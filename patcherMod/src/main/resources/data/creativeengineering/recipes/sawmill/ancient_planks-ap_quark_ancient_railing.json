@@ -1,0 +1,20 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "quark:ancient_planks"
+  },
+  "result": {
+    "item": "everycomp:ap/quark/ancient_railing",
+    "count": 1
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "blade": "railing"
+}

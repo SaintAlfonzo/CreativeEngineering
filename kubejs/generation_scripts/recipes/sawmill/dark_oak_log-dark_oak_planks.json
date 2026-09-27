@@ -1,0 +1,28 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 1600,
+  "input": {
+    "item": "minecraft:dark_oak_log"
+  },
+  "result": {
+    "count": 6,
+    "item": "minecraft:dark_oak_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersive_weathering:dark_oak_bark"
+      },
+      "stripping": true
+    },
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "stripped": {
+    "item": "minecraft:stripped_dark_oak_log"
+  }
+}

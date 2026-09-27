@@ -1,0 +1,80 @@
+{
+	id: "418AE88615341556"
+	loot_size: 1
+	order_index: 0
+	rewards: [
+		{ item: "create_factory:chocolate_waffle" }
+		{ item: "create_factory:dark_chocolate_waffle" }
+		{ item: "create_factory:white_chocolate_waffle" }
+		{ item: "create_factory:ruby_chocolate_waffle", weight: 0.1f }
+		{ item: "create_factory:chocolate_roll" }
+		{ item: "create_factory:dark_chocolate_roll" }
+		{ item: "create_factory:white_chocolate_roll" }
+		{ item: "create_factory:ruby_chocolate_roll", weight: 0.1f }
+		{ item: "create_factory:chocolate_apple" }
+		{ item: "create_factory:dark_chocolate_apple" }
+		{ item: "create_factory:white_chocolate_apple" }
+		{ item: "create_factory:ruby_chocolate_apple", weight: 0.1f }
+		{ item: "create:chocolate_glazed_berries" }
+		{ item: "create_confectionery:black_chocolate_glazed_berries" }
+		{ item: "create_confectionery:white_chocolate_glazed_berries" }
+		{ item: "create_confectionery:ruby_chocolate_glazed_berries", weight: 0.1f }
+		{ item: "create_confectionery:chocolate_glazed_marshmallow" }
+		{ item: "create_confectionery:black_chocolate_glazed_marshmallow" }
+		{ item: "create_confectionery:white_chocolate_glazed_marshmallow" }
+		{ item: "create_confectionery:ruby_chocolate_glazed_marshmallow", weight: 0.1f }
+		{ item: "create_confectionery:chocolate_candy_2" }
+		{ item: "create_confectionery:chocolate_candy_1" }
+		{ item: "create_confectionery:chocolate_candy_3", weight: 0.2f }
+		{ item: "create_confectionery:black_chocolate_candy_1" }
+		{ item: "create_confectionery:black_chocolate_candy_2" }
+		{ item: "create_confectionery:black_chocolate_candy_3", weight: 0.2f }
+		{ item: "create_confectionery:white_chocolate_candy_1" }
+		{ item: "create_confectionery:white_chocolate_candy_2" }
+		{ item: "create_confectionery:white_chocolate_candy_3", weight: 0.2f }
+		{ item: "create_confectionery:ruby_chocolate_candy_1", weight: 0.1f }
+		{ item: "create_confectionery:ruby_chocolate_candy_3", weight: 0.1f }
+		{ item: "create_confectionery:ruby_chocolate_candy_2", weight: 0.1f }
+		{
+			item: {
+				Count: 1b
+				id: "create_confectionery:full_chocolate_bar"
+				tag: {
+					Damage: 0
+				}
+			}
+			weight: 0.2f
+		}
+		{
+			item: {
+				Count: 1b
+				id: "create_confectionery:full_black_chocolate_bar"
+				tag: {
+					Damage: 0
+				}
+			}
+			weight: 0.2f
+		}
+		{
+			item: {
+				Count: 1b
+				id: "create_confectionery:full_white_chocolate_bar"
+				tag: {
+					Damage: 0
+				}
+			}
+			weight: 0.2f
+		}
+		{
+			item: {
+				Count: 1b
+				id: "create_confectionery:full_ruby_chocolate_bar"
+				tag: {
+					Damage: 0
+				}
+			}
+			weight: 0.05f
+		}
+	]
+	title: "AnyChocolateTreat"
+}

@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "villager_flower_house:flower_house",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 35,
+    "salt": 448543216
+  }
+}

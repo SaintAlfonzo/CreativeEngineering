@@ -1,0 +1,20 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "quark:blossom_planks"
+  },
+  "result": {
+    "item": "quark:blossom_pressure_plate",
+    "count": 1
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "blade": "pressure_plate"
+}

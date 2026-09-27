@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "small_viking_villager_house:small_viking_house",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 48,
+    "separation": 36,
+    "salt": 321101871
+  }
+}

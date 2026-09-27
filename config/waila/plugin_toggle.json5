@@ -1,0 +1,15 @@
+{
+  "waila:core": true,
+  "waila:vanilla": true,
+  "waila:harvest": true,
+  "waila:extra": true,
+  "waila:forge": true,
+  "waila:test": false,
+  "minecraft:waystones": true,
+  "wthitharvestability:plugin": true,
+  "minecraft:cookingforblockheads": true,
+  "treechop:plugin": true,
+  "securitycraft:plugin": true,
+  "ae2:wthit": true,
+  "creativeengineering:run_speed": true
+}

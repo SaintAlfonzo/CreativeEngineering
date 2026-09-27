@@ -1,0 +1,19 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "minecraft:stripped_birch_log"
+  },
+  "result": {
+    "count": 6,
+    "item": "minecraft:birch_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ]
+}

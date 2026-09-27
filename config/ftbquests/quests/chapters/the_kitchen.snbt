@@ -1,0 +1,112 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "the_kitchen"
+	group: "6813545A05D7C99D"
+	id: "6201694434DE479B"
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			id: "2B3CC4A08C30575B"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "39EE8996C2B7FE75"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5A1EAE1FAE10DAC3"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5EEE5FE11CBEB270"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7AECC665DA96C961"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					count: 16
+					id: "4801A079280EA443"
+					item: "create_confectionery:chocolate_bricks"
+					type: "item"
+				}
+				{
+					id: "3448CBD980A3E784"
+					item: "farmersdelight:chocolate_pie"
+					type: "item"
+				}
+			]
+			subtitle: "A world of pure imagination...."
+			tasks: [{
+				count: 16L
+				id: "3885BC4747991F47"
+				item: "create:bar_of_chocolate"
+				only_from_crafting: false
+				type: "item"
+			}]
+			title: "Chocolate!"
+			x: -3.0d
+			y: -3.0d
+		}
+		{
+			id: "4BF91D9552037F2C"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "0C3C763B15547D9E"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "58B64FCD57C987C6"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0BED1D2A513305BF"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					id: "07AFD59EE96DF386"
+					item: "farmersdelight:honey_glazed_ham_block"
+					type: "item"
+				}
+				{
+					id: "767BA4BAE81C8324"
+					item: "luphieclutteredmod:luphie_honeycomb_lamp"
+					type: "item"
+				}
+				{
+					count: 16
+					id: "74CAEBAE0519728B"
+					item: "buzzier_bees:honeycomb_bricks"
+					type: "item"
+				}
+			]
+			subtitle: "Aqcuire Fluid Honey"
+			tasks: [{
+				count: 4L
+				id: "3594398E9BBD4E4F"
+				item: "create:honey_bucket"
+				type: "item"
+			}]
+			title: "Sweet Liquid Gold"
+			x: -4.5d
+			y: -3.0d
+		}
+	]
+	title: "The Kitchen"
+}

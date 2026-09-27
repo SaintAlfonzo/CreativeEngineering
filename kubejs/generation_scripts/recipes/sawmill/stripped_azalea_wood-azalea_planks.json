@@ -1,0 +1,19 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "quark:stripped_azalea_wood"
+  },
+  "result": {
+    "count": 6,
+    "item": "quark:azalea_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ]
+}

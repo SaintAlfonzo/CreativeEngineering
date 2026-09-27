@@ -1,0 +1,26 @@
+{
+	icon: "create_confectionery:black_chocolate_glazed_berries"
+	id: "56B8D7F566B6F6B4"
+	loot_size: 1
+	order_index: 1
+	rewards: [
+		{ item: "create_factory:chocolate_apple" }
+		{ item: "create_factory:white_chocolate_roll" }
+		{ item: "create_factory:dark_chocolate_apple" }
+		{ item: "create_factory:chocolate_waffle" }
+		{ item: "create_confectionery:black_chocolate_glazed_berries" }
+		{ item: "create_confectionery:black_chocolate_candy_3" }
+		{ item: "create_confectionery:chocolate_candy_2" }
+		{
+			item: {
+				Count: 1b
+				id: "create_confectionery:full_chocolate_bar"
+				tag: {
+					Damage: 0
+				}
+			}
+		}
+		{ item: "create_confectionery:ruby_chocolate_glazed_marshmallow" }
+	]
+	title: "ChoiceChocolateTreats"
+}

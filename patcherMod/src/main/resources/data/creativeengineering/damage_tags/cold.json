@@ -1,0 +1,8 @@
+{
+  "description": "Freezing: powder snow and icicles.",
+  "values": [
+    "freeze",
+    "icicle",
+    "fallingIcicle"
+  ]
+}

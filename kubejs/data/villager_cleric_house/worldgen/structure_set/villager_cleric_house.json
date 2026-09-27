@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "villager_cleric_house:villager_cleric_house",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 39,
+    "separation": 32,
+    "salt": 375449722
+  }
+}

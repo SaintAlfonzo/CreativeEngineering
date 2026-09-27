@@ -1,0 +1,8 @@
+{
+  "description": "Bullets and slugs: every IE revolver round, the railgun, Pneumatic armour-piercing minigun ammo.",
+  "values": [
+    "ieRevolver_*",
+    "ieRailgun",
+    "armor_piercing"
+  ]
+}

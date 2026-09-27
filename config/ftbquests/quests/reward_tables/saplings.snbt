@@ -1,0 +1,22 @@
+{
+	id: "4369DEBCE3038320"
+	loot_size: 1
+	order_index: 7
+	rewards: [
+		{ item: "minecraft:oak_sapling" }
+		{ item: "minecraft:spruce_sapling" }
+		{ item: "minecraft:birch_sapling" }
+		{ item: "minecraft:jungle_sapling" }
+		{ item: "minecraft:acacia_sapling" }
+		{ item: "minecraft:dark_oak_sapling" }
+		{ item: "quark:red_blossom_sapling" }
+		{ item: "quark:orange_blossom_sapling" }
+		{ item: "quark:yellow_blossom_sapling" }
+		{ item: "quark:blue_blossom_sapling" }
+		{ item: "quark:lavender_blossom_sapling" }
+		{ item: "quark:pink_blossom_sapling" }
+		{ item: "architects_palette:twisted_sapling", weight: 0.1f }
+		{ item: "quark:ancient_sapling", weight: 0.1f }
+	]
+	title: "Wood Saplings"
+}

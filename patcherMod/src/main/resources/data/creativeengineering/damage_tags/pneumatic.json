@@ -1,0 +1,7 @@
+{
+  "description": "Pneumatic Craft hazards: over-pressure and drone overload.",
+  "values": [
+    "pressure",
+    "droneOverload"
+  ]
+}

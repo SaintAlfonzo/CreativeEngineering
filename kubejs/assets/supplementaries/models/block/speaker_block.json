@@ -1,0 +1,9 @@
+{
+  "parent": "create_things_and_misc:custom/speaker",
+  "textures": {
+    "all": "create_things_and_misc:blocks/railway_casing",
+    "particle": "create_things_and_misc:blocks/railway_casing",
+    "0": "create_things_and_misc:blocks/speaker"
+  },
+  "render_type": "solid"
+}

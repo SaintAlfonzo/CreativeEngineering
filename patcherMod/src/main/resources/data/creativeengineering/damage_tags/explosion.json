@@ -1,0 +1,12 @@
+{
+  "description": "Every source with vanilla's isExplosion flag: TNT/creepers/crystals, firework rockets, a bed or anchor exploding in the wrong dimension, the cuckoo clock, Supplementaries bombs.",
+  "values": [
+    "explosion",
+    "explosion.player",
+    "fireworks",
+    "badRespawnPoint",
+    "create.cuckoo_clock_explosion",
+    "supplementaries.bomb_explosion",
+    "supplementaries.bomb_explosion.player"
+  ]
+}

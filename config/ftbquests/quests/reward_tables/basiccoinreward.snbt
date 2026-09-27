@@ -1,0 +1,12 @@
+{
+	icon: "lightmanscurrency:coin_iron"
+	id: "61B59569E909F07B"
+	loot_size: 1
+	order_index: 3
+	rewards: [
+		{ count: 5, item: "lightmanscurrency:coin_iron" }
+		{ count: 10, item: "lightmanscurrency:coin_iron" }
+		{ count: 15, item: "lightmanscurrency:coin_iron" }
+	]
+	title: "BasicCoinReward"
+}

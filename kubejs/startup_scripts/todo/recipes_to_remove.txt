@@ -1,0 +1,262 @@
+[20:33:15] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create:iron_sheet -> 20 recipe(s):
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:green_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:black_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:light_blue_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:gray_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     create:crushing/update_one/scrap_iron_sheet
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     create_things_and_misc:gluepackagingcraft
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     bellsandwhistles:pilots/metal_pilot
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:purple_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:magenta_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:pink_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     bellsandwhistles:metro/metro_sheet
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:blue_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:red_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:yellow_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:white_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:brown_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:light_gray_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:orange_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:lime_decal
+[20:33:15] [INFO] .lib/recipe_scan.js#39:     createdeco:cyan_decal
+[20:33:16] [INFO] .lib/recipe_scan.js#38: [jeiRemove] everythingcopper:copper_nugget -> 2 recipe(s):
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     everythingcopper:copper_nugget_from_blasting
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     everythingcopper:copper_nugget_from_smelting
+[20:33:16] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create:copper_nugget -> 16 recipe(s):
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/copper/scrap_copper_fluid_pipe
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/copper/scrap_copper_backtank
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create_compressed:splashing/crushed_raw_copper_pile
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create_ultimate_factory:f_compacting_veridium
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/update_one/scrap_netherite_diving_boots
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     bellsandwhistles:pilots/copper_pilot
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     createsifter:sifting/gravel_andesite_mesh
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/update_one/scrap_copper_diving_boots
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     createsifter:sifting/gravel_zinc_mesh
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/update_one/scrap_copper_diving_helmet
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/veridium
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/copper/scrap_copper_ingot
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/update_one/scrap_copper_sheet
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/update_one/scrap_netherite_diving_helmet
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:splashing/crushed_raw_copper
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/veridium_recycling
+[20:33:16] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create:copper_sheet -> 5 recipe(s):
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create_compressed:copper_sheet_block
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     bellsandwhistles:pilots/copper_pilot
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create_things_and_misc:card_craft
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create:crushing/update_one/scrap_copper_sheet
+[20:33:16] [INFO] .lib/recipe_scan.js#39:     create_things_and_misc:spout_craft
+[20:33:17] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create_compressed:crushed_quicksilver_pile -> 2 recipe(s):
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     create_compressed:crushed_raw_quicksilver_pile
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     create_compressed:crushed_raw_quicksilver
+[20:33:17] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createaddition:spool -> 2 recipe(s):
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     createaddition:crafting/electrum_spool
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     createaddition:crafting/gold_spool
+[20:33:17] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createaddition:copper_spool -> 4 recipe(s):
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     createaddition:crafting/portable_energy_interface
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     createaddition:mechanical_crafting/alternator
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     createaddition:mechanical_crafting/electric_motor
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     createaddition:mechanical_crafting/tesla_coil
+[20:33:17] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create:golden_sheet -> 3 recipe(s):
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     create:sequenced_assembly/precision_mechanism
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     create_things_and_misc:portable_whistle_craft
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     create:crushing/update_one/scrap_gold_sheet
+[20:33:17] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:netherite_rod -> 1 recipe(s):
+[20:33:17] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/netherite_plate
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:netherite_wire -> 1 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/netherite_rod
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:netherite_spring -> 1 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/netherite_rod
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:small_netherite_spring -> 1 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/netherite_wire
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createdeco:netherite_nugget -> 2 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_nugget_from_netherite_ingot
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_ingot
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createdeco:netherite_sheet -> 8 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_sheet_metal_from_netherite_block_stonecutting
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     minecraft:pressing/netherite_sheet
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_sheet_slab_vert
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_sheet_stairs
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_sheet_slab
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_sheet_slab_vert_from_netherite_sheet_metal_stonecutting
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_sheet_slab_from_netherite_sheet_metal_stonecutting
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:netherite_sheet_stairs_from_netherite_sheet_metal_stonecutting
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createdeco:zinc_sheet -> 8 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:zinc_sheet_metal_from_zinc_block_stonecutting
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:zinc_sheet_slab
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:zinc_sheet_slab_vert
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:zinc_sheet_slab_from_zinc_sheet_metal_stonecutting
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:zinc_sheet_slab_vert_from_zinc_sheet_metal_stonecutting
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:zinc_sheet_stairs_from_zinc_sheet_metal_stonecutting
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createdeco:zinc_sheet_stairs
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     minecraft:pressing/zinc_sheet
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createaddition:zinc_sheet -> 1 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     createaddition:pressing/zinc_ingot
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create_things_and_misc:zinc_knife -> 1 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     create_things_and_misc:zinc_knif_craft
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:aluminum_rod -> 1 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/aluminum_ingot
+[20:33:18] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:aluminum_sheet -> 1 recipe(s):
+[20:33:18] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/aluminum_ingot
+[20:33:19] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:lead_rod -> 1 recipe(s):
+[20:33:19] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/lead_ingot
+[20:33:19] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:lead_sheet -> 1 recipe(s):
+[20:33:19] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/lead_ingot
+[20:33:19] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:silver_rod -> 1 recipe(s):
+[20:33:19] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/silver_ingot
+[20:33:19] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:silver_sheet -> 1 recipe(s):
+[20:33:19] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/silver_ingot
+[20:33:19] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:nickel_rod -> 1 recipe(s):
+[20:33:19] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/nickel_ingot
+[20:33:19] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:nickel_sheet -> 1 recipe(s):
+[20:33:19] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/nickel_ingot
+[20:33:19] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:uranium_rod -> 1 recipe(s):
+[20:33:19] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/uranium_ingot
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:uranium_sheet -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/uranium_ingot
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:small_uranium_spring -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/uranium_wire
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:cast_iron_wire -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/cast_iron_plate
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:cast_iron_sheet -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/cast_iron_ingot
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:cast_iron_spring -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/cast_iron_rod
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:small_cast_iron_spring -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/cast_iron_wire
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:steel_wire -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/steel_plate
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:steel_rod -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/steel_ingot
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] davebuildingmod:steel_ingot -> 2 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     davebuildingmod:rec_steel_ingot
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     davebuildingmod:rec_steel_block
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] davebuildingmod:steel_block -> 2 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     davebuildingmod:rec_steel_ingot
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     davebuildingmod:rec_steel_block
+[20:33:20] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create_things_and_misc:brass_knife -> 1 recipe(s):
+[20:33:20] [INFO] .lib/recipe_scan.js#39:     create_things_and_misc:brass_knife_craft
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:brass_wire -> 1 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/brass_plate
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:constantan_wire -> 1 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/constantan_plate
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:constantan_rod -> 1 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/constantan_ingot
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:constantan_sheet -> 1 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/constantan_ingot
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createaddition:electrum_wire -> 1 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     createaddition:rolling/electrum_plate
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createaddition:electrum_rod -> 1 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     createaddition:rolling/electrum_ingot
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createaddition:electrum_sheet -> 1 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     createaddition:pressing/electrum_ingot
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createaddition:electrum_nugget -> 3 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     create:crushing/ochrum_recycling
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     createaddition:crafting/electrum_nugget
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     create:crushing/ochrum
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] createaddition:electrum_ingot -> 3 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     createaddition:mixing/electrum
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     createaddition:crafting/electrum_nugget
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     createaddition:crafting/electrum_ingot
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] dustrial_decor:cast_iron_billet -> 2 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:cast_iron_block
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:cast_iron_balustrade
+[20:33:21] [INFO] .lib/recipe_scan.js#38: [jeiRemove] dustrial_decor:industrial_iron_billet -> 5 recipe(s):
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:padded_door
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:industrial_iron_door
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:padded_trapdoor
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:industrial_iron_block
+[20:33:21] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:industrial_iron_trapdoor
+[20:33:22] [INFO] .lib/recipe_scan.js#38: [jeiRemove] dustrial_decor:rusty_sheet_metal -> 13 recipe(s):
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_treading_stairs
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_plating_vertical_slab
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dramaticdoors:tall_rusty_sheet_metal_door
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_plating_stairs
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_treading_vertical_slab
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_walling_from_siding
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_plating_vertical_slab_to_slab
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_treading_slab
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dramaticdoors:short_rusty_sheet_metal_door
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:ingot_from_rusty_sheet
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_treading_vertical_slab_to_slab
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_plating_slab
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     dustrial_decor:rusty_sheet_metal_siding_from_walling
+[20:33:22] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:blaze_spring -> 1 recipe(s):
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/blaze_rod
+[20:33:22] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:shadow_steel_spring -> 1 recipe(s):
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/shadow_steel_rod
+[20:33:22] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:andesite_spring -> 1 recipe(s):
+[20:33:22] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/andesite_rod
+[20:33:23] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:vanadium_spring -> 1 recipe(s):
+[20:33:23] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/vanadium_rod
+[20:33:23] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:small_shadow_steel_spring -> 1 recipe(s):
+[20:33:23] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/shadow_steel_wire
+[20:33:23] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:small_andesite_spring -> 1 recipe(s):
+[20:33:23] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/andesite_wire
+[20:33:23] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:small_vanadium_spring -> 1 recipe(s):
+[20:33:23] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/vanadium_wire
+[20:33:24] [INFO] .lib/recipe_scan.js#38: [jeiRemove] cb_microblock:microblock -> 1 recipe(s):
+[20:33:24] [INFO] .lib/recipe_scan.js#39:     cb_microblock:microblock
+[20:33:24] [INFO] .lib/recipe_scan.js#38: [jeiRemove] cb_microblock:diamond_saw -> 1 recipe(s):
+[20:33:24] [INFO] .lib/recipe_scan.js#39:     projectred_core:silicon
+[20:33:26] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create_compressed:crushed_osmium_pile -> 2 recipe(s):
+[20:33:26] [INFO] .lib/recipe_scan.js#39:     create_compressed:crushed_raw_osmium
+[20:33:26] [INFO] .lib/recipe_scan.js#39:     create_compressed:crushed_raw_osmium_pile
+[20:33:26] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create_compressed:crushed_tin_pile -> 2 recipe(s):
+[20:33:26] [INFO] .lib/recipe_scan.js#39:     create_compressed:crushed_raw_tin_pile
+[20:33:26] [INFO] .lib/recipe_scan.js#39:     create_compressed:crushed_raw_tin
+[20:33:26] [INFO] .lib/recipe_scan.js#38: [jeiRemove] create_compressed:crushed_platium_pile -> 2 recipe(s):
+[20:33:26] [INFO] .lib/recipe_scan.js#39:     create_compressed:crushed_raw_platinum_pile
+[20:33:26] [INFO] .lib/recipe_scan.js#39:     create_compressed:crushed_raw_platinum
+[20:33:27] [INFO] .lib/recipe_scan.js#38: [jeiRemove] immersiveengineering:storage_steel -> 4 recipe(s):
+[20:33:27] [INFO] .lib/recipe_scan.js#39:     immersiveengineering:crafting/storage_steel_from_slab
+[20:33:27] [INFO] .lib/recipe_scan.js#39:     immersiveengineering:crafting/storage_steel_to_slab
+[20:33:27] [INFO] .lib/recipe_scan.js#39:     immersiveengineering:crafting/ingot_steel_to_storage_steel
+[20:33:27] [INFO] .lib/recipe_scan.js#39:     immersiveengineering:crafting/storage_steel_to_ingot_steel
+[20:33:27] [INFO] .lib/recipe_scan.js#38: [jeiRemove] littlelogistics:receiver_component -> 2 recipe(s):
+[20:33:27] [INFO] .lib/recipe_scan.js#39:     littlelogistics:automatic_switch_rail
+[20:33:27] [INFO] .lib/recipe_scan.js#39:     littlelogistics:automatic_tee_junction_rail
+[20:33:27] [INFO] .lib/recipe_scan.js#38: [jeiRemove] littlelogistics:transmitter_component -> 2 recipe(s):
+[20:33:27] [INFO] .lib/recipe_scan.js#39:     littlelogistics:tug_route
+[20:33:27] [INFO] .lib/recipe_scan.js#39:     littlelogistics:locomotive_route
+[20:33:28] [INFO] .lib/recipe_scan.js#38: [jeiRemove] nock_enough_arrows:quiver -> 1 recipe(s):
+[20:33:28] [INFO] .lib/recipe_scan.js#39:     nock_enough_arrows:quiver
+[20:33:28] [INFO] .lib/recipe_scan.js#38: [jeiRemove] nock_enough_arrows:torch_arrow -> 1 recipe(s):
+[20:33:28] [INFO] .lib/recipe_scan.js#39:     nock_enough_arrows:torch_arrow
+[20:33:30] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:andesite_rod -> 1 recipe(s):
+[20:33:30] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/andesite_alloy
+[20:33:30] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:andesite_sheet -> 1 recipe(s):
+[20:33:30] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/andesite_alloy
+[20:33:30] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:andesite_wire -> 1 recipe(s):
+[20:33:30] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/andesite_plate
+[20:33:37] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:refined_radiance_rod -> 1 recipe(s):
+[20:33:37] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/refined_radiance
+[20:33:37] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:refined_radiance_sheet -> 1 recipe(s):
+[20:33:37] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/refined_radiance
+[20:33:37] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:refined_radiance_spring -> 1 recipe(s):
+[20:33:37] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/refined_radiance_rod
+[20:33:37] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:refined_radiance_wire -> 1 recipe(s):
+[20:33:37] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/refined_radiance_plate
+[20:33:37] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:small_refined_radiance_spring -> 1 recipe(s):
+[20:33:37] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:coiling/refined_radiance_wire
+[20:33:38] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:shadow_steel_rod -> 1 recipe(s):
+[20:33:38] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/shadow_steel
+[20:33:38] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:shadow_steel_sheet -> 1 recipe(s):
+[20:33:38] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/shadow_steel
+[20:33:38] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:shadow_steel_wire -> 1 recipe(s):
+[20:33:38] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/shadow_steel_plate
+[20:33:39] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:vanadium_ingot -> 2 recipe(s):
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:craft/vanadium_nuggets_to_ingot
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:craft/vanadium_block_to_ingots
+[20:33:39] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:vanadium_nugget -> 3 recipe(s):
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     create:crushing/crimsite
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:craft/vanadium_ingot_to_nuggets
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     create:crushing/crimsite_recycling
+[20:33:39] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:vanadium_block -> 1 recipe(s):
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:craft/vanadium_ingots_to_block
+[20:33:39] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:vanadium_rod -> 1 recipe(s):
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/vanadium_ingot
+[20:33:39] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:vanadium_sheet -> 1 recipe(s):
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:pressing/vanadium_ingot
+[20:33:39] [INFO] .lib/recipe_scan.js#38: [jeiRemove] vintageimprovements:vanadium_wire -> 1 recipe(s):
+[20:33:39] [INFO] .lib/recipe_scan.js#39:     vintageimprovements:rolling/vanadium_plate
+[20:33:39] [INFO] .lib/recipe_scan.js#43: [recipe_scan] Scan complete. 178 total recipe references found across 297 removed items.

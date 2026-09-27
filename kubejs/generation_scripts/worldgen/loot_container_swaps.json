@@ -1,0 +1,13 @@
+{
+  "_readme": {
+    "what": "Lootr already turns every structure chest, barrel, trapped chest and shulker box that has a loot table into a per-player Lootr container (lootr-common.toml). It can't convert other mods' loot containers (IE crates, Farmer's Delight cabinets/baskets, PneumaticCraft reinforced chests). Each entry below swaps that block for a vanilla container when a structure places it WITH a loot table, so Lootr converts it too: a crate becomes a Lootr barrel, a reinforced chest a Lootr chest.",
+    "rules": "\"block or glob\": \"target block\". Globs use * (\"farmersdelight:*_cabinet\"). Only structure-placed blocks carrying a LootTable are swapped; player-placed containers, and containers with fixed contents and no loot table, are never touched. Facing/waterlogged carry over when the target has them. Read at every world load (patcherMod worldgen/LootContainerSwaps); only newly generated chunks are affected.",
+    "audit": "loot_container_audit.md (python3 tools/audit_loot_containers.py) lists every container with a loot table in every structure template, and whether Lootr converts it, this file swaps it, or neither."
+  },
+  "swaps": {
+    "immersiveengineering:crate": "minecraft:barrel",
+    "farmersdelight:*_cabinet": "minecraft:barrel",
+    "farmersdelight:basket": "minecraft:barrel",
+    "pneumaticcraft:reinforced_chest": "minecraft:chest"
+  }
+}

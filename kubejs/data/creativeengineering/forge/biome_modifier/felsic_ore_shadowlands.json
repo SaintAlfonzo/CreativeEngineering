@@ -1,0 +1,7 @@
+{
+  "__comment": "BIOME dial: which biome(s) get the shadowlands felsic vein. 'biomes' accepts a string, a list, or a #tag. To turn felsic off in this biome, delete this file.",
+  "type": "forge:add_features",
+  "biomes": "nullscape:shadowlands",
+  "features": "creativeengineering:felsic_ore_shadowlands",
+  "step": "underground_ores"
+}

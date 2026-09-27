@@ -1,0 +1,14 @@
+{
+  "description": "Multiplied by difficulty - and therefore ZERO for a player on Peaceful. Worth checking before assuming a shield (or anything else) even needs to block one of these.",
+  "values": [
+    "explosion",
+    "explosion.player",
+    "badRespawnPoint",
+    "create.crush",
+    "create.fan_fire",
+    "create.fan_lava",
+    "farseer",
+    "supplementaries.bomb_explosion",
+    "supplementaries.bomb_explosion.player"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "#blockrunner:very_quick_blocks": 1.55,
+  "#blockrunner:quick_blocks": 1.35,
+  "#blockrunner:slightly_quick_blocks": 1.15,
+  "#blockrunner:slightly_slow_blocks": 0.85,
+  "#blockrunner:slow_blocks": 0.65,
+  "#blockrunner:very_slow_blocks": 0.45,
+
+  "#blockrunner:surface/asphalt": 1.50,
+  "#blockrunner:surface/concrete": 1.40,
+  "#blockrunner:surface/grating": 1.30,
+  "#blockrunner:surface/metal": 1.25,
+  "#blockrunner:surface/slippery": 1.25,
+  "#blockrunner:surface/constructed_smooth": 1.25,
+  "#blockrunner:surface/constructed_brick": 1.25,
+  "#blockrunner:surface/natural_path": 1.15,
+  "#blockrunner:surface/wood": 1.10,
+  "#blockrunner:surface/natural_smooth": 1.05,
+
+  "#blockrunner:surface/machinery": 1.00,
+  "#blockrunner:surface/functional": 1.00,
+  "#blockrunner:surface/decorative": 1.00,
+  "#blockrunner:surface/camouflage": 1.00,
+
+  "#blockrunner:surface/glass": 1.00,
+  "#blockrunner:surface/dirt": 1.00,
+
+  "#blockrunner:surface/natural_rough": 0.92,
+  "#blockrunner:surface/soft": 0.88,
+  "#blockrunner:surface/dust": 0.85,
+  "#blockrunner:surface/confectionery": 0.85,
+  "#blockrunner:surface/tilled": 0.80,
+  "#blockrunner:surface/leaves": 0.78,
+  "#blockrunner:surface/snow": 0.75,
+  "#blockrunner:surface/sticky": 0.65,
+  "#blockrunner:surface/spongy": 0.60,
+  "#blockrunner:surface/very_sticky": 0.45
+}

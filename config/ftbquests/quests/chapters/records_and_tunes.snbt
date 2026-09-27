@@ -1,0 +1,121 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "records_and_tunes"
+	group: "6E8D1BA71A4FAF2E"
+	icon: "minecraft:music_disc_mellohi"
+	id: "6F7C13271FE0E9CA"
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			can_repeat: true
+			dependencies: ["59FB60C3BA204797"]
+			icon: "minecraft:music_disc_ward"
+			id: "7EF6D4CB736EB2E3"
+			rewards: [{
+				exclude_from_claim_all: true
+				id: "3C725163CC59561B"
+				table_id: 340158020744572283L
+				type: "random"
+			}]
+			shape: "octagon"
+			subtitle: "10 Iron Coins"
+			tasks: [{
+				consume_items: true
+				count: 10L
+				id: "40A4013DF19C9E38"
+				item: "lightmanscurrency:coin_iron"
+				type: "item"
+			}]
+			title: "Buy a Music Disc"
+			x: -21.0d
+			y: -9.5d
+		}
+		{
+			hide_dependent_lines: true
+			icon: "minecraft:jukebox"
+			id: "59FB60C3BA204797"
+			subtitle: "Here you can buy music discs and related equipment, and sell back unwanted discs"
+			tasks: [{
+				id: "6AE6F0E113A32091"
+				title: "Got it!"
+				type: "checkmark"
+			}]
+			title: "Record Shop"
+			x: -22.5d
+			y: -11.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["59FB60C3BA204797"]
+			icon: "quark:music_disc_chatter"
+			id: "7F0C6C74899ACADE"
+			rewards: [{
+				exclude_from_claim_all: true
+				id: "2D7E5D4F06562CE0"
+				table_id: 4365377398620593994L
+				type: "random"
+			}]
+			shape: "octagon"
+			subtitle: "20 Iron Coins"
+			tasks: [{
+				consume_items: true
+				count: 20L
+				id: "62258C5687AECD45"
+				item: "lightmanscurrency:coin_iron"
+				type: "item"
+			}]
+			title: "Buy an Ambience Disc"
+			x: -19.5d
+			y: -9.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["59FB60C3BA204797"]
+			icon: "etched:blank_music_disc"
+			id: "41EC655DDC0DCCE9"
+			rewards: [{
+				count: 2
+				id: "1B50E1F639F30040"
+				item: "etched:blank_music_disc"
+				type: "item"
+			}]
+			shape: "octagon"
+			subtitle: "5 Iron Coins"
+			tasks: [{
+				consume_items: true
+				count: 5L
+				id: "21CE4680D61511E7"
+				item: "lightmanscurrency:coin_iron"
+				type: "item"
+			}]
+			title: "Buy Blank Music Disc"
+			x: -21.0d
+			y: -12.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["59FB60C3BA204797"]
+			id: "422C2B502EF3703B"
+			rewards: [{
+				count: 2
+				id: "02555FFA81138067"
+				item: "lightmanscurrency:coin_iron"
+				type: "item"
+			}]
+			shape: "octagon"
+			subtitle: "2 Iron Coins"
+			tasks: [{
+				consume_items: true
+				id: "0F97DDA6E0C4B0EB"
+				item: "etched:blank_music_disc"
+				type: "item"
+			}]
+			title: "Sell Blank Music Disc"
+			x: -19.5d
+			y: -12.5d
+		}
+	]
+	title: "Records and Tunes"
+}

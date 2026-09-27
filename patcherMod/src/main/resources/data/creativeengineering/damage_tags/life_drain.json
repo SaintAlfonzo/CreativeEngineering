@@ -1,0 +1,7 @@
+{
+  "description": "Draining health or experience: Domestication Innovation health siphon, Supplementaries XP extraction.",
+  "values": [
+    "health_siphon",
+    "supplementaries.xp_extracting"
+  ]
+}

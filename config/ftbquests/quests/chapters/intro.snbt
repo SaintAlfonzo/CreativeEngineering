@@ -1,0 +1,36 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "intro"
+	group: ""
+	id: "004925C77D11D80F"
+	order_index: 0
+	quest_links: [ ]
+	quests: [{
+		id: "44B842AE577DB80A"
+		tasks: [
+			{
+				icon: "create:wrench"
+				id: "0E19DAD86E051180"
+				title: "Create"
+				type: "custom"
+			}
+			{
+				id: "72E9E0702EFC4D29"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:hammer"
+					tag: {
+						Damage: 0
+					}
+				}
+				title: "Immersive Engineering"
+				type: "item"
+			}
+		]
+		title: "Welcome!"
+		x: 0.0d
+		y: -0.5d
+	}]
+	title: "Intro"
+}

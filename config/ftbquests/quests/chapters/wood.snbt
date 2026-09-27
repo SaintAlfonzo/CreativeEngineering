@@ -1,0 +1,1419 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "wood"
+	group: "16C7EF1E80339E63"
+	icon: "minecraft:oak_planks"
+	id: "67F3BFB4B4891482"
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			id: "2E3FFF9D594C2E96"
+			subtitle: "Obtained via harvesting"
+			tasks: [{
+				id: "33A69F411004C992"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:oak_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:spruce_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:birch_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:dark_oak_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:jungle_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:acacia_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:mangrove_log"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_log"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_log"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_log"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:twisted_log"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Log"
+			x: -2.0d
+			y: -3.0d
+		}
+		{
+			dependencies: [
+				"2E3FFF9D594C2E96"
+				"2B0CF6D146462CEF"
+			]
+			dependency_requirement: "one_completed"
+			id: "6F363D8392303925"
+			subtitle: "Byproduct of axe stripping, Create saw and Immersive Engineering sawmill"
+			tasks: [{
+				id: "353CCC562A5376F3"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "immersive_weathering:oak_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:spruce_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:birch_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:dark_oak_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:jungle_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:acacia_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:mangrove_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:quark/ancient_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:quark/azalea_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:quark/blossom_bark"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:architects_palette/twisted_bark"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Bark"
+			x: -3.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["2E3FFF9D594C2E96"]
+			id: "3046DC2D8761D168"
+			subtitle: "Obtained via axe stripping, Create saw and Immersive Engineering sawmill"
+			tasks: [{
+				id: "70065DBAFB57F67B"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:stripped_oak_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:stripped_spruce_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:stripped_birch_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:stripped_dark_oak_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:stripped_jungle_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:stripped_acacia_log"
+							}
+							{
+								Count: 1b
+								id: "minecraft:stripped_mangrove_log"
+							}
+							{
+								Count: 1b
+								id: "quark:stripped_ancient_log"
+							}
+							{
+								Count: 1b
+								id: "quark:stripped_azalea_log"
+							}
+							{
+								Count: 1b
+								id: "quark:stripped_blossom_log"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:stripped_twisted_log"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Stripped Log"
+			x: 1.0d
+			y: -3.0d
+		}
+		{
+			dependencies: [
+				"3046DC2D8761D168"
+				"425F2ED6D496EFCF"
+			]
+			id: "0E15974BE863AFE2"
+			subtitle: "Byproduct of Immersive Engineering sawmill"
+			tasks: [{
+				id: "68E6392B8D94D430"
+				item: "immersiveengineering:dust_wood"
+				type: "item"
+			}]
+			x: -0.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["2E3FFF9D594C2E96"]
+			id: "2B0CF6D146462CEF"
+			subtitle: "Obtained via crafting or packing"
+			tasks: [{
+				id: "3C480B5ED4230FD0"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:oak_wood"
+							}
+							{
+								Count: 1b
+								id: "minecraft:spruce_wood"
+							}
+							{
+								Count: 1b
+								id: "minecraft:birch_wood"
+							}
+							{
+								Count: 1b
+								id: "minecraft:dark_oak_wood"
+							}
+							{
+								Count: 1b
+								id: "minecraft:jungle_wood"
+							}
+							{
+								Count: 1b
+								id: "minecraft:acacia_wood"
+							}
+							{
+								Count: 1b
+								id: "minecraft:mangrove_wood"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_wood"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_wood"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_wood"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:twisted_wood"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Wood"
+			x: -2.0d
+			y: 0.0d
+		}
+		{
+			dependencies: [
+				"2B0CF6D146462CEF"
+				"3046DC2D8761D168"
+			]
+			id: "425F2ED6D496EFCF"
+			subtitle: "Obtained via axe stripping, crafting, Create saw and Immersive Engineering sawmill"
+			tasks: [{
+				id: "339817F0EBFFCC5C"
+				item: "minecraft:stripped_oak_wood"
+				type: "item"
+			}]
+			title: "Stripped Wood"
+			x: 1.0d
+			y: 0.0d
+		}
+		{
+			id: "47643F80DD8BE359"
+			subtitle: "Obtained via harvesting"
+			tasks: [{
+				id: "2B31FF05BB7CE22C"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:crimson_stem"
+							}
+							{
+								Count: 1b
+								id: "minecraft:warped_stem"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Stem"
+			x: -2.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["47643F80DD8BE359"]
+			id: "395525B8DC5504AF"
+			subtitle: "Obtained via axe stripping, Create saw and Immersive Engineering sawmill"
+			tasks: [{
+				id: "4B8D32F3354C3EC9"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:stripped_crimson_stem"
+							}
+							{
+								Count: 1b
+								id: "minecraft:stripped_warped_stem"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Stripped Stem"
+			x: 1.0d
+			y: -6.0d
+		}
+		{
+			dependencies: [
+				"47643F80DD8BE359"
+				"161F5489D5A371EF"
+			]
+			id: "29355D5E535A04A3"
+			subtitle: "Byproduct of axe stripping, Create saw and Immersive Engineering sawmill"
+			tasks: [{
+				id: "1EE1137B9D110C8B"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "immersive_weathering:crimson_scales"
+							}
+							{
+								Count: 1b
+								id: "immersive_weathering:warped_scales"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Scales"
+			x: -3.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["47643F80DD8BE359"]
+			id: "161F5489D5A371EF"
+			subtitle: "Obtained via crafting or packing"
+			tasks: [{
+				id: "3C3D451CB36096FF"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:warped_hyphae"
+							}
+							{
+								Count: 1b
+								id: "minecraft:crimson_hyphae"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Hyphae"
+			x: -2.0d
+			y: -9.0d
+		}
+		{
+			dependencies: [
+				"161F5489D5A371EF"
+				"395525B8DC5504AF"
+			]
+			id: "059351B4922C720C"
+			subtitle: "Obtained via axe stripping, crafting, Create saw and Immersive Engineering sawmill"
+			tasks: [{
+				id: "3D35AAB55922BA45"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:stripped_crimson_hyphae"
+							}
+							{
+								Count: 1b
+								id: "minecraft:stripped_warped_hyphae"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Stripped Hyphae"
+			x: 1.0d
+			y: -9.0d
+		}
+		{
+			dependencies: [
+				"059351B4922C720C"
+				"395525B8DC5504AF"
+			]
+			id: "2273B5BD1011057C"
+			subtitle: "Byproduct of Immersive Engineering sawmill"
+			tasks: [{
+				id: "2C22ED5A6B35D793"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:crimson_roots"
+							}
+							{
+								Count: 1b
+								id: "minecraft:warped_roots"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Roots"
+			x: -0.5d
+			y: -7.5d
+		}
+		{
+			dependencies: [
+				"425F2ED6D496EFCF"
+				"3046DC2D8761D168"
+				"395525B8DC5504AF"
+				"059351B4922C720C"
+				"2E3FFF9D594C2E96"
+				"47643F80DD8BE359"
+			]
+			id: "10B511E06E6DE842"
+			subtitle: "Obtained via crafting, Create saw and Immersive Engineering sawmill"
+			tasks: [{
+				id: "4F31F6D3A7BF9358"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:oak_planks"
+							}
+							{
+								Count: 1b
+								id: "minecraft:spruce_planks"
+							}
+							{
+								Count: 1b
+								id: "minecraft:birch_planks"
+							}
+							{
+								Count: 1b
+								id: "minecraft:dark_oak_planks"
+							}
+							{
+								Count: 1b
+								id: "minecraft:jungle_planks"
+							}
+							{
+								Count: 1b
+								id: "minecraft:acacia_planks"
+							}
+							{
+								Count: 1b
+								id: "minecraft:mangrove_planks"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_planks"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_planks"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_planks"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:twisted_planks"
+							}
+							{
+								Count: 1b
+								id: "minecraft:crimson_planks"
+							}
+							{
+								Count: 1b
+								id: "minecraft:warped_planks"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Planks"
+			x: 2.5d
+			y: -4.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "0A4EF10AB6412C17"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "4EC8FA233C291A94"
+				item: "quark:vertical_oak_planks"
+				type: "item"
+			}]
+			x: 5.0d
+			y: -3.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "4272BBA6D341FD54"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "530E7E5621740F84"
+				item: "minecraft:oak_stairs"
+				type: "item"
+			}]
+			x: 5.0d
+			y: -2.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "084DEA6F31B29DD3"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "24012044A75C8EBF"
+				item: "minecraft:oak_slab"
+				type: "item"
+			}]
+			x: 5.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "75E0ED977B032B75"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "755073C5E18C6759"
+				item: "quark:oak_vertical_slab"
+				type: "item"
+			}]
+			x: 5.0d
+			y: -0.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "3EE43A22266FAF97"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "0A09A617F1FC6C36"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:oak_door"
+							}
+							{
+								Count: 1b
+								id: "minecraft:spruce_door"
+							}
+							{
+								Count: 1b
+								id: "minecraft:birch_door"
+							}
+							{
+								Count: 1b
+								id: "minecraft:jungle_door"
+							}
+							{
+								Count: 1b
+								id: "minecraft:acacia_door"
+							}
+							{
+								Count: 1b
+								id: "minecraft:dark_oak_door"
+							}
+							{
+								Count: 1b
+								id: "minecraft:mangrove_door"
+							}
+							{
+								Count: 1b
+								id: "minecraft:crimson_door"
+							}
+							{
+								Count: 1b
+								id: "minecraft:warped_door"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:twisted_door"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_door"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_door"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_door"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Door"
+			x: 5.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "0E524459C3049FE4"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "7AB1F2CA602D7720"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:oak_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "minecraft:spruce_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "minecraft:birch_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "minecraft:dark_oak_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "minecraft:jungle_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "minecraft:mangrove_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "minecraft:crimson_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "minecraft:warped_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:twisted_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_trapdoor"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_trapdoor"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Trapdoor"
+			x: 5.0d
+			y: -5.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "17FA53591716C86C"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "01ADC973D4F6D13B"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:oak_fence"
+							}
+							{
+								Count: 1b
+								id: "minecraft:spruce_fence"
+							}
+							{
+								Count: 1b
+								id: "minecraft:birch_fence"
+							}
+							{
+								Count: 1b
+								id: "minecraft:dark_oak_fence"
+							}
+							{
+								Count: 1b
+								id: "minecraft:acacia_fence"
+							}
+							{
+								Count: 1b
+								id: "minecraft:mangrove_fence"
+							}
+							{
+								Count: 1b
+								id: "minecraft:crimson_fence"
+							}
+							{
+								Count: 1b
+								id: "minecraft:warped_fence"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:twisted_fence"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_fence"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_fence"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_fence"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Fence"
+			x: 5.0d
+			y: -6.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "1FFCD3EC9B4A39F1"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "490D19CE82572109"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:oak_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "minecraft:spruce_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "minecraft:birch_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "minecraft:jungle_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "minecraft:acacia_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "minecraft:mangrove_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "minecraft:crimson_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "minecraft:warped_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:twisted_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_fence_gate"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_fence_gate"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Fence Gate"
+			x: 5.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "1A1F6E0A0A19C0D6"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "11252D0B0B787C33"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "architects_palette:oak_railing"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:birch_railing"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:dark_oak_railing"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:jungle_railing"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:acacia_railing"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:mangrove_railing"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:crimson_railing"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:warped_railing"
+							}
+							{
+								Count: 1b
+								id: "architects_palette:twisted_railing"
+							}
+							{
+								Count: 1b
+								id: "everycomp:ap/quark/ancient_railing"
+							}
+							{
+								Count: 1b
+								id: "everycomp:ap/quark/azalea_railing"
+							}
+							{
+								Count: 1b
+								id: "everycomp:ap/quark/blossom_railing"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Railing"
+			x: 5.0d
+			y: -8.5d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "038B1E6DF084E69B"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "762D13349B1CE580"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:birch_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:jungle_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:acacia_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:dark_oak_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:crimson_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:warped_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:mangrove_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_ladder"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_ladder"
+							}
+							{
+								Count: 1b
+								id: "everycomp:q/architects_palette/twisted_ladder"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Ladder"
+			x: 4.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "2F6E33465F67CC63"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "49FCDBE4EB0E08EB"
+				item: {
+					Count: 1b
+					id: "itemfilters:or"
+					tag: {
+						items: [
+							{
+								Count: 1b
+								id: "minecraft:spruce_sign"
+							}
+							{
+								Count: 1b
+								id: "minecraft:birch_sign"
+							}
+							{
+								Count: 1b
+								id: "minecraft:jungle_sign"
+							}
+							{
+								Count: 1b
+								id: "minecraft:acacia_sign"
+							}
+							{
+								Count: 1b
+								id: "minecraft:dark_oak_sign"
+							}
+							{
+								Count: 1b
+								id: "minecraft:mangrove_sign"
+							}
+							{
+								Count: 1b
+								id: "minecraft:crimson_sign"
+							}
+							{
+								Count: 1b
+								id: "minecraft:warped_sign"
+							}
+							{
+								Count: 1b
+								id: "quark:ancient_sign"
+							}
+							{
+								Count: 1b
+								id: "quark:blossom_sign"
+							}
+							{
+								Count: 1b
+								id: "quark:azalea_sign"
+							}
+						]
+					}
+				}
+				type: "item"
+			}]
+			title: "Sign"
+			x: 3.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "53306EDC5FCB31B1"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "69F1F13F8AADAA97"
+				item: "minecraft:oak_pressure_plate"
+				type: "item"
+			}]
+			x: 4.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["10B511E06E6DE842"]
+			id: "3EEB7CC2CE148EBF"
+			subtitle: "Obtained via crafting, Create sawing, and Creative Engineering precision sawing"
+			tasks: [{
+				id: "2DEF5F5C80065C01"
+				item: "minecraft:oak_button"
+				type: "item"
+			}]
+			x: 3.0d
+			y: 0.0d
+		}
+		{
+			dependencies: [
+				"199D4AB33970567C"
+				"4CBD56BDD47EC578"
+				"06942726B16AEE05"
+				"5C7CD895685F3975"
+			]
+			id: "22E15D0D81DFA99E"
+			subtitle: "Obtained via shapeless crafting"
+			tasks: [{
+				id: "650540ED17262852"
+				item: "farmersdelight:organic_compost"
+				type: "item"
+			}]
+			x: -5.0d
+			y: -4.5d
+		}
+		{
+			icon: "farmersdelight:straw"
+			id: "06942726B16AEE05"
+			subtitle: "Obtained via cutting grass w/ knife, processing rice and processing wheat with Immersive Engineering Crusher"
+			tasks: [{
+				id: "48373F73F10F4D01"
+				item: "farmersdelight:straw"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -6.0d
+		}
+		{
+			id: "199D4AB33970567C"
+			subtitle: "Obtained via bone and calcite processing"
+			tasks: [{
+				id: "7FFC7287A980AD8C"
+				item: "minecraft:bone_meal"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -3.0d
+		}
+		{
+			id: "4CBD56BDD47EC578"
+			subtitle: "Obtained via harvest and centrifuge"
+			tasks: [{
+				id: "6D151E844100867D"
+				item: "minecraft:dirt"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -4.5d
+		}
+		{
+			dependencies: [
+				"199D4AB33970567C"
+				"4CBD56BDD47EC578"
+				"06942726B16AEE05"
+				"2CF9A05ADB3D6B31"
+			]
+			id: "59326C7CCAD08588"
+			subtitle: "Obtained via shapeless crafting"
+			tasks: [{
+				id: "3CD42747267CE005"
+				item: "farmersdelight:organic_compost"
+				type: "item"
+			}]
+			x: -8.0d
+			y: -4.5d
+		}
+		{
+			id: "2CF9A05ADB3D6B31"
+			subtitle: "Obtained via harvest"
+			tasks: [{
+				id: "7CC8613A623BC396"
+				item: "minecraft:rotten_flesh"
+				type: "item"
+			}]
+			x: -8.0d
+			y: -3.0d
+		}
+		{
+			dependencies: [
+				"59326C7CCAD08588"
+				"22E15D0D81DFA99E"
+			]
+			id: "6CF805CC2A6DE908"
+			subtitle: "Obtained via rich soil + time + exposure or Immersive Engineering bottling"
+			tasks: [{
+				id: "6A594F2802CF94DF"
+				item: "farmersdelight:rich_soil"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -1.5d
+		}
+		{
+			dependencies: [
+				"6F363D8392303925"
+				"29355D5E535A04A3"
+			]
+			id: "5C7CD895685F3975"
+			subtitle: "Both Scales or Bark Work!"
+			tasks: [{
+				id: "654F4573F73311CB"
+				item: {
+					Count: 1b
+					id: "itemfilters:tag"
+					tag: {
+						value: "immersive_weathering:bark"
+					}
+				}
+				title: "Any #immersive_weathering:bark"
+				type: "item"
+			}]
+			title: "Any Bark or Scales"
+			x: -3.5d
+			y: -4.5d
+		}
+		{
+			dependencies: [
+				"199D4AB33970567C"
+				"6CF805CC2A6DE908"
+				"5C7CD895685F3975"
+				"7CD16DD435B125C7"
+				"6C496923744B79D4"
+			]
+			id: "2760A920FEEB8B69"
+			subtitle: "Obtained via shapeless crafting"
+			tasks: [{
+				id: "3C2372E72C0488F5"
+				item: "immersive_weathering:mulch_block"
+				type: "item"
+			}]
+			x: -5.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["0B1D599B26F1C364"]
+			id: "7CD16DD435B125C7"
+			subtitle: "Obtained via moss block processing"
+			tasks: [{
+				id: "2AA666D4DFC2A449"
+				item: "immersive_weathering:moss_clump"
+				type: "item"
+			}]
+			x: -5.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["2760A920FEEB8B69"]
+			id: "648B7978DFA3E8A3"
+			subtitle: "Obtained via water exposure"
+			tasks: [
+				{
+					id: "3D8CBF59B01F8368"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+				{
+					id: "6E6C05CE6A626853"
+					item: "immersive_weathering:mulch_block"
+					type: "item"
+				}
+			]
+			title: "Water-logged Mulch"
+			x: -5.0d
+			y: -3.0d
+		}
+		{
+			id: "0B1D599B26F1C364"
+			subtitle: "Obtained via harvest or Immersive Engineering garden cloche"
+			tasks: [{
+				id: "7AF48261957A165E"
+				item: "minecraft:moss_block"
+				type: "item"
+			}]
+			x: -6.5d
+			y: 0.0d
+		}
+		{
+			id: "6C496923744B79D4"
+			subtitle: "Obtained via burning"
+			tasks: [{
+				id: "2B1F16E9E0E63E19"
+				item: "supplementaries:ash"
+				type: "item"
+			}]
+			x: -2.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["6C496923744B79D4"]
+			id: "6D6C46901630BBC5"
+			subtitle: "Obtained via smelting"
+			tasks: [{
+				id: "361C6F0E0E203EB4"
+				item: "supplementaries:ash_brick"
+				type: "item"
+			}]
+			x: -0.5d
+			y: -4.5d
+		}
+		{
+			id: "79611D6CD5EB043A"
+			subtitle: "Obtained via Create crushing, haunting, mixing and spout"
+			tasks: [{
+				id: "5AA882A4BBBF777E"
+				item: "minecraft:netherrack"
+				type: "item"
+			}]
+			x: -5.0d
+			y: -9.0d
+		}
+		{
+			id: "18C9C472248A2657"
+			subtitle: "Obtained via harvest and Immersive Engineering garden cloche"
+			tasks: [{
+				id: "2F642BAF3530DE1A"
+				item: "minecraft:nether_wart"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -7.5d
+		}
+		{
+			id: "1BAAEB70CEF4FAEE"
+			subtitle: "Obtained via harvest, shapeless crafting and Create mixing"
+			tasks: [{
+				id: "68D14688AE82A603"
+				item: "minecraft:magma_cream"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -9.0d
+		}
+		{
+			dependencies: [
+				"29355D5E535A04A3"
+				"1BAAEB70CEF4FAEE"
+				"18C9C472248A2657"
+				"79611D6CD5EB043A"
+				"6C496923744B79D4"
+			]
+			id: "026D6AB9C8FC0610"
+			subtitle: "Obtained via shapeless crafting"
+			tasks: [{
+				id: "55E130E32C117A3F"
+				item: "immersive_weathering:nulch_block"
+				type: "item"
+			}]
+			x: -5.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["026D6AB9C8FC0610"]
+			id: "6B655B3F29879E19"
+			subtitle: "Obtained via lava exposure"
+			tasks: [
+				{
+					id: "2CB511319D7398C7"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "30352201D811FD3D"
+					item: "immersive_weathering:nulch_block"
+					type: "item"
+				}
+			]
+			title: "Lava-logged Nulch"
+			x: -5.0d
+			y: -6.0d
+		}
+		{
+			id: "12D3510CCF116298"
+			tasks: [{
+				id: "37AB7437B499447E"
+				item: "minecraft:charcoal"
+				type: "item"
+			}]
+			x: -3.5d
+			y: 0.0d
+		}
+		{
+			id: "013F0FE2CD38EC01"
+			tasks: [{
+				id: "16A255F108CF1ECB"
+				item: "minecraft:coal"
+				type: "item"
+			}]
+			x: -3.5d
+			y: 1.5d
+		}
+		{
+			id: "2B48C928C8A2677A"
+			tasks: [{
+				id: "04AC820C1D09BFFE"
+				item: "immersiveengineering:coal_coke"
+				type: "item"
+			}]
+			x: -2.0d
+			y: 1.5d
+		}
+		{
+			id: "3B4BDF6A9600151C"
+			tasks: [{
+				icon: "creativeengineering:creosote_soaked_sawdust"
+				id: "5B98F75785FE0DEA"
+				title: "Creosote Soaked Sawdust"
+				type: "custom"
+			}]
+			x: -0.5d
+			y: 1.5d
+		}
+	]
+	title: "Wood"
+}

@@ -1,0 +1,28 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 1600,
+  "input": {
+    "item": "minecraft:spruce_log"
+  },
+  "result": {
+    "count": 6,
+    "item": "minecraft:spruce_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersive_weathering:spruce_bark"
+      },
+      "stripping": true
+    },
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "stripped": {
+    "item": "minecraft:stripped_spruce_log"
+  }
+}

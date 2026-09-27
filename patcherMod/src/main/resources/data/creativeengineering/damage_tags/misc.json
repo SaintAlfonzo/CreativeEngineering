@@ -1,0 +1,11 @@
+{
+  "description": "Administrative/non-gameplay damage (kill commands, colony bookkeeping) and the couple of sources odd enough that no real category fits yet. Not part of any meta tag - always falls to the physical column by default.",
+  "values": [
+    "Console",
+    "despawn",
+    "nether",
+    "Stuck-damage",
+    "Default",
+    "freddy"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "_readme": {
+    "what": "Category knobs for jigsaw pool pieces (village houses above all). Each tag has a \"multiplier\" on the weight of every piece it contains: 0 = removed, 0.5 = half as likely to be picked, 2 = twice as likely. A piece's final weight = current (pool_config.json) x the product of every tag containing it. Rejoin the world to apply (patcherMod worldgen/PoolTuner, at every world load; new chunks only).",
+    "relative": "Weights are relative within a pool: a village street picks each house with chance weight / pool total. Lowering one house makes the others (and the pool's minecraft:empty lot, if it has one) more likely; it doesn't change how many houses a village has.",
+    "values": "Same syntax as structure_tags.json, applied to piece keys (template ids, see pool_config.json): \"ns:path\", globs (\"immersiveengineering:*\", \"*_engineer\"), \"#other_tag\", and \"!\" to exclude. An unknown explicit piece or tag is an error that applies NO pool tuning until fixed (listed in pool_tag_report.md); a glob that matches nothing is only a warning.",
+    "pools": "Optional \"pools\": [globs] limits a tag to those pools, e.g. [\"minecraft:village/desert/*\"] for desert villages only. Without it, the tag applies wherever its pieces appear.",
+    "report": "pool_tag_report.md lists every piece another mod injected into each pool (the fastest way to find a mod's village houses), each retuned pool's before/after chances, and every tag's members."
+  },
+  "tags": {
+    "mod/immersiveengineering": {
+      "multiplier": 0,
+      "note": "IE's 5 village houses (engineer, machinist, electrician, gunsmith, outfitter) x 5 biomes, weight 1 each. IE has no config for them.",
+      "values": ["immersiveengineering:*"]
+    },
+    "mod/dynamicvillage": {
+      "multiplier": 0,
+      "note": "Create: Dynamic Village's 4 Create-themed houses (mech, miner, plumber, train) x 5 biomes. Weight 20 EACH, far above vanilla houses (2-4), so they dominate villages. No config.",
+      "values": ["dynamicvillage:*"]
+    },
+    "mod/pneumaticcraft": {
+      "multiplier": 0,
+      "note": "Mechanic house (weight from pneumaticcraft-common.toml addMechanicHouse, default 8) plus its custom streets in desert/snowy villages.",
+      "values": ["pneumaticcraft:*"]
+    },
+    "mod/advancedperipherals": {
+      "multiplier": 0,
+      "note": "Computer scientist house (weight from config/Advancedperipherals/world.toml villagerStructureWeight, default 10).",
+      "values": ["advancedperipherals:*"]
+    },
+    "tech": {
+      "multiplier": 0,
+      "note": "Every tech-mod village house together.",
+      "values": ["#mod/immersiveengineering", "#mod/dynamicvillage", "#mod/pneumaticcraft", "#mod/advancedperipherals"]
+    },
+
+    "mod/chefsdelight":            { "multiplier": 1, "values": ["chefsdelight:*"] },
+    "mod/domesticationinnovation": { "multiplier": 1, "values": ["domesticationinnovation:*"] },
+    "mod/monobank":                { "multiplier": 1, "values": ["monobank:*"] },
+    "mod/farmersdelight":          { "multiplier": 1, "values": ["farmersdelight:*"] },
+    "mod/waystones":               { "multiplier": 1, "values": ["waystones:*"] },
+    "mod/cloudstorage":            { "multiplier": 1, "values": ["cloudstorage:*"] },
+    "mod/etched":                  { "multiplier": 1, "values": ["etched:*"] },
+    "mod/incubation":              { "multiplier": 1, "values": ["incubation:*"] },
+    "mod/beautify":                { "multiplier": 1, "values": ["beautify:*"] },
+    "mod/wares":                   { "multiplier": 1, "values": ["wares:*"] }
+  }
+}

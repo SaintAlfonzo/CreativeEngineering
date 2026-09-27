@@ -1,0 +1,9 @@
+{
+  "description": "Blades and drill bits: Create's saw and drill, Immersive Engineering's sawmill and sawblade.",
+  "values": [
+    "create.mechanical_saw",
+    "create.mechanical_drill",
+    "ieSawmill",
+    "ieSawblade"
+  ]
+}

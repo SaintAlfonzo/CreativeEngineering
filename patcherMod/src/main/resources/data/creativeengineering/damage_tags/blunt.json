@@ -1,0 +1,16 @@
+{
+  "description": "Heavy impacts: falls, elytra crashes, falling blocks, crushing machinery, and the odd shockwave.",
+  "values": [
+    "fall",
+    "flyIntoWall",
+    "cramming",
+    "anvil",
+    "fallingBlock",
+    "create.crush",
+    "create.mechanical_roller",
+    "create.run_over",
+    "ieCrushed",
+    "allurement.shockwave",
+    "sneak_balloon_attack"
+  ]
+}

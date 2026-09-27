@@ -1,0 +1,28 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 1600,
+  "input": {
+    "item": "minecraft:acacia_wood"
+  },
+  "result": {
+    "count": 6,
+    "item": "minecraft:acacia_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersive_weathering:acacia_bark"
+      },
+      "stripping": true
+    },
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "stripped": {
+    "item": "minecraft:stripped_acacia_wood"
+  }
+}

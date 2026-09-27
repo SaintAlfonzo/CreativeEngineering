@@ -1,0 +1,19 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 1600,
+  "input": {
+    "item": "create:polished_rose_quartz"
+  },
+  "result": {
+    "item": "create_things_and_misc:rose_quartz_sheet",
+    "count": 3
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "minecraft:redstone"
+      },
+      "stripping": false
+    }
+  ]
+}

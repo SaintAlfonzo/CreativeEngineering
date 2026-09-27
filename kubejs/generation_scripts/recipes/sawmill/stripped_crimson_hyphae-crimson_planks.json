@@ -1,0 +1,19 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "minecraft:stripped_crimson_hyphae"
+  },
+  "result": {
+    "count": 6,
+    "item": "minecraft:crimson_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "minecraft:crimson_roots"
+      },
+      "stripping": false
+    }
+  ]
+}

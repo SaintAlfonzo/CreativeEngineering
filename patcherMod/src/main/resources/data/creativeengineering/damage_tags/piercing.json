@@ -1,0 +1,18 @@
+{
+  "description": "Spikes, thorns, stabs: cactus, bee stings, berry bush, dripstone, icicles, spikes, barbed and razor wire, tridents and spears.",
+  "values": [
+    "cactus",
+    "sting",
+    "sweetBerryBush",
+    "stalagmite",
+    "fallingStalactite",
+    "icicle",
+    "fallingIcicle",
+    "supplementaries.bamboo_spikes",
+    "barbed_wire",
+    "barb",
+    "ieRazorWire",
+    "trident",
+    "spear"
+  ]
+}

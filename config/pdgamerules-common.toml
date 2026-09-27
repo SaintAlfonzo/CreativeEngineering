@@ -1,0 +1,2 @@
+[rules."minecraft:the_nether"]
+doMobLoot = "false"

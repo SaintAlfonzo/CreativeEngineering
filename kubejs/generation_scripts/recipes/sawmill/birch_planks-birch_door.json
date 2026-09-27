@@ -1,0 +1,20 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "minecraft:birch_planks"
+  },
+  "result": {
+    "item": "minecraft:birch_door",
+    "count": 1
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "blade": "door"
+}

@@ -1,0 +1,8 @@
+{
+  "description": "Falling-block-style damage: a helmet cuts it 75% and takes durability loss.",
+  "values": [
+    "anvil",
+    "fallingBlock",
+    "fallingStalactite"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "description": "Skips protection enchantments only (Resistance still works).",
+  "values": [
+    "sonic_boom",
+    "farseer"
+  ]
+}

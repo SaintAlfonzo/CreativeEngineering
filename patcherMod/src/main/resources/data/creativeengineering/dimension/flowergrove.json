@@ -1,0 +1,18 @@
+{
+  "type": "creativeengineering:hub_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:flower_forest",
+      "lakes": false,
+      "features": true,
+      "layers": [
+        { "block": "minecraft:bedrock", "height": 1 },
+        { "block": "minecraft:stone", "height": 64 },
+        { "block": "minecraft:dirt", "height": 10 },
+        { "block": "minecraft:grass_block", "height": 1 }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

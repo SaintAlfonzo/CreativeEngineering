@@ -1,0 +1,17 @@
+{
+  "__comment": "FREQUENCY + Y dial for nullscape:crystal_peaks (medium, wider band).",
+  "feature": "creativeengineering:felsic_ore",
+  "placement": [
+    { "type": "minecraft:count", "count": 7 },
+    { "type": "minecraft:in_square" },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:trapezoid",
+        "min_inclusive": { "absolute": 0 },
+        "max_inclusive": { "absolute": 64 }
+      }
+    },
+    { "type": "minecraft:biome" }
+  ]
+}

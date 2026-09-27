@@ -1,0 +1,1536 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "resources"
+	group: "16C7EF1E80339E63"
+	icon: "immersiveengineering:component_electronic"
+	id: "41A45F75CA991DBF"
+	order_index: 4
+	quest_links: [ ]
+	quests: [
+		{
+			dependencies: [
+				"5B06F0917B27E93A"
+				"7A1385A3E65FC154"
+				"26977968F2B22615"
+			]
+			id: "7FE8975535F098A6"
+			tasks: [{
+				id: "457E38DC7DCF597A"
+				item: "minecraft:redstone"
+				type: "item"
+			}]
+			x: -2.5d
+			y: -1.0d
+		}
+		{
+			id: "5B06F0917B27E93A"
+			tasks: [
+				{
+					id: "4092D53FE8441A1A"
+					item: "create_compressed:crushed_iron_pile"
+					type: "item"
+				}
+				{
+					id: "1776BD0D80561918"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "2787EFC449D69FC1"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "70D6C2C41D16FDB1"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Crushed Iron Washing"
+			x: -4.0d
+			y: 0.0d
+		}
+		{
+			id: "7A1385A3E65FC154"
+			tasks: [
+				{
+					id: "3D0CEE0BA01332E6"
+					item: "minecraft:netherrack"
+					type: "item"
+				}
+				{
+					id: "7944C81F2B3DA6AD"
+					item: "minecraft:flint"
+					type: "item"
+				}
+				{
+					id: "04A8624D9B88A3B9"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "11A8009005C5587E"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+			]
+			title: "Netherrack, Flint, Lava Mixing"
+			x: -4.0d
+			y: -1.0d
+		}
+		{
+			id: "26977968F2B22615"
+			tasks: [
+				{
+					id: "0257FC916B8FB6D2"
+					item: "create:cinder_flour"
+					type: "item"
+				}
+				{
+					id: "16D7D8EEE54461DF"
+					item: {
+						Count: 1b
+						id: "minecraft:potion"
+						tag: {
+							Potion: "minecraft:strength"
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "3DF481F423CCCE39"
+					item: "create:spout"
+					type: "item"
+				}
+			]
+			title: "Cinder Flour Strength Spouting"
+			x: -4.0d
+			y: -2.0d
+		}
+		{
+			id: "7E902D0EB793AA22"
+			subtitle: "Higher Yield w/ IE Crusher w/o Byproducts"
+			tasks: [
+				{
+					id: "01530BB6D547C124"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "60BCD05DFB7FE93B"
+					item: "create:limestone"
+					type: "item"
+				}
+				{
+					id: "45CA8ED085BF7CE4"
+					item: "minecraft:diorite"
+					type: "item"
+				}
+				{
+					id: "1E9931527EF3935E"
+					item: "minecraft:prismarine_crystals"
+					type: "item"
+				}
+				{
+					id: "0AD3B152BD1577B1"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Crushing Diorite, Limestone, Prismarine Crystals"
+			x: -4.0d
+			y: 3.0d
+		}
+		{
+			id: "0AF405F9915FB601"
+			tasks: [
+				{
+					id: "09AEF1A83328DF0C"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "514CAF9B206066B3"
+					item: "create_compressed:crushed_gold_pile"
+					type: "item"
+				}
+				{
+					id: "39932AB04F86CEC5"
+					item: "create:crushed_raw_gold"
+					type: "item"
+				}
+				{
+					id: "0126359B60559001"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+				{
+					id: "2B3E55EC1F5E2B1B"
+					item: "minecraft:soul_sand"
+					type: "item"
+				}
+			]
+			title: "Crushed Gold, Soul Sand Washing"
+			x: -4.0d
+			y: 1.0d
+		}
+		{
+			id: "6E00E324D701E23B"
+			tasks: [
+				{
+					id: "4DBA6AA774B45AF9"
+					item: "minecraft:soul_campfire"
+					type: "item"
+				}
+				{
+					id: "5F1DE29DC64DE72F"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "61FDEDC2BD35A41D"
+					item: "minecraft:amethyst_shard"
+					type: "item"
+				}
+			]
+			title: "Amethyst Haunting"
+			x: -4.0d
+			y: 2.0d
+		}
+		{
+			dependencies: [
+				"0AF405F9915FB601"
+				"6E00E324D701E23B"
+				"7E902D0EB793AA22"
+			]
+			id: "2E9BFF76A043DBB7"
+			tasks: [{
+				id: "0362789F72B86A4A"
+				item: "minecraft:quartz"
+				type: "item"
+			}]
+			x: -2.5d
+			y: 2.0d
+		}
+		{
+			dependencies: [
+				"7FE8975535F098A6"
+				"2E9BFF76A043DBB7"
+			]
+			id: "1B71D3C81245032C"
+			subtitle: "8 Redstone / Quartz"
+			tasks: [{
+				id: "1D8A438E572A0637"
+				item: "minecraft:crafting_table"
+				type: "item"
+			}]
+			title: "Shapeless Crafting"
+			x: -1.0d
+			y: -0.5d
+		}
+		{
+			dependencies: [
+				"2E9BFF76A043DBB7"
+				"7FE8975535F098A6"
+			]
+			id: "18CD13A37DAF6AAB"
+			subtitle: "4 Redstone / Quartz"
+			tasks: [
+				{
+					id: "37FF785CF0A293EC"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "7D94DF772BEE6AB9"
+					item: "create:blaze_burner"
+					type: "item"
+				}
+				{
+					id: "2A634199AE7D55B8"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:graphite_electrode"
+						tag: {
+							graphDmg: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Heated Mixing / IE Arc Smelting"
+			x: -1.0d
+			y: 0.5d
+		}
+		{
+			dependencies: [
+				"7FE8975535F098A6"
+				"2E9BFF76A043DBB7"
+			]
+			id: "33E684882346C3EB"
+			subtitle: "3 Redstone / Quartz"
+			tasks: [{
+				id: "4B62B58454AB08F4"
+				item: "pneumaticcraft:pressure_chamber_wall"
+				type: "item"
+			}]
+			title: "PC Pressure Chamber"
+			x: -1.0d
+			y: 1.5d
+		}
+		{
+			dependencies: [
+				"33E684882346C3EB"
+				"1B71D3C81245032C"
+				"18CD13A37DAF6AAB"
+			]
+			id: "1DC06BF9D3054683"
+			tasks: [{
+				id: "7D154E5F218413C5"
+				item: "create:rose_quartz"
+				type: "item"
+			}]
+			x: 0.5d
+			y: 0.5d
+		}
+		{
+			dependencies: ["1DC06BF9D3054683"]
+			id: "2F983F4CA1F880B9"
+			tasks: [{
+				id: "53ECC9046E3AC4D4"
+				item: "create_compressed:rose_quartz_crystal_block"
+				type: "item"
+			}]
+			x: 1.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["2F983F4CA1F880B9"]
+			id: "1488E5852E4243C0"
+			tasks: [
+				{
+					id: "62F8E40E30F4DA27"
+					item: {
+						Count: 1b
+						id: "create:sand_paper"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "46121F9AF22A4835"
+					item: "vintageimprovements:belt_grinder"
+					type: "item"
+				}
+				{
+					id: "204875B0123E4F80"
+					item: {
+						Count: 1b
+						id: "create:red_sand_paper"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "207822788FEE76B9"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "2C823E9EA72FE2EB"
+					item: {
+						Count: 1b
+						id: "createaddition:diamond_grit_sandpaper"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Polishing"
+			x: 2.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["1DC06BF9D3054683"]
+			id: "3343EA3A5EBEADC2"
+			tasks: [
+				{
+					id: "0182C3995C16E904"
+					item: "vintageimprovements:belt_grinder"
+					type: "item"
+				}
+				{
+					id: "20C70FBFEC937B42"
+					item: {
+						Count: 1b
+						id: "create:sand_paper"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "2BB655F770B12FE8"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "452A5DC31300D30C"
+					item: {
+						Count: 1b
+						id: "create:red_sand_paper"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "177E39FBC350D7D0"
+					item: {
+						Count: 1b
+						id: "createaddition:diamond_grit_sandpaper"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Polishing"
+			x: 2.0d
+			y: 0.5d
+		}
+		{
+			dependencies: [
+				"3343EA3A5EBEADC2"
+				"7AA6BCBB65389CF3"
+			]
+			id: "0EBCC0AFFF606506"
+			tasks: [{
+				id: "57F244310BE7625D"
+				item: "create:polished_rose_quartz"
+				type: "item"
+			}]
+			x: 3.5d
+			y: 0.5d
+		}
+		{
+			dependencies: ["1488E5852E4243C0"]
+			id: "7AA6BCBB65389CF3"
+			tasks: [{
+				id: "40F06335EA2EE36D"
+				item: "create_compressed:rose_quartz_polished_block"
+				type: "item"
+			}]
+			x: 3.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["0EBCC0AFFF606506"]
+			id: "2E9E67F8E8C0D727"
+			subtitle: "1 Plate / Rose Quartz"
+			tasks: [
+				{
+					id: "0D2C7936B80666EB"
+					item: "minecraft:crafting_table"
+					type: "item"
+				}
+				{
+					id: "1655A8B24C333B01"
+					item: "immersiveengineering:plate_iron"
+					type: "item"
+				}
+				{
+					id: "43DBAF8A6EB57960"
+					item: "create:deployer"
+					type: "item"
+				}
+			]
+			title: "Manual Crafting / Deploying"
+			x: 5.0d
+			y: 3.5d
+		}
+		{
+			dependencies: ["0EBCC0AFFF606506"]
+			id: "4A6CB59BDE887EB0"
+			subtitle: "4 Nuggets / Rose Quartz"
+			tasks: [
+				{
+					id: "54BDF03464F83884"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:graphite_electrode"
+						tag: {
+							graphDmg: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "667D0C9C731F915C"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+			]
+			title: "IE Arc Furnace"
+			x: 5.0d
+			y: 5.5d
+		}
+		{
+			dependencies: ["0EBCC0AFFF606506"]
+			id: "1A6E890AE7553AB3"
+			subtitle: "1 Rose Quartz / 2 Rose Quartz Plates"
+			tasks: [{
+				id: "7C1FE15B459AD39F"
+				item: "create:mechanical_saw"
+				type: "item"
+			}]
+			title: "Create Sawing"
+			x: 5.0d
+			y: -3.5d
+		}
+		{
+			dependencies: [
+				"2E9E67F8E8C0D727"
+				"4A6CB59BDE887EB0"
+				"2DCFB30FDDF01FC3"
+			]
+			id: "1922AA5910F8503E"
+			tasks: [{
+				id: "306F9A68084568B6"
+				item: "create:electron_tube"
+				type: "item"
+			}]
+			x: 6.5d
+			y: 4.5d
+		}
+		{
+			dependencies: [
+				"1A6E890AE7553AB3"
+				"4D12B546C2326510"
+			]
+			id: "3D05FF5788167866"
+			tasks: [{
+				id: "28DBB0FB34234CDF"
+				item: "create_things_and_misc:rose_quartz_sheet"
+				type: "item"
+			}]
+			x: 6.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["7FE8975535F098A6"]
+			id: "0D6BB8973F43EB4C"
+			subtitle: "Translate Between or Duplicate Redstone and Glowstone"
+			tasks: [
+				{
+					id: "62A68B948E5E552A"
+					item: "botania:mana_pool"
+					type: "item"
+				}
+				{
+					id: "209B3E9EEA491260"
+					item: "botania:alchemy_catalyst"
+					type: "item"
+				}
+				{
+					id: "2BCA83F7A5E9D22C"
+					item: "botania:conjuration_catalyst"
+					type: "item"
+				}
+			]
+			x: -1.0d
+			y: -2.5d
+		}
+		{
+			dependencies: [
+				"1976BDA03EA95C48"
+				"0D6BB8973F43EB4C"
+				"5F23EAAFF4FD2FC4"
+				"30E34FFBB85BE742"
+			]
+			id: "1D4EB0798038F798"
+			tasks: [{
+				id: "2B49725A13191AED"
+				item: "minecraft:glowstone_dust"
+				type: "item"
+			}]
+			x: -1.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["7FE8975535F098A6"]
+			id: "1976BDA03EA95C48"
+			tasks: [
+				{
+					id: "010F957DAF51A0A6"
+					item: "minecraft:soul_campfire"
+					type: "item"
+				}
+				{
+					id: "2409B5EC5D995390"
+					item: "create:encased_fan"
+					type: "item"
+				}
+			]
+			title: "Haunting"
+			x: -2.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["1D4EB0798038F798"]
+			id: "45637A547449C608"
+			size: 0.1d
+			x: -1.15d
+			y: -2.75d
+		}
+		{
+			dependencies: ["0D6BB8973F43EB4C"]
+			id: "0305EBB83E49F890"
+			size: 0.1d
+			tasks: [{
+				id: "04ACB8954C551203"
+				title: "Connector2"
+				type: "custom"
+			}]
+			x: -2.15d
+			y: -1.0d
+		}
+		{
+			id: "5F23EAAFF4FD2FC4"
+			tasks: [
+				{
+					id: "2BE93E08AECE25D0"
+					item: "create:spout"
+					type: "item"
+				}
+				{
+					id: "6A63D09B2C3C8238"
+					item: {
+						Count: 1b
+						id: "minecraft:potion"
+						tag: {
+							Potion: "minecraft:night_vision"
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Cinder Flour Night Vision Spouting"
+			x: -2.5d
+			y: -5.0d
+		}
+		{
+			id: "30E34FFBB85BE742"
+			subtitle: "Varying ratios for CR/IE crushing"
+			tasks: [
+				{
+					id: "2757F97BDEF5365E"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "19A04CBCC59311AD"
+					item: "minecraft:soul_sand"
+					type: "item"
+				}
+				{
+					id: "1DF57C40209D8F72"
+					item: "minecraft:glow_ink_sac"
+					type: "item"
+				}
+				{
+					id: "78C210CC9494C268"
+					item: "minecraft:prismarine_crystals"
+					type: "item"
+				}
+				{
+					id: "098E71646217532D"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "1F96B40AC41996BE"
+					item: "minecraft:soul_soil"
+					type: "item"
+				}
+			]
+			title: "IE/CR Crushing"
+			x: -2.5d
+			y: -4.0d
+		}
+		{
+			dependencies: ["0EBCC0AFFF606506"]
+			id: "2DCFB30FDDF01FC3"
+			subtitle: "0.5 Plates / Rose Quartz"
+			tasks: [{
+				id: "5CE3C20BCC77B313"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:blueprint"
+					tag: {
+						blueprint: "components"
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Workbench Crafting"
+			x: 5.0d
+			y: 4.5d
+		}
+		{
+			dependencies: [
+				"2BE6C103AE9E3826"
+				"7C76F9F2BC22DF70"
+				"608A22340C5D83C3"
+			]
+			id: "16175A637E696200"
+			tasks: [{
+				id: "41661A140157E367"
+				item: "create:rose_quartz_lamp"
+				type: "item"
+			}]
+			x: 6.5d
+			y: 0.5d
+		}
+		{
+			dependencies: ["0EBCC0AFFF606506"]
+			id: "7C76F9F2BC22DF70"
+			subtitle: "1 Redstone, 4 Rose Quartz, 4 Zinc Nuggets"
+			tasks: [
+				{
+					id: "6E76E68A510449BF"
+					item: "minecraft:crafting_table"
+					type: "item"
+				}
+				{
+					id: "6C670B5ADED3DEFB"
+					item: "minecraft:redstone"
+					type: "item"
+				}
+				{
+					id: "181C5FB0206CC7C2"
+					item: "create:zinc_nugget"
+					type: "item"
+				}
+			]
+			title: "Manual Crafting"
+			x: 5.0d
+			y: -0.5d
+		}
+		{
+			dependencies: ["0EBCC0AFFF606506"]
+			id: "2BE6C103AE9E3826"
+			subtitle: "1 Redstone, 3 Rose Quartz, 3 Zinc Nuggets"
+			tasks: [
+				{
+					id: "7AA6D74203D94899"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "22FA1D14379DB234"
+					item: "minecraft:redstone"
+					type: "item"
+				}
+				{
+					id: "6EBFF35B402A3B67"
+					item: "create:zinc_nugget"
+					type: "item"
+				}
+			]
+			title: "Sequenced Assembly"
+			x: 5.0d
+			y: 0.5d
+		}
+		{
+			dependencies: ["0EBCC0AFFF606506"]
+			id: "608A22340C5D83C3"
+			subtitle: "1 Redstone, 2 Rose Quartz, 2 Zinc Nuggets"
+			tasks: [{
+				id: "2CA47E7C466AD73E"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:blueprint"
+					tag: {
+						blueprint: "components"
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Workbench Crafting"
+			x: 5.0d
+			y: 1.5d
+		}
+		{
+			id: "3D2074745A809744"
+			tasks: [
+				{
+					id: "135279D1D604B966"
+					item: "create:cogwheel"
+					type: "item"
+				}
+				{
+					id: "5818B311D0F2217A"
+					item: "create:large_cogwheel"
+					type: "item"
+				}
+				{
+					id: "197BEE18D48DDA00"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+				{
+					id: "66C22A7A959C0538"
+					item: "create:brass_sheet"
+					type: "item"
+				}
+			]
+			title: "Cogwheels, Large Cogwheels, Iron Nuggets"
+			x: -5.5d
+			y: -11.5d
+		}
+		{
+			dependencies: ["3D2074745A809744"]
+			id: "295AE28289C8B718"
+			subtitle: "Brass Sheet + 5x Each Ingredient / 0.8 Mechanisms + 0.2 Scrap"
+			tasks: [{
+				id: "48E46E243E0AF3BE"
+				item: "create:deployer"
+				type: "item"
+			}]
+			title: "Sequenced Assembly"
+			x: -4.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["3D2074745A809744"]
+			id: "1B35C8EB8B41EF8B"
+			subtitle: "Brass Sheet + 5x Each Ingredient / 1 Mechanism"
+			tasks: [{
+				id: "58C0FE8F299FC483"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:blueprint"
+					tag: {
+						blueprint: "components"
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Workbench Crafting"
+			x: -4.0d
+			y: -10.5d
+		}
+		{
+			dependencies: [
+				"1B35C8EB8B41EF8B"
+				"295AE28289C8B718"
+			]
+			id: "2E24BB2409D762AD"
+			subtitle: "Now crafted w/ brass"
+			tasks: [{
+				id: "4F05443B58839706"
+				item: "create:precision_mechanism"
+				type: "item"
+			}]
+			x: -2.5d
+			y: -11.5d
+		}
+		{
+			dependencies: ["2E24BB2409D762AD"]
+			id: "083EF2E32544915F"
+			tasks: [{
+				id: "2E523DC5DAFEF5A5"
+				item: "create_tweaked_controllers:tweaked_linked_controller"
+				type: "item"
+			}]
+			x: -3.0d
+			y: -13.0d
+		}
+		{
+			dependencies: ["2E24BB2409D762AD"]
+			id: "0B5F04512BB51F2F"
+			tasks: [{
+				id: "48119D8A21E11BA4"
+				item: "create:controls"
+				type: "item"
+			}]
+			x: -4.0d
+			y: -13.0d
+		}
+		{
+			dependencies: ["2E24BB2409D762AD"]
+			id: "32821287452A5C33"
+			tasks: [{
+				id: "1F79C46AFE01411D"
+				item: "vintageimprovements:laser"
+				type: "item"
+			}]
+			x: -1.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["2E24BB2409D762AD"]
+			id: "71CB5AFB300578E1"
+			tasks: [{
+				id: "0F64A9E3931CAC4B"
+				item: "create:rotation_speed_controller"
+				type: "item"
+			}]
+			x: -1.0d
+			y: -13.0d
+		}
+		{
+			dependencies: ["2E24BB2409D762AD"]
+			id: "0194CFF7809FF068"
+			tasks: [{
+				id: "19907500B71CD853"
+				item: "create:mechanical_arm"
+				type: "item"
+			}]
+			x: -2.0d
+			y: -13.0d
+		}
+		{
+			id: "30620845DDF44CD8"
+			tasks: [
+				{
+					id: "2BD5982334E4A883"
+					item: "immersiveengineering:plate_gold"
+					type: "item"
+				}
+				{
+					id: "7AB9E3FFCDE2EBF3"
+					item: "create:andesite_alloy"
+					type: "item"
+				}
+			]
+			title: "Gold Plates and Andesite Alloy"
+			x: -5.5d
+			y: -8.5d
+		}
+		{
+			dependencies: ["30620845DDF44CD8"]
+			id: "2082E18171D8F520"
+			subtitle: "1 Alloy + 4 Plates / Hand"
+			tasks: [{
+				id: "597E42B38908F281"
+				item: "minecraft:crafting_table"
+				type: "item"
+			}]
+			title: "Manual Crafting"
+			x: -4.0d
+			y: -8.5d
+		}
+		{
+			dependencies: ["30620845DDF44CD8"]
+			id: "7C3257B20C6E8454"
+			subtitle: "1 Alloy + 3 Plates / Hand"
+			tasks: [{
+				id: "406CA134F7772773"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:blueprint"
+					tag: {
+						blueprint: "components"
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Workbench Crafting"
+			x: -4.0d
+			y: -7.5d
+		}
+		{
+			dependencies: [
+				"7C3257B20C6E8454"
+				"2082E18171D8F520"
+			]
+			id: "110D6EB6294388E0"
+			subtitle: "Now made w/ gold! Usable pre-alloys"
+			tasks: [{
+				id: "5F282C0EBE7D52BD"
+				item: "create:brass_hand"
+				type: "item"
+			}]
+			title: "Gold Hand"
+			x: -2.5d
+			y: -8.5d
+		}
+		{
+			dependencies: [
+				"2E24BB2409D762AD"
+				"110D6EB6294388E0"
+			]
+			id: "0CC49EEA04847F49"
+			tasks: [{
+				id: "04F131C2028D3A78"
+				item: {
+					Count: 1b
+					id: "create:extendo_grip"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: -2.5d
+			y: -10.0d
+		}
+		{
+			dependencies: ["110D6EB6294388E0"]
+			id: "3D7ECCE4AF09B123"
+			tasks: [{
+				id: "02435C95DD36C187"
+				item: "create:deployer"
+				type: "item"
+			}]
+			title: "Gold Deployer"
+			x: -1.0d
+			y: -8.5d
+		}
+		{
+			dependencies: [
+				"4FC40267BD04A736"
+				"6FB254CC743A6B56"
+			]
+			id: "19E4D60FFC84B058"
+			tasks: [{
+				id: "48E0FAEFBE9A4B51"
+				item: "minecraft:redstone_lamp"
+				type: "item"
+			}]
+			x: 3.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["1D4EB0798038F798"]
+			id: "7E9DE235C37F2369"
+			tasks: [{
+				id: "2B0A2D53560B52D2"
+				item: "minecraft:glowstone"
+				type: "item"
+			}]
+			x: 0.5d
+			y: -4.0d
+		}
+		{
+			dependencies: ["2FFE8068D61DB61D"]
+			id: "4FC40267BD04A736"
+			tasks: [
+				{
+					id: "43238E71ACA7CBA5"
+					item: "minecraft:crafting_table"
+					type: "item"
+				}
+				{
+					id: "0A9F62D7B9B7FFAD"
+					item: "minecraft:redstone"
+					type: "item"
+				}
+			]
+			title: "Manual Crafting"
+			x: 2.0d
+			y: -2.5d
+		}
+		{
+			dependencies: ["2FFE8068D61DB61D"]
+			id: "6FB254CC743A6B56"
+			tasks: [
+				{
+					id: "1FE034A4F0BB570B"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:blueprint"
+						tag: {
+							blueprint: "components"
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "2F3FFE2C965D375D"
+					item: "minecraft:redstone"
+					type: "item"
+				}
+			]
+			title: "IE Workbench Crafting"
+			x: 2.0d
+			y: -1.0d
+		}
+		{
+			dependencies: [
+				"7E9DE235C37F2369"
+				"1DC06BF9D3054683"
+			]
+			id: "2FFE8068D61DB61D"
+			tasks: [
+				{
+					id: "26D9E87EA06C0DEF"
+					item: "minecraft:glowstone"
+					type: "item"
+				}
+				{
+					id: "274452565C2C699F"
+					item: "create:rose_quartz"
+					type: "item"
+				}
+			]
+			title: "Glowstone or Rose Quartz"
+			x: 0.5d
+			y: -1.0d
+		}
+		{
+			dependencies: ["0EBCC0AFFF606506"]
+			id: "4D12B546C2326510"
+			subtitle: "1 Rose Quartz / 1 Rose Quartz Plate"
+			tasks: [{
+				id: "174B1FB5A6578C17"
+				item: "create:mechanical_press"
+				type: "item"
+			}]
+			title: "Create Pressing"
+			x: 5.0d
+			y: -2.5d
+		}
+		{
+			dependencies: [
+				"3D05FF5788167866"
+				"6868488289FC04FD"
+				"5A82331A55A0FB47"
+			]
+			id: "20034CB54E258708"
+			subtitle: "1 Echo Shard + 3x Ingredients / 1 Mechanism"
+			tasks: [
+				{
+					id: "1B790D0016B1DBB7"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "20024354218EA17C"
+					item: "minecraft:echo_shard"
+					type: "item"
+				}
+				{
+					id: "7CFB789C5801635D"
+					item: "minecraft:amethyst_shard"
+					type: "item"
+				}
+				{
+					id: "2D6AB30B8ECF036A"
+					item: "create_things_and_misc:rose_quartz_sheet"
+					type: "item"
+				}
+				{
+					id: "3BC46ECFAEA9B85B"
+					item: "create:cogwheel"
+					type: "item"
+				}
+				{
+					id: "4AEB4496A97CE505"
+					item: "minecraft:redstone"
+					type: "item"
+				}
+			]
+			title: "Sequenced Assembly"
+			x: 8.0d
+			y: -3.5d
+		}
+		{
+			dependencies: [
+				"3D05FF5788167866"
+				"6868488289FC04FD"
+				"5A82331A55A0FB47"
+			]
+			id: "003C5764084E19C4"
+			subtitle: "1 Echo Shard + 2x Ingredients / 1 Mechanism"
+			tasks: [
+				{
+					id: "3F8B6AC4062CD467"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:blueprint"
+						tag: {
+							blueprint: "components"
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "15743B3DDB343035"
+					item: "minecraft:amethyst_shard"
+					type: "item"
+				}
+				{
+					id: "6AC3963B8B52DAFB"
+					item: "minecraft:echo_shard"
+					type: "item"
+				}
+				{
+					id: "7392FD06333F9313"
+					item: "create_things_and_misc:rose_quartz_sheet"
+					type: "item"
+				}
+				{
+					id: "2911BF90F3890562"
+					item: "minecraft:redstone"
+					type: "item"
+				}
+				{
+					id: "08AF4793E8A99A89"
+					item: "create:cogwheel"
+					type: "item"
+				}
+			]
+			title: "IE Workbench Crafting"
+			x: 8.0d
+			y: -2.5d
+		}
+		{
+			dependencies: [
+				"20034CB54E258708"
+				"003C5764084E19C4"
+			]
+			id: "7D6CAD196575049C"
+			tasks: [{
+				id: "4C564B5D33084C72"
+				item: "create_things_and_misc:vibration_mechanism"
+				type: "item"
+			}]
+			x: 9.5d
+			y: -3.0d
+		}
+		{
+			dependencies: [
+				"5CC33B9E69BB24FD"
+				"61B82216D1AAD006"
+			]
+			id: "6868488289FC04FD"
+			tasks: [{
+				id: "09AA1E9DFEE218A8"
+				item: "minecraft:echo_shard"
+				type: "item"
+			}]
+			x: 9.5d
+			y: -6.0d
+		}
+		{
+			id: "5A82331A55A0FB47"
+			tasks: [{
+				id: "7E8005C1A418DF20"
+				item: "minecraft:amethyst_shard"
+				type: "item"
+			}]
+			x: 6.5d
+			y: -6.0d
+		}
+		{
+			dependencies: ["5A82331A55A0FB47"]
+			id: "61B82216D1AAD006"
+			subtitle: "1 Amethyst + 2 Sculk / Echo Shard"
+			tasks: [
+				{
+					id: "0E842A1650EAEC20"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "406979A132008DF9"
+					item: "minecraft:sculk"
+					type: "item"
+				}
+			]
+			x: 8.0d
+			y: -5.5d
+		}
+		{
+			dependencies: ["5A82331A55A0FB47"]
+			id: "5CC33B9E69BB24FD"
+			subtitle: "1 Amethyst + 4 Sculk / Echo Shard"
+			tasks: [
+				{
+					id: "51C41F0D381AD0D3"
+					item: "minecraft:crafting_table"
+					type: "item"
+				}
+				{
+					id: "5D66BCB475B0C76F"
+					item: "minecraft:sculk"
+					type: "item"
+				}
+			]
+			title: "Manual Crafting"
+			x: 8.0d
+			y: -6.5d
+		}
+		{
+			dependencies: ["5A82331A55A0FB47"]
+			id: "06D505D19BD4189C"
+			subtitle: "3 Amethyst Shards"
+			tasks: [
+				{
+					id: "3CBE98DCF82CCD8D"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "36C8E2F105106A1E"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Water Mixing"
+			x: 6.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["06D505D19BD4189C"]
+			id: "3E42DAD545811883"
+			tasks: [{
+				id: "1CC40877E7C01E73"
+				item: "minecraft:amethyst_block"
+				type: "item"
+			}]
+			x: 6.5d
+			y: -9.0d
+		}
+		{
+			dependencies: ["3E42DAD545811883"]
+			id: "3F87E8D9FD88B23D"
+			subtitle: "3.5 Amethyst Shards"
+			tasks: [{
+				id: "7508A6E8CFCB7C66"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "Create Crushing"
+			x: 7.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["3E42DAD545811883"]
+			id: "6B0C10AE2BF5EF89"
+			subtitle: "4 Amethyst Shards"
+			tasks: [{
+				id: "3483FD0C1E715150"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Crushing"
+			x: 8.5d
+			y: -7.5d
+		}
+		{
+			dependencies: [
+				"3F87E8D9FD88B23D"
+				"6B0C10AE2BF5EF89"
+				"3CE5014CD98F0F87"
+				"2B09691F2627D2E2"
+			]
+			id: "76F2BC8C77E8D14E"
+			size: 0.1d
+			x: 6.5d
+			y: -6.0d
+		}
+		{
+			dependencies: ["3E42DAD545811883"]
+			id: "7490FC8D3DF4D40E"
+			tasks: [
+				{
+					id: "779FDCCA2ED6368C"
+					item: "minecraft:budding_amethyst"
+					type: "item"
+				}
+				{
+					id: "24EAEA1A7E81A924"
+					item: "create:spout"
+					type: "item"
+				}
+				{
+					id: "1EEFEF053A87B237"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "464AF5BCF44DA343"
+					item: "minecraft:small_amethyst_bud"
+					type: "item"
+				}
+			]
+			title: "Sequenced Assembly"
+			x: 6.5d
+			y: -10.5d
+		}
+		{
+			dependencies: ["279224EAEE6F9B16"]
+			id: "4D904B530576DF5B"
+			subtitle: "Natural Crystal Growth"
+			tasks: [{
+				id: "25724D4579A0A404"
+				item: "minecraft:amethyst_cluster"
+				type: "item"
+			}]
+			x: 5.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["4D904B530576DF5B"]
+			id: "2B09691F2627D2E2"
+			subtitle: "9.5 Amethyst Shards"
+			tasks: [{
+				id: "2D31AAFE5EA88BA0"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Crushing"
+			x: 5.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["4D904B530576DF5B"]
+			id: "3CE5014CD98F0F87"
+			subtitle: "7.5 Amethyst Shards"
+			tasks: [{
+				id: "59686BB26FBFD7A6"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "Create Crushing"
+			x: 4.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["7490FC8D3DF4D40E"]
+			id: "279224EAEE6F9B16"
+			tasks: [{
+				id: "7C22C0D4AEB64344"
+				item: "minecraft:budding_amethyst"
+				type: "item"
+			}]
+			x: 5.0d
+			y: -10.5d
+		}
+		{
+			dependencies: ["7D6CAD196575049C"]
+			id: "32074356680B3DBC"
+			tasks: [{
+				id: "656069CF2AAD6898"
+				item: "create_things_and_misc:brass_speaker"
+				type: "item"
+			}]
+			x: 11.0d
+			y: -2.0d
+		}
+		{
+			dependencies: ["7D6CAD196575049C"]
+			id: "4AB2DE3166B772A6"
+			tasks: [{
+				id: "6EAA00C9085C804F"
+				item: "create_things_and_misc:radar"
+				type: "item"
+			}]
+			x: 11.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["7D6CAD196575049C"]
+			id: "46DBC2522533D2CE"
+			subtitle: "Required for Redstone Mechanism"
+			tasks: [{
+				id: "54AF36CEFC832F28"
+				item: "vintageimprovements:vibrating_table"
+				type: "item"
+			}]
+			x: 11.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["3D05FF5788167866"]
+			id: "3A295D214C5D8837"
+			subtitle: "2 Quartz or Rose Quartz Plates / 1 Daylight Detector"
+			tasks: [
+				{
+					id: "4A5CA603586F436D"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "19EFD6B3DD626B43"
+					item: "minecraft:quartz"
+					type: "item"
+				}
+				{
+					id: "1371F43643C7C3D2"
+					item: "create_things_and_misc:rose_quartz_sheet"
+					type: "item"
+				}
+				{
+					id: "1BA8D6A9A7B95482"
+					item: "minecraft:glass"
+					type: "item"
+				}
+				{
+					id: "3B9813DF57FAB3DC"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:blueprint"
+						tag: {
+							blueprint: "components"
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Sequenced Assembly or IE Workbench"
+			x: 8.0d
+			y: -1.0d
+		}
+		{
+			dependencies: ["3A295D214C5D8837"]
+			id: "2BC6A3C3C6FBD0D9"
+			tasks: [{
+				id: "3921ABDC2EC500C5"
+				item: "minecraft:daylight_detector"
+				type: "item"
+			}]
+			x: 9.5d
+			y: -1.0d
+		}
+	]
+	title: "Components"
+}
