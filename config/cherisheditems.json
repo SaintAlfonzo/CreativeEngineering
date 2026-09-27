@@ -1,0 +1,22 @@
+{
+  "renamed_items_despawn_time": {
+    "enabled": true,
+    "despawn_time": 6000
+  },
+  "enchanted_items_despawn_time": {
+    "enabled": true,
+    "despawn_time": 6000
+  },
+  "default_despawn_times": {
+    "enabled": false,
+    "despawn_time": 6000
+  },
+  "shortened_time_tag": {
+    "enabled": true,
+    "despawn_time": 1200
+  },
+  "extended_time_tag": {
+    "enabled": true,
+    "despawn_time": 12000
+  }
+}

@@ -1,0 +1,7 @@
+{
+	chapter_groups: [
+		{ id: "6813545A05D7C99D", title: "Quests" }
+		{ id: "6E8D1BA71A4FAF2E", title: "The Market" }
+		{ id: "16C7EF1E80339E63", title: "Recipe Paths" }
+	]
+}

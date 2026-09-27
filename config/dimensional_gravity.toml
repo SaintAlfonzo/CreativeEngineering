@@ -1,0 +1,36 @@
+
+["Dimension Enable/Disable"]
+	#Enable changing gravity of the end
+	end = true
+	#Enable changing gravity of the nether
+	nether = false
+	#Enable changing gravity of the overworld
+	overworld = false
+	#Enable changing gravity for other dimensions
+	custom1 = false
+	custom2 = false
+	custom3 = false
+	custom4 = false
+	custom5 = false
+
+[Gravity]
+	#Default: 0.026 (x3 lower gravity)
+	endgravity = 0.026
+	#Default: 0.04 (x2 lower gravity)
+	nethergravity = 0.04
+	#Default: 0.08 (normal gravity)
+	overworldgravity = 0.08
+	custom1gravity = 0.08
+	custom2gravity = 0.08
+	custom3gravity = 0.08
+	custom4gravity = 0.08
+	custom5gravity = 0.08
+
+["Custom Dimensions"]
+	#e.g: minecraft:overworld, twilightforest:twilight_forest, can be found on F3 when in dimension
+	custom1id = "none"
+	custom2id = "none"
+	custom3id = "none"
+	custom4id = "none"
+	custom5id = "none"
+

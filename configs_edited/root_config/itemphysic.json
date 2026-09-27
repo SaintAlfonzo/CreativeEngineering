@@ -1,0 +1,27 @@
+{
+  "general": {
+    "customThrow": true,
+    "fallSounds": true,
+    "swimmingItems": {
+      "entries": [],
+      "isWhitelist": true
+    },
+    "burningItems": {
+      "entries": [],
+      "isWhitelist": false
+    },
+    "undestroyableItems": {
+      "entries": [
+        "{id:\"item\",item:\"minecraft:nether_star\"}",
+        "{block:\"minecraft:bedrock\",id:\"block\"}",
+        "{block:\"minecraft:obsidian\",id:\"block\"}"
+      ],
+      "isWhitelist": true
+    }
+  },
+  "pickup": {
+    "customPickup": false,
+    "pickupWhenSneaking": true,
+    "maximumPickupRange": 5.0
+  }
+}

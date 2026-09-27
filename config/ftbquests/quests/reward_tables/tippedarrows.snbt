@@ -1,0 +1,120 @@
+{
+	id: "06D3106E9E2BA8E1"
+	loot_size: 1
+	order_index: 8
+	rewards: [
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:long_slowness"
+				}
+			}
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:strong_slowness"
+				}
+			}
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:long_turtle_master"
+				}
+			}
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:strong_turtle_master"
+				}
+			}
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:strong_harming"
+				}
+			}
+			weight: 5.0f
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:long_poison"
+				}
+			}
+			weight: 3.0f
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:strong_poison"
+				}
+			}
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:long_weakness"
+				}
+			}
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "minecraft:long_slow_falling"
+				}
+			}
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "buzzier_bees:long_unluck"
+				}
+			}
+		}
+		{
+			count: 64
+			item: {
+				Count: 1b
+				id: "minecraft:tipped_arrow"
+				tag: {
+					Potion: "buzzier_bees:strong_unluck"
+				}
+			}
+		}
+	]
+	title: "TippedArrows"
+}

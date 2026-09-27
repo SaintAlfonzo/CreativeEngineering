@@ -1,0 +1,8 @@
+{
+  "description": "The world itself: hunger, drying out, water against Ender creatures.",
+  "values": [
+    "starve",
+    "dryout",
+    "wasWatered"
+  ]
+}

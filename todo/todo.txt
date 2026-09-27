@@ -1,0 +1,262 @@
+CreativeEngineering2 — consolidated TODO
+Compiled 2026-09-24 from: memory/ audit notes, kubejs/startup_scripts/todo/{kubejs_todo,mod_todo}.txt
+(prior full-repo audits from ~2026-09-11/12), a fresh grep for TODO/FIXME comments, and a check
+of crash-reports/ through today. Superseded items from those two audit files have been dropped or
+corrected below; see them directly for exhaustive blow-by-blow detail on anything summarized here.
+
+============================================================
+CRITICAL — LIVE CRASH BUGS
+============================================================
+
+[ ] Shield block handler NoClassDefFoundError (NEW, crash-2026-09-24_22.20.16-server.txt)
+    ShieldBlockHandler.onShieldBlock -> ShieldCategory.classify -> DamageTags.tagsOf throws
+    NoClassDefFoundError on com.SaintAlfonzo.creativeengineering.damage.DamageFlag. Same "lazy
+    class loads after Mixin transform already ran" pattern this codebase has hit and fixed twice
+    before (SawbladeRouting/SawmillProcessExt/SawmillRecipeExt, ItemPhysicSplit, ForgivingVoidBridge
+    — see the forceLoad() calls in CreativeEngineering.java:152-162). Fix: add
+    forceLoad("com.SaintAlfonzo.creativeengineering.damage.DamageFlag") (and probably
+    DamageTags too) alongside the existing forceLoad list.
+    NOTE: memory's [[shield-tiers-implementation]] and [[damage-tags-layer]] entries say "built,
+    NOT deployed, not yet tried in game" — that's now stale, both are clearly live in the build
+    that produced this crash. Update those memory files once this is fixed and confirmed.
+
+[ ] ItemPhysicSplit$1 NoClassDefFoundError — STILL RECURRING (crash-2026-09-17_17.59.33-server.txt,
+    also crash-2026-09-09_17.49.19-server.txt). ItemPhysicSplit.burnDecision(ItemPhysicSplit.java:128)
+    throws on its enum-switch's synthetic $1 helper class. The outer class IS force-loaded
+    (CreativeEngineering.java:158) but that doesn't force-link the switch statement's own
+    synthetic inner class. Confirmed NOT fixed as of 2026-09-17 (8 days after first occurrence).
+    See [[itemphysic-fire-lava-split]] in memory. Likely fix: reference/force-load the enum
+    switch map class too, or restructure burnDecision() to avoid a switch on the enum (e.g.
+    if/else chain) so javac doesn't generate the synthetic class at all.
+
+[ ] crash-2026-09-11_17.47.20-server.txt is a 0-byte crash report — something crashed and the
+    report never finished writing. Never investigated. Unclear if related to the above.
+
+============================================================
+LITERAL TODO COMMENTS IN LIVE CODE
+============================================================
+
+[ ] kubejs/server_scripts/_lib/sequence_assembly_processes.js:51
+    "TODO: change helper to return recipe for all valid sequence processes, make comment
+    explaining in each helper func"
+
+[ ] kubejs/startup_scripts/changes/transition_items.js:24
+    "TODO / Add `const incComponentSteel = R.incomplete('component_steel')` definitions by file
+    to item dict"
+
+[ ] ~70 effect tooltip descriptions still say "TODO: write a description for X" —
+    kubejs/assets/creativeengineering/lang/en_us.json (lines 2-48) and
+    kubejs/exported/undescribed_effects_queue.json (mirror/working queue). Covers effects from
+    better_beacons, brewinandchewin, this pack's own magic_resistance, endersdelight, essence,
+    immersivepetroleum, monobank, via_romana, vinery, warbrode, xaerominimap, xaeroworldmap.
+    Machinery already exists to (re)generate the placeholder rows — tools/gen_effect_descriptions.py,
+    idempotent, see [[jeed-effect-descriptions]] — what's missing is a human pass to replace the
+    placeholders with real text.
+
+============================================================
+FEATURES NOT YET STARTED
+============================================================
+
+[ ] In-game guidebook. Patchouli is installed + configured (mods/Patchouli-*.jar,
+    config/patchouli-client.toml) but patchouli_books/ is completely empty — no book.json, no
+    single page, anywhere (including patcherMod resources). Hasn't been begun at all.
+
+[ ] Loot overhaul content. kubejs/server_scripts/loot/ is fully scaffolded (global.LOOT API,
+    numbered concern files 00-99, README.md) but 00_lib.js's groups{} and tiers{} lists are all
+    still empty arrays waiting on a `/dumploot` export + manual fill-in; 20_frequency.js through
+    40_targeted.js are 100% commented-out examples. Only the blanket pneumaticcraft: removal in
+    10_removals.js is actually live. See [[loot-overhaul-lootjs]].
+
+[ ] Dragon-elytra rocket takeoff for Alex's Mobs items. Investigated in
+    [[dragon-elytra-rocket-takeoff]] with two viable approaches written up, neither implemented.
+
+[ ] 10 orphaned pre-KubeJS recipes in Modpack/recipes/ (5 Create + 5 Immersive Engineering,
+    dated Aug 2024) never ported into the live kubejs/ pack. Also contains an actual invalid-JSON
+    bug: Modpack/recipes/papyruspressing.json line 7 has a trailing comma before the ingredients
+    array closes (confirmed via python3 json.load).
+
+============================================================
+BUILT, BUT WITH ACKNOWLEDGED GAPS
+============================================================
+
+[ ] Item/fluid/block dictionary merge backlog — kubejs/startup_scripts/todo/ holds 4 unmerged
+    worklists (none loaded by KubeJS, all *.txt):
+      - create_ie_dict_additions.txt — 911 candidate item_dict.js entries, confirmed unmerged
+      - not_in_dict.txt — 689 unmapped item ids
+      - recipes_to_remove.txt — tied to the still-live diagnostic server_scripts/_lib/recipe_scan.js,
+        which logs new cleanup targets every session
+      - remove_list.txt — 26/27 already actioned; only vintageimprovements:rose_gold_rod (line 6)
+        outstanding (may be intentional — a differently-keyed rod_rose_gold item is still used
+        elsewhere, worth a human check before merging)
+    Also: item_dict.js's own "Merge additions from old dict" section (~line 1673) flags the
+    redstone module as still on the old incomplete variant vs. the new dict.
+
+[ ] Tag-based item-dict validation unimplemented in three places (each says so explicitly):
+    startup_scripts/_lib/block_dict.js:33, startup_scripts/_lib/fluid_dict.js:162,
+    startup_scripts/func/neoCraftHelper.js:383.
+
+[ ] Cultured/lab-grown meats — only cow->beef is wired end-to-end ([[sample-syringe]]);
+    pork/mutton/poultry/rabbit/cod/salmon cultures exist as items with no sample-mob recipe yet.
+    All 7 sample syringe items still use a placeholder vanilla iron-sword texture
+    (startup_scripts/items/sample_syringe.js:14). cultures.js says outright the food items have
+    no nutrition values yet ("add once the cooking recipes are designed").
+
+[ ] 29 sequenced-assembly outputs still fall back to the generic grey kubejs:incomplete_item
+    sprite instead of bespoke art. client_scripts/texture_tool.js:28 is a dev tool built
+    specifically to help chase these down (spans redstone.js, transport.js, crystal.js,
+    metal_building.js, misc_metal_crafts.js, cooking.js).
+
+[ ] Metal subsystem standardization — server_scripts/metal/metal_base_materials.js:1-31 has a
+    long author's-note-to-self listing plate/rod/dust-recycle coverage gaps across the 9 base
+    metals, ending in a literal open question to yourself about which standardization approach
+    to take. Still present, still unanswered.
+
+[ ] Component tier names undecided — server_scripts/engineering/components.js:18,22 still have
+    placeholder category comments on aluminum (`--- Light? ---`) and uranium (`--- Dense? ---`).
+
+[ ] Magic Resistance potion reagent — minecraft:amethyst_shard (potions.js:71) is explicitly
+    called out as "a placeholder reagent - retune later." (Corrects [[magic-resistance-effect]],
+    which says "not brewable yet" — it IS brewable now via this mix, just with a placeholder
+    reagent that should be retuned.)
+
+[ ] removed_items.js bookkeeping gap — minecraft:dispenser, minecraft:smoker, and minecraft:cake
+    are removed in-game but not tracked as entries in startup_scripts/_lib/removed_items.js
+    (the removals work, they're just untracked for consistency/audit purposes).
+
+[ ] metal_building.js:11 removes createdeco:polished_iron_bars's stonecutting recipe with no
+    replacement recipe anywhere — looks like it's now genuinely uncraftable, worth confirming
+    intentional.
+
+[ ] Potion-bucket dome (ring-stack AreaEffectCloud approach, [[potion-buckets]]) not yet
+    confirmed in-game: shape/feel of the stacked-ring dome, and the two-layer tint textures'
+    brightness (`lum * 1.6` scale factor in tools/potion_bucket_texture.py's split()) if the
+    liquid layer looks off.
+
+[ ] Potion-bucket survival craft/reverse recipes (potion_bottling.js's bucketRecipes()) and the
+    vanilla-potion-item crafting remainder fix (item.setCraftingRemainder(...) in
+    potion_buckets.js, corrected 2026-09-12 after the wrong containerItem() call) — implemented
+    but not yet confirmed working in-game.
+
+[ ] FlintAndTerraSteelItem.java:16-26 — doc comment admits this is "TEMPORARY testing behavior":
+    places CreativeEngineeringBlocks.DARK_FIRE on any adjacent air block with no real
+    portal-frame validation. References a TerraFireBlock class that no longer exists in the
+    codebase (grep-confirmed) — stale naming from an earlier design. Real frame-validation logic
+    still needs to be written.
+
+[ ] PortalFailureHandler.java:47-52 — diagnostic LOGGER.info kept in deliberately "until this is
+    confirmed working" for the Dark Fire portal-failure path. Stability not yet confirmed; safe
+    to remove once it is.
+
+============================================================
+DEAD CODE / CLEANUP (mid-migration leftovers, safe-ish to action)
+============================================================
+
+[ ] Pack is mid-migration from the old recipe helper (global.CE, archive/craftHelper.js — dead,
+    archive/ isn't an auto-loaded KubeJS root) to the current global.NCH
+    (startup_scripts/func/neoCraftHelper.js). Old CE-based blocks were commented out in place
+    rather than deleted, confirmed dead via logs/kubejs/server.log (no start/finish log pair for
+    the old blocks):
+      - server_scripts/other/misc_mods.js lines 50-304 (255/304 lines dead) — includes the
+        author's own "// all fucked up, fix later" and a stray double-comma syntax error, so it
+        couldn't even be re-enabled as-is.
+      - server_scripts/engineering/resource_blocks.js lines 251-481 (231/482 lines dead)
+      - server_scripts/cooking/cooking.js lines 313-737 (424/736 lines dead)
+      - archive/ (whole folder, 9 files) — confirmed zero live references anywhere
+    Worth confirming with yourself whether archive/ and these dead blocks are safe to delete
+    outright or worth keeping as reference a while longer.
+
+[ ] patcherMod duplicate/legacy blocks:
+      - CreativeEngineering.java:254-416 — old onServerStarted/onServerAboutToStart + a dead
+        SawdustFalseFluidHandler capability hook (class no longer exists)
+      - IECompat.java:171-394 — two full commented-out legacy versions of the class
+      - item/CreativeEngineeringItems.javaold and build.gradleold — stale drafts kept out of the
+        build only via a mangled `.javaold`/`.gradleold` extension
+
+[ ] Duplicate/dead localization file — assets/creativeengineering/lang/.en_us.json (leading dot,
+    never loaded by Minecraft) still holds all 26 real item/block display names + 16 unrelated
+    block.chalk.* keys. The file actually loaded, en_us.json, only has 5 unrelated entries. Names
+    render correctly today only because kubejs/client_scripts/namechanges.js duplicates the same
+    data client-side — this is drift risk (two sources of truth), not a live bug. Either delete
+    the dead `.en_us.json` or reconcile/merge it into the real file.
+
+[ ] patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/Config.java — entirely
+    untouched Forge MDK example boilerplate (LOG_DIRT_BLOCK, MAGIC_NUMBER, ITEM_STRINGS). Config.SPEC
+    is never registered anywhere in active code, so this whole config system is orphaned and
+    doesn't even load. (Superseded by CEConfig — see [[global-config-framework]].) Safe to delete.
+
+[ ] META-INF/mods.toml lines 1-44 — unedited Forge MDK template text: commented-out
+    issueTrackerURL/updateJSONURL/displayURL pointing at *.example.invalid, logoFile=examplemod.png,
+    and (not commented out) description='''Content for Creative Engineering''' — literal MDK
+    placeholder, never replaced with real text.
+
+[ ] patcherMod/README.txt — generic unmodified Forge MDK boilerplate, never customized.
+
+[ ] PotionFluidHandlerMixin.java:62-66 — permanent LOGGER.info dump on every potion-bundle
+    emptying, labeled "// TEMP diagnostic" but never removed.
+
+[ ] IETagUtilsMixin.java:54 — casual debug-level LOGGER.info("Called arc recycling mixin func")
+    left in a method that runs on every arc-recycling ingredient check (potentially hot path).
+
+[ ] CycleEnchantmentMixin.java, StockpileEnchantmentMixin.java, RecoveryEnchantmentMixin.java —
+    all three import org.spongepowered.asm.mixin.Overwrite but never annotate any method with it
+    (isDiscoverable/canApplyAtEnchantingTable/isAllowedOnBooks). Works today (Mixin treats them as
+    injections since the targets inherit from Enchantment), but reads like an interrupted refactor
+    copy-pasted three times — worth a maintainer double-check.
+
+[ ] fluidtags.js:79 — dead commented-out block referencing a nonexistent/mis-cased T.addFluid;
+    harmless while dead, don't copy back in as-is if ever revisited.
+
+[ ] wood/sawdust.js:83 — author's own note that live nulch-compost content is sitting in the
+    wrong file ("Integrate nulch, move to compost file") and hasn't been relocated.
+
+============================================================
+HOUSEKEEPING / LOW PRIORITY
+============================================================
+
+[ ] scratch_kjs/dev/latvian/mods/kubejs/item/{ItemStackJS.class, OutputItem.class} — decompiled
+    KubeJS internals, zero references anywhere in the source tree. Safe to delete.
+
+[ ] tools/gen_create_ie_dict.mjs — credited (in create_ie_dict_additions.txt's own header) as the
+    generator for that worklist, but no longer exists anywhere in the instance.
+
+[ ] kubejs/mixin/ and quests_structures/ — both completely empty scaffolding, never used. All
+    real Mixin work lives in patcherMod/src/main/java/.../mixin/ instead.
+
+[ ] kubejs/quest_working/produce.txt — draft "Sell Wheat Flour" quest chain SNBT; verified already
+    fully merged into the live config/ftbquests/quests/chapters/food_purchasing.snbt (all 10
+    quest titles match with real registered IDs). Safe to delete.
+
+[ ] simplebackups/ — ~25GB of instance backup zips at the instance root. Not a code issue, just a
+    disk-space flag if space ever gets tight.
+
+[ ] Fragile-by-design mixins worth re-checking after any dependency update:
+      - MemoryStickItemMixin.java — matches PneumaticCraft internals by compiler-assigned lambda
+        names; the class doc itself warns a future PC:R update can silently break this with no
+        error.
+      - EasyElytraTakeoffGroundCheckMixin.java — pins a raw bytecode local-variable slot number
+        (index 8) reverse-engineered from one specific easyelytratakeoff jar version.
+
+[ ] "Recently built, never explicitly closed out" chains — per memory, the whole Sept 6-8 potion-
+    fluid rework (IE Mixer/Bottler/Refinery <-> create:potion, splash/lingering parity, dedicated
+    JEI categories: [[am-potion-brewing-fix]], [[ie-refinery-lingerification]],
+    [[ie-jei-fluid-nbt-tooltips]]) and the sawblade-profile routing fix ([[sawblade-recipe-routing]])
+    all ended their sessions at "built + deployed, awaiting restart to verify in-game." No
+    regression reported since, but nothing on record confirms the in-game checklist was ever
+    explicitly run — low priority given the time elapsed without issues, but worth a pass if
+    you're ever touching that code anyway.
+
+============================================================
+NOTES ON THIS FILE
+============================================================
+- Source material: kubejs/startup_scripts/todo/kubejs_todo.txt (kubejs/ tree audit, 2026-09-11)
+  and kubejs/startup_scripts/todo/mod_todo.txt (patcherMod audit, 2026-09-12) contain much more
+  exhaustive line-by-line detail than summarized here, including a "checked and already resolved"
+  section — read those directly if you need the full context on any item above.
+- Item-dictionary worklists (create_ie_dict_additions.txt, not_in_dict.txt, recipes_to_remove.txt,
+  remove_list.txt) are left where they are, not duplicated here — see "dictionary merge backlog"
+  above.
+- Several items the two source audits flagged as outstanding were spot-checked against current
+  code for this pass and found already done (crossed off here, not listed above): potion-bucket
+  dispenser support ([[potion-bucket-dispenser]]), potion-bucket survival recipes (implemented,
+  just not yet in-game-confirmed per above), the misc_metal_crafts.js "Broken? Item still
+  craftable" rusty-door bug.

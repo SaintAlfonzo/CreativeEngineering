@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "nullscape:void_barrens",
+  "features": "creativeengineering:felsic_ore_void_barrens",
+  "step": "underground_ores"
+}

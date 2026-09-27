@@ -1,0 +1,14 @@
+{
+  // Surface tier speeds (#blockrunner:surface/*) are NOT set here any more: they live in
+  // config/creativeengineering-common.toml [surface.speed], and patcherMod writes them in every
+  // time BlockRunner reads this file (a tier key added here is overridden, with a log warning).
+  // This file keeps BlockRunner's six basic tiers (kept empty by blocktags.js, for one-off
+  // overrides) and any "namespace:block": multiplier keys, which always beat tags.
+  // Gson reads it leniently: // comments are fine, trailing commas are not.
+  "#blockrunner:very_quick_blocks": 1.55,
+  "#blockrunner:quick_blocks": 1.35,
+  "#blockrunner:slightly_quick_blocks": 1.15,
+  "#blockrunner:slightly_slow_blocks": 0.85,
+  "#blockrunner:slow_blocks": 0.65,
+  "#blockrunner:very_slow_blocks": 0.45
+}

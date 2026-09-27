@@ -1,0 +1,325 @@
+Based on a full pass over patcherMod/src (all 63 Java files, creativeengineering.mixins.json, mods.toml, lang/data resources, plus corroborating runtime evidence from logs/ and crash-reports/ at the instance root), here is the complete work-in-progress audit.
+
+Mixin registration cross-check (explicitly requested)
+Clean bill of health. All 35 .java files under src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ have an exact 1:1 match with the 35 entries in src/main/resources/creativeengineering.mixins.json (26 in "mixins", 9 in "client"). No .java mixin is missing from the JSON, and no JSON entry points at a deleted class. This part of the mod is fully wired.
+
+Top-tier findings (clear, high-confidence WIP/placeholder signals)
+1. src/main/java/com/SaintAlfonzo/creativeengineering/Config.java (whole file) — This is the untouched Forge MDK example config class: LOG_DIRT_BLOCK ("Whether to log the dirt block on common setup"), MAGIC_NUMBER (comment: "A magic number", default 42), MAGIC_NUMBER_INTRODUCTION, and an ITEM_STRINGS list defaulting to "minecraft:iron_ingot". Worse: Config.SPEC is never passed to ModLoadingContext.get().registerConfig(...) anywhere in the active source (confirmed by grep — the only ModLoadingContext reference is inside the dead commented-out block in CreativeEngineering.java), so this entire config system is orphaned template boilerplate that doesn't even load.
+
+2. src/main/resources/META-INF/mods.toml lines 1-44 — Still contains large stretches of unedited Forge MDK template comments and placeholder values: commented-out issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/", updateJSONURL="https://change.me.example.invalid/updates.json", displayURL="https://change.me.to.your.mods.homepage.example.invalid/", logoFile="examplemod.png", and — not commented out — description='''Content for Creative Engineering''', which is the literal MDK template description pattern, never replaced with real text. (By contrast, the [[dependencies...]] blocks at lines 68-105 are clearly hand-written and well-maintained, so the metadata was simply never finished.)
+
+3. patcherMod/README.txt (whole file) — Generic, unmodified Forge MDK "Source installation information for modders" boilerplate; never customized to describe this project.
+
+4. src/main/java/com/SaintAlfonzo/creativeengineering/item/CreativeEngineeringItems.javaold and patcherMod/build.gradleold — Stale backup/draft files left in place with a mangled extension so they're silently excluded from compilation. The .javaold is an early draft of CreativeEngineeringItems.java from when there was only one item (precision_sawblade, durability 200, plain Item).
+
+5. src/main/java/com/SaintAlfonzo/creativeengineering/item/FlintAndTerraSteelItem.java lines 16-26 — Doc comment literally says: "TEMPORARY testing behavior: places TerraFireBlock on any air block adjacent to the clicked face, with no portal-frame validation at all... this version is a stand-in." It places CreativeEngineeringBlocks.DARK_FIRE (there is no TerraFireBlock anywhere in the codebase — confirmed via grep), and explicitly skips real frame-validation logic that the author says still needs to be written.
+
+6. src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java lines 254-416 — An entire second, earlier version of the whole mod class wrapped in a block comment (old onServerStarted, old onServerAboutToStart, and an attachCaps/SawdustFalseFluidHandler capability hook). SawdustFalseFluidHandler no longer exists anywhere in the source tree — this is dead reference material. Also line 83: //FluidBridge.logStartupDiagnostic(); is a stale commented-out call left over from before the real call was added via event.enqueueWork(...) at line 115.
+
+7. src/main/java/com/SaintAlfonzo/creativeengineering/compat/IECompat.java:
+
+Lines 171-394: two more complete commented-out legacy versions of the class.
+Lines 93-126: a comment describing a planned fix for a "tag-iteration-order bug," followed by a /* ... */-commented-out implementation of that fix that is currently inactive/unused.
+8. src/main/java/com/SaintAlfonzo/creativeengineering/dimension/PortalFailureHandler.java lines 47-52 — LOGGER.info(...) guarded by the comment "Diagnostic: confirms whether this fires at all for Dark Fire... Safe to remove once this is confirmed working - but leave it in until then." States outright that the Dark Fire portal-failure feature isn't yet confirmed stable.
+
+9. src/main/java/com/SaintAlfonzo/creativeengineering/block/DarkFireBlock.java lines 45-53 vs 73-76 — Contradictory comments: lines 45-53 say "No isAir() override" and explain it was removed because it broke rendering; lines 73-76 still say "Dark Fire's isAir() override means PortalShape's interior check already accepts it directly" as if the override still exists. Stale comment from an earlier design that was never updated. (This file/PortalFailureHandler.java are also tied to a real Aug 17 StackOverflowError crash in onPlace/m_6807_, which the "Intentionally NOT calling super.onPlace(...)" comment at lines 63-67 appears to retroactively explain/fix.)
+
+10. Lang file mismatch — src/main/resources/assets/creativeengineering/lang/.en_us.json vs en_us.json — This is a significant, concrete bug. The dot-prefixed .en_us.json (never loaded by Minecraft — wrong filename) contains all 26 of this mod's own item/block display names (precision sawblade, all the metal wires/plates/dust piles, etc.) plus 16 unrelated block.chalk.* keys. The file Minecraft actually loads, en_us.json, contains only 5 unrelated entries (a Waila tooltip, dragon-breathing recipe names, JEI category names). I verified kubejs/client_scripts/namechanges.js separately re-adds the same 26+ keys, so players currently see correct names in practice — but this is a dead, duplicate, driftable copy of localization data sitting in patcherMod, clear evidence of an incomplete migration/cleanup.
+
+11. src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ArmorMaterialEnchantabilityMixin.java lines 22-23, 36-39 — OVERRIDES map has exactly 2 entries (echo_armor, felsic), with the doc comment explicitly saying "Add a row to {@link #OVERRIDES} for more materials." Designed to be extended; currently minimal.
+
+12. src/main/java/com/SaintAlfonzo/creativeengineering/mixin/IETagUtilsMixin.java lines 46-50 — Same pattern: BLACKLISTED_MATERIALS set has exactly 1 entry ("compressed_iron") with comment "add any other tags here that should never be treated as a legitimate material family for recycling purposes."
+
+13. src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionFluidHandlerMixin.java line 62-66 — // TEMP diagnostic above a permanent LOGGER.info(...) that dumps bundle info on every potion-bundle emptying — an explicitly-labeled temporary debug line never removed.
+
+14. src/main/java/com/SaintAlfonzo/creativeengineering/mixin/IETagUtilsMixin.java line 54 — LOGGER.info("Called arc recycling mixin func"); — vague, casual debug-style message left at INFO level inside a method that runs on every arc-recycling ingredient check (potentially very frequent), unlike the otherwise polished style of the file.
+
+15. src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MemoryStickItemMixin.java lines 19-40 — Class doc explicitly warns: "these lambda names are compiler-assigned... If a future PC:R update adds, removes, or reorders a lambda... these names can silently shift... and this Mixin will stop matching with NO error." Debug logging was added purely as an early-warning tripwire for this known fragility. Also has duplicated imports (Constant/ModifyConstant imported twice, lines 13-16) and an inconsistent method-prefix convention (xpfluidbridge$... vs creativeengineering$... on the last method), suggesting a half-finished rename/refactor.
+
+16. src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EasyElytraTakeoffGroundCheckMixin.java lines 29-34, 39 — @ModifyVariable(..., index = 8) targets a raw local-variable slot number reverse-engineered from one specific shipped jar ("local slot 8 is inAir in the shipped easyelytratakeoff-1.19.2-4.2 bytecode"). Explicitly version-pinned/fragile by the author's own admission; this is the newest file in the tree (Sept 10) and I found no crash-report evidence yet confirming it survived a real update of that dependency.
+
+17. src/main/java/com/SaintAlfonzo/creativeengineering/compat/AutomatedPotionMixingCategory.java / LingerificationCategory.java — Both reflectively overwrite a private final field on a third-party JEI category class, wrapped in try/catch that disables the whole feature (ACTIVE = false) if IE's internals ever change. Runtime corroboration: crash-2026-09-07_18.05.37-client.txt and crash-2026-09-07_18.10.04-client.txt show the companion JEIHelperMixin crashed twice the same day while this exact subsystem was being built (wrong static modifier, then a missing receiver arg) — both now appear fixed in the current source, but it shows this whole "Automated Potion Mixing / Lingerification" feature was still being actively stabilized very recently.
+
+18. src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java + itemphysic/ItemPhysicSplit.java — Likely still-open bug. crash-2026-09-09_17.49.19-server.txt shows NoClassDefFoundError: com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit$1 from ItemPhysicSplit.burnDecision. $1 is the synthetic enum-switch-map class javac generates for the switch at ItemPhysicSplit.java line 128; it's lazily linked only when that switch statement executes, so the forceLoad("...ItemPhysicSplit") workaround in CreativeEngineering.java line 113 (added specifically to fix this exact class of "late Mixin transform" crash — see the comment at lines 102-106) does not cover it. ItemPhysicSplit.java's last edit (Sept 8 23:46) predates this crash (Sept 9 17:49), and neither it nor CreativeEngineering.java (last touched Sept 8 19:13) has been modified since — suggesting this specific crash has not yet been fixed.
+
+19. src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CycleEnchantmentMixin.java, StockpileEnchantmentMixin.java, RecoveryEnchantmentMixin.java (identical in all three) — Each imports org.spongepowered.asm.mixin.Overwrite but never actually annotates any of its three methods (isDiscoverable, canApplyAtEnchantingTable, isAllowedOnBooks) with @Overwrite. I confirmed via logs/latest.log these currently apply without a logged Mixin error (likely because the target classes inherit these methods from Enchantment rather than declaring them, so Mixin treats them as new method injections rather than true overwrites) — but the identical unused import across all three files, with no annotation ever applied, is a strong "half-refactored / copy-pasted incompletely" signal worth a maintainer double-check.
+
+20. Empty item-physics tags — src/main/resources/data/creativeengineering/tags/items/physics/fireproof.json and .../physics/sinks.json both have "values": [], while the sibling floats.json and lavaproof.json are well-populated. The Java-side feature (ItemPhysicSplit) fully supports all four categories; two of them have no content curated yet.
+
+21. src/main/java/com/SaintAlfonzo/creativeengineering/fluidbrewing/Lingerification.java line 68-69 — /** Between IE's own biodiesel (80) and phenolic resin (240). Tunable. */ private static final int ENERGY = 120; — an interpolated placeholder value flagged by the author as still needing tuning.
+
+Lower-priority nitpicks (still flagged per "over-include" instruction)
+mixin/FermenterRecipeCategoryMixin.java and mixin/SqueezerRecipeCategoryMixin.java: both doc comments admit "Inert in this pack" — speculative/future-proofing code with no current effect.
+mixin/FluidTagInputMixin.java line 23: garbled sentence fragment — "used by the Bottling Machine (and the Mechanical... IE Mixer / Refinery — the change is intentionally shared..." — reads like an edit was interrupted mid-thought.
+item/CreosoteSoakedSawdustItem.java line 17-19: unused imports (RecipeType, Nullable, fully-qualified names used instead), and the burn-time comment ("200 = 1 item smelted, so 400 = 2 items") doesn't cleanly justify the actual value used (250).
+Reflection-with-graceful-degradation pattern repeated across fluidbrewing/PotionMixDedup.java (line 89-102), mixin/PotionRecipeGeneratorsMixin.java (creativeengineering$mixes, lines 234-249), and CreativeEngineering.java's forceLoad helper (lines 123-130) — each logs-and-disables silently if a private field/class name doesn't resolve; not bugs today, but every one is a "this could silently stop working after an update" trap by design.
+Crash-confirmed-but-now-apparently-fixed bugs worth knowing about for context on how unstable this area has been recently: CopperPickaxeItemMixin (crash-2026-08-08_19.43.29-fml.txt, @ModifyVariable static-modifier mismatch) and ItemPhysicServerMixin's creativeengineering$onBurnDeath (crash-2026-09-09_19.23.58-fml.txt, wrong @Redirect handler signature) — both match the "expected" fix already present in current source.
+Out of scope but directly relevant (flagging briefly per your "over-include" instruction, not analyzed further)
+kubejs/startup_scripts/todo/ (outside patcherMod) contains not_in_dict.txt and recipes_to_remove.txt — a live TODO backlog for the broader pack.
+crash-reports/crash-2026-09-11_17.47.20-server.txt is a 0-byte file timestamped today; cause unknown, not investigated (outside the source-audit scope), but flagged since it's the most recent crash-report artifact in the instance.
+One of the patcherMod findings — a possible still-open crash in the item-physics mixin — is serious enough to verify before I report it as live. Let me check that directly.
+
+Bash Read the ItemPhysicSplit crash report
+IN
+echo "=== crash report ===" && cat "crash-reports/crash-2026-09-09_17.49.19-server.txt" 2>/dev/null | head -60
+
+OUT
+=== crash report ===
+---- Minecraft Crash Report ----
+// Ooh. Shiny.
+
+Time: 2026-09-09 17:49:19
+Description: Ticking entity
+
+java.lang.NoClassDefFoundError: com/SaintAlfonzo/creativeengineering/itemphysic/ItemPhysicSplit$1
+	at com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit.burnDecision(ItemPhysicSplit.java:128) ~[creativeengineering-1.0.0.jar%23554!/:1.0.0] {re:classloading,re:mixin}
+	at team.creative.itemphysic.server.ItemPhysicServer.creativeengineering$route(ItemPhysicServer.java:573) ~[ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar%23633!/:1.6.7] {re:mixin,re:classloading,pl:mixin:A}
+	at team.creative.itemphysic.server.ItemPhysicServer.redirect$ejc000$creativeengineering$fireImmune(ItemPhysicServer.java:547) ~[ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar%23633!/:1.6.7] {re:mixin,re:classloading,pl:mixin:A}
+	at team.creative.itemphysic.server.ItemPhysicServer.fireImmune(ItemPhysicServer.java:144) ~[ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar%23633!/:1.6.7] {re:mixin,re:classloading,pl:mixin:A}
+	at net.minecraft.world.entity.item.ItemEntity.handler$bdh000$fireImmuneInject(ItemEntity.java:2116) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ItemEntityMixin,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityMixin,pl:mixin:APP:itemphysic.mixins.json:ItemEntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.ItemEntityAccess,pl:mixin:APP:immersiveengineering.mixins.json:accessors.ItemEntityAccess,pl:mixin:APP:dragonloot.mixins.json:ItemEntityMixin,pl:mixin:APP:tactical_fishing.mixin.json:ItemEntityMixin,pl:mixin:APP:cherisheditems.mixins.json:AccessorItemEntity,pl:mixin:APP:cherisheditems.mixins.json:MixinItemEntity,pl:mixin:APP:allurement.mixins.json:ItemEntityMixin,pl:mixin:APP:decorative_blocks.mixins.json:ItemEntityMixin,pl:mixin:A}
+	at net.minecraft.world.entity.item.ItemEntity.m_5825_(ItemEntity.java) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ItemEntityMixin,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityMixin,pl:mixin:APP:itemphysic.mixins.json:ItemEntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.ItemEntityAccess,pl:mixin:APP:immersiveengineering.mixins.json:accessors.ItemEntityAccess,pl:mixin:APP:dragonloot.mixins.json:ItemEntityMixin,pl:mixin:APP:tactical_fishing.mixin.json:ItemEntityMixin,pl:mixin:APP:cherisheditems.mixins.json:AccessorItemEntity,pl:mixin:APP:cherisheditems.mixins.json:MixinItemEntity,pl:mixin:APP:allurement.mixins.json:ItemEntityMixin,pl:mixin:APP:decorative_blocks.mixins.json:ItemEntityMixin,pl:mixin:A}
+	at net.minecraft.world.entity.Entity.m_6060_(Entity.java:1980) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:create.mixins.json:EntityMixin,pl:mixin:APP:kubejs-forge.mixins.json:EntityMixin,pl:mixin:APP:kubejs-common.mixins.json:EntityMixin,pl:mixin:APP:etched.mixins.json:EntityMixin,pl:mixin:APP:supplementaries-common.mixins.json:EntityMixin,pl:mixin:APP:botania_xplat.mixins.json:EntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:EntityMixin,pl:mixin:APP:curios.mixins.json:AccessorEntity,pl:mixin:APP:transition.mixins.json:ExtensionMixin,pl:mixin:APP:transition.mixins.json:EntityAccessor,pl:mixin:APP:itemphysic.mixins.json:EntityAccessor,pl:mixin:APP:sliceanddice.mixins.json:EntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.EntityAccess,pl:mixin:APP:fusion.mixins.json:EntityMixin,pl:mixin:APP:memoryleakfix.mixins.json:entityMemoriesLeak.Entity_clearMemoriesMixin,pl:mixin:APP:entityculling.mixins.json:CullableMixin,pl:mixin:APP:effective_fg.mixins.json:EntityMixin,pl:mixin:APP:domesticationinnovation.mixins.json:EntityMixin,pl:mixin:APP:treechop.mixins.json:EntityChopSettingsMixin,pl:mixin:APP:netherportalfix.mixins.json:EntityAccessor,pl:mixin:APP:bookshelf.common.mixins.json:entity.AccessorEntity,pl:mixin:APP:railways-common.mixins.json:conductor_possession.MixinEntity,pl:mixin:APP:railways-common.mixins.json:client.AccessorEntity,pl:mixin:APP:allurement.mixins.json:EntityMixin,pl:mixin:APP:wthit.mixins.json:EntityAccess,pl:mixin:APP:betterthirdperson.mixins.json:EntityMixin,pl:mixin:APP:DistantHorizons.forge.mixins.json:server.MixinEntity,pl:mixin:APP:blueprint.mixins.json:EntityMixin,pl:mixin:APP:quark.mixins.json:EntityMixin,pl:mixin:APP:presencefootsteps.mixin.json:IEntity,pl:mixin:APP:create.mixins.json:ContraptionDriverInteractMixin,pl:mixin:APP:create.mixins.json:client.EntityContraptionInteractionMixin,pl:mixin:A}
+	at net.minecraft.world.entity.Entity.m_6478_(Entity.java:568) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:create.mixins.json:EntityMixin,pl:mixin:APP:kubejs-forge.mixins.json:EntityMixin,pl:mixin:APP:kubejs-common.mixins.json:EntityMixin,pl:mixin:APP:etched.mixins.json:EntityMixin,pl:mixin:APP:supplementaries-common.mixins.json:EntityMixin,pl:mixin:APP:botania_xplat.mixins.json:EntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:EntityMixin,pl:mixin:APP:curios.mixins.json:AccessorEntity,pl:mixin:APP:transition.mixins.json:ExtensionMixin,pl:mixin:APP:transition.mixins.json:EntityAccessor,pl:mixin:APP:itemphysic.mixins.json:EntityAccessor,pl:mixin:APP:sliceanddice.mixins.json:EntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.EntityAccess,pl:mixin:APP:fusion.mixins.json:EntityMixin,pl:mixin:APP:memoryleakfix.mixins.json:entityMemoriesLeak.Entity_clearMemoriesMixin,pl:mixin:APP:entityculling.mixins.json:CullableMixin,pl:mixin:APP:effective_fg.mixins.json:EntityMixin,pl:mixin:APP:domesticationinnovation.mixins.json:EntityMixin,pl:mixin:APP:treechop.mixins.json:EntityChopSettingsMixin,pl:mixin:APP:netherportalfix.mixins.json:EntityAccessor,pl:mixin:APP:bookshelf.common.mixins.json:entity.AccessorEntity,pl:mixin:APP:railways-common.mixins.json:conductor_possession.MixinEntity,pl:mixin:APP:railways-common.mixins.json:client.AccessorEntity,pl:mixin:APP:allurement.mixins.json:EntityMixin,pl:mixin:APP:wthit.mixins.json:EntityAccess,pl:mixin:APP:betterthirdperson.mixins.json:EntityMixin,pl:mixin:APP:DistantHorizons.forge.mixins.json:server.MixinEntity,pl:mixin:APP:blueprint.mixins.json:EntityMixin,pl:mixin:APP:quark.mixins.json:EntityMixin,pl:mixin:APP:presencefootsteps.mixin.json:IEntity,pl:mixin:APP:create.mixins.json:ContraptionDriverInteractMixin,pl:mixin:APP:create.mixins.json:client.EntityContraptionInteractionMixin,pl:mixin:A}
+	at net.minecraft.world.entity.item.ItemEntity.m_8119_(ItemEntity.java:129) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ItemEntityMixin,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityMixin,pl:mixin:APP:itemphysic.mixins.json:ItemEntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.ItemEntityAccess,pl:mixin:APP:immersiveengineering.mixins.json:accessors.ItemEntityAccess,pl:mixin:APP:dragonloot.mixins.json:ItemEntityMixin,pl:mixin:APP:tactical_fishing.mixin.json:ItemEntityMixin,pl:mixin:APP:cherisheditems.mixins.json:AccessorItemEntity,pl:mixin:APP:cherisheditems.mixins.json:MixinItemEntity,pl:mixin:APP:allurement.mixins.json:ItemEntityMixin,pl:mixin:APP:decorative_blocks.mixins.json:ItemEntityMixin,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_8647_(ServerLevel.java:658) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,re:classloading,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,pl:mixin:APP:betterendisland.mixins.json:ServerLevelMixin,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:supplementaries-common.mixins.json:ServerLevelMixin,pl:mixin:APP:botania_xplat.mixins.json:ServerLevelMixin,pl:mixin:APP:citadel.mixins.json:ServerLevelMixin,pl:mixin:APP:immersive_weathering-common.mixins.json:ServerLevelMixin,pl:mixin:APP:immersiveengineering.mixins.json:coremods.ServerWorldMixin,pl:mixin:APP:architects_palette.mixins.json:ServerWorldMixin,pl:mixin:APP:xaeroworldmap.mixins.json:MixinServerWorld,pl:mixin:APP:forge-mca.mixin.json:MixinServerWorld,pl:mixin:APP:betterdeserttemples.mixins.json:ServerLevelMixin,pl:mixin:APP:blueprint.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:APP:betterendisland.mixins.json:EndergeticExpansionMixins,pl:mixin:A}
+	at net.minecraft.world.level.Level.m_46653_(Level.java:457) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:LevelMixin,pl:mixin:APP:botania_xplat.mixins.json:LevelAccessor,pl:mixin:APP:citadel.mixins.json:LevelMixin,pl:mixin:APP:sliceanddice.mixins.json:LevelMixin,pl:mixin:APP:sereneseasons.mixins.json:MixinLevel,pl:mixin:APP:survivality.mixins.json:world.LevelMixin,pl:mixin:APP:pdgamerules.mixins.json:LevelMixin,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_184063_(ServerLevel.java:323) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,re:classloading,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,pl:mixin:APP:betterendisland.mixins.json:ServerLevelMixin,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:supplementaries-common.mixins.json:ServerLevelMixin,pl:mixin:APP:botania_xplat.mixins.json:ServerLevelMixin,pl:mixin:APP:citadel.mixins.json:ServerLevelMixin,pl:mixin:APP:immersive_weathering-common.mixins.json:ServerLevelMixin,pl:mixin:APP:immersiveengineering.mixins.json:coremods.ServerWorldMixin,pl:mixin:APP:architects_palette.mixins.json:ServerWorldMixin,pl:mixin:APP:xaeroworldmap.mixins.json:MixinServerWorld,pl:mixin:APP:forge-mca.mixin.json:MixinServerWorld,pl:mixin:APP:betterdeserttemples.mixins.json:ServerLevelMixin,pl:mixin:APP:blueprint.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:APP:betterendisland.mixins.json:EndergeticExpansionMixins,pl:mixin:A}
+	at net.minecraft.world.level.entity.EntityTickList.m_156910_(EntityTickList.java:54) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:classloading}
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:303) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,re:classloading,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,pl:mixin:APP:betterendisland.mixins.json:ServerLevelMixin,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:supplementaries-common.mixins.json:ServerLevelMixin,pl:mixin:APP:botania_xplat.mixins.json:ServerLevelMixin,pl:mixin:APP:citadel.mixins.json:ServerLevelMixin,pl:mixin:APP:immersive_weathering-common.mixins.json:ServerLevelMixin,pl:mixin:APP:immersiveengineering.mixins.json:coremods.ServerWorldMixin,pl:mixin:APP:architects_palette.mixins.json:ServerWorldMixin,pl:mixin:APP:xaeroworldmap.mixins.json:MixinServerWorld,pl:mixin:APP:forge-mca.mixin.json:MixinServerWorld,pl:mixin:APP:betterdeserttemples.mixins.json:ServerLevelMixin,pl:mixin:APP:blueprint.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:APP:betterendisland.mixins.json:EndergeticExpansionMixins,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:866) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:806) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.client.server.IntegratedServer.m_5705_(IntegratedServer.java:84) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:runtimedistcleaner:A,re:classloading,pl:mixin:A,pl:runtimedistcleaner:A}
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:654) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:244) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:A}
+	at java.lang.Thread.run(Thread.java:840) [?:?] {re:mixin}
+Caused by: java.lang.ClassNotFoundException: com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit$1
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141) ~[securejarhandler-2.1.4.jar:?] {}
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?] {}
+	... 20 more
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Server thread
+Suspected Mods: 
+	Creative Engineering (creativeengineering), Version: 1.0.0
+		at TRANSFORMER/creativeengineering@1.0.0/com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit.burnDecision(ItemPhysicSplit.java:128)
+
+	ItemPhysic (itemphysic), Version: 1.6.7
+		Issue tracker URL: https://github.com/CreativeMD/ItemPhysic/issues
+		at TRANSFORMER/itemphysic@1.6.7/team.creative.itemphysic.server.ItemPhysicServer.creativeengineering$route(ItemPhysicServer.java:573)
+Stacktrace:
+	at com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit.burnDecision(ItemPhysicSplit.java:128) ~[creativeengineering-1.0.0.jar%23554!/:1.0.0] {re:classloading,re:mixin}
+	at team.creative.itemphysic.server.ItemPhysicServer.creativeengineering$route(ItemPhysicServer.java:573) ~[ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar%23633!/:1.6.7] {re:mixin,re:classloading,pl:mixin:A}
+	at team.creative.itemphysic.server.ItemPhysicServer.redirect$ejc000$creativeengineering$fireImmune(ItemPhysicServer.java:547) ~[ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar%23633!/:1.6.7] {re:mixin,re:classloading,pl:mixin:A}
+	at team.creative.itemphysic.server.ItemPhysicServer.fireImmune(ItemPhysicServer.java:144) ~[ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar%23633!/:1.6.7] {re:mixin,re:classloading,pl:mixin:A}
+	at net.minecraft.world.entity.item.ItemEntity.handler$bdh000$fireImmuneInject(ItemEntity.java:2116) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ItemEntityMixin,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityMixin,pl:mixin:APP:itemphysic.mixins.json:ItemEntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.ItemEntityAccess,pl:mixin:APP:immersiveengineering.mixins.json:accessors.ItemEntityAccess,pl:mixin:APP:dragonloot.mixins.json:ItemEntityMixin,pl:mixin:APP:tactical_fishing.mixin.json:ItemEntityMixin,pl:mixin:APP:cherisheditems.mixins.json:AccessorItemEntity,pl:mixin:APP:cherisheditems.mixins.json:MixinItemEntity,pl:mixin:APP:allurement.mixins.json:ItemEntityMixin,pl:mixin:APP:decorative_blocks.mixins.json:ItemEntityMixin,pl:mixin:A}
+	at net.minecraft.world.entity.item.ItemEntity.m_5825_(ItemEntity.java) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ItemEntityMixin,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityMixin,pl:mixin:APP:itemphysic.mixins.json:ItemEntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.ItemEntityAccess,pl:mixin:APP:immersiveengineering.mixins.json:accessors.ItemEntityAccess,pl:mixin:APP:dragonloot.mixins.json:ItemEntityMixin,pl:mixin:APP:tactical_fishing.mixin.json:ItemEntityMixin,pl:mixin:APP:cherisheditems.mixins.json:AccessorItemEntity,pl:mixin:APP:cherisheditems.mixins.json:MixinItemEntity,pl:mixin:APP:allurement.mixins.json:ItemEntityMixin,pl:mixin:APP:decorative_blocks.mixins.json:ItemEntityMixin,pl:mixin:A}
+	at net.minecraft.world.entity.Entity.m_6060_(Entity.java:1980) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:create.mixins.json:EntityMixin,pl:mixin:APP:kubejs-forge.mixins.json:EntityMixin,pl:mixin:APP:kubejs-common.mixins.json:EntityMixin,pl:mixin:APP:etched.mixins.json:EntityMixin,pl:mixin:APP:supplementaries-common.mixins.json:EntityMixin,pl:mixin:APP:botania_xplat.mixins.json:EntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:EntityMixin,pl:mixin:APP:curios.mixins.json:AccessorEntity,pl:mixin:APP:transition.mixins.json:ExtensionMixin,pl:mixin:APP:transition.mixins.json:EntityAccessor,pl:mixin:APP:itemphysic.mixins.json:EntityAccessor,pl:mixin:APP:sliceanddice.mixins.json:EntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.EntityAccess,pl:mixin:APP:fusion.mixins.json:EntityMixin,pl:mixin:APP:memoryleakfix.mixins.json:entityMemoriesLeak.Entity_clearMemoriesMixin,pl:mixin:APP:entityculling.mixins.json:CullableMixin,pl:mixin:APP:effective_fg.mixins.json:EntityMixin,pl:mixin:APP:domesticationinnovation.mixins.json:EntityMixin,pl:mixin:APP:treechop.mixins.json:EntityChopSettingsMixin,pl:mixin:APP:netherportalfix.mixins.json:EntityAccessor,pl:mixin:APP:bookshelf.common.mixins.json:entity.AccessorEntity,pl:mixin:APP:railways-common.mixins.json:conductor_possession.MixinEntity,pl:mixin:APP:railways-common.mixins.json:client.AccessorEntity,pl:mixin:APP:allurement.mixins.json:EntityMixin,pl:mixin:APP:wthit.mixins.json:EntityAccess,pl:mixin:APP:betterthirdperson.mixins.json:EntityMixin,pl:mixin:APP:DistantHorizons.forge.mixins.json:server.MixinEntity,pl:mixin:APP:blueprint.mixins.json:EntityMixin,pl:mixin:APP:quark.mixins.json:EntityMixin,pl:mixin:APP:presencefootsteps.mixin.json:IEntity,pl:mixin:APP:create.mixins.json:ContraptionDriverInteractMixin,pl:mixin:APP:create.mixins.json:client.EntityContraptionInteractionMixin,pl:mixin:A}
+	at net.minecraft.world.entity.Entity.m_6478_(Entity.java:568) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:create.mixins.json:EntityMixin,pl:mixin:APP:kubejs-forge.mixins.json:EntityMixin,pl:mixin:APP:kubejs-common.mixins.json:EntityMixin,pl:mixin:APP:etched.mixins.json:EntityMixin,pl:mixin:APP:supplementaries-common.mixins.json:EntityMixin,pl:mixin:APP:botania_xplat.mixins.json:EntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:EntityMixin,pl:mixin:APP:curios.mixins.json:AccessorEntity,pl:mixin:APP:transition.mixins.json:ExtensionMixin,pl:mixin:APP:transition.mixins.json:EntityAccessor,pl:mixin:APP:itemphysic.mixins.json:EntityAccessor,pl:mixin:APP:sliceanddice.mixins.json:EntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.EntityAccess,pl:mixin:APP:fusion.mixins.json:EntityMixin,pl:mixin:APP:memoryleakfix.mixins.json:entityMemoriesLeak.Entity_clearMemoriesMixin,pl:mixin:APP:entityculling.mixins.json:CullableMixin,pl:mixin:APP:effective_fg.mixins.json:EntityMixin,pl:mixin:APP:domesticationinnovation.mixins.json:EntityMixin,pl:mixin:APP:treechop.mixins.json:EntityChopSettingsMixin,pl:mixin:APP:netherportalfix.mixins.json:EntityAccessor,pl:mixin:APP:bookshelf.common.mixins.json:entity.AccessorEntity,pl:mixin:APP:railways-common.mixins.json:conductor_possession.MixinEntity,pl:mixin:APP:railways-common.mixins.json:client.AccessorEntity,pl:mixin:APP:allurement.mixins.json:EntityMixin,pl:mixin:APP:wthit.mixins.json:EntityAccess,pl:mixin:APP:betterthirdperson.mixins.json:EntityMixin,pl:mixin:APP:DistantHorizons.forge.mixins.json:server.MixinEntity,pl:mixin:APP:blueprint.mixins.json:EntityMixin,pl:mixin:APP:quark.mixins.json:EntityMixin,pl:mixin:APP:presencefootsteps.mixin.json:IEntity,pl:mixin:APP:create.mixins.json:ContraptionDriverInteractMixin,pl:mixin:APP:create.mixins.json:client.EntityContraptionInteractionMixin,pl:mixin:A}
+	at net.minecraft.world.entity.item.ItemEntity.m_8119_(ItemEntity.java:129) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:ItemEntityMixin,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityAccessor,pl:mixin:APP:botania_xplat.mixins.json:ItemEntityMixin,pl:mixin:APP:itemphysic.mixins.json:ItemEntityMixin,pl:mixin:APP:mixins.pneumaticcraft.json:accessors.ItemEntityAccess,pl:mixin:APP:immersiveengineering.mixins.json:accessors.ItemEntityAccess,pl:mixin:APP:dragonloot.mixins.json:ItemEntityMixin,pl:mixin:APP:tactical_fishing.mixin.json:ItemEntityMixin,pl:mixin:APP:cherisheditems.mixins.json:AccessorItemEntity,pl:mixin:APP:cherisheditems.mixins.json:MixinItemEntity,pl:mixin:APP:allurement.mixins.json:ItemEntityMixin,pl:mixin:APP:decorative_blocks.mixins.json:ItemEntityMixin,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_8647_(ServerLevel.java:658) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,re:classloading,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,pl:mixin:APP:betterendisland.mixins.json:ServerLevelMixin,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:supplementaries-common.mixins.json:ServerLevelMixin,pl:mixin:APP:botania_xplat.mixins.json:ServerLevelMixin,pl:mixin:APP:citadel.mixins.json:ServerLevelMixin,pl:mixin:APP:immersive_weathering-common.mixins.json:ServerLevelMixin,pl:mixin:APP:immersiveengineering.mixins.json:coremods.ServerWorldMixin,pl:mixin:APP:architects_palette.mixins.json:ServerWorldMixin,pl:mixin:APP:xaeroworldmap.mixins.json:MixinServerWorld,pl:mixin:APP:forge-mca.mixin.json:MixinServerWorld,pl:mixin:APP:betterdeserttemples.mixins.json:ServerLevelMixin,pl:mixin:APP:blueprint.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:APP:betterendisland.mixins.json:EndergeticExpansionMixins,pl:mixin:A}
+	at net.minecraft.world.level.Level.m_46653_(Level.java:457) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B,pl:mixin:APP:kubejs-common.mixins.json:LevelMixin,pl:mixin:APP:botania_xplat.mixins.json:LevelAccessor,pl:mixin:APP:citadel.mixins.json:LevelMixin,pl:mixin:APP:sliceanddice.mixins.json:LevelMixin,pl:mixin:APP:sereneseasons.mixins.json:MixinLevel,pl:mixin:APP:survivality.mixins.json:world.LevelMixin,pl:mixin:APP:pdgamerules.mixins.json:LevelMixin,pl:mixin:A}
+	at net.minecraft.server.level.ServerLevel.m_184063_(ServerLevel.java:323) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,re:classloading,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,pl:mixin:APP:betterendisland.mixins.json:ServerLevelMixin,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:supplementaries-common.mixins.json:ServerLevelMixin,pl:mixin:APP:botania_xplat.mixins.json:ServerLevelMixin,pl:mixin:APP:citadel.mixins.json:ServerLevelMixin,pl:mixin:APP:immersive_weathering-common.mixins.json:ServerLevelMixin,pl:mixin:APP:immersiveengineering.mixins.json:coremods.ServerWorldMixin,pl:mixin:APP:architects_palette.mixins.json:ServerWorldMixin,pl:mixin:APP:xaeroworldmap.mixins.json:MixinServerWorld,pl:mixin:APP:forge-mca.mixin.json:MixinServerWorld,pl:mixin:APP:betterdeserttemples.mixins.json:ServerLevelMixin,pl:mixin:APP:blueprint.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:APP:betterendisland.mixins.json:EndergeticExpansionMixins,pl:mixin:A}
+	at net.minecraft.world.level.entity.EntityTickList.m_156910_(EntityTickList.java:54) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:classloading}
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:303) ~[client-1.19.2-20220805.130853-srg.jar%23785!/:?] {re:mixin,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,re:classloading,pl:accesstransformer:B,xf:fml:sereneseasons:temperature_transformer,pl:mixin:APP:betterendisland.mixins.json:ServerLevelMixin,pl:mixin:APP:kubejs-common.mixins.json:ServerLevelMixin,pl:mixin:APP:supplementaries-common.mixins.json:ServerLevelMixin,pl:mixin:APP:botania_xplat.mixins.json:ServerLevelMixin,pl:mixin:APP:citadel.mixins.json:ServerLevelMixin,pl:mixin:APP:immersive_weathering-common.mixins.json:ServerLevelMixin,pl:mixin:APP:immersiveengineering.mixins.json:coremods.ServerWorldMixin,pl:mixin:APP:architects_palette.mixins.json:ServerWorldMixin,pl:mixin:APP:xaeroworldmap.mixins.json:MixinServerWorld,pl:mixin:APP:forge-mca.mixin.json:MixinServerWorld,pl:mixin:APP:betterdeserttemples.mixins.json:ServerLevelMixin,pl:mixin:APP:blueprint.mixins.json:ServerLevelMixin,pl:mixin:APP:create.mixins.json:accessor.ServerLevelAccessor,pl:mixin:APP:betterendisland.mixins.json:EndergeticExpansionMixins,pl:mixin:A}
+Bash Check whether ItemPhysicSplit is force-loaded at startup
+IN
+echo "=== forceLoad section in CreativeEngineering.java ===" && grep -n "forceLoad\|ItemPhysicSplit\|Class.forName" patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java
+
+OUT
+=== forceLoad section in CreativeEngineering.java ===
+107:			forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.SawbladeRouting");
+108:			forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.duck.SawmillProcessExt");
+109:			forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.duck.SawmillRecipeExt");
+113:			forceLoad("com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit");
+124:	private void forceLoad(String className) {
+126:			Class.forName(className, true, CreativeEngineering.class.getClassLoader());
+Bash Inspect the enum switch causing the synthetic $1 class
+IN
+echo "=== ItemPhysicSplit.java around the switch (line 128) ===" && sed -n '100,140p' patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/ItemPhysicSplit.java
+
+OUT
+=== ItemPhysicSplit.java around the switch (line 128) ===
+
+    public static void floats(String itemId)       { FLOAT_BY_ID.add(rl(itemId)); }
+    public static void sinks(String itemId)        { FLOAT_BY_ID.remove(rl(itemId)); }
+    public static void floatsTag(String tagId)     { FLOAT_BY_TAG.add(rl(tagId)); }
+    public static void sinksTag(String tagId)      { FLOAT_BY_TAG.remove(rl(tagId)); }
+
+    /** One-line summary for the startup script to log. */
+    public static String summary() {
+        return String.format("canonical tags: %s / %s / %s / %s | programmatic: %d+%d burn, %d+%d float",
+                FLOATS.location(), SINKS.location(), FIREPROOF.location(), LAVAPROOF.location(),
+                BURN_BY_ID.size(), BURN_BY_TAG.size(), FLOAT_BY_ID.size(), FLOAT_BY_TAG.size());
+    }
+
+    // ------------------------------------------------------------------------
+    // Queries (called from the mixin, per item entity per tick)
+    // ------------------------------------------------------------------------
+
+    /**
+     * Fire/lava destruction decision for the mixin.
+     *
+     * @param lava true if the item entity is currently in lava (vs. open fire)
+     * @return {@code TRUE} = destroy it, {@code FALSE} = immune, {@code null} = no rule —
+     *         the caller falls back to ItemPhysic's own burningItems list.
+     */
+    public static Boolean burnDecision(ItemStack stack, boolean lava) {
+        if (stack == null || stack.isEmpty()) return null;
+        if (stack.is(LAVAPROOF)) return Boolean.FALSE;                      // immune to both
+        if (stack.is(FIREPROOF)) return lava ? Boolean.TRUE : Boolean.FALSE; // survives fire, burns in lava
+        switch (burnBehavior(stack)) {
+            case NEVER:     return Boolean.FALSE;
+            case FIRE_ONLY: return !lava;
+            case LAVA_ONLY: return lava;
+            default:        return null;   // BURN
+        }
+    }
+
+    /** Programmatic burn behaviour for this stack; {@link Burn#BURN} if no rule matches. */
+    public static Burn burnBehavior(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return Burn.BURN;
+        if (!BURN_BY_ID.isEmpty()) {
+            ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
+Bash Check for recurrence of the ItemPhysic crash and inspect the most recent crash reports
+IN
+echo "=== any crash-reports after Sept 9 mentioning ItemPhysic ===" && grep -rl "ItemPhysic" crash-reports/ 2>/dev/null
+echo "=== most recent crash reports (by name/date) ===" && ls -1t crash-reports/ | head -15
+echo "=== today's 0-byte crash report ===" && ls -la "crash-reports/crash-2026-09-11_17.47.20-server.txt" 2>/dev/null
+
+OUT
+=== any crash-reports after Sept 9 mentioning ItemPhysic ===
+crash-reports/crash-2023-06-13_20.57.39-client.txt
+crash-reports/crash-2026-04-30_20.09.02-client.txt
+crash-reports/crash-2023-06-12_23.37.04-fml.txt
+crash-reports/crash-2026-09-07_01.51.58-client.txt
+crash-reports/crash-2023-06-13_00.00.47-fml.txt
+crash-reports/crash-2026-08-08_19.43.29-fml.txt
+crash-reports/crash-2024-08-11_22.35.53-client.txt
+crash-reports/crash-2026-05-24_20.56.40-fml.txt
+crash-reports/crash-2026-08-14_19.46.32-server.txt
+crash-reports/crash-2026-07-20_18.05.54-fml.txt
+crash-reports/crash-2026-09-09_17.49.19-server.txt
+crash-reports/crash-2026-07-29_23.28.48-client.txt
+crash-reports/crash-2026-04-25_23.50.42-server.txt
+crash-reports/crash-2026-08-16_18.00.02-fml.txt
+crash-reports/crash-2026-04-28_21.50.22-server.txt
+crash-reports/crash-2026-09-07_01.53.00-client.txt
+crash-reports/crash-2026-07-08_18.35.26-fml.txt
+crash-reports/crash-2026-08-22_22.31.55-fml.txt
+crash-reports/crash-2023-06-13_00.02.40-fml.txt
+crash-reports/crash-2026-07-24_17.47.07-fml.txt
+crash-reports/crash-2026-05-07_01.34.40-client.txt
+crash-reports/crash-2026-04-26_00.00.34-server.txt
+crash-reports/crash-2023-06-13_00.07.00-fml.txt
+crash-reports/crash-2026-09-06_11.00.28-client.txt
+crash-reports/crash-2026-07-09_23.22.10-fml.txt
+crash-reports/crash-2026-04-30_17.42.58-fml.txt
+crash-reports/crash-2026-08-17_21.53.42-server.txt
+crash-reports/crash-2026-02-06_19.15.15-fml.txt
+crash-reports/crash-2024-08-31_21.52.53-fml.txt
+crash-reports/crash-2024-06-12_22.00.22-client.txt
+crash-reports/crash-2026-04-25_22.37.12-fml.txt
+crash-reports/crash-2026-09-07_18.05.37-client.txt
+crash-reports/crash-2026-07-08_18.36.47-fml.txt
+crash-reports/crash-2024-09-07_19.39.39-fml.txt
+crash-reports/crash-2024-06-30_20.57.04-fml.txt
+crash-reports/crash-2024-08-18_21.59.34-client.txt
+crash-reports/crash-2023-06-13_00.09.16-fml.txt
+crash-reports/crash-2026-05-24_16.03.29-server.txt
+crash-reports/crash-2023-06-12_23.57.13-fml.txt
+crash-reports/crash-2024-07-09_18.11.14-fml.txt
+crash-reports/crash-2024-04-05_18.41.40-fml.txt
+crash-reports/crash-2026-09-09_19.23.58-fml.txt
+crash-reports/crash-2026-08-14_19.43.32-client.txt
+crash-reports/crash-2026-04-26_00.13.41-fml.txt
+crash-reports/crash-2026-04-25_23.54.57-server.txt
+crash-reports/crash-2026-09-07_01.54.58-client.txt
+crash-reports/crash-2026-07-31_14.18.27-fml.txt
+crash-reports/crash-2024-08-11_19.35.33-fml.txt
+crash-reports/crash-2023-06-13_00.10.17-fml.txt
+crash-reports/crash-2026-09-07_18.10.04-client.txt
+crash-reports/crash-2026-04-25_22.26.46-fml.txt
+crash-reports/crash-2026-07-09_23.20.38-client.txt
+=== most recent crash reports (by name/date) ===
+crash-2026-09-11_17.47.20-server.txt
+crash-2026-09-09_19.23.58-fml.txt
+crash-2026-09-09_17.49.19-server.txt
+crash-2026-09-07_18.10.04-client.txt
+crash-2026-09-07_18.05.37-client.txt
+crash-2026-09-07_01.54.58-client.txt
+crash-2026-09-07_01.53.00-client.txt
+crash-2026-09-07_01.51.58-client.txt
+crash-2026-09-06_11.00.28-client.txt
+crash-2026-09-01_20.10.20-client.txt
+crash-2026-09-01_20.08.02-client.txt
+crash-2026-09-01_20.06.52-client.txt
+crash-2026-08-22_22.31.55-fml.txt
+crash-2026-08-17_21.53.42-server.txt
+crash-2026-08-16_18.00.02-fml.txt
+=== today's 0-byte crash report ===
+-rw-rw-r-- 1 liam liam 0 Sep 11 17:47 crash-reports/crash-2026-09-11_17.47.20-server.txt
+One finding needs flagging before the list: there's a confirmed, likely-still-live crash bug, not just an incomplete feature. Let me also fix a stale line in my own memory index while it's fresh — the "CE components/coils recipes still TODO" note is outdated (the detail file already shows recipes were completed).
+
+Edit MEMORY.md
+Modified
+Both background scans plus the patcherMod scan are done, and I've cross-checked the highest-stakes claims against the live code (some plans turned out fully executed, like the XP-fluid merge; others turned out to still be open). Here's the full inventory.
+
+Worth checking before anything else
+Possible live crash bug, item physics. ItemPhysicSplit.java:128 threw NoClassDefFoundError on its enum-switch's synthetic helper class the one time it's been exercised in the logs (crash-2026-09-09_17.49.19-server.txt, triggered by an item catching fire). The general "pre-load classes so late Mixin transforms can find them" fix was applied to the outer class (CreativeEngineering.java:113) but that doesn't force-load the switch statement's own synthetic inner class, and neither file has been touched since the crash. This may only bite once per fresh launch, but it looks unresolved — the whole item-physics fire/lava split ([[itemphysic-fire-lava-split]] in memory) rides on this method.
+Unexplained empty crash report from today. crash-2026-09-11_17.47.20-server.txt is 0 bytes — something crashed and the report never finished writing. Not investigated; unclear if related to the above.
+Features not yet started
+In-game guidebook. Patchouli is installed and configured, but patchouli_books/ is completely empty — no book, no single page. If you wanted a CE guidebook, it hasn't begun.
+Pack-wide loot overhaul. Fully scaffolded, essentially zero content: kubejs/server_scripts/loot/00_lib.js has empty groups/tiers lists waiting on a /dumploot export, and 10_removals.js through 40_targeted.js are all commented-out examples. Only the PneumaticCraft blanket-removal rule is actually live.
+~~Survival recipe for potion buckets~~ — done: server_scripts/engineering/potion_bottling.js now has a shapeless craft (bucket + 4 matching potion bottles -> filled bucket) and its reverse (bucket -> 4 bottles), per potion x tier. Bottle/bucket remainder items (glass_bottle / bucket) via containerItem — the vanilla-item containerItem (ItemEvents.modification in potion_buckets.js) is unconfirmed in-game, wrapped in try/catch. (Dispenser support was already done — patcherMod PotionBucketDispenser + potion_area.js setHandler wiring — see [[potion-bucket-dispenser]] in memory.)
+Enderiophage rocket takeoff (Alex's Mobs item) — investigated in memory ([[dragon-elytra-rocket-takeoff]]), explicitly marked not-yet-done, with two viable approaches written up but neither implemented.
+10 orphaned pre-KubeJS recipes. Modpack/recipes/ (dated Aug 2024, over a year stale) has 5 Create + 5 Immersive Engineering recipes that never got ported into the live pack — and papyruspressing.json has an actual invalid-JSON syntax error in it.
+Built, but with acknowledged gaps in the rollout
+Item dictionary merge backlog. kubejs/startup_scripts/todo/ holds four worklists that are exactly what they sound like — nothing here is loaded by KubeJS: create_ie_dict_additions.txt (911 candidate entries, sampled and confirmed unmerged), not_in_dict.txt (689 items), recipes_to_remove.txt (tied to a diagnostic script that still runs every session and logs new cleanup targets), remove_list.txt (26/27 already done, 1 outstanding). Related: item_dict.js's own "Merge additions from old dict" section (~line 1673) flags the redstone module as still on the old incomplete variant.
+Tag-based dict validation — explicitly unimplemented in three places: block_dict.js:33, fluid_dict.js:162, neoCraftHelper.js:383.
+Cultured/lab-grown meats. Only cow→beef is wired end-to-end ([[sample-syringe]]); pork/mutton/poultry/rabbit/cod/salmon cultures exist as items with no sample mob or recipe yet. The syringe items themselves also all use a placeholder vanilla iron-sword texture (sample_syringe.js:14) rather than custom art, and cultures.js says outright the foods have no nutrition values ("add once the cooking recipes are designed").
+29 sequenced-assembly items still fall back to the generic grey i.incomplete sprite instead of bespoke art — client_scripts/texture_tool.js:28 is a dev tool built specifically to help chase these down.
+Two potions with placeholder brewing reagents — long_reach and phantom_bane in potions.js:50-51 are tagged // TODO: placeholder reagent.
+Metal subsystem standardization — metal_base_materials.js:3-31 is a long author's-note-to-self listing 5 numbered coverage gaps (plate recipe methods inconsistent across metals, zinc-only rod/recycle recipes, a leftover unremoved duplicate recipe), ending in a literal open question to yourself: "Want me to fill these in? I'd need your call on..."
+Component tier names undecided — components.js:18,22 leaves aluminum and uranium components with placeholder category comments (--- Light? ---, --- Dense? ---).
+Scaffolding that's intentionally minimal (not broken, just small)
+ArmorMaterialEnchantabilityMixin.java:22 — only 2 materials in its OVERRIDES map, doc comment invites more.
+IETagUtilsMixin.java:46 — BLACKLISTED_MATERIALS has exactly 1 entry, same "add more here" comment.
+Item-physics tags fireproof.json/sinks.json (under patcherMod/.../data/creativeengineering/tags/items/physics/) ship empty values: [] in the mod jar itself — likely fine since the bulk of population happens on the KubeJS side ([[itemphysic-fire-lava-split]]), but worth a /dumptags item spot-check since I couldn't fully confirm the split from static analysis alone.
+The NBT-ingredient capability for IE machines (added for the Engineer's Workbench) technically "works for free" on Bottling/Alloy/Crusher/Mixer/etc. per its own plan, but only the 2 Workbench recipes actually use it — everything else in that table is unclaimed potential, not a bug.
+Paused/dead code left sitting in live files
+This pack is mid-migration from an old helper (global.CE) to the current one (global.NCH), and a lot of the old code was commented out in place rather than deleted:
+
+server_scripts/other/misc_mods.js — 255 of 304 lines are a dead commented block, including the author's own // all fucked up, fix later.
+server_scripts/engineering/resource_blocks.js — 231 of 482 lines dead.
+server_scripts/cooking/cooking.js — 424 of 736 lines dead.
+kubejs/archive/ — 9 whole superseded files sitting outside any loaded script root (confirmed genuinely dead, not silently still running).
+Same pattern in patcherMod: CreativeEngineering.java:254-416 and two full legacy versions inside IECompat.java:171-394 are block-commented old code; CreativeEngineeringItems.javaold and patcherMod/build.gradleold are stale drafts kept alive only by a mangled extension.
+Duplicate/dead localization file — assets/creativeengineering/lang/.en_us.json (note the leading dot — Minecraft never loads it) still holds all 26 real item/block names; the file that's actually loaded has only 5 unrelated entries. Names show correctly in-game today only because kubejs/client_scripts/namechanges.js duplicates the same data — so this is drift risk, not a live bug.
+Smaller leftovers: a // TEMP diagnostic log permanently left in PotionFluidHandlerMixin.java:62; an unedited Forge-MDK Config.java that isn't even wired to load; template placeholder text still in mods.toml (change.me.example.invalid URLs, generic description) and patcherMod/README.txt.
+Self-flagged open questions & small known bugs
+misc_metal_crafts.js previously had a self-flagged "Broken? Item still craftable" comment on the rusty-door recipe — now resolved, verified fixed as of today's code.
+removed_items.js is still missing tracked entries for minecraft:dispenser, minecraft:smoker, and minecraft:cake (bookkeeping gap — the removals themselves work, they're just untracked).
+metal_building.js:11 removes createdeco:polished_iron_bars's stonecutting recipe with no replacement anywhere — looks like it's now genuinely uncraftable.
+fluidtags.js:79 has a dead commented-out block referencing a nonexistent T.addFluid (wrong capitalization) — harmless while dead, don't copy it back in as-is.
+MemoryStickItemMixin.java matches PneumaticCraft internals by compiler-assigned lambda names the class doc admits are fragile to a PC:R update; EasyElytraTakeoffGroundCheckMixin.java similarly pins a raw bytecode local-variable slot number to one specific dependency jar version.
+Three near-identical mixins (CycleEnchantmentMixin, StockpileEnchantmentMixin, RecoveryEnchantmentMixin) each import @Overwrite but never use it — works today, but reads like an interrupted refactor.
+FlintAndTerraSteelItem.java:16-26 — doc comment literally says "TEMPORARY testing behavior... no portal-frame validation at all... this version is a stand-in," and references a TerraFireBlock class that no longer exists (it actually places DARK_FIRE now). PortalFailureHandler.java:47 has a diagnostic log explicitly kept in "until this is confirmed working" — i.e., the Dark Fire portal feature's stability isn't confirmed yet.
+Recently-built chains never explicitly closed out
+Per memory, the whole potion-fluid rework from Sept 6-8 — IE Mixer/Bottler/Refinery ↔ create:potion, splash/lingering parity, the dedicated JEI categories ([[am-potion-brewing-fix]], [[ie-refinery-lingerification]], [[ie-jei-fluid-nbt-tooltips]]) and the sawblade-profile routing crash fix ([[sawblade-recipe-routing]]) — all ended their session at "built + deployed, awaiting restart to verify in-game." Six days of subsequent work has been built on top of these without any reported regression, so they're very likely fine, but nothing on record explicitly confirms the in-game checklist was ever run. Worth a quick pass if you haven't already.
+
+Orphaned files (housekeeping, not features)
+scratch_kjs/dev/ — 2 decompiled KubeJS .class files, unreferenced anywhere, safe to ignore.
+tools/gen_create_ie_dict.mjs is credited as the generator for the dict-additions worklist above but no longer exists in the instance (per memory, it was trashed).
+kubejs/mixin/ and quests_structures/ — both completely empty, unused scaffolding.
+kubejs/quest_working/produce.txt — draft quest chain, but verified already fully merged into the live food_purchasing.snbt chapter; safe to delete, not a gap.
+simplebackups/ is holding ~25GB of instance backups — not a feature, just a disk-space flag.
+Checked and already resolved (so you don't re-verify these)
+A large "server_scripts migration audit" plan from Sept 5 turned out mostly actioned already: metaltags.js's missing-event-argument bug is fixed, beef_patty/framed_cube dict entries exist, the PneumaticCraft compressed-iron-ingot redirect is back, the copper plate/block reverse-recipe "gap" is explained inline as intentional, and the XP-fluid merge (PneumaticCraft Memory Stick + Sophisticated Backpacks ↔ Create Enchantment Industry) that looked stalled from the plan history is actually fully implemented, mixins registered and dead code cleaned up — only loose end there is the temp diagnostic log mentioned above.
+
+Given the length of this, want me to turn it into a checklist artifact you can check items off as you close them out, rather than re-scanning this thread each time?
+
+All three finished, and I already synthesized everything into the final report in my last message — the crash-risk callout, the "not started," "built with gaps," "intentionally minimal scaffolding," "dead code from the CE→NCH migration," "self-flagged bugs," "awaiting-verification chains," "orphaned files," and "already resolved" sections above cover all three agents' findings plus the memory/plan cross-checks. Nothing further to add unless you want the checklist artifact I offered at the end.

@@ -1,0 +1,13 @@
+{
+  "description": "Electricity: IE tesla, wire and razor shock, Create Additions tesla coil, SecurityCraft electricity and taser, lightning.",
+  "values": [
+    "ieTesla",
+    "ieTeslaPrimary",
+    "ieWireShock",
+    "ieRazorShock",
+    "tesla_coil",
+    "securitycraft.electricity",
+    "securitycraft.taser",
+    "lightningBolt"
+  ]
+}

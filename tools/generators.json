@@ -1,0 +1,125 @@
+{
+  "_readme": [
+    "Generator manifest for the in-game /cegen command (patcherMod devtools/GeneratorRunner) and the",
+    "optional run at game startup (config/creativeengineering-common.toml [debug.generators]).",
+    "",
+    "Entries run one at a time, in this order, so put a generator after anything it reads:",
+    "gen_structure_config writes structure_config.json, which build_biome_merges and the analyzer read.",
+    "A failed entry is reported and the rest still run.",
+    "",
+    "Fields per generator:",
+    "  id        name used by /cegen run <id>",
+    "  script    path from the instance root, run with the configured python from the instance root",
+    "  args      extra command-line arguments (optional)",
+    "  groups    /cegen run <group> runs every entry in the group; 'all' runs everything",
+    "  dumps     in-game commands whose kubejs/exported/ output the script reads. /cegen run <target> dumps",
+    "            runs them first; plain runs (and the startup run) use whatever the last dump left",
+    "  outputs   files or folders the script writes. Hashed before and after, so chat can say what changed",
+    "  apply     what makes a changed output take effect, shown only when something changed",
+    "  warnExit  exit codes that mean 'finished with findings' rather than 'failed' (optional)",
+    "  highlight extra regexes, on top of the top-level list, whose matching output lines go to chat",
+    "",
+    "Not listed on purpose: dump_server_mods.py (in game it's /dumpservermods), echo_texture.py and",
+    "potion_bucket_texture.py (one-off art tools that take arguments), gen_bedspreads/elytra_pattern_compat.py",
+    "(they write patcherMod resources, so their output needs a jar rebuild, not a game restart)."
+  ],
+  "highlight": [
+    "WARNING",
+    "^\\s*!",
+    "Traceback",
+    "Error:",
+    "NEW proposal",
+    "no proposal any more",
+    "^\\s*dropped ",
+    "no longer exists",
+    "not found"
+  ],
+  "generators": [
+    {
+      "id": "structure_config",
+      "script": "tools/gen_structure_config.py",
+      "groups": ["core", "worldgen"],
+      "outputs": ["kubejs/generation_scripts/worldgen/structure_config.json"],
+      "apply": "rejoin the world; only newly generated chunks use it"
+    },
+    {
+      "id": "biome_merges",
+      "script": "tools/build_biome_merges.py",
+      "groups": ["core", "worldgen"],
+      "outputs": [
+        "kubejs/generation_scripts/worldgen/biome_merges.json",
+        "kubejs/generation_scripts/worldgen/biome_merge_suggestions.md"
+      ],
+      "apply": "/reload or rejoin; only newly generated chunks use it"
+    },
+    {
+      "id": "biome_config",
+      "script": "tools/gen_biome_config.py",
+      "groups": ["core", "worldgen"],
+      "outputs": [
+        "kubejs/generation_scripts/worldgen/biome_config.json",
+        "kubejs/generation_scripts/worldgen/biome_baselines"
+      ],
+      "apply": "new worlds only (solved at world load)"
+    },
+    {
+      "id": "loot_config",
+      "script": "tools/gen_loot_config.py",
+      "groups": ["core", "loot"],
+      "dumps": ["dumploot", "dumptags item"],
+      "outputs": [
+        "kubejs/server_scripts/loot/loot_config.json",
+        "kubejs/server_scripts/loot/loot_index.json"
+      ],
+      "apply": "/reload"
+    },
+    {
+      "id": "effect_descriptions",
+      "script": "tools/gen_effect_descriptions.py",
+      "groups": ["core", "client"],
+      "outputs": ["kubejs/assets/creativeengineering/lang/en_us.json"],
+      "apply": "F3+T (client resource reload)"
+    },
+    {
+      "id": "biome_merge_proposals",
+      "script": "tools/analyze_structure_biome_merges.py",
+      "groups": ["reports", "worldgen"],
+      "outputs": [
+        "kubejs/generation_scripts/worldgen/biome_merge_proposals.json",
+        "kubejs/generation_scripts/worldgen/biome_merge_proposals.md"
+      ],
+      "apply": "report only"
+    },
+    {
+      "id": "structure_live_check",
+      "script": "tools/check_structure_live.py",
+      "groups": ["reports", "worldgen"],
+      "dumps": ["dumpstructuregen"],
+      "warnExit": [1],
+      "highlight": ["^\\d\\. .*: [1-9]"]
+    },
+    {
+      "id": "loot_container_audit",
+      "script": "tools/audit_loot_containers.py",
+      "groups": ["reports", "loot", "slow"],
+      "outputs": ["kubejs/generation_scripts/worldgen/loot_container_audit.md"],
+      "apply": "report only"
+    },
+    {
+      "id": "loot_census",
+      "script": "tools/loot_census.py",
+      "groups": ["reports", "loot", "slow"],
+      "dumps": ["dumploot"],
+      "outputs": ["kubejs/server_scripts/loot/loot_census.md"],
+      "apply": "report only"
+    },
+    {
+      "id": "blockrunner_scan",
+      "script": "tools/blockrunner_scan.py",
+      "groups": ["reports", "blockrunner"],
+      "dumps": ["dumptags block", "dumpitemsbymod"],
+      "outputs": ["tools/blockrunner_untagged_blocks.json"],
+      "apply": "input for tools/blockrunner_tag_sim.js (node), nothing in game"
+    }
+  ]
+}

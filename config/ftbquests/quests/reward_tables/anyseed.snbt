@@ -1,0 +1,18 @@
+{
+	icon: "farmersdelight:tomato_seeds"
+	id: "34D8D886DDB50FCA"
+	loot_size: 1
+	order_index: 9
+	rewards: [
+		{ item: "minecraft:wheat_seeds", weight: 0.1f }
+		{ item: "minecraft:pumpkin_seeds" }
+		{ item: "minecraft:melon_seeds" }
+		{ item: "minecraft:beetroot_seeds" }
+		{ item: "farmersdelight:cabbage_seeds" }
+		{ item: "farmersdelight:tomato_seeds" }
+		{ item: "immersiveengineering:seed", weight: 0.1f }
+		{ item: "minecraft:carrot" }
+		{ item: "minecraft:potato" }
+	]
+	title: "CropSeed"
+}

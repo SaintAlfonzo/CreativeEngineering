@@ -1,0 +1,1189 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "cooking"
+	group: "16C7EF1E80339E63"
+	icon: "create:dough"
+	id: "54C3F7EF9A8F8453"
+	order_index: 2
+	quest_links: [ ]
+	quests: [
+		{
+			id: "026A0886475EA1E5"
+			tasks: [{
+				id: "2B3A0B3837CC7A2E"
+				item: "minecraft:wheat"
+				type: "item"
+			}]
+			x: 0.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["026A0886475EA1E5"]
+			id: "53605E29113AFE4C"
+			tasks: [{
+				id: "5A5E9C641FE9B9C1"
+				item: "minecraft:tnt"
+				type: "item"
+			}]
+			title: "Explosion Crafting"
+			x: 1.5d
+			y: 0.0d
+		}
+		{
+			dependencies: ["026A0886475EA1E5"]
+			id: "712826D886DDEB47"
+			tasks: [
+				{
+					id: "4EDEDC39FF262E49"
+					item: "create:millstone"
+					type: "item"
+				}
+				{
+					id: "5D49FEA24170F20C"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+			]
+			title: "Create Milling or Crushing"
+			x: 1.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["026A0886475EA1E5"]
+			id: "3F0F95D9C2378FA7"
+			tasks: [{
+				id: "22AED3E1F0B382A0"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Crushing"
+			x: 1.5d
+			y: 3.0d
+		}
+		{
+			dependencies: ["026A0886475EA1E5"]
+			id: "5019B2F534A15DA5"
+			tasks: [{
+				id: "63E575F7BBBED87D"
+				item: "pneumaticcraft:pressure_chamber_wall"
+				type: "item"
+			}]
+			title: "Pressure Chamber"
+			x: 1.5d
+			y: 4.5d
+		}
+		{
+			dependencies: ["026A0886475EA1E5"]
+			id: "0E7CF2CD0E202BD4"
+			tasks: [{
+				id: "547A76DF038B9492"
+				item: "minecraft:hay_block"
+				type: "item"
+			}]
+			x: 0.0d
+			y: 3.0d
+		}
+		{
+			dependencies: ["0E7CF2CD0E202BD4"]
+			id: "00AFBF457D257423"
+			shape: "circle"
+			tasks: [{
+				id: "4D3B84058CC46FF2"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "Create Crushing"
+			x: -1.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["0E7CF2CD0E202BD4"]
+			id: "15DBCB45196E14A0"
+			tasks: [{
+				id: "58B433D239E6C530"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Crushing"
+			x: -1.5d
+			y: 3.0d
+		}
+		{
+			id: "5EAD1C9F8B4A570B"
+			tasks: [{
+				id: "1C3A389EBAF9E111"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: 3.0d
+			y: -1.5d
+		}
+		{
+			id: "634B8C8EF5F77ABB"
+			tasks: [{
+				id: "795B4004CA9E2A83"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: -3.0d
+			y: -1.5d
+		}
+		{
+			id: "1B24299C116DA695"
+			tasks: [{
+				id: "07B3025C25D255CE"
+				item: "davebuildingmod:arrow_left_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: -1.5d
+			y: -1.5d
+		}
+		{
+			id: "48175255B5AC88A9"
+			tasks: [{
+				id: "5D6BB97ED903E8F7"
+				item: "davebuildingmod:arrow_right_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: 1.5d
+			y: -1.5d
+		}
+		{
+			id: "3DD245C27EB43CC2"
+			tasks: [{
+				id: "532F236A99CC4BCF"
+				type: "custom"
+			}]
+			title: "Input"
+			x: 0.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["53605E29113AFE4C"]
+			id: "17BA39507D870C03"
+			tasks: [{
+				id: "3E959236D4F402ED"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "0.5 Flour"
+			x: 3.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["712826D886DDEB47"]
+			hide: false
+			id: "56CD5EA9A557FDF1"
+			shape: "diamond"
+			tasks: [{
+				id: "3C3EF9AAC2BE9320"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "1.5 Flour"
+			x: 3.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["3F0F95D9C2378FA7"]
+			id: "43C483C4C8CA0991"
+			shape: "pentagon"
+			tasks: [{
+				id: "10C8FD9D2FD8B7B9"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "2 Flour"
+			x: 3.0d
+			y: 3.0d
+		}
+		{
+			dependencies: ["5019B2F534A15DA5"]
+			id: "09392D87D66888F6"
+			shape: "hexagon"
+			tasks: [{
+				id: "5340CB18397E27EF"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "3 Flour"
+			x: 3.0d
+			y: 4.5d
+		}
+		{
+			dependencies: ["00AFBF457D257423"]
+			id: "4ADE8E4E6B7FA20C"
+			shape: "diamond"
+			tasks: [{
+				id: "769ACBF94A1B56E4"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			x: -3.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["15DBCB45196E14A0"]
+			id: "17B3D9F9B36F52AA"
+			shape: "pentagon"
+			tasks: [{
+				id: "1C20EDCA650732B3"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "18 Flour"
+			x: -3.0d
+			y: 3.0d
+		}
+		{
+			id: "3F3DDFDB511DD8EB"
+			tasks: [{
+				id: "7A41A2BEDA41AC5D"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			x: 0.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["3F3DDFDB511DD8EB"]
+			id: "6B813E58569DBB52"
+			tasks: [{
+				id: "4FC2263804F86CE5"
+				item: "create_compressed:wheat_flour_pile"
+				type: "item"
+			}]
+			x: 0.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["3F3DDFDB511DD8EB"]
+			id: "020B68D9FAE6BF38"
+			tasks: [{
+				id: "14B6E13C6D441B91"
+				item: "minecraft:water_bucket"
+				type: "item"
+			}]
+			title: "Manual Crafting"
+			x: 1.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["3F3DDFDB511DD8EB"]
+			id: "505EDBA9D582C464"
+			tasks: [{
+				id: "0FA6F88183341171"
+				item: "create:encased_fan"
+				type: "item"
+			}]
+			title: "Washing"
+			x: 1.5d
+			y: -4.5d
+		}
+		{
+			dependencies: ["3F3DDFDB511DD8EB"]
+			id: "3F7E4DEA550CA76A"
+			tasks: [{
+				id: "20B2F7725956C1A9"
+				item: "create:mechanical_mixer"
+				type: "item"
+			}]
+			title: "Mixing"
+			x: 1.5d
+			y: -6.0d
+		}
+		{
+			dependencies: ["3F3DDFDB511DD8EB"]
+			id: "469152A44050CCCF"
+			tasks: [{
+				id: "1F818F6AEDE3DB4C"
+				item: "minecraft:egg"
+				type: "item"
+			}]
+			title: "Egg Substitute Manual Crafting \\& Mixing"
+			x: 1.5d
+			y: -9.0d
+		}
+		{
+			dependencies: ["3F3DDFDB511DD8EB"]
+			id: "7094BED630B13773"
+			tasks: [{
+				id: "17800233CAA6F341"
+				item: {
+					Count: 1b
+					id: "minecraft:potion"
+					tag: {
+						Potion: "minecraft:water"
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Bottling"
+			x: 1.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["020B68D9FAE6BF38"]
+			id: "7BD02B6B7BD62DD4"
+			tasks: [{
+				id: "6E62156CA7FFE952"
+				item: "create:dough"
+				type: "item"
+			}]
+			title: "1 Dough"
+			x: 3.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["505EDBA9D582C464"]
+			id: "2CDF9FA3905EF57A"
+			tasks: [{
+				id: "7AFF10178ACB8FF1"
+				item: "create:dough"
+				type: "item"
+			}]
+			title: "1 Dough"
+			x: 3.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["3F7E4DEA550CA76A"]
+			id: "0105636F480E339F"
+			tasks: [{
+				id: "38A47C559ECBC3BA"
+				item: "create:dough"
+				type: "item"
+			}]
+			title: "1 Dough"
+			x: 3.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["7094BED630B13773"]
+			id: "133D79670B495A56"
+			tasks: [{
+				id: "7953CE4CC74C894C"
+				item: "create:dough"
+				type: "item"
+			}]
+			title: "1 Dough"
+			x: 3.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["469152A44050CCCF"]
+			id: "3BCB09E353C8B7F2"
+			shape: "hexagon"
+			tasks: [{
+				id: "012E04144D0C32D6"
+				item: "create:dough"
+				type: "item"
+			}]
+			title: "2 Dough"
+			x: 3.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["6B813E58569DBB52"]
+			id: "47D20EC8B1D20BE7"
+			tasks: [{
+				id: "630119752A88943D"
+				item: "create:encased_fan"
+				type: "item"
+			}]
+			title: "Washing"
+			x: -1.5d
+			y: -4.5d
+		}
+		{
+			dependencies: ["6B813E58569DBB52"]
+			id: "5CAF06D6D77C10A2"
+			tasks: [{
+				id: "768CBF6596A459C9"
+				item: "create:mechanical_mixer"
+				type: "item"
+			}]
+			title: "Mixing"
+			x: -1.5d
+			y: -6.0d
+		}
+		{
+			dependencies: ["6B813E58569DBB52"]
+			id: "77D93E3C572BF66B"
+			tasks: [{
+				id: "3CFCC31F265AE625"
+				item: "minecraft:water_bucket"
+				type: "item"
+			}]
+			title: "Manual Crafting"
+			x: -1.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["6B813E58569DBB52"]
+			id: "6FDACDFAE08444DC"
+			tasks: [{
+				id: "140BA8DF54A86542"
+				item: {
+					Count: 1b
+					id: "minecraft:potion"
+					tag: {
+						Potion: "minecraft:water"
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Bottling"
+			x: -1.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["6FDACDFAE08444DC"]
+			id: "03E6881E6B4FBCAA"
+			tasks: [{
+				id: "176927A710B81E43"
+				item: "create_compressed:dough_block"
+				type: "item"
+			}]
+			title: "1 Dough Block"
+			x: -3.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["5CAF06D6D77C10A2"]
+			id: "4D76B99C781572CF"
+			tasks: [{
+				id: "7C5EA7F18AE51CDC"
+				item: "create_compressed:dough_block"
+				type: "item"
+			}]
+			title: "1 Dough Block"
+			x: -3.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["47D20EC8B1D20BE7"]
+			id: "123D8CF1D7D4BAB2"
+			tasks: [{
+				id: "15E2D86F9E451577"
+				item: "create_compressed:dough_block"
+				type: "item"
+			}]
+			title: "1 Dough Block"
+			x: -3.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["77D93E3C572BF66B"]
+			id: "1533571BB04707D4"
+			tasks: [{
+				id: "07026093D56075D9"
+				item: "create_compressed:dough_block"
+				type: "item"
+			}]
+			title: "1 Dough Block"
+			x: -3.0d
+			y: -3.0d
+		}
+		{
+			id: "4990764040D9888A"
+			tasks: [{
+				id: "691EA463651DAE44"
+				type: "custom"
+			}]
+			title: "Input"
+			x: 0.0d
+			y: -10.5d
+		}
+		{
+			id: "32F42A213A161CF6"
+			tasks: [{
+				id: "2FE3EC5108125372"
+				item: "davebuildingmod:arrow_right_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: 1.5d
+			y: -10.5d
+		}
+		{
+			id: "68027D3C49D0D903"
+			tasks: [{
+				id: "33C8F55C4FD6203D"
+				item: "davebuildingmod:arrow_left_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: -1.5d
+			y: -10.5d
+		}
+		{
+			id: "2C83BB45ED5D8A04"
+			tasks: [{
+				id: "04F468B7B0E46258"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: 3.0d
+			y: -10.5d
+		}
+		{
+			id: "4BBDB0722F8124A9"
+			tasks: [{
+				id: "2448882F4CEBD927"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: -3.0d
+			y: -10.5d
+		}
+		{
+			dependencies: ["2B78B1F4927328DF"]
+			id: "410665968DC2F07E"
+			tasks: [{
+				id: "3E342A1CE61EB8AF"
+				item: "farmersdelight:raw_pasta"
+				type: "item"
+			}]
+			title: "1 Pasta"
+			x: 3.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["6F946A01FA02D287"]
+			id: "2B78B1F4927328DF"
+			tasks: [
+				{
+					id: "41DA067981D00C47"
+					item: {
+						Count: 1b
+						id: "farmersdelight:iron_knife"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "1EC1D9BCF5EA4490"
+					item: "farmersdelight:cutting_board"
+					type: "item"
+				}
+				{
+					id: "2C2A2557DC04D709"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "21272AEE2F4008D0"
+					item: {
+						Count: 1b
+						id: "farmersdelight:iron_knife"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Farmers Delight Cutting Board \\& Deployer Cutting"
+			x: 1.5d
+			y: -15.0d
+		}
+		{
+			dependencies: ["6F946A01FA02D287"]
+			id: "2A401E281F4FB8A1"
+			tasks: [{
+				id: "04E1CEB3346E4021"
+				item: "create_compressed:dough_block"
+				type: "item"
+			}]
+			x: 0.0d
+			y: -12.0d
+		}
+		{
+			id: "6F946A01FA02D287"
+			tasks: [{
+				id: "6DC4D80BB3FE318E"
+				item: "create:dough"
+				type: "item"
+			}]
+			x: 0.0d
+			y: -13.5d
+		}
+		{
+			dependencies: ["6F946A01FA02D287"]
+			id: "0B28A5243EFB7EEC"
+			tasks: [
+				{
+					id: "5C076AC53F245542"
+					item: "minecraft:smoker"
+					type: "item"
+				}
+				{
+					id: "5452D485283F0FEB"
+					item: "minecraft:campfire"
+					type: "item"
+				}
+				{
+					id: "28107AAEC4719A6C"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "0DFFEA1F57F15BEF"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+			]
+			title: "Smelting"
+			x: 1.5d
+			y: -13.5d
+		}
+		{
+			dependencies: ["0B28A5243EFB7EEC"]
+			id: "0E4AE27F7825963F"
+			tasks: [{
+				id: "743130E6DAE88E2F"
+				item: "minecraft:bread"
+				type: "item"
+			}]
+			title: "1 Bread"
+			x: 3.0d
+			y: -13.5d
+		}
+		{
+			dependencies: ["2A401E281F4FB8A1"]
+			id: "77188250BE317472"
+			tasks: [
+				{
+					id: "10F7E42D77BC1C50"
+					item: "minecraft:smoker"
+					type: "item"
+				}
+				{
+					id: "2FDAB22F85AE5C86"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "79E12C13CBDC8043"
+					item: "minecraft:campfire"
+					type: "item"
+				}
+				{
+					id: "14528BA578E1F42E"
+					item: "minecraft:smoker"
+					type: "item"
+				}
+			]
+			title: "Smoking"
+			x: -1.5d
+			y: -13.5d
+		}
+		{
+			dependencies: ["77188250BE317472"]
+			id: "6B032FF46282129A"
+			tasks: [{
+				id: "57B27F9434BADC8E"
+				item: "architects_palette:bread_block"
+				type: "item"
+			}]
+			title: "Bread Block"
+			x: 0.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["6F946A01FA02D287"]
+			id: "0609F00B65AC6FE4"
+			tasks: [{
+				id: "59451B22D3B2DF24"
+				item: "minecraft:lime_dye"
+				type: "item"
+			}]
+			title: "1 Lime Dye"
+			x: 1.5d
+			y: -12.0d
+		}
+		{
+			dependencies: ["2A401E281F4FB8A1"]
+			id: "18F8BABFF7756EA8"
+			tasks: [{
+				id: "6F473FE22827EE72"
+				item: "minecraft:lime_dye"
+				type: "item"
+			}]
+			title: "8 Lime Dye"
+			x: -1.5d
+			y: -12.0d
+		}
+		{
+			dependencies: ["18F8BABFF7756EA8"]
+			id: "54B976B1C9A59D9C"
+			shape: "hexagon"
+			tasks: [{
+				id: "65C3D9F529BAB030"
+				item: "minecraft:slime_block"
+				type: "item"
+			}]
+			title: "9 Slime for 8 Lime Dye"
+			x: -3.0d
+			y: -12.0d
+		}
+		{
+			dependencies: ["0609F00B65AC6FE4"]
+			id: "01B67AC6CFEC715D"
+			tasks: [{
+				id: "2E3C9FECB8A14DF4"
+				item: "minecraft:slime_ball"
+				type: "item"
+			}]
+			title: "1 Slimeball for 1 Lime Dye"
+			x: 3.0d
+			y: -12.0d
+		}
+		{
+			dependencies: ["6F946A01FA02D287"]
+			id: "2769349616FD8403"
+			tasks: [{
+				id: "075109A8D91152EE"
+				item: "immersiveengineering:mold_wire"
+				type: "item"
+			}]
+			title: "IE Metal Press"
+			x: 1.5d
+			y: -16.5d
+		}
+		{
+			dependencies: ["2769349616FD8403"]
+			id: "160AE39CE907E616"
+			shape: "hexagon"
+			tasks: [{
+				id: "037115926596A1B3"
+				item: "farmersdelight:raw_pasta"
+				type: "item"
+			}]
+			title: "2 Pasta"
+			x: 3.0d
+			y: -16.5d
+		}
+		{
+			dependencies: ["6B032FF46282129A"]
+			id: "3B75078E00999326"
+			tasks: [{
+				id: "17E05105B6FCD324"
+				item: "create:mechanical_saw"
+				type: "item"
+			}]
+			title: "Create Sawing"
+			x: -1.5d
+			y: -16.5d
+		}
+		{
+			dependencies: ["6B032FF46282129A"]
+			id: "59294C7730419AAA"
+			tasks: [
+				{
+					id: "2FA84341E9EB7089"
+					item: {
+						Count: 1b
+						id: "farmersdelight:iron_knife"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "07669A5AFBFF4769"
+					item: "farmersdelight:cutting_board"
+					type: "item"
+				}
+				{
+					id: "2C9EADD5F9BF9A95"
+					item: "create:deployer"
+					type: "item"
+				}
+				{
+					id: "7C265DFC98FF1904"
+					item: {
+						Count: 1b
+						id: "farmersdelight:iron_knife"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Farmers Delight Cutting Board \\& Deployer Cutting"
+			x: -1.5d
+			y: -15.0d
+		}
+		{
+			dependencies: ["59294C7730419AAA"]
+			id: "05815D4AC994237C"
+			shape: "hexagon"
+			tasks: [{
+				id: "65468E8D26E70B2B"
+				item: "minecraft:bread"
+				type: "item"
+			}]
+			title: "16 Bread"
+			x: -3.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["3B75078E00999326"]
+			id: "283AD1860E75833C"
+			shape: "hexagon"
+			tasks: [{
+				id: "6EEF3F0D741DF3E3"
+				item: "minecraft:bread"
+				type: "item"
+			}]
+			title: "16 Bread"
+			x: -3.0d
+			y: -16.5d
+		}
+		{
+			id: "7F2C1791FA2B7B82"
+			tasks: [{
+				id: "0070C1A41CD91E1C"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: -3.0d
+			y: -18.0d
+		}
+		{
+			id: "701C6AFAE991E922"
+			tasks: [{
+				id: "4C66DC6EE8466C68"
+				item: "davebuildingmod:arrow_left_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: -1.5d
+			y: -18.0d
+		}
+		{
+			id: "097BE6662D13AEC7"
+			tasks: [{
+				id: "2B67FE3E5E5D4297"
+				type: "custom"
+			}]
+			title: "Input"
+			x: 0.0d
+			y: -18.0d
+		}
+		{
+			id: "45669807C93ED1CF"
+			tasks: [{
+				id: "0A01CA704DB86DF6"
+				item: "davebuildingmod:arrow_right_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: 1.5d
+			y: -18.0d
+		}
+		{
+			id: "335F349D3936DF96"
+			tasks: [{
+				id: "1C5BA86431FF7D54"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: 3.0d
+			y: -18.0d
+		}
+		{
+			id: "17F11C6BEC13A6DA"
+			shape: "diamond"
+			tasks: [{
+				id: "3DE05408D7DF08A2"
+				item: "immersive_weathering:frosty_glass_pane"
+				type: "item"
+			}]
+			title: "---------------------------------"
+			x: 4.5d
+			y: -18.0d
+		}
+		{
+			id: "3A26CAE03AF489D8"
+			tasks: [{
+				id: "66FAE7C6DE40AF4B"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			x: 6.0d
+			y: -18.0d
+		}
+		{
+			id: "40263891412DA7BE"
+			tasks: [{
+				id: "163EC64938F4CB73"
+				item: "davebuildingmod:arrow_left_sign"
+				type: "item"
+			}]
+			x: 7.5d
+			y: -18.0d
+		}
+		{
+			id: "0A1E91D6E26DCA4F"
+			tasks: [{
+				id: "40806A182602509D"
+				type: "custom"
+			}]
+			x: 9.0d
+			y: -18.0d
+		}
+		{
+			id: "0B23E2070BF11B20"
+			tasks: [{
+				id: "3461F1522A1DAB74"
+				item: "davebuildingmod:arrow_right_sign"
+				type: "item"
+			}]
+			x: 10.5d
+			y: -18.0d
+		}
+		{
+			id: "53DB9999F2BCB29C"
+			tasks: [{
+				id: "342931D4D0C0B590"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			x: 12.0d
+			y: -18.0d
+		}
+		{
+			id: "609F76C55D16F114"
+			tasks: [{
+				id: "458D80AAF669DD61"
+				item: "farmersdelight:tomato"
+				type: "item"
+			}]
+			x: 9.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["609F76C55D16F114"]
+			id: "6B24A84F3ED7C17E"
+			tasks: [{
+				id: "66FAEFDEFB9D3184"
+				item: "minecraft:crafting_table"
+				type: "item"
+			}]
+			title: "Manual Crafting"
+			x: 7.5d
+			y: -16.5d
+		}
+		{
+			dependencies: ["6B24A84F3ED7C17E"]
+			id: "4008A2CFE12FBCE8"
+			tasks: [{
+				id: "27A80111A241EE29"
+				item: "farmersdelight:tomato_sauce"
+				type: "item"
+			}]
+			title: "Tomato Sauce (x4 Tomatoes)"
+			x: 6.0d
+			y: -16.5d
+		}
+		{
+			dependencies: ["609F76C55D16F114"]
+			id: "27FFE17742901E58"
+			tasks: [
+				{
+					id: "67CBA42843F109F2"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "3B9F3CED6C07B8EA"
+					item: "create:blaze_burner"
+					type: "item"
+				}
+			]
+			title: "Heated Mixing"
+			x: 7.5d
+			y: -15.0d
+		}
+		{
+			dependencies: ["27FFE17742901E58"]
+			id: "02D712D226F4E2ED"
+			tasks: [{
+				id: "3170666A5CCBFB83"
+				item: "farmersdelight:tomato_sauce"
+				type: "item"
+			}]
+			title: "Tomato Sauce (x2 Tomatoes)"
+			x: 6.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["609F76C55D16F114"]
+			id: "3C76DC03F5EEA1CA"
+			tasks: [{
+				id: "0E80B69EF717DFDC"
+				item: "farmersdelight:cooking_pot"
+				type: "item"
+			}]
+			title: "Farmers Delight Cooking"
+			x: 7.5d
+			y: -13.5d
+		}
+		{
+			dependencies: ["3C76DC03F5EEA1CA"]
+			id: "0E7540B13454FF9C"
+			tasks: [{
+				id: "69D386D4D92236E1"
+				item: "farmersdelight:tomato_sauce"
+				type: "item"
+			}]
+			title: "Tomato Sauce (x2 Tomatoes)"
+			x: 6.0d
+			y: -13.5d
+		}
+		{
+			dependencies: ["609F76C55D16F114"]
+			id: "49D83C09F2F3AF67"
+			tasks: [
+				{
+					id: "643E7856563BE63B"
+					item: "immersiveengineering:wooden_barrel"
+					type: "item"
+				}
+				{
+					id: "3D3E53734C9C546D"
+					item: "minecraft:piston"
+					type: "item"
+				}
+			]
+			title: "IE Squeezer"
+			x: 10.5d
+			y: -16.5d
+		}
+		{
+			dependencies: ["57AA2C7DD4184994"]
+			id: "6247B1F563E414D5"
+			tasks: [{
+				id: "1586EA49025D1139"
+				item: "farmersdelight:tomato_sauce"
+				type: "item"
+			}]
+			title: "Tomato Sauce"
+			x: 12.0d
+			y: -12.0d
+		}
+		{
+			dependencies: ["49D83C09F2F3AF67"]
+			id: "66893C666A683699"
+			shape: "hexagon"
+			tasks: [{
+				id: "779D6AA9BBBA8498"
+				item: "create_central_kitchen:tomato_sauce_bucket"
+				type: "item"
+			}]
+			title: "250mb Fluid Tomato Sauce (x1 Tomato)"
+			x: 12.0d
+			y: -16.5d
+		}
+		{
+			dependencies: ["5033A32DC52C46F7"]
+			id: "57AA2C7DD4184994"
+			tasks: [{
+				id: "4BCC55EF27FC7FC6"
+				item: "create:spout"
+				type: "item"
+			}]
+			title: "Create Filling"
+			x: 10.5d
+			y: -12.0d
+		}
+		{
+			dependencies: ["5033A32DC52C46F7"]
+			id: "66EBE786DABB201C"
+			tasks: [{
+				id: "2A90FA69C1D17A24"
+				item: "minecraft:glass_bottle"
+				type: "item"
+			}]
+			title: "IE Bottling"
+			x: 10.5d
+			y: -13.5d
+		}
+		{
+			dependencies: ["66EBE786DABB201C"]
+			id: "3AB4E4AD2740AF7C"
+			tasks: [{
+				id: "6CCF3897E5502A8D"
+				item: "farmersdelight:tomato_sauce"
+				type: "item"
+			}]
+			title: "Tomato Sauce"
+			x: 12.0d
+			y: -13.5d
+		}
+		{
+			dependencies: ["609F76C55D16F114"]
+			id: "69270EAA2BEAAB04"
+			tasks: [{
+				id: "3D4784184EE3E618"
+				item: "create:mechanical_mixer"
+				type: "item"
+			}]
+			title: "Mixing w/o Heat"
+			x: 10.5d
+			y: -15.0d
+		}
+		{
+			dependencies: ["69270EAA2BEAAB04"]
+			id: "394A86BD4AF971A7"
+			tasks: [{
+				id: "67BBF293FBC27F76"
+				item: "create_central_kitchen:tomato_sauce_bucket"
+				type: "item"
+			}]
+			title: "250mb Fluid Tomato Sauce (x2 Tomato)"
+			x: 12.0d
+			y: -15.0d
+		}
+		{
+			id: "5033A32DC52C46F7"
+			tasks: [{
+				id: "2DB7BC005072BFF4"
+				item: "create_central_kitchen:tomato_sauce_bucket"
+				type: "item"
+			}]
+			title: "250mb Fluid Tomato Sauce"
+			x: 9.0d
+			y: -13.5d
+		}
+	]
+	title: "Cooking"
+}

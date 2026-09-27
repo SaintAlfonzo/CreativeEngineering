@@ -1,0 +1,19 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 2400,
+  "input": {
+    "item": "creativeengineering:layered_obsidian"
+  },
+  "result": {
+    "item": "create:sturdy_sheet",
+    "count": 16
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "create:powdered_obsidian"
+      },
+      "stripping": false
+    }
+  ]
+}

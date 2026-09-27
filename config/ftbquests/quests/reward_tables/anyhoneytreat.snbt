@@ -1,0 +1,17 @@
+{
+	id: "7EDF97C1EB90DA4B"
+	loot_size: 1
+	order_index: 2
+	rewards: [
+		{ item: "create_factory:honey_waffle" }
+		{ item: "create_factory:honey_roll" }
+		{ item: "create_factory:honey_glazed_berries" }
+		{ item: "farmersdelight:honey_cookie" }
+		{ item: "create:honeyed_apple" }
+		{ item: "create_central_kitchen:honey_cake_slice" }
+		{ item: "create_confectionery:honey_candy" }
+		{ item: "buzzier_bees:honey_bread" }
+		{ item: "buzzier_bees:glazed_porkchop" }
+	]
+	title: "AnyHoneyTreat"
+}

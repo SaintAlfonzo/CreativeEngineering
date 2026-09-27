@@ -1,0 +1,574 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "food_purchasing"
+	group: "6E8D1BA71A4FAF2E"
+	id: "7334BEF0276A2A78"
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			can_repeat: true
+			dependencies: ["1134369C39B75249"]
+			hide: true
+			id: "22964D092FDD7D80"
+			rewards: [{
+				count: 2
+				id: "61B4302CE91E2AFD"
+				item: "lightmanscurrency:coin_copper"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 8L
+				id: "3A9A2F590D1A1B58"
+				item: "minecraft:wheat"
+				type: "item"
+			}]
+			title: "Sell x8 Wheat for 2 Copper Coins"
+			x: -2.0d
+			y: -1.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["22964D092FDD7D80"]
+			hide: false
+			id: "59F72D41993D9264"
+			rewards: [{
+				count: 10
+				id: "5242AF2D33EC53F4"
+				item: "lightmanscurrency:coin_copper"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 32L
+				id: "6085D415F5FF2D98"
+				item: "minecraft:wheat"
+				type: "item"
+			}]
+			title: "Sell x32 Wheat for 10 Copper Coins"
+			x: -2.0d
+			y: 0.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["59F72D41993D9264"]
+			hide: false
+			id: "0551891EB6082D4B"
+			rewards: [{
+				count: 25
+				id: "27C4434AC4FFDB36"
+				item: "lightmanscurrency:coin_copper"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 64L
+				id: "33EE60BC954D2059"
+				item: "minecraft:wheat"
+				type: "item"
+			}]
+			title: "Sell x1 Stack of Wheat for 25 Copper Coins"
+			x: -2.0d
+			y: 1.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["0551891EB6082D4B"]
+			id: "41F272E5C25826D5"
+			rewards: [{
+				count: 52
+				id: "14AC1B2C7223B08B"
+				item: "lightmanscurrency:coin_copper"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 128L
+				id: "430001CEDFCEF308"
+				item: "minecraft:wheat"
+				type: "item"
+			}]
+			title: "Sell x2 Stacks of Wheat for 52 Copper Coins"
+			x: -2.0d
+			y: 3.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["41F272E5C25826D5"]
+			id: "3A987F82F4B9A8D8"
+			rewards: [
+				{
+					count: 100
+					id: "11CED2A399A99D48"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+				{
+					count: 11
+					id: "75AF10F8B68F8A8E"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				id: "723D3FD05E9E0772"
+				item: "minecraft:wheat"
+				type: "item"
+			}]
+			title: "Sell x4 Stacks of Wheat for 111 Copper Coins"
+			x: -2.0d
+			y: 4.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["3A987F82F4B9A8D8"]
+			hide: false
+			id: "524F5D36EFF70C67"
+			rewards: [
+				{
+					count: 100
+					id: "4F18DFF188EF2DF5"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+				{
+					count: 100
+					id: "50ABB275FBBC45F6"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+				{
+					count: 56
+					id: "680460A96D332300"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 64L
+				id: "303BAD41B4EB9797"
+				item: "minecraft:hay_block"
+				type: "item"
+			}]
+			title: "Sell x1 Stack of Hay Bale for 256 Copper Coins"
+			x: -2.0d
+			y: 6.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["524F5D36EFF70C67"]
+			id: "18CEEF1AE149CDBE"
+			rewards: [
+				{
+					count: 5
+					id: "640AE03FD444B751"
+					item: "lightmanscurrency:coin_iron"
+					type: "item"
+				}
+				{
+					count: 55
+					id: "6087BA11CF37DBAE"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 128L
+				id: "283060C1615E3A74"
+				item: "minecraft:hay_block"
+				tags: ["128"]
+				type: "item"
+			}]
+			title: "Sell x2 Stacks of Hay Bale for 555 Copper Coins"
+			x: -2.0d
+			y: 7.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["18CEEF1AE149CDBE"]
+			id: "627A5A1E289D1C9B"
+			rewards: [
+				{
+					count: 11
+					id: "0E193CD1903FCADE"
+					item: "lightmanscurrency:coin_iron"
+					type: "item"
+				}
+				{
+					count: 11
+					id: "0A6297D2545D8548"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 256L
+				id: "1253485D3EB81865"
+				item: "minecraft:hay_block"
+				type: "item"
+			}]
+			title: "Sell x4 Stacks of Hay Bale for 1111 Copper Coins"
+			x: -2.0d
+			y: 9.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["627A5A1E289D1C9B"]
+			id: "577EFC8A3B1CEC12"
+			rewards: [
+				{
+					count: 21
+					id: "34281AC8A49389A5"
+					item: "lightmanscurrency:coin_iron"
+					type: "item"
+				}
+				{
+					count: 12
+					id: "235B8A0A4BDB7CBD"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 384L
+				id: "2706390CE9E371A8"
+				item: "minecraft:hay_block"
+				type: "item"
+			}]
+			title: "Sell x6 Stacks of Hay Bale for 2112 Copper Coins"
+			x: -2.0d
+			y: 10.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["577EFC8A3B1CEC12"]
+			hide: false
+			hide_dependency_lines: false
+			id: "39C8D59288AF158E"
+			rewards: [{
+				count: 45
+				id: "26736D77CF4FFF08"
+				item: "lightmanscurrency:coin_iron"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 786L
+				id: "2AD997860A7EA80F"
+				item: "minecraft:hay_block"
+				type: "item"
+			}]
+			title: "Sell x12 Stacks of Hay Bale for 4500 Copper Coins"
+			x: -2.0d
+			y: 12.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["1134369C39B75249"]
+			hide: true
+			id: "07D1C274FA6221C0"
+			rewards: [{
+				count: 3
+				id: "462D82773AC74A03"
+				item: "lightmanscurrency:coin_copper"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 8L
+				id: "12C5AEF7CFB33D7E"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "Sell x8 Wheat Flour for 3 Copper Coins"
+			x: -0.5d
+			y: -1.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["07D1C274FA6221C0"]
+			hide: false
+			id: "4B8143EBC5AFBF59"
+			rewards: [{
+				count: 15
+				id: "1BFB419865E5644C"
+				item: "lightmanscurrency:coin_copper"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 32L
+				id: "7B2860BB34CB0C29"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "Sell x32 Wheat Flour for 15 Copper Coins"
+			x: -0.5d
+			y: 0.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["4B8143EBC5AFBF59"]
+			hide: false
+			id: "0ACB003C05B80517"
+			rewards: [{
+				count: 32
+				id: "725E741E6C7EF64A"
+				item: "lightmanscurrency:coin_copper"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 64L
+				id: "1B33C6206990CA9D"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "Sell x1 Stack of Wheat Flour for 32 Copper Coins"
+			x: -0.5d
+			y: 1.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["0ACB003C05B80517"]
+			hide: false
+			id: "0277691970013546"
+			rewards: [{
+				count: 64
+				id: "11A7F70A3D28EE34"
+				item: "lightmanscurrency:coin_copper"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 128L
+				id: "03EED5D59DB5F13E"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "Sell x2 Stacks of Wheat Flour for 64 Copper Coins"
+			x: -0.5d
+			y: 3.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["0277691970013546"]
+			hide: false
+			id: "382937F1F5F30DE1"
+			rewards: [
+				{
+					count: 100
+					id: "1E99BAEC5644C2AA"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+				{
+					count: 33
+					id: "7A5847C158FE932F"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 256L
+				id: "3F58BB8E8C29DEF3"
+				item: "create:wheat_flour"
+				type: "item"
+			}]
+			title: "Sell x4 Stacks of Wheat Flour for 133 Copper Coins"
+			x: -0.5d
+			y: 4.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["382937F1F5F30DE1"]
+			id: "3A77E3554A1BBC89"
+			rewards: [
+				{
+					count: 100
+					id: "4050EB003D38B29B"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+				{
+					count: 100
+					id: "5FAF2FA9FF12C46B"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+				{
+					count: 100
+					id: "26A55DB60DBD824C"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 64L
+				id: "63870841D74925DA"
+				item: "create_compressed:wheat_flour_pile"
+				type: "item"
+			}]
+			title: "Sell x1 Stack of Wheat Flour Pile for 300 Copper Coins"
+			x: -0.5d
+			y: 6.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["3A77E3554A1BBC89"]
+			hide: false
+			id: "366C0FB51BE5C202"
+			rewards: [
+				{
+					count: 6
+					id: "7B87A36B41C24123"
+					item: "lightmanscurrency:coin_iron"
+					type: "item"
+				}
+				{
+					count: 16
+					id: "1D52759B15AF8771"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 128L
+				id: "76BA478F9538EFD7"
+				item: "create_compressed:wheat_flour_pile"
+				tags: ["128"]
+				type: "item"
+			}]
+			title: "Sell x2 Stacks of Wheat Flour Pile for 616 Copper Coins"
+			x: -0.5d
+			y: 7.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["366C0FB51BE5C202"]
+			hide: false
+			id: "4931CDB583060AC2"
+			rewards: [
+				{
+					count: 12
+					id: "40B9859385AD0A3F"
+					item: "lightmanscurrency:coin_iron"
+					type: "item"
+				}
+				{
+					count: 34
+					id: "15AE0D76C155FAA1"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 256L
+				id: "4CC51F8327A56A74"
+				item: "create_compressed:wheat_flour_pile"
+				type: "item"
+			}]
+			title: "Sell x4 Stacks of Wheat Flour Pile for 1234 Copper Coins"
+			x: -0.5d
+			y: 9.0d
+		}
+		{
+			can_repeat: true
+			dependencies: ["4931CDB583060AC2"]
+			hide: false
+			id: "6F1837675282C812"
+			rewards: [
+				{
+					count: 19
+					id: "7A0DA0F62DB59597"
+					item: "lightmanscurrency:coin_iron"
+					type: "item"
+				}
+				{
+					count: 73
+					id: "73F49FC1164E782B"
+					item: "lightmanscurrency:coin_copper"
+					type: "item"
+				}
+			]
+			tasks: [{
+				consume_items: true
+				count: 384L
+				id: "2BB3712969D3FACF"
+				item: "create_compressed:wheat_flour_pile"
+				type: "item"
+			}]
+			title: "Sell x6 Stacks of Wheat Flour Pile for 1973 Copper Coins"
+			x: -0.5d
+			y: 10.5d
+		}
+		{
+			can_repeat: true
+			dependencies: ["6F1837675282C812"]
+			dependency_requirement: "all_started"
+			hide: false
+			id: "3D1C2E89216B30BC"
+			rewards: [{
+				count: 45
+				id: "1723AA7CB709156F"
+				item: "lightmanscurrency:coin_iron"
+				type: "item"
+			}]
+			tasks: [{
+				consume_items: true
+				count: 786L
+				id: "2D4E9565D216A118"
+				item: "create_compressed:wheat_flour_pile"
+				type: "item"
+			}]
+			title: "Sell x12 Stacks of Wheat Flour Pile for 4500 Copper Coins"
+			x: -0.5d
+			y: 12.0d
+		}
+		{
+			hide_dependent_lines: true
+			id: "1134369C39B75249"
+			subtitle: "You can sell various food and farming related goods here. Get higher profits when you sell in bulk"
+			tasks: [{
+				id: "53E8F2DC57804847"
+				title: "OK!"
+				type: "checkmark"
+			}]
+			title: "Selling Produce"
+			x: -3.5d
+			y: -3.0d
+		}
+		{
+			id: "16428DF500E3A996"
+			tasks: [{
+				id: "53FF1EE11715E090"
+				item: "create:dough"
+				type: "item"
+			}]
+			x: 1.0d
+			y: -1.5d
+		}
+		{
+			id: "6B64CDB5DD704199"
+			tasks: [{
+				id: "385BF7C16324642B"
+				item: "create_compressed:dough_block"
+				type: "item"
+			}]
+			x: 1.0d
+			y: 6.0d
+		}
+	]
+	title: "Produce Market"
+}

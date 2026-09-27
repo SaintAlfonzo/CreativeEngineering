@@ -1,0 +1,1178 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "ore"
+	group: "16C7EF1E80339E63"
+	icon: "create:crushed_raw_gold"
+	id: "2395211DC8D370BE"
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			dependencies: [
+				"1911D763AD11A1EF"
+				"36D8E6E43247A1F2"
+			]
+			id: "4356E58346FFB824"
+			tasks: [{
+				id: "7143426C04376DCF"
+				item: "minecraft:raw_iron"
+				type: "item"
+			}]
+			title: "Raw Ore"
+			x: -1.5d
+			y: -0.5d
+		}
+		{
+			id: "1911D763AD11A1EF"
+			tasks: [{
+				id: "304C47F83BB46363"
+				item: "minecraft:iron_ore"
+				type: "item"
+			}]
+			title: "Ore"
+			x: -3.0d
+			y: -0.5d
+		}
+		{
+			dependencies: ["4356E58346FFB824"]
+			id: "4076C287FF1D35F9"
+			tasks: [
+				{
+					id: "0C5B6AA407D97383"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+				{
+					id: "0BCD639DA5DED492"
+					item: "minecraft:blast_furnace"
+					type: "item"
+				}
+			]
+			title: "Smelting/Blasting"
+			x: 0.0d
+			y: -2.0d
+		}
+		{
+			dependencies: ["4076C287FF1D35F9"]
+			id: "6F6949FB02F8C9BC"
+			tasks: [{
+				id: "46B0D51A7DAE120C"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "1 Ingot"
+			x: 1.5d
+			y: -2.0d
+		}
+		{
+			dependencies: ["4356E58346FFB824"]
+			id: "6BF5969B6A117BD1"
+			tasks: [{
+				id: "0439393ACDAB2BA3"
+				item: "minecraft:raw_iron_block"
+				type: "item"
+			}]
+			title: "Raw Ore Block"
+			x: -1.5d
+			y: 7.0d
+		}
+		{
+			dependencies: ["6BF5969B6A117BD1"]
+			id: "157C3F21CE5EAB47"
+			tasks: [
+				{
+					id: "7DC9F8F18A1C7DD2"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+				{
+					id: "18E1124967A1AF0D"
+					item: "minecraft:blast_furnace"
+					type: "item"
+				}
+			]
+			title: "Smelting/Blasting"
+			x: 0.0d
+			y: 8.5d
+		}
+		{
+			dependencies: ["157C3F21CE5EAB47"]
+			id: "4A46ABB25B83EE31"
+			tasks: [{
+				id: "5BBD20113442EE9D"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "9 Ingots"
+			x: 1.5d
+			y: 8.5d
+		}
+		{
+			dependencies: ["4356E58346FFB824"]
+			id: "6C8E1608DC1E7BAB"
+			shape: "heart"
+			tasks: [{
+				id: "02C05081363EBEC1"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "Create Crushing"
+			x: 0.0d
+			y: -0.5d
+		}
+		{
+			dependencies: ["6BF5969B6A117BD1"]
+			id: "08DC9F06181FED0A"
+			shape: "heart"
+			tasks: [{
+				id: "47109E3ABAA8C388"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "Create Crushing"
+			x: 0.0d
+			y: 7.0d
+		}
+		{
+			id: "36D8E6E43247A1F2"
+			tasks: [{
+				id: "51DDEB3B398F510B"
+				item: "minecraft:deepslate_iron_ore"
+				type: "item"
+			}]
+			title: "Deepslate Ore"
+			x: -3.0d
+			y: 7.0d
+		}
+		{
+			dependencies: ["6C8E1608DC1E7BAB"]
+			id: "33962047E0A07BA3"
+			shape: "rsquare"
+			subtitle: "+.75 Nuggets of Experience"
+			tasks: [
+				{
+					id: "08BD9442F00FAC8A"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "33F79CAD6B920D35"
+					item: "create:experience_nugget"
+					type: "item"
+				}
+				{
+					id: "495B1EA89E393833"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "4E3666DB34BAFE1A"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+			]
+			title: "1 Crushed Ore"
+			x: 1.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["08DC9F06181FED0A"]
+			id: "100B4A1E109C16B4"
+			shape: "rsquare"
+			subtitle: "+6.75 Nuggets of Experience"
+			tasks: [
+				{
+					id: "7A3DF0153E7A3470"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "3549F11F69CD1B78"
+					item: "create:experience_nugget"
+					type: "item"
+				}
+				{
+					id: "4539BB088FBBD39E"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "5C079347E07F5A87"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+			]
+			title: "9 Crushed Ore"
+			x: 1.5d
+			y: 7.0d
+		}
+		{
+			dependencies: ["1911D763AD11A1EF"]
+			id: "0A2E1378C9627832"
+			shape: "heart"
+			tasks: [{
+				id: "04B1F96157658F18"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "Create Crushing"
+			x: -4.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["36D8E6E43247A1F2"]
+			id: "57B17CBB8C939AE1"
+			shape: "gear"
+			tasks: [{
+				id: "7B120A53D966ED8B"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "Create Crushing"
+			x: -4.5d
+			y: 7.0d
+		}
+		{
+			dependencies: ["0A2E1378C9627832"]
+			id: "2A62EEF5DE579F2F"
+			shape: "pentagon"
+			subtitle: "+0.75 Nuggets of Experience, 0.12 Cobblestone"
+			tasks: [
+				{
+					id: "5C5467E91E26F5E7"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "6CE6CA688F7C68F7"
+					item: "create:experience_nugget"
+					type: "item"
+				}
+				{
+					id: "30F8B59FD20A64C1"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "75651274ECB795A6"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "6E7F667BC8D5CEE8"
+					item: "minecraft:cobblestone"
+					type: "item"
+				}
+				{
+					id: "2F0E173DF79122ED"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+			]
+			title: "1.5 Crushed Ore"
+			x: -6.0d
+			y: -0.5d
+		}
+		{
+			dependencies: ["57B17CBB8C939AE1"]
+			id: "2518AEC8FFE97727"
+			shape: "gear"
+			subtitle: "+0.75 Nuggets of Experience, 0.12 Cobbled Deepslate"
+			tasks: [
+				{
+					id: "21B462742D976EEF"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "68874487135A2460"
+					item: "create:experience_nugget"
+					type: "item"
+				}
+				{
+					id: "1B48B24EC9C24BB8"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "316255A4864A3061"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+				{
+					id: "2EDE3D6131118752"
+					item: "minecraft:deepslate"
+					type: "item"
+				}
+				{
+					id: "7193F45E8A7686B0"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+			]
+			title: "2.25 Crushed Ore"
+			x: -6.0d
+			y: 7.0d
+		}
+		{
+			dependencies: ["4356E58346FFB824"]
+			id: "666001BE6427B65A"
+			shape: "heart"
+			tasks: [{
+				id: "5C883C4406C05DF3"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "WIP IE Crushing"
+			x: 0.0d
+			y: 1.0d
+		}
+		{
+			dependencies: ["666001BE6427B65A"]
+			id: "2933975849E71BF7"
+			shape: "diamond"
+			tasks: [{
+				id: "00503FAE6AB47D81"
+				item: "create:crushed_raw_iron"
+				type: "item"
+			}]
+			title: "1.333 Raw Ore"
+			x: 1.5d
+			y: 1.0d
+		}
+		{
+			dependencies: ["6BF5969B6A117BD1"]
+			id: "5DF06F29021815D5"
+			shape: "heart"
+			tasks: [{
+				id: "0E0A5485F8DD24FE"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "WIP IE Crushing"
+			x: 0.0d
+			y: 5.5d
+		}
+		{
+			dependencies: ["5DF06F29021815D5"]
+			id: "021049717D725806"
+			shape: "diamond"
+			tasks: [{
+				id: "49C3C6B19C466E80"
+				item: "create:crushed_raw_iron"
+				type: "item"
+			}]
+			title: "12 Raw Ore"
+			x: 1.5d
+			y: 5.5d
+		}
+		{
+			dependencies: ["031316B80AE3CF9F"]
+			id: "3474F79720BD314B"
+			shape: "heart"
+			tasks: [{
+				id: "4FFED9356E38238F"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "WIP IE Crushing"
+			x: -4.5d
+			y: 1.0d
+		}
+		{
+			dependencies: ["3474F79720BD314B"]
+			id: "12D05B152209B297"
+			shape: "hexagon"
+			tasks: [{
+				id: "3CBFF8B7A65A4ED6"
+				item: "create:crushed_raw_iron"
+				type: "item"
+			}]
+			title: "2 Crushed Iron"
+			x: -6.0d
+			y: 1.0d
+		}
+		{
+			id: "79D54E152834A9CF"
+			shape: "square"
+			tasks: [{
+				id: "62C687E8969B068F"
+				title: "Inputs"
+				type: "custom"
+			}]
+			x: -3.0d
+			y: -3.5d
+		}
+		{
+			id: "6CFD7E51558A3F8A"
+			shape: "square"
+			tasks: [{
+				id: "70C28E39D45A504F"
+				title: "Inputs"
+				type: "custom"
+			}]
+			title: "Inputs"
+			x: -1.5d
+			y: -3.5d
+		}
+		{
+			id: "15DB41596BE48D9D"
+			shape: "square"
+			tasks: [{
+				id: "2B03FE5CF82D8066"
+				item: "davebuildingmod:arrow_right_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: 0.0d
+			y: -3.5d
+		}
+		{
+			id: "1E6ECD7127A01297"
+			shape: "square"
+			tasks: [{
+				id: "777AA3287CCF345C"
+				item: "davebuildingmod:arrow_left_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: -4.5d
+			y: -3.5d
+		}
+		{
+			icon: "sophisticatedbackpacks:advanced_deposit_upgrade"
+			id: "34D71FB9FD45042E"
+			shape: "square"
+			tasks: [{
+				id: "238034C66542AD5E"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: 1.5d
+			y: -3.5d
+		}
+		{
+			id: "17F4D6C510129A1E"
+			shape: "square"
+			tasks: [{
+				id: "7E9D42DD6F23D4F9"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: -6.0d
+			y: -3.5d
+		}
+		{
+			id: "758E2E2E1A044024"
+			tasks: [{
+				id: "11FBBFB2BCC02FE4"
+				item: "create:crushed_raw_iron"
+				type: "item"
+			}]
+			title: "Crushed Ore"
+			x: -1.5d
+			y: -5.0d
+		}
+		{
+			dependencies: ["758E2E2E1A044024"]
+			id: "1CC596D4072B5B48"
+			tasks: [{
+				id: "18F4004DCE576458"
+				item: "create_compressed:crushed_iron_pile"
+				type: "item"
+			}]
+			title: "Crushed Ore Pile"
+			x: -3.0d
+			y: -5.0d
+		}
+		{
+			dependencies: ["758E2E2E1A044024"]
+			id: "5F38C7D4A4AC288A"
+			tasks: [
+				{
+					id: "535867EDF9AA5459"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+				{
+					id: "5826C369A00921CD"
+					item: "minecraft:blast_furnace"
+					type: "item"
+				}
+			]
+			title: "Smelting/Blasting"
+			x: 0.0d
+			y: -9.5d
+		}
+		{
+			dependencies: ["4356E58346FFB824"]
+			id: "2C76077A28B92607"
+			shape: "pentagon"
+			tasks: [{
+				id: "755E54651AC8DEF4"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:graphite_electrode"
+					tag: {
+						graphDmg: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Arc Smelting"
+			x: 0.0d
+			y: 2.5d
+		}
+		{
+			dependencies: ["2C76077A28B92607"]
+			id: "35AC4E4A58F06CE1"
+			shape: "pentagon"
+			tasks: [{
+				id: "36FB4B4BB612EE9B"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "1.5 Ingots"
+			x: 1.5d
+			y: 2.5d
+		}
+		{
+			dependencies: ["6BF5969B6A117BD1"]
+			id: "2E08574BB1F3FFBE"
+			shape: "pentagon"
+			tasks: [{
+				id: "113DD4C7E56B1AB6"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:graphite_electrode"
+					tag: {
+						graphDmg: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Arc Smelting"
+			x: 0.0d
+			y: 4.0d
+		}
+		{
+			dependencies: ["2E08574BB1F3FFBE"]
+			id: "5AD79C0C774FCF48"
+			shape: "pentagon"
+			tasks: [{
+				id: "357083175FC530C1"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "13.5 Ingots"
+			x: 1.5d
+			y: 4.0d
+		}
+		{
+			dependencies: ["5B2A6A575B9047E1"]
+			id: "783B68C667D3C220"
+			shape: "hexagon"
+			subtitle: "+1 Slag"
+			tasks: [
+				{
+					id: "7A7AEAC4B40F2553"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "71EC6410D661B11C"
+					item: "immersiveengineering:slag"
+					type: "item"
+				}
+				{
+					id: "1357ECC4454161C3"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "2275D32ED53369A4"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+			]
+			title: "2 Ingots"
+			x: -6.0d
+			y: 4.0d
+		}
+		{
+			dependencies: ["031316B80AE3CF9F"]
+			id: "5B2A6A575B9047E1"
+			shape: "hexagon"
+			tasks: [{
+				id: "7CF8F82BD06D2DAD"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:graphite_electrode"
+					tag: {
+						graphDmg: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Arc Smelting"
+			x: -4.5d
+			y: 4.0d
+		}
+		{
+			dependencies: [
+				"36D8E6E43247A1F2"
+				"1911D763AD11A1EF"
+			]
+			id: "031316B80AE3CF9F"
+			tasks: [
+				{
+					id: "5BEF80562A9999B9"
+					item: "minecraft:deepslate_iron_ore"
+					type: "item"
+				}
+				{
+					id: "14C8402D5F2D3427"
+					item: "minecraft:iron_ore"
+					type: "item"
+				}
+			]
+			title: "Any Ore"
+			x: -3.0d
+			y: 2.5d
+		}
+		{
+			dependencies: ["031316B80AE3CF9F"]
+			id: "3D1807C32C6CAD76"
+			tasks: [
+				{
+					id: "7D97DD78CD7F50C4"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+				{
+					id: "714E97064A636231"
+					item: "minecraft:blast_furnace"
+					type: "item"
+				}
+			]
+			title: "Smelting/Blasting"
+			x: -4.5d
+			y: 2.5d
+		}
+		{
+			dependencies: ["3D1807C32C6CAD76"]
+			id: "3FE0D2357EE05E1F"
+			tasks: [{
+				id: "76C42747B4037828"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "1 Ingot"
+			x: -6.0d
+			y: 2.5d
+		}
+		{
+			dependencies: ["1CC596D4072B5B48"]
+			id: "79CF5DF60F3F1BA9"
+			shape: "heart"
+			tasks: [{
+				id: "34454CC000960ADA"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:graphite_electrode"
+					tag: {
+						graphDmg: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "WIP IE Arc Smelting"
+			x: -4.5d
+			y: -5.0d
+		}
+		{
+			dependencies: ["79CF5DF60F3F1BA9"]
+			id: "301E762421CC93A5"
+			shape: "pentagon"
+			tasks: [{
+				id: "4B436D8496EC37E1"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "13.5 Ingots"
+			x: -6.0d
+			y: -5.0d
+		}
+		{
+			dependencies: ["758E2E2E1A044024"]
+			id: "553D2A27FD99558A"
+			shape: "heart"
+			tasks: [{
+				id: "1EDC2D04918EBC31"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:graphite_electrode"
+					tag: {
+						graphDmg: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "WIP IE Arc Smelting"
+			x: 0.0d
+			y: -5.0d
+		}
+		{
+			dependencies: ["553D2A27FD99558A"]
+			id: "14155BC6ADD190CA"
+			shape: "pentagon"
+			tasks: [{
+				id: "2FDFFD855BA9BF2B"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "1.5 Ingots"
+			x: 1.5d
+			y: -5.0d
+		}
+		{
+			dependencies: ["5F38C7D4A4AC288A"]
+			id: "518884FBD927EF21"
+			tasks: [{
+				id: "16107309C82D212F"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "1 Ingot"
+			x: 1.5d
+			y: -9.5d
+		}
+		{
+			dependencies: ["758E2E2E1A044024"]
+			id: "59A98E1F38552B92"
+			shape: "heart"
+			tasks: [{
+				id: "1146C71AA48121A3"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "WIP IE Crushing"
+			x: 0.0d
+			y: -6.5d
+		}
+		{
+			dependencies: ["1CC596D4072B5B48"]
+			id: "5BB3AEE64D93785F"
+			shape: "heart"
+			tasks: [{
+				id: "7878AF8109AAFEF1"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "WIP IE Crushing"
+			x: -4.5d
+			y: -6.5d
+		}
+		{
+			dependencies: ["59A98E1F38552B92"]
+			id: "587F0F287E163BAD"
+			shape: "diamond"
+			tasks: [{
+				id: "035B4D0656C83BF3"
+				item: "immersiveengineering:dust_iron"
+				type: "item"
+			}]
+			title: "1.333 Grit"
+			x: 1.5d
+			y: -6.5d
+		}
+		{
+			dependencies: ["5BB3AEE64D93785F"]
+			id: "5384D7EC51DFB39B"
+			shape: "diamond"
+			tasks: [{
+				id: "36FF5BD3C00A33DB"
+				item: "immersiveengineering:dust_iron"
+				type: "item"
+			}]
+			title: "12 Grit"
+			x: -6.0d
+			y: -6.5d
+		}
+		{
+			dependencies: ["758E2E2E1A044024"]
+			id: "356525AD9C058729"
+			shape: "rsquare"
+			tasks: [{
+				id: "08DE1DC6C944868B"
+				item: "create:encased_fan"
+				type: "item"
+			}]
+			title: "Create Washing"
+			x: 0.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["356525AD9C058729"]
+			id: "352607E3A9ADE436"
+			shape: "rsquare"
+			subtitle: "+Variable Byproduct"
+			tasks: [
+				{
+					id: "1912A0453C10C381"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+				{
+					id: "273672D09E794677"
+					item: "minecraft:redstone"
+					type: "item"
+				}
+				{
+					id: "020D26C60BDE5522"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+				{
+					id: "00BD96E82246F042"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+			]
+			title: "9 Nuggets"
+			x: 1.5d
+			y: -8.0d
+		}
+		{
+			dependencies: ["1CC596D4072B5B48"]
+			id: "38C8415191ADED42"
+			shape: "rsquare"
+			tasks: [{
+				id: "3E705664C65B21EA"
+				item: "create:encased_fan"
+				type: "item"
+			}]
+			title: "Create Washing"
+			x: -4.5d
+			y: -8.0d
+		}
+		{
+			dependencies: ["38C8415191ADED42"]
+			id: "78C9CB0BC181A6DD"
+			shape: "rsquare"
+			subtitle: "+Variable Byproduct"
+			tasks: [
+				{
+					id: "32FF2A1196A22174"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+				{
+					id: "11D37C169FCA6A28"
+					item: "minecraft:redstone"
+					type: "item"
+				}
+				{
+					id: "7ECA3B74864C3209"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+				{
+					id: "48ADECAFC8122984"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+			]
+			title: "81 Nuggets"
+			x: -6.0d
+			y: -8.0d
+		}
+		{
+			id: "49AE2464D35102F3"
+			tasks: [{
+				id: "3D0EA3C028E4D043"
+				item: "immersiveengineering:dust_iron"
+				type: "item"
+			}]
+			title: "Grit"
+			x: -1.5d
+			y: -11.0d
+		}
+		{
+			dependencies: ["49AE2464D35102F3"]
+			id: "71DC0697DCB13554"
+			tasks: [{
+				id: "4C1D3AB7B5C9533D"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:graphite_electrode"
+					tag: {
+						graphDmg: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Arc Smelting"
+			x: 0.0d
+			y: -12.5d
+		}
+		{
+			dependencies: ["71DC0697DCB13554"]
+			id: "3616150ABF572727"
+			tasks: [{
+				id: "00EE8F6319D8010D"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "1 Ingot"
+			x: 1.5d
+			y: -12.5d
+		}
+		{
+			id: "5AE234935B68E181"
+			tasks: [{
+				id: "51FBA4A2364C2B75"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "Ingot"
+			x: -3.0d
+			y: -11.0d
+		}
+		{
+			dependencies: ["5AE234935B68E181"]
+			id: "1C53356E8D8AABFA"
+			tasks: [{
+				id: "184FD2A6DBF445E3"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Crushing"
+			x: -4.5d
+			y: -11.0d
+		}
+		{
+			dependencies: ["1C53356E8D8AABFA"]
+			id: "2F5F37DE8DA009A1"
+			tasks: [{
+				id: "4DF1E891D981FB6C"
+				item: "immersiveengineering:dust_iron"
+				type: "item"
+			}]
+			title: "1 Grit"
+			x: -6.0d
+			y: -11.0d
+		}
+		{
+			dependencies: ["49AE2464D35102F3"]
+			id: "4F43D3A704DA5923"
+			tasks: [
+				{
+					id: "0347841F6B85BF98"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+				{
+					id: "53A8CC94E51FB8E2"
+					item: "minecraft:blast_furnace"
+					type: "item"
+				}
+			]
+			title: "Smelting/Blasting"
+			x: 0.0d
+			y: -11.0d
+		}
+		{
+			dependencies: ["4F43D3A704DA5923"]
+			id: "3CC0B76523919047"
+			tasks: [{
+				id: "49EEE47202D209D2"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "1 Ingot"
+			x: 1.5d
+			y: -11.0d
+		}
+		{
+			id: "30FC3BCB52845C44"
+			shape: "square"
+			tasks: [{
+				id: "17BACC4B5E19BEBE"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: -6.0d
+			y: -14.0d
+		}
+		{
+			id: "38B3F7186E958170"
+			shape: "square"
+			tasks: [{
+				id: "53AE5A1CA5006C38"
+				item: "davebuildingmod:arrow_left_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: -4.5d
+			y: -14.0d
+		}
+		{
+			id: "086310357B403731"
+			shape: "square"
+			tasks: [{
+				id: "489706ED5F2288CE"
+				type: "custom"
+			}]
+			title: "Input"
+			x: -3.0d
+			y: -14.0d
+		}
+		{
+			id: "3D25B6C388ED558B"
+			shape: "square"
+			tasks: [{
+				id: "7A0CAB53DB35FB45"
+				type: "custom"
+			}]
+			title: "Input"
+			x: -1.5d
+			y: -14.0d
+		}
+		{
+			id: "447884020122F184"
+			shape: "square"
+			tasks: [{
+				id: "3BFA07B240029A99"
+				item: "davebuildingmod:arrow_right_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: 0.0d
+			y: -14.0d
+		}
+		{
+			id: "0AF9FA16637A8260"
+			shape: "square"
+			tasks: [{
+				id: "0F35220BD2E87369"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: 1.5d
+			y: -14.0d
+		}
+		{
+			id: "44DB8B3B195CF385"
+			shape: "square"
+			tasks: [{
+				id: "45B06D426C8F875E"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: 1.5d
+			y: 10.0d
+		}
+		{
+			id: "5967263CD5A7A750"
+			shape: "square"
+			tasks: [{
+				id: "08FB795AB58DB9B8"
+				item: "davebuildingmod:arrow_right_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: 0.0d
+			y: 10.0d
+		}
+		{
+			id: "0EA35433BB393109"
+			shape: "square"
+			tasks: [{
+				id: "7075AD93509F9A27"
+				type: "custom"
+			}]
+			title: "Input"
+			x: -1.5d
+			y: 10.0d
+		}
+		{
+			id: "31A6F3B7C32BF209"
+			shape: "square"
+			tasks: [{
+				id: "0AF4B6267BBD9660"
+				type: "custom"
+			}]
+			title: "Input"
+			x: -3.0d
+			y: 10.0d
+		}
+		{
+			id: "788E0FBF1173F9D2"
+			shape: "square"
+			tasks: [{
+				id: "7F6E0B10751F3186"
+				item: "davebuildingmod:arrow_left_sign"
+				type: "item"
+			}]
+			title: "Process"
+			x: -4.5d
+			y: 10.0d
+		}
+		{
+			id: "0150B50483E2E3AF"
+			shape: "square"
+			tasks: [{
+				id: "05D66AB56180D442"
+				item: "sophisticatedbackpacks:advanced_deposit_upgrade"
+				type: "item"
+			}]
+			title: "Output"
+			x: -6.0d
+			y: 10.0d
+		}
+	]
+	title: "Ore"
+}

@@ -1,0 +1,8 @@
+{
+  "description": "Acids and toxins: IE acid, Pneumatic etching acid, copper poisoning (all stages).",
+  "values": [
+    "ieAcid",
+    "acid",
+    "everythingcopper.copper_poisoning*"
+  ]
+}

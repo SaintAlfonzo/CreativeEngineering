@@ -1,0 +1,6 @@
+{
+  "description": "Direct hits from a living attacker. Deliberately narrow: 'mob'/'player' are reused by non-melee mechanics elsewhere in the pack (Quark's pickarang, Create's Guardian turret) and are correctly handled instead by the LIVE creativeengineering:melee flag (whether the actual direct entity is living), never by listing those ids here. This file only adds ids that are unambiguously always melee.",
+  "values": [
+    "slap"
+  ]
+}

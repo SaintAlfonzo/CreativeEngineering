@@ -1,0 +1,156 @@
+
+[types]
+
+	[types.leaves_type]
+
+		[types.leaves_type.architects_palette]
+			twisted = true
+
+		[types.leaves_type.vinery]
+			grapevine = true
+			cherry = true
+			apple = true
+
+		[types.leaves_type.quark]
+			ancient = true
+			blue_blossom = true
+			lavender_blossom = true
+			orange_blossom = true
+			pink_blossom = true
+			yellow_blossom = true
+			red_blossom = true
+
+		[types.leaves_type.myrtrees]
+			rubberwood = true
+
+	[types.wood_type]
+
+		[types.wood_type.quark]
+			bamboo = true
+			azalea = true
+			ancient = true
+			blossom = true
+
+		[types.wood_type.botania]
+			livingwood = true
+			dreamwood = true
+
+		[types.wood_type.architects_palette]
+			twisted = true
+
+		[types.wood_type.vinery]
+			cherry = true
+
+		[types.wood_type.myrtrees]
+			rubberwood = true
+
+		[types.wood_type.create_dd]
+			rose = true
+			smoked = true
+			rubber = true
+			spirit = true
+
+[entries]
+
+	[entries.leaves_type]
+
+		[entries.leaves_type.quark]
+			hedge = true
+			leaf_carpet = true
+
+	[entries.wood_type]
+
+		[entries.wood_type.handcrafted]
+			counter = true
+			corner_trim = true
+			fancy_bed = true
+			desk = true
+			dining_bench = true
+			drawer = true
+			side_table = true
+			board = true
+			couch = true
+			drawer_4 = true
+			drawer_1 = true
+			table = true
+			drawer_3 = true
+			chair = true
+			drawer_2 = true
+			shelf = true
+			cupboard = true
+			bench = true
+			cupboard_2 = true
+			cupboard_1 = true
+			pillar_trim = true
+			nightstand = true
+			shelf_1 = true
+			counter_1 = true
+			counter_2 = true
+			counter_3 = true
+
+		[entries.wood_type.architects_palette]
+			board_stairs = true
+			board_wall = true
+			railing = true
+			boards = true
+			board_slab = true
+
+		[entries.wood_type.beautify]
+			blinds = true
+			picture_frame = true
+			trellis = true
+
+		[entries.wood_type.another_furniture]
+			planter_box = true
+			shutter = true
+			drawer = true
+			shelf = true
+			bench = true
+			table = true
+			chair = true
+
+		[entries.wood_type.quark]
+			vertical_planks = true
+			ladder = true
+			post = true
+			trapped_chest = true
+			chest = true
+			hollow_log = true
+			bookshelf = true
+			stripped_post = true
+
+		[entries.wood_type.decorative_blocks]
+			seat = true
+			palisade = true
+			beam = true
+			support = true
+
+		[entries.wood_type.farmersdelight]
+			cabinet = true
+
+		[entries.wood_type.storagedrawers]
+			full_drawers_2 = true
+			full_drawers_4 = true
+			full_drawers_1 = true
+			half_drawers_1 = true
+			half_drawers_4 = true
+			half_drawers_2 = true
+			trim = true
+
+		[entries.wood_type.twigs]
+			table = true
+
+		[entries.wood_type.lightmanscurrency]
+			bookshelf_trader = true
+			auction_stand = true
+			shelf_2x2 = true
+			shelf = true
+
+		[entries.wood_type.dramaticdoors]
+			short_door = true
+			tall_door = true
+
+		[entries.wood_type.create]
+			window_pane = true
+			window = true
+

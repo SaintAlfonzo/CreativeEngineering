@@ -1,0 +1,28 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 1600,
+  "input": {
+    "item": "minecraft:jungle_wood"
+  },
+  "result": {
+    "count": 6,
+    "item": "minecraft:jungle_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersive_weathering:jungle_bark"
+      },
+      "stripping": true
+    },
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "stripped": {
+    "item": "minecraft:stripped_jungle_wood"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "description": "Every source with vanilla's isFall flag (Feather Falling applies): fall damage, landing on a dripstone stalagmite, and - unexpectedly - Immersive Weathering's icicle stab.",
+  "values": [
+    "fall",
+    "stalagmite",
+    "icicle"
+  ]
+}

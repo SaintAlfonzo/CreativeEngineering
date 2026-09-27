@@ -1,0 +1,7 @@
+{
+  "description": "SecurityCraft defences and the Pneumatic security station.",
+  "values": [
+    "securitycraft.*",
+    "securityStation"
+  ]
+}

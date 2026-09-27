@@ -1,0 +1,43 @@
+ServerEvents.tags('item', e => {
+	var t = global.tags
+	var i = global.item
+	console.log('misctagremoval starting')
+
+	// sugar
+	t.add(e, 'forge:sugar', i.glycerol)
+
+	// flour / dough cleanup
+	t.clearAll(e, [i.wheat_flour_pc, i.out_dough])
+	t.add(e, 'forge:dusts/flour', i.in_flour)
+
+	// ice cubes
+	t.add(e, 'forge:ice_cubes', i.ice)
+
+	// redundant egg
+	t.clearAll(e, i.fried_egg_incubation)
+
+	// lasagna meats
+	t.add(e, 'brewinandchewin:cooked_horror_lasagna_meats', [
+		i.beef_cooked, i.mutton_cooked, i.beef_patty, i.cooked_mutton_chops,
+	])
+
+	// cooked meat
+	t.add(e, 'forge:cooked_meat', [
+		i.beef_cooked, i.beef_patty,
+		i.porkchop_cooked, i.cooked_bacon,
+		i.chicken_cooked, i.chicken_cuts_cooked,
+		i.mutton_cooked, i.cooked_mutton_chops,
+		i.cod_cooked, i.cod_slice_cooked,
+		i.salmon_cooked, i.salmon_slice_cooked,
+		i.rabbit_cooked,
+		i.moose_ribs_cooked, i.moose_rib_cooked_loose,
+		i.kangaroo_meat_cooked, i.kangaroo_shank_cooked,
+		i.catfish_cooked_mob, i.catfish_slice_cooked,
+		i.bunfungus_cooked, i.bunfungus_drumstick_cooked,
+		i.bison_cooked, i.bison_patty,
+		i.centipede_leg_cooked,
+		i.venison_chops_cooked,
+		i.lobster_tail_cooked,
+		i.cooked_crab,
+	])
+})

@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "villager_farmer_house:villager_farmer_house",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 47,
+    "separation": 35,
+    "salt": 1077238613
+  }
+}

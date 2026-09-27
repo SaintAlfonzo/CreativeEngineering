@@ -1,0 +1,3155 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "progression"
+	group: "6813545A05D7C99D"
+	icon: "create:brass_ingot"
+	id: "7FBC0425B3D812C5"
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "littlelogistics:steam_locomotive"
+			id: "7A94BF2AA51E35B2"
+			rewards: [
+				{
+					count: 16
+					id: "24B24125B60E02FF"
+					item: "littlelogistics:spring"
+					type: "item"
+				}
+				{
+					count: 8
+					id: "446C95209F8AE69D"
+					item: "littlelogistics:locomotive_route"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2A836274F1293A92"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "596B9C7A10F44428"
+					item: "littlelogistics:steam_locomotive"
+					type: "item"
+				}
+				{
+					id: "6CFF930641BED207"
+					item: "littlelogistics:chest_car"
+					type: "item"
+				}
+				{
+					id: "27CAA8980F99FE0E"
+					item: "littlelogistics:conductors_wrench"
+					type: "item"
+				}
+			]
+			title: "Little Logistics Trains"
+			x: -7.5d
+			y: 2.5d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			icon: "minecraft:oak_planks"
+			id: "11A1BA279E6773BA"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "1F47DAE7C7B1988C"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5A7F3618D8C26793"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "74FAC8B6F1571582"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "7F62801CEF271CCE"
+				item: {
+					Count: 1b
+					id: "itemfilters:tag"
+					tag: {
+						value: "minecraft:planks"
+					}
+				}
+				title: "Any #minecraft:planks"
+				type: "item"
+			}]
+			title: "Wood"
+			x: -13.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["11A1BA279E6773BA"]
+			icon: "minecraft:cobblestone"
+			id: "20BF13200559BE62"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "7BC04E0C202B4369"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0818EC9656ADA5BD"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "147B306DB91A0369"
+				item: {
+					Count: 1b
+					id: "itemfilters:tag"
+					tag: {
+						value: "forge:cobblestone"
+					}
+				}
+				title: "Any #forge:cobblestone"
+				type: "item"
+			}]
+			title: "Stone"
+			x: -11.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["0229A1A3184F3807"]
+			hide: false
+			id: "65418883BAEDD689"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "4F0D8DFA61C0C5DE"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7032FE2A9EBE9378"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "49182A0747965010"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "4F9DCC71B5610208"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "Iron"
+			x: -7.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["20BF13200559BE62"]
+			id: "0229A1A3184F3807"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "5D907A68AEC949E9"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "41EC4F7A8960B876"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "10593F056B7C396E"
+				item: "minecraft:copper_ingot"
+				type: "item"
+			}]
+			title: "Copper"
+			x: -9.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			id: "6DB497472E14ABAA"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "010DE33F140F00A5"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2AF0B690D30DE37F"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "hexagon"
+			size: 2.0d
+			tasks: [{
+				id: "7AF5D731025DAAD2"
+				item: "minecraft:gold_ingot"
+				type: "item"
+			}]
+			title: "Gold"
+			x: -3.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: false
+			id: "490CD7D6A4B70B5E"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "1EF51F5CBE256CBC"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "3D050C069C43995E"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "42E040AE96216679"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "4F069C5BC345F847"
+				item: "minecraft:diamond"
+				type: "item"
+			}]
+			x: -1.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			id: "726B3F5A29798FE1"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "7FABBA17EA8EE99D"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7571D50724E655C8"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "hexagon"
+			size: 2.0d
+			tasks: [{
+				id: "5208FD789BB38271"
+				item: "minecraft:redstone"
+				type: "item"
+			}]
+			title: "Redstone"
+			x: -5.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			id: "56EF164F4AC574C8"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "191A03BC86F90AA1"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "605342C9F5B3A75A"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "hexagon"
+			size: 2.0d
+			tasks: [{
+				id: "3590C6F0FA9C2604"
+				item: "minecraft:lapis_lazuli"
+				type: "item"
+			}]
+			x: -3.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			id: "17CAF34E66315CCF"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "69A07E7B69508CEC"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7D2397FD06BEBC93"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "hexagon"
+			size: 2.0d
+			tasks: [{
+				id: "0DD695520795F84F"
+				item: "create:zinc_ingot"
+				type: "item"
+			}]
+			title: "Zinc"
+			x: -7.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["0229A1A3184F3807"]
+			hide_dependency_lines: true
+			id: "244374F5BC5D5CA1"
+			shape: "hexagon"
+			size: 2.0d
+			tasks: [{
+				id: "36A05111BBADC87C"
+				item: "immersiveengineering:ingot_aluminum"
+				type: "item"
+			}]
+			title: "Aluminum"
+			x: -5.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["244374F5BC5D5CA1"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				id: "immersiveengineering:armor_faraday_head"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7A0CF746F0B01524"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "2401B3AB18CE357E"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "755C0B742E87410F"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Don't Get Zapped!"
+			tasks: [
+				{
+					id: "14E2101AD6E13B6D"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:armor_faraday_head"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "76A9CAC1634C006E"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:armor_faraday_chest"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "06EAF2EDDAF7C2C1"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:armor_faraday_legs"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "3C20285320BBB8D2"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:armor_faraday_feet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Faraday Armor"
+			x: -5.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "exposure:camera"
+			id: "72F4BD53A2B8D5CE"
+			rewards: [
+				{
+					count: 8
+					id: "6E7E396C20B950A8"
+					item: "exposure:black_and_white_film"
+					type: "item"
+				}
+				{
+					count: 8
+					id: "322C41644ED0B38E"
+					item: "minecraft:paper"
+					type: "item"
+				}
+				{
+					count: 8
+					id: "5B7A6BA50B9DAD48"
+					item: "minecraft:black_dye"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "63E7501A20E41390"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "527C710DF001A674"
+					item: "exposure:camera"
+					type: "item"
+				}
+				{
+					id: "40B25B7A32089343"
+					item: "exposure:black_and_white_film"
+					type: "item"
+				}
+				{
+					id: "09062E50FBB28623"
+					item: "exposure:lightroom"
+					type: "item"
+				}
+			]
+			title: "Black and White Photography"
+			x: -7.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["56EF164F4AC574C8"]
+			hide_dependency_lines: true
+			id: "1432610BF13FF52D"
+			rewards: [
+				{
+					count: 8
+					id: "6FD93AC7ACC432D5"
+					item: "exposure:color_film"
+					type: "item"
+				}
+				{
+					count: 8
+					id: "5AAD27185B477242"
+					item: "minecraft:cyan_dye"
+					type: "item"
+				}
+				{
+					count: 8
+					id: "70953FBE3D4B2083"
+					item: "minecraft:magenta_dye"
+					type: "item"
+				}
+				{
+					count: 8
+					id: "3F2042CE7E52B7C8"
+					item: "minecraft:yellow_dye"
+					type: "item"
+				}
+				{
+					count: 8
+					id: "0DC8E68AC3FA0EAC"
+					item: "minecraft:black_dye"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5FA28A2D09D0D98C"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [{
+				id: "7AB4C1E468A6F021"
+				item: "exposure:color_film"
+				type: "item"
+			}]
+			title: "Color Photography"
+			x: -3.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["490CD7D6A4B70B5E"]
+			hide_dependency_lines: true
+			icon: "etched:radio"
+			id: "0B09EA1DEB9D94F0"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "63BA91537FDDB736"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "73AEDA404B183594"
+					table_id: 4365377398620593994L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "6866379B80F43123"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "6930A02FD62142D1"
+					item: "etched:boombox"
+					type: "item"
+				}
+				{
+					id: "4AC59A5A1DF791D0"
+					item: "etched:radio"
+					type: "item"
+				}
+				{
+					id: "298ED37DD854652F"
+					item: "etched:jukebox_minecart"
+					type: "item"
+				}
+			]
+			title: "Music On The Go"
+			x: -1.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["490CD7D6A4B70B5E"]
+			hide_dependency_lines: true
+			icon: "etched:etching_table"
+			id: "6A1860B48FC67126"
+			rewards: [
+				{
+					count: 9
+					id: "481DE6EE87CF88BF"
+					item: {
+						Count: 1b
+						id: "etched:music_label"
+						tag: {
+							Label: { }
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "163626F4E92555F4"
+					item: "etched:album_cover"
+					type: "item"
+				}
+				{
+					count: 3
+					id: "4CA7E873EEE3551F"
+					item: "etched:blank_music_disc"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "48ABC469FDDAAA37"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2F85D01C8CAF9CCB"
+					table_id: 4365377398620593994L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1AA36727D292C67A"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "3CA59C1B20D89875"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "73F4D8FFB507DFD9"
+					item: "etched:etching_table"
+					type: "item"
+				}
+				{
+					id: "6C6FF264FE025400"
+					item: "etched:album_jukebox"
+					type: "item"
+				}
+				{
+					id: "1D05E084EB4BEA85"
+					item: "etched:blank_music_disc"
+					type: "item"
+				}
+			]
+			title: "Custom Tunes"
+			x: -0.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "littlelogistics:tug"
+			id: "312F9CB1AF6927A4"
+			rewards: [
+				{
+					count: 8
+					id: "7C6247DE80B41638"
+					item: "littlelogistics:tug_route"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5502BF69B7C4F872"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "03702097AA53D81F"
+					item: "littlelogistics:tug"
+					type: "item"
+				}
+				{
+					id: "2F64D8B6F7005192"
+					item: "littlelogistics:barge"
+					type: "item"
+				}
+				{
+					id: "3D6FA6CBDEA7BF45"
+					item: "littlelogistics:seater_barge"
+					type: "item"
+				}
+			]
+			title: "Little Logistics Tugs \\& Barges"
+			x: -6.5d
+			y: 2.5d
+		}
+		{
+			id: "7CD0AFFAC85B60EA"
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "75663D02329589B6"
+				item: "create:brass_ingot"
+				type: "item"
+			}]
+			title: "Brass"
+			x: 3.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["7CD0AFFAC85B60EA"]
+			hide_dependency_lines: true
+			icon: "littlecontraptions:contraption_barge"
+			id: "432E3B254ADBFAA2"
+			rewards: [
+				{
+					id: "62DD47102FD03946"
+					item: {
+						Count: 1b
+						id: "create:super_glue"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "21A2B0B7200A2F54"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "0947CF2FFF0FF2E1"
+					item: "littlecontraptions:contraption_barge"
+					type: "item"
+				}
+				{
+					id: "64A4B8DCA25194C2"
+					item: "littlecontraptions:barge_assembler"
+					type: "item"
+				}
+			]
+			title: "Barge Contraptions"
+			x: 2.5d
+			y: -2.5d
+		}
+		{
+			icon: "minecraft:grass_block"
+			id: "49CE9302AF83ECF9"
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "50B03FF08DFBC243"
+				title: "Alright"
+				type: "checkmark"
+			}]
+			title: "Overworld Start"
+			x: -15.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			hide_dependency_lines: true
+			id: "4A47576A13F0798E"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "25BA4E42E426B0DD"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1527AA5E33AF9E0F"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "12F3A79DA52129BE"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Sleep anywhere, but don't set your spawn point"
+			tasks: [{
+				id: "6771B2A49F6E6578"
+				item: {
+					Count: 1b
+					id: "itemfilters:tag"
+					tag: {
+						value: "comforts:sleeping_bags"
+					}
+				}
+				title: "Any #comforts:sleeping_bags"
+				type: "item"
+			}]
+			title: "Sleeping Bags"
+			x: -15.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "comforts:rope_and_nail"
+			id: "3338AB9FD5BFFC4F"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "10DD5664FE9780B3"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0C82BA16DD6441E4"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1B3105CC2B236B4E"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "071E430A7483ED42"
+					item: "comforts:rope_and_nail"
+					type: "item"
+				}
+				{
+					id: "75AAC3BEBF45B49E"
+					item: {
+						Count: 1b
+						id: "itemfilters:tag"
+						tag: {
+							value: "comforts:hammocks"
+						}
+					}
+					title: "Any #comforts:hammocks"
+					type: "item"
+				}
+			]
+			title: "Hammocks"
+			x: -7.5d
+			y: 0.5d
+		}
+		{
+			dependencies: ["0229A1A3184F3807"]
+			hide_dependency_lines: true
+			id: "13C951E1F20865EB"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "4DC050764D748CB6"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0D65AC569701AE97"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Rotates blocks! The first of many wrenches"
+			tasks: [{
+				id: "4A051C61A58C2E10"
+				item: {
+					Count: 1b
+					id: "supplementaries:wrench"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: -8.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "quark:trowel"
+			id: "6F71C833244039E1"
+			rewards: [
+				{
+					count: 16
+					id: "102CBE25FBA32231"
+					item: "create:builders_tea"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "13A98B233E69D557"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "4042B3B366BFB4A0"
+					item: "quark:trowel"
+					type: "item"
+				}
+				{
+					id: "6A802EA80C7AEDB2"
+					item: "quark:abacus"
+					type: "item"
+				}
+			]
+			title: "Building Tools"
+			x: -7.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["11A1BA279E6773BA"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				id: "immersive_armors:wooden_helmet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "234970C8ED4E8F03"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "4F891F4352FA3212"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7E9EC80444E2059D"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "207386A4709AEDC2"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "00B8D962DD9840D7"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Better than nothing"
+			tasks: [
+				{
+					id: "4E0306489795E190"
+					item: {
+						Count: 1b
+						id: "immersive_armors:wooden_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "4916E6FC5F79C2B1"
+					item: {
+						Count: 1b
+						id: "immersive_armors:wooden_chestplate"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "1DDD6AB4C423B4A0"
+					item: {
+						Count: 1b
+						id: "immersive_armors:wooden_leggings"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "2B057551C601BF0F"
+					item: {
+						Count: 1b
+						id: "immersive_armors:wooden_boots"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Wooden Armor"
+			x: -13.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "create:analog_lever"
+			id: "1F24967E5D68810D"
+			rewards: [
+				{
+					id: "018BB232DE3CD424"
+					item: "design_decor:stepped_lever"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0262D24BFD7B68BB"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "29F4459C1CCDEFB5"
+					item: "create:analog_lever"
+					type: "item"
+				}
+				{
+					id: "3816AF8A1E2912B5"
+					item: "gates:rotary_switch"
+					type: "item"
+				}
+			]
+			title: "Analog Restone"
+			x: -6.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["0229A1A3184F3807"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				ForgeCaps: {
+					Parent: {
+						Items: [ ]
+						SelectedSlot: 0
+						Size: 6
+					}
+				}
+				id: "supplementaries:quiver"
+			}
+			id: "00AA79AD87D0A975"
+			rewards: [
+				{
+					count: 64
+					id: "60D0E5A5232A7952"
+					item: "minecraft:spectral_arrow"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0C19C52CDC6AAE0E"
+					table_id: 491754851599624417L
+					type: "random"
+				}
+				{
+					count: 64
+					id: "6404449B8AAD9328"
+					item: "quark:torch_arrow"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7C9AA51C94CE7EE6"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "12F6ED9EB132A875"
+					item: {
+						Count: 1b
+						ForgeCaps: {
+							Parent: {
+								Items: [ ]
+								SelectedSlot: 0
+								Size: 6
+							}
+						}
+						id: "supplementaries:quiver"
+					}
+					type: "item"
+				}
+				{
+					id: "387AF46A516E87B6"
+					item: "quark:torch_arrow"
+					type: "item"
+				}
+				{
+					id: "6023D451EB4F6376"
+					item: {
+						Count: 1b
+						id: "supplementaries:rope_arrow"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "7BE99450A8E17DFA"
+					item: {
+						Count: 1b
+						id: "supplementaries:slingshot"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Manipulation with Projectiles"
+			x: -9.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			hide_dependency_lines: true
+			id: "0AA61CAD2BA07570"
+			rewards: [
+				{
+					count: 6
+					id: "7160175BBE00EC91"
+					item: "quarkdelight:cloud_latte"
+					type: "item"
+				}
+				{
+					id: "2609C7499CDC19AE"
+					item: "simplehats:raincloud"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5E219864D100B839"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "3B508F971E58867B"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Get high!"
+			tasks: [{
+				id: "4F827666BB97EAA9"
+				item: "quark:bottled_cloud"
+				type: "item"
+			}]
+			x: -15.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			id: "470ED31C759A4CB6"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "3142FB08E52BE042"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7A6C9113D07BD493"
+					table_id: 4365377398620593994L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "4B8581B1294D877B"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [{
+				id: "5A9E5A363EA02FF0"
+				item: "quark:slime_in_a_bucket"
+				type: "item"
+			}]
+			x: -7.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			hide_dependency_lines: true
+			icon: "quark:glass_item_frame"
+			id: "1D90EB7F8AE3F2E2"
+			rewards: [
+				{
+					count: 16
+					id: "59D68C9E365142C9"
+					item: "quark:glass_item_frame"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1A33749AC3A3A935"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Frameless item display!"
+			tasks: [
+				{
+					id: "09B0F31903548DEB"
+					item: "quark:glass_item_frame"
+					type: "item"
+				}
+				{
+					id: "163E6CFA424F375A"
+					item: "quark:glowing_glass_item_frame"
+					type: "item"
+				}
+			]
+			x: -14.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "supplementaries:wind_vane"
+			id: "24CB6CB68E5BC2E3"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "41BB3A2D8A4FA42D"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2396BE8A4C2D7527"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2E3DDB83019A431F"
+					table_id: 4365377398620593994L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1D03A9791383BDBC"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "382D0FD534200F4B"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "0F09B62E6A3A3449"
+					item: "supplementaries:wind_vane"
+					type: "item"
+				}
+				{
+					id: "37AD1E377660BB9C"
+					item: "supplementaries:faucet"
+					type: "item"
+				}
+				{
+					id: "4015B1AF2B9EF85D"
+					item: "quark:grate"
+					type: "item"
+				}
+				{
+					id: "6F7AFE6FFB72A683"
+					item: "suppsquared:metal_frame"
+					type: "item"
+				}
+				{
+					id: "40EF2AA0F41840DF"
+					item: "quark:iron_button"
+					type: "item"
+				}
+				{
+					id: "01B6A84E117041C1"
+					item: "supplementaries:cage"
+					type: "item"
+				}
+				{
+					id: "1972BAE4FA69061E"
+					item: "suppsquared:iron_plaque"
+					type: "item"
+				}
+				{
+					id: "00359B897F255A21"
+					item: "chimes:iron_chimes"
+					type: "item"
+				}
+			]
+			title: "Iron Utilities"
+			x: -6.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["11A1BA279E6773BA"]
+			hide_dependency_lines: true
+			icon: "supplementaries:bellows"
+			id: "5619EFCD4EC4A1C7"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "055831D4C1CD04F9"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "6503EF0646688F67"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5F0B7EF2A192ACD0"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "549F177F2E2C3A5D"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "627FC44DF9A873F7"
+					item: "supplementaries:bellows"
+					type: "item"
+				}
+				{
+					id: "297D559431620699"
+					item: "quark:feeding_trough"
+					type: "item"
+				}
+				{
+					id: "401D1C39B9B01D3A"
+					item: "supplementaries:timber_frame"
+					type: "item"
+				}
+				{
+					id: "435B19ED2906FA4D"
+					item: "supplementaries:notice_board"
+					type: "item"
+				}
+				{
+					id: "4753DD9BBDCE0115"
+					item: "supplementaries:jar"
+					type: "item"
+				}
+				{
+					id: "54C90718BB779EF3"
+					item: {
+						Count: 1b
+						id: "itemfilters:tag"
+						tag: {
+							value: "supplementaries:sign_posts"
+						}
+					}
+					title: "Any #supplementaries:sign_posts"
+					type: "item"
+				}
+			]
+			title: "Low-Tech Utilities"
+			x: -12.5d
+			y: -2.5d
+		}
+		{
+			id: "57556427BB1D4254"
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "031110F61BCED3C5"
+				item: "minecraft:netherite_ingot"
+				type: "item"
+			}]
+			title: "Netherite"
+			x: 5.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["6DB497472E14ABAA"]
+			hide_dependency_lines: true
+			icon: "supplementaries:key"
+			id: "62E457DE60E7D9C9"
+			rewards: [
+				{
+					count: 3
+					id: "38F1CC3C8390588F"
+					item: "supplementaries:key"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "00E7F5443935997D"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Rename a key and set ownership, key works in inventory and curios slot. Lock block emits redstone pulse when unlocked"
+			tasks: [
+				{
+					id: "125ACE8473C31C23"
+					item: "supplementaries:key"
+					type: "item"
+				}
+				{
+					id: "40770F94911FE46B"
+					item: "supplementaries:lock_block"
+					type: "item"
+				}
+			]
+			title: "Lock and Key"
+			x: -2.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["57556427BB1D4254"]
+			hide_dependency_lines: true
+			icon: "supplementaries:safe"
+			id: "4855D354B909A643"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "268D8857DEB77A76"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "51957C782520EBED"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "402C2EB1BF871C62"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "06E41B39C664CB0A"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Lock doors in powered position to prevent break-ins!"
+			tasks: [
+				{
+					id: "71F77993AB3F9907"
+					item: "supplementaries:safe"
+					type: "item"
+				}
+				{
+					id: "39BEABFA29176860"
+					item: "supplementaries:netherite_door"
+					type: "item"
+				}
+				{
+					id: "325B01FD1DFCB37A"
+					item: "supplementaries:netherite_trapdoor"
+					type: "item"
+				}
+				{
+					id: "2E766C9EA8F77AFC"
+					item: "suppsquared:heavy_key"
+					type: "item"
+				}
+			]
+			title: "Safe and Sound"
+			x: 5.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			hide_dependency_lines: true
+			id: "2E3F3EC2964C161D"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "1A061904BAC9C16C"
+					table_id: 3808031558698602442L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "58F7A2AFF3AE2461"
+					table_id: 3808031558698602442L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "175271D53B0AC7EB"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2E23AB74ECEBC6CD"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [{
+				id: "219FEE01F4630C53"
+				item: "quark:seed_pouch"
+				type: "item"
+			}]
+			title: "Seedy Business"
+			x: -14.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			hide_dependency_lines: true
+			icon: "vinery:flower_pot"
+			id: "76D1F3F534B606DF"
+			rewards: [
+				{
+					count: 8
+					id: "38149E85997142C9"
+					item: "framedblocks:framed_flower_pot"
+					type: "item"
+				}
+				{
+					id: "305F67A919869630"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "351E93A8DB766B80"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5B0E21714CB6F478"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "085B79F5EB7CED9B"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					id: "7253E434481DA076"
+					item: {
+						Count: 1b
+						id: "immersive_weathering:flower_crown"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "68E11281ED78CA1A"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "6BA197A742546383"
+					item: "minecraft:flower_pot"
+					type: "item"
+				}
+				{
+					id: "0DCDE79735631D8D"
+					item: "vinery:flower_pot"
+					type: "item"
+				}
+				{
+					id: "77D60C6CD8FFA230"
+					item: "supplementaries:planter"
+					type: "item"
+				}
+				{
+					id: "6EA647B6E2BA6C11"
+					item: "supplementaries:planter_rich"
+					type: "item"
+				}
+			]
+			title: "Flower Pots"
+			x: -15.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["11A1BA279E6773BA"]
+			hide_dependency_lines: true
+			icon: "supplementaries:ash"
+			id: "4BB85AF548077272"
+			rewards: [
+				{
+					count: 16
+					id: "4FB3D3EDF9882522"
+					item: "supplementaries:ash_bricks"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "026D9BA07FE155A0"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "4F564DCC148F1703"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "0AB5D302451F5A1E"
+					item: "supplementaries:ash"
+					type: "item"
+				}
+				{
+					id: "49B0F2EA40DB669D"
+					item: "supplementaries:ash_brick"
+					type: "item"
+				}
+			]
+			x: -13.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["6DB497472E14ABAA"]
+			hide_dependency_lines: true
+			icon: "supplementaries:gold_door"
+			id: "09D596E1E9DDEBB0"
+			rewards: [
+				{
+					count: 16
+					id: "4D120415B8EE0E7B"
+					item: "createdeco:gold_coinstack"
+					type: "item"
+				}
+				{
+					count: 4
+					id: "0623501184F6E8CA"
+					item: "immersive_weathering:golden_moss_clump"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "230CF091E56BF6A8"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "7F129C5555EFC753"
+					item: "supplementaries:gold_door"
+					type: "item"
+				}
+				{
+					id: "2054698152AEC140"
+					item: "supplementaries:gold_trapdoor"
+					type: "item"
+				}
+			]
+			title: "Golden Doors"
+			x: -3.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["6DB497472E14ABAA"]
+			hide_dependency_lines: true
+			icon: "suppsquared:gold_candle_holder"
+			id: "4BA0B5FA92F4725C"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "524889DC3ABF524E"
+					table_id: 3090972614573536412L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "03AECB8AD0087DB3"
+					table_id: 3090972614573536412L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2B7D9193D74FA61E"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "7E0558252B5FD253"
+					item: "supplementaries:candle_holder"
+					type: "item"
+				}
+				{
+					id: "09911B99B8D306C7"
+					item: "minecraft:candle"
+					type: "item"
+				}
+				{
+					id: "48F6E4ECC5A39F4B"
+					item: "beautify:lamp_candleabra"
+					type: "item"
+				}
+				{
+					id: "5D5FDDBC88B140F9"
+					item: "suppsquared:gold_candle_holder"
+					type: "item"
+				}
+			]
+			title: "Candles"
+			x: -3.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "supplementaries:soap"
+			id: "3B3B315157FAF848"
+			rewards: [
+				{
+					count: 32
+					id: "3F2A67E7C3099C77"
+					item: "supplementaries:bubble_block"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2C29AB439AA104D0"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "12F22AD815072443"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "77B3A6E64B195ECC"
+					item: "supplementaries:soap"
+					type: "item"
+				}
+				{
+					id: "01892698AD804065"
+					item: "supplementaries:soap_block"
+					type: "item"
+				}
+				{
+					id: "79A7A54F04FE308E"
+					item: {
+						Count: 1b
+						id: "supplementaries:bubble_blower"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Squeaky Clean!"
+			x: -7.5d
+			y: 3.5d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			hide_dependency_lines: true
+			icon: "minecraft:scaffolding"
+			id: "774BFF093A756E83"
+			rewards: [
+				{
+					count: 8
+					id: "4526F0657E27C627"
+					item: "quark:paper_lantern_sakura"
+					type: "item"
+				}
+				{
+					count: 16
+					id: "259E36BC68B4563D"
+					item: "quark:paper_wall_big"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "6611C64016931EA0"
+					item: {
+						Count: 1b
+						id: "supplementaries:bamboo_spikes_tipped"
+						tag: {
+							Damage: 0
+							Potion: "minecraft:strong_harming"
+						}
+					}
+					type: "item"
+				}
+				{
+					count: 2
+					id: "33B69CFEEF3083B9"
+					item: {
+						Count: 1b
+						id: "supplementaries:bamboo_spikes_tipped"
+						tag: {
+							Damage: 0
+							Potion: "minecraft:long_poison"
+						}
+					}
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "608F29BB83E50E9D"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "78494DD34FE1385E"
+					item: "farmersdelight:basket"
+					type: "item"
+				}
+				{
+					id: "15996F4466456AB3"
+					item: "supplementaries:bamboo_spikes"
+					type: "item"
+				}
+				{
+					id: "66E2020733322329"
+					item: "twigs:bamboo_mat"
+					type: "item"
+				}
+				{
+					id: "6E12793266879543"
+					item: "minecraft:scaffolding"
+					type: "item"
+				}
+				{
+					id: "0ED6FEF301035BF5"
+					item: "quark:paper_wall"
+					type: "item"
+				}
+				{
+					id: "374FC73E104F0C80"
+					item: {
+						Count: 1b
+						id: "supplementaries:flute"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Bamboo Utilities"
+			x: -14.5d
+			y: -2.5d
+		}
+		{
+			id: "0C7B40FF027F1D34"
+			shape: "gear"
+			size: 2.0d
+			tasks: [{
+				id: "24B878DE7C4DE8D8"
+				item: "minecraft:end_stone"
+				type: "item"
+			}]
+			title: "Uncategorized End Quests"
+			x: 9.5d
+			y: -4.0d
+		}
+		{
+			id: "49F3C75026985879"
+			shape: "circle"
+			tasks: [{
+				id: "7F5F0BC562750FB3"
+				item: "quark:iron_rod"
+				type: "item"
+			}]
+			x: 9.0d
+			y: -2.5d
+		}
+		{
+			dependencies: ["11A1BA279E6773BA"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				ForgeCaps: {
+					Parent: {
+						Items: [ ]
+						Size: 5
+					}
+				}
+				id: "solapplepie:lunchbag"
+			}
+			id: "6EB22747F5DD6B64"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "2ED34CF7EA7F548B"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "12C24F04553E1EF2"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0F202455C830EDF8"
+					table_id: 3808031558698602442L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1F48F67E01918D25"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "6306DAE77F6389FD"
+					item: {
+						Count: 1b
+						ForgeCaps: {
+							Parent: {
+								Items: [ ]
+								Size: 5
+							}
+						}
+						id: "solapplepie:lunchbag"
+					}
+					type: "item"
+				}
+				{
+					id: "221A52FD2059AE2A"
+					item: "farmersdelight:egg_sandwich"
+					type: "item"
+				}
+				{
+					id: "5815EDF6CC9D7181"
+					item: "minecraft:baked_potato"
+					type: "item"
+				}
+				{
+					id: "1B8A45129669F4E6"
+					item: "farmersdelight:fried_rice"
+					type: "item"
+				}
+				{
+					id: "62CED5AE7458AAE2"
+					item: "farmersdelight:baked_cod_stew"
+					type: "item"
+				}
+			]
+			title: "Pack a Lunch"
+			x: -12.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["6DB497472E14ABAA"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				ForgeCaps: {
+					Parent: {
+						Items: [ ]
+						Size: 14
+					}
+				}
+				id: "solapplepie:golden_lunchbox"
+			}
+			id: "4806E0A4BC784EB4"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "4E4076114355765A"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "4E661DA1867FAA2D"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "6FC2D755400AF724"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "6B922905ABE819B6"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "40519B3310A26B3A"
+					table_id: 3808031558698602442L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "04D06D933A121D0F"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "23982466067887F6"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "30978087F42BC631"
+					item: {
+						Count: 1b
+						ForgeCaps: {
+							Parent: {
+								Items: [ ]
+								Size: 14
+							}
+						}
+						id: "solapplepie:golden_lunchbox"
+					}
+					type: "item"
+				}
+				{
+					id: "48A2B90B094D774E"
+					item: "brewinandchewin:scarlet_pierogies"
+					type: "item"
+				}
+				{
+					id: "263CE9A47A2C80A7"
+					item: "brewinandchewin:pizza_slice"
+					type: "item"
+				}
+				{
+					id: "01AA00F2D7B18C0D"
+					item: "delightful:deluxe_cheeseburger"
+					type: "item"
+				}
+				{
+					id: "3877A610CC6BEE96"
+					item: "brewinandchewin:quiche"
+					type: "item"
+				}
+				{
+					id: "1B47FC9B791E9FA9"
+					item: "delightful:berry_matcha_latte"
+					type: "item"
+				}
+			]
+			title: "Full Course Meal"
+			x: -2.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				ForgeCaps: {
+					Parent: {
+						Items: [ ]
+						Size: 9
+					}
+				}
+				id: "solapplepie:lunchbox"
+			}
+			id: "704185F683967762"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "5F8D35650DC529DD"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "32498EF2EA02BC58"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "4CFA8F22567AF43F"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "392CE3B273836100"
+					table_id: 3808031558698602442L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2B052A8F13048C34"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "6AD70CA8916A7530"
+					item: {
+						Count: 1b
+						ForgeCaps: {
+							Parent: {
+								Items: [ ]
+								Size: 9
+							}
+						}
+						id: "solapplepie:lunchbox"
+					}
+					type: "item"
+				}
+				{
+					id: "4CF9DDE4C0D27300"
+					item: "farmersdelight:shepherds_pie"
+					type: "item"
+				}
+				{
+					id: "7B2AF04BFCFF70A0"
+					item: "farmersdelight:steak_and_potatoes"
+					type: "item"
+				}
+				{
+					id: "7E420CFB74B486DE"
+					item: "quarkdelight:crab_pasta"
+					type: "item"
+				}
+				{
+					id: "224F57E32122C239"
+					item: "create:honeyed_apple"
+					type: "item"
+				}
+			]
+			title: "Second Helpings"
+			x: -6.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["6DB497472E14ABAA"]
+			hide_dependency_lines: true
+			icon: "create:goggles"
+			id: "599F90C8E7C0D44D"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "30D987E04C8EE5CA"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "4BC0B85039945273"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "6ACB1F51EB9E62B4"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "7EEE8F2394DC9335"
+					item: "create:goggles"
+					type: "item"
+				}
+				{
+					id: "03D63795161CE55E"
+					item: "create:wrench"
+					type: "item"
+				}
+				{
+					id: "464EC2813EFF0E48"
+					item: "create:brown_toolbox"
+					type: "item"
+				}
+			]
+			title: "Create Tools"
+			x: -3.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["6DB497472E14ABAA"]
+			hide_dependency_lines: true
+			icon: "supplementaries:hourglass"
+			id: "59412B154ED96A3F"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "6929A9C88309BA4F"
+					table_id: 3090972614573536412L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "145B1322ABC82B66"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "3A36317DF2303047"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "6CD7D223FCC7F7FA"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "65D60E67FF40CDA3"
+					item: "supplementaries:hourglass"
+					type: "item"
+				}
+				{
+					id: "15EB14701D9D8684"
+					item: "suppsquared:gold_plaque"
+					type: "item"
+				}
+				{
+					id: "187C846578E6DE77"
+					item: "dustrial_decor:gold_chain"
+					type: "item"
+				}
+				{
+					id: "1B7115F1FEC49AA6"
+					item: "dustrial_decor:large_gold_chain"
+					type: "item"
+				}
+				{
+					id: "66DFFDCACBF99A2E"
+					item: "design_decor:gold_large_chain"
+					type: "item"
+				}
+			]
+			title: "Gold Utilities"
+			x: -2.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["11A1BA279E6773BA"]
+			hide_dependency_lines: true
+			icon: "domesticationinnovation:pet_bed_white"
+			id: "06DA9F371B0FFC48"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "0076D68754968159"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "3639746CF2E9C0B0"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "3E2FF40A41D1DAE0"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					id: "37A208A570D9D82E"
+					item: "domesticationinnovation:deed_of_ownership"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5AD0A08AB28F3710"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "5430697CEE0E5328"
+					item: "domesticationinnovation:pet_bed_white"
+					type: "item"
+				}
+				{
+					id: "1E9F502FCC6739C9"
+					item: {
+						Count: 1b
+						id: "domesticationinnovation:feather_on_a_stick"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "3056AC569A7B6FFC"
+					item: "domesticationinnovation:drum"
+					type: "item"
+				}
+			]
+			title: "Pet Comforts"
+			x: -12.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "domesticationinnovation:collar_tag"
+			id: "356DF24FC3B8F659"
+			rewards: [
+				{
+					id: "1470D1B1494AE46B"
+					item: "domesticationinnovation:deed_of_ownership"
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1DAFB6C950A05A56"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "13FA070AC3F3D543"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "28F968DFBDA49EF4"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					id: "6121AD1355F6A885"
+					item: {
+						Count: 1b
+						id: "minecraft:enchanted_book"
+						tag: {
+							StoredEnchantments: [{
+								id: "domesticationinnovation:fireproof"
+								lvl: 1s
+							}]
+						}
+					}
+					type: "item"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "59970C5EEB1E0AA5"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "567EAE2BF6C675B5"
+					item: "domesticationinnovation:collar_tag"
+					type: "item"
+				}
+				{
+					id: "6BC727CE7425D1EB"
+					item: "domesticationinnovation:wayward_lantern"
+					type: "item"
+				}
+			]
+			x: -6.5d
+			y: 0.5d
+		}
+		{
+			dependencies: ["0229A1A3184F3807"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				id: "create:copper_diving_helmet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "032153E59A4632D8"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "0199418A1A0D60C8"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7B7BF86377A61D2A"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "234A5C99D8A8EE54"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "343B751ADDA8635C"
+					item: {
+						Count: 1b
+						id: "create:copper_diving_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "2C1B5E9A551BE7CA"
+					item: {
+						Count: 1b
+						id: "create:copper_backtank"
+						tag: {
+							Air: 900
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "1D9386A63F5D6EDB"
+					item: {
+						Count: 1b
+						id: "create:copper_diving_boots"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Deep Sea Diving"
+			x: -9.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["57556427BB1D4254"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				id: "create:netherite_diving_helmet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "1A5934147C266C79"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "2D29A2DF31D5E5A9"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5787AD56FD145BBE"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1E26CDD4FB9E0AA7"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5DB7018A4B75F403"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "670175BB996F927E"
+					item: {
+						Count: 1b
+						id: "create:netherite_diving_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "2C9C1BD78C5C648C"
+					item: {
+						Count: 1b
+						id: "create:netherite_backtank"
+						tag: {
+							Air: 900
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "36CC53324348FAC7"
+					item: {
+						Count: 1b
+						id: "create:netherite_diving_boots"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Protective Diving"
+			x: 4.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["0229A1A3184F3807"]
+			hide_dependency_lines: true
+			icon: "everythingcopper:copper_anvil"
+			id: "4742A5FFF4CFC21F"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "559D7B577BE1067B"
+					table_id: 4365377398620593994L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "682EF9C101552769"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "798A2EFBC43AA29D"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "32DF053B203A83FC"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "150B20D5243A4E30"
+					item: "everythingcopper:copper_anvil"
+					type: "item"
+				}
+				{
+					id: "20768E61097B28B6"
+					item: "suppsquared:copper_plaque"
+					type: "item"
+				}
+				{
+					id: "44F21381C53559F4"
+					item: "chimes:copper_chimes"
+					type: "item"
+				}
+			]
+			title: "Copper Utilities"
+			x: -8.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			hide_dependency_lines: true
+			icon: "supplementaries:feather_block"
+			id: "3491FE07ECE5A961"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "7207B1B6A7A4DF1F"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5CCC90EA7A60475E"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "76AF49733A3FD456"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "442E56E2B7FB0733"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "4E449EA7D9945241"
+					item: "supplementaries:feather_block"
+					type: "item"
+				}
+				{
+					id: "61BADB2D33A04967"
+					item: "supplementaries:flint_block"
+					type: "item"
+				}
+				{
+					id: "15246261F5823D42"
+					item: {
+						Count: 1b
+						id: "itemfilters:tag"
+						tag: {
+							value: "quark:hollow_logs"
+						}
+					}
+					title: "Any #quark:hollow_logs"
+					type: "item"
+				}
+				{
+					id: "3FF8972891F5C69D"
+					item: "quark:mud_brick_lattice"
+					type: "item"
+				}
+				{
+					id: "18939235E25F79B1"
+					item: "minecraft:hay_block"
+					type: "item"
+				}
+			]
+			title: "Utility Blocks"
+			x: -15.5d
+			y: 0.5d
+		}
+		{
+			dependencies: ["11A1BA279E6773BA"]
+			hide_dependency_lines: true
+			icon: "supplementaries:flower_box"
+			id: "0EED6F39E9928E07"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "7DADD19C48C93380"
+					table_id: 4857658575939666720L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "41F213F28A424DF8"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5C56C92CDC52A952"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "486ABFC6CD6F9E4A"
+					table_id: 3808031558698602442L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "2C571E39CF79489B"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "7186AF33AD03F8CF"
+					item: "supplementaries:flower_box"
+					type: "item"
+				}
+				{
+					id: "5798EBE2A38D114D"
+					item: {
+						Count: 1b
+						id: "itemfilters:tag"
+						tag: {
+							value: "another_furniture:planter_boxes"
+						}
+					}
+					title: "Any #another_furniture:planter_boxes"
+					type: "item"
+				}
+				{
+					id: "37E6998028C403AD"
+					item: "vinery:flower_box"
+					type: "item"
+				}
+			]
+			title: "Wooden Planters"
+			x: -13.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["49CE9302AF83ECF9"]
+			hide_dependency_lines: true
+			icon: "supplementaries:sack"
+			id: "1A04E39210700EE5"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "29B4CA2E3A90E3C5"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "5796741A99388307"
+					table_id: 9142192627722017355L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "4A8ABB3056ED7F92"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "3BA9D58CB70BEF87"
+					item: "supplementaries:sack"
+					type: "item"
+				}
+				{
+					id: "45C8C70E126BFB83"
+					item: "supplementaries:present"
+					type: "item"
+				}
+				{
+					id: "718AA7F658292E0B"
+					item: "minecraft:bundle"
+					type: "item"
+				}
+				{
+					id: "226929E9D997B101"
+					item: "supplementaries:jar"
+					type: "item"
+				}
+			]
+			title: "Primative Item Management"
+			x: -14.5d
+			y: 0.5d
+		}
+		{
+			dependencies: ["234970C8ED4E8F03"]
+			hide_dependency_lines: true
+			icon: "sophisticatedbackpacks:backpack"
+			id: "6121BEF6E61AF93E"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "46F8912E5847BE5A"
+					table_id: 340158020744572283L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "3E40479A4B995CF7"
+					table_id: 5528505901145135189L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0E439E58AADB0ACA"
+					table_id: 5987855293904009140L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			tasks: [{
+				id: "254CAC260AF4EC7C"
+				item: "sophisticatedbackpacks:backpack"
+				type: "item"
+			}]
+			title: "First Backpack"
+			x: -13.5d
+			y: 0.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: {
+				Count: 1b
+				id: "sophisticatedbackpacks:backpack"
+				tag: {
+					borderColor: 16383998
+					clothColor: 16383998
+				}
+			}
+			id: "71DD4C9BB80EC997"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "09F759C78D9326DE"
+					table_id: 4722842821830382934L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0BDA389B58508D00"
+					table_id: 6248981931966789300L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "1626791E4EAA9949"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			shape: "rsquare"
+			subtitle: "Save iron by crafting a copper backpack first"
+			tasks: [{
+				id: "48B93116F07DCB1A"
+				item: "sophisticatedbackpacks:iron_backpack"
+				type: "item"
+			}]
+			title: "A Better Backpack"
+			x: -7.5d
+			y: -0.5d
+		}
+		{
+			dependencies: ["65418883BAEDD689"]
+			hide_dependency_lines: true
+			icon: "sophisticatedbackpacks:upgrade_base"
+			id: "3AA5C94B6547EB21"
+			rewards: [{
+				count: 16
+				id: "204D650F4395DB9E"
+				item: "sophisticatedbackpacks:upgrade_base"
+				type: "item"
+			}]
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "7DBCCC4A219C52DD"
+					item: "sophisticatedbackpacks:upgrade_base"
+					type: "item"
+				}
+				{
+					id: "0D4CD6F6C2F8FC4B"
+					item: "sophisticatedbackpacks:crafting_upgrade"
+					type: "item"
+				}
+				{
+					id: "49E6EC2BC30611E9"
+					item: "sophisticatedbackpacks:tool_swapper_upgrade"
+					type: "item"
+				}
+				{
+					id: "78358A2193C3D050"
+					item: {
+						Count: 1b
+						id: "itemfilters:or"
+						tag: {
+							items: [
+								{
+									Count: 1b
+									id: "sophisticatedbackpacks:stack_upgrade_starter_tier"
+								}
+								{
+									Count: 1b
+									id: "sophisticatedbackpacks:stack_upgrade_tier_1"
+								}
+							]
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Backpack Upgrades"
+			x: -6.5d
+			y: -0.5d
+		}
+		{
+			id: "2CBB949172560214"
+			tasks: [{
+				id: "461C29E160CD2799"
+				item: "sophisticatedbackpacks:diamond_backpack"
+				type: "item"
+			}]
+			title: "Diamond backpack + seperate diamond upgrades"
+			x: -1.5d
+			y: -0.5d
+		}
+		{
+			id: "3060B67A31F7A520"
+			tasks: [{
+				id: "4BA8CE7079C5DCEC"
+				item: "sophisticatedbackpacks:netherite_backpack"
+				type: "item"
+			}]
+			title: "best backpack and upgrades quest"
+			x: 4.5d
+			y: -0.5d
+		}
+		{
+			icon: "supplementaries:enderman_head"
+			id: "34D055832D6B1D0F"
+			rewards: [
+				{
+					exclude_from_claim_all: true
+					id: "1DCEF29273D7F65B"
+					table_id: 491754851599624417L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "29C2F060599EFF33"
+					table_id: 491754851599624417L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "37B2638927C62B79"
+					table_id: 491754851599624417L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "69F80E6A919A81EB"
+					table_id: 4365377398620593994L
+					type: "choice"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0D89E72317003E21"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "7282A312CFFBDC91"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+				{
+					exclude_from_claim_all: true
+					id: "0EFF5D1206935934"
+					table_id: 7040697874577485947L
+					type: "random"
+				}
+			]
+			tasks: [
+				{
+					id: "32D3B26DCB0B31AB"
+					item: "minecraft:dragon_head"
+					type: "item"
+				}
+				{
+					id: "389282E6EAE9AE98"
+					item: "minecraft:wither_skeleton_skull"
+					type: "item"
+				}
+				{
+					id: "286DFAD04801F077"
+					item: "minecraft:skeleton_skull"
+					type: "item"
+				}
+				{
+					id: "5BE535D76E457F7A"
+					item: "minecraft:zombie_head"
+					type: "item"
+				}
+				{
+					id: "7C6BB8332B390CCE"
+					item: "minecraft:creeper_head"
+					type: "item"
+				}
+				{
+					id: "4A2763A601B8CD07"
+					item: "supplementaries:enderman_head"
+					type: "item"
+				}
+			]
+			title: "Head Hunter"
+			x: 10.0d
+			y: -2.5d
+		}
+		{
+			id: "1A6906F5EAB77D71"
+			tasks: [{
+				id: "01A01D63A34AB04A"
+				item: "nock_enough_arrows:reinforced_arrow"
+				type: "item"
+			}]
+			x: 8.0d
+			y: 1.0d
+		}
+		{
+			id: "79ABCFFDED21501D"
+			tasks: [{
+				id: "3B7BB37C95E3EA1E"
+				item: "nock_enough_arrows:split_arrow"
+				type: "item"
+			}]
+			x: 9.0d
+			y: 1.0d
+		}
+		{
+			id: "34B0687FA566DF7E"
+			tasks: [{
+				id: "10F92E61CCC826DC"
+				item: "nock_enough_arrows:explosive_arrow"
+				type: "item"
+			}]
+			x: 8.0d
+			y: 2.0d
+		}
+		{
+			id: "7C1B0CD77DE6E5EF"
+			tasks: [{
+				id: "3261D9ADDAE7CCE7"
+				item: "nock_enough_arrows:blossom_arrow"
+				type: "item"
+			}]
+			title: "Utility Arrows"
+			x: -12.5d
+			y: 0.5d
+		}
+		{
+			id: "772981C89A4D37CB"
+			tasks: [{
+				id: "1C165DA6CCC3ABC7"
+				item: "nock_enough_arrows:slime_arrow"
+				type: "item"
+			}]
+			title: "Novelty Arrows"
+			x: -12.5d
+			y: 1.5d
+		}
+		{
+			id: "5B9C5B5C65C3B1E6"
+			tasks: [{
+				id: "2D5F994067885F8A"
+				item: "botania:vine_ball"
+				type: "item"
+			}]
+			x: -15.5d
+			y: 1.5d
+		}
+	]
+	title: "Progression"
+}

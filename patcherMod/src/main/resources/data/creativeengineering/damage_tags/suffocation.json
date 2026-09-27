@@ -1,0 +1,9 @@
+{
+  "description": "Not getting air: inside blocks, drowning, no oxygen, plastic.",
+  "values": [
+    "inWall",
+    "drown",
+    "out_of_oxygen",
+    "plastic_block"
+  ]
+}

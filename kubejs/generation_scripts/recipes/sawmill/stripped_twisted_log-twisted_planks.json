@@ -1,0 +1,19 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "architects_palette:stripped_twisted_log"
+  },
+  "result": {
+    "count": 6,
+    "item": "architects_palette:twisted_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ]
+}

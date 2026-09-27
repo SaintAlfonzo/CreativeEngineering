@@ -1,0 +1,152 @@
+Read ArmorMaterialEnchantabilityMixin.java
+Based on a full sweep of the kubejs/ tree (grep for TODO/FIXME/WIP/placeholder/incomplete/disabled/etc., manual read of every hit in context, plus a check of logs/kubejs/*.log to confirm which code paths actually execute), here is the complete work-in-progress inventory, organized by subsystem. Paths are relative to kubejs/.
+
+Most significant systemic finding: an unfinished helper-migration, with large dead code blocks left in live files
+The pack is mid-migration from an old recipe-helper object (global.CE, defined in archive/craftHelper.js) to a new one (global.NCH, defined in startup_scripts/func/neoCraftHelper.js). archive/ is not one of KubeJS's auto-loaded roots (only startup_scripts/, server_scripts/, client_scripts/ are), so global.CE no longer exists at runtime — and indeed the old CE.*-based code was never deleted, just block-commented out in place:
+
+					server_scripts/other/misc_mods.js lines 50–304 (255 of 304 lines, ~84% of the file) — an entire second ServerEvents.recipes(...) block wrapped in /* ... */, containing the old wool→hemp-fabric substitution recipes, bandage recipes, and enderstorage recipe rebuilds. Inside it, line 202 has the author's own note // all fucked up, fix later, and line 217 ('#minecraft:wool_carpets',, e)) has a stray double-comma — the section couldn't even be re-enabled as-is without a syntax fix. The block also ends (lines 274–303) with a leftover debug scratch snippet, /*console.log('=== Registry enumeration test ===')..., including an empty handler ServerEvents.loaded(event => { });.
+					server_scripts/engineering/resource_blocks.js lines 251–481 (231 of 482 lines, ~48%) — an old "Resource stones" ServerEvents.recipes block built on const CE = global.CE, fully commented out.
+					server_scripts/cooking/cooking.js lines 313–737 (424 of 736 lines, ~58%) — an old cooking ServerEvents.recipes block, also built on global.CE, fully commented out.
+					Confirmed via logs/kubejs/server.log: each of these files logs only ONE "started/finished" pair (from the live R/NCH-based block); the old CE-based block's own start/finish log lines never appear, i.e. it genuinely never runs. This isn't a live bug, but it is a large amount of paused/abandoned migration work sitting dormant in otherwise-active files.
+
+					archive/ (whole folder, 9 files): oldsawblades.js, oldblueprints.js, barkold.js, pneumaticold.js, wood_old.js, metalold.js, engineeringold.js, eng_mid_merge.js, craftHelper.js — all superseded pre-migration versions of current systems, sitting outside any loaded script root. eng_mid_merge.js's name literally says "mid-merge." Worth confirming with the user whether these are safe to delete or still referenced as documentation.
+					startup_scripts/func/neoCraftHelper.js line 1 — stale header comment // kubejs/server_scripts/helpers/recipes.js, i.e. the file used to live at a different path; a small leftover from the same refactor.
+
+Loot overhaul (server_scripts/loot/) — fully scaffolded, almost no content filled in
+				server_scripts/loot/00_lib.js lines 24–42 — global.LOOT.groups (junk, foodJunk, redundantTools, sherds, musicDiscs) and global.LOOT.tiers (common, uncommon, rare, treasure) are all empty arrays, with the comment directly above: "content lists (fill from a /dumploot export)". Textbook empty-list-meant-to-be-filled-in.
+				server_scripts/loot/10_removals.js — the one live rule strips all pneumaticcraft: items; the groups.junk removal is gated behind if (L.groups.junk.length), currently always false. Three more removals (lines 26–39) are commented-out "examples — uncomment & edit."
+				server_scripts/loot/20_frequency.js — 100% commented-out examples (weight reweighting, count caps, chance-gated bonus pool); nothing live.
+				server_scripts/loot/30_redistribute.js — 100% commented-out examples (village tier pools, dungeon signature items, stronghold library paper); nothing live.
+				server_scripts/loot/40_targeted.js — 100% commented-out examples (end city treasure, ancient city pool, buried-treasure override); nothing live.
+				server_scripts/loot/99_debug.js line 9 — // event.enableLogging() commented out; the README explicitly says to uncomment it "while tuning," implying this feature is still in the tuning/verification phase, not finished.
+				server_scripts/loot/README.md — describes the intended 5-step workflow (Enumerate via /dumploot → Fill the lists → Apply → Verify → tune Lootr config); per the above, only step 1's plumbing exists — step 2 ("fill the lists") hasn't happened yet.
+				
+				
+Metal subsystem (server_scripts/metal/)
+				server_scripts/metal/metal_base_materials.js lines 3–31 — a large top-of-file note enumerating 5 numbered "Standardization gaps" (plate coverage split across 3 inconsistent methods; manual rod recipe only exists for zinc; dust→ingot recycle only exists for zinc; hammercrushing_zinc/raw_hammercrushing_zinc never got removed while every other metal's was; plate↔plate-block conversion missing one direction for copper), ending with an explicit open, unanswered question: "Want me to fill these in? I'd need your call on: plate — keep IE press for the 8 + add pack Create pressing for the missing 5, or fully replace with one standardized method?" This is an unresolved design decision left directly in the source.
+				Line 44 — // ---------- Remove duplicate/unfinished recipes ---------- heading a cleanup block; the label itself documents past unfinished/duplicate recipe issues.
+				Item/fluid/block dictionaries (startup_scripts/_lib/)
+				startup_scripts/_lib/item_dict.js lines 1673–1697 — section header // Merge additions from old dict documents an in-progress reconciliation, explicitly calling out remaining gaps: the redstone module "OLD dict has the complete (non-incomplete) version; new dict only has the incomplete variant" (line 1679); generic plate/rod/wire "any"-tag entries, spring tags, and "building tags" are "not present under any key in the new dict."
+				startup_scripts/_lib/block_dict.js line 33 and startup_scripts/_lib/fluid_dict.js line 162 and startup_scripts/func/neoCraftHelper.js line 383 — all three warn "...is not validated (tag support not yet implemented)": tag-based dictionary-entry validation is explicitly unimplemented in three places.
+				
+startup_scripts/todo/ (whole folder) — literally named "todo": create_ie_dict_additions.txt (882 candidate item_dict.js entries for Create/Botania/IE generated by a script, explicitly "NOT loaded by KubeJS... a worklist"), not_in_dict.txt (690 item ids not yet mapped in the dict), recipes_to_remove.txt (a recipe-removal scan log), remove_list.txt (a short pending-removal list). All four are unmerged/unactioned worklists.
+Sequenced-assembly "incomplete" placeholder items (cross-cutting: startup_scripts/changes/, client_scripts/, server_scripts/engineering/)
+startup_scripts/changes/transition_items.js lines 24–25 — // TODO / Add "const incComponentSteel = R.incomplete('component_steel')" definitions by file to item dict.
+client_scripts/texture_tool.js lines 28–41 — a dev tool built specifically to chase down "The 29 sequenced-assembly outputs currently falling back to i.incomplete" (a shared grey placeholder sprite) instead of bespoke in-progress art, spanning redstone.js, transport.js, crystal.js, metal_building.js, misc_metal_crafts.js, and cooking.js.
+server_scripts/engineering/components.js lines 18, 22 — inline undecided category labels: // Aluminum --- Light? --- and // Uranium --- Dense? ---, suggesting the author hadn't settled on a tier name for these two components.
+Cooking / food (server_scripts/cooking/, startup_scripts/cooking/, startup_scripts/items/)
+startup_scripts/items/cultures.js lines 3, 6 — "still WIP over there" (referring to server_scripts/cooking/cultivated_meat.js); items are "Plain items for now, no .food() — add nutrition once the cooking recipes are designed" (not yet designed).
+startup_scripts/cooking/potions.js lines 50–51 — two custom potions (long_reach, phantom_bane) each marked // TODO: placeholder reagent — the brewing reagents (geode:wrappist_shard, geode:celestite_shard) are stand-ins.
+server_scripts/cooking/cooking.js — see the dead 424-line CE-based block noted above.
+Wood subsystem (server_scripts/wood/, generation_scripts/)
+server_scripts/wood/sawdust.js line 83 — //****...Integrate nulch, move to compost file directly above live nulch recipes: the author knows this content is in the wrong file but hasn't relocated it.
+generation_scripts/sawmill.js lines 331–346 — a verbatim commented-out duplicate of the oak sawmill-recipe generation calls already executed earlier in the same file (lines 112–115); leftover scratch code from iterating on the generator. (Note: generation_scripts/recipes/sawmill/*.json, 211 files, is this script's own generated output, run externally via Node's fs/path — not loaded by KubeJS itself.)
+Items (startup_scripts/items/)
+startup_scripts/items/sample_syringe.js lines 14–15 — "No custom texture yet — placeholder texture points at vanilla's iron sword... Swap the .texture() calls for real textures later." All 7 syringe items (cow/pig/chicken/sheep/rabbit/cod/salmon) use the iron sword texture.
+startup_scripts/items/potion_buckets.js line 19 — "A survival recipe that transfers the brewed potion NBT onto the bucket is still TODO — for now /give a filled one." No in-game crafting path exists yet; buckets can currently only be obtained via command.
+Tags (server_scripts/tags/)
+server_scripts/tags/fluidtags.js line 79 — a commented-out /*T.addFluid(e, 'forge:fluid', [...])*/ block listing ~15 fluids (seed/vegetable oil, bioethanol, various biodiesel/ethanol/kerosene/diesel/lubricant/gasoline pairs, experience, memory_essence) that are currently NOT tagged under forge:fluid; paused tagging work.
+Line 102 — t.clearAll(e, [f.tmted_melon_juice, ...]) // dead placeholder fluids — cleanup of fluids the comment itself calls "dead placeholder."
+server_scripts/tags/item_physics_tags.js lines 14–20 — header calls out several "GRAY-AREA CALLS (see the breakdown in chat; flip any of these freely)" — e.g., committing the whole stone family to lavaproof — flagged by the author as a tentative/reversible design choice, not fully settled.
+Client scripts (client_scripts/)
+client_scripts/jeichanges.js lines 37–45 — a commented-out JEIEvents.hideItems block for hiding all enchanted-book levels of unwanted enchants, superseded by (but left alongside) the tooltip-flag approach below it — a "tried this, paused it" block.
+client_scripts/tooltips.js lines 356–358 — /*addTooltips(e, [i.ghost_rail, [...]]);*/ under an "Archery" header — a written but disabled tooltip.
+quest_working/ and mixin/
+quest_working/produce.txt — the folder name plus a bare .txt (not a real FTB Quests file extension) containing an SNBT fragment for a "Sell Wheat Flour" quest chain strongly suggests this is a staging/draft snippet not yet merged into an actual quest file.
+mixin/ — completely empty (no files at all, not even hidden ones); a stub directory with nothing in it.
+Checked and clean (for completeness)
+kubejs/data/** (41 files, datapack JSON/NBT) and kubejs/recipes/** (4 JSON files) — no markers found; look like finished, static datapack content.
+kubejs/exported/** (292 files) — pure generated dumps (items_by_mod, tags, loot_tables, gear CSVs); no "todo"-named folder or leftover draft files found (per your instruction, contents weren't dumped, only scanned for stray filenames/markers).
+Server/startup files not listed above (equipment/, economy/, magic/ other than end_gear.js's incomplete-item usage, remaining engineering/.js, remaining tags/.js) showed no WIP markers under any of the searched signals.
+If it's useful, the single highest-value thing to act on first is probably the loot subsystem (fully wired plumbing, zero content) and the metal_base_materials.js gap list (an explicit, itemized, still-open question from the author to themselves).
+
+Bash Search for extensibility/limited-coverage comments across java files
+IN
+cd /home/liam/.local/share/atlauncher/instances/CreativeEngineering2/patcherMod/src
+grep -rniE "add (a |another )?(row|entry|entries|case|line)|for more|add more|only supports?|only handles?|only covers?|extend this|not (all|every)|doesn.t (yet )?(support|handle|cover)" --include='*.java' . 
+
+OUT
+main/java/com/SaintAlfonzo/creativeengineering/mixin/ArmorMaterialEnchantabilityMixin.java:22: * material name, covers all four pieces of a set at once. Add a row to {@link #OVERRIDES}
+main/java/com/SaintAlfonzo/creativeengineering/mixin/ArmorMaterialEnchantabilityMixin.java:23: * for more materials.
+main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java:158:    // blasting / haunting fan categories all extend this; the plain base just addItemStack()s
+Read PotionRecipeGeneratorsMixin.java
+Investigation complete. Here's the full location-by-location report.
+
+Executive summary — genuine unfinished/orphaned items found
+Priority	Location	Finding
+High	startup_scripts/todo/	Explicit, self-documented merge queue — 0% merged (sampled)
+High	patchouli_books/	CE guidebook never started (Patchouli is installed; zero pages exist anywhere)
+Medium	Modpack/recipes/	Pre-KubeJS leftover, never ported, contains one invalid JSON file
+Low	kubejs/quest_working/	Draft already fully merged into live quests — safe to delete
+Low	kubejs/mixin/, quests_structures/, scratchpadx/	Empty placeholders, nothing to recover
+Not WIP	kubejs/archive/, kubejs/generation_scripts/, tools/	Verified fully superseded / fully integrated — false alarms, explained below
+1. scratch_kjs/ (+ scratch_kjs/dev/)
+Exists. Contains exactly 2 files, nested at scratch_kjs/dev/latvian/mods/kubejs/item/{ItemStackJS.class, OutputItem.class} — compiled Java .class files (not source) from KubeJS's own dev.latvian.mods.kubejs.item package, apparently extracted from the KubeJS mod jar for reference.
+
+Verified grep -rn "ItemStackJS\|OutputItem" patcherMod/src → zero hits. Not referenced by the Java mod, not referenced by any kubejs script.
+Verdict: inert leftover from some past investigation into KubeJS internals (maybe while writing the sawmill mixins below). No current purpose, nothing to integrate — safe to ignore/delete.
+2. scratchpadx/
+Exists, completely empty (0 entries, checked recursively including hidden files). Nothing to report.
+
+3. tools/
+Exists. 2 Python asset-gen scripts, both legitimate and already used:
+
+tools/echo_texture.py (141 lines) — generates the animated "echo" tool texture strips. Its outputs (echo_pickaxe/axe/hoe/shovel.png + .mcmeta) already exist in kubejs/assets/creativeengineering/textures/item/. Integrated.
+tools/potion_bucket_texture.py (75 lines) — generates potion-bucket textures. Its outputs (potion_bucket.png, splash_potion_bucket.png, lingering_potion_bucket.png) already exist in the same folder. Integrated.
+Loose end found: kubejs/startup_scripts/todo/create_ie_dict_additions.txt (line 2) credits a third tool, tools/gen_create_ie_dict.mjs, that does not exist anywhere in the instance — it was apparently run once and never committed/kept. Its output survives only as the todo/ worklist (see #8).
+4. kubejs/archive/
+Exists. 9 .js files (~160KB): barkold.js, craftHelper.js, engineeringold.js, eng_mid_merge.js, metalold.js, oldblueprints.js, oldsawblades.js, pneumaticold.js, wood_old.js. Confirmed zero references to archive/ from any live server_scripts/startup_scripts/client_scripts file.
+I dug into this one hard since "eng_mid_merge" and "engineeringold" sound like they could be half-migrated:
+
+craftHelper.js defines global.CE; global.CE has zero live usages anywhere — fully replaced by global.NCH (kubejs/startup_scripts/func/neoCraftHelper.js).
+eng_mid_merge.js / engineeringold.js / metalold.js all use item.incomplete / i.incomplete (= 'kubejs:incomplete_item') heavily — this looked like an "unfinished recipe" marker at first glance, but it's actually Create's standard sequenced-assembly placeholder item, used the exact same way in the live kubejs/server_scripts/engineering/crystal.js:13-17 and redstone.js (which implement the identical budding_amethyst_sequenced_assembly, echo_shard_sequenced_assembly, etc. recipes via the newer R.incomplete('key') helper). The archived versions are superseded drafts, not gaps.
+metalold.js:28 — comment // Remove unfinished copper shield refers to everythingcopper:copper_shield (an upstream mod's own half-finished item). Checked: this removal was carried forward and is live today at kubejs/server_scripts/metal/metal_base_materials.js:48 and kubejs/startup_scripts/_lib/removed_items.js:82. Already fully handled.
+oldsawblades.js is superseded by the live blueprint system — see #5.
+Verdict: this is a clean "old code" archive exactly as labeled. Not itself unfinished work; everything in it has a verified live replacement.
+5. kubejs/generation_scripts/
+Exists. sawmill.js (a standalone Node.js script, uses require('fs')/require('path') — not KubeJS-loadable, it's a build-time codegen tool) plus recipes/sawmill/ containing 211 generated recipe JSONs.
+I traced this fully because it looked orphaned at first (the JSONs aren't in kubejs/data/ or kubejs/recipes/):
+
+kubejs/server_scripts/tags/engineeringtags.js:17-18 explicitly cross-references it: "the blueprint recipes (...) point at these. Keep in sync with the sawmill outputs generated in generation_scripts/sawmill.js."
+Full recursive diff confirms all 211 files are byte-identical to patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/*.json, which get compiled into the mod jar and drive the "Precision Sawblade" profile-routing feature (patcherMod/.../sawmill/SawbladeRouting.java, SawmillProcessMixin.java). Generated ~33 seconds apart per file timestamps — a working copy-into-jar pipeline.
+Verdict: fully integrated, not orphaned. It's a build tool, so it's expected to sit outside server_scripts/startup_scripts.
+Minor note: kubejs/recipes/sawmill/ (empty) and kubejs/data/creativeengineering/recipes/sawmill/ (only 2 unrelated files: rose_quartz_sawing.json, layered_obsidian_sawing.json) sit right next to this and could mislead someone into thinking they're the real output location. Not a bug, just a potential source of confusion.
+6. kubejs/mixin/
+Exists, completely empty. Looks like a scaffold for KubeJS-scripted Mixins that was never used — all real Mixin work for this pack lives in Java at patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ (SawmillProcessMixin.java, SawmillRecipeMixin.java, SawmillRecipeSerializerMixin.java). Nothing to recover, but flagging the empty/unused folder per your "over-include" instruction.
+
+7. kubejs/quest_working/
+Exists. One file: produce.txt (267 lines) — an FTB Quests SNBT fragment for a "Sell Wheat Flour / Wheat Flour Pile" quest line (LightmansCurrency coin rewards), using placeholder sequential IDs (A000000000000001, AA00000000000002, …) rather than FTB Quests' real random-hex ID format.
+
+Cross-checked all 10 quest titles ("Sell x8 Wheat Flour for 3 Copper Coins" through "Sell x12 Stacks of Wheat Flour Pile for 4500 Copper Coins") against the live, chapter-registered config/ftbquests/quests/chapters/food_purchasing.snbt — all 10 already exist there verbatim (lines 290-535, using real IDs like 7334BEF0276A2A78), as part of the "Produce Market" chapter alongside Wheat and Hay Bale lines.
+Verdict: fully superseded draft — already shipped into the live quest book. Safe to delete, not an active gap.
+8. kubejs/startup_scripts/todo/ (confirmed the only folder literally named todo under kubejs/ — searched the whole tree)
+Exists, sitting alongside real script folders (func, items, changes, _lib, cooking). Contains 4 .txt files (~111KB) — none of them .js, so KubeJS never loads any of this. This is the richest genuine-TODO location in the audit:
+
+create_ie_dict_additions.txt (911 lines) — self-documented in its own header (lines 1-14): "911 candidate global.item (item_dict.js) entries... NOT loaded by KubeJS (.txt) - a worklist... Merge: copy the sections/lines you want into item_dict.js." Sampled 10 candidate lines including i.coil_hv = 'immersiveengineering:coil_hv' (line 18) — none appear in the live kubejs/startup_scripts/_lib/item_dict.js. Confirmed unmerged.
+not_in_dict.txt (689 lines) — earlier/rawer version of the same unmapped-item worklist (bare modid:path list).
+recipes_to_remove.txt (262 lines) — a saved console-log capture from the still-live diagnostic kubejs/server_scripts/_lib/recipe_scan.js (runs every session, priority: -10000). Ends with "[recipe_scan] Scan complete. 178 total recipe references found across 297 removed items." Spot-checked one entry — createdeco:green_decal (referenced via removed create:iron_sheet) has no corresponding cleanup call anywhere live. Genuinely outstanding cleanup work.
+remove_list.txt (27 items) — cross-checked against live removed_items.js: 26 of 27 already actioned. Only line 6, vintageimprovements:rose_gold_rod, isn't there (worth a human check — a differently-keyed rod_rose_gold item is still actively used elsewhere, so this may be intentional rather than forgotten).
+9. Modpack/recipes/
+Exists. Modpack/ contains only a recipes/ folder — no pack.mcmeta, no data/<namespace>/ wrapper, so it isn't even a structurally valid datapack location, and it sits outside kubejs/ entirely. Directory dates to Aug 29, 2024, over a year before the current kubejs/ tree (last touched Sep 2026) — clearly a pre-KubeJS-conversion leftover.
+
+10 files: 5 Create-mod processing recipes (beetrootcrushing.json, beetrootmilling.json, carrotmilling.json, kelppressing.json, papyruspressing.json) + 5 more under immersiveengineering/ (crushed_raw_{uranium,aluminum,nickel,lead,silver}.json).
+Verified none of these recipe concepts exist anywhere in the live kubejs/ tree or patcherMod — never ported.
+Bug: Modpack/recipes/papyruspressing.json line 7 has a trailing comma (}, before the ingredients array closes) — confirmed invalid via python3 json.load: JSONDecodeError: Expecting value: line 7 column 3. A concrete broken/never-finished artifact.
+10. patchouli_books/
+Exists, completely empty (0 entries, including hidden files). Per your request I checked whether this emptiness is meaningful: Patchouli is installed (mods/Patchouli-1.19.2-77.jar) and configured (config/patchouli-client.toml), and kubejs/assets/creativeengineering/ has textures/, models/, blockstates/ — but no patchouli_books/ subfolder anywhere, and no book content in patcherMod resources either.
+
+Verdict: the CreativeEngineering in-game guidebook hasn't been started at all — not even a skeleton book.json or a single placeholder page exists. This is the most clear-cut "feature not yet begun" in the whole audit.
+11. quests_structures/
+Exists, completely empty (including hidden files). Nothing to report — presumably intended for quest-related structures/schematics but never started.
+
+12. local/kubejs/ and simplebackups/ (low priority, as expected)
+local/kubejs/: dev.properties (KubeJS dev-mode logging flags, all defaults/false) + 3 empty subfolders (cache/, export/, exported_packs/). Just inert KubeJS dev scaffolding.
+simplebackups/: 6 zip files, ~25GB total — 5 Workspace_*.zip full-instance backups (Sep 10-11, 2026, 1.8-6.5GB each) + 1 New World (1)_2026-09-11_19-09-42.zip world save (8.2MB). Pure automated backup output, nothing WIP-relevant. Worth flagging only for disk-space awareness given the size.
+Excellent — the KubeJS scan surfaced a lot, including things memory hadn't captured (large dead legacy-helper code blocks in three live files, an explicit unresolved design question left in a comment, placeholder textures on every sample syringe, and two "TODO placeholder reagent" potions). Waiting on the patcherMod and scratch-directory scans before I put together the full report.
+
+Bash no-op wait
+IN
+:
+
+OUT
+(Bash completed with no output)

@@ -1,0 +1,12 @@
+{
+	id: "2AE557375E1DB49C"
+	loot_size: 1
+	order_index: 11
+	rewards: [
+		{ count: 16, item: "minecraft:candle" }
+		{ count: 16, item: "supplementaries:candle_holder" }
+		{ count: 16, item: "suppsquared:gold_candle_holder" }
+		{ count: 16, item: "beautify:lamp_candleabra" }
+	]
+	title: "Candles"
+}

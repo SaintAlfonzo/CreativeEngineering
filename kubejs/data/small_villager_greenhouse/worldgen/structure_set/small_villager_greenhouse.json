@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "small_villager_greenhouse:small_villager_greenhouse",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 32,
+    "salt": 2028346759
+  }
+}

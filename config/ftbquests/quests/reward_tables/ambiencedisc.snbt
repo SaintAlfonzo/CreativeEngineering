@@ -1,0 +1,16 @@
+{
+	id: "3C94EF9D834C9F4A"
+	loot_size: 1
+	order_index: 5
+	rewards: [
+		{ item: "quark:music_disc_drips" }
+		{ item: "quark:music_disc_ocean" }
+		{ item: "quark:music_disc_rain" }
+		{ item: "quark:music_disc_wind" }
+		{ item: "quark:music_disc_fire" }
+		{ item: "quark:music_disc_clock" }
+		{ item: "quark:music_disc_crickets" }
+		{ item: "quark:music_disc_chatter" }
+	]
+	title: "AmbienceDisc"
+}

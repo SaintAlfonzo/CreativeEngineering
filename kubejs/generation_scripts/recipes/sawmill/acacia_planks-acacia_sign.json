@@ -1,0 +1,20 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "minecraft:acacia_planks"
+  },
+  "result": {
+    "item": "minecraft:acacia_sign",
+    "count": 1
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "blade": "sign"
+}

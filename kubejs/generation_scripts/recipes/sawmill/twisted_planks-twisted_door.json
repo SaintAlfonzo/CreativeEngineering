@@ -1,0 +1,20 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 800,
+  "input": {
+    "item": "architects_palette:twisted_planks"
+  },
+  "result": {
+    "item": "architects_palette:twisted_door",
+    "count": 1
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersiveengineering:dust_wood"
+      },
+      "stripping": false
+    }
+  ],
+  "blade": "door"
+}

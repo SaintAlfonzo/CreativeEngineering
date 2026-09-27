@@ -1,0 +1,19 @@
+{
+  "__comment": "The ore vein itself. Replaces end_stone with felsic_block. size/discard are the vein-SHAPE dials (same for every biome). For a per-biome vein size, copy this file to felsic_ore_big.json etc. and point that biome's placed_feature at it.",
+  "type": "minecraft:ore",
+  "config": {
+    "size": 9,
+    "discard_chance_on_air_exposure": 0.3,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:end_stone"
+        },
+        "state": {
+          "Name": "felsic_gear:felsic_block"
+        }
+      }
+    ]
+  }
+}

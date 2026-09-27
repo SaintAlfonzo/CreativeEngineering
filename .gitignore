@@ -1,0 +1,53 @@
+# Allow-list: this folder is a whole ATLauncher instance (~25 GB of saves, backups, mod jars,
+# logs, caches). Only the pack's own source is tracked; everything else is ignored by default.
+# Third-party jars/packs are NOT committed - pack/manifest.json + pack/MODLIST.md list every
+# mod, resource pack and shader pack with its CurseForge/Modrinth source and sha1 instead
+# (regenerate with: python3 tools/gen_pack_manifest.py).
+/*
+
+# --- repo meta / notes ---
+!/.gitignore
+!/README.md
+!/CLAUDE.md
+!/mod_sides.md
+!/damage_types_findings.md
+!/modlist.ods
+!/value.ods
+!/dump_loot_tables.sh
+!/pack/
+!/feature_writeup/
+!/todo/
+!/tools/
+!/.claude/
+
+# --- pack content ---
+!/kubejs/
+!/config/
+!/defaultconfigs/
+!/configs_edited/
+!/patcherMod/
+
+# Hand-made resource pack with no download source (all others are listed in pack/)
+!/resourcepacks/
+/resourcepacks/*
+!/resourcepacks/CE2 Iron Armor Fix.zip
+
+# --- excluded inside tracked folders ---
+# KubeJS dump output (/dumptags, /dumprecipes, ...) - regenerate in game
+/kubejs/exported/
+# patcherMod: build output + third-party compile jars (copies of mods/ jars)
+/patcherMod/libs/
+/patcherMod/build/
+/patcherMod/.gradle/
+/patcherMod/run/
+/patcherMod/run-data/
+/patcherMod/.idea/
+# WorldEdit runtime cache / per-player sessions
+/config/worldedit/.archive-unpack/
+/config/worldedit/sessions/
+# Claude Code per-machine settings
+/.claude/settings.local.json
+
+__pycache__/
+*.pyc
+*.class

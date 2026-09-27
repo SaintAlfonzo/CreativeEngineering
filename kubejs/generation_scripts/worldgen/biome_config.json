@@ -1,0 +1,1323 @@
+{
+  "_readme": {
+    "workflow": "Set a biome's \"multiplier\" (or \"replace_with\"), then /reload or rejoin to see the solve (result_pct / note below update), and create a NEW world to use it. kubejs/server_scripts/worldgen/biome_overrides.js solves the layout at every world load. Multipliers other than 0/1 need a climate sample from /dumpclimate first (see README.md).",
+    "multiplier": "1.0 = untouched. 0 = removed (its climate space goes to whichever biomes border it). 0.5 = half as common, 2.0 = twice as common, measured against share_pct. The solver hits these by raising/lowering one offset penalty per biome, so a boosted biome grows outward from its existing patches into its climate neighbours, never appears somewhere climatically unrelated.",
+    "replace_with": "A biome id, or null. Relabels every entry of this biome to that one -- an exact swap of the same climate space. Overrides multiplier.",
+    "read_only": "\"entries\" (how many climate boxes the biome owns), \"layer\" (surface or underground -- which sample layer its share is measured on), \"share_pct\" (original % of that layer), \"result_pct\" (% after the last solve), \"note\" (solver warnings, e.g. target clamped).",
+    "caveat": "Every world stores its biome layout in level.dat at creation time. Changes only affect worlds created AFTER the override exists; existing saves keep the layout they were made with."
+  },
+  "dimensions": {
+    "minecraft:overworld": {
+      "source": "Terralith_1.19.3_v2.3.12.jar",
+      "baseline": "biome_baselines/minecraft__overworld.json",
+      "biome_count": 145,
+      "entry_count": 1697,
+      "samples": {
+        "file": "../../exported/worldgen/climate/minecraft__overworld.json",
+        "points": 13465,
+        "seed": "7992144288592822000",
+        "generated": "2026-09-27T17:17:30.209Z",
+        "layer_points": {
+          "surface": 3000,
+          "underground": 10465
+        }
+      },
+      "model_agreement_pct": 98.997,
+      "biomes": {
+        "minecraft:badlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 47,
+          "layer": "surface",
+          "share_pct": 0.967,
+          "result_pct": 0.967
+        },
+        "minecraft:bamboo_jungle": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 19,
+          "layer": "surface",
+          "share_pct": 0.3,
+          "result_pct": 0.3
+        },
+        "minecraft:beach": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 9,
+          "layer": "surface",
+          "share_pct": 1.267,
+          "result_pct": 1.267
+        },
+        "minecraft:birch_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.233
+        },
+        "minecraft:cold_ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 4.067,
+          "result_pct": 4.067
+        },
+        "minecraft:dark_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 33,
+          "layer": "surface",
+          "share_pct": 1.233,
+          "result_pct": 1.233
+        },
+        "minecraft:deep_cold_ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 10,
+          "layer": "surface",
+          "share_pct": 6.7,
+          "result_pct": 6.967
+        },
+        "minecraft:deep_dark": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 0.01,
+          "result_pct": 0.01
+        },
+        "minecraft:deep_frozen_ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 5,
+          "result_pct": 5.033
+        },
+        "minecraft:deep_lukewarm_ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 10,
+          "layer": "surface",
+          "share_pct": 4.967,
+          "result_pct": 4.967
+        },
+        "minecraft:deep_ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 11,
+          "layer": "surface",
+          "share_pct": 9.133,
+          "result_pct": 9.367
+        },
+        "minecraft:desert": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 36,
+          "layer": "surface",
+          "share_pct": 0.733,
+          "result_pct": 0.733
+        },
+        "minecraft:dripstone_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 4.969,
+          "result_pct": 4.969
+        },
+        "minecraft:eroded_badlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 24,
+          "layer": "surface",
+          "share_pct": 0.4,
+          "result_pct": 0.4
+        },
+        "minecraft:flower_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.067
+        },
+        "minecraft:forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 23,
+          "layer": "surface",
+          "share_pct": 3.1,
+          "result_pct": 2.933
+        },
+        "minecraft:frozen_ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 2.667,
+          "result_pct": 2.667
+        },
+        "minecraft:frozen_peaks": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 14,
+          "layer": "surface",
+          "share_pct": 0.9,
+          "result_pct": 0.9
+        },
+        "minecraft:frozen_river": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0.4,
+          "result_pct": 0.367
+        },
+        "minecraft:grove": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 63,
+          "layer": "surface",
+          "share_pct": 0.233,
+          "result_pct": 0.233
+        },
+        "minecraft:ice_spikes": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 9,
+          "layer": "surface",
+          "share_pct": 0.1,
+          "result_pct": 0.1
+        },
+        "minecraft:jagged_peaks": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 9,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.267
+        },
+        "minecraft:jungle": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 15,
+          "layer": "surface",
+          "share_pct": 0.967,
+          "result_pct": 0.967
+        },
+        "minecraft:lukewarm_ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 2.433,
+          "result_pct": 2.433
+        },
+        "minecraft:lush_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 11.61,
+          "result_pct": 11.61
+        },
+        "minecraft:mangrove_swamp": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0.6,
+          "result_pct": 0.6
+        },
+        "minecraft:meadow": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 17,
+          "layer": "surface",
+          "share_pct": 1.433,
+          "result_pct": 1.333
+        },
+        "minecraft:mushroom_fields": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.1,
+          "result_pct": 0.1
+        },
+        "minecraft:ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 4.133,
+          "result_pct": 4.2
+        },
+        "minecraft:old_growth_birch_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 13,
+          "layer": "surface",
+          "share_pct": 0.333,
+          "result_pct": 0.333
+        },
+        "minecraft:old_growth_pine_taiga": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 14,
+          "layer": "surface",
+          "share_pct": 0.667,
+          "result_pct": 0.6
+        },
+        "minecraft:old_growth_spruce_taiga": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 12,
+          "layer": "surface",
+          "share_pct": 0.833,
+          "result_pct": 0.767
+        },
+        "minecraft:plains": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 43,
+          "layer": "surface",
+          "share_pct": 2.567,
+          "result_pct": 2.567
+        },
+        "minecraft:river": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 20,
+          "layer": "surface",
+          "share_pct": 1.533,
+          "result_pct": 1.5
+        },
+        "minecraft:savanna": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 26,
+          "layer": "surface",
+          "share_pct": 1.467,
+          "result_pct": 1.467
+        },
+        "minecraft:savanna_plateau": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 33,
+          "layer": "surface",
+          "share_pct": 0.8,
+          "result_pct": 0.8
+        },
+        "minecraft:snowy_beach": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 8,
+          "layer": "surface",
+          "share_pct": 0.367,
+          "result_pct": 0.367
+        },
+        "minecraft:snowy_plains": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 27,
+          "layer": "surface",
+          "share_pct": 2.1,
+          "result_pct": 2.033
+        },
+        "minecraft:snowy_slopes": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 66,
+          "layer": "surface",
+          "share_pct": 0.167,
+          "result_pct": 0.167
+        },
+        "minecraft:snowy_taiga": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 35,
+          "layer": "surface",
+          "share_pct": 1.533,
+          "result_pct": 1.467
+        },
+        "minecraft:sparse_jungle": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 30,
+          "layer": "surface",
+          "share_pct": 0.7,
+          "result_pct": 0.7
+        },
+        "minecraft:stony_peaks": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 8,
+          "layer": "surface",
+          "share_pct": 0.5,
+          "result_pct": 0.5
+        },
+        "minecraft:stony_shore": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 8,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "minecraft:sunflower_plains": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 6,
+          "layer": "surface",
+          "share_pct": 0.2,
+          "result_pct": 0.2
+        },
+        "minecraft:swamp": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 1.133,
+          "result_pct": 0.967
+        },
+        "minecraft:taiga": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 40,
+          "layer": "surface",
+          "share_pct": 1.267,
+          "result_pct": 1.1
+        },
+        "minecraft:warm_ocean": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 2.6,
+          "result_pct": 2.6
+        },
+        "minecraft:windswept_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 7,
+          "layer": "surface",
+          "share_pct": 0.233,
+          "result_pct": 0.233
+        },
+        "minecraft:windswept_gravelly_hills": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 7,
+          "layer": "surface",
+          "share_pct": 0.2,
+          "result_pct": 0.2
+        },
+        "minecraft:windswept_hills": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 9,
+          "layer": "surface",
+          "share_pct": 0.3,
+          "result_pct": 0.3
+        },
+        "minecraft:windswept_savanna": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 10,
+          "layer": "surface",
+          "share_pct": 0.533,
+          "result_pct": 0.533
+        },
+        "minecraft:wooded_badlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 20,
+          "layer": "surface",
+          "share_pct": 0.4,
+          "result_pct": 0.333
+        },
+        "terralith:alpha_islands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.033,
+          "result_pct": 0.033
+        },
+        "terralith:alpha_islands_winter": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:alpine_grove": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 35,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.067
+        },
+        "terralith:alpine_highlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 28,
+          "layer": "surface",
+          "share_pct": 0.767,
+          "result_pct": 0.767
+        },
+        "terralith:amethyst_canyon": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.133,
+          "result_pct": 0.133
+        },
+        "terralith:amethyst_rainforest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 23,
+          "layer": "surface",
+          "share_pct": 0.1,
+          "result_pct": 0.1
+        },
+        "terralith:ancient_sands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:arid_highlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.533,
+          "result_pct": 0.533
+        },
+        "terralith:ashen_savanna": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 6,
+          "layer": "surface",
+          "share_pct": 0.1,
+          "result_pct": 0.1
+        },
+        "terralith:basalt_cliffs": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:birch_taiga": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 18,
+          "layer": "surface",
+          "share_pct": 0.133,
+          "result_pct": 0.1
+        },
+        "terralith:blooming_plateau": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.267
+        },
+        "terralith:blooming_valley": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 6,
+          "layer": "surface",
+          "share_pct": 0.233,
+          "result_pct": 0.233
+        },
+        "terralith:brushland": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 37,
+          "layer": "surface",
+          "share_pct": 2.467,
+          "result_pct": 2.467
+        },
+        "terralith:bryce_canyon": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 15,
+          "layer": "surface",
+          "share_pct": 0.533,
+          "result_pct": 0.5
+        },
+        "terralith:caldera": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 6,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:cave/andesite_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 7.167,
+          "result_pct": 7.167
+        },
+        "terralith:cave/deep_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 12.527,
+          "result_pct": 12.527
+        },
+        "terralith:cave/diorite_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 1.166,
+          "result_pct": 1.166
+        },
+        "terralith:cave/frostfire_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:cave/fungal_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 0.946,
+          "result_pct": 0.946
+        },
+        "terralith:cave/granite_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 2.303,
+          "result_pct": 2.303
+        },
+        "terralith:cave/infested_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 2.962,
+          "result_pct": 2.962
+        },
+        "terralith:cave/mantle_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:cave/thermal_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 1.739,
+          "result_pct": 1.739
+        },
+        "terralith:cave/tuff_caves": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:cave/underground_jungle": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 0.64,
+          "result_pct": 0.64
+        },
+        "terralith:cloud_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.067
+        },
+        "terralith:cold_shrubland": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 26,
+          "layer": "surface",
+          "share_pct": 0.867,
+          "result_pct": 0.8
+        },
+        "terralith:desert_canyon": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.1,
+          "result_pct": 0.1
+        },
+        "terralith:desert_oasis": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 17,
+          "layer": "surface",
+          "share_pct": 0.033,
+          "result_pct": 0.033
+        },
+        "terralith:desert_spires": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 2,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.067
+        },
+        "terralith:emerald_peaks": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 5,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.067
+        },
+        "terralith:forested_highlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 22,
+          "layer": "surface",
+          "share_pct": 0.6,
+          "result_pct": 0.6
+        },
+        "terralith:fractured_savanna": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 8,
+          "layer": "surface",
+          "share_pct": 0.367,
+          "result_pct": 0.367
+        },
+        "terralith:frozen_cliffs": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:glacial_chasm": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.467,
+          "result_pct": 0.467
+        },
+        "terralith:granite_cliffs": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 8,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:gravel_beach": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0.367,
+          "result_pct": 0.367
+        },
+        "terralith:gravel_desert": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 14,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.267
+        },
+        "terralith:haze_mountain": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 2,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.267
+        },
+        "terralith:highlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 1.333,
+          "result_pct": 1.333
+        },
+        "terralith:hot_shrubland": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 28,
+          "layer": "surface",
+          "share_pct": 0.533,
+          "result_pct": 0.533
+        },
+        "terralith:ice_marsh": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 10,
+          "layer": "surface",
+          "share_pct": 0.833,
+          "result_pct": 0.833
+        },
+        "terralith:jungle_mountains": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.267
+        },
+        "terralith:lavender_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 5,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.067
+        },
+        "terralith:lavender_valley": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 2,
+          "layer": "surface",
+          "share_pct": 0.433,
+          "result_pct": 0.433
+        },
+        "terralith:lush_desert": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 6,
+          "layer": "surface",
+          "share_pct": 0.033,
+          "result_pct": 0.033
+        },
+        "terralith:lush_valley": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.167,
+          "result_pct": 0.167
+        },
+        "terralith:mirage_isles": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.4,
+          "result_pct": 0.4
+        },
+        "terralith:moonlight_grove": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 29,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.267
+        },
+        "terralith:moonlight_valley": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.467,
+          "result_pct": 0.467
+        },
+        "terralith:orchid_swamp": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0.9,
+          "result_pct": 0.9
+        },
+        "terralith:painted_mountains": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 10,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.033
+        },
+        "terralith:red_oasis": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.1,
+          "result_pct": 0.1
+        },
+        "terralith:rocky_jungle": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 21,
+          "layer": "surface",
+          "share_pct": 0.467,
+          "result_pct": 0.467
+        },
+        "terralith:rocky_mountains": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 21,
+          "layer": "surface",
+          "share_pct": 1.533,
+          "result_pct": 1.467
+        },
+        "terralith:rocky_shrubland": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:sakura_grove": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 33,
+          "layer": "surface",
+          "share_pct": 0.1,
+          "result_pct": 0.1
+        },
+        "terralith:sakura_valley": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 5,
+          "layer": "surface",
+          "share_pct": 0.167,
+          "result_pct": 0.167
+        },
+        "terralith:sandstone_valley": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 2,
+          "layer": "surface",
+          "share_pct": 0.133,
+          "result_pct": 0.133
+        },
+        "terralith:savanna_badlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 34,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.267
+        },
+        "terralith:savanna_slopes": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 10,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.067
+        },
+        "terralith:scarlet_mountains": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 5,
+          "layer": "surface",
+          "share_pct": 0.167,
+          "result_pct": 0.167
+        },
+        "terralith:shield": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 19,
+          "layer": "surface",
+          "share_pct": 0.667,
+          "result_pct": 0.467
+        },
+        "terralith:shield_clearing": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:shrubland": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 34,
+          "layer": "surface",
+          "share_pct": 0.4,
+          "result_pct": 0.4
+        },
+        "terralith:siberian_grove": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 7,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:siberian_taiga": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 63,
+          "layer": "surface",
+          "share_pct": 0.833,
+          "result_pct": 0.833
+        },
+        "terralith:skylands_autumn": {
+          "multiplier": 0.15,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.233,
+          "result_pct": 0.033
+        },
+        "terralith:skylands_spring": {
+          "multiplier": 0.15,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0
+        },
+        "terralith:skylands_summer": {
+          "multiplier": 0.15,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.033,
+          "result_pct": 0
+        },
+        "terralith:skylands_winter": {
+          "multiplier": 0.15,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.3,
+          "result_pct": 0
+        },
+        "terralith:snowy_badlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 21,
+          "layer": "surface",
+          "share_pct": 0.633,
+          "result_pct": 0.633
+        },
+        "terralith:snowy_maple_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 10,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:snowy_shield": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 9,
+          "layer": "surface",
+          "share_pct": 0.133,
+          "result_pct": 0.133
+        },
+        "terralith:steppe": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0.2,
+          "result_pct": 0.167
+        },
+        "terralith:stony_spires": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 6,
+          "layer": "surface",
+          "share_pct": 0.367,
+          "result_pct": 0.367
+        },
+        "terralith:temperate_highlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 25,
+          "layer": "surface",
+          "share_pct": 0.833,
+          "result_pct": 0.833
+        },
+        "terralith:tropical_jungle": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 12,
+          "layer": "surface",
+          "share_pct": 0.167,
+          "result_pct": 0.133
+        },
+        "terralith:valley_clearing": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 2,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:volcanic_crater": {
+          "multiplier": 1.5,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0,
+          "note": "never hit in the sample set -- a multiplier has nothing to scale; dump more columns (/dumpclimate 20000)"
+        },
+        "terralith:volcanic_peaks": {
+          "multiplier": 1.5,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0.533,
+          "result_pct": 0.7,
+          "note": "aimed for 0.8%, got 0.7% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+        },
+        "terralith:warm_river": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 8,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:warped_mesa": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.1,
+          "result_pct": 0.1
+        },
+        "terralith:white_cliffs": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0
+        },
+        "terralith:white_mesa": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 5,
+          "layer": "surface",
+          "share_pct": 0.067,
+          "result_pct": 0.067
+        },
+        "terralith:windswept_spires": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 4,
+          "layer": "surface",
+          "share_pct": 0.267,
+          "result_pct": 0.267
+        },
+        "terralith:wintry_forest": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 49,
+          "layer": "surface",
+          "share_pct": 0.7,
+          "result_pct": 0.7
+        },
+        "terralith:wintry_lowlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 6,
+          "layer": "surface",
+          "share_pct": 0.167,
+          "result_pct": 0.167
+        },
+        "terralith:yellowstone": {
+          "multiplier": 1.5,
+          "replace_with": null,
+          "entries": 6,
+          "layer": "surface",
+          "share_pct": 2.733,
+          "result_pct": 4.067
+        },
+        "terralith:yosemite_cliffs": {
+          "multiplier": 1.5,
+          "replace_with": null,
+          "entries": 2,
+          "layer": "surface",
+          "share_pct": 0.033,
+          "result_pct": 0.067
+        },
+        "terralith:yosemite_lowlands": {
+          "multiplier": 1.5,
+          "replace_with": null,
+          "entries": 3,
+          "layer": "surface",
+          "share_pct": 0,
+          "result_pct": 0,
+          "note": "never hit in the sample set -- a multiplier has nothing to scale; dump more columns (/dumpclimate 20000)"
+        }
+      }
+    },
+    "minecraft:the_end": {
+      "source": "Nullscape_1.19.3_v1.2.2.jar",
+      "baseline": "biome_baselines/minecraft__the_end.json",
+      "biome_count": 6,
+      "entry_count": 7,
+      "samples": {
+        "file": "../../exported/worldgen/climate/minecraft__the_end.json",
+        "points": 7315,
+        "seed": "7992144288592822000",
+        "generated": "2026-09-27T17:18:01.969Z",
+        "layer_points": {
+          "surface": 3000,
+          "underground": 4315
+        }
+      },
+      "model_agreement_pct": 81.244,
+      "biomes": {
+        "minecraft:end_highlands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 62.063,
+          "result_pct": 76.686
+        },
+        "minecraft:small_end_islands": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 11.067,
+          "result_pct": 11.067
+        },
+        "minecraft:the_end": {
+          "multiplier": 1,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 0.4,
+          "result_pct": 0.4
+        },
+        "nullscape:crystal_peaks": {
+          "multiplier": 0.25,
+          "replace_with": null,
+          "entries": 2,
+          "layer": "underground",
+          "share_pct": 7.254,
+          "result_pct": 3.592,
+          "note": "aimed for 1.808%, got 3.592% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+        },
+        "nullscape:shadowlands": {
+          "multiplier": 0.5,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 22.781,
+          "result_pct": 12.885,
+          "note": "aimed for 11.402%, got 12.885% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+        },
+        "nullscape:void_barrens": {
+          "multiplier": 0.75,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "underground",
+          "share_pct": 4.844,
+          "result_pct": 3.778
+        }
+      }
+    },
+    "minecraft:the_nether": {
+      "source": "vanilla_preset:minecraft:nether",
+      "baseline": "biome_baselines/minecraft__the_nether.json",
+      "biome_count": 5,
+      "entry_count": 5,
+      "samples": {
+        "file": "../../exported/worldgen/climate/minecraft__the_nether.json",
+        "points": 15000,
+        "seed": "7992144288592822000",
+        "generated": "2026-09-27T17:17:30.401Z",
+        "layer_points": {
+          "surface": 15000,
+          "underground": 0
+        }
+      },
+      "model_agreement_pct": 100,
+      "biomes": {
+        "minecraft:basalt_deltas": {
+          "multiplier": 0.666,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 16.7,
+          "result_pct": 11.133
+        },
+        "minecraft:crimson_forest": {
+          "multiplier": 0.75,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 22.267,
+          "result_pct": 16.7
+        },
+        "minecraft:nether_wastes": {
+          "multiplier": 2,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 36.567,
+          "result_pct": 48.067,
+          "note": "aimed for 73.133%, got 48.067% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+        },
+        "minecraft:soul_sand_valley": {
+          "multiplier": 1.25,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 16.667,
+          "result_pct": 18.233,
+          "note": "aimed for 20.833%, got 18.233% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+        },
+        "minecraft:warped_forest": {
+          "multiplier": 0.75,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 7.8,
+          "result_pct": 5.867
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,2163 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "terrain"
+	group: "16C7EF1E80339E63"
+	icon: "minecraft:gravel"
+	id: "01F6CD3020B02A91"
+	order_index: 3
+	quest_links: [ ]
+	quests: [
+		{
+			dependencies: [
+				"25C838D85EFC7966"
+				"640F341DD439637B"
+			]
+			id: "59822C2407FEE503"
+			shape: "pentagon"
+			tasks: [{
+				id: "6FEAC040C4134787"
+				item: "minecraft:cobblestone"
+				type: "item"
+			}]
+			x: -12.5d
+			y: -4.5d
+		}
+		{
+			dependencies: [
+				"22AFDBDD22152ADD"
+				"25C838D85EFC7966"
+				"640F341DD439637B"
+			]
+			id: "0D421F9A79FDFF49"
+			shape: "pentagon"
+			tasks: [{
+				id: "0C3C15E5230A16BF"
+				item: "minecraft:stone"
+				type: "item"
+			}]
+			x: -12.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["59822C2407FEE503"]
+			id: "22AFDBDD22152ADD"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "783EFD94156305D3"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+				{
+					id: "6A79989F7083E0FA"
+					item: "clayworks:kiln"
+					type: "item"
+				}
+				{
+					id: "5EC93D53A5C27AB8"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "227C663593570D8B"
+					item: "create:encased_fan"
+					type: "item"
+				}
+			]
+			title: "Smeltling"
+			x: -12.5d
+			y: -3.0d
+		}
+		{
+			dependencies: [
+				"5BBC67759B2B223C"
+				"0E1BAF1B0D560151"
+			]
+			id: "25C838D85EFC7966"
+			shape: "rsquare"
+			subtitle: "Bulk Processing at Higher Heats"
+			tasks: [
+				{
+					id: "7E1DA7E716A0BD4B"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "349852098BAA8FA2"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "56760FF3CCBE5C72"
+					item: "create:blaze_burner"
+					type: "item"
+				}
+				{
+					id: "678A9EF819CE772B"
+					item: "create:blaze_cake"
+					type: "item"
+				}
+			]
+			title: "Mixing"
+			x: -15.5d
+			y: -4.5d
+		}
+		{
+			dependencies: [
+				"5BBC67759B2B223C"
+				"0E1BAF1B0D560151"
+			]
+			id: "640F341DD439637B"
+			shape: "rsquare"
+			tasks: [{
+				id: "531C970CA42C4CC0"
+				item: "create_mechanical_extruder:mechanical_extruder"
+				type: "item"
+			}]
+			x: -15.5d
+			y: -1.5d
+		}
+		{
+			id: "5BBC67759B2B223C"
+			shape: "octagon"
+			size: 0.75d
+			tasks: [{
+				id: "5EDCCF142BFC7DBD"
+				item: "minecraft:water_bucket"
+				type: "item"
+			}]
+			title: "Water"
+			x: -15.0d
+			y: -3.0d
+		}
+		{
+			id: "0E1BAF1B0D560151"
+			shape: "octagon"
+			size: 0.75d
+			tasks: [{
+				id: "4609B444862FD510"
+				item: "minecraft:lava_bucket"
+				type: "item"
+			}]
+			title: "Lava"
+			x: -16.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["2F1BCE7057D40A29"]
+			id: "486DF6A37FD9F6E7"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "2CB348C8007E341D"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "7FBD6950D1B82E6E"
+					item: "create:millstone"
+					type: "item"
+				}
+				{
+					id: "166EEC5C2DE9D87C"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing or Milling"
+			x: -8.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["59822C2407FEE503"]
+			id: "11AB85B67F16CB01"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "29C639664047ACF3"
+					item: "create:mechanical_press"
+					type: "item"
+				}
+				{
+					id: "05B24783464EB294"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "31B5030E48DC46CC"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Pressing"
+			x: -12.5d
+			y: -9.0d
+		}
+		{
+			dependencies: [
+				"11AB85B67F16CB01"
+				"4E6F2C9BC36E53B0"
+				"51D1BBF2EFDB515B"
+			]
+			id: "608E16F6D0F818D3"
+			shape: "pentagon"
+			tasks: [{
+				id: "16059DAD571B92A4"
+				item: "minecraft:tuff"
+				type: "item"
+			}]
+			x: -12.5d
+			y: -10.5d
+		}
+		{
+			dependencies: ["59822C2407FEE503"]
+			id: "455F384E333E4534"
+			shape: "rsquare"
+			subtitle: "Higher Efficiencies with More Lava and Higher Heat"
+			tasks: [
+				{
+					id: "0004C8A0A6478084"
+					item: "create:mechanical_press"
+					type: "item"
+				}
+				{
+					id: "554F5C0DF529F5CA"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "6485AE1C6FFA8885"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+			]
+			title: "Pressing"
+			x: -15.5d
+			y: -6.0d
+		}
+		{
+			dependencies: ["455F384E333E4534"]
+			hide: false
+			id: "44FB238ACC0E089E"
+			shape: "pentagon"
+			tasks: [{
+				id: "47659845AC39D6EC"
+				item: "minecraft:deepslate"
+				type: "item"
+			}]
+			x: -15.5d
+			y: -9.0d
+		}
+		{
+			id: "7B917DE80EA8B72D"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "506E9710E4E66B52"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "46D304657D8080F7"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "5D2D2BA0A599E341"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "231BAA2F57762709"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Mixing"
+			x: -3.5d
+			y: -1.5d
+		}
+		{
+			dependencies: [
+				"7B917DE80EA8B72D"
+				"221C3D65046CC15B"
+			]
+			id: "7927F36CFE2A9B2B"
+			shape: "pentagon"
+			tasks: [{
+				id: "12CD4563F6085CB3"
+				item: "minecraft:obsidian"
+				type: "item"
+			}]
+			x: -2.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["2F1BCE7057D40A29"]
+			id: "365E159214350F68"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "5800C8E1884913E7"
+					item: "minecraft:soul_campfire"
+					type: "item"
+				}
+				{
+					id: "7F4C442CDA131A77"
+					item: "create:encased_fan"
+					type: "item"
+				}
+			]
+			title: "Haunting"
+			x: -6.5d
+			y: -4.5d
+		}
+		{
+			dependencies: ["486DF6A37FD9F6E7"]
+			id: "5B2CB20B2E0F56A3"
+			shape: "pentagon"
+			tasks: [{
+				id: "53C0EC82928D226C"
+				item: "minecraft:gravel"
+				type: "item"
+			}]
+			x: -8.0d
+			y: -7.5d
+		}
+		{
+			dependencies: [
+				"365E159214350F68"
+				"68A761E8118DD982"
+			]
+			id: "32380EBCE31EA2C5"
+			shape: "pentagon"
+			tasks: [{
+				id: "3D91DDBE6ED4CFC4"
+				item: "minecraft:blackstone"
+				type: "item"
+			}]
+			x: -3.5d
+			y: -4.5d
+		}
+		{
+			dependencies: ["608E16F6D0F818D3"]
+			id: "46A4ED343AE985A1"
+			shape: "rsquare"
+			tasks: [{
+				id: "55860FFEA590EC8B"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			x: -14.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["46A4ED343AE985A1"]
+			id: "40845AA0DF2575F8"
+			shape: "gear"
+			tasks: [
+				{
+					id: "51BB3AF4E7672A67"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+				{
+					id: "325A390B69966CC2"
+					item: "immersiveengineering:nugget_copper"
+					type: "item"
+				}
+				{
+					id: "4319784DC043BC72"
+					item: "minecraft:gold_nugget"
+					type: "item"
+				}
+				{
+					id: "632F2013A05B0F78"
+					item: "create:zinc_nugget"
+					type: "item"
+				}
+				{
+					id: "33EF360292ED278E"
+					item: "immersiveengineering:nugget_electrum"
+					type: "item"
+				}
+				{
+					id: "194538250E13344C"
+					item: "minecraft:flint"
+					type: "item"
+				}
+			]
+			title: "Nuggets and Flint"
+			x: -14.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["59822C2407FEE503"]
+			id: "74C0FDCE8BBEE843"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "1A9BDCCE5E553F5B"
+					item: "botania:mana_pool"
+					type: "item"
+				}
+				{
+					id: "52FB16428A9B8779"
+					item: "botania:alchemy_catalyst"
+					type: "item"
+				}
+			]
+			title: "Mana Infusion"
+			x: -11.0d
+			y: -9.0d
+		}
+		{
+			dependencies: [
+				"74C0FDCE8BBEE843"
+				"39036F3A33BCF023"
+			]
+			id: "7ADAA19E0AB90B2E"
+			shape: "pentagon"
+			tasks: [{
+				id: "1F4D467E8029C75A"
+				item: "minecraft:sand"
+				type: "item"
+			}]
+			x: -9.5d
+			y: -10.5d
+		}
+		{
+			dependencies: ["608E16F6D0F818D3"]
+			id: "77C293472A4C5FDF"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "31E4FE93CFED88EA"
+					item: "botania:mana_pool"
+					type: "item"
+				}
+				{
+					id: "6F41F505EF845B0F"
+					item: "botania:alchemy_catalyst"
+					type: "item"
+				}
+			]
+			title: "Mana Infusion"
+			x: -8.0d
+			y: -12.0d
+		}
+		{
+			dependencies: [
+				"77C293472A4C5FDF"
+				"4DC90B95C1E97351"
+			]
+			id: "7E9C0879223D3DC2"
+			shape: "pentagon"
+			tasks: [{
+				id: "34E5AA7624DD9DDB"
+				item: "minecraft:calcite"
+				type: "item"
+			}]
+			x: -5.0d
+			y: -13.5d
+		}
+		{
+			dependencies: ["5B2CB20B2E0F56A3"]
+			id: "4DC90B95C1E97351"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "67EA71644301A4B3"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "1688C4545C292329"
+					item: "minecraft:bone_meal"
+					type: "item"
+				}
+				{
+					id: "67486525DA5821AF"
+					item: "create:mechanical_press"
+					type: "item"
+				}
+			]
+			title: "Pressing + Bonemeal"
+			x: -5.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["44FB238ACC0E089E"]
+			id: "4E6F2C9BC36E53B0"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "165B4952D6DB1F57"
+					item: "botania:mana_pool"
+					type: "item"
+				}
+				{
+					id: "0F4D6DD2F46BCB57"
+					item: "botania:alchemy_catalyst"
+					type: "item"
+				}
+			]
+			title: "Mana Infusion"
+			x: -15.5d
+			y: -10.5d
+		}
+		{
+			dependencies: ["2F1BCE7057D40A29"]
+			id: "3CCF710289B2000F"
+			shape: "rsquare"
+			subtitle: "Netherrack Positive Process Loop, Requires Initial Netherrack"
+			tasks: [
+				{
+					id: "33219A03AC2B59A5"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "401BEF8C3E0D1637"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "377520D175767849"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+			]
+			title: "Mixing"
+			x: -8.0d
+			y: 0.0d
+		}
+		{
+			dependencies: [
+				"3CCF710289B2000F"
+				"15FEF23BC8D97DBE"
+				"5502A28D8DBE84A6"
+			]
+			id: "74328E673ED3E778"
+			shape: "pentagon"
+			tasks: [{
+				id: "1AC8AA0B2DCB083F"
+				item: "minecraft:netherrack"
+				type: "item"
+			}]
+			x: -6.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["43DD3DB1016CE8B0"]
+			id: "64EC2DDC64890AED"
+			shape: "pentagon"
+			tasks: [{
+				id: "5B835E632B8F539C"
+				item: "create:cinder_flour"
+				type: "item"
+			}]
+			x: -9.5d
+			y: 0.0d
+		}
+		{
+			dependencies: ["74328E673ED3E778"]
+			id: "43DD3DB1016CE8B0"
+			shape: "rsquare"
+			subtitle: "Better yield with IE crusher"
+			tasks: [
+				{
+					id: "7976BB6E6B5AB677"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "14A54731E509DF98"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "CR or IE Crushing"
+			x: -9.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["64EC2DDC64890AED"]
+			id: "20AAE9B2CA89323B"
+			size: 0.1d
+			tasks: [{
+				id: "49F68DA9CDE0D604"
+				type: "custom"
+			}]
+			title: "Connector1"
+			x: -8.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["59822C2407FEE503"]
+			id: "2F1BCE7057D40A29"
+			shape: "pentagon"
+			tasks: [
+				{
+					id: "44E7ABE50BAE691D"
+					item: "minecraft:cobbled_deepslate"
+					type: "item"
+				}
+				{
+					id: "764ED20B2031C1E9"
+					item: "minecraft:cobblestone"
+					type: "item"
+				}
+				{
+					id: "6290F853609AE5CA"
+					item: "minecraft:mossy_cobblestone"
+					type: "item"
+				}
+			]
+			title: "Any Cobble"
+			x: -8.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["0D421F9A79FDFF49"]
+			hide: false
+			id: "10D4AAB153A46B22"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "36F83FA35F3BFD36"
+					item: "botania:mana_pool"
+					type: "item"
+				}
+				{
+					id: "641EB5812046C903"
+					item: "botania:alchemy_catalyst"
+					type: "item"
+				}
+			]
+			title: "Mana Infusion"
+			x: -11.0d
+			y: -6.0d
+		}
+		{
+			dependencies: [
+				"10D4AAB153A46B22"
+				"013607B90BCA958C"
+				"42704E315F7ADBB1"
+			]
+			id: "2EEC76A6C8980661"
+			shape: "pentagon"
+			tasks: [{
+				id: "3A470765B66FBEDA"
+				item: "minecraft:andesite"
+				type: "item"
+			}]
+			x: -11.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["7E9C0879223D3DC2"]
+			id: "20A630957B9A14B3"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "7D4B45B46AAF97E3"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "6ADE249259044D7A"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "2160EE3982EAEBB5"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Mixing w/ water"
+			x: -3.5d
+			y: -13.5d
+		}
+		{
+			dependencies: [
+				"7E9C0879223D3DC2"
+				"129A0107C8AB3CBF"
+			]
+			id: "1408C19DA39D71DF"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "4C9A31EE89DC18EC"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "202785E6CFE6AA95"
+					item: "minecraft:bone_meal"
+					type: "item"
+				}
+				{
+					id: "28A5EE03E23CBEFD"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "757618C65275CC61"
+					item: "create:blaze_burner"
+					type: "item"
+				}
+			]
+			title: "Heated Mixing w/ Bonemeal + Clay"
+			x: -5.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["20A630957B9A14B3"]
+			id: "4EF4E22D432404A8"
+			shape: "pentagon"
+			tasks: [{
+				id: "23CA768EAC3C56F6"
+				item: "minecraft:dripstone_block"
+				type: "item"
+			}]
+			x: -3.5d
+			y: -15.0d
+		}
+		{
+			dependencies: ["1408C19DA39D71DF"]
+			hide: false
+			id: "2477D6DBB2F3520D"
+			shape: "pentagon"
+			tasks: [{
+				id: "77065731918828B8"
+				item: "create:limestone"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -15.0d
+		}
+		{
+			dependencies: ["2477D6DBB2F3520D"]
+			id: "5B414B3AC3923127"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "2E10371AB976DD19"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "3B26B1F1BEBC16DD"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing"
+			x: -6.5d
+			y: -13.5d
+		}
+		{
+			dependencies: ["5B414B3AC3923127"]
+			id: "35541CC702B5DC73"
+			shape: "gear"
+			subtitle: "No Lapis Byproduct w/ IE Crusher"
+			tasks: [
+				{
+					id: "66C26B29FF3AF40A"
+					item: "minecraft:quartz"
+					type: "item"
+				}
+				{
+					id: "791933F885A87C72"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+			]
+			title: "Quartz + Lapis"
+			x: -8.0d
+			y: -13.5d
+		}
+		{
+			dependencies: ["4BF91D9552037F2C"]
+			hide: true
+			id: "6C41EABE11942365"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "456EBF224319F9F5"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "5AFDC640F1CB5E7F"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "61F51DF93E57389D"
+					item: "create:honey_bucket"
+					type: "item"
+				}
+				{
+					id: "05156E235B3DBF45"
+					item: "create:honey_bucket"
+					type: "item"
+				}
+			]
+			title: "Mixing Honey w/ Lava"
+			x: -8.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["6C41EABE11942365"]
+			id: "079E97D85B4AD995"
+			size: 0.1d
+			tasks: [{
+				id: "55B0E6D6506D85B2"
+				item: "minecraft:glass"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -14.95d
+		}
+		{
+			dependencies: ["4EF4E22D432404A8"]
+			id: "64EE5AEE78D41EAB"
+			shape: "rsquare"
+			subtitle: "Higher Yield w/ IE Crusher"
+			tasks: [
+				{
+					id: "1A26B83ECEE7DB5A"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "7154B6252EBAB794"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing"
+			x: -3.5d
+			y: -16.5d
+		}
+		{
+			dependencies: [
+				"64EE5AEE78D41EAB"
+				"348D48D878AB093D"
+			]
+			id: "129A0107C8AB3CBF"
+			shape: "pentagon"
+			tasks: [{
+				id: "1C001179499834B4"
+				item: "minecraft:clay_ball"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -16.5d
+		}
+		{
+			dependencies: ["7E9C0879223D3DC2"]
+			id: "7F02EA753EF16C50"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "239F77295067CC62"
+					item: "minecraft:flint"
+					type: "item"
+				}
+				{
+					id: "175DFA13EC69292C"
+					item: "create:mechanical_press"
+					type: "item"
+				}
+				{
+					id: "2A42F76ADB836E4D"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+			]
+			title: "Compacting w/ Flint + Lava"
+			x: -6.5d
+			y: -9.0d
+		}
+		{
+			dependencies: ["7F02EA753EF16C50"]
+			id: "446370CDB1509054"
+			shape: "pentagon"
+			tasks: [{
+				id: "2B50EB34BAD7692E"
+				item: "minecraft:diorite"
+				type: "item"
+			}]
+			x: -8.0d
+			y: -10.5d
+		}
+		{
+			dependencies: ["32380EBCE31EA2C5"]
+			id: "162F58F43AFA9F39"
+			shape: "rsquare"
+			tasks: [{
+				id: "786367145A13B35C"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "CR Crushing"
+			x: -2.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["32380EBCE31EA2C5"]
+			id: "2BFB18FF2AC7822B"
+			shape: "rsquare"
+			tasks: [{
+				id: "6BB8366C0B40D625"
+				item: "create:millstone"
+				type: "item"
+			}]
+			title: "Milling"
+			x: -2.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["32380EBCE31EA2C5"]
+			id: "21BAA59DCDC88411"
+			shape: "rsquare"
+			tasks: [{
+				id: "36976703948DD32B"
+				item: {
+					Count: 1b
+					id: "immersiveengineering:grindingdisk"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "IE Crushing"
+			x: -2.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["32380EBCE31EA2C5"]
+			id: "2329A697C6B3FFFD"
+			shape: "rsquare"
+			tasks: [{
+				id: "0C606555E19C9501"
+				item: "create:spout"
+				type: "item"
+			}]
+			title: "Filling w/ Lava"
+			x: -3.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["2BFB18FF2AC7822B"]
+			id: "15FCBB4AB09D78F7"
+			shape: "gear"
+			subtitle: "Very Low Chance"
+			tasks: [{
+				id: "6FEE3D5E353657B2"
+				item: "minecraft:wither_skeleton_skull"
+				type: "item"
+			}]
+			x: -0.5d
+			y: -4.5d
+		}
+		{
+			dependencies: [
+				"21BAA59DCDC88411"
+				"162F58F43AFA9F39"
+			]
+			id: "4D1F824E61B8A8BC"
+			shape: "gear"
+			tasks: [{
+				id: "0A2AF15F3AB632D6"
+				item: "minecraft:coal"
+				type: "item"
+			}]
+			x: -0.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["162F58F43AFA9F39"]
+			id: "4D32A3628BB2222E"
+			shape: "gear"
+			tasks: [{
+				id: "095C3FEE84ADAE00"
+				item: "create_netherless:netherite_fragment"
+				type: "item"
+			}]
+			x: -0.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["7927F36CFE2A9B2B"]
+			id: "5454D0BD05C1C711"
+			shape: "rsquare"
+			subtitle: "Higher Output but Lower Recovery Chance on IE Crusher"
+			tasks: [
+				{
+					id: "2ED4DB9DFB2017DA"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "4CCB8F17B23E9F5E"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing"
+			x: -0.5d
+			y: 0.0d
+		}
+		{
+			dependencies: ["5454D0BD05C1C711"]
+			id: "30A91276E7F0FECD"
+			size: 0.1d
+			title: "Marker 4"
+			x: -2.0d
+			y: 0.3d
+		}
+		{
+			dependencies: [
+				"5454D0BD05C1C711"
+				"6BF83AE500380F80"
+			]
+			id: "6E2D34005E12B32F"
+			shape: "pentagon"
+			tasks: [{
+				id: "6331CEB057811861"
+				item: "create:powdered_obsidian"
+				type: "item"
+			}]
+			x: 1.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["2329A697C6B3FFFD"]
+			id: "11527E4A8A0CA6BD"
+			shape: "pentagon"
+			tasks: [{
+				id: "5F23B58CA34899EC"
+				item: "minecraft:magma_block"
+				type: "item"
+			}]
+			x: -5.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["11527E4A8A0CA6BD"]
+			id: "15FEF23BC8D97DBE"
+			shape: "rsquare"
+			tasks: [{
+				id: "4F6F0D8BE08FD7CB"
+				item: "create:spout"
+				type: "item"
+			}]
+			title: "Filling w/ Water"
+			x: -5.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["11527E4A8A0CA6BD"]
+			id: "221C3D65046CC15B"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "48FFB727C4132220"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "55DD40AAD02D41BA"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Washing"
+			x: -3.5d
+			y: 0.0d
+		}
+		{
+			dependencies: ["2F1BCE7057D40A29"]
+			id: "0DFF041BAD89A5B8"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "66112C4A9B99C559"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "2A62284A04782042"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "723B2222B9741ECB"
+					item: "create:blaze_burner"
+					type: "item"
+				}
+				{
+					id: "333A386586D647B4"
+					item: "create:blaze_cake"
+					type: "item"
+				}
+			]
+			title: "Superheating"
+			x: -9.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["0DFF041BAD89A5B8"]
+			id: "60CD702DBCBE8375"
+			ignore_reward_blocking: true
+			shape: "gear"
+			tasks: [{
+				id: "2EB572CBE7ABC799"
+				item: "minecraft:lava_bucket"
+				type: "item"
+			}]
+			title: "Lava"
+			x: -9.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["5B2CB20B2E0F56A3"]
+			id: "6B9A2EDDB9C3217E"
+			shape: "rsquare"
+			subtitle: "Gravel conjuring"
+			tasks: [
+				{
+					id: "4E950BD4D1ADA841"
+					item: "botania:mana_pool"
+					type: "item"
+				}
+				{
+					id: "61C2B88FC2636022"
+					item: "botania:conjuration_catalyst"
+					type: "item"
+				}
+			]
+			title: "Mana Infusion"
+			x: -6.5d
+			y: -6.0d
+		}
+		{
+			dependencies: ["6B9A2EDDB9C3217E"]
+			id: "108816D708067787"
+			size: 0.1d
+			x: -7.85d
+			y: -7.2d
+		}
+		{
+			dependencies: ["5B2CB20B2E0F56A3"]
+			id: "78F99EDF71E1DDE1"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "2E72F8228ED0B119"
+					item: "create:mechanical_press"
+					type: "item"
+				}
+				{
+					id: "10B7A6B8B84F180A"
+					item: "create:zinc_nugget"
+					type: "item"
+				}
+				{
+					id: "1B11F7CC4DBBBC63"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+				{
+					id: "665FC08B458AB1C3"
+					item: "minecraft:gold_nugget"
+					type: "item"
+				}
+				{
+					id: "2A70CE14D73A3AE1"
+					item: "immersiveengineering:nugget_copper"
+					type: "item"
+				}
+				{
+					id: "633D876E5ABE2160"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "4D81AF564F50EE5C"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Resource Stone Pressing"
+			x: -5.0d
+			y: -7.5d
+		}
+		{
+			dependencies: ["78F99EDF71E1DDE1"]
+			id: "3F827B8423EA55E0"
+			shape: "gear"
+			tasks: [
+				{
+					id: "0B1382AA672199F1"
+					item: "create:asurine"
+					type: "item"
+				}
+				{
+					id: "75D0B041096A3E00"
+					item: "create:crimsite"
+					type: "item"
+				}
+				{
+					id: "13D141F442FF128C"
+					item: "create:ochrum"
+					type: "item"
+				}
+				{
+					id: "6AB40BAA613601CB"
+					item: "create:veridium"
+					type: "item"
+				}
+			]
+			title: "Resource Stones"
+			x: -3.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["5B2CB20B2E0F56A3"]
+			id: "39036F3A33BCF023"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "1FA09D51BF5C0001"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "2673F82A1EAB1585"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing"
+			x: -8.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["5B2CB20B2E0F56A3"]
+			id: "14208FA845015FD9"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "79B45128BCD19AB2"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "028E3EBFA53FF125"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Washing"
+			x: -5.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["14208FA845015FD9"]
+			id: "4250B457977B5CCA"
+			shape: "gear"
+			tasks: [
+				{
+					id: "756275921D3AB9AB"
+					item: "minecraft:iron_nugget"
+					type: "item"
+				}
+				{
+					id: "47DB735CAB812655"
+					item: "minecraft:flint"
+					type: "item"
+				}
+			]
+			title: "Iron Nugget and Flint"
+			x: -3.5d
+			y: -6.0d
+		}
+		{
+			dependencies: ["446370CDB1509054"]
+			id: "42704E315F7ADBB1"
+			shape: "rsquare"
+			subtitle: "Better Efficiency at Higher Heat"
+			tasks: [
+				{
+					id: "4A3848217FF16D17"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "0FE5D9623E4AFBC2"
+					item: "minecraft:cobblestone"
+					type: "item"
+				}
+			]
+			title: "Mixing"
+			x: -9.5d
+			y: -9.0d
+		}
+		{
+			dependencies: ["5B2CB20B2E0F56A3"]
+			id: "013607B90BCA958C"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "13354DE4BC0D2259"
+					item: "create:mechanical_press"
+					type: "item"
+				}
+				{
+					id: "0D40E1A8D1F06DB9"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "1FD5EBE275A35823"
+					item: "minecraft:flint"
+					type: "item"
+				}
+			]
+			title: "Pressing Lava + Flint"
+			x: -9.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["7927F36CFE2A9B2B"]
+			id: "4E6ADBAC9051F8FA"
+			shape: "rsquare"
+			tasks: [{
+				id: "3AF35A532359B929"
+				item: "create:encased_fan"
+				type: "item"
+			}]
+			title: "Haunting"
+			x: -2.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["4E6ADBAC9051F8FA"]
+			id: "27CD91E14FBA8981"
+			shape: "pentagon"
+			tasks: [{
+				id: "5A15F58AD352D86C"
+				item: "minecraft:crying_obsidian"
+				type: "item"
+			}]
+			x: -0.5d
+			y: 1.5d
+		}
+		{
+			dependencies: ["27CD91E14FBA8981"]
+			id: "6BF83AE500380F80"
+			shape: "rsquare"
+			subtitle: "More output + byproduct w/ IE Crushing"
+			tasks: [{
+				id: "06E3163617E22AAB"
+				item: "create:crushing_wheel"
+				type: "item"
+			}]
+			title: "IE/CR Crushing"
+			x: 1.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["6BF83AE500380F80"]
+			id: "5D4587CC3BF6E76D"
+			shape: "gear"
+			tasks: [{
+				id: "62365B807A597B2A"
+				item: "minecraft:amethyst_shard"
+				type: "item"
+			}]
+			x: 2.5d
+			y: 1.5d
+		}
+		{
+			id: "51D1BBF2EFDB515B"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "3F3671486C2718A8"
+					item: "create:basin"
+					type: "item"
+				}
+				{
+					id: "5D948636AF263E4C"
+					item: "create:mechanical_press"
+					type: "item"
+				}
+				{
+					id: "168E32D03344606B"
+					item: "supplementaries:ash"
+					type: "item"
+				}
+			]
+			title: "Ash Compacting"
+			x: -15.5d
+			y: -12.0d
+		}
+		{
+			dependencies: ["129A0107C8AB3CBF"]
+			id: "3A60C1A8B90EAFF1"
+			shape: "pentagon"
+			tasks: [{
+				id: "3A39F8110DE73512"
+				item: "minecraft:clay"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -18.0d
+		}
+		{
+			dependencies: ["3A60C1A8B90EAFF1"]
+			id: "51095345CCAF8174"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "34059557F19EC429"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+				{
+					id: "4DDB9C68C58162BE"
+					item: "clayworks:kiln"
+					type: "item"
+				}
+				{
+					id: "5380F89BB4836A95"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "311E5686D22937EE"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+			]
+			title: "Smelting"
+			x: -8.0d
+			y: -18.0d
+		}
+		{
+			dependencies: ["51095345CCAF8174"]
+			id: "414B8DEA5B4947C9"
+			shape: "pentagon"
+			tasks: [{
+				id: "6A6327B57F70F5E6"
+				item: "minecraft:terracotta"
+				type: "item"
+			}]
+			x: -9.5d
+			y: -18.0d
+		}
+		{
+			dependencies: ["414B8DEA5B4947C9"]
+			id: "12AB8324F9D30BF2"
+			shape: "rsquare"
+			subtitle: "Increased Yield w/ IE Crusher"
+			tasks: [
+				{
+					id: "7781728F71567A7D"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "667533E40CB8669A"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing"
+			x: -9.5d
+			y: -16.5d
+		}
+		{
+			dependencies: ["12AB8324F9D30BF2"]
+			id: "0C2E30F599B247E5"
+			shape: "pentagon"
+			tasks: [{
+				id: "3B751D7A34AC03CB"
+				item: "minecraft:red_sand"
+				type: "item"
+			}]
+			x: -9.5d
+			y: -15.0d
+		}
+		{
+			dependencies: [
+				"0C2E30F599B247E5"
+				"7ADAA19E0AB90B2E"
+			]
+			id: "06D3B0EDDB2B84E4"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "7D48D790E2BC6CFE"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "6E1D8C6F87D8BBF3"
+					item: "minecraft:soul_campfire"
+					type: "item"
+				}
+			]
+			title: "Haunting"
+			x: -9.5d
+			y: -13.5d
+		}
+		{
+			dependencies: ["06D3B0EDDB2B84E4"]
+			id: "70AFA9C09CBFCA76"
+			shape: "rsquare"
+			tasks: [{
+				id: "3CB1D641900C4252"
+				item: "minecraft:soul_sand"
+				type: "item"
+			}]
+			x: -11.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["70AFA9C09CBFCA76"]
+			id: "709C25762695CB79"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "125ACB5760E66365"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "57E33912DA2A8DC6"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Washing"
+			x: -11.0d
+			y: -13.5d
+		}
+		{
+			dependencies: ["709C25762695CB79"]
+			id: "4B5BCEB5E3197E53"
+			shape: "gear"
+			tasks: [
+				{
+					id: "363DB61069CA061E"
+					item: "minecraft:quartz"
+					type: "item"
+				}
+				{
+					id: "798312C298716EC5"
+					item: "minecraft:gold_nugget"
+					type: "item"
+				}
+			]
+			title: "Quartz + Gold Nugget"
+			x: -11.0d
+			y: -12.0d
+		}
+		{
+			dependencies: ["70AFA9C09CBFCA76"]
+			id: "081E72AE19638DC1"
+			shape: "rsquare"
+			subtitle: "Soul Sand Conjuring"
+			tasks: [
+				{
+					id: "62349B6B92F4FEC4"
+					item: "botania:mana_pool"
+					type: "item"
+				}
+				{
+					id: "12E1B8D965ECA9A2"
+					item: "botania:conjuration_catalyst"
+					type: "item"
+				}
+			]
+			x: -12.5d
+			y: -15.0d
+		}
+		{
+			dependencies: ["081E72AE19638DC1"]
+			id: "2567BC22929A1A91"
+			size: 0.1d
+			x: -11.3d
+			y: -14.85d
+		}
+		{
+			dependencies: ["70AFA9C09CBFCA76"]
+			id: "0ABE2D14F3F4A091"
+			shape: "rsquare"
+			tasks: [{
+				id: "3A2005F1597FB59B"
+				item: "minecraft:furnace"
+				type: "item"
+			}]
+			title: "Smelting"
+			x: -12.5d
+			y: -13.5d
+		}
+		{
+			dependencies: ["7ADAA19E0AB90B2E"]
+			id: "348D48D878AB093D"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "152D97E1D9578A6D"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "4F8F2296F58998A5"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+			]
+			title: "Washing"
+			x: -8.0d
+			y: -16.5d
+		}
+		{
+			dependencies: ["70AFA9C09CBFCA76"]
+			id: "2ACBBB74152088EA"
+			shape: "rsquare"
+			subtitle: "Better yield when compacted to soul sandstone + IE crusher"
+			tasks: [
+				{
+					id: "352779792577CEE7"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "16DAE87525EB677F"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing"
+			x: -12.5d
+			y: -12.0d
+		}
+		{
+			dependencies: ["2ACBBB74152088EA"]
+			id: "553C9FAF51244F31"
+			shape: "gear"
+			tasks: [{
+				id: "75A98F7EB05533CC"
+				item: "minecraft:glowstone_dust"
+				type: "item"
+			}]
+			x: -14.0d
+			y: -12.0d
+		}
+		{
+			dependencies: ["0ABE2D14F3F4A091"]
+			id: "615ABB146A24AA6E"
+			shape: "pentagon"
+			tasks: [{
+				id: "5511E9CD95E3319B"
+				item: "create:scoria"
+				type: "item"
+			}]
+			x: -14.0d
+			y: -13.5d
+		}
+		{
+			dependencies: ["615ABB146A24AA6E"]
+			id: "41B9E5AE41490B82"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "69016FB6B0B3607E"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "30D41AD9B0E9530C"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing"
+			x: -14.0d
+			y: -15.0d
+		}
+		{
+			dependencies: ["4BF91D9552037F2C"]
+			hide: true
+			id: "2A3FA4FF271B7A5D"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "3896AA783F412163"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "4E14624AAFC344A0"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "6B15E9D43B0D0840"
+					item: "create:chocolate_bucket"
+					type: "item"
+				}
+				{
+					id: "4B45DEE9698498A5"
+					item: "create:chocolate_bucket"
+					type: "item"
+				}
+			]
+			title: "Mixing Chocolate w/ Lava"
+			x: -15.5d
+			y: -15.0d
+		}
+		{
+			dependencies: ["41B9E5AE41490B82"]
+			id: "1D9D84CEF431B55C"
+			shape: "gear"
+			subtitle: "Higher yield but no chance of byproduct w/ IE crusher"
+			tasks: [
+				{
+					id: "0328CC68F845D729"
+					item: "minecraft:blaze_powder"
+					type: "item"
+				}
+				{
+					id: "321ED808E5DF9706"
+					item: "minecraft:blaze_rod"
+					type: "item"
+				}
+			]
+			x: -14.0d
+			y: -16.5d
+		}
+		{
+			dependencies: ["2A3FA4FF271B7A5D"]
+			id: "5FD4A8A28FFDF58D"
+			size: 0.1d
+			x: -14.0d
+			y: -13.45d
+		}
+		{
+			dependencies: ["446370CDB1509054"]
+			id: "347FFE27211E1AA6"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "66051EBC54C30D51"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "65F354E47C2A38B7"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "CR/IE Crushing"
+			x: -6.5d
+			y: -10.5d
+		}
+		{
+			dependencies: ["347FFE27211E1AA6"]
+			id: "18BEE372549127DE"
+			shape: "gear"
+			subtitle: "Higher Yield w/ IE Crusher"
+			tasks: [{
+				id: "12EDC6D96C6F7F87"
+				item: "minecraft:quartz"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -12.0d
+		}
+		{
+			dependencies: ["407784AC4525BAB9"]
+			id: "68A761E8118DD982"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "5CBD4DF752161170"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					id: "5C07304FB48E4204"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+			]
+			title: "CR/IE Crusher"
+			x: -5.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["15A312C89FC3BFA1"]
+			id: "407784AC4525BAB9"
+			shape: "pentagon"
+			tasks: [{
+				id: "0381935D39BEDE79"
+				item: "minecraft:basalt"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["407784AC4525BAB9"]
+			id: "5502A28D8DBE84A6"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "6B14919846A0C6E8"
+					item: "minecraft:soul_campfire"
+					type: "item"
+				}
+				{
+					id: "79C06DC711023A12"
+					item: "create:encased_fan"
+					type: "item"
+				}
+			]
+			title: "Haunting"
+			x: -6.5d
+			y: 0.0d
+		}
+		{
+			id: "15A312C89FC3BFA1"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "03F125AC458707D1"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					id: "7AFEC3B898DF6227"
+					item: "create_mechanical_extruder:mechanical_extruder"
+					type: "item"
+				}
+				{
+					id: "58975EF1A7841D87"
+					item: "minecraft:lava_bucket"
+					type: "item"
+				}
+				{
+					id: "7078B970AA2F5E03"
+					item: "minecraft:blue_ice"
+					type: "item"
+				}
+				{
+					id: "7D575325DD3BA6E4"
+					item: "minecraft:soul_soil"
+					type: "item"
+				}
+			]
+			title: "Mixing or Extruding"
+			x: -6.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["68A761E8118DD982"]
+			id: "0B12BF88650FB32E"
+			shape: "rsquare"
+			subtitle: "Higher Yield w/ IE Crusher"
+			tasks: [
+				{
+					id: "62F8CCC0B78FB99D"
+					item: "immersiveengineering:nugget_silver"
+					type: "item"
+				}
+				{
+					id: "78BCAE55CC081D24"
+					item: "immersiveengineering:nugget_aluminum"
+					type: "item"
+				}
+				{
+					id: "1FEFF320A922FAC2"
+					item: "immersiveengineering:nugget_nickel"
+					type: "item"
+				}
+			]
+			title: "Aluminum, Silver, and Nickel Nuggets"
+			x: -5.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["74328E673ED3E778"]
+			id: "74F4FFD494298C3B"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "3E8F66E8D58A3EF0"
+					item: "clayworks:kiln"
+					type: "item"
+				}
+				{
+					id: "56333CB6AC4D37AC"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+			]
+			title: "Smelting"
+			x: -6.5d
+			y: 3.0d
+		}
+		{
+			dependencies: [
+				"74F4FFD494298C3B"
+				"4336225C77536E05"
+			]
+			id: "5A65E718869E935C"
+			shape: "pentagon"
+			tasks: [{
+				id: "3434323B1360D359"
+				item: "minecraft:nether_brick"
+				type: "item"
+			}]
+			x: -5.0d
+			y: 3.0d
+		}
+		{
+			dependencies: ["5A65E718869E935C"]
+			id: "7E42F7369A9B7AC3"
+			shape: "pentagon"
+			tasks: [{
+				id: "433F3429B3E7F510"
+				item: "minecraft:nether_bricks"
+				type: "item"
+			}]
+			x: -3.5d
+			y: 4.5d
+		}
+		{
+			dependencies: ["7E42F7369A9B7AC3"]
+			id: "71C572C50129BCBD"
+			shape: "rsquare"
+			subtitle: "Better Yield and Return Rate w/ IE Crusher"
+			tasks: [
+				{
+					id: "6BEA3B558238E204"
+					item: "create:crushing_wheel"
+					type: "item"
+				}
+				{
+					id: "690D3629293E4451"
+					item: {
+						Count: 1b
+						id: "immersiveengineering:grindingdisk"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "CR/IE Crusher"
+			x: -3.5d
+			y: 3.0d
+		}
+		{
+			dependencies: ["71C572C50129BCBD"]
+			id: "34745DA8300B2B88"
+			size: 0.1d
+			tasks: [{
+				id: "17C2DCF40E2A058F"
+				title: "connector6"
+				type: "custom"
+			}]
+			x: -5.0d
+			y: 3.0d
+		}
+		{
+			dependencies: ["71C572C50129BCBD"]
+			id: "741B857CEDE4755B"
+			shape: "gear"
+			subtitle: "Very Small Chance"
+			tasks: [{
+				id: "2767D0E1C1B70E54"
+				item: "create_netherless:netherite_fragment"
+				type: "item"
+			}]
+			x: -3.5d
+			y: 1.5d
+		}
+		{
+			id: "4336225C77536E05"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "0D47227DDBC75B42"
+					item: "minecraft:soul_campfire"
+					type: "item"
+				}
+				{
+					id: "7724D8425C879F0E"
+					item: "create:encased_fan"
+					type: "item"
+				}
+				{
+					id: "1DDB53EE3E5252BF"
+					item: "minecraft:brick"
+					type: "item"
+				}
+			]
+			title: "Brick Haunting"
+			x: -5.0d
+			y: 4.5d
+		}
+		{
+			dependencies: ["0C2E30F599B247E5"]
+			id: "3908266FC433AFD6"
+			shape: "rsquare"
+			tasks: [
+				{
+					id: "234D5D725B918F22"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+				{
+					id: "17316442B40A9382"
+					item: "create:encased_fan"
+					type: "item"
+				}
+			]
+			title: "Washing"
+			x: -11.0d
+			y: -16.5d
+		}
+		{
+			dependencies: ["3908266FC433AFD6"]
+			id: "4FDAAECD4B5EF890"
+			shape: "gear"
+			tasks: [
+				{
+					id: "7DD3F56BE8184F61"
+					item: "minecraft:dead_bush"
+					type: "item"
+				}
+				{
+					id: "0E656A5AFE39546B"
+					item: "minecraft:gold_nugget"
+					type: "item"
+				}
+			]
+			title: "Gold Nugget + Dead Bush"
+			x: -12.5d
+			y: -16.5d
+		}
+		{
+			dependencies: ["74328E673ED3E778"]
+			id: "73401CDA7A13C8CA"
+			shape: "rsquare"
+			subtitle: "Redstone Conjuring"
+			tasks: [
+				{
+					id: "3135368063644870"
+					item: "botania:mana_pool"
+					type: "item"
+				}
+				{
+					id: "6F5DB5B845D31DE8"
+					item: "botania:conjuration_catalyst"
+					type: "item"
+				}
+			]
+			title: "Mana Infusion"
+			x: -8.0d
+			y: 3.0d
+		}
+		{
+			dependencies: ["73401CDA7A13C8CA"]
+			id: "7E54368CB8CD15F3"
+			size: 0.1d
+			x: -6.6d
+			y: 1.85d
+		}
+	]
+	title: "Terrain"
+}

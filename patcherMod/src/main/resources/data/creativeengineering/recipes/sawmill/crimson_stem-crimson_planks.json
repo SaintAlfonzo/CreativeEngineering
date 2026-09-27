@@ -1,0 +1,28 @@
+{
+  "type": "immersiveengineering:sawmill",
+  "energy": 1600,
+  "input": {
+    "item": "minecraft:crimson_stem"
+  },
+  "result": {
+    "count": 6,
+    "item": "minecraft:crimson_planks"
+  },
+  "secondaries": [
+    {
+      "output": {
+        "item": "immersive_weathering:crimson_scales"
+      },
+      "stripping": true
+    },
+    {
+      "output": {
+        "item": "minecraft:crimson_roots"
+      },
+      "stripping": false
+    }
+  ],
+  "stripped": {
+    "item": "minecraft:stripped_crimson_stem"
+  }
+}

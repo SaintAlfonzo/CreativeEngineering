@@ -1,0 +1,6 @@
+{
+  "description": "Skips the Resistance effect AND protection enchantments. Vanilla-only - just hunger.",
+  "values": [
+    "starve"
+  ]
+}

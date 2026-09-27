@@ -1,0 +1,47 @@
+{
+  "__comment": "Overrides Felsic Gear's felsic_block (which ships NO loot table) so it behaves as an END ORE. Silk touch -> the block itself; otherwise -> 2-4 felsic_scrap, fortune-scaled. NOTE: FelsicBlockBlock hardcodes canHarvestBlock() to require a harvest-level-4 (netherite / Felsic) pickaxe, so nothing below that tier will ever trigger this table.",
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "felsic_gear:felsic_block",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      { "enchantment": "minecraft:silk_touch", "levels": { "min": 1 } }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "creativeengineering:felsic_scrap",
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": { "type": "minecraft:uniform", "min": 1.0, "max": 2.0 }
+                },
+                {
+                  "function": "minecraft:apply_bonus",
+                  "enchantment": "minecraft:fortune",
+                  "formula": "minecraft:ore_drops"
+                },
+                { "function": "minecraft:explosion_decay" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
