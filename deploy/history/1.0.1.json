@@ -1,21 +1,13 @@
 {
  "version": "1.0.1",
- "date": "2026-09-28T17:44:16",
+ "date": "2026-09-28T17:50:35",
  "name": "CreativeEngineering - 2",
  "minecraft": "1.19.2",
  "loader": "Forge 43.3.9",
- "commit": "d0d572c",
- "dirty": [
-  "kubejs/generation_scripts/worldgen/biome_merge_suggestions.md",
-  "kubejs/generation_scripts/worldgen/biome_merges.json",
-  "kubejs/server_scripts/loot/loot_config.json",
-  "kubejs/server_scripts/loot/loot_index.json",
-  "mod_sides.md"
- ],
+ "commit": "c566438",
+ "dirty": [],
  "notes": "",
- "warnings": [
-  "5 uncommitted change(s) in shipped folders (commit d0d572c + working tree)"
- ],
+ "warnings": [],
  "resourcePackOrder": [
   "vanilla",
   "mod_resources",
