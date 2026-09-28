@@ -1008,6 +1008,14 @@
         "minecraft:chests/abandoned_mineshaft": 27.1
       }
     },
+    "minecraft:air": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "illager_viking_longship:chests/longship": 29.2
+      }
+    },
     "minecraft:allium": {
       "remove": false,
       "frequency": 1,
@@ -1061,12 +1069,15 @@
     "minecraft:apple": {
       "remove": false,
       "frequency": 1,
-      "chests": 34,
+      "chests": 39,
       "where": {
         "minecraft:chests/spawn_bonus_chest": 83.8,
         "terralith:village/desert/food": 77.4,
         "terralith:village/fortified/food": 77.4,
+        "takesapillage:chests/bastille/farm": 74.2,
+        "takesapillage:chests/bastille/graveyard": 74.2,
         "minecraft:chests/village/village_plains_house": 73.4,
+        "skyvillages:chests/sky_village_normal_house": 73.4,
         "terralith:village/fortified/tavern_downstairs": 73.2,
         "minecraft:chests/igloo_chest": 70.4,
         "terralith:village/desert/generic": 70.1,
@@ -1085,6 +1096,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 59.4,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 59.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 59.4,
+        "skyvillages:chests/sky_village_weaponsmith": 59.4,
         "mes:houses_common": 56.6,
         "minecraft:chests/stronghold_crossing": 47.5,
         "betterstrongholds:chests/common": 35.0,
@@ -1092,6 +1104,7 @@
         "betterdungeons:zombie_dungeon/chests/common": 30.7,
         "betterdungeons:zombie_dungeon/chests/special": 30.7,
         "terralith:village/fortified/tavern_upstairs": 23.8,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 17.2,
         "terralith:ruin/glacial/main_cs": 16.9,
         "hopo:chests/food": 16.4,
         "terralith:village/fortified/treasure": 15.8,
@@ -1102,18 +1115,23 @@
     "minecraft:arrow": {
       "remove": false,
       "frequency": 1,
-      "chests": 22,
+      "chests": 27,
       "where": {
         "minecraft:chests/jungle_temple_dispenser": 100.0,
         "terralith:village/desert/archer": 96.7,
         "terralith:village/fortified/archer": 96.7,
         "betterfortresses:chests/beacon": 85.4,
+        "illager_viking_longship:chests/longship": 53.3,
+        "unwrecked_ships:dispensers/fire_dispenser": 53.1,
         "minecraft:chests/bastion_bridge": 47.9,
         "minecraft:chests/bastion_other": 44.1,
         "minecraft:chests/pillager_outpost": 39.1,
+        "takesapillage:chests/bastille/center": 39.1,
+        "takesapillage:chests/bastille/church": 39.1,
         "twigs:chests/bloodstone_obelisk": 37.7,
         "hopo:chests/materials": 22.6,
         "minecraft:chests/village/village_fletcher": 22.4,
+        "skyvillages:chests/sky_village_fletcher": 22.4,
         "philipsruins:chest/nether_lava_ruins_loot": 21.6,
         "philipsruins:chest/nether_ruins_low": 21.3,
         "minecraft:chests/bastion_hoglin_stable": 19.1,
@@ -1200,9 +1218,10 @@
     "minecraft:barrel": {
       "remove": false,
       "frequency": 1,
-      "chests": 13,
+      "chests": 14,
       "where": {
         "minecraft:chests/village/village_fisher": 22.4,
+        "skyvillages:chests/sky_village_fisher": 22.4,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 7.46,
         "simply_houses:chests/taiga_house/taiga_house_normal": 7.46,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 7.46,
@@ -1220,10 +1239,11 @@
     "minecraft:beef": {
       "remove": false,
       "frequency": 1,
-      "chests": 16,
+      "chests": 17,
       "where": {
         "terralith:ruin/glacial/main_cs": 52.9,
         "minecraft:chests/village/village_butcher": 47.4,
+        "skyvillages:chests/sky_village_butcher": 47.4,
         "terralith:village/desert/butcher": 42.2,
         "terralith:village/fortified/butcher": 42.2,
         "terralith:ruin/glacial/junk": 26.0,
@@ -1350,9 +1370,10 @@
     "minecraft:black_wool": {
       "remove": false,
       "frequency": 1,
-      "chests": 1,
+      "chests": 2,
       "where": {
-        "minecraft:chests/village/village_shepherd": 31.8
+        "minecraft:chests/village/village_shepherd": 31.8,
+        "skyvillages:chests/sky_village_shepherd": 31.8
       }
     },
     "minecraft:blackstone": {
@@ -1456,7 +1477,7 @@
     "minecraft:bone": {
       "remove": false,
       "frequency": 1,
-      "chests": 51,
+      "chests": 53,
       "where": {
         "betterstrongholds:chests/crypt": 97.2,
         "betterdungeons:zombie_dungeon/chests/tombstone": 96.4,
@@ -1471,6 +1492,8 @@
         "betterdeserttemples:chests/tomb": 76.0,
         "betterdeserttemples:chests/tomb_pharaoh": 76.0,
         "betterdungeons:skeleton_dungeon/chests/common": 75.0,
+        "takesapillage:chests/bastille/graveyard": 74.2,
+        "illager_viking_longship:chests/longship": 64.5,
         "domesticationinnovation:chests/petshop_chest": 64.1,
         "philipsruins:chest/badlands_dungeon_loot_high": 62.7,
         "minecraft:chests/desert_pyramid": 60.8,
@@ -1525,7 +1548,7 @@
     "minecraft:bone_meal": {
       "remove": false,
       "frequency": 1,
-      "chests": 14,
+      "chests": 15,
       "where": {
         "beautify:chests/botanist/botanist_chest": 100.0,
         "beautify:chests/botanist/botanist_chest_desert": 100.0,
@@ -1540,13 +1563,14 @@
         "philipsruins:chest/bone_dungeon_loot": 25.3,
         "philipsruins:chest/sculk_dungeon_loot": 20.4,
         "chefsdelight:chests/cooker": 12.8,
-        "hopo:chests/food": 12.5
+        "hopo:chests/food": 12.5,
+        "takesapillage:chests/bastille/farm": 12.1
       }
     },
     "minecraft:book": {
       "remove": false,
       "frequency": 1,
-      "chests": 90,
+      "chests": 96,
       "where": {
         "mes:cartographer_tower": 100.0,
         "terralith:spire/common": 100.0,
@@ -1563,6 +1587,7 @@
         "mes:houses_books": 69.4,
         "minecraft:chests/ancient_city": 67.9,
         "terralith:underground/chest": 67.8,
+        "villagesandpillages:village_witch/house/attic_chest": 51.2,
         "mes:floating_islands": 50.0,
         "minecraft:chests/bastion_hoglin_stable": 49.1,
         "betterdeserttemples:chests/tomb_pharaoh": 41.5,
@@ -1602,17 +1627,22 @@
         "minecraft:chests/abandoned_mineshaft": 14.1,
         "minecraft:chests/village/village_desert_house": 13.9,
         "philipsruins:chest/ocean_ruins_loot": 13.8,
+        "illager_viking_longship:chests/longship": 13.5,
         "wares:package/village/snowy": 13.2,
         "philipsruins:chest/nether_lava_ruins_loot": 12.1,
         "minecraft:chests/simple_dungeon": 12.1,
         "minecraft:chests/village/village_plains_house": 11.8,
+        "skyvillages:chests/sky_village_normal_house": 11.8,
         "philipsruins:chest/lost_soul_city_loot": 11.6,
         "minecraft:chests/bastion_other": 11.2,
         "wares:package/village/savanna": 11.1,
         "kaisyn:village/village_mushroom_house": 11.1,
         "minecraft:chests/pillager_outpost": 11.0,
+        "takesapillage:chests/bastille/center": 11.0,
+        "takesapillage:chests/bastille/church": 11.0,
         "terralith:village/desert/generic": 10.9,
         "terralith:village/fortified/generic": 10.9,
+        "takesapillage:chests/bastille/gallows": 10.5,
         "kaisyn:village/village_badlands_house": 10.5,
         "philipsruins:chest/ocean_ruin_fortress": 10.4,
         "wares:package/village/desert": 9.8,
@@ -1705,18 +1735,23 @@
     "minecraft:bread": {
       "remove": false,
       "frequency": 1,
-      "chests": 71,
+      "chests": 80,
       "where": {
         "minecraft:chests/village/village_temple": 87.9,
+        "skyvillages:chests/sky_village_temple": 87.9,
         "mes:houses_uncommon": 80.6,
         "mes:houses_desert": 80.6,
         "minecraft:chests/village/village_toolsmith": 80.6,
+        "skyvillages:chests/sky_village_toolsmith": 80.6,
         "minecraft:chests/village/village_desert_house": 79.7,
         "terralith:village/desert/food": 77.4,
         "terralith:village/fortified/food": 77.4,
         "minecraft:chests/village/village_armorer": 76.3,
+        "skyvillages:chests/sky_village_armorer": 76.3,
         "mes:large_carts": 75.0,
+        "takesapillage:chests/bastille/farm": 74.2,
         "minecraft:chests/village/village_plains_house": 73.4,
+        "skyvillages:chests/sky_village_normal_house": 73.4,
         "terralith:village/fortified/tavern_downstairs": 73.2,
         "kaisyn:village/exclusives/village_mediterranean_house": 72.5,
         "minecraft:chests/village/village_savanna_house": 70.9,
@@ -1734,6 +1769,7 @@
         "minecraft:chests/spawn_bonus_chest": 61.5,
         "minecraft:chests/village/village_cartographer": 60.4,
         "minecraft:chests/village/village_tannery": 60.4,
+        "skyvillages:chests/sky_village_cartographer": 60.4,
         "kaisyn:village/exclusives/village_classic_blacksmith": 59.8,
         "minecraft:chests/village/village_weaponsmith": 59.4,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 59.4,
@@ -1744,7 +1780,9 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 59.4,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 59.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 59.4,
+        "skyvillages:chests/sky_village_weaponsmith": 59.4,
         "minecraft:chests/village/village_mason": 59.3,
+        "skyvillages:chests/sky_village_mason": 59.3,
         "mes:houses_common": 56.6,
         "betterdeserttemples:chests/food_storage": 55.8,
         "kaisyn:village/village_jungle_house": 51.3,
@@ -1759,6 +1797,7 @@
         "philipsruins:chest/badlands_dungeon_loot_low": 22.8,
         "philipsruins:chest/sculk_dungeon_loot": 22.1,
         "philipsruins:chest/desert_pyramid_loot": 17.4,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 17.2,
         "terralith:ruin/glacial/main_cs": 16.9,
         "wares:agreement/village/snowy_payment_buy": 16.7,
         "wares:agreement/village/desert_payment_buy": 15.6,
@@ -1811,9 +1850,10 @@
     "minecraft:brown_mushroom": {
       "remove": false,
       "frequency": 1,
-      "chests": 7,
+      "chests": 8,
       "where": {
         "mes:mushroom_pond": 63.8,
+        "villagesandpillages:village_witch/house/barrel": 37.3,
         "betterdungeons:zombie_dungeon/chests/common": 30.7,
         "betterdungeons:zombie_dungeon/chests/special": 30.7,
         "kaisyn:village/village_mushroom_house": 21.1,
@@ -1833,9 +1873,10 @@
     "minecraft:brown_wool": {
       "remove": false,
       "frequency": 1,
-      "chests": 1,
+      "chests": 2,
       "where": {
-        "minecraft:chests/village/village_shepherd": 22.4
+        "minecraft:chests/village/village_shepherd": 22.4,
+        "skyvillages:chests/sky_village_shepherd": 22.4
       }
     },
     "minecraft:bubble_coral": {
@@ -1868,8 +1909,9 @@
     "minecraft:bucket": {
       "remove": false,
       "frequency": 1,
-      "chests": 12,
+      "chests": 13,
       "where": {
+        "takesapillage:chests/bastille/farm": 22.8,
         "minecraft:chests/simple_dungeon": 18.5,
         "minecraft:chests/woodland_mansion": 18.5,
         "philipsruins:chest/nether_lava_ruins_loot": 18.2,
@@ -1923,11 +1965,12 @@
     "minecraft:carrot": {
       "remove": false,
       "frequency": 1,
-      "chests": 13,
+      "chests": 14,
       "where": {
         "terralith:village/fortified/tavern_downstairs": 77.6,
         "domesticationinnovation:chests/petshop_chest": 64.1,
         "minecraft:chests/pillager_outpost": 57.5,
+        "takesapillage:chests/bastille/center": 57.5,
         "betterdeserttemples:chests/lab": 54.6,
         "betterwitchhuts:chests/hut_0": 45.1,
         "betterdungeons:zombie_dungeon/chests/common": 42.2,
@@ -1953,10 +1996,11 @@
     "minecraft:chain": {
       "remove": false,
       "frequency": 1,
-      "chests": 10,
+      "chests": 11,
       "where": {
         "terralith:village/desert/treasure": 62.2,
         "betterstrongholds:chests/prison_lg": 61.9,
+        "takesapillage:chests/bastille/gallows": 37.7,
         "terralith:village/fortified/treasure": 37.3,
         "minecraft:chests/bastion_other": 24.4,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 2.44,
@@ -1989,13 +2033,14 @@
     "minecraft:chainmail_chestplate": {
       "remove": false,
       "frequency": 1,
-      "chests": 19,
+      "chests": 20,
       "where": {
         "minecraft:chests/woodland_mansion": 13.4,
         "betterdungeons:small_nether_dungeon/chests/common": 11.6,
         "betterfortresses:chests/keep": 7.47,
         "kaisyn:outpost/common/armory": 6.59,
         "betterstrongholds:chests/armoury": 5.61,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 1.28,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 1.28,
         "simply_houses:chests/forest_fort/forest_fort_barrels": 1.28,
@@ -2035,7 +2080,7 @@
     "minecraft:chainmail_leggings": {
       "remove": false,
       "frequency": 1,
-      "chests": 24,
+      "chests": 25,
       "where": {
         "philipsruins:chest/desert_pyramid_loot": 25.4,
         "philipsruins:chest/nether_lava_ruins_loot": 12.1,
@@ -2045,6 +2090,7 @@
         "philipsruins:chest/ocean_ruins_loot": 9.72,
         "betterfortresses:chests/keep": 7.47,
         "philipsruins:chest/lost_soul_city_loot": 7.06,
+        "rare-ice:chests/rare_ice": 6.67,
         "kaisyn:outpost/common/armory": 6.59,
         "betterstrongholds:chests/armoury": 5.61,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 1.28,
@@ -2066,11 +2112,13 @@
     "minecraft:charcoal": {
       "remove": false,
       "frequency": 1,
-      "chests": 6,
+      "chests": 8,
       "where": {
         "terralith:village/desert/butcher": 100.0,
         "terralith:village/fortified/butcher": 100.0,
         "betterdungeons:skeleton_dungeon/chests/middle": 58.4,
+        "watchtower_building:chests/fresh_towerloot": 44.4,
+        "watchtower_building:chests/towerloot": 44.4,
         "mes:houses_uncommon": 31.8,
         "kaisyn:outpost/common/armory": 14.9,
         "betterstrongholds:chests/armoury": 12.8
@@ -2079,10 +2127,12 @@
     "minecraft:chicken": {
       "remove": false,
       "frequency": 1,
-      "chests": 8,
+      "chests": 10,
       "where": {
+        "watchtower_building:chests/towerloot": 61.5,
         "terralith:village/desert/butcher": 42.2,
         "terralith:village/fortified/butcher": 42.2,
+        "watchtower_building:chests/fresh_towerloot": 38.5,
         "terralith:ruin/glacial/main_cs": 28.1,
         "terralith:ruin/glacial/junk": 22.2,
         "terralith:village/fortified/tavern_upstairs": 15.5,
@@ -2114,7 +2164,7 @@
     "minecraft:clay_ball": {
       "remove": false,
       "frequency": 1,
-      "chests": 12,
+      "chests": 13,
       "where": {
         "terralith:village/desert/mason": 61.1,
         "terralith:village/fortified/mason": 61.1,
@@ -2122,6 +2172,7 @@
         "terralith:village/fortified/fisherman": 23.9,
         "kaisyn:village/village_badlands_house": 19.9,
         "minecraft:chests/village/village_mason": 19.5,
+        "skyvillages:chests/sky_village_mason": 19.5,
         "hopo:chests/materials": 15.6,
         "mes:houses_desert": 14.3,
         "minecraft:chests/village/village_desert_house": 13.9,
@@ -2143,7 +2194,7 @@
     "minecraft:coal": {
       "remove": false,
       "frequency": 1,
-      "chests": 62,
+      "chests": 68,
       "where": {
         "minecraft:chests/underwater_ruin_small": 84.2,
         "minecraft:chests/underwater_ruin_big": 81.0,
@@ -2152,6 +2203,8 @@
         "betterdungeons:small_nether_dungeon/chests/common": 67.5,
         "betterstrongholds:chests/prison_lg": 61.9,
         "betterdungeons:skeleton_dungeon/chests/middle": 58.4,
+        "watchtower_building:chests/fresh_towerloot": 55.6,
+        "watchtower_building:chests/towerloot": 55.6,
         "terralith:village/desert/smith/expert": 53.4,
         "terralith:village/fortified/treasure": 51.2,
         "betterdungeons:spider_dungeon/chests/egg_room": 49.1,
@@ -2162,6 +2215,7 @@
         "philipsruins:chest/nether_lava_ruins_loot": 41.3,
         "minecraft:chests/village/village_snowy_house": 40.6,
         "minecraft:chests/village/village_fisher": 40.2,
+        "skyvillages:chests/sky_village_fisher": 40.2,
         "minecraft:chests/shipwreck_supply": 37.3,
         "minecraft:chests/stronghold_crossing": 34.3,
         "betterfortresses:chests/keep": 33.3,
@@ -2170,9 +2224,11 @@
         "betterdungeons:zombie_dungeon/chests/special": 30.7,
         "philipsruins:chest/badlands_dungeon_loot_low": 30.7,
         "philipsruins:chest/badlands_dungeon_loot_high": 29.2,
+        "rare-ice:chests/rare_ice": 28.0,
         "philipsruins:chest/bone_dungeon_loot": 27.3,
         "minecraft:chests/abandoned_mineshaft": 27.3,
         "minecraft:chests/village/village_butcher": 27.1,
+        "skyvillages:chests/sky_village_butcher": 27.1,
         "minecraft:chests/simple_dungeon": 26.6,
         "minecraft:chests/woodland_mansion": 26.6,
         "philipsruins:chest/ocean_ruins_loot": 24.7,
@@ -2193,6 +2249,7 @@
         "hopo:chests/food": 10.5,
         "philipsruins:chest/ocean_ruin_fortress": 10.4,
         "minecraft:chests/village/village_toolsmith": 9.72,
+        "skyvillages:chests/sky_village_toolsmith": 9.72,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 1.28,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 1.28,
         "simply_houses:chests/forest_fort/forest_fort_barrels": 1.28,
@@ -2229,8 +2286,9 @@
     "minecraft:cobbled_deepslate": {
       "remove": false,
       "frequency": 1,
-      "chests": 4,
+      "chests": 5,
       "where": {
+        "takesapillage:chests/bastille/church": 81.1,
         "terralith:village/desert/smith/expert": 75.0,
         "terralith:village/fortified/treasure": 57.2,
         "terralith:village/desert/smith": 3.75,
@@ -2252,11 +2310,13 @@
     "minecraft:cobweb": {
       "remove": false,
       "frequency": 1,
-      "chests": 10,
+      "chests": 12,
       "where": {
+        "watchtower_building:chests/towerloot": 100.0,
         "betterdungeons:spider_dungeon/chests/egg_room": 87.5,
         "betterdeserttemples:chests/lab": 80.2,
         "terralith:village/fortified/attic": 69.2,
+        "villagesandpillages:village_witch/house/attic_chest": 68.7,
         "betterdungeons:small_dungeon/chests/loot_piles": 63.0,
         "mes:abandoned": 54.2,
         "betterdeserttemples:chests/tomb": 53.1,
@@ -2279,10 +2339,12 @@
     "minecraft:cod": {
       "remove": false,
       "frequency": 1,
-      "chests": 12,
+      "chests": 14,
       "where": {
         "terralith:village/fortified/fisherman": 42.8,
         "minecraft:chests/village/village_fisher": 40.2,
+        "skyvillages:chests/sky_village_fisher": 40.2,
+        "rare-ice:chests/rare_ice": 25.0,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 23.3,
         "simply_houses:chests/taiga_house/taiga_house_normal": 23.3,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 23.3,
@@ -2310,13 +2372,14 @@
     "minecraft:compass": {
       "remove": false,
       "frequency": 1,
-      "chests": 12,
+      "chests": 13,
       "where": {
         "mes:cartographer_tower": 50.0,
         "terralith:village/desert/cartographer": 33.3,
         "terralith:village/fortified/cartographer": 33.3,
         "mes:houses_books": 26.3,
         "minecraft:chests/village/village_cartographer": 25.8,
+        "skyvillages:chests/sky_village_cartographer": 25.8,
         "betterstrongholds:chests/library_md": 17.6,
         "minecraft:chests/ancient_city": 14.3,
         "philipsruins:chest/badlands_dungeon_loot_high": 13.8,
@@ -2326,15 +2389,25 @@
         "minecraft:chests/stronghold_library": 7.05
       }
     },
+    "minecraft:composter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 2,
+      "where": {
+        "takesapillage:chests/bastille/farm": 12.1,
+        "takesapillage:chests/bastille/graveyard": 12.1
+      }
+    },
     "minecraft:cooked_beef": {
       "remove": false,
       "frequency": 1,
-      "chests": 6,
+      "chests": 7,
       "where": {
         "terralith:village/desert/food": 77.4,
         "terralith:village/fortified/food": 77.4,
         "mes:large_carts": 75.0,
         "terralith:ruin/glacial/main_cs": 69.1,
+        "illager_viking_longship:chests/longship": 39.2,
         "terralith:ruin/glacial/junk": 37.5,
         "terralith:village/fortified/tavern_downstairs": 28.1
       }
@@ -2342,8 +2415,10 @@
     "minecraft:cooked_chicken": {
       "remove": false,
       "frequency": 1,
-      "chests": 4,
+      "chests": 6,
       "where": {
+        "watchtower_building:chests/fresh_towerloot": 61.5,
+        "watchtower_building:chests/towerloot": 38.5,
         "terralith:village/fortified/tavern_downstairs": 33.0,
         "terralith:ruin/glacial/main_cs": 28.1,
         "terralith:ruin/glacial/junk": 22.2,
@@ -2560,11 +2635,12 @@
     "minecraft:dandelion": {
       "remove": false,
       "frequency": 1,
-      "chests": 8,
+      "chests": 9,
       "where": {
         "beautify:chests/botanist/botanist_chest": 43.6,
         "beautify:chests/botanist/botanist_chest_savanna": 43.6,
         "minecraft:chests/village/village_plains_house": 22.3,
+        "skyvillages:chests/sky_village_normal_house": 22.3,
         "terralith:village/desert/generic": 20.7,
         "terralith:village/fortified/generic": 20.7,
         "terralith:village/desert/generic_low": 16.9,
@@ -2575,9 +2651,10 @@
     "minecraft:dark_oak_log": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 3,
       "where": {
         "minecraft:chests/pillager_outpost": 100.0,
+        "takesapillage:chests/bastille/center": 100.0,
         "minecraft:chests/spawn_bonus_chest": 26.2
       }
     },
@@ -2663,7 +2740,7 @@
     "minecraft:diamond": {
       "remove": false,
       "frequency": 1,
-      "chests": 65,
+      "chests": 69,
       "where": {
         "betterfortresses:chests/worship": 100.0,
         "terralith:village/desert/smith/expert": 100.0,
@@ -2691,6 +2768,7 @@
         "philipsruins:chest/nether_lava_ruins_loot": 21.1,
         "minecraft:chests/end_city_treasure": 20.2,
         "terralith:underground/chest": 19.2,
+        "rare-ice:chests/rare_ice": 19.1,
         "cloudstorage:chests/loot_balloon": 18.0,
         "minecraft:chests/nether_bridge": 17.3,
         "betterstrongholds:chests/prison_lg": 16.8,
@@ -2705,12 +2783,14 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 16.1,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 16.1,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 16.1,
+        "skyvillages:chests/sky_village_weaponsmith": 16.1,
         "philipsruins:chest/badlands_dungeon_loot_high": 15.3,
         "minecraft:chests/shipwreck_treasure": 14.1,
         "philipsruins:chest/desert_pyramid_loot": 11.9,
         "minecraft:chests/jungle_temple": 11.3,
         "minecraft:chests/bastion_treasure": 10.9,
         "minecraft:chests/village/village_toolsmith": 9.72,
+        "skyvillages:chests/sky_village_toolsmith": 9.72,
         "mes:crystal": 9.64,
         "minecraft:chests/abandoned_mineshaft": 8.88,
         "terralith:village/desert/smith": 8.65,
@@ -2723,6 +2803,7 @@
         "philipsruins:chest/nether_ruins_low": 5.94,
         "betterdungeons:spider_dungeon/chests/egg_room": 4.24,
         "terralith:village/desert/smith/novice": 3.84,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 2.44,
         "simply_houses:chests/taiga_house/taiga_house_normal": 2.44,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 2.44,
@@ -2776,12 +2857,13 @@
     "minecraft:diamond_helmet": {
       "remove": false,
       "frequency": 1,
-      "chests": 6,
+      "chests": 7,
       "where": {
         "minecraft:chests/bastion_treasure": 22.8,
         "minecraft:chests/end_city_treasure": 12.6,
         "philipsruins:chest/lost_soul_city_loot": 11.6,
         "betterstrongholds:chests/armoury": 3.76,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "terralith:underground/chest": 3.31,
         "philipsruins:chest/ocean_ruin_fortress": 3.3
       }
@@ -2802,7 +2884,7 @@
     "minecraft:diamond_horse_armor": {
       "remove": false,
       "frequency": 1,
-      "chests": 23,
+      "chests": 24,
       "where": {
         "betterdeserttemples:chests/tomb_pharaoh": 41.5,
         "minecraft:chests/ancient_city": 14.3,
@@ -2821,6 +2903,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 5.64,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 5.64,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 5.64,
+        "skyvillages:chests/sky_village_weaponsmith": 5.64,
         "minecraft:chests/end_city_treasure": 4.36,
         "minecraft:chests/jungle_temple": 3.89,
         "betterjungletemples:chests/campsite": 2.96,
@@ -2857,13 +2940,14 @@
     "minecraft:diamond_pickaxe": {
       "remove": false,
       "frequency": 1,
-      "chests": 10,
+      "chests": 11,
       "where": {
         "terralith:village/desert/smith/expert": 100.0,
         "minecraft:chests/end_city_treasure": 12.6,
         "minecraft:chests/bastion_hoglin_stable": 12.0,
         "philipsruins:chest/lost_soul_city_loot": 11.6,
         "minecraft:chests/bastion_other": 6.74,
+        "rare-ice:chests/rare_ice": 6.67,
         "terralith:spire/treasure": 6.25,
         "philipsruins:chest/end_ruins_loot": 5.19,
         "terralith:village/desert/smith": 5.0,
@@ -2958,11 +3042,13 @@
     "minecraft:egg": {
       "remove": false,
       "frequency": 1,
-      "chests": 9,
+      "chests": 11,
       "where": {
         "chefsdelight:chests/cooker": 34.9,
         "minecraft:chests/village/village_fletcher": 22.4,
+        "skyvillages:chests/sky_village_fletcher": 22.4,
         "terralith:village/fortified/tavern_upstairs": 18.3,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 17.2,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 7.46,
         "simply_houses:chests/taiga_house/taiga_house_normal": 7.46,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 7.46,
@@ -2982,7 +3068,7 @@
     "minecraft:emerald": {
       "remove": false,
       "frequency": 1,
-      "chests": 110,
+      "chests": 124,
       "where": {
         "betterjungletemples:chests/treasure": 100.0,
         "mes:cart": 100.0,
@@ -3003,11 +3089,13 @@
         "minecraft:chests/shipwreck_treasure": 73.7,
         "terralith:village/desert/cartographer": 71.2,
         "terralith:village/fortified/cartographer": 71.2,
+        "villagesandpillages:village_witch/house/attic_chest": 68.7,
         "betterdeserttemples:chests/statue": 62.5,
         "yungsextras:desert/ruins": 59.4,
         "mes:crystal": 59.3,
         "domesticationinnovation:chests/petshop_chest": 53.4,
         "betterdeserttemples:chests/pot": 53.4,
+        "illager_viking_longship:chests/longship": 53.3,
         "minecraft:chests/buried_treasure": 53.1,
         "terralith:village/fortified/treasure": 51.2,
         "betterstrongholds:chests/trap": 49.9,
@@ -3024,18 +3112,26 @@
         "terralith:village/desert/generic": 29.5,
         "terralith:village/fortified/generic": 29.5,
         "minecraft:chests/village/village_armorer": 28.8,
+        "skyvillages:chests/sky_village_armorer": 28.8,
         "hopo:chests/small_ruin_cold": 27.9,
         "hopo:chests/materials": 27.0,
         "mes:general": 25.9,
         "terralith:village/desert/generic_low": 24.5,
         "terralith:village/fortified/generic_low": 24.5,
         "minecraft:chests/village/village_temple": 24.3,
+        "skyvillages:chests/sky_village_temple": 24.3,
+        "takesapillage:chests/bastille/farm": 22.8,
+        "takesapillage:chests/bastille/graveyard": 22.8,
         "minecraft:chests/village/village_fisher": 22.4,
+        "skyvillages:chests/sky_village_fisher": 22.4,
         "minecraft:chests/village/village_plains_house": 22.3,
+        "skyvillages:chests/sky_village_normal_house": 22.3,
         "minecraft:chests/village/village_savanna_house": 21.1,
         "betterdeserttemples:chests/tomb": 20.6,
         "philipsruins:chest/lost_soul_city_loot": 20.2,
         "minecraft:chests/village/village_mason": 19.5,
+        "skyvillages:chests/sky_village_mason": 19.5,
+        "rare-ice:chests/rare_ice": 19.1,
         "monobank:monobank/village/desert": 19.0,
         "monobank:monobank/village/plains": 19.0,
         "monobank:monobank/village/savanna": 19.0,
@@ -3056,11 +3152,14 @@
         "minecraft:chests/village/village_desert_house": 13.9,
         "minecraft:chests/village/village_fletcher": 11.8,
         "minecraft:chests/village/village_shepherd": 11.8,
+        "skyvillages:chests/sky_village_fletcher": 11.8,
+        "skyvillages:chests/sky_village_shepherd": 11.8,
         "kaisyn:village/exclusives/village_mediterranean_house": 11.6,
         "kaisyn:village/exclusives/village_wandering_trader_hut": 11.6,
         "philipsruins:chest/ocean_ruin_fortress": 11.2,
         "kaisyn:village/village_swamp_house": 10.3,
         "minecraft:chests/village/village_butcher": 9.88,
+        "skyvillages:chests/sky_village_butcher": 9.88,
         "minecraft:chests/village/village_snowy_house": 9.72,
         "minecraft:chests/end_city_treasure": 8.55,
         "philipsruins:chest/ancient_ruins": 8.33,
@@ -3089,6 +3188,7 @@
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 3.81,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 3.81,
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_barrels": 3.81,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "wares:package/village/snowy": 2.63,
         "wares:package/village/savanna": 2.22,
         "wares:package/village/desert": 1.96,
@@ -3116,13 +3216,17 @@
     "minecraft:enchanted_book": {
       "remove": false,
       "frequency": 1,
-      "chests": 31,
+      "chests": 42,
       "where": {
         "minecraft:chests/village/village_armorer": 28.8,
+        "skyvillages:chests/sky_village_armorer": 28.8,
         "minecraft:chests/end_city_treasure": 25.0,
         "minecraft:chests/village/village_temple": 24.3,
+        "skyvillages:chests/sky_village_temple": 24.3,
         "minecraft:chests/village/village_fisher": 22.4,
+        "skyvillages:chests/sky_village_fisher": 22.4,
         "minecraft:chests/village/village_mason": 19.5,
+        "skyvillages:chests/sky_village_mason": 19.5,
         "minecraft:chests/village/village_tannery": 16.3,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 14.7,
         "simply_houses:chests/taiga_house/taiga_house_normal": 14.7,
@@ -3133,13 +3237,19 @@
         "minecraft:chests/village/village_desert_house": 13.9,
         "minecraft:chests/village/village_fletcher": 11.8,
         "minecraft:chests/village/village_shepherd": 11.8,
+        "skyvillages:chests/sky_village_fletcher": 11.8,
+        "skyvillages:chests/sky_village_shepherd": 11.8,
         "minecraft:chests/village/village_plains_house": 11.8,
+        "skyvillages:chests/sky_village_normal_house": 11.8,
         "minecraft:chests/village/village_savanna_house": 11.1,
         "minecraft:chests/village/village_butcher": 9.88,
+        "skyvillages:chests/sky_village_butcher": 9.88,
         "minecraft:chests/village/village_snowy_house": 9.72,
         "minecraft:chests/village/village_toolsmith": 9.72,
+        "skyvillages:chests/sky_village_toolsmith": 9.72,
         "minecraft:chests/village/village_taiga_house": 9.56,
         "minecraft:chests/village/village_cartographer": 5.73,
+        "skyvillages:chests/sky_village_cartographer": 5.73,
         "minecraft:chests/village/village_weaponsmith": 5.64,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 5.64,
         "simply_houses:chests/forest_fort/forest_fort_normal": 5.64,
@@ -3148,7 +3258,8 @@
         "simply_houses:chests/plains_mansion/plains_mansion_normal": 5.64,
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 5.64,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 5.64,
-        "simply_houses:chests/taiga_house/taiga_house_barrels": 5.64
+        "simply_houses:chests/taiga_house/taiga_house_barrels": 5.64,
+        "skyvillages:chests/sky_village_weaponsmith": 5.64
       }
     },
     "minecraft:enchanted_golden_apple": {
@@ -3205,9 +3316,12 @@
     "minecraft:experience_bottle": {
       "remove": false,
       "frequency": 1,
-      "chests": 14,
+      "chests": 18,
       "where": {
         "minecraft:chests/pillager_outpost": 60.9,
+        "takesapillage:chests/bastille/center": 60.9,
+        "takesapillage:chests/bastille/church": 60.9,
+        "takesapillage:chests/bastille/gallows": 59.0,
         "twigs:chests/bloodstone_obelisk": 59.0,
         "minecraft:chests/ancient_city": 20.7,
         "betterdungeons:zombie_dungeon/chests/common": 18.3,
@@ -3216,6 +3330,7 @@
         "minecraft:chests/shipwreck_treasure": 14.1,
         "philipsruins:chest/badlands_dungeon_loot_high": 12.4,
         "mes:crystal": 9.64,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "wares:package/village/snowy": 2.63,
         "wares:package/village/savanna": 2.22,
         "wares:package/village/desert": 1.96,
@@ -3234,12 +3349,13 @@
     "minecraft:feather": {
       "remove": false,
       "frequency": 1,
-      "chests": 18,
+      "chests": 20,
       "where": {
         "minecraft:chests/shipwreck_map": 60.0,
         "terralith:village/desert/archer": 55.1,
         "terralith:village/fortified/archer": 55.1,
         "minecraft:chests/village/village_fletcher": 54.2,
+        "skyvillages:chests/sky_village_fletcher": 54.2,
         "betterdeserttemples:chests/wardrobe": 41.4,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 18.1,
         "simply_houses:chests/taiga_house/taiga_house_normal": 18.1,
@@ -3249,6 +3365,7 @@
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 18.1,
         "hopo:chests/materials": 18.0,
         "minecraft:chests/village/village_plains_house": 11.8,
+        "skyvillages:chests/sky_village_normal_house": 11.8,
         "terralith:village/desert/generic": 10.9,
         "terralith:village/fortified/generic": 10.9,
         "philipsruins:chest/ocean_ruin_fortress": 9.08,
@@ -3259,9 +3376,10 @@
     "minecraft:fermented_spider_eye": {
       "remove": false,
       "frequency": 1,
-      "chests": 1,
+      "chests": 2,
       "where": {
-        "betterdeserttemples:chests/lab": 54.6
+        "betterdeserttemples:chests/lab": 54.6,
+        "villagesandpillages:village_witch/house/barrel": 37.3
       }
     },
     "minecraft:fern": {
@@ -3277,9 +3395,10 @@
     "minecraft:fire_charge": {
       "remove": false,
       "frequency": 1,
-      "chests": 3,
+      "chests": 4,
       "where": {
         "betterfortresses:chests/beacon": 85.4,
+        "unwrecked_ships:dispensers/fire_dispenser": 84.0,
         "minecraft:chests/ruined_portal": 46.4,
         "betterfortresses:chests/storage": 44.4
       }
@@ -3337,11 +3456,13 @@
     "minecraft:flint": {
       "remove": false,
       "frequency": 1,
-      "chests": 16,
+      "chests": 18,
       "where": {
+        "villager_gold_washing_facility:chests/villager_gold_washing_facility_loot_table": 81.7,
         "terralith:village/desert/archer": 55.1,
         "terralith:village/fortified/archer": 55.1,
         "minecraft:chests/village/village_fletcher": 54.2,
+        "skyvillages:chests/sky_village_fletcher": 54.2,
         "minecraft:chests/ruined_portal": 46.4,
         "betterfortresses:chests/keep": 33.3,
         "philipsruins:chest/badlands_dungeon_loot_low": 28.8,
@@ -3372,18 +3493,20 @@
     "minecraft:flower_pot": {
       "remove": false,
       "frequency": 1,
-      "chests": 10,
+      "chests": 12,
       "where": {
         "kaisyn:village/exclusives/village_mediterranean_house": 72.5,
         "terralith:village/desert/mason": 61.1,
         "terralith:village/fortified/mason": 61.1,
+        "villagesandpillages:village_witch/house/attic_chest": 51.2,
         "mes:houses_flower": 32.9,
         "beautify:chests/botanist/botanist_chest_desert": 31.2,
         "beautify:chests/botanist/botanist_chest_savanna": 31.2,
         "beautify:chests/botanist/botanist_chest_snowy": 31.2,
         "beautify:chests/botanist/botanist_chest_taiga": 31.2,
         "beautify:chests/botanist/botanist_chest": 25.6,
-        "minecraft:chests/village/village_mason": 19.5
+        "minecraft:chests/village/village_mason": 19.5,
+        "skyvillages:chests/sky_village_mason": 19.5
       }
     },
     "minecraft:flowering_azalea_leaves": {
@@ -3416,19 +3539,24 @@
     "minecraft:glass_bottle": {
       "remove": false,
       "frequency": 1,
-      "chests": 4,
+      "chests": 8,
       "where": {
         "kaisyn:outpost/exclusives/outpost_mediterranean_barrel": 85.5,
         "terralith:village/fortified/attic": 69.2,
+        "villagesandpillages:village_witch/house/attic_chest": 51.2,
+        "villagesandpillages:village_witch/house/barrel": 47.9,
+        "villagesandpillages:village_witch/house/personal_chest": 45.6,
         "terralith:village/fortified/fisherman": 30.7,
+        "takesapillage:chests/bastille/church": 23.0,
         "kaisyn:outpost/exclusives/outpost_rustic_barrel": 22.3
       }
     },
     "minecraft:glistering_melon_slice": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 3,
       "where": {
+        "takesapillage:chests/bastille/church": 57.5,
         "betterdeserttemples:chests/lab": 25.9,
         "minecraft:chests/ruined_portal": 7.29
       }
@@ -3466,10 +3594,13 @@
     "minecraft:glowstone_dust": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 5,
       "where": {
+        "villagesandpillages:village_witch/house/personal_chest": 45.6,
         "betterfortresses:chests/hall": 43.3,
-        "betterfortresses:chests/extra": 40.8
+        "betterfortresses:chests/extra": 40.8,
+        "villagesandpillages:village_witch/house/barrel": 37.3,
+        "takesapillage:chests/bastille/church": 23.0
       }
     },
     "minecraft:goat_horn": {
@@ -3502,10 +3633,11 @@
     "minecraft:gold_ingot": {
       "remove": false,
       "frequency": 1,
-      "chests": 86,
+      "chests": 93,
       "where": {
         "betterjungletemples:chests/treasure": 93.4,
         "minecraft:chests/buried_treasure": 88.0,
+        "villager_gold_washing_facility:chests/villager_gold_washing_facility_loot_table": 73.3,
         "betterdungeons:small_nether_dungeon/chests/common": 67.5,
         "philipsruins:chest/end_ruins_loot": 62.8,
         "betterdeserttemples:chests/statue": 62.5,
@@ -3521,6 +3653,7 @@
         "betterfortresses:chests/hall": 43.3,
         "betterdeserttemples:chests/tomb_pharaoh": 41.5,
         "betterfortresses:chests/extra": 40.8,
+        "illager_viking_longship:chests/longship": 39.2,
         "philipsruins:chest/lost_soul_city_loot": 38.1,
         "philipsruins:chest/nether_lava_ruins_loot": 36.3,
         "betterfortresses:chests/storage": 34.9,
@@ -3545,6 +3678,7 @@
         "minecraft:chests/shipwreck_treasure": 26.5,
         "kaisyn:village/exclusives/village_classic_blacksmith": 25.6,
         "minecraft:chests/village/village_weaponsmith": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 24.4,
         "simply_houses:chests/taiga_house/taiga_house_normal": 24.4,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 24.4,
@@ -3552,11 +3686,13 @@
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 24.4,
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 24.4,
         "minecraft:chests/village/village_temple": 24.3,
+        "skyvillages:chests/sky_village_temple": 24.3,
         "philipsruins:chest/nether_ruins_low": 24.2,
         "philipsruins:chest/sculk_dungeon_loot": 23.8,
         "betterstrongholds:chests/treasure": 21.4,
         "betterdeserttemples:chests/tomb": 20.6,
         "terralith:village/fortified/treasure": 20.3,
+        "rare-ice:chests/rare_ice": 19.1,
         "monobank:monobank/village/desert": 19.0,
         "monobank:monobank/village/plains": 19.0,
         "monobank:monobank/village/savanna": 19.0,
@@ -3580,6 +3716,7 @@
         "betterdungeons:zombie_dungeon/chests/common": 9.78,
         "betterdungeons:zombie_dungeon/chests/special": 9.78,
         "minecraft:chests/village/village_toolsmith": 9.72,
+        "skyvillages:chests/sky_village_toolsmith": 9.72,
         "minecraft:chests/simple_dungeon": 9.61,
         "minecraft:chests/woodland_mansion": 9.61,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 7.56,
@@ -3589,14 +3726,16 @@
         "simply_houses:chests/plains_mansion/plains_mansion_barrels": 7.56,
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_barrels": 7.56,
         "minecraft:chests/ruined_portal": 7.29,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "betterstrongholds:chests/common": 2.64
       }
     },
     "minecraft:gold_nugget": {
       "remove": false,
       "frequency": 1,
-      "chests": 56,
+      "chests": 59,
       "where": {
+        "villager_gold_washing_facility:chests/villager_gold_washing_facility_loot_table": 90.7,
         "minecraft:chests/underwater_ruin_big": 81.0,
         "philipsruins:chest/ancient_ruins": 66.7,
         "philipsruins:chest/ancient_ruins_loot": 66.7,
@@ -3642,8 +3781,10 @@
         "philipsruins:chest/desert_pyramid_loot": 17.4,
         "philipsruins:chest/ocean_ruins_loot": 12.8,
         "wares:agreement/village/savanna_requested_sell": 12.5,
+        "takesapillage:chests/bastille/graveyard": 12.1,
         "philipsruins:chest/bone_dungeon_loot": 11.9,
         "minecraft:chests/village/village_plains_house": 11.8,
+        "skyvillages:chests/sky_village_normal_house": 11.8,
         "minecraft:chests/village/village_savanna_house": 11.1,
         "terralith:village/desert/generic": 10.9,
         "terralith:village/fortified/generic": 10.9,
@@ -3669,7 +3810,7 @@
     "minecraft:golden_apple": {
       "remove": false,
       "frequency": 1,
-      "chests": 54,
+      "chests": 55,
       "where": {
         "minecraft:chests/igloo_chest": 100.0,
         "betterstrongholds:chests/trap": 49.9,
@@ -3703,6 +3844,7 @@
         "philipsruins:chest/lost_soul_city_loot": 6.35,
         "philipsruins:chest/ocean_ruin_fortress": 6.13,
         "minecraft:chests/underwater_ruin_big": 4.35,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "philipsruins:chest/end_ruins_loot": 2.99,
         "minecraft:chests/stronghold_corridor": 2.48,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 1.28,
@@ -3756,7 +3898,7 @@
     "minecraft:golden_boots": {
       "remove": false,
       "frequency": 1,
-      "chests": 9,
+      "chests": 10,
       "where": {
         "minecraft:chests/ruined_portal": 20.5,
         "minecraft:chests/bastion_other": 19.0,
@@ -3765,6 +3907,7 @@
         "betterdungeons:small_nether_dungeon/chests/common": 11.6,
         "minecraft:chests/bastion_bridge": 11.2,
         "hopo:chests/small_ruin_warm": 7.2,
+        "rare-ice:chests/rare_ice": 6.67,
         "betterfortresses:chests/keep": 3.79,
         "terralith:underground/chest": 1.45
       }
@@ -3772,9 +3915,10 @@
     "minecraft:golden_carrot": {
       "remove": false,
       "frequency": 1,
-      "chests": 15,
+      "chests": 16,
       "where": {
         "kaisyn:village/exclusives/village_wandering_trader_hut": 72.5,
+        "takesapillage:chests/bastille/church": 57.5,
         "minecraft:chests/ancient_city_ice_box": 54.9,
         "betterdeserttemples:chests/lab": 25.9,
         "wares:agreement/wandering_trader/rare_ware": 25.0,
@@ -3794,7 +3938,7 @@
     "minecraft:golden_chestplate": {
       "remove": false,
       "frequency": 1,
-      "chests": 12,
+      "chests": 13,
       "where": {
         "minecraft:chests/ruined_portal": 20.5,
         "minecraft:chests/nether_bridge": 17.3,
@@ -3806,6 +3950,7 @@
         "minecraft:chests/bastion_other": 9.75,
         "philipsruins:chest/nether_lava_ruins_loot": 7.67,
         "hopo:chests/small_ruin_warm": 7.2,
+        "rare-ice:chests/rare_ice": 6.67,
         "betterfortresses:chests/keep": 3.79,
         "terralith:underground/chest": 1.45
       }
@@ -3846,7 +3991,7 @@
     "minecraft:golden_horse_armor": {
       "remove": false,
       "frequency": 1,
-      "chests": 30,
+      "chests": 31,
       "where": {
         "minecraft:chests/nether_bridge": 26.5,
         "philipsruins:chest/nether_ruins_low": 20.6,
@@ -3868,6 +4013,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 5.64,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 5.64,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 5.64,
+        "skyvillages:chests/sky_village_weaponsmith": 5.64,
         "philipsruins:chest/ocean_ruin_fortress": 4.92,
         "minecraft:chests/end_city_treasure": 4.36,
         "betterdungeons:small_nether_dungeon/chests/common": 4.01,
@@ -3883,7 +4029,7 @@
     "minecraft:golden_leggings": {
       "remove": false,
       "frequency": 1,
-      "chests": 13,
+      "chests": 14,
       "where": {
         "philipsruins:chest/nether_ruins_low": 35.4,
         "minecraft:chests/ruined_portal": 20.5,
@@ -3896,6 +4042,7 @@
         "philipsruins:chest/nether_lava_ruins_loot": 7.67,
         "philipsruins:chest/ocean_ruin_fortress": 7.31,
         "hopo:chests/small_ruin_warm": 7.2,
+        "rare-ice:chests/rare_ice": 6.67,
         "betterfortresses:chests/keep": 3.79,
         "terralith:underground/chest": 1.45
       }
@@ -3903,10 +4050,11 @@
     "minecraft:golden_pickaxe": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 3,
       "where": {
         "minecraft:chests/ruined_portal": 20.5,
-        "terralith:underground/chest": 9.09
+        "terralith:underground/chest": 9.09,
+        "rare-ice:chests/rare_ice": 6.67
       }
     },
     "minecraft:golden_shovel": {
@@ -3921,7 +4069,7 @@
     "minecraft:golden_sword": {
       "remove": false,
       "frequency": 1,
-      "chests": 9,
+      "chests": 10,
       "where": {
         "betterdeserttemples:chests/pharaoh_hidden": 100.0,
         "betterdeserttemples:chests/tomb_pharaoh": 41.5,
@@ -3931,6 +4079,7 @@
         "minecraft:chests/bastion_bridge": 11.2,
         "minecraft:chests/bastion_other": 9.75,
         "philipsruins:chest/nether_lava_ruins_loot": 7.67,
+        "rare-ice:chests/rare_ice": 6.67,
         "betterfortresses:chests/keep": 3.79
       }
     },
@@ -3980,9 +4129,10 @@
     "minecraft:gray_wool": {
       "remove": false,
       "frequency": 1,
-      "chests": 1,
+      "chests": 2,
       "where": {
-        "minecraft:chests/village/village_shepherd": 22.4
+        "minecraft:chests/village/village_shepherd": 22.4,
+        "skyvillages:chests/sky_village_shepherd": 22.4
       }
     },
     "minecraft:green_candle": {
@@ -4010,7 +4160,7 @@
     "minecraft:gunpowder": {
       "remove": false,
       "frequency": 1,
-      "chests": 30,
+      "chests": 32,
       "where": {
         "philipsruins:chest/ancient_ruins": 91.8,
         "philipsruins:chest/ancient_ruins_loot": 91.8,
@@ -4025,6 +4175,7 @@
         "philipsruins:chest/ocean_ruin_fortress": 51.9,
         "philipsruins:chest/ocean_ruins_loot": 51.9,
         "minecraft:chests/desert_pyramid": 46.0,
+        "villagesandpillages:village_witch/house/personal_chest": 45.6,
         "philipsruins:chest/end_ruins_loot": 45.2,
         "betterwitchhuts:chests/hut_0": 45.1,
         "philipsruins:chest/badlands_dungeon_loot_high": 44.9,
@@ -4036,6 +4187,7 @@
         "betterfortresses:chests/keep": 33.3,
         "philipsruins:chest/bone_dungeon_loot": 32.7,
         "philipsruins:chest/sculk_dungeon_loot": 31.5,
+        "takesapillage:chests/bastille/church": 23.0,
         "philipsruins:chest/badlands_dungeon_loot_low": 21.9,
         "minecraft:chests/shipwreck_supply": 20.8,
         "wares:agreement/wandering_trader/regular_ware": 20.0,
@@ -4146,10 +4298,11 @@
     "minecraft:iron_axe": {
       "remove": false,
       "frequency": 1,
-      "chests": 22,
+      "chests": 23,
       "where": {
         "terralith:village/desert/butcher": 100.0,
         "terralith:village/fortified/butcher": 100.0,
+        "illager_viking_longship:chests/longship": 21.7,
         "philipsruins:chest/bone_dungeon_loot": 19.0,
         "philipsruins:chest/sculk_dungeon_loot": 15.2,
         "hopo:chests/copper": 15.2,
@@ -4199,7 +4352,7 @@
     "minecraft:iron_boots": {
       "remove": false,
       "frequency": 1,
-      "chests": 19,
+      "chests": 20,
       "where": {
         "kaisyn:village/exclusives/village_classic_blacksmith": 25.6,
         "minecraft:chests/village/village_weaponsmith": 25.4,
@@ -4211,6 +4364,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 25.4,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 25.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "kaisyn:outpost/common/armory": 12.9,
         "minecraft:chests/end_city_treasure": 12.6,
         "minecraft:chests/stronghold_corridor": 12.0,
@@ -4225,7 +4379,7 @@
     "minecraft:iron_chestplate": {
       "remove": false,
       "frequency": 1,
-      "chests": 24,
+      "chests": 25,
       "where": {
         "kaisyn:village/exclusives/village_classic_blacksmith": 25.6,
         "minecraft:chests/village/village_weaponsmith": 25.4,
@@ -4237,6 +4391,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 25.4,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 25.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "philipsruins:chest/bone_dungeon_loot": 15.3,
         "philipsruins:chest/badlands_dungeon_loot_high": 13.8,
         "philipsruins:chest/desert_pyramid_loot": 13.3,
@@ -4256,9 +4411,10 @@
     "minecraft:iron_helmet": {
       "remove": false,
       "frequency": 1,
-      "chests": 29,
+      "chests": 32,
       "where": {
         "minecraft:chests/village/village_armorer": 28.8,
+        "skyvillages:chests/sky_village_armorer": 28.8,
         "kaisyn:village/exclusives/village_classic_blacksmith": 25.6,
         "philipsruins:chest/desert_pyramid_loot": 25.4,
         "minecraft:chests/village/village_weaponsmith": 25.4,
@@ -4270,6 +4426,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 25.4,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 25.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "kaisyn:outpost/common/armory": 12.9,
         "minecraft:chests/end_city_treasure": 12.6,
         "philipsruins:chest/badlands_dungeon_loot_high": 12.4,
@@ -4282,6 +4439,7 @@
         "philipsruins:chest/ocean_ruins_loot": 9.72,
         "philipsruins:chest/lost_soul_city_loot": 9.33,
         "philipsruins:chest/ocean_ruin_fortress": 7.31,
+        "rare-ice:chests/rare_ice": 6.67,
         "philipsruins:chest/bone_dungeon_loot": 6.52,
         "philipsruins:chest/sculk_dungeon_loot": 5.25,
         "philipsruins:chest/end_ruins_loot": 5.19,
@@ -4306,7 +4464,7 @@
     "minecraft:iron_horse_armor": {
       "remove": false,
       "frequency": 1,
-      "chests": 22,
+      "chests": 23,
       "where": {
         "domesticationinnovation:chests/petshop_chest": 39.7,
         "minecraft:chests/simple_dungeon": 17.7,
@@ -4324,6 +4482,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 5.64,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 5.64,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 5.64,
+        "skyvillages:chests/sky_village_weaponsmith": 5.64,
         "minecraft:chests/end_city_treasure": 4.36,
         "minecraft:chests/jungle_temple": 3.89,
         "betterfortresses:chests/keep": 3.79,
@@ -4335,7 +4494,7 @@
     "minecraft:iron_ingot": {
       "remove": false,
       "frequency": 1,
-      "chests": 85,
+      "chests": 93,
       "where": {
         "minecraft:chests/buried_treasure": 99.4,
         "minecraft:chests/shipwreck_treasure": 97.4,
@@ -4362,13 +4521,17 @@
         "mes:general": 55.9,
         "betterfortresses:chests/puzzle": 55.1,
         "minecraft:chests/village/village_armorer": 49.9,
+        "skyvillages:chests/sky_village_armorer": 49.9,
         "betterstrongholds:chests/trap": 49.9,
         "kaisyn:village/exclusives/village_classic_blacksmith": 45.1,
         "minecraft:chests/village/village_weaponsmith": 44.8,
+        "skyvillages:chests/sky_village_weaponsmith": 44.8,
         "philipsruins:chest/end_ruins_loot": 43.8,
         "minecraft:chests/village/village_toolsmith": 40.6,
+        "skyvillages:chests/sky_village_toolsmith": 40.6,
         "mes:jungle_tower": 40.5,
         "philipsruins:chest/nether_lava_ruins_loot": 39.4,
+        "illager_viking_longship:chests/longship": 39.2,
         "terralith:village/desert/smith/expert": 38.9,
         "minecraft:chests/end_city_treasure": 36.7,
         "minecraft:chests/stronghold_crossing": 34.3,
@@ -4381,6 +4544,8 @@
         "mes:houses_uncommon": 31.8,
         "philipsruins:chest/badlands_dungeon_loot_high": 31.0,
         "minecraft:chests/pillager_outpost": 30.5,
+        "takesapillage:chests/bastille/center": 30.5,
+        "takesapillage:chests/bastille/church": 30.5,
         "philipsruins:chest/bone_dungeon_loot": 29.3,
         "hopo:chests/small_ruin_cold": 27.9,
         "philipsruins:chest/nether_ruins_low": 27.4,
@@ -4407,6 +4572,7 @@
         "philipsruins:chest/ocean_ruins_loot": 21.8,
         "betterstrongholds:chests/treasure": 21.4,
         "philipsruins:chest/ocean_ruin_fortress": 19.5,
+        "rare-ice:chests/rare_ice": 19.1,
         "minecraft:chests/bastion_other": 19.0,
         "minecraft:chests/simple_dungeon": 18.5,
         "minecraft:chests/woodland_mansion": 18.5,
@@ -4421,13 +4587,14 @@
         "terralith:underground/chest": 11.4,
         "minecraft:chests/bastion_bridge": 11.2,
         "betterdungeons:zombie_dungeon/chests/common": 9.78,
-        "betterdungeons:zombie_dungeon/chests/special": 9.78
+        "betterdungeons:zombie_dungeon/chests/special": 9.78,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45
       }
     },
     "minecraft:iron_leggings": {
       "remove": false,
       "frequency": 1,
-      "chests": 24,
+      "chests": 25,
       "where": {
         "kaisyn:village/exclusives/village_classic_blacksmith": 25.6,
         "minecraft:chests/village/village_weaponsmith": 25.4,
@@ -4439,6 +4606,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 25.4,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 25.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "minecraft:chests/ancient_city": 20.7,
         "philipsruins:chest/badlands_dungeon_loot_high": 13.8,
         "philipsruins:chest/desert_pyramid_loot": 13.3,
@@ -4458,7 +4626,7 @@
     "minecraft:iron_nugget": {
       "remove": false,
       "frequency": 1,
-      "chests": 40,
+      "chests": 42,
       "where": {
         "philipsruins:chest/ancient_ruins": 96.3,
         "philipsruins:chest/ancient_ruins_loot": 96.3,
@@ -4477,6 +4645,7 @@
         "terralith:village/fortified/archer": 55.1,
         "terralith:village/desert/smith/expert": 53.4,
         "terralith:village/fortified/treasure": 51.2,
+        "takesapillage:chests/bastille/graveyard": 48.2,
         "minecraft:chests/bastion_bridge": 47.9,
         "terralith:village/desert/smith": 47.3,
         "terralith:village/fortified/smith": 47.3,
@@ -4489,6 +4658,7 @@
         "philipsruins:chest/desert_pyramid_loot": 34.3,
         "mes:abandoned": 33.3,
         "hopo:chests/small_ruin_cold": 32.6,
+        "takesapillage:chests/bastille/gallows": 29.3,
         "hopo:chests/materials": 29.2,
         "minecraft:chests/bastion_other": 24.4,
         "philipsruins:chest/nether_ruins_low": 24.2,
@@ -4515,12 +4685,13 @@
     "minecraft:iron_pickaxe": {
       "remove": false,
       "frequency": 1,
-      "chests": 40,
+      "chests": 44,
       "where": {
         "terralith:village/desert/smith/novice": 100.0,
         "terralith:village/desert/smith": 95.0,
         "terralith:village/fortified/smith": 95.0,
         "minecraft:chests/village/village_toolsmith": 40.6,
+        "skyvillages:chests/sky_village_toolsmith": 40.6,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 26.4,
         "simply_houses:chests/forest_fort/forest_fort_normal": 26.4,
         "simply_houses:chests/forest_stonemason/forest_stonemason_normal": 26.4,
@@ -4531,6 +4702,7 @@
         "simply_houses:chests/taiga_house/taiga_house_barrels": 26.4,
         "kaisyn:village/exclusives/village_classic_blacksmith": 25.6,
         "minecraft:chests/village/village_weaponsmith": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "terralith:underground/chest": 22.7,
         "hopo:chests/copper": 15.2,
         "philipsruins:chest/ocean_ruin_fortress": 12.8,
@@ -4541,9 +4713,11 @@
         "philipsruins:chest/ocean_ruins_loot": 7.62,
         "philipsruins:chest/sculk_dungeon_loot": 7.44,
         "minecraft:chests/abandoned_mineshaft": 7.04,
+        "rare-ice:chests/rare_ice": 6.67,
         "philipsruins:chest/end_ruins_loot": 5.92,
         "terralith:spire/rare": 5.0,
         "minecraft:chests/stronghold_crossing": 3.97,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "betterstrongholds:chests/common": 2.64,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 2.44,
         "simply_houses:chests/taiga_house/taiga_house_normal": 2.44,
@@ -4562,14 +4736,16 @@
     "minecraft:iron_shovel": {
       "remove": false,
       "frequency": 1,
-      "chests": 14,
+      "chests": 16,
       "where": {
         "terralith:village/desert/mason": 100.0,
         "terralith:village/fortified/mason": 100.0,
         "minecraft:chests/village/village_toolsmith": 40.6,
+        "skyvillages:chests/sky_village_toolsmith": 40.6,
         "philipsruins:chest/bone_dungeon_loot": 14.5,
         "minecraft:chests/end_city_treasure": 12.6,
         "terralith:spire/common": 12.5,
+        "takesapillage:chests/bastille/graveyard": 12.1,
         "philipsruins:chest/sculk_dungeon_loot": 11.7,
         "terralith:underground/chest": 11.4,
         "betterdungeons:zombie_dungeon/chests/common": 9.78,
@@ -4583,7 +4759,7 @@
     "minecraft:iron_sword": {
       "remove": false,
       "frequency": 1,
-      "chests": 41,
+      "chests": 44,
       "where": {
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 26.4,
         "simply_houses:chests/forest_fort/forest_fort_normal": 26.4,
@@ -4595,6 +4771,7 @@
         "simply_houses:chests/taiga_house/taiga_house_barrels": 26.4,
         "kaisyn:village/exclusives/village_classic_blacksmith": 25.6,
         "minecraft:chests/village/village_weaponsmith": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "mes:large_carts": 25.0,
         "minecraft:chests/buried_treasure": 25.0,
         "betterstrongholds:chests/crypt": 23.6,
@@ -4611,9 +4788,11 @@
         "betterdungeons:zombie_dungeon/chests/special": 9.78,
         "philipsruins:chest/ocean_ruins_loot": 8.68,
         "betterfortresses:chests/keep": 7.47,
+        "rare-ice:chests/rare_ice": 6.67,
         "philipsruins:chest/ocean_ruin_fortress": 6.52,
         "philipsruins:chest/end_ruins_loot": 5.92,
         "terralith:spire/rare": 5.0,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 2.44,
         "simply_houses:chests/taiga_house/taiga_house_normal": 2.44,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 2.44,
@@ -4684,7 +4863,7 @@
     "minecraft:lapis_lazuli": {
       "remove": false,
       "frequency": 1,
-      "chests": 34,
+      "chests": 36,
       "where": {
         "minecraft:chests/shipwreck_treasure": 61.5,
         "philipsruins:chest/end_ruins_loot": 39.6,
@@ -4708,6 +4887,7 @@
         "philipsruins:chest/bone_dungeon_loot": 25.3,
         "wares:agreement/wandering_trader/rare_ware": 25.0,
         "minecraft:chests/village/village_temple": 24.3,
+        "skyvillages:chests/sky_village_temple": 24.3,
         "philipsruins:chest/ocean_ruin_fortress": 22.5,
         "betterstrongholds:chests/treasure": 21.4,
         "philipsruins:chest/sculk_dungeon_loot": 20.4,
@@ -4717,6 +4897,7 @@
         "minecraft:chests/abandoned_mineshaft": 14.5,
         "hopo:chests/materials": 13.2,
         "betterdeserttemples:chests/storage": 8.19,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
         "terralith:spire/common": 2.46,
         "terralith:village/desert/smith": 1.94,
         "terralith:village/fortified/smith": 1.94
@@ -4756,8 +4937,9 @@
     "minecraft:lead": {
       "remove": false,
       "frequency": 1,
-      "chests": 8,
+      "chests": 9,
       "where": {
+        "takesapillage:chests/bastille/gallows": 72.5,
         "domesticationinnovation:chests/petshop_chest": 64.1,
         "terralith:village/desert/cartographer": 46.7,
         "terralith:village/fortified/cartographer": 46.7,
@@ -4771,9 +4953,11 @@
     "minecraft:leather": {
       "remove": false,
       "frequency": 1,
-      "chests": 23,
+      "chests": 25,
       "where": {
         "mes:cart": 100.0,
+        "villagesandpillages:village_witch/house/attic_chest": 79.1,
+        "illager_viking_longship:chests/longship": 64.5,
         "terralith:village/desert/butcher": 50.0,
         "terralith:village/fortified/butcher": 50.0,
         "minecraft:chests/bastion_bridge": 47.9,
@@ -4801,7 +4985,7 @@
     "minecraft:leather_boots": {
       "remove": false,
       "frequency": 1,
-      "chests": 12,
+      "chests": 13,
       "where": {
         "terralith:village/desert/cartographer": 100.0,
         "terralith:village/fortified/cartographer": 100.0,
@@ -4814,13 +4998,14 @@
         "betterfortresses:chests/keep": 14.5,
         "kaisyn:outpost/common/armory": 10.8,
         "betterstrongholds:chests/armoury": 9.23,
+        "rare-ice:chests/rare_ice": 6.67,
         "philipsruins:chest/ocean_ruin_fortress": 5.72
       }
     },
     "minecraft:leather_chestplate": {
       "remove": false,
       "frequency": 1,
-      "chests": 16,
+      "chests": 17,
       "where": {
         "betterdeserttemples:chests/wardrobe": 34.5,
         "minecraft:chests/village/village_tannery": 30.2,
@@ -4836,6 +5021,7 @@
         "betterstrongholds:chests/armoury": 9.23,
         "minecraft:chests/underwater_ruin_small": 8.33,
         "philipsruins:chest/desert_pyramid_loot": 7.16,
+        "rare-ice:chests/rare_ice": 6.67,
         "philipsruins:chest/ocean_ruin_fortress": 5.72,
         "minecraft:chests/underwater_ruin_big": 4.35
       }
@@ -4912,9 +5098,10 @@
     "minecraft:light_gray_wool": {
       "remove": false,
       "frequency": 1,
-      "chests": 1,
+      "chests": 2,
       "where": {
-        "minecraft:chests/village/village_shepherd": 22.4
+        "minecraft:chests/village/village_shepherd": 22.4,
+        "skyvillages:chests/sky_village_shepherd": 22.4
       }
     },
     "minecraft:light_weighted_pressure_plate": {
@@ -5013,15 +5200,17 @@
     "minecraft:map": {
       "remove": false,
       "frequency": 1,
-      "chests": 19,
+      "chests": 21,
       "where": {
         "mes:cartographer_tower": 100.0,
         "minecraft:chests/shipwreck_map": 100.0,
         "terralith:village/desert/cartographer": 80.8,
         "terralith:village/fortified/cartographer": 80.8,
         "minecraft:chests/village/village_cartographer": 45.5,
+        "skyvillages:chests/sky_village_cartographer": 45.5,
         "minecraft:chests/underwater_ruin_big": 43.5,
         "minecraft:chests/underwater_ruin_small": 41.7,
+        "rare-ice:chests/rare_ice": 19.1,
         "betterstrongholds:chests/library_md": 17.6,
         "betterdeserttemples:chests/library": 11.7,
         "betterstrongholds:chests/grand_library": 11.1,
@@ -5047,7 +5236,7 @@
     "minecraft:melon_seeds": {
       "remove": false,
       "frequency": 1,
-      "chests": 8,
+      "chests": 9,
       "where": {
         "betterdeserttemples:chests/food_storage": 55.8,
         "betterdeserttemples:chests/pot": 53.4,
@@ -5056,19 +5245,21 @@
         "minecraft:chests/abandoned_mineshaft": 27.3,
         "philipsruins:chest/badlands_dungeon_loot_high": 21.6,
         "minecraft:chests/simple_dungeon": 18.5,
-        "minecraft:chests/woodland_mansion": 18.5
+        "minecraft:chests/woodland_mansion": 18.5,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45
       }
     },
     "minecraft:melon_slice": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 6,
       "where": {
         "terralith:village/fortified/tavern_downstairs": 68.1,
         "kaisyn:village/village_jungle_house": 66.6,
         "betterdeserttemples:chests/lab": 54.6,
         "betterstrongholds:chests/mess": 46.0,
-        "terralith:village/fortified/tavern_upstairs": 18.3
+        "terralith:village/fortified/tavern_upstairs": 18.3,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45
       }
     },
     "minecraft:milk_bucket": {
@@ -5230,9 +5421,10 @@
     "minecraft:mutton": {
       "remove": false,
       "frequency": 1,
-      "chests": 11,
+      "chests": 12,
       "where": {
         "minecraft:chests/village/village_butcher": 47.4,
+        "skyvillages:chests/sky_village_butcher": 47.4,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 15.8,
         "simply_houses:chests/taiga_house/taiga_house_normal": 15.8,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 15.8,
@@ -5414,9 +5606,10 @@
     "minecraft:oak_sapling": {
       "remove": false,
       "frequency": 1,
-      "chests": 18,
+      "chests": 20,
       "where": {
         "minecraft:chests/village/village_plains_house": 47.4,
+        "skyvillages:chests/sky_village_normal_house": 47.4,
         "terralith:village/desert/generic": 44.4,
         "terralith:village/fortified/generic": 44.4,
         "terralith:village/desert/generic_low": 38.0,
@@ -5432,6 +5625,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 25.4,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 25.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "beautify:chests/botanist/botanist_chest": 24.6,
         "terralith:village/fortified/treasure": 18.6
       }
@@ -5448,7 +5642,7 @@
     "minecraft:obsidian": {
       "remove": false,
       "frequency": 1,
-      "chests": 29,
+      "chests": 30,
       "where": {
         "nullscape:phantom_nest": 100.0,
         "terralith:village/desert/treasure/diamond": 100.0,
@@ -5467,6 +5661,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 25.4,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 25.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 25.4,
+        "skyvillages:chests/sky_village_weaponsmith": 25.4,
         "minecraft:chests/bastion_other": 24.4,
         "philipsruins:chest/nether_lava_ruins_loot": 18.0,
         "philipsruins:chest/end_ruins_loot": 8.79,
@@ -5539,10 +5734,11 @@
     "minecraft:painting": {
       "remove": false,
       "frequency": 1,
-      "chests": 4,
+      "chests": 5,
       "where": {
         "terralith:village/desert/library": 60.2,
         "terralith:village/fortified/library": 60.2,
+        "villagesandpillages:village_witch/house/attic_chest": 51.2,
         "kaisyn:village/exclusives/village_mediterranean_house": 46.6,
         "kaisyn:village/exclusives/village_wandering_trader_hut": 46.6
       }
@@ -5550,7 +5746,7 @@
     "minecraft:paper": {
       "remove": false,
       "frequency": 1,
-      "chests": 35,
+      "chests": 36,
       "where": {
         "mes:cartographer_tower": 100.0,
         "wares:chests/village/desert_warehouse": 100.0,
@@ -5570,6 +5766,7 @@
         "terralith:village/desert/library": 67.5,
         "terralith:village/fortified/library": 67.5,
         "minecraft:chests/village/village_cartographer": 60.4,
+        "skyvillages:chests/sky_village_cartographer": 60.4,
         "terralith:underground/chest": 55.2,
         "minecraft:chests/shipwreck_supply": 46.4,
         "terralith:spire/common": 28.4,
@@ -5659,7 +5856,7 @@
     "minecraft:poppy": {
       "remove": false,
       "frequency": 1,
-      "chests": 14,
+      "chests": 15,
       "where": {
         "terralith:village/desert/treasure/golem": 100.0,
         "beautify:chests/botanist/botanist_chest_snowy": 51.4,
@@ -5671,6 +5868,7 @@
         "betterdungeons:zombie_dungeon/chests/common": 30.7,
         "betterdungeons:zombie_dungeon/chests/special": 30.7,
         "minecraft:chests/village/village_plains_house": 11.8,
+        "skyvillages:chests/sky_village_normal_house": 11.8,
         "terralith:village/desert/generic": 10.9,
         "terralith:village/fortified/generic": 10.9,
         "terralith:village/desert/generic_low": 8.77,
@@ -5680,10 +5878,11 @@
     "minecraft:porkchop": {
       "remove": false,
       "frequency": 1,
-      "chests": 18,
+      "chests": 19,
       "where": {
         "terralith:ruin/glacial/main_cs": 61.7,
         "minecraft:chests/village/village_butcher": 47.4,
+        "skyvillages:chests/sky_village_butcher": 47.4,
         "terralith:village/desert/butcher": 42.2,
         "terralith:village/fortified/butcher": 42.2,
         "terralith:ruin/glacial/junk": 31.9,
@@ -5705,10 +5904,11 @@
     "minecraft:potato": {
       "remove": false,
       "frequency": 1,
-      "chests": 35,
+      "chests": 37,
       "where": {
         "mes:cart": 100.0,
         "minecraft:chests/village/village_plains_house": 73.4,
+        "skyvillages:chests/sky_village_normal_house": 73.4,
         "terralith:village/desert/generic": 70.1,
         "terralith:village/fortified/generic": 70.1,
         "kaisyn:village/village_badlands_house": 68.5,
@@ -5719,6 +5919,7 @@
         "terralith:village/desert/generic_low": 63.6,
         "terralith:village/fortified/generic_low": 63.6,
         "minecraft:chests/pillager_outpost": 57.5,
+        "takesapillage:chests/bastille/center": 57.5,
         "mes:houses_common": 56.6,
         "betterdeserttemples:chests/food_storage": 55.8,
         "betterdeserttemples:chests/pot": 53.4,
@@ -5747,8 +5948,9 @@
     "minecraft:potion": {
       "remove": false,
       "frequency": 1,
-      "chests": 19,
+      "chests": 21,
       "where": {
+        "villagesandpillages:village_witch/house/personal_chest": 100.0,
         "simply_houses:chests/forest_fort/forest_fort_potions": 100.0,
         "simply_houses:chests/forest_house/forest_house_potions": 100.0,
         "simply_houses:chests/forest_stonemason/forest_stonemason_potions": 100.0,
@@ -5761,6 +5963,7 @@
         "yungsextras:desert/chillzone": 99.8,
         "betterdungeons:spider_dungeon/chests/egg_room": 94.1,
         "betterwitchhuts:chests/hut_0": 90.1,
+        "takesapillage:chests/bastille/church": 80.9,
         "minecraft:chests/buried_treasure": 66.7,
         "betterdeserttemples:chests/lab": 54.6,
         "terralith:village/fortified/fisherman": 48.2,
@@ -5814,13 +6017,14 @@
     "minecraft:prismarine_crystals": {
       "remove": false,
       "frequency": 1,
-      "chests": 6,
+      "chests": 7,
       "where": {
         "minecraft:chests/buried_treasure": 53.1,
         "hopo:chests/prismarine": 31.8,
         "philipsruins:chest/ocean_ruins_loot": 23.2,
         "hopo:chests/small_ruin_cold": 22.9,
         "philipsruins:chest/ocean_ruin_fortress": 20.8,
+        "rare-ice:chests/rare_ice": 19.1,
         "hopo:chests/small_ruin_warm": 13.9
       }
     },
@@ -5839,8 +6043,9 @@
     "minecraft:pufferfish": {
       "remove": false,
       "frequency": 1,
-      "chests": 11,
+      "chests": 12,
       "where": {
+        "villagesandpillages:village_witch/house/barrel": 37.3,
         "betterwitchhuts:chests/hut_0": 25.2,
         "terralith:village/fortified/fisherman": 23.9,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
@@ -5948,8 +6153,9 @@
     "minecraft:rabbit_foot": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 6,
       "where": {
+        "villagesandpillages:village_witch/house/barrel": 37.3,
         "terralith:village/desert/archer": 22.5,
         "terralith:village/fortified/archer": 22.5,
         "betterdeserttemples:chests/lab": 7.07,
@@ -6010,8 +6216,9 @@
     "minecraft:raw_gold": {
       "remove": false,
       "frequency": 1,
-      "chests": 7,
+      "chests": 8,
       "where": {
+        "villager_gold_washing_facility:chests/villager_gold_washing_facility_loot_table": 76.4,
         "kaisyn:village/exclusives/village_wandering_trader_hut": 72.5,
         "mes:mushroom_pond": 66.7,
         "mes:jungle_tower": 47.0,
@@ -6078,10 +6285,11 @@
     "minecraft:red_mushroom": {
       "remove": false,
       "frequency": 1,
-      "chests": 7,
+      "chests": 8,
       "where": {
         "mes:mushroom_pond": 76.0,
         "kaisyn:village/village_mushroom_house": 45.1,
+        "villagesandpillages:village_witch/house/barrel": 37.3,
         "betterdungeons:zombie_dungeon/chests/common": 30.7,
         "betterdungeons:zombie_dungeon/chests/special": 30.7,
         "hopo:chests/food": 12.5,
@@ -6137,14 +6345,18 @@
     "minecraft:redstone": {
       "remove": false,
       "frequency": 1,
-      "chests": 14,
+      "chests": 19,
       "where": {
         "betterdungeons:skeleton_dungeon/chests/common": 57.5,
+        "villagesandpillages:village_witch/house/personal_chest": 45.6,
         "betterwitchhuts:chests/hut_0": 45.1,
         "minecraft:chests/village/village_temple": 43.1,
+        "skyvillages:chests/sky_village_temple": 43.1,
+        "villagesandpillages:village_witch/house/barrel": 37.3,
         "philipsruins:chest/nether_lava_ruins_loot": 29.5,
         "minecraft:chests/simple_dungeon": 26.6,
         "minecraft:chests/woodland_mansion": 26.6,
+        "takesapillage:chests/bastille/church": 23.0,
         "betterstrongholds:chests/treasure": 21.4,
         "minecraft:chests/stronghold_crossing": 18.6,
         "minecraft:chests/abandoned_mineshaft": 14.5,
@@ -6152,7 +6364,8 @@
         "philipsruins:chest/ocean_ruins_loot": 12.8,
         "betterstrongholds:chests/common": 12.7,
         "minecraft:chests/stronghold_corridor": 12.0,
-        "philipsruins:chest/ocean_ruin_fortress": 9.67
+        "philipsruins:chest/ocean_ruin_fortress": 9.67,
+        "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45
       }
     },
     "minecraft:rooted_dirt": {
@@ -6187,7 +6400,7 @@
     "minecraft:rotten_flesh": {
       "remove": false,
       "frequency": 1,
-      "chests": 39,
+      "chests": 41,
       "where": {
         "philipsruins:chest/ancient_ruins": 99.9,
         "philipsruins:chest/ancient_ruins_loot": 99.9,
@@ -6196,8 +6409,10 @@
         "philipsruins:chest/ruin_loot": 99.9,
         "philipsruins:chest/ruin_loot_value": 99.9,
         "minecraft:chests/village/village_temple": 87.9,
+        "skyvillages:chests/sky_village_temple": 87.9,
         "philipsruins:chest/nether_ruins_low": 76.0,
         "mes:swamps": 75.6,
+        "takesapillage:chests/bastille/graveyard": 74.2,
         "philipsruins:chest/badlands_dungeon_loot_high": 72.0,
         "betterdungeons:zombie_dungeon/chests/common": 70.8,
         "betterdungeons:zombie_dungeon/chests/special": 70.8,
@@ -6233,7 +6448,7 @@
     "minecraft:saddle": {
       "remove": false,
       "frequency": 1,
-      "chests": 35,
+      "chests": 36,
       "where": {
         "betterdungeons:small_nether_dungeon/chests/common": 42.2,
         "minecraft:chests/nether_bridge": 32.3,
@@ -6254,6 +6469,7 @@
         "simply_houses:chests/plains_mansion/plains_mansion_treasure": 16.1,
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 16.1,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 16.1,
+        "skyvillages:chests/sky_village_weaponsmith": 16.1,
         "minecraft:chests/ancient_city": 14.3,
         "philipsruins:chest/desert_pyramid_loot": 14.0,
         "minecraft:chests/end_city_treasure": 12.6,
@@ -6275,12 +6491,14 @@
     "minecraft:salmon": {
       "remove": false,
       "frequency": 1,
-      "chests": 12,
+      "chests": 14,
       "where": {
         "kaisyn:outpost/exclusives/outpost_beach_barrel": 85.5,
         "minecraft:chests/spawn_bonus_chest": 61.5,
         "terralith:village/fortified/fisherman": 42.8,
+        "rare-ice:chests/rare_ice": 25.0,
         "minecraft:chests/village/village_fisher": 22.4,
+        "skyvillages:chests/sky_village_fisher": 22.4,
         "hopo:chests/food": 18.3,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 18.0,
         "simply_houses:chests/taiga_house/taiga_house_normal": 18.0,
@@ -6400,16 +6618,18 @@
     "minecraft:shears": {
       "remove": false,
       "frequency": 1,
-      "chests": 1,
+      "chests": 2,
       "where": {
-        "minecraft:chests/village/village_shepherd": 11.8
+        "minecraft:chests/village/village_shepherd": 11.8,
+        "skyvillages:chests/sky_village_shepherd": 11.8
       }
     },
     "minecraft:shield": {
       "remove": false,
       "frequency": 1,
-      "chests": 8,
+      "chests": 9,
       "where": {
+        "illager_viking_longship:chests/longship": 39.2,
         "kaisyn:outpost/common/armory": 12.9,
         "betterstrongholds:chests/armoury": 11.0,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 2.44,
@@ -6431,9 +6651,10 @@
     "minecraft:slime_ball": {
       "remove": false,
       "frequency": 1,
-      "chests": 16,
+      "chests": 17,
       "where": {
         "kaisyn:village/village_swamp_house": 67.8,
+        "takesapillage:chests/bastille/gallows": 57.5,
         "betterwitchhuts:chests/hut_0": 45.1,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 12.5,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 12.5,
@@ -6462,11 +6683,12 @@
     "minecraft:smooth_stone": {
       "remove": false,
       "frequency": 1,
-      "chests": 3,
+      "chests": 4,
       "where": {
         "terralith:village/desert/mason": 56.6,
         "terralith:village/fortified/mason": 56.6,
-        "minecraft:chests/village/village_mason": 19.5
+        "minecraft:chests/village/village_mason": 19.5,
+        "skyvillages:chests/sky_village_mason": 19.5
       }
     },
     "minecraft:snow_block": {
@@ -6532,19 +6754,23 @@
     "minecraft:spider_eye": {
       "remove": false,
       "frequency": 1,
-      "chests": 4,
+      "chests": 7,
       "where": {
         "terralith:village/fortified/attic": 69.2,
         "betterdungeons:spider_dungeon/chests/egg_room": 49.1,
+        "villagesandpillages:village_witch/house/personal_chest": 45.6,
         "betterwitchhuts:chests/hut_0": 45.1,
-        "minecraft:chests/desert_pyramid": 27.3
+        "villagesandpillages:village_witch/house/barrel": 37.3,
+        "minecraft:chests/desert_pyramid": 27.3,
+        "takesapillage:chests/bastille/church": 23.0
       }
     },
     "minecraft:splash_potion": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 3,
       "where": {
+        "villagesandpillages:village_witch/house/barrel": 98.3,
         "betterdungeons:spider_dungeon/chests/egg_room": 94.1,
         "betterwitchhuts:chests/hut_0": 79.3
       }
@@ -6576,8 +6802,9 @@
     "minecraft:spruce_log": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 6,
       "where": {
+        "takesapillage:chests/bastille/gallows": 100.0,
         "minecraft:chests/village/village_taiga_house": 64.9,
         "minecraft:chests/spawn_bonus_chest": 26.2,
         "wares:agreement/village/taiga_payment_buy": 11.6,
@@ -6627,9 +6854,12 @@
     "minecraft:stick": {
       "remove": false,
       "frequency": 1,
-      "chests": 32,
+      "chests": 40,
       "where": {
+        "watchtower_building:chests/fresh_towerloot": 100.0,
+        "watchtower_building:chests/towerloot": 100.0,
         "minecraft:chests/village/village_toolsmith": 89.5,
+        "skyvillages:chests/sky_village_toolsmith": 89.5,
         "terralith:village/desert/food": 81.2,
         "terralith:village/fortified/food": 81.2,
         "betterdeserttemples:chests/lab": 80.2,
@@ -6637,14 +6867,19 @@
         "terralith:village/fortified/cartographer": 71.2,
         "minecraft:chests/spawn_bonus_chest": 67.3,
         "betterdungeons:skeleton_dungeon/chests/middle": 58.4,
+        "takesapillage:chests/bastille/gallows": 57.5,
         "terralith:village/desert/archer": 55.1,
         "terralith:village/fortified/archer": 55.1,
         "minecraft:chests/village/village_fletcher": 54.2,
+        "skyvillages:chests/sky_village_fletcher": 54.2,
         "terralith:village/fortified/fisherman": 53.2,
+        "villagesandpillages:village_witch/house/personal_chest": 45.6,
         "kaisyn:village/village_mushroom_house": 45.1,
         "kaisyn:village/village_badlands_house": 43.1,
+        "takesapillage:chests/bastille/church": 42.2,
         "terralith:village/desert/junk": 27.2,
         "minecraft:chests/village/village_cartographer": 25.8,
+        "skyvillages:chests/sky_village_cartographer": 25.8,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 18.1,
         "simply_houses:chests/taiga_house/taiga_house_normal": 18.1,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 18.1,
@@ -6666,14 +6901,15 @@
     "minecraft:stone": {
       "remove": false,
       "frequency": 1,
-      "chests": 6,
+      "chests": 7,
       "where": {
         "terralith:village/desert/smith/novice": 79.1,
         "terralith:village/desert/smith": 75.2,
         "terralith:village/fortified/smith": 75.2,
         "terralith:village/desert/mason": 56.6,
         "terralith:village/fortified/mason": 56.6,
-        "minecraft:chests/village/village_mason": 35.5
+        "minecraft:chests/village/village_mason": 35.5,
+        "skyvillages:chests/sky_village_mason": 35.5
       }
     },
     "minecraft:stone_axe": {
@@ -6699,36 +6935,39 @@
     "minecraft:stone_bricks": {
       "remove": false,
       "frequency": 1,
-      "chests": 4,
+      "chests": 5,
       "where": {
         "terralith:village/desert/mason": 56.6,
         "terralith:village/fortified/mason": 56.6,
         "minecraft:chests/village/village_mason": 35.5,
+        "skyvillages:chests/sky_village_mason": 35.5,
         "hopo:chests/small_ruin_cold": 12.1
       }
     },
     "minecraft:stone_pickaxe": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 6,
       "where": {
         "minecraft:chests/spawn_bonus_chest": 25.0,
         "hopo:chests/copper": 15.2,
         "terralith:ruin/glacial/junk": 14.3,
         "terralith:ruin/glacial/main_cs": 14.3,
-        "terralith:spire/junk": 14.3
+        "terralith:spire/junk": 14.3,
+        "rare-ice:chests/rare_ice": 6.67
       }
     },
     "minecraft:stone_shovel": {
       "remove": false,
       "frequency": 1,
-      "chests": 19,
+      "chests": 20,
       "where": {
         "betterdungeons:zombie_dungeon/chests/common": 14.5,
         "betterdungeons:zombie_dungeon/chests/special": 14.5,
         "terralith:ruin/glacial/junk": 14.3,
         "terralith:ruin/glacial/main_cs": 14.3,
         "terralith:spire/junk": 14.3,
+        "takesapillage:chests/bastille/graveyard": 12.1,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 1.28,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 1.28,
         "simply_houses:chests/forest_fort/forest_fort_barrels": 1.28,
@@ -6748,17 +6987,18 @@
     "minecraft:stone_sword": {
       "remove": false,
       "frequency": 1,
-      "chests": 3,
+      "chests": 4,
       "where": {
         "betterfortresses:chests/keep": 14.5,
         "betterdungeons:zombie_dungeon/chests/common": 14.5,
-        "betterdungeons:zombie_dungeon/chests/special": 14.5
+        "betterdungeons:zombie_dungeon/chests/special": 14.5,
+        "rare-ice:chests/rare_ice": 6.67
       }
     },
     "minecraft:string": {
       "remove": false,
       "frequency": 1,
-      "chests": 39,
+      "chests": 43,
       "where": {
         "philipsruins:chest/ancient_ruins": 99.1,
         "philipsruins:chest/ancient_ruins_loot": 99.1,
@@ -6767,6 +7007,7 @@
         "philipsruins:chest/ruin_loot": 99.1,
         "philipsruins:chest/ruin_loot_value": 99.1,
         "betterdungeons:spider_dungeon/chests/egg_room": 87.5,
+        "villagesandpillages:village_witch/house/attic_chest": 68.7,
         "terralith:spire/junk": 68.1,
         "philipsruins:chest/nether_ruins_low": 66.4,
         "philipsruins:chest/badlands_dungeon_loot_high": 62.7,
@@ -6783,6 +7024,9 @@
         "terralith:village/fortified/fisherman": 42.8,
         "betterfortresses:chests/extra": 40.8,
         "minecraft:chests/pillager_outpost": 39.1,
+        "takesapillage:chests/bastille/center": 39.1,
+        "takesapillage:chests/bastille/church": 39.1,
+        "takesapillage:chests/bastille/gallows": 37.7,
         "twigs:chests/bloodstone_obelisk": 37.7,
         "betterdeserttemples:chests/storage": 36.1,
         "betterdeserttemples:chests/tomb": 34.4,
@@ -6830,11 +7074,14 @@
     "minecraft:sugar": {
       "remove": false,
       "frequency": 1,
-      "chests": 4,
+      "chests": 7,
       "where": {
         "kaisyn:outpost/exclusives/outpost_mediterranean_barrel": 85.5,
         "kaisyn:outpost/exclusives/outpost_rustic_barrel": 73.4,
+        "villagesandpillages:village_witch/house/personal_chest": 45.6,
         "betterwitchhuts:chests/hut_0": 45.1,
+        "villagesandpillages:village_witch/house/barrel": 37.3,
+        "takesapillage:chests/bastille/church": 23.0,
         "terralith:village/fortified/tavern_upstairs": 21.1
       }
     },
@@ -6915,6 +7162,14 @@
         "wares:agreement/village/desert_requested_sell": 8.33
       }
     },
+    "minecraft:tinted_glass": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "takesapillage:chests/bastille/church": 58.0
+      }
+    },
     "minecraft:tipped_arrow": {
       "remove": false,
       "frequency": 1,
@@ -6938,8 +7193,10 @@
     "minecraft:torch": {
       "remove": false,
       "frequency": 1,
-      "chests": 7,
+      "chests": 9,
       "where": {
+        "watchtower_building:chests/fresh_towerloot": 100.0,
+        "watchtower_building:chests/towerloot": 100.0,
         "minecraft:chests/abandoned_mineshaft": 65.7,
         "betterdungeons:skeleton_dungeon/chests/middle": 58.4,
         "betterdungeons:zombie_dungeon/chests/common": 30.7,
@@ -6947,6 +7204,14 @@
         "betterstrongholds:chests/common": 12.7,
         "minecraft:chests/village/village_savanna_house": 11.1,
         "kaisyn:village/village_jungle_house": 8.39
+      }
+    },
+    "minecraft:totem_of_undying": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "takesapillage:chests/bastille/church": 33.3
       }
     },
     "minecraft:trident": {
@@ -6961,11 +7226,13 @@
     "minecraft:tripwire_hook": {
       "remove": false,
       "frequency": 1,
-      "chests": 3,
+      "chests": 5,
       "where": {
         "terralith:village/desert/archer": 55.1,
         "terralith:village/fortified/archer": 55.1,
-        "minecraft:chests/pillager_outpost": 30.5
+        "minecraft:chests/pillager_outpost": 30.5,
+        "takesapillage:chests/bastille/center": 30.5,
+        "takesapillage:chests/bastille/gallows": 29.3
       }
     },
     "minecraft:tropical_fish": {
@@ -7054,14 +7321,16 @@
     "minecraft:water_bucket": {
       "remove": false,
       "frequency": 1,
-      "chests": 14,
+      "chests": 16,
       "where": {
         "terralith:village/fortified/fisherman": 42.8,
         "terralith:village/desert/mason": 25.5,
         "terralith:village/fortified/mason": 25.5,
         "minecraft:chests/village/village_fisher": 22.4,
+        "skyvillages:chests/sky_village_fisher": 22.4,
         "kaisyn:village/village_swamp_house": 19.6,
         "hopo:chests/small_ruin_cold": 12.1,
+        "takesapillage:chests/bastille/farm": 12.1,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 7.46,
         "simply_houses:chests/taiga_house/taiga_house_normal": 7.46,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 7.46,
@@ -7101,21 +7370,25 @@
     "minecraft:wheat": {
       "remove": false,
       "frequency": 1,
-      "chests": 36,
+      "chests": 40,
       "where": {
         "minecraft:chests/underwater_ruin_small": 84.2,
         "minecraft:chests/underwater_ruin_big": 81.0,
         "mes:houses_desert": 80.6,
         "minecraft:chests/village/village_desert_house": 79.7,
+        "takesapillage:chests/bastille/farm": 74.2,
         "minecraft:chests/pillager_outpost": 72.5,
+        "takesapillage:chests/bastille/center": 72.5,
         "kaisyn:village/village_badlands_house": 68.5,
         "kaisyn:village/village_swamp_house": 67.8,
         "yungsextras:desert/ruins": 59.4,
         "betterdeserttemples:chests/food_storage": 55.8,
         "minecraft:chests/igloo_chest": 55.3,
         "minecraft:chests/village/village_shepherd": 54.2,
+        "skyvillages:chests/sky_village_shepherd": 54.2,
         "betterdeserttemples:chests/pot": 53.4,
         "minecraft:chests/village/village_butcher": 47.4,
+        "skyvillages:chests/sky_village_butcher": 47.4,
         "minecraft:chests/shipwreck_supply": 42.1,
         "minecraft:chests/simple_dungeon": 34.1,
         "minecraft:chests/woodland_mansion": 34.1,
@@ -7144,11 +7417,13 @@
     "minecraft:wheat_seeds": {
       "remove": false,
       "frequency": 1,
-      "chests": 15,
+      "chests": 17,
       "where": {
         "mes:general": 80.8,
         "minecraft:chests/village/village_savanna_house": 70.9,
         "minecraft:chests/village/village_fisher": 54.2,
+        "skyvillages:chests/sky_village_fisher": 54.2,
+        "takesapillage:chests/bastille/farm": 48.2,
         "mes:houses_flower": 39.4,
         "kaisyn:village/village_jungle_house": 35.9,
         "betterdungeons:zombie_dungeon/chests/common": 30.7,
@@ -7208,9 +7483,10 @@
     "minecraft:white_wool": {
       "remove": false,
       "frequency": 1,
-      "chests": 1,
+      "chests": 2,
       "where": {
-        "minecraft:chests/village/village_shepherd": 54.2
+        "minecraft:chests/village/village_shepherd": 54.2,
+        "skyvillages:chests/sky_village_shepherd": 54.2
       }
     },
     "minecraft:wooden_axe": {
@@ -7227,9 +7503,10 @@
     "minecraft:wooden_hoe": {
       "remove": false,
       "frequency": 1,
-      "chests": 15,
+      "chests": 16,
       "where": {
         "terralith:village/desert/junk": 27.2,
+        "takesapillage:chests/bastille/farm": 12.1,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 1.28,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 1.28,
         "simply_houses:chests/forest_fort/forest_fort_barrels": 1.28,
@@ -7261,8 +7538,9 @@
     "minecraft:wooden_shovel": {
       "remove": false,
       "frequency": 1,
-      "chests": 3,
+      "chests": 4,
       "where": {
+        "takesapillage:chests/bastille/graveyard": 22.8,
         "terralith:ruin/glacial/junk": 14.3,
         "terralith:ruin/glacial/main_cs": 14.3,
         "terralith:spire/junk": 14.3
@@ -7271,12 +7549,13 @@
     "minecraft:wooden_sword": {
       "remove": false,
       "frequency": 1,
-      "chests": 4,
+      "chests": 5,
       "where": {
         "terralith:ruin/glacial/junk": 14.3,
         "terralith:ruin/glacial/main_cs": 14.3,
         "terralith:spire/junk": 14.3,
-        "betterstrongholds:chests/armoury": 12.8
+        "betterstrongholds:chests/armoury": 12.8,
+        "rare-ice:chests/rare_ice": 6.67
       }
     },
     "minecraft:writable_book": {
@@ -7302,11 +7581,12 @@
     "minecraft:yellow_dye": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 6,
       "where": {
         "terralith:village/desert/mason": 61.1,
         "terralith:village/fortified/mason": 61.1,
         "minecraft:chests/village/village_mason": 19.5,
+        "skyvillages:chests/sky_village_mason": 19.5,
         "betterdeserttemples:chests/wardrobe": 18.8,
         "wares:agreement/wandering_trader/regular_ware": 1.25
       }
@@ -8041,6 +8321,24 @@
       "chests": 1,
       "where": {
         "minecraft:chests/abandoned_mineshaft": 35.0
+      }
+    },
+    "takesapillage:bastille_blues_music_disc": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 3,
+      "where": {
+        "takesapillage:chests/bastille/center": 50.0,
+        "takesapillage:chests/bastille/church": 33.3,
+        "takesapillage:chests/bastille/gallows": 10.5
+      }
+    },
+    "takesapillage:ravager_horn": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "takesapillage:chests/bastille/church": 33.3
       }
     },
     "the_dirty_stuff:tobacco_seeds": {

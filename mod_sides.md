@@ -10,12 +10,13 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `server` | Only does anything on the server; harmless on clients | Yes |
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 
-**Current count:** 297 both, 9 server, 41 client (347 jars).
+**Current count:** 326 both, 12 server, 43 client (381 jars).
 
 ## Keeping this up to date
 
 - **New mod:** add a row. Use `client` only if it adds no blocks, items or entities, and its page or `mods.toml` says it's client-side. If you're unsure, use `both`.
 - **Removed mod:** delete its row. The dump script warns about rows whose mod is no longer installed.
+- **Deploy a release:** `python3 tools/build_deploy.py --notes "..."` stages `deploy/latest/` (server jars in `mods/`, client-only jars in `client_mods/`, kubejs, config, packs, removal lists) and logs it in `deploy/DEPLOY_LOG.md`. It refuses to build while a jar has no row here.
 - **Build the server mod folder:** `python3 tools/dump_server_mods.py` writes the server jars to `server_mods/` in the instance root. `--dry-run` lists what it would copy.
 
 ## Mods
@@ -369,3 +370,37 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Unwrecked Ships Plus | `unwrecked_ships_plus` | `Unwrecked Ships Plus 1.19-1.0.4 Forge.jar` | Structures only (lowcode datapack jar, loads fine) |
 | both | Redeco | `redeco` | `redeco-1.5.0-1.19.2.jar` | Decoration blocks; no structures |
 | both | No Hostiles Around Campfire | `nohostilesaroundcampfire` | `nohostilesaroundcampfire-1.19.2-5.9.jar` | Server logic; no structures. Requires Collective |
+| both | Glow Ink Plus | `glow_ink_plus` | `(Forge)GlowInkPlus-1.19.2-1.2.0.jar` | Glowing wool/carpet blocks |
+| both | Abnormals Delight | `abnormals_delight` | `abnormals_delight-1.19.2-4.1.2.jar` | Blocks/items; requires Blueprint, Farmer's Delight |
+| both | Alex's Abnormalities | `alexsabnormalities` | `alexsabnormalities-1.3.jar` | Alex's Mobs x Abnormals compat blocks/items |
+| both | AstikorCarts | `astikorcarts` | `astikorcarts-1.19.2-1.1.2.jar` | Cart entities |
+| both | Berry Good | `berry_good` | `berry_good-1.19.2-6.1.0.jar` | Blocks/items |
+| client | Boat Item View | `boatiview` | `Boat-Item-View-Forge-1.19.x-0.0.4.jar` | Held-item rendering in boats |
+| both | Boatload | `boatload` | `boatload-1.19.2-4.2.2.jar` | Boat entities |
+| client | BoatView360 | `boatview360` | `boatview360-v1.0.4-mc1.17-1.20.1-forge.jar` | Boat camera |
+| both | Breezy | `breezy` | `breezy-1.19.2-1.0.8.jar` | Hot air balloon entities |
+| both | Canned Goods | `canned_goods` | `CannedGoods-1.19.2-3.jar` | Blocks/items |
+| both | Colored Water | `colored_water` | `Colored Water-1.19.2-1.3.7.jar` | Blocks/items |
+| server | Create: Fast Schematic Cannon | `createfastschematiccannon` | `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar` | Schematicannon block-entity speed mixins |
+| both | Floral Enchantment | `floralench` | `Floral Enchantment-1.19.2-1.4.3.jar` | Blocks/items |
+| server | GlowingRaidIllagers | `glowingraidillagers` | `glowingraidillagers-1.19.2-1.0.0.jar` | Raid mixin applies vanilla Glowing |
+| both | Golden Food | `goldenfood` | `goldenfood-1.19.2-2.0.0.jar` | Items |
+| both | Greek Villager House | `greek_villager_house` | `greek_villager_house-1.0.0-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
+| both | hobbit house | `hobbit_house_` | `hobbit_house_-1.0.1-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
+| both | Hopo Better Underwater Ruins | `hopour` | `HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar` | Structures only |
+| both | Ice Boat Nerf | `iceboatnerf` | `iceboatnerf-1.1.1.jar` | Boat mixin; boat physics run on the driving client |
+| server | Ice Prevents Crop Growth | `icepreventscropgrowth` | `icepreventscropgrowth-1.19.2-3.2.jar` | Crop-growth event |
+| both | Neapolitan | `neapolitan` | `neapolitan-1.19.2-4.1.0.jar` | Blocks/items/entities |
+| both | old swamp fisherman house | `old_swamp_fisherman_house` | `old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
+| both | Rare Ice | `rare_ice` | `rare-ice-0.5.1.jar` | Blocks |
+| both | Salt | `salt` | `salt-1.19.2-1.2.4.1.jar` | Blocks/items |
+| both | SawmillHouse | `sawmillhouse` | `sawmillhouse-1.3.0-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
+| both | Shulker Box Slot | `shulkerboxslot` | `shulkerboxslot-forge-5.0.0-beta.2+1.19.2.jar` | Accessory slot |
+| both | Simply Houses | `simply_houses` | `SimplyHouses-1.1.3-1.19-forge.jar` | Structures only (data-only jar, loads fine; not ported) |
+| both | Starter Kit | `starterkit` | `starterkit-1.19.2-7.0.jar` | Kit choice screen |
+| both | It Takes A Pillage | `takesapillage` | `takesapillage-1.0.3-1.19.2.jar` | Entities + structures |
+| both | The Dirty Stuff | `the_dirty_stuff` | `the_dirty_stuff-2.1-forge-1.19.2.jar` | Blocks/items |
+| both | Tinted Campfires | `tintedcampfires` | `Tinted Campfires-1.19.2-1.2.9.jar` | Blocks |
+| both | Upgrade Aquatic | `upgrade_aquatic` | `upgrade_aquatic-1.19.2-5.1.0.jar` | Blocks/items/entities |
+| both | XP Tome | `xpbook` | `xptome-1.19-2.1.7.jar` | Items |
+| both | Bushier Flowers | `bushierflowers` | `bushierflowers-0.0.2-1.19.2.jar` | Flower bush blocks |
