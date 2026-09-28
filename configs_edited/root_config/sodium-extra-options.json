@@ -65,10 +65,10 @@
     "use_adaptive_sync": false,
     "cloud_height": 192,
     "toasts": true,
-    "advancement_toast": true,
+    "advancement_toast": false,
     "recipe_toast": true,
     "system_toast": true,
-    "tutorial_toast": true,
+    "tutorial_toast": false,
     "instant_sneak": false,
     "prevent_shaders": false
   },

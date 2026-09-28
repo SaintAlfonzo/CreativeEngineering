@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "forgotten_church:forgotten_church",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 55,
+    "separation": 35,
+    "salt": 866019268
+  }
+}

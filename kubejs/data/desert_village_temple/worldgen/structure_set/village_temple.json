@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "desert_village_temple:village_temple",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 30,
+    "salt": 362054456
+  }
+}

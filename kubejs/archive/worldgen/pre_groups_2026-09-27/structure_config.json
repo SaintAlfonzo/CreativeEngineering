@@ -1,0 +1,5005 @@
+{
+  "_readme": {
+    "workflow": "Edit values under \"current\" per structure_set, or flip a structure entry's \"enabled\" to false, then rejoin the world: kubejs/server_scripts/worldgen/structure_overrides.js applies this file at every world load (new chunks only; structure_tag_report.md shows what it did). For category-wide changes (\"all villages x0.5\") use multipliers in structure_tags.json instead; they apply on top of \"current\". Re-running tools/gen_structure_config.py is always safe -- it keeps \"enabled\" and every field you changed in \"current\".",
+    "top_level_fields": {
+      "source": "Where this structure_set's definition came from: a mod jar filename, or \"vanilla_known_defaults\" (see caveat below).",
+      "structures": "The structure(s) this set can place. Each has \"structure\" (its id), \"weight\", \"enabled\" (your on/off switch), and \"biomes\" (read-only reference).",
+      "original": "The values this structure_set actually has without any override -- the diff baseline, refreshed on every scan. Don't edit this; structure_overrides.js compares \"current\" against it to decide what to write.",
+      "current": "Your edits go here. Identical to \"original\" until you change something."
+    },
+    "placement_dials (inside original/current)": {
+      "type": "Which placement algorithm: \"minecraft:random_spread\" (almost everything -- an evenly-spaced grid, one random attempt per cell) or \"minecraft:concentric_rings\" (strongholds only -- rings expanding out from world spawn, not a grid).",
+      "spacing": "[random_spread] Average chunks between grid cells, i.e. between attempts at this structure. Bigger spacing = rarer structure. This is usually the dial you want for \"make X less/more common\".",
+      "separation": "[random_spread] Minimum chunks kept clear around each grid cell so two attempts can never land right next to each other. Must stay smaller than \"spacing\" (vanilla convention: separation < spacing, often spacing/4).",
+      "spread_type": "[random_spread, optional] Where within its grid cell an attempt can land: \"linear\" (default, anywhere in the cell) or \"triangular\" (biased toward the cell center -- vanilla only uses this for ocean monuments). Rarely worth touching.",
+      "distance": "[concentric_rings] Chunks between each successive ring.",
+      "spread": "[concentric_rings] Random jitter added within a ring so structures aren't on a perfect circle.",
+      "count": "[concentric_rings] Total number of attempts across every ring in the whole set (128 for vanilla strongholds). Lower = fewer strongholds total, still spread across the same ring layout.",
+      "frequency": "A flat 0.0-1.0 chance multiplier applied on top of spacing/separation or the ring layout -- \"of the grid cells that pass everything else, only spawn here X% of the time.\" Vanilla uses this to keep mineshafts/buried treasure rare despite a 1-chunk grid. Setting it to 0 disables the structure outright -- this is exactly what structure_overrides.js does automatically when you disable every structure in a set. Omitted/1.0 means \"no extra reduction\".",
+      "frequency_reduction_method": "Which RNG algorithm applies the \"frequency\" chance (\"legacy_type_1\" / \"legacy_type_2\" / \"default\"). Purely about matching vanilla's exact RNG behavior bit-for-bit -- doesn't change how rare something ends up feeling. Safe to leave alone.",
+      "salt": "Seeds this structure_set's own slice of the world seed's RNG, so different structure_sets don't land in lockstep with each other. Only affects WHERE on the grid attempts fall, not how often. Safe to leave alone -- a wrong value just shifts the grid's phase relative to a from-scratch vanilla world.",
+      "locate_offset": "The \"xyz coords\" dial: an integer [x, y, z] nudge applied to every placement attempt before any other check. x/z shift the whole grid sideways; y is essentially unused (the structure's own logic picks its actual height). Default [0, 0, 0]."
+    },
+    "per_structure_fields (inside a structures[] entry)": {
+      "weight": "When a set holds multiple structures sharing one grid (e.g. the 5 village variants in minecraft:villages), weight influences which ONE wins a given grid cell before that structure's own biome check narrows it further. Only meaningful relative to the other entries in the same set.",
+      "enabled": "Your removal switch. false on the only structure in a set forces that set's frequency to 0 (always schema-safe). false on one of several removes just that entry from the set's structure list, leaving the others untouched.",
+      "biomes": "Read-only reference -- which biomes this structure can spawn in, from the mod's own structure json or (vanilla) minecraft's has_structure/* tags. Changing WHERE something spawns needs editing the structure's own definition, which this framework deliberately never touches -- see the README.",
+      "blocked": "Read-only, only present when another mod stops this structure in code (YUNG's \"Disable Vanilla X\" options, Better Dungeons' small nether dungeon toggle). Its set can still be tuned, but nothing generates while the block is on. Written by the scanner from the current mod configs; re-run it after changing one of those options."
+    },
+    "caveats": "Vanilla \"source\":\"vanilla_known_defaults\" entries come from a table in the scanner (vanilla bootstraps them in Java, unlike every mod here), javap-checked against the 1.19.2 StructureSets bytecode. /dumpstructuregen in-world shows the live values. Also: this pack's minecraft:villages and minecraft:end_cities are NOT vanilla -- Terralith and Nullscape already override them, and the scanner picked that up (check \"source\" per entry)."
+  },
+  "structure_sets": {
+    "ae2:meteorite": {
+      "source": "appliedenergistics2-forge-12.9.12.jar (registered in code)",
+      "structures": [
+        {
+          "structure": "ae2:meteorite",
+          "weight": 0.2,
+          "enabled": true,
+          "biomes": "#ae2:has_meteorites"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 124895654,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 124895654,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "beautify:botanist_house_desert": {
+      "source": "beautify-1.4.3.jar",
+      "structures": [
+        {
+          "structure": "beautify:botanist_house_desert",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#beautify:has_structure/botanist_house_desert_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "beautify:botanist_house_plains": {
+      "source": "beautify-1.4.3.jar",
+      "structures": [
+        {
+          "structure": "beautify:botanist_house_plains",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#beautify:has_structure/botanist_house_plains_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "beautify:botanist_house_savanna": {
+      "source": "beautify-1.4.3.jar",
+      "structures": [
+        {
+          "structure": "beautify:botanist_house_savanna",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#beautify:has_structure/botanist_house_savanna_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "beautify:botanist_house_snowy": {
+      "source": "beautify-1.4.3.jar",
+      "structures": [
+        {
+          "structure": "beautify:botanist_house_snowy",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#beautify:has_structure/botanist_house_snowy_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "beautify:botanist_house_taiga": {
+      "source": "beautify-1.4.3.jar",
+      "structures": [
+        {
+          "structure": "beautify:botanist_house_taiga",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#beautify:has_structure/botanist_house_taiga_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 6,
+        "salt": 1994267089,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "betterdeserttemples:desert_temples": {
+      "source": "YungsBetterDesertTemples-1.19.2-Forge-2.2.2.jar",
+      "structures": [
+        {
+          "structure": "betterdeserttemples:desert_temple",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterdeserttemples:has_structure/better_desert_temple"
+        }
+      ],
+      "original": {
+        "type": "betterdeserttemples:desert_temple",
+        "spacing": 30,
+        "separation": 20,
+        "salt": 92746251,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 6,
+          "other_set": "minecraft:villages"
+        }
+      },
+      "current": {
+        "type": "betterdeserttemples:desert_temple",
+        "spacing": 30,
+        "separation": 20,
+        "salt": 92746251,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 6,
+          "other_set": "minecraft:villages"
+        }
+      }
+    },
+    "betterdungeons:skeleton_dungeons": {
+      "source": "YungsBetterDungeons-1.19.2-Forge-3.2.2.jar",
+      "structures": [
+        {
+          "structure": "betterdungeons:skeleton_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterdungeons:has_structure/skeleton_dungeon"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 46,
+        "separation": 23,
+        "salt": 732581671,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 46,
+        "separation": 23,
+        "salt": 732581671,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "betterdungeons:small_dungeons": {
+      "source": "YungsBetterDungeons-1.19.2-Forge-3.2.2.jar",
+      "structures": [
+        {
+          "structure": "betterdungeons:small_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterdungeons:has_structure/small_dungeon"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 10,
+        "separation": 6,
+        "salt": 34239823,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 10,
+        "separation": 6,
+        "salt": 34239823,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "betterdungeons:small_nether_dungeons": {
+      "source": "YungsBetterDungeons-1.19.2-Forge-3.2.2.jar",
+      "structures": [
+        {
+          "structure": "betterdungeons:small_nether_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterdungeons:has_structure/small_nether_dungeon",
+          "blocked": "YUNG's Better Dungeons stops it in code (config/betterdungeons-forge-1_19.toml: \"Enable Small Nether Dungeons\" = false). Tuning this set has no effect."
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 16,
+        "separation": 10,
+        "salt": 998767517,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 6,
+          "other_set": "minecraft:nether_complexes"
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 16,
+        "separation": 10,
+        "salt": 998767517,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 6,
+          "other_set": "minecraft:nether_complexes"
+        }
+      }
+    },
+    "betterdungeons:spider_dungeons": {
+      "source": "YungsBetterDungeons-1.19.2-Forge-3.2.2.jar",
+      "structures": [
+        {
+          "structure": "betterdungeons:spider_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterdungeons:has_structure/spider_dungeon"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 44,
+        "separation": 22,
+        "salt": 596523129,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 44,
+        "separation": 22,
+        "salt": 596523129,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "betterdungeons:zombie_dungeons": {
+      "source": "YungsBetterDungeons-1.19.2-Forge-3.2.2.jar",
+      "structures": [
+        {
+          "structure": "betterdungeons:zombie_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterdungeons:has_structure/zombie_dungeon"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 24,
+        "salt": 280667671,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 24,
+        "salt": 280667671,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "betterfortresses:fortress": {
+      "source": "YungsBetterNetherFortresses-1.19.2-Forge-1.0.6.jar",
+      "structures": [
+        {
+          "structure": "betterfortresses:fortress",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterfortresses:has_structure/better_fortress"
+        }
+      ],
+      "original": {
+        "type": "yungsapi:enhanced_random_spread",
+        "spacing": 30,
+        "separation": 20,
+        "salt": 784827271,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "enhanced_exclusion_zone": {
+          "other_set": "#betterfortresses:fortress_avoid",
+          "chunk_count": 10
+        }
+      },
+      "current": {
+        "type": "yungsapi:enhanced_random_spread",
+        "spacing": 30,
+        "separation": 20,
+        "salt": 784827271,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "enhanced_exclusion_zone": {
+          "other_set": "#betterfortresses:fortress_avoid",
+          "chunk_count": 10
+        }
+      }
+    },
+    "betterjungletemples:jungle_temples": {
+      "source": "YungsBetterJungleTemples-1.19.2-Forge-1.0.1.jar",
+      "structures": [
+        {
+          "structure": "betterjungletemples:jungle_temple",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterjungletemples:has_structure/better_jungle_temple"
+        }
+      ],
+      "original": {
+        "type": "betterjungletemples:jungle_temple",
+        "spacing": 24,
+        "separation": 8,
+        "salt": 996971851,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "enhanced_exclusion_zone": {
+          "other_set": "#betterjungletemples:jungle_temple_avoid",
+          "chunk_count": 4
+        }
+      },
+      "current": {
+        "type": "betterjungletemples:jungle_temple",
+        "spacing": 24,
+        "separation": 8,
+        "salt": 996971851,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "enhanced_exclusion_zone": {
+          "other_set": "#betterjungletemples:jungle_temple_avoid",
+          "chunk_count": 4
+        }
+      }
+    },
+    "betterstrongholds:stronghold": {
+      "source": "YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar",
+      "structures": [
+        {
+          "structure": "betterstrongholds:stronghold",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterstrongholds:has_structure/better_stronghold"
+        }
+      ],
+      "original": {
+        "type": "betterstrongholds:stronghold",
+        "spacing": 85,
+        "separation": 50,
+        "salt": 596441294,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "chunk_distance_to_first_ring": 80,
+        "ring_chunk_thickness": 96
+      },
+      "current": {
+        "type": "betterstrongholds:stronghold",
+        "spacing": 85,
+        "separation": 50,
+        "salt": 596441294,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "chunk_distance_to_first_ring": 80,
+        "ring_chunk_thickness": 96
+      }
+    },
+    "betterwitchhuts:witch_circle": {
+      "source": "YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar",
+      "structures": [
+        {
+          "structure": "betterwitchhuts:witch_circle",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterwitchhuts:has_structure/witch_circle"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 10,
+        "salt": 19797254,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 10,
+        "salt": 19797254,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "betterwitchhuts:witch_hut": {
+      "source": "YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar",
+      "structures": [
+        {
+          "structure": "betterwitchhuts:witch_hut",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#betterwitchhuts:has_structure/better_witch_hut"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 30,
+        "separation": 8,
+        "salt": 79297177,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 30,
+        "separation": 8,
+        "salt": 79297177,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "cloudstorage:big_balloon": {
+      "source": "cloudstorage-1.3.4-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "cloudstorage:big_balloon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#cloudstorage:has_big_balloons"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 20,
+        "salt": 42069421,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 96,
+        "separation": 72,
+        "salt": 42069421,
+        "frequency": 1,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "cloudstorage:sky_temple": {
+      "source": "cloudstorage-1.3.4-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "cloudstorage:sky_temple",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#cloudstorage:has_big_balloons"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 24,
+        "salt": 111823992,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 96,
+        "separation": 72,
+        "salt": 111823992,
+        "frequency": 1,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "farmers_structures:aethers_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:aethers",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_aether_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 25,
+        "salt": 214225994,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 25,
+        "salt": 214225994,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:aquacultures_beach_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:aquacultures_beach",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_aquaculture_beach_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 65,
+        "separation": 31,
+        "salt": 1935777680,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 65,
+        "separation": 31,
+        "salt": 1935777680,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:aquacultures_carp_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:aquacultures_carp",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_aquaculture_carp_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 31,
+        "salt": 126199459,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 31,
+        "salt": 126199459,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:aquacultures_common_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:aquacultures_common",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_aquaculture_common_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 26,
+        "salt": 1837701544,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 26,
+        "salt": 1837701544,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:cooks_moss_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:cooks_moss",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_cook_moss_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 16,
+        "separation": 14,
+        "salt": 1406582318,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 16,
+        "separation": 14,
+        "salt": 1406582318,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:cooks_nether_1_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:cooks_nether_1",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_cook_nether_1_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 30,
+        "separation": 21,
+        "salt": 593245336,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 30,
+        "separation": 21,
+        "salt": 593245336,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:cooks_nether_2_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:cooks_nether_2",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_cook_nether_2_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 37,
+        "separation": 22,
+        "salt": 433617316,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 37,
+        "separation": 22,
+        "salt": 433617316,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:cooks_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:cooks",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_cook_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 32,
+        "salt": 736240813,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 32,
+        "salt": 736240813,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:sushus_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:sushis",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_sushi_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 35,
+        "separation": 20,
+        "salt": 1314228740,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 35,
+        "separation": 20,
+        "salt": 1314228740,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:undergardens_sea_with_all": {
+      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "farmers_structures:undergardens_sea",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#farmers_structures:is_undergarden_sea_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 155,
+        "separation": 120,
+        "salt": 664652465,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 155,
+        "separation": 120,
+        "salt": 664652465,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "greek_villager_house:greek_house": {
+      "source": "greek_villager_house-1.0.0-forge-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "greek_villager_house:greek_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "savanna"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 30,
+        "salt": 1214076116,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 30,
+        "salt": 1214076116,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "hearths:netherrack_spirals": {
+      "source": "hearths-v1.0.0-mc1.19u1.19.3.jar",
+      "structures": [
+        {
+          "structure": "hearths:netherrack_spiral",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "minecraft:nether_wastes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 6,
+        "separation": 4,
+        "salt": 814798319,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 6,
+        "separation": 4,
+        "salt": 814798319,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "hearths:towers": {
+      "source": "hearths-v1.0.0-mc1.19u1.19.3.jar",
+      "structures": [
+        {
+          "structure": "hearths:crimson_tower",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "minecraft:crimson_forest"
+        },
+        {
+          "structure": "hearths:warped_tower",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "minecraft:warped_forest"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 16,
+        "separation": 12,
+        "salt": 214798319,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 16,
+        "separation": 12,
+        "salt": 214798319,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "hobbit_house_:hobbit_house": {
+      "source": "hobbit_house_-1.0.1-forge-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "hobbit_house_:hobbit_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "old_growth_pine_taiga",
+            "old_growth_spruce_taiga",
+            "taiga",
+            "dark_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 30,
+        "salt": 1704928497,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 30,
+        "salt": 1704928497,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "mes:astral_hideaway": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:astral_hideaway",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 23,
+        "separation": 15,
+        "salt": 136568741,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 23,
+        "separation": 15,
+        "salt": 136568741,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:astral_meteorite": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:astral_meteorite",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 27,
+        "separation": 15,
+        "salt": 477477412,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 27,
+        "separation": 15,
+        "salt": 477477412,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:ender_spire": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:ender_spire",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 20,
+        "separation": 15,
+        "salt": 132545875,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 20,
+        "separation": 15,
+        "salt": 132545875,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:enderbloom_grove": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:enderbloom_grove",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 26,
+        "separation": 15,
+        "salt": 965235487,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 26,
+        "separation": 15,
+        "salt": 965235487,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:enderkeep_courtyard": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:enderkeep_courtyard",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 29,
+        "separation": 20,
+        "salt": 363654741,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 29,
+        "separation": 20,
+        "salt": 363654741,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:enderpin_spikes": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:enderpin_spikes",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 14,
+        "separation": 8,
+        "salt": 133287874,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 14,
+        "separation": 8,
+        "salt": 133287874,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:enderskog": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:enderskog",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 26,
+        "separation": 15,
+        "salt": 525248754,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 26,
+        "separation": 15,
+        "salt": 525248754,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:enderwatch_tower": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:enderwatch_tower",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 37,
+        "separation": 12,
+        "salt": 336251487,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 37,
+        "separation": 12,
+        "salt": 336251487,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:endscraps": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:endscraps",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 27,
+        "separation": 15,
+        "salt": 132487569,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 27,
+        "separation": 15,
+        "salt": 132487569,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:manuscript_shrine": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:manuscript_shrine",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 22,
+        "separation": 15,
+        "salt": 369858747,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 22,
+        "separation": 15,
+        "salt": 369858747,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:monolith": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:monolith",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 33,
+        "separation": 20,
+        "salt": 665665241,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 33,
+        "separation": 20,
+        "salt": 665665241,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:mythic_garden": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:mythic_garden",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 24,
+        "separation": 20,
+        "salt": 985747587,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 24,
+        "separation": 20,
+        "salt": 985747587,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:phantom_citadel": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:phantom_citadel",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 38,
+        "separation": 20,
+        "salt": 132545874,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 38,
+        "separation": 20,
+        "salt": 132545874,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:placid_prairie": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:placid_prairie",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 28,
+        "separation": 15,
+        "salt": 985412145,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 28,
+        "separation": 15,
+        "salt": 985412145,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:ruined_pillar": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:ruined_pillar",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 12,
+        "separation": 7,
+        "salt": 322652548,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 12,
+        "separation": 7,
+        "salt": 322652548,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "mes:starlight_voyager": {
+      "source": "mes-1.3.1-1.19.2-forge.jar",
+      "structures": [
+        {
+          "structure": "mes:starlight_voyager",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#mes:has_structure/end_biomes"
+        }
+      ],
+      "original": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 31,
+        "separation": 20,
+        "salt": 987874585,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      },
+      "current": {
+        "type": "mes:advanced_random_spread",
+        "spacing": 31,
+        "separation": 20,
+        "salt": 987874585,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "min_distance_from_world_origin": 1000
+      }
+    },
+    "minecraft:ancient_cities": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:ancient_city",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:deep_dark"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 24,
+        "separation": 8,
+        "salt": 20083232,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 24,
+        "separation": 8,
+        "salt": 20083232,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:buried_treasures": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:buried_treasure",
+          "weight": 1,
+          "enabled": true,
+          "biomes": []
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 1,
+        "separation": 0,
+        "salt": 0,
+        "frequency": 0.01,
+        "frequency_reduction_method": "legacy_type_2",
+        "locate_offset": [
+          9,
+          0,
+          9
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 1,
+        "separation": 0,
+        "salt": 0,
+        "frequency": 0.01,
+        "frequency_reduction_method": "legacy_type_2",
+        "locate_offset": [
+          9,
+          0,
+          9
+        ]
+      }
+    },
+    "minecraft:desert_pyramids": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:desert_pyramid",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:desert"
+          ],
+          "blocked": "YUNG's Better Desert Temples stops it in code (config/betterdeserttemples-forge-1_19.toml: \"Disable Vanilla Pyramids\" = true). Tuning this set has no effect."
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 14357617,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 14357617,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:end_cities": {
+      "source": "Nullscape_1.19.3_v1.2.2.jar",
+      "structures": [
+        {
+          "structure": "minecraft:end_city",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:end_highlands",
+            "minecraft:end_midlands"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 26,
+        "separation": 18,
+        "salt": 10387313,
+        "frequency": 1.0,
+        "frequency_reduction_method": "default",
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "triangular"
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 26,
+        "separation": 18,
+        "salt": 10387313,
+        "frequency": 1.0,
+        "frequency_reduction_method": "default",
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "triangular"
+      }
+    },
+    "minecraft:igloos": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:igloo",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:snowy_plains",
+            "minecraft:snowy_slopes",
+            "minecraft:snowy_taiga"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 14357618,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 14357618,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:jungle_temples": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:jungle_pyramid",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:bamboo_jungle",
+            "minecraft:jungle"
+          ],
+          "blocked": "YUNG's Better Jungle Temples stops it in code (config/betterjungletemples-forge-1_19_2.toml: \"Disable Vanilla Jungle Temples\" = true). Tuning this set has no effect."
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 14357619,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 14357619,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:mineshafts": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:mineshaft",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:desert",
+            "minecraft:dripstone_caves",
+            "minecraft:ice_spikes",
+            "minecraft:lush_caves",
+            "minecraft:mangrove_swamp",
+            "minecraft:mushroom_fields",
+            "minecraft:plains",
+            "minecraft:savanna",
+            "minecraft:savanna_plateau",
+            "minecraft:snowy_plains",
+            "minecraft:stony_shore",
+            "minecraft:sunflower_plains",
+            "minecraft:swamp",
+            "minecraft:windswept_savanna"
+          ]
+        },
+        {
+          "structure": "minecraft:mineshaft_mesa",
+          "weight": 1,
+          "enabled": true,
+          "biomes": []
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 1,
+        "separation": 0,
+        "salt": 0,
+        "frequency": 0.004,
+        "frequency_reduction_method": "legacy_type_3",
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 1,
+        "separation": 0,
+        "salt": 0,
+        "frequency": 0.004,
+        "frequency_reduction_method": "legacy_type_3",
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:nether_complexes": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:fortress",
+          "weight": 2,
+          "enabled": true,
+          "biomes": [],
+          "blocked": "YUNG's Better Nether Fortresses stops it in code (config/betterfortresses-forge-1_19.toml: \"Disable Vanilla Nether Fortresses\" = true). Tuning this set has no effect."
+        },
+        {
+          "structure": "minecraft:bastion_remnant",
+          "weight": 3,
+          "enabled": true,
+          "biomes": [
+            "minecraft:crimson_forest",
+            "minecraft:nether_wastes",
+            "minecraft:soul_sand_valley",
+            "minecraft:warped_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 27,
+        "separation": 4,
+        "salt": 30084232,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 27,
+        "separation": 4,
+        "salt": 30084232,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:nether_fossils": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:nether_fossil",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:soul_sand_valley"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 2,
+        "separation": 1,
+        "salt": 14357921,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 2,
+        "separation": 1,
+        "salt": 14357921,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:ocean_monuments": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:monument",
+          "weight": 1,
+          "enabled": true,
+          "biomes": []
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 5,
+        "salt": 10387313,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "triangular"
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 5,
+        "salt": 10387313,
+        "frequency": 0.1,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "triangular"
+      }
+    },
+    "minecraft:ocean_ruins": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:ocean_ruin_cold",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:cold_ocean",
+            "minecraft:deep_cold_ocean",
+            "minecraft:deep_frozen_ocean",
+            "minecraft:deep_ocean",
+            "minecraft:frozen_ocean",
+            "minecraft:ocean"
+          ]
+        },
+        {
+          "structure": "minecraft:ocean_ruin_warm",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:deep_lukewarm_ocean",
+            "minecraft:lukewarm_ocean",
+            "minecraft:warm_ocean"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 8,
+        "salt": 14357621,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 8,
+        "salt": 14357621,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:pillager_outposts": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:pillager_outpost",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:desert",
+            "minecraft:grove",
+            "minecraft:plains",
+            "minecraft:savanna",
+            "minecraft:snowy_plains",
+            "minecraft:taiga"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 165745296,
+        "frequency": 0.2,
+        "frequency_reduction_method": "legacy_type_1",
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 10
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 165745296,
+        "frequency": 0.2,
+        "frequency_reduction_method": "legacy_type_1",
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 10
+        }
+      }
+    },
+    "minecraft:ruined_portals": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:ruined_portal",
+          "weight": 1,
+          "enabled": false,
+          "biomes": [
+            "minecraft:dripstone_caves",
+            "minecraft:ice_spikes",
+            "minecraft:lush_caves",
+            "minecraft:mushroom_fields",
+            "minecraft:plains",
+            "minecraft:savanna",
+            "minecraft:snowy_plains",
+            "minecraft:sunflower_plains"
+          ]
+        },
+        {
+          "structure": "minecraft:ruined_portal_desert",
+          "weight": 1,
+          "enabled": false,
+          "biomes": [
+            "minecraft:desert"
+          ]
+        },
+        {
+          "structure": "minecraft:ruined_portal_jungle",
+          "weight": 1,
+          "enabled": false,
+          "biomes": []
+        },
+        {
+          "structure": "minecraft:ruined_portal_swamp",
+          "weight": 1,
+          "enabled": false,
+          "biomes": [
+            "minecraft:mangrove_swamp",
+            "minecraft:swamp"
+          ]
+        },
+        {
+          "structure": "minecraft:ruined_portal_mountain",
+          "weight": 1,
+          "enabled": false,
+          "biomes": [
+            "minecraft:savanna_plateau",
+            "minecraft:stony_shore",
+            "minecraft:windswept_savanna"
+          ]
+        },
+        {
+          "structure": "minecraft:ruined_portal_ocean",
+          "weight": 1,
+          "enabled": false,
+          "biomes": []
+        },
+        {
+          "structure": "minecraft:ruined_portal_nether",
+          "weight": 1,
+          "enabled": false,
+          "biomes": []
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 15,
+        "salt": 34222645,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 15,
+        "salt": 34222645,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:shipwrecks": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:shipwreck",
+          "weight": 1,
+          "enabled": true,
+          "biomes": []
+        },
+        {
+          "structure": "minecraft:shipwreck_beached",
+          "weight": 1,
+          "enabled": true,
+          "biomes": []
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 24,
+        "separation": 4,
+        "salt": 165745295,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 24,
+        "separation": 4,
+        "salt": 165745295,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:strongholds": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:stronghold",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [],
+          "blocked": "YUNG's Better Strongholds always stops it (no config option). Tuning this set has no effect."
+        }
+      ],
+      "original": {
+        "type": "minecraft:concentric_rings",
+        "distance": 32,
+        "spread": 3,
+        "count": 128,
+        "salt": 0,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "preferred_biomes": "#minecraft:stronghold_biased_to"
+      },
+      "current": {
+        "type": "minecraft:concentric_rings",
+        "distance": 32,
+        "spread": 3,
+        "count": 128,
+        "salt": 0,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "preferred_biomes": "#minecraft:stronghold_biased_to"
+      }
+    },
+    "minecraft:swamp_huts": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:swamp_hut",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:swamp"
+          ],
+          "blocked": "YUNG's Better Witch Huts stops it in code (config/betterwitchhuts-forge-1_19.toml: \"Disable Vanilla Witch Huts\" = true). Tuning this set has no effect."
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 14357620,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 14357620,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:village": {
+      "source": "themissingvillages-3.0.0-1.19.2-beta.jar",
+      "structures": [
+        {
+          "structure": "themissingvillages:large/jungle_village",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_normal"
+        },
+        {
+          "structure": "themissingvillages:large/jungle_sparse_village",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_sparse"
+        },
+        {
+          "structure": "themissingvillages:large/jungle_bamboo_village",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_bamboo"
+        },
+        {
+          "structure": "themissingvillages:large/swamp_village",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#themissingvillages:swamp_normal"
+        },
+        {
+          "structure": "themissingvillages:large/swamp_mangrove_village",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#themissingvillages:swamp_mangrove"
+        },
+        {
+          "structure": "themissingvillages:medium/jungle_village",
+          "weight": 4,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_normal"
+        },
+        {
+          "structure": "themissingvillages:medium/jungle_sparse_village",
+          "weight": 4,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_sparse"
+        },
+        {
+          "structure": "themissingvillages:medium/jungle_bamboo_village",
+          "weight": 4,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_bamboo"
+        },
+        {
+          "structure": "themissingvillages:medium/swamp_village",
+          "weight": 4,
+          "enabled": true,
+          "biomes": "#themissingvillages:swamp_normal"
+        },
+        {
+          "structure": "themissingvillages:medium/swamp_mangrove_village",
+          "weight": 4,
+          "enabled": true,
+          "biomes": "#themissingvillages:swamp_mangrove"
+        },
+        {
+          "structure": "themissingvillages:small/jungle_village",
+          "weight": 8,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_normal"
+        },
+        {
+          "structure": "themissingvillages:small/jungle_sparse_village",
+          "weight": 8,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_sparse"
+        },
+        {
+          "structure": "themissingvillages:small/jungle_bamboo_village",
+          "weight": 8,
+          "enabled": true,
+          "biomes": "#themissingvillages:jungle_bamboo"
+        },
+        {
+          "structure": "themissingvillages:small/swamp_village",
+          "weight": 8,
+          "enabled": true,
+          "biomes": "#themissingvillages:swamp_normal"
+        },
+        {
+          "structure": "themissingvillages:small/swamp_mangrove_village",
+          "weight": 8,
+          "enabled": true,
+          "biomes": "#themissingvillages:swamp_mangrove"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 25,
+        "salt": 10387312,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 25,
+        "salt": 10387312,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "minecraft:villages": {
+      "source": "Terralith_1.19.3_v2.3.12.jar",
+      "structures": [
+        {
+          "structure": "minecraft:village_plains",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:meadow",
+            "minecraft:plains"
+          ]
+        },
+        {
+          "structure": "minecraft:village_desert",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:desert"
+          ]
+        },
+        {
+          "structure": "minecraft:village_savanna",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:savanna"
+          ]
+        },
+        {
+          "structure": "minecraft:village_snowy",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:snowy_plains"
+          ]
+        },
+        {
+          "structure": "minecraft:village_taiga",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:taiga"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 26,
+        "separation": 8,
+        "salt": 10387312,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "terralith:rare_village",
+          "chunk_count": 8
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 26,
+        "separation": 8,
+        "salt": 10387312,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "terralith:rare_village",
+          "chunk_count": 8
+        }
+      }
+    },
+    "minecraft:woodland_mansions": {
+      "source": "vanilla_known_defaults",
+      "structures": [
+        {
+          "structure": "minecraft:mansion",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "minecraft:dark_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 80,
+        "separation": 20,
+        "salt": 10387319,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "triangular"
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 80,
+        "separation": 20,
+        "salt": 10387319,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "triangular"
+      }
+    },
+    "nullscape:dragon_skeleton": {
+      "source": "Nullscape_1.19.3_v1.2.2.jar",
+      "structures": [
+        {
+          "structure": "nullscape:dragon_skeleton",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "nullscape:shadowlands"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 22,
+        "separation": 12,
+        "salt": 461798080,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "linear"
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 22,
+        "separation": 12,
+        "salt": 461798080,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "linear"
+      }
+    },
+    "old_swamp_fisherman_house:fisherman_house": {
+      "source": "old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "old_swamp_fisherman_house:fisherman_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "mangrove_swamp",
+            "swamp"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 25,
+        "salt": 2137805844,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 25,
+        "salt": 2137805844,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:ancient_crypt": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:ancient_crypt",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/ancient_crypt_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 80,
+        "separation": 50,
+        "salt": 265792644,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 80,
+        "separation": 50,
+        "salt": 265792644,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:ancient_dungeon": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:ancient_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/ancient_dungeon_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 10,
+        "separation": 3,
+        "salt": 512345192,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 10,
+        "separation": 3,
+        "salt": 512345192,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:ancient_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:ancient_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/ancient_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 20,
+        "salt": 165916912,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "triangular"
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 20,
+        "salt": 165916912,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "triangular"
+      }
+    },
+    "philipsruins:ancient_towers": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:ancient_towers",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/ancient_towers_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 40,
+        "salt": 283426912,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 40,
+        "salt": 283426912,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:antiquus_crypta": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:antiquus_crypta",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/ancient_crypt_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 90,
+        "separation": 40,
+        "salt": 348998429,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 90,
+        "separation": 40,
+        "salt": 348998429,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:desert_structures": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:badlands_start_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/badlands_structures_biomes"
+        },
+        {
+          "structure": "philipsruins:badlands_structures",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/ancient_pyramid_biomes"
+        },
+        {
+          "structure": "philipsruins:desert_structures",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/desert_structures_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 39,
+        "separation": 15,
+        "salt": 294718935,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 39,
+        "separation": 15,
+        "salt": 294718935,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:end_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:end_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/end_ruins_biomes"
+        },
+        {
+          "structure": "philipsruins:end_gate_fortress",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/end_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 35,
+        "separation": 25,
+        "salt": 265792644,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 35,
+        "separation": 25,
+        "salt": 265792644,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:field_stone_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:field_stone_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/level_two_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 75,
+        "separation": 35,
+        "salt": 558158731,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 75,
+        "separation": 35,
+        "salt": 558158731,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:field_stone_ruins_rocks": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:field_stone_ruins_rocks",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/field_stone_ruins_rocks_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 27,
+        "salt": 144788412,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 10,
+          "other_set": "minecraft:villages"
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 40,
+        "separation": 27,
+        "salt": 144788412,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 10,
+          "other_set": "minecraft:villages"
+        }
+      }
+    },
+    "philipsruins:level_one_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:level_one_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/level_two_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 75,
+        "separation": 40,
+        "salt": 328134491,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 75,
+        "separation": 40,
+        "salt": 328134491,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:level_three_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:level_three_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/level_two_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 85,
+        "separation": 45,
+        "salt": 198312145,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 85,
+        "separation": 45,
+        "salt": 198312145,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:level_two_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:level_two_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/level_two_ruins_biomes"
+        },
+        {
+          "structure": "philipsruins:level_two_ruins_pool",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/level_two_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 80,
+        "separation": 50,
+        "salt": 697518742,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 80,
+        "separation": 50,
+        "salt": 697518742,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:lost_soul_city": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:lost_soul_city",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/lost_soul_city_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 80,
+        "separation": 65,
+        "salt": 121229911,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 80,
+        "separation": 65,
+        "salt": 121229911,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:nether_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:start_nether_ruin",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/level_two_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 310,
+        "separation": 90,
+        "salt": 685112318,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 310,
+        "separation": 90,
+        "salt": 685112318,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:nether_structures": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:start_nether_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/nether_structures_biomes"
+        },
+        {
+          "structure": "philipsruins:sealedruinedghaststatue1",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/nether_structures_biomes"
+        },
+        {
+          "structure": "philipsruins:nether_lava_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/nether_structures_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 30,
+        "separation": 25,
+        "salt": 785892126,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 30,
+        "separation": 25,
+        "salt": 785892126,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:ocean_fortress_main": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:ocean_fortress",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/ocean_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 70,
+        "separation": 50,
+        "salt": 765385625,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 70,
+        "separation": 50,
+        "salt": 765385625,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:ocean_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:ocean_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/ocean_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 40,
+        "salt": 937485621,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 40,
+        "salt": 937485621,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:pumpkin_ruins": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:pumpkin_ruins",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/pumpkin_ruins_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 40,
+        "salt": 248791439,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 40,
+        "salt": 248791439,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:rare_ruin": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:rare_ruin",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/rare_ruin_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 360,
+        "separation": 130,
+        "salt": 341891341,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 360,
+        "separation": 130,
+        "salt": 341891341,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "philipsruins:underground_structures": {
+      "source": "PhilipsRuins1.19.2-10.8.jar",
+      "structures": [
+        {
+          "structure": "philipsruins:lost_soul_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/lost_soul_dungeon_biomes"
+        },
+        {
+          "structure": "philipsruins:bone_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/bone_dungeon_biomes"
+        },
+        {
+          "structure": "philipsruins:underground_structures",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/lost_soul_dungeon_biomes"
+        },
+        {
+          "structure": "philipsruins:sculk_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#philipsruins:has_structure/sculk_dungeon_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 60,
+        "separation": 35,
+        "salt": 641781942,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 60,
+        "separation": 35,
+        "salt": 641781942,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "sawmillhouse:sawmill": {
+      "source": "sawmillhouse-1.3.0-forge-1.19.2.jar",
+      "structures": [
+        {
+          "structure": "sawmillhouse:sawmill",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "birch_forest",
+            "dark_forest",
+            "flower_forest",
+            "forest",
+            "old_growth_birch_forest",
+            "windswept_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 33,
+        "separation": 30,
+        "salt": 1335402114,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 33,
+        "separation": 30,
+        "salt": 1335402114,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "simply_houses:forest_structures": {
+      "source": "SimplyHouses-1.1.3-1.19-forge.jar",
+      "structures": [
+        {
+          "structure": "simply_houses:forest_chapel",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/forest_chapel_biomes"
+        },
+        {
+          "structure": "simply_houses:forest_house",
+          "weight": 2,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/forest_house_biomes"
+        },
+        {
+          "structure": "simply_houses:forest_stonemason",
+          "weight": 2,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/forest_stonemason_biomes"
+        },
+        {
+          "structure": "simply_houses:forest_fort",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/forest_fort_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 70,
+        "separation": 65,
+        "salt": 4424514,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 70,
+        "separation": 65,
+        "salt": 4424514,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "simply_houses:plains_structures": {
+      "source": "SimplyHouses-1.1.3-1.19-forge.jar",
+      "structures": [
+        {
+          "structure": "simply_houses:plains_mansion",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/plains_mansion_biomes"
+        },
+        {
+          "structure": "simply_houses:plains_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/plains_house_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 60,
+        "separation": 50,
+        "salt": 4418387,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 60,
+        "separation": 50,
+        "salt": 4418387,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "simply_houses:taiga_structures": {
+      "source": "SimplyHouses-1.1.3-1.19-forge.jar",
+      "structures": [
+        {
+          "structure": "simply_houses:taiga_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/taiga_house_biomes"
+        },
+        {
+          "structure": "simply_houses:taiga_forge",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/taiga_forge_biomes"
+        },
+        {
+          "structure": "simply_houses:taiga_inn",
+          "weight": 2,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/taiga_inn_biomes"
+        },
+        {
+          "structure": "simply_houses:taiga_woodcutter",
+          "weight": 2,
+          "enabled": true,
+          "biomes": "#simply_houses:has_structure/taiga_woodcutter_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 45,
+        "salt": 9928661,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 45,
+        "salt": 9928661,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "small_viking_villager_house:small_viking_house": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "small_viking_villager_house:small_viking_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "old_growth_pine_taiga",
+            "old_growth_spruce_taiga",
+            "snowy_taiga",
+            "taiga"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 36,
+        "salt": 321101871,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 36,
+        "salt": 321101871,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "small_villager_greenhouse:small_villager_greenhouse": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "small_villager_greenhouse:small_villager_greenhouse",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "plains",
+            "sunflower_plains",
+            "birch_forest",
+            "forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 32,
+        "salt": 2028346759,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 32,
+        "salt": 2028346759,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "supplementaries:way_signs": {
+      "source": "supplementaries-1.19.2-2.4.20.jar",
+      "structures": [
+        {
+          "structure": "supplementaries:way_sign",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#supplementaries:has_way_signs"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 19,
+        "separation": 10,
+        "salt": 431041527,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 10,
+          "other_set": "minecraft:villages"
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 19,
+        "separation": 10,
+        "salt": 431041527,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 10,
+          "other_set": "minecraft:villages"
+        }
+      }
+    },
+    "terralith:rare_dungeon": {
+      "source": "Terralith_1.19.3_v2.3.12.jar",
+      "structures": [
+        {
+          "structure": "terralith:spire",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/spire"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 36,
+        "separation": 18,
+        "salt": 928472105,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 36,
+        "separation": 18,
+        "salt": 928472105,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "terralith:rare_village": {
+      "source": "Terralith_1.19.3_v2.3.12.jar",
+      "structures": [
+        {
+          "structure": "terralith:fortified_village",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/fortified_village"
+        },
+        {
+          "structure": "terralith:fortified_desert_village",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/fortified_desert_village"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 46,
+        "separation": 18,
+        "salt": 42069,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 46,
+        "separation": 18,
+        "salt": 42069,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "terralith:ruin": {
+      "source": "Terralith_1.19.3_v2.3.12.jar",
+      "structures": [
+        {
+          "structure": "terralith:glacial_hut",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "terralith:glacial_chasm"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 27,
+        "separation": 10,
+        "salt": 3141592653589,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 27,
+        "separation": 10,
+        "salt": 3141592653589,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "terralith:underground": {
+      "source": "Terralith_1.19.3_v2.3.12.jar",
+      "structures": [
+        {
+          "structure": "terralith:underground/oak_cabin",
+          "weight": 11,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/oak_cabin"
+        },
+        {
+          "structure": "terralith:underground/giant_bee_hive",
+          "weight": 2,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/giant_bee_hive"
+        },
+        {
+          "structure": "terralith:underground/mining_outpost",
+          "weight": 13,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/mining_outpost"
+        },
+        {
+          "structure": "terralith:underground/old_refinery",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/old_refinery"
+        },
+        {
+          "structure": "terralith:underground/sunken_tower",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/sunken_tower"
+        },
+        {
+          "structure": "terralith:underground/witch_hut",
+          "weight": 4,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/witch_hut"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 11,
+        "separation": 3,
+        "salt": 69696969,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 11,
+        "separation": 3,
+        "salt": 69696969,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "terralith:underground_dungeon": {
+      "source": "Terralith_1.19.3_v2.3.12.jar",
+      "structures": [
+        {
+          "structure": "terralith:underground/frosted_dungeon",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#terralith:has_structure/frosted_dungeon"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 9,
+        "separation": 6,
+        "salt": 6942069,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 9,
+        "separation": 6,
+        "salt": 6942069,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "towns_and_towers:other": {
+      "source": "Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar",
+      "structures": [
+        {
+          "structure": "towns_and_towers:mimic_desert",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#minecraft:has_structure/desert_pyramid"
+        },
+        {
+          "structure": "towns_and_towers:wreckage_ocean",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/shallow_oceans_wreckage"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 16,
+        "salt": 30084234,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 16,
+        "salt": 30084234,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "towns_and_towers:towers": {
+      "source": "Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar",
+      "structures": [
+        {
+          "structure": "towns_and_towers:pillager_outpost_badlands",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_badlands"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_beach",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_beach"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_birch_forest",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_birch_forest"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_desert",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_desert"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_flower_forest",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_flower_forest"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_forest",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_forest"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_grove",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_grove"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_jungle",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_jungle"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_meadow",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_meadow"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_mushroom_fields",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_mushroom_fields"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_ocean",
+          "weight": 2,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_deep_oceans"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_old_growth_taiga",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_old_growth_taiga"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_savanna",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_savanna"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_snowy_beach",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_snowy_beach"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_snowy_plains",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_snowy_plains"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_snowy_slopes",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_snowy_slopes"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_sparse_jungle",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_sparse_jungle"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_sunflower_plains",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_sunflower_plains"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_swamp",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_swamp"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_taiga",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_taiga"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_snowy_taiga",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_snowy_taiga"
+        },
+        {
+          "structure": "towns_and_towers:pillager_outpost_wooded_badlands",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/pillager_outpost_wooded_badlands"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/pillager_outpost_mediterranean",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/pillager_outpost_mediterranean"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/pillager_outpost_tudor",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/pillager_outpost_tudor"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/pillager_outpost_classic",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/pillager_outpost_classic"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/pillager_outpost_oriental",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/pillager_outpost_oriental"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/pillager_outpost_swedish",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/pillager_outpost_swedish"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/pillager_outpost_iberian",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/pillager_outpost_iberian"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/pillager_outpost_rustic",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/pillager_outpost_rustic"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 24,
+        "salt": 205745294,
+        "frequency": 0.2,
+        "frequency_reduction_method": "legacy_type_1",
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 5,
+          "other_set": "towns_and_towers:towns"
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 24,
+        "salt": 205745294,
+        "frequency": 0.2,
+        "frequency_reduction_method": "legacy_type_1",
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 5,
+          "other_set": "towns_and_towers:towns"
+        }
+      }
+    },
+    "towns_and_towers:towns": {
+      "source": "Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar",
+      "structures": [
+        {
+          "structure": "towns_and_towers:village_badlands",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_badlands_pueblo"
+        },
+        {
+          "structure": "towns_and_towers:village_beach",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_beach_lighthouse"
+        },
+        {
+          "structure": "towns_and_towers:village_birch_forest",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_birch_forest_romanian"
+        },
+        {
+          "structure": "towns_and_towers:village_flower_forest",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_flower_forest_japanese"
+        },
+        {
+          "structure": "towns_and_towers:village_forest",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_forest_ruins"
+        },
+        {
+          "structure": "towns_and_towers:village_snowy_slopes",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_snowy_slopes_inn"
+        },
+        {
+          "structure": "towns_and_towers:village_jungle",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_jungle_tribal"
+        },
+        {
+          "structure": "towns_and_towers:village_meadow",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_meadow_swiss"
+        },
+        {
+          "structure": "towns_and_towers:village_mushroom_fields",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_mushroom_fields_fantasy"
+        },
+        {
+          "structure": "towns_and_towers:village_ocean",
+          "weight": 2,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_deep_oceans_ships"
+        },
+        {
+          "structure": "towns_and_towers:village_old_growth_taiga",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_old_growth_taiga_polish"
+        },
+        {
+          "structure": "towns_and_towers:village_grove",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_grove_villager_outpost"
+        },
+        {
+          "structure": "towns_and_towers:village_sunflower_plains",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_sunflower_plains_farm"
+        },
+        {
+          "structure": "towns_and_towers:village_snowy_taiga",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_snowy_taiga_viking"
+        },
+        {
+          "structure": "towns_and_towers:village_sparse_jungle",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_sparse_jungle_polynesian"
+        },
+        {
+          "structure": "towns_and_towers:village_swamp",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_swamp_boat"
+        },
+        {
+          "structure": "towns_and_towers:village_wooded_badlands",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/village_wooded_badlands_tipi"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/village_mediterranean",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/village_mediterranean"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/village_swedish",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/village_swedish"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/village_tudor",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/village_tudor"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/village_wandering_trader_camp",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/village_oriental"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/village_classic",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/village_classic"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/village_rustic",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/village_rustic"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/village_iberian",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/village_iberian"
+        },
+        {
+          "structure": "towns_and_towers:exclusives/village_nilotic",
+          "weight": 5,
+          "enabled": true,
+          "biomes": "#towns_and_towers:has_structure/exclusives/village_nilotic"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 24,
+        "salt": 10587309,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 5,
+          "other_set": "minecraft:villages"
+        }
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 48,
+        "separation": 24,
+        "salt": 10587309,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "chunk_count": 5,
+          "other_set": "minecraft:villages"
+        }
+      }
+    },
+    "twigs:bloodstone_obelisk": {
+      "source": "twigs-forge-1.19.2-3.0.1.jar",
+      "structures": [
+        {
+          "structure": "twigs:bloodstone_obelisk",
+          "weight": 1,
+          "enabled": true,
+          "biomes": "#twigs:has_structure/bloodstone_obelisk"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 4,
+        "salt": 4206914,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "linear"
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 20,
+        "separation": 4,
+        "salt": 4206914,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "spread_type": "linear"
+      }
+    },
+    "villager_butcher_house:butcher_house": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "villager_butcher_house:butcher_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "plains",
+            "sunflower_plains"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 43,
+        "separation": 32,
+        "salt": 310305363,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 43,
+        "separation": 32,
+        "salt": 310305363,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "villager_cartographer_house:villager_cartographer_house": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "villager_cartographer_house:villager_cartographer_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "plains",
+            "sunflower_plains"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 42,
+        "separation": 35,
+        "salt": 471730549,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 42,
+        "separation": 35,
+        "salt": 471730549,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "villager_cleric_house:villager_cleric_house": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "villager_cleric_house:villager_cleric_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "plains",
+            "sunflower_plains"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 39,
+        "separation": 32,
+        "salt": 375449722,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 39,
+        "separation": 32,
+        "salt": 375449722,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "villager_country_house:country_house": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "villager_country_house:country_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "savanna",
+            "savanna_plateau"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 35,
+        "salt": 823174623,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 50,
+        "separation": 35,
+        "salt": 823174623,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "villager_farmer_house:villager_farmer_house": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "villager_farmer_house:villager_farmer_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "plains",
+            "sunflower_plains"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 47,
+        "separation": 35,
+        "salt": 1077238613,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 47,
+        "separation": 35,
+        "salt": 1077238613,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "villager_fletcher_house:villager_fletcher_house": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "villager_fletcher_house:villager_fletcher_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "plains",
+            "sunflower_plains"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 38,
+        "separation": 32,
+        "salt": 1611576274,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 38,
+        "separation": 32,
+        "salt": 1611576274,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "villager_flower_house:flower_house": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "villager_flower_house:flower_house",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "meadow",
+            "sunflower_plains"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 35,
+        "salt": 448543216,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 35,
+        "salt": 448543216,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "villager_tannery:tannery": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "villager_tannery:tannery",
+          "weight": 1,
+          "enabled": true,
+          "biomes": [
+            "plains",
+            "forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 30,
+        "salt": 2043282447,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "current": {
+        "type": "minecraft:random_spread",
+        "spacing": 45,
+        "separation": 30,
+        "salt": 2043282447,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  }
+}

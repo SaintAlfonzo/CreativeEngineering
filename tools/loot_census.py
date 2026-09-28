@@ -53,8 +53,9 @@ def is_chest_seed(tid, table):
     return ttype in (None, 'minecraft:generic') and bool(CHEST_PATH.search(path)) and not path.startswith(NON_CHEST_PREFIX)
 
 
-def chest_scope(effective, code_pools, glms):
-    """(scope, roots) the way gen_loot_config.py builds them: seeds + everything they pull in."""
+def chest_scope(effective, code_pools, glms, placed=()):
+    """(scope, roots) the way gen_loot_config.py builds them: seeds (chest-typed, chests/ folders, and
+    every table a structure template places) + everything they pull in."""
     glm_edges = defaultdict(set)
     for _, data in glms.values():
         sub = data.get('lootTable') or data.get('loot_table') or data.get('table')
@@ -66,7 +67,7 @@ def chest_scope(effective, code_pools, glms):
         pools = list(effective.get(tid, {}).get('pools', [])) + code_pools.get(tid, [])
         return table_refs(pools) | glm_edges.get(tid, set())
 
-    scope, todo = set(), [t for t, v in effective.items() if is_chest_seed(t, v)]
+    scope, todo = set(), [t for t, v in effective.items() if is_chest_seed(t, v) or t in placed]
     while todo:
         tid = todo.pop()
         if tid in scope or tid not in effective:
@@ -173,9 +174,6 @@ def main():
                 if extra:
                     code_pools[tid] = extra
 
-    scope, roots = chest_scope(effective, code_pools, glms)
-    index_scope = set(index['tables']) if index else set()
-
     # structure templates: table -> templates whose containers roll it
     placed = defaultdict(set)
     containers = defaultdict(Counter)   # table -> {template namespace: containers}
@@ -183,6 +181,9 @@ def main():
         if row['loot']:
             placed[norm_id(row['loot'])].add(row['template'])
             containers[norm_id(row['loot'])][row['template'].split(':', 1)[0]] += 1
+
+    scope, roots = chest_scope(effective, code_pools, glms, placed)
+    index_scope = set(index['tables']) if index else set()
     roots |= {t for t in scope if t in placed}
     dead_refs = {t: tpls for t, tpls in placed.items() if t not in effective and (export is None or t not in export)}
     cat = {tid: category(tid, t, scope, roots, placed) for tid, t in effective.items()}

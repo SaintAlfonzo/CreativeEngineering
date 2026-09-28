@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "plains_villager_tents:big_villager_tent",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 30,
+    "salt": 1221291229
+  }
+}

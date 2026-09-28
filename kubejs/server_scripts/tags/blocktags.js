@@ -377,6 +377,24 @@ ServerEvents.tags('block', e => {
 	t.remove(e, runnerTags, '/_(button|pressure_plate)$/')
 
 	t.overlaps(e, runnerTags.concat(basicTiers), 'BlockRunner tier')
+
+	// ── Structure ground matching (patcherMod worldgen/GroundMatch, CEConfig [ground_match]) ──
+	// A base family: these blocks in a structure's bottom layers become the sampled local ground where
+	// the ground isn't this family (grass pads on volcanic peaks, dirt in deserts). A new family = a new
+	// tag here + its id in [ground_match] families. dirt_path and farmland stay: they're design, not base.
+	t.add(e, 'creativeengineering:ground_match/grass', [
+		item.grass_block, item.dirt, item.coarse_dirt, item.podzol, item.rooted_dirt, item.mycelium,
+	])
+	// Dropped when the block under them is swapped (both halves of tall plants).
+	t.add(e, 'creativeengineering:ground_match/plants', [
+		'#minecraft:flowers', '#minecraft:saplings', item.grass, item.fern, item.tall_grass, item.large_fern,
+		item.dead_bush, item.brown_mushroom, item.red_mushroom, b.sweet_berry_bush,
+	])
+	// Never sampled as ground: tree and crop parts that neighbouring chunks' features spill onto the surface.
+	t.add(e, 'creativeengineering:ground_match/not_ground', [
+		'#minecraft:leaves', '#minecraft:logs', item.brown_mushroom_block, item.red_mushroom_block,
+		item.mushroom_stem, item.cactus, item.bamboo, item.pumpkin, item.melon_block,
+	])
 })
 
 console.log('block tags finished')

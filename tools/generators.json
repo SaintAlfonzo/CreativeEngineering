@@ -4,7 +4,8 @@
     "optional run at game startup (config/creativeengineering-common.toml [debug.generators]).",
     "",
     "Entries run one at a time, in this order, so put a generator after anything it reads:",
-    "gen_structure_config writes structure_config.json, which build_biome_merges and the analyzer read.",
+    "gen_structure_config writes structure_config.json, which build_biome_merges, the analyzer and gen_structure_groups read;",
+    "gen_structure_groups also reads biome_merges.json and biome_config.json, so it runs after both.",
     "A failed entry is reported and the rest still run.",
     "",
     "Fields per generator:",
@@ -19,7 +20,7 @@
     "  warnExit  exit codes that mean 'finished with findings' rather than 'failed' (optional)",
     "  highlight extra regexes, on top of the top-level list, whose matching output lines go to chat",
     "",
-    "Not listed on purpose: dump_server_mods.py (in game it's /dumpservermods), echo_texture.py and",
+    "Not listed on purpose: dump_server_mods.py (it copies ~300 jars; in game it is /dumpservermods), echo_texture.py and",
     "potion_bucket_texture.py (one-off art tools that take arguments), gen_bedspreads/elytra_pattern_compat.py",
     "(they write patcherMod resources, so their output needs a jar rebuild, not a game restart)."
   ],
@@ -32,6 +33,8 @@
     "no proposal any more",
     "^\\s*dropped ",
     "no longer exists",
+    "^\\s*removed ",
+    "no entry under",
     "not found"
   ],
   "generators": [
@@ -63,6 +66,16 @@
       "apply": "new worlds only (solved at world load)"
     },
     {
+      "id": "structure_groups",
+      "script": "tools/gen_structure_groups.py",
+      "groups": ["core", "worldgen"],
+      "outputs": [
+        "kubejs/generation_scripts/worldgen/structure_groups.json",
+        "kubejs/generation_scripts/worldgen/structure_group_estimates.md"
+      ],
+      "apply": "rejoin the world; only newly generated chunks use it"
+    },
+    {
       "id": "loot_config",
       "script": "tools/gen_loot_config.py",
       "groups": ["core", "loot"],
@@ -79,6 +92,20 @@
       "groups": ["core", "client"],
       "outputs": ["kubejs/assets/creativeengineering/lang/en_us.json"],
       "apply": "F3+T (client resource reload)"
+    },
+    {
+      "id": "pack_manifest",
+      "script": "tools/gen_pack_manifest.py",
+      "groups": ["core", "pack"],
+      "outputs": ["pack/manifest.json", "pack/MODLIST.md"],
+      "apply": "commit pack/ (nothing in game)"
+    },
+    {
+      "id": "structures_by_biome",
+      "script": "tools/gen_structure_biome_table.py",
+      "groups": ["reports", "worldgen"],
+      "outputs": ["feature_writeup/structures_by_biome.md"],
+      "apply": "nothing to apply: it is a report (holes in villages, houses, pillager, dungeons, ruins per biome, professions per village style)"
     },
     {
       "id": "biome_merge_proposals",

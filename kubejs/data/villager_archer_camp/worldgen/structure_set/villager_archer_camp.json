@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "villager_archer_camp:villager_archer_camp",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 35,
+    "salt": 725722647
+  }
+}

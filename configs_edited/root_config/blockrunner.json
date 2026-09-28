@@ -1,38 +1,14 @@
 {
+  // Surface tier speeds (#blockrunner:surface/*) are NOT set here any more: they live in
+  // config/creativeengineering-common.toml [surface.speed], and patcherMod writes them in every
+  // time BlockRunner reads this file (a tier key added here is overridden, with a log warning).
+  // This file keeps BlockRunner's six basic tiers (kept empty by blocktags.js, for one-off
+  // overrides) and any "namespace:block": multiplier keys, which always beat tags.
+  // Gson reads it leniently: // comments are fine, trailing commas are not.
   "#blockrunner:very_quick_blocks": 1.55,
   "#blockrunner:quick_blocks": 1.35,
   "#blockrunner:slightly_quick_blocks": 1.15,
   "#blockrunner:slightly_slow_blocks": 0.85,
   "#blockrunner:slow_blocks": 0.65,
-  "#blockrunner:very_slow_blocks": 0.45,
-
-  "#blockrunner:surface/asphalt": 1.50,
-  "#blockrunner:surface/concrete": 1.40,
-  "#blockrunner:surface/grating": 1.30,
-  "#blockrunner:surface/metal": 1.25,
-  "#blockrunner:surface/slippery": 1.25,
-  "#blockrunner:surface/constructed_smooth": 1.25,
-  "#blockrunner:surface/constructed_brick": 1.25,
-  "#blockrunner:surface/natural_path": 1.15,
-  "#blockrunner:surface/wood": 1.10,
-  "#blockrunner:surface/natural_smooth": 1.05,
-
-  "#blockrunner:surface/machinery": 1.00,
-  "#blockrunner:surface/functional": 1.00,
-  "#blockrunner:surface/decorative": 1.00,
-  "#blockrunner:surface/camouflage": 1.00,
-
-  "#blockrunner:surface/glass": 1.00,
-  "#blockrunner:surface/dirt": 1.00,
-
-  "#blockrunner:surface/natural_rough": 0.92,
-  "#blockrunner:surface/soft": 0.88,
-  "#blockrunner:surface/dust": 0.85,
-  "#blockrunner:surface/confectionery": 0.85,
-  "#blockrunner:surface/tilled": 0.80,
-  "#blockrunner:surface/leaves": 0.78,
-  "#blockrunner:surface/snow": 0.75,
-  "#blockrunner:surface/sticky": 0.65,
-  "#blockrunner:surface/spongy": 0.60,
-  "#blockrunner:surface/very_sticky": 0.45
+  "#blockrunner:very_slow_blocks": 0.45
 }

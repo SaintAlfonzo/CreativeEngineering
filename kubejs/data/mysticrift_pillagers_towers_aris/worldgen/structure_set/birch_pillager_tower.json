@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "mysticrift_pillagers_towers_aris:birch_pillager_tower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 200,
+    "separation": 12,
+    "salt": 644728235
+  }
+}

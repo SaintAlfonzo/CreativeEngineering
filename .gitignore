@@ -35,6 +35,8 @@
 # --- excluded inside tracked folders ---
 # KubeJS dump output (/dumptags, /dumprecipes, ...) - regenerate in game
 /kubejs/exported/
+# tools/gen_loot_config.py structure-template scan cache (rebuilt when the jar list changes)
+/tools/.cache/
 # patcherMod: build output + third-party compile jars (copies of mods/ jars)
 /patcherMod/libs/
 /patcherMod/build/

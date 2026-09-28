@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "snowy_tents:snowy_tent",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 23,
+    "separation": 22,
+    "salt": 2042563284
+  }
+}

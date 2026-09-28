@@ -44,6 +44,8 @@ public final class CEConfig {
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
     public static final Surface SURFACE;
+    public static final Worldgen WORLDGEN;
+    public static final Debug DEBUG;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -59,6 +61,8 @@ public final class CEConfig {
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
         SURFACE = new Surface(builder);
+        WORLDGEN = new Worldgen(builder);
+        DEBUG = new Debug(builder);
         COMMON_SPEC = builder.build();
     }
 
@@ -552,6 +556,7 @@ public final class CEConfig {
         /** Dials for {@code surface.WthitRunSpeed} (client-side, display only). */
         public static final class Wthit {
             public final ForgeConfigSpec.BooleanValue enabled;
+            public final ForgeConfigSpec.BooleanValue hideUntyped;
             public final ForgeConfigSpec.BooleanValue hideNormal;
             public final ForgeConfigSpec.BooleanValue showTier;
             public final ForgeConfigSpec.EnumValue<SpeedFormat> format;
@@ -559,19 +564,28 @@ public final class CEConfig {
             private Wthit(ForgeConfigSpec.Builder b) {
                 b.comment(
                         "A 'Run Speed' line in WTHIT's look-at overlay: the speed you'd walk at on that block, by",
-                        "the same rules as movement (camo and sticky facing included). Client-side only; it reads",
-                        "BlockRunner's own speed table, no server traffic."
+                        "the same rules as movement (camo and sticky facing included). Blocks you pass through",
+                        "(plants) get no line unless they slow you from inside (cobwebs, berry bushes, leaf piles);",
+                        "thin layers (carpet, 1-2 snow layers) show the block beneath, which is the one you walk on.",
+                        "Client-side only; it reads BlockRunner's own speed table, no server traffic."
                 ).push("wthit");
 
                 enabled = b.comment("Master on/off switch for the line.")
                         .define("enabled", true);
 
-                hideNormal = b.comment("true: no line on blocks at normal speed (1.0), which is most blocks.")
+                hideUntyped = b.comment(
+                        "true: no line on blocks nothing gives a speed to: no surface tier, no blockrunner.json",
+                        "entry, no speed of their own, and they don't slow you from inside. Those are always 1.0,",
+                        "so this only matters with hideNormal = false: tiered 1.0 blocks (Glass, Dirt) still show."
+                ).define("hideUntyped", true);
+
+                hideNormal = b.comment("true: no line on any block at normal speed (1.0), tiered or not.")
                         .define("hideNormal", true);
 
                 showTier = b.comment(
-                        "true: name the surface tier after the value, e.g. 'Run Speed: 1.50\u00d7 (Asphalt)', and say",
-                        "'from camo' on frames and 'sticky face not up' on sideways sticky pistons."
+                        "true: name the surface tier after the value, e.g. 'Run Speed: 1.50\u00d7 (Asphalt)', and add",
+                        "notes: 'from camo', 'sticky face not up', 'block below' (thin layers), 'own speed'",
+                        "(soul sand), 'walking through' (cobwebs and other blocks that slow you from inside)."
                 ).define("showTier", true);
 
                 format = b.comment("MULTIPLIER: 1.50\u00d7 / 0.88\u00d7. PERCENT: +50% / -12%.")
@@ -812,6 +826,285 @@ public final class CEConfig {
             ).define("logSeenSources", false);
 
             b.pop(); // damage_tags
+        }
+    }
+
+    /** How a structure's grass/dirt base is swapped for the local ground ({@code worldgen/GroundMatch}). */
+    public enum GroundMode { TERRAIN, PALETTE, REMOVE }
+
+    /** Where /ceplace puts each structure vertically ({@code worldgen/MassPlacer}). */
+    public enum VerticalAlign { AUTO, KEEP, GROUND }
+
+    /**
+     * Every worldgen system's switch and every tuning constant that isn't per-structure data. Per-structure
+     * and per-piece values stay in kubejs/generation_scripts/worldgen/*.json (hundreds of entries); this is
+     * the layer above them, for testing: turn a system off, scale every structure's rate, tune the solvers.
+     * Read through {@code worldgen/WorldgenConfig}, which falls back to the defaults before the file loads.
+     * Most of it is read at world load (rejoin to apply); ground matching and /ceplace read it live.
+     */
+    public static final class Worldgen {
+        public final WorldgenSystems systems;
+        public final WorldgenDebug debug;
+        public final PoolTuning pools;
+        public final BiomeSolver biomeSolver;
+        public final GroundMatch groundMatch;
+        public final MassPlace massPlace;
+
+        private Worldgen(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "World generation: switches per system, a debug rate multiplier, and the constants of the pack's",
+                    "worldgen code. The per-structure, per-piece and per-biome tables are the JSON files in",
+                    "kubejs/generation_scripts/worldgen/ (see feature_writeup/structure_tuning.md). Structure and",
+                    "biome settings apply when a world loads (rejoin), and only to chunks generated afterwards."
+            ).push("worldgen");
+            systems = new WorldgenSystems(b);
+            debug = new WorldgenDebug(b);
+            pools = new PoolTuning(b);
+            biomeSolver = new BiomeSolver(b);
+            groundMatch = new GroundMatch(b);
+            massPlace = new MassPlace(b);
+            b.pop(); // worldgen
+        }
+    }
+
+    /** One switch per worldgen system, so each can be A/B tested against the mods' own defaults. */
+    public static final class WorldgenSystems {
+        public final ForgeConfigSpec.BooleanValue structureGroups;
+        public final ForgeConfigSpec.BooleanValue structureFrequencies;
+        public final ForgeConfigSpec.BooleanValue poolTuning;
+        public final ForgeConfigSpec.BooleanValue lootContainerSwaps;
+        public final ForgeConfigSpec.BooleanValue biomeLayout;
+        public final ForgeConfigSpec.BooleanValue biomeMerges;
+        public final ForgeConfigSpec.BooleanValue deadPlacementFilter;
+        public final ForgeConfigSpec.BooleanValue groundMatch;
+
+        private WorldgenSystems(ForgeConfigSpec.Builder b) {
+            b.comment("Switch a system off to see the mods' own behaviour. Off never deletes a config file.").push("systems");
+            structureGroups = b.comment(
+                    "structure_groups.json + group/* tags (kubejs worldgen/structure_overrides.js). Off: every structure",
+                    "set as its mod ships it (debug.structureDensity still applies). Rejoin to apply."
+            ).define("structureGroups", true);
+            structureFrequencies = b.comment(
+                    "The per-structure frequency roll (patcherMod StructureFrequencies). Off: every group member spawns",
+                    "whenever it wins its slot, i.e. at its weight share only. Rejoin to apply."
+            ).define("structureFrequencies", true);
+            poolTuning = b.comment("pool_config.json / pool_tags.json village-house weights (PoolTuner). Off: every pool at its first-seen weights. Rejoin.")
+                    .define("poolTuning", true);
+            lootContainerSwaps = b.comment("loot_container_swaps.json: modded loot containers placed by structures become vanilla ones for Lootr.")
+                    .define("lootContainerSwaps", true);
+            biomeLayout = b.comment("biome_config.json multipliers / replacements (BiomeLayoutTuner). Only affects worlds created afterwards.")
+                    .define("biomeLayout", true);
+            biomeMerges = b.comment("biome_merges.json: extra biomes in structure biome tags (kubejs worldgen/biome_merges.js). /reload or rejoin.")
+                    .define("biomeMerges", true);
+            deadPlacementFilter = b.comment("Explorer maps and /locate skip structure sets at frequency 0 (without it they can hang the server).")
+                    .define("deadPlacementFilter", true);
+            groundMatch = b.comment("Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).")
+                    .define("groundMatch", true);
+            b.pop(); // systems
+        }
+    }
+
+    /** Testing knobs that are wrong for a real world. */
+    public static final class WorldgenDebug {
+        public final ForgeConfigSpec.DoubleValue structureDensity;
+
+        private WorldgenDebug(ForgeConfigSpec.Builder b) {
+            b.comment("For testing only; leave at the defaults for play.").push("debug");
+            structureDensity = b.comment(
+                    "Multiplies how often EVERY structure spawns (natural generation, every set, grouped or not). 1 = off.",
+                    "Below 1: each set's frequency is multiplied (exact, spacing and gaps unchanged). Above 1: grids shrink",
+                    "by sqrt(x) and the frequency absorbs the rounding, so the rate is exact until a grid reaches its",
+                    "minimum (spacing = separation + 1); separations shrink with the grid. structure_tag_report.md shows",
+                    "the result. Rejoin to apply; only new chunks change."
+            ).defineInRange("structureDensity", 1.0, 0.01, 100.0);
+            b.pop(); // debug
+        }
+    }
+
+    /** {@code worldgen/PoolTuner} constants. */
+    public static final class PoolTuning {
+        public final ForgeConfigSpec.IntValue maxFractionScale;
+
+        private PoolTuning(ForgeConfigSpec.Builder b) {
+            b.push("pools");
+            maxFractionScale = b.comment(
+                    "Fractional piece weights are made whole by scaling the pool's list by up to this factor. Jigsaw",
+                    "tries every copy of a piece in a pool, so a bigger factor is more exact but slower to fail."
+            ).defineInRange("maxFractionScale", 10, 1, 100);
+            b.pop(); // pools
+        }
+    }
+
+    /** {@code worldgen/BiomeLayoutTuner} solver constants (they change the solve, so they're part of its cache key). */
+    public static final class BiomeSolver {
+        public final ForgeConfigSpec.IntValue maxCandidates;
+        public final ForgeConfigSpec.IntValue rounds;
+
+        private BiomeSolver(ForgeConfigSpec.Builder b) {
+            b.push("biome_solver");
+            maxCandidates = b.comment("Biomes considered per climate sample (the closest ones). More = slower, rarely different.")
+                    .defineInRange("maxCandidates", 24, 2, 256);
+            rounds = b.comment("Penalty-adjustment rounds. More = closer to the target shares, slower world creation.")
+                    .defineInRange("rounds", 20, 1, 200);
+            b.pop(); // biome_solver
+        }
+    }
+
+    /**
+     * Knobs for {@code worldgen/GroundMatch}: a structure template's base blocks (grass, dirt...) are
+     * swapped for the ground actually around it when that ground isn't grass/dirt (a grassy ruin in
+     * volcanic peaks sits on basalt instead). Which blocks count is block-tag driven (KubeJS
+     * blocktags.js), so only the behaviour lives here. Read while chunks generate: already-generated
+     * chunks never change. On/off: [worldgen.systems] groundMatch.
+     */
+    public static final class GroundMatch {
+        public final ForgeConfigSpec.EnumValue<GroundMode> mode;
+        public final ForgeConfigSpec.IntValue baseLayers;
+        public final ForgeConfigSpec.DoubleValue nativeShare;
+        public final ForgeConfigSpec.IntValue minSamples;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> families;
+        public final ForgeConfigSpec.BooleanValue log;
+        public final ForgeConfigSpec.IntValue centerStride;
+        public final ForgeConfigSpec.IntValue neighbourStride;
+        public final ForgeConfigSpec.IntValue subDepth;
+        public final ForgeConfigSpec.IntValue maxDig;
+        public final ForgeConfigSpec.IntValue maxPlantHeight;
+
+        private GroundMatch(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Structure bases that don't match the ground. As a structure generates, grass/dirt in the bottom",
+                    "layers of its templates is compared with the natural ground sampled around that chunk; where the",
+                    "ground isn't grass/dirt (volcanic peaks, deserts, snowy slopes, badlands...) the base becomes that",
+                    "ground instead. Blocks: tags creativeengineering:ground_match/* (kubejs blocktags.js). Exempt a",
+                    "structure with the structure tag creativeengineering:ground_match/exempt. New chunks only."
+            ).push("ground_match");
+
+            mode = b.comment(
+                    "TERRAIN: a base block whose spot already holds natural ground is skipped, so the terrain stays;",
+                    "  the rest (base above the ground) is filled with blocks sampled from the local ground.",
+                    "PALETTE: every base block becomes a sampled ground block.",
+                    "REMOVE: base blocks are never placed (whatever is there stays, air included)."
+            ).defineEnum("mode", GroundMode.TERRAIN);
+
+            baseLayers = b.comment(
+                    "How many template layers from the bottom count as the base. Family blocks higher up (roof",
+                    "gardens, planters) are left alone."
+            ).defineInRange("baseLayers", 3, 1, 16);
+
+            nativeShare = b.comment(
+                    "A family counts as native when at least this share of the sampled ground tops belong to it;",
+                    "native chunks are left exactly as the template has them."
+            ).defineInRange("nativeShare", 0.35, 0.0, 1.0);
+
+            minSamples = b.comment(
+                    "Fewest natural ground columns needed to decide (columns under structures are skipped). With",
+                    "fewer, even after also sampling the 8 neighbouring chunks, the base is left as it is."
+            ).defineInRange("minSamples", 16, 1, 1024);
+
+            families = b.comment(
+                    "Block tags, one per base family. A family block in a base is swapped where its family isn't",
+                    "native. Add a tag here (and fill it in blocktags.js) to match another kind of base, e.g. sand."
+            ).defineList("families", List.of("creativeengineering:ground_match/grass"),
+                    o -> o instanceof String str && str.contains(":"));
+
+            log = b.comment("Log each changed template (chunk, family share, palettes). For testing.")
+                    .define("log", false);
+
+            b.comment("How the natural ground is sampled.").push("sampling");
+            centerStride = b.comment("Every Nth column of the chunk being placed is sampled (2 = 64 columns).")
+                    .defineInRange("centerStride", 2, 1, 16);
+            neighbourStride = b.comment("Every Nth column of each of the 8 neighbouring chunks (4 = 16 each).")
+                    .defineInRange("neighbourStride", 4, 1, 16);
+            subDepth = b.comment("Blocks sampled under each column's top block (the under-block palette).")
+                    .defineInRange("subDepth", 3, 1, 16);
+            maxDig = b.comment("How far down past leaves, logs and plants a column is searched for its ground.")
+                    .defineInRange("maxDig", 24, 1, 128);
+            maxPlantHeight = b.comment("Tallest plant (in blocks) removed from a swapped block.")
+                    .defineInRange("maxPlantHeight", 4, 1, 16);
+            b.pop(); // sampling
+
+            b.pop(); // ground_match
+        }
+    }
+
+    /** {@code /ceplace}: whole structures or raw templates laid out in rows, for inspecting them in a flat world. */
+    public static final class MassPlace {
+        public final ForgeConfigSpec.IntValue gap;
+        public final ForgeConfigSpec.IntValue rowGap;
+        public final ForgeConfigSpec.BooleanValue labels;
+        public final ForgeConfigSpec.EnumValue<VerticalAlign> verticalAlign;
+        public final ForgeConfigSpec.IntValue autoAlignBand;
+        public final ForgeConfigSpec.IntValue maxItems;
+        public final ForgeConfigSpec.IntValue tickBudgetMs;
+
+        private MassPlace(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "/ceplace structures <filter> and /ceplace templates <glob>: place every match in rows (one row per",
+                    "type tag, group, mod or template folder), starting at your position and going +X, rows stacked +Z.",
+                    "Meant for a flat world with Generate Structures off. /ceplace preview ... lists without placing."
+            ).push("mass_place");
+            gap = b.comment("Blocks between two structures in a row.").defineInRange("gap", 12, 0, 512);
+            rowGap = b.comment("Blocks between rows (the aisle the labels stand in).").defineInRange("rowGap", 16, 4, 512);
+            labels = b.comment("Put a sign with the id in front of each structure and at the start of each row.")
+                    .define("labels", true);
+            verticalAlign = b.comment(
+                    "KEEP: each structure at the height it generated at here. GROUND: its bottom layer at ground level.",
+                    "AUTO: GROUND only for structures that generated more than autoAlignBand blocks above or below the",
+                    "ground (underground and sky structures); surface ones keep their height."
+            ).defineEnum("verticalAlign", VerticalAlign.AUTO);
+            autoAlignBand = b.comment("AUTO's tolerance, in blocks.").defineInRange("autoAlignBand", 8, 0, 256);
+            maxItems = b.comment("Refuse a run with more matches than this (preview first, or narrow the filter).")
+                    .defineInRange("maxItems", 1000, 1, 100000);
+            tickBudgetMs = b.comment(
+                    "Milliseconds of work per server tick. Each structure is laid out, then its chunks are generated and",
+                    "built one at a time until the budget is used, so a big village takes several ticks instead of one",
+                    "long one (a dedicated server kills a tick over 60 s). Higher = faster runs, choppier server."
+            ).defineInRange("tickBudgetMs", 40, 5, 1000);
+            b.pop(); // mass_place
+        }
+    }
+
+    /** Dev-instance knobs: the Python generator runner ({@code devtools/GeneratorRunner}, /cegen). */
+    public static final class Debug {
+        public final ForgeConfigSpec.BooleanValue runGeneratorsAtStartup;
+        public final ForgeConfigSpec.ConfigValue<String> generatorTarget;
+        public final ForgeConfigSpec.ConfigValue<String> python;
+        public final ForgeConfigSpec.IntValue timeoutSeconds;
+        public final ForgeConfigSpec.IntValue startupWaitSeconds;
+
+        private Debug(ForgeConfigSpec.Builder b) {
+            b.comment("Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).").push("debug");
+            b.comment(
+                    "The pack's generator scripts (tools/*.py: structure/biome/loot configs, effect descriptions,",
+                    "pack manifest, reports) listed in tools/generators.json. /cegen run [target] runs them in game;",
+                    "these knobs also let them run by themselves every time the game starts."
+            ).push("generators");
+
+            runGeneratorsAtStartup = b.comment(
+                    "Debug mode. When true, the generators run in the background as the game starts (from common",
+                    "setup), and loading waits for them before finishing, so the first world load already reads",
+                    "fresh files. Results go to latest.log, logs/cegen/<id>.log and /cegen status. Off by default."
+            ).define("runAtStartup", false);
+
+            generatorTarget = b.comment(
+                    "What the startup run and a bare /cegen run execute: 'all', a group or one generator id",
+                    "from tools/generators.json."
+            ).define("target", "core");
+
+            python = b.comment("Python interpreter to run the scripts with (a name on PATH or a full path).")
+                    .define("python", "python3");
+
+            timeoutSeconds = b.comment("A script still running after this long is killed and reported as TIMEOUT.")
+                    .defineInRange("timeoutSeconds", 300, 10, 3600);
+
+            startupWaitSeconds = b.comment(
+                    "How long the end of loading waits for the startup run. The core generators take about 10 s and",
+                    "run alongside the rest of loading, so this rarely waits at all. 0 = never wait (files may then",
+                    "change after the first world has loaded)."
+            ).defineInRange("startupWaitSeconds", 120, 0, 3600);
+
+            b.pop(); // generators
+            b.pop(); // debug
         }
     }
 }

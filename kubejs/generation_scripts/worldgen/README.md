@@ -1,118 +1,101 @@
-# Structure spawn-frequency / removal framework
+# Structure spawn rates: structure groups
 
-One place to retune how often any structure generates — vanilla or modded — or kill it
-outright, instead of hunting through per-mod config toggles. KubeJS ignores this `.md`.
+One place to set how often every structure generates, vanilla or modded, and how far apart
+structures of the same kind keep, instead of hunting through per-mod config toggles. KubeJS
+ignores this `.md`. Full writeup + in-game tests: `feature_writeup/structure_tuning.md` (ST-).
 
 ## Applied at world load: no script to run after an edit
 
-Everything in this folder is config, read by three server scripts in
-`kubejs/server_scripts/worldgen/` every time a world loads (including world creation):
+Everything in this folder is config, read at every world load (including world creation):
 
 | Config | Applied by | Takes effect |
 |---|---|---|
-| `structure_config.json` + `structure_tags.json` | `structure_overrides.js` (`ServerEvents.highPriorityData`) | rejoin the world; new chunks only |
+| `structure_groups.json` (rates) + `structure_tags.json` (group membership) + `structure_config.json` (baseline) | `kubejs/server_scripts/worldgen/structure_overrides.js` (`ServerEvents.highPriorityData`) + patcherMod `worldgen/StructureFrequencies` | rejoin the world; new chunks only |
 | `biome_merges.json` | `biome_merges.js` (`ServerEvents.tags('worldgen/biome')`, via `global.tags`) | `/reload` or rejoin; new chunks only |
 | `biome_config.json` | `biome_overrides.js` -> patcherMod `worldgen/BiomeLayoutTuner` (Java solver) | new worlds only |
 | `pool_config.json` + `pool_tags.json` | patcherMod `worldgen/PoolTuner` (`ServerAboutToStartEvent`, LOWEST) | rejoin the world; new chunks only |
 | `loot_container_swaps.json` | patcherMod `worldgen/LootContainerSwaps` + `mixin/StructureTemplateLootSwapMixin` | rejoin the world; new chunks only |
 
+Above these files sits `config/creativeengineering-common.toml` `[worldgen]` (also in Create's config screen): an on/off
+switch for each system above plus ground matching, `[worldgen.debug] structureDensity` (every structure's rate times x,
+for testing), the solvers' constants, ground matching and `/ceplace`. Switching a system off never touches these files;
+the game just uses the mods' own values while it's off. See `feature_writeup/structure_tuning.md` 3.9 and 3.10.
+
 `highPriorityData` fires inside KubeJS's world-load resource wrap, before the game parses worldgen,
 and its files go into KubeJS's top-priority virtual datapack (above `kubejs/data`, Terralith,
 Nullscape). Nothing is written to `kubejs/data`. A config error applies nothing for that system
-(mods' own defaults are used) and is logged as a KubeJS error. The old node generators that wrote
-`kubejs/data` files are archived in `kubejs/archive/worldgen/` for reference; don't run them, their
-output would double-apply. The `tools/*.py` scanners are still scripts, but only needed after a
-mod update (they refresh the baselines and keep your edits).
+(mods' own defaults are used) and is logged as a KubeJS error. The `tools/*.py` scripts are only
+needed after a mod update or a group membership change.
 
-## Why structure_set, never the structure itself
+## The model (since 2026-09-27)
 
-A structure's spawn **frequency** (spacing/separation/frequency chance), its **xyz coords**
-(`locate_offset`, the grid nudge every placement type supports), and which entries even
-compete for a given chunk all live on its `structure_set` — a small 3-field document
-(`type` / `placement` / `structures`). The structure's own definition (biomes, jigsaw pools,
-size…) is what you'd need to touch to move it to *different* biomes, but that's not what this
-framework does — it only ever writes `structure_set` overrides, never touches a structure file.
-That keeps every override reconstructable from a handful of known fields, whether the
-structure_set's original came from a mod's jar or (for vanilla) a hand-maintained defaults
-table — no jigsaw-schema landmines. `biomes` is still recorded per structure in the config, as
-informational/reference context, from the mod's own structure json or, for vanilla,
-`minecraft`'s `has_structure/*` convenience tags — see `tools/gen_structure_config.py`.
+- **Group:** one shared structure_set, `creativeengineering:group/<name>`, holding every structure
+  in the tag `group/<name>`. Members share its grid, so **no two members ever start closer than
+  `separation + 1` chunks**, whatever mod they come from, and the grid allows at most one member per
+  `spacing x spacing` chunks. Groups: `settlements`, `pillager_settlements` (kept 4 chunks off
+  settlement grid slots), `ruins`, `surface_dungeons`, `ocean_ruins`, `ocean_dungeons` (the
+  monuments' own grid), `sky`, `boats`, `remote`.
+- **Per member:** `weight` decides who wins a slot where several members fit the biome (vanilla set
+  weight). `frequency` (0..1) is the chance the winner really spawns; otherwise the slot stays
+  **empty**, it does not fall through to another member, so lowering one never makes another more
+  common. Where a member is the only one that fits the biome it gets every slot x its frequency.
+  `enabled: false` removes it.
+- **Standalone:** every structure in no group keeps its own set, listed under `standalone` by set id:
+  `placement` holds only the fields you change (the rest is `original` in `structure_config.json`),
+  and each structure has the same `frequency` / `enabled` / optional `weight`.
+- A structure moved into a group leaves its original set. A set left with no live member is written
+  with **no structures** and frequency 0: it can't generate, and `/locate` and explorer maps never
+  search it (no hang).
+- `frequency < 1` is not vanilla: the script hands the table to patcherMod, which rolls it when a
+  structure is about to be stored (`mixin/ChunkGeneratorStructureFrequencyMixin`) and answers
+  `/locate`'s "could it start here?" with the same roll (`mixin/StructureCheckFrequencyMixin`).
+  Without that class (an older jar in `mods/`) the script applies **nothing**.
+- **Meta structures** (planned): our own structures that live only in a group. They go in
+  `kubejs/data/creativeengineering/worldgen/structure/meta/`; the scanner lists them under
+  `meta_structures` and they join groups through the same tags.
 
 ## Files
 
 | File | Concern |
 |---|---|
-| `tools/gen_structure_config.py` | Scans `mods/*.jar` (plus `kubejs/data/`, for structures shipped as plain datapack data; a jar's set always wins) for every `worldgen/structure_set` + `worldgen/structure` json, adds a hand-maintained vanilla-defaults table for the ~19 structure_sets vanilla bootstraps in Java (no loose json to scan) and a `CODE_REGISTERED_SETS` table for modded sets registered in Java (`ae2:meteorite`), marks structures another mod stops in code (`blocked`, from `CODE_BLOCKS` + the current mod configs), and (re)builds `structure_config.json`. Re-run-safe — never clobbers edits already in `current`/`enabled`. |
-| `structure_config.json` | **Per-set source of truth.** One entry per structure_set: `source` (which jar, or `vanilla_known_defaults`), `structures` (id/weight/**enabled**/biomes), `original` (diff baseline — leave alone), `current` (**edit this**: spacing/separation/distance/spread/count/frequency/locate_offset). Every raw placement field is carried (exclusion zones, spread types, mod-specific fields), so overrides reproduce a set exactly. |
-| `structure_tags.json` | **Category knobs.** Tags of structures, each with a `multiplier`. A structure's multiplier is the product of every tag it's in, applied on top of `current`. See "Structure tags" below. |
-| `kubejs/server_scripts/worldgen/structure_overrides.js` | Runs at world load. Applies `current`, `enabled` and the tag multipliers, and adds a structure_set override for every set that differs from its default (plus `creativeengineering:split/...` sets, see below). Sets that end up at their default get no override. |
-| `structure_tag_report.md` | Rewritten on every load: active multipliers, each changed set's multiplier chain and final placement, splits, coverage gaps, and every tag's resolved members. On a config error it lists the errors instead. |
-| `kubejs/server_scripts/_lib/dump_structuregen.js` | `/dumpstructuregen` (in-world) → `kubejs/exported/worldgen/structuregen.json`, the LIVE post-merge registry values. Verification tool, not the primary data source — see Workflow. |
-| `tools/check_structure_live.py` | After `/dumpstructuregen`: lists live sets missing from `structure_config.json` (a mod registering a set in Java, see below), config sets that aren't live, structures in no set, and checks every written set's spacing/separation/count against the live registry. |
-| `tools/structure_tuning_sim.js` | `node tools/structure_tuning_sim.js [report.md] [out/]`: runs the real `structure_overrides.js` in node against the current config + tags and prints the summary line and coverage gaps the game would log. Check edits here before rejoining. |
+| `structure_groups.json` | **Every rate. Edit this.** `groups.<name>`: `placement` (spacing, separation, salt, optional spread_type / frequency / locate_offset / exclusion_zone) and `structures` (weight, frequency, enabled per member). `standalone.<set id>`: `placement` overrides and `structures`. |
+| `structure_tags.json` | Named structure lists: `group/*` decides membership (a structure may be in one group), `mod/*` / `type/*` / `dungeon/*` classify. No multipliers. Values: ids, `*` globs, `#tags`, `!` excludes; an unknown id or tag is an error that applies nothing. |
+| `structure_config.json` | **Read-only baseline** from `tools/gen_structure_config.py`: every set as the mods/vanilla define it (`original`), members, biomes, `blocked` notes, `meta_structures`. |
+| `structure_tag_report.md` | Rewritten by the game at every world load: warnings, each group's grid and members ("alone: 1 per N chunks"), standalone sets written, sets emptied into groups, coverage, tag members. On a config error it lists the errors. |
+| `structure_group_estimates.md` | `python3 tools/gen_structure_groups.py --check`: expected structures per area for every structure (mod default vs now), from its biome pool and the real biome areas in `biome_config.json`. |
+| `structure_group_migration.md` | The one-time comparison of the groups against the tuning they replaced (0 structures moved by more than 20%). `--migration-report` rebuilds it from `kubejs/archive/worldgen/pre_groups_2026-09-27/`. |
+| `tools/gen_structure_groups.py` | Sync (default): adds groups / members / standalone sets missing from `structure_groups.json`, fitted to their mod defaults, removes stale standalone entries of structures that moved into a group, never changes an existing value; then the estimates. `--migrate` was the one-time conversion. |
+| `tools/structure_tuning_sim.js` | `node tools/structure_tuning_sim.js [report.md] [out/]`: runs the real script in node; prints the summary, warnings and coverage the game would log; `out/` gets every set json + `frequencies.json`. |
+| `tools/test_structure_groups.sh` | node sim + the same script in the pack's own Rhino (must match node byte for byte) + the old-jar refusal + the Java logic test of `StructureFrequencies`. |
+| `tools/check_structure_live.py` | After `/dumpstructuregen` in game: live sets missing from the baseline, baseline sets not live, and every set the script writes vs the live spacing / separation / count / members. |
 
 ## Workflow
 
-1. **Adjust.** Open `structure_config.json`. To retune frequency: edit `current.spacing` /
-   `current.separation` (`random_spread`) or `current.distance` / `current.spread` /
-   `current.count` (`concentric_rings`, strongholds only), or `current.frequency` (0.0–1.0
-   chance multiplier — some vanilla sets like mineshafts/buried_treasure already use this
-   instead of a wide spacing grid). To nudge grid alignment, edit `current.locate_offset`
-   (`[x, y, z]`, integer chunk-ish offset — the literal "xyz coords" knob).
-2. **Remove.** Flip a structure's `"enabled"` to `false`. If it's the sole member of its
-   structure_set, the generator kills the whole set via `frequency: 0` (always schema-safe,
-   whatever the placement type). If it shares a set with structures you're keeping (e.g. one
-   village variant out of five), it's just dropped from that set's `structures` list.
-3. **Tune categories.** Set `multiplier` on tags in `structure_tags.json` (see below).
-4. **Apply.** Rejoin the world. Worldgen registries (structure_sets included) load when a world
-   loads, so `/reload` only refreshes the report, not the running world. The log shows a
-   `[structure-tuning]` summary line and `structure_tag_report.md` is rewritten. Revert an edit and
-   rejoin: the set falls back to its mod/vanilla default. Only chunks generated afterwards are
-   affected (structures are placed at chunk generation, not retroactively).
-5. **Verify.** In-world, run `/dumpstructuregen`, then compare the id in
-   `kubejs/exported/worldgen/structuregen.json` with the report.
+1. **Change a rate:** edit `structure_groups.json`: a member's `frequency` (rarer), `weight` (wins
+   more of the slots it shares), `enabled`; a group's `spacing` (overall density) or `separation`
+   (minimum gap); a standalone set's `placement` or member `frequency`.
+2. **Move a structure between groups** (or out of them): edit the `group/*` tags, then
+   `python3 tools/gen_structure_groups.py` (fits the new member, cleans stale entries).
+3. **Check offline:** `node tools/structure_tuning_sim.js` (errors) and
+   `python3 tools/gen_structure_groups.py --check` (expected rates per structure).
+4. **Apply:** rejoin the world. The log shows a `[structure-tuning]` line and a
+   `[structure-frequency] N structure(s) in M set(s)` line; `structure_tag_report.md` is rewritten.
+   Only chunks generated afterwards are affected.
+5. **After a mod update:** `python3 tools/gen_structure_config.py` (baseline), then
+   `python3 tools/gen_structure_groups.py` (entries for new structures), then check the new
+   structures' tags: new mods need a `mod/*` tag and, if they belong in a group, a group tag.
 
-## Structure tags
+## How the migration kept the old rates (2026-09-27)
 
-`structure_tags.json` groups structures so one number tunes a whole category. Each tag has a
-`multiplier` (structures per area: 0.5 = half as many, 2 = twice, 0 = removed) and `values`:
-`ns:id`, globs (`ns:*`, `towns_and_towers:pillager_outpost_*`), other tags (`#type/village`),
-and `!` in front of any of those to exclude. An unknown id/tag is an error that applies no
-structure changes at all (logged + listed in the report), so typos never silently do nothing.
-
-**Tags stack by multiplying.** `mod/themissingvillages` 0.5 and `type/village` 0.5 leave a
-Missing Villages village at 0.25 and every other village at 0.5. Each tag counts once per structure
-even when it reaches it through several nested tags. The report shows every structure's chain.
-
-| Family | Tags |
-|---|---|
-| `mod/*` | One per namespace, plus `mod/yungs` (all 6 YUNG's mods). |
-| `type/*` | village, house, camp, fort, tower, ship, enemy_building, ruin, ruined_portal, underwater_ruin, shipwreck, mineshaft, underground, environmental, decoration, sky, nether_environmental, nether_constructed, end_environmental, end_constructed. A structure can have several (a T&T outpost tower is `type/tower` and `type/enemy_building`). |
-| `dungeon/*` | `surface_*` / `underground_*` crossed with `vanilla` / `better` (YUNG's replacements) / `modded`, plus the unions `dungeon/surface`, `dungeon/underground`, `dungeon/vanilla`, `dungeon/better`, `dungeon/modded`, `dungeon/classic` (vanilla + better). |
-| meta | `dungeons`, `pillager` (vanilla outpost + mansion + all 29 T&T outposts), `nether`, `end`, `ruins`. |
-
-Classification sources: T&T outposts are split by the template folder their start pool uses
-(`outpost/camps|forts|towers`, `ships/`). Nether/End environmental vs constructed was decided by each
-template's block palette (for example MES is almost all purpur and end-stone bricks, so it is
-constructed; Nullscape's dragon skeleton is 100% bone blocks, so it is environmental). Dimensions
-come from each structure's resolved biome pool: `philipsruins:start_nether_ruin` actually
-spawns in the Overworld, and `twigs:bloodstone_obelisk` spawns in the Nether.
-
-**How a multiplier is applied.** Grid placements (`random_spread` and the YUNG/MES subclasses of
-it) place one attempt per spacing x spacing cell, so spacing becomes `floor(spacing / sqrt(m))` and
-`frequency` absorbs the rounding, which gives the exact multiplier. Separation scales with spacing.
-Where spacing is already 1 (mineshafts, buried treasure), only frequency moves. Strongholds
-(`concentric_rings`) scale `count`. A set using `legacy_type_1` (outposts) switches to `default`
-when its frequency changes, because legacy only rounds to 1/n. If a limit is hit (frequency
-can't exceed 1), the report says what was achieved.
-
-**Shared sets split.** Members of one structure_set share one grid. When tags give them different
-multipliers, the heaviest group keeps the set and the others move into new sets
-(`creativeengineering:split/<ns>/<path>_<n>`, same placement, different salt). This is exact when the
-members spawn in different biomes (T&T's per-biome outposts, vanilla's per-biome villages). Where
-their biomes overlap, the split-off members stop competing for the same cells and end up somewhat
-more common. Other sets' exclusion zones that point at the original set won't see split-off groups.
-The report lists every split.
+The old model tuned each set separately (`current` edits + tag multipliers, members with different
+multipliers split into separate grids), so sets of different mods piled up independently. The
+migration measured each structure's old density per biome (its biome pool from every jar's tags +
+`biome_merges.json`, biome areas from the climate sample in `biome_config.json`) and fitted each
+group's weights and frequencies (least squares on log density, every structure counted equally). Each
+group's grid is sized for its most crowded biome, so nothing gets capped; the gain is the gap. Result
+over today's biome pools: every structure between x0.89 and x1.13 of its old rate, 135 of 164 within
+5%. Standalone sets that the old model had split got one fitted grid too. The archived originals are
+in `kubejs/archive/worldgen/pre_groups_2026-09-27/`.
 
 ## Landscape facts
 
@@ -133,7 +116,17 @@ The report lists every split.
   on those entries and the report lists them; tuning them does nothing.
 - **Other mods' own frequency configs are left at defaults on purpose.** Towns & Towers'
   `structure_rarity.json5` matches its jar sets, and this framework's overrides win (checked
-  against the live registry, 2026-09-27). Philip's Ruins has `"Enable Configs" = false`, so its
+  against the live registry, 2026-09-27).
+- **HopoBetterUnderwaterRuins** (added 2026-09-27) moves both vanilla shipwrecks onto beaches and
+  rivers and halves their set's spacing; its 3 ruins are in `group/ocean_ruins`, its fossils standalone.
+  **Revamped Shipwrecks** (added later that day) also overrides `minecraft:shipwrecks` and wins in
+  game (checked live): the vanilla set is empty and `minecraft:shipwreck(_beached)` are in no set.
+  Its own two jigsaw wrecks use the same biome tags (so Hopo's beach/river extension still applies)
+  and stand in for the vanilla ones in `type/shipwreck` / `group/ocean_ruins`.
+- **Ported structure mods:** MCreator one-building jars that crash Forge 43.3.9 (`<init>()`) or are
+  pure data are converted to `kubejs/data/<ns>/` by `tools/port_structure_jars.py` (1.20 blocks
+  remapped, unknown items dropped, pool entries for missing templates dropped, jar moved to
+  `disabledmods/`). Their sets show `source: "kubejs/data"` in the baseline. Philip's Ruins has `"Enable Configs" = false`, so its
   separation/density/toggles are inactive. Village-house weights (Chef's Delight, Wares,
   Monobank, Domestication Innovation, Advanced Peripherals, PneumaticCraft, Cloud Storage) come
   from those mods' configs and show up as `original` in `pool_config.json`. The full list is in
@@ -141,6 +134,7 @@ The report lists every split.
 - **One modded set is registered in Java:** `ae2:meteorite` (spacing 32 / separation 8, only
   while `config/ae2/common.json` `generateMeteorites` is true). It's in the scanner's
   `CODE_REGISTERED_SETS` table. `tools/check_structure_live.py` finds any new ones.
+  - add to sky groups tags, reduce frequency through sky tuning
 - **313 raw structure jsons exist across mod jars but only 200 are referenced by any
   structure_set** — the rest are unused template/leftover files that wouldn't naturally
   generate anyway, so they're not tracked here.

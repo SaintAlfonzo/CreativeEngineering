@@ -40,10 +40,15 @@
     "ExcavationDrillItemMixin",
     "DeforesterSawItemMixin",
     "StructureTemplateLootSwapMixin",
+    "StructureTemplateGroundMatchMixin",
+    "StructureStartGroundMatchMixin",
     "BlockRunnerBlockStateMixin",
     "BlockRunnerSpeedConfigMixin",
     "FramedDoubleCamoOrderMixin",
-    "CopycatMaterialOrderMixin"
+    "CopycatMaterialOrderMixin",
+    "ChunkGeneratorLocateMixin",
+    "ChunkGeneratorStructureFrequencyMixin",
+    "StructureCheckFrequencyMixin"
   ],
   "client": [
     "ItemDrainCategoryMixin",

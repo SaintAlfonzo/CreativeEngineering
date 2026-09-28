@@ -11,8 +11,9 @@ writeup explains how the pieces fit and how to prove they work.
 |---|---|---|---|
 | BlockRunner walk speed by surface (tiers, sticky facing, camo speed, visual sinking) | [blockrunner.md](blockrunner.md) | `BR-` | DEPLOYED, in-game test pending |
 | Tooltips (pack lines, removals/rewrites of other mods' lines, framework tooltips) | [tooltips.md](tooltips.md) | `TT-` | DEPLOYED (new removals), in-game test pending |
-| Structure tuning (structure-set frequency and removal, village-house pool weights, Lootr container swaps, other mods' structure configs) | [structure_tuning.md](structure_tuning.md) | `ST-` | DEPLOYED, in-game test pending (ST-11 passed) |
-| Loot (census of every loot table by mod, chest-loot tuning catalog + runtime, LootJS scripts, mod loot configs) | [loot.md](loot.md) | `LT-` | DEPLOYED, in-game test pending (LT-01, LT-06 passed); 8 open findings |
+| Structure tuning (structure groups: shared grids with a minimum gap and per-structure weight/frequency, standalone sets, village-house pool weights, Lootr container swaps, ground matching of grass/dirt bases, CEConfig [worldgen] switches + debug density, /ceplace mass placement, other mods' structure configs) | [structure_tuning.md](structure_tuning.md) | `ST-` | DEPLOYED, in-game test pending (ST-11 passed; groups ST-17 to ST-26 new, ST-01/02/06-09 retired; ground matching, [worldgen] config + debug density, /ceplace DEPLOYED, ST-27 to ST-42) |
+| Structures by biome (generated reference: kinds and rates per biome, holes, professions per village style) | [structures_by_biome.md](structures_by_biome.md) | none | reference, regenerate with `python3 tools/gen_structure_biome_table.py` |
+| Loot (census of every loot table by mod, chest-loot tuning catalog + runtime, pre-roll framework: bans, tag groups, boosts, packed-food splits, additions, injection restores, aliases; LootJS-only scripts, mod loot configs) | [loot.md](loot.md) | `LT-` | DEPLOYED, in-game test pending (LT-01, LT-06 passed; LT-14 to LT-27 new); findings 1-7 fixed, 8 (legacy dump) open |
 
 ## Backlog: the rest of the pack, one small chunk at a time
 

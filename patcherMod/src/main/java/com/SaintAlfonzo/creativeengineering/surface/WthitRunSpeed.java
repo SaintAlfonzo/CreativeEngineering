@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativeengineering.surface;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import com.SaintAlfonzo.creativeengineering.CEConfig;
@@ -49,24 +51,37 @@ public final class WthitRunSpeed implements IWailaClientPlugin, IBlockComponentP
         if (!cfg.enabled.get()) {
             return;
         }
-        RunSpeed.Info info = RunSpeed.at(accessor.getLevel(), accessor.getPosition(), accessor.getBlockState());
-        if (cfg.hideNormal.get() && RunSpeed.isNormal(info.factor())) {
+        RunSpeed.Info info = RunSpeed.at(accessor.getLevel(), accessor.getPosition(), accessor.getBlockState(),
+                accessor.getPlayer());
+        if (info == null
+                || cfg.hideUntyped.get() && !info.typed()
+                || cfg.hideNormal.get() && RunSpeed.isNormal(info.factor())) {
             return;
         }
         MutableComponent line = Component.translatable("creativeengineering.wthit.run_speed",
                 RunSpeed.format(info.factor(), cfg.format.get()));
         if (cfg.showTier.get()) {
-            MutableComponent detail = null;
+            List<Component> parts = new ArrayList<>();
             if (info.tier() != null) {
-                detail = Component.translatable("creativeengineering.surface.tier." + info.tier().key());
+                parts.add(Component.translatable("creativeengineering.surface.tier." + info.tier().key()));
             }
-            if (info.note() != RunSpeed.Note.NONE) {
-                Component note = Component.translatable("creativeengineering.wthit.run_speed."
-                        + info.note().name().toLowerCase(Locale.ROOT));
-                detail = detail == null ? note.copy() : detail.append(", ").append(note);
+            if (info.source() == RunSpeed.Source.NATIVE || info.source() == RunSpeed.Source.IN_BLOCK) {
+                parts.add(Component.translatable("creativeengineering.wthit.run_speed.source."
+                        + info.source().name().toLowerCase(Locale.ROOT)));
             }
-            if (detail != null) {
-                line.append(Component.literal(" (").append(detail).append(")").withStyle(ChatFormatting.GRAY));
+            for (RunSpeed.Note note : info.notes()) {
+                parts.add(Component.translatable("creativeengineering.wthit.run_speed."
+                        + note.name().toLowerCase(Locale.ROOT)));
+            }
+            if (!parts.isEmpty()) {
+                MutableComponent detail = Component.literal(" (");
+                for (int i = 0; i < parts.size(); i++) {
+                    if (i > 0) {
+                        detail.append(", ");
+                    }
+                    detail.append(parts.get(i));
+                }
+                line.append(detail.append(")").withStyle(ChatFormatting.GRAY));
             }
         }
         tooltip.setLine(LINE, line);

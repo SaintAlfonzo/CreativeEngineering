@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "illager_viking_longship:illager_longship",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 30,
+    "salt": 2027534652
+  }
+}

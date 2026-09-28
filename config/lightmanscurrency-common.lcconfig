@@ -202,7 +202,7 @@ debugLevel=0
 	#Chest Loot Settings
 	[loot.chests]
 		#Whether coins can spawn in chests.
-		enabled=true
+		enabled=false
 		
 		#Chest Spawn Lists
 		[loot.chests.lists]

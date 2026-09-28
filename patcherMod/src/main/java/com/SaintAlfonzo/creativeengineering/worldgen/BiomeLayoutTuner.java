@@ -56,8 +56,9 @@ public final class BiomeLayoutTuner {
 	private static final double Q = 10000;                 // Climate.quantizeCoord scale
 	private static final double PMAX = 0.6 * 0.6 * Q * Q;  // largest penalty either way (an offset of 0.6)
 	private static final double WINDOW = 3 * PMAX;         // biomes further than this from a sample's best can never win it
-	private static final int MAX_CANDIDATES = 24;
-	private static final int ROUNDS = 20;
+	// Candidates per sample and solver rounds: CEConfig [worldgen.biome_solver] (read per solve, part of the cache key).
+	private static int maxCandidates = 24;
+	private static int rounds = 20;
 
 	private static final Gson PRETTY = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().create();
 	private static final Gson COMPACT = new GsonBuilder().disableHtmlEscaping().create();
@@ -83,6 +84,12 @@ public final class BiomeLayoutTuner {
 
 	public static synchronized Result run() {
 		Result r = new Result();
+		if (!WorldgenConfig.biomeLayoutEnabled()) {
+			r.messages.add("off in CEConfig [worldgen.systems] biomeLayout: new worlds get the mod/vanilla biome layout");
+			return r;
+		}
+		maxCandidates = WorldgenConfig.biomeMaxCandidates();
+		rounds = WorldgenConfig.biomeRounds();
 		try {
 			String cfgText = WorldgenFiles.readText(CONFIG);
 			if (cfgText == null) {
@@ -288,7 +295,7 @@ public final class BiomeLayoutTuner {
 			for (int b = 0; b < B; b++) if (perBiome[b] <= best + WINDOW) list.add(b);
 			final double[] pb = perBiome.clone();
 			list.sort((x, y) -> Double.compare(pb[x], pb[y])); // stable, like Array.prototype.sort
-			int n = Math.min(MAX_CANDIDATES, list.size());
+			int n = Math.min(maxCandidates, list.size());
 			candB[j] = new int[n];
 			candF[j] = new double[n];
 			for (int t = 0; t < n; t++) { candB[j][t] = list.get(t); candF[j][t] = pb[list.get(t)]; }
@@ -299,7 +306,7 @@ public final class BiomeLayoutTuner {
 		int[] tunedIdx = tuned.stream().mapToInt(bIdx::get).toArray();
 		Map<Integer, Long> target = new LinkedHashMap<>();
 		for (int b : tunedIdx) target.put(b, Math.round(num(cfg.getAsJsonObject(biomeIds.get(b)).get("multiplier")) * origCounts[layerOf[b]][b]));
-		for (int round = 0; round < ROUNDS && tunedIdx.length > 0; round++) {
+		for (int round = 0; round < rounds && tunedIdx.length > 0; round++) {
 			double moved = 0;
 			for (int b : tunedIdx) {
 				int L = layerOf[b];
@@ -535,6 +542,7 @@ public final class BiomeLayoutTuner {
 
 	private static String fingerprint(String cfgText, Set<String> dimIds, Map<String, String> baselines, Map<String, String> samples) throws Exception {
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		md.update(("solver " + maxCandidates + " " + rounds + "\0").getBytes(StandardCharsets.UTF_8));
 		md.update(cfgText.getBytes(StandardCharsets.UTF_8));
 		for (String d : dimIds) {
 			md.update(("\0" + d + "\0").getBytes(StandardCharsets.UTF_8));

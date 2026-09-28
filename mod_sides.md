@@ -10,7 +10,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `server` | Only does anything on the server; harmless on clients | Yes |
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 
-**Current count:** 292 both, 9 server, 40 client (341 jars).
+**Current count:** 297 both, 9 server, 41 client (347 jars).
 
 ## Keeping this up to date
 
@@ -287,7 +287,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Tactical Fishing | `tactical_fishing` | `TacticalFishing-1.19.x2-v1.2.jar` |  |
 | both | Tectonic | `tectonic` | `tectonic-forge-1.19-2.3.5a.jar` |  |
 | both | Terralith | `terralith` | `Terralith_1.19.3_v2.3.12.jar` |  |
-| both | The Missing Villages | `themissingvillages` | `themissingvillages-3.0.0-1.19.2-beta.jar` |  |
 | both | Towns and Towers | `t_and_t` | `Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar` |  |
 | both | Trade Cycling | `trade_cycling` | `trade-cycling-forge-1.19.2-1.0.15.jar` |  |
 | both | Trash Cans | `trashcans` | `trashcans-1.0.18-forge-mc1.19.jar` |  |
@@ -349,6 +348,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | client | JustEnoughBeacons | `just_enough_beacons` | `JustEnoughBeacons-Forge-1.19+-1.1.2.jar` | JEI add-on |
 | client | Konkrete | `konkrete` | `konkrete_forge_1.8.0_MC_1.19-1.19.2.jar` | Menu library; no server mod needs it |
 | client | Legendary Tooltips | `legendarytooltips` | `LegendaryTooltips-1.19.2-forge-1.4.0.jar` | Tooltips |
+| client | Make Bubbles Pop | `make_bubbles_pop` | `make_bubbles_pop-0.3.0-forge-mc1.19-1.19.3.jar` | Bubble particles; loads net.minecraft.client on a dedicated server (FML crash, found 2026-09-27) |
 | client | Mod Name Tooltip | `modnametooltip` | `modnametooltip-1.20.1-1.20.0.jar` | Tooltips |
 | client | Mouse Tweaks | `mousetweaks` | `MouseTweaks-forge-mc1.19-2.23.jar` | Inventory mouse handling |
 | client | NotEnoughAnimations | `notenoughanimations` | `notenoughanimations-forge-1.12.2-mc1.19.2.jar` | Player animations |
@@ -363,3 +363,9 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | client | Xaero's Minimap | `xaerominimap` | `xaerominimap-forge-1.19.2-25.3.10.jar` | Minimap (optional on server; not used there) |
 | client | Xaero's World Map | `xaeroworldmap` | `xaeroworldmap-forge-1.19.2-1.40.11.jar` | World map (optional on server; not used there) |
 | client | XaeroZoomout | `xaerozoomout` | `XaeroZoomout-Forge-1.19-1.1.0.jar` | Map zoom |
+| both | Blocky Siege | `blocky_siege` | `blocky_siege-6.1.91-1.19.2.jar` | **Structure mod with more than structures:** siege weapons (GeckoLib entities), blocks, items, recipes. Its one structure (`blocky_siege:pillager_ship`) is in group/boats. Requires GeckoLib |
+| both | Villages & Pillages | `villagesandpillages` | `villagesandpillages-forge-mc1.19.2-1.0.2.jar` | **Structure mod with more than structures:** its witch village uses a custom structure type, 6 structure processors and 3 mixins (fewer trees in the village), so it can't become a datapack. Requires YUNG's API |
+| both | Revamped Shipwrecks | `revamped_shipwrecks` | `Revamped Shipwrecks 1.1.0.jar` | Structures only (lowcode datapack jar, loads fine). Empties `minecraft:shipwrecks` and replaces the vanilla wrecks with its own |
+| both | Unwrecked Ships Plus | `unwrecked_ships_plus` | `Unwrecked Ships Plus 1.19-1.0.4 Forge.jar` | Structures only (lowcode datapack jar, loads fine) |
+| both | Redeco | `redeco` | `redeco-1.5.0-1.19.2.jar` | Decoration blocks; no structures |
+| both | No Hostiles Around Campfire | `nohostilesaroundcampfire` | `nohostilesaroundcampfire-1.19.2-5.9.jar` | Server logic; no structures. Requires Collective |

@@ -1,6 +1,6 @@
 # Structure biome merges: status + review
 
-22 proposals executed (50 additive tag files), 1 held, 0 new/undecided. Approved state lives in `biome_merges.json`; `tools/build_biome_merges.py` regenerates this file.
+20 proposals executed (45 additive tag files), 1 held, 2 new/undecided. Approved state lives in `biome_merges.json`; `tools/build_biome_merges.py` regenerates this file.
 
 Global rules applied: **skylands biomes are never added; cave biomes are never added to non-cave-native structures.**
 
@@ -16,10 +16,10 @@ Global rules applied: **skylands biomes are never added; cave biomes are never a
 | 6 | desert -> towns_and_towers | executed |  |
 | 7 | end -> philipsruins | HELD |  |
 | 8 | forest -> minecraft | EXECUTED (modified) | skylands removed |
-| 9 | forest -> towns_and_towers | EXECUTED (modified) | skylands removed |
-| 10 | jungle -> betterjungletemples | executed | skylands removed; cave biomes withheld: terralith:cave/underground_jungle |
-| 11 | jungle -> minecraft | executed | skylands removed; cave biomes withheld: terralith:cave/underground_jungle; 1 of 2 structures got no additions (no fitting biome) |
-| 12 | jungle -> themissingvillages | executed | skylands removed; cave biomes withheld: terralith:cave/underground_jungle |
+| 9 | forest -> simply_houses | NEW (undecided, not applied) |  |
+| 10 | forest -> towns_and_towers | EXECUTED (modified) | skylands removed |
+| 11 | jungle -> betterjungletemples | executed | skylands removed; cave biomes withheld: terralith:cave/underground_jungle |
+| 12 | jungle -> minecraft | executed | skylands removed; cave biomes withheld: terralith:cave/underground_jungle; 1 of 2 structures got no additions (no fitting biome) |
 | 13 | jungle -> towns_and_towers | executed | skylands removed; cave biomes withheld: terralith:cave/underground_jungle |
 | 14 | mushroom -> towns_and_towers | EXECUTED (modified) | cave biomes withheld: quark:glimmering_weald, terralith:cave/fungal_caves |
 | 15 | plains -> towns_and_towers | EXECUTED (modified) | 2 of 2 structures got no additions (no fitting biome) |
@@ -28,41 +28,31 @@ Global rules applied: **skylands biomes are never added; cave biomes are never a
 | 18 | snowy -> minecraft | executed | skylands removed |
 | 19 | snowy -> towns_and_towers | EXECUTED (modified) | skylands removed; 1 of 8 structures got no additions (no fitting biome) |
 | 20 | swamp -> betterwitchhuts | executed |  |
-| 21 | swamp -> themissingvillages | executed |  |
-| 22 | swamp -> towns_and_towers | executed |  |
+| 21 | swamp -> towns_and_towers | executed |  |
+| 22 | taiga -> simply_houses | NEW (undecided, not applied) |  |
 | 23 | taiga -> towns_and_towers | EXECUTED (modified) | skylands removed; removed: terralith:bryce_canyon |
 
 ## Applied tag merges
 
 - **betterdeserttemples:has_structure/better_desert_temple** (proposal 3): terralith:desert_canyon, terralith:desert_oasis, terralith:desert_spires, terralith:lush_desert, terralith:sandstone_valley
-- **betterjungletemples:has_structure/better_jungle_temple** (proposal 10): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains
+- **betterjungletemples:has_structure/better_jungle_temple** (proposal 11): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains
 - **betterwitchhuts:has_structure/better_witch_hut** (proposal 20): terralith:ice_marsh, terralith:orchid_swamp
 - **betterwitchhuts:has_structure/witch_circle** (proposal 20): terralith:ice_marsh, terralith:orchid_swamp
 - **minecraft:has_structure/desert_pyramid** (proposals 4, 6): terralith:desert_canyon, terralith:lush_desert
 - **minecraft:has_structure/igloo** (proposal 18): terralith:alpha_islands_winter, terralith:alpine_grove, terralith:cold_shrubland, terralith:emerald_peaks, terralith:gravel_desert, terralith:ice_marsh, terralith:rocky_mountains, terralith:rocky_shrubland, terralith:siberian_grove, terralith:snowy_maple_forest, terralith:snowy_shield, terralith:wintry_lowlands
-- **minecraft:has_structure/jungle_temple** (proposal 11): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains
+- **minecraft:has_structure/jungle_temple** (proposal 12): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains
 - **minecraft:has_structure/ruined_portal_desert** (proposal 4): terralith:desert_canyon, terralith:lush_desert
 - **minecraft:has_structure/village_desert** (proposal 4): terralith:desert_canyon, terralith:desert_spires, terralith:lush_desert
 - **minecraft:has_structure/village_savanna** (proposal 16): terralith:ashen_savanna, terralith:brushland, terralith:fractured_savanna, terralith:shrubland
 - **minecraft:has_structure/village_snowy** (proposal 18): terralith:alpha_islands_winter, terralith:alpine_grove, terralith:cold_shrubland, terralith:emerald_peaks, terralith:gravel_desert, terralith:ice_marsh, terralith:rocky_mountains, terralith:rocky_shrubland, terralith:siberian_grove, terralith:snowy_maple_forest, terralith:snowy_shield, terralith:wintry_forest, terralith:wintry_lowlands
 - **minecraft:has_structure/woodland_mansion** (proposal 8): terralith:sakura_valley
 - **philipsruins:has_structure/desert_structures_biomes** (proposal 5): terralith:desert_canyon, terralith:desert_oasis, terralith:desert_spires, terralith:lush_desert, terralith:sandstone_valley
-- **themissingvillages:jungle_bamboo** (proposal 12): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:rocky_jungle, terralith:tropical_jungle
-  - also affects (shares this tag): themissingvillages:jungle_bamboo_village
-- **themissingvillages:jungle_normal** (proposal 12): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:rocky_jungle, terralith:tropical_jungle
-  - also affects (shares this tag): themissingvillages:jungle_village
-- **themissingvillages:jungle_sparse** (proposal 12): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:rocky_jungle, terralith:tropical_jungle
-  - also affects (shares this tag): themissingvillages:jungle_sparse_village
-- **themissingvillages:swamp_mangrove** (proposal 21): terralith:ice_marsh, terralith:orchid_swamp
-  - also affects (shares this tag): themissingvillages:swamp_mangrove_village
-- **themissingvillages:swamp_normal** (proposal 21): terralith:ice_marsh, terralith:orchid_swamp
-  - also affects (shares this tag): themissingvillages:swamp_village
 - **towns_and_towers:has_structure/pillager_outpost_badlands** (proposal 1): terralith:ancient_sands, terralith:bryce_canyon, terralith:painted_mountains, terralith:red_oasis, terralith:savanna_badlands, terralith:warped_mesa, terralith:white_mesa
 - **towns_and_towers:has_structure/pillager_outpost_beach** (proposal 2): terralith:frozen_cliffs, terralith:gravel_beach
-- **towns_and_towers:has_structure/pillager_outpost_birch_forest** (proposal 9): terralith:birch_taiga, terralith:white_cliffs
+- **towns_and_towers:has_structure/pillager_outpost_birch_forest** (proposal 10): terralith:birch_taiga, terralith:white_cliffs
 - **towns_and_towers:has_structure/pillager_outpost_desert** (proposal 6): terralith:desert_canyon, terralith:desert_oasis, terralith:desert_spires, terralith:lush_desert, terralith:sandstone_valley
-- **towns_and_towers:has_structure/pillager_outpost_flower_forest** (proposal 9): terralith:cloud_forest, terralith:lavender_forest, terralith:lavender_valley, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley
-- **towns_and_towers:has_structure/pillager_outpost_forest** (proposal 9): terralith:temperate_highlands
+- **towns_and_towers:has_structure/pillager_outpost_flower_forest** (proposal 10): terralith:cloud_forest, terralith:lavender_forest, terralith:lavender_valley, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley
+- **towns_and_towers:has_structure/pillager_outpost_forest** (proposal 10): terralith:temperate_highlands
 - **towns_and_towers:has_structure/pillager_outpost_grove** (proposal 19): terralith:alpine_grove, terralith:siberian_grove
 - **towns_and_towers:has_structure/pillager_outpost_jungle** (proposal 13): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:rocky_jungle, terralith:tropical_jungle
 - **towns_and_towers:has_structure/pillager_outpost_mushroom_fields** (proposal 14): terralith:mirage_isles
@@ -72,14 +62,14 @@ Global rules applied: **skylands biomes are never added; cave biomes are never a
 - **towns_and_towers:has_structure/pillager_outpost_snowy_slopes** (proposal 19): terralith:rocky_mountains
 - **towns_and_towers:has_structure/pillager_outpost_snowy_taiga** (proposal 19): terralith:snowy_maple_forest, terralith:snowy_shield, terralith:wintry_forest, terralith:wintry_lowlands
 - **towns_and_towers:has_structure/pillager_outpost_sparse_jungle** (proposal 13): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:rocky_jungle, terralith:tropical_jungle
-- **towns_and_towers:has_structure/pillager_outpost_swamp** (proposal 22): terralith:ice_marsh, terralith:orchid_swamp
+- **towns_and_towers:has_structure/pillager_outpost_swamp** (proposal 21): terralith:ice_marsh, terralith:orchid_swamp
 - **towns_and_towers:has_structure/pillager_outpost_taiga** (proposal 23): terralith:alpine_highlands, terralith:birch_taiga, terralith:cloud_forest, terralith:forested_highlands, terralith:lush_valley, terralith:scarlet_mountains, terralith:shield, terralith:siberian_grove, terralith:siberian_taiga, terralith:snowy_maple_forest, terralith:valley_clearing, terralith:wintry_forest, terralith:wintry_lowlands, terralith:yellowstone, terralith:yosemite_lowlands
 - **towns_and_towers:has_structure/pillager_outpost_wooded_badlands** (proposal 1): terralith:ancient_sands, terralith:bryce_canyon, terralith:painted_mountains, terralith:red_oasis, terralith:savanna_badlands, terralith:warped_mesa, terralith:white_mesa
 - **towns_and_towers:has_structure/village_badlands_pueblo** (proposal 1): terralith:ancient_sands, terralith:bryce_canyon, terralith:painted_mountains, terralith:red_oasis, terralith:savanna_badlands, terralith:warped_mesa, terralith:white_mesa
 - **towns_and_towers:has_structure/village_beach_lighthouse** (proposal 2): terralith:frozen_cliffs, terralith:gravel_beach
-- **towns_and_towers:has_structure/village_birch_forest_romanian** (proposal 9): terralith:birch_taiga, terralith:white_cliffs
-- **towns_and_towers:has_structure/village_flower_forest_japanese** (proposal 9): terralith:cloud_forest, terralith:lavender_forest, terralith:lavender_valley, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley
-- **towns_and_towers:has_structure/village_forest_ruins** (proposal 9): terralith:temperate_highlands
+- **towns_and_towers:has_structure/village_birch_forest_romanian** (proposal 10): terralith:birch_taiga, terralith:white_cliffs
+- **towns_and_towers:has_structure/village_flower_forest_japanese** (proposal 10): terralith:cloud_forest, terralith:lavender_forest, terralith:lavender_valley, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley
+- **towns_and_towers:has_structure/village_forest_ruins** (proposal 10): terralith:temperate_highlands
 - **towns_and_towers:has_structure/village_grove_villager_outpost** (proposal 19): terralith:alpine_grove, terralith:siberian_grove
 - **towns_and_towers:has_structure/village_jungle_tribal** (proposal 13): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:rocky_jungle, terralith:tropical_jungle
 - **towns_and_towers:has_structure/village_mushroom_fields_fantasy** (proposal 14): terralith:mirage_isles
@@ -87,7 +77,7 @@ Global rules applied: **skylands biomes are never added; cave biomes are never a
 - **towns_and_towers:has_structure/village_snowy_slopes_inn** (proposal 19): terralith:rocky_mountains
 - **towns_and_towers:has_structure/village_snowy_taiga_viking** (proposal 19): terralith:snowy_maple_forest, terralith:snowy_shield, terralith:wintry_forest, terralith:wintry_lowlands
 - **towns_and_towers:has_structure/village_sparse_jungle_polynesian** (proposal 13): terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:rocky_jungle, terralith:tropical_jungle
-- **towns_and_towers:has_structure/village_swamp_boat** (proposal 22): terralith:ice_marsh, terralith:orchid_swamp
+- **towns_and_towers:has_structure/village_swamp_boat** (proposal 21): terralith:ice_marsh, terralith:orchid_swamp
 - **towns_and_towers:has_structure/village_wooded_badlands_tipi** (proposal 1): terralith:ancient_sands, terralith:bryce_canyon, terralith:painted_mountains, terralith:red_oasis, terralith:savanna_badlands, terralith:warped_mesa, terralith:white_mesa
 
 Variant-matched structures that received NO additions (no fitting biome):
@@ -95,7 +85,7 @@ Variant-matched structures that received NO additions (no fitting biome):
 - towns_and_towers:pillager_outpost_sunflower_plains
 - towns_and_towers:village_sunflower_plains
 
-## Variant-matched sets (proposals 9, 15, 19)
+## Variant-matched sets (proposals 10, 15, 19)
 
 Each biome-variant structure only gets biomes resembling its own variant.
 
@@ -177,21 +167,18 @@ Cave-native = underground/stronghold structure step, or vanilla mineshaft/strong
 
 ### Cave biomes in the suggestions (withheld, not applied)
 
-- [CAVE] proposal 10 (jungle -> betterjungletemples): terralith:cave/underground_jungle
-- [CAVE] proposal 11 (jungle -> minecraft): terralith:cave/underground_jungle
-- [CAVE] proposal 12 (jungle -> themissingvillages): terralith:cave/underground_jungle
+- [CAVE] proposal 11 (jungle -> betterjungletemples): terralith:cave/underground_jungle
+- [CAVE] proposal 12 (jungle -> minecraft): terralith:cave/underground_jungle
 - [CAVE] proposal 13 (jungle -> towns_and_towers): terralith:cave/underground_jungle
 - [CAVE] proposal 14 (mushroom -> towns_and_towers): quark:glimmering_weald, terralith:cave/fungal_caves
 
 ## Variant structures vs broader biome definitions
 
-### In the suggestions (blanket across sibling variants, like proposal 9/15)
+### In the suggestions (blanket across sibling variants, like proposal 10/15)
 
 - [VARIANT-BROAD] proposal 1 (badlands -> towns_and_towers, executed): 2 distinct vanilla variants receive the identical 7-biome list -> minecraft:badlands: towns_and_towers:pillager_outpost_badlands, towns_and_towers:village_badlands | minecraft:wooded_badlands: towns_and_towers:pillager_outpost_wooded_badlands, towns_and_towers:village_wooded_badlands
-- [VARIANT-BROAD] proposal 12 (jungle -> themissingvillages, executed): 3 distinct vanilla variants receive the identical 7-biome list -> minecraft:jungle: themissingvillages:large/jungle_village, themissingvillages:medium/jungle_village, themissingvillages:small/jungle_village | minecraft:sparse_jungle: themissingvillages:large/jungle_sparse_village, themissingvillages:medium/jungle_sparse_village, themissingvillages:small/jungle_sparse_village | minecraft:bamboo_jungle: themissingvillages:large/jungle_bamboo_village, themissingvillages:medium/jungle_bamboo_village, themissingvillages:small/jungle_bamboo_village
 - [VARIANT-BROAD] proposal 13 (jungle -> towns_and_towers, executed): 2 distinct vanilla variants receive the identical 7-biome list -> minecraft:jungle: towns_and_towers:pillager_outpost_jungle, towns_and_towers:village_jungle | minecraft:sparse_jungle: towns_and_towers:pillager_outpost_sparse_jungle, towns_and_towers:village_sparse_jungle
 - [VARIANT-BROAD] proposal 20 (swamp -> betterwitchhuts, executed): 2 distinct vanilla variants receive the identical 2-biome list -> minecraft:swamp: betterwitchhuts:witch_circle | minecraft:mangrove_swamp/minecraft:swamp: betterwitchhuts:witch_hut
-- [VARIANT-BROAD] proposal 21 (swamp -> themissingvillages, executed): 2 distinct vanilla variants receive the identical 2-biome list -> minecraft:swamp: themissingvillages:large/swamp_village, themissingvillages:medium/swamp_village, themissingvillages:small/swamp_village | minecraft:mangrove_swamp: themissingvillages:large/swamp_mangrove_village, themissingvillages:medium/swamp_mangrove_village, themissingvillages:small/swamp_mangrove_village
 - [VARIANT-BROAD] proposal 23 (taiga -> towns_and_towers, executed): 2 distinct vanilla variants receive the identical 17-biome list -> minecraft:old_growth_pine_taiga/minecraft:old_growth_spruce_taiga: towns_and_towers:pillager_outpost_old_growth_taiga, towns_and_towers:village_old_growth_taiga | minecraft:taiga: towns_and_towers:pillager_outpost_taiga
 
 ### Already present (variant structure whose pool includes off-theme modded biomes)
@@ -253,29 +240,29 @@ Add: terralith:alpha_islands, terralith:alpine_grove, terralith:birch_taiga, ter
 
 Structures: minecraft:mansion (+16)
 
-### 9. forest (terralith) -> towns_and_towers
+### 9. forest (terralith) -> simply_houses
+
+Add: terralith:alpha_islands, terralith:birch_taiga, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands, terralith:skylands_autumn, terralith:skylands_spring, terralith:temperate_highlands, terralith:white_cliffs, terralith:yosemite_lowlands
+
+Structures: simply_houses:forest_chapel (+15), simply_houses:forest_fort (+15), simply_houses:forest_house (+15), simply_houses:forest_stonemason (+15)
+
+### 10. forest (terralith) -> towns_and_towers
 
 Add: terralith:alpha_islands, terralith:alpine_grove, terralith:birch_taiga, terralith:cloud_forest, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands, terralith:skylands_autumn, terralith:skylands_spring, terralith:temperate_highlands, terralith:white_cliffs, terralith:yosemite_lowlands
 
 Structures: towns_and_towers:pillager_outpost_birch_forest (+17), towns_and_towers:pillager_outpost_flower_forest (+17), towns_and_towers:pillager_outpost_forest (+17), towns_and_towers:village_birch_forest (+17), towns_and_towers:village_flower_forest (+17), towns_and_towers:village_forest (+17)
 
-### 10. jungle (terralith) -> betterjungletemples
+### 11. jungle (terralith) -> betterjungletemples
 
 Add: terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:cave/underground_jungle, terralith:jungle_mountains, terralith:skylands_summer
 
 Structures: betterjungletemples:jungle_temple (+5)
 
-### 11. jungle (terralith) -> minecraft
+### 12. jungle (terralith) -> minecraft
 
 Add: terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:cave/underground_jungle, terralith:jungle_mountains, terralith:skylands_summer
 
 Structures: minecraft:jungle_pyramid (+5), minecraft:ruined_portal_jungle (+2)
-
-### 12. jungle (terralith) -> themissingvillages
-
-Add: terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:cave/underground_jungle, terralith:jungle_mountains, terralith:rocky_jungle, terralith:skylands_summer, terralith:tropical_jungle
-
-Structures: themissingvillages:large/jungle_bamboo_village (+7), themissingvillages:large/jungle_sparse_village (+7), themissingvillages:large/jungle_village (+7), themissingvillages:medium/jungle_bamboo_village (+7), themissingvillages:medium/jungle_sparse_village (+7), themissingvillages:medium/jungle_village (+7), themissingvillages:small/jungle_bamboo_village (+7), themissingvillages:small/jungle_sparse_village (+7), themissingvillages:small/jungle_village (+7)
 
 ### 13. jungle (terralith) -> towns_and_towers
 
@@ -325,17 +312,17 @@ Add: terralith:ice_marsh, terralith:orchid_swamp
 
 Structures: betterwitchhuts:witch_circle (+2), betterwitchhuts:witch_hut (+2)
 
-### 21. swamp (terralith) -> themissingvillages
-
-Add: terralith:ice_marsh, terralith:orchid_swamp
-
-Structures: themissingvillages:large/swamp_mangrove_village (+2), themissingvillages:large/swamp_village (+2), themissingvillages:medium/swamp_mangrove_village (+2), themissingvillages:medium/swamp_village (+2), themissingvillages:small/swamp_mangrove_village (+2), themissingvillages:small/swamp_village (+2)
-
-### 22. swamp (terralith) -> towns_and_towers
+### 21. swamp (terralith) -> towns_and_towers
 
 Add: terralith:ice_marsh, terralith:orchid_swamp
 
 Structures: towns_and_towers:pillager_outpost_swamp (+2), towns_and_towers:village_swamp (+2)
+
+### 22. taiga (terralith) -> simply_houses
+
+Add: terralith:alpine_highlands, terralith:bryce_canyon, terralith:cloud_forest, terralith:scarlet_mountains, terralith:siberian_grove, terralith:siberian_taiga, terralith:skylands_winter, terralith:snowy_maple_forest, terralith:valley_clearing, terralith:wintry_lowlands
+
+Structures: simply_houses:taiga_forge (+10), simply_houses:taiga_house (+10), simply_houses:taiga_inn (+10), simply_houses:taiga_woodcutter (+10)
 
 ### 23. taiga (terralith) -> towns_and_towers
 

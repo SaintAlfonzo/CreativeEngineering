@@ -23,6 +23,9 @@
 		[types.leaves_type.myrtrees]
 			rubberwood = true
 
+		[types.leaves_type.upgrade_aquatic]
+			river = true
+
 	[types.wood_type]
 
 		[types.wood_type.quark]
@@ -49,6 +52,10 @@
 			smoked = true
 			rubber = true
 			spirit = true
+
+		[types.wood_type.upgrade_aquatic]
+			driftwood = true
+			river = true
 
 [entries]
 

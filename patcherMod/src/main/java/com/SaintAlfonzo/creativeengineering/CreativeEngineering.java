@@ -135,6 +135,25 @@ public class CreativeEngineering
         // LOWEST priority, so every mod has injected its village pieces first.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.PoolTuner.class);
 
+        // Structure groups: per-structure frequency inside a structure_set, staged by
+        // kubejs/server_scripts/worldgen/structure_overrides.js and frozen at ServerAboutToStartEvent.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies.class);
+
+        // Structure bases that don't match the ground (grass pads on volcanic peaks...): swapped for the
+        // sampled local ground as templates place (mixin/StructureTemplateGroundMatchMixin). Registered for
+        // its per-world sample cache reset; knobs in CEConfig [worldgen.ground_match].
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.GroundMatch.class);
+
+        // /ceplace: every structure or template matching a filter, laid out in rows (flat-world testing);
+        // knobs in CEConfig [worldgen.mass_place].
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.MassPlacer.class);
+
+        // Python generators (tools/generators.json): /cegen registers itself on the FORGE bus; these two
+        // run them at startup when CEConfig [debug.generators] runAtStartup is on, finishing before any
+        // datapack loads.
+        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.devtools.GeneratorCommand::onCommonSetup);
+        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.devtools.GeneratorCommand::onLoadComplete);
+
         // Fire an early presence check so the log clearly shows, at startup,
         // whether the target fluid was actually found - rather than only
         // discovering a missing-dependency problem the first time a player

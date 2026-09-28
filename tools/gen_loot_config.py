@@ -22,11 +22,18 @@ Sources:
     Backpacks / MineColonies / CC inject pools). Those are the export's pools past the raw pool
     count, so the export being a post-tuning dump doesn't matter (tuning never drops a pool).
   - kubejs/exported/tags/item_tags.json (/dumptags), optional: members of expand:true tag entries.
+  - Structure templates in the jars (tools/audit_loot_containers.scan, cached in tools/.cache/): every
+    table a container names is a chest root, whatever its type or folder.
+  - kubejs/exported/loot_runtime_additions.json, written by 05_tuning.js at every reload: pools and
+    item entries the pack's own rules add pre-roll, so the export diff doesn't mistake them for
+    mod injections.
 
 "Chest loot" = every table declaring type minecraft:chest, every untyped table with a chests/ or
-chest/ path segment (cloudstorage's balloon, Domestication Innovation's pet shop), plus everything
-reachable from those through loot_table entries, code-added pools, and add_loot_table GLMs.
-Untyped roots may be rolled by mod code into chests we can't name, so their items get "reach": "*".
+chest/ path segment (cloudstorage's balloon, Domestication Innovation's pet shop), every table a
+structure template's container names, plus everything reachable from those through loot_table
+entries, code-added pools, and add_loot_table GLMs. Roots = tables nothing else pulls in, or that a
+template places. Untyped roots no template places may be rolled by mod code into chests we can't
+name, so their items get "reach": "*".
 
 Safe to re-run after mod updates or a fresh /dumploot: "remove" / "frequency" / any extra keys
 you added to an item are preserved; items that vanished but still carry an edit are kept and
@@ -48,6 +55,9 @@ MODS_DIR = INSTANCE / 'mods'
 KUBEJS_DATA = INSTANCE / 'kubejs/data'
 EXPORT_DIR = INSTANCE / 'kubejs/exported/loot_tables'
 TAGS_EXPORT = INSTANCE / 'kubejs/exported/tags/item_tags.json'
+RUNTIME_ADDITIONS = INSTANCE / 'kubejs/exported/loot_runtime_additions.json'
+TEMPLATE_CACHE = INSTANCE / 'tools/.cache/template_loot.json'
+STALE_EXPORT_SECONDS = 600  # a /dumploot rewrites every live namespace within seconds of each other
 OUT_DIR = INSTANCE / 'kubejs/server_scripts/loot'
 CONFIG_PATH = OUT_DIR / 'loot_config.json'
 INDEX_PATH = OUT_DIR / 'loot_index.json'
@@ -68,10 +78,9 @@ DEFAULT_SETTINGS = OrderedDict([
     ('log_tables', False),
 ])
 
-# Seeded on first generation only. Migrated from the old post-roll-only 10_removals.js.
-DEFAULT_PATTERNS = OrderedDict([
-    ('@pneumaticcraft', OrderedDict([('remove', True)])),
-])
+# Seeded on first generation only. Bans (PneumaticCraft, Lightman's coins), '#tag' groups and
+# packed food live in kubejs/server_scripts/loot/07_rules.js as global.lootTuning calls.
+DEFAULT_PATTERNS = OrderedDict()
 
 README = OrderedDict([
     ('what', 'Chest loot tuning. Every item that can appear in chest loot is listed under "items". '
@@ -79,18 +88,24 @@ README = OrderedDict([
              'half as often wherever it appears. Then /reload in game. Nothing else to run.'),
     ('items', OrderedDict([
         ('remove', 'true = never appears in any chest loot.'),
-        ('frequency', '0..1, multiplies how often the item appears per chest-loot roll, in every table. '
-                      '1 = unchanged, 0.25 = a quarter as often, 0 = same as remove. Values above 1 are '
-                      'clamped to 1 (use 30_redistribute.js to add or boost loot).'),
+        ('frequency', 'Multiplies how often the item appears per chest-loot roll, in every table. 1 = unchanged, '
+                      '0.25 = a quarter as often, 0 = same as remove, 2 = twice as often (a boost takes its share '
+                      'from the rest of the pool; it only works where the item is a table entry, not post_roll_only).'),
         ('chests', 'Read-only. How many loot tables (roots: the ones containers actually use) can give this item.'),
         ('where', 'Read-only. Chance (%) that one chest from that table contains at least one of the item, '
                   'BEFORE tuning, assuming no Luck. Includes sub-tables and mod-injected loot.'),
         ('missing', 'Set by the generator when an item you edited no longer shows up in any chest table.'),
+        ('post_roll_only', 'Set by the generator when no loot table JSON holds the item (a global loot modifier or '
+                           'a mod adds it in code): rules on it act after the roll, and a removed stack leaves an '
+                           'empty slot.'),
     ])),
-    ('patterns', 'Bulk rules keyed "@modid" (every item of a mod) or "/regex/" (matched against the item id). '
-                 'Value: {"remove": true} or {"frequency": 0.5}, optional "except": ["ns:id", ...]. '
+    ('patterns', 'Bulk rules keyed "@modid" (every item of a mod), "/regex/" (matched against the item id) or '
+                 '"#ns:tag" (members read from the same reload\'s tag event). '
+                 'Value: {"remove": true} or {"frequency": 0.5}, optional "except": ["ns:id", "#ns:tag", ...]. '
                  'An item whose own entry is edited (remove true or frequency != 1) ignores patterns. '
-                 'Tag patterns ("#ns:tag") are not supported: tags are not bound yet while loot tables load.'),
+                 'Optional "tables": an id, "@mod" or "/regex/" (or a list) to act only in matching tables. '
+                 'Script rules (bans, tag groups, packed food, additions) are in 07_rules.js and come after these; '
+                 'bans beat everything.'),
     ('settings', OrderedDict([
         ('enabled', 'false = the whole tuning system does nothing.'),
         ('slack', '"redistribute" (default): the share an item loses goes to the other entries of the same pool, '
@@ -136,17 +151,26 @@ def iter_data_sources():
         yield 'kubejs/data', (lambda n: (INSTANCE / 'kubejs' / n).read_bytes()), names
 
 
-def load_sources():
-    tables = {}
+def load_sources(overrides=None):
+    """(tables, active GLMs). `overrides`, if given, is filled with {table: {'winner': label, 'over': [labels]}}
+    for every table shipped by more than one source (the last one wins, like datapack priority)."""
+    tables, origin = {}, {}
     glm_files, glm_active = {}, set()
     for label, read, names in iter_data_sources():
         for n in names:
             m = re.match(r'data/([^/]+)/loot_tables/(.+)\.json$', n)
             if m:
+                tid = f'{m[1]}:{m[2]}'
                 try:
-                    tables[f'{m[1]}:{m[2]}'] = json.loads(read(n))
+                    tables[tid] = json.loads(read(n))
                 except Exception as err:
                     print(f'WARNING: {label} {n}: {err}')
+                    continue
+                if overrides is not None and tid in origin:
+                    o = overrides.setdefault(tid, {'winner': label, 'over': []})
+                    o['over'].append(origin[tid])
+                    o['winner'] = label
+                origin[tid] = label
                 continue
             m = re.match(r'data/([^/]+)/loot_modifiers/(.+)\.json$', n)
             if m:
@@ -164,13 +188,50 @@ def load_sources():
 
 
 def load_export():
+    """/dumploot tables. Files much older than the newest one are namespaces of removed mods: skipped."""
     if not EXPORT_DIR.exists():
         return None
-    out = {}
-    for f in EXPORT_DIR.glob('*.json'):
+    files = list(EXPORT_DIR.glob('*.json'))
+    if not files:
+        return None
+    newest = max(f.stat().st_mtime for f in files)
+    out, stale = {}, []
+    for f in files:
+        if f.stat().st_mtime < newest - STALE_EXPORT_SECONDS:
+            stale.append(f.stem)
+            continue
         for path, table in json.loads(f.read_text()).items():
             out[f'{f.stem}:{path}'] = table
+    if stale:
+        print(f'note: skipped {len(stale)} stale /dumploot files (removed mods?): {", ".join(sorted(stale))}')
     return out or None
+
+
+def load_runtime_additions():
+    """{table: {'pools': n, 'items': set}} the pack's own pre-roll rules added (05_tuning.js writes it)."""
+    if not RUNTIME_ADDITIONS.exists():
+        return {}
+    data = json.loads(RUNTIME_ADDITIONS.read_text()).get('tables', {})
+    return {t: {'pools': int(v.get('pools', 0)), 'items': {norm_id(i) for i in v.get('items', [])}} for t, v in data.items()}
+
+
+def placed_tables():
+    """{table: {templates}} for every container a structure template places with a LootTable. The scan
+    reads every .nbt in every jar (~25 s), so it's cached by the jar list (name, size, mtime)."""
+    jars = sorted(MODS_DIR.glob('*.jar'))
+    sig = [[j.name, j.stat().st_size, int(j.stat().st_mtime)] for j in jars]
+    if TEMPLATE_CACHE.exists():
+        cached = json.loads(TEMPLATE_CACHE.read_text())
+        if cached.get('sig') == sig:
+            return {t: set(v) for t, v in cached['placed'].items()}
+    from audit_loot_containers import scan
+    placed = defaultdict(set)
+    for row in scan():
+        if row['loot']:
+            placed[norm_id(row['loot'])].add(row['template'])
+    TEMPLATE_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    TEMPLATE_CACHE.write_text(json.dumps({'sig': sig, 'placed': {t: sorted(v) for t, v in placed.items()}}))
+    return placed
 
 
 def load_tags():
@@ -344,22 +405,78 @@ def pct(p):
 
 # ------------------------------------------------------------------------------------------ main
 
+def injected_entries(raw_pool, export_pool, ours):
+    """Item entries a mod slipped into an existing pool in code (Quark's tomes, Buzzier Bees' clover...):
+    in the export's pool but not the JSON one, and not added by the pack's own rules. Returned as
+    raw-scale entries (export weights are rescaled by the pre-roll rewrite: divide by the median
+    export/raw ratio of the entries both share)."""
+    def item_entries(pool):
+        return [e for e in walk_entries(pool.get('entries'))
+                if (norm_type(e.get('type')) or 'minecraft:item') == 'minecraft:item' and 'name' in e]
+    raw_w = {}
+    for e in item_entries(raw_pool):
+        raw_w[norm_id(e['name'])] = float(e.get('weight', 1))
+    extra, ratios = [], []
+    for e in item_entries(export_pool):
+        name = norm_id(e['name'])
+        w = float(e.get('weight', 1))
+        if name in raw_w:
+            if raw_w[name] > 0:
+                ratios.append(w / raw_w[name])
+        elif name not in ours:
+            extra.append(e)
+    if not extra:
+        return []
+    ratios.sort()
+    k = ratios[len(ratios) // 2] if ratios else 1.0
+    return [dict(e, weight=max(float(e.get('weight', 1)) / k, 0.0)) for e in extra]
+
+
+def overridden_entry(tid, o):
+    out = OrderedDict([('winner', o['winner']), ('vanilla', False)])
+    if VANILLA_JAR and VANILLA_JAR.name in o['over']:
+        ns, path = tid.split(':', 1)
+        with zipfile.ZipFile(VANILLA_JAR) as z:
+            out['vanilla'] = True
+            out['vanilla_table'] = json.loads(z.read(f'data/{ns}/loot_tables/{path}.json'))
+    return out
+
+
 def main():
-    tables, glms = load_sources()
+    overrides = {}
+    tables, glms = load_sources(overrides)
     export = load_export()
     tags = load_tags()
+    runtime = load_runtime_additions()
+    placed = placed_tables()
     if export is None:
         print('WARNING: no /dumploot export - pools mods add in code (Botania, Supplementaries, '
               'Sophisticated Backpacks, MineColonies...) will be missing from the catalog')
 
-    # pools added in code (LootTableLoadEvent) = export pools past the raw pool count
-    code_pools = {}
+    # pools added in code (LootTableLoadEvent) = export pools past the raw pool count and past the pools
+    # the pack's own rules append pre-roll (those come first: they're in the JSON before the event fires).
+    # Entries added in code to an existing pool are diffed per pool; analysis sees them via `analysis`.
+    code_pools, injected = {}, {}
+    analysis = dict(tables)
     if export:
         for tid, raw in tables.items():
-            if tid in export:
-                extra = export[tid].get('pools', [])[len(raw.get('pools', [])):]
-                if extra:
-                    code_pools[tid] = extra
+            if tid not in export:
+                continue
+            ours = runtime.get(tid, {'pools': 0, 'items': set()})
+            raw_pools = raw.get('pools', [])
+            exp_pools = export[tid].get('pools', [])
+            extra = exp_pools[len(raw_pools) + ours['pools']:]
+            if extra:
+                code_pools[tid] = extra
+            patched = None
+            for i in range(min(len(raw_pools), len(exp_pools))):
+                add = injected_entries(raw_pools[i], exp_pools[i], ours['items'])
+                if add:
+                    patched = patched or [dict(p) for p in raw_pools]
+                    patched[i]['entries'] = list(raw_pools[i].get('entries', [])) + add
+                    injected.setdefault(tid, []).extend(norm_id(e['name']) for e in add)
+            if patched:
+                analysis[tid] = dict(raw, pools=patched)
 
     # GLMs
     glm_edges = defaultdict(dict)     # target table -> {sub-table rolled into it: GLM chance}
@@ -384,7 +501,7 @@ def main():
         pools = list(tables.get(tid, {}).get('pools', [])) + code_pools.get(tid, [])
         return table_refs(pools) | set(glm_edges.get(tid, {}))
 
-    seeds = set()
+    seeds = {t for t in placed if t in tables}
     for tid, t in tables.items():
         path = tid.split(':', 1)[1]
         ttype = norm_type(t.get('type'))
@@ -408,8 +525,8 @@ def main():
         for c in children(tid):
             if c in scope:
                 parents[c].add(tid)
-    roots = sorted(t for t in scope if not parents[t])
-    orphans = sorted(t for t in roots if norm_type(tables[t].get('type')) != CHEST_TYPE)
+    roots = sorted(t for t in scope if not parents[t] or t in placed)
+    orphans = sorted(t for t in roots if norm_type(tables[t].get('type')) != CHEST_TYPE and t not in placed)
 
     def ancestors_or_self(tid):
         seen, todo = set(), [tid]
@@ -438,7 +555,7 @@ def main():
         ])
 
     # catalog: chance per root table
-    an = Analyzer(tables, code_pools, tags)
+    an = Analyzer(analysis, code_pools, tags)
     where = defaultdict(dict)
     for root in roots:
         none = defaultdict(lambda: 1.0)
@@ -471,11 +588,13 @@ def main():
         entry['chests'] = len(spots)
         entry['where'] = OrderedDict((t, pct(p)) for t, p in spots)
         for k, v in prev.items():  # user-added keys survive
-            if k not in entry and k != 'missing':
+            if k not in entry and k not in ('missing', 'post_roll_only'):
                 entry[k] = v
         if item not in where:
             entry['missing'] = True
             kept_missing += 1
+        elif item not in index_items:
+            entry['post_roll_only'] = True
         items[item] = entry
 
     config = OrderedDict([
@@ -490,6 +609,10 @@ def main():
                    '"reach": tables whose rolls those edits already cover (post-roll thinning skips them); '
                    '"*" = also rolled by mod code into unknown chests, so post-roll thinning never applies.'),
         ('tables', OrderedDict((t, norm_type(tables[t].get('type'))) for t in sorted(scope))),
+        # tables whose vanilla copy is replaced by a jar/datapack copy: Forge fires no LootTableLoadEvent
+        # for them, so mods' code pools never land there (05_tuning.js restoreInjection() checks this)
+        # "vanilla_table": vanilla's own copy, for 05_tuning.js useVanilla()
+        ('overridden', OrderedDict((t, overridden_entry(t, o)) for t, o in sorted(overrides.items()) if t in scope)),
         ('items', index_items),
         ('report', OrderedDict([
             ('roots', len(roots)),
@@ -501,6 +624,11 @@ def main():
             ('opaque_glms', [g for g in opaque if set(g['targets']) & scope
                              or (not g['targets'] and 'chest' in g['glm'] + str(g['type']))]),
             ('missing_refs', sorted(missing_refs)),
+            ('placed_roots', len([t for t in roots if t in placed])),
+            # item entries mods add in code to an existing pool (post-roll only for the tuning runtime)
+            ('injected_entries', {t: sorted(set(v)) for t, v in sorted(injected.items()) if t in scope}),
+            # tables containers name that no source ships: always empty (05_tuning.js alias() fills them)
+            ('dead_placed', sorted(t for t in placed if t not in tables)),
         ])),
     ])
 
@@ -508,12 +636,16 @@ def main():
     INDEX_PATH.write_text(json.dumps(index, indent=1) + '\n')
 
     edited = sum(1 for e in items.values() if e['remove'] or e['frequency'] != 1)
-    print(f'scope: {len(scope)} tables ({len(roots)} roots, {len(orphans)} code-rolled orphans, '
-          f'{sum(1 for t in code_pools if t in scope)} with code-added pools)')
+    print(f'scope: {len(scope)} tables ({len(roots)} roots, {index["report"]["placed_roots"]} placed by templates, '
+          f'{len(orphans)} code-rolled orphans, {sum(1 for t in code_pools if t in scope)} with code-added pools, '
+          f'{len(index["report"]["injected_entries"])} with code-injected entries)')
+    if index['report']['dead_placed']:
+        print(f'note: {len(index["report"]["dead_placed"])} tables named by templates do not exist (always-empty containers)')
     print(f'glms: {len(glms)} active, {sum(len(v) for v in glm_edges.values())} sub-table edges, '
           f'{sum(len(v) for v in glm_items.values())} injected items, {len(index["report"]["opaque_glms"])} opaque chest GLMs')
     print(f'items: {len(items)} in catalog ({edited} edited, {kept_missing} kept as missing), '
-          f'{len(index_items)} with direct table entries')
+          f'{len(index_items)} with direct table entries, '
+          f'{sum(1 for e in items.values() if e.get("post_roll_only"))} post-roll only')
     if missing_refs:
         print(f'note: {len(missing_refs)} referenced tables do not exist: {sorted(missing_refs)[:5]}...')
     print(f'wrote {CONFIG_PATH.relative_to(INSTANCE)} ({CONFIG_PATH.stat().st_size // 1024} KB), '

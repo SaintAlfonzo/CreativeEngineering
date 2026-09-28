@@ -1,79 +1,67 @@
 # Loot: every loot table in the pack, and the tools to tune chest loot
 
 Test prefix **LT-** · Last updated **2026-09-27** · Overall status **DEPLOYED, in-game test pending** (the pre-roll
-rewrite is confirmed by the 2026-09-27 12:00 log and 12:08 export; everything else is untested in game)
+rewrite is confirmed by the 2026-09-27 12:00 log and 12:08 export; script rules, bans and packed food (3.8) pass the
+offline sim but are untested in game)
 
 ## 0. At a glance
 
-The pack has about 11,000 loot tables, but only about 370 matter for chest loot. The rest are block drops
-(10,286) and mob drops (225), which nothing here touches. Chest loot is tuned in three layers, all reloaded by
-`/reload`:
+The pack has about 11,000 loot tables, but only 376 matter for chest loot. The rest are block drops (10,399)
+and mob drops (227), which nothing here touches. Chest loot is edited by one framework with two stages, both
+rebuilt by `/reload`:
 
-1. **The catalog** (`loot_config.json`): every item that can show up in a chest, with `remove` / `frequency`
-   knobs, plus `@mod` and `/regex/` patterns. A Python generator builds it from the jars.
-2. **The tuning runtime** (`05_tuning.js`): rewrites table weights before the roll (exact odds). A LootJS pass
-   after the roll catches whatever the JSON pass can't see.
-3. **Targeted LootJS scripts** (`10_removals.js` to `40_targeted.js`): per-table removals, additions, stack caps.
-   The helpers are in place; the scripts hold only commented examples.
+1. **Pre-roll (KubeJS, `05_tuning.js`)**: the default for everything. Table JSON is rewritten before the game
+   parses it, so odds stay exact and a removed entry's roll goes to the rest of its pool. Rules come from the
+   catalog (`loot_config.json`: per-item `remove` / `frequency`, `@mod` / `/regex/` / `#tag` patterns, optional
+   `tables` scope) and from calls in `07_rules.js` (section 3.8): bans with loud warnings, tag groups, boosts,
+   packed-food splits, companions, added entries and pools, restored mod injections, vanilla reverts, aliases.
+2. **Post-roll (LootJS)**: only what pre-roll can't reach. The same rules act on items a loot modifier or mod
+   code adds (the catalog flags them `post_roll_only`; the log lists any that are tuned), and the `10`-`40`
+   scripts hold LootJS-only edits: by structure, biome, dimension or player, stack caps, per-roll code.
 
-Next to those sit Lootr (per-player containers), the Lootr container swaps and structure frequency (both in
-[structure_tuning.md](structure_tuning.md)), and about 20 mod configs with their own loot knobs.
+A Python generator builds the catalog and index from the jars, structure templates and a `/dumploot` export;
+`tools/loot_tuning_sim.js` runs the real runtime offline. Next to all this sit Lootr (per-player containers),
+the Lootr container swaps and structure frequency (both in [structure_tuning.md](structure_tuning.md)), and
+about 20 mod configs with their own loot knobs.
 
 | Part | Layer | Status |
 |---|---|---|
-| Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT 2026-09-26. **Stale:** 30 container tables added since (SimplyHouses 29, the_dirty_stuff 1) aren't indexed; see finding 1 |
-| Pre-roll weight rewrite | KubeJS `ServerEvents.genericLootTables` in `05_tuning.js` | Runs in game: log 2026-09-27 12:00:42, `3 rules -> rewrote 7 tables (36 entries removed, 7 pools reweighted, 0 via conditions)`, which matches an offline replay exactly; the 12:08 `/dumploot` shows the halved chalk and emptied PNC tables (LT-01, LT-06 PASSED) |
-| Post-roll backstop + `/loottuning` | LootJS `LootType.CHEST` modifier in `05_tuning.js` | DEPLOYED; nothing logged or tested yet |
-| Targeted scripts + `global.LOOT` | LootJS, `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as inert scaffolding (examples only) |
+| Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT, regenerated 2026-09-27 evening: 376 tables (237 placed by templates), 615 items (55 post-roll only), 0 missing from the index |
+| Pre-roll framework | KubeJS `ServerEvents.genericLootTables` in `05_tuning.js`, rules in `07_rules.js` | The 2026-09-27 12:00 version ran in game (LT-01, LT-06 PASSED). The full framework is DEPLOYED 2026-09-27 evening and passes the offline sim: `4 rules -> rewrote 204 tables`; in game LT-14 to LT-27 |
+| Post-roll pass + `/loottuning` | LootJS `LootType.CHEST` modifier in `05_tuning.js` | DEPLOYED; nothing logged or tested yet |
+| PneumaticCraft / Lightman chest loot off at the source | `pneumaticcraft-common.toml`, `lightmanscurrency-common.lcconfig` | DEPLOYED 2026-09-27, guarded by bans |
+| LootJS-only scripts + `global.LOOT` | `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as scaffolding (commented examples of LootJS-only edits) |
 | `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-09-27 12:08 (10,865 tables) |
-| Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT 2026-09-27 |
+| Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; agrees with the generator (0 tables outside scope) |
 | Lootr container swaps | patcherMod | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
 
-**Findings to act on** (details in 4.2; nothing below has been changed yet):
+**Findings** (details in 4.2). Fixed 2026-09-27: 1 stale index, 2 scope missed 39 container tables, 3 injected
+entries not cataloged, 4 goldenfood dropped village injections, 5 always-empty containers, 6 Lightman coins,
+7 root rule. Open: 8 housekeeping (legacy `dump_loot_tables.sh` + `loot_table_dump/`, 40 MB, superseded; not
+deleted).
 
-1. **Stale index.** SimplyHouses (added 10:33 today) and the_dirty_stuff aren't in `loot_index.json`, so
-   pre-roll rules can't touch their 30 tables and their items aren't in the catalog. Re-run the generator, ideally
-   after fix 2.
-2. **39 container tables sit outside the tuning scope** (129 of the 2,320 template containers). They are
-   untyped and not under a `chests/` folder, or declared something other than `minecraft:chest`: Terralith
-   village houses, The Missing Villages' jungle_sparse / swamp_mangrove sets, Monobank vaults, IE's engineer's
-   house crates (declared `minecraft:empty`, 50 containers), Nullscape phantom nests. Post-roll rules still reach
-   them, with empty-slot semantics; the catalog doesn't list them, and 24 of their items appear nowhere else.
-3. **Items injected into existing pools aren't in the catalog:** Quark (ancient tome, blank rune, ancient sapling,
-   Endermosh disc), Buzzier Bees' four-leaf clover, Netherite Horse Armor. Lightman's coins come from a GLM, so
-   they're missing too. Rules still work on them post-roll (`@quark`, or an item key you add by hand).
-4. **`goldenfood` replaces all 16 vanilla village chest tables, which silently drops every code injection into
-   them.** Forge only fires `LootTableLoadEvent` for tables whose winning copy comes from the vanilla pack, so
-   Botania's and Chalk's village pools are gone (the 09-26 index had code pools on 10 village tables; today's
-   export has none). GLM additions (Farmer's Delight, Everything Copper) still apply.
-5. **12 structure containers name loot tables that don't exist** and always generate empty (Terralith desert
-   fisherman/leatherworker/shepherd, Towns & Towers forest-ruins set, and others; list in 2.8).
-6. **Lightman's coins are spawned, then stripped.** `[loot.chests] enabled = true` in its config, while a
-   `loot_config.json` regex removes the coins post-roll. `enabled = false` would say the same thing directly. The 9
-   `kubejs/data` overrides of its entity/boss coin tables are inert while `[loot.entities] enabled = false`.
-7. **Generator root rule:** after the re-run, 4 vanilla village tables that SimplyHouses borrows would stop
-   counting as containers in the catalog's `where` view (display only; the runtime is unaffected).
-8. Housekeeping: 7 stale `/dumploot` files from removed mods; the pre-generator `dump_loot_tables.sh` +
-   `loot_table_dump/` (40 MB, 2026-08-25) are superseded; the node harness used to test the runtime on 09-25
-   wasn't saved.
-
-**Open first:** [loot_config.json](../kubejs/server_scripts/loot/loot_config.json) (the knobs),
-[loot_census.md](../kubejs/server_scripts/loot/loot_census.md) (the full per-mod tables),
-[loot/README.md](../kubejs/server_scripts/loot/README.md) (LootJS cheatsheet).
+**Open first:** [07_rules.js](../kubejs/server_scripts/loot/07_rules.js) (the rules),
+[loot_config.json](../kubejs/server_scripts/loot/loot_config.json) (per-item knobs),
+[loot_census.md](../kubejs/server_scripts/loot/loot_census.md) (per-mod tables),
+[loot/README.md](../kubejs/server_scripts/loot/README.md) (API + LootJS cheatsheet).
 
 **Knobs:**
-- Per item: `"remove": true` or `"frequency": 0..1` under `items` in `loot_config.json`.
-- Per mod or id pattern: `patterns` -> `"@modid"` or `"/regex/"`, each with an optional `except` list.
+- Per item: `"remove": true` or `"frequency": 0..100` under `items` in `loot_config.json` (above 1 boosts).
+- Per mod, id pattern or tag: `patterns` -> `"@modid"`, `"/regex/"` or `"#ns:tag"`, with optional `except` and `tables`.
+- Script rules in `07_rules.js` (3.8): chalk `L.frequency(i.t_loot_chalk, 0.5)`; golden food
+  `L.frequency(i.t_loot_golden_food, 2)` with the Golden Food book beside it (`rate: 0.5`) and in village/camp
+  chests (`share: 0.01`); packed food `L.packRate(0.1)` and `L.packBoost(/village/, 3)`.
 - Globally: `settings.enabled`, `settings.slack` (`redistribute` | `empty`), `settings.log_tables`.
-- Per table (add, cap, targeted remove): LootJS in `10`-`40` via `global.LOOT`.
+- LootJS-only edits (structure / biome / player scoped, stack caps): `10`-`40` via `global.LOOT`.
 - Whether a chest exists at all: structure frequency, house pool weights, mod configs ([structure_tuning.md](structure_tuning.md)).
 
 **Applying:** `/reload`. Both stages rebuild. Test with `/loot give @s loot <table>`, which runs the same path as
 a chest (tables, code injections, GLMs, LootJS). In the world, only containers nobody has opened yet change (Lootr rolls
 per player on first open).
 
-**Measuring:** `/loottuning`, the `[loot-tuning]` line in `logs/kubejs/server.log`, `/dumploot` (the export shows
-the rewritten weights), `python3 tools/loot_census.py`.
+**Measuring:** `/loottuning`, the `[loot-tuning]` lines in `logs/kubejs/server.log`, `/dumploot` (the export shows
+the rewritten tables), `python3 tools/loot_census.py`, `node tools/loot_tuning_sim.js [table ids]` (offline).
+Any `!!!` banner in the log is a ban alarm (3.8).
 
 ---
 
@@ -202,7 +190,7 @@ inside its own tables. The census has the full 30-row list.
 | Channel | Mods | Tables | Visible to the catalog? |
 |---|---|---|---|
 | Code pools (`LootTableLoadEvent`, whole pools) | Supplementaries 10, CC:Tweaked 9, Sophisticated Backpacks 8, Botania 6, Chalk 4, Immersive Weathering 3, Alex's Mobs 2, Domestication Innovation 1 | 19 vanilla chest tables | yes (the generator diffs `/dumploot` pool counts) |
-| Code entries into existing pools | Quark (tome 5 tables, rune 4, sapling, Endermosh disc), Buzzier Bees (clover 2), Netherite Horse Armor (bastion treasure) | 9 vanilla chest tables | **no** (finding 3) |
+| Code entries into existing pools | Quark (tome 5 tables, rune 4, sapling, Endermosh disc), Buzzier Bees (clover 2), Netherite Horse Armor (bastion treasure) | 9 vanilla chest tables | yes since finding 3's fix (`post_roll_only`) |
 | GLM rolling a sub-table | Farmer's Delight (14 vanilla chests -> `fd_*`), Old Guns (4 vanilla chests -> 6 tables), the_dirty_stuff (plains house -> tobacco chest) | | yes |
 | GLM adding one item | Armor Trims templates (21 GLMs, percent chance; 4 more target 1.20 trail-ruins tables that don't exist), Everything Copper (8 items), End Portal (purpur eye), Geode+ (goat horn) | | yes, with the GLM's chance |
 | GLM in code (opaque) | PneumaticCraft `dungeon_loot` (16 tables), Simple Hats (12), Lightman's `coins_in_chests` (config lists) | | no; post-roll rules only |
@@ -211,7 +199,7 @@ inside its own tables. The census has the full 30-row list.
 
 | Overridden | By | Effect |
 |---|---|---|
-| 16 `minecraft:chests/village/*` | goldenfood | its copies win, and code injections into them stop (finding 4) |
+| 16 `minecraft:chests/village/*` | goldenfood | its copies win, and code injections into them stop; undone by `useVanilla` + `restoreInjection` (finding 4, 3.8) |
 | 17 vanilla glass block drops | Quark | glass drops itself |
 | `minecraft:blocks/copper_ore`, `deepslate_copper_ore` | CopperDrops | |
 | `minecraft:blocks/amethyst_block` | Nullscape | |
@@ -242,8 +230,8 @@ engineer's-house loot, for example).
 | `luna_structures:chests/taiga_inn/taiga_inn_barrels` | 1 | SimplyHouses taiga inn |
 | `themissingvillages:village/swamp_mangrove/cartographer` | 1 | The Missing Villages mangrove cartographer |
 
-A JSON at `kubejs/data/<ns>/loot_tables/<path>.json` would fill them. It could hold a single `loot_table`
-entry pointing at the nearest real table, for example the fortified fisherman for the desert one.
+All 12 are filled since 2026-09-27 by `L.alias(...)` in `07_rules.js` (3.8), one roll of the nearest sibling table.
+The generator lists them as `dead_placed` in the index report.
 
 ### 2.9 Loot that isn't a loot table
 
@@ -269,67 +257,98 @@ matching pattern in file order wins.
   "quark:ancient_tome":    { "remove": true }                // not in the catalog: add it by hand, works post-roll
 },
 "patterns": {
-  "@pneumaticcraft": { "remove": true },                     // live
-  "/^lightmanscurrency:coin(pile|block)?_(chocolate_)?(copper|iron|gold|emerald|diamond|netherite)$/": { "remove": true },  // live
-  "@chalk": { "frequency": 0.5 },                            // live
+  "@somemod": { "remove": true },                           // every item of a mod
+  "#forge:seeds": { "frequency": 0.5 },                      // tag members, read from the same reload
   "/_sword$/": { "frequency": 0.5, "except": ["minecraft:diamond_sword"] }
 },
 "settings": { "enabled": true, "slack": "redistribute", "log_tables": false }
 ```
 
-Rules the runtime rejects, with a warning: `frequency` above 1 (clamped to "no rule"; boosting belongs in
-`30_redistribute.js`), negative values, and `#tag` patterns (tags aren't bound yet when loot tables load).
+`frequency` above 1 boosts (pre-roll only, up to 100). A pattern can take `"tables"` (an id, `@mod` or `/regex/`, or
+a list) to act only in matching tables. Rules the runtime rejects, with a warning: negative or non-number values.
+`#tag` patterns work since 2026-09-27 (3.8).
 
-**Live today:** the three patterns above and no item edits. In game that rewrote 7 tables: 4 PneumaticCraft
-tables lost all 36 entries, and the 3 Chalk sub-tables were reweighted. The Lightman rule has no pre-roll
-target (coins come from a GLM) and acts post-roll only. PneumaticCraft's mechanic house is 100% PNC items, so
-its chest now rolls nothing. That's moot while pool tuning keeps the house out of villages
-([structure_tuning.md](structure_tuning.md) ST-12).
+**Live today:** no JSON patterns and no item edits. The three rules that used to sit here moved to `07_rules.js` on
+2026-09-27: `@pneumaticcraft` and the Lightman coin regex became bans, `@chalk` became the `#creativeengineering:loot/chalk`
+tag rule (same 0.5). They rewrite the same tables as before: 4 PneumaticCraft tables lose all 36 entries, and the 3
+Chalk sub-tables are reweighted. PneumaticCraft's mechanic house is 100% PNC items, so its chest now rolls nothing.
+That's moot while pool tuning keeps the house out of villages ([structure_tuning.md](structure_tuning.md) ST-12).
 
 ### 3.2 `05_tuning.js`: the runtime
 
-**Pre-roll** (`ServerEvents.genericLootTables`, raw JSON before parsing). For each table `loot_index.json` lists
-as holding a tuned item, every pool with a tuned entry gets new integer weights. The tuned entry's chance per
-roll becomes exactly `f x` the old one. The lost share goes:
+**Pre-roll** (`ServerEvents.genericLootTables`, raw JSON before parsing). The runtime plans which tables need
+work (from the index plus the rules), then rewrites each one in this order:
 
-- `redistribute` (default): to the pool's untuned entries, keeping their ratios, so chests stay as full as before.
-- `empty`: to an added `minecraft:empty` entry, so every other item keeps its exact odds.
+1. `alias()`: a table no source ships is created (from a sibling table or given pools).
+2. `useVanilla()`: a jar's override of a vanilla table is replaced by vanilla's pools (stored in the index).
+3. `addPool()` / `restoreInjection()`: whole pools are appended. A restore happens only where the vanilla table is
+   overridden, and a pool whose `name` already exists is skipped.
+4. `add()`: an item entry is added to the table's main pool (the one with the most item entries) at a set share.
+5. `pack()` / `companion()`: packed food is split out of its loose entry; companions go beside their anchors.
+6. Tuning: every entry with a rule gets a new integer weight. Its chance per roll becomes exactly `f x` the old one
+   (`f` = 0 drops the entry, below 1 cuts, above 1 boosts).
 
-Example: a pool of bread 10, apple 5, wheat 5 with bread at `frequency 0.5`. Bread goes from 50% to 25% of rolls.
-`redistribute` gives bread 10, apple 15, wheat 15 (25% / 37.5% / 37.5%). `empty` gives bread 5, apple 5,
-wheat 5, empty 5. Weights are scaled by the smallest multiple of the old total that keeps every share within 1%.
-`quality` scales with the weight.
+Where the difference goes:
+
+- `redistribute` (default): to or from the pool's untuned entries, keeping their ratios. A cut makes the others a
+  bit more likely, and a boost takes its extra share from them. Chests stay as full as before.
+- `empty`: a cut's lost share goes to an added `minecraft:empty` entry, so every other item keeps its exact odds.
+  Boosts always take from the other entries.
+
+Example: a pool of bread 10, apple 5, wheat 5. Bread at `frequency 0.5` goes from 50% to 25% of rolls:
+`redistribute` gives bread 10, apple 15, wheat 15; `empty` gives bread 5, apple 5, wheat 5, empty 5. Bread at
+`frequency 1.5` goes to 75%: apple and wheat drop to 12.5% each. If boosts ask for more than the whole pool, the
+other entries keep 1% of their odds and the log warns. A boost on an entry that is its pool's only item (a
+guaranteed golden apple) changes nothing.
+Weights are scaled by the smallest multiple of the old total that keeps every share within 1%; `quality`
+scales with the weight.
 
 Pools are never dropped (mods look pools up by name or position). A pool left with no real entry becomes one
-`empty` entry. Pools with composite entries or `expand: true` tags (4 Terralith spire pools) can't be reweighted
-exactly. There a tuned item is dropped (remove) or gets a `random_chance` condition (frequency). `modify` forces
-the table type to `minecraft:generic`, so the runtime puts back the type recorded in the index.
+`empty` entry. Pools with composite entries or `expand: true` tags (4 Terralith spire pools, 6 SimplyHouses taiga
+pools) can't be reweighted exactly: a tuned item there is dropped (remove), gets a `random_chance` condition (cut),
+or is left alone (boosts, packing). `modify` forces the table type to `minecraft:generic`, so the runtime puts back
+the type from the index (vanilla's for a reverted table, `minecraft:chest` for an alias).
 
-**Post-roll** (LootJS on every `LootType.CHEST` roll): a removed item's stacks are stripped, and the slot stays
-empty. A reduced item is kept with probability `f`, unless the pre-roll pass already governs that item in the
-rolled table (the index's `reach` list), so nothing is reduced twice. Items with `reach: "*"` (27, the ones
-Cloud Storage balloons and pet shops can give) are never thinned post-roll.
+**Post-roll** (LootJS on every `LootType.CHEST` roll): only what pre-roll can't reach. A removed item's stacks are
+stripped (the slot stays empty); a reduced item is kept with probability `f`; a boost can't apply. Nothing is
+done twice: the index's `reach` list says which rolled tables pre-roll already covers for an item, and the runtime
+extends it for everything the rules add (aliases, restored pools, packed and added items). At each reload the log
+lists tuned items that are post-roll only (`post_roll_only` in the catalog); today there are none.
 
-**Tools:** `/loottuning` (op level 2) prints active/inactive, slack, the rule count, the pre-roll counts, and the
-post-roll counts since the last reload. `settings.log_tables` logs one line per rewritten table. Everything is in
-`global.lootTuning`. The script is an IIFE because all server scripts share one scope.
+**Every reload writes** `kubejs/exported/loot_runtime_additions.json`: per table, the pools and items the rules
+added. The generator reads it so the next `/dumploot` diff doesn't take them for mod injections.
+
+**Tools:** `/loottuning` (op level 2) prints active/inactive, slack, rules and bans, pre-roll counts, packed and
+added counts, post-roll counts since the reload, tag rules, and any alarms. `settings.log_tables` logs one line
+per rewritten table. Everything is in `global.lootTuning`. The script is an IIFE because all server scripts share
+one scope.
 
 ### 3.3 `tools/gen_loot_config.py`: the generator
 
 Rebuilds `loot_config.json` + `loot_index.json` from the vanilla -extra jar, `mods/*.jar`, `kubejs/data`, active
-GLMs, the `/dumploot` export (only to find pools added in code) and `/dumptags` (members of `expand` tags).
+GLMs, structure templates, the `/dumploot` export and `/dumptags` (members of `expand` tags). About 3 s; the
+template scan (about 45 s) is cached in `tools/.cache/template_loot.json` until the jar list changes.
 
-- **Scope:** tables declared `minecraft:chest`, plus untyped / generic tables under a `chests/` or `chest/`
-  folder, plus everything those reach through `loot_table` entries, code pools and sub-table GLMs. It has 3 gaps:
-  finding 2 (tables that match neither rule), finding 3 (entries injected into existing pools) and finding 7
-  (a borrowed table stops counting as a root).
-- **Index:** per item, `edit` (tables with a direct JSON entry, which pre-roll rewrites) and `reach` (every table
-  whose rolls those edits already cover); per table, its declared type. The `report` section lists roots, code-rolled
-  orphans, code-pool tables, GLM sub-tables, GLM items, opaque GLMs and missing references.
+- **Scope:** tables declared `minecraft:chest`, untyped / generic tables under a `chests/` or `chest/` folder, and
+  every table a structure template's container names (`audit_loot_containers.scan`), plus everything those reach
+  through `loot_table` entries, code pools and sub-table GLMs. **Roots** are tables nothing pulls in, or that a
+  template places. Untyped roots no template places (Cloud Storage balloon, Domestication Innovation pet shop) are
+  rolled by mod code, so their items get `reach: "*"`.
+- **From the export:** pools past the JSON pool count (minus the ones the rules append) are code pools; item
+  entries in a pool that the JSON pool doesn't have (minus the rules' own) are code-injected entries (Quark tomes
+  and runes, Buzzier Bees' clover, Netherite Horse Armor...). Their weights are brought back to the JSON's scale by
+  the median ratio of shared entries, and they count in the catalog's `where`. Export files much older than the
+  newest (removed mods) are skipped.
+- **Catalog:** every item with a chance per table; items no JSON entry holds get `"post_roll_only": true`.
+- **Index:** per item, `edit` (tables with a direct JSON entry) and `reach`; per table, its declared type;
+  `overridden` (tables a jar or datapack replaced, with vanilla's own copy for `useVanilla`). The `report` lists
+  roots, templates' dead references (`dead_placed`), code-pool tables, injected entries, GLM sub-tables and items,
+  opaque GLMs and missing references.
 - **Safe re-runs:** keeps `remove` / `frequency` / any key you added, keeps edited items that vanished as
   `"missing": true`, never touches `settings` / `patterns`. Run it after mod changes, then `/reload`.
+- The generator and census don't read `07_rules.js`; the catalog's `where` is the view before any rule.
 
-### 3.4 LootJS targeted scripts and `global.LOOT`
+### 3.4 LootJS-only scripts and `global.LOOT`
 
 `00_lib.js` builds `global.LOOT` on every reload:
 
@@ -339,12 +358,15 @@ GLMs, the `/dumploot` export (only to find pools added in code) and `/dumptags` 
 - **Validation:** `strict: true` makes an unknown id or empty tag throw; `false` warns instead.
 - **Reusable lists:** `groups` / `tiers`, all empty.
 
+Each script's header sends table-based work to the pre-roll API first; what stays here is what only LootJS can do.
+
 | Script | For | Contents today |
 |---|---|---|
-| `10_removals.js` | take an item out of specific tables only (post-roll, empty slot) | 2 commented examples |
-| `20_frequency.js` | stack-size caps; chance that an added pool fires | 2 commented examples |
-| `30_redistribute.js` | put items in more places (`anyStructure`, `anyBiome`, `anyDimension` scoping) | 3 commented examples |
-| `40_targeted.js` | signature edits to one table; `disableLootModification` for hand-written overrides | 3 commented examples |
+| `06_dead_maps.js` | pre-roll: drop explorer-map entries aimed at removed structures from listed tables | 5 Monobank vault tables, `minecraft:ruined_portal` (see structure_tuning.md section 4) |
+| `10_removals.js` | removals scoped by structure / biome / dimension / player (post-roll, empty slot) | 2 commented examples |
+| `20_frequency.js` | stack-size caps; bonuses gated by place or chance | 2 commented examples |
+| `30_redistribute.js` | additions scoped by structure / biome (on top of the rolled loot) | 2 commented examples |
+| `40_targeted.js` | per-roll code (`.apply(ctx => ...)`); `disableLootModification` | 2 commented examples |
 | `99_debug.js` | `event.enableLogging()` -> `[LootJS]` lines in `logs/latest.log` | commented out |
 
 LootJS gotcha: `LootEntry.withChance(int)` is a misnamed alias of `withWeight`; use `.when(c => c.randomChance(f))`.
@@ -373,8 +395,8 @@ LootJS gotcha: `LootEntry.withChance(int)` is a misnamed alias of `withWeight`; 
 
 | Mod | File | Knob (current value) |
 |---|---|---|
-| Lightman's Currency | `config/lightmanscurrency-common.lcconfig` `[loot]` | tier items T1-T6; `[loot.chests] enabled = true` + per-tier table lists; `[loot.entities] enabled = false` |
-| PneumaticCraft | `pneumaticcraft-common.toml` | `enable_dungeon_loot = true` (its GLM now rolls emptied tables) |
+| Lightman's Currency | `config/lightmanscurrency-common.lcconfig` `[loot]` | tier items T1-T6; `[loot.chests] enabled=false` (2026-09-27) + per-tier table lists; `[loot.entities] enabled=false`. Guarded by a ban (3.8) |
+| PneumaticCraft | `pneumaticcraft-common.toml` | `enable_dungeon_loot = false` (2026-09-27). Guarded by a ban (3.8) |
 | Sophisticated Backpacks | `sophisticatedbackpacks-common.toml` | `chestLootEnabled = true` |
 | Farmer's Delight | `farmersdelight-common.toml` | `generateFDChestLoot = true` |
 | Alex's Mobs | `alexsmobs.toml` | `addLootToChests = true` |
@@ -391,45 +413,192 @@ LootJS gotcha: `LootEntry.withChance(int)` is a misnamed alias of `withWeight`; 
 Remember the [configs_edited rule](../configs_edited) when changing any of these: copy the edited file there
 too.
 
+### 3.8 Script rules (`07_rules.js`)
+
+`05_tuning.js` (priority 100) exposes `global.lootTuning`; `07_rules.js` (priority 0) calls it. Item targets are the
+same as `patterns` (`'ns:id'`, `'@mod'`, `'/regex/'`, `'#ns:tag'`, a JS regex, a list), written as `global.item`
+keys; table filters take ids, `@mod`, regexes or lists. Precedence: bans, then an item's own `loot_config.json`
+entry, then JSON patterns in file order, then script rules in call order. The full API is in
+[loot/README.md](../kubejs/server_scripts/loot/README.md).
+
+**Bans.** `L.ban(target, { name, why, modLootOn, ownTables })` removes the item like `remove`, and assumes the mod's
+own loot switch already keeps it out. It raises a loud warning (a `!!!` banner at ERROR level in
+`logs/kubejs/server.log`, red chat to online ops, and the list again to any op who logs in before the next reload) in
+three cases:
+
+| When | Check | Means |
+|---|---|---|
+| every reload | `modLootOn()` reads the mod's live config object (`ConfigHelper.common().general.enableDungeonLoot`, `LCConfig.COMMON.enableChestLoot` / `enableEntityDrops`) | the config was reset or edited back on |
+| pre-roll | a banned entry in a table outside `ownTables` (default for `'@mod'`: that mod's own tables) | another mod or datapack ships the item |
+| post-roll | a chest roll produced a banned stack (it's stripped) | a GLM or code pool added it after the pre-roll pass |
+
+Live bans: `@pneumaticcraft` (switch: `enable_dungeon_loot = false`) and Lightman's coins, coin piles and coin blocks
+including the chocolate ones (switches: `[loot.chests]` and `[loot.entities] enabled=false`; `ownTables`
+`@lightmanscurrency`). Pre-roll still strips the 36 entries of PneumaticCraft's own 4 tables quietly; that's expected.
+
+**Tag rules.** Tags aren't bound while loot tables load, but the reload's tag event runs earlier (its prepare phase;
+loot tables apply after the barrier). `95_tag_capture.js` (priority -1000, so its `ServerEvents.tags('item')` handler
+is last) copies the members of every tag a rule names. It also reads during KubeJS's pre pass, which forces the real
+re-run (see `tag_helper.js`). If the capture didn't run, the runtime falls back to the registry's bound tags (last
+reload's; empty on a fresh start) and warns. Two meta tags in `tags/loottags.js`:
+
+- `#creativeengineering:loot/chalk` (`i.t_loot_chalk`) = `#chalk:chalks` (nested, so new colours follow) + the chalk
+  box. `L.frequency(i.t_loot_chalk, 0.5)`: 8 of its 17 members show up in chest loot.
+- `#creativeengineering:loot/golden_food` (`i.t_loot_golden_food`) = golden apple, golden carrot and Golden Food's
+  23 plain `golden_*` foods (the enchanted ones and the notch apple are left out as the rare tier). Only the golden
+  apple and carrot are in chest loot today.
+
+**Packed food: a split.** `L.pack(packed, loose, { rate, max })` splits each pool entry of the loose item. The entry
+keeps its chance per roll, and no other entry in the pool changes. Within it, think of the roll as a number from 0 to
+1: below `1 - rate` it gives the loose food as before; above, crates, and the higher the roll the more crates
+(1 up to `max`, each step half as likely as the last). `max` comes from the loose entry's own stack size (about a
+quarter of its largest stack, 1 to 3: a 1-7 potato stack gets up to 2 crates). Each crate band is its own entry,
+copying the loose entry's conditions.
+
+- `L.packRate(0.1)`: a tenth of each loose entry becomes crates. `L.packBoost(/village/, 3)` triples that in every
+  table whose id contains `village` (vanilla, FD `fd_village_*`, Terralith, The Missing Villages, Towns & Towers,
+  Monobank, Wares packages), so villages give crates for 30% of those rolls. Rates are capped at 0.9, so a loose
+  entry never vanishes. `L.packExclude(/^wares:agreement\//)`: Wares trade agreements list items a trader asks for.
+- Example, vanilla taiga house (village): potato 10 of 60 weight becomes potato 7, one crate 2, two crates 1 (by
+  share); sweet berries 5 become berries 3.5, one sack 1, two sacks 0.5. Everything else keeps its odds.
+- Pairs (from the jars' 3x3 recipes; Quark's own carrot/potato/beetroot/apple crates are removed items, so FD's and
+  Vinery's are used). Sim on 2026-09-27 (evening):
+
+| Packed | Loose | Pools (village-boosted) |
+|---|---|---:|
+| `vinery:apple_crate` | apple | 30 (16) |
+| `farmersdelight:potato_crate` | potato | 27 (16) |
+| `farmersdelight:carrot_crate` | carrot | 11 (4) |
+| `quark:berry_sack` | sweet berries | 7 (5) |
+| `quark:glowberry_sack` | glow berries | 6 (1) |
+| `quark:cocoa_beans_sack` | cocoa beans | 5 (4) |
+| `farmersdelight:beetroot_crate` / `onion_crate` / `rice_bag` | beetroot / onion / rice | 4 (2) each |
+| `endersdelight:chorus_crate` | chorus fruit | 1 (0) |
+| cabbage, tomato, cherry, red / white grape, ancient fruit crates | | 0: no chest holds the loose item today |
+
+  99 loose entries split into 146 crate entries. Skipped: 6 SimplyHouses taiga pools with composite entries and
+  `farmersdelight:chests/fd_pillager_outpost`, which already has an onion crate. Left out on purpose: golden apple /
+  golden carrot crates, egg crates, hay bales, nether wart sacks, Rustic Delight's pepper crates (no dict keys, never
+  in chest loot).
+
+**Golden Food (finding 4).** goldenfood ships copies of all 16 vanilla village chest tables. The only change is one
+`enchanted_book` entry (weight 1) carrying its `goldenfood:gf_enchantment`, which an anvil uses to turn golden apples
+and carrots into enchanted ones. Because the copies replace vanilla's files, Forge fires no `LootTableLoadEvent` for
+them. Every mod that injects pools in code lost its village loot. A bytecode audit of every jar with an event
+handler found three such mods: Chalk (cartographer, mason, plains house, savanna house), Botania (temple,
+toolsmith, weaponsmith; rolls 0-1) and CC:Tweaked (cartographer; its `treasure_disk` table is empty until a
+datapack fills it). Immersive Armors, Allurement, Farmer's Delight, Everything Copper and the other loot modifiers
+aren't affected. Dustrial Decor's handler is switched off (`loot_table_modification = false`). The rules:
+
+1. `L.useVanilla(/^minecraft:chests\/village\//, { winner: /goldenfood/ })`: the 16 tables get vanilla's pools back.
+2. `L.restoreInjection(...)` x3: the Chalk, Botania and CC pools, exactly as their code builds them, only where the
+   vanilla table is overridden (if goldenfood is removed, Forge injects them itself and these skip).
+3. `L.frequency(i.t_loot_golden_food, 2)`: golden food is twice as likely per roll wherever it's an entry (58 entries;
+   simple dungeon golden apple 11.6% -> 22% of pool 0). Pools where it's the only item (the igloo's guaranteed
+   golden apple) can't go higher.
+4. `L.companion(i.enchanted_book, i.t_loot_golden_food, { rate: 0.5, nbt })`: the Golden Food book goes beside golden
+   food at half its chance (51 pools). Pools made only of golden food are skipped.
+5. `L.add(/village|camp|outpost/, i.enchanted_book, { share: 0.01, nbt, except })`: 1% of a roll in the main pool of
+   114 village, campsite and outpost tables. Excluded: Wares (trade deals and packages), FD `fd_` sub-tables
+   (they're rolled into vanilla village chests on top), Monobank vaults. goldenfood's own copies had 1 of 44 (2.3%)
+   in village tables only.
+
+The book is written with `StoredEnchantments` (the proper enchanted-book form, so the tooltip shows it);
+goldenfood's own copies used `Enchantments`. Its anvil handler only checks the NBT text for `gf_enchantment`, so
+both work.
+
+**Always-empty containers (finding 5).** `L.alias(missing, source)` creates the 12 tables structure containers name
+but no mod ships, as one roll of a sibling: Towns & Towers birch-forest house and forest ruins (plains house,
+butcher, Terralith fortified library, temple), the Wythers leftover (plains house), SimplyHouses' taiga inn
+barrels (SimplyHouses' own copy under `luna_structures:`), the Iberian leatherworker and Terralith desert
+leatherworker (tannery), Terralith desert fisherman (fisher) and shepherd (shepherd), The Missing Villages mangrove
+cartographer (its swamp cartography). Terralith's giant bee hive has no sibling, so it gets its own pool:
+honeycomb 1-3, honey bottle, glass bottle, 2-4 rolls. An alias never touches a table that exists.
+
+**Offline check:** `node tools/loot_tuning_sim.js [table ids]` runs the real `05` + `07` + tag scripts against the raw
+jar tables and the `/dumptags` export and prints the `[loot-tuning]` line, the per-pair table above, golden food,
+reverts, restores, aliases and bans. It fails if a banned item survives, a split's crate share is off
+by more than 2% (or loose + crates don't add up to the old loose share in pools nothing else touches), a reverted
+table still has goldenfood's book, a restored pool or alias is missing, or a tag rule has no members. It reads the
+two mod configs from disk, so a switched-on config shows up as an alarm there too.
+
 ## 4. Limits and decisions
 
 ### 4.1 Decisions
 
-- **Pre-roll rewrite via KubeJS, not LootJS.** LootJS 2.x only ever sees rolled stacks and can't change a weight.
-  The old `L.reweight` helper was a no-op (`replaceLoot`'s third argument is `preserveCount`) and was deleted
-  on 2026-09-25. `genericLootTables` exposes the raw JSON and re-runs on `/reload`.
-- **LootJS for the rest.** LootJS runs after every GLM, so it can edit Farmer's Delight, Armor Trims and the
-  other injected loot. The Loot Integrations mod was rejected: it only swaps whole modded structure tables, per mod.
-  A datapack JSON per table was rejected too: about 340 files, no "remove X everywhere", and no reload.
-- **No boosting in the catalog.** `frequency > 1` would need to steal share from other items; additions go in
-  `30_redistribute.js`, where they're explicit.
-- **No `#tag` patterns.** Tags aren't bound while loot tables load. Use `/regex/` or `@mod`.
-- **The index comes from files, not the game.** The event's table map is private and reflection is class-filtered,
-  so table ids come from the offline index. Hence "re-run the generator after mod changes".
-- **KubeJS's pre-roll edit does not block injections.** Its mixin redirects the `forEach` in `LootTables.apply`,
-  and vanilla's own lambda still reads the real source pack. Only file-level overrides (a jar or `kubejs/data`
-  replacing a vanilla table) block `LootTableLoadEvent`.
+- **KubeJS pre-roll (`ServerEvents.genericLootTables`) is the default.**
+  - *Strengths:* it edits the table JSON before it's parsed, so it can express anything a loot table can: exact
+    weights, removals that hand their roll to the rest of the pool, boosts, new entries, new pools, whole tables
+    (aliases, vanilla reverts). The result is an ordinary table, so JEI/JER, `/dumploot` and every mod that reads
+    tables see it. It costs nothing per roll. It re-runs on `/reload`. It doesn't block Forge's
+    `LootTableLoadEvent` (its mixin redirects the `forEach` in `LootTables.apply`; vanilla's lambda still reads the
+    real source pack).
+  - *Weaknesses:* it only sees JSON. It can't see what loot modifiers add after the roll (Lightman, PneumaticCraft,
+    Armor Trims, Simple Hats), pools or entries mods add in code later in the same load (Quark's tomes), or tables
+    built entirely in code. It can't list tables (the map is private and reflection is class-filtered), so
+    targets come from the offline index, which must be regenerated after mod changes. `modify` forces the type
+    to `minecraft:generic` and creates a table for an unknown id. Tags aren't bound yet (hence
+    `95_tag_capture.js`). It knows nothing about the chest's position, structure, biome or player, and `JSON.stringify` is
+    Rhino's Gson-backed one.
+- **LootJS 2.9.1 post-roll only where pre-roll can't reach.**
+  - *Strengths:* it runs after every loot modifier and code pool, on the final rolled list, so it's the only way to
+    touch what those add. It knows the context: loot type by caller (every container roll is `CHEST`, whatever the
+    table), structure, biome, dimension, player, luck, the rolled stacks themselves. Tags are bound. It also has
+    per-roll code (`apply`), stack-size edits and conditions (`anyStructure`, `randomChance`).
+  - *Weaknesses:* it never sees a weight. A removal leaves an empty slot, a "reduction" is random thinning, a boost
+    is impossible, and an addition sits on top of the roll instead of competing in the pool. Its edits are
+    invisible to JEI/JER and `/dumploot` (only rolling shows them). It runs on every chest roll. It's the 2.x API:
+    `withChance` is a misnamed `withWeight`, and `replaceLoot`'s third argument is `preserveCount` (the deleted
+    `L.reweight` helper relied on it and never changed a weight).
+  - The Loot Integrations mod was rejected: it only swaps whole modded structure tables, per mod. Hand-written datapack
+    JSON per table was rejected too: about 370 files, no "remove X everywhere", and a vanilla-table override
+    silently kills mods' injections (finding 4).
+- **Boosting is allowed, pre-roll.** `frequency > 1` (up to 100) takes the extra share from the pool's other
+  entries. The earlier "no boosting" rule came from the catalog view; with the pre-roll runtime doing exact
+  shares, a boost is as exact as a cut. It can't apply post-roll or inside composite pools.
+- **`#tag` rules via a capture, not the registry.** Tags aren't bound while loot tables load, but the same reload's
+  tag event has already run, so `95_tag_capture.js` copies the members there. Rejected: resolving tags offline in
+  the generator from `/dumptags` (stale until the next dump); post-roll-only tag rules (empty-slot semantics).
+- **Packed food is a split of the loose entry (user, 2026-09-27).** A low roll within the entry gives loose food, a
+  high one crates, the highest the most crates; no other entry changes. This replaced the first version (an extra
+  crate entry beside the loose one, which diluted the rest of the pool). A rate can't pass 0.9, so the village boost
+  tops out there.
+- **goldenfood: revert and restore rather than edit the jar.** Deleting its tables from the jar would bring
+  back every injection automatically, but the pack manifest rebuilds mods from their download source, so a
+  modified jar wouldn't survive a rebuild. A patcherMod mixin that makes Forge fire the event anyway was the other
+  option. It would also restore injectors nobody knows about, but the bytecode audit found only three, so data
+  rules cover it without a Java change.
+- **Bans live in script, next to the config check.** The mod's own switch is the real removal; the ban is the
+  alarm. JSON patterns can't hold a config check, so the old `@pneumaticcraft` / coin patterns moved to `07_rules.js`.
+  The Python generator and census don't read `07_rules.js`, so the census's "tuned" column doesn't show script rules.
+- **The index comes from files, not the game.** Table ids come from the offline index (see the KubeJS weaknesses).
+  Hence "re-run the generator after mod changes". What the rules add is written back
+  (`loot_runtime_additions.json`) so the next generation isn't fooled by it.
 
-### 4.2 Known gaps and their fixes (none applied yet)
+### 4.2 Known gaps and their fixes
 
-| # | Gap | Effect | Proposed fix |
-|---|---|---|---|
-| 1 | Index predates SimplyHouses / the_dirty_stuff | pre-roll can't touch 30 tables; items missing from the catalog | re-run `gen_loot_config.py` (after fix 2) |
-| 2 | Scope misses 39 container tables (129 containers) | no exact reweighting there, not in the catalog | seed the generator's scope with every table a template container names (reuse `audit_loot_containers.scan`, as the census does) |
-| 3 | Entries injected into existing pools unseen | Quark / Buzzier Bees / NHA items missing from the catalog | have the generator diff each pool's entries against `/dumploot`, like it already does for pool counts, and list those items as post-roll-only |
-| 4 | goldenfood blocks village injections | no Botania / Chalk loot in vanilla village chests | pick one: accept it; re-add the lost loot with LootJS in `30_redistribute.js`; or drop goldenfood's overrides (it's all-or-nothing per table) |
-| 5 | 12 containers name missing tables | always empty | small `kubejs/data` tables pointing at a sibling table |
-| 6 | Lightman coins spawned then stripped | works, but two systems fight | set `[loot.chests] enabled = false` and keep or drop the regex |
-| 7 | Root rule drops borrowed vanilla tables | `where` view only | root = no parent, or placed by a template |
-| 8 | Stale exports, legacy dump, no saved harness | clutter; runtime changes can't be re-checked offline | skip stale files by mtime in the generator; archive `dump_loot_tables.sh` / `loot_table_dump/`; save a `tools/loot_tuning_sim.js` |
+| # | Gap | Status |
+|---|---|---|
+| 1 | Index predated SimplyHouses / the_dirty_stuff | FIXED 2026-09-27 (regenerated). Re-run the generator after every mod change |
+| 2 | Scope missed 39 container tables (129 containers: Terralith houses, Missing Villages sets, Monobank vaults, IE engineer's house, Nullscape nests) | FIXED 2026-09-27: every table a template names seeds the scope (376 tables, census agrees) |
+| 3 | Entries injected into existing pools weren't cataloged | FIXED 2026-09-27: diffed per pool against `/dumploot`, in `where`, flagged `post_roll_only` (10 tables: Quark, Buzzier Bees, NHA...) |
+| 4 | goldenfood blocked village injections | FIXED 2026-09-27: vanilla pools back, Chalk/Botania/CC restored, its book folded into golden food (3.8) |
+| 5 | 12 containers named missing tables | FIXED 2026-09-27: aliases (3.8) |
+| 6 | Lightman coins spawned then stripped | FIXED 2026-09-27: `[loot.chests] enabled=false`, regex kept as a ban |
+| 7 | Root rule dropped borrowed vanilla tables | FIXED 2026-09-27: root = no parent, or placed by a template |
+| 8 | Stale exports, legacy dump | Stale exports: the generator skips them (FIXED). Open: `dump_loot_tables.sh` / `loot_table_dump/` (40 MB) are superseded; delete when you're happy (not done: it's your call) |
 
 ### 4.3 Other limits
 
 - A post-roll removal leaves an empty slot. Only the pre-roll path refills from the pool.
 - Pre-roll exactness assumes the JSON pool is the whole pool. If a mod later slips an entry into the same pool
   (Quark's tome into `simple_dungeon`), the tuned share is slightly off.
+- A table-scoped rule (`tables`) is matched against the table that holds the entry. For an entry in a sub-table,
+  include the sub-table in the filter (e.g. `/village/` already matches FD's `fd_village_*`).
 - A tuned item that is only reachable from a `reach: "*"` table is never thinned post-roll.
 - Mob drops, block drops, fishing and bartering are out of scope, even for the same item.
+- Packing, companions and boosts only act where the item is a direct JSON entry in an indexed table.
+- The catalog's `where` is the view before any rule: it still shows goldenfood's copies and no crates or books.
 - Worlds: a `/reload` reaches only containers nobody has opened. Lootr containers roll per player at first open.
 
 ## 5. File map
@@ -438,32 +607,45 @@ too.
   [loot_index.json](../kubejs/server_scripts/loot/loot_index.json) (generated),
   [loot_census.md](../kubejs/server_scripts/loot/loot_census.md) (generated),
   [README.md](../kubejs/server_scripts/loot/README.md)
-- Runtime: [05_tuning.js](../kubejs/server_scripts/loot/05_tuning.js), [00_lib.js](../kubejs/server_scripts/loot/00_lib.js),
+- Runtime: [05_tuning.js](../kubejs/server_scripts/loot/05_tuning.js), [07_rules.js](../kubejs/server_scripts/loot/07_rules.js),
+  [95_tag_capture.js](../kubejs/server_scripts/loot/95_tag_capture.js), [loottags.js](../kubejs/server_scripts/tags/loottags.js),
+  [00_lib.js](../kubejs/server_scripts/loot/00_lib.js),
+  [06_dead_maps.js](../kubejs/server_scripts/loot/06_dead_maps.js),
   [10_removals.js](../kubejs/server_scripts/loot/10_removals.js), [20_frequency.js](../kubejs/server_scripts/loot/20_frequency.js),
   [30_redistribute.js](../kubejs/server_scripts/loot/30_redistribute.js), [40_targeted.js](../kubejs/server_scripts/loot/40_targeted.js),
   [99_debug.js](../kubejs/server_scripts/loot/99_debug.js), [_lib/loot_dump.js](../kubejs/server_scripts/_lib/loot_dump.js) (`/dumploot`)
 - Tools: [gen_loot_config.py](../tools/gen_loot_config.py), [loot_census.py](../tools/loot_census.py),
+  [loot_tuning_sim.js](../tools/loot_tuning_sim.js),
   [audit_loot_containers.py](../tools/audit_loot_containers.py)
 - Pack datapack overrides: [kubejs/data/lightmanscurrency/loot_tables/](../kubejs/data/lightmanscurrency/loot_tables/),
   [felsic_block.json](../kubejs/data/felsic_gear/loot_tables/blocks/felsic_block.json)
 - Neighbours: [loot_container_swaps.json](../kubejs/generation_scripts/worldgen/loot_container_swaps.json),
   [loot_container_audit.md](../kubejs/generation_scripts/worldgen/loot_container_audit.md),
   [lootr-common.toml](../config/lootr-common.toml)
-- Exports: `kubejs/exported/loot_tables/` (7 stale files: colony4cc, distantfriends, domum_ornamentum,
-  minecolonies, multipiston, refinedcooking, refinedstorage)
+- Mod configs: [pneumaticcraft-common.toml](../config/pneumaticcraft-common.toml),
+  [lightmanscurrency-common.lcconfig](../config/lightmanscurrency-common.lcconfig) (copies in `configs_edited/root_config/`)
+- Exports: `kubejs/exported/loot_tables/` (8 stale files the generator skips: colony4cc, distantfriends,
+  domum_ornamentum, minecolonies, multipiston, refinedcooking, refinedstorage, tobacconistmod),
+  `kubejs/exported/loot_runtime_additions.json` (written every reload), `tools/.cache/template_loot.json` (scan cache)
 - Legacy, superseded: [dump_loot_tables.sh](../dump_loot_tables.sh), `loot_table_dump/`
 
 ## 6. Offline checks
 
-- `python3 tools/gen_loot_config.py` prints scope / GLM / item counts. Today's files report 301 tables and 236
-  roots. A re-run would add SimplyHouses and the_dirty_stuff.
+- In game, `/cegen run loot dumps` runs `/dumploot` + `/dumptags item`, then `gen_loot_config.py`, the audit and the
+  census, and says in chat which files changed (patcherMod `/cegen`, list in `tools/generators.json`). `/cegen run
+  loot_config` alone is about 2 s. Full output lands in `logs/cegen/<id>.log`.
+- `python3 tools/gen_loot_config.py` prints scope / GLM / item counts. On 2026-09-27 (evening): `scope: 376 tables
+  (309 roots, 237 placed by templates, 2 code-rolled orphans, 19 with code-added pools, 10 with code-injected
+  entries)`, 615 items (55 post-roll only), 12 dead template references.
 - `python3 tools/loot_census.py`: totals, index drift ("chest tables missing from loot_index.json"),
   out-of-scope tables, dead references. It should agree with section 2 until the next mod change.
-- Replaying the three live rules against `loot_index.json` gives 7 tables, 36 PneumaticCraft entries removed and
-  7 pools reweighted, the same as the 12:00 log line. After any `/dumploot`, compare a tuned table in the export
-  with its jar copy to see the rewritten weights (LT-06). The node harness that tested all 303 tables on 2026-09-25
-  wasn't kept, so a `tools/loot_tuning_sim.js` (like `structure_tuning_sim.js`) is the missing piece for checking
-  runtime changes offline.
+- `node tools/loot_tuning_sim.js [table ids]` (about 5 s): runs the real runtime + rules offline (3.8). On
+  2026-09-27 (evening) it gives `4 rules -> rewrote 204 tables (36 entries removed, 59 pools reweighted, 0 via
+  conditions, 58 boosted entries; packed 99 loose entries into 146 crate entries; 51 companions, 114 items + 0 pools
+  added, 8 injections restored, 16 reverted to vanilla, 12 aliases)` and "all checks passed". Earlier the same day a
+  scratch variant that flipped the PNC switch on and planted a coin and a PNC item in `simple_dungeon` raised all
+  three expected banners. After any `/dumploot`, compare a tuned
+  table in the export with its jar copy to see the rewritten weights (LT-06, LT-16).
 - `grep "\[loot-tuning\]" logs/kubejs/server.log` after any launch or `/reload`.
 
 ## 7. In-game test suite
@@ -474,20 +656,24 @@ Revert every temporary edit and `/reload` afterwards.
 - [x] **LT-01 Pre-roll runs:** launch or `/reload` -> `logs/kubejs/server.log` has
   `[loot-tuning] 3 rules -> rewrote 7 tables (36 entries removed, 7 pools reweighted, 0 via conditions)`.
   PASSED 2026-09-27 (12:00:42 log).
-- [ ] **LT-02 Status command:** `/loottuning` -> "active, slack=redistribute, 3 rules", "pre-roll: 7 tables
-  rewritten, 36 entries removed, 7 pools reweighted, 0 via conditions", and a post-roll line.
+- [ ] **LT-02 Status command:** `/loottuning` -> "active, slack=redistribute, 4 rules (2 bans)", a pre-roll line
+  with 204 tables rewritten and 58 boosted, "packed: 16 pairs, rate 0.1, 1 boosts -> 99 loose entries split into 146
+  crate entries, 6 skipped", "added: 51 companions, 114 items, 0 pools, 8 restored injections, 16 tables reverted to
+  vanilla, 12 aliases", a post-roll line ending "0 tuned items are post-roll only", a bans line, the two tag rules
+  (chalk 17, golden food 25), and no ALARM lines.
 - [ ] **LT-03 PNC removed pre-roll:** `/loot give @s loot pneumaticcraft:chests/mechanic_house` 5x -> nothing at
   all (the table was 100% PNC).
 - [ ] **LT-04 PNC GLM path:** `/loot give @s loot minecraft:chests/simple_dungeon` 20x -> no PneumaticCraft items;
   vanilla dungeon loot, Quark tomes and runes and Botania items still show up.
-- [ ] **LT-05 Lightman coins stripped post-roll:** during LT-04, no coins at all (simple_dungeon is in Lightman's T3
-  list). `/loottuning` post-roll "stacks removed" is above 0.
+- [ ] **LT-05 Lightman coins gone at the source:** during LT-04, no coins at all (simple_dungeon is in Lightman's T3
+  list), no red `[loot]` chat line, and `/loottuning` "bans: ... 0 stacks stripped post-roll" (with
+  `[loot.chests] enabled=false` the coins never roll; a nonzero count means the switch isn't working).
 - [x] **LT-06 Chalk halved:** `/dumploot`, then compare the chalk tables in `kubejs/exported/loot_tables/chalk.json`
   with the jar -> chalk's share of each pool is halved. PASSED 2026-09-27 (12:08 export): `village_chalk_loot` empty
   70 -> 175 with chalk weights kept (33% -> 17%), `dungeon_chalk_loot` chalk weights halved with empty 60 -> 75,
   `desert_pyramid_chalk_loot` empty 70 -> 181; the 4 PNC tables are a single `minecraft:empty` entry. The only
   untuned entry in these pools is their own `empty`, so `redistribute` fed it.
-- [ ] **LT-07 Item remove:** add `"remove": true` to `minecraft:bread`, `/reload` -> log shows 4 rules and more
+- [ ] **LT-07 Item remove:** add `"remove": true` to `minecraft:bread`, `/reload` -> log shows 5 rules and more
   tables; `/loot give @s loot minecraft:chests/village/village_plains_house` 20x -> never bread, chests not emptier.
 - [ ] **LT-08 Pattern with except on injected items:** add `"@quark": {"remove": true, "except": ["quark:ancient_tome"]}`,
   `/reload` -> 30 rolls of `minecraft:chests/simple_dungeon` show ancient tomes but never blank runes.
@@ -495,15 +681,66 @@ Revert every temporary edit and `/reload` afterwards.
   `minecraft.json`, `chests/village/village_plains_house` has no new `minecraft:empty` entry and the other items'
   weights grew. Then `"slack": "empty"`, `/reload`, `/dumploot` -> `/loottuning` says slack=empty, the table gained a
   `minecraft:empty` entry, and the other items' shares are unchanged.
-- [ ] **LT-10 Kill switch:** `"enabled": false`, `/reload` -> `/loottuning` says inactive; LT-03 gives PNC items again.
-- [ ] **LT-11 Targeted script:** uncomment the simple_dungeon rotten flesh example in `10_removals.js` and
-  `enableLogging()` in `99_debug.js`, `/reload` -> 20 rolls without rotten flesh; `logs/latest.log` has `[LootJS]`
-  lines naming `CE/loot/removals/simple_dungeon_flesh`.
+- [ ] **LT-10 Kill switch:** `"enabled": false`, `/reload` -> `/loottuning` says inactive; LT-03 gives PNC items again,
+  and village chests are goldenfood's copies again (no crates, no restored Chalk pool).
+- [ ] **LT-11 LootJS-only script:** uncomment the village rotten flesh example in `10_removals.js` and
+  `enableLogging()` in `99_debug.js`, `/reload`, open never-opened chests inside a village -> no rotten flesh;
+  `logs/latest.log` has `[LootJS]` lines naming `CE/loot/removals/village_flesh`. (`/loot give` has no position, so
+  structure-scoped rules need a real chest.)
 - [ ] **LT-12 Lootr timing:** with LT-07's rule active, open a never-opened village chest in fresh chunks -> no bread.
   A chest you opened before the `/reload` keeps its old contents.
-- [ ] **LT-13 Out-of-scope table still tuned post-roll:** add `"immersiveengineering:coal_coke": {"remove": true}`,
-  `/reload` -> 20 rolls of `immersiveengineering:chests/engineers_house` never give coal coke. After fix 2 this
-  becomes a pre-roll edit.
+- [ ] **LT-13 Formerly out-of-scope table, now pre-roll:** add `"immersiveengineering:coal_coke": {"remove": true}`,
+  `/reload` -> 20 rolls of `immersiveengineering:chests/engineers_house` never give coal coke and never leave a gap;
+  `/dumploot` shows no coal coke entry in that table (it's in scope since finding 2's fix).
+
+- [ ] **LT-14 Framework loads:** launch or `/reload` -> `logs/kubejs/server.log` has
+  `[loot-tuning] 4 rules -> rewrote 204 tables (36 entries removed, 59 pools reweighted, 0 via conditions, 58 boosted
+  entries; packed 99 loose entries into 146 crate entries; 51 companions, 114 items + 0 pools added, 8 injections
+  restored, 16 reverted to vanilla, 12 aliases)` (what `node tools/loot_tuning_sim.js` prints), no `!!!` banner, no
+  "tag rules resolved from the registry" warning, and `kubejs/exported/loot_runtime_additions.json` is fresh.
+- [ ] **LT-15 Chalk tag:** `/kubejs hand` on a chalk box and on red chalk -> both list `creativeengineering:loot/chalk`.
+  `/dumploot`, then `chalk.json` -> `village_chalk_loot` etc. show the halved chalk weights, same as LT-06.
+- [ ] **LT-16 Packed food split, in the export:** `/dumploot`, then in `minecraft.json` ->
+  `chests/village/village_plains_house` has potato 353, potato crate 101, potato crate x2 51, apple 353, apple crate
+  152 (crates are 30% of each loose item's old share; bread, emerald and the rest keep their odds);
+  `chests/pillager_outpost` pool 1 reads wheat 14, potato 9, potato crate 1, carrot 9, carrot crate 1.
+- [ ] **LT-17 Packed food in chests:** `/loot give @s loot minecraft:chests/village/village_plains_house` 20x -> about
+  3 crate results per 7 loose-potato stacks (some of them 2 crates), and potatoes overall about as common as
+  before counting crates. `/loot give @s loot minecraft:chests/pillager_outpost` 20x -> about one crate per 9 potato /
+  carrot stacks (rate 0.1).
+- [ ] **LT-18 Config switch alarm:** set `enable_dungeon_loot = true` in `config/pneumaticcraft-common.toml`, wait a
+  few seconds (Forge reloads the file), `/reload` -> red `[loot] BANNED loot is switched ON again: PneumaticCraft` in
+  chat and a `!!!` banner in `logs/kubejs/server.log`; relog -> the op login notice repeats it. Revert, `/reload`,
+  no message.
+- [ ] **LT-19 Post-roll alarm:** `/loot give @s loot lightmanscurrency:loot_addons/chest/tier1` -> nothing given, red
+  `[loot] BANNED item lightmanscurrency:coin_copper rolled in chest loot lightmanscurrency:loot_addons/chest/tier1`
+  (that table is the coin source, so here the alarm is expected; it proves the post-roll path).
+- [ ] **LT-20 Tuning a packed item:** add `"farmersdelight:potato_crate": {"remove": true}` to `loot_config.json`
+  items, `/reload` -> LT-14's line shows 5 rules; `/dumploot` -> no potato crates anywhere, and the village plains
+  house potato entry is back to its full weight (a removed packed item switches its split off). Revert.
+- [ ] **LT-21 goldenfood reverted, injections back:** `/dumploot`, then in `minecraft.json` -> none of the 16
+  `chests/village/*` tables has goldenfood's `{Enchantments:[{id:"goldenfood:gf_enchantment"...` book;
+  `village_plains_house` has a second pool rolling `chalk:chests/village_chalk_loot`, `village_temple` one rolling
+  `botania:inject/village_chest`, `village_cartographer` both Chalk's and the `computercraft_treasure` pool.
+  `/loot give @s loot minecraft:chests/village/village_mason` 20x -> some chalk.
+- [ ] **LT-22 Golden food doubled:** `/dumploot` -> in `chests/simple_dungeon` pool 0, golden apple is about 22% of the
+  weight (was 11.6%; the book added beside it takes a little); `/loot give @s loot minecraft:chests/simple_dungeon` 20x -> noticeably more golden apples.
+  The igloo still gives exactly one golden apple.
+- [ ] **LT-23 Golden Food book beside golden food:** `/dumploot` -> `chests/simple_dungeon` pool 0 has an
+  `enchanted_book` with `StoredEnchantments` `goldenfood:gf_enchantment` at about half the golden apple's old weight.
+  Take one from `/loot give` rolls, put it in an anvil with a golden apple -> an enchanted golden apple.
+- [ ] **LT-24 Book in village and camp chests:** `/dumploot` -> `chests/pillager_outpost` pool 3 (not the crossbow
+  pool) and each `chests/village/*` table's main pool have the book at about 1% of the weight; Wares packages,
+  `fd_*` tables and Monobank vaults don't.
+- [ ] **LT-25 Aliases fill empty containers:** `/loot give @s loot terralith:village/desert/fisherman` -> fisher loot;
+  `/loot give @s loot terralith:underground/giant_bee_hive` -> honeycomb / honey. In a fresh Terralith desert village,
+  the fisherman house chest isn't empty.
+- [ ] **LT-26 Table-scoped boost:** in `07_rules.js` add `L.frequency(i.emerald, 3, { tables: /village/ })`,
+  `/reload`, `/dumploot` -> emerald's share triples in village tables and is unchanged in non-village tables that
+  have it (e.g. `chests/jungle_temple`). Revert.
+- [ ] **LT-27 Post-roll-only listing:** add `"quark:ancient_tome": {"remove": true}` to `loot_config.json`, `/reload`
+  -> the log has "1 tuned item(s) can only be tuned after the roll ...: quark:ancient_tome" and `/loottuning` says
+  "1 tuned items are post-roll only"; 20 rolls of `minecraft:chests/stronghold_library` never give a tome. Revert.
 
 ## 8. History
 
@@ -519,3 +756,32 @@ Revert every temporary edit and `/reload` afterwards.
   `tools/loot_census.py` added, this writeup written. Found the 8 items in 4.2. Confirmed in bytecode that LootJS
   types rolls by caller, that Forge skips `LootTableLoadEvent` for overridden vanilla tables, and that KubeJS's
   pre-roll edit doesn't trigger that.
+- **2026-09-27:** `/cegen` (patcherMod `devtools/GeneratorRunner`) runs the loot generators from in game or at
+  startup (`[debug.generators] runAtStartup`). BUILT, not in mods/ yet. Its first scratch run showed `loot_config.json`
+  and `loot_index.json` are behind SimplyHouses.
+- **2026-09-27:** `06_dead_maps.js` strips Monobank's ruined-portal explorer map from its 5 vault tables (ruined
+  portals are removed, and the map search hung the dedicated server). Tested in node on the real tables; test ST-16 in
+  structure_tuning.md.
+- **2026-09-27 (evening):** script rules. `05_tuning.js` got a `global.lootTuning` API (`frequency`, `remove`, `ban`,
+  `pack`, `packRate`, `packBoost`, `packExclude`), `#tag` targets (captured from the reload's tag event by
+  `95_tag_capture.js`), loud ban alarms and the packed-food pre-roll pass. `07_rules.js` holds the rules: bans on
+  PneumaticCraft and Lightman's coins (their JSON patterns moved here), the `#creativeengineering:loot/chalk` meta tag
+  at 0.5 (replaces `@chalk`), 16 packed-food pairs at rate 0.1 with villages x3. PneumaticCraft `enable_dungeon_loot`
+  and Lightman `[loot.chests] enabled` set to false (finding 6). Catalog regenerated (finding 1; 337 tables, 584 items;
+  HopoBetterUnderwaterRuins is new). `tools/loot_tuning_sim.js` added; it caught a packed-weight indexing bug before
+  deploy. Tests LT-14 to LT-20.
+- **2026-09-27 (late):** framework finished; pre-roll is the default for everything a table can express.
+  `05_tuning.js` gained table-scoped rules (`tables`), boosts (`frequency > 1`), `add`, `companion`, `addPool`,
+  `restoreInjection`, `useVanilla` and `alias`. It also lists tuned post-roll-only items and writes
+  `loot_runtime_additions.json`. Packed food became a split of the loose entry (user's call: low roll loose, high
+  roll crates, highest roll most crates; nothing else in the pool moves). Generator: template-placed tables seed the
+  scope and count as roots (findings 2, 7), code-injected entries are diffed into the catalog as `post_roll_only`
+  (finding 3), overridden tables carry vanilla's copy, stale exports are skipped, and the template scan is cached.
+  Finding 4: a bytecode audit of every jar with a `LootTableLoadEvent` handler found Chalk, Botania and CC:Tweaked
+  as the only village injectors lost to goldenfood. The 16 tables went back to vanilla with those 3 pools restored;
+  golden food is x2 (`#creativeengineering:loot/golden_food`), and the Golden Food book sits beside it and at 1% in
+  114 village/camp/outpost tables. Finding 5: 12 aliases. The 10-40 LootJS scripts are rescoped to LootJS-only edits.
+  Census seeds its scope the same way (0 tables outside). The sim caught two problems before deploy: the book landing
+  in the outpost's crossbow pool (`add` now picks the main pool) and a companion diluting the igloo's guaranteed
+  golden apple (anchor-only pools skipped). Section 4.1 now spells out KubeJS vs LootJS strengths and weaknesses.
+  Tests LT-21 to LT-27; LT-02/10/11/13/14/16/17/20 updated.
