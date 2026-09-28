@@ -12,6 +12,9 @@
 // the check runs on ServerEvents.loaded instead, against the live biome registry + final tags:
 // every entry is reported as missing (biome not registered, e.g. a typo) or not applied.
 //
+// CEConfig [worldgen.systems] biomeMerges = false skips every merge (the mods' own tags only); read when the
+// scripts load, so /reload after changing it.
+//
 // Wrapped in an IIFE: all server scripts share one top-level scope.
 
 (function () {
@@ -23,7 +26,19 @@
 	var $TagKey = Java.loadClass('net.minecraft.tags.TagKey')
 	var $ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')
 
+	function mergesEnabled() {
+		try {
+			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig').biomeMergesEnabled() == true
+		} catch (err) {
+			return true   // older jar: no switch
+		}
+	}
+
 	function readMerges() {
+		if (!mergesEnabled()) {
+			console.info(TAG + 'off in CEConfig [worldgen.systems] biomeMerges: structures spawn in their mods\' own biome tags')
+			return null
+		}
 		try {
 			return JSON.parse(String(JsonIO.readString(MERGES_PATH))).tags
 		} catch (err) {

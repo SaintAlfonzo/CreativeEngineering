@@ -10,10 +10,12 @@
 //   .modifyLoot(filter, stack=>stack) .pool(b=>) .group(b=>) .apply(ctx=>) .logName(str)
 //   + conditions: .randomChance(f) .anyStructure([...],bool) .anyBiome(...) .anyDimension(...)
 //
-// Global "remove X from every chest" / "X shows up half as often" is NOT done here: that's the
-// config-driven tuning system (05_tuning.js + loot_config.json), which rewrites table weights
-// before the roll. LootJS 2.x only ever sees loot AFTER the roll, so it can't change a weight.
-// This lib is for the targeted / additive edits in 10-40. See loot/README.md.
+// Anything a loot table can express (remove, reweight, boost, add an entry or a pool, per table or
+// everywhere) is NOT done here: that's the pre-roll framework (05_tuning.js, calls in 07_rules.js,
+// knobs in loot_config.json), which rewrites the table JSON before the roll. LootJS 2.x only ever
+// sees loot AFTER the roll, so it can't change a weight and a removal leaves an empty slot.
+// This lib is for what only LootJS can do in 10-40: edits scoped by where the chest is (structure,
+// biome, dimension) or who opened it, stack-size caps, per-roll code. See loot/README.md.
 
 global.LOOT = {
 

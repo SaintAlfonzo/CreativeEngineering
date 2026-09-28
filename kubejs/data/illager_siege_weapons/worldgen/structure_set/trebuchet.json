@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "illager_siege_weapons:trebuchet",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 50,
+    "separation": 35,
+    "salt": 489827201
+  }
+}

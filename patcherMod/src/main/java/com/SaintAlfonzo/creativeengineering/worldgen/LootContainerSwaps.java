@@ -93,7 +93,7 @@ public final class LootContainerSwaps {
 	/** The processed block list with loot containers swapped, or null when nothing changed. */
 	public static List<StructureBlockInfo> apply(List<StructureBlockInfo> infos) {
 		Map<Block, Block> map = swaps;
-		if (map.isEmpty() || infos == null) return null;
+		if (map.isEmpty() || infos == null || !WorldgenConfig.lootContainerSwapsEnabled()) return null;
 		List<StructureBlockInfo> out = null;
 		for (int i = 0; i < infos.size(); i++) {
 			StructureBlockInfo info = infos.get(i);

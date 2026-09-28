@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "ancient_enchantment_temple:temple",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 30,
+    "salt": 567394136
+  }
+}

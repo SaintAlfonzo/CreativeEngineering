@@ -1024,17 +1024,177 @@
 		copyCamo = true
 
 	#A 'Run Speed' line in WTHIT's look-at overlay: the speed you'd walk at on that block, by
-	#the same rules as movement (camo and sticky facing included). Client-side only; it reads
-	#BlockRunner's own speed table, no server traffic.
+	#the same rules as movement (camo and sticky facing included). Blocks you pass through
+	#(plants) get no line unless they slow you from inside (cobwebs, berry bushes, leaf piles);
+	#thin layers (carpet, 1-2 snow layers) show the block beneath, which is the one you walk on.
+	#Client-side only; it reads BlockRunner's own speed table, no server traffic.
 	[surface.wthit]
 		#Master on/off switch for the line.
 		enabled = true
-		#true: no line on blocks at normal speed (1.0), which is most blocks.
+		#true: no line on any block at normal speed (1.0), tiered or not.
 		hideNormal = true
-		#true: name the surface tier after the value, e.g. 'Run Speed: 1.50× (Asphalt)', and say
-		#'from camo' on frames and 'sticky face not up' on sideways sticky pistons.
+		#true: name the surface tier after the value, e.g. 'Run Speed: 1.50× (Asphalt)', and add
+		#notes: 'from camo', 'sticky face not up', 'block below' (thin layers), 'own speed'
+		#(soul sand), 'walking through' (cobwebs and other blocks that slow you from inside).
 		showTier = true
 		#MULTIPLIER: 1.50× / 0.88×. PERCENT: +50% / -12%.
 		#Allowed Values: MULTIPLIER, PERCENT
 		format = "MULTIPLIER"
+		#true: no line on blocks nothing gives a speed to: no surface tier, no blockrunner.json
+		#entry, no speed of their own, and they don't slow you from inside. Those are always 1.0,
+		#so this only matters with hideNormal = false: tiered 1.0 blocks (Glass, Dirt) still show.
+		hideUntyped = true
+
+#Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).
+[debug]
+
+	#The pack's generator scripts (tools/*.py: structure/biome/loot configs, effect descriptions,
+	#pack manifest, reports) listed in tools/generators.json. /cegen run [target] runs them in game;
+	#these knobs also let them run by themselves every time the game starts.
+	[debug.generators]
+		#Debug mode. When true, the generators run in the background as the game starts (from common
+		#setup), and loading waits for them before finishing, so the first world load already reads
+		#fresh files. Results go to latest.log, logs/cegen/<id>.log and /cegen status. Off by default.
+		runAtStartup = false
+		#What the startup run and a bare /cegen run execute: 'all', a group or one generator id
+		#from tools/generators.json.
+		target = "core"
+		#Python interpreter to run the scripts with (a name on PATH or a full path).
+		python = "python3"
+		#A script still running after this long is killed and reported as TIMEOUT.
+		#Range: 10 ~ 3600
+		timeoutSeconds = 300
+		#How long the end of loading waits for the startup run. The core generators take about 10 s and
+		#run alongside the rest of loading, so this rarely waits at all. 0 = never wait (files may then
+		#change after the first world has loaded).
+		#Range: 0 ~ 3600
+		startupWaitSeconds = 120
+
+#World generation: switches per system, a debug rate multiplier, and the constants of the pack's
+#worldgen code. The per-structure, per-piece and per-biome tables are the JSON files in
+#kubejs/generation_scripts/worldgen/ (see feature_writeup/structure_tuning.md). Structure and
+#biome settings apply when a world loads (rejoin), and only to chunks generated afterwards.
+[worldgen]
+
+	#Switch a system off to see the mods' own behaviour. Off never deletes a config file.
+	[worldgen.systems]
+		#structure_groups.json + group/* tags (kubejs worldgen/structure_overrides.js). Off: every structure
+		#set as its mod ships it (debug.structureDensity still applies). Rejoin to apply.
+		structureGroups = true
+		#The per-structure frequency roll (patcherMod StructureFrequencies). Off: every group member spawns
+		#whenever it wins its slot, i.e. at its weight share only. Rejoin to apply.
+		structureFrequencies = true
+		#pool_config.json / pool_tags.json village-house weights (PoolTuner). Off: every pool at its first-seen weights. Rejoin.
+		poolTuning = true
+		#loot_container_swaps.json: modded loot containers placed by structures become vanilla ones for Lootr.
+		lootContainerSwaps = true
+		#biome_config.json multipliers / replacements (BiomeLayoutTuner). Only affects worlds created afterwards.
+		biomeLayout = true
+		#biome_merges.json: extra biomes in structure biome tags (kubejs worldgen/biome_merges.js). /reload or rejoin.
+		biomeMerges = true
+		#Explorer maps and /locate skip structure sets at frequency 0 (without it they can hang the server).
+		deadPlacementFilter = true
+		#Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).
+		groundMatch = true
+
+	#For testing only; leave at the defaults for play.
+	[worldgen.debug]
+		#Multiplies how often EVERY structure spawns (natural generation, every set, grouped or not). 1 = off.
+		#Below 1: each set's frequency is multiplied (exact, spacing and gaps unchanged). Above 1: grids shrink
+		#by sqrt(x) and the frequency absorbs the rounding, so the rate is exact until a grid reaches its
+		#minimum (spacing = separation + 1); separations shrink with the grid. structure_tag_report.md shows
+		#the result. Rejoin to apply; only new chunks change.
+		#Range: 0.01 ~ 100.0
+		structureDensity = 1.0
+
+	[worldgen.pools]
+		#Fractional piece weights are made whole by scaling the pool's list by up to this factor. Jigsaw
+		#tries every copy of a piece in a pool, so a bigger factor is more exact but slower to fail.
+		#Range: 1 ~ 100
+		maxFractionScale = 10
+
+	[worldgen.biome_solver]
+		#Biomes considered per climate sample (the closest ones). More = slower, rarely different.
+		#Range: 2 ~ 256
+		maxCandidates = 24
+		#Penalty-adjustment rounds. More = closer to the target shares, slower world creation.
+		#Range: 1 ~ 200
+		rounds = 20
+
+	#Structure bases that don't match the ground. As a structure generates, grass/dirt in the bottom
+	#layers of its templates is compared with the natural ground sampled around that chunk; where the
+	#ground isn't grass/dirt (volcanic peaks, deserts, snowy slopes, badlands...) the base becomes that
+	#ground instead. Blocks: tags creativeengineering:ground_match/* (kubejs blocktags.js). Exempt a
+	#structure with the structure tag creativeengineering:ground_match/exempt. New chunks only.
+	[worldgen.ground_match]
+		#TERRAIN: a base block whose spot already holds natural ground is skipped, so the terrain stays;
+		#  the rest (base above the ground) is filled with blocks sampled from the local ground.
+		#PALETTE: every base block becomes a sampled ground block.
+		#REMOVE: base blocks are never placed (whatever is there stays, air included).
+		#Allowed Values: TERRAIN, PALETTE, REMOVE
+		mode = "TERRAIN"
+		#How many template layers from the bottom count as the base. Family blocks higher up (roof
+		#gardens, planters) are left alone.
+		#Range: 1 ~ 16
+		baseLayers = 3
+		#A family counts as native when at least this share of the sampled ground tops belong to it;
+		#native chunks are left exactly as the template has them.
+		#Range: 0.0 ~ 1.0
+		nativeShare = 0.35
+		#Fewest natural ground columns needed to decide (columns under structures are skipped). With
+		#fewer, even after also sampling the 8 neighbouring chunks, the base is left as it is.
+		#Range: 1 ~ 1024
+		minSamples = 16
+		#Block tags, one per base family. A family block in a base is swapped where its family isn't
+		#native. Add a tag here (and fill it in blocktags.js) to match another kind of base, e.g. sand.
+		families = ["creativeengineering:ground_match/grass"]
+		#Log each changed template (chunk, family share, palettes). For testing.
+		log = false
+
+		#How the natural ground is sampled.
+		[worldgen.ground_match.sampling]
+			#Every Nth column of the chunk being placed is sampled (2 = 64 columns).
+			#Range: 1 ~ 16
+			centerStride = 2
+			#Every Nth column of each of the 8 neighbouring chunks (4 = 16 each).
+			#Range: 1 ~ 16
+			neighbourStride = 4
+			#Blocks sampled under each column's top block (the under-block palette).
+			#Range: 1 ~ 16
+			subDepth = 3
+			#How far down past leaves, logs and plants a column is searched for its ground.
+			#Range: 1 ~ 128
+			maxDig = 24
+			#Tallest plant (in blocks) removed from a swapped block.
+			#Range: 1 ~ 16
+			maxPlantHeight = 4
+
+	#/ceplace structures <filter> and /ceplace templates <glob>: place every match in rows (one row per
+	#type tag, group, mod or template folder), starting at your position and going +X, rows stacked +Z.
+	#Meant for a flat world with Generate Structures off. /ceplace preview ... lists without placing.
+	[worldgen.mass_place]
+		#Blocks between two structures in a row.
+		#Range: 0 ~ 512
+		gap = 12
+		#Blocks between rows (the aisle the labels stand in).
+		#Range: 4 ~ 512
+		rowGap = 16
+		#Put a sign with the id in front of each structure and at the start of each row.
+		labels = true
+		#KEEP: each structure at the height it generated at here. GROUND: its bottom layer at ground level.
+		#AUTO: GROUND only for structures that generated more than autoAlignBand blocks above or below the
+		#ground (underground and sky structures); surface ones keep their height.
+		#Allowed Values: AUTO, KEEP, GROUND
+		verticalAlign = "AUTO"
+		#AUTO's tolerance, in blocks.
+		#Range: 0 ~ 256
+		autoAlignBand = 8
+		#Refuse a run with more matches than this (preview first, or narrow the filter).
+		#Range: 1 ~ 100000
+		maxItems = 1000
+		#Milliseconds of work per server tick. Each structure is laid out, then its chunks are generated and
+		#built one at a time until the budget is used, so a big village takes several ticks instead of one
+		#long one (a dedicated server kills a tick over 60 s). Higher = faster runs, choppier server.
+		#Range: 5 ~ 1000
+		tickBudgetMs = 40
 

@@ -1,0 +1,1127 @@
+#!/usr/bin/env python3
+"""
+Structure groups: builds, syncs and checks kubejs/generation_scripts/worldgen/structure_groups.json.
+
+THE MODEL
+  A group is ONE structure_set, creativeengineering:group/<name>, holding every structure in the
+  structure tag group/<name> (structure_tags.json). All members share its grid, so no two of them
+  ever start closer than the group's separation, whatever mod they come from. Per member:
+    weight     who wins a grid slot where several members could spawn (vanilla set weight)
+    frequency  chance that the winner really spawns there; otherwise the slot stays EMPTY (it does
+               not fall through to another member), so turning one member down never makes the
+               others more common. Needs patcherMod (worldgen/StructureFrequencies).
+  Where a member is the only one that fits the biome, it takes every slot there x its frequency.
+  Every structure not in a group keeps its own set ("standalone") and is tuned in the same file,
+  with the same per-structure frequency.
+  kubejs/server_scripts/worldgen/structure_overrides.js applies the file at every world load.
+
+MODES
+  python3 tools/gen_structure_groups.py             sync: adds groups, members and standalone sets that
+                                                    are missing from structure_groups.json (a new mod, a
+                                                    new group/* tag), fitted to their mod defaults. Never
+                                                    changes a value that is already there. Then writes the
+                                                    estimates report.
+  python3 tools/gen_structure_groups.py --check     only rewrites structure_group_estimates.md
+  ... --refit GROUP [GROUP ...]                     new grid for those groups, every member refitted to the
+                                                    rate the file gives it now. Spacing and separation are
+                                                    re-derived: set a hand-picked separation again afterwards.
+  ... --migration-report                            also rewrites structure_group_migration.md: the current
+                                                    file against the pre-groups tuning (from the archive)
+  python3 tools/gen_structure_groups.py --migrate   one-time conversion of the pre-2026-09-27 tuning
+                                                    ("current" per set + tag multipliers), see migrate()
+
+THE FIT (new members, and --migrate)
+  For every member and every biome it can spawn in, the target is the density (structures per chunk^2)
+  it had before. In biome b, the group gives member i
+      K * frequency_i * weight_i / (sum of weights of members valid in b),   K = 1 / spacing^2
+  so members that share biomes share slots. Weights and frequencies are solved (least squares on log
+  density, each biome weighted by its real area from biome_config.json) to keep every member as close
+  to its target as possible. The group's spacing comes from the crowding: K covers the combined old
+  density of its most crowded biome (QUANTILE 1.0), so no biome loses structures and the gain is the
+  guaranteed gap. Lower QUANTILE (e.g. 0.9 = the 90% least crowded area) to cap the most crowded
+  biomes at the group rate instead; the estimates report lists what gets capped.
+
+Biome pools come from every jar's biome tags + kubejs/data + biome_merges.json, the same resolution
+as tools/analyze_structure_biome_merges.py.
+"""
+import argparse
+import json
+import math
+import shutil
+import sys
+import zipfile
+import zlib
+from collections import OrderedDict, defaultdict
+from pathlib import Path
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from analyze_structure_biome_merges import VANILLA_JAR, MODS_DIR  # noqa: E402
+from gen_structure_config import VANILLA_TAG_OVERRIDES, loads_lenient  # noqa: E402
+
+INSTANCE = Path(__file__).resolve().parent.parent
+WG = INSTANCE / 'kubejs/generation_scripts/worldgen'
+CONFIG = WG / 'structure_config.json'
+TAGS = WG / 'structure_tags.json'
+GROUPS = WG / 'structure_groups.json'
+MERGES = WG / 'biome_merges.json'
+BIOME_CONFIG = WG / 'biome_config.json'
+ESTIMATES = WG / 'structure_group_estimates.md'
+MIGRATION_REPORT = WG / 'structure_group_migration.md'
+KUBEJS_DATA = INSTANCE / 'kubejs/data'
+ARCHIVE = INSTANCE / 'kubejs/archive/worldgen/pre_groups_2026-09-27'
+
+GROUP_SET_PREFIX = 'creativeengineering:group/'
+QUANTILE = 1.0
+MEDIAN_WEIGHT = 100
+EPS_AREA = 1e-4          # a biome that exists but never showed up in the climate sample
+
+# The groups the pack starts with (2026-09-27). --migrate writes these as group/<name> tags; after
+# that the tags in structure_tags.json are the source of truth and this table is only a record.
+GROUP_SPECS = OrderedDict([
+    ('settlements', {
+        'note': 'Friendly settlements: vanilla and Towns & Towers villages, Terralith fortified villages. Meta structures join later.',
+        'values': ['#type/village', '!towns_and_towers:village_ocean',
+                   '!towns_and_towers:exclusives/village_wandering_trader_camp'],
+    }),
+    ('pillager_settlements', {
+        'note': 'Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpost except the ship (boats).',
+        'values': ['minecraft:pillager_outpost', 'towns_and_towers:pillager_outpost_*',
+                   'towns_and_towers:exclusives/pillager_outpost_*', '!towns_and_towers:pillager_outpost_ocean'],
+        'exclusion': ('settlements', 4),
+    }),
+    ('ruins', {
+        'note': "Surface land ruins: Philip's Ruins and Terralith's glacial hut. Underground ruins stay standalone.",
+        'values': ['#type/ruin', '!#type/underground'],
+    }),
+    ('surface_dungeons', {
+        'note': "Surface dungeons: YUNG's temples and witch huts, the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The vanilla temples YUNG's blocks in code stay out.",
+        'values': ['#dungeon/surface', '!#type/sky', '!minecraft:desert_pyramid', '!minecraft:jungle_pyramid',
+                   '!minecraft:swamp_hut'],
+    }),
+    ('ocean_ruins', {
+        'note': "Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, vanilla shipwrecks, the T&T wreckage.",
+        'values': ['#type/underwater_ruin', '#type/shipwreck'],
+    }),
+    ('ocean_dungeons', {
+        'note': 'Ocean monuments, on the monuments\' own grid (same spacing, spread and salt, so positions match vanilla). Monument meta structures join later.',
+        'values': ['minecraft:monument'],
+        'grid_from': 'minecraft:ocean_monuments',
+    }),
+    ('sky', {
+        'note': "Sky structures: Cloud Storage's hot air balloons and sky temples. Meta structures join later.",
+        'values': ['#type/sky'],
+    }),
+    ('boats', {
+        'note': 'Ships at sea: the Towns & Towers ship village and pillager ship. Meta structures join later.',
+        'values': ['towns_and_towers:village_ocean', 'towns_and_towers:pillager_outpost_ocean'],
+    }),
+    ('remote', {
+        'note': 'Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer\'s Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.',
+        'values': ['towns_and_towers:exclusives/village_wandering_trader_camp', '#type/house', '!#nether',
+                   '!farmers_structures:aethers', '!farmers_structures:undergardens_sea'],
+    }),
+])
+
+
+# ── small helpers ────────────────────────────────────────────────────────────
+
+def read_json(path):
+    return json.loads(path.read_text(), object_pairs_hook=OrderedDict)
+
+
+def write_json(path, obj):
+    path.write_text(json.dumps(obj, indent=2) + '\n')
+
+
+def js_round(x):
+    """JS Math.round (half up), which structure_overrides.js uses."""
+    return math.floor(x + 0.5)
+
+
+def round6(x):
+    return js_round(x * 1e6) / 1e6
+
+
+def spacing_equiv(d):
+    """Density (per chunk^2) -> 'one per N x N chunks'."""
+    return math.sqrt(1 / d) if d > 0 else float('inf')
+
+
+def fmt_sp(d):
+    s = spacing_equiv(d)
+    return '-' if s == float('inf') else f'{s:.0f}'
+
+
+def group_salt(name):
+    return zlib.crc32(('creativeengineering:group/' + name).encode()) & 0x7fffffff
+
+
+# ── structure tags (same syntax + semantics as structure_overrides.js) ───────
+
+def resolve_tags(tag_defs, all_ids):
+    import fnmatch
+    id_set = set(all_ids)
+    members, resolving, errors = {}, set(), []
+
+    def glob_match(pattern):
+        return [i for i in all_ids if fnmatch.fnmatchcase(i, pattern)]
+
+    def resolve(name, frm):
+        if name in members:
+            return members[name]
+        if name not in tag_defs:
+            errors.append(f'{frm}: unknown tag "#{name}"')
+            return set()
+        if name in resolving:
+            errors.append(f'{frm}: tag cycle through "#{name}"')
+            return set()
+        resolving.add(name)
+        inc, exc = set(), set()
+        for raw in tag_defs[name].get('values', []):
+            neg = raw.startswith('!')
+            v = raw[1:] if neg else raw
+            if v.startswith('#'):
+                ids = resolve(v[1:], name)
+            elif '*' in v:
+                ids = set(glob_match(v))
+            elif v in id_set:
+                ids = {v}
+            else:
+                errors.append(f'{name}: unknown structure "{v}"')
+                ids = set()
+            (exc if neg else inc).update(ids)
+        resolving.discard(name)
+        members[name] = inc - exc
+        return members[name]
+
+    for name in tag_defs:
+        resolve(name, name)
+    return members, errors
+
+
+# ── biome pools and areas ────────────────────────────────────────────────────
+
+def load_biome_tags():
+    """Every biome tag from the vanilla jar, every mod jar (lenient: Beautify's have comments),
+    kubejs/data, and biome_merges.json additions."""
+    import re
+    raw = defaultdict(list)
+    jars = ([VANILLA_JAR] if VANILLA_JAR else []) + sorted(MODS_DIR.glob('*.jar'))
+    for jar in jars:
+        try:
+            z = zipfile.ZipFile(jar)
+        except (zipfile.BadZipFile, FileNotFoundError):
+            continue
+        for name in z.namelist():
+            m = re.match(r'^data/([^/]+)/tags/worldgen/biome/(.+)\.json$', name)
+            if not m:
+                continue
+            try:
+                data = loads_lenient(z.read(name).decode('utf-8', 'replace'))
+            except (ValueError, UnicodeDecodeError):
+                continue
+            if isinstance(data, dict):
+                raw[f'{m.group(1)}:{m.group(2)}'].extend(data.get('values', []))
+    for f in KUBEJS_DATA.glob('*/tags/worldgen/biome/**/*.json'):
+        ns = f.relative_to(KUBEJS_DATA).parts[0]
+        path = f.relative_to(KUBEJS_DATA / ns / 'tags/worldgen/biome').with_suffix('').as_posix()
+        try:
+            raw[f'{ns}:{path}'].extend(json.loads(f.read_text()).get('values', []))
+        except json.JSONDecodeError:
+            pass
+    if MERGES.exists():
+        for tag, spec in read_json(MERGES).get('tags', {}).items():
+            raw[tag].extend(spec.get('add', []))
+    return raw
+
+
+def resolve_biome_tag(tag_id, raw, cache, stack=frozenset()):
+    if tag_id in cache:
+        return cache[tag_id]
+    if tag_id in stack:
+        return frozenset()
+    out = set()
+    for v in raw.get(tag_id, []):
+        if isinstance(v, dict):
+            v = v.get('id')
+        if not isinstance(v, str):
+            continue
+        if v.startswith('#'):
+            out |= resolve_biome_tag(full_id(v[1:]), raw, cache, stack | {tag_id})
+        else:
+            out.add(full_id(v))
+    cache[tag_id] = frozenset(out)
+    return cache[tag_id]
+
+
+def full_id(v):
+    """Tag files may leave out the namespace ("#is_ocean", "lush_caves"): it's minecraft."""
+    return v if ':' in v else 'minecraft:' + v
+
+
+def structure_pool(sid, field, raw, cache):
+    """Every biome the structure may spawn in (not yet filtered to biomes that exist)."""
+    ns, _, path = sid.partition(':')
+    if ns == 'minecraft' and not isinstance(field, str):
+        # the config's lists for vanilla are read from the vanilla jar alone; the tag includes
+        # Terralith's and biome_merges' additions. A string field means a mod replaced the
+        # structure json (Hopo's shipwrecks), so that field is the real one.
+        tag = f'minecraft:has_structure/{VANILLA_TAG_OVERRIDES.get(sid, path)}'
+        if tag in raw:
+            return resolve_biome_tag(tag, raw, cache)
+    if field is None:
+        return frozenset()
+    fields = field if isinstance(field, list) else [field]
+    out = set()
+    for v in fields:
+        if isinstance(v, str) and v.startswith('#'):
+            out |= resolve_biome_tag(full_id(v[1:]), raw, cache)
+        elif isinstance(v, str):
+            out.add(full_id(v))
+    return frozenset(out)
+
+
+def load_areas():
+    """biome -> share of its dimension layer (0..1), from the live climate sample."""
+    areas = {}
+    for dim in read_json(BIOME_CONFIG)['dimensions'].values():
+        for b, info in dim['biomes'].items():
+            pct = info.get('result_pct', info.get('share_pct', 0)) or 0
+            areas[b] = max(pct / 100.0, EPS_AREA)
+    return areas
+
+
+# ── densities ────────────────────────────────────────────────────────────────
+
+def grid_density(p):
+    """Attempts per chunk^2 of a placement (None for non-grid placements)."""
+    if not isinstance(p.get('spacing'), (int, float)):
+        return None
+    return p.get('frequency', 1) / (p['spacing'] ** 2)
+
+
+def scale_placement(base, m):
+    """Port of structure_overrides.js scalePlacement (pre-2026-09-27): -> (placement, achieved)."""
+    p = OrderedDict(base)
+    if m == 1:
+        return p, 1.0
+    f0 = p.get('frequency', 1)
+    if f0 == 0:
+        return p, 1.0
+    if isinstance(p.get('spacing'), (int, float)):
+        s0, sep0 = p['spacing'], p.get('separation', 0)
+        s = max(1, min(4096, math.floor(s0 / math.sqrt(m) + 1e-9)))
+        sep = max(0, min(s - 1, js_round(sep0 * s / s0)))
+        f = round6(min(1, f0 * m * (s / s0) ** 2))
+        p['spacing'], p['separation'], p['frequency'] = s, sep, f
+        achieved = (s0 / s) ** 2 * f / f0
+    elif isinstance(p.get('count'), (int, float)):
+        c = max(1, min(4095, js_round(p['count'] * m)))
+        achieved = c / p['count']
+        p['count'] = c
+    else:
+        p['frequency'] = round6(min(1, f0 * m))
+        achieved = p['frequency'] / f0
+    if p.get('frequency') != f0 and p.get('frequency_reduction_method') == 'legacy_type_1':
+        p['frequency_reduction_method'] = 'default'
+    return p, achieved
+
+
+def exclusion_loss(p, set_density):
+    """Share of this placement's grid slots an exclusion_zone removes. The zone checks every chunk in
+    a (2r+1)^2 square for a grid slot of the other set (grid + frequency only, no biome check)."""
+    ez = p.get('exclusion_zone')
+    if not isinstance(ez, dict):
+        return 0.0
+    d = set_density.get(ez.get('other_set'))
+    if not d:
+        return 0.0
+    return min(1.0, (2 * ez.get('chunk_count', 0) + 1) ** 2 * d)
+
+
+def member_densities(K, members, pools):
+    """members: {id: (weight, chance)} sharing one grid of K slots per chunk^2 ->
+    {id: {biome: density}}. Vanilla semantics: the pick is among members valid in that biome."""
+    by_biome = defaultdict(float)
+    for sid, (w, _) in members.items():
+        for b in pools.get(sid, ()):
+            by_biome[b] += w
+    return {sid: {b: K * c * w / by_biome[b] for b in pools.get(sid, ())}
+            for sid, (w, c) in members.items()}
+
+
+class Pack:
+    """Everything the model needs, loaded once."""
+
+    def __init__(self, config_path=None, tags_path=None):
+        self.config = read_json(config_path or CONFIG)
+        self.sets = self.config['structure_sets']
+        self.tags_doc = read_json(tags_path or TAGS)
+        self.tag_defs = self.tags_doc['tags']
+        self.all_ids = [s['structure'] for e in self.sets.values() for s in e['structures']]
+        self.all_ids += [m for m in self.config.get('meta_structures', {}) if m not in self.all_ids]
+        self.set_of = {}
+        for sid, e in self.sets.items():
+            for s in e['structures']:
+                self.set_of.setdefault(s['structure'], sid)
+        self.tag_members, errors = resolve_tags(self.tag_defs, self.all_ids)
+        if errors:
+            sys.exit('structure_tags.json errors:\n  ' + '\n  '.join(errors))
+        self.areas = load_areas()
+        raw = load_biome_tags()
+        cache = {}
+        self.pools, self.pool_all = {}, {}
+        for e in self.sets.values():
+            for s in e['structures']:
+                pool = structure_pool(s['structure'], s.get('biomes'), raw, cache)
+                self.pool_all[s['structure']] = pool
+                self.pools[s['structure']] = frozenset(b for b in pool if b in self.areas)
+        self.blocked = {s['structure'] for e in self.sets.values() for s in e['structures'] if s.get('blocked')}
+
+    def group_names(self):
+        return [t[len('group/'):] for t in self.tag_defs if t.startswith('group/')]
+
+    def group_members(self, name):
+        return sorted(self.tag_members.get('group/' + name, ()))
+
+    def weight_in_set(self, sid):
+        for s in self.sets[self.set_of[sid]]['structures']:
+            if s['structure'] == sid:
+                return s['weight']
+        return 1
+
+    # Densities of the old model (structure_config "current" + tag multipliers + splits) or, with
+    # legacy=False, of the mods' own defaults.
+    def old_densities(self, legacy=True):
+        active = {t: d['multiplier'] for t, d in self.tag_defs.items()
+                  if legacy and isinstance(d.get('multiplier'), (int, float)) and d['multiplier'] != 1}
+
+        def mult(sid):
+            m = 1.0
+            for t, v in active.items():
+                if sid in self.tag_members[t]:
+                    m *= v
+            return m
+
+        outputs = {}          # set -> [(placement, [member ids])]
+        for set_id, e in self.sets.items():
+            base = OrderedDict(e['original'])
+            if legacy:
+                base.update(e.get('current', {}))
+            live = [s for s in e['structures']
+                    if (not legacy or s.get('enabled', True)) and mult(s['structure']) > 0]
+            groups = OrderedDict()
+            for s in live:
+                groups.setdefault(mult(s['structure']), []).append(s)
+            ordered = sorted(groups.items(), key=lambda kv: -sum(x['weight'] for x in kv[1]))
+            outs = []
+            for m, mem in ordered:
+                p, _ = scale_placement(base, m)
+                outs.append((p, [x['structure'] for x in mem]))
+            if not outs:
+                outs = [(OrderedDict(base, frequency=0), [])]
+            outputs[set_id] = outs
+        set_density = {sid: grid_density(o[0][0]) for sid, o in outputs.items()}
+        dens = {}
+        for set_id, outs in outputs.items():
+            for p, mem in outs:
+                K = grid_density(p)
+                if K is None:
+                    continue
+                K *= 1 - exclusion_loss(p, set_density)
+                live = {m: (self.weight_in_set(m), 1.0) for m in mem if m not in self.blocked}
+                dens.update(member_densities(K, live, self.pools))
+        return dens, outputs
+
+    def multiplier(self, sid):
+        m = 1.0
+        for t, d in self.tag_defs.items():
+            v = d.get('multiplier')
+            if isinstance(v, (int, float)) and v != 1 and sid in self.tag_members[t]:
+                m *= v
+        return m
+
+
+def mean_density(dmap, areas):
+    """Area-weighted mean density over a member's biomes."""
+    if not dmap:
+        return 0.0
+    a = sum(areas[b] for b in dmap)
+    return sum(d * areas[b] for b, d in dmap.items()) / a
+
+
+def weighted_quantile(values, weights, q):
+    order = np.argsort(values)
+    v, w = np.asarray(values)[order], np.asarray(weights)[order]
+    c = np.cumsum(w) / w.sum()
+    return float(v[min(len(v) - 1, np.searchsorted(c, q))])
+
+
+# ── the fit ──────────────────────────────────────────────────────────────────
+
+def fit_group(ids, pools, targets, areas, lnK, fixed=None, iters=6000):
+    """Solve log-weights x and log-frequencies y (<= 0) so that
+         lnK + y_i + x_i - log(sum_{j valid in b} e^x_j)  ~  ln target_i(b)
+    area-weighted per member, every member counted equally. fixed: {id: (weight, chance)} held."""
+    fixed = fixed or {}
+    ids = [i for i in ids if pools.get(i)]
+    if not ids:
+        return {}
+    biomes = sorted({b for i in ids for b in pools[i]})
+    col = {b: k for k, b in enumerate(biomes)}
+    n, m = len(ids), len(biomes)
+    mask = np.zeros((n, m), bool)
+    lnD = np.zeros((n, m))
+    W = np.zeros((n, m))
+    for r, i in enumerate(ids):
+        for b in pools[i]:
+            c = col[b]
+            mask[r, c] = True
+            W[r, c] = areas[b]
+            t = targets.get(i, {}).get(b)
+            lnD[r, c] = math.log(t) if t and t > 0 else 0.0
+    has_target = np.array([bool(targets.get(i)) for i in ids])
+    W /= W.sum(1, keepdims=True)
+    free = np.array([i not in fixed and has_target[r] for r, i in enumerate(ids)])
+    x = np.where(free, (lnD * W).sum(1), 0.0)
+    y = np.zeros(n)
+    for r, i in enumerate(ids):
+        if i in fixed:
+            x[r] = math.log(fixed[i][0])
+            y[r] = math.log(max(fixed[i][1], 1e-9))
+    anchor = x[~free].mean() if (~free).any() else None
+    if anchor is not None:
+        # new members next to fitted ones: start at the group's typical weight (a member that shares no
+        # biome keeps it, since its weight never matters)
+        x = np.where(free, anchor, x)
+
+    def lse(xv):
+        big = np.where(mask, xv[:, None], -np.inf)
+        mx = big.max(0)
+        return mx + np.log(np.exp(big - mx).sum(0))
+
+    lr, beta1, beta2 = 0.05, 0.9, 0.999
+    mom, vel = np.zeros(n), np.zeros(n)
+    for it in range(1, iters + 1):
+        L = lse(x)
+        base = lnK + x[:, None] - L[None, :]
+        ystep = np.minimum(0.0, ((lnD - base) * W).sum(1))
+        y = np.where(free, ystep, y)
+        r = np.where(mask, base + y[:, None] - lnD, 0.0)
+        P = np.where(mask, np.exp(x[:, None] - L[None, :]), 0.0)
+        Wr = W * r
+        g = 2 * Wr.sum(1) - 2 * (P * Wr.sum(0)[None, :]).sum(1)
+        g = np.where(free, g, 0.0)
+        mom = beta1 * mom + (1 - beta1) * g
+        vel = beta2 * vel + (1 - beta2) * g * g
+        x = x - lr * (mom / (1 - beta1 ** it)) / (np.sqrt(vel / (1 - beta2 ** it)) + 1e-9)
+        if anchor is None:
+            x = np.where(free, x - x[free].mean(), x)
+    # integer weights (the set codec needs positive ints), then the frequencies again for them
+    if anchor is None:
+        scale = MEDIAN_WEIGHT / math.exp(float(np.median(x[free]))) if free.any() else 1.0
+    else:
+        scale = 1.0
+    w_int = np.array([fixed[i][0] if i in fixed else max(1, js_round(math.exp(x[r]) * scale))
+                      for r, i in enumerate(ids)], float)
+    x = np.log(w_int)
+    L = lse(x)
+    base = lnK + x[:, None] - L[None, :]
+    y = np.where(free, np.minimum(0.0, ((lnD - base) * W).sum(1)), y)
+    out = {}
+    for r, i in enumerate(ids):
+        if i in fixed:
+            continue
+        c = math.exp(y[r]) if has_target[r] else 1.0
+        out[i] = (int(w_int[r]), round(min(1.0, c), 4))
+    return out
+
+
+# ── building group entries ───────────────────────────────────────────────────
+
+def group_grid(pack, name, spec, members, targets, set_density):
+    """Placement for a new group, from its members' old densities."""
+    if spec.get('grid_from'):
+        src = pack.sets[spec['grid_from']]
+        base = OrderedDict(src['original'])
+        base.update(src.get('current', {}))
+        p = OrderedDict([('spacing', base['spacing']), ('separation', base['separation']),
+                         ('salt', base['salt'])])
+        if base.get('spread_type', 'linear') != 'linear':
+            p['spread_type'] = base['spread_type']
+        return p
+    T = defaultdict(float)
+    for i in members:
+        for b, d in targets.get(i, {}).items():
+            T[b] += d
+    if not T:
+        return OrderedDict([('spacing', 32), ('separation', 8), ('salt', group_salt(name))])
+    bs = sorted(T)
+    K = weighted_quantile([T[b] for b in bs], [pack.areas[b] for b in bs], QUANTILE)
+    ex = spec.get('exclusion')
+    if ex:
+        loss = min(0.9, (2 * ex[1] + 1) ** 2 * set_density.get(GROUP_SET_PREFIX + ex[0], 0))
+        K /= (1 - loss)
+    S = max(2, min(4096, math.floor(math.sqrt(1 / K))))
+    # separation keeps the members' old feel: their old separation/spacing ratio, density-weighted
+    num = den = 0.0
+    for i in members:
+        p = pack.legacy_placement.get(i)
+        if not p or not p.get('spacing'):
+            continue
+        d = mean_density(targets.get(i, {}), pack.areas)
+        num += d * p.get('separation', 0) / p['spacing']
+        den += d
+    ratio = num / den if den else 0.4
+    sep = max(0, min(S - 1, js_round(S * ratio)))
+    return OrderedDict([('spacing', S), ('separation', sep), ('salt', group_salt(name))])
+
+
+def fit_standalone(pack, base, members, targets):
+    """One grid for a formerly split standalone set: capacity = its most crowded biome's old total."""
+    T = defaultdict(float)
+    for i in members:
+        for b, d in targets.get(i, {}).items():
+            T[b] += d
+    f = base.get('frequency', 1)
+    K = max(T.values()) if T else f / base['spacing'] ** 2
+    S = max(2, min(4096, math.floor(math.sqrt(f / K))))
+    p = OrderedDict(base)
+    p['separation'] = max(0, min(S - 1, js_round(base.get('separation', 0) * S / base['spacing'])))
+    p['spacing'] = S
+    return p, fit_group(members, pack.pools, targets, pack.areas, math.log(f / S ** 2))
+
+
+def fit_members(pack, placement, exclusion_loss_value, members, targets, fixed=None):
+    K = placement.get('frequency', 1) / placement['spacing'] ** 2 * (1 - exclusion_loss_value)
+    return fit_group(members, pack.pools, targets, pack.areas, math.log(K), fixed)
+
+
+# ── migrate ──────────────────────────────────────────────────────────────────
+
+def migrate(pack, dry=False):
+    """Old model -> structure_groups.json, once. Old model = per-set "current" edits, per-structure
+    "enabled", tag multipliers (a product per structure; members of one set with different products
+    were split into separate sets). Groups: fitted to each member's old density (see the module doc).
+    Standalone sets: the set is scaled to its largest member multiplier and every other member keeps
+    its own through frequency (m / largest), which is exact because the members keep sharing the grid
+    with the same weights. Afterwards "current"/"enabled" leave structure_config.json and "multiplier"
+    leaves structure_tags.json; the originals are in kubejs/archive/worldgen/pre_groups_2026-09-27/."""
+    if GROUPS.exists() and not dry:
+        sys.exit(f'{GROUPS.name} already exists; --migrate only runs once (delete it to redo from the archive).')
+    if not any('current' in e for e in pack.sets.values()):
+        sys.exit('structure_config.json has no "current" fields: nothing to migrate.')
+
+    # 1. group/* tags
+    for name, spec in GROUP_SPECS.items():
+        tag = 'group/' + name
+        if tag not in pack.tag_defs:
+            pack.tag_defs[tag] = OrderedDict([('note', spec['note']), ('values', spec['values'])])
+    pack.tag_members, errors = resolve_tags(pack.tag_defs, pack.all_ids)
+    if errors:
+        sys.exit('group tag errors:\n  ' + '\n  '.join(errors))
+    owner = {}
+    for name in pack.group_names():
+        for sid in pack.group_members(name):
+            if sid in owner:
+                sys.exit(f'{sid} is in group/{owner[sid]} and group/{name}')
+            owner[sid] = name
+
+    legacy, outputs = pack.old_densities(legacy=True)
+    pack.legacy_placement = {}
+    for set_id, outs in outputs.items():
+        for p, mem in outs:
+            for m in mem:
+                pack.legacy_placement[m] = p
+    enabled = {s['structure']: s.get('enabled', True) for e in pack.sets.values() for s in e['structures']}
+
+    # 2. groups, in an order where an exclusion's target comes first
+    groups = OrderedDict()
+    group_density = {}
+    for name, spec in GROUP_SPECS.items():
+        members = pack.group_members(name)
+        live = [m for m in members if enabled[m] and pack.multiplier(m) > 0 and m not in pack.blocked]
+        placement = group_grid(pack, name, spec, live, legacy, group_density)
+        loss = 0.0
+        if spec.get('exclusion'):
+            other, r = spec['exclusion']
+            placement['exclusion_zone'] = OrderedDict([('other_set', GROUP_SET_PREFIX + other), ('chunk_count', r)])
+            loss = min(1.0, (2 * r + 1) ** 2 * group_density.get(GROUP_SET_PREFIX + other, 0))
+        group_density[GROUP_SET_PREFIX + name] = placement.get('frequency', 1) / placement['spacing'] ** 2
+        fitted = fit_members(pack, placement, loss, live, legacy)
+        structures = OrderedDict()
+        for m in members:
+            if m in fitted:
+                w, c = fitted[m]
+                structures[m] = OrderedDict([('weight', w), ('frequency', c)])
+            else:
+                structures[m] = OrderedDict([('weight', MEDIAN_WEIGHT), ('frequency', 1.0)])
+                if not (enabled[m] and pack.multiplier(m) > 0):
+                    structures[m]['enabled'] = False
+        groups[name] = OrderedDict([('note', spec['note']), ('placement', placement), ('structures', structures)])
+
+    # 3. standalone sets
+    fully_grouped = {sid for sid, e in pack.sets.items()
+                     if e['structures'] and all(s['structure'] in owner for s in e['structures'])}
+    standalone = OrderedDict()
+    retargets = []
+    for set_id, e in pack.sets.items():
+        rest = [s for s in e['structures'] if s['structure'] not in owner]
+        if not rest:
+            continue
+        base = OrderedDict(e['original'])
+        base.update(e.get('current', {}))
+        live = [s for s in rest if s.get('enabled', True) and pack.multiplier(s['structure']) > 0]
+        structures = OrderedDict()
+        mults = {pack.multiplier(s['structure']) for s in live}
+        if len(mults) > 1 and isinstance(base.get('spacing'), (int, float)):
+            # the old model split this set by multiplier into separate grids, so its members didn't
+            # compete where their biomes overlap; one grid can only match that with a fit (every
+            # biome at full capacity, nothing capped: consistent spacing is a group goal, not this)
+            p, fitted = fit_standalone(pack, base, [s['structure'] for s in live], legacy)
+            for s in rest:
+                sid = s['structure']
+                if sid in fitted:
+                    w, c = fitted[sid]
+                    structures[sid] = OrderedDict([('weight', w), ('frequency', c)])
+                elif s in live:
+                    structures[sid] = OrderedDict([('frequency', 1.0)])
+                else:
+                    structures[sid] = OrderedDict([('frequency', 1.0), ('enabled', False)])
+        else:
+            if live:
+                p, achieved = scale_placement(base, max(mults))
+            else:
+                p, achieved = base, 1.0
+            for s in rest:
+                sid = s['structure']
+                if s in live:
+                    structures[sid] = OrderedDict([('frequency', round(min(1.0, pack.multiplier(sid) / achieved), 4))])
+                else:
+                    structures[sid] = OrderedDict([('frequency', 1.0), ('enabled', False)])
+        ez = p.get('exclusion_zone')
+        if isinstance(ez, dict) and ez.get('other_set') in fully_grouped:
+            old_set = ez['other_set']
+            dests = defaultdict(int)
+            for s in pack.sets[old_set]['structures']:
+                dests[owner[s['structure']]] += 1
+            dest = max(dests, key=dests.get)
+            old_d = grid_density(outputs[old_set][0][0]) or 0
+            new_d = group_density[GROUP_SET_PREFIX + dest]
+            old_loss = min(1.0, (2 * ez['chunk_count'] + 1) ** 2 * old_d)
+            r = max(1, min(16, js_round((math.sqrt(old_loss / new_d) - 1) / 2)))
+            p = OrderedDict(p)
+            p['exclusion_zone'] = OrderedDict([('other_set', GROUP_SET_PREFIX + dest), ('chunk_count', r)])
+            retargets.append(f'{set_id}: exclusion_zone {old_set} r{ez["chunk_count"]} -> {GROUP_SET_PREFIX + dest} r{r} '
+                             f'(keeps ~{old_loss:.0%} of its slots excluded)')
+        changed = OrderedDict((k, v) for k, v in p.items() if e['original'].get(k) != v)
+        standalone[set_id] = OrderedDict([('placement', changed), ('structures', structures)])
+
+    doc = OrderedDict([('_readme', groups_readme()), ('groups', groups), ('standalone', standalone)])
+    for r in retargets:
+        print('  retargeted ' + r)
+    if dry:
+        return legacy, doc
+
+    # 4. write, archive first
+    ARCHIVE.mkdir(parents=True, exist_ok=True)
+    for f in (CONFIG, TAGS):
+        if not (ARCHIVE / f.name).exists():
+            shutil.copy2(f, ARCHIVE / f.name)
+    write_json(GROUPS, doc)
+    for t in pack.tag_defs.values():
+        t.pop('multiplier', None)
+    pack.tags_doc['_readme'] = tags_readme()
+    write_json(TAGS, pack.tags_doc)
+    for e in pack.sets.values():
+        e.pop('current', None)
+        for s in e['structures']:
+            s.pop('enabled', None)
+    write_json(CONFIG, pack.config)
+    print(f'migrated: {len(groups)} groups, {len(standalone)} standalone sets -> {GROUPS.relative_to(INSTANCE)}')
+    return legacy, doc
+
+
+# ── sync ─────────────────────────────────────────────────────────────────────
+
+def sync(pack, doc, refit=()):
+    """Adds what's missing, fitted to mod defaults; never touches existing values, except that every group
+    in refit gets a new grid and all its members refitted to the rates the file gives them now."""
+    defaults, outputs = pack.old_densities(legacy=False)
+    pack.legacy_placement = {m: p for outs in outputs.values() for p, mem in outs for m in mem}
+    added = []
+    groups = doc.setdefault('groups', OrderedDict())
+    owner = {}
+    for name in pack.group_names():
+        for sid in pack.group_members(name):
+            owner[sid] = name
+    group_density = {GROUP_SET_PREFIX + n: g['placement'].get('frequency', 1) / g['placement']['spacing'] ** 2
+                     for n, g in groups.items() if 'placement' in g}
+    # a structure that moves (into a group, or between groups) keeps the rate the file gives it now
+    current = doc_densities(pack, doc)
+    targets = dict(defaults)
+    targets.update({m: d for m, d in current.items() if d})
+    for name in refit:
+        if groups.pop(name, None) is not None:
+            added.append(f'refit {name}: new grid, every member refitted to its current rate')
+    for name, g in groups.items():
+        for sid in [m for m in g.get('structures', {}) if owner.get(m) != name]:
+            del g['structures'][sid]
+            added.append(f'removed {name}: {sid} (' + (f'now in group/{owner[sid]})' if sid in owner else 'in no group now)'))
+    for name in pack.group_names():
+        members = pack.group_members(name)
+        g = groups.get(name)
+        if g is None:
+            spec = GROUP_SPECS.get(name, {})
+            live = [m for m in members if m not in pack.blocked]
+            placement = group_grid(pack, name, spec, live, targets, group_density)
+            g = groups[name] = OrderedDict([('note', pack.tag_defs['group/' + name].get('note', '')),
+                                            ('placement', placement), ('structures', OrderedDict())])
+            group_density[GROUP_SET_PREFIX + name] = 1 / placement['spacing'] ** 2
+            added.append(f'group {name} (spacing {placement["spacing"]}, separation {placement["separation"]})')
+        st = g.setdefault('structures', OrderedDict())
+        new = [m for m in members if m not in st and m not in pack.blocked]
+        if not new:
+            continue
+        fixed = {m: (v.get('weight', MEDIAN_WEIGHT), v.get('frequency', 1.0))
+                 for m, v in st.items() if v.get('enabled', True) and m in members}
+        p = g['placement']
+        ez = p.get('exclusion_zone')
+        loss = 0.0
+        if isinstance(ez, dict):
+            loss = min(1.0, (2 * ez.get('chunk_count', 0) + 1) ** 2 * group_density.get(ez.get('other_set'), 0))
+        fitted = fit_members(pack, p, loss, list(fixed) + new, targets, fixed)
+        for m in new:
+            w, c = fitted.get(m, (MEDIAN_WEIGHT, 1.0))
+            st[m] = OrderedDict([('weight', w), ('frequency', c)])
+            added.append(f'{name}: {m} (weight {w}, frequency {c})')
+    standalone = doc.setdefault('standalone', OrderedDict())
+    for set_id in list(standalone):
+        entry = standalone[set_id]
+        for sid in [m for m in entry.get('structures', {}) if m in owner]:
+            del entry['structures'][sid]
+            added.append(f'removed standalone {set_id}: {sid} (now in group/{owner[sid]})')
+        if set_id in pack.sets and all(s['structure'] in owner for s in pack.sets[set_id]['structures']):
+            del standalone[set_id]
+            added.append(f'removed standalone {set_id} (every member is in a group now)')
+    for set_id, e in pack.sets.items():
+        rest = [s['structure'] for s in e['structures'] if s['structure'] not in owner]
+        if not rest:
+            continue
+        entry = standalone.get(set_id)
+        if entry is None:
+            entry = standalone[set_id] = OrderedDict([('placement', OrderedDict()), ('structures', OrderedDict())])
+            added.append(f'standalone {set_id}')
+        for sid in rest:
+            if sid not in entry['structures']:
+                entry['structures'][sid] = OrderedDict([('frequency', 1.0)])
+                added.append(f'standalone {set_id}: {sid}')
+    return added
+
+
+# ── estimates report ─────────────────────────────────────────────────────────
+
+def doc_densities(pack, doc):
+    """What structure_groups.json gives each structure by its own entries, ignoring the (possibly just
+    edited) group tags: group entries on their group grid, standalone sets with all their members."""
+    plans, set_density = [], {}
+    for name, g in doc.get('groups', {}).items():
+        p = g.get('placement', {})
+        if not p.get('spacing'):
+            continue
+        set_density[GROUP_SET_PREFIX + name] = p.get('frequency', 1) / p['spacing'] ** 2
+        plans.append((p, {m: (v.get('weight', MEDIAN_WEIGHT), v.get('frequency', 1.0))
+                          for m, v in g.get('structures', {}).items()
+                          if v.get('enabled', True) and v.get('frequency', 1.0) > 0 and m not in pack.blocked}))
+    for set_id, entry in doc.get('standalone', {}).items():
+        if set_id not in pack.sets:
+            continue
+        p = OrderedDict(pack.sets[set_id]['original'])
+        p.update(entry.get('placement', {}))
+        set_density[set_id] = grid_density(p)
+        live = {}
+        for s in pack.sets[set_id]['structures']:
+            v = entry.get('structures', {}).get(s['structure'])
+            if v is None or s['structure'] in pack.blocked:
+                continue
+            if v.get('enabled', True) and v.get('frequency', 1.0) > 0:
+                live[s['structure']] = (v.get('weight', s['weight']), v.get('frequency', 1.0))
+        plans.append((p, live))
+    dens = {}
+    for p, live in plans:
+        K = grid_density(p)
+        if K is None:
+            continue
+        dens.update(member_densities(K * (1 - exclusion_loss(p, set_density)), live, pack.pools))
+    return dens
+
+
+def new_densities(pack, doc):
+    """Densities the NEW model gives, straight from structure_groups.json."""
+    owner = {}
+    for name in pack.group_names():
+        for sid in pack.group_members(name):
+            owner[sid] = name
+    set_density = {}
+    plans = []
+    for name, g in doc.get('groups', {}).items():
+        p = g['placement']
+        set_density[GROUP_SET_PREFIX + name] = p.get('frequency', 1) / p['spacing'] ** 2
+        live = {m: (v.get('weight', MEDIAN_WEIGHT), v.get('frequency', 1.0))
+                for m, v in g.get('structures', {}).items()
+                if v.get('enabled', True) and v.get('frequency', 1.0) > 0 and m not in pack.blocked
+                and owner.get(m) == name}
+        plans.append((p, live))
+    for set_id, e in pack.sets.items():
+        entry = doc.get('standalone', {}).get(set_id, {})
+        rest = [s for s in e['structures'] if s['structure'] not in owner]
+        if not rest:
+            set_density[set_id] = 0
+            continue
+        p = OrderedDict(e['original'])
+        p.update(entry.get('placement', {}))
+        set_density[set_id] = grid_density(p)
+        live = {}
+        for s in rest:
+            v = entry.get('structures', {}).get(s['structure'], {})
+            if v.get('enabled', True) and s['structure'] not in pack.blocked:
+                live[s['structure']] = (v.get('weight', s['weight']), v.get('frequency', 1.0))
+        plans.append((p, live))
+    dens = {}
+    for p, live in plans:
+        K = grid_density(p)
+        if K is None:
+            continue
+        K *= 1 - exclusion_loss(p, set_density)
+        dens.update(member_densities(K, live, pack.pools))
+    return dens
+
+
+def write_estimates(pack, doc, baseline, baseline_label, path, title='Structure group estimates'):
+    """baseline None = compare against mod defaults (no Before column, no drift list)."""
+    new = new_densities(pack, doc)
+    defaults, _ = pack.old_densities(legacy=False)
+    migration = baseline is not None
+    if not migration:
+        baseline = defaults
+    lines = [f'# {title}', '',
+             'Written by `python3 tools/gen_structure_groups.py`. Do not edit. Expected structures per area for every '
+             'structure, from `structure_groups.json`, each structure\'s biome pool and the real biome areas in '
+             '`biome_config.json`. "1 per N" means one structure per N x N chunks, averaged over the biomes it can '
+             'spawn in (so a structure limited to rare biomes is still rare overall). The game itself writes '
+             '`structure_tag_report.md`; this file is the offline estimate.', '',
+             f'Compared against: **{baseline_label}**. Ratio = new / that; 1.00 = unchanged.', '']
+    owner = {}
+    for name in pack.group_names():
+        for sid in pack.group_members(name):
+            owner[sid] = name
+
+    def row(sid, v=None):
+        pool = pack.pools.get(sid, frozenset())
+        n = mean_density(new.get(sid, {}), pack.areas)
+        o = mean_density(baseline.get(sid, {}), pack.areas)
+        dd = mean_density(defaults.get(sid, {}), pack.areas)
+        ratio = f'{n / o:.2f}' if o > 0 else ('-' if n == 0 else 'new')
+        flags = []
+        if sid in pack.blocked:
+            flags.append('blocked in code')
+        if not pool:
+            flags.append('no biome in this pack' if pack.pool_all.get(sid)
+                         else 'empty biome tag: never spawns unless a mod fills it at runtime')
+        cells = [f'`{sid}`']
+        if v is not None:
+            cells += [str(v.get('weight', '-')), str(v.get('frequency', 1.0)) + ('' if v.get('enabled', True) else ' (off)')]
+        cells += [fmt_sp(dd)] + ([fmt_sp(o)] if migration else []) + [fmt_sp(n), ratio, ', '.join(flags)]
+        return '| ' + ' | '.join(cells) + ' |'
+
+    lines += ['## Groups', '']
+    for name, g in doc.get('groups', {}).items():
+        p = g['placement']
+        K = p.get('frequency', 1) / p['spacing'] ** 2
+        lines.append(f'### `{name}` -> `{GROUP_SET_PREFIX}{name}`')
+        lines.append('')
+        lines.append(f'{g.get("note", "")}')
+        lines.append('')
+        lines.append(f'Grid: spacing {p["spacing"]}, separation {p["separation"]} (members never start closer than '
+                     f'{p["separation"] + 1} chunks = {(p["separation"] + 1) * 16} blocks apart). At most 1 structure per '
+                     f'{p["spacing"]} x {p["spacing"]} chunks anywhere.'
+                     + (f' Excluded within {p["exclusion_zone"]["chunk_count"]} chunks of `{p["exclusion_zone"]["other_set"]}` grid slots.'
+                        if isinstance(p.get('exclusion_zone'), dict) else ''))
+        # crowding: biomes where the old total exceeded the group's capacity
+        T, Tn = defaultdict(float), defaultdict(float)
+        for sid in g.get('structures', {}):
+            for b, d in baseline.get(sid, {}).items():
+                T[b] += d
+            for b, d in new.get(sid, {}).items():
+                Tn[b] += d
+        capped = sorted((b for b in T if T[b] > K * 1.05), key=lambda b: -pack.areas[b] * T[b])
+        if capped:
+            share = sum(pack.areas[b] for b in capped) / max(1e-12, sum(pack.areas[b] for b in T))
+            lines.append('')
+            lines.append(f'Capped (old combined density above the group grid): {len(capped)} biome(s), '
+                         f'{share:.0%} of the group\'s area. Largest: '
+                         + ', '.join(f'`{b}` 1 per {fmt_sp(T[b])} -> {fmt_sp(Tn[b])}' for b in capped[:6]) + '.')
+        lines.append('')
+        lines += header_rows(migration)
+        for sid, v in g.get('structures', {}).items():
+            lines.append(row(sid, v))
+        lines.append('')
+
+    lines += ['## Standalone sets (changed ones only)', ''] + header_rows(migration)
+    for set_id, entry in doc.get('standalone', {}).items():
+        touched = entry.get('placement') or any(v.get('frequency', 1.0) != 1.0 or not v.get('enabled', True)
+                                                for v in entry.get('structures', {}).values())
+        if not touched:
+            continue
+        for sid, v in entry.get('structures', {}).items():
+            vv = OrderedDict(v)
+            vv.setdefault('weight', pack.weight_in_set(sid))
+            lines.append(row(sid, vv))
+    lines.append('')
+
+    drifted = []
+    if migration:
+        for sid in pack.all_ids:
+            n = mean_density(new.get(sid, {}), pack.areas)
+            o = mean_density(baseline.get(sid, {}), pack.areas)
+            if o > 0 and (n / o < 0.8 or n / o > 1.25):
+                drifted.append((n / o, sid, owner.get(sid, 'standalone')))
+        lines += ['## Changed by more than 20%', '']
+        if drifted:
+            for r, sid, where in sorted(drifted):
+                lines.append(f'- `{sid}` ({where}): x{r:.2f}')
+        else:
+            lines.append('None.')
+        lines.append('')
+    path.write_text('\n'.join(lines) + '\n')
+    return drifted
+
+
+def header_rows(migration):
+    cols = ['Structure', 'Weight', 'Frequency', 'Mod default 1 per'] + (['Before 1 per'] if migration else []) \
+        + ['New 1 per', 'Ratio', 'Note']
+    return ['| ' + ' | '.join(cols) + ' |', '|' + '---|' * len(cols)]
+
+
+def migration_report(pack, doc):
+    """Current structure_groups.json against the tuning it replaced (read from the archive)."""
+    if not (ARCHIVE / CONFIG.name).exists():
+        return None
+    old = Pack(ARCHIVE / CONFIG.name, ARCHIVE / TAGS.name)
+    # where a structure can spawn comes from the jars, not the config: judge both over today's pools
+    # (the archived config predates Hopo moving both shipwrecks onto beaches, for one)
+    old.pools, old.pool_all = pack.pools, pack.pool_all
+    legacy, _ = old.old_densities(legacy=True)
+    # structures the old config never knew (mods added after it was written) ran at their defaults
+    defaults, _ = pack.old_densities(legacy=False)
+    for sid in pack.all_ids:
+        if sid not in old.set_of:
+            legacy[sid] = defaults.get(sid, {})
+    return write_estimates(pack, doc, legacy, 'the tuning before groups (archived 2026-09-27)', MIGRATION_REPORT,
+                           'Structure groups vs the tuning they replaced')
+
+
+# ── readmes ──────────────────────────────────────────────────────────────────
+
+def groups_readme():
+    return OrderedDict([
+        ('what', 'Every structure\'s spawn rate, in one file. A GROUP is one shared structure_set '
+                 '(creativeengineering:group/<name>) holding every structure in the structure tag group/<name> '
+                 '(structure_tags.json): all members share its grid, so no two of them ever start closer than its '
+                 'separation, whatever mod they come from. Every structure that is in no group keeps its own set '
+                 'and is tuned under "standalone". Rejoin the world to apply (new chunks only); '
+                 'structure_tag_report.md shows what the game applied.'),
+        ('group placement', 'spacing: one grid slot per spacing x spacing chunks (the group\'s top density). '
+                            'separation: minimum chunks between any two members. salt: which grid (leave it). '
+                            'Optional: spread_type, frequency (chance per slot for the whole group), locate_offset, '
+                            'exclusion_zone {other_set, chunk_count} (keep off another set\'s grid slots; it checks '
+                            'slots, not real structures, so keep chunk_count small).'),
+        ('per structure', 'weight: who wins a slot where several members can spawn (relative, whole numbers). '
+                          'frequency: 0..1, chance that the winner really spawns; otherwise the slot stays empty, so '
+                          'lowering one never makes another more common. enabled: false removes it. Where a '
+                          'structure is the only member that fits the biome, it gets every slot x its frequency.'),
+        ('standalone', 'Keyed by the structure_set id in structure_config.json. placement: only the fields you '
+                       'change (spacing, separation, frequency, count, locate_offset...; the rest come from '
+                       '"original" in structure_config.json). structures: frequency / enabled / optional weight, '
+                       'same meaning as in a group.'),
+        ('moving a structure', 'Edit the group/* tags in structure_tags.json, then run python3 '
+                               'tools/gen_structure_groups.py: it adds the new member with a weight and frequency '
+                               'fitted to its mod default and leaves everything else alone. A tagged member with no '
+                               'entry here still works (the game fills in a rough default and flags it).'),
+        ('estimates', 'python3 tools/gen_structure_groups.py --check rewrites structure_group_estimates.md: '
+                      'expected structures per area for every structure, from its real biome areas.'),
+    ])
+
+
+def tags_readme():
+    return OrderedDict([
+        ('what', 'Named lists of structures. group/* tags decide which structures share a group grid '
+                 '(structure_groups.json); every other tag is for grouping, reports and building those lists. '
+                 'Tags have no multipliers any more (2026-09-27: every rate lives in structure_groups.json).'),
+        ('values', 'Entries: "ns:id" (one structure), "ns:*" or "ns:prefix_*" (glob, * matches anything including /), '
+                   '"#tag/name" (every member of another tag in this file), and a leading "!" on any of those to '
+                   'exclude (exclusions win, whatever their position). Unknown ids and tags are errors (logged, listed '
+                   'in the report, and NO structure changes are applied until fixed), so a typo never silently does nothing.'),
+        ('groups', 'A structure may be in at most one group/* tag. After changing one, run python3 '
+                   'tools/gen_structure_groups.py to give new members a fitted weight and frequency.'),
+        ('families', 'mod/* = one tag per namespace (plus mod/yungs for YUNG\'s 6). type/* = what the structure is; a '
+                     'structure can have more than one type. dungeon/* = dungeons split by location (surface / '
+                     'underground) and origin (vanilla / better = YUNG\'s / modded). group/* = the shared grids.'),
+    ])
+
+
+# ── main ─────────────────────────────────────────────────────────────────────
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split('\n')[1])
+    ap.add_argument('--migrate', action='store_true')
+    ap.add_argument('--check', action='store_true')
+    ap.add_argument('--dry-run', metavar='ESTIMATES_MD', help='with --migrate: write nothing but this estimates file')
+    ap.add_argument('--worldgen-dir', help='use the configs in this folder instead (tests)')
+    ap.add_argument('--refit', nargs='+', metavar='GROUP',
+                    help='rebuild these groups\' grids and refit every member to its current rate (after adding members '
+                         'much denser than the grid, e.g. meteorites into sky)')
+    ap.add_argument('--migration-report', action='store_true',
+                    help='also rewrite structure_group_migration.md (current file vs the archived pre-groups tuning)')
+    args = ap.parse_args()
+    if args.worldgen_dir:
+        global WG, CONFIG, TAGS, GROUPS, ESTIMATES, MIGRATION_REPORT
+        WG = Path(args.worldgen_dir).resolve()
+        CONFIG, TAGS, GROUPS = WG / 'structure_config.json', WG / 'structure_tags.json', WG / 'structure_groups.json'
+        ESTIMATES, MIGRATION_REPORT = WG / 'structure_group_estimates.md', WG / 'structure_group_migration.md'
+    pack = Pack()
+    if args.migrate:
+        legacy, doc = migrate(pack, dry=bool(args.dry_run))
+        if args.dry_run:
+            out = Path(args.dry_run).resolve()
+            json.dump(doc, open(out.with_suffix('.json'), 'w'), indent=2)
+            drifted = write_estimates(pack, doc, legacy, 'the tuning before groups', out)
+            print(f'dry run -> {out} ({len(drifted)} structure(s) changed by more than 20%)')
+            return
+        pack = Pack()
+        doc = read_json(GROUPS)
+    else:
+        if not GROUPS.exists():
+            sys.exit(f'{GROUPS.name} is missing: run with --migrate (first time) or restore it.')
+        doc = read_json(GROUPS)
+        if not args.check:
+            added = sync(pack, doc, args.refit or ())
+            if added:
+                write_json(GROUPS, doc)
+                print(f'changed {len(added)}:')
+                for a in added:
+                    print('  ' + a)
+            else:
+                print('structure_groups.json already covers every structure')
+    write_estimates(pack, doc, None, 'mod defaults', ESTIMATES)
+    print(f'estimates -> {ESTIMATES}')
+    if args.migrate or args.migration_report:
+        drifted = migration_report(pack, doc)
+        if drifted is not None:
+            print(f'migration comparison -> {MIGRATION_REPORT} ({len(drifted)} structure(s) changed by more than 20%)')
+
+
+if __name__ == '__main__':
+    main()

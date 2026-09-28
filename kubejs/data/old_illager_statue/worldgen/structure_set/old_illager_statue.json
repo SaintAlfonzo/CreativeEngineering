@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "old_illager_statue:old_illager_statue",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 42,
+    "separation": 29,
+    "salt": 1984720536
+  }
+}

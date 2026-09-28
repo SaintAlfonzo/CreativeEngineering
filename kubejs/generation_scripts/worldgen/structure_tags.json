@@ -1,95 +1,472 @@
 {
   "_readme": {
-    "what": "Category-wide spawn-frequency knobs for structures. Each tag has a \"multiplier\" (1 = untouched, 0.5 = half as many, 2 = twice as many, 0 = removed) and a list of \"values\". A structure's final multiplier is the PRODUCT of every tag it belongs to, so mod/themissingvillages 0.5 and type/village 0.5 leave a Missing Villages village at 0.25 and every other village at 0.5. Then rejoin the world: kubejs/server_scripts/worldgen/structure_overrides.js applies them at every world load (new chunks only).",
+    "what": "Named lists of structures. group/* tags decide which structures share a group grid (structure_groups.json); every other tag is for grouping, reports and building those lists. Tags have no multipliers any more (2026-09-27: every rate lives in structure_groups.json).",
     "values": "Entries: \"ns:id\" (one structure), \"ns:*\" or \"ns:prefix_*\" (glob, * matches anything including /), \"#tag/name\" (every member of another tag in this file), and a leading \"!\" on any of those to exclude (exclusions win, whatever their position). Unknown ids and tags are errors (logged, listed in the report, and NO structure changes are applied until fixed), so a typo never silently does nothing.",
-    "counting": "Each tag counts once per structure, even if it reaches that structure through several paths (dungeons -> dungeon/vanilla and dungeons -> dungeon/surface both contain desert_pyramid; dungeons still applies once). Different tags always stack.",
-    "families": "mod/* = one tag per namespace (plus mod/yungs for YUNG's 6). type/* = what the structure is; a structure can have more than one type (a T&T outpost tower is type/tower and type/enemy_building). dungeon/* = dungeons split by location (surface / underground) and origin (vanilla / better = YUNG's replacements / modded); dungeon/classic is vanilla + better. Bare names (pillager, nether, end, ruins, dungeons) are meta tags built from the others.",
-    "how_it_applies": "Multipliers scale structures per area. For grid placements (random_spread and the YUNG/MES variants) spacing becomes spacing/sqrt(m), rounded to a whole chunk, and frequency absorbs the rounding so the result is exact; separation scales with spacing. Strongholds (concentric_rings) scale their count. It applies on top of \"current\" in structure_config.json.",
-    "shared_sets": "Structures that share a structure_set share one grid. If your tags give members of one set different multipliers, the generator splits the set: one group stays in the original set, the rest move into new sets named creativeengineering:split/... with their own grid. That is exact when the members spawn in different biomes (T&T's per-biome outposts, vanilla's per-biome villages). Where their biomes overlap, the split-off members stop competing for the same grid cells, so they get somewhat more common there. The report lists every split.",
-    "report": "structure_tag_report.md (same folder) lists every tag's resolved members and, for each changed structure, its multiplier chain and the placement that was written.",
-    "new_structures": "When a mod adds structures, the report's Coverage section lists any without a type/* tag. Globs (\"ns:*\") pick up new ids automatically."
+    "groups": "A structure may be in at most one group/* tag. After changing one, run python3 tools/gen_structure_groups.py to give new members a fitted weight and frequency.",
+    "families": "mod/* = one tag per namespace (plus mod/yungs for YUNG's 6). type/* = what the structure is; a structure can have more than one type. dungeon/* = dungeons split by location (surface / underground) and origin (vanilla / better = YUNG's / modded). group/* = the shared grids."
   },
   "tags": {
-    "mod/minecraft":           { "multiplier": 1, "values": ["minecraft:*"] },
-    "mod/towns_and_towers":    { "multiplier": 1, "values": ["towns_and_towers:*"] },
-    "mod/philipsruins":        { "multiplier": 2, "values": ["philipsruins:*"] },
-    "mod/mes":                 { "multiplier": 1, "note": "Moog's End Structures", "values": ["mes:*"] },
-    "mod/themissingvillages":  { "multiplier": 1.5, "values": ["themissingvillages:*"] },
-    "mod/terralith":           { "multiplier": 1, "values": ["terralith:*"] },
-    "mod/farmers_structures":  { "multiplier": 1, "values": ["farmers_structures:*"] },
-    "mod/beautify":            { "multiplier": 1, "values": ["beautify:*"] },
-    "mod/hearths":             { "multiplier": 1, "values": ["hearths:*"] },
-    "mod/cloudstorage":        { "multiplier": 0.1, "values": ["cloudstorage:*"] },
-    "mod/nullscape":           { "multiplier": 0.75, "values": ["nullscape:*"] },
-    "mod/supplementaries":     { "multiplier": 1, "values": ["supplementaries:*"] },
-    "mod/twigs":               { "multiplier": 1, "values": ["twigs:*"] },
-    "mod/betterdungeons":      { "multiplier": 1, "values": ["betterdungeons:*"] },
-    "mod/betterwitchhuts":     { "multiplier": 1, "values": ["betterwitchhuts:*"] },
-    "mod/betterdeserttemples": { "multiplier": 1, "values": ["betterdeserttemples:*"] },
-    "mod/betterfortresses":    { "multiplier": 1, "values": ["betterfortresses:*"] },
-    "mod/betterjungletemples": { "multiplier": 1, "values": ["betterjungletemples:*"] },
-    "mod/betterstrongholds":   { "multiplier": 1, "values": ["betterstrongholds:*"] },
-    "mod/yungs": {
-      "multiplier": 1,
-      "note": "All of YUNG's Better X mods together.",
-      "values": ["#mod/betterdungeons", "#mod/betterwitchhuts", "#mod/betterdeserttemples", "#mod/betterfortresses", "#mod/betterjungletemples", "#mod/betterstrongholds"]
-    },
-    "mod/ae2":                 { "multiplier": 1, "values": ["ae2:*"] },
-    "mod/simply_houses":       { "multiplier": 1, "values": ["simply_houses:*"] },
-    "mod/greek_villager_house":        { "multiplier": 1, "values": ["greek_villager_house:*"] },
-    "mod/hobbit_house_":               { "multiplier": 1, "values": ["hobbit_house_:*"] },
-    "mod/old_swamp_fisherman_house":   { "multiplier": 1, "values": ["old_swamp_fisherman_house:*"] },
-    "mod/sawmillhouse":                { "multiplier": 1, "values": ["sawmillhouse:*"] },
-    "mod/small_viking_villager_house": { "multiplier": 1, "values": ["small_viking_villager_house:*"] },
-    "mod/small_villager_greenhouse":   { "multiplier": 1, "values": ["small_villager_greenhouse:*"] },
-    "mod/villager_butcher_house":      { "multiplier": 1, "values": ["villager_butcher_house:*"] },
-    "mod/villager_cartographer_house": { "multiplier": 1, "values": ["villager_cartographer_house:*"] },
-    "mod/villager_cleric_house":       { "multiplier": 1, "values": ["villager_cleric_house:*"] },
-    "mod/villager_country_house":      { "multiplier": 1, "values": ["villager_country_house:*"] },
-    "mod/villager_farmer_house":       { "multiplier": 1, "values": ["villager_farmer_house:*"] },
-    "mod/villager_fletcher_house":     { "multiplier": 1, "values": ["villager_fletcher_house:*"] },
-    "mod/villager_flower_house":       { "multiplier": 1, "values": ["villager_flower_house:*"] },
-    "mod/villager_tannery":            { "multiplier": 1, "values": ["villager_tannery:*"] },
-    "mod/villager_houses": {
-      "multiplier": 1,
-      "note": "The 14 one-building house mods, each a lone house with a villager inside: 4 jars (greek, hobbit, swamp fisherman, sawmill) and the 10 MCreator houses converted to kubejs/data. Simply Houses is not in here (no villagers, several buildings per set).",
+    "mod/minecraft": {
       "values": [
-        "#mod/greek_villager_house", "#mod/hobbit_house_", "#mod/old_swamp_fisherman_house", "#mod/sawmillhouse",
-        "#mod/small_viking_villager_house", "#mod/small_villager_greenhouse", "#mod/villager_butcher_house",
-        "#mod/villager_cartographer_house", "#mod/villager_cleric_house", "#mod/villager_country_house",
-        "#mod/villager_farmer_house", "#mod/villager_fletcher_house", "#mod/villager_flower_house", "#mod/villager_tannery"
+        "minecraft:*"
       ]
     },
-
+    "mod/towns_and_towers": {
+      "values": [
+        "towns_and_towers:*"
+      ]
+    },
+    "mod/philipsruins": {
+      "values": [
+        "philipsruins:*"
+      ]
+    },
+    "mod/mes": {
+      "note": "Moog's End Structures",
+      "values": [
+        "mes:*"
+      ]
+    },
+    "mod/terralith": {
+      "values": [
+        "terralith:*"
+      ]
+    },
+    "mod/farmers_structures": {
+      "values": [
+        "farmers_structures:*"
+      ]
+    },
+    "mod/beautify": {
+      "values": [
+        "beautify:*"
+      ]
+    },
+    "mod/hearths": {
+      "values": [
+        "hearths:*"
+      ]
+    },
+    "mod/cloudstorage": {
+      "values": [
+        "cloudstorage:*"
+      ]
+    },
+    "mod/nullscape": {
+      "values": [
+        "nullscape:*"
+      ]
+    },
+    "mod/supplementaries": {
+      "values": [
+        "supplementaries:*"
+      ]
+    },
+    "mod/twigs": {
+      "values": [
+        "twigs:*"
+      ]
+    },
+    "mod/betterdungeons": {
+      "values": [
+        "betterdungeons:*"
+      ]
+    },
+    "mod/betterwitchhuts": {
+      "values": [
+        "betterwitchhuts:*"
+      ]
+    },
+    "mod/betterdeserttemples": {
+      "values": [
+        "betterdeserttemples:*"
+      ]
+    },
+    "mod/betterfortresses": {
+      "values": [
+        "betterfortresses:*"
+      ]
+    },
+    "mod/betterjungletemples": {
+      "values": [
+        "betterjungletemples:*"
+      ]
+    },
+    "mod/betterstrongholds": {
+      "values": [
+        "betterstrongholds:*"
+      ]
+    },
+    "mod/yungs": {
+      "note": "All of YUNG's Better X mods together.",
+      "values": [
+        "#mod/betterdungeons",
+        "#mod/betterwitchhuts",
+        "#mod/betterdeserttemples",
+        "#mod/betterfortresses",
+        "#mod/betterjungletemples",
+        "#mod/betterstrongholds"
+      ]
+    },
+    "mod/ae2": {
+      "values": [
+        "ae2:*"
+      ]
+    },
+    "mod/simply_houses": {
+      "values": [
+        "simply_houses:*"
+      ]
+    },
+    "mod/greek_villager_house": {
+      "values": [
+        "greek_villager_house:*"
+      ]
+    },
+    "mod/hobbit_house_": {
+      "values": [
+        "hobbit_house_:*"
+      ]
+    },
+    "mod/old_swamp_fisherman_house": {
+      "values": [
+        "old_swamp_fisherman_house:*"
+      ]
+    },
+    "mod/sawmillhouse": {
+      "values": [
+        "sawmillhouse:*"
+      ]
+    },
+    "mod/small_viking_villager_house": {
+      "values": [
+        "small_viking_villager_house:*"
+      ]
+    },
+    "mod/small_villager_greenhouse": {
+      "values": [
+        "small_villager_greenhouse:*"
+      ]
+    },
+    "mod/villager_butcher_house": {
+      "values": [
+        "villager_butcher_house:*"
+      ]
+    },
+    "mod/villager_cartographer_house": {
+      "values": [
+        "villager_cartographer_house:*"
+      ]
+    },
+    "mod/villager_cleric_house": {
+      "values": [
+        "villager_cleric_house:*"
+      ]
+    },
+    "mod/villager_country_house": {
+      "values": [
+        "villager_country_house:*"
+      ]
+    },
+    "mod/villager_farmer_house": {
+      "values": [
+        "villager_farmer_house:*"
+      ]
+    },
+    "mod/villager_fletcher_house": {
+      "values": [
+        "villager_fletcher_house:*"
+      ]
+    },
+    "mod/villager_flower_house": {
+      "values": [
+        "villager_flower_house:*"
+      ]
+    },
+    "mod/villager_tannery": {
+      "values": [
+        "villager_tannery:*"
+      ]
+    },
+    "mod/villager_houses": {
+      "note": "The 14 one-building house mods, each a lone house with a villager inside: 4 jars (greek, hobbit, swamp fisherman, sawmill) and the 10 MCreator houses converted to kubejs/data. Simply Houses is not in here (no villagers, several buildings per set).",
+      "values": [
+        "#mod/greek_villager_house",
+        "#mod/hobbit_house_",
+        "#mod/old_swamp_fisherman_house",
+        "#mod/sawmillhouse",
+        "#mod/small_viking_villager_house",
+        "#mod/small_villager_greenhouse",
+        "#mod/villager_butcher_house",
+        "#mod/villager_cartographer_house",
+        "#mod/villager_cleric_house",
+        "#mod/villager_country_house",
+        "#mod/villager_farmer_house",
+        "#mod/villager_fletcher_house",
+        "#mod/villager_flower_house",
+        "#mod/villager_tannery"
+      ]
+    },
+    "mod/hopo": {
+      "values": [
+        "hopo:*"
+      ]
+    },
+    "mod/watchtower_building": {
+      "note": "Abandoned Watchtowers (MCreator, converted to kubejs/data)",
+      "values": [
+        "watchtower_building:*"
+      ]
+    },
+    "mod/skyvillages": {
+      "note": "Sky Villages (converted to kubejs/data; its compat pool entries for templates the jar never shipped were dropped)",
+      "values": [
+        "skyvillages:*"
+      ]
+    },
+    "mod/mysticrift_pillagers_towers_aris": {
+      "note": "Mysticrift Pillager Towers (jar file name \"1.19.2.jar\", converted to kubejs/data; pools repointed from its 1.21-format templates to the 1.20.1 saves of the same towers)",
+      "values": [
+        "mysticrift_pillagers_towers_aris:*"
+      ]
+    },
+    "mod/ancient_enchantment_temple": {
+      "values": [
+        "ancient_enchantment_temple:*"
+      ]
+    },
+    "mod/animal_barn": {
+      "values": [
+        "animal_barn:*"
+      ]
+    },
+    "mod/antiquetradingship": {
+      "values": [
+        "antiquetradingship:*"
+      ]
+    },
+    "mod/bighorsestable": {
+      "values": [
+        "bighorsestable:*"
+      ]
+    },
+    "mod/desert_village_temple": {
+      "values": [
+        "desert_village_temple:*"
+      ]
+    },
+    "mod/desert_watchtower": {
+      "values": [
+        "desert_watchtower:*"
+      ]
+    },
+    "mod/forest_ruins": {
+      "values": [
+        "forest_ruins:*"
+      ]
+    },
+    "mod/forest_watchtower": {
+      "values": [
+        "forest_watchtower:*"
+      ]
+    },
+    "mod/forgotten_church": {
+      "values": [
+        "forgotten_church:*"
+      ]
+    },
+    "mod/gothic_church": {
+      "values": [
+        "gothic_church:*"
+      ]
+    },
+    "mod/illager_siege_weapons": {
+      "values": [
+        "illager_siege_weapons:*"
+      ]
+    },
+    "mod/illager_viking_longship": {
+      "values": [
+        "illager_viking_longship:*"
+      ]
+    },
+    "mod/illagerwarship": {
+      "values": [
+        "illagerwarship:*"
+      ]
+    },
+    "mod/llama_stable": {
+      "values": [
+        "llama_stable:*"
+      ]
+    },
+    "mod/mini_clock_tower": {
+      "values": [
+        "mini_clock_tower:*"
+      ]
+    },
+    "mod/old_illager_statue": {
+      "values": [
+        "old_illager_statue:*"
+      ]
+    },
+    "mod/oldvillagerstatue": {
+      "values": [
+        "oldvillagerstatue:*"
+      ]
+    },
+    "mod/plains_villager_tents": {
+      "values": [
+        "plains_villager_tents:*"
+      ]
+    },
+    "mod/saloon": {
+      "values": [
+        "saloon:*"
+      ]
+    },
+    "mod/small_cat_statues": {
+      "values": [
+        "small_cat_statues:*"
+      ]
+    },
+    "mod/smallhorsestable": {
+      "values": [
+        "smallhorsestable:*"
+      ]
+    },
+    "mod/snowy_tents": {
+      "values": [
+        "snowy_tents:*"
+      ]
+    },
+    "mod/villager_archer_camp": {
+      "values": [
+        "villager_archer_camp:*"
+      ]
+    },
+    "mod/villager_circus_tent": {
+      "values": [
+        "villager_circus_tent:*"
+      ]
+    },
+    "mod/villager_fish_shop": {
+      "values": [
+        "villager_fish_shop:*"
+      ]
+    },
+    "mod/villager_fishermans_hut": {
+      "values": [
+        "villager_fishermans_hut:*"
+      ]
+    },
+    "mod/villager_forge": {
+      "values": [
+        "villager_forge:*"
+      ]
+    },
+    "mod/villager_gold_washing_facility": {
+      "values": [
+        "villager_gold_washing_facility:*"
+      ]
+    },
+    "mod/villager_rafts": {
+      "values": [
+        "villager_rafts:*"
+      ]
+    },
+    "mod/villager_windmill": {
+      "values": [
+        "villager_windmill:*"
+      ]
+    },
+    "mod/villagesandpillages": {
+      "note": "Villages & Pillages (jar kept: custom structure type, processors and mixins, needs YUNG's API)",
+      "values": [
+        "villagesandpillages:*"
+      ]
+    },
+    "mod/revamped_shipwrecks": {
+      "note": "Revamped Shipwrecks (lowcode datapack jar, kept). Empties minecraft:shipwrecks and replaces both vanilla wrecks with its own jigsaw wrecks.",
+      "values": [
+        "revamped_shipwrecks:*"
+      ]
+    },
+    "mod/unwrecked_ships": {
+      "note": "Unwrecked Ships Plus (lowcode datapack jar, kept)",
+      "values": [
+        "unwrecked_ships:*"
+      ]
+    },
+    "mod/blocky_siege": {
+      "note": "Blocky Siege (jar kept: a full siege-weapon mod; this pillager ship is its only structure)",
+      "values": [
+        "blocky_siege:*"
+      ]
+    },
+    "mod/villager_buildings": {
+      "note": "2026-09-27 batch of MCreator one-building mods with villagers (or their animals) inside, all converted to kubejs/data: stables, barns, shops, workshops, churches, temples, watchtowers. Tents and camps are in mod/villager_camps.",
+      "values": [
+        "#mod/animal_barn",
+        "#mod/bighorsestable",
+        "#mod/smallhorsestable",
+        "#mod/llama_stable",
+        "#mod/villager_fish_shop",
+        "#mod/villager_fishermans_hut",
+        "#mod/villager_forge",
+        "#mod/villager_gold_washing_facility",
+        "#mod/villager_windmill",
+        "#mod/saloon",
+        "#mod/mini_clock_tower",
+        "#mod/desert_watchtower",
+        "#mod/forest_watchtower",
+        "#mod/gothic_church",
+        "#mod/desert_village_temple",
+        "#mod/ancient_enchantment_temple"
+      ]
+    },
+    "mod/villager_camps": {
+      "note": "Friendly tents and camps from the same batch (converted to kubejs/data).",
+      "values": [
+        "#mod/plains_villager_tents",
+        "#mod/villager_archer_camp",
+        "#mod/villager_circus_tent",
+        "#mod/snowy_tents"
+      ]
+    },
     "type/village": {
-      "multiplier": 0.75,
-      "note": "Settlements: vanilla, Towns & Towers, The Missing Villages, Terralith fortified villages.",
+      "note": "Settlements: vanilla, Towns & Towers, Terralith fortified villages.",
       "values": [
         "minecraft:village_*",
         "towns_and_towers:village_*",
         "towns_and_towers:exclusives/village_*",
-        "themissingvillages:*",
         "terralith:fortified_*"
       ]
     },
     "type/house": {
-      "multiplier": 0.66,
       "note": "Standalone friendly buildings: homes, farms, cook houses, fish farms, the one-building villager house mods and Simply Houses' empty buildings (its \"forest fort\" is house-sized, not a walled compound). undergardens_sea targets the Undergarden dimension's biomes, so it likely never spawns here.",
-      "values": ["beautify:botanist_house_*", "farmers_structures:*", "minecraft:igloo", "#mod/villager_houses", "simply_houses:*"]
+      "values": [
+        "beautify:botanist_house_*",
+        "farmers_structures:*",
+        "minecraft:igloo",
+        "#mod/villager_houses",
+        "simply_houses:*",
+        "#mod/villager_buildings"
+      ]
     },
     "type/camp": {
-      "multiplier": 2.5,
-      "note": "Tents and small camps: T&T's camp-form outposts (beach, snowy beach, sparse jungle, wooded badlands) and the wandering trader camp village.",
+      "note": "Tents and small camps: T&T's camp-form outposts (beach, snowy beach, sparse jungle, wooded badlands), the wandering trader camp village, the friendly villager tents/camps (mod/villager_camps) and the illager siege-weapon camps.",
       "values": [
         "towns_and_towers:pillager_outpost_beach",
         "towns_and_towers:pillager_outpost_snowy_beach",
         "towns_and_towers:pillager_outpost_sparse_jungle",
         "towns_and_towers:pillager_outpost_wooded_badlands",
-        "towns_and_towers:exclusives/village_wandering_trader_camp"
+        "towns_and_towers:exclusives/village_wandering_trader_camp",
+        "#mod/villager_camps",
+        "illager_siege_weapons:*"
       ]
     },
     "type/fort": {
-      "multiplier": 1.33,
       "note": "Walled compounds: T&T's fort-form outposts.",
       "values": [
         "towns_and_towers:pillager_outpost_badlands",
@@ -104,7 +481,6 @@
       ]
     },
     "type/tower": {
-      "multiplier": 1.66,
       "note": "Towers in any dimension: the vanilla outpost, T&T's tower-form outposts, Philip's ancient towers, Terralith's spire and sunken tower, MES's enderwatch tower, Hearths' crimson/warped towers.",
       "values": [
         "minecraft:pillager_outpost",
@@ -127,21 +503,36 @@
         "terralith:spire",
         "terralith:underground/sunken_tower",
         "hearths:crimson_tower",
-        "hearths:warped_tower"
+        "hearths:warped_tower",
+        "mysticrift_pillagers_towers_aris:*",
+        "watchtower_building:fresh_watchtower"
       ]
     },
     "type/ship": {
-      "multiplier": 1.33,
-      "note": "Intact ships: T&T's pillager ship and ocean fleet village, MES's starlight voyager (End airship). Wrecks are type/shipwreck.",
-      "values": ["towns_and_towers:pillager_outpost_ocean", "towns_and_towers:village_ocean", "mes:starlight_voyager"]
+      "note": "Intact ships: T&T's pillager ship and ocean fleet village, MES's starlight voyager (End airship), the antique trading ship, illager warship and longship, Blocky Siege's pillager ship, Unwrecked Ships (ocean + Nether), villager rafts. Wrecks are type/shipwreck.",
+      "values": [
+        "towns_and_towers:pillager_outpost_ocean",
+        "towns_and_towers:village_ocean",
+        "mes:starlight_voyager",
+        "antiquetradingship:*",
+        "illagerwarship:*",
+        "illager_viking_longship:*",
+        "blocky_siege:pillager_ship",
+        "unwrecked_ships:*",
+        "villager_rafts:*"
+      ]
     },
     "type/enemy_building": {
-      "multiplier": 1.33,
       "note": "Buildings occupied by hostile mobs: every pillager structure plus witch huts (vanilla, YUNG's, Terralith's cave hut).",
-      "values": ["#pillager", "minecraft:swamp_hut", "betterwitchhuts:witch_hut", "terralith:underground/witch_hut"]
+      "values": [
+        "#pillager",
+        "minecraft:swamp_hut",
+        "betterwitchhuts:witch_hut",
+        "terralith:underground/witch_hut",
+        "villagesandpillages:village_witch"
+      ]
     },
     "type/ruin": {
-      "multiplier": 1.5,
       "note": "Overworld land ruins, surface and buried. start_nether_ruin is a nether-themed ruin that spawns in the Overworld. Ocean ruins are type/underwater_ruin, portals type/ruined_portal.",
       "values": [
         "philipsruins:ancient_ruins",
@@ -160,29 +551,47 @@
         "philipsruins:underground_structures",
         "philipsruins:lost_soul_city",
         "terralith:glacial_hut",
-        "terralith:underground/oak_cabin"
+        "terralith:underground/oak_cabin",
+        "forest_ruins:*",
+        "watchtower_building:abandoned_watchtower",
+        "forgotten_church:*"
       ]
     },
     "type/ruined_portal": {
-      "multiplier": 0,
       "note": "All 7 vanilla ruined portal variants (one shared set, currently disabled in structure_config.json).",
-      "values": ["minecraft:ruined_portal*"]
+      "values": [
+        "minecraft:ruined_portal*"
+      ]
     },
     "type/underwater_ruin": {
-      "multiplier": 0.66,
-      "values": ["minecraft:ocean_ruin_cold", "minecraft:ocean_ruin_warm", "philipsruins:ocean_ruins", "philipsruins:ocean_fortress"]
+      "values": [
+        "minecraft:ocean_ruin_cold",
+        "minecraft:ocean_ruin_warm",
+        "philipsruins:ocean_ruins",
+        "philipsruins:ocean_fortress",
+        "hopo:underwater_ruins",
+        "hopo:underwater_small_ruins",
+        "hopo:underwater_warm_small_ruins"
+      ],
+      "note": ""
     },
     "type/shipwreck": {
-      "multiplier": 0.66,
-      "values": ["minecraft:shipwreck", "minecraft:shipwreck_beached", "towns_and_towers:wreckage_ocean"]
+      "values": [
+        "revamped_shipwrecks:shipwreck",
+        "revamped_shipwrecks:shipwreck_beached",
+        "towns_and_towers:wreckage_ocean"
+      ],
+      "note": "Revamped Shipwrecks empties minecraft:shipwrecks, so its two jigsaw wrecks stand in for the vanilla shipwreck / shipwreck_beached (same biome tags, which Hopo extends to beaches and rivers)."
     },
     "type/mineshaft": {
-      "multiplier": 1,
       "note": "Vanilla mineshafts plus Terralith's underground mining outpost.",
-      "values": ["minecraft:mineshaft", "minecraft:mineshaft_mesa", "terralith:underground/mining_outpost"]
+      "values": [
+        "minecraft:mineshaft",
+        "minecraft:mineshaft_mesa",
+        "terralith:underground/mining_outpost"
+      ]
     },
     "type/underground": {
-      "multiplier": 1.5,
       "note": "Underground structures that are not dungeons (those are dungeon/underground) or mineshafts: Terralith's cave structures, Philip's deep ruins and lost soul city, buried treasure.",
       "values": [
         "terralith:underground/oak_cabin",
@@ -197,12 +606,14 @@
       ]
     },
     "type/environmental": {
-      "multiplier": 1,
       "note": "Overworld natural features rather than buildings. Nether and End ones are type/nether_environmental and type/end_environmental.",
-      "values": ["terralith:underground/giant_bee_hive", "ae2:meteorite"]
+      "values": [
+        "terralith:underground/giant_bee_hive",
+        "ae2:meteorite",
+        "hopo:underwater_fossils"
+      ]
     },
     "type/decoration": {
-      "multiplier": 1,
       "note": "Small clutter with no interior, any dimension: way signs, rock piles, obelisks, spikes, pillars, fossils.",
       "values": [
         "supplementaries:way_sign",
@@ -213,21 +624,27 @@
         "mes:enderpin_spikes",
         "mes:ender_spire",
         "mes:ruined_pillar",
-        "mes:endscraps"
+        "mes:endscraps",
+        "small_cat_statues:*",
+        "oldvillagerstatue:*",
+        "old_illager_statue:*"
       ]
     },
     "type/sky": {
-      "multiplier": 2,
-      "note": "Floating structures from Cloud Storage.",
-      "values": ["cloudstorage:*"]
+      "note": "Floating structures: Cloud Storage and Sky Villages.",
+      "values": [
+        "cloudstorage:*",
+        "skyvillages:*"
+      ]
     },
     "type/nether_environmental": {
-      "multiplier": 1,
       "note": "Natural-looking Nether features (checked by template blocks: fossil bone, a netherrack spiral).",
-      "values": ["minecraft:nether_fossil", "hearths:netherrack_spiral"]
+      "values": [
+        "minecraft:nether_fossil",
+        "hearths:netherrack_spiral"
+      ]
     },
     "type/nether_constructed": {
-      "multiplier": 1,
       "note": "Built Nether structures. twigs:bloodstone_obelisk is polished bloodstone bricks, so it counts as built.",
       "values": [
         "minecraft:bastion_remnant",
@@ -246,12 +663,16 @@
       ]
     },
     "type/end_environmental": {
-      "multiplier": 1,
       "note": "Natural-looking End features, checked by template blocks: bone dragon skeleton, meteorite crater, end-stone prairie, enderbloom trees, purpur/amethyst growths.",
-      "values": ["nullscape:dragon_skeleton", "mes:astral_meteorite", "mes:placid_prairie", "mes:enderbloom_grove", "mes:enderskog"]
+      "values": [
+        "nullscape:dragon_skeleton",
+        "mes:astral_meteorite",
+        "mes:placid_prairie",
+        "mes:enderbloom_grove",
+        "mes:enderskog"
+      ]
     },
     "type/end_constructed": {
-      "multiplier": 1,
       "note": "Built End structures: end cities, the rest of MES (purpur / end-stone-brick builds), Philip's End ruins and gate fortress.",
       "values": [
         "minecraft:end_city",
@@ -261,26 +682,39 @@
         "philipsruins:end_gate_fortress"
       ]
     },
-
     "dungeon/surface_vanilla": {
-      "multiplier": 1.33,
-      "values": ["minecraft:desert_pyramid", "minecraft:jungle_pyramid", "minecraft:swamp_hut", "minecraft:mansion"]
+      "values": [
+        "minecraft:desert_pyramid",
+        "minecraft:jungle_pyramid",
+        "minecraft:swamp_hut",
+        "minecraft:mansion"
+      ]
     },
     "dungeon/surface_better": {
-      "multiplier": 1.33,
       "note": "YUNG's replacements for the vanilla surface dungeons.",
-      "values": ["betterdeserttemples:desert_temple", "betterjungletemples:jungle_temple", "betterwitchhuts:witch_hut", "betterwitchhuts:witch_circle"]
+      "values": [
+        "betterdeserttemples:desert_temple",
+        "betterjungletemples:jungle_temple",
+        "betterwitchhuts:witch_hut",
+        "betterwitchhuts:witch_circle"
+      ]
     },
     "dungeon/surface_modded": {
-      "multiplier": 1,
-      "values": ["terralith:spire", "towns_and_towers:mimic_desert", "philipsruins:badlands_start_dungeon", "cloudstorage:sky_temple"]
+      "values": [
+        "terralith:spire",
+        "towns_and_towers:mimic_desert",
+        "philipsruins:badlands_start_dungeon",
+        "cloudstorage:sky_temple",
+        "villagesandpillages:village_witch"
+      ]
     },
     "dungeon/underground_vanilla": {
-      "multiplier": 1.5,
-      "values": ["minecraft:stronghold", "minecraft:ancient_city"]
+      "values": [
+        "minecraft:stronghold",
+        "minecraft:ancient_city"
+      ]
     },
     "dungeon/underground_better": {
-      "multiplier": 1,
       "note": "YUNG's Better Strongholds and the four Overworld Better Dungeons.",
       "values": [
         "betterstrongholds:stronghold",
@@ -291,7 +725,6 @@
       ]
     },
     "dungeon/underground_modded": {
-      "multiplier": 1,
       "values": [
         "philipsruins:ancient_crypt",
         "philipsruins:antiquus_crypta",
@@ -303,53 +736,88 @@
       ]
     },
     "dungeon/surface": {
-      "multiplier": 1,
       "note": "Above-ground Overworld dungeons (vanilla, better and modded).",
-      "values": ["#dungeon/surface_vanilla", "#dungeon/surface_better", "#dungeon/surface_modded"]
+      "values": [
+        "#dungeon/surface_vanilla",
+        "#dungeon/surface_better",
+        "#dungeon/surface_modded"
+      ]
     },
     "dungeon/underground": {
-      "multiplier": 1,
-      "values": ["#dungeon/underground_vanilla", "#dungeon/underground_better", "#dungeon/underground_modded"]
+      "values": [
+        "#dungeon/underground_vanilla",
+        "#dungeon/underground_better",
+        "#dungeon/underground_modded"
+      ]
     },
     "dungeon/vanilla": {
-      "multiplier": 1,
       "note": "Every vanilla dungeon, including Nether, End and ocean ones.",
-      "values": ["#dungeon/surface_vanilla", "#dungeon/underground_vanilla", "minecraft:fortress", "minecraft:bastion_remnant", "minecraft:end_city", "minecraft:monument"]
+      "values": [
+        "#dungeon/surface_vanilla",
+        "#dungeon/underground_vanilla",
+        "minecraft:fortress",
+        "minecraft:bastion_remnant",
+        "minecraft:end_city",
+        "minecraft:monument"
+      ]
     },
     "dungeon/better": {
-      "multiplier": 1,
       "note": "Every YUNG's dungeon, including Better Fortresses and the Nether Better Dungeon.",
-      "values": ["#dungeon/surface_better", "#dungeon/underground_better", "betterfortresses:fortress", "betterdungeons:small_nether_dungeon"]
+      "values": [
+        "#dungeon/surface_better",
+        "#dungeon/underground_better",
+        "betterfortresses:fortress",
+        "betterdungeons:small_nether_dungeon"
+      ]
     },
     "dungeon/modded": {
-      "multiplier": 1,
-      "values": ["#dungeon/surface_modded", "#dungeon/underground_modded", "philipsruins:start_nether_dungeon"]
+      "values": [
+        "#dungeon/surface_modded",
+        "#dungeon/underground_modded",
+        "philipsruins:start_nether_dungeon"
+      ]
     },
     "dungeon/classic": {
-      "multiplier": 1,
       "note": "Vanilla dungeons and their YUNG's Better versions together.",
-      "values": ["#dungeon/vanilla", "#dungeon/better"]
+      "values": [
+        "#dungeon/vanilla",
+        "#dungeon/better"
+      ]
     },
-
     "dungeons": {
-      "multiplier": 1,
-      "values": ["#dungeon/vanilla", "#dungeon/better", "#dungeon/modded"]
+      "values": [
+        "#dungeon/vanilla",
+        "#dungeon/better",
+        "#dungeon/modded"
+      ]
     },
     "pillager": {
-      "multiplier": 1.33,
-      "note": "Every illager structure: the vanilla outpost and mansion, and all 29 T&T outposts (camps, forts, towers, ship).",
-      "values": ["minecraft:pillager_outpost", "minecraft:mansion", "towns_and_towers:pillager_outpost_*", "towns_and_towers:exclusives/pillager_outpost_*"]
+      "note": "Every illager structure: the vanilla outpost and mansion, all 29 T&T outposts (camps, forts, towers, ship), Mysticrift's 8 towers, the illager siege-weapon camps, the illager warship and longship, Blocky Siege's pillager ship.",
+      "values": [
+        "minecraft:pillager_outpost",
+        "minecraft:mansion",
+        "towns_and_towers:pillager_outpost_*",
+        "towns_and_towers:exclusives/pillager_outpost_*",
+        "mysticrift_pillagers_towers_aris:*",
+        "illager_siege_weapons:*",
+        "illagerwarship:*",
+        "illager_viking_longship:*",
+        "blocky_siege:pillager_ship"
+      ]
     },
     "nether": {
-      "multiplier": 1,
-      "values": ["#type/nether_environmental", "#type/nether_constructed"]
+      "values": [
+        "#type/nether_environmental",
+        "#type/nether_constructed"
+      ]
     },
     "end": {
-      "multiplier": 1,
-      "values": ["#type/end_environmental", "#type/end_constructed"]
+      "values": [
+        "#type/end_environmental",
+        "#type/end_constructed"
+      ]
     },
     "ruins": {
-      "multiplier": 1,
       "note": "Ruins in every dimension: land, underwater, portals, and the Nether/End ruins.",
       "values": [
         "#type/ruin",
@@ -360,6 +828,86 @@
         "philipsruins:end_ruins",
         "mes:endscraps",
         "mes:ruined_pillar"
+      ]
+    },
+    "group/settlements": {
+      "note": "Friendly settlements: vanilla and Towns & Towers villages, Terralith fortified villages. Meta structures join later.",
+      "values": [
+        "#type/village",
+        "!towns_and_towers:village_ocean",
+        "!towns_and_towers:exclusives/village_wandering_trader_camp"
+      ]
+    },
+    "group/pillager_settlements": {
+      "note": "Pillager outposts on land: vanilla, every Towns & Towers tower, fort and camp outpost except the ship (boats), Mysticrift's towers, the illager siege-weapon camps.",
+      "values": [
+        "minecraft:pillager_outpost",
+        "towns_and_towers:pillager_outpost_*",
+        "towns_and_towers:exclusives/pillager_outpost_*",
+        "!towns_and_towers:pillager_outpost_ocean",
+        "mysticrift_pillagers_towers_aris:*",
+        "illager_siege_weapons:*"
+      ]
+    },
+    "group/ruins": {
+      "note": "Surface land ruins: Philip's Ruins, Terralith's glacial hut, Forest Ruins, the abandoned watchtower, the forgotten church. Underground ruins stay standalone.",
+      "values": [
+        "#type/ruin",
+        "!#type/underground"
+      ]
+    },
+    "group/surface_dungeons": {
+      "note": "Surface dungeons: YUNG's temples and witch huts, the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The vanilla temples YUNG's blocks in code stay out.",
+      "values": [
+        "#dungeon/surface",
+        "!#type/sky",
+        "!minecraft:desert_pyramid",
+        "!minecraft:jungle_pyramid",
+        "!minecraft:swamp_hut"
+      ]
+    },
+    "group/ocean_ruins": {
+      "note": "Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, Revamped Shipwrecks (standing in for the vanilla wrecks), the T&T wreckage.",
+      "values": [
+        "#type/underwater_ruin",
+        "#type/shipwreck"
+      ]
+    },
+    "group/ocean_dungeons": {
+      "note": "Ocean monuments, on the monuments' own grid (same spacing, spread and salt, so positions match vanilla). Monument meta structures join later.",
+      "values": [
+        "minecraft:monument"
+      ]
+    },
+    "group/sky": {
+      "note": "Sky structures: Cloud Storage's hot air balloons and sky temples, Sky Villages, AE2 meteorites. Meta structures join later.",
+      "values": [
+        "#type/sky",
+        "ae2:meteorite"
+      ]
+    },
+    "group/boats": {
+      "note": "Ships at sea: the Towns & Towers ship village and pillager ship, the antique trading ship, illager warship and longship, Blocky Siege's pillager ship, Unwrecked Ships' ocean ship, villager rafts. Meta structures join later.",
+      "values": [
+        "towns_and_towers:village_ocean",
+        "towns_and_towers:pillager_outpost_ocean",
+        "antiquetradingship:*",
+        "illagerwarship:*",
+        "illager_viking_longship:*",
+        "blocky_siege:pillager_ship",
+        "unwrecked_ships:ship",
+        "villager_rafts:*"
+      ]
+    },
+    "group/remote": {
+      "note": "Lone camps and cabins: the T&T wandering trader camp, every single-building house mod in the Overworld and the friendly villager tents/camps. The two Farmer's Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.",
+      "values": [
+        "towns_and_towers:exclusives/village_wandering_trader_camp",
+        "#type/house",
+        "!#nether",
+        "!farmers_structures:aethers",
+        "!farmers_structures:undergardens_sea",
+        "#mod/villager_camps"
       ]
     }
   }

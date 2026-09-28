@@ -1,0 +1,1520 @@
+{
+  "_readme": {
+    "what": "Every structure's spawn rate, in one file. A GROUP is one shared structure_set (creativeengineering:group/<name>) holding every structure in the structure tag group/<name> (structure_tags.json): all members share its grid, so no two of them ever start closer than its separation, whatever mod they come from. Every structure that is in no group keeps its own set and is tuned under \"standalone\". Rejoin the world to apply (new chunks only); structure_tag_report.md shows what the game applied.",
+    "group placement": "spacing: one grid slot per spacing x spacing chunks (the group's top density). separation: minimum chunks between any two members. salt: which grid (leave it). Optional: spread_type, frequency (chance per slot for the whole group), locate_offset, exclusion_zone {other_set, chunk_count} (keep off another set's grid slots; it checks slots, not real structures, so keep chunk_count small).",
+    "per structure": "weight: who wins a slot where several members can spawn (relative, whole numbers). frequency: 0..1, chance that the winner really spawns; otherwise the slot stays empty, so lowering one never makes another more common. enabled: false removes it. Where a structure is the only member that fits the biome, it gets every slot x its frequency.",
+    "standalone": "Keyed by the structure_set id in structure_config.json. placement: only the fields you change (spacing, separation, frequency, count, locate_offset...; the rest come from \"original\" in structure_config.json). structures: frequency / enabled / optional weight, same meaning as in a group.",
+    "moving a structure": "Edit the group/* tags in structure_tags.json, then run python3 tools/gen_structure_groups.py: it adds the new member with a weight and frequency fitted to its mod default and leaves everything else alone. A tagged member with no entry here still works (the game fills in a rough default and flags it).",
+    "estimates": "python3 tools/gen_structure_groups.py --check rewrites structure_group_estimates.md: expected structures per area for every structure, from its real biome areas."
+  },
+  "groups": {
+    "settlements": {
+      "note": "Friendly settlements: vanilla and Towns & Towers villages, Terralith fortified villages. Meta structures join later.",
+      "placement": {
+        "spacing": 48,
+        "separation": 12,
+        "salt": 871105700
+      },
+      "structures": {
+        "minecraft:village_desert": {
+          "weight": 424,
+          "frequency": 0.6975
+        },
+        "minecraft:village_plains": {
+          "weight": 162,
+          "frequency": 0.9263
+        },
+        "minecraft:village_savanna": {
+          "weight": 176,
+          "frequency": 0.8134
+        },
+        "minecraft:village_snowy": {
+          "weight": 132,
+          "frequency": 1.0
+        },
+        "minecraft:village_taiga": {
+          "weight": 153,
+          "frequency": 0.9436
+        },
+        "terralith:fortified_desert_village": {
+          "weight": 108,
+          "frequency": 1.0
+        },
+        "terralith:fortified_village": {
+          "weight": 53,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/village_classic": {
+          "weight": 101,
+          "frequency": 0.1623
+        },
+        "towns_and_towers:exclusives/village_iberian": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/village_mediterranean": {
+          "weight": 41,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/village_nilotic": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/village_rustic": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/village_swedish": {
+          "weight": 22,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/village_tudor": {
+          "weight": 99,
+          "frequency": 0.4132
+        },
+        "towns_and_towers:village_badlands": {
+          "weight": 173,
+          "frequency": 0.2113
+        },
+        "towns_and_towers:village_beach": {
+          "weight": 101,
+          "frequency": 0.1623
+        },
+        "towns_and_towers:village_birch_forest": {
+          "weight": 162,
+          "frequency": 0.197
+        },
+        "towns_and_towers:village_flower_forest": {
+          "weight": 360,
+          "frequency": 0.1637
+        },
+        "towns_and_towers:village_forest": {
+          "weight": 144,
+          "frequency": 0.1749
+        },
+        "towns_and_towers:village_grove": {
+          "weight": 213,
+          "frequency": 0.1696
+        },
+        "towns_and_towers:village_jungle": {
+          "weight": 46,
+          "frequency": 0.4485
+        },
+        "towns_and_towers:village_meadow": {
+          "weight": 62,
+          "frequency": 0.6944
+        },
+        "towns_and_towers:village_mushroom_fields": {
+          "weight": 101,
+          "frequency": 0.1623
+        },
+        "towns_and_towers:village_old_growth_taiga": {
+          "weight": 110,
+          "frequency": 0.2153
+        },
+        "towns_and_towers:village_snowy_slopes": {
+          "weight": 141,
+          "frequency": 0.2799
+        },
+        "towns_and_towers:village_snowy_taiga": {
+          "weight": 108,
+          "frequency": 0.1943
+        },
+        "towns_and_towers:village_sparse_jungle": {
+          "weight": 46,
+          "frequency": 0.45
+        },
+        "towns_and_towers:village_sunflower_plains": {
+          "weight": 228,
+          "frequency": 0.2615
+        },
+        "towns_and_towers:village_swamp": {
+          "weight": 142,
+          "frequency": 0.5026
+        },
+        "towns_and_towers:village_wooded_badlands": {
+          "weight": 205,
+          "frequency": 0.1738
+        }
+      }
+    },
+    "pillager_settlements": {
+      "note": "Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpost except the ship (boats).",
+      "placement": {
+        "spacing": 32,
+        "separation": 8,
+        "salt": 1867953461,
+        "exclusion_zone": {
+          "other_set": "creativeengineering:group/settlements",
+          "chunk_count": 4
+        }
+      },
+      "structures": {
+        "minecraft:pillager_outpost": {
+          "weight": 74,
+          "frequency": 0.6336
+        },
+        "towns_and_towers:exclusives/pillager_outpost_classic": {
+          "weight": 80,
+          "frequency": 0.2338
+        },
+        "towns_and_towers:exclusives/pillager_outpost_iberian": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/pillager_outpost_mediterranean": {
+          "weight": 78,
+          "frequency": 0.3596
+        },
+        "towns_and_towers:exclusives/pillager_outpost_oriental": {
+          "weight": 65,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/pillager_outpost_rustic": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/pillager_outpost_swedish": {
+          "weight": 31,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/pillager_outpost_tudor": {
+          "weight": 100,
+          "frequency": 0.2918
+        },
+        "towns_and_towers:pillager_outpost_badlands": {
+          "weight": 83,
+          "frequency": 0.3573
+        },
+        "towns_and_towers:pillager_outpost_beach": {
+          "weight": 151,
+          "frequency": 0.4394
+        },
+        "towns_and_towers:pillager_outpost_birch_forest": {
+          "weight": 132,
+          "frequency": 0.2977
+        },
+        "towns_and_towers:pillager_outpost_desert": {
+          "weight": 159,
+          "frequency": 0.3206
+        },
+        "towns_and_towers:pillager_outpost_flower_forest": {
+          "weight": 252,
+          "frequency": 0.3165
+        },
+        "towns_and_towers:pillager_outpost_forest": {
+          "weight": 136,
+          "frequency": 0.2912
+        },
+        "towns_and_towers:pillager_outpost_grove": {
+          "weight": 172,
+          "frequency": 0.2852
+        },
+        "towns_and_towers:pillager_outpost_jungle": {
+          "weight": 109,
+          "frequency": 0.3648
+        },
+        "towns_and_towers:pillager_outpost_meadow": {
+          "weight": 152,
+          "frequency": 0.4
+        },
+        "towns_and_towers:pillager_outpost_mushroom_fields": {
+          "weight": 100,
+          "frequency": 0.2918
+        },
+        "towns_and_towers:pillager_outpost_old_growth_taiga": {
+          "weight": 108,
+          "frequency": 0.4216
+        },
+        "towns_and_towers:pillager_outpost_savanna": {
+          "weight": 42,
+          "frequency": 0.8362
+        },
+        "towns_and_towers:pillager_outpost_snowy_beach": {
+          "weight": 151,
+          "frequency": 0.4394
+        },
+        "towns_and_towers:pillager_outpost_snowy_plains": {
+          "weight": 156,
+          "frequency": 0.4073
+        },
+        "towns_and_towers:pillager_outpost_snowy_slopes": {
+          "weight": 67,
+          "frequency": 0.6132
+        },
+        "towns_and_towers:pillager_outpost_snowy_taiga": {
+          "weight": 100,
+          "frequency": 0.3106
+        },
+        "towns_and_towers:pillager_outpost_sparse_jungle": {
+          "weight": 110,
+          "frequency": 0.6864
+        },
+        "towns_and_towers:pillager_outpost_sunflower_plains": {
+          "weight": 100,
+          "frequency": 0.2918
+        },
+        "towns_and_towers:pillager_outpost_swamp": {
+          "weight": 100,
+          "frequency": 0.2918
+        },
+        "towns_and_towers:pillager_outpost_taiga": {
+          "weight": 45,
+          "frequency": 1.0
+        },
+        "towns_and_towers:pillager_outpost_wooded_badlands": {
+          "weight": 81,
+          "frequency": 0.7962
+        },
+        "illager_siege_weapons:ballista": {
+          "weight": 57,
+          "frequency": 1.0
+        },
+        "illager_siege_weapons:battering_ram": {
+          "weight": 57,
+          "frequency": 1.0
+        },
+        "illager_siege_weapons:catapult": {
+          "weight": 57,
+          "frequency": 1.0
+        },
+        "illager_siege_weapons:reinforced_battering_ram": {
+          "weight": 57,
+          "frequency": 1.0
+        },
+        "illager_siege_weapons:siege_tower": {
+          "weight": 57,
+          "frequency": 1.0
+        },
+        "illager_siege_weapons:trebuchet": {
+          "weight": 57,
+          "frequency": 1.0
+        },
+        "mysticrift_pillagers_towers_aris:acacia_pillager_tower": {
+          "weight": 5,
+          "frequency": 0.4211
+        },
+        "mysticrift_pillagers_towers_aris:birch_pillager_tower": {
+          "weight": 5,
+          "frequency": 0.38
+        },
+        "mysticrift_pillagers_towers_aris:cherry_pillager_tower": {
+          "weight": 5,
+          "frequency": 0.4211
+        },
+        "mysticrift_pillagers_towers_aris:desert_pillager_tower": {
+          "weight": 5,
+          "frequency": 0.4692
+        },
+        "mysticrift_pillagers_towers_aris:end_pillager_tower": {
+          "weight": 5,
+          "frequency": 0.4301
+        },
+        "mysticrift_pillagers_towers_aris:jungle_pillager_tower": {
+          "weight": 5,
+          "frequency": 0.9278
+        },
+        "mysticrift_pillagers_towers_aris:mangrove_pillager_tower": {
+          "weight": 5,
+          "frequency": 0.5938
+        },
+        "mysticrift_pillagers_towers_aris:oak_wood_pillager_tower": {
+          "weight": 5,
+          "frequency": 0.9425
+        }
+      }
+    },
+    "ruins": {
+      "note": "Surface land ruins: Philip's Ruins and Terralith's glacial hut. Underground ruins stay standalone.",
+      "placement": {
+        "spacing": 8,
+        "separation": 4,
+        "salt": 1418638049
+      },
+      "structures": {
+        "philipsruins:ancient_ruins": {
+          "weight": 119,
+          "frequency": 0.6739
+        },
+        "philipsruins:ancient_towers": {
+          "weight": 197,
+          "frequency": 0.6758
+        },
+        "philipsruins:badlands_structures": {
+          "weight": 250,
+          "frequency": 0.2387
+        },
+        "philipsruins:desert_structures": {
+          "weight": 250,
+          "frequency": 0.2387
+        },
+        "philipsruins:field_stone_ruins": {
+          "weight": 45,
+          "frequency": 0.9895
+        },
+        "philipsruins:field_stone_ruins_rocks": {
+          "weight": 196,
+          "frequency": 0.322
+        },
+        "philipsruins:level_one_ruins": {
+          "weight": 45,
+          "frequency": 0.9895
+        },
+        "philipsruins:level_three_ruins": {
+          "weight": 35,
+          "frequency": 0.9905
+        },
+        "philipsruins:level_two_ruins": {
+          "weight": 20,
+          "frequency": 0.9784
+        },
+        "philipsruins:level_two_ruins_pool": {
+          "weight": 20,
+          "frequency": 0.9784
+        },
+        "philipsruins:pumpkin_ruins": {
+          "weight": 84,
+          "frequency": 1.0
+        },
+        "philipsruins:rare_ruin": {
+          "weight": 254,
+          "frequency": 0.0082
+        },
+        "philipsruins:start_nether_ruin": {
+          "weight": 3,
+          "frequency": 0.8688
+        },
+        "terralith:glacial_hut": {
+          "weight": 261,
+          "frequency": 0.249
+        },
+        "forest_ruins:ruin_1": {
+          "weight": 38,
+          "frequency": 0.7313
+        },
+        "forest_ruins:ruin_2": {
+          "weight": 38,
+          "frequency": 0.7313
+        },
+        "forest_ruins:ruin_3": {
+          "weight": 38,
+          "frequency": 0.7313
+        },
+        "forest_ruins:ruin_4": {
+          "weight": 38,
+          "frequency": 0.7313
+        },
+        "forest_ruins:ruin_5": {
+          "weight": 38,
+          "frequency": 0.7313
+        },
+        "forest_ruins:ruin_6": {
+          "weight": 38,
+          "frequency": 0.7313
+        },
+        "forest_ruins:ruin_7": {
+          "weight": 38,
+          "frequency": 0.7313
+        },
+        "forgotten_church:forgotten_church": {
+          "weight": 16,
+          "frequency": 0.9825
+        },
+        "watchtower_building:abandoned_watchtower": {
+          "weight": 21,
+          "frequency": 1.0
+        }
+      }
+    },
+    "surface_dungeons": {
+      "note": "Surface dungeons: YUNG's temples and witch huts, the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The vanilla temples YUNG's blocks in code stay out.",
+      "placement": {
+        "spacing": 16,
+        "separation": 10,
+        "salt": 1261620025
+      },
+      "structures": {
+        "betterdeserttemples:desert_temple": {
+          "weight": 97,
+          "frequency": 0.7059
+        },
+        "betterjungletemples:jungle_temple": {
+          "weight": 186,
+          "frequency": 0.7481
+        },
+        "betterwitchhuts:witch_circle": {
+          "weight": 62,
+          "frequency": 1.0
+        },
+        "betterwitchhuts:witch_hut": {
+          "weight": 172,
+          "frequency": 0.8021
+        },
+        "minecraft:mansion": {
+          "weight": 30,
+          "frequency": 0.1191
+        },
+        "philipsruins:badlands_start_dungeon": {
+          "weight": 106,
+          "frequency": 0.426
+        },
+        "terralith:spire": {
+          "weight": 103,
+          "frequency": 0.415
+        },
+        "towns_and_towers:mimic_desert": {
+          "weight": 79,
+          "frequency": 0.7049
+        },
+        "villagesandpillages:village_witch": {
+          "weight": 101,
+          "frequency": 1.0
+        }
+      }
+    },
+    "ocean_ruins": {
+      "note": "Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, vanilla shipwrecks, the T&T wreckage.",
+      "placement": {
+        "spacing": 16,
+        "separation": 2,
+        "salt": 541836770
+      },
+      "structures": {
+        "hopo:underwater_ruins": {
+          "weight": 113,
+          "frequency": 1.0
+        },
+        "hopo:underwater_small_ruins": {
+          "weight": 513,
+          "frequency": 0.6268
+        },
+        "hopo:underwater_warm_small_ruins": {
+          "weight": 560,
+          "frequency": 0.9701
+        },
+        "minecraft:ocean_ruin_cold": {
+          "weight": 143,
+          "frequency": 0.627
+        },
+        "minecraft:ocean_ruin_warm": {
+          "weight": 92,
+          "frequency": 0.9743
+        },
+        "philipsruins:ocean_fortress": {
+          "weight": 29,
+          "frequency": 0.5047
+        },
+        "philipsruins:ocean_ruins": {
+          "weight": 58,
+          "frequency": 0.4946
+        },
+        "towns_and_towers:wreckage_ocean": {
+          "weight": 108,
+          "frequency": 0.3243
+        },
+        "revamped_shipwrecks:shipwreck": {
+          "weight": 258,
+          "frequency": 1.0
+        },
+        "revamped_shipwrecks:shipwreck_beached": {
+          "weight": 129,
+          "frequency": 0.4444
+        }
+      }
+    },
+    "ocean_dungeons": {
+      "note": "Ocean monuments, on the monuments' own grid (same spacing, spread and salt, so positions match vanilla). Monument meta structures join later.",
+      "placement": {
+        "spacing": 32,
+        "separation": 6,
+        "salt": 10387313,
+        "spread_type": "triangular"
+      },
+      "structures": {
+        "minecraft:monument": {
+          "weight": 100,
+          "frequency": 0.1
+        }
+      }
+    },
+    "boats": {
+      "note": "Ships at sea: the Towns & Towers ship village and pillager ship. Meta structures join later.",
+      "placement": {
+        "spacing": 48,
+        "separation": 28,
+        "salt": 905198075
+      },
+      "structures": {
+        "towns_and_towers:pillager_outpost_ocean": {
+          "weight": 72,
+          "frequency": 0.9618
+        },
+        "towns_and_towers:village_ocean": {
+          "weight": 138,
+          "frequency": 0.9588
+        },
+        "antiquetradingship:antique_trading_ship": {
+          "weight": 97,
+          "frequency": 1.0
+        },
+        "blocky_siege:pillager_ship": {
+          "weight": 57,
+          "frequency": 1.0
+        },
+        "illager_viking_longship:illager_longship": {
+          "weight": 148,
+          "frequency": 1.0
+        },
+        "illagerwarship:warship": {
+          "weight": 97,
+          "frequency": 1.0
+        },
+        "unwrecked_ships:ship": {
+          "weight": 73,
+          "frequency": 1.0
+        },
+        "villager_rafts:raft_1": {
+          "weight": 83,
+          "frequency": 1.0
+        },
+        "villager_rafts:raft_2": {
+          "weight": 83,
+          "frequency": 1.0
+        },
+        "villager_rafts:raft_3": {
+          "weight": 83,
+          "frequency": 1.0
+        }
+      }
+    },
+    "remote": {
+      "note": "Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer's Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.",
+      "placement": {
+        "spacing": 16,
+        "separation": 8,
+        "salt": 419617315
+      },
+      "structures": {
+        "beautify:botanist_house_desert": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "beautify:botanist_house_plains": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "beautify:botanist_house_savanna": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "beautify:botanist_house_snowy": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "beautify:botanist_house_taiga": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "farmers_structures:aquacultures_beach": {
+          "weight": 64,
+          "frequency": 0.0307
+        },
+        "farmers_structures:aquacultures_carp": {
+          "weight": 42,
+          "frequency": 0.9679
+        },
+        "farmers_structures:aquacultures_common": {
+          "weight": 42,
+          "frequency": 0.9679
+        },
+        "farmers_structures:cooks": {
+          "weight": 183,
+          "frequency": 0.3129
+        },
+        "farmers_structures:cooks_moss": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "farmers_structures:sushis": {
+          "weight": 220,
+          "frequency": 0.1058
+        },
+        "greek_villager_house:greek_house": {
+          "weight": 73,
+          "frequency": 1.0
+        },
+        "hobbit_house_:hobbit_house": {
+          "weight": 69,
+          "frequency": 0.9939
+        },
+        "minecraft:igloo": {
+          "weight": 389,
+          "frequency": 0.2286
+        },
+        "old_swamp_fisherman_house:fisherman_house": {
+          "weight": 247,
+          "frequency": 0.1192
+        },
+        "sawmillhouse:sawmill": {
+          "weight": 159,
+          "frequency": 0.8113
+        },
+        "simply_houses:forest_chapel": {
+          "weight": 67,
+          "frequency": 0.0718
+        },
+        "simply_houses:forest_fort": {
+          "weight": 67,
+          "frequency": 0.0718
+        },
+        "simply_houses:forest_house": {
+          "weight": 135,
+          "frequency": 0.0713
+        },
+        "simply_houses:forest_stonemason": {
+          "weight": 135,
+          "frequency": 0.0713
+        },
+        "simply_houses:plains_house": {
+          "weight": 23,
+          "frequency": 1.0
+        },
+        "simply_houses:plains_mansion": {
+          "weight": 23,
+          "frequency": 1.0
+        },
+        "simply_houses:taiga_forge": {
+          "weight": 100,
+          "frequency": 0.0871
+        },
+        "simply_houses:taiga_house": {
+          "weight": 100,
+          "frequency": 0.0871
+        },
+        "simply_houses:taiga_inn": {
+          "weight": 200,
+          "frequency": 0.0871
+        },
+        "simply_houses:taiga_woodcutter": {
+          "weight": 200,
+          "frequency": 0.0871
+        },
+        "small_viking_villager_house:small_viking_house": {
+          "weight": 64,
+          "frequency": 1.0
+        },
+        "small_villager_greenhouse:small_villager_greenhouse": {
+          "weight": 72,
+          "frequency": 1.0
+        },
+        "towns_and_towers:exclusives/village_wandering_trader_camp": {
+          "weight": 423,
+          "frequency": 0.2036
+        },
+        "villager_butcher_house:butcher_house": {
+          "weight": 87,
+          "frequency": 1.0
+        },
+        "villager_cartographer_house:villager_cartographer_house": {
+          "weight": 91,
+          "frequency": 1.0
+        },
+        "villager_cleric_house:villager_cleric_house": {
+          "weight": 104,
+          "frequency": 1.0
+        },
+        "villager_country_house:country_house": {
+          "weight": 447,
+          "frequency": 0.1166
+        },
+        "villager_farmer_house:villager_farmer_house": {
+          "weight": 74,
+          "frequency": 1.0
+        },
+        "villager_fletcher_house:villager_fletcher_house": {
+          "weight": 109,
+          "frequency": 1.0
+        },
+        "villager_flower_house:flower_house": {
+          "weight": 781,
+          "frequency": 0.1035
+        },
+        "villager_tannery:tannery": {
+          "weight": 73,
+          "frequency": 1.0
+        },
+        "ancient_enchantment_temple:temple": {
+          "weight": 110,
+          "frequency": 0.1264
+        },
+        "animal_barn:barn": {
+          "weight": 116,
+          "frequency": 1.0
+        },
+        "bighorsestable:big_horse_stable": {
+          "weight": 98,
+          "frequency": 1.0
+        },
+        "desert_village_temple:village_temple": {
+          "weight": 110,
+          "frequency": 0.2528
+        },
+        "desert_watchtower:watchtower": {
+          "weight": 110,
+          "frequency": 0.2528
+        },
+        "forest_watchtower:forest_watchtower": {
+          "weight": 135,
+          "frequency": 1.0
+        },
+        "gothic_church:church": {
+          "weight": 81,
+          "frequency": 1.0
+        },
+        "llama_stable:llama_stable": {
+          "weight": 62,
+          "frequency": 1.0
+        },
+        "mini_clock_tower:mini_clock_tower": {
+          "weight": 108,
+          "frequency": 1.0
+        },
+        "plains_villager_tents:big_villager_tent": {
+          "weight": 116,
+          "frequency": 1.0
+        },
+        "saloon:saloon": {
+          "weight": 326,
+          "frequency": 0.3554
+        },
+        "smallhorsestable:horse_stable": {
+          "weight": 111,
+          "frequency": 1.0
+        },
+        "snowy_tents:snowy_tent": {
+          "weight": 284,
+          "frequency": 1.0
+        },
+        "villager_archer_camp:villager_archer_camp": {
+          "weight": 85,
+          "frequency": 1.0
+        },
+        "villager_circus_tent:villager_circus_tent": {
+          "weight": 84,
+          "frequency": 1.0
+        },
+        "villager_fish_shop:fish_shop": {
+          "weight": 17,
+          "frequency": 0.7785
+        },
+        "villager_fishermans_hut:villager_fishermans_hut": {
+          "weight": 125,
+          "frequency": 1.0
+        },
+        "villager_forge:villager_forge": {
+          "weight": 116,
+          "frequency": 1.0
+        },
+        "villager_gold_washing_facility:villager_gold_washing_facility": {
+          "weight": 37,
+          "frequency": 1.0
+        },
+        "villager_windmill:windmill": {
+          "weight": 103,
+          "frequency": 1.0
+        }
+      }
+    },
+    "sky": {
+      "note": "Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later.",
+      "placement": {
+        "spacing": 72,
+        "separation": 16,
+        "salt": 444386725
+      },
+      "structures": {
+        "ae2:meteorite": {
+          "weight": 100,
+          "frequency": 0.985
+        },
+        "cloudstorage:big_balloon": {
+          "weight": 100,
+          "frequency": 0.985
+        },
+        "cloudstorage:sky_temple": {
+          "weight": 100,
+          "frequency": 0.985
+        },
+        "skyvillages:skyvillage": {
+          "weight": 299,
+          "frequency": 1.0
+        }
+      }
+    }
+  },
+  "standalone": {
+    "betterdungeons:skeleton_dungeons": {
+      "placement": {},
+      "structures": {
+        "betterdungeons:skeleton_dungeon": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "betterdungeons:small_dungeons": {
+      "placement": {},
+      "structures": {
+        "betterdungeons:small_dungeon": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "betterdungeons:small_nether_dungeons": {
+      "placement": {},
+      "structures": {
+        "betterdungeons:small_nether_dungeon": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "betterdungeons:spider_dungeons": {
+      "placement": {},
+      "structures": {
+        "betterdungeons:spider_dungeon": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "betterdungeons:zombie_dungeons": {
+      "placement": {},
+      "structures": {
+        "betterdungeons:zombie_dungeon": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "betterfortresses:fortress": {
+      "placement": {},
+      "structures": {
+        "betterfortresses:fortress": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "betterstrongholds:stronghold": {
+      "placement": {},
+      "structures": {
+        "betterstrongholds:stronghold": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "farmers_structures:aethers_with_all": {
+      "placement": {
+        "spacing": 55,
+        "separation": 31,
+        "frequency": 0.985926,
+        "exclusion_zone": {
+          "other_set": "creativeengineering:group/settlements",
+          "chunk_count": 6
+        }
+      },
+      "structures": {
+        "farmers_structures:aethers": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "farmers_structures:cooks_nether_1_with_all": {
+      "placement": {
+        "spacing": 36,
+        "separation": 25,
+        "frequency": 0.9504,
+        "exclusion_zone": {
+          "other_set": "creativeengineering:group/settlements",
+          "chunk_count": 6
+        }
+      },
+      "structures": {
+        "farmers_structures:cooks_nether_1": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "farmers_structures:cooks_nether_2_with_all": {
+      "placement": {
+        "spacing": 45,
+        "separation": 27,
+        "frequency": 0.97626,
+        "exclusion_zone": {
+          "other_set": "creativeengineering:group/settlements",
+          "chunk_count": 6
+        }
+      },
+      "structures": {
+        "farmers_structures:cooks_nether_2": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "farmers_structures:undergardens_sea_with_all": {
+      "placement": {
+        "spacing": 190,
+        "separation": 147,
+        "frequency": 0.991717
+      },
+      "structures": {
+        "farmers_structures:undergardens_sea": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "hearths:netherrack_spirals": {
+      "placement": {},
+      "structures": {
+        "hearths:netherrack_spiral": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "hearths:towers": {
+      "placement": {
+        "spacing": 12,
+        "separation": 9,
+        "frequency": 0.93375
+      },
+      "structures": {
+        "hearths:crimson_tower": {
+          "frequency": 1.0
+        },
+        "hearths:warped_tower": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "hopo:underwater_fossils": {
+      "placement": {},
+      "structures": {
+        "hopo:underwater_fossils": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:astral_hideaway": {
+      "placement": {},
+      "structures": {
+        "mes:astral_hideaway": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:astral_meteorite": {
+      "placement": {},
+      "structures": {
+        "mes:astral_meteorite": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:ender_spire": {
+      "placement": {},
+      "structures": {
+        "mes:ender_spire": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:enderbloom_grove": {
+      "placement": {},
+      "structures": {
+        "mes:enderbloom_grove": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:enderkeep_courtyard": {
+      "placement": {},
+      "structures": {
+        "mes:enderkeep_courtyard": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:enderpin_spikes": {
+      "placement": {},
+      "structures": {
+        "mes:enderpin_spikes": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:enderskog": {
+      "placement": {},
+      "structures": {
+        "mes:enderskog": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:enderwatch_tower": {
+      "placement": {},
+      "structures": {
+        "mes:enderwatch_tower": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:endscraps": {
+      "placement": {},
+      "structures": {
+        "mes:endscraps": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:manuscript_shrine": {
+      "placement": {},
+      "structures": {
+        "mes:manuscript_shrine": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:monolith": {
+      "placement": {},
+      "structures": {
+        "mes:monolith": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:mythic_garden": {
+      "placement": {},
+      "structures": {
+        "mes:mythic_garden": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:phantom_citadel": {
+      "placement": {},
+      "structures": {
+        "mes:phantom_citadel": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:placid_prairie": {
+      "placement": {},
+      "structures": {
+        "mes:placid_prairie": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:ruined_pillar": {
+      "placement": {},
+      "structures": {
+        "mes:ruined_pillar": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "mes:starlight_voyager": {
+      "placement": {
+        "spacing": 26,
+        "separation": 17,
+        "frequency": 0.935567
+      },
+      "structures": {
+        "mes:starlight_voyager": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:ancient_cities": {
+      "placement": {
+        "spacing": 19,
+        "separation": 6,
+        "frequency": 0.940104
+      },
+      "structures": {
+        "minecraft:ancient_city": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:buried_treasures": {
+      "placement": {
+        "frequency": 0.015
+      },
+      "structures": {
+        "minecraft:buried_treasure": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:desert_pyramids": {
+      "placement": {
+        "spacing": 27,
+        "separation": 7,
+        "frequency": 0.946846
+      },
+      "structures": {
+        "minecraft:desert_pyramid": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:end_cities": {
+      "placement": {},
+      "structures": {
+        "minecraft:end_city": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:jungle_temples": {
+      "placement": {
+        "spacing": 27,
+        "separation": 7,
+        "frequency": 0.946846
+      },
+      "structures": {
+        "minecraft:jungle_pyramid": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:mineshafts": {
+      "placement": {},
+      "structures": {
+        "minecraft:mineshaft": {
+          "frequency": 1.0
+        },
+        "minecraft:mineshaft_mesa": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:nether_complexes": {
+      "placement": {},
+      "structures": {
+        "minecraft:fortress": {
+          "frequency": 1.0
+        },
+        "minecraft:bastion_remnant": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:nether_fossils": {
+      "placement": {},
+      "structures": {
+        "minecraft:nether_fossil": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:ruined_portals": {
+      "placement": {},
+      "structures": {
+        "minecraft:ruined_portal": {
+          "frequency": 1.0,
+          "enabled": false
+        },
+        "minecraft:ruined_portal_desert": {
+          "frequency": 1.0,
+          "enabled": false
+        },
+        "minecraft:ruined_portal_jungle": {
+          "frequency": 1.0,
+          "enabled": false
+        },
+        "minecraft:ruined_portal_swamp": {
+          "frequency": 1.0,
+          "enabled": false
+        },
+        "minecraft:ruined_portal_mountain": {
+          "frequency": 1.0,
+          "enabled": false
+        },
+        "minecraft:ruined_portal_ocean": {
+          "frequency": 1.0,
+          "enabled": false
+        },
+        "minecraft:ruined_portal_nether": {
+          "frequency": 1.0,
+          "enabled": false
+        }
+      }
+    },
+    "minecraft:strongholds": {
+      "placement": {
+        "count": 192
+      },
+      "structures": {
+        "minecraft:stronghold": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "minecraft:swamp_huts": {
+      "placement": {
+        "spacing": 24,
+        "separation": 6,
+        "frequency": 0.995006
+      },
+      "structures": {
+        "minecraft:swamp_hut": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "nullscape:dragon_skeleton": {
+      "placement": {
+        "spacing": 25,
+        "separation": 14,
+        "frequency": 0.968492
+      },
+      "structures": {
+        "nullscape:dragon_skeleton": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "philipsruins:ancient_crypt": {
+      "placement": {
+        "spacing": 56,
+        "separation": 35,
+        "frequency": 0.98
+      },
+      "structures": {
+        "philipsruins:ancient_crypt": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "philipsruins:ancient_dungeon": {
+      "placement": {
+        "spacing": 7,
+        "separation": 2,
+        "frequency": 0.98
+      },
+      "structures": {
+        "philipsruins:ancient_dungeon": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "philipsruins:antiquus_crypta": {
+      "placement": {
+        "spacing": 63,
+        "separation": 28,
+        "frequency": 0.98
+      },
+      "structures": {
+        "philipsruins:antiquus_crypta": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "philipsruins:end_ruins": {
+      "placement": {
+        "spacing": 24,
+        "separation": 17,
+        "frequency": 0.940408
+      },
+      "structures": {
+        "philipsruins:end_ruins": {
+          "frequency": 1.0
+        },
+        "philipsruins:end_gate_fortress": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "philipsruins:lost_soul_city": {
+      "placement": {
+        "spacing": 37,
+        "separation": 30,
+        "frequency": 0.962578
+      },
+      "structures": {
+        "philipsruins:lost_soul_city": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "philipsruins:nether_structures": {
+      "placement": {
+        "spacing": 21,
+        "separation": 18,
+        "frequency": 0.98
+      },
+      "structures": {
+        "philipsruins:start_nether_dungeon": {
+          "frequency": 1.0
+        },
+        "philipsruins:sealedruinedghaststatue1": {
+          "frequency": 1.0
+        },
+        "philipsruins:nether_lava_ruins": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "philipsruins:underground_structures": {
+      "placement": {
+        "spacing": 23,
+        "separation": 13
+      },
+      "structures": {
+        "philipsruins:lost_soul_dungeon": {
+          "weight": 86,
+          "frequency": 0.991
+        },
+        "philipsruins:bone_dungeon": {
+          "weight": 116,
+          "frequency": 0.2939
+        },
+        "philipsruins:underground_structures": {
+          "weight": 582,
+          "frequency": 0.9885
+        },
+        "philipsruins:sculk_dungeon": {
+          "weight": 86,
+          "frequency": 0.991
+        }
+      }
+    },
+    "supplementaries:way_signs": {
+      "placement": {
+        "exclusion_zone": {
+          "other_set": "creativeengineering:group/settlements",
+          "chunk_count": 8
+        }
+      },
+      "structures": {
+        "supplementaries:way_sign": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "terralith:underground": {
+      "placement": {
+        "spacing": 3,
+        "separation": 1
+      },
+      "structures": {
+        "terralith:underground/oak_cabin": {
+          "weight": 50,
+          "frequency": 1.0
+        },
+        "terralith:underground/giant_bee_hive": {
+          "weight": 78,
+          "frequency": 0.4261
+        },
+        "terralith:underground/mining_outpost": {
+          "weight": 713,
+          "frequency": 0.1097
+        },
+        "terralith:underground/old_refinery": {
+          "weight": 258,
+          "frequency": 0.1166
+        },
+        "terralith:underground/sunken_tower": {
+          "weight": 129,
+          "frequency": 0.4277
+        },
+        "terralith:underground/witch_hut": {
+          "weight": 44,
+          "frequency": 1.0
+        }
+      }
+    },
+    "terralith:underground_dungeon": {
+      "placement": {},
+      "structures": {
+        "terralith:underground/frosted_dungeon": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "twigs:bloodstone_obelisk": {
+      "placement": {},
+      "structures": {
+        "twigs:bloodstone_obelisk": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "old_illager_statue:old_illager_statue": {
+      "placement": {},
+      "structures": {
+        "old_illager_statue:old_illager_statue": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "oldvillagerstatue:old_villager_statue": {
+      "placement": {},
+      "structures": {
+        "oldvillagerstatue:old_villager_statue": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "small_cat_statues:cat_1": {
+      "placement": {},
+      "structures": {
+        "small_cat_statues:cat_1": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "small_cat_statues:cat_2": {
+      "placement": {},
+      "structures": {
+        "small_cat_statues:cat_2": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "small_cat_statues:cat_3": {
+      "placement": {},
+      "structures": {
+        "small_cat_statues:cat_3": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "takesapillage:pillager_structure": {
+      "placement": {},
+      "structures": {
+        "takesapillage:bastille": {
+          "frequency": 1.0
+        },
+        "takesapillage:pillager_camp": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "unwrecked_ships:nether_ship": {
+      "placement": {},
+      "structures": {
+        "unwrecked_ships:nether_ship": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "watchtower_building:fresh_watchtower": {
+      "placement": {},
+      "structures": {
+        "watchtower_building:fresh_watchtower": {
+          "frequency": 1.0
+        }
+      }
+    }
+  }
+}

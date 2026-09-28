@@ -7,6 +7,7 @@ global.blocks = {};
 var b = global.blocks;
 
 b.dark_fire = 'creativeengineering:dark_fire';
+b.sweet_berry_bush = 'minecraft:sweet_berry_bush'; // block id (the item is sweet_berries)
 
 // Tags
 b.any_bricks = '#minecraft:bricks';

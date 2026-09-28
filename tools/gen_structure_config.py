@@ -20,18 +20,22 @@ Sources, per structure_set:
              is read straight from data/minecraft/tags/worldgen/biome/has_structure/*.json
              inside the vanilla jar, so that part is exact.
 
-Safe to re-run (e.g. after a mod update): per-structure "enabled" flags are preserved, and
-"current" is rebuilt as the new "original" plus every field you had changed (a 3-way merge), so
-a corrected or updated baseline flows through to untouched fields without losing your edits.
+The output is a READ-ONLY BASELINE (what every set is without any override). Since 2026-09-27 every
+spawn rate lives in structure_groups.json (tools/gen_structure_groups.py); this file no longer has
+"current" or "enabled" fields, so re-running it (e.g. after a mod update) is always safe. Afterwards run
+python3 tools/gen_structure_groups.py so new structures/sets get entries.
+
+Meta structures (our own structures that are only ever placed through a group, no set of their own)
+are listed under "meta_structures", from kubejs/data/creativeengineering/worldgen/structure/meta/.
 
 Every placement field is kept, not just the tunable ones: exclusion_zone, spread_type,
 preferred_biomes and mod-specific fields (MES min_distance_from_world_origin, YUNG's
 enhanced_exclusion_zone / ring fields) all have to survive into an override, or the override
 silently changes behaviour (or fails to load, for required fields).
 
-Run: python3 tools/gen_structure_config.py
-Then edit kubejs/generation_scripts/worldgen/structure_config.json and rejoin the world:
-kubejs/server_scripts/worldgen/structure_overrides.js applies it at every world load.
+Run: python3 tools/gen_structure_config.py, then python3 tools/gen_structure_groups.py.
+kubejs/server_scripts/worldgen/structure_overrides.js reads this baseline + structure_groups.json at
+every world load.
 """
 import glob
 import json
@@ -373,93 +377,42 @@ def placement_block(raw_placement):
     return out
 
 
-def merge_current(prior, new_original):
-    """3-way merge: the new baseline plus every field the user changed relative to the OLD
-    baseline. Untouched fields follow corrections/mod updates; edited ones stay as edited."""
-    old_original = prior.get('original', {})
-    edits = {k: v for k, v in prior['current'].items() if old_original.get(k) != v}
-    merged = OrderedDict(new_original)
-    merged.update(edits)
-    return merged, sorted(edits)
-
-
 def build_readme():
     return OrderedDict([
-        ('workflow', (
-            'Edit values under "current" per structure_set, or flip a structure entry\'s '
-            '"enabled" to false, then rejoin the world: kubejs/server_scripts/worldgen/'
-            'structure_overrides.js applies this file at every world load (new chunks only; '
-            'structure_tag_report.md shows what it did). For category-wide changes ("all villages x0.5") '
-            'use multipliers in structure_tags.json instead; they apply on top of "current". '
-            'Re-running tools/gen_structure_config.py is always safe -- it keeps "enabled" and '
-            'every field you changed in "current".'
+        ('what', (
+            'Read-only baseline: every structure_set exactly as the mods (or vanilla) define it, with '
+            'no override. Rebuilt by python3 tools/gen_structure_config.py; do not edit. Spawn rates live '
+            'in structure_groups.json (groups + standalone sets), membership in the group/* tags of '
+            'structure_tags.json. kubejs/server_scripts/worldgen/structure_overrides.js reads all three '
+            'at every world load.'
         )),
         ('top_level_fields', OrderedDict([
-            ('source', 'Where this structure_set\'s definition came from: a mod jar filename, or '
-                '"vanilla_known_defaults" (see caveat below).'),
-            ('structures', 'The structure(s) this set can place. Each has "structure" (its id), '
-                '"weight", "enabled" (your on/off switch), and "biomes" (read-only reference).'),
-            ('original', 'The values this structure_set actually has without any override -- the '
-                'diff baseline, refreshed on every scan. Don\'t edit this; structure_overrides.js '
-                'compares "current" against it to decide what to write.'),
-            ('current', 'Your edits go here. Identical to "original" until you change something.'),
+            ('source', 'Where this structure_set\'s definition came from: a mod jar filename, '
+                '"kubejs/data", or "vanilla_known_defaults" (see caveat below).'),
+            ('structures', 'The structure(s) this set places: "structure" (id), "weight", "biomes" '
+                '(read-only reference) and, when another mod stops it in code, "blocked".'),
+            ('original', 'The set\'s placement without any override. A standalone entry in '
+                'structure_groups.json overrides individual fields of it.'),
         ])),
-        ('placement_dials (inside original/current)', OrderedDict([
+        ('meta_structures', 'Our own structures that have no set of their own and only generate '
+            'through a group (kubejs/data/creativeengineering/worldgen/structure/meta/). Empty until the first '
+            'one exists.'),
+        ('placement_dials (inside original)', OrderedDict([
             ('type', 'Which placement algorithm: "minecraft:random_spread" (almost everything -- '
                 'an evenly-spaced grid, one random attempt per cell) or '
                 '"minecraft:concentric_rings" (strongholds only -- rings expanding out from '
                 'world spawn, not a grid).'),
-            ('spacing', '[random_spread] Average chunks between grid cells, i.e. between attempts '
-                'at this structure. Bigger spacing = rarer structure. This is usually the dial '
-                'you want for "make X less/more common".'),
-            ('separation', '[random_spread] Minimum chunks kept clear around each grid cell so two '
-                'attempts can never land right next to each other. Must stay smaller than '
-                '"spacing" (vanilla convention: separation < spacing, often spacing/4).'),
-            ('spread_type', '[random_spread, optional] Where within its grid cell an attempt can '
-                'land: "linear" (default, anywhere in the cell) or "triangular" (biased toward '
-                'the cell center -- vanilla only uses this for ocean monuments). Rarely worth '
-                'touching.'),
-            ('distance', '[concentric_rings] Chunks between each successive ring.'),
-            ('spread', '[concentric_rings] Random jitter added within a ring so structures aren\'t '
-                'on a perfect circle.'),
-            ('count', '[concentric_rings] Total number of attempts across every ring in the whole '
-                'set (128 for vanilla strongholds). Lower = fewer strongholds total, still spread '
-                'across the same ring layout.'),
-            ('frequency', 'A flat 0.0-1.0 chance multiplier applied on top of spacing/separation '
-                'or the ring layout -- "of the grid cells that pass everything else, only spawn '
-                'here X% of the time." Vanilla uses this to keep mineshafts/buried treasure rare '
-                'despite a 1-chunk grid. Setting it to 0 disables the structure outright -- this '
-                'is exactly what structure_overrides.js does automatically when you disable '
-                'every structure in a set. Omitted/1.0 means "no extra reduction".'),
-            ('frequency_reduction_method', 'Which RNG algorithm applies the "frequency" chance '
-                '("legacy_type_1" / "legacy_type_2" / "default"). Purely about matching vanilla\'s '
-                'exact RNG behavior bit-for-bit -- doesn\'t change how rare something ends up '
-                'feeling. Safe to leave alone.'),
-            ('salt', 'Seeds this structure_set\'s own slice of the world seed\'s RNG, so different '
-                'structure_sets don\'t land in lockstep with each other. Only affects WHERE on '
-                'the grid attempts fall, not how often. Safe to leave alone -- a wrong value just '
-                'shifts the grid\'s phase relative to a from-scratch vanilla world.'),
-            ('locate_offset', 'The "xyz coords" dial: an integer [x, y, z] nudge applied to every '
-                'placement attempt before any other check. x/z shift the whole grid sideways; y '
-                'is essentially unused (the structure\'s own logic picks its actual height). '
-                'Default [0, 0, 0].'),
-        ])),
-        ('per_structure_fields (inside a structures[] entry)', OrderedDict([
-            ('weight', 'When a set holds multiple structures sharing one grid (e.g. the 5 village '
-                'variants in minecraft:villages), weight influences which ONE wins a given grid '
-                'cell before that structure\'s own biome check narrows it further. Only meaningful '
-                'relative to the other entries in the same set.'),
-            ('enabled', 'Your removal switch. false on the only structure in a set forces that '
-                'set\'s frequency to 0 (always schema-safe). false on one of several removes just '
-                'that entry from the set\'s structure list, leaving the others untouched.'),
-            ('biomes', 'Read-only reference -- which biomes this structure can spawn in, from the '
-                'mod\'s own structure json or (vanilla) minecraft\'s has_structure/* tags. '
-                'Changing WHERE something spawns needs editing the structure\'s own definition, '
-                'which this framework deliberately never touches -- see the README.'),
-            ('blocked', 'Read-only, only present when another mod stops this structure in code (YUNG\'s '
-                '"Disable Vanilla X" options, Better Dungeons\' small nether dungeon toggle). Its set can '
-                'still be tuned, but nothing generates while the block is on. Written by the scanner from '
-                'the current mod configs; re-run it after changing one of those options.'),
+            ('spacing', '[random_spread] Chunks between grid cells, i.e. between attempts. Bigger = rarer.'),
+            ('separation', '[random_spread] Minimum chunks between two attempts. Smaller than spacing.'),
+            ('spread_type', '[random_spread, optional] "linear" (default) or "triangular" (biased toward '
+                'the cell center; vanilla uses it for ocean monuments).'),
+            ('distance / spread / count', '[concentric_rings] ring distance, jitter, and total attempts.'),
+            ('frequency', 'A 0.0-1.0 chance per attempt on top of the grid. 0 disables the set.'),
+            ('frequency_reduction_method', 'Which RNG applies "frequency" (vanilla bit-compatibility only).'),
+            ('salt', 'Seeds this set\'s own slice of the world seed\'s RNG (where on the grid, not how often).'),
+            ('locate_offset', 'An integer [x, y, z] nudge of every attempt. Default [0, 0, 0].'),
+            ('exclusion_zone', 'Skip attempts within chunk_count chunks of another set\'s grid attempts '
+                '(checks attempts, not real structures, and no biome).'),
         ])),
         ('caveats', (
             'Vanilla "source":"vanilla_known_defaults" entries come from a table in the scanner '
@@ -469,6 +422,20 @@ def build_readme():
             'them, and the scanner picked that up (check "source" per entry).'
         )),
     ])
+
+
+def scan_meta_structures():
+    """Our meta structures: kubejs/data/creativeengineering/worldgen/structure/meta/**.json."""
+    out = OrderedDict()
+    root = KUBEJS_DATA_DIR / 'creativeengineering/worldgen/structure/meta'
+    for f in sorted(root.glob('**/*.json')):
+        rel = f.relative_to(KUBEJS_DATA_DIR / 'creativeengineering/worldgen/structure').with_suffix('').as_posix()
+        try:
+            data = loads_lenient(f.read_text())
+        except ValueError:
+            data = {}
+        out[f'creativeengineering:{rel}'] = OrderedDict([('biomes', data.get('biomes'))])
+    return out
 
 
 def build():
@@ -511,30 +478,15 @@ def build():
             structures.append(OrderedDict([
                 ('structure', struct_id),
                 ('weight', entry.get('weight', 1)),
-                ('enabled', True),
                 ('biomes', biome_for(struct_id)),
             ]))
             if struct_id in blocked:
                 structures[-1]['blocked'] = blocked[struct_id]
 
-        prior = existing.get(sid)
-        if prior and 'current' in prior:
-            current_placement, edited = merge_current(prior, original_placement)
-            if edited:
-                print(f'  kept your edits to {sid}: {", ".join(edited)}')
-            # carry forward per-structure enabled flags the user already set
-            prior_enabled = {s['structure']: s.get('enabled', True) for s in prior.get('structures', [])}
-            for s in structures:
-                if s['structure'] in prior_enabled:
-                    s['enabled'] = prior_enabled[s['structure']]
-        else:
-            current_placement = OrderedDict(original_placement)
-
         out_sets[sid] = OrderedDict([
             ('source', src),
             ('structures', structures),
             ('original', original_placement),
-            ('current', current_placement),
         ])
 
     # sets whose mod is gone (jar removed/renamed): dropped, since an override naming an
@@ -545,6 +497,7 @@ def build():
     result = OrderedDict([
         ('_readme', build_readme()),
         ('structure_sets', out_sets),
+        ('meta_structures', scan_meta_structures()),
     ])
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)

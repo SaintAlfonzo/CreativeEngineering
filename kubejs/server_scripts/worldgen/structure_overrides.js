@@ -1,30 +1,36 @@
-// Structure spawn frequency / removal, applied at world load.
+// Structure spawn rates: structure groups + standalone sets, applied at world load.
 //
-// Edit kubejs/generation_scripts/worldgen/structure_config.json ("current" placement values,
-// per-structure "enabled") or structure_tags.json (category multipliers), then rejoin the world.
-// Worldgen registries are read when a world loads, so /reload doesn't apply these to a running
-// world (it does refresh the report), and only chunks generated afterwards change. Refresh the
-// baseline after mod updates with `python3 tools/gen_structure_config.py` (keeps your edits).
+// Edit kubejs/generation_scripts/worldgen/structure_groups.json (every rate) or the group/* tags in
+// structure_tags.json (who is in which group), then rejoin the world. Worldgen registries are read
+// when a world loads, so /reload doesn't apply these to a running world (it does refresh the
+// report), and only chunks generated afterwards change. After moving structures between groups or
+// updating mods, run `python3 tools/gen_structure_groups.py` to give new members fitted values.
+//
+// THE MODEL
+//   Group: one structure_set, creativeengineering:group/<name>, holding every structure in the tag
+//   group/<name>. All members share its grid, so no two ever start closer than its separation.
+//   Per member: weight (who wins a slot where several fit the biome) and frequency (chance the
+//   winner really spawns; else the slot stays empty, no fall-through to another member).
+//   Standalone: every structure in no group keeps its own structure_set, tuned the same way.
+//   A structure moved into a group is removed from its original set; a set left with no live
+//   member is written with no structures and frequency 0, so it can't generate or be searched.
+//
+// frequency < 1 is not a vanilla feature: the table is handed to patcherMod
+// (worldgen/StructureFrequencies), which rolls it when a structure is about to be placed.
+// Without that class nothing is applied at all (a group without its frequencies would spawn
+// every member at full rate).
 //
 // ServerEvents.highPriorityData runs inside KubeJS's world-load resource wrap, before the game
 // parses worldgen: every structure_set that ends up different from its mod/vanilla default is
 // added to KubeJS's top-priority virtual datapack (above kubejs/data, Terralith, Nullscape).
 //
-// Per structure_set, in order:
-//   1. base = "current" (hand edits) over "original" (every raw placement field is kept:
-//      exclusion zones, spread types, MES/YUNG-specific fields).
-//   2. Each structure's multiplier = product of every structure_tags.json tag containing it.
-//   3. Members with enabled:false or multiplier 0 are dropped. If none are left, the whole set
-//      gets "frequency": 0 (schema-safe for any placement type).
-//   4. Remaining members are grouped by multiplier. One group keeps the set's id; any others
-//      move to new sets (creativeengineering:split/<ns>/<path>_<n>) with the same placement and
-//      a different salt, so each group can have its own grid density.
-//   5. Each group's placement is scaled by its multiplier (see scalePlacement).
+// Any config error applies NOTHING, so the game falls back to every mod's own defaults, and the
+// errors land in the log + the report. structure_tag_report.md (same folder as the configs) is
+// rewritten on every load.
 //
-// Any config error (unknown tag/structure, bad multiplier, invalid placement) applies NOTHING, so
-// the game falls back to every mod's own defaults, and the errors land in the log + the report.
-// structure_tag_report.md (same folder as the configs) is rewritten on every load: tag members,
-// multiplier chains, what was applied, splits and coverage gaps.
+// CEConfig [worldgen] (config/creativeengineering-common.toml, read through patcherMod's WorldgenConfig):
+//   systems.structureGroups = false  -> groups and standalone edits are ignored: every set as its mod ships it.
+//   debug.structureDensity = x       -> every set's rate times x (see scalePlacement), grouped or not.
 //
 // Wrapped in an IIFE: all server scripts share one top-level scope.
 
@@ -33,16 +39,38 @@
 	var DIR = 'kubejs/generation_scripts/worldgen/'
 	var CONFIG_PATH = DIR + 'structure_config.json'
 	var TAGS_PATH = DIR + 'structure_tags.json'
+	var GROUPS_PATH = DIR + 'structure_groups.json'
 	var REPORT_PATH = DIR + 'structure_tag_report.md'
-	var SPLIT_PREFIX = 'creativeengineering:split/'
+	var GROUP_SET_PREFIX = 'creativeengineering:group/'
 	var TAG = '[structure-tuning] '
 
-	// Codec limits (RandomSpreadStructurePlacement / ConcentricRingsStructurePlacement, 1.19.2).
+	// Codec limits (RandomSpreadStructurePlacement / ConcentricRingsStructurePlacement / ExclusionZone, 1.19.2).
 	var MAX_SPACING = 4096
 	var MAX_COUNT = 4095
+	var MAX_EXCLUSION = 16
+	var DEFAULT_WEIGHT = 100
+
+	var GROUP_PLACEMENT_KEYS = ['spacing', 'separation', 'salt', 'spread_type', 'frequency',
+		'frequency_reduction_method', 'locate_offset', 'exclusion_zone']
+	var MEMBER_KEYS = ['weight', 'frequency', 'enabled', 'note']
+	var REDUCTION_METHODS = ['default', 'legacy_type_1', 'legacy_type_2', 'legacy_type_3']
 
 	// KubeJS's class filter blocks java.io, so the markdown report goes through patcherMod.
 	var WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles')
+
+	// CEConfig [worldgen] switches; the defaults when the jar predates WorldgenConfig.
+	function worldgenSettings() {
+		var s = { groups: true, density: 1 }
+		try {
+			var C = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig')
+			s.groups = C.structureGroupsEnabled() == true
+			s.density = Number(C.structureDensity())
+		} catch (err) {
+			console.warn(TAG + 'no patcherMod WorldgenConfig (older jar?): structure groups on, density 1')
+		}
+		if (!(s.density > 0) || !isFinite(s.density)) s.density = 1
+		return s
+	}
 
 	// ── small helpers (Rhino: no Object.assign / Set / spread / ** here) ──────
 
@@ -53,10 +81,6 @@
 			Object.keys(src).forEach(function (k) { target[k] = src[k] })
 		}
 		return target
-	}
-
-	function clone(v) {
-		return JSON.parse(JSON.stringify(v))
 	}
 
 	// JSON text with JS number formatting. KubeJS's Rhino builds JSON.stringify on Gson, which
@@ -97,16 +121,22 @@
 		return id.substring(0, c) + ':worldgen/structure_set/' + id.substring(c + 1) + '.json'
 	}
 
-	function round6(x) {
-		return Math.round(x * 1e6) / 1e6
+	function isInt(v) {
+		return typeof v === 'number' && isFinite(v) && Math.floor(v) === v
 	}
 
-	function fmtMult(m) {
-		return 'x' + Number(m.toFixed(4))
+	function code(id) {
+		return '`' + id + '`'
 	}
 
-	function sortedKeys(obj) {
-		return Object.keys(obj).sort()
+	function median(values) {
+		if (!values.length) return DEFAULT_WEIGHT
+		var s = values.slice().sort(function (a, b) { return a - b })
+		return s[Math.floor(s.length / 2)]
+	}
+
+	function round4(x) {
+		return Math.round(x * 1e4) / 1e4
 	}
 
 	// ── tags ─────────────────────────────────────────────────────────────────
@@ -165,66 +195,63 @@
 		}
 
 		Object.keys(tagDefs).forEach(function (name) {
-			var m = tagDefs[name].multiplier
-			if (typeof m !== 'number' || !isFinite(m) || m < 0) {
-				errors.push(name + ': multiplier must be a number >= 0 (got ' + (typeof m === 'number' ? String(m) : JSON.stringify(m)) + ')')
-			}
+			if ('multiplier' in tagDefs[name]) warnings.push(name + ': "multiplier" is ignored (rates live in structure_groups.json since 2026-09-27)')
 			resolve(name, name)
 		})
 		return { members: members, errors: errors, warnings: warnings }
 	}
 
-	// ── placement math ───────────────────────────────────────────────────────
+	// ── validation ───────────────────────────────────────────────────────────
 
-	// Scale a placement so its structure count per area becomes m times the base's.
-	//   Grid placements (anything with "spacing": vanilla random_spread and the YUNG/MES subclasses
-	//   of it): one attempt per spacing x spacing cell, so density ~ frequency / spacing^2.
-	//   spacing' = floor(spacing / sqrt(m)) is never denser than asked; frequency then takes the
-	//   remaining factor exactly (it can only drop, so it stays <= 1 unless spacing hit 1).
-	//   Rings (strongholds): count scales.
-	//   Anything else: frequency only (can't go above 1).
-	function scalePlacement(base, m) {
-		var p = clone(base)
-		var notes = []
-		if (m === 1) return { p: p, achieved: 1, notes: notes }
-
-		var f0 = ('frequency' in p) ? p.frequency : 1
-		if (f0 === 0) {
-			notes.push('base frequency is 0 (set is disabled), multiplier ignored')
-			return { p: p, achieved: 1, notes: notes }
+	function validatePlacement(where, p, knownSets) {
+		var errs = []
+		if ('spacing' in p || 'separation' in p) {
+			if (!isInt(p.spacing) || p.spacing < 1 || p.spacing > MAX_SPACING) errs.push(where + ': spacing must be a whole number 1..' + MAX_SPACING + ' (got ' + p.spacing + ')')
+			else if (!isInt(p.separation) || p.separation < 0 || p.separation >= p.spacing) errs.push(where + ': separation must be a whole number from 0 to spacing - 1 (got ' + p.separation + ', spacing ' + p.spacing + ')')
 		}
-
-		var achieved
-		if (typeof p.spacing === 'number') {
-			var s0 = p.spacing
-			var sep0 = p.separation || 0
-			var s = Math.max(1, Math.min(MAX_SPACING, Math.floor(s0 / Math.sqrt(m) + 1e-9)))
-			var sep = Math.max(0, Math.min(s - 1, Math.round(sep0 * s / s0)))
-			var f = round6(Math.min(1, f0 * m * Math.pow(s / s0, 2)))
-			p.spacing = s
-			p.separation = sep
-			p.frequency = f
-			achieved = Math.pow(s0 / s, 2) * f / f0
-		} else if (typeof p.count === 'number') {
-			var c = Math.max(1, Math.min(MAX_COUNT, Math.round(p.count * m)))
-			achieved = c / p.count
-			p.count = c
-		} else {
-			p.frequency = round6(Math.min(1, f0 * m))
-			achieved = p.frequency / f0
+		if ('salt' in p && (!isInt(p.salt) || p.salt < 0)) errs.push(where + ': salt must be a whole number >= 0')
+		if ('frequency' in p && !(typeof p.frequency === 'number' && p.frequency >= 0 && p.frequency <= 1)) errs.push(where + ': frequency ' + p.frequency + ' outside 0..1')
+		if ('count' in p && !(isInt(p.count) && p.count >= 1 && p.count <= MAX_COUNT)) errs.push(where + ': count ' + p.count + ' outside 1..' + MAX_COUNT)
+		if ('spread_type' in p && ['linear', 'triangular'].indexOf(p.spread_type) < 0) errs.push(where + ': spread_type must be "linear" or "triangular"')
+		if ('frequency_reduction_method' in p && REDUCTION_METHODS.indexOf(p.frequency_reduction_method) < 0) errs.push(where + ': frequency_reduction_method must be one of ' + REDUCTION_METHODS.join(', '))
+		if ('locate_offset' in p && !(Array.isArray(p.locate_offset) && p.locate_offset.length === 3 && p.locate_offset.every(isInt))) errs.push(where + ': locate_offset must be [x, y, z] whole numbers')
+		if ('exclusion_zone' in p) {
+			var ez = p.exclusion_zone
+			if (!ez || typeof ez !== 'object') errs.push(where + ': exclusion_zone must be {"other_set": id, "chunk_count": n}')
+			else {
+				if (!knownSets[ez.other_set]) errs.push(where + ': exclusion_zone.other_set "' + ez.other_set + '" is not a structure set (a set id from structure_config.json, or ' + GROUP_SET_PREFIX + '<group>)')
+				if (!isInt(ez.chunk_count) || ez.chunk_count < 1 || ez.chunk_count > MAX_EXCLUSION) errs.push(where + ': exclusion_zone.chunk_count must be 1..' + MAX_EXCLUSION)
+			}
 		}
-
-		// legacy_type_1 (vanilla outposts) rolls nextInt((int)(1/frequency)) == 0, which only hits
-		// 1/n exactly; "default" rolls nextFloat() < frequency.
-		if (p.frequency !== f0 && p.frequency_reduction_method === 'legacy_type_1') {
-			p.frequency_reduction_method = 'default'
-			notes.push('frequency_reduction_method legacy_type_1 -> default (legacy only rounds to 1/n)')
-		}
-		if (Math.abs(achieved - m) > m * 0.01) {
-			notes.push('limit reached: asked ' + fmtMult(m) + ', got ' + fmtMult(achieved))
-		}
-		return { p: p, achieved: achieved, notes: notes }
+		return errs
 	}
+
+	// -> { settings, errs }
+	function memberSettings(where, raw, defaults) {
+		var errs = []
+		var s = assign({}, defaults)
+		if (raw === undefined) return { settings: s, errs: errs }
+		if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { settings: s, errs: [where + ': must be an object like {"weight": 10, "frequency": 0.5}'] }
+		Object.keys(raw).forEach(function (k) {
+			if (MEMBER_KEYS.indexOf(k) < 0) errs.push(where + ': unknown field "' + k + '" (allowed: ' + MEMBER_KEYS.join(', ') + ')')
+		})
+		if ('weight' in raw) {
+			if (!isInt(raw.weight) || raw.weight < 1) errs.push(where + ': weight must be a whole number >= 1 (got ' + raw.weight + ')')
+			else s.weight = raw.weight
+		}
+		if ('frequency' in raw) {
+			if (!(typeof raw.frequency === 'number' && raw.frequency >= 0 && raw.frequency <= 1)) errs.push(where + ': frequency must be 0..1 (got ' + raw.frequency + ')')
+			else s.frequency = raw.frequency
+		}
+		if ('enabled' in raw) {
+			if (typeof raw.enabled !== 'boolean') errs.push(where + ': enabled must be true or false')
+			else s.enabled = raw.enabled
+		}
+		s.auto = false
+		return { settings: s, errs: errs }
+	}
+
+	// ── output shape ─────────────────────────────────────────────────────────
 
 	// The JSON "placement" object: type first, defaults dropped.
 	function outputPlacement(p) {
@@ -238,110 +265,260 @@
 		return out
 	}
 
-	function validatePlacement(id, p) {
-		var errs = []
-		if (typeof p.spacing === 'number') {
-			if (!(p.spacing > (p.separation || 0))) errs.push(id + ': spacing ' + p.spacing + ' must be > separation ' + p.separation)
-			if (p.spacing > MAX_SPACING) errs.push(id + ': spacing ' + p.spacing + ' > ' + MAX_SPACING)
+	function gridDensity(p) {
+		if (typeof p.spacing !== 'number') return null
+		return ('frequency' in p ? p.frequency : 1) / (p.spacing * p.spacing)
+	}
+
+	// debug.structureDensity: the set's expected rate x m -> { placement, capped }.
+	//   m < 1: frequency x m (exact; spacing, separation and gaps unchanged).
+	//   m > 1, grids: spacing and separation / sqrt(m), rounded down, and the frequency absorbs the rounding
+	//          (exact), unless the spacing hits separation + 1 (capped: as dense as that grid gets).
+	//   m > 1, concentric rings: count x m.
+	// legacy_type_1 rounds 1/frequency to a whole number, so a changed frequency switches it to default.
+	function scalePlacement(p, m) {
+		if (m === 1) return { placement: p, capped: false }
+		var q = assign({}, p)
+		var f = 'frequency' in q ? q.frequency : 1
+		var capped = false
+		if (m < 1) {
+			q.frequency = f * m
+		} else if (isInt(q.spacing)) {
+			var root = Math.sqrt(m)
+			var sep = Math.floor(q.separation / root)
+			var spacing = Math.max(sep + 1, Math.floor(q.spacing / root))
+			var nf = f * m * (spacing * spacing) / (q.spacing * q.spacing)
+			if (nf > 1 + 1e-9) capped = true
+			q.spacing = spacing
+			q.separation = sep
+			q.frequency = Math.min(1, nf)
+		} else if (isInt(q.count)) {
+			q.count = Math.round(q.count * m)
+			if (q.count > MAX_COUNT) { q.count = MAX_COUNT; capped = true }
+		} else {
+			capped = true
 		}
-		if ('frequency' in p && !(p.frequency >= 0 && p.frequency <= 1)) errs.push(id + ': frequency ' + p.frequency + ' outside 0..1')
-		if (typeof p.count === 'number' && !(p.count >= 1 && p.count <= MAX_COUNT)) errs.push(id + ': count ' + p.count + ' outside 1..' + MAX_COUNT)
-		if (typeof p.salt === 'number' && p.salt < 0) errs.push(id + ': salt ' + p.salt + ' must be >= 0')
-		return errs
+		if ('frequency' in q) q.frequency = Math.max(1e-6, Math.round(q.frequency * 1e6) / 1e6)
+		if (q.frequency !== f && q.frequency_reduction_method === 'legacy_type_1') q.frequency_reduction_method = 'default'
+		return { placement: q, capped: capped }
+	}
+
+	// "one per N x N chunks" where the structure is the only member that fits
+	function aloneSpacing(p, frequency) {
+		var d = gridDensity(p)
+		if (d === null || !(d * frequency > 0)) return '-'
+		return String(Math.round(Math.sqrt(1 / (d * frequency))))
 	}
 
 	// ── planning ─────────────────────────────────────────────────────────────
 
-	function structureList(members) {
-		return members.map(function (s) { return { structure: s.structure, weight: s.weight } })
-	}
+	function plan() {
+		var settings = worldgenSettings()
+		var density = settings.density
+		var capped = []
+		var config = readJson(CONFIG_PATH)
+		if (!config) return { errors: ['could not read ' + CONFIG_PATH + ' (run python3 tools/gen_structure_config.py)'] }
+		var sets = config.structure_sets
+		var tagsDoc = readJson(TAGS_PATH)
+		var tagDefs = tagsDoc ? tagsDoc.tags : {}
+		var doc = readJson(GROUPS_PATH)
+		if (!doc) return { errors: ['could not read ' + GROUPS_PATH + ' (run python3 tools/gen_structure_groups.py)'] }
+		var groupsDoc = settings.groups ? doc.groups || {} : {}
+		var standaloneDoc = settings.groups ? doc.standalone || {} : {}
 
-	function planSet(id, entry, multOf) {
-		var base = assign({}, entry.original, entry.current)
-		var members = entry.structures.map(function (s) {
-			var mult = multOf(s.structure)
-			return { structure: s.structure, weight: s.weight, enabled: s.enabled, m: mult.m, chain: mult.chain, blocked: s.blocked }
+		var allIds = []
+		var setOf = {}
+		var baseWeight = {}
+		var blocked = {}
+		Object.keys(sets).forEach(function (id) {
+			sets[id].structures.forEach(function (s) {
+				allIds.push(s.structure)
+				if (!setOf[s.structure]) setOf[s.structure] = id
+				baseWeight[s.structure] = s.weight
+				if (s.blocked) blocked[s.structure] = s.blocked
+			})
 		})
-		var live = members.filter(function (s) { return s.enabled && s.m > 0 })
-		var outputs = []
+		// meta structures: structures of our own with no set of their own (they only live in groups)
+		Object.keys(config.meta_structures || {}).forEach(function (id) { if (!setOf[id]) allIds.push(id) })
 
-		if (!live.length) {
-			var p0 = assign({}, base, { frequency: 0 })
-			outputs.push({
-				id: id, primary: true, m: 0, achieved: 0, notes: ['every member disabled or at multiplier 0 -> frequency 0'],
-				placement: p0,
-				json: { placement: outputPlacement(p0), structures: structureList(entry.structures) },
-				members: members,
+		var resolved = resolveTags(tagDefs, allIds)
+		var warnings = resolved.warnings.slice()
+		if (resolved.errors.length) {
+			// Groups off: the tags only feed the report, so their errors don't stop the mod defaults.
+			if (settings.groups) return { errors: resolved.errors, title: 'structure_tags.json has errors' }
+			resolved.errors.forEach(function (e) { warnings.push('structure_tags.json: ' + e) })
+		}
+		var tagMembers = resolved.members
+		var errors = []
+		if (!settings.groups) warnings.push('structure groups are OFF (CEConfig [worldgen.systems] structureGroups): every structure set is its mod/vanilla default'
+			+ (density !== 1 ? ' times the debug density' : ''))
+
+		// group membership
+		var groupNames = !settings.groups ? [] : Object.keys(tagDefs).filter(function (t) { return t.indexOf('group/') === 0 })
+			.map(function (t) { return t.substring('group/'.length) })
+		var owner = {}
+		groupNames.forEach(function (g) {
+			if (!groupsDoc[g]) errors.push('tag group/' + g + ' has no entry under "groups" in structure_groups.json (run python3 tools/gen_structure_groups.py)')
+			Object.keys(tagMembers['group/' + g]).forEach(function (id) {
+				if (owner[id]) errors.push(id + ' is in both group/' + owner[id] + ' and group/' + g + ' (a structure can be in one group)')
+				else owner[id] = g
 			})
-		} else {
-			var groups = []
-			live.forEach(function (s) {
-				var g = null
-				for (var i = 0; i < groups.length; i++) if (groups[i].m === s.m) { g = groups[i]; break }
-				if (!g) groups.push(g = { m: s.m, members: [], weight: 0 })
-				g.members.push(s)
-				g.weight += s.weight
+		})
+		Object.keys(groupsDoc).forEach(function (g) {
+			if (groupNames.indexOf(g) < 0) errors.push('structure_groups.json group "' + g + '" has no tag group/' + g + ' in structure_tags.json')
+		})
+		if (settings.groups) allIds.forEach(function (id) {
+			if (!setOf[id] && !owner[id]) warnings.push(id + ' (meta structure) is in no group, so it never generates')
+		})
+
+		var knownSets = {}
+		Object.keys(sets).forEach(function (id) { knownSets[id] = true })
+		groupNames.forEach(function (g) { knownSets[GROUP_SET_PREFIX + g] = true })
+
+		var files = {}
+		var frequencies = {}     // set id -> { structure id: frequency < 1 }
+		var groupPlans = []
+		var setPlans = []
+
+		// groups
+		groupNames.forEach(function (g) {
+			var entry = groupsDoc[g]
+			if (!entry) return
+			var setId = GROUP_SET_PREFIX + g
+			var raw = entry.placement || {}
+			Object.keys(raw).forEach(function (k) {
+				if (GROUP_PLACEMENT_KEYS.indexOf(k) < 0) errors.push('groups.' + g + '.placement: unknown field "' + k + '" (allowed: ' + GROUP_PLACEMENT_KEYS.join(', ') + ')')
 			})
-			// Heaviest group keeps the original id (stable: first-listed wins ties).
-			var ordered = groups.map(function (g, i) { return { g: g, i: i } })
-				.sort(function (a, b) { return b.g.weight - a.g.weight || a.i - b.i })
-				.map(function (x) { return x.g })
-			ordered.forEach(function (g, k) {
-				var scaled = scalePlacement(base, g.m)
-				var p = scaled.p
-				var outId = id
-				if (k > 0) {
-					outId = SPLIT_PREFIX + id.replace(':', '/') + '_' + k
-					p.salt = ((base.salt || 0) + k * 1000003) % 2147483647
+			if (!('spacing' in raw) || !('separation' in raw) || !('salt' in raw)) errors.push('groups.' + g + '.placement needs spacing, separation and salt')
+			var p = assign({ type: 'minecraft:random_spread' }, raw)
+			errors.push.apply(errors, validatePlacement('groups.' + g + '.placement', p, knownSets))
+
+			var listed = entry.structures || {}
+			var ids = Object.keys(tagMembers['group/' + g]).sort()
+			Object.keys(listed).forEach(function (id) {
+				if (owner[id] !== g) errors.push('groups.' + g + '.structures lists ' + id + ', which is not in group/' + g + (owner[id] ? ' (it is in group/' + owner[id] + ')' : ''))
+			})
+			var listedWeights = ids.filter(function (id) { return listed[id] && isInt(listed[id].weight) }).map(function (id) { return listed[id].weight })
+			var autoWeight = median(listedWeights)
+			var members = ids.map(function (id) {
+				var auto = !(id in listed)
+				var defaults = { weight: autoWeight, frequency: 1, enabled: true, auto: auto }
+				if (auto) {
+					// rough default until gen_structure_groups.py fits one: the rate its own set gave it
+					var own = setOf[id] ? assign({}, sets[setOf[id]].original) : null
+					var ownD = own ? gridDensity(own) : null
+					var groupD = gridDensity(p)
+					if (ownD !== null && groupD) defaults.frequency = round4(Math.min(1, ownD / groupD))
 				}
-				outputs.push({
-					id: outId, primary: k === 0, m: g.m, achieved: scaled.achieved, notes: scaled.notes,
-					placement: p,
-					json: { placement: outputPlacement(p), structures: structureList(g.members) },
-					members: k === 0
-						? members.filter(function (s) { return !(s.enabled && s.m > 0) || g.members.indexOf(s) >= 0 })
-						: g.members,
-				})
+				var r = memberSettings('groups.' + g + '.structures.' + id, listed[id], defaults)
+				errors.push.apply(errors, r.errs)
+				r.settings.auto = auto
+				return assign({ structure: id, from: setOf[id] || '(meta structure)', blocked: blocked[id] }, r.settings)
 			})
-		}
+			var live = members.filter(function (m) { return m.enabled && m.frequency > 0 })
+			var scaled = scalePlacement(p, density)   // after the members: their auto defaults use the real grid
+			if (scaled.capped) capped.push(setId)
+			var plan = { name: g, id: setId, note: entry.note, placement: scaled.placement, members: members, live: live }
+			groupPlans.push(plan)
+			if (!live.length) return
+			files[resourcePath(setId)] = toJson({
+				placement: outputPlacement(scaled.placement),
+				structures: live.map(function (m) { return { structure: m.structure, weight: m.weight } }),
+			})
+			live.forEach(function (m) {
+				if (m.frequency < 1) (frequencies[setId] = frequencies[setId] || {})[m.structure] = m.frequency
+			})
+		})
 
-		var originalJson = {
-			placement: outputPlacement(entry.original),
-			structures: structureList(entry.structures),
+		// every original set: members that moved to a group leave it; the rest follow "standalone"
+		Object.keys(standaloneDoc).forEach(function (id) {
+			if (!sets[id]) errors.push('standalone: "' + id + '" is not a structure set in structure_config.json')
+		})
+		Object.keys(sets).forEach(function (id) {
+			var entry = sets[id]
+			var sa = standaloneDoc[id] || {}
+			var rest = entry.structures.filter(function (s) { return !owner[s.structure] })
+			var moved = entry.structures.filter(function (s) { return owner[s.structure] })
+				.map(function (s) { return { structure: s.structure, group: owner[s.structure] } })
+			var p = assign({}, entry.original, sa.placement || {})
+			if (rest.length) errors.push.apply(errors, validatePlacement('standalone.' + id + '.placement', p, knownSets))
+			var listed = sa.structures || {}
+			Object.keys(listed).forEach(function (sid) {
+				if (!entry.structures.some(function (s) { return s.structure === sid })) errors.push('standalone.' + id + '.structures lists ' + sid + ', which is not in that set')
+				else if (owner[sid]) warnings.push('standalone.' + id + '.structures still lists ' + sid + ', which is in group/' + owner[sid] + ' now: ignored (python3 tools/gen_structure_groups.py removes it)')
+			})
+			var members = rest.map(function (s) {
+				var r = memberSettings('standalone.' + id + '.structures.' + s.structure, listed[s.structure],
+					{ weight: s.weight, frequency: 1, enabled: true })
+				errors.push.apply(errors, r.errs)
+				return assign({ structure: s.structure, blocked: s.blocked }, r.settings)
+			})
+			var live = members.filter(function (m) { return m.enabled && m.frequency > 0 })
+			var out
+			if (live.length) {
+				var scaled = scalePlacement(p, density)
+				if (scaled.capped) capped.push(id)
+				p = scaled.placement
+				out = { placement: outputPlacement(p), structures: live.map(function (m) { return { structure: m.structure, weight: m.weight } }) }
+			} else {
+				out = { placement: outputPlacement(assign({}, p, { frequency: 0 })), structures: [] }
+			}
+			var original = {
+				placement: outputPlacement(entry.original),
+				structures: entry.structures.map(function (s) { return { structure: s.structure, weight: s.weight } }),
+			}
+			var changed = JSON.stringify(out) !== JSON.stringify(original)
+			if (changed) files[resourcePath(id)] = toJson(out)
+			live.forEach(function (m) {
+				if (m.frequency < 1) (frequencies[id] = frequencies[id] || {})[m.structure] = m.frequency
+			})
+			setPlans.push({ id: id, entry: entry, placement: p, members: members, live: live, moved: moved, changed: changed,
+				emptied: !live.length, handEdited: Object.keys(sa.placement || {}).length > 0 })
+		})
+
+		// exclusion zones that point at a set which can no longer generate
+		var dead = {}
+		setPlans.forEach(function (sp) { if (sp.emptied) dead[sp.id] = sp.moved.length ? 'its structures moved to groups' : 'every member is disabled' })
+		groupPlans.forEach(function (gp) { if (!gp.live.length) dead[gp.id] = 'the group has no live member' })
+		function checkExclusion(where, p) {
+			var ez = p.exclusion_zone
+			if (ez && typeof ez === 'object' && dead[ez.other_set]) warnings.push(where + ': exclusion_zone points at ' + ez.other_set + ', which never generates (' + dead[ez.other_set] + '), so it excludes nothing. Point it at the group that took them.')
 		}
-		var primary = outputs[0]
-		primary.unchanged = JSON.stringify(primary.json) === JSON.stringify(originalJson)
-		return { id: id, entry: entry, base: base, members: members, outputs: outputs, split: outputs.length > 1 }
+		groupPlans.forEach(function (gp) { checkExclusion('groups.' + gp.name, gp.placement) })
+		setPlans.forEach(function (sp) { if (!sp.emptied) checkExclusion('standalone.' + sp.id, sp.placement) })
+
+		if (errors.length) return { errors: errors, title: 'structure_groups.json / structure_tags.json have errors' }
+		if (density !== 1) warnings.push('DEBUG structure density x' + density + ' (CEConfig [worldgen.debug] structureDensity): every set\'s rate is scaled; '
+			+ (capped.length ? capped.length + ' set(s) hit their densest grid and stay below x' + density + ': ' + capped.join(', ') : 'all exact')
+			+ '. Set it back to 1 for play.')
+
+		var autoCount = 0
+		groupPlans.forEach(function (gp) { gp.members.forEach(function (m) { if (m.auto) autoCount++ }) })
+		if (autoCount) warnings.push(autoCount + ' group member(s) have no entry in structure_groups.json and use a rough default (marked "auto" in the report): run python3 tools/gen_structure_groups.py')
+
+		var freqCount = 0
+		Object.keys(frequencies).forEach(function (s) { freqCount += Object.keys(frequencies[s]).length })
+		return {
+			files: files,
+			frequencies: frequencies,
+			report: buildReport(groupPlans, setPlans, tagDefs, tagMembers, allIds, warnings, freqCount),
+			warnings: warnings,
+			summary: (settings.groups ? '' : 'GROUPS OFF, ') + (density !== 1 ? 'DEBUG density x' + density + ', ' : '')
+				+ groupPlans.length + ' groups, ' + Object.keys(files).length + ' structure_sets written ('
+				+ setPlans.filter(function (sp) { return sp.emptied && sp.moved.length }).length + ' emptied into groups), '
+				+ Object.keys(sets).length + ' original sets; ' + freqCount + ' structure frequencies below 1',
+		}
 	}
 
 	// ── report ───────────────────────────────────────────────────────────────
 
-	function placementSummary(from, to) {
-		var keys = ['spacing', 'separation', 'frequency', 'count', 'frequency_reduction_method']
-		return keys.filter(function (k) { return (k in from) || (k in to) }).map(function (k) {
-			var a = (k in from) ? from[k] : (k === 'frequency' ? 1 : '-')
-			var b = (k in to) ? to[k] : (k === 'frequency' ? 1 : '-')
-			return a === b ? k + ' ' + a : k + ' ' + a + ' -> **' + b + '**'
-		}).join(', ')
-	}
-
-	function chainText(s) {
-		if (!s.enabled) return 'disabled (enabled: false)'
-		if (!s.chain.length) return 'x1'
-		var parts = s.chain.map(function (c) { return c[0] + ' ' + fmtMult(c[1]) })
-		return parts.join(' · ') + (s.chain.length > 1 ? ' = ' + fmtMult(s.m) : '')
-	}
-
-	function code(id) {
-		return '`' + id + '`'
-	}
-
 	function reportHeader(lines) {
-		lines.push('# Structure tag report')
+		lines.push('# Structure tuning report')
 		lines.push('')
 		lines.push('Written ' + new Date().toISOString().slice(0, 19).replace('T', ' ') + ' UTC at world load by '
 			+ '`kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. '
-			+ 'Edit `structure_tags.json` / `structure_config.json` instead, then rejoin the world.')
+			+ 'Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. '
+			+ 'Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).')
 		lines.push('')
 	}
 
@@ -357,52 +534,17 @@
 		return lines.join('\n')
 	}
 
-	function buildReport(tagDefs, tagMembers, plans, allIds, splitWarnings, warnings) {
+	function placementText(p) {
+		var keys = ['spacing', 'separation', 'frequency', 'count', 'distance', 'spread', 'spread_type', 'frequency_reduction_method', 'salt']
+		var parts = keys.filter(function (k) { return k in p }).map(function (k) { return k + ' ' + p[k] })
+		if (p.exclusion_zone) parts.push('exclusion_zone ' + p.exclusion_zone.other_set + ' r' + p.exclusion_zone.chunk_count)
+		return parts.join(', ')
+	}
+
+	function buildReport(groupPlans, setPlans, tagDefs, tagMembers, allIds, warnings, freqCount) {
 		var lines = []
 		var out = function (s) { lines.push(s) }
 		reportHeader(lines)
-
-		out('## Active multipliers')
-		out('')
-		var active = Object.keys(tagDefs).filter(function (t) { return tagDefs[t].multiplier !== 1 })
-		if (!active.length) {
-			out('None. Every tag is at 1, so tags change nothing yet.')
-		} else {
-			out('| Tag | Multiplier | Structures |')
-			out('|---|---|---|')
-			active.forEach(function (t) { out('| `' + t + '` | ' + fmtMult(tagDefs[t].multiplier) + ' | ' + Object.keys(tagMembers[t]).length + ' |') })
-		}
-		out('')
-
-		out('## Structure sets written')
-		out('')
-		var changed = plans.filter(function (pl) { return pl.split || !pl.outputs[0].unchanged })
-		if (!changed.length) out('None. Every set matches its mod/vanilla default.')
-		changed.forEach(function (pl) {
-			out('### `' + pl.id + '`' + (pl.split ? ' (split)' : ''))
-			out('')
-			out('Source: ' + pl.entry.source + '.')
-			var handEdited = JSON.stringify(outputPlacement(pl.base)) !== JSON.stringify(outputPlacement(pl.entry.original))
-			if (handEdited) out('Hand edits in "current": ' + placementSummary(pl.entry.original, pl.base) + '.')
-			out('')
-			pl.outputs.forEach(function (o) {
-				if (o.primary && o.unchanged) return
-				out('- ' + (o.primary ? 'Written as' : 'Split off to') + ' `' + o.id + '`: target ' + fmtMult(o.m) + ', got '
-					+ fmtMult(o.achieved) + '. ' + placementSummary(pl.entry.original, o.placement))
-				o.notes.forEach(function (n) { out('  - note: ' + n) })
-				o.members.forEach(function (s) { out('  - `' + s.structure + '`: ' + chainText(s) + (s.blocked ? ' (**blocked:** ' + s.blocked + ')' : '')) })
-			})
-			out('')
-		})
-
-		if (splitWarnings.length) {
-			out('## Splits to check')
-			out('')
-			out('A split set\'s groups no longer share one grid. Exact when their biomes don\'t overlap; where they do, the split-off group gets somewhat more common than its multiplier says.')
-			out('')
-			splitWarnings.forEach(function (w) { out('- ' + w) })
-			out('')
-		}
 
 		if (warnings.length) {
 			out('## Warnings')
@@ -410,6 +552,65 @@
 			warnings.forEach(function (w) { out('- ' + w) })
 			out('')
 		}
+
+		out('## Groups')
+		out('')
+		out('Members of a group share one grid: at most one structure per grid slot, and no two members start closer '
+			+ 'than separation + 1 chunks. "Alone: 1 per N" = one per N x N chunks where it is the only member that fits the biome '
+			+ '(sharing a biome splits the slots by weight). ' + freqCount + ' frequencies below 1 are rolled by patcherMod.')
+		out('')
+		groupPlans.forEach(function (gp) {
+			var p = gp.placement
+			out('### `' + gp.name + '` -> `' + gp.id + '`')
+			out('')
+			if (gp.note) out(gp.note)
+			out('')
+			out('Grid: ' + placementText(p) + '. Members never start closer than ' + (p.separation + 1) + ' chunks ('
+				+ ((p.separation + 1) * 16) + ' blocks). ' + gp.live.length + ' of ' + gp.members.length + ' members live.'
+				+ (gp.live.length ? '' : ' **No live member: no set written.**'))
+			out('')
+			out('| Structure | Weight | Frequency | Alone: 1 per | Was in | Note |')
+			out('|---|---|---|---|---|---|')
+			gp.members.forEach(function (m) {
+				var notes = []
+				if (m.auto) notes.push('**auto** (not in structure_groups.json yet)')
+				if (!m.enabled) notes.push('disabled')
+				if (m.blocked) notes.push('**blocked:** ' + m.blocked)
+				out('| ' + code(m.structure) + ' | ' + m.weight + ' | ' + m.frequency + ' | '
+					+ (m.enabled ? aloneSpacing(p, m.frequency) : '-') + ' | ' + code(m.from) + ' | ' + notes.join('; ') + ' |')
+			})
+			out('')
+		})
+
+		out('## Standalone sets written')
+		out('')
+		var written = setPlans.filter(function (sp) { return sp.changed && !(sp.emptied && sp.moved.length) })
+		if (!written.length) out('None. Every standalone set matches its mod/vanilla default.')
+		written.forEach(function (sp) {
+			out('### `' + sp.id + '`')
+			out('')
+			out('Source: ' + sp.entry.source + '. Placement: ' + placementText(sp.placement) + (sp.handEdited ? ' (edited)' : '') + '.'
+				+ (sp.emptied ? ' **Every member disabled: written with no structures.**' : ''))
+			if (sp.moved.length) out('Moved to groups: ' + sp.moved.map(function (s) { return code(s.structure) + ' (' + s.group + ')' }).join(', ') + '.')
+			out('')
+			sp.members.forEach(function (m) {
+				var bits = ['weight ' + m.weight, 'frequency ' + m.frequency]
+				if (!m.enabled) bits.push('disabled')
+				if (m.enabled) bits.push('alone: 1 per ' + aloneSpacing(sp.placement, m.frequency))
+				if (m.blocked) bits.push('**blocked:** ' + m.blocked)
+				out('- ' + code(m.structure) + ': ' + bits.join(', '))
+			})
+			out('')
+		})
+
+		out('## Sets emptied into groups')
+		out('')
+		out('Written with no structures and frequency 0: they can neither generate nor show up in /locate or map searches.')
+		out('')
+		setPlans.filter(function (sp) { return sp.emptied && sp.moved.length }).forEach(function (sp) {
+			out('- ' + code(sp.id) + ': ' + sp.moved.map(function (s) { return code(s.structure) + ' -> ' + s.group }).join(', '))
+		})
+		out('')
 
 		out('## Coverage')
 		out('')
@@ -420,19 +621,20 @@
 		}
 		var noType = allIds.filter(function (id) { return !inFamily(['type/', 'dungeon/'], id) })
 		var noMod = allIds.filter(function (id) { return !inFamily(['mod/'], id) })
+		var standaloneIds = allIds.filter(function (id) { return !inFamily(['group/'], id) })
 		out('- Structures with no `type/*` or `dungeon/*` tag: ' + (noType.length ? noType.map(code).join(', ') : 'none'))
 		out('- Structures with no `mod/*` tag: ' + (noMod.length ? noMod.map(code).join(', ') : 'none'))
-		// "blocked" notes come from tools/gen_structure_config.py (another mod stops these in code)
-		var blocked = []
-		plans.forEach(function (pl) { pl.entry.structures.forEach(function (s) { if (s.blocked) blocked.push(code(s.structure)) }) })
-		out('- Structures another mod stops in code (tuning them has no effect, see "blocked" in structure_config.json): ' + (blocked.length ? blocked.join(', ') : 'none'))
+		var blockedIds = []
+		setPlans.forEach(function (sp) { sp.entry.structures.forEach(function (s) { if (s.blocked) blockedIds.push(code(s.structure)) }) })
+		out('- Structures another mod stops in code (tuning them has no effect, see "blocked" in structure_config.json): ' + (blockedIds.length ? blockedIds.join(', ') : 'none'))
+		out('- Structures in no group (' + standaloneIds.length + ', standalone): ' + standaloneIds.map(code).join(', '))
 		out('')
 
 		out('## Tag members')
 		out('')
 		Object.keys(tagDefs).forEach(function (t) {
-			var ids = sortedKeys(tagMembers[t])
-			out('- **`' + t + '`** ' + fmtMult(tagDefs[t].multiplier) + ', ' + ids.length + ': ' + ids.map(code).join(', '))
+			var ids = Object.keys(tagMembers[t]).sort()
+			out('- **`' + t + '`** ' + ids.length + ': ' + ids.map(code).join(', '))
 		})
 		out('')
 		return lines.join('\n')
@@ -446,68 +648,12 @@
 		}
 	}
 
-	// ── main ─────────────────────────────────────────────────────────────────
-
-	// -> { files: {resourcePath: jsonText}, summary } or { errors: [...] }
-	function plan() {
-		var config = readJson(CONFIG_PATH)
-		if (!config) return { errors: ['could not read ' + CONFIG_PATH + ' (run python3 tools/gen_structure_config.py)'] }
-		var sets = config.structure_sets
-		var tagsDoc = readJson(TAGS_PATH)
-		var tagDefs = tagsDoc ? tagsDoc.tags : {}
-
-		var allIds = []
-		Object.keys(sets).forEach(function (id) { sets[id].structures.forEach(function (s) { allIds.push(s.structure) }) })
-
-		var resolved = resolveTags(tagDefs, allIds)
-		var tagMembers = resolved.members
-		if (resolved.errors.length) return { errors: resolved.errors, title: 'structure_tags.json has errors' }
-
-		var activeTags = Object.keys(tagDefs).filter(function (t) { return tagDefs[t].multiplier !== 1 })
-		var multCache = {}
-		function multOf(sid) {
-			if (!multCache[sid]) {
-				var chain = activeTags.filter(function (t) { return tagMembers[t][sid] }).map(function (t) { return [t, tagDefs[t].multiplier] })
-				multCache[sid] = { m: chain.reduce(function (acc, c) { return acc * c[1] }, 1), chain: chain }
-			}
-			return multCache[sid]
-		}
-
-		var plans = Object.keys(sets).map(function (id) { return planSet(id, sets[id], multOf) })
-
-		var files = {}
-		var invalid = []
-		var splitWarnings = []
-		plans.forEach(function (pl) {
-			pl.outputs.forEach(function (o) {
-				if (o.primary && o.unchanged && !pl.split) return
-				invalid.push.apply(invalid, validatePlacement(o.id, o.placement))
-				files[resourcePath(o.id)] = toJson(o.json)
-			})
-			if (pl.split) {
-				var groups = pl.outputs.map(function (o) {
-					return o.id + ' (' + fmtMult(o.m) + ': ' + o.json.structures.map(function (s) { return s.structure }).join(', ') + ')'
-				})
-				var w = '`' + pl.id + '` split into ' + groups.join(' | ')
-				var referrers = Object.keys(sets).filter(function (other) {
-					return ['exclusion_zone', 'enhanced_exclusion_zone'].some(function (k) {
-						return (sets[other].original[k] || {}).other_set === pl.id
-					})
-				})
-				if (referrers.length) w += '. Exclusion zones in ' + referrers.join(', ') + ' point at `' + pl.id + '` and won\'t see the split-off groups'
-				splitWarnings.push(w)
-			}
-		})
-		if (invalid.length) return { errors: invalid, title: 'Invalid placements' }
-
-		var splits = plans.filter(function (p) { return p.split }).length
-		return {
-			files: files,
-			report: buildReport(tagDefs, tagMembers, plans, allIds, splitWarnings, resolved.warnings),
-			warnings: resolved.warnings,
-			summary: Object.keys(files).length + ' structure_sets overridden (' + splits + ' split sets), ' + plans.length + ' sets total; '
-				+ activeTags.length + ' active tag multipliers: '
-				+ (activeTags.map(function (t) { return t + ' ' + fmtMult(tagDefs[t].multiplier) }).join(', ') || 'none'),
+	// patcherMod's frequency roller; null when the jar is older than this script
+	function frequencyStage() {
+		try {
+			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies')
+		} catch (err) {
+			return null
 		}
 	}
 
@@ -518,13 +664,21 @@
 		} catch (err) {
 			result = { errors: ['structure tuning failed: ' + err], title: 'Structure tuning failed' }
 		}
+		var stage = frequencyStage()
+		if (!result.errors && !stage) {
+			result = { errors: ['patcherMod has no worldgen.StructureFrequencies: mods/ holds an older creativeengineering jar. '
+				+ 'Groups without their per-structure frequencies would spawn every member at full rate, so nothing is applied. '
+				+ 'Copy the new jar from patcherMod/build/libs into mods/.'], title: 'patcherMod jar too old' }
+		}
 		if (result.errors) {
 			result.errors.forEach(function (e) { console.error(TAG + e) })
 			console.error(TAG + 'nothing applied, every structure uses its mod/vanilla default')
+			if (stage) stage.stage('{}')
 			writeReport(buildErrorReport(result.title || 'Errors', result.errors))
 			return
 		}
 		Object.keys(result.files).forEach(function (path) { event.add(path, result.files[path]) })
+		stage.stage(toJson(result.frequencies))
 		result.warnings.forEach(function (w) { console.warn(TAG + w) })
 		console.info(TAG + result.summary)
 		writeReport(result.report)

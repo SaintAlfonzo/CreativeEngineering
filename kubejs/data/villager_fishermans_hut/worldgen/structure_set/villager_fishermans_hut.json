@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "villager_fishermans_hut:villager_fishermans_hut",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 42,
+    "separation": 34,
+    "salt": 1284177647
+  }
+}

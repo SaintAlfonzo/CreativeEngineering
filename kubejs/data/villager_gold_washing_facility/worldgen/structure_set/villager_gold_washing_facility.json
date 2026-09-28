@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "villager_gold_washing_facility:villager_gold_washing_facility",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 50,
+    "separation": 35,
+    "salt": 1787248236
+  }
+}

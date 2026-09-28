@@ -6,26 +6,28 @@
 Reads:
   kubejs/exported/worldgen/structuregen.json            live registry (/dumpstructuregen in game)
   kubejs/generation_scripts/worldgen/structure_config.json
-  kubejs/generation_scripts/worldgen/structure_tag_report.md   what structure_overrides.js wrote
+  what structure_overrides.js writes for the CURRENT configs (runs tools/structure_tuning_sim.js)
 
 Prints:
   1. live structure_sets missing from structure_config.json (not tunable: re-run
-     tools/gen_structure_config.py, or add a code-registered set to its CODE_REGISTERED_SETS table)
+     tools/gen_structure_config.py, or add a code-registered set to its CODE_REGISTERED_SETS table);
+     the creativeengineering:group/* sets are expected and not listed
   2. config sets that aren't live (a mod was removed: re-run the scanner)
   3. live structures that belong to no set (never generate on their own)
-  4. every set the report says was written, checked against the live spacing / separation / count.
-     A mismatch means something replaced the override after it loaded (a mod applying its own
-     config in code), or the dump comes from an older world load than the report.
-The live dump can't read frequency or salt (Rhino method lookup), so those aren't compared.
+  4. every set the script would write, checked against the live spacing / separation / count and
+     members. A mismatch means the configs changed since that world load (rejoin), or something
+     replaced the override after it loaded (a mod applying its own config in code).
+The live dump can't read frequency or salt (Rhino method lookup), so those aren't compared, and the
+per-structure frequencies live in patcherMod, not the registry (the log line
+"[structure-frequency] N structure(s) in M set(s)" confirms them).
 Exit code 1 when section 1, 2 or 4 has findings.
 """
-import json, os, re, sys, datetime
+import json, os, re, shutil, subprocess, sys, tempfile, datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUMP = os.path.join(ROOT, 'kubejs/exported/worldgen/structuregen.json')
 CONFIG = os.path.join(ROOT, 'kubejs/generation_scripts/worldgen/structure_config.json')
-REPORT = os.path.join(ROOT, 'kubejs/generation_scripts/worldgen/structure_tag_report.md')
-SPLIT = 'creativeengineering:split/'
+GROUP = 'creativeengineering:group/'
 
 def stamp(path):
     return datetime.datetime.fromtimestamp(os.path.getmtime(path)).strftime('%Y-%m-%d %H:%M')
@@ -33,10 +35,10 @@ def stamp(path):
 live = json.load(open(DUMP))
 live_sets, live_structs = live['structure_sets'], live['structures']
 cfg_sets = json.load(open(CONFIG))['structure_sets']
-print('dump %s (%s) | report %s' % (live.get('generated', '?'), stamp(DUMP), stamp(REPORT)))
+print('dump %s (%s)' % (live.get('generated', '?'), stamp(DUMP)))
 bad = 0
 
-missing = sorted(s for s in live_sets if s not in cfg_sets and not s.startswith(SPLIT))
+missing = sorted(s for s in live_sets if s not in cfg_sets and not s.startswith(GROUP))
 print('\n1. live sets not in structure_config.json: %d' % len(missing))
 for s in missing:
     print('   ', s, [e['structure'] for e in live_sets[s].get('structures') or []])
@@ -58,28 +60,37 @@ print('\n3. live structures in no set (never generate naturally): %d' % len(orph
 for k, n in sorted(groups.items()):
     print('   ', k + (' x%d' % n if n > 1 else ''))
 
-# "- Written as `id`: target x.., got x... spacing 34 -> **30**, separation 8 -> **7**, frequency 1 -> **0.9**"
+# what structure_overrides.js adds for the current configs
+tmp = tempfile.mkdtemp()
+sim = subprocess.run(['node', os.path.join(ROOT, 'tools/structure_tuning_sim.js'), os.path.join(tmp, 'report.md'), tmp],
+                     capture_output=True, text=True)
+if sim.returncode != 0:
+    print('\n4. the simulation reports config errors, nothing would be applied:\n' + sim.stdout)
+    sys.exit(1)
 written = {}
-for line in open(REPORT, encoding='utf-8'):
-    m = re.match(r'- Written as `([^`]+)`:(.*)$', line)
-    if not m:
-        continue
-    want = {}
-    for field in ('spacing', 'separation', 'count'):
-        f = re.search(field + r' (\d+)(?: -> \*\*(\d+)\*\*)?', m.group(2))
-        if f:
-            want[field] = int(f.group(2) or f.group(1))
-    written[m.group(1)] = want
+for dirpath, _, files in os.walk(tmp):
+    for f in files:
+        rel = os.path.relpath(os.path.join(dirpath, f), tmp)
+        m = re.match(r'([^/]+)/worldgen/structure_set/(.+)\.json$', rel)
+        if m:
+            written[m.group(1) + ':' + m.group(2)] = json.load(open(os.path.join(dirpath, f)))
+shutil.rmtree(tmp, ignore_errors=True)
 
-print('\n4. written overrides vs live values: %d sets' % len(written))
+print('\n4. written sets vs live values: %d sets' % len(written))
 mism = 0
 for sid, want in sorted(written.items()):
-    got = (live_sets.get(sid) or {}).get('placement')
-    if got is None:
+    got = live_sets.get(sid)
+    if got is None or got.get('placement') is None:
         print('    NOT LIVE', sid)
         mism += 1
         continue
-    diffs = ['%s want %s live %s' % (k, v, got.get(k)) for k, v in want.items() if got.get(k) is not None and got.get(k) != v]
+    diffs = ['%s want %s live %s' % (k, want['placement'][k], got['placement'].get(k))
+             for k in ('spacing', 'separation', 'count')
+             if k in want['placement'] and got['placement'].get(k) is not None and got['placement'][k] != want['placement'][k]]
+    want_members = sorted(e['structure'] for e in want['structures'])
+    live_members = sorted(e['structure'] for e in got.get('structures') or [])
+    if want_members != live_members:
+        diffs.append('members want %d live %d' % (len(want_members), len(live_members)))
     if diffs:
         print('    MISMATCH', sid + ':', ', '.join(diffs))
         mism += 1

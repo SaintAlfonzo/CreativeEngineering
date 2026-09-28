@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "mini_clock_tower:mini_clock_tower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 43,
+    "separation": 28,
+    "salt": 1866773758
+  }
+}

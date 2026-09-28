@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "bighorsestable:big_horse_stable",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 40,
+    "separation": 30,
+    "salt": 27189184
+  }
+}

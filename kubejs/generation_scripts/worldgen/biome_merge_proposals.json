@@ -340,6 +340,120 @@
   },
   {
     "category": "forest",
+    "target_mod": "simply_houses",
+    "biome_mods": [
+      "terralith"
+    ],
+    "biomes": [
+      "terralith:alpha_islands",
+      "terralith:birch_taiga",
+      "terralith:lavender_forest",
+      "terralith:lavender_valley",
+      "terralith:mirage_isles",
+      "terralith:moonlight_grove",
+      "terralith:moonlight_valley",
+      "terralith:sakura_grove",
+      "terralith:sakura_valley",
+      "terralith:skylands",
+      "terralith:skylands_autumn",
+      "terralith:skylands_spring",
+      "terralith:temperate_highlands",
+      "terralith:white_cliffs",
+      "terralith:yosemite_lowlands"
+    ],
+    "tags_to_extend": [
+      "simply_houses:has_structure/forest_chapel_biomes",
+      "simply_houses:has_structure/forest_fort_biomes",
+      "simply_houses:has_structure/forest_house_biomes",
+      "simply_houses:has_structure/forest_stonemason_biomes"
+    ],
+    "literal_only_structures": [],
+    "structures": [
+      {
+        "structure": "simply_houses:forest_chapel",
+        "missing": [
+          "terralith:alpha_islands",
+          "terralith:birch_taiga",
+          "terralith:lavender_forest",
+          "terralith:lavender_valley",
+          "terralith:mirage_isles",
+          "terralith:moonlight_grove",
+          "terralith:moonlight_valley",
+          "terralith:sakura_grove",
+          "terralith:sakura_valley",
+          "terralith:skylands",
+          "terralith:skylands_autumn",
+          "terralith:skylands_spring",
+          "terralith:temperate_highlands",
+          "terralith:white_cliffs",
+          "terralith:yosemite_lowlands"
+        ]
+      },
+      {
+        "structure": "simply_houses:forest_fort",
+        "missing": [
+          "terralith:alpha_islands",
+          "terralith:birch_taiga",
+          "terralith:lavender_forest",
+          "terralith:lavender_valley",
+          "terralith:mirage_isles",
+          "terralith:moonlight_grove",
+          "terralith:moonlight_valley",
+          "terralith:sakura_grove",
+          "terralith:sakura_valley",
+          "terralith:skylands",
+          "terralith:skylands_autumn",
+          "terralith:skylands_spring",
+          "terralith:temperate_highlands",
+          "terralith:white_cliffs",
+          "terralith:yosemite_lowlands"
+        ]
+      },
+      {
+        "structure": "simply_houses:forest_house",
+        "missing": [
+          "terralith:alpha_islands",
+          "terralith:birch_taiga",
+          "terralith:lavender_forest",
+          "terralith:lavender_valley",
+          "terralith:mirage_isles",
+          "terralith:moonlight_grove",
+          "terralith:moonlight_valley",
+          "terralith:sakura_grove",
+          "terralith:sakura_valley",
+          "terralith:skylands",
+          "terralith:skylands_autumn",
+          "terralith:skylands_spring",
+          "terralith:temperate_highlands",
+          "terralith:white_cliffs",
+          "terralith:yosemite_lowlands"
+        ]
+      },
+      {
+        "structure": "simply_houses:forest_stonemason",
+        "missing": [
+          "terralith:alpha_islands",
+          "terralith:birch_taiga",
+          "terralith:lavender_forest",
+          "terralith:lavender_valley",
+          "terralith:mirage_isles",
+          "terralith:moonlight_grove",
+          "terralith:moonlight_valley",
+          "terralith:sakura_grove",
+          "terralith:sakura_valley",
+          "terralith:skylands",
+          "terralith:skylands_autumn",
+          "terralith:skylands_spring",
+          "terralith:temperate_highlands",
+          "terralith:white_cliffs",
+          "terralith:yosemite_lowlands"
+        ]
+      }
+    ],
+    "id": 9
+  },
+  {
+    "category": "forest",
     "target_mod": "towns_and_towers",
     "biome_mods": [
       "terralith"
@@ -506,7 +620,7 @@
         ]
       }
     ],
-    "id": 9
+    "id": 10
   },
   {
     "category": "jungle",
@@ -537,7 +651,7 @@
         ]
       }
     ],
-    "id": 10
+    "id": 11
   },
   {
     "category": "jungle",
@@ -573,139 +687,6 @@
         "missing": [
           "terralith:cave/underground_jungle",
           "terralith:skylands_summer"
-        ]
-      }
-    ],
-    "id": 11
-  },
-  {
-    "category": "jungle",
-    "target_mod": "themissingvillages",
-    "biome_mods": [
-      "terralith"
-    ],
-    "biomes": [
-      "terralith:amethyst_canyon",
-      "terralith:amethyst_rainforest",
-      "terralith:cave/underground_jungle",
-      "terralith:jungle_mountains",
-      "terralith:rocky_jungle",
-      "terralith:skylands_summer",
-      "terralith:tropical_jungle"
-    ],
-    "tags_to_extend": [
-      "themissingvillages:jungle_bamboo",
-      "themissingvillages:jungle_normal",
-      "themissingvillages:jungle_sparse"
-    ],
-    "literal_only_structures": [],
-    "structures": [
-      {
-        "structure": "themissingvillages:large/jungle_bamboo_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
-        ]
-      },
-      {
-        "structure": "themissingvillages:large/jungle_sparse_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
-        ]
-      },
-      {
-        "structure": "themissingvillages:large/jungle_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
-        ]
-      },
-      {
-        "structure": "themissingvillages:medium/jungle_bamboo_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
-        ]
-      },
-      {
-        "structure": "themissingvillages:medium/jungle_sparse_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
-        ]
-      },
-      {
-        "structure": "themissingvillages:medium/jungle_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
-        ]
-      },
-      {
-        "structure": "themissingvillages:small/jungle_bamboo_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
-        ]
-      },
-      {
-        "structure": "themissingvillages:small/jungle_sparse_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
-        ]
-      },
-      {
-        "structure": "themissingvillages:small/jungle_village",
-        "missing": [
-          "terralith:amethyst_canyon",
-          "terralith:amethyst_rainforest",
-          "terralith:cave/underground_jungle",
-          "terralith:jungle_mountains",
-          "terralith:rocky_jungle",
-          "terralith:skylands_summer",
-          "terralith:tropical_jungle"
         ]
       }
     ],
@@ -1225,67 +1206,6 @@
   },
   {
     "category": "swamp",
-    "target_mod": "themissingvillages",
-    "biome_mods": [
-      "terralith"
-    ],
-    "biomes": [
-      "terralith:ice_marsh",
-      "terralith:orchid_swamp"
-    ],
-    "tags_to_extend": [
-      "themissingvillages:swamp_mangrove",
-      "themissingvillages:swamp_normal"
-    ],
-    "literal_only_structures": [],
-    "structures": [
-      {
-        "structure": "themissingvillages:large/swamp_mangrove_village",
-        "missing": [
-          "terralith:ice_marsh",
-          "terralith:orchid_swamp"
-        ]
-      },
-      {
-        "structure": "themissingvillages:large/swamp_village",
-        "missing": [
-          "terralith:ice_marsh",
-          "terralith:orchid_swamp"
-        ]
-      },
-      {
-        "structure": "themissingvillages:medium/swamp_mangrove_village",
-        "missing": [
-          "terralith:ice_marsh",
-          "terralith:orchid_swamp"
-        ]
-      },
-      {
-        "structure": "themissingvillages:medium/swamp_village",
-        "missing": [
-          "terralith:ice_marsh",
-          "terralith:orchid_swamp"
-        ]
-      },
-      {
-        "structure": "themissingvillages:small/swamp_mangrove_village",
-        "missing": [
-          "terralith:ice_marsh",
-          "terralith:orchid_swamp"
-        ]
-      },
-      {
-        "structure": "themissingvillages:small/swamp_village",
-        "missing": [
-          "terralith:ice_marsh",
-          "terralith:orchid_swamp"
-        ]
-      }
-    ],
-    "id": 21
-  },
-  {
-    "category": "swamp",
     "target_mod": "towns_and_towers",
     "biome_mods": [
       "terralith"
@@ -1312,6 +1232,95 @@
         "missing": [
           "terralith:ice_marsh",
           "terralith:orchid_swamp"
+        ]
+      }
+    ],
+    "id": 21
+  },
+  {
+    "category": "taiga",
+    "target_mod": "simply_houses",
+    "biome_mods": [
+      "terralith"
+    ],
+    "biomes": [
+      "terralith:alpine_highlands",
+      "terralith:bryce_canyon",
+      "terralith:cloud_forest",
+      "terralith:scarlet_mountains",
+      "terralith:siberian_grove",
+      "terralith:siberian_taiga",
+      "terralith:skylands_winter",
+      "terralith:snowy_maple_forest",
+      "terralith:valley_clearing",
+      "terralith:wintry_lowlands"
+    ],
+    "tags_to_extend": [
+      "simply_houses:has_structure/taiga_forge_biomes",
+      "simply_houses:has_structure/taiga_house_biomes",
+      "simply_houses:has_structure/taiga_inn_biomes",
+      "simply_houses:has_structure/taiga_woodcutter_biomes"
+    ],
+    "literal_only_structures": [],
+    "structures": [
+      {
+        "structure": "simply_houses:taiga_forge",
+        "missing": [
+          "terralith:alpine_highlands",
+          "terralith:bryce_canyon",
+          "terralith:cloud_forest",
+          "terralith:scarlet_mountains",
+          "terralith:siberian_grove",
+          "terralith:siberian_taiga",
+          "terralith:skylands_winter",
+          "terralith:snowy_maple_forest",
+          "terralith:valley_clearing",
+          "terralith:wintry_lowlands"
+        ]
+      },
+      {
+        "structure": "simply_houses:taiga_house",
+        "missing": [
+          "terralith:alpine_highlands",
+          "terralith:bryce_canyon",
+          "terralith:cloud_forest",
+          "terralith:scarlet_mountains",
+          "terralith:siberian_grove",
+          "terralith:siberian_taiga",
+          "terralith:skylands_winter",
+          "terralith:snowy_maple_forest",
+          "terralith:valley_clearing",
+          "terralith:wintry_lowlands"
+        ]
+      },
+      {
+        "structure": "simply_houses:taiga_inn",
+        "missing": [
+          "terralith:alpine_highlands",
+          "terralith:bryce_canyon",
+          "terralith:cloud_forest",
+          "terralith:scarlet_mountains",
+          "terralith:siberian_grove",
+          "terralith:siberian_taiga",
+          "terralith:skylands_winter",
+          "terralith:snowy_maple_forest",
+          "terralith:valley_clearing",
+          "terralith:wintry_lowlands"
+        ]
+      },
+      {
+        "structure": "simply_houses:taiga_woodcutter",
+        "missing": [
+          "terralith:alpine_highlands",
+          "terralith:bryce_canyon",
+          "terralith:cloud_forest",
+          "terralith:scarlet_mountains",
+          "terralith:siberian_grove",
+          "terralith:siberian_taiga",
+          "terralith:skylands_winter",
+          "terralith:snowy_maple_forest",
+          "terralith:valley_clearing",
+          "terralith:wintry_lowlands"
         ]
       }
     ],

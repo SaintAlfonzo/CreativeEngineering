@@ -2,7 +2,7 @@
 
 Each proposal adds modded biomes of one theme to the spawn pool of one mod's structures. Pools are fully tag-resolved (Terralith's existing additions to vanilla tags are already counted as "current"). Approve by number; nothing is applied yet. Execution = one additive tag file per tag listed (`"replace": false`) under `kubejs/data/<ns>/tags/worldgen/biome/`.
 
-23 proposals, 67 structures.
+23 proposals, 60 structures.
 
 ## 1. badlands biomes (terralith) -> towns_and_towers structures
 
@@ -84,7 +84,19 @@ Each proposal adds modded biomes of one theme to the spawn pool of one mod's str
 **Structures:**
 - minecraft:mansion (+16)
 
-## 9. forest biomes (terralith) -> towns_and_towers structures
+## 9. forest biomes (terralith) -> simply_houses structures
+
+**Add:** terralith:alpha_islands, terralith:birch_taiga, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands, terralith:skylands_autumn, terralith:skylands_spring, terralith:temperate_highlands, terralith:white_cliffs, terralith:yosemite_lowlands
+
+**Tags extended (4):** simply_houses:has_structure/forest_chapel_biomes, simply_houses:has_structure/forest_fort_biomes, simply_houses:has_structure/forest_house_biomes, simply_houses:has_structure/forest_stonemason_biomes
+
+**Structures:**
+- simply_houses:forest_chapel (+15)
+- simply_houses:forest_fort (+15)
+- simply_houses:forest_house (+15)
+- simply_houses:forest_stonemason (+15)
+
+## 10. forest biomes (terralith) -> towns_and_towers structures
 
 **Add:** terralith:alpha_islands, terralith:alpine_grove, terralith:birch_taiga, terralith:cloud_forest, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands, terralith:skylands_autumn, terralith:skylands_spring, terralith:temperate_highlands, terralith:white_cliffs, terralith:yosemite_lowlands
 
@@ -98,7 +110,7 @@ Each proposal adds modded biomes of one theme to the spawn pool of one mod's str
 - towns_and_towers:village_flower_forest (+17)
 - towns_and_towers:village_forest (+17)
 
-## 10. jungle biomes (terralith) -> betterjungletemples structures
+## 11. jungle biomes (terralith) -> betterjungletemples structures
 
 **Add:** terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:cave/underground_jungle, terralith:jungle_mountains, terralith:skylands_summer
 
@@ -107,7 +119,7 @@ Each proposal adds modded biomes of one theme to the spawn pool of one mod's str
 **Structures:**
 - betterjungletemples:jungle_temple (+5)
 
-## 11. jungle biomes (terralith) -> minecraft structures
+## 12. jungle biomes (terralith) -> minecraft structures
 
 **Add:** terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:cave/underground_jungle, terralith:jungle_mountains, terralith:skylands_summer
 
@@ -116,23 +128,6 @@ Each proposal adds modded biomes of one theme to the spawn pool of one mod's str
 **Structures:**
 - minecraft:jungle_pyramid (+5)
 - minecraft:ruined_portal_jungle (+2)
-
-## 12. jungle biomes (terralith) -> themissingvillages structures
-
-**Add:** terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:cave/underground_jungle, terralith:jungle_mountains, terralith:rocky_jungle, terralith:skylands_summer, terralith:tropical_jungle
-
-**Tags extended (3):** themissingvillages:jungle_bamboo, themissingvillages:jungle_normal, themissingvillages:jungle_sparse
-
-**Structures:**
-- themissingvillages:large/jungle_bamboo_village (+7)
-- themissingvillages:large/jungle_sparse_village (+7)
-- themissingvillages:large/jungle_village (+7)
-- themissingvillages:medium/jungle_bamboo_village (+7)
-- themissingvillages:medium/jungle_sparse_village (+7)
-- themissingvillages:medium/jungle_village (+7)
-- themissingvillages:small/jungle_bamboo_village (+7)
-- themissingvillages:small/jungle_sparse_village (+7)
-- themissingvillages:small/jungle_village (+7)
 
 ## 13. jungle biomes (terralith) -> towns_and_towers structures
 
@@ -220,21 +215,7 @@ Each proposal adds modded biomes of one theme to the spawn pool of one mod's str
 - betterwitchhuts:witch_circle (+2)
 - betterwitchhuts:witch_hut (+2)
 
-## 21. swamp biomes (terralith) -> themissingvillages structures
-
-**Add:** terralith:ice_marsh, terralith:orchid_swamp
-
-**Tags extended (2):** themissingvillages:swamp_mangrove, themissingvillages:swamp_normal
-
-**Structures:**
-- themissingvillages:large/swamp_mangrove_village (+2)
-- themissingvillages:large/swamp_village (+2)
-- themissingvillages:medium/swamp_mangrove_village (+2)
-- themissingvillages:medium/swamp_village (+2)
-- themissingvillages:small/swamp_mangrove_village (+2)
-- themissingvillages:small/swamp_village (+2)
-
-## 22. swamp biomes (terralith) -> towns_and_towers structures
+## 21. swamp biomes (terralith) -> towns_and_towers structures
 
 **Add:** terralith:ice_marsh, terralith:orchid_swamp
 
@@ -243,6 +224,18 @@ Each proposal adds modded biomes of one theme to the spawn pool of one mod's str
 **Structures:**
 - towns_and_towers:pillager_outpost_swamp (+2)
 - towns_and_towers:village_swamp (+2)
+
+## 22. taiga biomes (terralith) -> simply_houses structures
+
+**Add:** terralith:alpine_highlands, terralith:bryce_canyon, terralith:cloud_forest, terralith:scarlet_mountains, terralith:siberian_grove, terralith:siberian_taiga, terralith:skylands_winter, terralith:snowy_maple_forest, terralith:valley_clearing, terralith:wintry_lowlands
+
+**Tags extended (4):** simply_houses:has_structure/taiga_forge_biomes, simply_houses:has_structure/taiga_house_biomes, simply_houses:has_structure/taiga_inn_biomes, simply_houses:has_structure/taiga_woodcutter_biomes
+
+**Structures:**
+- simply_houses:taiga_forge (+10)
+- simply_houses:taiga_house (+10)
+- simply_houses:taiga_inn (+10)
+- simply_houses:taiga_woodcutter (+10)
 
 ## 23. taiga biomes (terralith) -> towns_and_towers structures
 

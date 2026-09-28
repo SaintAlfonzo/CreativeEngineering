@@ -1,12 +1,14 @@
-// Chest loot — STACK SIZE / BONUS POOLS.
+// Chest loot — STACK SIZE / CONDITIONAL BONUS (LootJS).
 //
-// How OFTEN an item shows up is tuned in loot_config.json ("frequency": 0..1 per item, or a
-// "@modid" / "/regex/" pattern) — see 05_tuning.js. LootJS can't do that: it only sees loot
-// after the roll, so a replaceLoot(...withWeight(n)) is a no-op on frequency.
+// How OFTEN an item shows up is pre-roll, in 07_rules.js or loot_config.json:
+//   L.frequency(i.item, 0.5)                       half as often per roll, every chest
+//   L.frequency(i.item, 2, { tables: /village/ })  twice as often, village tables only
+// LootJS can't do that: it only sees loot after the roll.
 //
 // Two levers that DO belong here:
 //   count   — stack size. L.capCount(builder, filter, max)  or  .modifyLoot(filter, s => ...)
-//   chance  — does an added pool fire at all. builder.randomChance(0-1) as a condition.
+//   chance  — a bonus that fires only in some places or for some players:
+//             builder.anyStructure(...).randomChance(0-1) as conditions.
 //
 // Reload with /reload.
 
@@ -19,11 +21,12 @@ LootJS.modifiers(event => {
   // L.capCount(L.chestType(event), 'minecraft:emerald', 8)
   //   .logName('CE/loot/frequency/emerald_cap')
 
-  // ── appearance chance of an added pool ──────────────────────────────────
+  // ── context-gated bonus ──────────────────────────────────────────────────
 
-  // only 30% of chests get this bonus pool at all
+  // 30% of chests in deep dark biomes get an extra echo shard
   // L.chestType(event)
+  //   .anyBiome('minecraft:deep_dark')
   //   .randomChance(0.3)
-  //   .addWeightedLoot(L.entry({ item: 'minecraft:golden_apple', weight: 1 }, 'freq/bonus_apple'))
-  //   .logName('CE/loot/frequency/bonus_apple')
+  //   .addLoot(L.entry({ item: 'minecraft:echo_shard' }, 'freq/deep_dark_echo'))
+  //   .logName('CE/loot/frequency/deep_dark_echo')
 })

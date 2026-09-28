@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "villager_circus_tent:villager_circus_tent",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 35,
+    "salt": 258041729
+  }
+}

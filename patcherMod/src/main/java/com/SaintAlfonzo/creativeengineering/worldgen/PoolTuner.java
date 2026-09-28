@@ -69,9 +69,8 @@ public final class PoolTuner {
 	static final String TAGS = BiomeLayoutTuner.WORLDGEN_DIR + "pool_tags.json";
 	static final String REPORT = BiomeLayoutTuner.WORLDGEN_DIR + "pool_tag_report.md";
 
-	/** Fractional weights are realised by scaling the whole pool by up to this factor. Jigsaw tries
-	 *  every copy of a piece in a pool's list, so a bigger list is slower to fail. */
-	private static final int MAX_SCALE = 10;
+	// Fractional weights are realised by scaling the whole pool by up to CEConfig [worldgen.pools]
+	// maxFractionScale. Jigsaw tries every copy of a piece in a pool's list, so a bigger list is slower to fail.
 	private static final int SIZE_UNSET = Integer.MIN_VALUE;
 
 	private static final Field RAW_TEMPLATES = field(StructureTemplatePool.class, "f_210559_", "rawTemplates");
@@ -247,7 +246,10 @@ public final class PoolTuner {
 		}
 
 		// ── plan ─────────────────────────────────────────────────────────────
-		boolean apply = errors.isEmpty();
+		// Switched off: every pool goes back to its first-seen weights, exactly like an error would do.
+		boolean enabled = WorldgenConfig.poolTuningEnabled();
+		if (!enabled) warnings.add("pool tuning is off in CEConfig [worldgen.systems] poolTuning: every pool is at its mod/vanilla weights");
+		boolean apply = enabled && errors.isEmpty();
 		List<PoolInfo> changed = new ArrayList<>();
 		int restored = 0;
 		for (PoolInfo info : pools.values()) {
@@ -354,7 +356,7 @@ public final class PoolTuner {
 		int k = 1;
 		if (!allInt) {
 			double bestErr = Double.MAX_VALUE;
-			for (int s = 1; s <= MAX_SCALE; s++) {
+			for (int s = 1, max = WorldgenConfig.poolMaxFractionScale(); s <= max; s++) {
 				double err = 0;
 				for (Piece p : info.pieces) {
 					if (p.effective <= 0) continue;

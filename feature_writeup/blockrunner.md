@@ -1,29 +1,30 @@
 # BlockRunner: walk speed by surface
 
-Test prefix **BR-** · Last updated **2026-09-27** · Overall status **DEPLOYED, in-game test pending**
+Test prefix **BR-** · Last updated **2026-09-27** · Overall status **DEPLOYED (2026-09-27 16:45), in-game test pending; restart needed to load the latest jar and json**
 
 ## 0. At a glance
 
 Every block you walk on belongs to at most one speed tier (asphalt 1.50 down to very sticky 0.45).
 BlockRunner applies the speed and KubeJS fills the tiers. patcherMod adds what a block tag can't express:
 sticky pistons only count when they face up, framed and copycat blocks walk like their camo, and
-walking on soft or dusty blocks visually sinks you in like soul sand.
+walking on soft or dusty blocks visually sinks you in like soul sand. A WTHIT line shows the speed of
+the block you're looking at.
 
 | Part | Layer | Status |
 |---|---|---|
-| 26 surface tiers + 6 empty basic tiers | KubeJS tags + `blockrunner.json` | Loads in game with 0 overlaps (2026-09-27 12:00 world load; the `/dumptags` export from the 11:54 load holds 6126 tiered ids, none in two tiers, identical to the offline sim). 3 ids added after that for the newest mods (6129, 0 overlaps in the sim); they need a `/reload` |
-| SecurityCraft reinforced blocks and mines copy their vanilla block's tier | KubeJS `t.mirror()` | BUILT 2026-09-27; runs in the pack's Rhino (harness); needs a game restart |
+| 26 surface tiers + 6 empty basic tiers | KubeJS tags + `[surface.speed]` (basic tiers in `blockrunner.json`) | Loads in game with 0 overlaps: 15:21 world load on 2026-09-27, including the 3 ids added for the newest mods (log `6085 ids, 0 overlap(s)`; the log counts low, the sim holds 6129). The 11:54 `/dumptags` export matched the sim exactly |
+| SecurityCraft reinforced blocks and mines copy their vanilla block's tier | KubeJS `t.mirror()` | Loaded since the 14:49 restart (Rhino harness tested); untested in game (BR-38) |
 | Sticky tier checks facing | patcherMod mixin | Mixin applies (log 2026-09-26); behaviour untested |
 | Visual sinking (camera + models) | patcherMod mixins | Both mixins apply (log 2026-09-26); behaviour untested |
-| Framed / copycat blocks sink like their newest camo | patcherMod (`SinkingRender`) | BUILT 2026-09-27, waiting for the jar to be copied to `mods/` (the game was open for every build so far) |
-| Every surface setting in one `[surface]` config section: per-tier speeds, sticky, camouflage, sinking | patcherMod (`SurfaceTier`, `SurfaceSpeeds`, `BlockRunnerSpeedConfigMixin`) | BUILT 2026-09-27 12:43, headless test 14/14 green; not deployed, see "Pending deploy" below |
-| WTHIT "Run Speed" line on the looked-at block | patcherMod WTHIT plugin (`WthitRunSpeed`, `RunSpeed`), `[surface.wthit]` | BUILT 2026-09-27 13:08, formatting/config headless test 10/10 green; not deployed |
+| Framed / copycat blocks sink like their newest camo | patcherMod (`SinkingRender`) | In game since the 14:49 restart (13:12 jar); untested |
+| Every surface setting in one `[surface]` config section: per-tier speeds, sticky, camouflage, sinking, wthit | patcherMod (`SurfaceTier`, `SurfaceSpeeds`, `BlockRunnerSpeedConfigMixin`) | Working in game: the mixin applies and the log has `[surface] 26 tier speeds applied` (15:21). The old `[block_sinking]`/`[camouflage_speed]` sections were dropped on first load; they held the defaults, so nothing was lost. The trimmed `blockrunner.json` was put in place at 16:45, so it needs a restart |
+| WTHIT "Run Speed" line on the looked-at block | patcherMod WTHIT plugin (`WthitRunSpeed`, `RunSpeed`, `StuckInBlock`), `[surface.wthit]` | First version loaded in game (plugin initialised 14:50, no errors). The second version (hideUntyped, passable blocks, thin layers, inside slowdowns, own speed) is headless-tested 31/31 and was deployed at 16:45, so it needs a restart |
 | Camouflage copies camo speed, "newest camo" for multi-material (hybrid) blocks | patcherMod mixins | Newest-camo rule confirmed in game on framed double slabs (BR-17, 2026-09-27); rest untested |
-| D&D asphalt friction reset (its own ~3.4× speed boost removed) | KubeJS startup `BlockEvents.modification` | DEPLOYED 2026-09-27; needs a restart; untested |
+| D&D asphalt friction reset (its own ~3.4× speed boost removed) | KubeJS startup `BlockEvents.modification` | Loaded since the 14:49 restart; untested (BR-28) |
 | Tooltips (Speed Multiplier line, camo rewrite, IP asphalt line removed) | see [tooltips.md](tooltips.md) | tests moved to TT-01..05 |
 
-**Open first:** [config/blockrunner.json](../config/blockrunner.json) (values),
-[blocktags.js L25-374](../kubejs/server_scripts/tags/blocktags.js#L25-L374) (tier contents),
+**Open first:** `config/creativeengineering-common.toml` `[surface.speed]` (values),
+[blocktags.js L25-380](../kubejs/server_scripts/tags/blocktags.js#L25-L380) (tier contents),
 [patcherMod surface/](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/) (Java behaviour).
 
 **Knobs:** everything is under `[surface]` in `creativeengineering-common.toml`, which shows as one
@@ -37,12 +38,14 @@ walking on soft or dusty blocks visually sinks you in like soul sand.
 The two `copyCamo`s are independent, and the whole section reloads live when saved. Outside it,
 `blockrunner.json` keeps only one-off block overrides, and `blockrunner-client.toml` holds the tooltip and FOV options.
 
-**Pending deploy (game must be closed):**
-1. Copy `patcherMod/build/libs/creativeengineering-1.0.1.jar` to `mods/` and compare `md5sum`.
-2. Replace `config/blockrunner.json` with `patcherMod/deploy_pending/blockrunner.json` (basic tiers only), back it up to `configs_edited/root_config/`, and delete `deploy_pending/`.
-3. In `creativeengineering-common.toml`, rename `[block_sinking]` to `[surface.sinking]` and `[camouflage_speed]` to `[surface.camouflage]`, so your values carry over. Forge drops the old sections on the first load.
+**Deploy state (2026-09-27 16:45, game closed):** everything is in place:
+- `mods/creativeengineering-1.0.1.jar` matches the build (`md5sum` compared).
+- `config/blockrunner.json` now holds only the basic tiers; it's backed up in `configs_edited/root_config/`.
+- `patcherMod/deploy_pending/` is deleted.
+- `pack/` manifest is regenerated.
 
-Don't `/reload` between step 2 and a restart: the old jar would load a json with no tiers.
+Forge adds the new `[surface.wthit] hideUntyped` key to the toml on the next launch. Only the
+dedicated server copy is still behind (4, Limits).
 
 **Measuring speed in game:** `M` =
 `/attribute @s minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002`
@@ -60,7 +63,7 @@ BlockRunner 4.2.2 (Fuzs) maps blocks to walk-speed multipliers. `config/blockrun
 - **Which block counts:** the block about 0.2 below your feet (vanilla `getBlockStateOn`). Anything
   thinner than that never registers and the block beneath it counts instead: carpets, 1–2-layer snow,
   pressure plates, rails and tracks, chalk marks, flower patches, leaf piles. You stand *in* a
-  soul sand or mud block, so those do count.
+  soul sand or mud block, so those do count. The WTHIT line follows the same rule (3.8).
 - **How speed is applied:** an attribute modifier on movement speed (the UUID above, named "Block speed boost",
   amount = base × (m − 1)). It is recalculated when you move to a new block position or land,
   on the server for every living entity and on the client for your own player. Mobs, pets and ridden
@@ -80,7 +83,7 @@ BlockRunner 4.2.2 (Fuzs) maps blocks to walk-speed multipliers. `config/blockrun
 ## 2. Reference: speed tiers
 
 Counts come from `tools/blockrunner_tag_sim.js` on 2026-09-27, after the whole-pack scan. They include
-blocks that carry no tags (see 6). Tiers are listed fastest first; the json keeps the same order.
+blocks that carry no tags (see 6). Tiers are listed fastest first; `[surface.speed]` keeps the same order. The × column shows the defaults.
 
 | Tier (`blockrunner:surface/…`) | × | # | What belongs | Examples |
 |---|---|---|---|---|
@@ -134,12 +137,12 @@ tier first, or add a `"namespace:block": 1.2` key to the json (block-id keys alw
 
 ### 3.1 Tier building (KubeJS)
 
-Everything lives in one block in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L25-L243),
+Everything lives in one block in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L25-L380),
 in speed order:
 
-- **`var runner = {…}`** ([L32](../kubejs/server_scripts/tags/blocktags.js#L32)) names every tier and
-  carries its multiplier as a comment. Keep the comments in step with the json.
-- **Wiping the basic tiers:** `t.wipeTag(e, basicTiers)` ([L64](../kubejs/server_scripts/tags/blocktags.js#L64))
+- **`var runner = {…}`** ([L34](../kubejs/server_scripts/tags/blocktags.js#L34)) names every tier and
+  carries its default multiplier as a comment. Keep the comments in step with `SurfaceTier` defaults.
+- **Wiping the basic tiers:** `t.wipeTag(e, basicTiers)` ([L66](../kubejs/server_scripts/tags/blocktags.js#L66))
   clears the jar's seeds.
 - **Filling tiers:** each tier is one `t.addMatching(e, tier, [entries], {except})` call. Entries can be ids,
   wildcards (`'minecraft:*_concrete'`, `*` never crosses `:`), `'/regex/'`, `'#tags'` or `'@mod'`.
@@ -152,8 +155,8 @@ in speed order:
   members, because a nested tag reference can't be filtered, and it accepts `#tags` too.
   [tag_helper.js L36](../kubejs/startup_scripts/func/tag_helper.js#L36).
 - **Order matters once:** `dirt` is filled last, as "`#minecraft:dirt` minus every other tier"
-  ([L346](../kubejs/server_scripts/tags/blocktags.js#L346)).
-- **SecurityCraft copies:** `t.mirror(e, runnerTags, rename)` ([L359](../kubejs/server_scripts/tags/blocktags.js#L359),
+  ([L351](../kubejs/server_scripts/tags/blocktags.js#L351)).
+- **SecurityCraft copies:** `t.mirror(e, runnerTags, rename)` ([L364](../kubejs/server_scripts/tags/blocktags.js#L364),
   helper [tag_helper L212](../kubejs/startup_scripts/func/tag_helper.js#L212)) puts every registered
   `securitycraft:reinforced_<x>` and `securitycraft:<x>_mine` in the tier of `minecraft:<x>`
   (`<x>_ore` → `<x>_mine`). A mine with a speed of its own would give itself away. SecurityCraft's own
@@ -279,8 +282,8 @@ resets them with `BlockEvents.modification` (startup, so it needs a game restart
 
 | File | What | Backup |
 |---|---|---|
-| `config/creativeengineering-common.toml` | `[surface]`: tier speeds, sticky, camouflage, sinking (3.7) | `configs_edited/root_config/` once a value differs from its default |
-| `config/blockrunner.json` | basic tiers + one-off block overrides only (after the pending deploy) | `configs_edited/root_config/blockrunner.json` |
+| `config/creativeengineering-common.toml` | `[surface]`: tier speeds, sticky, camouflage, sinking, wthit (3.7, 3.8) | `configs_edited/root_config/` once a value differs from its default (all defaults on 2026-09-27) |
+| `config/blockrunner.json` | basic tiers + one-off block overrides only | `configs_edited/root_config/blockrunner.json` |
 | `config/blockrunner-client.toml` | tooltip on, FOV change off | `configs_edited/root_config/blockrunner-client.toml` |
 
 ### 3.7 One `[surface]` config section (patcherMod)
@@ -297,7 +300,8 @@ folder) keeps it all editable in game.
   ([SurfaceSpeeds](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/SurfaceSpeeds.java)).
   From there BlockRunner treats the values as its own: they're synced to players on join and on
   `/reload`, and its Speed Multiplier tooltip shows them.
-  - A `#blockrunner:surface/*` key left in the json is overridden, with a warning in the log.
+  - A `#blockrunner:surface/*` key left in the json is overridden, with a warning in the log if its
+    value differs from the toml's.
   - Each load logs `[surface] 26 tier speeds applied to BlockRunner from [surface.speed]`.
 - **Live edits:** saving the toml (by hand or in Create's screen) re-runs BlockRunner's load on the
   server, but only if a tier speed changed. You feel the new speed after stepping onto a new block.
@@ -319,25 +323,61 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
   and sticky rules as movement: `CamoSpeed.speedCamo` and `StickyFacing.cancels`, shared helpers that
   both paths call. The line always shows what you'd walk at, and a `[surface.speed]` edit shows up
   straight away.
+- **Which block counts** (same as BlockRunner, which reads 0.2 below your feet), decided from the
+  block's collision shape for someone standing on top of it:
+  - **Collision top 0.2 or higher:** the block's own speed.
+  - **Thin solid layer** (collision top under 0.2: carpets, 2 snow layers, lily pads) **or any
+    1-2 layer snow**: the block beneath, noted "block below". A single snow layer has no collision at
+    all but is still treated as a layer. Snow layers don't slow you in this pack (Immersive
+    Weathering's snow mixin only handles melting); 3+ layers count as the Snow tier.
+  - **No collision** (grass, flowers, crops, saplings, pressure plates, rails): **no line**, unless the
+    block slows you from inside (next point).
+  - The shape is read with a "standing on top" context, so scaffolding shows its solid top and
+    powder snow counts as a surface (Snow tier) only while you wear leather boots.
+- **Blocks that slow you from inside** ([StuckInBlock](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/StuckInBlock.java)):
+  their `entityInside` calls `makeStuckInBlock`, which multiplies your move and zeroes your momentum
+  every tick. The line shows the real walking speed, `multiplier × (1 − 0.91 × friction)` of normal
+  (about 0.45 × the multiplier on a normal floor), times the speed of the block beneath. Noted
+  "walking through". Table keyed by block class, superclasses included (a modded `WebBlock` subclass
+  counts as a cobweb); values read from each class's bytecode on 2026-09-27:
+
+  | Block (class) | Multiplier | Shows (on a 1.00 floor) | Condition |
+  |---|---|---|---|
+  | Cobweb, SecurityCraft reinforced cobweb, Fantasy Furniture spider webs, Create Additions barbed wire | 0.25 | 0.11× | reinforced cobweb: its owner passes freely, the line doesn't check |
+  | Sweet berry bush, Nether's Delight propelplant, Vinery taiga grape bush | 0.80 | 0.36× | |
+  | Powder snow | 0.90 | 0.41× | only when you'd sink in (no leather boots) |
+  | Supplementaries bamboo spikes | 0.95 | 0.43× | not in creative |
+  | Twigs bamboo leaves | 0.75 | 0.34× | 3+ layers |
+  | Immersive Weathering leaf piles | 0.992-0.997 | 0.45× | 4+ layers, IW `leaf_piles_slow` on, no Depth Strider |
+
+  Create's crushing wheel controllers also call it, but they are machine internals and left out. A new
+  mod's slowing block needs a row in `StuckInBlock.RULES` (find candidates by grepping jars for
+  `m_7601_`).
+- **Block's own speed factor:** a block BlockRunner has no value for keeps its vanilla/modded speed
+  factor. The line shows its real walking effect, `(1 − 0.91f) / (1 − 0.91 f s)`: soul sand's 0.4 reads
+  **0.58×**, noted "own speed". Soul Speed isn't modelled.
 - **Tier name:** from a cached Block-to-tier map, filled the first time you look at a block and
   cleared on every tag reload (joining, `/reload`). Blocks with a speed but no surface tier (a one-off
   json override or a basic tier) show the number only.
-- **Cost:** per WTHIT refresh, one hash lookup for the speed, one cached lookup for the tier, and a
-  block-entity read for framed/copycat blocks only. It's client-side only with no server traffic, since
-  frames already sync their camo.
+- **Cost:** per WTHIT refresh, one or two collision shapes, one hash lookup for the speed, one cached
+  lookup for the tier, and a block-entity read for framed/copycat blocks only. It's client-side only
+  with no server traffic, since frames already sync their camo.
 - **Plugin wiring:** [WthitRunSpeed](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/WthitRunSpeed.java)
   is a client-only WTHIT plugin declared in `patcherMod/src/main/resources/waila_plugins.json`, which
   requires `blockrunner`. It fills the WTHIT line `creativeengineering:run_speed`.
 - **Config `[surface.wthit]`:**
-  - `enabled` (true)
-  - `hideNormal` (true): no line on 1.0 blocks, which is most of them.
+  - `enabled` (true): master switch.
+  - `hideUntyped` (true): no line on blocks nothing gives a speed to (no tier, no json entry, no speed
+    factor of their own, no inside slowdown). Those are always 1.00, so it only matters with
+    `hideNormal = false`: then tiered 1.00 blocks (Glass, Dirt, Camouflage) still show, furniture doesn't.
+  - `hideNormal` (true): no line on any 1.00 block, tiered or not, which is most of them.
   - `showTier` (true): tier name and notes.
   - `format`: `MULTIPLIER` (1.50×) or `PERCENT` (+50%).
 - **Text:** lang keys `creativeengineering.wthit.run_speed*` and `creativeengineering.surface.tier.<key>`.
   Tier names are the config keys in title case ("Natural Smooth"), so the line tells you which
   `[surface.speed]` key to edit.
-- **Not modelled:** BlockRunner reads the block about 0.2 below your feet. Looking at a carpet shows the
-  carpet (untiered, so no line), not the block under it that you'd actually walk at.
+- **Not modelled:** a surface's friction (slime's 0.8 friction makes it slower than its tier; ice is
+  about even), Soul Speed, and the vertical part of inside slowdowns.
 
 ## 4. Limits and decisions
 
@@ -352,8 +392,11 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
   camera. This only matters on block edges.
 - **Speed edits need a new block:** a `[surface.speed]` change reaches BlockRunner immediately but, like
   any tier change, applies to you once you step onto another block.
-- **Server copy is stale:** `server_mods/` still has `creativeengineering-1.0.0.jar`, and the facing
-  and camo logic must run server-side too. The CreEngServer folder is currently in the Trash.
+- **Server copy is stale:** `server_mods/` still has `creativeengineering-1.0.0.jar`, and the facing,
+  camo and `[surface.speed]` logic must run server-side too. The CreEngServer folder is currently in the Trash.
+- **Twigs bamboo leaves are in the `leaves` tier but can never register:** the block has no collision,
+  so you always stand on the block beneath. The tier entry is harmless dead weight. The WTHIT line
+  treats the block as a slow-while-inside block (0.34× at 3+ layers).
 - **Stray camouflage members:** the tier includes a few technical/thin blocks (`copycats:copycat_base`,
   framed rails/torches). Harmless; they never register or are never walked on.
 - **The scan only sees untagged modded blocks that have an item:** jars also ship blockstates for
@@ -378,13 +421,13 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 
 ## 5. File map
 
-- Values: [config/blockrunner.json](../config/blockrunner.json), [config/blockrunner-client.toml](../config/blockrunner-client.toml)
-- Tier contents: [kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L25-L374)
+- Values: `config/creativeengineering-common.toml` `[surface]`; one-offs in [config/blockrunner.json](../config/blockrunner.json); client options in [config/blockrunner-client.toml](../config/blockrunner-client.toml)
+- Tier contents: [kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L25-L380)
 - Helpers: [kubejs/startup_scripts/func/tag_helper.js](../kubejs/startup_scripts/func/tag_helper.js) (`addMatching` L36, `_glob` L57, `wipeTag` L102, `overlaps` L188, `mirror` L212)
-- patcherMod behaviour: [surface/](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/): SurfaceTier, SurfaceSpeeds, RunSpeed, WthitRunSpeed, StickyFacing, CamoSpeed, FramedCamo, CopycatsPlusCamo, CamoSpeedTooltip, SinkingRender, LastInsertedCamo, LastInsertedMaterial
+- patcherMod behaviour: [surface/](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/): SurfaceTier, SurfaceSpeeds, RunSpeed, StuckInBlock, WthitRunSpeed, StickyFacing, CamoSpeed, FramedCamo, CopycatsPlusCamo, CamoSpeedTooltip, SinkingRender, LastInsertedCamo, LastInsertedMaterial
 - patcherMod mixins: BlockRunnerBlockStateMixin, BlockRunnerSpeedConfigMixin, FramedDoubleCamoOrderMixin, CopycatMaterialOrderMixin (common); CameraSinkMixin, EntitySinkRenderMixin (client). All in [mixin/](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/)
-- patcherMod config: [CEConfig.java](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java#L455) `Surface` (`speed`, `Sticky`, `Camouflage`, `Sinking`); tooltip and SurfaceSpeeds listeners registered in [CreativeEngineering.java L119](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java#L119)
-- Tooltip text: [patcherMod lang en_us.json](../patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) `creativeengineering.tooltip.walk_speed.*`
+- patcherMod config: [CEConfig.java](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java#L460) `Surface` (`speed`, `Sticky`, `Camouflage`, `Sinking`, `Wthit`); tooltip and SurfaceSpeeds listeners registered in [CreativeEngineering.java L121](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java#L121)
+- Text: [patcherMod lang en_us.json](../patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) `creativeengineering.tooltip.walk_speed.*` (item tooltip), `creativeengineering.wthit.run_speed*` and `creativeengineering.surface.tier.*` (WTHIT line)
 - Compile-only jars in `patcherMod/libs/`: BlockRunner, FramedBlocks, Copycats+, WTHIT
 - WTHIT plugin declaration: [waila_plugins.json](../patcherMod/src/main/resources/waila_plugins.json)
 - Native property resets: [kubejs/startup_scripts/changes/block_properties.js](../kubejs/startup_scripts/changes/block_properties.js); D&D asphalt keys in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) ("Dreams & Desires" under Create)
@@ -407,6 +450,10 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - **patcherMod:** `cd patcherMod && ./gradlew build --offline`. Then copy
   `build/libs/creativeengineering-1.0.1.jar` to `mods/` **with the game closed** and compare `md5sum`
   of both files.
+- **patcherMod logic without the game:** plain `javac`/`java` against the mapped Forge jar, with a
+  one-line `FMLEnvironment` stub (see Claude's memory `patchermod-headless-smoke-test`). It can
+  bootstrap Minecraft to check real blocks' collision shapes and the `StuckInBlock` table; the Run
+  Speed test (31 checks) ran that way. Mixins, WTHIT and rendering still need the game.
 - **Rhino-only script bugs:** the headless Rhino harness (see Claude's memory
   `kubejs-headless-rhino-harness`) runs the real scripts in the pack's Rhino.
 
@@ -439,9 +486,9 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - [x] **BR-13 Other sticky blocks:** Create sticky mechanical piston facing up → **−0.035**. CTM sticky launcher (any placement) → **−0.035**. Supplementaries spring launcher → "no modifier".
 
 **Camouflage speed (3.3)**
-- [ ] **BR-14 Empty frame:** `M` on an empty framed cube → "no modifier".
-- [ ] **BR-15 Copies camo:** right-click the frame with concrete → step off/on → **+0.04**. Re-camo with honey → **−0.055**, with wool → **−0.012**.
-- [ ] **BR-16 Create copycat:** a copycat step with concrete as its material → **+0.04**.
+- [x] **BR-14 Empty frame:** `M` on an empty framed cube → "no modifier".
+- [x] **BR-15 Copies camo:** right-click the frame with concrete → step off/on → **+0.04**. Re-camo with honey → **−0.055**, with wool → **−0.012**.
+- [x] **BR-16 Create copycat:** a copycat step with concrete as its material → **+0.04**.
 - [x] **BR-17 Newest wins (FramedBlocks):** PASSED 2026-09-27.
   - Place a framed slab on a framed slab (makes a framed double slab).
   - Camo the bottom half with oak planks, then the top half with concrete. → **+0.04**.
@@ -454,7 +501,7 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 **Visual sinking (3.4)**
 - [x] **BR-22 Camera drop:** set `[surface.sinking] depthPixels = 8` for visibility. In first person, walk from stone onto wool and back. → The view drops half a block, and rises back smoothly over a tick.
 - [x] **BR-23 Third person:** F5 on sand. → The body sits in the sand, the shadow stays on the sand's top, and F3+B's hitbox box stays on top.
-- [ ] **BR-24 Others sink:** a pig on wool, a dropped item on sand and a ridden horse on sand all sit lower. The rider sinks with the horse.
+- [x] **BR-24 Others sink:** a pig on wool, a dropped item on sand and a ridden horse on sand all sit lower. The rider sinks with the horse.
 - [ ] **BR-25 No sink where it shouldn't:** carpet on wool, a thatch slab, a honey block (keeps its own real sink), mid-jump over sand → no extra sink.
 - [ ] **BR-26 Off switch:** `depthPixels = 0` → nothing sinks. Set it back to `2` afterwards.
 
@@ -464,18 +511,22 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - [ ] **BR-32 Non-full frames don't sink:** a single framed slab camo'd with wool → no sink.
 - [ ] **BR-33 Independent switch:** set `[surface.sinking] copyCamo = false` → the wool frame from BR-30 no longer sinks, but `M` on it still reads wool's **−0.012** (walk speed follows `[surface.camouflage]`). Set it back to `true`.
 
-**Surface config (3.7, needs the rebuilt patcherMod jar and the pending deploy steps)**
+**Surface config (3.7, in game since 14:49; the trimmed json needs a restart)**
 - [ ] **BR-39 Section is there:** open Create's Configs screen for Creative Engineering, Common → a **surface** folder holding speed, sticky, camouflage and sinking. `speed` lists all 26 tiers, each showing its description. No `block_sinking` or `camouflage_speed` left at the top level.
-- [ ] **BR-40 Speeds come from the toml:** `latest.log` has `[surface] 26 tier speeds applied to BlockRunner from [surface.speed]` and no `without BlockRunnerSpeedConfigMixin` error. `M` on asphalt → **+0.05**, on sand → **−0.015** (the json no longer lists either tier).
+- [ ] **BR-40 Speeds come from the toml:** `latest.log` has `[surface] 26 tier speeds applied to BlockRunner from [surface.speed]` and no `without BlockRunnerSpeedConfigMixin` error (log half seen 2026-09-27 15:21, with the old json still listing the tiers). After a restart with the trimmed json: `M` on asphalt → **+0.05**, on sand → **−0.015**.
 - [ ] **BR-41 Live edit:** in the Configs screen set `surface.speed.asphalt` to 2.0 and save. Step off and back onto asphalt → `M` **+0.1**, and the asphalt item's tooltip reads "Speed Multiplier: 2.0". Set it back to 1.5.
 - [ ] **BR-42 Sticky switch:** set `[surface.sticky] faceUpOnly = false`. Step onto a sideways sticky piston → **−0.035**. Set it back to `true` → "no modifier" after stepping off and on.
 - [ ] **BR-43 Hybrid wording:** framed slab, framed panel, a framed double slab, a Copycats+ copycat slab → "Speed Multiplier: matches its camo (newest camo sets walk behaviors for hybrid blocks)". Framed cube → "…matches its camo". (Needs `[surface.camouflage] copyCamo = true`; with false every frame reads "1.0, no matter its camo".)
 
-**WTHIT Run Speed line (3.8, needs the rebuilt patcherMod jar)**
+**WTHIT Run Speed line (3.8, needs a restart after the 16:45 deploy)**
 - [ ] **BR-44 Line shows:** look at IP asphalt → "Run Speed: 1.50× (Asphalt)", number green. Sand → "0.85× (Dust)", red. Stone → "1.05× (Natural Smooth)". Glass and grass → no line (1.00, `hideNormal`).
 - [ ] **BR-45 Frames and sticky:** a framed cube camo'd with concrete → "1.40× (Concrete, from camo)". A sticky piston facing up → "0.65× (Sticky)". Facing sideways → no line; with `hideNormal = false` → "1.00× (Sticky, sticky face not up)".
 - [ ] **BR-46 Live and configurable:** set `[surface.speed] asphalt = 2.0` and save → the asphalt line reads 2.00× without relooking. `format = PERCENT` → "+100%". `showTier = false` → number only. `enabled = false` → no line. Put everything back.
-- [ ] **BR-47 Plugin loads:** WTHIT's plugin list (its config screen, Plugins) includes `creativeengineering:run_speed`; `latest.log` has no WTHIT plugin error for it.
+- [ ] **BR-47 Plugin loads:** WTHIT's plugin list (its config screen, Plugins) includes `creativeengineering:run_speed`; `latest.log` has no WTHIT plugin error for it (log half seen 2026-09-27 14:50 with the first version).
+- [ ] **BR-48 Passable blocks:** tall grass, a flower, a wheat seedling, a pressure plate → no line, even with `hideNormal = false` and `hideUntyped = false`. A cobweb on grass → "0.11× (walking through)". A grown sweet berry bush → "0.36× (walking through)". A 5-layer IW leaf pile → "0.45× (walking through)"; 2 layers → no line.
+- [ ] **BR-49 Layers and powder snow:** a 1-layer and a 2-layer snow on sand → "0.85× (Dust, block below)"; 3 layers → "0.75× (Snow)". A carpet on planks → "1.10× (Wood, block below)". Powder snow bare-footed → "0.41× (walking through)"; in leather boots → "0.75× (Snow)".
+- [ ] **BR-50 Own speed:** soul sand → "0.58× (own speed)".
+- [ ] **BR-51 Hide switches:** set `hideNormal = false` (keep `hideUntyped = true`) → glass shows "1.00× (Glass)", a crafting table shows nothing. Then `hideUntyped = false` → the crafting table shows "1.00×". Put both back to `true`.
 
 **Native property resets (3.5)**
 - [ ] **BR-28 D&D asphalt matches IP asphalt:** lay a strip alternating IP asphalt and D&D asphalt, and walk (then sprint) along it. → `M` reads **+0.05** on both. The pace doesn't change between them; before the fix you'd shoot ahead on the D&D blocks and slide when stopping.
@@ -520,6 +571,17 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
     Built and headless-tested (14/14); not deployed, because the game was open. BR-39..43 added.
   - WTHIT "Run Speed" line (3.8): reads BlockRunner's speed map plus the shared camo/sticky rules, tier names
     from a cached Block-to-tier map, `[surface.wthit]` knobs. Built, formatting/config headless-tested (10/10). BR-44..47 added.
+  - Run Speed line, more granular: new `hideUntyped` switch next to `hideNormal`. Passable blocks (plants) no longer
+    show a speed. Thin layers (carpet, 1-2 snow layers) show the block beneath. Blocks that slow you from inside
+    (cobwebs, berry bushes, IW leaf piles, bamboo leaves, barbed wire, powder snow...) show their real walking
+    speed, and soul sand shows its own 0.58×. Built, headless-tested with MC bootstrapped (31/31); not deployed.
+    BR-48..51 added.
+  - Deployed at 16:45 with the game closed. The 13:12 jar (surface config, first Run Speed line, camo sinking)
+    had already been running since the 14:49 restart. The toml sections had moved with no values lost, and
+    the log showed `26 tier speeds applied`, 0 tier overlaps (6085 ids) and the WTHIT plugin initialised.
+    Now in `mods/`: the latest jar and the trimmed `blockrunner.json` (backed up); `deploy_pending/` removed;
+    `pack/` manifest regenerated. Writeup reviewed end to end; Twigs bamboo leaves noted as a leaves-tier
+    member that can't register.
   - Re-check against the newest mods (houses, boats, Breezy, Golden Food, Canned Goods, Tobacconist, Create Fast
     Schematic Cannon), using the 11:54 dumps. Only 4 walkable-ish new blocks: Golden Food's two cakes → confectionery,
     Canned Goods' sealed canned dirt → metal. Opened canned dirt shows dirt on top and stays untiered (1.00, same as

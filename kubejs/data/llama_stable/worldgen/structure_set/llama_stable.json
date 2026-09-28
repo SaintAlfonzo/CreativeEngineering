@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "llama_stable:llama_stable",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 45,
+    "separation": 30,
+    "salt": 344193932
+  }
+}

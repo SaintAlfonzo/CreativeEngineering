@@ -1,0 +1,8 @@
+{
+  "block.prettypipes.pipe": "Item Pipe",
+  "container.prettypipes.pipe": "Item Pipe",
+  "item.prettypipes.wrench": "Item Pipe Wrench",
+  "item.prettypipes.pipe_frame": "Item Pipe Frame",
+  "block.prettypipes.pressurizer": "Item Pipe Pressurizer",
+  "container.prettypipes.pressurizer": "Item Pipe Pressurizer"
+}
