@@ -15,6 +15,9 @@
 !/value.ods
 !/dump_loot_tables.sh
 !/pack/
+# Deploy record from tools/build_deploy.py (DEPLOY_LOG.md + history/); the staged payload isn't committed
+!/deploy/
+/deploy/latest/
 !/feature_writeup/
 !/todo/
 !/tools/

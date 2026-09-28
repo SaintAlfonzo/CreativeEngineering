@@ -1,0 +1,1117 @@
+# Deploy log
+
+Every version staged by `tools/build_deploy.py`, newest first. Each entry lists what changed since the
+version before it and which files the other machines must delete. The full file list of a version is in
+`history/<version>.json`.
+
+<!-- deploy:1.0.2 -->
+## 1.0.2 - 2026-09-28 17:49
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: d0d572c + 5 uncommitted file(s)
+- Since: 1.0.1
+- Contents: 338 server+client mods, 43 client-only mods, 27 resource pack files, 16 shader pack files
+- Built with warnings:
+  - 5 uncommitted change(s) in shipped folders (commit d0d572c + working tree)
+
+### Changes
+
+No file changes since the previous version.
+
+### Removals
+
+None.
+
+<!-- deploy:1.0.1 -->
+## 1.0.1 - 2026-09-28 17:44
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: d0d572c + 5 uncommitted file(s)
+- Since: 1.0.0
+- Contents: 338 server+client mods, 43 client-only mods, 27 resource pack files, 16 shader pack files
+- Built with warnings:
+  - 5 uncommitted change(s) in shipped folders (commit d0d572c + working tree)
+
+### Changes
+
+<details><summary>Mods added (41)</summary>
+
+- Abnormals Delight 4.1.2 `abnormals_delight-1.19.2-4.1.2.jar` (both)
+- Alex's Abnormalities `alexsabnormalities-1.3.jar` (both)
+- AstikorCarts [Horse Carts] 1.1.2 `astikorcarts-1.19.2-1.1.2.jar` (both)
+- Berry Good 6.1.0 `berry_good-1.19.2-6.1.0.jar` (both)
+- Blocky Siege `blocky_siege-6.1.91-1.19.2.jar` (both)
+- Boat Item View (Forge/Neoforge) 1.19.x-0.0.4 `Boat-Item-View-Forge-1.19.x-0.0.4.jar` (client)
+- Boatload 4.2.2 `boatload-1.19.2-4.2.2.jar` (both)
+- BoatView360 v1.0.4-mc1.17-1.20.1-forge `boatview360-v1.0.4-mc1.17-1.20.1-forge.jar` (client)
+- Breezy 1.0.8 `breezy-1.19.2-1.0.8.jar` (both)
+- Bushier Flowers 0.0.2-1.19.2 `bushierflowers-0.0.2-1.19.2.jar` (both)
+- Canned Goods :| 1.0.3 `CannedGoods-1.19.2-3.jar` (both)
+- ColoredWater 1.19.2-1.3.7 `Colored Water-1.19.2-1.3.7.jar` (both)
+- Create: Fast SchematicCannon 1.19.2-2.6.1-0.5.1i `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar` (server)
+- Floral Enchantment 1.19.2-1.4.3 `Floral Enchantment-1.19.2-1.4.3.jar` (both)
+- Glow Ink Plus 1.2.0 `(Forge)GlowInkPlus-1.19.2-1.2.0.jar` (both)
+- Glowing Illagers 1.0.0 `glowingraidillagers-1.19.2-1.0.0.jar` (server)
+- Golden Foods! 1.19.2-2.0.0 `goldenfood-1.19.2-2.0.0.jar` (both)
+- Greek Villager House `greek_villager_house-1.0.0-forge-1.19.2.jar` (both)
+- Hobbit House `hobbit_house_-1.0.1-forge-1.19.2.jar` (both)
+- Hopo Better Underwater Ruins 1.1.1 `HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar` (both)
+- Ice Boat Nerf - Reforged  [Forge 1.17 - 1.20.5] Ice Boat Nerf `iceboatnerf-1.1.1.jar` (both)
+- Ice Prevents Crop Growth 1.19.2-3.2-fabric+forge+neo `icepreventscropgrowth-1.19.2-3.2.jar` (server)
+- It Takes a Pillage 1.0.3 `takesapillage-1.0.3-1.19.2.jar` (both)
+- Make Bubbles Pop [Client] [Fabric/Forge] 0.3.0-forge `make_bubbles_pop-0.3.0-forge-mc1.19-1.19.3.jar` (client)
+- Neapolitan 4.1.0 `neapolitan-1.19.2-4.1.0.jar` (both)
+- No Hostiles Around Campfire 1.19.2-5.9-fabric+forge `nohostilesaroundcampfire-1.19.2-5.9.jar` (both)
+- Old fisherman swamp house `old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar` (both)
+- Rare Ice (Forge/Fabric) 0.5.1 `rare-ice-0.5.1.jar` (both)
+- Re:Deco - Vanilla Furniture 1.5.0 `redeco-1.5.0-1.19.2.jar` (both)
+- Revamped Shipwrecks (Mod) 1.1.0 `Revamped Shipwrecks 1.1.0.jar` (both)
+- Sawmill House 1.3.0 `sawmillhouse-1.3.0-forge-1.19.2.jar` (both)
+- Shulker Box Slot (Fabric/Forge/Quilt) 5.0.0-beta.2+1.19.2 `shulkerboxslot-forge-5.0.0-beta.2+1.19.2.jar` (both)
+- Simply Houses [FORGE] SimplyHouses-1.1.3-1.19-forge `SimplyHouses-1.1.3-1.19-forge.jar` (both)
+- Starter Kit 1.19.2-7.0-fabric+forge `starterkit-1.19.2-7.0.jar` (both)
+- The Dirty Stuff (Cigarettes) `the_dirty_stuff-2.1-forge-1.19.2.jar` (both)
+- The Salt 1.2.4.1 `salt-1.19.2-1.2.4.1.jar` (both)
+- Tinted Campfires 1.19.2-1.2.9 `Tinted Campfires-1.19.2-1.2.9.jar` (both)
+- Unwrecked Ships (Forge) Unwrecked Ships - 1.19-1.0.4 [Plus] `Unwrecked Ships Plus 1.19-1.0.4 Forge.jar` (both)
+- Upgrade Aquatic 5.1.0 `upgrade_aquatic-1.19.2-5.1.0.jar` (both)
+- Villages&Pillages forge-mc1.19.2-1.0.2 `villagesandpillages-forge-mc1.19.2-1.0.2.jar` (both)
+- XP Tome v2.1.7 `xptome-1.19-2.1.7.jar` (both)
+
+</details>
+
+Mods updated (1):
+
+- creativeengineering: `creativeengineering-1.0.0.jar` -> `creativeengineering-1.0.1.jar`
+
+Mods removed (1):
+
+- The Missing Villages 3.0.0-1.19.2 `themissingvillages-3.0.0-1.19.2-beta.jar` (was both)
+
+<details><summary>kubejs/: 411 added, 43 changed, 0 removed</summary>
+
+*added (411)*
+
+- `assets/prettypipes/lang/en_us.json`
+- `assets/watchtower_building/lang/en_us.json`
+- `data/ancient_enchantment_temple/structures/jungle_overgrown_temple.nbt`
+- `data/ancient_enchantment_temple/worldgen/structure/temple.json`
+- `data/ancient_enchantment_temple/worldgen/structure_set/temple.json`
+- `data/ancient_enchantment_temple/worldgen/template_pool/temple.json`
+- `data/animal_barn/structures/barn.nbt`
+- `data/animal_barn/worldgen/structure/barn.json`
+- `data/animal_barn/worldgen/structure_set/barn.json`
+- `data/animal_barn/worldgen/template_pool/barn.json`
+- `data/antiquetradingship/structures/shipo.nbt`
+- `data/antiquetradingship/worldgen/structure/antique_trading_ship.json`
+- `data/antiquetradingship/worldgen/structure_set/antique_trading_ship.json`
+- `data/antiquetradingship/worldgen/template_pool/antique_trading_ship.json`
+- `data/bighorsestable/structures/big_horsestable.nbt`
+- `data/bighorsestable/worldgen/structure/big_horse_stable.json`
+- `data/bighorsestable/worldgen/structure_set/big_horse_stable.json`
+- `data/bighorsestable/worldgen/template_pool/big_horse_stable.json`
+- `data/creativeengineering/forge/biome_modifier/felsic_ore_crystal_peaks.json`
+- `data/creativeengineering/forge/biome_modifier/felsic_ore_end_barrens.json`
+- `data/creativeengineering/forge/biome_modifier/felsic_ore_end_highlands.json`
+- `data/creativeengineering/forge/biome_modifier/felsic_ore_end_midlands.json`
+- `data/creativeengineering/forge/biome_modifier/felsic_ore_shadowlands.json`
+- `data/creativeengineering/forge/biome_modifier/felsic_ore_void_barrens.json`
+- `data/creativeengineering/recipes/blueprint/` (12 files)
+- `data/creativeengineering/recipes/sawmill/layered_obsidian_sawing.json`
+- `data/creativeengineering/recipes/sawmill/rose_quartz_sawing.json`
+- `data/creativeengineering/worldgen/configured_feature/felsic_ore.json`
+- `data/creativeengineering/worldgen/placed_feature/felsic_ore_crystal_peaks.json`
+- `data/creativeengineering/worldgen/placed_feature/felsic_ore_end_barrens.json`
+- `data/creativeengineering/worldgen/placed_feature/felsic_ore_end_highlands.json`
+- `data/creativeengineering/worldgen/placed_feature/felsic_ore_end_midlands.json`
+- `data/creativeengineering/worldgen/placed_feature/felsic_ore_shadowlands.json`
+- `data/creativeengineering/worldgen/placed_feature/felsic_ore_void_barrens.json`
+- `data/desert_village_temple/structures/villager_desert_temple.nbt`
+- `data/desert_village_temple/worldgen/structure/village_temple.json`
+- `data/desert_village_temple/worldgen/structure_set/village_temple.json`
+- `data/desert_village_temple/worldgen/template_pool/village_temple.json`
+- `data/desert_watchtower/structures/desert_watch_tower.nbt`
+- `data/desert_watchtower/worldgen/structure/watchtower.json`
+- `data/desert_watchtower/worldgen/structure_set/watchtower.json`
+- `data/desert_watchtower/worldgen/template_pool/watchtower.json`
+- `data/felsic_gear/loot_tables/blocks/felsic_block.json`
+- `data/forest_ruins/structures/ruin_1.nbt`
+- `data/forest_ruins/structures/ruin_2.nbt`
+- `data/forest_ruins/structures/ruin_3.nbt`
+- `data/forest_ruins/structures/ruin_4.nbt`
+- `data/forest_ruins/structures/ruin_5.nbt`
+- `data/forest_ruins/structures/ruin_6.nbt`
+- `data/forest_ruins/structures/ruin_7.nbt`
+- `data/forest_ruins/worldgen/structure/ruin_1.json`
+- `data/forest_ruins/worldgen/structure/ruin_2.json`
+- `data/forest_ruins/worldgen/structure/ruin_3.json`
+- `data/forest_ruins/worldgen/structure/ruin_4.json`
+- `data/forest_ruins/worldgen/structure/ruin_5.json`
+- `data/forest_ruins/worldgen/structure/ruin_6.json`
+- `data/forest_ruins/worldgen/structure/ruin_7.json`
+- `data/forest_ruins/worldgen/structure_set/ruin_1.json`
+- `data/forest_ruins/worldgen/structure_set/ruin_2.json`
+- `data/forest_ruins/worldgen/structure_set/ruin_3.json`
+- `data/forest_ruins/worldgen/structure_set/ruin_4.json`
+- `data/forest_ruins/worldgen/structure_set/ruin_5.json`
+- `data/forest_ruins/worldgen/structure_set/ruin_6.json`
+- `data/forest_ruins/worldgen/structure_set/ruin_7.json`
+- `data/forest_ruins/worldgen/template_pool/ruin_1.json`
+- `data/forest_ruins/worldgen/template_pool/ruin_2.json`
+- `data/forest_ruins/worldgen/template_pool/ruin_3.json`
+- `data/forest_ruins/worldgen/template_pool/ruin_4.json`
+- `data/forest_ruins/worldgen/template_pool/ruin_5.json`
+- `data/forest_ruins/worldgen/template_pool/ruin_6.json`
+- `data/forest_ruins/worldgen/template_pool/ruin_7.json`
+- `data/forest_watchtower/structures/forest_watchtower.nbt`
+- `data/forest_watchtower/worldgen/structure/forest_watchtower.json`
+- `data/forest_watchtower/worldgen/structure_set/forest_watchtower.json`
+- `data/forest_watchtower/worldgen/template_pool/forest_watchtower.json`
+- `data/forgotten_church/structures/church_ruin.nbt`
+- `data/forgotten_church/worldgen/structure/forgotten_church.json`
+- `data/forgotten_church/worldgen/structure_set/forgotten_church.json`
+- `data/forgotten_church/worldgen/template_pool/forgotten_church.json`
+- `data/gothic_church/structures/church.nbt`
+- `data/gothic_church/worldgen/structure/church.json`
+- `data/gothic_church/worldgen/structure_set/church.json`
+- `data/gothic_church/worldgen/template_pool/church.json`
+- `data/illager_siege_weapons/structures/ballista.nbt`
+- `data/illager_siege_weapons/structures/betteringram.nbt`
+- `data/illager_siege_weapons/structures/catapult.nbt`
+- `data/illager_siege_weapons/structures/reforcedbatteringram.nbt`
+- `data/illager_siege_weapons/structures/siegetower.nbt`
+- `data/illager_siege_weapons/structures/trebuchet.nbt`
+- `data/illager_siege_weapons/worldgen/structure/ballista.json`
+- `data/illager_siege_weapons/worldgen/structure/battering_ram.json`
+- `data/illager_siege_weapons/worldgen/structure/catapult.json`
+- `data/illager_siege_weapons/worldgen/structure/reinforced_battering_ram.json`
+- `data/illager_siege_weapons/worldgen/structure/siege_tower.json`
+- `data/illager_siege_weapons/worldgen/structure/trebuchet.json`
+- `data/illager_siege_weapons/worldgen/structure_set/ballista.json`
+- `data/illager_siege_weapons/worldgen/structure_set/battering_ram.json`
+- `data/illager_siege_weapons/worldgen/structure_set/catapult.json`
+- `data/illager_siege_weapons/worldgen/structure_set/reinforced_battering_ram.json`
+- `data/illager_siege_weapons/worldgen/structure_set/siege_tower.json`
+- `data/illager_siege_weapons/worldgen/structure_set/trebuchet.json`
+- `data/illager_siege_weapons/worldgen/template_pool/ballista.json`
+- `data/illager_siege_weapons/worldgen/template_pool/battering_ram.json`
+- `data/illager_siege_weapons/worldgen/template_pool/catapult.json`
+- `data/illager_siege_weapons/worldgen/template_pool/reinforced_battering_ram.json`
+- `data/illager_siege_weapons/worldgen/template_pool/siege_tower.json`
+- `data/illager_siege_weapons/worldgen/template_pool/trebuchet.json`
+- `data/illager_viking_longship/loot_tables/chests/longship.json`
+- `data/illager_viking_longship/structures/longship_modded.nbt`
+- `data/illager_viking_longship/worldgen/structure/illager_longship.json`
+- `data/illager_viking_longship/worldgen/structure_set/illager_longship.json`
+- `data/illager_viking_longship/worldgen/template_pool/illager_longship.json`
+- `data/illagerwarship/structures/illager-warship.nbt`
+- `data/illagerwarship/worldgen/structure/warship.json`
+- `data/illagerwarship/worldgen/structure_set/warship.json`
+- `data/illagerwarship/worldgen/template_pool/warship.json`
+- `data/immersiveengineering/structures/multiblocks/arcfurnace.nbt`
+- `data/immersiveengineering/structures/multiblocks/bucket_wheel.nbt`
+- `data/immersivepetroleum/structures/multiblocks/cokerunit.nbt`
+- `data/immersivepetroleum/structures/multiblocks/pumpjack.nbt`
+- `data/lightmanscurrency/loot_tables/loot_addons/boss/tier1.json`
+- `data/lightmanscurrency/loot_tables/loot_addons/boss/tier2.json`
+- `data/lightmanscurrency/loot_tables/loot_addons/boss/tier3.json`
+- `data/lightmanscurrency/loot_tables/loot_addons/entity/tier1.json`
+- `data/lightmanscurrency/loot_tables/loot_addons/entity/tier2.json`
+- `data/lightmanscurrency/loot_tables/loot_addons/entity/tier3.json`
+- `data/lightmanscurrency/loot_tables/loot_addons/entity/tier4.json`
+- `data/lightmanscurrency/loot_tables/loot_addons/entity/tier5.json`
+- `data/lightmanscurrency/loot_tables/loot_addons/entity/tier6.json`
+- `data/llama_stable/structures/llama_stable.nbt`
+- `data/llama_stable/worldgen/structure/llama_stable.json`
+- `data/llama_stable/worldgen/structure_set/llama_stable.json`
+- `data/llama_stable/worldgen/template_pool/llama_stable.json`
+- `data/mini_clock_tower/structures/mini_clock_tower.nbt`
+- `data/mini_clock_tower/worldgen/structure/mini_clock_tower.json`
+- `data/mini_clock_tower/worldgen/structure_set/mini_clock_tower.json`
+- `data/mini_clock_tower/worldgen/template_pool/mini_clock_tower.json`
+- `data/mysticrift_pillagers_towers_aris/structures/acacia_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/birch_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/cherry_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/desert_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/end_new_pillager_tower.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/jungle_pillager_tower.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/mangrove_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/oak_wood_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure/acacia_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure/birch_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure/cherry_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure/desert_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure/end_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure/jungle_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure/mangrove_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure/oak_wood_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure_set/acacia_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure_set/birch_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure_set/cherry_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure_set/desert_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure_set/end_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure_set/jungle_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure_set/mangrove_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/structure_set/oak_wood_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/template_pool/acacia_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/template_pool/birch_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/template_pool/cherry_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/template_pool/desert_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/template_pool/end_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/template_pool/jungle_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/template_pool/mangrove_pillager_tower.json`
+- `data/mysticrift_pillagers_towers_aris/worldgen/template_pool/oak_wood_pillager_tower.json`
+- `data/old_illager_statue/structures/old_illager_statue.nbt`
+- `data/old_illager_statue/worldgen/structure/old_illager_statue.json`
+- `data/old_illager_statue/worldgen/structure_set/old_illager_statue.json`
+- `data/old_illager_statue/worldgen/template_pool/old_illager_statue.json`
+- `data/oldvillagerstatue/structures/oldvillagerstatue.nbt`
+- `data/oldvillagerstatue/worldgen/structure/old_villager_statue.json`
+- `data/oldvillagerstatue/worldgen/structure_set/old_villager_statue.json`
+- `data/oldvillagerstatue/worldgen/template_pool/old_villager_statue.json`
+- `data/plains_villager_tents/structures/villager_plains_tent.nbt`
+- `data/plains_villager_tents/worldgen/structure/big_villager_tent.json`
+- `data/plains_villager_tents/worldgen/structure_set/big_villager_tent.json`
+- `data/plains_villager_tents/worldgen/template_pool/big_villager_tent.json`
+- `data/saloon/structures/saloon.nbt`
+- `data/saloon/worldgen/structure/saloon.json`
+- `data/saloon/worldgen/structure_set/saloon.json`
+- `data/saloon/worldgen/template_pool/saloon.json`
+- `data/skyvillages/loot_tables/chests/` (11 files)
+- `data/skyvillages/loot_tables/chests/supplementaries/sky_village_supplementaries_urn.json`
+- `data/skyvillages/structures/` (20 files)
+- `data/skyvillages/tags/worldgen/biome/has_structure/skyvillage.json`
+- `data/skyvillages/worldgen/processor_list/house_processor.json`
+- `data/skyvillages/worldgen/structure/skyvillage.json`
+- `data/skyvillages/worldgen/structure_set/skyvillage.json`
+- `data/skyvillages/worldgen/template_pool/skyvillage.json`
+- `data/skyvillages/worldgen/template_pool/skyvillage_bridges.json`
+- `data/skyvillages/worldgen/template_pool/skyvillage_deco.json`
+- `data/skyvillages/worldgen/template_pool/skyvillage_houses.json`
+- `data/skyvillages/worldgen/template_pool/skyvillage_terminator.json`
+- `data/skyvillages/worldgen/template_pool/skyvillage_villager.json`
+- `data/small_cat_statues/structures/cat1.nbt`
+- `data/small_cat_statues/structures/cat2.nbt`
+- `data/small_cat_statues/structures/cat3.nbt`
+- `data/small_cat_statues/worldgen/structure/cat_1.json`
+- `data/small_cat_statues/worldgen/structure/cat_2.json`
+- `data/small_cat_statues/worldgen/structure/cat_3.json`
+- `data/small_cat_statues/worldgen/structure_set/cat_1.json`
+- `data/small_cat_statues/worldgen/structure_set/cat_2.json`
+- `data/small_cat_statues/worldgen/structure_set/cat_3.json`
+- `data/small_cat_statues/worldgen/template_pool/cat_1.json`
+- `data/small_cat_statues/worldgen/template_pool/cat_2.json`
+- `data/small_cat_statues/worldgen/template_pool/cat_3.json`
+- `data/small_viking_villager_house/structures/villagervikinghouse.nbt`
+- `data/small_viking_villager_house/worldgen/structure/small_viking_house.json`
+- `data/small_viking_villager_house/worldgen/structure_set/small_viking_house.json`
+- `data/small_viking_villager_house/worldgen/template_pool/small_viking_house.json`
+- `data/small_villager_greenhouse/structures/smallvillagergreenhouse.nbt`
+- `data/small_villager_greenhouse/worldgen/structure/small_villager_greenhouse.json`
+- `data/small_villager_greenhouse/worldgen/structure_set/small_villager_greenhouse.json`
+- `data/small_villager_greenhouse/worldgen/template_pool/small_villager_greenhouse.json`
+- `data/smallhorsestable/structures/horsestable.nbt`
+- `data/smallhorsestable/worldgen/structure/horse_stable.json`
+- `data/smallhorsestable/worldgen/structure_set/horse_stable.json`
+- `data/smallhorsestable/worldgen/template_pool/horse_stable.json`
+- `data/snowy_tents/structures/snowy-tent.nbt`
+- `data/snowy_tents/worldgen/structure/snowy_tent.json`
+- `data/snowy_tents/worldgen/structure_set/snowy_tent.json`
+- `data/snowy_tents/worldgen/template_pool/snowy_tent.json`
+- `data/villager_archer_camp/structures/villagerarchercamp.nbt`
+- `data/villager_archer_camp/worldgen/structure/villager_archer_camp.json`
+- `data/villager_archer_camp/worldgen/structure_set/villager_archer_camp.json`
+- `data/villager_archer_camp/worldgen/template_pool/villager_archer_camp.json`
+- `data/villager_butcher_house/structures/butcher.nbt`
+- `data/villager_butcher_house/worldgen/structure/butcher_house.json`
+- `data/villager_butcher_house/worldgen/structure_set/butcher_house.json`
+- `data/villager_butcher_house/worldgen/template_pool/butcher_house.json`
+- `data/villager_cartographer_house/structures/carto.nbt`
+- `data/villager_cartographer_house/worldgen/structure/villager_cartographer_house.json`
+- `data/villager_cartographer_house/worldgen/structure_set/villager_cartographer_house.json`
+- `data/villager_cartographer_house/worldgen/template_pool/villager_cartographer_house.json`
+- `data/villager_circus_tent/structures/circus_tent.nbt`
+- `data/villager_circus_tent/worldgen/structure/villager_circus_tent.json`
+- `data/villager_circus_tent/worldgen/structure_set/villager_circus_tent.json`
+- `data/villager_circus_tent/worldgen/template_pool/villager_circus_tent.json`
+- `data/villager_cleric_house/structures/villagerclerichouse.nbt`
+- `data/villager_cleric_house/worldgen/structure/villager_cleric_house.json`
+- `data/villager_cleric_house/worldgen/structure_set/villager_cleric_house.json`
+- `data/villager_cleric_house/worldgen/template_pool/villager_cleric_house.json`
+- `data/villager_country_house/structures/country_house.nbt`
+- `data/villager_country_house/worldgen/structure/country_house.json`
+- `data/villager_country_house/worldgen/structure_set/country_house.json`
+- `data/villager_country_house/worldgen/template_pool/country_house.json`
+- `data/villager_farmer_house/structures/farmer_house.nbt`
+- `data/villager_farmer_house/worldgen/structure/villager_farmer_house.json`
+- `data/villager_farmer_house/worldgen/structure_set/villager_farmer_house.json`
+- `data/villager_farmer_house/worldgen/template_pool/villager_farmer_house.json`
+- `data/villager_fish_shop/structures/smallfishinshop.nbt`
+- `data/villager_fish_shop/worldgen/structure/fish_shop.json`
+- `data/villager_fish_shop/worldgen/structure_set/fish_shop.json`
+- `data/villager_fish_shop/worldgen/template_pool/fish_shop.json`
+- `data/villager_fishermans_hut/structures/villagerfisherman.nbt`
+- `data/villager_fishermans_hut/worldgen/structure/villager_fishermans_hut.json`
+- `data/villager_fishermans_hut/worldgen/structure_set/villager_fishermans_hut.json`
+- `data/villager_fishermans_hut/worldgen/template_pool/villager_fishermans_hut.json`
+- `data/villager_fletcher_house/structures/villager_archery_house.nbt`
+- `data/villager_fletcher_house/worldgen/structure/villager_fletcher_house.json`
+- `data/villager_fletcher_house/worldgen/structure_set/villager_fletcher_house.json`
+- `data/villager_fletcher_house/worldgen/template_pool/villager_fletcher_house.json`
+- `data/villager_flower_house/structures/villager_flower_house.nbt`
+- `data/villager_flower_house/worldgen/structure/flower_house.json`
+- `data/villager_flower_house/worldgen/structure_set/flower_house.json`
+- `data/villager_flower_house/worldgen/template_pool/flower_house.json`
+- `data/villager_forge/structures/villager-forge.nbt`
+- `data/villager_forge/worldgen/structure/villager_forge.json`
+- `data/villager_forge/worldgen/structure_set/villager_forge.json`
+- `data/villager_forge/worldgen/template_pool/villager_forge.json`
+- `data/villager_gold_washing_facility/loot_tables/chests/villager_gold_washing_facility_loot_table.json`
+- `data/villager_gold_washing_facility/structures/villager_gold_washing_facility_lt.nbt`
+- `data/villager_gold_washing_facility/worldgen/structure/villager_gold_washing_facility.json`
+- `data/villager_gold_washing_facility/worldgen/structure_set/villager_gold_washing_facility.json`
+- `data/villager_gold_washing_facility/worldgen/template_pool/villager_gold_washing_facility.json`
+- `data/villager_rafts/structures/raft1.nbt`
+- `data/villager_rafts/structures/raft2.nbt`
+- `data/villager_rafts/structures/raft3.nbt`
+- `data/villager_rafts/worldgen/structure/raft_1.json`
+- `data/villager_rafts/worldgen/structure/raft_2.json`
+- `data/villager_rafts/worldgen/structure/raft_3.json`
+- `data/villager_rafts/worldgen/structure_set/raft_1.json`
+- `data/villager_rafts/worldgen/structure_set/raft_2.json`
+- `data/villager_rafts/worldgen/structure_set/raft_3.json`
+- `data/villager_rafts/worldgen/template_pool/raft_1.json`
+- `data/villager_rafts/worldgen/template_pool/raft_2.json`
+- `data/villager_rafts/worldgen/template_pool/raft_3.json`
+- `data/villager_tannery/structures/villager_tannery.nbt`
+- `data/villager_tannery/worldgen/structure/tannery.json`
+- `data/villager_tannery/worldgen/structure_set/tannery.json`
+- `data/villager_tannery/worldgen/template_pool/tannery.json`
+- `data/villager_windmill/structures/windmill.nbt`
+- `data/villager_windmill/worldgen/structure/windmill.json`
+- `data/villager_windmill/worldgen/structure_set/windmill.json`
+- `data/villager_windmill/worldgen/template_pool/windmill.json`
+- `data/watchtower_building/advancements/watchtower_found.json`
+- `data/watchtower_building/loot_tables/chests/fresh_towerloot.json`
+- `data/watchtower_building/loot_tables/chests/towerloot.json`
+- `data/watchtower_building/structures/` (33 files)
+- `data/watchtower_building/worldgen/structure/abandoned_watchtower.json`
+- `data/watchtower_building/worldgen/structure/fresh_watchtower.json`
+- `data/watchtower_building/worldgen/structure_set/abandoned_watchtower.json`
+- `data/watchtower_building/worldgen/structure_set/fresh_watchtower.json`
+- `data/watchtower_building/worldgen/template_pool/` (12 files)
+- `exported/worldgen/climate/minecraft__overworld.json`
+- `exported/worldgen/climate/minecraft__the_end.json`
+- `exported/worldgen/climate/minecraft__the_nether.json`
+- `generation_scripts/worldgen/loot_container_audit.md`
+- `generation_scripts/worldgen/loot_container_swaps.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/pool_tag_report.md`
+- `generation_scripts/worldgen/pool_tags.json`
+- `generation_scripts/worldgen/structure_group_estimates.md`
+- `generation_scripts/worldgen/structure_group_migration.md`
+- `generation_scripts/worldgen/structure_groups.json`
+- `server_scripts/_lib/export_io.js`
+- `server_scripts/_lib/java_guard.js`
+- `server_scripts/loot/06_dead_maps.js`
+- `server_scripts/loot/07_rules.js`
+- `server_scripts/loot/95_tag_capture.js`
+- `server_scripts/loot/loot_census.md`
+- `server_scripts/tags/loottags.js`
+- `server_scripts/worldgen/ground_match.js`
+- `startup_scripts/changes/block_properties.js`
+
+*changed (43)*
+
+- `client_scripts/fluid_jei.js`
+- `client_scripts/tooltips.js`
+- `generation_scripts/worldgen/` (9 files)
+- `server_scripts/_lib/` (13 files)
+- `server_scripts/loot/` (9 files)
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/worldgen/biome_merges.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/fluid_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/cooking/potions.js`
+- `startup_scripts/func/item_physics.js`
+- `startup_scripts/func/potion_area.js`
+- `startup_scripts/func/tag_helper.js`
+
+</details>
+
+<details><summary>config/: 162 added, 28 changed, 0 removed</summary>
+
+*added (162)*
+
+- `/` (101 files)
+- `better_beacons/better_beacons-client.toml`
+- `chunky/tasks/minecraft/overworld.properties`
+- `chunky/tasks/minecraft/the_end.properties`
+- `com.yuushya/client_config.json`
+- `doapi/recipebook.json5`
+- `jei/blacklist.cfg`
+- `jei/ingredient-list-type-sort-order.ini`
+- `jei/jei-client.ini`
+- `jei/jei-colors.ini`
+- `jei/jei-debug.ini`
+- `jei/jei-mod-id-format.ini`
+- `jei/world/local/New_World/bookmarks.ini`
+- `jei/world/local/Schematics/bookmarks.ini`
+- `jei/world/local/Workspace/bookmarks.ini`
+- `jei/world/local/WorldA/bookmarks.ini`
+- `jei/world/server/Creative_Engineering_30/bookmarks.ini`
+- `jei/world/server/Creative_Engineering_6768b59c/bookmarks.ini`
+- `jei/world/server/Creative_Engineering_85adfa7b/bookmarks.ini`
+- `jei/world/server/Jayda_and_Elijah_30/bookmarks.ini`
+- `jei/world/server/Minecraft_Server_30/bookmarks.ini`
+- `jei/world/server/Minecraft_Server_85adf6b1/bookmarks.ini`
+- `jei/world/server/Minecraft_Server_85adfa7b/bookmarks.ini`
+- `jei/world/server/Schematics_2_6768b657/bookmarks.ini`
+- `jei/world/server/Schematics_2_85adfa7b/bookmarks.ini`
+- `jei/world/server/Schematics_30/bookmarks.ini`
+- `konkrete/locals/de_de.local`
+- `konkrete/locals/en_us.local`
+- `konkrete/locals/pl_pl.local`
+- `konkrete/locals/pt_br.local`
+- `pneumaticcraft/ArmorFeatureStatus.cfg`
+- `presencefootsteps/userconfig.json`
+- `simplehats_hatdl/simplehats_hatdl.zip`
+- `simplehats_hatdl/uuids.json`
+- `spyglass-improvements/settings.json`
+- `starterkit/descriptions/Archer.txt`
+- `starterkit/descriptions/Default.txt`
+- `starterkit/descriptions/Lumberjack.txt`
+- `starterkit/descriptions/Witch.txt`
+- `starterkit/kits/Default.txt`
+- `starterkit/kits/inactive/Archer.txt`
+- `starterkit/kits/inactive/Lumberjack.txt`
+- `starterkit/kits/inactive/Witch.txt`
+- `waila/blacklist.json5_2026.04.25.19.42.11`
+- `waila/blacklist.json_2024.04.05.18.43.03`
+- `waila/waila.json5`
+- `xaero/lib/client.cfg`
+- `xaero/lib/common.cfg`
+- `xaero/lib/profiles/default.cfg`
+- `xaero/lib/server_profiles/default.cfg`
+- `xaero/minimap/client.cfg`
+- `xaero/minimap/common.cfg`
+- `xaero/minimap/default_radar_categories_client.json`
+- `xaero/minimap/default_radar_categories_server.json`
+- `xaero/minimap/profiles/default.cfg`
+- `xaero/minimap/profiles/entity_radar_categories/default.cfg.json`
+- `xaero/minimap/profiles/info_display_config/default.cfg.txt`
+- `xaero/minimap/server_profiles/default.cfg`
+- `xaero/world-map/client.cfg`
+- `xaero/world-map/common.cfg`
+- `xaero/world-map/profiles/default.cfg`
+- `xaero/world-map/server_profiles/default.cfg`
+
+*changed (28)*
+
+- `/` (15 files)
+- `YungsExtras/forge-1_19/wishing_wells.json`
+- `betterdeserttemples/forge-1_19/armorstands.json`
+- `betterdeserttemples/forge-1_19/itemframes.json`
+- `betterfortresses/forge-1_19/itemframes.json`
+- `betterstrongholds/forge-1_19/armorstands.json`
+- `betterstrongholds/forge-1_19/itemframes.json`
+- `betterstrongholds/forge-1_19/ores.json`
+- `betterstrongholds/forge-1_19/rareblocks.json`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `waila/plugin_toggle.json5`
+- `waila/waila_plugins.json5`
+- `worldedit/worldedit.properties`
+
+</details>
+
+defaultconfigs/: 2 added, 1 changed, 0 removed:
+
+*added (2)*
+
+- `seasonhud-server.toml`
+- `sereneseasons-server.toml`
+
+*changed (1)*
+
+- `brickhopper-server.toml`
+
+### Removals
+
+Delete on the server (2, also in removals_server.txt):
+
+- `mods/creativeengineering-1.0.0.jar`
+- `mods/themissingvillages-3.0.0-1.19.2-beta.jar`
+
+Delete on the client (2, also in removals_client.txt):
+
+- `mods/creativeengineering-1.0.0.jar`
+- `mods/themissingvillages-3.0.0-1.19.2-beta.jar`
+
+<!-- deploy:1.0.0 -->
+## 1.0.0 - 2026-09-26 15:39
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: none (before the git repo)
+- Since: nothing (first deployment: everything is new)
+- Contents: 301 server+client mods, 40 client-only mods, 27 resource pack files, 16 shader pack files
+- Notes: Deployed when the server started running (world winecraft created 2026-09-26 15:39). Recorded 2026-09-28: server files hashed from the CreEngServer folder as deployed; client = the same server files + client-only jars and packs from pack/manifest.json at 609cd21 (2026-09-27), the earliest record of the client side
+
+### Changes
+
+<details><summary>Mods added (341)</summary>
+
+- Advanced Peripherals `AdvancedPeripherals-1.19.2-0.7.37r.jar` (both)
+- AE2 QoL Recipes `ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar` (both)
+- Alex's Delight `alexsdelight-1.4.1.jar` (both)
+- Alex's Mobs 1.21.1 `alexsmobs-1.21.1.jar` (both)
+- Allurement 3.2.1 `allurement-1.19.2-3.2.1.jar` (both)
+- Another Furniture 1.19.2-2.1.4 `another_furniture-forge-1.19.2-2.1.4.jar` (both)
+- AppleSkin forge-mc1.19-2.4.2 `appleskin-forge-mc1.19-2.4.2.jar` (both)
+- Applied Botanics Addon 1.4.6-forge `Applied-Botanics-forge-1.4.6.jar` (both)
+- Applied Cooking 2.0.3 `appliedcooking-2.0.3.jar` (both)
+- Applied Energistics 2 AE2 12.9.12 [FORGE] `appliedenergistics2-forge-12.9.12.jar` (both)
+- Architect's Palette 1.3.5 `Architects-Palette-1.19.2-1.3.5.jar` (both)
+- Architectury API 6.6.92+forge `architectury-6.6.92-forge.jar` (both)
+- Armor Trims Backport 1.3.3 `armortrims-1.19.2-1.3.3.jar` (both)
+- AutoRegLib 1.8.2-55 `AutoRegLib-1.8.2-55.jar` (both)
+- bad packets forge-0.2.3 `badpackets-forge-0.2.3.jar` (both)
+- Balm `balm-forge-1.19.2-4.6.0.jar` (both)
+- Beautify! 1.4.3 `beautify-1.4.3.jar` (both)
+- Bedspreads 6.0.0+1.19.2 `bedspreads-forge-6.0.0+1.19.2.jar` (both)
+- Better Days 1.19.2-3.3.4.3-FORGE `betterdays-1.19.2-3.3.4.3-FORGE.jar` (both)
+- Better Third Person BetterThirdPerson - Forge - 1.19 - 1.9.0 `BetterThirdPerson-Forge-1.19-1.9.0.jar` (client)
+- BetterF3 4.0.1 `BetterF3-4.0.1-Forge-1.19.2.jar` (client)
+- Block Runner v4.2.2-1.19.2-Forge `BlockRunner-v4.2.2-1.19.2-Forge.jar` (server)
+- Blueprint 6.2.0 `blueprint-1.19.2-6.2.0.jar` (both)
+- Book Fishing 1.0.0 `Book Fishing 1.0.0 - 1.19.2.jar` (both)
+- Bookshelf 16.3.20 `Bookshelf-Forge-1.19.2-16.3.20.jar` (both)
+- Botania 1.19.2-440.2-forge `Botania-1.19.2-440.2-FORGE.jar` (both)
+- Brewin' And Chewin' 1.19-2.0 `BrewinAndChewin-1.19-2.0.jar` (both)
+- Brick Hopper `brickhopper-1.19-1.4.2.1.jar` (both)
+- Buzzier Bees 5.0.1 `buzzier_bees-1.19.2-5.0.1.jar` (both)
+- Caelus API 1.19.2-3.0.0.6 `caelus-forge-1.19.2-3.0.0.6.jar` (both)
+- Cat Loaf [Forge] Cat Loaf 1.1.1 - 1.19.2 `catloaf-1.1.1-1.19.x-FORGE.jar` (both)
+- CB Multipart 3.2.0.139 `CBMultipart-1.19.2-3.2.0.139-universal.jar` (both)
+- CC: Tweaked `cc-tweaked-1.19.2-1.101.4.jar` (both)
+- CC:C Bridge 1.5.1-forge `cccbridge-mc1.19.2-forge-v1.5.1.jar` (both)
+- CERBON's Better Beacons [Forge | Fabric | NeoForge] `CerbonsBetterBeacons-Forge-1.19.2-1.0.2.jar` (both)
+- Chalk 1.6.4 `chalk-1.19.2-1.6.4.jar` (both)
+- Charm of Undying (Fabric/Forge/Quilt) 6.2.1+1.19.2 `charmofundying-forge-6.2.1+1.19.2.jar` (both)
+- Chef's Delight [Forge] - Farmer's Delight Villagers 1.0.3-forge-1.19.2 `chefsdelight-1.0.3-forge-1.19.2.jar` (both)
+- Cherished Items `CherishedItems-Forge-1.19.2-1.0.2.jar` (server)
+- Cherished Worlds `cherishedworlds-forge-6.0.5+1.19.4.jar` (client)
+- Chimes v2.0.1-1.19.2-Forge `Chimes-v2.0.1-1.19.2.jar` (both)
+- Chunky (Forge/NeoForge) 1.3.38 `Chunky-1.3.38.jar` (server)
+- Citadel 2.1.4-1.19 `citadel-2.1.4-1.19.jar` (both)
+- Clayworks 2.1.0 `clayworks-1.19.2-2.1.0.jar` (both)
+- Clear Void 1.3.0 `clearvoid-forge-1.3.0.jar` (client)
+- Cloth Config API (Fabric/Forge/NeoForge) 8.3.134+forge `cloth-config-8.3.134-forge.jar` (both)
+- Cloud  Storage 1.3.4 `cloudstorage-1.3.4-1.19.2.jar` (both)
+- Clumps 9.0.0+14 `Clumps-forge-1.19.2-9.0.0+14.jar` (both)
+- CodeChicken Lib 1.8.+ 4.3.2.490 `CodeChickenLib-1.19.2-4.3.2.490-universal.jar` (both)
+- Collective 1.19.2-7.64-fabric+forge `collective-1.19.2-7.64.jar` (both)
+- Comfortable Campfires 1.1.2+1.19.2 `comfortable-campfires-1.1.2+1.19.2.jar` (both)
+- Comforts 6.0.7+1.19.2 `comforts-forge-6.0.7+1.19.2.jar` (both)
+- Compressed Creativity 1.19.2-0.1.8 `compressedcreativity-1.19.2-0.1.8.jar` (both)
+- Compressed Engineering `compressedengineering-1.3.5.jar` (both)
+- ConnectedTexturesMod CTM - 1.19.2-1.1.6+8 `CTM-1.19.2-1.1.6+8.jar` (client)
+- Connectible Chains [FORGE] Connectible Chains-forge-1.19.2-2.1.4 `Connectible Chains-forge-1.19.2-2.1.4.jar` (both)
+- Construction Wand 1.19.2-2.10 `constructionwand-1.19.2-2.10.jar` (both)
+- Control Engineering 0.2.0 `ControlEngineering-0.2.0.jar` (both)
+- Controlling 10.0+7 `Controlling-forge-1.19.2-10.0+7.jar` (client)
+- Cooking for Blockheads `cookingforblockheads-forge-1.19.2-13.3.4.jar` (both)
+- Copper Drops 1.1 - 1.19-1.21+ `CopperDrops-1.1.jar` (both)
+- Corpse [FORGE][1.19.2] Corpse 1.19.2-1.0.17 `corpse-forge-1.19.2-1.0.17.jar` (both)
+- Corpse x Cosmetic Armor Reworked Compat 1.0.0 `cosmeticcorpsecompat-1.19.x-1.20.x-Forge-1.0.0.jar` (both)
+- Corpse x Curios API Compat 1.20.4 `corpsecurioscompat-1.18.x-1.20.x-Forge-2.2.2.jar` (both)
+- Cosmetic Armor Reworked `CosmeticArmorReworked-1.19.2-v1a.jar` (both)
+- Create 1.19.2-0.5.1.i `create-1.19.2-0.5.1.i.jar` (both)
+- Create : Gravity 1.2.0 `create_gravity-1.19.2-1.2.0-all.jar` (both)
+- Create : Misc & Things 4.0A `create_misc_and_things_ 1.19.2_4.0A.jar` (both)
+- Create Compact Exp `nocube's_create_compact_exp_1.0.4_forge_1.19.2.jar` (both)
+- Create Compressed 2.0.0 `create_compressed-2.0.0-forge-1.19.2.jar` (both)
+- Create Confectionery `create-confectionery1.19.2_v1.0.9.jar` (both)
+- Create Crafts & Additions createaddition-forge-1.19.2-1.2.3 `createaddition-1.19.2-1.2.3.jar` (both)
+- Create Deco `createdeco-1.3.3-1.19.2.jar` (both)
+- Create Goggles (Create Plus) 0.5.5.g `creategoggles-1.19.2-0.5.5.g-[FORGE].jar` (both)
+- Create Guardian Beam Defense 1.2.3b `Create-Guardian-Beam-Defense-1.2.3b.jar` (both)
+- Create Mechanical Extruder 1.19.2-1.5.7.e-44 `create_mechanical_extruder-1.19.2-1.5.7.e-44.jar` (both)
+- Create Questing 1.0.0 `Create_Questing-FORGE-1.19.2-1.0.0.jar` (client)
+- Create Recycle Everything `create_recycle_1.0.2_forge_1.19.2.jar` (both)
+- Create Slice & Dice 2.4.0 `sliceanddice-forge-2.4.0.jar` (both)
+- Create Waystone Recipes 1.19 / 1.20 `Create_Waystone_Recipes_1.19_v2.jar` (both)
+- Create: Applied Kinetics 1.4-1.19.2 `createappliedkinetics-1.4-1.19.2.jar` (both)
+- Create: Bells & Whistles 0.4.4-1.19.2-forge `bellsandwhistles-v0.4.4-1.19.2.jar` (both)
+- Create: Central Kitchen 1.3.11.c `create_central_kitchen-1.19.2-for-create-0.5.1.f-1.3.11.c.jar` (both)
+- Create: Copper Splashing `Create_Copper_Splashing_v2.jar` (both)
+- Create: Copycats+ 2.2.2+mc.1.19.2-forge `copycats-2.2.2+mc.1.19.2-forge.jar` (both)
+- Create: Crystal Clear 1.19.2-0.2.a `create_crystal_clear-0.2.1-1.19.2.jar` (both)
+- Create: Deep Dark 1.7.0 `create_deep_dark-1.7.0-forge-1.19.2.jar` (both)
+- Create: Design n' Decor 0.4.0 `design_decor-0.4-1.19.2.jar` (both)
+- Create: Dreams n' Desires 1.2cBetaMidDev `Create-DnDesire-1.19.2-1.2c.Beta Mid-Dev.jar` (both)
+- Create: Dynamic Village 0.4-1.19.2 `dynamicvillage-v0.4-1.19.2.jar` (both)
+- Create: Easy Stone Generators 1.0.0 `create_generators-1.0.0-forge-1.19.2.jar` (both)
+- Create: Enchantment Industry 1.2.9.e `create_enchantment_industry-1.19.2-for-create-0.5.1.f-1.2.9.e.jar` (both)
+- Create: Extended Cogwheels  2.1.1-1.19.2-0.5.1.f-forge `extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar` (both)
+- Create: Factory 0.0.2-1.19.2 `create_factory-0.0.2-1.19.2.jar` (both)
+- Create: Fishing Bobber Detector | Automatic Fishing with Create `bobberdetector-0.1.9-1.19.2.jar` (both)
+- Create: Framed 1.4.5.1+1.19.2-forge `createframed-1.19.2-1.4.5.1.jar` (both)
+- Create: Interiors 0.5.6+forge-mc1.19.2 `interiors-0.5.6+forge-mc1.19.2-build.105.jar` (both)
+- Create: Liquid Fuel 2.1.1-1.19.2 `createliquidfuel-2.1.1-1.19.2.jar` (server)
+- Create: Netherless (Forge) 1.3.0 `create_netherless-1.19.2-1.3.jar` (both)
+- Create: Oxidized 0.1.1 `create_oxidized-1.19.2-0.1.1.jar` (both)
+- Create: Power Loader 1.5.0-mc1.19.2 `create_power_loader-1.5.0-mc1.19.2.jar` (both)
+- Create: Steam 'n' Rails 1.6.6+forge-mc1.19.2 `Steam_Rails-1.6.6+forge-mc1.19.2.jar` (both)
+- Create: Tweaked Controllers 1.19.2-1.2.4 `create_tweaked_controllers-1.19.2-1.2.4.jar` (both)
+- Create: Ultimate Factory 1.9.0 `create_ultimate_factory-1.9.0-forge-1.19.2.jar` (both)
+- Create: Vintage Improvements 1.19.2-0.2.0.3 `vintageimprovements-1.19.2-0.2.0.3.jar` (both)
+- CreativeCore 2.11.28 `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` (both)
+- creativeengineering `creativeengineering-1.0.0.jar` (both)
+- Curios API (Forge/NeoForge) `curios-forge-1.19.2-5.1.6.4.jar` (both)
+- Customizable Elytra forge-1.7.4-1.19.0 `customizableelytra-1.19.0-1.7.4.jar` (both)
+- Dave's Building Extended `dbExtended-1.19.2-6.0.1.jar` (both)
+- Death Knell 6.0.3 `DeathKnell-Forge-1.19.2-6.0.3.jar` (server)
+- Decorative Blocks `Decorative Blocks-forge-1.19.2-3.0.0.jar` (both)
+- Delightful 3.4.1-1.19.2 `Delightful-1.19.2-3.4.1.jar` (both)
+- Detail Armor Bar [Forge] 2.6.4+1.19.2-forge `DetailArmorBar-2.6.4+1.19.2-forge.jar` (client)
+- Dimensional Gravity `Dimensional Gravity 1.0.1 - 1.19.2.jar` (both)
+- Display Delight 1.2.0 `displaydelight-1.2.0.jar` (both)
+- Distant Horizons: A Level of Detail mod 3.0.2-b-1.19.2 `DistantHorizons-3.0.2-b-1.19.2-fabric-forge.jar` (both)
+- Do a Barrel Roll 2.6.2+1.19-forge `do-a-barrel-roll-2.6.2+1.19.2-forge.jar` (both)
+- Domestication Innovation 1.6.1 `domesticationinnovation-1.6.1-1.19.2.jar` (both)
+- Don't void Arrows 1.1.0 `don't void arrows V.1.1-1.19.2.jar` (both)
+- Dramatic Doors 1.19.2-3.2.7 `DramaticDoors-QuiFabrge-1.19.2-3.2.7.jar` (both)
+- Durability Tooltip 1.1.6a-forge-mc1.19 `durabilitytooltip-1.1.6a-forge-mc1.19.jar` (client)
+- 'Dustrial Decor `DustrialDecor-1.3.3-1.19.2.jar` (both)
+- Dynamic Villager Trades `dynamicvillagertrades-1.2.3-forge-1.19.2.jar` (both)
+- Easy Elytra Takeoff 1.19.2-4.2-fabric+forge+neo `easyelytratakeoff-1.19.2-4.2.jar` (both)
+- Easy Magic v4.3.3-1.19.2-Forge `EasyMagic-v4.3.3-1.19.2-Forge.jar` (both)
+- Effective (Forge) `effective_fg-1.3.4.jar` (client)
+- Effishiency 1.19.2-1.1.1 `effishiency-1.19.2-1.1.1.jar` (both)
+- Elytra Bombing [Forge] `ElytraBombing-Forge-1.19.2-1.0.0.jar` (both)
+- Elytra Slot 6.1.2+1.19.2 `elytraslot-forge-6.1.2+1.19.2.jar` (both)
+- Embeddium (Rubidium) Extra 0.4.19+mc1.19.2-build.105 `rubidium-extra-0.4.19+mc1.19.2-build.105.jar` (client)
+- Enchantment Descriptions `EnchantmentDescriptions-Forge-1.19.2-13.0.20.jar` (client)
+- Ender Crop `endercrop-1.19.2-1.7.0-beta.jar` (both)
+- Ender Storage 1.8.+ 2.10.1.181 `EnderStorage-1.19.2-2.10.1.181-universal.jar` (both)
+- Ender's Delight 1.19-1.2.2 `endersdelight-1.19-1.2.2.jar` (both)
+- Enderdragon Loot `dragonloot-1.1.15-1.19.2-forge.jar` (both)
+- Engineer's Decor `engineersdecor-1.19.2-forge-1.3.29.jar` (both)
+- Engineers Delight TMTED 1.19.2 R.1.3 `Engineers Delight 1.19.2 R.1.3.jar` (both)
+- Entity Culling Fabric/Forge 1.6.1 `entityculling-forge-1.6.1-mc1.19.2.jar` (client)
+- Etched [Forge 1.19.2] Etched 2.3.2 `etched-forge-2.3.2.jar` (both)
+- Every Compat (Wood Good) 1.19.2-2.5.36 `everycomp-1.19.2-2.5.36.jar` (both)
+- Everything is Copper `everythingcopper-1.19.2-2.3.4.jar` (both)
+- Explorer's Compass 1.19.2-1.3.0-forge `ExplorersCompass-1.19.2-1.3.0-forge.jar` (both)
+- Exposure 1.6.0 `exposure-1.19.2-1.6.0-forge.jar` (both)
+- Fairy Lights fairylights-6.0.1-1.19.2 `fairylights-6.0.1-1.19.2.jar` (both)
+- Fantasy's Furniture 6.7.0 `fantasyfurniture-1.19.2-6.7.0.jar` (both)
+- Farmer's Delight 1.19.2-1.2.4 `FarmersDelight-1.19.2-1.2.4.jar` (both)
+- Farmers Structures `FarmersStructures-1.0.0-1.19.2.jar` (both)
+- Fast Leaf Decay `FastLeafDecay-30.jar` (both)
+- FastFurnace `FastFurnace-1.19.2-7.0.0.jar` (both)
+- FastWorkbench `FastWorkbench-1.19.2-7.1.4.jar` (both)
+- Felsic Gear 1.0.0 `Felsic Gear 1.0.0  - 1.19.2.jar` (both)
+- FerriteCore ((Neo)Forge) 5.0.3-forge `ferritecore-5.0.3-forge.jar` (both)
+- Fish On The Line 1.19.2-3.2-fabric+forge+neo `fishontheline-1.19.2-3.2.jar` (both)
+- Flower Patch `FlowerPatch-forge-1.19.2-2.0.3.jar` (both)
+- Forgiving Void `forgivingvoid-forge-1.19-7.0.0.jar` (both)
+- FramedBlocks 6.8.6 `FramedBlocks-6.8.6.jar` (both)
+- Friendly Griefing 1.19-1.0.2 `FriendlyGriefing-1.19-1.0.2.jar` (both)
+- FTB Library (NeoForge) `ftb-library-forge-1902.4.1-build.236.jar` (both)
+- FTB Quests (NeoForge) `ftb-quests-forge-1902.5.10-build.497.jar` (both)
+- FTB Teams (NeoForge) `ftb-teams-forge-1902.2.14-build.123.jar` (both)
+- Fullblock Energistics forge-1.7.1-1.19.2 `fulleng-forge-1.7.1-1.19.2.jar` (both)
+- Furnace Recycle 1.19.2-2.2-fabric+forge+neo `furnacerecycle-1.19.2-2.2.jar` (both)
+- GeckoLib 3.1.40 `geckolib-forge-1.19-3.1.40.jar` (both)
+- Geode+ [Forge 1.19.2] 1.1.8 `geodeforge-1.1.8-1.19.2.jar` (both)
+- Geophilic Reforged – Biome Additions 1.2.0 `GeophilicReforged-v1.2.0.jar` (both)
+- Golems Are Friends Not Fodder 3 `golemsarefriends-1.19.2-0.1.0.1.jar` (both)
+- Handcrafted 2.0.6 `handcrafted-forge-1.19.2-2.0.6.jar` (both)
+- Hearths v1.0.0-mc1.19u1.19.3 `hearths-v1.0.0-mc1.19u1.19.3.jar` (both)
+- Heartstone 1.19.2-1.1.2 `heartstone-1.19.2-1.1.2.jar` (both)
+- HT's TreeChop 0.19.1 `TreeChop-1.19.2-forge-0.19.1.jar` (both)
+- Iceberg [Neo/Forge] 1.1.4 `Iceberg-1.19.2-forge-1.1.4.jar` (client)
+- ImmediatelyFast 1.4.0+1.19.2-forge `ImmediatelyFast-Forge-1.4.0+1.19.2.jar` (client)
+- Immersive Armors [Fabric/Forge] 1.5.6+1.19.2 `immersive_armors-1.5.6+1.19.2-forge.jar` (both)
+- Immersive Engineering 1.19.2-9.2.4-170 `ImmersiveEngineering-1.19.2-9.2.4-170.jar` (both)
+- Immersive Paintings [Fabric/Forge] 0.6.7+1.19.2 `immersive_paintings-0.6.7+1.19.2-forge.jar` (both)
+- Immersive Petroleum `ImmersivePetroleum-1.19.2-4.2.0-29b.jar` (both)
+- Immersive Posts 4.3.0-8 `ImmersivePosts-1.19.2-4.3.0-8.jar` (both)
+- Immersive Weathering [FORGE] `immersive_weathering-1.19.2-1.2.10-forge.jar` (both)
+- Incubation 3.0.1 `incubation-1.19.2-3.0.1.jar` (both)
+- Iron Fishing Rods 1.0.0 `Iron Fishing Rods 1.0.0 - 1.19.2.jar` (both)
+- Item Filters 1902.2.9-build.51 `item-filters-forge-1902.2.9-build.51.jar` (both)
+- Item Highlighter [Neo/Forge] 1.1.4 `Highlighter-1.19.1-1.1.4.jar` (client)
+- ItemPhysic Full 1.6.7 `ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar` (both)
+- Just Another Rotten Flesh to Leather Mod 1.4.3 `JRFTL [1.19.1]-1.4.3.jar` (both)
+- Just Enough Beacons Reforged [Forge | Fabric | NeoForge] `JustEnoughBeacons-Forge-1.19+-1.1.2.jar` (client)
+- Just Enough Breeding (JEBr) `justenoughbreeding-forge-1.19.2-1.4.0.jar` (client)
+- Just Enough Effect Descriptions (JEED) 1.19.2-2.1.4 `jeed-1.19.2-2.1.4.jar` (client)
+- Just Enough Immersive Multiblocks 1.19.2-0.0.3 `jeimultiblocks-1.19.2-0.0.3.jar` (client)
+- Just Enough Items (JEI) 11.8.1.1034 `jei-1.19.2-forge-11.8.1.1034.jar` (client)
+- Just Enough Professions (JEP) 2.0.2 `JustEnoughProfessions-forge-1.19.2-2.0.2.jar` (client)
+- Just Enough Repair Materials (JERM) 1.19.2-1.2 `jerm-1.19.2-1.2.jar` (client)
+- Just Enough Resources (JER) 1.2.3.243 `JustEnoughResources-1.19.2-1.2.3.243.jar` (client)
+- Just Enough Sculk Sensor `jess-1.19.2-forge-1.0.0.jar` (client)
+- Kiwi 🥝 (Neo/Forge) 8.3.6 `Kiwi-1.19.2-forge-8.3.6.jar` (both)
+- Konkrete 1.8.0-1.19-1.19.2-forge `konkrete_forge_1.8.0_MC_1.19-1.19.2.jar` (client)
+- Kotlin for Forge 3.12.0 `kotlinforforge-3.12.0-all.jar` (both)
+- KubeJS 1902.6.2-build.73+forge `kubejs-forge-1902.6.2-build.73.jar` (both)
+- KubeJS + CC: Tweaked 1902-1.0.2-beta `kjscc-1902-1.0.2-beta.jar` (both)
+- KubeJS Botania `kubejs_botania-1.3.1-forge.jar` (both)
+- KubeJS Create 1902.2.4-build.36+forge `kubejs-create-forge-1902.2.4-build.36.jar` (both)
+- KubeJS CSV `kubejs_csv-1.18.2~1.20.1-1.0.0.jar` (both)
+- KubeJS Delight 1.19.2-1.1.2 `kubejsdelight-1.19.2-1.1.2.jar` (both)
+- KubeJS Immersive Engineering 1902.2.3-build.18 `kubejs-immersive-engineering-1902.2.3-build.18.jar` (both)
+- Legendary Tooltips [Neo/Forge] `LegendaryTooltips-1.19.2-forge-1.4.0.jar` (client)
+- [Let's Do] API  1.1.0b-forge `doapi-1.1.0b.jar` (both)
+- [Let's Do] Vinery Vinery - 1.3.10 - FORGE - 1.19.2 `letsdo-vinery-forge-1.3.10.jar` (both)
+- Lightman's Currency 1.19.2-2.2.1.3g `lightmanscurrency-1.19.2-2.2.1.3g.jar` (both)
+- Lightman's Discord Integration 1.19.2-0.2.0.3 `lightmansdiscord-1.19.2-0.2.0.3-server.jar` (server)
+- Little Contraptions [Forge] 1.19.2.2 `littlecontraptions-forge-1.19.2.2.jar` (both)
+- Little Logistics 1.4.0 `littlelogistics-mc1.19.2-v1.4.0.jar` (both)
+- Loading Protection `loadingprotection-1.0.2-forge-1.19.2.jar` (server)
+- LootJS: KubeJS Addon 1.19.2-2.9.1+forge `lootjs-forge-1.19.2-2.9.1.jar` (both)
+- Lootr (Forge & NeoForge) 0.4.28.75 `lootr-forge-1.19-0.4.29.76.jar` (both)
+- Lucky's Wardrobe `wardrobe-1.0.3-1.19.2.jar` (both)
+- MCA Reborn [Fabric/Forge] 7.5.20+1.19.2 `minecraft-comes-alive-7.5.20+1.19.2-universal.jar` (both)
+- MemoryLeakFix v1.0.0 `memoryleakfix-forge-1.17+-1.0.0.jar` (both)
+- MES - Moog's End Structures 1.3.1-1.19.2-forge `mes-1.3.1-1.19.2-forge.jar` (both)
+- Metal Fences 1.0.1 `MetalFences-FORGE-1.19.2-1.0.1.jar` (both)
+- MmmMmmMmmMmm (Target Dummy) MmmMmmMmmMmm-1.19.2-1.7.1 `dummmmmmy-1.19.2-1.7.1.jar` (both)
+- Mod Name Tooltip `modnametooltip-1.20.1-1.20.0.jar` (client)
+- Momentum Protection Enchantment [Forge] 1.19.2-0.0.1 `momentumprotection-1.19.2-0.0.1.jar` (both)
+- Monobank 1.1.3 `monobank-1.19.2-1.1.3.jar` (both)
+- Moonlight Lib 1.19.2-2.3.7 `moonlight-1.19.2-2.3.7-forge.jar` (both)
+- More Immersive Wires 1.19-1.1.3 `more-immersive-wires-1.19.2-1.1.3.jar` (both)
+- More Mob Variants 1.3.0 `moremobvariants-forge+1.19.2-1.3.0.1.jar` (both)
+- MoreJS 1.19.2-0.3.0+forge `morejs-forge-1.19.2-0.3.0.jar` (both)
+- Mosaic Masonry 1.1 `mosaic_masonry-1.1.jar` (both)
+- Mouse Tweaks 1.19-2.23-forge `MouseTweaks-forge-mc1.19-2.23.jar` (client)
+- Moyai 1.19.2-2.0.1 `moyai-1.19.2-2.0.1.jar` (both)
+- Myrtrees `myrtrees-forge-1.2.0-build.32.jar` (both)
+- Mystical Oak Tree `mysticaloaktree-1.19.2-1.10.jar` (both)
+- Nametag Crafting 1.0+mod `name-tag-crafting-recipe-mod-1.0 (3).jar` (both)
+- Nature's Compass 1.19.2-1.10.0-forge `NaturesCompass-1.19.2-1.10.0-forge.jar` (both)
+- Nether's Delight 1.19-3.1 `NethersDelight-1.19-3.1.jar` (both)
+- Nethered End Portal End Portal 1.19.2 ver1.2 `endportal-1.19.2-ver1.2.jar` (both)
+- NetherPortalFix `netherportalfix-forge-1.19-10.0.1.jar` (both)
+- Nock Enough Arrows 1.19.2 - 1.2.0 `nock_enough_arrows-1.19.2-1.2.0.jar` (both)
+- Not Enough Animations 1.12.2 `notenoughanimations-forge-1.12.2-mc1.19.2.jar` (client)
+- Not Enough Recipe Book [NERB] 0.3 `nerb-1.19.2-0.3-FORGE.jar` (both)
+- Nullscape 1.2.2 `Nullscape_1.19.3_v1.2.2.jar` (both)
+- Old Guns Mod `oldguns-1.19.2-3.7.3-47.jar` (both)
+- Ore Excavation `OreExcavation-1.11.166.jar` (both)
+- Panorama [1.19.2] [Forge] Panorama 1.3.0 `panorama-1.3.0 - 1.19.2.jar` (client)
+- Patchouli 1.19.2-77-forge `Patchouli-1.19.2-77.jar` (both)
+- Per-Dimension Game Rules `PerDimensionGameRules-1.19.2-forge-1.2.0.jar` (both)
+- Philip's Ruins 1.19.2-10.8 `PhilipsRuins1.19.2-10.8.jar` (both)
+- Pierce Arrow `piercearrow-1.19.2-2.0.0.jar` (both)
+- Placebo `Placebo-1.19.2-7.4.1.jar` (both)
+- PneumaticCraft: Repressurized pneumaticcraft-repressurized v1.19.2-4.3.15 `pneumaticcraft-repressurized-1.19.2-4.3.15-52.jar` (both)
+- Pollen [Forge 1.19.2] Pollen 2.1.0 `pollen-forge-2.1.0.jar` (both)
+- Polymorph (Fabric/Forge/Quilt) 0.46.6+1.19.2 `polymorph-forge-0.46.6+1.19.2.jar` (both)
+- Polymorphic Energistics forge-0.1.1-1.19.2 `polyeng-forge-0.1.1-1.19.2.jar` (both)
+- Ponder for KubeJS 1.19.2-1.2.0+forge `ponderjs-1.19.2-1.2.0.jar` (client)
+- Portable Mobs 1.2.1 for Forge 1.19 `portablemobs-1.2.1-forge-mc1.19.jar` (both)
+- Portable Wardrobes (Easy Armor Swap) `portablewardrobearmorswap-1.0.2-forge-1.19.2.jar` (both)
+- Potion Bundles 1.6 `potionbundles-1.19.1-1.6.jar` (both)
+- Presence Footsteps (Forge) 1.19.2-1.6.4.1 `PresenceFootsteps-1.19.2-1.6.4.1-forge.jar` (client)
+- Pretty Pipes 1.13.6 `PrettyPipes-1.13.6.jar` (both)
+- Pretty Pipes: Fluids `ppfluids-1.19.2-2.0.1.jar` (both)
+- Prism [Neo/Forge] 1.0.2 `Prism-1.19.1-1.0.2.jar` (client)
+- Project Red - Core 4.19.0-beta+33 `ProjectRed-1.19.2-4.19.0-beta+33-core.jar` (both)
+- Project Red - Fabrication 4.19.0-beta+33 `ProjectRed-1.19.2-4.19.0-beta+33-fabrication.jar` (both)
+- Project Red - Illumination 4.19.0-beta+33 `ProjectRed-1.19.2-4.19.0-beta+33-illumination.jar` (both)
+- Project Red - Integration 4.19.0-beta+33 `ProjectRed-1.19.2-4.19.0-beta+33-integration.jar` (both)
+- Project Red - Transmission 4.19.0-beta+33 `ProjectRed-1.19.2-4.19.0-beta+33-transmission.jar` (both)
+- Puzzles Lib v4.4.3-1.19.2-Forge `PuzzlesLib-v4.4.3-1.19.2-Forge.jar` (both)
+- Quark 1.19.2-3.4-418 `Quark-3.4-418.jar` (both)
+- Quark Delight `quark_delight_1.0.0_forge_1.19.2.jar` (both)
+- Quark Engineering `QuarkEngineering.jar` (both)
+- Quark Oddities 1.18 `QuarkOddities-1.18.jar` (both)
+- Quests Additions (Forge) `questsadditions-1.19.2-1.4.2.jar` (both)
+- Redstone Gates `gates-1.8.0.jar` (both)
+- Regrowth `Regrowth-1.19-41.1.31.1.jar` (both)
+- Resourceful Lib 1.1.24 `resourcefullib-forge-1.19.2-1.1.24.jar` (both)
+- Responsive Shields 2.3 `responsiveshields-2.3-mc1.18-19-20.x.jar` (both)
+- Rhino 1902.2.3-build.284+forge `rhino-forge-1902.2.3-build.284.jar` (both)
+- Rubidium 0.6.2c `rubidium-mc1.19.2-0.6.2c.jar` (client)
+- Rustic Delight 1.3.0 `rusticdelight-forge-1.19.2-1.3.0.jar` (both)
+- Scholar Unofficial Backport `scholar-1.19.2-1.0.0-forge.jar` (both)
+- Sculk Transporting v1.1 `sculktransporting-1.19.2-1.1.jar` (both)
+- SeasonHud 1.19.2-2.0.4 `seasonhud-forge-1.19.2-2.0.4.jar` (both)
+- SebastrnLib 2.0.2 `sebastrnlib-2.0.2.jar` (both)
+- Second Chance (Forge) Release 1.5.1 for Minecraft 1.19 `secondchanceforge-1.19-1.5.1.jar` (both)
+- Security Craft v1.9.6.1 `[1.19.2] SecurityCraft v1.9.6.1.jar` (both)
+- Separated Leaves 2.4.0-forge-1.19.2 `separatedleaves-2.4.0-forge-1.19.2.jar` (both)
+- Serene Seasons 8.1.0.24 `SereneSeasons-1.19.2-8.1.0.24.jar` (both)
+- Simple Backups 1.19.1-2.1.12 `SimpleBackups-1.19.1-2.1.12.jar` (server)
+- Simple Hats 1.19.2-0.3.2 `simplehats-forge-1.19.2-0.3.2.jar` (both)
+- Simple Netherite Horse Armor 1.19-1.0.4 `netherite_horse_armor-forge-1.19-1.0.4.jar` (both)
+- Sit v1.3.3 `sit-1.19-1.3.3.jar` (both)
+- Smaller Nether Portals 1.19.2-3.6-fabric+forge+neo `smallernetherportals-1.19.2-3.6.jar` (both)
+- Snow Under Trees v1.3.1 `snowundertrees-1.19.2-1.3.1.jar` (both)
+- Sooty Chimneys 1.2.1 `sootychimneys-1.19.2-1.2.1.jar` (both)
+- Sophisticated Backpacks 1.19.2-3.20.2.1035 `sophisticatedbackpacks-1.19.2-3.20.2.1035.jar` (both)
+- Sophisticated Core 1.19.2-0.6.4.730 `sophisticatedcore-1.19.2-0.6.4.730.jar` (both)
+- Spice of Life: Apple Pie Edition `solapplepie-1.19.2-2.2.0.jar` (both)
+- Spyglass Improvements: Zoom, Quick Access... [Fabric/NeoForge] 1.5.12+mc1.19+forge `spyglass_improvements-forge-1.5.12+mc1.19+forge.jar` (client)
+- Stardew Fishing v1.3 (1.19.2) `stardew_fishing-1.19.2-1.3-all.jar` (both)
+- Storage Delight (Forge & Neoforge) 25.12.09-1.19-forge `storagedelight-25.12.09-1.19-forge.jar` (both)
+- Storage Drawers 11.4.1 `StorageDrawers-1.19.2-11.4.1.jar` (both)
+- SuperMartijn642's Config Lib 1.1.8-forge-mc1.19 `supermartijn642configlib-1.1.8-forge-mc1.19.jar` (both)
+- SuperMartijn642's Core Lib 1.1.21-forge-mc1.19.2 `supermartijn642corelib-1.1.21-forge-mc1.19.2.jar` (both)
+- Supplementaries 1.19.2-2.4.20 `supplementaries-1.19.2-2.4.20.jar` (both)
+- Supplementaries Squared `suppsquared-1.19.2-1.1.1.jar` (both)
+- Survivality 1.2.4 `survivality-1.19.2-1.2.4-forge.jar` (both)
+- SwingThroughGrass `swingthroughgrass-1.19.2-1.10.0.jar` (both)
+- Tactical Fishing 1.2 `TacticalFishing-1.19.x2-v1.2.jar` (both)
+- Tax Free Levels 1.4.23 `TaxFreeLevels-1.4.23-forge-1.20.1.jar` (server)
+- Tectonic 2.3.5a `tectonic-forge-1.19-2.3.5a.jar` (both)
+- Terralith 2.3.12 `Terralith_1.19.3_v2.3.12.jar` (both)
+- The Dreamcatcher 1.0.0 `dreamcatcher mod.jar` (both)
+- The Missing Villages 3.0.0-1.19.2 `themissingvillages-3.0.0-1.19.2-beta.jar` (both)
+- Towns and Towers 1.10.0 `Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar` (both)
+- Trade Cycling [FORGE][1.19.2] Trade Cycling 1.19.2-1.0.15 `trade-cycling-forge-1.19.2-1.0.15.jar` (both)
+- Trash Cans 1.0.18-forge-mc1.19 `trashcans-1.0.18-forge-mc1.19.jar` (both)
+- TrashSlot `trashslot-forge-1.19.2-12.1.0.jar` (both)
+- Twigs 3.0.1 `twigs-forge-1.19.2-3.0.1.jar` (both)
+- Via Romana: Infrastructure-Driven Fast Travel 1.1.3 `Via_Romana-1.19.2-1.1.3.jar` (both)
+- Villagers Sell Animals [NoCube's Mods] `nocube's_villagers_sell_animals_1.2.1_forge_1.19.2.jar` (both)
+- Vintage KubeJS 1.19.2-1.0.0rc-2 `vintage_kubejs-1.19.2-1.0.0rc-2.jar` (both)
+- Wares 1.2.9 `wares-1.19.2-1.2.9.jar` (both)
+- Waystones `waystones-forge-1.19.2-11.4.2.jar` (both)
+- Waystones Teleport Pets 1.2 `WaystonesTeleportPets-1.19.2-1.19.4--1.2.jar` (both)
+- WorldEdit 7.2.12 (Forge/Fabric for MC 1.19.2) `worldedit-mod-7.2.12.jar` (both)
+- WTHIT Forge Edition forge-5.36.1 `wthit-1.19.2-forge-5.36.1.jar` (both)
+- WTHIT Harvestability 2.1.0 `wthitharvestability-mc1.19.2-2.1.0.jar` (client)
+- Xaero Zoomout 1.1.0 `XaeroZoomout-Forge-1.19-1.1.0.jar` (client)
+- Xaero's Minimap forge-1.19.2-25.3.10 `xaerominimap-forge-1.19.2-25.3.10.jar` (client)
+- Xaero's Minimap & World Map - Waystones Compatibility [Forge & NeoForge] 1.1 `xaeros_waystones_compatibility-1.1 - 1.19.2.jar` (both)
+- Xaero's World Map forge-1.19.2-1.40.11 `xaeroworldmap-forge-1.19.2-1.40.11.jar` (client)
+- YUNG's API (Forge/NeoForge) 1.19.2-Forge-3.8.10 `YungsApi-1.19.2-Forge-3.8.10.jar` (both)
+- YUNG's Better Desert Temples (Forge/NeoForge) 1.19.2-Forge-2.2.2 `YungsBetterDesertTemples-1.19.2-Forge-2.2.2.jar` (both)
+- YUNG's Better Dungeons (Forge/NeoForge) 1.19.2-Forge-3.2.2 `YungsBetterDungeons-1.19.2-Forge-3.2.2.jar` (both)
+- YUNG's Better End Island (Forge/NeoForge) 1.19.2-Forge-1.0 `YungsBetterEndIsland-1.19.2-Forge-1.0.jar` (both)
+- YUNG's Better Jungle Temples (Forge/NeoForge) 1.19.2-Forge-1.0.1 `YungsBetterJungleTemples-1.19.2-Forge-1.0.1.jar` (both)
+- YUNG's Better Nether Fortresses (Forge/NeoForge) 1.19.2-Forge-1.0.6 `YungsBetterNetherFortresses-1.19.2-Forge-1.0.6.jar` (both)
+- YUNG's Better Strongholds (Forge/NeoForge) 1.19.2-Forge-3.2.0 `YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar` (both)
+- YUNG's Better Witch Huts (Forge/NeoForge) 1.19.2-Forge-2.1.0 `YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar` (both)
+- YUNG's Extras (Forge/NeoForge) 1.19.2-Forge-3.1.0 `YungsExtras-1.19.2-Forge-3.1.0.jar` (both)
+- Yuushya Modelling 2.2.0 `yuushya-modelling-1.19.2-forge-2.2.0.jar` (both)
+
+</details>
+
+<details><summary>kubejs/: 687 added, 0 changed, 0 removed</summary>
+
+*added (687)*
+
+- `README.txt`
+- `assets/create/textures/block/redstone_antenna.png`
+- `assets/create/textures/block/redstone_antenna_powered.png`
+- `assets/create/textures/block/redstone_bridge.png`
+- `assets/create/textures/block/redstone_bridge_powered.png`
+- `assets/create/textures/item/crushed_raw_aluminum.png`
+- `assets/create_compressed/textures/block/crushed_aluminium_pile.png`
+- `assets/creativeengineering/blockstates/` (39 files)
+- `assets/creativeengineering/lang/en_us.json`
+- `assets/creativeengineering/models/block/` (39 files)
+- `assets/creativeengineering/models/item/` (76 files)
+- `assets/creativeengineering/textures/block/dark_fire_0.png`
+- `assets/creativeengineering/textures/block/dark_fire_0.png.mcmeta`
+- `assets/creativeengineering/textures/block/dark_fire_1.png`
+- `assets/creativeengineering/textures/block/dark_fire_1.png.mcmeta`
+- `assets/creativeengineering/textures/block/layered_obsidian.png`
+- `assets/creativeengineering/textures/block/prepared_flesh_block.png`
+- `assets/creativeengineering/textures/block/coil_block/` (20 files)
+- `assets/creativeengineering/textures/block/dust_pile/` (16 files)
+- `assets/creativeengineering/textures/block/plate_block/` (11 files)
+- `assets/creativeengineering/textures/entity/shield/` (14 files)
+- `assets/creativeengineering/textures/item/` (65 files)
+- `assets/creativeengineering/textures/mob_effect/magic_resistance.png`
+- `assets/dragonloot/textures/item/dragon_scale.png`
+- `assets/kubejs/lang/en_us.json`
+- `assets/kubejs/textures/block/example_block.png`
+- `assets/kubejs/textures/item/example_item.png`
+- `assets/lightmanscurrency/textures/item/coin_copper.png`
+- `assets/lightmanscurrency/textures/item/coin_diamond.png`
+- `assets/lightmanscurrency/textures/item/coin_emerald.png`
+- `assets/lightmanscurrency/textures/item/coin_gold.png`
+- `assets/lightmanscurrency/textures/item/coin_iron.png`
+- `assets/lightmanscurrency/textures/item/coin_netherite.png`
+- `assets/minecraft/texts/minecraftsplashes.txt`
+- `assets/minecraft/texts/splashes.txt`
+- `assets/nock_enough_arrows/textures/item/redstone_torch_arrow.png`
+- `assets/nock_enough_arrows/textures/item/soul_torch_arrow.png`
+- `assets/pneumaticcraft/lang/en_us.json`
+- `assets/pneumaticcraft/textures/block/compressed_iron_block.png`
+- `assets/ponderjs_generated/lang/en_us.json`
+- `assets/supplementaries/blockstates/speaker_block.json`
+- `assets/supplementaries/models/block/speaker_block.json`
+- `assets/supplementaries/models/custom/speaker.json`
+- `assets/vintageimprovements/textures/item/aluminum_spring.png`
+- `assets/vintageimprovements/textures/item/constantan_spring.png`
+- `assets/vintageimprovements/textures/item/small_aluminum_spring.png`
+- `assets/vintageimprovements/textures/item/small_constantan_spring.png`
+- `client_scripts/armor_effects_tooltip.js`
+- `client_scripts/fluid_jei.js`
+- `client_scripts/jeichanges.js`
+- `client_scripts/namechanges.js`
+- `client_scripts/potion_buckets.js`
+- `client_scripts/texture_tool.js`
+- `client_scripts/tool_effects_tooltip.js`
+- `client_scripts/tooltips.js`
+- `config/client.properties`
+- `config/common.properties`
+- `config/dev.properties`
+- `generation_scripts/sawmill.js`
+- `generation_scripts/recipes/sawmill/` (211 files)
+- `generation_scripts/worldgen/` (9 files)
+- `generation_scripts/worldgen/biome_baselines/minecraft__overworld.json`
+- `generation_scripts/worldgen/biome_baselines/minecraft__the_end.json`
+- `generation_scripts/worldgen/biome_baselines/minecraft__the_nether.json`
+- `recipes/food/bonemeal_broth.json`
+- `recipes/recycle/sawmill_recycle_door.json`
+- `recipes/recycle/sawmill_recycle_slab.json`
+- `recipes/recycle/sawmill_recycle_stairs.json`
+- `server_scripts/_lib/` (17 files)
+- `server_scripts/cooking/chocolate.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/cooking/cultivated_meat.js`
+- `server_scripts/cooking/golden.js`
+- `server_scripts/economy/coin.js`
+- `server_scripts/economy/trades.js`
+- `server_scripts/engineering/` (24 files)
+- `server_scripts/equipment/archery.js`
+- `server_scripts/equipment/bullets.js`
+- `server_scripts/equipment/dragon_autorepair.js`
+- `server_scripts/equipment/end_gear.js`
+- `server_scripts/equipment/shield.js`
+- `server_scripts/equipment/tipped_arrows.js`
+- `server_scripts/loot/` (10 files)
+- `server_scripts/magic/` (9 files)
+- `server_scripts/metal/metal_base_materials.js`
+- `server_scripts/metal/metal_building.js`
+- `server_scripts/metal/misc_metal_crafts.js`
+- `server_scripts/other/dead_recipe_removal.js`
+- `server_scripts/other/harvest.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/tags/` (10 files)
+- `server_scripts/wood/ash.js`
+- `server_scripts/wood/bark.js`
+- `server_scripts/wood/sawdust.js`
+- `server_scripts/wood/wood_types.js`
+- `server_scripts/worldgen/biome_merges.js`
+- `server_scripts/worldgen/biome_overrides.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/fluid_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/_lib/removed_items.js`
+- `startup_scripts/changes/transition_items.js`
+- `startup_scripts/cooking/potions.js`
+- `startup_scripts/func/` (10 files)
+- `startup_scripts/items/` (13 files)
+- `startup_scripts/magic/magic_resistance.js`
+- `startup_scripts/todo/create_ie_dict_additions.txt`
+- `startup_scripts/todo/not_in_dict.txt`
+- `startup_scripts/todo/recipes_to_remove.txt`
+- `startup_scripts/todo/remove_list.txt`
+
+</details>
+
+<details><summary>config/: 305 added, 0 changed, 0 removed</summary>
+
+*added (305)*
+
+- `/` (140 files)
+- `Advancedperipherals/general.toml`
+- `Advancedperipherals/metaphysics.toml`
+- `Advancedperipherals/peripherals.toml`
+- `Advancedperipherals/world.toml`
+- `YungsExtras/README.txt`
+- `YungsExtras/forge-1_19/README.txt`
+- `YungsExtras/forge-1_19/wishing_wells.json`
+- `ae2/client.json`
+- `ae2/common.json`
+- `alexsmobs/` (88 files)
+- `better_beacons/better_beacons-common.toml`
+- `betterdeserttemples/README.txt`
+- `betterdeserttemples/forge-1_19/README.txt`
+- `betterdeserttemples/forge-1_19/armorstands.json`
+- `betterdeserttemples/forge-1_19/itemframes.json`
+- `betterfortresses/README.txt`
+- `betterfortresses/forge-1_19/README.txt`
+- `betterfortresses/forge-1_19/itemframes.json`
+- `betterstrongholds/README.txt`
+- `betterstrongholds/forge-1_19/README.txt`
+- `betterstrongholds/forge-1_19/armorstands.json`
+- `betterstrongholds/forge-1_19/itemframes.json`
+- `betterstrongholds/forge-1_19/ores.json`
+- `betterstrongholds/forge-1_19/rareblocks.json`
+- `chunky/config.json`
+- `ftbquests/quests/chapter_groups.snbt`
+- `ftbquests/quests/data.snbt`
+- `ftbquests/quests/chapters/` (10 files)
+- `ftbquests/quests/reward_tables/` (12 files)
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `lightmanscurrency/MasterCoinList.json`
+- `lightmanscurrency/PersistentTraders.json`
+- `oreexcavation/block_groups.json`
+- `oreexcavation/shapes.json`
+- `oreexcavation/tool_overrides.json`
+- `pneumaticcraft/MicromissileDefaults.cfg`
+- `pneumaticcraft/PneumaticArmorHUDLayout.cfg`
+- `pneumaticcraft/ProgrammingPuzzleBlacklist.cfg`
+- `pneumaticcraft/thirdparty.cfg`
+- `sereneseasons/fertility.toml`
+- `sereneseasons/seasons.toml`
+- `towns_and_towers/structure_enable_or_disable.json5`
+- `towns_and_towers/structure_rarity.json5`
+- `towns_and_towers/resources/t_and_t_waystones_patch_1.19.2.zip`
+- `trades/lightmanscurrency/custom_banker_trades.json`
+- `trades/lightmanscurrency/custom_cashier_trades.json`
+- `trades/lightmanscurrency/custom_wandering_trader_trades.json`
+- `vinery/config.json5`
+- `waila/blacklist.json5`
+- `waila/debug.json5`
+- `waila/plugin_toggle.json5`
+- `waila/waila_plugins.json5`
+- `waila/extra/energy_blacklist.json5`
+- `waila/extra/fluid_blacklist.json5`
+- `waila/extra/item_blacklist.json5`
+- `waila/extra/progress_blacklist.json5`
+- `worldedit/worldedit.properties`
+
+</details>
+
+defaultconfigs/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `brickhopper-server.toml`
+
+resourcepacks/: 27 added, 0 changed, 0 removed:
+
+*added (27)*
+
+- `/` (27 files)
+
+shaderpacks/: 16 added, 0 changed, 0 removed:
+
+*added (16)*
+
+- `/` (14 files)
+- `presets/BSL_v8.2.01-custom-high.txt`
+- `presets/ComplementaryReimagined_r1.4-custom.txt`
+
+### Removals
+
+None.
+
