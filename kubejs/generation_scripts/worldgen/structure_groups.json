@@ -475,7 +475,7 @@
     "ocean_ruins": {
       "note": "Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, vanilla shipwrecks, the T&T wreckage.",
       "placement": {
-        "spacing": 16,
+        "spacing": 6,
         "separation": 2,
         "salt": 541836770
       },

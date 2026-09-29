@@ -755,10 +755,10 @@
         for (var i = 0; i < parts.length; i++) if (parts[i].old !== null) total += parts[i].old
         if (total <= 0) total = 1
         var qs = []
-        for (i = 0; i < parts.length; i++) qs.push(parts[i].q)
+        for (var i = 0; i < parts.length; i++) qs.push(parts[i].q)
         var iw = integerWeights(qs, total)
         var out = []
-        for (i = 0; i < parts.length; i++) {
+        for (var i = 0; i < parts.length; i++) {
             if (!(parts[i].q > 0) && parts[i].old === null) continue  // (existing weight-0 entries stay: Luck)
             var e = parts[i].entry
             var ref = parts[i].old !== null ? parts[i].old : parts[i].qualityRef
@@ -826,7 +826,7 @@
         var names = {}
         for (var i = 0; i < pools.length; i++) if (pools[i].name) names[pools[i].name] = true
         var added = 0
-        for (i = 0; i < op.pools.length; i++) {
+        for (var i = 0; i < op.pools.length; i++) {
             var pa = op.pools[i]
             if (pa.pool.name && names[pa.pool.name]) continue
             pools.push(copy(pa.pool))
@@ -863,7 +863,7 @@
                 var parts = []
                 var total = 0
                 for (var j = 0; j < entries.length; j++) total += weightOf(entries[j])
-                for (j = 0; j < entries.length; j++) parts.push({ entry: entries[j], q: (1 - ad.share) * weightOf(entries[j]) / total, old: weightOf(entries[j]) })
+                for (var j = 0; j < entries.length; j++) parts.push({ entry: entries[j], q: (1 - ad.share) * weightOf(entries[j]) / total, old: weightOf(entries[j]) })
                 parts.push({ entry: ne, q: ad.share, old: null })
                 setShares(pool, parts)
             }
@@ -913,11 +913,11 @@
         }
 
         var total = 0
-        for (k = 0; k < entries.length; k++) total += weightOf(entries[k])
+        for (var k = 0; k < entries.length; k++) total += weightOf(entries[k])
         var byIndex = {}
-        for (k = 0; k < plans.length; k++) byIndex[plans[k].index] = plans[k]
+        for (var k = 0; k < plans.length; k++) byIndex[plans[k].index] = plans[k]
         var parts = []
-        for (k = 0; k < entries.length; k++) {
+        for (var k = 0; k < entries.length; k++) {
             var ent = entries[k]
             var w = weightOf(ent)
             var p = w / total
@@ -928,15 +928,15 @@
             }
             // several packed forms of one loose item share its split evenly
             var r = 0
-            for (m = 0; m < pl.use.length; m++) r += pl.use[m].rate
+            for (var m = 0; m < pl.use.length; m++) r += pl.use[m].rate
             r = Math.min(r / pl.use.length, MAX_PACK_RATE)
             parts.push({ entry: ent, q: p * (1 - r), old: w })
-            for (m = 0; m < pl.use.length; m++) {
+            for (var m = 0; m < pl.use.length; m++) {
                 var pair = pl.use[m].pair
                 var max = pair.max || Math.max(1, Math.min(3, Math.round(maxCount(ent) / 4)))
                 var norm = 0
                 for (var b = 1; b <= max; b++) norm += Math.pow(0.5, b - 1)
-                for (b = 1; b <= max; b++) {
+                for (var b = 1; b <= max; b++) {
                     parts.push({
                         entry: itemEntry(pair.packed, b, null, ent.conditions),
                         q: p * r / pl.use.length * Math.pow(0.5, b - 1) / norm,
@@ -970,7 +970,7 @@
                 if (entryType(e) === 'minecraft:item' && e.name != null && anyMatch(cp.anchors, normId(e.name))) anchorW += weightOf(e)
             }
             var poolW = 0
-            for (k = 0; k < entries.length; k++) poolW += weightOf(entries[k])
+            for (var k = 0; k < entries.length; k++) poolW += weightOf(entries[k])
             // no anchor, or the anchor IS the pool (a guaranteed golden apple): adding would dilute the guarantee
             if (anchorW <= 0 || anchorW >= poolW) continue
             extra.push({ cp: cp, w: cp.rate * anchorW })
@@ -978,10 +978,10 @@
         }
         if (!extra.length) return false
         var total = 0
-        for (k = 0; k < entries.length; k++) total += weightOf(entries[k])
+        for (var k = 0; k < entries.length; k++) total += weightOf(entries[k])
         var parts = []
-        for (k = 0; k < entries.length; k++) parts.push({ entry: entries[k], q: weightOf(entries[k]) / total, old: weightOf(entries[k]) })
-        for (i = 0; i < extra.length; i++) {
+        for (var k = 0; k < entries.length; k++) parts.push({ entry: entries[k], q: weightOf(entries[k]) / total, old: weightOf(entries[k]) })
+        for (var i = 0; i < extra.length; i++) {
             parts.push({ entry: itemEntry(extra[i].cp.item, extra[i].cp.count, extra[i].cp.nbt, null), q: extra[i].w / total, old: null })
             T.stats.companions++
             noteAdded(table, extra[i].cp.item)

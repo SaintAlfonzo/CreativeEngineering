@@ -530,24 +530,6 @@ Delete on the client (2, also in removals_client.txt):
 - `mods/creativeengineering-1.0.0.jar`
 - `mods/themissingvillages-3.0.0-1.19.2-beta.jar`
 
-<!-- deploy:1.0.2 -->
-## 1.0.2 - 2026-09-28 17:49
-
-- Minecraft 1.19.2, Forge 43.3.9
-- Commit: d0d572c + 5 uncommitted file(s)
-- Since: 1.0.1
-- Contents: 338 server+client mods, 43 client-only mods, 27 resource pack files, 16 shader pack files
-- Built with warnings:
-  - 5 uncommitted change(s) in shipped folders (commit d0d572c + working tree)
-
-### Changes
-
-No file changes since the previous version.
-
-### Removals
-
-None.
-
 <!-- deploy:1.0.0 -->
 ## 1.0.0 - 2026-09-26 15:39
 
