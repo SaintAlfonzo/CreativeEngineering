@@ -128,3 +128,14 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
+// jar_archive/ (git-ignored) keeps one jar per mod_version so released versions survive `gradlew clean`.
+// A build only adds a version that isn't there yet, so dev rebuilds never replace a released jar;
+// tools/build_deploy.py stores the jar it actually ships. Copying into ../mods stays manual.
+def archiveJar = tasks.register('archiveJar', Copy) {
+    dependsOn 'reobfJar'
+    from tasks.named('jar', Jar).flatMap { it.archiveFile }
+    into "${projectDir}/jar_archive"
+    eachFile { if (new File("${projectDir}/jar_archive", it.name).exists()) it.exclude() }
+}
+tasks.named('build').configure { finalizedBy archiveJar }

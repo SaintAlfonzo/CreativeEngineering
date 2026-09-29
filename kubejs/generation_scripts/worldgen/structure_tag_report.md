@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-09-28 04:42:57 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-09-29 02:20:56 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Groups
 
@@ -151,20 +151,20 @@ Grid: spacing 16, separation 10, salt 1261620025. Members never start closer tha
 
 Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, vanilla shipwrecks, the T&T wreckage.
 
-Grid: spacing 16, separation 2, salt 541836770. Members never start closer than 3 chunks (48 blocks). 10 of 10 members live.
+Grid: spacing 6, separation 2, salt 541836770. Members never start closer than 3 chunks (48 blocks). 10 of 10 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `hopo:underwater_ruins` | 113 | 1 | 16 | `hopo:underwater_ruins` |  |
-| `hopo:underwater_small_ruins` | 513 | 0.6268 | 20 | `hopo:underwater_small_ruins` |  |
-| `hopo:underwater_warm_small_ruins` | 560 | 0.9701 | 16 | `hopo:underwater_warm_small_ruins` |  |
-| `minecraft:ocean_ruin_cold` | 143 | 0.627 | 20 | `minecraft:ocean_ruins` |  |
-| `minecraft:ocean_ruin_warm` | 92 | 0.9743 | 16 | `minecraft:ocean_ruins` |  |
-| `philipsruins:ocean_fortress` | 29 | 0.5047 | 23 | `philipsruins:ocean_fortress_main` |  |
-| `philipsruins:ocean_ruins` | 58 | 0.4946 | 23 | `philipsruins:ocean_ruins` |  |
-| `revamped_shipwrecks:shipwreck` | 258 | 1 | 16 | `revamped_shipwrecks:shipwreck` |  |
-| `revamped_shipwrecks:shipwreck_beached` | 129 | 0.4444 | 24 | `revamped_shipwrecks:shipwreck` |  |
-| `towns_and_towers:wreckage_ocean` | 108 | 0.3243 | 28 | `towns_and_towers:other` |  |
+| `hopo:underwater_ruins` | 113 | 1 | 6 | `hopo:underwater_ruins` |  |
+| `hopo:underwater_small_ruins` | 513 | 0.6268 | 8 | `hopo:underwater_small_ruins` |  |
+| `hopo:underwater_warm_small_ruins` | 560 | 0.9701 | 6 | `hopo:underwater_warm_small_ruins` |  |
+| `minecraft:ocean_ruin_cold` | 143 | 0.627 | 8 | `minecraft:ocean_ruins` |  |
+| `minecraft:ocean_ruin_warm` | 92 | 0.9743 | 6 | `minecraft:ocean_ruins` |  |
+| `philipsruins:ocean_fortress` | 29 | 0.5047 | 8 | `philipsruins:ocean_fortress_main` |  |
+| `philipsruins:ocean_ruins` | 58 | 0.4946 | 9 | `philipsruins:ocean_ruins` |  |
+| `revamped_shipwrecks:shipwreck` | 258 | 1 | 6 | `revamped_shipwrecks:shipwreck` |  |
+| `revamped_shipwrecks:shipwreck_beached` | 129 | 0.4444 | 9 | `revamped_shipwrecks:shipwreck` |  |
+| `towns_and_towers:wreckage_ocean` | 108 | 0.3243 | 11 | `towns_and_towers:other` |  |
 
 ### `ocean_dungeons` -> `creativeengineering:group/ocean_dungeons`
 

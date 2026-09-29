@@ -12,6 +12,8 @@ deploy/
                          (the client always gets the full server mod set: it also runs single-player
                          worlds on its integrated server, so server-only mods must be there too)
     kubejs/ config/ defaultconfigs/                  -> both
+    server/              server-root files: LaunchServer.sh/.bat, perf/ (always-on JFR recording)
+                                                     -> the server folder itself (server only)
     resourcepacks/ shaderpacks/                      -> client; only new or changed packs (all with --full)
     removals_server.txt  removals_client.txt         paths (from the target's root) to delete, if any
 
@@ -21,6 +23,7 @@ What goes where:
   kubejs/, config/,        every file .gitignore doesn't ignore, minus EXCLUDE (kubejs/archive, Forge's
   defaultconfigs/          *.toml.bak backups, ...), plus RUNTIME_INPUTS (ignored dumps that code reads,
                            e.g. the /dumpclimate samples the biome tuner needs at world creation)
+  server/                  the tracked server/ folder, same rules; lands in the server's root folder
   configs_edited/server_config/*   merged into defaultconfigs/ so a new server world starts with the
                            hand-edited serverconfig values (configs_edited wins on a conflict)
   resourcepacks/, shaderpacks/     zips, folder packs (pack.mcmeta) and shader settings files
@@ -67,9 +70,12 @@ HISTORY = os.path.join(DEPLOY, 'history')
 LOG = os.path.join(DEPLOY, 'DEPLOY_LOG.md')
 WORLDGEN = os.path.join(ROOT, 'kubejs', 'generation_scripts', 'worldgen')
 SERVER_CONFIG_EDITS = os.path.join(ROOT, 'configs_edited', 'server_config')
+JAR_ARCHIVE = os.path.join(ROOT, 'patcherMod', 'jar_archive')
 
-# payload folder -> (targets, folder it goes to on the target). Everything the server gets, the client gets
-# too: clients also host single-player worlds, so they need the server-only mods and server configs.
+# payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
+# gets, the client gets too: clients also host single-player worlds, so they need the server-only mods and
+# server configs. The one exception is 'server': launch scripts and the perf/ recording setup of the
+# dedicated server itself, meaningless in a client instance.
 CATEGORIES = {
     'mods': (('server', 'client'), 'mods'),
     'client_mods': (('client',), 'mods'),
@@ -78,8 +84,9 @@ CATEGORIES = {
     'defaultconfigs': (('server', 'client'), 'defaultconfigs'),
     'resourcepacks': (('client',), 'resourcepacks'),
     'shaderpacks': (('client',), 'shaderpacks'),
+    'server': (('server',), ''),
 }
-TREES = ('kubejs', 'config', 'defaultconfigs')
+TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
 # Big, client-only and rarely changed: shipped only when new or changed (unless --full).
 INCREMENTAL = ('resourcepacks', 'shaderpacks')
 # Paths from the instance root, on top of what .gitignore already ignores.
@@ -303,7 +310,7 @@ def installed(snapshot, target):
     for cat, paths in snapshot['files'].items():
         targets, dest = CATEGORIES[cat]
         if target in targets:
-            out.update(f'{dest}/{p}' for p in paths)
+            out.update(f'{dest}/{p}' if dest else p for p in paths)
     return out
 
 
@@ -446,7 +453,10 @@ def render_readme(cur, prev, d, shipped_incremental):
              "`xargs -d '\\n' rm -f < removals_server.txt`" if d['removals']['server'] else
              '2. Nothing to delete.',
              '3. Copy `mods/` into the server\'s `mods/`. Do not copy `client_mods/`.',
-             '4. Copy `kubejs/`, `config/` and `defaultconfigs/` over the server\'s folders.',
+             '4. Copy `kubejs/`, `config/` and `defaultconfigs/` over the server\'s folders.' +
+             (' Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, '
+              '`perf/`); if you changed MEMORY or JAVAPATH in the server\'s LaunchServer script, set them again.'
+              if cur['files'].get('server') else ''),
              '5. Existing world only: `defaultconfigs/` is used only when a world has no serverconfig yet. '
              'Copy any changed `*-server.toml` from it into `<world>/serverconfig/` by hand.',
              '', '## Client', '',
@@ -478,6 +488,18 @@ def write_log(cur, entry):
     body = '\n'.join(entry).rstrip() + '\n\n'
     with open(LOG, 'w', encoding='utf8') as f:
         f.write(head.rstrip() + '\n\n' + body + ''.join(entries))
+
+
+def archive_patchermod(files):
+    """Store the patcherMod jar this version ships in patcherMod/jar_archive/ (git-ignored). The build
+    only adds versions that aren't archived yet, so this is what keeps the released jar there."""
+    for jar, src in files['mods'].items():
+        if re.match(r'creativeengineering-.*\.jar$', jar):
+            dst = os.path.join(JAR_ARCHIVE, jar)
+            if not os.path.isfile(dst) or sha1(dst) != sha1(src):
+                os.makedirs(JAR_ARCHIVE, exist_ok=True)
+                shutil.copy2(src, dst)
+                print(f'archived the shipped {jar} in {os.path.relpath(JAR_ARCHIVE, ROOT)}/')
 
 
 # ── main ─────────────────────────────────────────────────────────────────────
@@ -561,6 +583,7 @@ def main():
         json.dump(cur, f, indent=1, ensure_ascii=False)
         f.write('\n')
     write_log(cur, entry)
+    archive_patchermod(files)
 
     print(f"staged {version} in {os.path.relpath(OUT, ROOT)}/: {len(files['mods'])} mods, "
           f"{len(files['client_mods'])} client mods, {shipped_incremental} resource/shader pack files; "

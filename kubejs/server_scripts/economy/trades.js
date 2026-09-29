@@ -10,6 +10,8 @@ v.chef = 'chefsdelight:delightchef';
 v.cleric = 'minecraft:cleric'
 
 MoreJSEvents.villagerTrades((e) => {
+  // Fires at server start, long after load: re-read the dict, top-level `i` is shared by every server script
+  var i = global.item
 
   // Mechanical Engineer
   e.removeModdedTrades([v.mechanical_engineer], [1, 5])
