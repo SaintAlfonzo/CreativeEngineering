@@ -4,10 +4,10 @@
 
 | Part | Status |
 |---|---|
-| Aging Barrel fermentation page | BUILT (patcherMod 1.0.3), not in `mods/`; **arrow time wrong** (1800 ticks shown, real is about 50, §4) |
-| Apple Press page | BUILT, not in `mods/` |
-| Grape Stomping page | BUILT, not in `mods/` |
-| Wine Aging page | BUILT, not in `mods/` |
+| Aging Barrel fermentation page | BUILT, in `mods/` (patcherMod 1.0.3); **arrow time wrong** (1800 ticks shown, real is about 50, §4) |
+| Apple Press page | BUILT, in `mods/` |
+| Grape Stomping page | BUILT, in `mods/` |
+| Wine Aging page | BUILT, in `mods/` |
 
 - **Files to open:** `development/patcherMod/.../compat/vinery/` (one class per page, `VineryIds` for every id and number).
 - **Knobs:** none of our own. The aging page reads Vinery's `config/vinery/config.json5` (`year_length_in_days`, `years_per_effect_level`).
@@ -92,3 +92,4 @@ Display only. No Vinery behaviour, recipe or config is changed.
 
 - 2026-10-01: built (patcherMod 1.0.3). Not copied to `mods/` because a game instance was running.
 - 2026-10-01: the real barrel time is about 50 ticks, not 1800 (from the decompiled jar); fix open. Full Vinery behaviour reference: [vinery.md](vinery.md).
+- 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.

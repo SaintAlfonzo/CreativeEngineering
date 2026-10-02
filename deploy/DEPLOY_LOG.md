@@ -5,27 +5,34 @@ version before it and which files the other machines must delete. The full file 
 `history/<version>.json`.
 
 <!-- deploy:1.0.3 -->
-## 1.0.3 - 2026-10-01 20:49
+## 1.0.3 - 2026-10-02 15:41
 
 - Minecraft 1.19.2, Forge 43.3.9
-- Commit: 81421be + 67 uncommitted file(s)
+- Commit: ffdda7e + 11 uncommitted file(s)
 - Since: 1.0.2
-- Contents: 340 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
-- Payload: update from 1.0.2: 58 files, 6.4 MB (mods 2, kubejs 44, config 8, server 4)
-- Notes: Exposure 1.9.19 backport (base + Polaroid) replaces Exposure 1.6.0 (new items/configs; 1.6.0 photos and cameras don't carry over); patcherMod 1.0.3
+- Contents: 344 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
+- Payload: update from 1.0.1, config functional: 105 files, 10.4 MB (mods 10, kubejs 76, config 11, server 8)
+- Notes: server catch-up from 1.0.1 (crash fixes, JFR launch scripts) + 1.0.3: exposure backport, camera bags, Vinery JEI, food mods, trash slot, join protection, LC + Cloud Storage map trades via Async Locator; config functional
 - Built with warnings:
-  - 67 uncommitted change(s) in shipped folders (commit 81421be + working tree)
+  - 11 uncommitted change(s) in shipped folders (commit ffdda7e + working tree)
 
 ### Changes
+
+Mods added (4):
+
+- Corn Delight[Forge] 1.0.3-1.19.2 `corn_delight-1.0.3-1.19.2.jar` (both)
+- Farmer's Respite 1.19-2.0 `FarmersRespite-1.19-2.0.jar` (both)
+- More Delight (Forge & Neoforge) 25.07.28-1.19-forge `moredelight-25.07.28-1.19-forge.jar` (both)
+- Mysterious Mountain Lib 1.2.3-1.19.2 `mysterious_mountain_lib-1.2.3-1.19.2.jar` (both)
 
 Mods updated (2):
 
 - creativeengineering: `creativeengineering-1.0.2.jar` -> `creativeengineering-1.0.3.jar`
 - exposure: `exposure-1.19.2-1.6.0-forge.jar` -> `exposureBackport-1.9.19-ce-19.2-01.jar`
 
-<details><summary>kubejs/: 31 added, 13 changed, 235 removed</summary>
+<details><summary>kubejs/: 35 added, 16 changed, 235 removed</summary>
 
-*added (31)*
+*added (35)*
 
 - `assets/creativeengineering/blockstates/beef_culture_block.json`
 - `assets/creativeengineering/blockstates/cod_culture_block.json`
@@ -55,19 +62,26 @@ Mods updated (2):
 - `assets/creativeengineering/textures/block/culture_block/poultry_culture_block.png`
 - `assets/creativeengineering/textures/block/culture_block/rabbit_culture_block.png`
 - `assets/creativeengineering/textures/block/culture_block/salmon_culture_block.png`
+- `assets/displaydelight/lang/en_us.json`
 - `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
 - `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
 - `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
+- `server_scripts/_lib/dump_crafting_audit.js`
+- `server_scripts/_lib/dump_names.js`
+- `server_scripts/equipment/camera_bag.js`
 
-*changed (13)*
+*changed (16)*
 
 - `client_scripts/namechanges.js`
+- `client_scripts/tooltips.js`
 - `generation_scripts/worldgen/biome_config.json`
 - `generation_scripts/worldgen/pool_config.json`
+- `server_scripts/_lib/dump_all.js`
 - `server_scripts/_lib/dump_climate.js`
 - `server_scripts/cooking/canning.js`
 - `server_scripts/cooking/cultivated_meat.js`
 - `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/equipmenttags.js`
 - `server_scripts/tags/storageblocktags.js`
 - `server_scripts/worldgen/structure_overrides.js`
 - `startup_scripts/_lib/item_dict.js`
@@ -97,21 +111,71 @@ Mods updated (2):
 
 </details>
 
-config/: 1 added, 7 changed, 0 removed:
+<details><summary>config/: 3 added, 7 changed, 0 removed, 123 no longer shipped</summary>
 
-*added (1)*
+*added (3)*
 
-- `exposure_polaroid-client.toml`
+- `corn_delight-common.toml`
+- `farmersrespite-common.toml`
+- `mysterious_mountain_lib-common.toml`
 
 *changed (7)*
 
 - `creativeengineering-common.toml`
-- `exposure-client.toml`
 - `exposure-common.toml`
 - `loadingprotection-common.toml`
 - `rare-ice.properties`
 - `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
 - `worldedit/worldedit.properties`
+
+*no longer shipped (player settings, left in place) (123)*
+
+- `/` (81 files)
+- `better_beacons/better_beacons-client.toml`
+- `jei/jei-client.ini`
+- `jei/jei-colors.ini`
+- `jei/jei-debug.ini`
+- `jei/jei-mod-id-format.ini`
+- `jei/world/local/New_World/bookmarks.ini`
+- `jei/world/local/Schematics/bookmarks.ini`
+- `jei/world/local/Workspace/bookmarks.ini`
+- `jei/world/local/WorldA/bookmarks.ini`
+- `jei/world/server/Creative_Engineering_30/bookmarks.ini`
+- `jei/world/server/Creative_Engineering_6768b59c/bookmarks.ini`
+- `jei/world/server/Creative_Engineering_85adfa7b/bookmarks.ini`
+- `jei/world/server/Jayda_and_Elijah_30/bookmarks.ini`
+- `jei/world/server/Minecraft_Server_30/bookmarks.ini`
+- `jei/world/server/Minecraft_Server_85adf6b1/bookmarks.ini`
+- `jei/world/server/Minecraft_Server_85adfa7b/bookmarks.ini`
+- `jei/world/server/Schematics_2_6768b657/bookmarks.ini`
+- `jei/world/server/Schematics_2_85adfa7b/bookmarks.ini`
+- `jei/world/server/Schematics_30/bookmarks.ini`
+- `pneumaticcraft/PneumaticArmorHUDLayout.cfg`
+- `presencefootsteps/userconfig.json`
+- `spyglass-improvements/settings.json`
+- `waila/blacklist.json5`
+- `waila/blacklist.json5_2026.04.25.19.42.11`
+- `waila/blacklist.json_2024.04.05.18.43.03`
+- `waila/debug.json5`
+- `waila/plugin_toggle.json5`
+- `waila/waila.json5`
+- `waila/waila_plugins.json5`
+- `waila/extra/energy_blacklist.json5`
+- `waila/extra/fluid_blacklist.json5`
+- `waila/extra/item_blacklist.json5`
+- `waila/extra/progress_blacklist.json5`
+- `xaero/lib/client.cfg`
+- `xaero/lib/profiles/default.cfg`
+- `xaero/minimap/client.cfg`
+- `xaero/minimap/default_radar_categories_client.json`
+- `xaero/minimap/profiles/default.cfg`
+- `xaero/minimap/profiles/entity_radar_categories/default.cfg.json`
+- `xaero/minimap/profiles/info_display_config/default.cfg.txt`
+- `xaero/world-map/client.cfg`
+- `xaero/world-map/profiles/default.cfg`
+
+</details>
 
 server/: 1 added, 3 changed, 0 removed:
 
@@ -125,10 +189,11 @@ server/: 1 added, 3 changed, 0 removed:
 - `LaunchServer.sh`
 - `perf/README.md`
 
-### Removals (from 1.0.2)
+### Removals (server from 1.0.1, client from 1.0.2)
 
-<details><summary>Delete on the server (237, also in removals_server.txt)</summary>
+<details><summary>Delete on the server (240, also in removals_server.txt)</summary>
 
+- `config/nohostilesaroundcampfire.json5`
 - `kubejs/README.txt`
 - `kubejs/exported/worldgen/climate/minecraft__overworld.json`
 - `kubejs/exported/worldgen/climate/minecraft__the_end.json`
@@ -364,8 +429,10 @@ server/: 1 added, 3 changed, 0 removed:
 - `kubejs/startup_scripts/todo/not_in_dict.txt`
 - `kubejs/startup_scripts/todo/recipes_to_remove.txt`
 - `kubejs/startup_scripts/todo/remove_list.txt`
-- `mods/creativeengineering-1.0.2.jar`
+- `mods/creativeengineering-1.0.1.jar`
 - `mods/exposure-1.19.2-1.6.0-forge.jar`
+- `mods/nohostilesaroundcampfire-1.19.2-5.9.jar`
+- `mods/snowundertrees-1.19.2-1.3.1.jar`
 
 </details>
 
@@ -617,7 +684,7 @@ server/: 1 added, 3 changed, 0 removed:
 - Minecraft 1.19.2, Forge 43.3.9
 - Commit: 81421be + 31 uncommitted file(s)
 - Since: 1.0.1
-- Deployed: server, client 2026-09-30
+- Deployed: client 2026-09-30
 - Contents: 340 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
 - Notes: Crash fixes from external-server logs: thread-safe Level.random (Regrowth RNG crash), No Hostiles Around Campfire removed (spawn-scan hang), DH threads 6->2, Async Locator added, JEI now on server; loot-tuning + villager-trade script fixes; multi-serving cans; compost framework; Bushier Flowers growth/worldgen off (Flower Patch instead, 4 loose -> grown recipe); emu nest (Incubation); Untitled Duck Mod + Fuel Goes Here added
 - Built with warnings:
@@ -741,6 +808,7 @@ Delete on the client (4, also in removals_client.txt):
 - Minecraft 1.19.2, Forge 43.3.9
 - Commit: c566438
 - Since: 1.0.0
+- Deployed: server 2026-09-28 18:00
 - Contents: 338 server+client mods, 43 client-only mods, 27 resource pack files, 16 shader pack files
 
 ### Changes

@@ -16,9 +16,9 @@ writeup explains how the pieces fit and how to prove they work.
 | Loot (census of every loot table by mod, chest-loot tuning catalog + runtime, pre-roll framework: bans, tag groups, boosts, packed-food splits, additions, injection restores, aliases; LootJS-only scripts, mod loot configs) | [loot.md](loot.md) | `LT-` | DEPLOYED, in-game test pending (LT-01, LT-06 passed; LT-14 to LT-27 new); findings 1-7 fixed, 8 (legacy dump) open |
 | Food (1.0.2: `/dumpfood`, 31 food types as `#creativeengineering:food_type/...` tags, canned map, Spice of Life mechanics, Canned Goods parity, tuning design) | [food.md](food.md) | `FO-` | BUILT, restart pending (FO-01 passed; FO-02 to FO-08); tuning system designed, not built (decisions D1-D6); fried egg + cooking oil + egg stacks BUILT (FO-23 to FO-28); egg tag migration TODO |
 | Performance (always-on JFR recording on the server, dump helpers, per-mod HTML report: mods, tick phases, event handlers, busy seconds, allocation, worldgen threads; `perf/report.sh` crash/lag bundle + `ingest_report.py`) | [perf.md](perf.md) | `PF-` | BUILT, ships with the next deploy (PF-01 to PF-12) |
-| Trash slot (pack default screens, per-tier backpack positions, creative support, allContainers switch) | [trashslot.md](trashslot.md) | `TS-` | BUILT (patcherMod 1.0.3), not in `mods/` or deployed (TS-01 to TS-13) |
+| Trash slot (pack default screens, per-tier backpack positions, creative support, allContainers switch) | [trashslot.md](trashslot.md) | `TS-` | BUILT, in `mods/` (patcherMod 1.0.3), not deployed (TS-01 to TS-13) |
 | Deploy pipeline (deployment snapshot, update/install payloads, verify scripts, kubejs file classes, gzipped climate samples) | [deploy.md](deploy.md) | `DP-` | BUILT, offline checks passed; first real update pending (DP-01 to DP-07) |
-| Vinery JEI pages (Aging Barrel fermentation, Apple Press, Grape Stomping, Wine Aging) | [vinery_jei.md](vinery_jei.md) | `VJ-` | BUILT (patcherMod 1.0.3), not in `mods/` (VJ-01 to VJ-10); fermentation time wrong (1800 vs about 50 ticks), fix open |
+| Vinery JEI pages (Aging Barrel fermentation, Apple Press, Grape Stomping, Wine Aging) | [vinery_jei.md](vinery_jei.md) | `VJ-` | BUILT, in `mods/` (patcherMod 1.0.3) (VJ-01 to VJ-10); fermentation time wrong (1800 vs about 50 ticks), fix open |
 | Vinery (behaviour reference from the decompiled 1.3.10 jar: pot, press, barrel, stems, lattice, bushes, vines, leaves, wine aging and effects, worldgen, hopper jams; pack changes; tooltip removals + placeholders) | [vinery.md](vinery.md) | `VN-` | reference, in-game checks pending (VN-01 to VN-20); tooltip placeholders TODO |
 | Food catalog (generated reference: every food's type, hunger, saturation, effects, SoL value, cans, recipe chains, canned parity) | [food_catalog.md](food_catalog.md) | none | reference, regenerate with `python3 tools/food_catalog.py` after `/dumpfood` |
 | Exposure cameras and photographs (our 1.9.19 backport in one jar: base mod, Polaroid instant camera, Expanded lenses/filters/palette films; build-time tag merge; Catalog on hold) | [exposure.md](exposure.md) | `EX-` | DEPLOYED (in `mods/`, ships with 1.0.3), in-game test pending (EX-11, EX-17 passed); EX-50 old-world check before deploy |
@@ -30,7 +30,7 @@ writeup explains how the pieces fit and how to prove they work.
 
 | Release | File | Status |
 |---|---|---|
-| 1.0.3: deploy install/update modes, server performance report, render desync, item-loss monitor, trash slot, join protection | [plan_1.0.3.md](plan_1.0.3.md) | PLANNED |
+| 1.0.3: deploy install/update modes, server performance report, render desync, item-loss monitor, trash slot, join protection; plus everything else added during development (section 0.1) | [plan_1.0.3.md](plan_1.0.3.md) | IN PROGRESS, not deployed |
 
 ## Backlog: the rest of the pack, one small chunk at a time
 

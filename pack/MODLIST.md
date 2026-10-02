@@ -7,7 +7,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 - Java 17
 - JVM args: `-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dmixin.debug.verbose=true -Dmixin.debug.export=true`
 
-## Mods (382: 327 both, 42 client, 13 server)
+## Mods (386: 331 both, 42 client, 13 server)
 
 | Side | Mod | Mod id | Version | File | Source |
 |---|---|---|---|---|---|
@@ -85,6 +85,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | client | Controlling | `controlling` | 10.0+7 | `Controlling-forge-1.19.2-10.0+7.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/controlling/files/4050343) [MR](https://modrinth.com/mod/controlling/version/cV6fmL90) |
 | both | Cooking for Blockheads | `cookingforblockheads` | cookingforblockheads-forge-1.19.2-13.3.4.jar | `cookingforblockheads-forge-1.19.2-13.3.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/cooking-for-blockheads/files/4942589) |
 | both | Copper Drops | `copperdrops` | Copper Drops 1.1 - 1.19-1.21+ | `CopperDrops-1.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/copper-drops/files/4889063) |
+| both | Corn Delight[Forge] | `corn_delight` | 1.0.3-1.19.2 | `corn_delight-1.0.3-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/corn-delight/files/4637286) [MR](https://modrinth.com/mod/corn-delight/version/yOYdkPX6) |
 | both | Corpse | `corpse` | [FORGE][1.19.2] Corpse 1.19.2-1.0.17 | `corpse-forge-1.19.2-1.0.17.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/corpse/files/5816905) |
 | both | Corpse x Cosmetic Armor Reworked Compat | `cosmeticcorpsecompat` | 1.0.0 | `cosmeticcorpsecompat-1.19.x-1.20.x-Forge-1.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/corpse-x-cosmetic-armor-reworked-compat/files/6637829) [MR](https://modrinth.com/mod/corpse-x-cosmetic-armor-reworked-compat/version/IUCHHmk5) |
 | both | Corpse x Curios API Compat | `corpsecurioscompat` | 1.20.4 | `corpsecurioscompat-1.18.x-1.20.x-Forge-2.2.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/corpse-x-curios-api-compat/files/6327919) [MR](https://modrinth.com/mod/corpse-x-curios-api-compat/version/svYuXRgL) |
@@ -172,6 +173,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Fairy Lights | `fairylights` | fairylights-6.0.1-1.19.2 | `fairylights-6.0.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fairy-lights/files/4961791) |
 | both | Fantasy's Furniture | `fantasyfurniture` | 6.7.0 | `fantasyfurniture-1.19.2-6.7.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fantasys-furniture/files/4183177) [MR](https://modrinth.com/mod/fantasy-furniture/version/QewqRA2e) |
 | both | Farmer's Delight | `farmersdelight` | 1.19.2-1.2.4 | `FarmersDelight-1.19.2-1.2.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-delight/files/5051241) [MR](https://modrinth.com/mod/farmers-delight/version/rFTKVUtq) |
+| both | Farmer's Respite | `farmersrespite` | 1.19-2.0 | `FarmersRespite-1.19-2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-respite/files/4081312) [MR](https://modrinth.com/mod/farmers-respite/version/4eMRgi1r) |
 | both | Farmers Structures | `farmers_structures` | FarmersStructures-1.0.0-1.19.2.jar | `FarmersStructures-1.0.0-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-structures/files/5656711) |
 | both | Fast Leaf Decay | `fastleafdecay` | FastLeafDecay-30.jar | `FastLeafDecay-30.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fast-leaf-decay/files/3894512) |
 | both | FastFurnace | `fastfurnace` | FastFurnace-1.19.2-7.0.0.jar | `FastFurnace-1.19.2-7.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fastfurnace/files/4028348) |
@@ -261,6 +263,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Momentum Protection Enchantment [Forge] | `momentumprotection` | 1.19.2-0.0.1 | `momentumprotection-1.19.2-0.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/momentum-protection-forge/files/4544432) |
 | both | Monobank | `monobank` | 1.1.3 | `monobank-1.19.2-1.1.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/monobank/files/4631081) [MR](https://modrinth.com/mod/monobank/version/FjZpXKnA) |
 | both | Moonlight Lib | `moonlight` | 1.19.2-2.3.7 | `moonlight-1.19.2-2.3.7-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/selene/files/5567102) [MR](https://modrinth.com/mod/moonlight/version/4R7I44b3) |
+| both | More Delight (Forge & Neoforge) | `moredelight` | 25.07.28-1.19-forge | `moredelight-25.07.28-1.19-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/more-delight-forge/files/6822039) [MR](https://modrinth.com/mod/more-delight/version/Zidu1lX5) |
 | both | More Immersive Wires | `more_immersive_wires` | 1.19-1.1.3 | `more-immersive-wires-1.19.2-1.1.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/more-immersive-wires/files/5002289) [MR](https://modrinth.com/mod/more-immersive-wires/version/j2uMfiXV) |
 | both | More Mob Variants | `moremobvariants` | 1.3.0 | `moremobvariants-forge+1.19.2-1.3.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/more-mob-variants/files/5280608) [MR](https://modrinth.com/mod/more-mob-variants/version/uMKJZZE3) |
 | both | MoreJS | `morejs` | 1.19.2-0.3.0+forge | `morejs-forge-1.19.2-0.3.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/morejs/files/5080707) [MR](https://modrinth.com/mod/morejs/version/OPrF3dPN) |
@@ -268,6 +271,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | client | Mouse Tweaks | `mousetweaks` | 1.19-2.23-forge | `MouseTweaks-forge-mc1.19-2.23.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/mouse-tweaks/files/3871353) [MR](https://modrinth.com/mod/mouse-tweaks/version/Un7oJEL8) |
 | both | Moyai | `moyai` | 1.19.2-2.0.1 | `moyai-1.19.2-2.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/moyai/files/4545978) [MR](https://modrinth.com/mod/moyai/version/c1iV7XZi) |
 | both | Myrtrees | `myrtrees` | myrtrees-forge-1.2.0-build.32.jar | `myrtrees-forge-1.2.0-build.32.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/myrtrees/files/4371268) |
+| both | Mysterious Mountain Lib | `mysterious_mountain_lib` | 1.2.3-1.19.2 | `mysterious_mountain_lib-1.2.3-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/mysterious-mountain-lib/files/4547401) [MR](https://modrinth.com/mod/mmlib/version/Oe3zPknB) |
 | both | Mystical Oak Tree | `mysticaloaktree` | mysticaloaktree-1.19.2-1.10.jar | `mysticaloaktree-1.19.2-1.10.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/mystical-oak-tree/files/4654181) |
 | both | Nametag Crafting | `mr_name_tagcraftingrecipemod` | 1.0+mod | `name-tag-crafting-recipe-mod-1.0 (3).jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/nametag-crafting/files/6807242) [MR](https://modrinth.com/mod/name-tag-crafting-recipe-mod/version/nZX0ieOB) |
 | both | Nature's Compass | `naturescompass` | 1.19.2-1.10.0-forge | `NaturesCompass-1.19.2-1.10.0-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/natures-compass/files/4118390) [MR](https://modrinth.com/mod/natures-compass/version/N4ONofeB) |

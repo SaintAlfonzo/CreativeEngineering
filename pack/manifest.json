@@ -1069,6 +1069,29 @@
       }
     },
     {
+      "file": "FarmersRespite-1.19-2.0.jar",
+      "name": "Farmer's Respite",
+      "version": "1.19-2.0",
+      "sha1": "df109f2a9ea5a051a29cd3d393d1e098dc00a6fc",
+      "modId": "farmersrespite",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 551453,
+          "fileId": 4081312,
+          "slug": "farmers-respite",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/farmers-respite/files/4081312"
+        },
+        "modrinth": {
+          "projectId": "fasdaXH5",
+          "versionId": "4eMRgi1r",
+          "slug": "farmers-respite",
+          "url": "https://modrinth.com/mod/farmers-respite/version/4eMRgi1r",
+          "download": "https://cdn.modrinth.com/data/fasdaXH5/versions/4eMRgi1r/FarmersRespite-1.19-2.0.jar"
+        }
+      }
+    },
+    {
       "file": "FarmersStructures-1.0.0-1.19.2.jar",
       "name": "Farmers Structures",
       "version": "FarmersStructures-1.0.0-1.19.2.jar",
@@ -3706,6 +3729,29 @@
       }
     },
     {
+      "file": "corn_delight-1.0.3-1.19.2.jar",
+      "name": "Corn Delight[Forge]",
+      "version": "1.0.3-1.19.2",
+      "sha1": "9f67fd87e43ab44d912ae148ca5dc1e70d68cccd",
+      "modId": "corn_delight",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 577805,
+          "fileId": 4637286,
+          "slug": "corn-delight",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/corn-delight/files/4637286"
+        },
+        "modrinth": {
+          "projectId": "uxLAKWU8",
+          "versionId": "yOYdkPX6",
+          "slug": "corn-delight",
+          "url": "https://modrinth.com/mod/corn-delight/version/yOYdkPX6",
+          "download": "https://cdn.modrinth.com/data/uxLAKWU8/versions/yOYdkPX6/corn_delight-1.0.3-1.19.2.jar"
+        }
+      }
+    },
+    {
       "file": "corpse-forge-1.19.2-1.0.17.jar",
       "name": "Corpse",
       "version": "[FORGE][1.19.2] Corpse 1.19.2-1.0.17",
@@ -4295,7 +4341,7 @@
       "file": "creativeengineering-1.0.3.jar",
       "name": "creativeengineering-1.0.3.jar",
       "version": "Unknown",
-      "sha1": "3918c512ab905cf3768568c89cfcc128b6d8a273",
+      "sha1": "fdaf07de2ae8ab06689d43da2f70ed002dd7759c",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -6163,6 +6209,29 @@
       }
     },
     {
+      "file": "moredelight-25.07.28-1.19-forge.jar",
+      "name": "More Delight (Forge & Neoforge)",
+      "version": "25.07.28-1.19-forge",
+      "sha1": "b63e367bd6ebb671cc03e1d3fbdbdb946d2c1cfa",
+      "modId": "moredelight",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 977515,
+          "fileId": 6822039,
+          "slug": "more-delight-forge",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/more-delight-forge/files/6822039"
+        },
+        "modrinth": {
+          "projectId": "znHQQtuU",
+          "versionId": "Zidu1lX5",
+          "slug": "more-delight",
+          "url": "https://modrinth.com/mod/more-delight/version/Zidu1lX5",
+          "download": "https://cdn.modrinth.com/data/znHQQtuU/versions/Zidu1lX5/moredelight-25.07.28-1.19-forge.jar"
+        }
+      }
+    },
+    {
       "file": "morejs-forge-1.19.2-0.3.0.jar",
       "name": "MoreJS",
       "version": "1.19.2-0.3.0+forge",
@@ -6267,6 +6336,29 @@
           "fileId": 4371268,
           "slug": "myrtrees",
           "url": "https://www.curseforge.com/minecraft/mc-mods/myrtrees/files/4371268"
+        }
+      }
+    },
+    {
+      "file": "mysterious_mountain_lib-1.2.3-1.19.2.jar",
+      "name": "Mysterious Mountain Lib",
+      "version": "1.2.3-1.19.2",
+      "sha1": "fdcb28d506a60f5e85c1bddd0ec4dd8c9f45b1f5",
+      "modId": "mysterious_mountain_lib",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 368098,
+          "fileId": 4547401,
+          "slug": "mysterious-mountain-lib",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/mysterious-mountain-lib/files/4547401"
+        },
+        "modrinth": {
+          "projectId": "ntMyNH8c",
+          "versionId": "Oe3zPknB",
+          "slug": "mmlib",
+          "url": "https://modrinth.com/mod/mmlib/version/Oe3zPknB",
+          "download": "https://cdn.modrinth.com/data/ntMyNH8c/versions/Oe3zPknB/mysterious_mountain_lib-1.2.3-1.19.2.jar"
         }
       }
     },

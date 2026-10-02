@@ -4,7 +4,7 @@
 
 | Part | Status |
 |---|---|
-| Pack default screens (`[trash_slot] enabledScreens`, switched on once per client) | BUILT (patcherMod 1.0.3), not in `mods/` yet |
+| Pack default screens (`[trash_slot] enabledScreens`, switched on once per client) | BUILT, in `mods/` (patcherMod 1.0.3), not deployed |
 | `allContainers` switch for every other container (off) + `excludedScreens` | BUILT, off by default |
 | Starting positions per screen (`positions`) | BUILT |
 | Sophisticated Backpacks: one position and on/off per tier | BUILT |
@@ -110,3 +110,4 @@ shared one spot even though each tier has a different panel size, and it never a
 ## 8. History
 
 - 2026-09-30: investigated (plan_1.0.3 section 5.5), then built; compiled as patcherMod 1.0.3 (in `development/patcherMod/build/libs/` and `jar_archive/`, not in `mods/`, not deployed).
+- 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
