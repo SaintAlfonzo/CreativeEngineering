@@ -4,6 +4,104 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.0.2 -->
+## 1.0.2 - 2026-09-29 20:56
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: c6a3433 + 15 uncommitted file(s)
+- Since: 1.0.1
+- Contents: 338 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
+- Notes: Crash fixes from external-server logs: thread-safe Level.random (Regrowth RNG crash), No Hostiles Around Campfire removed (spawn-scan hang), DH threads 6->2, Async Locator added, JEI now on server; loot-tuning + villager-trade script fixes; multi-serving cans (untested)
+- Built with warnings:
+  - 15 uncommitted change(s) in shipped folders (commit c6a3433 + working tree)
+
+### Changes
+
+Mods added (1):
+
+- Async Locator 1.19.2-1.3.0 `async-locator-forge-1.19.2-1.3.0.jar` (server)
+
+Mods updated (1):
+
+- creativeengineering: `creativeengineering-1.0.1.jar` -> `creativeengineering-1.0.2.jar`
+
+Mods removed (2):
+
+- No Hostiles Around Campfire 1.19.2-5.9-fabric+forge `nohostilesaroundcampfire-1.19.2-5.9.jar` (was both)
+- Snow Under Trees v1.3.1 `snowundertrees-1.19.2-1.3.1.jar` (was both)
+
+Mods whose side changed (1):
+
+- Just Enough Items (JEI) `jei-1.19.2-forge-11.8.1.1034.jar`: client -> both
+
+kubejs/: 7 added, 12 changed, 0 removed:
+
+*added (7)*
+
+- `generation_scripts/food/can_servings.json`
+- `generation_scripts/food/food_types.json`
+- `server_scripts/_lib/dump_food.js`
+- `server_scripts/cooking/canning.js`
+- `server_scripts/tags/cantags.js`
+- `server_scripts/tags/foodtypetags.js`
+- `startup_scripts/items/cans.js`
+
+*changed (12)*
+
+- `exported/worldgen/climate/minecraft__overworld.json`
+- `exported/worldgen/climate/minecraft__the_end.json`
+- `exported/worldgen/climate/minecraft__the_nether.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/pool_tag_report.md`
+- `generation_scripts/worldgen/structure_groups.json`
+- `generation_scripts/worldgen/structure_tag_report.md`
+- `server_scripts/economy/trades.js`
+- `server_scripts/loot/05_tuning.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/func/item_physics.js`
+- `startup_scripts/func/neoCraftHelper.js`
+
+config/: 0 added, 4 changed, 1 removed:
+
+*changed (4)*
+
+- `DistantHorizons.toml`
+- `rare-ice.properties`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+*removed (1)*
+
+- `nohostilesaroundcampfire.json5`
+
+server/: 7 added, 0 changed, 0 removed:
+
+*added (7)*
+
+- `LaunchServer.bat`
+- `LaunchServer.sh`
+- `perf/README.md`
+- `perf/ce-server.jfc`
+- `perf/dump.bat`
+- `perf/dump.ps1`
+- `perf/dump.sh`
+
+### Removals
+
+Delete on the server (4, also in removals_server.txt):
+
+- `config/nohostilesaroundcampfire.json5`
+- `mods/creativeengineering-1.0.1.jar`
+- `mods/nohostilesaroundcampfire-1.19.2-5.9.jar`
+- `mods/snowundertrees-1.19.2-1.3.1.jar`
+
+Delete on the client (4, also in removals_client.txt):
+
+- `config/nohostilesaroundcampfire.json5`
+- `mods/creativeengineering-1.0.1.jar`
+- `mods/nohostilesaroundcampfire-1.19.2-5.9.jar`
+- `mods/snowundertrees-1.19.2-1.3.1.jar`
+
 <!-- deploy:1.0.1 -->
 ## 1.0.1 - 2026-09-28 17:50
 

@@ -45,5 +45,6 @@
   "creativeengineering.surface.tier.snow": "Snow",
   "creativeengineering.surface.tier.sticky": "Sticky",
   "creativeengineering.surface.tier.spongy": "Spongy",
-  "creativeengineering.surface.tier.very_sticky": "Very Sticky"
+  "creativeengineering.surface.tier.very_sticky": "Very Sticky",
+  "creativeengineering.can.servings": "Servings: %s / %s"
 }

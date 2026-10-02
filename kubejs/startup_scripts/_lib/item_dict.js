@@ -12284,6 +12284,59 @@ i.t_food_canned               = '#creativeengineering:food_type/canned';
 i.t_canned_source             = '#creativeengineering:canned_source';
 // ===== end food mods (generated) =====
 
+// ===== can tags (server_scripts/tags/cantags.js, patcherMod food.CanServings) =====
+i.t_cans                        = '#creativeengineering:cans';
+i.t_can_servings                = '#creativeengineering:cans/servings'; // + '/<n>' = cans holding n servings
+
+// ===== canning (server_scripts/cooking/canning.js, startup_scripts/items/cans.js) =====
+// additives
+i.salt                          = '#forge:salt';
+// ingredient groups (whole + sliced, or colours/varieties canned into one can)
+i.any_cabbage                   = '#forge:crops/cabbage';           // cabbage, cabbage leaf
+i.any_potato                    = '#forge:vegetables/potato';       // potato, potato slices
+i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow
+i.any_grape                     = '#creativeengineering:canning/grapes';        // red, white, savanna, taiga (tags/cantags.js)
+i.any_jungle_grape              = '#creativeengineering:canning/jungle_grapes'; // jungle red, white (tags/cantags.js)
+// raw veggie cans (2 servings)
+i.canned_beetroot               = 'creativeengineering:canned_beetroot';
+i.canned_cabbage                = 'creativeengineering:canned_cabbage';
+i.canned_carrot                 = 'creativeengineering:canned_carrot';
+i.canned_onion                  = 'creativeengineering:canned_onion';
+i.canned_potato                 = 'creativeengineering:canned_potato';
+i.canned_tomato                 = 'creativeengineering:canned_tomato';
+i.canned_bell_pepper            = 'creativeengineering:canned_bell_pepper';
+i.canned_cactus                 = 'creativeengineering:canned_cactus';
+i.canned_gongylidia             = 'creativeengineering:canned_gongylidia';
+i.canned_mint                   = 'creativeengineering:canned_mint';
+i.canned_pumpkin                = 'creativeengineering:canned_pumpkin';
+// raw fruit cans (3 servings)
+i.canned_acorn                  = 'creativeengineering:canned_acorn';
+i.canned_apple                  = 'creativeengineering:canned_apple';
+i.canned_banana                 = 'creativeengineering:canned_banana';
+i.canned_cantaloupe             = 'creativeengineering:canned_cantaloupe';
+i.canned_cherry                 = 'creativeengineering:canned_cherry';
+i.canned_glow_berry             = 'creativeengineering:canned_glow_berry';
+i.canned_melon                  = 'creativeengineering:canned_melon';
+i.canned_mulberry               = 'creativeengineering:canned_mulberry';
+i.canned_grape                  = 'creativeengineering:canned_grape';
+i.canned_salmonberry            = 'creativeengineering:canned_salmonberry';
+i.canned_strawberry             = 'creativeengineering:canned_strawberry';
+i.canned_sweet_berry            = 'creativeengineering:canned_sweet_berry';
+// raw meat cans (4 servings); canned_raw_* so they don't clash with Canned Goods' cooked canned_beef/chicken/pork
+i.canned_raw_beef               = 'creativeengineering:canned_raw_beef';
+i.canned_raw_chicken            = 'creativeengineering:canned_raw_chicken';
+i.canned_raw_mutton             = 'creativeengineering:canned_raw_mutton';
+i.canned_raw_pork               = 'creativeengineering:canned_raw_pork';
+i.canned_raw_rabbit             = 'creativeengineering:canned_raw_rabbit';
+i.canned_raw_ham                = 'creativeengineering:canned_raw_ham';
+i.canned_raw_chevon             = 'creativeengineering:canned_raw_chevon';
+i.canned_raw_hoglin             = 'creativeengineering:canned_raw_hoglin';
+i.canned_raw_kangaroo           = 'creativeengineering:canned_raw_kangaroo';
+i.canned_raw_moose              = 'creativeengineering:canned_raw_moose';
+i.canned_raw_bison              = 'creativeengineering:canned_raw_bison';
+i.canned_raw_bunfungus          = 'creativeengineering:canned_raw_bunfungus';
+i.canned_mite_crust             = 'creativeengineering:canned_mite_crust';
+
 // ############################## Validation ##############################
 
 StartupEvents.postInit(() => {

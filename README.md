@@ -15,7 +15,7 @@ CurseForge/Modrinth link and sha1.
 | `kubejs/` | KubeJS scripts (startup/server/client), data, assets, worldgen generation scripts |
 | `config/`, `defaultconfigs/` | Mod configs as used by the pack |
 | `configs_edited/` | Backups of every hand-edited config (`root_config/`, `server_config/`) |
-| `patcherMod/` | Source of `creativeengineering-1.0.1.jar` (Forge + Mixin coremod) |
+| `patcherMod/` | Source of `creativeengineering-1.0.2.jar` (Forge + Mixin coremod) |
 | `pack/` | Generated mod / resource pack / shader pack manifest |
 | `mod_sides.md` | Client / server / both classification for every mod |
 | `tools/` | Python/JS helper scripts (manifest, server mod folder, generators, audits) |

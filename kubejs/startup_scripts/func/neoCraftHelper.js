@@ -688,7 +688,13 @@ global.NCH = {
   // Vanilla-style recipes
   // ========================================================================
 
-  shaped(output, pattern, keys, e, idOverride, damage) {
+  // cans: let multi-serving cans in this recipe lose one serving instead of being used up
+  // (patcherMod food.CanServings; the last serving rolls empty/crushed/nothing). true = every can
+  // slot (#creativeengineering:cans), or a filter / array of filters (item, '#tag', slot index).
+  //   R.shapeless(Item.of(i.beef_cooked), [i.canned_beef], e, 'uncan_beef', null, null, true)
+  // A slot holding a stack of full cans opens a new can per craft (the opened one goes to the
+  // inventory): vanilla's remainder rule. Put the opened can in the grid on its own to drain it.
+  shaped(output, pattern, keys, e, idOverride, damage, cans) {
     if (!e) throw new Error('shaped called without event object!')
     var idSuffix = idOverride ?? global.NCH.toId(output, Object.values(keys)[0], "shaped")
     var ctx = 'shaped ' + idSuffix
@@ -708,9 +714,11 @@ global.NCH = {
             recipe.damageIngredient(pairs[d][0], pairs[d][1])
         }
     }
+    global.NCH._canServings(recipe, cans, ctx)
+    return recipe
 	},
 
-	shapeless(output, input, e, idOverride, damage, replace) {
+	shapeless(output, input, e, idOverride, damage, replace, cans) {
     if (!e) throw new Error('shapeless called without event object!')
     var idSuffix = idOverride ?? global.NCH.toId(output, input, "shapeless")
     var ctx = 'shapeless ' + idSuffix
@@ -746,7 +754,28 @@ global.NCH = {
             recipe.replaceIngredient(rpairs[r][0], rpairs[r][1])
         }
     }
+    global.NCH._canServings(recipe, cans, ctx)
+    return recipe
 	},
+
+  // Attaches the creativeengineering:can_serving ingredient action (see shaped()). KubeJS empties
+  // its custom-action map at the start of every server script load, so the Java callback is put
+  // back here on each call; the action id and the logic both live in patcherMod compat.KubeJSCanAction.
+  _canServings(recipe, cans, ctx) {
+    if (!cans) return
+    var action
+    try {
+      action = Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.KubeJSCanAction')
+      action.register()
+    } catch (err) {
+      console.warn('[NCH] ' + ctx + ': patcherMod KubeJSCanAction not available, cans are used up whole: ' + err)
+      return
+    }
+    var filters = cans === true ? [global.item.t_cans] : (Array.isArray(cans) ? cans : [cans])
+    for (var f = 0; f < filters.length; f++) {
+      recipe.customIngredientAction(filters[f], String(action.ID))
+    }
+  },
 
 	stonecutting(output, input, e, idOverride) {
 		if (!e) throw new Error('stonecutting called without event object!')
