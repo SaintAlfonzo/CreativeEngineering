@@ -1,0 +1,37 @@
+{
+  "parent": "exposure:adventure/exposure",
+  "criteria": {
+    "get_instant_camera": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "exposure_polaroid:instant_camera"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "frame": "task",
+    "hidden": false,
+    "show_toast": true,
+    "announce_to_chat": true,
+    "icon": {
+      "item": "exposure_polaroid:instant_camera"
+    },
+    "title": {
+      "translate": "advancement.exposure_polaroid.instant_classic.title"
+    },
+    "description": {
+      "translate": "advancement.exposure_polaroid.instant_classic.description"
+    }
+  },
+  "requirements": [
+    [
+      "get_instant_camera"
+    ]
+  ]
+}

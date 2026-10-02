@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:spider_filter"
+  },
+  "shader": "minecraft:shaders/post/spider.json"
+}

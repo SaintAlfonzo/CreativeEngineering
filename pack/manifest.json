@@ -4292,10 +4292,10 @@
       }
     },
     {
-      "file": "creativeengineering-1.0.2.jar",
-      "name": "creativeengineering-1.0.2.jar",
+      "file": "creativeengineering-1.0.3.jar",
+      "name": "creativeengineering-1.0.3.jar",
       "version": "Unknown",
-      "sha1": "1d9ea43fbb97ce31045d374f9fd5b5e140609fc1",
+      "sha1": "3918c512ab905cf3768568c89cfcc128b6d8a273",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -4845,27 +4845,13 @@
       }
     },
     {
-      "file": "exposure-1.19.2-1.6.0-forge.jar",
-      "name": "Exposure",
-      "version": "1.6.0",
-      "sha1": "18ae48ab15335b23dd97f932307c70ea1dda6637",
+      "file": "exposureBackport-1.9.19-ce-19.2-01.jar",
+      "name": "exposureBackport-1.9.19-ce-19.2-01.jar",
+      "version": "Unknown",
+      "sha1": "93d9b0c4022cbbdd20777c46e76ff38e79bd8b78",
       "modId": "exposure",
       "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 871755,
-          "fileId": 5336107,
-          "slug": "exposure",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/exposure/files/5336107"
-        },
-        "modrinth": {
-          "projectId": "hB899VmG",
-          "versionId": "nCcagXCN",
-          "slug": "exposure",
-          "url": "https://modrinth.com/mod/exposure/version/nCcagXCN",
-          "download": "https://cdn.modrinth.com/data/hB899VmG/versions/nCcagXCN/exposure-1.19.2-1.6.0-forge.jar"
-        }
-      }
+      "source": "local"
     },
     {
       "file": "extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar",
@@ -5036,6 +5022,29 @@
           "fileId": 4611938,
           "slug": "ftb-teams-forge",
           "url": "https://www.curseforge.com/minecraft/mc-mods/ftb-teams-forge/files/4611938"
+        }
+      }
+    },
+    {
+      "file": "fuelgoeshere-1.19.2-0.1.0.0.jar",
+      "name": "Fuel Goes Here",
+      "version": "1",
+      "sha1": "e7c4a5a21f1f0195d748806db89d4f3633c0a73d",
+      "modId": "fuelgoeshere",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 659090,
+          "fileId": 3933961,
+          "slug": "fuelgoeshere",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/fuelgoeshere/files/3933961"
+        },
+        "modrinth": {
+          "projectId": "Nw1znDUQ",
+          "versionId": "CmwY7pPB",
+          "slug": "fuelgoeshere",
+          "url": "https://modrinth.com/mod/fuelgoeshere/version/CmwY7pPB",
+          "download": "https://cdn.modrinth.com/data/Nw1znDUQ/versions/CmwY7pPB/fuelgoeshere-1.19.2-0.1.0.0.jar"
         }
       }
     },
@@ -7624,6 +7633,29 @@
           "slug": "twigs",
           "url": "https://modrinth.com/mod/twigs/version/3vp46egv",
           "download": "https://cdn.modrinth.com/data/RG50cUrX/versions/3vp46egv/twigs-forge-1.19.2-3.0.1.jar"
+        }
+      }
+    },
+    {
+      "file": "untitledduckmod-0.6.1-1.19.2-forge.jar",
+      "name": "Untitled Duck Mod (Forge)",
+      "version": "0.6.1-forge-1.19.2",
+      "sha1": "0e43e80ee845c3d84e378a2a65d969bc036da4df",
+      "modId": "untitledduckmod",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 451789,
+          "fileId": 3964148,
+          "slug": "untitled-duck-mod-forge",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/untitled-duck-mod-forge/files/3964148"
+        },
+        "modrinth": {
+          "projectId": "ojFjz7JF",
+          "versionId": "4C9cxXuI",
+          "slug": "untitled-duck-mod",
+          "url": "https://modrinth.com/mod/untitled-duck-mod/version/4C9cxXuI",
+          "download": "https://cdn.modrinth.com/data/ojFjz7JF/versions/4C9cxXuI/untitledduckmod-0.6.1-1.19.2-forge.jar"
         }
       }
     },

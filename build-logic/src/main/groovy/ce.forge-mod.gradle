@@ -1,0 +1,180 @@
+// Shared setup for every in-tree Forge mod (patcherMod, exposureBackport). A mod's build.gradle applies
+// `id 'ce.forge-mod'` and adds only what is specific to it (dependencies, extra source sets, compiler args).
+//
+// Reads from the root gradle.properties: minecraft_version(_range), forge_version(_range),
+// loader_version_range, mapping_channel, mapping_version.
+// Reads from <mod>/gradle.properties:
+//   mod_id, mod_name, mod_license, mod_version, mod_group_id, mod_authors, mod_description
+//   jar_name        optional, jar file prefix (default mod_id): <jar_name>-<mod_version>.jar
+//   mixin_configs   optional, comma-separated mixin configs for the jar manifest (default <mod_id>.mixins.json)
+//   replaces_jars   optional, comma-separated globs of other mods/ jars that installToMods moves out
+//                   (for a jar that replaces a third-party mod with the same mod id)
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle'
+}
+
+def prop = { String key, String fallback = null -> (project.findProperty(key) ?: fallback)?.toString() }
+def modId = prop('mod_id')
+def jarName = prop('jar_name', modId)
+def csv = { String key, String fallback = '' -> prop(key, fallback).split(',')*.trim().findAll { it } }
+
+version = prop('mod_version')
+group = prop('mod_group_id')
+
+base {
+    archivesName = jarName
+}
+
+// Mojang ships Java 17 to end users in 1.18+.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: prop('mapping_channel'), version: prop('mapping_version')
+
+    copyIdeResources = true
+
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', modId
+
+            // A mod with extra source sets adds them to this entry in its own build.gradle.
+            mods {
+                "${modId}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {}
+
+        server {
+            args '--nogui'
+        }
+
+        gameTestServer {}
+
+        data {
+            workingDirectory project.file('run-data')
+            args '--mod', modId, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+// Dev runs: match the loader libraries of the real Forge 43.3.9 install (instance.json libraries). Forge's
+// POMs use open ranges that now resolve newer deps: log4j-api 2.19 against core 2.17 (NoSuchMethodError
+// LoaderUtil.getClassLoaders), a second slf4j binding, and coremods' forgespi 7.x + net.minecraftforge:
+// modlauncher/securemodules; securemodules also calls itself cpw.mods.securejarhandler, so the runs died with
+// "Module com.google.common reads more than one module named cpw.mods.securejarhandler". FG builds the run
+// classpath from its own `minecraft` configuration, so this has to cover every configuration.
+configurations.configureEach {
+    resolutionStrategy.force 'net.minecraftforge:forgespi:6.0.0', 'net.minecraftforge:unsafe:0.2.0',
+            'org.apache.logging.log4j:log4j-api:2.17.0', 'org.apache.logging.log4j:log4j-core:2.17.0'
+    exclude group: 'net.minecraftforge', module: 'securemodules'
+    exclude group: 'net.minecraftforge', module: 'modlauncher'
+    exclude group: 'org.slf4j', module: 'slf4j-simple'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(ProcessResources).configureEach {
+    def replaceProperties = [
+            minecraft_version   : prop('minecraft_version'), minecraft_version_range: prop('minecraft_version_range'),
+            forge_version       : prop('forge_version'), forge_version_range: prop('forge_version_range'),
+            loader_version_range: prop('loader_version_range'),
+            mod_id              : modId, mod_name: prop('mod_name'), mod_license: prop('mod_license'),
+            mod_version         : prop('mod_version'), mod_authors: prop('mod_authors'),
+            mod_description     : prop('mod_description'),
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'     : modId,
+                'Specification-Vendor'    : prop('mod_authors'),
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : prop('mod_authors'),
+                'MixinConfigs'            : csv('mixin_configs', "${modId}.mixins.json").join(',')
+        ])
+    }
+
+    finalizedBy 'reobfJar'
+}
+
+// Reproducible jars: no build timestamp in the manifest, fixed entry order and entry times. Rebuilding
+// unchanged source gives a byte-identical jar, so a root `./gradlew build` that repacks every mod changes
+// nothing downstream (same sha1 in mods/, no false "differs from build/libs" deploy warning).
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+// License files in the mod's folder (GPLv3 LICENSE / LICENSE.txt, upstream NOTICE-*) go into its jar.
+tasks.named('jar', Jar).configure {
+    from(projectDir) {
+        include 'LICENSE', 'LICENSE.txt', 'NOTICE*'
+        rename { "${jarName}-${it}" }
+    }
+}
+
+// jar_archive/ (git-ignored) keeps one jar per mod_version so released versions survive `gradlew clean`.
+// A build only adds a version that isn't there yet, so dev rebuilds never replace a released jar;
+// tools/build_deploy.py stores the jar it actually ships.
+def archiveJar = tasks.register('archiveJar', Copy) {
+    dependsOn 'reobfJar'
+    from tasks.named('jar', Jar).flatMap { it.archiveFile }
+    into "${projectDir}/jar_archive"
+    eachFile { if (new File("${projectDir}/jar_archive", it.name).exists()) it.exclude() }
+}
+tasks.named('build').configure { finalizedBy archiveJar }
+
+// Explicit only (never part of `build`): put this build's jar into the instance's mods/. Older versions
+// of this mod and anything matching replaces_jars are MOVED to jar_archive/displaced/, not deleted.
+// Don't run it while the game is running.
+tasks.register('installToMods') {
+    group = 'ce'
+    description = "Builds ${jarName} and swaps it into ../mods (old versions -> jar_archive/displaced/)"
+    dependsOn 'build'
+    doLast {
+        def modsDir = rootProject.file('mods')
+        def built = tasks.named('jar', Jar).get().archiveFile.get().asFile
+        def displaced = file('jar_archive/displaced')
+        def matchers = (["${jarName}-*.jar"] + csv('replaces_jars')).collect {
+            java.nio.file.FileSystems.default.getPathMatcher("glob:${it}")
+        }
+        modsDir.listFiles().findAll { f ->
+            f.isFile() && f.name != built.name && matchers.any { it.matches(java.nio.file.Paths.get(f.name)) }
+        }.each { f ->
+            displaced.mkdirs()
+            java.nio.file.Files.move(f.toPath(), new File(displaced, f.name).toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            logger.lifecycle("moved mods/${f.name} -> ${projectDir.name}/jar_archive/displaced/")
+        }
+        java.nio.file.Files.copy(built.toPath(), new File(modsDir, built.name).toPath(),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.COPY_ATTRIBUTES)
+        logger.lifecycle("installed mods/${built.name}")
+    }
+}

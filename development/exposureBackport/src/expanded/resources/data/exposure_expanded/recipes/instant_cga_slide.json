@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#M#",
+    "CMC",
+    "PPP"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "C": {
+      "item": "minecraft:cyan_dye"
+    },
+    "M": {
+      "item": "minecraft:magenta_dye"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "count": 3,
+    "item": "exposure_expanded:instant_cga_slide"
+  }
+}

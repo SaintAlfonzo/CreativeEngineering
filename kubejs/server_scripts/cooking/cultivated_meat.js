@@ -41,5 +41,24 @@ R.fdCutting(i.culture_rabbit, i.any_knife, Item.of(i.rabbit, 3), e)
 R.fdCutting(i.culture_cod, i.any_knife, Item.of(i.cod_slice, 8), e)
 R.fdCutting(i.culture_salmon, i.any_knife, Item.of(i.salmon_slice, 8), e)
 
+// ============================================================
+// Culture blocks (9 <-> 1)
+// ============================================================
+
+R.shapeless(Item.of(i.culture_block_beef, 1), [Item.of(i.culture_beef, 9)], e)
+R.shapeless(Item.of(i.culture_beef, 9), [Item.of(i.culture_block_beef, 1)], e)
+R.shapeless(Item.of(i.culture_block_pork, 1), [Item.of(i.culture_pork, 9)], e)
+R.shapeless(Item.of(i.culture_pork, 9), [Item.of(i.culture_block_pork, 1)], e)
+R.shapeless(Item.of(i.culture_block_mutton, 1), [Item.of(i.culture_mutton, 9)], e)
+R.shapeless(Item.of(i.culture_mutton, 9), [Item.of(i.culture_block_mutton, 1)], e)
+R.shapeless(Item.of(i.culture_block_poultry, 1), [Item.of(i.culture_poultry, 9)], e)
+R.shapeless(Item.of(i.culture_poultry, 9), [Item.of(i.culture_block_poultry, 1)], e)
+R.shapeless(Item.of(i.culture_block_rabbit, 1), [Item.of(i.culture_rabbit, 9)], e)
+R.shapeless(Item.of(i.culture_rabbit, 9), [Item.of(i.culture_block_rabbit, 1)], e)
+R.shapeless(Item.of(i.culture_block_cod, 1), [Item.of(i.culture_cod, 9)], e)
+R.shapeless(Item.of(i.culture_cod, 9), [Item.of(i.culture_block_cod, 1)], e)
+R.shapeless(Item.of(i.culture_block_salmon, 1), [Item.of(i.culture_salmon, 9)], e)
+R.shapeless(Item.of(i.culture_salmon, 9), [Item.of(i.culture_block_salmon, 1)], e)
+
 console.log('cultivated meat done')
 })

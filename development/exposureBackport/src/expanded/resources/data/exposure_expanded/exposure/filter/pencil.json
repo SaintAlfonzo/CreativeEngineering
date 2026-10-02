@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:pencil_filter"
+  },
+  "shader": "minecraft:shaders/post/pencil.json"
+}

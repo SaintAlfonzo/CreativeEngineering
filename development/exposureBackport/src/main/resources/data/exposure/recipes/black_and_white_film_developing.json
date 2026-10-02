@@ -1,0 +1,20 @@
+{
+  "type": "exposure:film_developing",
+  "film": {
+    "tag": "exposure:black_and_white_film_rolls"
+  },
+  "ingredients": [
+    [
+      {
+        "type": "forge:partial_nbt",
+        "item": "minecraft:potion",
+        "nbt": {
+          "Potion": "minecraft:water"
+        }
+      }
+    ]
+  ],
+  "result": {
+    "item": "exposure:developed_black_and_white_film"
+  }
+}

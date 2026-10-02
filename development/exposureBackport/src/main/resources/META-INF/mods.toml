@@ -1,0 +1,95 @@
+# One jar, four mods. Each keeps its upstream mod id, so upstream ids, tags, data and assets port
+# unchanged and ModList.isLoaded("exposure_polaroid")-style checks keep working.
+# Versions all follow the jar (mod_version); the upstream versions are noted per mod.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/mortuusars/Exposure/issues"
+
+# ---- exposure: upstream Exposure 1.9.19 (src/main) ----
+[[mods]]
+modId="exposure"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="mortuusars; 1.19.2 backport: SaintAlfonzo"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/exposure"
+logoFile="exposure_icon.png"
+description='''${mod_description}'''
+
+[[dependencies.exposure]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.exposure]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+# Upstream: Create 6.0.7+ for sequenced film developing; the port targets this pack's Create 0.5.1.
+[[dependencies.exposure]]
+modId="create"
+mandatory=false
+versionRange="[0.5.1,)"
+ordering="NONE"
+side="BOTH"
+
+# ---- exposure_expanded: upstream Exposure: Expanded 1.0.1 (src/expanded) ----
+[[mods]]
+modId="exposure_expanded"
+version="${mod_version}"
+displayName="Exposure: Expanded (backport)"
+authors="Sparkwave, JohnRamRu; 1.19.2 backport: SaintAlfonzo"
+description='''Addon for Exposure that adds new lenses, filters and films.'''
+
+[[dependencies.exposure_expanded]]
+modId="exposure"
+mandatory=true
+versionRange="[${mod_version}]"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.exposure_expanded]]
+modId="exposure_polaroid"
+mandatory=true
+versionRange="[${mod_version}]"
+ordering="AFTER"
+side="BOTH"
+
+# ---- exposure_polaroid: upstream Exposure Polaroid 1.1.6 (src/polaroid) ----
+[[mods]]
+modId="exposure_polaroid"
+version="${mod_version}"
+displayName="Exposure Polaroid (backport)"
+authors="mortuusars; 1.19.2 backport: SaintAlfonzo"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/exposure-polaroid"
+logoFile="exposure_polaroid_icon.png"
+description='''Addon for Exposure that adds Instant Camera.'''
+
+[[dependencies.exposure_polaroid]]
+modId="exposure"
+mandatory=true
+versionRange="[${mod_version}]"
+ordering="AFTER"
+side="BOTH"
+
+# ---- exposure_catalog: upstream Exposure Catalog 1.1.2 (src/catalog) ----
+[[mods]]
+modId="exposure_catalog"
+version="${mod_version}"
+displayName="Exposure Catalog (backport)"
+authors="mortuusars; 1.19.2 backport: SaintAlfonzo"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/exposure-catalog"
+logoFile="exposure_catalog_icon.png"
+description='''Creative-mode tool to view and manage exposures.'''
+
+[[dependencies.exposure_catalog]]
+modId="exposure"
+mandatory=true
+versionRange="[${mod_version}]"
+ordering="AFTER"
+side="BOTH"

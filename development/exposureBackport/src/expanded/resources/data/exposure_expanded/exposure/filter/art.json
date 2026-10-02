@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:art_filter"
+  },
+  "shader": "minecraft:shaders/post/art.json"
+}

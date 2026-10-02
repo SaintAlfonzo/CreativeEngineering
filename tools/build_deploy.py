@@ -4,47 +4,67 @@ Stages a release of the pack in deploy/latest/ and records it in deploy/DEPLOY_L
 
 deploy/
   DEPLOY_LOG.md          one section per version, newest first: what changed and what to delete
-  history/<version>.json snapshot of every deployed file (sha1) + mod sides; the next build diffs against it
+  DEPLOYED.json          which version the server and the clients run (written by --snapshot only)
+  history/<version>.json snapshot of every file of that version (sha1) + mod sides; diffs and verify read it
   latest/                the payload to copy to the other machines (rebuilt from scratch every run)
-    README.md            install steps for server and client, this version's changes, the removals
-    mods/                every server jar (both + server) -> server mods/  AND  client mods/
+    README.md            steps for this payload's mode, this version's changes, the removals
+    VERSION.txt          "1.0.3 (update from 1.0.2)" / "1.0.3 (full install)"
+    verify.sh verify.ps1 update mode: proves a machine is at the from-version before anything is copied
+    verify/<target>.sha1   (hashes of the jars the from-version put in that target's mods/)
+    mods/                server jars (both + server) -> server mods/  AND  client mods/
     client_mods/         client-only jars                 -> client mods/ only
                          (the client always gets the full server mod set: it also runs single-player
                          worlds on its integrated server, so server-only mods must be there too)
     kubejs/ config/ defaultconfigs/                  -> both
     server/              server-root files: LaunchServer.sh/.bat, perf/ (always-on JFR recording)
                                                      -> the server folder itself (server only)
-    resourcepacks/ shaderpacks/                      -> client; only new or changed packs (all with --full)
+    resourcepacks/ shaderpacks/                      -> client
     removals_server.txt  removals_client.txt         paths (from the target's root) to delete, if any
+
+Two payload modes:
+  update   (default once DEPLOYED.json exists) only files that are new or changed since the deployed
+           version, in every folder: jars, scripts, datapack files, configs, packs. Removals are computed
+           against the same version, and verify.sh/.ps1 check the machine really runs it.
+  install  everything, for a new machine or one verify found drifted.
+The deployed version ("deployment snapshot") is set by hand after a payload is copied out:
+  python3 tools/build_deploy.py --snapshot [VERSION] [--target server|client] [--date ISO]
+With both targets marked, an update starts from the older of the two. A deployed version can't be
+rebuilt (its history json is what the machines are checked against): build the next version instead.
 
 What goes where:
   mods/*.jar               side from mod_sides.md (same lookup as tools/dump_server_mods.py). Jars in
                            sub-folders (mods/panorama/) are never shipped.
-  kubejs/, config/,        every file .gitignore doesn't ignore, minus EXCLUDE (kubejs/archive, Forge's
-  defaultconfigs/          *.toml.bak backups, ...), plus RUNTIME_INPUTS (ignored dumps that code reads,
-                           e.g. the /dumpclimate samples the biome tuner needs at world creation)
+  kubejs/                  files .gitignore doesn't ignore, filtered by KUBEJS_CLASSES: runtime and client
+                           files ship, dev files (notes, reports, generator inputs, /dump output in
+                           exported/) never do. An unclassified file is a preflight error.
+  config/, defaultconfigs/ every file .gitignore doesn't ignore, minus EXCLUDE (*.toml.bak backups, ...)
   server/                  the tracked server/ folder, same rules; lands in the server's root folder
   configs_edited/server_config/*   merged into defaultconfigs/ so a new server world starts with the
                            hand-edited serverconfig values (configs_edited wins on a conflict)
   resourcepacks/, shaderpacks/     zips, folder packs (pack.mcmeta) and shader settings files
 
-Removals are what the previous deployed version had at a path on that target and this one doesn't:
-an updated jar's old file, a mod removed or moved to client-only (server side), a deleted script.
+Removals are what the from-version had at a path on that target and this one doesn't: an updated jar's
+old file, a mod removed or moved to client-only (server side), a deleted or now dev-only script.
 Copying a folder over never deletes anything, so apply them. From the target's game folder:
   xargs -d '\\n' rm -f < removals_server.txt
 
 Preflight (errors stop the build unless --force; warnings go into the log entry):
   - every jar in mods/ has a mod_sides.md row                                    (error)
+  - every kubejs/ file matches a KUBEJS_CLASSES rule                              (error)
   - structure_config.json regenerated from the installed jars + kubejs/data matches the file, and
     gen_structure_groups.py sync would change nothing (both run on a scratch copy)   (error)
-  - patcherMod: jar in mods/ equals the gradle build and no source is newer    (warning)
+  - the shipped patcherMod jar can read the gzipped climate samples              (error)
+  - the version being built isn't already deployed; the from-version's history json is unchanged
+    since its --snapshot                                                         (error)
+  - in-tree mods (IN_TREE_MODS): jar in mods/ equals the gradle build, no source newer (warning)
   - pack/manifest.json lists the installed mods                                  (warning)
   - uncommitted changes in shipped folders (recorded with the commit)            (warning)
 
-Building the same version again replaces its log entry and snapshot (fix-ups before distributing);
-changes are always counted from the newest *other* version in history/.
+The log's "Changes" are counted from the newest *other* version in history/ (the changelog); the
+payload and its removals from the deployed version. Usually they're the same version.
 
-Run: python3 tools/build_deploy.py [--version X.Y.Z] [--notes TEXT] [--dry-run] [--full] [--force]
+Run: python3 tools/build_deploy.py [--version X.Y.Z] [--mode update|install] [--from X.Y.Z]
+                                   [--notes TEXT] [--dry-run] [--full] [--force]
      (no --version: bumps the last version's patch number; the first release is 1.0.0)
 """
 import argparse
@@ -59,6 +79,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dump_server_mods import MODS, ROOT, SERVER_SIDES, jar_modid, read_doc  # noqa: E402
@@ -68,9 +89,16 @@ DEPLOY = os.path.join(ROOT, 'deploy')
 OUT = os.path.join(DEPLOY, 'latest')
 HISTORY = os.path.join(DEPLOY, 'history')
 LOG = os.path.join(DEPLOY, 'DEPLOY_LOG.md')
+DEPLOYED = os.path.join(DEPLOY, 'DEPLOYED.json')
 WORLDGEN = os.path.join(ROOT, 'kubejs', 'generation_scripts', 'worldgen')
 SERVER_CONFIG_EDITS = os.path.join(ROOT, 'configs_edited', 'server_config')
-JAR_ARCHIVE = os.path.join(ROOT, 'patcherMod', 'jar_archive')
+# In-tree mods built by the root Gradle build: (Gradle project = folder under development/, jar file prefix,
+# must be in mods/). Each project keeps its released jars in development/<project>/jar_archive/.
+DEVELOPMENT = os.path.join(ROOT, 'development')
+IN_TREE_MODS = [
+    ('patcherMod', 'creativeengineering', True),
+    ('exposureBackport', 'exposureBackport', True),
+]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
 # gets, the client gets too: clients also host single-player worlds, so they need the server-only mods and
@@ -91,17 +119,48 @@ TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
 INCREMENTAL = ('resourcepacks', 'shaderpacks')
 # Paths from the instance root, on top of what .gitignore already ignores.
 EXCLUDE = [
-    'kubejs/archive/*',        # old worldgen tuning, never loaded
-    'kubejs/quest_working/*',  # notes
     '*.bak',                   # Forge's backups of rewritten configs
     '*.backup[0-9]*',          # Xaero's
     '*/__pycache__/*',
     '*.pyc',
 ]
-# Git-ignored dump output that code reads at runtime, so it ships anyway.
-RUNTIME_INPUTS = [
-    'kubejs/exported/worldgen/climate/*.json',  # BiomeLayoutTuner's /dumpclimate samples: without them
-                                                # biome multipliers are skipped when a world is created
+# Every file under kubejs/ (path inside kubejs/, fnmatch, first match wins) is one of:
+#   runtime  read by the game on server and client (scripts, datapack, inputs the tuners read)
+#   client   read by the client only (the server ignores it; still shipped, it's one kubejs/ folder)
+#   dev      never shipped: notes, reports, generator inputs and output, dumps
+# A file no rule matches stops the build (preflight error), so a new runtime input can't silently stay
+# home. kubejs/exported/ (the /dump* output, git-ignored) is dev-only as a whole: nothing in it is
+# read at runtime since the climate samples moved to generation_scripts/worldgen/climate/ (1.0.3).
+KUBEJS_CLASSES = [
+    ('README.txt', 'dev'),
+    ('archive/*', 'dev'),                  # old worldgen tuning, never loaded
+    ('quest_working/*', 'dev'),            # notes
+    ('exported/*', 'dev'),                 # /dump* output
+    ('recipes/*', 'dev'),                  # not a KubeJS load path (KubeJSPaths has no recipes/): unread leftovers
+    ('startup_scripts/todo/*', 'dev'),     # .txt work lists
+    ('*.md', 'dev'),                       # notes and reports; the tuners rewrite their *_report.md on every load
+    ('startup_scripts/*', 'runtime'),
+    ('server_scripts/*', 'runtime'),       # incl. loot/loot_config.json + loot_index.json (05_tuning.js)
+    ('data/*', 'runtime'),
+    ('config/*', 'runtime'),
+    ('client_scripts/*', 'client'),
+    ('assets/*', 'client'),
+    # generation_scripts/: only what patcherMod or a script reads in-game; the rest is generator input/output
+    ('generation_scripts/worldgen/climate/*.json.gz', 'runtime'),      # BiomeLayoutTuner (/dumpclimate samples)
+    ('generation_scripts/worldgen/biome_baselines/*.json', 'runtime'),  # BiomeLayoutTuner
+    ('generation_scripts/worldgen/biome_config.json', 'runtime'),       # BiomeLayoutTuner
+    ('generation_scripts/worldgen/biome_merges.json', 'runtime'),       # worldgen/biome_merges.js
+    ('generation_scripts/worldgen/loot_container_swaps.json', 'runtime'),  # LootContainerSwaps
+    ('generation_scripts/worldgen/pool_config.json', 'runtime'),        # PoolTuner
+    ('generation_scripts/worldgen/pool_tags.json', 'runtime'),          # PoolTuner
+    ('generation_scripts/worldgen/structure_config.json', 'runtime'),   # worldgen/structure_overrides.js
+    ('generation_scripts/worldgen/structure_groups.json', 'runtime'),   # worldgen/structure_overrides.js
+    ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
+    ('generation_scripts/food/food_types.json', 'runtime'),             # tags/foodtypetags.js
+    ('generation_scripts/food/can_servings.json', 'runtime'),           # tags/cantags.js
+    ('generation_scripts/worldgen/biome_merge_proposals.json', 'dev'),  # tools/analyze_structure_biome_merges.py
+    ('generation_scripts/recipes/*', 'dev'),                            # sawmill.js output (copied into the jar)
+    ('generation_scripts/sawmill.js', 'dev'),                           # node generator
 ]
 LOG_HEADER = """# Deploy log
 
@@ -152,7 +211,12 @@ def not_ignored(paths):
     if ignored is None:
         return paths
     ignored = set(ignored.splitlines())
-    return [p for p in paths if p not in ignored or any(fnmatch.fnmatch(p, pat) for pat in RUNTIME_INPUTS)]
+    return [p for p in paths if p not in ignored]
+
+
+def kubejs_class(rel):
+    """KUBEJS_CLASSES class of a path inside kubejs/, or None when no rule matches."""
+    return next((cls for pat, cls in KUBEJS_CLASSES if fnmatch.fnmatch(rel, pat)), None)
 
 
 def collect(pre, root=ROOT, unknown_side=None):
@@ -187,10 +251,22 @@ def collect(pre, root=ROOT, unknown_side=None):
         pre.error('jars with no row in mod_sides.md (add a row, see its "Keeping this up to date"):\n'
                   + '\n'.join('    ' + u for u in unknown))
 
+    unclassified = []
     for tree in TREES:
         for rel in not_ignored(walk(tree, root)):
-            if not excluded(rel):
-                files[tree][rel[len(tree) + 1:]] = os.path.join(root, rel)
+            inner = rel[len(tree) + 1:]
+            if excluded(rel):
+                continue
+            if tree == 'kubejs' and root == ROOT:
+                cls = kubejs_class(inner)
+                if cls is None:
+                    unclassified.append(inner)
+                if cls in (None, 'dev'):
+                    continue
+            files[tree][inner] = os.path.join(root, rel)
+    if unclassified:
+        pre.error('kubejs files no KUBEJS_CLASSES rule covers (add a runtime/client/dev rule in '
+                  'tools/build_deploy.py):\n' + '\n'.join('    kubejs/' + u for u in unclassified))
     if root == ROOT and os.path.isdir(SERVER_CONFIG_EDITS):
         for rel in walk(os.path.relpath(SERVER_CONFIG_EDITS, ROOT)):
             name = rel.split('/', 2)[2]
@@ -252,19 +328,40 @@ def check_structures(pre):
                       'then review the new rates):\n' + '\n'.join('  ' + c for c in changes))
 
 
-def check_patchermod(pre):
-    deployed = [j for j in os.listdir(MODS) if re.match(r'creativeengineering-.*\.jar$', j)]
-    if len(deployed) != 1:
-        pre.warn(f'expected one creativeengineering-*.jar in mods/, found {deployed or "none"}')
+def in_tree_jar(prefix, jar):
+    return re.match(rf'{re.escape(prefix)}-.*\.jar$', jar)
+
+
+def check_in_tree_mods(pre):
+    for project, prefix, required in IN_TREE_MODS:
+        deployed = [j for j in os.listdir(MODS) if in_tree_jar(prefix, j)]
+        if len(deployed) != 1:
+            if deployed or required:
+                pre.warn(f'expected one {prefix}-*.jar in mods/, found {deployed or "none"}')
+            continue
+        jar = os.path.join(MODS, deployed[0])
+        built = os.path.join(DEVELOPMENT, project, 'build', 'libs', deployed[0])
+        if os.path.isfile(built) and sha1(built) != sha1(jar):
+            pre.warn(f'mods/{deployed[0]} differs from development/{project}/build/libs/{deployed[0]} '
+                     '(built but not installed? ./gradlew :' + project + ':installToMods)')
+        src = os.path.join(DEVELOPMENT, project, 'src')
+        newest = max((os.path.getmtime(os.path.join(d, f)) for d, _, fs in os.walk(src) for f in fs), default=0)
+        if newest > os.path.getmtime(jar):
+            pre.warn(f'development/{project}/src has changes newer than mods/{deployed[0]} (rebuild + install the jar?)')
+
+
+def check_climate_reader(pre, files):
+    """The gzipped climate samples need patcherMod 1.0.3+ (WorldgenFiles.readGzipText); an older jar
+    falls back to kubejs/exported/, which no longer ships, so biome tuning would be skipped."""
+    if not any(p.startswith('generation_scripts/worldgen/climate/') for p in files['kubejs']):
         return
-    jar = os.path.join(MODS, deployed[0])
-    built = os.path.join(ROOT, 'patcherMod', 'build', 'libs', deployed[0])
-    if os.path.isfile(built) and sha1(built) != sha1(jar):
-        pre.warn(f'mods/{deployed[0]} differs from patcherMod/build/libs/{deployed[0]} (built but not copied to mods/?)')
-    src = os.path.join(ROOT, 'patcherMod', 'src')
-    newest = max((os.path.getmtime(os.path.join(d, f)) for d, _, fs in os.walk(src) for f in fs), default=0)
-    if newest > os.path.getmtime(jar):
-        pre.warn(f'patcherMod/src has changes newer than mods/{deployed[0]} (rebuild + copy the jar?)')
+    for jar, src in files['mods'].items():
+        if re.match(r'creativeengineering-.*\.jar$', jar):
+            with zipfile.ZipFile(src) as z:
+                cls = z.read('com/SaintAlfonzo/creativeengineering/worldgen/WorldgenFiles.class')
+            if b'readGzipText' not in cls:
+                pre.error(f'mods/{jar} predates the gzipped climate samples (no WorldgenFiles.readGzipText): '
+                          'copy the current development/patcherMod/build/libs jar into mods/ first')
 
 
 def check_manifest(pre, files):
@@ -350,6 +447,204 @@ def diff(prev, cur):
     return d
 
 
+# ── deployment snapshots ─────────────────────────────────────────────────────
+# deploy/DEPLOYED.json says which version each target runs. It's written only by --snapshot, which you
+# run by hand after copying a payload out. Its version's history json is the "deployment snapshot":
+# the full file list + hashes that update payloads are diffed against and verify scripts check.
+
+def history_path(version):
+    return os.path.join(HISTORY, f'{version}.json')
+
+
+def load_deployed():
+    if not os.path.isfile(DEPLOYED):
+        return {}
+    return json.load(open(DEPLOYED, encoding='utf8'))
+
+
+def deployed_versions(deployed):
+    return {e['version'] for e in deployed.get('log', [])}
+
+
+def default_base(deployed):
+    """The version an update starts from: the older of the server's and the client's marks, so one
+    payload brings both up to date."""
+    marks = [deployed[t]['version'] for t in ('server', 'client') if t in deployed]
+    return min(marks, key=parse_version) if marks else None
+
+
+def load_base(pre, deployed, version):
+    """History snapshot of a deployed version, checked against the hash --snapshot recorded (a
+    history json rewritten after its deployment no longer describes the machines)."""
+    path = history_path(version)
+    if not os.path.isfile(path):
+        pre.error(f'--from {version}: no {os.path.relpath(path, ROOT)}')
+        return None
+    recorded = {deployed[t].get('snapshotSha1') for t in ('server', 'client')
+                if deployed.get(t, {}).get('version') == version}
+    if recorded and sha1(path) not in recorded:
+        pre.error(f'{os.path.relpath(path, ROOT)} changed after {version} was deployed: an update built '
+                  'from it would not match the machines (restore it from git, or use --mode install)')
+    elif not recorded:
+        pre.warn(f'--from {version}: no deployment snapshot of {version} in DEPLOYED.json; '
+                 'run verify on each machine before applying')
+    return json.load(open(path, encoding='utf8'))
+
+
+def snapshot(version, targets, date, notes):
+    """--snapshot: record that `version` (staged in deploy/latest/ by default) is now on `targets`."""
+    if not version:
+        vf = os.path.join(OUT, 'VERSION.txt')
+        if not os.path.isfile(vf):
+            sys.exit('--snapshot: no version given and no deploy/latest/VERSION.txt')
+        version = open(vf, encoding='utf8').read().split()[0]
+    path = history_path(version)
+    if not os.path.isfile(path):
+        sys.exit(f'--snapshot: {os.path.relpath(path, ROOT)} not found (stage {version} first)')
+    date = date or datetime.datetime.now().isoformat(timespec='minutes')
+    deployed = load_deployed()
+    mark = {'version': version, 'date': date, 'snapshotSha1': sha1(path)}
+    if notes:
+        mark['notes'] = notes
+    for t in targets:
+        deployed[t] = mark
+    deployed.setdefault('log', []).append({'version': version, 'date': date, 'targets': list(targets),
+                                           **({'notes': notes} if notes else {})})
+    out = {'_about': 'Which pack version each machine runs. Written by `tools/build_deploy.py --snapshot` '
+                     'after a payload is copied out; update payloads are diffed against these versions\' '
+                     'history/<version>.json.'}
+    out.update({k: deployed[k] for k in ('server', 'client', 'log') if k in deployed})
+    with open(DEPLOYED, 'w', encoding='utf8') as f:
+        json.dump(out, f, indent=1, ensure_ascii=False)
+        f.write('\n')
+    mark_log(version, deployed)
+    print(f"snapshot: {', '.join(targets)} at {version} ({date}); next update builds from "
+          f"{default_base(deployed)}")
+
+
+def mark_log(version, deployed):
+    """Put a "- Deployed:" line in the version's DEPLOY_LOG section."""
+    if not os.path.isfile(LOG):
+        return
+    when = [f"{', '.join(e['targets'])} {e['date'].replace('T', ' ')}"
+            for e in deployed.get('log', []) if e['version'] == version]
+    line = '- Deployed: ' + '; '.join(when)
+    text = open(LOG, encoding='utf8').read()
+    m = re.search(rf'(?ms)^<!-- deploy:{re.escape(version)} -->.*?(?=^<!-- deploy:|\Z)', text)
+    if not m:
+        return
+    sec = m.group(0)
+    if re.search(r'(?m)^- Deployed: .*$', sec):
+        sec = re.sub(r'(?m)^- Deployed: .*$', lambda _: line, sec, count=1)
+    else:
+        sec = re.sub(r'(?m)^(- Since: .*)$', lambda mm: mm.group(1) + '\n' + line, sec, count=1)
+    with open(LOG, 'w', encoding='utf8') as f:
+        f.write(text[:m.start()] + sec + text[m.end():])
+
+
+# ── payload ──────────────────────────────────────────────────────────────────
+
+def select_payload(files, cur, base, mode, full):
+    """{category: {path: source}} to copy. install: everything. update: only files that are new or
+    changed since `base` (jars, scripts, data, configs, packs alike); deletions go in the removals."""
+    out = {}
+    for cat, paths in files.items():
+        old = (base or {}).get('files', {}).get(cat, {})
+        keep_all = mode == 'install' or (full and cat in INCREMENTAL)
+        out[cat] = {rel: src for rel, src in paths.items() if keep_all or old.get(rel) != cur['files'][cat][rel]}
+    return out
+
+
+def payload_stats(payload):
+    n = sum(len(v) for v in payload.values())
+    size = sum(os.path.getsize(src) for v in payload.values() for src in v.values())
+    by_cat = ', '.join(f'{cat} {len(v)}' for cat, v in payload.items() if v)
+    return n, size, by_cat
+
+
+def mb(n):
+    return f'{n / 1e6:.1f} MB' if n >= 1e5 else f'{n / 1e3:.0f} KB'
+
+
+VERIFY_SH = r"""#!/bin/sh
+# Checks that a game folder is at {base} before this update is applied: every jar in its mods/ must be
+# the one {base} shipped, nothing missing, nothing extra. Needs only sh + sha1sum (or shasum).
+#   sh verify.sh server /path/to/server
+#   sh verify.sh client /path/to/instance
+set -u
+here=$(cd "$(dirname "$0")" && pwd)
+target=${{1:-}}
+dir=${{2:-.}}
+case "$target" in server|client) ;; *) echo "usage: sh verify.sh server|client [game folder]"; exit 2 ;; esac
+command -v sha1sum >/dev/null 2>&1 || sha1sum() {{ shasum -a 1 "$@"; }}
+list="$here/verify/$target.sha1"
+cd "$dir" || exit 2
+[ -d mods ] || {{ echo "no mods/ folder in $(pwd): pass the $target's game folder"; exit 2; }}
+bad=0
+while read -r sum path; do
+  if [ ! -f "$path" ]; then echo "MISSING  $path"; bad=$((bad + 1))
+  elif [ "$(sha1sum "$path" | cut -d' ' -f1)" != "$sum" ]; then echo "CHANGED  $path"; bad=$((bad + 1)); fi
+done < "$list"
+for f in mods/*.jar; do
+  [ -e "$f" ] || continue
+  cut -d' ' -f3- "$list" | grep -qxF "$f" || {{ echo "EXTRA    $f"; bad=$((bad + 1)); }}
+done
+if [ "$bad" -eq 0 ]; then
+  echo "OK: $(pwd) matches {base} ($(wc -l < "$list") jars). Apply the update."
+else
+  echo "DRIFT: $bad difference(s) from {base}. Don't apply this update: use an install payload"
+  echo "(python3 tools/build_deploy.py --mode install), or fix the listed jars by hand."
+  exit 1
+fi
+"""
+
+VERIFY_PS1 = r"""# Checks that a game folder is at {base} before this update is applied: every jar in its mods/ must be
+# the one {base} shipped, nothing missing, nothing extra.
+#   powershell -ExecutionPolicy Bypass -File verify.ps1 client "C:\path	o\instance"
+param(
+  [Parameter(Mandatory = $true)][ValidateSet('server', 'client')][string]$Target,
+  [string]$Dir = '.'
+)
+$expected = @{{}}
+foreach ($line in Get-Content -LiteralPath (Join-Path $PSScriptRoot "verify\$Target.sha1")) {{
+  $sum, $path = $line -split '  ', 2
+  $expected[$path] = $sum
+}}
+if (-not (Test-Path -LiteralPath (Join-Path $Dir 'mods'))) {{ "no mods\ folder in ${{Dir}}: pass the $Target's game folder"; exit 2 }}
+$bad = 0
+foreach ($path in $expected.Keys) {{
+  $f = Join-Path $Dir $path
+  if (-not (Test-Path -LiteralPath $f)) {{ "MISSING  $path"; $bad++ }}
+  elseif ((Get-FileHash -LiteralPath $f -Algorithm SHA1).Hash.ToLower() -ne $expected[$path]) {{ "CHANGED  $path"; $bad++ }}
+}}
+Get-ChildItem -LiteralPath (Join-Path $Dir 'mods') -Filter *.jar -File | ForEach-Object {{
+  $p = 'mods/' + $_.Name
+  if (-not $expected.ContainsKey($p)) {{ "EXTRA    $p"; $bad++ }}
+}}
+if ($bad -eq 0) {{ "OK: $Dir matches {base} ($($expected.Count) jars). Apply the update." }}
+else {{
+  "DRIFT: $bad difference(s) from {base}. Don't apply this update: use an install payload"
+  "(python3 tools/build_deploy.py --mode install), or fix the listed jars by hand."
+  exit 1
+}}
+"""
+
+
+def write_verify(out, base):
+    """verify.sh / verify.ps1 + verify/<target>.sha1: the jars `base` put in each target's mods/."""
+    os.makedirs(os.path.join(out, 'verify'), exist_ok=True)
+    for target in ('server', 'client'):
+        lines = sorted(f'{h}  mods/{rel}' for cat, paths in base['files'].items()
+                       for rel, h in paths.items()
+                       if CATEGORIES[cat][1] == 'mods' and target in CATEGORIES[cat][0])
+        with open(os.path.join(out, 'verify', f'{target}.sha1'), 'w', encoding='utf8', newline='\n') as f:
+            f.write('\n'.join(lines) + '\n')
+    for name, body in (('verify.sh', VERIFY_SH), ('verify.ps1', VERIFY_PS1)):
+        with open(os.path.join(out, name), 'w', encoding='utf8', newline='\n') as f:
+            f.write(body.format(base=base['version']))
+    os.chmod(os.path.join(out, 'verify.sh'), 0o755)
+
+
 # ── rendering ────────────────────────────────────────────────────────────────
 
 def details(title, lines, open_limit=15):
@@ -419,65 +714,93 @@ def render_removals(d):
     return lines or ['None.', '']
 
 
-def render_entry(cur, prev, d):
+def render_entry(cur, prev, d, dpay, stats):
     counts = (f"{len(cur['files']['mods'])} server+client mods, {len(cur['files']['client_mods'])} client-only mods, "
               f"{len(cur['files']['resourcepacks'])} resource pack files, {len(cur['files']['shaderpacks'])} shader pack files")
     commit = cur['commit'] or 'no git'
     if cur['dirty']:
         commit += f" + {len(cur['dirty'])} uncommitted file(s)"
+    pay = cur['payload']
+    n, size, by_cat = stats
     lines = [f"<!-- deploy:{cur['version']} -->",
              f"## {cur['version']} - {cur['date'][:16].replace('T', ' ')}", '',
              f"- Minecraft {cur['minecraft']}, {cur['loader']}",
              f"- Commit: {commit}",
              f"- Since: {prev['version'] if prev else 'nothing (first deployment: everything is new)'}",
-             f"- Contents: {counts}"]
+             f"- Contents: {counts}",
+             f"- Payload: {pay['mode']}" + (f" from {pay['from']}" if pay['from'] else '') + f": {n} files, {mb(size)} ({by_cat})"]
     if cur['notes']:
         lines.append(f"- Notes: {cur['notes']}")
     if cur['warnings']:
         lines.append('- Built with warnings:')
         lines += [f'  - {w.splitlines()[0]}' for w in cur['warnings']]
     lines += ['', '### Changes', ''] + render_changes(cur, prev, d)
-    lines += ['### Removals', ''] + render_removals(d)
+    lines += ['### Removals' + (f" (from {pay['from']})" if pay['from'] else ''), ''] + render_removals(dpay)
     return lines
 
 
-def render_readme(cur, prev, d, shipped_incremental):
-    rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
-    lines = [f"# {cur['name']} {cur['version']}", '',
+def numbered(steps):
+    return [f'{i + 1}. {s}' for i, s in enumerate(x for x in steps if x)]
+
+
+def render_readme(cur, prev, d, dpay, base, payload):
+    pay = cur['payload']
+    update = pay['mode'] == 'update'
+    has = lambda cat: bool(payload.get(cat))
+    folders = lambda cats: ', '.join(f'`{c}/`' for c in cats if has(c))
+    only_changed = ' (only the new and changed files)' if update else ''
+    rm = lambda t: ("Delete every path in `removals_%s.txt` (from the %s folder): `xargs -d '\\n' rm -f < removals_%s.txt`"
+                    % (t, 'server' if t == 'server' else 'instance', t)) if dpay['removals'][t] else 'Nothing to delete.'
+    lines = [f"# {cur['name']} {cur['version']}" + (f" (update from {pay['from']})" if update else ' (full install)'), '',
              f"Built {cur['date'][:16].replace('T', ' ')} from commit {cur['commit'] or '?'}"
              f"{' (with uncommitted changes)' if cur['dirty'] else ''}. "
-             f"Minecraft {cur['minecraft']}, {cur['loader']}.", '',
-             '## Server', '',
-             '1. Stop the server and back up the world.',
-             '2. Delete every path in `removals_server.txt` (from the server folder): '
-             "`xargs -d '\\n' rm -f < removals_server.txt`" if d['removals']['server'] else
-             '2. Nothing to delete.',
-             '3. Copy `mods/` into the server\'s `mods/`. Do not copy `client_mods/`.',
-             '4. Copy `kubejs/`, `config/` and `defaultconfigs/` over the server\'s folders.' +
-             (' Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, '
-              '`perf/`); if you changed MEMORY or JAVAPATH in the server\'s LaunchServer script, set them again.'
-              if cur['files'].get('server') else ''),
-             '5. Existing world only: `defaultconfigs/` is used only when a world has no serverconfig yet. '
-             'Copy any changed `*-server.toml` from it into `<world>/serverconfig/` by hand.',
-             '', '## Client', '',
-             '1. Close the game.',
-             '2. Delete every path in `removals_client.txt` (from the instance folder): '
-             "`xargs -d '\\n' rm -f < removals_client.txt`" if d['removals']['client'] else
-             '2. Nothing to delete.',
-             '3. Copy `mods/` **and** `client_mods/` into the instance\'s `mods/`. `mods/` is the full server '
-             'mod set, server-only mods included: the client needs them to host single-player worlds.',
-             '4. Copy `kubejs/`, `config/`, `defaultconfigs/`' +
-             (', `resourcepacks/`, `shaderpacks/`' if shipped_incremental else '') + ' over the instance\'s folders.',
-             ]
-    if shipped_incremental:
-        lines.append('   `resourcepacks/` and `shaderpacks/` hold only packs that are new or changed in this version.')
-    if rp_order:
-        lines += ['5. Enable these resource packs, lowest priority first (1 ends up at the bottom of the '
-                  "in-game Selected list, the last one at the top); packs not listed stay off:", '']
-        lines += [f'   {i + 1}. {p}' for i, p in enumerate(rp_order)]
-    lines += ['', '## Changes since ' + (prev['version'] if prev else 'nothing (first deployment)'), '']
+             f"Minecraft {cur['minecraft']}, {cur['loader']}.", '']
+    if update:
+        lines += [f"**Update payload.** It holds only the files that are new or changed since {pay['from']}; files "
+                  f"that are gone are in the removals lists. Apply it only to a machine that runs {pay['from']}.", '',
+                  f"## Check the machine is at {pay['from']} first", '',
+                  '- Linux/macOS: `sh verify.sh server /path/to/server` or `sh verify.sh client /path/to/instance`',
+                  '- Windows: `powershell -ExecutionPolicy Bypass -File verify.ps1 client "C:\\path\\to\\instance"`', '',
+                  f"It hashes every jar in that `mods/` and compares it with what {pay['from']} shipped. `OK`: carry on. "
+                  "`DRIFT` (a missing, changed or extra jar): don't apply this payload; fix the listed jars by hand or "
+                  'use a full install (`python3 tools/build_deploy.py --mode install`).', '']
+    else:
+        lines += ['**Full install.** Everything the pack needs. Use it for a new machine, or for one whose `verify` '
+                  'reported drift: in that case move its `mods/` aside first, so no stale jar survives.', '']
+    lines += ['## Server', ''] + numbered([
+        'Stop the server and back up the world.',
+        rm('server'),
+        ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
+        'No server jars changed.',
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs')) else None,
+        ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
+         "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
+        ('Existing world only: `defaultconfigs/` is used only when a world has no serverconfig yet. Copy any changed '
+         '`*-server.toml` from it into `<world>/serverconfig/` by hand.') if has('defaultconfigs') else None,
+    ])
+    rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
+    show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks'))
+    lines += ['', '## Client', ''] + numbered([
+        'Close the game.',
+        rm('client'),
+        (f"Copy {folders(('mods', 'client_mods'))} into the instance's `mods/`{only_changed}. `mods/` is the server mod "
+         'set, server-only mods included: the client needs them to host single-player worlds.')
+        if has('mods') or has('client_mods') else 'No jars changed.',
+        f"Copy {client_trees} over the instance's folders{only_changed}." if client_trees else None,
+        ('Enable these resource packs, lowest priority first (1 ends up at the bottom of the in-game Selected list, '
+         'the last one at the top); packs not listed stay off:') if show_order else None,
+    ])
+    if show_order:
+        lines += [''] + [f'   {i + 1}. {p}' for i, p in enumerate(rp_order)]
+    lines += ['', '## After copying', '',
+              f"On the dev machine: `python3 tools/build_deploy.py --snapshot {cur['version']}` (add `--target server` "
+              'or `--target client` if only one side got it). Updates are built from that snapshot, so skipping '
+              'this makes the next update start from an older version (bigger, still correct).', '',
+              '## Changes since ' + (prev['version'] if prev else 'nothing (first deployment)'), '']
     lines += render_changes(cur, prev, d)
-    lines += ['## Removals', ''] + render_removals(d)
+    lines += ['## Removals' + (f" (from {pay['from']})" if pay['from'] else ''), ''] + render_removals(dpay)
     return '\n'.join(lines) + '\n'
 
 
@@ -490,16 +813,18 @@ def write_log(cur, entry):
         f.write(head.rstrip() + '\n\n' + body + ''.join(entries))
 
 
-def archive_patchermod(files):
-    """Store the patcherMod jar this version ships in patcherMod/jar_archive/ (git-ignored). The build
-    only adds versions that aren't archived yet, so this is what keeps the released jar there."""
-    for jar, src in files['mods'].items():
-        if re.match(r'creativeengineering-.*\.jar$', jar):
-            dst = os.path.join(JAR_ARCHIVE, jar)
-            if not os.path.isfile(dst) or sha1(dst) != sha1(src):
-                os.makedirs(JAR_ARCHIVE, exist_ok=True)
-                shutil.copy2(src, dst)
-                print(f'archived the shipped {jar} in {os.path.relpath(JAR_ARCHIVE, ROOT)}/')
+def archive_in_tree_mods(files):
+    """Store each in-tree jar this version ships in development/<project>/jar_archive/ (git-ignored). The build only
+    adds versions that aren't archived yet, so this is what keeps the released jar there."""
+    for project, prefix, _ in IN_TREE_MODS:
+        archive = os.path.join(DEVELOPMENT, project, 'jar_archive')
+        for jar, src in {**files['mods'], **files['client_mods']}.items():
+            if in_tree_jar(prefix, jar):
+                dst = os.path.join(archive, jar)
+                if not os.path.isfile(dst) or sha1(dst) != sha1(src):
+                    os.makedirs(archive, exist_ok=True)
+                    shutil.copy2(src, dst)
+                    print(f'archived the shipped {jar} in {os.path.relpath(archive, ROOT)}/')
 
 
 # ── main ─────────────────────────────────────────────────────────────────────
@@ -507,17 +832,32 @@ def archive_patchermod(files):
 def main():
     ap = argparse.ArgumentParser(description='Stage a release of the pack in deploy/latest/ and log it.')
     ap.add_argument('--version', help='version to stage (default: last version with its patch number + 1)')
-    ap.add_argument('--notes', default='', help='one line for the log entry')
-    ap.add_argument('--dry-run', action='store_true', help='print the log entry; write and copy nothing')
-    ap.add_argument('--full', action='store_true', help='ship every resource/shader pack, not just new or changed ones')
+    ap.add_argument('--notes', default='', help='one line for the log entry (or the snapshot)')
+    ap.add_argument('--mode', choices=('update', 'install'),
+                    help='update: only what changed since the deployed version (default once DEPLOYED.json exists); '
+                         'install: everything')
+    ap.add_argument('--from', dest='from_version', metavar='VERSION',
+                    help='update from this version instead of the deployment snapshot in DEPLOYED.json')
+    ap.add_argument('--dry-run', action='store_true', help='print the log entry and payload size; write and copy nothing')
+    ap.add_argument('--full', action='store_true', help='update mode: ship every resource/shader pack anyway')
     ap.add_argument('--force', action='store_true', help='build even if a preflight check fails (recorded in the log)')
+    ap.add_argument('--snapshot', nargs='?', const='', metavar='VERSION',
+                    help='record that VERSION (default: the one in deploy/latest/) was copied to the machines; '
+                         'builds nothing')
+    ap.add_argument('--target', choices=('both', 'server', 'client'), default='both', help='with --snapshot')
+    ap.add_argument('--date', help='with --snapshot: when it was deployed (default: now), e.g. 2026-09-30T01:00')
     args = ap.parse_args()
+
+    if args.snapshot is not None:
+        snapshot(args.snapshot, ('server', 'client') if args.target == 'both' else (args.target,), args.date, args.notes)
+        return
 
     pre = Preflight()
     files, mods = collect(pre)
     print('checking structure data (regenerating in a scratch folder)...')
     check_structures(pre)
-    check_patchermod(pre)
+    check_in_tree_mods(pre)
+    check_climate_reader(pre, files)
     check_manifest(pre, files)
     commit, dirty = git_state(pre)
 
@@ -525,6 +865,21 @@ def main():
     last = history[-1]['version'] if history else None
     version = args.version or (re.sub(r'(\d+)(?!.*\d)', lambda m: str(int(m.group(1)) + 1), last) if last else '1.0.0')
     prev = next((s for s in reversed(history) if s['version'] != version), None)
+
+    deployed = load_deployed()
+    if version in deployed_versions(deployed):
+        pre.error(f'{version} is already deployed (DEPLOYED.json): rebuilding it would change the snapshot the '
+                  'machines are checked against. Build a new version (omit --version to bump the patch).')
+    mode = args.mode or ('update' if default_base(deployed) or args.from_version else 'install')
+    base = None
+    if mode == 'update':
+        from_version = args.from_version or default_base(deployed)
+        if not from_version:
+            pre.error('--mode update: nothing deployed yet (run --snapshot after copying a payload out) and no --from')
+        elif from_version == version:
+            pre.error(f'--from {from_version} is the version being built')
+        else:
+            base = load_base(pre, deployed, from_version)
 
     for w in pre.warnings:
         print('WARNING: ' + w)
@@ -546,49 +901,53 @@ def main():
         'dirty': dirty,
         'notes': args.notes,
         'warnings': pre.warnings + [f'FORCED past: {e}' for e in pre.errors],
+        'payload': {'mode': mode, 'from': base['version'] if base else None},
         'resourcePackOrder': enabled,
         'mods': mods,
         'files': {cat: {p: sha1(src) for p, src in paths.items()} for cat, paths in files.items()},
     }
-    d = diff(prev, cur)
-    entry = render_entry(cur, prev, d)
+    d = diff(prev, cur)                  # changelog: since the previous build
+    dpay = diff(base or prev, cur)       # removals: since what the machines run
+    payload = select_payload(files, cur, base, mode, args.full)
+    stats = payload_stats(payload)
+    entry = render_entry(cur, prev, d, dpay, stats)
     if args.dry_run:
         print('\n'.join(entry))
-        print(f'(dry run: nothing written; would stage {version} in {os.path.relpath(OUT, ROOT)}/)')
+        print(f'(dry run: nothing written; would stage {version} in {os.path.relpath(OUT, ROOT)}/: '
+              f'{mode}{" from " + base["version"] if base else ""}, {stats[0]} files, {mb(stats[1])})')
         return
 
     if os.path.isdir(OUT):
         shutil.rmtree(OUT)
-    shipped_incremental = 0
-    for cat, paths in files.items():
+    os.makedirs(OUT)
+    for cat, paths in payload.items():
         for rel, src in paths.items():
-            if cat in INCREMENTAL and prev and not args.full and \
-                    prev['files'].get(cat, {}).get(rel) == cur['files'][cat][rel]:
-                continue
             dst = os.path.join(OUT, cat, rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             shutil.copy2(src, dst)
-            shipped_incremental += cat in INCREMENTAL
     for target in ('server', 'client'):
-        if d['removals'][target]:
+        if dpay['removals'][target]:
             with open(os.path.join(OUT, f'removals_{target}.txt'), 'w', encoding='utf8') as f:
-                f.write('\n'.join(d['removals'][target]) + '\n')
+                f.write('\n'.join(dpay['removals'][target]) + '\n')
+    if base:
+        write_verify(OUT, base)
     with open(os.path.join(OUT, 'README.md'), 'w', encoding='utf8') as f:
-        f.write(render_readme(cur, prev, d, shipped_incremental))
+        f.write(render_readme(cur, prev, d, dpay, base, payload))
     with open(os.path.join(OUT, 'VERSION.txt'), 'w', encoding='utf8') as f:
-        f.write(version + '\n')
+        f.write(version + (f' (update from {base["version"]})' if base else ' (full install)') + '\n')
 
     os.makedirs(HISTORY, exist_ok=True)
-    with open(os.path.join(HISTORY, f'{version}.json'), 'w', encoding='utf8') as f:
+    with open(history_path(version), 'w', encoding='utf8') as f:
         json.dump(cur, f, indent=1, ensure_ascii=False)
         f.write('\n')
     write_log(cur, entry)
-    archive_patchermod(files)
+    archive_in_tree_mods(files)
 
-    print(f"staged {version} in {os.path.relpath(OUT, ROOT)}/: {len(files['mods'])} mods, "
-          f"{len(files['client_mods'])} client mods, {shipped_incremental} resource/shader pack files; "
-          f"removals: {len(d['removals']['server'])} server, {len(d['removals']['client'])} client")
-    print(f'logged in {os.path.relpath(LOG, ROOT)}')
+    print(f"staged {version} in {os.path.relpath(OUT, ROOT)}/ ({mode}{' from ' + base['version'] if base else ''}): "
+          f"{stats[0]} files, {mb(stats[1])} ({stats[2]}); "
+          f"removals: {len(dpay['removals']['server'])} server, {len(dpay['removals']['client'])} client")
+    print(f'logged in {os.path.relpath(LOG, ROOT)}; after copying it out: '
+          f'python3 tools/build_deploy.py --snapshot {version}')
 
 
 if __name__ == '__main__':

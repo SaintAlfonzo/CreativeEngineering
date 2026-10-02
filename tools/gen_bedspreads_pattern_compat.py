@@ -35,7 +35,7 @@ BEDSPREADS_JAR = os.path.join(MODS_DIR, "bedspreads-forge-6.0.0+1.19.2.jar")
 VANILLA_JAR = "/home/liam/.minecraft/versions/1.19.2/1.19.2.jar"
 OUT_ROOT = os.path.join(
     INSTANCE_ROOT,
-    "patcherMod/src/main/resources/assets/creativeengineering/textures/entity",
+    "development/patcherMod/src/main/resources/assets/creativeengineering/textures/entity",
 )
 
 PATTERN_RE = re.compile(r"^assets/([a-z0-9_.\-]+)/textures/entity/banner/([a-z0-9_./\-]+)\.png$")

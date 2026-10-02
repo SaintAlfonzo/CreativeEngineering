@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "exposure_expanded:antialias_filter",
+    "exposure_expanded:art_filter",
+    "exposure_expanded:bits_filter",
+    "exposure_expanded:blobs_filter",
+    "exposure_expanded:blur_filter",
+    "exposure_expanded:bumpy_filter",
+    "exposure_expanded:color_convolve_filter",
+    "exposure_expanded:deconverge_filter",
+    "exposure_expanded:desaturate_filter",
+    "exposure_expanded:flip_filter",
+    "exposure_expanded:ntsc_filter",
+    "exposure_expanded:pencil_filter",
+    "exposure_expanded:scan_pincushion_filter",
+    "exposure_expanded:sobel_filter",
+    "exposure_expanded:spider_filter",
+    "exposure_expanded:wobble_filter"
+  ]
+}

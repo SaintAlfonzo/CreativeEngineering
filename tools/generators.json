@@ -147,6 +147,21 @@
       "dumps": ["dumptags block", "dumpitemsbymod"],
       "outputs": ["tools/blockrunner_untagged_blocks.json"],
       "apply": "input for tools/blockrunner_tag_sim.js (node), nothing in game"
+    },
+    {
+      "id": "display_delight_names",
+      "script": "tools/gen_display_delight_names.py",
+      "groups": ["names"],
+      "outputs": ["kubejs/assets/displaydelight/lang/en_us.json"],
+      "apply": "F3+T or restart the client (lang only)"
+    },
+    {
+      "id": "missing_names",
+      "script": "tools/missing_names.py",
+      "groups": ["reports", "names"],
+      "dumps": ["dumpnames"],
+      "outputs": ["feature_writeup/names.md"],
+      "apply": "report only"
     }
   ]
 }

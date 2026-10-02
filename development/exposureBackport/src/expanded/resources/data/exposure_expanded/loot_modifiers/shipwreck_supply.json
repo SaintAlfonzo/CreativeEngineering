@@ -1,0 +1,10 @@
+{
+  "type": "exposure:add_table",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/shipwreck_supply"
+    }
+  ],
+  "table": "exposure_expanded:chests/shipwreck_supply"
+}

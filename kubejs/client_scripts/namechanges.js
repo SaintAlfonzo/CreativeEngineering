@@ -52,8 +52,19 @@ ClientEvents.lang('en_us', e => {
 	e.add('block.creativeengineering.constantan_dust_pile', 'Constantan Grit Pile')
 	e.add('block.creativeengineering.brass_dust_pile', 'Brass Grit Pile')
 
+  e.add('block.rusticdelight.bell_peppers', 'Bell Peppers')
+  e.add('block.rusticdelight.cotton', 'Cotton')
+  e.add('block.rusticdelight.coffee', 'Coffee Plant')
+  e.add('block.rusticdelight.potted_wild_bell_peppers', 'Potted Wild Bell Peppers')
+  e.add('block.rusticdelight.potted_wild_coffee', 'Potted Wild Coffee')
+  e.add('block.rusticdelight.potted_wild_cotton', 'Potted Wild Cotton')
+
   e.renameItem('creativeengineering:transmitter', 'Transmitter')
   
+  e.renameItem('canned_goods:canned_rotten_flesh', 'Canned Tough Jerky')
+  e.renameItem('canned_goods:canned_spider_eyes', 'Canned Night Berries')
+  e.renameItem('neapolitan:chocolate_spider_eye', 'Chocolate Night Berries')
+
 	e.renameItem('create_compressed:copper_sheet_block', 'Copper Plate Block')
   e.renameItem('create_compressed:iron_sheet_block', 'Iron Plate Block')
   e.renameItem('create_compressed:gold_sheet_block', 'Gold Plate Block')

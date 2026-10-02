@@ -17,7 +17,8 @@ Options:
   --skip S / --last S drop the first S seconds of the window / keep only the last S seconds
   --baseline FILE     an earlier .summary.json: adds "change" columns
   --out FILE          report path (default perf/reports/<recording name>.html)
-  --tsrg FILE         SRG->official method names (default patcherMod/build/createMcpToSrg/output.tsrg;
+  --name NAME         cache/report name (default the recording's file name); ingest_report.py sets it
+  --tsrg FILE         SRG->official method names (default development/patcherMod/build/createMcpToSrg/output.tsrg;
                       without it method names stay m_12345_, tick phases still work)
 
 How samples are attributed (details in the report's "Method and limits" section):
@@ -531,14 +532,15 @@ def main():
     ap.add_argument('--last', type=float, default=0)
     ap.add_argument('--baseline')
     ap.add_argument('--out')
-    ap.add_argument('--tsrg', default=os.path.join(ROOT, 'patcherMod', 'build', 'createMcpToSrg', 'output.tsrg'))
+    ap.add_argument('--name')
+    ap.add_argument('--tsrg', default=os.path.join(ROOT, 'development', 'patcherMod', 'build', 'createMcpToSrg', 'output.tsrg'))
     args = ap.parse_args()
     if not args.mods:
         dl = os.path.join(ROOT, 'deploy', 'latest', 'mods')
         args.mods = dl if os.path.isdir(dl) else os.path.join(ROOT, 'mods')
     args.mods = os.path.abspath(args.mods)
 
-    name = re.sub(r'\.jfr$', '', os.path.basename(os.path.normpath(args.recording)))
+    name = args.name or re.sub(r'\.jfr$', '', os.path.basename(os.path.normpath(args.recording)))
     parsed = os.path.join(ROOT, 'perf', 'parsed', name)
     ensure_parsed(args.recording, parsed)
     idx = modindex.build(args.mods, os.path.join(ROOT, 'perf', '.cache', 'modindex.json'))

@@ -1,6 +1,6 @@
 // TODO(dynamic updates): move this off the manual pipeline, like the worldgen scripts were
 // (kubejs/server_scripts/worldgen/). Today: `node sawmill.js` -> recipes/sawmill/*.json -> copied by
-// hand into patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/ -> jar rebuild.
+// hand into development/patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/ -> jar rebuild.
 // Plan: an NCH helper that adds these recipes as raw JSON from ServerEvents.highPriorityData
 // (event.add), which bypasses kubejs-immersive-engineering's broken secondaries schema the same way
 // the jar's datapack JSONs do, driven by the species table in server_scripts/wood/wood_types.js so

@@ -668,7 +668,7 @@
 		if (!result.errors && !stage) {
 			result = { errors: ['patcherMod has no worldgen.StructureFrequencies: mods/ holds an older creativeengineering jar. '
 				+ 'Groups without their per-structure frequencies would spawn every member at full rate, so nothing is applied. '
-				+ 'Copy the new jar from patcherMod/build/libs into mods/.'], title: 'patcherMod jar too old' }
+				+ 'Copy the new jar from development/patcherMod/build/libs into mods/.'], title: 'patcherMod jar too old' }
 		}
 		if (result.errors) {
 			result.errors.forEach(function (e) { console.error(TAG + e) })

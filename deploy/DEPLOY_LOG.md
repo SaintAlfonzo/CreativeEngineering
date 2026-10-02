@@ -4,22 +4,632 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
-<!-- deploy:1.0.2 -->
-## 1.0.2 - 2026-09-29 20:56
+<!-- deploy:1.0.3 -->
+## 1.0.3 - 2026-10-01 20:49
 
 - Minecraft 1.19.2, Forge 43.3.9
-- Commit: c6a3433 + 15 uncommitted file(s)
-- Since: 1.0.1
-- Contents: 338 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
-- Notes: Crash fixes from external-server logs: thread-safe Level.random (Regrowth RNG crash), No Hostiles Around Campfire removed (spawn-scan hang), DH threads 6->2, Async Locator added, JEI now on server; loot-tuning + villager-trade script fixes; multi-serving cans (untested)
+- Commit: 81421be + 67 uncommitted file(s)
+- Since: 1.0.2
+- Contents: 340 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
+- Payload: update from 1.0.2: 58 files, 6.4 MB (mods 2, kubejs 44, config 8, server 4)
+- Notes: Exposure 1.9.19 backport (base + Polaroid) replaces Exposure 1.6.0 (new items/configs; 1.6.0 photos and cameras don't carry over); patcherMod 1.0.3
 - Built with warnings:
-  - 15 uncommitted change(s) in shipped folders (commit c6a3433 + working tree)
+  - 67 uncommitted change(s) in shipped folders (commit 81421be + working tree)
 
 ### Changes
 
-Mods added (1):
+Mods updated (2):
+
+- creativeengineering: `creativeengineering-1.0.2.jar` -> `creativeengineering-1.0.3.jar`
+- exposure: `exposure-1.19.2-1.6.0-forge.jar` -> `exposureBackport-1.9.19-ce-19.2-01.jar`
+
+<details><summary>kubejs/: 31 added, 13 changed, 235 removed</summary>
+
+*added (31)*
+
+- `assets/creativeengineering/blockstates/beef_culture_block.json`
+- `assets/creativeengineering/blockstates/cod_culture_block.json`
+- `assets/creativeengineering/blockstates/mutton_culture_block.json`
+- `assets/creativeengineering/blockstates/pork_culture_block.json`
+- `assets/creativeengineering/blockstates/poultry_culture_block.json`
+- `assets/creativeengineering/blockstates/rabbit_culture_block.json`
+- `assets/creativeengineering/blockstates/salmon_culture_block.json`
+- `assets/creativeengineering/models/block/beef_culture_block.json`
+- `assets/creativeengineering/models/block/cod_culture_block.json`
+- `assets/creativeengineering/models/block/mutton_culture_block.json`
+- `assets/creativeengineering/models/block/pork_culture_block.json`
+- `assets/creativeengineering/models/block/poultry_culture_block.json`
+- `assets/creativeengineering/models/block/rabbit_culture_block.json`
+- `assets/creativeengineering/models/block/salmon_culture_block.json`
+- `assets/creativeengineering/models/item/beef_culture_block.json`
+- `assets/creativeengineering/models/item/cod_culture_block.json`
+- `assets/creativeengineering/models/item/mutton_culture_block.json`
+- `assets/creativeengineering/models/item/pork_culture_block.json`
+- `assets/creativeengineering/models/item/poultry_culture_block.json`
+- `assets/creativeengineering/models/item/rabbit_culture_block.json`
+- `assets/creativeengineering/models/item/salmon_culture_block.json`
+- `assets/creativeengineering/textures/block/culture_block/beef_culture_block.png`
+- `assets/creativeengineering/textures/block/culture_block/cod_culture_block.png`
+- `assets/creativeengineering/textures/block/culture_block/mutton_culture_block.png`
+- `assets/creativeengineering/textures/block/culture_block/pork_culture_block.png`
+- `assets/creativeengineering/textures/block/culture_block/poultry_culture_block.png`
+- `assets/creativeengineering/textures/block/culture_block/rabbit_culture_block.png`
+- `assets/creativeengineering/textures/block/culture_block/salmon_culture_block.png`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
+
+*changed (13)*
+
+- `client_scripts/namechanges.js`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `server_scripts/_lib/dump_climate.js`
+- `server_scripts/cooking/canning.js`
+- `server_scripts/cooking/cultivated_meat.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/storageblocktags.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/func/neoCraftHelper.js`
+- `startup_scripts/items/cultures.js`
+- `startup_scripts/magic/magic_resistance.js`
+
+*removed (235)*
+
+- `README.txt`
+- `exported/worldgen/climate/minecraft__overworld.json`
+- `exported/worldgen/climate/minecraft__the_end.json`
+- `exported/worldgen/climate/minecraft__the_nether.json`
+- `generation_scripts/sawmill.js`
+- `generation_scripts/recipes/sawmill/` (211 files)
+- `generation_scripts/worldgen/` (9 files)
+- `recipes/food/bonemeal_broth.json`
+- `recipes/recycle/sawmill_recycle_door.json`
+- `recipes/recycle/sawmill_recycle_slab.json`
+- `recipes/recycle/sawmill_recycle_stairs.json`
+- `server_scripts/loot/README.md`
+- `server_scripts/loot/loot_census.md`
+- `startup_scripts/todo/create_ie_dict_additions.txt`
+- `startup_scripts/todo/not_in_dict.txt`
+- `startup_scripts/todo/recipes_to_remove.txt`
+- `startup_scripts/todo/remove_list.txt`
+
+</details>
+
+config/: 1 added, 7 changed, 0 removed:
+
+*added (1)*
+
+- `exposure_polaroid-client.toml`
+
+*changed (7)*
+
+- `creativeengineering-common.toml`
+- `exposure-client.toml`
+- `exposure-common.toml`
+- `loadingprotection-common.toml`
+- `rare-ice.properties`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+server/: 1 added, 3 changed, 0 removed:
+
+*added (1)*
+
+- `perf/report.sh`
+
+*changed (3)*
+
+- `LaunchServer.bat`
+- `LaunchServer.sh`
+- `perf/README.md`
+
+### Removals (from 1.0.2)
+
+<details><summary>Delete on the server (237, also in removals_server.txt)</summary>
+
+- `kubejs/README.txt`
+- `kubejs/exported/worldgen/climate/minecraft__overworld.json`
+- `kubejs/exported/worldgen/climate/minecraft__the_end.json`
+- `kubejs/exported/worldgen/climate/minecraft__the_nether.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_log-acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-vertical_acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_wood-acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_log-ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_planks_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_planks_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_planks_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ap_quark_ancient_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-vertical_ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_wood-ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_log-azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-ap_quark_azalea_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_planks_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_planks_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_planks_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-vertical_azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_wood-azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_log-birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-vertical_birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_wood-birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_log-blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-ap_quark_blossom_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_planks_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_planks_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_planks_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-vertical_blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_wood-blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_hyphae-crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-vertical_crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_stem-crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_log-dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-vertical_dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_wood-dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_log-jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-vertical_jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_wood-jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_log-mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-vertical_mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_wood-mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_log-oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-vertical_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_wood-oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_log-spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-vertical_spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_wood-spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_acacia_log-acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_acacia_wood-acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_ancient_log-ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_ancient_wood-ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_azalea_log-azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_azalea_wood-azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_birch_log-birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_birch_wood-birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_blossom_log-blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_blossom_wood-blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_crimson_hyphae-crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_crimson_stem-crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_dark_oak_log-dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_dark_oak_wood-dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_jungle_log-jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_jungle_wood-jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_mangrove_log-mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_mangrove_wood-mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_oak_log-oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_oak_wood-oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_spruce_log-spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_spruce_wood-spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_twisted_log-twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_twisted_wood-twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_warped_hyphae-warped_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_warped_stem-warped_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_log-twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-q_architects_palette_twisted_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-q_architects_palette_vertical_twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_wood-twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_hyphae-warped_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-vertical_warped_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_stem-warped_planks.json`
+- `kubejs/generation_scripts/sawmill.js`
+- `kubejs/generation_scripts/worldgen/README.md`
+- `kubejs/generation_scripts/worldgen/biome_merge_proposals.json`
+- `kubejs/generation_scripts/worldgen/biome_merge_proposals.md`
+- `kubejs/generation_scripts/worldgen/biome_merge_suggestions.md`
+- `kubejs/generation_scripts/worldgen/loot_container_audit.md`
+- `kubejs/generation_scripts/worldgen/pool_tag_report.md`
+- `kubejs/generation_scripts/worldgen/structure_group_estimates.md`
+- `kubejs/generation_scripts/worldgen/structure_group_migration.md`
+- `kubejs/generation_scripts/worldgen/structure_tag_report.md`
+- `kubejs/recipes/food/bonemeal_broth.json`
+- `kubejs/recipes/recycle/sawmill_recycle_door.json`
+- `kubejs/recipes/recycle/sawmill_recycle_slab.json`
+- `kubejs/recipes/recycle/sawmill_recycle_stairs.json`
+- `kubejs/server_scripts/loot/README.md`
+- `kubejs/server_scripts/loot/loot_census.md`
+- `kubejs/startup_scripts/todo/create_ie_dict_additions.txt`
+- `kubejs/startup_scripts/todo/not_in_dict.txt`
+- `kubejs/startup_scripts/todo/recipes_to_remove.txt`
+- `kubejs/startup_scripts/todo/remove_list.txt`
+- `mods/creativeengineering-1.0.2.jar`
+- `mods/exposure-1.19.2-1.6.0-forge.jar`
+
+</details>
+
+<details><summary>Delete on the client (237, also in removals_client.txt)</summary>
+
+- `kubejs/README.txt`
+- `kubejs/exported/worldgen/climate/minecraft__overworld.json`
+- `kubejs/exported/worldgen/climate/minecraft__the_end.json`
+- `kubejs/exported/worldgen/climate/minecraft__the_nether.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_log-acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-acacia_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_planks-vertical_acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/acacia_wood-acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_log-ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_planks_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_planks_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_planks_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ancient_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-ap_quark_ancient_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_planks-vertical_ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/ancient_wood-ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_log-azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-ap_quark_azalea_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_planks_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_planks_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_planks_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-azalea_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_planks-vertical_azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/azalea_wood-azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_log-birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-birch_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_planks-vertical_birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/birch_wood-birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_log-blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-ap_quark_blossom_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_planks_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_planks_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_planks_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-blossom_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_planks-vertical_blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/blossom_wood-blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_hyphae-crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-crimson_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_planks-vertical_crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/crimson_stem-crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_log-dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-dark_oak_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_planks-vertical_dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/dark_oak_wood-dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_log-jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-jungle_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_planks-vertical_jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/jungle_wood-jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_log-mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-mangrove_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_planks-vertical_mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/mangrove_wood-mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_log-oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-oak_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_planks-vertical_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/oak_wood-oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_log-spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-spruce_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_planks-vertical_spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/spruce_wood-spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_acacia_log-acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_acacia_wood-acacia_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_ancient_log-ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_ancient_wood-ancient_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_azalea_log-azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_azalea_wood-azalea_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_birch_log-birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_birch_wood-birch_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_blossom_log-blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_blossom_wood-blossom_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_crimson_hyphae-crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_crimson_stem-crimson_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_dark_oak_log-dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_dark_oak_wood-dark_oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_jungle_log-jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_jungle_wood-jungle_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_mangrove_log-mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_mangrove_wood-mangrove_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_oak_log-oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_oak_wood-oak_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_spruce_log-spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_spruce_wood-spruce_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_twisted_log-twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_twisted_wood-twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_warped_hyphae-warped_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/stripped_warped_stem-warped_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_log-twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-q_architects_palette_twisted_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-q_architects_palette_vertical_twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_planks-twisted_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/twisted_wood-twisted_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_hyphae-warped_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-vertical_warped_planks.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_button.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_door.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_fence.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_fence_gate.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_ladder.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_pressure_plate.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_railing.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_sign.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_stairs.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_trapdoor.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_planks-warped_vertical_slab.json`
+- `kubejs/generation_scripts/recipes/sawmill/warped_stem-warped_planks.json`
+- `kubejs/generation_scripts/sawmill.js`
+- `kubejs/generation_scripts/worldgen/README.md`
+- `kubejs/generation_scripts/worldgen/biome_merge_proposals.json`
+- `kubejs/generation_scripts/worldgen/biome_merge_proposals.md`
+- `kubejs/generation_scripts/worldgen/biome_merge_suggestions.md`
+- `kubejs/generation_scripts/worldgen/loot_container_audit.md`
+- `kubejs/generation_scripts/worldgen/pool_tag_report.md`
+- `kubejs/generation_scripts/worldgen/structure_group_estimates.md`
+- `kubejs/generation_scripts/worldgen/structure_group_migration.md`
+- `kubejs/generation_scripts/worldgen/structure_tag_report.md`
+- `kubejs/recipes/food/bonemeal_broth.json`
+- `kubejs/recipes/recycle/sawmill_recycle_door.json`
+- `kubejs/recipes/recycle/sawmill_recycle_slab.json`
+- `kubejs/recipes/recycle/sawmill_recycle_stairs.json`
+- `kubejs/server_scripts/loot/README.md`
+- `kubejs/server_scripts/loot/loot_census.md`
+- `kubejs/startup_scripts/todo/create_ie_dict_additions.txt`
+- `kubejs/startup_scripts/todo/not_in_dict.txt`
+- `kubejs/startup_scripts/todo/recipes_to_remove.txt`
+- `kubejs/startup_scripts/todo/remove_list.txt`
+- `mods/creativeengineering-1.0.2.jar`
+- `mods/exposure-1.19.2-1.6.0-forge.jar`
+
+</details>
+
+<!-- deploy:1.0.2 -->
+## 1.0.2 - 2026-09-30 00:14
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 81421be + 31 uncommitted file(s)
+- Since: 1.0.1
+- Deployed: server, client 2026-09-30
+- Contents: 340 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
+- Notes: Crash fixes from external-server logs: thread-safe Level.random (Regrowth RNG crash), No Hostiles Around Campfire removed (spawn-scan hang), DH threads 6->2, Async Locator added, JEI now on server; loot-tuning + villager-trade script fixes; multi-serving cans; compost framework; Bushier Flowers growth/worldgen off (Flower Patch instead, 4 loose -> grown recipe); emu nest (Incubation); Untitled Duck Mod + Fuel Goes Here added
+- Built with warnings:
+  - 31 uncommitted change(s) in shipped folders (commit 81421be + working tree)
+
+### Changes
+
+Mods added (3):
 
 - Async Locator 1.19.2-1.3.0 `async-locator-forge-1.19.2-1.3.0.jar` (server)
+- Fuel Goes Here 1 `fuelgoeshere-1.19.2-0.1.0.0.jar` (both)
+- Untitled Duck Mod (Forge) 0.6.1-forge-1.19.2 `untitledduckmod-0.6.1-1.19.2-forge.jar` (both)
 
 Mods updated (1):
 
@@ -34,40 +644,63 @@ Mods whose side changed (1):
 
 - Just Enough Items (JEI) `jei-1.19.2-forge-11.8.1.1034.jar`: client -> both
 
-kubejs/: 7 added, 12 changed, 0 removed:
+<details><summary>kubejs/: 18 added, 20 changed, 0 removed</summary>
 
-*added (7)*
+*added (18)*
 
+- `data/bushierflowers/forge/biome_modifier/add_grown_flower_default.json`
+- `data/bushierflowers/forge/biome_modifier/add_grown_flower_flower_forest.json`
+- `data/bushierflowers/forge/biome_modifier/add_grown_flower_meadow.json`
+- `data/bushierflowers/forge/biome_modifier/add_grown_flower_plain.json`
+- `data/bushierflowers/forge/biome_modifier/add_grown_flower_swamp.json`
 - `generation_scripts/food/can_servings.json`
 - `generation_scripts/food/food_types.json`
+- `server_scripts/_lib/dump_compost.js`
 - `server_scripts/_lib/dump_food.js`
 - `server_scripts/cooking/canning.js`
+- `server_scripts/other/flowers.js`
 - `server_scripts/tags/cantags.js`
 - `server_scripts/tags/foodtypetags.js`
+- `startup_scripts/changes/item_properties.js`
+- `startup_scripts/compost/compost_rules.js`
+- `startup_scripts/compost/compost_values.js`
+- `startup_scripts/func/compost.js`
 - `startup_scripts/items/cans.js`
 
-*changed (12)*
+*changed (20)*
 
+- `client_scripts/namechanges.js`
 - `exported/worldgen/climate/minecraft__overworld.json`
 - `exported/worldgen/climate/minecraft__the_end.json`
 - `exported/worldgen/climate/minecraft__the_nether.json`
+- `generation_scripts/worldgen/biome_config.json`
 - `generation_scripts/worldgen/pool_config.json`
 - `generation_scripts/worldgen/pool_tag_report.md`
 - `generation_scripts/worldgen/structure_groups.json`
 - `generation_scripts/worldgen/structure_tag_report.md`
+- `server_scripts/_lib/dump_all.js`
+- `server_scripts/cooking/cooking.js`
 - `server_scripts/economy/trades.js`
 - `server_scripts/loot/05_tuning.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/cookingtags.js`
+- `startup_scripts/_lib/block_dict.js`
 - `startup_scripts/_lib/item_dict.js`
 - `startup_scripts/func/item_physics.js`
 - `startup_scripts/func/neoCraftHelper.js`
 
-config/: 0 added, 4 changed, 1 removed:
+</details>
 
-*changed (4)*
+config/: 0 added, 6 changed, 1 removed:
+
+*changed (6)*
 
 - `DistantHorizons.toml`
+- `creativeengineering-common.toml`
 - `rare-ice.properties`
 - `jei/ingredient-list-mod-sort-order.ini`
+- `jei/world/local/Workspace/bookmarks.ini`
 - `worldedit/worldedit.properties`
 
 *removed (1)*

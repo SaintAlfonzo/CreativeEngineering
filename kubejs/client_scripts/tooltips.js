@@ -68,15 +68,19 @@ function removeTooltips(e) {
 
 // Strip only the lines built from one translation key (a mod's own flavour text), leaving the name
 // and every other line alone - unlike removeTooltips, BlockRunner's "Speed Multiplier" line survives.
+// A key ending in '*' matches every key with that prefix (mods that build the key from the item id).
 //   removeTooltipKey(e, 'desc.somemod.flavour.thing', i.thing, i.thing_slab)
+//   removeTooltipKey(e, 'item.somemod.fruit.tooltip.*', i.apple, i.pear)
 function removeTooltipKey(e, key) {
     var ids = Array.prototype.slice.call(arguments, 2);
+    var isPrefix = key.charAt(key.length - 1) === '*';
+    var prefix = isPrefix ? key.substring(0, key.length - 1) : key;
     for (var k = 0; k < ids.length; k++) {
         e.addAdvanced(ids[k], function(item, advanced, text) {
             for (var n = text.size() - 1; n >= 1; n--) {
                 var lineKey = null;
                 try { lineKey = String(text.get(n).getContents().getKey()); } catch (err) {}
-                if (lineKey === key) {
+                if (lineKey !== null && (isPrefix ? lineKey.indexOf(prefix) === 0 : lineKey === key)) {
                     text.remove(n);
                 }
             }
@@ -603,7 +607,41 @@ var i = global.item;
 		[i.teleportation_arrow, ['Teleport to arrow destination', col.epic]],
 		[i.whistling_arrow, ['Creates noise, distracts enemies', col.norm]]
 	);
-  	
+
+// ############################## Vinery ##############################
+
+	// Remove Vinery's per-variant grape and grape seed flavour lines (keys built from the item id)
+	// removeTooltipKey(e, 'item.vinery.grape.tooltip.*',
+	// 	i.red_grape, i.white_grape, i.savanna_grapes_red, i.savanna_grapes_white,
+	// 	i.taiga_grapes_red, i.taiga_grapes_white, i.jungle_grapes_red, i.jungle_grapes_white);
+	// removeTooltipKey(e, 'item.vinery.grapeseed.tooltip.*',
+	// 	i.grape_seeds_red, i.grape_seeds_white, i.grape_seeds_red_savanna, i.grape_seeds_white_savanna,
+	// 	i.grape_seeds_red_taiga, i.grape_seeds_white_taiga, i.grape_seeds_red_jungle, i.grape_seeds_white_jungle);
+
+	// addTooltips(e,
+	// 	// Processing
+	// 	[i.grapevine_pot, ['TODO', col.norm]],
+	// 	[i.wine_press, ['TODO', col.norm]],
+	// 	[i.fermentation_barrel, ['TODO', col.norm]],
+	// 	// Growing
+	// 	[i.grapevine_stem, ['TODO', col.norm]],
+	// 	[i.grapevine_lattice, ['TODO', col.norm]],
+	// 	[i.apple_leaves, ['TODO', col.norm]],
+	// 	[i.cherry_leaves, ['TODO', col.norm]],
+	// 	[i.apple_tree_sapling, ['TODO', col.norm]],
+	// 	[i.cherry_sapling, ['TODO', col.norm]],
+	// 	// Utility
+	// 	[i.kitchen_sink, ['TODO', col.norm]],
+	// 	[i.stackable_log, ['TODO', col.norm]],
+	// 	// Wine storage
+	// 	[i.wine_rack_1, ['TODO', col.norm]],
+	// 	[i.wine_rack_2, ['TODO', col.norm]],
+	// 	[i.wine_rack_3, ['TODO', col.norm]],
+	// 	[i.wine_rack_5, ['TODO', col.norm]],
+	// 	[i.wine_box, ['TODO', col.norm]]
+	// );
+	// addTooltipPattern(e, 'vinery:*_wine_rack_mid', ['TODO', col.norm]);
+
 // ############################## Quark ##############################
 
 	//addTooltipPattern(e, 'quark:*_rune', {text: 'Recolor enchantment shine!',color: 'white'});

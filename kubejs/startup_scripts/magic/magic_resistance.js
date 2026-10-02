@@ -11,7 +11,7 @@
 // LivingHurtEvent read-only (getDamage() only, no setAmount()/cancel — confirmed by
 // decompiling kubejs-forge-1902.6.2-build.73.jar), so reducing incoming damage needs a real
 // Forge listener. That half lives in patcherMod:
-//   patcherMod/.../potion/MagicResistanceEffect.java — @SubscribeEvent on LivingHurtEvent,
+//   development/patcherMod/.../potion/MagicResistanceEffect.java — @SubscribeEvent on LivingHurtEvent,
 //   reduces damage from sources vanilla already flags as magic (DamageSource#isMagic() —
 //   potion/instant-damage, evoker fangs, conduit, dragon's breath, etc.) by 20% per
 //   amplifier level (same scaling as vanilla Resistance), full immunity at amplifier 4+.

@@ -1,0 +1,130 @@
+// exposureBackport: Exposure 1.9.19 and its addons ported to Forge 1.19.2, in one jar that holds four mods.
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
+//
+// Each addon is its own source set (src/<addon>/java, src/<addon>/resources) that compiles against main,
+// so the base port (src/main) can never import addon code: the compiler enforces the separation. All
+// source sets go into the one jar and into the dev runs.
+plugins {
+    id 'ce.forge-mod-refmap'
+}
+
+repositories {
+    // Third-party mod jars copied from ../../mods (git-ignored), for optional integrations only.
+    flatDir { dir 'libs' }
+}
+
+dependencies {
+    // Optional integrations (JEI, KubeJS, Create). fg.deobf remaps the SRG-named mod jars to Mojang names, so
+    // integration code can call Minecraft methods inherited through their classes. Compile-only: none of them
+    // is needed at runtime, every integration entry point checks the mod is loaded first.
+    // flatDir notation: 'local:<file name without -version>:<version>' (any group: flatDir ignores it, FG's deobf repo needs one)
+    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+    compileOnly fg.deobf('local:kubejs-forge:1902.6.2-build.73')
+    compileOnly fg.deobf('local:rhino-forge:1902.2.3-build.284')
+    compileOnly fg.deobf('local:architectury:6.6.92-forge')
+    compileOnly fg.deobf('local:create-1.19.2:0.5.1.i')
+    compileOnly fg.deobf('local:flywheel-forge-1.19.2:0.6.11-22')
+    compileOnly fg.deobf('local:Registrate-MC1.19:1.1.5')
+}
+
+// addon source set -> other addons it may compile against. Order matters: dependencies first.
+// expanded -> polaroid: upstream Expanded's optional instant-slide integration (PolaroidHandler).
+def addons = [
+        polaroid: [],
+        catalog : [],
+        expanded: ['polaroid'],
+]
+
+addons.each { name, deps ->
+    def ss = sourceSets.create(name)
+    ss.compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+    ss.runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    deps.each { dep ->
+        ss.compileClasspath += sourceSets[dep].output
+        ss.runtimeClasspath += sourceSets[dep].output
+    }
+    dependencies.add(ss.annotationProcessorConfigurationName, 'org.spongepowered:mixin:0.8.5:processor')
+}
+
+tasks.named('jar', Jar).configure {
+    addons.keySet().each { from sourceSets[it].output }
+}
+
+minecraft.runs.configureEach {
+    mods {
+        "${mod_id}" {
+            addons.keySet().each { source sourceSets[it] }
+        }
+    }
+}
+
+// The jar is one resource pack, so an addon file at the same path as one in main would replace it (jar) or be hidden
+// by it (dev runs). Upstream ships them as separate jars, where tags and global loot modifiers merge across packs.
+// Here main's processResources merges each addon's copy into its own output (list union, `replace` OR'd), and the
+// addon's processResources leaves those files out. Any other shared path fails the build.
+def mergeableJson = { String path ->
+    path ==~ /data\/[^\/]+\/tags\/.+\.json/ || path == 'data/forge/loot_modifiers/global_loot_modifiers.json'
+}
+def resourceOverlaps = { String addon ->
+    def mainRoot = file('src/main/resources')
+    def addonRoot = file("src/${addon}/resources")
+    if (!addonRoot.isDirectory()) return []
+    fileTree(addonRoot).files
+            .collect { addonRoot.toPath().relativize(it.toPath()).toString().replace(File.separator, '/') }
+            .findAll { new File(mainRoot, it).isFile() }
+            .sort()
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    addons.keySet().each { inputs.dir("src/${it}/resources").optional().withPropertyName("${it}Resources") }
+    doLast {
+        def slurper = new groovy.json.JsonSlurper()
+        addons.keySet().each { addon ->
+            resourceOverlaps(addon).each { path ->
+                if (!mergeableJson(path)) {
+                    throw new GradleException("src/${addon}/resources/${path} has the same path as a file in src/main/resources " +
+                            "and can't be merged (only tags and global_loot_modifiers.json can)")
+                }
+                def target = new File(destinationDir, path)
+                def merged = slurper.parse(target)
+                def extra = slurper.parse(file("src/${addon}/resources/${path}"))
+                merged.replace = (merged.replace ?: false) || (extra.replace ?: false)
+                ['values', 'entries'].each { key ->
+                    if (extra[key] != null) {
+                        def seen = (merged[key] ?: []).collect { groovy.json.JsonOutput.toJson(it) } as Set
+                        merged[key] = (merged[key] ?: []) + extra[key].findAll { seen.add(groovy.json.JsonOutput.toJson(it)) }
+                    }
+                }
+                target.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(merged)) + '\n'
+                logger.info("merged src/${addon}/resources/${path} into main")
+            }
+        }
+    }
+}
+addons.keySet().each { addon ->
+    tasks.named(sourceSets[addon].processResourcesTaskName, ProcessResources).configure {
+        def overlaps = resourceOverlaps(addon) as Set
+        exclude { overlaps.contains(it.relativePath.pathString) }
+    }
+}
+
+// Access transformer (SRG names, generated from tools/accesstransformer.official.cfg by tools/gen_at.py).
+minecraft {
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+}
+
+// Unlike patcherMod, this mod gets real Mixin refmaps: mixins use Mojang names and work both in the dev
+// runs (runClient / runServer / runGameTestServer) and reobfuscated in the instance.
+mixin {
+    add sourceSets.main, 'exposure.refmap.json'
+    add sourceSets.expanded, 'exposure_expanded.refmap.json'
+    add sourceSets.polaroid, 'exposure_polaroid.refmap.json'
+    add sourceSets.catalog, 'exposure_catalog.refmap.json'
+    // dev runs read mixin configs from here; the jar manifest gets them from mixin_configs too
+    mixin_configs.split(',').each { config it.trim() }
+}
+
+// Port in progress: report every compile error, not javac's default first 100.
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
+}

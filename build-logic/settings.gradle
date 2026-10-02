@@ -1,0 +1,10 @@
+// Included build holding the shared convention plugin for the in-tree mods (see ../settings.gradle).
+dependencyResolutionManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    }
+}
+
+rootProject.name = 'build-logic'

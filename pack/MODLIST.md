@@ -7,7 +7,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 - Java 17
 - JVM args: `-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dmixin.debug.verbose=true -Dmixin.debug.export=true`
 
-## Mods (380: 325 both, 42 client, 13 server)
+## Mods (382: 327 both, 42 client, 13 server)
 
 | Side | Mod | Mod id | Version | File | Source |
 |---|---|---|---|---|---|
@@ -131,7 +131,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Create: Ultimate Factory | `create_ultimate_factory` | 1.9.0 | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-ultimate-factory/files/6077105) [MR](https://modrinth.com/mod/create-ultimate-factory/version/DgbBwr4p) |
 | both | Create: Vintage Improvements | `vintageimprovements` | 1.19.2-0.2.0.3 | `vintageimprovements-1.19.2-0.2.0.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-vintage-improvements/files/5661435) [MR](https://modrinth.com/mod/create-vintage-improvements/version/nXivVakq) |
 | both | CreativeCore | `creativecore` | 2.11.28 | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/creativecore/files/5491926) [MR](https://modrinth.com/mod/creativecore/version/FHuLs5LQ) |
-| both | creativeengineering-1.0.2.jar | `creativeengineering` | Unknown | `creativeengineering-1.0.2.jar` | local |
+| both | creativeengineering-1.0.3.jar | `creativeengineering` | Unknown | `creativeengineering-1.0.3.jar` | local |
 | both | Curios API (Forge/NeoForge) | `curios` | curios-forge-1.19.2-5.1.6.4.jar | `curios-forge-1.19.2-5.1.6.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/curios/files/5843737) |
 | both | Customizable Elytra | `customizableelytra` | forge-1.7.4-1.19.0 | `customizableelytra-1.19.0-1.7.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/customizable-elytra/files/4101953) [MR](https://modrinth.com/mod/customizable-elytra/version/gsnrKi46) |
 | both | Dave's Building Extended | `davebuildingmod` | dbExtended-1.19.2-6.0.1.jar | `dbExtended-1.19.2-6.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/daves-building-extended/files/4841878) |
@@ -168,7 +168,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Every Compat (Wood Good) | `everycomp` | 1.19.2-2.5.36 | `everycomp-1.19.2-2.5.36.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/every-compat/files/7142836) [MR](https://modrinth.com/mod/every-compat/version/xUCsILcc) |
 | both | Everything is Copper | `everythingcopper` | everythingcopper-1.19.2-2.3.4.jar | `everythingcopper-1.19.2-2.3.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/everythingcopper/files/5030661) |
 | both | Explorer's Compass | `explorerscompass` | 1.19.2-1.3.0-forge | `ExplorersCompass-1.19.2-1.3.0-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/explorers-compass/files/4016467) [MR](https://modrinth.com/mod/explorers-compass/version/YkK8Bd84) |
-| both | Exposure | `exposure` | 1.6.0 | `exposure-1.19.2-1.6.0-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/exposure/files/5336107) [MR](https://modrinth.com/mod/exposure/version/nCcagXCN) |
+| both | exposureBackport-1.9.19-ce-19.2-01.jar | `exposure` | Unknown | `exposureBackport-1.9.19-ce-19.2-01.jar` | local |
 | both | Fairy Lights | `fairylights` | fairylights-6.0.1-1.19.2 | `fairylights-6.0.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fairy-lights/files/4961791) |
 | both | Fantasy's Furniture | `fantasyfurniture` | 6.7.0 | `fantasyfurniture-1.19.2-6.7.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fantasys-furniture/files/4183177) [MR](https://modrinth.com/mod/fantasy-furniture/version/QewqRA2e) |
 | both | Farmer's Delight | `farmersdelight` | 1.19.2-1.2.4 | `FarmersDelight-1.19.2-1.2.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-delight/files/5051241) [MR](https://modrinth.com/mod/farmers-delight/version/rFTKVUtq) |
@@ -187,6 +187,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | FTB Library (NeoForge) | `ftblibrary` | ftb-library-forge-1902.4.1-build.236.jar | `ftb-library-forge-1902.4.1-build.236.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ftb-library-forge/files/4661834) |
 | both | FTB Quests (NeoForge) | `ftbquests` | ftb-quests-forge-1902.5.10-build.497.jar | `ftb-quests-forge-1902.5.10-build.497.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ftb-quests-forge/files/6130546) |
 | both | FTB Teams (NeoForge) | `ftbteams` | ftb-teams-forge-1902.2.14-build.123.jar | `ftb-teams-forge-1902.2.14-build.123.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ftb-teams-forge/files/4611938) |
+| both | Fuel Goes Here | `fuelgoeshere` | 1 | `fuelgoeshere-1.19.2-0.1.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fuelgoeshere/files/3933961) [MR](https://modrinth.com/mod/fuelgoeshere/version/CmwY7pPB) |
 | both | Fullblock Energistics | `fulleng` | forge-1.7.1-1.19.2 | `fulleng-forge-1.7.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fullblock-energistics/files/5296308) [MR](https://modrinth.com/mod/fullblock-energistics/version/4ymCZv2B) |
 | both | Furnace Recycle | `furnacerecycle` | 1.19.2-2.2-fabric+forge+neo | `furnacerecycle-1.19.2-2.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/furnace-recycle/files/4964885) [MR](https://modrinth.com/mod/furnace-recycle/version/SX0jjroc) |
 | both | GeckoLib | `geckolib3` | 3.1.40 | `geckolib-forge-1.19-3.1.40.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/geckolib/files/4407241) [MR](https://modrinth.com/mod/geckolib/version/lxzmD9V4) |
@@ -364,6 +365,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Trash Cans | `trashcans` | 1.0.18-forge-mc1.19 | `trashcans-1.0.18-forge-mc1.19.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/trash-cans/files/4606893) [MR](https://modrinth.com/mod/trash-cans/version/wwDGSLqc) |
 | both | TrashSlot | `trashslot` | trashslot-forge-1.19.2-12.1.0.jar | `trashslot-forge-1.19.2-12.1.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/trashslot/files/4753179) |
 | both | Twigs | `twigs` | 3.0.1 | `twigs-forge-1.19.2-3.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/twigs/files/4533061) [MR](https://modrinth.com/mod/twigs/version/3vp46egv) |
+| both | Untitled Duck Mod (Forge) | `untitledduckmod` | 0.6.1-forge-1.19.2 | `untitledduckmod-0.6.1-1.19.2-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/untitled-duck-mod-forge/files/3964148) [MR](https://modrinth.com/mod/untitled-duck-mod/version/4C9cxXuI) |
 | both | Unwrecked Ships (Forge) | `unwrecked_ships_plus` | Unwrecked Ships - 1.19-1.0.4 [Plus] | `Unwrecked Ships Plus 1.19-1.0.4 Forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/unwrecked-ships-forge/files/6038594) |
 | both | Upgrade Aquatic | `upgrade_aquatic` | 5.1.0 | `upgrade_aquatic-1.19.2-5.1.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/upgrade-aquatic/files/4777515) [MR](https://modrinth.com/mod/upgrade-aquatic/version/W50xMJpW) |
 | both | Via Romana: Infrastructure-Driven Fast Travel | `via_romana` | 1.1.3 | `Via_Romana-1.19.2-1.1.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/via-romana/files/6224859) [MR](https://modrinth.com/mod/via-romana/version/6wjExxEF) |

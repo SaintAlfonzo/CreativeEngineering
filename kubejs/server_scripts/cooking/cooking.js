@@ -270,6 +270,21 @@ R.remove({ id: 'buzzier_bees:honey/honey_apple' }, e)
 R.remove({ id: 'incubation:fried_egg' }, e)
 R.remove({ id: 'incubation:fried_egg_from_smoking' }, e)
 R.remove({ id: 'incubation:fried_egg_from_campfire_cooking' }, e)
+// Abnormals Delight overrides Farmer's Delight's three fried egg recipes with copies that don't load when
+// Incubation is installed, which left only the cooking oil recipe. Put Farmer's Delight's back.
+R.smelting(i.farmersdelight_fried_egg, i.minecraft_egg, e, undefined, 0.35, 200)
+R.smoking(i.farmersdelight_fried_egg, i.minecraft_egg, e, undefined, 0.35, 100)
+R.campfireCooking(i.farmersdelight_fried_egg, i.minecraft_egg, e, undefined, 0.35, 600)
+
+//Cooking oil
+// Slice & Dice turns Cooking Pot recipes into heated mixing after KubeJS runs, so R.remove can't reach its copy;
+// it skips ids ending in _manual_only. Re-add the pot recipe under such an id and give the mixer its own ratio.
+R.remove({ id: 'rusticdelight:cooking/cooking_oil' }, e)
+R.fdCooking([i.t_cooking_oil_ingredients, i.t_cooking_oil_ingredients, i.t_cooking_oil_ingredients,
+	i.t_cooking_oil_ingredients, i.t_cooking_oil_ingredients, i.t_cooking_oil_ingredients],
+	Item.of(i.cooking_oil, 2), e, 'cooking_oil_manual_only', 0.35, 100, i.glass_bottle)
+R.createMixing(Item.of(i.cooking_oil, 1), [i.t_cooking_oil_ingredients, i.t_cooking_oil_ingredients,
+	i.t_cooking_oil_ingredients, i.glass_bottle], e, 'cooking_oil_heated_mixing', 'heated')
 
 //Fish
 //Increase slicing yield

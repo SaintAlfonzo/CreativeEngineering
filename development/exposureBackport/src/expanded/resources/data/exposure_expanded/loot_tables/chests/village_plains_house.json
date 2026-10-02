@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:gameboy_film",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"exposure:film_frames\":[{\"identifier\":{\"texture\":\"exposure_expanded:textures/exposure/gameboy_creeper.png\"},\"type\":\"color\"}]}"
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:gameboy_film",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"exposure:film_frames\":[{\"identifier\":{\"texture\":\"exposure_expanded:textures/exposure/gameboy_tnt.png\"},\"type\":\"color\"}]}"
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:gameboy_film",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

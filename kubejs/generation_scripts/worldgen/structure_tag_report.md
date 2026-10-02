@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-09-29 02:52:40 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-10-02 18:08:50 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Groups
 

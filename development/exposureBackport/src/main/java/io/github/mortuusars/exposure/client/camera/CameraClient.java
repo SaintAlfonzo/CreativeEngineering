@@ -1,0 +1,69 @@
+package io.github.mortuusars.exposure.client.camera;
+
+import io.github.mortuusars.exposure.client.camera.viewfinder.Viewfinder;
+import io.github.mortuusars.exposure.client.camera.viewfinder.ViewfinderRegistry;
+import io.github.mortuusars.exposure.client.util.Minecrft;
+import io.github.mortuusars.exposure.network.Packets;
+import io.github.mortuusars.exposure.network.packet.common.ActiveCameraDeactivateCommonPacket;
+import io.github.mortuusars.exposure.world.camera.Camera;
+import java.util.Optional;
+import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import io.github.mortuusars.exposure.world.entity.CameraOperator;
+
+public class CameraClient {
+   @Nullable
+   private static Viewfinder activeViewfinder;
+
+   public static void tick() {
+      if (activeViewfinder != null) {
+         activeViewfinder.tick();
+      }
+   }
+
+   public static Optional<Camera> getActive() {
+      return ((CameraOperator)Minecrft.player()).getActiveExposureCameraOptional();
+   }
+
+   public static boolean isActive() {
+      return getActive().isPresent();
+   }
+
+   public static void deactivate() {
+      ((CameraOperator)Minecrft.player()).getActiveExposureCameraOptional().ifPresent(camera -> {
+         camera.map((item, stack) -> item.deactivate(camera.getHolder().asHolderEntity(), stack));
+         ((CameraOperator)Minecrft.player()).removeActiveExposureCamera();
+      });
+      Packets.sendToServer(ActiveCameraDeactivateCommonPacket.INSTANCE);
+   }
+
+   public static void setCameraEntity(Entity entity) {
+      Minecrft.get().cameraEntity = entity;
+      Minecrft.get().gameRenderer.getMainCamera().eyeHeight = entity.getEyeHeight();
+      Minecrft.get().gameRenderer.getMainCamera().eyeHeightOld = entity.getEyeHeight();
+      Minecrft.get().gameRenderer.getMainCamera().reset();
+   }
+
+   public static void resetCameraEntity() {
+      setCameraEntity(Minecrft.player());
+   }
+
+   @Nullable
+   public static Viewfinder viewfinder() {
+      return activeViewfinder;
+   }
+
+   public static void setupViewfinder(@NotNull Camera camera) {
+      removeViewfinder();
+      activeViewfinder = ViewfinderRegistry.get(camera);
+      activeViewfinder.setup();
+   }
+
+   public static void removeViewfinder() {
+      if (activeViewfinder != null) {
+         activeViewfinder.close();
+         activeViewfinder = null;
+      }
+   }
+}

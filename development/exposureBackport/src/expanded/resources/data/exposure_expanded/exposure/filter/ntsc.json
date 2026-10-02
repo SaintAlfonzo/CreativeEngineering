@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:ntsc_filter"
+  },
+  "shader": "minecraft:shaders/post/ntsc.json"
+}

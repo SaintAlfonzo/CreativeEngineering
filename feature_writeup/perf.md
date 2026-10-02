@@ -1,7 +1,7 @@
 # Performance: always-on server recording and the per-mod report
 
-Test prefix **PF-** · Last updated **2026-09-28** · Overall status **BUILT** (the Linux path works end to end on a
-scratch copy of the server; ships with the next deploy build; the Windows scripts are untested)
+Test prefix **PF-** · Last updated **2026-09-30** · Overall status **BUILT** (the Linux path works end to end on a
+scratch copy of the server, the server report included; ships with the next deploy build; the Windows scripts are untested)
 
 ## 0. At a glance
 
@@ -18,8 +18,14 @@ Recorder (JFR), built into Java, no mod. When it lags, `perf/dump.sh` on the ser
 | Shipping | `tools/build_deploy.py` category `server` -> server root | BUILT; dry run lists the 7 files |
 | Report | `tools/perf/perf_report.py` (+ `PerfParse.java`, `modindex.py`, `report_html.py`) | BUILT; run on scratch recordings |
 | Server docs | `server/perf/README.md` (ships with the server) | written |
+| Server report (crash/lag bundle) | `server/perf/report.sh` | BUILT 2026-09-30; live, crashed and watchdog paths tested on a scratch server; Linux only |
+| Report intake | `tools/perf/ingest_report.py` | BUILT 2026-09-30; tested on the three scratch archives |
+| Dump on exit | `dumponexit=true,filename=perf/exit` in the `JVMARGS` line | BUILT 2026-09-30; watchdog crash wrote a 254 MB recording |
 
-**Use:** on the server, `perf/dump.sh 10m`. Copy the file to `perf/recordings/` here. Then run
+**After a crash or lag (preferred):** on the server, `perf/report.sh` (section 3.5). Copy the zip here and run
+`python3 tools/perf/ingest_report.py <zip>`, then open `perf/incoming/<name>/index.html`.
+
+**Recording only:** on the server, `perf/dump.sh 10m`. Copy the file to `perf/recordings/` here. Then run
 `python3 tools/perf/perf_report.py perf/recordings/<file>.jfr` and open `perf/reports/<file>.html`. Add
 `--baseline perf/reports/<older>.summary.json` to see what changed between two recordings.
 
@@ -122,6 +128,66 @@ command line alone; with several servers running it asks for `-ServerPid`.
 4. `report_html.py` writes one self-contained page: inline SVG and JS, light and dark mode, a table under
    every chart.
 
+### 3.5 Server report: `report.sh` on the server, `ingest_report.py` here
+
+One command on the server gathers everything a crash or lag investigation needs into one archive; one command
+here turns it into a start page. Designed in [plan_1.0.3.md](plan_1.0.3.md) section 2 (PR).
+
+**`server/perf/report.sh [window] [tag]`** (default window 30m) -> `perf/reports/<date>-<time>[-tag].zip`
+(`.tar.gz` without `zip`). The table of contents is in `server/perf/README.md`. Behaviour:
+
+- **Finding the server.** Any `java` process whose working folder is the server folder; PIDs only, never
+  command lines. Running: the window ends now. Not running: it ends at the last write to `logs/latest.log`, so
+  after a crash the excerpts hold the minutes before it.
+- **Recording.** Running: `jcmd JFR.dump maxage=<window>`, or a copy of this run's `perf/jfr-repo/*_<pid>/`
+  without jcmd. Previous run: the newest `perf/exit/*.jfr` from the last 24 h and the newest leftover
+  `perf/jfr-repo/` folder from the last 24 h go to `previous-run/`.
+- **JVM shutting down.** The watchdog's `System.exit` can leave the JVM alive for up to 10 s.
+  `JFR.dump` then says "No recordings", and REPORT.md says the JVM is shutting down.
+- **Logs.** `*.window.log` excerpts parse the Forge timestamp (`[30Sep2026 22:39:38.778]`). Lines without a
+  timestamp (stack traces) go with the line above.
+- **Redaction.** Every copied text file goes through one awk pass. It replaces, literally, the values of
+  `password`/`token`/`secret`/`apikey` keys (4+ characters) from `server.properties`, `config/*.toml`,
+  `defaultconfigs/*.toml` and `<level-name>/serverconfig/*.toml`. It also masks `/a.b.c.d[:port]`. A Forge
+  "Incorrect key ... was corrected from {token=...}" line was caught too, since it holds the same value.
+- **`files.sha1`.** Hashes (`find -L`, so symlinked jars count) let the intake name the version and list config
+  drift without shipping any config.
+
+**Dump on exit.** Found while testing: a watchdog crash exits through `System.exit`, JFR's shutdown hook then
+deletes the repository folder, and the minutes before the hang were lost. Before this, the README said the
+folder stays after a crash, which was only true for hard kills. `dumponexit=true,filename=perf/exit` writes the
+recording on every exit. Checked on Java 17.0.20 and 21.0.7: `System.exit` writes
+`hotspot-pid-<pid>-id-1-<time>.jfr`, and `Runtime.halt` leaves the repo folder instead. Gotcha: if `perf/exit`
+doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the folder and keep the newest 3.
+
+**`tools/perf/ingest_report.py <zip | tar.gz | folder>`** -> `perf/incoming/<name>/index.html`:
+
+- **Version.** The server's `mods/` hashes are matched against every `deploy/history/*.json`. The best version
+  is shown, with "mods differ" when the match isn't exact. Changed / missing / extra files are listed for
+  `mods`, `config`, `defaultconfigs` and `kubejs`.
+- **Jars for attribution.** Each server jar is found by sha1 in `mods/`, `deploy/latest/mods`,
+  `server_mods/`, `development/patcherMod/jar_archive` and `development/patcherMod/build/libs`, and symlinked into
+  `perf/incoming/<name>/mods/`. `perf_report.py` then attributes with the jars that server actually ran;
+  `deploy/latest/mods` is only an update payload now. Jars with no local copy are listed. Hashes are cached in
+  `perf/.cache/jar_sha1.json`.
+- **perf_report runs.** `perf.html` for the live recording and `previous-<run>.html` for each `previous-run/`
+  entry, with `--name incoming-<name>[...]`. `--name` is new, so the parse caches don't collide on
+  `recording`.
+  - If the window after boot is under 30 s, or comes out empty, the run is redone with
+    `--include-startup`. The tick-time event reads 0 for a while after boot, so a server that lagged
+    straight after starting showed a 5 s window.
+- **Timeline.** Tick time from the recording, with "Can't keep up" lines (orange) and crash reports (red) on
+  the same axis. Server-local log times are converted with the `%z` offset in REPORT.md. A hung tick never
+  completes, so a watchdog hang shows as a flat line up to the red mark.
+- **Logs and crashes.**
+  - Lag lines.
+  - Crash report heads: description, exception plus 16 frames with the transformer lists stripped, and the
+    mod jars named in the stack. On the 7 external-server reports in `debug/` this named Regrowth for the RNG
+    crash and Collective + nohostilesaroundcampfire for the 09-28 hang, as the hand triage did.
+  - `hs_err` heads, KubeJS "Error occurred while handling event" grouped, exceptions by type, ERROR lines by
+    logger with numbers normalised.
+  - The Server thread from each live thread dump, and system.txt.
+
 ## 4. Limits and decisions
 
 **Blind spots:**
@@ -152,9 +218,10 @@ command line alone; with several servers running it asks for `-ServerPid`.
 - [../server/LaunchServer.sh](../server/LaunchServer.sh), [../server/LaunchServer.bat](../server/LaunchServer.bat)
 - [../server/perf/ce-server.jfc](../server/perf/ce-server.jfc), [../server/perf/README.md](../server/perf/README.md)
 - [../server/perf/dump.sh](../server/perf/dump.sh), [../server/perf/dump.bat](../server/perf/dump.bat), [../server/perf/dump.ps1](../server/perf/dump.ps1)
+- [../server/perf/report.sh](../server/perf/report.sh), [../tools/perf/ingest_report.py](../tools/perf/ingest_report.py)
 - [../tools/perf/perf_report.py](../tools/perf/perf_report.py), [../tools/perf/PerfParse.java](../tools/perf/PerfParse.java), [../tools/perf/modindex.py](../tools/perf/modindex.py), [../tools/perf/report_html.py](../tools/perf/report_html.py)
 - [../tools/build_deploy.py](../tools/build_deploy.py) (`server` category)
-- Untracked output: `perf/recordings/`, `perf/parsed/`, `perf/reports/`, `perf/.cache/`
+- Untracked output: `perf/recordings/`, `perf/parsed/`, `perf/reports/`, `perf/incoming/`, `perf/.cache/`
 
 ## 6. Offline checks (done 2026-09-28, scratch server from `deploy/latest`, 338 jars)
 
@@ -188,11 +255,30 @@ command line alone; with several servers running it asks for `-ServerPid`.
   has several thousand samples, and the mods table and tick phases are filled in.
 - [ ] **PF-06 lag capture:** when the server lags, dump within a few minutes -> "Busy seconds" lists the lag
   seconds and the mods whose share jumps.
-- [ ] **PF-07 clean stop:** `stop` the server -> the run folder under `perf/jfr-repo/` is removed.
+- [ ] **PF-07 clean stop:** `stop` the server -> the run folder under `perf/jfr-repo/` is removed and
+  `perf/exit/hotspot-pid-<pid>-...jfr` appears (at most 3 kept after the next launch).
 - [ ] **PF-08 compare:** run a later recording with `--baseline <earlier>.summary.json` -> "change" columns
   appear.
 
+- [ ] **PF-09 report, server running:** `perf/report.sh 10m` -> prints the window summary and
+  `Saved ... perf/reports/<name>.zip`; the zip has `recording.jfr`, `jvm/threads-1..3.txt`, `logs/`,
+  `system.txt`, `files.sha1`, `REPORT.md`. (Scratch: done, 13.5 s, 28 MB zip for a 5 min window.)
+- [ ] **PF-10 no secrets:** `unzip -p <zip> '*' | grep -c '<discord token>\|<rcon password>'` -> 0, and a
+  player's IP from a login line shows as `/<ip>`. (Scratch with fake values: 0 hits.)
+- [ ] **PF-11 after a crash:** after a watchdog crash (or a stop), `perf/report.sh` -> the zip has
+  `previous-run/hotspot-pid-...jfr` and the crash report. After a `kill -9` it has the leftover
+  `perf/jfr-repo/<folder>/` instead. (Scratch: the watchdog case was done; kill -9 was not tested.)
+- [ ] **PF-12 intake:** `python3 tools/perf/ingest_report.py <zip>` -> `perf/incoming/<name>/index.html` shows
+  the right pack version, the timeline with lag/crash marks, and links to `perf.html` / `previous-*.html`
+  with no "unattributed jars" warning. (Scratch: done; 1.0.2 "mods differ", as expected for dev jars.)
+- [ ] **PF-13 Windows:** no `report.ps1` yet; build it if a Windows server ever needs it.
+
 ## 8. History
+
+- 2026-09-30: Server report built (3.5): `server/perf/report.sh`, `tools/perf/ingest_report.py`,
+  `perf_report.py --name`, and the dump on exit in both launch scripts. That fixes the recording a watchdog
+  crash used to delete. Tested on a scratch server running, crashed (before the fix: no recording) and after a
+  watchdog crash (254 MB exit dump).
 
 - 2026-09-28: Studied the options (JFR vs spark vs Observable vs vanilla `/jfr`), prototyped on a scratch
   server, and A/B-tested the overhead. Built `tools/perf/`, `server/` (launch scripts with the recording and the

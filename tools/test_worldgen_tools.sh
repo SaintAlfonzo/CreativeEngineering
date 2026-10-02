@@ -3,7 +3,7 @@
 #   1. GroundMatchTest: ground matching (patcherMod worldgen/GroundMatch)
 #   2. MassPlacerTest: /ceplace filters, rows on the real structure_tags.json, signs, alignment; WorldgenConfig defaults
 #   3. node: CEConfig [worldgen.debug] structureDensity scales every set's rate exactly (tools/structure_density_check.js)
-# Java parts run against patcherMod/build/classes (run ./gradlew build first). No game needed.
+# Java parts run against development/patcherMod/build/classes (run ./gradlew build first). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT

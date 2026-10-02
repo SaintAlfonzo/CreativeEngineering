@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:nes_film",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"exposure:film_frames\":[{\"identifier\":{\"texture\":\"exposure_expanded:textures/exposure/nes_camel.png\"},\"type\":\"color\"}]}"
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:nes_film",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"exposure:film_frames\":[{\"identifier\":{\"texture\":\"exposure_expanded:textures/exposure/nes_pyramid.png\"},\"type\":\"color\"}]}"
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:nes_film",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
