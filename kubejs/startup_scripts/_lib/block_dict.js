@@ -8,6 +8,8 @@ var b = global.blocks;
 
 b.dark_fire = 'creativeengineering:dark_fire';
 b.sweet_berry_bush = 'minecraft:sweet_berry_bush'; // block id (the item is sweet_berries)
+b.emu_nest = 'creativeengineering:emu_nest';         // patcherMod nest/EmuNests.java
+b.emu_egg_nest = 'creativeengineering:emu_egg_nest'; // the 1-6 egg state; no item
 
 // Tags
 b.any_bricks = '#minecraft:bricks';

@@ -4,7 +4,7 @@
 #   2. Rhino: the same script in the pack's own Rhino fork; its output must be byte-identical to node's
 #      ... also at debug density x4 and x0.3 and with structure groups off (CEConfig [worldgen])
 #   3. Rhino with no StructureFrequencies class (an old patcherMod jar): must apply nothing
-#   4. Java: tools/structure_groups_test/FreqTest against patcherMod/build/classes (run ./gradlew build first)
+#   4. Java: tools/structure_groups_test/FreqTest against development/patcherMod/build/classes (run ./gradlew build first)
 # Needs the ATLauncher library folder (Rhino's gson, Forge's bootstrap deps). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

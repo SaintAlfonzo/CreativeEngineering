@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:color_convolve_filter"
+  },
+  "shader": "minecraft:shaders/post/color_convolve.json"
+}

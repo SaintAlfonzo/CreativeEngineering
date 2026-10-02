@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#BO",
+    "CMY",
+    "PPP"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "B": {
+      "item": "minecraft:black_dye"
+    },
+    "O": {
+      "item": "minecraft:emerald"
+    },
+    "C": {
+      "item": "minecraft:cyan_dye"
+    },
+    "M": {
+      "item": "minecraft:magenta_dye"
+    },
+    "Y": {
+      "item": "minecraft:yellow_dye"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "count": 3,
+    "item": "exposure_expanded:instant_c64_slide"
+  }
+}

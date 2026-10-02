@@ -864,16 +864,25 @@ global.NCH = {
 			.id(`${global.NCH.modId}:campfirecooking/${idSuffix}`)
 	},
 
-	smoking(output, input, e, idOverride) {
+	smoking(output, input, e, idOverride, xp, cookingtime) {
 		if (!e) throw new Error('smoking called without event object!')
+		xp = xp ?? 0
+		cookingtime = cookingtime ?? 100
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "smoking")
 		var ctx = 'smoking ' + idSuffix
 
-		global.NCH._validateAny(output, ctx + ' output')
-		global.NCH._validateAny(input, ctx + ' input')
+		// NOTE: result is deliberately a raw item id string here, not an { item }
+		// object - that's the actual vanilla smoking recipe JSON shape.
+		var resolvedOutput = global.NCH._resolveIdCount(output)
+		global.NCH._checkItem(resolvedOutput.id, ctx + ' output')
 
-		e.recipes.minecraft.smoking(output, input)
-		.id(`${global.NCH.modId}:smoking/${idSuffix}`)
+		e.custom({
+			type: 'minecraft:smoking',
+			ingredient: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
+			result: resolvedOutput.id,
+			experience: xp,
+			cookingtime: cookingtime
+		}).id(`${global.NCH.modId}:smoking/${idSuffix}`)
 	},
 
 	fletching(arrowhead, shaft, fin, result, e, idOverride) {
@@ -1599,7 +1608,7 @@ global.NCH = {
 	// the "stripped" result CANNOT be added here - kubejs-immersive-engineering's
 	// SawmillRecipeSchema serialises the `secondaries` array in a shape IE's own serializer
 	// rejects ("Missing stripping, expected to find a Boolean"). For those, write a datapack
-	// json (see patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/*.json
+	// json (see development/patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/*.json
 	// or kubejs/data/creativeengineering/recipes/sawmill/<id>.json), which loads through IE
 	// directly and bypasses the broken schema.
 	ieSawmill(output, input, e, idOverride, opts) {

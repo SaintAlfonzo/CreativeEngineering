@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:antialias_filter"
+  },
+  "shader": "minecraft:shaders/post/antialias.json"
+}

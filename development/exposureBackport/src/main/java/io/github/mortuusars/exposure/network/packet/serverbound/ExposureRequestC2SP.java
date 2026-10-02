@@ -1,0 +1,34 @@
+package io.github.mortuusars.exposure.network.packet.serverbound;
+
+import io.github.mortuusars.exposure.Exposure;
+import io.github.mortuusars.exposure.ExposureServer;
+import io.github.mortuusars.exposure.network.packet.Packet;
+import net.minecraft.network.FriendlyByteBuf;
+import io.github.mortuusars.exposure.backport.codec.ByteBufCodecs;
+import io.github.mortuusars.exposure.backport.codec.StreamCodec;
+import net.minecraft.network.protocol.PacketFlow;
+import io.github.mortuusars.exposure.backport.network.CustomPacketPayload;
+import io.github.mortuusars.exposure.backport.network.CustomPacketPayload.Type;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
+
+public record ExposureRequestC2SP(String id) implements Packet {
+   public static final ResourceLocation ID = Exposure.resource("exposure_request");
+   public static final Type<ExposureRequestC2SP> TYPE = new Type(ID);
+   public static final StreamCodec<FriendlyByteBuf, ExposureRequestC2SP> STREAM_CODEC = StreamCodec.composite(
+      ByteBufCodecs.STRING_UTF8, ExposureRequestC2SP::id, ExposureRequestC2SP::new
+   );
+
+   @NotNull
+   public Type<? extends CustomPacketPayload> type() {
+      return TYPE;
+   }
+
+   @Override
+   public boolean handle(PacketFlow flow, Player player) {
+      ExposureServer.exposureRepository().handleClientRequest((ServerPlayer)player, this.id);
+      return true;
+   }
+}

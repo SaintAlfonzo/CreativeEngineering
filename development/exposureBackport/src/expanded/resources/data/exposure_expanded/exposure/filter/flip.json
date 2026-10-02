@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:flip_filter"
+  },
+  "shader": "minecraft:shaders/post/flip.json"
+}

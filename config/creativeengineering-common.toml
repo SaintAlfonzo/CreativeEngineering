@@ -1198,3 +1198,41 @@
 		#Range: 5 ~ 1000
 		tickBudgetMs = 40
 
+#Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
+#one takes a serving; the servings left show as a durability bar and a tooltip line. The
+#last serving leaves an empty can, a crushed can or nothing, rolled with the chances below.
+[canning]
+	#Off = every can behaves like the Canned Goods original (one serving, always an empty can).
+	enabled = true
+	#Chance [0-1] that an emptied can comes back as an empty can.
+	#Range: 0.0 ~ 1.0
+	emptyCanChance = 0.7
+	#Chance [0-1] that it comes back as a crushed can instead. Whatever is left after both
+	#chances gives nothing; if the two add up past 1, the crushed chance is cut to fit.
+	#Range: 0.0 ~ 1.0
+	crushedCanChance = 0.25
+	#Item id handed back as the empty can.
+	emptyCanItem = "canned_goods:empty_can"
+	#Item id handed back as the crushed can.
+	crushedCanItem = "canned_goods:crushed_empty_can"
+
+#TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
+#but TrashSlotSaveState.json in the game folder lists every screen opened so far.
+[trash_slot]
+	#Screens that show the trash slot by default. Each one is switched on once per client, the
+	#first time it opens after being added here; pressing the toggle key afterwards still sticks.
+	enabledScreens = ["net.minecraft.client.gui.screens.inventory.InventoryScreen", "net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen", "net.minecraft.client.gui.screens.inventory.ContainerScreen", "net.minecraft.client.gui.screens.inventory.CraftingScreen", "net.minecraft.client.gui.screens.inventory.FurnaceScreen", "net.minecraft.client.gui.screens.inventory.BlastFurnaceScreen", "net.minecraft.client.gui.screens.inventory.SmokerScreen", "net.minecraft.client.gui.screens.inventory.AnvilScreen", "net.minecraft.client.gui.screens.inventory.SmithingScreen", "net.minecraft.client.gui.screens.inventory.GrindstoneScreen", "net.minecraft.client.gui.screens.inventory.StonecutterScreen", "net.minecraft.client.gui.screens.inventory.LoomScreen", "net.minecraft.client.gui.screens.inventory.CartographyTableScreen", "net.minecraft.client.gui.screens.inventory.EnchantmentScreen", "net.minecraft.client.gui.screens.inventory.BrewingStandScreen", "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen"]
+	#true: every other container screen (modded machines, storage, ...) also shows it by default,
+	#except the ones in excludedScreens. false: only enabledScreens do.
+	allContainers = false
+	#Never switched on by allContainers.
+	excludedScreens = ["net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackSettingsScreen"]
+	#Starting position for a screen the player hasn't opened yet: 'class|anchorX|anchorY|x|y'.
+	#The anchor is a fraction of the panel (0.5 = centre, 1.0 = right/bottom edge) and x/y are
+	#pixels from it to the slot's top-left; the slot is 28x28. Screens not listed start under the
+	#panel's bottom-right corner. Dragging the slot in game overrides this.
+	positions = ["net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen|1.0|1.0|0|-28", "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen|1.0|1.0|-28|0"]
+	#true: each Sophisticated Backpacks tier (leather, copper, iron, gold, diamond, netherite)
+	#remembers its own trash slot position and on/off state. false: all backpacks share one.
+	splitBackpacksByTier = true
+

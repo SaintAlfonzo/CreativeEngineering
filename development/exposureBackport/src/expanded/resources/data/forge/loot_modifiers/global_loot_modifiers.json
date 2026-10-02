@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "entries": [
+    "exposure_expanded:abandoned_mineshaft",
+    "exposure_expanded:ancient_city",
+    "exposure_expanded:bastion_other",
+    "exposure_expanded:buried_treasure",
+    "exposure_expanded:desert_pyramid",
+    "exposure_expanded:end_city_treasure",
+    "exposure_expanded:igloo_chest",
+    "exposure_expanded:jungle_temple",
+    "exposure_expanded:nether_bridge",
+    "exposure_expanded:pillager_outpost",
+    "exposure_expanded:ruined_portal",
+    "exposure_expanded:shipwreck_supply",
+    "exposure_expanded:simple_dungeon",
+    "exposure_expanded:trial_chamber_corridor",
+    "exposure_expanded:underwater_ruin_small",
+    "exposure_expanded:village_plains_house",
+    "exposure_expanded:village_snowy_house",
+    "exposure_expanded:village_desert_house",
+    "exposure_expanded:village_savanna_house",
+    "exposure_expanded:village_temple",
+    "exposure_expanded:woodland_mansion"
+  ]
+}

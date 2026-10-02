@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#GG",
+    "gCC",
+    "gDD"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:gold_nugget"
+    },
+    "G": {
+      "item": "minecraft:green_dye"
+    },
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "C": {
+      "item": "minecraft:gunpowder"
+    },
+    "D": {
+      "item": "minecraft:dried_kelp"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "exposure_expanded:gameboy_film"
+  }
+}

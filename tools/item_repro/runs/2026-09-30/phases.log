@@ -1,0 +1,4 @@
+20:30:47 phase p0lag0 delay=0 jitter=0 lag=0
+21:18:49 phase C1-150ms delay=150 jitter=20 lag=0
+21:26:49 phase C2-150ms-busy delay=150 jitter=20 lag=40
+21:34:49 phase C3-300ms-busy delay=300 jitter=100 lag=45

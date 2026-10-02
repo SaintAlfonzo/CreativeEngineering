@@ -43,6 +43,16 @@ R.remove({id: 'quarkdelight:cutting/knife/bamboo_mat_carpet'}, e)
 //Create tree fertilizer dead recipe, missing tag input but doesnt want to remove
 R.remove({id: 'create:crafting/tree_fertilizer'}, e)
 
+// ============================================================
+// Incubation
+// ============================================================
+
+// Nests, same U shape as Incubation's own hay nest (5 wheat).
+// Twig nest: stock Incubation only has it from worldgen
+R.shaped(Item.of(i.twig_nest, 1), ['T T', 'TTT'], { T: [i.twig, i.any_stick] }, e, 'twig_nest')
+// Emu nest (patcherMod nest/EmuNests.java): only emus lay in it
+R.shaped(Item.of(i.emu_nest, 1), ['B B', 'BBB'], { B: i.any_bark }, e, 'emu_nest')
+
 console.log('misc mods finished')
 })
 

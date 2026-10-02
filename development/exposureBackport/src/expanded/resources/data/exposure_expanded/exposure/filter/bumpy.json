@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:bumpy_filter"
+  },
+  "shader": "minecraft:shaders/post/bumpy.json"
+}

@@ -1,0 +1,49 @@
+# Upstream files tools/port_upstream.py never copies (in addition to --exclude): replaced by other code in the port,
+# or integrations for mods the pack doesn't have. Globs relative to the upstream source root. One reason per group.
+
+# Architectury @ExpectPlatform implementations: folded into the common classes (README: conventions)
+io/github/mortuusars/exposure/neoforge/*Impl.java
+io/github/mortuusars/exposure/network/neoforge/*
+# NeoForge entry points / events / loot / capability: rewritten as forge/ExposureForge, forge/event/Forge*Events, forge/loot
+io/github/mortuusars/exposure/neoforge/ExposureNeoForge*.java
+io/github/mortuusars/exposure/neoforge/ExposureMixinPlugin.java
+io/github/mortuusars/exposure/neoforge/event/*
+io/github/mortuusars/exposure/neoforge/block/*
+# NeoForge-only mixins: IItemExtension overrides moved into the items; KubeJS 1902 has no world render hook;
+# the key mapping extension became KeyMappingMixin#isConflictContextAndModifierActive
+io/github/mortuusars/exposure/neoforge/mixin/AlbumItemNeoForgeMixin.java
+io/github/mortuusars/exposure/neoforge/mixin/CameraItemNeoForgeMixin.java
+io/github/mortuusars/exposure/neoforge/mixin/KeyMappingExtensionNeoForgeMixin.java
+io/github/mortuusars/exposure/neoforge/mixin/KubeJSGameClientEventHandlerMixin.java
+# Mixins replaced: anvil limit -> ServerGamePacketListenerMixin; ServerPlayer/LocalPlayer camera overrides -> PlayerMixin;
+# Gui / ItemFrameRenderer / ItemInHandRenderer / mouse scroll+press -> Forge events (forge/event/ForgeClientEvents)
+io/github/mortuusars/exposure/mixin/AnvilMenuMixin.java
+io/github/mortuusars/exposure/mixin/client/LocalPlayerMixin.java
+io/github/mortuusars/exposure/mixin/client/GuiMixin.java
+io/github/mortuusars/exposure/mixin/client/ItemFrameRendererMixin.java
+io/github/mortuusars/exposure/mixin/client/ItemInHandRendererMixin.java
+# Dev-only debug overlay (Bugger) and a keybind tooltip: rely on 1.20 DebugScreenOverlay/KeyBindsList internals
+io/github/mortuusars/exposure/mixin/client/BuggerKeyboardHandlerMixin.java
+io/github/mortuusars/exposure/mixin/client/BuggerScreenOverlayMixin.java
+io/github/mortuusars/exposure/mixin/client/BuggerScreenRenderLinesInvoker.java
+io/github/mortuusars/exposure/mixin/client/KeyBindTooltipMixin.java
+io/github/mortuusars/exposure/client/util/bugger/*
+# Integrations for mods not in the pack (stubs or nothing in their place)
+io/github/mortuusars/exposure/integration/jade/*
+io/github/mortuusars/exposure/integration/real_camera/*
+io/github/mortuusars/exposure/integration/shoulder_surfing/*
+io/github/mortuusars/exposure/mixin/compat/*
+
+# ---- exposure_polaroid (src/polaroid) ----
+# @ExpectPlatform implementations folded into Register / PlatformHelper; NeoForge entry points and events rewritten as
+# forge/ExposurePolaroidForge and forge/event/Forge*Events (the plugin, ExposurePolaroidMixinPlugin, ports as is)
+io/github/mortuusars/exposure_polaroid/neoforge/*Impl.java
+io/github/mortuusars/exposure_polaroid/neoforge/ExposurePolaroidNeoForge*.java
+io/github/mortuusars/exposure_polaroid/neoforge/event/*
+
+# ---- exposure_expanded (src/expanded) ----
+# Architectury's generated platform shim; the NeoForge entry point is rewritten as forge/ExposureExpandedForge
+architectury_inject_*/*
+dev/titanite/sparkwave/exposureexpanded/neoforge/ExampleModNeoForge.java
+# Its codec is Exposure's add_table, which the loot modifier JSON names directly (ConfigurableAddTableLootModifier)
+dev/titanite/sparkwave/exposureexpanded/neoforge/ExposureExpandedLootModifier.java

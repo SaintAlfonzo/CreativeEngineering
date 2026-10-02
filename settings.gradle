@@ -1,0 +1,35 @@
+// One Gradle build for every in-tree mod. Each mod is a subproject that applies the shared
+// `ce.forge-mod` convention plugin from build-logic/ (Forge setup, mods.toml expansion, jar
+// manifest, jar archive, installToMods), so only mod-specific settings live in its own build.gradle.
+//
+//   ./gradlew build                      build every mod
+//   ./gradlew :exposureBackport:build    build one mod (or `cd <mod> && ./gradlew build`)
+//
+// Shared versions (Minecraft, Forge, mappings, Java home) are in the root gradle.properties;
+// mod_id / mod_version / ... are in each mod's own gradle.properties.
+pluginManagement {
+    includeBuild 'build-logic'
+    repositories {
+        gradlePluginPortal()
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+        maven {
+            name = 'Sponge'
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+}
+
+rootProject.name = 'CreativeEngineering'
+
+// The mod folders live under development/; project names (and :task paths) stay the bare mod names.
+['patcherMod', 'exposureBackport'].each { name ->
+    include name
+    project(":${name}").projectDir = file("development/${name}")
+}

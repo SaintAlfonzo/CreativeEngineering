@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:scan_pincushion_filter"
+  },
+  "shader": "minecraft:shaders/post/scan_pincushion.json"
+}

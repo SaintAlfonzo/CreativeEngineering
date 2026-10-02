@@ -10,16 +10,21 @@ set maxmemory=6G
 set javapath="java"
 
 :: Any additional arguments to pass to Java such as Metaspace, GC or anything else
-set jvmargs="-XX:FlightRecorderOptions=stackdepth=256,repository=perf/jfr-repo -XX:StartFlightRecording=name=ce,settings=perf/ce-server.jfc,disk=true,maxage=30m,maxsize=512m"
+set jvmargs="-XX:FlightRecorderOptions=stackdepth=256,repository=perf/jfr-repo -XX:StartFlightRecording=name=ce,settings=perf/ce-server.jfc,disk=true,maxage=30m,maxsize=512m,dumponexit=true,filename=perf/exit"
 :: ^ always-on performance recording (Java Flight Recorder): keeps the last 30 minutes (at most 512 MB) in
 ::   perf\jfr-repo\. Save it with perf\dump.bat when the server lags; see perf\README.md. Remove the two
-::   -XX options to turn it off. stackdepth=256: the default 64 cuts deep modded stacks.
+::   -XX options to turn it off. stackdepth=256: the default 64 cuts deep modded stacks. dumponexit: every
+::   stop, watchdog crashes included, writes the last 30 minutes to perf\exit\ (the newest 3 are kept).
 
 ::----------------------------::
 :: Don't edit past this point ::
 ::----------------------------::
 
 set launchargs=%*
+
+:: perf\exit must exist, or JFR writes a file named "exit"; keep its newest 3 recordings
+if not exist "%~dp0perf\exit" mkdir "%~dp0perf\exit"
+for /f "skip=3 delims=" %%f in ('dir /b /o-d "%~dp0perf\exit\*.jfr" 2^>nul') do del "%~dp0perf\exit\%%f"
 :: Launcher can specify path to java using a custom token
 IF "%1"=="ATLcustomjava" (
     echo Using launcher provided Java from %2

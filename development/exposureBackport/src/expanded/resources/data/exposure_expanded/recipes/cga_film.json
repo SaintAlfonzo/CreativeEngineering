@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#GA",
+    "gCC",
+    "gDD"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:gold_nugget"
+    },
+    "G": {
+      "item": "minecraft:cyan_dye"
+    },
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "C": {
+      "item": "minecraft:gunpowder"
+    },
+    "D": {
+      "item": "minecraft:dried_kelp"
+    },
+    "A": {
+      "item": "minecraft:magenta_dye"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "exposure_expanded:cga_film"
+  }
+}

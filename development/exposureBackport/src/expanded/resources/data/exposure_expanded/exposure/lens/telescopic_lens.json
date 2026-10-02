@@ -1,0 +1,9 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:telescopic_lens"
+  },
+  "focal_range": {
+    "min": 200,
+    "max": 300
+  }
+}

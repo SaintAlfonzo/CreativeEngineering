@@ -1,0 +1,9 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:panoramic_lens"
+  },
+  "focal_range": {
+    "min": 10,
+    "max": 18
+  }
+}

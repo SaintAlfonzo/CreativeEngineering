@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:bits_filter"
+  },
+  "shader": "minecraft:shaders/post/bits.json"
+}

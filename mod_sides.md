@@ -10,7 +10,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `server` | Only does anything on the server; harmless on clients | Yes |
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 
-**Current count:** 326 both, 12 server, 43 client (381 jars).
+**Current count:** 327 both, 13 server, 42 client (382 jars).
 
 ## Keeping this up to date
 
@@ -116,7 +116,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.2.jar` | This pack's own mod (patcherMod); client-only parts are guarded |
+| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.3.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
 | both | Customizable Elytra | `customizableelytra` | `customizableelytra-1.19.0-1.7.4.jar` |  |
@@ -148,7 +148,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Every Compat | `everycomp` | `everycomp-1.19.2-2.5.36.jar` |  |
 | both | Everything is Copper | `everythingcopper` | `everythingcopper-1.19.2-2.3.4.jar` |  |
 | both | Explorer's Compass | `explorerscompass` | `ExplorersCompass-1.19.2-1.3.0-forge.jar` |  |
-| both | Exposure | `exposure` | `exposure-1.19.2-1.6.0-forge.jar` |  |
+| both | Exposure Backport | `exposure` | `exposureBackport-1.9.19-ce-19.2-01.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded. Replaced exposure-1.19.2-1.6.0-forge.jar |
 | both | Extended Cogwheels | `extendedgears` | `extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar` |  |
 | both | Fairy Lights | `fairylights` | `fairylights-6.0.1-1.19.2.jar` |  |
 | both | Fantasy's Furniture | `fantasyfurniture` | `fantasyfurniture-1.19.2-6.7.0.jar` |  |
@@ -271,7 +271,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | SimpleHats | `simplehats` | `simplehats-forge-1.19.2-0.3.2.jar` |  |
 | both | Sit | `sit` | `sit-1.19-1.3.3.jar` |  |
 | both | Smaller Nether Portals | `smallernetherportals` | `smallernetherportals-1.19.2-3.6.jar` |  |
-| both | Snow Under Trees | `snowundertrees` | `snowundertrees-1.19.2-1.3.1.jar` |  |
 | both | Sooty Chimneys | `sootychimneys` | `sootychimneys-1.19.2-1.2.1.jar` |  |
 | both | Sophisticated Backpacks | `sophisticatedbackpacks` | `sophisticatedbackpacks-1.19.2-3.20.2.1035.jar` |  |
 | both | Sophisticated Core | `sophisticatedcore` | `sophisticatedcore-1.19.2-0.6.4.730.jar` | Required by: Sophisticated Backpacks |
@@ -404,3 +403,5 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Upgrade Aquatic | `upgrade_aquatic` | `upgrade_aquatic-1.19.2-5.1.0.jar` | Blocks/items/entities |
 | both | XP Tome | `xpbook` | `xptome-1.19-2.1.7.jar` | Items |
 | both | Bushier Flowers | `bushierflowers` | `bushierflowers-0.0.2-1.19.2.jar` | Flower bush blocks |
+| both | Fuel Goes Here | `fuelgoeshere` | `fuelgoeshere-1.19.2-0.1.0.0.jar` | Furnace shift-click puts fuel in the fuel slot; ships recipes/tags. Added 2026-09-30 |
+| both | Untitled Duck Mod | `untitledduckmod` | `untitledduckmod-0.6.1-1.19.2-forge.jar` | Duck/goose entities + items. Needs GeckoLib, Architectury. Added 2026-09-30 |

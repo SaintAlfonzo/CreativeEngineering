@@ -1,0 +1,10 @@
+{
+  "type": "exposure:add_table",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/underwater_ruin_small"
+    }
+  ],
+  "table": "exposure_expanded:chests/underwater_ruin_small"
+}

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "exposure_expanded:gameboy_film",
+    "exposure_expanded:nes_film",
+    "exposure_expanded:c64_film",
+    "exposure_expanded:cga_film",
+    "exposure_expanded:hicap_color_film",
+    "exposure_expanded:hires_color_film"
+  ]
+}

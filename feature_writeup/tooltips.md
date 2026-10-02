@@ -83,6 +83,9 @@ Examples:
   IP's figure described its own 1.2 speed factor, which BlockRunner overrides. Removed with
   `removeTooltipKey` so the Speed Multiplier line and any other lines stay.
 - **Create Compressed crushed ore piles** (aluminium, lead, silver, nickel, uranium): the compatibility line, via `removeTooltips`.
+- **Vinery grapes and grape seeds** (all 8 of each): the per-variant flavour line ("A robust and vigorous Grape - can be found in temperate Biomes", "Heavy - needs sunlight and Coarse Dirt or Podzol nearby to grow"...).
+  Vinery builds the key from the item id (`item.vinery.grape.tooltip.<id>`, `item.vinery.grapeseed.tooltip.<id>`), so
+  `removeTooltipKey` now treats a key ending in `*` as a prefix. The real bush requirements are in [vinery.md §2.6](vinery.md).
 
 **Renamed**
 - **FramedBlocks → "Framed Copycat …"** (e.g. Framed Copycat Slab, Large Framed Copycat Button, Framed Copycat Chest GUI title).
@@ -109,6 +112,11 @@ Examples:
   - every framed `*double*` item: "Hybrid block: each part holds its own camo"
   - Their Speed Multiplier line reads "matches its camo (newest camo sets walk behaviors for hybrid blocks)" (your wording, 2026-09-27).
 
+**Added for Vinery** ("Vinery" section, 2026-10-01)
+- `TODO` placeholders (gray) on the Grapevine Pot, Apple Press, Aging Barrel, Grapevine Stem and Lattice,
+  apple/cherry leaves and saplings, Kitchen Sink, Stackable Log and the wine storage blocks (`*_wine_rack_mid` by pattern).
+  Text still to be written. The behaviour to describe is in [vinery.md](vinery.md). They show in game until replaced.
+
 **Added by frameworks** (each documented in its own memory):
 - armor effects (`armor_effects_tooltip.js`) and tool effects (`tool_effects_tooltip.js`)
 - potion buckets (`potion_buckets.js`), vanilla-style effect lines
@@ -123,6 +131,7 @@ Examples:
 
 - **`removeTooltips` is blunt:** it also removes BlockRunner's Speed Multiplier line and other mods'
   lines. Prefer `removeTooltipKey`.
+- **`removeTooltipKey` prefix keys:** a key ending in `*` matches every key starting with the rest, for mods that build keys from the item id (Vinery).
 - **`removeTooltipKey` only matches lines built from a translation key.** A mod line built from plain
   text needs a match on the text instead.
 - **Patterns resolve at load:** `addTooltipPattern` resolves wildcards against the item registry when
@@ -142,8 +151,8 @@ Examples:
 
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): helpers, colour legend, all hand-written lines, removals
 - [armor_effects_tooltip.js](../kubejs/client_scripts/armor_effects_tooltip.js), [tool_effects_tooltip.js](../kubejs/client_scripts/tool_effects_tooltip.js), [potion_buckets.js](../kubejs/client_scripts/potion_buckets.js)
-- patcherMod: [surface/CamoSpeedTooltip.java](../patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`
-- Lang: [patcherMod lang en_us.json](../patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) (`creativeengineering.tooltip.*`)
+- patcherMod: [surface/CamoSpeedTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`
+- Lang: [patcherMod lang en_us.json](../development/patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) (`creativeengineering.tooltip.*`)
 - Item keys: `global.item` in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js)
 - Renames: `resourcepacks/Copycat Framed Block.zip` → `assets/framedblocks/lang/en_us.json` (backups in `configs_edited/resourcepacks/`)
 
@@ -175,9 +184,30 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [ ] **TT-12 Hybrid lines:** framed slab and framed panel → "Place a second one in the same space to make a hybrid block, one camo per half"; Framed Copycat Double Corner → "Hybrid block: each part holds its own camo"; framed cube → neither line.
 - [ ] **TT-13 Schematic claim holds:** save a Create schematic over a camo'd framed cube and a copycat block, then print it. → The framed cube comes out empty; the copycat keeps its material.
 
+**Vinery**
+- [ ] **TT-14 Grape lines gone:** hover each grape and each grape seed in JEI. → Name (and food / mod lines) only, no italic "can be found in ... Biomes" or "needs sunlight" line.
+- [ ] **TT-15 Vinery placeholders:** hover the Grapevine Pot and any `*_wine_rack_mid`. → A gray "TODO" line under Vinery's own line (until the text is written). `logs/latest.log` shows `[addTooltipPattern] vinery:*_wine_rack_mid -> 8 matches`.
+
 - [ ] **TT-09 No dead patterns:** search `logs/latest.log` for `[addTooltipPattern]`. → Every line reports more than 0 matches.
 
-## 8. History
+## 8. Tooltips To Add
+
+### Items
+
+- [] Straw- Can be collected by cutting grass with a knife
+- [] Knifes- Can be used to collect straw by cutting grass
+- [] Foods- Food type tooltip (Feast, Sweets, Baked, Fruit, etc)
+- [] Cans- Needs appleskin mixin. (shanks, saturation, of single meal, standard appleskin render) x(number of meals in can)
+- [] Chalk- Right click to mark block w/ arrow, hold right click to change mark
+- [] Pretty Pipes- Use pipe wrench w/ block in off-hand to add cover
+
+### Mods to Cover
+- [] Botania
+- [] Vinery + JEI (placeholders in, text TODO; behaviour reference in [vinery.md](vinery.md))
+- [] Cloud Storage
+- [] Brewin Chewing + JEI
+
+## 9. History
 
 - **Before 2026-09-27:** tooltips.js helpers, colour legend and sections built up over time (not reconstructed here).
 - **2026-09-27:**
@@ -186,3 +216,4 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
   - The BlockRunner tooltip tests moved here (BR-06, BR-20 and part of BR-21 → TT-03..05).
   - Schematic lines recoloured to the normal gray (`col.norm`) at your request.
   - "Framed / Copycat Blocks" section added (schematic + hybrid lines); FramedBlocks renamed "Framed Copycat …" by editing the resource pack; hybrid wording on the Speed Multiplier line. TT-10..13 added.
+- **2026-10-01:** Vinery grape and grape seed flavour lines removed (`removeTooltipKey` prefix keys); Vinery `TODO` placeholders added. TT-14, TT-15 added. See [vinery.md](vinery.md).

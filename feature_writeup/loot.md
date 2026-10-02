@@ -127,7 +127,7 @@ The only chest one is the_dirty_stuff's tobacco chest; that mod didn't load in t
 | Mod jars | `mods/<jar>` -> `data/<ns>/loot_tables/` | everything else; a jar may ship other namespaces (goldenfood ships `minecraft:chests/village/*`) |
 | Pack datapack | `kubejs/data/<ns>/loot_tables/` | 10 files: Lightman's 9 entity/boss coin tiers (overrides), `felsic_gear:blocks/felsic_block` (new, an ore-style drop) |
 | Code only | none | 180 live-only: everycomp 87, creativeengineering 39 (KubeJS blocks), suppsquared 21, supplementaries 13, immersive_weathering 12, tobacconistmod 6 |
-| patcherMod | `patcherMod/src/main/resources/data/creativeengineering/loot_tables/` | empty folder |
+| patcherMod | `development/patcherMod/src/main/resources/data/creativeengineering/loot_tables/` | empty folder |
 
 Folder layout is not a reliable signal. About half the container tables aren't under `chests/`: Terralith
 `village/<type>/`, The Missing Villages `village/<biome>/`, Towns & Towers `village/` + `outpost/`, Wares

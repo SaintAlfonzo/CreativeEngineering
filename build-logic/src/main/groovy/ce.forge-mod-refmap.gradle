@@ -1,0 +1,8 @@
+// ce.forge-mod plus MixinGradle (refmaps), for mods whose mixins use Mojang names and must also work in
+// the dev runs. Configure it in the mod's build.gradle with a `mixin { add sourceSets.X, '<name>.refmap.json' }`
+// block. (A plugin that build-logic only depends on can't be applied by id from a mod's build.gradle,
+// hence this wrapper.)
+plugins {
+    id 'ce.forge-mod'
+    id 'org.spongepowered.mixin'
+}

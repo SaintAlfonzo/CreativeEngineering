@@ -16,6 +16,9 @@ ServerEvents.tags('item', e => {
 	// redundant egg
 	t.clearAll(e, i.fried_egg_incubation)
 
+	// cooking oil: Rustic Delight only presses cotton seeds
+	t.add(e, i.t_cooking_oil_ingredients, i.pumpkin_seeds)
+
 	// lasagna meats
 	t.add(e, 'brewinandchewin:cooked_horror_lasagna_meats', [
 		i.beef_cooked, i.mutton_cooked, i.beef_patty, i.cooked_mutton_chops,

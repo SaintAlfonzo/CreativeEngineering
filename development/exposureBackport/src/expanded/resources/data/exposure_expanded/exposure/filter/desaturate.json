@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:desaturate_filter"
+  },
+  "shader": "minecraft:shaders/post/desaturate.json"
+}

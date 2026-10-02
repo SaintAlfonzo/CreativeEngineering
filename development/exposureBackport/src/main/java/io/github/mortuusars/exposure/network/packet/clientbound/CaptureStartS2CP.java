@@ -1,0 +1,34 @@
+package io.github.mortuusars.exposure.network.packet.clientbound;
+
+import io.github.mortuusars.exposure.Exposure;
+import io.github.mortuusars.exposure.network.handler.ClientPacketsHandler;
+import io.github.mortuusars.exposure.network.packet.Packet;
+import io.github.mortuusars.exposure.world.camera.capture.CaptureParameters;
+import io.github.mortuusars.exposure.backport.codec.StreamCodec;
+import net.minecraft.network.protocol.PacketFlow;
+import io.github.mortuusars.exposure.backport.network.CustomPacketPayload;
+import io.github.mortuusars.exposure.backport.network.CustomPacketPayload.Type;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
+import net.minecraft.network.FriendlyByteBuf;
+import io.github.mortuusars.exposure.backport.codec.ByteBufCodecs;
+
+public record CaptureStartS2CP(ResourceLocation templateId, CaptureParameters captureParameters) implements Packet {
+   public static final ResourceLocation ID = Exposure.resource("capture_start");
+   public static final Type<CaptureStartS2CP> TYPE = new Type(ID);
+   public static final StreamCodec<FriendlyByteBuf, CaptureStartS2CP> STREAM_CODEC = StreamCodec.composite(
+      ByteBufCodecs.RESOURCE_LOCATION, CaptureStartS2CP::templateId, CaptureParameters.STREAM_CODEC, CaptureStartS2CP::captureParameters, CaptureStartS2CP::new
+   );
+
+   @NotNull
+   public Type<? extends CustomPacketPayload> type() {
+      return TYPE;
+   }
+
+   @Override
+   public boolean handle(PacketFlow flow, Player player) {
+      ClientPacketsHandler.startCapture(this);
+      return true;
+   }
+}

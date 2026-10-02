@@ -1,0 +1,40 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "exposure_expanded:hires_black_and_white_film"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "exposure:developed_black_and_white_film"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "exposure_expanded:hires_black_and_white_film"
+        },
+        {
+          "fluid": "minecraft:water",
+          "amount": 250
+        }
+      ],
+      "results": [
+        {
+          "item": "exposure_expanded:hires_black_and_white_film"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "exposure_expanded:hires_black_and_white_film"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "io.github.mortuusars.exposure_polaroid.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "refmap": "exposure_polaroid.refmap.json",
+  "mixins": [],
+  "client": [
+    "client.ItemRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

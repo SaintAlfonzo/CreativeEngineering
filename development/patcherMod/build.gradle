@@ -1,0 +1,39 @@
+// Shared Forge setup (runs, mods.toml expansion, jar manifest, jar_archive, installToMods) comes from
+// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to patcherMod.
+// Build from the instance root (`./gradlew :patcherMod:build`) or from here (`./gradlew build`).
+plugins {
+    id 'maven-publish'
+    id 'ce.forge-mod'
+}
+
+repositories {
+    flatDir {
+        dir 'libs'
+    }
+}
+
+dependencies {
+    // Third-party mod jars copied from ../mods (git-ignored). They are SRG-named, see the note below.
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
+}
+
+// This project ships no Mixin refmap (the org.spongepowered.mixin Gradle plugin is not
+// applied) and only ever runs reobfuscated. Mixins that target Minecraft classes therefore
+// use SRG member names with remap = false; disable the AP target validator so it does not
+// reject those names against the dev-time (Mojmap) classes.
+tasks.named('compileJava', JavaCompile).configure {
+    options.compilerArgs << '-AdisableTargetValidator=true'
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}

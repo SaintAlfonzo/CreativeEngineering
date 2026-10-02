@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:blur_filter"
+  },
+  "shader": "minecraft:shaders/post/blur.json"
+}

@@ -1,0 +1,14 @@
+EVENT  C0-nolag-r1: +64 minecraft:arrow, +211 minecraft:cobblestone, +97 minecraft:dirt, +41 minecraft:egg, +10 minecraft:ender_pearl, +6 minecraft:golden_apple, +32 minecraft:gravel, +64 minecraft:iron_ingot, +1 minecraft:iron_pickaxe{Damage:0}, +49 minecraft:oak_log, +1 minecraft:potion{Potion:"minecraft:healing"}, +32 minecraft:stick, +19 minecraft:stone{display:{Name:'{"text":"Marked"}'}}, +42 minecraft:torch, +1
+EVENT  C1-150ms-r81: -20 minecraft:bread, -115 minecraft:cobblestone, -32 minecraft:dirt, -64 minecraft:iron_ingot, -64 minecraft:stick, -20 minecraft:stone{display:{Name:'{"text":"Marked"}'}}
+EVENT  C1-150ms-r89: -1 minecraft:diamond_sword{Damage:100}
+EVENT  C1-150ms-r90: +1 minecraft:diamond_sword{Damage:100}
+EVENT  C1-150ms-r131: -1 minecraft:diamond_sword{Damage:0,Enchantments:[{id:"minecraft:sharpness",lvl:3s}]}
+EVENT  C2-150ms-busy-r132: +1 minecraft:diamond_sword{Damage:0,Enchantments:[{id:"minecraft:sharpness",lvl:3s}]}
+EVENT  C2-150ms-busy-r146: -64 minecraft:arrow, -96 minecraft:cobblestone, -1 minecraft:diamond_sword{Damage:100}, -42 minecraft:egg, -32 minecraft:gravel, -1 minecraft:iron_pickaxe{Damage:0}, -50 minecraft:oak_log, -1 minecraft:white_shulker_box
+EVENT  C2-150ms-busy-r147: +64 minecraft:arrow, +96 minecraft:cobblestone, +1 minecraft:diamond_sword{Damage:100}, +42 minecraft:egg, +32 minecraft:gravel, +1 minecraft:iron_pickaxe{Damage:0}, +50 minecraft:oak_log, +1 minecraft:white_shulker_box
+EVENT  C3-300ms-busy-r229: -64 minecraft:arrow, -160 minecraft:cobblestone, -1 minecraft:diamond_sword{Damage:0,Enchantments:[{id:"minecraft:sharpness",lvl:3s}]}, -1 minecraft:diamond_sword{Damage:100}, -65 minecraft:dirt, -42 minecraft:egg, -2 minecraft:ender_pearl, -7 minecraft:golden_apple, -32 minecraft:gravel, -12 minecraft:iron_ingot, -50 minecraft:oak_log, -1 minecraft:potion{Potion:"minecraft:healing"}, -1 minecraft
+phase             rounds  events  lost  deltas  desync
+C0-nolag              58       1     0       5       2
+C1-150ms              73       4    51      11      18
+C2-150ms-busy         72       3    72       3      18
+C3-300ms-busy         73       1    73       7      16

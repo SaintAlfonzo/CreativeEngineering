@@ -7,14 +7,20 @@ MEMORY="6G"
 JAVAPATH="java"
 
 # Any additional arguments to pass to Java such as Metaspace, GC or anything else
-JVMARGS="-XX:FlightRecorderOptions=stackdepth=256,repository=perf/jfr-repo -XX:StartFlightRecording=name=ce,settings=perf/ce-server.jfc,disk=true,maxage=30m,maxsize=512m"
+JVMARGS="-XX:FlightRecorderOptions=stackdepth=256,repository=perf/jfr-repo -XX:StartFlightRecording=name=ce,settings=perf/ce-server.jfc,disk=true,maxage=30m,maxsize=512m,dumponexit=true,filename=perf/exit"
 # ^ always-on performance recording (Java Flight Recorder): keeps the last 30 minutes (at most 512 MB) in
-#   perf/jfr-repo/. Save it with perf/dump.sh when the server lags; see perf/README.md. Remove the two
-#   -XX options to turn it off. stackdepth=256: the default 64 cuts deep modded stacks.
+#   perf/jfr-repo/. Save it with perf/dump.sh when the server lags, or gather everything with perf/report.sh;
+#   see perf/README.md. Remove the two -XX options to turn it off. stackdepth=256: the default 64 cuts deep
+#   modded stacks. dumponexit: every stop, watchdog crashes included, writes the last 30 minutes to perf/exit/
+#   (the newest 3 are kept).
 
 # Don't edit past this point
 
 cd "$(dirname "$0")"
+
+# perf/exit must exist, or JFR writes a file named "exit"; keep its newest 3 recordings
+mkdir -p perf/exit
+ls -t perf/exit/*.jfr 2>/dev/null | tail -n +4 | xargs -r rm -f --
 
 LAUNCHARGS="$@"
 # Launcher can specify path to java using a custom token

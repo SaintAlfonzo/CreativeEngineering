@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:cga_film",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"exposure:film_frames\":[{\"identifier\":{\"texture\":\"exposure_expanded:textures/exposure/cga_horse.png\"},\"type\":\"color\"}]}"
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:cga_film",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"exposure:film_frames\":[{\"identifier\":{\"texture\":\"exposure_expanded:textures/exposure/cga_room.png\"},\"type\":\"color\"}]}"
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "exposure_expanded:cga_film",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

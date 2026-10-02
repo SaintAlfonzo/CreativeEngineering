@@ -1,0 +1,6 @@
+{
+  "predicate": {
+    "items": "exposure_expanded:blobs_filter"
+  },
+  "shader": "minecraft:shaders/post/blobs.json"
+}

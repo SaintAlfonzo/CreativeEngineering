@@ -1,4 +1,11 @@
-// /dumpclimate [columns] [radius]  ->  kubejs/exported/worldgen/climate/<ns>__<dim>.json
+// /dumpclimate [columns] [radius]  ->  kubejs/generation_scripts/worldgen/climate/<ns>__<dim>.json.gz
+//
+// The samples ship with the pack (BiomeLayoutTuner reads them whenever a world is created), so they're
+// stored small: compact JSON, one point per line, integer climate values (the game quantizes to x10000
+// longs anyway), gzipped. About 0.2 MB for all three dimensions instead of 3 MB pretty-printed.
+// Read one with `zcat <file> | less`. With a pre-1.0.3 patcherMod jar (no WorldgenFiles.writeGzipText)
+// it falls back to the old uncompressed kubejs/exported/worldgen/climate/<ns>__<dim>.json, which that
+// jar's tuner reads.
 //
 // Climate-noise sample set for every multi_noise dimension, the data source for the biome
 // frequency tuner (patcherMod BiomeLayoutTuner via kubejs/server_scripts/worldgen/biome_overrides.js,
@@ -24,6 +31,14 @@
 
 	const $Types = Java.loadClass('net.minecraft.world.level.levelgen.Heightmap$Types')
 	const $Random = Java.loadClass('java.util.Random')
+	const $WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles')
+
+	// JSON.stringify is Gson-backed and prints every number as a double ("675.0"); the points are
+	// joined by hand so the integers stay integers. Array.join uses JS number formatting.
+	function compactJson(header, points) {
+		const head = Object.keys(header).map(k => JSON.stringify(k) + ':' + JSON.stringify(header[k]))
+		return '{' + head.join(',') + ',"points":[\n' + points.map(p => '[' + p.join(',') + ']').join(',\n') + '\n]}\n'
+	}
 
 	function safe(fn) {
 		try { return fn() } catch (e) { return undefined }
@@ -87,8 +102,8 @@
 		}
 
 		const [ns, path] = dimId.split(':')
-		const out = `kubejs/exported/worldgen/climate/${ns}__${path.replace(/\//g, '__')}.json`
-		writeExportJson(out, {
+		const name = `${ns}__${path.replace(/\//g, '__')}.json`
+		const header = {
 			dimension: dimId,
 			biome_source: sourceClass,
 			seed: String(level.getSeed()),
@@ -98,8 +113,17 @@
 			layers: ['surface', 'underground'],
 			fields: ['layer', 'temperature', 'humidity', 'continentalness', 'erosion', 'depth', 'weirdness', 'live_biome'],
 			biomes: biomes,
-			points: points,
-		})
+		}
+		var out
+		// Rhino throws, rather than returning undefined, for a static member the class doesn't have
+		if (safe(() => typeof $WorldgenFiles.writeGzipText === 'function')) {
+			out = `kubejs/generation_scripts/worldgen/climate/${name}.gz`
+			$WorldgenFiles.writeGzipText(out, compactJson(header, points))
+		} else {
+			out = `kubejs/exported/worldgen/climate/${name}`
+			header.points = points
+			writeExportJson(out, header)
+		}
 		if (heightFailures) console.warn(`[dumpclimate] ${dimId}: getBaseHeight failed on ${heightFailures} columns (sampled at y=64 instead)`)
 		return { dim: dimId, points: points.length, biomes: biomes.length, out: out }
 	}

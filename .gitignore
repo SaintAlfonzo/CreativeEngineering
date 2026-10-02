@@ -28,7 +28,15 @@
 !/config/
 !/defaultconfigs/
 !/configs_edited/
-!/patcherMod/
+# In-tree mods (development/patcherMod, development/exposureBackport)
+!/development/
+# Root Gradle build shared by the in-tree mods
+!/settings.gradle
+!/gradle.properties
+!/gradlew
+!/gradlew.bat
+!/gradle/
+!/build-logic/
 # Dedicated-server root files shipped by tools/build_deploy.py (LaunchServer scripts, perf/ recording setup)
 !/server/
 
@@ -45,15 +53,20 @@
 /kubejs/exported/
 # tools/gen_loot_config.py structure-template scan cache (rebuilt when the jar list changes)
 /tools/.cache/
-# patcherMod: build output + third-party compile jars (copies of mods/ jars)
-/patcherMod/libs/
-/patcherMod/build/
-# every built/released creativeengineering jar, kept locally (tasks.archiveJar in build.gradle)
-/patcherMod/jar_archive/
-/patcherMod/.gradle/
-/patcherMod/run/
-/patcherMod/run-data/
-/patcherMod/.idea/
+# In-tree mods: build output, dev runs, IDE files, and third-party compile jars (copies of mods/ jars).
+# jar_archive/ keeps every built/released jar locally (archiveJar task, tools/build_deploy.py).
+/development/*/build/
+/development/*/libs/
+/development/*/jar_archive/
+/development/*/.gradle/
+/development/*/run/
+/development/*/run-data/
+/development/*/.idea/
+/development/*/tools/__pycache__/
+# root Gradle build output
+/.gradle/
+/build-logic/build/
+/build-logic/.gradle/
 # WorldEdit runtime cache / per-player sessions
 /config/worldedit/.archive-unpack/
 /config/worldedit/sessions/

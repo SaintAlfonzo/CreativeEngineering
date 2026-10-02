@@ -1,6 +1,6 @@
 # Food: types, values, Spice of Life and canned parity
 
-Test prefix **FO-** · Last updated **2026-09-28** · Overall status **BUILT, restart pending** (the `/dumpfood` export
+Test prefix **FO-** · Last updated **2026-09-29** · Overall status **BUILT, restart pending** (the `/dumpfood` export
 ran in game: FO-01 PASSED; the food type tags need a restart because they add item_dict keys: FO-02 to FO-08; can
 recipes FO-09 to FO-13; food canning and the tuning system in 3.5 aren't built yet)
 
@@ -27,6 +27,9 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | Multi-serving cans, chance can return, cans in recipes | patcherMod `food/CanServings` + `ItemStackCanServingsMixin`, CEConfig `[canning]`, [can_servings.json](../kubejs/generation_scripts/food/can_servings.json), [cantags.js](../kubejs/server_scripts/tags/cantags.js), NCH `cans` argument | BUILT 2026-09-28, jar not in mods/ yet (game was running); needs a restart. FO-14 to FO-22 |
 | Food canning: raw veggie, fruit, meat | [canning.js](../kubejs/server_scripts/cooking/canning.js), 36 cans in [cans.js](../kubejs/startup_scripts/items/cans.js) (beetroot can sprite), servings in can_servings.json | BUILT 2026-09-29, needs a restart (new items). Cooked/prepared cans not built |
 | Tuning system (values, effects, SoL complexity, canned parity) | design in 3.5 | Not built. Decisions D1 to D6 (4.3) first |
+| Fried egg furnace/smoker/campfire restored; cooking oil from pumpkin seeds too; own mixer ratio | [cooking.js](../kubejs/server_scripts/cooking/cooking.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js), NCH `smoking` xp/time | BUILT 2026-09-29, needs a restart (new item_dict key). FO-23 to FO-27 |
+| Vanilla egg -> `#forge:eggs` migration | list in 3.8 | TODO, not built |
+| Every raw egg stacks to 64 | [item_properties.js](../kubejs/startup_scripts/changes/item_properties.js) | BUILT 2026-09-29, needs a restart. FO-28 |
 
 **Open first:** [food_catalog.md](food_catalog.md) (every food), [food_types.json](../kubejs/generation_scripts/food/food_types.json)
 (who is in which type), section 2.3 (Spice of Life), section 4.2 (what is broken today).
@@ -412,6 +415,67 @@ each call; common setup also registers it for clients of a dedicated server.
 - No food canning recipe exists yet, so the only cans in play come from loot, the butcher (`canned_food`) and
   the drink recipes.
 
+### 3.7 Cooking oil and fried eggs (built, restart pending)
+
+**What was wrong (found 2026-09-29).** Only one recipe made a fried egg: Rustic Delight's egg + cooking oil in the
+Cooking Pot (plus its Slice & Dice mixer copy). Abnormals Delight ships its own `farmersdelight:fried_egg`,
+`fried_egg_from_smoking` and `fried_egg_from_campfire_cooking` with a `forge:not mod_loaded incubation` condition,
+replacing Farmer's Delight's. Incubation is installed, so none of the three load. cooking.js then removes
+Incubation's own three fried egg recipes as redundant. Everything on `#forge:cooked_eggs` (egg sandwich, bacon and
+eggs, noodle soup, the deploying step in cooking.js) needed a cotton farm first.
+
+**Fix.** cooking.js re-adds Farmer's Delight's three recipes through NCH with its values: furnace 200 ticks, smoker
+100, campfire 600, 0.35 xp each, input the vanilla egg (as Farmer's Delight had it; see 3.8). Ids are
+`creativeengineering:smelting|smoking|campfirecooking/...`. Incubation's fried egg stays removed. NCH `smoking` now
+takes `xp` and `cookingtime` like `smelting` (defaults 0 and 100, the old behaviour).
+
+**Cooking oil.** `rusticdelight:cooking_oil` is a drinkable bottle (stacks to 16, 2 hunger, 50% Nausea 20 s, gives the
+bottle back). It feeds fried chicken, fried calamari, fried mushrooms, fruit beignet, spring rolls, the oil fried
+egg and an oil-for-egg fried rice.
+
+| Change | Before | Now |
+|---|---|---|
+| `#rusticdelight:cooking_oil_ingredients` | cotton seeds | cotton seeds, pumpkin seeds (`i.t_cooking_oil_ingredients`) |
+| Cooking Pot | 6 seeds + bottles -> 2 oil (`rusticdelight:cooking/cooking_oil`) | same recipe, id `creativeengineering:farmersdelightcooking/cooking_oil_manual_only` |
+| Create mixer (heated) | Slice & Dice copy: 6 seeds + 1 bottle -> 2 oil | 3 seeds + 1 bottle -> 1 oil (`creativeengineering:createmixing/cooking_oil_heated_mixing`) |
+
+Slice & Dice builds its mixing copies at the end of KubeJS's recipe event (a mixin on `RecipesEventJS.post`), so
+`R.remove` on a `sliceanddice:` id finds nothing. It skips any Cooking Pot recipe whose id ends in `_manual_only`,
+so the pot recipe is removed and re-added under that suffix, and the mixer recipe is written by hand. The other
+oil recipes keep their Slice & Dice copies.
+
+### 3.8 Vanilla egg -> `#forge:eggs` migration (TODO, not built)
+
+Recipes that take `minecraft:egg` as an item don't accept the other eggs. `#forge:eggs` holds 10 items: vanilla,
+turtle, the Alex's Mobs crocodile, emu and terrapin eggs, and 5 Quark parrot eggs. From the 2026-09-28 dump
+(it can't read IE machine recipes, so rescan first):
+
+| Recipe | Migrate? |
+|---|---|
+| `creativeengineering:` smelting, smoking and campfire fried egg (3.7) | yes |
+| `rusticdelight:cooking/fried_egg_from_cooking_oil` | yes |
+| `brewinandchewin:cooking/vegetable_omelet` | yes |
+| `brewinandchewin:quiche_bacon`, `quiche_mushroom` | yes |
+| `brewinandchewin:fermenting/egg_grog`, `dread_nog` | yes |
+| `create_factory:cake_paste`, `create_deep_dark:compacting_echo_cake_base` | yes |
+| `incubation:chicken_egg_crate` | no: storage block, must stay vanilla eggs |
+| `mca:potion_of_feminity`, `potion_of_masculinity` | probably no: not food |
+
+Notes for the build:
+- Use `R.replaceInput` with a per-recipe id filter, not a pack-wide swap, so the crate keeps its egg.
+- Slice & Dice copies (vegetable omelet, oil fried egg) follow on their own: they're built from the source recipe
+  after KubeJS runs.
+- Decide first whether turtle and parrot eggs belong in `#forge:eggs` at all. Turtle eggs are placeable blocks,
+  and parrot eggs hatch parrots, so a fried egg from them may not be wanted.
+
+### 3.9 Egg stack size (built, restart pending)
+
+[item_properties.js](../kubejs/startup_scripts/changes/item_properties.js) sets the stack size of all 10 raw eggs in
+`#forge:eggs` to 64: vanilla egg, turtle egg, the Alex's Mobs crocodile, emu and terrapin eggs, and the 5 Quark parrot
+eggs. They are listed by item_dict key, because tags aren't loaded yet when the startup event runs. If a mod adds an
+egg to `#forge:eggs` later, add its key here too. Not changed: cooked eggs (fried eggs, boiled emu egg), the
+dragon egg and spawn eggs.
+
 ## 4. Limits and decisions
 
 ### 4.1 Limits
@@ -465,6 +529,10 @@ each call; common setup also registers it for clients of a dedicated server.
 - **Item ids in food_types.json:** would define ids a second time (item_dict is the one place for ids).
 - **Editing the per-world Spice of Life toml as the source of truth:** differs per world and resets with new worlds;
   the KubeJS map fill applies pack-wide.
+- **Fried eggs as a `kubejs/data/farmersdelight/recipes/` override** (would keep Farmer's Delight's ids): recipes go
+  through NCH in this pack; the NCH ids are fine.
+- **Removing the Slice & Dice oil copy with `R.remove`:** does nothing, the copy doesn't exist yet when KubeJS
+  removes (3.7). Turning off `basin_cooking` in `sliceanddice-common.toml` would drop every copy.
 - **Scratch dedicated server for the dump:** the client was using 10 of 14 GB, so the dump ran in your world instead.
 
 ## 5. File map
@@ -474,6 +542,10 @@ each call; common setup also registers it for clients of a dedicated server.
 - [foodtypetags.js](../kubejs/server_scripts/tags/foodtypetags.js): the tags
 - [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js): generated "Food mods" block before `// Validation`
 - `tools/food_catalog.py`: classifier, checker, catalog writer
+- [cooking.js](../kubejs/server_scripts/cooking/cooking.js) "Protein / Egg": fried egg restore, cooking oil pot and mixer
+- [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js): pumpkin seeds in `#rusticdelight:cooking_oil_ingredients`
+- [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js): `smoking(output, input, e, id, xp, cookingtime)`
+- [item_properties.js](../kubejs/startup_scripts/changes/item_properties.js): egg stack sizes
 - [food_catalog.md](food_catalog.md): generated reference; `kubejs/exported/food/catalog.json` (not in git)
 - Spice of Life config: `saves/<world>/serverconfig/solapplepie-server.toml`, client `config/solapplepie-client.toml`
 - Related configs: `config/salt-common.toml`, `config/farmersdelight-common.toml` (vanilla soups get FD effects,
@@ -534,6 +606,20 @@ Restart the game first (item_dict gained keys), then load WorldC.
   `/reload`. One full Canned Beef in the grid -> cooked beef, and the grid keeps the can at 1 / 2; craft again ->
   cooked beef and the rolled return in the grid. No `[NCH] ... KubeJSCanAction not available` warning in the log.
 
+Cooking oil and fried eggs (3.7), after a restart:
+- [ ] **FO-23 fried egg:** JEI uses of Egg show Fried Egg in the furnace (10 s), smoker (5 s) and campfire (30 s);
+  cook one in each. JEI shows no Incubation fried egg recipe.
+- [ ] **FO-24 seeds tag:** hold Pumpkin Seeds, `/kubejs hand` -> tags include `rusticdelight:cooking_oil_ingredients`.
+- [ ] **FO-25 cooking pot:** 3 cotton seeds + 3 pumpkin seeds in a heated Cooking Pot -> 2 Cooking Oil, one bottle
+  per oil. JEI lists one Cooking Pot recipe for Cooking Oil (`cooking_oil_manual_only`).
+- [ ] **FO-26 mixer:** a heated basin with 3 pumpkin seeds + 1 glass bottle -> 1 Cooking Oil. JEI lists one mixing
+  recipe for Cooking Oil (3 seeds, 1 bottle), no `sliceanddice:` one.
+- [ ] **FO-27 other oil copies kept:** JEI still shows the Slice & Dice mixing recipe for Fried Chicken; the log has
+  no NCH warning for `cooking_oil`.
+- [ ] **FO-28 egg stacks:** `/give @s minecraft:egg 64`, `/give @s quark:egg_parrot_blue 64` and
+  `/give @s alexsmobs:emu_egg 64`: each is one full stack. Chickens' eggs picked up merge past 16.
+  `logs/kubejs/startup.log` has no `[item_properties]` warning.
+
 ## 8. History
 
 - **2026-09-28** First writeup for 1.0.2. `/dumpfood` built and run in WorldC. 31 food types, food_types.json,
@@ -550,3 +636,9 @@ Restart the game first (item_dict gained keys), then load WorldC.
   raw meat (4 meals of 5/3, bone broth): 36 new `creativeengineering:canned_*` items on the Canned Goods beetroot
   sprite, basic ~80% / additive ~60% of the ingredients a can is worth, grid-capped at 8 / 6. Every canning recipe has an
   explicit id (the auto id only uses the first input, so basic and additive recipes collided).
+- **2026-09-29** Fried eggs (3.7): Abnormals Delight's Incubation-conditioned overrides had removed Farmer's
+  Delight's furnace, smoker and campfire fried egg; re-added through NCH (NCH `smoking` gained xp and time).
+  Cooking oil: pumpkin seeds join cotton seeds; the Slice & Dice mixer copy is replaced by 3 seeds + 1 bottle -> 1
+  oil (pot recipe moved to a `_manual_only` id). Vanilla egg -> `#forge:eggs` migration listed as TODO (3.8).
+  FO-23 to FO-27.
+- **2026-09-29** Egg stack size (3.9): the 10 raw eggs in `#forge:eggs` stack to 64. FO-28.

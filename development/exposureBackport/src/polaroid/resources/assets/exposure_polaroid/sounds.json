@@ -1,0 +1,40 @@
+{
+  "item.instant_camera.viewfinder_open": {
+    "sounds": [
+      {
+        "name": "exposure_polaroid:item/instant_camera_viewfinder",
+        "volume": 1.0,
+        "pitch": 1.1
+      }
+    ],
+    "subtitle": "subtitle.exposure.camera.viewfinder_open"
+  },
+  "item.instant_camera.viewfinder_close": {
+    "sounds": [
+      {
+        "name": "exposure_polaroid:item/instant_camera_viewfinder",
+        "volume": 0.9,
+        "pitch": 0.85
+      }
+    ],
+    "subtitle": "subtitle.exposure.camera.viewfinder_close"
+  },
+  "item.instant_camera.release": {
+    "sounds": [
+      "exposure_polaroid:item/instant_camera_release"
+    ],
+    "subtitle": "subtitle.exposure.camera.shutter"
+  },
+  "item.instant_camera.slide_insert": {
+    "sounds": [
+      "exposure_polaroid:item/instant_camera_slide_insert"
+    ],
+    "subtitle": "subtitle.exposure_polaroid.instant_camera.slide_insert"
+  },
+  "item.instant_camera.slide_remove": {
+    "sounds": [
+      "exposure_polaroid:item/instant_camera_slide_remove"
+    ],
+    "subtitle": "subtitle.exposure_polaroid.instant_camera.slide_remove"
+  }
+}

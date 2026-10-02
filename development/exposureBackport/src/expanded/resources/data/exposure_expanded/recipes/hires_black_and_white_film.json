@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#GG",
+    "gCC",
+    "gDD"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_nugget"
+    },
+    "G": {
+      "item": "minecraft:bone_meal"
+    },
+    "g": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:redstone"
+    },
+    "D": {
+      "item": "minecraft:dried_kelp"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "exposure_expanded:hires_black_and_white_film"
+  }
+}
