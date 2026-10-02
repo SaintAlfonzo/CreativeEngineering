@@ -24,7 +24,8 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | item_dict keys for the 216 foods it lacked + 32 tag keys | generated block at the end of [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | BUILT, `node --check` clean |
 | Classifier, checker and catalog | `tools/food_catalog.py` -> [food_catalog.md](food_catalog.md) | BUILT; `--check` passes |
 | Canned Goods recipes removed, new empty-can recipes | [canning.js](../kubejs/server_scripts/cooking/canning.js) | BUILT 2026-09-28, `/reload` applies it. FO-09 to FO-13 |
-| Food canning by type | canning.js (placeholder section) | Not built: waiting on the can side |
+| Multi-serving cans, chance can return, cans in recipes | patcherMod `food/CanServings` + `ItemStackCanServingsMixin`, CEConfig `[canning]`, [can_servings.json](../kubejs/generation_scripts/food/can_servings.json), [cantags.js](../kubejs/server_scripts/tags/cantags.js), NCH `cans` argument | BUILT 2026-09-28, jar not in mods/ yet (game was running); needs a restart. FO-14 to FO-22 |
+| Food canning: raw veggie, fruit, meat | [canning.js](../kubejs/server_scripts/cooking/canning.js), 36 cans in [cans.js](../kubejs/startup_scripts/items/cans.js) (beetroot can sprite), servings in can_servings.json | BUILT 2026-09-29, needs a restart (new items). Cooked/prepared cans not built |
 | Tuning system (values, effects, SoL complexity, canned parity) | design in 3.5 | Not built. Decisions D1 to D6 (4.3) first |
 
 **Open first:** [food_catalog.md](food_catalog.md) (every food), [food_types.json](../kubejs/generation_scripts/food/food_types.json)
@@ -352,6 +353,65 @@ block (2 cakes = 28 hunger, 5.6 points; 2 pumpkin pies = 24 hunger, 14.4 points)
 restart (values) or `/reload` plus rejoin (SoL values, if the script re-applies on reload) -> `/dumpfood` again and
 compare the catalog.
 
+### 3.6 Multi-serving cans (built, not deployed)
+
+A can holds several servings. Eating one takes a serving; the last serving leaves an empty can, a crushed can
+or nothing. A KubeJS shaped or shapeless recipe can use a can the same way: one serving per craft.
+
+**How many servings.** [can_servings.json](../kubejs/generation_scripts/food/can_servings.json) maps item_dict
+keys to a count. [cantags.js](../kubejs/server_scripts/tags/cantags.js) turns it into
+`#creativeengineering:cans/servings/<n>`, which chains up to `#creativeengineering:cans/servings` and
+`#creativeengineering:cans` (keys `i.t_can_servings`, `i.t_cans`). `/reload` applies a change. A can that isn't
+listed keeps the Canned Goods behaviour: one serving, always an empty can back. Defaults: the 34 food cans,
+`canned_food` and the Hot Hot Hotpot hold 2; Soda, Reef-Cola and Oculemonade hold 1, so they only get the
+return roll. Mini Fizz isn't a can (it hands nothing back) and isn't listed.
+
+**Value per serving.** Each serving gives the can's full food value and effects. Canned Goods sized its values
+for 2 foods, so at 2 servings a can is now worth twice as much until the parity tuning (3.5) runs. The parity
+rule fits servings well: a can of n x source holds n servings, each worth one source.
+
+**Servings, not durability.** The servings left are an NBT int (`CanServings`), written only on a can that has
+been opened. Real durability would force a stack size of 1 (cans stack to 64) and make cans enchantable. A full
+can carries no NBT, so new cans stack as before. An opened can draws a bar like a damaged tool's (width and
+green-to-red colour from the servings left), and every can with more than one serving has a tooltip line
+`Servings: x / y`.
+
+**Eating.** A mixin on `ItemStack#finishUsingItem` runs the can's own `finishUsingItem` on a one-can copy, so
+food, effects and Canned Goods' procedures (golden apple cans, Soda and so on) apply to each serving; the empty
+can that code hands back is discarded. Then one serving is taken:
+- from the can in hand if it is already open;
+- otherwise from the most-eaten open can of the same kind in the inventory, so a stack of full cans doesn't
+  open a new can per bite;
+- otherwise from one can of the held stack, and the opened can goes to the inventory (or drops if it's full).
+Creative mode takes nothing. Spice of Life counts each serving as eating that can.
+
+**Return roll.** On the last serving, CEConfig `[canning]`: `emptyCanChance` 0.7 empty can,
+`crushedCanChance` 0.25 crushed can, the rest nothing. If the two add up past 1, the crushed chance is cut to
+fit. `emptyCanItem` and `crushedCanItem` name the items. `enabled = false` turns everything off. Crushed cans
+now have a source again, so canned dirt and the canned golem can be made again, and crushed can -> iron nugget
+recycles them.
+
+**Recipes.** `R.shaped(output, pattern, keys, e, id, damage, cans)` and
+`R.shapeless(output, input, e, id, damage, replace, cans)`: `cans = true` covers every can slot, or pass a filter
+or an array of filters (item, `#tag`, slot index). NCH attaches the KubeJS custom ingredient action
+`creativeengineering:can_serving` (Java: `compat/KubeJSCanAction`), which leaves the can with one serving less
+in the grid, or rolls the return on the last serving. Example in canning.js:
+`R.shapeless(Item.of(i.beef_cooked), [i.canned_beef], e, 'uncan_beef', null, null, true)`.
+KubeJS empties its custom action map on every server script load, so NCH registers the callback again on
+each call; common setup also registers it for clients of a dedicated server.
+
+**Limits.**
+- A grid slot holding a stack of full cans opens a new can per craft, and the opened can goes to the
+  inventory (vanilla's remainder rule). To drain one can, put it in the grid on its own.
+- Only KubeJS shaped/shapeless recipes made through NCH with `cans` use servings. Other recipes (Create
+  mixing, mechanical crafting, other mods' recipes) use up the whole can as before.
+- An auto-feeder that calls `Item#finishUsingItem` directly, not through the stack, eats the whole can as one
+  serving.
+- On a dedicated server the client briefly guesses nothing for a last-serving craft; the server's roll then
+  shows.
+- No food canning recipe exists yet, so the only cans in play come from loot, the butcher (`canned_food`) and
+  the drink recipes.
+
 ## 4. Limits and decisions
 
 ### 4.1 Limits
@@ -454,6 +514,26 @@ Restart the game first (item_dict gained keys), then load WorldC.
 - [ ] **FO-13 workbench and recycling:** the components blueprint in the Engineer's Workbench makes 32 Empty Cans
   from 4 IE iron plates; an Empty Can in a furnace or blast furnace no longer smelts to an iron ingot.
 
+- [ ] **FO-14 restart and tags:** after deploying the jar and restarting, `logs/kubejs/server.log` has
+  `[can servings] 39 cans: 3 x 1, 36 x 2` and no `[can servings]` warning. `/kubejs hand` on a Canned Beef lists
+  `creativeengineering:cans/servings/2`, `creativeengineering:cans/servings` and `creativeengineering:cans`.
+- [ ] **FO-15 tooltip:** a Canned Beef shows `Servings: 2 / 2` under its name; a Soda shows no servings line.
+- [ ] **FO-16 first serving:** hold one Canned Beef (survival), eat it. You get the food, the can stays in hand
+  with a bar at half width (yellow) and `Servings: 1 / 2`; no empty can appears.
+- [ ] **FO-17 last serving:** eat it again. The can is replaced by an empty can, a crushed can or nothing.
+  Repeat with 20 or so cans (`/give @s canned_goods:canned_beef 20`): roughly 14 empty, 5 crushed, 1 nothing.
+- [ ] **FO-18 stack and open cans first:** hold 5 full Canned Beef and eat once: 4 stay in hand, an opened can
+  (1 / 2) goes to the inventory. Eat again from the stack: the opened can empties (roll) and the hand still has 4.
+- [ ] **FO-19 stacking:** full cans stack with new full cans; two opened cans at 1 / 2 stack together; an opened
+  can doesn't stack with a full one.
+- [ ] **FO-20 effects per serving:** eat a Canned Golden Apples twice: its effects apply both times.
+- [ ] **FO-21 config:** set `[canning] emptyCanChance = 0`, `crushedCanChance = 1` in the Configs screen, empty a
+  can: always a crushed can. `enabled = false`: no tooltip line, no bar, eating gives an empty can every time
+  (Canned Goods behaviour). Put both back.
+- [ ] **FO-22 crafting:** add the `uncan_beef` example from canning.js's header comment as a real line (or any recipe with `cans`),
+  `/reload`. One full Canned Beef in the grid -> cooked beef, and the grid keeps the can at 1 / 2; craft again ->
+  cooked beef and the rolled return in the grid. No `[NCH] ... KubeJSCanAction not available` warning in the log.
+
 ## 8. History
 
 - **2026-09-28** First writeup for 1.0.2. `/dumpfood` built and run in WorldC. 31 food types, food_types.json,
@@ -463,3 +543,10 @@ Restart the game first (item_dict gained keys), then load WorldC.
 - **2026-09-28** canning.js: Canned Goods food-can, can and can-recycling recipes removed; empty cans from the
   stonecutter (4 per ingot), crafting table and deployer (12 per 2 plates) and Engineer's Workbench (32 per 4
   plates). Food canning not built yet. FO-09 to FO-13.
+- **2026-09-28** Multi-serving cans (3.6): servings from `can_servings.json` tags, NBT servings with a bar and
+  tooltip, open cans eaten first, empty/crushed/nothing roll on the last serving (CEConfig `[canning]`), NCH
+  `cans` argument for shaped/shapeless recipes. patcherMod built; the jar isn't in `mods/` yet. FO-14 to FO-22.
+- **2026-09-29** Food canning for raw veggie (2 Baked Potato meals, salt), raw fruit (3 meals of 5/3, sugar) and
+  raw meat (4 meals of 5/3, bone broth): 36 new `creativeengineering:canned_*` items on the Canned Goods beetroot
+  sprite, basic ~80% / additive ~60% of the ingredients a can is worth, grid-capped at 8 / 6. Every canning recipe has an
+  explicit id (the auto id only uses the first input, so basic and additive recipes collided).

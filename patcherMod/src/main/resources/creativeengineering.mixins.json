@@ -48,7 +48,9 @@
     "CopycatMaterialOrderMixin",
     "ChunkGeneratorLocateMixin",
     "ChunkGeneratorStructureFrequencyMixin",
-    "StructureCheckFrequencyMixin"
+    "StructureCheckFrequencyMixin",
+    "ItemStackCanServingsMixin",
+    "LevelThreadSafeRandomMixin"
   ],
   "client": [
     "ItemDrainCategoryMixin",

@@ -2,7 +2,7 @@
 //  Item Physics — fire / lava burning split + float control
 // ─────────────────────────────────────────────────────────────────────────────
 //
-//  Backed by patcherMod (creativeengineering-1.0.1.jar):
+//  Backed by patcherMod (creativeengineering-1.0.2.jar):
 //    com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit
 //    + mixin/ItemPhysicServerMixin
 //

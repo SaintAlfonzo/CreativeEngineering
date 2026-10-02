@@ -116,7 +116,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.1.jar` | This pack's own mod (patcherMod); client-only parts are guarded |
+| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.2.jar` | This pack's own mod (patcherMod); client-only parts are guarded |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
 | both | Customizable Elytra | `customizableelytra` | `customizableelytra-1.19.0-1.7.4.jar` |  |
@@ -314,6 +314,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | YUNG's Better Witch Huts | `betterwitchhuts` | `YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar` |  |
 | both | YUNG's Extras | `yungsextras` | `YungsExtras-1.19.2-Forge-3.1.0.jar` |  |
 | both | Yuushya Modelling | `yuushya_modelling` | `yuushya-modelling-1.19.2-forge-2.2.0.jar` |  |
+| server | Async Locator | `asynclocator` | `async-locator-forge-1.19.2-1.3.0.jar` | Off-thread /locate, explorer maps, dolphins, eyes of ender (IGNORE_SERVER_VERSION) |
 | server | Block Runner | `blockrunner` | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | Server-side walk-speed logic |
 | server | CherishedItems | `cherisheditems` | `CherishedItems-Forge-1.19.2-1.0.2.jar` | Item despawn rules |
 | server | Chunky | `chunky` | `Chunky-1.3.38.jar` | Chunk pre-generation |
@@ -341,7 +342,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | client | Just Enough Breeding | `justenoughbreeding` | `justenoughbreeding-forge-1.19.2-1.4.0.jar` | JEI add-on |
 | client | Just Enough Effect Descriptions | `jeed` | `jeed-1.19.2-2.1.4.jar` | JEI add-on |
 | client | Just Enough Immersive Multiblocks | `jeimultiblocks` | `jeimultiblocks-1.19.2-0.0.3.jar` | JEI add-on |
-| client | Just Enough Items | `jei` | `jei-1.19.2-forge-11.8.1.1034.jar` | Recipe viewer |
+| both | Just Enough Items | `jei` | `jei-1.19.2-forge-11.8.1.1034.jar` | Recipe viewer; required on the server |
 | client | Just Enough Professions (JEP) | `justenoughprofessions` | `JustEnoughProfessions-forge-1.19.2-2.0.2.jar` | JEI add-on |
 | client | Just Enough Repair Materials | `jerm` | `jerm-1.19.2-1.2.jar` | JEI add-on |
 | client | Just Enough Resources | `jeresources` | `JustEnoughResources-1.19.2-1.2.3.243.jar` | JEI add-on |
@@ -369,7 +370,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Revamped Shipwrecks | `revamped_shipwrecks` | `Revamped Shipwrecks 1.1.0.jar` | Structures only (lowcode datapack jar, loads fine). Empties `minecraft:shipwrecks` and replaces the vanilla wrecks with its own |
 | both | Unwrecked Ships Plus | `unwrecked_ships_plus` | `Unwrecked Ships Plus 1.19-1.0.4 Forge.jar` | Structures only (lowcode datapack jar, loads fine) |
 | both | Redeco | `redeco` | `redeco-1.5.0-1.19.2.jar` | Decoration blocks; no structures |
-| both | No Hostiles Around Campfire | `nohostilesaroundcampfire` | `nohostilesaroundcampfire-1.19.2-5.9.jar` | Server logic; no structures. Requires Collective |
 | both | Glow Ink Plus | `glow_ink_plus` | `(Forge)GlowInkPlus-1.19.2-1.2.0.jar` | Glowing wool/carpet blocks |
 | both | Abnormals Delight | `abnormals_delight` | `abnormals_delight-1.19.2-4.1.2.jar` | Blocks/items; requires Blueprint, Farmer's Delight |
 | both | Alex's Abnormalities | `alexsabnormalities` | `alexsabnormalities-1.3.jar` | Alex's Mobs x Abnormals compat blocks/items |

@@ -28,7 +28,7 @@
       "Bash(javap -p -c \"dev/latvian/mods/kubejs/recipe/RecipeJS.class\")",
       "Bash(rm -v mixin/MultiblockProcessBottlingMixin.java mixin/BottlingMachineRecipeMixin.java mixin/BottlingMachineRecipeSerializerMixin.java mixin/BottlingMachineBlockEntityMixin.java)",
       "Bash(rm -rvf bottling)",
-      "Bash(unzip -l patcherMod/build/libs/creativeengineering-1.0.1.jar)",
+      "Bash(unzip -l patcherMod/build/libs/creativeengineering-1.0.2.jar)",
       "Bash(rm -v kubejs/data/creativeengineering/recipes/bottling/bottle_create_potion.json)",
       "Bash(rmdir kubejs/data/creativeengineering/recipes/bottling)",
       "Bash(find ~/.gradle ~/.m2 / -maxdepth 8 \\\\\\( -iname \"*vineflower*.jar\" -o -iname \"*cfr*.jar\" -o -iname \"*procyon*decompiler*.jar\" -o -iname \"*fernflower*.jar\" \\\\\\) 2>/dev/null | head; echo \"---\"; find / -maxdepth 6 -iname \"*.jar\" -path \"*decompiler*\" 2>/dev/null | head)",

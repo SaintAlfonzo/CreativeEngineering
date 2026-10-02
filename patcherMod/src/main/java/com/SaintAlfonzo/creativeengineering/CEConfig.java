@@ -43,6 +43,7 @@ public final class CEConfig {
     public static final Shields SHIELDS;
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
+    public static final Canning CANNING;
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
     public static final Debug DEBUG;
@@ -60,6 +61,7 @@ public final class CEConfig {
         SHIELDS = new Shields(builder);
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
+        CANNING = new Canning(builder);
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
         DEBUG = new Debug(builder);
@@ -450,6 +452,46 @@ public final class CEConfig {
                     .defineInRange("damagePerUse", 1, 0, 100);
 
             b.pop(); // bonemeal_charm
+        }
+    }
+
+    /**
+     * Dials for multi-serving cans ({@code food.CanServings}). How many servings a can holds is
+     * NOT here: it comes from the {@code #creativeengineering:cans/servings/<n>} item tags, set in
+     * KubeJS from {@code kubejs/generation_scripts/food/can_servings.json}.
+     */
+    public static final class Canning {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.DoubleValue emptyCanChance;
+        public final ForgeConfigSpec.DoubleValue crushedCanChance;
+        public final ForgeConfigSpec.ConfigValue<String> emptyCanItem;
+        public final ForgeConfigSpec.ConfigValue<String> crushedCanItem;
+
+        private Canning(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with",
+                    "one takes a serving; the servings left show as a durability bar and a tooltip line. The",
+                    "last serving leaves an empty can, a crushed can or nothing, rolled with the chances below."
+            ).push("canning");
+
+            enabled = b.comment("Off = every can behaves like the Canned Goods original (one serving, always an empty can).")
+                    .define("enabled", true);
+
+            emptyCanChance = b.comment("Chance [0-1] that an emptied can comes back as an empty can.")
+                    .defineInRange("emptyCanChance", 0.7, 0.0, 1.0);
+
+            crushedCanChance = b.comment(
+                    "Chance [0-1] that it comes back as a crushed can instead. Whatever is left after both",
+                    "chances gives nothing; if the two add up past 1, the crushed chance is cut to fit."
+            ).defineInRange("crushedCanChance", 0.25, 0.0, 1.0);
+
+            emptyCanItem = b.comment("Item id handed back as the empty can.")
+                    .define("emptyCanItem", "canned_goods:empty_can");
+
+            crushedCanItem = b.comment("Item id handed back as the crushed can.")
+                    .define("crushedCanItem", "canned_goods:crushed_empty_can");
+
+            b.pop(); // canning
         }
     }
 

@@ -116,6 +116,11 @@ public class CreativeEngineering
         // TierShieldItem#appendHoverText of its own to show them from.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.shield.IronShieldTooltip.class);
 
+        // Multi-serving cans (food.CanServings, CEConfig [canning]): max-servings cache cleared on tag
+        // reload + the "Servings: x / y" tooltip line. Eating and the bar are mixin.ItemStackCanServingsMixin.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServings.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServingsTooltip.class);
+
         // Framed / copycat blocks: say on BlockRunner's speed tooltip line whether they walk like
         // their camo (surface.CamoSpeed, CEConfig.Surface.Camouflage).
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.surface.CamoSpeedTooltip.class);
@@ -201,6 +206,11 @@ public class CreativeEngineering
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fan.DragonBreathingFanProcessingType::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.potion.PotionBucketDispenser::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.NockRecipeBookSync::register);
+			// Can-serving crafting action for KubeJS recipes (NCH re-registers it on every server
+			// script load; this covers clients of a dedicated server).
+			if (net.minecraftforge.fml.ModList.get().isLoaded("kubejs")) {
+				event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.KubeJSCanAction::register);
+			}
 
 			LOGGER.info("CreativeEngineering setup complete");
 	}
