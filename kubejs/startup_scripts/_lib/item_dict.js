@@ -54,6 +54,12 @@ i.ce_dragon_shield = 'creativeengineering:dragon_shield';
 i.ce_potion_bucket = 'creativeengineering:potion_bucket';
 i.ce_splash_potion_bucket = 'creativeengineering:splash_potion_bucket';
 i.ce_lingering_potion_bucket = 'creativeengineering:lingering_potion_bucket';
+// Camera bags - item inventory for Exposure gear (#creativeengineering:camera_equipment only).
+// Java items: patcherMod camerabag/ | slot counts: CEConfig [camera_bag] | recipes:
+// server_scripts/equipment/camera_bag.js (smithing upgrades keep the contents)
+i.leather_camera_bag = 'creativeengineering:leather_camera_bag';
+i.iron_camera_bag = 'creativeengineering:iron_camera_bag';
+i.netherite_camera_bag = 'creativeengineering:netherite_camera_bag';
 // Sample Syringe — one empty (reusable) item + one filled item per sampled animal, split
 // like book/written_book/enchanted_book instead of one item + NBT (NBT-matched ingredients
 // via .weakNBT()/PartialNBTIngredient kept silently matching zero items here - not worth
@@ -12530,6 +12536,75 @@ i.grown_poppy        = 'bushierflowers:grown_poppy';
 i.grown_red_tulip    = 'bushierflowers:grown_red_tulip';
 i.grown_white_tulip  = 'bushierflowers:grown_white_tulip';
 i.grown_wither_rose  = 'bushierflowers:grown_wither_rose';
+
+// ===== exposure / exposure_expanded / exposure_polaroid (development/exposureBackport, ids from the 1.9.19 port) =====
+// items_by_mod/exposure.json is the stale 1.6.0 export; these come from the backport jar's registered items.
+// exposure (19)
+i.aged_photograph                       = 'exposure:aged_photograph';
+i.album                                 = 'exposure:album';
+i.black_and_white_film                  = 'exposure:black_and_white_film';
+i.broken_interplanar_projector          = 'exposure:broken_interplanar_projector';
+i.camera                                = 'exposure:camera';
+i.camera_stand                          = 'exposure:camera_stand';
+i.chromatic_sheet                       = 'exposure:chromatic_sheet';
+i.color_film                            = 'exposure:color_film';
+i.developed_black_and_white_film        = 'exposure:developed_black_and_white_film';
+i.developed_color_film                  = 'exposure:developed_color_film';
+i.glass_photograph_frame                = 'exposure:glass_photograph_frame';
+i.high_sensitivity_black_and_white_film = 'exposure:high_sensitivity_black_and_white_film';
+i.high_sensitivity_color_film           = 'exposure:high_sensitivity_color_film';
+i.interplanar_projector                 = 'exposure:interplanar_projector';
+i.lightroom                             = 'exposure:lightroom';
+i.photograph                            = 'exposure:photograph';
+i.photograph_frame                      = 'exposure:photograph_frame';
+i.signed_album                          = 'exposure:signed_album';
+i.stacked_photographs                   = 'exposure:stacked_photographs';
+// exposure_expanded (32)
+i.antialias_filter                    = 'exposure_expanded:antialias_filter';
+i.art_filter                          = 'exposure_expanded:art_filter';
+i.bits_filter                         = 'exposure_expanded:bits_filter';
+i.blobs_filter                        = 'exposure_expanded:blobs_filter';
+i.blur_filter                         = 'exposure_expanded:blur_filter';
+i.bumpy_filter                        = 'exposure_expanded:bumpy_filter';
+i.c64_film                            = 'exposure_expanded:c64_film';
+i.cga_film                            = 'exposure_expanded:cga_film';
+i.color_convolve_filter               = 'exposure_expanded:color_convolve_filter';
+i.deconverge_filter                   = 'exposure_expanded:deconverge_filter';
+i.desaturate_filter                   = 'exposure_expanded:desaturate_filter';
+i.flip_filter                         = 'exposure_expanded:flip_filter';
+i.gameboy_film                        = 'exposure_expanded:gameboy_film';
+i.hicap_black_and_white_film          = 'exposure_expanded:hicap_black_and_white_film';
+i.hicap_color_film                    = 'exposure_expanded:hicap_color_film';
+i.hires_black_and_white_film          = 'exposure_expanded:hires_black_and_white_film';
+i.hires_color_film                    = 'exposure_expanded:hires_color_film';
+i.instant_c64_slide                   = 'exposure_expanded:instant_c64_slide';
+i.instant_cga_slide                   = 'exposure_expanded:instant_cga_slide';
+i.instant_gameboy_slide               = 'exposure_expanded:instant_gameboy_slide';
+i.instant_hires_black_and_white_slide = 'exposure_expanded:instant_hires_black_and_white_slide';
+i.instant_hires_color_slide           = 'exposure_expanded:instant_hires_color_slide';
+i.instant_nes_slide                   = 'exposure_expanded:instant_nes_slide';
+i.nes_film                            = 'exposure_expanded:nes_film';
+i.ntsc_filter                         = 'exposure_expanded:ntsc_filter';
+i.panoramic_lens                      = 'exposure_expanded:panoramic_lens';
+i.pencil_filter                       = 'exposure_expanded:pencil_filter';
+i.scan_pincushion_filter              = 'exposure_expanded:scan_pincushion_filter';
+i.sobel_filter                        = 'exposure_expanded:sobel_filter';
+i.spider_filter                       = 'exposure_expanded:spider_filter';
+i.telescopic_lens                     = 'exposure_expanded:telescopic_lens';
+i.wobble_filter                       = 'exposure_expanded:wobble_filter';
+// exposure_polaroid (5)
+i.high_sensitivity_instant_black_and_white_slide = 'exposure_polaroid:high_sensitivity_instant_black_and_white_slide';
+i.high_sensitivity_instant_color_slide           = 'exposure_polaroid:high_sensitivity_instant_color_slide';
+i.instant_black_and_white_slide                  = 'exposure_polaroid:instant_black_and_white_slide';
+i.instant_camera                                 = 'exposure_polaroid:instant_camera';
+i.instant_color_slide                            = 'exposure_polaroid:instant_color_slide';
+// tags. t_camera_equipment = what a camera bag accepts (server_scripts/tags/equipmenttags.js, patcherMod camerabag/)
+i.t_exposure_film_rolls           = '#exposure:film_rolls';
+i.t_exposure_developed_film_rolls = '#exposure:developed_film_rolls';
+i.t_exposure_lenses               = '#exposure:lenses';
+i.t_exposure_filters              = '#exposure:filters';
+i.t_exposure_flashes              = '#exposure:flashes';
+i.t_camera_equipment              = '#creativeengineering:camera_equipment';
 
 // ############################## Validation ##############################
 

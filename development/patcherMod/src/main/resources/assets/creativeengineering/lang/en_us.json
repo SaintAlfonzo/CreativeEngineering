@@ -62,5 +62,10 @@
   "creativeengineering.jei.vinery.wine_aging.stamp_arrow": "Aging Barrel writes NBT Year: %s",
   "creativeengineering.jei.vinery.wine_aging.age_arrow": "%s years later (%s days); the tag never changes",
   "creativeengineering.jei.vinery.wine_aging.fresh": "Year %s: potency %s",
-  "creativeengineering.jei.vinery.wine_aging.aged": "Aged %s years: potency %s (max)"
+  "creativeengineering.jei.vinery.wine_aging.aged": "Aged %s years: potency %s (max)",
+  "item.creativeengineering.leather_camera_bag": "Leather Camera Bag",
+  "item.creativeengineering.iron_camera_bag": "Iron Camera Bag",
+  "item.creativeengineering.netherite_camera_bag": "Netherite Camera Bag",
+  "tooltip.creativeengineering.camera_bag.slots": "%s / %s slots used",
+  "tooltip.creativeengineering.camera_bag.entry": "%s x%s"
 }

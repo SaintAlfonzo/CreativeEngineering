@@ -47,6 +47,7 @@ public final class CEConfig {
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
     public static final TrashSlot TRASH_SLOT;
+    public static final CameraBag CAMERA_BAG;
     public static final Debug DEBUG;
 
     static {
@@ -66,6 +67,7 @@ public final class CEConfig {
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
         TRASH_SLOT = new TrashSlot(builder);
+        CAMERA_BAG = new CameraBag(builder);
         DEBUG = new Debug(builder);
         COMMON_SPEC = builder.build();
     }
@@ -1187,6 +1189,30 @@ public final class CEConfig {
             ).define("splitBackpacksByTier", true);
 
             b.pop(); // trash_slot
+        }
+    }
+
+    /**
+     * Camera bags ({@code camerabag/} package): slots per tier. Read each time a bag is opened, so a
+     * change applies from the next opening; the server's value wins (it is sent with the menu).
+     */
+    public static final class CameraBag {
+        public final ForgeConfigSpec.IntValue leatherSlots;
+        public final ForgeConfigSpec.IntValue ironSlots;
+        public final ForgeConfigSpec.IntValue netheriteSlots;
+
+        private CameraBag(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Camera bags hold anything tagged #creativeengineering:camera_equipment, in any slot, at the",
+                    "item's normal stack size. Slots per tier (1-27). Lowering a value moves the items in the",
+                    "removed slots into the player's inventory (or drops them) the next time that bag is opened."
+            ).push("camera_bag");
+
+            leatherSlots = b.defineInRange("leatherSlots", 5, 1, 27);
+            ironSlots = b.defineInRange("ironSlots", 9, 1, 27);
+            netheriteSlots = b.defineInRange("netheriteSlots", 14, 1, 27);
+
+            b.pop(); // camera_bag
         }
     }
 

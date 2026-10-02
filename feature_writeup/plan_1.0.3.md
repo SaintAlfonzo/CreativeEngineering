@@ -1,8 +1,9 @@
 # 1.0.3 plan: deploy pipeline, server performance reports, bug fixes
 
-PLANNED, nothing built yet (written 2026-09-30). This file is the scope and design for 1.0.3. As each
-workstream gets built it moves into its own writeup (or an existing one), and this file keeps only the
-status line and a link.
+IN PROGRESS, not deployed (planned 2026-09-30, last updated 2026-10-02). This file covers what was planned for
+1.0.3 and what was actually done in it. The planned workstreams are in the table below and sections 1-6;
+everything else that went into 1.0.3 during development is in section 0.1. As each piece gets built it moves
+into its own writeup (or an existing one), and this file keeps only the status line and a link.
 
 ## 0. At a glance
 
@@ -12,13 +13,158 @@ status line and a link.
 | PR | Server performance report script (logs + JFR + system snapshot in one folder/zip) | build | M | BUILT (scratch-tested, Linux), PF-09..12 pending on the real server | [perf.md](perf.md) 3.5 (`PF-09`+) |
 | RD | Large block changes render wrong on clients (pasted structures, phantom leaves) | investigate, then fix | M-L | INVESTIGATING (client side cleared statically, 3.5a) | new `fixes` entry (`RD-`) |
 | IM | Random item deletion in inventories: toggleable item monitor | build a diagnostic, then fix | M | REPRO DONE (4.7): SB backpack storage wipe found; monitor not built | new (`IM-`) |
-| TS | Trash slot missing on most screens (player inventory, Sophisticated Backpacks) | investigate, then fix | S | BUILT (patcherMod 1.0.3), not in mods/ | [trashslot.md](trashslot.md) (`TS-`) |
+| TS | Trash slot missing on most screens (player inventory, Sophisticated Backpacks) | investigate, then fix | S | BUILT, in `mods/` (patcherMod 1.0.3), not deployed | [trashslot.md](trashslot.md) (`TS-`) |
 | SP | Join protection 60 s -> 150 s | config | XS | DONE (config), SP-01 pending | this file (`SP-`) |
 
 **Suggested order:** SP, PR, IM, TS, DP, RD (section 7 has the reasons).
 
 **Blocking questions for you** are in section 8. The main ones: which version the server and each client
 are on now, which tool pasted the structure, and whether deleted items come back after a relog.
+
+### 0.1 Also in 1.0.3 (added during development, not in the original plan)
+
+Found by diffing the working tree against the shipped 1.0.2 snapshot (`deploy/history/1.0.2.json`, the
+archived `creativeengineering-1.0.2.jar`) on 2026-10-02. Nothing here is on the server or the clients yet.
+"In `mods/`" and "live" mean the dev instance runs it (the legend's DEPLOYED); none of it has had a full
+in-game test.
+
+| ID | Change | State | Writeup |
+|---|---|---|---|
+| EX | Exposure 1.9.19 backport (base + Polaroid + Expanded) replaces Exposure 1.6.0 | in `mods/`, EX-11/EX-17 passed, rest pending | [exposure.md](exposure.md) (`EX-`) |
+| CB | Camera bags (leather, iron, netherite) | in `mods/`, boot-tested only, uncommitted | none yet |
+| VJ | Vinery JEI pages + Vinery behaviour reference | in `mods/`, VJ-/VN- pending, barrel time bug open | [vinery_jei.md](vinery_jei.md), [vinery.md](vinery.md) |
+| CU | Culture storage blocks (7 meats) | scripts live, untested | none yet |
+| CN | Canning recipe changes: alternative additives, canned cookies and bread | scripts live, untested | [food.md](food.md) 3.6 (cans) |
+| NM | Display Delight + Rustic Delight names, three food renames | live, NM-01..08 pending | [names.md](names.md) (`NM-`) |
+| FM | New food mods: Farmer's Respite, Corn Delight, More Delight | in `mods/`, blocks the deploy (no `mod_sides.md` rows) | none yet |
+| WG | Biome tuning re-solved on the new climate samples; village pool config regenerated | data live, new worlds only | [deploy.md](deploy.md), [structure_tuning.md](structure_tuning.md) |
+| CF | Small config changes (JEI sort order and bookmarks, timestamp-only rewrites) | live | none |
+| AM | Modded explorer-map trades (Lightman's Currency cashier, Cloud Storage balloon salesman) through Async Locator | in `mods/` (patcherMod 1.0.3), scratch-server tested | [deploy.md](deploy.md) runbook; this entry |
+| CC | Deploy config classes: `--config functional` leaves players' keybinds/HUD/minimap/JEI/video settings alone | built, 1.0.3 staged with it | [deploy.md](deploy.md) |
+| DV | Dev side: repo reorganisation, root Gradle build, new tools, dump commands, writeups | done, not shipped (except the dump commands) | see the entry |
+
+**EX: Exposure backport.** Our own Forge 1.19.2 port of Exposure 1.9.19 and two addons (Polaroid instant
+camera, Expanded lenses/filters/films), in one jar. Addon tags and loot modifiers are merged at build time.
+It replaces Exposure 1.6.0 with no compatibility: 1.6.0 cameras and photos in existing worlds don't carry
+over (EX-50 is the old-world check to run before deploying). Catalog is on hold.
+- Where: [development/exposureBackport/](../development/exposureBackport/), `mods/exposureBackport-1.9.19-ce-19.2-01.jar`,
+  `config/exposure-common.toml`, `exposure-client.toml`, `exposure_polaroid-client.toml` (new format).
+- State: in `mods/`; the photo-stack and Camera Stand bugs found in game are fixed (EX-11, EX-17 passed);
+  Expanded hasn't been tested in game; `tools/check_jar.py` passes.
+- Writeup: [exposure.md](exposure.md).
+
+**CB: Camera bags.** Three bag items that hold only `#creativeengineering:camera_equipment` (cameras, the
+camera stand, Exposure's lens/filter/film tags and the 10 instant slides: 64 items). The contents live in the
+stack's NBT, so a bag can be carried, dropped or upgraded without losing them. Leather bag: shaped recipe;
+iron and netherite: smithing upgrades that keep the contents. Slot counts are CEConfig `[camera_bag]`
+(5 / 9 / 14).
+- Where: patcherMod [camerabag/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/camerabag/),
+  [equipment/camera_bag.js](../kubejs/server_scripts/equipment/camera_bag.js) (recipes),
+  [tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) (tag), item_dict keys `i.*_camera_bag`.
+- State: in `mods/` (patcherMod 1.0.3, rebuilt 2026-10-02). A scratch server boot proved the items, config,
+  tag and recipes load. The GUI, slot locking, smithing, tooltip and overflow spill are untested. The iron
+  and netherite textures are placeholders. Not committed to git yet.
+- Writeup: none yet; the camera-equipment tag belongs next to [exposure.md](exposure.md).
+
+**VJ: Vinery JEI and reference.** JEI pages for Vinery's Aging Barrel fermentation, Apple Press, Grape
+Stomping and Wine Aging (Vinery 1.3.10 ships REI support only). Alongside it: a behaviour reference for
+Vinery from the decompiled jar, a prefix form of `removeTooltipKey` (`'key.*'`) in
+[tooltips.js](../kubejs/client_scripts/tooltips.js), and commented-out Vinery tooltip placeholders.
+- Where: patcherMod [compat/vinery/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/),
+  `tools/decompile_mod.py`.
+- State: in `mods/` with patcherMod 1.0.3; VJ-01..10 and VN-01..20 pending. Open bug: the barrel page shows
+  1800 ticks, but the barrel really takes about 50.
+- Writeup: [vinery_jei.md](vinery_jei.md), [vinery.md](vinery.md).
+
+**CU: Culture blocks.** Seven storage blocks for the cultured meats (beef, pork, mutton, poultry, rabbit,
+cod, salmon): 9 cultures make 1 block, and 1 block gives back 9. They are soft like the prepared flesh block
+(clay material, mud sound, breakable by hand, hoe is the fast tool) and are in BlockRunner's `spongy` speed
+tier.
+- Where: [items/cultures.js](../kubejs/startup_scripts/items/cultures.js) (blocks),
+  [cooking/cultivated_meat.js](../kubejs/server_scripts/cooking/cultivated_meat.js) (recipes),
+  [tags/storageblocktags.js](../kubejs/server_scripts/tags/storageblocktags.js),
+  [tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js) (spongy), `kubejs/assets/creativeengineering/`
+  (7 blockstates, block and item models, textures), item_dict `i.culture_block_*`.
+- State: scripts live, not checked in game.
+- Writeup: none yet (backlog chunk 6, engineering recipes, already covers the sample syringe).
+
+**CN: Canning changes.** The multi-serving cans themselves shipped in 1.0.2. In 1.0.3: every "stretched" can
+recipe takes a choice of additive. Veggie and meat cans take salt or bone broth; fruit cans take sugar or a
+honey bottle (the bottle comes back). Canned pumpkin moved from the salt group to the sugar group. There are
+new recipes for canned cookies and canned bread. The file also gained the design notes and a TODO list for
+the remaining can groups.
+- Where: [cooking/canning.js](../kubejs/server_scripts/cooking/canning.js).
+- State: scripts live, untested (the multi-serving cans are still untested from 1.0.2 as well).
+- Writeup: [food.md](food.md) 3.6 covers the can mechanics; the additive changes aren't in it yet.
+
+**NM: Names.** 205 generated names for Display Delight placed foods
+(`kubejs/assets/displaydelight/lang/en_us.json`, from `tools/gen_display_delight_names.py`) and names for
+the Rustic Delight coffee/cotton/bell pepper crops and potted wild plants. Also three renames in
+[namechanges.js](../kubejs/client_scripts/namechanges.js): Canned Rotten Flesh to Canned Tough Jerky, Canned
+Spider Eyes to Canned Night Berries, Chocolate Spider Eye to Chocolate Night Berries. Includes the
+missing-names catalog (offline pass) and the `/dumpnames` command.
+- State: live; NM-01..08 pending; `/dumpnames` not run yet. The three renames aren't in names.md yet.
+- Writeup: [names.md](names.md).
+
+**FM: New food mods.** Farmer's Respite 2.0, Corn Delight 1.0.3 (with its library, Mysterious Mountain
+Lib 1.2.3) and More Delight 25.07.28 are in `mods/`, with their default configs in `config/`.
+- State: in `mods/`, not checked in game. **Blocks the next deploy:** `build_deploy.py` stops because the
+  four jars have no row in `mod_sides.md`. They aren't in the food types, the food catalog or the names
+  catalog yet (names.md still lists Corn Delight as "not installed"). `pack/manifest.json` is out of date.
+- Writeup: none yet; [food.md](food.md) and [food_catalog.md](food_catalog.md) need them once the food
+  types are assigned.
+
+**WG: Worldgen data.** The climate samples were resampled on 2026-09-30 (a different seed) and now ship
+gzipped in `kubejs/generation_scripts/worldgen/climate/` (part of DP). `biome_config.json` was re-solved on
+them: the solver's model agreement went from 51% to 99%, and the per-biome target shares shifted. The village
+pool tuning (`pool_config.json`, `pool_tag_report.md`, commit `ffdda7e`) was regenerated from a fresh pool
+dump: entries reordered, and the Beautify botanist houses' recorded original street weight corrected from 2
+to 1 (the current weights are unchanged).
+- State: data live; applies to new worlds (biomes) and new chunks (pools) only.
+- Writeup: [deploy.md](deploy.md) (gzipped samples), [structure_tuning.md](structure_tuning.md) (pools); the
+  biome solver has no writeup yet (backlog chunk 9).
+
+**CF: Small config changes.** JEI's mod and recipe-category sort orders were edited. JEI's world-local
+`bookmarks.ini` is in the payload, so everyone would get the dev world's bookmarks (decide whether it should
+ship). `rare-ice.properties` and `worldedit.properties` only differ by the timestamp the mods rewrite on load.
+`creativeengineering-common.toml` gained the `[trash_slot]` section; `[camera_bag]` isn't written to the
+dev instance's copy yet (it appears on the next launch).
+
+**AM: Async map trades.** Lightman's Currency `ItemsForMapTrade` (cashier ocean/woodland maps) and Cloud Storage
+`SellingMap` (balloon salesman big balloon/sky temple maps) searched for structures on the server thread: a
+scratch server's `/dumptrades` froze 60 s and the watchdog killed it. patcherMod `LCItemsForMapTradeMixin` +
+`CSSellingMapMixin` hand off to `compat/AsyncMapTrades`, which returns Async Locator's pending map, searches on
+its thread and fills the map in (LC: locked; CS: tinted). The search is decided one server task later and runs
+for any trader that has ever been in a world, because MCA builds a vanilla villager's offers, discards it and
+hands the same offers to its replacement. Scratch test 2026-10-02: 24 summoned traders, 23 maps filled, 0 left
+pending, no lag warning; `/dumptrades` 5 s (was a watchdog kill).
+
+**CC: Config classes.** See [deploy.md](deploy.md) "config classes". 126 player files stopped shipping with 1.0.3
+(none removed); `trashslot-common.toml` ships once more with 1.0.3.
+
+**DV: Dev side (not shipped).**
+- Reorganisation: patcherMod moved to `development/patcherMod/`, with a root Gradle build
+  (`settings.gradle` + `build-logic` convention plugins, `installToMods`). Path mentions in scripts were
+  updated.
+- New tools: `tools/decompile_mod.py`, `jei_coverage.py`, `missing_names.py`, `lang_index.py`,
+  `gen_display_delight_names.py`, `tools/item_repro/` (IM),
+  `tools/perf/ingest_report.py` (PR), `development/exposureBackport/tools/check_jar.py`.
+- New dump commands (ship with kubejs, operator use): `/dumpcraftingaudit` and `/dumpnames`, both added to
+  `/dumpall`.
+- New writeups: [crops.md](crops.md) (reference, gaps G1-G10 open), [jei_coverage.md](jei_coverage.md)
+  (part 1 done), [names.md](names.md), [exposure.md](exposure.md), [vinery.md](vinery.md),
+  [vinery_jei.md](vinery_jei.md), [trashslot.md](trashslot.md), [deploy.md](deploy.md).
+
+**Before staging 1.0.3:**
+1. DONE 2026-10-02: `mod_sides.md` rows for the four new jars (all `both`), pack manifest regenerated.
+2. OPEN: commit the camera bag work (the staging records 10 uncommitted files).
+3. DONE 2026-10-02: restaged. The server never got 1.0.2, so DEPLOYED.json now marks the server at 1.0.1 and
+   the client at 1.0.2. The payload's files are diffed from 1.0.1; each target's removals and verify list come
+   from its own version. A scratch dedicated server with the 1.0.3 server jar set booted in 61 s with no
+   errors from our code or the new mods. `deploy/RUNBOOK.md` (perf capture + data dumps) ships in the payload.
+4. OPEN: `config/jei/world/local/Workspace/bookmarks.ini` still ships (it has shipped since 1.0.0; excluding
+   it now would make it a removal).
+5. EX-50 (old Exposure items in winecraft) was not run: no copy of the live world here.
 
 ## 1. DP: deploy pipeline, install vs update
 
@@ -531,6 +677,7 @@ While active, it cancels all damage to the player and stops mobs from targeting 
 
 ## 9. History
 
+- 2026-10-02: section 0.1 added: everything else in 1.0.3 so far (Exposure backport, camera bags, Vinery JEI, culture blocks, canning changes, names, new food mods, worldgen data, configs, dev side), from a diff against the 1.0.2 snapshot; TS row now in `mods/`. The file now covers planned and done work.
 - 2026-09-30: PR built ([perf.md](perf.md) 3.5): report.sh + ingest_report.py, dump on exit; scratch-tested running, crashed, watchdog.
 
 - 2026-09-30: DP built ([deploy.md](deploy.md)); 1.0.2 snapshotted as deployed.

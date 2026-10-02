@@ -87,6 +87,9 @@ public class CreativeEngineering
         // Tier shields (copper..dragon): the items here, the block-check widening in
         // mixin/LivingEntityShieldMixin, everything tunable in CEConfig.SHIELDS.
         com.SaintAlfonzo.creativeengineering.shield.ShieldItems.register(modEventBus);
+        // Camera bags (leather/iron/netherite): item inventory for #creativeengineering:camera_equipment.
+        // Items + menu here, slot counts in CEConfig [camera_bag], recipes in kubejs equipment/camera_bag.js.
+        com.SaintAlfonzo.creativeengineering.camerabag.CameraBag.register(modEventBus);
         // Emu nest (Incubation nest for Alex's Mobs emus): blocks here, the emu's EggLayer side in
         // mixin/EntityEmuEggLayerMixin, the foreign-nest guard in mixin/LayEggInNestGoalMixin.
         if (net.minecraftforge.fml.ModList.get().isLoaded("incubation")) {
@@ -356,6 +359,7 @@ public class CreativeEngineering
                 com.SaintAlfonzo.creativeengineering.compat.TrashSlotCompat.register();
             }
             com.SaintAlfonzo.creativeengineering.shield.client.TierShieldClient.setup(event);
+            com.SaintAlfonzo.creativeengineering.camerabag.client.CameraBagClient.setup(event);
         }
 
         @SubscribeEvent

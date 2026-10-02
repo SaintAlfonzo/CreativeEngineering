@@ -10,7 +10,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `server` | Only does anything on the server; harmless on clients | Yes |
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 
-**Current count:** 327 both, 13 server, 42 client (382 jars).
+**Current count:** 331 both, 13 server, 42 client (386 jars).
 
 ## Keeping this up to date
 
@@ -405,3 +405,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Bushier Flowers | `bushierflowers` | `bushierflowers-0.0.2-1.19.2.jar` | Flower bush blocks |
 | both | Fuel Goes Here | `fuelgoeshere` | `fuelgoeshere-1.19.2-0.1.0.0.jar` | Furnace shift-click puts fuel in the fuel slot; ships recipes/tags. Added 2026-09-30 |
 | both | Untitled Duck Mod | `untitledduckmod` | `untitledduckmod-0.6.1-1.19.2-forge.jar` | Duck/goose entities + items. Needs GeckoLib, Architectury. Added 2026-09-30 |
+| both | Farmer's Respite | `farmersrespite` | `FarmersRespite-1.19-2.0.jar` | Tea/coffee crops, kettle, drinks. Needs Farmer's Delight. Added 2026-10-01 |
+| both | Corn Delight | `corn_delight` | `corn_delight-1.0.3-1.19.2.jar` | Corn crop + foods. Needs Farmer's Delight, Mysterious Mountain Lib. Added 2026-10-01 |
+| both | More Delight | `moredelight` | `moredelight-25.07.28-1.19-forge.jar` | Extra Farmer's Delight foods/tools. Added 2026-10-01 |
+| both | Mysterious Mountain Lib | `mysterious_mountain_lib` | `mysterious_mountain_lib-1.2.3-1.19.2.jar` | Library. Required by: Corn Delight. Added 2026-10-01 |

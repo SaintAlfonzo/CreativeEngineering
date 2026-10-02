@@ -95,3 +95,22 @@ e.add('forge:arrow_shaft', i.stick_treated)
 e.add('forge:arrow_shaft/wooden', i.stick_treated)
 
 })
+
+// Camera equipment - the only items a camera bag accepts (patcherMod camerabag/CameraBag.canHold;
+// any slot, normal stack size). Exposure's own tags go in as nested references, so new
+// lenses / filters / films added to them later are picked up here too. Exposure counts every
+// glass pane and the Interplanar Projector as filters, so those fit as well.
+// Instant slides aren't in #exposure:film_rolls (the Polaroid addon has no tag), hence listed.
+// Not included: photographs, albums, frames.
+ServerEvents.tags('item', e => {
+	var i = global.item
+	global.tags.add(e, i.t_camera_equipment, [
+		i.camera, i.instant_camera, i.camera_stand,
+		i.t_exposure_lenses, i.t_exposure_filters,
+		i.t_exposure_film_rolls, i.t_exposure_developed_film_rolls,
+		i.instant_color_slide, i.instant_black_and_white_slide,
+		i.high_sensitivity_instant_color_slide, i.high_sensitivity_instant_black_and_white_slide,
+		i.instant_gameboy_slide, i.instant_nes_slide, i.instant_c64_slide, i.instant_cga_slide,
+		i.instant_hires_color_slide, i.instant_hires_black_and_white_slide,
+	])
+})

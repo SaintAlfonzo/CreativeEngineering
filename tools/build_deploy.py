@@ -8,6 +8,7 @@ deploy/
   history/<version>.json snapshot of every file of that version (sha1) + mod sides; diffs and verify read it
   latest/                the payload to copy to the other machines (rebuilt from scratch every run)
     README.md            steps for this payload's mode, this version's changes, the removals
+    RUNBOOK.md           copy of deploy/RUNBOOK.md: server update, perf capture and data-dump commands
     VERSION.txt          "1.0.3 (update from 1.0.2)" / "1.0.3 (full install)"
     verify.sh verify.ps1 update mode: proves a machine is at the from-version before anything is copied
     verify/<target>.sha1   (hashes of the jars the from-version put in that target's mods/)
@@ -28,7 +29,9 @@ Two payload modes:
   install  everything, for a new machine or one verify found drifted.
 The deployed version ("deployment snapshot") is set by hand after a payload is copied out:
   python3 tools/build_deploy.py --snapshot [VERSION] [--target server|client] [--date ISO]
-With both targets marked, an update starts from the older of the two. A deployed version can't be
+With both targets marked, an update's files start from the older of the two (one payload brings both up to
+date), while each target's removals and verify list come from its own mark: a client one version ahead
+still gets the deletions for files that only its version shipped. A deployed version can't be
 rebuilt (its history json is what the machines are checked against): build the next version instead.
 
 What goes where:
@@ -37,7 +40,10 @@ What goes where:
   kubejs/                  files .gitignore doesn't ignore, filtered by KUBEJS_CLASSES: runtime and client
                            files ship, dev files (notes, reports, generator inputs, /dump output in
                            exported/) never do. An unclassified file is a preflight error.
-  config/, defaultconfigs/ every file .gitignore doesn't ignore, minus EXCLUDE (*.toml.bak backups, ...)
+  config/, defaultconfigs/ every file .gitignore doesn't ignore, minus EXCLUDE (*.toml.bak backups, ...).
+                           config/ is filtered by CONFIG_CLASSES: --config functional (default) leaves out
+                           players' own settings (keybinds, HUD/UI, minimap, video, JEI), --config full ships
+                           all of it. Player files are never removals.
   server/                  the tracked server/ folder, same rules; lands in the server's root folder
   configs_edited/server_config/*   merged into defaultconfigs/ so a new server world starts with the
                            hand-edited serverconfig values (configs_edited wins on a conflict)
@@ -90,6 +96,7 @@ OUT = os.path.join(DEPLOY, 'latest')
 HISTORY = os.path.join(DEPLOY, 'history')
 LOG = os.path.join(DEPLOY, 'DEPLOY_LOG.md')
 DEPLOYED = os.path.join(DEPLOY, 'DEPLOYED.json')
+RUNBOOK = os.path.join(DEPLOY, 'RUNBOOK.md')  # operator one-pager (perf capture, dumps), copied into every payload
 WORLDGEN = os.path.join(ROOT, 'kubejs', 'generation_scripts', 'worldgen')
 SERVER_CONFIG_EDITS = os.path.join(ROOT, 'configs_edited', 'server_config')
 # In-tree mods built by the root Gradle build: (Gradle project = folder under development/, jar file prefix,
@@ -162,6 +169,46 @@ KUBEJS_CLASSES = [
     ('generation_scripts/recipes/*', 'dev'),                            # sawmill.js output (copied into the jar)
     ('generation_scripts/sawmill.js', 'dev'),                           # node generator
 ]
+# Every file under config/ (path inside config/, fnmatch, first match wins) is one of:
+#   functional  pack behaviour: gameplay, worldgen, recipes, server rules, technical/mixin toggles. Always ships.
+#   player      a player's own taste: keybinds, HUD/UI layout, tooltips, minimap, video, sounds, JEI layout and
+#               bookmarks. Ships only with --config full, so an update never overwrites a player's choices.
+# A third field ships a player rule in functional mode too, up to and including that version (a one-off push of
+# a changed default). Unmatched files are functional. A player file never becomes a removal: whatever the
+# player has stays in place even when the pack stops shipping it.
+CONFIG_CLASSES = [
+    ('trashslot-common.toml', 'player', '1.0.3'),   # TrashSlot deletion behaviour; pushed once with 1.0.3
+    ('jei/blacklist.cfg', 'functional'),            # hidden ingredients (pack-defined)
+    ('jei/recipe-category-sort-order.ini', 'functional'),   # pack's recipe tab order
+    ('jei/ingredient-list-mod-sort-order.ini', 'functional'),  # pack's ingredient list order by mod
+    ('jei/ingredient-list-type-sort-order.ini', 'functional'), # ... and by ingredient type
+    ('jei/*', 'player'),                            # JEI client options, colours, per-world bookmarks
+    ('*-client.*', 'player'),                       # every mod's client config (HUD, rendering, keys, sounds)
+    ('*_client.*', 'player'),
+    ('xaero/*/common.cfg', 'functional'),           # Xaero server rules (what maps/radar may show) ...
+    ('xaero/*/server_profiles/*', 'functional'),    # ... and the profile the server enforces
+    ('xaero/*/*_server.json', 'functional'),        # server radar categories
+    ('xaero/*', 'player'),                          # the rest: minimap / world map client settings
+    ('xaerohud.txt', 'player'),
+    ('xaeropatreon.txt', 'player'),
+    ('waila/*', 'player'),                          # WTHIT HUD toggles and blacklists
+    ('pneumaticcraft/PneumaticArmorHUDLayout.cfg', 'player'),
+    ('presencefootsteps/*', 'player'),              # footstep sounds
+    ('spyglass-improvements/*', 'player'),
+    ('betterf3.toml', 'player'),                    # F3 screen layout
+    ('betterthirdperson-common.toml', 'player'),    # camera
+    ('detailarmorbar.json', 'player'),              # armor bar look (the pack's colours are set in code)
+    ('enchdesc.json', 'player'),                    # enchantment tooltips
+    ('MouseTweaks.cfg', 'player'),
+    ('notenoughanimations.json', 'player'),
+    ('panorama.json', 'player'),                    # panorama screenshot tool
+    ('rubidium-options.json', 'player'),            # video settings (rubidium-mixins.properties stays functional)
+    ('sodium-extra-options.json', 'player'),        # video settings (sodium-extra.properties stays functional)
+    ('sidebar_buttons.json', 'player'),             # FTB sidebar
+    ('transition.json', 'player'),
+    ('trender.json', 'player'),
+]
+CONFIG_MODES = ('functional', 'full')
 LOG_HEADER = """# Deploy log
 
 Every version staged by `tools/build_deploy.py`, newest first. Each entry lists what changed since the
@@ -219,12 +266,32 @@ def kubejs_class(rel):
     return next((cls for pat, cls in KUBEJS_CLASSES if fnmatch.fnmatch(rel, pat)), None)
 
 
-def collect(pre, root=ROOT, unknown_side=None):
+def config_rule(rel):
+    """(class, ship_until) of a path inside config/ (CONFIG_CLASSES; unmatched = functional)."""
+    for rule in CONFIG_CLASSES:
+        if fnmatch.fnmatch(rel, rule[0]):
+            return rule[1], (rule[2] if len(rule) > 2 else None)
+    return 'functional', None
+
+
+def is_player_config(target_path):
+    """A path on a target (config/... from the game folder) holding a player's own settings."""
+    return target_path.startswith('config/') and config_rule(target_path[len('config/'):])[0] == 'player'
+
+
+def config_ships(rel, mode, version):
+    cls, until = config_rule(rel)
+    return (cls == 'functional' or mode == 'full'
+            or bool(until and version and parse_version(version) <= parse_version(until)))
+
+
+def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=None):
     """(files, mods): files = {category: {path inside the category: source path}},
     mods = {jar: {modId, side, name, version}}.
 
     root: the dev instance, or an installed game/server folder to record as a past version (then
-    configs_edited isn't merged, and unknown_side is the side of jars mod_sides.md no longer lists)."""
+    configs_edited isn't merged, and unknown_side is the side of jars mod_sides.md no longer lists).
+    config_mode/pack_version: which config/ files ship (CONFIG_CLASSES); 'full' takes them all."""
     files = {c: {} for c in CATEGORIES}
     mods = {}
     by_modid, by_jar = read_doc()
@@ -263,6 +330,8 @@ def collect(pre, root=ROOT, unknown_side=None):
                     unclassified.append(inner)
                 if cls in (None, 'dev'):
                     continue
+            if tree == 'config' and not config_ships(inner, config_mode, pack_version):
+                continue
             files[tree][inner] = os.path.join(root, rel)
     if unclassified:
         pre.error('kubejs files no KUBEJS_CLASSES rule covers (add a runtime/client/dev rule in '
@@ -437,13 +506,17 @@ def diff(prev, cur):
             continue
         a = (prev or {}).get('files', {}).get(cat, {})
         b = cur['files'][cat]
+        gone = a.keys() - b.keys()
+        kept = {p for p in gone if cat == 'config' and is_player_config('config/' + p)}
         d['files'][cat] = {
             'added': sorted(b.keys() - a.keys()),
             'changed': sorted(p for p in b.keys() & a.keys() if a[p] != b[p]),
-            'removed': sorted(a.keys() - b.keys()),
+            'removed': sorted(gone - kept),
+            'no longer shipped (player settings, left in place)': sorted(kept),
         }
     for target in ('server', 'client'):
-        d['removals'][target] = sorted(installed(prev, target) - installed(cur, target)) if prev else []
+        d['removals'][target] = sorted(p for p in installed(prev, target) - installed(cur, target)
+                                       if not is_player_config(p)) if prev else []
     return d
 
 
@@ -567,8 +640,9 @@ def mb(n):
 
 
 VERIFY_SH = r"""#!/bin/sh
-# Checks that a game folder is at {base} before this update is applied: every jar in its mods/ must be
-# the one {base} shipped, nothing missing, nothing extra. Needs only sh + sha1sum (or shasum).
+# Checks that a game folder is at the version this update expects for that target (verify/<target>.version:
+# {base}) before it is applied: every jar in its mods/ must be the one that version shipped, nothing missing,
+# nothing extra. Needs only sh + sha1sum (or shasum).
 #   sh verify.sh server /path/to/server
 #   sh verify.sh client /path/to/instance
 set -u
@@ -578,6 +652,7 @@ dir=${{2:-.}}
 case "$target" in server|client) ;; *) echo "usage: sh verify.sh server|client [game folder]"; exit 2 ;; esac
 command -v sha1sum >/dev/null 2>&1 || sha1sum() {{ shasum -a 1 "$@"; }}
 list="$here/verify/$target.sha1"
+base=$(cat "$here/verify/$target.version")
 cd "$dir" || exit 2
 [ -d mods ] || {{ echo "no mods/ folder in $(pwd): pass the $target's game folder"; exit 2; }}
 bad=0
@@ -590,21 +665,22 @@ for f in mods/*.jar; do
   cut -d' ' -f3- "$list" | grep -qxF "$f" || {{ echo "EXTRA    $f"; bad=$((bad + 1)); }}
 done
 if [ "$bad" -eq 0 ]; then
-  echo "OK: $(pwd) matches {base} ($(wc -l < "$list") jars). Apply the update."
+  echo "OK: $(pwd) matches $base ($(wc -l < "$list") jars). Apply the update."
 else
-  echo "DRIFT: $bad difference(s) from {base}. Don't apply this update: use an install payload"
+  echo "DRIFT: $bad difference(s) from $base. Don't apply this update: use an install payload"
   echo "(python3 tools/build_deploy.py --mode install), or fix the listed jars by hand."
   exit 1
 fi
 """
 
-VERIFY_PS1 = r"""# Checks that a game folder is at {base} before this update is applied: every jar in its mods/ must be
-# the one {base} shipped, nothing missing, nothing extra.
+VERIFY_PS1 = r"""# Checks that a game folder is at the version this update expects for that target (verify\<target>.version:
+# {base}) before it is applied: every jar in its mods/ must be the one that version shipped.
 #   powershell -ExecutionPolicy Bypass -File verify.ps1 client "C:\path	o\instance"
 param(
   [Parameter(Mandatory = $true)][ValidateSet('server', 'client')][string]$Target,
   [string]$Dir = '.'
 )
+$base = (Get-Content -LiteralPath (Join-Path $PSScriptRoot "verify\$Target.version") -TotalCount 1).Trim()
 $expected = @{{}}
 foreach ($line in Get-Content -LiteralPath (Join-Path $PSScriptRoot "verify\$Target.sha1")) {{
   $sum, $path = $line -split '  ', 2
@@ -621,27 +697,31 @@ Get-ChildItem -LiteralPath (Join-Path $Dir 'mods') -Filter *.jar -File | ForEach
   $p = 'mods/' + $_.Name
   if (-not $expected.ContainsKey($p)) {{ "EXTRA    $p"; $bad++ }}
 }}
-if ($bad -eq 0) {{ "OK: $Dir matches {base} ($($expected.Count) jars). Apply the update." }}
+if ($bad -eq 0) {{ "OK: $Dir matches $base ($($expected.Count) jars). Apply the update." }}
 else {{
-  "DRIFT: $bad difference(s) from {base}. Don't apply this update: use an install payload"
+  "DRIFT: $bad difference(s) from $base. Don't apply this update: use an install payload"
   "(python3 tools/build_deploy.py --mode install), or fix the listed jars by hand."
   exit 1
 }}
 """
 
 
-def write_verify(out, base):
-    """verify.sh / verify.ps1 + verify/<target>.sha1: the jars `base` put in each target's mods/."""
+def write_verify(out, bases):
+    """verify.sh / verify.ps1 + verify/<target>.sha1 and .version: the jars each target's base version put
+    in its mods/ (bases: {target: history snapshot})."""
     os.makedirs(os.path.join(out, 'verify'), exist_ok=True)
-    for target in ('server', 'client'):
+    for target, base in bases.items():
         lines = sorted(f'{h}  mods/{rel}' for cat, paths in base['files'].items()
                        for rel, h in paths.items()
                        if CATEGORIES[cat][1] == 'mods' and target in CATEGORIES[cat][0])
         with open(os.path.join(out, 'verify', f'{target}.sha1'), 'w', encoding='utf8', newline='\n') as f:
             f.write('\n'.join(lines) + '\n')
+        with open(os.path.join(out, 'verify', f'{target}.version'), 'w', encoding='utf8', newline='\n') as f:
+            f.write(base['version'] + '\n')
+    label = ', '.join(f"{t} {b['version']}" for t, b in bases.items())
     for name, body in (('verify.sh', VERIFY_SH), ('verify.ps1', VERIFY_PS1)):
         with open(os.path.join(out, name), 'w', encoding='utf8', newline='\n') as f:
-            f.write(body.format(base=base['version']))
+            f.write(body.format(base=label))
     os.chmod(os.path.join(out, 'verify.sh'), 0o755)
 
 
@@ -694,14 +774,22 @@ def render_changes(cur, prev, d):
         if not n:
             continue
         body = []
-        for kind in ('added', 'changed', 'removed'):
-            if ch[kind]:
-                body += [f'*{kind} ({len(ch[kind])})*', ''] + collapse(ch[kind]) + ['']
-        lines += details(f"{cat}/: {len(ch['added'])} added, {len(ch['changed'])} changed, {len(ch['removed'])} removed",
-                         body[:-1], open_limit=25)
+        for kind, paths in ch.items():
+            if paths:
+                body += [f'*{kind} ({len(paths)})*', ''] + collapse(paths) + ['']
+        unshipped = sum(len(v) for k, v in ch.items() if k not in ('added', 'changed', 'removed'))
+        lines += details(f"{cat}/: {len(ch['added'])} added, {len(ch['changed'])} changed, {len(ch['removed'])} removed"
+                         + (f', {unshipped} no longer shipped' if unshipped else ''), body[:-1], open_limit=25)
     if not lines:
         lines = ['No file changes since the previous version.', '']
     return lines
+
+
+def removals_from(pay):
+    at = pay.get('fromByTarget') or {}
+    if len(set(at.values())) > 1:
+        return ' (' + ', '.join(f'{t} from {v}' for t, v in at.items()) + ')'
+    return f" (from {pay['from']})" if pay['from'] else ''
 
 
 def render_removals(d):
@@ -728,14 +816,15 @@ def render_entry(cur, prev, d, dpay, stats):
              f"- Commit: {commit}",
              f"- Since: {prev['version'] if prev else 'nothing (first deployment: everything is new)'}",
              f"- Contents: {counts}",
-             f"- Payload: {pay['mode']}" + (f" from {pay['from']}" if pay['from'] else '') + f": {n} files, {mb(size)} ({by_cat})"]
+             f"- Payload: {pay['mode']}" + (f" from {pay['from']}" if pay['from'] else '')
+             + f", config {pay.get('config', 'full')}: {n} files, {mb(size)} ({by_cat})"]
     if cur['notes']:
         lines.append(f"- Notes: {cur['notes']}")
     if cur['warnings']:
         lines.append('- Built with warnings:')
         lines += [f'  - {w.splitlines()[0]}' for w in cur['warnings']]
     lines += ['', '### Changes', ''] + render_changes(cur, prev, d)
-    lines += ['### Removals' + (f" (from {pay['from']})" if pay['from'] else ''), ''] + render_removals(dpay)
+    lines += ['### Removals' + removals_from(pay), ''] + render_removals(dpay)
     return lines
 
 
@@ -756,17 +845,23 @@ def render_readme(cur, prev, d, dpay, base, payload):
              f"{' (with uncommitted changes)' if cur['dirty'] else ''}. "
              f"Minecraft {cur['minecraft']}, {cur['loader']}.", '']
     if update:
+        at = pay.get('fromByTarget') or {'server': pay['from'], 'client': pay['from']}
+        expect = (f"the server at {at['server']} and clients at {at['client']}" if at['server'] != at['client']
+                  else f"machines at {at['server']}")
         lines += [f"**Update payload.** It holds only the files that are new or changed since {pay['from']}; files "
-                  f"that are gone are in the removals lists. Apply it only to a machine that runs {pay['from']}.", '',
-                  f"## Check the machine is at {pay['from']} first", '',
+                  f"that are gone are in the removals lists. It expects {expect}.", '',
+                  f"## Check each machine first ({expect})", '',
                   '- Linux/macOS: `sh verify.sh server /path/to/server` or `sh verify.sh client /path/to/instance`',
                   '- Windows: `powershell -ExecutionPolicy Bypass -File verify.ps1 client "C:\\path\\to\\instance"`', '',
-                  f"It hashes every jar in that `mods/` and compares it with what {pay['from']} shipped. `OK`: carry on. "
+                  "It hashes every jar in that `mods/` and compares it with what that target's version shipped. `OK`: carry on. "
                   "`DRIFT` (a missing, changed or extra jar): don't apply this payload; fix the listed jars by hand or "
                   'use a full install (`python3 tools/build_deploy.py --mode install`).', '']
     else:
         lines += ['**Full install.** Everything the pack needs. Use it for a new machine, or for one whose `verify` '
                   'reported drift: in that case move its `mods/` aside first, so no stale jar survives.', '']
+    if pay.get('config') == 'functional':
+        lines += ["`config/` holds the pack's functional settings only. Players' own settings (keybinds, HUD and UI, "
+                  "minimap, video, JEI layout and bookmarks) are neither shipped nor deleted.", '']
     lines += ['## Server', ''] + numbered([
         'Stop the server and back up the world.',
         rm('server'),
@@ -800,7 +895,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
               'this makes the next update start from an older version (bigger, still correct).', '',
               '## Changes since ' + (prev['version'] if prev else 'nothing (first deployment)'), '']
     lines += render_changes(cur, prev, d)
-    lines += ['## Removals' + (f" (from {pay['from']})" if pay['from'] else ''), ''] + render_removals(dpay)
+    lines += ['## Removals' + removals_from(pay), ''] + render_removals(dpay)
     return '\n'.join(lines) + '\n'
 
 
@@ -840,6 +935,9 @@ def main():
                     help='update from this version instead of the deployment snapshot in DEPLOYED.json')
     ap.add_argument('--dry-run', action='store_true', help='print the log entry and payload size; write and copy nothing')
     ap.add_argument('--full', action='store_true', help='update mode: ship every resource/shader pack anyway')
+    ap.add_argument('--config', choices=CONFIG_MODES, default='functional',
+                    help="functional (default): config/ without players' own settings (CONFIG_CLASSES 'player': "
+                         'keybinds, HUD/UI, minimap, video, JEI); full: every config file')
     ap.add_argument('--force', action='store_true', help='build even if a preflight check fails (recorded in the log)')
     ap.add_argument('--snapshot', nargs='?', const='', metavar='VERSION',
                     help='record that VERSION (default: the one in deploy/latest/) was copied to the machines; '
@@ -853,18 +951,18 @@ def main():
         return
 
     pre = Preflight()
-    files, mods = collect(pre)
+    history = load_history()
+    last = history[-1]['version'] if history else None
+    version = args.version or (re.sub(r'(\d+)(?!.*\d)', lambda m: str(int(m.group(1)) + 1), last) if last else '1.0.0')
+    prev = next((s for s in reversed(history) if s['version'] != version), None)
+
+    files, mods = collect(pre, config_mode=args.config, pack_version=version)
     print('checking structure data (regenerating in a scratch folder)...')
     check_structures(pre)
     check_in_tree_mods(pre)
     check_climate_reader(pre, files)
     check_manifest(pre, files)
     commit, dirty = git_state(pre)
-
-    history = load_history()
-    last = history[-1]['version'] if history else None
-    version = args.version or (re.sub(r'(\d+)(?!.*\d)', lambda m: str(int(m.group(1)) + 1), last) if last else '1.0.0')
-    prev = next((s for s in reversed(history) if s['version'] != version), None)
 
     deployed = load_deployed()
     if version in deployed_versions(deployed):
@@ -880,6 +978,13 @@ def main():
             pre.error(f'--from {from_version} is the version being built')
         else:
             base = load_base(pre, deployed, from_version)
+    # Each target's own starting point: removals and verify lists come from it (the payload's files come
+    # from the older `base`, a superset). --from overrides both.
+    bases = {}
+    if base:
+        for t in ('server', 'client'):
+            v = deployed.get(t, {}).get('version') if not args.from_version else None
+            bases[t] = base if not v or v == base['version'] else load_base(pre, deployed, v)
 
     for w in pre.warnings:
         print('WARNING: ' + w)
@@ -901,13 +1006,17 @@ def main():
         'dirty': dirty,
         'notes': args.notes,
         'warnings': pre.warnings + [f'FORCED past: {e}' for e in pre.errors],
-        'payload': {'mode': mode, 'from': base['version'] if base else None},
+        'payload': {'mode': mode, 'from': base['version'] if base else None, 'config': args.config,
+                    **({'fromByTarget': {t: b['version'] for t, b in bases.items()}} if bases else {})},
         'resourcePackOrder': enabled,
         'mods': mods,
         'files': {cat: {p: sha1(src) for p, src in paths.items()} for cat, paths in files.items()},
     }
     d = diff(prev, cur)                  # changelog: since the previous build
-    dpay = diff(base or prev, cur)       # removals: since what the machines run
+    dpay = diff(base or prev, cur)       # removals: since what the machines run (each target its own)
+    for t, b in bases.items():
+        if b is not base:
+            dpay['removals'][t] = diff(b, cur)['removals'][t]
     payload = select_payload(files, cur, base, mode, args.full)
     stats = payload_stats(payload)
     entry = render_entry(cur, prev, d, dpay, stats)
@@ -930,9 +1039,11 @@ def main():
             with open(os.path.join(OUT, f'removals_{target}.txt'), 'w', encoding='utf8') as f:
                 f.write('\n'.join(dpay['removals'][target]) + '\n')
     if base:
-        write_verify(OUT, base)
+        write_verify(OUT, bases)
     with open(os.path.join(OUT, 'README.md'), 'w', encoding='utf8') as f:
         f.write(render_readme(cur, prev, d, dpay, base, payload))
+    if os.path.isfile(RUNBOOK):
+        shutil.copy2(RUNBOOK, os.path.join(OUT, 'RUNBOOK.md'))
     with open(os.path.join(OUT, 'VERSION.txt'), 'w', encoding='utf8') as f:
         f.write(version + (f' (update from {base["version"]})' if base else ' (full install)') + '\n')
 

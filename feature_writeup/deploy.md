@@ -102,6 +102,24 @@ Runtime inputs in `generation_scripts/`, with their readers:
 | `worldgen/structure_config.json`, `structure_groups.json`, `structure_tags.json` | `structure_overrides.js` (+ MassPlacer for tags) |
 | `food/food_types.json`, `food/can_servings.json` | `tags/foodtypetags.js`, `tags/cantags.js` |
 
+### config classes (functional vs full)
+
+`--config functional` (the default) ships the pack's settings and leaves players' own alone; `--config full`
+ships every config file. Each file under `config/` matches a rule in `CONFIG_CLASSES` (first match wins);
+an unmatched file is functional.
+
+| Class | Ships | Paths |
+|---|---|---|
+| functional | always | everything not listed below, incl. `jei/blacklist.cfg`, the three JEI sort orders (`recipe-category-sort-order.ini`, `ingredient-list-mod-sort-order.ini`, `ingredient-list-type-sort-order.ini`) and Xaero's server side (`xaero/*/common.cfg`, `xaero/*/server_profiles/`, `*_server.json`) |
+| player | `--config full` only | `*-client.*` / `*_client.*` (every mod's client config), `jei/` (options, colours, per-world bookmarks), `xaero/` (minimap and world map), `waila/`, `pneumaticcraft/PneumaticArmorHUDLayout.cfg`, `presencefootsteps/`, `spyglass-improvements/`, `betterf3.toml`, `betterthirdperson-common.toml`, `detailarmorbar.json`, `enchdesc.json`, `MouseTweaks.cfg`, `notenoughanimations.json`, `panorama.json`, `rubidium-options.json`, `sodium-extra-options.json`, `sidebar_buttons.json`, `transition.json`, `trender.json` |
+| player, one-off | functional mode too, up to the version in the rule's third field | `trashslot-common.toml` (through 1.0.3) |
+
+- A player file is never a removal. When the pack stops shipping one, the changelog lists it as "no longer
+  shipped (player settings, left in place)" and the machine keeps whatever the player has.
+- `history/<ver>.json` records only what that version shipped, and `payload.config` records the mode.
+- To push a changed default once, add the version as the rule's third field, e.g.
+  `('trashslot-common.toml', 'player', '1.0.3')`.
+
 ## 3. What the pack changes
 
 - **Climate samples.** `/dumpclimate` writes `kubejs/generation_scripts/worldgen/climate/<ns>__<dim>.json.gz`.
@@ -166,3 +184,7 @@ Runtime inputs in `generation_scripts/`, with their readers:
 ## 8. History
 
 - 2026-09-30: built. Deployment snapshot + update/install modes + verify scripts; kubejs classes; climate samples gzipped into `generation_scripts/worldgen/climate/` (patcherMod 1.0.3 rebuilt and copied to `mods/`). 1.0.2 snapshotted as deployed on both sides ("last night", the 00:14 staging).
+- 2026-10-02: the server never got 1.0.2, so DEPLOYED.json marks the server 1.0.1 and the client 1.0.2. Payload
+  files come from the older mark, but removals and verify lists are per target (`fromByTarget`,
+  `verify/<target>.version`). `deploy/RUNBOOK.md` ships in every payload. Config classes added
+  (`--config functional|full`, default functional).
