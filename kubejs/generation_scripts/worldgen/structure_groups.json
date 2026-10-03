@@ -1516,5 +1516,16 @@
         }
       }
     }
+  },
+  "biome_rules": {
+    "water": {
+      "note": "Oceans and rivers hold water structures only. Mods give some structures every overworld biome (Mysticrift pillager towers: #minecraft:is_overworld), which put them in the open sea.",
+      "biomes": [
+        "#minecraft:is_ocean",
+        "#minecraft:is_river",
+        "#c:river"
+      ],
+      "allow": "#water_ok"
+    }
   }
 }

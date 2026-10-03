@@ -379,6 +379,26 @@ class Pack:
                 self.pool_all[s['structure']] = pool
                 self.pools[s['structure']] = frozenset(b for b in pool if b in self.areas)
         self.blocked = {s['structure'] for e in self.sets.values() for s in e['structures'] if s.get('blocked')}
+        self.apply_biome_rules(raw, cache)
+
+    def apply_biome_rules(self, raw, cache):
+        """biome_rules in structure_groups.json, as patcherMod StructureBiomeRules applies them: a structure
+        that isn't allowed loses the rule's biomes. kept_out = {rule: [structure ids that lost biomes]}."""
+        self.kept_out = OrderedDict()
+        rules = read_json(GROUPS).get('biome_rules', {}) if GROUPS.exists() else {}
+        for name, rule in rules.items():
+            biomes = set()
+            for b in rule.get('biomes', []):
+                biomes |= resolve_biome_tag(full_id(b[1:]), raw, cache) if b.startswith('#') else {full_id(b)}
+            allow = self.tag_members.get(rule.get('allow', '').lstrip('#'), set())
+            out = []
+            for sid in self.pools:
+                if sid in allow or not (self.pool_all[sid] & biomes):
+                    continue
+                self.pool_all[sid] = self.pool_all[sid] - biomes
+                self.pools[sid] = self.pools[sid] - biomes
+                out.append(sid)
+            self.kept_out[name] = sorted(out)
 
     def group_names(self):
         return [t[len('group/'):] for t in self.tag_defs if t.startswith('group/')]
@@ -1052,6 +1072,10 @@ def groups_readme():
                                'entry here still works (the game fills in a rough default and flags it).'),
         ('estimates', 'python3 tools/gen_structure_groups.py --check rewrites structure_group_estimates.md: '
                       'expected structures per area for every structure, from its real biome areas.'),
+        ('biome rules', 'biome_rules.<name>: {biomes: [biome ids / #biome tags], allow: "#<structure tag>"}. Only '
+                        'the tag\'s structures may start in those biomes; every other structure loses them from its '
+                        'own biome list (patcherMod StructureBiomeRules, which also covers structures no config '
+                        'knows yet). water keeps the open sea for ships, wrecks and ocean ruins.'),
     ])
 
 

@@ -21,15 +21,17 @@ RHINO="$(ls mods/rhino-forge-*.jar | head -1)"; GSON="$L/com/google/code/gson/gs
 mkdir -p "$T/rhino_cls"
 javac -proc:none -cp "$RHINO:$GSON" -d "$T/rhino_cls" tools/structure_groups_test/RhinoRun.java
 java -cp "$T/rhino_cls:$RHINO:$GSON" RhinoRun "$ROOT" "$T/rhino" | tail -1
-diff -r --exclude='frequencies*' --exclude=report.md "$T/node" "$T/rhino" && echo "structure_set files identical"
+diff -r --exclude='frequencies*' --exclude='rules*' --exclude=report.md "$T/node" "$T/rhino" && echo "structure_set files identical"
 python3 -c "import json,sys; a=json.load(open(sys.argv[1])); b=json.load(open(sys.argv[2])); sys.exit(0 if a == b else 1)" \
   "$T/node/frequencies.json" "$T/rhino/frequencies.raw.json" && echo "frequency tables identical"
+python3 -c "import json,sys; a=json.load(open(sys.argv[1])); b=json.load(open(sys.argv[2])); sys.exit(0 if a == b and a else 1)" \
+  "$T/node/rules.json" "$T/rhino/rules.raw.json" && echo "biome rules identical"
 diff <(sed 1,3d "$T/node_report.md") <(sed 1,3d "$T/rhino/report.md") >/dev/null && echo "reports identical (timestamp aside)"
 for v in "density=4 --density=4" "density=0.3 --density=0.3" "groupsoff --groups-off"; do
   set -- $v
   node tools/structure_tuning_sim.js "$T/node_$1.md" "$T/node_$1" "$2" > /dev/null
   java -cp "$T/rhino_cls:$RHINO:$GSON" RhinoRun "$ROOT" "$T/rhino_$1" "$1" > /dev/null
-  diff -r --exclude='frequencies*' --exclude=report.md "$T/node_$1" "$T/rhino_$1" >/dev/null \
+  diff -r --exclude='frequencies*' --exclude='rules*' --exclude=report.md "$T/node_$1" "$T/rhino_$1" >/dev/null \
     && diff <(sed 1,3d "$T/node_$1.md") <(sed 1,3d "$T/rhino_$1/report.md") >/dev/null \
     && echo "$1: node and Rhino identical ($(find "$T/rhino_$1" -name '*.json' -path '*structure_set*' | wc -l) sets)" || { echo "$1: node and Rhino DIFFER"; exit 1; }
 done

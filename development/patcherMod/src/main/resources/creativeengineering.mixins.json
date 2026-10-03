@@ -51,11 +51,21 @@
     "ChunkGeneratorLocateMixin",
     "ChunkGeneratorStructureFrequencyMixin",
     "StructureCheckFrequencyMixin",
+    "ChunkGeneratorStructureBiomeRulesMixin",
     "ItemStackCanServingsMixin",
     "LevelThreadSafeRandomMixin",
     "BushierFlowersDisableMixin",
     "EntityEmuEggLayerMixin",
-    "LayEggInNestGoalMixin"
+    "LayEggInNestGoalMixin",
+    "TobaccoPlacementMixin",
+    "FarmBlockUnderCropsMixin",
+    "MulchBlockCropGrowthMixin",
+    "QuarkHoeHarvestMixin",
+    "QuarkHoeAreaBreakMixin",
+    "QuarkHoeAreaHarvestMixin",
+    "CannedGolemColorMixin",
+    "WanderingTraderSpawnerMixin",
+    "WanderingTraderTradesMixin"
   ],
   "client": [
     "ItemDrainCategoryMixin",
@@ -79,7 +89,8 @@
     "CameraSinkMixin",
     "TrashSlotGuiHandlerMixin",
     "TrashSlotComponentMixin",
-    "TrashSlotSaveStateAccessor"
+    "TrashSlotSaveStateAccessor",
+    "CannedGolemRendererMixin"
   ],
   "server": []
 }

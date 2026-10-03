@@ -1,6 +1,6 @@
 # Crops: soils, right-click harvest, hoe harvesting
 
-Test prefix **CR-** · Last updated **2026-10-02** · Overall status **reference from the decompiled jars, in-game checks pending**
+Test prefix **CR-** · Last updated **2026-10-03** · Overall status **reference from the decompiled jars; tobacco parity and hoe areas BUILT (patcherMod 1.0.4 in `mods/`, not deployed); wild generation reference written 2026-10-03; pack wild-crop placement (§2.8) BUILT 2026-10-03, offline-tested, not run in game; in-game checks pending**
 
 ## 0. At a glance
 
@@ -9,16 +9,27 @@ Test prefix **CR-** · Last updated **2026-10-02** · Overall status **reference
 | Per-crop table: type, soils, right-click, hoe right-click, hoe break | §2.1 | reference; CR-01 to CR-20 check the surprising parts |
 | How right-click replanting works (Quark Simple Harvest) | §2.2 | reference |
 | How the hoe area mechanics work (Quark Hoe Harvesting + Simple Harvest) | §2.3 | reference |
+| Per-hoe harvest area sizes 1x1 to 9x9 + auto tooltip | §2.3 | BUILT 2026-10-02, in `mods/` (patcherMod 1.0.4), not deployed; CR-26 to CR-30 pending |
 | Soil rules (Dirt, Farmland, Rich Soil, Rich Farmland, Fertile Soil, Nulch) | §2.4 | reference |
-| Pack changes to farming | §3 | DEPLOYED (configs and scripts as they are today) |
-| Gaps: tobacco, hemp, grape bushes, weeds, pack hoes | §4 | open, nothing changed yet |
+| Crop parity layer: how a non-standard crop is brought in line (tobacco done) | §2.6 | BUILT, in `mods/` (patcherMod 1.0.4), not deployed; CR-01, CR-02, CR-21 to CR-25 pending |
+| Pack changes to farming | §3 | tobacco parity built, the rest DEPLOYED |
+| Gaps: hemp, grape bushes, weeds, pack hoes | §4 | G1 to G3 (tobacco) fixed; the rest open |
+| 1.0.4 mods: Corn Delight, Farmer's Respite (tea, coffee), Fruits Delight (bushes, lemon, pineapple, hamimelon, 13 fruit trees) | §2.1 | reference from the decompiled jars 2026-10-02; G12 to G15 open; CR-31 to CR-37 |
+| Wild generation: where every crop, bush and fruit tree spawns (biomes, rate, height, ground, side blocks such as Coarse Dirt, Adzuki Soil, mint ponds) | §2.7 + generated [crops_by_biome.md](crops_by_biome.md) | reference 2026-10-03; findings V1 to V12 feed the planned vegetation worldgen system; CR-38 to CR-46 |
+| Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | BUILT 2026-10-03, offline-tested, not run in game; V13 to V20; CR-47 to CR-58 |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
 - **Knobs:** `config/quark-common.toml` sections `[tweaks.simple_harvest]` and `[tweaks.hoe_harvesting]`.
   The pack runs Quark's defaults: empty-hand harvest on, no durability cost, harvesting search on,
-  villagers use simple harvest, hoe radius 2 (3x3) and 3 (5x5).
-- **Why tobacco is different:** it isn't a crop class at all. It's a plain MCreator block with a
-  block entity, and its placement check is hard-coded to `minecraft:farmland` (§2.5).
+  villagers use simple harvest, hoe radius 2 (3x3) and 3 (5x5). The pack overrides the size per hoe
+  with the `creativeengineering:hoe_harvest/NxN` item tags (§2.3); Quark's radius only covers untagged hoes.
+- **Tobacco:** it isn't a crop class at all. It's a plain MCreator block with a block entity, and
+  its placement check is hard-coded to `minecraft:farmland` (§2.5). The pack's crop parity layer (§2.6)
+  now gives it the same soils, right-click replant, hoe replant and hoe area break as wheat.
+- **Bringing another crop in line:** follow the recipe in §2.6.
+- **Where does X grow wild:** §2.8 (the pack's rules, `wild_crops.json`), [crops_by_biome.md](crops_by_biome.md) for exact
+  biome lists; §2.7 for what each mod does on its own. Regenerate with `python3 tools/gen_crop_worldgen_table.py` after
+  mod, biome or `wild_crops.json` changes.
 - **How to re-read the code:** `python3 tools/decompile_mod.py <jar> <out dir>` (§6).
 
 ## 1. Overview
@@ -30,7 +41,8 @@ Three separate systems decide how a crop behaves:
 2. **The soil block** gets a say through Forge's `canSustainPlant`. Farmer's Delight Rich Soil and Rich
    Farmland, and Immersive Weathering Mulch (renamed **Fertile Soil** in the pack), each override it
    with their own rules (§2.4). A crop that skips `canSustainPlant` and checks the block below directly
-   (tobacco, grape bushes) ignores those overrides.
+   (tobacco, grape bushes) ignores those overrides. For tobacco the pack replaces that check with the
+   `creativeengineering:crops/farmland_soils` tag (§2.6).
 3. **Quark** adds the harvesting conveniences. *Simple Harvest* turns a right-click on a ripe crop into
    "drop the harvest and replant". *Hoe Harvesting* makes a hoe work on an area, for right-clicks and
    for breaking.
@@ -64,7 +76,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Onion | `farmersdelight:onions` | no | yes | no | yes | yes | Quark replant (auto-found) | replant | yes |
 | Bell Pepper, Coffee, Cotton | `rusticdelight:bell_peppers`, `coffee`, `cotton` | no | yes | no | yes | yes | Quark replant (auto-found) | replant | yes |
 | Ender Crop | `endercrop:ender_crop` | no | yes, dark only | no | yes, dark only | yes, dark only | Quark replant (auto-found) | replant | yes |
-| **Tobacco** | `the_dirty_stuff:tobacco_seeds` | no | **yes** | no | **no** | **no** | **none** | **no** | **no** |
+| Tobacco | `the_dirty_stuff:tobacco_seeds` | no | yes | no | yes (pack, §2.6) | yes (pack, §2.6) | Quark replant (config list, pack) | replant | yes (pack, §2.6) |
 
 - Ender Crop off end stone needs raw light 7 or less at the crop, so a roofed, unlit farm. On
   Ender Crop's Tilled End Stone it needs light 8 or more instead.
@@ -78,6 +90,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Flax | `supplementaries:flax` | no | yes | no | yes | yes | Quark replant, **lower half only** | replant | yes, same height only |
 | Hemp | `immersiveengineering:hemp` | no | yes | no | yes | yes | none (break the top, the bottom regrows it) | no | yes, same height only |
 | Tomatoes (climb ropes) | `farmersdelight:budding_tomatoes` then `farmersdelight:tomatoes` | no | yes | no | yes | yes | bottom vine: Quark replant. Vine on a rope: own pick | bottom vines only | yes |
+| Corn | `corn_delight:corn_crop` (both halves) | no | yes | no | yes | yes | Quark replant (auto-found), **lower half only** | lower halves | yes, same height only |
 
 - **Flax:** the top half appears from stage 4. Right-click the lower half, or the farmland under it.
   Clicking the top half does nothing (§4, G9). The replant resets the lower half and the top half disappears.
@@ -85,6 +98,10 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
   other tops at that height in the hoe's area and leaves the bottoms, so a hoe works as a hemp
   harvester if you break the top row. Breaking a bottom with a hoe breaks the bottoms around it
   and you lose those plants.
+- **Corn** (Mysterious Mountain Lib `HighCropBlock`, a `CropBlock`): the top half is the same block with
+  `upper=true`. It appears once the lower half reaches stage 4 and needs light 8+ or open sky, then ages on its own.
+  Both halves drop corn at stage 7, else a seed. Quark only matches the lower half (G13): replanting it to stage 0
+  makes the top fail its survival check, so the top breaks and drops its own corn. Clicking the top does nothing.
 - **Tomatoes:** both resets go to stage 0, so the result is the same. Tomatoes on Supplementaries sticks and ropes
   (`supplementaries:stick_tomatoes`, `rope_tomatoes`) use the same tomato code and the same own pick.
 
@@ -102,7 +119,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 
 | Crop | Block | Dirt | Farmland | Rich | RichF | Fertile | Right-click | Hoe RC | Hoe break |
 |---|---|---|---|---|---|---|---|---|---|
-| Pumpkin, Melon stems | `minecraft:pumpkin_stem`, `melon_stem` | no | yes | no | yes | yes | none (break the fruit) | no | **yes, stems too** |
+| Pumpkin, Melon, Hamimelon stems | `minecraft:pumpkin_stem`, `melon_stem`, `fruitsdelight:hamimelon_stem` | no | yes | no | yes | yes | none (break the fruit) | no | **yes, stems too** |
 
 - The fruit can land on any of the five soils next to the stem, including plain dirt and grass.
 - Breaking a neighbouring crop with a hoe also breaks stems in the area. Keep stems out of hoe range,
@@ -118,10 +135,19 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Mint (plant with Mint Sprout) | `neapolitan:mint` | yes | yes | yes | yes | yes | own pick when grown (back to 1) | pick | yes |
 | Grape bushes: red, white, savanna, taiga | `vinery:red_grape_bush` etc. | yes | **no** | yes | **no** | probably yes, CR-13 | own pick from stage 2 (back to 1) | pick | yes |
 | Flower bushes (Floral Enchantment, 17 kinds) | `floralench:*_bush` | yes | yes | yes | yes | yes | own pick: stage 2 flowers, stage 3 vine items | pick | yes |
+| Blueberries, Cranberries (plant the berry) | `fruitsdelight:blueberry_bush`, `cranberry_bush` | yes | yes | yes | yes | yes | own pick at stage 4: 1-2 berries (back to 2) | pick | yes |
+| Lemon (two-high bush, plant Lemon Seeds) | `fruitsdelight:lemon_tree` | yes | yes | yes | yes | yes | own pick at stage 4, either half: 1-2 lemons (back to 2) | pick | yes, same height only |
+| Tea (plant Tea Seeds) | `farmersrespite:small_tea_bush`, then the two-high `tea_bush` | yes | **no** | yes | **no** | yes | **shears only**: leaves by age + 2-3 sticks, back to a small bush. An axe stunts it | no (needs shears) | yes, same height only |
 
 - Grape bushes need a full opaque block below plus their own light rules. See [vinery.md](vinery.md) §2.6.
   Farmland and Rich Farmland are not full blocks. Fertile Soil has a full-cube shape, but it isn't
   confirmed to count as opaque (CR-13).
+- **Fruits Delight bushes** grow 1 in 5 random ticks at light 9+ above them. They need no farmland.
+- **Tea:** the small bush becomes the two-high bush 1 in 20 random ticks when the space above is free, then ages
+  0 to 3 (1 in 12 ticks). Shears give green leaves at age 0, yellow at 1, yellow + black at 2, black at 3, so you
+  choose the tea by when you cut. Right-click with an axe stunts the bush: it stops aging, which holds a colour.
+  Both bushes check `#minecraft:dirt` directly instead of Forge's soil hook, so Farmland and Rich Farmland refuse
+  them (G12). Bone meal is off (`farmersrespite-common.toml` `enableBoneMealTeaBush = false`).
 - "Pick" in the Hoe RC column means Quark clicks every bush in the hoe's area for you (§2.3).
 
 **Hanging, wall and climbing crops**
@@ -134,6 +160,23 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Jungle grapes (wall vine) | `vinery:jungle_grapes_*` vine | walls, like vines | own pick | no | likely yes (vines are replaceable plants) |
 | Grapevine Stem / Lattice | `vinery:grapevine_stem`, `vinery:grapevine_lattice` | stem: a full solid block or another stem | own pick (stem: stage 4 back to 2; lattice: stage 3+ back to 1) | no | no |
 | Vanilla | `neapolitan:vanilla_vine` | sideways from `#neapolitan:vanilla_plantable_on` (logs, leaves, dirt-like blocks, Rich Soil, Fertile Soil) | none (break for pods) | no | not checked |
+
+**Coffee, pineapple and fruit trees (1.0.4 mods)**
+
+| Crop | Block | Grows on | Right-click | Hoe RC | Hoe break |
+|---|---|---|---|---|---|
+| Coffee (plant Coffee Beans) | `farmersrespite:coffee_bush`, grows into `coffee_stem` + `coffee_bush_top`, later `coffee_stem_double` / `_middle` | basalt, polished basalt, smooth basalt, magma block | own pick from a stem at stage 2: 1 coffee berry (back to 0) | pick | yes |
+| Pineapple (plant a Pineapple Sapling) | `fruitsdelight:pineapple` | **sand, red sand, coarse dirt** (`#fruitsdelight:pineapple_grows_on`) | none (break at stage 4) | no | yes |
+| Fruit trees: apple, bayberry, durian, fig, hawberry, kiwi, lychee, mango, mangosteen, orange, peach, pear, persimmon | `fruitsdelight:*_sapling`, fruit on `fruitsdelight:*_leaves` | sapling: vanilla sapling soils | right-click (or walk into) fruiting leaves: drops the fruit, back to plain leaves | no | no (leaves aren't plants) |
+
+- **Coffee drains crops (G14).** Outside the Nether a coffee plant only grows by eating a `CropBlock` within 2
+  blocks: each growth step turns that crop into Wither Roots or a Wild Coffee Bush. In an ultrawarm dimension (the
+  Nether) it grows without that. Bone meal is off (`enableBoneMealCoffeeBush = false`).
+- **Fruit trees:** only natural leaves (`persistent=false`) flower and fruit; leaves you place never do. Flowers
+  spread leaf to leaf and some decay (Fruits Delight config `flowerDecayChance`). Ripe durians also drop on their
+  own as falling blocks.
+- **Wild plants** (`corn_delight:wild_corn`, `farmersrespite:wild_tea_bush`, `wild_coffee_bush`,
+  `fruitsdelight:wild_pineapple`) are break-for-drops worldgen plants, not crops.
 
 **Nether and colony crops**
 
@@ -151,6 +194,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Sugar Cane | `minecraft:sugar_cane` | Dirt or sand next to water. **Rich Soil and Fertile Soil need no water** | none | no | yes, same height only |
 | Cactus, Bamboo, Kelp | vanilla | vanilla rules | none | no | no |
 | Weeds (pest) | `immersive_weathering:weeds` | spreads onto Dirt, Farmland, Rich, Fertile, cracked and mossy blocks | **Quark replant, so it plants the weed again** | replant (same problem) | yes |
+| Wither Roots (pest) | `farmersrespite:wither_roots`, `wither_roots_plant` | put there by coffee on the crop it drains; survive on Dirt, Farmland, basalt, magma | none | no | yes |
 
 ### 2.2 Right-click replant (Quark Simple Harvest)
 
@@ -160,7 +204,8 @@ From `vazkii.quark.content.tweaks.module.SimpleHarvestModule` (Quark 3.4-418).
   - the `Harvestable Blocks` config list: wheat, carrots, potatoes, beetroots, nether wart and cocoa;
   - every **non-vanilla block that is a `CropBlock` subclass** (`Do Harvesting Search`). For these it
     records one state: the crop's default state with its age set to the property's maximum.
-- **Tobacco is in neither list**, so right-click does nothing.
+- **Tobacco** isn't a `CropBlock`, so the pack adds it to the config list:
+  `"the_dirty_stuff:tobacco_seeds[blockstate=7]"` (§2.6).
 - **Exact state match.** A crop with extra block-state properties only matches in its default
   setting of those properties. That's why flax only matches its lower half, and why tomatoes only
   match the bottom vine and not vines on a rope. The other states fall through to the block's own
@@ -182,10 +227,30 @@ From `vazkii.quark.content.tweaks.module.SimpleHarvestModule` (Quark 3.4-418).
 A "hoe" is any `HoeItem`, anything in `#forge:tools/hoes`, or any tool that can do the hoe-dig action. That
 includes the pack's echo hoe, Dragon Hoe and Felsic Hoe.
 
-| Hoe | Area |
-|---|---|
-| Diamond, Netherite, Elementium (`#quark:big_harvesting_hoes`) | 5x5 |
-| Every other hoe, including echo, dragon, felsic, copper, steel, manasteel | 3x3 |
+| Hoe | Area | Tag |
+|---|---|---|
+| Wooden, Stone | 1x1 (no area) | `creativeengineering:hoe_harvest/1x1` |
+| Copper, Golden | 2x2 | `hoe_harvest/2x2` |
+| Iron, IE Steel | 3x3 | `hoe_harvest/3x3` |
+| Diamond, Netherite, Elementium, Manasteel | 4x4 | `hoe_harvest/4x4` |
+| Echo, Felsic, Dragon (end gear) | 5x5 | `hoe_harvest/5x5` |
+| Any other hoe | Quark's own: 5x5 in `#quark:big_harvesting_hoes`, else 3x3 | none |
+
+- **Where:** tags in [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) "Hoe harvest area"
+  (via `global.tags` + item_dict keys), read by patcherMod `crops/HoeHarvestArea`. Any size from 1x1 to 9x9
+  has a tag; a hoe in several gets the largest. Tags reload with `/reload`, no rebuild.
+- **Even sizes** can't be centred, so the area reaches one block further on the side the player is
+  looking toward, on each axis. A 2x2 is the target block plus the blocks ahead of it. Looking straight
+  along an axis, the sideways half flips with tiny head turns.
+- **Odd sizes** are centred, same as Quark.
+- **How:** `mixin/QuarkHoeAreaHarvestMixin` (right-click, `SimpleHarvestModule.click`) and
+  `mixin/QuarkHoeAreaBreakMixin` (area break, `HoeHarvestingModule.onBlockBroken`) take over where Quark
+  asks for the range, after all of Quark's own checks, and run Quark's loop over the new area. The
+  empty-hand right-click stays Quark's.
+- A 1x1 hoe still replants the one crop clicked, but like Quark's radius 1 it doesn't click bushes.
+- **Tooltip:** every hoe with an area of 2x2 or more shows "Harvest area: NxN" (plus "toward where you
+  look" when even) and "Right-click ripe crops to harvest and replant, break plants to clear", generated
+  from the same size (`crops/HoeHarvestTooltip`, lang keys `creativeengineering.hoe_harvest.*`).
 
 **Hoe right-click (area replant).** Click a ripe crop or the farmland under it:
 
@@ -216,8 +281,8 @@ height in the hoe's area breaks too:
 | Dirt, Grass | `#minecraft:dirt` | bushes and other "plains" plants. Not farmland crops | none |
 | Farmland | `minecraft:farmland` | farmland crops, bushes | moist farmland speeds crop growth; dries and reverts to dirt; can be trampled |
 | Rich Soil | `farmersdelight:rich_soil` | anything that **isn't** a farmland crop, Nether plant or water plant. So bushes, saplings, flowers, rice and sugar cane, but **not** wheat, cabbage, flax, hemp or tobacco | 20% chance per random tick to bone-meal the plant above (`richSoilBoostChance = 0.2`); turns a mushroom above into a colony |
-| Rich Farmland | `farmersdelight:rich_soil_farmland` | farmland crops and plains plants. Grape bushes and tobacco refuse it because they check the block below directly | same 20% boost, but only while fully moist; never reverts to dirt; can't be trampled |
-| Fertile Soil | `immersive_weathering:mulch_block` | everything except Nether plants, with no tilling. Grape bushes and tobacco check the block below directly, so the soil's rule doesn't apply to them | always counts as fertile (moist-farmland speed). While soaked (water bucket, rain, touching water) and light 9+: farmland crops get a bone-meal step per soil random tick, stems get 10 extra random ticks, other plants nothing extra. Never dries out to dirt; can't be trampled |
+| Rich Farmland | `farmersdelight:rich_soil_farmland` | farmland crops and plains plants. Grape bushes refuse it because they check the block below directly. Tobacco accepts it through the pack's soil tag (§2.6) | same 20% boost, but only while fully moist; never reverts to dirt; can't be trampled |
+| Fertile Soil | `immersive_weathering:mulch_block` | everything except Nether plants, with no tilling. Grape bushes check the block below directly, so the soil's rule doesn't apply to them. Tobacco accepts it through the pack's soil tag (§2.6) | always counts as fertile (moist-farmland speed). While soaked (water bucket, rain, touching water) and light 9+: farmland crops get a bone-meal step per soil random tick (`CropBlock`s from IW, tobacco from the pack, §2.6), stems get 10 extra random ticks, other plants nothing extra. Never dries out to dirt; can't be trampled |
 | Nulch | `immersive_weathering:nulch_block` | Nether Wart (and other Nether-type plants) | none for crops |
 
 Rich Soil and Fertile Soil are both in `#minecraft:dirt`. That's why plain bushes accept them through
@@ -226,20 +291,349 @@ the normal bush rule as well. Rich Farmland isn't in that tag.
 ### 2.5 Tobacco in detail (`the_dirty_stuff:tobacco_seeds`)
 
 - **Class:** `net.mcreator.thedirtystuff.block.TobaccoSeedsBlock extends Block`, with a block entity.
-  It isn't a `CropBlock`, isn't a bush, and isn't a Forge plant.
-- **Placement and survival:** `TobaccoSeedsBlockValidPlacementConditionProcedure` returns
-  `block below == Blocks.FARMLAND`. It's an identity check on vanilla farmland, so Rich Farmland and
-  Fertile Soil (both subclasses of farmland) and Rich Soil all fail. If the farmland under it turns to
-  dirt, the tobacco pops.
+  It isn't a `CropBlock`, isn't a bush, and isn't a Forge plant (`IPlantable`). It is a `BonemealableBlock`.
+- **Placement and survival (stock):** `TobaccoSeedsBlockValidPlacementConditionProcedure` returns
+  `block below == Blocks.FARMLAND`. That's an identity check on vanilla farmland, so Rich Farmland and
+  Fertile Soil (both subclasses of farmland) and Rich Soil all fail. `canSurvive` is the procedure's
+  only caller, so the same check covers placing, surviving and neighbour updates.
 - **Growth:** the `blockstate` property goes 0 to 7. Each random tick adds +1 when light is 9 or more, with
-  no chance roll, so it takes about 8 minutes at the default tick speed. It ignores soil fertility
-  and Forge's crop-growth events. Bone meal adds 1 to 5 stages, depending on the stage.
+  no chance roll, so it takes about 8 minutes at the default tick speed. It ignores soil moisture and
+  Forge's crop-growth events. Bone meal adds 1 to 5 stages, depending on the stage.
 - **Drops at stage 7:** 4 leaves, plus 0 to 3 more leaves with fortune, plus 1 to 2 seeds. Before stage 7:
-  just the seed.
-- **Why the three mechanics miss it:**
-  - **Right-click:** Quark only auto-finds `CropBlock` classes, and tobacco isn't in the config list.
-  - **Hoe RC:** same reason as right-click.
-  - **Hoe break:** it isn't a Forge plant, and its material (`PLANT`) isn't replaceable.
+  just the seed. A Quark replant takes one seed out of those drops, the same as wheat.
+- **Stock gaps and what the pack does about each one** (details in §2.6):
+
+| Stock behaviour | Cause | Pack fix |
+|---|---|---|
+| Refuses Rich Farmland and Fertile Soil | identity check on `Blocks.FARMLAND` | `TobaccoPlacementMixin`: the check becomes "vanilla farmland or `#creativeengineering:crops/farmland_soils`" |
+| Dry vanilla farmland under it turns to dirt and pops it (wheat keeps its farmland) | Forge's `FarmBlock.isUnderCrops` only counts `IPlantable`s | `FarmBlockUnderCropsMixin`: `#creativeengineering:crops/farmland_crops` counts as a crop |
+| No bone-meal step from soaked Fertile Soil | IW only calls `CropBlock.growCrops` | `MulchBlockCropGrowthMixin`: one `performBonemeal` under IW's own conditions |
+| No right-click or hoe right-click replant | Quark only auto-finds `CropBlock`s | Quark `Harvestable Blocks` line `the_dirty_stuff:tobacco_seeds[blockstate=7]` |
+| Not caught by the hoe area break | not `IPlantable`, material `PLANT` isn't replaceable | `QuarkHoeHarvestMixin`: `#creativeengineering:crops/farmland_crops` counts in `canHarvest` |
+| Rich Farmland's 20% growth boost | already worked: FD bone-meals any `BonemealableBlock` | none needed |
+
+### 2.6 Crop parity approach (how to bring any crop in line)
+
+Built for tobacco on 2026-10-02. Use the same pieces for the next crop. The aim is for a crop to behave
+like wheat on every soil in §2.4 and with both Quark mechanics in §2.2 and §2.3.
+
+**Data, edited per crop:**
+
+| Piece | Where | What it does |
+|---|---|---|
+| `creativeengineering:crops/farmland_soils` (block tag) | [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), "Crop parity" | soils that count as farmland for crops whose own check is hard-coded. Today: farmland, Rich Farmland, Fertile Soil. Untilled Rich Soil stays out (G6). Vanilla farmland counts even if the tag is empty or not loaded yet |
+| `creativeengineering:crops/farmland_crops` (block tag) | same | non-`CropBlock` plants treated as farmland crops: vanilla farmland under them doesn't revert to dirt, soaked Fertile Soil bone-meals them, Quark's hoe area break includes them. Today: tobacco |
+| Quark `Harvestable Blocks` | [config/quark-common.toml](../config/quark-common.toml) `[tweaks.simple_harvest]` | one `"mod:block[age_prop=max]"` line per crop (optionally `,mod:block[age_prop=0]` for the replant state). Gives right-click and hoe right-click replant. Backed up in `configs_edited/root_config/` and the CreEngServer mirror |
+
+**Code, written once** (patcherMod, `crops/CropParity` holds both tag keys and the two checks):
+
+| Mixin | Target | Generic? |
+|---|---|---|
+| `FarmBlockUnderCropsMixin` | vanilla `FarmBlock.isUnderCrops` (`m_53250_`) | yes, tag-driven |
+| `MulchBlockCropGrowthMixin` | IW `MulchBlock.randomTick` (`m_213898_`), head; reads IW's own mulch config | yes, tag-driven; skips `CropBlock`s (IW grows those) |
+| `QuarkHoeHarvestMixin` | Quark `HoeHarvestingModule.canHarvest`, head | yes, tag-driven |
+| `TobaccoPlacementMixin` | The Dirty Stuff's placement procedure | no: each crop with a hard-coded soil check needs its own small mixin that calls `CropParity.isFarmlandSoil` |
+
+**Checklist for the next crop:**
+
+1. Read its block class (`tools/decompile_mod.py`). Note how it checks soil, whether it's a `CropBlock`,
+   `IPlantable` or `BonemealableBlock`, its age property and the max value.
+2. Soils: if it uses `canSustainPlant` (most crops), Rich Farmland and Fertile Soil already work. If it
+   checks the block below directly, add a placement mixin that calls `CropParity.isFarmlandSoil`.
+3. If it isn't a `CropBlock`, add it to `crops/farmland_crops` (farmland drying, Fertile Soil growth,
+   hoe area break) and add its ripe state to Quark `Harvestable Blocks` (replant). A `CropBlock` from
+   a mod already gets all of this.
+4. A crop with extra block-state properties needs one `Harvestable Blocks` line per combination,
+   like cocoa's `facing`.
+5. Add the crop's row to §2.1 and a CR- test.
+
+### 2.7 Wild generation (where each crop spawns in the world)
+
+Read from the decompiled jars and the pack's configs on 2026-10-03. **The biome lists below are the mods'
+defaults.** Since §2.8 the pack moves most of these crops elsewhere: the rates, ground rules and side blocks here still
+hold, but the biomes come from §2.8 (CEConfig `wildCrops` on, the default). The full biome list for every feature, plus a
+crops-per-biome table, is generated into [crops_by_biome.md](crops_by_biome.md) by
+`python3 tools/gen_crop_worldgen_table.py`.
+
+**How a wild crop gets into a biome.** A placed feature reaches a biome in one of two ways:
+
+- **The biome's own file lists it.** Terralith ships the file for every overworld biome, the vanilla
+  ones included, so all the vanilla patches (berries, pumpkins, sugar cane, melons, jungle trees with
+  cocoa) come from Terralith's lists. Hearths ships three Nether biomes and Nullscape the End ones.
+- **A Forge biome modifier adds it**, by biome tag. Most crop mods do this. Farmer's Delight's own
+  modifier type (`add_features_by_filter`, also used by Delightful and Corn Delight) can add a base
+  temperature window and a deny list.
+
+Most crop mods register their features in Java, so there's no JSON to edit. The rates below come from
+the decompiled classes, and the rates that read a config say so. Every crop feature is placed at the
+**surface** (heightmap) unless the table says otherwise, so none of them has a Y window of its own.
+Only new chunks get changes. Existing chunks keep what they generated with.
+
+Words used below: **rate** = patch attempts per chunk ("1/30" = one chunk in 30 on average). **Share**
+= the part of the overworld surface covered by those biomes, with ocean biomes not counted
+(post-tuning areas from `biome_config.json`; oceans are 41% of the overworld). Exact biome lists are in [crops_by_biome.md](crops_by_biome.md).
+
+#### 2.7.1 Per-crop table
+
+**Farmer's Delight wild crops** (`WildCropFeature`: 64 tries for the crop within 4 blocks, 64 for a
+companion plant within 6, y ±3. Chances are in `farmersdelight-common.toml` `[world.*]`)
+
+| Crop | Wild block | Biomes | Rate | Ground | Companion / also placed |
+|---|---|---|---|---|---|
+| Cabbage | `farmersdelight:wild_cabbages` | vanilla **Beach only** | 1/30 | sand | Sandy Shrub |
+| Beetroot | `farmersdelight:wild_beetroots` (Sea Beet) | vanilla **Beach only** | 1/30 | sand | Sandy Shrub |
+| Carrot | `farmersdelight:wild_carrots` | every overworld biome with base temperature 0.4 to 0.9 except Lush Caves and Mushroom Fields: 57 biomes (forests, plains, meadow, swamps, beach, river, 34 Terralith). Share 21% | 1/120 | `#minecraft:dirt` | Grass, plus a **Coarse Dirt floor** under the patch |
+| Onion | `farmersdelight:wild_onions` | same 57 biomes as carrots | 1/120 | `#minecraft:dirt` | Allium |
+| Potato | `farmersdelight:wild_potatoes` | temperature 0.1 to 0.3, not underground: 24 cold biomes (taigas, windswept hills, Terralith cold forests and mountains). Share 12% | 1/100 | `#minecraft:dirt` | Fern |
+| Tomato | `farmersdelight:wild_tomatoes` | `#forge:is_hot/overworld` minus `#forge:is_wet`: 30 biomes (desert, savannas, badlands, Terralith arid and volcanic). Share 13% | 1/100 | `#farmersdelight:terrain` (dirt, grass, sand, red sand, mud...) | Dead Bush |
+| Rice | `farmersdelight:wild_rice` | `#forge:is_wet/overworld`, not underground: 23 biomes (jungles, swamps, beach, Terralith wet). Share 11% | 1/20 | a full water source 1 deep with air above, on dirt or sand; 96 tries within 7 | none |
+| Mushroom colonies | `farmersdelight:brown_mushroom_colony`, `red_mushroom_colony` (age 0 to 3) | `#forge:is_mushroom`: Mushroom Fields, Quark Glimmering Weald, Terralith Fungal Caves and Mirage Isles | 1/15 each | mycelium | brown / red mushrooms |
+
+**Other Farmer's Delight add-ons**
+
+| Crop | Wild block | Biomes | Rate | Ground | Companion / notes |
+|---|---|---|---|---|---|
+| Corn (Corn Delight) | `corn_delight:wild_corn` | same 57 biomes as wild carrots | 1/30 (hard-coded) | `#minecraft:dirt` | Grass and a Coarse Dirt floor, like carrots. Also village house and shipwreck chests |
+| Tea (Farmer's Respite) | `farmersrespite:wild_tea_bush` | vanilla **Swamp only** | every chunk, but only 3 tries, so a bush or two | `#minecraft:dirt` | Fern |
+| Coffee (Farmer's Respite) | `farmersrespite:wild_coffee_bush` | **Basalt Deltas** (Nether) | every chunk, 64 tries at a random height (y ±6) | basalt | **Wither Roots** |
+| Cotton (Rustic Delight) | `rusticdelight:wild_cotton` | `#minecraft:is_forest`: forest, birch, old-growth birch, flower forest, dark forest, grove, Terralith Alpine Grove and Cloud Forest | 1/96 (`wild_cotton_chance`) | `#minecraft:dirt` | 32 tries within 6 |
+| Bell Pepper (Rustic Delight) | `rusticdelight:wild_bell_peppers` | `#minecraft:is_jungle`: 3 vanilla jungles + 5 Terralith jungles | 1/15 (`wild_bell_peppers_chance`) | `#minecraft:dirt` | 48 tries within 4 |
+| Coffee (Rustic Delight) | `rusticdelight:wild_coffee` | same 8 jungles | 1/15 (`wild_coffee_chance`) | `#minecraft:dirt` | 48 tries within 6. A different coffee item from Farmer's Respite's |
+| Salmonberries (Delightful) | `delightful:wild_salmonberries` | `#delightful:salmonberry_spawns`: the same 8 forests as cotton | 1/35 | `#minecraft:dirt` | Grass |
+| Mini Melon (Delightful) | `delightful:mini_melon` | plains, sunflower plains, meadow, snowy plains, Terralith Highlands, Alpine Highlands, Rocky Shrubland | 1/35 | `#minecraft:dirt` | 64 tries within 4 |
+| Cantaloupe (Delightful) | `delightful:cantaloupe` | beach, snowy beach, Terralith Gravel Beach | 1/55 | `#delightful:cantaloupe_spawns` (dirt, grass, sand...) | 64 tries within 3 |
+| Propelplant (Nether's Delight) | `nethersdelight:propelplant_*` | **Crimson Forest** | 8 per chunk, each at a random height | nylium | a cross-shaped 7x7 at the chosen height ±1, 1 in 3 spots: bushes, stems, canes, some with pearls |
+
+Rustic Delight's three patches are flower-type features. Bone meal on grass in those forests and
+jungles picks from the biome's flower features, so it can also grow wild cotton, peppers and coffee.
+
+**Neapolitan** (biome tags `#neapolitan:has_feature/*`)
+
+| Crop | What generates | Biomes | Rate | Ground | Also placed |
+|---|---|---|---|---|---|
+| Strawberries | `neapolitan:strawberry_bush`. 90% are red, ripe bushes (age 6). 10% are unripe bushes on Coarse Dirt | vanilla **Plains only** | 1/64, 512 tries within 5 | grass block or coarse dirt | **Coarse Dirt**: under the unripe bushes, and each neighbour of a bush has a 50% chance to turn |
+| Vanilla | `neapolitan:vanilla_vine` growing sideways | Savanna, Savanna Plateau, Windswept Savanna (vanilla only) | 1/64 | the side of `#neapolitan:vanilla_plantable_on` (logs, leaves, dirt) | none |
+| Adzuki Beans | `neapolitan:adzuki_sprouts`, ripe (age 6) | forest, birch forest, old-growth birch, flower forest, dark forest | 1/128, 256 tries within 3 | grass block | **the grass under each sprout becomes plain Dirt**. Breaking a ripe sprout turns the dirt or grass under it into **Adzuki Soil** (`neapolitan:adzuki_soil`), which grows a new sprout on its own (light 9+, 1 in 4 per random tick, or with bone meal). So the "adzuki soil" you see in the wild comes from a harvest; the worldgen itself only lays down dirt |
+| Mint | `neapolitan:mint` (age 4, 1 to 4 sprouts) around a **mint pond** | windswept hills, windswept forest, windswept gravelly hills, Terralith Cloud Forest, Fractured Savanna, Haze Mountain, Jungle Mountains | 1/4 | flat grass with grass/dirt on all four sides | **a small pond (1 to about 9 water blocks)**, grass under the water turned to dirt, and often **one spruce tree** beside it |
+| Banana | banana stalk 3 to 6 tall with fronds, sometimes a **Banana Bundle** | common: jungle, bamboo jungle (0.75 per chunk). Uncommon: sparse jungle (1/10). Rare: beach, stony shore (1/20) | see biomes | grass block, sand or gravel | **grass around the plant turns to Gravel**. With a bundle, 25% chance of a **chimpanzee group** (12 to 24 spawn attempts, up to 10). Bundles can release **Plantain Spiders** |
+
+**Fruits Delight** (biome tags `#fruitsdelight:plants/*_biomes`; Terralith biomes are in them)
+
+| Crop | What generates | Biomes | Rate | Ground |
+|---|---|---|---|---|
+| Blueberry | ripe `fruitsdelight:blueberry_bush` | 23 cold or wet biomes: taigas, snowy plains/taiga, grove, windswept, swamps, Terralith cold forests | 1/32, 20 tries | grass block |
+| Cranberry | ripe `cranberry_bush` | 9: jungles, swamps, dark forest, Terralith jungles and Orchid Swamp | 1/32 | grass block |
+| Lemon | ripe `lemon_tree` bush | 9: plains, sunflower plains, meadow, Terralith Blooming, Lavender and Moonlight biomes | 1/32 | grass block |
+| Pineapple | `fruitsdelight:wild_pineapple` | vanilla **Beach only** | 1/32, 24 tries | sand |
+| Hamimelon | hamimelon blocks (no stem) | desert + 5 Terralith deserts | 1/64, 24 tries | sand |
+
+| Fruit tree | Trees per chunk | Trunk | Biomes |
+|---|---|---|---|
+| Lychee, Mango | 1/4 | jungle log | jungles (2 vanilla + 4 Terralith incl. Orchid Swamp) |
+| Peach | 1/8 | jungle log | sparse jungle + 4 Terralith jungles |
+| Bayberry | 1/15 | spruce log | swamps, Terralith jungles |
+| Pear | 1/15 | birch log | birch forests, Terralith Blooming/Lavender/Moonlight |
+| Apple, Fig, Kiwi, Orange | 1/20 | oak (kiwi: jungle) | forest, flower forest, Terralith Blooming/Lavender/Moonlight |
+| Hawberry | 1/20 | spruce log | 16 cold biomes (taigas, Terralith cold forests) |
+| Mangosteen | 1/40 | oak log | jungles and swamps |
+| Persimmon | 1/50 | spruce log | 16 snowy biomes (snowy plains/taiga, grove, Terralith wintry) |
+| Durian | 1/200 | jungle log | jungles and swamps |
+
+Trees are placed at the surface on dry land only, where the sapling would survive. Only natural
+(`persistent=false`) leaves flower and fruit.
+
+**Vinery** (details in [vinery.md](vinery.md) §2.13): red/white grape bushes 1/92 in 7 vanilla
+temperate biomes (forest, plains, swamp, birch, meadow, sunflower plains, river). Savanna and taiga
+bushes 1/92 in the matching vanilla biomes. Jungle grape vines 1/5 in the jungles and wooded badlands.
+Apple and cherry trees: 1 in 100 chunks in plains, sunflower plains, meadow and 9 Terralith biomes.
+Bushes are placed at age 3 (taiga bushes at age 2), on grass blocks only. **No Terralith biome gets grape bushes.**
+
+**Others**
+
+| Crop | What generates | Biomes | Rate | Notes |
+|---|---|---|---|---|
+| Mulberries (Upgrade Aquatic) | ripe `mulberry_vine` under **river trees** | river, frozen river | about 2 trees per chunk | each leaf with air below has a 1 in 6 chance of a vine |
+| Flax (Supplementaries) | `supplementaries:wild_flax` next to water | **none: switched off in the pack** (`supplementaries-common.toml` `[functional.flax.wild_flax] enabled = false`, the hand-edited copy in `configs_edited/`) | would be 1/6, 35 tries | seeds come from chest injects (dungeon, mineshaft, pillager, shipwreck), urns and villager trades |
+
+**Vanilla crops** (via Terralith's biome files)
+
+| Crop | Biomes | Rate | Notes |
+|---|---|---|---|
+| Sweet Berries | 17 biomes: taiga, both old-growth taigas, dark forest, Terralith cold forests, Shield, Yellowstone, Yosemite. Snowy Taiga: rare | 1/32 (rare 1/384) | ripe bushes on grass blocks, 96 tries |
+| Pumpkin | 118 overworld biomes (nearly all land). Share 52% | 1/300 | 96 tries on grass blocks. Skylands: 1/4 |
+| Melon | jungle, bamboo jungle and 5 Terralith jungles (Terralith's own patch, 1/6). Sparse jungle: 1/64 | 1/6 | vanilla's `patch_melon` isn't used by any biome |
+| Sugar Cane | 103 biomes 1/6. Desert-type: every chunk. Swamps: 1/3. Badlands: 1/5. Terralith cherry biomes: every chunk | see biomes | dirt or sand next to water |
+| Cocoa | on vanilla-style jungle trees in jungle, jungle edge, Terralith Violet and Hawaii-style coastal trees, skylands summer | 1 in 5 jungle trees | Bamboo Jungle's trees are mega jungle trees: no cocoa |
+| Glow Berries | Lush Caves (188 vine attempts per chunk under ceilings), Terralith Underground Jungle, Skylands Summer | see biomes | below Y 256 for the cave biomes |
+| Chorus Fruit | End Highlands (Nullscape's chorus features) | noise-based | |
+| Bamboo, Cactus | jungles; deserts and badlands | vanilla rates | not crops, listed in crops_by_biome.md |
+
+**No wild generation at all:** wheat (seeds from grass, village farms), hemp (IE: 10% from grass and
+tall grass, not with shears), tobacco (villager trade and the mod's chest table), Ender Crop (crafted
+seeds), Nether Wart (fortresses), Floral Enchantment flower bushes (crafted), flax (switched off, above),
+Quark ancient fruit (ancient city chests), Alex's Mobs bananas (drop from jungle leaves; a separate item
+from Neapolitan's).
+
+#### 2.7.2 Everything else crop generation puts in the world
+
+| Placed by | Block | Where |
+|---|---|---|
+| Wild carrots, wild corn | Coarse Dirt floor (64 tries within 6 blocks: any `#minecraft:dirt` block with a replaceable block above, so grass blocks too) | under and around the patch |
+| Wild cabbages, sea beets | Sandy Shrub | around the patch, on sand |
+| Wild onions / potatoes / tomatoes | Allium / Fern / Dead Bush | around the patch |
+| Wild carrots, corn, salmonberries | Grass | around the patch |
+| Wild tea | Fern | around the bush |
+| FR coffee | Wither Roots | on basalt around the bushes |
+| Mushroom colonies | Brown / Red Mushroom | around the colonies |
+| Strawberries | Coarse Dirt | under unripe bushes and next to bushes |
+| Adzuki | Dirt (grass removed); Adzuki Soil after a harvest | under each sprout |
+| Mint pond | Water, Dirt, a Spruce tree | the pond and its rim |
+| Banana plant | Gravel ground, Banana Bundle, Chimpanzees, Plantain Spiders (from bundles) | around the plant |
+| Fruit trees (Fruits Delight) | vanilla oak/birch/spruce/jungle logs + fruit leaves; durians fall as blocks when ripe | tree |
+| Vinery trees | Vinery apple/cherry logs and leaves | tree |
+| River trees (UA) | river logs and leaves | river banks |
+| Propelplant | propelplant stems and canes | crimson nylium |
+
+#### 2.7.3 Heights
+
+- Every overworld crop feature uses the **surface heightmap**, so it follows the terrain at any Y.
+  Neither the mods nor the pack add Y limits. Mountain biomes get crops on their peaks if the biome is
+  in the list.
+- Trees and river trees use the ocean-floor heightmap plus a "no water above" filter: dry land only.
+- Random height: FR coffee (anywhere in Basalt Deltas, y ±6 around the pick) and propelplant (8 random
+  heights per chunk in Crimson Forest, then only on nylium within ±1 of each).
+- Caves: glow berries attempt below Y 256 under a solid ceiling. Terralith Skylands Summer glow berries
+  are at Y 130 to 160.
+- Neapolitan's `White Strawberry minimum height = 256`: white strawberries only grow above Y 256, so
+  in practice none form in normal terrain.
+
+#### 2.7.4 Other vegetation mods (not crops)
+
+Scope for the planned vegetation system, not yet broken down per biome:
+
+| Mod | What it adds to the world | How |
+|---|---|---|
+| Terralith | every overworld biome's trees, flowers, grass and the vanilla patches above | biome files |
+| Geophilic Reforged | bushes (oak, birch, spruce, acacia, azalea), fallen trees, tree stumps, extra grass, coarse dirt cover, sparse bamboo and dead bushes, moss, rocks | biome modifiers on `#geophilic_reforged:gets/*` and `wood_type/*` tags |
+| Quark | blossom trees (by `forge:is_snowy`, `forge:is_swamp`... tags, rarity 100 to 200), Glimmering Weald, chorus vegetation (End), fairy rings | Quark config `[world.*]` |
+| Upgrade Aquatic | beachgrass dunes, searocket (beach), flowering rush (river), pickerelweed, river trees, driftwood (pack: x0.25) | biome modifiers |
+| Buzzier Bees | buttercups, pink and white clover | biome modifiers |
+| Botania | mystical flowers and mushrooms | biome modifiers |
+| Immersive Weathering | moss and ivy patches, humus, fluvisol, cryosol and similar soil patches | biome modifiers |
+| Twigs | twigs, pebbles, seashells, azalea flowers | biome modifiers |
+| Myrtrees | rubber trees, 1 in 20 chunks in `#minecraft:is_jungle`, `is_forest`, `is_savanna` and swamp-hut biomes | Architectury biome modification (Java) |
+| Mystical Oak Tree | the Wise Oak | biome modifier, all overworld |
+| Hearths, Nullscape | Nether forest fungi and stems; End vegetation | biome files |
+| Bushier Flowers | switched off by the pack (memory note `bushier-flowers-disabled`) | none |
+
+### 2.8 Pack wild-crop placement (`wild_crops.json`)
+
+**Status: BUILT 2026-10-03, offline-tested (`tools/test_wild_crops.sh`), not run in game.** Your 2026-10-03 spec
+decides which biomes each wild crop and fruit tree goes to. The mods' own rates stay; only the biomes change. §2.7
+describes what the mods do on their own, which is what you get with the switch off.
+
+**How it works**
+
+- `kubejs/generation_scripts/worldgen/wild_crops.json` gives every overworld biome a list of **traits** (climate
+  `cold`/`temperate`/`warm`, `wet`/`dry`, `snowy`, ground such as `grassy`/`sandy`/`terracotta`, and shapes such as
+  `forest`/`mountain`/`beach`/`cliff`/`swamp`/`jungle`). Each crop has a **rule** over those traits, for example
+  `"warm wet !cliff"` or `["sandy beach", "cliff"]`. A list means "any of these", `!` means "not", and `add`/`except`
+  name biomes directly. Ocean and cave biomes never match a rule. The traits come from Terralith's `c:` and `forge:`
+  climate tags, base temperature and downfall, and the trees and ground each biome file places. Judgment calls are
+  listed under "Choices made" below.
+- `kubejs/server_scripts/worldgen/wild_crops.js` applies it at world load:
+  - fills the biome tag `creativeengineering:wild_crops/<crop>`;
+  - replaces each mod's own biome modifier for that crop with `forge:none` (44 of them);
+  - adds one `forge:add_features` modifier per crop (46).
+  - Vanilla patches that Terralith's biome files list (sweet berries, pumpkins, melons, sugar cane) are removed from
+    every overworld biome by one `forge:remove_features` modifier, and the pack's copies (same configured feature,
+    same rate) are added where the rule says. Forge removes after it adds, so re-adding the original id wouldn't work.
+  - A feature of a mod that isn't loaded is skipped, because an unknown id stops the world loading.
+  - On world load it checks the live tags against the rules and lists any overworld biome the config doesn't
+    classify.
+- Switch: CEConfig `[worldgen.systems] wildCrops` (patcherMod 1.0.4, rebuilt 2026-10-03). Off means every crop spawns
+  where its mod puts it. Rejoin to apply. Only new chunks change.
+- `python3 tools/gen_crop_worldgen_table.py` evaluates the same rules. [crops_by_biome.md](crops_by_biome.md) §3
+  has each rule's exact biome list, §1 the before/after density per crop, §5 every biome with its traits and
+  crops, and §6 the coverage checks.
+
+**Pack features** (`kubejs/data/creativeengineering/worldgen/{configured,placed}_feature/wild/`). These exist
+where a mod's ground test would block the spec:
+
+| Feature | Why | Ground |
+|---|---|---|
+| `wild/cabbages`, `wild/beetroots` | FD's own test for sand only; cliffs are stone with grass tops | sand or `#minecraft:dirt` (FD's wild crop block survives on both); Sandy Shrub companions still need sand |
+| `wild/brown_mushroom_colonies`, `wild/red_mushroom_colonies` | FD's own need mycelium; dark forests have podzol and grass | `#minecraft:mushroom_grow_block` or `#minecraft:dirt`. The colony block itself still needs light below 13 off mycelium/podzol, and the heightmap ignores leaves so the attempt lands under the canopy |
+| `wild/hamimelon` | Fruits Delight's own wants plain sand; badlands are red sand and terracotta | `#minecraft:sand` or `#minecraft:terracotta` |
+| `wild/cocoa_jungle_tree` | cocoa only grows on vanilla jungle trees (CocoaDecorator 0.2) | a vanilla jungle tree in 1 chunk of 3, dry land, where a jungle sapling survives |
+| `wild/sweet_berries`, `wild/pumpkin`, `wild/melon`, `wild/sugar_cane` | copies of the vanilla patches (see above) | vanilla's: grass for berries, pumpkins and melons; dirt/sand next to water for cane |
+
+Same rarities as the mods: FD's config chances as the pack sets them (30, 15), Fruits Delight's 64, vanilla's 32, 300
+and 6. A change to `farmersdelight-common.toml` `[world.wild_cabbages]` or `[world.wild_beetroots]` no longer
+reaches these two crops; edit the placed feature json instead.
+
+**Where each crop goes** (exact lists: [crops_by_biome.md](crops_by_biome.md) §3)
+
+| Crop | Rule | Biomes |
+|---|---|---|
+| Cabbage, Sea Beet | sandy beaches + cliffs | 7: beach, snowy beach, stony shore, basalt/frozen/granite/white cliffs |
+| Carrot, Onion | temperate grassy, not swamp | 26: plains, meadow, every temperate forest (birch, dark, flower), Terralith flower/sakura/lavender/moonlight, steppe, clearings, Yosemite, skylands spring/autumn |
+| Sweet Berries, Potato, Salmonberries, Blueberry | cold grassy (snowy too) | 32: taigas, groves, snowy plains/taiga, windswept hills/forest, Terralith cold forests, highlands, shrublands, Yellowstone, Ice Marsh |
+| Pumpkin | cold grassy forest, not snowy + "autumn" | 12: taigas, windswept forest, birch taiga, cloud forest, forested highlands, haze mountain, shield, siberian taiga, Yellowstone, skylands autumn |
+| Melon, Mini Melon, Vanilla, Rice, Bell Pepper, Coffee (RD) | warm wet, not cliff | 11: the 8 jungles, mangrove and orchid swamps, skylands summer |
+| Cocoa | warm wet, not cliff, minus biomes that already grow cocoa trees | 3 new: bamboo jungle, mangrove swamp, orchid swamp (the 8 others keep their own trees) |
+| Sugar Cane | rivers + beaches | 6: river, warm river, frozen river, beach, snowy beach, gravel beach |
+| Tomato, Cotton, Cantaloupe, Corn | warm dry grassy | 12: savannas (plateau, windswept, slopes, ashen, fractured, badlands), wooded badlands, arid highlands, brushland, shrublands |
+| Brown/Red Mushroom Colony | mushroom + dark forest | 2: mushroom fields, dark forest |
+| Tea | temperate wet grassy | 3: swamp, blooming valley, mirage isles |
+| Strawberries | grassy mountain + cold grassy | 48 |
+| Adzuki | temperate grassy forest | 19 |
+| Mint | grassy mountain | 29 |
+| Banana | warm wet forest | 9: common rate in jungle, bamboo jungle, tropical jungle, amethyst rainforest; uncommon rate in the other 5 |
+| Lemon | warm wet forest | 9 jungles |
+| Cranberry | cold wet grassy | 5: Caldera, Cloud Forest, Ice Marsh, Siberian Taiga, Yellowstone |
+| Pineapple | warm beach + warm wet coastal | 4: beach, mangrove swamp, granite cliffs, tropical jungle |
+| Hamimelon | warm sand or terracotta desert | 15: deserts, badlands, Terralith canyons/oases/mesas, painted mountains |
+| Lychee, Mango, Peach, Orange, Kiwi trees | jungle | 9 jungles |
+| Bayberry, Mangosteen, Durian trees | swamp | 4: swamp, mangrove, orchid swamp, ice marsh |
+| Pear tree | birch | 3: birch forest, old-growth birch, birch taiga |
+| Apple trees (Fruits Delight + Vinery) | oak forest | 6: forest, flower forest, alpha islands (+ winter), temperate highlands, Yosemite lowlands |
+| Fig, Hawberry trees | cold forest (snowy too) | 22 |
+| Persimmon tree | snowy forest | 11 |
+
+**Cold wet biomes (for cranberries):** Terralith Caldera (crater lake, tagged wet), Cloud Forest (misty mountain forest),
+Ice Marsh (the cold swamp), Siberian Taiga (downfall 1.2, the wettest cold biome) and Yellowstone (hot-spring wetlands,
+tagged wet). The rest of the cold biomes are moderate (taiga downfall 0.8) or dry.
+
+**Side changes in the same pass**
+
+- Oak and dark oak leaves no longer drop apples (`kubejs/server_scripts/loot/08_leaf_apples.js`, pre-roll like the dead
+  maps). Myrtrees rubberwood leaves still do (V17).
+- Alex's Mobs bananas no longer drop from jungle leaves: `config/alexsmobs.toml` `bananasDropFromLeaves = false`
+  (backed up in `configs_edited/root_config/`).
+- Farmer's Respite coffee no longer spawns in Basalt Deltas (its modifier is off, V18).
+- Neapolitan's beach bananas (rare tier) are off.
+- Vinery's cherry tree keeps its own biomes. Vinery's apple tree shares that biome tag, so only the apple modifier was
+  replaced.
+- Untouched: the grapes, cherry trees, mulberries, glow berries, chorus, propelplant, bamboo, cactus.
+
+**Choices made** (each is one line in `wild_crops.json`; say if you want it different)
+
+- "Cold" includes snowy biomes unless the rule says `!snowy` (only pumpkin does). This follows from your "cold non-snow
+  forests" for pumpkins.
+- "Warm wet" counts the jungles, mangrove and orchid swamps and skylands summer. It leaves out granite cliffs and the
+  oases: Terralith tags those wet, but they are a cliff and two deserts.
+- "Cliff biomes" means the coastal cliffs plus stony shore. Yosemite Cliffs is an inland mountain and is left out.
+- "Sand beaches" includes the snowy beach (sand under snow). Gravel beach is left out for cabbage and beet, but it is in
+  for sugar cane ("beaches").
+- "Pumpkin biomes / orchards": the pack has no orchard biome (the only hit is a BYG leaf file in Separated Leaves, and
+  BYG isn't installed). Terralith Skylands Autumn, which already has its own pumpkin patch, stands in. V16.
+- "Strawberries in grassy mountains" is taken literally, so warm grassy mountains (savanna plateaus, jungle mountains)
+  are in. `"grassy mountain !warm"` would drop them.
+- "Swamps" includes the cold Ice Marsh for bayberry, mangosteen and durian.
+- "Dark forests" means `minecraft:dark_forest` only. Temperate Highlands has some dark oaks but is a mountain.
+- Mirage Isles is tagged `forge:is_mushroom` but has no mycelium, so it counts as a temperate wet forest, not a mushroom
+  biome. Fungal Caves and the Glimmering Weald are caves, where a surface feature never lands.
 
 ## 3. What the pack changes
 
@@ -252,27 +646,27 @@ the normal bush rule as well. Rich Farmland isn't in that tag.
 - **Immersive Weathering mulch growth:** `mulch_grows_crops = true`, bone-meal style for crops,
   `mulch_growth_random_ticks = 10` for stems.
 - **Bushier Flowers** growth is disabled, see the bushier-flowers notes in memory. It isn't a crop here.
-- Nothing in KubeJS or patcherMod touches crop placement or harvesting today.
+- **Wild crop placement (built 2026-10-03, not run in game):** §2.8. Also oak/dark oak leaves drop no apples,
+  Alex's Mobs leaf bananas are off (`config/alexsmobs.toml`) and Farmer's Respite's Basalt Deltas coffee is off.
+- **Crop parity layer (built 2026-10-02, patcherMod 1.0.4, not deployed):** tobacco gets farmland
+  soils, right-click and hoe replant and the hoe area break. See §2.6 for the tags, the Quark config line
+  and the four mixins.
 
 ## 4. Limits and decisions
 
-Open gaps, none fixed yet. Each has a suggested fix, for you to approve or reject:
+G1 to G3 are fixed (§2.6). The rest are open, each with a suggested fix for you to approve or reject:
 
-- **G1 Tobacco has no right-click replant.** Fix (config only): add
-  `"the_dirty_stuff:tobacco_seeds[blockstate=7],the_dirty_stuff:tobacco_seeds[blockstate=0]"` to
-  Quark's `Harvestable Blocks`. That also gives it hoe-area replant. Copy the edited config to
-  `configs_edited/` and the server (backup rule).
-- **G2 Tobacco refuses Rich Farmland and Fertile Soil.** The check is hard-coded, so this needs a
-  patcherMod mixin on `TobaccoSeedsBlockValidPlacementConditionProcedure.execute`. It would accept a block
-  tag (for example `creativeengineering:tobacco_soil` = farmland, rich soil farmland, mulch block, built
-  through `global.tags`), which matches the other farmland crops. Leave untilled Rich Soil out, as for
-  every other farmland crop.
-- **G3 Tobacco isn't caught by the hoe area break.** It would need a mixin into Quark's `canHarvest` or
-  into the tobacco block. Low value; leave it unless asked.
+- **G1 Tobacco has no right-click replant.** FIXED 2026-10-02: Quark `Harvestable Blocks` line
+  `the_dirty_stuff:tobacco_seeds[blockstate=7]`, which also gives hoe-area replant.
+- **G2 Tobacco refuses Rich Farmland and Fertile Soil.** FIXED 2026-10-02: `TobaccoPlacementMixin` with
+  the `crops/farmland_soils` tag. Untilled Rich Soil stays out, as for every farmland crop. Also fixed
+  while there: dry farmland under tobacco no longer reverts, and soaked Fertile Soil now grows it.
+- **G3 Tobacco isn't caught by the hoe area break.** FIXED 2026-10-02: `QuarkHoeHarvestMixin` with the
+  `crops/farmland_crops` tag.
 - **G4 Hemp has no right-click.** That's IE's design: break the top and the bottom regrows it. The
   hoe area break on the top row already works as a harvester. No change suggested.
-- **G5 Pack hoes are 3x3.** Echo, Dragon and Felsic hoes are end-game but not in
-  `#quark:big_harvesting_hoes`. Fix: add them through `global.tags` if you want 5x5.
+- **G5 Pack hoes are 3x3.** FIXED 2026-10-02: per-hoe sizes through the `hoe_harvest/NxN` tags (§2.3);
+  echo, felsic and dragon hoes are 5x5.
 - **G6 Untilled Rich Soil never takes farmland crops.** That's Farmer's Delight's design: till it into Rich
   Farmland. Not a bug.
 - **G7 Grape bushes refuse Farmland and Rich Farmland.** That's Vinery's full-opaque-block rule ([vinery.md](vinery.md)).
@@ -284,6 +678,88 @@ Open gaps, none fixed yet. Each has a suggested fix, for you to approve or rejec
   half or the farmland.
 - **G10 The hoe area break destroys unripe crops.** That's Quark's design. Use the hoe right-click for
   harvesting and the hoe break only for clearing.
+- **G11 Tobacco ignores farmland moisture.** It grows +1 stage on every random tick at light 9+, wet or
+  dry, on any accepted soil. That is its own growth rule, not a soil rule, so it is left alone. It
+  still gets Rich Farmland's 20% boost and Fertile Soil's bone-meal step.
+- **G12 Tea refuses Farmland and Rich Farmland.** Both tea bushes test `#minecraft:dirt` themselves, so the
+  pack's farmland soils never reach them. Rich Soil and Fertile Soil work (they're in `#minecraft:dirt`). Fix if
+  wanted: a placement mixin per §2.6, like tobacco.
+- **G13 Corn's top half doesn't respond to right-click.** Quark records only the `upper=false` ripe state, the
+  same limit as flax (G9). Click the lower half or the farmland.
+- **G14 Coffee eats neighbouring crops.** Farmer's Respite design; keep coffee 3+ blocks from other crops, or grow
+  it in the Nether. Turning bone meal on (`enableBoneMealCoffeeBush`) is the only config knob.
+- **G15 Pineapple only grows on sand, red sand and coarse dirt.** Fruits Delight design (the tag
+  `fruitsdelight:pineapple_grows_on`). Extend the tag if you want it on farmland.
+
+**Wild generation findings (2026-10-03).** Inputs for the vegetation worldgen system. Nothing is changed
+yet; each has a suggested direction for you to approve or reject.
+
+- **V1 Several crops only reach vanilla biomes.** ADDRESSED 2026-10-03 by §2.8 for every crop in it; the Vinery grape
+  bushes are untouched and still only reach vanilla biomes. Their biome tags name vanilla biomes and Terralith's
+  similar biomes were never added: strawberries (Plains only), tea (Swamp only), cabbage, sea beet and
+  pineapple (Beach only), vanilla vine (the three vanilla savannas), all Vinery grape bushes, Neapolitan
+  adzuki (5 vanilla forests). Terralith makes the vanilla biomes a small part of the world, so these crops
+  are rare. Suggested: one pack-side biome list per crop, built from climate groups (the way
+  `biome_merges.json` extends structure tags), with Terralith look-alikes added.
+- **V2 Temperature-window crops list dead biomes.** ADDRESSED by §2.8: ocean and cave biomes never match a rule. Wild carrots, onions and corn (base temperature 0.4 to
+  0.9) and tomatoes (`#forge:is_hot/overworld`) are added to oceans, rivers, Deep Dark, Dripstone Caves and
+  Terralith cave biomes. Surface placement there lands on water or in another biome, so nothing grows. That's
+  harmless, but it inflates the biome counts. Suggested: the system's biome lists exclude ocean and cave biomes.
+- **V3 Carrot, onion and corn share one biome set.** ADDRESSED by §2.8: carrots and onions temperate grass, corn warm dry grass. They use the same 57 biomes and differ only in rate
+  (corn 1/30 against 1/120). Suggested: give each its own climate or region if you want variety.
+- **V4 Jungles are crowded.** Still true after §2.8, by the spec: the warm wet group (melons, mini melons, vanilla, rice,
+  peppers, coffee), bananas, lemons and five fruit trees all land in the 8 jungles. Melon, cocoa, bell pepper, RD coffee, rice, banana, cranberry, jungle grapes,
+  lychee, mango, mangosteen, durian, peach and bayberry trees all spawn there. Temperate land gets
+  carrots, onions, corn, pumpkins and a few fruit trees.
+- **V5 Two coffees and two apples.** 2026-10-03: both apple trees now spawn in oak forests until they're merged;
+  Farmer's Respite coffee no longer spawns (V18). Rustic Delight coffee (jungle) and Farmer's Respite coffee (Basalt
+  Deltas) are different items. Vinery apple trees (plains, meadow) and Fruits Delight apple trees (forests)
+  also differ. Decide whether both stay, or unify them through tags/recipes (the item_dict rule).
+- **V6 Wild flax is switched off** in `supplementaries-common.toml` (hand-edited copy in `configs_edited/`).
+  Its biome tag is built at runtime by Supplementaries, so with it switched off no biome gets it. Decide
+  whether it comes back under the new system.
+- **V7 Rustic Delight patches are flower-type.** Bone meal on grass in forests and jungles can grow wild
+  cotton, peppers and coffee. Keep that (it's a renewable source), or register them as plain patches.
+- **V8 Tea is one or two bushes per Swamp chunk, every chunk.** §2.8 widens it to the three temperate wet biomes (V20). It's dense in one small biome and absent
+  everywhere else.
+- **V9 Rates span three orders of magnitude.** Banana plants try 0.75 times per jungle chunk, pumpkins
+  once in 300 chunks and durian trees once in 200. A system-wide "per 1000 land chunks" target per crop
+  (the column in [crops_by_biome.md](crops_by_biome.md)) gives one scale to tune against.
+- **V10 Most crop features are Java-registered.** USED by §2.8: the mods' modifiers become `forge:none` and the pack adds
+  its own; the Java rates stay. Changing their rate or biomes in place isn't possible
+  from data (no JSON). The system would add its own JSON placed features for the wild blocks and remove the
+  mods' features with `forge:remove_features`, or suppress them by config (FD, Delightful and Rustic Delight
+  chances, Farmer's Respite chances) where a config exists.
+- **V11 Vanilla `minecraft:patch_melon` is unused.** Terralith's jungles use their own `terralith:jungle/patch_melon`.
+- **V12 New chunks only.** Like every worldgen change, explored chunks keep what they generated with.
+
+**Wild crop placement findings (2026-10-03, §2.8).** Open; each has a suggested direction.
+
+- **V13 Densities moved a lot.** The rates per attempt are the mods', but the biome areas changed. Per 1000 overworld
+  chunks ([crops_by_biome.md](crops_by_biome.md) §1): sugar cane 116 to 6.7 (x0.06), pumpkin 1.7 to 0.3, persimmon 1.4 to
+  0.4, rice 5.7 to 1.8, corn 7.1 to 3.1, lemon 1.5 to 0.7, mini melon 2.0 to 1.0, Vinery apple 0.7 to 0.4. Up: mint ponds
+  2.2 to 25.4 (x11), strawberries 0.5 to 3.5, mushroom colonies 0.2 to 1.2 each, cantaloupe 0.3 to 1.7, fig 1.9 to 5.8,
+  salmonberries 1.6 to 5.0. Suggested: a per-crop target and a placed-feature copy with its own rarity (the pack copy
+  pattern in §2.8 already does this for the vanilla patches), mint and pumpkin first.
+- **V14 Pineapples still need sand.** Fruits Delight's wild pineapple only survives on sand, red sand or coarse dirt
+  (`#fruitsdelight:pineapple_grows_on`), and its feature tests for plain sand. In mangrove swamp, granite cliffs and
+  tropical jungle they only appear where the coast has sand. Fix if wanted: a pack feature on that tag plus extending the
+  tag with grass/mud (that also lets players plant them there).
+- **V15 Ground limits elsewhere.** Cabbages and sea beets on cliffs need a dirt or grass top (stone cliffs get none), and
+  their Sandy Shrubs need sand. Sugar cane can't root on gravel (gravel beach) or beside ice (frozen river). Melons and
+  mini melons need grass, not mangrove mud. These biomes are in the lists as you asked; they just yield little.
+- **V16 No orchard or pumpkin biome.** Pumpkins use Skylands Autumn as the "pumpkin biome". If you meant something else
+  (Vinery/Fruits Delight apple biomes, flower forests), it is one `where` clause.
+- **V17 Rubberwood leaves drop apples.** Myrtrees' rubberwood leaves copy the oak loot table, apple included. Add
+  `myrtrees:blocks/rubberwood_leaves` to `08_leaf_apples.js` TABLES if apples should only come from apple trees.
+- **V18 Farmer's Respite coffee has no source now.** Its only source was the Basalt Deltas bushes: no chest loot, no
+  trades. Options: merge it into Rustic Delight coffee (the item_dict/recipes route), or spawn FR coffee bushes again
+  somewhere (they need basalt or magma).
+- **V19 Biomes with no wild crop.** 13 land biomes match no rule: the stone and ice peaks (frozen, jagged, stony,
+  emerald, volcanic crater/peaks), snowy slopes, ice spikes, glacial chasm, gravel desert, windswept gravelly hills,
+  stony spires and windswept spires. All rock, ice or gravel, where none of the crop blocks survives.
+- **V20 Tea is in 3 biomes.** "Wet temperate" by the climate tags is swamp, Blooming Valley and Mirage Isles. Lush
+  Valley and dark forest have downfall 0.8 but no wet tag; add them if you want more tea.
 
 ## 5. File map
 
@@ -292,11 +768,29 @@ Open gaps, none fixed yet. Each has a suggested fix, for you to approve or rejec
 - [config/immersive_weathering-common.toml](../config/immersive_weathering-common.toml): `[misc]` mulch growth
 - [config/farmersdelight-common.toml](../config/farmersdelight-common.toml): `richSoilBoostChance`, tomato rope settings
 - [config/endercrop-common.toml](../config/endercrop-common.toml): tilled end stone, growth multipliers
-- [kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js): `rich_soil`, `rich_farmland`, `fertile_soil`, `nulch`
+- [kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js): `farmland`, `rich_soil`, `rich_farmland`, `fertile_soil`, `nulch`, `tobacco_seeds`
+- [kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js): "Crop parity" section, `crops/farmland_soils` and `crops/farmland_crops`
+- patcherMod `crops/CropParity.java` and `mixin/TobaccoPlacementMixin`, `FarmBlockUnderCropsMixin`,
+  `MulchBlockCropGrowthMixin`, `QuarkHoeHarvestMixin` (compile jars for The Dirty Stuff, Quark and IW in `libs/`)
+- patcherMod `crops/HoeHarvestArea.java`, `crops/HoeHarvestTooltip.java`, `mixin/QuarkHoeAreaHarvestMixin`,
+  `mixin/QuarkHoeAreaBreakMixin`; [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) "Hoe harvest area"
 - [kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js): Fertile Soil rename
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): soil tooltips
 - [kubejs/server_scripts/wood/sawdust.js](../kubejs/server_scripts/wood/sawdust.js): Fertile Soil recipes
 - [vinery.md](vinery.md): grape bush, stem and lattice detail
+- Wild generation (§2.7): [tools/gen_crop_worldgen_table.py](../tools/gen_crop_worldgen_table.py) (its `JAVA_PLACED` table restates the
+  Java-registered features) → [crops_by_biome.md](crops_by_biome.md) and `kubejs/exported/worldgen/crop_worldgen.json`.
+  Inputs: `kubejs/exported/biome_data.json` (`/dumpbiomes`), `kubejs/generation_scripts/worldgen/biome_config.json` (areas).
+  Configs with worldgen knobs: `farmersdelight-common.toml` `[world.*]`, `delightful-common.toml` `chance_*`,
+  `rusticdelight-common.toml` `wild_*_chance`, `farmersrespite-common.toml` `teaBushChance` / `coffeeBushChance`,
+  `supplementaries-common.toml` `[functional.flax.wild_flax]`, `neapolitan-common.toml` (strawberry height, chimpanzees)
+- Wild crop placement (§2.8): [kubejs/generation_scripts/worldgen/wild_crops.json](../kubejs/generation_scripts/worldgen/wild_crops.json)
+  (biome traits + crop rules, the file to edit), [kubejs/server_scripts/worldgen/wild_crops.js](../kubejs/server_scripts/worldgen/wild_crops.js)
+  (applier), `kubejs/data/creativeengineering/worldgen/configured_feature/wild/` and `placed_feature/wild/` (pack features),
+  patcherMod `CEConfig` `[worldgen.systems] wildCrops` + `worldgen/WorldgenConfig.wildCropsEnabled()`,
+  [kubejs/server_scripts/loot/08_leaf_apples.js](../kubejs/server_scripts/loot/08_leaf_apples.js) (leaf apples),
+  [config/alexsmobs.toml](../config/alexsmobs.toml) `bananasDropFromLeaves` (copy in `configs_edited/root_config/`),
+  [tools/test_wild_crops.sh](../tools/test_wild_crops.sh) + `tools/wild_crops_test/RhinoWildCrops.java` (offline checks)
 
 ## 6. Offline checks
 
@@ -312,14 +806,31 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
   `libraries/net/minecraftforge/forge/1.19.2-43.3.9/forge-1.19.2-43.3.9-client.jar` (patched vanilla classes).
 - Tag contents (`#minecraft:dirt`, `#quark:big_harvesting_hoes`, `#quark:simple_harvest_blacklisted`) come
   from `kubejs/exported/tags/block_tags.json` and `item_tags.json`, refreshed by `/dumptags`.
+- **Wild generation (§2.7):** `python3 tools/gen_crop_worldgen_table.py` (about 1 s). On 2026-10-03 it printed
+  `84 crop/feature rows, 62 crops` and two notes: `minecraft:patch_melon` and `supplementaries:wild_flax` reach no
+  biome (V11, V6). It merges biome tags statically from the jars and `kubejs/data`. Tags added at runtime aren't
+  seen: Supplementaries' generated tags, and KubeJS tag events (today those only touch structure tags). The Java
+  feature classes read for §2.7: FD `WildCropGeneration`, `WildCropFeature`, `WildRiceFeature`,
+  `AddFeaturesByFilterBiomeModifier`; FR `FRGeneration`; Delightful `DelightfulWildCropGeneration`; Corn Delight
+  `WildCornGeneration`; Rustic Delight `ModConfiguredFeatures` / `ModPlacedFeatures`; Nether's Delight `NDGeneration`,
+  `PropelplantFeature`; Neapolitan `NeapolitanFeatures` and `common/levelgen/feature/*`; Fruits Delight `FDTrees`,
+  `FDBushes`, `FDPineapple`, `FDMelons`; Upgrade Aquatic `UAFeatures`, `RiverTreeFeature`; vanilla `VegetationPlacements`,
+  `VegetationFeatures`, `TreeFeatures`, `CavePlacements` (from the mapped Forge jar in `~/.gradle/caches/forge_gradle`).
+- **Wild crop placement (§2.8):** `tools/test_wild_crops.sh` (about 10 s, needs the ATLauncher libraries for Rhino's gson).
+  It runs the generator (fails on any config problem), then the real `wild_crops.js` in the pack's Rhino fork with KubeJS
+  stubbed: every crop tag must equal the generator's list, every data file must parse with the expected modifier types,
+  CEConfig off must apply nothing, and a missing mod (neapolitan) must only drop its own entries. 2026-10-03: all four
+  pass; "46 crop tags match the generator", "46 add modifiers, 44 forge:none, 1 remove modifier". The generator printed
+  `78 crop/feature rows, 61 crops`, 13 land biomes with no crop (V19) and the flax note (V6). Not covered: the KubeJS
+  type wrappers and Forge actually loading the modifiers, which needs the game (CR-47).
 
 ## 7. In-game test suite
 
-- [ ] **CR-01 Tobacco soils:** tobacco seeds on Farmland plant. On Rich Farmland, Fertile Soil and Rich Soil they're refused.
-- [ ] **CR-02 Tobacco harvest:** right-click a stage-7 tobacco (empty hand, then an iron hoe) → nothing. Breaking it drops 4+ leaves and 1-2 seeds.
+- [ ] **CR-01 Tobacco soils:** tobacco seeds plant on Farmland, Rich Farmland and Fertile Soil. On Rich Soil and dirt they're refused.
+- [ ] **CR-02 Tobacco replant:** right-click a stage-7 tobacco with an empty hand → 4+ leaves and 0-1 seeds drop, and the plant is back at stage 0. Right-click an unripe one → nothing.
 - [ ] **CR-03 Wheat replant:** right-click ripe wheat with an empty hand → wheat and seeds drop (one seed fewer than breaking), and the wheat is back at stage 0.
 - [ ] **CR-04 Any item harvests:** right-click ripe wheat while holding a stick or a block → it's harvested, and the block isn't placed.
-- [ ] **CR-05 Hoe area size:** iron hoe right-click on a ripe field → 3x3 replanted, no durability lost. Diamond hoe → 5x5. Echo hoe → 3x3.
+- [ ] **CR-05 Hoe area size:** iron hoe right-click on a ripe field → 3x3 replanted, no durability lost. Diamond hoe → 4x4. Echo hoe → 5x5.
 - [ ] **CR-06 Hoe on grass:** iron hoe right-click on grass next to ripe wheat → the grass is tilled, no harvest.
 - [ ] **CR-07 Hoe break:** break one ripe wheat with an iron hoe in a half-ripe field → the 3x3 around it breaks, unripe ones included, and nothing replants.
 - [ ] **CR-08 Rich Soil vs crops:** cabbage seeds on Rich Soil are refused. On Rich Farmland and Fertile Soil they plant.
@@ -335,6 +846,66 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
 - [ ] **CR-18 Stems and hoe break:** break a crop with a hoe next to a pumpkin stem → the stem breaks too.
 - [ ] **CR-19 Sugar cane without water:** sugar cane on Rich Soil and on Fertile Soil with no water nearby → it plants.
 - [ ] **CR-20 Glow berries hoe click:** iron hoe right-click under a ripe glow berry vine → only the bottom (tip) block in range is picked.
+- [ ] **CR-21 Tobacco hoe replant:** a 3x3 of ripe tobacco, iron hoe right-click on the middle → all 9 replanted at stage 0, no durability lost.
+- [ ] **CR-22 Tobacco hoe break:** break one tobacco with an iron hoe in a 3x3 patch (ripe and unripe) → the whole 3x3 breaks, nothing replants.
+- [ ] **CR-23 Dry farmland keeps tobacco:** tobacco on farmland with no water in range → after a few minutes the farmland is dry but stays farmland and the tobacco stays. Bare dry farmland next to it turns to dirt.
+- [ ] **CR-24 Tobacco on soaked Fertile Soil:** soak Fertile Soil (water bucket), plant tobacco in daylight → it ripens visibly faster than tobacco on dry Fertile Soil next to it.
+- [ ] **CR-25 Tobacco soil swap:** tobacco on Rich Farmland; break the soil → the tobacco pops (drops a seed) as with wheat.
+- [ ] **CR-26 Tooltips:** hover each hoe. Wooden/stone → no harvest lines. Copper/golden → "Harvest area: 2x2, toward where you look". Iron/steel/manasteel → "3x3". Diamond/netherite/elementium → "4x4, toward where you look". Echo/felsic/dragon → "5x5". Every one with an area also shows the right-click/break line.
+- [ ] **CR-27 2x2 direction:** in a ripe 5x5 wheat field, stand south of the middle facing north-east, golden hoe right-click the middle → it plus the block north, the block east and the block north-east replant (4 total). Face north-west → the west side instead.
+- [ ] **CR-28 4x4 right-click:** diamond hoe right-click the middle of a ripe 7x7 field facing north-east → 16 replanted: 1 block west/south of the middle and 2 blocks north/east.
+- [ ] **CR-29 Area break:** break one wheat in a full field with a copper hoe → 4 gone (2x2). Netherite → 16. Dragon → 25. Wooden hoe → only the one broken.
+- [ ] **CR-30 Wooden hoe right-click:** wooden hoe right-click a ripe wheat in a field → only that one replants. On a ripe sweet berry bush → it's picked by vanilla's own click, the neighbours aren't.
+
+- [ ] **CR-31 Corn replant:** right-click the lower half of ripe corn → corn drops, the lower half is back at stage 0 and the top half breaks and drops its corn. Right-click the top half → nothing.
+- [ ] **CR-32 Corn soils:** corn seeds plant on Farmland, Rich Farmland and Fertile Soil; refused on dirt and Rich Soil.
+- [ ] **CR-33 Tea:** tea seeds plant on grass and Rich Soil, refused on Farmland (G12). Shears on a grown bush → leaves + sticks, back to a small bush; empty hand and iron hoe right-click → nothing.
+- [ ] **CR-34 Coffee drain:** coffee beans on basalt next to a wheat patch in the Overworld → as the coffee grows, wheat within 2 blocks turns into Wither Roots / Wild Coffee Bush. A stem at stage 2 gives 1 berry on an empty-hand click.
+- [ ] **CR-35 Fruit bushes:** blueberry bush at stage 4 → right-click gives 1-2 berries and it drops to stage 2; iron hoe right-click on a ripe patch picks 3x3. Lemon: right-click the top half of a ripe lemon tree → lemons drop.
+- [ ] **CR-36 Pineapple:** pineapple sapling plants on sand and coarse dirt, refused on grass and farmland.
+- [ ] **CR-37 Fruit tree:** grow an orange tree from a sapling, wait for fruit → right-click a fruiting leaf drops an orange and the leaf turns plain. Leaves placed by hand never flower.
+
+Wild generation (§2.7). Use a new world, or chunks nobody has explored. `/locate biome <id>` finds the biome.
+
+- [ ] **CR-38 Beach crops:** walk a vanilla `minecraft:beach` → wild cabbages and sea beets with Sandy Shrubs, wild pineapples and cantaloupes on the sand. A Terralith beach-like biome (e.g. `terralith:gravel_beach`) has cantaloupes but no cabbages, sea beets or pineapples (V1).
+- [ ] **CR-39 Temperate wild crops:** in a forest or plains → wild carrot patches with a Coarse Dirt floor and Grass, wild onions with Alliums, and wild corn (about four times as common as the other two).
+- [ ] **CR-40 Strawberries and adzuki:** vanilla `plains` → strawberry patches, most bushes red and ripe, a few unripe on Coarse Dirt. Vanilla `forest` → adzuki sprouts on plain Dirt. Break a ripe sprout → the dirt under it becomes Adzuki Soil and a new sprout appears later.
+- [ ] **CR-41 Mint pond:** `windswept_hills` → a small pond ringed by mint, usually with one spruce beside it.
+- [ ] **CR-42 Jungle:** `jungle` → banana plants on gravel patches (sometimes with chimpanzees), wild bell peppers, Rustic Delight wild coffee, melons, cocoa on jungle trees, lychee or mango trees.
+- [ ] **CR-43 Bone meal flowers:** bone-meal a big grass area in a `jungle` several times → now and then a wild bell pepper or wild coffee grows among the flowers (V7).
+- [ ] **CR-44 Swamp and Nether:** vanilla `swamp` → one or two wild tea bushes with ferns in most chunks. `basalt_deltas` → wild coffee bushes and Wither Roots on basalt. `crimson_forest` → propelplant on nylium.
+- [ ] **CR-45 River trees:** `river` → small river trees on the banks, some with mulberry vines hanging from the leaves.
+- [ ] **CR-46 No wild flax:** search a river or beach area → no wild flax (V6).
+
+CR-38 to CR-45 describe the mods' own spawns: since §2.8 they only hold with CEConfig `[worldgen.systems] wildCrops = false`.
+
+Pack wild-crop placement (§2.8). Needs patcherMod 1.0.4 rebuilt 2026-10-03 in `mods/` for CR-58 (the scripts default to on
+without it). New world, or unexplored chunks; `/locate biome <id>`.
+
+- [ ] **CR-47 Loads:** create a world → it loads. `logs/latest.log` has `[wild-crops] 46 crop modifiers added, 44 mod modifiers
+  off, 11 biome-file patches removed` and, after the world loads, `[wild-crops] <n> crop/biome pairs in 46 crop tags` with no
+  `problems` and no "not in" warnings. `[leaf-apples] apples removed from 2 of 2 leaf tables`.
+- [ ] **CR-48 Coast:** `beach` → wild cabbages, sea beets, pineapples, sugar cane. `terralith:white_cliffs` or `granite_cliffs`
+  → cabbages and sea beets on grassy cliff tops (no Sandy Shrub off sand). No cantaloupes on beaches any more.
+- [ ] **CR-49 Temperate:** `plains` and `forest` → wild carrots and onions; no wild corn, no strawberries in plains.
+  `forest` also has adzuki sprouts and apple trees (both kinds). `birch_forest` → pear trees.
+- [ ] **CR-50 Cold:** `taiga` → sweet berries, wild potatoes, salmonberries, blueberries, strawberries, pumpkins, fig and
+  hawberry trees. `snowy_taiga` → the same minus pumpkins, plus persimmon trees.
+- [ ] **CR-51 Cold wet:** `terralith:ice_marsh` or `yellowstone` → cranberry bushes. Jungles and swamps have none.
+- [ ] **CR-52 Warm wet:** `jungle` → melons, mini melons, vanilla vines, wild rice in shallow water, bell peppers, RD wild coffee,
+  bananas, lemon bushes and the five fruit trees (lychee, mango, peach, orange, kiwi). `mangrove_swamp` → a few jungle trees
+  with cocoa, bayberry/mangosteen/durian trees.
+- [ ] **CR-53 Warm dry:** `savanna` → wild tomatoes, cotton, cantaloupes and corn. `desert` → none of those; hamimelons on
+  sand. `badlands` → hamimelons on red sand and terracotta.
+- [ ] **CR-54 Mushrooms:** `dark_forest` → brown and red mushroom colonies on the shaded floor (not on leaves). `mushroom_fields`
+  → colonies on mycelium.
+- [ ] **CR-55 Tea and mint:** `swamp` → wild tea bushes. `windswept_hills` or `meadow` → mint ponds. No mint in plains.
+- [ ] **CR-56 Sugar cane only by rivers and beaches:** a desert lake or swamp has no sugar cane; a river bank has it.
+- [ ] **CR-57 Leaf drops:** break 200 oak leaves and 200 dark oak leaves (or `/loot spawn ~ ~ ~ mine ~ ~ ~` on placed leaves) →
+  saplings and sticks, no apples. Break jungle leaves → no Alex's Mobs bananas. Basalt Deltas → no wild coffee bushes.
+- [ ] **CR-58 Switch off:** set `wildCrops = false` in `config/creativeengineering-common.toml`, new world → the log has
+  `[wild-crops] off in CEConfig`; `plains` has strawberries and corn again (mod defaults). Leaf apples stay off (that's loot,
+  not this switch).
 
 ## 8. History
 
@@ -343,3 +914,31 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
   3.4.1, Rustic Delight 1.3.0, Ender Crop 1.7.0, Upgrade Aquatic 5.1.0, Nether's Delight 3.1, Berry Good
   6.1.0, Floral Enchantment 1.4.3, Vinery 1.3.10) and Forge 43.3.9's patched vanilla classes. No pack
   changes made; gaps G1 to G10 open.
+- **2026-10-02:** tobacco brought in line (G1 to G3) through the new crop parity layer (§2.6): two block
+  tags, one Quark config line, four patcherMod mixins. Built into patcherMod 1.0.3 in `mods/`, not
+  deployed, not boot-tested yet. G11 noted.
+- **2026-10-02:** per-hoe harvest area (G5): `hoe_harvest/NxN` item tags, sizes 1x1 to 9x9 with even sizes
+  biased toward the look direction, two Quark mixins and a generated tooltip (§2.3). Built into patcherMod
+  1.0.3 `build/libs`, not copied to `mods/`, not deployed.
+- **2026-10-02:** everything built since the 1.0.3 deploy is pack 1.0.4: the crop parity layer and the hoe
+  areas ship in patcherMod 1.0.4 (the earlier "1.0.3" labels were the unbumped jar name), now in `mods/`, not
+  deployed, not boot-tested. See [plan_1.0.4.md](plan_1.0.4.md).
+- **2026-10-02:** 1.0.4 mods added from their decompiled jars (Corn Delight 1.0.3 + Mysterious Mountain Lib
+  1.2.3, Farmer's Respite 2.0, Fruits Delight 0.5.11): corn (two-high, lower half replants), tea (shears only, no
+  farmland), coffee (basalt/magma, drains nearby crops), blueberry/cranberry/lemon bushes, pineapple (sand), the
+  hamimelon stem and 13 fruit trees. More Delight and Untitled Duck Mod add no crops. Gaps G12 to G15, tests CR-31
+  to CR-37. No pack changes.
+- **2026-10-03:** §2.7 wild generation written from the decompiled jars (Farmer's Delight 1.2.4, Farmer's Respite 2.0,
+  Delightful 3.4.1, Corn Delight 1.0.3, Rustic Delight 1.3.0, Nether's Delight 3.1, Neapolitan 4.1.0, Fruits Delight 0.5.11,
+  Upgrade Aquatic 5.1.0, Vinery 1.3.10, Supplementaries 2.4.20, vanilla 1.19.2) and the biome files of Terralith 2.3.12,
+  Hearths 1.0.0 and Nullscape 1.2.2. New generator `tools/gen_crop_worldgen_table.py` → [crops_by_biome.md](crops_by_biome.md).
+  Found: wild flax is switched off in the pack's Supplementaries config; Neapolitan's "adzuki soil" comes from harvesting
+  wild sprouts (the worldgen only lays down dirt). Findings V1 to V12 and tests CR-38 to CR-46 added. No pack changes.
+- **2026-10-03:** §2.8 wild crop placement built from your spec: `wild_crops.json` (traits for all 146 overworld biomes incl.
+  oceans/caves, 46 crop rules), `worldgen/wild_crops.js` (biome tags, 44 mod modifiers to `forge:none`, 46 add modifiers,
+  one remove modifier for the vanilla patches), 5 configured + 10 placed pack features, CEConfig `wildCrops` switch
+  (patcherMod 1.0.4 rebuilt; not copied to `mods/` because the game was running). Oak/dark oak leaf apples removed
+  (`loot/08_leaf_apples.js`), Alex's Mobs leaf bananas off, Farmer's Respite Nether coffee off. Generator now evaluates the
+  rules, shows before/after densities, biome traits and coverage; it also learned that `minecraft:trees_jungle` grows
+  cocoa (rocky jungle, jungle mountains). Offline checks `tools/test_wild_crops.sh` pass; not run in game. V1 to V3, V10
+  addressed; V13 to V20 and CR-47 to CR-58 added.

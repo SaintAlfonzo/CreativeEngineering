@@ -1096,6 +1096,9 @@
 		deadPlacementFilter = true
 		#Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).
 		groundMatch = true
+		#biome_rules in structure_groups.json (patcherMod StructureBiomeRules): only allowed structures start in
+		#the rule's biomes (water: ships, wrecks, ocean ruins...). Off: every structure uses its own biome list. Rejoin.
+		structureBiomeRules = true
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
@@ -1236,14 +1239,31 @@
 	#remembers its own trash slot position and on/off state. false: all backpacks share one.
 	splitBackpacksByTier = true
 
-#Camera bags hold anything tagged #creativeengineering:camera_equipment, in any slot, at the
-#item's normal stack size. Slots per tier (1-27). Lowering a value moves the items in the
-#removed slots into the player's inventory (or drops them) the next time that bag is opened.
-[camera_bag]
-	#Range: 1 ~ 27
-	leatherSlots = 5
-	#Range: 1 ~ 27
-	ironSlots = 9
-	#Range: 1 ~ 27
-	netheriteSlots = 14
+#Wandering Trader and Wandering Winemaker spawning, and the trader's offer counts.
+#Each spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
+#overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not
+#change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then
+#a free spot near a random player; on average about 14 rolls per spawn.
+#To stop both use /gamerule doTraderSpawning false.
+[wandering_trader]
+	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers) and no Winemaker spawner.
+	enabled = true
+	#Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes.
+	#A change takes effect after the wait already counting down.
+	#Range: 1200 ~ 100000000
+	traderIntervalTicks = 96000
+	#Offers drawn from the common pool. Vanilla: 5. Each offer is a different listing; a pool
+	#smaller than this gives every listing once.
+	#Range: 0 ~ 200
+	commonTrades = 25
+	#Offers drawn from the rare pool, all different items. Vanilla: 1.
+	#Range: 1 ~ 50
+	rareTrades = 5
+	#Spawn Vinery's Wandering Winemaker from its own spawner, independent of the Wandering Trader.
+	#Vinery's own swap (config/vinery/config.json5 wine_trader_chance) must be 0, or it still
+	#turns that share of Wandering Trader spawns into Winemakers.
+	winemakerEnabled = true
+	#Ticks between Wandering Winemaker spawn rolls.
+	#Range: 1200 ~ 100000000
+	winemakerIntervalTicks = 96000
 

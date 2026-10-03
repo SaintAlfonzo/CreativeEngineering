@@ -1,0 +1,25 @@
+{
+  "__comment": "Improved Pillager Outpost as a small chance instead of a replacement. IPO overwrites minecraft:pillager_outpost/base_plate with a plate whose jigsaw only leads to its own towers; kubejs/data puts the vanilla plate back at that id and keeps IPO's plate as ipo:pillager_outpost/base_plate. The plate picks the tower: vanilla 7, IPO 1 (1 outpost in 8 is an IPO tower). Retune in pool_config.json.",
+  "name": "minecraft:pillager_outpost/base_plates",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 7,
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:pillager_outpost/base_plate",
+        "processors": { "processors": [] },
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "ipo:pillager_outpost/base_plate",
+        "processors": { "processors": [] },
+        "projection": "rigid"
+      }
+    }
+  ]
+}

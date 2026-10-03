@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class RhinoRun {
 	static final Map<String, String> files = new TreeMap<>();
-	static String report, staged;
+	static String report, staged, rules;
 	static final List<String> logs = new ArrayList<>();
 	static Path root;
 	static boolean noPatcher, groupsOff;
@@ -19,6 +19,7 @@ public class RhinoRun {
 		public String read(String p) throws Exception { return Files.readString(root.resolve(p)); }
 		public void writeText(String p, String t) { report = t; }
 		public void stage(String j) { staged = j; }
+		public void stageRules(String j) { rules = j; }
 		public void add(String p, String t) { files.put(p, t); }
 		public void log(String level, String msg) { logs.add(level + msg); }
 		public boolean noPatcher() { return noPatcher; }
@@ -42,6 +43,7 @@ public class RhinoRun {
 			"  warn: function (m) { __HOST.log('WARN ', String(m)) }, error: function (m) { __HOST.log('ERROR ', String(m)) } };",
 			"var JsonIO = { readString: function (p) { return __HOST.read(p) } };",
 			"var Java = { loadClass: function (n) {",
+			"  if (n.indexOf('StructureBiomeRules') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n); return { stage: function (j) { __HOST.stageRules(j) } } }",
 			"  if (n.indexOf('StructureFrequencies') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n); return { stage: function (j) { __HOST.stage(j) } } }",
 			"  if (n.indexOf('WorldgenConfig') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n);",
 			"    return { structureDensity: function () { return __HOST.density() }, structureGroupsEnabled: function () { return __HOST.groups() } } }",
@@ -58,6 +60,7 @@ public class RhinoRun {
 			Files.writeString(f, e.getValue());
 		}
 		if (staged != null) Files.writeString(out.resolve("frequencies.raw.json"), staged);
+		if (rules != null) Files.writeString(out.resolve("rules.raw.json"), rules);
 		if (report != null) Files.writeString(out.resolve("report.md"), report);
 		logs.forEach(System.out::println);
 		System.out.println(files.size() + " files, staged " + (staged == null ? "nothing" : staged.length() + " chars"));

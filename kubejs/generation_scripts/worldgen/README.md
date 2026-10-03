@@ -156,6 +156,24 @@ Workflow: edit `biome_merges.json`, then `/reload` or rejoin. Only chunks genera
 affected. `biome_merge_suggestions.md` also lists structures already generating in skylands and
 cave biomes and marks variant structures that generate in broader biome definitions.
 
+## Wild crops (which biomes each wild crop and fruit tree spawns in)
+
+Separate from structures: `wild_crops.json` gives every overworld biome a set of traits (climate, wet/dry, ground,
+shape) and each wild crop a rule over them, plus the mods' biome modifiers it replaces. Reference, choices and the
+`CR-47`.. tests: `feature_writeup/crops.md` section 2.8.
+
+| File | Concern |
+|---|---|
+| `wild_crops.json` | **Edit this.** `biomes` (traits per biome) and `crops` (rule, features, modifiers to switch off, vanilla patches to remove) |
+| `kubejs/server_scripts/worldgen/wild_crops.js` | At world load: biome tag per crop, mod modifiers -> `forge:none`, one add modifier per crop, one remove modifier for the vanilla patches (highPriorityData). Checks the live tags on `ServerEvents.loaded` |
+| `kubejs/data/creativeengineering/worldgen/*_feature/wild/` | The pack's own features where a mod's ground test would block a biome, and copies of the vanilla patches |
+| `tools/gen_crop_worldgen_table.py` | Evaluates the same rules -> `feature_writeup/crops_by_biome.md` (biome lists, before/after density, coverage) |
+| `tools/test_wild_crops.sh` | Offline: generator + the real script in Rhino, tags must match |
+
+Workflow: edit `wild_crops.json`, run the generator to see the lists, then rejoin (biome modifiers are read at world
+load, not on `/reload`). Only new chunks change. CEConfig `[worldgen.systems] wildCrops = false` turns it off.
+A new biome mod: its biomes show up as unclassified in the generator and the log; add them to `biomes`.
+
 ## Biome frequency tuning (how common each biome is)
 
 Make any biome rarer, more common, removed, or swapped for another, per dimension. Covers every

@@ -1,4 +1,4 @@
-// /dumpfood   ->  writes kubejs/exported/food/  (and refreshes kubejs/exported/tags/ for items)
+// /dumpfood   ->  writes kubejs/exported/food/ (item tags are read live and embedded per row)
 //
 //   foods.json         every edible item as the game sees it right now (after any KubeJS edits):
 //                      nutrition, saturation modifier, saturation points, effects with chances, meat /
@@ -29,7 +29,7 @@ ServerEvents.commandRegistry(event => {
 					console.error('[dumpfood] failed: ' + g.error)
 					ctx.source.sendFailure(Text.red('dumpfood failed - see log: ' + g.error))
 				}
-				return 1
+				return g.ok ? 1 : 0
 			})
 	)
 })

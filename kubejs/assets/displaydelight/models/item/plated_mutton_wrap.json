@@ -1,0 +1,22 @@
+{
+ "parent": "displaydelight:block/plated_mutton_wrap_1",
+ "display": {
+  "gui": {
+   "rotation": [
+    37,
+    44,
+    0
+   ],
+   "translation": [
+    0,
+    4,
+    0
+   ],
+   "scale": [
+    0.8,
+    0.8,
+    0.8
+   ]
+  }
+ }
+}

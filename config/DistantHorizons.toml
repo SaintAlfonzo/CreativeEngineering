@@ -691,7 +691,7 @@ _version = 4
 				#     '0' equals to Vanilla Biome Blending of '1x1' or 'OFF', 
 				#     '1' equals to Vanilla Biome Blending of '3x3', 
 				#     '2' equals to Vanilla Biome Blending of '5x5'...
-				lodBiomeBlending = 3
+				lodBiomeBlending = 0
 				#
 				# How should vanilla Minecraft fade into Distant Horizons LODs? 
 				# 

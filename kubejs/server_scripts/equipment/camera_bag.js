@@ -1,9 +1,9 @@
-// Camera bags (patcherMod camerabag/): leather -> iron -> netherite.
+// Camera bags (exposureBackport src/extras, mod exposure_extras): leather -> iron -> netherite.
 // The upgrades are smithing recipes on purpose: smithing copies the base item's NBT onto the
 // result, and the bag keeps its contents there, so an upgrade keeps everything inside (and the
 // custom name). A crafting-table upgrade would empty the bag.
-// Slot counts per tier: CEConfig [camera_bag]. Allowed items: #creativeengineering:camera_equipment
-// (tags/equipmenttags.js).
+// Slot counts per tier: config/exposure_extras-common.toml [camera_bag]. Allowed items:
+// #exposure_extras:camera_equipment (tags/equipmenttags.js).
 
 ServerEvents.recipes(e => {
 	const R = global.NCH

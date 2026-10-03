@@ -8,8 +8,11 @@ Items an exclusion blocks are left out and named in a comment. Ids the item dict
 one, in a generated block of item_dict.js before the Validation header.
 
 The values file is hand-edited after the first run, so this refuses to overwrite it without --force.
+After adding mods, --merge instead appends only the dump's original items that have no row yet (new mods'
+own compostables, at their original chance) to their category's section, and leaves every existing row,
+comment and edit alone.
 
-  python3 tools/gen_compost_values.py [--dump kubejs/exported/compost/compost.json] [--force] [--dry-run]
+  python3 tools/gen_compost_values.py [--dump kubejs/exported/compost/compost.json] [--force | --merge] [--dry-run]
 """
 import argparse
 import json
@@ -99,15 +102,53 @@ def render_values(groups, order, excluded):
 
 
 
+def merge_values(text, groups, key_val):
+    """Append groups' rows whose dict key has no row in `text` yet. Returns (new text, rows added)."""
+    import re
+    present = set(re.findall(r'\[i\.(\w+),', text))
+    added = 0
+    for cat, rows in groups.items():
+        rows = [r for r in rows if r[1] not in present]
+        if not rows:
+            continue
+        rows.sort(key=lambda r: r[0])
+        head = re.search(r"\tC\.values\('%s', \[\n" % re.escape(cat), text)
+        if head:
+            end = text.index('\n\t])', head.end())
+            body = text[head.end():end]
+            w = max([len(m) for m in re.findall(r'\[(i\.\w+,)', body)] + [len('i.' + k + ',') for _, k, _ in rows])
+            lines, ns_prev = [], None
+            for item_id, key, chance in rows:
+                ns = item_id.split(':')[0]
+                if ns != ns_prev:
+                    lines.append(f'\t\t// {ns}')
+                    ns_prev = ns
+                lines.append(f"\t\t[{('i.' + key + ',').ljust(w)} {fmt(chance)}],")
+            text = text[:end] + '\n' + '\n'.join(lines) + text[end:]
+            n = len(re.findall(r'\[i\.\w+,', text[head.end():text.index('\n\t])', head.end())]))
+            text = re.sub(r"(// ── %s \()\d+(\) ─+)" % re.escape(cat),
+                          lambda m: m.group(1) + str(n) + m.group(2), text, count=1)
+        else:
+            sec = render_values({cat: rows}, [cat], []).split(";(function () {")[1]
+            sec = sec.split('\tvar C = global.compost\n', 1)[1].rsplit('})()', 1)[0]
+            tail = text.rindex('})()')
+            text = text[:tail].rstrip('\n') + '\n' + sec.rstrip('\n') + '\n' + text[tail:]
+        added += len(rows)
+    total = len(re.findall(r'\[i\.\w+,', text))
+    text = re.sub(r'^// \d+ items\.$', f'// {total} items.', text, count=1, flags=re.M)
+    return text, added
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--dump', default=str(DUMP))
     ap.add_argument('--force', action='store_true', help='overwrite an existing compost_values.js')
+    ap.add_argument('--merge', action='store_true', help='add only missing original items to an existing file')
     ap.add_argument('--dry-run', action='store_true')
     a = ap.parse_args()
 
     d = json.load(open(a.dump))
-    if OUT.exists() and not a.force and not a.dry_run:
+    if OUT.exists() and not a.force and not a.merge and not a.dry_run:
         raise SystemExit(f'{OUT.relative_to(INSTANCE)} exists (hand-edited?); pass --force to overwrite')
 
     src, key_val, by_id = parse_dict()
@@ -129,6 +170,17 @@ def main():
             taken.add(key)
             new_keys.append((key, item_id))
         groups[cat].append((item_id, key, chance))
+
+    if a.merge:
+        text, added = merge_values(OUT.read_text(), groups, key_val)
+        new_keys = [(k, v) for k, v in new_keys if f'i.{k},' in text]
+        print(f'merge: {added} new rows, {len(new_keys)} new item_dict keys')
+        if not a.dry_run and added:
+            OUT.write_text(text)
+            if new_keys:
+                DICT.write_text(dict_block(src, new_keys))
+            print(f'wrote {OUT.relative_to(INSTANCE)}')
+        return
 
     out = render_values(groups, order, excluded)
     total = sum(len(v) for v in groups.values())

@@ -1,8 +1,9 @@
 # exposureBackport
 
 Exposure **1.9.19** and its addons **Exposure: Expanded 1.0.1**, **Exposure Polaroid 1.1.6** and
-**Exposure Catalog 1.1.2** (NeoForge 1.21.1, all MIT) ported to **Forge 1.19.2**, in one jar:
-`exposureBackport-<mod_version>.jar`.
+**Exposure Catalog 1.1.2** (NeoForge 1.21.1, all MIT) ported to **Forge 1.19.2**, plus **Exposure Extras**
+(`exposure_extras`, this pack's own additions), in one jar: `exposureBackport-<mod_version>.jar`. The base mod's
+display name is **Exposure (Backport & Extras)** (`mod_name`).
 
 Status (2026-10-01):
 - **Base mod (`exposure`) ported:** all of Exposure 1.9.19 compiles for 1.19.2. The dev client reaches the main menu.
@@ -17,6 +18,12 @@ Status (2026-10-01):
   server its palettes load into the registry (`/exposure palette export`) and its dungeon loot rolls through the
   merged global loot modifiers; the dev client loads its models, textures and lang. Not yet tested in game.
 - Catalog (`exposure_catalog`) is still empty, and on hold (user, 2026-10-01: not wanted for now).
+- **Extras (`exposure_extras`, 2026-10-02):** the leather/iron/netherite camera bags, moved here from patcherMod
+  (they were `creativeengineering:*_camera_bag`; a MissingMappingsEvent remap carries old bags over). Slot counts
+  are `config/exposure_extras-common.toml` `[camera_bag]`. What a bag accepts is the item tag
+  `#exposure_extras:camera_equipment`: defaults in `src/extras/resources/data/exposure_extras/tags/items/`, pack
+  adjustments in kubejs `server_scripts/tags/equipmenttags.js`. No recipes in the jar (kubejs
+  `equipment/camera_bag.js`). The bag item models and GUI use Spice of Life (`solapplepie`) textures.
 - **Installed in `mods/` (2026-10-01)**, replacing stock Exposure 1.6.0 (moved to `jar_archive/displaced/`, along
   with its 1.6.0 `config/exposure-*.toml` files, which were replaced with the 1.9.19 defaults). Shipped in pack 1.0.3.
 
@@ -27,17 +34,18 @@ Status (2026-10-01):
 - No 1.6.0 world compatibility: 1.6.0 photos, cameras and saved exposures are not migrated.
 - Keep the upstream mod ids, packages and class names so the addons port with as few changes as possible,
   and each ported file can be diffed against its upstream original.
-- Pack-specific changes don't go here. Recipes, tags and loot go through KubeJS (`global.NCH`,
-  `global.tags`, LootJS); Java tweaks go in patcherMod. This jar stays a faithful port.
+- The upstream source sets stay a faithful port. Pack recipes, tags and loot go through KubeJS (`global.NCH`,
+  `global.tags`, LootJS); Java tweaks to other mods go in patcherMod. New Exposure-related content of our own goes
+  in `src/extras` (mod id `exposure_extras`, package `com.SaintAlfonzo.exposure_extras`).
 
 ## Version
 
 `mod_version` in `gradle.properties`: `<upstream Exposure version>-ce-<MC 1.19.2>-<port build>`, e.g.
-`1.9.19-ce-19.2-01`. All four mods carry the jar's version.
+`1.9.19-ce-19.2-01`. All five mods carry the jar's version.
 
 ## Layout
 
-One Gradle source set per mod. All four go into the one jar and into the dev runs.
+One Gradle source set per mod. All five go into the one jar and into the dev runs.
 
 | Source set | Mod id | Upstream | Package |
 |---|---|---|---|
@@ -45,12 +53,13 @@ One Gradle source set per mod. All four go into the one jar and into the dev run
 | `src/polaroid` | `exposure_polaroid` | Exposure Polaroid 1.1.6 | `io.github.mortuusars.exposure_polaroid` |
 | `src/catalog` | `exposure_catalog` | Exposure Catalog 1.1.2 | `io.github.mortuusars.exposure_catalog` |
 | `src/expanded` | `exposure_expanded` | Exposure: Expanded 1.0.1 | `dev.titanite.sparkwave.exposureexpanded` |
+| `src/extras` | `exposure_extras` | none (this pack's own) | `com.SaintAlfonzo.exposure_extras` |
 
 - **Separation is enforced by the compiler.** Addons compile against `main`, and `expanded` also against
   `polaroid` (upstream's optional instant-slide support). `main` sees no addon code, so the base mod can't
   depend on an addon by accident. Add an allowed edge in `build.gradle` (`addons` map) if one is ever
   really needed.
-- **One `mods.toml`** (`src/main/resources/META-INF/`) declares all four mods. Each mod has its own `@Mod`
+- **One `mods.toml`** (`src/main/resources/META-INF/`) declares all five mods. Each mod has its own `@Mod`
   class, configs, network channel and resource namespace (`assets/<mod id>/`, `data/<mod id>/` in its
   own source set's `resources/`).
 - **Shared resource paths are merged at build time.** The jar is one resource pack, so an addon file at the same

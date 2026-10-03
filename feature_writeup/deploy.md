@@ -6,7 +6,7 @@ BUILT 2026-09-30. Offline checks passed (section 6); no real machine has been up
 
 | Part | Status | Open |
 |---|---|---|
-| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.0.2 recorded as deployed on both sides (2026-09-30) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
+| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.0.3 recorded as deployed on both sides (2026-10-02 15:55) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
 | `update` / `install` payload modes | BUILT; scratch-tested (DP-01..DP-04 offline) | `select_payload`, `render_readme` |
 | `verify.sh` / `verify.ps1` | BUILT; sh tested, ps1 not run (no PowerShell here) | `VERIFY_SH`, `VERIFY_PS1` |
 | kubejs file classes (`KUBEJS_CLASSES`) | BUILT; every kubejs file classified | `KUBEJS_CLASSES` |
@@ -188,3 +188,4 @@ an unmatched file is functional.
   files come from the older mark, but removals and verify lists are per target (`fromByTarget`,
   `verify/<target>.version`). `deploy/RUNBOOK.md` ships in every payload. Config classes added
   (`--config functional|full`, default functional).
+- 2026-10-02: `--snapshot 1.0.3 --target both --date 2026-10-02T15:55` recorded the 1.0.3 deploy (it had been copied out without a snapshot). `--version 1.0.4 --dry-run` then said `update from 1.0.3`: 26 files, 5.7 MB, removals = the two old in-tree jars + the T&T waystones patch zip. In-tree mods bumped to patcherMod 1.0.4 / exposureBackport `-02`.

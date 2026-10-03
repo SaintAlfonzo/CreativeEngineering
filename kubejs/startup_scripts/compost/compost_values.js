@@ -8,13 +8,13 @@
 // Sections follow the rule categories (the first rule an item matches), seeds first. Add a new
 // item to any section: the section name only groups the file and labels /dumpcompost.
 // After editing: /kubejs reload startup_scripts, then /reload. Engine: startup_scripts/func/compost.js.
-// 580 items.
+// 684 items.
 
 ;(function () {
 	var i = global.item
 	var C = global.compost
 
-	// ── seeds (36) ───────────────────────────────────────────────────────────────────
+	// ── seeds (39) ───────────────────────────────────────────────────────────────────
 	C.values('seeds', [
 		// minecraft
 		[i.beetroot_seeds,            0.3],
@@ -64,9 +64,14 @@
 		[i.grape_seeds_red_taiga,     0.4],
 		[i.grape_seeds_white_taiga,   0.4],
 		[i.grape_seeds_white,         0.4],
+		// farmersrespite
+		[i.tea_seeds,                 0.3],
+		// fruitsdelight
+		[i.hamimelon_seeds,           0.3],
+		[i.lemon_seeds,               0.15],
 	])
 
-	// ── saplings (18) ────────────────────────────────────────────────────────────────
+	// ── saplings (32) ────────────────────────────────────────────────────────────────
 	C.values('saplings', [
 		// minecraft
 		[i.acacia_sapling,           0.3],
@@ -90,9 +95,24 @@
 		// vinery
 		[i.apple_tree_sapling,       0.4],
 		[i.cherry_sapling,           0.4],
+		// fruitsdelight
+		[i.apple_sapling,            0.3],
+		[i.bayberry_sapling,         0.3],
+		[i.durian_sapling,           0.3],
+		[i.fig_sapling,              0.3],
+		[i.hawberry_sapling,         0.3],
+		[i.kiwi_sapling,             0.3],
+		[i.lychee_sapling,           0.3],
+		[i.mango_sapling,            0.3],
+		[i.mangosteen_sapling,       0.3],
+		[i.orange_sapling,           0.3],
+		[i.peach_sapling,            0.3],
+		[i.pear_sapling,             0.3],
+		[i.persimmon_sapling,        0.3],
+		[i.pineapple_sapling,        0.3],
 	])
 
-	// ── leaves (66) ──────────────────────────────────────────────────────────────────
+	// ── leaves (108) ──────────────────────────────────────────────────────────────────
 	C.values('leaves', [
 		// minecraft
 		[i.acacia_leaves,                     0.3],
@@ -168,6 +188,52 @@
 		[i.apple_leaves,                      0.4],
 		[i.cherry_leaves,                     0.4],
 		[i.grapevine_leaves,                  0.4],
+		// everycomp
+		[i.q_fruitsdelight_apple_leaf_carpet,      0.2],
+		[i.q_fruitsdelight_bayberry_leaf_carpet,   0.2],
+		[i.q_fruitsdelight_durian_leaf_carpet,     0.2],
+		[i.q_fruitsdelight_fig_leaf_carpet,        0.2],
+		[i.q_fruitsdelight_hawberry_leaf_carpet,   0.2],
+		[i.q_fruitsdelight_kiwi_leaf_carpet,       0.2],
+		[i.q_fruitsdelight_lychee_leaf_carpet,     0.2],
+		[i.q_fruitsdelight_mango_leaf_carpet,      0.2],
+		[i.q_fruitsdelight_mangosteen_leaf_carpet, 0.2],
+		[i.q_fruitsdelight_orange_leaf_carpet,     0.2],
+		[i.q_fruitsdelight_peach_leaf_carpet,      0.2],
+		[i.q_fruitsdelight_pear_leaf_carpet,       0.2],
+		[i.q_fruitsdelight_persimmon_leaf_carpet,  0.2],
+		// farmersrespite
+		[i.black_tea_leaves,                       0.1],
+		[i.green_tea_leaves,                       0.3],
+		[i.yellow_tea_leaves,                      0.2],
+		// fruitsdelight
+		[i.fruitsdelight_apple_leaves,             0.3],
+		[i.bayberry_leaves,                        0.3],
+		[i.durian_leaves,                          0.3],
+		[i.fig_leaves,                             0.3],
+		[i.hawberry_leaves,                        0.3],
+		[i.kiwi_leaves,                            0.3],
+		[i.lychee_leaves,                          0.3],
+		[i.mango_leaves,                           0.3],
+		[i.mangosteen_leaves,                      0.3],
+		[i.orange_leaves,                          0.3],
+		[i.peach_leaves,                           0.3],
+		[i.pear_leaves,                            0.3],
+		[i.persimmon_leaves,                       0.3],
+		// immersive_weathering
+		[i.fruitsdelight_apple_leaf_pile,          0.3],
+		[i.fruitsdelight_bayberry_leaf_pile,       0.3],
+		[i.fruitsdelight_durian_leaf_pile,         0.3],
+		[i.fruitsdelight_fig_leaf_pile,            0.3],
+		[i.fruitsdelight_hawberry_leaf_pile,       0.3],
+		[i.fruitsdelight_kiwi_leaf_pile,           0.3],
+		[i.fruitsdelight_lychee_leaf_pile,         0.3],
+		[i.fruitsdelight_mango_leaf_pile,          0.3],
+		[i.fruitsdelight_mangosteen_leaf_pile,     0.3],
+		[i.fruitsdelight_orange_leaf_pile,         0.3],
+		[i.fruitsdelight_peach_leaf_pile,          0.3],
+		[i.fruitsdelight_pear_leaf_pile,           0.3],
+		[i.fruitsdelight_persimmon_leaf_pile,      0.3],
 	])
 
 	// ── flowers (27) ─────────────────────────────────────────────────────────────────
@@ -217,7 +283,7 @@
 		[i.glow_shroom,    0.65],
 	])
 
-	// ── crops (61) ───────────────────────────────────────────────────────────────────
+	// ── crops (80) ───────────────────────────────────────────────────────────────────
 	C.values('crops', [
 		// minecraft
 		[i.apple,                  0.65],
@@ -291,9 +357,30 @@
 		[i.taiga_grapes_red,       0.4],
 		[i.taiga_grapes_white,     0.4],
 		[i.white_grape,            0.4],
+		// corn_delight
+		[i.corn,                   0.65],
+		[i.corn_seeds,             0.35],
+		[i.wild_corn,              0.55],  // flower-tagged; kept with the crops like the other wild crops
+		// fruitsdelight
+		[i.bayberry,               0.65],
+		[i.blueberry,              0.15],
+		[i.cranberry,              0.15],
+		[i.fig,                    0.65],
+		[i.hamimelon,              0.65],
+		[i.hawberry,               0.65],
+		[i.kiwi,                   0.65],
+		[i.lemon,                  0.35],
+		[i.lychee,                 0.65],
+		[i.mango,                  0.65],
+		[i.mangosteen,             0.65],
+		[i.orange,                 0.65],
+		[i.peach,                  0.65],
+		[i.pear,                   0.65],
+		[i.persimmon,              0.65],
+		[i.pineapple,              0.65],
 	])
 
-	// ── baked (19) ───────────────────────────────────────────────────────────────────
+	// ── baked (20) ───────────────────────────────────────────────────────────────────
 	C.values('baked', [
 		// minecraft
 		[i.baked_potato,               0.85],
@@ -321,9 +408,11 @@
 		[i.boiled_blue_pickerelweed,   0.3],
 		[i.boiled_purple_pickerelweed, 0.3],
 		[i.mulberry_bread,             0.85],
+		// farmersrespite
+		[i.green_tea_cookie,           0.85],
 	])
 
-	// ── cakes_pies (41) ──────────────────────────────────────────────────────────────
+	// ── cakes_pies (45) ──────────────────────────────────────────────────────────────
 	C.values('cakes_pies', [
 		// minecraft
 		[i.cake,                                   1.0],
@@ -373,6 +462,11 @@
 		[i.vanilla_cake,                           1.0],
 		// upgrade_aquatic
 		[i.mulberry_pie,                           1.0],
+		// farmersrespite
+		[i.coffee_cake,                            1.0],
+		[i.coffee_cake_slice,                      0.85],
+		[i.rose_hip_pie,                           1.0],
+		[i.rose_hip_pie_slice,                     0.85],
 	])
 
 	// ── plant_matter (62) ────────────────────────────────────────────────────────────
@@ -448,7 +542,7 @@
 		[i.tongue_kelp_block,                0.5],
 	])
 
-	// ── plants (40) ──────────────────────────────────────────────────────────────────
+	// ── plants (44) ──────────────────────────────────────────────────────────────────
 	C.values('plants', [
 		// minecraft
 		[i.big_dripleaf,          0.65],
@@ -498,6 +592,12 @@
 		[i.tall_beachgrass,       0.65],
 		[i.thorny_kelp,           0.3],
 		[i.tongue_kelp,           0.3],
+		// farmersrespite
+		[i.wild_tea_bush,         0.65],
+		// fruitsdelight
+		[i.blueberry_bush,        0.65],
+		[i.lemon_tree,            0.65],
+		[i.wild_pineapple,        0.65],
 	])
 
 	// ── crates (68) ──────────────────────────────────────────────────────────────────
@@ -585,7 +685,7 @@
 		[i.white_grape_crate,                   1.0],
 	])
 
-	// ── other (137) ───────────────────────────────────────────────────────────────────
+	// ── other (154) ───────────────────────────────────────────────────────────────────
 	C.values('other', [
 		// minecraft
 		[i.carved_pumpkin,                     0.65],
@@ -741,5 +841,24 @@
 		[i.apple_mash,                         0.4],
 		[i.rotten_cherry,                      0.4],
 		[i.straw_hat,                          0.4],
+		// corn_delight
+		[i.boiled_corn,                        0.65],
+		[i.cornbread,                          0.85],
+		[i.cornbread_batter,                   0.85],
+		[i.grilled_corn,                       0.65],
+		[i.popcorn,                            0.5],
+		[i.taco,                               1.0],
+		[i.tortilla,                           0.75],
+		[i.tortilla_raw,                       0.75],
+		// farmersrespite
+		[i.coffee_berries,                     0.3],
+		[i.rose_hips,                          0.3],
+		// fruitsdelight
+		[i.durian,                             0.65],
+		[i.durian_flesh,                       0.3],
+		[i.durian_helmet,                      0.3],
+		[i.durian_shell,                       0.3],
+		[i.hamimelon_slice,                    0.5],
+		[i.pineapple_slice,                    0.5],
 	])
 })()

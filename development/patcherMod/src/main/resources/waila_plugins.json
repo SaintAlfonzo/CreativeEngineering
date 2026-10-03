@@ -5,5 +5,12 @@
     },
     "side": "client",
     "required": ["blockrunner"]
+  },
+  "creativeengineering:block_model_icon": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitBlockModelIcon"
+    },
+    "side": "client",
+    "required": ["displaydelight"]
   }
 }

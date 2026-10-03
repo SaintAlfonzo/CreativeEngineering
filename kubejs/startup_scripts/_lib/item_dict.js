@@ -54,12 +54,12 @@ i.ce_dragon_shield = 'creativeengineering:dragon_shield';
 i.ce_potion_bucket = 'creativeengineering:potion_bucket';
 i.ce_splash_potion_bucket = 'creativeengineering:splash_potion_bucket';
 i.ce_lingering_potion_bucket = 'creativeengineering:lingering_potion_bucket';
-// Camera bags - item inventory for Exposure gear (#creativeengineering:camera_equipment only).
-// Java items: patcherMod camerabag/ | slot counts: CEConfig [camera_bag] | recipes:
-// server_scripts/equipment/camera_bag.js (smithing upgrades keep the contents)
-i.leather_camera_bag = 'creativeengineering:leather_camera_bag';
-i.iron_camera_bag = 'creativeengineering:iron_camera_bag';
-i.netherite_camera_bag = 'creativeengineering:netherite_camera_bag';
+// Camera bags - item inventory for Exposure gear (#exposure_extras:camera_equipment only).
+// Java items: exposureBackport src/extras (mod exposure_extras) | slot counts: exposure_extras-common.toml
+// [camera_bag] | recipes: server_scripts/equipment/camera_bag.js (smithing upgrades keep the contents)
+i.leather_camera_bag = 'exposure_extras:leather_camera_bag';
+i.iron_camera_bag = 'exposure_extras:iron_camera_bag';
+i.netherite_camera_bag = 'exposure_extras:netherite_camera_bag';
 // Sample Syringe — one empty (reusable) item + one filled item per sampled animal, split
 // like book/written_book/enchanted_book instead of one item + NBT (NBT-matched ingredients
 // via .weakNBT()/PartialNBTIngredient kept silently matching zero items here - not worth
@@ -115,6 +115,8 @@ i.t_chest_wooden = '#forge:chests/wooden';
 i.t_chalks = '#chalk:chalks';
 i.t_loot_chalk = '#creativeengineering:loot/chalk';
 i.t_loot_golden_food = '#creativeengineering:loot/golden_food';
+i.t_trades_golden_food = '#creativeengineering:trades/golden_food';
+i.t_trades_canned_golden = '#creativeengineering:trades/canned_golden';
 i.t_cooking_oil_ingredients = '#rusticdelight:cooking_oil_ingredients';
 i.cauldron = 'minecraft:cauldron';
 i.leather = 'minecraft:leather';
@@ -12124,6 +12126,137 @@ i.oculemonade              = 'canned_goods:oculemonade';
 i.reef_cola                = 'canned_goods:reef_cola';
 i.soda                     = 'canned_goods:soda';
 
+// ===== corn_delight (9) =====
+i.caramel_popcorn    = 'corn_delight:caramel_popcorn';
+i.classic_corn_dog   = 'corn_delight:classic_corn_dog';
+i.corn_dog           = 'corn_delight:corn_dog';
+i.corn_soup          = 'corn_delight:corn_soup';
+i.cornbread_stuffing = 'corn_delight:cornbread_stuffing';
+i.creamed_corn       = 'corn_delight:creamed_corn';
+i.creamy_corn_drink  = 'corn_delight:creamy_corn_drink';
+i.nachos_bowl        = 'corn_delight:nachos_bowl';
+i.tortilla_chip      = 'corn_delight:tortilla_chip';
+
+// ===== farmersrespite (26) =====
+i.black_cod             = 'farmersrespite:black_cod';
+i.black_tea             = 'farmersrespite:black_tea';
+i.blazing_chili         = 'farmersrespite:blazing_chili';
+i.farmersrespite_coffee = 'farmersrespite:coffee';
+i.dandelion_tea         = 'farmersrespite:dandelion_tea';
+i.green_tea             = 'farmersrespite:green_tea';
+i.long_apple_cider      = 'farmersrespite:long_apple_cider';
+i.long_black_tea        = 'farmersrespite:long_black_tea';
+i.long_coffee           = 'farmersrespite:long_coffee';
+i.long_dandelion_tea    = 'farmersrespite:long_dandelion_tea';
+i.long_green_tea        = 'farmersrespite:long_green_tea';
+i.long_purulent_tea     = 'farmersrespite:long_purulent_tea';
+i.long_rose_hip_tea     = 'farmersrespite:long_rose_hip_tea';
+i.long_yellow_tea       = 'farmersrespite:long_yellow_tea';
+i.nether_wart_sourdough = 'farmersrespite:nether_wart_sourdough';
+i.purulent_tea          = 'farmersrespite:purulent_tea';
+i.rose_hip_tea          = 'farmersrespite:rose_hip_tea';
+i.strong_apple_cider    = 'farmersrespite:strong_apple_cider';
+i.strong_black_tea      = 'farmersrespite:strong_black_tea';
+i.strong_coffee         = 'farmersrespite:strong_coffee';
+i.strong_green_tea      = 'farmersrespite:strong_green_tea';
+i.strong_purulent_tea   = 'farmersrespite:strong_purulent_tea';
+i.strong_rose_hip_tea   = 'farmersrespite:strong_rose_hip_tea';
+i.strong_yellow_tea     = 'farmersrespite:strong_yellow_tea';
+i.tea_curry             = 'farmersrespite:tea_curry';
+i.yellow_tea            = 'farmersrespite:yellow_tea';
+
+// ===== fruitsdelight (90) =====
+i.apple_jello                  = 'fruitsdelight:apple_jello';
+i.apple_jelly                  = 'fruitsdelight:apple_jelly';
+i.baked_durian                 = 'fruitsdelight:baked_durian';
+i.baked_pear                   = 'fruitsdelight:baked_pear';
+i.bayberry_cookie              = 'fruitsdelight:bayberry_cookie';
+i.bayberry_jello               = 'fruitsdelight:bayberry_jello';
+i.bayberry_jelly               = 'fruitsdelight:bayberry_jelly';
+i.bayberry_soup                = 'fruitsdelight:bayberry_soup';
+i.bellini_cocktail             = 'fruitsdelight:bellini_cocktail';
+i.blueberry_custard            = 'fruitsdelight:blueberry_custard';
+i.blueberry_jello              = 'fruitsdelight:blueberry_jello';
+i.blueberry_jelly              = 'fruitsdelight:blueberry_jelly';
+i.blueberry_muffin             = 'fruitsdelight:blueberry_muffin';
+i.bowl_of_pineapple_fried_rice = 'fruitsdelight:bowl_of_pineapple_fried_rice';
+i.chorus_jello                 = 'fruitsdelight:chorus_jello';
+i.chorus_jelly                 = 'fruitsdelight:chorus_jelly';
+i.cranberry_cookie             = 'fruitsdelight:cranberry_cookie';
+i.cranberry_jello              = 'fruitsdelight:cranberry_jello';
+i.cranberry_jelly              = 'fruitsdelight:cranberry_jelly';
+i.cranberry_muffin             = 'fruitsdelight:cranberry_muffin';
+i.dried_persimmon              = 'fruitsdelight:dried_persimmon';
+i.durian_jello                 = 'fruitsdelight:durian_jello';
+i.durian_jelly                 = 'fruitsdelight:durian_jelly';
+i.durian_pie                   = 'fruitsdelight:durian_pie';
+i.fig_chicken_stew             = 'fruitsdelight:fig_chicken_stew';
+i.fig_jello                    = 'fruitsdelight:fig_jello';
+i.fig_jelly                    = 'fruitsdelight:fig_jelly';
+i.fig_pudding_slice            = 'fruitsdelight:fig_pudding_slice';
+i.fig_tart                     = 'fruitsdelight:fig_tart';
+i.glowberry_jello              = 'fruitsdelight:glowberry_jello';
+i.glowberry_jelly              = 'fruitsdelight:glowberry_jelly';
+i.hamimelon_jello              = 'fruitsdelight:hamimelon_jello';
+i.hamimelon_jelly              = 'fruitsdelight:hamimelon_jelly';
+i.hamimelon_juice              = 'fruitsdelight:hamimelon_juice';
+i.hamimelon_popsicle           = 'fruitsdelight:hamimelon_popsicle';
+i.hamimelon_shaved_ice         = 'fruitsdelight:hamimelon_shaved_ice';
+i.hawberry_jello               = 'fruitsdelight:hawberry_jello';
+i.hawberry_jelly               = 'fruitsdelight:hawberry_jelly';
+i.hawberry_roll                = 'fruitsdelight:hawberry_roll';
+i.hawberry_sheet               = 'fruitsdelight:hawberry_sheet';
+i.hawberry_stick               = 'fruitsdelight:hawberry_stick';
+i.hawberry_tea                 = 'fruitsdelight:hawberry_tea';
+i.jelly_bread                  = 'fruitsdelight:jelly_bread';
+i.kiwi_jello                   = 'fruitsdelight:kiwi_jello';
+i.kiwi_jelly                   = 'fruitsdelight:kiwi_jelly';
+i.kiwi_juice                   = 'fruitsdelight:kiwi_juice';
+i.kiwi_popsicle                = 'fruitsdelight:kiwi_popsicle';
+i.lemon_cookie                 = 'fruitsdelight:lemon_cookie';
+i.lemon_jello                  = 'fruitsdelight:lemon_jello';
+i.lemon_jelly                  = 'fruitsdelight:lemon_jelly';
+i.lemon_juice                  = 'fruitsdelight:lemon_juice';
+i.lemon_slice                  = 'fruitsdelight:lemon_slice';
+i.lemon_tart                   = 'fruitsdelight:lemon_tart';
+i.lychee_cherry_tea            = 'fruitsdelight:lychee_cherry_tea';
+i.lychee_chicken               = 'fruitsdelight:lychee_chicken';
+i.lychee_jello                 = 'fruitsdelight:lychee_jello';
+i.lychee_jelly                 = 'fruitsdelight:lychee_jelly';
+i.mango_jello                  = 'fruitsdelight:mango_jello';
+i.mango_jelly                  = 'fruitsdelight:mango_jelly';
+i.mango_milkshake              = 'fruitsdelight:mango_milkshake';
+i.mango_salad                  = 'fruitsdelight:mango_salad';
+i.mango_tea                    = 'fruitsdelight:mango_tea';
+i.mangosteen_cake              = 'fruitsdelight:mangosteen_cake';
+i.mangosteen_jello             = 'fruitsdelight:mangosteen_jello';
+i.mangosteen_jelly             = 'fruitsdelight:mangosteen_jelly';
+i.mangosteen_tea               = 'fruitsdelight:mangosteen_tea';
+i.melon_jello                  = 'fruitsdelight:melon_jello';
+i.melon_jelly                  = 'fruitsdelight:melon_jelly';
+i.orange_chicken               = 'fruitsdelight:orange_chicken';
+i.orange_jello                 = 'fruitsdelight:orange_jello';
+i.orange_jelly                 = 'fruitsdelight:orange_jelly';
+i.orange_juice                 = 'fruitsdelight:orange_juice';
+i.orange_marinated_pork        = 'fruitsdelight:orange_marinated_pork';
+i.orange_slice                 = 'fruitsdelight:orange_slice';
+i.peach_jello                  = 'fruitsdelight:peach_jello';
+i.peach_jelly                  = 'fruitsdelight:peach_jelly';
+i.peach_tea                    = 'fruitsdelight:peach_tea';
+i.pear_jello                   = 'fruitsdelight:pear_jello';
+i.pear_jelly                   = 'fruitsdelight:pear_jelly';
+i.pear_juice                   = 'fruitsdelight:pear_juice';
+i.pear_with_rock_sugar         = 'fruitsdelight:pear_with_rock_sugar';
+i.persimmon_cookie             = 'fruitsdelight:persimmon_cookie';
+i.persimmon_jello              = 'fruitsdelight:persimmon_jello';
+i.persimmon_jelly              = 'fruitsdelight:persimmon_jelly';
+i.pineapple_jello              = 'fruitsdelight:pineapple_jello';
+i.pineapple_jelly              = 'fruitsdelight:pineapple_jelly';
+i.pineapple_marinated_pork     = 'fruitsdelight:pineapple_marinated_pork';
+i.pineapple_pie                = 'fruitsdelight:pineapple_pie';
+i.sweetberry_jello             = 'fruitsdelight:sweetberry_jello';
+i.sweetberry_jelly             = 'fruitsdelight:sweetberry_jelly';
+
 // ===== goldenfood (45) =====
 i.enchanted_golden_baked_potato    = 'goldenfood:enchanted_golden_baked_potato';
 i.enchanted_golden_beetroot        = 'goldenfood:enchanted_golden_beetroot';
@@ -12170,6 +12303,39 @@ i.golden_mushroom_stew             = 'goldenfood:golden_mushroom_stew';
 i.golden_pumpkin_pie               = 'goldenfood:golden_pumpkin_pie';
 i.golden_rabbit_stew               = 'goldenfood:golden_rabbit_stew';
 i.golden_sweet_berries             = 'goldenfood:golden_sweet_berries';
+
+// ===== moredelight (31) =====
+i.bread_slice                          = 'moredelight:bread_slice';
+i.carrot_soup                          = 'moredelight:carrot_soup';
+i.chicken_salad                        = 'moredelight:chicken_salad';
+i.chicken_sandwich_with_egg_and_tomato = 'moredelight:chicken_sandwich_with_egg_and_tomato';
+i.chocolate_popsicle                   = 'moredelight:chocolate_popsicle';
+i.cooked_rice_with_beef                = 'moredelight:cooked_rice_with_beef';
+i.cooked_rice_with_chicken_cuts        = 'moredelight:cooked_rice_with_chicken_cuts';
+i.cooked_rice_with_porkchop            = 'moredelight:cooked_rice_with_porkchop';
+i.creamy_pasta_with_chicken_cuts       = 'moredelight:creamy_pasta_with_chicken_cuts';
+i.creamy_pasta_with_ham                = 'moredelight:creamy_pasta_with_ham';
+i.diced_potatoes                       = 'moredelight:diced_potatoes';
+i.diced_potatoes_with_beef             = 'moredelight:diced_potatoes_with_beef';
+i.diced_potatoes_with_chicken_cuts     = 'moredelight:diced_potatoes_with_chicken_cuts';
+i.diced_potatoes_with_egg_and_tomato   = 'moredelight:diced_potatoes_with_egg_and_tomato';
+i.diced_potatoes_with_porkchop         = 'moredelight:diced_potatoes_with_porkchop';
+i.egg_with_bacon_sandwich              = 'moredelight:egg_with_bacon_sandwich';
+i.hamburger_with_egg                   = 'moredelight:hamburger_with_egg';
+i.loaded_hamburger                     = 'moredelight:loaded_hamburger';
+i.mashed_potatoes                      = 'moredelight:mashed_potatoes';
+i.omelette                             = 'moredelight:omelette';
+i.porkchop_sandwich                    = 'moredelight:porkchop_sandwich';
+i.moredelight_potato_salad             = 'moredelight:potato_salad';
+i.simple_hamburger                     = 'moredelight:simple_hamburger';
+i.steak_sandwich                       = 'moredelight:steak_sandwich';
+i.toast                                = 'moredelight:toast';
+i.toast_with_chocolate                 = 'moredelight:toast_with_chocolate';
+i.toast_with_egg                       = 'moredelight:toast_with_egg';
+i.toast_with_glow_berries              = 'moredelight:toast_with_glow_berries';
+i.toast_with_honey                     = 'moredelight:toast_with_honey';
+i.toast_with_sweet_berries             = 'moredelight:toast_with_sweet_berries';
+i.tomato_sandwich                      = 'moredelight:tomato_sandwich';
 
 // ===== neapolitan (38) =====
 i.adzuki_bun                 = 'neapolitan:adzuki_bun';
@@ -12266,6 +12432,12 @@ i.stuffed_bell_pepper_yellow = 'rusticdelight:stuffed_bell_pepper_yellow';
 i.golden_lunchbox = 'solapplepie:golden_lunchbox';
 i.lunchbag        = 'solapplepie:lunchbag';
 i.lunchbox        = 'solapplepie:lunchbox';
+
+// ===== untitledduckmod (4) =====
+i.cooked_duck  = 'untitledduckmod:cooked_duck';
+i.cooked_goose = 'untitledduckmod:cooked_goose';
+i.raw_duck     = 'untitledduckmod:raw_duck';
+i.raw_goose    = 'untitledduckmod:raw_goose';
 
 // ===== upgrade_aquatic (11) =====
 i.boiled_blue_pickerelweed   = 'upgrade_aquatic:boiled_blue_pickerelweed';
@@ -12380,13 +12552,53 @@ i.glow_berry_pips    = 'berry_good:glow_berry_pips';
 i.sweet_berry_basket = 'berry_good:sweet_berry_basket';
 i.sweet_berry_pips   = 'berry_good:sweet_berry_pips';
 
-// ===== everycomp (1) =====
-i.q_myrtrees_rubberwood_leaf_carpet = 'everycomp:q/myrtrees/rubberwood_leaf_carpet';
+// ===== corn_delight (11) =====
+i.boiled_corn      = 'corn_delight:boiled_corn';
+i.corn             = 'corn_delight:corn';
+i.corn_seeds       = 'corn_delight:corn_seeds';
+i.cornbread        = 'corn_delight:cornbread';
+i.cornbread_batter = 'corn_delight:cornbread_batter';
+i.grilled_corn     = 'corn_delight:grilled_corn';
+i.popcorn          = 'corn_delight:popcorn';
+i.taco             = 'corn_delight:taco';
+i.tortilla         = 'corn_delight:tortilla';
+i.tortilla_raw     = 'corn_delight:tortilla_raw';
+i.wild_corn        = 'corn_delight:wild_corn';
+
+// ===== everycomp (14) =====
+i.q_fruitsdelight_apple_leaf_carpet      = 'everycomp:q/fruitsdelight/apple_leaf_carpet';
+i.q_fruitsdelight_bayberry_leaf_carpet   = 'everycomp:q/fruitsdelight/bayberry_leaf_carpet';
+i.q_fruitsdelight_durian_leaf_carpet     = 'everycomp:q/fruitsdelight/durian_leaf_carpet';
+i.q_fruitsdelight_fig_leaf_carpet        = 'everycomp:q/fruitsdelight/fig_leaf_carpet';
+i.q_fruitsdelight_hawberry_leaf_carpet   = 'everycomp:q/fruitsdelight/hawberry_leaf_carpet';
+i.q_fruitsdelight_kiwi_leaf_carpet       = 'everycomp:q/fruitsdelight/kiwi_leaf_carpet';
+i.q_fruitsdelight_lychee_leaf_carpet     = 'everycomp:q/fruitsdelight/lychee_leaf_carpet';
+i.q_fruitsdelight_mango_leaf_carpet      = 'everycomp:q/fruitsdelight/mango_leaf_carpet';
+i.q_fruitsdelight_mangosteen_leaf_carpet = 'everycomp:q/fruitsdelight/mangosteen_leaf_carpet';
+i.q_fruitsdelight_orange_leaf_carpet     = 'everycomp:q/fruitsdelight/orange_leaf_carpet';
+i.q_fruitsdelight_peach_leaf_carpet      = 'everycomp:q/fruitsdelight/peach_leaf_carpet';
+i.q_fruitsdelight_pear_leaf_carpet       = 'everycomp:q/fruitsdelight/pear_leaf_carpet';
+i.q_fruitsdelight_persimmon_leaf_carpet  = 'everycomp:q/fruitsdelight/persimmon_leaf_carpet';
+i.q_myrtrees_rubberwood_leaf_carpet      = 'everycomp:q/myrtrees/rubberwood_leaf_carpet';
 
 // ===== fantasyfurniture (3) =====
 i.decorations_berry_basket_blueberry  = 'fantasyfurniture:decorations/berry_basket_blueberry';
 i.decorations_berry_basket_strawberry = 'fantasyfurniture:decorations/berry_basket_strawberry';
 i.decorations_berry_basket_sweetberry = 'fantasyfurniture:decorations/berry_basket_sweetberry';
+
+// ===== farmersrespite (12) =====
+i.black_tea_leaves   = 'farmersrespite:black_tea_leaves';
+i.coffee_berries     = 'farmersrespite:coffee_berries';
+i.coffee_cake        = 'farmersrespite:coffee_cake';
+i.coffee_cake_slice  = 'farmersrespite:coffee_cake_slice';
+i.green_tea_cookie   = 'farmersrespite:green_tea_cookie';
+i.green_tea_leaves   = 'farmersrespite:green_tea_leaves';
+i.rose_hip_pie       = 'farmersrespite:rose_hip_pie';
+i.rose_hip_pie_slice = 'farmersrespite:rose_hip_pie_slice';
+i.rose_hips          = 'farmersrespite:rose_hips';
+i.tea_seeds          = 'farmersrespite:tea_seeds';
+i.wild_tea_bush      = 'farmersrespite:wild_tea_bush';
+i.yellow_tea_leaves  = 'farmersrespite:yellow_tea_leaves';
 
 // ===== floralench (14) =====
 i.allium_basket             = 'floralench:allium_basket';
@@ -12404,16 +12616,85 @@ i.red_tulip_basket          = 'floralench:red_tulip_basket';
 i.white_tulip_basket        = 'floralench:white_tulip_basket';
 i.wither_rose_basket        = 'floralench:wither_rose_basket';
 
-// ===== immersive_weathering (9) =====
-i.create_dd_rose_bark             = 'immersive_weathering:create_dd/rose_bark';
-i.create_dd_rubber_bark           = 'immersive_weathering:create_dd/rubber_bark';
-i.create_dd_smoked_bark           = 'immersive_weathering:create_dd/smoked_bark';
-i.create_dd_spirit_bark           = 'immersive_weathering:create_dd/spirit_bark';
-i.myrtrees_rubberwood_bark        = 'immersive_weathering:myrtrees/rubberwood_bark';
-i.myrtrees_rubberwood_leaf_pile   = 'immersive_weathering:myrtrees/rubberwood_leaf_pile';
-i.upgrade_aquatic_driftwood_bark  = 'immersive_weathering:upgrade_aquatic/driftwood_bark';
-i.upgrade_aquatic_river_bark      = 'immersive_weathering:upgrade_aquatic/river_bark';
-i.upgrade_aquatic_river_leaf_pile = 'immersive_weathering:upgrade_aquatic/river_leaf_pile';
+// ===== fruitsdelight (54) =====
+i.fruitsdelight_apple_leaves = 'fruitsdelight:apple_leaves';
+i.apple_sapling              = 'fruitsdelight:apple_sapling';
+i.bayberry                   = 'fruitsdelight:bayberry';
+i.bayberry_leaves            = 'fruitsdelight:bayberry_leaves';
+i.bayberry_sapling           = 'fruitsdelight:bayberry_sapling';
+i.blueberry                  = 'fruitsdelight:blueberry';
+i.blueberry_bush             = 'fruitsdelight:blueberry_bush';
+i.cranberry                  = 'fruitsdelight:cranberry';
+i.durian                     = 'fruitsdelight:durian';
+i.durian_flesh               = 'fruitsdelight:durian_flesh';
+i.durian_helmet              = 'fruitsdelight:durian_helmet';
+i.durian_leaves              = 'fruitsdelight:durian_leaves';
+i.durian_sapling             = 'fruitsdelight:durian_sapling';
+i.durian_shell               = 'fruitsdelight:durian_shell';
+i.fig                        = 'fruitsdelight:fig';
+i.fig_leaves                 = 'fruitsdelight:fig_leaves';
+i.fig_sapling                = 'fruitsdelight:fig_sapling';
+i.hamimelon                  = 'fruitsdelight:hamimelon';
+i.hamimelon_seeds            = 'fruitsdelight:hamimelon_seeds';
+i.hamimelon_slice            = 'fruitsdelight:hamimelon_slice';
+i.hawberry                   = 'fruitsdelight:hawberry';
+i.hawberry_leaves            = 'fruitsdelight:hawberry_leaves';
+i.hawberry_sapling           = 'fruitsdelight:hawberry_sapling';
+i.kiwi                       = 'fruitsdelight:kiwi';
+i.kiwi_leaves                = 'fruitsdelight:kiwi_leaves';
+i.kiwi_sapling               = 'fruitsdelight:kiwi_sapling';
+i.lemon                      = 'fruitsdelight:lemon';
+i.lemon_seeds                = 'fruitsdelight:lemon_seeds';
+i.lemon_tree                 = 'fruitsdelight:lemon_tree';
+i.lychee                     = 'fruitsdelight:lychee';
+i.lychee_leaves              = 'fruitsdelight:lychee_leaves';
+i.lychee_sapling             = 'fruitsdelight:lychee_sapling';
+i.mango                      = 'fruitsdelight:mango';
+i.mango_leaves               = 'fruitsdelight:mango_leaves';
+i.mango_sapling              = 'fruitsdelight:mango_sapling';
+i.mangosteen                 = 'fruitsdelight:mangosteen';
+i.mangosteen_leaves          = 'fruitsdelight:mangosteen_leaves';
+i.mangosteen_sapling         = 'fruitsdelight:mangosteen_sapling';
+i.orange                     = 'fruitsdelight:orange';
+i.orange_leaves              = 'fruitsdelight:orange_leaves';
+i.orange_sapling             = 'fruitsdelight:orange_sapling';
+i.peach                      = 'fruitsdelight:peach';
+i.peach_leaves               = 'fruitsdelight:peach_leaves';
+i.peach_sapling              = 'fruitsdelight:peach_sapling';
+i.pear                       = 'fruitsdelight:pear';
+i.pear_leaves                = 'fruitsdelight:pear_leaves';
+i.pear_sapling               = 'fruitsdelight:pear_sapling';
+i.persimmon                  = 'fruitsdelight:persimmon';
+i.persimmon_leaves           = 'fruitsdelight:persimmon_leaves';
+i.persimmon_sapling          = 'fruitsdelight:persimmon_sapling';
+i.pineapple                  = 'fruitsdelight:pineapple';
+i.pineapple_sapling          = 'fruitsdelight:pineapple_sapling';
+i.pineapple_slice            = 'fruitsdelight:pineapple_slice';
+i.wild_pineapple             = 'fruitsdelight:wild_pineapple';
+
+// ===== immersive_weathering (22) =====
+i.create_dd_rose_bark                = 'immersive_weathering:create_dd/rose_bark';
+i.create_dd_rubber_bark              = 'immersive_weathering:create_dd/rubber_bark';
+i.create_dd_smoked_bark              = 'immersive_weathering:create_dd/smoked_bark';
+i.create_dd_spirit_bark              = 'immersive_weathering:create_dd/spirit_bark';
+i.fruitsdelight_apple_leaf_pile      = 'immersive_weathering:fruitsdelight/apple_leaf_pile';
+i.fruitsdelight_bayberry_leaf_pile   = 'immersive_weathering:fruitsdelight/bayberry_leaf_pile';
+i.fruitsdelight_durian_leaf_pile     = 'immersive_weathering:fruitsdelight/durian_leaf_pile';
+i.fruitsdelight_fig_leaf_pile        = 'immersive_weathering:fruitsdelight/fig_leaf_pile';
+i.fruitsdelight_hawberry_leaf_pile   = 'immersive_weathering:fruitsdelight/hawberry_leaf_pile';
+i.fruitsdelight_kiwi_leaf_pile       = 'immersive_weathering:fruitsdelight/kiwi_leaf_pile';
+i.fruitsdelight_lychee_leaf_pile     = 'immersive_weathering:fruitsdelight/lychee_leaf_pile';
+i.fruitsdelight_mango_leaf_pile      = 'immersive_weathering:fruitsdelight/mango_leaf_pile';
+i.fruitsdelight_mangosteen_leaf_pile = 'immersive_weathering:fruitsdelight/mangosteen_leaf_pile';
+i.fruitsdelight_orange_leaf_pile     = 'immersive_weathering:fruitsdelight/orange_leaf_pile';
+i.fruitsdelight_peach_leaf_pile      = 'immersive_weathering:fruitsdelight/peach_leaf_pile';
+i.fruitsdelight_pear_leaf_pile       = 'immersive_weathering:fruitsdelight/pear_leaf_pile';
+i.fruitsdelight_persimmon_leaf_pile  = 'immersive_weathering:fruitsdelight/persimmon_leaf_pile';
+i.myrtrees_rubberwood_bark           = 'immersive_weathering:myrtrees/rubberwood_bark';
+i.myrtrees_rubberwood_leaf_pile      = 'immersive_weathering:myrtrees/rubberwood_leaf_pile';
+i.upgrade_aquatic_driftwood_bark     = 'immersive_weathering:upgrade_aquatic/driftwood_bark';
+i.upgrade_aquatic_river_bark         = 'immersive_weathering:upgrade_aquatic/river_bark';
+i.upgrade_aquatic_river_leaf_pile    = 'immersive_weathering:upgrade_aquatic/river_leaf_pile';
 
 // ===== neapolitan (41) =====
 i.adzuki_beans                  = 'neapolitan:adzuki_beans';
@@ -12598,13 +12879,210 @@ i.high_sensitivity_instant_color_slide           = 'exposure_polaroid:high_sensi
 i.instant_black_and_white_slide                  = 'exposure_polaroid:instant_black_and_white_slide';
 i.instant_camera                                 = 'exposure_polaroid:instant_camera';
 i.instant_color_slide                            = 'exposure_polaroid:instant_color_slide';
-// tags. t_camera_equipment = what a camera bag accepts (server_scripts/tags/equipmenttags.js, patcherMod camerabag/)
+// tags. t_camera_equipment = what a camera bag accepts (server_scripts/tags/equipmenttags.js, exposureBackport src/extras)
 i.t_exposure_film_rolls           = '#exposure:film_rolls';
 i.t_exposure_developed_film_rolls = '#exposure:developed_film_rolls';
 i.t_exposure_lenses               = '#exposure:lenses';
 i.t_exposure_filters              = '#exposure:filters';
 i.t_exposure_flashes              = '#exposure:flashes';
-i.t_camera_equipment              = '#creativeengineering:camera_equipment';
+i.t_camera_equipment              = '#exposure_extras:camera_equipment';
+
+// ############################## New mods 1.0.4 (generated 2026-10-02) ##############################
+// Every item of the mods added since 1.0.2 that no section above maps yet (from kubejs/exported/items_by_mod).
+// Key = bare leaf, else <ns>_leaf, else the full path, else <ns>_ + full path.
+
+// ===== farmersrespite  -  12 new  (50 items, 38 already mapped) =====
+i.black_tea_leaves_sack       = 'farmersrespite:black_tea_leaves_sack';
+i.farmersrespite_coffee_beans = 'farmersrespite:coffee_beans';
+i.coffee_beans_sack           = 'farmersrespite:coffee_beans_sack';
+i.gamblers_tea                = 'farmersrespite:gamblers_tea';
+i.green_tea_leaves_sack       = 'farmersrespite:green_tea_leaves_sack';
+i.kettle                      = 'farmersrespite:kettle';
+i.long_gamblers_tea           = 'farmersrespite:long_gamblers_tea';
+i.strong_gamblers_tea         = 'farmersrespite:strong_gamblers_tea';
+i.strong_hot_cocoa            = 'farmersrespite:strong_hot_cocoa';
+i.strong_melon_juice          = 'farmersrespite:strong_melon_juice';
+i.wild_coffee_bush            = 'farmersrespite:wild_coffee_bush';
+i.yellow_tea_leaves_sack      = 'farmersrespite:yellow_tea_leaves_sack';
+
+// ===== corn_delight  -  4 new  (24 items, 20 already mapped) =====
+i.corn_crate      = 'corn_delight:corn_crate';
+i.corn_kernel_bag = 'corn_delight:corn_kernel_bag';
+i.nachos_block    = 'corn_delight:nachos_block';
+i.popcorn_box     = 'corn_delight:popcorn_box';
+
+// ===== moredelight  -  2 new  (33 items, 31 already mapped) =====
+i.stone_knife  = 'moredelight:stone_knife';
+i.wooden_knife = 'moredelight:wooden_knife';
+
+// ===== fruitsdelight  -  130 new  (274 items, 144 already mapped) =====
+i.apple_cauldron            = 'fruitsdelight:apple_cauldron';
+i.fruitsdelight_apple_crate = 'fruitsdelight:apple_crate';
+i.apple_jello_block         = 'fruitsdelight:apple_jello_block';
+i.apple_jello_cauldron      = 'fruitsdelight:apple_jello_cauldron';
+i.apple_jelly_block         = 'fruitsdelight:apple_jelly_block';
+i.apple_jelly_cauldron      = 'fruitsdelight:apple_jelly_cauldron';
+i.bayberry_cauldron         = 'fruitsdelight:bayberry_cauldron';
+i.bayberry_crate            = 'fruitsdelight:bayberry_crate';
+i.bayberry_jello_block      = 'fruitsdelight:bayberry_jello_block';
+i.bayberry_jello_cauldron   = 'fruitsdelight:bayberry_jello_cauldron';
+i.bayberry_jelly_block      = 'fruitsdelight:bayberry_jelly_block';
+i.bayberry_jelly_cauldron   = 'fruitsdelight:bayberry_jelly_cauldron';
+i.blueberry_cauldron        = 'fruitsdelight:blueberry_cauldron';
+i.blueberry_crate           = 'fruitsdelight:blueberry_crate';
+i.blueberry_jello_block     = 'fruitsdelight:blueberry_jello_block';
+i.blueberry_jello_cauldron  = 'fruitsdelight:blueberry_jello_cauldron';
+i.blueberry_jelly_block     = 'fruitsdelight:blueberry_jelly_block';
+i.blueberry_jelly_cauldron  = 'fruitsdelight:blueberry_jelly_cauldron';
+i.chorus_cauldron           = 'fruitsdelight:chorus_cauldron';
+i.chorus_jello_block        = 'fruitsdelight:chorus_jello_block';
+i.chorus_jello_cauldron     = 'fruitsdelight:chorus_jello_cauldron';
+i.chorus_jelly_block        = 'fruitsdelight:chorus_jelly_block';
+i.chorus_jelly_cauldron     = 'fruitsdelight:chorus_jelly_cauldron';
+i.cranberry_cauldron        = 'fruitsdelight:cranberry_cauldron';
+i.cranberry_crate           = 'fruitsdelight:cranberry_crate';
+i.cranberry_jello_block     = 'fruitsdelight:cranberry_jello_block';
+i.cranberry_jello_cauldron  = 'fruitsdelight:cranberry_jello_cauldron';
+i.cranberry_jelly_block     = 'fruitsdelight:cranberry_jelly_block';
+i.cranberry_jelly_cauldron  = 'fruitsdelight:cranberry_jelly_cauldron';
+i.dummy_cauldron            = 'fruitsdelight:dummy_cauldron';
+i.durian_cauldron           = 'fruitsdelight:durian_cauldron';
+i.durian_jello_block        = 'fruitsdelight:durian_jello_block';
+i.durian_jello_cauldron     = 'fruitsdelight:durian_jello_cauldron';
+i.durian_jelly_block        = 'fruitsdelight:durian_jelly_block';
+i.durian_jelly_cauldron     = 'fruitsdelight:durian_jelly_cauldron';
+i.fig_cauldron              = 'fruitsdelight:fig_cauldron';
+i.fig_crate                 = 'fruitsdelight:fig_crate';
+i.fig_jello_block           = 'fruitsdelight:fig_jello_block';
+i.fig_jello_cauldron        = 'fruitsdelight:fig_jello_cauldron';
+i.fig_jelly_block           = 'fruitsdelight:fig_jelly_block';
+i.fig_jelly_cauldron        = 'fruitsdelight:fig_jelly_cauldron';
+i.fig_pudding               = 'fruitsdelight:fig_pudding';
+i.glowberry_cauldron        = 'fruitsdelight:glowberry_cauldron';
+i.glowberry_jello_block     = 'fruitsdelight:glowberry_jello_block';
+i.glowberry_jello_cauldron  = 'fruitsdelight:glowberry_jello_cauldron';
+i.glowberry_jelly_block     = 'fruitsdelight:glowberry_jelly_block';
+i.glowberry_jelly_cauldron  = 'fruitsdelight:glowberry_jelly_cauldron';
+i.hamimelon_cauldron        = 'fruitsdelight:hamimelon_cauldron';
+i.hamimelon_jello_block     = 'fruitsdelight:hamimelon_jello_block';
+i.hamimelon_jello_cauldron  = 'fruitsdelight:hamimelon_jello_cauldron';
+i.hamimelon_jelly_block     = 'fruitsdelight:hamimelon_jelly_block';
+i.hamimelon_jelly_cauldron  = 'fruitsdelight:hamimelon_jelly_cauldron';
+i.hawberry_cauldron         = 'fruitsdelight:hawberry_cauldron';
+i.hawberry_crate            = 'fruitsdelight:hawberry_crate';
+i.hawberry_jello_block      = 'fruitsdelight:hawberry_jello_block';
+i.hawberry_jello_cauldron   = 'fruitsdelight:hawberry_jello_cauldron';
+i.hawberry_jelly_block      = 'fruitsdelight:hawberry_jelly_block';
+i.hawberry_jelly_cauldron   = 'fruitsdelight:hawberry_jelly_cauldron';
+i.kiwi_cauldron             = 'fruitsdelight:kiwi_cauldron';
+i.kiwi_crate                = 'fruitsdelight:kiwi_crate';
+i.kiwi_jello_block          = 'fruitsdelight:kiwi_jello_block';
+i.kiwi_jello_cauldron       = 'fruitsdelight:kiwi_jello_cauldron';
+i.kiwi_jelly_block          = 'fruitsdelight:kiwi_jelly_block';
+i.kiwi_jelly_cauldron       = 'fruitsdelight:kiwi_jelly_cauldron';
+i.lemon_cauldron            = 'fruitsdelight:lemon_cauldron';
+i.lemon_crate               = 'fruitsdelight:lemon_crate';
+i.lemon_jello_block         = 'fruitsdelight:lemon_jello_block';
+i.lemon_jello_cauldron      = 'fruitsdelight:lemon_jello_cauldron';
+i.lemon_jelly_block         = 'fruitsdelight:lemon_jelly_block';
+i.lemon_jelly_cauldron      = 'fruitsdelight:lemon_jelly_cauldron';
+i.lemonade_cauldron         = 'fruitsdelight:lemonade_cauldron';
+i.lychee_cauldron           = 'fruitsdelight:lychee_cauldron';
+i.lychee_crate              = 'fruitsdelight:lychee_crate';
+i.lychee_jello_block        = 'fruitsdelight:lychee_jello_block';
+i.lychee_jello_cauldron     = 'fruitsdelight:lychee_jello_cauldron';
+i.lychee_jelly_block        = 'fruitsdelight:lychee_jelly_block';
+i.lychee_jelly_cauldron     = 'fruitsdelight:lychee_jelly_cauldron';
+i.mango_cauldron            = 'fruitsdelight:mango_cauldron';
+i.mango_crate               = 'fruitsdelight:mango_crate';
+i.mango_jello_block         = 'fruitsdelight:mango_jello_block';
+i.mango_jello_cauldron      = 'fruitsdelight:mango_jello_cauldron';
+i.mango_jelly_block         = 'fruitsdelight:mango_jelly_block';
+i.mango_jelly_cauldron      = 'fruitsdelight:mango_jelly_cauldron';
+i.mangosteen_cauldron       = 'fruitsdelight:mangosteen_cauldron';
+i.mangosteen_crate          = 'fruitsdelight:mangosteen_crate';
+i.mangosteen_jello_block    = 'fruitsdelight:mangosteen_jello_block';
+i.mangosteen_jello_cauldron = 'fruitsdelight:mangosteen_jello_cauldron';
+i.mangosteen_jelly_block    = 'fruitsdelight:mangosteen_jelly_block';
+i.mangosteen_jelly_cauldron = 'fruitsdelight:mangosteen_jelly_cauldron';
+i.melon_cauldron            = 'fruitsdelight:melon_cauldron';
+i.melon_jello_block         = 'fruitsdelight:melon_jello_block';
+i.melon_jello_cauldron      = 'fruitsdelight:melon_jello_cauldron';
+i.melon_jelly_block         = 'fruitsdelight:melon_jelly_block';
+i.melon_jelly_cauldron      = 'fruitsdelight:melon_jelly_cauldron';
+i.orange_cauldron           = 'fruitsdelight:orange_cauldron';
+i.orange_crate              = 'fruitsdelight:orange_crate';
+i.orange_jello_block        = 'fruitsdelight:orange_jello_block';
+i.orange_jello_cauldron     = 'fruitsdelight:orange_jello_cauldron';
+i.orange_jelly_block        = 'fruitsdelight:orange_jelly_block';
+i.orange_jelly_cauldron     = 'fruitsdelight:orange_jelly_cauldron';
+i.peach_cauldron            = 'fruitsdelight:peach_cauldron';
+i.peach_crate               = 'fruitsdelight:peach_crate';
+i.peach_jello_block         = 'fruitsdelight:peach_jello_block';
+i.peach_jello_cauldron      = 'fruitsdelight:peach_jello_cauldron';
+i.peach_jelly_block         = 'fruitsdelight:peach_jelly_block';
+i.peach_jelly_cauldron      = 'fruitsdelight:peach_jelly_cauldron';
+i.pear_cauldron             = 'fruitsdelight:pear_cauldron';
+i.pear_crate                = 'fruitsdelight:pear_crate';
+i.pear_jello_block          = 'fruitsdelight:pear_jello_block';
+i.pear_jello_cauldron       = 'fruitsdelight:pear_jello_cauldron';
+i.pear_jelly_block          = 'fruitsdelight:pear_jelly_block';
+i.pear_jelly_cauldron       = 'fruitsdelight:pear_jelly_cauldron';
+i.persimmon_cauldron        = 'fruitsdelight:persimmon_cauldron';
+i.persimmon_crate           = 'fruitsdelight:persimmon_crate';
+i.persimmon_jello_block     = 'fruitsdelight:persimmon_jello_block';
+i.persimmon_jello_cauldron  = 'fruitsdelight:persimmon_jello_cauldron';
+i.persimmon_jelly_block     = 'fruitsdelight:persimmon_jelly_block';
+i.persimmon_jelly_cauldron  = 'fruitsdelight:persimmon_jelly_cauldron';
+i.pineapple_cauldron        = 'fruitsdelight:pineapple_cauldron';
+i.pineapple_crate           = 'fruitsdelight:pineapple_crate';
+i.pineapple_fried_rice      = 'fruitsdelight:pineapple_fried_rice';
+i.pineapple_jello_block     = 'fruitsdelight:pineapple_jello_block';
+i.pineapple_jello_cauldron  = 'fruitsdelight:pineapple_jello_cauldron';
+i.pineapple_jelly_block     = 'fruitsdelight:pineapple_jelly_block';
+i.pineapple_jelly_cauldron  = 'fruitsdelight:pineapple_jelly_cauldron';
+i.sweetberry_cauldron       = 'fruitsdelight:sweetberry_cauldron';
+i.sweetberry_jello_block    = 'fruitsdelight:sweetberry_jello_block';
+i.sweetberry_jello_cauldron = 'fruitsdelight:sweetberry_jello_cauldron';
+i.sweetberry_jelly_block    = 'fruitsdelight:sweetberry_jelly_block';
+i.sweetberry_jelly_cauldron = 'fruitsdelight:sweetberry_jelly_cauldron';
+
+// ===== untitledduckmod  -  8 new  (12 items, 4 already mapped) =====
+i.duck_egg        = 'untitledduckmod:duck_egg';
+i.duck_feather    = 'untitledduckmod:duck_feather';
+i.duck_sack       = 'untitledduckmod:duck_sack';
+i.duck_spawn_egg  = 'untitledduckmod:duck_spawn_egg';
+i.empty_duck_sack = 'untitledduckmod:empty_duck_sack';
+i.goose_egg       = 'untitledduckmod:goose_egg';
+i.goose_foot      = 'untitledduckmod:goose_foot';
+i.goose_spawn_egg = 'untitledduckmod:goose_spawn_egg';
+
+// ===== well  -  17 new  (17 items, 0 already mapped) =====
+i.black_well      = 'well:black_well';
+i.blue_well       = 'well:blue_well';
+i.brown_well      = 'well:brown_well';
+i.cyan_well       = 'well:cyan_well';
+i.gray_well       = 'well:gray_well';
+i.green_well      = 'well:green_well';
+i.light_blue_well = 'well:light_blue_well';
+i.light_gray_well = 'well:light_gray_well';
+i.lime_well       = 'well:lime_well';
+i.magenta_well    = 'well:magenta_well';
+i.orange_well     = 'well:orange_well';
+i.pink_well       = 'well:pink_well';
+i.purple_well     = 'well:purple_well';
+i.red_well        = 'well:red_well';
+i.well            = 'well:well';
+i.white_well      = 'well:white_well';
+i.yellow_well     = 'well:yellow_well';
+
+// ===== Wandering Trader stock (2026-10-03, economy/wandering_trades.js) =====
+i.rubberwood_sapling        = 'myrtrees:rubberwood_sapling';
+i.glow_squid_bucket         = 'upgrade_aquatic:glow_squid_bucket';
+i.jellyfish_bucket          = 'upgrade_aquatic:jellyfish_bucket';
+i.perch_bucket              = 'upgrade_aquatic:perch_bucket';
+i.squid_bucket              = 'upgrade_aquatic:squid_bucket';
+i.sealed_delivery_agreement = 'wares:sealed_delivery_agreement';
 
 // ############################## Validation ##############################
 

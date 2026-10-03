@@ -1,6 +1,6 @@
 # Food: types, values, Spice of Life and canned parity
 
-Test prefix **FO-** · Last updated **2026-09-29** · Overall status **BUILT, restart pending** (the `/dumpfood` export
+Test prefix **FO-** · Last updated **2026-10-02** · Overall status **BUILT, restart pending** (the `/dumpfood` export
 ran in game: FO-01 PASSED; the food type tags need a restart because they add item_dict keys: FO-02 to FO-08; can
 recipes FO-09 to FO-13; food canning and the tuning system in 3.5 aren't built yet)
 
@@ -10,16 +10,16 @@ wrong today and how tuning will work.
 
 ## 0. At a glance
 
-The pack has **629 edible items** from 34 mods (plus 32 placed cakes, pies and feasts, and 21 drinks with no food
-value). Every one of them is sorted into **one of 31 types** (raw vegetable, cooked meat, soup, prepared meal, drink,
+The pack has **856 edible items** from 40 mods (plus 138 food blocks: placed cakes, pies, feasts and jelly bottles, and 26
+drinks with no food value). Every one of them is sorted into **one of 31 types** (raw vegetable, cooked meat, soup, prepared meal, drink,
 golden food and so on), and each type is an item tag, so recipes can target "every cooked fish" or "every raw food"
 without listing items. The next step is a tuning layer that sets hunger, saturation, effects and Spice of Life value
 per type, with per-item exceptions, and gives every can the value of what went into it.
 
 | Part | Layer | Status |
 |---|---|---|
-| `/dumpfood` export | KubeJS command, `_lib/dump_food.js` | Works: ran 2026-09-28 19:24 (629 foods, 132 food blocks, 21 drinks, 26,533 recipes). FO-01 PASSED |
-| Food types (31) + canned map | [food_types.json](../kubejs/generation_scripts/food/food_types.json) | BUILT: 615 foods typed, 14 excluded, 34 cans mapped to 33 sources |
+| `/dumpfood` export | KubeJS command, `_lib/dump_food.js` | Works: ran 2026-09-28 19:24 (629 foods), FO-01 PASSED. Re-run 2026-10-02 22:13 after the 1.0.4 mods: 856 foods, 138 food blocks, 26 drinks, 27,499 recipes. Now part of `/dumpall` |
+| Food types (31) + canned map | [food_types.json](../kubejs/generation_scripts/food/food_types.json) | BUILT: 842 foods typed, 14 excluded, 70 cans mapped to 76 sources (227 new foods typed 2026-10-02, 3.2) |
 | Type tags `#creativeengineering:food_type/...` + `#creativeengineering:canned_source` | [foodtypetags.js](../kubejs/server_scripts/tags/foodtypetags.js) | BUILT; needs a restart (216 new item_dict keys). FO-02 to FO-08 |
 | item_dict keys for the 216 foods it lacked + 32 tag keys | generated block at the end of [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | BUILT, `node --check` clean |
 | Classifier, checker and catalog | `tools/food_catalog.py` -> [food_catalog.md](food_catalog.md) | BUILT; `--check` passes |
@@ -71,10 +71,11 @@ type (printed so you can move them) and an item_dict key; nothing you placed mov
 - **Spice of Life** (the jar is "Apple Pie Edition", the code is *Sweet Potato*, `com.tarinoita.solsweetpotato`):
   rewards a varied diet with permanent bonuses. Mechanics in 2.3.
 
-Where the 629 foods come from: Farmer's Delight 74, Delightful 46, Golden Food 45, Canned Goods 39, vanilla 39,
-Neapolitan 38, Vinery 38, Create Confectionery 37, Rustic Delight 34, Brewin' and Chewin' 29, Abnormals Delight 28,
-Alex's Delight 23, Create: Central Kitchen 22, Alex's Mobs 20, Ender's Delight 20, Create: Factory 19, Nether's
-Delight 14, Upgrade Aquatic 11, Quark Delight 9, 15 more mods with 1 to 7 each.
+Where the 856 foods come from (2026-10-02 export): Fruits Delight 107, Farmer's Delight 74, Delightful 46, Golden
+Food 45, Canned Goods 39, vanilla 39, Neapolitan 38, Vinery 38, Create Confectionery 37, the pack's own cans 36,
+Rustic Delight 34, More Delight 31, Farmer's Respite 30, Brewin' and Chewin' 29, Abnormals Delight 28, Alex's Delight
+23, Create: Central Kitchen 22, Alex's Mobs 20, Ender's Delight 20, Corn Delight 19, Create: Factory 19, Nether's
+Delight 14, Upgrade Aquatic 11, Quark Delight 9, 16 more mods with 1 to 7 each (Untitled Duck Mod 4).
 
 ## 2. Reference
 
@@ -82,41 +83,41 @@ Delight 14, Upgrade Aquatic 11, Quark Delight 9, 15 more mods with 1 to 7 each.
 
 One type per food. A `/` nests a type under its parent, and the tag of a nested type is also in every parent:
 `raw/meat/sliced` is in `raw/meat`, `raw` and the root `#creativeengineering:food_type`. Counts are from the
-2026-09-28 export; values are hunger and modifier medians (the full spread is in the catalog summary).
+2026-10-02 export; values are hunger and modifier medians (the full spread is in the catalog summary).
 
 | Type | Covers | Foods | Median hunger / mod | Examples |
 |---|---|---:|---|---|
-| `raw/veggie` | raw vegetables, herbs, fungi, grain | 12 | 1.5 / 0.3 | carrot, cabbage, onion, bell peppers, gongylidia |
-| `raw/veggie/sliced` | cut raw vegetables | 3 | 1 / 0.3 | cabbage leaf, potato slices, pumpkin slice |
-| `raw/fruit` | fruit, berries, nuts | 21 | 2 / 0.1 | apple, sweet berries, strawberries, grapes, acorn |
-| `raw/meat` | raw meat, whole | 13 | 3 / 0.3 | beef, porkchop, ham, raw bison, hoglin loin |
+| `raw/veggie` | raw vegetables, herbs, fungi, grain | 14 | 1.5 / 0.3 | carrot, cabbage, onion, bell peppers, gongylidia |
+| `raw/veggie/sliced` | cut raw vegetables | 4 | 1.5 / 0.35 | cabbage leaf, potato slices, pumpkin slice |
+| `raw/fruit` | fruit, berries, nuts | 41 | 2 / 0.3 | apple, sweet berries, strawberries, grapes, acorn, Fruits Delight's fruits and slices |
+| `raw/meat` | raw meat, whole | 15 | 3 / 0.3 | beef, porkchop, ham, raw bison, hoglin loin |
 | `raw/meat/sliced` | cuts, chops, mince, bacon, fillets | 15 | 2 / 0.3 | minced beef, bacon, chicken cuts, duck fillet |
 | `raw/fish` | fish and seafood, whole | 13 | 2 / 0.3 | cod, salmon, pike, crab leg, calamari |
 | `raw/fish/sliced` | fish slices | 7 | 1 / 0.1 | cod slice, pike slice, shulker filet |
-| `cooked/veggie` | baked, roasted, dried, pickled vegetables, cooked rice | 13 | 4 / 0.5 | baked potato, dried kelp, roasted peppers, kimchi |
+| `cooked/veggie` | baked, roasted, dried, pickled vegetables, cooked rice | 17 | 4 / 0.4 | baked potato, dried kelp, roasted peppers, kimchi |
 | `cooked/veggie/sliced` | cooked cut vegetables | 1 | 3 / 0.6 | baked potato slices |
-| `cooked/fruit` | cooked or dried fruit | 1 | 4 / 0.3 | dried banana |
-| `cooked/meat` | cooked meat, whole; patties, jerky, glazed cuts | 18 | 6.5 / 0.8 | steak, smoked ham, beef patty, glazed porkchop |
+| `cooked/fruit` | cooked or dried fruit | 4 | 4 / 0.3 | dried banana |
+| `cooked/meat` | cooked meat, whole; patties, jerky, glazed cuts | 20 | 6.5 / 0.8 | steak, smoked ham, beef patty, glazed porkchop |
 | `cooked/meat/sliced` | cooked cuts | 10 | 3.5 / 0.7 | cooked bacon, cooked mutton chops |
 | `cooked/fish` | cooked fish, whole | 10 | 6 / 0.68 | cooked cod, cooked pike, kippers |
 | `cooked/fish/sliced` | cooked slices | 6 | 3 / 0.65 | cooked salmon slice |
 | `egg` | egg on its own | 4 | 4 / 0.6 | fried egg, scrambled eggs, boiled emu egg |
-| `baked` | bread and buns | 7 | 5 / 0.6 | bread, sourdough bread, banana bread, adzuki bun |
+| `baked` | bread and buns | 12 | 5 / 0.4 | bread, sourdough bread, banana bread, adzuki bun |
 | `dairy` | cheese | 2 | 4 / 1 | flaxen and scarlet cheese wedges |
-| `sweet` | cake/pie slices, cookies, candy, chocolate, ice cream | 136 | 5 / 0.4 | cake slice, cookie, candies, waffles, ice cream |
-| `handheld` | sandwiches, burgers, wraps, rolls, skewers, stuffed veg | 38 | 10 / 0.75 | hamburger, kelp roll, barbecue stick, pizza slice |
-| `salad` | salads | 8 | 7 / 0.57 | mixed salad, fruit salad, potato salad |
-| `soup` | soups, stews, broths | 26 | 10 / 0.7 | beef stew, chicken soup, bone broth, rabbit stew |
-| `meal` | plated meals | 46 | 12 / 0.8 | steak and potatoes, fried rice, pasta, curry |
-| `meal/feast` | servings from a placed feast | 7 | 14 / 0.75 | roast chicken, shepherd's pie, stuffed hoglin |
-| `drink` | non-alcoholic drinks | 27 | 2 / 0.05 | coffee, milkshakes, tea, honey bottle, soda |
+| `sweet` | cake/pie slices, cookies, candy, chocolate, ice cream | 185 | 4 / 0.35 | cake slice, cookie, candies, waffles, ice cream |
+| `handheld` | sandwiches, burgers, wraps, rolls, skewers, stuffed veg | 52 | 10 / 0.8 | hamburger, kelp roll, barbecue stick, pizza slice |
+| `salad` | salads | 11 | 6 / 0.6 | mixed salad, fruit salad, potato salad |
+| `soup` | soups, stews, broths | 31 | 10 / 0.7 | beef stew, chicken soup, bone broth, rabbit stew |
+| `meal` | plated meals | 65 | 12 / 0.8 | steak and potatoes, fried rice, pasta, curry |
+| `meal/feast` | servings from a placed feast | 10 | 14 / 0.75 | roast chicken, shepherd's pie, stuffed hoglin |
+| `drink` | non-alcoholic drinks | 62 | 0 / 0 | coffee, milkshakes, tea, honey bottle, soda |
 | `drink/alcohol` | wine, beer, spirits | 41 | 1 / 0 | Vinery wines, Brewin' and Chewin' boozes |
 | `golden` | golden apple tier | 25 | 4 / 1.2 | golden apple, golden carrot, Golden Food's golden_* |
 | `golden/enchanted` | notch apple tier | 25 | 8 / 8 | enchanted golden apple, Golden Food's enchanted_* |
-| `ingredient` | edible intermediates | 18 | 2 / 0.3 | dough, raw pasta, tomato sauce, cooking oil, jam |
+| `ingredient` | edible intermediates | 42 | 4 / 0.3 | dough, raw pasta, tomato sauce, cooking oil, jam |
 | `hazard` | eaten for the downside or in a pinch | 11 | 1 / 0.2 | rotten flesh, spider eye, pufferfish, soap |
 | `special` | magic, joke or utility food | 15 | 1 / 0.2 | chorus fruit, mana cookie, icicle, dog food |
-| `canned` | Canned Goods cans | 36 | 10 / 9 | canned steak, canned rabbit stew |
+| `canned` | Canned Goods cans and the pack's own food cans | 72 | 5 / 0.8 | canned steak, canned rabbit stew |
 | (excluded) | edible in code, not food | 14 | | Central Kitchen's `incomplete_*` assembly items, the Spice of Life lunchboxes |
 
 "Sliced" is a form, not a food group: it only exists under raw and cooked, where a cut changes the numbers (a cod
@@ -565,18 +566,19 @@ Restart the game first (item_dict gained keys), then load WorldC.
 - [x] **FO-01 dump:** `/dumpfood` -> chat `Dumped 629 foods, 132 food blocks, 21 drinks, 26533 recipes`; four files
   in `kubejs/exported/food/`. PASSED 2026-09-28 19:24.
 - [ ] **FO-02 tags load:** after the restart, `logs/kubejs/server.log` has
-  `[food types] 615 foods in 31 types, 33 canned sources` and no `[food types]` warning.
+  `[food types] 842 foods in 31 types, 76 canned sources` and no `[food types]` warning (seen on the 2026-10-02
+  scratch server).
 - [ ] **FO-03 nested tags:** hold Raw Bacon (`farmersdelight:bacon`), `/kubejs hand` -> tags include
   `creativeengineering:food_type/raw/meat/sliced`, `.../raw/meat`, `.../raw` and `creativeengineering:food_type`.
 - [ ] **FO-04 canned source:** hold a Cooked Porkchop, `/kubejs hand` -> `creativeengineering:food_type/cooked/meat` and
   `creativeengineering:canned_source`. A Carrot shows no `canned_source`.
 - [ ] **FO-05 new keys:** hold Neapolitan Strawberries (a food whose key is new) -> `creativeengineering:food_type/raw/fruit`.
-- [ ] **FO-06 JEI:** search `$creativeengineering:food_type/meal/feast` -> the 7 feast servings;
-  `$creativeengineering:food_type/meal` -> 53 items.
+- [ ] **FO-06 JEI:** search `$creativeengineering:food_type/meal/feast` -> the 10 feast servings;
+  `$creativeengineering:food_type/meal` -> 75 items.
 - [ ] **FO-07 startup validation:** `logs/kubejs/startup.log` has no new `[item_dict] Missing/invalid` lines for the
   food block (the pre-existing `catfish_slice`, `jei_bucket_*`, `tmted_*`, `rs_*` lines are old).
 - [ ] **FO-08 round trip:** `/dumpfood`, then `python3 tools/food_catalog.py --check` exits 0 and
-  `kubejs/exported/tags/item_tags.json` lists 615 members under `creativeengineering:food_type`.
+  `kubejs/exported/tags/item_tags.json` lists 842 members under `creativeengineering:food_type`.
 
 - [ ] **FO-09 food cans gone:** after `/reload`, JEI shows no crafting recipe for any Canned Goods food can (e.g.
   Canned Steak, Canned Apples, Hot Hot Hotpot); Soda and Reef-Cola still have theirs.
@@ -642,3 +644,11 @@ Cooking oil and fried eggs (3.7), after a restart:
   oil (pot recipe moved to a `_manual_only` id). Vanilla egg -> `#forge:eggs` migration listed as TODO (3.8).
   FO-23 to FO-27.
 - **2026-09-29** Egg stack size (3.9): the 10 raw eggs in `#forge:eggs` stack to 64. FO-28.
+- **2026-10-02** Refresh for the mods added since 09-28 (Fruits Delight, More Delight, Farmer's Respite, Corn Delight,
+  Untitled Duck Mod): `/dumpfood` re-run on a scratch server (856 foods) and added to `/dumpall`. The classifier
+  typed 227 new foods; 74 of its picks were moved by hand to match earlier calls: bottled jellies -> `ingredient`
+  (like jam bottles), jellos, muffins, tarts, single pies, custard, shaved ice, hawberry candy and sweet toasts ->
+  `sweet`, corn dogs, tacos, jelly bread and egg toast -> `handheld`, tortilla and bread slice -> `baked`, baked/dried
+  fruit -> `cooked/fruit`, durian flesh and orange slice -> `raw/fruit`, diced potatoes -> `raw/veggie/sliced`,
+  tortilla chips -> `cooked/veggie`, raw tortilla -> `ingredient`. Scratch server logs `842 foods in 31 types,
+  76 canned sources`. FO-02/06/08 expectations updated.

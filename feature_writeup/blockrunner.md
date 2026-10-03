@@ -12,7 +12,7 @@ the block you're looking at.
 
 | Part | Layer | Status |
 |---|---|---|
-| 26 surface tiers + 6 empty basic tiers | KubeJS tags + `[surface.speed]` (basic tiers in `blockrunner.json`) | Loads in game with 0 overlaps: 15:21 world load on 2026-09-27, including the 3 ids added for the newest mods (log `6085 ids, 0 overlap(s)`; the log counts low, the sim holds 6129). The 11:54 `/dumptags` export matched the sim exactly |
+| 26 surface tiers + 6 empty basic tiers | KubeJS tags + `[surface.speed]` (basic tiers in `blockrunner.json`) | Loads in game with 0 overlaps: 15:21 world load on 2026-09-27, including the 3 ids added for the newest mods (log `6085 ids, 0 overlap(s)`; the log counts low, the sim holds 6129). 2026-10-02: 1.0.4 mods tiered, sim 6355 ids, 0 overlaps; needs a restart (new item_dict keys), BR-52. The 11:54 `/dumptags` export matched the sim exactly |
 | SecurityCraft reinforced blocks and mines copy their vanilla block's tier | KubeJS `t.mirror()` | Loaded since the 14:49 restart (Rhino harness tested); untested in game (BR-38) |
 | Sticky tier checks facing | patcherMod mixin | Mixin applies (log 2026-09-26); behaviour untested |
 | Visual sinking (camera + models) | patcherMod mixins | Both mixins apply (log 2026-09-26); behaviour untested |
@@ -539,6 +539,8 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - [ ] **BR-37 Blocks with no tags:** a froglight → **−0.012**; D&D padded rubber → **−0.012**; tilled end stone → **−0.02**. These only work because the scan found them.
 - [ ] **BR-38 SecurityCraft copies:** reinforced stone and a stone mine → **+0.005** (same as stone); reinforced concrete → **+0.04**; a reinforced sticky piston facing up → **−0.035**, sideways → "no modifier".
 
+- [ ] **BR-52 1.0.4 mod blocks:** after a restart, a Fruits Delight crate → wood tier; a Farmer's Respite tea leaves sack and a Corn Kernel Bag → soft; a placed Hamimelon and a Coffee Cake → confectionery; an apple jelly block and an apple jello block → very sticky (same as honey / slime). The tier overlap log line still says 0 overlaps.
+
 **Server side (only when the dedicated server is back)**
 - [ ] **BR-27 Server parity:** with the new patcherMod jar on the server, repeat BR-11, BR-15 and BR-17 while connected. → Same values, and no rubber-banding when walking across camo'd frames.
 
@@ -587,3 +589,12 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
     Canned Goods' sealed canned dirt → metal. Opened canned dirt shows dirt on top and stays untiered (1.00, same as
     dirt); the hookah (furniture) and tobacco crops are left out like other thin/functional blocks. The house, boat and
     cannon mods add no blocks. 6129 ids, 0 overlaps. In game, the pre-change set loaded with 0 overlaps (BR-01 passed).
+- **2026-10-02** Re-check for the mods added since 09-27 (Fruits Delight, Farmer's Respite, Corn Delight, More
+  Delight, Well, Untitled Duck Mod, Blue Flame, plus redeco / Floral Enchantment / Upgrade Aquatic blocks the scan now
+  sees), from the `/dumpall` tag export. Tiered by the existing precedents: `fruitsdelight:*_crate` + Corn Crate → wood
+  (like FD crates); Farmer's Respite `*_sack` + Corn Kernel Bag → soft (sacks and bags); Hamimelon (a melon-like gourd),
+  Coffee Cake, Rose Hip Pie, Fig Pudding, Mangosteen Cake, Pineapple Fried Rice, Nachos and Popcorn Box → confectionery;
+  Fruits Delight jelly blocks (`HoneyBlock` subclass) and jello blocks (`SlimeBlock` subclass) → very sticky. Left out
+  like before: cauldrons, jelly bottles, plants, the kettle and the wells (furniture). New single ids come from new
+  item_dict keys (173 added for the new mods), so a restart is needed. Sim: 6355 ids, 0 overlaps, no dead patterns.
+  BR-52 added.

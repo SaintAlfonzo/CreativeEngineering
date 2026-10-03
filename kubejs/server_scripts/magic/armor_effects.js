@@ -62,18 +62,20 @@ PlayerEvents.tick(event => {
 // AbstractHorse in ITS OWN inventory, not a player armor slot, so PlayerEvents.tick
 // above can never see it. Walks every horse in the level instead, same
 // reapply-every-tick idiom as applyEffects()/PlayerEvents.tick.
-LevelEvents.tick(event => {
-	var level = event.getLevel()
-	if (level.isClientSide()) return
 
-	var AE = global.armorEffects
-	if (!AE || !Object.keys(AE.MOUNTS).length) return
+// Disabled for now due to performance concerns TODO: add effect on equip, apply every 30 seconds
+// LevelEvents.tick(event => {
+// 	var level = event.getLevel()
+// 	if (level.isClientSide()) return
 
-	level.getAllEntities().forEach(entity => {
-		if (!(entity instanceof $AbstractHorse)) return
-		var armorStack = entity.getSlot(HORSE_ARMOR_SLOT).get()
-		if (!armorStack || armorStack.isEmpty()) return
-		var effects = AE.MOUNTS[String(armorStack.getItem().getId())]
-		if (effects && effects.length) applyEffects(entity, effects)
-	})
-})
+// 	var AE = global.armorEffects
+// 	if (!AE || !Object.keys(AE.MOUNTS).length) return
+
+// 	level.getAllEntities().forEach(entity => {
+// 		if (!(entity instanceof $AbstractHorse)) return
+// 		var armorStack = entity.getSlot(HORSE_ARMOR_SLOT).get()
+// 		if (!armorStack || armorStack.isEmpty()) return
+// 		var effects = AE.MOUNTS[String(armorStack.getItem().getId())]
+// 		if (effects && effects.length) applyEffects(entity, effects)
+// 	})
+// })

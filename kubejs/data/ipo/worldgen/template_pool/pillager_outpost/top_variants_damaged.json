@@ -1,0 +1,79 @@
+{
+  "__comment": "Improved Pillager Outpost v5 pool with its template names fixed: the jar ships tower/overgrown_damaged and tower/top/overgrown_damaged(_active) but its pools ask for damaged_overgrown, which places an empty piece (a plate with no tower or no top). Delete this file once IPO fixes it.",
+  "name": "ipo:pillager_outpost/top_variants_damaged",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 100,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "ipo:pillager_outpost/tower/top/damaged",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 75,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "ipo:pillager_outpost/tower/top/damaged_active",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 60,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "ipo:pillager_outpost/tower/top/overgrown_damaged",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 45,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "ipo:pillager_outpost/tower/top/overgrown_damaged_active",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 40,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "ipo:pillager_outpost/tower/top/regular",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 25,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "ipo:pillager_outpost/tower/top/regular_active",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "ipo:pillager_outpost/tower/top/overgrown",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "ipo:pillager_outpost/tower/top/overgrown_active",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}
