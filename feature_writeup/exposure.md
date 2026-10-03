@@ -12,7 +12,7 @@
 | Pack customisation (KubeJS recipes, tags, loot rules) | none yet; everything is upstream behaviour |
 
 - **What it is:** our own port of Exposure 1.9.19 and two of its addons from NeoForge 1.21.1 to Forge 1.19.2.
-  Everything is in one jar, `mods/exposureBackport-1.9.19-ce-19.2-01.jar`, built from
+  Everything is in one jar, `mods/exposureBackport-1.9.19-ce-19.2-02.jar` (pack 1.0.4), built from
   [development/exposureBackport](../development/exposureBackport/). It replaced Exposure 1.6.0.
 - **Files to open:** the port's [README.md](../development/exposureBackport/README.md) (layout, conventions,
   every deviation from upstream), [Exposure.java](../development/exposureBackport/src/main/java/io/github/mortuusars/exposure/Exposure.java)
@@ -245,8 +245,9 @@ palette with `/exposure palette export <id> json <file>`.
   - `config/exposure-common-1.toml.bak` is a 1.6.0-era Forge backup.
   - The Exposure-Create Compatibility resource pack is off, because it overrides 1.6.0 camera models and
     would break 1.9.19's.
-- **Version:** stays `1.9.19-ce-19.2-01` until 1.0.3 is distributed. The jar was rebuilt in place twice
-  (bug fixes, Expanded).
+- **Version:** `1.9.19-ce-19.2-01` shipped with pack 1.0.3 (it was rebuilt in place twice before that: bug
+  fixes, Expanded). `-02` is pack 1.0.4: the login-packet null fix, the refmap fix and Exposure Extras. Bump the
+  port build once per pack release; rebuilds before a release keep the same number.
 - **Rejected:** porting onto 1.6.0, i.e. adding Expanded's lenses and films to the old mod with KubeJS. The
   feasibility study (2026-09-30) found 1.9.19 is a rewrite, and every addon depends on 1.9 internals.
 - **Rejected:** shipping each addon as its own resource pack inside the jar. Build-time merging keeps one pack
@@ -293,10 +294,10 @@ palette with `/exposure palette export <id> json <file>`.
 ## 7. In-game tests
 
 Base (camera, film, printing):
-- [ ] **EX-01 attachments:** craft a camera, Sneak + Use → attachments screen; insert color film, a redstone lamp, a spyglass and a red pane → each shows on the camera.
-- [ ] **EX-02 shoot:** Use raises the viewfinder, Use again → shutter sound, film counter goes to 1/16.
+- [x] **EX-01 attachments:** craft a camera, Sneak + Use → attachments screen; insert color film, a redstone lamp, a spyglass and a red pane → each shows on the camera.
+- [x] **EX-02 shoot:** Use raises the viewfinder, Use again → shutter sound, film counter goes to 1/16.
 - [ ] **EX-03 controls:** Sneak in the viewfinder → controls; change shutter speed, zoom with scroll, set the self-timer → the shot fires after the timer.
-- [ ] **EX-04 lens range:** without a lens the zoom stops at 18-55mm; with a spyglass 55-200mm.
+- [x] **EX-04 lens range:** without a lens the zoom stops at 18-55mm; with a spyglass 55-200mm.
 - [ ] **EX-05 flash:** shoot in a dark room with the flash on → the photo is lit.
 - [ ] **EX-06 develop by crafting:** color film + awkward, thick, mundane potions → developed color film; B&W film + water bottle → developed B&W film.
 - [ ] **EX-07 develop with Create:** run exposed color film through spouts (awkward, thick, mundane, 250 mB each) → developed film that still has its frames in the Lightroom.

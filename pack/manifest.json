@@ -1427,6 +1427,29 @@
       }
     },
     {
+      "file": "ImprovedPillagerOutpost-v5.jar",
+      "name": "Improved Pillager Outpost",
+      "version": "5",
+      "sha1": "325f371af2ef6af8d12fc12e99a82fbdab680cb2",
+      "modId": "ipo",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 1093283,
+          "fileId": 6269462,
+          "slug": "improved-pillager-outpost",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/improved-pillager-outpost/files/6269462"
+        },
+        "modrinth": {
+          "projectId": "WQxwMPH5",
+          "versionId": "UqNxyorq",
+          "slug": "improved-pillager-outpost",
+          "url": "https://modrinth.com/mod/improved-pillager-outpost/version/UqNxyorq",
+          "download": "https://cdn.modrinth.com/data/WQxwMPH5/versions/UqNxyorq/ImprovedPillagerOutpost-v5.jar"
+        }
+      }
+    },
+    {
       "file": "Iron Fishing Rods 1.0.0 - 1.19.2.jar",
       "name": "Iron Fishing Rods",
       "version": "Iron Fishing Rods 1.0.0",
@@ -3118,6 +3141,29 @@
       }
     },
     {
+      "file": "blueflame-1.19.2-0.1.0.2.jar",
+      "name": "Blue Flame Burning",
+      "version": "5",
+      "sha1": "b8b56b2f59666f696282f9cc765b7eaee94a67db",
+      "modId": "blueflame",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 656551,
+          "fileId": 4034673,
+          "slug": "blueflame",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/blueflame/files/4034673"
+        },
+        "modrinth": {
+          "projectId": "8k7QiW7U",
+          "versionId": "uheMFxJl",
+          "slug": "blueflame",
+          "url": "https://modrinth.com/mod/blueflame/version/uheMFxJl",
+          "download": "https://cdn.modrinth.com/data/8k7QiW7U/versions/uheMFxJl/blueflame-1.19.2-0.1.0.2.jar"
+        }
+      }
+    },
+    {
       "file": "blueprint-1.19.2-6.2.0.jar",
       "name": "Blueprint",
       "version": "6.2.0",
@@ -4338,10 +4384,10 @@
       }
     },
     {
-      "file": "creativeengineering-1.0.3.jar",
-      "name": "creativeengineering-1.0.3.jar",
-      "version": "Unknown",
-      "sha1": "fdaf07de2ae8ab06689d43da2f70ed002dd7759c",
+      "file": "creativeengineering-1.0.4.jar",
+      "name": "creativeengineering-1.0.4",
+      "version": "",
+      "sha1": "63904204b700e57066aee39f5a683a61aeb4d6ab",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -4891,10 +4937,10 @@
       }
     },
     {
-      "file": "exposureBackport-1.9.19-ce-19.2-01.jar",
-      "name": "exposureBackport-1.9.19-ce-19.2-01.jar",
-      "version": "Unknown",
-      "sha1": "93d9b0c4022cbbdd20777c46e76ff38e79bd8b78",
+      "file": "exposureBackport-1.9.19-ce-19.2-02.jar",
+      "name": "exposureBackport-1.9.19-ce-19.2-02",
+      "version": "",
+      "sha1": "caeb096abaaa8f260664ad733447fab5853abb89",
       "modId": "exposure",
       "side": "both",
       "source": "local"
@@ -5020,6 +5066,22 @@
           "fileId": 3833506,
           "slug": "forgiving-void",
           "url": "https://www.curseforge.com/minecraft/mc-mods/forgiving-void/files/3833506"
+        }
+      }
+    },
+    {
+      "file": "fruitsdelight-0.5.11.jar",
+      "name": "Fruits Delight",
+      "version": "fruitsdelight-0.5.11.jar",
+      "sha1": "56d02e8c663ed60ac3d5fa689ecd99ed3575564b",
+      "modId": "fruitsdelight",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 943774,
+          "fileId": 6242386,
+          "slug": "fruits-delight",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/fruits-delight/files/6242386"
         }
       }
     },
@@ -7895,6 +7957,29 @@
           "fileId": 4943265,
           "slug": "waystones",
           "url": "https://www.curseforge.com/minecraft/mc-mods/waystones/files/4943265"
+        }
+      }
+    },
+    {
+      "file": "well-1.19.2-1.0.0.jar",
+      "name": "Just a Well",
+      "version": "1.0.0",
+      "sha1": "7f71e4d847818279bc564ed846ec1b1b69835b30",
+      "modId": "well",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 839110,
+          "fileId": 4656937,
+          "slug": "just-a-well",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/just-a-well/files/4656937"
+        },
+        "modrinth": {
+          "projectId": "qs7zlvyh",
+          "versionId": "RRpcxSiv",
+          "slug": "just-a-well",
+          "url": "https://modrinth.com/mod/just-a-well/version/RRpcxSiv",
+          "download": "https://cdn.modrinth.com/data/qs7zlvyh/versions/RRpcxSiv/well-1.19.2-1.0.0.jar"
         }
       }
     },

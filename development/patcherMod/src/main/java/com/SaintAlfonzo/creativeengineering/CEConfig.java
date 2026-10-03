@@ -47,7 +47,7 @@ public final class CEConfig {
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
     public static final TrashSlot TRASH_SLOT;
-    public static final CameraBag CAMERA_BAG;
+    public static final WanderingTrader WANDERING_TRADER;
     public static final Debug DEBUG;
 
     static {
@@ -67,7 +67,7 @@ public final class CEConfig {
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
         TRASH_SLOT = new TrashSlot(builder);
-        CAMERA_BAG = new CameraBag(builder);
+        WANDERING_TRADER = new WanderingTrader(builder);
         DEBUG = new Debug(builder);
         COMMON_SPEC = builder.build();
     }
@@ -917,12 +917,14 @@ public final class CEConfig {
     public static final class WorldgenSystems {
         public final ForgeConfigSpec.BooleanValue structureGroups;
         public final ForgeConfigSpec.BooleanValue structureFrequencies;
+        public final ForgeConfigSpec.BooleanValue structureBiomeRules;
         public final ForgeConfigSpec.BooleanValue poolTuning;
         public final ForgeConfigSpec.BooleanValue lootContainerSwaps;
         public final ForgeConfigSpec.BooleanValue biomeLayout;
         public final ForgeConfigSpec.BooleanValue biomeMerges;
         public final ForgeConfigSpec.BooleanValue deadPlacementFilter;
         public final ForgeConfigSpec.BooleanValue groundMatch;
+        public final ForgeConfigSpec.BooleanValue wildCrops;
 
         private WorldgenSystems(ForgeConfigSpec.Builder b) {
             b.comment("Switch a system off to see the mods' own behaviour. Off never deletes a config file.").push("systems");
@@ -934,6 +936,10 @@ public final class CEConfig {
                     "The per-structure frequency roll (patcherMod StructureFrequencies). Off: every group member spawns",
                     "whenever it wins its slot, i.e. at its weight share only. Rejoin to apply."
             ).define("structureFrequencies", true);
+            structureBiomeRules = b.comment(
+                    "biome_rules in structure_groups.json (patcherMod StructureBiomeRules): only allowed structures start in",
+                    "the rule's biomes (water: ships, wrecks, ocean ruins...). Off: every structure uses its own biome list. Rejoin."
+            ).define("structureBiomeRules", true);
             poolTuning = b.comment("pool_config.json / pool_tags.json village-house weights (PoolTuner). Off: every pool at its first-seen weights. Rejoin.")
                     .define("poolTuning", true);
             lootContainerSwaps = b.comment("loot_container_swaps.json: modded loot containers placed by structures become vanilla ones for Lootr.")
@@ -946,6 +952,9 @@ public final class CEConfig {
                     .define("deadPlacementFilter", true);
             groundMatch = b.comment("Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).")
                     .define("groundMatch", true);
+            wildCrops = b.comment("wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).",
+                    "Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.")
+                    .define("wildCrops", true);
             b.pop(); // systems
         }
     }
@@ -1193,26 +1202,55 @@ public final class CEConfig {
     }
 
     /**
-     * Camera bags ({@code camerabag/} package): slots per tier. Read each time a bag is opened, so a
-     * change applies from the next opening; the server's value wins (it is sent with the menu).
+     * Dials for {@code trader.WanderingTraderTweaks} (Wandering Trader wait and offer counts, through
+     * {@code mixin.WanderingTraderSpawnerMixin} / {@code mixin.WanderingTraderTradesMixin}) and
+     * {@code trader.WinemakerSpawner} (the Wandering Winemaker's own spawner). What the pools hold is
+     * set in KubeJS ({@code kubejs/server_scripts/economy/wandering_trades.js}).
      */
-    public static final class CameraBag {
-        public final ForgeConfigSpec.IntValue leatherSlots;
-        public final ForgeConfigSpec.IntValue ironSlots;
-        public final ForgeConfigSpec.IntValue netheriteSlots;
+    public static final class WanderingTrader {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.IntValue traderIntervalTicks;
+        public final ForgeConfigSpec.IntValue commonTrades;
+        public final ForgeConfigSpec.IntValue rareTrades;
+        public final ForgeConfigSpec.BooleanValue winemakerEnabled;
+        public final ForgeConfigSpec.IntValue winemakerIntervalTicks;
 
-        private CameraBag(ForgeConfigSpec.Builder b) {
+        private WanderingTrader(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Camera bags hold anything tagged #creativeengineering:camera_equipment, in any slot, at the",
-                    "item's normal stack size. Slots per tier (1-27). Lowering a value moves the items in the",
-                    "removed slots into the player's inventory (or drops them) the next time that bag is opened."
-            ).push("camera_bag");
+                    "Wandering Trader and Wandering Winemaker spawning, and the trader's offer counts.",
+                    "Each spawner rolls once per interval, counted in server ticks (20 = 1 second) while the",
+                    "overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not",
+                    "change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then",
+                    "a free spot near a random player; on average about 14 rolls per spawn.",
+                    "To stop both use /gamerule doTraderSpawning false."
+            ).push("wandering_trader");
 
-            leatherSlots = b.defineInRange("leatherSlots", 5, 1, 27);
-            ironSlots = b.defineInRange("ironSlots", 9, 1, 27);
-            netheriteSlots = b.defineInRange("netheriteSlots", 14, 1, 27);
+            enabled = b.comment("Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers) and no Winemaker spawner.")
+                    .define("enabled", true);
 
-            b.pop(); // camera_bag
+            traderIntervalTicks = b.comment(
+                    "Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes.",
+                    "A change takes effect after the wait already counting down."
+            ).defineInRange("traderIntervalTicks", 96000, 1200, 100_000_000);
+
+            commonTrades = b.comment(
+                    "Offers drawn from the common pool. Vanilla: 5. Each offer is a different listing; a pool",
+                    "smaller than this gives every listing once."
+            ).defineInRange("commonTrades", 25, 0, 200);
+
+            rareTrades = b.comment("Offers drawn from the rare pool, all different items. Vanilla: 1.")
+                    .defineInRange("rareTrades", 5, 1, 50);
+
+            winemakerEnabled = b.comment(
+                    "Spawn Vinery's Wandering Winemaker from its own spawner, independent of the Wandering Trader.",
+                    "Vinery's own swap (config/vinery/config.json5 wine_trader_chance) must be 0, or it still",
+                    "turns that share of Wandering Trader spawns into Winemakers."
+            ).define("winemakerEnabled", true);
+
+            winemakerIntervalTicks = b.comment("Ticks between Wandering Winemaker spawn rolls.")
+                    .defineInRange("winemakerIntervalTicks", 96000, 1200, 100_000_000);
+
+            b.pop(); // wandering_trader
         }
     }
 

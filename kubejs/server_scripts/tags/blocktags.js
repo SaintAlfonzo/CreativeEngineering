@@ -226,7 +226,7 @@ ServerEvents.tags('block', e => {
 		'/^davebuildingmod:(full_log_pile|log_palisade|log_pile_[12]_(bottom|top)|half_lumber_[a-z_]+)$/',
 		'/^vinery:(cherry_(beam|floorboard)|stackable_log|[a-z_]*crate)$/', '/^create_compressed:(large_)?cogwheel_block$/',
 		'farmersdelight:*_crate', 'rusticdelight:*crate', 'delightful:*_crate', 'quarkdelight:*_fruit_crate',
-		item.chorus_crate,
+		'fruitsdelight:*_crate', item.chorus_crate, item.corn_crate,
 	], { except: ['/^(copycats|framedblocks):/'] }) // their copycat/framed trapdoors are camouflage
 
 	t.addMatching(e, runner.natural_smooth, [
@@ -298,7 +298,7 @@ ServerEvents.tags('block', e => {
 		'davebuildingmod:*_quilted_wool', item.bison_fur_block, 'botania:*_petal_block', 'twigs:bamboo_thatch*',
 		item.paraffin_wax_block,
 		// sacks, bags and bales
-		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag',
+		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag', 'farmersrespite:*_sack', item.corn_kernel_bag,
 		'/^farmersdelight:(rice_bag|rice_bale|straw_bale|tatami)$/',
 	])
 
@@ -321,7 +321,8 @@ ServerEvents.tags('block', e => {
 		'minecraft:melon', 'minecraft:pumpkin', 'minecraft:carved_pumpkin', 'minecraft:jack_o_lantern', item.chorus_fruit_block,
 		'/^delightful:(sliced_)?(cantaloupe|melon|mini_melon|pumpkin)$/', '/^brewinandchewin:(pizza|quiche)$/',
 		'/^createaddition:(chocolate|honey)_cake$/', '/^rusticdelight:[a-z_]*(pancakes|cheesecake)$/', item.chorus_pie,
-		'/^goldenfood:(enchanted_)?golden_cake$/',
+		'/^goldenfood:(enchanted_)?golden_cake$/', item.hamimelon, item.coffee_cake, item.rose_hip_pie,
+		item.fig_pudding, item.mangosteen_cake, item.pineapple_fried_rice, item.nachos_block, item.popcorn_box,
 	])
 
 	t.addMatching(e, runner.tilled, ['minecraft:farmland', 'farmersdelight:rich_soil_farmland', item.tilled_end_stone])
@@ -347,6 +348,7 @@ ServerEvents.tags('block', e => {
 
 	t.addMatching(e, runner.very_sticky, [
 		'minecraft:honey_block', 'minecraft:slime_block', 'alexsmobs:banana_slug_slime_block',
+		'fruitsdelight:*_jelly_block', 'fruitsdelight:*_jello_block', // extend HoneyBlock / SlimeBlock
 	])
 
 	// Last: whatever's left of #minecraft:dirt (grass, dirt, rooted dirt, modded grasses/soils)
@@ -399,6 +401,15 @@ ServerEvents.tags('block', e => {
 		'#minecraft:leaves', '#minecraft:logs', item.brown_mushroom_block, item.red_mushroom_block,
 		item.mushroom_stem, item.cactus, item.bamboo, item.pumpkin, item.melon_block,
 	])
+
+	// ── Crop parity (patcherMod crops/CropParity, feature_writeup/crops.md) ──
+	// Soils that count as farmland for crops whose own check is hard-coded to vanilla farmland
+	// (tobacco via mixin/TobaccoPlacementMixin). Untilled Rich Soil stays out, as for every farmland crop.
+	t.add(e, 'creativeengineering:crops/farmland_soils', [item.farmland, item.rich_farmland, item.fertile_soil])
+	// Non-CropBlock plants treated as farmland crops: vanilla farmland under them doesn't dry back to
+	// dirt, soaked Fertile Soil bone-meals them, Quark's hoe area break includes them. Their right-click
+	// replant is a separate line in config/quark-common.toml "Harvestable Blocks".
+	t.add(e, 'creativeengineering:crops/farmland_crops', item.tobacco_seeds)
 })
 
 console.log('block tags finished')

@@ -5,7 +5,8 @@
 //   node tools/structure_tuning_sim.js report.md        also write the report there (never over the real one)
 //   node tools/structure_tuning_sim.js report.md out/   also write every structure_set json it would add,
 //                                                       plus out/frequencies.json (what patcherMod would roll)
-//   --no-patchermod                                     pretend the jar lacks StructureFrequencies
+//                                                       and out/rules.json (the biome rules it would get)
+//   --no-patchermod                                     pretend the jar lacks StructureFrequencies (and StructureBiomeRules)
 //   --density=X                                         CEConfig [worldgen.debug] structureDensity
 //   --groups-off                                        CEConfig [worldgen.systems] structureGroups = false
 // Node, not Rhino: catches config, tag and math mistakes, not Rhino-only quirks (see the Rhino harness).
@@ -24,11 +25,13 @@ const [reportOut, filesOut] = argv.filter(a => !a.startsWith('--'))
 let report = null
 let handler = null
 let staged = null
+let rules = null
 const logs = []
 const log = level => (...a) => logs.push(level + a.join(' '))
 const classes = {
   'com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles': { writeText: (p, text) => { if (p === REAL_REPORT) report = text } },
   'com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies': { stage: json => { staged = JSON.parse(json) } },
+  'com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules': { stage: json => { rules = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig': { structureDensity: () => density, structureGroupsEnabled: () => !groupsOff },
 }
 const sandbox = {
@@ -36,7 +39,7 @@ const sandbox = {
   JsonIO: { readString: p => fs.readFileSync(ROOT + p, 'utf8') },
   Java: {
     loadClass: name => {
-      if (noPatcher && name.endsWith('StructureFrequencies')) throw new Error("Class '" + name + "' is not found")
+      if (noPatcher && /StructureFrequencies|StructureBiomeRules/.test(name)) throw new Error("Class '" + name + "' is not found")
       if (!classes[name]) throw new Error('sim has no stub for ' + name)
       return classes[name]
     },
@@ -55,6 +58,7 @@ if (staged) {
   const count = Object.values(staged).reduce((a, m) => a + Object.keys(m).length, 0)
   console.log('frequency table: ' + count + ' structure(s) in ' + Object.keys(staged).length + ' set(s)')
 }
+if (rules) Object.entries(rules).forEach(([n, r]) => console.log('biome rule ' + n + ': ' + r.biomes.join(' ') + ', ' + r.allow.length + ' allowed'))
 if (report) {
   const cov = /## Coverage\n([\s\S]*?)(\n## |$)/.exec(report)
   console.log(cov ? '\nCoverage:\n' + cov[1].trim() : '\n(no coverage section)')
@@ -68,6 +72,7 @@ if (filesOut) {
     fs.writeFileSync(f, text)
   })
   if (staged) fs.writeFileSync(path.join(filesOut, 'frequencies.json'), JSON.stringify(staged, null, 2))
+  if (rules) fs.writeFileSync(path.join(filesOut, 'rules.json'), JSON.stringify(rules, null, 2))
   console.log('structure_set files -> ' + filesOut)
 }
 process.exit(logs.some(l => l.startsWith('ERROR')) ? 1 : 0)

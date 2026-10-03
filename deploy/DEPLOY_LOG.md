@@ -10,6 +10,7 @@ version before it and which files the other machines must delete. The full file 
 - Minecraft 1.19.2, Forge 43.3.9
 - Commit: ffdda7e + 11 uncommitted file(s)
 - Since: 1.0.2
+- Deployed: server, client 2026-10-02 15:55
 - Contents: 344 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
 - Payload: update from 1.0.1, config functional: 105 files, 10.4 MB (mods 10, kubejs 76, config 11, server 8)
 - Notes: server catch-up from 1.0.1 (crash fixes, JFR launch scripts) + 1.0.3: exposure backport, camera bags, Vinery JEI, food mods, trash slot, join protection, LC + Cloud Storage map trades via Async Locator; config functional

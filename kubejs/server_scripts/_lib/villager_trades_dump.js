@@ -8,6 +8,8 @@
 // a number of times, de-duping the offers. Random listings (enchanted books, dyed armour,
 // treasure maps, and "gatherer" trades that vary by villager biome type) only show the
 // variants that happened to roll - raise <samples> to catch more.
+// Also dumps Vinery's Wandering Winemaker pool (its own static map, not part of the wanderer pools).
+// Not seen here: Quark's Pathfinder's Quill, which Quark puts on every Wandering Trader outside the pools.
 
 ServerEvents.commandRegistry(event => {
     const Commands = Java.loadClass('net.minecraft.commands.Commands')
@@ -98,10 +100,27 @@ function makeVillager(level, profession) {
     return villager
 }
 
+// Rhino rejects a const declared inside try {} here ("redeclaration of var"), hence a separate function with var.
+function dumpWinemakerPool(level, rand, samples, result) {
+    try {
+        var wmClass = Java.loadClass('satisfyu.vinery.entity.WanderingWinemakerEntity')
+        var wmType = $EntityType.byString('vinery:wandering_winemaker').orElse(null)
+        var wm = wmType ? wmType.create(level) : null
+        if (!wm) return
+        wm.setPos(0.5, 64, 0.5)
+        intKeyedEntries(wmClass.TRADES).forEach(entry => {
+            result.wandering_winemaker['pool_' + entry[0]] = sampleListings(entry[1], wm, rand, samples)
+        })
+        wm.discard()
+    } catch (err) {
+        console.warn('[dumptrades] Wandering Winemaker pool not dumped: ' + err)
+    }
+}
+
 function dumpVillagerTrades(source, samples) {
     const level = source.getLevel()
     const rand = $RandomSource.create()
-    const result = { samplesPerListing: samples, professions: {}, wandering_trader: {} }
+    const result = { samplesPerListing: samples, professions: {}, wandering_trader: {}, wandering_winemaker: {} }
     let professionCount = 0
     let offerCount = 0
 
@@ -126,6 +145,9 @@ function dumpVillagerTrades(source, samples) {
         result.wandering_trader['pool_' + entry[0]] = sampleListings(entry[1], wt, rand, samples)
     })
     wt.discard()
+
+    // --- Vinery's Wandering Winemaker: WanderingWinemakerEntity.TRADES (key 1; it draws 8) ---
+    dumpWinemakerPool(level, rand, samples, result)
 
     writeExportJson('kubejs/exported/villager_trades.json', result)
 

@@ -7,7 +7,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 - Java 17
 - JVM args: `-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dmixin.debug.verbose=true -Dmixin.debug.export=true`
 
-## Mods (386: 331 both, 42 client, 13 server)
+## Mods (390: 335 both, 42 client, 13 server)
 
 | Side | Mod | Mod id | Version | File | Source |
 |---|---|---|---|---|---|
@@ -39,6 +39,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | client | BetterF3 | `betterf3` | 4.0.1 | `BetterF3-4.0.1-Forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/betterf3/files/4863555) [MR](https://modrinth.com/mod/betterf3/version/mMlLANpz) |
 | server | Block Runner | `blockrunner` | v4.2.2-1.19.2-Forge | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/block-runner/files/4531217) [MR](https://modrinth.com/mod/block-runner/version/MxlSUiGV) |
 | both | Blocky Siege | `blocky_siege` | Blocky_siege-6.1.91-1.19.2.jar | `blocky_siege-6.1.91-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/luckys-blocky-siege/files/5144430) |
+| both | Blue Flame Burning | `blueflame` | 5 | `blueflame-1.19.2-0.1.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/blueflame/files/4034673) [MR](https://modrinth.com/mod/blueflame/version/uheMFxJl) |
 | both | Blueprint | `blueprint` | 6.2.0 | `blueprint-1.19.2-6.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/blueprint/files/4749000) [MR](https://modrinth.com/mod/blueprint/version/SnLXbWe9) |
 | client | Boat Item View (Forge/Neoforge) | `boatiview` | 1.19.x-0.0.4 | `Boat-Item-View-Forge-1.19.x-0.0.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/boat-item-view-forge/files/3921224) [MR](https://modrinth.com/mod/boat-item-view/version/sfI1Ijd2) |
 | both | Boatload | `boatload` | 4.2.2 | `boatload-1.19.2-4.2.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/boatload/files/4776091) [MR](https://modrinth.com/mod/boatload/version/DDO9WQES) |
@@ -132,7 +133,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Create: Ultimate Factory | `create_ultimate_factory` | 1.9.0 | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-ultimate-factory/files/6077105) [MR](https://modrinth.com/mod/create-ultimate-factory/version/DgbBwr4p) |
 | both | Create: Vintage Improvements | `vintageimprovements` | 1.19.2-0.2.0.3 | `vintageimprovements-1.19.2-0.2.0.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-vintage-improvements/files/5661435) [MR](https://modrinth.com/mod/create-vintage-improvements/version/nXivVakq) |
 | both | CreativeCore | `creativecore` | 2.11.28 | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/creativecore/files/5491926) [MR](https://modrinth.com/mod/creativecore/version/FHuLs5LQ) |
-| both | creativeengineering-1.0.3.jar | `creativeengineering` | Unknown | `creativeengineering-1.0.3.jar` | local |
+| both | creativeengineering-1.0.4 | `creativeengineering` |  | `creativeengineering-1.0.4.jar` | local |
 | both | Curios API (Forge/NeoForge) | `curios` | curios-forge-1.19.2-5.1.6.4.jar | `curios-forge-1.19.2-5.1.6.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/curios/files/5843737) |
 | both | Customizable Elytra | `customizableelytra` | forge-1.7.4-1.19.0 | `customizableelytra-1.19.0-1.7.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/customizable-elytra/files/4101953) [MR](https://modrinth.com/mod/customizable-elytra/version/gsnrKi46) |
 | both | Dave's Building Extended | `davebuildingmod` | dbExtended-1.19.2-6.0.1.jar | `dbExtended-1.19.2-6.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/daves-building-extended/files/4841878) |
@@ -169,7 +170,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Every Compat (Wood Good) | `everycomp` | 1.19.2-2.5.36 | `everycomp-1.19.2-2.5.36.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/every-compat/files/7142836) [MR](https://modrinth.com/mod/every-compat/version/xUCsILcc) |
 | both | Everything is Copper | `everythingcopper` | everythingcopper-1.19.2-2.3.4.jar | `everythingcopper-1.19.2-2.3.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/everythingcopper/files/5030661) |
 | both | Explorer's Compass | `explorerscompass` | 1.19.2-1.3.0-forge | `ExplorersCompass-1.19.2-1.3.0-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/explorers-compass/files/4016467) [MR](https://modrinth.com/mod/explorers-compass/version/YkK8Bd84) |
-| both | exposureBackport-1.9.19-ce-19.2-01.jar | `exposure` | Unknown | `exposureBackport-1.9.19-ce-19.2-01.jar` | local |
+| both | exposureBackport-1.9.19-ce-19.2-02 | `exposure` |  | `exposureBackport-1.9.19-ce-19.2-02.jar` | local |
 | both | Fairy Lights | `fairylights` | fairylights-6.0.1-1.19.2 | `fairylights-6.0.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fairy-lights/files/4961791) |
 | both | Fantasy's Furniture | `fantasyfurniture` | 6.7.0 | `fantasyfurniture-1.19.2-6.7.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fantasys-furniture/files/4183177) [MR](https://modrinth.com/mod/fantasy-furniture/version/QewqRA2e) |
 | both | Farmer's Delight | `farmersdelight` | 1.19.2-1.2.4 | `FarmersDelight-1.19.2-1.2.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-delight/files/5051241) [MR](https://modrinth.com/mod/farmers-delight/version/rFTKVUtq) |
@@ -186,6 +187,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Forgiving Void | `forgivingvoid` | forgivingvoid-forge-1.19-7.0.0.jar | `forgivingvoid-forge-1.19-7.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/forgiving-void/files/3833506) |
 | both | FramedBlocks | `framedblocks` | 6.8.6 | `FramedBlocks-6.8.6.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/framedblocks/files/4762544) [MR](https://modrinth.com/mod/framedblocks/version/6MJCf25K) |
 | both | Friendly Griefing | `friendlygriefing` | 1.19-1.0.2 | `FriendlyGriefing-1.19-1.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/friendly-griefing/files/3879591) [MR](https://modrinth.com/mod/friendly-griefing/version/IGiXIeDH) |
+| both | Fruits Delight | `fruitsdelight` | fruitsdelight-0.5.11.jar | `fruitsdelight-0.5.11.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fruits-delight/files/6242386) |
 | both | FTB Library (NeoForge) | `ftblibrary` | ftb-library-forge-1902.4.1-build.236.jar | `ftb-library-forge-1902.4.1-build.236.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ftb-library-forge/files/4661834) |
 | both | FTB Quests (NeoForge) | `ftbquests` | ftb-quests-forge-1902.5.10-build.497.jar | `ftb-quests-forge-1902.5.10-build.497.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ftb-quests-forge/files/6130546) |
 | both | FTB Teams (NeoForge) | `ftbteams` | ftb-teams-forge-1902.2.14-build.123.jar | `ftb-teams-forge-1902.2.14-build.123.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ftb-teams-forge/files/4611938) |
@@ -216,12 +218,14 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Immersive Petroleum | `immersivepetroleum` | ImmersivePetroleum-1.19.2-4.2.0-29b.jar | `ImmersivePetroleum-1.19.2-4.2.0-29b.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/immersive-petroleum/files/7413342) |
 | both | Immersive Posts | `immersiveposts` | 4.3.0-8 | `ImmersivePosts-1.19.2-4.3.0-8.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/immersiveposts/files/4783229) [MR](https://modrinth.com/mod/immersiveposts/version/ScxX3QeZ) |
 | both | Immersive Weathering [FORGE] | `immersive_weathering` | immersive_weathering-1.19.2-1.2.10-forge.jar | `immersive_weathering-1.19.2-1.2.10-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/immersive-weathering-forge/files/4689815) |
+| both | Improved Pillager Outpost | `ipo` | 5 | `ImprovedPillagerOutpost-v5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/improved-pillager-outpost/files/6269462) [MR](https://modrinth.com/mod/improved-pillager-outpost/version/UqNxyorq) |
 | both | Incubation | `incubation` | 3.0.1 | `incubation-1.19.2-3.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/incubation/files/4776209) [MR](https://modrinth.com/mod/incubation/version/xNXbdthU) |
 | both | Iron Fishing Rods | `iron_fishing_rods` | Iron Fishing Rods 1.0.0 | `Iron Fishing Rods 1.0.0 - 1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/iron-fishing-rods/files/4412470) |
 | both | It Takes a Pillage | `takesapillage` | 1.0.3 | `takesapillage-1.0.3-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/it-takes-a-pillage/files/4388334) [MR](https://modrinth.com/mod/it-takes-a-pillage/version/Hm11vzRw) |
 | both | Item Filters | `itemfilters` | 1902.2.9-build.51 | `item-filters-forge-1902.2.9-build.51.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/item-filters/files/4553326) [MR](https://modrinth.com/mod/item-filters/version/pG1yr0GB) |
 | client | Item Highlighter [Neo/Forge] | `highlighter` | 1.1.4 | `Highlighter-1.19.1-1.1.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/item-highlighter/files/3907155) [MR](https://modrinth.com/mod/item-highlighter/version/If7Qldnf) |
 | both | ItemPhysic Full | `itemphysic` | 1.6.7 | `ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/itemphysic/files/5491932) [MR](https://modrinth.com/mod/itemphysic/version/pHa2uS92) |
+| both | Just a Well | `well` | 1.0.0 | `well-1.19.2-1.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/just-a-well/files/4656937) [MR](https://modrinth.com/mod/just-a-well/version/RRpcxSiv) |
 | both | Just Another Rotten Flesh to Leather Mod | `jrftl` | 1.4.3 | `JRFTL [1.19.1]-1.4.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/just-another-rotten-flesh-to-leather-mod/files/4459026) [MR](https://modrinth.com/mod/jrftl/version/HqEAO1Tg) |
 | client | Just Enough Beacons Reforged [Forge \| Fabric \| NeoForge] | `just_enough_beacons` | JustEnoughBeacons-Forge-1.19+-1.1.2.jar | `JustEnoughBeacons-Forge-1.19+-1.1.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/just-enough-beacons-reforged/files/5047440) |
 | client | Just Enough Breeding (JEBr) | `justenoughbreeding` | justenoughbreeding-forge-1.19.2-1.4.0.jar | `justenoughbreeding-forge-1.19.2-1.4.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/justenoughbreeding/files/5682314) |

@@ -31,12 +31,14 @@ public final class WorldgenConfig {
 	// ── systems ──────────────────────────────────────────────────────────────
 	public static boolean structureGroupsEnabled() { return get(() -> wg().systems.structureGroups.get(), true); }
 	public static boolean structureFrequenciesEnabled() { return get(() -> wg().systems.structureFrequencies.get(), true); }
+	public static boolean structureBiomeRulesEnabled() { return get(() -> wg().systems.structureBiomeRules.get(), true); }
 	public static boolean poolTuningEnabled() { return get(() -> wg().systems.poolTuning.get(), true); }
 	public static boolean lootContainerSwapsEnabled() { return get(() -> wg().systems.lootContainerSwaps.get(), true); }
 	public static boolean biomeLayoutEnabled() { return get(() -> wg().systems.biomeLayout.get(), true); }
 	public static boolean biomeMergesEnabled() { return get(() -> wg().systems.biomeMerges.get(), true); }
 	public static boolean deadPlacementFilterEnabled() { return get(() -> wg().systems.deadPlacementFilter.get(), true); }
 	public static boolean groundMatchEnabled() { return get(() -> wg().systems.groundMatch.get(), true); }
+	public static boolean wildCropsEnabled() { return get(() -> wg().systems.wildCrops.get(), true); }
 
 	// ── debug ────────────────────────────────────────────────────────────────
 	public static double structureDensity() { return get(() -> wg().debug.structureDensity.get(), 1.0); }

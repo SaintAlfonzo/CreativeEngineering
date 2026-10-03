@@ -16,7 +16,8 @@ CurseForge: https://www.curseforge.com/minecraft/mc-mods/lets-do-wine
 	// Probability for the set bonus to work (in %)
 	"probability_to_keep_bone_meal": 100,
 	// How many % of the normal wandering traders should be a wandering wine trader?
-	"wine_trader_chance": 50,
+	// Pack: 0. The Winemaker spawns from its own timer instead (creativeengineering-common.toml [wandering_trader]).
+	"wine_trader_chance": 0,
 	// Length of a year (in days).
 	"year_length_in_days": 16,
 	// Years per effect level

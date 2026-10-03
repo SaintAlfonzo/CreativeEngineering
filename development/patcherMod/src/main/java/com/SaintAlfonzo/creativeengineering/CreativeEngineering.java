@@ -87,9 +87,6 @@ public class CreativeEngineering
         // Tier shields (copper..dragon): the items here, the block-check widening in
         // mixin/LivingEntityShieldMixin, everything tunable in CEConfig.SHIELDS.
         com.SaintAlfonzo.creativeengineering.shield.ShieldItems.register(modEventBus);
-        // Camera bags (leather/iron/netherite): item inventory for #creativeengineering:camera_equipment.
-        // Items + menu here, slot counts in CEConfig [camera_bag], recipes in kubejs equipment/camera_bag.js.
-        com.SaintAlfonzo.creativeengineering.camerabag.CameraBag.register(modEventBus);
         // Emu nest (Incubation nest for Alex's Mobs emus): blocks here, the emu's EggLayer side in
         // mixin/EntityEmuEggLayerMixin, the foreign-nest guard in mixin/LayEggInNestGoalMixin.
         if (net.minecraftforge.fml.ModList.get().isLoaded("incubation")) {
@@ -133,6 +130,10 @@ public class CreativeEngineering
         // their camo (surface.CamoSpeed, CEConfig.Surface.Camouflage).
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.surface.CamoSpeedTooltip.class);
 
+        // Per-hoe Quark harvest area (crops.HoeHarvestArea, #creativeengineering:hoe_harvest/NxN tags): the
+        // "Harvest area: 3x3" tooltip. The area itself is mixin.QuarkHoeAreaBreakMixin / QuarkHoeAreaHarvestMixin.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.crops.HoeHarvestTooltip.class);
+
         // BlockRunner tier speeds come from CEConfig [surface.speed] (mixin/BlockRunnerSpeedConfigMixin):
         // re-apply them when the toml is saved, and log an error if the mixin never ran.
         modEventBus.addListener(com.SaintAlfonzo.creativeengineering.surface.SurfaceSpeeds::onConfigReload);
@@ -152,6 +153,10 @@ public class CreativeEngineering
         // kubejs/server_scripts/worldgen/structure_overrides.js and frozen at ServerAboutToStartEvent.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies.class);
 
+        // Structure biome rules (biome_rules in structure_groups.json): only allowed structures start in
+        // the water biomes. Staged by structure_overrides.js, frozen at ServerAboutToStartEvent.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules.class);
+
         // Structure bases that don't match the ground (grass pads on volcanic peaks...): swapped for the
         // sampled local ground as templates place (mixin/StructureTemplateGroundMatchMixin). Registered for
         // its per-world sample cache reset; knobs in CEConfig [worldgen.ground_match].
@@ -160,6 +165,10 @@ public class CreativeEngineering
         // /ceplace: every structure or template matching a filter, laid out in rows (flat-world testing);
         // knobs in CEConfig [worldgen.mass_place].
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.MassPlacer.class);
+
+        // Vinery's Wandering Winemaker on its own spawn timer, independent of the Wandering Trader;
+        // knobs in CEConfig [wandering_trader]. Pool content is KubeJS (economy/wandering_trades.js).
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.trader.WinemakerSpawner.class);
 
         // Python generators (tools/generators.json): /cegen registers itself on the FORGE bus; these two
         // run them at startup when CEConfig [debug.generators] runAtStartup is on, finishing before any
@@ -359,7 +368,6 @@ public class CreativeEngineering
                 com.SaintAlfonzo.creativeengineering.compat.TrashSlotCompat.register();
             }
             com.SaintAlfonzo.creativeengineering.shield.client.TierShieldClient.setup(event);
-            com.SaintAlfonzo.creativeengineering.camerabag.client.CameraBagClient.setup(event);
         }
 
         @SubscribeEvent

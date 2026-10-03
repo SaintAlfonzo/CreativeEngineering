@@ -12,17 +12,24 @@ Lootr converts natively: `minecraft:chest`, `minecraft:trapped_chest`, `minecraf
 | `farmersdelight:spruce_cabinet` | 16 | 4 | swapped -> minecraft:barrel -> Lootr | chefsdelight-1.0.3-forge-1.19.2.jar |
 | `farmersdelight:oak_cabinet` | 15 | 4 | swapped -> minecraft:barrel -> Lootr | chefsdelight-1.0.3-forge-1.19.2.jar |
 | `minecraft:dropper` | 13 | 4 | **NOT converted** | Nullscape_1.19.3_v1.2.2.jar |
+| `minecraft:dispenser` | 12 | 3 | **NOT converted** | Unwrecked Ships Plus 1.19-1.0.4 Forge.jar |
 | `monobank:monobank` | 10 | 10 | **NOT converted** | monobank-1.19.2-1.1.3.jar |
 | `farmersdelight:acacia_cabinet` | 8 | 2 | swapped -> minecraft:barrel -> Lootr | chefsdelight-1.0.3-forge-1.19.2.jar |
 | `farmersdelight:basket` | 7 | 7 | swapped -> minecraft:barrel -> Lootr | chefsdelight-1.0.3-forge-1.19.2.jar |
 | `pneumaticcraft:reinforced_chest` | 5 | 5 | swapped -> minecraft:chest -> Lootr | pneumaticcraft-repressurized-1.19.2-4.3.15-52.jar |
-| `minecraft:chest` | 1615 | 858 | Lootr (native) | DustrialDecor-1.3.3-1.19.2.jar, FarmersStructures-1.0.0-1.19.2.jar, PhilipsRuins1.19.2-10.8.jar, Quark-3.4-418.jar, SimplyHouses-1.1.3-1.19-forge.jar, Terralith_1.19.3_v2.3.12.jar, Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar, YungsBetterDesertTemples-1.19.2-Forge-2.2.2.jar, YungsBetterDungeons-1.19.2-Forge-3.2.2.jar, YungsBetterJungleTemples-1.19.2-Forge-1.0.1.jar, YungsBetterNetherFortresses-1.19.2-Forge-1.0.6.jar, YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar, YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar, YungsExtras-1.19.2-Forge-3.1.0.jar, beautify-1.4.3.jar, dynamicvillage-v0.4-1.19.2.jar, hearths-v1.0.0-mc1.19u1.19.3.jar, mes-1.3.1-1.19.2-forge.jar, monobank-1.19.2-1.1.3.jar, themissingvillages-3.0.0-1.19.2-beta.jar, vanilla, wares-1.19.2-1.2.9.jar |
-| `minecraft:barrel` | 563 | 150 | Lootr (native) | Quark-3.4-418.jar, SimplyHouses-1.1.3-1.19-forge.jar, Terralith_1.19.3_v2.3.12.jar, Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar, YungsBetterDesertTemples-1.19.2-Forge-2.2.2.jar, YungsBetterDungeons-1.19.2-Forge-3.2.2.jar, YungsBetterJungleTemples-1.19.2-Forge-1.0.1.jar, YungsBetterNetherFortresses-1.19.2-Forge-1.0.6.jar, YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar, YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar, monobank-1.19.2-1.1.3.jar, themissingvillages-3.0.0-1.19.2-beta.jar |
+| `minecraft:chest` | 2807 | 1771 | Lootr (native) | DustrialDecor-1.3.3-1.19.2.jar, FarmersStructures-1.0.0-1.19.2.jar, HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar, ImprovedPillagerOutpost-v5.jar, PhilipsRuins1.19.2-10.8.jar, Quark-3.4-418.jar, Revamped Shipwrecks 1.1.0.jar, SimplyHouses-1.1.3-1.19-forge.jar, Terralith_1.19.3_v2.3.12.jar, Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar, Unwrecked Ships Plus 1.19-1.0.4 Forge.jar, YungsBetterDesertTemples-1.19.2-Forge-2.2.2.jar, YungsBetterDungeons-1.19.2-Forge-3.2.2.jar, YungsBetterJungleTemples-1.19.2-Forge-1.0.1.jar, YungsBetterNetherFortresses-1.19.2-Forge-1.0.6.jar, YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar, YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar, YungsExtras-1.19.2-Forge-3.1.0.jar, beautify-1.4.3.jar, blocky_siege-6.1.91-1.19.2.jar, dynamicvillage-v0.4-1.19.2.jar, hearths-v1.0.0-mc1.19u1.19.3.jar, mes-1.3.1-1.19.2-forge.jar, monobank-1.19.2-1.1.3.jar, takesapillage-1.0.3-1.19.2.jar, vanilla, villagesandpillages-forge-mc1.19.2-1.0.2.jar, wares-1.19.2-1.2.9.jar |
+| `minecraft:barrel` | 913 | 187 | Lootr (native) | HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar, Quark-3.4-418.jar, SimplyHouses-1.1.3-1.19-forge.jar, Terralith_1.19.3_v2.3.12.jar, Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar, YungsBetterDesertTemples-1.19.2-Forge-2.2.2.jar, YungsBetterDungeons-1.19.2-Forge-3.2.2.jar, YungsBetterJungleTemples-1.19.2-Forge-1.0.1.jar, YungsBetterNetherFortresses-1.19.2-Forge-1.0.6.jar, YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar, YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar, blocky_siege-6.1.91-1.19.2.jar, monobank-1.19.2-1.1.3.jar, takesapillage-1.0.3-1.19.2.jar, villagesandpillages-forge-mc1.19.2-1.0.2.jar |
 | `minecraft:trapped_chest` | 18 | 15 | Lootr (native) | Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar, YungsBetterDesertTemples-1.19.2-Forge-2.2.2.jar, YungsBetterJungleTemples-1.19.2-Forge-1.0.1.jar, YungsBetterNetherFortresses-1.19.2-Forge-1.0.6.jar, YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar |
 
 ## Not converted: where they are
 
 Add a block to `loot_container_swaps.json` to have Lootr handle it (swapped to a vanilla chest/barrel first).
+
+### `minecraft:dispenser`
+
+- `unwrecked_ships:ship/sailor_layout/nether/nether_privateer_ship` x4: `unwrecked_ships:dispensers/fire_dispenser`
+- `unwrecked_ships:ship/sailor_layout/pillager_pirate_ship` x4: `minecraft:chests/jungle_temple_dispenser`
+- `unwrecked_ships:ship/sailor_layout/privateer_ship` x4: `minecraft:chests/jungle_temple_dispenser`
 
 ### `minecraft:dropper`
 
@@ -57,6 +64,11 @@ These hold hand-placed items instead of a loot table, so there is nothing for Lo
 | FarmersStructures-1.0.0-1.19.2.jar | `farmersdelight:basket` | 2 |
 | FarmersStructures-1.0.0-1.19.2.jar | `aether:altar` | 1 |
 | FarmersStructures-1.0.0-1.19.2.jar | `aether:incubator` | 1 |
+| HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar | `minecraft:campfire` | 18 |
+| HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar | `minecraft:barrel` | 1 |
+| ImprovedPillagerOutpost-v5.jar | `minecraft:furnace` | 4 |
+| ImprovedPillagerOutpost-v5.jar | `minecraft:barrel` | 4 |
+| ImprovedPillagerOutpost-v5.jar | `minecraft:brewing_stand` | 4 |
 | PhilipsRuins1.19.2-10.8.jar | `minecraft:chest` | 54 |
 | PhilipsRuins1.19.2-10.8.jar | `minecraft:dispenser` | 7 |
 | PhilipsRuins1.19.2-10.8.jar | `minecraft:barrel` | 6 |
@@ -95,6 +107,8 @@ These hold hand-placed items instead of a loot table, so there is nothing for Lo
 | YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar | `minecraft:dispenser` | 4 |
 | YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar | `minecraft:barrel` | 1 |
 | YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar | `minecraft:chest` | 1 |
+| blocky_siege-6.1.91-1.19.2.jar | `blocky_siege:cannon` | 6 |
+| blocky_siege-6.1.91-1.19.2.jar | `minecraft:campfire` | 4 |
 | dynamicvillage-v0.4-1.19.2.jar | `minecraft:chest` | 2 |
 | greek_villager_house-1.0.0-forge-1.19.2.jar | `minecraft:furnace` | 1 |
 | greek_villager_house-1.0.0-forge-1.19.2.jar | `minecraft:chest` | 1 |
@@ -112,6 +126,7 @@ These hold hand-placed items instead of a loot table, so there is nothing for Lo
 | sawmillhouse-1.3.0-forge-1.19.2.jar | `minecraft:chest` | 6 |
 | sawmillhouse-1.3.0-forge-1.19.2.jar | `minecraft:chiseled_bookshelf` | 3 |
 | sawmillhouse-1.3.0-forge-1.19.2.jar | `minecraft:smoker` | 3 |
+| takesapillage-1.0.3-1.19.2.jar | `minecraft:chest` | 1 |
 | vanilla | `minecraft:chest` | 4 |
 | vanilla | `minecraft:brewing_stand` | 2 |
 | vanilla | `minecraft:furnace` | 1 |

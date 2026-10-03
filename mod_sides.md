@@ -10,7 +10,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `server` | Only does anything on the server; harmless on clients | Yes |
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 
-**Current count:** 331 both, 13 server, 42 client (386 jars).
+**Current count:** 335 both, 13 server, 42 client (390 jars).
 
 ## Keeping this up to date
 
@@ -116,7 +116,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.3.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
+| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.4.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
 | both | Customizable Elytra | `customizableelytra` | `customizableelytra-1.19.0-1.7.4.jar` |  |
@@ -148,7 +148,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Every Compat | `everycomp` | `everycomp-1.19.2-2.5.36.jar` |  |
 | both | Everything is Copper | `everythingcopper` | `everythingcopper-1.19.2-2.3.4.jar` |  |
 | both | Explorer's Compass | `explorerscompass` | `ExplorersCompass-1.19.2-1.3.0-forge.jar` |  |
-| both | Exposure Backport | `exposure` | `exposureBackport-1.9.19-ce-19.2-01.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded. Replaced exposure-1.19.2-1.6.0-forge.jar |
+| both | Exposure (Backport & Extras) | `exposure` | `exposureBackport-1.9.19-ce-19.2-02.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded, plus exposure_extras (camera bags). Replaced exposure-1.19.2-1.6.0-forge.jar |
 | both | Extended Cogwheels | `extendedgears` | `extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar` |  |
 | both | Fairy Lights | `fairylights` | `fairylights-6.0.1-1.19.2.jar` |  |
 | both | Fantasy's Furniture | `fantasyfurniture` | `fantasyfurniture-1.19.2-6.7.0.jar` |  |
@@ -409,3 +409,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Corn Delight | `corn_delight` | `corn_delight-1.0.3-1.19.2.jar` | Corn crop + foods. Needs Farmer's Delight, Mysterious Mountain Lib. Added 2026-10-01 |
 | both | More Delight | `moredelight` | `moredelight-25.07.28-1.19-forge.jar` | Extra Farmer's Delight foods/tools. Added 2026-10-01 |
 | both | Mysterious Mountain Lib | `mysterious_mountain_lib` | `mysterious_mountain_lib-1.2.3-1.19.2.jar` | Library. Required by: Corn Delight. Added 2026-10-01 |
+| both | Blue Flame Burning | `blueflame` | `blueflame-1.19.2-0.1.0.2.jar` | Soul-fire burning state synced to clients (blue flame overlay). Added 2026-10-02 |
+| both | Fruits Delight | `fruitsdelight` | `fruitsdelight-0.5.11.jar` | Fruit trees/bushes, jams, jellies, foods; biome modifiers. Needs Farmer's Delight. Added 2026-10-02 |
+| both | ImprovedPillagerOutpost | `ipo` | `ImprovedPillagerOutpost-v5.jar` | Structures only (data-only jar: replaces vanilla pillager_outpost template pools) Added 2026-10-02 |
+| both | Well Mod | `well` | `well-1.19.2-1.0.0.jar` | Well blocks (16 dyed) that pump water. Added 2026-10-02 |

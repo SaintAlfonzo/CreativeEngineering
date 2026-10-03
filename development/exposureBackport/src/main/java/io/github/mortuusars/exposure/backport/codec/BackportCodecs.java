@@ -1,7 +1,6 @@
 package io.github.mortuusars.exposure.backport.codec;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -191,9 +190,42 @@ public final class BackportCodecs {
                 return DataResult.error("Cannot parse " + what + " from " + json + ": " + e.getMessage());
             }
         }, value -> {
-            JsonElement json = toJson.apply(value);
-            return DataResult.success(json != null ? json : JsonNull.INSTANCE);
+            JsonElement json = withoutNulls(toJson.apply(value));
+            return DataResult.success(json != null ? json : new JsonObject());
         });
+    }
+
+    /**
+     * Copy of {@code json} without JSON nulls (null in -> null out). Vanilla 1.19.2 serializers write "any" bounds as
+     * {@code "count": null}; JsonOps hands those to other ops as Java null, so converting to NBT (the login packet's
+     * datapack-registry sync) NPEs and kicks the player. Every fromJson here reads a missing key as "any".
+     */
+    @org.jetbrains.annotations.Nullable
+    public static JsonElement withoutNulls(@org.jetbrains.annotations.Nullable JsonElement json) {
+        if (json == null || json.isJsonNull()) {
+            return null;
+        }
+        if (json.isJsonObject()) {
+            JsonObject copy = new JsonObject();
+            json.getAsJsonObject().entrySet().forEach(entry -> {
+                JsonElement value = withoutNulls(entry.getValue());
+                if (value != null) {
+                    copy.add(entry.getKey(), value);
+                }
+            });
+            return copy;
+        }
+        if (json.isJsonArray()) {
+            com.google.gson.JsonArray copy = new com.google.gson.JsonArray();
+            json.getAsJsonArray().forEach(element -> {
+                JsonElement value = withoutNulls(element);
+                if (value != null) {
+                    copy.add(value);
+                }
+            });
+            return copy;
+        }
+        return json;
     }
 
     public static JsonObject emptyJsonObject() {

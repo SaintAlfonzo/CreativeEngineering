@@ -113,6 +113,34 @@ public class FreqTest {
 		StructureFrequencies.stage("not json");
 		check(true, "bad staging input logged, not thrown");
 
+		// 5. StructureBiomeRules: allow-list per biome set (strings stand in for biomes)
+		String o1 = "ocean", o2 = "deep_ocean", river = "river", plains = "plains";
+		Map<String, java.util.Set<String>> spawns = new LinkedHashMap<>();
+		spawns.put("ns:tower", java.util.Set.of(plains, o1, o2, river));
+		spawns.put("ns:ship", java.util.Set.of(o1, o2));
+		spawns.put("ns:house", java.util.Set.of(plains));
+		Map<String, StructureBiomeRules.Rule> rules = new LinkedHashMap<>();
+		rules.put("water", new StructureBiomeRules.Rule(List.of("#ocean", "river", "#missing"), java.util.Set.of("ns:ship")));
+		Map<String, String> structs = new LinkedHashMap<>();
+		spawns.keySet().forEach(k -> structs.put(k, k));
+		List<String> ruleLog = new java.util.ArrayList<>();
+		Map<String, java.util.Set<String>> forbidden = StructureBiomeRules.resolve(rules,
+				e -> e.equals("#ocean") ? List.of(o1, o2) : e.equals("river") ? List.of(river) : List.of(),
+				structs, (s, biome) -> spawns.get(s).contains(biome), ruleLog);
+		check(forbidden.containsKey("ns:tower") && forbidden.get("ns:tower").size() == 3 && !forbidden.get("ns:tower").contains(plains),
+				"a structure outside the allow-list loses exactly the rule's biomes it had");
+		check(!forbidden.containsKey("ns:ship"), "an allowed structure keeps its water biomes");
+		check(!forbidden.containsKey("ns:house"), "a structure with none of the rule's biomes is untouched");
+		check(ruleLog.size() == 1 && ruleLog.get(0).contains("3 biomes, 1 allowed") && ruleLog.get(0).endsWith("kept out: ns:tower"),
+				"rule summary: " + ruleLog);
+		Fake untouched = new Fake("ns:untouched");
+		java.util.function.Predicate<Holder<net.minecraft.world.level.biome.Biome>> any = h -> true;
+		StructureBiomeRules.setActiveForTest(Map.of());
+		check(StructureBiomeRules.filter(untouched, any) == any, "a structure no rule covers gets its own predicate back unchanged");
+		StructureBiomeRules.stage("{\"water\":{\"biomes\":[],\"allow\":[]}}");
+		StructureBiomeRules.stage("not json");
+		check(true, "bad biome-rule staging input logged, not thrown");
+
 		System.out.println(fails == 0 ? "ALL " + checks + " CHECKS PASSED" : fails + " FAILED of " + checks);
 		System.exit(fails == 0 ? 0 : 1);
 	}

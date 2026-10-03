@@ -19,6 +19,8 @@
 		'dumprecipes',
 		'dumpcraftingaudit',
 		'dumpgear',
+		'dumpstacks',
+		'dumpfood',
 		'dumpcompost',
 		'dumpstructures',
 		'dumpstructuregen',

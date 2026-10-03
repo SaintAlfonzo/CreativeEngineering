@@ -156,6 +156,14 @@
       "apply": "F3+T or restart the client (lang only)"
     },
     {
+      "id": "display_delight_models",
+      "script": "tools/gen_display_delight_models.py",
+      "groups": ["client"],
+      "dumps": ["dumpitemsbymod displaydelight"],
+      "outputs": ["kubejs/assets/displaydelight/models"],
+      "apply": "F3+T or restart the client (models only)"
+    },
+    {
       "id": "missing_names",
       "script": "tools/missing_names.py",
       "groups": ["reports", "names"],

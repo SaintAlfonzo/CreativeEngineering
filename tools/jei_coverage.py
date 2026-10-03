@@ -104,6 +104,7 @@ UNCOVERED = {
     'fairylights:crafting_special_copy_color': ('mod', 'Two fairy-light items: copies the colour of one onto the other.', 'stand-in'),
     'fantasyfurniture:dyeable': ('mod', 'Dyeable furniture + dye: recolours it.', 'stand-in'),
     'farmersdelight:food_serving': ('mod', 'Cooking Pot holding a meal + its container: serves the meal, pot kept.', 'stand-in'),
+    'farmersrespite:drink_pouring': ('mod', 'Kettle holding a drink + its container: pours one serving, the kettle keeps the rest (recipe id minecraft:drink_pouring).', 'stand-in'),
     'immersiveengineering:crafting_special_flare_bullet_color': ('mod', 'Flare cartridge + dye: flare colour.', 'stand-in'),
     'immersiveengineering:crafting_special_jerrycan_refill': ('mod', 'Fluid item (drill, chemthrower...) + Jerrycan: refills the item from the can.', 'stand-in'),
     'immersiveengineering:crafting_special_potion_bullet_fill': ('mod', 'Phial cartridge + potion: potion bullet.', 'stand-in'),

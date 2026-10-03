@@ -40,12 +40,12 @@
       "frequency": 1,
       "chests": 6,
       "where": {
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       },
       "post_roll_only": true
     },
@@ -54,12 +54,12 @@
       "frequency": 1,
       "chests": 6,
       "where": {
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       },
       "post_roll_only": true
     },
@@ -68,12 +68,12 @@
       "frequency": 1,
       "chests": 6,
       "where": {
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       },
       "post_roll_only": true
     },
@@ -82,12 +82,12 @@
       "frequency": 1,
       "chests": 6,
       "where": {
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       },
       "post_roll_only": true
     },
@@ -316,8 +316,8 @@
       "frequency": 1,
       "chests": 2,
       "where": {
-        "minecraft:chests/jungle_temple": 18.2,
-        "minecraft:chests/desert_pyramid": 5.99
+        "minecraft:chests/jungle_temple": 15.1,
+        "minecraft:chests/desert_pyramid": 0.641
       },
       "post_roll_only": true
     },
@@ -472,6 +472,32 @@
       "chests": 1,
       "where": {
         "cloudstorage:chests/loot_balloon": 33.1
+      }
+    },
+    "corn_delight:corn": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 6,
+      "where": {
+        "minecraft:chests/village/village_desert_house": 88.3,
+        "minecraft:chests/village/village_plains_house": 88.3,
+        "minecraft:chests/village/village_savanna_house": 88.3,
+        "minecraft:chests/village/village_snowy_house": 88.3,
+        "minecraft:chests/village/village_taiga_house": 88.3,
+        "minecraft:chests/shipwreck_supply": 76.6
+      }
+    },
+    "corn_delight:corn_seeds": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 6,
+      "where": {
+        "minecraft:chests/village/village_desert_house": 88.3,
+        "minecraft:chests/village/village_plains_house": 88.3,
+        "minecraft:chests/village/village_savanna_house": 88.3,
+        "minecraft:chests/village/village_snowy_house": 88.3,
+        "minecraft:chests/village/village_taiga_house": 88.3,
+        "minecraft:chests/shipwreck_supply": 76.6
       }
     },
     "domesticationinnovation:collar_tag": {
@@ -649,6 +675,194 @@
         "minecraft:chests/village/village_weaponsmith": 100.0
       },
       "post_roll_only": true
+    },
+    "exposure:aged_photograph": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 3,
+      "where": {
+        "minecraft:chests/village/village_plains_house": 40.5,
+        "minecraft:chests/stronghold_crossing": 30.0,
+        "minecraft:chests/shipwreck_map": 19.0
+      }
+    },
+    "exposure:black_and_white_film": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/shipwreck_map": 15.0
+      }
+    },
+    "exposure:photograph": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 2,
+      "where": {
+        "minecraft:chests/abandoned_mineshaft": 20.0,
+        "minecraft:chests/simple_dungeon": 10.0
+      }
+    },
+    "exposure_expanded:antialias_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/simple_dungeon": 100.0
+      }
+    },
+    "exposure_expanded:art_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/igloo_chest": 100.0
+      }
+    },
+    "exposure_expanded:bits_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/desert_pyramid": 100.0
+      }
+    },
+    "exposure_expanded:blobs_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/nether_bridge": 100.0
+      }
+    },
+    "exposure_expanded:blur_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/underwater_ruin_small": 100.0
+      }
+    },
+    "exposure_expanded:bumpy_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "exposure_expanded:chests/trial_chamber_corridor": 100.0
+      }
+    },
+    "exposure_expanded:c64_film": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/village/village_savanna_house": 100.0
+      }
+    },
+    "exposure_expanded:cga_film": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/village/village_snowy_house": 100.0
+      }
+    },
+    "exposure_expanded:color_convolve_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/jungle_temple": 100.0
+      }
+    },
+    "exposure_expanded:deconverge_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/village/village_temple": 100.0
+      }
+    },
+    "exposure_expanded:desaturate_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/woodland_mansion": 100.0
+      }
+    },
+    "exposure_expanded:flip_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/ruined_portal": 100.0
+      }
+    },
+    "exposure_expanded:gameboy_film": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/village/village_plains_house": 100.0
+      }
+    },
+    "exposure_expanded:nes_film": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/village/village_desert_house": 100.0
+      }
+    },
+    "exposure_expanded:ntsc_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/bastion_other": 100.0
+      }
+    },
+    "exposure_expanded:pencil_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/buried_treasure": 100.0
+      }
+    },
+    "exposure_expanded:scan_pincushion_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 2,
+      "where": {
+        "minecraft:chests/pillager_outpost": 100.0,
+        "minecraft:chests/shipwreck_supply": 100.0
+      }
+    },
+    "exposure_expanded:sobel_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/ancient_city": 100.0
+      }
+    },
+    "exposure_expanded:spider_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/abandoned_mineshaft": 100.0
+      }
+    },
+    "exposure_expanded:wobble_filter": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/end_city_treasure": 100.0
+      }
     },
     "fantasyfurniture:decorations/bone_candles": {
       "remove": false,
@@ -1049,8 +1263,8 @@
         "nullscape:phantom_nest": 47.1,
         "philipsruins:chest/lost_soul_city_loot": 26.1,
         "wares:agreement/wandering_trader/rare_ware": 25.0,
+        "minecraft:chests/ancient_city": 23.2,
         "kaisyn:village/exclusives/village_wandering_trader_hut": 21.9,
-        "minecraft:chests/ancient_city": 20.7,
         "mes:floating_islands": 12.8,
         "terralith:underground/chest": 6.8,
         "philipsruins:chest/end_ruins_loot": 5.92
@@ -1117,10 +1331,10 @@
       "frequency": 1,
       "chests": 27,
       "where": {
-        "minecraft:chests/jungle_temple_dispenser": 100.0,
         "terralith:village/desert/archer": 96.7,
         "terralith:village/fortified/archer": 96.7,
         "betterfortresses:chests/beacon": 85.4,
+        "minecraft:chests/jungle_temple_dispenser": 72.0,
         "illager_viking_longship:chests/longship": 53.3,
         "unwrecked_ships:dispensers/fire_dispenser": 53.1,
         "minecraft:chests/bastion_bridge": 47.9,
@@ -1196,12 +1410,12 @@
         "terralith:village/fortified/tavern_downstairs": 68.1,
         "kaisyn:outpost/common/food": 63.9,
         "minecraft:chests/ancient_city_ice_box": 54.9,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       }
     },
     "minecraft:bamboo": {
@@ -1209,7 +1423,7 @@
       "frequency": 1,
       "chests": 4,
       "where": {
-        "minecraft:chests/jungle_temple": 46.1,
+        "minecraft:chests/jungle_temple": 39.6,
         "betterjungletemples:chests/campsite": 38.5,
         "kaisyn:village/village_jungle_house": 23.3,
         "minecraft:chests/shipwreck_supply": 14.4
@@ -1466,6 +1680,14 @@
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_barrels": 50.0
       }
     },
+    "minecraft:blue_stained_glass_pane": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/shipwreck_map": 16.7
+      }
+    },
     "minecraft:blue_wool": {
       "remove": false,
       "frequency": 1,
@@ -1496,21 +1718,21 @@
         "illager_viking_longship:chests/longship": 64.5,
         "domesticationinnovation:chests/petshop_chest": 64.1,
         "philipsruins:chest/badlands_dungeon_loot_high": 62.7,
-        "minecraft:chests/desert_pyramid": 60.8,
+        "minecraft:chests/desert_pyramid": 61.4,
         "terralith:spire/junk": 60.5,
         "minecraft:chests/simple_dungeon": 57.8,
         "minecraft:chests/woodland_mansion": 57.8,
         "philipsruins:chest/ocean_ruin_fortress": 56.7,
         "philipsruins:chest/ocean_ruins_loot": 56.7,
-        "minecraft:chests/jungle_temple": 56.6,
         "betterstrongholds:chests/trap": 49.9,
+        "minecraft:chests/jungle_temple": 49.3,
         "philipsruins:chest/end_ruins_loot": 49.3,
         "mes:swamps": 49.0,
         "betterjungletemples:chests/campsite": 48.7,
         "philipsruins:chest/lost_soul_city_loot": 41.7,
         "betterdeserttemples:chests/storage": 36.1,
+        "minecraft:chests/ancient_city": 35.8,
         "philipsruins:chest/bone_dungeon_loot": 32.7,
-        "minecraft:chests/ancient_city": 32.2,
         "philipsruins:chest/sculk_dungeon_loot": 31.5,
         "philipsruins:chest/nether_lava_ruins_loot": 28.6,
         "philipsruins:chest/nether_ruins_low": 25.7,
@@ -1584,8 +1806,8 @@
         "minecraft:chests/stronghold_library": 88.0,
         "betterdungeons:skeleton_dungeon/chests/common": 77.9,
         "betterdungeons:spider_dungeon/chests/egg_room": 77.0,
+        "minecraft:chests/ancient_city": 72.4,
         "mes:houses_books": 69.4,
-        "minecraft:chests/ancient_city": 67.9,
         "terralith:underground/chest": 67.8,
         "villagesandpillages:village_witch/house/attic_chest": 51.2,
         "mes:floating_islands": 50.0,
@@ -1598,9 +1820,9 @@
         "hopo:chests/materials": 35.2,
         "minecraft:chests/shipwreck_map": 34.5,
         "hopo:chests/copper": 32.4,
-        "minecraft:chests/woodland_mansion": 23.0,
+        "minecraft:chests/woodland_mansion": 24.1,
+        "minecraft:chests/desert_pyramid": 23.4,
         "hopo:chests/small_ruin_cold": 22.9,
-        "minecraft:chests/desert_pyramid": 22.4,
         "philipsruins:chest/nether_ruins_low": 22.3,
         "minecraft:chests/underwater_ruin_big": 21.7,
         "betterdeserttemples:chests/tomb": 20.6,
@@ -1623,6 +1845,7 @@
         "philipsruins:chest/badlands_dungeon_loot_high": 18.1,
         "cloudstorage:chests/loot_balloon": 18.0,
         "hopo:chests/food": 14.5,
+        "minecraft:chests/simple_dungeon": 14.3,
         "mes:houses_desert": 14.3,
         "minecraft:chests/abandoned_mineshaft": 14.1,
         "minecraft:chests/village/village_desert_house": 13.9,
@@ -1630,7 +1853,6 @@
         "illager_viking_longship:chests/longship": 13.5,
         "wares:package/village/snowy": 13.2,
         "philipsruins:chest/nether_lava_ruins_loot": 12.1,
-        "minecraft:chests/simple_dungeon": 12.1,
         "minecraft:chests/village/village_plains_house": 11.8,
         "skyvillages:chests/sky_village_normal_house": 11.8,
         "philipsruins:chest/lost_soul_city_loot": 11.6,
@@ -1665,7 +1887,7 @@
         "philipsruins:chest/end_ruins_loot": 5.19,
         "minecraft:chests/stronghold_crossing": 3.97,
         "philipsruins:chest/badlands_dungeon_loot_low": 3.91,
-        "minecraft:chests/jungle_temple": 3.89,
+        "minecraft:chests/jungle_temple": 3.21,
         "betterstrongholds:chests/common": 2.64,
         "minecraft:chests/stronghold_corridor": 2.48
       }
@@ -1803,16 +2025,16 @@
         "wares:agreement/village/desert_payment_buy": 15.6,
         "wares:agreement/village/savanna_payment_buy": 15.6,
         "wares:agreement/village/snowy_requested_sell": 14.3,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 14.2,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 14.2,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 14.2,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 14.2,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 14.2,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 14.2,
         "wares:agreement/village/plains_requested_sell": 12.5,
         "wares:agreement/village/savanna_requested_sell": 12.5,
         "terralith:ruin/glacial/junk": 12.2,
         "wares:agreement/village/taiga_payment_buy": 11.6,
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 10.6,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 10.6,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 10.6,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 10.6,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 10.6,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 10.6,
         "terralith:spire/junk": 10.0,
         "wares:agreement/village/plains_payment_buy": 10.0,
         "wares:agreement/village/taiga_requested_sell": 10.0,
@@ -1957,7 +2179,7 @@
         "terralith:village/desert/library": 60.2,
         "terralith:village/fortified/library": 60.2,
         "kaisyn:outpost/exclusives/outpost_rustic_barrel": 59.7,
-        "minecraft:chests/ancient_city": 20.7,
+        "minecraft:chests/ancient_city": 23.2,
         "terralith:spire/common": 15.1,
         "philipsruins:chest/end_ruins_loot": 7.36
       }
@@ -2035,7 +2257,7 @@
       "frequency": 1,
       "chests": 20,
       "where": {
-        "minecraft:chests/woodland_mansion": 13.4,
+        "minecraft:chests/woodland_mansion": 14.7,
         "betterdungeons:small_nether_dungeon/chests/common": 11.6,
         "betterfortresses:chests/keep": 7.47,
         "kaisyn:outpost/common/armory": 6.59,
@@ -2211,7 +2433,7 @@
         "terralith:village/desert/smith": 47.3,
         "terralith:village/fortified/smith": 47.3,
         "terralith:village/desert/smith/novice": 47.0,
-        "minecraft:chests/ancient_city": 42.2,
+        "minecraft:chests/ancient_city": 46.4,
         "philipsruins:chest/nether_lava_ruins_loot": 41.3,
         "minecraft:chests/village/village_snowy_house": 40.6,
         "minecraft:chests/village/village_fisher": 40.2,
@@ -2345,13 +2567,13 @@
         "minecraft:chests/village/village_fisher": 40.2,
         "skyvillages:chests/sky_village_fisher": 40.2,
         "rare-ice:chests/rare_ice": 25.0,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 23.3,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 23.3,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 23.3,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 23.3,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 23.3,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 23.3,
         "philipsruins:chest/ocean_ruin_fortress": 22.1,
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 20.8,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 20.8,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 20.8,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 20.8,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 20.8,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 20.8,
         "hopo:chests/food": 18.3,
         "kaisyn:outpost/exclusives/outpost_beach_barrel": 16.4,
         "philipsruins:chest/ocean_ruins_loot": 13.4
@@ -2381,7 +2603,7 @@
         "minecraft:chests/village/village_cartographer": 25.8,
         "skyvillages:chests/sky_village_cartographer": 25.8,
         "betterstrongholds:chests/library_md": 17.6,
-        "minecraft:chests/ancient_city": 14.3,
+        "minecraft:chests/ancient_city": 16.1,
         "philipsruins:chest/badlands_dungeon_loot_high": 13.8,
         "betterdeserttemples:chests/library": 11.7,
         "betterstrongholds:chests/grand_library": 11.1,
@@ -2431,12 +2653,12 @@
       "chests": 7,
       "where": {
         "minecraft:chests/buried_treasure": 75.0,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       }
     },
     "minecraft:cooked_mutton": {
@@ -2465,12 +2687,12 @@
       "chests": 7,
       "where": {
         "minecraft:chests/buried_treasure": 75.0,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       }
     },
     "minecraft:cookie": {
@@ -2552,12 +2774,12 @@
       "chests": 7,
       "where": {
         "minecraft:chests/bastion_hoglin_stable": 19.1,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 5.79,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 5.79,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 5.79,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 5.79,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 5.79,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 5.79
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 4.3,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 4.3,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 4.3,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 4.3,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 4.3,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 4.3
       }
     },
     "minecraft:crimson_nylium": {
@@ -2787,11 +3009,11 @@
         "philipsruins:chest/badlands_dungeon_loot_high": 15.3,
         "minecraft:chests/shipwreck_treasure": 14.1,
         "philipsruins:chest/desert_pyramid_loot": 11.9,
-        "minecraft:chests/jungle_temple": 11.3,
         "minecraft:chests/bastion_treasure": 10.9,
         "minecraft:chests/village/village_toolsmith": 9.72,
         "skyvillages:chests/sky_village_toolsmith": 9.72,
         "mes:crystal": 9.64,
+        "minecraft:chests/jungle_temple": 9.35,
         "minecraft:chests/abandoned_mineshaft": 8.88,
         "terralith:village/desert/smith": 8.65,
         "terralith:village/fortified/smith": 8.65,
@@ -2799,7 +3021,7 @@
         "philipsruins:chest/ocean_ruin_fortress": 7.62,
         "betterstrongholds:chests/treasure": 7.37,
         "minecraft:chests/stronghold_corridor": 7.32,
-        "minecraft:chests/desert_pyramid": 5.99,
+        "minecraft:chests/desert_pyramid": 6.28,
         "philipsruins:chest/nether_ruins_low": 5.94,
         "betterdungeons:spider_dungeon/chests/egg_room": 4.24,
         "terralith:village/desert/smith/novice": 3.84,
@@ -2846,7 +3068,7 @@
         "minecraft:chests/bastion_treasure": 22.8,
         "philipsruins:chest/lost_soul_city_loot": 13.8,
         "minecraft:chests/end_city_treasure": 12.6,
-        "minecraft:chests/woodland_mansion": 6.88,
+        "minecraft:chests/woodland_mansion": 7.55,
         "philipsruins:chest/bone_dungeon_loot": 6.52,
         "terralith:spire/treasure": 6.25,
         "philipsruins:chest/end_ruins_loot": 5.92,
@@ -2874,8 +3096,8 @@
       "chests": 6,
       "where": {
         "terralith:village/desert/junk": 100.0,
-        "minecraft:chests/woodland_mansion": 19.7,
-        "minecraft:chests/ancient_city": 14.3,
+        "minecraft:chests/woodland_mansion": 21.5,
+        "minecraft:chests/ancient_city": 16.1,
         "philipsruins:chest/lost_soul_city_loot": 9.33,
         "terralith:spire/rare": 5.0,
         "philipsruins:chest/ocean_ruin_fortress": 3.3
@@ -2887,12 +3109,12 @@
       "chests": 24,
       "where": {
         "betterdeserttemples:chests/tomb_pharaoh": 41.5,
-        "minecraft:chests/ancient_city": 14.3,
+        "minecraft:chests/ancient_city": 16.1,
         "minecraft:chests/nether_bridge": 10.7,
         "betterdeserttemples:chests/storage": 8.19,
+        "minecraft:chests/simple_dungeon": 7.32,
+        "minecraft:chests/desert_pyramid": 6.28,
         "mes:swamps": 6.27,
-        "minecraft:chests/simple_dungeon": 6.16,
-        "minecraft:chests/desert_pyramid": 5.99,
         "kaisyn:village/exclusives/village_classic_blacksmith": 5.7,
         "minecraft:chests/village/village_weaponsmith": 5.64,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 5.64,
@@ -2905,7 +3127,7 @@
         "simply_houses:chests/taiga_house/taiga_house_barrels": 5.64,
         "skyvillages:chests/sky_village_weaponsmith": 5.64,
         "minecraft:chests/end_city_treasure": 4.36,
-        "minecraft:chests/jungle_temple": 3.89,
+        "minecraft:chests/jungle_temple": 3.21,
         "betterjungletemples:chests/campsite": 2.96,
         "betterstrongholds:chests/common": 2.64,
         "minecraft:chests/stronghold_corridor": 2.48,
@@ -2918,7 +3140,7 @@
       "chests": 9,
       "where": {
         "minecraft:chests/bastion_treasure": 22.8,
-        "minecraft:chests/ancient_city": 14.3,
+        "minecraft:chests/ancient_city": 16.1,
         "minecraft:chests/end_city_treasure": 12.6,
         "philipsruins:chest/lost_soul_city_loot": 9.33,
         "philipsruins:chest/bone_dungeon_loot": 6.52,
@@ -3007,7 +3229,7 @@
       "frequency": 1,
       "chests": 1,
       "where": {
-        "minecraft:chests/ancient_city": 26.7
+        "minecraft:chests/ancient_city": 29.7
       }
     },
     "minecraft:dried_kelp": {
@@ -3036,7 +3258,7 @@
       "chests": 2,
       "where": {
         "philipsruins:chest/sculk_dungeon_loot": 30.5,
-        "minecraft:chests/ancient_city": 26.7
+        "minecraft:chests/ancient_city": 29.7
       }
     },
     "minecraft:egg": {
@@ -3139,8 +3361,8 @@
         "monobank:monobank/village/taiga": 19.0,
         "minecraft:chests/village/village_taiga_house": 18.3,
         "mes:houses_flower": 18.0,
+        "minecraft:chests/desert_pyramid": 18.0,
         "hopo:chests/small_ruin_warm": 17.2,
-        "minecraft:chests/desert_pyramid": 17.2,
         "betterstrongholds:chests/prison_lg": 16.8,
         "minecraft:chests/underwater_ruin_small": 16.4,
         "minecraft:chests/village/village_tannery": 16.3,
@@ -3169,10 +3391,10 @@
         "philipsruins:chest/ruin_loot": 8.33,
         "philipsruins:chest/ruin_loot_value": 8.33,
         "betterdeserttemples:chests/storage": 8.19,
-        "minecraft:chests/jungle_temple": 7.65,
         "minecraft:chests/igloo_chest": 7.64,
         "betterstrongholds:chests/treasure": 7.37,
         "philipsruins:chest/end_ruins_loot": 6.64,
+        "minecraft:chests/jungle_temple": 6.32,
         "mes:swamps": 6.27,
         "simply_houses:chests/forest_chapel/forest_chapel_barrels": 3.81,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 3.81,
@@ -3272,14 +3494,14 @@
         "philipsruins:chest/bone_dungeon_loot": 12.3,
         "philipsruins:chest/sculk_dungeon_loot": 11.4,
         "betterdungeons:skeleton_dungeon/chests/common": 9.96,
+        "minecraft:chests/ancient_city": 8.36,
         "philipsruins:chest/nether_lava_ruins_loot": 8.27,
-        "minecraft:chests/ancient_city": 7.39,
         "minecraft:chests/bastion_treasure": 4.44,
         "betterdungeons:spider_dungeon/chests/egg_room": 4.24,
         "betterdungeons:small_nether_dungeon/chests/common": 3.91,
-        "minecraft:chests/woodland_mansion": 2.79,
-        "minecraft:chests/simple_dungeon": 2.49,
-        "minecraft:chests/desert_pyramid": 2.43,
+        "minecraft:chests/woodland_mansion": 3.07,
+        "minecraft:chests/simple_dungeon": 2.97,
+        "minecraft:chests/desert_pyramid": 2.55,
         "philipsruins:chest/lost_soul_city_loot": 2.16,
         "betterdungeons:zombie_dungeon/chests/common": 1.95,
         "betterdungeons:zombie_dungeon/chests/special": 1.95,
@@ -3323,7 +3545,7 @@
         "takesapillage:chests/bastille/church": 60.9,
         "takesapillage:chests/bastille/gallows": 59.0,
         "twigs:chests/bloodstone_obelisk": 59.0,
-        "minecraft:chests/ancient_city": 20.7,
+        "minecraft:chests/ancient_city": 23.2,
         "betterdungeons:zombie_dungeon/chests/common": 18.3,
         "betterdungeons:zombie_dungeon/chests/special": 18.3,
         "hopo:chests/materials": 18.0,
@@ -3570,7 +3792,7 @@
         "kaisyn:village/exclusives/village_wandering_trader_hut": 72.5,
         "mes:floating_islands": 53.1,
         "minecraft:chests/abandoned_mineshaft": 38.7,
-        "minecraft:chests/ancient_city": 20.7,
+        "minecraft:chests/ancient_city": 23.2,
         "kaisyn:outpost/exclusives/outpost_mediterranean_barrel": 16.4
       }
     },
@@ -3648,11 +3870,11 @@
         "betterfortresses:chests/puzzle": 55.1,
         "minecraft:chests/end_city_treasure": 50.2,
         "betterstrongholds:chests/trap": 49.9,
-        "minecraft:chests/jungle_temple": 46.1,
         "minecraft:chests/nether_bridge": 45.1,
         "betterfortresses:chests/hall": 43.3,
         "betterdeserttemples:chests/tomb_pharaoh": 41.5,
         "betterfortresses:chests/extra": 40.8,
+        "minecraft:chests/jungle_temple": 39.6,
         "illager_viking_longship:chests/longship": 39.2,
         "philipsruins:chest/lost_soul_city_loot": 38.1,
         "philipsruins:chest/nether_lava_ruins_loot": 36.3,
@@ -3702,8 +3924,8 @@
         "terralith:spire/common": 18.9,
         "minecraft:chests/stronghold_crossing": 18.6,
         "mes:crystal": 18.6,
+        "minecraft:chests/desert_pyramid": 18.0,
         "hopo:chests/small_ruin_warm": 17.2,
-        "minecraft:chests/desert_pyramid": 17.2,
         "hopo:chests/materials": 15.6,
         "wares:agreement/village/savanna_payment_buy": 15.6,
         "minecraft:chests/abandoned_mineshaft": 14.5,
@@ -3820,11 +4042,11 @@
         "kaisyn:outpost/common/food": 33.8,
         "minecraft:chests/abandoned_mineshaft": 28.2,
         "wares:agreement/wandering_trader/rare_ware": 25.0,
-        "minecraft:chests/desert_pyramid": 22.4,
+        "minecraft:chests/desert_pyramid": 23.4,
+        "minecraft:chests/woodland_mansion": 21.5,
+        "minecraft:chests/simple_dungeon": 20.9,
         "minecraft:chests/ruined_portal": 20.5,
         "betterdungeons:spider_dungeon/chests/egg_room": 20.4,
-        "minecraft:chests/woodland_mansion": 19.7,
-        "minecraft:chests/simple_dungeon": 17.7,
         "philipsruins:chest/bone_dungeon_loot": 16.2,
         "terralith:village/desert/food": 15.9,
         "terralith:village/fortified/food": 15.9,
@@ -3861,12 +4083,12 @@
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 1.28,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 1.28,
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_barrels": 1.28,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 0.0588,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 0.0588,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 0.0588,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 0.0588,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 0.0588,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 0.0588
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 0.0435,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 0.0435,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 0.0435,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 0.0435,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 0.0435,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 0.0435
       }
     },
     "minecraft:golden_axe": {
@@ -3927,12 +4149,12 @@
         "minecraft:chests/bastion_hoglin_stable": 10.0,
         "minecraft:chests/ruined_portal": 7.29,
         "philipsruins:chest/end_ruins_loot": 6.64,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 0.0588,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 0.0588,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 0.0588,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 0.0588,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 0.0588,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 0.0588
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 0.0435,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 0.0435,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 0.0435,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 0.0435,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 0.0435,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 0.0435
       }
     },
     "minecraft:golden_chestplate": {
@@ -3995,9 +4217,9 @@
       "where": {
         "minecraft:chests/nether_bridge": 26.5,
         "philipsruins:chest/nether_ruins_low": 20.6,
+        "minecraft:chests/simple_dungeon": 14.3,
         "philipsruins:chest/lost_soul_city_loot": 13.8,
-        "minecraft:chests/simple_dungeon": 12.1,
-        "minecraft:chests/desert_pyramid": 11.7,
+        "minecraft:chests/desert_pyramid": 12.3,
         "philipsruins:chest/nether_lava_ruins_loot": 9.15,
         "betterdeserttemples:chests/storage": 8.19,
         "minecraft:chests/ruined_portal": 7.29,
@@ -4017,7 +4239,7 @@
         "philipsruins:chest/ocean_ruin_fortress": 4.92,
         "minecraft:chests/end_city_treasure": 4.36,
         "betterdungeons:small_nether_dungeon/chests/common": 4.01,
-        "minecraft:chests/jungle_temple": 3.89,
+        "minecraft:chests/jungle_temple": 3.21,
         "betterjungletemples:chests/campsite": 2.96,
         "philipsruins:chest/bone_dungeon_loot": 2.83,
         "betterfortresses:chests/keep": 2.66,
@@ -4155,6 +4377,14 @@
         "minecraft:chests/village/village_desert_house": 13.9,
         "wares:agreement/village/desert_requested_sell": 8.33,
         "wares:agreement/wandering_trader/regular_ware": 1.25
+      }
+    },
+    "minecraft:green_stained_glass_pane": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/shipwreck_map": 16.7
       }
     },
     "minecraft:gunpowder": {
@@ -4467,9 +4697,9 @@
       "chests": 23,
       "where": {
         "domesticationinnovation:chests/petshop_chest": 39.7,
-        "minecraft:chests/simple_dungeon": 17.7,
+        "minecraft:chests/simple_dungeon": 20.9,
+        "minecraft:chests/desert_pyramid": 18.0,
         "minecraft:chests/nether_bridge": 17.3,
-        "minecraft:chests/desert_pyramid": 17.2,
         "betterdeserttemples:chests/storage": 12.1,
         "mes:swamps": 6.27,
         "kaisyn:village/exclusives/village_classic_blacksmith": 5.7,
@@ -4484,8 +4714,8 @@
         "simply_houses:chests/taiga_house/taiga_house_barrels": 5.64,
         "skyvillages:chests/sky_village_weaponsmith": 5.64,
         "minecraft:chests/end_city_treasure": 4.36,
-        "minecraft:chests/jungle_temple": 3.89,
         "betterfortresses:chests/keep": 3.79,
+        "minecraft:chests/jungle_temple": 3.21,
         "betterjungletemples:chests/campsite": 2.96,
         "betterstrongholds:chests/common": 2.64,
         "minecraft:chests/stronghold_corridor": 2.48
@@ -4540,13 +4770,13 @@
         "terralith:village/fortified/smith": 34.0,
         "terralith:village/desert/smith/novice": 33.7,
         "minecraft:chests/bastion_treasure": 33.7,
-        "minecraft:chests/jungle_temple": 33.4,
         "mes:houses_uncommon": 31.8,
         "philipsruins:chest/badlands_dungeon_loot_high": 31.0,
         "minecraft:chests/pillager_outpost": 30.5,
         "takesapillage:chests/bastille/center": 30.5,
         "takesapillage:chests/bastille/church": 30.5,
         "philipsruins:chest/bone_dungeon_loot": 29.3,
+        "minecraft:chests/jungle_temple": 28.3,
         "hopo:chests/small_ruin_cold": 27.9,
         "philipsruins:chest/nether_ruins_low": 27.4,
         "minecraft:chests/abandoned_mineshaft": 27.3,
@@ -4576,10 +4806,10 @@
         "minecraft:chests/bastion_other": 19.0,
         "minecraft:chests/simple_dungeon": 18.5,
         "minecraft:chests/woodland_mansion": 18.5,
+        "minecraft:chests/desert_pyramid": 18.0,
         "minecraft:chests/nether_bridge": 17.3,
         "philipsruins:chest/desert_pyramid_loot": 17.3,
         "hopo:chests/small_ruin_warm": 17.2,
-        "minecraft:chests/desert_pyramid": 17.2,
         "hopo:chests/materials": 15.6,
         "terralith:spire/common": 15.5,
         "philipsruins:chest/lost_soul_city_loot": 12.4,
@@ -4607,7 +4837,7 @@
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 25.4,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 25.4,
         "skyvillages:chests/sky_village_weaponsmith": 25.4,
-        "minecraft:chests/ancient_city": 20.7,
+        "minecraft:chests/ancient_city": 23.2,
         "philipsruins:chest/badlands_dungeon_loot_high": 13.8,
         "philipsruins:chest/desert_pyramid_loot": 13.3,
         "kaisyn:outpost/common/armory": 12.9,
@@ -4943,10 +5173,10 @@
         "domesticationinnovation:chests/petshop_chest": 64.1,
         "terralith:village/desert/cartographer": 46.7,
         "terralith:village/fortified/cartographer": 46.7,
-        "minecraft:chests/woodland_mansion": 25.6,
+        "minecraft:chests/woodland_mansion": 27.9,
         "philipsruins:chest/lost_soul_city_loot": 22.7,
         "betterdungeons:spider_dungeon/chests/egg_room": 19.1,
-        "minecraft:chests/ancient_city": 14.3,
+        "minecraft:chests/ancient_city": 16.1,
         "betterdungeons:skeleton_dungeon/chests/common": 7.23
       }
     },
@@ -5268,12 +5498,12 @@
       "chests": 7,
       "where": {
         "terralith:village/fortified/tavern_upstairs": 15.5,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 5.79,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 5.79,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 5.79,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 5.79,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 5.79,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 5.79
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 4.3,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 4.3,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 4.3,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 4.3,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 4.3,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 4.3
       }
     },
     "minecraft:moss_block": {
@@ -5335,12 +5565,12 @@
         "kaisyn:village/village_mushroom_house": 21.1,
         "terralith:village/fortified/tavern_downstairs": 16.1,
         "hopo:chests/food": 8.5,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 2.92,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 2.92,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 2.92,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 2.92,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 2.92,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 2.92
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 2.16,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 2.16,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 2.16,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 2.16,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 2.16,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 2.16
       }
     },
     "minecraft:music_disc_13": {
@@ -5349,9 +5579,9 @@
       "chests": 4,
       "where": {
         "betterdungeons:small_nether_dungeon/chests/common": 26.9,
-        "minecraft:chests/woodland_mansion": 19.7,
-        "minecraft:chests/simple_dungeon": 17.7,
-        "minecraft:chests/ancient_city": 14.3
+        "minecraft:chests/woodland_mansion": 21.5,
+        "minecraft:chests/simple_dungeon": 20.9,
+        "minecraft:chests/ancient_city": 16.1
       }
     },
     "minecraft:music_disc_blocks": {
@@ -5367,9 +5597,9 @@
       "frequency": 1,
       "chests": 10,
       "where": {
-        "minecraft:chests/woodland_mansion": 19.7,
-        "minecraft:chests/simple_dungeon": 17.7,
-        "minecraft:chests/ancient_city": 14.3,
+        "minecraft:chests/woodland_mansion": 21.5,
+        "minecraft:chests/simple_dungeon": 20.9,
+        "minecraft:chests/ancient_city": 16.1,
         "philipsruins:chest/nether_ruins_low": 9.77,
         "philipsruins:chest/badlands_dungeon_loot_low": 7.71,
         "philipsruins:chest/desert_pyramid_loot": 7.16,
@@ -5401,11 +5631,11 @@
       "chests": 7,
       "where": {
         "philipsruins:chest/nether_ruins_low": 9.77,
+        "minecraft:chests/ancient_city": 8.36,
         "betterdungeons:small_nether_dungeon/chests/common": 7.88,
-        "minecraft:chests/ancient_city": 7.39,
         "philipsruins:chest/badlands_dungeon_loot_low": 5.82,
         "philipsruins:chest/desert_pyramid_loot": 5.4,
-        "minecraft:chests/simple_dungeon": 2.49,
+        "minecraft:chests/simple_dungeon": 2.97,
         "minecraft:chests/stronghold_corridor": 2.48
       }
     },
@@ -5444,11 +5674,11 @@
       "where": {
         "minecraft:chests/abandoned_mineshaft": 42.3,
         "betterdungeons:small_nether_dungeon/chests/common": 34.6,
-        "minecraft:chests/woodland_mansion": 25.6,
-        "minecraft:chests/simple_dungeon": 23.1,
+        "minecraft:chests/woodland_mansion": 27.9,
+        "minecraft:chests/simple_dungeon": 27.1,
         "betterdungeons:spider_dungeon/chests/egg_room": 19.1,
         "terralith:village/fortified/fisherman": 16.5,
-        "minecraft:chests/ancient_city": 14.3,
+        "minecraft:chests/ancient_city": 16.1,
         "betterdungeons:zombie_dungeon/chests/common": 9.48,
         "betterdungeons:zombie_dungeon/chests/special": 9.48,
         "philipsruins:chest/lost_soul_city_loot": 9.33,
@@ -5933,16 +6163,16 @@
         "wares:package/village/snowy": 13.2,
         "wares:agreement/village/plains_requested_sell": 12.5,
         "wares:agreement/village/taiga_payment_buy": 11.6,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4,
         "wares:agreement/village/plains_payment_buy": 10.0,
         "wares:agreement/village/taiga_requested_sell": 10.0,
         "wares:package/village/taiga": 9.43,
-        "wares:package/village/plains": 9.09
+        "wares:package/village/plains": 9.09,
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       }
     },
     "minecraft:potion": {
@@ -5967,8 +6197,8 @@
         "minecraft:chests/buried_treasure": 66.7,
         "betterdeserttemples:chests/lab": 54.6,
         "terralith:village/fortified/fisherman": 48.2,
+        "minecraft:chests/ancient_city": 35.8,
         "hopo:chests/prismarine": 35.1,
-        "minecraft:chests/ancient_city": 32.2,
         "terralith:village/fortified/tavern_upstairs": 23.8,
         "nullscape:phantom_nest": 20.0
       }
@@ -6048,12 +6278,12 @@
         "villagesandpillages:village_witch/house/barrel": 37.3,
         "betterwitchhuts:chests/hut_0": 25.2,
         "terralith:village/fortified/fisherman": 23.9,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4,
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5,
         "philipsruins:chest/ocean_ruins_loot": 7.73,
         "philipsruins:chest/ocean_ruin_fortress": 6.88,
         "hopo:chests/food": 6.44
@@ -6325,6 +6555,14 @@
         "wares:agreement/village/desert_requested_sell": 8.33
       }
     },
+    "minecraft:red_stained_glass_pane": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/shipwreck_map": 16.7
+      }
+    },
     "minecraft:red_terracotta": {
       "remove": false,
       "frequency": 1,
@@ -6419,16 +6657,16 @@
         "philipsruins:chest/ocean_ruins_loot": 66.3,
         "philipsruins:chest/ocean_ruin_fortress": 65.8,
         "betterstrongholds:chests/prison_lg": 61.9,
-        "minecraft:chests/desert_pyramid": 60.8,
+        "minecraft:chests/desert_pyramid": 61.4,
         "minecraft:chests/underwater_ruin_small": 59.6,
         "minecraft:chests/simple_dungeon": 57.8,
         "minecraft:chests/woodland_mansion": 57.8,
         "minecraft:chests/igloo_chest": 55.3,
         "mes:abandoned": 54.2,
         "betterdungeons:small_nether_dungeon/chests/common": 52.0,
-        "minecraft:chests/jungle_temple": 48.3,
         "philipsruins:chest/end_ruins_loot": 45.2,
         "philipsruins:chest/lost_soul_city_loot": 44.5,
+        "minecraft:chests/jungle_temple": 41.6,
         "betterjungletemples:chests/campsite": 40.6,
         "betterdeserttemples:chests/storage": 36.1,
         "betterdeserttemples:chests/tomb": 34.4,
@@ -6452,14 +6690,15 @@
       "where": {
         "betterdungeons:small_nether_dungeon/chests/common": 42.2,
         "minecraft:chests/nether_bridge": 32.3,
-        "minecraft:chests/simple_dungeon": 23.1,
-        "minecraft:chests/desert_pyramid": 22.4,
+        "minecraft:chests/simple_dungeon": 27.1,
+        "minecraft:chests/desert_pyramid": 23.4,
         "betterdeserttemples:chests/tomb": 20.6,
         "betterdungeons:spider_dungeon/chests/egg_room": 20.4,
         "philipsruins:chest/badlands_dungeon_loot_low": 18.5,
         "mes:swamps": 17.8,
         "minecraft:chests/village/village_tannery": 16.3,
         "kaisyn:village/exclusives/village_classic_blacksmith": 16.2,
+        "minecraft:chests/ancient_city": 16.1,
         "minecraft:chests/village/village_weaponsmith": 16.1,
         "simply_houses:chests/forest_chapel/forest_chapel_normal": 16.1,
         "simply_houses:chests/forest_fort/forest_fort_normal": 16.1,
@@ -6470,14 +6709,13 @@
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 16.1,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 16.1,
         "skyvillages:chests/sky_village_weaponsmith": 16.1,
-        "minecraft:chests/ancient_city": 14.3,
         "philipsruins:chest/desert_pyramid_loot": 14.0,
         "minecraft:chests/end_city_treasure": 12.6,
         "minecraft:chests/bastion_hoglin_stable": 12.0,
-        "minecraft:chests/jungle_temple": 11.3,
         "minecraft:chests/village/village_savanna_house": 11.1,
         "betterdungeons:zombie_dungeon/chests/common": 9.48,
         "betterdungeons:zombie_dungeon/chests/special": 9.48,
+        "minecraft:chests/jungle_temple": 9.35,
         "betterjungletemples:chests/campsite": 8.69,
         "kaisyn:village/village_jungle_house": 8.39,
         "betterdeserttemples:chests/storage": 8.19,
@@ -6500,12 +6738,12 @@
         "minecraft:chests/village/village_fisher": 22.4,
         "skyvillages:chests/sky_village_fisher": 22.4,
         "hopo:chests/food": 18.3,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 18.0,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 18.0,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 18.0,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 18.0,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 18.0,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 18.0,
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 15.3,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 15.3,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 15.3,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 15.3,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 15.3,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 15.3,
         "chefsdelight:chests/cooker": 12.8
       }
     },
@@ -6559,7 +6797,7 @@
       "frequency": 1,
       "chests": 2,
       "where": {
-        "minecraft:chests/ancient_city": 20.7,
+        "minecraft:chests/ancient_city": 23.2,
         "philipsruins:chest/sculk_dungeon_loot": 8.88
       }
     },
@@ -6569,7 +6807,7 @@
       "chests": 2,
       "where": {
         "philipsruins:chest/sculk_dungeon_loot": 23.8,
-        "minecraft:chests/ancient_city": 14.3
+        "minecraft:chests/ancient_city": 16.1
       }
     },
     "minecraft:sculk_sensor": {
@@ -6577,7 +6815,7 @@
       "frequency": 1,
       "chests": 2,
       "where": {
-        "minecraft:chests/ancient_city": 20.7,
+        "minecraft:chests/ancient_city": 23.2,
         "philipsruins:chest/sculk_dungeon_loot": 7.44
       }
     },
@@ -6735,7 +6973,7 @@
       "frequency": 1,
       "chests": 1,
       "where": {
-        "minecraft:chests/ancient_city": 32.2
+        "minecraft:chests/ancient_city": 35.8
       }
     },
     "minecraft:spectral_arrow": {
@@ -6761,7 +6999,7 @@
         "villagesandpillages:village_witch/house/personal_chest": 45.6,
         "betterwitchhuts:chests/hut_0": 45.1,
         "villagesandpillages:village_witch/house/barrel": 37.3,
-        "minecraft:chests/desert_pyramid": 27.3,
+        "minecraft:chests/desert_pyramid": 28.5,
         "takesapillage:chests/bastille/church": 23.0
       }
     },
@@ -7242,13 +7480,13 @@
       "where": {
         "domesticationinnovation:chests/petshop_chest": 78.8,
         "hopo:chests/food": 12.5,
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4,
-        "terralith:village/fortified/fisherman": 8.56
+        "terralith:village/fortified/fisherman": 8.56,
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       }
     },
     "minecraft:tropical_fish_bucket": {
@@ -7302,12 +7540,12 @@
       "frequency": 1,
       "chests": 6,
       "where": {
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 5.79,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 5.79,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 5.79,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 5.79,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 5.79,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 5.79
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 4.3,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 4.3,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 4.3,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 4.3,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 4.3,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 4.3
       }
     },
     "minecraft:warped_planks": {
@@ -7598,6 +7836,33 @@
       "where": {
         "betterdeserttemples:chests/wardrobe": 41.4
       }
+    },
+    "neapolitan:bananarrow": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/jungle_temple_dispenser": 52.0
+      },
+      "post_roll_only": true
+    },
+    "neapolitan:chocolate_bar": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/jungle_temple": 28.3
+      },
+      "post_roll_only": true
+    },
+    "neapolitan:chocolate_spider_eye": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/jungle_temple": 33.0
+      },
+      "post_roll_only": true
     },
     "netherite_horse_armor:netherite_horse_armor": {
       "remove": false,
@@ -8060,7 +8325,7 @@
       "frequency": 1,
       "chests": 1,
       "where": {
-        "minecraft:chests/ancient_city": 46.6
+        "minecraft:chests/ancient_city": 1.47
       },
       "post_roll_only": true
     },
@@ -8071,9 +8336,9 @@
       "where": {
         "minecraft:chests/stronghold_library": 88.0,
         "minecraft:chests/bastion_treasure": 46.5,
-        "minecraft:chests/ancient_city": 26.7,
-        "minecraft:chests/simple_dungeon": 23.1,
-        "minecraft:chests/woodland_mansion": 19.7
+        "minecraft:chests/simple_dungeon": 4.23,
+        "minecraft:chests/woodland_mansion": 3.28,
+        "minecraft:chests/ancient_city": 0.738
       },
       "post_roll_only": true
     },
@@ -8082,10 +8347,10 @@
       "frequency": 1,
       "chests": 4,
       "where": {
-        "minecraft:chests/jungle_temple": 27.6,
         "minecraft:chests/nether_bridge": 26.5,
-        "minecraft:chests/simple_dungeon": 12.1,
-        "minecraft:chests/desert_pyramid": 9.45
+        "minecraft:chests/jungle_temple": 23.2,
+        "minecraft:chests/simple_dungeon": 2.13,
+        "minecraft:chests/desert_pyramid": 1.02
       },
       "post_roll_only": true
     },
@@ -8103,12 +8368,12 @@
       "frequency": 1,
       "chests": 6,
       "where": {
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       },
       "post_roll_only": true
     },
@@ -8117,12 +8382,12 @@
       "frequency": 1,
       "chests": 6,
       "where": {
-        "simply_houses:chests/taiga_forge/taiga_forge_normal": 11.4,
-        "simply_houses:chests/taiga_house/taiga_house_normal": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 11.4,
-        "simply_houses:chests/taiga_inn/taiga_inn_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 11.4,
-        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 11.4
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
       },
       "post_roll_only": true
     },
@@ -8356,6 +8621,118 @@
       "where": {
         "twigs:chests/bloodstone_obelisk": 100.0
       }
+    },
+    "upgrade_aquatic:blue_pickerelweed": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/shipwreck_supply": 62.5
+      },
+      "post_roll_only": true
+    },
+    "upgrade_aquatic:cooked_lionfish": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 6,
+      "where": {
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
+      },
+      "post_roll_only": true
+    },
+    "upgrade_aquatic:cooked_perch": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 6,
+      "where": {
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
+      },
+      "post_roll_only": true
+    },
+    "upgrade_aquatic:cooked_pike": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 6,
+      "where": {
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
+      },
+      "post_roll_only": true
+    },
+    "upgrade_aquatic:lionfish": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 6,
+      "where": {
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
+      },
+      "post_roll_only": true
+    },
+    "upgrade_aquatic:perch": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 6,
+      "where": {
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
+      },
+      "post_roll_only": true
+    },
+    "upgrade_aquatic:pike": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 6,
+      "where": {
+        "simply_houses:chests/taiga_forge/taiga_forge_normal": 8.5,
+        "simply_houses:chests/taiga_house/taiga_house_normal": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_barrels": 8.5,
+        "simply_houses:chests/taiga_inn/taiga_inn_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 8.5,
+        "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 8.5
+      },
+      "post_roll_only": true
+    },
+    "upgrade_aquatic:purple_pickerelweed": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/shipwreck_supply": 62.5
+      },
+      "post_roll_only": true
+    },
+    "upgrade_aquatic:thrasher_tooth": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 2,
+      "where": {
+        "minecraft:chests/buried_treasure": 50.0,
+        "minecraft:chests/underwater_ruin_big": 50.0
+      },
+      "post_roll_only": true
     },
     "wares:cardboard_box": {
       "remove": false,

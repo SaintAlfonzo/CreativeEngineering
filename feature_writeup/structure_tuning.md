@@ -1,6 +1,6 @@
 # Structure tuning: how often every structure and village house generates
 
-Test prefix **ST-** · Last updated **2026-09-27** · Overall status **DEPLOYED, in-game test pending** (structure groups
+Test prefix **ST-** · Last updated **2026-10-02** · Overall status **DEPLOYED, in-game test pending** (structure groups
 replaced the per-set + multiplier model on 2026-09-27 evening; jar in `mods/`, needs a rejoin: ST-17 onward). Ground
 matching (3.8), the CEConfig `[worldgen]` section with its debug density (3.9) and `/ceplace` (3.10) are DEPLOYED
 2026-09-27 (jar md5 729953e6); the structure lines, live-set check and `/ceplace` ran on a scratch dedicated server, your client not yet: ST-27 to ST-42
@@ -19,13 +19,15 @@ there (a grassy ruin on volcanic peaks sits on basalt instead).
 | Structure groups (`structure_groups.json` + `group/*` tags) | KubeJS `structure_overrides.js` (`ServerEvents.highPriorityData`) + patcherMod `StructureFrequencies` (2 mixins) | DEPLOYED 2026-09-27 (jar md5 e58b6e57): node sim, Rhino parity and a 13-check Java test pass (`tools/test_structure_groups.sh`). Needs a rejoin (ST-17 to ST-26) |
 | Migration from the old model | `tools/gen_structure_groups.py --migrate` | Done 2026-09-27: every structure within x0.89 to x1.13 of its old rate (`structure_group_migration.md`) |
 | KubeJS virtual-pack prefix fix (world creation broke without it) | patcherMod `KubeJSVirtualDataPackListMixin` | VERIFIED 2026-09-26 (world creation works, tuning applies) |
-| Jigsaw pool tuning (`pool_config.json` + `pool_tags.json`) | patcherMod `worldgen/PoolTuner` | Runs in game: report rewritten 2026-09-27 12:00, 645 pools / 3669 pieces, 12 pools retuned. Villages themselves not checked yet |
+| Jigsaw pool tuning (`pool_config.json` + `pool_tags.json`) | patcherMod `worldgen/PoolTuner` | Runs in game: report rewritten 2026-09-27 12:00, 645 pools / 3669 pieces, 12 pools retuned. Latest report (2026-10-02): 1,367 pools / 6,932 pieces, 9 retuned, Improved Pillager Outpost's pools included. Villages themselves not checked yet |
 | Lootr container swaps (`loot_container_swaps.json`) | patcherMod `LootContainerSwaps` + mixin | DEPLOYED; untested in game |
 | Searches skip removed sets (explorer maps, `/locate`) | patcherMod `ChunkGeneratorLocateMixin` + KubeJS `loot/06_dead_maps.js` | DEPLOYED (in the 16:51 jar). Emptied sets now also have no members, so searches never see them (ST-15, ST-16) |
 | Ground matching (grass/dirt bases on foreign ground) | patcherMod `worldgen/GroundMatch` + 2 mixins, CEConfig `[worldgen.ground_match]`, tags in `blocktags.js` | DEPLOYED 2026-09-27 (jar md5 729953e6), 37 headless checks pass (`tools/test_worldgen_tools.sh`). ST-27 to ST-32 |
 | Worldgen config: a switch per system, debug structure density, solver constants | CEConfig `[worldgen]` via `worldgen/WorldgenConfig`; read by the KubeJS applier and every patcherMod worldgen class | DEPLOYED 2026-09-27. Density exact for every live set (244 node checks), node and Rhino identical at x4, x0.3 and groups off. ST-33 to ST-38 |
 | `/ceplace`: every structure or template of a filter in rows (flat-world testing) | patcherMod `worldgen/MassPlacer` | DEPLOYED 2026-09-27; filter/row/sign/alignment logic tested headless (30 checks); a real run on a scratch dedicated server placed 55 of 56 T&T structures after the watchdog fix. ST-39 to ST-42 |
 | Data-only structure mods converted to `kubejs/data` (33 jars, 56 structures) | `tools/port_structure_jars.py` | Done 2026-09-27; scratch server boots, 56 of 56 placed by `/ceplace`, live sets match. Client untested. ST-43 |
+| Biome rules: only water structures start in oceans and rivers | `biome_rules` in `structure_groups.json` + tag `water_ok`; patcherMod `worldgen/StructureBiomeRules` + `ChunkGeneratorStructureBiomeRulesMixin`, CEConfig `structureBiomeRules` | BUILT 2026-10-03, patcherMod 1.0.4 in `mods/` (md5 ab58494b); 6 Java checks, node/Rhino parity; a scratch dedicated server applied it (25 kept out). ST-44 to ST-46 |
+| Improved Pillager Outpost as a 1-in-8 tower, not a replacement; IPO template names fixed; driftwood at 0.25x | `kubejs/data/{minecraft,ipo,upgrade_aquatic}` | BUILT 2026-10-03; the scratch server loaded the pools at 7:1 and created the world with the driftwood overrides. ST-47, ST-48 |
 
 **Open first:** [structure_groups.json](../kubejs/generation_scripts/worldgen/structure_groups.json) (every rate),
 [structure_tags.json](../kubejs/generation_scripts/worldgen/structure_tags.json) (`group/*` = who shares a grid),
@@ -225,8 +227,9 @@ Lootr only converts vanilla chests, barrels, trapped chests and shulker boxes. `
 listed block that a structure template places **with a loot table** into a vanilla container (facing kept), which
 Lootr then converts: IE crates and Farmer's Delight cabinets/baskets → barrel, PneumaticCraft reinforced chest →
 chest. Hook: `mixin/StructureTemplateLootSwapMixin` at the return of Forge's `StructureTemplate.processBlockInfos`,
-which every template placement goes through. `loot_container_audit.md` (re-run 2026-09-27: 2320 loot containers)
-leaves only Nullscape's phantom-hive droppers and Monobank's bank blocks unconverted, on purpose.
+which every template placement goes through. `loot_container_audit.md` (re-run 2026-10-02: 3,874 loot containers)
+leaves only Nullscape's phantom-hive droppers, Monobank's bank blocks and Unwrecked Ships' trap dispensers (12, like
+vanilla jungle-temple dispensers) unconverted, on purpose.
 
 ### 3.7 Existing configs that modify structure generation
 
@@ -396,6 +399,70 @@ carry only a datapack, so `tools/port_structure_jars.py` copies each one to `kub
   old one-building houses in plains drop to about x0.45 of their earlier density, T&T outposts to x0.44 to x0.88, the
   T&T ship village and pillager ship to about x0.27, witch huts to x0.7, and farmer's structures / Simply Houses to
   about x0.6 to x0.8. To win that back, lower the affected groups' `spacing` in `structure_groups.json`.
+
+### 3.12 Water biomes, IPO outposts, driftwood (added 2026-10-03)
+
+**Biome rules.** Mods sometimes give a structure every overworld biome: Mysticrift's 8 pillager towers use
+`#minecraft:is_overworld`, so they spawned in the open ocean. `biome_rules` in `structure_groups.json` holds rules of
+the form `{biomes, allow}`. Only the structures in the `allow` tag can start in a rule's biomes. Every other structure
+keeps its own biome list, minus those biomes.
+
+- **`water`:** biomes `#minecraft:is_ocean`, `#minecraft:is_river`, `#c:river` (Terralith's warm river): 12 in this
+  pack. `allow` is `#water_ok` in `structure_tags.json`:
+  - in the water: ships, wrecks, underwater ruins, the monument, Hopo's underwater fossils, the ocean ruined portal, and
+    Farmer's Structures' sushi stall. The stall is a stilted river building with fish inside, and its own mod spawns it
+    in rivers only.
+  - not in the water but fine there: sky structures and the AE2 meteorite, which sit above the sea, and everything
+    underground (`type/underground`, `type/mineshaft`, `dungeon/underground`), which sits under the seabed. Remove
+    those lines from the tag to keep them out of the sea too.
+- **Kept out (live, scratch server 2026-10-03), 25 in all:**
+  - the 8 Mysticrift towers
+  - Terralith's spire (frozen rivers)
+  - Supplementaries way signs (its set is registered in code, so it is not in `structure_config.json`)
+  - vanilla `ruined_portal` (already removed)
+  - vanilla `shipwreck` / `shipwreck_beached`: Revamped Shipwrecks empties their set, so nothing changes
+  - Terralith's 12 `zpointer/*` dummies (in no set)
+
+  The game logs the list as `[structure-biome-rules] water: ... kept out: ...`.
+- **How:** `structure_overrides.js` resolves the tag and stages `{biomes, allow ids}` to patcherMod
+  `StructureBiomeRules`. At ServerAboutToStart, that class resolves the biome tags against the loaded registry and
+  covers every registered structure, including ones from mods that no config knows yet.
+  `ChunkGeneratorStructureBiomeRulesMixin` narrows the valid-biome predicate that `tryGenerateStructure` hands to
+  `Structure#generate`, which is the same check that keeps a structure inside its own biome list.
+  - `/place structure` is not affected.
+  - `/locate` predictions in 1.19.2 never look at biomes, so a search loads the chunk and finds no start, the same as
+    for any other wrong-biome slot.
+  - A rule error applies nothing. An older jar without the class logs a warning, and the rules simply don't apply.
+  - Switch: CEConfig `[worldgen.systems] structureBiomeRules`.
+- **Rates:** the water slots of a group grid stay empty for the kept-out members; the land rates don't change.
+  `gen_structure_groups.py` and `structures_by_biome.md` apply the rule, so ocean rows now list only the ships under
+  Pillager.
+
+**Improved Pillager Outpost** (`ipo`, data only) overwrote `minecraft:pillager_outpost/base_plate` with a 19x1x19
+plate. The plate's only jigsaw leads to `ipo:pillager_outpost/towers`, so every outpost was an IPO tower. Now:
+- `kubejs/data/minecraft/structures/pillager_outpost/base_plate.nbt` is the vanilla plate again (from the 1.19.2 jar).
+- IPO's plate is copied to `ipo:pillager_outpost/base_plate`.
+- `minecraft:pillager_outpost/base_plates` (the start pool) picks the vanilla plate at weight 7 and the IPO plate at
+  weight 1, so 1 outpost in 8 is an IPO tower. Retune it in `pool_config.json`, where both entries are listed.
+- IPO's cages, tents and logs (`features` pool and templates) use the vanilla jigsaw layout, so vanilla outposts use
+  them too. To keep vanilla outposts fully vanilla, copy the 6 vanilla feature templates and the vanilla
+  `features` pool into `kubejs/data/minecraft`.
+- **IPO v5 bug, fixed:** its pools ask for `tower/damaged_overgrown` and `tower/top/damaged_overgrown(_active)`, but
+  the jar ships those templates as `overgrown_damaged`, so those picks placed an empty piece (a plate with no tower,
+  or a tower with no top). `kubejs/data/ipo/worldgen/template_pool/pillager_outpost/*.json` are IPO's 5 pools with
+  the names corrected. Delete them if IPO fixes this.
+
+**Driftwood** (Upgrade Aquatic) is a placed feature, not a structure. Its 5 placed features are registered in Java,
+so `kubejs/data/upgrade_aquatic/worldgen/placed_feature/driftwood_*.json` override them at 0.25x. Each file keeps
+the feature, the square spread, the `WORLD_SURFACE_WG` heightmap and the biome filter:
+
+| Feature | Upgrade Aquatic | Now |
+|---|---|---|
+| ocean | rarity 1/32 per chunk | 1/128 |
+| beach | rarity 1/4 per chunk | 1/16 |
+| river | 2 per chunk | 1 in 2 chunks |
+| swamp | 4 per chunk | 1 per chunk |
+| extra (Atmospheric rainforest basins) | 5 per chunk | 1 or 2 (3:1), mean 1.25 |
 
 ## 4. Limits and decisions
 
@@ -586,6 +653,13 @@ carry only a datapack, so `tools/port_structure_jars.py` copies each one to `kub
 - [ ] **ST-42 Status and stop:** start `/ceplace structures by group @philipsruins @hopo`, run `/ceplace status` (progress line naming the structure in progress and its chunks loaded/placed), then `/ceplace stop` → `stopped at n/N`, nothing more is placed.
 - [ ] **ST-43 Converted structure mods in the client:** the game starts with no `NoSuchMethodException ... <init>()`. In a flat world, `/ceplace structures @mysticrift_pillagers_towers_aris @skyvillages @saloon @villager_forge @illagerwarship` → all placed. Look for supplementaries urns where the 1.20 decorated pots were, Vinery cherry wood on the cherry tower, and Sky Villages with no empty gaps. *2026-09-27: all 56 placed on a scratch dedicated server (0 failed); client not yet.*
 
+**Water biomes, IPO, driftwood** (2026-10-03)
+- [ ] **ST-44 Rule applies:** latest.log has `[structure-biome-rules] water: 12 biomes, ... kept out:` listing the 8 `mysticrift_pillagers_towers_aris:*` towers; `structure_tag_report.md` has a "Biome rules" section. *2026-10-03: both on a scratch dedicated server (25 kept out, 31 allowed that can start in water).*
+- [ ] **ST-45 No towers at sea:** fly over 2,000+ blocks of new ocean → no Mysticrift tower stands in the water. Ships, rafts, wrecks and ocean ruins still show up. `L mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` from far out at sea → the answer is on land.
+- [ ] **ST-46 Switch:** set `[worldgen.systems] structureBiomeRules = false`, rejoin → the log says the rules are off; set it back.
+- [ ] **ST-47 IPO mix:** `/place structure minecraft:pillager_outpost` about 16 times in a flat area → mostly vanilla watchtowers, about 2 tall IPO towers. No outpost is a bare plate without a tower, and no IPO tower is missing its top. *2026-10-03: pool weights 7:1 and the renamed IPO pieces confirmed in the scratch server's pool_config.json; not placed yet.*
+- [ ] **ST-48 Driftwood:** new beach and ocean shoreline → driftwood still appears, but clearly sparser than before. *2026-10-03: the scratch server created a world with the 5 overrides, so the JSON parses.*
+
 ## 8. History
 
 - **2026-09-25:** framework built: jar scanner + vanilla table, `structure_config.json`, node generator writing
@@ -670,3 +744,24 @@ carry only a datapack, so `tools/port_structure_jars.py` copies each one to `kub
   grouped. A scratch dedicated server booted cleanly; `check_structure_live.py` found 0 mismatches over 150 written sets,
   and `/ceplace` placed all 56 converted structures (0 failed). Revamped Shipwrecks' `minecraft:shipwrecks` override wins
   live. ST-43 added.
+- **2026-10-02: refresh after the 1.0.4 mods.** Every worldgen generator re-run on the `/dumpall` exports.
+  `gen_structure_config.py` found no change (179 sets): the only new structure mod, Improved Pillager Outpost
+  (`ipo`, data only), replaces vanilla's `pillager_outpost` templates and its `features` pool and adds 6 `ipo:` pools,
+  so the outpost set, its group membership and rate are unchanged. No `pool_tags.json` rule touches outpost pools;
+  PoolTuner already lists the 6 `ipo:` pools at mod weights. `gen_structure_groups.py`: "already covers every
+  structure". `/dumpclimate` re-sampled, so `biome_config.json` stats and `structures_by_biome.md` were regenerated.
+  `build_biome_merges.py` still reports proposals 2 (beach -> Revamped Shipwrecks), 10 and 24 (forest/taiga ->
+  Simply Houses) and 23 (swamp -> Villages & Pillages) as undecided; they predate this refresh and wait on you.
+  Container audit: 3,874 containers; IPO, Hopo, Revamped/Unwrecked Ships, Blocky Siege and Villages & Pillages
+  templates are now covered.
+- **2026-10-03: water biomes, IPO, driftwood** (3.12). The user asked for: IPO towers as a small chance and not a
+  replacement, only water structures in water biomes (Mysticrift towers were standing in the ocean), and driftwood
+  at 0.25x. Built:
+  - biome rules: `biome_rules` + `water_ok`, patcherMod `StructureBiomeRules` + mixin, a CEConfig switch, and the
+    Python model and node/Rhino harnesses taught about the rule
+  - IPO restored to a 1-in-8 pick, with the template-name bug fixed
+  - driftwood overrides
+  
+  `tools/test_structure_groups.sh` passes (19 Java checks, node/Rhino parity including the staged rules). A scratch
+  dedicated server booted with the new jar, applied the rule and loaded the pools at 7:1. patcherMod stays 1.0.4
+  (rebuilt before release, installed to `mods/`, md5 ab58494b).

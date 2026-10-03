@@ -909,6 +909,23 @@
         "!farmers_structures:undergardens_sea",
         "#mod/villager_camps"
       ]
+    },
+    "water_ok": {
+      "note": "Structures allowed to start in water biomes (biome_rules.water in structure_groups.json). In the water: ships, wrecks, underwater ruins, the ocean monument, Hopo's underwater fossils, the ocean ruined portal, Farmer's Structures' stilted river sushi stall. Not in the water but fine over it: sky structures and the AE2 meteorite (group/sky), and everything underground (under the seabed).",
+      "values": [
+        "#type/ship",
+        "#type/underwater_ruin",
+        "#type/shipwreck",
+        "minecraft:monument",
+        "hopo:underwater_fossils",
+        "minecraft:ruined_portal_ocean",
+        "farmers_structures:sushis",
+        "#type/sky",
+        "#group/sky",
+        "#type/underground",
+        "#type/mineshaft",
+        "#dungeon/underground"
+      ]
     }
   }
 }

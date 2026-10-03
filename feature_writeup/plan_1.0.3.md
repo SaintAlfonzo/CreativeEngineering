@@ -1,6 +1,8 @@
 # 1.0.3 plan: deploy pipeline, server performance reports, bug fixes
 
-IN PROGRESS, not deployed (planned 2026-09-30, last updated 2026-10-02). This file covers what was planned for
+DEPLOYED 2026-10-02 15:55 to the server and the clients (commit `d791885`; planned 2026-09-30). Everything
+built after that deploy is 1.0.4: see [plan_1.0.4.md](plan_1.0.4.md), which also covers the two 1.0.3 bugs
+found on deploy (join kick, client startup crash). This file covers what was planned for
 1.0.3 and what was actually done in it. The planned workstreams are in the table below and sections 1-6;
 everything else that went into 1.0.3 during development is in section 0.1. As each piece gets built it moves
 into its own writeup (or an existing one), and this file keeps only the status line and a link.
@@ -13,7 +15,7 @@ into its own writeup (or an existing one), and this file keeps only the status l
 | PR | Server performance report script (logs + JFR + system snapshot in one folder/zip) | build | M | BUILT (scratch-tested, Linux), PF-09..12 pending on the real server | [perf.md](perf.md) 3.5 (`PF-09`+) |
 | RD | Large block changes render wrong on clients (pasted structures, phantom leaves) | investigate, then fix | M-L | INVESTIGATING (client side cleared statically, 3.5a) | new `fixes` entry (`RD-`) |
 | IM | Random item deletion in inventories: toggleable item monitor | build a diagnostic, then fix | M | REPRO DONE (4.7): SB backpack storage wipe found; monitor not built | new (`IM-`) |
-| TS | Trash slot missing on most screens (player inventory, Sophisticated Backpacks) | investigate, then fix | S | BUILT, in `mods/` (patcherMod 1.0.3), not deployed | [trashslot.md](trashslot.md) (`TS-`) |
+| TS | Trash slot missing on most screens (player inventory, Sophisticated Backpacks) | investigate, then fix | S | DEPLOYED in 1.0.3 (patcherMod 1.0.3) | [trashslot.md](trashslot.md) (`TS-`) |
 | SP | Join protection 60 s -> 150 s | config | XS | DONE (config), SP-01 pending | this file (`SP-`) |
 
 **Suggested order:** SP, PR, IM, TS, DP, RD (section 7 has the reasons).
@@ -31,7 +33,7 @@ in-game test.
 | ID | Change | State | Writeup |
 |---|---|---|---|
 | EX | Exposure 1.9.19 backport (base + Polaroid + Expanded) replaces Exposure 1.6.0 | in `mods/`, EX-11/EX-17 passed, rest pending | [exposure.md](exposure.md) (`EX-`) |
-| CB | Camera bags (leather, iron, netherite) | in `mods/`, boot-tested only, uncommitted | none yet |
+| CB | Camera bags (leather, iron, netherite) | DEPLOYED in 1.0.3 (patcherMod), boot-tested only; moved to Exposure Extras in 1.0.4 | none yet |
 | VJ | Vinery JEI pages + Vinery behaviour reference | in `mods/`, VJ-/VN- pending, barrel time bug open | [vinery_jei.md](vinery_jei.md), [vinery.md](vinery.md) |
 | CU | Culture storage blocks (7 meats) | scripts live, untested | none yet |
 | CN | Canning recipe changes: alternative additives, canned cookies and bread | scripts live, untested | [food.md](food.md) 3.6 (cans) |
@@ -157,7 +159,7 @@ pending, no lag warning; `/dumptrades` 5 s (was a watchdog kill).
 
 **Before staging 1.0.3:**
 1. DONE 2026-10-02: `mod_sides.md` rows for the four new jars (all `both`), pack manifest regenerated.
-2. OPEN: commit the camera bag work (the staging records 10 uncommitted files).
+2. DONE 2026-10-02: the camera bag work was committed with the deploy (`d791885`).
 3. DONE 2026-10-02: restaged. The server never got 1.0.2, so DEPLOYED.json now marks the server at 1.0.1 and
    the client at 1.0.2. The payload's files are diffed from 1.0.1; each target's removals and verify list come
    from its own version. A scratch dedicated server with the 1.0.3 server jar set booted in 61 s with no
@@ -677,6 +679,7 @@ While active, it cancels all damage to the player and stops mobs from targeting 
 
 ## 9. History
 
+- 2026-10-02: 1.0.3 deployed to the server and the clients (15:55, commit `d791885`; `--snapshot 1.0.3` recorded that evening). Work after it (the join-kick and client-crash fixes, the camera bag move to Exposure Extras, crop parity, hoe areas, canned golem dye, new mods) is 1.0.4: [plan_1.0.4.md](plan_1.0.4.md).
 - 2026-10-02: section 0.1 added: everything else in 1.0.3 so far (Exposure backport, camera bags, Vinery JEI, culture blocks, canning changes, names, new food mods, worldgen data, configs, dev side), from a diff against the 1.0.2 snapshot; TS row now in `mods/`. The file now covers planned and done work.
 - 2026-09-30: PR built ([perf.md](perf.md) 3.5): report.sh + ingest_report.py, dump on exit; scratch-tested running, crashed, watchdog.
 

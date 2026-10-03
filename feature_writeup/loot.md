@@ -1,13 +1,13 @@
 # Loot: every loot table in the pack, and the tools to tune chest loot
 
-Test prefix **LT-** · Last updated **2026-09-27** · Overall status **DEPLOYED, in-game test pending** (the pre-roll
+Test prefix **LT-** · Last updated **2026-10-02** · Overall status **DEPLOYED, in-game test pending** (the pre-roll
 rewrite is confirmed by the 2026-09-27 12:00 log and 12:08 export; script rules, bans and packed food (3.8) pass the
 offline sim but are untested in game)
 
 ## 0. At a glance
 
-The pack has about 11,000 loot tables, but only 376 matter for chest loot. The rest are block drops (10,399)
-and mob drops (227), which nothing here touches. Chest loot is edited by one framework with two stages, both
+The pack has about 12,400 loot tables, but only 384 matter for chest loot. The rest are block drops (11,682)
+and mob drops (242), which nothing here touches. Chest loot is edited by one framework with two stages, both
 rebuilt by `/reload`:
 
 1. **Pre-roll (KubeJS, `05_tuning.js`)**: the default for everything. Table JSON is rewritten before the game
@@ -26,13 +26,13 @@ about 20 mod configs with their own loot knobs.
 
 | Part | Layer | Status |
 |---|---|---|
-| Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT, regenerated 2026-09-27 evening: 376 tables (237 placed by templates), 615 items (55 post-roll only), 0 missing from the index |
-| Pre-roll framework | KubeJS `ServerEvents.genericLootTables` in `05_tuning.js`, rules in `07_rules.js` | The 2026-09-27 12:00 version ran in game (LT-01, LT-06 PASSED). The full framework is DEPLOYED 2026-09-27 evening and passes the offline sim: `4 rules -> rewrote 204 tables`; in game LT-14 to LT-27 |
+| Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT, regenerated 2026-10-02 after the 1.0.4 mods: 383 tables (290 roots, 201 placed by templates), 659 items (67 post-roll only) |
+| Pre-roll framework | KubeJS `ServerEvents.genericLootTables` in `05_tuning.js`, rules in `07_rules.js` | The 2026-09-27 12:00 version ran in game (LT-01, LT-06 PASSED). The full framework is DEPLOYED 2026-09-27 evening. 2026-10-02: the offline sim and a scratch server both log `4 rules -> rewrote 184 tables` (fewer than 204 because The Missing Villages is gone); in game LT-14 to LT-27 |
 | Post-roll pass + `/loottuning` | LootJS `LootType.CHEST` modifier in `05_tuning.js` | DEPLOYED; nothing logged or tested yet |
 | PneumaticCraft / Lightman chest loot off at the source | `pneumaticcraft-common.toml`, `lightmanscurrency-common.lcconfig` | DEPLOYED 2026-09-27, guarded by bans |
 | LootJS-only scripts + `global.LOOT` | `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as scaffolding (commented examples of LootJS-only edits) |
-| `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-09-27 12:08 (10,865 tables) |
-| Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; agrees with the generator (0 tables outside scope) |
+| `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-10-02 21:54 via `/dumpall` (12,326 live tables). Three tables can't be serialised and are skipped with a warning: `brewinandchewin:blocks/keg`, `farmersrespite:blocks/kettle` (custom copy functions), `myrtrees:blocks/wooden_bucket` |
+| Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-02: 0 tables outside scope. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
 | Lootr container swaps | patcherMod | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
 
 **Findings** (details in 4.2). Fixed 2026-09-27: 1 stale index, 2 scope missed 39 container tables, 3 injected
@@ -93,7 +93,7 @@ Any `!!!` banner in the log is a ban alarm (3.8).
   passed to `LootContext.Builder.create(...)` to a type. Containers, Lootr and `/loot ... loot <table>` all pass
   the chest set, so any table a container rolls is `LootType.CHEST`, whatever its declared type or path.
 
-## 2. Reference: the loot landscape (census 2026-09-27)
+## 2. Reference: the loot landscape (census 2026-09-27, totals and 2.3 refreshed 2026-10-02)
 
 All numbers come from `python3 tools/loot_census.py` (sources: vanilla jar, `mods/*.jar`, `kubejs/data`, the
 12:08 `/dumploot` export, and a scan of every structure template). The full per-namespace tables are in
@@ -103,17 +103,17 @@ All numbers come from `python3 tools/loot_census.py` (sources: vanilla jar, `mod
 
 | | count |
 |---|---:|
-| Distinct loot tables (after overrides) | 11,010 |
-| Namespaces with a table / sources shipping them | 133 / 132 (vanilla + 130 jars + `kubejs/data`) |
-| Container tables (rolled by a container) | 305 |
-| Chest sub-tables (pulled into a container table) | 64 |
-| Block drops / mob drops / gameplay (fishing, gifts, bartering) | 10,286 / 225 / 43 |
-| Config-driven (`minecraft:empty`, filled in code) / other | 10 / 77 |
-| Live in game (`/dumploot`) / live-only (code-built, no JSON) / shipped but not live | 10,865 / 180 / 325 |
-| Overridden by a higher-priority copy | 50 (16 of them vanilla village chests) |
-| Active global loot modifiers | 122 (55 target chest tables by id, plus Lightman's coins by config) |
-| Structure-template containers with a loot table | 2,320 |
-| Items in the chest catalog | 541 (382 vanilla; `minecraft:emerald` is in the most tables, 101) |
+| Distinct loot tables (after overrides) | 12,420 |
+| Namespaces with a table / sources shipping them | 160 / 153 (vanilla + jars + `kubejs/data`) |
+| Container tables (rolled by a container) | 290 |
+| Chest sub-tables (pulled into a container table) | 94 |
+| Block drops / mob drops / gameplay (fishing, gifts, bartering) | 11,682 / 242 / 43 |
+| Config-driven (`minecraft:empty`, filled in code) / other | 10 / 59 |
+| Live in game (`/dumploot`) / live-only (code-built, no JSON) / shipped but not live | 12,326 / 222 / 316 |
+| Overridden by a higher-priority copy | 51 (16 of them vanilla village chests) |
+| Active global loot modifiers | 150 |
+| Structure-template containers with a loot table | 3,874 (`loot_container_audit.md`) |
+| Items in the chest catalog | 659 |
 
 "Shipped but not live" is almost all block drops: Steam 'n' Rails' compat tracks (168) and Display Delight
 (109) name blocks from mods that aren't installed, so the game logs `Couldn't parse loot table` and skips them.
@@ -142,8 +142,7 @@ processor assigns it (MES, YUNG's) or when another mod's structure places it.
 
 | Mod (namespace) | Containers | Sub | Folder(s) | Template containers, by who places them | Notes |
 |---|---:|---:|---|---|---|
-| Vanilla (`minecraft`) | 43 | | `chests/`, `chests/village/` | Towns & Towers 463, vanilla 128, Quark 120, Better Dungeons 48, +12 mods | 16 village tables replaced by goldenfood; 19 get code pools |
-| The Missing Villages | 47 | | `village/<biome>/` | 59 (own) | 21 outside tuning scope (untyped) |
+| Vanilla (`minecraft`) | 43 | | `chests/`, `chests/village/` | Revamped Shipwrecks 848, Towns & Towers 463, vanilla 128, Quark 120, +18 mods (Improved Pillager Outpost among them) | 16 village tables replaced by goldenfood; 27 get code pools |
 | Terralith | 39 | 3 | `village/fortified/`, `village/desert/`, `spire/`, `ruin/`, `underground/` | 143 (own) | 10 outside scope; its templates name 4 missing ids |
 | Wares | 35 | 1 | `agreement/`, `package/`, `chests/village/` | 5 | agreements and packages are item contents rolled in code |
 | SimplyHouses | 29 | | `chests/<house>/` | 90 | not indexed yet; borrows 4 vanilla village tables |
@@ -166,6 +165,14 @@ processor assigns it (MES, YUNG's) or when another mod's structure places it.
 | Botania | | 6 | `inject/` | | code pools (+ black lotus entries) |
 | Old Guns | | 6 | top level | | GLM sub-tables (shipwrecks, dungeon, weaponsmith) |
 | Chalk, Immersive Weathering, CC:Tweaked, the_dirty_stuff | | 3 / 3 / 1 / 1 | | | code pools / GLM |
+| Sky Villages | 12 | | `chests/`, `chests/supplementaries/` | 0 (assigned in code) | 1 untyped. Added since the 09-27 census |
+| It Takes A Pillage | 5 | | `chests/bastille/` | 17 (own) | 1 untyped |
+| Villages & Pillages | 3 | | `village_witch/house/` | 21 (own) | |
+| Watchtower Building / Illager Viking Longship / Villager Gold Washing Facility / Rare Ice | 2 / 1 / 1 / 1 | | `chests/` | 0 | `rare-ice` untyped |
+| Unwrecked Ships | 1 | | `dispensers/` | 4 | a trap dispenser table; dispensers stay unconverted on purpose |
+| Exposure Expanded (1.0.4) | 1 | 20 | `chests/` | 0 | film and filter sub-tables pulled into vanilla chests by GLM |
+| Exposure (1.0.4) | | 5 | `chests/` | | photograph/film sub-tables (GLM) |
+| Corn Delight (1.0.4) | | 2 | top level | | `shipwreck_supply`, `village_house` (GLM sub-tables; corn and seeds) |
 
 ### 2.4 Vanilla tables other mods borrow
 
@@ -785,3 +792,10 @@ Revert every temporary edit and `/reload` afterwards.
   in the outpost's crossbow pool (`add` now picks the main pool) and a companion diluting the igloo's guaranteed
   golden apple (anchor-only pools skipped). Section 4.1 now spells out KubeJS vs LootJS strengths and weaknesses.
   Tests LT-21 to LT-27; LT-02/10/11/13/14/16/17/20 updated.
+- **2026-10-02** Refresh after the mods added since 09-27 (Exposure backport + Expanded, Corn Delight, Sky Villages, It
+  Takes A Pillage, Villages & Pillages, Unwrecked Ships, watchtowers, Improved Pillager Outpost and others; The
+  Missing Villages removed). `/dumploot` re-run via `/dumpall`, `gen_loot_config.py` regenerated (383 tables, 659
+  items; new: corn, Exposure films/filters/photographs, Upgrade Aquatic fish, Neapolitan treats), census and container
+  audit re-run (3,874 template containers; the one new unconverted kind is Unwrecked Ships' trap dispensers). Sim and
+  scratch server agree: `4 rules -> rewrote 184 tables`. Section 2.1 totals and the 2.3 table refreshed; 2.4 to 2.9
+  still read as of 09-27 (the census has the current lists).

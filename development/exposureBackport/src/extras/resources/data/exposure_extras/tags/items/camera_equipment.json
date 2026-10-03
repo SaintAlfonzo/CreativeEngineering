@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "exposure:camera",
+    "exposure_polaroid:instant_camera",
+    "exposure:camera_stand",
+    "#exposure:lenses",
+    "#exposure:filters",
+    "#exposure:film_rolls",
+    "#exposure:developed_film_rolls",
+    "exposure_polaroid:instant_color_slide",
+    "exposure_polaroid:instant_black_and_white_slide",
+    "exposure_polaroid:high_sensitivity_instant_color_slide",
+    "exposure_polaroid:high_sensitivity_instant_black_and_white_slide",
+    "exposure_expanded:instant_gameboy_slide",
+    "exposure_expanded:instant_nes_slide",
+    "exposure_expanded:instant_c64_slide",
+    "exposure_expanded:instant_cga_slide",
+    "exposure_expanded:instant_hires_color_slide",
+    "exposure_expanded:instant_hires_black_and_white_slide"
+  ]
+}

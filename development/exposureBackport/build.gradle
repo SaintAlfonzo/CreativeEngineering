@@ -1,4 +1,5 @@
-// exposureBackport: Exposure 1.9.19 and its addons ported to Forge 1.19.2, in one jar that holds four mods.
+// exposureBackport: Exposure 1.9.19 and its addons ported to Forge 1.19.2, plus this pack's own Exposure Extras,
+// in one jar that holds five mods.
 // Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
 //
 // Each addon is its own source set (src/<addon>/java, src/<addon>/resources) that compiles against main,
@@ -29,10 +30,12 @@ dependencies {
 
 // addon source set -> other addons it may compile against. Order matters: dependencies first.
 // expanded -> polaroid: upstream Expanded's optional instant-slide integration (PolaroidHandler).
+// extras is not upstream code: this pack's additions (camera bags), mod id exposure_extras, no mixins.
 def addons = [
         polaroid: [],
         catalog : [],
         expanded: ['polaroid'],
+        extras  : [],
 ]
 
 addons.each { name, deps ->
@@ -122,6 +125,32 @@ mixin {
     add sourceSets.catalog, 'exposure_catalog.refmap.json'
     // dev runs read mixin configs from here; the jar manifest gets them from mixin_configs too
     mixin_configs.split(',').each { config it.trim() }
+}
+
+// The mixin AP writes each refmap into its compile task's temporary dir, which Gradle doesn't track: if the file
+// goes missing while the compile is UP-TO-DATE, addMixinsToJar silently skips it and the jar ships without it (1.0.3
+// shipped without exposure_polaroid.refmap.json, so every real client crashed on startup). Declaring the refmap as
+// an output makes a missing one re-run the compile.
+(['main'] + addons.keySet()).each { name ->
+    tasks.named(sourceSets[name].compileJavaTaskName, JavaCompile).configure {
+        outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
+    }
+}
+
+// Backstop: every mixin config that lists mixins must find its refmap in the jar.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def jarFile = archiveFile.get().asFile
+        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
+        def slurper = new groovy.json.JsonSlurper()
+        mixin_configs.split(',').collect { it.trim() }.each { config ->
+            def json = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> slurper.parse(zip.getInputStream(zip.getEntry(config))) }
+            def count = ['mixins', 'client', 'server'].sum { (json[it] ?: []).size() }
+            if (count > 0 && json.refmap && !entries.contains(json.refmap)) {
+                throw new GradleException("${config} has ${count} mixin(s) but its refmap ${json.refmap} is not in ${jarFile.name}")
+            }
+        }
+    }
 }
 
 // Port in progress: report every compile error, not javac's default first 100.

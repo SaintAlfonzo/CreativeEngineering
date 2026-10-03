@@ -15,6 +15,11 @@
 //   A structure moved into a group is removed from its original set; a set left with no live
 //   member is written with no structures and frequency 0, so it can't generate or be searched.
 //
+// BIOME RULES (biome_rules in structure_groups.json): a rule names biomes and a structure tag; only the
+// tag's structures may start in those biomes (water: ships, wrecks, ocean ruins...), every other structure
+// loses those biomes from its own list. Handed to patcherMod (worldgen/StructureBiomeRules), which also
+// covers structures in no config yet; its log line lists what each rule kept out. Independent of the groups.
+//
 // frequency < 1 is not a vanilla feature: the table is handed to patcherMod
 // (worldgen/StructureFrequencies), which rolls it when a structure is about to be placed.
 // Without that class nothing is applied at all (a group without its frequencies would spawn
@@ -312,6 +317,26 @@
 
 	// ── planning ─────────────────────────────────────────────────────────────
 
+	// biome_rules -> { name: { biomes: [...], allow: [structure ids], note } }; problems go to errors
+	function planBiomeRules(rulesDoc, tagDefs, tagMembers, errors) {
+		var out = {}
+		var biomeRe = /^#?[a-z0-9_.-]+:[a-z0-9_.\/-]+$/
+		Object.keys(rulesDoc).forEach(function (name) {
+			var r = rulesDoc[name]
+			var where = 'structure_groups.json biome_rules.' + name
+			if (!r || !Array.isArray(r.biomes) || !r.biomes.length || !r.biomes.every(function (b) { return typeof b === 'string' && biomeRe.test(b) })) {
+				errors.push(where + '.biomes must be a non-empty list of biome ids or #biome_tags')
+				return
+			}
+			if (typeof r.allow !== 'string' || r.allow.charAt(0) !== '#' || !tagMembers[r.allow.substring(1)]) {
+				errors.push(where + '.allow must be "#<tag>" naming a tag in structure_tags.json (got ' + JSON.stringify(r.allow) + ')')
+				return
+			}
+			out[name] = { biomes: r.biomes.slice(), allow: Object.keys(tagMembers[r.allow.substring(1)]).sort(), tag: r.allow, note: r.note }
+		})
+		return out
+	}
+
 	function plan() {
 		var settings = worldgenSettings()
 		var density = settings.density
@@ -350,6 +375,7 @@
 		}
 		var tagMembers = resolved.members
 		var errors = []
+		var biomeRules = planBiomeRules(doc.biome_rules || {}, tagDefs, tagMembers, errors)
 		if (!settings.groups) warnings.push('structure groups are OFF (CEConfig [worldgen.systems] structureGroups): every structure set is its mod/vanilla default'
 			+ (density !== 1 ? ' times the debug density' : ''))
 
@@ -501,12 +527,14 @@
 		return {
 			files: files,
 			frequencies: frequencies,
-			report: buildReport(groupPlans, setPlans, tagDefs, tagMembers, allIds, warnings, freqCount),
+			biomeRules: biomeRules,
+			report: buildReport(groupPlans, setPlans, biomeRules, tagDefs, tagMembers, allIds, warnings, freqCount),
 			warnings: warnings,
 			summary: (settings.groups ? '' : 'GROUPS OFF, ') + (density !== 1 ? 'DEBUG density x' + density + ', ' : '')
 				+ groupPlans.length + ' groups, ' + Object.keys(files).length + ' structure_sets written ('
 				+ setPlans.filter(function (sp) { return sp.emptied && sp.moved.length }).length + ' emptied into groups), '
-				+ Object.keys(sets).length + ' original sets; ' + freqCount + ' structure frequencies below 1',
+				+ Object.keys(sets).length + ' original sets; ' + freqCount + ' structure frequencies below 1; '
+				+ Object.keys(biomeRules).length + ' biome rule(s)',
 		}
 	}
 
@@ -541,7 +569,7 @@
 		return parts.join(', ')
 	}
 
-	function buildReport(groupPlans, setPlans, tagDefs, tagMembers, allIds, warnings, freqCount) {
+	function buildReport(groupPlans, setPlans, biomeRules, tagDefs, tagMembers, allIds, warnings, freqCount) {
 		var lines = []
 		var out = function (s) { lines.push(s) }
 		reportHeader(lines)
@@ -552,6 +580,23 @@
 			warnings.forEach(function (w) { out('- ' + w) })
 			out('')
 		}
+
+		out('## Biome rules')
+		out('')
+		out('Only the allowed structures may start in a rule\'s biomes; every other structure loses those biomes from its own list '
+			+ '(patcherMod StructureBiomeRules, CEConfig [worldgen.systems] structureBiomeRules). The game log line '
+			+ '`[structure-biome-rules]` lists the structures each rule kept out.')
+		out('')
+		if (!Object.keys(biomeRules).length) out('None.')
+		Object.keys(biomeRules).forEach(function (name) {
+			var r = biomeRules[name]
+			out('### `' + name + '`')
+			out('')
+			if (r.note) out(r.note)
+			if (r.note) out('')
+			out('Biomes: ' + r.biomes.map(code).join(', ') + '. Allowed (`' + r.tag + '`, ' + r.allow.length + '): ' + r.allow.map(code).join(', '))
+			out('')
+		})
 
 		out('## Groups')
 		out('')
@@ -657,6 +702,15 @@
 		}
 	}
 
+	// patcherMod's biome rules; null when the jar is older than this script (rules then simply don't apply)
+	function biomeRuleStage() {
+		try {
+			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules')
+		} catch (err) {
+			return null
+		}
+	}
+
 	ServerEvents.highPriorityData(function (event) {
 		var result
 		try {
@@ -674,11 +728,20 @@
 			result.errors.forEach(function (e) { console.error(TAG + e) })
 			console.error(TAG + 'nothing applied, every structure uses its mod/vanilla default')
 			if (stage) stage.stage('{}')
+			var ruleStage = biomeRuleStage()
+			if (ruleStage) ruleStage.stage('{}')
 			writeReport(buildErrorReport(result.title || 'Errors', result.errors))
 			return
 		}
 		Object.keys(result.files).forEach(function (path) { event.add(path, result.files[path]) })
 		stage.stage(toJson(result.frequencies))
+		var rules = {}
+		Object.keys(result.biomeRules).forEach(function (name) {
+			rules[name] = { biomes: result.biomeRules[name].biomes, allow: result.biomeRules[name].allow }
+		})
+		var ruleStage = biomeRuleStage()
+		if (ruleStage) ruleStage.stage(toJson(rules))
+		else if (Object.keys(rules).length) result.warnings.push('patcherMod has no worldgen.StructureBiomeRules (older jar): biome_rules not applied')
 		result.warnings.forEach(function (w) { console.warn(TAG + w) })
 		console.info(TAG + result.summary)
 		writeReport(result.report)

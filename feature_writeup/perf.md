@@ -242,7 +242,15 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
   still being written.
 - **Mixin resolver.** Checked against the `.mixin.out` ground truth (numbers in 3.4).
 
-## 7. In-game test suite
+## 7. Known Issues
+
+  - Horse armor healing effect uses excessive resources, temp disabled
+  - Quark feeding trough rescans too frequently, disable search for 30s after miss
+  - create gravity scans all dimensions, mixin to disable all but end checks
+  - serene seasons calls melt check too frequently, decrease frequency but increase chance
+  - fruit delight leaves need projectile collision check short circuit
+
+## 8. In-game test suite
 
 - [ ] **PF-01 recording starts:** deploy the build that includes `server/` and start the server with
   `LaunchServer.sh`/`.bat` -> the console shows `Started recording 1`, `perf/jfr-repo/<date>_<pid>/` exists,
@@ -273,7 +281,7 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
   with no "unattributed jars" warning. (Scratch: done; 1.0.2 "mods differ", as expected for dev jars.)
 - [ ] **PF-13 Windows:** no `report.ps1` yet; build it if a Windows server ever needs it.
 
-## 8. History
+## 9. History
 
 - 2026-09-30: Server report built (3.5): `server/perf/report.sh`, `tools/perf/ingest_report.py`,
   `perf_report.py --name`, and the dump on exit in both launch scripts. That fixes the recording a watchdog
