@@ -36,6 +36,16 @@
     "mod/chefsdelight":            { "multiplier": 1, "values": ["chefsdelight:*"] },
     "mod/domesticationinnovation": { "multiplier": 1, "values": ["domesticationinnovation:*"] },
     "mod/monobank":                { "multiplier": 1, "values": ["monobank:*"] },
+    "monobank/vault_houses": {
+      "multiplier": 0.18,
+      "note": "Monobank's bank (vault) as a village house: weight 15 in every house pool, 10 to 12% of house picks once the tech houses are gone. 0.18 (weight 2.7) makes it about 5x rarer in all 5 biomes (2.0 to 2.3% of picks); the pool shrinks with it, which is why 0.18 and not 0.2. Only the 5 injected pieces are scaled: the vault's own locked/unlocked/empty sub-pools keep their ratios. Set 1 to restore.",
+      "values": ["monobank:village/houses/*_vault"]
+    },
+    "monobank/vault_streets": {
+      "multiplier": 0.16,
+      "note": "The same vault attached to a straight street piece (weight 15, 21 to 29% of straight-street picks, so most banks come from here). 0.16 (weight 2.4) makes it 4.7x to 5.2x rarer. Set 1 to restore.",
+      "values": ["monobank:village/streets/*"]
+    },
     "mod/farmersdelight":          { "multiplier": 1, "values": ["farmersdelight:*"] },
     "mod/waystones":               { "multiplier": 1, "values": ["waystones:*"] },
     "mod/cloudstorage":            { "multiplier": 1, "values": ["cloudstorage:*"] },

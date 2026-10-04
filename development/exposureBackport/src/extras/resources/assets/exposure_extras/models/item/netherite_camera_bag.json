@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "solapplepie:items/golden_lunchbox"
+    "layer0": "exposure_extras:item/camera_bag_dyable",
+    "layer1": "exposure_extras:item/camera_bag_outline_leather"
   }
 }

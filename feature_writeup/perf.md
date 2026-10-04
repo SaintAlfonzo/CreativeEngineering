@@ -1,6 +1,6 @@
 # Performance: always-on server recording and the per-mod report
 
-Test prefix **PF-** · Last updated **2026-09-30** · Overall status **BUILT** (the Linux path works end to end on a
+Test prefix **PF-** · Last updated **2026-10-03** · Overall status **BUILT** (the Linux path works end to end on a
 scratch copy of the server, the server report included; ships with the next deploy build; the Windows scripts are untested)
 
 ## 0. At a glance
@@ -242,13 +242,31 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
   still being written.
 - **Mixin resolver.** Checked against the `.mixin.out` ground truth (numbers in 3.4).
 
-## 7. Known Issues
+## 7. Known issues: third-party hot spots (fixed 2026-10-03)
 
-  - Horse armor healing effect uses excessive resources, temp disabled
-  - Quark feeding trough rescans too frequently, disable search for 30s after miss
-  - create gravity scans all dimensions, mixin to disable all but end checks
-  - serene seasons calls melt check too frequently, decrease frequency but increase chance
-  - fruit delight leaves need projectile collision check short circuit
+Found in the first server profile. Each is a throttle in patcherMod (the jar, 1.0.4, built, not in `mods/`) or
+a KubeJS change, with its dial in `config/creativeengineering-common.toml` under `[perf]` (read live).
+Checked on a scratch dedicated server (all 347 server jars, new jar): it booted, the mixin export shows every
+one applied, and there are no errors from them in the log. None of it is tested under real load.
+
+| Issue | Fix | Where | Dial |
+|---|---|---|---|
+| Horse armor effect used too many resources, was disabled | Back on, but the all-entities walk runs once per interval (not every tick) and effects last interval + 40 ticks. **Also fixed:** the registration used `minecraft:strong_regeneration`, a potion id, so the horse never got any effect even before it was disabled; now `minecraft:regeneration` (level I; the old name hinted at II, undecided) | `server_scripts/magic/armor_effects.js`, `startup_scripts/func/armor_effects.js` | `mountEffectIntervalTicks` = 100 |
+| Quark feeding trough re-searched constantly | After a miss (no trough, no real player tempting) the goal skips the search for 30 s. Hits are never stamped, so cached troughs are unchanged | `FeedingTroughModuleMixin`, `TemptGoalTroughRetryMixin`, `compat/TroughRetryAccess` | `troughMissCooldownTicks` = 600 |
+| Create: Gravity ran for every entity in every dimension | `ForgeEvents#handleLogic` is cancelled outside the listed dimensions (the End). An entity still carrying the low-gravity modifier runs it once more so the modifier is removed | `CreateGravityDimensionMixin` | `gravityLimitDimensions` = true, `gravityDimensions` = the End |
+| Serene Seasons melt check every tick | `RandomUpdateHandler#onWorldTick` runs every 4th tick and the melt chance roll gets 4x the chance (`nextInt(bound / 4)`); same average rate for the mod's bounds 16/12/8/4 | `SereneSeasonsMeltThrottleMixin` | `seasonsMeltIntervalTicks` = 4 |
+| Fruits Delight leaves tested the tag on every collision query | The handler's `is(BlockTags.LEAVES)` is rewritten to a projectile-first test (`FruitsDelightHooks.isLeafForProjectile`); same result. Mixin cannot inject into another mixin's handler, so this is a bytecode edit in a new mixin config plugin | `mixin/FruitsDelightLeafCheckMixin` (empty anchor), `compat/CreativeEngineeringMixinPlugin`, `compat/FruitsDelightHooks` | none (applies at launch) |
+
+Notes:
+
+- Snow Under Trees (the other half of the original melt-check finding) was removed from the pack in 1.0.2; only
+  Serene Seasons' own handler is left.
+- The gravity filter assumes gravity biomes exist only in the End dimension. The pack's `biome_configs` is
+  `#minecraft:is_end` only. Add a dimension to `gravityDimensions` if that changes.
+- The Fruits Delight patch does nothing if the handler is missing or looks different, so a Fruits Delight update
+  can only lose the saving, never break the game. Check the mixin export for `isLeafForProjectile` after updating it.
+- Trough: an ineligible animal (baby, in love) also counts as a miss, so its first search comes up to 30 s after it
+  becomes eligible.
 
 ## 8. In-game test suite
 
@@ -282,6 +300,10 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
 - [ ] **PF-13 Windows:** no `report.ps1` yet; build it if a Windows server ever needs it.
 
 ## 9. History
+
+- 2026-10-03: Known issues (section 7) fixed: 5 throttles in patcherMod `[perf]` plus the horse armor pass, and a
+  wrong effect id found while doing it. Scratch-server boot and mixin export checked. patcherMod 1.0.4 jar built, not
+  installed to `mods/`.
 
 - 2026-09-30: Server report built (3.5): `server/perf/report.sh`, `tools/perf/ingest_report.py`,
   `perf_report.py --name`, and the dump on exit in both launch scripts. That fixes the recording a watchdog

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit every loot container in every structure template (mods/*.jar + vanilla) against Lootr.
+"""Audit every loot container in every structure template (mods/*.jar + vanilla + kubejs/data) against Lootr.
 
 Writes kubejs/generation_scripts/worldgen/loot_container_audit.md: for each container block that
 appears with a LootTable, whether Lootr converts it natively (lootr-common.toml), whether
@@ -83,6 +83,27 @@ def matches(block, patterns):
     return next((p for p in patterns if fnmatch.fnmatchcase(block, p)), None)
 
 
+def scan_template(raw, jar, template, rows):
+    try:
+        d = read_nbt(gzip.decompress(raw))
+    except (OSError, ValueError, struct.error, EOFError):
+        try:
+            d = read_nbt(raw)
+        except (ValueError, struct.error, EOFError):
+            print(f'  skipped unreadable {jar}:{template}', file=sys.stderr)
+            return
+    palette = d.get('palette') or (d.get('palettes') or [[]])[0]
+    for b in d.get('blocks', []):
+        nb = b.get('nbt')
+        if not nb or b['state'] >= len(palette):
+            continue
+        block = palette[b['state']]['Name']
+        if not (nb.get('LootTable') or 'Items' in nb):
+            continue
+        rows.append(dict(jar=jar, template=template, block=block, loot=nb.get('LootTable'),
+                         items=len(nb.get('Items') or [])))
+
+
 def scan():
     rows = []
     jars = sorted(glob.glob(os.path.join(ROOT, 'mods/*.jar')))
@@ -100,27 +121,12 @@ def scan():
             template = f"{ns}:{n.split('/structures/', 1)[1][:-4]}"
             if template.startswith(SKIP_TEMPLATES):
                 continue
-            raw = z.read(n)
-            try:
-                d = read_nbt(gzip.decompress(raw))
-            except (OSError, ValueError, struct.error, EOFError):
-                try:
-                    d = read_nbt(raw)
-                except (ValueError, struct.error, EOFError):
-                    print(f'  skipped unreadable {os.path.basename(j)}:{n}', file=sys.stderr)
-                    continue
-            palette = d.get('palette') or (d.get('palettes') or [[]])[0]
-            for b in d.get('blocks', []):
-                nb = b.get('nbt')
-                if not nb or b['state'] >= len(palette):
-                    continue
-                block = palette[b['state']]['Name']
-                if not (nb.get('LootTable') or nb.get('Items') or CONTAINER_HINT.search(block)):
-                    continue
-                if not (nb.get('LootTable') or 'Items' in nb):
-                    continue
-                rows.append(dict(jar='vanilla' if j == VANILLA_JAR else os.path.basename(j), template=template,
-                                 block=block, loot=nb.get('LootTable'), items=len(nb.get('Items') or [])))
+            scan_template(z.read(n), 'vanilla' if j == VANILLA_JAR else os.path.basename(j), template, rows)
+    # structures ported out of jars into the KubeJS datapack (tools/port_structure_jars.py)
+    for path in sorted(glob.glob(os.path.join(ROOT, 'kubejs/data/*/structures/**/*.nbt'), recursive=True)):
+        rel = os.path.relpath(path, os.path.join(ROOT, 'kubejs/data')).split(os.sep)
+        with open(path, 'rb') as fh:
+            scan_template(fh.read(), 'kubejs/data', f"{rel[0]}:{'/'.join(rel[2:])[:-4]}", rows)
     return rows
 
 

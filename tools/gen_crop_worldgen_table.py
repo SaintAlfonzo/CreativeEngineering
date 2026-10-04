@@ -215,6 +215,7 @@ CROP_BLOCKS = {
     'minecraft:sweet_berry_bush': 'Sweet Berries', 'minecraft:pumpkin': 'Pumpkin', 'minecraft:melon': 'Melon',
     'minecraft:sugar_cane': 'Sugar Cane', 'minecraft:cave_vines': 'Glow Berries', 'minecraft:bamboo': 'Bamboo',
     'minecraft:cactus': 'Cactus', 'minecraft:chorus_flower': 'Chorus Fruit',
+    'myrtrees:rubberwood_log': 'Rubber tree',
     'supplementaries:wild_flax': 'Flax',
     'vinery:red_grape_bush': 'Grapes: red', 'vinery:white_grape_bush': 'Grapes: white',
     'vinery:savanna_grape_bush_red': 'Grapes: savanna red', 'vinery:savanna_grape_bush_white': 'Grapes: savanna white',

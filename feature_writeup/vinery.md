@@ -67,7 +67,7 @@ The juice is the matching `*_grapejuice_*_bottle` for the 8 grape types. An unse
 |---|---|
 | Slots (GUI) | 0: only `vinery:wine_bottle`. 1-4: only items that appear in some `vinery:wine_fermentation` recipe. 5: output, nothing can be placed. |
 | Recipe match | The number of **filled** slots among 1-4 must equal the recipe's ingredient count exactly (recipes have 1-4 ingredients). A stray extra item stops it. Order doesn't matter. |
-| Craft | Uses 1 wine bottle and 1 from each ingredient slot. Only runs when slot 5 is **empty**, so it makes one wine at a time and waits until you take it out. |
+| Craft | Uses 1 wine bottle and 1 from each ingredient slot. Stock it only ran when slot 5 was empty (one wine at a time). **Patched (patcherMod `FermentationBarrelStackOutputMixin`):** it also runs while slot 5 holds the same wine (same item, same `Year` tag) with room left, so the output stacks. A wine from a different year blocks it until taken out, because the two would not stack. |
 | Time | **About 50 ticks (2.5 s)**, not 1800. See below. |
 | Output | Gets an NBT `Year` tag (the current wine year, §2.10). |
 | Hoppers | The barrel is a plain container with no side rules: hoppers can put **any item into any slot** (the first empty one is the bottle slot) and pull from any slot, including the ingredient slots. |
@@ -297,7 +297,7 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - [ ] **VN-04 Press timing:** 10 apples in the Apple Press → 10 Apple Mash after about 36 s (3.6 s each).
 - [ ] **VN-05 Press hopper jam:** empty press, hopper above it holding 1 cobblestone and then apples → cobblestone goes into the input. Check whether anything ends up in the output slot. Record what happens.
 - [ ] **VN-06 Barrel time:** fill an Aging Barrel with a valid recipe → the wine appears in about 2.5 s, not 90 s.
-- [ ] **VN-07 Barrel one at a time:** leave the wine in the output → nothing more is made until it's taken out.
+- [ ] **VN-07 Barrel output stacks:** 8 wine bottles and 8 of each ingredient, leave the wine in the output → it keeps crafting and the output stack grows to 8 with no one taking it. A wine with a different `Year` in the output stops it.
 - [ ] **VN-08 Barrel hopper:** hopper above an empty barrel with dirt in it → dirt lands in the bottle slot.
 
 **Growing**

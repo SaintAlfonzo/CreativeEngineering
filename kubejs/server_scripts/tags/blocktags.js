@@ -402,6 +402,14 @@ ServerEvents.tags('block', e => {
 		item.mushroom_stem, item.cactus, item.bamboo, item.pumpkin, item.melon_block,
 	])
 
+	// ── Structure earth fill (patcherMod worldgen/EarthFill, CEConfig [worldgen.earth_fill]) ──
+	// Earth that counts when a structure's foundation sits over water or air: a start whose template
+	// bases hold more of these over water or air than the limits is cancelled. Loose ground only, not
+	// stone or bricks (those are the building). More tags can be listed in [earth_fill] blocks.
+	t.add(e, 'creativeengineering:earth_fill/earth', [
+		'#minecraft:dirt', '#forge:sand', '#forge:gravel', 'minecraft:clay', 'minecraft:dirt_path',
+	])
+
 	// ── Crop parity (patcherMod crops/CropParity, feature_writeup/crops.md) ──
 	// Soils that count as farmland for crops whose own check is hard-coded to vanilla farmland
 	// (tobacco via mixin/TobaccoPlacementMixin). Untilled Rich Soil stays out, as for every farmland crop.

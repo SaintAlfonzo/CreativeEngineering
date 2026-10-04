@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "com.SaintAlfonzo.creativeengineering.mixin",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "com.SaintAlfonzo.creativeengineering.compat.CreativeEngineeringMixinPlugin",
   "mixins": [
     "IETagUtilsMixin",
     "LCItemsForMapTradeMixin",
@@ -52,6 +53,7 @@
     "ChunkGeneratorStructureFrequencyMixin",
     "StructureCheckFrequencyMixin",
     "ChunkGeneratorStructureBiomeRulesMixin",
+    "ChunkGeneratorEarthFillMixin",
     "ItemStackCanServingsMixin",
     "LevelThreadSafeRandomMixin",
     "BushierFlowersDisableMixin",
@@ -65,7 +67,13 @@
     "QuarkHoeAreaHarvestMixin",
     "CannedGolemColorMixin",
     "WanderingTraderSpawnerMixin",
-    "WanderingTraderTradesMixin"
+    "WanderingTraderTradesMixin",
+    "TemptGoalTroughRetryMixin",
+    "FeedingTroughModuleMixin",
+    "CreateGravityDimensionMixin",
+    "SereneSeasonsMeltThrottleMixin",
+    "FruitsDelightLeafCheckMixin",
+    "FermentationBarrelStackOutputMixin"
   ],
   "client": [
     "ItemDrainCategoryMixin",

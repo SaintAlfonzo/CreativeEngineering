@@ -79,8 +79,8 @@
     // ── Golden Food: its village overrides out, its loot folded into golden food pools ───────
     // goldenfood ships copies of all 16 vanilla village chest tables that only add its enchanted book.
     // Because they replace the vanilla files, Forge stops running other mods' injections into them
-    // (Chalk, Botania, CC:Tweaked below). So: vanilla's own pools back, those injections restored,
-    // and the book placed where golden food already is, plus a small chance in villages and camps.
+    // (Chalk, Botania, CC:Tweaked below). So: vanilla's own pools back (no book), those injections
+    // restored, and golden food made twice as common.
 
     L.useVanilla(/^minecraft:chests\/village\//, { winner: /goldenfood/ })
 
@@ -105,16 +105,9 @@
         entries: [{ type: 'minecraft:loot_table', name: 'computercraft:treasure_disk' }],
     }, { mod: 'computercraft' })
 
-    // The Golden Food book (used in an anvil with golden apples / carrots to make the enchanted ones;
-    // the mod only checks the NBT text for "gf_enchantment", so the proper book form works).
-    var GF_BOOK_NBT = '{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}'
-
+    // The Golden Food enchantment book is not placed in any loot table (goldenfood's copies are reverted
+    // above, which is what removed it from villages).
     L.frequency(i.t_loot_golden_food, 2)                                     // golden food twice as common
-    L.companion(i.enchanted_book, i.t_loot_golden_food, { rate: 0.5, nbt: GF_BOOK_NBT })  // book beside it, half as likely
-    L.add(/village|camp|outpost/, i.enchanted_book, {
-        share: 0.01, nbt: GF_BOOK_NBT,                                      // 1% of a roll: small
-        except: [/^wares:/, /fd_/, /^monobank:/],                           // trade deals, FD sub-tables, bank vaults
-    })
 
     // ── containers that name a table nobody ships (always empty): one roll of a sibling ───────
     L.alias('kaisyn:village/village_birch_forest_house',                    'minecraft:chests/village/village_plains_house')

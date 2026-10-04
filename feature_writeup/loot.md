@@ -27,13 +27,14 @@ about 20 mod configs with their own loot knobs.
 | Part | Layer | Status |
 |---|---|---|
 | Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT, regenerated 2026-10-02 after the 1.0.4 mods: 383 tables (290 roots, 201 placed by templates), 659 items (67 post-roll only) |
-| Pre-roll framework | KubeJS `ServerEvents.genericLootTables` in `05_tuning.js`, rules in `07_rules.js` | The 2026-09-27 12:00 version ran in game (LT-01, LT-06 PASSED). The full framework is DEPLOYED 2026-09-27 evening. 2026-10-02: the offline sim and a scratch server both log `4 rules -> rewrote 184 tables` (fewer than 204 because The Missing Villages is gone); in game LT-14 to LT-27 |
+| Pre-roll framework | KubeJS `ServerEvents.genericLootTables` in `05_tuning.js`, rules in `07_rules.js` | The 2026-09-27 12:00 version ran in game (LT-01, LT-06 PASSED). The full framework is DEPLOYED 2026-09-27 evening. 2026-10-02: the offline sim and a scratch server both log `4 rules -> rewrote 184 tables` (fewer than 204 because The Missing Villages is gone); after the book removal 2026-10-03 the sim says `rewrote 128 tables`; in game LT-14 to LT-27 |
 | Post-roll pass + `/loottuning` | LootJS `LootType.CHEST` modifier in `05_tuning.js` | DEPLOYED; nothing logged or tested yet |
 | PneumaticCraft / Lightman chest loot off at the source | `pneumaticcraft-common.toml`, `lightmanscurrency-common.lcconfig` | DEPLOYED 2026-09-27, guarded by bans |
 | LootJS-only scripts + `global.LOOT` | `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as scaffolding (commented examples of LootJS-only edits) |
 | `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-10-02 21:54 via `/dumpall` (12,326 live tables). Three tables can't be serialised and are skipped with a warning: `brewinandchewin:blocks/keg`, `farmersrespite:blocks/kettle` (custom copy functions), `myrtrees:blocks/wooden_bucket` |
 | Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-02: 0 tables outside scope. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
 | Lootr container swaps | patcherMod | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
+| Loot catalog (every container table entry by entry, structures, hand-placed containers) | `tools/loot_breakdown.py` -> [loot_catalog/](loot_catalog/README.md) | BUILT 2026-10-03: 383 tables in 47 namespaces, 963 hand-placed containers; read-only reference for writing replacement tables |
 
 **Findings** (details in 4.2). Fixed 2026-09-27: 1 stale index, 2 scope missed 39 container tables, 3 injected
 entries not cataloged, 4 goldenfood dropped village injections, 5 always-empty containers, 6 Lightman coins,
@@ -49,8 +50,8 @@ deleted).
 - Per item: `"remove": true` or `"frequency": 0..100` under `items` in `loot_config.json` (above 1 boosts).
 - Per mod, id pattern or tag: `patterns` -> `"@modid"`, `"/regex/"` or `"#ns:tag"`, with optional `except` and `tables`.
 - Script rules in `07_rules.js` (3.8): chalk `L.frequency(i.t_loot_chalk, 0.5)`; golden food
-  `L.frequency(i.t_loot_golden_food, 2)` with the Golden Food book beside it (`rate: 0.5`) and in village/camp
-  chests (`share: 0.01`); packed food `L.packRate(0.1)` and `L.packBoost(/village/, 3)`.
+  `L.frequency(i.t_loot_golden_food, 2)` (the Golden Food book is in no loot table since 2026-10-03);
+  packed food `L.packRate(0.1)` and `L.packBoost(/village/, 3)`.
 - Globally: `settings.enabled`, `settings.slack` (`redistribute` | `empty`), `settings.log_tables`.
 - LootJS-only edits (structure / biome / player scoped, stack caps): `10`-`40` via `global.LOOT`.
 - Whether a chest exists at all: structure frequency, house pool weights, mod configs ([structure_tuning.md](structure_tuning.md)).
@@ -60,7 +61,7 @@ a chest (tables, code injections, GLMs, LootJS). In the world, only containers n
 per player on first open).
 
 **Measuring:** `/loottuning`, the `[loot-tuning]` lines in `logs/kubejs/server.log`, `/dumploot` (the export shows
-the rewritten tables), `python3 tools/loot_census.py`, `node tools/loot_tuning_sim.js [table ids]` (offline).
+the rewritten tables), `python3 tools/loot_census.py`, `python3 tools/loot_breakdown.py` (per-entry catalog, see [loot_catalog/](loot_catalog/README.md)), `node tools/loot_tuning_sim.js [table ids]` (offline).
 Any `!!!` banner in the log is a ban alarm (3.8).
 
 ---
@@ -503,16 +504,10 @@ aren't affected. Dustrial Decor's handler is switched off (`loot_table_modificat
 3. `L.frequency(i.t_loot_golden_food, 2)`: golden food is twice as likely per roll wherever it's an entry (58 entries;
    simple dungeon golden apple 11.6% -> 22% of pool 0). Pools where it's the only item (the igloo's guaranteed
    golden apple) can't go higher.
-4. `L.companion(i.enchanted_book, i.t_loot_golden_food, { rate: 0.5, nbt })`: the Golden Food book goes beside golden
-   food at half its chance (51 pools). Pools made only of golden food are skipped.
-5. `L.add(/village|camp|outpost/, i.enchanted_book, { share: 0.01, nbt, except })`: 1% of a roll in the main pool of
-   114 village, campsite and outpost tables. Excluded: Wares (trade deals and packages), FD `fd_` sub-tables
-   (they're rolled into vanilla village chests on top), Monobank vaults. goldenfood's own copies had 1 of 44 (2.3%)
-   in village tables only.
 
-The book is written with `StoredEnchantments` (the proper enchanted-book form, so the tooltip shows it);
-goldenfood's own copies used `Enchantments`. Its anvil handler only checks the NBT text for `gf_enchantment`, so
-both work.
+The Golden Food enchantment book is in no loot table (removed 2026-10-03): the vanilla revert in rule 1 drops
+goldenfood's own copy, and the companion and village/camp `L.add` rules that used to place it are gone. Its anvil
+recipe (book + golden apple/carrot) is untouched, so the book needs another source if it should exist in survival.
 
 **Always-empty containers (finding 5).** `L.alias(missing, source)` creates the 12 tables structure containers name
 but no mod ships, as one roll of a sibling: Towns & Towers birch-forest house and forest ruins (plains house,
@@ -589,7 +584,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 | 1 | Index predated SimplyHouses / the_dirty_stuff | FIXED 2026-09-27 (regenerated). Re-run the generator after every mod change |
 | 2 | Scope missed 39 container tables (129 containers: Terralith houses, Missing Villages sets, Monobank vaults, IE engineer's house, Nullscape nests) | FIXED 2026-09-27: every table a template names seeds the scope (376 tables, census agrees) |
 | 3 | Entries injected into existing pools weren't cataloged | FIXED 2026-09-27: diffed per pool against `/dumploot`, in `where`, flagged `post_roll_only` (10 tables: Quark, Buzzier Bees, NHA...) |
-| 4 | goldenfood blocked village injections | FIXED 2026-09-27: vanilla pools back, Chalk/Botania/CC restored, its book folded into golden food (3.8) |
+| 4 | goldenfood blocked village injections | FIXED 2026-09-27: vanilla pools back, Chalk/Botania/CC restored, its book later removed from all tables (3.8) |
 | 5 | 12 containers named missing tables | FIXED 2026-09-27: aliases (3.8) |
 | 6 | Lightman coins spawned then stripped | FIXED 2026-09-27: `[loot.chests] enabled=false`, regex kept as a ban |
 | 7 | Root rule dropped borrowed vanilla tables | FIXED 2026-09-27: root = no parent, or placed by a template |
@@ -605,7 +600,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 - A tuned item that is only reachable from a `reach: "*"` table is never thinned post-roll.
 - Mob drops, block drops, fishing and bartering are out of scope, even for the same item.
 - Packing, companions and boosts only act where the item is a direct JSON entry in an indexed table.
-- The catalog's `where` is the view before any rule: it still shows goldenfood's copies and no crates or books.
+- The catalog's `where` is the view before any rule: it still shows goldenfood's copies and no crates.
 - Worlds: a `/reload` reaches only containers nobody has opened. Lootr containers roll per player at first open.
 
 ## 5. File map
@@ -622,6 +617,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
   [30_redistribute.js](../kubejs/server_scripts/loot/30_redistribute.js), [40_targeted.js](../kubejs/server_scripts/loot/40_targeted.js),
   [99_debug.js](../kubejs/server_scripts/loot/99_debug.js), [_lib/loot_dump.js](../kubejs/server_scripts/_lib/loot_dump.js) (`/dumploot`)
 - Tools: [gen_loot_config.py](../tools/gen_loot_config.py), [loot_census.py](../tools/loot_census.py),
+  [loot_breakdown.py](../tools/loot_breakdown.py) + [loot_breakdown_scan.py](../tools/loot_breakdown_scan.py) (output: [loot_catalog/](loot_catalog/README.md)),
   [loot_tuning_sim.js](../tools/loot_tuning_sim.js),
   [audit_loot_containers.py](../tools/audit_loot_containers.py)
 - Pack datapack overrides: [kubejs/data/lightmanscurrency/loot_tables/](../kubejs/data/lightmanscurrency/loot_tables/),
@@ -655,7 +651,14 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
   table in the export with its jar copy to see the rewritten weights (LT-06, LT-16).
 - `grep "\[loot-tuning\]" logs/kubejs/server.log` after any launch or `/reload`.
 
-## 7. In-game test suite
+## 7. TODO
+
+  - [x] remove 'golden food enchantment' book from loot tables (2026-10-03: companion + village `L.add` rules deleted from `07_rules.js`; sim checks it; in-game LT-23)
+  - Comprehensive loot table system, remapping all loot tables (using existing tables when possible). tree-like tag structure for tables (container/village/leatherworker/mediocre_loot_table, container/village/leatherworker/tresure_loot_table, container/ocean/shipwreck/tresurea, etc), item merging for many-item-to-many-table looting 
+  - Cover missed lootr chests, fixed loot chests (bible verse written book + golden carrot). Inventory of every hand-placed container: [loot_catalog/handplaced.md](loot_catalog/handplaced.md) (2026-10-03)
+  - Find island loot tables (only present in 1 or 2 structures), fold into other loot tables (list done 2026-10-03: [loot_islands.md](loot_islands.md), 172 tables; nothing folded yet)
+
+## 8. In-game test suite
 
 Use `/loot give @s loot <table>` to roll a table on demand. It runs the whole chain (code pools, GLMs, LootJS).
 Revert every temporary edit and `/reload` afterwards.
@@ -665,7 +668,7 @@ Revert every temporary edit and `/reload` afterwards.
   PASSED 2026-09-27 (12:00:42 log).
 - [ ] **LT-02 Status command:** `/loottuning` -> "active, slack=redistribute, 4 rules (2 bans)", a pre-roll line
   with 204 tables rewritten and 58 boosted, "packed: 16 pairs, rate 0.1, 1 boosts -> 99 loose entries split into 146
-  crate entries, 6 skipped", "added: 51 companions, 114 items, 0 pools, 8 restored injections, 16 tables reverted to
+  crate entries, 6 skipped", "added: 0 companions, 0 items, 0 pools, 8 restored injections, 16 tables reverted to
   vanilla, 12 aliases", a post-roll line ending "0 tuned items are post-roll only", a bans line, the two tag rules
   (chalk 17, golden food 25), and no ALARM lines.
 - [ ] **LT-03 PNC removed pre-roll:** `/loot give @s loot pneumaticcraft:chests/mechanic_house` 5x -> nothing at
@@ -673,7 +676,7 @@ Revert every temporary edit and `/reload` afterwards.
 - [ ] **LT-04 PNC GLM path:** `/loot give @s loot minecraft:chests/simple_dungeon` 20x -> no PneumaticCraft items;
   vanilla dungeon loot, Quark tomes and runes and Botania items still show up.
 - [ ] **LT-05 Lightman coins gone at the source:** during LT-04, no coins at all (simple_dungeon is in Lightman's T3
-  list), no red `[loot]` chat line, and `/loottuning` "bans: ... 0 stacks stripped post-roll" (with
+  list), no red `[loot]` chat line, and `/loottuning` "bans: ... 0 stacks stripped post-roll" (
   `[loot.chests] enabled=false` the coins never roll; a nonzero count means the switch isn't working).
 - [x] **LT-06 Chalk halved:** `/dumploot`, then compare the chalk tables in `kubejs/exported/loot_tables/chalk.json`
   with the jar -> chalk's share of each pool is halved. PASSED 2026-09-27 (12:08 export): `village_chalk_loot` empty
@@ -702,8 +705,8 @@ Revert every temporary edit and `/reload` afterwards.
 
 - [ ] **LT-14 Framework loads:** launch or `/reload` -> `logs/kubejs/server.log` has
   `[loot-tuning] 4 rules -> rewrote 204 tables (36 entries removed, 59 pools reweighted, 0 via conditions, 58 boosted
-  entries; packed 99 loose entries into 146 crate entries; 51 companions, 114 items + 0 pools added, 8 injections
-  restored, 16 reverted to vanilla, 12 aliases)` (what `node tools/loot_tuning_sim.js` prints), no `!!!` banner, no
+  entries; packed 99 loose entries into 146 crate entries; 0 companions, 0 items + 0 pools added, 8 injections
+  restored, 16 reverted to vanilla, 11 aliases)` (2026-10-03 sim: 128 tables, 94 entries into 137 crate entries; what `node tools/loot_tuning_sim.js` prints), no `!!!` banner, no
   "tag rules resolved from the registry" warning, and `kubejs/exported/loot_runtime_additions.json` is fresh.
 - [ ] **LT-15 Chalk tag:** `/kubejs hand` on a chalk box and on red chalk -> both list `creativeengineering:loot/chalk`.
   `/dumploot`, then `chalk.json` -> `village_chalk_loot` etc. show the halved chalk weights, same as LT-06.
@@ -726,19 +729,16 @@ Revert every temporary edit and `/reload` afterwards.
   items, `/reload` -> LT-14's line shows 5 rules; `/dumploot` -> no potato crates anywhere, and the village plains
   house potato entry is back to its full weight (a removed packed item switches its split off). Revert.
 - [ ] **LT-21 goldenfood reverted, injections back:** `/dumploot`, then in `minecraft.json` -> none of the 16
-  `chests/village/*` tables has goldenfood's `{Enchantments:[{id:"goldenfood:gf_enchantment"...` book;
+  `chests/village/*` tables has goldenfood's `{Enchantments:[{id:"goldenfood:gf_enchantment"...` book (no `gf_enchantment` anywhere);
   `village_plains_house` has a second pool rolling `chalk:chests/village_chalk_loot`, `village_temple` one rolling
   `botania:inject/village_chest`, `village_cartographer` both Chalk's and the `computercraft_treasure` pool.
   `/loot give @s loot minecraft:chests/village/village_mason` 20x -> some chalk.
 - [ ] **LT-22 Golden food doubled:** `/dumploot` -> in `chests/simple_dungeon` pool 0, golden apple is about 22% of the
-  weight (was 11.6%; the book added beside it takes a little); `/loot give @s loot minecraft:chests/simple_dungeon` 20x -> noticeably more golden apples.
+  weight (was 11.6%); `/loot give @s loot minecraft:chests/simple_dungeon` 20x -> noticeably more golden apples.
   The igloo still gives exactly one golden apple.
-- [ ] **LT-23 Golden Food book beside golden food:** `/dumploot` -> `chests/simple_dungeon` pool 0 has an
-  `enchanted_book` with `StoredEnchantments` `goldenfood:gf_enchantment` at about half the golden apple's old weight.
-  Take one from `/loot give` rolls, put it in an anvil with a golden apple -> an enchanted golden apple.
-- [ ] **LT-24 Book in village and camp chests:** `/dumploot` -> `chests/pillager_outpost` pool 3 (not the crossbow
-  pool) and each `chests/village/*` table's main pool have the book at about 1% of the weight; Wares packages,
-  `fd_*` tables and Monobank vaults don't.
+- [ ] **LT-23 Golden Food book gone:** `/dumploot` -> `grep gf_enchantment kubejs/exported/loot_tables/*.json` finds
+  nothing; 20 rolls of `minecraft:chests/simple_dungeon` and a few village tables never give the book.
+  `node tools/loot_tuning_sim.js` prints "the Golden Food book is in 0 tables".
 - [ ] **LT-25 Aliases fill empty containers:** `/loot give @s loot terralith:village/desert/fisherman` -> fisher loot;
   `/loot give @s loot terralith:underground/giant_bee_hive` -> honeycomb / honey. In a fresh Terralith desert village,
   the fisherman house chest isn't empty.
@@ -749,7 +749,7 @@ Revert every temporary edit and `/reload` afterwards.
   -> the log has "1 tuned item(s) can only be tuned after the roll ...: quark:ancient_tome" and `/loottuning` says
   "1 tuned items are post-roll only"; 20 rolls of `minecraft:chests/stronghold_library` never give a tome. Revert.
 
-## 8. History
+## 9. History
 
 - **2026-08-25:** `dump_loot_tables.sh` extracted every jar's loot tables into `loot_table_dump/` (superseded).
 - **2026-09-06:** LootJS scaffold: `global.LOOT` (`00_lib.js`), concern scripts `10`-`40`, `99_debug.js`, README
@@ -799,3 +799,10 @@ Revert every temporary edit and `/reload` afterwards.
   audit re-run (3,874 template containers; the one new unconverted kind is Unwrecked Ships' trap dispensers). Sim and
   scratch server agree: `4 rules -> rewrote 184 tables`. Section 2.1 totals and the 2.3 table refreshed; 2.4 to 2.9
   still read as of 09-27 (the census has the current lists).
+- **2026-10-03:** TODO 1: the Golden Food enchantment book is in no loot table (companion and village/camp `L.add` rules
+  removed from `07_rules.js`; `tools/loot_tuning_sim.js` now fails if it shows up anywhere). Sim: `rewrote 128 tables`,
+  all checks passed. TODO 4 list: [loot_islands.md](loot_islands.md), analysis only.
+- **2026-10-03:** loot catalog: `tools/loot_breakdown.py` writes [loot_catalog/](loot_catalog/README.md): every container table
+  with rolls, entries (id, count, weight, chance, functions), structures and templates; hand-placed containers
+  (no table) with positions and fixed contents; a by-structure index; dead references (11 missing tables, 17 containers
+  that always open empty). Reference only, nothing applied.

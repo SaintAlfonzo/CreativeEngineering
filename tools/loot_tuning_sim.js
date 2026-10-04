@@ -203,9 +203,10 @@ for (const [id, op] of Object.entries(T.ops)) {
 const aliases = Object.keys(T.aliases)
 for (const a of aliases) if (!after[a] || !created.has(a)) problems.push(`alias ${a}: not created`)
 
-// golden food books: count tables holding the Golden Food book, and check the village/camp adds
+// the Golden Food book must be in no table (reverted goldenfood copies, no companion, no village add)
 const gfBook = e => isItem(e) && norm(e.name) === 'minecraft:enchanted_book' && (e.functions || []).some(f => /goldenfood:gf_enchantment/.test(f.tag || ''))
 const gfTables = Object.entries(after).filter(([, t]) => t.pools.some(p => (p.entries || []).some(gfBook))).map(([id]) => id)
+if (gfTables.length) problems.push(`Golden Food book still in: ${gfTables.join(', ')}`)
 
 // tag rules
 for (const r of T.patterns.filter(r => r.key.startsWith('#'))) {
@@ -224,8 +225,7 @@ for (const pair of T.packs) {
   const c = perPair[k]
   console.log(`  ${k}: ${c ? `${c.pools} pools (${c.boosted} boosted)` : 'no chest pool holds the loose item'}`)
 }
-console.log(`golden food: ${st.boosted} boosted entries, ${st.companions} books beside golden food, ` +
-  `${st.itemsAdded} books added to village/camp pools; the book is in ${gfTables.length} tables`)
+console.log(`golden food: ${st.boosted} boosted entries; the Golden Food book is in ${gfTables.length} tables`)
 console.log(`goldenfood: ${reverted} tables reverted to vanilla; restored: ${restored.join(', ')}`)
 console.log(`aliases: ${aliases.length} created`)
 console.log(`bans: ${T.bans.length}, ${st.banRemovedPre} entries removed pre-roll, ${st.alarms.length} alarms`)

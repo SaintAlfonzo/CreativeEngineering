@@ -4,6 +4,286 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.0.4 -->
+## 1.0.4 - 2026-10-04 13:47
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: d993d01 + 130 uncommitted file(s)
+- Since: 1.0.3
+- Contents: 347 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
+- Payload: update from 1.0.3, config functional: 398 files, 12.8 MB (mods 6, kubejs 377, config 15)
+- Notes: 1.0.4: Exposure Extras camera bags (dyeable) + join-kick/refmap fixes, crop parity + hoe harvest areas, wild crop placement, canned golem dye, Display Delight icons, Wandering Trader/Winemaker rework, earth fill + IPO + driftwood + banks worldgen, perf throttles for Quark/Serene Seasons/Create Gravity/Fruits Delight/horse armor, Vinery barrel stacking, loot (Golden Food book removed, Lootr fixed containers), 4 new mods, Dimensional Gravity removed
+- Built with warnings:
+  - 130 uncommitted change(s) in shipped folders (commit d993d01 + working tree)
+
+### Changes
+
+Mods added (4):
+
+- Blue Flame Burning 5 `blueflame-1.19.2-0.1.0.2.jar` (both)
+- Fruits Delight `fruitsdelight-0.5.11.jar` (both)
+- Improved Pillager Outpost 5 `ImprovedPillagerOutpost-v5.jar` (both)
+- Just a Well 1.0.0 `well-1.19.2-1.0.0.jar` (both)
+
+Mods updated (2):
+
+- creativeengineering: `creativeengineering-1.0.3.jar` -> `creativeengineering-1.0.4.jar`
+- exposure: `exposureBackport-1.9.19-ce-19.2-01.jar` -> `exposureBackport-1.9.19-ce-19.2-02.jar`
+
+Mods removed (1):
+
+- Dimensional Gravity `Dimensional Gravity 1.0.1 - 1.19.2.jar` (was both)
+
+<details><summary>kubejs/: 301 added, 76 changed, 0 removed</summary>
+
+*added (301)*
+
+- `assets/dyable.png`
+- `assets/leatheroutline.png`
+- `assets/creativeengineering/textures/entity/canned_golem/` (15 files)
+- `assets/displaydelight/models/block/df_cactus_soup.json`
+- `assets/displaydelight/models/block/lm_pufferfish_broth.json`
+- `assets/displaydelight/models/block/pumpkin_soup.json`
+- `assets/displaydelight/models/item/` (89 files)
+- `data/ancient_enchantment_temple/loot_tables/chests/fixed/55d6fe4433.json`
+- `data/animal_barn/loot_tables/chests/fixed/346e177d20.json`
+- `data/animal_barn/loot_tables/chests/fixed/3639e1f658.json`
+- `data/animal_barn/loot_tables/chests/fixed/76f93e87de.json`
+- `data/animal_barn/loot_tables/chests/fixed/c328cc64f4.json`
+- `data/animal_barn/loot_tables/chests/fixed/df216b2369.json`
+- `data/animal_barn/loot_tables/chests/fixed/ee30b37967.json`
+- `data/antiquetradingship/loot_tables/chests/fixed/` (22 files)
+- `data/bighorsestable/loot_tables/chests/fixed/01a2b6c5b7.json`
+- `data/bighorsestable/loot_tables/chests/fixed/18ccb86b19.json`
+- `data/bighorsestable/loot_tables/chests/fixed/1f8543df4e.json`
+- `data/bighorsestable/loot_tables/chests/fixed/6b30f5527e.json`
+- `data/bighorsestable/loot_tables/chests/fixed/c8ef58641f.json`
+- `data/bighorsestable/loot_tables/chests/fixed/ed1a64f478.json`
+- `data/creativeengineering/forge/biome_modifier/driftwood_land_beach.json`
+- `data/creativeengineering/forge/biome_modifier/driftwood_land_extra.json`
+- `data/creativeengineering/forge/biome_modifier/driftwood_land_swamp.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/beetroots.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/brown_mushroom_colonies.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/cabbages.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/hamimelon.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/red_mushroom_colonies.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/rubber_tree.json`
+- `data/creativeengineering/worldgen/placed_feature/driftwood_land/beach.json`
+- `data/creativeengineering/worldgen/placed_feature/driftwood_land/extra.json`
+- `data/creativeengineering/worldgen/placed_feature/driftwood_land/swamp.json`
+- `data/creativeengineering/worldgen/placed_feature/wild/` (11 files)
+- `data/desert_village_temple/loot_tables/chests/fixed/1d30e06aa9.json`
+- `data/desert_village_temple/loot_tables/chests/fixed/70abde37ea.json`
+- `data/desert_village_temple/loot_tables/chests/fixed/799090db68.json`
+- `data/desert_village_temple/loot_tables/chests/fixed/8ceac6a077.json`
+- `data/desert_village_temple/loot_tables/chests/fixed/a415bd50d9.json`
+- `data/desert_village_temple/loot_tables/chests/fixed/f3bdf01ab8.json`
+- `data/desert_watchtower/loot_tables/chests/fixed/2ca75e3c4d.json`
+- `data/forest_ruins/loot_tables/chests/fixed/62dc2f051e.json`
+- `data/forest_ruins/loot_tables/chests/fixed/9952d57750.json`
+- `data/forest_ruins/loot_tables/chests/fixed/d1eed4af72.json`
+- `data/forest_watchtower/loot_tables/chests/fixed/85432f6caa.json`
+- `data/forest_watchtower/loot_tables/chests/fixed/e7cdc49063.json`
+- `data/forgotten_church/loot_tables/chests/fixed/46779e895a.json`
+- `data/forgotten_church/loot_tables/chests/fixed/76668b036a.json`
+- `data/gothic_church/loot_tables/chests/fixed/22960186d8.json`
+- `data/gothic_church/loot_tables/chests/fixed/7ebc591a05.json`
+- `data/illager_siege_weapons/loot_tables/chests/fixed/5757e9f7bf.json`
+- `data/illager_viking_longship/loot_tables/chests/fixed/4c461f6c6a.json`
+- `data/illagerwarship/loot_tables/chests/fixed/` (11 files)
+- `data/ipo/structures/pillager_outpost/base_plate.nbt`
+- `data/ipo/worldgen/template_pool/pillager_outpost/top_variants.json`
+- `data/ipo/worldgen/template_pool/pillager_outpost/top_variants_damaged.json`
+- `data/ipo/worldgen/template_pool/pillager_outpost/top_variants_overgrown.json`
+- `data/ipo/worldgen/template_pool/pillager_outpost/top_variants_overgrown_damaged.json`
+- `data/ipo/worldgen/template_pool/pillager_outpost/towers.json`
+- `data/llama_stable/loot_tables/chests/fixed/bc4f7a2ef4.json`
+- `data/minecraft/structures/pillager_outpost/base_plate.nbt`
+- `data/minecraft/worldgen/template_pool/pillager_outpost/base_plates.json`
+- `data/mini_clock_tower/loot_tables/chests/fixed/f922b639fd.json`
+- `data/mysticrift_pillagers_towers_aris/loot_tables/chests/fixed/` (23 files)
+- `data/oldvillagerstatue/loot_tables/chests/fixed/20693cf08a.json`
+- `data/plains_villager_tents/loot_tables/chests/fixed/8f3056188d.json`
+- `data/plains_villager_tents/loot_tables/chests/fixed/b49b524504.json`
+- `data/saloon/loot_tables/chests/fixed/` (14 files)
+- `data/small_viking_villager_house/loot_tables/chests/fixed/d6a8a7d110.json`
+- `data/small_viking_villager_house/loot_tables/chests/fixed/e675137442.json`
+- `data/small_villager_greenhouse/loot_tables/chests/fixed/120d23465a.json`
+- `data/smallhorsestable/loot_tables/chests/fixed/6d452ae496.json`
+- `data/smallhorsestable/loot_tables/chests/fixed/e91b103738.json`
+- `data/snowy_tents/loot_tables/chests/fixed/0856ca91df.json`
+- `data/snowy_tents/loot_tables/chests/fixed/7665f2ac77.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_beach.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_extra.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_ocean.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_river.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_swamp.json`
+- `data/villager_archer_camp/loot_tables/chests/fixed/8b21ddcb7f.json`
+- `data/villager_butcher_house/loot_tables/chests/fixed/09fc8e99e5.json`
+- `data/villager_butcher_house/loot_tables/chests/fixed/94920ed781.json`
+- `data/villager_cartographer_house/loot_tables/chests/fixed/c610fb2dc6.json`
+- `data/villager_circus_tent/loot_tables/chests/fixed/5afa0421bc.json`
+- `data/villager_circus_tent/loot_tables/chests/fixed/87198d005e.json`
+- `data/villager_cleric_house/loot_tables/chests/fixed/b50fc670ad.json`
+- `data/villager_country_house/loot_tables/chests/fixed/0acd0b4993.json`
+- `data/villager_country_house/loot_tables/chests/fixed/6ef82b7be1.json`
+- `data/villager_country_house/loot_tables/chests/fixed/7fb77f72bf.json`
+- `data/villager_country_house/loot_tables/chests/fixed/9572f885c2.json`
+- `data/villager_farmer_house/loot_tables/chests/fixed/69db62953d.json`
+- `data/villager_farmer_house/loot_tables/chests/fixed/6d9792742d.json`
+- `data/villager_farmer_house/loot_tables/chests/fixed/752ac63222.json`
+- `data/villager_fish_shop/loot_tables/chests/fixed/110911a70f.json`
+- `data/villager_fish_shop/loot_tables/chests/fixed/161c4cd512.json`
+- `data/villager_fishermans_hut/loot_tables/chests/fixed/018b921ab0.json`
+- `data/villager_fishermans_hut/loot_tables/chests/fixed/47d7750151.json`
+- `data/villager_fishermans_hut/loot_tables/chests/fixed/a15c906c2d.json`
+- `data/villager_fishermans_hut/loot_tables/chests/fixed/a8f937c914.json`
+- `data/villager_fletcher_house/loot_tables/chests/fixed/588ebff9b4.json`
+- `data/villager_forge/loot_tables/chests/fixed/50834b4402.json`
+- `data/villager_forge/loot_tables/chests/fixed/c240b7e40a.json`
+- `data/villager_rafts/loot_tables/chests/fixed/07f6f1903c.json`
+- `data/villager_rafts/loot_tables/chests/fixed/540848abac.json`
+- `data/villager_rafts/loot_tables/chests/fixed/7b1027d4d0.json`
+- `data/villager_rafts/loot_tables/chests/fixed/9cd6548b25.json`
+- `data/villager_rafts/loot_tables/chests/fixed/9f0d58b7d7.json`
+- `data/villager_rafts/loot_tables/chests/fixed/da5f8ab305.json`
+- `data/villager_rafts/loot_tables/chests/fixed/e403a43512.json`
+- `data/villager_tannery/loot_tables/chests/fixed/40d7ed31f9.json`
+- `data/villager_windmill/loot_tables/chests/fixed/9c743ef286.json`
+- `data/villager_windmill/loot_tables/chests/fixed/a03487dc71.json`
+- `data/watchtower_building/loot_tables/chests/fixed/06161c8193.json`
+- `data/watchtower_building/loot_tables/chests/fixed/7f048c032e.json`
+- `generation_scripts/worldgen/wild_crops.json`
+- `server_scripts/_lib/dump_stacks.js`
+- `server_scripts/economy/wandering_trades.js`
+- `server_scripts/loot/08_leaf_apples.js`
+- `server_scripts/tags/tradetags.js`
+- `server_scripts/worldgen/earth_fill.js`
+- `server_scripts/worldgen/wild_crops.js`
+- `startup_scripts/func/trade_helper.js`
+
+*changed (76)*
+
+- `data/ancient_enchantment_temple/structures/jungle_overgrown_temple.nbt`
+- `data/animal_barn/structures/barn.nbt`
+- `data/antiquetradingship/structures/shipo.nbt`
+- `data/bighorsestable/structures/big_horsestable.nbt`
+- `data/desert_village_temple/structures/villager_desert_temple.nbt`
+- `data/desert_watchtower/structures/desert_watch_tower.nbt`
+- `data/forest_ruins/structures/ruin_1.nbt`
+- `data/forest_ruins/structures/ruin_4.nbt`
+- `data/forest_ruins/structures/ruin_6.nbt`
+- `data/forest_watchtower/structures/forest_watchtower.nbt`
+- `data/forgotten_church/structures/church_ruin.nbt`
+- `data/gothic_church/structures/church.nbt`
+- `data/illager_siege_weapons/structures/siegetower.nbt`
+- `data/illager_viking_longship/structures/longship_modded.nbt`
+- `data/illagerwarship/structures/illager-warship.nbt`
+- `data/llama_stable/structures/llama_stable.nbt`
+- `data/mini_clock_tower/structures/mini_clock_tower.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/acacia_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/birch_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/cherry_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/desert_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/jungle_pillager_tower.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/mangrove_pillager_tower_new.nbt`
+- `data/mysticrift_pillagers_towers_aris/structures/oak_wood_pillager_tower_new.nbt`
+- `data/oldvillagerstatue/structures/oldvillagerstatue.nbt`
+- `data/plains_villager_tents/structures/villager_plains_tent.nbt`
+- `data/saloon/structures/saloon.nbt`
+- `data/small_viking_villager_house/structures/villagervikinghouse.nbt`
+- `data/small_villager_greenhouse/structures/smallvillagergreenhouse.nbt`
+- `data/smallhorsestable/structures/horsestable.nbt`
+- `data/snowy_tents/structures/snowy-tent.nbt`
+- `data/villager_archer_camp/structures/villagerarchercamp.nbt`
+- `data/villager_butcher_house/structures/butcher.nbt`
+- `data/villager_cartographer_house/structures/carto.nbt`
+- `data/villager_circus_tent/structures/circus_tent.nbt`
+- `data/villager_cleric_house/structures/villagerclerichouse.nbt`
+- `data/villager_country_house/structures/country_house.nbt`
+- `data/villager_farmer_house/structures/farmer_house.nbt`
+- `data/villager_fish_shop/structures/smallfishinshop.nbt`
+- `data/villager_fishermans_hut/structures/villagerfisherman.nbt`
+- `data/villager_fletcher_house/structures/villager_archery_house.nbt`
+- `data/villager_forge/structures/villager-forge.nbt`
+- `data/villager_rafts/structures/raft1.nbt`
+- `data/villager_rafts/structures/raft2.nbt`
+- `data/villager_rafts/structures/raft3.nbt`
+- `data/villager_tannery/structures/villager_tannery.nbt`
+- `data/villager_windmill/structures/windmill.nbt`
+- `data/watchtower_building/structures/a_wt_r3_4p.nbt`
+- `data/watchtower_building/structures/ab_watchtower_big_tower.nbt`
+- `data/watchtower_building/structures/ab_watchtower_small_tower.nbt`
+- `data/watchtower_building/structures/fr_watchtower_big_tower.nbt`
+- `data/watchtower_building/structures/fr_watchtower_small_tower.nbt`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/pool_tags.json`
+- `generation_scripts/worldgen/structure_groups.json`
+- `generation_scripts/worldgen/structure_tags.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
+- `server_scripts/_lib/dump_all.js`
+- `server_scripts/_lib/dump_food.js`
+- `server_scripts/_lib/villager_trades_dump.js`
+- `server_scripts/engineering/dust.js`
+- `server_scripts/equipment/camera_bag.js`
+- `server_scripts/loot/07_rules.js`
+- `server_scripts/loot/loot_config.json`
+- `server_scripts/loot/loot_index.json`
+- `server_scripts/magic/armor_effects.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/equipmenttags.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/compost/compost_values.js`
+- `startup_scripts/func/armor_effects.js`
+
+</details>
+
+config/: 4 added, 11 changed, 0 removed, 1 no longer shipped:
+
+*added (4)*
+
+- `exposure_extras-common.toml`
+- `fruitsdelight-common.toml`
+- `starterkit/descriptions/Engineer.txt`
+- `starterkit/kits/Engineer.txt`
+
+*changed (11)*
+
+- `DistantHorizons.toml`
+- `alexsmobs.toml`
+- `create_central_kitchen-common.toml`
+- `creativeengineering-common.toml`
+- `everycomp-wood_types.toml`
+- `quark-common.toml`
+- `rare-ice.properties`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `vinery/config.json5`
+- `worldedit/worldedit.properties`
+
+*no longer shipped (player settings, left in place) (1)*
+
+- `trashslot-common.toml`
+
+### Removals (from 1.0.3)
+
+Delete on the server (3, also in removals_server.txt):
+
+- `mods/Dimensional Gravity 1.0.1 - 1.19.2.jar`
+- `mods/creativeengineering-1.0.3.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-01.jar`
+
+Delete on the client (3, also in removals_client.txt):
+
+- `mods/Dimensional Gravity 1.0.1 - 1.19.2.jar`
+- `mods/creativeengineering-1.0.3.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-01.jar`
+
 <!-- deploy:1.0.3 -->
 ## 1.0.3 - 2026-10-02 15:41
 

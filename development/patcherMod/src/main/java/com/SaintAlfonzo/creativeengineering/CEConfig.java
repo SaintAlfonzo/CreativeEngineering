@@ -44,6 +44,7 @@ public final class CEConfig {
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
     public static final Canning CANNING;
+    public static final Perf PERF;
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
     public static final TrashSlot TRASH_SLOT;
@@ -64,6 +65,7 @@ public final class CEConfig {
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
         CANNING = new Canning(builder);
+        PERF = new Perf(builder);
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
         TRASH_SLOT = new TrashSlot(builder);
@@ -456,6 +458,58 @@ public final class CEConfig {
                     .defineInRange("damagePerUse", 1, 0, 100);
 
             b.pop(); // bonemeal_charm
+        }
+    }
+
+    /**
+     * Throttles for third-party mod code that the server profile (feature_writeup/perf.md section 7) found
+     * hot. Each one is a mixin in {@code mixin/} that skips or spaces out work the mod does every tick;
+     * the comments say what is traded away. Read live, no rejoin needed.
+     */
+    public static final class Perf {
+        public final ForgeConfigSpec.IntValue troughMissCooldownTicks;
+        public final ForgeConfigSpec.IntValue seasonsMeltIntervalTicks;
+        public final ForgeConfigSpec.BooleanValue gravityLimitDimensions;
+        public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> gravityDimensions;
+        public final ForgeConfigSpec.IntValue mountEffectIntervalTicks;
+
+        private Perf(ForgeConfigSpec.Builder b) {
+            b.comment("Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.")
+                    .push("perf");
+
+            troughMissCooldownTicks = b.comment(
+                    "Quark feeding trough: after an animal's trough search finds nothing, it does not search again for",
+                    "this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a",
+                    "hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or",
+                    "refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour)."
+            ).defineInRange("troughMissCooldownTicks", 600, 0, 72000);
+
+            seasonsMeltIntervalTicks = b.comment(
+                    "Serene Seasons snow/ice melt: the per-chunk melt roll runs once every N ticks instead of every",
+                    "tick, with its chance multiplied by N so the average melt rate is unchanged (a roll's chance",
+                    "is capped at 1, so N above 4 melts slightly slower in summer). Walking every loaded chunk on",
+                    "every tick was the cost. Cost: melting is a little lumpier. 1 = off."
+            ).defineInRange("seasonsMeltIntervalTicks", 4, 1, 40);
+
+            gravityLimitDimensions = b.comment(
+                    "Create: Gravity runs its biome lookup and gravity-attribute update for every living entity in",
+                    "every dimension on every tick. On: only entities in the dimensions below run it (entities that",
+                    "still carry the low-gravity modifier from one run it once more to drop it). Off: the mod's own",
+                    "behaviour."
+            ).define("gravityLimitDimensions", true);
+            gravityDimensions = b.comment(
+                    "Dimensions Create: Gravity is allowed to run in. The pack's biome_configs lists only",
+                    "#minecraft:is_end, so the End is enough. Add a dimension here if you add a gravity biome",
+                    "outside the End."
+            ).defineList("gravityDimensions", java.util.List.of("minecraft:the_end"), o -> o instanceof String);
+
+            mountEffectIntervalTicks = b.comment(
+                    "Ticks between passes that apply a worn horse armor's effects (dragon horse armor: Regeneration).",
+                    "The pass walks every entity in the level, which cost too much every tick. Effects last",
+                    "this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval."
+            ).defineInRange("mountEffectIntervalTicks", 100, 1, 1200);
+
+            b.pop(); // perf
         }
     }
 
@@ -881,6 +935,9 @@ public final class CEConfig {
     /** Where /ceplace puts each structure vertically ({@code worldgen/MassPlacer}). */
     public enum VerticalAlign { AUTO, KEEP, GROUND }
 
+    /** Which structure starts the earth-fill check logs ({@code worldgen/EarthFill}). */
+    public enum EarthFillLog { OFF, CANCELLED, ALL }
+
     /**
      * Every worldgen system's switch and every tuning constant that isn't per-structure data. Per-structure
      * and per-piece values stay in kubejs/generation_scripts/worldgen/*.json (hundreds of entries); this is
@@ -894,6 +951,7 @@ public final class CEConfig {
         public final PoolTuning pools;
         public final BiomeSolver biomeSolver;
         public final GroundMatch groundMatch;
+        public final EarthFill earthFill;
         public final MassPlace massPlace;
 
         private Worldgen(ForgeConfigSpec.Builder b) {
@@ -908,6 +966,7 @@ public final class CEConfig {
             pools = new PoolTuning(b);
             biomeSolver = new BiomeSolver(b);
             groundMatch = new GroundMatch(b);
+            earthFill = new EarthFill(b);
             massPlace = new MassPlace(b);
             b.pop(); // worldgen
         }
@@ -924,6 +983,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue biomeMerges;
         public final ForgeConfigSpec.BooleanValue deadPlacementFilter;
         public final ForgeConfigSpec.BooleanValue groundMatch;
+        public final ForgeConfigSpec.BooleanValue earthFill;
         public final ForgeConfigSpec.BooleanValue wildCrops;
 
         private WorldgenSystems(ForgeConfigSpec.Builder b) {
@@ -952,6 +1012,9 @@ public final class CEConfig {
                     .define("deadPlacementFilter", true);
             groundMatch = b.comment("Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).")
                     .define("groundMatch", true);
+            earthFill = b.comment("Cancel a structure whose foundation would need too much earth over water or air ([worldgen.earth_fill]).",
+                    "New chunks only.")
+                    .define("earthFill", true);
             wildCrops = b.comment("wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).",
                     "Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.")
                     .define("wildCrops", true);
@@ -1079,6 +1142,71 @@ public final class CEConfig {
             b.pop(); // sampling
 
             b.pop(); // ground_match
+        }
+    }
+
+    /**
+     * Knobs for {@code worldgen/EarthFill}: a structure is cancelled before it is stored when the earth
+     * blocks in the bottom layers of its templates would sit on water or in air, judged against the
+     * terrain the generator predicts there. Which blocks are earth is a block tag (kubejs blocktags.js);
+     * structures that float on purpose are in the structure tag creativeengineering:earth_fill/exempt
+     * (kubejs worldgen/earth_fill.js). Read while chunks generate. On/off: [worldgen.systems] earthFill.
+     */
+    public static final class EarthFill {
+        public final ForgeConfigSpec.IntValue maxOverWater;
+        public final ForgeConfigSpec.IntValue maxOverAir;
+        public final ForgeConfigSpec.IntValue baseLayers;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> blocks;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> overrides;
+        public final ForgeConfigSpec.IntValue sampleGrid;
+        public final ForgeConfigSpec.EnumValue<EarthFillLog> log;
+
+        private EarthFill(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Structures that would need a lot of earth to stand on. Just before a structure start is stored,",
+                    "every earth block (tag below) in the bottom layers of its template pieces is compared with the",
+                    "terrain the generator predicts at that spot. A block where that terrain is water counts toward",
+                    "maxOverWater, one where it is air toward maxOverAir; past either limit the whole structure is",
+                    "cancelled and its slot stays empty (a slot shared with other structures tries the next pick).",
+                    "Village streets that follow the terrain are never counted. Exempt a structure with the structure",
+                    "tag creativeengineering:earth_fill/exempt. New chunks only; /place structure is not checked."
+            ).push("earth_fill");
+
+            maxOverWater = b.comment(
+                    "Most earth blocks that may stand in water (a pad or skirt reaching into a lake or the sea).",
+                    "-1 = no limit, 0 = none at all. Vanilla villages in their own biomes: 0, so 24 only trips at",
+                    "shores. Per structure: see overrides."
+            ).defineInRange("maxOverWater", 24, -1, 100000);
+            maxOverAir = b.comment(
+                    "Most earth blocks that may hang in air (a pad sticking out past a cliff or slope).",
+                    "-1 = no limit, 0 = none at all. Measured on vanilla terrain (tools/earth_fill_sim.sh): a whole",
+                    "village has a median 60 to 150 and a p99 of 170 to 430 (their terrain adaptation fills most of",
+                    "it), so 256 only cancels the extremes (savanna 12%, taiga 3%, others 0%); small ruins with a",
+                    "grass pad want a much lower value: use overrides. Per structure: see overrides."
+            ).defineInRange("maxOverAir", 128, -1, 100000);
+            baseLayers = b.comment(
+                    "How many template layers from the bottom count as the foundation. Earth higher up (roof gardens,",
+                    "planters) is not counted: above the ground everything is air."
+            ).defineInRange("baseLayers", 3, 1, 16);
+            blocks = b.comment(
+                    "Block tags, one entry each, that count as earth. Fill the default in kubejs blocktags.js; add a tag",
+                    "here to count another kind of block."
+            ).defineList("blocks", List.of("creativeengineering:earth_fill/earth"),
+                    o -> o instanceof String str && str.contains(":"));
+            overrides = b.comment(
+                    "Per-structure limits, one entry each: \"<structure id or #structure tag>=<water>,<air>\", e.g.",
+                    "\"philipsruins:ancient_ruins=0,16\" (never over water, at most 16 over air) or",
+                    "\"minecraft:village_plains=-1,-1\" (no limits). The first matching entry wins; -1 = no limit."
+            ).defineList("overrides", List.of(), o -> o instanceof String str && str.contains("="));
+            sampleGrid = b.comment(
+                    "The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little",
+                    "coarser at cliffs). 1 = every column."
+            ).defineInRange("sampleGrid", 2, 1, 8);
+            log = b.comment(
+                    "CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked",
+                    "structure that has any earth in its base. For tuning the limits."
+            ).defineEnum("log", EarthFillLog.CANCELLED);
+            b.pop(); // earth_fill
         }
     }
 
