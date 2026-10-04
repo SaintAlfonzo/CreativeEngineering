@@ -1099,6 +1099,12 @@
 		#biome_rules in structure_groups.json (patcherMod StructureBiomeRules): only allowed structures start in
 		#the rule's biomes (water: ships, wrecks, ocean ruins...). Off: every structure uses its own biome list. Rejoin.
 		structureBiomeRules = true
+		#Cancel a structure whose foundation would need too much earth over water or air ([worldgen.earth_fill]).
+		#New chunks only.
+		earthFill = true
+		#wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).
+		#Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.
+		wildCrops = true
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
@@ -1201,6 +1207,46 @@
 		#Range: 5 ~ 1000
 		tickBudgetMs = 40
 
+	#Structures that would need a lot of earth to stand on. Just before a structure start is stored,
+	#every earth block (tag below) in the bottom layers of its template pieces is compared with the
+	#terrain the generator predicts at that spot. A block where that terrain is water counts toward
+	#maxOverWater, one where it is air toward maxOverAir; past either limit the whole structure is
+	#cancelled and its slot stays empty (a slot shared with other structures tries the next pick).
+	#Village streets that follow the terrain are never counted. Exempt a structure with the structure
+	#tag creativeengineering:earth_fill/exempt. New chunks only; /place structure is not checked.
+	[worldgen.earth_fill]
+		#Most earth blocks that may stand in water (a pad or skirt reaching into a lake or the sea).
+		#-1 = no limit, 0 = none at all. Vanilla villages in their own biomes: 0, so 24 only trips at
+		#shores. Per structure: see overrides.
+		#Range: -1 ~ 100000
+		maxOverWater = 24
+		#Most earth blocks that may hang in air (a pad sticking out past a cliff or slope).
+		#-1 = no limit, 0 = none at all. Measured on vanilla terrain (tools/earth_fill_sim.sh): a whole
+		#village has a median 60 to 150 and a p99 of 170 to 430 (their terrain adaptation fills most of
+		#it), so 256 only cancels the extremes (savanna 12%, taiga 3%, others 0%); small ruins with a
+		#grass pad want a much lower value: use overrides. Per structure: see overrides.
+		#Range: -1 ~ 100000
+		maxOverAir = 256
+		#How many template layers from the bottom count as the foundation. Earth higher up (roof gardens,
+		#planters) is not counted: above the ground everything is air.
+		#Range: 1 ~ 16
+		baseLayers = 3
+		#Block tags, one entry each, that count as earth. Fill the default in kubejs blocktags.js; add a tag
+		#here to count another kind of block.
+		blocks = ["creativeengineering:earth_fill/earth"]
+		#Per-structure limits, one entry each: "<structure id or #structure tag>=<water>,<air>", e.g.
+		#"philipsruins:ancient_ruins=0,16" (never over water, at most 16 over air) or
+		#"minecraft:village_plains=-1,-1" (no limits). The first matching entry wins; -1 = no limit.
+		overrides = []
+		#The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little
+		#coarser at cliffs). 1 = every column.
+		#Range: 1 ~ 8
+		sampleGrid = 2
+		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
+		#structure that has any earth in its base. For tuning the limits.
+		#Allowed Values: OFF, CANCELLED, ALL
+		log = "CANCELLED"
+
 #Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
 #one takes a serving; the servings left show as a durability bar and a tooltip line. The
 #last serving leaves an empty can, a crushed can or nothing, rolled with the chances below.
@@ -1266,4 +1312,33 @@
 	#Ticks between Wandering Winemaker spawn rolls.
 	#Range: 1200 ~ 100000000
 	winemakerIntervalTicks = 96000
+
+#Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.
+[perf]
+	#Quark feeding trough: after an animal's trough search finds nothing, it does not search again for
+	#this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a
+	#hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or
+	#refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour).
+	#Range: 0 ~ 72000
+	troughMissCooldownTicks = 600
+	#Serene Seasons snow/ice melt: the per-chunk melt roll runs once every N ticks instead of every
+	#tick, with its chance multiplied by N so the average melt rate is unchanged (a roll's chance
+	#is capped at 1, so N above 4 melts slightly slower in summer). Walking every loaded chunk on
+	#every tick was the cost. Cost: melting is a little lumpier. 1 = off.
+	#Range: 1 ~ 40
+	seasonsMeltIntervalTicks = 4
+	#Create: Gravity runs its biome lookup and gravity-attribute update for every living entity in
+	#every dimension on every tick. On: only entities in the dimensions below run it (entities that
+	#still carry the low-gravity modifier from one run it once more to drop it). Off: the mod's own
+	#behaviour.
+	gravityLimitDimensions = true
+	#Dimensions Create: Gravity is allowed to run in. The pack's biome_configs lists only
+	##minecraft:is_end, so the End is enough. Add a dimension here if you add a gravity biome
+	#outside the End.
+	gravityDimensions = ["minecraft:the_end"]
+	#Ticks between passes that apply a worn horse armor's effects (dragon horse armor: Regeneration).
+	#The pass walks every entity in the level, which cost too much every tick. Effects last
+	#this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval.
+	#Range: 1 ~ 1200
+	mountEffectIntervalTicks = 100
 

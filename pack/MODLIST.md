@@ -5,9 +5,9 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 
 - Minecraft **1.19.2**, Forge **43.3.9**
 - Java 17
-- JVM args: `-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dmixin.debug.verbose=true -Dmixin.debug.export=true`
+- JVM args: `-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M`
 
-## Mods (390: 335 both, 42 client, 13 server)
+## Mods (389: 334 both, 42 client, 13 server)
 
 | Side | Mod | Mod id | Version | File | Source |
 |---|---|---|---|---|---|
@@ -141,7 +141,6 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Decorative Blocks | `decorative_blocks` | Decorative Blocks-forge-1.19.2-3.0.0.jar | `Decorative Blocks-forge-1.19.2-3.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/decorative-blocks/files/3941638) |
 | both | Delightful | `delightful` | 3.4.1-1.19.2 | `Delightful-1.19.2-3.4.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/delightful/files/4792851) [MR](https://modrinth.com/mod/delightful/version/3kuWUhts) |
 | client | Detail Armor Bar [Forge] | `detailab` | 2.6.4+1.19.2-forge | `DetailArmorBar-2.6.4+1.19.2-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/detail-armor-bar-forge/files/3920487) [MR](https://modrinth.com/mod/detail-armor-bar/version/kKIctwmh) |
-| both | Dimensional Gravity | `end_gravity` | Dimensional Gravity 1.0.1 - 1.19.2.jar | `Dimensional Gravity 1.0.1 - 1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/dimensional-gravity/files/4477853) |
 | both | Display Delight | `displaydelight` | 1.2.0 | `displaydelight-1.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/display-delight/files/5972197) [MR](https://modrinth.com/mod/display-delight/version/75JYP7rh) |
 | both | Distant Horizons: A Level of Detail mod | `distanthorizons` | 3.0.2-b-1.19.2 | `DistantHorizons-3.0.2-b-1.19.2-fabric-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/distant-horizons/files/7977102) [MR](https://modrinth.com/mod/distanthorizons/version/LMv5jaNg) |
 | both | Do a Barrel Roll | `do_a_barrel_roll` | 2.6.2+1.19-forge | `do-a-barrel-roll-2.6.2+1.19.2-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/do-a-barrel-roll/files/4385174) [MR](https://modrinth.com/mod/do-a-barrel-roll/version/nybnGUJv) |

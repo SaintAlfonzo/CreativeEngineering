@@ -1,6 +1,6 @@
 # Structure tuning: how often every structure and village house generates
 
-Test prefix **ST-** · Last updated **2026-10-02** · Overall status **DEPLOYED, in-game test pending** (structure groups
+Test prefix **ST-** · Last updated **2026-10-03** · Overall status **DEPLOYED, in-game test pending** (structure groups
 replaced the per-set + multiplier model on 2026-09-27 evening; jar in `mods/`, needs a rejoin: ST-17 onward). Ground
 matching (3.8), the CEConfig `[worldgen]` section with its debug density (3.9) and `/ceplace` (3.10) are DEPLOYED
 2026-09-27 (jar md5 729953e6); the structure lines, live-set check and `/ceplace` ran on a scratch dedicated server, your client not yet: ST-27 to ST-42
@@ -28,6 +28,9 @@ there (a grassy ruin on volcanic peaks sits on basalt instead).
 | Data-only structure mods converted to `kubejs/data` (33 jars, 56 structures) | `tools/port_structure_jars.py` | Done 2026-09-27; scratch server boots, 56 of 56 placed by `/ceplace`, live sets match. Client untested. ST-43 |
 | Biome rules: only water structures start in oceans and rivers | `biome_rules` in `structure_groups.json` + tag `water_ok`; patcherMod `worldgen/StructureBiomeRules` + `ChunkGeneratorStructureBiomeRulesMixin`, CEConfig `structureBiomeRules` | BUILT 2026-10-03, patcherMod 1.0.4 in `mods/` (md5 ab58494b); 6 Java checks, node/Rhino parity; a scratch dedicated server applied it (25 kept out). ST-44 to ST-46 |
 | Improved Pillager Outpost as a 1-in-8 tower, not a replacement; IPO template names fixed; driftwood at 0.25x | `kubejs/data/{minecraft,ipo,upgrade_aquatic}` | BUILT 2026-10-03; the scratch server loaded the pools at 7:1 and created the world with the driftwood overrides. ST-47, ST-48 |
+| Monobank banks 5x rarer in villages | `pool_tags.json` tags `monobank/vault_houses` x0.18 and `monobank/vault_streets` x0.16 | BUILT 2026-10-03; chance per pool computed from the 2026-10-03 pool report, not yet read back from a game load. ST-49 |
+| Driftwood: in the water at the 0.25x rate, on land about a tenth of that | `kubejs/data/upgrade_aquatic` (5 placed features gated to water) + `kubejs/data/creativeengineering` (3 land placed features + 3 biome modifiers) | BUILT 2026-10-03; the 8 placement lists parse against the 1.19.2 codecs headless; not loaded in a game. ST-50 |
+| Earth fill: cancel a structure whose foundation needs too much earth over water or air | patcherMod `worldgen/EarthFill` + `ChunkGeneratorEarthFillMixin`, CEConfig `[worldgen.earth_fill]`, tags in `blocktags.js` + `worldgen/earth_fill.js` | BUILT 2026-10-03 (patcherMod 1.0.4, not in `mods/`: the game was running); 21 headless checks + a vanilla terrain simulation; mixin slot checked against the SRG bytecode, never applied in a game. ST-51 to ST-55 |
 
 **Open first:** [structure_groups.json](../kubejs/generation_scripts/worldgen/structure_groups.json) (every rate),
 [structure_tags.json](../kubejs/generation_scripts/worldgen/structure_tags.json) (`group/*` = who shares a grid),
@@ -46,10 +49,10 @@ and the offline estimate [structure_group_estimates.md](../kubejs/generation_scr
 - Lootr: block → vanilla container pairs in `loot_container_swaps.json`.
 - `config/creativeengineering-common.toml` `[worldgen]` (also in Create's config screen), the layer above the JSON tables:
   - `[worldgen.systems]`: one on/off per system (structureGroups, structureFrequencies, poolTuning, lootContainerSwaps,
-    biomeLayout, biomeMerges, deadPlacementFilter, groundMatch).
+    biomeLayout, biomeMerges, deadPlacementFilter, groundMatch, structureBiomeRules, earthFill).
   - `[worldgen.debug] structureDensity`: every structure's rate times x (testing only).
   - `[worldgen.pools]`, `[worldgen.biome_solver]`: the solvers' constants.
-  - `[worldgen.ground_match]` (+ `.sampling`), `[worldgen.mass_place]` (`/ceplace` layout).
+  - `[worldgen.ground_match]` (+ `.sampling`), `[worldgen.earth_fill]` (limits, 3.13), `[worldgen.mass_place]` (`/ceplace` layout).
 - Ground matching: `[worldgen.ground_match]` (mode, baseLayers, nativeShare, minSamples, families, log, sampling); which
   blocks are base / plants / not-ground: the `creativeengineering:ground_match/*` block tags in `blocktags.js`; opt a
   structure out: `creativeengineering:ground_match/exempt` in `worldgen/ground_match.js`.
@@ -453,16 +456,123 @@ plate. The plate's only jigsaw leads to `ipo:pillager_outpost/towers`, so every 
   the names corrected. Delete them if IPO fixes this.
 
 **Driftwood** (Upgrade Aquatic) is a placed feature, not a structure. Its 5 placed features are registered in Java,
-so `kubejs/data/upgrade_aquatic/worldgen/placed_feature/driftwood_*.json` override them at 0.25x. Each file keeps
-the feature, the square spread, the `WORLD_SURFACE_WG` heightmap and the biome filter:
+so `kubejs/data/upgrade_aquatic/worldgen/placed_feature/driftwood_*.json` override them. Each file keeps the feature,
+the square spread, the `WORLD_SURFACE_WG` heightmap and the biome filter, at 0.25x the mod's rate (2026-10-03 morning),
+and since 2026-10-03 evening each one also has a `block_predicate_filter`: the block under the spot must be water, so
+these five only ever place floating driftwood.
 
-| Feature | Upgrade Aquatic | Now |
+| Feature | Upgrade Aquatic | In the water now |
 |---|---|---|
 | ocean | rarity 1/32 per chunk | 1/128 |
 | beach | rarity 1/4 per chunk | 1/16 |
 | river | 2 per chunk | 1 in 2 chunks |
 | swamp | 4 per chunk | 1 per chunk |
 | extra (Atmospheric rainforest basins) | 5 per chunk | 1 or 2 (3:1), mean 1.25 |
+
+Each attempt picks one random column, so a beach attempt that lands on sand no longer places anything: the
+water version only fires where that column is water. Driftwood on dry ground (sand, grass, dirt) comes from three
+new placed features, `kubejs/data/creativeengineering/worldgen/placed_feature/driftwood_land/{beach,swamp,extra}.json`,
+added to the same biomes by `forge/biome_modifier/driftwood_land_*.json`. They run the same `upgrade_aquatic:driftwood`
+feature with the opposite filter (`not` water below) at one tenth of the attempts:
+
+| Land driftwood | Attempts |
+|---|---|
+| beach | 1 in 160 chunks (was 1 in 16, and 1 in 4 from the mod) |
+| swamp | 1 in 10 chunks |
+| extra | 1 in 8 chunks, 1 or 2 logs (3:1) |
+
+Rivers and oceans have no land version, so a river bank loses its driftwood. Edit the `chance` in a land file (or
+delete the file and its biome modifier) to change it. Upgrade Aquatic's own feature decides what actually fits (it
+needs sand, or dirt near water, or open water), so the real number is lower than the attempts.
+
+**Banks** (Monobank's vault) are two kinds of village piece: a house, `monobank:village/houses/<biome>_vault` (weight
+15), and a straight street with a vault attached, `monobank:village/streets/<biome>_straight_fix_01` (weight 15). With
+the tech houses gone the vault was 10 to 12% of house picks and 21 to 29% of straight-street picks, so most banks came
+from the streets. Two tags in `pool_tags.json` cut both about 5x; a pool also shrinks when a piece's weight drops, so the
+multiplier is not 1/5:
+
+| Tag | Multiplier | Weight | Chance per pick, before to after |
+|---|---|---|---|
+| `monobank/vault_houses` | 0.18 | 15 to 2.7 | plains 10.2% to 2.0%, desert 11.5% to 2.3%, savanna 10.5% to 2.1%, snowy 11.7% to 2.3%, taiga 10.9% to 2.2% (5.0x to 5.1x) |
+| `monobank/vault_streets` | 0.16 | 15 to 2.4 | plains 23.1% to 4.6%, desert 29.4% to 6.3%, savanna 20.8% to 4.0%, snowy 23.8% to 4.8%, taiga 23.1% to 4.6% (4.7x to 5.2x) |
+
+(Computed from `pool_tag_report.md`'s weights as of 2026-10-03; the next game load rewrites the report with the real
+figures.) The vault's own `monobank:village/monobank/*` sub-pools (locked 12, unlocked 3, empty 1) are left alone:
+scaling them would round their ratios. Set a tag's multiplier to 1 to restore the old rate.
+
+### 3.13 Earth fill: cancel structures that need too much ground (added 2026-10-03)
+
+Some structures carry their own ground: a grass and dirt pad under a ruin, a skirt of dirt under a house. On a shore,
+a cliff or a lake that pad fills the water or hangs in the air. This check drops such a structure before it exists.
+
+**Hook.** `mixin/ChunkGeneratorEarthFillMixin` runs where `ChunkGenerator#tryGenerateStructure` stores the finished
+`StructureStart` (the local right after `Structure#generate`, slot 15 of the SRG bytecode). If the start fails the check
+the mixin swaps in `StructureStart.INVALID_START`, so the pick fails the way a start in a wrong biome does: a slot with
+one member stays empty, a shared slot tries the next pick. A start that the frequency roll is about to veto is skipped
+first (the roll is deterministic), so nothing is computed for it.
+
+**What is counted.** For each piece of the start (`PoolElementStructurePiece`, including list elements, and
+`TemplateStructurePiece`; anything else is ignored):
+1. the earth blocks of its template: the block tag `creativeengineering:earth_fill/earth` (`blocktags.js`: `#minecraft:dirt`,
+   sand, gravel, clay, dirt path; extra tags go in the `blocks` config list) in the bottom `baseLayers` (3) template layers,
+   first palette. Higher layers are ignored on purpose: above the ground everything is air, so a roof garden would count.
+2. where each stands in the world: piece position + rotation and mirror (the same transform the placement uses).
+3. what the generator's own terrain holds there: `ChunkGenerator#getBaseColumn` for the column (read once per
+   `sampleGrid` x `sampleGrid` cell, 2 by default, and cached per start), then the block at that Y: water, air, or
+   solid. A block over water counts toward `maxOverWater`, over air toward `maxOverAir`; solid doesn't count.
+4. Counting stops at the first limit crossed (unless `log = ALL`). A position in two pieces counts once.
+
+Village streets and anything else with the `terrain_matching` projection are skipped: a gravity processor drops them onto
+the ground column by column, so they never hang.
+
+**Config** (`[worldgen.earth_fill]`; on/off `[worldgen.systems] earthFill`; applies to new chunks, read live):
+
+| Key | Default | Meaning |
+|---|---|---|
+| `maxOverWater` | 24 | earth blocks allowed in water; -1 = no limit, 0 = none |
+| `maxOverAir` | 256 | earth blocks allowed in air; -1 = no limit, 0 = none |
+| `baseLayers` | 3 | template layers from the bottom that count as foundation |
+| `blocks` | `["creativeengineering:earth_fill/earth"]` | block tags that count as earth |
+| `overrides` | `[]` | per-structure limits: `"<id or #structure tag>=<water>,<air>"`, first match wins, e.g. `"philipsruins:ancient_ruins=0,16"` or `"minecraft:village_plains=-1,-1"` |
+| `sampleGrid` | 2 | terrain read once per N x N cells (1 = every column) |
+| `log` | `CANCELLED` | `CANCELLED` logs each cancelled start, `ALL` every start that has earth in its base (and counts it fully), `OFF` |
+
+**Exempt structures:** the structure tag `creativeengineering:earth_fill/exempt` (`worldgen/earth_fill.js`), which lists
+what floats or stands in the water on purpose: Cloud Storage, Sky Villages, the AE2 meteorite; every ship and raft;
+ocean ruins and fortresses, wrecks, the monument, Hopo's fossils, the sushi stall, buried treasure. Add an id to exempt
+it, or use an `overrides` line to give it its own numbers.
+
+**Where the defaults come from.** `tools/earth_fill_sim.sh` generates real vanilla structures on vanilla overworld
+terrain (the pack's own `EarthFill` counting, builtin registries, the real template and terrain code, 60 sites per
+structure inside the structure's biomes, seed 4242) and prints how the counts are distributed and what share each limit
+pair would cancel. Result, 2026-10-03:
+
+| Structure | Earth in base (mean) | Over water p50 / max | Over air p50 / p90 / p99 | Cancelled at (24, 64) | at (48, 160) | at (96, 256) |
+|---|---|---|---|---|---|---|
+| village_plains | 239 | 0 / 0 | 58 / 120 / 200 | 45% | 5% | 0% |
+| village_desert | 314 | 0 / 0 | 64 / 129 / 169 | 48% | 3% | 0% |
+| village_savanna | 594 | 0 / 0 | 148 / 260 / 426 | 78% | 45% | 12% |
+| village_snowy | 298 | 0 / 0 | 70 / 147 / 219 | 58% | 5% | 0% |
+| village_taiga | 328 | 0 / 0 | 74 / 200 / 314 | 63% | 15% | 3% |
+| pillager_outpost, igloo | 0 | none | none | 0% | 0% | 0% |
+| mansion | 47 | 0 / 0 | 25 / 79 / 100 | 13% | 0% | 0% |
+
+So a whole village hangs a median 60 to 150 earth blocks in air on ordinary terrain (its terrain adaptation fills
+under it later), and none stands in water in its own biomes. 24 over water therefore only trips at shores, and 256 over
+air only the extremes. **Small structures with a pad are a different case** (a 15 x 15 ruin has about 225 pad blocks in
+its bottom layers; half over a cliff is 110), so tighten them with `overrides` once you have seen `log = ALL` numbers for
+them. Modded structures were not simulated: the pack's registries need a game.
+
+**Limits.**
+- It judges the generator's noise terrain: no carvers, surface rules, features, lakes, or other structures' terrain
+  adaptation (the Beardifier fill under villages is not estimated). Vanilla and modded jigsaw structures that rely on
+  terrain adaptation therefore show their template earth as "in air" where the ground falls away, even though the
+  generator will fill under them. That is why the air default is high.
+- Only the template's own earth blocks are counted, not the terrain a structure's processors or beard add.
+- `/place structure`, `/ceplace` and `/locate` don't go through `tryGenerateStructure`, so none of them is checked
+  (a `/locate` can point at a slot the check later cancels: it loads the chunk and finds no start, as for a wrong biome).
+- A cancelled slot stays empty, so structure rates drop a little on coasts and cliffs (the group grid is unchanged).
+- Terrain-matching pieces and non-template pieces (legacy temples, mineshafts) count as no earth.
 
 ## 4. Limits and decisions
 
@@ -540,6 +650,8 @@ the feature, the square spread, the `WORLD_SURFACE_WG` heightmap and the biome f
 - Groups tool: [tools/gen_structure_groups.py](../tools/gen_structure_groups.py) (`GROUP_SPECS` = the starting groups, `fit_group`, `sync`, `migrate`, `write_estimates`)
 - Scanner: [tools/gen_structure_config.py](../tools/gen_structure_config.py) (`VANILLA_STRUCTURE_SETS`, `CODE_REGISTERED_SETS`, `CODE_BLOCKS`, `scan_meta_structures`)
 - patcherMod: [worldgen/StructureFrequencies.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/StructureFrequencies.java) + mixins [ChunkGeneratorStructureFrequencyMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorStructureFrequencyMixin.java), [StructureCheckFrequencyMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureCheckFrequencyMixin.java); [worldgen/PoolTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/PoolTuner.java), [LootContainerSwaps.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/LootContainerSwaps.java), [WorldgenFiles.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/WorldgenFiles.java) (report writer; KubeJS blocks java.io); mixins [StructureTemplateLootSwapMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureTemplateLootSwapMixin.java), [KubeJSVirtualDataPackListMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/KubeJSVirtualDataPackListMixin.java), [ChunkGeneratorLocateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorLocateMixin.java) + [DeadPlacementFilter.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/DeadPlacementFilter.java)
+- Earth fill: [worldgen/EarthFill.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/EarthFill.java) (`count`, `pieceEarth`, `localEarth`, `predicted`, `limitsFor`, `filter`) + mixin [ChunkGeneratorEarthFillMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorEarthFillMixin.java), knobs `CEConfig.EarthFill`, earth tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/earth_fill.js](../kubejs/server_scripts/worldgen/earth_fill.js); tests `EarthFillTest` and the calibration [tools/earth_fill_sim.sh](../tools/earth_fill_sim.sh) (`EarthFillSim`)
+- Banks and driftwood: tags `monobank/vault_houses` / `monobank/vault_streets` in [pool_tags.json](../kubejs/generation_scripts/worldgen/pool_tags.json); [driftwood placed features](../kubejs/data/upgrade_aquatic/worldgen/placed_feature/) and [land driftwood](../kubejs/data/creativeengineering/worldgen/placed_feature/driftwood_land/) with their [biome modifiers](../kubejs/data/creativeengineering/forge/biome_modifier/)
 - Dead explorer maps: [loot/06_dead_maps.js](../kubejs/server_scripts/loot/06_dead_maps.js)
 - Worldgen config: `CEConfig.Worldgen` (+ `WorldgenSystems`, `WorldgenDebug`, `PoolTuning`, `BiomeSolver`, `GroundMatch`, `MassPlace`), read through [worldgen/WorldgenConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/WorldgenConfig.java); density in `scalePlacement` in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js)
 - `/ceplace`: [worldgen/MassPlacer.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MassPlacer.java) (`select`, `rowsFor`, `templateRows`, `signLines`, `verticalShift`, `placeStructure`, `placeTemplate`)
@@ -574,7 +686,7 @@ the feature, the square spread, the `WORLD_SURFACE_WG` heightmap and the biome f
 - In game, `/cegen run worldgen` runs `gen_structure_config.py`, `build_biome_merges.py`, `gen_biome_config.py` and the
   merge analyzer; `/cegen run structure_live_check dumps` does `/dumpstructuregen` + `check_structure_live.py`.
 - **Loot containers after mod changes:** `python3 tools/audit_loot_containers.py` rewrites `loot_container_audit.md`.
-- **`tools/test_worldgen_tools.sh`** (about 30 s, after `./gradlew build`), all passed 2026-09-27:
+- **`tools/test_worldgen_tools.sh`** (about 30 s, after `./gradlew build`), all passed 2026-09-27 (earth fill added and passed 2026-10-03):
   1. 37 headless checks of `GroundMatch` against real block states and bound tags. They cover what counts as ground,
      the native/foreign decision (volcanic vs plains sample, the 35% threshold, too few columns), weighted picks, and a
      5x5 grass-pad ruin through all three modes: 50 base blocks swapped, poppy + tall grass dropped, exposed vs covered
@@ -582,12 +694,24 @@ the feature, the square spread, the `WORLD_SURFACE_WG` heightmap and the biome f
   2. 30 checks of `/ceplace` and `WorldgenConfig`: sign wrapping, every filter term, rows on the real
      `structure_tags.json` (each Towns & Towers structure in exactly one row, always its smallest type tag), template
      folders, vertical alignment, and every config default equal to the old hard-coded value.
-  3. `node tools/structure_density_check.js`: runs the simulation at x4, x0.25, x30 and x0.01 and checks every live set's
+  3. `EarthFillTest` (21 checks): the counting core (limits -1 and 0, early stop, dedupe), the earth blocks of a real template
+     through rotation, rigid / list / terrain-matching pool elements, a whole pool-element piece, override parsing.
+  4. `node tools/structure_density_check.js`: runs the simulation at x4, x0.25, x30 and x0.01 and checks every live set's
      rate against x1: 244 checks, exact except the reported capped sets. It also checks codec limits and `legacy_type_1`.
 - `test_structure_groups.sh` step 2 also compares node and Rhino at density x4 and x0.3 and with groups off (identical).
   The sim takes `--density=X` and `--groups-off`.
 
-## 7. In-game test suite
+## 7. Planned changes
+
+Done 2026-10-03, all three (3.12, 3.13):
+- Reduce bank frequency: Monobank vault pieces about 5x rarer in every village biome.
+- Reduce driftwood on land: water driftwood keeps its 0.25x rate, land driftwood is about a tenth of that.
+- Cancel structures that need too much earth over water or air: `worldgen/EarthFill`, limits in `[worldgen.earth_fill]`.
+
+Still open: the modded-structure calibration of the earth limits (needs a game with `log = ALL`), and a Beardifier fill
+estimate for terrain-adapted structures if the template count turns out to miss them.
+
+## 8. In-game test suite
 
 **Setup:**
 - Creative world with cheats. Rejoin once after pulling these changes, then fly well away from explored land (or
@@ -660,7 +784,16 @@ the feature, the square spread, the `WORLD_SURFACE_WG` heightmap and the biome f
 - [ ] **ST-47 IPO mix:** `/place structure minecraft:pillager_outpost` about 16 times in a flat area → mostly vanilla watchtowers, about 2 tall IPO towers. No outpost is a bare plate without a tower, and no IPO tower is missing its top. *2026-10-03: pool weights 7:1 and the renamed IPO pieces confirmed in the scratch server's pool_config.json; not placed yet.*
 - [ ] **ST-48 Driftwood:** new beach and ocean shoreline → driftwood still appears, but clearly sparser than before. *2026-10-03: the scratch server created a world with the 5 overrides, so the JSON parses.*
 
-## 8. History
+**Banks, driftwood, earth fill** (2026-10-03)
+- [ ] **ST-49 Banks:** rejoin; `pool_tag_report.md` shows `monobank:village/houses/plains_vault` at 2.7 and `monobank:village/streets/plains_straight_fix_01` at 2.4 (final chance about 2.0% and 4.6%), `monobank/vault_houses x0.18` and `monobank/vault_streets x0.16` listed, no errors. Then `L minecraft:village_plains` 6 times and walk each: banks (a vault building with its door, or a straight street with a vault beside it) should be uncommon, roughly 1 village in 4 or 5 instead of most of them.
+- [ ] **ST-50 Driftwood:** in new terrain, walk a beach, a swamp, a river and open ocean: driftwood floats in the shallows and on the sea, a log lying on dry sand or grass is now a rare find (beach about 1 per 160 chunks). A river bank has none. `latest.log` has no `upgrade_aquatic:driftwood_*` or `creativeengineering:driftwood_land/*` parse error.
+- [ ] **ST-51 Loads clean:** the log has no mixin error for `ChunkGeneratorEarthFillMixin`; the toml has `[worldgen.earth_fill]` and `systems.earthFill`; `/reload` and `/dumpstructuregen` still work.
+- [ ] **ST-52 Log run (calibration):** set `[worldgen.earth_fill] log = "ALL"`, rejoin, fly over 2,000+ blocks of fresh terrain (or `[worldgen.debug] structureDensity = 4`). `latest.log` has `[earth-fill] <id> at chunk [x, z]: N earth base blocks, W over water (limit 24), A over air (limit 256) -> kept|CANCELLED` lines. Collect them, then set the limits and any `overrides` from what you see. Put `log` back to `CANCELLED`.
+- [ ] **ST-53 A cancel:** set `maxOverAir = 0` and `maxOverWater = 0`, rejoin, fly into new terrain: structures with any earth in their base now log `CANCELLED` and are missing on slopes and shores, and the slot stays empty. Put the limits back.
+- [ ] **ST-54 Overrides and exempt:** set `overrides = ["minecraft:village_plains=-1,-1", "philipsruins:ancient_ruins=0,0"]`: plains villages never log a cancel, ruins cancel at any earth over water or air. A structure in `earth_fill/exempt` (a ship, a sky balloon) never logs, even at 0 and 0.
+- [ ] **ST-55 Switch:** `[worldgen.systems] earthFill = false` → no `[earth-fill]` lines, nothing cancelled. A world with the switch on at the default limits still has villages (the simulated cancel rate at 24 / 256 is 0 to 12%).
+
+## 9. History
 
 - **2026-09-25:** framework built: jar scanner + vanilla table, `structure_config.json`, node generator writing
   `kubejs/data` overrides, `/dumpstructuregen`. Ruined-portal set fixed (one set, 7 members) and all ruined portals removed.
@@ -765,3 +898,13 @@ the feature, the square spread, the `WORLD_SURFACE_WG` heightmap and the biome f
   `tools/test_structure_groups.sh` passes (19 Java checks, node/Rhino parity including the staged rules). A scratch
   dedicated server booted with the new jar, applied the rule and loaded the pools at 7:1. patcherMod stays 1.0.4
   (rebuilt before release, installed to `mods/`, md5 ab58494b).
+- **2026-10-03 (evening): banks, land driftwood, earth fill** (3.12, 3.13). The user asked for the three planned changes:
+  - Monobank vaults 5x rarer in villages (two pool tags, weights computed from the pool report).
+  - Driftwood outside water cut hard: the 5 water features are gated to water, 3 new land features at a tenth of the rate.
+  - Earth fill: patcherMod `EarthFill` + `ChunkGeneratorEarthFillMixin`, `[worldgen.earth_fill]` (water limit, air limit, base layers,
+    block tags, per-structure overrides, grid, log), earth tag in `blocktags.js`, exempt tag in `worldgen/earth_fill.js`.
+    `EarthFillTest` (21 checks) joined `tools/test_worldgen_tools.sh`; `tools/earth_fill_sim.sh` simulates vanilla villages,
+    outposts, igloos and mansions on vanilla terrain and gave the default limits (24 over water, 256 over air).
+  - Not done: no game or scratch server was started (the game was running, 10 GB resident and swapping), so the
+    mixin application, the KubeJS data and the pool report are checked offline only (ST-49 to ST-55). patcherMod stays 1.0.4,
+    built in `development/patcherMod/build/libs/`, not installed to `mods/`.

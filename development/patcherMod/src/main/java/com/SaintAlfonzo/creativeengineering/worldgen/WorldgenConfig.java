@@ -38,6 +38,7 @@ public final class WorldgenConfig {
 	public static boolean biomeMergesEnabled() { return get(() -> wg().systems.biomeMerges.get(), true); }
 	public static boolean deadPlacementFilterEnabled() { return get(() -> wg().systems.deadPlacementFilter.get(), true); }
 	public static boolean groundMatchEnabled() { return get(() -> wg().systems.groundMatch.get(), true); }
+	public static boolean earthFillEnabled() { return get(() -> wg().systems.earthFill.get(), true); }
 	public static boolean wildCropsEnabled() { return get(() -> wg().systems.wildCrops.get(), true); }
 
 	// ── debug ────────────────────────────────────────────────────────────────
@@ -60,6 +61,15 @@ public final class WorldgenConfig {
 	public static int groundSubDepth() { return get(() -> wg().groundMatch.subDepth.get(), 3); }
 	public static int groundMaxDig() { return get(() -> wg().groundMatch.maxDig.get(), 24); }
 	public static int groundMaxPlantHeight() { return get(() -> wg().groundMatch.maxPlantHeight.get(), 4); }
+
+	// ── earth fill ───────────────────────────────────────────────────────────
+	public static int earthMaxOverWater() { return get(() -> wg().earthFill.maxOverWater.get(), 24); }
+	public static int earthMaxOverAir() { return get(() -> wg().earthFill.maxOverAir.get(), 128); }
+	public static int earthBaseLayers() { return get(() -> wg().earthFill.baseLayers.get(), 3); }
+	public static List<? extends String> earthBlocks() { return get(() -> wg().earthFill.blocks.get(), List.of("creativeengineering:earth_fill/earth")); }
+	public static List<? extends String> earthOverrides() { return get(() -> wg().earthFill.overrides.get(), List.<String>of()); }
+	public static int earthSampleGrid() { return get(() -> wg().earthFill.sampleGrid.get(), 2); }
+	public static CEConfig.EarthFillLog earthLog() { return get(() -> wg().earthFill.log.get(), CEConfig.EarthFillLog.CANCELLED); }
 
 	// ── /ceplace ─────────────────────────────────────────────────────────────
 	public static int placeGap() { return get(() -> wg().massPlace.gap.get(), 12); }

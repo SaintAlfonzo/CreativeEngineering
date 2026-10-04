@@ -130,6 +130,7 @@ EXCLUDE = [
     '*.backup[0-9]*',          # Xaero's
     '*/__pycache__/*',
     '*.pyc',
+    'server/perf/reports/*',   # lag/crash bundles that came FROM the server (perf/report.sh); never sent back
 ]
 # Every file under kubejs/ (path inside kubejs/, fnmatch, first match wins) is one of:
 #   runtime  read by the game on server and client (scripts, datapack, inputs the tuners read)
@@ -163,6 +164,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/structure_config.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_groups.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
+    ('generation_scripts/worldgen/wild_crops.json', 'runtime'),         # worldgen/wild_crops.js
     ('generation_scripts/food/food_types.json', 'runtime'),             # tags/foodtypetags.js
     ('generation_scripts/food/can_servings.json', 'runtime'),           # tags/cantags.js
     ('generation_scripts/worldgen/biome_merge_proposals.json', 'dev'),  # tools/analyze_structure_biome_merges.py

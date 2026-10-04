@@ -127,7 +127,7 @@
     "terralith:lavender_forest": "temperate grassy forest flower",
     "terralith:lavender_valley": "temperate grassy forest mountain flower",
     "terralith:lush_desert": "warm dry sandy desert",
-    "terralith:lush_valley": "temperate grassy forest coniferous",
+    "terralith:lush_valley": "cold grassy forest coniferous",
     "terralith:mirage_isles": "temperate wet grassy forest coastal",
     "terralith:moonlight_grove": "temperate grassy forest flower",
     "terralith:moonlight_valley": "temperate grassy forest mountain flower",
@@ -391,16 +391,20 @@
     "peach": { "label": "Peach (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/peach_tree"], "disable_modifiers": ["fruitsdelight:peach"] },
     "orange": { "label": "Orange (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/orange_tree"], "disable_modifiers": ["fruitsdelight:orange"] },
     "kiwi": { "label": "Kiwi (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/kiwi_tree"], "disable_modifiers": ["fruitsdelight:kiwi"] },
-    "bayberry": { "label": "Bayberry (tree)", "where": ["swamp"], "features": ["fruitsdelight:tree/bayberry_tree"], "disable_modifiers": ["fruitsdelight:bayberry"] },
-    "mangosteen": { "label": "Mangosteen (tree)", "where": ["swamp"], "features": ["fruitsdelight:tree/mangosteen_tree"], "disable_modifiers": ["fruitsdelight:mangosteen"] },
-    "durian": { "label": "Durian (tree)", "where": ["swamp"], "features": ["fruitsdelight:tree/durian_tree"], "disable_modifiers": ["fruitsdelight:durian"] },
+    "bayberry": { "label": "Bayberry (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/bayberry_tree"], "disable_modifiers": ["fruitsdelight:bayberry"] },
+    "mangosteen": { "label": "Mangosteen (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/mangosteen_tree"], "disable_modifiers": ["fruitsdelight:mangosteen"] },
+    "durian": { "label": "Durian (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/durian_tree"], "disable_modifiers": ["fruitsdelight:durian"] },
     "pear": { "label": "Pear (tree)", "where": ["birch"], "features": ["fruitsdelight:tree/pear_tree"], "disable_modifiers": ["fruitsdelight:pear"] },
-    "apple": {
-      "label": "Apple (tree)",
-      "where": ["oak forest"],
-      "features": ["vinery:tree_apple"],
-      "disable_modifiers": ["vinery:add_apple_tree"],
-      "notes": "Vinery apple tree. Vinery's cherry tree keeps its own modifier. Oak/dark oak leaves no longer drop apples (loot/08_leaf_apples.js)."
+    "apple": { "label": "Apple (tree)", "where": ["oak forest"], "features": ["vinery:tree_apple"], "disable_modifiers": ["vinery:add_apple_tree", "fruitsdelight:apple"], 
+      "notes": "Vinery apple tree. Oak/dark oak leaves no longer drop apples (loot/08_leaf_apples.js)."
+    },
+    "cherry": { "label": "Cherry (tree)", "where": ["mountain forest"], "features": ["vinery:tree_cherry"], "disable_modifiers": ["vinery:add_cherry_tree"] },
+    "rubber": {
+      "label": "Rubber tree",
+      "where": ["jungle"],
+      "features": ["creativeengineering:wild/rubber_tree"],
+      "remove_features": ["minecraft:rubber_tree_placement"],
+      "notes": "Myrtrees adds its tree from Java (Architectury biome modification, id minecraft:rubber_tree_placement; 1% of chunks x 5 trees, any forest/taiga/jungle). Removed everywhere, pack copy in 1 chunk of 4 in jungles."
     },
     "fig": { "label": "Fig (tree)", "where": ["cold forest !snowy"], "features": ["fruitsdelight:tree/fig_tree"], "disable_modifiers": ["fruitsdelight:fig"] },
     "hawberry": { "label": "Hawberry (tree)", "where": ["cold forest !snowy"], "features": ["fruitsdelight:tree/hawberry_tree"], "disable_modifiers": ["fruitsdelight:hawberry"] },

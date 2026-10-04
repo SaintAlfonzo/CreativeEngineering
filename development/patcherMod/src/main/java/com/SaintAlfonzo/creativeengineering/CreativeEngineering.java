@@ -162,6 +162,11 @@ public class CreativeEngineering
         // its per-world sample cache reset; knobs in CEConfig [worldgen.ground_match].
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.GroundMatch.class);
 
+        // Earth fill: cancels a structure start whose template foundations would sit over too much water or
+        // air (mixin/ChunkGeneratorEarthFillMixin). Registered to clear its template cache; knobs in
+        // CEConfig [worldgen.earth_fill].
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.EarthFill.class);
+
         // /ceplace: every structure or template matching a filter, laid out in rows (flat-world testing);
         // knobs in CEConfig [worldgen.mass_place].
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.MassPlacer.class);

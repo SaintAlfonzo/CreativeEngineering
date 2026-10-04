@@ -14,6 +14,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
@@ -23,8 +24,13 @@ import net.minecraftforge.network.NetworkHooks;
 
 import io.github.mortuusars.exposure.Exposure;
 
-/** Right-click (either hand) opens the bag. See {@link CameraBag} for storage and what it accepts. */
-public class CameraBagItem extends Item {
+/**
+ * Right-click (either hand) opens the bag. See {@link CameraBag} for storage and what it accepts.
+ *
+ * <p>Dyeable like leather armour ({@code display.color}): the vanilla dye recipe and cauldron washing both
+ * key on {@link DyeableLeatherItem}, and smithing upgrades copy the colour along with the contents.
+ */
+public class CameraBagItem extends Item implements DyeableLeatherItem {
 
     /** Tooltip lists this many stacks, then "and N more...". */
     private static final int TOOLTIP_LINES = 5;

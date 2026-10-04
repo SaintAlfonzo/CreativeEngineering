@@ -1,7 +1,9 @@
 # 1.0.4: 1.0.3 deploy fixes, Exposure Extras, crop parity, hoe areas
 
-IN PROGRESS, not deployed (started 2026-10-02, last updated 2026-10-03). 1.0.4 is everything built after the
-1.0.3 deploy (2026-10-02 15:55, commit `d791885`, the last push). There was no plan up front. This file
+STAGED 2026-10-04 in `deploy/latest/`, not yet copied to the machines (started 2026-10-02, last updated 2026-10-04).
+1.0.4 is everything built after the
+1.0.3 deploy (2026-10-02 15:55, commit `d791885`, the last push; `d993d01` is the only commit since and is part
+of 1.0.4). There was no plan up front. This file
 records what went in, what is still open, and the checks to run before deploying. It follows
 [plan_1.0.3.md](plan_1.0.3.md): each piece links to its own writeup, and this file keeps only the status line
 and the summary.
@@ -12,22 +14,28 @@ and the summary.
 |---|---|---|---|---|
 | XK | Join kick on the dedicated server ("input is null", login packet) | fix, 1.0.3 bug | BUILT, exposureBackport `-02` in `mods/`; needs a real client joining a dedicated server | [exposure.md](exposure.md), this file 1.1 |
 | RF | Client startup crash (polaroid refmap missing from the jar) | fix, 1.0.3 bug | BUILT, `-02` in `mods/`; a throwaway client reached the main menu | [exposure.md](exposure.md), this file 1.2 |
-| CB | Camera bags moved from patcherMod to Exposure Extras (`exposure_extras`) | migration | IN PROGRESS: built and in `mods/`, not boot-tested since the move, remap untested | none yet; this file 2 |
+| CB | Camera bags moved from patcherMod to Exposure Extras (`exposure_extras`), now dyeable | migration + feature | BUILT, exposureBackport `-02` in `mods/` (md5 e54032b6); not boot-tested since the move, remap untested | none yet; this file 2 |
 | CP | Crop parity layer: tobacco on Rich Farmland / Fertile Soil, Quark replant and hoe harvesting | feature | BUILT, patcherMod 1.0.4 in `mods/`, not boot-tested; CR-01/02/21-25 pending | [crops.md](crops.md) 2.6 (`CR-`) |
 | HA | Harvest area per hoe (1x1 to 9x9) + tooltip | feature | BUILT, patcherMod 1.0.4 in `mods/`; scratch boots clean before the bump; CR-26..30 pending | [crops.md](crops.md) 2.3 (`CR-`) |
 | CG | Canned golem can be dyed (16 colours) | feature | BUILT, patcherMod 1.0.4 in `mods/`, not tested in game | none yet; this file 4 |
 | DD | Display Delight: missing-texture icons in WTHIT and JEI, empty WTHIT icon for item-less plates | fix | BUILT: kubejs models + patcherMod 1.0.4 in `mods/`; R4-08..10 pending | this file 4b |
 | NM | New mods: Blue Flame Burning, Fruits Delight, Improved Pillager Outpost, Well | mods | in `mods/`; `mod_sides.md` rows added 2026-10-02 (all `both`), in the payload | this file 5 |
 | DR | Data refresh for every mod added since the last dumps: `/dumpall` + `/dumpfood`, all generators, food types, compost, item_dict, BlockRunner tiers, JEI coverage, writeups | data + scripts | BUILT 2026-10-02; scratch server loads it clean; your client needs a restart (new item_dict keys) | this file 5b |
-| WG | Worldgen: Improved Pillager Outpost as a 1-in-8 tower (not a replacement), IPO template-name fix, only water structures in oceans/rivers (biome rules), driftwood x0.25 | feature + fix | BUILT 2026-10-03, patcherMod 1.0.4 in `mods/` (md5 ab58494b, since replaced by the WT build); scratch dedicated server applied it; ST-44..48 pending | [structure_tuning.md](structure_tuning.md) 3.12 (`ST-`) |
+| WG | Worldgen: Improved Pillager Outpost as a 1-in-8 tower (not a replacement), IPO template-name fix, only water structures in oceans/rivers (biome rules), driftwood x0.25 | feature + fix | BUILT 2026-10-03, scratch dedicated server applied it; ST-44..48 pending | [structure_tuning.md](structure_tuning.md) 3.12 (`ST-`) |
+| EF | Earth fill: cancel structures whose foundation needs too much earth over water or air; Monobank banks about 5x rarer in villages; driftwood only in water, land driftwood at 1/10 | feature + tuning | BUILT 2026-10-03, in the 1.0.4 jar; limits come from an offline simulation, never run in a game; ST-49..55 pending | [structure_tuning.md](structure_tuning.md) 3.12, 3.13 (`ST-`), this file 3b |
 | CF | Config: Quark tobacco line, Every Compat fruit leaves, JEI sort order, T&T waystones patch zip gone | config | live | this file 5 |
 | WT | Wandering Trader + Winemaker: independent spawn timers in ticks (96000 each), 25 + 5 offers, stock rework in KubeJS (`global.trades`), Vinery `wine_trader_chance` 0; catalog | feature + config | BUILT 2026-10-03, patcherMod 1.0.4 in `mods/` (md5 37ce1023) + KubeJS; scratch dedicated server checked it; WT-01..16 pending | [wandering_trader.md](wandering_trader.md) (`WT-`) |
-| WC | Wild crops: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`, 46 rules over 146 classified biomes), oak/dark oak leaves drop no apples, Alex's Mobs leaf bananas off, Farmer's Respite Nether coffee off; CEConfig `wildCrops` switch | feature + config | BUILT 2026-10-03, offline-tested; patcherMod 1.0.4 rebuilt (md5 09733ca8) but NOT copied to `mods/` (game was running); CR-47..58 pending | [crops.md](crops.md) 2.8 (`CR-`) |
+| WC | Wild crops: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), oak/dark oak leaves drop no apples, Alex's Mobs leaf bananas off, Farmer's Respite Nether coffee off, Myrtrees rubber trees only in jungles, cherry and the Fruits Delight apple moved; CEConfig `wildCrops` switch | feature + config | BUILT 2026-10-03/04, offline-tested; in the 1.0.4 jar (md5 55a2e65a); CR-47..58 pending | [crops.md](crops.md) 2.8 (`CR-`) |
+| PF | Performance: the five known third-party hot spots from the first server profile (horse armor pass, Quark feeding trough, Create: Gravity, Serene Seasons melt, Fruits Delight leaves), a `[perf]` config section, and a wrong horse-armor effect id | fix | BUILT 2026-10-03, scratch dedicated server checked that every mixin applies; none of it measured under load | [perf.md](perf.md) 7, this file 3c |
+| VB | Vinery Aging Barrel stacks its output while the wine in the slot has the same year; Vinery `years_per_effect_level` 4 to 2 | feature + config | BUILT 2026-10-03 22:50, in the 1.0.4 jar; VN-07 pending | [vinery.md](vinery.md) (`VN-`), this file 3d |
+| LC | Loot: Golden Food enchantment book removed from every table, loot catalog + island list (reference only), hand-filled structure containers converted to Lootr loot tables (151 containers, 148 tables, 52 templates) | tuning + data | BUILT 2026-10-03; the sim passes; LT-23 and the Lootr check pending | [loot.md](loot.md), [loot_catalog/](loot_catalog/README.md), this file 3e |
 | VR | Version records: in-tree jars bumped, jar archive, 1.0.3 snapshot | bookkeeping | DONE 2026-10-02 | [deploy.md](deploy.md), this file 6 |
 
-**Payload as of now** (`build_deploy.py --version 1.0.4 --dry-run`, 2026-10-02 late): update from 1.0.3, 139
-files, 10.7 MB, including the 4 new mod jars. Each side removes the two old in-tree jars. The only preflight
-warning left is uncommitted changes.
+**Payload as of 2026-10-04** (staged, `deploy/latest/`): update from 1.0.3, 398 files, 12.8 MB (mods 6, kubejs
+377, config 15). Jars: the four new mods plus the rebuilt patcherMod and exposureBackport. Each side
+deletes `creativeengineering-1.0.3.jar`, `exposureBackport-...-01.jar` and `Dimensional Gravity 1.0.1 - 1.19.2.jar`
+(a mod you removed from `mods/` since 1.0.3; Create: Gravity stays). The only preflight warning is uncommitted
+changes.
 
 ## 1. Fixes for the 1.0.3 deploy
 
@@ -99,6 +107,14 @@ correction). Anyone who changed slot counts on the server sets them again in the
 - `mod_sides.md`, the exposureBackport README and the JEI mod sort order are updated.
 - Both jars build. The `-02` jar contains every extras class, the tag and the models.
 
+**Dyeable (added 2026-10-03 20:04, after the move):** `CameraBagItem` implements `DyeableLeatherItem`, so the vanilla
+dye recipe and cauldron washing work on all three tiers and a smithing upgrade carries the colour (`display.color`)
+with the contents. The three item models now have two layers: `exposure_extras:item/camera_bag_dyable` (tinted by the
+client item colour handler in `CameraBagClient`) and `camera_bag_outline_leather` (untinted). The iron and netherite
+bags therefore no longer use the Spice of Life lunchbox textures; all three tiers share the leather look until
+tier-specific outlines are drawn. The two PNGs are in the jar's `textures/item/`; `kubejs/assets/dyable.png` and
+`leatheroutline.png` are the source art (they ship in the kubejs payload but nothing reads them).
+
 **Still open:**
 1. Boot test with both 1.0.4 jars (scratch server, then the dev client). Since the move, the items,
    config, tag and recipes have only been checked by the build, not by a boot.
@@ -106,7 +122,7 @@ correction). Anyone who changed slot counts on the server sets them again in the
    the live server.
 3. The in-game checks that were never run for the bags at all: the GUI, slot locking, smithing keeping the
    contents, the tooltip, overflow spill.
-4. The iron (lunchbox) and netherite (golden lunchbox) textures are still placeholders.
+4. Iron and netherite have no look of their own yet (the dyeable leather model above); check that dyeing, washing and a smithing upgrade keep the colour and the contents (R4-11).
 5. Flashes stay out of the default tag unless you want them in (the example line in `equipmenttags.js`).
 6. A writeup: a Camera bags / Extras section in [exposure.md](exposure.md) with its own tests.
 
@@ -153,6 +169,66 @@ hamimelons on terracotta, cocoa trees in swamps). Side changes: oak/dark oak lea
 coffee in Basalt Deltas. The CEConfig switch needs the rebuilt patcherMod jar in `mods/` (install with
 `./gradlew :patcherMod:installToMods` once the game is closed); without it the scripts default to on. Open: densities
 moved a lot (V13), FR coffee has no source now (V18). Details: [crops.md](crops.md) 2.8.
+
+## 3b. EF: earth fill, banks and driftwood
+
+All three are worldgen tuning from 2026-10-03; the tests are ST-49 to ST-55 and the long writeup is
+[structure_tuning.md](structure_tuning.md) 3.12 and 3.13.
+
+- **Earth fill** (`worldgen/EarthFill`, `mixin/ChunkGeneratorEarthFillMixin`, `[worldgen.earth_fill]`, switch
+  `[worldgen.systems] earthFill`, block tag `creativeengineering:earth_fill/earth` in
+  [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structure tag in
+  [earth_fill.js](../kubejs/server_scripts/worldgen/earth_fill.js)). Just before a structure start is stored, the
+  loose earth in the bottom 3 template layers of its pieces is compared with the terrain the generator predicts: more than
+  24 blocks over water or 256 over air cancels the start (a shared slot tries the next pick). Ships, wrecks, sky
+  structures and the like are exempt. New chunks only. The defaults come from `tools/earth_fill_sim.sh` on vanilla
+  structures; modded ruins with grass pads were not simulated, so tune them with `log = "ALL"` and `overrides` (ST-52).
+- **Banks:** Monobank vaults are about 5x rarer in villages (`pool_tags.json`: `monobank/vault_houses` x0.18,
+  `vault_streets` x0.16).
+- **Driftwood:** the five Upgrade Aquatic features now only place on water (still at 0.25x the mod's rate); three new
+  features in `kubejs/data/creativeengineering` put driftwood on land at about a tenth of that. Rivers and oceans have
+  no land version.
+
+## 3c. PF: performance fixes for other mods
+
+The first server profile found five hot spots in other mods. Each has a dial in `creativeengineering-common.toml`
+under the new `[perf]` section, read live (details and the mixin-into-a-mixin lesson in [perf.md](perf.md) 7):
+
+| Hot spot | Fix | Dial |
+|---|---|---|
+| Quark feeding trough re-searched every few ticks | no new search for 30 s after a miss | `troughMissCooldownTicks` 600 |
+| Serene Seasons melt walked every chunk every tick | runs every 4th tick with 4x the chance | `seasonsMeltIntervalTicks` 4 |
+| Create: Gravity ran for every entity in every dimension | cancelled outside the End | `gravityLimitDimensions`, `gravityDimensions` |
+| Fruits Delight leaves tested the leaf tag on every collision query | bytecode patch via a mixin config plugin: projectile check first | none (does nothing if the handler changed) |
+| Dragon horse armor effect was disabled for cost | back on, one walk per interval | `mountEffectIntervalTicks` 100 |
+
+The horse armor script also had a wrong effect id (`strong_regeneration` is a potion, so the horse never got anything);
+it is `minecraft:regeneration` now. This adds a mixin config plugin (`creativeengineering.mixins.json` `"plugin"`),
+six mixins and a `compat` hook class to the patcherMod jar. **Why it matters for staging:** the first in-game profile
+ran against a jar without these, and the new script threw `CEConfig has no public ... PERF` on every level tick
+until the jar was installed. The payload's KubeJS scripts and the 1.0.4 jar have to go out together.
+
+## 3d. VB: Vinery barrel and the wine age setting
+
+`mixin/FermentationBarrelStackOutputMixin`: the Aging Barrel used to make one wine and stall until the output slot was
+emptied. It now keeps crafting while slot 5 holds the same wine (same item, same `Year` tag) with room left; a wine from
+another year still blocks it. Also `config/vinery/config.json5` `years_per_effect_level` is 2 (was 4), backed up in
+`configs_edited/root_config/vinery/config.json5`. Test: VN-07 in [vinery.md](vinery.md).
+
+## 3e. LC: loot changes and reference catalogs
+
+- **Golden Food book gone.** The rules in [07_rules.js](../kubejs/server_scripts/loot/07_rules.js) that placed the
+  enchantment book beside golden food and in village, camp and outpost chests are deleted, and the vanilla revert drops
+  goldenfood's own copy, so the book is in no table. Golden food is still twice as common. The anvil recipe is untouched,
+  so the book needs another source if it should exist in survival. `tools/loot_tuning_sim.js` fails if the book shows up
+  again (LT-23).
+- **Lootr for hand-filled containers.** `tools/lootr_fixed_containers.py` gave a loot table to 151 chests and barrels
+  in the ported structure templates that held fixed items, which Lootr could not convert: 148 tables under
+  `kubejs/data/<ns>/loot_tables/chests/fixed/`, 52 templates changed (38 structure datapacks). Slot positions are not kept;
+  Lootr scatters them. Re-run it after every `port_structure_jars.py` run.
+- **Reference only:** [loot_catalog/](loot_catalog/README.md) (`tools/loot_breakdown.py`: 383 tables entry by entry,
+  963 hand-placed containers, 11 dead table ids) and [loot_islands.md](loot_islands.md) (172 tables used by only one or
+  two structures). Nothing from either is applied yet.
 
 ## 4. CG: dyeable canned golem
 
@@ -210,6 +286,9 @@ The models ship with the kubejs payload and the plugin ships with the patcherMod
 - **Well** `well-1.19.2-1.0.0.jar`: 17 well blocks (plain + 16 dyed) that pump water.
 - `mod_sides.md` rows for all four were added 2026-10-02 (`both`); `/dumpservermods` and `build_deploy.py` no
   longer stop. `pack/` regenerated.
+- **Removed since 1.0.3:** Dimensional Gravity (`end_gravity`, `Dimensional Gravity 1.0.1 - 1.19.2.jar`). It is out of
+  `mods/`, so both sides delete it. Create: Gravity (`create_gravity`) stays and is what the `[perf]` gravity filter
+  limits. Its row in `mod_sides.md` is stale; drop it if it is gone for good.
 
 ## 5b. DR: data refresh after the new mods (2026-10-02)
 
@@ -243,6 +322,23 @@ new `[item_dict] Missing/invalid` lines.
   launch) before staging.
 - `trashslot-common.toml` stops shipping, as planned: it was a one-off through 1.0.3 (player config class).
 
+Config changes after the first draft (2026-10-03/04), all in the payload unless noted:
+- `creativeengineering-common.toml`: `[perf]` (3c), `[worldgen.earth_fill]` and the `earthFill` / `wildCrops` switches
+  (3b, WC). **A server that already has this file keeps its old copy** unless the payload file is copied over it (copying
+  a config folder over is the intended path here); a missing key is written with its default on first launch.
+- `DistantHorizons.toml`: server `realTimeUpdateDistanceRadiusInChunks` 256 to 192, `numberOfThreads` 2 to 3; client
+  graphics `lodChunkRenderDistanceRadius` 512 to 192, vertical and horizontal quality MEDIUM to LOW, transparency
+  DISABLED, SSAO off, vanilla fade SINGLE_PASS, far-plane fade off, biome blending 1. Backed up in
+  `configs_edited/root_config/DistantHorizons.toml`. This file ships to clients too, so it changes their LOD look.
+- `create_central_kitchen-common.toml`: the Farmer's Respite kettle can be boosted on a Blaze Stove.
+- `vinery/config.json5`: `years_per_effect_level` 2 (3d).
+- `starterkit/kits/Engineer.txt` and `descriptions/Engineer.txt`: a new kit (leather boots, copper shield, copper pickaxe and
+  axe, 8 bread). `Default.txt` is unchanged and the kits in `inactive/` stay inactive.
+- Not shipped: `legendarytooltips-common.toml`, `waila/*` (player config class; WTHIT rewrote its comments only),
+  `rare-ice.properties` and `worldedit.properties` differ by timestamp or a rewritten comment.
+- T&T waystones zip: **resolved.** Towns and Towers regenerated `t_and_t_waystones_patch_1.19.2.zip` at launch
+  (2026-10-03 20:01, untracked), so the staged update has no removal for it.
+
 ## 6. VR: versions and records (done 2026-10-02)
 
 | What | Before | After |
@@ -258,16 +354,25 @@ new `[item_dict] Missing/invalid` lines.
 Version rule from here: bump patcherMod's patch version and exposureBackport's port build once per pack
 release. Rebuilds before a release keep the number.
 
-## 7. Before staging 1.0.4
+## 7. Staging 1.0.4
 
-1. DONE 2026-10-02: `mod_sides.md` rows for Blue Flame Burning, Fruits Delight, Improved Pillager Outpost and
-   Well (all `both`), then `tools/gen_pack_manifest.py`.
-2. OPEN: confirm the T&T waystones patch zip removal (5).
-3. OPEN: a boot test with both 1.0.4 jars and the new mods (scratch server, then the dev client), then the
-   CB remap check (R4-04).
-4. OPEN: commit (the dry run counts 14 uncommitted files in shipped folders).
-5. Then stage: `python3 tools/build_deploy.py --version 1.0.4 --notes "..."`. After copying it out, run
-   `--snapshot 1.0.4`.
+1. DONE 2026-10-02: `mod_sides.md` rows for the four new mods.
+2. DONE 2026-10-04: T&T waystones zip (regenerated by the game, no removal).
+3. DONE 2026-10-04: jars current. exposureBackport `-02` in `mods/` matches the build (md5 e54032b6). The patcherMod
+   1.0.4 jar in `mods/` was the 19:36 build on 2026-10-03, older than 22:51 (it lacked the perf, earth fill, barrel and wild
+   crop switch classes); it was replaced by the 22:51 build (md5 55a2e65a, 323 classes) via a copy and an atomic rename, because
+   the game was running and `installToMods` would have rewritten a loaded jar in place. The running game keeps the old
+   jar until it restarts.
+4. DONE 2026-10-04: `tools/gen_pack_manifest.py` (389 mods). `tools/build_deploy.py` got two fixes: `wild_crops.json` is a
+   runtime KubeJS input (it was an unclassified-file error), and `server/perf/reports/*` is excluded (lag bundles that came
+   from the server shouldn't be sent back).
+5. DONE 2026-10-04: staged with `python3 tools/build_deploy.py --version 1.0.4 --notes "..."` (398 files, 12.8 MB, see the
+   payload line in section 0). After you copy it out: `python3 tools/build_deploy.py --snapshot 1.0.4`.
+6. OPEN: nothing has booted the final jars. The last scratch boot was before the 2026-10-03 evening changes (earth fill,
+   barrel, wild crops). Boot a scratch dedicated server from `deploy/latest/` before
+   copying if there is time, then run the R4 checks below on the server.
+7. OPEN: nothing is committed past `d993d01`; the build warns about 130 uncommitted files in shipped folders. Commit before
+   the snapshot so the deploy log's commit is meaningful.
 
 ## 8. Release checks (`R4-`)
 
@@ -291,9 +396,18 @@ release. Rebuilds before a release keep the number.
 - [ ] **R4-09 DD item-less plates:** place 1 and then 3 cookies on a food plate, and a pumpkin pie → WTHIT shows a
   3D icon of the plate with the right number of cookies (it was blank before).
 - [ ] **R4-10 DD soups:** a placed pumpkin soup has no purple/black patches inside the bowl.
+- [ ] **R4-11 bag dye:** craft a leather bag with a dye in the crafting grid → tinted; wash it in a cauldron → undyed;
+  upgrade a dyed bag at a smithing table → the colour and the contents stay. Items inside still open normally.
+- [ ] **R4-12 perf throttles:** server log at start has no error from `FeedingTroughModuleMixin`, `SereneSeasonsMeltThrottleMixin`,
+  `CreateGravityDimensionMixin` or `CreativeEngineeringMixinPlugin`; no `CEConfig has no public` line from KubeJS. A dragon
+  horse armor on a horse gives Regeneration within about 5 s.
+- [ ] **R4-13 barrel:** VN-07 in [vinery.md](vinery.md) (output stacks, a different year stops it).
+- [ ] **R4-14 Lootr containers:** open a converted chest in a ported structure (any file under
+  `kubejs/data/*/loot_tables/chests/fixed/`) as two players → each sees the fixed contents; the second player's chest was not emptied by the first.
 - Crops and hoes: CR-01, CR-02, CR-21 to CR-37 in [crops.md](crops.md).
 - Wild crops (WC): CR-47 to CR-58 in [crops.md](crops.md).
-- Worldgen (WG): ST-44 to ST-48 in [structure_tuning.md](structure_tuning.md).
+- Worldgen (WG, EF): ST-44 to ST-55 in [structure_tuning.md](structure_tuning.md).
+- Loot (LC): LT-23 in [loot.md](loot.md).
 - Wandering Trader (WT): WT-01 to WT-16 (not WT-06) in [wandering_trader.md](wandering_trader.md).
 - Data refresh (DR): FO-02, FO-06, FO-08 in [food.md](food.md); BR-52 in [blockrunner.md](blockrunner.md).
 
@@ -314,3 +428,10 @@ release. Rebuilds before a release keep the number.
   patcherMod rebuilt at 1.0.4 and installed (md5 37ce1023).
 - 2026-10-03: WC wild crop placement built from the user's spec (see the table). patcherMod rebuilt at 1.0.4 for the
   `wildCrops` switch (md5 09733ca8), not installed: a game process was running.
+- 2026-10-03 (evening): EF earth fill, Monobank banks, land driftwood (3b); PF five perf hot spots and the `[perf]` config
+  (3c); VB barrel output stacking (3d); LC Golden Food book removed, loot catalog, Lootr fixed containers (3e); camera
+  bags made dyeable (2); wild crops got rubber, cherry and the Fruits Delight apple rules. patcherMod rebuilt at 1.0.4
+  (22:51, md5 55a2e65a).
+- 2026-10-04: this file brought up to date with everything since 1.0.3. Jars refreshed in `mods/` (patcherMod 22:51 build in
+  place of the 19:36 one), pack manifest regenerated, `build_deploy.py` fixed for `wild_crops.json` and the lag bundles, and
+  1.0.4 staged in `deploy/latest/` (update from 1.0.3).

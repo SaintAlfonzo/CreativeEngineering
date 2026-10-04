@@ -9,7 +9,7 @@
     "component": "java-runtime-gamma",
     "majorVersion": 17
   },
-  "jvmArgs": "-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dmixin.debug.verbose=true -Dmixin.debug.export=true",
+  "jvmArgs": "-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
   "resourcePackOrder": [
     "vanilla",
     "mod_resources",
@@ -847,22 +847,6 @@
           "slug": "detail-armor-bar",
           "url": "https://modrinth.com/mod/detail-armor-bar/version/kKIctwmh",
           "download": "https://cdn.modrinth.com/data/hAt6ty93/versions/2.6.4%2B1.19.2-forge/DetailArmorBar-2.6.4%2B1.19.2-forge.jar"
-        }
-      }
-    },
-    {
-      "file": "Dimensional Gravity 1.0.1 - 1.19.2.jar",
-      "name": "Dimensional Gravity",
-      "version": "Dimensional Gravity 1.0.1 - 1.19.2.jar",
-      "sha1": "66b9f3c070200ce4026a65138e93339d7a5b892e",
-      "modId": "end_gravity",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 846834,
-          "fileId": 4477853,
-          "slug": "dimensional-gravity",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/dimensional-gravity/files/4477853"
         }
       }
     },
@@ -4387,7 +4371,7 @@
       "file": "creativeengineering-1.0.4.jar",
       "name": "creativeengineering-1.0.4",
       "version": "",
-      "sha1": "63904204b700e57066aee39f5a683a61aeb4d6ab",
+      "sha1": "276cdf7d21bf3ed318f57dbeb75d076ac0c3b807",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -4940,7 +4924,7 @@
       "file": "exposureBackport-1.9.19-ce-19.2-02.jar",
       "name": "exposureBackport-1.9.19-ce-19.2-02",
       "version": "",
-      "sha1": "caeb096abaaa8f260664ad733447fab5853abb89",
+      "sha1": "e5bf5db47bf379079f9a70d712e6f849f1a9c47c",
       "modId": "exposure",
       "side": "both",
       "source": "local"

@@ -327,8 +327,8 @@
     "ruins": {
       "note": "Surface land ruins: Philip's Ruins and Terralith's glacial hut. Underground ruins stay standalone.",
       "placement": {
-        "spacing": 8,
-        "separation": 4,
+        "spacing": 16,
+        "separation": 8,
         "salt": 1418638049
       },
       "structures": {
@@ -475,8 +475,8 @@
     "ocean_ruins": {
       "note": "Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, vanilla shipwrecks, the T&T wreckage.",
       "placement": {
-        "spacing": 6,
-        "separation": 2,
+        "spacing": 8,
+        "separation": 3,
         "salt": 541836770
       },
       "structures": {
@@ -590,8 +590,8 @@
     "remote": {
       "note": "Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer's Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.",
       "placement": {
-        "spacing": 16,
-        "separation": 8,
+        "spacing": 24,
+        "separation": 12,
         "salt": 419617315
       },
       "structures": {
@@ -828,7 +828,7 @@
     "sky": {
       "note": "Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later.",
       "placement": {
-        "spacing": 72,
+        "spacing": 64,
         "separation": 16,
         "salt": 444386725
       },

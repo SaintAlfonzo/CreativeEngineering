@@ -282,4 +282,8 @@ become barrels, and PneumaticCraft reinforced chests (mechanic house) become che
 `python3 tools/audit_loot_containers.py` writes `loot_container_audit.md`, which lists every loot
 container in every template and its fate. Two kinds are left unconverted on purpose. Nullscape's phantom-hive
 droppers are part of a mob nest. Monobank's bank blocks are that mod's bank mechanic, not loot.
-Chests with fixed contents and no loot table can't become Lootr containers at all (nothing to roll per player).
+Chests with fixed contents and no loot table aren't converted by Lootr. For the structures ported into `kubejs/data`,
+`python3 tools/lootr_fixed_containers.py` fixes that: each hand-filled chest/trapped chest/barrel gets a generated loot table
+(`<ns>:chests/fixed/<hash>`, one pool per stack, count and item NBT kept, slots scatter) set on its template, so Lootr
+converts it. Idempotent; re-run after every `port_structure_jars.py` run. Same-contents jar templates under `mods/` are not
+touched (listed in the audit's fixed-contents table).
