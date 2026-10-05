@@ -5,6 +5,46 @@ const R = global.NCH
 var f = global.fluid
 var i = global.item;
 
+// Generated cans (tools/gen_can_types.py -> generation_scripts/food/can_types.json): one meal = the food it holds x the
+// section multiplier, effects copied with scaled durations. Each can has its recipes in the json: n of the source(s) (any
+// of the listed alternatives per slot) + an empty can, plus the additive variants. canSection('x') makes the recipes of one
+// section; recipe ids are the can key plus the variant suffix (canned_cookies, canned_cookies_sugar).
+var canTypes = {}
+try {
+	canTypes = JSON.parse(String(JsonIO.readString('kubejs/generation_scripts/food/can_types.json'))).cans
+} catch (err) {
+	console.error('[canning] could not read can_types.json, run tools/gen_can_types.py: ' + err)
+}
+function canSection(section) {
+	var made = 0
+	Object.keys(canTypes).forEach(key => {
+		var can = canTypes[key]
+		if (can.section !== section) return
+		can.recipes.forEach(rec => {
+			try {
+				var input = [i.empty_can]
+				rec.inputs.forEach(inp => {
+					var ids = inp.any.map(k => i[k])
+					ids.forEach((id, slot) => {
+						if (typeof id !== 'string') throw new Error(inp.any[slot] + ' is not in item_dict')
+					})
+					if (ids.length === 1) {
+						input.push(inp.n > 1 ? Item.of(ids[0], inp.n) : ids[0])
+					} else {
+						for (var n = 0; n < inp.n; n++) input.push(ids) // every slot takes any of the alternatives
+					}
+				})
+				if (typeof i[key] !== 'string') throw new Error(key + ' is not in item_dict')
+				R.shapeless(Item.of(i[key], 1), input, e, key + rec.suffix)
+				made++
+			} catch (err) {
+				console.warn('[canning] ' + key + rec.suffix + ' skipped: ' + err)
+			}
+		})
+	})
+	console.log('[canning] ' + section + ': ' + made + ' recipes')
+}
+
 // ============================================================
 // Other Changes TODO
 // ============================================================
@@ -382,16 +422,15 @@ R.shapeless(Item.of(i.canned_raw_bunfungus, 1), [i.empty_can, Item.of(i.raw_bunf
 // ============================================================
 
 // Goal
-// (Cookie Type x4) sized meals, 4 Meals/Can
+// (Cookie Type x2) sized meals, 5 Meals/Can
 // All fast
 // Sugar additive
 
 // Food- Hunger Points, Saturation
 
 // Cookie- 2, 1.2
-// (4, 2.4) x4
-R.shapeless(Item.of(i.canned_cookies, 1), [i.empty_can, Item.of(i.cookie, 8)], e, 'canned_cookies')
-R.shapeless(Item.of(i.canned_cookies, 1), [i.empty_can, Item.of(i.cookie, 6), i.sugar], e, 'canned_cookies_sugar')
+// (4, 2.4) x5
+canSection('cookies')
 
 // ============================================================
 // Cooked Veggies
@@ -409,6 +448,10 @@ R.shapeless(Item.of(i.canned_cookies, 1), [i.empty_can, Item.of(i.cookie, 6), i.
 // Dried Kelp
 // Roasted Bell Pepper (all colors)
 
+// Meal = the item x2 (hunger and saturation points), so a can keeps the item's modifier. The sliced baked potato counts as a
+// baked potato. Generated: can_types.json, section cooked_veggie.
+canSection('cooked_veggie')
+
 // ============================================================
 // Cooked Meat - Mirror raw meat can split, all fish accept sliced
 // Ignore for now - (honey pork chops, maple bacon, mint, will have custom recipes)
@@ -417,6 +460,11 @@ R.shapeless(Item.of(i.canned_cookies, 1), [i.empty_can, Item.of(i.cookie, 6), i.
 // Goal
 // (Meat Item x2) -> 3 Meals/can
 // 5 Meat per can craft, salt additive for 4 meat
+
+// Meal = the item x2. Whole and sliced cuts share a can for chicken, mutton, kangaroo, moose and every fish that has a
+// sliced form; beef, pork and bison keep a separate can for the patty / bacon. The additive is salt or bone broth, like the
+// raw meat cans. Fish are in the same section (cooked_meat) of can_types.json.
+canSection('cooked_meat')
 
 // ============================================================
 // Bread
@@ -431,7 +479,8 @@ R.shapeless(Item.of(i.canned_cookies, 1), [i.empty_can, Item.of(i.cookie, 6), i.
 
 // Bread- 5, 6
 // (10, 12) x4 meals
-R.shapeless(Item.of(i.canned_bread, 1), [i.empty_can, Item.of(i.bread, 6)], e, 'canned_bread')
+// Canned Honey Bread also has a second recipe: 5 bread + a honey bottle.
+canSection('bread')
 
 // ============================================================
 // Salad
@@ -447,6 +496,10 @@ R.shapeless(Item.of(i.canned_bread, 1), [i.empty_can, Item.of(i.bread, 6)], e, '
 
 // All salads but potato salad, maggot salad
 
+// Meal = the salad x1.25, fast, effects at 0.75x duration, 8 meals per can. No additive yet (vinegar comes later:
+// 5 salads + vinegar). Generated: can_types.json, section salad.
+canSection('salad')
+
 // ============================================================
 // Soup
 // ============================================================
@@ -460,6 +513,10 @@ R.shapeless(Item.of(i.canned_bread, 1), [i.empty_can, Item.of(i.bread, 6)], e, '
 // Food- Hunger Points, Saturation
 
 // All soups but cave explorer and the wooden soups that were removed
+
+// Meal = the soup x1.25, effects at 0.75x duration, 8 meals per can; 3 soups + salt or bone broth also works.
+// Suspicious stew is left out: its effects come from its NBT, a can would lose them. Generated: can_types.json, section soup.
+canSection('soup')
 
 // ============================================================
 // Meals
@@ -528,6 +585,11 @@ R.shapeless(Item.of(i.canned_bread, 1), [i.empty_can, Item.of(i.bread, 6)], e, '
 // Food- Hunger Points, Saturation
 
 // All
+
+// Meal = the golden food x0.25 (1 hunger for a golden apple), effects at 0.25x duration, 10 meals per can.
+// 2 golden foods + a honey bottle (returns the bottle). New cans: Canned Goods' own golden apple / carrot / notch apple
+// cans add code effects on top of their food, so they are not reused. Generated: can_types.json, section golden.
+canSection('golden')
 
 // ============================================================
 // Special

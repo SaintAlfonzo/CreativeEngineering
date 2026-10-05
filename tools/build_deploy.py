@@ -180,6 +180,7 @@ KUBEJS_CLASSES = [
 # player has stays in place even when the pack stops shipping it.
 CONFIG_CLASSES = [
     ('trashslot-common.toml', 'player', '1.0.3'),   # TrashSlot deletion behaviour; pushed once with 1.0.3
+    ('DistantHorizons.toml', 'player', '1.0.4'),    # LOD distance/quality + DH threads; pushed once with 1.0.4
     ('jei/blacklist.cfg', 'functional'),            # hidden ingredients (pack-defined)
     ('jei/recipe-category-sort-order.ini', 'functional'),   # pack's recipe tab order
     ('jei/ingredient-list-mod-sort-order.ini', 'functional'),  # pack's ingredient list order by mod

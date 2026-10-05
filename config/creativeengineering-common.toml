@@ -1070,6 +1070,21 @@
 		#Range: 0 ~ 3600
 		startupWaitSeconds = 120
 
+	#Block-state sync diagnostics, for ghost blocks that only appear on a dedicated server (the client
+	#throws 'Error executing task on Client' because a block-update packet names a block state it does
+	#not have, and drops the rest of that packet). Turn it on on the CLIENT, and on the SERVER to get its
+	#half of the comparison.
+	[debug.block_state_sync]
+		#Debug mode. Client: logs every block-update packet containing a state id the client cannot resolve
+		#(the raw id, the block position, the client's state count) and writes
+		#logs/ce_block_state_ranges_client.txt. Dedicated server: writes logs/ce_block_state_ranges_server.txt
+		#when it starts. tools/diff_block_state_ranges.py compares the two files and names the block.
+		enabled = false
+		#Per-packet detail lines to log before falling back to one summary line every 500 bad packets.
+		#Each distinct bad id is always logged the first time it is seen.
+		#Range: 0 ~ 100000
+		maxDetailLines = 200
+
 #World generation: switches per system, a debug rate multiplier, and the constants of the pack's
 #worldgen code. The per-structure, per-piece and per-biome tables are the JSON files in
 #kubejs/generation_scripts/worldgen/ (see feature_writeup/structure_tuning.md). Structure and

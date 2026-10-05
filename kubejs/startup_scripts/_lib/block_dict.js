@@ -10,6 +10,10 @@ b.dark_fire = 'creativeengineering:dark_fire';
 b.sweet_berry_bush = 'minecraft:sweet_berry_bush'; // block id (the item is sweet_berries)
 b.emu_nest = 'creativeengineering:emu_nest';         // patcherMod nest/EmuNests.java
 b.emu_egg_nest = 'creativeengineering:emu_egg_nest'; // the 1-6 egg state; no item
+b.duck_nest = 'creativeengineering:duck_nest';         // patcherMod nest/WaterfowlNests.java
+b.duck_egg_nest = 'creativeengineering:duck_egg_nest'; // the 1-6 egg state; no item
+b.goose_nest = 'creativeengineering:goose_nest';
+b.goose_egg_nest = 'creativeengineering:goose_egg_nest';
 
 // Tags
 b.any_bricks = '#minecraft:bricks';

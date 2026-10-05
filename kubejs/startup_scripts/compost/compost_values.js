@@ -804,6 +804,8 @@
 		[i.hay_nest,                           0.65],
 		[i.twig_nest,                          0.65],
 		[i.emu_nest,                           0.65],
+		[i.duck_nest,                          0.65],
+		[i.goose_nest,                         0.65],
 		// neapolitan
 		[i.adzuki_beans,                       0.3],
 		[i.banana_bunch,                       0.5],

@@ -1,6 +1,6 @@
 # 1.0.4: 1.0.3 deploy fixes, Exposure Extras, crop parity, hoe areas
 
-STAGED 2026-10-04 in `deploy/latest/`, not yet copied to the machines (started 2026-10-02, last updated 2026-10-04).
+DEPLOYED 2026-10-04 13:54 (snapshot recorded for server and clients; started 2026-10-02, last updated 2026-10-04).
 1.0.4 is everything built after the
 1.0.3 deploy (2026-10-02 15:55, commit `d791885`, the last push; `d993d01` is the only commit since and is part
 of 1.0.4). There was no plan up front. This file
@@ -17,6 +17,7 @@ and the summary.
 | CB | Camera bags moved from patcherMod to Exposure Extras (`exposure_extras`), now dyeable | migration + feature | BUILT, exposureBackport `-02` in `mods/` (md5 e54032b6); not boot-tested since the move, remap untested | none yet; this file 2 |
 | CP | Crop parity layer: tobacco on Rich Farmland / Fertile Soil, Quark replant and hoe harvesting | feature | BUILT, patcherMod 1.0.4 in `mods/`, not boot-tested; CR-01/02/21-25 pending | [crops.md](crops.md) 2.6 (`CR-`) |
 | HA | Harvest area per hoe (1x1 to 9x9) + tooltip | feature | BUILT, patcherMod 1.0.4 in `mods/`; scratch boots clean before the bump; CR-26..30 pending | [crops.md](crops.md) 2.3 (`CR-`) |
+| GL | WTHIT growth line for the plants WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all), `[crop_growth]` config, `/dumpcropgrowth` audit | feature | BUILT 2026-10-04, headless-tested; jar built in `build/libs`, not installed; CR-59..66 pending | [crops.md](crops.md) 2.9 (`CR-`) |
 | CG | Canned golem can be dyed (16 colours) | feature | BUILT, patcherMod 1.0.4 in `mods/`, not tested in game | none yet; this file 4 |
 | DD | Display Delight: missing-texture icons in WTHIT and JEI, empty WTHIT icon for item-less plates | fix | BUILT: kubejs models + patcherMod 1.0.4 in `mods/`; R4-08..10 pending | this file 4b |
 | NM | New mods: Blue Flame Burning, Fruits Delight, Improved Pillager Outpost, Well | mods | in `mods/`; `mod_sides.md` rows added 2026-10-02 (all `both`), in the payload | this file 5 |
@@ -288,7 +289,7 @@ The models ship with the kubejs payload and the plugin ships with the patcherMod
   longer stop. `pack/` regenerated.
 - **Removed since 1.0.3:** Dimensional Gravity (`end_gravity`, `Dimensional Gravity 1.0.1 - 1.19.2.jar`). It is out of
   `mods/`, so both sides delete it. Create: Gravity (`create_gravity`) stays and is what the `[perf]` gravity filter
-  limits. Its row in `mod_sides.md` is stale; drop it if it is gone for good.
+  limits. Its `mod_sides.md` row was dropped 2026-10-04.
 
 ## 5b. DR: data refresh after the new mods (2026-10-02)
 
@@ -326,7 +327,7 @@ Config changes after the first draft (2026-10-03/04), all in the payload unless 
 - `creativeengineering-common.toml`: `[perf]` (3c), `[worldgen.earth_fill]` and the `earthFill` / `wildCrops` switches
   (3b, WC). **A server that already has this file keeps its old copy** unless the payload file is copied over it (copying
   a config folder over is the intended path here); a missing key is written with its default on first launch.
-- `DistantHorizons.toml`: server `realTimeUpdateDistanceRadiusInChunks` 256 to 192, `numberOfThreads` 2 to 3; client
+- `DistantHorizons.toml` (shipped this once; from 1.0.5 on it is a player config class and is no longer pushed, `CONFIG_CLASSES` through 1.0.4): server `realTimeUpdateDistanceRadiusInChunks` 256 to 192, `numberOfThreads` 2 to 3; client
   graphics `lodChunkRenderDistanceRadius` 512 to 192, vertical and horizontal quality MEDIUM to LOW, transparency
   DISABLED, SSAO off, vanilla fade SINGLE_PASS, far-plane fade off, biome blending 1. Backed up in
   `configs_edited/root_config/DistantHorizons.toml`. This file ships to clients too, so it changes their LOD look.
@@ -368,11 +369,10 @@ release. Rebuilds before a release keep the number.
    from the server shouldn't be sent back).
 5. DONE 2026-10-04: staged with `python3 tools/build_deploy.py --version 1.0.4 --notes "..."` (398 files, 12.8 MB, see the
    payload line in section 0). After you copy it out: `python3 tools/build_deploy.py --snapshot 1.0.4`.
-6. OPEN: nothing has booted the final jars. The last scratch boot was before the 2026-10-03 evening changes (earth fill,
+6. NOT DONE before the deploy: nothing booted the final jars. The last scratch boot was before the 2026-10-03 evening changes (earth fill,
    barrel, wild crops). Boot a scratch dedicated server from `deploy/latest/` before
    copying if there is time, then run the R4 checks below on the server.
-7. OPEN: nothing is committed past `d993d01`; the build warns about 130 uncommitted files in shipped folders. Commit before
-   the snapshot so the deploy log's commit is meaningful.
+7. DONE: committed (`334c76b`) before the final staging.
 
 ## 8. Release checks (`R4-`)
 
@@ -435,3 +435,5 @@ release. Rebuilds before a release keep the number.
 - 2026-10-04: this file brought up to date with everything since 1.0.3. Jars refreshed in `mods/` (patcherMod 22:51 build in
   place of the 19:36 one), pack manifest regenerated, `build_deploy.py` fixed for `wild_crops.json` and the lag bundles, and
   1.0.4 staged in `deploy/latest/` (update from 1.0.3).
+- 2026-10-04 (later): `mod_sides.md` row for Dimensional Gravity dropped; `DistantHorizons.toml` classed as a player config shipped through 1.0.4 only; 1.0.4 re-staged and recorded with `--snapshot 1.0.4` (server and clients, 13:54). R4 checks still open.
+- 2026-10-04: GL WTHIT growth line (see the table). patcherMod rebuilt at 1.0.4 (md5 23df38e7) into `build/libs` only: the working tree also holds the unfinished Breezy and block-state-overflow work, so the jar was not installed to `mods/`.

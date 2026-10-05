@@ -12,5 +12,11 @@
     },
     "side": "client",
     "required": ["displaydelight"]
+  },
+  "creativeengineering:crop_growth": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.crops.WthitCropGrowth"
+    },
+    "side": "client"
   }
 }

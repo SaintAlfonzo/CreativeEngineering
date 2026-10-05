@@ -91,6 +91,9 @@ public class CreativeEngineering
         // mixin/EntityEmuEggLayerMixin, the foreign-nest guard in mixin/LayEggInNestGoalMixin.
         if (net.minecraftforge.fml.ModList.get().isLoaded("incubation")) {
             com.SaintAlfonzo.creativeengineering.nest.EmuNests.register(modEventBus);
+            // Duck + goose nests (Untitled Duck Mod): blocks here, the EggLayer side in
+            // mixin/DuckEntityEggLayerMixin + GooseEntityEggLayerMixin.
+            com.SaintAlfonzo.creativeengineering.nest.WaterfowlNests.register(modEventBus);
         }
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)
@@ -235,6 +238,7 @@ public class CreativeEngineering
 			}
 			if (net.minecraftforge.fml.ModList.get().isLoaded("incubation")) {
 				event.enqueueWork(com.SaintAlfonzo.creativeengineering.nest.EmuNests::registerFlammables);
+				event.enqueueWork(com.SaintAlfonzo.creativeengineering.nest.WaterfowlNests::registerFlammables);
 			}
 
 			LOGGER.info("CreativeEngineering setup complete");
