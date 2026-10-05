@@ -17,8 +17,12 @@ ServerEvents.tags('block', e => {
 
 	t.add(e, 'minecraft:fire', b.dark_fire)
 
-	// Emu nest: Incubation's bird_nests tag (hoe-mineable, like its hay/twig nests)
-	t.add(e, 'incubation:bird_nests', [b.emu_nest, b.emu_egg_nest])
+	// Emu, duck and goose nests: Incubation's bird_nests tag (hoe-mineable, like its hay/twig nests)
+	t.add(e, 'incubation:bird_nests', [
+		b.emu_nest, b.emu_egg_nest,
+		b.duck_nest, b.duck_egg_nest,
+		b.goose_nest, b.goose_egg_nest,
+	])
 
 	// minecraft:concrete isn't a vanilla tag in 1.19.2 — the 16 solid concretes (not powder)
 	t.addMatching(e, 'forge:concrete', 'minecraft:*_concrete')

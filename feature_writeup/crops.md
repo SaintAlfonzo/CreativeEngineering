@@ -17,6 +17,7 @@ Test prefix **CR-** · Last updated **2026-10-03** · Overall status **reference
 | 1.0.4 mods: Corn Delight, Farmer's Respite (tea, coffee), Fruits Delight (bushes, lemon, pineapple, hamimelon, 13 fruit trees) | §2.1 | reference from the decompiled jars 2026-10-02; G12 to G15 open; CR-31 to CR-37 |
 | Wild generation: where every crop, bush and fruit tree spawns (biomes, rate, height, ground, side blocks such as Coarse Dirt, Adzuki Soil, mint ponds) | §2.7 + generated [crops_by_biome.md](crops_by_biome.md) | reference 2026-10-03; findings V1 to V12 feed the planned vegetation worldgen system; CR-38 to CR-46 |
 | Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | BUILT 2026-10-03, offline-tested, not run in game; V13 to V20; CR-47 to CR-58 |
+| WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit), jar built not installed; not seen in game; CR-59 to CR-66 |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
 - **Knobs:** `config/quark-common.toml` sections `[tweaks.simple_harvest]` and `[tweaks.hoe_harvesting]`.
@@ -635,6 +636,86 @@ tagged wet). The rest of the cold biomes are moderate (taiga downfall 0.8) or dr
 - Mirage Isles is tagged `forge:is_mushroom` but has no mycelium, so it counts as a temperate wet forest, not a mushroom
   biome. Fungal Caves and the Glimmering Weald are caves, where a surface feature never lands.
 
+### 2.9 WTHIT growth line (`crop_growth.json`)
+
+WTHIT's own "Growth: 60%" / "Growth: Mature" line comes from `PlantProvider` and covers only `CropBlock` subclasses
+(wheat, carrots, corn, cabbage, onions, tomatoes, flax, rice panicles...) plus five vanilla blocks matched by
+identity: melon and pumpkin stem, nether wart, cocoa, sweet berry bush. A modded stem or berry bush is a different
+block, so it gets nothing. Every other plant in the pack was silent. The pack adds the same line, same wording, same
+"Crop progress" toggle in WTHIT's config, for all of them (patcherMod `crops/WthitCropGrowth`, rules in
+`assets/creativeengineering/crop_growth.json`). Plants you can pick before they finish read
+"Growth: 75% (Harvestable)" until fully grown.
+
+**How the catalog was made:** `/dumpcropgrowth` (in `/dumpall`) walks every registered block and writes every one
+with a stage-like blockstate property to `kubejs/exported/crops/crop_growth_audit.json`: 290 blocks on 2026-10-04.
+22 are WTHIT-native, 62 got a rule, 206 are not crops (below). `python3 tools/crop_growth_coverage.py` checks that every
+audited block is ruled, covered by the fallback or has a skip reason, and that each rule's property, stage names and
+numbers fit the real block states; a plant from a newly added mod shows as UNKNOWN until it gets a rule.
+
+**Confirmed silent before the change, all now covered:** hemp, tobacco, strawberries, salmonberries, mint, grapes,
+blueberries, cranberries, lemons.
+
+**Plants that were missing the line (62 blocks)**
+
+| Plant | Block(s) | State read | Shows "Harvestable" from | Fully grown |
+|---|---|---|---|---|
+| Hemp | `immersiveengineering:hemp` | enum `growth`: bottom0..bottom4, then `top0` | none | bottom4 and the top half |
+| Tobacco | `the_dirty_stuff:tobacco_seeds` | `blockstate` 0-7 | none | 7 |
+| Strawberries | `neapolitan:strawberry_bush` | `age` 0-6 | none | 6 |
+| Mint | `neapolitan:mint` | `age` 0-4 | none | 4 |
+| Adzuki | `neapolitan:adzuki_sprouts` | `age` 0-6 | none | 6 |
+| Salmonberries | `delightful:salmonberry_bush` | `age` 0-4 | 3 | 4 |
+| Blueberries, cranberries | `fruitsdelight:blueberry_bush`, `cranberry_bush` | `age` 0-4 | none | 4 |
+| Lemon (both halves) | `fruitsdelight:lemon_tree` | `age` 0-4 | none | 4 |
+| Pineapple | `fruitsdelight:pineapple` | `age` 0-4 | none | 4 |
+| Hamimelon stem (modded stem, not WTHIT's vanilla pair) | `fruitsdelight:hamimelon_stem` | `age` 0-7 | none | 7 |
+| Grape bushes: red, white, savanna, taiga (8 blocks) | `vinery:*_grape_bush` | `age` 0-3 | 2 | 3 |
+| Jungle grapes (wall vine, 2 blocks) | `vinery:jungle_grape_bush_red`, `_white` | `age` 0-3 | none | 3 |
+| Grapevine stem | `vinery:grapevine_stem` | `age` 0-4, age 0 = empty stem, no line | none | 4 |
+| Grapevine lattice (jungle grapes) | `vinery:grapevine_lattice` | `age` 0-4, age 0 = empty, no line | 3 | 4 |
+| Mulberry vine | `upgrade_aquatic:mulberry_vine` | `age` 0-4 | none | 4 |
+| Flower bushes (17 kinds) | `floralench:*_bush` | `age` 0-3 | 2 (flowers) | 3 |
+| Tea bush (both halves) | `farmersrespite:tea_bush` | `age` 0-3 | none | 3 |
+| Coffee stem, middle stem | `farmersrespite:coffee_stem`, `coffee_stem_middle` | `age` 0-2 | none | 2 |
+| Coffee double stem | `farmersrespite:coffee_stem_double` | `age` + `age1` (two berries, summed, 0-4) | none | both berries at 2 |
+| Rice (bottom block) | `farmersdelight:rice` | `age` 0-3 | none | 3 (the panicles grow on top, WTHIT-native) |
+| Budding tomatoes | `farmersdelight:budding_tomatoes` | `age` 0-4 | none | 4 (turns into `tomatoes`, WTHIT-native) |
+| Mushroom and fungus colonies (4) | `farmersdelight:*_mushroom_colony`, `nethersdelight:*_fungus_colony` | `age` 0-3 | none | 3 |
+| Fruit tree leaves, natural only (12) | `fruitsdelight:*_leaves` | enum `type`: leaves 0%, flowers 50%, fruits = fully grown | none | fruits |
+| Durian leaves, natural only | `fruitsdelight:durian_leaves` | enum `fruit`: none, flowers, small, fruits | none | fruits |
+
+- "Harvestable from" is the stage where the mod's own right-click already gives something (salmonberry stage 3, grapes
+  stage 2, flowers stage 2); the thresholds come from §2.1 and [vinery.md](vinery.md). A plant with "none" only reads
+  "Growth: Mature" at the end, like wheat.
+- Fruit leaves you place yourself (`persistent = true`) never flower, so they get no line; the fruit-tree leaves only
+  show it while natural. A natural leaf in the plain `leaves` stage reads "Growth: 0%".
+- WTHIT-native and unchanged (22 blocks): wheat, carrots, potatoes, beetroots, cabbages, onions, tomatoes (plain,
+  rope and stick), corn, flax, ender crop, bell peppers, RD coffee, cotton, rice panicles, weeds, melon and pumpkin
+  stems, nether wart, cocoa, sweet berries. The plugin skips them so nothing gets two lines.
+- A bush-type block (`BushBlock`, not a sapling) with an integer `age` that no rule lists still gets a line,
+  fully grown at its top age (`[crop_growth] fallback`). Today it catches nothing; it is for mods added later.
+
+**Not shown on purpose (206 blocks, each with a reason in the coverage tool):**
+
+| Why | Examples |
+|---|---|
+| Saplings, `stage` 0-1 is the tree-growth roll (WTHIT shows nothing for vanilla saplings either) | all 32 saplings, propagule |
+| Leaves, `distance` to a log | 22 plain leaves |
+| Immersive Weathering leaf and flower piles, `layers` | 37 piles |
+| Trellises, flower patches, hanging pot, sea pickle: a decoration or item count, not growth | 41 |
+| Weathering state of cobblestone, stone bricks and their slabs, stairs and walls | 45 |
+| Column plants and vines: `age` is a growth counter with nothing to pick by stage | sugar cane, cactus, bamboo, kelp (6), cave, twisting and weeping vines, chorus flower |
+| Sliced melons and pumpkin, containers (cookie jar, Vinery basket, grapevine pot), fire, frosted ice, skunk spray, ender residue, ivy, grass spread counters, unripe cheese wheels, big dripleaf | the rest |
+
+- **Not covered, no state to read:** Farmer's Respite `coffee_bush` and `small_tea_bush` (first stage, no blockstate
+  property), the wild plants (no age at all). Cave vines carry their berries as a boolean.
+- **Rendering of the percentage:** rounded like WTHIT (`2 of 3` = 67%), never 100% before the plant is fully grown.
+
+**Knobs:** `[crop_growth]` in `config/creativeengineering-common.toml`: `enabled`, `fallback`, `showHarvestable`;
+WTHIT's own "Crop progress" option also hides the added lines. To change which plants or stages count, edit
+`crop_growth.json`; the copy in the jar is the default, a copy at
+`kubejs/assets/creativeengineering/crop_growth.json` overrides it (F3+T reloads it).
+
 ## 3. What the pack changes
 
 - **Fertile Soil** is a rename of Immersive Weathering's Mulch Block ([namechanges.js](../kubejs/client_scripts/namechanges.js)).
@@ -784,6 +865,12 @@ yet; each has a suggested direction for you to approve or reject.
   Configs with worldgen knobs: `farmersdelight-common.toml` `[world.*]`, `delightful-common.toml` `chance_*`,
   `rusticdelight-common.toml` `wild_*_chance`, `farmersrespite-common.toml` `teaBushChance` / `coffeeBushChance`,
   `supplementaries-common.toml` `[functional.flax.wild_flax]`, `neapolitan-common.toml` (strawberry height, chimpanzees)
+- WTHIT growth line (§2.9): patcherMod `crops/WthitCropGrowth.java` (plugin, entry in `waila_plugins.json`) and `crops/CropGrowth.java`
+  (rules and maths), [crop_growth.json](../development/patcherMod/src/main/resources/assets/creativeengineering/crop_growth.json)
+  (the file to edit), `CEConfig` `[crop_growth]`, lang key `creativeengineering.wthit.crop_harvestable`;
+  [kubejs/server_scripts/_lib/dump_crop_growth.js](../kubejs/server_scripts/_lib/dump_crop_growth.js) (`/dumpcropgrowth`),
+  [tools/crop_growth_coverage.py](../tools/crop_growth_coverage.py), [tools/test_crop_growth.sh](../tools/test_crop_growth.sh) +
+  `tools/crop_growth_test/CropGrowthTest.java`
 - Wild crop placement (§2.8): [kubejs/generation_scripts/worldgen/wild_crops.json](../kubejs/generation_scripts/worldgen/wild_crops.json)
   (biome traits + crop rules, the file to edit), [kubejs/server_scripts/worldgen/wild_crops.js](../kubejs/server_scripts/worldgen/wild_crops.js)
   (applier), `kubejs/data/creativeengineering/worldgen/configured_feature/wild/` and `placed_feature/wild/` (pack features),
@@ -823,6 +910,11 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
   pass; "46 crop tags match the generator", "46 add modifiers, 44 forge:none, 1 remove modifier". The generator printed
   `78 crop/feature rows, 61 crops`, 13 land biomes with no crop (V19) and the flax note (V6). Not covered: the KubeJS
   type wrappers and Forge actually loading the modifiers, which needs the game (CR-47).
+- **WTHIT growth line (§2.9):** `tools/test_crop_growth.sh` (about 5 s; compile patcherMod first with
+  `./gradlew :patcherMod:compileJava --offline`). It runs 38 checks on the maths and the shipped rule file, then
+  `tools/crop_growth_coverage.py` against `kubejs/exported/crops/crop_growth_audit.json`. After adding mods, run
+  `/dumpcropgrowth` (or `/dumpall`) and the coverage script; an UNKNOWN row is a new plant to give a rule or a skip reason.
+  Not covered offline: the WTHIT overlay itself (CR-59 to CR-66).
 
 ## 7. In-game test suite
 
@@ -907,6 +999,22 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   `[wild-crops] off in CEConfig`; `plains` has strawberries and corn again (mod defaults). Leaf apples stay off (that's loot,
   not this switch).
 
+- [ ] **CR-59 Hemp:** plant hemp on farmland and look at it each stage → "Growth: 0%", 25%, 50%, 75%, then "Growth: Mature" at the
+  last bottom stage; the top half that grows on it reads "Growth: Mature".
+- [ ] **CR-60 Tobacco:** look at tobacco at stages 0, 3 and 7 → 0%, 43%, "Mature". Right-click the stage-7 plant (CR-02): it drops to 0%.
+- [ ] **CR-61 Berry bushes:** strawberry bush stage 3 → "Growth: 50%", stage 6 → "Mature". Salmonberry stage 2 → 50%, stage 3 →
+  "75% (Harvestable)", stage 4 → "Mature". Mint, blueberry, cranberry and lemon (look at either half) → a percentage, "Mature" at the last stage.
+- [ ] **CR-62 Grapes:** a red grape bush at stage 1, 2, 3 → 33%, "67% (Harvestable)", "Mature". An empty grapevine stem (no seed) shows no
+  line; planted, it counts up from 25% to "Mature" at stage 4. A lattice with jungle grapes at stage 3 → "75% (Harvestable)".
+- [ ] **CR-63 Fruit leaves:** natural apple (or any Fruits Delight) leaves in the flowering stage → "Growth: 50%", fruiting → "Mature".
+  Leaves you placed yourself show no Growth line. Durian leaves: none / flowers / small / fruits → 0%, 33%, 67%, "Mature".
+- [ ] **CR-64 No doubles:** wheat, cocoa, sweet berries, a melon stem and nether wart each show exactly one Growth line, and tea, coffee stems,
+  colonies, rice, budding tomatoes, adzuki, mulberries, pineapple, hamimelon stem and a floral bush each show one too.
+- [ ] **CR-65 Toggles:** turn WTHIT's "Crop progress" off (WTHIT config, vanilla plugin section) → the added lines go too, wheat's as well. Set
+  `[crop_growth] enabled = false` → only the added lines go. `showHarvestable = false` → "(Harvestable)" disappears.
+- [ ] **CR-66 Override file:** copy `crop_growth.json` to `kubejs/assets/creativeengineering/`, change salmonberry's `"harvest": 3` to 4, F3+T →
+  stage 3 no longer says "(Harvestable)". Delete the copy and F3+T → it is back.
+
 ## 8. History
 
 - **2026-10-02:** written from the decompiled jars (Quark 3.4-418, Farmer's Delight 1.2.4, Immersive
@@ -942,3 +1050,9 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   rules, shows before/after densities, biome traits and coverage; it also learned that `minecraft:trees_jungle` grows
   cocoa (rocky jungle, jungle mountains). Offline checks `tools/test_wild_crops.sh` pass; not run in game. V1 to V3, V10
   addressed; V13 to V20 and CR-47 to CR-58 added.
+- **2026-10-04:** §2.9 WTHIT growth line. Cause: WTHIT's `PlantProvider` only handles `CropBlock` subclasses and five vanilla blocks by
+  identity. New `/dumpcropgrowth` audit (290 growing blocks, 22 native, 62 ruled, 206 not crops), `crop_growth.json` rules, patcherMod
+  `crops/WthitCropGrowth` + `CropGrowth`, `[crop_growth]` config, coverage tool and `tools/test_crop_growth.sh` (38 checks). Built
+  into `development/patcherMod/build/libs` (md5 23df38e7), not installed to `mods/`; not seen in game. Hemp's state is an enum
+  (`growth`), found only after the first audit pass read integer properties alone; Durian leaves use `fruit` not `type`, found by the
+  coverage tool. CR-59 to CR-66 added.

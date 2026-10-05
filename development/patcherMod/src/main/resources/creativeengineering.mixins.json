@@ -6,6 +6,7 @@
   "plugin": "com.SaintAlfonzo.creativeengineering.compat.CreativeEngineeringMixinPlugin",
   "mixins": [
     "IETagUtilsMixin",
+    "SupplementariesBreezyCompatMixin",
     "LCItemsForMapTradeMixin",
     "CSSellingMapMixin",
     "MemoryStickItemMixin",
@@ -58,6 +59,8 @@
     "LevelThreadSafeRandomMixin",
     "BushierFlowersDisableMixin",
     "EntityEmuEggLayerMixin",
+    "DuckEntityEggLayerMixin",
+    "GooseEntityEggLayerMixin",
     "LayEggInNestGoalMixin",
     "TobaccoPlacementMixin",
     "FarmBlockUnderCropsMixin",
@@ -73,7 +76,8 @@
     "CreateGravityDimensionMixin",
     "SereneSeasonsMeltThrottleMixin",
     "FruitsDelightLeafCheckMixin",
-    "FermentationBarrelStackOutputMixin"
+    "FermentationBarrelStackOutputMixin",
+    "SectionUpdateEncodeFixMixin"
   ],
   "client": [
     "ItemDrainCategoryMixin",
@@ -98,7 +102,9 @@
     "TrashSlotGuiHandlerMixin",
     "TrashSlotComponentMixin",
     "TrashSlotSaveStateAccessor",
-    "CannedGolemRendererMixin"
+    "CannedGolemRendererMixin",
+    "SectionUpdateNullStateMixin",
+    "BlockUpdateNullStateMixin"
   ],
   "server": []
 }

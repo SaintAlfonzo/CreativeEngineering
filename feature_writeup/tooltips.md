@@ -126,6 +126,7 @@ Examples:
 **Fixed**
 - **D&D Jetpack tooltip crash:** `JetpackItemTooltipMixin` stops a crash that used to break client
   tag loading, which delayed JEI (memory `axe-tag-ghost-entries`).
+- **WTHIT growth line** for hemp, tobacco, berry bushes, grapes and other plants WTHIT skips: patcherMod `crops/WthitCropGrowth`, written up in [crops.md](crops.md) 2.9 (tests CR-59 to CR-66).
 
 ## 4. Limits and decisions
 

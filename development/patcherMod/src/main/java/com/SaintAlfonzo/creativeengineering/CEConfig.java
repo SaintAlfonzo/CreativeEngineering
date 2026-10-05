@@ -43,6 +43,7 @@ public final class CEConfig {
     public static final Shields SHIELDS;
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
+    public static final CropGrowth CROP_GROWTH;
     public static final Canning CANNING;
     public static final Perf PERF;
     public static final Surface SURFACE;
@@ -64,6 +65,7 @@ public final class CEConfig {
         SHIELDS = new Shields(builder);
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
+        CROP_GROWTH = new CropGrowth(builder);
         CANNING = new Canning(builder);
         PERF = new Perf(builder);
         SURFACE = new Surface(builder);
@@ -458,6 +460,43 @@ public final class CEConfig {
                     .defineInRange("damagePerUse", 1, 0, 100);
 
             b.pop(); // bonemeal_charm
+        }
+    }
+
+    /**
+     * Dials for {@code crops.WthitCropGrowth} (client-side, display only): the "Growth" line WTHIT
+     * leaves off bushes, vines, hemp, tobacco and fruit-tree leaves.
+     */
+    public static final class CropGrowth {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.BooleanValue fallback;
+        public final ForgeConfigSpec.BooleanValue showHarvestable;
+
+        private CropGrowth(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla",
+                    "plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in",
+                    "WTHIT's own config, to every other growing plant. The blocks and their stages are in",
+                    "assets/creativeengineering/crop_growth.json (override it from kubejs/assets/creativeengineering/).",
+                    "Client-side only; reads the block state the client already has."
+            ).push("crop_growth");
+
+            enabled = b.comment("Master on/off switch for the added lines.")
+                    .define("enabled", true);
+
+            fallback = b.comment(
+                    "true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in",
+                    "crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from",
+                    "mods added later. false: only the plants in the file."
+            ).define("fallback", true);
+
+            showHarvestable = b.comment(
+                    "true: plants that can be picked before they are fully grown (salmonberries from stage 3,",
+                    "grapes from stage 2) read 'Growth: 75% (Harvestable)' until they finish. false: the",
+                    "percentage only."
+            ).define("showHarvestable", true);
+
+            b.pop(); // crop_growth
         }
     }
 
@@ -1389,6 +1428,8 @@ public final class CEConfig {
         public final ForgeConfigSpec.ConfigValue<String> python;
         public final ForgeConfigSpec.IntValue timeoutSeconds;
         public final ForgeConfigSpec.IntValue startupWaitSeconds;
+        public final ForgeConfigSpec.BooleanValue stateSyncEnabled;
+        public final ForgeConfigSpec.IntValue stateSyncMaxDetailLines;
 
         private Debug(ForgeConfigSpec.Builder b) {
             b.comment("Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).").push("debug");
@@ -1422,6 +1463,27 @@ public final class CEConfig {
             ).defineInRange("startupWaitSeconds", 120, 0, 3600);
 
             b.pop(); // generators
+
+            b.comment(
+                    "Block-state sync diagnostics, for ghost blocks that only appear on a dedicated server (the client",
+                    "throws 'Error executing task on Client' because a block-update packet names a block state it does",
+                    "not have, and drops the rest of that packet). Turn it on on the CLIENT, and on the SERVER to get its",
+                    "half of the comparison."
+            ).push("block_state_sync");
+
+            stateSyncEnabled = b.comment(
+                    "Debug mode. Client: logs every block-update packet containing a state id the client cannot resolve",
+                    "(the raw id, the block position, the client's state count) and writes",
+                    "logs/ce_block_state_ranges_client.txt. Dedicated server: writes logs/ce_block_state_ranges_server.txt",
+                    "when it starts. tools/diff_block_state_ranges.py compares the two files and names the block."
+            ).define("enabled", false);
+
+            stateSyncMaxDetailLines = b.comment(
+                    "Per-packet detail lines to log before falling back to one summary line every 500 bad packets.",
+                    "Each distinct bad id is always logged the first time it is seen."
+            ).defineInRange("maxDetailLines", 200, 0, 100000);
+
+            b.pop(); // block_state_sync
             b.pop(); // debug
         }
     }

@@ -20,6 +20,7 @@
 		'dumpcraftingaudit',
 		'dumpgear',
 		'dumpstacks',
+		'dumpcropgrowth',
 		'dumpfood',
 		'dumpcompost',
 		'dumpstructures',

@@ -5,16 +5,17 @@ version before it and which files the other machines must delete. The full file 
 `history/<version>.json`.
 
 <!-- deploy:1.0.4 -->
-## 1.0.4 - 2026-10-04 13:47
+## 1.0.4 - 2026-10-04 13:54
 
 - Minecraft 1.19.2, Forge 43.3.9
-- Commit: d993d01 + 130 uncommitted file(s)
+- Commit: 334c76b + 1 uncommitted file(s)
 - Since: 1.0.3
+- Deployed: server, client 2026-10-04 13:54
 - Contents: 347 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
 - Payload: update from 1.0.3, config functional: 398 files, 12.8 MB (mods 6, kubejs 377, config 15)
 - Notes: 1.0.4: Exposure Extras camera bags (dyeable) + join-kick/refmap fixes, crop parity + hoe harvest areas, wild crop placement, canned golem dye, Display Delight icons, Wandering Trader/Winemaker rework, earth fill + IPO + driftwood + banks worldgen, perf throttles for Quark/Serene Seasons/Create Gravity/Fruits Delight/horse armor, Vinery barrel stacking, loot (Golden Food book removed, Lootr fixed containers), 4 new mods, Dimensional Gravity removed
 - Built with warnings:
-  - 130 uncommitted change(s) in shipped folders (commit d993d01 + working tree)
+  - 1 uncommitted change(s) in shipped folders (commit 334c76b + working tree)
 
 ### Changes
 

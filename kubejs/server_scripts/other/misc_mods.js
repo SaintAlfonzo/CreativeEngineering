@@ -52,6 +52,10 @@ R.remove({id: 'create:crafting/tree_fertilizer'}, e)
 R.shaped(Item.of(i.twig_nest, 1), ['T T', 'TTT'], { T: [i.twig, i.any_stick] }, e, 'twig_nest')
 // Emu nest (patcherMod nest/EmuNests.java): only emus lay in it
 R.shaped(Item.of(i.emu_nest, 1), ['B B', 'BBB'], { B: i.any_bark }, e, 'emu_nest')
+// Duck and goose nests (patcherMod nest/WaterfowlNests.java): grass + tall grass, with the two
+// kinds swapped between the pair so the two U shapes never match each other
+R.shaped(Item.of(i.duck_nest, 1), ['T T', 'GGG'], { G: i.grass, T: i.tall_grass }, e, 'duck_nest')
+R.shaped(Item.of(i.goose_nest, 1), ['G G', 'TTT'], { G: i.grass, T: i.tall_grass }, e, 'goose_nest')
 
 console.log('misc mods finished')
 })

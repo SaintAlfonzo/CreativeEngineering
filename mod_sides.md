@@ -123,7 +123,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Dave's Building Extended | `davebuildingmod` | `dbExtended-1.19.2-6.0.1.jar` |  |
 | both | Decorative Blocks | `decorative_blocks` | `Decorative Blocks-forge-1.19.2-3.0.0.jar` |  |
 | both | Delightful | `delightful` | `Delightful-1.19.2-3.4.1.jar` |  |
-| both | Dimensional Gravity | `end_gravity` | `Dimensional Gravity 1.0.1 - 1.19.2.jar` |  |
 | both | Display Delight | `displaydelight` | `displaydelight-1.2.0.jar` |  |
 | both | Distant Horizons | `distanthorizons` | `DistantHorizons-3.0.2-b-1.19.2-fabric-forge.jar` | Optional on server: sends distant terrain to players |
 | both | Do A Barrel Roll | `do_a_barrel_roll` | `do-a-barrel-roll-2.6.2+1.19.2-forge.jar` | Optional on server: enforces its settings |
