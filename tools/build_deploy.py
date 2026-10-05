@@ -167,6 +167,8 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/wild_crops.json', 'runtime'),         # worldgen/wild_crops.js
     ('generation_scripts/food/food_types.json', 'runtime'),             # tags/foodtypetags.js
     ('generation_scripts/food/can_servings.json', 'runtime'),           # tags/cantags.js
+    ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
+    ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
     ('generation_scripts/worldgen/biome_merge_proposals.json', 'dev'),  # tools/analyze_structure_biome_merges.py
     ('generation_scripts/recipes/*', 'dev'),                            # sawmill.js output (copied into the jar)
     ('generation_scripts/sawmill.js', 'dev'),                           # node generator
