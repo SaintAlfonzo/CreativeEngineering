@@ -4,6 +4,78 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.0.5 -->
+## 1.0.5 - 2026-10-05 14:13
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: eebaf63
+- Since: 1.0.4
+- Contents: 347 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
+- Payload: update from 1.0.4, config functional: 22 files, 4.2 MB (mods 1, kubejs 17, config 4)
+- Notes: Waterfowl nests (duck/goose), stack size policy, generated per-type cans, crop growth WTHIT line, ghost-block + Supplementaries/Breezy fixes (patcherMod 1.0.5)
+
+### Changes
+
+Mods updated (1):
+
+- creativeengineering: `creativeengineering-1.0.4.jar` -> `creativeengineering-1.0.5.jar`
+
+<details><summary>kubejs/: 4 added, 13 changed, 1 removed</summary>
+
+*added (4)*
+
+- `generation_scripts/food/can_types.json`
+- `generation_scripts/stacks/stack_sizes.json`
+- `server_scripts/_lib/dump_crop_growth.js`
+- `startup_scripts/changes/stack_sizes.js`
+
+*changed (13)*
+
+- `generation_scripts/food/can_servings.json`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/wild_crops.json`
+- `server_scripts/_lib/dump_all.js`
+- `server_scripts/cooking/canning.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/tags/blocktags.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/compost/compost_values.js`
+- `startup_scripts/items/cans.js`
+
+*removed (1)*
+
+- `startup_scripts/changes/item_properties.js`
+
+</details>
+
+config/: 0 added, 4 changed, 0 removed, 1 no longer shipped:
+
+*changed (4)*
+
+- `creativeengineering-common.toml`
+- `rare-ice.properties`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+*no longer shipped (player settings, left in place) (1)*
+
+- `DistantHorizons.toml`
+
+### Removals (from 1.0.4)
+
+Delete on the server (2, also in removals_server.txt):
+
+- `kubejs/startup_scripts/changes/item_properties.js`
+- `mods/creativeengineering-1.0.4.jar`
+
+Delete on the client (2, also in removals_client.txt):
+
+- `kubejs/startup_scripts/changes/item_properties.js`
+- `mods/creativeengineering-1.0.4.jar`
+
 <!-- deploy:1.0.4 -->
 ## 1.0.4 - 2026-10-04 13:54
 

@@ -133,7 +133,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Create: Ultimate Factory | `create_ultimate_factory` | 1.9.0 | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-ultimate-factory/files/6077105) [MR](https://modrinth.com/mod/create-ultimate-factory/version/DgbBwr4p) |
 | both | Create: Vintage Improvements | `vintageimprovements` | 1.19.2-0.2.0.3 | `vintageimprovements-1.19.2-0.2.0.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-vintage-improvements/files/5661435) [MR](https://modrinth.com/mod/create-vintage-improvements/version/nXivVakq) |
 | both | CreativeCore | `creativecore` | 2.11.28 | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/creativecore/files/5491926) [MR](https://modrinth.com/mod/creativecore/version/FHuLs5LQ) |
-| both | creativeengineering-1.0.4 | `creativeengineering` |  | `creativeengineering-1.0.4.jar` | local |
+| both | creativeengineering-1.0.5 | `creativeengineering` |  | `creativeengineering-1.0.5.jar` | local |
 | both | Curios API (Forge/NeoForge) | `curios` | curios-forge-1.19.2-5.1.6.4.jar | `curios-forge-1.19.2-5.1.6.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/curios/files/5843737) |
 | both | Customizable Elytra | `customizableelytra` | forge-1.7.4-1.19.0 | `customizableelytra-1.19.0-1.7.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/customizable-elytra/files/4101953) [MR](https://modrinth.com/mod/customizable-elytra/version/gsnrKi46) |
 | both | Dave's Building Extended | `davebuildingmod` | dbExtended-1.19.2-6.0.1.jar | `dbExtended-1.19.2-6.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/daves-building-extended/files/4841878) |

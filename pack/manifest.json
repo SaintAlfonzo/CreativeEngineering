@@ -4368,10 +4368,10 @@
       }
     },
     {
-      "file": "creativeengineering-1.0.4.jar",
-      "name": "creativeengineering-1.0.4",
+      "file": "creativeengineering-1.0.5.jar",
+      "name": "creativeengineering-1.0.5",
       "version": "",
-      "sha1": "276cdf7d21bf3ed318f57dbeb75d076ac0c3b807",
+      "sha1": "5008f3452a10935366a4de9fce0f3bf1f8376b39",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"

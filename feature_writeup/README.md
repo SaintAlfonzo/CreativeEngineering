@@ -36,7 +36,8 @@ writeup explains how the pieces fit and how to prove they work.
 | Release | File | Status |
 |---|---|---|
 | 1.0.3: deploy install/update modes, server performance report, render desync, item-loss monitor, trash slot, join protection; plus everything else added during development (section 0.1) | [plan_1.0.3.md](plan_1.0.3.md) | DEPLOYED 2026-10-02 (server + clients) |
-| 1.0.4: fixes for the 1.0.3 join kick and client crash, camera bags moved to Exposure Extras, crop parity, per-hoe harvest areas, dyeable canned golem, new mods, data refresh | [plan_1.0.4.md](plan_1.0.4.md) | IN PROGRESS, not deployed |
+| 1.0.4: fixes for the 1.0.3 join kick and client crash, camera bags moved to Exposure Extras, crop parity, per-hoe harvest areas, dyeable canned golem, new mods, data refresh | [plan_1.0.4.md](plan_1.0.4.md) | DEPLOYED 2026-10-04 (server + clients) |
+| 1.0.5: duck and goose nests, stack size policy, generated per-type cans, crop growth line, ghost-block and Supplementaries/Breezy fixes | [plan_1.0.5.md](plan_1.0.5.md) | STAGED 2026-10-05, not deployed |
 
 ## Backlog: the rest of the pack, one small chunk at a time
 
