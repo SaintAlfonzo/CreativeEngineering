@@ -1,0 +1,21 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:allium",
+      "weight": 6
+    },
+    {
+      "state": "minecraft:pink_tulip",
+      "weight": 1
+    },
+    {
+      "state": "farmersdelight:wild_onions",
+      "weight": 1,
+      "optional": true
+    }
+  ],
+  "egg_colors": [
+    "#A65EE1",
+    "#E8CFFE"
+  ]
+}

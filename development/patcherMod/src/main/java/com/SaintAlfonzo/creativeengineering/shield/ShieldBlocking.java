@@ -6,6 +6,7 @@ import com.SaintAlfonzo.creativeengineering.damage.DamageFlag;
 import com.SaintAlfonzo.creativeengineering.damage.DamageTags;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -18,9 +19,10 @@ import net.minecraft.world.phys.Vec3;
  *
  * <p>Every decision here about what KIND of damage a hit is goes through
  * {@link DamageTags} - never a direct {@code source.isX()} call - so the whole classification
- * is visible and editable as damage tags, per the user's ask. The one exception is the piercing-arrow
- * check just below: that isn't a kind of damage at all, it's a structural, unconditional vanilla
- * mechanic (a piercing arrow ignores every shield, tier or not), so it stays a direct entity check.
+ * is visible and editable as damage tags, per the user's ask. Two exceptions, neither a kind of
+ * damage: piercing arrows (a structural vanilla rule - they ignore every shield) and damage dealt by a
+ * ticking potion effect ({@link EffectTickContext}; poison ticks share the {@code magic} source with
+ * Instant Damage, so no tag can tell them apart).
  *
  * <p>Vanilla's rule is: not bypassArmor, the holder {@code isBlocking()}, not a piercing arrow, and
  * the source has a position inside the front 180 degrees. That rule can never say yes to fire,
@@ -51,10 +53,21 @@ public final class ShieldBlocking {
         if (source.getDirectEntity() instanceof AbstractArrow arrow && arrow.getPierceLevel() > 0) {
             return false; // vanilla: piercing arrows go through shields - a structural exception, not a damage kind
         }
+        MobEffect ticking = EffectTickContext.tickingOn(holder);
+        if (ticking != null && ShieldConfig.unblockableEffectTick(ticking)) {
+            return false; // poison / wither ticks: never blocked, not even attempted
+        }
+        ShieldTickGate gate = ShieldTickGate.of(source);
+        if (gate != null && !ShieldConfig.blocksTicks(tier, gate)) {
+            return false; // burning below netherite, thorns below diamond (defaults): not even attempted
+        }
 
         ShieldCategory category = ShieldCategory.classify(source);
         if (ShieldConfig.reduction(tier, category, source) <= 0) {
             return false;
+        }
+        if (gate != null) {
+            return true; // an allowed tick: no direction, and armour-piercing (barbed pane) doesn't matter
         }
         ShieldGroup group = category.group();
         if (group.honorsArmorBypass() && DamageTags.is(source, DamageFlag.ARMOR_PIERCING.tag())) {

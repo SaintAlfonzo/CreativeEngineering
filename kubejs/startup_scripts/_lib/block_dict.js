@@ -8,12 +8,14 @@ var b = global.blocks;
 
 b.dark_fire = 'creativeengineering:dark_fire';
 b.sweet_berry_bush = 'minecraft:sweet_berry_bush'; // block id (the item is sweet_berries)
-b.emu_nest = 'creativeengineering:emu_nest';         // patcherMod nest/EmuNests.java
-b.emu_egg_nest = 'creativeengineering:emu_egg_nest'; // the 1-6 egg state; no item
-b.duck_nest = 'creativeengineering:duck_nest';         // patcherMod nest/WaterfowlNests.java
-b.duck_egg_nest = 'creativeengineering:duck_egg_nest'; // the 1-6 egg state; no item
-b.goose_nest = 'creativeengineering:goose_nest';
-b.goose_egg_nest = 'creativeengineering:goose_egg_nest';
+b.emu_nest = 'incubation_additions:emu_nest';         // incubationAdditions nest/EmuNests.java
+b.emu_egg_nest = 'incubation_additions:emu_egg_nest'; // the 1-6 egg state; no item
+b.duck_nest = 'incubation_additions:duck_nest';         // incubationAdditions nest/WaterfowlNests.java
+b.duck_egg_nest = 'incubation_additions:duck_egg_nest'; // the 1-6 egg state; no item
+b.goose_nest = 'incubation_additions:goose_nest';
+b.goose_egg_nest = 'incubation_additions:goose_egg_nest';
+b.duck_egg_crate = 'incubation_additions:duck_egg_crate';   // incubationAdditions crate/WaterfowlEggCrates.java
+b.goose_egg_crate = 'incubation_additions:goose_egg_crate';
 
 // Tags
 b.any_bricks = '#minecraft:bricks';

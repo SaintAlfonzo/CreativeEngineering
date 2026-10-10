@@ -11,6 +11,7 @@
 ;(function () {
 	const DUMP_ALL_COMMANDS = [
 		'dumpbiomes',
+		'dumpspawns',
 		'dumpfluids',
 		'dumppotions',
 		'dumpnames',
@@ -22,6 +23,7 @@
 		'dumpstacks',
 		'dumpcropgrowth',
 		'dumpfood',
+		'dumpplaceable',
 		'dumpcompost',
 		'dumpstructures',
 		'dumpstructuregen',

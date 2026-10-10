@@ -14,8 +14,9 @@ import net.minecraft.world.item.Rarity;
  * "what tier (if any) is this stack", used everywhere a hit needs to know it (`ShieldBlocking`,
  * `ShieldBlockHandler`) instead of an {@code instanceof TierShieldItem} check. Durability
  * ({@code mixin/VanillaShieldDurabilityMixin}) and anvil repair material
- * ({@code mixin/VanillaShieldRepairMixin}) are now config-driven for it too, the same as every
- * other tier - only banner rendering is untouched (vanilla's own, unaffected either way).
+ * ({@code mixin/VanillaShieldRepairMixin}) are config-driven for it too, the same as every other
+ * tier; only its rendering stays vanilla's own (the seven dedicated items have their own textures,
+ * {@code shield/client/TierShieldMaterials}).
  *
  * <p>Everything here is only a DEFAULT: durability, repair item, the physical / elemental / magic
  * reduction and durability cost, and the on-block effects are all live config
@@ -23,8 +24,12 @@ import net.minecraft.world.item.Rarity;
  * can also default straight into the elemental fire/electric/cold/chemical breakdown instead of
  * the blanket elemental percentage by giving the "elem" constructor argument an {@code int[]}
  * instead of a plain {@code int} - see {@link #defaultElementalBreakdown} - which IRON does
- * (25/30/35/40); every other tier still defaults to blanket mode (all four at -1), that being
- * only ever an initial value config can then override either way.
+ * (fire 25, the rest 0), as do COPPER, DIAMOND and NETHERITE; GOLD, ECHO, FELSIC and DRAGON default
+ * to blanket mode (all four at -1). Either is only an initial value config can then override.
+ *
+ * <p>These defaults only fill a freshly generated toml. The pack ships its own tuned
+ * {@code creativeengineering-common.toml}, which is what actually plays ({@code tools/shield_check.py}
+ * prints both and where they differ).
  *
  * <p>Default rationale (placeholders - tune in config):
  * <ul>
@@ -33,8 +38,8 @@ import net.minecraft.world.item.Rarity;
  *       scaled by the copper tool tier (180 vs iron's 250); gold is half of that scale because a
  *       tool-proportional ~43 would be unusable. IRON's own 336 is vanilla's real, unmodified
  *       shield durability, kept as the starting default now that it's actually enforced.</li>
- *   <li><b>Reduction</b>: physical scales up by tier (copper 20% -> felsic 80%); only DRAGON
- *       blocks physical hits at vanilla's full 100%. ELEMENTAL and MAGIC - which a plain vanilla
+ *   <li><b>Reduction</b>: physical scales up by tier (copper 40% -> felsic 95%; the shipped
+ *       toml has 20% -> 80%); only DRAGON blocks physical hits at vanilla's full 100%. ELEMENTAL and MAGIC - which a plain vanilla
  *       shield could never block at all before this feature existed - are separate columns.</li>
  * </ul>
  */
@@ -169,12 +174,25 @@ public enum ShieldTier { //TODO: ajdust kbthreshold to be more reasonable, add v
     }
 
     /**
-     * Default damage amount (post-reduction) below which a blocked melee hit no longer knocks its
-     * attacker back ({@link ShieldBlockHandler}'s {@code m_6728_}/{@code blockUsingShield} suppression).
-     * Placeholder ladder: 1 for copper, incrementing by 1 per tier up to 8 for dragon.
+     * Default damage amount (after this tier's reduction) below which a blocked hit no longer
+     * knocks the HOLDER back ({@link ShieldBlockHandler#onKnockback}); the attacker's own recoil
+     * off the shield is left vanilla. Placeholder ladder: 1 for copper, +1 per tier up to 8 for dragon.
      */
     public int defaultKnockbackThreshold() {
         return defaultKnockbackThreshold;
+    }
+
+    /**
+     * Default for {@code [shields.<tier>].<gate key>}: whether this tier may block {@code gate}'s ticks at
+     * all ({@link ShieldTickGate}). Ladder rules: burning and hot blocks from NETHERITE up, thorns and
+     * barbed panes from DIAMOND up. Below that the shield doesn't even attempt the block - no shield
+     * sound, full damage - whatever its percentages say.
+     */
+    public boolean defaultBlocksTicks(ShieldTickGate gate) {
+        return switch (gate) {
+            case BURN -> ordinal() >= NETHERITE.ordinal();
+            case CONTACT -> ordinal() >= DIAMOND.ordinal();
+        };
     }
 
     /** Default on-block effects for the holder, in the {@code ShieldEffects} string format. */

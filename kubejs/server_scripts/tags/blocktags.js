@@ -17,12 +17,7 @@ ServerEvents.tags('block', e => {
 
 	t.add(e, 'minecraft:fire', b.dark_fire)
 
-	// Emu, duck and goose nests: Incubation's bird_nests tag (hoe-mineable, like its hay/twig nests)
-	t.add(e, 'incubation:bird_nests', [
-		b.emu_nest, b.emu_egg_nest,
-		b.duck_nest, b.duck_egg_nest,
-		b.goose_nest, b.goose_egg_nest,
-	])
+	// Emu, duck and goose nests: Incubation Additions tags them into incubation:bird_nests itself
 
 	// minecraft:concrete isn't a vanilla tag in 1.19.2 — the 16 solid concretes (not powder)
 	t.addMatching(e, 'forge:concrete', 'minecraft:*_concrete')
@@ -414,6 +409,18 @@ ServerEvents.tags('block', e => {
 		'#minecraft:dirt', '#forge:sand', '#forge:gravel', 'minecraft:clay', 'minecraft:dirt_path',
 	])
 
+	// ── Template trim (patcherMod worldgen/TemplateTrim, CEConfig [worldgen.terrain_adaptation]) ──
+	// For structures in creativeengineering:template_trim: a template column holding only air, pad and plants
+	// isn't placed, so the natural ground stays there. Pad = loose ground a template brings along; dirt_path
+	// and farmland are left out on purpose (paths and crop plots are design, so their columns count as built).
+	t.add(e, 'creativeengineering:template_trim/pad', [
+		'#minecraft:dirt', '#forge:sand', '#forge:gravel', 'minecraft:clay', item.snow_block,
+	])
+	// Loose things standing on a pad: dropped with it.
+	t.add(e, 'creativeengineering:template_trim/plants', [
+		'#creativeengineering:ground_match/plants', item.snow, item.moss_carpet,
+	])
+
 	// ── Crop parity (patcherMod crops/CropParity, feature_writeup/crops.md) ──
 	// Soils that count as farmland for crops whose own check is hard-coded to vanilla farmland
 	// (tobacco via mixin/TobaccoPlacementMixin). Untilled Rich Soil stays out, as for every farmland crop.
@@ -422,6 +429,15 @@ ServerEvents.tags('block', e => {
 	// dirt, soaked Fertile Soil bone-meals them, Quark's hoe area break includes them. Their right-click
 	// replant is a separate line in config/quark-common.toml "Harvestable Blocks".
 	t.add(e, 'creativeengineering:crops/farmland_crops', item.tobacco_seeds)
+
+	// ── Wild plant soils (tools/gen_soil_compat.py, feature_writeup/crops.md 2.8.1) ──
+	// Ground that worldgen plant/tree features hard-coded to grass_block also accept (the generator's
+	// kubejs/data overrides and the pack's wild/hamimelon test this tag). Immersive Weathering lays these
+	// soils before vegetation. Permafrost is left out on purpose.
+	t.add(e, 'creativeengineering:worldgen/grass_like_soils', [
+		item.grass_block, item.humus, item.fluvisol, item.immersive_weathering_silt, item.vertisol,
+		item.cryosol, item.rooted_grass_block,
+	])
 })
 
 console.log('block tags finished')

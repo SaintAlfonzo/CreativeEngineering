@@ -18,6 +18,7 @@ Test prefix **CR-** · Last updated **2026-10-03** · Overall status **reference
 | Wild generation: where every crop, bush and fruit tree spawns (biomes, rate, height, ground, side blocks such as Coarse Dirt, Adzuki Soil, mint ponds) | §2.7 + generated [crops_by_biome.md](crops_by_biome.md) | reference 2026-10-03; findings V1 to V12 feed the planned vegetation worldgen system; CR-38 to CR-46 |
 | Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | BUILT 2026-10-03, offline-tested, not run in game; V13 to V20; CR-47 to CR-58 |
 | WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit), jar built not installed; not seen in game; CR-59 to CR-66 |
+| Wild plants, bushes and trees on Immersive Weathering soils (humus, fluvisol, silt, vertisol, cryosol, rooted grass; not permafrost) | §2.8.1 | BUILT 2026-10-05, scratch-server tested (12 features x 9 grounds, before/after), not run in your game; CR-67, CR-68 |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
 - **Knobs:** `config/quark-common.toml` sections `[tweaks.simple_harvest]` and `[tweaks.hoe_harvesting]`.
@@ -636,6 +637,42 @@ tagged wet). The rest of the cold biomes are moderate (taiga downfall 0.8) or dr
 - Mirage Isles is tagged `forge:is_mushroom` but has no mycelium, so it counts as a temperate wet forest, not a mushroom
   biome. Fungal Caves and the Glimmering Weald are caves, where a surface feature never lands.
 
+#### 2.8.1 Immersive Weathering soils (`tools/gen_soil_compat.py`)
+
+**Cause.** Immersive Weathering lays its soils at `raw_generation`, before any vegetation: humus in Dark Forest, fluvisol
+and silt in `minecraft:swamp` + `#c:swamp` (Terralith Ice Marsh, Orchid Swamp), vertisol over red sand in badlands and
+desert. All of them are in `#minecraft:dirt`, so the plants survive on them (that's why you can plant there), but many
+worldgen features test the block below with `matching_blocks: minecraft:grass_block` and skip every soil block. Cryosol is
+different: it is placed at `top_layer_modification`, after vegetation, and only over snow blocks, so no plant ever sees it
+during generation.
+
+Blocked before the fix, where it mattered: adzuki on Dark Forest humus; cranberry, blueberry and sweet berries on Ice Marsh
+fluvisol; melon and Terralith's orchid flowers in Orchid Swamp; hamimelon on vertisol. Features that test `#minecraft:dirt`
+(FD carrots/onions/potatoes, Rustic Delight, Corn Delight, tea, salmonberry, mini melon, the pack's cabbage/beet/mushroom
+copies), plain `simple_block` flowers and grass, and trees that only check `would_survive` a sapling already worked.
+
+**Fix.** Block tag `creativeengineering:worldgen/grass_like_soils` (grass block + the six soils, permafrost left out;
+[blocktags.js](../kubejs/server_scripts/tags/blocktags.js)). `tools/gen_soil_compat.py` scans every mod jar for
+placed/configured features whose below-block test lists `grass_block`, and writes a `kubejs/data` override where that test
+becomes `any_of(original list, #grass_like_soils)`; nothing else in the file changes. 65 features: vanilla pumpkin/melon/
+berry patches (Terralith's versions), 6 Vinery grape bushes, 2 Geophilic grass patches, ~50 Terralith flower/grass/tree/
+mushroom features, plus Neapolitan strawberry + adzuki patches and Fruits Delight blueberry/cranberry/lemon patches (those 5
+are registered in Java; the script rebuilds them from the decompiled source). Snow-layer, lake and snow-removal features are
+left alone (they shape terrain). The pack's own `wild/hamimelon` takes the tag directly. A manifest
+(`kubejs/generation_scripts/worldgen/soil_compat_manifest.json`) lists the files it owns; rerunning removes stale ones and
+never overwrites a hand-written file. Rerun after updating Terralith, Vinery, Neapolitan, Fruits Delight or Geophilic
+(`/cegen run soil_compat`).
+
+Not reachable from JSON: Neapolitan's mint pond and banana plant test `grass_block` inside the Java feature. Neither spawns
+in a biome that has an IW soil, so they are left alone. Side effects: an adzuki patch on humus turns the block under each
+sprout into plain Dirt (same as it does to grass); hamimelon can now also land on the grass in Wooded Badlands.
+
+**Tested 2026-10-05 on a scratch dedicated server** (the instance's mods + kubejs): the world loads with all 65 overrides;
+`/place feature` of 12 features (pumpkin, berries, melon, adzuki, strawberry, cranberry, blueberry, lemon, white grape,
+Terralith plains grass, Geophilic plains grass, hamimelon) succeeded on grass and all six soils and failed on stone and
+permafrost. With the tag cut down to grass only (`/reload`), all 12 failed on every soil, which was the behaviour before
+the fix.
+
 ### 2.9 WTHIT growth line (`crop_growth.json`)
 
 WTHIT's own "Growth: 60%" / "Growth: Mature" line comes from `PlantProvider` and covers only `CropBlock` subclasses
@@ -1014,6 +1051,10 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   `[crop_growth] enabled = false` → only the added lines go. `showHarvestable = false` → "(Harvestable)" disappears.
 - [ ] **CR-66 Override file:** copy `crop_growth.json` to `kubejs/assets/creativeengineering/`, change salmonberry's `"harvest": 3` to 4, F3+T →
   stage 3 no longer says "(Harvestable)". Delete the copy and F3+T → it is back.
+- [ ] **CR-67 Dark Forest humus:** new chunks of a Dark Forest → humus patches have adzuki sprouts, grass, flowers and mushroom
+  colonies on them like the grass around (adzuki is rare, 1 in 128 chunks; `/place feature neapolitan:patch_adzuki_sprouts` on humus works).
+- [ ] **CR-68 Swamps and badlands:** Ice Marsh fluvisol carries cranberry/blueberry/sweet berry bushes, Orchid Swamp fluvisol carries melons and
+  orchids, badlands vertisol can carry hamimelon. Permafrost never carries any of them.
 
 ## 8. History
 
@@ -1056,3 +1097,6 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   into `development/patcherMod/build/libs` (md5 23df38e7), not installed to `mods/`; not seen in game. Hemp's state is an enum
   (`growth`), found only after the first audit pass read integer properties alone; Durian leaves use `fruit` not `type`, found by the
   coverage tool. CR-59 to CR-66 added.
+- **2026-10-05:** §2.8.1 Immersive Weathering soils. Cause: IW soils are laid before vegetation and many features test
+  `grass_block` by name. New tag `creativeengineering:worldgen/grass_like_soils`, generator `tools/gen_soil_compat.py` (65
+  `kubejs/data` overrides, `/cegen` id `soil_compat`), hamimelon takes the tag. Scratch-server before/after test passed. CR-67, CR-68 added.

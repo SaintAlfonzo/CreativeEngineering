@@ -1,0 +1,17 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:wither_rose",
+      "weight": 1,
+      "chance": 0.1
+    }
+  ],
+  "any_weight": 0,
+  "spawns_in_dark_on": [
+    "#more_mooblooms:spawnable_on_in_dark"
+  ],
+  "egg_colors": [
+    "#2A1F19",
+    "#171210"
+  ]
+}

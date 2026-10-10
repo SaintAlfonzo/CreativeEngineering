@@ -1,0 +1,16 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:oxeye_daisy",
+      "weight": 2
+    },
+    {
+      "state": "minecraft:azure_bluet",
+      "weight": 1
+    }
+  ],
+  "egg_colors": [
+    "#F7F7F7",
+    "#F5BA27"
+  ]
+}

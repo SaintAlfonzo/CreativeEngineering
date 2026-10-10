@@ -1,0 +1,16 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:lily_of_the_valley",
+      "weight": 2
+    },
+    {
+      "state": "minecraft:white_tulip",
+      "weight": 1
+    }
+  ],
+  "egg_colors": [
+    "#F7F7F7",
+    "#D8D8D8"
+  ]
+}

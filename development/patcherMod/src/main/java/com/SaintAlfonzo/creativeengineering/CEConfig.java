@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.SaintAlfonzo.creativeengineering.shield.ElementalKind;
+import com.SaintAlfonzo.creativeengineering.shield.ShieldConfig;
 import com.SaintAlfonzo.creativeengineering.shield.ShieldGroup;
+import com.SaintAlfonzo.creativeengineering.shield.ShieldTickGate;
 import com.SaintAlfonzo.creativeengineering.shield.ShieldTier;
 import com.SaintAlfonzo.creativeengineering.surface.SurfaceTier;
 
@@ -40,12 +42,15 @@ public final class CEConfig {
     public static final ArmorEnchant ARMOR_ENCHANT;
     public static final Shrapnel SHRAPNEL;
     public static final ArmorOverflow ARMOR_OVERFLOW;
+    public static final Jei JEI;
+    public static final GuiTitle GUI_TITLE;
     public static final Shields SHIELDS;
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
     public static final CropGrowth CROP_GROWTH;
     public static final Canning CANNING;
     public static final Perf PERF;
+    public static final Seasons SEASONS;
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
     public static final TrashSlot TRASH_SLOT;
@@ -62,12 +67,15 @@ public final class CEConfig {
         ARMOR_ENCHANT = new ArmorEnchant(builder);
         SHRAPNEL = new Shrapnel(builder);
         ARMOR_OVERFLOW = new ArmorOverflow(builder);
+        JEI = new Jei(builder);
+        GUI_TITLE = new GuiTitle(builder);
         SHIELDS = new Shields(builder);
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
         CROP_GROWTH = new CropGrowth(builder);
         CANNING = new Canning(builder);
         PERF = new Perf(builder);
+        SEASONS = new Seasons(builder);
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
         TRASH_SLOT = new TrashSlot(builder);
@@ -593,6 +601,36 @@ public final class CEConfig {
     }
 
     /**
+     * Season types for Serene Seasons ({@code seasons/SeasonTypes}): arid, frozen and tropical biomes by
+     * tag, and rivers/beaches that take on the land around them. feature_writeup/weather.md.
+     */
+    public static final class Seasons {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.IntValue adaptiveRadius;
+
+        private Seasons(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Season types on top of Serene Seasons. The biome lists are the tags creativeengineering:seasons/",
+                    "arid, frozen, tropical and adaptive (kubejs/generation_scripts/worldgen/season_types.json).",
+                    "Arid: no rain all year. Frozen: snow all year. Tropical: wet and dry seasons, savannas included.",
+                    "Adaptive (rivers, beaches): each column behaves like the nearest land biome. SeasonHUD shows",
+                    "'Arid' / 'Frozen' with the day of the year. Read live on both sides."
+            ).push("seasons");
+
+            enabled = b.comment("false: Serene Seasons' own rules everywhere, the tags are ignored.")
+                    .define("enabled", true);
+
+            adaptiveRadius = b.comment(
+                    "How far (blocks) a river or beach column looks for land to copy, in rings of 8 directions",
+                    "at 8, 16, 24, 32, 48, 64, ... blocks. The first ring that reaches land decides by majority.",
+                    "Nothing found: the river or beach keeps its own biome."
+            ).defineInRange("adaptiveRadius", 64, 8, 256);
+
+            b.pop(); // seasons
+        }
+    }
+
+    /**
      * Everything about walking on blocks ({@code surface/} package): BlockRunner's tier speeds,
      * sticky facing, camouflage and visual sinking, all under one {@code [surface]} section (one
      * folder in Create's Configs screen). {@code [surface.speed]} is generated from
@@ -772,6 +810,54 @@ public final class CEConfig {
     }
 
     /**
+     * Dials for {@code compat.jei.CraftableFirstRecipeLayoutList}, a backport of JEI 19's
+     * "Show craftable recipes first" sorting to JEI 11.8.1 (port notes:
+     * feature_writeup/jei_craftable_first_port.md). Client-side only; a server ignores it.
+     */
+    public static final class Jei {
+        public final ForgeConfigSpec.BooleanValue craftableFirst;
+
+        private Jei(ForgeConfigSpec.Builder b) {
+            b.comment("JEI recipe screen tweaks (client side).").push("jei");
+
+            craftableFirst = b.comment(
+                    "When the recipe screen is opened over a screen that can take recipe transfers (crafting table,",
+                    "inventory, modded crafting GUIs), list the recipes whose + button is enabled first. The rest follow,",
+                    "most-complete first (the share of inputs you already have). Other screens keep JEI's own order.",
+                    "Takes effect the next time a recipe lookup opens."
+            ).define("craftableFirst", true);
+
+            b.pop(); // jei
+        }
+    }
+
+    /**
+     * Dials for {@code compat.guititle.TitlePlaques}: stretches a GUI resource pack's title plaque
+     * (Engineers GUIs) to fit long container titles. Client-side only; a server ignores it.
+     */
+    public static final class GuiTitle {
+        public final ForgeConfigSpec.BooleanValue stretchPlaque;
+        public final ForgeConfigSpec.BooleanValue logOverflow;
+
+        private GuiTitle(ForgeConfigSpec.Builder b) {
+            b.comment("Container title plaques from GUI resource packs (client side).").push("gui_title");
+
+            stretchPlaque = b.comment(
+                    "When a container title is wider than the plaque the resource pack painted behind it, stretch the",
+                    "plaque to fit. Titles wider than the whole GUI are cut short with \"...\". Only screens that draw",
+                    "their title the vanilla way (chests, barrels, shulker boxes, hoppers, horses, dispensers, furnaces)."
+            ).define("stretchPlaque", true);
+
+            logOverflow = b.comment(
+                    "Record every title that needed a stretch in kubejs/exported/gui_title_overflow.json",
+                    "(screen class, texture, title and widths; kept across sessions)."
+            ).define("logOverflow", true);
+
+            b.pop(); // gui_title
+        }
+    }
+
+    /**
      * Everything tunable about the seven tier shields ({@code shield/} package). The whole
      * section is generated by looping {@link ShieldTier} x {@link ShieldGroup} (physical /
      * elemental / magic), so a new tier or a new group shows up here (and in Create's Configs
@@ -782,14 +868,17 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue enabled;
         public final ForgeConfigSpec.DoubleValue wearThreshold;
         public final ForgeConfigSpec.IntValue disableCooldownTicks;
+        public final ForgeConfigSpec.ConfigValue<String> unblockableEffectTicks;
         public final Map<ShieldGroup, ForgeConfigSpec.EnumValue<ShieldGroup.Facing>> facing =
                 new EnumMap<>(ShieldGroup.class);
         public final Map<ShieldTier, TierCfg> tiers = new EnumMap<>(ShieldTier.class);
 
         private Shields(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Tier shields (copper / gold / diamond / netherite / echo / felsic / dragon). Vanilla's",
-                    "shield and Immersive Engineering's shield are NOT affected by anything in here.",
+                    "Tier shields: copper / gold / iron / diamond / netherite / echo / felsic / dragon. 'iron' is",
+                    "the vanilla minecraft:shield itself, tuned like the others. Immersive Engineering's shield",
+                    "and Alex's Mobs' Shield of the Deep are NOT tier shields; only disableCooldownTicks below",
+                    "applies to them.",
                     "",
                     "A raised tier shield sorts each incoming hit into one of three kinds and looks that",
                     "kind up under its own tier, each tuned independently:",
@@ -830,14 +919,21 @@ public final class CEConfig {
             ).defineInRange("wearThreshold", 3.0, 0.0, 1000.0);
 
             disableCooldownTicks = b.comment(
-                    "Ticks a shield is unusable after an attacker disables it (a vanilla axe hit by default;",
-                    "Immersive Engineering's shock upgrade and Alex's Mobs' void worm shot trigger the same",
-                    "mechanic directly). This is a Player-level vanilla mechanic, NOT tier-specific - unlike",
-                    "everything else in [shields], it also applies to the plain vanilla shield and Immersive",
-                    "Engineering's shield. 20 (1 second) is vanilla's hardcoded value; lower it to let",
-                    "blocking recover faster against fast/continuous attackers without removing the",
-                    "punish-for-turtling mechanic entirely. 0 disables the cooldown outright."
+                    "Ticks a raised shield is unusable after an attacker disables it: a player's axe, a mob's",
+                    "axe (vindicators, piglin brutes; 25% chance per hit, more with Efficiency), Immersive",
+                    "Engineering's shock upgrade and Alex's Mobs' void worm shot. Not tier-specific - it covers",
+                    "every shield, tier or not. Vanilla hardcodes 100 (5 seconds); the pack uses 20 (1 second).",
+                    "0 disables the cooldown outright."
             ).defineInRange("disableCooldownTicks", 20, 0, 12000);
+
+            unblockableEffectTicks = b.comment(
+                    "Potion effects whose periodic damage no shield may block, comma-separated effect ids.",
+                    "Matched by the effect that is ticking on the shield holder, not by damage tag: poison",
+                    "ticks use the same 'magic' damage source as Instant Damage, so a tag can't tell them",
+                    "apart. The shield doesn't attempt the block (no shield sound, full damage). Instant",
+                    "Damage and other one-off magic hits are unaffected. The default is every effect in the",
+                    "pack that deals tick damage."
+            ).define("unblockableEffectTicks", ShieldConfig.UNBLOCKABLE_EFFECT_TICKS_DEFAULT);
 
             b.comment(
                     "Per damage kind (physical / elemental / magic): how the raised shield's direction is checked.",
@@ -863,6 +959,7 @@ public final class CEConfig {
             public final ForgeConfigSpec.IntValue durability;
             public final ForgeConfigSpec.ConfigValue<String> repairItem;
             public final ForgeConfigSpec.IntValue knockbackThreshold;
+            public final Map<ShieldTickGate, ForgeConfigSpec.BooleanValue> blocksTicks = new EnumMap<>(ShieldTickGate.class);
             public final ForgeConfigSpec.ConfigValue<String> shielderEffects;
             public final ForgeConfigSpec.ConfigValue<String> attackerEffects;
             public final Map<ShieldGroup, ForgeConfigSpec.IntValue> reduction = new EnumMap<>(ShieldGroup.class);
@@ -881,11 +978,27 @@ public final class CEConfig {
                         .define("repairItem", t.defaultRepairItem());
 
                 knockbackThreshold = b.comment(
-                        "Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no",
-                        "longer knocks its attacker back (vanilla always applies that recoil; this only ever",
-                        "removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never",
-                        "suppress (always knock back, vanilla behaviour)."
+                        "Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer",
+                        "knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.",
+                        "This only ever removes knockback, never adds it. 0 = never suppress (vanilla)."
                 ).defineInRange("knockbackThreshold", t.defaultKnockbackThreshold(), 0, 1000);
+
+                for (ShieldTickGate g : ShieldTickGate.values()) {
+                    String[] what = switch (g) {
+                        case BURN -> new String[] {
+                                "Whether this tier may block burning and hot-block ticks at all: the",
+                                "creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,",
+                                "magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it."};
+                        case CONTACT -> new String[] {
+                                "Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick",
+                                "damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,",
+                                "barbed panes). Default: diamond and above."};
+                    };
+                    String[] comment = java.util.Arrays.copyOf(what, what.length + 2);
+                    comment[what.length] = "false = the shield doesn't attempt the block (no shield sound, full damage). true = it";
+                    comment[what.length + 1] = "blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).";
+                    blocksTicks.put(g, b.comment(comment).define(g.configKey(), t.defaultBlocksTicks(g)));
+                }
 
                 shielderEffects = b.comment(
                         "Potion effects given to whoever is HOLDING the shield each time it blocks a hit.",
@@ -991,6 +1104,8 @@ public final class CEConfig {
         public final BiomeSolver biomeSolver;
         public final GroundMatch groundMatch;
         public final EarthFill earthFill;
+        public final WaterFill waterFill;
+        public final TerrainAdaptation terrainAdaptation;
         public final MassPlace massPlace;
 
         private Worldgen(ForgeConfigSpec.Builder b) {
@@ -1006,6 +1121,8 @@ public final class CEConfig {
             biomeSolver = new BiomeSolver(b);
             groundMatch = new GroundMatch(b);
             earthFill = new EarthFill(b);
+            waterFill = new WaterFill(b);
+            terrainAdaptation = new TerrainAdaptation(b);
             massPlace = new MassPlace(b);
             b.pop(); // worldgen
         }
@@ -1023,7 +1140,12 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue deadPlacementFilter;
         public final ForgeConfigSpec.BooleanValue groundMatch;
         public final ForgeConfigSpec.BooleanValue earthFill;
+        public final ForgeConfigSpec.BooleanValue waterFill;
+        public final ForgeConfigSpec.BooleanValue terrainAdaptation;
+        public final ForgeConfigSpec.BooleanValue templateTrim;
         public final ForgeConfigSpec.BooleanValue wildCrops;
+        public final ForgeConfigSpec.BooleanValue wildFlowers;
+        public final ForgeConfigSpec.BooleanValue mobSpawns;
 
         private WorldgenSystems(ForgeConfigSpec.Builder b) {
             b.comment("Switch a system off to see the mods' own behaviour. Off never deletes a config file.").push("systems");
@@ -1054,9 +1176,24 @@ public final class CEConfig {
             earthFill = b.comment("Cancel a structure whose foundation would need too much earth over water or air ([worldgen.earth_fill]).",
                     "New chunks only.")
                     .define("earthFill", true);
+            waterFill = b.comment("Cancel a water structure whose water would replace too much dry ground or air ([worldgen.water_fill]).",
+                    "New chunks only.")
+                    .define("waterFill", true);
+            terrainAdaptation = b.comment("The creativeengineering:terrain_adaptation/* structure tags replace a structure's own terrain adaptation",
+                    "(none, bury, beard_thin, beard_box, or the pack's soft beard; [worldgen.terrain_adaptation]). Rejoin; new chunks only.")
+                    .define("terrainAdaptation", true);
+            templateTrim = b.comment("Structures in the creativeengineering:template_trim tag skip their template's air and bare pad (grass,",
+                    "dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.")
+                    .define("templateTrim", true);
             wildCrops = b.comment("wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).",
                     "Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.")
                     .define("wildCrops", true);
+            wildFlowers = b.comment("wild_flowers.json: flower biomes and rates, Botania colors per biome, Flower Patch blocks in wild flowers",
+                    "(kubejs worldgen/wild_flowers.js). Off: every flower as its mod ships it. Rejoin to apply; only new chunks change.")
+                    .define("wildFlowers", true);
+            mobSpawns = b.comment("mob_spawns.json: per-biome mob spawn weights, additions and removals (kubejs worldgen/mob_spawns.js,",
+                    "patcherMod SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.")
+                    .define("mobSpawns", true);
             b.pop(); // systems
         }
     }
@@ -1239,13 +1376,85 @@ public final class CEConfig {
             ).defineList("overrides", List.of(), o -> o instanceof String str && str.contains("="));
             sampleGrid = b.comment(
                     "The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little",
-                    "coarser at cliffs). 1 = every column."
+                    "coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too."
             ).defineInRange("sampleGrid", 2, 1, 8);
             log = b.comment(
                     "CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked",
                     "structure that has any earth in its base. For tuning the limits."
             ).defineEnum("log", EarthFillLog.CANCELLED);
             b.pop(); // earth_fill
+        }
+    }
+
+    /**
+     * Knobs for the water half of {@code worldgen/EarthFill}: a structure in the structure tag
+     * creativeengineering:water_fill/structures (kubejs worldgen/water_fill.js) is cancelled before it is
+     * stored when the water its templates carry would replace too much dry ground or air, judged against
+     * the same predicted terrain as earth fill (and its sampleGrid). On/off: [worldgen.systems] waterFill.
+     */
+    public static final class WaterFill {
+        public final ForgeConfigSpec.IntValue maxIntoGround;
+        public final ForgeConfigSpec.IntValue maxIntoAir;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> overrides;
+        public final ForgeConfigSpec.EnumValue<EarthFillLog> log;
+
+        private WaterFill(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Water structures that would flood the land. Just before a structure start in the structure tag",
+                    "creativeengineering:water_fill/structures is stored, every water block of its template pieces (water,",
+                    "waterlogged blocks, kelp, seagrass; all layers) is compared with the terrain the generator predicts",
+                    "at that spot. Water in water is fine, and so is water replacing a sea, lake or river bed. Water",
+                    "replacing dry ground counts toward maxIntoGround, water in air (above the sea surface or on land)",
+                    "toward maxIntoAir; past either limit the whole structure is cancelled and its slot stays empty.",
+                    "Uses [worldgen.earth_fill] sampleGrid. New chunks only; /place structure is not checked."
+            ).push("water_fill");
+
+            maxIntoGround = b.comment(
+                    "Most water blocks that may replace dry ground (a ruin reaching onto a beach or into a hillside).",
+                    "-1 = no limit, 0 = none at all. Per structure: see overrides."
+            ).defineInRange("maxIntoGround", 32, -1, 100000);
+            maxIntoAir = b.comment(
+                    "Most water blocks that may land in air (water standing above the sea surface or on land, where it",
+                    "spills). -1 = no limit, 0 = none at all. Per structure: see overrides."
+            ).defineInRange("maxIntoAir", 16, -1, 100000);
+            overrides = b.comment(
+                    "Per-structure limits, one entry each: \"<structure id or #structure tag>=<ground>,<air>\". The default",
+                    "lets the structures in creativeengineering:water_fill/ponds (fish ponds, a house on a pond) dig their",
+                    "water into the ground and allows them 16 in air. The first matching entry wins; -1 = no limit.",
+                    "Only structures in creativeengineering:water_fill/structures are checked at all."
+            ).defineList("overrides", List.of("#creativeengineering:water_fill/ponds=-1,16"), o -> o instanceof String str && str.contains("="));
+            log = b.comment(
+                    "CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked",
+                    "structure that carries any water. For tuning the limits."
+            ).defineEnum("log", EarthFillLog.CANCELLED);
+            b.pop(); // water_fill
+        }
+    }
+
+    /**
+     * Knobs for {@code worldgen/TerrainAdaptation} and {@code worldgen/TemplateTrim}: which structures get which
+     * terrain adaptation, and which are trimmed, is structure tags (kubejs worldgen/terrain_adaptation.js); only
+     * the soft beard's width lives here. On/off: [worldgen.systems] terrainAdaptation and templateTrim.
+     */
+    public static final class TerrainAdaptation {
+        public final ForgeConfigSpec.IntValue skirtBump;
+
+        private TerrainAdaptation(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Terrain around structures. Vanilla's beard flattens the whole template bounding box and blends it out",
+                    "over about 8 blocks around it, so a small structure with a flat pad or a lot of saved air leaves a flat",
+                    "rectangle the size of its whole template in a curved hillside. Structures in the structure tag",
+                    "creativeengineering:terrain_adaptation/soft get the soft beard instead: the same fill and carve, but",
+                    "only under the template's built columns (pad and air columns left out when the structure is also in",
+                    "creativeengineering:template_trim), blending out over a short round skirt. Tags: kubejs",
+                    "worldgen/terrain_adaptation.js. New chunks only."
+            ).push("terrain_adaptation");
+            skirtBump = b.comment(
+                    "Blocks added to the soft beard's minimum skirt of 4 (where its fill and carve fade out, measured from",
+                    "the built footprint). 0 = the tightest blend; 4 = as wide as vanilla's beard (8), but round and",
+                    "around the footprint; 8 = the most there is room for (12, vanilla's reach). Read per chunk."
+            ).defineInRange("skirtBump", 0, 0, 8);
+            b.pop(); // terrain_adaptation
         }
     }
 

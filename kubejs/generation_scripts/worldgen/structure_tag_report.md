@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-10-05 01:38:22 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-10-10 03:28:33 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Biome rules
 
@@ -147,7 +147,7 @@ Grid: spacing 16, separation 10, salt 1261620025. Members never start closer tha
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `betterdeserttemples:desert_temple` | 97 | 0.7059 | 19 | `betterdeserttemples:desert_temples` |  |
+| `betterdeserttemples:desert_temple` | 40 | 0.2 | 36 | `betterdeserttemples:desert_temples` |  |
 | `betterjungletemples:jungle_temple` | 186 | 0.7481 | 18 | `betterjungletemples:jungle_temples` |  |
 | `betterwitchhuts:witch_circle` | 62 | 1 | 16 | `betterwitchhuts:witch_circle` |  |
 | `betterwitchhuts:witch_hut` | 172 | 0.8021 | 18 | `betterwitchhuts:witch_hut` |  |

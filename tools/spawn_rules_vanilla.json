@@ -1,0 +1,437 @@
+{
+  "_source": "forge-1.19.2-43.3.9_mapped_official_1.19.2.jar SpawnPlacements.<clinit>",
+  "mobs": {
+    "minecraft:axolotl": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Axolotl.checkAxolotlSpawnRules",
+      "class": "net.minecraft.world.entity.animal.axolotl.Axolotl"
+    },
+    "minecraft:bat": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Bat.checkBatSpawnRules",
+      "class": "net.minecraft.world.entity.ambient.Bat"
+    },
+    "minecraft:blaze": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkAnyLightMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:cat": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:cave_spider": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:chicken": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:cod": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "WaterAnimal.checkSurfaceWaterAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.WaterAnimal"
+    },
+    "minecraft:cow": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:creeper": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:dolphin": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "WaterAnimal.checkSurfaceWaterAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.WaterAnimal"
+    },
+    "minecraft:donkey": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:drowned": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Drowned.checkDrownedSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Drowned"
+    },
+    "minecraft:elder_guardian": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Guardian.checkGuardianSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Guardian"
+    },
+    "minecraft:ender_dragon": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Mob.checkMobSpawnRules",
+      "class": "net.minecraft.world.entity.Mob"
+    },
+    "minecraft:enderman": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:endermite": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Endermite.checkEndermiteSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Endermite"
+    },
+    "minecraft:evoker": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:fox": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Fox.checkFoxSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Fox"
+    },
+    "minecraft:frog": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Frog.checkFrogSpawnRules",
+      "class": "net.minecraft.world.entity.animal.frog.Frog"
+    },
+    "minecraft:ghast": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Ghast.checkGhastSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Ghast"
+    },
+    "minecraft:giant": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:glow_squid": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "GlowSquid.checkGlowSquideSpawnRules",
+      "class": "net.minecraft.world.entity.GlowSquid"
+    },
+    "minecraft:goat": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Goat.checkGoatSpawnRules",
+      "class": "net.minecraft.world.entity.animal.goat.Goat"
+    },
+    "minecraft:guardian": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Guardian.checkGuardianSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Guardian"
+    },
+    "minecraft:hoglin": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Hoglin.checkHoglinSpawnRules",
+      "class": "net.minecraft.world.entity.monster.hoglin.Hoglin"
+    },
+    "minecraft:horse": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:husk": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Husk.checkHuskSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Husk"
+    },
+    "minecraft:illusioner": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:iron_golem": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Mob.checkMobSpawnRules",
+      "class": "net.minecraft.world.entity.Mob"
+    },
+    "minecraft:llama": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:magma_cube": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "MagmaCube.checkMagmaCubeSpawnRules",
+      "class": "net.minecraft.world.entity.monster.MagmaCube"
+    },
+    "minecraft:mooshroom": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "MushroomCow.checkMushroomSpawnRules",
+      "class": "net.minecraft.world.entity.animal.MushroomCow"
+    },
+    "minecraft:mule": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:ocelot": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING",
+      "rule": "Ocelot.checkOcelotSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Ocelot"
+    },
+    "minecraft:panda": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:parrot": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING",
+      "rule": "Parrot.checkParrotSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Parrot"
+    },
+    "minecraft:phantom": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Mob.checkMobSpawnRules",
+      "class": "net.minecraft.world.entity.Mob"
+    },
+    "minecraft:pig": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:piglin": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Piglin.checkPiglinSpawnRules",
+      "class": "net.minecraft.world.entity.monster.piglin.Piglin"
+    },
+    "minecraft:pillager": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "PatrollingMonster.checkPatrollingMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.PatrollingMonster"
+    },
+    "minecraft:polar_bear": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "PolarBear.checkPolarBearSpawnRules",
+      "class": "net.minecraft.world.entity.animal.PolarBear"
+    },
+    "minecraft:pufferfish": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "WaterAnimal.checkSurfaceWaterAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.WaterAnimal"
+    },
+    "minecraft:rabbit": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Rabbit.checkRabbitSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Rabbit"
+    },
+    "minecraft:ravager": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:salmon": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "WaterAnimal.checkSurfaceWaterAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.WaterAnimal"
+    },
+    "minecraft:sheep": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:shulker": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Mob.checkMobSpawnRules",
+      "class": "net.minecraft.world.entity.Mob"
+    },
+    "minecraft:silverfish": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Silverfish.checkSilverfishSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Silverfish"
+    },
+    "minecraft:skeleton": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:skeleton_horse": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:slime": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Slime.checkSlimeSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Slime"
+    },
+    "minecraft:snow_golem": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Mob.checkMobSpawnRules",
+      "class": "net.minecraft.world.entity.Mob"
+    },
+    "minecraft:spider": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:squid": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "WaterAnimal.checkSurfaceWaterAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.WaterAnimal"
+    },
+    "minecraft:stray": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Stray.checkStraySpawnRules",
+      "class": "net.minecraft.world.entity.monster.Stray"
+    },
+    "minecraft:strider": {
+      "placement": "IN_LAVA",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Strider.checkStriderSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Strider"
+    },
+    "minecraft:trader_llama": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:tropical_fish": {
+      "placement": "IN_WATER",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "TropicalFish.checkTropicalFishSpawnRules",
+      "class": "net.minecraft.world.entity.animal.TropicalFish"
+    },
+    "minecraft:turtle": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Turtle.checkTurtleSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Turtle"
+    },
+    "minecraft:vex": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:villager": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Mob.checkMobSpawnRules",
+      "class": "net.minecraft.world.entity.Mob"
+    },
+    "minecraft:vindicator": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:wandering_trader": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Mob.checkMobSpawnRules",
+      "class": "net.minecraft.world.entity.Mob"
+    },
+    "minecraft:warden": {
+      "placement": "NO_RESTRICTIONS",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Mob.checkMobSpawnRules",
+      "class": "net.minecraft.world.entity.Mob"
+    },
+    "minecraft:witch": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:wither": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:wither_skeleton": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:wolf": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Wolf.checkWolfSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Wolf"
+    },
+    "minecraft:zombie": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:zombie_horse": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Animal.checkAnimalSpawnRules",
+      "class": "net.minecraft.world.entity.animal.Animal"
+    },
+    "minecraft:zombie_villager": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "Monster.checkMonsterSpawnRules",
+      "class": "net.minecraft.world.entity.monster.Monster"
+    },
+    "minecraft:zombified_piglin": {
+      "placement": "ON_GROUND",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES",
+      "rule": "ZombifiedPiglin.checkZombifiedPiglinSpawnRules",
+      "class": "net.minecraft.world.entity.monster.ZombifiedPiglin"
+    }
+  }
+}

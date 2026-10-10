@@ -1,0 +1,20 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:rose_bush[half=upper]",
+      "weight": 5
+    },
+    {
+      "state": "minecraft:poppy",
+      "weight": 4
+    },
+    {
+      "state": "minecraft:red_tulip",
+      "weight": 1
+    }
+  ],
+  "egg_colors": [
+    "#9B221A",
+    "#ED302C"
+  ]
+}

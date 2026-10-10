@@ -1,0 +1,25 @@
+{
+  "_readme": "Parity cases for tools/test_mob_spawns.sh: each case runs its rules in order on one vanilla biome's spawners through patcherMod SpawnTuning.apply (Java) and gen_spawn_table.apply_rule (Python); both must agree. Biomes: plains, desert, snowy, ocean, mooshroom, jungle, plains_dup (plains + a second cow entry 3 (1-2)).",
+  "cases": [
+    { "name": "scale cow x2", "biome": "plains", "rules": [ { "mob": "minecraft:cow", "action": "scale", "factor": 2 } ] },
+    { "name": "set pig keeps group", "biome": "plains", "rules": [ { "mob": "minecraft:pig", "action": "set", "weight": 20 } ] },
+    { "name": "add lone pillager", "biome": "plains", "rules": [ { "mob": "minecraft:pillager", "action": "set", "weight": 5, "min": 1, "max": 1 } ] },
+    { "name": "add with category", "biome": "plains", "rules": [ { "mob": "minecraft:mooshroom", "action": "set", "weight": 3, "category": "creature", "min": 2, "max": 4 } ] },
+    { "name": "remove sheep", "biome": "plains", "rules": [ { "mob": "minecraft:sheep", "action": "remove" } ] },
+    { "name": "set 0 removes", "biome": "plains", "rules": [ { "mob": "minecraft:sheep", "action": "set", "weight": 0 } ] },
+    { "name": "scale 0 removes", "biome": "plains", "rules": [ { "mob": "minecraft:horse", "action": "scale", "factor": 0 } ] },
+    { "name": "scale floor 1", "biome": "plains", "rules": [ { "mob": "minecraft:chicken", "action": "scale", "factor": 0.04 } ] },
+    { "name": "scale rounds half up", "biome": "plains", "rules": [ { "mob": "minecraft:horse", "action": "scale", "factor": 1.5 } ] },
+    { "name": "set unchanged", "biome": "desert", "rules": [ { "mob": "minecraft:rabbit", "action": "set", "weight": 4, "min": 2, "max": 3 } ] },
+    { "name": "scale missing mob", "biome": "desert", "rules": [ { "mob": "minecraft:cow", "action": "scale", "factor": 3 } ] },
+    { "name": "remove missing mob", "biome": "ocean", "rules": [ { "mob": "minecraft:cow", "action": "remove" } ] },
+    { "name": "scale squid", "biome": "ocean", "rules": [ { "mob": "minecraft:squid", "action": "scale", "factor": 0.5 } ] },
+    { "name": "remove then add back", "biome": "plains", "rules": [ { "mob": "minecraft:cow", "action": "remove" }, { "mob": "minecraft:cow", "action": "set", "weight": 8, "min": 4, "max": 4 } ] },
+    { "name": "duplicates collapse", "biome": "plains_dup", "rules": [ { "mob": "minecraft:cow", "action": "set", "weight": 10 } ] },
+    { "name": "duplicates scale each", "biome": "plains_dup", "rules": [ { "mob": "minecraft:cow", "action": "scale", "factor": 2 } ] },
+    { "name": "min above old max", "biome": "plains", "rules": [ { "mob": "minecraft:cow", "action": "set", "weight": 8, "min": 6 } ] },
+    { "name": "monster tweak", "biome": "snowy", "rules": [ { "mob": "minecraft:stray", "action": "scale", "factor": 0.25 }, { "mob": "minecraft:polar_bear", "action": "set", "weight": 3 } ] },
+    { "name": "mooshroom fields", "biome": "mooshroom", "rules": [ { "mob": "minecraft:mooshroom", "action": "scale", "factor": 2 }, { "mob": "minecraft:cow", "action": "set", "weight": 4, "min": 2, "max": 3 } ] },
+    { "name": "jungle chain", "biome": "jungle", "rules": [ { "mob": "minecraft:parrot", "action": "scale", "factor": 3 }, { "mob": "minecraft:pig", "action": "remove" }, { "mob": "minecraft:chicken", "action": "set", "weight": 1 } ] }
+  ]
+}

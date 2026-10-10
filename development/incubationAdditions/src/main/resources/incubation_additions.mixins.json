@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.incubation_additions.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.SaintAlfonzo.incubation_additions.IncubationAdditionsMixinPlugin",
+  "mixins": [
+    "EntityEmuEggLayerMixin",
+    "DuckEntityEggLayerMixin",
+    "GooseEntityEggLayerMixin",
+    "LayEggInNestGoalMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

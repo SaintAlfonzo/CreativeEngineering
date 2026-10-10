@@ -1,6 +1,6 @@
 # Tooltips
 
-Test prefix **TT-** · Last updated **2026-09-27** · Overall status **DEPLOYED (new removals), in-game test pending**
+Test prefix **TT-** · Last updated **2026-10-05** · Overall status **DEPLOYED (new removals), in-game test pending**
 
 ## 0. At a glance
 
@@ -18,6 +18,7 @@ keeps its own writeup.
 | FramedBlocks renamed "Framed Copycat …" | edited resource pack `Copycat Framed Block.zip` | DEPLOYED 2026-09-27; F3+T |
 | BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + patcherMod `CamoSpeedTooltip` | DEPLOYED (the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording is built, not yet in `mods/`) |
 | Framework tooltips: armor effects, tool effects, potion buckets | dedicated client scripts | VERIFIED per their own memories |
+| Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | BUILT 2026-10-05, PL-01 to PL-08 |
 | patcherMod tooltips: tier shields, vanilla shield, echo armor set bonus, D&D jetpack crash fix | patcherMod | VERIFIED / see memories |
 
 **Open first:** [tooltips.js](../kubejs/client_scripts/tooltips.js) (helpers L1-86, colour legend L91-125, then sections).
@@ -87,6 +88,10 @@ Examples:
   Vinery builds the key from the item id (`item.vinery.grape.tooltip.<id>`, `item.vinery.grapeseed.tooltip.<id>`), so
   `removeTooltipKey` now treats a key ending in `*` as a prefix. The real bush requirements are in [vinery.md §2.6](vinery.md).
 
+- **Display Delight and Fruits Delight placement lines** ("Can be placed while sneaking", "Can be plated on:", "Food Plate", "Small Food Plate",
+  "Shift right click to place down"): stripped by translation key on every item and replaced by the placeable food lines
+  below. DD showed its lines from the tags alone, even for foods it never links to a block. See [placeable_food.md](placeable_food.md).
+
 **Renamed**
 - **FramedBlocks → "Framed Copycat …"** (e.g. Framed Copycat Slab, Large Framed Copycat Button, Framed Copycat Chest GUI title).
   The resource pack `Copycat Framed Block.zip` retextures framed blocks to look like Create copycats,
@@ -117,10 +122,15 @@ Examples:
   apple/cherry leaves and saplings, Kitchen Sink, Stackable Log and the wine storage blocks (`*_wine_rack_mid` by pattern).
   Text still to be written. The behaviour to describe is in [vinery.md](vinery.md). They show in game until replaced.
 
+**Added for placeable food** (2026-10-05, [placeable_food.md](placeable_food.md))
+- 164 foods: gray "Placeable" / "Placeable (while sneaking)" / "Placeable on plate" / "Placeable on small plate", drawn from the
+  `#creativeengineering:placeable*` tags at hover time (`addAdvancedToAll`). Catalog: [placeable_catalog.md](placeable_catalog.md).
+
 **Added by frameworks** (each documented in its own memory):
 - armor effects (`armor_effects_tooltip.js`) and tool effects (`tool_effects_tooltip.js`)
 - potion buckets (`potion_buckets.js`), vanilla-style effect lines
-- tier shields and the vanilla shield (`ShieldTooltip` / `IronShieldTooltip`)
+- tier shields and the vanilla shield (`ShieldTooltip` / `IronShieldTooltip`); the Shift view gained
+  `Blocks burning` and `Blocks thorns` Yes/No lines 2026-10-05 (built, not in `mods/`). Details and tests: [shields.md](shields.md) 2.6, SH-04
 - precision sawblade profile (`addAdvanced`, reads NBT)
 
 **Fixed**
@@ -151,6 +161,7 @@ Examples:
 ## 5. File map
 
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): helpers, colour legend, all hand-written lines, removals
+- [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js): placeable food lines + DD / Fruits Delight removals (tests in [placeable_food.md](placeable_food.md), PL-)
 - [armor_effects_tooltip.js](../kubejs/client_scripts/armor_effects_tooltip.js), [tool_effects_tooltip.js](../kubejs/client_scripts/tool_effects_tooltip.js), [potion_buckets.js](../kubejs/client_scripts/potion_buckets.js)
 - patcherMod: [surface/CamoSpeedTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`
 - Lang: [patcherMod lang en_us.json](../development/patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) (`creativeengineering.tooltip.*`)
@@ -218,3 +229,5 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
   - Schematic lines recoloured to the normal gray (`col.norm`) at your request.
   - "Framed / Copycat Blocks" section added (schematic + hybrid lines); FramedBlocks renamed "Framed Copycat …" by editing the resource pack; hybrid wording on the Speed Multiplier line. TT-10..13 added.
 - **2026-10-01:** Vinery grape and grape seed flavour lines removed (`removeTooltipKey` prefix keys); Vinery `TODO` placeholders added. TT-14, TT-15 added. See [vinery.md](vinery.md).
+- **2026-10-05:** Placeable food lines added and DD / Fruits Delight placement lines removed ([placeable_food.md](placeable_food.md), tests PL-01 to PL-08).
+- **2026-10-05:** Shield Shift view adds "Blocks burning" and "Blocks thorns" Yes/No lines ([shields.md](shields.md), SH-04). Built, not in `mods/`.

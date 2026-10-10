@@ -39,7 +39,12 @@ public final class WorldgenConfig {
 	public static boolean deadPlacementFilterEnabled() { return get(() -> wg().systems.deadPlacementFilter.get(), true); }
 	public static boolean groundMatchEnabled() { return get(() -> wg().systems.groundMatch.get(), true); }
 	public static boolean earthFillEnabled() { return get(() -> wg().systems.earthFill.get(), true); }
+	public static boolean waterFillEnabled() { return get(() -> wg().systems.waterFill.get(), true); }
+	public static boolean terrainAdaptationEnabled() { return get(() -> wg().systems.terrainAdaptation.get(), true); }
+	public static boolean templateTrimEnabled() { return get(() -> wg().systems.templateTrim.get(), true); }
 	public static boolean wildCropsEnabled() { return get(() -> wg().systems.wildCrops.get(), true); }
+	public static boolean wildFlowersEnabled() { return get(() -> wg().systems.wildFlowers.get(), true); }
+	public static boolean mobSpawnsEnabled() { return get(() -> wg().systems.mobSpawns.get(), true); }
 
 	// ── debug ────────────────────────────────────────────────────────────────
 	public static double structureDensity() { return get(() -> wg().debug.structureDensity.get(), 1.0); }
@@ -70,6 +75,15 @@ public final class WorldgenConfig {
 	public static List<? extends String> earthOverrides() { return get(() -> wg().earthFill.overrides.get(), List.<String>of()); }
 	public static int earthSampleGrid() { return get(() -> wg().earthFill.sampleGrid.get(), 2); }
 	public static CEConfig.EarthFillLog earthLog() { return get(() -> wg().earthFill.log.get(), CEConfig.EarthFillLog.CANCELLED); }
+
+	// ── water fill ───────────────────────────────────────────────────────────
+	public static int waterMaxIntoGround() { return get(() -> wg().waterFill.maxIntoGround.get(), 32); }
+	public static int waterMaxIntoAir() { return get(() -> wg().waterFill.maxIntoAir.get(), 16); }
+	public static List<? extends String> waterOverrides() { return get(() -> wg().waterFill.overrides.get(), List.of("#creativeengineering:water_fill/ponds=-1,16")); }
+	public static CEConfig.EarthFillLog waterLog() { return get(() -> wg().waterFill.log.get(), CEConfig.EarthFillLog.CANCELLED); }
+
+	// ── terrain adaptation ───────────────────────────────────────────────────
+	public static int softSkirtBump() { return get(() -> wg().terrainAdaptation.skirtBump.get(), 0); }
 
 	// ── /ceplace ─────────────────────────────────────────────────────────────
 	public static int placeGap() { return get(() -> wg().massPlace.gap.get(), 12); }

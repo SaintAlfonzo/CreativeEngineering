@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "incubation_additions:duck_egg_crate"
+    }
+  ],
+  "result": {
+    "item": "untitledduckmod:duck_egg",
+    "count": 9
+  }
+}

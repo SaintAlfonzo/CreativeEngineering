@@ -1,0 +1,20 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:sunflower[half=upper]",
+      "weight": 5
+    },
+    {
+      "state": "minecraft:dandelion",
+      "weight": 4
+    },
+    {
+      "state": "minecraft:orange_tulip",
+      "weight": 1
+    }
+  ],
+  "egg_colors": [
+    "#F5BA27",
+    "#FFEC4F"
+  ]
+}

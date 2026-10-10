@@ -86,6 +86,9 @@ public final class GroundMatch {
 
 	public static void endPlacing() { PLACING.remove(); }
 
+	/** The structure start placing on this thread, or null outside StructureStart#placeInChunk. */
+	static StructureStart placing() { return PLACING.get(); }
+
 	/** The sampling settings are part of the key, so a config edit never reuses a stale sample. */
 	private record Key(ResourceKey<Level> dim, long chunk, int centerStride, int neighbourStride, int subDepth, int maxDig) {}
 

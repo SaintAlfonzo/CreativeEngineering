@@ -309,6 +309,7 @@ Photographs:
 - [x] **EX-11 stack paging:** stack 3+ photos, Use → the viewer pages with the arrows, A/D and the arrow keys. PASSED 2026-10-01 (after the fix).
 - [ ] **EX-12 stack cycling:** Sneak + Use with a stack in hand → the top photo moves to the bottom.
 - [ ] **EX-13 album:** put photos in an album with notes, sign it → signed album glints, readable by another player.
+  - 2026-10-05 (`-03`): note and title boxes took no keys (1.19.2 screen focus never set the widget's focused flag); fixed in the backport screens. Retest typing/backspace/Enter in a note, Esc to unfocus, right-click to clear, and the signing title box focused on open.
 - [ ] **EX-14 frames:** place a Photograph Frame on a wall with 3x3 space → 3x3; in a 1-block gap → 1x1; on the floor and the ceiling; insert a photo; Glow Ink Sac → it glows.
 - [ ] **EX-15 glass frame:** place a Glass Photograph Frame and insert a photo → the photo shows; sizes and Glow Ink Sac work as in EX-14.
 - [ ] **EX-16 copy and age:** photo + paper + dyes → a copy; photo + brown dye (or antique ink) → aged photograph.

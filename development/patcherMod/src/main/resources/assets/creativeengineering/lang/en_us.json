@@ -51,12 +51,6 @@
   "creativeengineering.hoe_harvest.area": "Harvest area: %s",
   "creativeengineering.hoe_harvest.area_even": "Harvest area: %s, toward where you look",
   "creativeengineering.hoe_harvest.how": "Right-click ripe crops to harvest and replant, break plants to clear",
-  "block.creativeengineering.emu_nest": "Emu Nest",
-  "block.creativeengineering.emu_egg_nest": "Emu Egg Nest",
-  "block.creativeengineering.duck_nest": "Duck Nest",
-  "block.creativeengineering.duck_egg_nest": "Duck Egg Nest",
-  "block.creativeengineering.goose_nest": "Goose Nest",
-  "block.creativeengineering.goose_egg_nest": "Goose Egg Nest",
   "creativeengineering.jei.vinery.time": "%s seconds",
   "creativeengineering.jei.vinery.wine_press": "Apple Press",
   "creativeengineering.jei.vinery.grape_stomping": "Grape Stomping",
@@ -70,5 +64,7 @@
   "creativeengineering.jei.vinery.wine_aging.stamp_arrow": "Aging Barrel writes NBT Year: %s",
   "creativeengineering.jei.vinery.wine_aging.age_arrow": "%s years later (%s days); the tag never changes",
   "creativeengineering.jei.vinery.wine_aging.fresh": "Year %s: potency %s",
-  "creativeengineering.jei.vinery.wine_aging.aged": "Aged %s years: potency %s (max)"
+  "creativeengineering.jei.vinery.wine_aging.aged": "Aged %s years: potency %s (max)",
+  "desc.seasonhud.season.arid": "Arid",
+  "desc.seasonhud.season.frozen": "Frozen"
 }

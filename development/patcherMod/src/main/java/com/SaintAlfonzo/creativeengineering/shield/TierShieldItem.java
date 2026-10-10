@@ -30,8 +30,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  * shield. It blocks through vanilla's own machinery; what makes it a tier shield is
  * {@code mixin/LivingEntityShieldMixin} (which damage it can block, and from where) and
  * {@link ShieldBlockHandler} (how much it absorbs, wear, on-block effects), both keyed off
- * {@link ShieldTier#of}, not this class specifically. It looks exactly like a vanilla shield -
- * see {@link TierShieldRenderer}.
+ * {@link ShieldTier#of}, not this class specifically. It uses vanilla's shield model with its own
+ * base texture per tier - see {@link TierShieldRenderer} / {@code TierShieldMaterials}.
  */
 public class TierShieldItem extends ShieldItem {
 
@@ -64,7 +64,8 @@ public class TierShieldItem extends ShieldItem {
 
     /**
      * Vanilla's shield appends the banner colour ({@code item.minecraft.shield.white}); there is no
-     * such lang key for these and no recipe to dye them, but a banner can still arrive via NBT/commands.
+     * such lang key for these, so a bannered tier shield (crafting grid, via
+     * {@code mixin/ShieldDecorationRecipeMixin}) keeps its plain tier name.
      */
     @Override
     public String getDescriptionId(ItemStack stack) {

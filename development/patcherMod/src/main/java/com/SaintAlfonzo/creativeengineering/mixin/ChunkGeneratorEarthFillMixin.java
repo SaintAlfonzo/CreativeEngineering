@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 /**
- * Earth-fill check (see worldgen/EarthFill).
+ * Earth-fill and water-fill checks (see worldgen/EarthFill).
  *
  * ChunkGenerator#tryGenerateStructure (m_223104_, private) stores the generated StructureStart in a local
  * (slot 15: after the 9 parameters, one of them a long, and the structure, reference count, biome set and

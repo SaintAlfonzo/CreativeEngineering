@@ -1,0 +1,13 @@
+{
+  "parents": [
+    "more_mooblooms:moobloom",
+    "more_mooblooms:bluebloom"
+  ],
+  "chance": 0.2,
+  "results": [
+    {
+      "variant": "more_mooblooms:azaleabloom",
+      "weight": 1
+    }
+  ]
+}

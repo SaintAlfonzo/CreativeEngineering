@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "More Mooblooms: abnormals_delight compat (loaded only with abnormals_delight)",
+    "pack_format": 9,
+    "forge:resource_pack_format": 9,
+    "forge:data_pack_format": 10
+  }
+}

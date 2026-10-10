@@ -185,6 +185,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Immersive Posts | `immersiveposts` | `ImmersivePosts-1.19.2-4.3.0-8.jar` |  |
 | both | Immersive Weathering | `immersive_weathering` | `immersive_weathering-1.19.2-1.2.10-forge.jar` |  |
 | both | Incubation | `incubation` | `incubation-1.19.2-3.0.1.jar` |  |
+| both | Incubation Additions | `incubation_additions` | `incubationAdditions-1.0.0.jar` | This pack's own mod (development/incubationAdditions): emu, duck and goose nests for Incubation. Moved out of creativeengineering 2026-10-05; NOT in mods/ yet |
 | both | Iron Fishing Rods | `iron_fishing_rods` | `Iron Fishing Rods 1.0.0 - 1.19.2.jar` |  |
 | both | Item Filters | `itemfilters` | `item-filters-forge-1902.2.9-build.51.jar` | Required by: FTB Quests |
 | both | ItemPhysic | `itemphysic` | `ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar` |  |
@@ -213,6 +214,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Moog's End Structures | `mes` | `mes-1.3.1-1.19.2-forge.jar` |  |
 | both | Moonlight Library | `moonlight` | `moonlight-1.19.2-2.3.7-forge.jar` | Required by: Every Compat, Heartstone, Immersive Weathering, MmmMmmMmmmmm, Moyai, Mystical Oak Tree (+2 more) |
 | both | More Immersive Wires | `more_immersive_wires` | `more-immersive-wires-1.19.2-1.1.3.jar` |  |
+| both | More Mooblooms | `more_mooblooms` | `moreMooblooms-1.0.0.jar` | This pack's own mod (development/moreMooblooms): data-driven moobloom variants; cleans up Buzzier Bees' moobloom, buttercup and Sunny. Rebuilt 2026-10-07 as the 1.0 release; the jar in mods/ is an earlier build until reinstalled |
 | both | More Mob Variants | `moremobvariants` | `moremobvariants-forge+1.19.2-1.3.0.1.jar` |  |
 | both | MoreJS | `morejs` | `morejs-forge-1.19.2-0.3.0.jar` |  |
 | both | Mosaic Masonry | `mosaic_masonry` | `mosaic_masonry-1.1.jar` |  |
