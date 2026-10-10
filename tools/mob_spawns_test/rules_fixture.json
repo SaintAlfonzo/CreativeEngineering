@@ -1,0 +1,123 @@
+{
+  "_readme": "Test rules for tools/test_mob_spawns.sh (not the pack's): every action, trait clauses, ids, a #tag, except, disable_modifiers; conditions everywhere / by rule / by selector with except; spawn_ground.",
+  "rules": [
+    {
+      "id": "pig_forests",
+      "mob": "minecraft:pig",
+      "action": "scale",
+      "factor": 2,
+      "where": [
+        "forest",
+        "swamp"
+      ],
+      "except": [
+        "minecraft:dark_forest"
+      ]
+    },
+    {
+      "id": "sheep_hills",
+      "mob": "minecraft:sheep",
+      "action": "set",
+      "weight": 16,
+      "where": [
+        "mountain !snowy",
+        "peak"
+      ]
+    },
+    {
+      "id": "lone_pillager",
+      "mob": "minecraft:pillager",
+      "action": "set",
+      "weight": 2,
+      "min": 1,
+      "max": 1,
+      "category": "monster",
+      "where": [
+        "dark_oak",
+        "swamp",
+        "badlands"
+      ],
+      "add": [
+        "minecraft:ice_spikes"
+      ]
+    },
+    {
+      "id": "no_cows_desert",
+      "mob": "minecraft:cow",
+      "action": "remove",
+      "where": [
+        "desert"
+      ]
+    },
+    {
+      "id": "nether_striders",
+      "mob": "minecraft:strider",
+      "action": "scale",
+      "factor": 0.5,
+      "add": [
+        "#minecraft:is_nether"
+      ]
+    },
+    {
+      "id": "ducks",
+      "mob": "untitledduckmod:duck",
+      "action": "set",
+      "weight": 6,
+      "min": 2,
+      "max": 4,
+      "where": [
+        "river",
+        "swamp"
+      ],
+      "disable_modifiers": [
+        "untitledduckmod:duck_spawns"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "birds_light",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:parrot",
+        "alexsmobs:crow"
+      ]
+    },
+    {
+      "id": "ducks_water",
+      "condition": "water_only",
+      "mobs": [
+        "untitledduckmod:duck"
+      ],
+      "rules": [
+        "ducks"
+      ],
+      "add": [
+        "minecraft:plains"
+      ],
+      "except": [
+        "minecraft:swamp"
+      ]
+    },
+    {
+      "id": "striders_light",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:strider"
+      ],
+      "add": [
+        "#minecraft:is_nether"
+      ]
+    }
+  ],
+  "spawn_ground": {
+    "_note": "test",
+    "minecraft:animals_spawnable_on": [
+      "#minecraft:dirt",
+      "minecraft:podzol"
+    ],
+    "minecraft:mooshrooms_spawnable_on": [
+      "untitledduckmod:fake_block"
+    ]
+  }
+}

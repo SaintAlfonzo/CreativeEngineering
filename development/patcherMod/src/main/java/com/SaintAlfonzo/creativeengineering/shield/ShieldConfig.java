@@ -1,8 +1,14 @@
 package com.SaintAlfonzo.creativeengineering.shield;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.SaintAlfonzo.creativeengineering.CEConfig;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Null-safe reads of {@link CEConfig#SHIELDS}. A {@code ConfigValue#get()} throws until Forge has
@@ -35,8 +41,43 @@ public final class ShieldConfig {
         try {
             return CEConfig.SHIELDS.disableCooldownTicks.get();
         } catch (RuntimeException notLoaded) {
-            return 100;
+            return 20;
         }
+    }
+
+    /** Default for {@code [shields].unblockableEffectTicks}: every effect in the pack that deals tick damage. */
+    public static final String UNBLOCKABLE_EFFECT_TICKS_DEFAULT = "minecraft:poison, minecraft:wither, "
+            + "everythingcopper:copper_poisoning, alexsmobs:debilitating_sting, alexsmobs:exsanguination, "
+            + "alexsmobs:ender_flu, endersdelight:phasing";
+
+    // Parsed effect-id set keyed by the raw config string, so a live edit just re-parses.
+    private static volatile String unblockableRaw;
+    private static volatile Set<ResourceLocation> unblockable = Set.of();
+
+    /**
+     * True when {@code effect}'s periodic damage may never be blocked by any shield
+     * ({@code [shields].unblockableEffectTicks}). Unknown or malformed ids are simply never matched.
+     */
+    public static boolean unblockableEffectTick(MobEffect effect) {
+        String raw;
+        try {
+            raw = CEConfig.SHIELDS.unblockableEffectTicks.get();
+        } catch (RuntimeException notLoaded) {
+            raw = UNBLOCKABLE_EFFECT_TICKS_DEFAULT;
+        }
+        if (!raw.equals(unblockableRaw)) {
+            Set<ResourceLocation> ids = new HashSet<>();
+            for (String part : raw.split(",")) {
+                ResourceLocation id = ResourceLocation.tryParse(part.trim());
+                if (id != null && !part.isBlank()) {
+                    ids.add(id);
+                }
+            }
+            unblockable = Set.copyOf(ids);
+            unblockableRaw = raw;
+        }
+        ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(effect);
+        return id != null && unblockable.contains(id);
     }
 
     public static ShieldGroup.Facing facing(ShieldGroup group) {
@@ -128,12 +169,21 @@ public final class ShieldConfig {
         return durabilityCost(tier, category.group());
     }
 
-    /** Damage amount (post-reduction) below which a blocked melee hit stops knocking its attacker back. */
+    /** Damage amount (post-reduction) below which a blocked hit stops knocking the holder back. */
     public static float knockbackThreshold(ShieldTier tier) {
         try {
             return CEConfig.SHIELDS.tiers.get(tier).knockbackThreshold.get().floatValue();
         } catch (RuntimeException notLoaded) {
             return tier.defaultKnockbackThreshold();
+        }
+    }
+
+    /** Whether {@code tier} may block {@code gate}'s ticks at all ({@link ShieldTickGate}). */
+    public static boolean blocksTicks(ShieldTier tier, ShieldTickGate gate) {
+        try {
+            return CEConfig.SHIELDS.tiers.get(tier).blocksTicks.get(gate).get();
+        } catch (RuntimeException notLoaded) {
+            return tier.defaultBlocksTicks(gate);
         }
     }
 

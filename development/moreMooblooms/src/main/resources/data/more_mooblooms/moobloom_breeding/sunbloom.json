@@ -1,0 +1,30 @@
+{
+  "rules": [
+    {
+      "parents": [
+        "more_mooblooms:moobloom",
+        "more_mooblooms:moobloom"
+      ],
+      "chance": 0.1,
+      "results": [
+        {
+          "variant": "more_mooblooms:sunbloom",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "parents": [
+        "more_mooblooms:moobloom",
+        "more_mooblooms:oxeyebloom"
+      ],
+      "chance": 0.2,
+      "results": [
+        {
+          "variant": "more_mooblooms:sunbloom",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

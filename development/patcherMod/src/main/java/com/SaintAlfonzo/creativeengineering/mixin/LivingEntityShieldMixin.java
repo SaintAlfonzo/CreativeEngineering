@@ -10,7 +10,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Lets a tier shield ({@code shield.TierShieldItem}) decide for itself what it can block.
+ * Lets a tier shield (a {@code shield.TierShieldItem}, or the vanilla shield as the iron tier -
+ * {@code ShieldTier#of}) decide for itself what it can block.
  * Vanilla's {@code LivingEntity#isDamageSourceBlocked} ({@code m_21275_}) refuses anything flagged
  * {@code bypassArmor} or without a source position - fire, poison and most magic - so no
  * {@code ShieldBlockEvent} listener could ever reach those hits; the event only fires once this

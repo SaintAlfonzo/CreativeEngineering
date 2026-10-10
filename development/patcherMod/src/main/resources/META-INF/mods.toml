@@ -113,22 +113,3 @@ versionRange="[2.6.4,)"
 ordering="AFTER"
 side="CLIENT"
 
-# Incubation: nest.EmuNests / nest.WaterfowlNests build the emu, duck and goose nests from
-# Incubation's nest classes and nest properties; EntityEmuEggLayerMixin, DuckEntityEggLayerMixin,
-# GooseEntityEggLayerMixin + LayEggInNestGoalMixin hook its egg-laying goal. Optional (the nest
-# classes are skipped when it's absent), but must load first.
-[[dependencies.creativeengineering]]
-modId="incubation"
-mandatory=false
-versionRange="[3.0,)"
-ordering="AFTER"
-side="BOTH"
-
-# Untitled Duck Mod: DuckEntityEggLayerMixin / GooseEntityEggLayerMixin target its entities (the
-# nests themselves only name its egg items by id). Must load first.
-[[dependencies.creativeengineering]]
-modId="untitledduckmod"
-mandatory=false
-versionRange="[0.6,)"
-ordering="AFTER"
-side="BOTH"

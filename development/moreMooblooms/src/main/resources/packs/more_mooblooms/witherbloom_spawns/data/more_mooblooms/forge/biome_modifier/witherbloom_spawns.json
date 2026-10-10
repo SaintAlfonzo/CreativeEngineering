@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#more_mooblooms:spawns_witherbloom",
+  "spawners": {
+    "type": "more_mooblooms:moobloom",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import io.github.mortuusars.exposure.client.gui.screen.element.textbox.TextBox;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -127,6 +129,22 @@ public abstract class AbstractWidget extends net.minecraft.client.gui.components
     @Override
     public void setFocused(boolean focused) {
         super.setFocused(focused);
+    }
+
+    /**
+     * 1.20 {@code ContainerEventHandler.setFocused}: moving a screen's focus also sets the widgets' own focused
+     * flags. 1.19.2's only stores the field, so {@link TextBox} (which gates input on {@link #isFocused()}) never
+     * received keys: the album note and album title boxes could not be typed in. Only text boxes are flagged, since
+     * buttons and photo slots draw highlighted while focused and would stay lit after a click. Called by the backport
+     * screens before storing the field.
+     */
+    public static void moveFocus(@Nullable GuiEventListener from, @Nullable GuiEventListener to) {
+        if (from != to && from instanceof TextBox box) {
+            box.setFocused(false);
+        }
+        if (to instanceof TextBox box) {
+            box.setFocused(true);
+        }
     }
 
     // ---- tooltip ----

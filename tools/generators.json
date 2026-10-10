@@ -76,6 +76,23 @@
       "apply": "rejoin the world; only newly generated chunks use it"
     },
     {
+      "id": "soil_compat",
+      "script": "tools/gen_soil_compat.py",
+      "groups": ["core", "worldgen"],
+      "outputs": ["kubejs/generation_scripts/worldgen/soil_compat_manifest.json"],
+      "apply": "restart the server (worldgen is read at world load); only newly generated chunks use it"
+    },
+    {
+      "id": "wild_flowers",
+      "script": "tools/gen_wild_flowers.py",
+      "groups": ["core", "worldgen"],
+      "outputs": [
+        "kubejs/generation_scripts/worldgen/flower_features.json",
+        "feature_writeup/flowers_by_biome.md"
+      ],
+      "apply": "rejoin the world (the snapshot is read at world load); only newly generated chunks use it"
+    },
+    {
       "id": "loot_config",
       "script": "tools/gen_loot_config.py",
       "groups": ["core", "loot"],
@@ -108,6 +125,14 @@
       "apply": "nothing to apply: it is a report (holes in villages, houses, pillager, dungeons, ruins per biome, professions per village style)"
     },
     {
+      "id": "weather_by_biome",
+      "script": "tools/gen_weather_table.py",
+      "groups": ["reports", "worldgen"],
+      "dumps": ["dumpbiomes"],
+      "outputs": ["feature_writeup/weather_by_biome.md"],
+      "apply": "nothing to apply: it is a report (precipitation per biome per Serene Seasons sub-season)"
+    },
+    {
       "id": "biome_merge_proposals",
       "script": "tools/analyze_structure_biome_merges.py",
       "groups": ["reports", "worldgen"],
@@ -124,6 +149,17 @@
       "dumps": ["dumpstructuregen"],
       "warnExit": [1],
       "highlight": ["^\\d\\. .*: [1-9]"]
+    },
+    {
+      "id": "terrain_adaptation_scan",
+      "script": "tools/terrain_adaptation_scan.py",
+      "groups": ["reports", "worldgen"],
+      "dumps": ["dumptags block"],
+      "outputs": [
+        "feature_writeup/terrain_adaptation_scan.md",
+        "kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json"
+      ],
+      "apply": "report only: tag candidates in kubejs/server_scripts/worldgen/terrain_adaptation.js"
     },
     {
       "id": "loot_container_audit",
@@ -164,12 +200,33 @@
       "apply": "F3+T or restart the client (models only)"
     },
     {
+      "id": "spawns_by_biome",
+      "script": "tools/gen_spawn_table.py",
+      "groups": ["reports", "worldgen"],
+      "dumps": ["dumpspawns"],
+      "outputs": ["feature_writeup/spawns_by_biome.md"],
+      "warnExit": [1],
+      "apply": "report only (mob_spawns.json itself applies on rejoin)"
+    },
+    {
       "id": "missing_names",
       "script": "tools/missing_names.py",
       "groups": ["reports", "names"],
       "dumps": ["dumpnames"],
       "outputs": ["feature_writeup/names.md"],
       "apply": "report only"
+    },
+    {
+      "id": "placeable_catalog",
+      "script": "tools/placeable_catalog.py",
+      "groups": ["reports", "food"],
+      "dumps": ["dumpplaceable"],
+      "outputs": [
+        "kubejs/generation_scripts/food/placeable.json",
+        "feature_writeup/placeable_catalog.md",
+        "kubejs/startup_scripts/_lib/item_dict.js"
+      ],
+      "apply": "restart if item_dict.js changed, else /reload (tags) - tooltips follow the tags"
     }
   ]
 }

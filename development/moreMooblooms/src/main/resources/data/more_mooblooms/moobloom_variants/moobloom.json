@@ -1,0 +1,13 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:dandelion",
+      "weight": 1,
+      "feed_weight": 9
+    }
+  ],
+  "egg_colors": [
+    "#FDD500",
+    "#F7EDC1"
+  ]
+}

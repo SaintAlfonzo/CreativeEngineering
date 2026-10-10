@@ -12,5 +12,6 @@
   "securitycraft:plugin": true,
   "ae2:wthit": true,
   "creativeengineering:run_speed": true,
-  "creativeengineering:block_model_icon": true
+  "creativeengineering:block_model_icon": true,
+  "creativeengineering:crop_growth": true
 }

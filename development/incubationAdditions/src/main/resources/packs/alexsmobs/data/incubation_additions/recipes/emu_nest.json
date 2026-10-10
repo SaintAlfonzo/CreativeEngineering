@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "tag": "immersive_weathering:bark"
+    }
+  },
+  "pattern": [
+    "B B",
+    "BBB"
+  ],
+  "result": {
+    "item": "incubation_additions:emu_nest"
+  }
+}

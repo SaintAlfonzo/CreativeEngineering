@@ -1,0 +1,107 @@
+{
+  "rules": [
+    {
+      "id": "Bad Id",
+      "mob": "minecraft:pig",
+      "action": "remove",
+      "where": [
+        "forest"
+      ]
+    },
+    {
+      "id": "no_action",
+      "mob": "minecraft:pig",
+      "where": [
+        "forest"
+      ]
+    },
+    {
+      "id": "set_no_weight",
+      "mob": "minecraft:pig",
+      "action": "set",
+      "where": [
+        "forest"
+      ]
+    },
+    {
+      "id": "dup",
+      "mob": "minecraft:pig",
+      "action": "remove",
+      "where": [
+        "forest"
+      ]
+    },
+    {
+      "id": "dup",
+      "mob": "minecraft:cow",
+      "action": "remove",
+      "where": [
+        "forest"
+      ]
+    },
+    {
+      "id": "typo_trait",
+      "mob": "minecraft:cow",
+      "action": "remove",
+      "where": [
+        "plains",
+        "forrest"
+      ]
+    },
+    {
+      "id": "tag_except",
+      "mob": "minecraft:cow",
+      "action": "remove",
+      "where": [
+        "plains"
+      ],
+      "except": [
+        "#minecraft:is_forest"
+      ]
+    },
+    {
+      "id": "bad_category",
+      "mob": "minecraft:cow",
+      "action": "set",
+      "weight": 3,
+      "category": "creatures",
+      "where": [
+        "plains"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "bad_kind",
+      "condition": "dark_only",
+      "mobs": [
+        "minecraft:pig"
+      ]
+    },
+    {
+      "id": "no_mobs",
+      "condition": "light_only",
+      "mobs": []
+    },
+    {
+      "id": "bad_ref",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:pig"
+      ],
+      "rules": [
+        "set_no_weight"
+      ]
+    },
+    {
+      "id": "good_cond",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:pig"
+      ],
+      "rules": [
+        "typo_trait"
+      ]
+    }
+  ]
+}

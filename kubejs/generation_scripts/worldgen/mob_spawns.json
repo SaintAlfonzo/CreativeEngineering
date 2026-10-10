@@ -1,0 +1,259 @@
+{
+  "_readme": [
+    "Mob spawn tuning: which mobs spawn in which biomes, and how often. Applied at world load by",
+    "kubejs/server_scripts/worldgen/mob_spawns.js as one biome modifier of patcherMod's type creativeengineering:tune_spawns",
+    "(CEConfig [worldgen.systems] mobSpawns). Rejoin the world after editing. Unlike worldgen, spawns change in existing",
+    "worlds too, but only for mobs that spawn from then on.",
+    "Reference + tests: feature_writeup/mob_spawns.md. Preview the result without the game:",
+    "python3 tools/gen_spawn_table.py (reads the last /dumpspawns and applies this file to it).",
+    "",
+    "The rules run after every mod's biome modifiers, in this order, one biome at a time.",
+    "",
+    "rules: [ { ... }, ... ]",
+    "  id      unique, lowercase a-z 0-9 _ (names the biome tag creativeengineering:mob_spawns/<id> and the log lines)",
+    "  mob     entity id. A mob of a mod that isn't loaded is skipped with a warning.",
+    "  action  set    spawn at 'weight' (and 'min'/'max' group size when given). Where the mob already spawns its",
+    "                 entries become one, in place; where it doesn't, it is added to 'category' (default: the mob's",
+    "                 own), group 1-1 unless min/max are given. weight 0 = remove.",
+    "          scale  every existing weight times 'factor' (rounded, at least 1; 0 = remove). Never adds the mob.",
+    "          remove the mob leaves the biome, every category.",
+    "  where / add / except   biome selection, as in wild_crops.json: 'where' clauses are OR'ed, the traits in a clause",
+    "          AND'ed, '!trait' must not hold; traits come from the 'biomes' table in wild_crops.json (overworld only).",
+    "          'add' takes biome ids or '#tags' (Nether and End biomes go here); 'except' takes biome ids and only removes",
+    "          biomes the clauses or ids matched, not members of an added '#tag'. Unlike crops, ocean and cave biomes match.",
+    "  category        for 'set' when the mob is added: monster, creature, ambient, water_creature, water_ambient,",
+    "                  underground_water_creature, axolotls, misc",
+    "  disable_modifiers  a mod's own biome modifiers this rule replaces (each becomes forge:none). Optional.",
+    "  label, notes    shown in the report, for the reader.",
+    "",
+    "conditions: [ { ... }, ... ]   spawn checks instead of biome lists (patcherMod worldgen/SpawnConditions). Natural spawns",
+    "          and chunk-generation herds only; spawn eggs, spawners and commands are untouched.",
+    "  id         unique, lowercase a-z 0-9 _ (names the biome tag creativeengineering:spawn_conditions/<id>)",
+    "  condition  light_only  the mob's spawn rule becomes 'light above 8' on any block its placement allows (no ground",
+    "                         block requirement). Its own check (Alex's Mobs' 1-in-N roll) still runs.",
+    "             water_only  only on the water surface (top block of the column is water). Its own rule still runs.",
+    "  mobs       entity ids. Ids of a mod that isn't loaded are left out.",
+    "  where / add / except / rules   where it applies, as for rules; 'rules' = the biomes those rule ids match.",
+    "             None of them = everywhere.",
+    "",
+    "spawn_ground: { block tag: [entries] }   blocks added to a spawn-rule ground tag (ids or '#tags'), e.g.",
+    "          #minecraft:animals_spawnable_on, which vanilla animals and many Alex's Mobs animals need below them.",
+    "          patcherMod makes Animal's (and the mooshroom's) walk value read the same tag, so night spawns agree.",
+    "",
+    "Weights are relative to the other mobs of the same category in that biome (plains creatures: sheep 12, pig 10,",
+    "chicken 10, cow 8, horse 5, donkey 1; one picked per spawn attempt). See mob_spawns.md section 2 for what else",
+    "decides whether a picked mob actually appears (light, ground block, mob cap)."
+  ],
+  "rules": [
+    {
+      "id": "mooshroom_dark_forests",
+      "mob": "minecraft:mooshroom",
+      "action": "set",
+      "weight": 8,
+      "min": 2,
+      "max": 4,
+      "add": [
+        "minecraft:dark_forest",
+        "terralith:mirage_isles"
+      ],
+      "label": "Plan 9.1",
+      "notes": "Mooshrooms in dark forests and the mirage isles. Needs spawn_ground: their rule wants #mooshrooms_spawnable_on below (mycelium only in vanilla)."
+    },
+    {
+      "id": "pig_forests",
+      "mob": "minecraft:pig",
+      "action": "scale",
+      "factor": 2,
+      "where": [
+        "forest",
+        "swamp"
+      ],
+      "label": "Plan 9.3",
+      "notes": "Pigs favour forests and swamps."
+    },
+    {
+      "id": "sheep_hills",
+      "mob": "minecraft:sheep",
+      "action": "scale",
+      "factor": 2,
+      "where": [
+        "mountain"
+      ],
+      "label": "Plan 9.3",
+      "notes": "Sheep favour hills and peaks (every mountain-trait biome; peaks are a subset)."
+    },
+    {
+      "id": "cow_plains",
+      "mob": "minecraft:cow",
+      "action": "scale",
+      "factor": 2,
+      "where": [
+        "plains"
+      ],
+      "label": "Plan 9.3",
+      "notes": "Cows favour plains and flat biomes. Also doubles mooblooms where More Mooblooms converts plains cows (meadow, blooming plateau)."
+    },
+    {
+      "id": "chicken_shores",
+      "mob": "minecraft:chicken",
+      "action": "set",
+      "weight": 10,
+      "min": 2,
+      "max": 4,
+      "where": [
+        "beach",
+        "river"
+      ],
+      "label": "Plan 9.3",
+      "notes": "Chickens on beaches and river banks; the chicken_shores condition lets them spawn on sand and gravel there."
+    },
+    {
+      "id": "chicken_sky",
+      "mob": "minecraft:chicken",
+      "action": "set",
+      "weight": 20,
+      "min": 2,
+      "max": 4,
+      "where": [
+        "sky"
+      ],
+      "label": "Plan 9.3",
+      "notes": "Chickens in every skylands biome, at twice the spring weight."
+    },
+    {
+      "id": "rabbit_savanna",
+      "mob": "minecraft:rabbit",
+      "action": "set",
+      "weight": 8,
+      "min": 2,
+      "max": 3,
+      "where": [
+        "savanna"
+      ],
+      "label": "Plan 9.3",
+      "notes": "Rabbits in savannas (none before)."
+    },
+    {
+      "id": "rabbit_snowy",
+      "mob": "minecraft:rabbit",
+      "action": "scale",
+      "factor": 2,
+      "where": [
+        "snowy"
+      ],
+      "label": "Plan 9.3",
+      "notes": "Rabbits twice as common in snowy biomes that have them."
+    },
+    {
+      "id": "duck_wetlands",
+      "mob": "untitledduckmod:duck",
+      "action": "set",
+      "weight": 6,
+      "min": 2,
+      "max": 4,
+      "where": [
+        "swamp",
+        "beach"
+      ],
+      "label": "Plan 9.6",
+      "notes": "Ducks in swamps and on beaches as on rivers (anywhere, daylight unless on grass)."
+    },
+    {
+      "id": "goose_wetlands",
+      "mob": "untitledduckmod:goose",
+      "action": "set",
+      "weight": 4,
+      "min": 2,
+      "max": 4,
+      "where": [
+        "swamp",
+        "beach"
+      ],
+      "label": "Plan 9.6",
+      "notes": "Geese in swamps and on beaches as on rivers."
+    },
+    {
+      "id": "duck_ponds",
+      "mob": "untitledduckmod:duck",
+      "action": "set",
+      "weight": 4,
+      "min": 2,
+      "max": 4,
+      "where": [
+        "grassy !swamp !river !beach !sky !ocean !cave"
+      ],
+      "label": "Plan 9.6",
+      "notes": "Ducks on lakes and ponds in grassy land biomes: the waterfowl_ponds condition only lets them spawn on water there."
+    },
+    {
+      "id": "goose_ponds",
+      "mob": "untitledduckmod:goose",
+      "action": "set",
+      "weight": 3,
+      "min": 2,
+      "max": 4,
+      "where": [
+        "grassy !swamp !river !beach !sky !ocean !cave"
+      ],
+      "label": "Plan 9.6",
+      "notes": "Geese on lakes and ponds, as duck_ponds."
+    }
+  ],
+  "conditions": [
+    {
+      "id": "flying_birds",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:parrot",
+        "alexsmobs:crow",
+        "alexsmobs:seagull",
+        "alexsmobs:bald_eagle",
+        "alexsmobs:sunbird",
+        "alexsmobs:toucan",
+        "alexsmobs:blue_jay",
+        "alexsmobs:hummingbird",
+        "alexsmobs:potoo"
+      ],
+      "label": "Plan 9.5",
+      "notes": "Flying birds need only light, not a ground block. Everywhere."
+    },
+    {
+      "id": "chicken_shores",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:chicken"
+      ],
+      "rules": [
+        "chicken_shores"
+      ],
+      "label": "Plan 9.3",
+      "notes": "Chickens on sand and gravel on beaches and river banks (elsewhere they keep the ground rule)."
+    },
+    {
+      "id": "waterfowl_ponds",
+      "condition": "water_only",
+      "mobs": [
+        "untitledduckmod:duck",
+        "untitledduckmod:goose"
+      ],
+      "rules": [
+        "duck_ponds",
+        "goose_ponds"
+      ],
+      "label": "Plan 9.6",
+      "notes": "In grassy land biomes ducks and geese spawn only on water, so they turn up on lakes and ponds. Rivers, swamps and beaches are not in it."
+    }
+  ],
+  "spawn_ground": {
+    "_note": "Plan 9.2: every dirt (#minecraft:dirt: dirt, coarse dirt, podzol, rooted dirt, mycelium, moss, mud, Immersive Weathering soils, Botania grasses...) counts as ground for animals, mooshrooms and rabbits.",
+    "minecraft:animals_spawnable_on": [
+      "#minecraft:dirt"
+    ],
+    "minecraft:mooshrooms_spawnable_on": [
+      "#minecraft:dirt"
+    ],
+    "minecraft:rabbits_spawnable_on": [
+      "#minecraft:dirt"
+    ]
+  }
+}

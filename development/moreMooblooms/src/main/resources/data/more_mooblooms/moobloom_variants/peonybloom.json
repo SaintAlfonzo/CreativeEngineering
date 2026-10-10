@@ -1,0 +1,20 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:peony[half=upper]",
+      "weight": 5
+    },
+    {
+      "state": "minecraft:lilac[half=upper]",
+      "weight": 4
+    },
+    {
+      "state": "minecraft:pink_tulip",
+      "weight": 1
+    }
+  ],
+  "egg_colors": [
+    "#E3A1F7",
+    "#F6E2FF"
+  ]
+}

@@ -1,0 +1,87 @@
+# More Mooblooms. The dollar-brace values come from gradle.properties (mod_*) and the root gradle.properties
+# (versions), expanded by build-logic's ce.forge-mod.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.${mod_id}]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+# Buzzier Bees: the buzzier_bees content set (removes its moobloom, buttercup and Sunny sources from
+# outside; nothing of Buzzier Bees is in this jar). ordering AFTER so our setup work runs after its own.
+[[dependencies.${mod_id}]]
+modId="buzzier_bees"
+mandatory=false
+versionRange="[5,)"
+ordering="AFTER"
+side="BOTH"
+
+# JEI: one spawn egg per variant, info pages, hiding the buttercup / Buzzier Bees egg.
+[[dependencies.${mod_id}]]
+modId="jei"
+mandatory=false
+versionRange="[11,)"
+ordering="NONE"
+side="BOTH"
+
+# Blueprint: the Two by Two advancement modifier.
+[[dependencies.${mod_id}]]
+modId="blueprint"
+mandatory=false
+versionRange="[6,)"
+ordering="NONE"
+side="BOTH"
+
+# Tag-compat packs only (no code): the moobloom joins that mod's cow tags.
+[[dependencies.${mod_id}]]
+modId="alexsmobs"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="supplementaries"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="abnormals_delight"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="botania"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="delightful"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

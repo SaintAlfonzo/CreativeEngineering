@@ -84,17 +84,10 @@ public class CreativeEngineering
 				com.SaintAlfonzo.creativeengineering.gear.ElytraDuplicationSerializers.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.potion.BetterBeaconsPotions.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.potion.MagicResistancePotions.register(modEventBus);
-        // Tier shields (copper..dragon): the items here, the block-check widening in
-        // mixin/LivingEntityShieldMixin, everything tunable in CEConfig.SHIELDS.
+        // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check
+        // widening in mixin/LivingEntityShieldMixin, everything tunable in CEConfig.SHIELDS.
         com.SaintAlfonzo.creativeengineering.shield.ShieldItems.register(modEventBus);
-        // Emu nest (Incubation nest for Alex's Mobs emus): blocks here, the emu's EggLayer side in
-        // mixin/EntityEmuEggLayerMixin, the foreign-nest guard in mixin/LayEggInNestGoalMixin.
-        if (net.minecraftforge.fml.ModList.get().isLoaded("incubation")) {
-            com.SaintAlfonzo.creativeengineering.nest.EmuNests.register(modEventBus);
-            // Duck + goose nests (Untitled Duck Mod): blocks here, the EggLayer side in
-            // mixin/DuckEntityEggLayerMixin + GooseEntityEggLayerMixin.
-            com.SaintAlfonzo.creativeengineering.nest.WaterfowlNests.register(modEventBus);
-        }
+        // Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)
         MinecraftForge.EVENT_BUS.register(this);
@@ -156,6 +149,11 @@ public class CreativeEngineering
         // kubejs/server_scripts/worldgen/structure_overrides.js and frozen at ServerAboutToStartEvent.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies.class);
 
+        // Mob spawn tuning: biome modifier type creativeengineering:tune_spawns (mob_spawns.json, written by
+        // kubejs/server_scripts/worldgen/mob_spawns.js); its change record feeds /dumpspawns and is cleared on stop.
+        com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.class);
+
         // Structure biome rules (biome_rules in structure_groups.json): only allowed structures start in
         // the water biomes. Staged by structure_overrides.js, frozen at ServerAboutToStartEvent.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules.class);
@@ -166,9 +164,17 @@ public class CreativeEngineering
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.GroundMatch.class);
 
         // Earth fill: cancels a structure start whose template foundations would sit over too much water or
-        // air (mixin/ChunkGeneratorEarthFillMixin). Registered to clear its template cache; knobs in
-        // CEConfig [worldgen.earth_fill].
+        // air, and a water structure whose water would replace too much dry ground or air
+        // (mixin/ChunkGeneratorEarthFillMixin). Registered to clear its template caches; knobs in
+        // CEConfig [worldgen.earth_fill] and [worldgen.water_fill].
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.EarthFill.class);
+
+        // Terrain adaptation by structure tag (none / bury / beard_thin / beard_box / the soft beard) and template trim
+        // (air and bare pad around the built columns not placed): mixin/StructureTerrainAdaptationMixin,
+        // BeardifierSoftMixin and StructureTemplateGroundMatchMixin. Registered for the tag table and the template
+        // caches; knobs in CEConfig [worldgen.terrain_adaptation].
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.TerrainAdaptation.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.TemplateTrim.class);
 
         // /ceplace: every structure or template matching a filter, laid out in rows (flat-world testing);
         // knobs in CEConfig [worldgen.mass_place].
@@ -235,10 +241,6 @@ public class CreativeEngineering
 			// script load; this covers clients of a dedicated server).
 			if (net.minecraftforge.fml.ModList.get().isLoaded("kubejs")) {
 				event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.KubeJSCanAction::register);
-			}
-			if (net.minecraftforge.fml.ModList.get().isLoaded("incubation")) {
-				event.enqueueWork(com.SaintAlfonzo.creativeengineering.nest.EmuNests::registerFlammables);
-				event.enqueueWork(com.SaintAlfonzo.creativeengineering.nest.WaterfowlNests::registerFlammables);
 			}
 
 			LOGGER.info("CreativeEngineering setup complete");

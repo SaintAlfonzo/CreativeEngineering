@@ -45,6 +45,15 @@
                       0
                     ],
                     "tag": "minecraft:terracotta"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      -1,
+                      0
+                    ],
+                    "tag": "creativeengineering:worldgen/grass_like_soils"
                   }
                 ]
               }

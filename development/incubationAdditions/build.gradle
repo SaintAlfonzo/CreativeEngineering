@@ -1,0 +1,19 @@
+// Shared Forge setup (runs, mods.toml expansion, jar manifest, jar_archive, installToMods) comes from
+// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to incubationAdditions.
+// Build from the instance root (`./gradlew :incubationAdditions:build`) or from here (`./gradlew build`).
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Third-party mod jars copied from ../mods (git-ignored): incubation, blueprint, alexsmobs, citadel,
+    // untitledduckmod, geckolib. They are SRG-named, see the note below.
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
+}
+
+// Same approach as patcherMod: no Mixin refmap, the jar only ever runs reobfuscated, so mixins that
+// touch Minecraft members use SRG names with remap = false. Disable the AP target validator so it
+// doesn't reject those names against the dev-time (Mojmap) classes.
+tasks.named('compileJava', JavaCompile).configure {
+    options.compilerArgs << '-AdisableTargetValidator=true'
+}

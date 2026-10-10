@@ -1,0 +1,23 @@
+{
+  "selector": "minecraft:husbandry/bred_all_animals",
+  "priority": "normal",
+  "modifiers": [
+    {
+      "type": "criteria",
+      "config": {
+        "criteria": {
+          "more_mooblooms:moobloom": {
+            "trigger": "minecraft:bred_animals",
+            "conditions": {
+              "child": [
+                { "condition": "minecraft:entity_properties", "entity": "this", "predicate": { "type": "more_mooblooms:moobloom" } }
+              ]
+            }
+          }
+        },
+        "requirements": [["more_mooblooms:moobloom"]],
+        "should_replace_requirements": false
+      }
+    }
+  ]
+}

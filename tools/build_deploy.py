@@ -105,6 +105,8 @@ DEVELOPMENT = os.path.join(ROOT, 'development')
 IN_TREE_MODS = [
     ('patcherMod', 'creativeengineering', True),
     ('exposureBackport', 'exposureBackport', True),
+    ('incubationAdditions', 'incubationAdditions', True),
+    ('moreMooblooms', 'moreMooblooms', True),
 ]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
@@ -165,9 +167,11 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/structure_groups.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
     ('generation_scripts/worldgen/wild_crops.json', 'runtime'),         # worldgen/wild_crops.js
+    ('generation_scripts/worldgen/mob_spawns.json', 'runtime'),         # worldgen/mob_spawns.js
     ('generation_scripts/food/food_types.json', 'runtime'),             # tags/foodtypetags.js
     ('generation_scripts/food/can_servings.json', 'runtime'),           # tags/cantags.js
     ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
+    ('generation_scripts/food/placeable.json', 'runtime'),             # tags/placeabletags.js (placeable food tooltips)
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
     ('generation_scripts/worldgen/biome_merge_proposals.json', 'dev'),  # tools/analyze_structure_biome_merges.py
     ('generation_scripts/recipes/*', 'dev'),                            # sawmill.js output (copied into the jar)

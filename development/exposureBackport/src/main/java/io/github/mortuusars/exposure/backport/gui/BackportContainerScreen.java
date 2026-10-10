@@ -1,11 +1,14 @@
 package io.github.mortuusars.exposure.backport.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.mortuusars.exposure.client.gui.screen.element.textbox.TextBox;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A 1.19.2 {@link AbstractContainerScreen} with the 1.20.2+ contract, for upstream container screens:
@@ -67,6 +70,26 @@ public abstract class BackportContainerScreen<T extends AbstractContainerMenu> e
     @Override
     public final boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         return this.mouseScrolled(mouseX, mouseY, 0.0, delta);
+    }
+
+    /** 1.20: focusing a child also sets its focused flag (see {@link AbstractWidget#moveFocus}). */
+    @Override
+    public void setFocused(@Nullable GuiEventListener listener) {
+        AbstractWidget.moveFocus(this.getFocused(), listener);
+        super.setFocused(listener);
+    }
+
+    /**
+     * 1.19.2's version follows {@code setFocused} with {@code changeFocus(true)}, which toggles the flag
+     * {@link #setFocused} just set on a text box back off. 1.20 only sets the focus.
+     */
+    @Override
+    public void setInitialFocus(@NotNull GuiEventListener listener) {
+        if (listener instanceof TextBox) {
+            this.setFocused(listener);
+        } else {
+            super.setInitialFocus(listener);
+        }
     }
 
     public void setTooltipForNextRenderPass(Component tooltip) {

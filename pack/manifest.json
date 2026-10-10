@@ -4371,7 +4371,7 @@
       "file": "creativeengineering-1.0.5.jar",
       "name": "creativeengineering-1.0.5",
       "version": "",
-      "sha1": "5008f3452a10935366a4de9fce0f3bf1f8376b39",
+      "sha1": "c4cd7a59f6f8798429d359c74eb1a173d904ec66",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -4921,10 +4921,10 @@
       }
     },
     {
-      "file": "exposureBackport-1.9.19-ce-19.2-02.jar",
-      "name": "exposureBackport-1.9.19-ce-19.2-02",
+      "file": "exposureBackport-1.9.19-ce-19.2-03.jar",
+      "name": "exposureBackport-1.9.19-ce-19.2-03",
       "version": "",
-      "sha1": "e5bf5db47bf379079f9a70d712e6f849f1a9c47c",
+      "sha1": "8a2af83f8f5908b91cb36c8f5ca53dff6c142ba5",
       "modId": "exposure",
       "side": "both",
       "source": "local"

@@ -295,8 +295,10 @@
 	#Range: 1 ~ 9
 	compactRowSpacing = 4
 
-#Tier shields (copper / gold / diamond / netherite / echo / felsic / dragon). Vanilla's
-#shield and Immersive Engineering's shield are NOT affected by anything in here.
+#Tier shields: copper / gold / iron / diamond / netherite / echo / felsic / dragon. 'iron' is
+#the vanilla minecraft:shield itself, tuned like the others. Immersive Engineering's shield
+#and Alex's Mobs' Shield of the Deep are NOT tier shields; only disableCooldownTicks below
+#applies to them.
 #
 #A raised tier shield sorts each incoming hit into one of three kinds and looks that
 #kind up under its own tier, each tuned independently:
@@ -332,15 +334,20 @@
 	#sources (burning, poison ticks) are usually under it; lava and big hits are not.
 	#Range: 0.0 ~ 1000.0
 	wearThreshold = 3.0
-	#Ticks a shield is unusable after an attacker disables it (a vanilla axe hit by default;
-	#Immersive Engineering's shock upgrade and Alex's Mobs' void worm shot trigger the same
-	#mechanic directly). This is a Player-level vanilla mechanic, NOT tier-specific - unlike
-	#everything else in [shields], it also applies to the plain vanilla shield and Immersive
-	#Engineering's shield. 20 (1 second) is vanilla's hardcoded value; lower it to let
-	#blocking recover faster against fast/continuous attackers without removing the
-	#punish-for-turtling mechanic entirely. 0 disables the cooldown outright.
+	#Ticks a raised shield is unusable after an attacker disables it: a player's axe, a mob's
+	#axe (vindicators, piglin brutes; 25% chance per hit, more with Efficiency), Immersive
+	#Engineering's shock upgrade and Alex's Mobs' void worm shot. Not tier-specific - it covers
+	#every shield, tier or not. Vanilla hardcodes 100 (5 seconds); the pack uses 20 (1 second).
+	#0 disables the cooldown outright.
 	#Range: 0 ~ 12000
 	disableCooldownTicks = 20
+	#Potion effects whose periodic damage no shield may block, comma-separated effect ids.
+	#Matched by the effect that is ticking on the shield holder, not by damage tag: poison
+	#ticks use the same 'magic' damage source as Instant Damage, so a tag can't tell them
+	#apart. The shield doesn't attempt the block (no shield sound, full damage). Instant
+	#Damage and other one-off magic hits are unaffected. The default is every effect in the
+	#pack that deals tick damage.
+	unblockableEffectTicks = "minecraft:poison, minecraft:wither, everythingcopper:copper_poisoning, alexsmobs:debilitating_sting, alexsmobs:exsanguination, alexsmobs:ender_flu, endersdelight:phasing"
 
 	#Per damage kind (physical / elemental / magic): how the raised shield's direction is checked.
 	#  REQUIRED       vanilla: the source needs a position and must be in front of you.
@@ -375,12 +382,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 1
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.copper.reduction]
@@ -440,12 +458,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 2
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.gold.reduction]
@@ -505,12 +534,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 4
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.diamond.reduction]
@@ -570,12 +610,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 5
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.netherite.reduction]
@@ -635,12 +686,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 6
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.echo.reduction]
@@ -700,12 +762,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 7
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.felsic.reduction]
@@ -765,12 +838,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = "minecraft:poison;100;0"
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 8
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.dragon.reduction]
@@ -830,12 +914,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 3
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.iron.reduction]
@@ -1120,6 +1215,21 @@
 		#wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).
 		#Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.
 		wildCrops = true
+		#Cancel a water structure whose water would replace too much dry ground or air ([worldgen.water_fill]).
+		#New chunks only.
+		waterFill = true
+		#wild_flowers.json: flower biomes and rates, Botania colors per biome, Flower Patch blocks in wild flowers
+		#(kubejs worldgen/wild_flowers.js). Off: every flower as its mod ships it. Rejoin to apply; only new chunks change.
+		wildFlowers = true
+		#mob_spawns.json: per-biome mob spawn weights, additions and removals (kubejs worldgen/mob_spawns.js,
+		#patcherMod SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.
+		mobSpawns = true
+		#The creativeengineering:terrain_adaptation/* structure tags replace a structure's own terrain adaptation
+		#(none, bury, beard_thin, beard_box, or the pack's soft beard; [worldgen.terrain_adaptation]). Rejoin; new chunks only.
+		terrainAdaptation = true
+		#Structures in the creativeengineering:template_trim tag skip their template's air and bare pad (grass,
+		#dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.
+		templateTrim = true
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
@@ -1254,13 +1364,53 @@
 		#"minecraft:village_plains=-1,-1" (no limits). The first matching entry wins; -1 = no limit.
 		overrides = []
 		#The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little
-		#coarser at cliffs). 1 = every column.
+		#coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too.
 		#Range: 1 ~ 8
 		sampleGrid = 2
 		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
 		#structure that has any earth in its base. For tuning the limits.
 		#Allowed Values: OFF, CANCELLED, ALL
 		log = "CANCELLED"
+
+	#Water structures that would flood the land. Just before a structure start in the structure tag
+	#creativeengineering:water_fill/structures is stored, every water block of its template pieces (water,
+	#waterlogged blocks, kelp, seagrass; all layers) is compared with the terrain the generator predicts
+	#at that spot. Water in water is fine, and so is water replacing a sea, lake or river bed. Water
+	#replacing dry ground counts toward maxIntoGround, water in air (above the sea surface or on land)
+	#toward maxIntoAir; past either limit the whole structure is cancelled and its slot stays empty.
+	#Uses [worldgen.earth_fill] sampleGrid. New chunks only; /place structure is not checked.
+	[worldgen.water_fill]
+		#Most water blocks that may replace dry ground (a ruin reaching onto a beach or into a hillside).
+		#-1 = no limit, 0 = none at all. Per structure: see overrides.
+		#Range: -1 ~ 100000
+		maxIntoGround = 32
+		#Most water blocks that may land in air (water standing above the sea surface or on land, where it
+		#spills). -1 = no limit, 0 = none at all. Per structure: see overrides.
+		#Range: -1 ~ 100000
+		maxIntoAir = 16
+		#Per-structure limits, one entry each: "<structure id or #structure tag>=<ground>,<air>". The default
+		#lets the structures in creativeengineering:water_fill/ponds (fish ponds, a house on a pond) dig their
+		#water into the ground and allows them 16 in air. The first matching entry wins; -1 = no limit.
+		#Only structures in creativeengineering:water_fill/structures are checked at all.
+		overrides = ["#creativeengineering:water_fill/ponds=-1,16"]
+		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
+		#structure that carries any water. For tuning the limits.
+		#Allowed Values: OFF, CANCELLED, ALL
+		log = "CANCELLED"
+
+	#Terrain around structures. Vanilla's beard flattens the whole template bounding box and blends it out
+	#over about 8 blocks around it, so a small structure with a flat pad or a lot of saved air leaves a flat
+	#rectangle the size of its whole template in a curved hillside. Structures in the structure tag
+	#creativeengineering:terrain_adaptation/soft get the soft beard instead: the same fill and carve, but
+	#only under the template's built columns (pad and air columns left out when the structure is also in
+	#creativeengineering:template_trim), blending out over a short round skirt. Tags: kubejs
+	#worldgen/terrain_adaptation.js. New chunks only.
+	[worldgen.terrain_adaptation]
+		#Blocks added to the soft beard's minimum skirt of 4 (where its fill and carve fade out, measured from
+		#the built footprint). 0 = the tightest blend; 4 = as wide as vanilla's beard (8), but round and
+		#around the footprint; 8 = the most there is room for (12, vanilla's reach). Read per chunk.
+		#Range: 0 ~ 8
+		skirtBump = 0
 
 #Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
 #one takes a serving; the servings left show as a durability bar and a tooltip line. The
@@ -1356,4 +1506,53 @@
 	#this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval.
 	#Range: 1 ~ 1200
 	mountEffectIntervalTicks = 100
+
+#JEI recipe screen tweaks (client side).
+[jei]
+	#When the recipe screen is opened over a screen that can take recipe transfers (crafting table,
+	#inventory, modded crafting GUIs), list the recipes whose + button is enabled first. The rest follow,
+	#most-complete first (the share of inputs you already have). Other screens keep JEI's own order.
+	#Takes effect the next time a recipe lookup opens.
+	craftableFirst = true
+
+#WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
+#plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
+#WTHIT's own config, to every other growing plant. The blocks and their stages are in
+#assets/creativeengineering/crop_growth.json (override it from kubejs/assets/creativeengineering/).
+#Client-side only; reads the block state the client already has.
+[crop_growth]
+	#Master on/off switch for the added lines.
+	enabled = true
+	#true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in
+	#crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from
+	#mods added later. false: only the plants in the file.
+	fallback = true
+	#true: plants that can be picked before they are fully grown (salmonberries from stage 3,
+	#grapes from stage 2) read 'Growth: 75% (Harvestable)' until they finish. false: the
+	#percentage only.
+	showHarvestable = true
+
+#Container title plaques from GUI resource packs (client side).
+[gui_title]
+	#When a container title is wider than the plaque the resource pack painted behind it, stretch the
+	#plaque to fit. Titles wider than the whole GUI are cut short with "...". Only screens that draw
+	#their title the vanilla way (chests, barrels, shulker boxes, hoppers, horses, dispensers, furnaces).
+	stretchPlaque = true
+	#Record every title that needed a stretch in kubejs/exported/gui_title_overflow.json
+	#(screen class, texture, title and widths; kept across sessions).
+	logOverflow = true
+
+#Season types on top of Serene Seasons. The biome lists are the tags creativeengineering:seasons/
+#arid, frozen, tropical and adaptive (kubejs/generation_scripts/worldgen/season_types.json).
+#Arid: no rain all year. Frozen: snow all year. Tropical: wet and dry seasons, savannas included.
+#Adaptive (rivers, beaches): each column behaves like the nearest land biome. SeasonHUD shows
+#'Arid' / 'Frozen' with the day of the year. Read live on both sides.
+[seasons]
+	#false: Serene Seasons' own rules everywhere, the tags are ignored.
+	enabled = true
+	#How far (blocks) a river or beach column looks for land to copy, in rings of 8 directions
+	#at 8, 16, 24, 32, 48, 64, ... blocks. The first ring that reaches land decides by majority.
+	#Nothing found: the river or beach keeps its own biome.
+	#Range: 8 ~ 256
+	adaptiveRadius = 64
 

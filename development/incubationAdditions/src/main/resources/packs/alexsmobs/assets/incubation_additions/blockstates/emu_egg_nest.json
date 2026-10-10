@@ -1,0 +1,57 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "incubation:block/twig_nest"
+      }
+    },
+    {
+      "apply": {
+        "model": "incubation_additions:block/one_emu_egg"
+      },
+      "when": {
+        "eggs": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "incubation_additions:block/two_emu_eggs"
+      },
+      "when": {
+        "eggs": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "incubation_additions:block/three_emu_eggs"
+      },
+      "when": {
+        "eggs": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "incubation_additions:block/four_emu_eggs"
+      },
+      "when": {
+        "eggs": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "incubation_additions:block/five_emu_eggs"
+      },
+      "when": {
+        "eggs": "5"
+      }
+    },
+    {
+      "apply": {
+        "model": "incubation_additions:block/six_emu_eggs"
+      },
+      "when": {
+        "eggs": "6"
+      }
+    }
+  ]
+}

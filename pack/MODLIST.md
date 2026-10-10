@@ -169,7 +169,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Every Compat (Wood Good) | `everycomp` | 1.19.2-2.5.36 | `everycomp-1.19.2-2.5.36.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/every-compat/files/7142836) [MR](https://modrinth.com/mod/every-compat/version/xUCsILcc) |
 | both | Everything is Copper | `everythingcopper` | everythingcopper-1.19.2-2.3.4.jar | `everythingcopper-1.19.2-2.3.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/everythingcopper/files/5030661) |
 | both | Explorer's Compass | `explorerscompass` | 1.19.2-1.3.0-forge | `ExplorersCompass-1.19.2-1.3.0-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/explorers-compass/files/4016467) [MR](https://modrinth.com/mod/explorers-compass/version/YkK8Bd84) |
-| both | exposureBackport-1.9.19-ce-19.2-02 | `exposure` |  | `exposureBackport-1.9.19-ce-19.2-02.jar` | local |
+| both | exposureBackport-1.9.19-ce-19.2-03 | `exposure` |  | `exposureBackport-1.9.19-ce-19.2-03.jar` | local |
 | both | Fairy Lights | `fairylights` | fairylights-6.0.1-1.19.2 | `fairylights-6.0.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fairy-lights/files/4961791) |
 | both | Fantasy's Furniture | `fantasyfurniture` | 6.7.0 | `fantasyfurniture-1.19.2-6.7.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fantasys-furniture/files/4183177) [MR](https://modrinth.com/mod/fantasy-furniture/version/QewqRA2e) |
 | both | Farmer's Delight | `farmersdelight` | 1.19.2-1.2.4 | `FarmersDelight-1.19.2-1.2.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-delight/files/5051241) [MR](https://modrinth.com/mod/farmers-delight/version/rFTKVUtq) |

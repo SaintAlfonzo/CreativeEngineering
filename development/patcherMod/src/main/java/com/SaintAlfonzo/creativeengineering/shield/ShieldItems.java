@@ -14,7 +14,9 @@ import net.minecraftforge.registries.RegistryObject;
 /**
  * Registers {@code creativeengineering:<tier>_shield} for every {@link ShieldTier} EXCEPT
  * {@link ShieldTier#IRON}, which is folded into the player's real vanilla shield ({@code Items.SHIELD})
- * instead of getting a new item of its own - see {@link ShieldTier#of}. No recipes - by request.
+ * instead of getting a new item of its own - see {@link ShieldTier#of}. Recipes are KubeJS
+ * ({@code server_scripts/equipment/shield.js}, {@code end_gear.js}); banner decoration is
+ * {@code mixin/ShieldDecorationRecipeMixin}.
  */
 public final class ShieldItems {
 

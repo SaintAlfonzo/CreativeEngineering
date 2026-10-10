@@ -1,9 +1,11 @@
 {
-  "description": "Spikes, thorns, stabs: cactus, bee stings, berry bush, dripstone, icicles, spikes, barbed and razor wire, tridents and spears.",
+  "description": "Spikes, thorns, stabs: cactus, bee stings, berry bush, dripstone, icicles, spikes, wither roots, beanstalk thorns, barbed and razor wire, tridents and spears.",
   "values": [
     "cactus",
     "sting",
     "sweetBerryBush",
+    "farmersrespite.witherRoots",
+    "neapolitan.beanstalkThorns",
     "stalagmite",
     "fallingStalactite",
     "icicle",

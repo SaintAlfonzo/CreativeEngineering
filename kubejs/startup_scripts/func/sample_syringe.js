@@ -15,6 +15,7 @@ console.log('sample_syringe func loading')
     // Written out one entry per line on purpose - add more as they're needed.
     const SAMPLES = {}
     SAMPLES['minecraft:cow'] = { name: 'Cow', filledId: 'creativeengineering:cow_sample_syringe' }
+    SAMPLES['more_mooblooms:moobloom'] = { name: 'Moobloom', filledId: 'creativeengineering:cow_sample_syringe' }
     SAMPLES['minecraft:pig'] = { name: 'Pig', filledId: 'creativeengineering:pig_sample_syringe' }
     SAMPLES['minecraft:chicken'] = { name: 'Chicken', filledId: 'creativeengineering:chicken_sample_syringe' }
     SAMPLES['minecraft:sheep'] = { name: 'Sheep', filledId: 'creativeengineering:sheep_sample_syringe' }

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "incubation_additions:duck_nest",
+    "incubation_additions:duck_egg_nest",
+    "incubation_additions:goose_nest",
+    "incubation_additions:goose_egg_nest"
+  ]
+}

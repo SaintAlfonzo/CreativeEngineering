@@ -1,0 +1,10 @@
+{
+  "description": "Thorn ticks from standing in or walking through something: cactus; sweetBerryBush, which also covers Immersive Weathering leaf piles and weeds and the Vinery taiga grape bush; Farmer's Respite wither roots; Neapolitan beanstalk thorns; Dustrial Decor barbed panes. Shields only attempt these on tiers with [shields.<tier>].blocksContactTicks = true (diamond and above by default), and then block them from any direction at the physical percentage.",
+  "values": [
+    "cactus",
+    "sweetBerryBush",
+    "farmersrespite.witherRoots",
+    "neapolitan.beanstalkThorns",
+    "barb"
+  ]
+}

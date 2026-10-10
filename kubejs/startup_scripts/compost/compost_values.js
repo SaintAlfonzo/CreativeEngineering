@@ -260,7 +260,6 @@
 		// alexsmobs
 		[i.acacia_blossom,                      1.0],
 		// buzzier_bees
-		[i.buttercup,                           1.0],
 		[i.pink_clover,                         1.0],
 		[i.white_clover,                        1.0],
 		// immersive_weathering

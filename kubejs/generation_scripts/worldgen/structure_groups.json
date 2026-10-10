@@ -435,8 +435,8 @@
       },
       "structures": {
         "betterdeserttemples:desert_temple": {
-          "weight": 97,
-          "frequency": 0.7059
+          "weight": 40,
+          "frequency": 0.2
         },
         "betterjungletemples:jungle_temple": {
           "weight": 186,

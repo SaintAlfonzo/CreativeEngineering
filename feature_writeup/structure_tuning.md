@@ -31,6 +31,8 @@ there (a grassy ruin on volcanic peaks sits on basalt instead).
 | Monobank banks 5x rarer in villages | `pool_tags.json` tags `monobank/vault_houses` x0.18 and `monobank/vault_streets` x0.16 | BUILT 2026-10-03; chance per pool computed from the 2026-10-03 pool report, not yet read back from a game load. ST-49 |
 | Driftwood: in the water at the 0.25x rate, on land about a tenth of that | `kubejs/data/upgrade_aquatic` (5 placed features gated to water) + `kubejs/data/creativeengineering` (3 land placed features + 3 biome modifiers) | BUILT 2026-10-03; the 8 placement lists parse against the 1.19.2 codecs headless; not loaded in a game. ST-50 |
 | Earth fill: cancel a structure whose foundation needs too much earth over water or air | patcherMod `worldgen/EarthFill` + `ChunkGeneratorEarthFillMixin`, CEConfig `[worldgen.earth_fill]`, tags in `blocktags.js` + `worldgen/earth_fill.js` | BUILT 2026-10-03 (patcherMod 1.0.4, not in `mods/`: the game was running); 21 headless checks + a vanilla terrain simulation; mixin slot checked against the SRG bytecode, never applied in a game. ST-51 to ST-55 |
+| Water fill: cancel a water structure whose water would replace too much dry ground or air | `worldgen/EarthFill` (same hook), CEConfig `[worldgen.water_fill]`, tags in `worldgen/water_fill.js` | BUILT 2026-10-08 (patcherMod 1.0.5 build, not in `mods/`); 32 headless checks; defaults not calibrated. ST-56 to ST-60 |
+| Terrain adaptation by tag (none / bury / beard_thin / beard_box / **soft**) and template trim (no square pads or air notches) | patcherMod `worldgen/TerrainAdaptation` + `TemplateTrim`, 2 new mixins + the ground-match mixin, CEConfig `[worldgen.terrain_adaptation]`, tags in `worldgen/terrain_adaptation.js` + `blocktags.js` | BUILT 2026-10-09 (patcherMod 1.0.5 build, not in `mods/`: the game was running); 50 headless checks (soft beard equals vanilla's at skirt 8, real templates trimmed as a python read predicts); mixin targets checked against the Forge-patched SRG bytecode, never applied in a game. ST-61 to ST-68 |
 
 **Open first:** [structure_groups.json](../kubejs/generation_scripts/worldgen/structure_groups.json) (every rate),
 [structure_tags.json](../kubejs/generation_scripts/worldgen/structure_tags.json) (`group/*` = who shares a grid),
@@ -49,13 +51,18 @@ and the offline estimate [structure_group_estimates.md](../kubejs/generation_scr
 - Lootr: block → vanilla container pairs in `loot_container_swaps.json`.
 - `config/creativeengineering-common.toml` `[worldgen]` (also in Create's config screen), the layer above the JSON tables:
   - `[worldgen.systems]`: one on/off per system (structureGroups, structureFrequencies, poolTuning, lootContainerSwaps,
-    biomeLayout, biomeMerges, deadPlacementFilter, groundMatch, structureBiomeRules, earthFill).
+    biomeLayout, biomeMerges, deadPlacementFilter, groundMatch, structureBiomeRules, earthFill, waterFill,
+    terrainAdaptation, templateTrim).
   - `[worldgen.debug] structureDensity`: every structure's rate times x (testing only).
   - `[worldgen.pools]`, `[worldgen.biome_solver]`: the solvers' constants.
-  - `[worldgen.ground_match]` (+ `.sampling`), `[worldgen.earth_fill]` (limits, 3.13), `[worldgen.mass_place]` (`/ceplace` layout).
+  - `[worldgen.ground_match]` (+ `.sampling`), `[worldgen.earth_fill]` (limits, 3.13), `[worldgen.water_fill]` (3.14),
+    `[worldgen.terrain_adaptation]` (soft beard `skirtBump`, 3.15), `[worldgen.mass_place]` (`/ceplace` layout).
 - Ground matching: `[worldgen.ground_match]` (mode, baseLayers, nativeShare, minSamples, families, log, sampling); which
   blocks are base / plants / not-ground: the `creativeengineering:ground_match/*` block tags in `blocktags.js`; opt a
   structure out: `creativeengineering:ground_match/exempt` in `worldgen/ground_match.js`.
+- Terrain around a structure (3.15): the structure tags `creativeengineering:terrain_adaptation/{none,bury,beard_thin,beard_box,soft}`
+  and `creativeengineering:template_trim` in `worldgen/terrain_adaptation.js`; pad / plant blocks: the
+  `creativeengineering:template_trim/*` block tags in `blocktags.js`; soft skirt width: `[worldgen.terrain_adaptation] skirtBump`.
 - Inspecting structures: `/ceplace preview structures <filter>`, `/ceplace structures [by type|group|mod|none] <filter>`,
   `/ceplace templates <glob>` (3.10).
 
@@ -573,6 +580,203 @@ them. Modded structures were not simulated: the pack's registries need a game.
   (a `/locate` can point at a slot the check later cancels: it loads the chunk and finds no start, as for a wrong biome).
 - A cancelled slot stays empty, so structure rates drop a little on coasts and cliffs (the group grid is unchanged).
 - Terrain-matching pieces and non-template pieces (legacy temples, mineshafts) count as no earth.
+- For a structure in `creativeengineering:template_trim` (3.15) only the earth that is still placed counts: pad in a
+  column with no built block above it is never placed, so it can't hang anywhere (added 2026-10-09).
+
+### 3.14 Water fill: cancel water structures that would flood the land (added 2026-10-08)
+
+The same idea as earth fill (3.13), turned round. Some structures carry their own water: Hopo's underwater ruins are
+full of it up to 20 blocks high, the T&T ocean outpost stands on a 10,000-block water plate, the swamp fisherman house
+sits on a pond. On a shore or on land that water replaces dry ground or stands in air and spills. This check drops such
+a structure before it exists.
+
+**Which structures.** Only the structure tag `creativeengineering:water_fill/structures`
+([worldgen/water_fill.js](../kubejs/server_scripts/worldgen/water_fill.js)). It is opt-in, unlike earth fill: plenty of
+land and underground structures carry water on purpose (Better Jungle Temples' water rooms have 600+ blocks, Better
+Strongholds and the ancient city have fountains, village farms have water rows), and dug into the ground is exactly where
+that water belongs. The list was made from a scan of every template in `mods/*.jar` (2026-10-08, 401 templates carry
+water):
+
+| In the tag | Water per template | Placed |
+|---|---|---|
+| `hopo:underwater_ruins`, `underwater_small_ruins`, `underwater_warm_small_ruins`, `underwater_fossils` | 30 to 7,700, from template y 1 up | on the ocean floor (`OCEAN_FLOOR_WG`) |
+| `towns_and_towers:pillager_outpost_ocean` | 10,000 (plate, template y 0-5) | absolute y 58, so y 57-62: flush with the sea |
+| `towns_and_towers:village_ocean` | 500 per escort ship (hull, y 0-1) | absolute y 59 |
+| `farmers_structures:sushis` | 57 (waterlogged stilts) | rivers, absolute y 48 |
+| ponds: `farmers_structures:aquacultures_beach`, `_carp`, `_common`, `old_swamp_fisherman_house:fisherman_house` | 170 to 270 | sunk into the ground (beach, plains, swamp) |
+
+Left out on purpose: Terralith's spire (a land structure with a lake inside), the undergarden structures (another
+dimension), the vanilla ocean ruins and shipwrecks and the other ships (their templates carry no water; they would count
+nothing).
+
+**What is counted.** Every water block of each template piece: anything whose fluid is water (water, waterlogged
+blocks, kelp, seagrass, bubble columns), in **all** layers (water high up spills just as well), first palette, placed with
+the piece's position and rotation. Each is compared with the same predicted terrain as earth fill (same `sampleGrid`,
+same column cache, the same start), which now tells four kinds apart:
+- water: fine.
+- seabed: a solid block whose column is topped by water (a sea, lake or river bed). Fine: a ruin sunk a few blocks into
+  the ocean floor is how it is built.
+- dry ground: a solid block under a land column. Counts toward `maxIntoGround`.
+- air: above the sea surface, or above the ground on land. Counts toward `maxIntoAir`.
+
+Earth fill treats seabed as solid, so its results are unchanged. The two checks share one hook: earth first, then water,
+and either can cancel.
+
+**Config** (`[worldgen.water_fill]`; on/off `[worldgen.systems] waterFill`; applies to new chunks, read live):
+
+| Key | Default | Meaning |
+|---|---|---|
+| `maxIntoGround` | 32 | water blocks allowed to replace dry ground; -1 = no limit, 0 = none |
+| `maxIntoAir` | 16 | water blocks allowed in air; -1 = no limit, 0 = none |
+| `overrides` | `["#creativeengineering:water_fill/ponds=-1,16"]` | per-structure limits: `"<id or #structure tag>=<ground>,<air>"`, first match wins |
+| `log` | `CANCELLED` | `CANCELLED`, `ALL` (every checked start that carries water, counted fully), `OFF` |
+
+The ponds tag (`creativeengineering:water_fill/ponds`, same file) holds the structures that dig their water into the
+ground every time; the default override lifts their ground limit, so only a pond spilling into air cancels them. A log
+line reads `[water-fill] <id> at chunk [x, z]: N water blocks, G into dry ground (limit 32), A into air (limit 16) -> kept|CANCELLED`.
+
+**Where the defaults come from.** A guess, not a measurement: the vanilla simulation of 3.13 can't run modded
+structures. The reasoning: a water structure in its own biome lands in water or seabed almost everywhere, so its counts
+should be near 0, and a few dozen blocks into dry ground or air is already a visible spill. Calibrate with `log = ALL`
+(ST-57).
+
+**Limits.** The same as earth fill (noise terrain only, no `/place`, `/ceplace` or `/locate`, an empty slot on a
+cancel), plus:
+- The seabed test reads the column's top non-air block, so a lake or river bed counts as seabed too, and a column whose
+  surface the noise puts in an aquifer lake is "under water" even if a surface rule later makes it dry.
+- At `sampleGrid` 2 a shoreline is resolved to 2 blocks; a ruin touching a beach may count a few blocks either way.
+- Water a processor adds or removes at placement is not seen; only the template's own blocks count.
+
+### 3.15 Terrain adaptation by tag, the soft beard and template trim (added 2026-10-09)
+
+**The problem.** Some small and medium structures sit in a flat square of land with straight edges, cut into
+otherwise smooth hills. The Illager Siege Weapons ballista is the clearest case. Three things cause it:
+
+| Cause | What it does | Example |
+|---|---|---|
+| Vanilla's beard (`terrain_adaptation: beard_thin`) | Fills under and carves above the piece's whole **bounding box** at floor level, then fades out over about 8 blocks around that box | The ballista is a 7 x 13 box with no pad at all; 35 of its 91 columns are only air, yet the whole 7 x 13 plus 8 blocks around it is flattened |
+| Pads saved in the template | A grass/dirt slab several blocks wider than the building, placed at one height | Circus tent: 264 pad-only columns; fletcher house 254; big horse stable 279 |
+| Air saved in the template | Every air block in the template box replaces the terrain, cutting a rectangular notch into any slope | Circus tent 17,903 air blocks (6,072 of them outside the built columns), ballista 454 |
+
+Nearly all MCreator structure mods (the 59 terrain-adapted ones ported to `kubejs/data`, 3.11) have all three: they
+were built in a flat test world and saved as a whole box. Vanilla's beard skirt itself is round (straight-line
+distance to the box); the square comes from the box being the whole template.
+
+**Tags** ([worldgen/terrain_adaptation.js](../kubejs/server_scripts/worldgen/terrain_adaptation.js)):
+- `creativeengineering:terrain_adaptation/<mode>` replaces a structure's own `terrain_adaptation`: `none`, `bury`,
+  `beard_thin`, `beard_box` (vanilla's), or `soft` (below). Works for any structure, jar or `kubejs/data`, without
+  touching its json. A structure in two mode tags takes the first of none, bury, beard_box, beard_thin, soft, and the
+  load log says so.
+- `creativeengineering:template_trim`: the template's air, pad and plants outside its built columns are not placed.
+
+Tagged now (97 structures):
+- `none` + `template_trim`: the 6 siege weapons (ballista, battering ram, reinforced ram, catapult, siege tower,
+  trebuchet): small open frames on a few slabs, nothing to flatten for.
+- `soft` + `template_trim`: the other 53 ported terrain-adapted structures (houses, stables, tents, churches, temples,
+  towers, the forest ruins, statues, both watchtowers); scan batch 1, 12 houses on pads; scan batch 2, the vanilla and
+  23 Towns & Towers pillager outposts (added 2026-10-09, below).
+- `soft` alone: scan batch 3, Takes a Pillage's bastille and camp (walled yards stay flat).
+- The ships, rafts and Sky Villages (`none` already) are untouched.
+
+**The soft beard.** The same vertical profile as beard_thin (the same fill below the floor and carve above it, so the
+structure still stands on ground on a slope), with two changes:
+1. **Footprint, not box.** It covers the columns of the template that place a block: with `template_trim`, only the
+   built ones (anything that isn't air, pad or a plant). The ballista's beard covers its 56 built columns, not the
+   91-column box; a house's covers the house, not its yard.
+2. **Short skirt.** The fade-out distance is 4 blocks plus `skirtBump` (vanilla's is 8), measured as straight-line
+   distance to the nearest footprint column, so it follows the building's outline. Technically: vanilla's beard
+   formula with the horizontal distance multiplied by `8 / skirt`. At `skirtBump = 4` (skirt 8) on a rectangular
+   footprint it is exactly vanilla's beard_thin (test: worst difference 9e-6), so the bump runs from "tightest" (0) to
+   "vanilla width, but around the building" (4) and up to 12 blocks (8), vanilla's hard limit.
+
+Pieces that aren't templates (or whose template can't be read) use their bounding box as the footprint, still with
+the short skirt.
+
+**Template trim.** Each template placement of a trimmed structure is split into columns. A column with a built block
+is placed whole (pad under the building, the air inside it, everything). Every other column drops its air, its pad
+(block tag `creativeengineering:template_trim/pad`: `#minecraft:dirt`, sand, gravel, clay, snow block) and the plants on
+it (`creativeengineering:template_trim/plants`: the ground-match plants, snow layers, moss carpet). `dirt_path` and
+farmland are not pad: paths and crop plots count as built, as in ground matching. Structure blocks and jigsaws are
+never dropped. A template with no built column at all is left alone: it is a foundation plate that another piece
+stands on (the watchtowers' start piece). Trim runs before ground matching on the same hook, so ground matching only
+sees what is still placed, and earth fill (3.13) only counts earth that is still placed.
+
+Measured on the real templates (the test reads the ported `.nbt` files; an independent python read agrees):
+
+| Template | Columns with blocks / built | Trim drops |
+|---|---|---|
+| ballista | 56 / 56 (no pad) | 210 air in 35 columns |
+| circus tent | 841 / 577 | 6,072 air + 264 pad |
+| forest ruin 3 | 238 / 170 | 519 air + 69 pad + 24 plants |
+
+**Hooks** (patcherMod):
+- `StructureTerrainAdaptationMixin`: `Structure#terrainAdaptation` (SRG `m_226620_`) answers from the tag table, so
+  every vanilla use follows the tag (the Beardifier, and the 12-block reference margin of terrain-adapted starts). A
+  soft structure answers `beard_thin`.
+- `BeardifierSoftMixin`: in `Beardifier#forStructuresInChunk`'s per-start lambda (`m_223930_`) each `new Rigid` goes
+  through `TerrainAdaptation.rigid`; a soft structure's piece gets adjustment NONE (vanilla adds nothing) and a
+  `SoftBox` (a `BoundingBox` subclass carrying the footprint) as its box. In `Beardifier#compute` (`m_207386_`) the
+  density (local slot 5) gets every `SoftBox`'s beard added right after vanilla's rigid loop. Keeping the soft pieces
+  in vanilla's own list matters: YUNG's API replaces the Beardifier with a new one built from that list, so state kept
+  on the Beardifier object would be lost.
+- `StructureTemplateGroundMatchMixin` (processBlockInfos): `TemplateTrim.apply`, then ground matching.
+- The tag table is built on world load (`ServerAboutToStartEvent`) and after every server tag load (`/reload`). Load
+  log: `[terrain-adaptation] world load: 97 structures tagged, modes {NONE=6, SOFT=91}, 95 trimmed`.
+
+**Config** (`[worldgen.terrain_adaptation]`; on/off `[worldgen.systems] terrainAdaptation` (mode tags, soft beard) and
+`templateTrim`; new chunks only):
+
+| Key | Default | Meaning |
+|---|---|---|
+| `skirtBump` | 0 | blocks added to the soft beard's minimum skirt of 4; 0 to 8. 4 = vanilla's width |
+
+**Limits.**
+- New chunks only, rejoin after changing tags or switches. Already generated structures keep their terrain.
+- YUNG's structures (`YungJigsawStructure`) answer `terrainAdaptation` themselves and have their own enhanced
+  adaptation, so the mode tags do nothing for them (logged as "answers terrainAdaptation itself"). Template trim
+  still works for them.
+- `none` means the structure sits where its start lands (`project_start_to_heightmap` at its centre): on a steep
+  slope a siege weapon's low end can float a block or two. Move it to `soft` if that bothers you.
+- Trim is per template. In a multi-piece structure, a later piece's air no longer clears an earlier piece's blocks
+  outside its own built columns (designers rarely rely on that).
+- The soft footprint is read from the raw template (first palette); blocks that processors add or remove are not
+  seen. Jigsaw junction beards (the small blend where two jigsaw pieces join) stay vanilla's.
+- The ground inside the yard of a trimmed structure is natural, so a fence or a lamp post in the yard stands on
+  whatever slope is there (its own column is built, so the soft beard levels a little around it).
+- Only the ported MCreator structures are tagged. The scan below lists every other structure that could use the tags.
+
+**Which other structures it could help (scan, 2026-10-09).** `python3 tools/terrain_adaptation_scan.py` (also
+`/cegen run terrain_adaptation_scan`, about a minute fresh, seconds cached) follows every structure's start pool and
+jigsaw links to the templates it can place and measures each rigid one the way `TemplateTrim` does (pad and plants
+from the live tag export). Report: [terrain_adaptation_scan.md](terrain_adaptation_scan.md); data:
+`kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json`. Of 383 structures, before batches 1 to 3 were tagged:
+
+| Verdict | Count | Who |
+|---|---|---|
+| Strong (30%+ of the box unbuilt, 12+ pad or air-only columns) | 29 | 16 Towns & Towers pillager outposts, the vanilla pillager outpost, Takes a Pillage's bastille and camp, Farmer's Structures cook houses and two fish ponds, the hobbit house, the sawmill, Simply Houses' forest fort, Terralith's glacial hut and spire, Beautify's desert botanist house |
+| Mild (15%+, 6+ columns) | 17 | 7 more T&T outposts, 4 Beautify botanist houses, the Greek house, the swamp fisherman house, Philip's level-three and nether-themed ruins (801 and 512 pad columns), Philip's desert structures (bury), Simply Houses' taiga forge |
+| Settlements (review) | 31 | the 5 vanilla villages, 24 T&T villages, Terralith's 2 fortified villages |
+| Compact | 16 | most Simply Houses, the Better Witch Huts, 5 T&T outposts: built edge to edge, nothing to gain |
+| Ships, rafts, sky | 23 | the earth_fill/exempt list: not suggested (trim at sea leaves sea water where the template had air) |
+| Not surface | 194 | underground (141 of them Terralith's), buried, seabed, Nether, End, mostly-water templates |
+| Terrain-matching only | 6 | Philip's field-stone, level-one, pumpkin, rare and badlands ruins: placed column by column on the ground, no beard |
+| Code-built / not found | 8 | shipwrecks, Cloud Storage, the spider dungeon; 2 Philip's ruins and the bloodstone obelisk whose templates the pools name but no jar has |
+
+Batches 1 to 3 were tagged on 2026-10-09 (the user's choice); batch 4 is open. After tagging, the scan shows 97
+tagged, 3 strong and 5 mild left (all batch 4 or too small to matter). The batches:
+1. **Houses on pads**, the same case as the ported ones, `soft` + `template_trim`: hobbit house, sawmill, Simply Houses
+   forest fort, Farmer's Structures cooks and cooks_moss, Terralith glacial hut, the 5 Beautify botanist houses, the
+   Greek house.
+2. **Pillager outposts**, `soft` + `template_trim`: the 23 strong and mild T&T outposts, and the vanilla outpost. For
+   the vanilla one the gain is smaller than its numbers: 768 of its 2,020 air-only columns are the `base_plate`
+   (16 x 16) and `feature_plate` (32 x 16), templates of pure air that trim leaves alone (nothing built) and the soft
+   beard covers by their box; the rest is the overhang of the 8 Improved Pillager Outpost tower tops.
+3. **Walled compounds**, `soft` alone (yards stay flat, the skirt gets short and round): Takes a Pillage bastille
+   (9,423 pad columns: courtyards) and camp. Terralith's fortified villages belong here if the villages are done.
+4. **Look first:** Terralith's spire (`none`, 5,555 air-only columns: trim would stop it carving the hills around
+   it), the fish ponds and fisherman house (in `water_fill/ponds`; trim keeps the water columns), Philip's level-three
+   and nether-themed ruins (grass pads that ground matching already reskins), and the villages (tagging one changes
+   every house in it).
 
 ## 4. Limits and decisions
 
@@ -650,7 +854,9 @@ them. Modded structures were not simulated: the pack's registries need a game.
 - Groups tool: [tools/gen_structure_groups.py](../tools/gen_structure_groups.py) (`GROUP_SPECS` = the starting groups, `fit_group`, `sync`, `migrate`, `write_estimates`)
 - Scanner: [tools/gen_structure_config.py](../tools/gen_structure_config.py) (`VANILLA_STRUCTURE_SETS`, `CODE_REGISTERED_SETS`, `CODE_BLOCKS`, `scan_meta_structures`)
 - patcherMod: [worldgen/StructureFrequencies.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/StructureFrequencies.java) + mixins [ChunkGeneratorStructureFrequencyMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorStructureFrequencyMixin.java), [StructureCheckFrequencyMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureCheckFrequencyMixin.java); [worldgen/PoolTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/PoolTuner.java), [LootContainerSwaps.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/LootContainerSwaps.java), [WorldgenFiles.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/WorldgenFiles.java) (report writer; KubeJS blocks java.io); mixins [StructureTemplateLootSwapMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureTemplateLootSwapMixin.java), [KubeJSVirtualDataPackListMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/KubeJSVirtualDataPackListMixin.java), [ChunkGeneratorLocateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorLocateMixin.java) + [DeadPlacementFilter.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/DeadPlacementFilter.java)
-- Earth fill: [worldgen/EarthFill.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/EarthFill.java) (`count`, `pieceEarth`, `localEarth`, `predicted`, `limitsFor`, `filter`) + mixin [ChunkGeneratorEarthFillMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorEarthFillMixin.java), knobs `CEConfig.EarthFill`, earth tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/earth_fill.js](../kubejs/server_scripts/worldgen/earth_fill.js); tests `EarthFillTest` and the calibration [tools/earth_fill_sim.sh](../tools/earth_fill_sim.sh) (`EarthFillSim`)
+- Earth fill: [worldgen/EarthFill.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/EarthFill.java) (`count`, `pieceEarth`, `localEarth`, `pieceWater`, `localWater`, `predicted`, `topIsWater`, `limitsFor`, `waterLimitsFor`, `filter`) + mixin [ChunkGeneratorEarthFillMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorEarthFillMixin.java), knobs `CEConfig.EarthFill`, earth tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/earth_fill.js](../kubejs/server_scripts/worldgen/earth_fill.js); water structures and ponds [worldgen/water_fill.js](../kubejs/server_scripts/worldgen/water_fill.js), knobs `CEConfig.WaterFill`; tests `EarthFillTest` and the calibration [tools/earth_fill_sim.sh](../tools/earth_fill_sim.sh) (`EarthFillSim`)
+- Terrain adaptation candidates: [tools/terrain_adaptation_scan.py](../tools/terrain_adaptation_scan.py) → [terrain_adaptation_scan.md](terrain_adaptation_scan.md) + `kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json` (cache `tools/.cache/terrain_scan.json`; `/cegen run terrain_adaptation_scan`)
+- Terrain adaptation + template trim: [worldgen/TerrainAdaptation.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/TerrainAdaptation.java) (`Mode`, `rebuild`, `override`, `rigid`, `softBox`, `SoftBox`, `beard`, `field`, `addSoft`), [worldgen/TemplateTrim.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/TemplateTrim.java) (`kind`, `columns`, `trim`, `apply`), mixins [StructureTerrainAdaptationMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureTerrainAdaptationMixin.java), [BeardifierSoftMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BeardifierSoftMixin.java) and the trim call in [StructureTemplateGroundMatchMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureTemplateGroundMatchMixin.java); knobs `CEConfig.TerrainAdaptation`; structure tags [worldgen/terrain_adaptation.js](../kubejs/server_scripts/worldgen/terrain_adaptation.js), block tags `template_trim/*` in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js); test `TerrainAdaptationTest`
 - Banks and driftwood: tags `monobank/vault_houses` / `monobank/vault_streets` in [pool_tags.json](../kubejs/generation_scripts/worldgen/pool_tags.json); [driftwood placed features](../kubejs/data/upgrade_aquatic/worldgen/placed_feature/) and [land driftwood](../kubejs/data/creativeengineering/worldgen/placed_feature/driftwood_land/) with their [biome modifiers](../kubejs/data/creativeengineering/forge/biome_modifier/)
 - Dead explorer maps: [loot/06_dead_maps.js](../kubejs/server_scripts/loot/06_dead_maps.js)
 - Worldgen config: `CEConfig.Worldgen` (+ `WorldgenSystems`, `WorldgenDebug`, `PoolTuning`, `BiomeSolver`, `GroundMatch`, `MassPlace`), read through [worldgen/WorldgenConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/WorldgenConfig.java); density in `scalePlacement` in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js)
@@ -694,10 +900,21 @@ them. Modded structures were not simulated: the pack's registries need a game.
   2. 30 checks of `/ceplace` and `WorldgenConfig`: sign wrapping, every filter term, rows on the real
      `structure_tags.json` (each Towns & Towers structure in exactly one row, always its smallest type tag), template
      folders, vertical alignment, and every config default equal to the old hard-coded value.
-  3. `EarthFillTest` (21 checks): the counting core (limits -1 and 0, early stop, dedupe), the earth blocks of a real template
-     through rotation, rigid / list / terrain-matching pool elements, a whole pool-element piece, override parsing.
+  3. `EarthFillTest` (32 checks since 2026-10-08): the counting core (limits -1 and 0, early stop, dedupe), the earth blocks of a real template
+     through rotation, rigid / list / terrain-matching pool elements, a whole pool-element piece, override parsing; water fill:
+     which blocks hold water (water, waterlogged, kelp, seagrass, all layers), a piece's water on a shore (sea / seabed / dry
+     ground / air), the ground and air limits, seabed as solid for earth fill, and the column-top seabed test.
   4. `node tools/structure_density_check.js`: runs the simulation at x4, x0.25, x30 and x0.01 and checks every live set's
      rate against x1: 244 checks, exact except the reported capped sets. It also checks codec limits and `legacy_type_1`.
+  5. `TerrainAdaptationTest` (50 checks, added 2026-10-09): block kinds; template columns and the trim on a pad-and-hut
+     test template (50 air, 26 pad, 2 plants dropped; the hut and the grass under it kept; a pad-only plate untouched;
+     structure blocks kept); earth fill's trimmed count; the real ballista, circus tent and forest ruin 3 templates
+     against a python read; tag precedence; config defaults; distance fields (Euclidean, reach 12, rotation); the soft
+     beard against vanilla's `getBeardContribution` (exact formula, and skirt 8 on a box = beard_thin around the box),
+     skirt scaling and cutoffs, footprint vs box; `addSoft` adding only soft rigids and rewinding the iterator.
+- **Terrain adaptation candidates:** `python3 tools/terrain_adaptation_scan.py [--fresh]` after adding or updating
+  structure mods (or after a `/dumptags`, since pad and plants come from the tag export). Its template numbers agree
+  with `TerrainAdaptationTest` (ballista 56 built / 35 air-only columns / 210 air; circus tent 264 pad / 6,072 air).
 - `test_structure_groups.sh` step 2 also compares node and Rhino at density x4 and x0.3 and with groups off (identical).
   The sim takes `--density=X` and `--groups-off`.
 
@@ -708,10 +925,33 @@ Done 2026-10-03, all three (3.12, 3.13):
 - Reduce driftwood on land: water driftwood keeps its 0.25x rate, land driftwood is about a tenth of that.
 - Cancel structures that need too much earth over water or air: `worldgen/EarthFill`, limits in `[worldgen.earth_fill]`.
 
-Still open: the modded-structure calibration of the earth limits (needs a game with `log = ALL`), and a Beardifier fill
+Done 2026-10-09 (3.15): terrain adaptation by structure tag, the soft beard, template trim.
+
+Done 2026-10-09: the scan of every other structure for pads and saved air (3.15, `terrain_adaptation_scan.md`), and
+its batches 1 to 3 tagged. Still open: batch 4 (the spire, the fish ponds, Philip's padded ruins, the villages: look in
+game first); the modded-structure calibration of the earth limits (needs a game with `log = ALL`), and a Beardifier fill
 estimate for terrain-adapted structures if the template count turns out to miss them.
 
 ## 8. In-game test suite
+
+**Terrain adaptation and template trim** (2026-10-09, 3.15). Install the jar first (`./gradlew installToMods` in
+`development/patcherMod` with the game closed), rejoin, and fly well away from explored land.
+- [ ] **ST-61 Loads clean:** no mixin error for `StructureTerrainAdaptationMixin` or `BeardifierSoftMixin` (the game would not start); `latest.log` has `[terrain-adaptation] world load: 97 structures tagged, modes {NONE=6, SOFT=91}, 95 trimmed` and no `answers terrainAdaptation itself` or `... wins` warning; no KubeJS error for `worldgen/terrain_adaptation.js`; the toml has `[worldgen.terrain_adaptation] skirtBump = 0` and `systems.terrainAdaptation` / `systems.templateTrim`.
+- [ ] **ST-62 Ballista:** `L illager_siege_weapons:ballista` (or another siege weapon) until one generates on a slope. No flat square around it and no notch in the hill; the ground under and around it is the natural slope; it stands on its own slabs (one end may hang a block or two over a steep slope: that is `none`).
+- [ ] **ST-63 Soft house on a slope:** `L villager_butcher_house:butcher_house` (or the circus tent, a pillager tower) in hilly new terrain. The ground is level under the building and blends into the hill within about 4 blocks, following the walls with rounded corners; no square grass pad; the yard is natural ground.
+- [ ] **ST-64 skirtBump:** set `skirtBump = 4`, rejoin, find the same kind of structure in new chunks: the blend is as wide as vanilla's (about 8 blocks) but still follows the building. Set it back to 0.
+- [ ] **ST-65 Switches:** `[worldgen.systems] terrainAdaptation = false`, rejoin, new chunks: the tagged structures get their own beard again (the flat rectangle), with `templateTrim` still on (no pad, no air notch, but the rectangle is flattened). Then `templateTrim = false` too: pads and notches are back. Both back on.
+- [ ] **ST-66 Watchtowers and plates:** `L watchtower_building:fresh_watchtower`: the tower stands complete on its base plate (the foundation piece is never trimmed), with the soft blend around it.
+- [ ] **ST-67 Earth fill sees the trim:** with `[worldgen.earth_fill] log = "ALL"`, a trimmed structure's `[earth-fill]` line counts only earth under its built columns (the circus tent's base count drops by its 264 trimmed pad blocks). Put `log` back.
+- [ ] **ST-68b Scan batches:** in new terrain, a Towns & Towers pillager outpost (`L towns_and_towers:pillager_outpost_grove`) and a vanilla one on a slope: level under the tower and pieces only, round 4-block blend, no grass slab or air notch beyond them; the outpost is otherwise complete (tower top, cages, tents). A hobbit house or botanist house: as ST-63. A Takes a Pillage bastille: its courtyards are still flat inside the walls, but outside the walls the ground blends back within about 4 blocks instead of a wide flat apron.
+- [ ] **ST-68 Others unchanged:** a vanilla village, a YUNG's structure and an untagged modded house look as before (the same beard and pads).
+
+**Water fill** (2026-10-08, 3.14)
+- [ ] **ST-56 Loads clean:** the toml has `[worldgen.water_fill]` and `systems.waterFill`; no `[water-fill] overrides: ... skipped` warning; no KubeJS error for `worldgen/water_fill.js`; `/dumpstructuregen` still works.
+- [ ] **ST-57 Log run (calibration):** set `[worldgen.water_fill] log = "ALL"`, rejoin, fly over 2,000+ blocks of new ocean and coast (or `[worldgen.debug] structureDensity = 4`). `latest.log` has `[water-fill] hopo:underwater_ruins at chunk [x, z]: N water blocks, G into dry ground (limit 32), A into air (limit 16) -> kept|CANCELLED` lines. Ruins in open ocean should show 0 or close to it; tell me the numbers and the limits get set from them. Put `log` back to `CANCELLED`.
+- [ ] **ST-58 A cancel:** set `maxIntoGround = 0`, `maxIntoAir = 0` and `overrides = []`, rejoin, fly along a new coast: Hopo ruins near the shore log `CANCELLED` and are missing; the fish ponds and the swamp fisherman house cancel almost everywhere (their water is dug into the ground). Put the values back.
+- [ ] **ST-59 Ponds:** with the default overrides, a fish pond on flat plains or a fisherman house in a swamp still generates (their ground count doesn't matter); one on a steep slope where the pond would spill logs `CANCELLED`.
+- [ ] **ST-60 Switch and scope:** `[worldgen.systems] waterFill = false` → no `[water-fill]` lines. Back on: a structure not in `water_fill/structures` (a Better Jungle Temple, a village with farms) never logs a `[water-fill]` line, even at 0 and 0.
 
 **Setup:**
 - Creative world with cheats. Rejoin once after pulling these changes, then fly well away from explored land (or
@@ -908,3 +1148,32 @@ estimate for terrain-adapted structures if the template count turns out to miss 
   - Not done: no game or scratch server was started (the game was running, 10 GB resident and swapping), so the
     mixin application, the KubeJS data and the pool report are checked offline only (ST-49 to ST-55). patcherMod stays 1.0.4,
     built in `development/patcherMod/build/libs/`, not installed to `mods/`.
+- **2026-10-08: water fill** (3.14). The user asked for the earth-fill cancel to extend to water structures, with a cap
+  on how many blocks or how much air their water replaces. Same hook and terrain as earth fill; the predicted terrain
+  now tells a seabed (solid under a water column) from dry ground. Opt-in structure tag `water_fill/structures` (11
+  structures, from a scan of every template's water) plus a `water_fill/ponds` tag whose default override only limits
+  air. `EarthFillTest` 21 -> 32 checks, all pass. Not done: no game or scratch server (the game was running), defaults
+  not calibrated (ST-57). The jar is in `development/patcherMod/build/libs/` (still 1.0.5), not installed to `mods/`.
+- **2026-10-09: terrain adaptation by tag, the soft beard, template trim** (3.15). The user reported square flat pads
+  around small structures (the Illager Siege Weapons ballista). The cause: vanilla's beard flattens the whole template
+  box plus 8 blocks, and MCreator templates save their pads and air. The user picked the tag-driven system: mode tags
+  (none / bury / beard_thin / beard_box / soft) via a `Structure#terrainAdaptation` mixin; a soft beard over the built
+  footprint with a 4-block skirt and a configurable `skirtBump` (default 0); `template_trim` dropping air, pad and
+  plants outside the built columns. YUNG's API replaces the Beardifier from its rigid list, so the soft pieces ride
+  inside that list (a `BoundingBox` subclass with adjustment NONE) and the density is added inside vanilla's
+  `compute`. The 6 siege weapons are in `none`, the other 53 ported terrain-adapted structures in `soft`, all 59
+  trimmed. Earth fill now ignores pad that trim drops. `TerrainAdaptationTest` (50 checks) passes; the other worldgen
+  tests are unchanged. Not done: no game or scratch server (the game was running, no free memory); the jar is in
+  `development/patcherMod/build/libs/` (1.0.5), not installed to `mods/`. ST-61 to ST-68.
+- **2026-10-09, later: terrain adaptation scan** (3.15). The user asked for a comprehensive scan of the other
+  structures the tags could affect. `tools/terrain_adaptation_scan.py` measures every reachable rigid template of all
+  383 structures (vanilla jigsaw ones via `pool_config.json`; ported templates in `kubejs/data` included) and sorts
+  them: 29 strong and 17 mild candidates, 31 settlements to review, the rest compact, afloat, not on the surface,
+  terrain-matching or code-built. Classification fixes on the way: village farm water no longer marks a village as a
+  water structure (water must be 20% of a template's blocks), the earth_fill/exempt list marks ships, End detection
+  matches `end` as a word part. Nothing tagged yet: four suggested batches in 3.15. Registered in `tools/generators.json`.
+- **2026-10-09, later: scan batches 1 to 3 tagged** (3.15). User: "tag 1-3". `worldgen/terrain_adaptation.js` is now
+  built from named groups (siegeWeapons, portedMods, padHouses, outposts, walledCompounds) so a group can be soft
+  without trim: 12 houses on pads and 24 pillager outposts (vanilla + 23 T&T) went to `soft` + `template_trim`, the
+  bastille and the pillager camp to `soft` alone. 97 tagged (`none` 6, `soft` 91, trimmed 95), checked by evaluating the
+  script under node and by the scan. Batch 4 still open. ST-61 expects the new load line; new check ST-68b.

@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
 import com.SaintAlfonzo.creativeengineering.worldgen.GroundMatch;
+import com.SaintAlfonzo.creativeengineering.worldgen.TemplateTrim;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -13,9 +14,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 /**
- * Swaps a structure's grass/dirt base for the surrounding ground where that ground isn't grass/dirt
- * (see worldgen/GroundMatch). Same target as StructureTemplateLootSwapMixin: Forge's 6-argument
- * processBlockInfos, which keeps its name in production and which every template placement uses.
+ * Two rewrites of a structure template's processed block list, in this order: worldgen/TemplateTrim drops the
+ * air and bare pad around the built columns of creativeengineering:template_trim structures, then
+ * worldgen/GroundMatch swaps a grass/dirt base for the surrounding ground where that ground isn't grass/dirt.
+ * Same target as StructureTemplateLootSwapMixin: Forge's 6-argument processBlockInfos, which keeps its name in
+ * production and which every template placement uses.
  */
 @Mixin(value = StructureTemplate.class, remap = false)
 public class StructureTemplateGroundMatchMixin {
@@ -25,7 +28,11 @@ public class StructureTemplateGroundMatchMixin {
 	private static void creativeengineering$matchGround(LevelAccessor level, BlockPos offset, BlockPos pos, StructurePlaceSettings settings,
 			List<StructureTemplate.StructureBlockInfo> infos, StructureTemplate template,
 			CallbackInfoReturnable<List<StructureTemplate.StructureBlockInfo>> cir) {
-		List<StructureTemplate.StructureBlockInfo> matched = GroundMatch.apply(level, offset, settings, cir.getReturnValue());
-		if (matched != null) cir.setReturnValue(matched);
+		List<StructureTemplate.StructureBlockInfo> out = cir.getReturnValue();
+		List<StructureTemplate.StructureBlockInfo> trimmed = TemplateTrim.apply(level, out);
+		if (trimmed != null) out = trimmed;
+		List<StructureTemplate.StructureBlockInfo> matched = GroundMatch.apply(level, offset, settings, out);
+		if (matched != null) out = matched;
+		if (out != cir.getReturnValue()) cir.setReturnValue(out);
 	}
 }

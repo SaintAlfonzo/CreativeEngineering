@@ -1,0 +1,17 @@
+{
+  "flowers": [
+    {
+      "state": "minecraft:flowering_azalea",
+      "weight": 2
+    },
+    {
+      "state": "minecraft:azalea",
+      "weight": 1
+    }
+  ],
+  "scale": 0.5,
+  "egg_colors": [
+    "#6C8031",
+    "#9E5088"
+  ]
+}

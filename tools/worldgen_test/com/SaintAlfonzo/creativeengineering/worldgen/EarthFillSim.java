@@ -119,8 +119,8 @@ public class EarthFillSim {
 				if (!start.isValid()) { noStart++; continue; }
 				List<long[]> pieces = new ArrayList<>();
 				for (StructurePiece p : start.getPieces()) pieces.add(EarthFill.pieceEarth(p, templates, earth, 3));
-				EarthFill.Result r = EarthFill.count(pieces, EarthFill.predicted(generator, randomState, height, 2), -1, -1, false);
-				res.add(new int[]{r.earth(), r.water(), r.air()});
+				EarthFill.Result r = EarthFill.count(pieces, EarthFill.predicted(generator, randomState, height, 2), new EarthFill.Limits(-1, -1, -1), false);
+				res.add(new int[]{r.blocks(), r.water(), r.air()});
 			}
 			if (res.isEmpty()) { System.out.println(e.getKey() + ": no start in " + tries + " tries (" + noStart + " invalid)"); continue; }
 			StringBuilder cancelled = new StringBuilder();

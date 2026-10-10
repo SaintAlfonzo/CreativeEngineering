@@ -1,0 +1,5 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": ["minecraft:meadow", "terralith:blooming_plateau", "terralith:skylands_spring"],
+  "spawners": { "type": "minecraft:cow", "weight": 8, "minCount": 4, "maxCount": 4 }
+}

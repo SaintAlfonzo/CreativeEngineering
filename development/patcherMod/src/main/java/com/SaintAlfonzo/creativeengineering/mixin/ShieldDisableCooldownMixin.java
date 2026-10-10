@@ -9,16 +9,16 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 /**
- * Vanilla disables a player's raised shield for a flat 100 ticks (5s) once an attacker's weapon
- * lands a hit through it while {@code ItemStack#canDisableShield} answers true (vanilla axes by
- * default, via {@code AxeItem}'s Forge-only override) - {@code Player#disableShield(boolean)}
- * ({@code m_36384_}), bytecode-confirmed as a single {@code bipush 100} immediately before the
- * {@code ItemCooldowns#addCooldown} call. Immersive Engineering's own shield-disabling handler and
- * Alex's Mobs' void worm shot both call this exact method directly too (bypassing
- * {@code canDisableShield} entirely), so retuning this one constant covers every shield in the pack
- * uniformly - vanilla, Immersive Engineering's, and all seven tier shields alike. No mod in this
- * pack (including responsiveshields, which only retunes the unrelated shield-raise-time constant)
- * touches this method.
+ * Vanilla disables a player's raised shield for a flat 100 ticks (5s) when a PLAYER's weapon lands a
+ * hit through it while {@code ItemStack#canDisableShield} answers true (vanilla axes, via
+ * {@code AxeItem}'s Forge override) - {@code Player#disableShield(boolean)} ({@code m_36384_}),
+ * bytecode-confirmed as a single {@code bipush 100} immediately before the
+ * {@code ItemCooldowns#addCooldown} call. Forge puts that cooldown on the shield actually raised, so
+ * this covers every shield. Immersive Engineering's shock upgrade and Alex's Mobs' void worm shot call
+ * this method directly too. A MOB's axe goes through a separate method with its own 100,
+ * {@code Mob#maybeDisableShield} - see {@link MobShieldDisableMixin}. Both read
+ * {@code [shields].disableCooldownTicks} (20 in the pack). No other mod in the pack touches either
+ * method (responsiveshields only retunes the unrelated raise-time constant).
  *
  * <p>Vanilla-class target, matched by SRG name with {@code remap = false} - same idiom as
  * {@link LivingEntityShieldMixin}.

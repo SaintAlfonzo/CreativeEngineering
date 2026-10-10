@@ -18,8 +18,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  *
  * <p>By default only the non-zero defenses are shown, to keep the compact tooltip short. Holding
  * shift (or toggling advanced tooltips, F3+H) switches to the full stat block: every
- * reduction/wear line regardless of value, plus fireproof and knockback threshold, neither of
- * which the compact view shows at all. {@code appendLines} is called fresh on every tooltip
+ * reduction/wear line regardless of value, plus fireproof, tick-gate blocking and knockback
+ * threshold, none of which the compact view shows at all. {@code appendLines} is called fresh on every tooltip
  * frame, so this reacts live to the shift key the same way vanilla's own shift-tooltips do.
  */
 final class ShieldTooltip {
@@ -69,6 +69,10 @@ final class ShieldTooltip {
         }
         if (full) {
             tooltip.add(Component.literal("§7Fireproof: §f" + (tier.fireproof() ? "Yes" : "No")));
+            for (ShieldTickGate gate : ShieldTickGate.values()) {
+                tooltip.add(Component.literal("§7" + gate.label() + ": §f"
+                        + (ShieldConfig.blocksTicks(tier, gate) ? "Yes" : "No")));
+            }
             tooltip.add(Component.literal("§7Knockback threshold: §f"
                     + formatThreshold(ShieldConfig.knockbackThreshold(tier))));
         }
