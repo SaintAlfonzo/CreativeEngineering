@@ -104,6 +104,72 @@ public class EarthFillTest {
 		check(r.blocks() == 5, "the same position in two pieces counts once");
 		check(EarthFill.count(List.<long[]>of(), lake, earthLimits(0, 0), false).blocks() == 0, "no earth, no result");
 
+		// 1b. earth after the beard (7.3.1): a slope, ground at y 60 - x, so a pad at y 61 has x air blocks under its bottom layer
+		EarthFill.Terrain slope = (x, y, z) -> y <= 60 - x ? EarthFill.Kind.SOLID : EarthFill.Kind.AIR;
+		int[][] row = new int[13][];
+		for (int x = 0; x <= 12; x++) row[x] = new int[]{x, 61, 0};
+		long[] padRow = longs(row);
+		EarthFill.Reach reach = new EarthFill.Reach(6, 10, 8);
+		EarthFill.EarthLimits open = new EarthFill.EarthLimits(-1, -1, -1);
+		EarthFill.EarthResult er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.NONE)), slope, open, reach, false);
+		check(er.blocks() == 13 && er.air() == 13, "no beard: every earth block over air counts (13)");
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD)), slope, open, reach, false);
+		check(er.air() == 6, "beard reach 6: only the air deeper than 6 below the piece counts (x 7..12 = 6)");
+		check(er.mound() == 4, "mound height 8: columns with more than 8 air blocks under the piece (x 9..12 = 4)");
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BURY)), slope, open, reach, false);
+		check(er.air() == 2, "bury reach 10: x 11 and 12 (2)");
+		long[] upper = longs(new int[]{6, 63, 0}, new int[]{7, 63, 0});
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(upper, 61, EarthFill.Beard.BEARD)), slope, open, reach, false);
+		check(er.air() == 1, "an upper-layer block is judged by the gap under the piece's bottom, not under itself (x 7 counts, x 6 doesn't)");
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD), new EarthFill.EarthPiece(longs(new int[]{10, 62, 0}, new int[]{11, 62, 0}), 61, EarthFill.Beard.BEARD)),
+				slope, open, reach, false);
+		check(er.mound() == 4 && er.blocks() == 15, "a column counts once as a mound, however many earth blocks it holds");
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD)), slope, new EarthFill.EarthLimits(-1, -1, 3), reach, false);
+		check(er.cancelled() && er.complete(), "mound 4 > limit 3 cancels");
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD)), slope, new EarthFill.EarthLimits(-1, 2, -1), reach, true);
+		check(er.cancelled() && !er.complete() && er.air() == 3, "stopEarly: stops at the third air block past the beard");
+		check(!EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD)), slope, new EarthFill.EarthLimits(-1, 6, 4), reach, false).cancelled(),
+				"at the limits is allowed");
+		check(EarthFill.earthBlocks(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD), new EarthFill.EarthPiece(upper, 61, EarthFill.Beard.BEARD),
+				new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD))) == 15, "a start's size counts each earth position once (13 + 2)");
+		// a river, water up to y 62 over its bed at y 55 (x < 5) or 49; a house floor set into the top water layer (y 62), bottom 62
+		EarthFill.Terrain river = (x, y, z) -> y <= (x >= 5 ? 49 : 55) ? EarthFill.Kind.SEABED : y <= 62 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR;
+		long[] floor = longs(new int[]{0, 62, 0}, new int[]{1, 62, 0}, new int[]{5, 62, 0}, new int[]{6, 62, 0});
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(floor, 62, EarthFill.Beard.BEARD)), river, open, reach, false);
+		check(er.water() == 2 && er.air() == 0, "beard: water as deep as its reach is filled (x 0, 1: 6 under the piece), deeper water counts (x 5, 6: 12)");
+		check(er.mound() == 2, "and the deep-water columns are mound columns");
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(floor, 62, EarthFill.Beard.NONE)), river, open, reach, false);
+		check(er.water() == 4, "no beard: every earth block in water counts");
+		// pruning: the jigsaw tree from junctions. 0 = street (root), 1 = house on the street, 2 = villager in the house,
+		// 3 = another house on the street, 4 = a lamp on house 3 by an up jigsaw (same column); 5 = a piece with no junctions
+		List<net.minecraft.world.level.levelgen.structure.BoundingBox> boxes = List.of(
+				new net.minecraft.world.level.levelgen.structure.BoundingBox(0, 64, 0, 20, 64, 2),
+				new net.minecraft.world.level.levelgen.structure.BoundingBox(4, 64, 3, 10, 70, 9),
+				new net.minecraft.world.level.levelgen.structure.BoundingBox(6, 65, 5, 6, 66, 5),
+				new net.minecraft.world.level.levelgen.structure.BoundingBox(12, 64, 3, 18, 70, 9),
+				new net.minecraft.world.level.levelgen.structure.BoundingBox(15, 71, 6, 15, 73, 6),
+				new net.minecraft.world.level.levelgen.structure.BoundingBox(30, 64, 30, 31, 65, 31));
+		List<List<EarthFill.Joint>> joints = List.of(
+				List.of(new EarthFill.Joint(7, 3, 0), new EarthFill.Joint(15, 3, 0)),        // street -> both houses' doors
+				List.of(new EarthFill.Joint(7, 2, 0), new EarthFill.Joint(6, 5, -1)),        // house 1: up to the street, down to its villager
+				List.of(new EarthFill.Joint(6, 6, 1)),                                         // villager: up to house 1 (one block over)
+				List.of(new EarthFill.Joint(15, 2, 0), new EarthFill.Joint(15, 6, 3)),       // house 3: up to the street, its roof jigsaw
+				List.of(new EarthFill.Joint(15, 6, -3)),                                       // lamp on house 3's roof (same column)
+				List.of());
+		int[][] tree = EarthFill.links(boxes, joints);
+		check(java.util.Arrays.equals(tree[0], new int[]{-1, 0, 1, 0, 3, -1}), "jigsaw tree from junctions: houses on the street, villager in house 1, lamp on house 3, a loose piece unlinked");
+		check(tree[1][1] == 0 && tree[1][3] == 1 && tree[1][2] == 1 && tree[1][4] == 1, "and which parent junction leads to each child");
+		boolean[] drop = EarthFill.withChildren(new boolean[]{false, true, false, false, false, false}, tree[0]);
+		check(java.util.Arrays.equals(drop, new boolean[]{false, true, true, false, false, false}), "dropping house 1 drops its villager, not the other house or its lamp");
+		drop = EarthFill.withChildren(new boolean[]{false, false, false, false, false, true}, tree[0]);
+		check(java.util.Arrays.equals(drop, new boolean[]{false, false, false, false, false, true}), "an unlinked piece drops alone");
+		List<List<EarthFill.Joint>> wrongDelta = new ArrayList<>(joints);
+		wrongDelta.set(2, List.of(new EarthFill.Joint(6, 6, -1)));
+		check(EarthFill.links(boxes, wrongDelta)[0][2] == -1, "a junction pair must have opposite deltaY");
+		List<Integer> bounds = List.of(150, 600, 2000);
+		check(EarthFill.sizeOf(149, bounds) == 0 && EarthFill.sizeOf(150, bounds) == 1 && EarthFill.sizeOf(599, bounds) == 1 && EarthFill.sizeOf(600, bounds) == 2
+				&& EarthFill.sizeOf(2000, bounds) == 3 && EarthFill.sizeOf(90000, bounds) == 3, "sizes: under 150 small, 150..599 medium, 600..1999 large, 2000+ huge");
+
 		// 2. earth blocks of a template: bottom layers only, rotation, offset. 3x4x3: grass pad y0, dirt skirt y1 at x0, stone walls, dirt roof garden y3.
 		List<StructureTemplate.StructureBlockInfo> blocks = new ArrayList<>();
 		for (int x = 0; x < 3; x++) for (int z = 0; z < 3; z++) blocks.add(info(x, 0, z, Blocks.GRASS_BLOCK));
@@ -146,16 +212,21 @@ public class EarthFillTest {
 		check(world.length == 11, "a pool-element piece gives its element's earth at its position and rotation (11)");
 
 		// 4. overrides: parsing and matching
-		List<EarthFill.Override> parsed = EarthFill.parseOverrides("earth-fill", List.of("philipsruins:ancient_ruins=0,16", "#minecraft:village=-1,-1", "garbage", "a:b=1", "a:b=x,2"));
+		List<EarthFill.Override> parsed = EarthFill.parseOverrides("earth-fill", List.of("philipsruins:ancient_ruins=0,16", "#minecraft:village=-1,-1,-1", "garbage", "a:b=1",
+				"a:b=x,2", "a:b=1,2,3,4"), true);
 		check(parsed.size() == 2 && parsed.get(0).key().equals("philipsruins:ancient_ruins") && parsed.get(0).a() == 0 && parsed.get(0).b() == 16
-				&& parsed.get(1).key().equals("#minecraft:village") && parsed.get(1).a() == -1, "overrides: 2 valid lines parsed, 3 malformed ones skipped");
+				&& parsed.get(0).c() == EarthFill.Override.UNSET && parsed.get(1).key().equals("#minecraft:village") && parsed.get(1).c() == -1,
+				"earth overrides: 2 or 3 numbers parsed (mound left out = from the size), 4 malformed lines skipped");
+		check(EarthFill.parseOverrides("water-fill", List.of("a:b=1,2,3"), false).isEmpty(), "water overrides take exactly 2 numbers");
 
 		ResourceKey<Registry<Structure>> reg = ResourceKey.createRegistryKey(new ResourceLocation("worldgen/structure"));
 		ResourceKey<Structure> key = ResourceKey.create(reg, new ResourceLocation("philipsruins:ancient_ruins"));
 		Holder.Reference<Structure> holder = Holder.Reference.createStandAlone(null, key);
 		holder.bind(key, new Fake());
-		EarthFill.Limits lim = EarthFill.limitsFor(holder);
-		check(lim.ground() == -1 && lim.water() == 24 && lim.air() == 128, "no overrides configured: the global defaults (24 over water, 128 over air, ground never)");
+		EarthFill.EarthLimits lim = EarthFill.earthLimitsFor(holder, 2);
+		check(lim.water() == 24 && lim.air() == 160 && lim.mound() == 64, "no overrides configured: a large start gets 24 over water, 160 over air, 64 mound columns");
+		lim = EarthFill.earthLimitsFor(holder, 0);
+		check(lim.water() == 24 && lim.air() == 24 && lim.mound() == 8, "a small start: 24 over water, 24 over air, 8 mound columns");
 		EarthFill.Limits wlim = EarthFill.waterLimitsFor(holder);
 		check(wlim.ground() == 32 && wlim.water() == -1 && wlim.air() == 16, "water fill, no matching override: the global defaults (32 into ground, 16 into air, water never)");
 

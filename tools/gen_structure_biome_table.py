@@ -3,13 +3,13 @@
 plus which professions every village style builds. Writes feature_writeup/structures_by_biome.md.
 
 Everything comes from the files the game uses: structure_groups.json (rates, disabled members), the group/type
-tags in structure_tags.json, each structure's biome pool (jar tags + kubejs/data + biome_merges.json, as
+tags in structure_tags.json, each structure's biome pool (jar tags + kubejs/data + biome_fits.json, as
 gen_structure_groups.py resolves them), the biome areas in biome_config.json, and for professions
 pool_config.json + pool_tags.json (so pieces tuned to 0, like the tech houses, don't count).
 
     python3 tools/gen_structure_biome_table.py
 
-Re-run after changing structure_groups.json, the tags, biome merges, pools or mods.
+Re-run after changing structure_groups.json, the tags, biome fits, pools or mods.
 """
 import json
 import math
@@ -284,7 +284,7 @@ def main():
     w('# Structures by biome')
     w('')
     w(f'Generated {now} by `python3 tools/gen_structure_biome_table.py`. Do not edit; re-run it after changing '
-      '`structure_groups.json`, the structure tags, biome merges, village pools or the mod list. Test prefix: none (a '
+      '`structure_groups.json`, the structure tags, biome fits, village pools or the mod list. Test prefix: none (a '
       'reference, checked against the game through ST-19 and ST-39 in [structure_tuning.md](structure_tuning.md)).')
     w('')
     w('**How to read it.** Every structure that can spawn in a biome, grouped by kind. A rate like `1/48` means one '

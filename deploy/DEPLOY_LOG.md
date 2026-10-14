@@ -4,45 +4,385 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
-<!-- deploy:1.0.5 -->
-## 1.0.5 - 2026-10-05 14:13
+<!-- deploy:1.0.6 -->
+## 1.0.6 - 2026-10-14 12:52
 
 - Minecraft 1.19.2, Forge 43.3.9
-- Commit: eebaf63
-- Since: 1.0.4
-- Contents: 347 server+client mods, 42 client-only mods, 27 resource pack files, 16 shader pack files
-- Payload: update from 1.0.4, config functional: 22 files, 4.2 MB (mods 1, kubejs 17, config 4)
-- Notes: Waterfowl nests (duck/goose), stack size policy, generated per-type cans, crop growth WTHIT line, ghost-block + Supplementaries/Breezy fixes (patcherMod 1.0.5)
+- Commit: 52b2c63 + 111 uncommitted file(s)
+- Since: 1.0.5
+- Deployed: server, client 2026-10-14 13:01
+- Contents: 373 server+client mods, 45 client-only mods, 28 resource pack files, 16 shader pack files
+- Payload: update from 1.0.4, config functional: 1255 files, 23.2 MB (mods 28, client_mods 4, kubejs 1205, config 16, defaultconfigs 1, resourcepacks 1)
+- Notes: 1.0.6: everything since the 1.0.4 deploy, folding in the undistributed 1.0.5 (nests mod, stack sizes, cans, mooblooms, seasons/snow line, mob spawns, wild flowers/crops) plus 23 new mods (painting packs, Witch Mobility, Unlit Campfire...). STRUCTURE TUNING IS INCOMPLETE in this release: structure_tuning 7.1-7.4 (groups, replacements, earth fill 7.3, locate 7.3.2, block swaps, CCC 2.3.4 port, new structure mods) ships mid-test, scratch phases 1-3 + M2 run, phases 4-10 pending, known open bugs listed in plan_1.0.6.md.
+- Built with warnings:
+  - 111 uncommitted change(s) in shipped folders (commit 52b2c63 + working tree)
 
 ### Changes
 
+<details><summary>Mods added (23)</summary>
+
+- Atmospheric Paintings Pack for FORGE and FABRIC 1.19.2 `FORGE_PaintingPack_1.19.2.jar` (both)
+- Bottled Air 1.19.2-2.3-fabric+forge+neo `bottledair-1.19.2-2.3.jar` (both)
+- Campsite Structures 1.0.3 `campsite_structures-1.19.2-FORGE-1.0.3.jar` (both)
+- Cycle Paintings 1.19.2-3.5-fabric+forge+neo `cyclepaintings-1.19.2-3.5.jar` (both)
+- Dark Paintings 13.1.5 `DarkPaintings-Forge-1.19.2-13.1.5.jar` (both)
+- Dimensional Paintings 1.4.1 `Dimensional-Paintings-1.19.2-1.4.1.jar` (both)
+- Firefly Bush  [1.18+1.21++ Backport] `fireflybush-1.19.2.jar` (both)
+- Fortune on Netherite `fortune_on_netherite_1.1.0_forge_1.19.2.jar` (both)
+- Just Enough Painting Previews (JEPP) `jepp-1.19.2-1.1.0.jar` (client)
+- Lava Clear View `LavaClearView-1.19.2-forge-5.0.0.jar` (client)
+- MC style paintings 1.19.2 v2. `MC style paintings 1.19.2 v2.jar` (both)
+- Neko's Enchanted Books 1.19-2.0.3 `NekosEnchantedBooks-1.19-2.0.3.jar` (client)
+- Rain should extinguish campfires 1.0-1.19.2-forge `rsec-1.0-1.19.2-forge.jar` (server)
+- REBIRTH: Paintings 5.0.0 |Minecon Live Update|1.19.2| `REBIRTH Paintings 5.0.0 Backport 1.19.2.jar` (both)
+- RestApi 0.7-1.19.2-forge `restApi - 0.7 - 1.19.2 - Forge.jar` (both)
+- Sticky It! `sticky_it-1.2.1-forge-1.19.2.jar` (both)
+- Subterrestrial 2.0.0-forge `subterrestrial-forge-1.19.2-2.0.0.jar` (both)
+- The Splash Milk 1.4.0 `splash_milk-1.19.2-1.4.0.jar` (both)
+- Too Many Paintings! 26.08.16-1.19-forge `toomanypaintings-26.08.16-1.19-forge.jar` (both)
+- Underground Bunkers `UndergroundBunkers-1.0.4-1.19.2-1.20.4-forge.jar` (both)
+- Unlit Campfire `unlitcampfire-forge-1.19-1.7.1.0.jar` (both)
+- Volcanic Caverns 1.2.2 `volcanic_caverns-1.19.2-1.2.2.jar` (both)
+- Witch Mobility [Forge & Fabric] witchmobility-1.3.2-1.19.2-FORGE `witchmobility-1.3.2-1.19.2.jar` (both)
+
+</details>
+
 Mods updated (1):
 
-- creativeengineering: `creativeengineering-1.0.4.jar` -> `creativeengineering-1.0.5.jar`
+- creativeengineering: `creativeengineering-1.0.5.jar` -> `creativeengineering-1.0.6.jar`
 
-<details><summary>kubejs/: 4 added, 13 changed, 1 removed</summary>
+Mods whose side changed (1):
 
-*added (4)*
+- Breedable Killer Rabbit `breedablekillerrabbit-1.19.2-3.5.jar`: server -> both
 
+<details><summary>kubejs/: 1086 added, 26 changed, 13 removed</summary>
+
+*added (1086)*
+
+- `assets/canned_goods/textures/items/` (9 files)
+- `assets/creativeengineering/textures/item/` (25 files)
+- `assets/eugene/lang/en_us.json`
+- `assets/eugene/lang/zh_cn.json`
+- `data/campsite_structures/forge/biome_modifier/armorer_campsite_biome_modifier.json`
+- `data/campsite_structures/forge/biome_modifier/butcher_campsite_biome_modifier.json`
+- `data/campsite_structures/forge/biome_modifier/cartographer_campsite_biome_modifier.json`
+- `data/campsite_structures/forge/biome_modifier/cleric_campsite_biome_modifier.json`
+- `data/campsite_structures/forge/biome_modifier/farmer_campsite_biome_modifier.json`
+- `data/campsite_structures/forge/biome_modifier/fisher_campsite_biome_modifier.json`
+- `data/campsite_structures/worldgen/structure/armorer_campsite.json`
+- `data/campsite_structures/worldgen/structure/butcher_campsite.json`
+- `data/campsite_structures/worldgen/structure/cartographer_campsite.json`
+- `data/campsite_structures/worldgen/structure/cleric_campsite.json`
+- `data/campsite_structures/worldgen/structure/farmer_campsite.json`
+- `data/campsite_structures/worldgen/structure/fisher_campsite.json`
+- `data/campsite_structures/worldgen/structure_set/armorer_campsite.json`
+- `data/campsite_structures/worldgen/structure_set/butcher_campsite.json`
+- `data/campsite_structures/worldgen/structure_set/cartographer_campsite.json`
+- `data/campsite_structures/worldgen/structure_set/cleric_campsite.json`
+- `data/campsite_structures/worldgen/structure_set/farmer_campsite.json`
+- `data/campsite_structures/worldgen/structure_set/fisher_campsite.json`
+- `data/campsite_structures/worldgen/template_pool/armorer_campsite.json`
+- `data/campsite_structures/worldgen/template_pool/butcher_campsite.json`
+- `data/campsite_structures/worldgen/template_pool/cartographer_campsite.json`
+- `data/campsite_structures/worldgen/template_pool/cleric_campsite.json`
+- `data/campsite_structures/worldgen/template_pool/farmer_campsite.json`
+- `data/campsite_structures/worldgen/template_pool/fisher_campsite.json`
+- `data/creativeengineering/paintings/alexsmobs/dog_poker.json`
+- `data/creativeengineering/paintings/alexsmobs/dog_poker.png`
+- `data/creativeengineering/paintings/alexsmobs/nft.json`
+- `data/creativeengineering/paintings/alexsmobs/nft.png`
+- `data/creativeengineering/paintings/buzzier_bees/candle.json`
+- `data/creativeengineering/paintings/buzzier_bees/candle.png`
+- `data/creativeengineering/paintings/cccbridge/funny_redrouters.json`
+- `data/creativeengineering/paintings/cccbridge/funny_redrouters.png`
+- `data/creativeengineering/paintings/clayworks/baked.json`
+- `data/creativeengineering/paintings/clayworks/baked.png`
+- `data/creativeengineering/paintings/create_things_and_misc/create_2022.json`
+- `data/creativeengineering/paintings/create_things_and_misc/create_2022.png`
+- `data/creativeengineering/paintings/darkpaintings/` (60 files)
+- `data/creativeengineering/paintings/handcrafted/` (56 files)
+- `data/creativeengineering/paintings/minecraft/` (60 files)
+- `data/creativeengineering/paintings/minecraft_style_paintings/` (24 files)
+- `data/creativeengineering/paintings/neapolitan/cone.json`
+- `data/creativeengineering/paintings/neapolitan/cone.png`
+- `data/creativeengineering/paintings/neapolitan/dawn.json`
+- `data/creativeengineering/paintings/neapolitan/dawn.png`
+- `data/creativeengineering/paintings/neapolitan/scream.json`
+- `data/creativeengineering/paintings/neapolitan/scream.png`
+- `data/creativeengineering/paintings/paintings_pack1/` (98 files)
+- `data/creativeengineering/paintings/rebirth_paintings/` (500 files)
+- `data/creativeengineering/paintings/supplementaries/bombs.json`
+- `data/creativeengineering/paintings/supplementaries/bombs.png`
+- `data/creativeengineering/paintings/toomanypaintings/` (130 files)
+- `data/creativeengineering/paintings/upgrade_aquatic/sightless.json`
+- `data/creativeengineering/paintings/upgrade_aquatic/sightless.png`
+- `data/eugene/functions/` (11 files)
+- `data/eugene/loot_tables/chests/carriage_chest.json`
+- `data/eugene/loot_tables/chests/piglin_camp_chest.json`
+- `data/eugene/loot_tables/chests/trader_camp_chest.json`
+- `data/eugene/loot_tables/chests/undead_castle_chest.json`
+- `data/eugene/loot_tables/chests/watch_tower_chest.json`
+- `data/eugene/loot_tables/entities/pig_ranger.json`
+- `data/eugene/predicates/chance_1.json`
+- `data/eugene/predicates/ranger_spawn.json`
+- `data/eugene/structures/` (16 files)
+- `data/eugene/tags/worldgen/biome/has_structure/camp.json`
+- `data/eugene/tags/worldgen/biome/has_structure/castle.json`
+- `data/eugene/tags/worldgen/biome/has_structure/piglin_camp.json`
+- `data/eugene/tags/worldgen/biome/has_structure/pillager_loot_carriage.json`
+- `data/eugene/tags/worldgen/biome/has_structure/witch_wagon.json`
+- `data/eugene/worldgen/structure/` (10 files)
+- `data/eugene/worldgen/structure_set/camp.json`
+- `data/eugene/worldgen/structure_set/castle.json`
+- `data/eugene/worldgen/structure_set/piglin_camp.json`
+- `data/eugene/worldgen/structure_set/pillager_loot_carriage.json`
+- `data/eugene/worldgen/structure_set/witch_wagon.json`
+- `data/eugene/worldgen/template_pool/` (14 files)
+- `data/minecraft/structures/pillager_outpost/feature_tent1.nbt`
+- `data/minecraft/structures/pillager_outpost/feature_tent2.nbt`
+- `data/minecraft/tags/functions/load.json`
+- `data/minecraft/tags/functions/tick.json`
+- `generation_scripts/worldgen/meat_block_swaps.json`
+- `generation_scripts/worldgen/nether_block_swaps.json`
+- `server_scripts/_lib/dump_paintings.js`
+
+*changed (26)*
+
+- `client_scripts/namechanges.js`
+- `generation_scripts/food/can_servings.json`
 - `generation_scripts/food/can_types.json`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/biome_fits.json`
+- `generation_scripts/worldgen/meta_structures.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/season_types.json`
+- `generation_scripts/worldgen/structure_config.json`
+- `generation_scripts/worldgen/structure_groups.json`
+- `generation_scripts/worldgen/structure_tags.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
+- `server_scripts/_lib/dump_all.js`
+- `server_scripts/cooking/canning.js`
+- `server_scripts/tags/cantags.js`
+- `server_scripts/tags/seasontags.js`
+- `server_scripts/worldgen/earth_fill.js`
+- `server_scripts/worldgen/mob_spawns.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `server_scripts/worldgen/wild_crops.js`
+- `server_scripts/worldgen/wild_flowers.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/items/cans.js`
+
+*removed (13)*
+
+- `assets/` (11 files)
+- `generation_scripts/worldgen/biome_merges.json`
+- `server_scripts/worldgen/biome_merges.js`
+
+</details>
+
+config/: 3 added, 11 changed, 0 removed:
+
+*added (3)*
+
+- `bottledair.json5`
+- `cyclepaintings.json5`
+- `dimpaintings-common.toml`
+
+*changed (11)*
+
+- `betterdeserttemples-forge-1_19.toml`
+- `betterjungletemples-forge-1_19_2.toml`
+- `betterwitchhuts-forge-1_19.toml`
+- `create_central_kitchen-common.toml`
+- `creativeengineering-common.toml`
+- `prettyrain.json5`
+- `rare-ice.properties`
+- `Advancedperipherals/world.toml`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+defaultconfigs/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `unlitcampfire-server.toml`
+
+### Removals (from 1.0.4)
+
+Delete on the server (5, also in removals_server.txt):
+
+- `kubejs/generation_scripts/worldgen/biome_merges.json`
+- `kubejs/server_scripts/worldgen/biome_merges.js`
+- `kubejs/startup_scripts/changes/item_properties.js`
+- `mods/creativeengineering-1.0.4.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-02.jar`
+
+Delete on the client (5, also in removals_client.txt):
+
+- `kubejs/generation_scripts/worldgen/biome_merges.json`
+- `kubejs/server_scripts/worldgen/biome_merges.js`
+- `kubejs/startup_scripts/changes/item_properties.js`
+- `mods/creativeengineering-1.0.4.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-02.jar`
+
+<!-- deploy:1.0.5 -->
+## 1.0.5 - 2026-10-11 20:42
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 52b2c63 + 25 uncommitted file(s)
+- Since: 1.0.4
+- Contents: 353 server+client mods, 42 client-only mods, 28 resource pack files, 16 shader pack files
+- Payload: update from 1.0.4, config functional: 146 files, 13.7 MB (mods 8, client_mods 1, kubejs 126, config 10, resourcepacks 1)
+- Notes: 1.0.5: everything since the 1.0.4 deploy (nests mod, stack sizes, per-type cans, worldgen: meta structures, biome fits, terrain adaptation, wild flowers/crops, bee nests, mob spawns, season types; More Mooblooms; Cool Rain, Pretty Rain, MEED, Breedable Killer Rabbit)
+- Built with warnings:
+  - 25 uncommitted change(s) in shipped folders (commit 52b2c63 + working tree)
+
+### Changes
+
+Mods added (6):
+
+- Breedable Killer Rabbit 1.19.2-3.5-fabric+forge `breedablekillerrabbit-1.19.2-3.5.jar` (server)
+- Cool Rain Reforged 1.0.2 `coolrain-1.19.2-Forge-1.0.2.jar` (both)
+- incubation_additions `incubationAdditions-1.0.0.jar` (both)
+- Moderately Enough Effect Descriptions (MEED) MEED-1.19.2-7.1.1 (Ars & Relics Reupdate) `MEED-1.19.2-7.1.1.jar` (both)
+- more_mooblooms `moreMooblooms-1.0.0.jar` (both)
+- Pretty Rain 1.19.2 `Pretty Rain-1.19.2-Forge-1.1.1.jar` (client)
+
+Mods updated (2):
+
+- creativeengineering: `creativeengineering-1.0.4.jar` -> `creativeengineering-1.0.5.jar`
+- exposure: `exposureBackport-1.9.19-ce-19.2-02.jar` -> `exposureBackport-1.9.19-ce-19.2-03.jar`
+
+Mods whose side changed (1):
+
+- Just Enough Effect Descriptions (JEED) `jeed-1.19.2-2.1.4.jar`: client -> both
+
+<details><summary>kubejs/: 104 added, 22 changed, 1 removed</summary>
+
+*added (104)*
+
+- `assets/` (11 files)
+- `client_scripts/placeable_tooltip.js`
+- `data/creativeengineering/forge/biome_modifier/azaleabloom_lush_caves.json`
+- `data/creativeengineering/forge/biome_modifier/moobloom_cows.json`
+- `data/creativeengineering/worldgen/placed_feature/meta/flotilla_driftwood.json`
+- `data/fruitsdelight/worldgen/configured_feature/blueberry_bush.json`
+- `data/fruitsdelight/worldgen/configured_feature/cranberry_bush.json`
+- `data/fruitsdelight/worldgen/configured_feature/lemon_tree.json`
+- `data/geophilic_reforged/worldgen/configured_feature/grass/deciduous_forest.json`
+- `data/geophilic_reforged/worldgen/configured_feature/grass/plains.json`
+- `data/minecraft/worldgen/configured_feature/patch_berry_bush.json`
+- `data/minecraft/worldgen/configured_feature/patch_melon.json`
+- `data/minecraft/worldgen/configured_feature/patch_pumpkin.json`
+- `data/more_mooblooms/moobloom_spawns/creativeengineering.json`
+- `data/neapolitan/worldgen/configured_feature/patch_adzuki_sprouts.json`
+- `data/neapolitan/worldgen/configured_feature/patch_strawberry_bush.json`
+- `data/terralith/worldgen/configured_feature/alpha/flowers.json`
+- `data/terralith/worldgen/configured_feature/alpha/flowers_2.json`
+- `data/terralith/worldgen/configured_feature/birch/fallen_tree_base.json`
+- `data/terralith/worldgen/configured_feature/brushland/grass.json`
+- `data/terralith/worldgen/configured_feature/brushland/grass_extra.json`
+- `data/terralith/worldgen/configured_feature/flower/blue/orchid.json`
+- `data/terralith/worldgen/configured_feature/flower/white/flowers.json`
+- `data/terralith/worldgen/configured_feature/highlands/patch_pumpkin.json`
+- `data/terralith/worldgen/configured_feature/highlands/alpine/grass.json`
+- `data/terralith/worldgen/configured_feature/highlands/alpine/grass_extra.json`
+- `data/terralith/worldgen/configured_feature/jungle/patch_melon.json`
+- `data/terralith/worldgen/configured_feature/plains/patch_grass.json`
+- `data/terralith/worldgen/configured_feature/plains/patch_tall_grass.json`
+- `data/terralith/worldgen/configured_feature/skylands/patch_grass.json`
+- `data/terralith/worldgen/configured_feature/skylands/winter/patch_grass.json`
+- `data/terralith/worldgen/placed_feature/birch/fallen_tree.json`
+- `data/terralith/worldgen/placed_feature/birch/trees_forest.json`
+- `data/terralith/worldgen/placed_feature/birch/trees_forest_negative.json`
+- `data/terralith/worldgen/placed_feature/canyon/red_sandstone/scattered_palms.json`
+- `data/terralith/worldgen/placed_feature/canyon/sandstone/scattered_palms.json`
+- `data/terralith/worldgen/placed_feature/cherry/birch.json`
+- `data/terralith/worldgen/placed_feature/cherry/birch_sparse.json`
+- `data/terralith/worldgen/placed_feature/coastal/trees_hawaii.json`
+- `data/terralith/worldgen/placed_feature/dark/patch_mushroom.json`
+- `data/terralith/worldgen/placed_feature/dark/trees.json`
+- `data/terralith/worldgen/placed_feature/desert/lush/grass.json`
+- `data/terralith/worldgen/placed_feature/enchanted/shrooms.json`
+- `data/terralith/worldgen/placed_feature/enchanted/shrooms_brown.json`
+- `data/terralith/worldgen/placed_feature/enchanted/small_shrooms.json`
+- `data/terralith/worldgen/placed_feature/enchanted/small_shrooms_brown.json`
+- `data/terralith/worldgen/placed_feature/enchanted/trees.json`
+- `data/terralith/worldgen/placed_feature/flower/blue/amethysts.json`
+- `data/terralith/worldgen/placed_feature/flower/blue/orange_tulips.json`
+- `data/terralith/worldgen/placed_feature/flower/blue/trees.json`
+- `data/terralith/worldgen/placed_feature/grove/alpine/trees_tiny.json`
+- `data/terralith/worldgen/placed_feature/grove/mid/trees_mid.json`
+- `data/terralith/worldgen/placed_feature/grove/small/trees_small.json`
+- `data/terralith/worldgen/placed_feature/grove/tall/trees_tall.json`
+- `data/terralith/worldgen/placed_feature/grove/tiny/trees_tiny.json`
+- `data/terralith/worldgen/placed_feature/highlands/temperate/trees_neg.json`
+- `data/terralith/worldgen/placed_feature/highlands/temperate/trees_pos.json`
+- `data/terralith/worldgen/placed_feature/jungle/mega_tree.json`
+- `data/terralith/worldgen/placed_feature/jungle/mega_tree_2.json`
+- `data/terralith/worldgen/placed_feature/jungle/vanilla/trees_jungle.json`
+- `data/terralith/worldgen/placed_feature/savanna/baobabs.json`
+- `data/terralith/worldgen/placed_feature/shrubland/cold/cone_trees.json`
+- `data/terralith/worldgen/placed_feature/skylands/trees.json`
+- `data/terralith/worldgen/placed_feature/skylands/summer/trees.json`
+- `data/terralith/worldgen/placed_feature/swamp/orchid/flowers.json`
+- `data/vinery/worldgen/configured_feature/red_grape_bush.json`
+- `data/vinery/worldgen/configured_feature/savanna_red_grape_bush.json`
+- `data/vinery/worldgen/configured_feature/savanna_white_grape_bush.json`
+- `data/vinery/worldgen/configured_feature/taiga_red_grape_bush.json`
+- `data/vinery/worldgen/configured_feature/taiga_white_grape_bush.json`
+- `data/vinery/worldgen/configured_feature/white_grape_bush.json`
+- `generation_scripts/food/can_types.json`
+- `generation_scripts/food/placeable.json`
 - `generation_scripts/stacks/stack_sizes.json`
+- `generation_scripts/worldgen/bee_nests.json`
+- `generation_scripts/worldgen/biome_fits.json`
+- `generation_scripts/worldgen/flower_features.json`
+- `generation_scripts/worldgen/meta_structures.json`
+- `generation_scripts/worldgen/mob_spawns.json`
+- `generation_scripts/worldgen/season_types.json`
+- `generation_scripts/worldgen/wild_flowers.json`
+- `server_scripts/_lib/dump_bee_nests.js`
 - `server_scripts/_lib/dump_crop_growth.js`
+- `server_scripts/_lib/dump_placeable.js`
+- `server_scripts/_lib/dump_spawns.js`
+- `server_scripts/tags/entitytags.js`
+- `server_scripts/tags/placeabletags.js`
+- `server_scripts/tags/seasontags.js`
+- `server_scripts/worldgen/bee_nests.js`
+- `server_scripts/worldgen/mob_spawns.js`
+- `server_scripts/worldgen/terrain_adaptation.js`
+- `server_scripts/worldgen/water_fill.js`
+- `server_scripts/worldgen/wild_flowers.js`
 - `startup_scripts/changes/stack_sizes.js`
 
-*changed (13)*
+*changed (22)*
 
+- `data/creativeengineering/worldgen/configured_feature/wild/hamimelon.json`
 - `generation_scripts/food/can_servings.json`
 - `generation_scripts/food/food_types.json`
 - `generation_scripts/worldgen/biome_config.json`
 - `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/structure_config.json`
+- `generation_scripts/worldgen/structure_groups.json`
+- `generation_scripts/worldgen/structure_tags.json`
 - `generation_scripts/worldgen/wild_crops.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
 - `server_scripts/_lib/dump_all.js`
 - `server_scripts/cooking/canning.js`
 - `server_scripts/other/misc_mods.js`
 - `server_scripts/tags/blocktags.js`
+- `server_scripts/worldgen/structure_overrides.js`
 - `startup_scripts/_lib/block_dict.js`
 - `startup_scripts/_lib/item_dict.js`
 - `startup_scripts/compost/compost_values.js`
+- `startup_scripts/func/sample_syringe.js`
 - `startup_scripts/items/cans.js`
 
 *removed (1)*
@@ -51,30 +391,47 @@ Mods updated (1):
 
 </details>
 
-config/: 0 added, 4 changed, 0 removed, 1 no longer shipped:
+config/: 3 added, 7 changed, 0 removed, 1 no longer shipped:
 
-*changed (4)*
+*added (3)*
 
+- `breedablekillerrabbit.json5`
+- `more_mooblooms-common.toml`
+- `prettyrain.json5`
+
+*changed (7)*
+
+- `create_central_kitchen-common.toml`
 - `creativeengineering-common.toml`
+- `quark-common.toml`
 - `rare-ice.properties`
 - `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
 - `worldedit/worldedit.properties`
 
 *no longer shipped (player settings, left in place) (1)*
 
 - `DistantHorizons.toml`
 
+resourcepacks/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `SquirmingSilverfish [1.13 - 26.3]   (v2).zip`
+
 ### Removals (from 1.0.4)
 
-Delete on the server (2, also in removals_server.txt):
+Delete on the server (3, also in removals_server.txt):
 
 - `kubejs/startup_scripts/changes/item_properties.js`
 - `mods/creativeengineering-1.0.4.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-02.jar`
 
-Delete on the client (2, also in removals_client.txt):
+Delete on the client (3, also in removals_client.txt):
 
 - `kubejs/startup_scripts/changes/item_properties.js`
 - `mods/creativeengineering-1.0.4.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-02.jar`
 
 <!-- deploy:1.0.4 -->
 ## 1.0.4 - 2026-10-04 13:54

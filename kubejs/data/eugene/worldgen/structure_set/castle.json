@@ -1,0 +1,26 @@
+{
+  "structures": [
+    {
+      "structure": "eugene:undead_castle",
+      "weight": 1
+    },
+    {
+      "structure": "eugene:red_roof_castle",
+      "weight": 1
+    },
+    {
+      "structure": "eugene:ruined_drum_tower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 75,
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 4
+    },
+    "separation": 65,
+    "salt": 273348201
+  }
+}

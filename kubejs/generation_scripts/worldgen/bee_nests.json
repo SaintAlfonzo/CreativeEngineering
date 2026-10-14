@@ -1,0 +1,35 @@
+{
+  "_readme": [
+    "Wild bee nests per biome. Applied at world load by kubejs/server_scripts/worldgen/bee_nests.js (CEConfig",
+    "[worldgen.systems] beeNests) and patcherMod BeeNests. Rejoin the world after editing; only chunks generated",
+    "afterwards change. Reference + tests: feature_writeup/bee_nests.md section 3. Per-biome before/after:",
+    "feature_writeup/bee_nests_by_biome.md (python3 tools/gen_bee_nests.py).",
+    "Selector: 'where' clauses OR'ed, traits AND'ed, '!x' negated (traits: wild_crops.json biomes); ocean/cave",
+    "biomes never match a clause; then 'add' (ids, '#tags') and 'except' (ids).",
+    "chance (0-1): every tree in the biome has at least this chance of a nest (trees without one gain it).",
+    "scale (0-1000): the trees' own nest chances times this. Per tree: min(1, max(p * scale, chance)).",
+    "Rules fold in file order per biome; each sets only the fields it names (later wins).",
+    "trees: extra trees carrying nests, { feature, rate ('1/16' = one per 16 chunks), sapling (survival check) }.",
+    "Values below are calibrated on measured trees per chunk (bee_nests_baseline.json, scratch server 2026-10-10)."
+  ],
+  "rules": [
+    { "id": "temperate_woods", "where": ["temperate forest"], "chance": 0.003,
+      "_note": "Birch and Dark Forest had no nests (Terralith trees); ~14 and ~10 trees/chunk -> about 1 in 25-35 chunks. Forest 1 in 100 -> 1 in 55." },
+    { "id": "warm_woods", "where": ["warm savanna", "warm swamp flower"], "chance": 0.003,
+      "_note": "Savannas, shrublands, orchid swamp: none before; savanna ~1 in 160 (sparse acacias). Jungles left out on purpose (no bees in jungles; none before either)." },
+    { "id": "cold_woods", "where": ["cold forest !snowy"], "chance": 0.001,
+      "_note": "Taigas and cold highland forests, not snowy ones: a rare find, ~1 in 200-250 chunks." },
+    { "id": "grassland", "where": ["temperate grassy plains !dry"], "chance": 0.02,
+      "_note": "Plains, Sunflower Plains, Meadow, Blooming Plateau: their few trees nest more often." },
+    { "id": "flower_boost", "where": ["flower"], "scale": 2,
+      "_note": "The bee biomes: their own nest chances doubled (Flower Forest, lavender, sakura, blooming, moonlight)." },
+    { "id": "bloom_woods", "add": ["terralith:blooming_valley", "terralith:skylands_spring"], "chance": 0.02,
+      "_note": "Showcase bee biomes, about as rich as Sakura / Old Growth Birch: ~1 nest in 10 chunks." },
+    { "id": "meadow_bee_trees", "where": ["temperate plains flower"], "except": ["terralith:blooming_plateau", "minecraft:sunflower_plains"],
+      "trees": { "feature": "minecraft:fancy_oak_bees", "rate": "1/16" },
+      "_note": "Meadow-type biomes have ~1 tree per 100 chunks: add a lone fancy oak with a nest every ~16 chunks." },
+    { "id": "bloom_bee_trees", "add": ["terralith:blooming_plateau", "minecraft:sunflower_plains"],
+      "trees": { "feature": "minecraft:fancy_oak_bees", "rate": "1/10" },
+      "_note": "Showcase bee biomes with almost no trees of their own: a lone bee oak every ~10 chunks." }
+  ]
+}

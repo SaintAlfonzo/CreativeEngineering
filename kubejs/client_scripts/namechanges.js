@@ -64,6 +64,7 @@ ClientEvents.lang('en_us', e => {
   e.renameItem('canned_goods:canned_rotten_flesh', 'Canned Tough Jerky')
   e.renameItem('canned_goods:canned_spider_eyes', 'Canned Night Berries')
   e.renameItem('neapolitan:chocolate_spider_eye', 'Chocolate Night Berries')
+  e.renameItem('delightful:cactus_flesh', 'Cactus Flesh') // was Cactus Chunk; its can is Canned Cactus Flesh
 
 	e.renameItem('create_compressed:copper_sheet_block', 'Copper Plate Block')
   e.renameItem('create_compressed:iron_sheet_block', 'Iron Plate Block')

@@ -1,0 +1,18 @@
+{
+  "structures": [
+      {
+          "structure": "eugene:pillager_loot_carriage",
+          "weight": 1
+      }
+  ],
+  "placement": {
+      "type": "minecraft:random_spread",
+      "spacing": 120,
+      "exclusion_zone": {
+        "other_set": "minecraft:villages",
+        "chunk_count": 4
+      },
+      "separation": 70,
+      "salt": 1034584405
+  }
+}

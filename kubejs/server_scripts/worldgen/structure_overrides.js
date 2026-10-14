@@ -19,6 +19,39 @@
 // tag's structures may start in those biomes (water: ships, wrecks, ocean ruins...), every other structure
 // loses those biomes from its own list. Handed to patcherMod (worldgen/StructureBiomeRules), which also
 // covers structures in no config yet; its log line lists what each rule kept out. Independent of the groups.
+// A rule's optional surface_check tag: those structures (dungeons with a staircase to the surface) also may not start
+// where the surface above them is one of the rule's biomes or under water (patcherMod checks the noise surface).
+//
+// BIOME FITS (biome_fits.json): a fit is a biome list and the structure tag of the same name (land/oak). A structure
+// in the tag spawns in its fit's biomes plus every parent fit's (land/oak: land/oak + land), never a sibling's, in
+// place of its mod's own list. Each fit is also added as the real biome tag and structure tag creativeengineering:<fit>
+// (ServerEvents.tags below). Handed to patcherMod (worldgen/StructureBiomeFits), which answers Structure#biomes().
+//
+// META STRUCTURES (meta_structures.json): our structures built from other structures and features (a village with
+// peaceful towers, a driftwood flotilla). Each definition is added as data/<ns>/worldgen/structure/<path>.json, but only
+// when patcherMod has worldgen/MetaStructure (its structure type) and [worldgen.systems] metaStructures is on; otherwise
+// it stays out of every group set (an unknown structure type, or a set naming a missing structure, fails the world load).
+// They live only in groups. The meta/* tags of structure_tags.json are also added as real structure tags
+// creativeengineering:meta/<name> (the anchors and parts the definitions name), from ServerEvents.tags below.
+//
+// PLACEMENT PRIORITY ("priority" in structure_groups.json): a rank per group (and per tag, for the fortified towns); a
+// structure whose pieces would overlap a higher-ranked structure's never starts. A meta structure's "companions" are
+// structures started in chunks of their own around it (villages around a fortified town). priority.peaceful: a radius
+// (chunks) around big settlements, villages and remote camps/houses where no hostile structure may start. Staged to
+// patcherMod (worldgen/PlacementPriority); an older jar ignores all of it with a warning.
+//
+// REPLACEMENTS: a group member with "replaces": "<member id>" and "share": 0..1 never wins a slot by its own weight; it
+// takes that share of the slots the named member wins and keeps (the vanilla swamp hut in YUNG's witch hut slots), so the
+// two together spawn exactly as often as the named member alone did. Staged to patcherMod (worldgen/MetaSlots). Without
+// MetaSlots.stageReplacements (older jar), or with [worldgen.systems] structureReplacements off, replacements are left
+// out of their group set and the named member keeps every slot.
+//
+// BIOME FREQUENCY (a group's "biome_frequency", 2026-10-14): {"#biome tag" | "biome id": factor 0..1, ..., "default": factor}.
+// Every member's frequency is multiplied by the factor of the biome at its generation point (the first rule the biome
+// matches, else default); patcherMod rolls it in generation and in /locate's prediction alike. The vehicles use it to be
+// twice as common in #creativeengineering:harsh biomes. Biome tags of our own (harsh) are biome_fits.json "biome_tags",
+// added as real tags creativeengineering:<name> below. An older jar without StructureFrequencies.stageBiomeFactors
+// ignores it with a warning (every member then spawns at its plain frequency).
 //
 // frequency < 1 is not a vanilla feature: the table is handed to patcherMod
 // (worldgen/StructureFrequencies), which rolls it when a structure is about to be placed.
@@ -45,6 +78,8 @@
 	var CONFIG_PATH = DIR + 'structure_config.json'
 	var TAGS_PATH = DIR + 'structure_tags.json'
 	var GROUPS_PATH = DIR + 'structure_groups.json'
+	var META_PATH = DIR + 'meta_structures.json'
+	var FITS_PATH = DIR + 'biome_fits.json'
 	var REPORT_PATH = DIR + 'structure_tag_report.md'
 	var GROUP_SET_PREFIX = 'creativeengineering:group/'
 	var TAG = '[structure-tuning] '
@@ -53,12 +88,21 @@
 	var MAX_SPACING = 4096
 	var MAX_COUNT = 4095
 	var MAX_EXCLUSION = 16
+	var PEACE_MAX_RADIUS = 16   // PlacementPriority.MAX_RADIUS
 	var DEFAULT_WEIGHT = 100
 
 	var GROUP_PLACEMENT_KEYS = ['spacing', 'separation', 'salt', 'spread_type', 'frequency',
 		'frequency_reduction_method', 'locate_offset', 'exclusion_zone']
-	var MEMBER_KEYS = ['weight', 'frequency', 'enabled', 'note']
+	var MEMBER_KEYS = ['weight', 'frequency', 'enabled', 'note', 'fit_base', 'fit_keep', 'replaces', 'share']   // fit_base, fit_keep: gen_structure_groups.py --fit-rates bookkeeping, not read here
 	var REDUCTION_METHODS = ['default', 'legacy_type_1', 'legacy_type_2', 'legacy_type_3']
+	var META_TYPE = 'creativeengineering:meta'
+	var META_KEYS = ['note', 'type', 'biomes', 'step', 'terrain_adaptation', 'spawn_overrides', 'anchor', 'share', 'parts', 'companions']
+	var COMPANION_KEYS = ['structures', 'count', 'distance']
+	var META_PART_KEYS = ['structures', 'features', 'count', 'chance', 'distance', 'spacing', 'margin', 'tries', 'water_depth', 'radius']
+	var META_MAX_DISTANCE = 112   // MetaStructure.REACH chunks
+	var META_TAG_PREFIX = 'meta/'
+	var WAY_SIGN_GROUP = 'settlements'
+	var WAY_SIGN_DESTINATIONS = 'supplementaries:way_sign_destinations'
 
 	// KubeJS's class filter blocks java.io, so the markdown report goes through patcherMod.
 	var WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles')
@@ -124,6 +168,11 @@
 	function resourcePath(id) {
 		var c = id.indexOf(':')
 		return id.substring(0, c) + ':worldgen/structure_set/' + id.substring(c + 1) + '.json'
+	}
+
+	function structurePath(id) {
+		var c = id.indexOf(':')
+		return id.substring(0, c) + ':worldgen/structure/' + id.substring(c + 1) + '.json'
 	}
 
 	function isInt(v) {
@@ -252,6 +301,12 @@
 			if (typeof raw.enabled !== 'boolean') errs.push(where + ': enabled must be true or false')
 			else s.enabled = raw.enabled
 		}
+		if (('replaces' in raw) !== ('share' in raw)) errs.push(where + ': "replaces" and "share" go together')
+		else if ('replaces' in raw) {
+			if (typeof raw.replaces !== 'string' || !/^[a-z0-9_.-]+:[a-z0-9_.\/-]+$/.test(raw.replaces)) errs.push(where + ': replaces must be a structure id')
+			else if (!(typeof raw.share === 'number' && raw.share >= 0 && raw.share <= 1)) errs.push(where + ': share must be 0..1 (got ' + raw.share + ')')
+			else { s.replaces = raw.replaces; s.share = raw.share }
+		}
 		s.auto = false
 		return { settings: s, errs: errs }
 	}
@@ -332,9 +387,349 @@
 				errors.push(where + '.allow must be "#<tag>" naming a tag in structure_tags.json (got ' + JSON.stringify(r.allow) + ')')
 				return
 			}
-			out[name] = { biomes: r.biomes.slice(), allow: Object.keys(tagMembers[r.allow.substring(1)]).sort(), tag: r.allow, note: r.note }
+			var surface = []
+			if ('surface_check' in r) {
+				if (typeof r.surface_check !== 'string' || r.surface_check.charAt(0) !== '#' || !tagMembers[r.surface_check.substring(1)]) {
+					errors.push(where + '.surface_check must be "#<tag>" naming a tag in structure_tags.json (got ' + JSON.stringify(r.surface_check) + ')')
+					return
+				}
+				surface = Object.keys(tagMembers[r.surface_check.substring(1)]).sort()
+			}
+			out[name] = { biomes: r.biomes.slice(), allow: Object.keys(tagMembers[r.allow.substring(1)]).sort(), tag: r.allow, note: r.note,
+				surface: surface, surfaceTag: r.surface_check }
 		})
 		return out
+	}
+
+	// ── biome fits ───────────────────────────────────────────────────────────
+
+	var FIT_NAME = /^[a-z0-9_.-]+(\/[a-z0-9_.-]+)*$/
+	var FIT_KEYS = ['note', 'biomes', 'inherit']
+
+	function readFits() {
+		var doc = readJson(FITS_PATH)
+		return (doc && doc.fits) || {}
+	}
+
+	// The fits a structure in fit tag `name` takes, nearest first: the fit, then (inherit) its nearest parent fit's chain.
+	function fitChain(fits, name) {
+		var chain = [name]
+		if (fits[name].inherit === false) return chain
+		var parts = name.split('/')
+		for (var n = parts.length - 1; n > 0; n--) {
+			var parent = parts.slice(0, n).join('/')
+			if (fits[parent]) return chain.concat(fitChain(fits, parent))
+		}
+		return chain
+	}
+
+	// biome_fits.json -> { fits: {name: {biomes, inherit, note, chain, structures}}, structures: {id: [fit names]} }.
+	// Problems go to errors (any applies no fit); a structure tag that looks like a fit but isn't one is a warning.
+	function planBiomeFits(fitsDoc, tagDefs, tagMembers, errors, warnings) {
+		var biomeRe = /^#?[a-z0-9_.-]+:[a-z0-9_.\/-]+$/
+		var fits = {}
+		Object.keys(fitsDoc).forEach(function (name) {
+			var f = fitsDoc[name]
+			var where = 'biome_fits.json fits.' + name
+			if (!FIT_NAME.test(name)) return errors.push(where + ': a fit name is a tag path like land/oak')
+			if (!f || typeof f !== 'object') return errors.push(where + ' must be an object')
+			Object.keys(f).forEach(function (k) { if (FIT_KEYS.indexOf(k) < 0) errors.push(where + ': unknown field "' + k + '"') })
+			if (!Array.isArray(f.biomes) || !f.biomes.every(function (b) { return typeof b === 'string' && biomeRe.test(b) }))
+				return errors.push(where + '.biomes must be a list of biome ids or #biome_tags')
+			if ('inherit' in f && typeof f.inherit !== 'boolean') return errors.push(where + '.inherit must be true or false')
+			if (!tagDefs[name]) return errors.push(where + ': structure_tags.json has no tag "' + name + '" (its structures; may be empty)')
+			if (!f.biomes.length && Object.keys(tagMembers[name] || {}).length) warnings.push(where + ' lists no biome: its structures only spawn in its parent fits\' biomes, or never')
+			fits[name] = { biomes: f.biomes.slice(), inherit: f.inherit !== false, note: f.note }
+		})
+		var roots = {}
+		Object.keys(fits).forEach(function (name) { roots[name.split('/')[0]] = true })
+		Object.keys(tagDefs).forEach(function (t) {
+			if (!fits[t] && t.indexOf('/') > 0 && roots[t.split('/')[0]] && FIT_NAME.test(t))
+				warnings.push('structure_tags.json ' + t + ' looks like a biome fit, but biome_fits.json has no fit "' + t + '": ignored')
+		})
+		var structures = {}
+		Object.keys(fits).forEach(function (name) {
+			var chain = fitChain(fits, name)
+			fits[name].chain = chain
+			fits[name].structures = Object.keys(tagMembers[name] || {}).sort()
+			fits[name].structures.forEach(function (id) {
+				var list = structures[id] || (structures[id] = [])
+				chain.forEach(function (c) { if (list.indexOf(c) < 0) list.push(c) })
+			})
+		})
+		return { fits: fits, structures: structures }
+	}
+
+	// What StructureBiomeFits.stage takes: every fit's listed biomes + each structure's fit names.
+	function fitStage(biomeFits) {
+		var fits = {}
+		Object.keys(biomeFits.fits).forEach(function (name) { fits[name] = biomeFits.fits[name].biomes })
+		return { fits: fits, structures: biomeFits.structures }
+	}
+
+	// patcherMod's biome fits; null when the jar is older than this script (fits then simply don't apply)
+	function biomeFitStage() {
+		try {
+			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeFits')
+		} catch (err) {
+			return null
+		}
+	}
+
+	// ── meta structures ──────────────────────────────────────────────────────
+
+	// {ok} when patcherMod can build meta structures, else {ok: false, why}
+	function metaSupport() {
+		try {
+			Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure')
+		} catch (err) {
+			return { ok: false, why: 'patcherMod has no worldgen.MetaStructure (older jar in mods/)' }
+		}
+		try {
+			Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots')
+		} catch (err) {
+			// a jar from before slot conversion would let an anchored meta take group slots of its own
+			return { ok: false, why: 'patcherMod has no worldgen.MetaSlots (older jar in mods/)' }
+		}
+		try {
+			var C = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig')
+			if (C.metaStructuresEnabled() != true) return { ok: false, why: 'switched off ([worldgen.systems] metaStructures)' }
+		} catch (err) {
+			// an older WorldgenConfig has no switch: on
+		}
+		return { ok: true }
+	}
+
+	// {ok, stage: MetaSlots} when patcherMod can stage replacements and the switch is on, else {ok: false, why}
+	function replacementSupport() {
+		var slots
+		try {
+			slots = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots')
+		} catch (err) {
+			return { ok: false, why: 'patcherMod has no worldgen.MetaSlots (older jar in mods/)' }
+		}
+		if (!slots.stageReplacements) return { ok: false, why: 'patcherMod has no MetaSlots.stageReplacements (older jar in mods/)' }
+		try {
+			var C = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig')
+			if (C.structureReplacementsEnabled() != true) return { ok: false, why: 'switched off ([worldgen.systems] structureReplacements)', stage: slots }
+		} catch (err) {
+			// a WorldgenConfig without the switch can't come with stageReplacements; on
+		}
+		return { ok: true, stage: slots }
+	}
+
+	// patcherMod's PlacementPriority stager, or null (older jar)
+	function prioritySupport() {
+		try {
+			var C = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority')
+			return C.stage ? C : null
+		} catch (err) {
+			return null
+		}
+	}
+
+	// structure_groups.json "priority" -> {ranks: {id: n}, companions: {meta: {...}}, groups, overrides}
+	function planPriority(doc, groupNames, tagMembers, owner, metaPlans, errors, warnings) {
+		var pr = doc.priority || {}
+		var out = { ranks: {}, companions: {}, groups: {}, overrides: {}, shaped: [], shapeGroups: [],
+			radius: {}, hostile: [], peaceGroups: {}, peaceOverrides: {}, hostileKeys: [] }
+		var groupRanks = pr.groups || {}
+		Object.keys(pr).forEach(function (k) {
+			if (['_readme', 'groups', 'structures', 'shape', 'peaceful'].indexOf(k) < 0) errors.push('priority: unknown field "' + k + '"')
+		})
+		Object.keys(groupRanks).forEach(function (g) {
+			if (!isInt(groupRanks[g])) return errors.push('priority.groups.' + g + ' must be a whole number')
+			if (groupNames.indexOf(g) < 0) return warnings.push('priority.groups.' + g + ': no such group (ignored)')
+			out.groups[g] = groupRanks[g]
+			Object.keys(tagMembers['group/' + g] || {}).forEach(function (id) { if (owner[id] === g) out.ranks[id] = groupRanks[g] })
+		})
+		Object.keys(pr.structures || {}).forEach(function (k) {
+			var r = pr.structures[k]
+			if (!isInt(r)) return errors.push('priority.structures.' + k + ' must be a whole number')
+			var ids = k.charAt(0) === '#' ? Object.keys(tagMembers[k.substring(1)] || {}) : [k]
+			if (k.charAt(0) === '#' && !tagMembers[k.substring(1)]) return errors.push('priority.structures: no tag ' + k + ' in structure_tags.json')
+			out.overrides[k] = r
+			ids.forEach(function (id) { if (owner[id]) out.ranks[id] = r })
+		})
+		if ('shape' in pr) {
+			if (!Array.isArray(pr.shape)) errors.push('priority.shape must be a list of group names')
+			else pr.shape.forEach(function (g) {
+				if (groupNames.indexOf(g) < 0) return warnings.push('priority.shape: no group ' + g + ' (ignored)')
+				out.shapeGroups.push(g)
+				Object.keys(tagMembers['group/' + g] || {}).forEach(function (id) { if (owner[id] === g && out.shaped.indexOf(id) < 0) out.shaped.push(id) })
+			})
+			out.shaped.sort()
+		}
+		if ('peaceful' in pr) planPeaceful(pr.peaceful, out, groupNames, tagMembers, owner, errors, warnings)
+		metaPlans.forEach(function (mp) {
+			if (mp.off || !mp.def || !mp.def.companions || !owner[mp.id]) return
+			var g = owner[mp.id]
+			var cp = mp.def.companions
+			var ids = []
+			entryList(cp.structures).forEach(function (e) {
+				var t = e.indexOf('#creativeengineering:') === 0 ? e.substring('#creativeengineering:'.length) : null
+				if (t) Object.keys(tagMembers[t] || {}).forEach(function (a) { ids.push(a) })
+				else if (e.charAt(0) !== '#') ids.push(e)
+			})
+			ids = ids.filter(function (id, i) { return ids.indexOf(id) === i && owner[id] === g }).sort()
+			if (!ids.length) return warnings.push(mp.id + ' companions: none of its companion structures is in group/' + g + ', so none spawn')
+			if (!isInt(groupRanks[g])) return warnings.push(mp.id + ' companions: group/' + g + ' has no priority rank, so none spawn')
+			var count = isInt(cp.count) ? [cp.count, cp.count] : cp.count
+			out.companions[mp.id] = { structures: ids, count: count, distance: [Math.max(1, Math.round(cp.distance[0] / 16)), Math.round(cp.distance[1] / 16)],
+				rank: groupRanks[g] - 1 }
+		})
+		return out
+	}
+
+	// priority.peaceful -> out.radius {id: chunks} (groups, then structures over them) and out.hostile [ids]
+	function planPeaceful(pc, out, groupNames, tagMembers, owner, errors, warnings) {
+		if (!pc || typeof pc !== 'object' || Array.isArray(pc)) return errors.push('priority.peaceful must be an object')
+		Object.keys(pc).forEach(function (k) {
+			if (['_readme', 'groups', 'structures', 'hostile'].indexOf(k) < 0) errors.push('priority.peaceful: unknown field "' + k + '"')
+		})
+		function radiusOk(where, n) {
+			if (isInt(n) && n >= 1 && n <= PEACE_MAX_RADIUS) return true
+			errors.push(where + ' must be a whole number of chunks from 1 to ' + PEACE_MAX_RADIUS)
+			return false
+		}
+		// "#tag", "group name" or an id -> ids
+		function members(where, k) {
+			if (k.charAt(0) === '#') {
+				if (!tagMembers[k.substring(1)]) { errors.push(where + ': no tag ' + k + ' in structure_tags.json'); return [] }
+				return Object.keys(tagMembers[k.substring(1)])
+			}
+			if (groupNames.indexOf(k) >= 0) return Object.keys(tagMembers['group/' + k] || {}).filter(function (id) { return owner[id] === k })
+			if (k.indexOf(':') < 0) { warnings.push(where + ': no group ' + k + ' (ignored)'); return [] }
+			return [k]
+		}
+		var groups = pc.groups || {}
+		Object.keys(groups).forEach(function (g) {
+			if (!radiusOk('priority.peaceful.groups.' + g, groups[g])) return
+			if (groupNames.indexOf(g) < 0) return warnings.push('priority.peaceful.groups.' + g + ': no such group (ignored)')
+			out.peaceGroups[g] = groups[g]
+			members('priority.peaceful.groups', g).forEach(function (id) { out.radius[id] = groups[g] })
+		})
+		var structs = pc.structures || {}
+		Object.keys(structs).forEach(function (k) {
+			if (!radiusOk('priority.peaceful.structures.' + k, structs[k])) return
+			out.peaceOverrides[k] = structs[k]
+			members('priority.peaceful.structures', k).forEach(function (id) { out.radius[id] = structs[k] })
+		})
+		if ('hostile' in pc) {
+			if (!Array.isArray(pc.hostile)) return errors.push('priority.peaceful.hostile must be a list of group names, "#tag"s or ids')
+			pc.hostile.forEach(function (k) {
+				out.hostileKeys.push(k)
+				members('priority.peaceful.hostile', k).forEach(function (id) {
+					if (id in out.radius) return warnings.push('priority.peaceful: ' + id + ' is both peaceful and hostile (kept peaceful)')
+					if (out.hostile.indexOf(id) < 0) out.hostile.push(id)
+				})
+			})
+			out.hostile.sort()
+		}
+		if (Object.keys(out.radius).length && !out.hostile.length) warnings.push('priority.peaceful: radii but no hostile structures, so nothing is kept away')
+	}
+
+	// A group's biome_frequency -> the ordered rules object StructureFrequencies.stageBiomeFactors takes, or null (errors)
+	function planBiomeFrequency(where, raw, errors) {
+		var ruleRe = /^#?[a-z0-9_.-]+:[a-z0-9_.\/-]+$/
+		if (!raw || typeof raw !== 'object' || Array.isArray(raw) || !Object.keys(raw).length) {
+			errors.push(where + ' must be an object of "#biome_tag" / "biome id" / "default" -> factor 0..1')
+			return null
+		}
+		var out = {}
+		var ok = true
+		Object.keys(raw).forEach(function (k) {
+			var v = raw[k]
+			if (k !== 'default' && !ruleRe.test(k)) { errors.push(where + ': "' + k + '" is not a biome id, #biome_tag or "default"'); ok = false }
+			else if (typeof v !== 'number' || !(v >= 0 && v <= 1)) { errors.push(where + '.' + k + ' must be a number 0..1'); ok = false }
+			else out[k] = v
+		})
+		return ok ? out : null
+	}
+
+	function isRange(v, max) {
+		if (isInt(v)) return v >= 0 && v <= max
+		return Array.isArray(v) && v.length === 2 && isInt(v[0]) && isInt(v[1]) && v[0] >= 0 && v[0] <= v[1] && v[1] <= max
+	}
+
+	function entryList(v) {
+		if (typeof v === 'string') return [v]
+		if (Array.isArray(v) && v.length && v.every(function (e) { return typeof e === 'string' })) return v
+		return null
+	}
+
+	// Problems with one definition (it is then left out, the rest still apply). Checks what the Java codec would
+	// reject, so a typo can't fail the world load, plus #creativeengineering:meta/* tags that structure_tags.json lacks.
+	function metaProblems(id, def, tagDefs) {
+		var errs = []
+		if (!def || typeof def !== 'object' || Array.isArray(def)) return ['must be an object']
+		Object.keys(def).forEach(function (k) { if (META_KEYS.indexOf(k) < 0) errs.push('unknown field "' + k + '"') })
+		if (def.type !== META_TYPE) errs.push('type must be "' + META_TYPE + '"')
+		if (id.indexOf('creativeengineering:') !== 0) errs.push('the id must be in the creativeengineering namespace')
+		;['biomes', 'step', 'spawn_overrides'].forEach(function (k) { if (!(k in def)) errs.push('needs "' + k + '"') })
+		function checkEntries(where, v) {
+			var list = entryList(v)
+			if (!list) return errs.push(where + ' must be "#tag", an id, or a list of them')
+			list.forEach(function (e) {
+				var tagPrefix = '#creativeengineering:' + META_TAG_PREFIX
+				if (e.indexOf(tagPrefix) === 0 && !tagDefs[e.substring('#creativeengineering:'.length)]) {
+					errs.push(where + ': ' + e + ' has no ' + e.substring('#creativeengineering:'.length) + ' tag in structure_tags.json')
+				}
+			})
+		}
+		if ('anchor' in def) checkEntries('anchor', def.anchor)
+		if ('anchor' in def && !('share' in def)) errs.push('needs "share" (0..1, the share of its anchors\' slots it takes) because it has an anchor')
+		if ('share' in def && !('anchor' in def)) errs.push('"share" needs an "anchor" (a meta without one is an ordinary group member)')
+		if ('share' in def && !(typeof def.share === 'number' && def.share >= 0 && def.share <= 1)) errs.push('share must be 0..1')
+		if ('companions' in def) {
+			var cp = def.companions
+			if (!cp || typeof cp !== 'object' || Array.isArray(cp)) errs.push('companions must be an object')
+			else {
+				Object.keys(cp).forEach(function (k) { if (COMPANION_KEYS.indexOf(k) < 0) errs.push('companions: unknown field "' + k + '"') })
+				checkEntries('companions.structures', cp.structures)
+				if (!isRange(cp.count, 8)) errs.push('companions.count must be n or [min, max] (at most 8)')
+				if (!(Array.isArray(cp.distance) && isRange(cp.distance, 512) && cp.distance[0] >= 16)) errs.push('companions.distance must be [min, max] blocks, 16..512')
+				if (!('anchor' in def)) errs.push('companions need an anchor (they surround the slot the anchor won)')
+			}
+		}
+		if (!Array.isArray(def.parts) || (!def.parts.length && !('companions' in def))) errs.push('needs a non-empty "parts" list (empty is allowed with "companions")')
+		else def.parts.forEach(function (part, n) {
+			var where = 'parts[' + n + ']'
+			if (!part || typeof part !== 'object') return errs.push(where + ' must be an object')
+			Object.keys(part).forEach(function (k) { if (META_PART_KEYS.indexOf(k) < 0) errs.push(where + ': unknown field "' + k + '"') })
+			if (('structures' in part) === ('features' in part)) errs.push(where + ' needs exactly one of "structures" and "features"')
+			if ('structures' in part) checkEntries(where + '.structures', part.structures)
+			if ('features' in part) checkEntries(where + '.features', part.features)
+			if ('count' in part && !isRange(part.count, 4096)) errs.push(where + '.count must be n or [min, max]')
+			if ('distance' in part && !(Array.isArray(part.distance) && isRange(part.distance, META_MAX_DISTANCE))) errs.push(where + '.distance must be [min, max] with max <= ' + META_MAX_DISTANCE)
+			if ('chance' in part && !(typeof part.chance === 'number' && part.chance >= 0 && part.chance <= 1)) errs.push(where + '.chance must be 0..1')
+			;[['spacing', 0, 256], ['margin', 0, 64], ['tries', 1, 64], ['water_depth', 0, 64], ['radius', 0, 16]].forEach(function (f) {
+				if (f[0] in part && !(isInt(part[f[0]]) && part[f[0]] >= f[1] && part[f[0]] <= f[2])) errs.push(where + '.' + f[0] + ' must be a whole number ' + f[1] + '..' + f[2])
+			})
+		})
+		return errs
+	}
+
+	// the structure json the game reads: the definition without our note
+	function metaJson(def) {
+		var out = {}
+		Object.keys(def).forEach(function (k) { if (k !== 'note' && k !== 'companions') out[k] = def[k] })
+		return toJson(out)
+	}
+
+	// every structure id the tags may name: the baseline's set members, then our meta structures
+	function structureIds(config, metaDefs) {
+		var ids = []
+		var seen = {}
+		Object.keys(config.structure_sets).forEach(function (id) {
+			config.structure_sets[id].structures.forEach(function (s) {
+				if (!seen[s.structure]) { seen[s.structure] = true; ids.push(s.structure) }
+			})
+		})
+		Object.keys(config.meta_structures || {}).concat(Object.keys(metaDefs)).forEach(function (id) {
+			if (!seen[id]) { seen[id] = true; ids.push(id) }
+		})
+		return ids
 	}
 
 	function plan() {
@@ -350,6 +745,8 @@
 		if (!doc) return { errors: ['could not read ' + GROUPS_PATH + ' (run python3 tools/gen_structure_groups.py)'] }
 		var groupsDoc = settings.groups ? doc.groups || {} : {}
 		var standaloneDoc = settings.groups ? doc.standalone || {} : {}
+		var metaDoc = readJson(META_PATH)
+		var metaDefs = (metaDoc && metaDoc.structures) || {}
 
 		var allIds = []
 		var setOf = {}
@@ -364,7 +761,9 @@
 			})
 		})
 		// meta structures: structures of our own with no set of their own (they only live in groups)
-		Object.keys(config.meta_structures || {}).forEach(function (id) { if (!setOf[id]) allIds.push(id) })
+		Object.keys(config.meta_structures || {}).concat(Object.keys(metaDefs)).forEach(function (id) {
+			if (!setOf[id] && allIds.indexOf(id) < 0) allIds.push(id)
+		})
 
 		var resolved = resolveTags(tagDefs, allIds)
 		var warnings = resolved.warnings.slice()
@@ -375,7 +774,28 @@
 		}
 		var tagMembers = resolved.members
 		var errors = []
+
+		// which meta structures can be built: staged as structure files, the rest kept out of every set
+		var support = metaSupport()
+		var metaPlans = []
+		var metaOff = {}       // id -> why it can't generate
+		var metaFiles = {}
+		Object.keys(metaDefs).forEach(function (id) {
+			var problems = metaProblems(id, metaDefs[id], tagDefs)
+			problems.forEach(function (e) { warnings.push('meta_structures.json ' + id + ': ' + e + ' (left out)') })
+			if (problems.length) metaOff[id] = 'errors in meta_structures.json'
+			else if (!support.ok) metaOff[id] = support.why
+			else metaFiles[structurePath(id)] = metaJson(metaDefs[id])
+			metaPlans.push({ id: id, def: metaDefs[id], off: metaOff[id], problems: problems })
+		})
+		Object.keys(config.meta_structures || {}).forEach(function (id) {
+			if (!metaDefs[id]) { metaOff[id] = 'not in meta_structures.json'; warnings.push(id + ' is listed in structure_config.json but has no definition in meta_structures.json: rerun python3 tools/gen_structure_config.py') }
+		})
+		if (!support.ok && metaPlans.length) warnings.push('meta structures not built: ' + support.why + '; their group slots go to the other members')
 		var biomeRules = planBiomeRules(doc.biome_rules || {}, tagDefs, tagMembers, errors)
+		var fitsDoc = readJson(FITS_PATH)
+		if (!fitsDoc) warnings.push('could not read ' + FITS_PATH + ': no biome fits')
+		var biomeFits = planBiomeFits((fitsDoc && fitsDoc.fits) || {}, tagDefs, tagMembers, errors, warnings)
 		if (!settings.groups) warnings.push('structure groups are OFF (CEConfig [worldgen.systems] structureGroups): every structure set is its mod/vanilla default'
 			+ (density !== 1 ? ' times the debug density' : ''))
 
@@ -396,6 +816,50 @@
 		if (settings.groups) allIds.forEach(function (id) {
 			if (!setOf[id] && !owner[id]) warnings.push(id + ' (meta structure) is in no group, so it never generates')
 		})
+		// a meta with an anchor only takes slots its anchors win in its own group (patcherMod MetaSlots)
+		var shareSum = {}
+		if (settings.groups) metaPlans.forEach(function (mp) {
+			if (mp.off || !('anchor' in mp.def) || !owner[mp.id]) return
+			var anchors = []
+			entryList(mp.def.anchor).forEach(function (e) {
+				var t = e.indexOf('#creativeengineering:') === 0 ? e.substring('#creativeengineering:'.length) : null
+				if (t) Object.keys(tagMembers[t] || {}).forEach(function (a) { anchors.push(a) })
+				else if (e.charAt(0) !== '#') anchors.push(e)
+			})
+			var inGroup = anchors.filter(function (a) { return owner[a] === owner[mp.id] })
+			if (!inGroup.length) warnings.push(mp.id + ' (meta structure): none of its anchors is in group/' + owner[mp.id] + ', so it never generates')
+			inGroup.forEach(function (a) { shareSum[a] = (shareSum[a] || 0) + mp.def.share })
+		})
+		// replacements: checked here, their members left out of the group sets below when they can't be staged
+		var replSupport = replacementSupport()
+		var replacements = {}   // replacement id -> { replaces, share }
+		var replOff = {}        // replacement id -> why it isn't staged
+		if (settings.groups) groupNames.forEach(function (g) {
+			var listed = (groupsDoc[g] && groupsDoc[g].structures) || {}
+			Object.keys(listed).sort().forEach(function (id) {
+				var r = listed[id]
+				if (!r || typeof r !== 'object' || !('replaces' in r) || owner[id] !== g) return
+				var where = 'groups.' + g + '.structures.' + id
+				if (r.replaces === id) errors.push(where + ': replaces itself')
+				else if (owner[r.replaces] !== g) errors.push(where + ': replaces ' + r.replaces + ', which is not in group/' + g + ' (a replacement takes slots in its own group)')
+				else if (metaDefs[id] || metaDefs[r.replaces]) errors.push(where + ': a meta structure can\'t replace or be replaced (use "anchor" + "share" in meta_structures.json)')
+				else if (listed[r.replaces] && typeof listed[r.replaces] === 'object' && 'replaces' in listed[r.replaces]) errors.push(where + ': replaces ' + r.replaces + ', which is a replacement itself')
+				else if (typeof r.share === 'number' && r.enabled !== false) {
+					if (!replSupport.ok) { replOff[id] = replSupport.why; return }
+					replacements[id] = { replaces: r.replaces, share: r.share }
+					shareSum[r.replaces] = (shareSum[r.replaces] || 0) + r.share
+				}
+			})
+		})
+		if (Object.keys(replOff).length) warnings.push('replacements not staged: ' + replSupport.why + '; ' + Object.keys(replOff).sort().join(', ')
+			+ ' left out of their groups, the structures they replace keep every slot')
+		Object.keys(shareSum).sort().forEach(function (a) {
+			if (shareSum[a] > 1 + 1e-9) warnings.push(a + ': the meta structures and replacements it anchors take ' + Math.round(shareSum[a] * 100) + '% of its slots; the game cuts that to 100% in id order')
+		})
+
+		var priority = planPriority(doc, groupNames, tagMembers, owner, metaPlans, errors, warnings)
+		var priorityStage = prioritySupport()
+		if (!priorityStage && Object.keys(priority.ranks).length) warnings.push('patcherMod has no worldgen.PlacementPriority (older jar): placement priority and companions not applied')
 
 		var knownSets = {}
 		Object.keys(sets).forEach(function (id) { knownSets[id] = true })
@@ -403,6 +867,7 @@
 
 		var files = {}
 		var frequencies = {}     // set id -> { structure id: frequency < 1 }
+		var biomeFrequencies = {}   // set id -> { "#tag" | "biome" | "default": factor }, groups with biome_frequency
 		var groupPlans = []
 		var setPlans = []
 
@@ -419,6 +884,7 @@
 			var p = assign({ type: 'minecraft:random_spread' }, raw)
 			errors.push.apply(errors, validatePlacement('groups.' + g + '.placement', p, knownSets))
 
+			var biomeFrequency = 'biome_frequency' in entry ? planBiomeFrequency('groups.' + g + '.biome_frequency', entry.biome_frequency, errors) : null
 			var listed = entry.structures || {}
 			var ids = Object.keys(tagMembers['group/' + g]).sort()
 			Object.keys(listed).forEach(function (id) {
@@ -439,12 +905,12 @@
 				var r = memberSettings('groups.' + g + '.structures.' + id, listed[id], defaults)
 				errors.push.apply(errors, r.errs)
 				r.settings.auto = auto
-				return assign({ structure: id, from: setOf[id] || '(meta structure)', blocked: blocked[id] }, r.settings)
+				return assign({ structure: id, from: setOf[id] || '(meta structure)', blocked: blocked[id], metaOff: metaOff[id], replOff: replOff[id] }, r.settings)
 			})
-			var live = members.filter(function (m) { return m.enabled && m.frequency > 0 })
+			var live = members.filter(function (m) { return m.enabled && m.frequency > 0 && !m.metaOff && !m.replOff })
 			var scaled = scalePlacement(p, density)   // after the members: their auto defaults use the real grid
 			if (scaled.capped) capped.push(setId)
-			var plan = { name: g, id: setId, note: entry.note, placement: scaled.placement, members: members, live: live }
+			var plan = { name: g, id: setId, note: entry.note, placement: scaled.placement, members: members, live: live, biomeFrequency: biomeFrequency }
 			groupPlans.push(plan)
 			if (!live.length) return
 			files[resourcePath(setId)] = toJson({
@@ -454,6 +920,7 @@
 			live.forEach(function (m) {
 				if (m.frequency < 1) (frequencies[setId] = frequencies[setId] || {})[m.structure] = m.frequency
 			})
+			if (biomeFrequency) biomeFrequencies[setId] = biomeFrequency
 		})
 
 		// every original set: members that moved to a group leave it; the rest follow "standalone"
@@ -524,17 +991,30 @@
 
 		var freqCount = 0
 		Object.keys(frequencies).forEach(function (s) { freqCount += Object.keys(frequencies[s]).length })
+		var metaCount = Object.keys(metaFiles).length
 		return {
 			files: files,
+			metaFiles: metaFiles,
 			frequencies: frequencies,
+			biomeFrequencies: biomeFrequencies,
+			replacements: replacements,
+			replacementStage: replSupport.stage || null,
+			priority: priority,
+			priorityStage: priorityStage,
 			biomeRules: biomeRules,
-			report: buildReport(groupPlans, setPlans, biomeRules, tagDefs, tagMembers, allIds, warnings, freqCount),
+			biomeFits: biomeFits,
+			report: buildReport(groupPlans, setPlans, biomeRules, biomeFits, tagDefs, tagMembers, allIds, warnings, freqCount, metaPlans, owner, priority),
 			warnings: warnings,
 			summary: (settings.groups ? '' : 'GROUPS OFF, ') + (density !== 1 ? 'DEBUG density x' + density + ', ' : '')
 				+ groupPlans.length + ' groups, ' + Object.keys(files).length + ' structure_sets written ('
 				+ setPlans.filter(function (sp) { return sp.emptied && sp.moved.length }).length + ' emptied into groups), '
 				+ Object.keys(sets).length + ' original sets; ' + freqCount + ' structure frequencies below 1; '
-				+ Object.keys(biomeRules).length + ' biome rule(s)',
+				+ Object.keys(biomeRules).length + ' biome rule(s); ' + Object.keys(biomeFits.fits).length + ' biome fit(s) for '
+				+ Object.keys(biomeFits.structures).length + ' structure(s); ' + metaCount + ' meta structure(s)'
+				+ (metaPlans.length > metaCount ? ' (' + (metaPlans.length - metaCount) + ' left out)' : '')
+				+ '; ' + Object.keys(replacements).length + ' replacement(s)'
+				+ '; ' + Object.keys(priority.ranks).length + ' ranked structure(s), ' + Object.keys(priority.companions).length + ' companion rule(s)'
+				+ (Object.keys(replOff).length ? ' (' + Object.keys(replOff).length + ' left out)' : ''),
 		}
 	}
 
@@ -569,10 +1049,12 @@
 		return parts.join(', ')
 	}
 
-	function buildReport(groupPlans, setPlans, biomeRules, tagDefs, tagMembers, allIds, warnings, freqCount) {
+	function buildReport(groupPlans, setPlans, biomeRules, biomeFits, tagDefs, tagMembers, allIds, warnings, freqCount, metaPlans, owner, priority) {
 		var lines = []
 		var out = function (s) { lines.push(s) }
 		reportHeader(lines)
+		var metaShare = {}   // meta id -> share, for the built metas with an anchor
+		metaPlans.forEach(function (mp) { if (!mp.off && mp.def && 'anchor' in mp.def) metaShare[mp.id] = mp.def.share })
 
 		if (warnings.length) {
 			out('## Warnings')
@@ -595,8 +1077,63 @@
 			if (r.note) out(r.note)
 			if (r.note) out('')
 			out('Biomes: ' + r.biomes.map(code).join(', ') + '. Allowed (`' + r.tag + '`, ' + r.allow.length + '): ' + r.allow.map(code).join(', '))
+			if (r.surface.length) out('Surface check (`' + r.surfaceTag + '`): ' + r.surface.map(code).join(', ')
+				+ ' may not start where the surface above them is in these biomes or under water.')
 			out('')
 		})
+
+		out('## Biome fits')
+		out('')
+		out('A structure in a fit\'s structure tag spawns in that fit\'s biomes plus its parents\' instead of its own list '
+			+ '(`biome_fits.json`, patcherMod StructureBiomeFits, CEConfig [worldgen.systems] structureBiomeFits). Each fit is also the real '
+			+ 'biome tag and structure tag `creativeengineering:<fit>`. The game log line `[structure-biome-fits]` gives each structure\'s '
+			+ 'old and new biome count.')
+		out('')
+		if (!Object.keys(biomeFits.fits).length) out('None.')
+		else {
+			out('| Fit | Spawns in | Biomes listed | Structures |')
+			out('|---|---|---|---|')
+			Object.keys(biomeFits.fits).forEach(function (name) {
+				var f = biomeFits.fits[name]
+				out('| `' + name + '` | ' + f.chain.map(code).join(' + ') + ' | ' + f.biomes.length + ' | '
+					+ (f.structures.length ? f.structures.map(code).join(', ') : 'none') + ' |')
+			})
+		}
+		out('')
+
+		out('## Placement priority')
+		out('')
+		out('A structure whose pieces would overlap a higher-ranked structure\'s never starts (patcherMod PlacementPriority, CEConfig '
+			+ '[worldgen.systems] placementPriority). Same rank: no check (a group\'s grid keeps its own members apart).')
+		out('')
+		out('| Group | Rank |')
+		out('|---|---:|')
+		Object.keys(priority.groups).sort(function (a, b) { return priority.groups[b] - priority.groups[a] }).forEach(function (g) { out('| `' + g + '` | ' + priority.groups[g] + ' |') })
+		out('')
+		Object.keys(priority.overrides).forEach(function (k) { out('- `' + k + '`: rank ' + priority.overrides[k]) })
+		if (priority.shapeGroups.length) out('- shaped (jigsaw members grow around higher-ranked structures instead of being dropped): '
+			+ priority.shapeGroups.map(function (g) { return '`' + g + '`' }).join(', ') + ' (' + priority.shaped.length + ' structures)')
+		Object.keys(priority.companions).forEach(function (m) {
+			var cp = priority.companions[m]
+			out('- companions of `' + m + '`: ' + cp.count[0] + ' to ' + cp.count[1] + ' of ' + cp.structures.length + ' structures, '
+				+ cp.distance[0] + ' to ' + cp.distance[1] + ' chunks out, rank ' + cp.rank)
+		})
+		out('')
+		if (Object.keys(priority.radius).length) {
+			out('### Peaceful radius')
+			out('')
+			out('No hostile structure starts with a piece within this many chunks (square, XZ) of a peaceful structure\'s pieces, '
+				+ 'whatever the ranks; peaceful structures ignore hostile ones in their own rank check.')
+			out('')
+			out('| Peaceful | Radius (chunks) |')
+			out('|---|---:|')
+			Object.keys(priority.peaceOverrides).forEach(function (k) { out('| `' + k + '` | ' + priority.peaceOverrides[k] + ' |') })
+			Object.keys(priority.peaceGroups).sort(function (a, b) { return priority.peaceGroups[b] - priority.peaceGroups[a] })
+				.forEach(function (g) { out('| `' + g + '` | ' + priority.peaceGroups[g] + ' |') })
+			out('')
+			out('- hostile: ' + priority.hostileKeys.map(function (k) { return '`' + k + '`' }).join(', ') + ' (' + priority.hostile.length + ' structures)')
+			out('')
+		}
 
 		out('## Groups')
 		out('')
@@ -614,6 +1151,12 @@
 				+ ((p.separation + 1) * 16) + ' blocks). ' + gp.live.length + ' of ' + gp.members.length + ' members live.'
 				+ (gp.live.length ? '' : ' **No live member: no set written.**'))
 			out('')
+			if (gp.biomeFrequency) {
+				out('Biome frequency: every member\'s frequency x ' + Object.keys(gp.biomeFrequency).map(function (k) {
+					return (k === 'default' ? 'anywhere else' : code(k)) + ' ' + gp.biomeFrequency[k]
+				}).join(', ') + ' (the biome at its generation point; the first that matches).')
+				out('')
+			}
 			out('| Structure | Weight | Frequency | Alone: 1 per | Was in | Note |')
 			out('|---|---|---|---|---|---|')
 			gp.members.forEach(function (m) {
@@ -621,8 +1164,44 @@
 				if (m.auto) notes.push('**auto** (not in structure_groups.json yet)')
 				if (!m.enabled) notes.push('disabled')
 				if (m.blocked) notes.push('**blocked:** ' + m.blocked)
+				if (m.metaOff) notes.push('**meta structure not built:** ' + m.metaOff)
+				else if (metaShare[m.structure] !== undefined) notes.push('meta structure: takes ' + Math.round(metaShare[m.structure] * 100) + '% of the slots its anchors win here; this weight is never used')
+				if (m.replOff) notes.push('**replacement left out:** ' + m.replOff)
+				else if (m.replaces && m.enabled) notes.push('replaces ' + code(m.replaces) + ': takes ' + Math.round(m.share * 100) + '% of the slots it wins and keeps; this weight is never used')
 				out('| ' + code(m.structure) + ' | ' + m.weight + ' | ' + m.frequency + ' | '
 					+ (m.enabled ? aloneSpacing(p, m.frequency) : '-') + ' | ' + code(m.from) + ' | ' + notes.join('; ') + ' |')
+			})
+			out('')
+		})
+
+		out('## Meta structures')
+		out('')
+		out('Our structures built from other structures and features (`meta_structures.json`, patcherMod MetaStructure). '
+			+ 'They generate only through their group. `#creativeengineering:meta/*` = the `meta/*` tags below.')
+		out('')
+		if (!metaPlans.length) out('None defined.')
+		metaPlans.forEach(function (mp) {
+			out('### ' + code(mp.id))
+			out('')
+			if (mp.def && mp.def.note) out(mp.def.note)
+			if (mp.def && mp.def.note) out('')
+			out('Status: ' + (mp.off ? '**not built** (' + mp.off + ')' : 'built') + '. Group: '
+				+ (owner[mp.id] ? '`' + owner[mp.id] + '`' : '**none, so it never generates**') + '.')
+			out('')
+			if (mp.problems.length) mp.problems.forEach(function (e) { out('- error: ' + e) })
+			function members(entries) {
+				return (entryList(entries) || []).map(function (e) {
+					var t = e.indexOf('#creativeengineering:') === 0 ? e.substring('#creativeengineering:'.length) : null
+					return t && tagMembers[t] ? code(e) + ' (' + Object.keys(tagMembers[t]).sort().map(code).join(', ') + ')' : code(e)
+				}).join(', ')
+			}
+			if (mp.def && 'anchor' in mp.def) out('- anchor: ' + members(mp.def.anchor) + '; takes ' + Math.round((mp.def.share || 0) * 100)
+				+ '% of the slots these win in its group (share ' + mp.def.share + ')')
+			;((mp.def && mp.def.parts) || []).forEach(function (part, n) {
+				var what = 'structures' in part ? members(part.structures) : 'features ' + members(part.features)
+				var bits = ['count ' + toJson('count' in part ? part.count : 1), 'distance ' + toJson(part.distance || [0, 64])]
+				;['chance', 'spacing', 'margin', 'tries', 'water_depth', 'radius'].forEach(function (k) { if (k in part) bits.push(k + ' ' + part[k]) })
+				out('- part ' + (n + 1) + ': ' + what + '; ' + bits.join(', '))
 			})
 			out('')
 		})
@@ -702,6 +1281,17 @@
 		}
 	}
 
+	// The group biome factors; false when the jar predates them (2026-10-14)
+	function stageBiomeFactors(stage, json) {
+		try {
+			if (!stage.stageBiomeFactors) return false
+			stage.stageBiomeFactors(json)
+			return true
+		} catch (err) {
+			return false
+		}
+	}
+
 	// patcherMod's biome rules; null when the jar is older than this script (rules then simply don't apply)
 	function biomeRuleStage() {
 		try {
@@ -728,22 +1318,86 @@
 			result.errors.forEach(function (e) { console.error(TAG + e) })
 			console.error(TAG + 'nothing applied, every structure uses its mod/vanilla default')
 			if (stage) stage.stage('{}')
+			if (stage) stageBiomeFactors(stage, '{}')
+			var prio = prioritySupport()
+			if (prio) prio.stage('{}')
+			var repl = replacementSupport()
+			if (repl.stage) repl.stage.stageReplacements('{}')
 			var ruleStage = biomeRuleStage()
 			if (ruleStage) ruleStage.stage('{}')
+			var fitStageClass = biomeFitStage()
+			if (fitStageClass) fitStageClass.stage('{}')
 			writeReport(buildErrorReport(result.title || 'Errors', result.errors))
 			return
 		}
 		Object.keys(result.files).forEach(function (path) { event.add(path, result.files[path]) })
+		Object.keys(result.metaFiles).forEach(function (path) { event.add(path, result.metaFiles[path]) })
 		stage.stage(toJson(result.frequencies))
+		if (!stageBiomeFactors(stage, toJson(result.biomeFrequencies)) && Object.keys(result.biomeFrequencies).length)
+			result.warnings.push('patcherMod has no StructureFrequencies.stageBiomeFactors (older jar): biome_frequency not applied ('
+				+ Object.keys(result.biomeFrequencies).join(', ') + ' spawn at their plain frequencies)')
+		if (result.replacementStage) result.replacementStage.stageReplacements(toJson(result.replacements))
+		if (result.priorityStage) result.priorityStage.stage(toJson({ ranks: result.priority.ranks, shaped: result.priority.shaped, companions: result.priority.companions,
+			peace: { radius: result.priority.radius, hostile: result.priority.hostile } }))
 		var rules = {}
 		Object.keys(result.biomeRules).forEach(function (name) {
 			rules[name] = { biomes: result.biomeRules[name].biomes, allow: result.biomeRules[name].allow }
+			if (result.biomeRules[name].surface.length) rules[name].surface_check = result.biomeRules[name].surface
 		})
 		var ruleStage = biomeRuleStage()
 		if (ruleStage) ruleStage.stage(toJson(rules))
 		else if (Object.keys(rules).length) result.warnings.push('patcherMod has no worldgen.StructureBiomeRules (older jar): biome_rules not applied')
+		var fitStageClass = biomeFitStage()
+		if (fitStageClass) fitStageClass.stage(toJson(fitStage(result.biomeFits)))
+		else if (Object.keys(result.biomeFits.structures).length) result.warnings.push('patcherMod has no worldgen.StructureBiomeFits (older jar): biome fits not applied')
 		result.warnings.forEach(function (w) { console.warn(TAG + w) })
 		console.info(TAG + result.summary)
 		writeReport(result.report)
+	})
+
+	// The meta/* tags of structure_tags.json as real structure tags creativeengineering:meta/<name>: the anchors
+	// and parts meta_structures.json names (patcherMod MetaStructure reads them when it generates). Also every
+	// biome fit's structure tag as creativeengineering:<fit> (for /locate and other datapacks; the fit itself is staged).
+	ServerEvents.tags('worldgen/structure', function (e) {
+		var config = readJson(CONFIG_PATH)
+		var tagsDoc = readJson(TAGS_PATH)
+		if (!config || !tagsDoc) return console.error(TAG + 'meta tags: could not read ' + CONFIG_PATH + ' / ' + TAGS_PATH)
+		var metaDoc = readJson(META_PATH)
+		var resolved = resolveTags(tagsDoc.tags, structureIds(config, (metaDoc && metaDoc.structures) || {}))
+		resolved.errors.forEach(function (err) { console.error(TAG + 'meta tags: structure_tags.json: ' + err) })
+		Object.keys(tagsDoc.tags).filter(function (t) { return t.indexOf(META_TAG_PREFIX) === 0 }).forEach(function (t) {
+			var ids = Object.keys(resolved.members[t] || {}).sort()
+			if (ids.length) global.tags.add(e, 'creativeengineering:' + t, ids)
+			else console.warn(TAG + 'meta tags: ' + t + ' has no members')
+		})
+		var fits = readFits()
+		Object.keys(fits).filter(function (t) { return tagsDoc.tags[t] }).forEach(function (t) {
+			var ids = Object.keys(resolved.members[t] || {}).sort()
+			if (ids.length) global.tags.add(e, 'creativeengineering:' + t, ids)
+		})
+		// Way signs point at the nearest #supplementaries:way_sign_destinations: every settlement the group holds, so
+		// meta/village_towers (stored under the meta's id, not the village's) and Terralith's fortified villages count too.
+		var settlements = Object.keys(resolved.members['group/' + WAY_SIGN_GROUP] || {}).sort()
+		if (settlements.length) global.tags.add(e, WAY_SIGN_DESTINATIONS, settlements)
+		else console.warn(TAG + 'way sign destinations: group/' + WAY_SIGN_GROUP + ' has no members')
+	})
+
+	// Every biome fit as the real biome tag creativeengineering:<fit>; StructureBiomeFits resolves the fit through it.
+	// Also biome_fits.json "biome_tags" (biome tags that are not fits, e.g. harsh for biome_frequency) as
+	// creativeengineering:<name>; they may name fit tags (#creativeengineering:land/desert).
+	// Unknown biome ids are reported by StructureBiomeFits at world load (this handler runs as a pre-pass, see wild_crops.js).
+	ServerEvents.tags('worldgen/biome', function (e) {
+		var fits = readFits()
+		Object.keys(fits).forEach(function (name) {
+			var biomes = fits[name] && fits[name].biomes
+			if (FIT_NAME.test(name) && Array.isArray(biomes) && biomes.length) global.tags.add(e, 'creativeengineering:' + name, biomes)
+		})
+		var doc = readJson(FITS_PATH)
+		var extra = (doc && doc.biome_tags) || {}
+		Object.keys(extra).forEach(function (name) {
+			var biomes = extra[name] && extra[name].biomes
+			if (FIT_NAME.test(name) && !fits[name] && Array.isArray(biomes) && biomes.length) global.tags.add(e, 'creativeengineering:' + name, biomes)
+			else console.warn(TAG + 'biome_fits.json biome_tags.' + name + ': needs a tag path name (not a fit) and a list of biomes')
+		})
 	})
 })()

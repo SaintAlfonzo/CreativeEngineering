@@ -6,14 +6,14 @@
 Writes feature_writeup/weather_by_biome.md (generated reference; the hand-written side is
 feature_writeup/weather.md). Rerun after `/dumpbiomes`, after adding or updating biome mods, after
 `/dumpclimate`, or after editing season_types.json or the Serene Seasons configs. Exit code 1 when
-season_types.json has problems (unknown ids, a biome in two lists).
+season_types.json has problems (unknown ids, a biome in two lists, unknown snow_seasons names).
 
 Inputs:
 - kubejs/exported/biome_data.json (/dumpbiomes): every biome's live base temperature, downfall and declared
   precipitation, and the dimensions whose biome source can place it.
 - kubejs/generation_scripts/worldgen/season_types.json: the pack's season types (arid, frozen, dry, tropical,
-  temperate, adaptive), applied in game as biome tags by kubejs/server_scripts/tags/seasontags.js and patcherMod
-  seasons/SeasonTypes.
+  temperate, adaptive) and snow_seasons (the sub-seasons a biome may snow in), applied in game as biome tags by
+  kubejs/server_scripts/tags/seasontags.js and patcherMod seasons/SeasonTypes.
 - Biome jsons (vanilla, Forge, mod jars, kubejs/data, via gen_crop_worldgen_table): temperature_modifier, and
   the is_ocean / is_river / is_beach tags.
 - kubejs/generation_scripts/worldgen/biome_config.json: post-tuning share of each dimension per biome.
@@ -55,6 +55,7 @@ OUT_MD = INSTANCE / 'feature_writeup/weather_by_biome.md'
 MAX_Y = 320          # overworld build height (Tectonic increased_height = false)
 SNOW_BELOW = 0.15    # Biome.warmEnoughToRain: temperature >= 0.15F
 FROZEN_MAX = 0.1     # SeasonTypes.FROZEN_MAX_TEMPERATURE
+SNOW_LINE_DEFAULT = 320  # CEConfig [seasons] snowLineY (build height)
 
 # Serene Seasons ServerConfig defaults (single-player worlds get these)
 SS_DEFAULT = {
@@ -77,23 +78,39 @@ TROP_NAMES = ['Early Dry', 'Mid Dry', 'Late Dry', 'Early Wet', 'Mid Wet', 'Late 
 # SeasonTime.getTropicalSeason: ((subSeason + 11) / 2 + 5) % 6
 TROP = [((s + 11) // 2 + 5) % 6 for s in range(12)]
 MID_DRY, MID_WET = 1, 4
+SEASON_WORDS = ['spring', 'summer', 'autumn', 'winter']
+SUB_IDS = [f'{part}_{season}' for season in SEASON_WORDS for part in ('early', 'mid', 'late')]
+WINTER = {9, 10, 11}
+
+# filled by main(): season_types.json snow_seasons as {biome: set of sub-season indexes it may snow in}, and
+# CEConfig [seasons] snowLineY
+SNOW_ALLOWED = {}
+SNOW_LINE_MIN = SNOW_LINE_DEFAULT
 WET = {3, 4, 5}
 
 # vanilla OverworldBiomeBuilder temperature parameter bands, in the climate dump's x10000 units
 BANDS = ['frozen', 'cold', 'temperate', 'warm', 'hot']
 BAND_EDGES = [-4500, -1500, 2000, 5500]
 
-TYPE_KEYS = ['arid', 'frozen', 'dry', 'tropical', 'temperate', 'adaptive']
+PERMANENT = ['permanent_spring', 'permanent_summer', 'permanent_autumn', 'permanent_winter']
+TYPE_KEYS = ['arid', 'frozen', 'dry', 'tropical', 'temperate', 'cold', 'adaptive'] + PERMANENT
 # SeasonTypes.tagged: the first list that names the biome wins
-TAGGED = ['arid', 'frozen', 'dry', 'tropical', 'temperate']
+TAGGED = ['arid', 'frozen', 'permanent_winter', 'permanent_spring', 'permanent_summer', 'permanent_autumn',
+          'dry', 'tropical', 'cold', 'temperate']
+FROZEN_LIKE = ('frozen', 'permanent_winter')
+# SeasonTypes.COLD_SNOW: Late Autumn to Early Spring
+COLD_SNOW = {8, 9, 10, 11, 0}
 # classes: off (vanilla), arid, frozen, dry, tropical and temperate (tagged), ss-tropical and ss-temperate
 # (untagged, Serene Seasons' rule), adaptive (rivers/beaches: the nearest land's class)
 CLASS_TITLES = [('arid', 'Arid'), ('frozen', 'Frozen'), ('dry', 'Dry (Mid Wet rain only)'),
                 ('tropical', 'Tropical (tagged)'),
                 ('ss-tropical', 'Tropical by Serene Seasons\' rule (untagged, warmer than 0.8 or on its list)'),
-                ('temperate', 'Temperate (tagged)'), ('ss-temperate', 'Temperate by Serene Seasons\' rule (untagged)'),
+                ('temperate', 'Temperate (tagged)'), ('cold', 'Cold (snow Late Autumn to Early Spring)'),
+                ('ss-temperate', 'Temperate by Serene Seasons\' rule (untagged)'),
+                ('permanent_spring', 'Permanent spring'), ('permanent_summer', 'Permanent summer'),
+                ('permanent_autumn', 'Permanent autumn'), ('permanent_winter', 'Permanent winter (frozen, shown as Winter)'),
                 ('adaptive', 'Adaptive (rivers and beaches)'), ('off', 'Seasons off (blacklisted)')]
-SEASONAL = ('temperate', 'ss-temperate')
+SEASONAL = ('temperate', 'cold', 'ss-temperate')
 WET_DRY = ('dry', 'tropical', 'ss-tropical')
 
 
@@ -144,13 +161,35 @@ def season_ticks(path):
     return struct.unpack('>i', raw[i + 16:i + 20])[0] if i >= 0 else None
 
 
+def seasons_config(key, default):
+    """A CEConfig [seasons] value."""
+    if not CE_CONFIG.exists():
+        return default
+    m = re.search(r'^\[seasons\](.*?)(^\[|\Z)', CE_CONFIG.read_text(), re.M | re.S)
+    v = toml_value(m.group(1), key) if m else None
+    return default if v is None else v
+
+
 def seasons_enabled():
     """CEConfig [seasons] enabled (default true)."""
-    if not CE_CONFIG.exists():
-        return True
-    m = re.search(r'^\[seasons\](.*?)(^\[|\Z)', CE_CONFIG.read_text(), re.M | re.S)
-    v = toml_value(m.group(1), 'enabled') if m else None
-    return v is not False
+    return seasons_config('enabled', True) is not False
+
+
+def load_snow_seasons():
+    """season_types.json snow_seasons -> ({biome: allowed sub-season indexes}, [(biome, bad name)]), as seasontags.js."""
+    raw = json.loads(SEASON_TYPES.read_text()).get('snow_seasons', {})
+    allowed, bad = {}, []
+    for bid, names in raw.items():
+        subs = set()
+        for name in names:
+            if name in SUB_IDS:
+                subs.add(SUB_IDS.index(name))
+            elif name in SEASON_WORDS:
+                subs.update(i for i, sid in enumerate(SUB_IDS) if sid.endswith('_' + name))
+            else:
+                bad.append((bid, name))
+        allowed[bid] = subs
+    return allowed, bad
 
 
 # ── the rules ────────────────────────────────────────────────────────────
@@ -188,27 +227,42 @@ def ss_class(b, cfg, types):
 
 
 def sea_level_temp(b, cls, sub):
-    # untagged temperate is always <= 0.8; tagged temperate takes the offset above it too
-    if cls in SEASONAL:
-        return f32(max(-0.5, min(2.0, f32(b.base) - f32(OFFSET[sub]))))
-    if cls == 'frozen':
-        return min(f32(b.base), f32(FROZEN_MAX))
-    return f32(b.base)
+    """Serene Seasons' seasonal temperature, then SeasonTypes.seasonTemperature's rule for the type."""
+    # untagged temperate is always <= 0.8; tagged temperate and cold take the offset above it too
+    t = f32(max(-0.5, min(2.0, f32(b.base) - f32(OFFSET[sub])))) if cls in SEASONAL else f32(b.base)
+    if cls in FROZEN_LIKE:
+        snow = True
+    elif cls == 'cold':
+        snow = sub in COLD_SNOW
+    elif cls in ('permanent_spring', 'permanent_autumn'):
+        snow = sub in WINTER
+    elif cls == 'permanent_summer':
+        snow = False
+    else:
+        return t
+    return min(t, f32(FROZEN_MAX)) if snow else max(t, f32(SNOW_BELOW))
 
 
-def cell(b, cls, sub):
+def snow_blocked(b, cls, sub):
+    """season_types.json snow_seasons leaves this sub-season out (SeasonTypes.applySnowRules; frozen and
+    permanent seasons ignore it)."""
+    return cls not in FROZEN_LIKE and cls not in PERMANENT and b.id in SNOW_ALLOWED and sub not in SNOW_ALLOWED[b.id]
+
+
+def cell(b, cls, sub, snow_rules=True):
     """What the client draws at y <= 80 (no height adjustment), in one sub-season.
 
     R rain, S snow, - nothing, R! rain in a biome that declares no precipitation (Serene Seasons' own tropical
     Mid Wet, outside the dry type), -* nothing falls but snow layers still settle during storms
-    (shouldSnow ignores precipitation), ~ adaptive (takes the land's cell).
+    (shouldSnow ignores precipitation), ~ adaptive (takes the land's cell). snow_rules=False: without the
+    snow_seasons lists (Serene Seasons alone).
     """
     if cls == 'adaptive':
         return '~'
     if cls == 'arid':
         return '-'
     t = sea_level_temp(b, cls, sub)
-    cold = t < f32(SNOW_BELOW)
+    cold = t < f32(SNOW_BELOW) and not (snow_rules and snow_blocked(b, cls, sub))
     if cls == 'dry':
         return ('S' if cold else 'R') if TROP[sub] == MID_WET else '-'
     if cls in ('tropical', 'ss-tropical') and b.precip in ('RAIN', 'NONE'):
@@ -221,12 +275,24 @@ def cell(b, cls, sub):
     return 'S' if cold else 'R'
 
 
-def snow_line(t):
-    """Lowest y where it snows, from Biome.getHeightAdjustedTemperature: -0.05/40 per block above y80, +-8 blocks noise."""
+def snow_line_y(t, blocked=False, gauge=False):
+    """Lowest y where it snows (None: at every height). Biome.getHeightAdjustedTemperature cools 0.05 per 40 blocks
+    above y80 (+-8 blocks noise); SeasonTypes.applySnowRules keeps rain below CEConfig snowLineY when it rains at
+    y80, and when snow_seasons leaves the sub-season out; gauge (temperate and cold): always snows from snowLineY up."""
     if t < SNOW_BELOW:
+        return SNOW_LINE_MIN if blocked else None
+    line = max(80 + (t - SNOW_BELOW) / 0.00125, SNOW_LINE_MIN)
+    return min(line, SNOW_LINE_MIN) if gauge else line
+
+
+def snow_line_text(y):
+    if y is None:
         return 'all'
-    y = 80 + (t - SNOW_BELOW) / 0.00125
     return 'never' if y > MAX_Y else f'y{round(y)}'
+
+
+def snow_line(t):
+    return snow_line_text(snow_line_y(t))
 
 
 # ── data ─────────────────────────────────────────────────────────────────
@@ -348,8 +414,15 @@ def main():
     biomes = load_biomes()
     area = load_area()
     samples = load_samples()
+    global SNOW_ALLOWED, SNOW_LINE_MIN
     pack = load_ss(SS_PACK)
     types = load_types() if seasons_enabled() else None
+    snow_allowed, bad_snow = load_snow_seasons()
+    if types:
+        SNOW_ALLOWED = snow_allowed
+        SNOW_LINE_MIN = seasons_config('snowLineY', SNOW_LINE_DEFAULT)
+    else:
+        SNOW_LINE_MIN = -64
     seasons_txt = SS_SEASONS.read_text() if SS_SEASONS.exists() else ''
     cls_of = {bid: ss_class(b, pack, types) for bid, b in biomes.items()}
     cls_sp = {bid: ss_class(b, SS_DEFAULT, types) for bid, b in biomes.items()}
@@ -386,7 +459,8 @@ def main():
       '`none`, and for `rain` or `snow` draws snow when the temperature at that block is below 0.15 and rain '
       'otherwise. So a `snow` biome at 0.2 shows rain, and a `rain` biome at 0.0 shows snow.')
     w('- **Height**: above y80 the temperature drops 0.05 per 40 blocks (plus or minus 8 blocks of noise), '
-      '`Biome.getHeightAdjustedTemperature`. The "snow line" columns below are where that crosses 0.15.')
+      '`Biome.getHeightAdjustedTemperature`. The "snow line" columns below are where that crosses 0.15, '
+      'but never below the pack\'s minimum snow line (1.3).')
     w('- **Temperature modifier** `frozen` (frozen oceans): patches of the biome read 0.2 instead of the base.')
     w('- **Gameplay rain** (`Level.isRainingAt`: fire put out, cauldrons, enderman damage, riptide, lightning '
       'targets) needs declared `rain` and temperature >= 0.15.')
@@ -434,9 +508,37 @@ def main():
           '| Dry / Wet seasons |')
         w(f'| temperate | {len(types["temperate"])} | Serene Seasons\' temperate rain/snow | seasonal offset, '
           'also above 0.8 | four seasons |')
+        w(f'| cold | {len(types["cold"])} (taiga, windswept, highlands, cold oceans) | snow Late Autumn to Early Spring, '
+          'rain the rest of the year | seasonal offset, then held at 0.1 or colder in the snow window, 0.15 or warmer '
+          'outside it | four seasons |')
+        for k, name in (('permanent_spring', 'Spring'), ('permanent_autumn', 'Autumn')):
+            snowy = 'Early Spring' if name == 'Spring' else 'Late Autumn'
+            w(f'| {k} | {", ".join(x.split(":")[1] for x in types[k]) or "-"} | snow in its {snowy} (the world\'s '
+              f'winter, 1/4 of the year), rain otherwise | base, no offset | "{name}": Early 1/4, Mid 1/2, Late 1/4 of '
+              'the year, day within the part |')
+        w(f'| permanent_summer | {", ".join(x.split(":")[1] for x in types["permanent_summer"]) or "-"} | rain, never '
+          'snow | base, no offset | "Summer", day of the year |')
+        w(f'| permanent_winter | {", ".join(x.split(":")[1] for x in types["permanent_winter"]) or "-"} | as frozen: '
+          f'snow all year | at most {FROZEN_MAX} | "Winter", day of the year |')
         w(f'| adaptive | {len(types["adaptive"])} (rivers, beaches) | the nearest land biome\'s, per column | the land\'s '
           '| the land\'s |')
         w('| (untagged) | rest | Serene Seasons\' own rule (1.2) | | |\n')
+        w(f'**Snow line** (CEConfig `[seasons] snowLineY` = {SNOW_LINE_MIN}, the build height is {MAX_Y}): below it, '
+          'height alone never turns rain into snow. A column snows there only if its biome snows at y80 in the '
+          'current sub-season (every dimension). At and above it, temperate and cold biomes always snow (overworld): '
+          'no block can sit that high, so snow only tells a flyer they are above build height; their snow-line '
+          f'column reads "y{SNOW_LINE_MIN}". Frozen and permanent-season biomes keep their own rules. World generation '
+          'keeps vanilla snow caps, which melt in seasons warm enough to rain.\n')
+        w('**Snow seasons** (`season_types.json` `snow_seasons`, tags `creativeengineering:snow/no_<sub_season>`): '
+          'the sub-seasons a biome may snow in. In any other sub-season it rains instead, however cold the season '
+          'makes it (below the snow line). Frozen biomes ignore it.\n')
+        if SNOW_ALLOWED:
+            w('| Biome | May snow in |')
+            w('|---|---|')
+            for bid in sorted(SNOW_ALLOWED):
+                subs = sorted(SNOW_ALLOWED[bid])
+                w(f'| `{bid}` | {" ".join(SUBS[x] for x in subs) or "never"} |')
+            w('')
 
     # ── 2. problems
     w('## 2. Problems found\n')
@@ -450,6 +552,18 @@ def main():
         w(f'- **unknown id** `{b}` in `{k}` (not in biome_data.json)')
     for b, ks in sorted(twice.items()):
         w(f'- **in two lists** `{b}`: {", ".join(ks)} (code takes arid, then frozen, then tropical)')
+    snow_unknown = [bid for bid in snow_allowed if bid not in biomes]
+    snow_idle = [bid for bid in snow_allowed if bid in biomes and (cls_of[bid] in ('arid', 'adaptive') + FROZEN_LIKE
+                                                                  or cls_of[bid] in PERMANENT)]
+    for bid in snow_unknown:
+        w(f'- **unknown id** `{bid}` in `snow_seasons` (not in biome_data.json)')
+    for bid, name in bad_snow:
+        w(f'- **unknown season** `{name}` for `{bid}` in `snow_seasons` (early_spring ... late_winter, or spring, '
+          'summer, autumn, winter)')
+    if snow_idle:
+        w(f'- In `snow_seasons` but no effect (frozen and permanent seasons keep their own rule, arid has none, '
+          'adaptive follows its land): '
+          f'{", ".join(f"`{b}`" for b in snow_idle)}.')
     land_ow = [b for b in ow if not b.ocean and cls_of[b.id] not in ('off', 'adaptive')]
     cold_untagged = [b for b in land_ow if cls_of[b.id] in ('ss-temperate', 'ss-tropical')
                      and (b.base < SNOW_BELOW or b.precip == 'SNOW')]
@@ -498,7 +612,7 @@ def main():
         w(f'| `{bid}` | {b.base:g} | {cls_of[bid]} | {band_text(bands)} | {"; ".join(parts)} |')
     w('')
 
-    snow_decl = [b for b in ow if b.precip == 'SNOW' and b.base >= SNOW_BELOW and cls_of[b.id] not in ('frozen', 'adaptive')]
+    snow_decl = [b for b in ow if b.precip == 'SNOW' and b.base >= SNOW_BELOW and cls_of[b.id] not in FROZEN_LIKE + ('adaptive',)]
     w(f'### 2.4 Declared snow, warm enough to rain ({len(snow_decl)})\n')
     w('Data quirk (the biome json): these draw rain at sea level whenever the temperature is 0.15 or more. '
       'Frozen-tagged biomes are held below 0.15, so they are not listed.\n')
@@ -528,17 +642,30 @@ def main():
         w(f'| `{b.id}` | {b.base:g} | {cls_of[b.id]} | {cls_sp[b.id]} |')
     w('')
 
-    changed = [b for b in ow if any(cell(b, cls_raw[b.id], s) != cell(b, cls_of[b.id], s) for s in range(12))]
+    changed = [b for b in ow if any(cell(b, cls_raw[b.id], s, False) != cell(b, cls_of[b.id], s) for s in range(12))]
     w(f'### 2.7 What the season types change ({len(changed)} biomes)\n')
-    w('Cells with Serene Seasons alone (server config) against cells with the season types. Adaptive biomes show '
-      '`~` (they take the land\'s row).\n')
+    w('Cells with Serene Seasons alone (server config) against cells with the season types and snow seasons. '
+      'Adaptive biomes show `~` (they take the land\'s row).\n')
     w('| Biome | Before | After |')
     w('|---|---|---|')
     for b in sorted(changed, key=lambda b: (cls_of[b.id], b.id)):
-        before = ''.join(cell(b, cls_raw[b.id], s).replace('*', '\\*').ljust(2) for s in range(12)).replace(' ', '.')
+        before = ''.join(cell(b, cls_raw[b.id], s, False).replace('*', '\\*').ljust(2) for s in range(12)).replace(' ', '.')
         after = ''.join(cell(b, cls_of[b.id], s).replace('*', '\\*').ljust(2) for s in range(12)).replace(' ', '.')
         w(f'| `{b.id}` ({cls_raw[b.id]} -> {cls_of[b.id]}) | `{before}` | `{after}` |')
     w('\nColumns run ESp to LWi, two characters each.\n')
+
+    shoulder = [b for b in ow if cls_of[b.id] not in FROZEN_LIKE + ('adaptive',)
+                and any(cell(b, cls_of[b.id], x) in ('S', '-*') for x in range(12) if x not in WINTER)]
+    w(f'### 2.8 Snow outside winter ({len(shoulder)} biomes)\n')
+    w('Biomes (not frozen) that snow at sea level in any sub-season outside Early, Mid and Late Winter, with the '
+      'snow seasons applied. To shorten a biome\'s snow, list it in `season_types.json` `snow_seasons` (for example '
+      '`["winter"]`, or `["late_autumn", "winter"]`). Sorted by base temperature, warmest first.\n')
+    w('| Biome | Class | Base | Share | Snows outside winter |')
+    w('|---|---|---|---|---|')
+    for b in sorted(shoulder, key=lambda b: (-b.base, b.id)):
+        subs = [SUBS[x] for x in range(12) if x not in WINTER and cell(b, cls_of[b.id], x) in ('S', '-*')]
+        w(f'| `{b.id}` | {cls_of[b.id]} | {b.base:g} | {pct(share(b))} | {" ".join(subs)} |')
+    w('')
 
     # ── 3. overworld table
     w('## 3. Overworld, per biome (server config)\n')
@@ -576,10 +703,13 @@ def main():
         w('| Biome | Base | Mod | Declared | Bands | Share | Snow line | ' + ' | '.join(SUBS) + ' |')
         w('|---|---|---|---|---|---|---|' + '---|' * 12)
         for b in group:
-            temps = [sea_level_temp(b, cls_name, s) for s in range(12)]
             cells = [cell(b, cls_name, s) for s in range(12)]
-            sl = (f'{snow_line(max(temps))} / {snow_line(min(temps))}' if max(temps) != min(temps) else snow_line(temps[0])) \
-                if b.precip != 'NONE' and cls_name != 'arid' else '-'
+            gauge = cls_name in SEASONAL
+            lines = [snow_line_text(snow_line_y(sea_level_temp(b, cls_name, s), snow_blocked(b, cls_name, s), gauge))
+                     for s in range(12)]
+            hi = max(lines, key=lambda x: {'all': -1, 'never': 1e9}.get(x, int(x[1:]) if x[1:].isdigit() else 0))
+            lo = min(lines, key=lambda x: {'all': -1, 'never': 1e9}.get(x, int(x[1:]) if x[1:].isdigit() else 0))
+            sl = (f'{hi} / {lo}' if hi != lo else hi) if b.precip != 'NONE' and cls_name != 'arid' else '-'
             w(f'| `{b.id}` | {b.base:g} | {b.modifier if b.modifier != "none" else ""} | {b.precip.lower()} | '
               f'{band_text(bands_of.get(b.id, Counter()))} | {pct(share(b))} | {sl} | '
               + ' | '.join(c.replace('*', '\\*') for c in cells) + ' |')
@@ -675,7 +805,11 @@ def main():
         print(f'  ! unknown id {b} in {k}')
     for b, ks in twice.items():
         print(f'  ! {b} in two lists: {", ".join(ks)}')
-    return 1 if unknown or twice else 0
+    for bid in snow_unknown:
+        print(f'  ! unknown id {bid} in snow_seasons')
+    for bid, name in bad_snow:
+        print(f'  ! unknown season {name} for {bid} in snow_seasons')
+    return 1 if unknown or twice or snow_unknown or bad_snow else 0
 
 
 if __name__ == '__main__':

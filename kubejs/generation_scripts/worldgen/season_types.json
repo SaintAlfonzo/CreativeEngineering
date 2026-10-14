@@ -15,6 +15,13 @@
     "             Jungles, swamps, warm and lukewarm oceans.",
     "  temperate  Serene Seasons' temperate seasons (cools by up to 0.8 in winter), also above 0.8 where the mod",
     "             would make the biome tropical. Used for oceans and for temperate_highlands.",
+    "  cold       temperate seasons (cools by up to 0.8 in winter), but snows exactly Late Autumn to Early Spring and",
+    "             rains the rest of the year. Taiga, windswept, highland and cold-ocean biomes.",
+    "  permanent_spring / permanent_summer / permanent_autumn / permanent_winter",
+    "             one season all year (the Terralith skylands): no seasonal temperature, the HUD, grass tint and crops",
+    "             show that season. Winter = frozen, shown as Winter. Summer never snows. Spring and autumn split the",
+    "             year Early 1/4, Mid 1/2, Late 1/4 (HUD shows the part and its day); they snow only in their Early",
+    "             Spring / Late Autumn, which falls in the world's winter, and rain the rest of the year.",
     "  adaptive   rivers and beaches: each column takes the type and temperature of the nearest land biome",
     "             (CEConfig [seasons] adaptiveRadius), so a river is arid in a desert and tropical in a jungle.",
     "",
@@ -22,7 +29,15 @@
     "Oceans get seasonal weather (rain/snow) but only frozen-listed oceans freeze over; the rest keep vanilla ice (none).",
     "A biome in none of the lists keeps Serene Seasons' own rule: tropical if it is in the server config's",
     "tropical_biomes or warmer than 0.8, temperate otherwise; blacklisted biomes (caves) stay vanilla.",
-    "Only one list per biome; the order of precedence in code is arid, frozen, dry, tropical, temperate."
+    "Only one list per biome; the order of precedence in code is arid, frozen, permanent_winter, permanent_spring,",
+    "permanent_summer, permanent_autumn, dry, tropical, cold, temperate.",
+    "",
+    "snow_seasons: biome -> the sub-seasons it may snow in; any other sub-season it rains instead, however cold",
+    "Serene Seasons makes it. Names: early_spring ... late_winter, or a whole season (spring, summer, autumn,",
+    "winter). [] = never snows. Biomes not listed snow whenever they are cold enough. Frozen and permanent",
+    "biomes ignore it (their type decides). Applies below the snow line, CEConfig [seasons] snowLineY (320, build",
+    "height): below it height alone never turns rain into snow; at and above it temperate and cold biomes always",
+    "snow. Filled into the tags creativeengineering:snow/no_<sub_season> by seasontags.js."
   ],
   "arid": [
     "minecraft:badlands",
@@ -64,7 +79,6 @@
     "terralith:scarlet_mountains",
     "terralith:siberian_grove",
     "terralith:siberian_taiga",
-    "terralith:skylands_winter",
     "terralith:snowy_badlands",
     "terralith:snowy_maple_forest",
     "terralith:snowy_shield",
@@ -106,9 +120,43 @@
   "temperate": [
     "minecraft:ocean",
     "minecraft:deep_ocean",
+    "terralith:temperate_highlands"
+  ],
+  "cold": [
     "minecraft:cold_ocean",
     "minecraft:deep_cold_ocean",
-    "terralith:temperate_highlands"
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:old_growth_spruce_taiga",
+    "minecraft:taiga",
+    "minecraft:windswept_forest",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:windswept_hills",
+    "terralith:alpine_highlands",
+    "terralith:birch_taiga",
+    "terralith:caldera",
+    "terralith:cloud_forest",
+    "terralith:forested_highlands",
+    "terralith:haze_mountain",
+    "terralith:highlands",
+    "terralith:shield",
+    "terralith:shield_clearing",
+    "terralith:steppe",
+    "terralith:windswept_spires",
+    "terralith:yellowstone",
+    "terralith:yosemite_cliffs",
+    "terralith:yosemite_lowlands"
+  ],
+  "permanent_spring": [
+    "terralith:skylands_spring"
+  ],
+  "permanent_summer": [
+    "terralith:skylands_summer"
+  ],
+  "permanent_autumn": [
+    "terralith:skylands_autumn"
+  ],
+  "permanent_winter": [
+    "terralith:skylands_winter"
   ],
   "adaptive": [
     "minecraft:river",
@@ -118,5 +166,34 @@
     "minecraft:stony_shore",
     "terralith:warm_river",
     "terralith:gravel_beach"
-  ]
+  ],
+  "snow_seasons": {
+    "minecraft:ocean": [
+      "winter"
+    ],
+    "minecraft:deep_ocean": [
+      "winter"
+    ],
+    "minecraft:meadow": [
+      "winter"
+    ],
+    "terralith:basalt_cliffs": [
+      "winter"
+    ],
+    "terralith:blooming_plateau": [
+      "winter"
+    ],
+    "terralith:granite_cliffs": [
+      "winter"
+    ],
+    "terralith:lush_valley": [
+      "winter"
+    ],
+    "terralith:valley_clearing": [
+      "winter"
+    ],
+    "terralith:white_cliffs": [
+      "winter"
+    ]
+  }
 }

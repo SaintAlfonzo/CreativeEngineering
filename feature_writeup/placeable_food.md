@@ -1,7 +1,8 @@
 # Placeable food
 
-Test prefix **PL-** · Last updated **2026-10-05** · Overall status **BUILT, not run in game** (catalog built from the
-2026-10-03 `/dumpfood` export + the Display Delight jar; `/dumpplaceable` not run yet)
+Test prefix **PL-** · Last updated **2026-10-11** · Overall status **STAGED for 1.0.6, not deployed** (catalog built from the
+2026-10-03 `/dumpfood` export + the Display Delight jar; `/dumpplaceable` not run yet; the tags and client script loaded
+without errors in single player 2026-10-11)
 
 ## 0. At a glance
 
@@ -124,3 +125,7 @@ Restart the game (new item_dict keys, new client script). Hover items in JEI or 
 
 - **2026-10-05:** Built. Catalog from the fallback data (164 items). DD's leftover loot tables found and ignored.
   DD and Fruits Delight placement lines replaced by the pack's lines. PL-01 to PL-09 added.
+- **2026-10-11:** ships in pack 1.0.5 (staged, not deployed): `placeable_tooltip.js`, `placeabletags.js`, `placeable.json`
+  and `dump_placeable.js` are in the payload. Loaded without KubeJS errors in single player. PL-01 to PL-09 still pending.
+- 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
+  2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.

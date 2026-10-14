@@ -159,7 +159,6 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/climate/*.json.gz', 'runtime'),      # BiomeLayoutTuner (/dumpclimate samples)
     ('generation_scripts/worldgen/biome_baselines/*.json', 'runtime'),  # BiomeLayoutTuner
     ('generation_scripts/worldgen/biome_config.json', 'runtime'),       # BiomeLayoutTuner
-    ('generation_scripts/worldgen/biome_merges.json', 'runtime'),       # worldgen/biome_merges.js
     ('generation_scripts/worldgen/loot_container_swaps.json', 'runtime'),  # LootContainerSwaps
     ('generation_scripts/worldgen/pool_config.json', 'runtime'),        # PoolTuner
     ('generation_scripts/worldgen/pool_tags.json', 'runtime'),          # PoolTuner
@@ -168,12 +167,23 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
     ('generation_scripts/worldgen/wild_crops.json', 'runtime'),         # worldgen/wild_crops.js
     ('generation_scripts/worldgen/mob_spawns.json', 'runtime'),         # worldgen/mob_spawns.js
+    ('generation_scripts/worldgen/bee_nests.json', 'runtime'),          # worldgen/bee_nests.js (BeeNests)
+    ('generation_scripts/worldgen/biome_fits.json', 'runtime'),         # structure_overrides.js (StructureBiomeFits)
+    ('generation_scripts/worldgen/meta_structures.json', 'runtime'),    # structure_overrides.js (MetaStructure)
+    ('generation_scripts/worldgen/season_types.json', 'runtime'),       # tags/seasontags.js (SeasonTypes)
+    ('generation_scripts/worldgen/wild_flowers.json', 'runtime'),       # worldgen/wild_flowers.js
+    ('generation_scripts/worldgen/flower_features.json', 'runtime'),    # worldgen/wild_flowers.js (snapshot)
+    ('generation_scripts/worldgen/meat_block_swaps.json', 'runtime'),   # TemplateBlockSwaps (tools/meat_block_scan.py)
+    ('generation_scripts/worldgen/nether_block_swaps.json', 'runtime'),  # TemplateBlockSwaps (tools/gen_nether_swaps.py)
+    ('generation_scripts/worldgen/nether_swap_rules.json', 'dev'),      # tools/gen_nether_swaps.py input
+    ('generation_scripts/worldgen/bee_nests_baseline.json', 'dev'),     # tools/gen_bee_nests.py calibration
+    ('generation_scripts/worldgen/soil_compat_manifest.json', 'dev'),   # tools/gen_soil_compat.py
+    ('generation_scripts/worldgen/terrain_adaptation_scan.json', 'dev'),  # tools/terrain_adaptation_scan.py
     ('generation_scripts/food/food_types.json', 'runtime'),             # tags/foodtypetags.js
     ('generation_scripts/food/can_servings.json', 'runtime'),           # tags/cantags.js
     ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
     ('generation_scripts/food/placeable.json', 'runtime'),             # tags/placeabletags.js (placeable food tooltips)
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
-    ('generation_scripts/worldgen/biome_merge_proposals.json', 'dev'),  # tools/analyze_structure_biome_merges.py
     ('generation_scripts/recipes/*', 'dev'),                            # sawmill.js output (copied into the jar)
     ('generation_scripts/sawmill.js', 'dev'),                           # node generator
 ]

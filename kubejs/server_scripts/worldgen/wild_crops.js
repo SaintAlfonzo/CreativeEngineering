@@ -18,9 +18,10 @@
 // Rule matching is the same as tools/gen_crop_worldgen_table.py: clauses OR'ed, the traits in a clause
 // AND'ed, '!trait' negated, then add / except; biomes marked ocean or cave never match.
 //
-// The tags handler can't check biome ids (KubeJS runs it as a pre-pass without a registry, see
-// biome_merges.js), so ServerEvents.loaded compares the live tags with the rules and lists overworld biomes
-// the config doesn't classify.
+// The tags handler can't check biome ids: KubeJS runs it once at script load as a "pre" pass (PreTagEventJS:
+// add() only queues the action, totalAdded never moves, no registry yet) and replays the queued adds on the real
+// tag load without calling this script again. So ServerEvents.loaded compares the live tags with the rules and
+// lists overworld biomes the config doesn't classify.
 //
 // CEConfig [worldgen.systems] wildCrops = false: nothing here runs, every crop as its mod ships it.
 //

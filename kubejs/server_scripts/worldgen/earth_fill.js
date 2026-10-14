@@ -17,5 +17,14 @@ ServerEvents.tags('worldgen/structure', function (e) {
 		'hopo:underwater_ruins', 'hopo:underwater_small_ruins', 'hopo:underwater_warm_small_ruins', 'hopo:underwater_fossils',
 		'minecraft:shipwreck', 'minecraft:shipwreck_beached', 'revamped_shipwrecks:shipwreck', 'revamped_shipwrecks:shipwreck_beached',
 		'towns_and_towers:wreckage_ocean', 'minecraft:monument', 'farmers_structures:sushis', 'minecraft:buried_treasure',
+		// builds its own foundation: the woodland mansion pours cobblestone under its footprint down to the ground
+		// (its afterPlace), so its pad never hangs (structure_tuning.md 7.3.1)
+		'minecraft:mansion',
+	])
+	// Jigsaw structures whose offending pieces are dropped instead of the whole start (CEConfig [worldgen.earth_fill]
+	// prune): a house over deep water or a cliff goes, with its villagers, and the village stays (structure_tuning.md
+	// 3.13). Meta structures in the type tag are judged part by part and not pruned.
+	global.tags.add(e, 'creativeengineering:earth_fill/prune', [
+		'#creativeengineering:type/village',
 	])
 })

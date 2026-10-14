@@ -1,0 +1,33 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "eugene:plains_undead_castle",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "eugene:red_roof",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "eugene:ruined_drum_tower",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    }
+  ],
+  "fallback": "minecraft:empty",
+  "name": "eugene:castle"
+}

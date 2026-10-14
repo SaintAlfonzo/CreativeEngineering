@@ -6,7 +6,7 @@
       "structures": "The structure(s) this set places: \"structure\" (id), \"weight\", \"biomes\" (read-only reference) and, when another mod stops it in code, \"blocked\".",
       "original": "The set's placement without any override. A standalone entry in structure_groups.json overrides individual fields of it."
     },
-    "meta_structures": "Our own structures that have no set of their own and only generate through a group (kubejs/data/creativeengineering/worldgen/structure/meta/). Empty until the first one exists.",
+    "meta_structures": "Our own structures that have no set of their own and only generate through a group (kubejs/generation_scripts/worldgen/meta_structures.json, staged at world load by structure_overrides.js). Per structure: biomes (its own), anchor, share and required_parts (structure entries of every part it needs at least one of), for the rate estimates.",
     "placement_dials (inside original)": {
       "type": "Which placement algorithm: \"minecraft:random_spread\" (almost everything -- an evenly-spaced grid, one random attempt per cell) or \"minecraft:concentric_rings\" (strongholds only -- rings expanding out from world spawn, not a grid).",
       "spacing": "[random_spread] Chunks between grid cells, i.e. between attempts. Bigger = rarer.",
@@ -549,6 +549,302 @@
         ]
       }
     },
+    "campsite_structures:armorer_campsite": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "campsite_structures:armorer_campsite",
+          "weight": 1,
+          "biomes": [
+            "minecraft:plains",
+            "minecraft:meadow",
+            "terralith:hot_shrubland",
+            "terralith:steppe",
+            "minecraft:sunflower_plains",
+            "terralith:blooming_plateau",
+            "terralith:shield_clearing",
+            "terralith:valley_clearing",
+            "terralith:highlands",
+            "terralith:alpine_highlands",
+            "terralith:rocky_mountains",
+            "minecraft:windswept_hills",
+            "minecraft:windswept_gravelly_hills",
+            "terralith:mountain_steppe",
+            "minecraft:forest",
+            "terralith:shield",
+            "minecraft:old_growth_birch_forest",
+            "terralith:temperate_highlands",
+            "terralith:moonlight_valley",
+            "minecraft:birch_forest",
+            "terralith:blooming_valley",
+            "terralith:sakura_grove",
+            "minecraft:flower_forest",
+            "terralith:lush_valley",
+            "terralith:lavender_valley",
+            "terralith:moonlight_grove",
+            "terralith:yosemite_lowlands",
+            "terralith:white_cliffs",
+            "terralith:granite_cliffs",
+            "terralith:sakura_valley",
+            "terralith:cloud_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 1496928512,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "campsite_structures:butcher_campsite": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "campsite_structures:butcher_campsite",
+          "weight": 1,
+          "biomes": [
+            "minecraft:plains",
+            "minecraft:meadow",
+            "terralith:hot_shrubland",
+            "terralith:steppe",
+            "minecraft:sunflower_plains",
+            "terralith:blooming_plateau",
+            "terralith:shield_clearing",
+            "terralith:valley_clearing",
+            "terralith:highlands",
+            "terralith:alpine_highlands",
+            "terralith:rocky_mountains",
+            "minecraft:windswept_hills",
+            "minecraft:windswept_gravelly_hills",
+            "terralith:mountain_steppe",
+            "minecraft:forest",
+            "terralith:shield",
+            "minecraft:old_growth_birch_forest",
+            "terralith:temperate_highlands",
+            "terralith:moonlight_valley",
+            "minecraft:birch_forest",
+            "terralith:blooming_valley",
+            "terralith:sakura_grove",
+            "minecraft:flower_forest",
+            "terralith:lush_valley",
+            "terralith:lavender_valley",
+            "terralith:moonlight_grove",
+            "terralith:yosemite_lowlands",
+            "terralith:white_cliffs",
+            "terralith:granite_cliffs",
+            "terralith:sakura_valley",
+            "terralith:cloud_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 1602327970,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "campsite_structures:cartographer_campsite": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "campsite_structures:cartographer_campsite",
+          "weight": 1,
+          "biomes": [
+            "minecraft:plains",
+            "minecraft:meadow",
+            "terralith:hot_shrubland",
+            "terralith:steppe",
+            "minecraft:sunflower_plains",
+            "terralith:blooming_plateau",
+            "terralith:shield_clearing",
+            "terralith:valley_clearing",
+            "terralith:highlands",
+            "terralith:alpine_highlands",
+            "terralith:rocky_mountains",
+            "minecraft:windswept_hills",
+            "minecraft:windswept_gravelly_hills",
+            "terralith:mountain_steppe",
+            "minecraft:forest",
+            "terralith:shield",
+            "minecraft:old_growth_birch_forest",
+            "terralith:temperate_highlands",
+            "terralith:moonlight_valley",
+            "minecraft:birch_forest",
+            "terralith:blooming_valley",
+            "terralith:sakura_grove",
+            "minecraft:flower_forest",
+            "terralith:lush_valley",
+            "terralith:lavender_valley",
+            "terralith:moonlight_grove",
+            "terralith:yosemite_lowlands",
+            "terralith:white_cliffs",
+            "terralith:granite_cliffs",
+            "terralith:sakura_valley",
+            "terralith:cloud_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 140994417,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "campsite_structures:cleric_campsite": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "campsite_structures:cleric_campsite",
+          "weight": 1,
+          "biomes": [
+            "minecraft:plains",
+            "minecraft:meadow",
+            "terralith:hot_shrubland",
+            "terralith:steppe",
+            "minecraft:sunflower_plains",
+            "terralith:blooming_plateau",
+            "terralith:shield_clearing",
+            "terralith:valley_clearing",
+            "terralith:highlands",
+            "terralith:alpine_highlands",
+            "terralith:rocky_mountains",
+            "minecraft:windswept_hills",
+            "minecraft:windswept_gravelly_hills",
+            "terralith:mountain_steppe",
+            "minecraft:forest",
+            "terralith:shield",
+            "minecraft:old_growth_birch_forest",
+            "terralith:temperate_highlands",
+            "terralith:moonlight_valley",
+            "minecraft:birch_forest",
+            "terralith:blooming_valley",
+            "terralith:sakura_grove",
+            "minecraft:flower_forest",
+            "terralith:lush_valley",
+            "terralith:lavender_valley",
+            "terralith:moonlight_grove",
+            "terralith:yosemite_lowlands",
+            "terralith:white_cliffs",
+            "terralith:granite_cliffs",
+            "terralith:sakura_valley",
+            "terralith:cloud_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 134076404,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "campsite_structures:farmer_campsite": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "campsite_structures:farmer_campsite",
+          "weight": 1,
+          "biomes": [
+            "minecraft:plains",
+            "minecraft:meadow",
+            "terralith:hot_shrubland",
+            "terralith:steppe",
+            "minecraft:sunflower_plains",
+            "terralith:blooming_plateau",
+            "terralith:shield_clearing",
+            "terralith:valley_clearing",
+            "terralith:highlands",
+            "terralith:alpine_highlands",
+            "terralith:rocky_mountains",
+            "minecraft:windswept_hills",
+            "minecraft:windswept_gravelly_hills",
+            "terralith:mountain_steppe",
+            "minecraft:forest",
+            "terralith:shield",
+            "minecraft:old_growth_birch_forest",
+            "terralith:temperate_highlands",
+            "terralith:moonlight_valley",
+            "minecraft:birch_forest",
+            "terralith:blooming_valley",
+            "terralith:sakura_grove",
+            "minecraft:flower_forest",
+            "terralith:lush_valley",
+            "terralith:lavender_valley",
+            "terralith:moonlight_grove",
+            "terralith:yosemite_lowlands",
+            "terralith:white_cliffs",
+            "terralith:granite_cliffs",
+            "terralith:sakura_valley",
+            "terralith:cloud_forest"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 1980674874,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "campsite_structures:fisher_campsite": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "campsite_structures:fisher_campsite",
+          "weight": 1,
+          "biomes": [
+            "minecraft:beach",
+            "terralith:gravel_beach",
+            "minecraft:snowy_beach"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 8,
+        "salt": 6423449,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
     "cloudstorage:big_balloon": {
       "source": "cloudstorage-1.3.4-1.19.2.jar",
       "structures": [
@@ -629,6 +925,148 @@
         "spacing": 45,
         "separation": 30,
         "salt": 1358541846,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "eugene:camp": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "eugene:camp",
+          "weight": 115,
+          "biomes": "#eugene:has_structure/camp"
+        },
+        {
+          "structure": "eugene:pillager_camp",
+          "weight": 120,
+          "biomes": "#eugene:has_structure/camp"
+        },
+        {
+          "structure": "eugene:fake_trader_camp",
+          "weight": 10,
+          "biomes": "#eugene:has_structure/camp"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 38,
+        "separation": 22,
+        "salt": 389564243,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 4
+        }
+      }
+    },
+    "eugene:castle": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "eugene:undead_castle",
+          "weight": 1,
+          "biomes": "#eugene:has_structure/castle"
+        },
+        {
+          "structure": "eugene:red_roof_castle",
+          "weight": 1,
+          "biomes": "#eugene:has_structure/castle"
+        },
+        {
+          "structure": "eugene:ruined_drum_tower",
+          "weight": 1,
+          "biomes": "#eugene:has_structure/castle"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 75,
+        "separation": 65,
+        "salt": 273348201,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 4
+        }
+      }
+    },
+    "eugene:piglin_camp": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "eugene:piglin_camp",
+          "weight": 1,
+          "biomes": "#eugene:has_structure/piglin_camp"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 22,
+        "separation": 12,
+        "salt": 2064158176,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "eugene:pillager_loot_carriage": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "eugene:pillager_loot_carriage",
+          "weight": 1,
+          "biomes": "#eugene:has_structure/pillager_loot_carriage"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 120,
+        "separation": 70,
+        "salt": 1034584405,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 4
+        }
+      }
+    },
+    "eugene:witch_wagon": {
+      "source": "kubejs/data",
+      "structures": [
+        {
+          "structure": "eugene:witch_wagon",
+          "weight": 1,
+          "biomes": "#eugene:has_structure/witch_wagon"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 60,
+        "separation": 25,
+        "salt": 2064202355,
         "frequency": 1.0,
         "locate_offset": [
           0,
@@ -2039,8 +2477,7 @@
           "weight": 1,
           "biomes": [
             "minecraft:desert"
-          ],
-          "blocked": "YUNG's Better Desert Temples stops it in code (config/betterdeserttemples-forge-1_19.toml: \"Disable Vanilla Pyramids\" = true). Tuning this set has no effect."
+          ]
         }
       ],
       "original": {
@@ -2118,8 +2555,7 @@
           "biomes": [
             "minecraft:bamboo_jungle",
             "minecraft:jungle"
-          ],
-          "blocked": "YUNG's Better Jungle Temples stops it in code (config/betterjungletemples-forge-1_19_2.toml: \"Disable Vanilla Jungle Temples\" = true). Tuning this set has no effect."
+          ]
         }
       ],
       "original": {
@@ -2449,8 +2885,7 @@
           "weight": 1,
           "biomes": [
             "minecraft:swamp"
-          ],
-          "blocked": "YUNG's Better Witch Huts stops it in code (config/betterwitchhuts-forge-1_19.toml: \"Disable Vanilla Witch Huts\" = true). Tuning this set has no effect."
+          ]
         }
       ],
       "original": {
@@ -3766,6 +4201,182 @@
         ]
       }
     },
+    "subterrestrial:deepslate_cabin": {
+      "source": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "structures": [
+        {
+          "structure": "subterrestrial:deepslate_cabin",
+          "weight": 1,
+          "biomes": "#subterrestrial:has_structure/deepslate_cabin"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 8,
+        "separation": 6,
+        "salt": 930216435,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "subterrestrial:default_cabin": {
+      "source": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "structures": [
+        {
+          "structure": "subterrestrial:default_cabin",
+          "weight": 1,
+          "biomes": "#subterrestrial:has_structure/default_cabin"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 8,
+        "separation": 7,
+        "salt": 620305146,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "subterrestrial:desert_cabin": {
+      "source": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "structures": [
+        {
+          "structure": "subterrestrial:desert_cabin",
+          "weight": 1,
+          "biomes": "#subterrestrial:has_structure/desert_cabin"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 7,
+        "separation": 6,
+        "salt": 850269402,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "subterrestrial:ice_cabin": {
+      "source": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "structures": [
+        {
+          "structure": "subterrestrial:ice_cabin",
+          "weight": 1,
+          "biomes": "#subterrestrial:has_structure/ice_cabin"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 6,
+        "separation": 5,
+        "salt": 398191767,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "subterrestrial:jungle_cabin": {
+      "source": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "structures": [
+        {
+          "structure": "subterrestrial:jungle_cabin",
+          "weight": 1,
+          "biomes": "#subterrestrial:has_structure/jungle_cabin"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 7,
+        "separation": 6,
+        "salt": 991795390,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "subterrestrial:mesa_cabin": {
+      "source": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "structures": [
+        {
+          "structure": "subterrestrial:mesa_cabin",
+          "weight": 1,
+          "biomes": "#subterrestrial:has_structure/mesa_cabin"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 6,
+        "separation": 5,
+        "salt": 367681074,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "subterrestrial:ocean_cabin": {
+      "source": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "structures": [
+        {
+          "structure": "subterrestrial:ocean_cabin",
+          "weight": 1,
+          "biomes": "#subterrestrial:has_structure/ocean_cabin"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 10,
+        "separation": 8,
+        "salt": 259410023,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "subterrestrial:taiga_cabin": {
+      "source": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "structures": [
+        {
+          "structure": "subterrestrial:taiga_cabin",
+          "weight": 1,
+          "biomes": "#subterrestrial:has_structure/taiga_cabin"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 7,
+        "separation": 6,
+        "salt": 764700120,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
     "supplementaries:way_signs": {
       "source": "supplementaries-1.19.2-2.4.20.jar",
       "structures": [
@@ -4320,6 +4931,28 @@
           0
         ],
         "spread_type": "linear"
+      }
+    },
+    "underground_bunkers:minor_structures": {
+      "source": "UndergroundBunkers-1.0.4-1.19.2-1.20.4-forge.jar",
+      "structures": [
+        {
+          "structure": "underground_bunkers:underground_bunker",
+          "weight": 1,
+          "biomes": "#underground_bunkers:has_structure/underground_bunker_biomes"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 25,
+        "separation": 20,
+        "salt": 734441625,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
       }
     },
     "unwrecked_ships:nether_ship": {
@@ -4910,5 +5543,269 @@
       }
     }
   },
-  "meta_structures": {}
+  "meta_structures": {
+    "creativeengineering:meta/village_towers": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/villages"
+      ],
+      "share": 0.33,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/peaceful_towers"
+        ]
+      ]
+    },
+    "creativeengineering:meta/driftwood_flotilla": {
+      "biomes": "#minecraft:is_ocean",
+      "anchor": [],
+      "share": 0,
+      "required_parts": []
+    },
+    "creativeengineering:meta/ruin_cluster": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/large_ruins"
+      ],
+      "share": 0.5,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/small_ruins"
+        ]
+      ]
+    },
+    "creativeengineering:meta/ruin_scatter": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/small_ruins"
+      ],
+      "share": 0.3,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/small_ruins"
+        ]
+      ]
+    },
+    "creativeengineering:meta/sunken_ruin_cluster": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/underwater_large_ruins"
+      ],
+      "share": 0.5,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/underwater_small_ruins"
+        ]
+      ]
+    },
+    "creativeengineering:meta/raft_convoy": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/flotilla_rafts"
+      ],
+      "share": 0.3,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/flotilla_rafts"
+        ]
+      ]
+    },
+    "creativeengineering:meta/shipwreck_debris": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/sunken_shipwrecks"
+      ],
+      "share": 0.3,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/floating_wreckage"
+        ]
+      ]
+    },
+    "creativeengineering:meta/shipwreck_graveyard": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/shipwrecks"
+      ],
+      "share": 0.12,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/shipwrecks"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_tower_siege": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/pillager_towers"
+      ],
+      "share": 0.35,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/pillager_outworks"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_great_tower_siege": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/pillager_large_towers"
+      ],
+      "share": 0.5,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/pillager_outworks"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_stronghold_siege": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/pillager_strongholds"
+      ],
+      "share": 0.4,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/pillager_outworks"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_camp_siege": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/pillager_camps"
+      ],
+      "share": 0.2,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/pillager_camps"
+        ],
+        [
+          "#creativeengineering:meta/siege_weapons"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_camp_ruin": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/pillager_camps"
+      ],
+      "share": 0.15,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/large_ruins"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_camp_ruins": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/pillager_camps"
+      ],
+      "share": 0.15,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/small_ruins"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_fleet": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/pillager_boats"
+      ],
+      "share": 0.35,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/pillager_boats"
+        ],
+        [
+          "#creativeengineering:meta/fleet_wreckage"
+        ]
+      ]
+    },
+    "creativeengineering:meta/fortified_ruins": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/fortified_towns"
+      ],
+      "share": 0.2,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/small_ruins"
+        ]
+      ]
+    },
+    "creativeengineering:meta/fortified_camps": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/fortified_towns"
+      ],
+      "share": 0.2,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/friendly_camps"
+        ]
+      ]
+    },
+    "creativeengineering:meta/farmers_camp": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/farmers_structures"
+      ],
+      "share": 0.3,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/friendly_camps"
+        ]
+      ]
+    },
+    "creativeengineering:meta/house_camp": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/lone_houses"
+      ],
+      "share": 0.15,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/friendly_camps"
+        ]
+      ]
+    },
+    "creativeengineering:meta/waysign_camps": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/friendly_camps"
+      ],
+      "share": 0.25,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/way_signs"
+        ]
+      ]
+    },
+    "creativeengineering:meta/waysign_house_camp": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/lone_houses"
+      ],
+      "share": 0.1,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/friendly_camps"
+        ],
+        [
+          "#creativeengineering:meta/way_signs"
+        ]
+      ]
+    },
+    "creativeengineering:meta/town_villages": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/fortified_towns"
+      ],
+      "share": 0.4,
+      "required_parts": []
+    }
+  }
 }

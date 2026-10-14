@@ -607,6 +607,7 @@ public final class CEConfig {
     public static final class Seasons {
         public final ForgeConfigSpec.BooleanValue enabled;
         public final ForgeConfigSpec.IntValue adaptiveRadius;
+        public final ForgeConfigSpec.IntValue snowLineY;
 
         private Seasons(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -625,6 +626,14 @@ public final class CEConfig {
                     "at 8, 16, 24, 32, 48, 64, ... blocks. The first ring that reaches land decides by majority.",
                     "Nothing found: the river or beach keeps its own biome."
             ).defineInRange("adaptiveRadius", 64, 8, 256);
+
+            snowLineY = b.comment(
+                    "The snow line (default 320, the overworld build height). Below it height alone never turns rain",
+                    "into snow (vanilla cools 0.05 per 40 blocks above y80): a column snows only if its biome snows at",
+                    "y80 in the current sub-season. At and above it temperate and cold biomes always snow, so falling",
+                    "snow tells a flyer they are above build height. Frozen and permanent-season biomes keep their own",
+                    "rules. Also the ceiling for the snow_seasons lists in season_types.json."
+            ).defineInRange("snowLineY", 320, -64, 4096);
 
             b.pop(); // seasons
         }
@@ -1106,7 +1115,12 @@ public final class CEConfig {
         public final EarthFill earthFill;
         public final WaterFill waterFill;
         public final TerrainAdaptation terrainAdaptation;
+        public final MetaStructures metaStructures;
         public final MassPlace massPlace;
+        public final OceanGeodes oceanGeodes;
+        public final PlacementPriorityCfg placementPriority;
+        public final LocateCfg locate;
+        public final DistantCfg distant;
 
         private Worldgen(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -1123,7 +1137,12 @@ public final class CEConfig {
             earthFill = new EarthFill(b);
             waterFill = new WaterFill(b);
             terrainAdaptation = new TerrainAdaptation(b);
+            metaStructures = new MetaStructures(b);
             massPlace = new MassPlace(b);
+            oceanGeodes = new OceanGeodes(b);
+            placementPriority = new PlacementPriorityCfg(b);
+            locate = new LocateCfg(b);
+            distant = new DistantCfg(b);
             b.pop(); // worldgen
         }
     }
@@ -1133,19 +1152,25 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue structureGroups;
         public final ForgeConfigSpec.BooleanValue structureFrequencies;
         public final ForgeConfigSpec.BooleanValue structureBiomeRules;
+        public final ForgeConfigSpec.BooleanValue structureBiomeFits;
         public final ForgeConfigSpec.BooleanValue poolTuning;
         public final ForgeConfigSpec.BooleanValue lootContainerSwaps;
         public final ForgeConfigSpec.BooleanValue biomeLayout;
-        public final ForgeConfigSpec.BooleanValue biomeMerges;
         public final ForgeConfigSpec.BooleanValue deadPlacementFilter;
         public final ForgeConfigSpec.BooleanValue groundMatch;
         public final ForgeConfigSpec.BooleanValue earthFill;
         public final ForgeConfigSpec.BooleanValue waterFill;
         public final ForgeConfigSpec.BooleanValue terrainAdaptation;
         public final ForgeConfigSpec.BooleanValue templateTrim;
+        public final ForgeConfigSpec.BooleanValue metaStructures;
+        public final ForgeConfigSpec.BooleanValue structureReplacements;
         public final ForgeConfigSpec.BooleanValue wildCrops;
         public final ForgeConfigSpec.BooleanValue wildFlowers;
         public final ForgeConfigSpec.BooleanValue mobSpawns;
+        public final ForgeConfigSpec.BooleanValue beeNests;
+        public final ForgeConfigSpec.BooleanValue oceanGeodes;
+        public final ForgeConfigSpec.BooleanValue placementPriority;
+        public final ForgeConfigSpec.BooleanValue templateBlockSwaps;
 
         private WorldgenSystems(ForgeConfigSpec.Builder b) {
             b.comment("Switch a system off to see the mods' own behaviour. Off never deletes a config file.").push("systems");
@@ -1161,14 +1186,16 @@ public final class CEConfig {
                     "biome_rules in structure_groups.json (patcherMod StructureBiomeRules): only allowed structures start in",
                     "the rule's biomes (water: ships, wrecks, ocean ruins...). Off: every structure uses its own biome list. Rejoin."
             ).define("structureBiomeRules", true);
+            structureBiomeFits = b.comment(
+                    "biome_fits.json + the land/* structure tags (patcherMod StructureBiomeFits): a structure in a fit tag spawns in",
+                    "its fit's biomes (land/oak: land/oak + land biomes) instead of its own list. Off: its own list. Rejoin; new chunks only."
+            ).define("structureBiomeFits", true);
             poolTuning = b.comment("pool_config.json / pool_tags.json village-house weights (PoolTuner). Off: every pool at its first-seen weights. Rejoin.")
                     .define("poolTuning", true);
             lootContainerSwaps = b.comment("loot_container_swaps.json: modded loot containers placed by structures become vanilla ones for Lootr.")
                     .define("lootContainerSwaps", true);
             biomeLayout = b.comment("biome_config.json multipliers / replacements (BiomeLayoutTuner). Only affects worlds created afterwards.")
                     .define("biomeLayout", true);
-            biomeMerges = b.comment("biome_merges.json: extra biomes in structure biome tags (kubejs worldgen/biome_merges.js). /reload or rejoin.")
-                    .define("biomeMerges", true);
             deadPlacementFilter = b.comment("Explorer maps and /locate skip structure sets at frequency 0 (without it they can hang the server).")
                     .define("deadPlacementFilter", true);
             groundMatch = b.comment("Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).")
@@ -1185,6 +1212,14 @@ public final class CEConfig {
             templateTrim = b.comment("Structures in the creativeengineering:template_trim tag skip their template's air and bare pad (grass,",
                     "dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.")
                     .define("templateTrim", true);
+            metaStructures = b.comment("meta_structures.json: our structures built from other structures and features (a village with peaceful",
+                    "towers, ruin clusters, pillager camps with siege weapons, a driftwood flotilla...; patcherMod MetaStructure, [worldgen.meta_structures]).",
+                    "Off: none generate (their anchors spawn plain). Rejoin; new chunks only.")
+                    .define("metaStructures", true);
+            structureReplacements = b.comment("Group members with \"replaces\" + \"share\" in structure_groups.json take that share of another member's slots",
+                    "(the vanilla swamp hut in YUNG's witch hut slots; patcherMod MetaSlots). Off: they never generate and the",
+                    "structures they replace keep every slot. Rejoin; new chunks only.")
+                    .define("structureReplacements", true);
             wildCrops = b.comment("wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).",
                     "Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.")
                     .define("wildCrops", true);
@@ -1194,6 +1229,21 @@ public final class CEConfig {
             mobSpawns = b.comment("mob_spawns.json: per-biome mob spawn weights, additions and removals (kubejs worldgen/mob_spawns.js,",
                     "patcherMod SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.")
                     .define("mobSpawns", true);
+            beeNests = b.comment("bee_nests.json: per-biome bee nest chance on generated trees, plus extra bee-nest trees (kubejs",
+                    "worldgen/bee_nests.js, patcherMod BeeNests). Off: nests as the mods ship them. Rejoin to apply; only new chunks change.")
+                    .define("beeNests", true);
+            oceanGeodes = b.comment("Geodes under oceans generate lower so fewer break through the sea floor ([worldgen.ocean_geodes];",
+                    "patcherMod OceanGeodes: vanilla amethyst and every Geode Plus geode). Off: at their own height. New chunks only.")
+                    .define("oceanGeodes", true);
+            placementPriority = b.comment("Placement priority (structure_groups.json \"priority\"; patcherMod PlacementPriority): a structure whose",
+                    "pieces would overlap a higher-ranked structure's never starts (settlements > pillagers > dungeons > houses",
+                    "and camps > ruins), and companion villages around fortified towns. Off: structures may overlap, no",
+                    "companions. Rejoin; new chunks only.")
+                    .define("placementPriority", true);
+            templateBlockSwaps = b.comment("meat_block_swaps.json (patcherMod TemplateBlockSwaps): marked blocks in structure templates are swapped",
+                    "when the template loads (lone red glazed terracotta \"meat\" -> Architect's Palette salmon log). Off: templates as",
+                    "the mods ship them. Rejoin; new chunks only.")
+                    .define("templateBlockSwaps", true);
             b.pop(); // systems
         }
     }
@@ -1330,36 +1380,67 @@ public final class CEConfig {
      */
     public static final class EarthFill {
         public final ForgeConfigSpec.IntValue maxOverWater;
-        public final ForgeConfigSpec.IntValue maxOverAir;
+        public final ForgeConfigSpec.IntValue beardReach;
+        public final ForgeConfigSpec.IntValue buryReach;
+        public final ForgeConfigSpec.IntValue maxMoundHeight;
+        public final ForgeConfigSpec.BooleanValue prune;
+        public final ForgeConfigSpec.IntValue pruneMaxHanging;
+        public final ForgeConfigSpec.IntValue pruneMaxMound;
         public final ForgeConfigSpec.IntValue baseLayers;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> blocks;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> overrides;
         public final ForgeConfigSpec.IntValue sampleGrid;
         public final ForgeConfigSpec.EnumValue<EarthFillLog> log;
+        public final EarthFillSizes sizes;
 
         private EarthFill(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Structures that would need a lot of earth to stand on. Just before a structure start is stored,",
                     "every earth block (tag below) in the bottom layers of its template pieces is compared with the",
-                    "terrain the generator predicts at that spot. A block where that terrain is water counts toward",
-                    "maxOverWater, one where it is air toward maxOverAir; past either limit the whole structure is",
-                    "cancelled and its slot stays empty (a slot shared with other structures tries the next pick).",
-                    "Village streets that follow the terrain are never counted. Exempt a structure with the structure",
-                    "tag creativeengineering:earth_fill/exempt. New chunks only; /place structure is not checked."
+                    "terrain the generator predicts at that spot. Earth in water counts toward maxOverWater, earth in air",
+                    "toward the size's air limit, but only where the structure's beard (its terrain adaptation) won't",
+                    "fill under it: ground deeper than beardReach (buryReach for bury), or always with no adaptation.",
+                    "Columns whose ground lies more than maxMoundHeight below a piece count toward the size's mound",
+                    "limit. Past any limit the whole structure is cancelled and its slot stays empty (a slot shared",
+                    "with other structures tries the next pick). The limits scale with the structure's size (its earth",
+                    "base block count, [worldgen.earth_fill.sizes]). Village streets that follow the terrain are never",
+                    "counted. Exempt a structure with the structure tag creativeengineering:earth_fill/exempt. New",
+                    "chunks only; /place structure is not checked."
             ).push("earth_fill");
 
             maxOverWater = b.comment(
-                    "Most earth blocks that may stand in water (a pad or skirt reaching into a lake or the sea).",
-                    "-1 = no limit, 0 = none at all. Vanilla villages in their own biomes: 0, so 24 only trips at",
-                    "shores. Per structure: see overrides."
+                    "Most earth blocks that may stand in water the beard won't fill (a pad reaching out over a lake or the",
+                    "sea deeper than beardReach). -1 = no limit, 0 = none at all. Vanilla villages set house floors into the",
+                    "top water layer of rivers and coasts; their beard fills under them, so that doesn't count. Per",
+                    "structure: see overrides."
             ).defineInRange("maxOverWater", 24, -1, 100000);
-            maxOverAir = b.comment(
-                    "Most earth blocks that may hang in air (a pad sticking out past a cliff or slope).",
-                    "-1 = no limit, 0 = none at all. Measured on vanilla terrain (tools/earth_fill_sim.sh): a whole",
-                    "village has a median 60 to 150 and a p99 of 170 to 430 (their terrain adaptation fills most of",
-                    "it), so 256 only cancels the extremes (savanna 12%, taiga 3%, others 0%); small ruins with a",
-                    "grass pad want a much lower value: use overrides. Per structure: see overrides."
-            ).defineInRange("maxOverAir", 128, -1, 100000);
+            beardReach = b.comment(
+                    "How deep under a piece the beard (beard_thin, beard_box, the soft beard) still fills the ground, in",
+                    "blocks between the piece's bottom and the ground (air and water both: the beard fills either). Earth",
+                    "over a deeper gap hangs and counts; a shallower one is filled and doesn't. Measured with",
+                    "tools/earth_fill_sim.sh beard on vanilla villages: the whole gap is filled 81% of the time at 6 blocks,",
+                    "35% at 7."
+            ).defineInRange("beardReach", 6, 0, 32);
+            buryReach = b.comment(
+                    "The same for bury (the structure sinks into the ground): filled 100% to 10 blocks, 27% at 11."
+            ).defineInRange("buryReach", 10, 0, 32);
+            maxMoundHeight = b.comment(
+                    "A column whose ground lies more than this many blocks below a piece's bottom is a mound column:",
+                    "the beard would build a tall pillar there, or can't reach the piece at all (an edge of a ravine, a",
+                    "pad over a cliff). Each column counts once per structure, toward the size's mound limit."
+            ).defineInRange("maxMoundHeight", 8, 0, 64);
+            prune = b.comment(
+                    "For structures in the structure tag creativeengineering:earth_fill/prune (villages): before the whole start",
+                    "is judged, each jigsaw piece but the first is judged alone, and one past pruneMaxHanging or pruneMaxMound",
+                    "is dropped with every piece attached below it (a house over deep water with its villagers). The street",
+                    "that led to it stays as a dead end. Then the rest is judged as usual. Off: the whole start is judged."
+            ).define("prune", true);
+            pruneMaxHanging = b.comment(
+                    "Earth blocks of one piece over water or air the beard won't fill before that piece is dropped. -1 = never."
+            ).defineInRange("pruneMaxHanging", 8, -1, 100000);
+            pruneMaxMound = b.comment(
+                    "Mound columns of one piece before that piece is dropped. -1 = never."
+            ).defineInRange("pruneMaxMound", 4, -1, 100000);
             baseLayers = b.comment(
                     "How many template layers from the bottom count as the foundation. Earth higher up (roof gardens,",
                     "planters) is not counted: above the ground everything is air."
@@ -1370,9 +1451,10 @@ public final class CEConfig {
             ).defineList("blocks", List.of("creativeengineering:earth_fill/earth"),
                     o -> o instanceof String str && str.contains(":"));
             overrides = b.comment(
-                    "Per-structure limits, one entry each: \"<structure id or #structure tag>=<water>,<air>\", e.g.",
-                    "\"philipsruins:ancient_ruins=0,16\" (never over water, at most 16 over air) or",
-                    "\"minecraft:village_plains=-1,-1\" (no limits). The first matching entry wins; -1 = no limit."
+                    "Per-structure limits, one entry each: \"<structure id or #structure tag>=<water>,<air>[,<mound>]\",",
+                    "e.g. \"philipsruins:ancient_ruins=0,16\" (never over water, at most 16 over air after the beard,",
+                    "mound from its size) or \"#creativeengineering:type/village=-1,-1,-1\" (no limits). They replace the",
+                    "size's limits. The first matching entry wins; -1 = no limit."
             ).defineList("overrides", List.of(), o -> o instanceof String str && str.contains("="));
             sampleGrid = b.comment(
                     "The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little",
@@ -1382,7 +1464,40 @@ public final class CEConfig {
                     "CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked",
                     "structure that has any earth in its base. For tuning the limits."
             ).defineEnum("log", EarthFillLog.CANCELLED);
+            sizes = new EarthFillSizes(b);
             b.pop(); // earth_fill
+        }
+    }
+
+    /**
+     * {@code [worldgen.earth_fill.sizes]}: earth-fill limits by the size of the structure, so a fish pond and a
+     * fortified town aren't held to one number. The size is the start's own earth base block count.
+     */
+    public static final class EarthFillSizes {
+        public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> bounds;
+        public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> small;
+        public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> medium;
+        public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> large;
+        public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> huge;
+
+        private EarthFillSizes(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "A structure's size is its earth base block count (each start counted as it generates, a meta",
+                    "structure part by part). Each size has [maxOverAir, maxMound]: earth blocks over air after the beard,",
+                    "and mound columns; -1 = no limit. First guesses, to calibrate with log = ALL."
+            ).push("sizes");
+            bounds = b.comment(
+                    "Earth base blocks where medium, large and huge start: under the first is small, from the last on huge.")
+                    .defineList("bounds", List.of(150, 600, 2000), o -> o instanceof Integer i && i > 0);
+            small = b.comment("[maxOverAir, maxMound] for small structures (a well, a small ruin, a fish pond).")
+                    .defineList("small", List.of(24, 8), o -> o instanceof Integer i && i >= -1);
+            medium = b.comment("[maxOverAir, maxMound] for medium structures (a house, a camp, a tower).")
+                    .defineList("medium", List.of(64, 24), o -> o instanceof Integer i && i >= -1);
+            large = b.comment("[maxOverAir, maxMound] for large structures (a village, a fortified village, a mansion).")
+                    .defineList("large", List.of(160, 64), o -> o instanceof Integer i && i >= -1);
+            huge = b.comment("[maxOverAir, maxMound] for huge structures.")
+                    .defineList("huge", List.of(320, 128), o -> o instanceof Integer i && i >= -1);
+            b.pop(); // sizes
         }
     }
 
@@ -1459,6 +1574,169 @@ public final class CEConfig {
     }
 
     /** {@code /ceplace}: whole structures or raw templates laid out in rows, for inspecting them in a flat world. */
+    /**
+     * Knobs for {@code worldgen/MetaStructure}. The structures themselves are defined in
+     * kubejs/generation_scripts/worldgen/meta_structures.json; on/off is [worldgen.systems] metaStructures.
+     */
+    /** worldgen/OceanGeodes: how far geodes under oceans are pushed down; on/off is [worldgen.systems] oceanGeodes. */
+    public static final class OceanGeodes {
+        public final ForgeConfigSpec.IntValue drop;
+        public final ForgeConfigSpec.DoubleValue stayShare;
+        public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> untouched;
+
+        private OceanGeodes(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Geodes whose column is an ocean (the biome at the sea floor is #minecraft:is_ocean) are moved down before",
+                    "they generate, so fewer of them poke through the sea floor. Which geodes stay is a fixed roll per position."
+            ).push("ocean_geodes");
+            drop = b.comment("Blocks a geode under an ocean is moved down.")
+                    .defineInRange("drop", 10, 0, 64);
+            stayShare = b.comment("Share of geodes under oceans that keep their own height (0.1 = 1 in 10).")
+                    .defineInRange("stayShare", 0.1, 0.0, 1.0);
+            untouched = b.comment("Geodes whose inner layer is one of these blocks are left at their own height (Geode Plus'",
+                    "prismarine geode belongs on the sea floor).")
+                    .defineList("untouched", java.util.List.of("geode:budding_prismarine"), o -> o instanceof String);
+            b.pop();
+        }
+    }
+
+    /** worldgen/PlacementPriority; on/off is [worldgen.systems] placementPriority. */
+    public static final class PlacementPriorityCfg {
+        public final ForgeConfigSpec.BooleanValue log;
+
+        private PlacementPriorityCfg(ForgeConfigSpec.Builder b) {
+            b.push("placement_priority");
+            log = b.comment("Log every structure start dropped because a higher-ranked structure overlaps it, and every",
+                    "companion village. For testing.")
+                    .define("log", false);
+            b.pop();
+        }
+    }
+
+    /**
+     * Structure searches (/locate, explorer maps, map trades, dolphins, Eyes of Ender; all through Async Locator):
+     * the cheap "could it start here?" prediction, chunk loads for misses, StructureCheck thread safety, miss
+     * logging and the /celocate batch and census commands. See feature_writeup/locate.md.
+     */
+    public static final class LocateCfg {
+        public final ForgeConfigSpec.BooleanValue foldPlacement;
+        public final ForgeConfigSpec.BooleanValue foldBiomes;
+        public final ForgeConfigSpec.BooleanValue nonBlockingLoads;
+        public final ForgeConfigSpec.BooleanValue threadSafeStructureCheck;
+        public final ForgeConfigSpec.IntValue logMissesAtLeast;
+        public final ForgeConfigSpec.IntValue batchRadius;
+        public final ForgeConfigSpec.IntValue batchTimeoutSeconds;
+        public final ForgeConfigSpec.IntValue censusRegionChunks;
+        public final ForgeConfigSpec.IntValue loadTimeoutSeconds;
+        public final ForgeConfigSpec.IntValue searchTimeoutSeconds;
+
+        private LocateCfg(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Structure searches. A miss is a slot the cheap prediction called possible, so the search generated that",
+                    "chunk's structure starts, and nothing was there. Each fold below makes the prediction say \"no\" earlier,",
+                    "only where generation would certainly say no. Async Locator's thread count is its own server config",
+                    "(serverconfig/asynclocator-server.toml, asyncLocatorThreads)."
+            ).push("locate");
+            foldPlacement = b.comment(
+                    "Stage A: the structure set's own frequency and exclusion zone (vanilla checks both when generating but",
+                    "not when searching). Exact. Applies to new searches immediately.")
+                    .define("foldPlacement", true);
+            foldBiomes = b.comment(
+                    "Stage B: the biome at the structure's generation point, with the pack's biome rules and fits (vanilla",
+                    "never tests the biome in the prediction). Exact. Applies to new searches immediately.")
+                    .define("foldBiomes", true);
+            nonBlockingLoads = b.comment(
+                    "A search running off the server thread (Async Locator) waits for a miss's chunk itself instead of making",
+                    "the server thread block until the chunk's structure starts exist. Off: vanilla's blocking load.")
+                    .define("nonBlockingLoads", true);
+            threadSafeStructureCheck = b.comment(
+                    "Make vanilla's structure-presence cache safe for several search threads at once (needed before raising",
+                    "asyncLocatorThreads above 1). Read when a dimension loads (rejoin to apply).")
+                    .define("threadSafeStructureCheck", true);
+            logMissesAtLeast = b.comment(
+                    "Log one [locate] line for every search with at least this many misses (0 = every search, -1 = never).")
+                    .defineInRange("logMissesAtLeast", 8, -1, Integer.MAX_VALUE);
+            batchRadius = b.comment("Default search radius of /celocate batch, in chunks (/locate uses 100).")
+                    .defineInRange("batchRadius", 100, 1, 1000);
+            batchTimeoutSeconds = b.comment(
+                    "A /celocate batch search still running after this long is reported as timed out and cancelled (Async",
+                    "Locator never completes a search that threw).")
+                    .defineInRange("batchTimeoutSeconds", 120, 5, 3600);
+            censusRegionChunks = b.comment(
+                    "/celocate census splits its square into regions this many chunks wide; each region is one task on",
+                    "Async Locator's thread pool.")
+                    .defineInRange("censusRegionChunks", 32, 4, 256);
+            loadTimeoutSeconds = b.comment(
+                    "A non-blocking miss load that hasn't finished after this long counts as a miss (protects search threads",
+                    "from a stopping server).")
+                    .defineInRange("loadTimeoutSeconds", 300, 10, 3600);
+            searchTimeoutSeconds = b.comment(
+                    "Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and",
+                    "logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches",
+                    "too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.")
+                    .defineInRange("searchTimeoutSeconds", 120, 0, 3600);
+            b.pop();
+        }
+    }
+
+    /**
+     * Distant Horizons' own world generation (its throwaway LOD chunks, never real chunks): the bottom of the world
+     * is not generated; oceans get a fake seabed instead. See feature_writeup/locate.md 3.7.
+     */
+    public static final class DistantCfg {
+        public final ForgeConfigSpec.BooleanValue clip;
+        public final ForgeConfigSpec.IntValue clipBelowY;
+        public final ForgeConfigSpec.IntValue oceanFloorY;
+        public final ForgeConfigSpec.IntValue deepOceanFloorY;
+        public final ForgeConfigSpec.IntValue floorVariation;
+        public final ForgeConfigSpec.IntValue floorScale;
+        public final ForgeConfigSpec.BooleanValue skipFeatures;
+
+        private DistantCfg(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Distant Horizons' distant generation only (chunks it generates for LODs and throws away). Below clipBelowY",
+                    "no terrain noise is computed: land columns are filled with stone, and an ocean column whose block at",
+                    "clipBelowY is water keeps water down to a fake sand/gravel floor that rolls around a per-biome height.",
+                    "Chunks players walk in are never affected."
+            ).push("distant");
+            clip = b.comment("Clip Distant Horizons' generation below clipBelowY.")
+                    .define("clip", true);
+            clipBelowY = b.comment("No noise below this y (rounded down to a multiple of 16).")
+                    .defineInRange("clipBelowY", 48, -64, 320);
+            oceanFloorY = b.comment("Fake floor height in ocean biomes (capped just under clipBelowY).")
+                    .defineInRange("oceanFloorY", 48, -64, 320);
+            deepOceanFloorY = b.comment("Fake floor height in deep ocean biomes (#minecraft:is_deep_ocean).")
+                    .defineInRange("deepOceanFloorY", 8, -64, 320);
+            floorVariation = b.comment("How far the fake floor rolls above and below its height, in blocks.")
+                    .defineInRange("floorVariation", 4, 0, 32);
+            floorScale = b.comment("Width of the fake floor's rolls, in blocks (seeded from the world seed).")
+                    .defineInRange("floorScale", 24, 4, 256);
+            skipFeatures = b.comment("Skip placed features (ores, geodes, cave decoration) that start below clipBelowY.")
+                    .define("skipFeatures", true);
+            b.pop();
+        }
+    }
+
+    public static final class MetaStructures {
+        public final ForgeConfigSpec.BooleanValue log;
+
+        private MetaStructures(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Meta structures: one structure start made of other structures (an anchor such as a village, plus",
+                    "satellites such as towers around it) and placed features (driftwood on the sea). Every part keeps",
+                    "within 7 chunks of the start so the whole thing generates; a part that can't fit (biome, room)",
+                    "is retried elsewhere, and a meta structure short of a part's minimum count doesn't spawn at all.",
+                    "A meta with an anchor only takes a share of the slots its anchor already won, so no structure's rate",
+                    "changes. /locate finds a meta by its id and a structure inside one by the structure's own id."
+            ).push("meta_structures");
+            log = b.comment(
+                    "Log every meta structure start that is assembled: its anchor, each part and how many of each",
+                    "fitted, or which part fell short (the slot is then the plain anchor)."
+            ).define("log", false);
+            b.pop(); // meta_structures
+        }
+    }
+
     public static final class MassPlace {
         public final ForgeConfigSpec.IntValue gap;
         public final ForgeConfigSpec.IntValue rowGap;

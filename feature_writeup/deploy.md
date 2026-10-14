@@ -1,15 +1,18 @@
 # Deploy pipeline: update payloads, deployment snapshots, kubejs classes
 
-BUILT 2026-09-30. Offline checks passed (section 6); no real machine has been updated with an update payload yet.
+BUILT 2026-09-30. Offline checks passed (section 6). Used for real deploys: 1.0.3 (2026-10-02) and 1.0.4 (2026-10-04) went out as
+update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 is STAGED (2026-10-14, update from 1.0.4, folds in 1.0.5).
 
 ## 0. At a glance
 
 | Part | Status | Open |
 |---|---|---|
-| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.0.3 recorded as deployed on both sides (2026-10-02 15:55) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
+| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.0.4 recorded as deployed on both sides (2026-10-04 13:54); after 1.0.6 is copied out: `--snapshot 1.0.6` | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
 | `update` / `install` payload modes | BUILT; scratch-tested (DP-01..DP-04 offline) | `select_payload`, `render_readme` |
 | `verify.sh` / `verify.ps1` | BUILT; sh tested, ps1 not run (no PowerShell here) | `VERIFY_SH`, `VERIFY_PS1` |
-| kubejs file classes (`KUBEJS_CLASSES`) | BUILT; every kubejs file classified | `KUBEJS_CLASSES` |
+| kubejs file classes (`KUBEJS_CLASSES`) | BUILT; every kubejs file classified (2026-10-11: 9 new worldgen files, 6 runtime + 3 dev; 2026-10-14: block swap tables, 2 runtime + 1 dev) | `KUBEJS_CLASSES` |
+| Mod sides (`mod_sides.md`): a jar with no row stops the build; a row whose side changed is listed under "Mods whose side changed" and the jar moves between `mods/` and `client_mods/` | BUILT; 2026-10-11: 4 rows added (Breedable Killer Rabbit server, Cool Rain both, MEED both, Pretty Rain client), JEED moved client -> both; 2026-10-14: 4 rows (Campsite Structures, restApi, Unlit Campfire both; rsec server), 417 rows | [mod_sides.md](../mod_sides.md) |
+| In-tree mods (`IN_TREE_MODS`): patcherMod, exposureBackport, incubationAdditions, moreMooblooms; preflight checks `mods/` equals the build, the shipped jar is archived | BUILT | `IN_TREE_MODS` |
 | Climate samples gzipped and moved out of `exported/` | BUILT (patcherMod 1.0.3, copied to `mods/`); tuner output byte-identical | [BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java), [dump_climate.js](../kubejs/server_scripts/_lib/dump_climate.js) |
 
 **Day to day:**
@@ -101,6 +104,18 @@ Runtime inputs in `generation_scripts/`, with their readers:
 | `worldgen/pool_config.json`, `worldgen/pool_tags.json` | PoolTuner |
 | `worldgen/structure_config.json`, `structure_groups.json`, `structure_tags.json` | `structure_overrides.js` (+ MassPlacer for tags) |
 | `food/food_types.json`, `food/can_servings.json` | `tags/foodtypetags.js`, `tags/cantags.js` |
+| `food/can_types.json` | `items/cans.js` (generated per-type cans) |
+| `food/placeable.json` | `tags/placeabletags.js` |
+| `stacks/stack_sizes.json` | `changes/stack_sizes.js` |
+| `worldgen/wild_crops.json` | `worldgen/wild_crops.js` |
+| `worldgen/mob_spawns.json` | `worldgen/mob_spawns.js` (SpawnTuning) |
+| `worldgen/bee_nests.json` | `worldgen/bee_nests.js` (BeeNests) |
+| `worldgen/wild_flowers.json`, `worldgen/flower_features.json` (snapshot) | `worldgen/wild_flowers.js` |
+| `worldgen/meta_structures.json`, `worldgen/biome_fits.json` | `structure_overrides.js` (MetaStructure, StructureBiomeFits) |
+| `worldgen/season_types.json` | `tags/seasontags.js` (SeasonTypes) |
+
+Generator-only files stay home (dev): e.g. `biome_merge_proposals.json`, `bee_nests_baseline.json`,
+`soil_compat_manifest.json`, `terrain_adaptation_scan.json`.
 
 ### config classes (functional vs full)
 
@@ -173,12 +188,12 @@ an unmatched file is functional.
 
 ## 7. In-game test suite
 
-- [ ] **DP-01 install payload:** `--mode install --dry-run` -> lists every jar, kubejs runtime/client file, config, pack (1792 files at 1.0.3).
-- [ ] **DP-02 update payload:** the next real build -> `- Payload: update from 1.0.2`, only changed jars, removals match the Changes section.
+- [x] **DP-01 install payload:** PASSED 2026-10-11 (`--version 1.0.5 --mode install --dry-run`: 2121 files, 518 MB, every category). Was: `--mode install --dry-run` -> lists every jar, kubejs runtime/client file, config, pack (1792 files at 1.0.3).
+- [x] **DP-02 update payload:** PASSED (1.0.3, 1.0.4 and 1.0.5 built as updates; 1.0.5: `update from 1.0.4`, 146 files, removals = the two old in-tree jars + `item_properties.js`, matching Changes). Was: the next real build -> `- Payload: update from 1.0.2`, only changed jars, removals match the Changes section.
 - [ ] **DP-03 verify on the real server:** `sh verify.sh server <server folder>` before applying -> `OK ... matches 1.0.2 (340 jars)`.
 - [ ] **DP-04 apply on the real server:** removals + copy -> server boots; `[biome-tuning]` logs `override` for 3 dimensions (samples found); no KubeJS errors.
 - [ ] **DP-05 client:** `verify.sh client` (or `verify.ps1` on Windows) -> OK; apply; single-player world creation logs the biome overrides.
-- [ ] **DP-06 snapshot:** `--snapshot` after DP-04/05 -> DEPLOYED.json at 1.0.3, `- Deployed:` line in the log, next `--dry-run` says `update from 1.0.3`.
+- [x] **DP-06 snapshot:** PASSED (1.0.3 and 1.0.4 recorded; the 1.0.5 build said `update from 1.0.4`). Was: `--snapshot` after DP-04/05 -> DEPLOYED.json at 1.0.3, `- Deployed:` line in the log, next `--dry-run` says `update from 1.0.3`.
 - [ ] **DP-07 /dumpclimate:** in a world, `/dumpclimate` -> writes `generation_scripts/worldgen/climate/*.json.gz` (about 0.2 MB total), `/reload` solves with them.
 
 ## 8. History
@@ -189,3 +204,16 @@ an unmatched file is functional.
   `verify/<target>.version`). `deploy/RUNBOOK.md` ships in every payload. Config classes added
   (`--config functional|full`, default functional).
 - 2026-10-02: `--snapshot 1.0.3 --target both --date 2026-10-02T15:55` recorded the 1.0.3 deploy (it had been copied out without a snapshot). `--version 1.0.4 --dry-run` then said `update from 1.0.3`: 26 files, 5.7 MB, removals = the two old in-tree jars + the T&T waystones patch zip. In-tree mods bumped to patcherMod 1.0.4 / exposureBackport `-02`.
+- 2026-10-11: 1.0.5 restaged (`--version 1.0.5`, it was never copied out): update from 1.0.4, 146 files / 13.7 MB (mods 8,
+  client_mods 1, kubejs 126, config 10, resourcepacks 1); removals 3 per side. Preflight first stopped on 4 jars with no
+  mod_sides row and 9 unclassified worldgen files; rows and `KUBEJS_CLASSES` rules added (runtime: bee_nests,
+  biome_fits, meta_structures, season_types, wild_flowers, flower_features; dev: bee_nests_baseline,
+  soil_compat_manifest, terrain_adaptation_scan). JEED moved client -> both so its recipe types (and MEED's data) exist
+  on a dedicated server. Afterwards patcherMod `mod_version` -> 1.0.6 for the next build (not built).
+- 2026-10-14: **1.0.6 staged** (`--version 1.0.6`): update from 1.0.4 (both sides still run it), 1255 files / 23.2 MB
+  (mods 28, client_mods 4, kubejs 1205, config 16, defaultconfigs 1, resourcepacks 1), removals 5 per side. Folds in the
+  never-deployed 1.0.5 (its history json stays as an undeployed version; the changelog counts from it). Structure tuning
+  ships INCOMPLETE ([plan_1.0.6.md](plan_1.0.6.md)). New `KUBEJS_CLASSES` rules for `meat_block_swaps.json` and
+  `nether_block_swaps.json` (runtime, read by TemplateBlockSwaps) and `nether_swap_rules.json` (dev); 4 mod_sides rows;
+  `pack/manifest.json` regenerated. Staging archived the shipped 1.0.6 jar over the unshipped 2026-10-11 build of the same
+  version (lost nothing: its source is in the shipped jar). Next: copy out, then `--snapshot 1.0.6`.

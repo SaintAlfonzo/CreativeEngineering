@@ -10,15 +10,15 @@ file that changes spawn weights per biome, adds mobs to biomes and removes them.
 |---|---|
 | `/dumpspawns` (KubeJS `kubejs/server_scripts/_lib/dump_spawns.js` -> patcherMod `worldgen/SpawnDump`) | BUILT 2026-10-09, in `/dumpall`; first real dump 2026-10-09 21:58 (`kubejs/exported/spawns.json`) |
 | `tools/gen_spawn_table.py` -> [spawns_by_biome.md](spawns_by_biome.md) | BUILT; report generated from the real dump 2026-10-09 |
-| Spawn tuning: `mob_spawns.json` -> `worldgen/mob_spawns.js` -> biome modifier `creativeengineering:tune_spawns` (patcherMod `worldgen/SpawnTuning`) | BUILT, offline tests pass; 12 rules for the first block of section 9 (2026-10-09), not run in game |
-| Spawn conditions (`light_only`, `water_only`; patcherMod `worldgen/SpawnConditions` + `SpawnPlacementsConditionsMixin`) and spawn ground (every dirt in the animal ground tags + `AnimalWalkTargetMixin`, `MushroomCowWalkTargetMixin`) | BUILT 2026-10-09, offline tests pass, jar in `development/patcherMod/build/libs` (not in `mods/`) |
-| Shiba off (Quark `Shiba = false`, plan 9.4) | DONE 2026-10-09, `config/` + `configs_edited/` |
+| Spawn tuning: `mob_spawns.json` -> `worldgen/mob_spawns.js` -> biome modifier `creativeengineering:tune_spawns` (patcherMod `worldgen/SpawnTuning`) | BUILT, offline tests pass; 12 rules for the first block of section 9 (2026-10-09); STAGED for pack 1.0.6 (not deployed); single player 2026-10-11 applied them (`12 rules, 94 biomes changed, 286 changes`), spawns not looked at |
+| Spawn conditions (`light_only`, `water_only`; patcherMod `worldgen/SpawnConditions` + `SpawnPlacementsConditionsMixin`) and spawn ground (every dirt in the animal ground tags + `AnimalWalkTargetMixin`, `MushroomCowWalkTargetMixin`) | BUILT 2026-10-09, offline tests pass; in patcherMod 1.0.5 (in `mods/`), STAGED for pack 1.0.6 (not deployed); conditions applied in single player (`flying_birds, chicken_shores, waterfowl_ponds`) |
+| Shiba off (Quark `Shiba = false`, plan 9.4) | DONE 2026-10-09, `config/` + `configs_edited/`; ships in 1.0.5 (`quark-common.toml`) |
 | CEConfig `[worldgen.systems] mobSpawns` | BUILT, same jar |
 | Cow table in [mooblooms.md](mooblooms.md) (first consumer) | PLANNED |
 | Passive animal analysis (farm animals, duck/goose, Alex's Mobs surface animals) | DONE 2026-10-09, section 10; baseline for the cohesion rules |
 
-- **Install first:** `./gradlew :patcherMod:installToMods` with the game closed. Without the new jar `/dumpspawns`
-  says so, and `mob_spawns.js` writes nothing (an unknown modifier type would stop the world loading).
+- **Jar:** needs patcherMod 1.0.5 or later (in `mods/`, ships in pack 1.0.5). With an older jar `/dumpspawns` says so,
+  and `mob_spawns.js` writes nothing (an unknown modifier type would stop the world loading).
 - **Measure:** `/dumpspawns` (or `/dumpall`), then `python3 tools/gen_spawn_table.py` (or `/cegen run spawns_by_biome`).
 - **Knobs:** `kubejs/generation_scripts/worldgen/mob_spawns.json` (rules, section 3); CEConfig
   `[worldgen.systems] mobSpawns` (off = every mob as its mod ships it). Rejoin to apply.
@@ -345,7 +345,12 @@ has cow (More Mooblooms' set switches Buzzier Bees' removal off).
   Shiba off in Quark's config. Decisions: land animals keep ground + light (no daytime spawns on stone); "birds" =
   flying birds only (not chicken/duck/goose/AM ground birds); lakes and ponds = ducks added to grassy land biomes but
   water-only there. Offline tests extended and passing; jar built, not in `mods/`.
-
+- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): patcherMod 1.0.5 with `SpawnTuning`, `SpawnConditions` and the
+  walk-target mixins, `mob_spawns.json` + `mob_spawns.js`, Quark Shiba off. Single player with the staged files applied
+  12 rules (94 biomes, 286 changes) and the 3 conditions without errors. New spawns appear in loaded chunks too
+  (spawn lists are read live), unlike the worldgen systems. MS-01 to MS-12 still pending.
+- 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
+  2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
 
 ## 9. Plans
 
@@ -376,8 +381,11 @@ First block (down to the ducks) DONE 2026-10-09, see section 3 and 3.1 (not yet 
     - siege equipment- plg, sometimes vind x1
     - camps- plg, vind 0-2
     - towers- plg, vind, evoker/illusioner 0-1
+    - large towers, special structures, 
   - remove pillager spawners
 - Lone villager in plains, temperate hills, temperate field and meadow biomes 
+- allay spawns in more structures
+- add mooblooms to spring-autumn skylands, 100% even split between all availible flowers on skyland
 
 ## 10. Passive overworld animals (analysis 2026-10-09)
 

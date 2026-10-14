@@ -1,0 +1,226 @@
+{
+ "_readme": {
+  "what": "Nether blocks in Overworld structures, swapped when a template loads (patcherMod worldgen/TemplateBlockSwaps). python3 tools/gen_nether_swaps.py expands these rules over every template into exact positions in nether_block_swaps.json; rerun it after editing this file or after mod updates.",
+  "rules": "In order; the first rule that matches a block at a position wins. structures: ids (or [\"*\"] = every Overworld structure); except: ids skipped (plus the plan/move_to_nether tag for every rule); blocks: block ids; to: a block id (stairs, slab, wall and axis properties carry over), \"air\" (removed), or \"deepslate\" (the nether brick family to its deepslate brick twin; a fence becomes a wall).",
+  "safety": "A template any Nether or End structure can also place is never swapped (Nether builds keep their blocks)."
+ },
+ "rules": [
+  {
+   "note": "Philip's underground structures: soul sand and soil to basalt",
+   "structures": [
+    "philipsruins:underground_structures"
+   ],
+   "blocks": [
+    "minecraft:soul_sand",
+    "minecraft:soul_soil"
+   ],
+   "to": "minecraft:basalt"
+  },
+  {
+   "note": "YUNG's crypt: soul sand to coarse dirt",
+   "structures": [
+    "betterdungeons:zombie_dungeon"
+   ],
+   "blocks": [
+    "minecraft:soul_sand"
+   ],
+   "to": "minecraft:coarse_dirt"
+  },
+  {
+   "note": "Jungle temple, fortified desert village: netherrack to magma (magma keeps fire burning: vanilla infiniburn_overworld); their soul sand/soil goes to basalt below",
+   "structures": [
+    "betterjungletemples:jungle_temple",
+    "terralith:fortified_desert_village"
+   ],
+   "blocks": [
+    "minecraft:netherrack"
+   ],
+   "to": "minecraft:magma_block"
+  },
+  {
+   "note": "Terralith frosted dungeon: soul soil to permafrost, soul fire put out",
+   "structures": [
+    "terralith:underground/frosted_dungeon"
+   ],
+   "blocks": [
+    "minecraft:soul_soil"
+   ],
+   "to": "immersive_weathering:permafrost"
+  },
+  {
+   "note": "Terralith frosted dungeon: soul fire put out",
+   "structures": [
+    "terralith:underground/frosted_dungeon"
+   ],
+   "blocks": [
+    "minecraft:soul_fire"
+   ],
+   "to": "air"
+  },
+  {
+   "note": "Simply Houses taiga woodcutter: nether wart and netherrack removed",
+   "structures": [
+    "simply_houses:taiga_woodcutter"
+   ],
+   "blocks": [
+    "minecraft:nether_wart",
+    "minecraft:nether_wart_block",
+    "minecraft:netherrack"
+   ],
+   "to": "air"
+  },
+  {
+   "note": "Terralith fortified village: soul campfires to campfires",
+   "structures": [
+    "terralith:fortified_village"
+   ],
+   "blocks": [
+    "minecraft:soul_campfire"
+   ],
+   "to": "minecraft:campfire"
+  },
+  {
+   "note": "Simply Houses taiga house: crimson and warped plants, nether sprouts removed",
+   "structures": [
+    "simply_houses:taiga_house"
+   ],
+   "blocks": [
+    "minecraft:crimson_roots",
+    "minecraft:crimson_fungus",
+    "minecraft:warped_fungus",
+    "minecraft:warped_roots",
+    "minecraft:nether_sprouts"
+   ],
+   "to": "air"
+  },
+  {
+   "note": "Sky village: glowstone to yellow corundum",
+   "structures": [
+    "skyvillages:skyvillage"
+   ],
+   "blocks": [
+    "minecraft:glowstone"
+   ],
+   "to": "quark:yellow_corundum"
+  },
+  {
+   "note": "Simply Houses taiga forge: wart blocks removed",
+   "structures": [
+    "simply_houses:taiga_forge"
+   ],
+   "blocks": [
+    "minecraft:nether_wart_block",
+    "minecraft:warped_wart_block"
+   ],
+   "to": "air"
+  },
+  {
+   "note": "YUNG's stronghold: nether gold ore to gold ore",
+   "structures": [
+    "betterstrongholds:stronghold"
+   ],
+   "blocks": [
+    "minecraft:nether_gold_ore"
+   ],
+   "to": "minecraft:gold_ore"
+  },
+  {
+   "note": "T&T mushroom village: twisting vines removed",
+   "structures": [
+    "towns_and_towers:village_mushroom_fields"
+   ],
+   "blocks": [
+    "minecraft:twisting_vines",
+    "minecraft:twisting_vines_plant"
+   ],
+   "to": "air"
+  },
+  {
+   "note": "Mysticrift mangrove tower: every Nether block to gold ore",
+   "structures": [
+    "mysticrift_pillagers_towers_aris:mangrove_pillager_tower"
+   ],
+   "blocks": [
+    "@nether"
+   ],
+   "to": "minecraft:gold_ore"
+  },
+  {
+   "note": "Every nether brick block to its deepslate brick twin",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "@nether_bricks"
+   ],
+   "to": "deepslate"
+  },
+  {
+   "note": "Any netherrack left to magma (the ruined portals, all off, keep theirs)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:netherrack"
+   ],
+   "to": "minecraft:magma_block",
+   "except": [
+    "minecraft:ruined_portal",
+    "minecraft:ruined_portal_desert",
+    "minecraft:ruined_portal_jungle",
+    "minecraft:ruined_portal_mountain",
+    "minecraft:ruined_portal_ocean",
+    "minecraft:ruined_portal_swamp",
+    "minecraft:ruined_portal_nether"
+   ]
+  },
+  {
+   "note": "Any soul sand or soil left to basalt (the ancient city and Philip's sculk dungeon keep theirs)",
+   "structures": [
+    "*"
+   ],
+   "except": [
+    "minecraft:ancient_city",
+    "philipsruins:sculk_dungeon"
+   ],
+   "blocks": [
+    "minecraft:soul_sand",
+    "minecraft:soul_soil"
+   ],
+   "to": "minecraft:basalt"
+  },
+  {
+   "note": "Shroomlight to orange corundum",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:shroomlight"
+   ],
+   "to": "quark:orange_corundum"
+  },
+  {
+   "note": "Any soul campfire left to a campfire",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:soul_campfire"
+   ],
+   "to": "minecraft:campfire"
+  },
+  {
+   "note": "Potted Nether plants to a potted dead bush",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:potted_crimson_fungus",
+    "minecraft:potted_crimson_roots",
+    "minecraft:potted_warped_fungus",
+    "minecraft:potted_warped_roots"
+   ],
+   "to": "minecraft:potted_dead_bush"
+  }
+ ]
+}

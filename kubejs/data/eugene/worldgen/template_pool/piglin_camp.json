@@ -1,0 +1,15 @@
+{
+  "name": "eugene:piglin_camp",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "processors": "minecraft:empty",
+        "location": "eugene:piglin_camp"
+      },
+      "weight": 1
+    }
+  ]
+}

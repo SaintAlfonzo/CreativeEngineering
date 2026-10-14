@@ -11,21 +11,20 @@
 | Scaled durability wear per damage group | DEPLOYED, in-game test pending |
 | Round-down rule (under 1 damage left = full block) and per-tier knockback threshold | DEPLOYED, in-game test pending (the first knockback attempt was wrong and was replaced) |
 | On-block potion effects for holder and attacker (dragon: Regeneration / Poison) | DEPLOYED, in-game test pending |
-| Shield-disable cooldown (`disableCooldownTicks` = 20), player and mob axes, every shield | player axes DEPLOYED; mob axes BUILT 2026-10-05, in `mods/`, not boot-tested |
-| Burning and hot-block ticks (fire, campfires, magma, stoves) only blocked by netherite and above (`burn_tick`, `blocksBurnTicks`) | BUILT 2026-10-05, in `mods/`, not boot-tested |
-| Thorn ticks (cactus, berry bushes, thorny plants, barbed panes) only blocked by diamond and above (`contact_tick`, `blocksContactTicks`) | BUILT 2026-10-05, in `mods/`, not boot-tested |
-| Effect ticks never blocked: poison, wither, copper poisoning, Debilitating Sting, Exsanguination, Ender Flu, Phasing (`unblockableEffectTicks`) | BUILT 2026-10-05, in `mods/`, not boot-tested |
-| Banner decoration in the crafting grid for every tier | BUILT 2026-10-05, in `mods/`, not boot-tested |
+| Shield-disable cooldown (`disableCooldownTicks` = 20), player and mob axes, every shield | player axes DEPLOYED; mob axes BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean, not tested in game |
+| Burning and hot-block ticks (fire, campfires, magma, stoves) only blocked by netherite and above (`burn_tick`, `blocksBurnTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean (single player 2026-10-11), not tested in game |
+| Thorn ticks (cactus, berry bushes, thorny plants, barbed panes) only blocked by diamond and above (`contact_tick`, `blocksContactTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean (single player 2026-10-11), not tested in game |
+| Effect ticks never blocked: poison, wither, copper poisoning, Debilitating Sting, Exsanguination, Ender Flu, Phasing (`unblockableEffectTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean (single player 2026-10-11), not tested in game |
+| Banner decoration in the crafting grid for every tier | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean (single player 2026-10-11), not tested in game |
 | Recipe ladder (shaped, smithing, echo / felsic / dragon assembly) | DEPLOYED (KubeJS) |
 | Damage tag layer (32 tag files, reload listener, seen-sources log) | DEPLOYED (30); `burn_tick`, `contact_tick` BUILT 2026-10-05 |
 | Offline checks `tools/test_shields.sh` (`shield_check.py` + `ShieldConfigTest`) | BUILT 2026-10-05, passes (32 checks) |
-| Smithing to netherite needs Armor Trims' Netherite Upgrade Smithing Template (F8); JEI's vanilla Smithing category no longer lists template-only recipes (`SmithingTemplateJEI`) | template rule: Armor Trims config, kept; JEI fix BUILT 2026-10-05 20:56, not in `mods/` yet (the 20:13 jar in `mods/` hides the recipes entirely) |
+| Smithing to netherite needs Armor Trims' Netherite Upgrade Smithing Template (F8); JEI's vanilla Smithing category no longer lists template-only recipes (`SmithingTemplateJEI`) | template rule: Armor Trims config, kept; JEI fix BUILT 2026-10-05 20:56, in the patcherMod 1.0.5 jar (STAGED for 1.0.6); SH-43 pending |
 
-- **Pending:** `development/patcherMod/build/libs/creativeengineering-1.0.5.jar` (built 2026-10-05 20:56) has the
-  JEI smithing fix; `mods/` still has the 20:13 jar (md5 9a44333c), which booted but hid netherite smithing
-  from JEI entirely. Copy the new jar with the game closed, then run SH-43 and SH-14, SH-19, SH-33 to SH-42. It adds three
-  vanilla-class mixins (`MobShieldDisableMixin`, `MobEffectTickContextMixin`, `ShieldDecorationRecipeMixin`):
-  if the game won't boot, check `logs/latest.log` for `InvalidInjectionException` naming one of them.
+- **Pending:** everything from 2026-10-05 ships in pack 1.0.5 (staged 2026-10-11, `creativeengineering-1.0.5.jar`
+  md5 68509043, not deployed). That jar booted in single player on 2026-10-11 with no `InvalidInjectionException`
+  from the three new vanilla-class mixins (`MobShieldDisableMixin`, `MobEffectTickContextMixin`,
+  `ShieldDecorationRecipeMixin`). Still to run in game: SH-43, then SH-14, SH-19, SH-33 to SH-42.
 
 - **Files to open:** [ShieldTier.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldTier.java) (defaults),
   [ShieldBlocking.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldBlocking.java) (can it block),
@@ -530,3 +529,7 @@ on F3+H. "Raise" means hold right click.
 - 2026-10-05: in game the 20:13 jar hid the 24 netherite smithing recipes from JEI entirely. Cause: Armor Trims'
   JEI pages were always empty (its plugin's recipe-type mismatch, logged). `SmithingTemplateJEI` now fills both
   Armor Trims pages itself and hides only what it re-showed. Jar built 20:56, not yet copied (game running).
+- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): the 2026-10-05 changes are all in the staged patcherMod
+  1.0.5 jar (md5 68509043; it replaced both 2026-10-05 builds). Single-player boot with it: no mixin errors.
+- 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
+  2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.

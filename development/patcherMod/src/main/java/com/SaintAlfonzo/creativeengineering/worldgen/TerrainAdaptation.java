@@ -347,9 +347,15 @@ public final class TerrainAdaptation {
 	 */
 	public static Beardifier.Rigid rigid(BoundingBox box, TerrainAdjustment adjustment, int groundLevelDelta) {
 		StructureStart start = GATHERING.get();
-		if (start != null && (adjustment == TerrainAdjustment.BEARD_THIN || adjustment == TerrainAdjustment.BEARD_BOX) && soft(start.getStructure())) {
+		Structure structure = start == null ? null : start.getStructure();
+		if (structure instanceof MetaStructure) {
+			// a meta structure's part beards as the structure it came from (its own adaptation and tags)
+			structure = MetaStructure.structureOf(start, box);
+			if (!(structure instanceof MetaStructure)) adjustment = structure.terrainAdaptation();
+		}
+		if (structure != null && (adjustment == TerrainAdjustment.BEARD_THIN || adjustment == TerrainAdjustment.BEARD_BOX) && soft(structure)) {
 			try {
-				boolean trimmed = WorldgenConfig.templateTrimEnabled() && trims(start.getStructure());
+				boolean trimmed = WorldgenConfig.templateTrimEnabled() && trims(structure);
 				return new Beardifier.Rigid(softBox(start, box, groundLevelDelta, trimmed, skirt()), TerrainAdjustment.NONE, groundLevelDelta);
 			} catch (RuntimeException e) {
 				LOG.error("[terrain-adaptation] soft beard failed for a piece at {}; using vanilla's", box, e);

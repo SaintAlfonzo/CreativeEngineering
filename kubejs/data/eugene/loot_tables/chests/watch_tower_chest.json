@@ -1,0 +1,59 @@
+{
+  "pools": [
+    {
+      "rolls": {
+        "min": 2,
+        "max": 8
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "name": "minecraft:emerald",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2,
+                "max": 8
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "minecraft:arrow",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2,
+                "max": 16
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "minecraft:crossbow"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:iron_ingot",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

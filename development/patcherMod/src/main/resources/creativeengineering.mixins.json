@@ -56,8 +56,18 @@
     "ChunkGeneratorLocateMixin",
     "ChunkGeneratorStructureFrequencyMixin",
     "StructureCheckFrequencyMixin",
+    "StructureCheckMetaMixin",
+    "ChunkGeneratorMetaLocateMixin",
     "ChunkGeneratorStructureBiomeRulesMixin",
+    "StructureBiomesMixin",
     "ChunkGeneratorEarthFillMixin",
+    "ChunkGeneratorBeeNestsMixin",
+    "TreeFeatureBeeNestsMixin",
+    "BeehiveDecoratorBeeNestsMixin",
+    "GeodeFeatureOceanDepthMixin",
+    "ChunkGeneratorPlacementPriorityMixin",
+    "JigsawPlacementPriorityMixin",
+    "StructureTemplateManagerSwapMixin",
     "StructureTerrainAdaptationMixin",
     "BeardifierSoftMixin",
     "ItemStackCanServingsMixin",
@@ -85,7 +95,11 @@
     "SeasonFertilityMixin",
     "SpawnPlacementsConditionsMixin",
     "AnimalWalkTargetMixin",
-    "MushroomCowWalkTargetMixin"
+    "MushroomCowWalkTargetMixin",
+    "StructureCheckThreadSafeMixin",
+    "NoiseBasedChunkGeneratorDistantClipMixin",
+    "NoiseChunkDistantClipMixin",
+    "ConfiguredFeatureDistantClipMixin"
   ],
   "client": [
     "ItemDrainCategoryMixin",
@@ -127,7 +141,8 @@
     "SeasonColorUtilMixin",
     "SeasonHudHelperMixin",
     "SeasonHudCurrentSeasonMixin",
-    "PrettyRainSeasonMixin"
+    "PrettyRainSeasonMixin",
+    "DhCloudHeightMixin"
   ],
   "server": []
 }

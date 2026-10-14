@@ -10,7 +10,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `server` | Only does anything on the server; harmless on clients | Yes |
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 
-**Current count:** 335 both, 13 server, 42 client (390 jars).
+**Current count:** 358 both, 14 server, 45 client (417 rows).
 
 ## Keeping this up to date
 
@@ -116,7 +116,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.4.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
+| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.6.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
 | both | Customizable Elytra | `customizableelytra` | `customizableelytra-1.19.0-1.7.4.jar` |  |
@@ -147,7 +147,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Every Compat | `everycomp` | `everycomp-1.19.2-2.5.36.jar` |  |
 | both | Everything is Copper | `everythingcopper` | `everythingcopper-1.19.2-2.3.4.jar` |  |
 | both | Explorer's Compass | `explorerscompass` | `ExplorersCompass-1.19.2-1.3.0-forge.jar` |  |
-| both | Exposure (Backport & Extras) | `exposure` | `exposureBackport-1.9.19-ce-19.2-02.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded, plus exposure_extras (camera bags). Replaced exposure-1.19.2-1.6.0-forge.jar |
+| both | Exposure (Backport & Extras) | `exposure` | `exposureBackport-1.9.19-ce-19.2-03.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded, plus exposure_extras (camera bags). Replaced exposure-1.19.2-1.6.0-forge.jar |
 | both | Extended Cogwheels | `extendedgears` | `extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar` |  |
 | both | Fairy Lights | `fairylights` | `fairylights-6.0.1-1.19.2.jar` |  |
 | both | Fantasy's Furniture | `fantasyfurniture` | `fantasyfurniture-1.19.2-6.7.0.jar` |  |
@@ -185,7 +185,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Immersive Posts | `immersiveposts` | `ImmersivePosts-1.19.2-4.3.0-8.jar` |  |
 | both | Immersive Weathering | `immersive_weathering` | `immersive_weathering-1.19.2-1.2.10-forge.jar` |  |
 | both | Incubation | `incubation` | `incubation-1.19.2-3.0.1.jar` |  |
-| both | Incubation Additions | `incubation_additions` | `incubationAdditions-1.0.0.jar` | This pack's own mod (development/incubationAdditions): emu, duck and goose nests for Incubation. Moved out of creativeengineering 2026-10-05; NOT in mods/ yet |
+| both | Incubation Additions | `incubation_additions` | `incubationAdditions-1.0.0.jar` | This pack's own mod (development/incubationAdditions): emu, duck and goose nests for Incubation. Moved out of creativeengineering 2026-10-05; in mods/ since 2026-10-05 |
 | both | Iron Fishing Rods | `iron_fishing_rods` | `Iron Fishing Rods 1.0.0 - 1.19.2.jar` |  |
 | both | Item Filters | `itemfilters` | `item-filters-forge-1902.2.9-build.51.jar` | Required by: FTB Quests |
 | both | ItemPhysic | `itemphysic` | `ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar` |  |
@@ -214,7 +214,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Moog's End Structures | `mes` | `mes-1.3.1-1.19.2-forge.jar` |  |
 | both | Moonlight Library | `moonlight` | `moonlight-1.19.2-2.3.7-forge.jar` | Required by: Every Compat, Heartstone, Immersive Weathering, MmmMmmMmmmmm, Moyai, Mystical Oak Tree (+2 more) |
 | both | More Immersive Wires | `more_immersive_wires` | `more-immersive-wires-1.19.2-1.1.3.jar` |  |
-| both | More Mooblooms | `more_mooblooms` | `moreMooblooms-1.0.0.jar` | This pack's own mod (development/moreMooblooms): data-driven moobloom variants; cleans up Buzzier Bees' moobloom, buttercup and Sunny. Rebuilt 2026-10-07 as the 1.0 release; the jar in mods/ is an earlier build until reinstalled |
+| both | More Mooblooms | `more_mooblooms` | `moreMooblooms-1.0.0.jar` | This pack's own mod (development/moreMooblooms): data-driven moobloom variants; cleans up Buzzier Bees' moobloom, buttercup and Sunny. Rebuilt 2026-10-11 at 1.0.0 (azaleabloom spawns on moss), in mods/ |
 | both | More Mob Variants | `moremobvariants` | `moremobvariants-forge+1.19.2-1.3.0.1.jar` |  |
 | both | MoreJS | `morejs` | `morejs-forge-1.19.2-0.3.0.jar` |  |
 | both | Mosaic Masonry | `mosaic_masonry` | `mosaic_masonry-1.1.jar` |  |
@@ -340,7 +340,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | client | Iceberg | `iceberg` | `Iceberg-1.19.2-forge-1.1.4.jar` | Library for Legendary Tooltips / Highlighter |
 | client | ImmediatelyFast | `immediatelyfast` | `ImmediatelyFast-Forge-1.4.0+1.19.2.jar` | Rendering optimisation |
 | client | Just Enough Breeding | `justenoughbreeding` | `justenoughbreeding-forge-1.19.2-1.4.0.jar` | JEI add-on |
-| client | Just Enough Effect Descriptions | `jeed` | `jeed-1.19.2-2.1.4.jar` | JEI add-on |
+| both | Just Enough Effect Descriptions | `jeed` | `jeed-1.19.2-2.1.4.jar` | JEI add-on. Moved client -> both 2026-10-11: it registers the `jeed:effect_provider` / `potion_provider` recipe types on both sides (only its JEI code is client-gated), and recipes reach players from the server, so without it there MEED's data and JEED's own providers never show on a dedicated server |
 | client | Just Enough Immersive Multiblocks | `jeimultiblocks` | `jeimultiblocks-1.19.2-0.0.3.jar` | JEI add-on |
 | both | Just Enough Items | `jei` | `jei-1.19.2-forge-11.8.1.1034.jar` | Recipe viewer; required on the server |
 | client | Just Enough Professions (JEP) | `justenoughprofessions` | `JustEnoughProfessions-forge-1.19.2-2.0.2.jar` | JEI add-on |
@@ -414,3 +414,30 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Fruits Delight | `fruitsdelight` | `fruitsdelight-0.5.11.jar` | Fruit trees/bushes, jams, jellies, foods; biome modifiers. Needs Farmer's Delight. Added 2026-10-02 |
 | both | ImprovedPillagerOutpost | `ipo` | `ImprovedPillagerOutpost-v5.jar` | Structures only (data-only jar: replaces vanilla pillager_outpost template pools) Added 2026-10-02 |
 | both | Well Mod | `well` | `well-1.19.2-1.0.0.jar` | Well blocks (16 dyed) that pump water. Added 2026-10-02 |
+| both | Breedable Killer Rabbit | `breedablekillerrabbit` | `breedablekillerrabbit-1.19.2-3.5.jar` | Killer rabbits from breeding + taming; event logic only, no blocks/items/network (Serilum). Requires Collective |
+| both | Cool Rain | `coolrain` | `coolrain-1.19.2-Forge-1.0.2.jar` | Per-block rain sounds (client), but registers a strict `coolrain:main` channel (version "1" both ways) and ships its block tags as data, so like w2w2 the server must have it |
+| both | MEED (Moderately Enough Effect Descriptions) | `meed` | `MEED-1.19.2-7.1.1.jar` | Data only: `jeed:effect_provider` recipes for other mods' effects. Recipes come from the server, so it must be there (and JEED with it) |
+| client | Pretty Rain | `particlerain` | `Pretty Rain-1.19.2-Forge-1.1.1.jar` | Rain/snow/fog particles; no channel. patcherMod's PrettyRainSeasonMixin is in the mixin config's client list |
+| both | Bottled Air | `bottledair` | `bottledair-1.19.2-2.3.jar` | Right-click an empty bottle underwater to refill air; event logic only (Serilum). Requires Collective. Added 2026-10-13 |
+| both | Cycle Paintings | `cyclepaintings` | `cyclepaintings-1.19.2-3.5.jar` | Right-click a placed painting with a painting to cycle same-size variants (sneak = backwards); server event logic only (Serilum). Cycles everything in `#minecraft:placeable`, which all the painting packs fill. Requires Collective. Added 2026-10-14 |
+| both | DarkPaintings | `darkpaintings` | `DarkPaintings-Forge-1.19.2-13.1.5.jar` | Painting variants (Forge registry, synced). Requires Bookshelf. Added 2026-10-13 |
+| both | Dimensional Paintings | `dimpaintings` | `Dimensional-Paintings-1.19.2-1.4.1.jar` | Painting items + recipes. Added 2026-10-13 |
+| both | Firefly Bush (port) | `fireflybushport` | `fireflybush-1.19.2.jar` | Firefly bush block + particles, worldgen biome modifier. Added 2026-10-13 |
+| both | Jess' Painting Collection | `paintings_pack1` | `FORGE_PaintingPack_1.19.2.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
+| both | Fortune on Netherite | `fortuneonneterite_i_ig_z` | `fortune_on_netherite_1.1.0_forge_1.19.2.jar` | MCreator mod: blocks/items, recipes, loot table edits. Added 2026-10-13 |
+| client | Just Enough Painting Previews | `jepp` | `jepp-1.19.2-1.1.0.jar` | JEI add-on (IGNORE_ALL_VERSION). Added 2026-10-13 |
+| client | Lava Clear View | `clearview` | `LavaClearView-1.19.2-forge-5.0.0.jar` | Fog/overlay render mixins only. Added 2026-10-13 |
+| both | minecraft style paintings | `minecraft_style_paintings` | `MC style paintings 1.19.2 v2.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
+| client | Neko's Enchanted Books | `nebs` | `NekosEnchantedBooks-1.19-2.0.3.jar` | Per-enchantment book textures (clientSideOnly). Added 2026-10-13 |
+| both | Rebirth: Paintings | `rebirth_paintings` | `REBIRTH Paintings 5.0.0 Backport 1.19.2.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
+| both | Splash Milk | `splash_milk` | `splash_milk-1.19.2-1.4.0.jar` | Splash milk item + recipes. Added 2026-10-13 |
+| both | Sticky It! | `sticky_it` | `sticky_it-1.2.1-forge-1.19.2.jar` | Items + recipes. Added 2026-10-13 |
+| both | Subterrestrial | `subterrestrial` | `subterrestrial-forge-1.19.2-2.0.0.jar` | Structures only (registers its own structure type). Added 2026-10-13 |
+| both | Too Many Paintings! | `toomanypaintings` | `toomanypaintings-26.08.16-1.19-forge.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
+| both | Underground Bunkers | `underground_bunkers` | `UndergroundBunkers-1.0.4-1.19.2-1.20.4-forge.jar` | Structures only (data-only jar) Added 2026-10-13 |
+| both | Volcanic Caverns | `volcanic_caverns` | `volcanic_caverns-1.19.2-1.2.2.jar` | Worldgen: lava cavern carver + features via biome modifier. Added 2026-10-13 |
+| both | Witch Mobility | `witchmobility` | `witchmobility-1.3.2-1.19.2.jar` | Broom entities, witch armor, items (GeckoLib). Added 2026-10-13 |
+| both | Campsite Structures | `campsite_structures` | `campsite_structures-1.19.2-FORGE-1.0.3.jar` | MCreator: camper entity + camp features (features overridden to forge:none by the structure work, jar kept for CamperEntity). Added 2026-10-14 |
+| both | restApi | `restapi` | `restApi - 0.7 - 1.19.2 - Forge.jar` | Library by restonic4 (registry/sound/tool-tier helpers). Added 2026-10-14 |
+| server | Rain should extinguish campfires | `rsec` | `rsec-1.0-1.19.2-forge.jar` | One CampfireBlockEntity tick mixin, acts on ServerLevel only. Added 2026-10-14 |
+| both | Unlit Campfire | `unlitcampfire` | `unlitcampfire-forge-1.19-1.7.1.0.jar` | Campfires placed unlit / burn out; block mixins + config, Jade/TOP compat. Added 2026-10-14 |

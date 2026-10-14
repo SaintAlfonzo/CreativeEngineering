@@ -44,6 +44,20 @@ public class FreqTest {
 		return new StructureSet.StructureSelectionEntry(h, weight);
 	}
 
+	@SafeVarargs
+	static Holder<net.minecraft.world.level.biome.Biome> biome(ResourceKey<Registry<net.minecraft.world.level.biome.Biome>> reg, String id,
+			net.minecraft.tags.TagKey<net.minecraft.world.level.biome.Biome>... tags) {
+		Holder.Reference<net.minecraft.world.level.biome.Biome> h = Holder.Reference.createStandAlone(null, ResourceKey.create(reg, new ResourceLocation(id)));
+		try {
+			java.lang.reflect.Method m = Holder.Reference.class.getDeclaredMethod("bindTags", java.util.Collection.class);
+			m.setAccessible(true);
+			m.invoke(h, List.of(tags));
+		} catch (ReflectiveOperationException e) {
+			throw new IllegalStateException(e);
+		}
+		return h;
+	}
+
 	public static void main(String[] args) {
 		net.minecraft.SharedConstants.tryDetectVersion();
 		net.minecraft.server.Bootstrap.bootStrap();
@@ -107,6 +121,49 @@ public class FreqTest {
 			if (predicted == StructureFrequencies.reject(a, seed, i, 3, new Object())) agree++;
 		}
 		check(agree == 2000, "StructureCheck prediction == generation roll (" + agree + "/2000)");
+
+		// 3b. biome factors (a group's biome_frequency): frequency x the factor of the biome at the generation point
+		ResourceKey<Registry<net.minecraft.world.level.biome.Biome>> biomeReg = ResourceKey.createRegistryKey(new ResourceLocation("worldgen/biome"));
+		net.minecraft.tags.TagKey<net.minecraft.world.level.biome.Biome> harsh = net.minecraft.tags.TagKey.create(biomeReg, new ResourceLocation("t:harsh"));
+		Holder<net.minecraft.world.level.biome.Biome> desert = biome(biomeReg, "minecraft:desert", harsh);
+		Holder<net.minecraft.world.level.biome.Biome> plainsB = biome(biomeReg, "minecraft:plains");
+		Holder<net.minecraft.world.level.biome.Biome> forestB = biome(biomeReg, "minecraft:forest");
+		Map<String, Float> rulesRaw = new LinkedHashMap<>();
+		rulesRaw.put("#t:harsh", 1.0F);
+		rulesRaw.put("minecraft:plains", 0.25F);
+		rulesRaw.put("default", 0.5F);
+		StructureFrequencies.Factors fac = StructureFrequencies.Factors.parse(rulesRaw);
+		check(fac.at(desert) == 1.0F && fac.at(plainsB) == 0.25F && fac.at(forestB) == 0.5F && fac.at(null) == 0.5F,
+				"biome factors: tag rule, id rule, default (and no point = default)");
+		check(StructureFrequencies.Factors.parse(Map.of("#t:harsh", 1.0F)).at(forestB) == 1.0F, "biome factors: no default = 1");
+		Map<String, Map<String, Float>> factorTable = new LinkedHashMap<>();
+		factorTable.put("ns:set", rulesRaw);
+		StructureFrequencies.Active act2 = StructureFrequencies.resolve(table, factorTable, id -> Optional.ofNullable(sets.get(id)));
+		check(act2.members.get(b).factors() != null && act2.members.get(c).factors() == null && act2.rolled == 3,
+				"resolve: every member of the set gets its factors and rolls (" + act2.rolled + " rolled)");
+		StructureFrequencies.setActiveForTest(act2);
+		int keptForest = 0, keptDesert = 0, keptA = 0, agreeF = 0;
+		for (int i = 0; i < trials; i++) {
+			if (!StructureFrequencies.reject(b, seed, i, 11, new Object(), () -> forestB)) keptForest++;
+			if (!StructureFrequencies.reject(b, seed, i, 11, new Object(), () -> desert)) keptDesert++;
+			if (!StructureFrequencies.reject(a, seed, i, 11, new Object(), () -> plainsB)) keptA++;
+			if (i < 2000) {
+				for (Holder<net.minecraft.world.level.biome.Biome> h : List.of(desert, plainsB, forestB)) {
+					boolean gen = StructureFrequencies.reject(a, seed, i, 13, new Object(), () -> h);
+					if (gen == StructureFrequencies.factorRejects(a, seed, new net.minecraft.world.level.ChunkPos(i, 13), h)) agreeF++;
+				}
+			}
+		}
+		check(Math.abs(keptForest / (double) trials - 0.5) < 0.01, "frequency 1 x default 0.5 keeps " + keptForest / (double) trials);
+		check(keptDesert == trials, "frequency 1 x harsh 1.0 is never rejected");
+		check(Math.abs(keptA / (double) trials - 0.0625) < 0.006, "frequency 0.25 x plains 0.25 keeps " + keptA / (double) trials);
+		check(agreeF == 6000, "prediction (factorRejects) == generation roll with factors (" + agreeF + "/6000)");
+		check(StructureFrequencies.hasBiomeFactors(a) && !StructureFrequencies.hasBiomeFactors(c), "hasBiomeFactors");
+		StructureFrequencies.stageBiomeFactors("{\"ns:set\":{\"default\":1.5}}");
+		StructureFrequencies.stageBiomeFactors("{\"ns:set\":{\"Not An Id\":0.5}}");
+		StructureFrequencies.stageBiomeFactors("not json");
+		check(true, "bad biome factor staging input logged, not thrown");
+		StructureFrequencies.setActiveForTest(act);
 
 		// 4. bad staging input is logged, never thrown into KubeJS
 		StructureFrequencies.stage("{\"ns:set\":{\"ns:a\":1.5}}");

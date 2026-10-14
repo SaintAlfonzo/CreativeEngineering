@@ -1,0 +1,28 @@
+{
+  "name": "eugene:undead_castle_enemies",
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "eugene:zombie_knight",
+        "processors": {
+          "processors": []
+        },
+        "projection": "rigid"
+      },
+      "weight": 60
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "eugene:skeleton_archer",
+        "processors": {
+          "processors": []
+        },
+        "projection": "rigid"
+      },
+      "weight": 40
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

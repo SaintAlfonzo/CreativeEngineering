@@ -101,7 +101,7 @@ public class MassPlacerTest {
 
 		// 6. WorldgenConfig defaults with no loaded config (what every worldgen path sees before the file loads)
 		check(WorldgenConfig.structureGroupsEnabled() && WorldgenConfig.structureFrequenciesEnabled() && WorldgenConfig.poolTuningEnabled()
-				&& WorldgenConfig.lootContainerSwapsEnabled() && WorldgenConfig.biomeLayoutEnabled() && WorldgenConfig.biomeMergesEnabled()
+				&& WorldgenConfig.lootContainerSwapsEnabled() && WorldgenConfig.biomeLayoutEnabled()
 				&& WorldgenConfig.deadPlacementFilterEnabled() && WorldgenConfig.groundMatchEnabled(), "every system on by default");
 		check(WorldgenConfig.structureDensity() == 1.0, "structureDensity default 1");
 		check(WorldgenConfig.poolMaxFractionScale() == 10 && WorldgenConfig.biomeMaxCandidates() == 24 && WorldgenConfig.biomeRounds() == 20,

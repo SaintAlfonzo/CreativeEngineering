@@ -26,7 +26,8 @@ spawn rate lives in structure_groups.json (tools/gen_structure_groups.py); this 
 python3 tools/gen_structure_groups.py so new structures/sets get entries.
 
 Meta structures (our own structures that are only ever placed through a group, no set of their own)
-are listed under "meta_structures", from kubejs/data/creativeengineering/worldgen/structure/meta/.
+are listed under "meta_structures", from kubejs/generation_scripts/worldgen/meta_structures.json: their biomes,
+anchor and the structure parts they can't do without, which tools/gen_structure_groups.py turns into a biome pool.
 
 Every placement field is kept, not just the tunable ones: exclusion_zone, spread_type,
 preferred_biomes and mod-specific fields (MES min_distance_from_world_origin, YUNG's
@@ -48,6 +49,7 @@ INSTANCE = Path(__file__).resolve().parent.parent
 MODS_DIR = INSTANCE / 'mods'
 KUBEJS_DATA_DIR = INSTANCE / 'kubejs/data'
 OUT_PATH = INSTANCE / 'kubejs/generation_scripts/worldgen/structure_config.json'
+META_PATH = INSTANCE / 'kubejs/generation_scripts/worldgen/meta_structures.json'
 
 # The vanilla 1.19.2 jar that actually contains loose data/ jsons (Forge's dev-time split puts
 # resources in the "-extra" jar; the plain client/server jars here are launcher stubs). Found by
@@ -395,8 +397,9 @@ def build_readme():
                 'structure_groups.json overrides individual fields of it.'),
         ])),
         ('meta_structures', 'Our own structures that have no set of their own and only generate '
-            'through a group (kubejs/data/creativeengineering/worldgen/structure/meta/). Empty until the first '
-            'one exists.'),
+            'through a group (kubejs/generation_scripts/worldgen/meta_structures.json, staged at world load by '
+            'structure_overrides.js). Per structure: biomes (its own), anchor, share and required_parts (structure '
+            'entries of every part it needs at least one of), for the rate estimates.'),
         ('placement_dials (inside original)', OrderedDict([
             ('type', 'Which placement algorithm: "minecraft:random_spread" (almost everything -- '
                 'an evenly-spaced grid, one random attempt per cell) or '
@@ -425,16 +428,23 @@ def build_readme():
 
 
 def scan_meta_structures():
-    """Our meta structures: kubejs/data/creativeengineering/worldgen/structure/meta/**.json."""
+    """Our meta structures, from kubejs/generation_scripts/worldgen/meta_structures.json."""
     out = OrderedDict()
-    root = KUBEJS_DATA_DIR / 'creativeengineering/worldgen/structure/meta'
-    for f in sorted(root.glob('**/*.json')):
-        rel = f.relative_to(KUBEJS_DATA_DIR / 'creativeengineering/worldgen/structure').with_suffix('').as_posix()
-        try:
-            data = loads_lenient(f.read_text())
-        except ValueError:
-            data = {}
-        out[f'creativeengineering:{rel}'] = OrderedDict([('biomes', data.get('biomes'))])
+    if not META_PATH.exists():
+        return out
+
+    def entries(v):
+        return [v] if isinstance(v, str) else list(v or [])
+
+    for sid, d in json.loads(META_PATH.read_text()).get('structures', {}).items():
+        required = []
+        for part in d.get('parts', []):
+            count = part.get('count', 1)
+            low = count if isinstance(count, int) else count[0]
+            if 'structures' in part and low >= 1 and part.get('chance', 1) >= 1:
+                required.append(entries(part['structures']))
+        out[sid] = OrderedDict([('biomes', d.get('biomes')), ('anchor', entries(d.get('anchor'))),
+                                ('share', d.get('share', 0)), ('required_parts', required)])
     return out
 
 

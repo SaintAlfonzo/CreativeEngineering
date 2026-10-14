@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "eugene:witch_wagon",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 60,
+    "separation": 25,
+    "salt": 2064202355
+  }
+}

@@ -1,0 +1,2 @@
+item replace entity @e[tag=pig_ranger] weapon.mainhand with minecraft:crossbow{Charged:1b,tag:{Enchantments:[{id:multishot,lvl:1},{id:quick_charge,lvl:3}]},ChargedProjectiles:[{id:"minecraft:firework_rocket",Count:1b,tag:{Fireworks:{Flight:1,Explosions:[{Type:0,Flicker:1,Trail:1,Colors:[I;16711680]}]}}}]}
+schedule function eugene:load_firework 2s

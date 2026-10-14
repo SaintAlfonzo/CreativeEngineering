@@ -68,7 +68,7 @@
 	"biomeTint": true,
 	"tintMix": 50,
 	"spawnAboveClouds": false,
-	"cloudHeight": 191,
+	"cloudHeight": 350,
 	"alwaysRaining": false,
 	"yLevelWindAdjustment": true
 }

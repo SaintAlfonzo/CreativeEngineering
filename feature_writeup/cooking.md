@@ -1,0 +1,58 @@
+# Cooking Plans
+
+- gummies 
+    - for most fruits
+    - allow slime balls, kelp
+    - manual craft, efficient cooking pot/create craft
+- muffins
+    - add most fruits
+    - add combinations
+        - orange cranberry
+        - lemon poppy
+    - fruit, milk, egg, sugar, flour
+    - serve w/ paper
+- pie crust
+    - use to craft all pies, seq assemble recipe
+    - swap wheat to flour
+    - pressing dough recipe
+- cake base
+    - slice dough block to cake bases
+    - cake base recipe for all cakes
+- deep frying fish (pneumaticcraft)
+    - add cooking w/ oil recipe, expand fish to any species and rename
+- meat
+    - remove unused meats (venison, goat) from crafting recipes/view
+- soup
+    - adjust base soup values to be based on ingredients, mark outliers then make changes
+    - put all in supplementaries jar
+- milk
+    - fill bottle from cow in a jar
+- yeast
+    - new recipe from mushroom colonies/blocks
+    - used in new sourdough chain
+- sourdough
+    - new starter->growing->fermenting->sourdough chain
+    - time based wait period between craft steps
+    - mill/mortar sourdough to get starter
+    - mark starter with date started, allow naming, carry these stats to any sourdough made.
+- bowls
+    - add bamboo recipe
+- ice
+    - smash ice to cubes on cutting board with hammer, less efficient when crushed w/ machine
+    - ice cubes usable as ice in recipes
+- mortar and pestle
+    - old guns mod, used for new kitchen grinding
+    - adds food related milling/grinding recipes to shapeless crafting, returns mortar and pestle
+- fridge
+    - added sort button deletes items on 2-tall fridge
+    - patch fridge model to appear as full block horizontally (for placing decor on top)
+- counters
+    - allow cutting board to be placed on
+    - add storage to corner cabinets
+
+
+
+- other, migrate elsewhere
+    - make 3 long curtain blocks
+    - backport chiseled bookshelves
+        - framed and copycat version?

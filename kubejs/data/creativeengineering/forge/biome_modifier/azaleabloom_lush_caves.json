@@ -1,0 +1,5 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:lush_caves",
+  "spawners": { "type": "more_mooblooms:moobloom", "weight": 10, "minCount": 1, "maxCount": 3 }
+}

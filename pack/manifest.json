@@ -11,6 +11,8 @@
   },
   "jvmArgs": "-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
   "resourcePackOrder": [
+    "incubation_additions:untitledduckmod",
+    "incubation_additions:alexsmobs",
     "vanilla",
     "mod_resources",
     "Everycomp Generated Pack",
@@ -41,7 +43,8 @@
     "file/create_style_pretty_fluid_pipes.zip",
     "file/Updated_Engineering_v1.7.zip",
     "file/SHC Enhanced Fire.zip",
-    "file/IE Breaker Switch Sound.zip"
+    "file/IE Breaker Switch Sound.zip",
+    "file/SquirmingSilverfish [1.13 - 26.3]   (v2).zip"
   ],
   "mods": [
     {
@@ -766,6 +769,29 @@
       }
     },
     {
+      "file": "DarkPaintings-Forge-1.19.2-13.1.5.jar",
+      "name": "Dark Paintings",
+      "version": "13.1.5",
+      "sha1": "978b2983a537d37c45e8f3410add8f4b5cd24355",
+      "modId": "darkpaintings",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 377281,
+          "fileId": 4357106,
+          "slug": "dark-paintings",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/dark-paintings/files/4357106"
+        },
+        "modrinth": {
+          "projectId": "lFGQ4Hnk",
+          "versionId": "J5B0QIef",
+          "slug": "dark-paintings",
+          "url": "https://modrinth.com/mod/dark-paintings/version/J5B0QIef",
+          "download": "https://cdn.modrinth.com/data/lFGQ4Hnk/versions/J5B0QIef/DarkPaintings-Forge-1.19.2-13.1.5.jar"
+        }
+      }
+    },
+    {
       "file": "DeathKnell-Forge-1.19.2-6.0.3.jar",
       "name": "Death Knell",
       "version": "6.0.3",
@@ -847,6 +873,29 @@
           "slug": "detail-armor-bar",
           "url": "https://modrinth.com/mod/detail-armor-bar/version/kKIctwmh",
           "download": "https://cdn.modrinth.com/data/hAt6ty93/versions/2.6.4%2B1.19.2-forge/DetailArmorBar-2.6.4%2B1.19.2-forge.jar"
+        }
+      }
+    },
+    {
+      "file": "Dimensional-Paintings-1.19.2-1.4.1.jar",
+      "name": "Dimensional Paintings",
+      "version": "1.4.1",
+      "sha1": "8a49ef49dc34b9a5d18eacc3f9bb3f25b5754604",
+      "modId": "dimpaintings",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 480500,
+          "fileId": 4363227,
+          "slug": "dimensional-paintings",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/dimensional-paintings/files/4363227"
+        },
+        "modrinth": {
+          "projectId": "Fp8IRgq4",
+          "versionId": "tc7irVxA",
+          "slug": "dimensional-paintings",
+          "url": "https://modrinth.com/mod/dimensional-paintings/version/tc7irVxA",
+          "download": "https://cdn.modrinth.com/data/Fp8IRgq4/versions/tc7irVxA/Dimensional-Paintings-1.19.2-1.4.1.jar"
         }
       }
     },
@@ -1026,6 +1075,29 @@
           "slug": "explorers-compass",
           "url": "https://modrinth.com/mod/explorers-compass/version/YkK8Bd84",
           "download": "https://cdn.modrinth.com/data/RV1qfVQ8/versions/YkK8Bd84/ExplorersCompass-1.19.2-1.3.0-forge.jar"
+        }
+      }
+    },
+    {
+      "file": "FORGE_PaintingPack_1.19.2.jar",
+      "name": "Atmospheric Paintings Pack for FORGE and FABRIC",
+      "version": "1.19.2",
+      "sha1": "0b4fc126e7e945f06b26fa017080497ea3cf8284",
+      "modId": "paintings_pack1",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 490008,
+          "fileId": 4257294,
+          "slug": "jess-painting-pack",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/jess-painting-pack/files/4257294"
+        },
+        "modrinth": {
+          "projectId": "OWfnVQX4",
+          "versionId": "WoUSyaxE",
+          "slug": "atmospheric-paintings",
+          "url": "https://modrinth.com/mod/atmospheric-paintings/version/WoUSyaxE",
+          "download": "https://cdn.modrinth.com/data/OWfnVQX4/versions/WoUSyaxE/FORGE_PaintingPack_1.19.2.jar"
         }
       }
     },
@@ -1581,6 +1653,22 @@
       }
     },
     {
+      "file": "LavaClearView-1.19.2-forge-5.0.0.jar",
+      "name": "Lava Clear View",
+      "version": "LavaClearView-1.19.2-forge-5.0.0.jar",
+      "sha1": "099dc07baa1f8f48e6ca544c683e57c80fa2bf88",
+      "modId": "clearview",
+      "side": "client",
+      "source": {
+        "curseforge": {
+          "projectId": 375272,
+          "fileId": 3940274,
+          "slug": "lava-clear-view",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/lava-clear-view/files/3940274"
+        }
+      }
+    },
+    {
       "file": "LegendaryTooltips-1.19.2-forge-1.4.0.jar",
       "name": "Legendary Tooltips [Neo/Forge]",
       "version": "LegendaryTooltips-1.19.2-forge-1.4.0.jar",
@@ -1593,6 +1681,38 @@
           "fileId": 4278509,
           "slug": "legendary-tooltips",
           "url": "https://www.curseforge.com/minecraft/mc-mods/legendary-tooltips/files/4278509"
+        }
+      }
+    },
+    {
+      "file": "MC style paintings 1.19.2 v2.jar",
+      "name": "MC style paintings",
+      "version": "MC style paintings 1.19.2 v2.",
+      "sha1": "b24d11da2ea21968df6c7fdfb6f4f54de983e421",
+      "modId": "minecraft_style_paintings",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 419711,
+          "fileId": 4453998,
+          "slug": "minecraft-style-paintings",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/minecraft-style-paintings/files/4453998"
+        }
+      }
+    },
+    {
+      "file": "MEED-1.19.2-7.1.1.jar",
+      "name": "Moderately Enough Effect Descriptions (MEED)",
+      "version": "MEED-1.19.2-7.1.1 (Ars & Relics Reupdate)",
+      "sha1": "672d7e7e82cbff01ad9592085bb0d451b7885e74",
+      "modId": "meed",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 918638,
+          "fileId": 6762585,
+          "slug": "moderately-enough-effect-descriptions-meed",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/moderately-enough-effect-descriptions-meed/files/6762585"
         }
       }
     },
@@ -1662,6 +1782,29 @@
           "slug": "natures-compass",
           "url": "https://modrinth.com/mod/natures-compass/version/N4ONofeB",
           "download": "https://cdn.modrinth.com/data/fPetb5Kh/versions/N4ONofeB/NaturesCompass-1.19.2-1.10.0-forge.jar"
+        }
+      }
+    },
+    {
+      "file": "NekosEnchantedBooks-1.19-2.0.3.jar",
+      "name": "Neko's Enchanted Books",
+      "version": "1.19-2.0.3",
+      "sha1": "67ccf8b5daf2671fecec35660ca42685a5aee769",
+      "modId": "nebs",
+      "side": "client",
+      "source": {
+        "curseforge": {
+          "projectId": 441114,
+          "fileId": 6180640,
+          "slug": "nekos-enchanted-books",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/nekos-enchanted-books/files/6180640"
+        },
+        "modrinth": {
+          "projectId": "VZWuyRVr",
+          "versionId": "G0oQtyG8",
+          "slug": "nekos-enchanted-books",
+          "url": "https://modrinth.com/mod/nekos-enchanted-books/version/G0oQtyG8",
+          "download": "https://cdn.modrinth.com/data/VZWuyRVr/versions/G0oQtyG8/NekosEnchantedBooks-1.19-2.0.3.jar"
         }
       }
     },
@@ -1811,6 +1954,29 @@
           "fileId": 4291556,
           "slug": "presence-footsteps-forge",
           "url": "https://www.curseforge.com/minecraft/mc-mods/presence-footsteps-forge/files/4291556"
+        }
+      }
+    },
+    {
+      "file": "Pretty Rain-1.19.2-Forge-1.1.1.jar",
+      "name": "Pretty Rain",
+      "version": "1.19.2",
+      "sha1": "4f2472d0bc9c19a0ec291e31be52fd73d9943832",
+      "modId": "particlerain",
+      "side": "client",
+      "source": {
+        "curseforge": {
+          "projectId": 1163800,
+          "fileId": 6412002,
+          "slug": "pretty-rain",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/pretty-rain/files/6412002"
+        },
+        "modrinth": {
+          "projectId": "IhZuHxkl",
+          "versionId": "jivIT0rc",
+          "slug": "pretty-rain",
+          "url": "https://modrinth.com/mod/pretty-rain/version/jivIT0rc",
+          "download": "https://cdn.modrinth.com/data/IhZuHxkl/versions/jivIT0rc/Pretty%20Rain-1.19.2-Forge-1.1.1.jar"
         }
       }
     },
@@ -2057,6 +2223,22 @@
           "slug": "quark-oddities",
           "url": "https://modrinth.com/mod/quark-oddities/version/gvWA7HWA",
           "download": "https://cdn.modrinth.com/data/qeEEslrN/versions/gvWA7HWA/QuarkOddities-1.18.jar"
+        }
+      }
+    },
+    {
+      "file": "REBIRTH Paintings 5.0.0 Backport 1.19.2.jar",
+      "name": "REBIRTH: Paintings",
+      "version": "REBIRTH: Paintings 5.0.0 |Minecon Live Update|1.19.2|",
+      "sha1": "054581592ddd43feb65cd750aa2adf366dda7193",
+      "modId": "rebirth_paintings",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 535453,
+          "fileId": 4821821,
+          "slug": "rebirth",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/rebirth/files/4821821"
         }
       }
     },
@@ -2342,6 +2524,22 @@
           "slug": "treechop",
           "url": "https://modrinth.com/mod/treechop/version/aOob2rJV",
           "download": "https://cdn.modrinth.com/data/gHoB7SHO/versions/aOob2rJV/TreeChop-1.19.2-forge-0.19.1.jar"
+        }
+      }
+    },
+    {
+      "file": "UndergroundBunkers-1.0.4-1.19.2-1.20.4-forge.jar",
+      "name": "Underground Bunkers",
+      "version": "[FORGE] UndergroundBunkers-1.0.4-1.19.2-1.20.4-forge.jar",
+      "sha1": "15bc83913ccb9e94b2df5ee7a3800b0374b968c7",
+      "modId": "underground_bunkers",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 961418,
+          "fileId": 5435395,
+          "slug": "underground-bunkers",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/underground-bunkers/files/5435395"
         }
       }
     },
@@ -3233,6 +3431,52 @@
       }
     },
     {
+      "file": "bottledair-1.19.2-2.3.jar",
+      "name": "Bottled Air",
+      "version": "1.19.2-2.3-fabric+forge+neo",
+      "sha1": "10b40f303c2f4d88b869f77edd1c6a98f5052667",
+      "modId": "bottledair",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 514444,
+          "fileId": 4965329,
+          "slug": "bottled-air",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/bottled-air/files/4965329"
+        },
+        "modrinth": {
+          "projectId": "hvrrNux3",
+          "versionId": "iU00AmRJ",
+          "slug": "bottled-air",
+          "url": "https://modrinth.com/mod/bottled-air/version/iU00AmRJ",
+          "download": "https://cdn.modrinth.com/data/hvrrNux3/versions/iU00AmRJ/bottledair-1.19.2-2.3.jar"
+        }
+      }
+    },
+    {
+      "file": "breedablekillerrabbit-1.19.2-3.5.jar",
+      "name": "Breedable Killer Rabbit",
+      "version": "1.19.2-3.5-fabric+forge",
+      "sha1": "36deadb116362ad6b437dc6bbc4130f7012c193a",
+      "modId": "breedablekillerrabbit",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 342154,
+          "fileId": 5169084,
+          "slug": "breedable-killer-rabbit",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/breedable-killer-rabbit/files/5169084"
+        },
+        "modrinth": {
+          "projectId": "bhXPWTWy",
+          "versionId": "MRwMqCA2",
+          "slug": "breedable-killer-rabbit",
+          "url": "https://modrinth.com/mod/breedable-killer-rabbit/version/MRwMqCA2",
+          "download": "https://cdn.modrinth.com/data/bhXPWTWy/versions/MRwMqCA2/breedablekillerrabbit-1.19.2-3.5.jar"
+        }
+      }
+    },
+    {
       "file": "breezy-1.19.2-1.0.8.jar",
       "name": "Breezy",
       "version": "1.0.8",
@@ -3337,6 +3581,29 @@
           "slug": "caelus",
           "url": "https://modrinth.com/mod/caelus/version/hmlQQjAc",
           "download": "https://cdn.modrinth.com/data/40FYwb4z/versions/hmlQQjAc/caelus-forge-1.19.2-3.0.0.6.jar"
+        }
+      }
+    },
+    {
+      "file": "campsite_structures-1.19.2-FORGE-1.0.3.jar",
+      "name": "Campsite Structures",
+      "version": "1.0.3",
+      "sha1": "f34639eaf9f4c66cd33bd16478d84659fab2bd10",
+      "modId": "campsite_structures",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 705070,
+          "fileId": 4215747,
+          "slug": "campsite-structures",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/campsite-structures/files/4215747"
+        },
+        "modrinth": {
+          "projectId": "gA6575EW",
+          "versionId": "3vOCWdkv",
+          "slug": "campsite-structures",
+          "url": "https://modrinth.com/mod/campsite-structures/version/3vOCWdkv",
+          "download": "https://cdn.modrinth.com/data/gA6575EW/versions/3vOCWdkv/campsite_structures-1.19.2-FORGE-1.0.3.jar"
         }
       }
     },
@@ -3732,6 +3999,29 @@
           "fileId": 4942589,
           "slug": "cooking-for-blockheads",
           "url": "https://www.curseforge.com/minecraft/mc-mods/cooking-for-blockheads/files/4942589"
+        }
+      }
+    },
+    {
+      "file": "coolrain-1.19.2-Forge-1.0.2.jar",
+      "name": "Cool Rain Reforged",
+      "version": "1.0.2",
+      "sha1": "ca7b6cd7edb49929d429c0d7a96899b969bf2b23",
+      "modId": "coolrain",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 1346978,
+          "fileId": 7090668,
+          "slug": "cool-rain-reforged",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/cool-rain-reforged/files/7090668"
+        },
+        "modrinth": {
+          "projectId": "IgftU6Mn",
+          "versionId": "5ib5x24J",
+          "slug": "cool-rain-reforged",
+          "url": "https://modrinth.com/mod/cool-rain-reforged/version/5ib5x24J",
+          "download": "https://cdn.modrinth.com/data/IgftU6Mn/versions/5ib5x24J/coolrain-1.19.2-Forge-1.0.2.jar"
         }
       }
     },
@@ -4368,10 +4658,10 @@
       }
     },
     {
-      "file": "creativeengineering-1.0.5.jar",
-      "name": "creativeengineering-1.0.5",
-      "version": "",
-      "sha1": "c4cd7a59f6f8798429d359c74eb1a173d904ec66",
+      "file": "creativeengineering-1.0.6.jar",
+      "name": "creativeengineering-1.0.6.jar",
+      "version": "Unknown",
+      "sha1": "ae9e03b4ed6c4b38ccefa3bda92d89b199c71928",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -4412,6 +4702,29 @@
           "slug": "customizable-elytra",
           "url": "https://modrinth.com/mod/customizable-elytra/version/gsnrKi46",
           "download": "https://cdn.modrinth.com/data/L25fOeGq/versions/gsnrKi46/customizableelytra-1.19.0-1.7.4.jar"
+        }
+      }
+    },
+    {
+      "file": "cyclepaintings-1.19.2-3.5.jar",
+      "name": "Cycle Paintings",
+      "version": "1.19.2-3.5-fabric+forge+neo",
+      "sha1": "1fb83e8015c7d4943394e15160005ce4cb3f1b31",
+      "modId": "cyclepaintings",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 345973,
+          "fileId": 4965175,
+          "slug": "cycle-paintings",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/cycle-paintings/files/4965175"
+        },
+        "modrinth": {
+          "projectId": "c85whkNB",
+          "versionId": "fFPVRVpy",
+          "slug": "cycle-paintings",
+          "url": "https://modrinth.com/mod/cycle-paintings/version/fFPVRVpy",
+          "download": "https://cdn.modrinth.com/data/c85whkNB/versions/fFPVRVpy/cyclepaintings-1.19.2-3.5.jar"
         }
       }
     },
@@ -4922,8 +5235,8 @@
     },
     {
       "file": "exposureBackport-1.9.19-ce-19.2-03.jar",
-      "name": "exposureBackport-1.9.19-ce-19.2-03",
-      "version": "",
+      "name": "exposureBackport-1.9.19-ce-19.2-03.jar",
+      "version": "Unknown",
       "sha1": "8a2af83f8f5908b91cb36c8f5ca53dff6c142ba5",
       "modId": "exposure",
       "side": "both",
@@ -5015,6 +5328,22 @@
       }
     },
     {
+      "file": "fireflybush-1.19.2.jar",
+      "name": "Firefly Bush  [1.18+1.21++ Backport]",
+      "version": "fireflybush-1.19.2.jar",
+      "sha1": "62074dc35c47a11ccbc013901b113d21b38975d0",
+      "modId": "fireflybushport",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 1194702,
+          "fileId": 6290155,
+          "slug": "firefly-bush",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/firefly-bush/files/6290155"
+        }
+      }
+    },
+    {
       "file": "fishontheline-1.19.2-3.2.jar",
       "name": "Fish On The Line",
       "version": "1.19.2-3.2-fabric+forge+neo",
@@ -5050,6 +5379,22 @@
           "fileId": 3833506,
           "slug": "forgiving-void",
           "url": "https://www.curseforge.com/minecraft/mc-mods/forgiving-void/files/3833506"
+        }
+      }
+    },
+    {
+      "file": "fortune_on_netherite_1.1.0_forge_1.19.2.jar",
+      "name": "Fortune on Netherite",
+      "version": "Fortune on Netherite 1.1.0 (Forge 1.19.2).jar",
+      "sha1": "8c2fa2321c410eb6b2b3de443c212b2fc65c81ad",
+      "modId": "fortuneonneterite_i_ig_z",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 995076,
+          "fileId": 5312984,
+          "slug": "fortune-on-netherite",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/fortune-on-netherite/files/5312984"
         }
       }
     },
@@ -5536,6 +5881,15 @@
       }
     },
     {
+      "file": "incubationAdditions-1.0.0.jar",
+      "name": "incubationAdditions-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "0e3f38c4581939afdf14c7b71bb68343eaf1b82a",
+      "modId": "incubation_additions",
+      "side": "both",
+      "source": "local"
+    },
+    {
       "file": "interiors-0.5.6+forge-mc1.19.2-build.105.jar",
       "name": "Create: Interiors",
       "version": "0.5.6+forge-mc1.19.2",
@@ -5587,7 +5941,7 @@
       "version": "1.19.2-2.1.4",
       "sha1": "4d893b3be13644df7299778d4bed933bfd293eae",
       "modId": "jeed",
-      "side": "client",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 532286,
@@ -5647,6 +6001,22 @@
           "slug": "jei-multiblocks",
           "url": "https://modrinth.com/mod/jei-multiblocks/version/a7cSVxhQ",
           "download": "https://cdn.modrinth.com/data/ffLYPaWN/versions/a7cSVxhQ/jeimultiblocks-1.19.2-0.0.3.jar"
+        }
+      }
+    },
+    {
+      "file": "jepp-1.19.2-1.1.0.jar",
+      "name": "Just Enough Painting Previews (JEPP)",
+      "version": "jepp-1.19.2-1.1.0.jar",
+      "sha1": "1a9baca934c4f641e07fd698a8e5364cc166ffdb",
+      "modId": "jepp",
+      "side": "client",
+      "source": {
+        "curseforge": {
+          "projectId": 546740,
+          "fileId": 4520544,
+          "slug": "jepp",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/jepp/files/4520544"
         }
       }
     },
@@ -6253,6 +6623,15 @@
           "download": "https://cdn.modrinth.com/data/ekzqyEZL/versions/j2uMfiXV/more-immersive-wires-1.19.2-1.1.3.jar"
         }
       }
+    },
+    {
+      "file": "moreMooblooms-1.0.0.jar",
+      "name": "moreMooblooms-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "409b993af877845a549aed18f7fb43129a72eb9b",
+      "modId": "more_mooblooms",
+      "side": "both",
+      "source": "local"
     },
     {
       "file": "moredelight-25.07.28-1.19-forge.jar",
@@ -6964,6 +7343,29 @@
       }
     },
     {
+      "file": "restApi - 0.7 - 1.19.2 - Forge.jar",
+      "name": "RestApi",
+      "version": "0.7-1.19.2-forge",
+      "sha1": "585eca55b3e0f3ba0d85536dc22b273827f86645",
+      "modId": "restapi",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 917700,
+          "fileId": 4802808,
+          "slug": "restapi",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/restapi/files/4802808"
+        },
+        "modrinth": {
+          "projectId": "mPg0PTH3",
+          "versionId": "4KZWSucy",
+          "slug": "rest-api",
+          "url": "https://modrinth.com/mod/rest-api/version/4KZWSucy",
+          "download": "https://cdn.modrinth.com/data/mPg0PTH3/versions/4KZWSucy/restApi%20-%200.7%20-%201.19.2%20-%20Forge.jar"
+        }
+      }
+    },
+    {
       "file": "rhino-forge-1902.2.3-build.284.jar",
       "name": "Rhino",
       "version": "1902.2.3-build.284+forge",
@@ -6983,6 +7385,29 @@
           "slug": "rhino",
           "url": "https://modrinth.com/mod/rhino/version/6m33q64a",
           "download": "https://cdn.modrinth.com/data/sk9knFPE/versions/6m33q64a/rhino-forge-1902.2.3-build.284.jar"
+        }
+      }
+    },
+    {
+      "file": "rsec-1.0-1.19.2-forge.jar",
+      "name": "Rain should extinguish campfires",
+      "version": "1.0-1.19.2-forge",
+      "sha1": "18b1ef2e3f563c75171147c0ed260d6d2e268bc0",
+      "modId": "rsec",
+      "side": "server",
+      "source": {
+        "curseforge": {
+          "projectId": 959784,
+          "fileId": 5029331,
+          "slug": "rain-should-extinguish-campfires",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/rain-should-extinguish-campfires/files/5029331"
+        },
+        "modrinth": {
+          "projectId": "XFk4dAJX",
+          "versionId": "FqhndMyk",
+          "slug": "rain-should-extinguish-campfires",
+          "url": "https://modrinth.com/mod/rain-should-extinguish-campfires/version/FqhndMyk",
+          "download": "https://cdn.modrinth.com/data/XFk4dAJX/versions/FqhndMyk/rsec-1.0-1.19.2-forge.jar"
         }
       }
     },
@@ -7426,6 +7851,29 @@
       }
     },
     {
+      "file": "splash_milk-1.19.2-1.4.0.jar",
+      "name": "The Splash Milk",
+      "version": "1.4.0",
+      "sha1": "550447308862511c0fb5deb04503ad112292bbe5",
+      "modId": "splash_milk",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 564244,
+          "fileId": 3925672,
+          "slug": "the-splash-milk",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/the-splash-milk/files/3925672"
+        },
+        "modrinth": {
+          "projectId": "ELrdP6OH",
+          "versionId": "YmDqV7s4",
+          "slug": "the-splash-milk",
+          "url": "https://modrinth.com/mod/the-splash-milk/version/YmDqV7s4",
+          "download": "https://cdn.modrinth.com/data/ELrdP6OH/versions/YmDqV7s4/splash_milk-1.19.2-1.4.0.jar"
+        }
+      }
+    },
+    {
       "file": "spyglass_improvements-forge-1.5.12+mc1.19+forge.jar",
       "name": "Spyglass Improvements: Zoom, Quick Access... [Fabric/NeoForge]",
       "version": "1.5.12+mc1.19+forge",
@@ -7488,6 +7936,22 @@
       }
     },
     {
+      "file": "sticky_it-1.2.1-forge-1.19.2.jar",
+      "name": "Sticky It!",
+      "version": "sticky_it-1.2.1-forge-1.19.2.jar",
+      "sha1": "27a7f736aa66df96d31c6e0241e7130730c7eb53",
+      "modId": "sticky_it",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 1374640,
+          "fileId": 7253365,
+          "slug": "sticky-it",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/sticky-it/files/7253365"
+        }
+      }
+    },
+    {
       "file": "storagedelight-25.12.09-1.19-forge.jar",
       "name": "Storage Delight (Forge & Neoforge)",
       "version": "25.12.09-1.19-forge",
@@ -7507,6 +7971,29 @@
           "slug": "storage-delight",
           "url": "https://modrinth.com/mod/storage-delight/version/Rgf2MFH6",
           "download": "https://cdn.modrinth.com/data/LTTvOp5L/versions/Rgf2MFH6/storagedelight-25.12.09-1.19-forge.jar"
+        }
+      }
+    },
+    {
+      "file": "subterrestrial-forge-1.19.2-2.0.0.jar",
+      "name": "Subterrestrial",
+      "version": "2.0.0-forge",
+      "sha1": "3ac4ca5de1704833328ccd9bdd7f03ddb8b8f90c",
+      "modId": "subterrestrial",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 575588,
+          "fileId": 4125924,
+          "slug": "subterrestrial",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/subterrestrial/files/4125924"
+        },
+        "modrinth": {
+          "projectId": "UiVm8hgI",
+          "versionId": "RAFF0TG0",
+          "slug": "subterrestrial",
+          "url": "https://modrinth.com/mod/subterrestrial/version/RAFF0TG0",
+          "download": "https://cdn.modrinth.com/data/UiVm8hgI/versions/RAFF0TG0/subterrestrial-forge-1.19.2-2.0.0.jar"
         }
       }
     },
@@ -7697,6 +8184,29 @@
       }
     },
     {
+      "file": "toomanypaintings-26.08.16-1.19-forge.jar",
+      "name": "Too Many Paintings!",
+      "version": "26.08.16-1.19-forge",
+      "sha1": "635dce1e1f897ccf6fca30f9170813c15c811922",
+      "modId": "toomanypaintings",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 988773,
+          "fileId": 8666514,
+          "slug": "too-many-paintings-forge-fabric",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/too-many-paintings-forge-fabric/files/8666514"
+        },
+        "modrinth": {
+          "projectId": "T8Fpxcl7",
+          "versionId": "iGfAKeXR",
+          "slug": "too-many-paintings",
+          "url": "https://modrinth.com/mod/too-many-paintings/version/iGfAKeXR",
+          "download": "https://cdn.modrinth.com/data/T8Fpxcl7/versions/iGfAKeXR/toomanypaintings-26.08.16-1.19-forge.jar"
+        }
+      }
+    },
+    {
       "file": "trade-cycling-forge-1.19.2-1.0.15.jar",
       "name": "Trade Cycling",
       "version": "[FORGE][1.19.2] Trade Cycling 1.19.2-1.0.15",
@@ -7771,6 +8281,22 @@
           "slug": "twigs",
           "url": "https://modrinth.com/mod/twigs/version/3vp46egv",
           "download": "https://cdn.modrinth.com/data/RG50cUrX/versions/3vp46egv/twigs-forge-1.19.2-3.0.1.jar"
+        }
+      }
+    },
+    {
+      "file": "unlitcampfire-forge-1.19-1.7.1.0.jar",
+      "name": "Unlit Campfire",
+      "version": "unlitcampfire-forge-1.19-1.7.1.0.jar",
+      "sha1": "63ea3d9c00889b105d3ccf37a08a9f77b92670a3",
+      "modId": "unlitcampfire",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 417553,
+          "fileId": 4550832,
+          "slug": "unlit-campfire",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/unlit-campfire/files/4550832"
         }
       }
     },
@@ -7890,6 +8416,22 @@
       }
     },
     {
+      "file": "volcanic_caverns-1.19.2-1.2.2.jar",
+      "name": "Volcanic Caverns",
+      "version": "Volcanic Caverns 1.2.2",
+      "sha1": "54f220946f7c73138cbc56aafccdc465d70c03bd",
+      "modId": "volcanic_caverns",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 522458,
+          "fileId": 3935087,
+          "slug": "volcanic-caverns",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/volcanic-caverns/files/3935087"
+        }
+      }
+    },
+    {
       "file": "wardrobe-1.0.3-1.19.2.jar",
       "name": "Lucky's Wardrobe",
       "version": "Wardrobe-1.0.3-1.19.2.jar",
@@ -7964,6 +8506,22 @@
           "slug": "just-a-well",
           "url": "https://modrinth.com/mod/just-a-well/version/RRpcxSiv",
           "download": "https://cdn.modrinth.com/data/qs7zlvyh/versions/RRpcxSiv/well-1.19.2-1.0.0.jar"
+        }
+      }
+    },
+    {
+      "file": "witchmobility-1.3.2-1.19.2.jar",
+      "name": "Witch Mobility [Forge & Fabric]",
+      "version": "witchmobility-1.3.2-1.19.2-FORGE",
+      "sha1": "84e640f58c8625c4338504483e6bf05e57d1eb38",
+      "modId": "witchmobility",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 782330,
+          "fileId": 4565083,
+          "slug": "witch-mobility",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/witch-mobility/files/4565083"
         }
       }
     },
@@ -8147,50 +8705,6 @@
   ],
   "disabledMods": [
     {
-      "file": "1.19.2.jar",
-      "name": "More Pillager Tower Variants",
-      "version": "6.24.9",
-      "sha1": "2115281244f87678f93e28d2a29e5f352661e1e1",
-      "modId": "mysticrift_pillagers_towers_aris",
-      "source": {
-        "curseforge": {
-          "projectId": 1013877,
-          "fileId": 7114748,
-          "slug": "more-pillager-towers",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/more-pillager-towers/files/7114748"
-        },
-        "modrinth": {
-          "projectId": "ew5Vacxe",
-          "versionId": "O1nLaBmZ",
-          "slug": "mysticrift-more-pillager-towers",
-          "url": "https://modrinth.com/mod/mysticrift-more-pillager-towers/version/O1nLaBmZ",
-          "download": "https://cdn.modrinth.com/data/ew5Vacxe/versions/O1nLaBmZ/1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "Abandoned Watchtowers 7.0 Forge 1.19.2.jar",
-      "name": "Abandoned Watchtowers",
-      "version": "7.0",
-      "sha1": "3a83a186ee3f77de88ba5e17f9ba3043e051357f",
-      "modId": "watchtower_building",
-      "source": {
-        "curseforge": {
-          "projectId": 1274025,
-          "fileId": 7776827,
-          "slug": "abandoned-watchtowers",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/abandoned-watchtowers/files/7776827"
-        },
-        "modrinth": {
-          "projectId": "XaDXUYLc",
-          "versionId": "vYJFC3h6",
-          "slug": "abandoned-watchtowers",
-          "url": "https://modrinth.com/mod/abandoned-watchtowers/version/vYJFC3h6",
-          "download": "https://cdn.modrinth.com/data/XaDXUYLc/versions/vYJFC3h6/Abandoned%20Watchtowers%207.0%20Forge%201.19.2.jar"
-        }
-      }
-    },
-    {
       "file": "DustyDecorations_1.19.2Forge_V1.3.jar",
       "name": "Dusty Decorations",
       "version": "Dusty Decorations 1.19.2 Forge V1.3",
@@ -8202,6 +8716,21 @@
           "fileId": 6608831,
           "slug": "dusty-decorations",
           "url": "https://www.curseforge.com/minecraft/mc-mods/dusty-decorations/files/6608831"
+        }
+      }
+    },
+    {
+      "file": "Fireflies Mod-1.0.1 (Forge 1.19.2).jar",
+      "name": "Fireflies",
+      "version": "Fireflies Mod-1.0.1 (Forge 1.19.2).jar",
+      "sha1": "5201547e663d46eb5f092133230e4b26b8e57fcd",
+      "modId": "fireflies",
+      "source": {
+        "curseforge": {
+          "projectId": 622624,
+          "fileId": 4086384,
+          "slug": "fireflies-mod",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/fireflies-mod/files/4086384"
         }
       }
     },
@@ -8221,17 +8750,17 @@
       }
     },
     {
-      "file": "SkyVillages-1.0.3-1.19.2-1.20.x-forge-release.jar",
-      "name": "Sky Villages [Forge]",
-      "version": "SkyVillages-1.0.3-1.19.2-1.20.x-forge-release.jar",
-      "sha1": "aba8ee1271e9d4ebf7fdeca11adf149f86173be4",
-      "modId": "skyvillages",
+      "file": "PaintingsN'DiscsBackport_1.19.2Forge_V1.3.1.jar",
+      "name": "Paintings N' Discs Backport",
+      "version": "Paintings N' Discs Backport 1.19.2 V1.3.1",
+      "sha1": "0144f5408d14086be9c51e03307aea1310ea7ff9",
+      "modId": "paintingsanddiscsbackport",
       "source": {
         "curseforge": {
-          "projectId": 545467,
-          "fileId": 4787087,
-          "slug": "sky-villages-forge",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/sky-villages-forge/files/4787087"
+          "projectId": 1013697,
+          "fileId": 6668150,
+          "slug": "paintings-n-discs-backport",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/paintings-n-discs-backport/files/6668150"
         }
       }
     },
@@ -8251,83 +8780,24 @@
       }
     },
     {
-      "file": "ancient_enchantment_temple-1.0.2-forge-1.19.2.jar",
-      "name": "Ancient Enchantment Temple",
+      "file": "caverns_and_chasms-1.19.2-1.0.2.jar",
+      "name": "Caverns & Chasms",
       "version": "1.0.2",
-      "sha1": "eb62233004843986a464b82a243a868ade1986e2",
-      "modId": "ancient_enchantment_temple",
+      "sha1": "12adad5c23228c65944c933797b511e5f2154f7a",
+      "modId": "caverns_and_chasms",
       "source": {
         "curseforge": {
-          "projectId": 1072613,
-          "fileId": 6468375,
-          "slug": "ancient-enchantment-temple",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/ancient-enchantment-temple/files/6468375"
+          "projectId": 438005,
+          "fileId": 5222972,
+          "slug": "caverns-and-chasms",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/caverns-and-chasms/files/5222972"
         },
         "modrinth": {
-          "projectId": "u9bP79Zj",
-          "versionId": "ggU6M1eI",
-          "slug": "ancient-enchantment-temple",
-          "url": "https://modrinth.com/mod/ancient-enchantment-temple/version/ggU6M1eI",
-          "download": "https://cdn.modrinth.com/data/u9bP79Zj/versions/ggU6M1eI/ancient_enchantment_temple-1.0.2-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "animal_barn-1.0.2-forge-1.19.2.jar",
-      "name": "Animal Barn",
-      "version": "animal_barn-1.0.2-forge-1.19.2.jar",
-      "sha1": "de0a1e567c39fdf01097bb9b3621a1a83ba38bca",
-      "modId": "animal_barn",
-      "source": {
-        "curseforge": {
-          "projectId": 1135542,
-          "fileId": 6468362,
-          "slug": "animal-barn",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/animal-barn/files/6468362"
-        }
-      }
-    },
-    {
-      "file": "antiquetradingship-1.3.0-forge-1.19.2.jar",
-      "name": "Antique Trading Ship",
-      "version": "1.3.0",
-      "sha1": "4c1e00316420a4119f996926b81b73c3fc51050c",
-      "modId": "antiquetradingship",
-      "source": {
-        "curseforge": {
-          "projectId": 1034045,
-          "fileId": 5755394,
-          "slug": "antique-trading-ship",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/antique-trading-ship/files/5755394"
-        },
-        "modrinth": {
-          "projectId": "luvBs7J4",
-          "versionId": "HNEQvEkv",
-          "slug": "antique-trading-ship",
-          "url": "https://modrinth.com/mod/antique-trading-ship/version/HNEQvEkv",
-          "download": "https://cdn.modrinth.com/data/luvBs7J4/versions/HNEQvEkv/antiquetradingship-1.3.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "bighorsestable-1.0.2-forge-1.19.2.jar",
-      "name": "Big Horse Stable",
-      "version": "1.0.2",
-      "sha1": "23ce22a236323ee693f92daa79513c2dfae7505f",
-      "modId": "bighorsestable",
-      "source": {
-        "curseforge": {
-          "projectId": 1170431,
-          "fileId": 7033835,
-          "slug": "big-horse-stable",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/big-horse-stable/files/7033835"
-        },
-        "modrinth": {
-          "projectId": "T7p7ItSv",
-          "versionId": "jA910xd2",
-          "slug": "big-horse-stable",
-          "url": "https://modrinth.com/mod/big-horse-stable/version/jA910xd2",
-          "download": "https://cdn.modrinth.com/data/T7p7ItSv/versions/jA910xd2/bighorsestable-1.0.2-forge-1.19.2.jar"
+          "projectId": "tfjmPSbI",
+          "versionId": "TuFWVSZM",
+          "slug": "caverns-and-chasms",
+          "url": "https://modrinth.com/mod/caverns-and-chasms/version/TuFWVSZM",
+          "download": "https://cdn.modrinth.com/data/tfjmPSbI/versions/TuFWVSZM/caverns_and_chasms-1.19.2-1.0.2.jar"
         }
       }
     },
@@ -8398,36 +8868,6 @@
       }
     },
     {
-      "file": "desert_village_temple-1.0.0-forge-1.19.2.jar",
-      "name": "Desert Village Temple",
-      "version": "desert_village_temple-1.0.0-forge-1.19.2.jar",
-      "sha1": "6c01ee3055342c259ed374e5a653fdd63318fbfd",
-      "modId": "desert_village_temple",
-      "source": {
-        "curseforge": {
-          "projectId": 1326254,
-          "fileId": 7152970,
-          "slug": "desert-village-temple",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/desert-village-temple/files/7152970"
-        }
-      }
-    },
-    {
-      "file": "desert_watchtower-1.0.2-forge-1.19.2.jar",
-      "name": "Desert Watchtower",
-      "version": "desert_watchtower-1.0.2-forge-1.19.2.jar",
-      "sha1": "66d7ecfe0a576ffa9dfc7ec1684c1576dfa6a1e9",
-      "modId": "desert_watchtower",
-      "source": {
-        "curseforge": {
-          "projectId": 1187872,
-          "fileId": 6468354,
-          "slug": "desert-watchtower",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/desert-watchtower/files/6468354"
-        }
-      }
-    },
-    {
       "file": "farmhouse_decorations-26.4.0-forge-1.19.2.jar",
       "name": "Farmhouse Decorations",
       "version": "26.4.0",
@@ -8472,72 +8912,6 @@
       }
     },
     {
-      "file": "forest_ruins-1.0.0-forge-1.19.2.jar",
-      "name": "Forest Ruins",
-      "version": "1.0.0",
-      "sha1": "a377124312988b89b10b5307d0f6ee56df81bea0",
-      "modId": "forest_ruins",
-      "source": {
-        "curseforge": {
-          "projectId": 1271504,
-          "fileId": 6557252,
-          "slug": "forest-ruins",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/forest-ruins/files/6557252"
-        },
-        "modrinth": {
-          "projectId": "HgZn3gGU",
-          "versionId": "vPnml0Aq",
-          "slug": "forest-ruins",
-          "url": "https://modrinth.com/mod/forest-ruins/version/vPnml0Aq",
-          "download": "https://cdn.modrinth.com/data/HgZn3gGU/versions/vPnml0Aq/forest_ruins-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "forest_watchtower-1.0.0-forge-1.19.2.jar",
-      "name": "Forest Watchtower",
-      "version": "1.0.0",
-      "sha1": "7a7fabbf476e0e0f87c41906913ce74e639fe965",
-      "modId": "forest_watchtower",
-      "source": {
-        "curseforge": {
-          "projectId": 1357127,
-          "fileId": 7056064,
-          "slug": "forest-watchtower",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/forest-watchtower/files/7056064"
-        },
-        "modrinth": {
-          "projectId": "3BpEp5l7",
-          "versionId": "fU6QeS2k",
-          "slug": "forest-watchtower",
-          "url": "https://modrinth.com/mod/forest-watchtower/version/fU6QeS2k",
-          "download": "https://cdn.modrinth.com/data/3BpEp5l7/versions/fU6QeS2k/forest_watchtower-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "forgotten_church-1.0.0-forge-1.19.2.jar",
-      "name": "Forgotten Church",
-      "version": "1.0.0",
-      "sha1": "54a9ca2ee656726a11b1f0dcafdfcb4f6732bf82",
-      "modId": "forgotten_church",
-      "source": {
-        "curseforge": {
-          "projectId": 1365281,
-          "fileId": 7123460,
-          "slug": "forgotten-church",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/forgotten-church/files/7123460"
-        },
-        "modrinth": {
-          "projectId": "JPM6sajk",
-          "versionId": "maqBeA0R",
-          "slug": "forgotten-church",
-          "url": "https://modrinth.com/mod/forgotten-church/version/maqBeA0R",
-          "download": "https://cdn.modrinth.com/data/JPM6sajk/versions/maqBeA0R/forgotten_church-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
       "file": "friendsandfoes-forge-mc1.19.2-3.0.9.jar",
       "name": "Friends&Foes (Forge/NeoForge)",
       "version": "forge-mc1.19.2-3.0.9",
@@ -8575,315 +8949,6 @@
       }
     },
     {
-      "file": "gothic_church-1.0.1-forge-1.19.2.jar",
-      "name": "Gothic Church",
-      "version": "1.0.1",
-      "sha1": "5e82cfbecfa9f7404ae7c656007ec2176cba2718",
-      "modId": "gothic_church",
-      "source": {
-        "curseforge": {
-          "projectId": 1153570,
-          "fileId": 7060015,
-          "slug": "gothic-church",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/gothic-church/files/7060015"
-        },
-        "modrinth": {
-          "projectId": "Jeaf8jgB",
-          "versionId": "62OJD2Za",
-          "slug": "gothic-church",
-          "url": "https://modrinth.com/mod/gothic-church/version/62OJD2Za",
-          "download": "https://cdn.modrinth.com/data/Jeaf8jgB/versions/62OJD2Za/gothic_church-1.0.1-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "illager_siege_weapons-1.0.0-forge-1.19.2.jar",
-      "name": "Illager Siege Weapons",
-      "version": "1.0.0",
-      "sha1": "7171cc02771602d05ec1348eb0bdb21bf49543ac",
-      "modId": "illager_siege_weapons",
-      "source": {
-        "curseforge": {
-          "projectId": 1349101,
-          "fileId": 7007758,
-          "slug": "illager-siege-weapons",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/illager-siege-weapons/files/7007758"
-        },
-        "modrinth": {
-          "projectId": "48wSZ5DR",
-          "versionId": "QcgJvghh",
-          "slug": "illager-siege-weapons",
-          "url": "https://modrinth.com/mod/illager-siege-weapons/version/QcgJvghh",
-          "download": "https://cdn.modrinth.com/data/48wSZ5DR/versions/QcgJvghh/illager_siege_weapons-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "illager_viking_longship-1.0.0-forge-1.19.2.jar",
-      "name": "Illager Viking Longship",
-      "version": "illager_viking_longship-1.0.0-forge-1.19.2.jar",
-      "sha1": "6e97923022fa0dfb1103e16066afdda982ab4d47",
-      "modId": "illager_viking_longship",
-      "source": {
-        "curseforge": {
-          "projectId": 1253596,
-          "fileId": 6472296,
-          "slug": "illager-viking-longship",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/illager-viking-longship/files/6472296"
-        }
-      }
-    },
-    {
-      "file": "illagerwarship-1.0.0-forge-1.19.2.jar",
-      "name": "Illager Warship",
-      "version": "1.0.0",
-      "sha1": "9e9c363bfe9a23e382da85aa2fdc3723443eadf6",
-      "modId": "illagerwarship",
-      "source": {
-        "curseforge": {
-          "projectId": 1091632,
-          "fileId": 5667138,
-          "slug": "illager-warship",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/illager-warship/files/5667138"
-        },
-        "modrinth": {
-          "projectId": "tUpIHo95",
-          "versionId": "qPFiclI0",
-          "slug": "illager-warship",
-          "url": "https://modrinth.com/mod/illager-warship/version/qPFiclI0",
-          "download": "https://cdn.modrinth.com/data/tUpIHo95/versions/qPFiclI0/illagerwarship-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "llama_stable-1.0.0-forge-1.19.2.jar",
-      "name": "Llama Stable",
-      "version": "1.0.0",
-      "sha1": "bc83e6e6e883dbf755eff52df1478eb2021f5188",
-      "modId": "llama_stable",
-      "source": {
-        "curseforge": {
-          "projectId": 1356051,
-          "fileId": 7048997,
-          "slug": "llama-stable",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/llama-stable/files/7048997"
-        },
-        "modrinth": {
-          "projectId": "bkxsR7PQ",
-          "versionId": "oSaE5enC",
-          "slug": "llama-stable",
-          "url": "https://modrinth.com/mod/llama-stable/version/oSaE5enC",
-          "download": "https://cdn.modrinth.com/data/bkxsR7PQ/versions/oSaE5enC/llama_stable-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "mini_clock_tower-1.0.2-forge-1.19.2.jar",
-      "name": "Mini Clock Tower",
-      "version": "1.0.2",
-      "sha1": "c628abbddbd0b68d284de936912e1a8011f96011",
-      "modId": "mini_clock_tower",
-      "source": {
-        "curseforge": {
-          "projectId": 1207874,
-          "fileId": 7201213,
-          "slug": "mini-clock-tower",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/mini-clock-tower/files/7201213"
-        },
-        "modrinth": {
-          "projectId": "UeZa7a3e",
-          "versionId": "dPYym0JJ",
-          "slug": "mini-clock-tower",
-          "url": "https://modrinth.com/mod/mini-clock-tower/version/dPYym0JJ",
-          "download": "https://cdn.modrinth.com/data/UeZa7a3e/versions/dPYym0JJ/mini_clock_tower-1.0.2-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "old_illager_statue-1.0.0-forge-1.19.2.jar",
-      "name": "Old Illager Statue",
-      "version": "1.0.0",
-      "sha1": "5ff32d8a28a629f1663c524f7582753ca20801c1",
-      "modId": "old_illager_statue",
-      "source": {
-        "curseforge": {
-          "projectId": 1358157,
-          "fileId": 7064061,
-          "slug": "old-illager-statue",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/old-illager-statue/files/7064061"
-        },
-        "modrinth": {
-          "projectId": "dzTUB5q7",
-          "versionId": "1rOCFDOc",
-          "slug": "old-illager-statue",
-          "url": "https://modrinth.com/mod/old-illager-statue/version/1rOCFDOc",
-          "download": "https://cdn.modrinth.com/data/dzTUB5q7/versions/1rOCFDOc/old_illager_statue-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "oldvillagerstatue-1.0.1-forge-1.19.2.jar",
-      "name": "Old Villager Statue",
-      "version": "1.0.1",
-      "sha1": "8ea833bbfadbb80f98fbcc78cda15616a35ad974",
-      "modId": "oldvillagerstatue",
-      "source": {
-        "curseforge": {
-          "projectId": 1174033,
-          "fileId": 7067664,
-          "slug": "old-villager-statue",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/old-villager-statue/files/7067664"
-        },
-        "modrinth": {
-          "projectId": "seaHxZpZ",
-          "versionId": "jBvcZdBZ",
-          "slug": "old-villager-statue",
-          "url": "https://modrinth.com/mod/old-villager-statue/version/jBvcZdBZ",
-          "download": "https://cdn.modrinth.com/data/seaHxZpZ/versions/jBvcZdBZ/oldvillagerstatue-1.0.1-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "plains_villager_tents-1.0.0-forge-1.19.2.jar",
-      "name": "Plains  Villager Tents",
-      "version": "plains_villager_tents-1.0.0-forge-1.19.2.jar",
-      "sha1": "414bc64c063dcfa2ef509ba80ea36ae9e6720eb8",
-      "modId": "plains_villager_tents",
-      "source": {
-        "curseforge": {
-          "projectId": 1257949,
-          "fileId": 6493259,
-          "slug": "plains-villager-tents",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/plains-villager-tents/files/6493259"
-        }
-      }
-    },
-    {
-      "file": "saloon-1.0.1-forge-1.19.2.jar",
-      "name": "Villager Saloon",
-      "version": "saloon-1.0.1-forge-1.19.2.jar",
-      "sha1": "fdb730c1b466385e12f97361d64a2f0ec1f1b315",
-      "modId": "saloon",
-      "source": {
-        "curseforge": {
-          "projectId": 1158384,
-          "fileId": 6009065,
-          "slug": "villager-saloon",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-saloon/files/6009065"
-        }
-      }
-    },
-    {
-      "file": "small_cat_statues-1.0.0-forge-1.19.2.jar",
-      "name": "Small Cat Statues",
-      "version": "1.0.0",
-      "sha1": "fc7add7d024e087a86b42db3b36d0dbf40b38402",
-      "modId": "small_cat_statues",
-      "source": {
-        "curseforge": {
-          "projectId": 1354836,
-          "fileId": 7040929,
-          "slug": "small-cat-statues",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/small-cat-statues/files/7040929"
-        },
-        "modrinth": {
-          "projectId": "FSDcdiQy",
-          "versionId": "ZUDA8yfv",
-          "slug": "small-cat-statues",
-          "url": "https://modrinth.com/mod/small-cat-statues/version/ZUDA8yfv",
-          "download": "https://cdn.modrinth.com/data/FSDcdiQy/versions/ZUDA8yfv/small_cat_statues-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "small_viking_villager_house-1.0.0-forge-1.19.2.jar",
-      "name": "Small Viking Villager House",
-      "version": "1.0.0",
-      "sha1": "7dde71a1fc9bfb408b93f0853f8c561534545d13",
-      "modId": "small_viking_villager_house",
-      "source": {
-        "curseforge": {
-          "projectId": 1345469,
-          "fileId": 6988115,
-          "slug": "small-viking-villager-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/small-viking-villager-house/files/6988115"
-        },
-        "modrinth": {
-          "projectId": "6ftMrbF5",
-          "versionId": "gdPW8iJM",
-          "slug": "small-viking-villager-house",
-          "url": "https://modrinth.com/mod/small-viking-villager-house/version/gdPW8iJM",
-          "download": "https://cdn.modrinth.com/data/6ftMrbF5/versions/gdPW8iJM/small_viking_villager_house-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "small_villager_greenhouse-1.0.0-forge-1.19.2.jar",
-      "name": "Small Villager Greenhouse",
-      "version": "1.0.0",
-      "sha1": "23c82d37ea745994f532a5fe481e9c128d31ca50",
-      "modId": "small_villager_greenhouse",
-      "source": {
-        "curseforge": {
-          "projectId": 1352700,
-          "fileId": 7027672,
-          "slug": "small-villager-greenhouse",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/small-villager-greenhouse/files/7027672"
-        },
-        "modrinth": {
-          "projectId": "pWMYm1Ut",
-          "versionId": "cRdh7Sjg",
-          "slug": "small-villager-greenhouse",
-          "url": "https://modrinth.com/mod/small-villager-greenhouse/version/cRdh7Sjg",
-          "download": "https://cdn.modrinth.com/data/pWMYm1Ut/versions/cRdh7Sjg/small_villager_greenhouse-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "smallhorsestable-1.1.0-forge-1.19.2.jar",
-      "name": "Small horse stable",
-      "version": "1.1.0",
-      "sha1": "70ca9354bcfe775384f16c0eb9b7bc307789fbd4",
-      "modId": "smallhorsestable",
-      "source": {
-        "curseforge": {
-          "projectId": 1069321,
-          "fileId": 5573134,
-          "slug": "small-horse-stable",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/small-horse-stable/files/5573134"
-        },
-        "modrinth": {
-          "projectId": "gfyIZI0R",
-          "versionId": "NSaR54mk",
-          "slug": "small-horse-stable",
-          "url": "https://modrinth.com/mod/small-horse-stable/version/NSaR54mk",
-          "download": "https://cdn.modrinth.com/data/gfyIZI0R/versions/NSaR54mk/smallhorsestable-1.1.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "snowy_tents-1.0.0-forge-1.19.2.jar",
-      "name": "Snowy Tents",
-      "version": "1.0.0",
-      "sha1": "2567c479bc3b75b3d5474c10b67b3e9fd370ec90",
-      "modId": "snowy_tents",
-      "source": {
-        "curseforge": {
-          "projectId": 1107833,
-          "fileId": 5748261,
-          "slug": "snowy-tents",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/snowy-tents/files/5748261"
-        },
-        "modrinth": {
-          "projectId": "dxqKAraL",
-          "versionId": "x9PzJqwg",
-          "slug": "snowy-tents",
-          "url": "https://modrinth.com/mod/snowy-tents/version/x9PzJqwg",
-          "download": "https://cdn.modrinth.com/data/dxqKAraL/versions/x9PzJqwg/snowy_tents-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
       "file": "tempad-forge-1.19.2-1.4.5.jar",
       "name": "Tempad",
       "version": "1.4.5",
@@ -8902,358 +8967,6 @@
           "slug": "tempad",
           "url": "https://modrinth.com/mod/tempad/version/lH6QeJfQ",
           "download": "https://cdn.modrinth.com/data/gKNwt7xu/versions/lH6QeJfQ/tempad-forge-1.19.2-1.4.5.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_archer_camp-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Archer Camp",
-      "version": "1.0.0",
-      "sha1": "820d880e4b77d61f9eb437a5fc1a15fe1e362e9f",
-      "modId": "villager_archer_camp",
-      "source": {
-        "curseforge": {
-          "projectId": 1341888,
-          "fileId": 6967714,
-          "slug": "villager-archer-camp",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-archer-camp/files/6967714"
-        },
-        "modrinth": {
-          "projectId": "AfNJApMX",
-          "versionId": "e4WbJEMM",
-          "slug": "villager-archer-camp",
-          "url": "https://modrinth.com/mod/villager-archer-camp/version/e4WbJEMM",
-          "download": "https://cdn.modrinth.com/data/AfNJApMX/versions/e4WbJEMM/villager_archer_camp-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_butcher_house-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Butcher House",
-      "version": "1.0.0",
-      "sha1": "44dfb2902bf9fa3cbc321777002c828550378952",
-      "modId": "villager_butcher_house",
-      "source": {
-        "curseforge": {
-          "projectId": 1346689,
-          "fileId": 6994688,
-          "slug": "villager-butcher-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-butcher-house/files/6994688"
-        },
-        "modrinth": {
-          "projectId": "Lda5cMMV",
-          "versionId": "kuI6SF74",
-          "slug": "villager-butcher-house",
-          "url": "https://modrinth.com/mod/villager-butcher-house/version/kuI6SF74",
-          "download": "https://cdn.modrinth.com/data/Lda5cMMV/versions/kuI6SF74/villager_butcher_house-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_cartographer_house-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Cartographer House",
-      "version": "1.0.0",
-      "sha1": "f889ff689a791506d0c9ba918a7f0108c9a8a7b1",
-      "modId": "villager_cartographer_house",
-      "source": {
-        "curseforge": {
-          "projectId": 1350819,
-          "fileId": 7017484,
-          "slug": "villager-cartographer-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-cartographer-house/files/7017484"
-        },
-        "modrinth": {
-          "projectId": "9Q06uWIr",
-          "versionId": "yh20OhK3",
-          "slug": "villager-cartographer-house",
-          "url": "https://modrinth.com/mod/villager-cartographer-house/version/yh20OhK3",
-          "download": "https://cdn.modrinth.com/data/9Q06uWIr/versions/yh20OhK3/villager_cartographer_house-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_circus_tent-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Circus Tent",
-      "version": "1.0.0",
-      "sha1": "6300792a1688927cbf28de514c92fecb0a8573b0",
-      "modId": "villager_circus_tent",
-      "source": {
-        "curseforge": {
-          "projectId": 1352105,
-          "fileId": 7024299,
-          "slug": "villager-circus-tent",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-circus-tent/files/7024299"
-        },
-        "modrinth": {
-          "projectId": "Yal3kcXP",
-          "versionId": "e7GvzeZN",
-          "slug": "villager-circus-tent",
-          "url": "https://modrinth.com/mod/villager-circus-tent/version/e7GvzeZN",
-          "download": "https://cdn.modrinth.com/data/Yal3kcXP/versions/e7GvzeZN/villager_circus_tent-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_cleric_house-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Cleric House",
-      "version": "1.0.0",
-      "sha1": "81fa2c97b1e34d0567cba672ae63c45f40ad7a08",
-      "modId": "villager_cleric_house",
-      "source": {
-        "curseforge": {
-          "projectId": 1348550,
-          "fileId": 7004878,
-          "slug": "villager-cleric-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-cleric-house/files/7004878"
-        },
-        "modrinth": {
-          "projectId": "QCz6jJew",
-          "versionId": "6Iiqbkpy",
-          "slug": "villager-cleric-house",
-          "url": "https://modrinth.com/mod/villager-cleric-house/version/6Iiqbkpy",
-          "download": "https://cdn.modrinth.com/data/QCz6jJew/versions/6Iiqbkpy/villager_cleric_house-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_country_house-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Country House",
-      "version": "1.0.0",
-      "sha1": "20097a51985fca7645718d83dad4fbfed64c6b0b",
-      "modId": "villager_country_house",
-      "source": {
-        "curseforge": {
-          "projectId": 1357579,
-          "fileId": 7105085,
-          "slug": "villager-country-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-country-house/files/7105085"
-        },
-        "modrinth": {
-          "projectId": "rZsreuTS",
-          "versionId": "i2VlDoy7",
-          "slug": "villager-country-house",
-          "url": "https://modrinth.com/mod/villager-country-house/version/i2VlDoy7",
-          "download": "https://cdn.modrinth.com/data/rZsreuTS/versions/i2VlDoy7/villager_country_house-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_farmer_house-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Farmer House",
-      "version": "1.0.0",
-      "sha1": "c506bd314656e22f65d6155927e65615b1121e99",
-      "modId": "villager_farmer_house",
-      "source": {
-        "curseforge": {
-          "projectId": 1350221,
-          "fileId": 7013973,
-          "slug": "villager-farmer-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-farmer-house/files/7013973"
-        },
-        "modrinth": {
-          "projectId": "pizY5sSx",
-          "versionId": "dXFH9fH2",
-          "slug": "villager-farmer-house",
-          "url": "https://modrinth.com/mod/villager-farmer-house/version/dXFH9fH2",
-          "download": "https://cdn.modrinth.com/data/pizY5sSx/versions/dXFH9fH2/villager_farmer_house-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_fish_shop-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Fish Shop",
-      "version": "1.0.0",
-      "sha1": "e7a2bf89553fc255f3ee6ac5fd6b6d3b7b189674",
-      "modId": "villager_fish_shop",
-      "source": {
-        "curseforge": {
-          "projectId": 1344347,
-          "fileId": 6981753,
-          "slug": "villager-fish-shop",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-fish-shop/files/6981753"
-        },
-        "modrinth": {
-          "projectId": "PetjGGJ5",
-          "versionId": "5ZM2gx9M",
-          "slug": "villager-fish-shop",
-          "url": "https://modrinth.com/mod/villager-fish-shop/version/5ZM2gx9M",
-          "download": "https://cdn.modrinth.com/data/PetjGGJ5/versions/5ZM2gx9M/villager_fish_shop-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_fishermans_hut-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Fisherman’s Hut",
-      "version": "1.0.0",
-      "sha1": "b4d22a046d714de7d0307ea03c60f072ab0521bf",
-      "modId": "villager_fishermans_hut",
-      "source": {
-        "curseforge": {
-          "projectId": 1347353,
-          "fileId": 6998350,
-          "slug": "villager-fishermans-hut",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-fishermans-hut/files/6998350"
-        },
-        "modrinth": {
-          "projectId": "iAZXCxAZ",
-          "versionId": "VEi6ukFF",
-          "slug": "villager-fishermans-hut",
-          "url": "https://modrinth.com/mod/villager-fishermans-hut/version/VEi6ukFF",
-          "download": "https://cdn.modrinth.com/data/iAZXCxAZ/versions/VEi6ukFF/villager_fishermans_hut-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_fletcher_house-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Fletcher House",
-      "version": "1.0.0",
-      "sha1": "1708aeecd6d64fead66b1820dde0aeff705e4026",
-      "modId": "villager_fletcher_house",
-      "source": {
-        "curseforge": {
-          "projectId": 1351482,
-          "fileId": 7022824,
-          "slug": "villager-fletcher-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-fletcher-house/files/7022824"
-        },
-        "modrinth": {
-          "projectId": "gd21FD33",
-          "versionId": "qqdzSNUg",
-          "slug": "villager-fletcher-house",
-          "url": "https://modrinth.com/mod/villager-fletcher-house/version/qqdzSNUg",
-          "download": "https://cdn.modrinth.com/data/gd21FD33/versions/qqdzSNUg/villager_fletcher_house-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_flower_house-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Flower House",
-      "version": "1.0.0",
-      "sha1": "ea00cfb6d4e240916685aefb495d42a4a95d7213",
-      "modId": "villager_flower_house",
-      "source": {
-        "curseforge": {
-          "projectId": 1342534,
-          "fileId": 6971155,
-          "slug": "villager-flower-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-flower-house/files/6971155"
-        },
-        "modrinth": {
-          "projectId": "PY8cCovm",
-          "versionId": "eXEghnTR",
-          "slug": "villager-flower-house",
-          "url": "https://modrinth.com/mod/villager-flower-house/version/eXEghnTR",
-          "download": "https://cdn.modrinth.com/data/PY8cCovm/versions/eXEghnTR/villager_flower_house-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_forge-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Forge",
-      "version": "1.0.0",
-      "sha1": "4b12bb7ae006a5e875a721763494aae2ad138624",
-      "modId": "villager_forge",
-      "source": {
-        "curseforge": {
-          "projectId": 1346020,
-          "fileId": 6991270,
-          "slug": "villager-forge",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-forge/files/6991270"
-        },
-        "modrinth": {
-          "projectId": "u1dRb6b1",
-          "versionId": "ZcEW89ta",
-          "slug": "villager-forge",
-          "url": "https://modrinth.com/mod/villager-forge/version/ZcEW89ta",
-          "download": "https://cdn.modrinth.com/data/u1dRb6b1/versions/ZcEW89ta/villager_forge-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_gold_washing_facility-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Gold Washing Facility",
-      "version": "1.0.0",
-      "sha1": "fc9aa1ac4e8bbaf96edac2d2e6e4c6c5566931c3",
-      "modId": "villager_gold_washing_facility",
-      "source": {
-        "curseforge": {
-          "projectId": 1448795,
-          "fileId": 7548987,
-          "slug": "villager-gold-washing-facility",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-gold-washing-facility/files/7548987"
-        },
-        "modrinth": {
-          "projectId": "JOqDaUwA",
-          "versionId": "SXQluENY",
-          "slug": "villager-gold-washing-facility",
-          "url": "https://modrinth.com/mod/villager-gold-washing-facility/version/SXQluENY",
-          "download": "https://cdn.modrinth.com/data/JOqDaUwA/versions/SXQluENY/villager_gold_washing_facility-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_rafts-1.0.0-forge-1.19.2.jar",
-      "name": "Villager Rafts",
-      "version": "1.0.0",
-      "sha1": "9c5074620606432b842d30e289921926a3a381d6",
-      "modId": "villager_rafts",
-      "source": {
-        "curseforge": {
-          "projectId": 1343782,
-          "fileId": 6978322,
-          "slug": "villager-rafts",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-rafts/files/6978322"
-        },
-        "modrinth": {
-          "projectId": "CtGYUNJ0",
-          "versionId": "D3YGuXGk",
-          "slug": "villager-rafts",
-          "url": "https://modrinth.com/mod/villager-rafts/version/D3YGuXGk",
-          "download": "https://cdn.modrinth.com/data/CtGYUNJ0/versions/D3YGuXGk/villager_rafts-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_tannery-1.0.1-forge-1.19.2.jar",
-      "name": "Villager Tannery House",
-      "version": "1.0.1",
-      "sha1": "62798b3a8c1a9cf6667d7d19c7b0aa8766c962cb",
-      "modId": "villager_tannery",
-      "source": {
-        "curseforge": {
-          "projectId": 1214860,
-          "fileId": 7060108,
-          "slug": "villager-tannery-house",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villager-tannery-house/files/7060108"
-        },
-        "modrinth": {
-          "projectId": "rd22zerp",
-          "versionId": "A7yy8scZ",
-          "slug": "villager-tannery-house",
-          "url": "https://modrinth.com/mod/villager-tannery-house/version/A7yy8scZ",
-          "download": "https://cdn.modrinth.com/data/rd22zerp/versions/A7yy8scZ/villager_tannery-1.0.1-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "villager_windmill-1.0.0-forge-1.19.2.jar",
-      "name": "Villager’s Windmill",
-      "version": "1.0.0",
-      "sha1": "1c35ea96d2a6539b67e05d452f76b94b0e71d72f",
-      "modId": "villager_windmill",
-      "source": {
-        "curseforge": {
-          "projectId": 1285044,
-          "fileId": 6641969,
-          "slug": "villagers-windmill",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/villagers-windmill/files/6641969"
-        },
-        "modrinth": {
-          "projectId": "rsZv4DTg",
-          "versionId": "zfY54iES",
-          "slug": "villagers-windmill",
-          "url": "https://modrinth.com/mod/villagers-windmill/version/zfY54iES",
-          "download": "https://cdn.modrinth.com/data/rsZv4DTg/versions/zfY54iES/villager_windmill-1.0.0-forge-1.19.2.jar"
         }
       }
     },
@@ -9278,6 +8991,372 @@
           "download": "https://cdn.modrinth.com/data/lfVtagkm/versions/kHuXAxVa/yuushya-1.19.2-forge-2.2.3.jar"
         }
       }
+    },
+    {
+      "file": "1.19.2.jar",
+      "name": "1.19.2",
+      "version": "",
+      "sha1": "2115281244f87678f93e28d2a29e5f352661e1e1",
+      "modId": "mysticrift_pillagers_towers_aris",
+      "source": "local"
+    },
+    {
+      "file": "Abandoned Watchtowers 7.0 Forge 1.19.2.jar",
+      "name": "Abandoned Watchtowers 7.0 Forge 1.19.2",
+      "version": "",
+      "sha1": "3a83a186ee3f77de88ba5e17f9ba3043e051357f",
+      "modId": "watchtower_building",
+      "source": "local"
+    },
+    {
+      "file": "SkyVillages-1.0.3-1.19.2-1.20.x-forge-release.jar",
+      "name": "SkyVillages-1.0.3-1.19.2-1.20.x-forge-release",
+      "version": "",
+      "sha1": "aba8ee1271e9d4ebf7fdeca11adf149f86173be4",
+      "modId": "skyvillages",
+      "source": "local"
+    },
+    {
+      "file": "ancient_enchantment_temple-1.0.2-forge-1.19.2.jar",
+      "name": "ancient_enchantment_temple-1.0.2-forge-1.19.2",
+      "version": "",
+      "sha1": "eb62233004843986a464b82a243a868ade1986e2",
+      "modId": "ancient_enchantment_temple",
+      "source": "local"
+    },
+    {
+      "file": "animal_barn-1.0.2-forge-1.19.2.jar",
+      "name": "animal_barn-1.0.2-forge-1.19.2",
+      "version": "",
+      "sha1": "de0a1e567c39fdf01097bb9b3621a1a83ba38bca",
+      "modId": "animal_barn",
+      "source": "local"
+    },
+    {
+      "file": "antiquetradingship-1.3.0-forge-1.19.2.jar",
+      "name": "antiquetradingship-1.3.0-forge-1.19.2",
+      "version": "",
+      "sha1": "4c1e00316420a4119f996926b81b73c3fc51050c",
+      "modId": "antiquetradingship",
+      "source": "local"
+    },
+    {
+      "file": "bighorsestable-1.0.2-forge-1.19.2.jar",
+      "name": "bighorsestable-1.0.2-forge-1.19.2",
+      "version": "",
+      "sha1": "23ce22a236323ee693f92daa79513c2dfae7505f",
+      "modId": "bighorsestable",
+      "source": "local"
+    },
+    {
+      "file": "camps_castles_carriages-1.1.1.jar",
+      "name": "Camps. Castles. Carriages.",
+      "version": "1.1.1+mod",
+      "sha1": "ab0c7a08e02752951392880a0433a98eb74d0628",
+      "modId": "mr_camps_castles_carriages",
+      "source": {
+        "curseforge": {
+          "projectId": 938667,
+          "fileId": 4954624,
+          "slug": "camps-castles-carriages",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/camps-castles-carriages/files/4954624"
+        },
+        "modrinth": {
+          "projectId": "h9XxzZxe",
+          "versionId": "LqqVwUdr",
+          "slug": "camps_castles_carriages",
+          "url": "https://modrinth.com/mod/camps_castles_carriages/version/LqqVwUdr",
+          "download": "https://cdn.modrinth.com/data/h9XxzZxe/versions/LqqVwUdr/camps_castles_carriages-1.1.1.jar"
+        }
+      }
+    },
+    {
+      "file": "desert_village_temple-1.0.0-forge-1.19.2.jar",
+      "name": "desert_village_temple-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "6c01ee3055342c259ed374e5a653fdd63318fbfd",
+      "modId": "desert_village_temple",
+      "source": "local"
+    },
+    {
+      "file": "desert_watchtower-1.0.2-forge-1.19.2.jar",
+      "name": "desert_watchtower-1.0.2-forge-1.19.2",
+      "version": "",
+      "sha1": "66d7ecfe0a576ffa9dfc7ec1684c1576dfa6a1e9",
+      "modId": "desert_watchtower",
+      "source": "local"
+    },
+    {
+      "file": "forest_ruins-1.0.0-forge-1.19.2.jar",
+      "name": "forest_ruins-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "a377124312988b89b10b5307d0f6ee56df81bea0",
+      "modId": "forest_ruins",
+      "source": "local"
+    },
+    {
+      "file": "forest_watchtower-1.0.0-forge-1.19.2.jar",
+      "name": "forest_watchtower-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "7a7fabbf476e0e0f87c41906913ce74e639fe965",
+      "modId": "forest_watchtower",
+      "source": "local"
+    },
+    {
+      "file": "forgotten_church-1.0.0-forge-1.19.2.jar",
+      "name": "forgotten_church-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "54a9ca2ee656726a11b1f0dcafdfcb4f6732bf82",
+      "modId": "forgotten_church",
+      "source": "local"
+    },
+    {
+      "file": "gothic_church-1.0.1-forge-1.19.2.jar",
+      "name": "gothic_church-1.0.1-forge-1.19.2",
+      "version": "",
+      "sha1": "5e82cfbecfa9f7404ae7c656007ec2176cba2718",
+      "modId": "gothic_church",
+      "source": "local"
+    },
+    {
+      "file": "illager_siege_weapons-1.0.0-forge-1.19.2.jar",
+      "name": "illager_siege_weapons-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "7171cc02771602d05ec1348eb0bdb21bf49543ac",
+      "modId": "illager_siege_weapons",
+      "source": "local"
+    },
+    {
+      "file": "illager_viking_longship-1.0.0-forge-1.19.2.jar",
+      "name": "illager_viking_longship-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "6e97923022fa0dfb1103e16066afdda982ab4d47",
+      "modId": "illager_viking_longship",
+      "source": "local"
+    },
+    {
+      "file": "illagerwarship-1.0.0-forge-1.19.2.jar",
+      "name": "illagerwarship-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "9e9c363bfe9a23e382da85aa2fdc3723443eadf6",
+      "modId": "illagerwarship",
+      "source": "local"
+    },
+    {
+      "file": "llama_stable-1.0.0-forge-1.19.2.jar",
+      "name": "llama_stable-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "bc83e6e6e883dbf755eff52df1478eb2021f5188",
+      "modId": "llama_stable",
+      "source": "local"
+    },
+    {
+      "file": "mini_clock_tower-1.0.2-forge-1.19.2.jar",
+      "name": "mini_clock_tower-1.0.2-forge-1.19.2",
+      "version": "",
+      "sha1": "c628abbddbd0b68d284de936912e1a8011f96011",
+      "modId": "mini_clock_tower",
+      "source": "local"
+    },
+    {
+      "file": "old_illager_statue-1.0.0-forge-1.19.2.jar",
+      "name": "old_illager_statue-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "5ff32d8a28a629f1663c524f7582753ca20801c1",
+      "modId": "old_illager_statue",
+      "source": "local"
+    },
+    {
+      "file": "oldvillagerstatue-1.0.1-forge-1.19.2.jar",
+      "name": "oldvillagerstatue-1.0.1-forge-1.19.2",
+      "version": "",
+      "sha1": "8ea833bbfadbb80f98fbcc78cda15616a35ad974",
+      "modId": "oldvillagerstatue",
+      "source": "local"
+    },
+    {
+      "file": "plains_villager_tents-1.0.0-forge-1.19.2.jar",
+      "name": "plains_villager_tents-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "414bc64c063dcfa2ef509ba80ea36ae9e6720eb8",
+      "modId": "plains_villager_tents",
+      "source": "local"
+    },
+    {
+      "file": "saloon-1.0.1-forge-1.19.2.jar",
+      "name": "saloon-1.0.1-forge-1.19.2",
+      "version": "",
+      "sha1": "fdb730c1b466385e12f97361d64a2f0ec1f1b315",
+      "modId": "saloon",
+      "source": "local"
+    },
+    {
+      "file": "small_cat_statues-1.0.0-forge-1.19.2.jar",
+      "name": "small_cat_statues-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "fc7add7d024e087a86b42db3b36d0dbf40b38402",
+      "modId": "small_cat_statues",
+      "source": "local"
+    },
+    {
+      "file": "small_viking_villager_house-1.0.0-forge-1.19.2.jar",
+      "name": "small_viking_villager_house-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "7dde71a1fc9bfb408b93f0853f8c561534545d13",
+      "modId": "small_viking_villager_house",
+      "source": "local"
+    },
+    {
+      "file": "small_villager_greenhouse-1.0.0-forge-1.19.2.jar",
+      "name": "small_villager_greenhouse-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "23c82d37ea745994f532a5fe481e9c128d31ca50",
+      "modId": "small_villager_greenhouse",
+      "source": "local"
+    },
+    {
+      "file": "smallhorsestable-1.1.0-forge-1.19.2.jar",
+      "name": "smallhorsestable-1.1.0-forge-1.19.2",
+      "version": "",
+      "sha1": "70ca9354bcfe775384f16c0eb9b7bc307789fbd4",
+      "modId": "smallhorsestable",
+      "source": "local"
+    },
+    {
+      "file": "snowy_tents-1.0.0-forge-1.19.2.jar",
+      "name": "snowy_tents-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "2567c479bc3b75b3d5474c10b67b3e9fd370ec90",
+      "modId": "snowy_tents",
+      "source": "local"
+    },
+    {
+      "file": "villager_archer_camp-1.0.0-forge-1.19.2.jar",
+      "name": "villager_archer_camp-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "820d880e4b77d61f9eb437a5fc1a15fe1e362e9f",
+      "modId": "villager_archer_camp",
+      "source": "local"
+    },
+    {
+      "file": "villager_butcher_house-1.0.0-forge-1.19.2.jar",
+      "name": "villager_butcher_house-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "44dfb2902bf9fa3cbc321777002c828550378952",
+      "modId": "villager_butcher_house",
+      "source": "local"
+    },
+    {
+      "file": "villager_cartographer_house-1.0.0-forge-1.19.2.jar",
+      "name": "villager_cartographer_house-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "f889ff689a791506d0c9ba918a7f0108c9a8a7b1",
+      "modId": "villager_cartographer_house",
+      "source": "local"
+    },
+    {
+      "file": "villager_circus_tent-1.0.0-forge-1.19.2.jar",
+      "name": "villager_circus_tent-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "6300792a1688927cbf28de514c92fecb0a8573b0",
+      "modId": "villager_circus_tent",
+      "source": "local"
+    },
+    {
+      "file": "villager_cleric_house-1.0.0-forge-1.19.2.jar",
+      "name": "villager_cleric_house-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "81fa2c97b1e34d0567cba672ae63c45f40ad7a08",
+      "modId": "villager_cleric_house",
+      "source": "local"
+    },
+    {
+      "file": "villager_country_house-1.0.0-forge-1.19.2.jar",
+      "name": "villager_country_house-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "20097a51985fca7645718d83dad4fbfed64c6b0b",
+      "modId": "villager_country_house",
+      "source": "local"
+    },
+    {
+      "file": "villager_farmer_house-1.0.0-forge-1.19.2.jar",
+      "name": "villager_farmer_house-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "c506bd314656e22f65d6155927e65615b1121e99",
+      "modId": "villager_farmer_house",
+      "source": "local"
+    },
+    {
+      "file": "villager_fish_shop-1.0.0-forge-1.19.2.jar",
+      "name": "villager_fish_shop-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "e7a2bf89553fc255f3ee6ac5fd6b6d3b7b189674",
+      "modId": "villager_fish_shop",
+      "source": "local"
+    },
+    {
+      "file": "villager_fishermans_hut-1.0.0-forge-1.19.2.jar",
+      "name": "villager_fishermans_hut-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "b4d22a046d714de7d0307ea03c60f072ab0521bf",
+      "modId": "villager_fishermans_hut",
+      "source": "local"
+    },
+    {
+      "file": "villager_fletcher_house-1.0.0-forge-1.19.2.jar",
+      "name": "villager_fletcher_house-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "1708aeecd6d64fead66b1820dde0aeff705e4026",
+      "modId": "villager_fletcher_house",
+      "source": "local"
+    },
+    {
+      "file": "villager_flower_house-1.0.0-forge-1.19.2.jar",
+      "name": "villager_flower_house-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "ea00cfb6d4e240916685aefb495d42a4a95d7213",
+      "modId": "villager_flower_house",
+      "source": "local"
+    },
+    {
+      "file": "villager_forge-1.0.0-forge-1.19.2.jar",
+      "name": "villager_forge-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "4b12bb7ae006a5e875a721763494aae2ad138624",
+      "modId": "villager_forge",
+      "source": "local"
+    },
+    {
+      "file": "villager_gold_washing_facility-1.0.0-forge-1.19.2.jar",
+      "name": "villager_gold_washing_facility-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "fc9aa1ac4e8bbaf96edac2d2e6e4c6c5566931c3",
+      "modId": "villager_gold_washing_facility",
+      "source": "local"
+    },
+    {
+      "file": "villager_rafts-1.0.0-forge-1.19.2.jar",
+      "name": "villager_rafts-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "9c5074620606432b842d30e289921926a3a381d6",
+      "modId": "villager_rafts",
+      "source": "local"
+    },
+    {
+      "file": "villager_tannery-1.0.1-forge-1.19.2.jar",
+      "name": "villager_tannery-1.0.1-forge-1.19.2",
+      "version": "",
+      "sha1": "62798b3a8c1a9cf6667d7d19c7b0aa8766c962cb",
+      "modId": "villager_tannery",
+      "source": "local"
+    },
+    {
+      "file": "villager_windmill-1.0.0-forge-1.19.2.jar",
+      "name": "villager_windmill-1.0.0-forge-1.19.2",
+      "version": "",
+      "sha1": "1c35ea96d2a6539b67e05d452f76b94b0e71d72f",
+      "modId": "villager_windmill",
+      "source": "local"
     }
   ],
   "resourcePacks": [
@@ -9287,7 +9366,7 @@
       "version": "Unknown",
       "sha1": "1fa70b09b66dd113b68f20c5966f60c96dbd6e05",
       "enabled": true,
-      "loadOrder": 10,
+      "loadOrder": 12,
       "flaggedIncompatible": false,
       "source": "local"
     },
@@ -9314,7 +9393,7 @@
       "version": "Copycat Framed Block.zip",
       "sha1": "2e300fb05d0edc238dd96d4356798ca2964ba4ad",
       "enabled": true,
-      "loadOrder": 11,
+      "loadOrder": 13,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9331,7 +9410,7 @@
       "version": "1.2.1",
       "sha1": "2f7e22eb0ca0a3ab7382c290b49995df66bba97e",
       "enabled": true,
-      "loadOrder": 12,
+      "loadOrder": 14,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9355,7 +9434,7 @@
       "version": "Create Tweaks Compats v17.zip",
       "sha1": "a52384c905017e4ba35a3cfa315a0876f5c3ee4c",
       "enabled": true,
-      "loadOrder": 13,
+      "loadOrder": 15,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9372,7 +9451,7 @@
       "version": "1.1.2",
       "sha1": "37230d133003a3574a2380326bfd6faf8a1c3124",
       "enabled": true,
-      "loadOrder": 14,
+      "loadOrder": 16,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9420,7 +9499,7 @@
       "version": "1.0",
       "sha1": "6d5ac607061fa5aedea571ec0c3ae842327dbf7c",
       "enabled": true,
-      "loadOrder": 15,
+      "loadOrder": 17,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9444,7 +9523,7 @@
       "version": "1.3.0",
       "sha1": "e960b4770f08761c294dd67530f94232acadc68e",
       "enabled": true,
-      "loadOrder": 16,
+      "loadOrder": 18,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9468,7 +9547,7 @@
       "version": " \tEngineers_GUIs_1.18.2_v.01.0",
       "sha1": "cdb59cac42a434bb74359f5b1bfa90c44733d9e0",
       "enabled": true,
-      "loadOrder": 17,
+      "loadOrder": 19,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9502,7 +9581,7 @@
       "version": "Golden crit.zip",
       "sha1": "2780c0d9711aeca8073ed10d441a7d0c78789fc9",
       "enabled": true,
-      "loadOrder": 18,
+      "loadOrder": 20,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9519,7 +9598,7 @@
       "version": "IE Breaker Switch Sound.zip",
       "sha1": "64b43eeeddee345082edce2f7ac7dfeb2ea5d546",
       "enabled": true,
-      "loadOrder": 30,
+      "loadOrder": 32,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9570,7 +9649,7 @@
       "version": "LootrChestRetexture_v1.1_1.19.zip",
       "sha1": "89baa371773d4783c5b2a21ada4aa0a032e289ff",
       "enabled": true,
-      "loadOrder": 19,
+      "loadOrder": 21,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9587,7 +9666,7 @@
       "version": "26.2",
       "sha1": "96932a034fff4cd0cad08ba12db730450c4772da",
       "enabled": true,
-      "loadOrder": 20,
+      "loadOrder": 22,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9611,7 +9690,7 @@
       "version": "Lower Shield.zip",
       "sha1": "b9f51386e4bcac7f402c15ea9fd4194c05b6dfc3",
       "enabled": true,
-      "loadOrder": 21,
+      "loadOrder": 23,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9662,7 +9741,7 @@
       "version": "v1",
       "sha1": "ee536a8763d6475231dce48b080eed8b20cefc3b",
       "enabled": true,
-      "loadOrder": 29,
+      "loadOrder": 31,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9698,12 +9777,29 @@
       }
     },
     {
+      "file": "SquirmingSilverfish [1.13 - 26.3]   (v2).zip",
+      "name": "Squirming Silverfish (+ LITE version) ",
+      "version": "SquirmingSilverfish [1.13 - 26.3]   (v2).zip",
+      "sha1": "f0b0ff9fef3f5e5371ce926a7ab1bbea67d31abf",
+      "enabled": true,
+      "loadOrder": 33,
+      "flaggedIncompatible": true,
+      "source": {
+        "curseforge": {
+          "projectId": 1712297,
+          "fileId": 9013579,
+          "slug": "squirming-silverfish",
+          "url": "https://www.curseforge.com/minecraft/texture-packs/squirming-silverfish/files/9013579"
+        }
+      }
+    },
+    {
       "file": "Updated_Engineering_v1.7.zip",
       "name": "Updated Engineering",
       "version": "Updated_Engineering_v1.7.zip",
       "sha1": "63c38fd48f109d949ddcb0359073c2a16fe8d558",
       "enabled": true,
-      "loadOrder": 28,
+      "loadOrder": 30,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9744,7 +9840,7 @@
       "version": "create_style_pretty_fluid_pipes-1.0.0",
       "sha1": "2c61693b522ffcab036cb850ec9e973fa2de54cf",
       "enabled": true,
-      "loadOrder": 27,
+      "loadOrder": 29,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {

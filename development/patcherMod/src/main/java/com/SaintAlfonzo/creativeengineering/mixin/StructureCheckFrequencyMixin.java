@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
-import com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies;
+import com.SaintAlfonzo.creativeengineering.worldgen.LocatePrediction;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureCheck;
@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * chunk that hasn't generated yet; /locate, explorer maps, cartographer trades and dolphins trust it
  * before loading the chunk. A slot whose frequency roll fails never gets that structure, so answer "no"
  * up front with the same roll (worldgen/StructureFrequencies) instead of loading the chunk to find out.
+ * Before it, the structure set's own frequency and exclusion zone (worldgen/LocatePrediction, stage A).
  */
 @Mixin(value = StructureCheck.class, remap = false)
 public class StructureCheckFrequencyMixin {
@@ -21,6 +22,6 @@ public class StructureCheckFrequencyMixin {
 	@Inject(method = "m_226755_(Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/levelgen/structure/Structure;)Z",
 			at = @At("HEAD"), cancellable = true, require = 1, remap = false)
 	private void creativeengineering$skipRejectedSlot(ChunkPos pos, Structure structure, CallbackInfoReturnable<Boolean> cir) {
-		if (StructureFrequencies.predictRejects((StructureCheck) (Object) this, structure, pos)) cir.setReturnValue(false);
+		if (LocatePrediction.rejectsAtHead((StructureCheck) (Object) this, structure, pos)) cir.setReturnValue(false);
 	}
 }

@@ -657,6 +657,27 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
   - Comprehensive loot table system, remapping all loot tables (using existing tables when possible). tree-like tag structure for tables (container/village/leatherworker/mediocre_loot_table, container/village/leatherworker/tresure_loot_table, container/ocean/shipwreck/tresurea, etc), item merging for many-item-to-many-table looting 
   - Cover missed lootr chests, fixed loot chests (bible verse written book + golden carrot). Inventory of every hand-placed container: [loot_catalog/handplaced.md](loot_catalog/handplaced.md) (2026-10-03)
   - Find island loot tables (only present in 1 or 2 structures), fold into other loot tables (list done 2026-10-03: [loot_islands.md](loot_islands.md), 172 tables; nothing folded yet)
+  - lower chalk frequencies
+  - ensure coins are removed from loot tables
+  - remove pneumaticcraft loot
+  - incraese food crate/sack frequency, boost further in farming/cooking structures
+  - add cans to loot pool, appear in villager chests, camps, ships, boosted in farming/cooking structures
+  - mca comb, thread, bouquets (boosted in flower houses), rings (rare, in homes or blacksmith) to villager houses
+  
+### Loot table changes
+
+- Basic loot table
+  - Mob loot (Rotten flesh, bones, string. rarer: spider eye, gunpowder. rarest: ender pearl)
+  - Crafting material (Sticks, leather, paper, feathers, clay balls, wool, coal, charcoal)
+  - Minable (Copper ingots, copper nugs, iron nugs. rarer: iron ingot, gold nugs, lapis, redstone)
+  - Emeralds (emeralds, rarely: emerald blocks)
+  - Tools (copper tools, copper shield, boats, flint and steel, bundle, leather/copper horse armor, fishing rod (new, damaged, damaged + low enchantment) arrows, bow/crossbow (new, damaged, damaged + low enchantment). rarer: quiver, shears, bucket, compass, clock, iron tools, spyglass, iron/gold shield, iron/gold horse armor)
+  - food (wheat, bread, potatoes, apples, carrots, beetroots, sugar, empty bowl, bonemeal. rarer: vanilla soup/stews, vanilla cooked food, crate/sacks of existing food in loot, vanilla cake cookies and pie, cans of vanilla food, )
+  - building (lantern, chain, glass, painting, ladder, armor stand, flower pot (any), copper bars)
+  - rare random (any dye, bricks, books, amethyst shard, candle, target, saddle, empty map, book and quill, vanilla banner pattern, any vanilla flower, lv1 enchanted book)
+
+- Blacksmith/armorer loot table
+  - tools (copper tools, copper armor, copper horse armor, copper anvil, bucket, shears, copper shield. rarer: iron tools, iron armor, iron/gold shield, gold tools+armor)
 
 ## 8. In-game test suite
 
