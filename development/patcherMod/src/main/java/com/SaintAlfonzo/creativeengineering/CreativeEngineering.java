@@ -87,6 +87,9 @@ public class CreativeEngineering
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check
         // widening in mixin/LivingEntityShieldMixin, everything tunable in CEConfig.SHIELDS.
         com.SaintAlfonzo.creativeengineering.shield.ShieldItems.register(modEventBus);
+        // Meta structures: the creativeengineering:meta structure type and its two piece types
+        // (worldgen/MetaStructure; the structures themselves are kubejs meta_structures.json).
+        com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure.register(modEventBus);
         // Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)
@@ -148,15 +151,29 @@ public class CreativeEngineering
         // Structure groups: per-structure frequency inside a structure_set, staged by
         // kubejs/server_scripts/worldgen/structure_overrides.js and frozen at ServerAboutToStartEvent.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies.class);
+        // Meta structures with an anchor take over slots their anchors won (worldgen/MetaSlots); its index is per world.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.TemplateBlockSwaps.class);
 
         // Mob spawn tuning: biome modifier type creativeengineering:tune_spawns (mob_spawns.json, written by
         // kubejs/server_scripts/worldgen/mob_spawns.js); its change record feeds /dumpspawns and is cleared on stop.
         com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.class);
 
+        // Bee nest tuning: biome modifier type creativeengineering:bee_nests (bee_nests.json, written by
+        // kubejs/server_scripts/worldgen/bee_nests.js) + the tree/nest/chunk counters behind /dumpbeenests.
+        com.SaintAlfonzo.creativeengineering.worldgen.BeeNests.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.BeeNests.class);
+
         // Structure biome rules (biome_rules in structure_groups.json): only allowed structures start in
         // the water biomes. Staged by structure_overrides.js, frozen at ServerAboutToStartEvent.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules.class);
+
+        // Biome fits (biome_fits.json + the tower/* structure tags): a structure's own biome list replaced by the
+        // fit's biome tags (mixin/StructureBiomesMixin). Staged by structure_overrides.js, frozen at
+        // ServerAboutToStartEvent (HIGHEST, before the biome rules read the lists).
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeFits.class);
 
         // Structure bases that don't match the ground (grass pads on volcanic peaks...): swapped for the
         // sampled local ground as templates place (mixin/StructureTemplateGroundMatchMixin). Registered for
@@ -179,6 +196,10 @@ public class CreativeEngineering
         // /ceplace: every structure or template matching a filter, laid out in rows (flat-world testing);
         // knobs in CEConfig [worldgen.mass_place].
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.MassPlacer.class);
+
+        // /celocate batch | census | stats: structure-search measurements on Async Locator's thread pool;
+        // the search prediction folds, miss logging and non-blocking loads are mixins. CEConfig [worldgen.locate].
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.LocateCommand.class);
 
         // Vinery's Wandering Winemaker on its own spawn timer, independent of the Wandering Trader;
         // knobs in CEConfig [wandering_trader]. Pool content is KubeJS (economy/wandering_trades.js).

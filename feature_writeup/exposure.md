@@ -12,7 +12,7 @@
 | Pack customisation (KubeJS recipes, tags, loot rules) | none yet; everything is upstream behaviour |
 
 - **What it is:** our own port of Exposure 1.9.19 and two of its addons from NeoForge 1.21.1 to Forge 1.19.2.
-  Everything is in one jar, `mods/exposureBackport-1.9.19-ce-19.2-02.jar` (pack 1.0.4), built from
+  Everything is in one jar, `mods/exposureBackport-1.9.19-ce-19.2-03.jar` (STAGED for pack 1.0.6; `-02` shipped with 1.0.4), built from
   [development/exposureBackport](../development/exposureBackport/). It replaced Exposure 1.6.0.
 - **Files to open:** the port's [README.md](../development/exposureBackport/README.md) (layout, conventions,
   every deviation from upstream), [Exposure.java](../development/exposureBackport/src/main/java/io/github/mortuusars/exposure/Exposure.java)
@@ -22,8 +22,8 @@
   (client and common), and per world `serverconfig/exposure-server.toml` and `serverconfig/exposure_polaroid-server.toml`.
   Nothing is in `defaultconfigs/`, so every world uses the defaults in section 2.
 - **Build and install:** `./gradlew :exposureBackport:installToMods --offline` from the instance root. Then
-  run `python3 tools/gen_pack_manifest.py`, and restage the deploy (`tools/build_deploy.py --version 1.0.3`)
-  before 1.0.3 goes out. The copy in `deploy/latest/` is older than `mods/`.
+  run `python3 tools/gen_pack_manifest.py` and stage a new pack version with `tools/build_deploy.py` (bump
+  `mod_version` once per pack release, never rebuild a released number).
 - **Keys:** Camera Controls (`key.exposure.camera_controls`) is unbound, so Sneak is used instead. That is the only key binding.
 
 ## 1. Overview
@@ -355,3 +355,7 @@ Before deploying 1.0.3:
 - 2026-10-01: fixed in game: photo stacks stuck on the top photo, Camera Stand film count not updating. User confirmed both fixed (EX-11, EX-17 PASSED).
 - 2026-10-01: Expanded ported (Java, data via `port_data.py --exclude 'assets/minecraft/shaders/*'`), build-time tag/loot merge added; scratch server and dev client checks passed; reinstalled to `mods/`. Catalog put on hold (user).
 - 2026-10-02: this writeup; `tools/check_jar.py` added (all PASS).
+- 2026-10-11: `-03` (album note/title text boxes take keys again, EX-13) ships in pack 1.0.5 (staged, not deployed);
+  the 1.0.5 removals delete `-02` on both machines.
+- 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
+  2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged (`-03`).

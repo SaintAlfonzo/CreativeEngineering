@@ -1,0 +1,3 @@
+# 1.19.2 port (2026-10-14): no /ride before 1.19.4, so the piglin is summoned as the hoglin's passenger.
+# Death loot table id fixed (the mod had "entitties").
+summon minecraft:hoglin ~ ~ ~ {Team:"ranger",Passengers:[{id:"minecraft:piglin",Health:150,Attributes:[{Name:"generic.max_health",Base:150}],Age:0,HandItems:[],HandDropChances:[0.1F,0F],ArmorItems:[{id:"minecraft:golden_boots",Count:1},{id:"minecraft:golden_leggings",Count:1},{id:"minecraft:leather_chestplate",tag:{display:{color:10500152}},Count:1},{id:"minecraft:leather_helmet",tag:{display:{color:10500152}},Count:1}],Tags:["pig_ranger"],Team:"ranger",DeathLootTable:"eugene:entities/pig_ranger"}]}

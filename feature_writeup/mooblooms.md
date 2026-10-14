@@ -8,11 +8,11 @@ Test prefix `MB-`. Sections 1-3 describe Buzzier Bees' moobloom, read from Buzzi
 
 | Part | Status |
 |---|---|
-| More Mooblooms 1.0 | `development/moreMooblooms`, jar `moreMooblooms-1.0.0.jar` (`build/libs/`). Install with `./gradlew :moreMooblooms:installToMods`, on the client and the server (same jar on both, 4.2). Verified on a scratch server (4.14). Rendering, JEI, feeding, grazing and the soul sand valley spawn still need a client (section 8) |
+| More Mooblooms 1.0 | `development/moreMooblooms`, jar `moreMooblooms-1.0.0.jar` (rebuilt and installed in `mods/` 2026-10-11 with azaleabloom's moss spawning; STAGED for pack 1.0.6, its first release, not deployed). Install with `./gradlew :moreMooblooms:installToMods`, on the client and the server (same jar on both, 4.2; the deploy ships it to both). Verified on a scratch server (4.14). Rendering, JEI, feeding, grazing and the soul sand valley spawn still need a client (section 8) |
 | Variants | 11 (4.4): moobloom (the default), sunbloom, rosebloom, peonybloom, onionbloom, bluebloom, orchidbloom, lilybloom, oxeyebloom, azaleabloom, witherbloom. Each grows a weighted pool of flowers; every vanilla flower is in at least one pool |
 | Variant data | generated from the variant table (4.4) by `python3 tools/gen_moobloom_variants.py`; checked by `python3 tools/check_moobloom_data.py` |
 | Breeding | any two mooblooms breed: 10 colour-mix combinations, otherwise same variant breeds true, otherwise a random calf (4.8) |
-| Spawning | the pack's rules follow the wild flowers (2.8): 25-100% of cows become mooblooms in 18 flower biomes (set per biome), 25% in 5 flowery ones, 2% in 34 with some flowers, each biome's variants matching its flowers; `rareChance` 0.002 applies to every other cow. The mod's own: rare witherblooms in soul sand valleys (4.9) |
+| Spawning | the pack's rules follow the wild flowers (2.8): 25-100% of cows become mooblooms in 18 flower biomes (set per biome), 25% in 5 flowery ones, 2% in 34 with some flowers, each biome's variants matching its flowers; `rareChance` 0.002 applies to every other cow; azaleablooms on moss in lush caves. The mod's own: rare witherblooms in soul sand valleys (4.9) |
 | Buzzier Bees | its moobloom, buttercup and Sunny are removed from outside, one config switch each (4.11). BB is under the Abnormals License 1.0: nothing of BB's ships in our jar (4.0) |
 | Pack side | per-biome spawn rules, cows in meadow, blooming plateau and skylands spring, `rareChance`, syringe line, `i.more_moobloom_spawn_egg`, JEED hides Sunny, Quark restock ignores the egg (4.12) |
 | JEI | one egg per variant with an info page, and a "Moobloom Breeding" category. More is planned for 1.1 (section 5) |
@@ -360,7 +360,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 
 | | |
 |---|---|
-| Name / id | **More Mooblooms**, `more_mooblooms`, version 1.0.0 (D22). Folder `development/moreMooblooms`, jar `moreMooblooms-<ver>.jar`, package `com.SaintAlfonzo.more_mooblooms`, GPLv3 |
+| Name / id | **More Mooblooms**, `more_mooblooms`, version 1.0.0 (D22; kept at 1.0.0 for the 2026-10-11 azaleabloom `spawns_in_dark_on` rebuild, by the user's choice). Folder `development/moreMooblooms`, jar `moreMooblooms-<ver>.jar`, package `com.SaintAlfonzo.more_mooblooms`, GPLv3 |
 | Build | a project in the root Gradle build (`settings.gradle`, `ce.forge-mod` convention plugin), the same as Incubation Additions: `./gradlew :moreMooblooms:build`, `./gradlew :moreMooblooms:installToMods` (moves other versions to `jar_archive/displaced/`) |
 | Hard dependencies | Forge, Minecraft 1.19.2 |
 | Optional dependencies | `buzzier_bees` (the O14 set), `jei` (plugin), `blueprint` (advancement modifier), the tag-compat mods (4.10), `farmersdelight` (wild onions on onionbloom, 4.4) |
@@ -410,7 +410,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 | Loot | `more_mooblooms:entities/moobloom`: our own table with the cow drops (leather, beef, cooked when on fire) |
 | Shearing (O9, O10) | 4.6 |
 | Grazing (O9) | `EatBlockGoal` at priority 5; `ate()` regrows. The sheep's head-down animation on the cow model (D18) |
-| Spawn placement | the cow's (`Animal.checkAnimalSpawnRules`: grass below, light), or a block that **the moobloom's variant** lists in `spawns_in_dark_on`, with no grass or light needed. Only the witherbloom lists any (soul sand, soul soil), so only witherblooms spawn on soul blocks in the dark. Two steps, because the variant isn't known at the first (4.14): the type-level placement check lets through a block that *any* variant lists; then `checkSpawnRules`, on the new moobloom, picks its variant and lets the block through only if that variant lists it |
+| Spawn placement | the cow's (`Animal.checkAnimalSpawnRules`: grass below, light), or a block that **the moobloom's variant** lists in `spawns_in_dark_on`, with no grass or light needed. The witherbloom lists soul sand and soul soil, the azaleabloom moss blocks, so only witherblooms spawn on soul blocks and only azaleablooms on moss in the dark. Two steps, because the variant isn't known at the first (4.14): the type-level placement check lets through a block that *any* variant lists; then `checkSpawnRules`, on the new moobloom, picks its variant and lets the block through only if that variant lists it |
 | Variant at spawn | a swapped cow: set by the swap (4.9). A moobloom a biome modifier spawns directly: its biome's rule, else a weighted random one, picked in `checkSpawnRules` (before `finalizeSpawn`). An egg: its `EntityTag.Variant`, else a weighted random one |
 
 The renderer is a `MobRenderer` with vanilla `CowModel` on our own model layer, the flower layer (4.7), and the
@@ -452,7 +452,7 @@ entity data.
 | `scale` | 1.0 | scale of the flower models (the azalea bushes, D4) |
 | `any_weight` | 1 | weight for "any" spawn rules, the rare roll and a plain egg; 0 = never wild |
 | `breed_weight` | `any_weight` | weight in the random calf pick (4.8) |
-| `spawns_in_dark_on` | none | block ids or `#tags` this variant may spawn on naturally with no grass or light (4.3, 4.9). Witherbloom: `["#more_mooblooms:spawnable_on_in_dark"]` (soul sand, soul soil). Not a table column: the generator keeps it from the existing file |
+| `spawns_in_dark_on` | none | block ids or `#tags` this variant may spawn on naturally with no grass or light (4.3, 4.9). Witherbloom: `["#more_mooblooms:spawnable_on_in_dark"]` (soul sand, soul soil). Azaleabloom: `["minecraft:moss_block"]` (lush caves, 4.9). Not a table column: the generator keeps it from the existing file |
 | `egg_colors` | the cow egg's | spawn egg base and spot colours |
 
 **Texture and name:** `assets/<ns>/textures/entity/moobloom/<path>.png`, 64x32 in the cow UV layout, and the lang
@@ -654,16 +654,16 @@ A cow that a rule under 100% leaves still gets the rare roll (any variant, by `a
 | `terralith:skylands_summer` | 50% | sunbloom 75, moobloom 16, oxeyebloom 9 |
 | `terralith:orchid_swamp` | 65% | orchidbloom 63, bluebloom 19, moobloom 18 |
 | `terralith:moonlight_valley` | 75% | sunbloom 66, bluebloom 19, lilybloom 9, orchidbloom 6 |
-| `terralith:blooming_plateau`, `terralith:blooming_valley` | 100% | lilybloom 28, oxeyebloom 17, onionbloom 15, sunbloom 11, bluebloom 10, rosebloom 10, moobloom 9 |
+| `terralith:blooming_plateau`, `terralith:blooming_valley` | 100% | even: 9 variants, every one but wither- and azaleabloom |
 | `terralith:lavender_forest`, `terralith:lavender_valley` | 75% | onionbloom 75, peonybloom 15, oxeyebloom 5, rosebloom 5, lilybloom 6 |
 | `terralith:sakura_grove`, `terralith:sakura_valley` | 65% | onionbloom 64, peonybloom 28, lilybloom 8 |
-| `terralith:cloud_forest` | 45% | lilybloom 48, oxeyebloom 42, bluebloom 10 |
-| `terralith:alpha_islands` | 25% | rosebloom 50, moobloom 50 |
-| `terralith:alpha_islands_winter` | 25% | rosebloom 50, moobloom 50|
-| `terralith:moonlight_grove` | 45% | bluebloom 50, lilybloom 23, orchidbloom 15, oxeyebloom 12 |
-| `meadow` | 65% | oxeyebloom 34, bluebloom 17, onionbloom 17, rosebloom 17, moobloom 15 |
-| `terralith:skylands_spring` | 50% | onionbloom 21, rosebloom 16, sunbloom 15, bluebloom 14, lilybloom 14, moobloom 13, peonybloom 7 |
-| `flower_forest` | 100% | lilybloom 20, rosebloom 20, peonybloom 15, oxeyebloom 14, onionbloom 10, sunbloom 8, bluebloom 7, moobloom 6 |
+| `terralith:cloud_forest` | 65% | lilybloom 48, oxeyebloom 42, bluebloom 10 |
+| `terralith:alpha_islands` | 35% | rosebloom 50, moobloom 50 |
+| `terralith:alpha_islands_winter` | 35% | rosebloom 50, moobloom 50|
+| `terralith:moonlight_grove` | 65% | bluebloom 50, lilybloom 23, orchidbloom 15, oxeyebloom 12 |
+| `meadow` | 75% | even: 9 variants, every one but wither- and azaleabloom |
+| `terralith:skylands_spring` | 75% | onionbloom 21, rosebloom 16, sunbloom 15, bluebloom 14, lilybloom 14, moobloom 13, peonybloom 7 |
+| `flower_forest` | 100% | even: 9 variants, every one but wither- and azaleabloom |
 | `sunflower_plains` | 100% | sunbloom 75, moobloom 25 |
 
 **Flowery (25%):**
@@ -696,18 +696,36 @@ A cow that a rule under 100% leaves still gets the rare roll (any variant, by `a
 | `windswept_savanna` | sunbloom 0.9, rosebloom 0.7, moobloom 0.4 |
 | `savanna_plateau`, `terralith:ashen_savanna`, `terralith:fractured_savanna`, `terralith:savanna_slopes` | rosebloom 0.9, sunbloom 0.6, moobloom 0.5 |
 
-**In numbers** (area-weighted over the biomes with cows, 38.8% of the surface, equal cow density assumed): about 10
-mooblooms per 100 cows (about 13 with every flower biome at 100%; about 4.8 under the old single rule: 7 biomes,
-1.8% of the surface, 100% each). Wild mooblooms by variant: onionbloom 15%, rosebloom 14%, lilybloom 14%,
-oxeyebloom 13%, bluebloom 13%, moobloom 8%, orchidbloom 8%, peonybloom 7%, sunbloom 7%, azaleabloom 0.1%.
+**In numbers** (area-weighted over the biomes with cows, 38.8% of the surface, equal cow density assumed;
+recounted 2026-10-11 after the flower biome retune): about 10.4 mooblooms per 100 cows (about 13 with every flower
+biome at 100%; about 4.8 under the old single rule: 7 biomes, 1.8% of the surface, 100% each). Mooblooms from cows by
+variant: lilybloom 14%, onionbloom 13%, rosebloom 13%, bluebloom 12%, orchidbloom 11%, peonybloom 10%, sunbloom 9%,
+oxeyebloom 9%, moobloom 8%, azaleabloom 0.2% (the rare roll; its own spawns are in lush caves, below, not cows).
 
-- **Azaleabloom** is in no rule: its flowers count only in lush caves (2.8, not covered). It comes from the rare
-  roll, feeding (azaleas) and breeding (moobloom + bluebloom).
+- **Even splits:** "every one but wither- and azaleabloom" = the 9 flower variants in equal parts (blooming plateau
+  and valley, flower forest: 11.11% each; meadow: 8.33% each).
+- **Azaleabloom** is in no cow rule: its flowers count only in lush caves (2.8, not covered). It spawns in lush caves
+  (below), and elsewhere comes from the rare roll, feeding (azaleas) and breeding (moobloom + bluebloom).
 - **Cows added for the rules (D27):** meadow, blooming plateau and skylands spring have no cows of their own;
   `kubejs/data/creativeengineering/forge/biome_modifier/moobloom_cows.json` adds them (weight 8, groups of 4).
 - **Close to a line:** swamp (0.23), windswept hills and caldera (0.23), shrubland (0.24) sit just under the 2% tier.
 - **Retuning by hand:** change a percent in the rule file and `/reload`; only new spawns change. After the wild
   flowers change, regenerate 2.8 and redo the affected rows (section 7).
+
+**Azaleablooms in lush caves (pack, 2026-10-11):** lush caves have no cows and no other creatures, so this is a
+direct spawn like the witherbloom's, not a swap:
+- `kubejs/data/creativeengineering/forge/biome_modifier/azaleabloom_lush_caves.json`: `forge:add_spawns`,
+  `more_mooblooms:moobloom` in `minecraft:lush_caves`, weight 10, groups of 1-3. It is the biome's only creature, so
+  every creature spawn attempt there picks it (the weight only matters if another creature is added).
+- a rule in `creativeengineering.json`: `minecraft:lush_caves` 100% azaleabloom (the direct-spawn variant).
+- azaleabloom's `spawns_in_dark_on: ["minecraft:moss_block"]` (mod data, 4.4): moss floors pass with no grass or
+  light. Other cave blocks only pass on the cow's rules (animal ground plus light; with patcherMod's
+  `spawn_ground`, mob_spawns.md, that includes rooted dirt and lit moss).
+
+How common: creatures are tried every 400 ticks, in chunks near a player, at random heights, and only while the
+player's creature cap (10) has room, so a lush cave a player explores fills up over a few minutes with azaleablooms
+on its moss, as long as the farm animals nearby don't fill the cap. Chunk generation never spawns them (it uses the
+surface biome). Needs the jar rebuilt on 2026-10-11 (still 1.0.0): with an older build dark moss fails (only the cow's ground-and-light check is left).
 
 **Witherblooms in soul sand valleys (R7):** the core switch pack `packs/more_mooblooms/witherbloom_spawns/`
 (config `witherbloomSpawns`, on by default) holds:
@@ -801,7 +819,7 @@ would mean patching BB.
 | Change | Where |
 |---|---|
 | Install | jar in `mods/` (`installToMods`), `mod_sides.md` row (both sides), `IN_TREE_MODS` row in `tools/build_deploy.py`, root `settings.gradle` |
-| Spawning (D12, D24, D27, D47) | `kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json` (35 per-biome rules, 4.9), `kubejs/data/creativeengineering/forge/biome_modifier/moobloom_cows.json` (cows, weight 8 in groups of 4, in meadow, blooming plateau and skylands spring), `rareChance = 0.002` |
+| Spawning (D12, D24, D27, D47) | `kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json` (35 per-biome rules plus lush caves, 4.9), `kubejs/data/creativeengineering/forge/biome_modifier/moobloom_cows.json` (cows, weight 8 in groups of 4, in meadow, blooming plateau and skylands spring), `.../azaleabloom_lush_caves.json` (mooblooms in lush caves, weight 10, groups of 1-3), `rareChance = 0.002` |
 | Config | `config/more_mooblooms-common.toml` (+ `configs_edited/`, + the server's `configs_edited/`) |
 | Beef sample (O5) | `sample_syringe.js`, one line |
 | item_dict | `i.more_moobloom_spawn_egg`; `i.buttercup` and `i.moobloom_spawn_egg` (BB's) kept for scripts that name them |
@@ -944,7 +962,7 @@ category lists the combinations as parent egg + parent egg -> calf egg with the 
 | Generators | `tools/gen_moobloom_variants.py` (variant table -> variant and breeding files), `development/moreMooblooms/tools/egg_colors.py` (egg colours from the coats) |
 | Checks | `tools/check_moobloom_data.py` |
 | Config | `config/more_mooblooms-common.toml` (+ `configs_edited/root_config/`) |
-| Pack side | [sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js), `kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json`, `kubejs/data/creativeengineering/forge/biome_modifier/moobloom_cows.json`, [jeed-client.toml](../config/jeed-client.toml), [quark-common.toml](../config/quark-common.toml) (Ignored Items), [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) (`i.more_moobloom_spawn_egg`, `i.moobloom_spawn_egg`, `i.buttercup`) |
+| Pack side | [sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js), `kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json`, `kubejs/data/creativeengineering/forge/biome_modifier/moobloom_cows.json` and `azaleabloom_lush_caves.json`, [jeed-client.toml](../config/jeed-client.toml), [quark-common.toml](../config/quark-common.toml) (Ignored Items), [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) (`i.more_moobloom_spawn_egg`, `i.moobloom_spawn_egg`, `i.buttercup`) |
 | Buzzier Bees jar | `mods/buzzier_bees-1.19.2-5.0.1.jar` (needs Blueprint 6.2.0); decompile with `python3 tools/decompile_mod.py mods/buzzier_bees-1.19.2-5.0.1.jar <out>` |
 | BB entity, render, Sunny | `com/teamabnormals/buzzier_bees/common/entity/animal/Moobloom.java`, `client/render/entity/MoobloomRenderer.java`, `client/render/entity/layers/MoobloomFlowerLayer.java`, `core/mixin/MobEntityMixin.java` (`Mob.isSunBurnTick` TAIL), `core/other/BBEvents.java` (hostile goal, phantom repel, bone meal) |
 | BB spawns, loot, config | jar `data/buzzier_bees/forge/biome_modifier/`, `data/buzzier_bees/tags/worldgen/biome/`, `data/buzzier_bees/loot_tables/entities/moobloom.json`; [buzzier_bees-common.toml](../config/buzzier_bees-common.toml) |
@@ -970,7 +988,7 @@ category lists the combinations as parent egg + parent egg -> calf egg with the 
   `wild_flowers.json` change, a worldgen mod update or biome tuning, regenerate 2.8 and redo the affected rules by
   hand, or automate it (the two approaches written up 2026-10-08, History).
 - Spawn rules: `python3 tools/check_moobloom_data.py` checks biome ids, variants and sums (36 rules on 2026-10-08:
-  the pack's 35 plus the witherbloom pack's).
+  the pack's 35 plus the witherbloom pack's; 37 since 2026-10-11 with lush caves).
 
 ## 8. In-game test suite
 
@@ -1024,13 +1042,13 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
 - [ ] **MB-63 Two by Two:** breed every animal including `more_mooblooms:moobloom` -> advancement granted (BB installed) / unaffected (BB absent, no Blueprint)
 
 **Spawning**
-- [ ] **MB-38 Flower biomes:** new chunks in blooming valley and flower forest -> no cows; lavender valley, sakura grove, orchid swamp, meadow -> about two in three cows are mooblooms (65-75%); the variants match the flowers (lavender mostly onionblooms, sakura onion- and peonyblooms, orchid swamp mostly orchidblooms, meadow mostly oxeyeblooms), never witherbloom or azaleabloom
+- [ ] **MB-38 Flower biomes:** new chunks in blooming valley and flower forest -> no cows; lavender valley, sakura grove, orchid swamp, meadow -> about two in three cows are mooblooms (65-75%); the variants match the flowers (lavender mostly onionblooms, sakura onion- and peonyblooms, orchid swamp mostly orchidblooms), meadow an even mix of the 9 flower variants, never witherbloom or azaleabloom
 - [ ] **MB-36 Sunflower plains:** new chunks there -> all mooblooms, three sunblooms to one moobloom, nothing else, no BB mooblooms
 - [ ] **MB-40 Few flowers:** desert-edge, snowy plains, river-side cows -> cows, with only the rare roll
 - [ ] **MB-94 Flowery tier:** highlands, birch forest, forested highlands -> about one cow in four is a moobloom; birch forest ones mostly lily- and oxeyeblooms
 - [ ] **MB-95 Some-flowers tier:** count over a large area of plains or taiga (`/execute if entity @e[type=more_mooblooms:moobloom]` vs cows) -> a few in 100 cows are mooblooms; taiga ones mostly blue- and lilyblooms, plains mixed
 - [ ] **MB-96 Old growth birch forest:** new chunks -> about a third of the cows are mooblooms, mostly peonyblooms
-- [ ] **MB-97 Skylands spring cows:** `/locate biome terralith:skylands_spring`, new chunks -> cows and mooblooms about half and half (the pack adds the cows)
+- [ ] **MB-97 Skylands spring cows:** `/locate biome terralith:skylands_spring`, new chunks -> about three in four cows are mooblooms (the pack adds the cows)
 - [ ] **MB-37 Rare roll:** set `rareChance` to 1.0, new chunks in a cow biome -> every cow is a moobloom, mixed variants, never witherbloom
 - [ ] **MB-39 Partial rule (format check):** a temporary `kubejs/data` rule of lilybloom 50% somewhere, then count over a large area (`/execute if entity @e[type=...]`) -> about half lilyblooms; remove the rule afterwards
 - [ ] **MB-42 Both spawn paths:** new chunks (chunk generation) and spawns in loaded chunks (natural) both swap
@@ -1038,6 +1056,7 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
 - [ ] **MB-41 Untouched sources:** cow spawn egg, cow breeding, `/summon minecraft:cow` -> always cows
 - [ ] **MB-92 Witherblooms in soul sand valleys:** spend time in a soul sand valley (or `/forceload` an area there and wait) -> now and then a witherbloom on soul sand or soul soil, never another variant; `witherbloomSpawns = false` and a new world -> none
 - [x] **MB-93 Dark placement:** a witherbloom can spawn on soul sand / soul soil without light; another variant can't (needs grass and light); nothing on stone (scratch, by script)
+- [ ] **MB-98 Azaleablooms in lush caves:** 2026-10-11 jar on both sides; explore a lush cave (or `/forceload` one and wait) -> azaleablooms appear on moss blocks, in the dark too, never another variant and never on stone or clay; with an older build none on dark moss
 - [ ] **MB-67 Standalone spawning:** MB-59 server (no pack data, default config) -> cows never become mooblooms on their own; witherblooms still appear in soul sand valleys
 
 **Buzzier Bees set and standalone**
@@ -1095,3 +1114,18 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
   file now holds bloom % x split (lavender's 106 split scaled to 75%). D49 added; MB-36/38/96/97 reworded. About 10
   mooblooms per 100 cows. The 1.0.0 jar in mods/ was already the current build (same md5 as build/libs, no newer
   source). Not run in game.
+- 2026-10-11: the user retuned the flower biome table (cloud forest and moonlight grove 65%, alpha islands 35%, meadow
+  and skylands spring 75%; blooming plateau/valley, meadow and flower forest an even split). The even split first
+  took all 10 non-wither variants, then, on the user's word, the 9 flower variants (azaleabloom out). Azaleablooms
+  now spawn in lush caves instead: the mod (kept at 1.0.0) gives azaleabloom `spawns_in_dark_on` moss block; the pack adds the
+  moobloom to lush caves (weight 10, groups of 1-3) with a 100% azaleabloom rule. About 10.4 mooblooms per 100
+  cows. MB-38/97 reworded, MB-98 added. Rebuilt jar installed in mods/ with patcherMod 1.0.5;
+  not run in game, server not updated.
+- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): `moreMooblooms-1.0.0.jar` (md5 9ced3342) with
+  `config/more_mooblooms-common.toml`, `kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json`, the two
+  biome modifiers (`moobloom_cows`, `azaleabloom_lush_caves`), (also 11 loose `kubejs/assets/*bloom.png`: identical copies of the jar's textures at a path nothing reads; they ship
+  but do nothing), the
+  syringe line and the Quark restock ignore. Single player with the staged jar (2026-10-11 14:42) loaded 11 variants,
+  37 spawn rules and 10 breeding rules without errors. The version stays 1.0.0 for this first release.
+- 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
+  2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.

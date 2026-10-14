@@ -8,21 +8,28 @@ the decisions and the tests.
 
 | Part | Status |
 |---|---|
-| Season types (arid, frozen, dry, tropical, temperate, adaptive) | BUILT 2026-10-08, dry + temperate + oceans 2026-10-09, in patcherMod 1.0.5 (`build/libs/`, not in `mods/`). Server side checked on scratch servers (sections 6.2, 6.3); client side (rendering, tint, HUD) not run yet |
+| Season types (arid, frozen, dry, tropical, temperate, adaptive) | BUILT 2026-10-08, dry + temperate + oceans 2026-10-09, in patcherMod 1.0.5 (in `mods/`, md5 68509043), STAGED for pack 1.0.6 (not deployed). Server side checked on scratch servers (sections 6.2, 6.3); client side (rendering, tint, HUD) not run yet |
 | Biome lists | `kubejs/generation_scripts/worldgen/season_types.json` -> tags `creativeengineering:seasons/<type>` (`kubejs/server_scripts/tags/seasontags.js`) |
 | Arid | 15 sand/terracotta biomes: no rain all year, no seasonal temperature or tint, summer crops all year. HUD: "Arid", day N of the year |
-| Frozen | 25 cold land biomes plus frozen and deep frozen ocean: snow all year (held at 0.1 or colder), no melting, no seasonal tint, winter crops only. HUD: "Frozen", day N of the year |
+| Frozen | 24 cold land biomes plus frozen and deep frozen ocean: snow all year (held at 0.1 or colder), no melting, no seasonal tint, winter crops only. HUD: "Frozen", day N of the year |
 | Dry | 11 savannas, shrublands and hot grasslands (arid_highlands, savanna_badlands): Serene Seasons' wet/dry cycle, rain in Mid Wet only (Late Winter + Early Spring), as the mod does for a savanna |
 | Tropical | 11 jungles and swamps plus the warm and lukewarm oceans: wet/dry cycle, rain in every season but Mid Dry |
-| Temperate | ocean, cold ocean (and deep variants), temperate_highlands: Serene Seasons' temperate seasons, also above 0.8 |
+| Temperate | ocean, deep ocean, temperate_highlands: Serene Seasons' temperate seasons, also above 0.8 |
+| Cold (3.4) | BUILT 2026-10-11, patcherMod 1.0.6. 22 biomes (taiga x4, windswept x4, highlands, forested_highlands, alpine_highlands, shield, shield_clearing, steppe, caldera, haze_mountain, yellowstone, yosemite cliffs/lowlands, cloud_forest, cold and deep cold ocean): temperate seasons, snow exactly Late Autumn to Early Spring, rain otherwise |
+| Permanent seasons (3.4) | BUILT 2026-10-11, same jar. The four Terralith skylands: one season all year. Winter = frozen shown as "Winter"; summer never snows; spring/autumn split the year Early 1/4, Mid 1/2, Late 1/4 on the HUD and snow only in their Early Spring / Late Autumn (the world's winter) |
 | Adaptive | 7 rivers/beaches: each column takes the nearest land biome's type and temperature |
 | Untagged | Serene Seasons' own rules (tropical when on its list or warmer than 0.8, temperate otherwise; blacklisted = vanilla). Tagged biomes ignore the blacklist |
+| Snow line (3.4) | BUILT 2026-10-11, patcherMod 1.0.6 in `mods/`, not run in game. `snowLineY` 320 (build height): below it height alone never turns rain into snow; at and above it temperate and cold biomes always snow (a height gauge for flyers). Frozen and permanent seasons unaffected |
+| Snow seasons (3.4) | BUILT 2026-10-11, same jar. `season_types.json` `snow_seasons`: ocean, deep_ocean, meadow, basalt_cliffs, blooming_plateau, granite_cliffs, lush_valley, valley_clearing, white_cliffs snow in winter only |
+| Rain and cloud height (3.4) | 2026-10-11: Pretty Rain `cloudHeight` 191 -> 350 (`config/prettyrain.json5`); Rubidium Extra `cloud_height` 192 -> 350 (`config/sodium-extra-options.json`, vanilla clouds, which are off; Distant Horizons' clouds follow the same value via `DhCloudHeightMixin`). Both client, backed up in `configs_edited/root_config/` |
 
 **Files to open first:** `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/seasons/SeasonTypes.java`
 (everything shared, with the design comment), then the mixins `Season*Mixin.java` in `mixin/`.
 
-**Knobs:** `season_types.json` (which biome is which, `/reload`); `config/creativeengineering-common.toml`
-`[seasons]`: `enabled` (false = Serene Seasons alone), `adaptiveRadius` (how far rivers/beaches look for land, default 64).
+**Knobs:** `season_types.json` (which biome is which, and `snow_seasons`, `/reload`); `config/creativeengineering-common.toml`
+`[seasons]`: `enabled` (false = Serene Seasons alone), `adaptiveRadius` (how far rivers/beaches look for land, default 64),
+`snowLineY` (default 320, the build height; -64 = vanilla height snow); `config/prettyrain.json5` `cloudHeight` (highest y
+rain particles spawn at, 350); `config/sodium-extra-options.json` `cloud_height` (vanilla cloud layer, 350).
 
 **How to measure:** stand in the biome during rain (`/weather rain`), set the season with `/season set <season>`
 (Serene Seasons' command). F3 shows the biome. The probe used on the scratch server (section 6.2) prints rain,
@@ -203,14 +210,105 @@ the call just before (`MutableBlockPos.set` in renderSnowAndRain, `getHeightmapP
 | Mixin | Side | Target | Does |
 |---|---|---|---|
 | `SeasonBiomeConfigMixin` | both | `BiomeConfig.usesTropicalSeasons`, `enablesSeasonalEffects` | tagged types answer first (dry/tropical yes); any tagged biome has seasons despite the blacklist |
-| `SeasonHooksTypesMixin` | both | `SeasonHooks` | oceans freeze only when frozen-tagged (`shouldFreezeWarmEnoughToRainHook`); adaptive temperature and gameplay rain; arid never rains; dry rains in Mid Wet only; arid/frozen no offset; frozen cap; temperate offset above 0.8 (redirect of `getBaseTemperature`, SRG `m_47554_`) |
-| `SeasonFertilityMixin` | both | `ModFertility.isCropFertile` | adaptive biome; arid tropical rule; frozen winter-only |
+| `SeasonHooksTypesMixin` | both | `SeasonHooks` | snow line and snow seasons (`SeasonTypes.applySnowRules` at RETURN of `getBiomeTemperature(Level, ...)`, 3.4); oceans freeze only when frozen-tagged (`shouldFreezeWarmEnoughToRainHook`); adaptive temperature and gameplay rain; arid never rains; dry rains in Mid Wet only; arid/frozen no offset; frozen cap; temperate offset above 0.8 (redirect of `getBaseTemperature`, SRG `m_47554_`) |
+| `SeasonFertilityMixin` | both | `ModFertility.isCropFertile` | adaptive biome; arid tropical rule; frozen and permanent winter winter-only; permanent seasons count as their season (`ISeasonState.getSeason` redirect) |
 | `SeasonHooksClientMixin` | client | `SeasonHooks.getLevelRendererPrecipitation` | adaptive column for the renderer |
 | `SeasonRainColumnMixin` | client | `LevelRenderer` renderSnowAndRain / tickRain | records the column (SRG names, no refmap) |
-| `SeasonColorUtilMixin` | client | `SeasonColorUtil` | no tint for arid/frozen |
-| `SeasonHudHelperMixin` | client | SeasonHUD `ForgeSeasonHelper` | adaptive biome; arid/frozen season, day of year, year length |
+| `SeasonColorUtilMixin` | client | `SeasonColorUtil` | no tint for arid/frozen/permanent winter; permanent spring/summer/autumn tinted as their own sub-season |
+| `SeasonHudHelperMixin` | client | SeasonHUD `ForgeSeasonHelper` | adaptive biome; arid/frozen season, day of year, year length; permanent seasons: season, Early/Mid/Late part, day and length |
 | `SeasonHudCurrentSeasonMixin` | client | SeasonHUD `CurrentSeason.getTranslation(boolean)` | "Arid" / "Frozen" name (lang `desc.seasonhud.season.arid/.frozen`) |
 | `PrettyRainSeasonMixin` | client | Pretty Rain `WeatherParticleSpawner` spawnParticle / getBiomeSound (@Pseudo) | both `getPrecipitation` reads answer from `SeasonTypes.precipitationAt`: adaptive column, season rule, rain or snow by seasonal temperature |
+
+### 3.4 Snow line, cold, permanent seasons, snow seasons, rain and cloud height (2026-10-11)
+
+Two requests the same day. First: rain drawn up to y500, snow lines at least 500 blocks (skylands_summer was
+snowing), temperate oceans snowing in winter only, and a list of the biomes snowing in Early Spring or Late Autumn.
+Second, after the user's review of that list (weather_by_biome.md 2.8): the list below marked cold, the rest winter
+only; rain and clouds at 350; the snow line moved to build height as a gauge; permanent seasons for the skylands.
+
+**Why skylands_summer snowed.** It was an untagged 0.5 biome, so Serene Seasons treated it as temperate: 0.1 at sea
+level in Early Spring and Late Autumn (below 0.15, snow) and 0.3 in Mid Spring/Autumn. The islands float high, and
+vanilla cools 0.05 per 40 blocks above y80, so at island height Mid Spring and Mid Autumn snowed too. Every
+untagged biome had the same height snow: plains and forests above about y280 in Early Spring, windswept hills above
+y120 in summer.
+
+**Snow line** (`SeasonTypes.applySnowRules`, CEConfig `[seasons] snowLineY`, default 320 = overworld build height).
+Applied to every temperature Serene Seasons hands out for a real level (`getBiomeTemperature(Level, ...)` at RETURN,
+after the river/beach swap), so the renderer, Pretty Rain, gameplay rain, snow layers, ice and melting all agree.
+- Below the line, a column that would snow (under 0.15) is checked at y80 in the same column. If y80 is warm enough to
+  rain this sub-season, the column reads 0.15 (just warm enough to rain and melt). Only ever raised. Every dimension.
+- At and above the line, temperate and cold biomes (tagged, or temperate by Serene Seasons' rule) read at most 0.1:
+  snow in every season. No block can sit at y320, so no snow lands; falling snow only tells a flyer they are above
+  build height. Overworld only (Serene Seasons' dimensions). Tropical, dry and arid biomes keep vanilla height
+  cooling above the line (a jungle would need y700+).
+- Frozen and permanent-season biomes are skipped (their own rules below).
+- The first version (same day) used a minimum of y500 and no gauge.
+
+**Cold** (`season_types.json` `cold`, tag `creativeengineering:seasons/cold`, 22 biomes chosen by the user): Serene
+Seasons' temperate seasons (offset, tint, crops, HUD), then `SeasonTypes.seasonTemperature` holds it at 0.1 or colder
+from Late Autumn to Early Spring and at 0.15 or warmer the rest of the year. Every listed biome is 0.5 or colder, so the
+cap changes nothing in practice; the floor is what stops taiga (Mid Spring/Autumn) and windswept/birch taiga/yellowstone
+(all of spring and autumn) snowing early. cold_ocean and deep_cold_ocean moved here from temperate; like temperate
+oceans they get snow but never ice over (`vanillaIce`). windswept_savanna stays dry.
+
+**Snow seasons** (`season_types.json` `snow_seasons`: biome -> sub-seasons it may snow in; `early_spring` ...
+`late_winter` or a whole season name; `[]` = never). `seasontags.js` turns it into one tag per sub-season,
+`creativeengineering:snow/no_<sub_season>`. Below the snow line, a biome in the current sub-season's tag reads 0.15
+instead of anything colder. Only in Serene Seasons' dimensions; frozen and permanent seasons ignore it; rivers and
+beaches follow their land's entry. Winter only: ocean, deep_ocean (first request), and the biomes from the 2.8 list the
+user did not mark cold: meadow, basalt_cliffs, blooming_plateau, granite_cliffs, lush_valley, valley_clearing,
+white_cliffs. (forested_highlands was briefly here, then moved to cold at the user's request.)
+
+**Permanent seasons** (`permanent_spring|summer|autumn|winter`, one Terralith skylands biome each). No seasonal
+temperature offset (`noSeasonalOffset`), then `seasonTemperature`:
+
+| Type | Weather | HUD (SeasonHUD) | Grass tint | Crops |
+|---|---|---|---|---|
+| permanent_winter (skylands_winter) | as frozen: snow all year, held at 0.1, nothing melts | "Winter", day of the year | none (as frozen) | winter only (as frozen) |
+| permanent_summer (skylands_summer) | rain, never snow (0.15 or warmer) | "Summer", day of the year | Mid Summer | summer |
+| permanent_spring (skylands_spring) | snow in its Early Spring, rain otherwise | Early / Mid / Late Spring (with sub-seasons shown) and the day within that part; day of its year otherwise | its own part (Early/Mid/Late Spring) | spring |
+| permanent_autumn (skylands_autumn) | snow in its Late Autumn, rain otherwise | Early / Mid / Late Autumn, same day rule | its own part | autumn |
+
+Spring and autumn calendar (`SeasonTypes.permanentPart/permanentDate`): the year is split Early 1/4 (3 Serene Seasons
+sub-seasons), Mid 1/2 (6), Late 1/4 (3). The snowy quarter is placed on the world's winter so the whole world's snow
+lines up and the temperature code can read it from the sub-season alone: spring's year starts at the world's Early
+Winter (Early Spring = world winter, Mid = world spring + summer, Late = world autumn); autumn's starts at the world's
+Early Spring (Early = world spring, Mid = world summer + autumn, Late = world winter). Snow is 1/4 of the year on both.
+On the server (`sub_season_duration` 10): Early and Late 30 days, Mid 60, year 120; single-player worlds (Serene
+Seasons' default 8): 24, 48 and 96. Code: `SeasonHooksTypesMixin` (temperature),
+`SeasonFertilityMixin` (redirects `ISeasonState.getSeason` in `isCropFertile` to the permanent season),
+`SeasonColorUtilMixin` (repeats the tint call with the permanent sub-season), `SeasonHudHelperMixin` (season,
+part, day, length). skylands_winter moved out of frozen; the HUD name override ("Frozen") is only for frozen.
+
+**World generation is unchanged.** Worldgen uses vanilla temperatures, so `freeze_top_layer` still puts snow above the
+vanilla line (4.3: birch_taiga 68% covered, taiga and windswept_spires on high ground). In game, Serene Seasons'
+melting sees 0.15 there whenever y80 rains, so those caps melt in the first warm sub-season.
+
+**Rain height.** Pretty Rain spawns weather particles in a 10-block sphere around the camera
+(`WeatherParticleSpawner.update`). With `spawnAboveClouds` false it clamps the spawn y to `cloudHeight` (was 191).
+Above about y201 every particle then spawned more than 10 blocks below the camera, was flagged out of range on its
+first tick (`removeIfOOB`) and faded out at alpha 0, so nothing was visible. `cloudHeight` is now 350 (500 for a few
+hours on 10-11): rain is drawn up to about y360, and with the gauge, snow falls around a flyer between y320 and y360.
+
+Performance: the number of spawn attempts per tick is the same at any height (`particleDensity` 75, storm 150, times
+the rain level). Each attempt does the same heightmap check, biome read and `SeasonTypes.precipitationAt` call wherever
+the camera is; the clamp only moved the y. What changes is particle lifetime between y201 and y350: particles that used
+to die on their first tick now live like ground rain (rain 50 ticks, snow 100). Up in open air there is no ground to
+stop them, so rain leaves the 10-block sphere within about 20 ticks of falling (gravity 1.0) and fades out. So flying
+in a storm now costs what standing in a storm on the ground costs, capped as before by `maxParticleAmount` 1500. No
+new worst case. Rain sound is unchanged: Pretty Rain only plays it when the surface is within 10 blocks of the camera.
+The snow line adds one Serene Seasons temperature read (at y80) for a column that would otherwise snow between y81 and
+y319, and one tag lookup per temperature read.
+
+**Cloud height.** Rubidium Extra's `cloud_height` (192 -> 350) moves the vanilla cloud layer (`MixinDimensionEffectsOverworld`
+on `DimensionSpecialEffects.getCloudHeight`). But vanilla clouds are off (`options.txt` `renderClouds:"false"`, set by
+Distant Horizons' `overrideVanillaGraphicsSettings`). The clouds on screen are Distant Horizons' LOD clouds
+(`enableCloudRendering = true`), placed by `CloudRenderHandler` at the level's max height + 200 (y520 in the overworld)
+on every frame, ignoring the vanilla value. `DhCloudHeightMixin` (client, @Pseudo, require 1) redirects that
+`ILevelWrapper.getMaxHeight()` read in `CloudRenderHandler.preRender` to the vanilla cloud height - 200, so DH's clouds
+sit at the vanilla height (350, Rubidium Extra) and the one setting moves both layers. The same local drives DH's
+culling. Dimensions whose vanilla cloud height is NaN keep DH's own. DH's jar is in `patcherMod/libs/` for compiling;
+a DH update that renames `preRender` will fail the mixin at startup (require 1), which is the signal to recheck.
 
 ## 4. Limits and decisions
 
@@ -436,7 +534,7 @@ Ice, same day after the ocean-ice change, at real ocean positions from the grid 
 ## 8. In-game test suite
 
 Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-season names: `EARLY_SPRING` ...
-`LATE_WINTER`; it jumps to the start of that sub-season) and force rain with `/weather rain`. Install the 1.0.5 jar from
+`LATE_WINTER`; it jumps to the start of that sub-season) and force rain with `/weather rain`. Install the current patcherMod jar from
 `development/patcherMod/build/libs/` first (client and server).
 
 - [ ] **WE-01 boot:** start the game and join a world → no mixin errors in `logs/latest.log` mentioning `Season` (grep `InvalidInjection\|Season.*Mixin`)
@@ -462,6 +560,18 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
 - [ ] **WE-22 warm ocean:** rain, `MID_WINTER` → rain (no snow, no ice); `LATE_SUMMER` → nothing (Mid Dry)
 - [ ] **WE-23 frozen ocean:** rain, `MID_SUMMER` → snow; open water between ice sheets freezes over with time
 - [ ] **WE-24 Pretty Rain:** warm river through a desert, rain, any season → no rain particles or rain sound over the water (sand dust where the bed is sand is fine); plains, rain, `MID_WINTER` → snow particles, not rain
+- [ ] **WE-25 Cool Rain:** Cool Rain (added in 1.0.5) plays its own per-block rain sounds from a HEAD inject in the client rain tick and reads the biome's own precipitation (`Biome.getPrecipitation`), not `SeasonTypes.precipitationAt`; not checked against the season types. Warm river through a desert, rain, any season → no rain sound over the water (if Cool Rain's sounds play there, it needs the same treatment as `PrettyRainSeasonMixin`); plains, rain, `MID_SUMMER` → Cool Rain's per-block sounds (leaves, metal, glass) play
+- [ ] **WE-26 skylands summer:** `terralith:skylands_summer` (`/locate biome`), rain, `EARLY_SPRING`, `MID_SPRING` and `MID_WINTER` → rain every time, never snow; HUD "Summer"
+- [ ] **WE-27 ocean winter only:** `minecraft:ocean` out at sea, rain: `EARLY_SPRING` and `LATE_AUTUMN` → rain; `EARLY_WINTER` → snow. `minecraft:cold_ocean` (cold): `EARLY_SPRING` and `LATE_AUTUMN` → snow, `MID_SPRING` → rain, no ice forms in any season
+- [ ] **WE-28 snow line:** plains or birch forest, rain, `MID_SUMMER`: stand on the highest ground below y320 → rain, not snow; generated snow on high ground (birch taiga) melts over time
+- [ ] **WE-29 frozen keeps snow:** frozen peaks or jagged peaks, rain, `MID_SUMMER` → snow at the summit
+- [ ] **WE-30 rain height and gauge:** plains, rain, `MID_SUMMER`, fly (creative) up from the ground: rain around you up to y319, snow from y320 to about y360, nothing above. F3 particle count (`P:`) stays at or below the ground-level count
+- [ ] **WE-31 snow seasons reload:** move a biome into `snow_seasons` (e.g. `"minecraft:plains": ["mid_winter"]`), `/reload`, rain, `EARLY_WINTER` in plains → rain
+- [ ] **WE-32 cold:** taiga, rain: `LATE_AUTUMN`, `MID_WINTER`, `EARLY_SPRING` → snow; `MID_SPRING`, `MID_AUTUMN` → rain (before: snow). Windswept hills `LATE_SPRING` → rain. HUD shows the normal four seasons
+- [ ] **WE-33 skylands winter:** `terralith:skylands_winter`, rain, `MID_SUMMER` → snow; HUD shows "Winter" (not "Frozen") with day N of the year; grass keeps its colour across `/season set`; wheat does not grow, a winter crop does
+- [ ] **WE-34 skylands spring:** HUD with sub-seasons on: `/season set EARLY_WINTER` → "Early Spring", day 1 of 30 (24 in single-player), rain → snow; `/season set EARLY_SPRING` → "Mid Spring", day 1 of 60 (48), rain → rain; `/season set EARLY_AUTUMN` → "Late Spring", day 1 of 30 (24). Grass tint follows (Early Spring tint in world winter). Spring crops grow in world summer
+- [ ] **WE-35 skylands autumn:** `/season set EARLY_SPRING` → "Early Autumn" day 1 of 30 (24 in single-player), rain; `EARLY_SUMMER` → "Mid Autumn" day 1 of 60 (48); `EARLY_WINTER` → "Late Autumn" day 1 of 30 (24), snow. HUD with sub-seasons off: "Autumn", day N of 120 (96)
+- [ ] **WE-36 clouds:** overworld, look up from the ground and fly up: Distant Horizons' clouds at y350 (fly through them there; nothing at y520); rain particles reach the cloud layer. Turn vanilla clouds on (Video Settings) → vanilla layer at the same height
 - [ ] **WE-17 switch off:** `[seasons] enabled = false` in creativeengineering-common.toml, rejoin → deserts rain again in Mid Wet (Serene Seasons alone)
 
 ## 7. History
@@ -481,3 +591,26 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
   Then: cold and plain oceans no longer ice over (snow only); frozen oceans still freeze. Probe in 6.3, jar reinstalled.
 - 2026-10-09: "arid warm river rains" traced to Pretty Rain replacing the vanilla weather renderer (section 7).
   `PrettyRainSeasonMixin` + `SeasonTypes.precipitationAt`; jar built, not installed.
+- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): patcherMod 1.0.5 in `mods/` holds the season types and
+  `PrettyRainSeasonMixin`; Pretty Rain and Cool Rain are new mods in the same payload. Cool Rain's rain sounds come
+  from its own client mixin that reads the biome's precipitation directly, so they may ignore the season types
+  (WE-25 added, not fixed).
+- 2026-10-11 (later): snow line and snow seasons (3.4). `SeasonTypes.applySnowRules` from `SeasonHooksTypesMixin`,
+  CEConfig `[seasons] snowLineMinY` (500), `season_types.json` `snow_seasons` -> tags `creativeengineering:snow/no_*`
+  (seasontags.js, checked in the pack's Rhino). ocean and deep_ocean snow in winter only, skylands_summer never.
+  Generator models both and lists the rest in weather_by_biome.md 2.8. Pretty Rain `cloudHeight` 191 -> 500.
+  patcherMod 1.0.6 built and installed in `mods/` (1.0.5 moved to jar_archive/displaced); not run in game
+  (WE-26..31).
+- 2026-10-11 (later still): user's picks from the 2.8 list. New type **cold** (21 biomes: snow Late Autumn to Early
+  Spring only, `seasonTemperature` cap/floor); the rest of the list winter only via `snow_seasons`; skylands_summer
+  out of `snow_seasons`. **Permanent seasons** for the four skylands (HUD, tint, crops, calendar 1/4-1/2-1/4 with the
+  snowy quarter on the world's winter). Snow line `snowLineMinY` 500 -> `snowLineY` 320 with the build-height gauge.
+  Pretty Rain `cloudHeight` 500 -> 350, Rubidium Extra `cloud_height` 192 -> 350; found the visible clouds are
+  Distant Horizons' at y520 (3.4). seasontags.js checked in the pack's Rhino; jar rebuilt and reinstalled (md5
+  09a5f9d4), not run in game (WE-26..36).
+- 2026-10-11 (end): forested_highlands moved from snow_seasons winter-only to cold (22). `DhCloudHeightMixin`: Distant
+  Horizons' clouds follow the vanilla cloud height (350) instead of build height + 200. Jar reinstalled (md5 233d304b),
+  not run in game.
+- 2026-10-14: ships in pack **1.0.6** (STAGED 2026-10-14, update from 1.0.4; 1.0.5 was never deployed): the season types
+  and Pretty Rain mixin from 1.0.5 plus the 2026-10-11 snow line, snow seasons, cold type, permanent skylands seasons
+  and `DhCloudHeightMixin`, all in patcherMod 1.0.6. Not run in game (WE-26 to WE-36). [plan_1.0.6.md](plan_1.0.6.md).

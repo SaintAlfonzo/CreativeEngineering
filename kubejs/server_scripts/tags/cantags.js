@@ -36,18 +36,3 @@ ServerEvents.tags('item', e => {
 	if (missing.length) console.warn('[can servings] not item ids in item_dict: ' + missing.join(', '))
 	console.log('[can servings] ' + total + ' cans: ' + Object.keys(byCount).map(n => byCount[n].length + ' x ' + n).join(', '))
 })
-
-// Canning ingredient groups (server_scripts/cooking/canning.js): varieties with the same value canned into one can.
-// vinery's own #vinery:red_grape / #vinery:white_grape mix the small grapes with jungle grapes (5, 6), which can at a
-// different ratio, so they get their own tags.
-ServerEvents.tags('item', e => {
-	var t = global.tags
-	var i = global.item
-
-	t.add(e, i.any_grape, [
-		i.red_grape, i.white_grape,
-		i.savanna_grapes_red, i.savanna_grapes_white,
-		i.taiga_grapes_red, i.taiga_grapes_white,
-	])
-	t.add(e, i.any_jungle_grape, [i.jungle_grapes_red, i.jungle_grapes_white])
-})

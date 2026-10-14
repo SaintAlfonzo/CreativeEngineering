@@ -4,7 +4,7 @@ Writes pack/manifest.json and pack/MODLIST.md: everything needed to rebuild this
 mods/, resourcepacks/ and shaderpacks/ from their download sources, without committing the jars.
 
 Sources of truth:
-  mods/, resourcepacks/, shaderpacks/, disabledmods/  -> what is actually installed
+  mods/, resourcepacks/, shaderpacks/, disabledmods/[archive/] -> what is actually installed
   instance.json (ATLauncher)                          -> CurseForge / Modrinth ids, versions, loader
   mod_sides.md                                        -> client / server / both (same lookup as
                                                          tools/dump_server_mods.py)
@@ -120,8 +120,9 @@ def main():
             unsided.append(jar)
         mods.append(build('mods', 'mods', jar, {'modId': modid, 'side': side}))
 
-    disabled = [build('mods', 'disabledmods', jar, {'modId': jar_modid(os.path.join(ROOT, 'disabledmods', jar))})
-                for jar in list_files('disabledmods', ('.jar', '.disabled'))]
+    disabled = [build('mods', folder, jar, {'modId': jar_modid(os.path.join(ROOT, folder, jar))})
+                for folder in ('disabledmods', 'disabledmods/archive')
+                for jar in list_files(folder, ('.jar', '.disabled'))]
 
     enabled, incompatible = enabled_resource_packs()
     order = {p[len('file/'):]: i for i, p in enumerate(enabled) if p.startswith('file/')}

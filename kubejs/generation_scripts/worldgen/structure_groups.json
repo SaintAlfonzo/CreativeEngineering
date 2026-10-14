@@ -2,10 +2,11 @@
   "_readme": {
     "what": "Every structure's spawn rate, in one file. A GROUP is one shared structure_set (creativeengineering:group/<name>) holding every structure in the structure tag group/<name> (structure_tags.json): all members share its grid, so no two of them ever start closer than its separation, whatever mod they come from. Every structure that is in no group keeps its own set and is tuned under \"standalone\". Rejoin the world to apply (new chunks only); structure_tag_report.md shows what the game applied.",
     "group placement": "spacing: one grid slot per spacing x spacing chunks (the group's top density). separation: minimum chunks between any two members. salt: which grid (leave it). Optional: spread_type, frequency (chance per slot for the whole group), locate_offset, exclusion_zone {other_set, chunk_count} (keep off another set's grid slots; it checks slots, not real structures, so keep chunk_count small).",
-    "per structure": "weight: who wins a slot where several members can spawn (relative, whole numbers). frequency: 0..1, chance that the winner really spawns; otherwise the slot stays empty, so lowering one never makes another more common. enabled: false removes it. Where a structure is the only member that fits the biome, it gets every slot x its frequency.",
+    "per structure": "weight: who wins a slot where several members can spawn (relative, whole numbers). frequency: 0..1, chance that the winner really spawns; otherwise the slot stays empty, so lowering one never makes another more common. enabled: false removes it. Where a structure is the only member that fits the biome, it gets every slot x its frequency. fit_base: written by --fit-rates for structures in a biome fit (biome_fits.json) = the weight and frequency it had on its mod's own biome list; --fit-rates solves from it. fit_keep: true lets --fit-rates raise the weight above fit_base when new neighbours crowd the structure's biomes, so it keeps its density (the towers); others are capped instead. replaces + share: this member never wins a slot by its weight; it takes share (0..1) of the slots the named member of the same group wins and keeps, where both can stand (the vanilla swamp hut in YUNG's witch hut slots), so the two together are as common as the named one was. Keep its weight at 1. CEConfig [worldgen.systems] structureReplacements turns them off.",
     "standalone": "Keyed by the structure_set id in structure_config.json. placement: only the fields you change (spacing, separation, frequency, count, locate_offset...; the rest come from \"original\" in structure_config.json). structures: frequency / enabled / optional weight, same meaning as in a group.",
     "moving a structure": "Edit the group/* tags in structure_tags.json, then run python3 tools/gen_structure_groups.py: it adds the new member with a weight and frequency fitted to its mod default and leaves everything else alone. A tagged member with no entry here still works (the game fills in a rough default and flags it).",
-    "estimates": "python3 tools/gen_structure_groups.py --check rewrites structure_group_estimates.md: expected structures per area for every structure, from its real biome areas."
+    "estimates": "python3 tools/gen_structure_groups.py --check rewrites structure_group_estimates.md: expected structures per area for every structure, from its real biome areas.",
+    "biome_frequency": "Group-level, optional: {\"#biome tag\" | \"biome id\": factor 0..1, ..., \"default\": factor}. Every member's frequency x the factor of the biome at its generation point (first match, else default; default 1 when left out). Rolled by patcherMod in generation and /locate alike. The vehicles: harsh 1.0, elsewhere 0.5."
   },
   "groups": {
     "settlements": {
@@ -18,31 +19,59 @@
       "structures": {
         "minecraft:village_desert": {
           "weight": 424,
-          "frequency": 0.6975
+          "frequency": 0.734547,
+          "fit_base": {
+            "weight": 424,
+            "frequency": 0.6975
+          }
         },
         "minecraft:village_plains": {
           "weight": 162,
-          "frequency": 0.9263
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 162,
+            "frequency": 0.9263
+          }
         },
         "minecraft:village_savanna": {
-          "weight": 176,
-          "frequency": 0.8134
+          "weight": 103,
+          "frequency": 0.99558,
+          "fit_base": {
+            "weight": 176,
+            "frequency": 0.8134
+          }
         },
         "minecraft:village_snowy": {
           "weight": 132,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 132,
+            "frequency": 1.0
+          }
         },
         "minecraft:village_taiga": {
           "weight": 153,
-          "frequency": 0.9436
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 153,
+            "frequency": 0.9436
+          }
         },
         "terralith:fortified_desert_village": {
           "weight": 108,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 108,
+            "frequency": 1.0
+          }
         },
         "terralith:fortified_village": {
           "weight": 53,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 53,
+            "frequency": 1.0
+          }
         },
         "towns_and_towers:exclusives/village_classic": {
           "weight": 101,
@@ -54,7 +83,11 @@
         },
         "towns_and_towers:exclusives/village_mediterranean": {
           "weight": 41,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 41,
+            "frequency": 1.0
+          }
         },
         "towns_and_towers:exclusives/village_nilotic": {
           "weight": 100,
@@ -66,75 +99,175 @@
         },
         "towns_and_towers:exclusives/village_swedish": {
           "weight": 22,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 22,
+            "frequency": 1.0
+          }
         },
         "towns_and_towers:exclusives/village_tudor": {
           "weight": 99,
-          "frequency": 0.4132
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 99,
+            "frequency": 0.4132
+          }
         },
         "towns_and_towers:village_badlands": {
           "weight": 173,
-          "frequency": 0.2113
+          "frequency": 0.430191,
+          "fit_base": {
+            "weight": 173,
+            "frequency": 0.2113
+          }
         },
         "towns_and_towers:village_beach": {
           "weight": 101,
-          "frequency": 0.1623
+          "frequency": 0.171066,
+          "fit_base": {
+            "weight": 101,
+            "frequency": 0.1623
+          }
         },
         "towns_and_towers:village_birch_forest": {
           "weight": 162,
-          "frequency": 0.197
+          "frequency": 0.361997,
+          "fit_base": {
+            "weight": 162,
+            "frequency": 0.197
+          }
         },
         "towns_and_towers:village_flower_forest": {
           "weight": 360,
-          "frequency": 0.1637
+          "frequency": 0.41542,
+          "fit_base": {
+            "weight": 360,
+            "frequency": 0.1637
+          }
         },
         "towns_and_towers:village_forest": {
           "weight": 144,
-          "frequency": 0.1749
+          "frequency": 0.457061,
+          "fit_base": {
+            "weight": 144,
+            "frequency": 0.1749
+          }
         },
         "towns_and_towers:village_grove": {
           "weight": 213,
-          "frequency": 0.1696
+          "frequency": 0.499402,
+          "fit_base": {
+            "weight": 213,
+            "frequency": 0.1696
+          }
         },
         "towns_and_towers:village_jungle": {
           "weight": 46,
-          "frequency": 0.4485
+          "frequency": 0.897,
+          "fit_base": {
+            "weight": 46,
+            "frequency": 0.4485
+          }
         },
         "towns_and_towers:village_meadow": {
           "weight": 62,
-          "frequency": 0.6944
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 62,
+            "frequency": 0.6944
+          }
         },
         "towns_and_towers:village_mushroom_fields": {
-          "weight": 101,
-          "frequency": 0.1623
+          "weight": 1,
+          "frequency": 0.1623,
+          "fit_base": {
+            "weight": 101,
+            "frequency": 0.1623
+          }
         },
         "towns_and_towers:village_old_growth_taiga": {
           "weight": 110,
-          "frequency": 0.2153
+          "frequency": 0.717581,
+          "fit_base": {
+            "weight": 110,
+            "frequency": 0.2153
+          }
         },
         "towns_and_towers:village_snowy_slopes": {
           "weight": 141,
-          "frequency": 0.2799
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 141,
+            "frequency": 0.2799
+          }
         },
         "towns_and_towers:village_snowy_taiga": {
           "weight": 108,
-          "frequency": 0.1943
+          "frequency": 0.590369,
+          "fit_base": {
+            "weight": 108,
+            "frequency": 0.1943
+          }
         },
         "towns_and_towers:village_sparse_jungle": {
           "weight": 46,
-          "frequency": 0.45
+          "frequency": 0.9,
+          "fit_base": {
+            "weight": 46,
+            "frequency": 0.45
+          }
         },
         "towns_and_towers:village_sunflower_plains": {
           "weight": 228,
-          "frequency": 0.2615
+          "frequency": 0.544825,
+          "fit_base": {
+            "weight": 228,
+            "frequency": 0.2615
+          }
         },
         "towns_and_towers:village_swamp": {
           "weight": 142,
-          "frequency": 0.5026
+          "frequency": 0.582744,
+          "fit_base": {
+            "weight": 142,
+            "frequency": 0.5026
+          }
         },
         "towns_and_towers:village_wooded_badlands": {
           "weight": 205,
-          "frequency": 0.1738
+          "frequency": 0.340365,
+          "fit_base": {
+            "weight": 205,
+            "frequency": 0.1738
+          }
+        },
+        "creativeengineering:meta/village_towers": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/fortified_camps": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/fortified_ruins": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/town_villages": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "eugene:red_roof_castle": {
+          "weight": 106,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 106,
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -152,7 +285,11 @@
       "structures": {
         "minecraft:pillager_outpost": {
           "weight": 74,
-          "frequency": 0.6336
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 74,
+            "frequency": 0.6336
+          }
         },
         "towns_and_towers:exclusives/pillager_outpost_classic": {
           "weight": 80,
@@ -164,11 +301,19 @@
         },
         "towns_and_towers:exclusives/pillager_outpost_mediterranean": {
           "weight": 78,
-          "frequency": 0.3596
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 78,
+            "frequency": 0.3596
+          }
         },
         "towns_and_towers:exclusives/pillager_outpost_oriental": {
           "weight": 65,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 65,
+            "frequency": 1.0
+          }
         },
         "towns_and_towers:exclusives/pillager_outpost_rustic": {
           "weight": 100,
@@ -176,59 +321,115 @@
         },
         "towns_and_towers:exclusives/pillager_outpost_swedish": {
           "weight": 31,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 31,
+            "frequency": 1.0
+          }
         },
         "towns_and_towers:exclusives/pillager_outpost_tudor": {
           "weight": 100,
-          "frequency": 0.2918
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 0.2918
+          }
         },
         "towns_and_towers:pillager_outpost_badlands": {
           "weight": 83,
-          "frequency": 0.3573
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 83,
+            "frequency": 0.3573
+          }
         },
         "towns_and_towers:pillager_outpost_beach": {
-          "weight": 151,
-          "frequency": 0.4394
+          "weight": 4,
+          "frequency": 0.878499,
+          "fit_base": {
+            "weight": 151,
+            "frequency": 0.4394
+          }
         },
         "towns_and_towers:pillager_outpost_birch_forest": {
           "weight": 132,
-          "frequency": 0.2977
+          "frequency": 0.720211,
+          "fit_base": {
+            "weight": 132,
+            "frequency": 0.2977
+          }
         },
         "towns_and_towers:pillager_outpost_desert": {
-          "weight": 159,
-          "frequency": 0.3206
+          "weight": 33,
+          "frequency": 0.995091,
+          "fit_base": {
+            "weight": 159,
+            "frequency": 0.3206
+          }
         },
         "towns_and_towers:pillager_outpost_flower_forest": {
-          "weight": 252,
-          "frequency": 0.3165
+          "weight": 210,
+          "frequency": 0.891321,
+          "fit_base": {
+            "weight": 252,
+            "frequency": 0.3165
+          }
         },
         "towns_and_towers:pillager_outpost_forest": {
           "weight": 136,
-          "frequency": 0.2912
+          "frequency": 0.610697,
+          "fit_base": {
+            "weight": 136,
+            "frequency": 0.2912
+          }
         },
         "towns_and_towers:pillager_outpost_grove": {
           "weight": 172,
-          "frequency": 0.2852
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 172,
+            "frequency": 0.2852
+          }
         },
         "towns_and_towers:pillager_outpost_jungle": {
           "weight": 109,
-          "frequency": 0.3648
+          "frequency": 0.560666,
+          "fit_base": {
+            "weight": 109,
+            "frequency": 0.3648
+          }
         },
         "towns_and_towers:pillager_outpost_meadow": {
           "weight": 152,
-          "frequency": 0.4
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 152,
+            "frequency": 0.4
+          }
         },
         "towns_and_towers:pillager_outpost_mushroom_fields": {
-          "weight": 100,
-          "frequency": 0.2918
+          "weight": 1,
+          "frequency": 0.237868,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 0.2918
+          }
         },
         "towns_and_towers:pillager_outpost_old_growth_taiga": {
           "weight": 108,
-          "frequency": 0.4216
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 108,
+            "frequency": 0.4216
+          }
         },
         "towns_and_towers:pillager_outpost_savanna": {
           "weight": 42,
-          "frequency": 0.8362
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 42,
+            "frequency": 0.8362
+          }
         },
         "towns_and_towers:pillager_outpost_snowy_beach": {
           "weight": 151,
@@ -236,91 +437,193 @@
         },
         "towns_and_towers:pillager_outpost_snowy_plains": {
           "weight": 156,
-          "frequency": 0.4073
+          "frequency": 0.584075,
+          "fit_base": {
+            "weight": 156,
+            "frequency": 0.4073
+          }
         },
         "towns_and_towers:pillager_outpost_snowy_slopes": {
           "weight": 67,
-          "frequency": 0.6132
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 67,
+            "frequency": 0.6132
+          }
         },
         "towns_and_towers:pillager_outpost_snowy_taiga": {
           "weight": 100,
-          "frequency": 0.3106
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 0.3106
+          }
         },
         "towns_and_towers:pillager_outpost_sparse_jungle": {
           "weight": 110,
-          "frequency": 0.6864
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 110,
+            "frequency": 0.6864
+          }
         },
         "towns_and_towers:pillager_outpost_sunflower_plains": {
           "weight": 100,
-          "frequency": 0.2918
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 0.2918
+          }
         },
         "towns_and_towers:pillager_outpost_swamp": {
-          "weight": 100,
-          "frequency": 0.2918
+          "weight": 2,
+          "frequency": 0.915151,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 0.2918
+          }
         },
         "towns_and_towers:pillager_outpost_taiga": {
           "weight": 45,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 45,
+            "frequency": 1.0
+          }
         },
         "towns_and_towers:pillager_outpost_wooded_badlands": {
           "weight": 81,
-          "frequency": 0.7962
-        },
-        "illager_siege_weapons:ballista": {
-          "weight": 57,
-          "frequency": 1.0
-        },
-        "illager_siege_weapons:battering_ram": {
-          "weight": 57,
-          "frequency": 1.0
-        },
-        "illager_siege_weapons:catapult": {
-          "weight": 57,
-          "frequency": 1.0
-        },
-        "illager_siege_weapons:reinforced_battering_ram": {
-          "weight": 57,
-          "frequency": 1.0
-        },
-        "illager_siege_weapons:siege_tower": {
-          "weight": 57,
-          "frequency": 1.0
-        },
-        "illager_siege_weapons:trebuchet": {
-          "weight": 57,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 81,
+            "frequency": 0.7962
+          }
         },
         "mysticrift_pillagers_towers_aris:acacia_pillager_tower": {
-          "weight": 5,
-          "frequency": 0.4211
+          "weight": 10,
+          "frequency": 0.930863,
+          "fit_base": {
+            "weight": 5,
+            "frequency": 0.4211
+          },
+          "fit_keep": true
         },
         "mysticrift_pillagers_towers_aris:birch_pillager_tower": {
-          "weight": 5,
-          "frequency": 0.38
+          "weight": 8,
+          "frequency": 0.905604,
+          "fit_base": {
+            "weight": 5,
+            "frequency": 0.38
+          },
+          "fit_keep": true
         },
         "mysticrift_pillagers_towers_aris:cherry_pillager_tower": {
-          "weight": 5,
-          "frequency": 0.4211
+          "weight": 17,
+          "frequency": 0.856877,
+          "fit_base": {
+            "weight": 5,
+            "frequency": 0.4211
+          },
+          "fit_keep": true
         },
         "mysticrift_pillagers_towers_aris:desert_pillager_tower": {
-          "weight": 5,
-          "frequency": 0.4692
+          "weight": 1,
+          "frequency": 0.650021,
+          "fit_base": {
+            "weight": 5,
+            "frequency": 0.4692
+          },
+          "fit_keep": true
         },
         "mysticrift_pillagers_towers_aris:end_pillager_tower": {
-          "weight": 5,
-          "frequency": 0.4301
+          "weight": 1,
+          "frequency": 0.019706,
+          "fit_base": {
+            "weight": 5,
+            "frequency": 0.4301
+          },
+          "fit_keep": true
         },
         "mysticrift_pillagers_towers_aris:jungle_pillager_tower": {
-          "weight": 5,
-          "frequency": 0.9278
+          "weight": 10,
+          "frequency": 0.973476,
+          "fit_base": {
+            "weight": 5,
+            "frequency": 0.9278
+          },
+          "fit_keep": true
         },
         "mysticrift_pillagers_towers_aris:mangrove_pillager_tower": {
           "weight": 5,
-          "frequency": 0.5938
+          "frequency": 0.038089,
+          "fit_base": {
+            "weight": 5,
+            "frequency": 0.5938
+          },
+          "fit_keep": true
         },
         "mysticrift_pillagers_towers_aris:oak_wood_pillager_tower": {
           "weight": 5,
-          "frequency": 0.9425
+          "frequency": 0.467934,
+          "fit_base": {
+            "weight": 5,
+            "frequency": 0.9425
+          },
+          "fit_keep": true
+        },
+        "creativeengineering:meta/pillager_camp_ruin": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/pillager_camp_ruins": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/pillager_camp_siege": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/pillager_great_tower_siege": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/pillager_stronghold_siege": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/pillager_tower_siege": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "takesapillage:bastille": {
+          "weight": 34,
+          "frequency": 1.0
+        },
+        "takesapillage:pillager_camp": {
+          "weight": 87,
+          "frequency": 1.0
+        },
+        "eugene:fake_trader_camp": {
+          "weight": 6,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 6,
+            "frequency": 1.0
+          }
+        },
+        "eugene:pillager_camp": {
+          "weight": 26,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 26,
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -334,51 +637,99 @@
       "structures": {
         "philipsruins:ancient_ruins": {
           "weight": 119,
-          "frequency": 0.6739
+          "frequency": 0.860538,
+          "fit_base": {
+            "weight": 119,
+            "frequency": 0.6739
+          }
         },
         "philipsruins:ancient_towers": {
           "weight": 197,
-          "frequency": 0.6758
+          "frequency": 0.862964,
+          "fit_base": {
+            "weight": 197,
+            "frequency": 0.6758
+          }
         },
         "philipsruins:badlands_structures": {
           "weight": 250,
-          "frequency": 0.2387
+          "frequency": 0.266459,
+          "fit_base": {
+            "weight": 250,
+            "frequency": 0.2387
+          }
         },
         "philipsruins:desert_structures": {
           "weight": 250,
-          "frequency": 0.2387
+          "frequency": 0.250975,
+          "fit_base": {
+            "weight": 250,
+            "frequency": 0.2387
+          }
         },
         "philipsruins:field_stone_ruins": {
           "weight": 45,
-          "frequency": 0.9895
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 45,
+            "frequency": 0.9895
+          }
         },
         "philipsruins:field_stone_ruins_rocks": {
           "weight": 196,
-          "frequency": 0.322
+          "frequency": 0.513101,
+          "fit_base": {
+            "weight": 196,
+            "frequency": 0.322
+          }
         },
         "philipsruins:level_one_ruins": {
           "weight": 45,
-          "frequency": 0.9895
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 45,
+            "frequency": 0.9895
+          }
         },
         "philipsruins:level_three_ruins": {
           "weight": 35,
-          "frequency": 0.9905
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 35,
+            "frequency": 0.9905
+          }
         },
         "philipsruins:level_two_ruins": {
           "weight": 20,
-          "frequency": 0.9784
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 20,
+            "frequency": 0.9784
+          }
         },
         "philipsruins:level_two_ruins_pool": {
           "weight": 20,
-          "frequency": 0.9784
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 20,
+            "frequency": 0.9784
+          }
         },
         "philipsruins:pumpkin_ruins": {
           "weight": 84,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 84,
+            "frequency": 1.0
+          }
         },
         "philipsruins:rare_ruin": {
           "weight": 254,
-          "frequency": 0.0082
+          "frequency": 0.007794,
+          "fit_base": {
+            "weight": 254,
+            "frequency": 0.0082
+          }
         },
         "philipsruins:start_nether_ruin": {
           "weight": 3,
@@ -386,48 +737,127 @@
         },
         "terralith:glacial_hut": {
           "weight": 261,
-          "frequency": 0.249
+          "frequency": 0.686437,
+          "fit_base": {
+            "weight": 261,
+            "frequency": 0.249
+          }
         },
         "forest_ruins:ruin_1": {
           "weight": 38,
-          "frequency": 0.7313
+          "frequency": 0.904155,
+          "fit_base": {
+            "weight": 38,
+            "frequency": 0.7313
+          }
         },
         "forest_ruins:ruin_2": {
           "weight": 38,
-          "frequency": 0.7313
+          "frequency": 0.904155,
+          "fit_base": {
+            "weight": 38,
+            "frequency": 0.7313
+          }
         },
         "forest_ruins:ruin_3": {
           "weight": 38,
-          "frequency": 0.7313
+          "frequency": 0.904155,
+          "fit_base": {
+            "weight": 38,
+            "frequency": 0.7313
+          }
         },
         "forest_ruins:ruin_4": {
           "weight": 38,
-          "frequency": 0.7313
+          "frequency": 0.904155,
+          "fit_base": {
+            "weight": 38,
+            "frequency": 0.7313
+          }
         },
         "forest_ruins:ruin_5": {
           "weight": 38,
-          "frequency": 0.7313
+          "frequency": 0.904155,
+          "fit_base": {
+            "weight": 38,
+            "frequency": 0.7313
+          }
         },
         "forest_ruins:ruin_6": {
           "weight": 38,
-          "frequency": 0.7313
+          "frequency": 0.904155,
+          "fit_base": {
+            "weight": 38,
+            "frequency": 0.7313
+          }
         },
         "forest_ruins:ruin_7": {
           "weight": 38,
-          "frequency": 0.7313
+          "frequency": 0.904155,
+          "fit_base": {
+            "weight": 38,
+            "frequency": 0.7313
+          }
         },
         "forgotten_church:forgotten_church": {
           "weight": 16,
-          "frequency": 0.9825
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 16,
+            "frequency": 0.9825
+          }
         },
         "watchtower_building:abandoned_watchtower": {
           "weight": 21,
+          "frequency": 0.194882,
+          "fit_base": {
+            "weight": 21,
+            "frequency": 1.0
+          },
+          "fit_keep": true
+        },
+        "creativeengineering:meta/ruin_cluster": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/ruin_scatter": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "old_illager_statue:old_illager_statue": {
+          "weight": 26,
           "frequency": 1.0
+        },
+        "oldvillagerstatue:old_villager_statue": {
+          "weight": 26,
+          "frequency": 1.0
+        },
+        "small_cat_statues:cat_1": {
+          "weight": 19,
+          "frequency": 1.0
+        },
+        "small_cat_statues:cat_2": {
+          "weight": 19,
+          "frequency": 1.0
+        },
+        "small_cat_statues:cat_3": {
+          "weight": 19,
+          "frequency": 1.0
+        },
+        "eugene:ruined_drum_tower": {
+          "weight": 19,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 19,
+            "frequency": 0.9905
+          }
         }
       }
     },
     "surface_dungeons": {
-      "note": "Surface dungeons: YUNG's temples and witch huts, the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The vanilla temples YUNG's blocks in code stay out.",
+      "note": "Surface dungeons: YUNG's desert and jungle temples, the vanilla desert pyramid and jungle temple (each in 10% of its YUNG's version's slots, \"replaces\" in structure_groups.json), the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The witch huts have their own group (group/witch_huts).",
       "placement": {
         "spacing": 16,
         "separation": 10,
@@ -436,39 +866,120 @@
       "structures": {
         "betterdeserttemples:desert_temple": {
           "weight": 40,
-          "frequency": 0.2
+          "frequency": 0.249618,
+          "fit_base": {
+            "weight": 40,
+            "frequency": 0.2
+          }
         },
         "betterjungletemples:jungle_temple": {
-          "weight": 186,
-          "frequency": 0.7481
-        },
-        "betterwitchhuts:witch_circle": {
-          "weight": 62,
-          "frequency": 1.0
-        },
-        "betterwitchhuts:witch_hut": {
-          "weight": 172,
-          "frequency": 0.8021
+          "weight": 1,
+          "frequency": 0.7481,
+          "fit_base": {
+            "weight": 186,
+            "frequency": 0.7481
+          }
         },
         "minecraft:mansion": {
-          "weight": 30,
-          "frequency": 0.1191
+          "weight": 1,
+          "frequency": 0.1191,
+          "fit_base": {
+            "weight": 30,
+            "frequency": 0.1191
+          }
         },
         "philipsruins:badlands_start_dungeon": {
           "weight": 106,
-          "frequency": 0.426
+          "frequency": 0.441692,
+          "fit_base": {
+            "weight": 106,
+            "frequency": 0.426
+          }
         },
         "terralith:spire": {
-          "weight": 103,
-          "frequency": 0.415
+          "weight": 1,
+          "frequency": 0.445566,
+          "fit_base": {
+            "weight": 103,
+            "frequency": 0.415
+          }
         },
         "towns_and_towers:mimic_desert": {
           "weight": 79,
-          "frequency": 0.7049
+          "frequency": 0.738952,
+          "fit_base": {
+            "weight": 79,
+            "frequency": 0.7049
+          }
+        },
+        "minecraft:desert_pyramid": {
+          "weight": 1,
+          "frequency": 1.0,
+          "replaces": "betterdeserttemples:desert_temple",
+          "share": 0.1,
+          "note": "Replacement: never picked by this weight; takes 10% of the slots YUNG's desert temple wins and keeps (where both can stand), so temples stay as common as before and 1 in 10 is vanilla. Keep the weight at 1."
+        },
+        "minecraft:jungle_pyramid": {
+          "weight": 1,
+          "frequency": 1.0,
+          "replaces": "betterjungletemples:jungle_temple",
+          "share": 0.1,
+          "note": "Replacement: never picked by this weight; takes 10% of the slots YUNG's jungle temple wins and keeps (where both can stand), so temples stay as common as before and 1 in 10 is vanilla. Keep the weight at 1."
+        },
+        "eugene:undead_castle": {
+          "weight": 1,
+          "frequency": 0.026314,
+          "fit_base": {
+            "weight": 1,
+            "frequency": 0.0255
+          }
+        }
+      }
+    },
+    "witch_huts": {
+      "note": "Witch huts, swamps only (land/swamp): YUNG's witch hut and witch circle, the Villages & Pillages witch village, and the vanilla swamp hut as a replacement of YUNG's hut. Own grid (at least 144 blocks between huts), so they no longer compete with the surface dungeons.",
+      "placement": {
+        "spacing": 16,
+        "separation": 8,
+        "salt": 1023661448
+      },
+      "structures": {
+        "minecraft:swamp_hut": {
+          "weight": 1,
+          "frequency": 1.0,
+          "replaces": "betterwitchhuts:witch_hut",
+          "share": 0.1,
+          "note": "Replacement: never picked by this weight; takes 10% of the slots YUNG's witch hut wins and keeps (where both can stand), so witch huts stay as common as before and 1 in 10 is vanilla. Keep the weight at 1."
+        },
+        "betterwitchhuts:witch_circle": {
+          "weight": 61,
+          "frequency": 0.9433
+        },
+        "betterwitchhuts:witch_hut": {
+          "weight": 150,
+          "frequency": 0.935
         },
         "villagesandpillages:village_witch": {
-          "weight": 101,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 0.9374
+        }
+      }
+    },
+    "entrance_dungeons": {
+      "note": "Surface-entrance dungeons, land only: YUNG's zombie dungeon (crypt) and spider dungeon (spider cave). Own grid (at least 272 blocks apart); the water rule's surface check keeps their entrances out of the sea.",
+      "placement": {
+        "spacing": 32,
+        "separation": 16,
+        "salt": 688304942
+      },
+      "structures": {
+        "betterdungeons:spider_dungeon": {
+          "weight": 109,
+          "frequency": 0.9754
+        },
+        "betterdungeons:zombie_dungeon": {
+          "weight": 92,
+          "frequency": 0.971
         }
       }
     },
@@ -519,6 +1030,25 @@
         "revamped_shipwrecks:shipwreck_beached": {
           "weight": 129,
           "frequency": 0.4444
+        },
+        "creativeengineering:meta/shipwreck_debris": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/shipwreck_graveyard": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/sunken_ruin_cluster": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "hopo:underwater_fossils": {
+          "weight": 215,
+          "frequency": 1.0
         }
       }
     },
@@ -584,6 +1114,30 @@
         "villager_rafts:raft_3": {
           "weight": 83,
           "frequency": 1.0
+        },
+        "creativeengineering:meta/pillager_fleet": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/raft_convoy": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        }
+      }
+    },
+    "flotsam": {
+      "note": "Floating debris at sea: the driftwood flotilla (meta structure). Its own grid, so it takes no slots from ruins or ships.",
+      "placement": {
+        "spacing": 32,
+        "separation": 8,
+        "salt": 1805269162
+      },
+      "structures": {
+        "creativeengineering:meta/driftwood_flotilla": {
+          "weight": 100,
+          "frequency": 1.0
         }
       }
     },
@@ -621,15 +1175,27 @@
         },
         "farmers_structures:aquacultures_carp": {
           "weight": 42,
-          "frequency": 0.9679
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 42,
+            "frequency": 0.9679
+          }
         },
         "farmers_structures:aquacultures_common": {
           "weight": 42,
-          "frequency": 0.9679
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 42,
+            "frequency": 0.9679
+          }
         },
         "farmers_structures:cooks": {
           "weight": 183,
-          "frequency": 0.3129
+          "frequency": 0.417675,
+          "fit_base": {
+            "weight": 183,
+            "frequency": 0.3129
+          }
         },
         "farmers_structures:cooks_moss": {
           "weight": 100,
@@ -641,187 +1207,461 @@
         },
         "greek_villager_house:greek_house": {
           "weight": 73,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 73,
+            "frequency": 1.0
+          }
         },
         "hobbit_house_:hobbit_house": {
           "weight": 69,
-          "frequency": 0.9939
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 69,
+            "frequency": 0.9939
+          }
         },
         "minecraft:igloo": {
           "weight": 389,
-          "frequency": 0.2286
+          "frequency": 0.502816,
+          "fit_base": {
+            "weight": 389,
+            "frequency": 0.2286
+          }
         },
         "old_swamp_fisherman_house:fisherman_house": {
           "weight": 247,
-          "frequency": 0.1192
+          "frequency": 0.147601,
+          "fit_base": {
+            "weight": 247,
+            "frequency": 0.1192
+          }
         },
         "sawmillhouse:sawmill": {
           "weight": 159,
-          "frequency": 0.8113
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 159,
+            "frequency": 0.8113
+          }
         },
         "simply_houses:forest_chapel": {
           "weight": 67,
-          "frequency": 0.0718
+          "frequency": 0.120438,
+          "fit_base": {
+            "weight": 67,
+            "frequency": 0.0718
+          }
         },
         "simply_houses:forest_fort": {
           "weight": 67,
-          "frequency": 0.0718
+          "frequency": 0.120438,
+          "fit_base": {
+            "weight": 67,
+            "frequency": 0.0718
+          }
         },
         "simply_houses:forest_house": {
           "weight": 135,
-          "frequency": 0.0713
+          "frequency": 0.1196,
+          "fit_base": {
+            "weight": 135,
+            "frequency": 0.0713
+          }
         },
         "simply_houses:forest_stonemason": {
           "weight": 135,
-          "frequency": 0.0713
+          "frequency": 0.1196,
+          "fit_base": {
+            "weight": 135,
+            "frequency": 0.0713
+          }
         },
         "simply_houses:plains_house": {
           "weight": 23,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 23,
+            "frequency": 1.0
+          }
         },
         "simply_houses:plains_mansion": {
           "weight": 23,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 23,
+            "frequency": 1.0
+          }
         },
         "simply_houses:taiga_forge": {
           "weight": 100,
-          "frequency": 0.0871
+          "frequency": 0.266606,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 0.0871
+          }
         },
         "simply_houses:taiga_house": {
           "weight": 100,
-          "frequency": 0.0871
+          "frequency": 0.266606,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 0.0871
+          }
         },
         "simply_houses:taiga_inn": {
           "weight": 200,
-          "frequency": 0.0871
+          "frequency": 0.266606,
+          "fit_base": {
+            "weight": 200,
+            "frequency": 0.0871
+          }
         },
         "simply_houses:taiga_woodcutter": {
           "weight": 200,
-          "frequency": 0.0871
+          "frequency": 0.266606,
+          "fit_base": {
+            "weight": 200,
+            "frequency": 0.0871
+          }
         },
         "small_viking_villager_house:small_viking_house": {
           "weight": 64,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 64,
+            "frequency": 1.0
+          }
         },
         "small_villager_greenhouse:small_villager_greenhouse": {
           "weight": 72,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 72,
+            "frequency": 1.0
+          }
         },
         "towns_and_towers:exclusives/village_wandering_trader_camp": {
           "weight": 423,
-          "frequency": 0.2036
+          "frequency": 0.36673,
+          "fit_base": {
+            "weight": 423,
+            "frequency": 0.2036
+          }
         },
         "villager_butcher_house:butcher_house": {
           "weight": 87,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 87,
+            "frequency": 1.0
+          }
         },
         "villager_cartographer_house:villager_cartographer_house": {
           "weight": 91,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 91,
+            "frequency": 1.0
+          }
         },
         "villager_cleric_house:villager_cleric_house": {
           "weight": 104,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 104,
+            "frequency": 1.0
+          }
         },
         "villager_country_house:country_house": {
           "weight": 447,
-          "frequency": 0.1166
+          "frequency": 0.166203,
+          "fit_base": {
+            "weight": 447,
+            "frequency": 0.1166
+          }
         },
         "villager_farmer_house:villager_farmer_house": {
           "weight": 74,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 74,
+            "frequency": 1.0
+          }
         },
         "villager_fletcher_house:villager_fletcher_house": {
           "weight": 109,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 109,
+            "frequency": 1.0
+          }
         },
         "villager_flower_house:flower_house": {
           "weight": 781,
-          "frequency": 0.1035
+          "frequency": 0.273887,
+          "fit_base": {
+            "weight": 781,
+            "frequency": 0.1035
+          }
         },
         "villager_tannery:tannery": {
           "weight": 73,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 73,
+            "frequency": 1.0
+          }
         },
         "ancient_enchantment_temple:temple": {
-          "weight": 110,
-          "frequency": 0.1264
+          "weight": 1,
+          "frequency": 0.1264,
+          "fit_base": {
+            "weight": 110,
+            "frequency": 0.1264
+          }
         },
         "animal_barn:barn": {
           "weight": 116,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 116,
+            "frequency": 1.0
+          }
         },
         "bighorsestable:big_horse_stable": {
           "weight": 98,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 98,
+            "frequency": 1.0
+          }
         },
         "desert_village_temple:village_temple": {
           "weight": 110,
-          "frequency": 0.2528
+          "frequency": 0.293336,
+          "fit_base": {
+            "weight": 110,
+            "frequency": 0.2528
+          }
         },
         "desert_watchtower:watchtower": {
           "weight": 110,
-          "frequency": 0.2528
+          "frequency": 0.342886,
+          "fit_base": {
+            "weight": 110,
+            "frequency": 0.2528
+          },
+          "fit_keep": true
         },
         "forest_watchtower:forest_watchtower": {
           "weight": 135,
-          "frequency": 1.0
+          "frequency": 0.954795,
+          "fit_base": {
+            "weight": 135,
+            "frequency": 1.0
+          },
+          "fit_keep": true
         },
         "gothic_church:church": {
           "weight": 81,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 81,
+            "frequency": 1.0
+          }
         },
         "llama_stable:llama_stable": {
           "weight": 62,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 62,
+            "frequency": 1.0
+          }
         },
         "mini_clock_tower:mini_clock_tower": {
           "weight": 108,
-          "frequency": 1.0
+          "frequency": 0.740947,
+          "fit_base": {
+            "weight": 108,
+            "frequency": 1.0
+          },
+          "fit_keep": true
         },
         "plains_villager_tents:big_villager_tent": {
           "weight": 116,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 116,
+            "frequency": 1.0
+          }
         },
         "saloon:saloon": {
           "weight": 326,
-          "frequency": 0.3554
+          "frequency": 0.43779,
+          "fit_base": {
+            "weight": 326,
+            "frequency": 0.3554
+          }
         },
         "smallhorsestable:horse_stable": {
           "weight": 111,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 111,
+            "frequency": 1.0
+          }
         },
         "snowy_tents:snowy_tent": {
           "weight": 284,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 284,
+            "frequency": 1.0
+          }
         },
         "villager_archer_camp:villager_archer_camp": {
           "weight": 85,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 85,
+            "frequency": 1.0
+          }
         },
         "villager_circus_tent:villager_circus_tent": {
           "weight": 84,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 84,
+            "frequency": 1.0
+          }
         },
         "villager_fish_shop:fish_shop": {
           "weight": 17,
-          "frequency": 0.7785
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 17,
+            "frequency": 0.7785
+          }
         },
         "villager_fishermans_hut:villager_fishermans_hut": {
           "weight": 125,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 125,
+            "frequency": 1.0
+          }
         },
         "villager_forge:villager_forge": {
           "weight": 116,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 116,
+            "frequency": 1.0
+          }
         },
         "villager_gold_washing_facility:villager_gold_washing_facility": {
           "weight": 37,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 37,
+            "frequency": 1.0
+          }
         },
         "villager_windmill:windmill": {
           "weight": 103,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 103,
+            "frequency": 1.0
+          }
+        },
+        "watchtower_building:fresh_watchtower": {
+          "weight": 160,
+          "frequency": 1.0,
+          "fit_keep": true
+        },
+        "creativeengineering:meta/farmers_camp": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/house_camp": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/waysign_camps": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/waysign_house_camp": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "campsite_structures:armorer_campsite": {
+          "weight": 60,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 60,
+            "frequency": 1.0
+          },
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+        },
+        "campsite_structures:butcher_campsite": {
+          "weight": 60,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 60,
+            "frequency": 1.0
+          },
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+        },
+        "campsite_structures:cartographer_campsite": {
+          "weight": 60,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 60,
+            "frequency": 1.0
+          },
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+        },
+        "campsite_structures:cleric_campsite": {
+          "weight": 60,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 60,
+            "frequency": 1.0
+          },
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+        },
+        "campsite_structures:farmer_campsite": {
+          "weight": 60,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 60,
+            "frequency": 1.0
+          },
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+        },
+        "campsite_structures:fisher_campsite": {
+          "weight": 15,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 15,
+            "frequency": 1.0
+          },
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+        },
+        "eugene:camp": {
+          "weight": 148,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 148,
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -847,7 +1687,138 @@
         },
         "skyvillages:skyvillage": {
           "weight": 299,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 299,
+            "frequency": 1.0
+          }
+        }
+      }
+    },
+    "nether_ruins": {
+      "note": "Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12.",
+      "placement": {
+        "spacing": 14,
+        "separation": 7,
+        "salt": 1485554039
+      },
+      "structures": {
+        "philipsruins:nether_lava_ruins": {
+          "weight": 100,
+          "frequency": 0.5993
+        },
+        "philipsruins:sealedruinedghaststatue1": {
+          "weight": 100,
+          "frequency": 0.5993
+        },
+        "philipsruins:start_nether_dungeon": {
+          "weight": 100,
+          "frequency": 0.5993
+        },
+        "twigs:bloodstone_obelisk": {
+          "weight": 194,
           "frequency": 1.0
+        }
+      }
+    },
+    "way_signs": {
+      "note": "Supplementaries' way signs on a grid of their own (2026-10-12): the old set's placement (19/10, kept 8 chunks off settlement grid slots), so the rate is unchanged. Each sign points at the nearest #supplementaries:way_sign_destinations, which structure_overrides.js fills with every group/settlements member (villages, fortified villages, meta/village_towers).",
+      "placement": {
+        "spacing": 19,
+        "separation": 10,
+        "salt": 247022060,
+        "exclusion_zone": {
+          "other_set": "creativeengineering:group/settlements",
+          "chunk_count": 8
+        }
+      },
+      "structures": {
+        "supplementaries:way_sign": {
+          "weight": 1,
+          "frequency": 1.0
+        }
+      }
+    },
+    "vehicles": {
+      "note": "Vehicles (hostile, 2026-10-14, plan 7.4.5): the 6 Illager Siege Weapons camps (moved out of pillager_settlements), the pillager loot carriage (with the villager chase and the golem prison van) and the witch wagon. Rarer than camps, more common than outposts, twice as common in harsh biomes (biome_frequency). Grid from the harsh rate (spacing 52: about 1 vehicle per 54 chunks in harsh biomes, 1 per 75 elsewhere, 2026-10-14); equal weights. Rates are hand-set (fit_base = the same values).",
+      "placement": {
+        "spacing": 52,
+        "separation": 16,
+        "salt": 1361593970,
+        "exclusion_zone": {
+          "other_set": "creativeengineering:group/settlements",
+          "chunk_count": 4
+        }
+      },
+      "biome_frequency": {
+        "#creativeengineering:harsh": 1.0,
+        "default": 0.5
+      },
+      "structures": {
+        "eugene:pillager_loot_carriage": {
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 1.0
+          }
+        },
+        "eugene:witch_wagon": {
+          "weight": 200,
+          "frequency": 0.76,
+          "fit_base": {
+            "weight": 200,
+            "frequency": 0.76
+          },
+          "note": "Weight 200 x 0.76: 4x the loot carriage's density per area of its biomes, as the mod's sets had (60 vs 120 spacing)."
+        },
+        "illager_siege_weapons:ballista": {
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 1.0
+          }
+        },
+        "illager_siege_weapons:battering_ram": {
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 1.0
+          }
+        },
+        "illager_siege_weapons:catapult": {
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 1.0
+          }
+        },
+        "illager_siege_weapons:reinforced_battering_ram": {
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 1.0
+          }
+        },
+        "illager_siege_weapons:siege_tower": {
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 1.0
+          }
+        },
+        "illager_siege_weapons:trebuchet": {
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_base": {
+            "weight": 100,
+            "frequency": 1.0
+          }
         }
       }
     }
@@ -857,7 +1828,10 @@
       "placement": {},
       "structures": {
         "betterdungeons:skeleton_dungeon": {
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -865,7 +1839,10 @@
       "placement": {},
       "structures": {
         "betterdungeons:small_dungeon": {
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -873,22 +1850,6 @@
       "placement": {},
       "structures": {
         "betterdungeons:small_nether_dungeon": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "betterdungeons:spider_dungeons": {
-      "placement": {},
-      "structures": {
-        "betterdungeons:spider_dungeon": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "betterdungeons:zombie_dungeons": {
-      "placement": {},
-      "structures": {
-        "betterdungeons:zombie_dungeon": {
           "frequency": 1.0
         }
       }
@@ -921,7 +1882,9 @@
       },
       "structures": {
         "farmers_structures:aethers": {
-          "frequency": 1.0
+          "frequency": 1.0,
+          "enabled": false,
+          "note": "Removed 2026-10-12: its biomes come only from the Aether / Undergarden, which this pack does not have, so it never spawned; disabled so its set is empty and stays out of /locate searches."
         }
       }
     },
@@ -965,7 +1928,9 @@
       },
       "structures": {
         "farmers_structures:undergardens_sea": {
-          "frequency": 1.0
+          "frequency": 1.0,
+          "enabled": false,
+          "note": "Removed 2026-10-12: its biomes come only from the Aether / Undergarden, which this pack does not have, so it never spawned; disabled so its set is empty and stays out of /locate searches."
         }
       }
     },
@@ -988,14 +1953,6 @@
           "frequency": 1.0
         },
         "hearths:warped_tower": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "hopo:underwater_fossils": {
-      "placement": {},
-      "structures": {
-        "hopo:underwater_fossils": {
           "frequency": 1.0
         }
       }
@@ -1154,34 +2111,10 @@
         }
       }
     },
-    "minecraft:desert_pyramids": {
-      "placement": {
-        "spacing": 27,
-        "separation": 7,
-        "frequency": 0.946846
-      },
-      "structures": {
-        "minecraft:desert_pyramid": {
-          "frequency": 1.0
-        }
-      }
-    },
     "minecraft:end_cities": {
       "placement": {},
       "structures": {
         "minecraft:end_city": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "minecraft:jungle_temples": {
-      "placement": {
-        "spacing": 27,
-        "separation": 7,
-        "frequency": 0.946846
-      },
-      "structures": {
-        "minecraft:jungle_pyramid": {
           "frequency": 1.0
         }
       }
@@ -1193,7 +2126,10 @@
           "frequency": 1.0
         },
         "minecraft:mineshaft_mesa": {
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -1259,18 +2195,6 @@
         }
       }
     },
-    "minecraft:swamp_huts": {
-      "placement": {
-        "spacing": 24,
-        "separation": 6,
-        "frequency": 0.995006
-      },
-      "structures": {
-        "minecraft:swamp_hut": {
-          "frequency": 1.0
-        }
-      }
-    },
     "nullscape:dragon_skeleton": {
       "placement": {
         "spacing": 25,
@@ -1291,7 +2215,10 @@
       },
       "structures": {
         "philipsruins:ancient_crypt": {
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -1315,7 +2242,10 @@
       },
       "structures": {
         "philipsruins:antiquus_crypta": {
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -1342,25 +2272,10 @@
       },
       "structures": {
         "philipsruins:lost_soul_city": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "philipsruins:nether_structures": {
-      "placement": {
-        "spacing": 21,
-        "separation": 18,
-        "frequency": 0.98
-      },
-      "structures": {
-        "philipsruins:start_nether_dungeon": {
-          "frequency": 1.0
-        },
-        "philipsruins:sealedruinedghaststatue1": {
-          "frequency": 1.0
-        },
-        "philipsruins:nether_lava_ruins": {
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_base": {
+            "frequency": 1.0
+          }
         }
       }
     },
@@ -1376,7 +2291,11 @@
         },
         "philipsruins:bone_dungeon": {
           "weight": 116,
-          "frequency": 0.2939
+          "frequency": 0.29382,
+          "fit_base": {
+            "weight": 116,
+            "frequency": 0.2939
+          }
         },
         "philipsruins:underground_structures": {
           "weight": 582,
@@ -1385,19 +2304,6 @@
         "philipsruins:sculk_dungeon": {
           "weight": 86,
           "frequency": 0.991
-        }
-      }
-    },
-    "supplementaries:way_signs": {
-      "placement": {
-        "exclusion_zone": {
-          "other_set": "creativeengineering:group/settlements",
-          "chunk_count": 8
-        }
-      },
-      "structures": {
-        "supplementaries:way_sign": {
-          "frequency": 1.0
         }
       }
     },
@@ -1441,77 +2347,92 @@
         }
       }
     },
-    "twigs:bloodstone_obelisk": {
-      "placement": {},
-      "structures": {
-        "twigs:bloodstone_obelisk": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "old_illager_statue:old_illager_statue": {
-      "placement": {},
-      "structures": {
-        "old_illager_statue:old_illager_statue": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "oldvillagerstatue:old_villager_statue": {
-      "placement": {},
-      "structures": {
-        "oldvillagerstatue:old_villager_statue": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "small_cat_statues:cat_1": {
-      "placement": {},
-      "structures": {
-        "small_cat_statues:cat_1": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "small_cat_statues:cat_2": {
-      "placement": {},
-      "structures": {
-        "small_cat_statues:cat_2": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "small_cat_statues:cat_3": {
-      "placement": {},
-      "structures": {
-        "small_cat_statues:cat_3": {
-          "frequency": 1.0
-        }
-      }
-    },
-    "takesapillage:pillager_structure": {
-      "placement": {},
-      "structures": {
-        "takesapillage:bastille": {
-          "frequency": 1.0
-        },
-        "takesapillage:pillager_camp": {
-          "frequency": 1.0
-        }
-      }
-    },
     "unwrecked_ships:nether_ship": {
       "placement": {},
       "structures": {
         "unwrecked_ships:nether_ship": {
+          "frequency": 1.0,
+          "enabled": false,
+          "note": "Removed 2026-10-12 (user: remove all warped/crimson unwrecked ships): the only Unwrecked Ships ships built of crimson and warped wood. Overworld ships never get those pieces (their jigsaw names don't match)."
+        }
+      }
+    },
+    "underground_bunkers:minor_structures": {
+      "placement": {},
+      "structures": {
+        "underground_bunkers:underground_bunker": {
           "frequency": 1.0
         }
       }
     },
-    "watchtower_building:fresh_watchtower": {
+    "eugene:piglin_camp": {
       "placement": {},
       "structures": {
-        "watchtower_building:fresh_watchtower": {
+        "eugene:piglin_camp": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "subterrestrial:deepslate_cabin": {
+      "placement": {},
+      "structures": {
+        "subterrestrial:deepslate_cabin": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "subterrestrial:default_cabin": {
+      "placement": {},
+      "structures": {
+        "subterrestrial:default_cabin": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "subterrestrial:desert_cabin": {
+      "placement": {},
+      "structures": {
+        "subterrestrial:desert_cabin": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "subterrestrial:ice_cabin": {
+      "placement": {},
+      "structures": {
+        "subterrestrial:ice_cabin": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "subterrestrial:jungle_cabin": {
+      "placement": {},
+      "structures": {
+        "subterrestrial:jungle_cabin": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "subterrestrial:mesa_cabin": {
+      "placement": {},
+      "structures": {
+        "subterrestrial:mesa_cabin": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "subterrestrial:ocean_cabin": {
+      "placement": {},
+      "structures": {
+        "subterrestrial:ocean_cabin": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "subterrestrial:taiga_cabin": {
+      "placement": {},
+      "structures": {
+        "subterrestrial:taiga_cabin": {
           "frequency": 1.0
         }
       }
@@ -1525,7 +2446,51 @@
         "#minecraft:is_river",
         "#c:river"
       ],
-      "allow": "#water_ok"
+      "allow": "#water_ok",
+      "surface_check": "#surface_check"
+    }
+  },
+  "priority": {
+    "_readme": "Placement priority (patcherMod PlacementPriority, CEConfig [worldgen.systems] placementPriority): a structure whose pieces would overlap (in 3D) a structure of a higher rank never starts; it is dropped before its terrain is shaped, and its slot falls through like a wrong biome. groups: rank per group (every member gets it). structures: rank per \"#tag\" or id, over its group's (big settlements over villages). Same rank: no check (a group's grid keeps its members apart). Companions (meta_structures.json) rank one below their group. Groups without a rank (and standalone sets) take no part. shape: groups whose jigsaw members (the villages, also as companions) grow around higher-ranked structures instead of being dropped: those are cut out of the space the jigsaw fits pieces into, so streets end or turn at their edge; only a start piece that overlaps one still drops the whole start.",
+    "groups": {
+      "settlements": 95,
+      "pillager_settlements": 90,
+      "surface_dungeons": 80,
+      "witch_huts": 79,
+      "entrance_dungeons": 78,
+      "vehicles": 76,
+      "remote": 70,
+      "way_signs": 69,
+      "ruins": 60,
+      "nether_ruins": 60,
+      "sky": 50,
+      "ocean_dungeons": 40,
+      "ocean_ruins": 35,
+      "boats": 30,
+      "flotsam": 25
+    },
+    "structures": {
+      "#priority/big_settlements": 100
+    },
+    "shape": [
+      "settlements"
+    ],
+    "peaceful": {
+      "_readme": "Peaceful radius (2026-10-12): no hostile structure starts with a piece within this many chunks (square, in XZ, measured from the peaceful structure's piece boxes, not its start chunk) of a peaceful one, whatever the ranks; the hostile start is dropped like a wrong biome. Peaceful structures ignore hostile ones in their own rank check and shaping. groups: radius per group (every member); structures: per \"#tag\" or id, over its group's. hostile: group names, \"#tag\"s or ids. 1 to 16 chunks. A structure both peaceful and hostile stays peaceful.",
+      "groups": {
+        "settlements": 5,
+        "remote": 3
+      },
+      "structures": {
+        "#priority/big_settlements": 8
+      },
+      "hostile": [
+        "pillager_settlements",
+        "surface_dungeons",
+        "witch_huts",
+        "entrance_dungeons",
+        "vehicles"
+      ]
     }
   }
 }

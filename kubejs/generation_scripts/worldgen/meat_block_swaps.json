@@ -1,0 +1,87 @@
+{
+ "_readme": {
+  "what": "Lone \"meat\" blocks in structure templates, marked to be swapped for Architect's Palette fish blocks standing upright when the structure is placed. Written by python3 tools/meat_block_scan.py (do not edit by hand: rerun it). A lone block has no neighbour of the same block in the template.",
+  "entries": "template id -> [{pos: [x, y, z] in the template, from: block id there, to: {Name, Properties}}]. A swap applies only when the template still has `from` at `pos` (a mod update that moves things skips it).",
+  "applied by": "patcherMod worldgen/TemplateBlockSwaps: each marked template is patched once when it loads (every rotation and every structure using it get the new block). Read at every world load; new chunks only. Switch: CEConfig [worldgen.systems] templateBlockSwaps."
+ },
+ "templates": {
+  "kaisyn:village/birch_forest_romanian/houses/birch_forest_butcher_and_leatherworker_1": [
+   {
+    "pos": [
+     5,
+     2,
+     4
+    ],
+    "from": "minecraft:red_glazed_terracotta",
+    "to": {
+     "Name": "architects_palette:salmon_log",
+     "Properties": {
+      "axis": "y"
+     }
+    }
+   }
+  ],
+  "kaisyn:village/exclusives/mediterranean/houses/regular/med_butcher_1": [
+   {
+    "pos": [
+     1,
+     2,
+     1
+    ],
+    "from": "minecraft:red_glazed_terracotta",
+    "to": {
+     "Name": "architects_palette:salmon_log",
+     "Properties": {
+      "axis": "y"
+     }
+    }
+   }
+  ],
+  "kaisyn:village/mushroom_fields_fantasy/houses/mushroom_butcher_1": [
+   {
+    "pos": [
+     0,
+     2,
+     2
+    ],
+    "from": "minecraft:red_glazed_terracotta",
+    "to": {
+     "Name": "architects_palette:salmon_log",
+     "Properties": {
+      "axis": "y"
+     }
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     4
+    ],
+    "from": "minecraft:red_glazed_terracotta",
+    "to": {
+     "Name": "architects_palette:salmon_log",
+     "Properties": {
+      "axis": "y"
+     }
+    }
+   }
+  ],
+  "skyvillages:farm_2": [
+   {
+    "pos": [
+     7,
+     15,
+     7
+    ],
+    "from": "minecraft:red_glazed_terracotta",
+    "to": {
+     "Name": "architects_palette:salmon_log",
+     "Properties": {
+      "axis": "y"
+     }
+    }
+   }
+  ]
+ }
+}

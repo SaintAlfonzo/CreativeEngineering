@@ -240,7 +240,7 @@ public final class GroundMatch {
 		if (!WorldgenConfig.groundMatchEnabled()) return null;
 		List<TagKey<Block>> families = families();
 		if (families.isEmpty()) return null;
-		if (placing != null && exempt(region, placing.getStructure())) return null;
+		if (placing != null && exempt(region, MetaStructure.structureAt(placing, offset))) return null;   // a meta part: its own structure
 
 		BoundingBox box = settings.getBoundingBox();
 		ChunkPos center = region instanceof WorldGenRegion r ? r.getCenter()

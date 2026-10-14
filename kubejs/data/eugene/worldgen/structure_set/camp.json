@@ -1,0 +1,26 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 389564243,
+    "separation": 22,
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 4
+    },
+    "spacing": 38
+  },
+  "structures": [
+    {
+      "structure": "eugene:camp",
+      "weight": 115
+    },
+    {
+      "structure": "eugene:pillager_camp",
+      "weight": 120
+    },
+    {
+      "structure": "eugene:fake_trader_camp",
+      "weight": 10
+    }
+  ]
+}

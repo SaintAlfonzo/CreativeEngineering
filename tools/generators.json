@@ -4,8 +4,8 @@
     "optional run at game startup (config/creativeengineering-common.toml [debug.generators]).",
     "",
     "Entries run one at a time, in this order, so put a generator after anything it reads:",
-    "gen_structure_config writes structure_config.json, which build_biome_merges, the analyzer and gen_structure_groups read;",
-    "gen_structure_groups also reads biome_merges.json and biome_config.json, so it runs after both.",
+    "gen_structure_config writes structure_config.json, which gen_structure_groups reads;",
+    "gen_structure_groups also reads biome_config.json, so it runs after both.",
     "A failed entry is reported and the rest still run.",
     "",
     "Fields per generator:",
@@ -46,16 +46,6 @@
       "apply": "rejoin the world; only newly generated chunks use it"
     },
     {
-      "id": "biome_merges",
-      "script": "tools/build_biome_merges.py",
-      "groups": ["core", "worldgen"],
-      "outputs": [
-        "kubejs/generation_scripts/worldgen/biome_merges.json",
-        "kubejs/generation_scripts/worldgen/biome_merge_suggestions.md"
-      ],
-      "apply": "/reload or rejoin; only newly generated chunks use it"
-    },
-    {
       "id": "biome_config",
       "script": "tools/gen_biome_config.py",
       "groups": ["core", "worldgen"],
@@ -91,6 +81,13 @@
         "feature_writeup/flowers_by_biome.md"
       ],
       "apply": "rejoin the world (the snapshot is read at world load); only newly generated chunks use it"
+    },
+    {
+      "id": "bee_nests",
+      "script": "tools/gen_bee_nests.py",
+      "groups": ["worldgen"],
+      "outputs": ["feature_writeup/bee_nests_by_biome.md"],
+      "apply": "report only; for measured numbers run /dumpbeenests reset, generate new chunks, /dumpbeenests first"
     },
     {
       "id": "loot_config",
@@ -131,16 +128,6 @@
       "dumps": ["dumpbiomes"],
       "outputs": ["feature_writeup/weather_by_biome.md"],
       "apply": "nothing to apply: it is a report (precipitation per biome per Serene Seasons sub-season)"
-    },
-    {
-      "id": "biome_merge_proposals",
-      "script": "tools/analyze_structure_biome_merges.py",
-      "groups": ["reports", "worldgen"],
-      "outputs": [
-        "kubejs/generation_scripts/worldgen/biome_merge_proposals.json",
-        "kubejs/generation_scripts/worldgen/biome_merge_proposals.md"
-      ],
-      "apply": "report only"
     },
     {
       "id": "structure_live_check",
@@ -227,6 +214,14 @@
         "kubejs/startup_scripts/_lib/item_dict.js"
       ],
       "apply": "restart if item_dict.js changed, else /reload (tags) - tooltips follow the tags"
+    },
+    {
+      "id": "immersive_paintings",
+      "script": "tools/gen_immersive_paintings.py",
+      "groups": ["pack"],
+      "dumps": ["dumppaintings"],
+      "outputs": ["kubejs/data/creativeengineering/paintings"],
+      "apply": "/reload (Immersive Paintings re-reads its datapack paintings)"
     }
   ]
 }

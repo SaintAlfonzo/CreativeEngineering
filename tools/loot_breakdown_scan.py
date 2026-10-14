@@ -95,7 +95,7 @@ def scan_template(raw, origin, template):
 
 
 def signature():
-    jars = sorted(glob.glob(str(ROOT / 'mods/*.jar'))) + sorted(glob.glob(str(ROOT / 'disabledmods/*.jar')))
+    jars = sorted(glob.glob(str(ROOT / 'mods/*.jar'))) + sorted(glob.glob(str(ROOT / 'disabledmods/**/*.jar'), recursive=True))
     sig = [[os.path.basename(j), os.path.getsize(j), int(os.path.getmtime(j))] for j in jars]
     kjs = sorted(glob.glob(str(ROOT / 'kubejs/data/*/structures/**/*.nbt'), recursive=True))
     sig += [[os.path.relpath(p, ROOT), os.path.getsize(p), int(os.path.getmtime(p))] for p in kjs]

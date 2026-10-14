@@ -4,9 +4,9 @@
 
 | Part | Status | Open |
 |---|---|---|
-| Rules engine (`wild_flowers.js`): Botania palettes, pack flower patches, existing-feature scale/remove, Flower Patch mixing | BUILT 2026-10-07, offline checks pass, scratch server verified (History) | FL-01 to FL-14 |
+| Rules engine (`wild_flowers.js`): Botania palettes, pack flower patches, existing-feature scale/remove, Flower Patch mixing | BUILT 2026-10-07, offline checks pass, scratch server verified (History); STAGED for pack 1.0.6 (not deployed); applied in single player 2026-10-11 | FL-01 to FL-14 |
 | First tuning pass (palettes for 124 land biomes, 19 flower entries, 2 existing tweaks) | BUILT | your in-game look |
-| CEConfig `[worldgen.systems] wildFlowers` | BUILT in patcherMod source, jar not rebuilt | the script runs (switch reads as on) without it |
+| CEConfig `[worldgen.systems] wildFlowers` | BUILT, in patcherMod 1.0.5 (ships in 1.0.5), on in the shipped config | |
 | Generator + report (`tools/gen_wild_flowers.py` -> [flowers_by_biome.md](flowers_by_biome.md)) | BUILT | |
 
 - **Edit:** [wild_flowers.json](../kubejs/generation_scripts/worldgen/wild_flowers.json). Rejoin the world; only new chunks change.
@@ -204,3 +204,9 @@ Use a new world (or new chunks). `/locate biome` then fly over.
   lilacs, plain alliums; Terralith's `minecraft:flower_default` (rewritten) -> 8 of 49 as poppy/dandelion patches
   (setting 15%); `taiga_floor/r4` -> cornflower and lily of the valley patches; `minecraft:flower_plain`
   (noise_threshold) -> cornflower patches. Natural generation across biomes not looked at (FL-02 onwards).
+- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): `wild_flowers.json`, `flower_features.json` (snapshot, now a
+  runtime file in `KUBEJS_CLASSES`), `wild_flowers.js` and the CEConfig switch in patcherMod 1.0.5. Single player with
+  the staged files: `99 Botania palette features, 19 flower features ... 378 files`, `291 flower/biome pairs in 119
+  tags`, no errors. Only new chunks change.
+- 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
+  2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.

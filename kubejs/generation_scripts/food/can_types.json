@@ -6,6 +6,1864 @@
   "Read by startup_scripts/items/cans.js (items, overrides) and server_scripts/cooking/canning.js (recipes)."
  ],
  "cans": {
+  "canned_bayberry": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Bayberries",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "bayberry"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "bayberry"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "bayberry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_blueberry": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Blueberries",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "blueberry"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "blueberry"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "blueberry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_cranberry": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Cranberries",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cranberry"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cranberry"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "cranberry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": null
+  },
+  "canned_durian": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Durian",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "durian_flesh"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "durian_flesh"
+       ],
+       "n": 3
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "durian_flesh"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_fig": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Figs",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "fig"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "fig"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "fig"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_hamimelon": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Hamimelon",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "hamimelon_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "hamimelon_slice"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "hamimelon_slice"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_hawberry": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Hawberries",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "hawberry"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "hawberry"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "hawberry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_kiwi": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Kiwi",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "kiwi"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "kiwi"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "kiwi"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_lemon": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Lemon",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "lemon",
+    "lemon_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "lemon"
+       ],
+       "n": 3
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "lemon"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_lemon_slice",
+     "inputs": [
+      {
+       "any": [
+        "lemon_slice"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_lemon_slice_sugar",
+     "inputs": [
+      {
+       "any": [
+        "lemon_slice"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_lychee": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Lychee",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "lychee"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "lychee"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "lychee"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_mango": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Mango",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "mango"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "mango"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "mango"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_mangosteen": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Mangosteen",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "mangosteen"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "mangosteen"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "mangosteen"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_orange": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Orange",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "orange",
+    "orange_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "orange"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "orange"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_orange_slice",
+     "inputs": [
+      {
+       "any": [
+        "orange_slice"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_orange_slice_sugar",
+     "inputs": [
+      {
+       "any": [
+        "orange_slice"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_peach": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Peach",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "peach"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "peach"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "peach"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_pear": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Pear",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "pear"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pear"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "pear"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_persimmon": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Persimmon",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "persimmon"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "persimmon"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "persimmon"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_pineapple": {
+   "section": "raw_fruit",
+   "existing": false,
+   "name": "Canned Pineapple",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "pineapple_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pineapple_slice"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "pineapple_slice"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
+  "canned_shulker": {
+   "section": "raw_meat",
+   "existing": false,
+   "name": "Canned Shulker Flesh",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": true,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:nausea",
+     "ticks": 200,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "shulker_mollusk",
+    "shulker_filet"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "shulker_mollusk"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "shulker_mollusk"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_shulker_filet",
+     "inputs": [
+      {
+       "any": [
+        "shulker_filet"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_shulker_filet_broth",
+     "inputs": [
+      {
+       "any": [
+        "shulker_filet"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_beef"
+  },
+  "canned_blobfish": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Blobfish",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": true,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:poison",
+     "ticks": 120,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "blobfish"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "blobfish"
+       ],
+       "n": 5
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "blobfish"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_flying_fish": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Flying Fish",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": true,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "flying_fish"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "flying_fish"
+       ],
+       "n": 5
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "flying_fish"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_raw_lobster": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Lobster Tail",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": true,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "lobster_tail"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "lobster_tail"
+       ],
+       "n": 7
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "lobster_tail"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_raw_calamari": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Raw Calamari",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "calamari",
+    "calamari_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "calamari"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "calamari"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_calamari_slice",
+     "inputs": [
+      {
+       "any": [
+        "calamari_slice"
+       ],
+       "n": 8
+      }
+     ],
+     "servings": 2
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_raw_catfish": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Raw Catfish",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": true,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "catfish",
+    "raw_catfish_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "catfish"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "catfish"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_raw_catfish_slice",
+     "inputs": [
+      {
+       "any": [
+        "raw_catfish_slice"
+       ],
+       "n": 8
+      }
+     ],
+     "servings": 2
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_raw_cod": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Raw Cod",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cod",
+    "cod_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cod"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "cod"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_cod_slice",
+     "inputs": [
+      {
+       "any": [
+        "cod_slice"
+       ],
+       "n": 8
+      }
+     ],
+     "servings": 2
+    }
+   ],
+   "texture": null
+  },
+  "canned_raw_crab": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Raw Crab Leg",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": true,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "raw_crab"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "raw_crab"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "raw_crab"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_raw_lionfish": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Raw Lionfish",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:poison",
+     "ticks": 600,
+     "amp": 3,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:nausea",
+     "ticks": 300,
+     "amp": 2,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "lionfish"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "lionfish"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "lionfish"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_raw_perch": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Raw Perch",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:hunger",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 0.3
+    }
+   ],
+   "sources": [
+    "perch",
+    "perch_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "perch"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "perch"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_perch_slice",
+     "inputs": [
+      {
+       "any": [
+        "perch_slice"
+       ],
+       "n": 8
+      }
+     ],
+     "servings": 2
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_raw_pike": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Raw Pike",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:hunger",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 0.3
+    }
+   ],
+   "sources": [
+    "pike",
+    "pike_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pike"
+       ],
+       "n": 5
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "pike"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_pike_slice",
+     "inputs": [
+      {
+       "any": [
+        "pike_slice"
+       ],
+       "n": 8
+      }
+     ],
+     "servings": 2
+    }
+   ],
+   "texture": "creativeengineering:item/canned_raw_salmon"
+  },
+  "canned_raw_salmon": {
+   "section": "raw_fish",
+   "existing": false,
+   "name": "Canned Raw Salmon",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "salmon",
+    "salmon_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "salmon"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "salmon"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_salmon_slice",
+     "inputs": [
+      {
+       "any": [
+        "salmon_slice"
+       ],
+       "n": 8
+      }
+     ],
+     "servings": 2
+    }
+   ],
+   "texture": null
+  },
+  "canned_tropical_fish": {
+   "section": "raw_fish",
+   "existing": true,
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "tropical_fish"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "tropical_fish"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "tropical_fish"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "canned_pufferfishs": {
+   "section": "hazard",
+   "existing": true,
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "code_fx": true,
+   "sources": [
+    "pufferfish"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pufferfish"
+       ],
+       "n": 8
+      }
+     ]
+    }
+   ]
+  },
+  "canned_posionous_potatos": {
+   "section": "hazard",
+   "existing": true,
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "code_fx": true,
+   "sources": [
+    "poisonous_potato"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "poisonous_potato"
+       ],
+       "n": 8
+      }
+     ]
+    }
+   ]
+  },
+  "canned_spider_eyes": {
+   "section": "hazard",
+   "existing": true,
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "code_fx": true,
+   "sources": [
+    "spider_eye"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "spider_eye"
+       ],
+       "n": 5
+      }
+     ]
+    }
+   ]
+  },
+  "canned_rotten_flesh": {
+   "section": "hazard",
+   "existing": true,
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": true,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "code_fx": true,
+   "sources": [
+    "rotten_flesh"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "rotten_flesh"
+       ],
+       "n": 5
+      }
+     ]
+    }
+   ]
+  },
+  "canned_chorus_fruits": {
+   "section": "special",
+   "existing": true,
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": true,
+   "glow": false,
+   "effects": [],
+   "code_fx": true,
+   "sources": [
+    "chorus_fruit"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "chorus_fruit"
+       ],
+       "n": 3
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "chorus_fruit"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "canned_ancient_fruit": {
+   "section": "special",
+   "existing": false,
+   "name": "Canned Ancient Fruit",
+   "servings": 3,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": true,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "ancient_fruit"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "ancient_fruit"
+       ],
+       "n": 3
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "ancient_fruit"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "sugar",
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_apple"
+  },
   "canned_cookies": {
    "section": "cookies",
    "existing": true,
@@ -50,6 +1908,571 @@
      ]
     }
    ]
+  },
+  "canned_bayberry_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Bayberry Cookies",
+   "servings": 5,
+   "hunger": 2,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "fruitsdelight:leaf_piercing",
+     "ticks": 100,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "bayberry_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "bayberry_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "bayberry_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_cherry_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Cherry Cookies",
+   "servings": 5,
+   "hunger": 4,
+   "modifier": 0.1,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cherry_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cherry_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "cherry_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_cranberry_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Cranberry Cookies",
+   "servings": 5,
+   "hunger": 2,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "fruitsdelight:shrinking",
+     "ticks": 400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cranberry_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cranberry_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "cranberry_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_green_tea_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Green Tea Cookies",
+   "servings": 5,
+   "hunger": 4,
+   "modifier": 0.1,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:haste",
+     "ticks": 200,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "green_tea_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "green_tea_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "green_tea_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_honey_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Honey Cookies",
+   "servings": 5,
+   "hunger": 4,
+   "modifier": 0.1,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "honey_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "honey_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "honey_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_lemon_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Lemon Cookies",
+   "servings": 5,
+   "hunger": 2,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:haste",
+     "ticks": 100,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "fruitsdelight:refreshing",
+     "ticks": 100,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "lemon_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "lemon_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "lemon_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_maple_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Maple Cookies",
+   "servings": 5,
+   "hunger": 4,
+   "modifier": 0.1,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "maple_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "maple_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "maple_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_mulberry_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Mulberry Cookies",
+   "servings": 5,
+   "hunger": 4,
+   "modifier": 0.1,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "mulberry_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "mulberry_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "mulberry_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_persimmon_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Persimmon Cookies",
+   "servings": 5,
+   "hunger": 2,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "fruitsdelight:astringent",
+     "ticks": 400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "persimmon_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "persimmon_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "persimmon_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_sweet_berry_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Sweet Berry Cookies",
+   "servings": 5,
+   "hunger": 4,
+   "modifier": 0.1,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "sweet_berry_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "sweet_berry_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "sweet_berry_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_uncanny_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Uncanny Cookies",
+   "servings": 5,
+   "hunger": 10,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:nausea",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "uncanny_cookies"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "uncanny_cookies"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "uncanny_cookies"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_baked_potato": {
    "section": "cooked_veggie",
@@ -143,7 +2566,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_cooked_rice": {
    "section": "cooked_veggie",
@@ -196,7 +2620,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_dried_kelp": {
    "section": "cooked_veggie",
@@ -293,7 +2718,539 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_baked_durian": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Baked Durian",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "fruitsdelight:alienating",
+     "ticks": 200,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "fruitsdelight:suspicious_smell",
+     "ticks": 400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "baked_durian"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "baked_durian"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "baked_durian"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_baked_pear": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Baked Pear",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "fruitsdelight:lozenge",
+     "ticks": 100,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "baked_pear"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "baked_pear"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "baked_pear"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_boiled_blue_pickerelweed": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Boiled Blue Pickerelweed",
+   "servings": 4,
+   "hunger": 4,
+   "modifier": 0.0,
+   "meat": false,
+   "fast": false,
+   "always": true,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "boiled_blue_pickerelweed"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "boiled_blue_pickerelweed"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "boiled_blue_pickerelweed"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_boiled_purple_pickerelweed": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Boiled Purple Pickerelweed",
+   "servings": 4,
+   "hunger": 6,
+   "modifier": 0.0,
+   "meat": false,
+   "fast": false,
+   "always": true,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "boiled_purple_pickerelweed"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "boiled_purple_pickerelweed"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "boiled_purple_pickerelweed"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_boiled_corn": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Boiled Corn",
+   "servings": 4,
+   "hunger": 12,
+   "modifier": 0.2,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "boiled_corn"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "boiled_corn"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "boiled_corn"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_dried_banana": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Dried Banana",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "neapolitan:agility",
+     "ticks": 200,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "dried_banana"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "dried_banana"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "dried_banana"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_dried_persimmon": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Dried Persimmon",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "fruitsdelight:astringent",
+     "ticks": 400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "dried_persimmon"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "dried_persimmon"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "dried_persimmon"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_kimchi": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Kimchi",
+   "servings": 4,
+   "hunger": 4,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "brewinandchewin:satisfaction",
+     "ticks": 2400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "kimchi"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "kimchi"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "kimchi"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_pickled_pickles": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Pickled Pickles",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:night_vision",
+     "ticks": 2400,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:luck",
+     "ticks": 6000,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "pickled_pickles"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pickled_pickles"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "pickled_pickles"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_roasted_adzuki_beans": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Roasted Adzuki Beans",
+   "servings": 4,
+   "hunger": 6,
+   "modifier": 0.4,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "neapolitan:harmony",
+     "ticks": 100,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "roasted_adzuki_beans"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "roasted_adzuki_beans"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "roasted_adzuki_beans"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_beef": {
    "section": "cooked_meat",
@@ -341,53 +3298,6 @@
     }
    ]
   },
-  "canned_cooked_beef_patty": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Beef Patty",
-   "servings": 3,
-   "hunger": 8,
-   "modifier": 0.8,
-   "meat": true,
-   "fast": true,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "beef_patty"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "beef_patty"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "beef_patty"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
-  },
   "canned_pork": {
    "section": "cooked_meat",
    "existing": true,
@@ -420,147 +3330,6 @@
       {
        "any": [
         "porkchop_cooked"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
-  },
-  "canned_cooked_bacon": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Cooked Bacon",
-   "servings": 3,
-   "hunger": 8,
-   "modifier": 0.8,
-   "meat": true,
-   "fast": true,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "cooked_bacon"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "cooked_bacon"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "cooked_bacon"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
-  },
-  "canned_cooked_bison": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Cooked Bison",
-   "servings": 3,
-   "hunger": 20,
-   "modifier": 1.0,
-   "meat": true,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "bison_cooked"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "bison_cooked"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "bison_cooked"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
-  },
-  "canned_cooked_bison_patty": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Bison Patty",
-   "servings": 3,
-   "hunger": 10,
-   "modifier": 0.7,
-   "meat": true,
-   "fast": true,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "bison_patty"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "bison_patty"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "bison_patty"
        ],
        "n": 4
       },
@@ -719,20 +3488,20 @@
     }
    ]
   },
-  "canned_cooked_ham": {
+  "canned_glazed_porkchop": {
    "section": "cooked_meat",
    "existing": false,
-   "name": "Canned Smoked Ham",
+   "name": "Canned Honey Glazed Porkchop",
    "servings": 3,
-   "hunger": 20,
+   "hunger": 18,
    "modifier": 0.8,
-   "meat": true,
+   "meat": false,
    "fast": false,
    "always": false,
    "glow": false,
    "effects": [],
    "sources": [
-    "smoked_ham"
+    "glazed_porkchop"
    ],
    "recipes": [
     {
@@ -740,7 +3509,7 @@
      "inputs": [
       {
        "any": [
-        "smoked_ham"
+        "glazed_porkchop"
        ],
        "n": 5
       }
@@ -751,7 +3520,7 @@
      "inputs": [
       {
        "any": [
-        "smoked_ham"
+        "glazed_porkchop"
        ],
        "n": 4
       },
@@ -764,12 +3533,61 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
-  "canned_cooked_chevon": {
+  "canned_jerky": {
    "section": "cooked_meat",
    "existing": false,
-   "name": "Canned Cooked Chevon",
+   "name": "Canned Jerky",
+   "servings": 3,
+   "hunger": 6,
+   "modifier": 0.7,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "jerky"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "jerky"
+       ],
+       "n": 5
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "jerky"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_maple_glazed_bacon": {
+   "section": "cooked_meat",
+   "existing": false,
+   "name": "Canned Maple Glazed Bacon",
    "servings": 3,
    "hunger": 12,
    "modifier": 0.8,
@@ -777,9 +3595,16 @@
    "fast": false,
    "always": false,
    "glow": false,
-   "effects": [],
+   "effects": [
+    {
+     "effect": "minecraft:resistance",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
    "sources": [
-    "cooked_goat"
+    "maple_glazed_bacon"
    ],
    "recipes": [
     {
@@ -787,7 +3612,7 @@
      "inputs": [
       {
        "any": [
-        "cooked_goat"
+        "maple_glazed_bacon"
        ],
        "n": 5
       }
@@ -798,7 +3623,7 @@
      "inputs": [
       {
        "any": [
-        "cooked_goat"
+        "maple_glazed_bacon"
        ],
        "n": 4
       },
@@ -811,201 +3636,8 @@
       }
      ]
     }
-   ]
-  },
-  "canned_cooked_hoglin": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Hoglin Sirloin",
-   "servings": 3,
-   "hunger": 14,
-   "modifier": 0.75,
-   "meat": true,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "hoglin_sirloin"
    ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "hoglin_sirloin"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "hoglin_sirloin"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
-  },
-  "canned_cooked_kangaroo": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Cooked Kangaroo",
-   "servings": 3,
-   "hunger": 16,
-   "modifier": 0.85,
-   "meat": true,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "kangaroo_meat_cooked",
-    "kangaroo_shank_cooked"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "kangaroo_meat_cooked",
-        "kangaroo_shank_cooked"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "kangaroo_meat_cooked",
-        "kangaroo_shank_cooked"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
-  },
-  "canned_cooked_moose": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Cooked Moose",
-   "servings": 3,
-   "hunger": 14,
-   "modifier": 0.85,
-   "meat": true,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "moose_ribs_cooked",
-    "moose_rib_cooked_loose"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "moose_ribs_cooked",
-        "moose_rib_cooked_loose"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "moose_ribs_cooked",
-        "moose_rib_cooked_loose"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
-  },
-  "canned_cooked_bunfungus": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Cooked Bunfungus",
-   "servings": 3,
-   "hunger": 14,
-   "modifier": 0.7,
-   "meat": true,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "bunfungus_cooked"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "bunfungus_cooked"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "bunfungus_cooked"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_fish": {
    "section": "cooked_meat",
@@ -1153,7 +3785,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_cooked_catfish": {
    "section": "cooked_meat",
@@ -1203,7 +3836,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_cooked_perch": {
    "section": "cooked_meat",
@@ -1253,7 +3887,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_cooked_pike": {
    "section": "cooked_meat",
@@ -1303,7 +3938,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_cooked_lionfish": {
    "section": "cooked_meat",
@@ -1350,101 +3986,8 @@
       }
      ]
     }
-   ]
-  },
-  "canned_cooked_lobster": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Lobster Tail",
-   "servings": 3,
-   "hunger": 12,
-   "modifier": 0.65,
-   "meat": true,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "lobster_tail_cooked"
    ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "lobster_tail_cooked"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "lobster_tail_cooked"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
-  },
-  "canned_cooked_crab": {
-   "section": "cooked_meat",
-   "existing": false,
-   "name": "Canned Crab Leg",
-   "servings": 3,
-   "hunger": 16,
-   "modifier": 0.8,
-   "meat": true,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "cooked_crab"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "cooked_crab"
-       ],
-       "n": 5
-      }
-     ]
-    },
-    {
-     "suffix": "_broth",
-     "inputs": [
-      {
-       "any": [
-        "cooked_crab"
-       ],
-       "n": 4
-      },
-      {
-       "any": [
-        "salt",
-        "bone_broth"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ]
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_rabbit_stew": {
    "section": "soup",
@@ -1566,6 +4109,1182 @@
     }
    ]
   },
+  "canned_bell_pepper_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Bell Pepper Pasta",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "bell_pepper_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "bell_pepper_pasta"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_cheesy_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Cheesy Pasta",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 3600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cheesy_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cheesy_pasta"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_crab_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Crab Pasta",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.619,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "crab_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "crab_pasta"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_kangaroo_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Kangaroo Pasta",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "kangaroo_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "kangaroo_pasta"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_lobster_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Lobster Pasta",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "lobster_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "lobster_pasta"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_duck_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Pasta with Duck",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "duck_noodles"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "duck_noodles"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_pasta_with_meatballs": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Pasta with Meatballs",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "pasta_with_meatballs"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pasta_with_meatballs"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_pasta_with_mutton": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Pasta with Mutton Chop",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "pasta_with_mutton"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pasta_with_mutton"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_pearl_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Pearl Pasta",
+   "servings": 4,
+   "hunger": 3,
+   "modifier": 0.4,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "pearl_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pearl_pasta"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_squid_ink_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Squid Ink Pasta",
+   "servings": 4,
+   "hunger": 11,
+   "modifier": 0.716,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "squid_ink_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "squid_ink_pasta"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_vegetable_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Vegetable Pasta",
+   "servings": 4,
+   "hunger": 11,
+   "modifier": 0.716,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "vegetable_noodles"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "vegetable_noodles"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_apple_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Apple Pie Filling",
+   "servings": 4,
+   "hunger": 3,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:speed",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "apple_pie_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "apple_pie_slice"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pie": "apple_pie",
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_chocolate_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Chocolate Pie Filling",
+   "servings": 4,
+   "hunger": 3,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:speed",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "chocolate_pie_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "chocolate_pie_slice"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pie": "chocolate_pie",
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_chorus_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Chorus Pie Filling",
+   "servings": 4,
+   "hunger": 3,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:speed",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "chorus_pie_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "chorus_pie_slice"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pie": "chorus_pie",
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_mulberry_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Mulberry Pie Filling",
+   "servings": 4,
+   "hunger": 3,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:speed",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "mulberry_pie_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "mulberry_pie_slice"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pie": "mulberry_pie",
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_pumpkin_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Pumpkin Pie Filling",
+   "servings": 4,
+   "hunger": 3,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:speed",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "delightful_pumpkin_pie_slice",
+    "pumpkin_pie_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "delightful_pumpkin_pie_slice",
+        "pumpkin_pie_slice"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pie": "pumpkin_pie",
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_rose_hip_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Rose Hip Pie Filling",
+   "servings": 4,
+   "hunger": 3,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:speed",
+     "ticks": 400,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:regeneration",
+     "ticks": 400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "rose_hip_pie_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "rose_hip_pie_slice"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pie": "rose_hip_pie",
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_salmonberry_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Salmonberry Pie Filling",
+   "servings": 4,
+   "hunger": 3,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:speed",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:water_breathing",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "salmonberry_pie_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "salmonberry_pie_slice"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pie": "salmonberry_pie",
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_durian_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Durian Pie Filling",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.4,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "fruitsdelight:alienating",
+     "ticks": 800,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "fruitsdelight:suspicious_smell",
+     "ticks": 1600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "durian_pie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "durian_pie"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_pineapple_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Pineapple Pie Filling",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.4,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:speed",
+     "ticks": 400,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "fruitsdelight:sweetening",
+     "ticks": 400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "pineapple_pie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pineapple_pie"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_caramel_popcorn": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Caramel Popcorn",
+   "servings": 6,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "caramel_popcorn"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "popcorn_box"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_hoglin_feast": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Hoglin Feast",
+   "servings": 6,
+   "hunger": 10,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 2400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "plate_of_stuffed_hoglin_ham"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "stuffed_hoglin"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_honey_glazed_ham": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Honey Glazed Ham",
+   "servings": 6,
+   "hunger": 14,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 6000,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "honey_glazed_ham"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "honey_glazed_ham_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_nachos": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Nachos",
+   "servings": 6,
+   "hunger": 12,
+   "modifier": 1.0,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 6000,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "nachos_bowl"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "nachos_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_pineapple_fried_rice": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Pineapple Fried Rice",
+   "servings": 6,
+   "hunger": 14,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 6000,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:speed",
+     "ticks": 800,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "fruitsdelight:sweetening",
+     "ticks": 800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "bowl_of_pineapple_fried_rice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pineapple_fried_rice"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_roast_chicken": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Roast Chicken",
+   "servings": 6,
+   "hunger": 14,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 6000,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "roast_chicken"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "roast_chicken_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_shepherds_pie": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Shepherd's Pie",
+   "servings": 6,
+   "hunger": 14,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 6000,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "shepherds_pie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "shepherds_pie_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_stuffed_pumpkin": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Stuffed Pumpkin",
+   "servings": 6,
+   "hunger": 14,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 6000,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "stuffed_pumpkin"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "stuffed_pumpkin_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_stuffed_shulker": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Stuffed Shulker",
+   "servings": 6,
+   "hunger": 7,
+   "modifier": 0.9,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:levitation",
+     "ticks": 400,
+     "amp": 2,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:resistance",
+     "ticks": 1800,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 6000,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "stuffed_shulker_bowl"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "stuffed_shulker"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
+  "canned_honey_bottles": {
+   "section": "drink",
+   "existing": true,
+   "servings": 4,
+   "hunger": 6,
+   "modifier": 0.1,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "code_fx": true,
+   "sources": [
+    "honey_bottle"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "honey_bottle"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ]
+  },
+  "canned_powdered_milk": {
+   "section": "drink",
+   "existing": false,
+   "name": "Canned Powdered Milk",
+   "servings": 4,
+   "hunger": 1,
+   "modifier": 0.1,
+   "meat": false,
+   "fast": false,
+   "always": true,
+   "glow": false,
+   "effects": [],
+   "clear_effects": true,
+   "sources": [
+    "minecraft_milk_bucket"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "minecraft_milk_bucket"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beets"
+  },
   "canned_adzuki_bun": {
    "section": "bread",
    "existing": false,
@@ -1600,7 +5319,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_banana_bread": {
    "section": "bread",
@@ -1636,36 +5356,8 @@
       }
      ]
     }
-   ]
-  },
-  "canned_bread_slice": {
-   "section": "bread",
-   "existing": false,
-   "name": "Canned Bread Slice",
-   "servings": 4,
-   "hunger": 4,
-   "modifier": 0.4,
-   "meat": false,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "bread_slice"
    ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "bread_slice"
-       ],
-       "n": 6
-      }
-     ]
-    }
-   ]
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_cornbread": {
    "section": "bread",
@@ -1694,7 +5386,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_honey_bread": {
    "section": "bread",
@@ -1740,7 +5433,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_mulberry_bread": {
    "section": "bread",
@@ -1769,7 +5463,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_nether_wart_sourdough": {
    "section": "bread",
@@ -1805,7 +5500,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_sourdough_bread": {
    "section": "bread",
@@ -1834,65 +5530,8 @@
       }
      ]
     }
-   ]
-  },
-  "canned_toast": {
-   "section": "bread",
-   "existing": false,
-   "name": "Canned Toast",
-   "servings": 4,
-   "hunger": 6,
-   "modifier": 0.4,
-   "meat": false,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "toast"
    ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "toast"
-       ],
-       "n": 6
-      }
-     ]
-    }
-   ]
-  },
-  "canned_tortilla": {
-   "section": "bread",
-   "existing": false,
-   "name": "Canned Tortilla",
-   "servings": 4,
-   "hunger": 6,
-   "modifier": 0.4,
-   "meat": false,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "tortilla"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "tortilla"
-       ],
-       "n": 6
-      }
-     ]
-    }
-   ]
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_bowl_of_exotic_fruits": {
    "section": "salad",
@@ -1921,7 +5560,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_chicken_salad": {
    "section": "salad",
@@ -1957,7 +5597,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_field_salad": {
    "section": "salad",
@@ -1999,7 +5640,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_fruit_salad": {
    "section": "salad",
@@ -2035,7 +5677,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_lush_moss_salad": {
    "section": "salad",
@@ -2064,7 +5707,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_mango_salad": {
    "section": "salad",
@@ -2106,7 +5750,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_mixed_salad": {
    "section": "salad",
@@ -2142,7 +5787,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_nether_salad": {
    "section": "salad",
@@ -2178,7 +5824,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_acacia_blossom_soup": {
    "section": "soup",
@@ -2232,7 +5879,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_adzuki_stew": {
    "section": "soup",
@@ -2286,7 +5934,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_baked_cod_stew": {
    "section": "soup",
@@ -2340,7 +5989,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_bayberry_soup": {
    "section": "soup",
@@ -2394,7 +6044,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_beef_stew": {
    "section": "soup",
@@ -2448,7 +6099,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_ce_beetroot_soup": {
    "section": "soup",
@@ -2495,7 +6147,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_bell_pepper_soup": {
    "section": "soup",
@@ -2549,7 +6202,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_blazing_chili": {
    "section": "soup",
@@ -2603,7 +6257,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_bone_broth": {
    "section": "soup",
@@ -2657,7 +6312,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_carrot_soup": {
    "section": "soup",
@@ -2711,7 +6367,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_chicken_soup": {
    "section": "soup",
@@ -2765,7 +6422,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_chorus_stew": {
    "section": "soup",
@@ -2825,7 +6483,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_corn_soup": {
    "section": "soup",
@@ -2879,7 +6538,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_creamy_onion_soup": {
    "section": "soup",
@@ -2933,7 +6593,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_endermite_stew": {
    "section": "soup",
@@ -2993,7 +6654,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_fig_chicken_stew": {
    "section": "soup",
@@ -3053,7 +6715,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_fish_stew": {
    "section": "soup",
@@ -3107,7 +6770,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_kangaroo_stew": {
    "section": "soup",
@@ -3161,7 +6825,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_miso_with_bamboo_sprouts": {
    "section": "soup",
@@ -3208,7 +6873,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_noodle_soup": {
    "section": "soup",
@@ -3262,7 +6928,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_pumpkin_soup": {
    "section": "soup",
@@ -3316,7 +6983,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_sinigang": {
    "section": "soup",
@@ -3376,7 +7044,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_sopa_de_macaco": {
    "section": "soup",
@@ -3423,7 +7092,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_strider_moss_stew": {
    "section": "soup",
@@ -3477,7 +7147,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_vegetable_soup": {
    "section": "soup",
@@ -3531,7 +7202,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_apple": {
    "section": "golden",
@@ -3579,7 +7251,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_baked_potato": {
    "section": "golden",
@@ -3627,7 +7300,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_beetroot": {
    "section": "golden",
@@ -3675,7 +7349,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_beetroot_soup": {
    "section": "golden",
@@ -3723,7 +7398,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_bread": {
    "section": "golden",
@@ -3771,7 +7447,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_ce_golden_carrot": {
    "section": "golden",
@@ -3819,7 +7496,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_chorus_fruit": {
    "section": "golden",
@@ -3867,7 +7545,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_cooked_beef": {
    "section": "golden",
@@ -3915,7 +7594,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_cooked_chicken": {
    "section": "golden",
@@ -3963,7 +7643,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_cooked_cod": {
    "section": "golden",
@@ -4011,7 +7692,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_cooked_mutton": {
    "section": "golden",
@@ -4059,7 +7741,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_cooked_porkchop": {
    "section": "golden",
@@ -4107,7 +7790,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_cooked_rabbit": {
    "section": "golden",
@@ -4155,7 +7839,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_cooked_salmon": {
    "section": "golden",
@@ -4203,7 +7888,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_cookie": {
    "section": "golden",
@@ -4251,7 +7937,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_dried_kelp": {
    "section": "golden",
@@ -4299,7 +7986,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_glow_berries": {
    "section": "golden",
@@ -4347,7 +8035,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_honey_bottle": {
    "section": "golden",
@@ -4395,7 +8084,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_melon_slice": {
    "section": "golden",
@@ -4443,7 +8133,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_milk_bucket": {
    "section": "golden",
@@ -4491,7 +8182,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_moss_clump": {
    "section": "golden",
@@ -4533,7 +8225,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_mushroom_stew": {
    "section": "golden",
@@ -4581,7 +8274,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_pumpkin_pie": {
    "section": "golden",
@@ -4629,7 +8323,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_rabbit_stew": {
    "section": "golden",
@@ -4677,7 +8372,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_golden_sweet_berries": {
    "section": "golden",
@@ -4725,7 +8421,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_apple": {
    "section": "golden",
@@ -4785,7 +8482,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_baked_potato": {
    "section": "golden",
@@ -4845,7 +8543,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_beetroot": {
    "section": "golden",
@@ -4905,7 +8604,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_beetroot_soup": {
    "section": "golden",
@@ -4965,7 +8665,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_bread": {
    "section": "golden",
@@ -5025,7 +8726,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_carrot": {
    "section": "golden",
@@ -5085,7 +8787,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_chorus_fruit": {
    "section": "golden",
@@ -5145,7 +8848,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_cooked_beef": {
    "section": "golden",
@@ -5205,7 +8909,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_cooked_chicken": {
    "section": "golden",
@@ -5265,7 +8970,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_cooked_cod": {
    "section": "golden",
@@ -5325,7 +9031,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_cooked_mutton": {
    "section": "golden",
@@ -5385,7 +9092,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_cooked_porkchop": {
    "section": "golden",
@@ -5445,7 +9153,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_cooked_rabbit": {
    "section": "golden",
@@ -5505,7 +9214,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_cooked_salmon": {
    "section": "golden",
@@ -5565,7 +9275,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_cookie": {
    "section": "golden",
@@ -5625,7 +9336,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_dried_kelp": {
    "section": "golden",
@@ -5685,7 +9397,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_glow_berries": {
    "section": "golden",
@@ -5745,7 +9458,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_honey_bottle": {
    "section": "golden",
@@ -5805,7 +9519,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_melon_slice": {
    "section": "golden",
@@ -5865,7 +9580,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_milk_bucket": {
    "section": "golden",
@@ -5925,7 +9641,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_moss_clump": {
    "section": "golden",
@@ -5979,7 +9696,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_mushroom_stew": {
    "section": "golden",
@@ -6039,7 +9757,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_pumpkin_pie": {
    "section": "golden",
@@ -6099,7 +9818,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_rabbit_stew": {
    "section": "golden",
@@ -6159,7 +9879,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   },
   "canned_enchanted_golden_sweet_berries": {
    "section": "golden",
@@ -6219,7 +9940,8 @@
       }
      ]
     }
-   ]
+   ],
+   "texture": "canned_goods:items/canned_beets"
   }
  }
 }

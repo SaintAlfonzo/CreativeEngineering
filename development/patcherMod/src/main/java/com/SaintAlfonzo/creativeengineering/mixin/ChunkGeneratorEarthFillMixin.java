@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
 import com.SaintAlfonzo.creativeengineering.worldgen.EarthFill;
+import com.SaintAlfonzo.creativeengineering.worldgen.LocateStats;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -34,6 +35,8 @@ public class ChunkGeneratorEarthFillMixin {
 	private StructureStart creativeengineering$checkEarthFill(StructureStart start, StructureSet.StructureSelectionEntry entry,
 			StructureManager structureManager, RegistryAccess registryAccess, RandomState randomState,
 			StructureTemplateManager templateManager, long seed, ChunkAccess chunk, ChunkPos chunkPos) {
-		return EarthFill.filter(start, entry, (ChunkGenerator) (Object) this, randomState, templateManager, seed, chunk, chunkPos);
+		StructureStart out = EarthFill.filter(start, entry, (ChunkGenerator) (Object) this, randomState, templateManager, seed, chunk, chunkPos);
+		if (out != start && start.isValid() && !out.isValid()) LocateStats.reject(entry.structure().value(), chunkPos, LocateStats.Reason.EARTH_FILL);
+		return out;
 	}
 }

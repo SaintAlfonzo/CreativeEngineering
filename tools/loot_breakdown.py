@@ -784,9 +784,9 @@ def contents_text(items):
 
 
 def origin_names(D):
-    """namespace -> origin jar for ported structure namespaces in kubejs/data (the jar sits in disabledmods/)."""
+    """namespace -> origin jar for ported structure namespaces in kubejs/data (the jar sits in disabledmods/archive/)."""
     out = {}
-    for jar in glob.glob(str(ROOT / 'disabledmods/*.jar')):
+    for jar in glob.glob(str(ROOT / 'disabledmods/**/*.jar'), recursive=True):
         try:
             z = zipfile.ZipFile(jar)
         except zipfile.BadZipFile:

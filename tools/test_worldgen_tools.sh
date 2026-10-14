@@ -5,6 +5,10 @@
 #   3. EarthFillTest: earth-fill and water-fill counting, template earth and water through rotation, pool elements, overrides, seabed
 #   4. node: CEConfig [worldgen.debug] structureDensity scales every set's rate exactly (tools/structure_density_check.js)
 #   5. TerrainAdaptationTest: template trim (kinds, columns, real ported templates), tag precedence, distance fields, soft beard vs vanilla
+#   6. MetaTest: meta structures (codec on the real meta_structures.json and bad input, the anchor's frequency roll, reach and clearance)
+#   7. FitTest: biome fits (the node sim's staged fits parsed by StructureBiomeFits, bad input, fit unions, value-based membership)
+#   8. LocateTest: locate counters (misses before a hit, stages, batch capture) and Distant Horizons' fake seabed roll
+#   9. tools/check_worldgen_json.py: kubejs/data worldgen JSON has the keys 1.19.2's codecs require (ported 1.20 data)
 # Java parts run against development/patcherMod/build/classes (run ./gradlew build first). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -27,4 +31,13 @@ echo "== 4. debug structure density"
 node tools/structure_density_check.js || status=1
 echo "== 5. terrain adaptation + template trim"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.TerrainAdaptationTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+echo "== 6. meta structures"
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.MetaTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+echo "== 7. biome fits"
+node tools/structure_tuning_sim.js "$T/fits_report.md" "$T/fits" > /dev/null
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.FitTest "$T/fits/fits.json" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+echo "== 8. locate"
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.LocateTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+echo "== 9. worldgen JSON shape (1.19.2 codecs)"
+python3 tools/check_worldgen_json.py || status=1
 exit $status

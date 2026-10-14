@@ -1200,8 +1200,6 @@
 		lootContainerSwaps = true
 		#biome_config.json multipliers / replacements (BiomeLayoutTuner). Only affects worlds created afterwards.
 		biomeLayout = true
-		#biome_merges.json: extra biomes in structure biome tags (kubejs worldgen/biome_merges.js). /reload or rejoin.
-		biomeMerges = true
 		#Explorer maps and /locate skip structure sets at frequency 0 (without it they can hang the server).
 		deadPlacementFilter = true
 		#Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).
@@ -1230,6 +1228,32 @@
 		#Structures in the creativeengineering:template_trim tag skip their template's air and bare pad (grass,
 		#dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.
 		templateTrim = true
+		#bee_nests.json: per-biome bee nest chance on generated trees, plus extra bee-nest trees (kubejs
+		#worldgen/bee_nests.js, patcherMod BeeNests). Off: nests as the mods ship them. Rejoin to apply; only new chunks change.
+		beeNests = true
+		#biome_fits.json + the land/* structure tags (patcherMod StructureBiomeFits): a structure in a fit tag spawns in
+		#its fit's biomes (land/oak: land/oak + land biomes) instead of its own list. Off: its own list. Rejoin; new chunks only.
+		structureBiomeFits = true
+		#meta_structures.json: our structures built from other structures and features (a village with peaceful
+		#towers, ruin clusters, pillager camps with siege weapons, a driftwood flotilla...; patcherMod MetaStructure, [worldgen.meta_structures]).
+		#Off: none generate (their anchors spawn plain). Rejoin; new chunks only.
+		metaStructures = true
+		#Group members with "replaces" + "share" in structure_groups.json take that share of another member's slots
+		#(the vanilla swamp hut in YUNG's witch hut slots; patcherMod MetaSlots). Off: they never generate and the
+		#structures they replace keep every slot. Rejoin; new chunks only.
+		structureReplacements = true
+		#Geodes under oceans generate lower so fewer break through the sea floor ([worldgen.ocean_geodes];
+		#patcherMod OceanGeodes: vanilla amethyst and every Geode Plus geode). Off: at their own height. New chunks only.
+		oceanGeodes = true
+		#Placement priority (structure_groups.json "priority"; patcherMod PlacementPriority): a structure whose
+		#pieces would overlap a higher-ranked structure's never starts (settlements > pillagers > dungeons > houses
+		#and camps > ruins), and companion villages around fortified towns. Off: structures may overlap, no
+		#companions. Rejoin; new chunks only.
+		placementPriority = true
+		#meat_block_swaps.json (patcherMod TemplateBlockSwaps): marked blocks in structure templates are swapped
+		#when the template loads (lone red glazed terracotta "meat" -> Architect's Palette salmon log). Off: templates as
+		#the mods ship them. Rejoin; new chunks only.
+		templateBlockSwaps = true
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
@@ -1412,6 +1436,35 @@
 		#Range: 0 ~ 8
 		skirtBump = 0
 
+	#Meta structures: one structure start made of other structures (an anchor such as a village, plus
+	#satellites such as towers around it) and placed features (driftwood on the sea). Every part keeps
+	#within 7 chunks of the start so the whole thing generates; a part that can't fit (biome, room)
+	#is retried elsewhere, and a meta structure short of a part's minimum count doesn't spawn at all.
+	#A meta with an anchor only takes a share of the slots its anchor already won, so no structure's rate
+	#changes. /locate finds a meta by its id and a structure inside one by the structure's own id.
+	[worldgen.meta_structures]
+		#Log every meta structure start that is assembled: its anchor, each part and how many of each
+		#fitted, or which part fell short (the slot is then the plain anchor).
+		log = false
+
+	#Geodes whose column is an ocean (the biome at the sea floor is #minecraft:is_ocean) are moved down before
+	#they generate, so fewer of them poke through the sea floor. Which geodes stay is a fixed roll per position.
+	[worldgen.ocean_geodes]
+		#Blocks a geode under an ocean is moved down.
+		#Range: 0 ~ 64
+		drop = 10
+		#Share of geodes under oceans that keep their own height (0.1 = 1 in 10).
+		#Range: 0.0 ~ 1.0
+		stayShare = 0.1
+		#Geodes whose inner layer is one of these blocks are left at their own height (Geode Plus'
+		#prismarine geode belongs on the sea floor).
+		untouched = ["geode:budding_prismarine"]
+
+	[worldgen.placement_priority]
+		#Log every structure start dropped because a higher-ranked structure overlaps it, and every
+		#companion village. For testing.
+		log = false
+
 #Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
 #one takes a serving; the servings left show as a durability bar and a tooltip line. The
 #last serving leaves an empty can, a crushed can or nothing, rolled with the chances below.
@@ -1555,4 +1608,11 @@
 	#Nothing found: the river or beach keeps its own biome.
 	#Range: 8 ~ 256
 	adaptiveRadius = 64
+	#The snow line (default 320, the overworld build height). Below it height alone never turns rain
+	#into snow (vanilla cools 0.05 per 40 blocks above y80): a column snows only if its biome snows at
+	#y80 in the current sub-season. At and above it temperate and cold biomes always snow, so falling
+	#snow tells a flyer they are above build height. Frozen and permanent-season biomes keep their own
+	#rules. Also the ceiling for the snow_seasons lists in season_types.json.
+	#Range: -64 ~ 4096
+	snowLineY = 320
 

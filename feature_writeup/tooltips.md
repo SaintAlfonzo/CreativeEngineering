@@ -1,6 +1,6 @@
 # Tooltips
 
-Test prefix **TT-** · Last updated **2026-10-05** · Overall status **DEPLOYED (new removals), in-game test pending**
+Test prefix **TT-** · Last updated **2026-10-11** · Overall status **DEPLOYED (new removals), in-game test pending**
 
 ## 0. At a glance
 
@@ -16,9 +16,12 @@ keeps its own writeup.
 | Remove Create Compressed crushed-pile compatibility line | tooltips.js `removeTooltips` | VERIFIED (long-standing) |
 | Framed / copycat lines: schematics save the block or not, and hybrid blocks | tooltips.js "Framed / Copycat Blocks" section | DEPLOYED 2026-09-27 |
 | FramedBlocks renamed "Framed Copycat …" | edited resource pack `Copycat Framed Block.zip` | DEPLOYED 2026-09-27; F3+T |
-| BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + patcherMod `CamoSpeedTooltip` | DEPLOYED (the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording is built, not yet in `mods/`) |
+| BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + patcherMod `CamoSpeedTooltip` | DEPLOYED (incl. the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording) |
 | Framework tooltips: armor effects, tool effects, potion buckets | dedicated client scripts | VERIFIED per their own memories |
-| Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | BUILT 2026-10-05, PL-01 to PL-08 |
+| Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | STAGED for 1.0.6 (not deployed), PL-01 to PL-08 |
+| Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, STAGED for 1.0.6; TT-16 |
+| AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | patcherMod `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in patcherMod 1.0.5, STAGED for 1.0.6; other screens still lack bars (Let's Do recipe book, FTB Quests, Wares, AE2 tables, Patchouli); TT-17, TT-18 |
+| Shield Shift view "Blocks burning" / "Blocks thorns" lines | patcherMod `ShieldTooltip` ([shields.md](shields.md)) | STAGED for 1.0.6; SH-04 |
 | patcherMod tooltips: tier shields, vanilla shield, echo armor set bonus, D&D jetpack crash fix | patcherMod | VERIFIED / see memories |
 
 **Open first:** [tooltips.js](../kubejs/client_scripts/tooltips.js) (helpers L1-86, colour legend L91-125, then sections).
@@ -200,6 +203,9 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [ ] **TT-14 Grape lines gone:** hover each grape and each grape seed in JEI. → Name (and food / mod lines) only, no italic "can be found in ... Biomes" or "needs sunlight" line.
 - [ ] **TT-15 Vinery placeholders:** hover the Grapevine Pot and any `*_wine_rack_mid`. → A gray "TODO" line under Vinery's own line (until the text is written). `logs/latest.log` shows `[addTooltipPattern] vinery:*_wine_rack_mid -> 8 matches`.
 
+- [ ] **TT-16 Underline (1.0.5):** hover a diamond chestplate and a netherite sword in the inventory, over a few launches → the line under the name sits below the spinning model, never across it
+- [ ] **TT-17 AppleSkin in JEI (1.0.5):** open the JEI recipe page of bread, hover the output slot and the catalyst column's crafting table → the bread slot shows AppleSkin's hunger/saturation bar; the recipe slots also show tooltip images (bundles), like the item list
+- [ ] **TT-18 AppleSkin in Lightman's Currency (1.0.5):** a trader selling cooked beef → hover the trade button → the food bar shows under the item lines
 - [ ] **TT-09 No dead patterns:** search `logs/latest.log` for `[addTooltipPattern]`. → Every line reports more than 0 matches.
 
 ## 8. Tooltips To Add
@@ -231,3 +237,8 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - **2026-10-01:** Vinery grape and grape seed flavour lines removed (`removeTooltipKey` prefix keys); Vinery `TODO` placeholders added. TT-14, TT-15 added. See [vinery.md](vinery.md).
 - **2026-10-05:** Placeable food lines added and DD / Fruits Delight placement lines removed ([placeable_food.md](placeable_food.md), tests PL-01 to PL-08).
 - **2026-10-05:** Shield Shift view adds "Blocks burning" and "Blocks thorns" Yes/No lines ([shields.md](shields.md), SH-04). Built, not in `mods/`.
+- **2026-10-11:** rows for the tooltip fixes in the patcherMod 1.0.5 jar (Legendary Tooltips underline, AppleSkin bars in JEI
+  and Lightman's Currency) with TT-16 to TT-18; placeable lines and the shield Shift lines marked STAGED for 1.0.6
+  (not deployed). The camo-speed wording row was stale: it shipped long ago.
+- 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
+  2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.

@@ -25,7 +25,7 @@
 // Selectors match tools/gen_spawn_table.py: 'where' clauses OR'ed, traits in a clause AND'ed, '!trait' negated,
 // traits from wild_crops.json's biome table; then 'add' (ids, '#tags' as nested tag references) and 'except' (ids).
 //
-// The tags handler can't check biome ids (KubeJS runs it as a pre-pass without a registry, see biome_merges.js),
+// The tags handler can't check biome ids (KubeJS runs it as a pre-pass without a registry, see wild_crops.js),
 // so ServerEvents.loaded compares the live tags with the rules and logs SpawnTuning's summary of what changed.
 //
 // CEConfig [worldgen.systems] mobSpawns = false: nothing here runs, every mob spawns as its mod ships it.

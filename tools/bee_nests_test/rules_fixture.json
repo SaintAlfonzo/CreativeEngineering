@@ -1,0 +1,18 @@
+{
+  "_readme": ["Test fixture for tools/test_bee_nests.sh: every rule shape, then rules that must be rejected."],
+  "rules": [
+    { "id": "floor", "where": ["temperate forest"], "chance": 0.01 },
+    { "id": "boost", "where": ["flower"], "scale": 3 },
+    { "id": "override", "where": ["birch"], "chance": 0.05, "scale": 0.5 },
+    { "id": "meadow_trees", "where": ["plains flower"], "add": ["minecraft:plains"], "except": ["minecraft:sunflower_plains"],
+      "trees": { "feature": "minecraft:fancy_oak_bees", "rate": "1/16" } },
+    { "id": "many_trees", "where": ["savanna"], "trees": { "feature": "minecraft:fancy_oak_bees", "rate": 2.4, "sapling": "minecraft:acacia_sapling" } },
+    { "id": "apple_bees", "where": ["oak forest"], "trees": { "feature": "vinery:apple_bee", "rate": "1/40" } },
+    { "id": "Bad_Id", "where": ["forest"], "chance": 0.1 },
+    { "id": "floor", "where": ["forest"], "chance": 0.1 },
+    { "id": "nothing", "where": ["forest"] },
+    { "id": "too_likely", "where": ["forest"], "chance": 1.5 },
+    { "id": "no_rate", "where": ["forest"], "trees": { "feature": "minecraft:fancy_oak_bees" } },
+    { "id": "no_biome", "where": ["no_such_trait"], "chance": 0.1 }
+  ]
+}

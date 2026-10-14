@@ -147,7 +147,9 @@ public final class TemplateTrim {
 	public static List<StructureBlockInfo> apply(LevelAccessor level, List<StructureBlockInfo> infos) {
 		if (infos == null || infos.isEmpty()) return null;
 		StructureStart placing = GroundMatch.placing();   // null: a structure block, /place template, a feature
-		if (placing == null || !WorldgenConfig.templateTrimEnabled() || !TerrainAdaptation.trims(placing.getStructure())) return null;
+		if (placing == null || !WorldgenConfig.templateTrimEnabled()) return null;
+		// a meta structure's part trims as the structure it came from (a tower beside a village)
+		if (!TerrainAdaptation.trims(MetaStructure.structureAt(placing, infos.get(0).pos))) return null;
 		Result r = trim(infos);
 		return r == null ? null : r.infos();
 	}

@@ -3,7 +3,8 @@
 # vanilla structures on vanilla overworld terrain at random sites in their biomes (no mods, builtin registries, the
 # real template and terrain code), counts earth over water / air the way EarthFill does, and prints the distribution
 # plus the share each candidate limit pair would cancel. About 7 minutes for 60 sites each; ~1.2 GB heap.
-# Usage: tools/earth_fill_sim.sh [seed] [sites per structure]    (run ./gradlew build in patcherMod first)
+# Usage: tools/earth_fill_sim.sh [seed] [sites per structure] [beard]    (run ./gradlew build in patcherMod first)
+# "beard": measure how deep under a piece the beard still fills the ground ([worldgen.earth_fill] beardReach)
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
@@ -15,5 +16,5 @@ source "$ROOT/tools/java_test_cp.sh"
 mkdir -p "$T/stub" "$T/test"
 javac -proc:none -nowarn -cp "$CP" -d "$T/stub" tools/structure_groups_test/net/minecraftforge/fml/loading/FMLEnvironment.java
 javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" tools/worldgen_test/com/SaintAlfonzo/creativeengineering/worldgen/EarthFillSim.java 2>&1 | grep -E 'error' -A3 || true
-java -Xmx1200m -cp "$T/stub:$T/test:$CP:$V/client-extra.jar" com.SaintAlfonzo.creativeengineering.worldgen.EarthFillSim "${1:-4242}" "${2:-60}" 2>&1 \
+java -Xmx1200m -cp "$T/stub:$T/test:$CP:$V/client-extra.jar" com.SaintAlfonzo.creativeengineering.worldgen.EarthFillSim "${1:-4242}" "${2:-60}" ${3:-} 2>&1 \
   | grep -v '^\[\|SLF4J\|StatusLogger'

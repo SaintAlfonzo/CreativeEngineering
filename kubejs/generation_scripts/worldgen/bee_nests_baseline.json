@@ -1,0 +1,372 @@
+{
+  "generated": "2026-10-10T18:26:17.324530057Z",
+  "counting_since": "2026-10-10T17:37:55.909479683Z",
+  "rules": [],
+  "biomes": {
+    "minecraft:badlands": {
+      "chunks": 706,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:bamboo_jungle": {
+      "chunks": 89,
+      "trees": 329,
+      "nests": 0
+    },
+    "minecraft:beach": {
+      "chunks": 578,
+      "trees": 2,
+      "nests": 0
+    },
+    "minecraft:birch_forest": {
+      "chunks": 788,
+      "trees": 11235,
+      "nests": 0
+    },
+    "minecraft:cold_ocean": {
+      "chunks": 1245,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:dark_forest": {
+      "chunks": 740,
+      "trees": 7388,
+      "nests": 0
+    },
+    "minecraft:deep_cold_ocean": {
+      "chunks": 2547,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:deep_lukewarm_ocean": {
+      "chunks": 6029,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:deep_ocean": {
+      "chunks": 9521,
+      "trees": 9,
+      "nests": 0
+    },
+    "minecraft:desert": {
+      "chunks": 86,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:eroded_badlands": {
+      "chunks": 34,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:flower_forest": {
+      "chunks": 1,
+      "trees": 3,
+      "nests": 0
+    },
+    "minecraft:forest": {
+      "chunks": 598,
+      "trees": 3544,
+      "nests": 6
+    },
+    "minecraft:frozen_ocean": {
+      "chunks": 118,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:frozen_peaks": {
+      "chunks": 71,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:frozen_river": {
+      "chunks": 45,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:grove": {
+      "chunks": 10,
+      "trees": 12,
+      "nests": 0
+    },
+    "minecraft:jagged_peaks": {
+      "chunks": 28,
+      "trees": 1,
+      "nests": 0
+    },
+    "minecraft:jungle": {
+      "chunks": 12,
+      "trees": 129,
+      "nests": 0
+    },
+    "minecraft:lukewarm_ocean": {
+      "chunks": 563,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:lush_caves": {
+      "chunks": 4,
+      "trees": 1,
+      "nests": 0
+    },
+    "minecraft:meadow": {
+      "chunks": 236,
+      "trees": 73,
+      "nests": 0
+    },
+    "minecraft:ocean": {
+      "chunks": 6648,
+      "trees": 3,
+      "nests": 0
+    },
+    "minecraft:old_growth_birch_forest": {
+      "chunks": 600,
+      "trees": 2507,
+      "nests": 35
+    },
+    "minecraft:old_growth_spruce_taiga": {
+      "chunks": 83,
+      "trees": 415,
+      "nests": 0
+    },
+    "minecraft:plains": {
+      "chunks": 985,
+      "trees": 239,
+      "nests": 1
+    },
+    "minecraft:river": {
+      "chunks": 346,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:savanna": {
+      "chunks": 765,
+      "trees": 1586,
+      "nests": 0
+    },
+    "minecraft:savanna_plateau": {
+      "chunks": 280,
+      "trees": 465,
+      "nests": 0
+    },
+    "minecraft:snowy_beach": {
+      "chunks": 265,
+      "trees": 7,
+      "nests": 0
+    },
+    "minecraft:snowy_plains": {
+      "chunks": 33,
+      "trees": 8,
+      "nests": 0
+    },
+    "minecraft:snowy_slopes": {
+      "chunks": 12,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:snowy_taiga": {
+      "chunks": 209,
+      "trees": 1056,
+      "nests": 0
+    },
+    "minecraft:sparse_jungle": {
+      "chunks": 22,
+      "trees": 29,
+      "nests": 0
+    },
+    "minecraft:swamp": {
+      "chunks": 224,
+      "trees": 1279,
+      "nests": 0
+    },
+    "minecraft:taiga": {
+      "chunks": 56,
+      "trees": 247,
+      "nests": 0
+    },
+    "minecraft:warm_ocean": {
+      "chunks": 986,
+      "trees": 0,
+      "nests": 0
+    },
+    "minecraft:windswept_forest": {
+      "chunks": 23,
+      "trees": 80,
+      "nests": 0
+    },
+    "minecraft:windswept_savanna": {
+      "chunks": 73,
+      "trees": 160,
+      "nests": 0
+    },
+    "minecraft:wooded_badlands": {
+      "chunks": 5,
+      "trees": 0,
+      "nests": 0
+    },
+    "terralith:alpine_grove": {
+      "chunks": 63,
+      "trees": 76,
+      "nests": 0
+    },
+    "terralith:alpine_highlands": {
+      "chunks": 9,
+      "trees": 39,
+      "nests": 0
+    },
+    "terralith:birch_taiga": {
+      "chunks": 313,
+      "trees": 790,
+      "nests": 0
+    },
+    "terralith:blooming_plateau": {
+      "chunks": 389,
+      "trees": 4,
+      "nests": 3
+    },
+    "terralith:blooming_valley": {
+      "chunks": 159,
+      "trees": 802,
+      "nests": 1
+    },
+    "terralith:brushland": {
+      "chunks": 161,
+      "trees": 1263,
+      "nests": 0
+    },
+    "terralith:cave/fungal_caves": {
+      "chunks": 0,
+      "trees": 36,
+      "nests": 0
+    },
+    "terralith:cave/infested_caves": {
+      "chunks": 1,
+      "trees": 0,
+      "nests": 0
+    },
+    "terralith:cave/underground_jungle": {
+      "chunks": 0,
+      "trees": 8,
+      "nests": 1
+    },
+    "terralith:forested_highlands": {
+      "chunks": 210,
+      "trees": 603,
+      "nests": 0
+    },
+    "terralith:gravel_beach": {
+      "chunks": 472,
+      "trees": 0,
+      "nests": 0
+    },
+    "terralith:haze_mountain": {
+      "chunks": 506,
+      "trees": 25684,
+      "nests": 0
+    },
+    "terralith:highlands": {
+      "chunks": 546,
+      "trees": 176,
+      "nests": 0
+    },
+    "terralith:hot_shrubland": {
+      "chunks": 119,
+      "trees": 211,
+      "nests": 1
+    },
+    "terralith:ice_marsh": {
+      "chunks": 89,
+      "trees": 164,
+      "nests": 0
+    },
+    "terralith:orchid_swamp": {
+      "chunks": 462,
+      "trees": 311,
+      "nests": 0
+    },
+    "terralith:rocky_jungle": {
+      "chunks": 21,
+      "trees": 178,
+      "nests": 0
+    },
+    "terralith:rocky_mountains": {
+      "chunks": 665,
+      "trees": 0,
+      "nests": 0
+    },
+    "terralith:savanna_badlands": {
+      "chunks": 14,
+      "trees": 6,
+      "nests": 0
+    },
+    "terralith:scarlet_mountains": {
+      "chunks": 83,
+      "trees": 0,
+      "nests": 0
+    },
+    "terralith:shield": {
+      "chunks": 345,
+      "trees": 1347,
+      "nests": 0
+    },
+    "terralith:shrubland": {
+      "chunks": 287,
+      "trees": 786,
+      "nests": 0
+    },
+    "terralith:siberian_taiga": {
+      "chunks": 46,
+      "trees": 438,
+      "nests": 0
+    },
+    "terralith:skylands_autumn": {
+      "chunks": 79,
+      "trees": 180,
+      "nests": 0
+    },
+    "terralith:skylands_spring": {
+      "chunks": 1,
+      "trees": 11,
+      "nests": 0
+    },
+    "terralith:skylands_summer": {
+      "chunks": 1,
+      "trees": 11,
+      "nests": 0
+    },
+    "terralith:snowy_shield": {
+      "chunks": 14,
+      "trees": 70,
+      "nests": 0
+    },
+    "terralith:steppe": {
+      "chunks": 1,
+      "trees": 0,
+      "nests": 0
+    },
+    "terralith:temperate_highlands": {
+      "chunks": 1,
+      "trees": 0,
+      "nests": 0
+    },
+    "terralith:tropical_jungle": {
+      "chunks": 9,
+      "trees": 47,
+      "nests": 0
+    },
+    "terralith:warm_river": {
+      "chunks": 14,
+      "trees": 0,
+      "nests": 0
+    },
+    "terralith:yellowstone": {
+      "chunks": 939,
+      "trees": 1619,
+      "nests": 0
+    },
+    "terralith:yosemite_cliffs": {
+      "chunks": 1,
+      "trees": 0,
+      "nests": 0
+    }
+  }
+}

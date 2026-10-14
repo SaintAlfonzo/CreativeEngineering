@@ -1,0 +1,188 @@
+# Nether block swaps
+
+Written by `python3 tools/gen_nether_swaps.py` from `kubejs/generation_scripts/worldgen/nether_swap_rules.json`. Do not edit. Per rule: every template it changes, with block counts. Applied by patcherMod `TemplateBlockSwaps` when a template loads.
+
+Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later): `philipsruins:lost_soul_city`, `philipsruins:lost_soul_dungeon`, `philipsruins:rare_ruin`, `philipsruins:start_nether_ruin`.
+
+## 1. Philip's underground structures: soul sand and soil to basalt (204 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `philipsruins:deep_ruin2` | `philipsruins:underground_structures` | `soul_sand` | `minecraft:basalt` | 7 |
+| `philipsruins:deep_ruin2` | `philipsruins:underground_structures` | `soul_soil` | `minecraft:basalt` | 6 |
+| `philipsruins:deep_ruin3` | `philipsruins:underground_structures` | `soul_sand` | `minecraft:basalt` | 8 |
+| `philipsruins:deep_ruin3` | `philipsruins:underground_structures` | `soul_soil` | `minecraft:basalt` | 8 |
+| `philipsruins:deep_ruin5` | `philipsruins:underground_structures` | `soul_sand` | `minecraft:basalt` | 11 |
+| `philipsruins:deep_ruin5` | `philipsruins:underground_structures` | `soul_soil` | `minecraft:basalt` | 7 |
+| `philipsruins:deep_ruin6` | `philipsruins:underground_structures` | `soul_sand` | `minecraft:basalt` | 13 |
+| `philipsruins:deep_ruin6` | `philipsruins:underground_structures` | `soul_soil` | `minecraft:basalt` | 19 |
+| `philipsruins:deep_ruin7` | `philipsruins:underground_structures` | `soul_sand` | `minecraft:basalt` | 1 |
+| `philipsruins:deep_ruin7` | `philipsruins:underground_structures` | `soul_soil` | `minecraft:basalt` | 3 |
+| `philipsruins:deep_ruin8` | `philipsruins:underground_structures` | `soul_sand` | `minecraft:basalt` | 22 |
+| `philipsruins:deep_ruin8` | `philipsruins:underground_structures` | `soul_soil` | `minecraft:basalt` | 28 |
+| `philipsruins:deep_ruinbig1` | `philipsruins:underground_structures` | `soul_sand` | `minecraft:basalt` | 32 |
+| `philipsruins:deep_ruinbig1` | `philipsruins:underground_structures` | `soul_soil` | `minecraft:basalt` | 39 |
+
+## 2. YUNG's crypt: soul sand to coarse dirt (97 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterdungeons:zombie_dungeon/floor1/room/floor1_specialroom_0` | `betterdungeons:zombie_dungeon` | `soul_sand` | `minecraft:coarse_dirt` | 97 |
+
+## 3. Jungle temple, fortified desert village: netherrack to magma (magma keeps fire burning: vanilla infiniburn_overworld); their soul sand/soil goes to basalt below (42 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterjungletemples:floor_1/room_back/floor_1_room_back_2` | `betterjungletemples:jungle_temple` | `netherrack` | `minecraft:magma_block` | 34 |
+| `terralith:village/desert/houses/armorsmith1` | `terralith:fortified_desert_village` | `netherrack` | `minecraft:magma_block` | 8 |
+
+## 4. Terralith frosted dungeon: soul soil to permafrost, soul fire put out (32 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `terralith:underground/dungeon1` | `terralith:underground/frosted_dungeon` | `soul_soil` | `immersive_weathering:permafrost` | 32 |
+
+## 5. Terralith frosted dungeon: soul fire put out (28 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `terralith:underground/dungeon1` | `terralith:underground/frosted_dungeon` | `soul_fire` | `minecraft:air` | 28 |
+
+## 6. Simply Houses taiga woodcutter: nether wart and netherrack removed (3 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `simply_houses:taiga_woodcutter/taiga_woodcutter` | `simply_houses:taiga_woodcutter` | `nether_wart_block` | `minecraft:air` | 2 |
+| `simply_houses:taiga_woodcutter/taiga_woodcutter` | `simply_houses:taiga_woodcutter` | `netherrack` | `minecraft:air` | 1 |
+
+## 7. Terralith fortified village: soul campfires to campfires (6 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `terralith:village/fortified/houses/generic_big1` | `terralith:fortified_village` | `soul_campfire` | `minecraft:campfire` | 1 |
+| `terralith:village/fortified/houses/library` | `terralith:fortified_village` | `soul_campfire` | `minecraft:campfire` | 1 |
+| `terralith:village/fortified/houses/smith1` | `terralith:fortified_village` | `soul_campfire` | `minecraft:campfire` | 2 |
+| `terralith:village/fortified/start_castle` | `terralith:fortified_village` | `soul_campfire` | `minecraft:campfire` | 2 |
+
+## 8. Simply Houses taiga house: crimson and warped plants, nether sprouts removed (4 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `simply_houses:taiga_house/taiga_house` | `simply_houses:taiga_house` | `crimson_fungus` | `minecraft:air` | 1 |
+| `simply_houses:taiga_house/taiga_house` | `simply_houses:taiga_house` | `crimson_roots` | `minecraft:air` | 1 |
+| `simply_houses:taiga_house/taiga_house` | `simply_houses:taiga_house` | `nether_sprouts` | `minecraft:air` | 1 |
+| `simply_houses:taiga_house/taiga_house` | `simply_houses:taiga_house` | `warped_fungus` | `minecraft:air` | 1 |
+
+## 9. Sky village: glowstone to yellow corundum (8 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `skyvillages:alchemist_1` | `skyvillages:skyvillage` | `glowstone` | `quark:yellow_corundum` | 2 |
+| `skyvillages:cartographer_1` | `skyvillages:skyvillage` | `glowstone` | `quark:yellow_corundum` | 1 |
+| `skyvillages:fletcher_1` | `skyvillages:skyvillage` | `glowstone` | `quark:yellow_corundum` | 1 |
+| `skyvillages:fountain` | `skyvillages:skyvillage` | `glowstone` | `quark:yellow_corundum` | 2 |
+| `skyvillages:loom_1` | `skyvillages:skyvillage` | `glowstone` | `quark:yellow_corundum` | 1 |
+| `skyvillages:weaponsmith_1` | `skyvillages:skyvillage` | `glowstone` | `quark:yellow_corundum` | 1 |
+
+## 10. Simply Houses taiga forge: wart blocks removed (6 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `simply_houses:taiga_forge/taiga_forge` | `simply_houses:taiga_forge` | `nether_wart_block` | `minecraft:air` | 6 |
+
+## 11. YUNG's stronghold: nether gold ore to gold ore (172 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterstrongholds:treasure/corner/treasure_corner_10` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 7 |
+| `betterstrongholds:treasure/corner/treasure_corner_11` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 6 |
+| `betterstrongholds:treasure/corner/treasure_corner_6` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 23 |
+| `betterstrongholds:treasure/corner/treasure_corner_7` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 20 |
+| `betterstrongholds:treasure/corner/treasure_corner_8` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 14 |
+| `betterstrongholds:treasure/corner/treasure_corner_9` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 12 |
+| `betterstrongholds:treasure/wall/treasure_wall_0` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 21 |
+| `betterstrongholds:treasure/wall/treasure_wall_1` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 21 |
+| `betterstrongholds:treasure/wall/treasure_wall_2` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 18 |
+| `betterstrongholds:treasure/wall/treasure_wall_3` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 16 |
+| `betterstrongholds:treasure/wall/treasure_wall_4` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 7 |
+| `betterstrongholds:treasure/wall/treasure_wall_5` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 7 |
+
+## 12. T&T mushroom village: twisting vines removed (15 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `kaisyn:village/mushroom_fields_fantasy/town_centers/mushroom_meeting_point_1` | `towns_and_towers:village_mushroom_fields` | `twisting_vines` | `minecraft:air` | 1 |
+| `kaisyn:village/mushroom_fields_fantasy/town_centers/mushroom_meeting_point_1` | `towns_and_towers:village_mushroom_fields` | `twisting_vines_plant` | `minecraft:air` | 14 |
+
+## 13. Mysticrift mangrove tower: every Nether block to gold ore (14 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `mysticrift_pillagers_towers_aris:mangrove_pillager_tower_new` | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | `ancient_debris` | `minecraft:gold_ore` | 7 |
+| `mysticrift_pillagers_towers_aris:mangrove_pillager_tower_new` | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | `glowstone` | `minecraft:gold_ore` | 6 |
+| `mysticrift_pillagers_towers_aris:mangrove_pillager_tower_new` | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | `respawn_anchor` | `minecraft:gold_ore` | 1 |
+
+## 14. Every nether brick block to its deepslate brick twin (155 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterstrongholds:rooms/grand_library` | `betterstrongholds:stronghold` | `nether_brick_fence` | `minecraft:deepslate_brick_wall` | 4 |
+| `betterstrongholds:rooms/grand_library` | `betterstrongholds:stronghold` | `nether_brick_wall` | `minecraft:deepslate_brick_wall` | 2 |
+| `betterstrongholds:statues/statue_book_l` | `betterstrongholds:stronghold` | `nether_brick_stairs` | `minecraft:deepslate_brick_stairs` | 2 |
+| `betterstrongholds:statues/statue_book_r` | `betterstrongholds:stronghold` | `nether_brick_stairs` | `minecraft:deepslate_brick_stairs` | 2 |
+| `betterstrongholds:statues/statue_chest_l` | `betterstrongholds:stronghold` | `nether_brick_fence` | `minecraft:deepslate_brick_wall` | 2 |
+| `betterstrongholds:statues/statue_chest_l` | `betterstrongholds:stronghold` | `nether_brick_wall` | `minecraft:deepslate_brick_wall` | 1 |
+| `betterstrongholds:statues/statue_chest_r` | `betterstrongholds:stronghold` | `nether_brick_fence` | `minecraft:deepslate_brick_wall` | 2 |
+| `betterstrongholds:statues/statue_chest_r` | `betterstrongholds:stronghold` | `nether_brick_wall` | `minecraft:deepslate_brick_wall` | 1 |
+| `betterstrongholds:terminators/hallway_end_statue_book_l` | `betterstrongholds:stronghold` | `nether_brick_stairs` | `minecraft:deepslate_brick_stairs` | 2 |
+| `betterstrongholds:terminators/hallway_end_statue_book_r` | `betterstrongholds:stronghold` | `nether_brick_stairs` | `minecraft:deepslate_brick_stairs` | 2 |
+| `betterstrongholds:terminators/hallway_end_statue_chest_l` | `betterstrongholds:stronghold` | `nether_brick_fence` | `minecraft:deepslate_brick_wall` | 2 |
+| `betterstrongholds:terminators/hallway_end_statue_chest_l` | `betterstrongholds:stronghold` | `nether_brick_wall` | `minecraft:deepslate_brick_wall` | 1 |
+| `betterstrongholds:terminators/hallway_end_statue_chest_r` | `betterstrongholds:stronghold` | `nether_brick_fence` | `minecraft:deepslate_brick_wall` | 2 |
+| `betterstrongholds:terminators/hallway_end_statue_chest_r` | `betterstrongholds:stronghold` | `nether_brick_wall` | `minecraft:deepslate_brick_wall` | 1 |
+| `illagerwarship:illager-warship` | `illagerwarship:warship` | `nether_brick_fence` | `minecraft:deepslate_brick_wall` | 9 |
+| `illagerwarship:illager-warship` | `illagerwarship:warship` | `nether_brick_slab` | `minecraft:deepslate_brick_slab` | 37 |
+| `illagerwarship:illager-warship` | `illagerwarship:warship` | `nether_bricks` | `minecraft:deepslate_bricks` | 69 |
+| `underground_bunkers:underground_bunker/underground_bunkers_large_room_2` | `underground_bunkers:underground_bunker` | `nether_brick_wall` | `minecraft:deepslate_brick_wall` | 14 |
+
+## 15. Any netherrack left to magma (the ruined portals, all off, keep theirs) (0 blocks)
+
+Nothing matched.
+
+## 16. Any soul sand or soil left to basalt (the ancient city and Philip's sculk dungeon keep theirs) (39 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `philipsruins:ancient_ruin_soul1` | `philipsruins:level_two_ruins_pool` | `soul_sand` | `minecraft:basalt` | 2 |
+| `philipsruins:ancient_ruin_soul1` | `philipsruins:level_two_ruins_pool` | `soul_soil` | `minecraft:basalt` | 1 |
+| `philipsruins:crypt_room5` | `philipsruins:ancient_crypt` | `soul_sand` | `minecraft:basalt` | 4 |
+| `philipsruins:crypt_room8` | `philipsruins:ancient_crypt` | `soul_sand` | `minecraft:basalt` | 2 |
+| `underground_bunkers:underground_bunker/underground_bunkers_room_7` | `underground_bunkers:underground_bunker` | `soul_sand` | `minecraft:basalt` | 30 |
+
+## 17. Shroomlight to orange corundum (38 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `kaisyn:outpost/towers/flower_forest/base_plate` | `towns_and_towers:pillager_outpost_flower_forest` | `shroomlight` | `quark:orange_corundum` | 1 |
+| `kaisyn:outpost/towers/mushroom_fields/base_plate` | `towns_and_towers:pillager_outpost_mushroom_fields` | `shroomlight` | `quark:orange_corundum` | 28 |
+| `kaisyn:village/mushroom_fields_fantasy/houses/mushroom_large_house_1` | `towns_and_towers:village_mushroom_fields` | `shroomlight` | `quark:orange_corundum` | 1 |
+| `kaisyn:village/mushroom_fields_fantasy/houses/mushroom_small_house_1` | `towns_and_towers:village_mushroom_fields` | `shroomlight` | `quark:orange_corundum` | 1 |
+| `terralith:underground/giant_bee_hive_1` | `terralith:underground/giant_bee_hive` | `shroomlight` | `quark:orange_corundum` | 4 |
+| `terralith:underground/giant_bee_hive_2` | `terralith:underground/giant_bee_hive` | `shroomlight` | `quark:orange_corundum` | 3 |
+
+## 18. Any soul campfire left to a campfire (2 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterdungeons:skeleton_dungeon/skeleton_shell` | `betterdungeons:skeleton_dungeon` | `soul_campfire` | `minecraft:campfire` | 1 |
+| `simply_houses:forest_fort/forest_fort` | `simply_houses:forest_fort` | `soul_campfire` | `minecraft:campfire` | 1 |
+
+## 19. Potted Nether plants to a potted dead bush (4 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `chefsdelight:plains_chef_house` | `minecraft:village_plains`, `minecraft:village_savanna` ... | `potted_crimson_fungus` | `minecraft:potted_dead_bush` | 1 |
+| `kaisyn:outpost/towers/snowy_plains/base_plate` | `towns_and_towers:pillager_outpost_snowy_plains` | `potted_crimson_roots` | `minecraft:potted_dead_bush` | 1 |
+| `terralith:village/fortified/houses/cartographer` | `terralith:fortified_village` | `potted_crimson_fungus` | `minecraft:potted_dead_bush` | 1 |
+| `terralith:village/fortified/houses/church` | `terralith:fortified_village` | `potted_crimson_fungus` | `minecraft:potted_dead_bush` | 1 |
+

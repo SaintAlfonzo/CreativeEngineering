@@ -21,7 +21,7 @@
 // Anything that names a mod which isn't loaded is skipped: an unknown id stops the world loading.
 //
 // The tags handler can't check biome ids (KubeJS runs it as a pre-pass without a registry, see
-// biome_merges.js), so ServerEvents.loaded compares the live tags with the rules.
+// wild_crops.js), so ServerEvents.loaded compares the live tags with the rules.
 //
 // CEConfig [worldgen.systems] wildFlowers = false: nothing here runs, every flower as its mod ships it.
 //

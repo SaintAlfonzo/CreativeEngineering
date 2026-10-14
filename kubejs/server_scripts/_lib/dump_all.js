@@ -24,6 +24,7 @@
 		'dumpcropgrowth',
 		'dumpfood',
 		'dumpplaceable',
+		'dumppaintings',
 		'dumpcompost',
 		'dumpstructures',
 		'dumpstructuregen',

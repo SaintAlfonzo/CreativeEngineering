@@ -41,8 +41,7 @@ THE FIT (new members, and --migrate)
   guaranteed gap. Lower QUANTILE (e.g. 0.9 = the 90% least crowded area) to cap the most crowded
   biomes at the group rate instead; the estimates report lists what gets capped.
 
-Biome pools come from every jar's biome tags + kubejs/data + biome_merges.json, the same resolution
-as tools/analyze_structure_biome_merges.py.
+Biome pools come from every jar's biome tags + kubejs/data, then biome_fits.json and the biome rules.
 """
 import argparse
 import json
@@ -57,15 +56,14 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from analyze_structure_biome_merges import VANILLA_JAR, MODS_DIR  # noqa: E402
-from gen_structure_config import VANILLA_TAG_OVERRIDES, loads_lenient  # noqa: E402
+from gen_structure_config import MODS_DIR, VANILLA_JAR, VANILLA_TAG_OVERRIDES, loads_lenient  # noqa: E402
 
 INSTANCE = Path(__file__).resolve().parent.parent
 WG = INSTANCE / 'kubejs/generation_scripts/worldgen'
 CONFIG = WG / 'structure_config.json'
 TAGS = WG / 'structure_tags.json'
 GROUPS = WG / 'structure_groups.json'
-MERGES = WG / 'biome_merges.json'
+FITS = WG / 'biome_fits.json'
 BIOME_CONFIG = WG / 'biome_config.json'
 ESTIMATES = WG / 'structure_group_estimates.md'
 MIGRATION_REPORT = WG / 'structure_group_migration.md'
@@ -116,6 +114,10 @@ GROUP_SPECS = OrderedDict([
     ('boats', {
         'note': 'Ships at sea: the Towns & Towers ship village and pillager ship. Meta structures join later.',
         'values': ['towns_and_towers:village_ocean', 'towns_and_towers:pillager_outpost_ocean'],
+    }),
+    ('flotsam', {
+        'note': 'Floating debris at sea: the driftwood flotilla (meta structure). Its own grid, so it takes no slots from ruins or ships.',
+        'values': ['creativeengineering:meta/driftwood_flotilla'],
     }),
     ('remote', {
         'note': 'Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer\'s Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.',
@@ -204,8 +206,7 @@ def resolve_tags(tag_defs, all_ids):
 # ── biome pools and areas ────────────────────────────────────────────────────
 
 def load_biome_tags():
-    """Every biome tag from the vanilla jar, every mod jar (lenient: Beautify's have comments),
-    kubejs/data, and biome_merges.json additions."""
+    """Every biome tag from the vanilla jar, every mod jar (lenient: Beautify's have comments) and kubejs/data."""
     import re
     raw = defaultdict(list)
     jars = ([VANILLA_JAR] if VANILLA_JAR else []) + sorted(MODS_DIR.glob('*.jar'))
@@ -231,9 +232,6 @@ def load_biome_tags():
             raw[f'{ns}:{path}'].extend(json.loads(f.read_text()).get('values', []))
         except json.JSONDecodeError:
             pass
-    if MERGES.exists():
-        for tag, spec in read_json(MERGES).get('tags', {}).items():
-            raw[tag].extend(spec.get('add', []))
     return raw
 
 
@@ -261,12 +259,17 @@ def full_id(v):
     return v if ':' in v else 'minecraft:' + v
 
 
+# Biome tags a mod fills at run time (its jar ships them empty): read as the tag they get filled with.
+# Supplementaries' dynamic pack puts #minecraft:is_overworld into has_way_signs.
+RUNTIME_BIOME_TAGS = {'supplementaries:has_way_signs': 'minecraft:is_overworld'}
+
+
 def structure_pool(sid, field, raw, cache):
     """Every biome the structure may spawn in (not yet filtered to biomes that exist)."""
     ns, _, path = sid.partition(':')
     if ns == 'minecraft' and not isinstance(field, str):
         # the config's lists for vanilla are read from the vanilla jar alone; the tag includes
-        # Terralith's and biome_merges' additions. A string field means a mod replaced the
+        # Terralith's additions. A string field means a mod replaced the
         # structure json (Hopo's shipwrecks), so that field is the real one.
         tag = f'minecraft:has_structure/{VANILLA_TAG_OVERRIDES.get(sid, path)}'
         if tag in raw:
@@ -277,7 +280,8 @@ def structure_pool(sid, field, raw, cache):
     out = set()
     for v in fields:
         if isinstance(v, str) and v.startswith('#'):
-            out |= resolve_biome_tag(full_id(v[1:]), raw, cache)
+            tag = full_id(v[1:])
+            out |= resolve_biome_tag(RUNTIME_BIOME_TAGS.get(tag, tag), raw, cache)
         elif isinstance(v, str):
             out.add(full_id(v))
     return frozenset(out)
@@ -355,7 +359,7 @@ def member_densities(K, members, pools):
 class Pack:
     """Everything the model needs, loaded once."""
 
-    def __init__(self, config_path=None, tags_path=None):
+    def __init__(self, config_path=None, tags_path=None, fits=True):
         self.config = read_json(config_path or CONFIG)
         self.sets = self.config['structure_sets']
         self.tags_doc = read_json(tags_path or TAGS)
@@ -372,14 +376,82 @@ class Pack:
         self.areas = load_areas()
         raw = load_biome_tags()
         cache = {}
+        self._raw, self._cache = raw, cache
         self.pools, self.pool_all = {}, {}
         for e in self.sets.values():
             for s in e['structures']:
                 pool = structure_pool(s['structure'], s.get('biomes'), raw, cache)
                 self.pool_all[s['structure']] = pool
                 self.pools[s['structure']] = frozenset(b for b in pool if b in self.areas)
+        self.fitted = OrderedDict()
+        if fits:
+            self.apply_biome_fits(raw, cache)
         self.blocked = {s['structure'] for e in self.sets.values() for s in e['structures'] if s.get('blocked')}
+        self.meta = self.config.get('meta_structures', {})
+        # metas with an anchor never win a slot themselves: they take a share of the slots their anchors won
+        # (patcherMod MetaSlots), so they are left out of every weighted pick here and estimated from their anchors
+        self.converted = {mid: float(m.get('share', 0)) for mid, m in self.meta.items() if m.get('anchor')}
+        # group members with "replaces" in structure_groups.json don't win slots by weight either: they take "share" of
+        # the slots the member they name wins and keeps (patcherMod MetaSlots); replaces = {replacement: replaced id}
+        self.replaces = {}
+        if GROUPS.exists():
+            for g in read_json(GROUPS).get('groups', {}).values():
+                for sid, v in g.get('structures', {}).items():
+                    if isinstance(v, dict) and 'replaces' in v and v.get('enabled', True):
+                        self.replaces[sid] = v['replaces']
+                        self.converted[sid] = float(v.get('share', 0))
+        for mid, m in self.meta.items():
+            pool = structure_pool(mid, m.get('biomes'), raw, cache)
+            # MetaStructure only starts where an anchor and one of every required part can stand
+            for need in ([m['anchor']] if m.get('anchor') else []) + m.get('required_parts', []):
+                pool = pool & frozenset().union(*(self.pool_all.get(i, frozenset()) for i in self.meta_entries(need)))
+            self.pool_all[mid] = pool
+            self.pools[mid] = frozenset(b for b in pool if b in self.areas)
         self.apply_biome_rules(raw, cache)
+
+    def meta_entries(self, entries):
+        """A meta structure's "#creativeengineering:meta/x" / id entries -> structure ids (meta/x = the
+        structure_tags.json tag; other tags aren't known here and count as empty)."""
+        out = set()
+        for e in entries or []:
+            if e.startswith('#creativeengineering:'):
+                out |= set(self.tag_members.get(e[len('#creativeengineering:'):], ()))
+            elif not e.startswith('#'):
+                out.add(e)
+        return out - set(self.meta)
+
+    def apply_biome_fits(self, raw, cache):
+        """biome_fits.json, as patcherMod StructureBiomeFits applies it: a structure in a fit's structure tag spawns in
+        that fit's biomes plus its parent fits' (unless inherit is false), not its own list. Runs before the meta
+        structures and biome rules, which see the fitted lists in game too. fitted = {structure id: [fit names]}."""
+        fits = read_json(FITS).get('fits', {}) if FITS.exists() else {}
+
+        def chain(name):
+            if fits[name].get('inherit', True) is False:
+                return [name]
+            parts = name.split('/')
+            for n in range(len(parts) - 1, 0, -1):
+                parent = '/'.join(parts[:n])
+                if parent in fits:
+                    return [name] + chain(parent)
+            return [name]
+
+        def biomes(name):
+            out = set()
+            for b in fits[name].get('biomes', []):
+                out |= resolve_biome_tag(full_id(b[1:]), raw, cache) if b.startswith('#') else {full_id(b)}
+            return out
+
+        for name in fits:
+            for sid in sorted(self.tag_members.get(name, ())):
+                names = self.fitted.setdefault(sid, [])
+                names.extend(c for c in chain(name) if c not in names)
+        for sid, names in self.fitted.items():
+            if sid not in self.pool_all:
+                continue
+            pool = frozenset().union(*(biomes(n) for n in names))
+            self.pool_all[sid] = pool
+            self.pools[sid] = frozenset(b for b in pool if b in self.areas)
 
     def apply_biome_rules(self, raw, cache):
         """biome_rules in structure_groups.json, as patcherMod StructureBiomeRules applies them: a structure
@@ -402,6 +474,30 @@ class Pack:
 
     def group_names(self):
         return [t[len('group/'):] for t in self.tag_defs if t.startswith('group/')]
+
+    def biome_entry(self, entry, stack=frozenset()):
+        """A biome id or #tag -> biome ids. #creativeengineering:<fit> is the fit's own list (the real tag
+        structure_overrides.js adds), #creativeengineering:<name> of biome_fits.json biome_tags likewise."""
+        if not entry.startswith('#'):
+            return {full_id(entry)}
+        tag = full_id(entry[1:])
+        doc = read_json(FITS) if FITS.exists() else {}
+        name = tag[len('creativeengineering:'):] if tag.startswith('creativeengineering:') else None
+        own = (doc.get('fits', {}).get(name) or doc.get('biome_tags', {}).get(name)) if name else None
+        if own is not None and tag not in stack:
+            return set().union(*(self.biome_entry(b, stack | {tag}) for b in own.get('biomes', [])))
+        return set(resolve_biome_tag(tag, self._raw, self._cache))
+
+    def biome_factor(self, rules):
+        """A group's biome_frequency -> factor(biome): the first rule the biome matches, else default (1)."""
+        resolved = [(None if k == 'default' else self.biome_entry(k), f) for k, f in rules.items()]
+        fallback = next((f for b, f in resolved if b is None), 1.0)
+        def factor(biome):
+            for b, f in resolved:
+                if b is not None and biome in b:
+                    return f
+            return fallback
+        return factor
 
     def group_members(self, name):
         return sorted(self.tag_members.get('group/' + name, ()))
@@ -662,7 +758,7 @@ def migrate(pack, dry=False):
     group_density = {}
     for name, spec in GROUP_SPECS.items():
         members = pack.group_members(name)
-        live = [m for m in members if enabled[m] and pack.multiplier(m) > 0 and m not in pack.blocked]
+        live = [m for m in members if enabled.get(m, True) and pack.multiplier(m) > 0 and m not in pack.blocked and m not in pack.converted]
         placement = group_grid(pack, name, spec, live, legacy, group_density)
         loss = 0.0
         if spec.get('exclusion'):
@@ -795,18 +891,21 @@ def sync(pack, doc, refit=()):
         g = groups.get(name)
         if g is None:
             spec = GROUP_SPECS.get(name, {})
-            live = [m for m in members if m not in pack.blocked]
+            live = [m for m in members if m not in pack.blocked and m not in pack.converted]
             placement = group_grid(pack, name, spec, live, targets, group_density)
             g = groups[name] = OrderedDict([('note', pack.tag_defs['group/' + name].get('note', '')),
                                             ('placement', placement), ('structures', OrderedDict())])
             group_density[GROUP_SET_PREFIX + name] = 1 / placement['spacing'] ** 2
             added.append(f'group {name} (spacing {placement["spacing"]}, separation {placement["separation"]})')
         st = g.setdefault('structures', OrderedDict())
+        for m in [m for m in members if m not in st and m in pack.converted]:
+            st[m] = OrderedDict([('weight', 1), ('frequency', 1.0), ('note', META_NOTE)])
+            added.append(f'{name}: {m} (meta structure with an anchor: weight 1, its rate is its share in meta_structures.json)')
         new = [m for m in members if m not in st and m not in pack.blocked]
         if not new:
             continue
         fixed = {m: (v.get('weight', MEDIAN_WEIGHT), v.get('frequency', 1.0))
-                 for m, v in st.items() if v.get('enabled', True) and m in members}
+                 for m, v in st.items() if v.get('enabled', True) and m in members and m not in pack.converted}
         p = g['placement']
         ez = p.get('exclusion_zone')
         loss = 0.0
@@ -843,6 +942,40 @@ def sync(pack, doc, refit=()):
 
 # ── estimates report ─────────────────────────────────────────────────────────
 
+META_NOTE = ('Meta structure with an anchor: never picked by this weight; it takes "share" (meta_structures.json) of the '
+             'slots its anchors win here, so no member\'s rate changes. Keep the weight at 1.')
+
+
+def apply_meta_anchors(pack, doc, dens):
+    """A meta structure with an anchor takes "share" of the slots its anchors win in its group (patcherMod MetaSlots):
+    per biome of its pool, share x the anchors' own densities there. Upper bound: a meta whose parts don't fit is the
+    plain anchor. The anchors keep their densities (a meta's anchor is still that structure). A replacement ("replaces"
+    in structure_groups.json) is converted the same way from the one member it names, but that member loses what the
+    replacement takes (in the biomes both can stand in). Shares of one anchor stack, cut at 1 in id order as the game does."""
+    used = defaultdict(float)
+    lost = defaultdict(lambda: defaultdict(float))
+    for mid in sorted(pack.converted):
+        group = next((g for g in doc.get('groups', {}).values() if mid in g.get('structures', {})), None)
+        if group is None or not group['structures'][mid].get('enabled', True):
+            dens.pop(mid, None)
+            continue
+        names = {pack.replaces[mid]} if mid in pack.replaces else pack.meta_entries(pack.meta[mid]['anchor'])
+        anchors = [a for a in sorted(names) if a in group['structures'] and a in dens and a != mid]
+        out = defaultdict(float)
+        for a in anchors:
+            take = max(0.0, min(pack.converted[mid], 1.0 - used[a]))
+            used[a] += take
+            for b, d in dens[a].items():
+                if b in pack.pools.get(mid, ()):
+                    out[b] += take * d
+                    if mid in pack.replaces:
+                        lost[a][b] += take * d
+        dens[mid] = dict(out)
+    for a, by_biome in lost.items():
+        dens[a] = {b: d - by_biome.get(b, 0.0) for b, d in dens[a].items()}
+    return dens
+
+
 def doc_densities(pack, doc):
     """What structure_groups.json gives each structure by its own entries, ignoring the (possibly just
     edited) group tags: group entries on their group grid, standalone sets with all their members."""
@@ -854,7 +987,8 @@ def doc_densities(pack, doc):
         set_density[GROUP_SET_PREFIX + name] = p.get('frequency', 1) / p['spacing'] ** 2
         plans.append((p, {m: (v.get('weight', MEDIAN_WEIGHT), v.get('frequency', 1.0))
                           for m, v in g.get('structures', {}).items()
-                          if v.get('enabled', True) and v.get('frequency', 1.0) > 0 and m not in pack.blocked}))
+                          if v.get('enabled', True) and v.get('frequency', 1.0) > 0 and m not in pack.blocked
+                          and m not in pack.converted}, g.get('biome_frequency')))
     for set_id, entry in doc.get('standalone', {}).items():
         if set_id not in pack.sets:
             continue
@@ -868,14 +1002,18 @@ def doc_densities(pack, doc):
                 continue
             if v.get('enabled', True) and v.get('frequency', 1.0) > 0:
                 live[s['structure']] = (v.get('weight', s['weight']), v.get('frequency', 1.0))
-        plans.append((p, live))
+        plans.append((p, live, None))
     dens = {}
-    for p, live in plans:
+    for p, live, bf in plans:
         K = grid_density(p)
         if K is None:
             continue
-        dens.update(member_densities(K * (1 - exclusion_loss(p, set_density)), live, pack.pools))
-    return dens
+        d = member_densities(K * (1 - exclusion_loss(p, set_density)), live, pack.pools)
+        if bf:
+            f = pack.biome_factor(bf)
+            d = {sid: {b: v * f(b) for b, v in m.items()} for sid, m in d.items()}
+        dens.update(d)
+    return apply_meta_anchors(pack, doc, dens)
 
 
 def new_densities(pack, doc):
@@ -892,8 +1030,8 @@ def new_densities(pack, doc):
         live = {m: (v.get('weight', MEDIAN_WEIGHT), v.get('frequency', 1.0))
                 for m, v in g.get('structures', {}).items()
                 if v.get('enabled', True) and v.get('frequency', 1.0) > 0 and m not in pack.blocked
-                and owner.get(m) == name}
-        plans.append((p, live))
+                and owner.get(m) == name and m not in pack.converted}
+        plans.append((p, live, g.get('biome_frequency')))
     for set_id, e in pack.sets.items():
         entry = doc.get('standalone', {}).get(set_id, {})
         rest = [s for s in e['structures'] if s['structure'] not in owner]
@@ -908,15 +1046,19 @@ def new_densities(pack, doc):
             v = entry.get('structures', {}).get(s['structure'], {})
             if v.get('enabled', True) and s['structure'] not in pack.blocked:
                 live[s['structure']] = (v.get('weight', s['weight']), v.get('frequency', 1.0))
-        plans.append((p, live))
+        plans.append((p, live, None))
     dens = {}
-    for p, live in plans:
+    for p, live, bf in plans:
         K = grid_density(p)
         if K is None:
             continue
         K *= 1 - exclusion_loss(p, set_density)
-        dens.update(member_densities(K, live, pack.pools))
-    return dens
+        d = member_densities(K, live, pack.pools)
+        if bf:   # biome_frequency: each member's frequency x the factor of the biome (patcherMod StructureFrequencies)
+            f = pack.biome_factor(bf)
+            d = {sid: {b: v * f(b) for b, v in m.items()} for sid, m in d.items()}
+        dens.update(d)
+    return apply_meta_anchors(pack, doc, dens)
 
 
 def write_estimates(pack, doc, baseline, baseline_label, path, title='Structure group estimates'):
@@ -947,6 +1089,8 @@ def write_estimates(pack, doc, baseline, baseline_label, path, title='Structure 
         flags = []
         if sid in pack.blocked:
             flags.append('blocked in code')
+        if sid in pack.replaces:
+            flags.append(f'replaces `{pack.replaces[sid]}` in {pack.converted[sid]:.0%} of its slots')
         if not pool:
             flags.append('no biome in this pack' if pack.pool_all.get(sid)
                          else 'empty biome tag: never spawns unless a mod fills it at runtime')
@@ -1061,7 +1205,15 @@ def groups_readme():
         ('per structure', 'weight: who wins a slot where several members can spawn (relative, whole numbers). '
                           'frequency: 0..1, chance that the winner really spawns; otherwise the slot stays empty, so '
                           'lowering one never makes another more common. enabled: false removes it. Where a '
-                          'structure is the only member that fits the biome, it gets every slot x its frequency.'),
+                          'structure is the only member that fits the biome, it gets every slot x its frequency. '
+                          'fit_base: written by --fit-rates for structures in a biome fit (biome_fits.json) = the '
+                          'weight and frequency it had on its mod\'s own biome list; --fit-rates solves from it. '
+                          'fit_keep: true lets --fit-rates raise the weight above fit_base when new neighbours crowd '
+                          'the structure\'s biomes, so it keeps its density (the towers); others are capped instead. '
+                          'replaces + share: this member never wins a slot by its weight; it takes share (0..1) of the '
+                          'slots the named member of the same group wins and keeps, where both can stand (the vanilla '
+                          'swamp hut in YUNG\'s witch hut slots), so the two together are as common as the named one was. '
+                          'Keep its weight at 1. CEConfig [worldgen.systems] structureReplacements turns them off.'),
         ('standalone', 'Keyed by the structure_set id in structure_config.json. placement: only the fields you '
                        'change (spacing, separation, frequency, count, locate_offset...; the rest come from '
                        '"original" in structure_config.json). structures: frequency / enabled / optional weight, '
@@ -1092,8 +1244,167 @@ def tags_readme():
                    'tools/gen_structure_groups.py to give new members a fitted weight and frequency.'),
         ('families', 'mod/* = one tag per namespace (plus mod/yungs for YUNG\'s 6). type/* = what the structure is; a '
                      'structure can have more than one type. dungeon/* = dungeons split by location (surface / '
-                     'underground) and origin (vanilla / better = YUNG\'s / modded). group/* = the shared grids.'),
+                     'underground) and origin (vanilla / better = YUNG\'s / modded). group/* = the shared grids. meta/* = the '
+                     'structures a meta structure may use as its anchor or parts (meta_structures.json); each is also a '
+                     'real structure tag creativeengineering:meta/<name>, added by structure_overrides.js. land and '
+                     'land/* = biome fits (biome_fits.json): a structure in one spawns in that fit\'s biomes plus its '
+                     'parents\' (land/oak: land/oak + land biomes) instead of its own list; each is also a real '
+                     'structure tag creativeengineering:<name>.'),
     ])
+
+
+# ── biome fits ───────────────────────────────────────────────────────────────
+
+def surface_mean(dmap, pool, surface, areas):
+    """Structures per chunk over the structure's surface biomes (area-weighted mean density)."""
+    bs = [b for b in pool if b in surface]
+    a = sum(areas[b] for b in bs)
+    return sum(dmap.get(b, 0) * areas[b] for b in bs) / a if a else 0.0
+
+
+KEEP_MAX = 64   # fit_keep: highest weight tried, x the base weight
+
+
+def fit_rates(pack, doc, passes=4):
+    """--fit-rates: every structure in a biome fit gets the weight and frequency that keep its mean density over its
+    surface biomes what it was over its mod's own list (more biomes, same crowding).
+
+    The weight decides how much the other members of its group move: a high weight with a low frequency wins slots in
+    the new biomes and then vetoes them (empty), starving the members there; a low weight hands the slots it held in
+    its old biomes to the members there. So a group member tries every weight from 1 to its base weight that can
+    still reach the density at frequency <= 1, takes the frequency that hits it, and keeps the weight that moves the
+    other members of its set least (sum of |log(new total / total before the fits)|). Standalone members (no weight in
+    the file) only get a frequency. Members sharing biomes are solved together over a few passes.
+
+    A member with fit_keep: true (the towers) that can't reach its density at its base weight, because the fits put
+    heavier members into its biomes, gets the smallest weight above the base that does (up to KEEP_MAX x the base);
+    the others in those biomes give up the slots. Without it the member is capped at its base weight.
+
+    fit_base = {weight, frequency} on the mod's own list; every run starts from it (no compounding), and a structure
+    that leaves every fit gets it back. A density out of reach at the base weight and frequency 1 is reported."""
+    import copy
+
+    def entries_of(d):
+        out = {}
+        for g in d.get('groups', {}).values():
+            out.update({k: (v, True) for k, v in g.get('structures', {}).items()})
+        for e in d.get('standalone', {}).values():
+            out.update({k: (v, False) for k, v in e.get('structures', {}).items()})
+        return out
+
+    def base_of(v):
+        b = v.get('fit_base')
+        if isinstance(b, dict):
+            return b
+        out = OrderedDict()
+        if 'weight' in v:
+            out['weight'] = v['weight']
+        out['frequency'] = b if isinstance(b, (int, float)) else v.get('frequency', 1.0)
+        return out
+
+    def put(v, weight, frequency):
+        if weight is not None:
+            v['weight'] = weight
+        v['frequency'] = frequency
+
+    entries = entries_of(doc)
+    changed = []
+    for sid, (v, _) in entries.items():
+        if sid not in pack.fitted and 'fit_base' in v:
+            b = base_of(v)
+            put(v, b.get('weight'), b['frequency'])
+            del v['fit_base']
+            changed.append(f'fit rate {sid}: in no fit now, back to weight {v.get("weight", "-")}, frequency {v["frequency"]}')
+    # replacements and metas take their rate from the slots they convert, not from a weight
+    todo = [sid for sid in pack.fitted if sid in entries and entries[sid][0].get('enabled', True) and sid not in pack.converted]
+    if not todo:
+        return changed
+    bases = {sid: base_of(entries[sid][0]) for sid in todo}
+    own = Pack(fits=False)
+    surface = {b for dim in read_json(BIOME_CONFIG)['dimensions'].values()
+               for b, info in dim['biomes'].items() if info.get('layer', 'surface') == 'surface'}
+
+    # targets: each structure's density on its own list, everything at its base values
+    base_doc = copy.deepcopy(doc)
+    base_entries = entries_of(base_doc)
+    for sid in todo:
+        put(base_entries[sid][0], bases[sid].get('weight'), bases[sid]['frequency'])
+    before = new_densities(own, base_doc)
+    target = {sid: surface_mean(before.get(sid, {}), own.pools.get(sid, ()), surface, pack.areas) for sid in todo}
+
+    work = base_doc
+    work_entries = base_entries
+    group_of = {}
+    for name, g in doc.get('groups', {}).items():
+        for m in g.get('structures', {}):
+            group_of[m] = [x for x in g['structures'] if x != m]
+
+    def total(dens, pk, sid):
+        return sum(dens.get(sid, {}).get(b, 0) * pk.areas[b] for b in pk.pools.get(sid, ()) if b in surface)
+
+    before_total = {m: total(before, own, m) for ms in group_of.values() for m in ms}
+
+    def disturbance(sid):
+        dens = new_densities(pack, work)
+        return sum(abs(math.log((total(dens, pack, m) + 1e-9) / (before_total[m] + 1e-9)))
+                   for m in group_of.get(sid, ()) if before_total.get(m))
+
+    def mean_at(sid, weight, frequency):
+        v = work_entries[sid][0]
+        put(v, weight, frequency)
+        return surface_mean(new_densities(pack, work).get(sid, {}), pack.pools.get(sid, ()), surface, pack.areas)
+
+    short = {}
+    for _ in range(passes):
+        for sid in todo:
+            T = target[sid]
+            v, in_group = work_entries[sid]
+            wb = bases[sid].get('weight')
+            if not T or not pack.pools.get(sid):
+                continue
+            if in_group and wb:
+                cands = sorted({w for w in range(1, min(wb, 24) + 1)} | {wb} |
+                               {max(1, js_round(wb * x / 24)) for x in range(1, 25)})
+                feasible = [w for w in cands if mean_at(sid, w, 1.0) >= T]
+                if not feasible and v.get('fit_keep'):
+                    # fit_keep: new neighbours crowd its biomes; take the smallest weight above the base that
+                    # still reaches the density (frequency stays near 1, so few slots are won and left empty)
+                    w = wb
+                    while mean_at(sid, w, 1.0) < T and w < wb * KEEP_MAX:
+                        w = max(w + 1, js_round(w * 1.2))
+                elif not feasible:
+                    w = wb
+                else:
+                    scored = []
+                    for c in feasible:
+                        m = mean_at(sid, c, 1.0)
+                        put(v, c, round6(min(1.0, T / m)))
+                        scored.append((disturbance(sid), c))
+                    w = min(scored)[1]
+            else:
+                w = None
+            m = mean_at(sid, w, 1.0)
+            want = T / m if m else 1.0
+            short[sid] = want
+            put(v, w, round6(min(1.0, want)))
+
+    capped = sorted((1 / short[sid], sid) for sid in todo if short.get(sid, 0) > 1.01)
+    if capped:
+        print(f'{len(capped)} fitted structure(s) capped (frequency 1 at the base weight; their biomes are full):')
+        for share, sid in capped:
+            print(f'  {sid}: {share:.0%} of its old density')
+    for sid in todo:
+        v = entries[sid][0]
+        nv = work_entries[sid][0]
+        old = (v.get('weight'), v.get('frequency', 1.0))
+        new = (nv.get('weight'), nv['frequency'])
+        v['fit_base'] = bases[sid]
+        if old != new:
+            put(v, new[0], new[1])
+            changed.append(f'fit rate {sid}: weight {old[0]} -> {new[0]}, frequency {old[1]} -> {new[1]} '
+                           f'(base {bases[sid].get("weight", "-")} / {bases[sid]["frequency"]})'
+                           + (f'; capped, reaches {1 / short[sid]:.0%} of its old density' if short.get(sid, 0) > 1 else ''))
+    return changed
 
 
 # ── main ─────────────────────────────────────────────────────────────────────
@@ -1107,6 +1418,9 @@ def main():
     ap.add_argument('--refit', nargs='+', metavar='GROUP',
                     help='rebuild these groups\' grids and refit every member to its current rate (after adding members '
                          'much denser than the grid, e.g. meteorites into sky)')
+    ap.add_argument('--fit-rates', action='store_true',
+                    help='after editing biome_fits.json or the fit structure tags: rescale each fitted structure\'s frequency '
+                         'so its density per area of its (new) biomes stays what it was over its mod\'s own list')
     ap.add_argument('--migration-report', action='store_true',
                     help='also rewrite structure_group_migration.md (current file vs the archived pre-groups tuning)')
     args = ap.parse_args()
@@ -1132,6 +1446,8 @@ def main():
         doc = read_json(GROUPS)
         if not args.check:
             added = sync(pack, doc, args.refit or ())
+            if args.fit_rates:
+                added += fit_rates(pack, doc)
             if added:
                 write_json(GROUPS, doc)
                 print(f'changed {len(added)}:')

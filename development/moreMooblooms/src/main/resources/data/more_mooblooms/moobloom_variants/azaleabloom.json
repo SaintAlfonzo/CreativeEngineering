@@ -10,6 +10,9 @@
     }
   ],
   "scale": 0.5,
+  "spawns_in_dark_on": [
+    "minecraft:moss_block"
+  ],
   "egg_colors": [
     "#6C8031",
     "#9E5088"

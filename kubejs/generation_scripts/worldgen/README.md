@@ -11,7 +11,6 @@ Everything in this folder is config, read at every world load (including world c
 | Config | Applied by | Takes effect |
 |---|---|---|
 | `structure_groups.json` (rates) + `structure_tags.json` (group membership) + `structure_config.json` (baseline) | `kubejs/server_scripts/worldgen/structure_overrides.js` (`ServerEvents.highPriorityData`) + patcherMod `worldgen/StructureFrequencies` | rejoin the world; new chunks only |
-| `biome_merges.json` | `biome_merges.js` (`ServerEvents.tags('worldgen/biome')`, via `global.tags`) | `/reload` or rejoin; new chunks only |
 | `biome_config.json` | `biome_overrides.js` -> patcherMod `worldgen/BiomeLayoutTuner` (Java solver) | new worlds only |
 | `pool_config.json` + `pool_tags.json` | patcherMod `worldgen/PoolTuner` (`ServerAboutToStartEvent`, LOWEST) | rejoin the world; new chunks only |
 | `loot_container_swaps.json` | patcherMod `worldgen/LootContainerSwaps` + `mixin/StructureTemplateLootSwapMixin` | rejoin the world; new chunks only |
@@ -33,8 +32,8 @@ needed after a mod update or a group membership change.
   in the tag `group/<name>`. Members share its grid, so **no two members ever start closer than
   `separation + 1` chunks**, whatever mod they come from, and the grid allows at most one member per
   `spacing x spacing` chunks. Groups: `settlements`, `pillager_settlements` (kept 4 chunks off
-  settlement grid slots), `ruins`, `surface_dungeons`, `ocean_ruins`, `ocean_dungeons` (the
-  monuments' own grid), `sky`, `boats`, `remote`.
+  settlement grid slots), `ruins`, `surface_dungeons`, `witch_huts` (swamps only, 2026-10-12),
+  `ocean_ruins`, `ocean_dungeons` (the monuments' own grid), `sky`, `boats`, `flotsam`, `remote`.
 - **Per member:** `weight` decides who wins a slot where several members fit the biome (vanilla set
   weight). `frequency` (0..1) is the chance the winner really spawns; otherwise the slot stays
   **empty**, it does not fall through to another member, so lowering one never makes another more
@@ -50,9 +49,22 @@ needed after a mod update or a group membership change.
   structure is about to be stored (`mixin/ChunkGeneratorStructureFrequencyMixin`) and answers
   `/locate`'s "could it start here?" with the same roll (`mixin/StructureCheckFrequencyMixin`).
   Without that class (an older jar in `mods/`) the script applies **nothing**.
-- **Meta structures** (planned): our own structures that live only in a group. They go in
-  `kubejs/data/creativeengineering/worldgen/structure/meta/`; the scanner lists them under
-  `meta_structures` and they join groups through the same tags.
+- **Meta structures** (2026-10-11): our own structures built from other structures and features (15:
+  villages with towers, ruin clusters, sunken ruins, wrecks, rafts, pillager towers/forts/camps with siege weapons, a
+  pillager fleet, a driftwood flotilla), defined in `meta_structures.json` and added to the datapack by the script only
+  when patcherMod has `MetaStructure` and `MetaSlots`. A meta with an anchor takes a `share` of the slots its anchors
+  already won in its group (its own group entry, weight 1, never generates), so no structure's rate changes. Who may
+  take part: the `meta/*` tags in `structure_tags.json`, also added as real tags `creativeengineering:meta/*`.
+  `/locate` finds a meta by its id and a structure inside one by the structure's id.
+  Reference: `feature_writeup/structure_tuning.md` 3.16.
+- **Placement priority** (2026-10-12): `priority` in `structure_groups.json` ranks groups (and the fortified towns);
+  a structure whose pieces would overlap a higher-ranked one's never starts. A meta's `companions` start whole
+  structures in chunks of their own around it (villages around a fortified town). Reference:
+  `feature_writeup/structure_tuning.md` 3.22.
+- **Replacements** (2026-10-12): a member with `"replaces": "<member id>", "share": 0.1` takes that share of the slots
+  the named member wins and keeps, where both can stand, and never a slot by its own weight (keep it at 1). The two
+  together are as common as the named one was. Used for the vanilla swamp hut, desert pyramid and jungle temple in their YUNG's versions' slots. Off with
+  CEConfig `[worldgen.systems] structureReplacements`. Reference: `feature_writeup/structure_tuning.md` 3.18.
 
 ## Files
 
@@ -60,6 +72,8 @@ needed after a mod update or a group membership change.
 |---|---|
 | `structure_groups.json` | **Every rate. Edit this.** `groups.<name>`: `placement` (spacing, separation, salt, optional spread_type / frequency / locate_offset / exclusion_zone) and `structures` (weight, frequency, enabled per member). `standalone.<set id>`: `placement` overrides and `structures`. |
 | `structure_tags.json` | Named structure lists: `group/*` decides membership (a structure may be in one group), `mod/*` / `type/*` / `dungeon/*` classify. No multipliers. Values: ids, `*` globs, `#tags`, `!` excludes; an unknown id or tag is an error that applies nothing. |
+| `biome_fits.json` | Biome fits: a named biome list per fit (`land/plains`, `land/oak`...) whose structure tag of the same name in `structure_tags.json` spawns there (plus parent fits' biomes) instead of in its mod's list. Biome-type families (plains, forest, taiga, snowy, desert...) and wood families (oak, spruce, acacia, sand, end...), plus `land/any` and `land/sky`: 29 fits, 163 structures (2026-10-12; the old `tower/*` fits were renamed into them). Staged at world load to patcherMod StructureBiomeFits; after editing, run `python3 tools/gen_structure_groups.py --fit-rates` (`fit_keep: true` on a member lets its weight rise to keep its density). See `feature_writeup/structure_tuning.md` 3.17 and the family tables in 7.2. |
+| `meta_structures.json` | Meta structure definitions: structure fields + `anchor` + `share` + `parts` (see its `_readme`). Staged at world load; an anchored meta's rate is its `share` of its anchors' slots (its group entry stays weight 1). |
 | `structure_config.json` | **Read-only baseline** from `tools/gen_structure_config.py`: every set as the mods/vanilla define it (`original`), members, biomes, `blocked` notes, `meta_structures`. |
 | `structure_tag_report.md` | Rewritten by the game at every world load: warnings, each group's grid and members ("alone: 1 per N chunks"), standalone sets written, sets emptied into groups, coverage, tag members. On a config error it lists the errors. |
 | `structure_group_estimates.md` | `python3 tools/gen_structure_groups.py --check`: expected structures per area for every structure (mod default vs now), from its biome pool and the real biome areas in `biome_config.json`. |
@@ -90,7 +104,7 @@ needed after a mod update or a group membership change.
 The old model tuned each set separately (`current` edits + tag multipliers, members with different
 multipliers split into separate grids), so sets of different mods piled up independently. The
 migration measured each structure's old density per biome (its biome pool from every jar's tags +
-`biome_merges.json`, biome areas from the climate sample in `biome_config.json`) and fitted each
+`biome_merges.json` at the time, biome areas from the climate sample in `biome_config.json`) and fitted each
 group's weights and frequencies (least squares on log density, every structure counted equally). Each
 group's grid is sized for its most crowded biome, so nothing gets capped; the gain is the gap. Result
 over today's biome pools: every structure between x0.89 and x1.13 of its old rate, 135 of 164 within
@@ -109,9 +123,9 @@ in `kubejs/archive/worldgen/pre_groups_2026-09-27/`.
   faithful override: outposts' `frequency` 0.2 + exclusion zone around villages, mineshaft /
   buried-treasure RNG methods, the triangular spread of mansions/monuments/end cities, nether
   complex weights (fortress 2 / bastion 3), and the stronghold's required `preferred_biomes`.
-- **YUNG's stops six structures in code**, whatever their set says: vanilla desert pyramids,
-  jungle temples, witch huts and nether fortresses ("Disable Vanilla X" = true in each mod's
-  config), the vanilla stronghold (Better Strongholds, always) and Better Dungeons' small nether
+- **YUNG's stops three structures in code**, whatever their set says: the vanilla nether fortress
+  ("Disable Vanilla Nether Fortresses" = true; the desert pyramid, jungle temple and witch hut switches are false
+  since 2026-10-12, so those three can be replacements), the vanilla stronghold (Better Strongholds, always) and Better Dungeons' small nether
   dungeon ("Enable Small Nether Dungeons" = false). The scanner writes a read-only `blocked` note
   on those entries and the report lists them; tuning them does nothing.
 - **Other mods' own frequency configs are left at defaults on purpose.** Towns & Towers'
@@ -126,7 +140,7 @@ in `kubejs/archive/worldgen/pre_groups_2026-09-27/`.
 - **Ported structure mods:** MCreator one-building jars that crash Forge 43.3.9 (`<init>()`) or are
   pure data are converted to `kubejs/data/<ns>/` by `tools/port_structure_jars.py` (1.20 blocks
   remapped, unknown items dropped, pool entries for missing templates dropped, jar moved to
-  `disabledmods/`). Their sets show `source: "kubejs/data"` in the baseline. Philip's Ruins has `"Enable Configs" = false`, so its
+  `disabledmods/archive/`). Their sets show `source: "kubejs/data"` in the baseline. Philip's Ruins has `"Enable Configs" = false`, so its
   separation/density/toggles are inactive. Village-house weights (Chef's Delight, Wares,
   Monobank, Domestication Innovation, Advanced Peripherals, PneumaticCraft, Cloud Storage) come
   from those mods' configs and show up as `original` in `pool_config.json`. The full list is in
@@ -139,22 +153,13 @@ in `kubejs/archive/worldgen/pre_groups_2026-09-27/`.
   structure_set** — the rest are unused template/leftover files that wouldn't naturally
   generate anyway, so they're not tracked here.
 
-## Biome pool merges (structure -> which biomes it can spawn in)
+## Biome pool merges (retired 2026-10-11)
 
-Separate from the structure_set frequency framework above: this widens which biomes a structure's
-spawn pool includes (e.g. Terralith's snowy biomes for igloos / snowy villages), by adding entries to
-the additive `has_structure/*` biome tags the structures already reference.
-
-| File | Concern |
-|---|---|
-| `tools/analyze_structure_biome_merges.py` | Resolves every structure's true biome pool (recursive tags, unioned across all jars) and emits numbered proposals -> `biome_merge_proposals.{md,json}` |
-| `tools/build_biome_merges.py` | Built the first `biome_merges.json` from the numbered proposals + decisions (held/modified proposals, global skylands + cave rules, variant matching), and the annotated `biome_merge_suggestions.md` review report. **Re-running it regenerates `biome_merges.json` from its constants, overwriting hand edits.** |
-| `biome_merges.json` | **Edit this.** One entry per tag: `add` (biome ids), plus read-only notes: which proposals, which structures, `also_affects` (other structures sharing that tag) |
-| `kubejs/server_scripts/worldgen/biome_merges.js` | Adds every `add` biome to its tag on each tag load (additive, the mod's own contents stay). Biome ids the game doesn't have are skipped and logged as warnings. |
-
-Workflow: edit `biome_merges.json`, then `/reload` or rejoin. Only chunks generated afterwards are
-affected. `biome_merge_suggestions.md` also lists structures already generating in skylands and
-cave biomes and marks variant structures that generate in broader biome definitions.
+`biome_merges.json` used to widen structures' spawn pools by adding biomes to the additive `has_structure/*` biome
+tags they reference (`biome_merges.js`, CEConfig `biomeMerges`). Retired 2026-10-11 in favour of biome fits
+(`biome_fits.json`), which replace one structure's list instead of widening a shared tag. The files, the proposal
+analyzer and the builder are archived in `kubejs/archive/worldgen/biome_merges_2026-10-11/`; see
+`feature_writeup/structure_tuning.md` 7.2.
 
 ## Wild crops (which biomes each wild crop and fruit tree spawns in)
 

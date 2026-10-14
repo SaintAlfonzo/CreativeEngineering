@@ -9,7 +9,7 @@ What falls from the sky in every biome, in every Serene Seasons sub-season, as t
 ### 1.1 Vanilla
 
 - A biome has a **base temperature** and a **declared precipitation** (`none`, `rain` or `snow`). The declaration only decides *whether* anything falls: `LevelRenderer.renderSnowAndRain` draws nothing for `none`, and for `rain` or `snow` draws snow when the temperature at that block is below 0.15 and rain otherwise. So a `snow` biome at 0.2 shows rain, and a `rain` biome at 0.0 shows snow.
-- **Height**: above y80 the temperature drops 0.05 per 40 blocks (plus or minus 8 blocks of noise), `Biome.getHeightAdjustedTemperature`. The "snow line" columns below are where that crosses 0.15.
+- **Height**: above y80 the temperature drops 0.05 per 40 blocks (plus or minus 8 blocks of noise), `Biome.getHeightAdjustedTemperature`. The "snow line" columns below are where that crosses 0.15, but never below the pack's minimum snow line (1.3).
 - **Temperature modifier** `frozen` (frozen oceans): patches of the biome read 0.2 instead of the base.
 - **Gameplay rain** (`Level.isRainingAt`: fire put out, cauldrons, enderman damage, riptide, lightning targets) needs declared `rain` and temperature >= 0.15.
 - **Snow layers and ice** (`ServerLevel.tickChunk`, `Biome.shouldSnow` / `shouldFreeze`) only look at the temperature, never at the declared precipitation. Snow layers need the world to be raining; ice forms in any weather.
@@ -47,12 +47,33 @@ Biome tags `creativeengineering:seasons/<type>` from `kubejs/generation_scripts/
 | Type | Biomes | Weather | Temperature | HUD |
 |---|---|---|---|---|
 | arid | 15 (sand, terracotta) | none, all year | base, never shifts | "Arid", day N of the year |
-| frozen | 28 | snow all year | at most 0.1, never shifts | "Frozen", day N of the year |
+| frozen | 27 | snow all year | at most 0.1, never shifts | "Frozen", day N of the year |
 | dry | 11 (savannas, shrublands) | wet/dry cycle, rain in Mid Wet only, whatever the biome declares | base, never shifts | Dry / Wet seasons |
 | tropical | 17 | wet/dry cycle, rain except in Mid Dry | base, never shifts | Dry / Wet seasons |
-| temperate | 5 | Serene Seasons' temperate rain/snow | seasonal offset, also above 0.8 | four seasons |
+| temperate | 3 | Serene Seasons' temperate rain/snow | seasonal offset, also above 0.8 | four seasons |
+| cold | 22 (taiga, windswept, highlands, cold oceans) | snow Late Autumn to Early Spring, rain the rest of the year | seasonal offset, then held at 0.1 or colder in the snow window, 0.15 or warmer outside it | four seasons |
+| permanent_spring | skylands_spring | snow in its Early Spring (the world's winter, 1/4 of the year), rain otherwise | base, no offset | "Spring": Early 1/4, Mid 1/2, Late 1/4 of the year, day within the part |
+| permanent_autumn | skylands_autumn | snow in its Late Autumn (the world's winter, 1/4 of the year), rain otherwise | base, no offset | "Autumn": Early 1/4, Mid 1/2, Late 1/4 of the year, day within the part |
+| permanent_summer | skylands_summer | rain, never snow | base, no offset | "Summer", day of the year |
+| permanent_winter | skylands_winter | as frozen: snow all year | at most 0.1 | "Winter", day of the year |
 | adaptive | 7 (rivers, beaches) | the nearest land biome's, per column | the land's | the land's |
 | (untagged) | rest | Serene Seasons' own rule (1.2) | | |
+
+**Snow line** (CEConfig `[seasons] snowLineY` = 320, the build height is 320): below it, height alone never turns rain into snow. A column snows there only if its biome snows at y80 in the current sub-season (every dimension). At and above it, temperate and cold biomes always snow (overworld): no block can sit that high, so snow only tells a flyer they are above build height; their snow-line column reads "y320". Frozen and permanent-season biomes keep their own rules. World generation keeps vanilla snow caps, which melt in seasons warm enough to rain.
+
+**Snow seasons** (`season_types.json` `snow_seasons`, tags `creativeengineering:snow/no_<sub_season>`): the sub-seasons a biome may snow in. In any other sub-season it rains instead, however cold the season makes it (below the snow line). Frozen biomes ignore it.
+
+| Biome | May snow in |
+|---|---|
+| `minecraft:deep_ocean` | EWi MWi LWi |
+| `minecraft:meadow` | EWi MWi LWi |
+| `minecraft:ocean` | EWi MWi LWi |
+| `terralith:basalt_cliffs` | EWi MWi LWi |
+| `terralith:blooming_plateau` | EWi MWi LWi |
+| `terralith:granite_cliffs` | EWi MWi LWi |
+| `terralith:lush_valley` | EWi MWi LWi |
+| `terralith:valley_clearing` | EWi MWi LWi |
+| `terralith:white_cliffs` | EWi MWi LWi |
 
 ## 2. Problems found
 
@@ -73,27 +94,18 @@ No unknown ids, no biome in two lists.
 
 Serene Seasons' Mid Wet rain in a biome that declares no precipitation, outside the dry type. None left.
 
-### 2.3 Out of step with the land around it (15 biomes)
+### 2.3 Out of step with the land around it (6 biomes)
 
 Sub-seasons in which the biome snows while at least 75% of the land in the same temperature band does not (or rains while 75% snows). "Land" is every sampled surface biome that is not ocean, river or beach, dry ones counted as not snowing; the band is the climate parameter where the biome was actually sampled (`/dumpclimate`), judged band by band. Adaptive and arid biomes are left out. Peaks and slopes are cold by height as well, so snow there among rainy land is expected.
 
 | Biome | Base | Class | Bands sampled | Out of step |
 |---|---|---|---|---|
-| `terralith:yellowstone` | 0.24775 | ss-temperate | cold 81, temperate 13 (n=100) | in temperate: snows MSp LSp EAu MAu (79-90% of temperate land does not) |
-| `terralith:volcanic_peaks` | 1 | tropical | warm 72, temperate 21 (n=33) | in temperate: rains EWi MWi LWi (87% of temperate land does not) |
-| `minecraft:old_growth_pine_taiga` | 0.3 | ss-temperate | temperate 87, cold 12 (n=31) | in temperate: snows MSp MAu (79% of temperate land does not) |
-| `minecraft:old_growth_spruce_taiga` | 0.25 | ss-temperate | temperate 83, cold 16 (n=24) | in temperate: snows MSp MAu (79% of temperate land does not) |
-| `minecraft:frozen_peaks` | -0.7 | frozen | temperate 68, cold 18, frozen 13 (n=22) | in cold: snows ESu MSu LSu (93% of cold land does not); in temperate: snows MSp LSp ESu MSu LSu EAu MAu (79-94% of temperate land does not) |
-| `minecraft:swamp` | 0.8 | tropical | temperate 75, cold 25 (n=16) | in cold: rains EWi MWi LWi (91% of cold land does not); in temperate: rains EWi MWi LWi (87% of temperate land does not) |
-| `minecraft:jagged_peaks` | -0.7 | frozen | temperate 84, cold 15 (n=13) | in temperate: snows MSp LSp ESu MSu LSu EAu MAu (79-94% of temperate land does not) |
-| `terralith:orchid_swamp` | 0.8 | tropical | temperate 90, cold 10 (n=10) | in temperate: rains EWi MWi LWi (87% of temperate land does not) |
-| `minecraft:snowy_slopes` | -0.3 | frozen | temperate 55, frozen 44 (n=9) | in temperate: snows MSp LSp ESu MSu LSu EAu MAu (79-94% of temperate land does not) |
-| `terralith:haze_mountain` | 0.3 | ss-temperate | warm 55, temperate 44 (n=9) | in temperate: snows MSp MAu (79% of temperate land does not); in warm: snows ESp MSp MAu LAu EWi MWi LWi (99% of warm land does not) |
-| `minecraft:windswept_forest` | 0.2 | ss-temperate | temperate 100 (n=8) | in temperate: snows MSp LSp EAu MAu (79-90% of temperate land does not) |
-| `terralith:yosemite_lowlands` | 0.25 | ss-temperate | temperate 75, cold 25 (n=8) | in temperate: snows MSp MAu (79% of temperate land does not) |
-| `terralith:birch_taiga` | 0.22 | ss-temperate | temperate 100 (n=5) | in temperate: snows MSp LSp EAu MAu (79-90% of temperate land does not) |
-| `terralith:snowy_shield` | 0.1 | frozen | cold 100 (n=5) | in cold: snows ESu MSu LSu (93% of cold land does not) |
-| `terralith:skylands_winter` | 0.2 | frozen | cold 100 (n=4) | in cold: snows ESu MSu LSu (93% of cold land does not) |
+| `minecraft:frozen_peaks` | -0.7 | frozen | temperate 47, cold 28, frozen 23 (n=21) | in cold: snows MSp LSp ESu MSu LSu EAu MAu (94% of cold land does not); in temperate: snows MSp LSp ESu MSu LSu EAu MAu (96% of temperate land does not) |
+| `minecraft:swamp` | 0.8 | tropical | temperate 81, cold 18 (n=16) | in cold: rains EWi MWi LWi (94% of cold land does not); in temperate: rains EWi MWi LWi (89% of temperate land does not) |
+| `minecraft:jagged_peaks` | -0.7 | frozen | temperate 57, cold 42 (n=14) | in cold: snows MSp LSp ESu MSu LSu EAu MAu (94% of cold land does not); in temperate: snows MSp LSp ESu MSu LSu EAu MAu (96% of temperate land does not) |
+| `terralith:volcanic_peaks` | 1 | tropical | warm 61, temperate 23, hot 15 (n=13) | in temperate: rains EWi MWi LWi (89% of temperate land does not) |
+| `terralith:orchid_swamp` | 0.8 | tropical | temperate 60, cold 40 (n=5) | in temperate: rains EWi MWi LWi (89% of temperate land does not) |
+| `terralith:skylands_winter` | 0.2 | permanent_winter | cold 100 (n=3) | in cold: snows MSp LSp ESu MSu LSu EAu MAu (94% of cold land does not) |
 
 ### 2.4 Declared snow, warm enough to rain (0)
 
@@ -127,9 +139,9 @@ The pack ships its Serene Seasons server config only to the dedicated server (`c
 | `terralith:cave/underground_jungle` | 0.5 | off | ss-temperate |
 | `terralith:mirage_isles` | 0.7 | off | ss-temperate |
 
-### 2.7 What the season types change (44 biomes)
+### 2.7 What the season types change (66 biomes)
 
-Cells with Serene Seasons alone (server config) against cells with the season types. Adaptive biomes show `~` (they take the land's row).
+Cells with Serene Seasons alone (server config) against cells with the season types and snow seasons. Adaptive biomes show `~` (they take the land's row).
 
 | Biome | Before | After |
 |---|---|---|
@@ -155,6 +167,20 @@ Cells with Serene Seasons alone (server config) against cells with the season ty
 | `terralith:sandstone_valley` (ss-tropical -> arid) | `R!-.-.-.-.-.-.-.-.-.-.R!` | `-.-.-.-.-.-.-.-.-.-.-.-.` |
 | `terralith:warped_mesa` (ss-tropical -> arid) | `R!-.-.-.-.-.-.-.-.-.-.R!` | `-.-.-.-.-.-.-.-.-.-.-.-.` |
 | `terralith:white_mesa` (ss-tropical -> arid) | `R!-.-.-.-.-.-.-.-.-.-.R!` | `-.-.-.-.-.-.-.-.-.-.-.-.` |
+| `minecraft:cold_ocean` (off -> cold) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `minecraft:deep_cold_ocean` (off -> cold) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `minecraft:old_growth_pine_taiga` (ss-temperate -> cold) | `S.S.R.R.R.R.R.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `minecraft:old_growth_spruce_taiga` (ss-temperate -> cold) | `S.S.R.R.R.R.R.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `minecraft:taiga` (ss-temperate -> cold) | `S.S.R.R.R.R.R.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `minecraft:windswept_forest` (ss-temperate -> cold) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `minecraft:windswept_gravelly_hills` (ss-temperate -> cold) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `minecraft:windswept_hills` (ss-temperate -> cold) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `terralith:birch_taiga` (ss-temperate -> cold) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `terralith:cloud_forest` (ss-temperate -> cold) | `S.S.R.R.R.R.R.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `terralith:haze_mountain` (ss-temperate -> cold) | `S.S.R.R.R.R.R.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `terralith:windswept_spires` (ss-temperate -> cold) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `terralith:yellowstone` (ss-temperate -> cold) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `terralith:yosemite_lowlands` (ss-temperate -> cold) | `S.S.R.R.R.R.R.S.S.S.S.S.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
 | `minecraft:savanna` (ss-tropical -> dry) | `R!-.-.-.-.-.-.-.-.-.-.R!` | `R.-.-.-.-.-.-.-.-.-.-.R.` |
 | `minecraft:savanna_plateau` (ss-tropical -> dry) | `R!-.-.-.-.-.-.-.-.-.-.R!` | `R.-.-.-.-.-.-.-.-.-.-.R.` |
 | `minecraft:windswept_savanna` (ss-tropical -> dry) | `R!-.-.-.-.-.-.-.-.-.-.R!` | `R.-.-.-.-.-.-.-.-.-.-.R.` |
@@ -168,11 +194,19 @@ Cells with Serene Seasons alone (server config) against cells with the season ty
 | `terralith:shrubland` (ss-tropical -> dry) | `R!-.-.-.-.-.-.-.-.-.-.R!` | `R.-.-.-.-.-.-.-.-.-.-.R.` |
 | `terralith:rocky_mountains` (ss-temperate -> frozen) | `-\*-\*-.-.-.-.-.-\*-\*-\*-\*-\*` | `-\*-\*-\*-\*-\*-\*-\*-\*-\*-\*-\*-\*` |
 | `terralith:siberian_taiga` (ss-temperate -> frozen) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.S.S.S.S.S.S.S.S.S.S.S.` |
-| `terralith:skylands_winter` (ss-temperate -> frozen) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.S.S.S.S.S.S.S.S.S.S.S.` |
-| `minecraft:cold_ocean` (off -> temperate) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
-| `minecraft:deep_cold_ocean` (off -> temperate) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
-| `minecraft:deep_ocean` (off -> temperate) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
-| `minecraft:ocean` (off -> temperate) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `S.R.R.R.R.R.R.R.S.S.S.S.` |
+| `terralith:skylands_autumn` (ss-temperate -> permanent_autumn) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `terralith:skylands_spring` (ss-temperate -> permanent_spring) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `terralith:skylands_summer` (ss-temperate -> permanent_summer) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.R.R.R.` |
+| `terralith:skylands_winter` (ss-temperate -> permanent_winter) | `S.S.S.R.R.R.S.S.S.S.S.S.` | `S.S.S.S.S.S.S.S.S.S.S.S.` |
+| `minecraft:meadow` (ss-temperate -> ss-temperate) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `terralith:basalt_cliffs` (ss-temperate -> ss-temperate) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `terralith:blooming_plateau` (ss-temperate -> ss-temperate) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `terralith:granite_cliffs` (ss-temperate -> ss-temperate) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `terralith:lush_valley` (ss-temperate -> ss-temperate) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `terralith:valley_clearing` (ss-temperate -> ss-temperate) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `terralith:white_cliffs` (ss-temperate -> ss-temperate) | `S.R.R.R.R.R.R.R.S.S.S.S.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `minecraft:deep_ocean` (off -> temperate) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
+| `minecraft:ocean` (off -> temperate) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
 | `terralith:temperate_highlands` (ss-tropical -> temperate) | `R.R.R.R.R.-.-.R.R.R.R.R.` | `R.R.R.R.R.R.R.R.R.S.S.S.` |
 | `minecraft:deep_lukewarm_ocean` (off -> tropical) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `R.R.R.R.R.-.-.R.R.R.R.R.` |
 | `minecraft:lukewarm_ocean` (off -> tropical) | `R.R.R.R.R.R.R.R.R.R.R.R.` | `R.R.R.R.R.-.-.R.R.R.R.R.` |
@@ -180,177 +214,231 @@ Cells with Serene Seasons alone (server config) against cells with the season ty
 
 Columns run ESp to LWi, two characters each.
 
+### 2.8 Snow outside winter (22 biomes)
+
+Biomes (not frozen) that snow at sea level in any sub-season outside Early, Mid and Late Winter, with the snow seasons applied. To shorten a biome's snow, list it in `season_types.json` `snow_seasons` (for example `["winter"]`, or `["late_autumn", "winter"]`). Sorted by base temperature, warmest first.
+
+| Biome | Class | Base | Share | Snows outside winter |
+|---|---|---|---|---|
+| `minecraft:cold_ocean` | cold | 0.5 | 4.2% | ESp LAu |
+| `minecraft:deep_cold_ocean` | cold | 0.5 | 4.9% | ESp LAu |
+| `terralith:alpine_highlands` | cold | 0.45 | 1.0% | ESp LAu |
+| `terralith:caldera` | cold | 0.45 | - | ESp LAu |
+| `terralith:highlands` | cold | 0.4 | 1.0% | ESp LAu |
+| `terralith:shield` | cold | 0.4 | 0.9% | ESp LAu |
+| `terralith:shield_clearing` | cold | 0.4 | - | ESp LAu |
+| `terralith:steppe` | cold | 0.4 | 0.4% | ESp LAu |
+| `terralith:yosemite_cliffs` | cold | 0.375 | 0.2% | ESp LAu |
+| `terralith:forested_highlands` | cold | 0.36 | 0.8% | ESp LAu |
+| `minecraft:old_growth_pine_taiga` | cold | 0.3 | 0.5% | ESp LAu |
+| `terralith:haze_mountain` | cold | 0.3 | - | ESp LAu |
+| `minecraft:old_growth_spruce_taiga` | cold | 0.25 | 1.0% | ESp LAu |
+| `minecraft:taiga` | cold | 0.25 | 1.0% | ESp LAu |
+| `terralith:cloud_forest` | cold | 0.25 | - | ESp LAu |
+| `terralith:yosemite_lowlands` | cold | 0.25 | <0.1% | ESp LAu |
+| `terralith:yellowstone` | cold | 0.24775 | 3.6% | ESp LAu |
+| `terralith:birch_taiga` | cold | 0.22 | 0.3% | ESp LAu |
+| `minecraft:windswept_forest` | cold | 0.2 | 0.2% | ESp LAu |
+| `minecraft:windswept_gravelly_hills` | cold | 0.2 | - | ESp LAu |
+| `minecraft:windswept_hills` | cold | 0.2 | 0.1% | ESp LAu |
+| `terralith:windswept_spires` | cold | 0.2 | 0.1% | ESp LAu |
+
 ## 3. Overworld, per biome (server config)
 
 Cells: what falls during a storm (the world is raining), at sea level (y80 or below). **R** rain, **S** snow, **-** nothing, **R!** Serene Seasons' Mid Wet rain in a biome that declares none, **-\*** nothing falls but snow layers settle, **~** adaptive. Above y80 it gets colder: see the snow line columns (lowest y where it snows; first the warmest sub-season, then the coldest). Share: post-tuning surface share of the overworld. Bands: the climate temperature band the biome was sampled in, percent of its samples (frozen/cold/temperate/warm/hot are vanilla's five).
 
-### 3.1 Arid (15, 3.9%)
+### 3.1 Arid (15, 6.8%)
 
 | Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `minecraft:badlands` | 2 |  | none | hot 100 (n=37) | 1.2% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `minecraft:desert` | 2 |  | none | hot 100 (n=26) | 0.9% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `minecraft:eroded_badlands` | 2 |  | none | hot 100 (n=8) | 0.3% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `minecraft:wooded_badlands` | 2 |  | none | hot 100 (n=16) | 0.5% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `minecraft:badlands` | 2 |  | none | hot 100 (n=57) | 1.9% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `minecraft:desert` | 2 |  | none | hot 100 (n=68) | 2.3% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `minecraft:eroded_badlands` | 2 |  | none | hot 100 (n=16) | 0.5% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `minecraft:wooded_badlands` | 2 |  | none | hot 100 (n=17) | 0.6% | - | - | - | - | - | - | - | - | - | - | - | - | - |
 | `terralith:ancient_sands` | 2 |  | none | hot 100 (n=1) | <0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:bryce_canyon` | 2 |  | none | hot 100 (n=9) | 0.3% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:desert_canyon` | 2 |  | none | hot 100 (n=3) | 0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:desert_oasis` | 2 |  | none | hot 100 (n=1) | <0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:desert_spires` | 2 |  | none | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:lush_desert` | 2 |  | none | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:red_oasis` | 2 |  | none | hot 100 (n=2) | <0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:sandstone_valley` | 2 |  | none | hot 100 (n=8) | 0.3% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:warped_mesa` | 2 |  | none | warm 100 (n=1) | <0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:white_mesa` | 2 |  | none | warm 100 (n=2) | <0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| `terralith:painted_mountains` | 1 |  | rain | hot 100 (n=4) | 0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:bryce_canyon` | 2 |  | none | hot 100 (n=18) | 0.6% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:desert_canyon` | 2 |  | none | hot 100 (n=5) | 0.2% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:desert_oasis` | 2 |  | none | hot 100 (n=3) | 0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:desert_spires` | 2 |  | none | hot 100 (n=1) | <0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:lush_desert` | 2 |  | none | hot 100 (n=3) | 0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:red_oasis` | 2 |  | none | hot 100 (n=5) | 0.2% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:sandstone_valley` | 2 |  | none | hot 100 (n=3) | 0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:warped_mesa` | 2 |  | none | warm 100 (n=3) | 0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:white_mesa` | 2 |  | none | warm 100 (n=1) | <0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| `terralith:painted_mountains` | 1 |  | rain | hot 100 (n=2) | 0.1% | - | - | - | - | - | - | - | - | - | - | - | - | - |
 
-### 3.2 Frozen (28, 12.8%)
+### 3.2 Frozen (27, 8.0%)
 
 | Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `terralith:rocky_mountains` | 0.3 |  | none | temperate 51, cold 48 (n=41) | 1.3% | - | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* |
-| `terralith:siberian_taiga` | 0.2 |  | snow | frozen 88, cold 11 (n=17) | 0.6% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:skylands_winter` | 0.2 |  | snow | cold 100 (n=4) | <0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:cold_shrubland` | 0.14 | frozen | rain | frozen 91 (n=12) | 0.4% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:gravel_desert` | 0.14 | frozen | snow | frozen 100 (n=3) | 0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:ice_marsh` | 0.14 | frozen | snow | frozen 100 (n=11) | 0.4% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:rocky_shrubland` | 0.14 | frozen | rain | - | - | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:rocky_mountains` | 0.3 |  | none | cold 59, temperate 40 (n=22) | 0.8% | - | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* | -\* |
+| `terralith:siberian_taiga` | 0.2 |  | snow | frozen 95 (n=20) | 0.7% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:cold_shrubland` | 0.14 | frozen | rain | frozen 90 (n=11) | 0.4% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:gravel_desert` | 0.14 | frozen | snow | cold 50, frozen 50 (n=2) | <0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:ice_marsh` | 0.14 | frozen | snow | frozen 100 (n=4) | 0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:rocky_shrubland` | 0.14 | frozen | rain | frozen 100 (n=1) | <0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
 | `terralith:siberian_grove` | 0.13 |  | snow | - | - | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:emerald_peaks` | 0.1 |  | snow | frozen 100 (n=3) | 0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:emerald_peaks` | 0.1 |  | snow | - | - | all | S | S | S | S | S | S | S | S | S | S | S | S |
 | `terralith:scarlet_mountains` | 0.1 |  | snow | frozen 100 (n=5) | 0.2% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:snowy_maple_forest` | 0.1 |  | snow | - | - | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:snowy_shield` | 0.1 |  | rain | cold 100 (n=5) | 0.2% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `minecraft:deep_frozen_ocean` | 0 | frozen | rain | frozen 100 (n=114) | 3.8% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `minecraft:frozen_ocean` | 0 | frozen | snow | frozen 100 (n=51) | 1.7% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:snowy_maple_forest` | 0.1 |  | snow | cold 100 (n=1) | <0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:snowy_shield` | 0.1 |  | rain | - | - | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `minecraft:deep_frozen_ocean` | 0 | frozen | rain | frozen 100 (n=42) | 1.4% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `minecraft:frozen_ocean` | 0 | frozen | snow | frozen 100 (n=31) | 1.0% | all | S | S | S | S | S | S | S | S | S | S | S | S |
 | `minecraft:ice_spikes` | 0 |  | snow | frozen 100 (n=3) | 0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `minecraft:snowy_plains` | 0 |  | snow | frozen 100 (n=28) | 1.0% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `minecraft:snowy_plains` | 0 |  | snow | frozen 100 (n=20) | 0.7% | all | S | S | S | S | S | S | S | S | S | S | S | S |
 | `terralith:alpha_islands_winter` | 0 |  | snow | - | - | all | S | S | S | S | S | S | S | S | S | S | S | S |
 | `terralith:frozen_cliffs` | 0 |  | snow | - | - | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:glacial_chasm` | 0 |  | snow | frozen 100 (n=9) | 0.3% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:snowy_badlands` | 0 |  | snow | frozen 100 (n=3) | 0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `minecraft:grove` | -0.2 |  | snow | frozen 40, cold 40, temperate 20 (n=5) | 0.2% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:alpine_grove` | -0.2 |  | snow | frozen 100 (n=1) | <0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `minecraft:snowy_slopes` | -0.3 |  | snow | temperate 55, frozen 44 (n=9) | 0.3% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `minecraft:snowy_taiga` | -0.5 |  | snow | frozen 100 (n=15) | 0.6% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:wintry_forest` | -0.5 |  | snow | frozen 100 (n=8) | 0.3% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `terralith:wintry_lowlands` | -0.5 |  | snow | - | - | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `minecraft:frozen_peaks` | -0.7 |  | snow | temperate 68, cold 18, frozen 13 (n=22) | 0.7% | all | S | S | S | S | S | S | S | S | S | S | S | S |
-| `minecraft:jagged_peaks` | -0.7 |  | snow | temperate 84, cold 15 (n=13) | 0.4% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:glacial_chasm` | 0 |  | snow | frozen 100 (n=6) | 0.2% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:snowy_badlands` | 0 |  | snow | frozen 100 (n=4) | 0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `minecraft:grove` | -0.2 |  | snow | frozen 66, temperate 33 (n=3) | 0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:alpine_grove` | -0.2 |  | snow | frozen 100 (n=2) | <0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `minecraft:snowy_slopes` | -0.3 |  | snow | - | <0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `minecraft:snowy_taiga` | -0.5 |  | snow | frozen 100 (n=18) | 0.6% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:wintry_forest` | -0.5 |  | snow | frozen 100 (n=7) | 0.2% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `terralith:wintry_lowlands` | -0.5 |  | snow | frozen 100 (n=3) | 0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `minecraft:frozen_peaks` | -0.7 |  | snow | temperate 47, cold 28, frozen 23 (n=21) | 0.7% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+| `minecraft:jagged_peaks` | -0.7 |  | snow | temperate 57, cold 42 (n=14) | 0.5% | all | S | S | S | S | S | S | S | S | S | S | S | S |
 
-### 3.3 Dry (Mid Wet rain only) (11, 9.1%)
+### 3.3 Dry (Mid Wet rain only) (11, 9.9%)
 
 | Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `terralith:arid_highlands` | 1.6 |  | none | warm 100 (n=26) | 0.9% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `minecraft:savanna` | 1.2 |  | none | warm 100 (n=66) | 2.2% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `terralith:brushland` | 1.2 |  | none | warm 100 (n=75) | 2.5% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `terralith:shrubland` | 1.2 |  | none | warm 54, temperate 45 (n=11) | 0.4% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `minecraft:windswept_savanna` | 1.1 |  | none | temperate 88 (n=17) | 0.6% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `terralith:fractured_savanna` | 1.1 |  | none | temperate 53, warm 46 (n=13) | 0.4% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `minecraft:savanna_plateau` | 1 |  | none | warm 100 (n=25) | 0.8% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `terralith:ashen_savanna` | 1 |  | none | warm 100 (n=1) | <0.1% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `terralith:savanna_badlands` | 1 |  | none | warm 100 (n=18) | 0.6% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `terralith:savanna_slopes` | 1 |  | none | warm 100 (n=2) | <0.1% | - | R | - | - | - | - | - | - | - | - | - | - | R |
-| `terralith:hot_shrubland` | 0.8 |  | rain | warm 100 (n=18) | 0.6% | never | R | - | - | - | - | - | - | - | - | - | - | R |
+| `terralith:arid_highlands` | 1.6 |  | none | warm 100 (n=17) | 0.6% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `minecraft:savanna` | 1.2 |  | none | warm 100 (n=78) | 2.6% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `terralith:brushland` | 1.2 |  | none | warm 100 (n=99) | 3.3% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `terralith:shrubland` | 1.2 |  | none | temperate 85, warm 14 (n=14) | 0.5% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `minecraft:windswept_savanna` | 1.1 |  | none | temperate 92 (n=14) | 0.5% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `terralith:fractured_savanna` | 1.1 |  | none | temperate 50, warm 50 (n=2) | <0.1% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `minecraft:savanna_plateau` | 1 |  | none | warm 100 (n=37) | 1.2% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `terralith:ashen_savanna` | 1 |  | none | - | - | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `terralith:savanna_badlands` | 1 |  | none | warm 100 (n=12) | 0.4% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `terralith:savanna_slopes` | 1 |  | none | warm 100 (n=1) | <0.1% | - | R | - | - | - | - | - | - | - | - | - | - | R |
+| `terralith:hot_shrubland` | 0.8 |  | rain | warm 100 (n=24) | 0.8% | never | R | - | - | - | - | - | - | - | - | - | - | R |
 
 ### 3.4 Tropical (tagged) (17, 21.5%)
 
 | Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `minecraft:stony_peaks` | 1 |  | rain | warm 100 (n=19) | 0.6% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `terralith:volcanic_crater` | 1 |  | rain | - | <0.1% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `terralith:volcanic_peaks` | 1 |  | rain | warm 72, temperate 21 (n=33) | 1.1% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `minecraft:stony_peaks` | 1 |  | rain | warm 100 (n=14) | 0.5% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `terralith:volcanic_crater` | 1 |  | rain | - | - | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `terralith:volcanic_peaks` | 1 |  | rain | warm 61, temperate 23, hot 15 (n=13) | 0.3% | never | R | R | R | R | R | - | - | R | R | R | R | R |
 | `minecraft:bamboo_jungle` | 0.95 |  | rain | warm 100 (n=10) | 0.3% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `minecraft:jungle` | 0.95 |  | rain | warm 100 (n=29) | 1.0% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `minecraft:sparse_jungle` | 0.95 |  | rain | warm 100 (n=30) | 1.0% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `terralith:amethyst_canyon` | 0.95 |  | rain | warm 100 (n=2) | <0.1% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `terralith:amethyst_rainforest` | 0.95 |  | rain | warm 100 (n=4) | 0.1% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `terralith:jungle_mountains` | 0.95 |  | rain | warm 100 (n=3) | 0.1% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `terralith:rocky_jungle` | 0.95 |  | rain | warm 100 (n=10) | 0.3% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `terralith:tropical_jungle` | 0.95 |  | rain | warm 100 (n=12) | 0.4% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `minecraft:mangrove_swamp` | 0.8 |  | rain | warm 100 (n=11) | 0.4% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `minecraft:swamp` | 0.8 |  | rain | temperate 75, cold 25 (n=16) | 0.6% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `terralith:orchid_swamp` | 0.8 |  | rain | temperate 90, cold 10 (n=10) | 0.3% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `minecraft:deep_lukewarm_ocean` | 0.5 |  | rain | warm 99 (n=226) | 7.5% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `minecraft:lukewarm_ocean` | 0.5 |  | rain | warm 100 (n=127) | 4.2% | never | R | R | R | R | R | - | - | R | R | R | R | R |
-| `minecraft:warm_ocean` | 0.5 |  | rain | hot 100 (n=100) | 3.3% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `minecraft:jungle` | 0.95 |  | rain | warm 100 (n=27) | 0.9% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `minecraft:sparse_jungle` | 0.95 |  | rain | warm 100 (n=28) | 0.9% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `terralith:amethyst_canyon` | 0.95 |  | rain | warm 100 (n=5) | 0.2% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `terralith:amethyst_rainforest` | 0.95 |  | rain | warm 100 (n=10) | 0.3% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `terralith:jungle_mountains` | 0.95 |  | rain | warm 100 (n=1) | <0.1% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `terralith:rocky_jungle` | 0.95 |  | rain | warm 100 (n=13) | 0.4% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `terralith:tropical_jungle` | 0.95 |  | rain | warm 100 (n=13) | 0.4% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `minecraft:mangrove_swamp` | 0.8 |  | rain | warm 100 (n=18) | 0.6% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `minecraft:swamp` | 0.8 |  | rain | temperate 81, cold 18 (n=16) | 0.5% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `terralith:orchid_swamp` | 0.8 |  | rain | temperate 60, cold 40 (n=5) | 0.2% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `minecraft:deep_lukewarm_ocean` | 0.5 |  | rain | warm 99 (n=188) | 6.2% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `minecraft:lukewarm_ocean` | 0.5 |  | rain | warm 100 (n=151) | 5.0% | never | R | R | R | R | R | - | - | R | R | R | R | R |
+| `minecraft:warm_ocean` | 0.5 |  | rain | hot 100 (n=138) | 4.6% | never | R | R | R | R | R | - | - | R | R | R | R | R |
 
-### 3.5 Temperate (tagged) (5, 24.6%)
-
-| Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `terralith:temperate_highlands` | 0.9 |  | rain | temperate 89, cold 10 (n=19) | 0.6% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `minecraft:cold_ocean` | 0.5 |  | rain | cold 100 (n=78) | 2.6% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `minecraft:deep_cold_ocean` | 0.5 |  | rain | cold 100 (n=182) | 6.1% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `minecraft:deep_ocean` | 0.5 |  | rain | temperate 98 (n=279) | 9.4% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `minecraft:ocean` | 0.5 |  | rain | temperate 98 (n=175) | 5.9% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-
-### 3.6 Temperate by Serene Seasons' rule (untagged) (46, 22.8%)
+### 3.5 Temperate (tagged) (3, 15.9%)
 
 | Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `minecraft:plains` | 0.8 |  | rain | temperate 80, cold 19 (n=72) | 2.4% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `minecraft:sunflower_plains` | 0.8 |  | rain | temperate 100 (n=3) | 0.1% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `minecraft:dark_forest` | 0.7 |  | rain | temperate 100 (n=48) | 1.7% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `minecraft:flower_forest` | 0.7 |  | rain | temperate 100 (n=5) | 0.2% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `minecraft:forest` | 0.7 |  | rain | temperate 78, cold 21 (n=92) | 3.2% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:alpha_islands` | 0.7 |  | rain | - | - | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:blooming_valley` | 0.7 |  | rain | temperate 80, cold 20 (n=10) | 0.3% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:lavender_forest` | 0.7 |  | rain | - | - | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:lavender_valley` | 0.7 |  | rain | temperate 100 (n=9) | 0.3% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:moonlight_grove` | 0.7 |  | rain | cold 100 (n=3) | 0.1% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:moonlight_valley` | 0.7 |  | rain | cold 100 (n=6) | 0.2% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:sakura_grove` | 0.7 |  | rain | temperate 100 (n=4) | 0.1% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:sakura_valley` | 0.7 |  | rain | temperate 100 (n=2) | <0.1% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `terralith:stony_spires` | 0.7 |  | rain | temperate 85, cold 14 (n=7) | 0.2% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `minecraft:birch_forest` | 0.6 |  | rain | temperate 100 (n=16) | 0.5% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `minecraft:old_growth_birch_forest` | 0.6 |  | rain | temperate 100 (n=10) | 0.4% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
-| `minecraft:meadow` | 0.5 |  | rain | temperate 79, cold 20 (n=48) | 1.6% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:basalt_cliffs` | 0.5 |  | rain | - | - | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:blooming_plateau` | 0.5 |  | rain | temperate 88, cold 11 (n=9) | 0.3% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:skylands_autumn` | 0.5 |  | rain | temperate 100 (n=3) | <0.1% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:skylands_spring` | 0.5 |  | rain | temperate 100 (n=1) | <0.1% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:skylands_summer` | 0.5 |  | rain | - | <0.1% | never / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:alpine_highlands` | 0.45 |  | rain | cold 51, temperate 48 (n=27) | 0.9% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:temperate_highlands` | 0.9 |  | rain | temperate 58, cold 41 (n=17) | 0.6% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:deep_ocean` | 0.5 |  | rain | temperate 99 (n=274) | 9.1% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:ocean` | 0.5 |  | rain | temperate 98 (n=188) | 6.2% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+
+### 3.6 Cold (snow Late Autumn to Early Spring) (22, 20.1%)
+
+| Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `minecraft:cold_ocean` | 0.5 |  | rain | cold 100 (n=126) | 4.2% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `minecraft:deep_cold_ocean` | 0.5 |  | rain | cold 100 (n=145) | 4.9% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:alpine_highlands` | 0.45 |  | rain | cold 55, temperate 44 (n=29) | 1.0% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
 | `terralith:caldera` | 0.45 |  | rain | - | - | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:granite_cliffs` | 0.4 |  | rain | - | - | y280 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:highlands` | 0.4 |  | rain | temperate 100 (n=28) | 0.9% | y280 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:lush_valley` | 0.4 |  | rain | cold 100 (n=3) | 0.1% | y280 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:shield` | 0.4 |  | rain | cold 100 (n=24) | 0.8% | y280 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:shield_clearing` | 0.4 |  | rain | - | - | y280 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:steppe` | 0.4 |  | rain | temperate 61, cold 38 (n=21) | 0.7% | y280 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:valley_clearing` | 0.4 |  | rain | - | - | y280 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:white_cliffs` | 0.4 |  | rain | - | - | y280 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:yosemite_cliffs` | 0.375 |  | rain | temperate 66, cold 33 (n=3) | 0.1% | y260 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `terralith:forested_highlands` | 0.36 |  | rain | cold 52, temperate 48 (n=25) | 0.8% | y248 / all | S | R | R | R | R | R | R | R | S | S | S | S |
-| `minecraft:old_growth_pine_taiga` | 0.3 |  | rain | temperate 87, cold 12 (n=31) | 1.0% | y200 / all | S | S | R | R | R | R | R | S | S | S | S | S |
-| `terralith:haze_mountain` | 0.3 |  | rain | warm 55, temperate 44 (n=9) | 0.3% | y200 / all | S | S | R | R | R | R | R | S | S | S | S | S |
-| `minecraft:old_growth_spruce_taiga` | 0.25 |  | rain | temperate 83, cold 16 (n=24) | 0.8% | y160 / all | S | S | R | R | R | R | R | S | S | S | S | S |
-| `minecraft:taiga` | 0.25 |  | rain | cold 92 (n=25) | 0.8% | y160 / all | S | S | R | R | R | R | R | S | S | S | S | S |
-| `terralith:cloud_forest` | 0.25 |  | rain | - | - | y160 / all | S | S | R | R | R | R | R | S | S | S | S | S |
-| `terralith:yosemite_lowlands` | 0.25 |  | rain | temperate 75, cold 25 (n=8) | 0.3% | y160 / all | S | S | R | R | R | R | R | S | S | S | S | S |
-| `terralith:yellowstone` | 0.24775 |  | rain | cold 81, temperate 13 (n=100) | 2.7% | y158 / all | S | S | S | R | R | R | S | S | S | S | S | S |
-| `terralith:birch_taiga` | 0.22 |  | rain | temperate 100 (n=5) | 0.2% | y136 / all | S | S | S | R | R | R | S | S | S | S | S | S |
-| `minecraft:windswept_forest` | 0.2 |  | rain | temperate 100 (n=8) | 0.3% | y120 / all | S | S | S | R | R | R | S | S | S | S | S | S |
-| `minecraft:windswept_gravelly_hills` | 0.2 |  | rain | cold 100 (n=3) | 0.1% | y120 / all | S | S | S | R | R | R | S | S | S | S | S | S |
-| `minecraft:windswept_hills` | 0.2 |  | rain | cold 100 (n=1) | <0.1% | y120 / all | S | S | S | R | R | R | S | S | S | S | S | S |
-| `terralith:windswept_spires` | 0.2 |  | rain | cold 100 (n=3) | 0.1% | y120 / all | S | S | S | R | R | R | S | S | S | S | S | S |
+| `terralith:highlands` | 0.4 |  | rain | temperate 100 (n=30) | 1.0% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:shield` | 0.4 |  | rain | cold 100 (n=28) | 0.9% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:shield_clearing` | 0.4 |  | rain | - | - | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:steppe` | 0.4 |  | rain | temperate 61, cold 38 (n=13) | 0.4% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:yosemite_cliffs` | 0.375 |  | rain | warm 40, temperate 40, cold 20 (n=5) | 0.2% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:forested_highlands` | 0.36 |  | rain | cold 75, temperate 25 (n=24) | 0.8% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `minecraft:old_growth_pine_taiga` | 0.3 |  | rain | temperate 93 (n=15) | 0.5% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:haze_mountain` | 0.3 |  | rain | - | - | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `minecraft:old_growth_spruce_taiga` | 0.25 |  | rain | temperate 93 (n=32) | 1.0% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `minecraft:taiga` | 0.25 |  | rain | cold 96 (n=30) | 1.0% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:cloud_forest` | 0.25 |  | rain | - | - | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:yosemite_lowlands` | 0.25 |  | rain | temperate 100 (n=1) | <0.1% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:yellowstone` | 0.24775 |  | rain | cold 85, temperate 12 (n=97) | 3.6% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:birch_taiga` | 0.22 |  | rain | temperate 100 (n=8) | 0.3% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `minecraft:windswept_forest` | 0.2 |  | rain | temperate 66, cold 33 (n=6) | 0.2% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `minecraft:windswept_gravelly_hills` | 0.2 |  | rain | - | - | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `minecraft:windswept_hills` | 0.2 |  | rain | cold 100 (n=4) | 0.1% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
+| `terralith:windswept_spires` | 0.2 |  | rain | cold 100 (n=3) | 0.1% | y320 / all | S | R | R | R | R | R | R | R | S | S | S | S |
 
-### 3.7 Adaptive (rivers and beaches) (7, 5.3%)
+### 3.7 Temperate by Serene Seasons' rule (untagged) (23, 11.9%)
+
+| Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `minecraft:plains` | 0.8 |  | rain | temperate 80, cold 19 (n=93) | 3.1% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:sunflower_plains` | 0.8 |  | rain | temperate 100 (n=8) | 0.3% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:dark_forest` | 0.7 |  | rain | temperate 100 (n=45) | 1.5% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:flower_forest` | 0.7 |  | rain | temperate 100 (n=4) | 0.1% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:forest` | 0.7 |  | rain | temperate 82, cold 17 (n=108) | 3.4% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:alpha_islands` | 0.7 |  | rain | - | - | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:blooming_valley` | 0.7 |  | rain | temperate 66, cold 33 (n=9) | 0.3% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:lavender_forest` | 0.7 |  | rain | - | - | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:lavender_valley` | 0.7 |  | rain | temperate 100 (n=2) | <0.1% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:moonlight_grove` | 0.7 |  | rain | cold 100 (n=2) | <0.1% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:moonlight_valley` | 0.7 |  | rain | cold 100 (n=14) | 0.5% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:sakura_grove` | 0.7 |  | rain | temperate 100 (n=7) | 0.2% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:sakura_valley` | 0.7 |  | rain | - | - | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:stony_spires` | 0.7 |  | rain | temperate 62, warm 25, cold 12 (n=8) | 0.3% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:birch_forest` | 0.6 |  | rain | temperate 90 (n=11) | 0.4% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:old_growth_birch_forest` | 0.6 |  | rain | temperate 100 (n=18) | 0.6% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `minecraft:meadow` | 0.5 |  | rain | temperate 62, cold 37 (n=24) | 0.8% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:basalt_cliffs` | 0.5 |  | rain | - | - | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:blooming_plateau` | 0.5 |  | rain | temperate 100 (n=5) | 0.2% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:granite_cliffs` | 0.4 |  | rain | - | - | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:lush_valley` | 0.4 |  | rain | cold 100 (n=3) | 0.1% | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:valley_clearing` | 0.4 |  | rain | - | - | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+| `terralith:white_cliffs` | 0.4 |  | rain | - | - | y320 / all | R | R | R | R | R | R | R | R | R | S | S | S |
+
+### 3.8 Permanent spring (1, <0.1%)
+
+| Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `terralith:skylands_spring` | 0.5 |  | rain | - | <0.1% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
+
+### 3.9 Permanent summer (1, <0.1%)
+
+| Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `terralith:skylands_summer` | 0.5 |  | rain | - | <0.1% | never | R | R | R | R | R | R | R | R | R | R | R | R |
+
+### 3.10 Permanent autumn (1, <0.1%)
+
+| Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `terralith:skylands_autumn` | 0.5 |  | rain | - | <0.1% | never / all | R | R | R | R | R | R | R | R | R | S | S | S |
+
+### 3.11 Permanent winter (frozen, shown as Winter) (1, <0.1%)
+
+| Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `terralith:skylands_winter` | 0.2 |  | snow | cold 100 (n=3) | <0.1% | all | S | S | S | S | S | S | S | S | S | S | S | S |
+
+### 3.12 Adaptive (rivers and beaches) (7, 5.4%)
 
 Each column takes the nearest land biome's type and temperature (rings of 8 directions out to CEConfig `[seasons] adaptiveRadius`). "Land in its bands" is what the climate samples put around it: the most common land classes in the bands where the biome was sampled.
 
 | Biome | Base | Bands | Share | Land in its bands |
 |---|---|---|---|---|
-| `minecraft:beach` | 0.8 | temperate 46, warm 31, cold 22 (n=45) | 1.5% | ss-temperate 55%, dry 21%, tropical 15%, frozen 7% |
-| `terralith:gravel_beach` | 0.8 | temperate 56, cold 31, warm 12 (n=16) | 0.5% | ss-temperate 70%, dry 10%, frozen 10%, tropical 8% |
+| `minecraft:beach` | 0.8 | temperate 48, cold 27, warm 23 (n=43) | 1.4% | ss-temperate 35%, cold 30%, dry 17%, tropical 10%, frozen 5% |
+| `terralith:gravel_beach` | 0.8 | cold 41, temperate 38, warm 19 (n=36) | 1.2% | cold 36%, ss-temperate 32%, dry 14%, tropical 9%, frozen 6% |
 | `minecraft:stony_shore` | 0.6 | - | - | - |
-| `minecraft:river` | 0.5 | warm 42, temperate 40, cold 17 (n=70) | 2.4% | ss-temperate 46%, dry 28%, tropical 19%, frozen 6% |
-| `terralith:warm_river` | 0.5 | hot 100 (n=9) | 0.3% | arid 97% |
-| `minecraft:snowy_beach` | 0.05 | frozen 100 (n=7) | 0.2% | frozen 95% |
-| `minecraft:frozen_river` | 0 | frozen 100 (n=9) | 0.3% | frozen 95% |
+| `minecraft:river` | 0.5 | temperate 49, warm 38, cold 11 (n=67) | 2.2% | ss-temperate 31%, dry 27%, cold 20%, tropical 15% |
+| `terralith:warm_river` | 0.5 | hot 100 (n=2) | <0.1% | arid 97% |
+| `minecraft:snowy_beach` | 0.05 | frozen 100 (n=5) | 0.2% | frozen 98% |
+| `minecraft:frozen_river` | 0 | frozen 100 (n=9) | 0.3% | frozen 98% |
 
-### 3.8 Seasons off (blacklisted) (16, <0.1%)
+### 3.13 Seasons off (blacklisted) (16, 0.3%)
 
 | Biome | Base | Mod | Declared | Bands | Share | Snow line | ESp | MSp | LSp | ESu | MSu | LSu | EAu | MAu | LAu | EWi | MWi | LWi |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -361,12 +449,12 @@ Each column takes the nearest land biome's type and temperature (rings of 8 dire
 | `terralith:cave/granite_caves` | 1 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `terralith:cave/infested_caves` | 1 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `terralith:cave/tuff_caves` | 1 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
-| `minecraft:mushroom_fields` | 0.9 |  | rain | cold 100 (n=1) | <0.1% | never | R | R | R | R | R | R | R | R | R | R | R | R |
+| `minecraft:mushroom_fields` | 0.9 |  | rain | hot 57, cold 28, temperate 14 (n=7) | 0.2% | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `minecraft:deep_dark` | 0.8 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `minecraft:dripstone_caves` | 0.8 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `terralith:cave/frostfire_caves` | 0.8 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `terralith:cave/thermal_caves` | 0.8 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
-| `terralith:mirage_isles` | 0.7 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
+| `terralith:mirage_isles` | 0.7 |  | rain | temperate 100 (n=1) | <0.1% | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `terralith:cave/deep_caves` | 0.6 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `minecraft:lush_caves` | 0.5 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
 | `terralith:cave/underground_jungle` | 0.5 |  | rain | - | - | never | R | R | R | R | R | R | R | R | R | R | R | R |
@@ -424,6 +512,8 @@ Sleeping skips weather (Better Days `weatherEffect = SLEEPING` runs the weather 
 | WorldB | Serene Seasons default | 33217 | Early Spring | Mid Wet | 2 of 8 |
 | WorldC | Serene Seasons default | 3662 | Early Spring | Mid Wet | 1 of 8 |
 | WorldD | Serene Seasons default | 66773 | Early Spring | Mid Wet | 3 of 8 |
-| WorldE | Serene Seasons default | 44750 | Early Spring | Mid Wet | 2 of 8 |
+| WorldE | Serene Seasons default | 59796 | Early Spring | Mid Wet | 3 of 8 |
+| WorldF | Serene Seasons default | 40405 | Early Spring | Mid Wet | 2 of 8 |
+| WorldG | Serene Seasons default | 56705 | Early Spring | Mid Wet | 3 of 8 |
 
 The dedicated server's season lives on the server (`<world>/data/seasons.dat`) and is not read here.
