@@ -32,7 +32,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
 | Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (engineering, item physics, biome tuning, fixes and compat, cans, composting, camera bags, TNT shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 6-7, 9-10, 13-15, 17, 20 | not written; 12 of 21 rows done (latest: pack tooling, WTHIT lines, portal ignition, mob/block tweaks) |
+| Writeups for the rest of the pack (item physics, biome tuning, fixes and compat, cans, composting, camera bags, tnt shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 7, 9, 10, 13, 14, 15, 17, 20 | not written; 13 of 21 rows done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
 
 ## 2. Partly done: built vs still to do
@@ -87,6 +87,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Tipped arrows on the Bottler (20 mB) and Spout (25 mB) cost less than the crafting grid (31.25 mB an arrow); the file comment says they're equal. [potion_buckets.md](../potion_buckets.md) 4 F1.
 - Potion bucket tooltips show the potion's durations, not × the bucket's 1.1 / 1.2 effect multiplier. [potion_buckets.md](../potion_buckets.md) 4 F2.
 - Probable, unverified: NEA's three removed enchantments can still roll from `enchant_randomly` loot (the `isDiscoverable` mixin method likely isn't remapped). [archery.md](../archery.md) 4 F6.
+- Engineering: component and coil disassembly comments promise a screwdriver / wirecutter the recipes do not take; iron and diamond components use a different centre on the blueprint. [engineering.md](../engineering.md) 4 F4, F6.
 - Probable, unverified: the air brake's `useDurationTicks` is read before Forge loads the config, so edits never apply (GR-28); the dragon set's 36 armor is over vanilla's 30 cap (GR-02). [gear_tuning.md](../gear_tuning.md) 4 F7, F13.
 - Cool Rain may ignore the season types (WE-25). [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2.
 - 5 Terralith cave biomes have no wild crops (single-player warning). [plan_1.0.5.md](../plan_1.0.5.md) 2.
@@ -113,7 +114,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - More Mooblooms D47 per-biome shares: first pass, open to retuning. [mooblooms.md](../mooblooms.md) 4.13.
 - Exposure bumpy filter: add a recipe or a loot entry. [exposure.md](../exposure.md) 4.
 - Metal standardization: plate / rod / dust-recycle gaps and an open question at the top of [metal_base_materials.js](../kubejs/server_scripts/metal/metal_base_materials.js).
-- Component tier names for aluminum (`Light?`) and uranium (`Dense?`). [components.js](../kubejs/server_scripts/engineering/components.js) lines 18 and 22.
+- Component tier names for aluminum (`Light?`) and uranium (`Dense?`). [components.js](../../kubejs/server_scripts/engineering/components.js) lines 18 and 22. The item names already say "Light" and "Heavy" ([engineering.md](../engineering.md) F5).
 - Whether `kubejs/archive/` and the commented-out old-helper blocks can be deleted (6).
 - Armor/tool effects: dragon bow and crossbow effects look reversed (F4); Magic Resistance on vanilla `isMagic()` or the pack's `magic` damage tag (F6); horse armor Regeneration I or II (F9). [armor_effects.md](../armor_effects.md) 4.
 - Portal: Flint and Terrasteel places Dark Fire anywhere (F1); Dark Fire lights portals in any dimension (F2). [nether_portal.md](../nether_portal.md) 4.
@@ -121,6 +122,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Potions: one batch size across machines or not (F1); keep the Refinery's regular → lingering shortcut (F2). [potions.md](../potions.md) 4.
 - Potion buckets: machine tipping price (F1); keep the glass-bottle remainder on every vanilla potion (F3). [potion_buckets.md](../potion_buckets.md) 4.
 - Archery: fix the bullet blueprint category (F1); split arrow 6 or 4 arrows (F2); the archery blueprint needs a trader-only Ethereal Arrow (F3). [archery.md](../archery.md) 4.
+- Engineering: show the sawmill blade in JEI (F2); one centre per component (F4); keep the bucket-eating shulker shell fan recipe (F7). [engineering.md](../engineering.md) 4.
 - Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
 
 **Decided, not carried out:**
@@ -213,6 +215,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [nether_portal.md](../nether_portal.md) | `NP-` | 12 / 0 | new 2026-10-18; NP-01 to NP-05 let the diagnostic log go |
 | [mob_block_tweaks.md](../mob_block_tweaks.md) | `MT-` | 12 / 0 | new 2026-10-18 (BR-28 stays in blockrunner.md) |
 | [wthit_lines.md](../wthit_lines.md) | `WL-` | 6 / 0 | new 2026-10-18; line tests stay in BR-, CR-, R4- |
+| [engineering.md](../engineering.md) | `EN-` | 18 / 0 | new 2026-10-18; EN-04 settles F2 |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
