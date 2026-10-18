@@ -36,6 +36,8 @@
 
 - other, migrate elsewhere
     - make 3 long curtain blocks
+    - allow hay bales, coal/charcoal, magma blocks straw bales, stick bales to extend campfire smoke and prevent rain extinguishing
+        - add tooltip to fuel block
     - collapsable ladders
         - extending functions like curtain block
         - only climbable when down
@@ -58,6 +60,68 @@
     - more allay spawns in pillager cages, mystical biomes and structures
     - prevent canvas sign dying (allow text to dye, not sign)
     - lower wandering trader wares trades
+    - karma system
+        - totally theoretical for now, only writeup
+        - doing certain actions gives good or bad karma, affecting an overall karma value
+        - positive and negative karma above a cutoff give good/bad luck, increasing as further from neutral
+        - limits on repeated actions for karma (linear decease on effect, exponential decrease, hard cut off after certain # of actions, time cooldown on karma effect from action)
+        - certain actions can only bring karma so high or low (low limit: restricted to low good or bad karma, high limit: unrestricted, can reach highest or lowest karma)
+        - good examples
+            - planting saplings (low good karma limit)
+            - bonemeal to compost (low limit)
+            - trading w/ villagers (low limit)
+            - helping in raids (time cooldown, high limit)
+            - pilling pillagers and witches (time cooldown, low limit)
+            - killing ender dragon (exponential decrease limit, negative offset to lower karma after x kills?)
+            - breeding animals (linear decrease to 0, low limit)
+            - taming pets (linear decrease to low, low limit)
+            - playing with pets (high karma, high limit)
+            - setting pet spawn points (linear decrease to low, cooldown, high limit)
+            - curing zombie villagers (slow linear decrease to low, high limit)
+            - tilling, planting, harvesting, planting flowers (high limit, slow linear increase to high, 5 minute cooldown)
+            - food pantry server feature?
+            - writing books, signing albums (linear decrease to low, high boost, high limit)
+            - taking photos (low boost, low limit)
+            - via romana path creation (linear increase to high, high limit)
+        - bad examples
+            - breaking claimed beds
+                - small decrease for villager owned
+                - large decrease for player owned
+                - linear increase on successive player bed breaks
+            - being mean (no cooldown, high limit)
+                - talking rude to mca
+                - punching villagers, baby animals
+                - killing villagers (high decrease)
+                - killing baby villagers, golems (higher decrease)
+            - pet respawning (high limit, exponential increase, no cooldown)
+            - killing pacifist mobs, protected or no drops (exponential increase, high limit, 1 minute cooldown)
+                - bats
+                - dolphins
+                - axolotls
+                - pandas
+                - polar bears
+                - alexs mobs that dont drop? review and decide
+            - killing animals (slow linear increase from low effect, 10 sec cooldown, buffer period of no effect)
+            - igniting tnt (constant low effect, no cooldown)
+            - breaking village bell (exponential increase, no cooldown, high limit)
+            - breaking wild waystones
+                - small linear increase if never activated
+                - large exponential increase if another player had activated waystone
+                    - announce waystone destruction and destroyer in chat
+            - igniting nether portal
+                - failing (1 time large karma decrease with low limit)
+                    - chat annoucement for first time for each player
+                - succeeding (slow linear decrease, low limit)
+                    - chat annoucement for first time for each player
+            - attacking neutral mobs (slow linear increase, high cap)
+                - zombie pigmen
+                - passive spiders 
+                - hitting/looking at endermen
+            - stealing honey w/o campfire (low exponential increase, low limit)
+            - refueling boat (slow linear increase, low limit)
+            - falling into void (exponential increase, 5 minute cooldown, high limit)
+            - looting corpse of another player (quick exponential increase, high limit)
+
     - vinery grass slab biome tint
     - vinery backport license
         - code is mit (i can use this, rebuild features in older version)
