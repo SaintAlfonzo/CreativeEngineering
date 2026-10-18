@@ -27,6 +27,19 @@ ServerEvents.recipes(e => {
 	R.ceBaking([i.wheat, i.wheat, i.any_sugar, i.any_sugar, i.t_fruits_mangosteen, i.t_fruits_mangosteen],
 		Item.of(i.mangosteen_cake, 1), e, 'mangosteen_cake', { exp: 0.1, time: 200, container: i.bowl })
 
+	//######################### Dummy bakeware recipes #########################
+	// One placeholder per bakeware piece so the tool slot has something to do (and to test with): each
+	// needs its tool, which stays in the slot. Ingredient counts differ from every real recipe above, so
+	// they never compete with them. Replace with real bakeware recipes later.
+	R.ceBaking([i.any_dough], Item.of(i.minecraft_bread, 1), e, 'dummy_baking_sheet',
+		{ exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet })
+	R.ceBaking([i.pie_crust, i.apple], Item.of(i.apple_pie, 1), e, 'dummy_pie_tin',
+		{ exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin })
+	R.ceBaking([i.any_dough, i.any_sugar, i.eggs], Item.of(i.cake, 1), e, 'dummy_cake_pan',
+		{ exp: 0.1, time: 200, tool: i.t_bakeware_cake_pan })
+	R.ceBaking([i.t_fruits_blueberry, i.any_dough], Item.of(i.blueberry_muffin, 1), e, 'dummy_muffin_tin',
+		{ exp: 0.1, time: 200, tool: i.t_bakeware_muffin_tin, container: i.paper })
+
 	//######################### Oven and bakeware #########################
 	// Oven: an iron-plate top over a hollow brick box.
 	R.shaped(i.oven, ['PPP', 'B B', 'BBB'], { P: i.any_plate_iron, B: i.bricks }, e, 'oven')

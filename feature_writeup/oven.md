@@ -19,6 +19,7 @@ The ask, from cooking.md:
 | Baking recipes: copies of the 7 baked-good pot recipes (Fruits Delight muffins, pies, tarts, cake). Pot recipes kept | BUILT 2026-10-18, not booted |
 | Muffin pot recipes on `#forge:dough` | BUILT 2026-10-18, not booted. Whether this was the "not cookable" cause is unconfirmed (3.8) |
 | Crafting recipes: oven, 4 bakeware | BUILT 2026-10-18 (placeholder patterns, 3.6) |
+| Dummy baking recipe per bakeware piece (tool required; muffin tin also plates on paper) | BUILT 2026-10-18, not booted (2.7) |
 
 Files to open first:
 
@@ -175,6 +176,21 @@ the only `farmersdelight:cooking` recipes with a baked output across the 27 food
 Brewin, Respite, Neapolitan, Abnormals Delight, Central Kitchen, Create Confectionery/Factory, ...); the scan didn't
 cover every mod in the pack. Sugar is `#forge:sugar`, as the pack-wide sugar swap in cooking.js gives every pot recipe.
 
+### 2.7 Dummy bakeware recipes
+
+Placeholders, one per bakeware piece, so the tool slot is used and testable. Each needs its tool, which stays in
+the slot. Their ingredient counts differ from every recipe in 2.6, so they never compete. Replace them with real
+bakeware recipes later.
+
+| Id `creativeengineering:baking/...` | Ingredients | Tool | Result | Container |
+|---|---|---|---|---|
+| `dummy_baking_sheet` | `#forge:dough` | baking sheet | bread | none |
+| `dummy_pie_tin` | pie crust, apple | pie tin | FD apple pie | none |
+| `dummy_cake_pan` | `#forge:dough`, `#forge:sugar`, `#forge:eggs` | cake pan | cake | none |
+| `dummy_muffin_tin` | blueberry, `#forge:dough` | muffin tin | 1 blueberry muffin | paper |
+
+All 200 ticks, 0.1 xp.
+
 ## 3. What the pack does, and why
 
 ### 3.1 Heat (`OvenHeat`)
@@ -199,7 +215,7 @@ oven with it).
 
 ### 3.4 Tool slot
 
-Recipes can ask for bakeware; none do yet (2.6). The tool is never used up. Filter: `#creativeengineering:bakeware`.
+Recipes can ask for bakeware; only the dummy recipes do so far (2.7). The tool is never used up. Filter: `#creativeengineering:bakeware`.
 
 ### 3.5 Automation (`OvenItemHandler`), the same on every face
 
@@ -310,6 +326,8 @@ Needs a patcherMod build in `mods/`.
 - [ ] **OV-12 Break / burn:** breaking drops oven and contents; standing on a lit oven hurts unless sneaking.
 - [ ] **OV-13 Muffins:** blueberry and cranberry muffins cook in the pot with Create dough. If not, record which
   ingredient slot JEI shows empty.
+- [ ] **OV-15 Dummy bakeware recipes:** each 2.7 recipe bakes only with its bakeware in the tool slot, the tool
+  stays afterwards, and the dummy muffin waits for paper. JEI shows the tool left of the grid.
 - [ ] **OV-14 Server:** the same on a dedicated server with a client (menu opens, slots sync, JEI page present).
 
 ## 8. History
@@ -319,3 +337,4 @@ Needs a patcherMod build in `mods/`.
   jar. Bakeware items (IE iron plate texture, no durability), tags, `NCH.ceBaking`, 7 baking recipes copied from the
   pot, oven and bakeware crafting recipes, muffin pot recipes on `#forge:dough`. Dough lead corrected (3.8). Compiles;
   8 GameTests pass.
+- 2026-10-18: one dummy baking recipe per bakeware piece (2.7).
