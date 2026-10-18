@@ -50,15 +50,45 @@
         - fruit basket
     - give composters more wood types
     - ensure cows in skyland, 100% mooblooms
+    - sculk sensor backport
+    - soap effect on slippery blocks
+        - ice blocks, document others
+        - stronger effect on slipperier blocks
+        - standard ice speed on all slippery blocks for ice boats
+            - tooltip for ice travel speed?
     - mod family tags
         - create mods
         - farmers delight mods (some farmers_xyz, some xyz_delight)
+    - lootr
+        - additional loot table/placed loot pass
+        - item frame integration
+        - resolve all textures to resource pack when possible (chests and barrels, shulkers may need new texture, need item frames)
+    - geodes
+        - ensure new shards have armor and potion usages
+    - tnt
+        - fix minecart shrapnel
+        - set item damage to fraction but keep knockback
     - framed blocks
         - change copycat resource pack to keep framed block name, disabled by default on client
-    - smoked wood recipe
+    - dreams and desires integration
+        - smoked wood recipe
+        - rubber
+            - integrate with rubber tree mod
+                - latex proccess chain to rubber
+                - dreams and desires sap machine on rubber logs, less efficient
+            - rubber to belts, more efficient
+        - rose quartz sand blasting: 80rough/20smooth recursive split
+        - remove extra woods? keep smoked/merge with treated?
+        - remove glowstone geodes, review geode spawns
     - verify firefly mod works, allow catching fireflies with jar?
+    - integrate horse cart crafting recipes
     - more allay spawns in pillager cages, mystical biomes and structures
     - prevent canvas sign dying (allow text to dye, not sign)
+    - hardened leather uses
+        - backpacks?
+        - check all armor w/ leather
+        - horse armor, saddles
+    - new pneumaticcraft armor crafts, make interesting
     - lower wandering trader wares trades
     - karma system
         - totally theoretical for now, only writeup
@@ -121,7 +151,6 @@
             - refueling boat (slow linear increase, low limit)
             - falling into void (exponential increase, 5 minute cooldown, high limit)
             - looting corpse of another player (quick exponential increase, high limit)
-
     - vinery grass slab biome tint
     - vinery backport license
         - code is mit (i can use this, rebuild features in older version)
