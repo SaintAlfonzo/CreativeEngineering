@@ -52,7 +52,8 @@ import java.util.function.Predicate;
  * on Forge's processBlockInfos, the same hook as {@link LootContainerSwaps}; mixin/StructureStartGroundMatchMixin
  * records which structure start is placing): world generation and /place structure. Structure blocks and
  * /place template are left alone. For the chunk being placed it samples the natural ground: the top solid block and the three below it, on a grid over
- * this chunk and its 8 neighbours, skipping every column a structure piece covers. A base family (a block
+ * this chunk and its 8 neighbours, skipping every column where a structure piece reaches the sampled ground's
+ * height (a piece deep below or high above that ground leaves it natural). A base family (a block
  * tag, default {@code creativeengineering:ground_match/grass}) is native when enough of those tops belong
  * to it; otherwise its blocks in the template's bottom layers are replaced (CEConfig [worldgen.ground_match]):
  * exposed ones by a sampled top block, covered ones by a sampled under-block, both picked by position
@@ -137,8 +138,7 @@ public final class GroundMatch {
 			int stride = dx == 0 && dz == 0 ? centerStride : neighbourStride;
 			int x0 = c.getPos().getMinBlockX(), z0 = c.getPos().getMinBlockZ();
 			for (int lx = stride / 2; lx < 16; lx += stride) for (int lz = stride / 2; lz < 16; lz += stride) {
-				if (covered(exclude, x0 + lx, z0 + lz)) continue;
-				sampleColumn(c, x0 + lx, z0 + lz, subDepth, maxDig, tops, subs);
+				sampleColumn(c, x0 + lx, z0 + lz, subDepth, maxDig, exclude, tops, subs);
 			}
 		}
 		s = new Sample(tops, subs);
@@ -151,14 +151,26 @@ public final class GroundMatch {
 		for (StructurePiece piece : start.getPieces()) exclude.add(piece.getBoundingBox());
 	}
 
-	private static boolean covered(List<BoundingBox> boxes, int x, int z) {
+	/**
+	 * True when a piece covers column x z (1 block of margin) at heights minY..maxY. Only XZ was checked before, so an
+	 * ancient city at y -51, Philip's underground ruins or a mineshaft under a site hid nearly every column, and the
+	 * sample fell under minSamples (03_phase_3.md 4.1).
+	 */
+	static boolean covered(List<BoundingBox> boxes, int x, int z, int minY, int maxY) {
 		for (BoundingBox b : boxes) {
-			if (x >= b.minX() - 1 && x <= b.maxX() + 1 && z >= b.minZ() - 1 && z <= b.maxZ() + 1) return true;
+			if (x >= b.minX() - 1 && x <= b.maxX() + 1 && z >= b.minZ() - 1 && z <= b.maxZ() + 1
+					&& b.minY() <= maxY && b.maxY() >= minY) return true;
 		}
 		return false;
 	}
 
-	private static void sampleColumn(ChunkAccess c, int x, int z, int subDepth, int maxDig, List<BlockState> tops, List<BlockState> subs) {
+	/**
+	 * The column's top ground block and the ones under it, unless a structure piece reaches that ground (its top,
+	 * its under-blocks, or the block right above it: a piece standing on the ground, or the top being the piece's own
+	 * blocks).
+	 */
+	private static void sampleColumn(ChunkAccess c, int x, int z, int subDepth, int maxDig, List<BoundingBox> exclude,
+			List<BlockState> tops, List<BlockState> subs) {
 		BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
 		// Top motion-blocking block, water ignored. Generated chunks only keep the non-WG heightmaps.
 		Heightmap.Types type = c.getStatus().isOrAfter(ChunkStatus.FULL) ? Heightmap.Types.OCEAN_FLOOR : Heightmap.Types.OCEAN_FLOOR_WG;
@@ -167,6 +179,7 @@ public final class GroundMatch {
 		for (int dig = 0; dig <= maxDig && y >= floor; dig++, y--) {
 			BlockState st = c.getBlockState(m.set(x, y, z));
 			if (!isGround(st)) continue;
+			if (covered(exclude, x, z, y - subDepth - 1, y + 1)) return;
 			tops.add(st);
 			for (int d = 1; d <= subDepth && y - d >= floor; d++) {
 				BlockState below = c.getBlockState(m.set(x, y - d, z));
@@ -257,6 +270,12 @@ public final class GroundMatch {
 
 		Rewrite rw = rewrite(infos, offset.getY(), box, families, WorldgenConfig.groundBaseLayers(), WorldgenConfig.groundMode(),
 				WorldgenConfig.groundMaxPlantHeight(), paletteFor, terrainAt);
+		if (WorldgenConfig.groundLog() && sample[0] != null && sample[0].tops().size() < minSamples) {
+			// a base block was found but too few columns were sampled to decide: say so, or the skip is silent
+			// (03_phase_3.md 4.1)
+			LOG.info("[ground-match] chunk {} template at {}: only {} ground columns sampled (minSamples {}), base left as is",
+					center, offset.toShortString(), sample[0].tops().size(), minSamples);
+		}
 		if (rw == null) return null;
 
 		if (WorldgenConfig.groundLog()) {

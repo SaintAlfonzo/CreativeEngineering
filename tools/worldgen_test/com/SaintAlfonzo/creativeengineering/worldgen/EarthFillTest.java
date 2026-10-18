@@ -85,6 +85,7 @@ public class EarthFillTest {
 		TagKey<Block> earthTag = BlockTags.create(new ResourceLocation("creativeengineering", "earth_fill/earth"));
 		Map<TagKey<Block>, List<Holder<Block>>> tags = new HashMap<>();
 		tags.put(earthTag, List.of(h(Blocks.DIRT), h(Blocks.GRASS_BLOCK), h(Blocks.SAND)));
+		tags.put(EarthFill.STONE_BLOCKS, List.of(h(Blocks.STONE)));
 		Registry.BLOCK.bindTags(tags);
 		List<TagKey<Block>> earth = List.of(earthTag);
 
@@ -182,6 +183,9 @@ public class EarthFillTest {
 		check(EarthFill.localEarth(t, earth, 3).length == 9 + 1 + 1, "3 base layers: 9 pad + 1 skirt + 1 sand = 11 (roof garden and stone left out)");
 		check(EarthFill.localEarth(t, earth, 2).length == 10, "2 base layers: the layer-2 sand drops out (10)");
 		check(EarthFill.localEarth(t, earth, 1).length == 9, "1 base layer: the pad only (9)");
+		List<TagKey<Block>> withStone = List.of(earthTag, EarthFill.STONE_BLOCKS);
+		check(EarthFill.localEarth(t, withStone, 3).length == 13, "stone base (earth_fill/stone_base): the 2 base-layer stone blocks count too (13)");
+		check(EarthFill.localEarth(t, earth, 3).length == 11, "and the plain earth list still gives 11 afterwards (separate caches)");
 
 		Function<StructureTemplate, long[]> earth3 = tt -> EarthFill.localEarth(tt, earth, 3);
 		LongArrayList out = new LongArrayList();
