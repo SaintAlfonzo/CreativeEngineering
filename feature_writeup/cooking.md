@@ -8,6 +8,8 @@
             - wandering trader trade
         - veggies
             - backport veggie delight, vintage delight, fungi delight
+            - potato slices
+                - merge diced potatos to rustic delight potato slices
         - corn
             - mill to corn meal before cornbread, etc crafts?
         - merge
@@ -29,7 +31,7 @@
         - soup
             - adjust base soup values to be based on ingredients, mark outliers then make changes
             - put all in supplementaries jar
-    - baked
+    - baked/fried
         - sliced bread/toast
             - allow/require on recipes with visual square bun
         - yeast
@@ -42,6 +44,18 @@
             - time based wait period between craft steps
             - mill/mortar sourdough to get starter
             - mark starter with date started, allow naming, carry these stats to any sourdough made.
+        - fries
+            - rename pc chips
+            - new diced potato/cooking oil frying recipe
+            - cod and chips
+                - raw potato slices + raw fish recipe plated with paper
+                - tooltip making fun of the 'chips'
+                - allow any fish? rename to fish and chips
+        - salmon tampura
+            - allow any fish, rename to fish tempura
+            - fd frying recipe (cooking oil)
+            - remove ALL pc deepfrying recipes
+
     - meals
         - add cooked ingredients to heatless shapeless recipe
         - fried rice
@@ -64,12 +78,7 @@
         - cold
             - custard
                 - add more variants
-        - baked
-            - new farmers delight oven block?
-                - functions almost exactly like cooking pot, but for baking goods
-                - can require input tool (baking sheet, cake pan) and plating item (paper for muffins)
-                - requires non-stove heat source (magma block, campfire)
-                - provides stove heat on top
+        - baking
             - muffins (make decent food source)
                 - add more variants
                 - add combinations, give mixed but shorter effects
@@ -174,6 +183,7 @@
     - inefficient meat culture cultivation w/ pot
     - cheese ripening shelf, stackable
     - more efficient heated dough block + green dye to slime block
+    - add incomplete textures to every sequence assembly recipe
 - tools
     - bowls
         - add bamboo recipe
@@ -188,12 +198,22 @@
         - allows extra interact height  when (space held?)
         - used for picking and building
 - kitchen
+    - new farmers delight oven block?
+        - functions almost exactly like cooking pot, but for baking goods
+        - can require input tool (baking sheet, cake pan) and plating item (paper for muffins)
+        - requires non-stove heat source (magma block, campfire)
+        - provides stove heat on top
+        - add decorative tooltip to fantasy ovens
+        - add furnace/smoker tooltip to blockheads oven
+            - ensure blockheads oven can both smelt and smoke food items
     - fridge
         - added sort button deletes items on 2-tall fridge
         - patch fridge model to appear as full block horizontally (for placing decor on top)
     - counters
         - allow cutting board to be placed on
         - add storage to corner cabinets
+    - stove
+        - bottle/bucket output slot for ingredient inputs in upgraded cooking pot?
     - sink
         - doesnt provide water?
         - rework to act like well?
