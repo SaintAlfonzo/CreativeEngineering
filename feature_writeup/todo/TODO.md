@@ -30,7 +30,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Structures: tuning pass (shipwreck 40%, jungle temple spacing, strip unexplained weights, sky village rate, fresh watchtower `--fit-rates`) | [structure_tuning.md](../structure_tuning.md) 7 Todo | waits on the end of the scratch test run |
 | Swap Overworld netherrack / crimson / warped ground (jasper, crimsite) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Biomes and terrain" | not built |
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
-| Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
+| Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | researched 2026-10-18 from decompiled jars (tiers corrected, order in 5); nothing ported, D1-D5 open |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
 | Writeups for the rest of the pack (recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 20 | not written; 20 of 21 rows done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
@@ -68,6 +68,7 @@ fixed in source 2026-10-18 for patcherMod 1.0.7, not built or shipped (2, "Struc
 The village-layout cause was found on the way: the pool order changes per JVM run.
 
 **Other features:**
+- Probable, unverified: Death Knell is server-only but its death messages are lang keys from its own jar, so clients likely see raw `message.deathknell.*` keys (FP-01). Rain Should Extinguish Campfires duplicates Unlit Campfire's rain rule: remove. [feature_porting.md](../feature_porting.md) 0, 2.2.
 - Brewin' 2.0 keg gives back an extra glass bottle per `pickled_pickles` brew (fluid-item leftover slot grows by the result count). Goes away with the 4.5.0 port. [remainder_buffer.md](../remainder_buffer.md) 1.3.
 - Vinery JEI fermentation arrow shows 1800 ticks; the real time is about 50. `VineryIds.FERMENTATION_TICKS` is still 1800. [vinery_jei.md](../vinery_jei.md) 4.
 - Canned Goods data: saturation values far too high, crossed ids, wrong effects. [food.md](../food.md) 4.2 findings 1-2 (the tuning system is the planned fix).
@@ -199,7 +200,7 @@ The village-layout cause was found on the way: the pool order changes per JVM ru
 - [alcohol.md](../alcohol.md) Part A says the port is "not started"; it has begun (2). [deploy.md](../deploy.md) `IN_TREE_MODS` will need `backportedBrewin` once it builds.
 - [exposure.md](../exposure.md) has no `-04` entry (2).
 - [cooking.md](../cooking.md) lists the fridge sort bug, which has a fix built (2).
-- Writeups not in the README index: [cooking.md](../cooking.md), [feature_porting.md](../feature_porting.md), [meat_blocks.md](../meat_blocks.md), [nether_swaps.md](../nether_swaps.md), [nether_blocks_scan.md](../nether_blocks_scan.md), [wood_mismatch.md](../wood_mismatch.md), [testing/fridge_sort/](../testing/fridge_sort/plan.md).
+- Writeups not in the README index: [cooking.md](../cooking.md), [meat_blocks.md](../meat_blocks.md), [nether_swaps.md](../nether_swaps.md), [nether_blocks_scan.md](../nether_blocks_scan.md), [wood_mismatch.md](../wood_mismatch.md), [testing/fridge_sort/](../testing/fridge_sort/plan.md).
 - [todo.txt](todo.txt) items found done on 2026-10-18: all 7 cultures wired; syringe texture; dead `.en_us.json`; `Config.java`; dragon-scale chestplate rocket takeoff (`EasyElytraTakeoffHelperMixin`; check whether Alex's Mobs items need adding to `#creativeengineering:elytra_chestplates`). The loot overhaul line is superseded by [loot.md](../loot.md).
 - Found while writing [armor_effects.md](../armor_effects.md) and [gear_tuning.md](../gear_tuning.md) (2026-10-18): [magic_resistance.js](../../kubejs/startup_scripts/magic/magic_resistance.js) header says there is no potion (there is); [armor_effects.js](../../kubejs/startup_scripts/func/armor_effects.js) header says 6 effects (cap is 7); the `NCH.cfg` example uses toml keys instead of field names ([neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) ~621). (shields.md 2.7 said the felsic shield's values were configurable: corrected the same day.)
 - Found while writing [potions.md](../potions.md), [potion_buckets.md](../potion_buckets.md) and [archery.md](../archery.md) (2026-10-18): `DragonBreathBrewing`'s javadoc names a `changes/dragon_breath.js` that doesn't exist (it's `potions.js` part 3); [tipped_arrows.js](../../kubejs/server_scripts/equipment/tipped_arrows.js) header gives amounts the code doesn't use. Raw `e.custom` recipes in `potion_bottling.js` and `tipped_arrows.js`, and 44 raw tag `e.add` lines in `equipmenttags.js`, are against the NCH / tag-helper rule.
