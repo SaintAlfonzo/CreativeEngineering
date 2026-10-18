@@ -133,6 +133,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - TNT shrapnel: the player who lit the TNT is immune to its shrapnel, keep or include them (F1). [tnt_shrapnel.md](../tnt_shrapnel.md) 4.
 - Engineering recipes: a blast furnace recipe or another block for the LL locomotive and tug (F1); a dispenser recipe (F2); one amethyst crushing output per machine (F3). [recipes_engineering.md](../recipes_engineering.md) 4.
 - Metal recipes: one plate method per metal or Create pressing for the missing 5 (F1); hand-crafted rods for every metal or none (F4); rose gold in the gold block tag (F5). [recipes_metal.md](../recipes_metal.md) 4.
+- Cooking recipes: a smoker recipe (vanilla's removed, none added) (F1); keep the vanilla cake removal (F2). [recipes_cooking.md](../recipes_cooking.md) 4.
 - Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
 
 **Decided, not carried out:**
@@ -237,6 +238,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [recipes_engineering.md](../recipes_engineering.md) | `RE-` | 20 / 0 | new 2026-10-18; RE-03, RE-08, RE-16 settle F1-F3 |
 | [recipes_metal.md](../recipes_metal.md) | `RM-` | 14 / 0 | new 2026-10-18; RM-07, RM-08, RM-11 check F1, F2, F5 |
 | [recipes_wood.md](../recipes_wood.md) | `RW-` | 10 / 0 | new 2026-10-18; RW-03 checks F1 |
+| [recipes_cooking.md](../recipes_cooking.md) | `RC-` | 14 / 0 | new 2026-10-18; RC-01, RC-02 settle F1, F2 |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
