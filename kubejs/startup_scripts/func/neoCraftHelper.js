@@ -955,6 +955,36 @@ global.NCH = {
 		.id(`${global.NCH.modId}:farmersdelightcutting/${idSuffix}`)
 	},
 
+	// Oven baking, creativeengineering:baking (patcherMod oven/, feature_writeup/oven.md 2.2): the FD
+	// cooking-pot JSON plus an optional `tool` (bakeware in the oven's tool slot, never used up).
+	// input: 1-6 ingredients (an array entry = any of those). opts: { exp, time, container, tool }
+	//   R.ceBaking([i.t_fruits_fig, i.pie_crust, i.eggs], Item.of(i.fig_tart, 2), e, undefined,
+	//     { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin, container: i.paper })
+	ceBaking(input, output, e, idOverride, opts) {
+		opts = opts || {}
+		if (!e) throw new Error('ceBaking called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, input, "baking")
+		var ctx = 'ceBaking ' + idSuffix
+
+		var inputs = Array.isArray(input) ? input : [input]
+		if (inputs.length < 1 || inputs.length > 6)
+			global.NCH._warn(ctx, 'needs 1-6 ingredients, got ' + inputs.length)
+
+		var json = {
+			type: 'creativeengineering:baking',
+			ingredients: inputs.map((v, idx) =>
+				global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + idx + ']' })),
+			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
+			experience: opts.exp ?? 0,
+			cookingtime: opts.time ?? 200
+		}
+		if (opts.tool) json.tool = global.NCH._itemJson(opts.tool, { countMode: 'none', context: ctx + ' tool' })
+		if (opts.container)
+			json.container = global.NCH._itemJson(opts.container, { allowTag: false, countMode: 'none', context: ctx + ' container' })
+
+		e.custom(json).id(`${global.NCH.modId}:baking/${idSuffix}`)
+	},
+
   // ========================================================================
   // Create
   // ========================================================================

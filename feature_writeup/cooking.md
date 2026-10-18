@@ -66,7 +66,7 @@
                 - add more variants
         - baked
             - new farmers delight oven block?
-                - plan + placeholder block: [oven.md](oven.md)
+                - built: [oven.md](oven.md)
                 - functions almost exactly like cooking pot, but for baking goods
                 - can require input tool (baking sheet, cake pan) and plating item (paper for muffins)
                 - requires non-stove heat source (magma block, campfire)
