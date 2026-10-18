@@ -32,7 +32,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
 | Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (biome tuning, fixes and compat, cans, composting, camera bags, tnt shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 9, 10, 13, 14, 15, 17, 20 | not written; 14 of 21 rows done |
+| Writeups for the rest of the pack (fixes and compat, cans, composting, camera bags, tnt shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 10, 13, 14, 15, 17, 20 | not written; 15 of 21 rows done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
 
 ## 2. Partly done: built vs still to do
@@ -124,6 +124,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Archery: fix the bullet blueprint category (F1); split arrow 6 or 4 arrows (F2); the archery blueprint needs a trader-only Ethereal Arrow (F3). [archery.md](../archery.md) 4.
 - Engineering: show the sawmill blade in JEI (F2); one centre per component (F4); keep the bucket-eating shulker shell fan recipe (F7). [engineering.md](../engineering.md) 4.
 - Item physics: classify modded items (most sink and burn by default) (F4). [item_physics.md](../item_physics.md) 4.
+- Biomes: accept or retune the 5 unreachable multipliers (F1); skylands at 15 % while mooblooms and seasons target them (F3). [biome_tuning.md](../biome_tuning.md) 4.
 - Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
 
 **Decided, not carried out:**
@@ -218,6 +219,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [wthit_lines.md](../wthit_lines.md) | `WL-` | 6 / 0 | new 2026-10-18; line tests stay in BR-, CR-, R4- |
 | [engineering.md](../engineering.md) | `EN-` | 18 / 0 | new 2026-10-18; EN-04 settles F2 |
 | [item_physics.md](../item_physics.md) | `IP-` | 14 / 0 | new 2026-10-18; IP-13 checks the $1 crash |
+| [biome_tuning.md](../biome_tuning.md) | `WG-` | 8 / 0 | new 2026-10-18; WG-06 settles F3 |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
