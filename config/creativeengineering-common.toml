@@ -1673,6 +1673,17 @@
 	#most-complete first (the share of inputs you already have). Other screens keep JEI's own order.
 	#Takes effect the next time a recipe lookup opens.
 	craftableFirst = true
+	#Order JEI's ingredient list by the pack's definition (kubejs/startup_scripts/jei/order.js) and its
+	#creativeengineering:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then
+	#each category's own order. Ingredients with no place keep JEI's own order ([sorting] in
+	#config/jei/jei-client.ini) after the placed ones of their type. Off: JEI's own order only.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	packOrder = true
+	#Write kubejs/exported/jei_order.json at every JEI start: every item, fluid, effect and multiblock with
+	#its place in the pack order and whether JEI shows it (shown / hidden by the pack / hidden by a mod /
+	#hidden in JEI's edit mode / never in JEI), plus problems in the definition. Render it with
+	#python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB.
+	orderReport = false
 
 #WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
 #plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
