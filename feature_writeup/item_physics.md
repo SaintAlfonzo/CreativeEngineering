@@ -17,7 +17,7 @@
   [mixin/ItemPhysicServerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java).
 - **Knobs:** the four tags (`/reload`); the burn-transform rules and programmatic rules (startup, restart);
   ItemPhysic's own `config/itemphysic.json` (lists `swimmingItems`, `burningItems`, `undestroyableItems`); TNT shrapnel
-  in `[shrapnel]` (backlog row 17).
+  in `[shrapnel]` ([tnt_shrapnel.md](tnt_shrapnel.md)).
 
 ## 1. Overview
 
@@ -140,7 +140,7 @@ When fire or lava destroys a dropped item (ItemPhysic's item health reaches 0 fr
 - patcherMod: [itemphysic/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/) (`ItemPhysicSplit`, `ItemBurnTransform`, `BurnBlastDamage`), [mixin/ItemPhysicServerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java), `data/creativeengineering/tags/items/physics/*.json` (seed).
 - KubeJS: [func/item_physics.js](../kubejs/startup_scripts/func/item_physics.js) (`global.itemPhysics`), [tags/item_physics_tags.js](../kubejs/server_scripts/tags/item_physics_tags.js).
 - Config: `config/itemphysic.json`.
-- Related: shrapnel (`shrapnel/` package, backlog row 17).
+- Related: shrapnel ([tnt_shrapnel.md](tnt_shrapnel.md)).
 
 ## 6. Offline checks
 

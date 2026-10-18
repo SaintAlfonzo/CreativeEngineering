@@ -74,6 +74,7 @@ What is still left across every writeup (not started, partly done, open bugs, op
 | Cans (hub: multi-serving cans and the return roll, 247 serving counts, 26 hand-written + 202 generated cans, dyeable canned golem; detail in food.md 3.6 and can_parity.md) | [cans.md](cans.md) | `CN-` | DEPLOYED (servings since 1.0.3, golem 1.0.4, generated cans 1.0.6), CN-01 to CN-06 pending (FO-, CP-, R4-07 elsewhere); findings F1-F4 |
 | Composting (`global.compost` rebuilds the composter table on every tag load: 10 rule categories, 684 per-item values, exclusions; `/dumpcompost`, `gen_compost_values.py`) | [composting.md](composting.md) | `CM-` | DEPLOYED (since 1.0.3), CM-01 to CM-08 pending; findings F1-F4; prefix CM- (CP- is can parity) |
 | Camera bags (Exposure Extras: leather / iron / netherite bags, 5 / 9 / 14 slots of `#exposure_extras:camera_equipment`, contents in NBT, dyeable, smithing upgrades, old-id remap) | [camera_bags.md](camera_bags.md) | `CB-` | DEPLOYED (1.0.3, moved 1.0.4), never tested in game; CB-01 to CB-10 + R4-04..06/11 pending; findings F1-F4, F1 (netherite upgrade needs Armor Trims' template) and F2 (no tier looks) need a decision |
+| TNT shrapnel (lit TNT, TNT minecarts and burning TNT items fire a ring of no-gravity fragments: 24 pieces, 12 blocks, 3 damage; `[shrapnel]`) | [tnt_shrapnel.md](tnt_shrapnel.md) | `TN-` | DEPLOYED (1.0.3 jar), TN-01 to TN-10 pending; findings F1-F4, F1 (the lighter is immune) needs a decision |
 
 ## Release plans
 
@@ -108,7 +109,7 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | 14 | ~~Composting~~ | done: [composting.md](composting.md) | `CM-` |
 | 15 | ~~Camera bags~~ | done: [camera_bags.md](camera_bags.md) | `CB-` |
 | 16 | ~~WTHIT lines~~ | done: [wthit_lines.md](wthit_lines.md) | `WL-` |
-| 17 | TNT shrapnel | `shrapnel/` package, `[shrapnel]` config | `TN-` |
+| 17 | ~~TNT shrapnel~~ | done: [tnt_shrapnel.md](tnt_shrapnel.md) | `TN-` |
 | 18 | ~~Nether portal ignition~~ | done: [nether_portal.md](nether_portal.md) | `NP-` |
 | 19 | ~~Mob and block tweaks~~ | done: [mob_block_tweaks.md](mob_block_tweaks.md) | `MT-` |
 | 20 | Recipe progression | the engineering/, metal/, wood/, cooking/, magic/ recipe scripts as a whole (components, power, oil, computing, pneumatic, crystals, metal unification, bark/sawdust/ash, chocolate, cultivated meat, XP, enchants, sculk), removed items and dead recipes | `RP-` (split per folder when picked) |
