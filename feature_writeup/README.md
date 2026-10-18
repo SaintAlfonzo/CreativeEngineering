@@ -49,6 +49,8 @@ What is still left across every writeup (not started, partly done, open bugs, op
 | Wandering Trader + Wandering Winemaker (independent tick-based spawn timers, 25 + 5 offers, stock edited through `global.trades`: removals, Wares x20, golden listings, saplings/seeds/plants/blocks/mob buckets, Winemaker additions, no Nether/End items) | [wandering_trader.md](wandering_trader.md) | `WT-` | DEPLOYED with 1.0.4; WT-01 to WT-16 pending (WT-06 retired) |
 | Wandering Trader catalog (generated: every pool entry of both traders with weights, gap check per category) | [wandering_trader_catalog.md](wandering_trader_catalog.md) | none | reference, regenerate with `python3 tools/wandering_trader_report.py` after `/dumptrades` |
 | Shields (seven tier shields + vanilla shield as the iron tier: per-group reduction, elemental breakdown, facing, scaled wear, round-down, knockback threshold, on-block effects, disable cooldown, recipes; the damage tag layer they read) | [shields.md](shields.md) | `SH-` | DEPLOYED, in-game test pending (SH-06 passed); mob-axe cooldown, banners on every tier, burn/thorn tick gates, unblockable effect ticks, JEI template-only smithing STAGED for 1.0.6 (boots clean) (SH-01 to SH-43); netherite smithing keeps Armor Trims' template (F8); offline `tools/test_shields.sh` |
+| Armor and tool effects (`global.armorEffects` piece/set/mount: set bonuses on wooden to dragon armor, dragon horse armor; `global.toolEffects` on-hit/held: echo and dragon tools; echo armor set bonus retargeted to Night Vision + Phantom Bane; Magic Resistance effect, damage cut and potions) | [armor_effects.md](armor_effects.md) | `AE-` | DEPLOYED (since 1.0.3; horse armor interval with 1.0.4), in-game test pending (AE-01 to AE-24); findings F1-F9 open, F4 (dragon bow/crossbow look reversed) and F6 (Magic Resistance vs the `magic` damage tag) need a decision |
+| Gear tuning (netherite → echo → felsic → dragon assembly ladder, `tuneTools` / `tuneArmor` stat tables, echo-tier tools, felsic config values, assembly NBT carry, armor enchantability per material, dragon gear autorepair, dragon scale elytra duplication, upgraded dragon chestplate rocket takeoff, air brake) | [gear_tuning.md](gear_tuning.md) | `GR-` | DEPLOYED (since 1.0.3), in-game test pending (GR-01 to GR-30); findings F1-F13 open (F1: felsic shield has no config section; F13: dragon set 36 armor over the 30 cap), F4, F5, F10, F13 need a decision |
 | JEI ordering (pack-defined order for items/blocks, multiblocks, fluids, effects via `creativeengineering:jei/...` tags; category/subcategory order, leaf sort modes, visibility report) | [jei_ordering.md](jei_ordering.md) | `JO-` | BUILT 2026-10-18 (patcherMod sorter + mixins, KubeJS definition/tags, first small tree, report tool), not run in game; JO-01 to JO-12 pending; filling the tree not started |
 | JEI craftable-first port map (JEI 19 sort vs 11.8.1, hook points) | [jei_craftable_first_port.md](jei_craftable_first_port.md) | none | reference + implementation; the backport is STAGED for 1.0.6 (JEI-01 to JEI-06 pending) |
 | Loot table islands (analysis: container tables used by only one or two structures) | [loot_islands.md](loot_islands.md) | none | analysis only, 2026-10-03 |
@@ -77,8 +79,8 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | # | Chunk | Covers | Prefix |
 |---|---|---|---|
 | 1 | ~~Shields~~ | done: [shields.md](shields.md) | `SH-` |
-| 2 | Armor and tool effects | armor effects framework (incl. mounts), tool effects, echo armor set bonus, magic resistance | `AE-` |
-| 3 | Gear tuning | tuneTools / tuneArmor, echo-tier tools, dragon gear autorepair, gear assembly NBT, dragon scale elytra, elytra rocket takeoff, air brake | `GR-` |
+| 2 | ~~Armor and tool effects~~ | done: [armor_effects.md](armor_effects.md) | `AE-` |
+| 3 | ~~Gear tuning~~ | done: [gear_tuning.md](gear_tuning.md) | `GR-` |
 | 4 | Potions and brewing | Create automatic brewing, IE refinery lingerification, IE bottler NBT fluids, JEI fluid tooltips, AM / Rustic Delight brewing fixes | `PO-` |
 | 5 | Potion buckets and tipped arrows | potion buckets (+ dispenser), machine tipping of arrows | `PB-` |
 | 6 | Engineering recipes | sawblade routing, dragon-breathing fan type, CE components and coils, sample syringe | `EN-` |
@@ -94,7 +96,7 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | 16 | WTHIT lines | Run Speed line, crop Growth % line + coverage tool, Display Delight icons | `WL-` |
 | 17 | TNT shrapnel | `shrapnel/` package, `[shrapnel]` config | `TN-` |
 | 18 | Nether portal ignition | `PortalFailureHandler`, Terra fire / flint and terrasteel (marked temporary) | `NP-` |
-| 19 | Mob and block tweaks | bubble column immunity, Bushier Flowers disabled, feeding-trough retry, armor enchantability overrides, block properties | `MT-` |
+| 19 | Mob and block tweaks | bubble column immunity, Bushier Flowers disabled, feeding-trough retry, block properties (armor enchantability overrides: done in [gear_tuning.md](gear_tuning.md)) | `MT-` |
 | 20 | Recipe progression | the engineering/, metal/, wood/, cooking/, magic/ recipe scripts as a whole (components, power, oil, computing, pneumatic, crystals, metal unification, bark/sawdust/ash, chocolate, cultivated meat, XP, enchants, sculk), removed items and dead recipes | `RP-` (split per folder when picked) |
 | 21 | Archery and bullets | archery.js, bullets.js | `AR-` |
 

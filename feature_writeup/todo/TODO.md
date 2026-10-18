@@ -32,7 +32,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
 | Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (armor/tool effects, gear, potions, potion buckets, engineering, item physics, biome tuning, fixes and compat, pack tooling, cans, composting, camera bags, WTHIT, TNT shrapnel, portal ignition, mob/block tweaks, recipe progression, archery) | [feature_writeup/README.md](../README.md) "Backlog" rows 2-7, 9-11, 13-21 | not written; only shields, loot and nests are done |
+| Writeups for the rest of the pack (potions, potion buckets, engineering, item physics, biome tuning, fixes and compat, pack tooling, cans, composting, camera bags, WTHIT, TNT shrapnel, portal ignition, mob/block tweaks, recipe progression, archery) | [feature_writeup/README.md](../README.md) "Backlog" rows 4-7, 9-11, 13-21 | not written; shields, armor/tool effects ([armor_effects.md](../armor_effects.md)), gear ([gear_tuning.md](../gear_tuning.md)), loot and nests are done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
 
 ## 2. Partly done: built vs still to do
@@ -79,6 +79,11 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Spice of Life default benefit `attribute,generic.speed,2` isn't a real attribute. [food.md](../food.md) 4.2 finding 4.
 - Muffins may not be cookable. [cooking.md](../cooking.md) "errors/bugs". Pot recipes moved to `#forge:dough` (2026-10-18) but the cause isn't confirmed: Create already puts its dough in `#forge:dough/wheat`. OV-13 in [oven.md](../oven.md) 3.8.
 - Bumpy filter (Exposure Expanded) has no source in 1.19.2 (trial chambers only). [exposure.md](../exposure.md) 4.
+- Felsic shield assembly asks for `CRAFTING.FELSIC_SHIELD`, which `CEConfig.Crafting` doesn't define: hardcoded values and an `[NCH.cfg]` warning every `/reload`. [gear_tuning.md](../gear_tuning.md) 4 F1.
+- Felsic `potionMb` feeds both fills, not just the last as its toml comment says. [gear_tuning.md](../gear_tuning.md) 4 F2.
+- Iron armor set bonus registered twice (harmless). [armor_effects.md](../armor_effects.md) 4 F1.
+- `#creativeengineering:elytra_chestplates` is a hand-written `e.add` in `equipmenttags.js` line 10, against the tag-helper rule. [gear_tuning.md](../gear_tuning.md) 4 F3.
+- Probable, unverified: the air brake's `useDurationTicks` is read before Forge loads the config, so edits never apply (GR-28); the dragon set's 36 armor is over vanilla's 30 cap (GR-02). [gear_tuning.md](../gear_tuning.md) 4 F7, F13.
 - Cool Rain may ignore the season types (WE-25). [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2.
 - 5 Terralith cave biomes have no wild crops (single-player warning). [plan_1.0.5.md](../plan_1.0.5.md) 2.
 
@@ -106,6 +111,8 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Metal standardization: plate / rod / dust-recycle gaps and an open question at the top of [metal_base_materials.js](../kubejs/server_scripts/metal/metal_base_materials.js).
 - Component tier names for aluminum (`Light?`) and uranium (`Dense?`). [components.js](../kubejs/server_scripts/engineering/components.js) lines 18 and 22.
 - Whether `kubejs/archive/` and the commented-out old-helper blocks can be deleted (6).
+- Armor/tool effects: dragon bow and crossbow effects look reversed (F4); Magic Resistance on vanilla `isMagic()` or the pack's `magic` damage tag (F6); horse armor Regeneration I or II (F9). [armor_effects.md](../armor_effects.md) 4.
+- Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
 
 **Decided, not carried out:**
 - Brewin' and Chewin' heat / cold tag additions (2.7) are proposed but not applied. [alcohol.md](../alcohol.md) Part A.
@@ -170,6 +177,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - [cooking.md](../cooking.md) lists the fridge sort bug, which has a fix built (2).
 - Writeups not in the README index: [cooking.md](../cooking.md), [feature_porting.md](../feature_porting.md), [meat_blocks.md](../meat_blocks.md), [nether_swaps.md](../nether_swaps.md), [nether_blocks_scan.md](../nether_blocks_scan.md), [wood_mismatch.md](../wood_mismatch.md), [testing/fridge_sort/](../testing/fridge_sort/plan.md).
 - [todo.txt](todo.txt) items found done on 2026-10-18: all 7 cultures wired; syringe texture; dead `.en_us.json`; `Config.java`; dragon-scale chestplate rocket takeoff (`EasyElytraTakeoffHelperMixin`; check whether Alex's Mobs items need adding to `#creativeengineering:elytra_chestplates`). The loot overhaul line is superseded by [loot.md](../loot.md).
+- Found while writing [armor_effects.md](../armor_effects.md) and [gear_tuning.md](../gear_tuning.md) (2026-10-18): [magic_resistance.js](../../kubejs/startup_scripts/magic/magic_resistance.js) header says there is no potion (there is); [armor_effects.js](../../kubejs/startup_scripts/func/armor_effects.js) header says 6 effects (cap is 7); the `NCH.cfg` example uses toml keys instead of field names ([neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) ~621). (shields.md 2.7 said the felsic shield's values were configurable: corrected the same day.)
 
 ---
 
@@ -185,6 +193,8 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [crops.md](../crops.md) | `CR-` | 68 / 0 | none run |
 | [mooblooms.md](../mooblooms.md) | `MB-` | 64 / 10 | client-side checks |
 | [shields.md](../shields.md) | `SH-` | 42 / 1 | SH-43 first, then SH-14, 19, 33-42 |
+| [gear_tuning.md](../gear_tuning.md) | `GR-` | 30 / 0 | new 2026-10-18; GR-02, GR-05, GR-28 settle findings |
+| [armor_effects.md](../armor_effects.md) | `AE-` | 24 / 0 | new 2026-10-18; AE-10, AE-19, AE-20 settle findings |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |

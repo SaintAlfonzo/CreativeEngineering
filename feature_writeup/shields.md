@@ -166,7 +166,7 @@ all four, also for blanket tiers.
 | Diamond shield | smithing iron or gold shield + diamond |
 | Netherite shield | smithing diamond shield + netherite ingot |
 | Echo shield | echo sequenced assembly from the netherite shield (Darkness + Night Vision) |
-| Felsic shield | felsic assembly from the echo shield (250 mB Magic Resistance, 1 loop, 8 blows; `CRAFTING.FELSIC_SHIELD`) |
+| Felsic shield | felsic assembly from the echo shield (250 mB Magic Resistance, 1 loop, 8 blows; `end_gear.js` asks for `CRAFTING.FELSIC_SHIELD`, which isn't in CEConfig yet, so these are hardcoded: [gear_tuning.md](gear_tuning.md) F1) |
 | Dragon shield | dragon assembly from the felsic shield (250 mB Long Resistance, 5 scales) |
 
 Any tier takes a banner in the crafting grid (shield + banner, like vanilla). The Engineer starter kit
@@ -533,3 +533,5 @@ on F3+H. "Raise" means hold right click.
   1.0.5 jar (md5 68509043; it replaced both 2026-10-05 builds). Single-player boot with it: no mixin errors.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- 2026-10-18: felsic shield recipe values corrected to "hardcoded" (no `CRAFTING.FELSIC_SHIELD` section exists); the
+  ladder and its assemblies are written up in [gear_tuning.md](gear_tuning.md).
