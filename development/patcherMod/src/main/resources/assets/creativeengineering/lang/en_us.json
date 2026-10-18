@@ -66,5 +66,12 @@
   "creativeengineering.jei.vinery.wine_aging.fresh": "Year %s: potency %s",
   "creativeengineering.jei.vinery.wine_aging.aged": "Aged %s years: potency %s (max)",
   "desc.seasonhud.season.arid": "Arid",
-  "desc.seasonhud.season.frozen": "Frozen"
+  "desc.seasonhud.season.frozen": "Frozen",
+  "block.creativeengineering.oven": "Oven",
+  "container.creativeengineering.oven": "Oven",
+  "container.creativeengineering.oven.heated": "Heated from below",
+  "container.creativeengineering.oven.not_heated": "Not heated: needs fire, a lit campfire, lava, magma or a fuelled blaze burner below (not a stove)",
+  "container.creativeengineering.oven.served_on": "Served on: %s",
+  "jei.creativeengineering.baking": "Baking",
+  "jei.creativeengineering.baking.heat": "Needs heat below the oven: fire, lit campfire, lava, magma or a fuelled blaze burner (not a stove)"
 }
