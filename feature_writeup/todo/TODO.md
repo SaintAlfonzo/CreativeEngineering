@@ -22,6 +22,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Vanilla egg -> `#forge:eggs` migration | [food.md](../food.md) 3.8 | list written, not built (rescan first, the dump can't read IE recipes) |
 | Exposure Catalog port | [exposure.md](../exposure.md) 4 | on hold (user, 2026-10-01); the source set and mods.toml entry are empty |
 | Cooking plans (seasoning, sourdough, vinegar, tools, kitchen, smoking, misc) | [cooking.md](../cooking.md) | outline only, nothing built. Two bugs in it are listed in 3 |
+| Oven (FD cooking-pot style baking block: bakeware tool slot, paper plating, non-stove heat below, stove heat on top) | [oven.md](../oven.md) | placeholder block only (`creativeengineering:oven`, FD stove textures, no function); Java oven planned in patcherMod, D1 to D8 open (4) |
 | Canning automation | `TODO` in [canning.js](../kubejs/server_scripts/cooking/canning.js) line 68 | not started |
 | Mob spawn plans beyond the first block (Alex's Mobs / duck parity, pillager overhaul, lone villagers, allay, skylands mooblooms) | [mob_spawns.md](../mob_spawns.md) 9 | first block done; "Investigate" and "Later" not started |
 | Structures: Nether, End and underground grouping pass; cave-structure tuning; move-to-Nether set | [structure_tuning.md](../structure_tuning.md) 7 Todo | not built. Three structures never generate until it's done (3) |
@@ -73,7 +74,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Canned Goods data: saturation values far too high, crossed ids, wrong effects. [food.md](../food.md) 4.2 findings 1-2 (the tuning system is the planned fix).
 - item_dict: `i.catfish_slice` points at a nonexistent id; `i.bacon` is the cooked item. [food.md](../food.md) 4.2 finding 6.
 - Spice of Life default benefit `attribute,generic.speed,2` isn't a real attribute. [food.md](../food.md) 4.2 finding 4.
-- Muffins may not be cookable. [cooking.md](../cooking.md) "errors/bugs".
+- Muffins may not be cookable. [cooking.md](../cooking.md) "errors/bugs". Lead: their pot recipe needs `#forge:dough/wheat`, which may be empty since `cookingtags.js` strips FD's wheat dough. [oven.md](../oven.md) 3.7.
 - Bumpy filter (Exposure Expanded) has no source in 1.19.2 (trial chambers only). [exposure.md](../exposure.md) 4.
 - Cool Rain may ignore the season types (WE-25). [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2.
 - 5 Terralith cave biomes have no wild crops (single-player warning). [plan_1.0.5.md](../plan_1.0.5.md) 2.
@@ -90,6 +91,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 **Waiting on you:**
 - Alcohol Part B: D3, D4, D5, D7 to D10, D12, and **D13 (license) first**. [alcohol.md](../alcohol.md) B5. Note: [cooking.md](../cooking.md) "vinery backport license" says the author refused redistribution, and sketches a plan (MIT code, upstream assets loaded from the old jar). That answer and plan aren't in alcohol.md B3.6 / B5 D13 yet.
 - Food tuning D1 to D6. [food.md](../food.md) 4.3.
+- Oven D1 to D8 (route, furnaces as heat, heat conductors, bakeware yields). [oven.md](../oven.md) 4.2.
 - Can parity `Want` = `?` cells. [can_parity.md](../can_parity.md).
 - Crops G4, G6 to G15, V findings: approve or reject each fix. [crops.md](../crops.md) 4.
 - Structures: undead castle vs earth fill (narrow its fits or relax the mound limit); ST-135 fortified metas against the 120 s timeout; geode drop tuning (ST-133). [plan_1.0.6.md](../plan_1.0.6.md) 2.1.
