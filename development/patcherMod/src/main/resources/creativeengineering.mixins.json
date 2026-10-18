@@ -100,7 +100,11 @@
     "StructureCheckThreadSafeMixin",
     "NoiseBasedChunkGeneratorDistantClipMixin",
     "NoiseChunkDistantClipMixin",
-    "ConfiguredFeatureDistantClipMixin"
+    "ConfiguredFeatureDistantClipMixin",
+    "CookingPotRemainderMixin",
+    "CookingPotMenuRemainderMixin",
+    "KettleRemainderMixin",
+    "KettleMenuRemainderMixin"
   ],
   "client": [
     "ItemDrainCategoryMixin",
@@ -148,7 +152,9 @@
     "SeasonHudHelperMixin",
     "SeasonHudCurrentSeasonMixin",
     "PrettyRainSeasonMixin",
-    "DhCloudHeightMixin"
+    "DhCloudHeightMixin",
+    "CookingPotScreenRemainderMixin",
+    "KettleScreenRemainderMixin"
   ],
   "server": []
 }

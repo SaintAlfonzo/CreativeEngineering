@@ -22,7 +22,6 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Vanilla egg -> `#forge:eggs` migration | [food.md](../food.md) 3.8 | list written, not built (rescan first, the dump can't read IE recipes) |
 | Exposure Catalog port | [exposure.md](../exposure.md) 4 | on hold (user, 2026-10-01); the source set and mods.toml entry are empty |
 | Cooking plans (seasoning, sourdough, vinegar, tools, kitchen, smoking, misc) | [cooking.md](../cooking.md) | outline only, nothing built. Two bugs in it are listed in 3 |
-| Remainder buffer (bottles/bowls/buckets kept in a slot on the pot, kettle, keg port and oven instead of thrown) | [remainder_buffer.md](../remainder_buffer.md) | feasibility done 2026-10-18 (feasible, ~7 mixins); D1 to D5 open; no code |
 | Canning automation | `TODO` in [canning.js](../kubejs/server_scripts/cooking/canning.js) line 68 | not started |
 | Mob spawn plans beyond the first block (Alex's Mobs / duck parity, pillager overhaul, lone villagers, allay, skylands mooblooms) | [mob_spawns.md](../mob_spawns.md) 9 | first block done; "Investigate" and "Later" not started |
 | Structures: Nether, End and underground grouping pass; cave-structure tuning; move-to-Nether set | [structure_tuning.md](../structure_tuning.md) 7 Todo | not built. Three structures never generate until it's done (3) |
@@ -44,6 +43,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Alcohol Part A: Brewin' and Chewin' 4.5.0 port | [alcohol.md](../alcohol.md) Part A | analysis, plan and decisions 4.1/4.5. **Port begun 2026-10-17** in `development/backportedBrewin` (in `settings.gradle`): ~45 upstream classes copied (blocks, keg block entity, recipes, items, utilities, Forge containers) | registries, config (`BnCConfiguration`), fluids, effects/attachments, network, menu, client, JEI, assets/data, loot, remaps, old-world conversion: 14 imported classes don't exist yet, so it doesn't compile. Heat/cold tag audit 2.7 not applied. Pack-side changes 3.4 not started. The writeup still says "not started" |
 | Food | [food.md](../food.md) | `/dumpfood`, 31 types + tags, catalog, multi-serving cans, raw and generated cans, fried eggs, egg stacks | tuning system and egg migration (1); cooked/prepared can sections pie, feast, meals, drinks, special |
 | Oven | [oven.md](../oven.md) | block, GUI, baking recipe type, JEI (patcherMod), bakeware, 7 baking recipes, muffin dough fix (2026-10-18; compiles, 8 GameTests pass) | patcherMod jar rebuild + OV-01 to OV-14; recipes don't use bakeware or plating yet, pot recipes not moved |
+| Remainder buffer | [remainder_buffer.md](../remainder_buffer.md) | pot + kettle (mixins), oven (native), `[cooking]` config, GameTest harness (2026-10-18; compiles, 10 GameTests pass) | patcherMod jar into `mods/` + RB-01 to RB-11; keg in the Brewin port once it compiles (3.6); optional WTHIT line |
 | Can parity | [can_parity.md](../can_parity.md) | every `x` row built, removals done | `?` Want cells; hunger/saturation columns postponed; no can value-audited; meal/pie/feast/drink/hazard values are placeholders (also flagged in [canning.js](../kubejs/server_scripts/cooking/canning.js) lines 504, 542, 557); hand-written raw cans don't carry effects |
 | Names | [names.md](../names.md) | Display Delight + Rustic Delight names; catalog parts 1 and 2 | catalog worked down: 191 partial blocks, 65 items, 53 entities, 20 professions, effects/potions/fluids; no fixes yet |
 | Effect descriptions (JEED) | [todo.txt](todo.txt) "Literal TODO comments" | generator `tools/gen_effect_descriptions.py` | 47 `TODO: write a description` rows left in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) |
@@ -92,7 +92,6 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 
 **Waiting on you:**
 - Alcohol Part B: D3, D4, D5, D7 to D10, D12, and **D13 (license) first**. [alcohol.md](../alcohol.md) B5. Note: [cooking.md](../cooking.md) "vinery backport license" says the author refused redistribution, and sketches a plan (MIT code, upstream assets loaded from the old jar). That answer and plan aren't in alcohol.md B3.6 / B5 D13 yet.
-- Remainder buffer D1 to D5 (stall or throw when full, recycle into the container slot, slot count, automation, keg timing). [remainder_buffer.md](../remainder_buffer.md) 5.
 - Food tuning D1 to D6. [food.md](../food.md) 4.3.
 - Can parity `Want` = `?` cells. [can_parity.md](../can_parity.md).
 - Crops G4, G6 to G15, V findings: approve or reject each fix. [crops.md](../crops.md) 4.
@@ -194,6 +193,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [tooltips.md](../tooltips.md) | `TT-` | 18 / 0 | TT-16 to TT-18 (1.0.6) |
 | [wandering_trader.md](../wandering_trader.md) | `WT-` | 16 / 0 | WT-16 natural spawn |
 | [can_parity.md](../can_parity.md) | `CP-` | 14 / 0 | CP-01 to CP-14 |
+| [remainder_buffer.md](../remainder_buffer.md) | `RB-` | 11 / 0 | needs the 1.0.7 jar; 10 offline GameTests pass (`tools/test_remainder_buffer.sh`) |
 | [flowers.md](../flowers.md) | `FL-` | 14 / 0 | |
 | [nests.md](../nests.md) | `NE-` | 14 / 0 | NE-13 client sprites |
 | [plan_1.0.4.md](../plan_1.0.4.md) | `R4-` | 14 / 0 | release checks never ticked |

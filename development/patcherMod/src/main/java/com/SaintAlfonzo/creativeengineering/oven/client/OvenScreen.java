@@ -3,6 +3,7 @@ package com.SaintAlfonzo.creativeengineering.oven.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.SaintAlfonzo.creativeengineering.cooking.client.RemainderSlotFrames;
 import com.SaintAlfonzo.creativeengineering.oven.OvenBlockEntity;
 import com.SaintAlfonzo.creativeengineering.oven.OvenMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -17,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * Draws Farmer's Delight's own cooking pot GUI texture by resource location (FD is installed, nothing is copied) and
- * one extra slot frame, cut from the same texture, for the tool slot. Heat flame, progress arrow and the "served on"
+ * extra slot frames, cut from the same texture, for the tool slot and the two leftover slots. Heat flame, progress arrow and the "served on"
  * tooltip work as in FD's CookingPotScreen.
  */
 public class OvenScreen extends AbstractContainerScreen<OvenMenu> {
@@ -74,6 +75,7 @@ public class OvenScreen extends AbstractContainerScreen<OvenMenu> {
         blit(poseStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         // Tool slot frame (the container slot's frame, moved left of the ingredient grid)
         blit(poseStack, leftPos + OvenMenu.TOOL_X - 1, topPos + OvenMenu.TOOL_Y - 1, SLOT_FRAME_U, SLOT_FRAME_V, 18, 18);
+        RemainderSlotFrames.draw(poseStack, BACKGROUND, leftPos, topPos, SLOT_FRAME_U, SLOT_FRAME_V);
         if (menu.isHeated()) {
             blit(poseStack, leftPos + HEAT_X, topPos + HEAT_Y, 176, 0, HEAT_W, HEAT_H);
         }
