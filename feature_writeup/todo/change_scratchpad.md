@@ -16,6 +16,9 @@
     - allow backpacks to be smithed for reskin
         - fruit basket
     - give composters more wood types
+    - mod family tags
+        - create mods
+        - farmers delight mods (some farmers_xyz, some xyz_delight)
     - framed blocks
         - change copycat resource pack to keep framed block name, disabled by default on client
     - smoked wood recipe

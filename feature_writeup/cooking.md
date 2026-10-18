@@ -27,6 +27,10 @@
     - dairy
         - milk
             - fill bottle from cow in a jar
+        - cheese
+            - more cheese types?
+                - red mushroom, warped fungus, fungi delight mushrooms?
+                - new colors, much longer age times, more cheese per slicing
     - cooked
         - soup
             - adjust base soup values to be based on ingredients, mark outliers then make changes
@@ -66,6 +70,19 @@
             - any veggie to cooked veggie
         - mushroom rice
             - baked potato
+        - shepards pie
+            - make shapeless
+            - swap milk for cheese
+            - seq assemble recipe
+        - mutton roll
+            - require tortilla
+        - horror lasagna
+            - sequence assembly efficient recipe?
+        - squid ink pasta
+            - dual fluid mixing recipe (ink and tomato sauce)
+            - expensive shapeless
+        - scrambled eggs
+            - make unheated shapeless and more expensive
     - sweet
         - candy
             - gummies 
@@ -79,12 +96,6 @@
             - custard
                 - add more variants
         - baked
-            - new farmers delight oven block?
-                - plan + placeholder block: [oven.md](oven.md)
-                - functions almost exactly like cooking pot, but for baking goods
-                - can require input tool (baking sheet, cake pan) and plating item (paper for muffins)
-                - requires non-stove heat source (magma block, campfire)
-                - provides stove heat on top
             - muffins (make decent food source)
                 - add more variants
                 - add combinations, give mixed but shorter effects
@@ -119,14 +130,21 @@
         - coffee
             - merge
         - tea
-            - merge?
-            - tooltips
+            - merge any duplicate teas?
+            - add create mixing recipes, more expensive than manual
+            - prevent upgrading teas (melon juice + honey) from throwing bottle for input tea (only 1 thrown for melon juice + honey), and remove bottle plating requirement from these recipes
+            - integrate with later bottle/bowl output buffer system?
+            - tooltips, fluid effect duration tooltip
+        - berry matcha
+            - integrate w/ farmers respite
         - alcohol
             - give most drinks short nausea, rotten food hunger type. food-like drinks are exempt
             - rename appleskin 'disgusting snack' tooltip for rotten food alchohol types to 'fermented drink' 
     - fluid
         - buckets
             - stack size 16?
+        - merge
+            - melon juice
         - potential fluids
             - beetroot soup
                 - used as beetroot in cooking, more efficient
@@ -150,6 +168,16 @@
                 - no drinks, "hard to disolve"
     - batter
         - more uses
+    - cornmeal
+        - new item, recolored flour
+        - milled or crushed corn
+        - usable as flour in some recipes
+            - pancakes
+            - pies and cakes
+        - remove corn-> tortilla washing
+        - required in
+            - tortilla
+            - cornbread batter
     - bone broth
         - useable as ingredient to allow soups/stews/pastas to be craftable shapeless instead of cooking pot
         - prevent create shapeless mixing
@@ -177,6 +205,7 @@
         - dill (sea pickle?)
         - cheese
         - cream and onion
+        - ice cubes (for cold drinks)
     - different benefit?
         - nutrition vs saturation boost
             - only nutrition (salt?)
@@ -205,6 +234,7 @@
         - used for picking and building
 - kitchen
     - new farmers delight oven block?
+        - plan + placeholder block: [oven.md](oven.md)
         - functions almost exactly like cooking pot, but for baking goods
         - can require input tool (baking sheet, cake pan) and plating item (paper for muffins)
         - requires non-stove heat source (magma block, campfire)
@@ -249,6 +279,8 @@
     - bread block
         - cutting to crustless bread block
         - standard slab recipe
+    - dog food
+        - expensive, cooked shapeless recipe
 
 - errors/bugs
     - muffins not cookable?
