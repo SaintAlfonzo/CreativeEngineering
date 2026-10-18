@@ -32,7 +32,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
 | Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (potions, potion buckets, engineering, item physics, biome tuning, fixes and compat, pack tooling, cans, composting, camera bags, WTHIT, TNT shrapnel, portal ignition, mob/block tweaks, recipe progression, archery) | [feature_writeup/README.md](../README.md) "Backlog" rows 4-7, 9-11, 13-21 | not written; shields, armor/tool effects ([armor_effects.md](../armor_effects.md)), gear ([gear_tuning.md](../gear_tuning.md)), loot and nests are done |
+| Writeups for the rest of the pack (engineering, item physics, biome tuning, fixes and compat, pack tooling, cans, composting, camera bags, WTHIT, TNT shrapnel, portal ignition, mob/block tweaks, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 6-7, 9-11, 13-20 | not written; shields, armor/tool effects, gear, potions, potion buckets, archery, loot and nests are done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
 
 ## 2. Partly done: built vs still to do
@@ -83,6 +83,10 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Felsic `potionMb` feeds both fills, not just the last as its toml comment says. [gear_tuning.md](../gear_tuning.md) 4 F2.
 - Iron armor set bonus registered twice (harmless). [armor_effects.md](../armor_effects.md) 4 F1.
 - `#creativeengineering:elytra_chestplates` is a hand-written `e.add` in `equipmenttags.js` line 10, against the tag-helper rule. [gear_tuning.md](../gear_tuning.md) 4 F3.
+- Dragon scale armor-piercing bullets use blueprint category `projectiles`, which nothing makes: unreachable. [archery.md](../archery.md) 4 F1.
+- Tipped arrows on the Bottler (20 mB) and Spout (25 mB) cost less than the crafting grid (31.25 mB an arrow); the file comment says they're equal. [potion_buckets.md](../potion_buckets.md) 4 F1.
+- Potion bucket tooltips show the potion's durations, not × the bucket's 1.1 / 1.2 effect multiplier. [potion_buckets.md](../potion_buckets.md) 4 F2.
+- Probable, unverified: NEA's three removed enchantments can still roll from `enchant_randomly` loot (the `isDiscoverable` mixin method likely isn't remapped). [archery.md](../archery.md) 4 F6.
 - Probable, unverified: the air brake's `useDurationTicks` is read before Forge loads the config, so edits never apply (GR-28); the dragon set's 36 armor is over vanilla's 30 cap (GR-02). [gear_tuning.md](../gear_tuning.md) 4 F7, F13.
 - Cool Rain may ignore the season types (WE-25). [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2.
 - 5 Terralith cave biomes have no wild crops (single-player warning). [plan_1.0.5.md](../plan_1.0.5.md) 2.
@@ -112,6 +116,9 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Component tier names for aluminum (`Light?`) and uranium (`Dense?`). [components.js](../kubejs/server_scripts/engineering/components.js) lines 18 and 22.
 - Whether `kubejs/archive/` and the commented-out old-helper blocks can be deleted (6).
 - Armor/tool effects: dragon bow and crossbow effects look reversed (F4); Magic Resistance on vanilla `isMagic()` or the pack's `magic` damage tag (F6); horse armor Regeneration I or II (F9). [armor_effects.md](../armor_effects.md) 4.
+- Potions: one batch size across machines or not (F1); keep the Refinery's regular → lingering shortcut (F2). [potions.md](../potions.md) 4.
+- Potion buckets: machine tipping price (F1); keep the glass-bottle remainder on every vanilla potion (F3). [potion_buckets.md](../potion_buckets.md) 4.
+- Archery: fix the bullet blueprint category (F1); split arrow 6 or 4 arrows (F2); the archery blueprint needs a trader-only Ethereal Arrow (F3). [archery.md](../archery.md) 4.
 - Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
 
 **Decided, not carried out:**
@@ -119,7 +126,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Incubation Additions license: repaint the 4 hay-nest PNGs and rewrite or reference the models before the jar is published anywhere. [nests.md](../nests.md) 4.
 - Shield knockback thresholds and a per-tier disable cooldown. [shields.md](../shields.md) 4, `TODO` in `ShieldTier.java` line 46.
 - Sawmill recipes off the manual pipeline into an NCH helper. `TODO` in [sawmill.js](../kubejs/generation_scripts/sawmill.js) line 1.
-- Magic Resistance and Luck potions use placeholder reagents. [potions.js](../kubejs/startup_scripts/cooking/potions.js) lines 70-71 and 86.
+- Magic Resistance and Luck potions use placeholder reagents. [potions.js](../../kubejs/startup_scripts/cooking/potions.js) lines 70-71 and 86; [potions.md](../potions.md) F3.
 - Advanced Peripherals structures: off by config; remove the warning or the structures outright. [structure_tuning.md](../structure_tuning.md) 7 Todo.
 - Dark Fire portal: `FlintAndTerraSteelItem` is still "TEMPORARY testing behavior" with no frame check and refers to a `TerraFireBlock` that no longer exists. `PortalFailureHandler` keeps a diagnostic log "until confirmed working". [todo.txt](todo.txt).
 
@@ -178,6 +185,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Writeups not in the README index: [cooking.md](../cooking.md), [feature_porting.md](../feature_porting.md), [meat_blocks.md](../meat_blocks.md), [nether_swaps.md](../nether_swaps.md), [nether_blocks_scan.md](../nether_blocks_scan.md), [wood_mismatch.md](../wood_mismatch.md), [testing/fridge_sort/](../testing/fridge_sort/plan.md).
 - [todo.txt](todo.txt) items found done on 2026-10-18: all 7 cultures wired; syringe texture; dead `.en_us.json`; `Config.java`; dragon-scale chestplate rocket takeoff (`EasyElytraTakeoffHelperMixin`; check whether Alex's Mobs items need adding to `#creativeengineering:elytra_chestplates`). The loot overhaul line is superseded by [loot.md](../loot.md).
 - Found while writing [armor_effects.md](../armor_effects.md) and [gear_tuning.md](../gear_tuning.md) (2026-10-18): [magic_resistance.js](../../kubejs/startup_scripts/magic/magic_resistance.js) header says there is no potion (there is); [armor_effects.js](../../kubejs/startup_scripts/func/armor_effects.js) header says 6 effects (cap is 7); the `NCH.cfg` example uses toml keys instead of field names ([neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) ~621). (shields.md 2.7 said the felsic shield's values were configurable: corrected the same day.)
+- Found while writing [potions.md](../potions.md), [potion_buckets.md](../potion_buckets.md) and [archery.md](../archery.md) (2026-10-18): `DragonBreathBrewing`'s javadoc names a `changes/dragon_breath.js` that doesn't exist (it's `potions.js` part 3); [tipped_arrows.js](../../kubejs/server_scripts/equipment/tipped_arrows.js) header gives amounts the code doesn't use. Raw `e.custom` recipes in `potion_bottling.js` and `tipped_arrows.js`, and 44 raw tag `e.add` lines in `equipmenttags.js`, are against the NCH / tag-helper rule.
 
 ---
 
@@ -195,6 +203,9 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [shields.md](../shields.md) | `SH-` | 42 / 1 | SH-43 first, then SH-14, 19, 33-42 |
 | [gear_tuning.md](../gear_tuning.md) | `GR-` | 30 / 0 | new 2026-10-18; GR-02, GR-05, GR-28 settle findings |
 | [armor_effects.md](../armor_effects.md) | `AE-` | 24 / 0 | new 2026-10-18; AE-10, AE-19, AE-20 settle findings |
+| [potions.md](../potions.md) | `PO-` | 26 / 0 | new 2026-10-18; replaces the never-recorded September potion-fluid checklist |
+| [potion_buckets.md](../potion_buckets.md) | `PB-` | 20 / 0 | new 2026-10-18; PB-04 (dome) and PB-11 to PB-17 (recipes, bottle remainder) close the todo.txt gaps |
+| [archery.md](../archery.md) | `AR-` | 18 / 0 | new 2026-10-18; AR-13, AR-14, AR-15 settle findings |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
@@ -219,4 +230,4 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [deploy.md](../deploy.md) | `DP-` | 4 / 3 | DP-03 to DP-05, DP-07 |
 | [jei_craftable_first_port.md](../jei_craftable_first_port.md) | `JEI-` | 6 / 0 | plain list, no boxes |
 | [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) | `FS-` | 5 / 0 | needs the 1.0.7 jar |
-| [todo.txt](todo.txt) "Built, but with acknowledged gaps" | none | | potion-bucket dome, survival recipes and crafting remainder; Sept 6-8 potion-fluid chain and sawblade routing never explicitly checked in game |
+| [todo.txt](todo.txt) "Built, but with acknowledged gaps" | none | | potion buckets now PB-04, PB-11 to PB-17; potion-fluid chain now PO-01 to PO-26; sawblade routing still never explicitly checked in game |
