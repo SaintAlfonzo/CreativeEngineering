@@ -31,6 +31,9 @@ i.amethyst_dust = 'creativeengineering:amethyst_dust';
 i.amethyst_lens = 'creativeengineering:amethyst_lens';
 i.wood_pellets = 'creativeengineering:wood_pellets';
 i.layered_obsidian = 'creativeengineering:layered_obsidian';
+// Oven — placeholder block (FD stove textures, no function yet). startup_scripts/cooking/oven.js |
+// plan: feature_writeup/oven.md
+i.oven = 'creativeengineering:oven';
 i.catfish = 'alexsmobs:raw_catfish';
 i.catfish_slice = 'alexsmobs:raw_catfish_slice';
 i.felsic_scrap = 'creativeengineering:felsic_scrap';
