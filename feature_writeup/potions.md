@@ -179,8 +179,8 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
 - **F5. Stale doc:** `DragonBreathBrewing`'s javadoc says the item dragon's breath mixes are stripped by
   `kubejs/startup_scripts/changes/dragon_breath.js`; there is no such file, it's `potions.js` part 3.
 - **F6. Raw `e.custom` in `potion_bottling.js`.** Bottling, filling and emptying are hand-written JSON, against the
-  NCH-helper rule in CLAUDE.md. An `NCH.ieBottling` and `NCH.createEmptying` helper would cover them (also used by
-  [potion_buckets.md](potion_buckets.md)).
+  NCH-helper rule in CLAUDE.md. `NCH.ieBottling` already exists (use it with an NBT fluid) and `NCH.createFilling`
+  covers the Spout; only a `createEmptying` helper is missing (also used by [potion_buckets.md](potion_buckets.md)).
 - **F7. A bottling recipe for every potion, including ones no machine can fill.** The loop skips only
   `minecraft:empty`; `minecraft:water` gets `create:potion{Potion:water}` recipes, but Create stores water bottles
   as plain water, so those never run. Harmless, they only add JEI entries.
