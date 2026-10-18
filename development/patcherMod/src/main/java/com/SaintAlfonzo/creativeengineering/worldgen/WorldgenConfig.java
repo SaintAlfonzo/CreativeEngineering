@@ -89,6 +89,7 @@ public final class WorldgenConfig {
 
 	// ── solvers ──────────────────────────────────────────────────────────────
 	public static int poolMaxFractionScale() { return get(() -> wg().pools.maxFractionScale.get(), 10); }
+	public static boolean poolCanonicalOrder() { return get(() -> wg().pools.canonicalOrder.get(), true); }
 	public static int biomeMaxCandidates() { return get(() -> wg().biomeSolver.maxCandidates.get(), 24); }
 	public static int biomeRounds() { return get(() -> wg().biomeSolver.rounds.get(), 20); }
 
