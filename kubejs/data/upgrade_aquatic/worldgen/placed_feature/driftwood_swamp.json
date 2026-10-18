@@ -1,5 +1,5 @@
 {
-  "__comment": "Driftwood at 0.25x Upgrade Aquatic's rate: 4 per chunk -> 1. Only where the block under the spot is water (driftwood on land comes from creativeengineering:driftwood_land/*, far rarer). Same feature and placement otherwise (UAFeatures$UAPlacedFeatures, registered in Java).",
+  "__comment": "Driftwood at 0.25x Upgrade Aquatic's rate: 4 per chunk -> 1. Only on a bank right next to water: the block under the spot is not water, and water is beside it or one block lower. Outside #is_ocean, Upgrade Aquatic's DriftwoodFeature only places on dirt (near water) or sand under its origin, so it can never float here; the old water-under filter never placed (feature_writeup/testing/structures/03_phase_3.md 4.2). Driftwood further inland comes from creativeengineering:driftwood_land/*, far rarer. Same feature and placement otherwise (UAFeatures$UAPlacedFeatures, registered in Java).",
   "feature": "upgrade_aquatic:driftwood",
   "placement": [
     {
@@ -16,15 +16,124 @@
     {
       "type": "minecraft:block_predicate_filter",
       "predicate": {
-        "type": "minecraft:matching_fluids",
-        "fluids": [
-          "minecraft:water",
-          "minecraft:flowing_water"
-        ],
-        "offset": [
-          0,
-          -1,
-          0
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:not",
+            "predicate": {
+              "type": "minecraft:matching_fluids",
+              "fluids": [
+                "minecraft:water",
+                "minecraft:flowing_water"
+              ],
+              "offset": [
+                0,
+                -1,
+                0
+              ]
+            }
+          },
+          {
+            "type": "minecraft:any_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_fluids",
+                "fluids": [
+                  "minecraft:water",
+                  "minecraft:flowing_water"
+                ],
+                "offset": [
+                  1,
+                  -1,
+                  0
+                ]
+              },
+              {
+                "type": "minecraft:matching_fluids",
+                "fluids": [
+                  "minecraft:water",
+                  "minecraft:flowing_water"
+                ],
+                "offset": [
+                  -1,
+                  -1,
+                  0
+                ]
+              },
+              {
+                "type": "minecraft:matching_fluids",
+                "fluids": [
+                  "minecraft:water",
+                  "minecraft:flowing_water"
+                ],
+                "offset": [
+                  0,
+                  -1,
+                  1
+                ]
+              },
+              {
+                "type": "minecraft:matching_fluids",
+                "fluids": [
+                  "minecraft:water",
+                  "minecraft:flowing_water"
+                ],
+                "offset": [
+                  0,
+                  -1,
+                  -1
+                ]
+              },
+              {
+                "type": "minecraft:matching_fluids",
+                "fluids": [
+                  "minecraft:water",
+                  "minecraft:flowing_water"
+                ],
+                "offset": [
+                  1,
+                  -2,
+                  0
+                ]
+              },
+              {
+                "type": "minecraft:matching_fluids",
+                "fluids": [
+                  "minecraft:water",
+                  "minecraft:flowing_water"
+                ],
+                "offset": [
+                  -1,
+                  -2,
+                  0
+                ]
+              },
+              {
+                "type": "minecraft:matching_fluids",
+                "fluids": [
+                  "minecraft:water",
+                  "minecraft:flowing_water"
+                ],
+                "offset": [
+                  0,
+                  -2,
+                  1
+                ]
+              },
+              {
+                "type": "minecraft:matching_fluids",
+                "fluids": [
+                  "minecraft:water",
+                  "minecraft:flowing_water"
+                ],
+                "offset": [
+                  0,
+                  -2,
+                  -1
+                ]
+              }
+            ]
+          }
         ]
       }
     },

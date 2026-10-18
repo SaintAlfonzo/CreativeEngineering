@@ -419,6 +419,13 @@ ServerEvents.tags('block', e => {
 	t.add(e, 'creativeengineering:earth_fill/earth', [
 		'#minecraft:dirt', '#forge:sand', '#forge:gravel', 'minecraft:clay', 'minecraft:dirt_path',
 	])
+	// Stone and brick bases, counted as earth only for structures in the structure tag of the same name
+	// (worldgen/earth_fill.js): ones that stand on a stone plate instead of a dirt pad, like the drum tower.
+	t.add(e, 'creativeengineering:earth_fill/stone_base', [
+		'#minecraft:base_stone_overworld', item.cobblestone, item.mossy_cobblestone, item.stone_bricks,
+		item.mossy_stone_bricks, item.cracked_stone_bricks, item.smooth_stone, item.polished_andesite,
+		item.polished_diorite, item.polished_granite, item.polished_deepslate, item.deepslate_bricks,
+	])
 
 	// ── Template trim (patcherMod worldgen/TemplateTrim, CEConfig [worldgen.terrain_adaptation]) ──
 	// For structures in creativeengineering:template_trim: a template column holding only air, pad and plants
