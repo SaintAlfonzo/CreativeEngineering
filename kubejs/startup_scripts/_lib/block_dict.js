@@ -16,9 +16,19 @@ b.goose_nest = 'incubation_additions:goose_nest';
 b.goose_egg_nest = 'incubation_additions:goose_egg_nest';
 b.duck_egg_crate = 'incubation_additions:duck_egg_crate';   // incubationAdditions crate/WaterfowlEggCrates.java
 b.goose_egg_crate = 'incubation_additions:goose_egg_crate';
+b.oven = 'creativeengineering:oven';                 // patcherMod oven/OvenBlock.java
+// Oven heat (feature_writeup/oven.md 2.4): non-stove sources below the oven
+b.magma_block = 'minecraft:magma_block';
+b.lava_cauldron = 'minecraft:lava_cauldron';
+b.blaze_burner = 'create:blaze_burner';             // counts only with blaze != none (OvenHeat.isActive)
+b.lit_blaze_burner = 'create:lit_blaze_burner';
+b.blaze_lantern = 'quark:blaze_lantern';
 
 // Tags
 b.any_bricks = '#minecraft:bricks';
+b.t_oven_heat_sources = '#creativeengineering:oven_heat_sources'; // OvenHeat.OVEN_HEAT_SOURCES
+b.t_fd_heat_sources = '#farmersdelight:heat_sources';
+b.t_fd_tray_heat_sources = '#farmersdelight:tray_heat_sources';   // fire, campfires, lava
 
 // ############################## Validation ##############################
 
