@@ -16,7 +16,6 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 
 | Feature | Where it's written up | State |
 |---|---|---|
-| Vinery backport (1.5.5 -> 1.19.2, "Backported Vinery") | [alcohol.md](../alcohol.md) Part B | analysis and plan only; `development/backportedVinery` doesn't exist. Blocked on D13 (license), see 4 |
 | JEI coverage parts 2 and 3 (recipe types with no category; world interactions) | [jei_coverage.md](../jei_coverage.md) 0 | not started. Part 1 is catalogued, but none of its stand-in or info fixes are built (5) |
 | Food tuning system (values per type, SoL complexity, canned parity) | [food.md](../food.md) 3.5, 4.3 | designed, not built; waits on D1 to D6 |
 | Vanilla egg -> `#forge:eggs` migration | [food.md](../food.md) 3.8 | list written, not built (rescan first, the dump can't read IE recipes) |
@@ -42,10 +41,11 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Structure tuning 7.1 to 7.4 (ships INCOMPLETE in 1.0.6) | [structure_tuning.md](../structure_tuning.md), [plan_1.0.6.md](../plan_1.0.6.md) 2.1, [testing/structures/](../testing/structures/00_plan.md) | built; scratch M1, M2, Phases 3 to 6 run | Phase 7 started 2026-10-14 17:43 with no results ([07_phase_7.scratch.md](../testing/structures/07_phase_7.scratch.md)); Phases 8 to 10 and the client list 8.0.11 not run; open bugs in 3; fixes go to 1.0.7 |
 | Locate (folding, non-blocking loads, census, DH clip) | [locate.md](../locate.md) | built and in 1.0.6; LO-02, 06, 08, 12, 15 passed | LO-05, LO-03/LO-14 failed in 1.0.6; their fixes are in source for 1.0.7 (next row); LO-01, LO-04 partly |
 | Structure and locate fixes for 1.0.7 (9 bugs from the scratch run) | [structure_tuning.md](../structure_tuning.md) 3.23, [locate.md](../locate.md) 3.2, 3.6, 8 | fixed in source 2026-10-18; offline checks pass against the mapped 1.19.2 jar (PoolTunerTest new) | build patcherMod 1.0.7 and install; run ST-191 to ST-198 and LO-03, LO-05, LO-14, LO-17 on a scratch server; `[worldgen.pools] canonicalOrder` changes every village layout in new chunks (on by default, see 4) |
-| Alcohol Part A: Brewin' and Chewin' 4.5.0 port | [alcohol.md](../alcohol.md) Part A | analysis, plan and decisions 4.1/4.5. **Port begun 2026-10-17** in `development/backportedBrewin` (in `settings.gradle`): ~45 upstream classes copied (blocks, keg block entity, recipes, items, utilities, Forge containers) | registries, config (`BnCConfiguration`), fluids, effects/attachments, network, menu, client, JEI, assets/data, loot, remaps, old-world conversion: 14 imported classes don't exist yet, so it doesn't compile. Heat/cold tag audit 2.7 not applied. Pack-side changes 3.4 not started. The writeup still says "not started" |
+| Alcohol Part A: Brewin' and Chewin' 4.5.0 port | [alcohol.md](../alcohol.md) Part A | analysis, plan, decisions 4.1/4.5. **Port builds (2026-10-18)**: all code, assets and data in `development/backportedBrewin`; `backportedBrewin-4.5.0-ce-19.2-01.jar`; `tools/check_data.py` 0 problems; CCK keg mixin checked against bytecode (3.5) | boot on a scratch server (AL-42) and AL-01 to AL-48; recipe-book fluid placement and JEI fluid transfer not ported (3.5); pack-side changes 3.4 together with the jar swap; heat/cold tag audit 2.7 not applied |
+| Alcohol Part B: Vinery 1.5.5 port ("Backported Vinery") | [alcohol.md](../alcohol.md) Part B | **Port builds (2026-10-18)**: `development/backportedVinery` (Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, old-world passes, upstream jars as runtime donors, WTHIT lines). patcherMod and pack-side changes done (B4.4 outcome), deploy category + mod_sides | the swap in `mods/` (`./gradlew :patcherMod:installToMods :backportedVinery:installToMods`, game closed); boot and VB-01 to VB-47 (user); I25 tool reruns; stem "leaves pending" WTHIT line; download-on-publish for `vinery_upstream/` (D14 A) |
 | Food | [food.md](../food.md) | `/dumpfood`, 31 types + tags, catalog, multi-serving cans, raw and generated cans, fried eggs, egg stacks | tuning system and egg migration (1); cooked/prepared can sections pie, feast, meals, drinks, special |
 | Oven | [oven.md](../oven.md) | block, GUI, baking recipe type, JEI (patcherMod), bakeware, 7 baking recipes, muffin dough fix (2026-10-18; compiles, 8 GameTests pass) | patcherMod jar rebuild + OV-01 to OV-14; recipes don't use bakeware or plating yet, pot recipes not moved |
-| Remainder buffer | [remainder_buffer.md](../remainder_buffer.md) | pot + kettle (mixins), oven (native), `[cooking]` config, GameTest harness (2026-10-18; compiles, 10 GameTests pass) | patcherMod jar into `mods/` + RB-01 to RB-11; keg in the Brewin port once it compiles (3.6); optional WTHIT line |
+| Remainder buffer | [remainder_buffer.md](../remainder_buffer.md) | pot + kettle (mixins), oven (native), `[cooking]` config, GameTest harness (2026-10-18; compiles, 10 GameTests pass) | patcherMod jar into `mods/` + RB-01 to RB-11; keg in the Brewin port (3.6; the port compiles now, 2026-10-18); optional WTHIT line |
 | Can parity | [can_parity.md](../can_parity.md) | every `x` row built, removals done | `?` Want cells; hunger/saturation columns postponed; no can value-audited; meal/pie/feast/drink/hazard values are placeholders (also flagged in [canning.js](../kubejs/server_scripts/cooking/canning.js) lines 504, 542, 557); hand-written raw cans don't carry effects |
 | Names | [names.md](../names.md) | Display Delight + Rustic Delight names; catalog parts 1 and 2 | catalog worked down: 191 partial blocks, 65 items, 53 entities, 20 professions, effects/potions/fluids; no fixes yet |
 | Effect descriptions (JEED) | [todo.txt](todo.txt) "Literal TODO comments" | generator `tools/gen_effect_descriptions.py` | 47 `TODO: write a description` rows left in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) |
@@ -70,12 +70,13 @@ The village-layout cause was found on the way: the pool order changes per JVM ru
 **Other features:**
 - Probable, unverified: Death Knell is server-only but its death messages are lang keys from its own jar, so clients likely see raw `message.deathknell.*` keys (FP-01). Rain Should Extinguish Campfires duplicates Unlit Campfire's rain rule: remove. [feature_porting.md](../feature_porting.md) 0, 2.2.
 - Brewin' 2.0 keg gives back an extra glass bottle per `pickled_pickles` brew (fluid-item leftover slot grows by the result count). Goes away with the 4.5.0 port. [remainder_buffer.md](../remainder_buffer.md) 1.3.
-- Vinery JEI fermentation arrow shows 1800 ticks; the real time is about 50. `VineryIds.FERMENTATION_TICKS` is still 1800. [vinery_jei.md](../vinery_jei.md) 4.
+- Vinery JEI fermentation arrow shows 1800 ticks; the real time is about 50. `VineryIds.FERMENTATION_TICKS` is still 1800. [vinery_jei.md](../vinery_jei.md) 4. Moot once the Vinery port is in mods/ (patcherMod's pages stand down).
 - Canned Goods data: saturation values far too high, crossed ids, wrong effects. [food.md](../food.md) 4.2 findings 1-2 (the tuning system is the planned fix).
 - item_dict: `i.catfish_slice` points at a nonexistent id; `i.bacon` is the cooked item. [food.md](../food.md) 4.2 finding 6.
 - Spice of Life default benefit `attribute,generic.speed,2` isn't a real attribute. [food.md](../food.md) 4.2 finding 4.
 - Muffins may not be cookable. [cooking.md](../cooking.md) "errors/bugs". Pot recipes moved to `#forge:dough` (2026-10-18) but the cause isn't confirmed: Create already puts its dough in `#forge:dough/wheat`. OV-13 in [oven.md](../oven.md) 3.8.
 - Bumpy filter (Exposure Expanded) has no source in 1.19.2 (trial chambers only). [exposure.md](../exposure.md) 4.
+- buggylouu (192.168.0.100) keeps getting `lost connection: Timed out` on the home server: 8 times on 10-17/10-18, against 1 for Saint_Alfonzo. Logs: `debug/latest.log` (client), `debug/serverlog/`. The server was not lagging, and it is the side that closes the connection (missed keep-alives). The client logs no error and notices the kick 1 to 10 s late. 2026-10-18 follow-up: the world keeps updating up to the kick and the last 15 to 30 s of input is lost, so client-to-server traffic stalls while server-to-client keeps flowing (not a client freeze). Ruled out: no mod calls `setAutoRead` or touches read control on the game connection (jar scan), and the mixins into `Connection` / `ServerGamePacketListenerImpl` (badpackets, Railways, Copycats, MCA, Supplementaries, Exposure, Quark, IE) don't block reads. Vanilla `Connection.sendPacket` turns auto-read off when a packet's protocol differs from the current one, but a server that stopped reading would still deliver the kick at once, and the 1 to 10 s delay looks like TCP retransmit backoff on a stalled link. Most likely cause: the client's own uplink (Wi-Fi power save or driver drops). The client also timed out on every internet version check at startup. DH changed in `config/` and both `configs_edited/` copies (`playerBandwidthLimit` 500 -> 200, `enableAdaptiveTransferSpeed = true`). `DistantHorizons.toml` is a `player` config class in build_deploy, so copy it to the server by hand. Next: Ethernet test, Wi-Fi power save off, `ping -i 0.2 192.168.0.122` from the client during play, client `journalctl -k` around the kick times.
 - Felsic shield assembly asks for `CRAFTING.FELSIC_SHIELD`, which `CEConfig.Crafting` doesn't define: hardcoded values and an `[NCH.cfg]` warning every `/reload`. [gear_tuning.md](../gear_tuning.md) 4 F1.
 - Felsic `potionMb` feeds both fills, not just the last as its toml comment says. [gear_tuning.md](../gear_tuning.md) 4 F2.
 - Iron armor set bonus registered twice (harmless). [armor_effects.md](../armor_effects.md) 4 F1.
@@ -103,7 +104,7 @@ The village-layout cause was found on the way: the pool order changes per JVM ru
 ## 4. Decisions not made, or made but not carried out
 
 **Waiting on you:**
-- Alcohol Part B: D3, D4, D5, D7 to D10, D12, and **D13 (license) first**. [alcohol.md](../alcohol.md) B5. Note: [cooking.md](../cooking.md) "vinery backport license" says the author refused redistribution, and sketches a plan (MIT code, upstream assets loaded from the old jar). That answer and plan aren't in alcohol.md B3.6 / B5 D13 yet.
+- Alcohol Part B: D3, D4, D5, D7 to D10, D12 (built with the recommendation; confirm or change). D13 and D14 decided 2026-10-18. [alcohol.md](../alcohol.md) B5.
 - Remainder buffer D1 to D5 (stall or throw when full, recycle into the container slot, slot count, automation, keg timing). [remainder_buffer.md](../remainder_buffer.md) 5.
 - Food tuning D1 to D6. [food.md](../food.md) 4.3.
 - Can parity `Want` = `?` cells. [can_parity.md](../can_parity.md).
@@ -152,8 +153,8 @@ The village-layout cause was found on the way: the pool order changes per JVM ru
 
 | Area | Where | Gap |
 |---|---|---|
-| Brewin' and Chewin' 2.0 -> 4.5.0 | [alcohol.md](../alcohol.md) Part A | port in progress (2) |
-| Vinery 1.3.10 -> 1.5.5 | [alcohol.md](../alcohol.md) Part B | not started (1) |
+| Brewin' and Chewin' 2.0 -> 4.5.0 | [alcohol.md](../alcohol.md) Part A | port builds, not booted or shipped (2) |
+| Vinery 1.3.10 -> 1.5.5 | [alcohol.md](../alcohol.md) Part B | in mods/; boots 1-2 crashed (fox mixin `this$0` shadow; flower pot static init order), boot 4 world load failed (`vinery:apple` unbound: stale `sapling_provider`), all fixed 10-18; world join + VB- tests pending; 4 upstream wine models use `#missing` (B4.9) |
 | Exposure 1.9.19 addons | [exposure.md](../exposure.md) | Catalog 1.1.2 not ported |
 | JEI 19 "craftable first" | [jei_craftable_first_port.md](../jei_craftable_first_port.md) | backport built, JEI-01 to JEI-06 never run |
 | Crop parity layer | [crops.md](../crops.md) 2.6, 4 | only tobacco brought in line; G-list crops (hemp, grapes, weeds, flax, tea, corn, coffee, pineapple) still differ |
@@ -197,7 +198,7 @@ The village-layout cause was found on the way: the pool order changes per JVM ru
 
 - **1.0.6 is deployed** ([deploy/DEPLOYED.json](../deploy/DEPLOYED.json): server and client 1.0.6, 2026-10-14 13:01; commit
   `15c43a0`). But [feature_writeup/README.md](../README.md), [plan_1.0.6.md](../plan_1.0.6.md), [deploy.md](../deploy.md) and most status blocks still say "STAGED for 1.0.6, not deployed". Sweep them to DEPLOYED.
-- [alcohol.md](../alcohol.md) Part A says the port is "not started"; it has begun (2). [deploy.md](../deploy.md) `IN_TREE_MODS` will need `backportedBrewin` once it builds.
+- [deploy.md](../deploy.md) `IN_TREE_MODS` will need `backportedBrewin` now that it builds ([alcohol.md](../alcohol.md) 3.5).
 - [exposure.md](../exposure.md) has no `-04` entry (2).
 - [cooking.md](../cooking.md) lists the fridge sort bug, which has a fix built (2).
 - Writeups not in the README index: [cooking.md](../cooking.md), [meat_blocks.md](../meat_blocks.md), [nether_swaps.md](../nether_swaps.md), [nether_blocks_scan.md](../nether_blocks_scan.md), [wood_mismatch.md](../wood_mismatch.md), [testing/fridge_sort/](../testing/fridge_sort/plan.md).
@@ -217,7 +218,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 |---|---|---|---|
 | [structure_tuning.md](../structure_tuning.md) | `ST-` | 101 / 98 | Phase 7 onward; ST-65 trim half; client list 8.0.11; ST-191 to ST-198 (1.0.7 fixes) |
 | [locate.md](../locate.md) | `LO-` | 10 / 7 | LO-03, 05, 14 failed in 1.0.6; rerun with the 1.0.7 fixes, plus LO-17 |
-| [alcohol.md](../alcohol.md) | `AL-`, `VB-` | 81 / 0 | drafted; run once built |
+| [alcohol.md](../alcohol.md) | `AL-`, `VB-` | 92 / 0 | drafted; run once built |
 | [crops.md](../crops.md) | `CR-` | 68 / 0 | none run |
 | [mooblooms.md](../mooblooms.md) | `MB-` | 64 / 10 | client-side checks |
 | [shields.md](../shields.md) | `SH-` | 42 / 1 | SH-43 first, then SH-14, 19, 33-42 |

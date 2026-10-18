@@ -4,6 +4,141 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.0.7 -->
+## 1.0.7 - 2026-10-18 18:20
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: dc669e2 + 28 uncommitted file(s)
+- Since: 1.0.6
+- Contents: 375 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
+- Payload: update from 1.0.6, config functional: 51 files, 15.0 MB (mods 6, kubejs 34, config 7, resourcepacks 2, vinery_upstream 2)
+- Built with warnings:
+  - pack/manifest.json is out of date with mods/: run tools/gen_pack_manifest.py and commit pack/
+  - 28 uncommitted change(s) in shipped folders (commit dc669e2 + working tree)
+
+### Changes
+
+Mods added (2):
+
+- Create : The Salt 1.1.0 `create_salt 1.19.2-1.1.0.jar` (both)
+- Storage Labels 1.19.2-1.10 `labels-1.19.2-1.10.jar` (both)
+
+Mods updated (3):
+
+- creativeengineering: `creativeengineering-1.0.6.jar` -> `creativeengineering-1.0.7.jar`
+- exposure: `exposureBackport-1.9.19-ce-19.2-03.jar` -> `exposureBackport-1.9.19-ce-19.2-04.jar`
+- vinery: `letsdo-vinery-forge-1.3.10.jar` -> `backportedVinery-1.5.5-ce-19.2-01.jar`
+
+Mods removed (1):
+
+- [Let's Do] API  1.1.0b-forge `doapi-1.1.0b.jar` (was both)
+
+Mods whose side changed (14):
+
+- Async Locator `async-locator-forge-1.19.2-1.3.0.jar`: server -> both
+- Block Runner `BlockRunner-v4.2.2-1.19.2-Forge.jar`: server -> both
+- Cherished Items `CherishedItems-Forge-1.19.2-1.0.2.jar`: server -> both
+- Chunky (Forge/NeoForge) `Chunky-1.3.38.jar`: server -> both
+- Create: Fast SchematicCannon `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar`: server -> both
+- Create: Liquid Fuel `createliquidfuel-2.1.1-1.19.2.jar`: server -> both
+- Death Knell `DeathKnell-Forge-1.19.2-6.0.3.jar`: server -> both
+- Glowing Illagers `glowingraidillagers-1.19.2-1.0.0.jar`: server -> both
+- Ice Prevents Crop Growth `icepreventscropgrowth-1.19.2-3.2.jar`: server -> both
+- Lightman's Discord Integration `lightmansdiscord-1.19.2-0.2.0.3-server.jar`: server -> both
+- Loading Protection `loadingprotection-1.0.2-forge-1.19.2.jar`: server -> both
+- Rain should extinguish campfires `rsec-1.0-1.19.2-forge.jar`: server -> both
+- Simple Backups `SimpleBackups-1.19.1-2.1.12.jar`: server -> both
+- Tax Free Levels `TaxFreeLevels-1.4.23-forge-1.20.1.jar`: server -> both
+
+<details><summary>kubejs/: 10 added, 24 changed, 0 removed</summary>
+
+*added (10)*
+
+- `assets/cornmeal.png`
+- `assets/prepared_flesh.png`
+- `client_scripts/jei_order.js`
+- `server_scripts/cooking/baking.js`
+- `server_scripts/tags/jei_order_tags.js`
+- `startup_scripts/_lib/effect_dict.js`
+- `startup_scripts/_lib/multiblock_dict.js`
+- `startup_scripts/cooking/bakeware.js`
+- `startup_scripts/func/jei_order.js`
+- `startup_scripts/jei/order.js`
+
+*changed (24)*
+
+- `assets/creativeengineering/lang/en_us.json`
+- `assets/minecraft/texts/splashes.txt`
+- `client_scripts/fluid_jei.js`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_beach.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_extra.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_river.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_swamp.json`
+- `generation_scripts/worldgen/biome_fits.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/structure_tags.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
+- `server_scripts/_lib/villager_trades_dump.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/engineering/fabric.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/cookingtags.js`
+- `server_scripts/worldgen/earth_fill.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/compost/compost_values.js`
+- `startup_scripts/func/neoCraftHelper.js`
+
+</details>
+
+config/: 2 added, 5 changed, 0 removed:
+
+*added (2)*
+
+- `brewinandchewin-common.toml`
+- `vinery-common.toml`
+
+*changed (5)*
+
+- `creativeengineering-common.toml`
+- `rare-ice.properties`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+resourcepacks/: 2 added, 0 changed, 0 removed:
+
+*added (2)*
+
+- `Fancy Crops v1.2.zip`
+- `Fancy_Beds-v4.2.zip`
+
+vinery_upstream/: 2 added, 0 changed, 0 removed:
+
+*added (2)*
+
+- `letsdo-vinery-fabric-1.5.5.jar`
+- `letsdo-vinery-forge-1.3.10.jar`
+
+### Removals (from 1.0.6)
+
+Delete on the server (4, also in removals_server.txt):
+
+- `mods/creativeengineering-1.0.6.jar`
+- `mods/doapi-1.1.0b.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-03.jar`
+- `mods/letsdo-vinery-forge-1.3.10.jar`
+
+Delete on the client (4, also in removals_client.txt):
+
+- `mods/creativeengineering-1.0.6.jar`
+- `mods/doapi-1.1.0b.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-03.jar`
+- `mods/letsdo-vinery-forge-1.3.10.jar`
+
 <!-- deploy:1.0.6 -->
 ## 1.0.6 - 2026-10-14 12:52
 

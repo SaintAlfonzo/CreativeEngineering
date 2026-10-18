@@ -27,6 +27,9 @@ import zipfile, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODS_DIR = os.path.join(ROOT, "mods")
+# The Vinery backport reads its lang (effect names and descriptions included) from this donor jar at runtime
+# (feature_writeup/alcohol.md B4.8). Only 1.5.5: the 1.3.10 jar there also holds names of effects the port dropped.
+DONOR_JARS = [os.path.join(ROOT, "vinery_upstream", "letsdo-vinery-fabric-1.5.5.jar")]
 KUBEJS_ASSETS = os.path.join(ROOT, "kubejs", "assets")
 OUT_FILE = os.path.join(KUBEJS_ASSETS, "creativeengineering", "lang", "en_us.json")
 
@@ -61,10 +64,9 @@ def process_lang_json(data, names, descs):
 def scan():
     names, descs = {}, {}
 
-    for fn in sorted(os.listdir(MODS_DIR)):
-        if not fn.endswith(".jar"):
-            continue
-        path = os.path.join(MODS_DIR, fn)
+    jars = [os.path.join(MODS_DIR, fn) for fn in sorted(os.listdir(MODS_DIR)) if fn.endswith(".jar")]
+    jars += [j for j in DONOR_JARS if os.path.isfile(j)]
+    for path in jars:
         try:
             with zipfile.ZipFile(path) as z:
                 for name in z.namelist():
@@ -120,6 +122,14 @@ def main():
         k for k in list(existing.keys())
         if (m := DESC_RE.match(k))
         and (m.group(1), m.group(2)) in descs
+        and existing[k].startswith(PLACEHOLDER_MARKER)
+    ]
+    # ...and placeholders for effects no installed mod names any more (removed mods, effects a mod dropped).
+    stale += [
+        k for k in list(existing.keys())
+        if k not in stale
+        and (m := DESC_RE.match(k))
+        and (m.group(1), m.group(2)) not in names
         and existing[k].startswith(PLACEHOLDER_MARKER)
     ]
     for k in stale:

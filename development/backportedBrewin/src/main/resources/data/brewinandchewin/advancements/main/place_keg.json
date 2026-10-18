@@ -1,0 +1,27 @@
+{
+  "parent": "brewinandchewin:main/root",
+  "criteria": {
+    "placed_keg": {
+      "conditions": {
+        "block": "brewinandchewin:keg"
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "brewinandchewin.advancement.place_keg.desc"
+    },
+    "icon": {
+      "item": "brewinandchewin:keg"
+    },
+    "title": {
+      "translate": "brewinandchewin.advancement.place_keg"
+    }
+  },
+  "requirements": [
+    [
+      "placed_keg"
+    ]
+  ]
+}

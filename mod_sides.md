@@ -199,7 +199,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | KubeJS CSV | `kubejs_csv` | `kubejs_csv-1.18.2~1.20.1-1.0.0.jar` |  |
 | both | KubeJS Immersive Engineering | `kubejs_immersive_engineering` | `kubejs-immersive-engineering-1902.2.3-build.18.jar` |  |
 | both | KubeJSDelight | `kubejsdelight` | `kubejsdelight-1.19.2-1.1.2.jar` |  |
-| both | Lets Do Api | `doapi` | `doapi-1.1.0b.jar` | Required by: Vinery |
 | both | Lightman's Currency | `lightmanscurrency` | `lightmanscurrency-1.19.2-2.2.1.3g.jar` |  |
 | both | Little Contraptions | `littlecontraptions` | `littlecontraptions-forge-1.19.2.2.jar` |  |
 | both | Little Logistics | `littlelogistics` | `littlelogistics-mc1.19.2-v1.4.0.jar` | Required by: Little Contraptions |
@@ -295,7 +294,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Twigs | `twigs` | `twigs-forge-1.19.2-3.0.1.jar` |  |
 | both | Via Romana | `via_romana` | `Via_Romana-1.19.2-1.1.3.jar` |  |
 | both | Villagers Sell Animals (by NoCube) | `villagersellanimals` | `nocube's_villagers_sell_animals_1.2.1_forge_1.19.2.jar` |  |
-| both | Vinery | `vinery` | `letsdo-vinery-forge-1.3.10.jar` |  |
+| both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-01.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
 | both | Vintage KubeJS | `vintage_kubejs` | `vintage_kubejs-1.19.2-1.0.0rc-2.jar` |  |
 | both | Wardrobe | `wardrobe` | `wardrobe-1.0.3-1.19.2.jar` |  |
 | both | Wares | `wares` | `wares-1.19.2-1.2.9.jar` |  |
@@ -314,16 +313,16 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | YUNG's Better Witch Huts | `betterwitchhuts` | `YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar` |  |
 | both | YUNG's Extras | `yungsextras` | `YungsExtras-1.19.2-Forge-3.1.0.jar` |  |
 | both | Yuushya Modelling | `yuushya_modelling` | `yuushya-modelling-1.19.2-forge-2.2.0.jar` |  |
-| server | Async Locator | `asynclocator` | `async-locator-forge-1.19.2-1.3.0.jar` | Off-thread /locate, explorer maps, dolphins, eyes of ender (IGNORE_SERVER_VERSION) |
-| server | Block Runner | `blockrunner` | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | Server-side walk-speed logic |
-| server | CherishedItems | `cherisheditems` | `CherishedItems-Forge-1.19.2-1.0.2.jar` | Item despawn rules |
-| server | Chunky | `chunky` | `Chunky-1.3.38.jar` | Chunk pre-generation |
-| server | Create Liquid Fuel | `createliquidfuel` | `createliquidfuel-2.1.1-1.19.2.jar` | Server-side fuel recipes |
-| server | DeathKnell | `deathknell` | `DeathKnell-Forge-1.19.2-6.0.3.jar` | Death messages |
-| server | Lightmans Discord Integration | `lightmansdiscord` | `lightmansdiscord-1.19.2-0.2.0.3-server.jar` | Discord bot (needs a token) |
-| server | Loading Protection | `loadingprotection` | `loadingprotection-1.0.2-forge-1.19.2.jar` | Join invulnerability |
-| server | Simple Backups | `simplebackups` | `SimpleBackups-1.19.1-2.1.12.jar` | World backups |
-| server | Tax Free Levels | `taxfreelevels` | `TaxFreeLevels-1.4.23-forge-1.20.1.jar` | Server-side enchanting cost |
+| both | Async Locator | `asynclocator` | `async-locator-forge-1.19.2-1.3.0.jar` | Off-thread /locate, explorer maps, dolphins, eyes of ender (IGNORE_SERVER_VERSION) |
+| both | Block Runner | `blockrunner` | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | Server-side walk-speed logic |
+| both | CherishedItems | `cherisheditems` | `CherishedItems-Forge-1.19.2-1.0.2.jar` | Item despawn rules |
+| both | Chunky | `chunky` | `Chunky-1.3.38.jar` | Chunk pre-generation |
+| both | Create Liquid Fuel | `createliquidfuel` | `createliquidfuel-2.1.1-1.19.2.jar` | Server-side fuel recipes |
+| both | DeathKnell | `deathknell` | `DeathKnell-Forge-1.19.2-6.0.3.jar` | Death messages |
+| both | Lightmans Discord Integration | `lightmansdiscord` | `lightmansdiscord-1.19.2-0.2.0.3-server.jar` | Discord bot (needs a token) |
+| both | Loading Protection | `loadingprotection` | `loadingprotection-1.0.2-forge-1.19.2.jar` | Join invulnerability |
+| both | Simple Backups | `simplebackups` | `SimpleBackups-1.19.1-2.1.12.jar` | World backups |
+| both | Tax Free Levels | `taxfreelevels` | `TaxFreeLevels-1.4.23-forge-1.20.1.jar` | Server-side enchanting cost |
 | client | Better Third Person | `betterthirdperson` | `BetterThirdPerson-Forge-1.19-1.9.0.jar` | Camera |
 | client | BetterF3 | `betterf3` | `BetterF3-4.0.1-Forge-1.19.2.jar` | F3 screen |
 | client | Cherished Worlds | `cherishedworlds` | `cherishedworlds-forge-6.0.5+1.19.4.jar` | World-list favourites |
@@ -381,15 +380,15 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Breezy | `breezy` | `breezy-1.19.2-1.0.8.jar` | Hot air balloon entities |
 | both | Canned Goods | `canned_goods` | `CannedGoods-1.19.2-3.jar` | Blocks/items |
 | both | Colored Water | `colored_water` | `Colored Water-1.19.2-1.3.7.jar` | Blocks/items |
-| server | Create: Fast Schematic Cannon | `createfastschematiccannon` | `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar` | Schematicannon block-entity speed mixins |
+| both | Create: Fast Schematic Cannon | `createfastschematiccannon` | `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar` | Schematicannon block-entity speed mixins |
 | both | Floral Enchantment | `floralench` | `Floral Enchantment-1.19.2-1.4.3.jar` | Blocks/items |
-| server | GlowingRaidIllagers | `glowingraidillagers` | `glowingraidillagers-1.19.2-1.0.0.jar` | Raid mixin applies vanilla Glowing |
+| both | GlowingRaidIllagers | `glowingraidillagers` | `glowingraidillagers-1.19.2-1.0.0.jar` | Raid mixin applies vanilla Glowing |
 | both | Golden Food | `goldenfood` | `goldenfood-1.19.2-2.0.0.jar` | Items |
 | both | Greek Villager House | `greek_villager_house` | `greek_villager_house-1.0.0-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
 | both | hobbit house | `hobbit_house_` | `hobbit_house_-1.0.1-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
 | both | Hopo Better Underwater Ruins | `hopour` | `HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar` | Structures only |
 | both | Ice Boat Nerf | `iceboatnerf` | `iceboatnerf-1.1.1.jar` | Boat mixin; boat physics run on the driving client |
-| server | Ice Prevents Crop Growth | `icepreventscropgrowth` | `icepreventscropgrowth-1.19.2-3.2.jar` | Crop-growth event |
+| both | Ice Prevents Crop Growth | `icepreventscropgrowth` | `icepreventscropgrowth-1.19.2-3.2.jar` | Crop-growth event |
 | both | Neapolitan | `neapolitan` | `neapolitan-1.19.2-4.1.0.jar` | Blocks/items/entities |
 | both | old swamp fisherman house | `old_swamp_fisherman_house` | `old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
 | both | Rare Ice | `rare_ice` | `rare-ice-0.5.1.jar` | Blocks |
@@ -439,5 +438,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Witch Mobility | `witchmobility` | `witchmobility-1.3.2-1.19.2.jar` | Broom entities, witch armor, items (GeckoLib). Added 2026-10-13 |
 | both | Campsite Structures | `campsite_structures` | `campsite_structures-1.19.2-FORGE-1.0.3.jar` | MCreator: camper entity + camp features (features overridden to forge:none by the structure work, jar kept for CamperEntity). Added 2026-10-14 |
 | both | restApi | `restapi` | `restApi - 0.7 - 1.19.2 - Forge.jar` | Library by restonic4 (registry/sound/tool-tier helpers). Added 2026-10-14 |
-| server | Rain should extinguish campfires | `rsec` | `rsec-1.0-1.19.2-forge.jar` | One CampfireBlockEntity tick mixin, acts on ServerLevel only. Added 2026-10-14 |
+| both | Rain should extinguish campfires | `rsec` | `rsec-1.0-1.19.2-forge.jar` | One CampfireBlockEntity tick mixin, acts on ServerLevel only. Added 2026-10-14 |
 | both | Unlit Campfire | `unlitcampfire` | `unlitcampfire-forge-1.19-1.7.1.0.jar` | Campfires placed unlit / burn out; block mixins + config, Jade/TOP compat. Added 2026-10-14 |
+| both | Create Salt | `create__the_salt` | `Create salt integration. Added 2026-10-18 |
+| both | Labels | `labels` | `labels-1.19.2-1.10.jar` | Decorative item labels. Added 2026-10-18 |

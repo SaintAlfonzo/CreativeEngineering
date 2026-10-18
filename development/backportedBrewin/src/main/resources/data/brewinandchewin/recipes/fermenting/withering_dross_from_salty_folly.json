@@ -1,0 +1,31 @@
+{
+  "type": "brewinandchewin:fermenting",
+  "base_fluid": {
+    "amount": 1000,
+    "ingredient": {
+      "tag": "#brewinandchewin:salty_folly"
+    },
+    "unit": "millibuckets"
+  },
+  "experience": 2.0,
+  "ingredients": [
+    {
+      "item": "minecraft:wither_rose"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    },
+    {
+      "item": "minecraft:nether_wart"
+    },
+    {
+      "item": "minecraft:bone"
+    }
+  ],
+  "result": {
+    "amount": 1000,
+    "id": "brewinandchewin:withering_dross"
+  },
+  "temperature": 5,
+  "unit": "millibuckets"
+}

@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-10-18 04:58:49 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-10-18 22:04:53 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Biome rules
 
@@ -46,7 +46,8 @@ A structure in a fit's structure tag spawns in that fit's biomes plus its parent
 | `land/sand` | `land/sand` + `land` | 10 | `desert_watchtower:watchtower`, `mysticrift_pillagers_towers_aris:desert_pillager_tower` |
 | `land/end` | `land/end` | 2 | `mysticrift_pillagers_towers_aris:end_pillager_tower` |
 | `land/mushroom` | `land/mushroom` + `land` | 2 | `towns_and_towers:pillager_outpost_mushroom_fields`, `towns_and_towers:village_mushroom_fields` |
-| `land/any` | `land/any` + `land` | 113 | `betterdungeons:skeleton_dungeon`, `betterdungeons:small_dungeon`, `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon`, `philipsruins:bone_dungeon`, `philipsruins:lost_soul_city` |
+| `land/any` | `land/any` + `land` | 113 | `betterdungeons:small_dungeon`, `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon` |
+| `land/any/deep` | `land/any/deep` + `land/any` + `land` | 14 | `betterdungeons:skeleton_dungeon`, `philipsruins:bone_dungeon`, `philipsruins:lost_soul_city` |
 | `land/sky` | `land/sky` + `land` | 114 | `skyvillages:skyvillage` |
 | `ocean/deep` | `ocean/deep` | 1 | `philipsruins:ocean_fortress` |
 
@@ -1139,7 +1140,8 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - **`land/cherry`** 1: `mysticrift_pillagers_towers_aris:cherry_pillager_tower`
 - **`land/sand`** 2: `desert_watchtower:watchtower`, `mysticrift_pillagers_towers_aris:desert_pillager_tower`
 - **`land/end`** 1: `mysticrift_pillagers_towers_aris:end_pillager_tower`
-- **`land/any`** 6: `betterdungeons:skeleton_dungeon`, `betterdungeons:small_dungeon`, `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon`, `philipsruins:bone_dungeon`, `philipsruins:lost_soul_city`
+- **`land/any`** 3: `betterdungeons:small_dungeon`, `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon`
+- **`land/any/deep`** 3: `betterdungeons:skeleton_dungeon`, `philipsruins:bone_dungeon`, `philipsruins:lost_soul_city`
 - **`land/sky`** 1: `skyvillages:skyvillage`
 - **`meta/large_ruins`** 4: `forgotten_church:forgotten_church`, `philipsruins:ancient_towers`, `philipsruins:level_three_ruins`, `philipsruins:rare_ruin`
 - **`meta/small_ruins`** 16: `forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `philipsruins:ancient_ruins`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:field_stone_ruins`, `philipsruins:level_one_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:pumpkin_ruins`, `terralith:glacial_hut`

@@ -5,7 +5,7 @@ Two backports live in this file:
 - **Part A (sections 0 to 8, tests `AL-`): Brewin' and Chewin'.** The pack ships 1.19-2.0; the plan is a full port of
   4.5.0+1.21.1 as "Backported Brewin".
 - **Part B (sections B0 to B8, tests `VB-`): Let's Do Vinery.** The pack ships Forge 1.3.10; the plan is a port of Fabric
-  1.5.5 (Minecraft 1.21.1) as "Backported Vinery". It starts after Part A's History.
+  1.5.5 (Minecraft 1.21.1) as "Backported Vinery", built 2026-10-18 (not booted yet). It starts after Part A's History.
 
 # Part A: Brewin' and Chewin' (Backported Brewin)
 
@@ -22,9 +22,9 @@ says otherwise. This part holds the gap analysis (sections 2.1 to 2.6), the port
 | Base fluid choice: honey / milk (4.1) | DECIDED 2026-10-14: the pack's `create:honey` and `minecraft:milk` |
 | Kombucha base (4.5) | DECIDED 2026-10-14: `create_central_kitchen:green_tea` |
 | Heat / cold block audit (2.7) | written 2026-10-14; tag additions proposed, not applied |
-| Port (`development/backportedBrewin`) | not started |
-| Pack-side changes (3.4) | not started |
-| In-game tests | AL-01 to AL-41 drafted (7), run once built |
+| Port (`development/backportedBrewin`) | BUILT 2026-10-18: everything compiles and `backportedBrewin-4.5.0-ce-19.2-01.jar` builds; offline data check passes (6). Never booted (no scratch server yet, by request); not in `mods/`. Gaps and port decisions: 3.5 |
+| Pack-side changes (3.4) | not started; they go in together with the jar (they would break the 2.0 jar) |
+| In-game tests | AL-01 to AL-48 drafted (7), none run |
 
 - **Scope:** everything in 4.5.0 except EMI support, which this pack doesn't have.
 - **Deviations from 4.5.0, by your choice:**
@@ -36,6 +36,8 @@ says otherwise. This part holds the gap analysis (sections 2.1 to 2.6), the port
   - Old mod: about 5.6k lines.
   - New code to port: `common/` 7.9k, `client/` 2.4k, JEI 1.8k.
   - The 2.9k-line Fabric layer is a guide only; Forge equivalents get written in its place.
+- **Source used for the port:** the Mojang-named NeoForge decompile in
+  `DecompiledMods/BrewinAndChewin-neoforge-4.5.0+1.21.1-src` (code, `assets/`, `data/`).
 - **Decompiling:** the decompiles live only in a session scratchpad.
   - Old jar: `python3 tools/decompile_mod.py mods/BrewinAndChewin-1.19-2.0.jar <out>`.
   - New jar: zip `DecompiledMods/BrewinAndChewin-fabric-4.5.0+1.21.1/umpaz` and run
@@ -435,6 +437,64 @@ Build order. Each step should boot before starting the next:
 | Create spout / drain for tankards (optional, not in 4.5.0) | Through `global.NCH` createFilling / createEmptying: tankard + 250 mB drink <-> drink. Without it, kegs are the only way to bottle |
 | Deploy | Remove the old jar from `mods/` and `server_mods/`, update mod_sides.md, regenerate the pack manifest, `/dumpall` refresh |
 
+### 3.5 Port status (2026-10-18)
+
+Built from the NeoForge decompile, class for class where 1.19.2 allows (133 files, about 10.5k lines). Package layout
+follows upstream: `common/` and `client/` as 4.5.0, `forge/` in place of `neoforge/`, `integration/jei/`.
+
+**Done:** every registry (blocks, items, 18 tank-only fluids + Forge fluid types, effects, block entities, menu,
+particles, recipe types and serializers, loot functions, slicing loot modifier); the config; the keg (tank, pouring,
+temperature, 2.0 keg conversion), keg screen, keg recipe book (items), keg item tooltip; Tipsy numbed hearts and cardiac
+arrest, Raging stacks, Intoxication (saturation block, undead immunity, HUD bar, AppleSkin preview), Sweet Heart, the
+milk-bottle low-priority rule; camera spin and mouse sway; chat, `/msg`, sign and name-tag scrambling (client side,
+4.3); coaster renderer; particles; JEI (Fermenting page with pouring, Cheese aging page, clickable tank, transfer
+button); old-world remaps (`item_coaster`, `scarlet_pierogies`, `satisfaction`, 2.0 coaster and keg contents); all
+assets and data through `tools/port_resources.py`.
+
+**Not ported yet (each works in a reduced form):**
+
+| Upstream | What the port does instead |
+|---|---|
+| `KegStackedContents` / `KegPlaceRecipe`: the recipe book also fills or empties the tank from fluid containers in the inventory | the recipe book places the item ingredients only (vanilla `ServerPlaceRecipe`) |
+| JEI `FermentingTransfer` + `JEITransferKegRecipeServerboundPacket` (about 1,100 lines): the same fluid handling for the JEI `+` button | JEI's basic handler, items only (the fluid slot is filtered out) |
+| AppleSkin hunger-bar wobble while Intoxicated (mixin into AppleSkin's offsets) | AppleSkin only previews no saturation |
+| Tipsy camera: a tiny positional drift on top of the spin | spin only |
+
+**Port decisions, where 1.19.2 forced a different shape:**
+
+- Config: `brewinandchewin-common.toml` ([keg], [recipe_book]) and `brewinandchewin-client.toml`, ForgeConfigSpec,
+  upstream key names. Common settings aren't synced to clients (upstream syncs them); the pack ships one file.
+- Per-entity data (Tipsy hearts, Raging) is one Forge capability on every LivingEntity, synced with the upstream packets
+  on login and start-tracking. Upstream's recipe-book settings packet is dropped: 1.19.2's own recipe packet already
+  carries every RecipeBookType.
+- Cardiac arrest is a `DamageSource("brewinandchewin.cardiacArrest")` with bypass-armor and bypass-magic (no damage type
+  registry in 1.19.2). `triggers_raging` (mob_attack, player_attack) is a melee check in `BnCDamageSources`.
+- Numbed health holds back the damage after armor, enchantments, effects and absorption (1.19.2's LivingDamageEvent).
+  Upstream subtracts those reductions a second time.
+- Effect particles: 1.19.2 effects have no particle of their own, so `LivingEntityMixin` swaps some of the swirl for
+  drunk bubbles or Raging particles. Clients only know their own player's effects (and synced Raging stacks), so other
+  players show the plain swirl for Tipsy.
+- Camera spin goes through Forge's camera-angle event (culling follows by itself); mouse sway wraps
+  `LocalPlayer#turn`; numbed hearts count the heart index on the container call (no local capture), so the mixins stay
+  safe without a local variable table.
+- Scrambling: the server mixins only announce the sender's Tipsy level and a seed (`broadcastChatMessage`, `/msg`); the
+  client scrambles in Forge's `ClientChatReceivedEvent` (no chat-listener mixin, no "modified" tag), name tags in
+  `RenderNameTagEvent`, signs by building scrambled lines each frame (the sign's line cache stays clean).
+- "Place a temperature block near a keg" is awarded from code (`BnCCommonEvents`): its 1.21 triggers take loot
+  conditions, which 1.19.2's `placed_block` can't. Upstream's two loot conditions served only this, so they aren't ported.
+- Coaster models are extra baked models drawn quad by quad with the texture-modifier tint (no wrapped model or colour
+  handler). Fluid item displays copy NBT keys (`copy_nbt`) where upstream remaps data components.
+- The 2.0 coaster block entity id is rewritten on load (`BlockEntityLegacyIdMixin`): block entity ids aren't in Forge's
+  registry snapshot, so a remap can't reach them.
+- Create Central Kitchen's required keg mixin (2.6) was checked against the bytecode: both its injectors find their
+  targets in the port's `updateTemperature` (first `Level#getBlockState`, second `BlockState#is(TagKey)` with a second
+  `BlockState` local), so it applies with no change in behaviour.
+- Upstream bugs fixed on the way: a part-full keg overfilled when poured into; the recipe-book filter flag was sent as
+  "open"; the JEI page crashed for a fluid result without a base fluid; fluid item displays kept stale entries across
+  reloads; kombucha had no fluid tag although its display names one.
+- One Farmer's Delight 1.21 texture (`block/tray`, MIT) ships as `brewinandchewin:block/fd_tray` for the coaster tray;
+  1.21 pie template models point at FD 1.2.4's `pie` models.
+
 ## 4. Decisions
 
 ### 4.1 Honey and milk: pack fluids vs B&C's own (DECIDED 2026-10-14: option A, the pack's fluids)
@@ -529,15 +589,26 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [../mods/BrewinAndChewin-1.19-2.0.jar](../mods/BrewinAndChewin-1.19-2.0.jar): the jar we ship today
 - [../DecompiledMods/BrewinAndChewin-fabric-4.5.0+1.21.1/](../DecompiledMods/BrewinAndChewin-fabric-4.5.0+1.21.1/): the newer classes, data (`data/brewinandchewin/recipe/`, tags, loot) and assets
 - [../tools/decompile_mod.py](../tools/decompile_mod.py): old jar -> Mojang-named source
-- `development/backportedBrewin/`: the port (not created yet)
+- [../DecompiledMods/BrewinAndChewin-neoforge-4.5.0+1.21.1-src/](../DecompiledMods/BrewinAndChewin-neoforge-4.5.0+1.21.1-src/): Mojang-named 4.5.0 source, the base of the port
+- [../development/backportedBrewin/](../development/backportedBrewin/): the port (Gradle subproject `:backportedBrewin`)
+  - `src/main/java/umpaz/brewinandchewin/`: `common/`, `client/`, `forge/` (entry point, platform helper, events,
+    network, fluid types, capability, slicing modifier, client setup and HUD), `integration/jei/`
+  - [../development/backportedBrewin/tools/port_resources.py](../development/backportedBrewin/tools/port_resources.py): rebuilds `src/main/resources/{assets,data}` from the decompile (format conversion, the 4.1 / 4.4 / 4.5 deviations, the filter-button sheet)
+  - [../development/backportedBrewin/tools/check_data.py](../development/backportedBrewin/tools/check_data.py): offline id check (6)
+  - [../development/backportedBrewin/tools/gen_at.py](../development/backportedBrewin/tools/gen_at.py) + `tools/accesstransformer.official.cfg`: the access transformer (one entry, `Gui$HeartType`)
 - Pack files to change: section 3.4
 
 ## 6. Offline checks
 
-None yet. Once built:
-- A script that compares the port's `data/brewinandchewin/recipe/` tree against 4.5.0's, field by field, after mapping
-  `c:` to `forge:`. It should report only the 4.4 / 4.5 deviations.
-- A boot on a scratch server (scratch-server memory), and a log grep for missing remaps and the CCK mixin warning.
+- `./gradlew :backportedBrewin:build`: compiles with no errors; the mixin annotation processor resolves every target
+  (refmap checked by hand, 2026-10-18).
+- `python3 development/backportedBrewin/tools/check_data.py`: every item, fluid and tag that the recipes, tags, loot
+  tables, coaster models and fluid displays name exists in the pack's last dump or in the port (0 problems, 2026-10-18).
+- Model references: every texture and parent the 189 models use exists in the port, Minecraft 1.19.2 or Farmer's Delight
+  1.2.4 (checked once by script, 2026-10-18; the one leftover is upstream's unused `item/beer_tankard`).
+- `port_resources.py` is a deterministic conversion, so the planned field-by-field compare against 4.5.0's recipes is
+  covered by reading its rules; it prints a warning for anything it can't map (none).
+- Still to do: a boot on a scratch server (scratch-server memory) with a log grep for mixin, recipe and remap errors.
 
 ## 7. In-game test suite (drafted, run once built)
 
@@ -582,8 +653,61 @@ None yet. Once built:
 - [ ] **AL-39 Satisfaction remap:** a 2.0 save with Satisfaction running -> loads with Nourishment, no error
 - [ ] **AL-40 Dedicated server:** boots with the port, client joins, no RecipeBookType or registry desync kick
 - [ ] **AL-41 Heat / cold tags:** after the 2.7 additions, `/dumptags` lists them; a lit furnace or bonfire next to a keg reads Warm, an unlit furnace doesn't count, a polished packed ice block reads Chilly, a snow layer doesn't count
+- [ ] **AL-42 Boot log:** client and server boot with the port; no mixin apply errors (including CCK's keg mixin), no recipe parse errors for `brewinandchewin:`
+- [ ] **AL-43 Recipe book:** in the keg, clicking a beer recipe places wheat, seeds and mushroom; the ghost shows the water gauge and the Normal bar
+- [ ] **AL-44 JEI transfer:** the `+` button on a Fermenting page moves the items into the keg's four slots; the fluid slot doesn't block it
+- [ ] **AL-45 Numbed hearts HUD:** at Tipsy III, take 6 damage -> 3 hearts show the numbed sprite, flicker in the last 4 s, then cardiac arrest lands; same with absorption hearts
+- [ ] **AL-46 Signs sober up:** scrambled signs read normally again the moment Tipsy drops below the threshold
+- [ ] **AL-47 /msg to two players:** a Tipsy sender's both echoes and both receivers' copies scramble the same way
+- [ ] **AL-48 Old coaster block entity:** a 2.0 world's item coaster keeps its item after loading (no "Skipping BlockEntity" in the log)
 
-## 8. History
+## 8. Changes to make
+- jei
+  - add effect tooltips to fluid output on keg
+- tooltips
+  - heating cask, cooling cask
+  - placeable on coaster 
+    - does it work w/ other mods?
+    - does it overlap w/ display delight?
+- ui
+  - keg missing left input fluid slot, fluids pass into output slot
+  - keg plating ui has black/purple missing texture
+- remove jams, marmalades, jelly
+  - handled by fruit delight
+- remove picked pickles
+  - handles by veggies/vintage delight when ported? leave enabled for now
+- cheese
+  - remove pumpkin seed from flaxen cheese, replace with brown mushroom
+- food
+  - change scarlet pierogi nether wart to beetroot
+  - remove creativeengineering kubejs recipe
+- pale jane
+  - swap tree bark for immersive weathering
+- beer
+  - swap seeds to dandelion
+- mead
+  - swap seeds to red muchroom
+  - merge mead from vinery into brewin when added
+- bloody mary
+  - sweet berries to salt
+- rice wine
+  - add 2nd rice ingredient
+- steel-toe stout
+  - change ingot to any metal dust, wheat to blaze powder, boost resistance effect
+- pizza
+  - 3 wheat to 1 dough
+- ham and cheese
+  - allow bread slices
+  - efficient smoked ham recipe, allow other cooked pork
+  - sequenced assembly for both efficiencies
+- quiche
+  - sequence assembly
+  - allow full cabbage in mushroom quiche
+- fluids
+  - create filling and draining recipes for drinks (not cheese)
+  - pumping fluids in and out of kegs
+
+## 9. History
 
 - 2026-10-14: gap analysis from decompiles of 1.19-2.0 (Forge) and 4.5.0+1.21.1 (Fabric). The user chose a full port
   that follows 4.5.0, client-only configurable scrambling, and a poison potion for Dread Nog. Honey/milk broken down in
@@ -591,10 +715,17 @@ None yet. Once built:
   Replaces the earlier `brewinandchewin_parity.md`.
 - 2026-10-14: decided: the pack's `create:honey` / `minecraft:milk` (4.1), green tea kombucha (4.5). Added the heat / cold
   block audit (2.7) and AL-41.
+- 2026-10-17: port begun in `development/backportedBrewin`: build files, licence, about 45 upstream classes (blocks, keg
+  block entity, recipes, items, utilities, Forge containers).
+- 2026-10-18: port completed to a building jar (3.5): registries, config, fluids, effects, capability, network, menu,
+  screen, recipe book, HUD, camera, scrambling, coaster renderer, JEI, remaps, mixins; `tools/port_resources.py` for
+  assets and data, `tools/check_data.py` (0 problems). CCK's keg mixin checked against the bytecode. Not booted, not in
+  `mods/`; recipe-book and JEI fluid handling not ported. Added AL-42 to AL-48.
 
 # Part B: Let's Do Vinery (Backported Vinery)
 
-Test prefix **VB-** · Written **2026-10-14** · Status **migration analysis only; nothing decided or built**
+Test prefix **VB-** · Written **2026-10-14** · Status **analysis + plan; D13 chosen 2026-10-18 (upstream jars as
+resource donors, B4.8, feasible); not built**
 
 ## B0. At a glance
 
@@ -602,12 +733,14 @@ Test prefix **VB-** · Written **2026-10-14** · Status **migration analysis onl
 |---|---|
 | Gap analysis 1.3.10 -> 1.5.5 (B2) | written 2026-10-14 from decompiles of both jars and of the bundled Foundation 1.0.1 |
 | Migration issues (B3) | 75 issues listed, grouped by kind |
-| License (B3.6) | text received 2026-10-14: code MIT, resources All Rights Reserved; blocks shipping upstream assets/data until D13 is settled |
-| Decisions (B5) | DECIDED 2026-10-14: D1 keep `cherry_*`, D2 keep every 1.3.10 block and add the new ones, D6 WTHIT, D11 winemaker set damage by config. Aging revamped to a playtime clock (B4.5). Still open: D3, D4, D5 (non-aging numbers), D7 to D10, D12, D13 (license, comes first) |
+| License (B3.6) | code MIT, resources All Rights Reserved (Vinery 2026-10-14, Foundation 2026-10-18: same split). Satisfy refused redistribution of assets and features (B3.6) |
+| Upstream jars as resource donors (B4.8) | CHOSEN 2026-10-18 (D13 B). Feasibility checked 2026-10-18: works; the port reads assets/data from the unmodified 1.5.5 and 1.3.10 jars at runtime. Delivery of the jars (D14) open |
+| Decisions (B5) | DECIDED 2026-10-14: D1 keep `cherry_*`, D2 keep every 1.3.10 block and add the new ones, D6 WTHIT, D11 winemaker set damage by config. Aging revamped to a playtime clock (B4.5). 2026-10-18: D13 option B (B4.8). D14 decided 2026-10-18: payload now, download on publish. Worldgen (user, 2026-10-18): 1.20+ worldgen types become the nearest 1.19.2 vanilla type, nothing backported. Still open, built with the recommendation: D3, D4, D5 (non-aging numbers), D7 to D10, D12 |
 | Wine aging (B4.5) | DESIGNED 2026-10-14: vintage clock on real playtime, lengths unchanged for now (16 days per year, 2 years per level) |
-| Port (`development/backportedVinery`) | not started |
-| Pack-side changes (B4.4) | not started |
-| In-game tests | VB-01 to VB-40 drafted (B7), run once built |
+| Port (`development/backportedVinery`) | BUILT 2026-10-18, never booted: Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, upstream-pack layer, WTHIT lines; status and gaps in B4.9 |
+| Pack-side changes (B4.4) | DONE 2026-10-18 except the jar swap in `mods/` (the game was running) and the I25 tool reruns; per-item outcome under B4.4 |
+| Deploy (D14) | `tools/build_deploy.py`: `vinery_upstream/` category (both sides) + sha1 check against the port's pins; `backportedVinery` in IN_TREE_MODS; mod_sides row swapped, doapi row removed |
+| In-game tests | VB-01 to VB-47 drafted (B7); in-game testing is the user's |
 
 - **Source jars:**
   - Ours: `mods/letsdo-vinery-forge-1.3.10.jar` (Forge 1.19.2, needs `doapi-1.1.0b`). Behaviour reference:
@@ -618,8 +751,11 @@ Test prefix **VB-** · Written **2026-10-14** · Status **migration analysis onl
   - The Java code is **MIT**, so it can be ported.
   - Everything under `src/main/resources/` is **All Rights Reserved**. That covers textures, models, sounds, lang,
     recipes, tags, loot, worldgen and structures.
-  - So a port can't ship upstream's assets or data without permission from Satisfy (D13).
-  - Foundation 1.0.1 also declares "Custom", and its license text hasn't been seen yet.
+  - So a port can't ship upstream's assets or data without permission from Satisfy (D13). Satisfy was asked and
+    refused.
+  - Foundation 1.0.1 has the same split (its `License` file, read 2026-10-18).
+  - **Route chosen (D13 B, B4.8):** the port ships only MIT code and our own files. It reads upstream's assets and
+    data at runtime from the unmodified 1.5.5 and 1.3.10 jars, kept outside `mods/`.
 - **Sizes:**
   - 1.3.10: 11.2k lines.
   - 1.5.5: `core/` 11.2k, `client/` 2.1k. The Fabric layer (0.5k) is a guide only.
@@ -637,6 +773,8 @@ Test prefix **VB-** · Written **2026-10-14** · Status **migration analysis onl
   6. 1.5.5 removes ~25 decoration and utility blocks: stove, kitchen sink, oven, calendar, basket, flower box, flower
      pot, loam, and others.
 - **How to re-read the code:**
+  - 1.5.5 real sources: Modrinth hosts `letsdo-vinery-fabric-1.5.5-sources.jar` next to the jar (B4.8). Port from
+    that, not from the decompile.
   - Old jar: `python3 tools/decompile_mod.py mods/letsdo-vinery-forge-1.3.10.jar <out>`.
   - New jar: zip `DecompiledMods/letsdo-vinery-fabric-1.5.5/net` and run
     `java -jar ~/.cache/ce-tools/vineflower-1.10.1.jar <zip> <out>`. Run the same command on the bundled
@@ -961,9 +1099,10 @@ Both parts are Copyright (c) 2022 Satisfy.
 | `fabric.mod.json` / `mods.toml`, mixin configs, refmaps, `pack.png`, `vinery.accesswidener`, the `bushy_leaves` resource pack | All Rights Reserved (they live in the resources folders) | write our own; they are short |
 
 **What it means for this plan:**
-- The **code side** (B3.1, B4.2 steps 1 to 12, B4.3) is fine as written. That includes the Foundation subset, if
-  Foundation's code is also MIT; Foundation's own `fabric.mod.json` says "Custom" too, and its license text hasn't been
-  seen. Check its repository before porting it.
+- The **code side** (B3.1, B4.2 steps 1 to 12, B4.3) is fine as written. That includes the Foundation subset:
+  Foundation's `License` (github.com/Let-s-Do-Collection/Foundation, `master`, read 2026-10-18) has the same split as
+  Vinery's: `*/src/main/resources/` All Rights Reserved, everything else MIT, Copyright (c) 2024 satisfy. Its
+  `fabric.mod.json` "Custom" means this split.
 - The **resources side** is blocked as written:
   - B4.2 assumes upstream assets get copied, and B3.2 (F1 to F7) converts upstream data files. Both ship All Rights
     Reserved files.
@@ -975,7 +1114,17 @@ Both parts are Copyright (c) 2022 Satisfy.
   noted here only so the question isn't forgotten.
 - doapi 1.1.0b declares `license = "ARR"`. The port no longer needs it, so nothing of doapi gets copied.
 
-This is a reading of the license text, not legal advice. D13 lists the ways forward.
+**Satisfy's answer (asked by the user, noted 2026-10-18):** they refused redistribution of "assets and features".
+- **Assets:** a refusal of option A. B4.8 never copies, changes on disk or repackages an upstream file. Each machine
+  reads the unmodified jars at runtime, the same way any resource pack overrides textures. How those jars reach each
+  machine is D14.
+- **Features:** the MIT grant covers the code as published. A grant on a published version can't be taken back, and
+  game mechanics as such aren't something copyright covers. So the port of the code stands on the license text.
+  It still goes against the author's stated wish. That matters little for a private pack copied by hand and more if the
+  port is ever published (Modrinth, CurseForge, a public jar): then any All Rights Reserved file that slips in is an
+  easy takedown. B6 adds a check that keeps upstream files out of the port.
+
+This is a reading of the license text, not legal advice. D13 lists the ways forward; B was chosen (B4.8).
 
 <details>
 <summary>Full license text (as received)</summary>
@@ -1064,7 +1213,10 @@ game (VB-38) before deciding whether to hide any from the creative tab and JEI. 
 - **Where:** `development/backportedVinery`, a subproject of the root Gradle build (`ce.forge-mod` convention), next to
   `backportedBrewin` and `exposureBackport`.
 - **Ids:** `mod_id=vinery`, so recipes, tags, structures and worlds keep resolving.
-- **Version:** `mod_version=1.5.5-ce-19.2-01`. It replaces `letsdo-vinery-forge-1.3.10.jar` and `doapi-1.1.0b.jar`.
+- **Version:** `mod_version=1.5.5-ce-19.2-01`. It replaces `letsdo-vinery-forge-1.3.10.jar` and `doapi-1.1.0b.jar`
+  in `mods/`. The 1.3.10 jar moves to `vinery_upstream/` as a resource donor (B4.8).
+- **What the jar holds (D13 B):** MIT code ported from upstream, our own code, and small files we write ourselves
+  (shims, `mods.toml`, mixin configs). No upstream asset or data file.
 - **Dependencies:**
   - Required: Forge 43.3.x, Architectury 6.6 (already in the pack). Architectury can be dropped if the port uses
     plain Forge registries.
@@ -1073,6 +1225,8 @@ game (VB-38) before deciding whether to hide any from the creative tab and JEI. 
 
 Build order. Each step should boot before starting the next:
 
+0. **Upstream packs (B4.8):** the jar check, the donor packs and the path and JSON translation. Everything after this
+   step depends on it for its textures and recipes.
 1. **Foundation subset (P1, P7, P9, P21):**
    - Storage blocks and the renderer.
    - Cabinet, chair + seat, table, big table, facing block, window, line-connecting blocks.
@@ -1105,7 +1259,7 @@ Build order. Each step should boot before starting the next:
 7. **Effects** (B2.5, P6). Experience orb mixin, fall-damage / jump mixins, the double-jump client handler.
 8. **Entities and trades:** mule, Wandering Winemaker (spawn via the pack's spawner, I4, I5), villager profession +
    config trades (P16).
-9. **Worldgen** (P15, F7). **Commands** (B2.6). **Data** (F1 to F6). **Config** (P14).
+9. **Worldgen** (P15, F7). **Commands** (B2.6). **Data** (F1 to F6, done in memory by the B4.8 translation). **Config** (P14).
 10. **Client:** renderers (lattice, pot, storage pot, log, bottles, racks, banner), screens, colours, armor models.
     WTHIT lines (D6, B4.6) in place of the info overlay.
 11. **JEI** (I3).
@@ -1144,6 +1298,36 @@ Rows shared with Part A 3.1 (data components, codecs, packets, `c:` tags) apply 
 | Part A 2.7 heat audit | I21 |
 | [vinery.md](vinery.md), [vinery_jei.md](vinery_jei.md), [tooltips.md](tooltips.md) | rewrite vinery.md 2.x for 1.5.5 behaviour once built; retire VJ tests that cover removed pages |
 | Deploy | I26 |
+
+**Outcome (2026-10-18):**
+
+| Item | Result |
+|---|---|
+| I2 | `FermentationBarrelStackOutputMixin` deleted, entry removed from `creativeengineering.mixins.json` |
+| I3 | patcherMod's `VineryJEI` stands down entirely when `net.satisfy.vinery.forge.VineryForge` is present: the port ships all five pages (barrel, both press stages, and its own Grape Stomping and Wine Aging). JEI sort order (`config/jei/` + `configs_edited/root_config/jei/`): the four `creativeengineering:vinery_*` lines became `vinery:wine_fermentation`, `apple_press_mashing`, `apple_press_fermenting`, `grape_stomping`, `wine_aging` (in configs_edited after the Brewin' lines) |
+| I4 | `WinemakerTrades` tries `net.satisfy.vinery.core.entity.WanderingWinemakerEntity` first, then 1.3.10's class; the port keeps the static `TRADES` map. `/dumptrades` (`villager_trades_dump.js`) does the same |
+| I5 | `WinemakerSpawner` reads `config/vinery-common.toml` `[trader] spawnChance` when that file exists, else 1.3.10's json5; CEConfig comment names both |
+| I6 | `StuckInBlock` has a rule for the port's `GrapeBushBlock$TaigaGrapeBush` next to the 1.3.10 one |
+| I7 | unchanged; still VB-27 |
+| I8 | `crop_growth.json`: the 10 `vinery:*_lattice` ids (listed one by one) |
+| I10 | all 144 dict ids still exist (D1/D2). 35 new items added in a block after the vinery section; `vinery_` prefix where a key was taken (`vinery_cherry_cabinet`, `_chair`, `_drawer`, `_shelf`, `_table`) |
+| I11 | no change: the pack only adds `minecraft:barrel` to `vinery:barrel` / `vinery:wooden_barrels`, which still load from 1.3.10's tags |
+| I12 | BlockRunner: racks and lattices with wood, `vinery:*_bag` with the sacks (soft), `dirt_path_slab` with paths, `window_block` with glass |
+| I13 | recipe id `vinery:vinemaker_leggings` -> `vinery:winemaker_leggings` (1.5.5's file name; the result is still `vinery:vinemaker_leggings`) in fabric.js and misc_mods.js |
+| I14 | no change: `apple_crate` is a D2 keeper |
+| I15 | the 10 bags at 1.0 next to the crates. `global.compost` rebuilds the table, so the port's own 0.4 list never fights it; its items already have rows |
+| I16 | no change (D3 keeps trippy) |
+| I17 | the 17 `effect.vinery.*` TODO placeholders removed (they would hide 1.5.5's real descriptions); trippy's description is in the port's lang. `tools/gen_effect_descriptions.py` now also reads the 1.5.5 donor jar and drops placeholders whose effect is gone |
+| I18 | no change (same ids) |
+| I19 | re-diffed: 1.5.5 only lowers `tries` (36 -> 32 or 33) on four bushes; the pack's overrides (soil test) stay as they are |
+| I20 | no change (D2 keeps the flower pot and box) |
+| I21 | no change: 1.3.10's `farmersdelight:heat_sources` tag still loads with the kept stove and oven. The fired stackable log stays a 2.7 candidate |
+| I22 | no change (D1 keeps the wood ids) |
+| I23 | no change: the Vinery lines in tooltips.js are commented-out placeholders |
+| I24 | `tools/placeable_catalog.py` knows the port's `DrinkBlockItem` (sneak to place) |
+| I25 | NOT DONE: rerun the generators and `/dumpall` after the jar swap |
+| I26 | mod_sides row swapped, doapi row removed (nothing else needs doapi: scanned every mods.toml); `vinery_upstream/` deploy category. NOT DONE: the swap in `mods/` (run `./gradlew :patcherMod:installToMods :backportedVinery:installToMods` with the game closed) |
+| Config | none to write: the port's spec defaults are the pack values (aging 16 days per year, 2 years per level, 28.2 h per year; `[winemaker_set]` as today; `trader.spawnChance` 0). Forge writes `config/vinery-common.toml` on first boot. 1.3.10's `config/vinery/config.json5` becomes unused |
 
 ### B4.5 Wine aging revamp: playtime clock (decided 2026-10-14)
 
@@ -1246,6 +1430,20 @@ These go in patcherMod's WTHIT plugin (next to Run Speed and Growth), not Founda
 
 Client settings: a WTHIT toggle per line group, using WTHIT's own config.
 
+**Built 2026-10-18, in the port, not patcherMod:** `net.satisfy.vinery.forge.compat.wthit` (`VineryWthit` common:
+toggles + server data; `VineryWthitClient`: body lines; `waila_plugins.json` in the port jar). The lines need the
+port's block entities and its vintage clock, which patcherMod could only reach by reflection or by compiling against
+our own jar. The D6 decision (WTHIT, not Foundation's overlay) is unchanged.
+- Server data for the barrel (juice, level %, recipe and %, bottles), press (both stages with input and %),
+  stackable log (fire left, cooking %), and storage contents. Storage pots are read from their saved tag, so looking at
+  one never rolls a loot table. Wine age, level and cellar rate are computed on the server.
+- The grapevine pot syncs to clients by itself: grapes x/6, stomps x/needed, the heavy-armor line when the player
+  wears 15+ armor, bottles left.
+- Toggles: `vinery:grapevine_pot`, `fermentation_barrel`, `apple_press`, `storage`, `stackable_log` (WTHIT config,
+  "Vinery" page). Lines reuse upstream's `hud.vinery.*` / `tooltip.vinery.fermentation_barrel.*` strings where they
+  exist; the rest are `wthit.vinery_backport.*` in the port's lang.
+- Not built: "leaves pending" for stems, and the 1.3.10 legacy wine racks (only the port's storage blocks and pots).
+
 ### B4.7 Winemaker set bonus settings (D11, decided 2026-10-14)
 
 `[winemaker_set]` in `vinery-common.toml`:
@@ -1262,9 +1460,146 @@ Client settings: a WTHIT toggle per line group, using WTHIT's own config.
 - The bonus runs only when vanilla returned CONSUME. The refund and the patcherMod charm (I7) must never both apply
   to the same use: the port's mixin marks the use as refunded, and the charm skips it (VB-27).
 
+### B4.8 Upstream jars as resource donors (D13 option B, chosen 2026-10-18)
+
+**The user's plan:** ship the unmodified 1.5.5 jar with the pack even though it can't run on 1.19.2, and have the port
+read its assets and data from that jar. **Verdict: feasible.** Checked 2026-10-18 against
+`~/Downloads/letsdo-vinery-fabric-1.5.5.jar`, its extracted copy in `DecompiledMods/` and the 1.19.2 client jar.
+
+**Findings**
+
+| Question | Answer |
+|---|---|
+| Can the 1.5.5 jar sit in `mods/`? | No. FML 43.3.9 (`AbstractModProvider.createMod`) takes a jar only with `META-INF/mods.toml` or an `FMLModType` manifest entry. The Fabric jar has neither, so FML rejects it as an invalid mod file. It goes in its own folder, `vinery_upstream/` (name not final) |
+| And the 1.3.10 jar? | It leaves `mods/` too: its mod id `vinery` collides with the port. It becomes a second donor (next rows) |
+| Do 1.5.5's models load on 1.19.2? | Yes, nearly as they are. Every vanilla parent and texture the 418 models name exists in 1.19.2. `render_type` (6 models) is supported by Forge 43. No 1.21-only model keys, no custom loaders. Blockstates are plain `variants` / `multipart` |
+| What do the models need from elsewhere? | 7 `foundation:block/template_*` parents, which come from the Foundation jar nested at `META-INF/jars/foundation-fabric-1.0.1.jar` (89 asset files). 21 references point to Vinery files that don't exist; they're broken in 1.5.5 too |
+| Does 1.5.5 art cover every block we keep (D1, D2)? | Not all of it. Of 51 blockstates only 1.3.10 has, 20 `cherry_*` blocks have 1.5.5 art under `dark_cherry_*` (alias). The other 31 (stove, kitchen sink, oven, calendar, basket, flower box and pot, loam set, old chair / table / big table / shelf / barrel / crates, `wine_press`, `wine_rack_1` to `_5`, old juice bottles, praetorian / king danis, `vinery_vine`, `grapevine_lattice`, `cooking_pot`) exist only in the 1.3.10 jar |
+| Data | 147 recipes: 116 vanilla crafting and 1 smithing transform need F2 / F5; the 30 Vinery-type recipes are read by the port's own serializers, which can take the 1.21 shape directly. 109 loot tables (6 with 1.21 `match_tool` predicates, F6), 70 advancements (F4), 30 Vinery tags + 46 other-namespace tags (F1, F3). 1.3.10's 373 data files would clash or fail to parse under the new recipe types, so only an allow-list (the D2 keepers' recipes and loot) is read from it |
+| Which machines need the jars? | Both. Clients for assets, the server (and every single-player world) for data |
+| Is the source on hand? | Modrinth version `PDi0T5xs` (project `1DWmBJVA`) is the same file (sha1 `9d4c7646b91219a75a432b6dea1d7a7c41faaaec`) and has a `-sources.jar` with the real MIT sources. The 1.3.10 jar (sha1 `fbbd4ae7c10a9d0aa13819e09b70167f3b4ff81c`) isn't on Modrinth; CurseForge only |
+
+**Design**
+
+- **Packs:** the port adds packs in `AddPackFindersEvent` for `CLIENT_RESOURCES` and `SERVER_DATA`: required, fixed,
+  position bottom. Resource packs, KubeJS (`kubejs/data/vinery/worldgen/configured_feature/*`) and datapacks still
+  override them.
+- **Layers, top first:**
+  1. The port's own files: shims we write (the 20 `cherry_*` -> `dark_cherry_*` blockstates and item models) and any
+     data we decide to write ourselves.
+  2. The 1.5.5 jar.
+  3. Foundation, opened straight from the nested jar (a zip file system inside the zip, no extraction).
+  4. The 1.3.10 jar: all assets, data only through the allow-list.
+  Lang merges across the layers by key, as it does across resource packs. 1.5.5 names win, and 1.3.10 fills in the
+  keepers.
+- **Translation layer:** one `PackResources` (1.19.2 `AbstractPackResources`) over each jar's zip file system.
+  - Maps 1.19.2 paths to the 1.21 ones (F1: `recipes/` -> `recipe/` and the rest), both for single lookups and for
+    `getResources` listings.
+  - Rewrites JSON as it reads it (F2 to F6). The result is kept in memory, so each file is converted once per reload.
+  - Supplies its own pack metadata (resource format 9, data format 10). Nothing is ever written to disk.
+- **Pinned input:** the port checks both jars' sha1 on startup. Missing or different -> it stops with a message naming
+  the file, the folder and the download page (a client error screen, a server log line before the world loads). A
+  silent start would leave a server with no Vinery recipes or loot. The pin also means the translation only ever sees
+  one known input, so it doesn't need to handle any other upstream version.
+- **Worldgen stays inside 1.19.2's feature set (user, 2026-10-18):** no new worldgen code is backported. A 1.20+ type
+  in upstream worldgen data is rewritten to the nearest 1.19.2 vanilla type. The only one is
+  `minecraft:cherry_foliage_placer` (dark cherry and apple trees) -> `minecraft:fancy_foliage_placer` with the same
+  `radius`, `offset` and `height` (it pairs with their `fancy_trunk_placer`, like vanilla's big oak); the hole and
+  hanging-leaf chances are dropped. Biome placement uses 1.3.10's own `forge/biome_modifier` files (1.3.10 ids, so
+  `wild_crops.json` keeps matching), which point at the same placed features 1.5.5 has.
+- **Optional:** 1.5.5's built-in `resourcepacks/bushy_leaves` can be offered as an optional resource pack from the same
+  jar.
+
+**What changes in the plan**
+
+- B4.2 step 0 (above) comes first. The old "copy upstream assets into the port" assumption is gone.
+- F1 to F6 (B3.2) are the same rules but run in Java at load time instead of in a build script like Backported
+  Brewin's `port_resources.py`. Estimate: 1 to 1.5k lines for the packs, the translation and the check.
+- Deploy (deploy.md): a `vinery_upstream/` category in `build_deploy.py`, `verify.sh` / `.ps1` hash lines, mod_sides
+  rows for both jars, and removal of the 1.3.10 and doapi jars from `mods/`. The rest depends on D14.
+
+**Risks**
+
+- **Author relations:** see B3.6. The plan stays inside the license texts, not inside the author's wish.
+- **Leaks into the port:** an upstream file copied into `src/main/resources` by habit would break D13 B. B6 adds a
+  build check against both jars.
+- **Dangling and missing art:** the 21 dangling references and any keeper without art show the missing texture. The
+  first boot will list them in the log (B7 VB-42).
+
+### B4.9 Port status (2026-10-18)
+
+`development/backportedVinery` (Gradle `:backportedVinery`, jar `backportedVinery-1.5.5-ce-19.2-01.jar`). Compiles; not
+booted yet.
+
+- **Sources:** 1.5.5's real sources (Modrinth `-sources.jar`), Foundation 1.0.1 from its GitHub tag `v1.0.1-1.21.1`,
+  the 1.3.10 decompile for the D2 keepers. Kept in `DecompiledMods/` (`vinery-1.5.5-src`, `foundation-1.0.1-src`,
+  `vinery-1.3.10-src`).
+- **Tools:** `tools/port_java.py` (first mechanical 1.21 -> 1.19.2 pass, copies only files the port doesn't have),
+  `tools/port_fixups.py` (second pass, in place), `tools/gen_at.py` (unused so far: no access transformer needed).
+- **Layout:** `net.satisfy.foundation` (own mod id `foundation` in the same jar, so its ids stay upstream's),
+  `net.satisfy.vinery.core|client|api` (1.5.5), `net.satisfy.vinery.legacy` (1.3.10 keepers),
+  `net.satisfy.vinery.forge` (entry, config, events, villagers, network, client, `upstream/` = B4.8).
+- **Port decisions (1.19.2 forced a different shape):**
+  - Blocks keep upstream's `useItemOn` / `useWithoutItem`; `foundation.util.ItemInteractionResult.dispatch` routes
+    1.19.2's single `use` through them in 1.21's order.
+  - Recipe inputs are small `SimpleContainer`s; the serializers read upstream's 1.21 JSON (`"id"` or `"item"` stacks).
+  - Effects: UUID attribute modifiers, one stable UUID per upstream id. Jellie adds its absorption on start and takes
+    it back on end (1.21's start / add pair cancelled out).
+  - Storage aging hooks: a listener on Foundation's storage block entity instead of upstream's mixin.
+  - Mixins avoid local capture: grass-to-slab spreading wraps the loop's block lookup; the experience effect modifies
+    the call argument.
+  - `FireBlock#setFlammable` and `GameRenderer#loadEffect` (trippy) are called by SRG name (no access transformer).
+  - Signs: block entity `vinery:mod_sign`; old 1.3.10 signs keep `minecraft:sign`. Wood type name `vinery:dark_cherry`
+    (1.5.5's sign and boat textures). Chest boat built on vanilla `ChestBoat`. Boats placed in 1.3.10 worlds
+    (`doapi:boat` entities) are lost with doapi.
+  - Press block entity id is 1.3.10's `wine_press`: old presses load straight into the new one (W4).
+  - Barrel: a 1.3.10 barrel (no `FluidLevel` key) converts on load per W3.
+  - Winemaker job site: the Aging Barrel (1.5.5); 1.3.10's was the wine press.
+  - Port-only text lives in `assets/vinery_backport/lang/` (keys are global; the path never matches upstream's).
+- **Open decisions built with the recommendation:** D3 (trippy kept as a client post shader, `improved_*` remapped
+  to vanilla), D4 (1.5.5 effect list, plus praetorian Glowing and king danis Instant Health), D5 (1.5.5 numbers;
+  aging per B4.5), D7 (Foundation bundled), D8 (no village houses), D9 (no hanging sign), D10 (rotten cherry kept,
+  setting `rottenCherryChance` 0.15), D12 (bamboo racks / lattice from `quark:bamboo_planks`).
+- **Done since (2026-10-18):** W2, W3, W4, W6, W8 to W10; praetorian / king danis barrel recipes
+  (`data/vinery/recipes/port/`); WTHIT lines (B4.6); pack-side changes (B4.4 outcome table); deploy category.
+- **Fixes found by review, no boot yet:**
+  - `mods.toml` declared only `vinery`. Foundation is a second `@Mod`, and FML rejects an `@Mod` class with no entry,
+    so the game would not have started. Added `[[mods]] foundation` and a vinery -> foundation dependency.
+  - Advancements: 1.21's location predicate `"biomes"` (also inside `entity_properties`) is now rewritten to 1.19.2's
+    `"biome"`. Without that, `fruits_of_the_field` fired in any biome.
+- **Data survey (2026-10-18):** every type, function, condition and trigger in 1.5.5's and Foundation's data was listed
+  against what the translator handles. Nothing else needs 1.21 features. No Fabric or NeoForge load conditions, no
+  item components. The 1.3.10 biome modifiers name placed features that exist in 1.5.5. The port registers every
+  1.5.5 id through the B4.1 map.
+- **First boot (2026-10-18, user):** crashed during mod construction: `FoxEatBerriesGoalMixin` shadowed the inner
+  class's synthetic outer field as `this$0` with `remap = false`. That name only exists in dev mappings; in SRG the
+  field is `f_28672_`, so Mixin threw `InvalidMixinException`. Fixed by dropping the shadow and casting the inherited
+  `MoveToBlockGoal.mob` (`f_25598_`, remapped normally) to `Fox`. Rebuilt and copied into `mods/`. No other port
+  mixin uses `remap = false` or synthetic names. Rule for later ports: never shadow `this$0`/`val$x`; use a mapped
+  field or an accessor.
+- **Second boot (2026-10-18, user):** `LegacyFlowerPotBlock` (1.3.10 keeper) threw an NPE in its static init, which
+  aborted block registration; the IE / salt / geode / fireflybushport "Registry Object not present" errors after it
+  were knock-on. The decompile declared `SHAPE = voxelShapeSupplier.get()` above the supplier (static fields
+  initialise in source order). Moved `SHAPE` below it. A scan of the whole port for static forward references found
+  no other case.
+- **Third boot (2026-10-18, scratch client, main menu only):** reaches the main menu with no Vinery/Foundation errors.
+  Only Vinery lines: first-boot `vinery-common.toml` corrections, and 4 `#missing` texture references in upstream
+  1.5.5's own models (`stal_wine`, `aegis_wine`, `strad_wine`, `glowing_wine`: faces point at an undefined
+  `#missing`; 1.3.10's models don't). Cosmetic; a port-written model override would fix it.
+- **Fourth boot (2026-10-18, user, world `Workspace`):** "Failed to load datapacks": `Unbound values in registry
+  worldgen/configured_feature: [vinery:apple]`. 1.5.5's `apple` / `apple_variant` tree configs carry a stale
+  `sapling_provider` naming `vinery:apple_sapling`; the port's sapling is `apple_tree_sapling`, so `keep()` dropped
+  both files (DEBUG line only) and `placed_feature/tree_apple` pointed at nothing. 1.19.2's `TreeConfiguration` has no
+  `sapling_provider`, so `convertWorldgen` now strips it from tree configs. Dropped worldgen / biome-modifier files
+  now log at WARN. The other 5 dropped files are the expected cherry-wood and hanging-sign recipes.
+- **Not done yet:** a world join and the VB- tests (the user's); I25 reruns; stem "leaves pending" line.
+
 ## B5. Decisions (recommendation first; DECIDED ones say so)
 
-### B5 D13. Upstream resources are All Rights Reserved (decide first)
+### B5 D13. Upstream resources are All Rights Reserved (DECIDED 2026-10-18: B, see B4.8)
+
+Option A was tried: Satisfy refused redistribution of assets and features (B3.6). The user chose B: the pack comes
+with the unmodified upstream jar, and the port reads it. How the jar gets onto each machine is D14.
 
 B3.6 explains why. The code can be ported; the textures, models, lang and data files can't be shipped as they are.
 
@@ -1294,6 +1629,22 @@ B3.6 explains why. The code can be ported; the textures, models, lang and data f
   - Bring over only behaviour that needs no new assets, using patcherMod mixins: barrel juice level, press stages, wine
     aging rules, effect changes.
   - New blocks (lattices, racks, bags, cabinet, banner) and the new effects' icons would be left out.
+
+### B5 D14. How the upstream jars reach each machine (DECIDED 2026-10-18: B for now, A on publish)
+
+The user's call: for now both jars travel in the deploy payload (B). When the pack is published, each machine
+downloads them from the official pages instead (A).
+
+Both jars go in `vinery_upstream/` on every client and the server (B4.8).
+
+- **A (recommended): each machine downloads them from the official pages.**
+  - `verify.sh` / `.ps1` (or a small fetch step in the runbook) downloads the 1.5.5 jar from the Modrinth CDN
+    (`https://cdn.modrinth.com/data/1DWmBJVA/versions/PDi0T5xs/letsdo-vinery-fabric-1.5.5.jar`) and checks the sha1.
+    The 1.3.10 jar comes from CurseForge, which has no stable direct link, so that one is a manual download.
+  - The pack never passes on a copy of the author's files, which is what their refusal was about.
+- **B: put both jars in the deploy payload, like every other jar.**
+  - Simplest. Today the pack already copies the 1.3.10 jar by hand.
+  - It is a copy of their files to other machines, which is closer to what they refused.
 
 ### B5 D1. Cherry wood ids (DECIDED 2026-10-14: keep `cherry_*`)
 
@@ -1393,7 +1744,13 @@ The decision goes further than the recommendation below: blocks that have a 1.5.
 
 ## B6. Offline checks
 
-None yet. Once built:
+- **Clean port (D13 B): BUILT.** `checkNoUpstreamResources` in the port's build.gradle fails the build if any file
+  under `src/main/resources` has a path that is in an upstream jar. Passes.
+- **Data survey: DONE 2026-10-18 (B4.9).** It replaces the dry run below for now.
+- **Deploy check: BUILT.** `build_deploy.py` refuses to stage while the port is in `mods/` and a `vinery_upstream/`
+  jar is missing or has another sha1 than `UpstreamJars.java` pins.
+- **Translation dry run:** a headless test that opens both jars through the B4.8 packs and parses every converted
+  recipe, loot table, advancement and tag with 1.19.2's own parsers; it lists anything that fails.
 - A script that compares the port's `data/vinery/` tree against 1.5.5's after the F1 to F3 renames and the B4.1 id
   map. It should report only the D-decision deviations.
 - An id audit: every id in `kubejs/exported/items_by_mod/vinery.json` (1.3.10) is registered in the port or appears in
@@ -1401,7 +1758,28 @@ None yet. Once built:
 - A scratch-server boot on a copy of a world with 1.3.10 Vinery blocks placed (scratch-server memory). Grep the log
   for missing mappings and unknown block entities.
 
-## B7. In-game test suite (drafted, run once built)
+## B7 Changes to make
+
+- jei
+  - add input fluid item in input slot for fermentation barrel
+  - expand fluid bar hover text to cover entire bar even when partially full on fermentation barrel
+- apple press
+  - only allow valid items in each 2nd input slot (apple, honeycomb for left, wine bottle, bottle for right)
+- merge effects
+  - luck
+  - resistance
+  - health effect?
+- shuffle wine effects, integrate w/ fruits delight and other existing mod effects
+  - fall back to default (alt for removed/merged effects) when other mods not added
+- add providers to wine effects
+- remove mead, brewin covers mead
+- change completion banner effect to health boost, configurable
+- merge vinery calendar w/ serene seasons
+  - ensure season, custom day length, and vinery age all work off the same scale. set all time values in one file sleeping should speed up wine age. 
+  - rename wine 'year' description to month everywhere
+  - +1 level every 2 months, 2.5x age in the dark
+
+## B8. In-game test suite (drafted, run once built)
 
 - [ ] **VB-01 Juice into barrel:** 4 red grape juice in slot 0 -> gauge 100, 4 wine bottles in slot 4
 - [ ] **VB-02 One juice type:** barrel holding red juice, put white juice in slot 0 -> it stays in the slot
@@ -1430,7 +1808,7 @@ None yet. Once built:
 - [ ] **VB-25 Party:** lilitu wine, hit a zombie -> firework at the target
 - [ ] **VB-26 Banner:** wine_somelier advancement gives 2 banners; standing within 8 blocks gives Regeneration II
 - [ ] **VB-27 Winemaker set and charm:** full set + bone meal -> bone meal kept, 30% of uses damage all 4 pieces by 1; set + bonemeal charm -> exactly one refund
-- [ ] **VB-28 JEI:** barrel, press mashing and press fermenting pages from the port; stomping and aging from patcherMod; no duplicates
+- [ ] **VB-28 JEI:** all five Vinery pages (barrel, press mashing, press fermenting, grape stomping, wine aging) come from the port, in that order after Brewin's; none of patcherMod's `creativeengineering:vinery_*` pages
 - [ ] **VB-29 Old world: ids kept:** a 1.3.10 world with cherry blocks, crates, wine_press, juice bottles, vinemaker armor, stove, sink, flower box -> all present under the same ids; nothing in the missing-mappings log except effects
 - [ ] **VB-30 Old world: storage:** 1.3.10 wine racks, shelves and placed wine bottles keep their bottles
 - [ ] **VB-31 Old world: barrel and wines:** 1.3.10 barrel with juice and bottles converts per W3; an old 2-year wine shows its age, not "brewed in the future"
@@ -1443,8 +1821,15 @@ None yet. Once built:
 - [ ] **VB-38 Old and new blocks side by side:** place old chair / table / crate / barrel / wine_rack_1 next to their new counterparts -> both work; note any look-alikes to hide
 - [ ] **VB-39 WTHIT lines:** look at a pot mid-stomp, a barrel mid-ferment, a press, a rack of wines in a cellar -> lines per B4.6
 - [ ] **VB-40 Winemaker set settings:** `damageMode = NONE` -> 50 bone meal uses, no durability lost; `ONE_PIECE` + `damageAmount 3` -> one piece loses 3 per damaging use
+- [ ] **VB-41 Upstream jar check:** remove `vinery_upstream/letsdo-vinery-fabric-1.5.5.jar` -> client and server both stop with the file name and download page; a renamed or different jar is refused the same way
+- [ ] **VB-42 Missing art sweep:** first boot, grep the log for missing models and textures under `vinery:` and `foundation:` -> only the 21 known upstream dangling references (B4.8)
+- [ ] **VB-43 Donor layering:** stove, kitchen sink and flower box show their 1.3.10 art; `cherry_planks` shows the 1.5.5 dark-cherry art; the lang says "Dark Cherry"
+- [ ] **VB-44 Overrides still win:** the pack's `kubejs/data/vinery/worldgen/configured_feature/*` grape-bush configs are the ones in use (`/dumpall` or a locate), not upstream's
+- [ ] **VB-45 Boots:** client and dedicated server start with the port and both mod ids (`vinery`, `foundation`) in the mod list; log has `[vinery-upstream] N data files ...` and no `vinery` / `foundation` errors
+- [ ] **VB-46 Plains advancement:** `fruits_of_the_field` is granted on entering plains, not in other biomes
+- [ ] **VB-47 WTHIT config:** the WTHIT config has a Vinery page with 5 toggles; turning one off hides only its lines; a fresh storage pot in a structure shows nothing and still has its loot when opened
 
-## B8. History
+## B9. History
 
 - 2026-10-14: migration analysis of Vinery 1.3.10 (Forge) -> 1.5.5 (Fabric 1.21.1) from decompiles of both jars and
   of Foundation 1.0.1. 75 issues in B3, 12 decisions open in B5, VB-01 to VB-32 drafted.
@@ -1467,3 +1852,18 @@ None yet. Once built:
     Better Days, and ages that re-scale when the settings change (B4.5). Lengths are unchanged for now
     (16 days per year, 2 years per level, about 28.2 h per year).
   - Tests VB-33 to VB-40 added; VB-20, VB-27 and VB-29 updated.
+- 2026-10-18: Satisfy refused redistribution of assets and features (B3.6). The user chose D13 B: ship the
+  unmodified upstream jar and have the port read it. Feasibility checked (B4.8):
+  - FML 43 rejects the Fabric jar in `mods/`, so both upstream jars go in their own folder.
+  - 1.5.5's 418 models need nothing from 1.21; their only outside parents are Foundation templates in the nested jar.
+  - 31 kept blocks need the 1.3.10 jar as a second donor; 20 `cherry_*` need an alias to `dark_cherry_*`.
+  - Data needs F1 to F6 in memory.
+  - Foundation's license is the same split as Vinery's.
+  - Modrinth hosts the same 1.5.5 jar and its sources.
+  Added D14 (how the jars reach each machine), B6 checks, VB-41 to VB-44.
+- 2026-10-18: implemented. D14 decided (upstream jars in the deploy payload for now, downloaded from source on
+  publish). User: wrap 1.20+ worldgen into 1.19.2's types, no worldgen backports (cherry foliage placer -> fancy).
+  The port builds (B4.9). Pack-side changes done (B4.4 outcome table). WTHIT lines built in the port (B4.6). Deploy
+  category and mod_sides done. Review fixes without a boot: missing `foundation` mods.toml entry (would not start),
+  advancement biome predicate. The jar swap in `mods/` waits for the game to be closed. Tests VB-45 to VB-47 added;
+  VB-28 updated.

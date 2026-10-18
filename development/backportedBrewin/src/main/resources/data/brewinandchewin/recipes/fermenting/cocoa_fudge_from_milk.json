@@ -1,0 +1,29 @@
+{
+  "type": "brewinandchewin:fermenting",
+  "base_fluid": {
+    "amount": 500,
+    "ingredient": {
+      "tag": "#forge:milk"
+    },
+    "unit": "millibuckets"
+  },
+  "category": "meals",
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    []
+  ],
+  "result": {
+    "item": "brewinandchewin:cocoa_fudge"
+  },
+  "temperature": 2,
+  "unit": "millibuckets"
+}

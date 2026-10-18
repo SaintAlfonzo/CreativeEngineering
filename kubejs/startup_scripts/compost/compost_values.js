@@ -682,6 +682,16 @@
 		[i.cherry_crate,                        1.0],
 		[i.red_grape_crate,                     1.0],
 		[i.white_grape_crate,                   1.0],
+		[i.apple_bag,                           1.0],
+		[i.cherry_bag,                          1.0],
+		[i.red_grape_bag,                       1.0],
+		[i.white_grape_bag,                     1.0],
+		[i.red_jungle_grape_bag,                1.0],
+		[i.white_jungle_grape_bag,              1.0],
+		[i.red_savanna_grape_bag,               1.0],
+		[i.white_savanna_grape_bag,             1.0],
+		[i.red_taiga_grape_bag,                 1.0],
+		[i.white_taiga_grape_bag,               1.0],
 	])
 
 	// ── other (154) ───────────────────────────────────────────────────────────────────

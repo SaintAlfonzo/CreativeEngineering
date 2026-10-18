@@ -162,6 +162,20 @@ public final class WinemakerSpawner {
     private static void warnIfVinerySwapsTraders() {
         CEConfig.WanderingTrader cfg = CEConfig.WANDERING_TRADER;
         if (!cfg.enabled.get() || !cfg.winemakerEnabled.get()) return;
+        // the Vinery backport (vinery-common.toml [trader] spawnChance), else 1.3.10 (config/vinery/config.json5)
+        Path toml = FMLPaths.CONFIGDIR.get().resolve("vinery-common.toml");
+        try {
+            if (Files.exists(toml)) {
+                Matcher t = Pattern.compile("(?s)\\[trader\\].*?spawnChance\\s*=\\s*([0-9.]+)").matcher(Files.readString(toml));
+                if (t.find() && Double.parseDouble(t.group(1)) > 0) {
+                    LOG.warn("[trades] {} has [trader] spawnChance {}: Vinery still swaps that share of Wandering Trader"
+                            + " spawns for Winemakers on top of the separate Winemaker spawner. Set it to 0.", toml, t.group(1));
+                }
+                return;
+            }
+        } catch (Exception e) {
+            LOG.debug("[trades] could not read {}: {}", toml, e.toString());
+        }
         Path file = FMLPaths.CONFIGDIR.get().resolve("vinery/config.json5");
         try {
             if (!Files.exists(file)) return;

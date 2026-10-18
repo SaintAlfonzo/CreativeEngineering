@@ -21,7 +21,8 @@ import org.slf4j.Logger;
 public final class WinemakerTrades {
 
     private static final Logger LOG = LogUtils.getLogger();
-    private static final String CLASS = "satisfyu.vinery.entity.WanderingWinemakerEntity";
+    /** The Vinery backport's class first, then 1.3.10's. */
+    private static final String[] CLASSES = {"net.satisfy.vinery.core.entity.WanderingWinemakerEntity", "satisfyu.vinery.entity.WanderingWinemakerEntity"};
 
     private static VillagerTrades.ItemListing[] original;
     private static final List<VillagerTrades.ItemListing> extra = new ArrayList<>();
@@ -59,11 +60,15 @@ public final class WinemakerTrades {
 
     @SuppressWarnings("unchecked")
     private static Map<Integer, VillagerTrades.ItemListing[]> trades() {
-        try {
-            return (Map<Integer, VillagerTrades.ItemListing[]>) Class.forName(CLASS).getField("TRADES").get(null);
-        } catch (ReflectiveOperationException | ClassCastException | LinkageError e) {
-            LOG.warn("[trades] Wandering Winemaker pool not reachable ({}); Vinery missing or changed", e.toString());
-            return null;
+        Throwable last = null;
+        for (String name : CLASSES) {
+            try {
+                return (Map<Integer, VillagerTrades.ItemListing[]>) Class.forName(name).getField("TRADES").get(null);
+            } catch (ReflectiveOperationException | ClassCastException | LinkageError e) {
+                last = e;
+            }
         }
+        LOG.warn("[trades] Wandering Winemaker pool not reachable ({}); Vinery missing or changed", String.valueOf(last));
+        return null;
     }
 }

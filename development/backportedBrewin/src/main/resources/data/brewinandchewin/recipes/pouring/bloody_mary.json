@@ -1,0 +1,11 @@
+{
+  "type": "brewinandchewin:keg_pouring",
+  "fluid": {
+    "amount": 250,
+    "id": "brewinandchewin:bloody_mary"
+  },
+  "output": {
+    "item": "brewinandchewin:bloody_mary"
+  },
+  "unit": "millibuckets"
+}

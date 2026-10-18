@@ -1,0 +1,23 @@
+{
+  "_comment": "Port (D2): 1.3.10's praetorian wine (white juice, glow berries, sugar) in 1.5.5's juice format.",
+  "type": "vinery:wine_fermentation",
+  "juice": {
+    "type": "white_general",
+    "amount": 15
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:glow_berries"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "wine_bottle": {
+    "required": true
+  },
+  "result": {
+    "id": "vinery:praetorian_wine",
+    "count": 1
+  }
+}

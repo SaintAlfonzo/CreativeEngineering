@@ -13,7 +13,7 @@
     { "blocks": ["vinery:red_grape_bush", "vinery:white_grape_bush", "vinery:savanna_grape_bush_*", "vinery:taiga_grape_bush_*"], "harvest": 2 },
     { "blocks": ["vinery:jungle_grape_bush_*"] },
     { "blocks": ["vinery:grapevine_stem"], "empty": 0 },
-    { "blocks": ["vinery:grapevine_lattice"], "empty": 0, "harvest": 3 },
+    { "blocks": ["vinery:grapevine_lattice", "vinery:oak_lattice", "vinery:spruce_lattice", "vinery:birch_lattice", "vinery:jungle_lattice", "vinery:acacia_lattice", "vinery:dark_oak_lattice", "vinery:mangrove_lattice", "vinery:cherry_lattice", "vinery:bamboo_lattice"], "empty": 0, "harvest": 3 },
 
     { "blocks": ["floralench:*_bush"], "harvest": 2 },
 
