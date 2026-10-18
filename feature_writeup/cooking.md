@@ -133,7 +133,7 @@
             - merge any duplicate teas?
             - add create mixing recipes, more expensive than manual
             - prevent upgrading teas (melon juice + honey) from throwing bottle for input tea (only 1 thrown for melon juice + honey), and remove bottle plating requirement from these recipes
-            - integrate with later bottle/bowl output buffer system?
+            - integrate with later bottle/bowl output buffer system? (feasibility: [remainder_buffer.md](remainder_buffer.md); the recycle step plates the upgraded tea with its own returned bottle)
             - tooltips, fluid effect duration tooltip
         - berry matcha
             - integrate w/ farmers respite
@@ -250,6 +250,7 @@
         - add storage to corner cabinets
     - stove
         - bottle/bucket output slot for ingredient inputs in upgraded cooking pot?
+            - feasibility + design: [remainder_buffer.md](remainder_buffer.md)
     - sink
         - doesnt provide water?
         - rework to act like well?
