@@ -10,12 +10,15 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.EmptyPoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,11 +30,13 @@ import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -52,6 +57,12 @@ import java.util.regex.Pattern;
  *     your current/enabled edits kept, pieces that vanished kept only if you had edited them);
  *  2. resolves pool_tags.json (same value syntax as structure_tags.json) into per-piece multipliers;
  *  3. rebuilds every pool whose weights changed, and writes pool_tag_report.md.
+ *
+ * Pool order: the pools reach this event in an order that changes from one JVM run to the next (some mod rebuilds
+ * them through an identity-hashed collection; the 10 versions of pool_tag_report.md in git list the desert houses in
+ * 9 orders), and jigsaw picks a piece by its index in the pool's list, so a seed's villages came out different
+ * after each restart (testing/structures/05_phase_5.md 3.3). With [worldgen.pools] canonicalOrder (default) every
+ * pool is sorted by piece key, a stable order, before anything else.
  *
  * Singleplayer caveat handled here: builtin pools (vanilla + everything mods inject into them) are
  * the same Java objects in every world you open in one game session, and several mods append their
@@ -78,6 +89,7 @@ public final class PoolTuner {
 	private static final Field MAX_SIZE = field(StructureTemplatePool.class, "f_210562_", "maxSize");
 	private static final Field FALLBACK = field(StructureTemplatePool.class, "f_210561_", "fallback");
 	private static final Field LIST_ELEMENTS = field(ListPoolElement.class, "f_210360_", "elements");
+	private static final Field PROCESSORS = holderField(SinglePoolElement.class);
 
 	/** SRG name in the game; the Mojmap name when run headless against the mapped jar (tests). */
 	private static Field field(Class<?> c, String srg, String mojmap) {
@@ -92,6 +104,17 @@ public final class PoolTuner {
 				throw new IllegalStateException("PoolTuner: no field " + srg + "/" + mojmap + " on " + c.getName(), e);
 			}
 		}
+	}
+
+	/** The one Holder field of the class (SinglePoolElement#processors), found by type so no SRG name is needed. */
+	private static Field holderField(Class<?> c) {
+		for (Field f : c.getDeclaredFields()) {
+			if (f.getType() == Holder.class && !java.lang.reflect.Modifier.isStatic(f.getModifiers())) {
+				f.setAccessible(true);
+				return f;
+			}
+		}
+		throw new IllegalStateException("PoolTuner: no Holder field on " + c.getName());
 	}
 
 	/** First-seen weights per pool object, plus the list we last wrote into it (see class doc). */
@@ -137,6 +160,11 @@ public final class PoolTuner {
 	public static void onServerAboutToStart(ServerAboutToStartEvent event) {
 		LootContainerSwaps.load();
 		try {
+			rebindProcessors(event.getServer().registryAccess());
+		} catch (Throwable t) {
+			LOG.error("[pool-tuning] processor lists not rebound; pieces added in code may be dropped when a chunk reloads", t);
+		}
+		try {
 			Registry<StructureTemplatePool> registry = event.getServer().registryAccess().registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY);
 			run(registry);
 		} catch (Throwable t) {
@@ -144,11 +172,51 @@ public final class PoolTuner {
 		}
 	}
 
+	/**
+	 * Pieces that mods add in code (Cloud Storage and Domestication Innovation houses in the five village house pools)
+	 * carry the builtin ProcessorLists holder, which the world's registry codec rejects: saving a structure_starts
+	 * chunk logs "Element ... minecraft:empty is not valid in current registry set" and writes the piece as {}, and
+	 * the reload drops it ("Invalid pool element found") before the village is placed (05_phase_5.md 3.2). Every
+	 * pool piece whose processor list isn't the world's own gets the world's holder of the same key. A list the
+	 * world doesn't have is left alone and counted.
+	 */
+	static void rebindProcessors(RegistryAccess access) throws IllegalAccessException {
+		Registry<StructureProcessorList> lists = access.registryOrThrow(Registry.PROCESSOR_LIST_REGISTRY);
+		Set<StructurePoolElement> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+		int[] counts = new int[2];   // rebound, unknown
+		for (StructureTemplatePool pool : access.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)) {
+			for (Pair<StructurePoolElement, Integer> pair : rawTemplates(pool)) rebind(pair.getFirst(), lists, seen, counts);
+			Object live = TEMPLATES.get(pool);
+			if (live instanceof List<?> elements) for (Object el : elements) if (el instanceof StructurePoolElement e) rebind(e, lists, seen, counts);
+		}
+		if (counts[0] > 0 || counts[1] > 0)
+			LOG.info("[pool-tuning] {} pool piece(s) moved to the world's processor lists; {} name a list the world doesn't have", counts[0], counts[1]);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void rebind(StructurePoolElement element, Registry<StructureProcessorList> lists, Set<StructurePoolElement> seen, int[] counts)
+			throws IllegalAccessException {
+		if (!seen.add(element)) return;
+		if (element instanceof ListPoolElement list) {
+			for (StructurePoolElement sub : (List<StructurePoolElement>) LIST_ELEMENTS.get(list)) rebind(sub, lists, seen, counts);
+			return;
+		}
+		if (!(element instanceof SinglePoolElement single)) return;
+		Holder<StructureProcessorList> holder = (Holder<StructureProcessorList>) PROCESSORS.get(single);
+		if (holder == null || holder.kind() != Holder.Kind.REFERENCE || holder.isValidInRegistry(lists)) return;
+		Optional<Holder<StructureProcessorList>> own = holder.unwrapKey().flatMap(lists::getHolder);
+		if (own.isPresent()) {
+			PROCESSORS.set(single, own.get());
+			counts[0]++;
+		} else counts[1]++;
+	}
+
 	static synchronized void run(Registry<StructureTemplatePool> registry) throws Exception {
 		List<String> errors = new ArrayList<>();
 		List<String> warnings = new ArrayList<>();
 
 		// ── discover ─────────────────────────────────────────────────────────
+		boolean canonical = WorldgenConfig.poolCanonicalOrder();
 		Map<String, PoolInfo> pools = new TreeMap<>();
 		for (Map.Entry<ResourceKey<StructureTemplatePool>, StructureTemplatePool> e : registry.entrySet()) {
 			StructureTemplatePool pool = e.getValue();
@@ -156,7 +224,9 @@ public final class PoolTuner {
 			Object fb = FALLBACK.get(pool);
 			PoolInfo info = new PoolInfo(id, pool, fb == null ? "" : fb.toString(), rawTemplates(pool));
 			Map<String, Integer> seen = new LinkedHashMap<>();
-			for (Pair<StructurePoolElement, Integer> pair : baseline(pool, info.live)) {
+			List<Pair<StructurePoolElement, Integer>> base = baseline(pool, info.live);
+			if (canonical) base = canonical(base);
+			for (Pair<StructurePoolElement, Integer> pair : base) {
 				String key = elementKey(pair.getFirst());
 				int n = seen.merge(key, 1, Integer::sum);
 				if (n > 1) key = key + " #" + n;
@@ -251,7 +321,7 @@ public final class PoolTuner {
 		if (!enabled) warnings.add("pool tuning is off in CEConfig [worldgen.systems] poolTuning: every pool is at its mod/vanilla weights");
 		boolean apply = enabled && errors.isEmpty();
 		List<PoolInfo> changed = new ArrayList<>();
-		int restored = 0;
+		int restored = 0, reordered = 0;
 		for (PoolInfo info : pools.values()) {
 			boolean differs = false;
 			for (Piece p : info.pieces) {
@@ -278,7 +348,10 @@ public final class PoolTuner {
 			List<Pair<StructurePoolElement, Integer>> target = buildList(info);
 			if (!sameList(target, info.live)) {
 				writePool(info.pool, target);
-				if (!differs) restored++;
+				if (!differs) {
+					if (canonical && sameList(target, canonical(info.live))) reordered++;   // the order was all that changed
+					else restored++;
+				}
 			}
 		}
 
@@ -290,8 +363,8 @@ public final class PoolTuner {
 		if (!errors.isEmpty()) {
 			LOG.error("[pool-tuning] {} error(s), NO pool tuning applied (see {}): {}", errors.size(), REPORT, errors.get(0));
 		} else {
-			LOG.info("[pool-tuning] {} pools / {} pieces, {} pool(s) retuned, {} restored to their first-seen weights, {} warning(s); report: {}",
-					pools.size(), pieces, changed.size(), restored, warnings.size(), REPORT);
+			LOG.info("[pool-tuning] {} pools / {} pieces, {} pool(s) retuned, {} restored to their first-seen weights, {} put in canonical order, {} warning(s); report: {}",
+					pools.size(), pieces, changed.size(), restored, reordered, warnings.size(), REPORT);
 		}
 	}
 
@@ -320,6 +393,13 @@ public final class PoolTuner {
 			known.add(p.getFirst());                      // else: a mod re-adding its piece on this world load
 		}
 		return new ArrayList<>(s.original);
+	}
+
+	/** The pieces sorted by key, then weight: the same order on every run (a stable sort keeps exact ties as they came). */
+	static List<Pair<StructurePoolElement, Integer>> canonical(List<Pair<StructurePoolElement, Integer>> list) {
+		List<Pair<StructurePoolElement, Integer>> out = new ArrayList<>(list);
+		out.sort(Comparator.comparing((Pair<StructurePoolElement, Integer> p) -> elementKey(p.getFirst())).thenComparingInt(Pair::getSecond));
+		return out;
 	}
 
 	private static List<Pair<StructurePoolElement, Integer>> buildList(PoolInfo info) {

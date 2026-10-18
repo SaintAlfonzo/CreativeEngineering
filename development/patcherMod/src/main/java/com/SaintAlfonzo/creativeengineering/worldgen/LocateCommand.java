@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -143,8 +145,10 @@ public final class LocateCommand {
 					item.result = r;
 					LocateStats.Search s = item.search[0];
 					String ended = s == null ? null : s.ended;
-					item.status = e != null ? "error: " + e : r != null ? "found" : ended == null ? "not_found"
-							: ended.startsWith("timed out") ? "timed_out" : "stopped";
+					// a queued search that /celocate stop cancels completes with a CancellationException (05_phase_5.md 3.4)
+					Throwable cause = e instanceof CompletionException && e.getCause() != null ? e.getCause() : e;
+					item.status = cause instanceof CancellationException ? "stopped" : e != null ? "error: " + e : r != null ? "found"
+							: ended == null ? "not_found" : ended.startsWith("timed out") ? "timed_out" : "stopped";
 					item.done = true;
 				});
 			} catch (RuntimeException e) {

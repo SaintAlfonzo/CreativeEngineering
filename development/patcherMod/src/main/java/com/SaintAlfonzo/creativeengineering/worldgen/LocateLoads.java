@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Function;
 
 /**
  * The chunk load a structure search makes for a candidate the prediction couldn't rule out (feature_writeup/locate.md
@@ -77,20 +76,15 @@ public final class LocateLoads {
 		ServerChunkCache cache = level.getChunkSource();
 		DistanceManager tickets = LocateReflect.tickets(cache);
 		ChunkPos pos = new ChunkPos(x, z);
-		CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> future = CompletableFuture.supplyAsync(() -> {
-			tickets.addTicket(TICKET, pos, LEVEL, pos);
-			return cache.getChunkFuture(x, z, ChunkStatus.STRUCTURE_STARTS, true);
-		}, server).thenCompose(Function.identity());
 		long deadline = System.nanoTime() + WorldgenConfig.locateLoadTimeoutSeconds() * 1_000_000_000L;
 		try {
-			while (true) {
-				try {
-					return future.get(250, TimeUnit.MILLISECONDS).left().orElse(null);
-				} catch (TimeoutException e) {
-					if (LocateStats.expired()) return null;
-					if (System.nanoTime() > deadline) throw e;
-				}
-			}
+			// the ticket first, in a server task; then getChunkFuture from this thread. Called on the server thread
+			// (inside the task, as before) it waits in managedBlock until the chunk is generated and stalls the tick
+			// (05_phase_5.md 3.1); off it, it only hands the load to the server's chunk executor and returns the future
+			if (!finished(CompletableFuture.runAsync(() -> tickets.addTicket(TICKET, pos, LEVEL, pos), server), deadline)) return null;
+			CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> load = cache.getChunkFuture(x, z, ChunkStatus.STRUCTURE_STARTS, true);
+			if (!finished(load, deadline)) return null;
+			return load.join().left().orElse(null);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			return null;
@@ -99,6 +93,19 @@ public final class LocateLoads {
 			return null;
 		} finally {
 			server.execute(() -> tickets.removeTicket(TICKET, pos, LEVEL, pos));
+		}
+	}
+
+	/** Waits for the future: true when it's done, false once the search has expired; throws past the deadline. */
+	private static boolean finished(CompletableFuture<?> future, long deadline) throws Exception {
+		while (true) {
+			try {
+				future.get(250, TimeUnit.MILLISECONDS);
+				return true;
+			} catch (TimeoutException e) {
+				if (LocateStats.expired()) return false;
+				if (System.nanoTime() > deadline) throw e;
+			}
 		}
 	}
 }
