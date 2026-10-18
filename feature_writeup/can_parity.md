@@ -89,7 +89,7 @@ Baked Potato meals (5, 6), 2 servings. Additive: salt or bone broth.
 | x | Potato `minecraft:potato` | Canned Potato | Potato Slices: x | x | x | x | / | none | later | later | later |
 | x | Pumpkin Slice `farmersdelight:pumpkin_slice` | Canned Pumpkin | - | x | x | x | / | none | later | later | later |
 | x | Tomato `farmersdelight:tomato` | Canned Tomato | - | x | x | x | / | none | later | later | later |
-| xF | Corn Kernel `corn_delight:corn_seeds` | Canned Corn Kernel | - | - | - | - | - | none | - | - | - |
+| x | Corn Kernel `corn_delight:corn_seeds` | Canned Corn Kernel | - | - | - | - | - | none | - | - | - |
 | x | Maize `corn_delight:corn` | Canned Corn | - | - | - | - | - | none | - | - | - |
 | / | Green Bell Pepper `rusticdelight:bell_pepper_green` | Canned Bell Pepper | - | x | x | x | / | none | later | later | later |
 | / | Red Bell Pepper `rusticdelight:bell_pepper_red` | Canned Bell Pepper | - | x | x | x | / | none | later | later | later |
