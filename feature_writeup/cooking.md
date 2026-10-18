@@ -7,7 +7,7 @@
         - berries
             - wandering trader trade
         - veggies
-            - integrate veggie delight
+            - backport veggie delight, vintage delight, fungi delight
         - corn
             - mill to corn meal before cornbread, etc crafts?
         - merge
@@ -65,9 +65,14 @@
             - custard
                 - add more variants
         - baked
-            - muffins (make decent food)
+            - new farmers delight oven block?
+                - functions almost exactly like cooking pot, but for baking goods
+                - can require input tool (baking sheet, cake pan) and plating item (paper for muffins)
+                - requires non-stove heat source (magma block, campfire)
+                - provides stove heat on top
+            - muffins (make decent food source)
                 - add more variants
-                - add combinations
+                - add combinations, give mixed but shorter effects
                     - orange cranberry
                     - lemon poppy
                 - fruit, milk, egg, sugar, flour
@@ -78,6 +83,8 @@
                 - pie crust
                     - use to craft all pies
                     - swap wheat to flour
+                    - swap milk to egg?
+                        - allows using frosting
                     - pressing dough recipe
             - cake
                 - dragon egg cake
@@ -96,6 +103,12 @@
             - recolor teas, make placeable
         - coffee
             - merge
+        - tea
+            - merge?
+            - tooltips
+        - alcohol
+            - give most drinks short nausea, rotten food hunger type. food-like drinks are exempt
+            - rename appleskin 'disgusting snack' tooltip for rotten food alchohol types to 'fermented drink' 
     - fluid
         - buckets
             - stack size 16?
@@ -103,10 +116,17 @@
             - beetroot soup
                 - used as beetroot in cooking, more efficient
             - egg solution
-                - egg + milk? 
-                - omelette, scrambled eggs, cornbread batter, efficient dough, cakes, potato salad, quiche, pie, pudding (change vanilla pudding), custard, tart, batter
+                - egg + milk
+                - omelette, scrambled eggs, cornbread batter, efficient dough, potato salad, quiche, pudding (change vanilla pudding), batter
+            - frosting
+                - milk + sugar
+                - cakes, pies, muffins, custard, tart
+            - chorus juice
+                - progression fluid?
+                - diluter for any tea/juice?
     - canned
         - ensure fast eating, effect passthrough
+        - fix nutrition and saturation values
 - ingredients
     - sugar
         - add glyerol to most sugar recipes
@@ -125,7 +145,7 @@
         - ice cubes usable as ice in recipes
         - ice module provides ice/ice cubes
     - vinegar
-        - needs to be added
+        - needs to be added (integrated w/ veggie delight?)
         - versitile canning additive
             - fruit
             - veg
