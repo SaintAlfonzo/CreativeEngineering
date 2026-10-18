@@ -10,6 +10,15 @@ ServerEvents.tags('item', e => {
 	t.clearAll(e, [i.wheat_flour_pc, i.out_dough])
 	t.add(e, 'forge:dusts/flour', i.in_flour)
 
+	// bakeware: one tag per kind (what a baking recipe's `tool` names) + the oven's tool-slot filter
+	t.add(e, i.t_bakeware_baking_sheet, i.baking_sheet)
+	t.add(e, i.t_bakeware_cake_pan, i.cake_pan)
+	t.add(e, i.t_bakeware_pie_tin, i.pie_tin)
+	t.add(e, i.t_bakeware_muffin_tin, i.muffin_tin)
+	t.add(e, i.t_bakeware, [
+		i.t_bakeware_baking_sheet, i.t_bakeware_cake_pan, i.t_bakeware_pie_tin, i.t_bakeware_muffin_tin,
+	])
+
 	// ice cubes
 	t.add(e, 'forge:ice_cubes', i.ice)
 

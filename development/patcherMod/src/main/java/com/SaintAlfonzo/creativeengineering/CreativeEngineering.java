@@ -90,6 +90,9 @@ public class CreativeEngineering
         // Meta structures: the creativeengineering:meta structure type and its two piece types
         // (worldgen/MetaStructure; the structures themselves are kubejs meta_structures.json).
         com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure.register(modEventBus);
+        // Oven: FD cooking-pot style baking block + the creativeengineering:baking recipe type
+        // (oven/ package; feature_writeup/oven.md). Recipes and tags are KubeJS.
+        com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.register(modEventBus);
         // Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)
@@ -400,6 +403,9 @@ public class CreativeEngineering
                 com.SaintAlfonzo.creativeengineering.compat.TrashSlotCompat.register();
             }
             com.SaintAlfonzo.creativeengineering.shield.client.TierShieldClient.setup(event);
+            event.enqueueWork(() -> net.minecraft.client.gui.screens.MenuScreens.register(
+                    com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.OVEN_MENU.get(),
+                    com.SaintAlfonzo.creativeengineering.oven.client.OvenScreen::new));
         }
 
         @SubscribeEvent

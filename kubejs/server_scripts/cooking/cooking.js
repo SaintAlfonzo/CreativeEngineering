@@ -260,6 +260,18 @@ R.remove({ id: 'create_central_kitchen:crafting/pumpkin_pie_from_slices' }, e)
 // Redundant cake recipe
 R.remove({ id: 'minecraft:cake' }, e)
 
+//Muffins
+// Fruits Delight's pot recipes ask for #forge:dough/wheat; use the general #forge:dough tag instead
+// (cooking.md "muffins not cookable?"). Otherwise identical: 2 berries, dough, milk bottle, egg, sugar ->
+// 2 muffins, 0.1 xp, 200 ticks. #forge:sugar as the line-59 sugar swap gives every other recipe. The
+// oven copies are in baking.js.
+R.remove({ id: 'farmersdelight:cooking/blueberry_muffin' }, e)
+R.remove({ id: 'farmersdelight:cooking/cranberry_muffin' }, e)
+R.fdCooking([i.t_fruits_blueberry, i.t_fruits_blueberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sugar],
+	Item.of(i.blueberry_muffin, 2), e, 'blueberry_muffin', 0.1, 200)
+R.fdCooking([i.t_fruits_cranberry, i.t_fruits_cranberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sugar],
+	Item.of(i.cranberry_muffin, 2), e, 'cranberry_muffin', 0.1, 200)
+
 //Honey
 //Honey item removals
 R.remove({ id: 'buzzier_bees:honey/honey_apple' }, e)
