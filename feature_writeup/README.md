@@ -72,6 +72,7 @@ What is still left across every writeup (not started, partly done, open bugs, op
 | Biome tuning (per-biome multiplier / replacement for the Overworld, End and Nether, solved against `/dumpclimate` samples by `BiomeLayoutTuner` at world load; biome merges retired for biome fits) | [biome_tuning.md](biome_tuning.md) | `WG-` | DEPLOYED (17 edits, new worlds only), WG-01 to WG-08 pending; findings F1-F5, F1 (5 targets unreachable) and F3 (skylands at 15 %) need a decision |
 | Fixes and compat (catalogue of 19 patches: forgiving void, banner patterns on beds/elytra, D&D crash, client exit hang, axe tag ghosts, armor bar icons + overflow, Create config text field, bonemeal charm, ghost blocks, Breezy wind vane, thread-safe random, async map trades, tooltip fixes, title plaque, creative menu, XP fluid merge, IE tag order) | [fixes_compat.md](fixes_compat.md) | `FX-` | DEPLOYED (1.0.3 to 1.0.6), FX-01 to FX-20 pending; findings F1-F6 (ghost-block fix ceiling at 2^20 states; version-pinned fixes) |
 | Cans (hub: multi-serving cans and the return roll, 247 serving counts, 26 hand-written + 202 generated cans, dyeable canned golem; detail in food.md 3.6 and can_parity.md) | [cans.md](cans.md) | `CN-` | DEPLOYED (servings since 1.0.3, golem 1.0.4, generated cans 1.0.6), CN-01 to CN-06 pending (FO-, CP-, R4-07 elsewhere); findings F1-F4 |
+| Composting (`global.compost` rebuilds the composter table on every tag load: 10 rule categories, 684 per-item values, exclusions; `/dumpcompost`, `gen_compost_values.py`) | [composting.md](composting.md) | `CM-` | DEPLOYED (since 1.0.3), CM-01 to CM-08 pending; findings F1-F4; prefix CM- (CP- is can parity) |
 
 ## Release plans
 
@@ -103,7 +104,7 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | 11 | ~~Pack tooling~~ | done: [pack_tooling.md](pack_tooling.md) | `TL-` |
 | 12 | ~~Nests~~ | done: [nests.md](nests.md) | `NE-` |
 | 13 | ~~Cans~~ | done: [cans.md](cans.md) | `CN-` |
-| 14 | Composting | `global.compost` rules + values, `/dumpcompost`, gen_compost_values.py | `CP-` |
+| 14 | ~~Composting~~ | done: [composting.md](composting.md) | `CM-` |
 | 15 | Camera bags | leather / iron / netherite bags, contents NBT, `#camera_equipment`, upgrades | `CB-` |
 | 16 | ~~WTHIT lines~~ | done: [wthit_lines.md](wthit_lines.md) | `WL-` |
 | 17 | TNT shrapnel | `shrapnel/` package, `[shrapnel]` config | `TN-` |
