@@ -31,8 +31,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * /celocate census (feature_writeup/locate.md 3.6): every slot of every live structure set in a square, the
  * prediction for each member (what a search would see, stage by stage), then the real structure starts of that chunk
- * (generated to STRUCTURE_STARTS only, through LocateLoads, so no noise or features). While it runs, the generation
- * reject points report why a member didn't start in one of its slot chunks (LocateStats.reject).
+ * (generated to STRUCTURE_STARTS only, through LocateLoads, so no noise or features). Every set that tries a chunk is
+ * predicted before that chunk loads, and the chunk loads once for all of them. While it runs, the generation reject
+ * points report why a member didn't start in one of its slot chunks (LocateStats.reject).
  *
  * Per structure: slots, predicted maybe / no (by stage) / already known, built, misses (maybe but not built, with
  * reasons), false negatives (predicted no but built: must be 0; any other number is a prediction bug). Per set: each
@@ -152,11 +153,15 @@ final class LocateCensus {
 		long seed = level.getSeed();
 		Registry<Structure> structures = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
 		Registry<StructureSet> sets = level.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY);
+		// every set that tries a chunk is predicted before that chunk loads, so the first set's load doesn't turn the
+		// later sets' slots into "known" (06_phase_6.md 3.1)
+		Map<Long, List<Slot>> byChunk = new LinkedHashMap<>();
+		for (Slot slot : slots) byChunk.computeIfAbsent(slot.pos().toLong(), k -> new ArrayList<>()).add(slot);
 		try {
-			for (Slot slot : slots) {
+			for (List<Slot> chunkSlots : byChunk.values()) {
 				if (cancelled.get()) return;
-				slot(slot, local, localSets, generator, randomState, seed, structures, sets);
-				slotsDone.incrementAndGet();
+				chunk(chunkSlots, local, localSets, generator, randomState, seed, structures, sets);
+				slotsDone.addAndGet(chunkSlots.size());
 			}
 		} catch (RuntimeException e) {
 			synchronized (this) {
@@ -171,17 +176,28 @@ final class LocateCensus {
 		}
 	}
 
-	private void slot(Slot slot, Map<String, Row> local, Map<String, SetRow> localSets, ChunkGenerator generator, RandomState randomState,
-			long seed, Registry<Structure> structures, Registry<StructureSet> sets) {
+	/** One set's slot at a chunk: whether the set tries it, and what a search would predict for each member. */
+	private record Predicted(Slot slot, boolean setTries, List<Structure> members, Map<Structure, String> prediction) {}
+
+	/** Every slot at one chunk: predict them all, load the chunk once, then score them all. */
+	private void chunk(List<Slot> chunkSlots, Map<String, Row> local, Map<String, SetRow> localSets, ChunkGenerator generator,
+			RandomState randomState, long seed, Registry<Structure> structures, Registry<StructureSet> sets) {
+		ChunkPos pos = chunkSlots.get(0).pos();
+		List<Predicted> predicted = new ArrayList<>();
+		for (Slot slot : chunkSlots) predicted.add(predict(slot, generator, randomState, seed));
+
+		// what generation did
+		ChunkAccess chunk = LocateLoads.structureStarts(level, pos.x, pos.z);
+		Map<Structure, StructureStart> starts = chunk.getAllStarts();
+		Map<Structure, LocateStats.Reason> why = reasons.getOrDefault(pos.toLong(), Map.of());
+		for (Predicted p : predicted) score(p, starts, why, local, localSets, structures, sets);
+	}
+
+	/** What a search would see, before the chunk exists. */
+	private Predicted predict(Slot slot, ChunkGenerator generator, RandomState randomState, long seed) {
 		ChunkPos pos = slot.pos();
 		StructureSet set = slot.set().value();
-		String setId = String.valueOf(sets.getKey(set));
-		SetRow setRow = localSets.computeIfAbsent(setId, k -> new SetRow());
-		setRow.slots++;
 		boolean setTries = set.placement().isStructureChunk(generator, randomState, seed, pos.x, pos.z);
-		if (!setTries) setRow.setSkipped++;
-
-		// what a search would see, before the chunk exists
 		List<Structure> members = new ArrayList<>();
 		Map<Structure, String> prediction = new HashMap<>();
 		for (StructureSet.StructureSelectionEntry e : set.structures()) {
@@ -196,17 +212,23 @@ final class LocateCensus {
 				prediction.put(s, "no:" + (st == null ? LocateStats.Stage.POINT : st).name());
 			} else prediction.put(s, "known");
 		}
+		return new Predicted(slot, setTries, members, prediction);
+	}
 
-		// what generation did
-		ChunkAccess chunk = LocateLoads.structureStarts(level, pos.x, pos.z);
-		Map<Structure, StructureStart> starts = chunk.getAllStarts();
-		Map<Structure, LocateStats.Reason> why = reasons.getOrDefault(pos.toLong(), Map.of());
+	private void score(Predicted p, Map<Structure, StructureStart> starts, Map<Structure, LocateStats.Reason> why, Map<String, Row> local,
+			Map<String, SetRow> localSets, Registry<Structure> structures, Registry<StructureSet> sets) {
+		ChunkPos pos = p.slot().pos();
+		boolean setTries = p.setTries();
+		String setId = String.valueOf(sets.getKey(p.slot().set().value()));
+		SetRow setRow = localSets.computeIfAbsent(setId, k -> new SetRow());
+		setRow.slots++;
+		if (!setTries) setRow.setSkipped++;
 		String winner = null;
-		for (Structure s : members) {
+		for (Structure s : p.members()) {
 			StructureStart st = starts.get(s);
 			if (st != null && st.isValid()) winner = idOf(structures, s);
 		}
-		for (Structure s : members) {
+		for (Structure s : p.members()) {
 			String id = idOf(structures, s);
 			Row row = local.computeIfAbsent(id, k -> new Row());
 			row.slots++;
@@ -217,10 +239,10 @@ final class LocateCensus {
 				row.built++;
 				setRow.built.merge(id, 1L, Long::sum);
 			}
-			String p = prediction.get(s);
-			if (p.equals("known")) {
+			String pr = p.prediction().get(s);
+			if (pr.equals("known")) {
 				row.known++;
-			} else if (p.equals("maybe")) {
+			} else if (pr.equals("maybe")) {
 				row.maybe++;
 				if (!built) {
 					row.misses++;
@@ -232,10 +254,10 @@ final class LocateCensus {
 					if (reason == null && winner != null) row.takenBy.merge(winner, 1L, Long::sum);
 				}
 			} else {
-				row.no[LocateStats.Stage.valueOf(p.substring(3)).ordinal()]++;
+				row.no[LocateStats.Stage.valueOf(pr.substring(3)).ordinal()]++;
 				if (built) {
 					row.falseNegatives++;
-					if (row.falseNegativeAt.size() < 20) row.falseNegativeAt.add(pos.x + "," + pos.z + " (" + p.substring(3).toLowerCase(Locale.ROOT) + ")");
+					if (row.falseNegativeAt.size() < 20) row.falseNegativeAt.add(pos.x + "," + pos.z + " (" + pr.substring(3).toLowerCase(Locale.ROOT) + ")");
 				}
 			}
 		}

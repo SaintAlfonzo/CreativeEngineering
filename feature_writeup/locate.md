@@ -10,11 +10,11 @@ come from the decompiled 1.19.2 classes and Async Locator 1.3.0; decisions in 4)
 | Part | Status | Where it lives |
 |---|---|---|
 | 3.1 Fold rules into the "could it start here?" check: stages A (set frequency, exclusion zone) + B (biomes); C-E on hold | BUILT 2026-10-12 | `worldgen/LocatePrediction` (from `StructureCheckFrequencyMixin` and `MetaSlots.predictGenerationPoint`) |
-| 3.2 Non-blocking miss loads | BUILT 2026-10-12 | `worldgen/LocateLoads` (redirect in `ChunkGeneratorMetaLocateMixin`, and `MetaSlots.locateAt`) |
+| 3.2 Non-blocking miss loads | BUILT 2026-10-12; still blocked in 1.0.6 (LO-05 failed), FIXED in source 2026-10-18 for patcherMod 1.0.7, not built or shipped | `worldgen/LocateLoads` (redirect in `ChunkGeneratorMetaLocateMixin`, and `MetaSlots.locateAt`) |
 | 3.3 StructureCheck thread safety | BUILT 2026-10-12 | `mixin/StructureCheckThreadSafeMixin` |
 | 3.4 Miss logging (misses before a hit, per search and per structure) | BUILT 2026-10-12 | `worldgen/LocateStats` + `mixin/ChunkGeneratorMetaLocateMixin` |
-| 3.5 `/celocate batch` | BUILT 2026-10-12 | `worldgen/LocateCommand`, `compat/AsyncLocatorBridge` |
-| 3.6 `/celocate census` (with generation-time miss reasons) | BUILT 2026-10-12 | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
+| 3.5 `/celocate batch` | BUILT 2026-10-12; `stop` label fixed in source 2026-10-18 (1.0.7) | `worldgen/LocateCommand`, `compat/AsyncLocatorBridge` |
+| 3.6 `/celocate census` (with generation-time miss reasons) | BUILT 2026-10-12; "known" bug (LO-03, LO-14) FIXED in source 2026-10-18 (1.0.7) | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
 | 3.7 Distant Horizons generation clipped below y 48 with a fake seabed (deep oceans around y 8, other oceans just under 48); pregen on the final server world | BUILT 2026-10-12 (option A); pregen is a deploy step | `worldgen/DistantClip`, `mixin/NoiseBasedChunkGeneratorDistantClipMixin`, `NoiseChunkDistantClipMixin`, `ConfiguredFeatureDistantClipMixin` |
 
 **Main findings:**
@@ -159,6 +159,16 @@ every Async Locator user (maps, trades, `/locate`), not just our commands. Risk:
 ticket path vanilla uses (`TicketType.UNKNOWN` at the status level); the only difference is who waits. Switch:
 `nonBlockingLoads`.
 
+**As built in 1.0.6 it still blocked (LO-05, [05_phase_5.md](testing/structures/05_phase_5.md) 3.1).**
+`LocateLoads.offThread` added its ticket and called `getChunkFuture` inside one `supplyAsync(..., server)` task.
+`getChunkFuture` checks the calling thread: on the server thread it calls `getChunkFutureMainThread` and then waits
+in `managedBlock` until the chunk exists. So every load still stalled the tick, as long as the generation took.
+**Fixed in source 2026-10-18 (patcherMod 1.0.7, not built or shipped):** the server task now only adds the ticket.
+The search thread waits for that task, then calls `getChunkFuture` itself. Off the server thread that call only hands
+`getChunkFutureMainThread` to the server's chunk executor and returns the future, and the search thread waits on it
+(a quarter second at a time, so a stopped or expired search still ends). The ticket is removed in a server task when
+the load ends, as before. Retest: LO-05, LO-13.
+
 ### 3.3 StructureCheck thread safety (prerequisite for more threads)
 
 `StructureCheck.loadedChunks` (fastutil `Long2ObjectOpenHashMap`) and `featureChecks` (`HashMap` of
@@ -232,6 +242,13 @@ what the census is for.
     earth fill and are no longer what the weights say.
 - Cost: only `STRUCTURE_STARTS` work for slot chunks (for a 32-spacing set, 1 chunk in 1024), no noise or features.
   Radius 256 chunks is a few thousand chunk loads.
+- **One load per chunk, after every prediction (fixed in source 2026-10-18, 1.0.7).** The 1.0.6 census handled one
+  slot at a time: predict, then load. Sets with a slot in every chunk (buried treasure, mineshafts) came first, so their
+  load generated the chunk, and every later set there found it loaded and counted "known" (142,971 of 179,710
+  member-slots in the Phase 6 census; LO-03 and LO-14 failed, [06_phase_6.md](testing/structures/06_phase_6.md) 3.1).
+  Now each region's slots are grouped by chunk: every set that tries the chunk is predicted, then the chunk loads
+  once, then every slot is scored. Chunks generated before the census still count "known", as designed. Retest:
+  LO-03, LO-14.
 
 ### 3.7 Deferring the bottom 64 to 96 blocks (investigation)
 
@@ -392,6 +409,9 @@ fresh level-name.
   group member. *2026-10-14 scratch phase 6 (structure_tuning 8.0.6, seed 8675309, 1.0.6 jar of 12:44, density 1, world st_p: Chunky square radius 96 chunks at 2144 -2592, census at -1700 1500; log testing/structures/06_phase_6.md): FAILED (same census bug): 1 miss (no_start) in the report while the log shows 79 placement drops and 48 earth-fill cancels in the square during the census; `sets[].shareOfSlots` is written for every set.*
 - [x] **LO-15 batch timeout and stop [scratch]:** `batchTimeoutSeconds` 5, `/celocate batch all` -> slow searches
   reported `timed_out`; a second run stopped with `/celocate stop` still writes its report. *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): PASSED: at 5 s, 21 of 51 towns_and_towers rows `timed_out` (a load in flight still finishes: worst 31.5 s); `/celocate stop` during `batch all` wrote the 258-row report in the same second. Label bug: the 245 rows never started say `error: java.util.concurrent.CancellationException` instead of `stopped`.*
+- [ ] **LO-17 `/celocate stop` label [scratch]:** `/celocate batch all`, then `/celocate stop` while rows are
+  still queued -> the queued rows say `stopped`, none says `error: java.util.concurrent.CancellationException`
+  (05_phase_5.md 3.4; fixed in source 2026-10-18, 1.0.7). Rows that were running when stopped say `stopped` too.
 - [x] **LO-16 boot and mixins [scratch]:** server boots with the 1.0.6 jar, no mixin apply errors for
   `StructureCheckThreadSafeMixin`, `ChunkGeneratorMetaLocateMixin`, `NoiseBasedChunkGeneratorDistantClipMixin`,
   `NoiseChunkDistantClipMixin`, `ConfiguredFeatureDistantClipMixin`; a plain `/locate` works. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): PASSED: no mixin apply errors at all; plain /locate minecraft:village_plains answered (-1792, 2784), 10 misses, 38.8 s.*
@@ -420,3 +440,9 @@ fresh level-name.
 - 2026-10-14: ships INCOMPLETE in pack 1.0.6 with the rest of the structure tuning (patcherMod 1.0.6, update from 1.0.4).
   The 7.3.2 locate changes (dimension check, `meta_target`, `searchTimeoutSeconds` 120, `/celocate stop`) are in the same
   jar. LO- tests still pending.
+- 2026-10-18: Three locate bugs from the scratch run fixed in source for patcherMod 1.0.7 (not built, not shipped):
+  the non-blocking loads ran `getChunkFuture` on the server thread and still stalled every tick (3.2, LO-05);
+  the census predicted only the first set at each chunk and counted the rest "known" (3.6, LO-03, LO-14); a
+  `/celocate stop` row still queued said `error: ...CancellationException` instead of `stopped` (LO-17 added).
+  Offline: the worldgen package compiles against the mapped 1.19.2 Forge jar, LocateTest 28/28; the loads and the
+  census only run in game, so LO-03, LO-05, LO-14, LO-17 are the checks.

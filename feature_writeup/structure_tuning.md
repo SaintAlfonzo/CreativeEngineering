@@ -44,6 +44,7 @@ there (a grassy ruin on volcanic peaks sits on basalt instead).
 | Standalone structures folded into groups: statues and cats -> `ruins`, It Takes a Pillage -> `pillager_settlements`, Nether ruins -> new `nether_ruins`, Hopo's fossils -> `ocean_ruins`, fresh watchtower -> `remote` (3.20, plan 7.1) | `group/*` tags in `structure_tags.json`, rates in `structure_groups.json` (sync) | BUILT 2026-10-12, data only; node sim clean. ST-117 to ST-123 |
 | Entrance dungeons: YUNG's zombie and spider dungeons in `group/entrance_dungeons`, land only, with a surface check so a crypt staircase or cave mouth never comes up in water (3.19, plan 7.1) | `group/entrance_dungeons` + `surface_check` tags, `biome_rules.water.surface_check`; patcherMod `StructureBiomeRules.surfaceCheck` via `ChunkGeneratorStructureBiomeRulesMixin` | BUILT 2026-10-12 in patcherMod 1.0.6 (`build/libs`, not in `mods/`); builds, node sim clean; not run in game. ST-112 to ST-116 |
 | Replacements (a member takes a share of another member's slots) and `group/witch_huts`: YUNG's hut, witch circle, witch village, and the vanilla swamp hut in 10% of YUNG's hut slots, swamps only (3.18, plan 7.1) | `replaces` + `share` in `structure_groups.json`, staged by `structure_overrides.js`; patcherMod `worldgen/MetaSlots` (conversion, biome narrowing, `/locate`), CEConfig `structureReplacements`; YUNG's "Disable Vanilla Witch Huts" = false | BUILT 2026-10-12 in patcherMod 1.0.6 (`build/libs`, not in `mods/`); 7 new headless checks (`MetaTest` 55), node/Rhino parity incl. the replacement table and the old-jar path; not run in game. ST-102 to ST-111 |
+| Fixes from the scratch run (3.23): pool order fixed per seed, code-added village pieces kept on reload, ground match over deep structures, driftwood on banks, cave fit for the 3 deep dungeons, stone bases in earth fill | patcherMod `PoolTuner`, `GroundMatch`, `EarthFill`, CEConfig `[worldgen.pools] canonicalOrder`; `biome_fits.json` + `structure_tags.json` (`land/any/deep`); `kubejs/data/upgrade_aquatic` driftwood; `earth_fill/stone_base` tags | FIXED in source 2026-10-18 for patcherMod 1.0.7: not built into `mods/`, not shipped. Offline checks pass (PoolTunerTest new, 10 checks); ST-191 to ST-198 pending |
 
 **Open first:** [structure_groups.json](../kubejs/generation_scripts/worldgen/structure_groups.json) (every rate),
 [structure_tags.json](../kubejs/generation_scripts/worldgen/structure_tags.json) (`group/*` = who shares a grid),
@@ -255,6 +256,8 @@ blocked fortress falls through to the bastion. Tune the YUNG's replacements inst
 - Singleplayer: vanilla pools are the same Java objects across world loads and some mods append again every
   load. PoolTuner keeps the first weights it saw per pool, so edits never compound and re-added duplicates are dropped.
 - Any error applies no pool tuning at all.
+- Since 2026-10-18 (1.0.7, not built, 3.23): every pool is first sorted into a stable order (`[worldgen.pools]
+  canonicalOrder`), and pieces added in code get the world's processor lists, so they survive a chunk reload.
 
 ### 3.6 Lootr container swaps (patcherMod)
 
@@ -349,6 +352,9 @@ volcanic peaks, sand/sandstone in a desert, and snow or stone on snowy slopes. T
 pad, say), add a family tag in `blocktags.js` and list it in `families`. With `log = true`, every changed template logs
 its chunk, the family's share, and both palettes. The sampling grid, under-block depth, dig limit and plant height are
 in `[worldgen.ground_match.sampling]`.
+
+Since 2026-10-18 (1.0.7, not built, 3.23): a column is skipped only when a structure piece reaches its sampled ground,
+not whenever one covers it in XZ, so a mineshaft or an ancient city far below no longer empties the sample.
 
 ### 3.9 CEConfig `[worldgen]`: switches, debug density, constants (added 2026-09-27)
 
@@ -514,7 +520,9 @@ feature with the opposite filter (`not` water below) at one tenth of the attempt
 | swamp | 1 in 10 chunks |
 | extra | 1 in 8 chunks, 1 or 2 logs (3:1) |
 
-Rivers and oceans have no land version, so a river bank loses its driftwood. Edit the `chance` in a land file (or
+Since 2026-10-18 (1.0.7 data, 3.23) the beach, river, swamp and extra versions filter for a bank next to water instead
+of water below: Upgrade Aquatic can't float a log outside oceans, so the old filter never placed anything. Rivers and
+oceans have no land version, so a river bank only gets the water-adjacent version. Edit the `chance` in a land file (or
 delete the file and its biome modifier) to change it. Upgrade Aquatic's own feature decides what actually fits (it
 needs sand, or dirt near water, or open water), so the real number is lower than the attempts.
 
@@ -549,6 +557,8 @@ first (the roll is deterministic), so nothing is computed for it.
 1. the earth blocks of its template: the block tag `creativeengineering:earth_fill/earth` (`blocktags.js`: `#minecraft:dirt`,
    sand, gravel, clay, dirt path; extra tags go in the `blocks` config list) in the bottom `baseLayers` (3) template layers,
    first palette. Higher layers are ignored on purpose: above the ground everything is air, so a roof garden would count.
+   Structures in the structure tag `earth_fill/stone_base` also count the block tag `earth_fill/stone_base` (stone and
+   brick plates, since 2026-10-18 in 1.0.7, not built; 3.23).
 2. where each stands in the world: piece position + rotation and mirror (the same transform the placement uses).
 3. what the generator's own terrain holds there: `ChunkGenerator#getBaseColumn` for the column (read once per
    `sampleGrid` x `sampleGrid` cell, 2 by default, and cached per start), then the block at that Y: water, air, or
@@ -1498,6 +1508,60 @@ dropped slot, load it, find nothing and move on, as with earth fill); companion 
 `/locate`, explorer maps and way signs don't find them (`/locate creativeengineering:meta/town_villages` finds the
 town); the offline estimates leave companions out and don't count drops.
 
+### 3.23 Fixes from the scratch run (2026-10-18, patcherMod 1.0.7, not built)
+
+Six of the open bugs from the 8.0 scratch run ([plan_1.0.6.md](plan_1.0.6.md) 2.1, [testing/structures/](testing/structures/00_plan.md)),
+fixed in source. None is in `mods/` or a deploy yet; the patcherMod parts need `./gradlew build` and a jar install. All
+of them act on new chunks only.
+
+1. **Village layouts differed from one server start to the next (05_phase_5.md 3.3).** Cause found: the pools reach
+   PoolTuner in an order that changes between JVM runs. `pool_tag_report.md`, rewritten at every world load, has 10
+   versions in git since 2026-10-02, and they list `minecraft:village/desert/houses` in 9 different orders (plains too),
+   with the same pieces: three were written within one minute on 2026-10-02 with the same 6,894 pieces, each in its own
+   order. Vanilla's JSON order is none of them and no string hash order matches, so some mod rebuilds the pools
+   through an identity-hashed collection. Jigsaw picks a piece by its index in the pool's list, so the same seed built different
+   villages after each restart. The Phase 5 batch only showed it for village_desert and village_savanna because their
+   box centre is what the meta's `/locate` returns; a plain village reports its chunk, so every jigsaw pool was likely
+   affected. **Fix:** PoolTuner sorts every pool's pieces by key, then weight (a stable order), before the rest of its
+   work, and rebuilds every pool whose order changed (logged as "put in canonical order"). Switch: CEConfig
+   `[worldgen.pools] canonicalOrder` (default true). The order is no longer vanilla's, so a seed's villages differ
+   from a vanilla game's (they already did) but repeat on every start.
+2. **Cloud Storage and Domestication Innovation houses dropped on reload (05_phase_5.md 3.2).** Their pieces hold
+   the builtin `ProcessorLists` holder, which the world's registry codec refuses: saving logs "Element ...
+   minecraft:empty is not valid in current registry set" and writes the piece as `{}`. **Fix:** at ServerAboutToStart,
+   before the tuning, PoolTuner gives every pool piece whose processor list isn't the world's own the world's holder
+   of the same key (the field is found by type, so no SRG name). One log line counts the rebound pieces. PoolTunerTest
+   reproduces the save failure with a piece built by `StructurePoolElement.single` and shows it saving after the rebind.
+3. **Ground match gave up over deep structures (03_phase_3.md 4.1).** A sample column was skipped when any piece in
+   the 3x3 chunks covered it in XZ, whatever its height, so an ancient city, Philip's underground ruins or a mineshaft
+   hid most columns, and with fewer than 16 the base was left as is without a log line. **Fix:** the column's ground is
+   found first, and the column is skipped only when a piece's box reaches that ground: from `subDepth` + 1 below the
+   top block to 1 above it (a piece standing on the ground, or the top being its own blocks). With `log = true`, a
+   template whose base was left alone for lack of samples now logs one line with the column count.
+4. **Beach, river and swamp driftwood never placed (03_phase_3.md 4.2).** Outside `#is_ocean`, Upgrade Aquatic's
+   feature only places on dirt (near water) or sand under its origin, so it can't float there, and our "water below"
+   filter made the four overrides dead. **Fix:** `driftwood_beach`, `_river`, `_swamp` and `_extra` now filter for a
+   bank: the block under the spot is not water, and water is beside it (4 sides) at that level or one lower. Same
+   rates (0.25x the mod's). Only open-ocean driftwood floats, as before; `driftwood_land/*` still adds the rare logs
+   further inland. 3.12 has the rates.
+5. **Skeleton dungeon, bone dungeon and lost soul city never started (7.3.3).** Their start height (y -50 to -30)
+   is in a cave biome (`terralith:cave/deep_caves` almost everywhere), and `land/any` lists surface biomes only.
+   **Fix:** a new fit `land/any/deep` (inherits `land/any` and `land`) adds the 14 cave biomes (vanilla's dripstone
+   caves, lush caves and deep dark, Terralith's 11 `cave/*`), and the three moved from the `land/any` tag to it. They
+   are standalone sets, so no group rate changes (`gen_structure_groups.py --check` gives the same estimates). Their
+   grouping and rates still wait on the cave-structure pass (Todo, "Underground").
+6. **Earth fill was blind to stone bases (plan_1.0.6.md 2.1, 02_new_mods_tests.md 4.2).** Only dirt, sand, gravel,
+   clay and path counted, so the drum tower's 49x45 polished andesite plate counted as "small, 10 earth" and could hang
+   over a cliff. **Fix, opt-in:** structures in the new structure tag `creativeengineering:earth_fill/stone_base`
+   (`worldgen/earth_fill.js`; for now only `eugene:ruined_drum_tower`) also count the block tag of the same name
+   (`blocktags.js`: `#minecraft:base_stone_overworld`, cobblestone, stone bricks and their mossy/cracked forms, smooth
+   stone, polished andesite/diorite/granite/deepslate, deepslate bricks) toward both their size and the limits. Not for
+   every structure: most stone is the building, not a pad, and counting it everywhere would move every size and rate.
+   The template cache now keeps one map per earth tag list, so the two lists don't clear each other.
+
+Still open from 2.1: the undead castle vs earth fill (a decision), ST-135 (fortified metas vs the 120 s timeout), the
+ocean geode drop (tuning), the piglin camp (Nether, out of scope; the stone-base tag could take it later).
+
 ## 4. Limits and decisions
 
 - **Only structure_set documents are written, never the structure.** Frequency, `locate_offset` and on/off all live
@@ -1672,6 +1736,15 @@ town); the offline estimates leave companions out and don't count drops.
   fits join in order without duplicates, an empty fit still applies (never spawns), and the fitted list matches by biome
   value (another holder of a listed biome is in, an unbound holder is out). `test_structure_groups.sh` compares the
   staged fits and the fit biome tags between node and Rhino. The sim prints `biome fit` and `biome tag` lines.
+
+- **Scratch-run fixes** (2026-10-18, 3.23): `tools/test_worldgen_tools.sh` step 10 runs `PoolTunerTest` (10 checks: the
+  canonical order by key then weight, the same list from two input orders; a piece made in code fails to save under a
+  copied registry set, is rebound to the copy's `minecraft:empty`, then saves; a second rebind changes nothing).
+  `GroundMatchTest` +4 (the column exclusion by height: a deep piece, a piece standing on the ground, the 1-block XZ
+  margin), `EarthFillTest` +2 (stone base counts with the stone tag; the plain list is unchanged after it), `FitTest`
+  +1 (31 fits; the skeleton dungeon's chain `land/any/deep` + `land/any` + `land`). Every step passed 2026-10-18 against
+  the mapped 1.19.2 Forge jar, with stubs for the main mod class and the Async Locator bridge (this container has no
+  third-party jars). The 8 driftwood placement lists decode with the 1.19.2 `PlacementModifier` codec.
 
 - `python3 tools/wood_mismatch_scan.py` -> `feature_writeup/wood_mismatch.md`: per live land structure, its woods,
   the share foreign to its biomes (wood fits as the native woods) and a verdict (unchanged / trim / woodless /
@@ -2075,6 +2148,8 @@ seconds.
 Terralith cave biome (`terralith:cave/deep_caves` everywhere sampled). Not fixed now: they go into the cave-structure
 generation tuning (Todo, "Underground"), which decides their biomes (cave biomes, an `underground/*` fit family), their
 grouping and their rates together. Until then they don't generate; ST-115 stays failed and is retested in that pass.
+**2026-10-18:** they get a fit of their own, `land/any/deep` (cave biomes + `land/any`), so they generate again while the
+grouping and rates still wait for that pass (3.23, ST-196).
 
 ### 7.4 Plan: new structure mods, the `vehicles` group, fortified-town meta shares (2026-10-14, BUILT 2026-10-14)
 
@@ -2664,6 +2739,34 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - [ ] **ST-190 Looks right [game]:** fly to one of each new structure: beard/trim fit the ground, no floating
   carts, Campsite's camper entity there, the castles' insides intact.
 
+**Fixes from the scratch run** (2026-10-18, 3.23). Needs the 1.0.7 jar built and installed; new chunks only.
+
+- [ ] **ST-191 Same villages after a restart [scratch]:** fresh world, `/celocate batch towns_and_towers` (and
+  `/locate` of `meta/village_towers`), restart the server on the same world copy taken before the first batch, run it
+  again -> every found position identical, including the desert and savanna village anchors. The log has `put in
+  canonical order` with a count; `pool_tag_report.md` lists `minecraft:village/desert/houses` in key order on both
+  starts. With `canonicalOrder = false` the old behaviour returns (orders differ between starts).
+- [ ] **ST-192 Mod village houses survive a reload [scratch]:** fresh world, `/locate` villages far out so their
+  structure_starts chunks are saved before placement, stop and restart, fly there -> no "Element ... not valid in
+  current registry set" at save and no "Invalid pool element found" at load; Cloud Storage and Domestication
+  Innovation houses are in the villages. The boot log has `pool piece(s) moved to the world's processor lists`.
+- [ ] **ST-193 Ground match over a deep structure [scratch]:** with `[worldgen.ground_match] log = true`, a Philip's
+  ruin or tower on volcanic peaks above a mineshaft or ancient city -> its grass pad is swapped (a log line with a
+  palette); where a base is left for lack of columns, a `only N ground columns sampled` line says so.
+- [ ] **ST-194 Ground match still skips structure ground [scratch]:** a ruin next to a village house -> the house's
+  floor and paths are not in the sampled palette (the log's top/under histograms have no planks or path).
+- [ ] **ST-195 Driftwood on banks [scratch]:** new terrain, walk a river, a swamp and a beach -> driftwood logs on
+  sand or dirt right at the water's edge, about one river bank log every few chunks; none floating outside oceans;
+  open ocean still has floating logs. `latest.log` has no `upgrade_aquatic:driftwood_*` parse error.
+- [ ] **ST-196 Deep dungeons generate [scratch]:** `/locate structure betterdungeons:skeleton_dungeon`,
+  `philipsruins:bone_dungeon` and `philipsruins:lost_soul_city` -> each found; `/place` or fly there: built at its
+  depth. (ST-115 retest.)
+- [ ] **ST-197 Drum tower on a cliff [scratch]:** with earth fill `log = ALL`, a few `eugene:ruined_drum_tower`
+  starts -> each line shows it as large or huge with hundreds of base blocks (not "small, 10 earth"); one over a cliff
+  or a lake is cancelled, one on flat ground kept.
+- [ ] **ST-198 Other structures unchanged by the stone tag [scratch]:** with `log = ALL`, a stone-floored structure
+  not in the tag (a YUNG's witch hut, a castle) -> its earth count and size are as before (stone not counted).
+
 **Terrain adaptation and template trim** (2026-10-09, 3.15). Install the jar first (`./gradlew installToMods` in
 `development/patcherMod` with the game closed), rejoin, and fly well away from explored land.
 - [x] **ST-61 Loads clean:** no mixin error for `StructureTerrainAdaptationMixin` or `BeardifierSoftMixin` (the game would not start); `latest.log` has `[terrain-adaptation] world load: 97 structures tagged, modes {NONE=6, SOFT=91}, 95 trimmed` and no `answers terrainAdaptation itself` or `... wins` warning; no KubeJS error for `worldgen/terrain_adaptation.js`; the toml has `[worldgen.terrain_adaptation] skirtBump = 0` and `systems.terrainAdaptation` / `systems.templateTrim`. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): PASSED: terrain-adaptation line exact (97, NONE=6 SOFT=91, 95 trimmed), no mixin/KubeJS errors, skirtBump = 0 and both systems keys.*
@@ -2765,6 +2868,13 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 
 ## 9. History
 
+- **2026-10-18: six bugs from the scratch run fixed in source (3.23), for patcherMod 1.0.7, not built.** User: "tackle
+  the structure and locate bugs in section 3" (TODO.md 3). Found the cause of the per-restart village layouts (pool
+  order from the mods changes between JVM runs; 10 report versions in git show 9 desert orders) and fixed it with a
+  canonical pool order; processor lists rebound for pieces added in code; ground match's column exclusion by height
+  plus a skip log line; driftwood filters moved to water-adjacent banks; `land/any/deep` for the three deep dungeons;
+  opt-in stone bases in earth fill. The locate fixes are in [locate.md](locate.md) 8. Offline checks pass;
+  ST-191 to ST-198 added.
 - **2026-10-14: shipped INCOMPLETE in pack 1.0.6.** User: "ship all the changes as 1.0.6. just mark the structure
   tuning as incomplete in this release". The 1.0.6 payload (update from 1.0.4) carries patcherMod 1.0.6 (12:44 rebuild of the
   01:28 source the Phase 3/4 scratch runs used) and all worldgen data through 7.4. Open bugs at staging: ground match over

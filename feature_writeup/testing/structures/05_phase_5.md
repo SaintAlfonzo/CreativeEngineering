@@ -82,6 +82,8 @@ Idle baseline: 20 TPS, max gap 51 to 69 ms.
 - **Fix (not made):** add the ticket in the server task, then call `getChunkFuture` from the search thread (off the
   server thread it only schedules the work and returns its future). Alternatively, call `getChunkFutureMainThread`
   in the task. It's a few lines; candidate for 1.0.7.
+- **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): the server task only adds the ticket; the search thread calls `getChunkFuture`
+  itself and waits on the future. [locate.md](../../locate.md) 3.2. Retest LO-05.
 
 ### 3.2 Cloud Storage and Domestication Innovation village pieces dropped on reload (third-party)
 
@@ -94,6 +96,8 @@ Idle baseline: 20 TPS, max gap 51 to 69 ms.
   travel).
 - **What it explains:** the "old noise" in client logs since 2026-04 is this.
 - **Possible fix:** PoolTuner (or a mixin) rebinds each pool element's processor holder to the world's registry.
+- **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): PoolTuner rebinds them at ServerAboutToStart. [structure_tuning.md](../../structure_tuning.md) 3.23 item 2,
+  ST-192.
 
 ### 3.3 Village layout differs between JVM runs (older, recorded)
 
@@ -101,11 +105,17 @@ Idle baseline: 20 TPS, max gap 51 to 69 ms.
   different in each of 3 server runs, always in the same chunk. Within one run they are stable.
 - **Not affected:** the other vanilla villages and 210 other structures.
 - **Why it matters:** two-world comparisons (Phase 8) should expect this. Cause not found yet.
+- **Cause found 2026-10-18:** the pools reach PoolTuner in an order that changes per JVM run (the 10 versions of
+  `pool_tag_report.md` in git list the desert houses in 9 orders), and jigsaw picks by list index. Likely every jigsaw
+  structure, not just these two (a plain village's locate answer is its chunk, which hides it). **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): 
+  a canonical pool order, `[worldgen.pools] canonicalOrder`. [structure_tuning.md](../../structure_tuning.md) 3.23
+  item 1, ST-191.
 
 ### 3.4 `/celocate stop` row label (cosmetic)
 
 - Batch rows for searches that were still queued say `error: java.util.concurrent.CancellationException` instead
   of `stopped`. The report is complete otherwise.
+- **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): a cancelled search's row says `stopped`. LO-17.
 
 ## 4. Values changed and restored
 
