@@ -70,6 +70,7 @@ What is still left across every writeup (not started, partly done, open bugs, op
 | Engineering (IE Sawmill recipe routing by precision-sawblade profile, Dragon Breathing fan processing, 15 components, wire coils and coil blocks for 12 metals + HV, sample syringe) | [engineering.md](engineering.md) | `EN-` | DEPLOYED (since 1.0.3), EN-01 to EN-18 pending; findings F1-F8, F2 (JEI doesn't show the blade) and F4 (component centres differ by route) need a decision |
 | Item physics (ItemPhysic fire/lava split, float/sink control by four reloadable tags, burn transforms: glass → dirty glass, wood → ash, TNT explodes) | [item_physics.md](item_physics.md) | `IP-` | DEPLOYED (since 1.0.3), IP-01 to IP-14 pending; findings F1-F6, F1 = the unfixed `ItemPhysicSplit$1` crash |
 | Biome tuning (per-biome multiplier / replacement for the Overworld, End and Nether, solved against `/dumpclimate` samples by `BiomeLayoutTuner` at world load; biome merges retired for biome fits) | [biome_tuning.md](biome_tuning.md) | `WG-` | DEPLOYED (17 edits, new worlds only), WG-01 to WG-08 pending; findings F1-F5, F1 (5 targets unreachable) and F3 (skylands at 15 %) need a decision |
+| Fixes and compat (catalogue of 19 patches: forgiving void, banner patterns on beds/elytra, D&D crash, client exit hang, axe tag ghosts, armor bar icons + overflow, Create config text field, bonemeal charm, ghost blocks, Breezy wind vane, thread-safe random, async map trades, tooltip fixes, title plaque, creative menu, XP fluid merge, IE tag order) | [fixes_compat.md](fixes_compat.md) | `FX-` | DEPLOYED (1.0.3 to 1.0.6), FX-01 to FX-20 pending; findings F1-F6 (ghost-block fix ceiling at 2^20 states; version-pinned fixes) |
 
 ## Release plans
 
@@ -97,7 +98,7 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | 7 | ~~Item physics~~ | done: [item_physics.md](item_physics.md) | `IP-` |
 | 8 | ~~Loot~~ | done: [loot.md](loot.md) | `LT-` |
 | 9 | ~~Biome tuning~~ | done: [biome_tuning.md](biome_tuning.md) | `WG-` |
-| 10 | Fixes and compat | forgiving void, banner patterns, D&D drill/saw crash, client exit hang, recipe-book desync, axe tag ghosts, DetailArmorBar recolours + armor bar overflow, Create config text field, bonemeal charm, ghost blocks (state id overflow), Supplementaries/Breezy wind vane, thread-safe Level.random, LC map-trade locate hang, Exposure login kick + refmap, Lightman's tooltip stacks, AppleSkin coverage, Legendary Tooltips underline, GUI title plaque stretch | `FX-` |
+| 10 | ~~Fixes and compat~~ | done: [fixes_compat.md](fixes_compat.md) | `FX-` |
 | 11 | ~~Pack tooling~~ | done: [pack_tooling.md](pack_tooling.md) | `TL-` |
 | 12 | ~~Nests~~ | done: [nests.md](nests.md) | `NE-` |
 | 13 | Cans | multi-serving cans (CanServings), generated per-type cans, canned golem dye | `CN-` |
