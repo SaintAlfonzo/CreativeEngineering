@@ -1,58 +1,239 @@
 # Cooking Plans
 
-- gummies 
-    - for most fruits
-    - allow slime balls, kelp
-    - manual craft, efficient cooking pot/create craft
-- muffins
-    - add most fruits
-    - add combinations
-        - orange cranberry
-        - lemon poppy
-    - fruit, milk, egg, sugar, flour
-    - serve w/ paper
-- pie crust
-    - use to craft all pies, seq assemble recipe
-    - swap wheat to flour
-    - pressing dough recipe
-- cake base
-    - slice dough block to cake bases
-    - cake base recipe for all cakes
-- deep frying fish (pneumaticcraft)
-    - add cooking w/ oil recipe, expand fish to any species and rename
-- meat
-    - remove unused meats (venison, goat) from crafting recipes/view
-- soup
-    - adjust base soup values to be based on ingredients, mark outliers then make changes
-    - put all in supplementaries jar
-- milk
-    - fill bottle from cow in a jar
-- yeast
-    - new recipe from mushroom colonies/blocks
-    - used in new sourdough chain
-- sourdough
-    - new starter->growing->fermenting->sourdough chain
-    - time based wait period between craft steps
-    - mill/mortar sourdough to get starter
-    - mark starter with date started, allow naming, carry these stats to any sourdough made.
-- bowls
-    - add bamboo recipe
-- ice
-    - smash ice to cubes on cutting board with hammer, less efficient when crushed w/ machine
-    - ice cubes usable as ice in recipes
-- mortar and pestle
-    - old guns mod, used for new kitchen grinding
-    - adds food related milling/grinding recipes to shapeless crafting, returns mortar and pestle
-- fridge
-    - added sort button deletes items on 2-tall fridge
-    - patch fridge model to appear as full block horizontally (for placing decor on top)
-- counters
-    - allow cutting board to be placed on
-    - add storage to corner cabinets
+- food
+    - crops
+        - seasons
+            - ensure growth seasons are realistic and fair
+        - berries
+            - wandering trader trade
+        - veggies
+            - integrate veggie delight
+        - corn
+            - mill to corn meal before cornbread, etc crafts?
+        - merge
+            - coffee
+            - bananas
+    - meat
+        - remove unused meats (venison, goat) from crafting recipes/view
+        - fish
+            - deep frying fish (pneumaticcraft)
+            - add cooking w/ oil recipe, expand fish to any species and rename
+    - animal products
+        - eggs
+            - cross egg compatability on almost everything
+            - any egg to fried egg
+    - dairy
+        - milk
+            - fill bottle from cow in a jar
+    - cooked
+        - soup
+            - adjust base soup values to be based on ingredients, mark outliers then make changes
+            - put all in supplementaries jar
+    - baked
+        - sliced bread/toast
+            - allow/require on recipes with visual square bun
+        - yeast
+            - new recipe from mushroom colonies/blocks
+            - used in new sourdough chain
+            - fix in world yeast process
+        - sourdough
+            - new starter->growing->fermenting->sourdough chain
+                - sprite texture increases in size through chain
+            - time based wait period between craft steps
+            - mill/mortar sourdough to get starter
+            - mark starter with date started, allow naming, carry these stats to any sourdough made.
+    - meals
+        - add cooked ingredients to heatless shapeless recipe
+        - fried rice
+            - fried egg
+        - baked cod stew
+            - fried egg, baked potato, tomato sauce
+        - chicken soup
+            - any veggie to cooked veggie
+        - mushroom rice
+            - baked potato
+    - sweet
+        - candy
+            - gummies 
+                - for most fruits
+                - allow slime balls, kelp
+                - manual craft, efficient cooking pot/create craft
+            - rock candy
+                - add 4-5 more variants, using corundum 
+                - keep rose quartz?
+        - cold
+            - custard
+                - add more variants
+        - baked
+            - muffins (make decent food)
+                - add more variants
+                - add combinations
+                    - orange cranberry
+                    - lemon poppy
+                - fruit, milk, egg, sugar, flour
+                - serve w/ paper
+                - sequence assembly
+            - pie 
+                - every pie seq assemble recipe
+                - pie crust
+                    - use to craft all pies
+                    - swap wheat to flour
+                    - pressing dough recipe
+            - cake
+                - dragon egg cake
+                - cake base
+                    - slice dough block to cake bases
+                    - cake base recipe for all cakes
+            - tart
+                - add more variants
+    - drink
+        - fd tea-like
+            - make placeable w/ display delight
+        - lemonade
+            - new fluid
+            - pink and blue variants
+            - use existing effects based on ingredients
+            - recolor teas, make placeable
+        - coffee
+            - merge
+    - fluid
+        - buckets
+            - stack size 16?
+        - potential fluids
+            - beetroot soup
+                - used as beetroot in cooking, more efficient
+            - egg solution
+                - egg + milk? 
+                - omelette, scrambled eggs, cornbread batter, efficient dough, cakes, potato salad, quiche, pie, pudding (change vanilla pudding), custard, tart, batter
+    - canned
+        - ensure fast eating, effect passthrough
+- ingredients
+    - sugar
+        - add glyerol to most sugar recipes
+            - nothing sugar only (sugar bag, sugar block, etc)
+            - other restrictions?
+                - no drinks, "hard to disolve"
+    - batter
+        - more uses
+    - bone broth
+        - useable as ingredient to allow soups/stews/pastas to be craftable shapeless instead of cooking pot
+        - prevent create shapeless mixing
+        - ensure every valid item is covered
+        - add cooked variant (baked potato instead of potato, precooked sauce/soup instead of tomato/beetroot) to shapeless heatless crafts
+    - ice
+        - smash ice to cubes on cutting board with hammer, less efficient when crushed w/ machine
+        - ice cubes usable as ice in recipes
+        - ice module provides ice/ice cubes
+    - vinegar
+        - needs to be added
+        - versitile canning additive
+            - fruit
+            - veg
+            - meat/fish
+- seasoning
+    - expansion of salt system
+        - salt improves nutrition and saturation (limit to nutrition)
+        - ensure saltable tag applies to all valid foods
+        - more salt crafting recipes
+        - ensure create salt automation works globally
+        - prevent intermediate ingredients (bone broth) from being salted
+    - new seasonings
+        - pepper
+        - dill (sea pickle?)
+        - cheese
+        - cream and onion
+    - different benefit?
+        - nutrition vs saturation boost
+            - only nutrition (salt?)
+            - only saturation
+            - nutrition/saturation split
+    - distinct popcorn variants, placeable
+- processes
+    - restrict brewing/chewin slots to allowed items
+    - allow input on any side
+    - inefficient meat culture cultivation w/ pot
+    - cheese ripening shelf, stackable
+    - more efficient heated dough block + green dye to slime block
+- tools
+    - bowls
+        - add bamboo recipe
+    - mortar and pestle
+        - old guns mod, used for new kitchen grinding
+        - adds food related milling/grinding recipes to shapeless crafting, returns mortar and pestle
+    - scythe
+        - harvest area only tool
+        - better area by tier than hoe
+    - stepstool
+        - similar to terraria stepstool
+        - allows extra interact height  when (space held?)
+        - used for picking and building
+- kitchen
+    - fridge
+        - added sort button deletes items on 2-tall fridge
+        - patch fridge model to appear as full block horizontally (for placing decor on top)
+    - counters
+        - allow cutting board to be placed on
+        - add storage to corner cabinets
+    - sink
+        - doesnt provide water?
+        - rework to act like well?
+    - decor
+        - meat grinder
+        - pots, pans, baking sheets, silverware
+- drugs
+    - smoking
+        - rolling
+        - pipe
+        - smoke limit
+            - increased/additional negative effects 
+                - nausea, increasing length
+            - additional tolerance increases
+        - herb additives
+            - gives effects
+        - spice of life tolerance mechanic?
+            - tobacco
+            - positive
+                - comfort?
+            - negative
+        - smokeleaf
+            - positive
+                - comfort?
+            - negative
+- misc
+    - bread block
+        - cutting to crustless bread block
+        - standard slab recipe
 
+- errors/bugs
+    - muffins not cookable?
 
 
 - other, migrate elsewhere
     - make 3 long curtain blocks
+    - collapsable ladders
+        - extending functions like curtain block
+        - only climbable when down
+        - iron varient requries redstone
     - backport chiseled bookshelves
         - framed and copycat version?
+    - set minimum leaf layer height slowdown
+    - plant flowers on copycat/framed dirt blocks
+    - allow backpacks to be smithed for reskin
+        - fruit basket
+    - give composters more wood types
+    - framed blocks
+        - change copycat resource pack to keep framed block name, disabled by default on client
+    - smoked wood recipe
+    - prevent canvas sign dying (allow text to dye, not sign)
+    - lower wandering trader wares trades
+    - vinery grass slab biome tint
+    - vinery backport license
+        - code is mit (i can use this, rebuild features in older version)
+        - assets are rights reserved
+            - inquired, author denied redistribution of "assets and features"
+                - new features shouldnt be restricted, mit
+                - assets can be shipped in newest jar, new alcho backport mod points to assets in unloaded mod
+
+- structures 
+    - greenhouses
+        - wide pool of berry, saplings, fruit tree saplings, flowers from biome types (snowy and cold in spruce, all jungle crops in  jungle, birch flowers/crops(onion) in birch, etc)

@@ -1,6 +1,7 @@
 package io.github.mortuusars.exposure.client.input;
 
 import io.github.mortuusars.exposure.client.camera.CameraClient;
+import io.github.mortuusars.exposure.client.util.Minecrft;
 
 public class MouseHandler {
    private static final boolean[] heldMouseButtons = new boolean[12];
@@ -14,7 +15,9 @@ public class MouseHandler {
          heldMouseButtons[button] = action == 1;
       }
 
-      return CameraClient.viewfinder() != null && CameraClient.viewfinder().mouseClicked(button, action);
+      // Port: Forge's MouseButton.Pre fires before MouseHandler hands the click to an open screen (upstream's hook only
+      // sees in-world clicks), so leave every click inside a screen alone.
+      return Minecrft.get().screen == null && CameraClient.viewfinder() != null && CameraClient.viewfinder().mouseClicked(button, action);
    }
 
    public static boolean scrolled(double amount) {

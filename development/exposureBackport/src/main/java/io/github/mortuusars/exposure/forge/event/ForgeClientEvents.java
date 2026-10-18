@@ -29,6 +29,7 @@ import io.github.mortuusars.exposure.forge.client.FirstPersonPhotographRenderer;
 import io.github.mortuusars.exposure.world.item.PhotographItem;
 import io.github.mortuusars.exposure.world.item.StackedPhotographsItem;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
@@ -109,6 +110,11 @@ public class ForgeClientEvents {
          if (event.getScrollDelta() != 0.0 && MouseHandler.scrolled(event.getScrollDelta())) {
             event.setCanceled(true);
          }
+      }
+
+      @SubscribeEvent
+      public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+         CameraClient.removeViewfinder();
       }
 
       @SubscribeEvent

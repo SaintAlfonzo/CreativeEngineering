@@ -1358,24 +1358,22 @@
 
 	#Structures that would need a lot of earth to stand on. Just before a structure start is stored,
 	#every earth block (tag below) in the bottom layers of its template pieces is compared with the
-	#terrain the generator predicts at that spot. A block where that terrain is water counts toward
-	#maxOverWater, one where it is air toward maxOverAir; past either limit the whole structure is
-	#cancelled and its slot stays empty (a slot shared with other structures tries the next pick).
-	#Village streets that follow the terrain are never counted. Exempt a structure with the structure
-	#tag creativeengineering:earth_fill/exempt. New chunks only; /place structure is not checked.
+	#terrain the generator predicts at that spot. Earth in water counts toward maxOverWater, earth in air
+	#toward the size's air limit, but only where the structure's beard (its terrain adaptation) won't
+	#fill under it: ground deeper than beardReach (buryReach for bury), or always with no adaptation.
+	#Columns whose ground lies more than maxMoundHeight below a piece count toward the size's mound
+	#limit. Past any limit the whole structure is cancelled and its slot stays empty (a slot shared
+	#with other structures tries the next pick). The limits scale with the structure's size (its earth
+	#base block count, [worldgen.earth_fill.sizes]). Village streets that follow the terrain are never
+	#counted. Exempt a structure with the structure tag creativeengineering:earth_fill/exempt. New
+	#chunks only; /place structure is not checked.
 	[worldgen.earth_fill]
-		#Most earth blocks that may stand in water (a pad or skirt reaching into a lake or the sea).
-		#-1 = no limit, 0 = none at all. Vanilla villages in their own biomes: 0, so 24 only trips at
-		#shores. Per structure: see overrides.
+		#Most earth blocks that may stand in water the beard won't fill (a pad reaching out over a lake or the
+		#sea deeper than beardReach). -1 = no limit, 0 = none at all. Vanilla villages set house floors into the
+		#top water layer of rivers and coasts; their beard fills under them, so that doesn't count. Per
+		#structure: see overrides.
 		#Range: -1 ~ 100000
 		maxOverWater = 24
-		#Most earth blocks that may hang in air (a pad sticking out past a cliff or slope).
-		#-1 = no limit, 0 = none at all. Measured on vanilla terrain (tools/earth_fill_sim.sh): a whole
-		#village has a median 60 to 150 and a p99 of 170 to 430 (their terrain adaptation fills most of
-		#it), so 256 only cancels the extremes (savanna 12%, taiga 3%, others 0%); small ruins with a
-		#grass pad want a much lower value: use overrides. Per structure: see overrides.
-		#Range: -1 ~ 100000
-		maxOverAir = 256
 		#How many template layers from the bottom count as the foundation. Earth higher up (roof gardens,
 		#planters) is not counted: above the ground everything is air.
 		#Range: 1 ~ 16
@@ -1383,9 +1381,10 @@
 		#Block tags, one entry each, that count as earth. Fill the default in kubejs blocktags.js; add a tag
 		#here to count another kind of block.
 		blocks = ["creativeengineering:earth_fill/earth"]
-		#Per-structure limits, one entry each: "<structure id or #structure tag>=<water>,<air>", e.g.
-		#"philipsruins:ancient_ruins=0,16" (never over water, at most 16 over air) or
-		#"minecraft:village_plains=-1,-1" (no limits). The first matching entry wins; -1 = no limit.
+		#Per-structure limits, one entry each: "<structure id or #structure tag>=<water>,<air>[,<mound>]",
+		#e.g. "philipsruins:ancient_ruins=0,16" (never over water, at most 16 over air after the beard,
+		#mound from its size) or "#creativeengineering:type/village=-1,-1,-1" (no limits). They replace the
+		#size's limits. The first matching entry wins; -1 = no limit.
 		overrides = []
 		#The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little
 		#coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too.
@@ -1395,6 +1394,47 @@
 		#structure that has any earth in its base. For tuning the limits.
 		#Allowed Values: OFF, CANCELLED, ALL
 		log = "CANCELLED"
+		#How deep under a piece the beard (beard_thin, beard_box, the soft beard) still fills the ground, in
+		#blocks between the piece's bottom and the ground (air and water both: the beard fills either). Earth
+		#over a deeper gap hangs and counts; a shallower one is filled and doesn't. Measured with
+		#tools/earth_fill_sim.sh beard on vanilla villages: the whole gap is filled 81% of the time at 6 blocks,
+		#35% at 7.
+		#Range: 0 ~ 32
+		beardReach = 6
+		#The same for bury (the structure sinks into the ground): filled 100% to 10 blocks, 27% at 11.
+		#Range: 0 ~ 32
+		buryReach = 10
+		#A column whose ground lies more than this many blocks below a piece's bottom is a mound column:
+		#the beard would build a tall pillar there, or can't reach the piece at all (an edge of a ravine, a
+		#pad over a cliff). Each column counts once per structure, toward the size's mound limit.
+		#Range: 0 ~ 64
+		maxMoundHeight = 8
+		#For structures in the structure tag creativeengineering:earth_fill/prune (villages): before the whole start
+		#is judged, each jigsaw piece but the first is judged alone, and one past pruneMaxHanging or pruneMaxMound
+		#is dropped with every piece attached below it (a house over deep water with its villagers). The street
+		#that led to it stays as a dead end. Then the rest is judged as usual. Off: the whole start is judged.
+		prune = true
+		#Earth blocks of one piece over water or air the beard won't fill before that piece is dropped. -1 = never.
+		#Range: -1 ~ 100000
+		pruneMaxHanging = 8
+		#Mound columns of one piece before that piece is dropped. -1 = never.
+		#Range: -1 ~ 100000
+		pruneMaxMound = 4
+
+		#A structure's size is its earth base block count (each start counted as it generates, a meta
+		#structure part by part). Each size has [maxOverAir, maxMound]: earth blocks over air after the beard,
+		#and mound columns; -1 = no limit. First guesses, to calibrate with log = ALL.
+		[worldgen.earth_fill.sizes]
+			#Earth base blocks where medium, large and huge start: under the first is small, from the last on huge.
+			bounds = [150, 600, 2000]
+			#[maxOverAir, maxMound] for small structures (a well, a small ruin, a fish pond).
+			small = [24, 8]
+			#[maxOverAir, maxMound] for medium structures (a house, a camp, a tower).
+			medium = [64, 24]
+			#[maxOverAir, maxMound] for large structures (a village, a fortified village, a mansion).
+			large = [160, 64]
+			#[maxOverAir, maxMound] for huge structures.
+			huge = [320, 128]
 
 	#Water structures that would flood the land. Just before a structure start in the structure tag
 	#creativeengineering:water_fill/structures is stored, every water block of its template pieces (water,
@@ -1464,6 +1504,72 @@
 		#Log every structure start dropped because a higher-ranked structure overlaps it, and every
 		#companion village. For testing.
 		log = false
+
+	#Structure searches. A miss is a slot the cheap prediction called possible, so the search generated that
+	#chunk's structure starts, and nothing was there. Each fold below makes the prediction say "no" earlier,
+	#only where generation would certainly say no. Async Locator's thread count is its own server config
+	#(serverconfig/asynclocator-server.toml, asyncLocatorThreads).
+	[worldgen.locate]
+		#Stage A: the structure set's own frequency and exclusion zone (vanilla checks both when generating but
+		#not when searching). Exact. Applies to new searches immediately.
+		foldPlacement = true
+		#Stage B: the biome at the structure's generation point, with the pack's biome rules and fits (vanilla
+		#never tests the biome in the prediction). Exact. Applies to new searches immediately.
+		foldBiomes = true
+		#A search running off the server thread (Async Locator) waits for a miss's chunk itself instead of making
+		#the server thread block until the chunk's structure starts exist. Off: vanilla's blocking load.
+		nonBlockingLoads = true
+		#Make vanilla's structure-presence cache safe for several search threads at once (needed before raising
+		#asyncLocatorThreads above 1). Read when a dimension loads (rejoin to apply).
+		threadSafeStructureCheck = true
+		#Log one [locate] line for every search with at least this many misses (0 = every search, -1 = never).
+		#Range: > -1
+		logMissesAtLeast = 8
+		#Default search radius of /celocate batch, in chunks (/locate uses 100).
+		#Range: 1 ~ 1000
+		batchRadius = 100
+		#A /celocate batch search still running after this long is reported as timed out and cancelled (Async
+		#Locator never completes a search that threw).
+		#Range: 5 ~ 3600
+		batchTimeoutSeconds = 120
+		#/celocate census splits its square into regions this many chunks wide; each region is one task on
+		#Async Locator's thread pool.
+		#Range: 4 ~ 256
+		censusRegionChunks = 32
+		#A non-blocking miss load that hasn't finished after this long counts as a miss (protects search threads
+		#from a stopping server).
+		#Range: 10 ~ 3600
+		loadTimeoutSeconds = 300
+		#Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and
+		#logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches
+		#too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.
+		#Range: 0 ~ 3600
+		searchTimeoutSeconds = 120
+
+	#Distant Horizons' distant generation only (chunks it generates for LODs and throws away). Below clipBelowY
+	#no terrain noise is computed: land columns are filled with stone, and an ocean column whose block at
+	#clipBelowY is water keeps water down to a fake sand/gravel floor that rolls around a per-biome height.
+	#Chunks players walk in are never affected.
+	[worldgen.distant]
+		#Clip Distant Horizons' generation below clipBelowY.
+		clip = true
+		#No noise below this y (rounded down to a multiple of 16).
+		#Range: -64 ~ 320
+		clipBelowY = 48
+		#Fake floor height in ocean biomes (capped just under clipBelowY).
+		#Range: -64 ~ 320
+		oceanFloorY = 48
+		#Fake floor height in deep ocean biomes (#minecraft:is_deep_ocean).
+		#Range: -64 ~ 320
+		deepOceanFloorY = 8
+		#How far the fake floor rolls above and below its height, in blocks.
+		#Range: 0 ~ 32
+		floorVariation = 4
+		#Width of the fake floor's rolls, in blocks (seeded from the world seed).
+		#Range: 4 ~ 256
+		floorScale = 24
+		#Skip placed features (ores, geodes, cave decoration) that start below clipBelowY.
+		skipFeatures = true
 
 #Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
 #one takes a serving; the servings left show as a durability bar and a tooltip line. The

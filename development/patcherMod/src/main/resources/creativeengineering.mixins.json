@@ -79,6 +79,7 @@
     "QuarkHoeHarvestMixin",
     "QuarkHoeAreaBreakMixin",
     "QuarkHoeAreaHarvestMixin",
+    "QuarkSortingHandlerMixin",
     "CannedGolemColorMixin",
     "WanderingTraderSpawnerMixin",
     "WanderingTraderTradesMixin",
