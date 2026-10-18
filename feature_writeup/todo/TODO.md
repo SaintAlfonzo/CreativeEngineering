@@ -88,6 +88,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Potion bucket tooltips show the potion's durations, not × the bucket's 1.1 / 1.2 effect multiplier. [potion_buckets.md](../potion_buckets.md) 4 F2.
 - Probable, unverified: NEA's three removed enchantments can still roll from `enchant_randomly` loot (the `isDiscoverable` mixin method likely isn't remapped). [archery.md](../archery.md) 4 F6.
 - Engineering: component and coil disassembly comments promise a screwdriver / wirecutter the recipes do not take; iron and diamond components use a different centre on the blueprint. [engineering.md](../engineering.md) 4 F4, F6.
+- Engineering recipes: `minecraft:blast_furnace` and `minecraft:dispenser` have their recipes removed and no replacement, so Little Logistics locomotives and tugs may be uncraftable (F1, F2); amethyst shards have two crushing recipes in both the crushing wheels and the IE crusher, one dead in each (F3). [recipes_engineering.md](../recipes_engineering.md) 4.
 - Probable, unverified: the air brake's `useDurationTicks` is read before Forge loads the config, so edits never apply (GR-28); the dragon set's 36 armor is over vanilla's 30 cap (GR-02). [gear_tuning.md](../gear_tuning.md) 4 F7, F13.
 - Cool Rain may ignore the season types (WE-25). [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2.
 - 5 Terralith cave biomes have no wild crops (single-player warning). [plan_1.0.5.md](../plan_1.0.5.md) 2.
@@ -128,6 +129,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Fixes: a mod-update checklist for the version-pinned fixes (D&D, Breezy, Create config lambda, EET slot) (F3). [fixes_compat.md](../fixes_compat.md) 4.
 - Camera bags: netherite upgrade blocked by Armor Trims without a template, keep or change the material (F1); tier looks (F2). [camera_bags.md](../camera_bags.md) 4.
 - TNT shrapnel: the player who lit the TNT is immune to its shrapnel, keep or include them (F1). [tnt_shrapnel.md](../tnt_shrapnel.md) 4.
+- Engineering recipes: a blast furnace recipe or another block for the LL locomotive and tug (F1); a dispenser recipe (F2); one amethyst crushing output per machine (F3). [recipes_engineering.md](../recipes_engineering.md) 4.
 - Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
 
 **Decided, not carried out:**
@@ -229,6 +231,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [composting.md](../composting.md) | `CM-` | 8 / 0 | new 2026-10-18; prefix CM- (CP- taken) |
 | [camera_bags.md](../camera_bags.md) | `CB-` | 10 / 0 | new 2026-10-18; R4-04..06, R4-11 in plan_1.0.4.md |
 | [tnt_shrapnel.md](../tnt_shrapnel.md) | `TN-` | 10 / 0 | new 2026-10-18; TN-03 settles F1 |
+| [recipes_engineering.md](../recipes_engineering.md) | `RE-` | 20 / 0 | new 2026-10-18; RE-03, RE-08, RE-16 settle F1-F3 |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
