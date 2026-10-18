@@ -136,6 +136,7 @@ KubeJS: `R.ceBaking(inputs, output, e, idOverride, { exp, time, container, tool 
 | 7 | result waiting for plating (display only) | FD's meal slot |
 | 8 | plating container | FD's bowl slot |
 | 9 | output (take only; taking awards recipe xp) | FD's output slot |
+| (buffer 0-1) | leftover slots, take only, menu slots 46-47 right of the output; saved under `Remainders` | [remainder_buffer.md](remainder_buffer.md) |
 
 ### 2.4 Tags
 
@@ -209,8 +210,10 @@ or kettle on the oven heats only while the oven itself is heated. Proven by Game
 ### 3.3 Baking and plating
 
 The tick loop is FD's: progress counts up while heated and a recipe matches, counts down 2 per tick while cold. Each
-bake takes one of each ingredient, ejects remainders (buckets, bottles) out of the front, and adds the result to
-slot 7. A result without a container moves to output; one with a container waits for it (slot 8, or right-click the
+bake takes one of each ingredient and adds the result to slot 7. Ingredient leftovers (buckets, bottles) go to the
+container slot when the waiting result is served in them, else to the two leftover slots; with the remainder buffer
+switched off (`[cooking] remainderBuffer`) or full they come out of the front ([remainder_buffer.md](remainder_buffer.md)).
+A bake whose leftovers wouldn't fit waits (`stallWhenFull`). A result without a container moves to output; one with a container waits for it (slot 8, or right-click the
 oven with it).
 
 ### 3.4 Tool slot
@@ -221,13 +224,13 @@ Recipes can ask for bakeware; only the dummy recipes do so far (2.7). The tool i
 
 - Insert: bakeware to the tool slot; the plating item (what the waiting result needs, or the last recipe's
   container) to slot 8; anything else to the ingredient slots.
-- Extract: output slot only.
+- Extract: output slot, then the two leftover slots (handler slots 10-11).
 - Limit: an item that is the last recipe's plating item can't be inserted as an ingredient by automation.
 
 ### 3.6 Changes from FD's pot
 
 No recipe book (it needs a `RecipeBookType` enum extension), no meal kept in the item when broken, no custom name,
-remainders eject from the front instead of the left. The GUI draws FD's own `cooking_pot.png` by resource location
+leftovers that don't go to the buffer eject from the front instead of the left. The GUI draws FD's own `cooking_pot.png` by resource location
 (including its pot picture behind the result slot) plus a copied slot frame for the tool; JEI does the same.
 
 ### 3.7 Lang
@@ -338,3 +341,5 @@ Needs a patcherMod build in `mods/`.
   pot, oven and bakeware crafting recipes, muffin pot recipes on `#forge:dough`. Dough lead corrected (3.8). Compiles;
   8 GameTests pass.
 - 2026-10-18: one dummy baking recipe per bakeware piece (2.7).
+- 2026-10-18: remainder buffer: two leftover slots (GUI, automation, drops, saved), leftovers recycled into the
+  container slot when they plate the waiting result ([remainder_buffer.md](remainder_buffer.md)).

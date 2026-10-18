@@ -93,6 +93,9 @@ public class CreativeEngineering
         // Oven: FD cooking-pot style baking block + the creativeengineering:baking recipe type
         // (oven/ package; feature_writeup/oven.md). Recipes and tags are KubeJS.
         com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.register(modEventBus);
+        // Remainder buffer: pot/kettle/oven keep ingredient leftovers in two slots instead of throwing them
+        // (cooking/ package + mixin/*RemainderMixin; feature_writeup/remainder_buffer.md). Saved as an attached cap.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferStorage.class);
         // Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)

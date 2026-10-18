@@ -43,11 +43,15 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
+import com.SaintAlfonzo.creativeengineering.cooking.RemainderBuffer;
+import com.SaintAlfonzo.creativeengineering.cooking.RemainderOutputHandler;
+
 /**
  * Farmer's Delight's CookingPotBlockEntity (1.19.2-1.2.4, MIT) adapted for baking: a tool slot the recipe can ask
  * for (never used up), the oven's own heat rule ({@link OvenHeat}) mirrored into the block's {@code lit} state (which
  * is what makes it a stove-heat source for a pot on top), side automation from every face, no recipe book and no
  * meal-in-item. Slots: 0-5 ingredients, 6 tool, 7 result waiting for plating, 8 plating container, 9 output.
+ * Ingredient leftovers go to the container slot or a {@link RemainderBuffer} (feature_writeup/remainder_buffer.md).
  */
 public class OvenBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -76,7 +80,9 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
     );
 
     private final ItemStackHandler inventory = createHandler();
-    private final LazyOptional<IItemHandler> automationHandler = LazyOptional.of(() -> new OvenItemHandler(this));
+    private final RemainderBuffer remainders = new RemainderBuffer(() -> setChanged());
+    private final LazyOptional<IItemHandler> automationHandler =
+            LazyOptional.of(() -> new RemainderOutputHandler(new OvenItemHandler(this), remainders));
     private final ContainerData data = createData();
     private final Object2IntOpenHashMap<ResourceLocation> usedRecipeTracker = new Object2IntOpenHashMap<>();
 
@@ -168,6 +174,18 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private boolean canBake(BakingRecipe recipe) {
+        return hasRoomForResult(recipe) && hasRoomForLeftovers(recipe);
+    }
+
+    private boolean hasRoomForLeftovers(BakingRecipe recipe) {
+        if (!RemainderBuffer.stalls()) return true;
+        return remainders.fits(
+                RemainderBuffer.leftovers(inventory, 0, BakingRecipe.INPUT_SLOTS, INGREDIENT_REMAINDER_OVERRIDES),
+                inventory, CONTAINER_SLOT, RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()),
+                getMeal().getCount() + recipe.getResultItem().getCount());
+    }
+
+    private boolean hasRoomForResult(BakingRecipe recipe) {
         ItemStack resultStack = recipe.getResultItem();
         if (resultStack.isEmpty()) {
             return false;
@@ -220,6 +238,10 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
 
     private void ejectIngredientRemainder(ItemStack remainderStack) {
         if (level == null) return;
+        if (RemainderBuffer.enabled()) {
+            remainderStack = remainders.store(remainderStack, inventory, CONTAINER_SLOT, this::isContainerValid, getMeal().getCount());
+            if (remainderStack.isEmpty()) return;
+        }
         // Out of the front, where the door is (the pot uses its left side; the oven's top is often taken).
         Direction direction = getBlockState().getValue(OvenBlock.FACING);
         double x = worldPosition.getX() + 0.5 + direction.getStepX() * 0.6;
@@ -346,6 +368,10 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
         return inventory;
     }
 
+    public RemainderBuffer getRemainders() {
+        return remainders;
+    }
+
     public ItemStack getMeal() {
         return inventory.getStackInSlot(MEAL_DISPLAY_SLOT);
     }
@@ -359,6 +385,9 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
         NonNullList<ItemStack> drops = NonNullList.create();
         for (int i = 0; i < INVENTORY_SIZE; ++i) {
             drops.add(inventory.getStackInSlot(i));
+        }
+        for (int i = 0; i < remainders.getSlots(); ++i) {
+            drops.add(remainders.getStackInSlot(i));
         }
         return drops;
     }
@@ -379,6 +408,7 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
     public void load(CompoundTag compound) {
         super.load(compound);
         inventory.deserializeNBT(compound.getCompound("Inventory"));
+        remainders.deserializeNBT(compound.getCompound("Remainders"));
         cookTime = compound.getInt("CookTime");
         cookTimeTotal = compound.getInt("CookTimeTotal");
         mealContainerStack = ItemStack.of(compound.getCompound("Container"));
@@ -396,6 +426,7 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
         compound.putInt("CookTimeTotal", cookTimeTotal);
         compound.put("Container", mealContainerStack.serializeNBT());
         compound.put("Inventory", inventory.serializeNBT());
+        compound.put("Remainders", remainders.serializeNBT());
         CompoundTag compoundRecipes = new CompoundTag();
         usedRecipeTracker.forEach((recipeId, craftedAmount) -> compoundRecipes.putInt(recipeId.toString(), craftedAmount));
         compound.put("RecipesUsed", compoundRecipes);

@@ -1,0 +1,12 @@
+// GameTest harness for the remainder buffer (feature_writeup/remainder_buffer.md 6). Its own Gradle build,
+// run through tools/test_remainder_buffer.sh. It reuses the instance's ce.forge-mod convention plugin.
+pluginManagement {
+    includeBuild '../../build-logic'
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    }
+}
+plugins { id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0' }
+rootProject.name = 'remainder_buffer_test'

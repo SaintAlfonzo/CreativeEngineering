@@ -1,0 +1,33 @@
+// Compiles the remainder buffer straight from patcherMod's sources (cooking/, the pot and kettle BE + menu mixins,
+// oven/ without JEI and client classes) next to the stand-in main class/config and the tests in src/, with
+// Farmer's Delight and Farmer's Respite deobfuscated at runtime (jars in libs/, fetched by the test script).
+plugins { id 'ce.forge-mod' }
+
+repositories { flatDir { dirs 'libs' } }
+
+dependencies {
+    implementation fg.deobf('local:farmersdelight:1.2.4')
+    implementation fg.deobf('local:farmersrespite:2.0')
+}
+
+def patcherSrc = file('../../development/patcherMod/src/main/java')
+def syncPatcherSources = tasks.register('syncPatcherSources', Sync) {
+    from(patcherSrc) {
+        include 'com/SaintAlfonzo/creativeengineering/cooking/**'
+        include 'com/SaintAlfonzo/creativeengineering/oven/**'
+        include 'com/SaintAlfonzo/creativeengineering/mixin/CookingPotRemainderMixin.java'
+        include 'com/SaintAlfonzo/creativeengineering/mixin/CookingPotMenuRemainderMixin.java'
+        include 'com/SaintAlfonzo/creativeengineering/mixin/KettleRemainderMixin.java'
+        include 'com/SaintAlfonzo/creativeengineering/mixin/KettleMenuRemainderMixin.java'
+        exclude '**/jei/**', '**/client/**'
+    }
+    into layout.buildDirectory.dir('patcher-src')
+}
+sourceSets.main.java.srcDir(syncPatcherSources)
+
+// Dev runs: the mods' refmaps need remapping to official names, and our mixin config isn't in a jar manifest.
+minecraft.runs.configureEach {
+    property 'mixin.env.remapRefMap', 'true'
+    property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+    args '-mixin.config=rbtest.mixins.json'
+}
