@@ -2,6 +2,37 @@
 - structures 
     - greenhouses
         - wide pool of berry, saplings, fruit tree saplings, flowers from biome types (snowy and cold in spruce, all jungle crops in  jungle, birch flowers/crops(onion) in birch, etc)
+    - pillager towers
+        - ensure end pillagers spawn with diving gear
+    - driftwood
+        - (old note) lower individual frequency, increase metastructure frequency
+    - floating debris
+        - create more variants
+        - dynamic wood type?
+    - villager rafts
+        - save damaged variants, load into pack
+        - dynamic wool type on spawn
+    - placement order
+        - doesnt work how i thought, amend placement order for importance and hard to place structures instead of structure 'age'
+    - spawner blocks
+        - remove pillager spawner blocks from structures?
+            - configurable option
+            - how do vanilla pillagers spawn?
+                -add pillager spawn box to structures?
+    - more structures
+        - greenhouse variants
+        - camera shop
+        - starer bases
+        - pioneer structures
+        - travellings boats, in groups
+        - peaceful raft variants
+
+- loot
+    - lower chalk frequency, skew to spawn more in libraries and underground
+    - boost crate/sack rates in villager and farming houses, slight boost underground
+    - boost basic cans in villager and farming houses, large boost underground
+        - small chance for named cans? lore names?
+    - mca combs, thread, rings (rare in homes, more frequently in blacksmiths/churches), boquets (boost in flower houses) in villager houses
 
 - other, migrate elsewhere
     - make 3 long curtain blocks
@@ -16,12 +47,15 @@
     - allow backpacks to be smithed for reskin
         - fruit basket
     - give composters more wood types
+    - ensure cows in skyland, 100% mooblooms
     - mod family tags
         - create mods
         - farmers delight mods (some farmers_xyz, some xyz_delight)
     - framed blocks
         - change copycat resource pack to keep framed block name, disabled by default on client
     - smoked wood recipe
+    - verify firefly mod works, allow catching fireflies with jar?
+    - more allay spawns in pillager cages, mystical biomes and structures
     - prevent canvas sign dying (allow text to dye, not sign)
     - lower wandering trader wares trades
     - vinery grass slab biome tint

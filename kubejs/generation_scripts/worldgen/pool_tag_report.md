@@ -62,8 +62,8 @@ Pool scaled x3 to hold fractional weights.
 | `dynamicvillage:desert/desert_plumber` | 20 | 9.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
 | `cloudstorage:balloon_stand_desert` | 2 | 0.9% | 6 | 1.7% |  |
 | `domesticationinnovation:desert_petshop` | 17 | 7.9% | 51 | 14.3% |  |
-| `wares:village/houses/desert_warehouse` | 10 | 4.6% | 30 | 8.4% |  |
 | `monobank:village/houses/desert_vault` | 15 | 6.9% | 8 | 2.2% | monobank/vault_houses x0.18 |
+| `wares:village/houses/desert_warehouse` | 10 | 4.6% | 30 | 8.4% |  |
 | `chefsdelight:desert_chef_house` | 5 | 2.3% | 15 | 4.2% |  |
 | `chefsdelight:desert_cook_house` | 3 | 1.4% | 9 | 2.5% |  |
 | `farmersdelight:village/houses/desert_compost_pile` | 3 | 1.4% | 9 | 2.5% |  |
@@ -145,8 +145,8 @@ Pool scaled x3 to hold fractional weights.
 | `dynamicvillage:plains/plains_plumber` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
 | `cloudstorage:balloon_stand_plains` | 2 | 0.8% | 6 | 1.5% |  |
 | `domesticationinnovation:plains_petshop` | 17 | 7.1% | 51 | 12.6% |  |
-| `wares:village/houses/plains_warehouse` | 10 | 4.2% | 30 | 7.4% |  |
 | `monobank:village/houses/plains_vault` | 15 | 6.3% | 8 | 2.0% | monobank/vault_houses x0.18 |
+| `wares:village/houses/plains_warehouse` | 10 | 4.2% | 30 | 7.4% |  |
 | `chefsdelight:plains_chef_house` | 5 | 2.1% | 15 | 3.7% |  |
 | `chefsdelight:plains_cook_house` | 2 | 0.8% | 6 | 1.5% |  |
 | `farmersdelight:village/houses/plains_compost_pile` | 5 | 2.1% | 15 | 3.7% |  |
@@ -228,8 +228,8 @@ Pool scaled x3 to hold fractional weights.
 | `dynamicvillage:savanna/savanna_plumber` | 20 | 8.5% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
 | `cloudstorage:balloon_stand_savanna` | 2 | 0.8% | 6 | 1.5% |  |
 | `domesticationinnovation:savanna_petshop` | 17 | 7.2% | 51 | 13.0% |  |
-| `wares:village/houses/savanna_warehouse` | 10 | 4.2% | 30 | 7.7% |  |
 | `monobank:village/houses/savanna_vault` | 15 | 6.4% | 8 | 2.0% | monobank/vault_houses x0.18 |
+| `wares:village/houses/savanna_warehouse` | 10 | 4.2% | 30 | 7.7% |  |
 | `chefsdelight:savanna_chef_house` | 5 | 2.1% | 15 | 3.8% |  |
 | `chefsdelight:savanna_cook_house` | 3 | 1.3% | 9 | 2.3% |  |
 | `farmersdelight:village/houses/savanna_compost_pile` | 4 | 1.7% | 12 | 3.1% |  |
@@ -313,8 +313,8 @@ Pool scaled x3 to hold fractional weights.
 | `dynamicvillage:snowy/snowy_plumber` | 20 | 9.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
 | `cloudstorage:balloon_stand_snowy` | 2 | 0.9% | 6 | 1.7% |  |
 | `domesticationinnovation:snowy_petshop` | 17 | 8.0% | 51 | 14.7% |  |
-| `wares:village/houses/snowy_warehouse` | 10 | 4.7% | 30 | 8.6% |  |
 | `monobank:village/houses/snowy_vault` | 15 | 7.0% | 8 | 2.3% | monobank/vault_houses x0.18 |
+| `wares:village/houses/snowy_warehouse` | 10 | 4.7% | 30 | 8.6% |  |
 | `chefsdelight:snowy_chef_house` | 4 | 1.9% | 12 | 3.5% |  |
 | `chefsdelight:snowy_cook_house` | 3 | 1.4% | 9 | 2.6% |  |
 | `farmersdelight:village/houses/snowy_compost_pile` | 3 | 1.4% | 9 | 2.6% |  |
@@ -392,8 +392,8 @@ Pool scaled x3 to hold fractional weights.
 | `dynamicvillage:taiga/taiga_plumber` | 20 | 8.7% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
 | `cloudstorage:balloon_stand_taiga` | 2 | 0.9% | 6 | 1.6% |  |
 | `domesticationinnovation:taiga_petshop` | 17 | 7.4% | 51 | 13.6% |  |
-| `wares:village/houses/taiga_warehouse` | 10 | 4.3% | 30 | 8.0% |  |
 | `monobank:village/houses/taiga_vault` | 15 | 6.5% | 8 | 2.1% | monobank/vault_houses x0.18 |
+| `wares:village/houses/taiga_warehouse` | 10 | 4.3% | 30 | 8.0% |  |
 | `chefsdelight:taiga_chef_house` | 4 | 1.7% | 12 | 3.2% |  |
 | `chefsdelight:taiga_cook_house` | 3 | 1.3% | 9 | 2.4% |  |
 | `farmersdelight:village/houses/taiga_compost_pile` | 4 | 1.7% | 12 | 3.2% |  |
