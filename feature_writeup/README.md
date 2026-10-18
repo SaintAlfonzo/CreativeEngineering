@@ -80,6 +80,7 @@ What is still left across every writeup (not started, partly done, open bugs, op
 | Wood recipes (species bark from saw and cutting-board stripping, reattach for 6 species; IE sawdust from every wooden shape; ash, creosote sawdust, wood pellets; compost, fertile soil and nulch from mulches; Create saw shapes for 13 species; chimney soot) | [recipes_wood.md](recipes_wood.md) | `RW-` | DEPLOYED (since 1.0.3), RW-01 to RW-10 pending; findings F1-F6, F1 is a bug (IE crusher: planks missing, logs probably 2 sawdust) |
 | Cooking recipes (one flour and dough, bread blocks, sourdough; tomato sauce and melon juice by machine; sugar as `#forge:sugar`; machine routes for about 25 meals; golden food by mixing and arc furnace; ruby chocolate; cultivated meat from mob samples) | [recipes_cooking.md](recipes_cooking.md) | `RC-` | DEPLOYED (since 1.0.3), RC-01 to RC-14 pending; findings F1-F7, F1 (no smoker recipe) and F2 (vanilla cake removed) need a decision |
 | Magic recipes (Create Enchantment Industry machines on experience blocks; sculk doubled with liquid XP; ender chests behind a Botania third eye, Cloud Storage and Ender Storage on tags; Nature's Compass on terrasteel, Explorer's Compass removed) | [recipes_magic.md](recipes_magic.md) | `RA-` | DEPLOYED (since 1.0.3), RA-01 to RA-08 pending; findings F1-F4, F1 (Explorer's Compass uncraftable) needs a decision |
+| Recipe progression hub (the order the recipe scripts set, from stone generators to steel, mechanisms and magic; removed items: 309 ids hidden, tagged red, tag-stripped and scanned; dead recipes: `dead_recipe_removal.js`, `kubejs/recipes/`, old `global.CE` blocks) | [recipe_progression.md](recipe_progression.md) | `RP-` | DEPLOYED (since 1.0.3), RP-01 to RP-08 pending; findings F1-F6, F1 (five items left without a recipe: blast furnace, dispenser, smoker, Explorer's Compass, maybe cake) needs a decision |
 
 ## Release plans
 
@@ -93,8 +94,8 @@ What is still left across every writeup (not started, partly done, open bugs, op
 
 ## Backlog: the rest of the pack, one small chunk at a time
 
-Not written yet. Each line is one writeup-sized chunk; Claude proposes the next one at natural
-stopping points and you pick (or reorder). Prefixes are proposals.
+All 21 rows written as of 2026-10-18; each row links its writeup and the index above has a row for each. New
+chunks go here as they come up: one writeup-sized chunk per line, prefixes are proposals.
 
 | # | Chunk | Covers | Prefix |
 |---|---|---|---|
@@ -117,7 +118,7 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | 17 | ~~TNT shrapnel~~ | done: [tnt_shrapnel.md](tnt_shrapnel.md) | `TN-` |
 | 18 | ~~Nether portal ignition~~ | done: [nether_portal.md](nether_portal.md) | `NP-` |
 | 19 | ~~Mob and block tweaks~~ | done: [mob_block_tweaks.md](mob_block_tweaks.md) | `MT-` |
-| 20 | Recipe progression | the engineering/, metal/, wood/, cooking/, magic/ recipe scripts as a whole (components, power, oil, computing, pneumatic, crystals, metal unification, bark/sawdust/ash, chocolate, cultivated meat, XP, enchants, sculk), removed items and dead recipes; written so far: [recipes_engineering.md](recipes_engineering.md) (`RE-`), [recipes_metal.md](recipes_metal.md) (`RM-`), [recipes_wood.md](recipes_wood.md) (`RW-`), [recipes_cooking.md](recipes_cooking.md) (`RC-`), [recipes_magic.md](recipes_magic.md) (`RA-`) | `RP-` (split per folder when picked) |
+| 20 | ~~Recipe progression~~ | done: hub [recipe_progression.md](recipe_progression.md), per folder [recipes_engineering.md](recipes_engineering.md), [recipes_metal.md](recipes_metal.md), [recipes_wood.md](recipes_wood.md), [recipes_cooking.md](recipes_cooking.md), [recipes_magic.md](recipes_magic.md) | `RP-` (`RE-`, `RM-`, `RW-`, `RC-`, `RA-`) |
 | 21 | ~~Archery and bullets~~ | done: [archery.md](archery.md) | `AR-` |
 
 ## Status legend

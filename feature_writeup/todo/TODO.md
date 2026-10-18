@@ -32,7 +32,6 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
 | Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 20 | not written; 20 of 21 rows done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
 
 ## 2. Partly done: built vs still to do
@@ -91,6 +90,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Engineering recipes: `minecraft:blast_furnace` and `minecraft:dispenser` have their recipes removed and no replacement, so Little Logistics locomotives and tugs may be uncraftable (F1, F2); amethyst shards have two crushing recipes in both the crushing wheels and the IE crusher, one dead in each (F3). [recipes_engineering.md](../recipes_engineering.md) 4.
 - Metal recipes: zinc can still be hammer-crushed by IE's own recipes (F3); 9 copper plates → copper plate block has no pack recipe (F2); `console.log('EVENT:', e)` in both base metal files (F7). [recipes_metal.md](../recipes_metal.md) 4.
 - Wood recipes: `sawdust.js` line 28 crushes `i.any_log` a second time where planks were meant, so planks have no IE crusher recipe and logs probably give 2 sawdust instead of 3 (same generated id) (F1). [recipes_wood.md](../recipes_wood.md) 4.
+- Recipe scan: `_lib/recipe_scan.js` walks every recipe once per removed item (309 passes) on the first load of a session; not measured (F2). [recipe_progression.md](../recipe_progression.md) 4.
 - Probable, unverified: the air brake's `useDurationTicks` is read before Forge loads the config, so edits never apply (GR-28); the dragon set's 36 armor is over vanilla's 30 cap (GR-02). [gear_tuning.md](../gear_tuning.md) 4 F7, F13.
 - Cool Rain may ignore the season types (WE-25). [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2.
 - 5 Terralith cave biomes have no wild crops (single-player warning). [plan_1.0.5.md](../plan_1.0.5.md) 2.
@@ -135,6 +135,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Metal recipes: one plate method per metal or Create pressing for the missing 5 (F1); hand-crafted rods for every metal or none (F4); rose gold in the gold block tag (F5). [recipes_metal.md](../recipes_metal.md) 4.
 - Cooking recipes: a smoker recipe (vanilla's removed, none added) (F1); keep the vanilla cake removal (F2). [recipes_cooking.md](../recipes_cooking.md) 4.
 - Magic recipes: Explorer's Compass has no recipe, loot only or a late recipe (F1). [recipes_magic.md](../recipes_magic.md) 4.
+- Recipe progression: give the blast furnace, dispenser, smoker and Explorer's Compass a recipe or add them to `removed_items.js`; check the cake (F1). [recipe_progression.md](../recipe_progression.md) 4.
 - Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
 
 **Decided, not carried out:**
@@ -168,7 +169,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 
 - **Loot overhaul** ([loot/](../kubejs/server_scripts/loot/README.md)): the LootJS-only layer is scaffolding (2).
 - **Dictionary worklists** ([startup_scripts/todo/](../kubejs/startup_scripts/todo/)): four `.txt` lists not merged (5). `recipes_to_remove.txt` is fed by the still-live `_lib/recipe_scan.js`; `remove_list.txt` has one item left, `vintageimprovements:rose_gold_rod` (check before removing).
-- **Helper migration `global.CE` -> `global.NCH`**: old blocks commented out in place: [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js) from line 60 (and a debug snippet at 280), [resource_blocks.js](../kubejs/server_scripts/engineering/resource_blocks.js) from line 257, [cooking.js](../kubejs/server_scripts/cooking/cooking.js) from line 328. `kubejs/archive/` (9 files and `worldgen/`) has no live references. Keep or delete is your call.
+- **Helper migration `global.CE` -> `global.NCH`**: old blocks commented out in place: [misc_mods.js](../../kubejs/server_scripts/other/misc_mods.js) from line 60 (and a debug snippet at 280), [resource_blocks.js](../../kubejs/server_scripts/engineering/resource_blocks.js) from line 257, [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) from line 340. `kubejs/archive/` (9 files and `worldgen/`) has no live references. Keep or delete is your call.
 - **`kubejs/recipes/`** (4 JSON files: bonemeal broth, sawmill recycle) is not a KubeJS load path, so they don't load. Port them through NCH or delete them.
 - **`kubejs/quest_working/produce.txt`**: already merged into `food_purchasing.snbt` (per todo.txt); safe to delete.
 - **Sawmill generator** ([sawmill.js](../kubejs/generation_scripts/sawmill.js)): manual pipeline into 211 jar JSON copies (4).
@@ -241,6 +242,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [recipes_wood.md](../recipes_wood.md) | `RW-` | 10 / 0 | new 2026-10-18; RW-03 checks F1 |
 | [recipes_cooking.md](../recipes_cooking.md) | `RC-` | 14 / 0 | new 2026-10-18; RC-01, RC-02 settle F1, F2 |
 | [recipes_magic.md](../recipes_magic.md) | `RA-` | 8 / 0 | new 2026-10-18; RA-07 settles F1 |
+| [recipe_progression.md](../recipe_progression.md) | `RP-` | 8 / 0 | new 2026-10-18; RP-05 collects the missing-recipe checks; folder tests in RE-, RM-, RW-, RC-, RA- |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
