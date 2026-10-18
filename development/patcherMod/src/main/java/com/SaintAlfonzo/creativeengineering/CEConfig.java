@@ -821,10 +821,13 @@ public final class CEConfig {
     /**
      * Dials for {@code compat.jei.CraftableFirstRecipeLayoutList}, a backport of JEI 19's
      * "Show craftable recipes first" sorting to JEI 11.8.1 (port notes:
-     * feature_writeup/jei_craftable_first_port.md). Client-side only; a server ignores it.
+     * feature_writeup/jei_craftable_first_port.md), and for {@code compat.jei.PackIngredientOrder}, the pack's
+     * order of the ingredient list (feature_writeup/jei_ordering.md). Client-side only; a server ignores it.
      */
     public static final class Jei {
         public final ForgeConfigSpec.BooleanValue craftableFirst;
+        public final ForgeConfigSpec.BooleanValue packOrder;
+        public final ForgeConfigSpec.BooleanValue orderReport;
 
         private Jei(ForgeConfigSpec.Builder b) {
             b.comment("JEI recipe screen tweaks (client side).").push("jei");
@@ -835,6 +838,21 @@ public final class CEConfig {
                     "most-complete first (the share of inputs you already have). Other screens keep JEI's own order.",
                     "Takes effect the next time a recipe lookup opens."
             ).define("craftableFirst", true);
+
+            packOrder = b.comment(
+                    "Order JEI's ingredient list by the pack's definition (kubejs/startup_scripts/jei/order.js) and its",
+                    "creativeengineering:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then",
+                    "each category's own order. Ingredients with no place keep JEI's own order ([sorting] in",
+                    "config/jei/jei-client.ini) after the placed ones of their type. Off: JEI's own order only.",
+                    "Takes effect the next time JEI starts (rejoin or /reload)."
+            ).define("packOrder", true);
+
+            orderReport = b.comment(
+                    "Write kubejs/exported/jei_order.json at every JEI start: every item, fluid, effect and multiblock with",
+                    "its place in the pack order and whether JEI shows it (shown / hidden by the pack / hidden by a mod /",
+                    "hidden in JEI's edit mode / never in JEI), plus problems in the definition. Render it with",
+                    "python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB."
+            ).define("orderReport", false);
 
             b.pop(); // jei
         }
