@@ -1,0 +1,30 @@
+
+- structures 
+    - greenhouses
+        - wide pool of berry, saplings, fruit tree saplings, flowers from biome types (snowy and cold in spruce, all jungle crops in  jungle, birch flowers/crops(onion) in birch, etc)
+
+- other, migrate elsewhere
+    - make 3 long curtain blocks
+    - collapsable ladders
+        - extending functions like curtain block
+        - only climbable when down
+        - iron varient requries redstone
+    - backport chiseled bookshelves
+        - framed and copycat version?
+    - set minimum leaf layer height slowdown
+    - plant flowers on copycat/framed dirt blocks
+    - allow backpacks to be smithed for reskin
+        - fruit basket
+    - give composters more wood types
+    - framed blocks
+        - change copycat resource pack to keep framed block name, disabled by default on client
+    - smoked wood recipe
+    - prevent canvas sign dying (allow text to dye, not sign)
+    - lower wandering trader wares trades
+    - vinery grass slab biome tint
+    - vinery backport license
+        - code is mit (i can use this, rebuild features in older version)
+        - assets are rights reserved
+            - inquired, author denied redistribution of "assets and features"
+                - new features shouldnt be restricted, mit
+                - assets can be shipped in newest jar, new alcho backport mod points to assets in unloaded mod
