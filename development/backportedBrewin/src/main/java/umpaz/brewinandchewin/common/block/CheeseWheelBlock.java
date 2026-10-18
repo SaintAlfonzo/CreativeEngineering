@@ -1,0 +1,103 @@
+package umpaz.brewinandchewin.common.block;
+
+import java.util.function.Supplier;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import umpaz.brewinandchewin.common.utility.BnCTextUtils;
+import vectorwing.farmersdelight.common.tag.ForgeTags;
+
+public class CheeseWheelBlock extends Block {
+   public static final IntegerProperty SERVINGS = IntegerProperty.create("servings", 0, 3);
+   protected static final VoxelShape[] SHAPES = new VoxelShape[]{
+      Block.box(2.0, 0.0, 2.0, 8.0, 6.0, 8.0),
+      Block.box(2.0, 0.0, 2.0, 14.0, 6.0, 8.0),
+      Shapes.or(Block.box(2.0, 0.0, 2.0, 14.0, 6.0, 8.0), Block.box(2.0, 0.0, 8.0, 8.0, 6.0, 14.0)),
+      Block.box(2.0, 0.0, 2.0, 14.0, 6.0, 14.0)
+   };
+   public final Supplier<Item> cheeseWedgeType;
+
+   public CheeseWheelBlock(Supplier<Item> cheeseWedgeType, Properties properties) {
+      super(properties);
+      this.registerDefaultState(this.stateDefinition.any().setValue(SERVINGS, 3));
+      this.cheeseWedgeType = cheeseWedgeType;
+   }
+
+   @Override
+   public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+      return SHAPES[state.getValue(SERVINGS)];
+   }
+
+   @Override
+   public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos) {
+      return facing == Direction.DOWN && !this.canSurvive(state, level, pos)
+         ? Blocks.AIR.defaultBlockState()
+         : super.updateShape(state, facing, facingState, level, pos, facingPos);
+   }
+
+   @Override
+   public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+      return canSupportCenter(level, pos.below(), Direction.UP);
+   }
+
+   @Override
+   public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+      ItemStack stack = player.getItemInHand(hand);
+      int servings = state.getValue(SERVINGS);
+      if (stack.is(ForgeTags.TOOLS_KNIVES)) {
+         level.playSound(null, pos, SoundEvents.WOOL_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
+         popResource(level, pos, new ItemStack(this.cheeseWedgeType.get(), 1));
+         if (servings > 0) {
+            level.setBlock(pos, state.setValue(SERVINGS, servings - 1), 3);
+         } else if (servings == 0) {
+            level.destroyBlock(pos, false);
+         }
+
+         return InteractionResult.sidedSuccess(level.isClientSide);
+      } else {
+         player.displayClientMessage(BnCTextUtils.getTranslation("block.feast.use_knife"), true);
+         return InteractionResult.PASS;
+      }
+   }
+
+   @Override
+   protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+      builder.add(SERVINGS);
+   }
+
+   @Override
+   public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
+      return blockState.getValue(SERVINGS);
+   }
+
+   @Override
+   public boolean hasAnalogOutputSignal(BlockState state) {
+      return true;
+   }
+
+   @Override
+   public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
+      return false;
+   }
+}

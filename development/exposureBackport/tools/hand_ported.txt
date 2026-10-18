@@ -35,6 +35,7 @@ io/github/mortuusars/exposure/mixin/client/ItemRendererMixin.java
 io/github/mortuusars/exposure/mixin/client/MinecraftMixin.java
 io/github/mortuusars/exposure/mixin/client/MouseHandlerMixin.java
 io/github/mortuusars/exposure/mixin/client/KeyMappingMixin.java
+io/github/mortuusars/exposure/client/input/MouseHandler.java
 io/github/mortuusars/exposure/mixin/client/HumanoidModelMixin.java
 io/github/mortuusars/exposure/forge/mixin/create/FillingBySpoutMixin.java
 io/github/mortuusars/exposure/world/item/crafting/recipe/ComponentTransferringRecipe.java

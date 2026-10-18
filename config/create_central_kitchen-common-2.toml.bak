@@ -8,7 +8,7 @@
 	enableCuttingBoardDeploying = true
 	#.
 	#List of Block Entities that can be boosted when placed on Blaze Stove
-	boostingCookerList = ["farmersdelight:cooking_pot", "farmersdelight:skillet"]
+	boostingCookerList = ["farmersdelight:cooking_pot", "farmersdelight:skillet", "farmersrespite:kettle"]
 
 #.
 #Config for Integration with other mods
@@ -34,4 +34,6 @@
 	#Basket of Farmers Delight has a 8 ticks transfer cooldown. Disable the cooldown for better automation.
 	#[@cui:RequiresReload:server]
 	disableTransferCooldownForFarmersDelightBasket = true
+
+FarmersDelightBasket = true
 

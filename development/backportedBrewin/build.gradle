@@ -1,0 +1,64 @@
+// backportedBrewin: Brewin' And Chewin' 4.5.0 ported to Forge 1.19.2 (mod id brewinandchewin).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
+// Build from the instance root (`./gradlew :backportedBrewin:build`) or from here (`./gradlew build`).
+plugins {
+    id 'ce.forge-mod-refmap'
+}
+
+repositories {
+    // Third-party mod jars copied from ../../mods (git-ignored).
+    flatDir { dir 'libs' }
+    mavenCentral()
+}
+
+dependencies {
+    // Farmer's Delight is the one hard dependency. fg.deobf remaps the SRG-named jars to Mojang names, so our code
+    // can call Minecraft methods inherited through their classes (SyncedBlockEntity, ConsumableItem, ...).
+    // flatDir notation: 'local:<file name without -version>:<version>'
+    compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
+    // Optional integrations; every entry point checks the mod is loaded first.
+    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+    compileOnly fg.deobf('local:create-1.19.2:0.5.1.i')
+    compileOnly fg.deobf('local:flywheel-forge-1.19.2:0.6.11-22')
+    compileOnly fg.deobf('local:Registrate-MC1.19:1.1.5')
+    compileOnly fg.deobf('local:appleskin-forge-mc1.19:2.4.2')
+
+    // MixinExtras (WrapOperation, ModifyExpressionValue, Local, ...) as upstream uses it. Not bundled: the pack
+    // already loads MixinExtras 0.5.4 through other mods. The annotation processor writes the refmap entries.
+    compileOnly 'io.github.llamalad7:mixinextras-common:0.4.1'
+    annotationProcessor 'io.github.llamalad7:mixinextras-common:0.4.1'
+}
+
+// Access transformer (SRG names, generated from tools/accesstransformer.official.cfg by tools/gen_at.py).
+minecraft {
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+}
+
+// Mixins use Mojang names and get a real refmap, like exposureBackport.
+mixin {
+    add sourceSets.main, 'brewinandchewin.refmap.json'
+    mixin_configs.split(',').each { config it.trim() }
+}
+
+// The mixin AP writes the refmap into the compile task's temporary dir, which Gradle doesn't track: declare it as an
+// output so a missing one re-runs the compile (exposureBackport shipped a jar without its refmap once).
+tasks.named('compileJava', JavaCompile).configure {
+    outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
+    options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
+}
+
+// Backstop: every mixin config that lists mixins must find its refmap in the jar.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def jarFile = archiveFile.get().asFile
+        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
+        def slurper = new groovy.json.JsonSlurper()
+        mixin_configs.split(',').collect { it.trim() }.each { config ->
+            def json = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> slurper.parse(zip.getInputStream(zip.getEntry(config))) }
+            def count = ['mixins', 'client', 'server'].sum { (json[it] ?: []).size() }
+            if (count > 0 && json.refmap && !entries.contains(json.refmap)) {
+                throw new GradleException("${config} has ${count} mixin(s) but its refmap ${json.refmap} is not in ${jarFile.name}")
+            }
+        }
+    }
+}

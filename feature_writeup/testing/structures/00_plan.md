@@ -80,3 +80,11 @@ reference.
 - 2026-10-14 12:52: the structure work as of now (patcherMod 1.0.6, 12:44 rebuild of the 01:28 source, plus all worldgen
   data) ships in pack 1.0.6, marked INCOMPLETE (user). Fixes from Phase 5 onward go into 1.0.7 (patcherMod `mod_version`
   1.0.7); open bugs at staging are listed in [plan_1.0.6.md](../../plan_1.0.6.md) 2.1.
+- 2026-10-14 16:10: M5 (Phase 5) done, writeup 05_phase_5.md: LO-02, 06 (adapted), 08, 15 passed, LO-01 partly, LO-05
+  FAILED (non-blocking locate loads still block the server thread, LocateLoads.java:82; older code, fix for 1.0.7 is
+  the user's call). Also: Cloud Storage / Domestication Innovation village pieces dropped on reload, village layout
+  differs between JVM runs, /celocate stop row label. Session 4 redid the lost ground-truth step. Next: M6 (Phase 6).
+- 2026-10-14 17:42: M6 (Phase 6) done, writeup 06_phase_6.md: ST-141, 154, 107, 20, 74, LO-12 passed; ST-142, ST-114
+  scratch parts passed; LO-04 partly; rate tests skipped; LO-03 and LO-14 FAILED on a census bug (slots run set by set,
+  the first set loads the chunk, later sets count as "known"). Older locate code, with the Phase 5 load bug: fix for
+  1.0.7 is the user's call. Next: M7 (Phase 7, calibration runs).

@@ -89,8 +89,8 @@ Baked Potato meals (5, 6), 2 servings. Additive: salt or bone broth.
 | x | Potato `minecraft:potato` | Canned Potato | Potato Slices: x | x | x | x | / | none | later | later | later |
 | x | Pumpkin Slice `farmersdelight:pumpkin_slice` | Canned Pumpkin | - | x | x | x | / | none | later | later | later |
 | x | Tomato `farmersdelight:tomato` | Canned Tomato | - | x | x | x | / | none | later | later | later |
-| ? | Corn Kernel `corn_delight:corn_seeds` | Canned Corn Kernel | - | - | - | - | - | none | - | - | - |
-| ? | Maize `corn_delight:corn` | Canned Maize | - | - | - | - | - | none | - | - | - |
+| xF | Corn Kernel `corn_delight:corn_seeds` | Canned Corn Kernel | - | - | - | - | - | none | - | - | - |
+| x | Maize `corn_delight:corn` | Canned Corn | - | - | - | - | - | none | - | - | - |
 | / | Green Bell Pepper `rusticdelight:bell_pepper_green` | Canned Bell Pepper | - | x | x | x | / | none | later | later | later |
 | / | Red Bell Pepper `rusticdelight:bell_pepper_red` | Canned Bell Pepper | - | x | x | x | / | none | later | later | later |
 | / | Yellow Bell Pepper `rusticdelight:bell_pepper_yellow` | Canned Bell Pepper | - | x | x | x | / | none | later | later | later |
@@ -116,7 +116,7 @@ Fruit Meals (5, 3), 3 servings. Additive: sugar or honey.
 | x | Sweet Berries `minecraft:sweet_berries` | Canned Sweet Berries | - | x | x | x | / | none | later | later | later |
 | x | Bayberry `fruitsdelight:bayberry` | Canned Bayberries | - | x | - | x | / | none | later | later | later |
 | x | Blueberry `fruitsdelight:blueberry` | Canned Blueberries | - | x | - | x | / | none | later | later | later |
-| ? | Coffee Berries `farmersrespite:coffee_berries` | Canned Coffee Berries | - | - | - | - | - | - | - | - | - |
+| x | Coffee Berries `farmersrespite:coffee_berries` | Canned Coffee Berries | - | - | - | - | - | - | - | - | - |
 | x | Cranberry `fruitsdelight:cranberry` | Canned Cranberries | - | x | x | x | / | none | later | later | later |
 | x | Durian Flesh `fruitsdelight:durian_flesh` | Canned Durian | - | x | - | x | / | none | later | later | later |
 | x | Fig `fruitsdelight:fig` | Canned Figs | - | x | - | x | / | none | later | later | later |
@@ -234,15 +234,15 @@ Item x2 meals, 4 servings. Additive: salt.
 | x | Boiled Blue Pickerelweed `upgrade_aquatic:boiled_blue_pickerelweed` | Canned Boiled Blue Pickerelweed | - | x | - | x | / | none | later | later | later |
 | x | Boiled Corn `corn_delight:boiled_corn` | Canned Boiled Corn | - | x | - | x | / | none | later | later | later |
 | x | Boiled Purple Pickerelweed `upgrade_aquatic:boiled_purple_pickerelweed` | Canned Boiled Purple Pickerelweed | - | x | - | x | / | none | later | later | later |
-| ? | Chips `pneumaticcraft:chips` | Canned Chips | - | - | - | - | - | none | - | - | - |
+| x | Chips `pneumaticcraft:chips` | Canned Chips | - | - | - | - | - | none | - | - | - |
 | x | Dried Banana `neapolitan:dried_banana` | Canned Dried Banana | - | x | - | x | / | x | later | later | later |
 | x | Dried Persimmon `fruitsdelight:dried_persimmon` | Canned Dried Persimmon | - | x | - | x | / | x | later | later | later |
-| ? | Grilled Corn `corn_delight:grilled_corn` | Canned Grilled Corn | - | - | - | - | - | none | - | - | - |
+| x | Grilled Corn `corn_delight:grilled_corn` | Canned Grilled Corn | - | - | - | - | - | none | - | - | - |
 | x | Kimchi `brewinandchewin:kimchi` | Canned Kimchi | - | x | - | x | / | x | later | later | later |
 | x | Pickled Pickles `brewinandchewin:pickled_pickles` | Canned Pickled Pickles | - | x | - | x | / | x | later | later | later |
-| ? | Popcorn `corn_delight:popcorn` | Canned Popcorn | - | - | - | - | - | none | - | - | - |
+| / | Popcorn `corn_delight:popcorn` | Canned Popcorn | - | - | - | - | - | none | - | - | - |
 | x | Roasted Adzuki Beans `neapolitan:roasted_adzuki_beans` | Canned Roasted Adzuki Beans | - | x | - | x | / | x | later | later | later |
-| ? | Tortilla Chip `corn_delight:tortilla_chip` | Canned Tortilla Chip | - | - | - | - | - | none | - | - | - |
+| x | Tortilla Chip `corn_delight:tortilla_chip` | Canned Tortilla Chip | - | - | - | - | - | none | - | - | - |
 
 ### 2.7 Cooked meat <a id="cooked-meat"></a>
 
@@ -390,56 +390,56 @@ Pasta, duck noodles -> Pasta with Duck).
 | x | Pearl Pasta `endersdelight:pearl_pasta` | Canned Pearl Pasta | - | x | / | x | / | x | later | later | later |
 | x | Squid Ink Pasta `farmersdelight:squid_ink_pasta` | Canned Squid Ink Pasta | - | x | / | x | / | x | later | later | later |
 | x | Vegetable Noodles `farmersdelight:vegetable_noodles` | Canned Vegetable Pasta | - | x | / | x | / | x | later | later | later |
-| ? | Adzuki Curry `neapolitan:adzuki_curry` | Canned Adzuki Curry | - | - | - | - | - | - | - | - | - |
+| / | Adzuki Curry `neapolitan:adzuki_curry` | Canned Adzuki Curry | - | - | - | - | - | - | - | - | - |
 | / | Bacon and Eggs `farmersdelight:bacon_and_eggs` | Canned Bacon and Eggs | - | - | - | - | - | - | - | - | - |
-| ? | Black Cod `farmersrespite:black_cod` | Canned Black Cod | - | - | - | - | - | - | - | - | - |
-| ? | Coconut Curry `delightful:coconut_curry` | Canned Coconut Curry | - | - | - | - | - | - | - | - | - |
-| ? | Coffee-Braised Beef `rusticdelight:coffee_braised_beef` | Canned Coffee-Braised Beef | - | - | - | - | - | - | - | - | - |
-| ? | Cooked Rice with Beef `moredelight:cooked_rice_with_beef` | Canned Cooked Rice with Beef | - | - | - | - | - | - | - | - | - |
-| ? | Cooked Rice with Chicken Cuts `moredelight:cooked_rice_with_chicken_cuts` | Canned Cooked Rice with Chicken Cuts | - | - | - | - | - | - | - | - | - |
-| ? | Cooked Rice with Porkchop `moredelight:cooked_rice_with_porkchop` | Canned Cooked Rice with Porkchop | - | - | - | - | - | - | - | - | - |
-| ? | Cooked Whole Crab `quarkdelight:cooked_whole_crab` | Canned Cooked Whole Crab | - | - | - | - | - | none | - | - | - |
-| ? | Cornbread Stuffing `corn_delight:cornbread_stuffing` | Canned Cornbread Stuffing | - | - | - | - | - | - | - | - | - |
-| ? | Creamed Corn `corn_delight:creamed_corn` | Canned Creamed Corn | - | - | - | - | - | - | - | - | - |
-| ? | Creamy Pasta with Chicken Cuts `moredelight:creamy_pasta_with_chicken_cuts` | Canned Creamy Pasta with Chicken Cuts | - | - | - | - | - | - | - | - | - |
-| ? | Creamy Pasta with Ham `moredelight:creamy_pasta_with_ham` | Canned Creamy Pasta with Ham | - | - | - | - | - | - | - | - | - |
-| ? | Diced Potatoes with Beef `moredelight:diced_potatoes_with_beef` | Canned Diced Potatoes with Beef | - | - | - | - | - | none | - | - | - |
-| ? | Diced Potatoes with Chicken Cuts `moredelight:diced_potatoes_with_chicken_cuts` | Canned Diced Potatoes with Chicken Cuts | - | - | - | - | - | none | - | - | - |
-| ? | Diced Potatoes with Egg and Tomato `moredelight:diced_potatoes_with_egg_and_tomato` | Canned Diced Potatoes with Egg and Tomato | - | - | - | - | - | none | - | - | - |
-| ? | Diced Potatoes with Porkchop `moredelight:diced_potatoes_with_porkchop` | Canned Diced Potatoes with Porkchop | - | - | - | - | - | none | - | - | - |
-| ? | Dune Platter `abnormals_delight:dune_platter` | Canned Dune Platter | - | - | - | - | - | - | - | - | - |
-| ? | Ender Paella `endersdelight:ender_paella` | Canned Ender Paella | - | - | - | - | - | - | - | - | - |
-| ? | Escargot `abnormals_delight:escargot` | Canned Escargot | - | - | - | - | - | none | - | - | - |
-| ? | Fiery Fondue `brewinandchewin:fiery_fondue` | Canned Fiery Fondue | - | - | - | - | - | - | - | - | - |
-| ? | Fried Calamari `rusticdelight:fried_calamari` | Canned Fried Calamari | - | - | - | - | - | - | - | - | - |
-| ? | Fried Chicken `rusticdelight:fried_chicken` | Canned Fried Chicken | - | - | - | - | - | - | - | - | - |
-| ? | Fried Mushrooms `rusticdelight:fried_mushrooms` | Canned Fried Mushrooms | - | - | - | - | - | - | - | - | - |
-| ? | Fried Rice `farmersdelight:fried_rice` | Canned Fried Rice | - | - | - | - | - | - | - | - | - |
-| ? | Grilled Salmon `farmersdelight:grilled_salmon` | Canned Grilled Salmon | - | - | - | - | - | - | - | - | - |
-| ? | Grilled Strider `nethersdelight:grilled_strider` | Canned Grilled Strider | - | - | - | - | - | - | - | - | - |
-| ? | Horror Lasagna `brewinandchewin:horror_lasagna` | Canned Horror Lasagna | - | - | - | - | - | - | - | - | - |
-| ? | Lychee Chicken `fruitsdelight:lychee_chicken` | Canned Lychee Chicken | - | - | - | - | - | - | - | - | - |
-| ? | Mashed Potatoes `moredelight:mashed_potatoes` | Canned Mashed Potatoes | - | - | - | - | - | none | - | - | - |
-| ? | Mushroom Rice `farmersdelight:mushroom_rice` | Canned Mushroom Rice | - | - | - | - | - | - | - | - | - |
-| ? | Omelet `moredelight:omelette` | Canned Omelet | - | - | - | - | - | none | - | - | - |
-| ? | Orange Chicken `fruitsdelight:orange_chicken` | Canned Orange Chicken | - | - | - | - | - | - | - | - | - |
-| ? | Orange Marinated Pork `fruitsdelight:orange_marinated_pork` | Canned Orange Marinated Pork | - | - | - | - | - | - | - | - | - |
-| ? | Passion Fruit Glazed Duck `abnormals_delight:passion_fruit_glazed_duck` | Canned Passion Fruit Glazed Duck | - | - | - | - | - | - | - | - | - |
-| ? | Perch with Mushrooms `abnormals_delight:perch_with_mushrooms` | Canned Perch with Mushrooms | - | - | - | - | - | - | - | - | - |
-| ? | Pike with Beetroot `abnormals_delight:pike_with_beetroot` | Canned Pike with Beetroot | - | - | - | - | - | - | - | - | - |
-| ? | Pineapple Marinated Pork `fruitsdelight:pineapple_marinated_pork` | Canned Pineapple Marinated Pork | - | - | - | - | - | - | - | - | - |
-| ? | Ratatouille `farmersdelight:ratatouille` | Canned Ratatouille | - | - | - | - | - | - | - | - | - |
-| ? | Roasted Mutton Chops `farmersdelight:roasted_mutton_chops` | Canned Roasted Mutton Chops | - | - | - | - | - | - | - | - | - |
-| ? | Scarlet Pierogies `brewinandchewin:scarlet_pierogies` | Canned Scarlet Pierogies | - | - | - | - | - | - | - | - | - |
-| ? | Seared Venison `abnormals_delight:seared_venison` | Canned Seared Venison | - | - | - | - | - | - | - | - | - |
-| ? | Shrimp-Fried Rice `alexsmobs:shrimp_fried_rice` | Canned Shrimp-Fried Rice | - | - | - | - | - | none | - | - | - |
-| ? | Slabdish `abnormals_delight:slabdish` | Canned Slabdish | - | - | - | - | - | - | - | - | - |
-| ? | Steak and Potatoes `farmersdelight:steak_and_potatoes` | Canned Steak and Potatoes | - | - | - | - | - | - | - | - | - |
-| ? | Tea Curry `farmersrespite:tea_curry` | Canned Tea Curry | - | - | - | - | - | - | - | - | - |
-| ? | Twisted Cereal `endersdelight:twisted_cereal` | Canned Twisted Cereal | - | - | - | - | - | - | - | - | - |
-| ? | Vegetable Omelet `brewinandchewin:vegetable_omelet` | Canned Vegetable Omelet | - | - | - | - | - | - | - | - | - |
-| ? | Venison with Bamboo Shoots `abnormals_delight:venison_with_bamboo_shoots` | Canned Venison with Bamboo Shoots | - | - | - | - | - | - | - | - | - |
-| ? | Warped Moldy Meat `nethersdelight:warped_moldy_meat` | Canned Warped Moldy Meat | - | - | - | - | - | - | - | - | - |
+| / | Black Cod `farmersrespite:black_cod` | Canned Black Cod | - | - | - | - | - | - | - | - | - |
+| / | Coconut Curry `delightful:coconut_curry` | Canned Coconut Curry | - | - | - | - | - | - | - | - | - |
+| / | Coffee-Braised Beef `rusticdelight:coffee_braised_beef` | Canned Coffee-Braised Beef | - | - | - | - | - | - | - | - | - |
+| / | Cooked Rice with Beef `moredelight:cooked_rice_with_beef` | Canned Cooked Rice with Beef | - | - | - | - | - | - | - | - | - |
+| / | Cooked Rice with Chicken Cuts `moredelight:cooked_rice_with_chicken_cuts` | Canned Cooked Rice with Chicken Cuts | - | - | - | - | - | - | - | - | - |
+| / | Cooked Rice with Porkchop `moredelight:cooked_rice_with_porkchop` | Canned Cooked Rice with Porkchop | - | - | - | - | - | - | - | - | - |
+| / | Cooked Whole Crab `quarkdelight:cooked_whole_crab` | Canned Cooked Whole Crab | - | - | - | - | - | none | - | - | - |
+| x | Cornbread Stuffing `corn_delight:cornbread_stuffing` | Canned Cornbread Stuffing | - | - | - | - | - | - | - | - | - |
+| x | Creamed Corn `corn_delight:creamed_corn` | Canned Creamed Corn | - | - | - | - | - | - | - | - | - |
+| x | Creamy Pasta with Chicken Cuts `moredelight:creamy_pasta_with_chicken_cuts` | Canned Creamy Pasta with Chicken Cuts | - | - | - | - | - | - | - | - | - |
+| x | Creamy Pasta with Ham `moredelight:creamy_pasta_with_ham` | Canned Creamy Pasta with Ham | - | - | - | - | - | - | - | - | - |
+| / | Diced Potatoes with Beef `moredelight:diced_potatoes_with_beef` | Canned Diced Potatoes with Beef | - | - | - | - | - | none | - | - | - |
+| / | Diced Potatoes with Chicken Cuts `moredelight:diced_potatoes_with_chicken_cuts` | Canned Diced Potatoes with Chicken Cuts | - | - | - | - | - | none | - | - | - |
+| / | Diced Potatoes with Egg and Tomato `moredelight:diced_potatoes_with_egg_and_tomato` | Canned Diced Potatoes with Egg and Tomato | - | - | - | - | - | none | - | - | - |
+| / | Diced Potatoes with Porkchop `moredelight:diced_potatoes_with_porkchop` | Canned Diced Potatoes with Porkchop | - | - | - | - | - | none | - | - | - |
+| / | Dune Platter `abnormals_delight:dune_platter` | Canned Dune Platter | - | - | - | - | - | - | - | - | - |
+| / | Ender Paella `endersdelight:ender_paella` | Canned Ender Paella | - | - | - | - | - | - | - | - | - |
+| / | Escargot `abnormals_delight:escargot` | Canned Escargot | - | - | - | - | - | none | - | - | - |
+| / | Fiery Fondue `brewinandchewin:fiery_fondue` | Canned Fiery Fondue | - | - | - | - | - | - | - | - | - |
+| / | Fried Calamari `rusticdelight:fried_calamari` | Canned Fried Calamari | - | - | - | - | - | - | - | - | - |
+| / | Fried Chicken `rusticdelight:fried_chicken` | Canned Fried Chicken | - | - | - | - | - | - | - | - | - |
+| / | Fried Mushrooms `rusticdelight:fried_mushrooms` | Canned Fried Mushrooms | - | - | - | - | - | - | - | - | - |
+| / | Fried Rice `farmersdelight:fried_rice` | Canned Fried Rice | - | - | - | - | - | - | - | - | - |
+| / | Grilled Salmon `farmersdelight:grilled_salmon` | Canned Grilled Salmon | - | - | - | - | - | - | - | - | - |
+| / | Grilled Strider `nethersdelight:grilled_strider` | Canned Grilled Strider | - | - | - | - | - | - | - | - | - |
+| / | Horror Lasagna `brewinandchewin:horror_lasagna` | Canned Horror Lasagna | - | - | - | - | - | - | - | - | - |
+| / | Lychee Chicken `fruitsdelight:lychee_chicken` | Canned Lychee Chicken | - | - | - | - | - | - | - | - | - |
+| / | Mashed Potatoes `moredelight:mashed_potatoes` | Canned Mashed Potatoes | - | - | - | - | - | none | - | - | - |
+| / | Mushroom Rice `farmersdelight:mushroom_rice` | Canned Mushroom Rice | - | - | - | - | - | - | - | - | - |
+| / | Omelet `moredelight:omelette` | Canned Omelet | - | - | - | - | - | none | - | - | - |
+| / | Orange Chicken `fruitsdelight:orange_chicken` | Canned Orange Chicken | - | - | - | - | - | - | - | - | - |
+| / | Orange Marinated Pork `fruitsdelight:orange_marinated_pork` | Canned Orange Marinated Pork | - | - | - | - | - | - | - | - | - |
+| / | Passion Fruit Glazed Duck `abnormals_delight:passion_fruit_glazed_duck` | Canned Passion Fruit Glazed Duck | - | - | - | - | - | - | - | - | - |
+| / | Perch with Mushrooms `abnormals_delight:perch_with_mushrooms` | Canned Perch with Mushrooms | - | - | - | - | - | - | - | - | - |
+| / | Pike with Beetroot `abnormals_delight:pike_with_beetroot` | Canned Pike with Beetroot | - | - | - | - | - | - | - | - | - |
+| / | Pineapple Marinated Pork `fruitsdelight:pineapple_marinated_pork` | Canned Pineapple Marinated Pork | - | - | - | - | - | - | - | - | - |
+| / | Ratatouille `farmersdelight:ratatouille` | Canned Ratatouille | - | - | - | - | - | - | - | - | - |
+| / | Roasted Mutton Chops `farmersdelight:roasted_mutton_chops` | Canned Roasted Mutton Chops | - | - | - | - | - | - | - | - | - |
+| / | Scarlet Pierogies `brewinandchewin:scarlet_pierogies` | Canned Scarlet Pierogies | - | - | - | - | - | - | - | - | - |
+| / | Seared Venison `abnormals_delight:seared_venison` | Canned Seared Venison | - | - | - | - | - | - | - | - | - |
+| / | Shrimp-Fried Rice `alexsmobs:shrimp_fried_rice` | Canned Shrimp-Fried Rice | - | - | - | - | - | none | - | - | - |
+| / | Slabdish `abnormals_delight:slabdish` | Canned Slabdish | - | - | - | - | - | - | - | - | - |
+| / | Steak and Potatoes `farmersdelight:steak_and_potatoes` | Canned Steak and Potatoes | - | - | - | - | - | - | - | - | - |
+| / | Tea Curry `farmersrespite:tea_curry` | Canned Tea Curry | - | - | - | - | - | - | - | - | - |
+| / | Twisted Cereal `endersdelight:twisted_cereal` | Canned Twisted Cereal | - | - | - | - | - | - | - | - | - |
+| / | Vegetable Omelet `brewinandchewin:vegetable_omelet` | Canned Vegetable Omelet | - | - | - | - | - | - | - | - | - |
+| / | Venison with Bamboo Shoots `abnormals_delight:venison_with_bamboo_shoots` | Canned Venison with Bamboo Shoots | - | - | - | - | - | - | - | - | - |
+| / | Warped Moldy Meat `nethersdelight:warped_moldy_meat` | Canned Warped Moldy Meat | - | - | - | - | - | - | - | - | - |
 | / | Ender Paella `endersdelight:ender_paella_wood` (wooden variant, removed) | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Pearl Pasta `endersdelight:pearl_pasta_wood` (plan: pearl pasta, not the wooden one) | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Twisted Cereal `endersdelight:twisted_cereal_wood` (wooden variant, removed) | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
@@ -506,69 +506,69 @@ milk buckets, 1 hunger, always edible, clears every effect.
 
 | Want | Item | Can | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| x | Honey Bottle `minecraft:honey_bottle` | Canned Honey Bottle | - | x | x | x | / | none | later | later | later |
+| x | Honey Bottle `minecraft:honey_bottle` | Canned Honey | - | x | x | x | / | none | later | later | later |
 | x | Milk Bucket `minecraft:milk_bucket` | Canned Powdered Milk | - | x | / | x | / | none | later | later | later |
-| ? | Adzuki Milkshake `neapolitan:adzuki_milkshake` | Canned Adzuki Milkshake | - | - | - | - | - | - | - | - | - |
-| ? | Apple Cider `farmersdelight:apple_cider` | Canned Apple Cider | - | - | - | - | - | - | - | - | - |
-| ? | Apple Cider `farmersrespite:long_apple_cider` | Canned Apple Cider | - | - | - | - | - | - | - | - | - |
-| ? | Apple Cider `farmersrespite:strong_apple_cider` | Canned Apple Cider | - | - | - | - | - | - | - | - | - |
-| ? | Azalea Tea `delightful:azalea_tea` | Canned Azalea Tea | - | - | - | - | - | - | - | - | - |
-| ? | Banana Milkshake `neapolitan:banana_milkshake` | Canned Banana Milkshake | - | - | - | - | - | - | - | - | - |
-| ? | Bellini Cocktail `fruitsdelight:bellini_cocktail` | Canned Bellini Cocktail | - | - | - | - | - | - | - | - | - |
-| ? | Berry Matcha Latte `delightful:berry_matcha_latte` | Canned Berry Matcha Latte | - | - | - | - | - | - | - | - | - |
-| ? | Black Tea `farmersrespite:black_tea` | Canned Black Tea | - | - | - | - | - | - | - | - | - |
-| ? | Black Tea `farmersrespite:long_black_tea` | Canned Black Tea | - | - | - | - | - | - | - | - | - |
-| ? | Black Tea `farmersrespite:strong_black_tea` | Canned Black Tea | - | - | - | - | - | - | - | - | - |
-| ? | Chocolate Coffee `rusticdelight:chocolate_coffee` | Canned Chocolate Coffee | - | - | - | - | - | - | - | - | - |
-| ? | Chocolate Milkshake `neapolitan:chocolate_milkshake` | Canned Chocolate Milkshake | - | - | - | - | - | - | - | - | - |
-| ? | Chorus Juice `endersdelight:chorus_juice` | Canned Chorus Juice | - | - | - | - | - | - | - | - | - |
-| ? | Cloud Latte `quarkdelight:cloud_latte` | Canned Cloud Latte | - | - | - | - | - | none | - | - | - |
-| ? | Coffee `rusticdelight:coffee` | Canned Coffee | - | - | - | - | - | - | - | - | - |
-| ? | Coffee `farmersrespite:coffee` | Canned Coffee | - | - | - | - | - | - | - | - | - |
-| ? | Coffee `farmersrespite:long_coffee` | Canned Coffee | - | - | - | - | - | - | - | - | - |
-| ? | Coffee `farmersrespite:strong_coffee` | Canned Coffee | - | - | - | - | - | - | - | - | - |
-| ? | Creamy Corn Drink `corn_delight:creamy_corn_drink` | Canned Creamy Corn Drink | - | - | - | - | - | - | - | - | - |
-| ? | Dandelion Tea `farmersrespite:dandelion_tea` | Canned Dandelion Tea | - | - | - | - | - | - | - | - | - |
-| ? | Dandelion Tea `farmersrespite:long_dandelion_tea` | Canned Dandelion Tea | - | - | - | - | - | - | - | - | - |
-| ? | Dark Coffee `rusticdelight:dark_coffee` | Canned Dark Coffee | - | - | - | - | - | - | - | - | - |
-| ? | Ender Nectar `delightful:ender_nectar` | Canned Ender Nectar | - | - | - | - | - | - | - | - | - |
-| ? | Green Tea `farmersrespite:green_tea` | Canned Green Tea | - | - | - | - | - | - | - | - | - |
-| ? | Green Tea `farmersrespite:long_green_tea` | Canned Green Tea | - | - | - | - | - | - | - | - | - |
-| ? | Green Tea `farmersrespite:strong_green_tea` | Canned Green Tea | - | - | - | - | - | - | - | - | - |
-| ? | Hamimelon Juice `fruitsdelight:hamimelon_juice` | Canned Hamimelon Juice | - | - | - | - | - | - | - | - | - |
-| ? | Hawberry Tea `fruitsdelight:hawberry_tea` | Canned Hawberry Tea | - | - | - | - | - | - | - | - | - |
-| ? | Honey Coffee `rusticdelight:honey_coffee` | Canned Honey Coffee | - | - | - | - | - | - | - | - | - |
-| ? | Hot Chocolate `create_confectionery:hot_chocolate_bottle` | Canned Hot Chocolate | - | - | - | - | - | none | - | - | - |
-| ? | Kiwi Juice `fruitsdelight:kiwi_juice` | Canned Kiwi Juice | - | - | - | - | - | - | - | - | - |
-| ? | Lavender Tea `delightful:lavender_tea` | Canned Lavender Tea | - | - | - | - | - | - | - | - | - |
-| ? | Lemon Juice `fruitsdelight:lemon_juice` | Canned Lemon Juice | - | - | - | - | - | - | - | - | - |
-| ? | Lychee Cherry Tea `fruitsdelight:lychee_cherry_tea` | Canned Lychee Cherry Tea | - | - | - | - | - | - | - | - | - |
-| ? | Mango Milkshake `fruitsdelight:mango_milkshake` | Canned Mango Milkshake | - | - | - | - | - | - | - | - | - |
-| ? | Mango Tea `fruitsdelight:mango_tea` | Canned Mango Tea | - | - | - | - | - | - | - | - | - |
-| ? | Mangosteen Tea `fruitsdelight:mangosteen_tea` | Canned Mangosteen Tea | - | - | - | - | - | - | - | - | - |
-| ? | Matcha Latte `delightful:matcha_latte` | Canned Matcha Latte | - | - | - | - | - | - | - | - | - |
-| ? | Milk Coffee `rusticdelight:milk_coffee` | Canned Milk Coffee | - | - | - | - | - | - | - | - | - |
-| ? | Mint Milkshake `neapolitan:mint_milkshake` | Canned Mint Milkshake | - | - | - | - | - | - | - | - | - |
-| ? | Oculemonade `canned_goods:oculemonade` | Canned Oculemonade | - | - | - | - | - | - | - | - | - |
-| ? | Orange Juice `fruitsdelight:orange_juice` | Canned Orange Juice | - | - | - | - | - | - | - | - | - |
-| ? | Peach Tea `fruitsdelight:peach_tea` | Canned Peach Tea | - | - | - | - | - | - | - | - | - |
-| ? | Pear Juice `fruitsdelight:pear_juice` | Canned Pear Juice | - | - | - | - | - | - | - | - | - |
-| ? | Prickly Pear Juice `delightful:prickly_pear_juice` | Canned Prickly Pear Juice | - | - | - | - | - | - | - | - | - |
-| ? | Purulent Tea `farmersrespite:long_purulent_tea` | Canned Purulent Tea | - | - | - | - | - | - | - | - | - |
-| ? | Purulent Tea `farmersrespite:purulent_tea` | Canned Purulent Tea | - | - | - | - | - | - | - | - | - |
-| ? | Purulent Tea `farmersrespite:strong_purulent_tea` | Canned Purulent Tea | - | - | - | - | - | - | - | - | - |
-| ? | Reef-Cola `canned_goods:reef_cola` | Canned Reef-Cola | - | - | - | - | - | - | - | - | - |
-| ? | Rose Hip Tea `farmersrespite:long_rose_hip_tea` | Canned Rose Hip Tea | - | - | - | - | - | - | - | - | - |
-| ? | Rose Hip Tea `farmersrespite:rose_hip_tea` | Canned Rose Hip Tea | - | - | - | - | - | - | - | - | - |
-| ? | Rose Hip Tea `farmersrespite:strong_rose_hip_tea` | Canned Rose Hip Tea | - | - | - | - | - | - | - | - | - |
-| ? | Soda `canned_goods:soda` | Canned Soda | - | - | - | - | - | - | - | - | - |
-| ? | Soothing Hot Chocolate `create_confectionery:soothing_hot_chocolate` | Canned Soothing Hot Chocolate | - | - | - | - | - | none | - | - | - |
-| ? | Strawberry Banana Smoothie `neapolitan:strawberry_banana_smoothie` | Canned Strawberry Banana Smoothie | - | - | - | - | - | - | - | - | - |
-| ? | Strawberry Milkshake `neapolitan:strawberry_milkshake` | Canned Strawberry Milkshake | - | - | - | - | - | none | - | - | - |
-| ? | Vanilla Milkshake `neapolitan:vanilla_milkshake` | Canned Vanilla Milkshake | - | - | - | - | - | - | - | - | - |
-| ? | Yellow Tea `farmersrespite:long_yellow_tea` | Canned Yellow Tea | - | - | - | - | - | - | - | - | - |
-| ? | Yellow Tea `farmersrespite:strong_yellow_tea` | Canned Yellow Tea | - | - | - | - | - | - | - | - | - |
-| ? | Yellow Tea `farmersrespite:yellow_tea` | Canned Yellow Tea | - | - | - | - | - | - | - | - | - |
+| / | Adzuki Milkshake `neapolitan:adzuki_milkshake` | Canned Adzuki Milkshake | - | - | - | - | - | - | - | - | - |
+| / | Apple Cider `farmersdelight:apple_cider` | Canned Apple Cider | - | - | - | - | - | - | - | - | - |
+| / | Apple Cider `farmersrespite:long_apple_cider` | Canned Apple Cider | - | - | - | - | - | - | - | - | - |
+| / | Apple Cider `farmersrespite:strong_apple_cider` | Canned Apple Cider | - | - | - | - | - | - | - | - | - |
+| / | Azalea Tea `delightful:azalea_tea` | Canned Azalea Tea | - | - | - | - | - | - | - | - | - |
+| / | Banana Milkshake `neapolitan:banana_milkshake` | Canned Banana Milkshake | - | - | - | - | - | - | - | - | - |
+| / | Bellini Cocktail `fruitsdelight:bellini_cocktail` | Canned Bellini Cocktail | - | - | - | - | - | - | - | - | - |
+| / | Berry Matcha Latte `delightful:berry_matcha_latte` | Canned Berry Matcha Latte | - | - | - | - | - | - | - | - | - |
+| / | Black Tea `farmersrespite:black_tea` | Canned Black Tea | - | - | - | - | - | - | - | - | - |
+| / | Black Tea `farmersrespite:long_black_tea` | Canned Black Tea | - | - | - | - | - | - | - | - | - |
+| / | Black Tea `farmersrespite:strong_black_tea` | Canned Black Tea | - | - | - | - | - | - | - | - | - |
+| / | Chocolate Coffee `rusticdelight:chocolate_coffee` | Canned Chocolate Coffee | - | - | - | - | - | - | - | - | - |
+| / | Chocolate Milkshake `neapolitan:chocolate_milkshake` | Canned Chocolate Milkshake | - | - | - | - | - | - | - | - | - |
+| / | Chorus Juice `endersdelight:chorus_juice` | Canned Chorus Juice | - | - | - | - | - | - | - | - | - |
+| / | Cloud Latte `quarkdelight:cloud_latte` | Canned Cloud Latte | - | - | - | - | - | none | - | - | - |
+| / | Coffee `rusticdelight:coffee` | Canned Coffee | - | - | - | - | - | - | - | - | - |
+| / | Coffee `farmersrespite:coffee` | Canned Coffee | - | - | - | - | - | - | - | - | - |
+| / | Coffee `farmersrespite:long_coffee` | Canned Coffee | - | - | - | - | - | - | - | - | - |
+| / | Coffee `farmersrespite:strong_coffee` | Canned Coffee | - | - | - | - | - | - | - | - | - |
+| / | Creamy Corn Drink `corn_delight:creamy_corn_drink` | Canned Creamy Corn Drink | - | - | - | - | - | - | - | - | - |
+| / | Dandelion Tea `farmersrespite:dandelion_tea` | Canned Dandelion Tea | - | - | - | - | - | - | - | - | - |
+| / | Dandelion Tea `farmersrespite:long_dandelion_tea` | Canned Dandelion Tea | - | - | - | - | - | - | - | - | - |
+| / | Dark Coffee `rusticdelight:dark_coffee` | Canned Dark Coffee | - | - | - | - | - | - | - | - | - |
+| / | Ender Nectar `delightful:ender_nectar` | Canned Ender Nectar | - | - | - | - | - | - | - | - | - |
+| / | Green Tea `farmersrespite:green_tea` | Canned Green Tea | - | - | - | - | - | - | - | - | - |
+| / | Green Tea `farmersrespite:long_green_tea` | Canned Green Tea | - | - | - | - | - | - | - | - | - |
+| / | Green Tea `farmersrespite:strong_green_tea` | Canned Green Tea | - | - | - | - | - | - | - | - | - |
+| / | Hamimelon Juice `fruitsdelight:hamimelon_juice` | Canned Hamimelon Juice | - | - | - | - | - | - | - | - | - |
+| / | Hawberry Tea `fruitsdelight:hawberry_tea` | Canned Hawberry Tea | - | - | - | - | - | - | - | - | - |
+| / | Honey Coffee `rusticdelight:honey_coffee` | Canned Honey Coffee | - | - | - | - | - | - | - | - | - |
+| / | Hot Chocolate `create_confectionery:hot_chocolate_bottle` | Canned Hot Chocolate | - | - | - | - | - | none | - | - | - |
+| / | Kiwi Juice `fruitsdelight:kiwi_juice` | Canned Kiwi Juice | - | - | - | - | - | - | - | - | - |
+| / | Lavender Tea `delightful:lavender_tea` | Canned Lavender Tea | - | - | - | - | - | - | - | - | - |
+| / | Lemon Juice `fruitsdelight:lemon_juice` | Canned Lemon Juice | - | - | - | - | - | - | - | - | - |
+| / | Lychee Cherry Tea `fruitsdelight:lychee_cherry_tea` | Canned Lychee Cherry Tea | - | - | - | - | - | - | - | - | - |
+| / | Mango Milkshake `fruitsdelight:mango_milkshake` | Canned Mango Milkshake | - | - | - | - | - | - | - | - | - |
+| / | Mango Tea `fruitsdelight:mango_tea` | Canned Mango Tea | - | - | - | - | - | - | - | - | - |
+| / | Mangosteen Tea `fruitsdelight:mangosteen_tea` | Canned Mangosteen Tea | - | - | - | - | - | - | - | - | - |
+| / | Matcha Latte `delightful:matcha_latte` | Canned Matcha Latte | - | - | - | - | - | - | - | - | - |
+| / | Milk Coffee `rusticdelight:milk_coffee` | Canned Milk Coffee | - | - | - | - | - | - | - | - | - |
+| / | Mint Milkshake `neapolitan:mint_milkshake` | Canned Mint Milkshake | - | - | - | - | - | - | - | - | - |
+| / | Oculemonade `canned_goods:oculemonade` | Canned Oculemonade | - | - | - | - | - | - | - | - | - |
+| / | Orange Juice `fruitsdelight:orange_juice` | Canned Orange Juice | - | - | - | - | - | - | - | - | - |
+| / | Peach Tea `fruitsdelight:peach_tea` | Canned Peach Tea | - | - | - | - | - | - | - | - | - |
+| / | Pear Juice `fruitsdelight:pear_juice` | Canned Pear Juice | - | - | - | - | - | - | - | - | - |
+| / | Prickly Pear Juice `delightful:prickly_pear_juice` | Canned Prickly Pear Juice | - | - | - | - | - | - | - | - | - |
+| / | Purulent Tea `farmersrespite:long_purulent_tea` | Canned Purulent Tea | - | - | - | - | - | - | - | - | - |
+| / | Purulent Tea `farmersrespite:purulent_tea` | Canned Purulent Tea | - | - | - | - | - | - | - | - | - |
+| / | Purulent Tea `farmersrespite:strong_purulent_tea` | Canned Purulent Tea | - | - | - | - | - | - | - | - | - |
+| / | Reef-Cola `canned_goods:reef_cola` | Canned Reef-Cola | - | - | - | - | - | - | - | - | - |
+| / | Rose Hip Tea `farmersrespite:long_rose_hip_tea` | Canned Rose Hip Tea | - | - | - | - | - | - | - | - | - |
+| / | Rose Hip Tea `farmersrespite:rose_hip_tea` | Canned Rose Hip Tea | - | - | - | - | - | - | - | - | - |
+| / | Rose Hip Tea `farmersrespite:strong_rose_hip_tea` | Canned Rose Hip Tea | - | - | - | - | - | - | - | - | - |
+| / | Soda `canned_goods:soda` | Canned Soda | - | - | - | - | - | - | - | - | - |
+| / | Soothing Hot Chocolate `create_confectionery:soothing_hot_chocolate` | Canned Soothing Hot Chocolate | - | - | - | - | - | none | - | - | - |
+| / | Strawberry Banana Smoothie `neapolitan:strawberry_banana_smoothie` | Canned Strawberry Banana Smoothie | - | - | - | - | - | - | - | - | - |
+| / | Strawberry Milkshake `neapolitan:strawberry_milkshake` | Canned Strawberry Milkshake | - | - | - | - | - | none | - | - | - |
+| / | Vanilla Milkshake `neapolitan:vanilla_milkshake` | Canned Vanilla Milkshake | - | - | - | - | - | - | - | - | - |
+| / | Yellow Tea `farmersrespite:long_yellow_tea` | Canned Yellow Tea | - | - | - | - | - | - | - | - | - |
+| / | Yellow Tea `farmersrespite:strong_yellow_tea` | Canned Yellow Tea | - | - | - | - | - | - | - | - | - |
+| / | Yellow Tea `farmersrespite:yellow_tea` | Canned Yellow Tea | - | - | - | - | - | - | - | - | - |
 
 ### 2.16 Drinks: alcohol <a id="alcohol"></a>
 
@@ -576,47 +576,47 @@ Not in the canning.js plan; listed so the family is complete.
 
 | Want | Item | Can | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| ? | A Bottle of 'Creepers Crush' `vinery:creepers_crush` | Canned A Bottle of 'Creepers Crush' | - | - | - | - | - | - | - | - | - |
-| ? | A Bottle of 'Mojang Noir' `vinery:bottle_mojang_noir` | Canned A Bottle of 'Mojang Noir' | - | - | - | - | - | - | - | - | - |
-| ? | A Bottle of 'Villagers Fright' `vinery:villagers_fright` | Canned A Bottle of 'Villagers Fright' | - | - | - | - | - | - | - | - | - |
-| ? | Aegis Wine `vinery:aegis_wine` | Canned Aegis Wine | - | - | - | - | - | - | - | - | - |
-| ? | Apple Wine `vinery:apple_wine` | Canned Apple Wine | - | - | - | - | - | - | - | - | - |
-| ? | Bloody Mary `brewinandchewin:bloody_mary` | Canned Bloody Mary | - | - | - | - | - | - | - | - | - |
-| ? | Bolvar Wine `vinery:bolvar_wine` | Canned Bolvar Wine | - | - | - | - | - | - | - | - | - |
-| ? | Bottle of Wodka `tmted:bottle_of_wodka` | Canned Wodka | - | - | - | - | - | none | - | - | - |
-| ? | Chenet Wine `vinery:chenet_wine` | Canned Chenet Wine | - | - | - | - | - | - | - | - | - |
-| ? | Cherry Wine `vinery:cherry_wine` | Canned Cherry Wine | - | - | - | - | - | - | - | - | - |
-| ? | Chorus Wine `vinery:chorus_wine` | Canned Chorus Wine | - | - | - | - | - | - | - | - | - |
-| ? | Cider `vinery:apple_cider` | Canned Cider | - | - | - | - | - | - | - | - | - |
-| ? | Clark Wine `vinery:clark_wine` | Canned Clark Wine | - | - | - | - | - | - | - | - | - |
-| ? | Cristel Wine `vinery:cristel_wine` | Canned Cristel Wine | - | - | - | - | - | - | - | - | - |
-| ? | Egg Grog `brewinandchewin:egg_grog` | Canned Egg Grog | - | - | - | - | - | - | - | - | - |
-| ? | Eiswein `vinery:eiswein` | Canned Eiswein | - | - | - | - | - | - | - | - | - |
-| ? | Glittering Grenadine `brewinandchewin:glittering_grenadine` | Canned Glittering Grenadine | - | - | - | - | - | - | - | - | - |
-| ? | Jellie Wine `vinery:jellie_wine` | Canned Jellie Wine | - | - | - | - | - | - | - | - | - |
-| ? | Jo's Special Mixture `vinery:jo_special_mixture` | Canned Jo's Special Mixture | - | - | - | - | - | - | - | - | - |
-| ? | Kelp Cider `vinery:kelp_cider` | Canned Kelp Cider | - | - | - | - | - | - | - | - | - |
-| ? | Kombucha `brewinandchewin:kombucha` | Canned Kombucha | - | - | - | - | - | - | - | - | - |
-| ? | Magnetic Wine `vinery:magnetic_wine` | Canned Magnetic Wine | - | - | - | - | - | - | - | - | - |
-| ? | Mead `brewinandchewin:mead` | Canned Mead | - | - | - | - | - | - | - | - | - |
-| ? | Mead `vinery:mead` | Canned Mead | - | - | - | - | - | - | - | - | - |
-| ? | Mellohi Wine `vinery:mellohi_wine` | Canned Mellohi Wine | - | - | - | - | - | - | - | - | - |
-| ? | Miss Lilitus Wine `vinery:king_danis_wine` | Canned Miss Lilitus Wine | - | - | - | - | - | - | - | - | - |
-| ? | Noir Wine `vinery:noir_wine` | Canned Noir Wine | - | - | - | - | - | - | - | - | - |
-| ? | Pale Jane `brewinandchewin:pale_jane` | Canned Pale Jane | - | - | - | - | - | - | - | - | - |
-| ? | Praetorian Wine `vinery:praetorian_wine` | Canned Praetorian Wine | - | - | - | - | - | - | - | - | - |
-| ? | Red Rum `brewinandchewin:red_rum` | Canned Red Rum | - | - | - | - | - | - | - | - | - |
-| ? | Red Wine `vinery:red_wine` | Canned Red Wine | - | - | - | - | - | - | - | - | - |
-| ? | Rice Wine `brewinandchewin:rice_wine` | Canned Rice Wine | - | - | - | - | - | - | - | - | - |
-| ? | Saccharine Rum `brewinandchewin:saccharine_rum` | Canned Saccharine Rum | - | - | - | - | - | - | - | - | - |
-| ? | Salty Folly `brewinandchewin:salty_folly` | Canned Salty Folly | - | - | - | - | - | - | - | - | - |
-| ? | Solaris Wine `vinery:solaris_wine` | Canned Solaris Wine | - | - | - | - | - | - | - | - | - |
-| ? | Stal Wine `vinery:stal_wine` | Canned Stal Wine | - | - | - | - | - | - | - | - | - |
-| ? | Steel Toe Stout `brewinandchewin:steel_toe_stout` | Canned Steel Toe Stout | - | - | - | - | - | - | - | - | - |
-| ? | Strad Wine `vinery:strad_wine` | Canned Strad Wine | - | - | - | - | - | - | - | - | - |
-| ? | Strongroot Ale `brewinandchewin:strongroot_ale` | Canned Strongroot Ale | - | - | - | - | - | - | - | - | - |
-| ? | Sunkissed Wine `vinery:glowing_wine` | Canned Sunkissed Wine | - | - | - | - | - | - | - | - | - |
-| ? | Withering Dross `brewinandchewin:withering_dross` | Canned Withering Dross | - | - | - | - | - | - | - | - | - |
+| / | A Bottle of 'Creepers Crush' `vinery:creepers_crush` | Canned A Bottle of 'Creepers Crush' | - | - | - | - | - | - | - | - | - |
+| / | A Bottle of 'Mojang Noir' `vinery:bottle_mojang_noir` | Canned A Bottle of 'Mojang Noir' | - | - | - | - | - | - | - | - | - |
+| / | A Bottle of 'Villagers Fright' `vinery:villagers_fright` | Canned A Bottle of 'Villagers Fright' | - | - | - | - | - | - | - | - | - |
+| / | Aegis Wine `vinery:aegis_wine` | Canned Aegis Wine | - | - | - | - | - | - | - | - | - |
+| / | Apple Wine `vinery:apple_wine` | Canned Apple Wine | - | - | - | - | - | - | - | - | - |
+| / | Bloody Mary `brewinandchewin:bloody_mary` | Canned Bloody Mary | - | - | - | - | - | - | - | - | - |
+| / | Bolvar Wine `vinery:bolvar_wine` | Canned Bolvar Wine | - | - | - | - | - | - | - | - | - |
+| / | Bottle of Wodka `tmted:bottle_of_wodka` | Canned Wodka | - | - | - | - | - | none | - | - | - |
+| / | Chenet Wine `vinery:chenet_wine` | Canned Chenet Wine | - | - | - | - | - | - | - | - | - |
+| / | Cherry Wine `vinery:cherry_wine` | Canned Cherry Wine | - | - | - | - | - | - | - | - | - |
+| / | Chorus Wine `vinery:chorus_wine` | Canned Chorus Wine | - | - | - | - | - | - | - | - | - |
+| / | Cider `vinery:apple_cider` | Canned Cider | - | - | - | - | - | - | - | - | - |
+| / | Clark Wine `vinery:clark_wine` | Canned Clark Wine | - | - | - | - | - | - | - | - | - |
+| / | Cristel Wine `vinery:cristel_wine` | Canned Cristel Wine | - | - | - | - | - | - | - | - | - |
+| / | Egg Grog `brewinandchewin:egg_grog` | Canned Egg Grog | - | - | - | - | - | - | - | - | - |
+| / | Eiswein `vinery:eiswein` | Canned Eiswein | - | - | - | - | - | - | - | - | - |
+| / | Glittering Grenadine `brewinandchewin:glittering_grenadine` | Canned Glittering Grenadine | - | - | - | - | - | - | - | - | - |
+| / | Jellie Wine `vinery:jellie_wine` | Canned Jellie Wine | - | - | - | - | - | - | - | - | - |
+| / | Jo's Special Mixture `vinery:jo_special_mixture` | Canned Jo's Special Mixture | - | - | - | - | - | - | - | - | - |
+| / | Kelp Cider `vinery:kelp_cider` | Canned Kelp Cider | - | - | - | - | - | - | - | - | - |
+| / | Kombucha `brewinandchewin:kombucha` | Canned Kombucha | - | - | - | - | - | - | - | - | - |
+| / | Magnetic Wine `vinery:magnetic_wine` | Canned Magnetic Wine | - | - | - | - | - | - | - | - | - |
+| / | Mead `brewinandchewin:mead` | Canned Mead | - | - | - | - | - | - | - | - | - |
+| / | Mead `vinery:mead` | Canned Mead | - | - | - | - | - | - | - | - | - |
+| / | Mellohi Wine `vinery:mellohi_wine` | Canned Mellohi Wine | - | - | - | - | - | - | - | - | - |
+| / | Miss Lilitus Wine `vinery:king_danis_wine` | Canned Miss Lilitus Wine | - | - | - | - | - | - | - | - | - |
+| / | Noir Wine `vinery:noir_wine` | Canned Noir Wine | - | - | - | - | - | - | - | - | - |
+| / | Pale Jane `brewinandchewin:pale_jane` | Canned Pale Jane | - | - | - | - | - | - | - | - | - |
+| / | Praetorian Wine `vinery:praetorian_wine` | Canned Praetorian Wine | - | - | - | - | - | - | - | - | - |
+| / | Red Rum `brewinandchewin:red_rum` | Canned Red Rum | - | - | - | - | - | - | - | - | - |
+| / | Red Wine `vinery:red_wine` | Canned Red Wine | - | - | - | - | - | - | - | - | - |
+| / | Rice Wine `brewinandchewin:rice_wine` | Canned Rice Wine | - | - | - | - | - | - | - | - | - |
+| / | Saccharine Rum `brewinandchewin:saccharine_rum` | Canned Saccharine Rum | - | - | - | - | - | - | - | - | - |
+| / | Salty Folly `brewinandchewin:salty_folly` | Canned Salty Folly | - | - | - | - | - | - | - | - | - |
+| / | Solaris Wine `vinery:solaris_wine` | Canned Solaris Wine | - | - | - | - | - | - | - | - | - |
+| / | Stal Wine `vinery:stal_wine` | Canned Stal Wine | - | - | - | - | - | - | - | - | - |
+| / | Steel Toe Stout `brewinandchewin:steel_toe_stout` | Canned Steel Toe Stout | - | - | - | - | - | - | - | - | - |
+| / | Strad Wine `vinery:strad_wine` | Canned Strad Wine | - | - | - | - | - | - | - | - | - |
+| / | Strongroot Ale `brewinandchewin:strongroot_ale` | Canned Strongroot Ale | - | - | - | - | - | - | - | - | - |
+| / | Sunkissed Wine `vinery:glowing_wine` | Canned Sunkissed Wine | - | - | - | - | - | - | - | - | - |
+| / | Withering Dross `brewinandchewin:withering_dross` | Canned Withering Dross | - | - | - | - | - | - | - | - | - |
 
 ### 2.17 Golden and enchanted golden <a id="golden"></a>
 
@@ -683,19 +683,19 @@ Fruit Meals like raw fruit (section special). Chorus reuses Canned Goods' can (i
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | x | Ancient Fruit `quark:ancient_fruit` | Canned Ancient Fruit | - | x | / | x | / | none | later | later | later |
 | x | Chorus Fruit `minecraft:chorus_fruit` | Canned Chorus Fruit | - | x | x | x | / | none | later | later | later |
-| ? | Azalea Flowers `immersive_weathering:azalea_flowers` | Canned Azalea Flowers | - | - | - | - | - | none | - | - | - |
-| ? | Biscuit of Totality `botania:mana_cookie` | Canned Biscuit of Totality | - | - | - | - | - | - | - | - | - |
-| ? | Cosmic Cod `alexsmobs:cosmic_cod` | Canned Cosmic Cod | - | - | - | - | - | - | - | - | - |
-| ? | Dog Food `farmersdelight:dog_food` | Canned Dog Food | - | - | - | - | - | none | - | - | - |
-| ? | Fish Oil `alexsmobs:fish_oil` | Canned Fish Oil | - | - | - | - | - | none | - | - | - |
-| ? | Ice Cubes `neapolitan:ice_cubes` | Canned Ice Cubes | - | - | - | - | - | none | - | - | - |
-| ? | Ice Sickle `immersive_weathering:ice_sickle` | Canned Ice Sickle | - | - | - | - | - | - | - | - | - |
-| ? | Icicle `immersive_weathering:icicle` | Canned Icicle | - | - | - | - | - | - | - | - | - |
-| ? | Magma Gelatin `nethersdelight:magma_gelatin` | Canned Magma Gelatin | - | - | - | - | - | - | - | - | - |
-| ? | Mana in a Bottle `botania:mana_bottle` | Canned Mana in a Bottle | - | - | - | - | - | none | - | - | - |
-| ? | Moss Clump `immersive_weathering:moss_clump` | Canned Moss Clump | - | - | - | - | - | none | - | - | - |
-| ? | Propelpearl `nethersdelight:propelpearl` | Canned Propelpearl | - | - | - | - | - | none | - | - | - |
-| ? | Rainbow Jelly `alexsmobs:rainbow_jelly` | Canned Rainbow Jelly | - | - | - | - | - | none | - | - | - |
+| / | Azalea Flowers `immersive_weathering:azalea_flowers` | Canned Azalea Flowers | - | - | - | - | - | none | - | - | - |
+| / | Biscuit of Totality `botania:mana_cookie` | Canned Biscuit of Totality | - | - | - | - | - | - | - | - | - |
+| / | Cosmic Cod `alexsmobs:cosmic_cod` | Canned Cosmic Cod | - | - | - | - | - | - | - | - | - |
+| / | Dog Food `farmersdelight:dog_food` | Canned Dog Food | - | - | - | - | - | none | - | - | - |
+| / | Fish Oil `alexsmobs:fish_oil` | Canned Fish Oil | - | - | - | - | - | none | - | - | - |
+| / | Ice Cubes `neapolitan:ice_cubes` | Canned Ice Cubes | - | - | - | - | - | none | - | - | - |
+| / | Ice Sickle `immersive_weathering:ice_sickle` | Canned Ice Sickle | - | - | - | - | - | - | - | - | - |
+| / | Icicle `immersive_weathering:icicle` | Canned Icicle | - | - | - | - | - | - | - | - | - |
+| / | Magma Gelatin `nethersdelight:magma_gelatin` | Canned Magma Gelatin | - | - | - | - | - | - | - | - | - |
+| / | Mana in a Bottle `botania:mana_bottle` | Canned Mana in a Bottle | - | - | - | - | - | none | - | - | - |
+| / | Moss Clump `immersive_weathering:moss_clump` | Canned Moss Clump | - | - | - | - | - | none | - | - | - |
+| / | Propelpearl `nethersdelight:propelpearl` | Canned Propelpearl | - | - | - | - | - | none | - | - | - |
+| / | Rainbow Jelly `alexsmobs:rainbow_jelly` | Canned Rainbow Jelly | - | - | - | - | - | none | - | - | - |
 
 
 ## 3. Outside the families

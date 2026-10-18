@@ -1,0 +1,45 @@
+# Brewin' And Chewin' 4.5.0 ported to Forge 1.19.2. Keeps the upstream mod id so every resource location, recipe, tag
+# and old-world item keeps working; replaces BrewinAndChewin-1.19-2.0.jar.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/MerchantCalico/BrewinAndChewin/issues"
+
+[[mods]]
+modId="brewinandchewin"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+logoFile="logo.png"
+logoBlur=false
+itemIcon="brewinandchewin:keg"
+description='''${mod_description}'''
+
+[[dependencies.brewinandchewin]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.brewinandchewin]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.brewinandchewin]]
+modId="farmersdelight"
+mandatory=true
+versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"
+
+# Optional: honey fluid, Blaze Burner heat rule, potion pouring.
+[[dependencies.brewinandchewin]]
+modId="create"
+mandatory=false
+versionRange="[0.5.1,)"
+ordering="AFTER"
+side="BOTH"

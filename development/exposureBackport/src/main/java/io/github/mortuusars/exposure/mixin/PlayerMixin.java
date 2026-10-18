@@ -140,12 +140,11 @@ public abstract class PlayerMixin extends LivingEntity implements CameraHolder, 
       if ((Object)this instanceof ServerPlayer serverPlayer) {
          ServerEvents.playerTick(serverPlayer);
       } else if (this.level.isClientSide) {
-         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PlayerClientHooks.onLocalPlayerTick((Player)(Object)this));
-         ((CameraOperator)this).getActiveExposureCameraOptional().ifPresent(camera -> {
-            if (!camera.isActive()) {
-               ((CameraOperator)this).removeActiveExposureCamera();
-            }
-         });
+         // The raw field: getActiveExposureCamera() already hides an inactive camera, so checking through it never fired.
+         if (this.activeExposureCamera != null && !this.activeExposureCamera.isActive()) {
+            ((CameraOperator)this).removeActiveExposureCamera();
+         }
+         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PlayerClientHooks.onLocalPlayerTick((Player)(Object)this, this.activeExposureCamera));
       }
    }
 

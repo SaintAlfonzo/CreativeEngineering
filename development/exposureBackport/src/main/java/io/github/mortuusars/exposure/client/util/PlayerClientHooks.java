@@ -23,9 +23,15 @@ public class PlayerClientHooks {
       }
    }
 
-   /** Upstream LocalPlayerMixin's tick (RETURN). */
-   public static void onLocalPlayerTick(Player player) {
+   /**
+    * Upstream LocalPlayerMixin's tick (RETURN). The viewfinder is static, so it outlives the LocalPlayer that opened it
+    * (respawn, dimension change, rejoin); drop it once the ticking player has no camera, or it keeps eating clicks.
+    */
+   public static void onLocalPlayerTick(Player player, @Nullable Camera activeCamera) {
       if (player instanceof LocalPlayer) {
+         if (activeCamera == null && CameraClient.viewfinder() != null) {
+            CameraClient.removeViewfinder();
+         }
          CameraClient.tick();
       }
    }
