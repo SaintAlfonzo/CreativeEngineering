@@ -10,10 +10,9 @@
 // full custom IModPlugin.
 // Known-dead placeholder fluids - tags.js already strips these down to nothing
 // (server_scripts/tags/fluidtags.js: "dead placeholder fluids"), so don't resurrect them
-// into JEI as if they were real/usable.
-const DEAD_FLUIDS = [
-	'tmted:melon_juice', 'tmted:tomato_sauce', 'tmted:apple_cider', 'decorative_blocks:thatch',
-]
+// into JEI as if they were real/usable. Listed as the JEI order's packHidden fluids
+// (startup_scripts/jei/order.js), so the order report counts them as hidden by the pack.
+const DEAD_FLUIDS = global.jeiOrder.packHidden('fluid')
 
 JEIEvents.addFluids(e => {
 	const ForgeRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
