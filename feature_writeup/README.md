@@ -73,6 +73,7 @@ What is still left across every writeup (not started, partly done, open bugs, op
 | Fixes and compat (catalogue of 19 patches: forgiving void, banner patterns on beds/elytra, D&D crash, client exit hang, axe tag ghosts, armor bar icons + overflow, Create config text field, bonemeal charm, ghost blocks, Breezy wind vane, thread-safe random, async map trades, tooltip fixes, title plaque, creative menu, XP fluid merge, IE tag order) | [fixes_compat.md](fixes_compat.md) | `FX-` | DEPLOYED (1.0.3 to 1.0.6), FX-01 to FX-20 pending; findings F1-F6 (ghost-block fix ceiling at 2^20 states; version-pinned fixes) |
 | Cans (hub: multi-serving cans and the return roll, 247 serving counts, 26 hand-written + 202 generated cans, dyeable canned golem; detail in food.md 3.6 and can_parity.md) | [cans.md](cans.md) | `CN-` | DEPLOYED (servings since 1.0.3, golem 1.0.4, generated cans 1.0.6), CN-01 to CN-06 pending (FO-, CP-, R4-07 elsewhere); findings F1-F4 |
 | Composting (`global.compost` rebuilds the composter table on every tag load: 10 rule categories, 684 per-item values, exclusions; `/dumpcompost`, `gen_compost_values.py`) | [composting.md](composting.md) | `CM-` | DEPLOYED (since 1.0.3), CM-01 to CM-08 pending; findings F1-F4; prefix CM- (CP- is can parity) |
+| Camera bags (Exposure Extras: leather / iron / netherite bags, 5 / 9 / 14 slots of `#exposure_extras:camera_equipment`, contents in NBT, dyeable, smithing upgrades, old-id remap) | [camera_bags.md](camera_bags.md) | `CB-` | DEPLOYED (1.0.3, moved 1.0.4), never tested in game; CB-01 to CB-10 + R4-04..06/11 pending; findings F1-F4, F1 (netherite upgrade needs Armor Trims' template) and F2 (no tier looks) need a decision |
 
 ## Release plans
 
@@ -105,7 +106,7 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | 12 | ~~Nests~~ | done: [nests.md](nests.md) | `NE-` |
 | 13 | ~~Cans~~ | done: [cans.md](cans.md) | `CN-` |
 | 14 | ~~Composting~~ | done: [composting.md](composting.md) | `CM-` |
-| 15 | Camera bags | leather / iron / netherite bags, contents NBT, `#camera_equipment`, upgrades | `CB-` |
+| 15 | ~~Camera bags~~ | done: [camera_bags.md](camera_bags.md) | `CB-` |
 | 16 | ~~WTHIT lines~~ | done: [wthit_lines.md](wthit_lines.md) | `WL-` |
 | 17 | TNT shrapnel | `shrapnel/` package, `[shrapnel]` config | `TN-` |
 | 18 | ~~Nether portal ignition~~ | done: [nether_portal.md](nether_portal.md) | `NP-` |

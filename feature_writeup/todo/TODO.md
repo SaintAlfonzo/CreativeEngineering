@@ -32,7 +32,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
 | Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (camera bags, tnt shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 15, 17, 20 | not written; 18 of 21 rows done |
+| Writeups for the rest of the pack (tnt shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 17, 20 | not written; 19 of 21 rows done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
 
 ## 2. Partly done: built vs still to do
@@ -126,6 +126,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Item physics: classify modded items (most sink and burn by default) (F4). [item_physics.md](../item_physics.md) 4.
 - Biomes: accept or retune the 5 unreachable multipliers (F1); skylands at 15 % while mooblooms and seasons target them (F3). [biome_tuning.md](../biome_tuning.md) 4.
 - Fixes: a mod-update checklist for the version-pinned fixes (D&D, Breezy, Create config lambda, EET slot) (F3). [fixes_compat.md](../fixes_compat.md) 4.
+- Camera bags: netherite upgrade blocked by Armor Trims without a template, keep or change the material (F1); tier looks (F2). [camera_bags.md](../camera_bags.md) 4.
 - Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
 
 **Decided, not carried out:**
@@ -225,6 +226,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [fixes_compat.md](../fixes_compat.md) | `FX-` | 20 / 0 | new 2026-10-18; TT-16..18, AR-17 stay in their files |
 | [cans.md](../cans.md) | `CN-` | 6 / 0 | new 2026-10-18; FO-14..22, CP-, R4-07 elsewhere |
 | [composting.md](../composting.md) | `CM-` | 8 / 0 | new 2026-10-18; prefix CM- (CP- taken) |
+| [camera_bags.md](../camera_bags.md) | `CB-` | 10 / 0 | new 2026-10-18; R4-04..06, R4-11 in plan_1.0.4.md |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
