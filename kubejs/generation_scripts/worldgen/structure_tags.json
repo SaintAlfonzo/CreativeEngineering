@@ -1704,12 +1704,17 @@
       ]
     },
     "land/any": {
-      "note": "Biome fit: underground structures (YUNG's 4 dungeons, Philip's bone dungeon and lost soul city): every land biome. Spawn in the land/any biomes. Real tag: creativeengineering:land/any.",
+      "note": "Biome fit: underground structures that start near the surface (YUNG's small, spider and zombie dungeons): every land biome. The deep ones are on land/any/deep. Spawn in the land/any biomes. Real tag: creativeengineering:land/any.",
       "values": [
-        "betterdungeons:skeleton_dungeon",
         "betterdungeons:small_dungeon",
         "betterdungeons:spider_dungeon",
-        "betterdungeons:zombie_dungeon",
+        "betterdungeons:zombie_dungeon"
+      ]
+    },
+    "land/any/deep": {
+      "note": "Biome fit: deep underground structures (YUNG's skeleton dungeon, Philip's bone dungeon and lost soul city), whose start height (y -50 to -30) is in a cave biome: the cave biomes plus every land/any biome. Spawn in the land/any/deep biomes. Real tag: creativeengineering:land/any/deep.",
+      "values": [
+        "betterdungeons:skeleton_dungeon",
         "philipsruins:bone_dungeon",
         "philipsruins:lost_soul_city"
       ]

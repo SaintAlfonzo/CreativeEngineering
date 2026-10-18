@@ -1316,6 +1316,7 @@ public final class CEConfig {
     /** {@code worldgen/PoolTuner} constants. */
     public static final class PoolTuning {
         public final ForgeConfigSpec.IntValue maxFractionScale;
+        public final ForgeConfigSpec.BooleanValue canonicalOrder;
 
         private PoolTuning(ForgeConfigSpec.Builder b) {
             b.push("pools");
@@ -1323,6 +1324,12 @@ public final class CEConfig {
                     "Fractional piece weights are made whole by scaling the pool's list by up to this factor. Jigsaw",
                     "tries every copy of a piece in a pool, so a bigger factor is more exact but slower to fail."
             ).defineInRange("maxFractionScale", 10, 1, 100);
+            canonicalOrder = b.comment(
+                    "Sort every pool's pieces by template id at world load. Mods that add pieces in code leave the pools",
+                    "in an order that changes from one server start to the next, and jigsaw picks by position in that",
+                    "list, so the same seed built different villages after each restart. Sorted, a seed gives the same",
+                    "layouts every time (not vanilla's: new chunks only). false = keep the order the mods left."
+            ).define("canonicalOrder", true);
             b.pop(); // pools
         }
     }

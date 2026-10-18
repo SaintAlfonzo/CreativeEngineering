@@ -62,6 +62,7 @@
    spots at density 4; at density 1 it is rarer but real, since mineshafts are common. Fix idea: skip a column only
    when a piece's box overlaps the sampled ground's height range, and log a line when matching is skipped for lack
    of samples.
+   **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): that fix idea, plus the log line. [structure_tuning.md](../../structure_tuning.md) 3.23 item 3, ST-193.
 2. **Beach, river and swamp driftwood water versions never place (bug, 2026-10-03 tuning).** Upgrade Aquatic
    5.1.0's `DriftwoodFeature`, outside `#is_ocean`, only places a log when the block directly under its origin is
    dirt (and water is near) or sand. Our overrides for beach/river/swamp/extra require water under the origin, so they
@@ -70,6 +71,9 @@
    - drop the water filter outside oceans and keep the 0.25x through rarity (UA then lays logs on banks next to
      water, its own design);
    - or filter for "water adjacent" instead of "water below".
+
+   **Fixed 2026-10-18** (data, 1.0.7, not shipped): the second option, a bank next to water (4 sides, at the
+   surface or one lower). [structure_tuning.md](../../structure_tuning.md) 3.23 item 4, ST-195.
 3. **The geode drop does little over deep oceans (tuning).** This seed's deep ocean floors sit near y 0. Geodes,
    placed up to y 30, still reach the floor after a 10-block drop: 14 of 80 ocean geode chunks with the system on
    vs 16 of 71 off. Options: drop relative to the floor (keep the top N blocks under OCEAN_FLOOR_WG), or a bigger

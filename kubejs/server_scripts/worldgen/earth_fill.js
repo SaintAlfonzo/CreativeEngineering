@@ -27,4 +27,10 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	global.tags.add(e, 'creativeengineering:earth_fill/prune', [
 		'#creativeengineering:type/village',
 	])
+	// Structures on a stone or brick base instead of a dirt pad: their base blocks (block tag
+	// creativeengineering:earth_fill/stone_base, blocktags.js) count as earth, for their size and their overhang.
+	// Without this the drum tower's 49x45 andesite plate counted as "small, 10 earth" (02_new_mods_tests.md 4.2).
+	global.tags.add(e, 'creativeengineering:earth_fill/stone_base', [
+		'eugene:ruined_drum_tower',
+	])
 })

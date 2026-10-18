@@ -60,6 +60,8 @@ Notes:
   per chunk. The reported "0 false negatives" proves little beyond buried treasure.
 - **Fix (not made):** group a region's slots by chunk; predict every member of every set that tries the chunk; then
   load once and score them all. Chunks generated before the census stay "known" as designed.
+- **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): exactly that: per chunk, every set predicted, then one load, then all scored.
+  [locate.md](../../locate.md) 3.6. Retest LO-03, LO-14.
 - **Related:** the Phase 5 bug (locate loads block the server thread) also applies here. The census still ran at
   ~160 slots/s, because most loads are quick STRUCTURE_STARTS-only generations.
 
