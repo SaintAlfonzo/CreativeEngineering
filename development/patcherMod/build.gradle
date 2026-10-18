@@ -15,9 +15,6 @@ repositories {
 dependencies {
     // Third-party mod jars copied from ../mods (git-ignored). They are SRG-named, see the note below.
     compileOnly fileTree(dir: 'libs', include: '*.jar')
-    // Farmer's Delight + Farmer's Respite (remainder buffer mixins, cooking/) straight from the instance's mods/,
-    // so they compile without a copy in libs/. A copy in libs/ as well is harmless.
-    compileOnly fileTree(dir: '../../mods', include: ['FarmersDelight-*.jar', 'FarmersRespite-*.jar'])
 }
 
 // This project ships no Mixin refmap (the org.spongepowered.mixin Gradle plugin is not
