@@ -2,8 +2,8 @@
 
 Goals for a pack-defined order of JEI's ingredient list: items/blocks, Immersive Engineering
 multiblocks, fluids and effects. Sections 1-8 state what the system should do; 9 is what the
-investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Multiblocks 0.0.3, and
-10-11 are the proposed design and build plan.
+investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Multiblocks 0.0.3,
+10-11 are the design and build plan, and 12 is what was built.
 
 ## 0. Status
 
@@ -11,7 +11,7 @@ investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Mult
 |---|---|
 | Goals (this file) | written 2026-10-18 |
 | Implementation investigation | done 2026-10-18 (9), design and build plan proposed (10, 11) |
-| Build | not started |
+| Build | steps 1-3 BUILT 2026-10-18 (patcherMod 1.0.7 in progress, KubeJS, first small tree, report tool; 12); not run in game, JO-01 to JO-12 pending; step 4 (fill the tree) not started |
 
 ## 1. Why
 
@@ -341,14 +341,17 @@ Sort the whole list by key, write positions into `sortedIndex`, done; re-run aft
 
 | Target | Kind | Why |
 |---|---|---|
-| `mezz.jei.gui.ingredients.IngredientSorter.sortIngredients` | `@Inject` HEAD, cancellable | pack sort of the base list when `packOrder` is on |
-| `mezz.jei.library.startup.JeiStarter.start` | `@Inject` TAIL | re-sort after `onRuntimeAvailable` (KubeJS adds/hides); write the report |
+| `mezz.jei.gui.ingredients.IngredientFilter.<init>` | `@Inject` RETURN | remember the list and JEI's own order of it (the fallback) |
+| `mezz.jei.library.startup.JeiStarter.start` | `@Inject` HEAD / RETURN | reset per-start state; pack sort after `onRuntimeAvailable` (KubeJS adds/hides); write the report |
+| `JeiStarter.stop` | `@Inject` HEAD | drop the old list |
 | `mezz.jei.gui.ingredients.IngredientFilter.onIngredientsAdded` | `@Inject` TAIL | re-sort later runtime additions |
-| `IngredientFilter.elementSearch` | `@Accessor` | the full element list for the re-sort |
-| `mezz.jei.library.load.PluginCaller.callOnPlugins` | `@WrapOperation` / `@Redirect` on `Consumer.accept` | current plugin uid for attribution |
+| `IngredientFilter.elementSearch`, `ingredientManager`, `notifyListenersOfChange` | `@Accessor` / `@Invoker` | the full element list for the re-sort, and refreshing an open list |
+| `mezz.jei.library.load.PluginCaller.callOnPlugins` | `@Redirect` on `Consumer.accept` (no MixinExtras in patcherMod) | current plugin uid for attribution |
 | `mezz.jei.library.ingredients.IngredientManager.add/removeIngredientsAtRuntime` | `@Inject` HEAD | record runtime adds/removes with the plugin uid |
 
-The JEI sorter keeps working unchanged when `packOrder` is off, so the feature can ship disabled.
+As built, JEI's own sort is left alone (no `IngredientSorter` hook): it runs as before, its result is kept as
+the fallback order, and the pack sort rewrites the indices once JEI has finished starting. With `packOrder`
+off nothing is re-sorted, so the feature can ship disabled.
 
 ## 11. Build plan
 
@@ -379,3 +382,64 @@ Open points for the build:
   script reloaded (`/kubejs reload startup_scripts`, then the client hand-off re-run with
   `/kubejs reload client_scripts`) and a JEI restart (`/reload`); check this in game, else it is a
   game restart.
+
+## 12. Build (2026-10-18)
+
+Steps 1-3 of 11. Compiled in isolation against Minecraft 1.19.2 / Forge 43.3.9 (official mappings) and the JEI
+11.8.1.1034 jar; the full patcherMod jar was not built here (its third-party `libs/` jars are not in this
+checkout). The definition was run through Node with the real dicts and helper, and its JSON through the Java
+parser and sort key in a harness (order below came out as designed). **Nothing has run in game yet.**
+
+### 12.1 Files
+
+| File | What |
+|---|---|
+| [PackIngredientOrder.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/PackIngredientOrder.java) | definition parse, placements from tags + lists, sort key, re-sort |
+| [PackOrderReport.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/PackOrderReport.java) | `kubejs/exported/jei_order.json` |
+| [JeiIngredientChanges.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/JeiIngredientChanges.java) | runtime adds/removes with the plugin that made them |
+| `mixin/JeiIngredientFilterAccessor`, `JeiIngredientFilterMixin`, `JeiStarterMixin`, `JeiPluginCallerMixin`, `JeiIngredientManagerMixin` | client mixins (10.6) |
+| [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) `[jei]` | `packOrder` (default on), `orderReport` (default off) |
+| [func/jei_order.js](../kubejs/startup_scripts/func/jei_order.js) | `global.jeiOrder`: `define`, `tag`, `walk`, `toJson`, `packHidden`; checks node ids, sort modes, list entries |
+| [jei/order.js](../kubejs/startup_scripts/jei/order.js) | the definition (first small tree, 12.2) |
+| [_lib/effect_dict.js](../kubejs/startup_scripts/_lib/effect_dict.js), [_lib/multiblock_dict.js](../kubejs/startup_scripts/_lib/multiblock_dict.js) | new dicts: `global.effect` (vanilla effects), `global.multiblock` (all 21 IE multiblocks, ids read from the IE 9.2.4 jar; the arc furnace is `multiblocks/arcfurnace`) |
+| [tags/jei_order_tags.js](../kubejs/server_scripts/tags/jei_order_tags.js) | `creativeengineering:jei/...` item, fluid and mob_effect tags from the definition |
+| [client_scripts/jei_order.js](../kubejs/client_scripts/jei_order.js) | hands the definition to Java |
+| [client_scripts/fluid_jei.js](../kubejs/client_scripts/fluid_jei.js) | dead fluids now come from `packHidden` |
+| [tools/jei_order_report.py](../tools/jei_order_report.py) | report -> `feature_writeup/jei_order_catalog.md` (`--check` exits 1 on definition problems) |
+
+### 12.2 First tree
+
+- **item**: Equipment > Tools > copper (Everything Copper sword/pickaxe/axe/shovel/hoe, Create Things and Misc and
+  Delightful copper knives), iron (vanilla iron tools, Farmer's Delight iron knife). Sort `list, mod, creative`.
+- **multiblock**: immersiveengineering > stone (coke oven, alloy smelter, blast furnace, improved), machines,
+  power_storage. Placed by `list` (no tags).
+- **fluid**: vanilla (water, lava, milk).
+- **effect**: beneficial (19 vanilla effects).
+- Type order item, multiblock, fluid, effect; everything else unplaced, in JEI's own order after the placed
+  entries of its type.
+
+### 12.3 Behaviour as built
+
+- An ingredient's place: its deepest `creativeengineering:jei/...` tag (item tags only, not a block's tags);
+  else the first node whose `list` names it. Tag on two branches, or tag vs a list elsewhere: kept by definition
+  order, reported as a conflict.
+- Re-sorts: when JEI finishes starting (join, `/reload`), when a mod adds ingredients later, and when
+  `client_scripts/jei_order.js` runs again (`/kubejs reload client_scripts`). Tags still need `/reload`.
+- Runtime-added ingredients with no place (e.g. most of fluid_jei.js's fluids for now) sit after the other
+  unplaced ones of their type: JEI gives them no position of their own. Once placed they sort normally (JO-12).
+- A sort or report failure is logged (`[jei order]` in latest.log) and JEI keeps its own order.
+
+### 12.4 First in-game run
+
+1. Build and install patcherMod (`./gradlew :patcherMod:installToMods`), set `orderReport = true` under `[jei]`
+   in the patcherMod common config.
+2. Join a world. latest.log: `[jeiOrder] defined 10 nodes over 4 types` (startup), `[jeiOrder] item: 2 jei
+   tags` / `fluid: 1` / `effect: 1` (server), `[jei order] definition: 4 types, 10 nodes`, `[jei order] sorted
+   N ingredients in M ms`, `[jei order] report: ...`.
+3. JEI's first page: copper tools, then iron tools (JO-01, JO-02); after the items: the IE multiblocks, then
+   water/lava/milk, then the effects (JO-05, JO-06).
+4. `python3 tools/jei_order_report.py`, read `jei_order_catalog.md` section 2 (should list no problems except
+   any list id the game doesn't know) and 4 (`global.removedItems` as hidden by the pack: JO-07).
+5. JO-11: speed/haste/... placed under `beneficial` proves mob_effect tags reach the client (they are listed
+   too, so check `placedBy: tag` in the JSON, not just the position).
+
