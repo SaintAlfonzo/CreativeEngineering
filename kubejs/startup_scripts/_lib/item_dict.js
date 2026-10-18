@@ -31,9 +31,19 @@ i.amethyst_dust = 'creativeengineering:amethyst_dust';
 i.amethyst_lens = 'creativeengineering:amethyst_lens';
 i.wood_pellets = 'creativeengineering:wood_pellets';
 i.layered_obsidian = 'creativeengineering:layered_obsidian';
-// Oven — placeholder block (FD stove textures, no function yet). startup_scripts/cooking/oven.js |
-// plan: feature_writeup/oven.md
+// Oven — FD cooking-pot style baking block. Java: patcherMod oven/ package (block, GUI, JEI, the
+// creativeengineering:baking recipe type) | recipes: server_scripts/cooking/baking.js (NCH.ceBaking) |
+// bakeware items: startup_scripts/cooking/bakeware.js | feature_writeup/oven.md
 i.oven = 'creativeengineering:oven';
+i.baking_sheet = 'creativeengineering:baking_sheet';
+i.cake_pan = 'creativeengineering:cake_pan';
+i.pie_tin = 'creativeengineering:pie_tin';
+i.muffin_tin = 'creativeengineering:muffin_tin';
+i.t_bakeware = '#creativeengineering:bakeware'; // the oven's tool-slot filter (OvenItemHandler.BAKEWARE)
+i.t_bakeware_baking_sheet = '#creativeengineering:bakeware/baking_sheet';
+i.t_bakeware_cake_pan = '#creativeengineering:bakeware/cake_pan';
+i.t_bakeware_pie_tin = '#creativeengineering:bakeware/pie_tin';
+i.t_bakeware_muffin_tin = '#creativeengineering:bakeware/muffin_tin';
 i.catfish = 'alexsmobs:raw_catfish';
 i.catfish_slice = 'alexsmobs:raw_catfish_slice';
 i.felsic_scrap = 'creativeengineering:felsic_scrap';
@@ -1867,12 +1877,19 @@ i.milk_bucket = '#forge:milk';
 i.milk_bottle = '#forge:milk';
 i.flour = '#forge:flour/wheat';
 i.dough = '#forge:dough/wheat';
+i.any_dough = '#forge:dough';
 i.bread = '#forge:bread/wheat';
 i.pasta = '#forge:pasta';
 i.any_sugar = '#forge:sugar';
 i.vegetables = '#forge:vegetables';
 i.salad_ingredients = '#forge:salad_ingredients';
 i.fruit = '#forge:fruits';
+i.t_fruits_blueberry = '#forge:fruits/blueberry';
+i.t_fruits_cranberry = '#forge:fruits/cranberry';
+i.t_fruits_lemon = '#forge:fruits/lemon';
+i.t_fruits_fig = '#forge:fruits/fig';
+i.t_fruits_mangosteen = '#forge:fruits/mangosteen';
+i.t_milk_bottle = '#forge:milk/milk_bottle'; // bottles only (i.milk_bottle is all of #forge:milk)
 i.carrot = '#forge:crops/carrot';
 i.potato = '#forge:crops/potato';
 i.beetroot = '#forge:crops/beetroot';
