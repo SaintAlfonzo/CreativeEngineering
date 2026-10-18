@@ -5,6 +5,9 @@ test or retune something, and Claude, at the start of a later session. Each writ
 up-to-date reference for its feature. The code and config stay the source of truth for values; the
 writeup explains how the pieces fit and how to prove they work.
 
+What is still left across every writeup (not started, partly done, open bugs, open decisions, test backlog):
+[../todo/TODO.md](../todo/TODO.md).
+
 ## Index
 
 | Feature | File | Test prefix | Status (see legend) |
