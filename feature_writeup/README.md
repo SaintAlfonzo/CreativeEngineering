@@ -67,6 +67,7 @@ What is still left across every writeup (not started, partly done, open bugs, op
 | Bee nests (where wild nests generate and how often; `bee_nests.json` per-biome nest chance on generated trees, scale of existing chances, extra bee-nest trees; `/dumpbeenests` measured trees/nests/chunks per biome) | [bee_nests.md](bee_nests.md) | `BN-` | STAGED for 1.0.6 with the starter rules (scratch-server verified, applied in single player: 44 biomes); BN-01 to BN-10 pending |
 | Spawns by biome (generated reference: tuning, mobs by category and biome type, per mob, per biome, spawn conditions, gaps) | [spawns_by_biome.md](spawns_by_biome.md) | none | reference, generated from the 2026-10-09 `/dumpspawns`; regenerate with `python3 tools/gen_spawn_table.py` |
 | Terrain adaptation scan (generated: which structures could use the soft beard or template trim, pad and air-notch columns per template) | [terrain_adaptation_scan.md](terrain_adaptation_scan.md) | none | reference, regenerate with `python3 tools/terrain_adaptation_scan.py` after adding structure mods |
+| Engineering (IE Sawmill recipe routing by precision-sawblade profile, Dragon Breathing fan processing, 15 components, wire coils and coil blocks for 12 metals + HV, sample syringe) | [engineering.md](engineering.md) | `EN-` | DEPLOYED (since 1.0.3), EN-01 to EN-18 pending; findings F1-F8, F2 (JEI doesn't show the blade) and F4 (component centres differ by route) need a decision |
 
 ## Release plans
 
@@ -90,7 +91,7 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | 3 | ~~Gear tuning~~ | done: [gear_tuning.md](gear_tuning.md) | `GR-` |
 | 4 | ~~Potions and brewing~~ | done: [potions.md](potions.md) | `PO-` |
 | 5 | ~~Potion buckets and tipped arrows~~ | done: [potion_buckets.md](potion_buckets.md) | `PB-` |
-| 6 | Engineering recipes | sawblade routing, dragon-breathing fan type, CE components and coils, sample syringe | `EN-` |
+| 6 | ~~Engineering recipes~~ | done: [engineering.md](engineering.md) | `EN-` |
 | 7 | Item physics | ItemPhysic fire/lava split and float/burn lists | `IP-` |
 | 8 | ~~Loot~~ | done: [loot.md](loot.md) | `LT-` |
 | 9 | Biome tuning | biome frequency solver (`/dumpclimate`), structure spawn biomes (biome merges retired 2026-10-11 for biome fits, structure_tuning.md 7.2; structure frequency, pools and Lootr swaps are done: [structure_tuning.md](structure_tuning.md)) | `WG-` |
