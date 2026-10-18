@@ -44,6 +44,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Alcohol Part A: Brewin' and Chewin' 4.5.0 port | [alcohol.md](../alcohol.md) Part A | analysis, plan and decisions 4.1/4.5. **Port begun 2026-10-17** in `development/backportedBrewin` (in `settings.gradle`): ~45 upstream classes copied (blocks, keg block entity, recipes, items, utilities, Forge containers) | registries, config (`BnCConfiguration`), fluids, effects/attachments, network, menu, client, JEI, assets/data, loot, remaps, old-world conversion: 14 imported classes don't exist yet, so it doesn't compile. Heat/cold tag audit 2.7 not applied. Pack-side changes 3.4 not started. The writeup still says "not started" |
 | Food | [food.md](../food.md) | `/dumpfood`, 31 types + tags, catalog, multi-serving cans, raw and generated cans, fried eggs, egg stacks | tuning system and egg migration (1); cooked/prepared can sections pie, feast, meals, drinks, special |
 | Oven | [oven.md](../oven.md) | block, GUI, baking recipe type, JEI (patcherMod), bakeware, 7 baking recipes, muffin dough fix (2026-10-18; compiles, 8 GameTests pass) | patcherMod jar rebuild + OV-01 to OV-14; recipes don't use bakeware or plating yet, pot recipes not moved |
+| Remainder buffer | [remainder_buffer.md](../remainder_buffer.md) | pot + kettle (mixins), oven (native), `[cooking]` config, GameTest harness (2026-10-18; compiles, 10 GameTests pass) | patcherMod jar into `mods/` + RB-01 to RB-11; keg in the Brewin port once it compiles (3.6); optional WTHIT line |
 | Can parity | [can_parity.md](../can_parity.md) | every `x` row built, removals done | `?` Want cells; hunger/saturation columns postponed; no can value-audited; meal/pie/feast/drink/hazard values are placeholders (also flagged in [canning.js](../kubejs/server_scripts/cooking/canning.js) lines 504, 542, 557); hand-written raw cans don't carry effects |
 | Names | [names.md](../names.md) | Display Delight + Rustic Delight names; catalog parts 1 and 2 | catalog worked down: 191 partial blocks, 65 items, 53 entities, 20 professions, effects/potions/fluids; no fixes yet |
 | Effect descriptions (JEED) | [todo.txt](todo.txt) "Literal TODO comments" | generator `tools/gen_effect_descriptions.py` | 47 `TODO: write a description` rows left in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) |
@@ -194,6 +195,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [tooltips.md](../tooltips.md) | `TT-` | 18 / 0 | TT-16 to TT-18 (1.0.6) |
 | [wandering_trader.md](../wandering_trader.md) | `WT-` | 16 / 0 | WT-16 natural spawn |
 | [can_parity.md](../can_parity.md) | `CP-` | 14 / 0 | CP-01 to CP-14 |
+| [remainder_buffer.md](../remainder_buffer.md) | `RB-` | 11 / 0 | needs the 1.0.7 jar; 10 offline GameTests pass (`tools/test_remainder_buffer.sh`) |
 | [flowers.md](../flowers.md) | `FL-` | 14 / 0 | |
 | [nests.md](../nests.md) | `NE-` | 14 / 0 | NE-13 client sprites |
 | [plan_1.0.4.md](../plan_1.0.4.md) | `R4-` | 14 / 0 | release checks never ticked |

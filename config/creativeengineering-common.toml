@@ -1589,6 +1589,17 @@
 	#Item id handed back as the crushed can.
 	crushedCanItem = "canned_goods:crushed_empty_can"
 
+#Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the
+#Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the
+#container slot; the rest goes to two leftover slots right of the output, which hoppers and
+#funnels on the output faces can empty.
+[cooking]
+	#Off = leftovers are thrown out of the station as in the original mods.
+	remainderBuffer = true
+	#On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).
+	#Off = it crafts anyway and throws what doesn't fit.
+	stallWhenFull = true
+
 #TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
 #but TrashSlotSaveState.json in the game folder lists every screen opened so far.
 [trash_slot]

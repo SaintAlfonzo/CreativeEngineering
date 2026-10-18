@@ -49,6 +49,7 @@ public final class CEConfig {
     public static final BonemealCharm BONEMEAL_CHARM;
     public static final CropGrowth CROP_GROWTH;
     public static final Canning CANNING;
+    public static final Cooking COOKING;
     public static final Perf PERF;
     public static final Seasons SEASONS;
     public static final Surface SURFACE;
@@ -74,6 +75,7 @@ public final class CEConfig {
         BONEMEAL_CHARM = new BonemealCharm(builder);
         CROP_GROWTH = new CropGrowth(builder);
         CANNING = new Canning(builder);
+        COOKING = new Cooking(builder);
         PERF = new Perf(builder);
         SEASONS = new Seasons(builder);
         SURFACE = new Surface(builder);
@@ -557,6 +559,34 @@ public final class CEConfig {
             ).defineInRange("mountEffectIntervalTicks", 100, 1, 1200);
 
             b.pop(); // perf
+        }
+    }
+
+    /**
+     * Remainder buffer on FD-style stations (cooking pot, Farmer's Respite kettle, oven): ingredient leftovers stay
+     * in the station. {@code cooking.RemainderBuffer}; feature_writeup/remainder_buffer.md.
+     */
+    public static final class Cooking {
+        public final ForgeConfigSpec.BooleanValue remainderBuffer;
+        public final ForgeConfigSpec.BooleanValue stallWhenFull;
+
+        private Cooking(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the",
+                    "Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the",
+                    "container slot; the rest goes to two leftover slots right of the output, which hoppers and",
+                    "funnels on the output faces can empty."
+            ).push("cooking");
+
+            remainderBuffer = b.comment("Off = leftovers are thrown out of the station as in the original mods.")
+                    .define("remainderBuffer", true);
+
+            stallWhenFull = b.comment(
+                    "On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).",
+                    "Off = it crafts anyway and throws what doesn't fit."
+            ).define("stallWhenFull", true);
+
+            b.pop(); // cooking
         }
     }
 
