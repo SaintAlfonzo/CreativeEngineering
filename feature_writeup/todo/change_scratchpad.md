@@ -46,11 +46,18 @@
         - framed and copycat version?
     - set minimum leaf layer height slowdown
     - plant flowers on copycat/framed dirt blocks
+    - check capitalization of display items and blocks
+        - glow ink plus
+    - add lit version to botania fel pumpkin
     - allow backpacks to be smithed for reskin
         - fruit basket
     - give composters more wood types
+    - mca jei family group
+    - trapdoor, another furniture shutters shape/wood variants
     - ensure cows in skyland, 100% mooblooms
     - sculk sensor backport
+    - mca villagers glitching while sleeping
+        - legs and arms bent out, jittering
     - soap effect on slippery blocks
         - ice blocks, document others
         - stronger effect on slipperier blocks
@@ -59,6 +66,11 @@
     - mod family tags
         - create mods
         - farmers delight mods (some farmers_xyz, some xyz_delight)
+    - whales
+        - drop blubber
+            - cook into cooking oil
+            - refine to whale oil, burnable fuel
+    - water splash from anvil, other entities
     - lootr
         - additional loot table/placed loot pass
         - item frame integration
@@ -68,6 +80,7 @@
     - tnt
         - fix minecart shrapnel
         - set item damage to fraction but keep knockback
+    - baby mob backport?
     - framed blocks
         - change copycat resource pack to keep framed block name, disabled by default on client
     - dreams and desires integration
@@ -84,6 +97,9 @@
     - integrate horse cart crafting recipes
     - more allay spawns in pillager cages, mystical biomes and structures
     - prevent canvas sign dying (allow text to dye, not sign)
+    - botania bowl of water use?
+    - returned food serve item (bowl, paper for popcorn bucket) dont stack with normal items, extra nbt?
+    - ensure cookings stack size consistant (bowl ingredients to 64, bottle ingredients (milk bottle, honey bottle) to 64, bowl foods (including jello) to 32, drinks and bottles (including tea, juice, custards, pitcher drinks, shaved ice) to 32, dogfood to 32, cheese wheel to 32)
     - hardened leather uses
         - backpacks?
         - check all armor w/ leather
@@ -130,6 +146,7 @@
                 - axolotls
                 - pandas
                 - polar bears
+                - whales
                 - alexs mobs that dont drop? review and decide
             - killing animals (slow linear increase from low effect, 10 sec cooldown, buffer period of no effect)
             - igniting tnt (constant low effect, no cooldown)
@@ -152,9 +169,15 @@
             - falling into void (exponential increase, 5 minute cooldown, high limit)
             - looting corpse of another player (quick exponential increase, high limit)
     - vinery grass slab biome tint
-    - vinery backport license
-        - code is mit (i can use this, rebuild features in older version)
-        - assets are rights reserved
-            - inquired, author denied redistribution of "assets and features"
-                - new features shouldnt be restricted, mit
-                - assets can be shipped in newest jar, new alcho backport mod points to assets in unloaded mod
+    - clock icon while sleeping is frozen
+    - season day and day counter on gui are misaligned
+    - allurement item curses fail, dont interact w/ item physics (assumption)
+    - disable all tutorial toasts
+    - disable advancement toasts, keep chat announcement
+    - rename pretty pipes to 'item pipes' for clarity
+    - finish container sorting audit
+        - programatic test to ensure no item deletion
+    - allow any item in botania trinket case
+    - complete crop harvest and replant features audit, ensure new crops covered
+    - mod to add writeup: sophisticated storage, decor mods in disabled, tempad
+    - audit weed behavior, prevent on rich soil

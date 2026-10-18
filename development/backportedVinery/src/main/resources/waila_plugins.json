@@ -1,0 +1,9 @@
+{
+  "vinery:info": {
+    "entrypoints": {
+      "common": "net.satisfy.vinery.forge.compat.wthit.VineryWthit",
+      "client": "net.satisfy.vinery.forge.compat.wthit.VineryWthitClient"
+    },
+    "side": "*"
+  }
+}

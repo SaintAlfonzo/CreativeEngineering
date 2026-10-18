@@ -107,6 +107,7 @@ IN_TREE_MODS = [
     ('exposureBackport', 'exposureBackport', True),
     ('incubationAdditions', 'incubationAdditions', True),
     ('moreMooblooms', 'moreMooblooms', True),
+    ('backportedVinery', 'backportedVinery', True),
 ]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
@@ -121,6 +122,9 @@ CATEGORIES = {
     'defaultconfigs': (('server', 'client'), 'defaultconfigs'),
     'resourcepacks': (('client',), 'resourcepacks'),
     'shaderpacks': (('client',), 'shaderpacks'),
+    # the unmodified Vinery jars the backport reads its art and data from (alcohol.md B4.8, D14: shipped in the
+    # payload for now; a published pack downloads them from their source instead). Never in mods/.
+    'vinery_upstream': (('server', 'client'), 'vinery_upstream'),
     'server': (('server',), ''),
 }
 TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
@@ -375,7 +379,27 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
     if os.path.isdir(os.path.join(root, 'shaderpacks')):
         for rel in walk('shaderpacks', root):
             files['shaderpacks'][rel[len('shaderpacks/'):]] = os.path.join(root, rel)
+    upstream = os.path.join(root, 'vinery_upstream')
+    for name in sorted(os.listdir(upstream)) if os.path.isdir(upstream) else []:
+        if name.endswith('.jar') and os.path.isfile(os.path.join(upstream, name)):
+            files['vinery_upstream'][name] = os.path.join(upstream, name)
+    if root == ROOT and any(j.startswith('backportedVinery') for j in mods):
+        need = vinery_upstream_jars()
+        have = {n: sha1(p) for n, p in files['vinery_upstream'].items()}
+        for name, want in need.items():
+            if name not in have:
+                pre.error(f'vinery_upstream/{name} missing: the Vinery backport refuses to start without it')
+            elif have[name] != want:
+                pre.error(f'vinery_upstream/{name} has sha1 {have[name]}, the backport pins {want}')
     return files, mods
+
+
+def vinery_upstream_jars():
+    """{jar: sha1} the Vinery backport pins (UpstreamJars.java), so the build checks the same files the game will."""
+    src = os.path.join(DEVELOPMENT, 'backportedVinery', 'src', 'main', 'java', 'net', 'satisfy', 'vinery', 'forge',
+                       'upstream', 'UpstreamJars.java')
+    text = open(src, encoding='utf8').read()
+    return dict(re.findall(r'new Jar\("([^"]+)", "([0-9a-f]{40})"', text))
 
 
 # ── preflight ────────────────────────────────────────────────────────────────
@@ -886,8 +910,10 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream')) else None,
+        ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
+         'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
          "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
         ('Existing world only: `defaultconfigs/` is used only when a world has no serverconfig yet. Copy any changed '
@@ -895,7 +921,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),

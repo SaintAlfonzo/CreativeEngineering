@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#forge:raw_beef",
+      "required": false
+    },
+    {
+      "id": "#forge:raw_chicken",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "parent": "brewinandchewin:main/place_keg",
+  "criteria": {
+    "placed_freeze_source_near_keg": {
+      "trigger": "minecraft:impossible"
+    },
+    "placed_heat_source_near_keg": {
+      "trigger": "minecraft:impossible"
+    },
+    "placed_keg_near_source": {
+      "trigger": "minecraft:impossible"
+    },
+    "updated_freeze_source_near_keg": {
+      "trigger": "minecraft:impossible"
+    },
+    "updated_heat_source_near_keg": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "brewinandchewin.advancement.place_temperature_block_near_keg.desc"
+    },
+    "icon": {
+      "item": "brewinandchewin:ice_crate"
+    },
+    "title": {
+      "translate": "brewinandchewin.advancement.place_temperature_block_near_keg"
+    }
+  },
+  "requirements": [
+    [
+      "placed_heat_source_near_keg",
+      "placed_freeze_source_near_keg",
+      "updated_heat_source_near_keg",
+      "updated_freeze_source_near_keg",
+      "placed_keg_near_source"
+    ]
+  ]
+}

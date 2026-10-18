@@ -1,0 +1,22 @@
+{
+  "create:potion": {
+    "id": "minecraft:potion",
+    "copy_nbt": [
+      "Potion",
+      "CustomPotionEffects"
+    ],
+    "optional": true
+  },
+  "create:flowing_potion": {
+    "id": "minecraft:potion",
+    "copy_nbt": [
+      "Potion",
+      "CustomPotionEffects"
+    ],
+    "optional": true
+  },
+  "create:tea": {
+    "id": "create:builders_tea",
+    "optional": true
+  }
+}

@@ -93,8 +93,6 @@ public interface BnCPlatformHelper {
 
    void initFluids();
 
-   void initCreativeTab();
-
    boolean isEdible(ItemStack stack, LivingEntity entity);
 
    FoodProperties getFoodProperties(ItemStack stack, LivingEntity entity);

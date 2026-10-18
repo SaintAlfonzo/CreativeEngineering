@@ -1,4 +1,21 @@
 {
+  vinery: {
+    // Grapevine Pot: grapes, stomps, bottles left
+    // Default value: [true]
+    grapevine_pot: true,
+    // Aging Barrel: juice, wine in progress, bottles
+    // Default value: [true]
+    fermentation_barrel: true,
+    // Apple Press: mashing and fermenting
+    // Default value: [true]
+    apple_press: true,
+    // Racks, shelves, boxes and pots: contents and wine age
+    // Default value: [true]
+    storage: true,
+    // Stackable Log: fire and cooking
+    // Default value: [true]
+    stackable_log: true
+  },
   securitycraft: {
     // Display Owner?
     // Require server to have WTHIT installed, if not, will be locked to [true]

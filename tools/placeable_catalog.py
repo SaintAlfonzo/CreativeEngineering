@@ -62,6 +62,7 @@ PLANT = re.compile(r'(Crop|Bush|Vine|Stem|Sapling|GrowingPlant|Flower|Mushroom|F
 # Item classes whose place() only runs while sneaking.
 SNEAK_ITEM_CLASSES = {
     'dev.xkmc.fruitsdelight.content.item.FDBlockItem': 'Fruits Delight: place() passes unless sneaking',
+    'net.satisfy.vinery.core.item.DrinkBlockItem': 'Vinery backport (1.5.5): getPlacementState is null unless crouching',
 }
 # How each own-block family places, by item class (shown in the catalog).
 HOW_BY_ITEM_CLASS = {
@@ -69,6 +70,7 @@ HOW_BY_ITEM_CLASS = {
     'satisfyu.vinery.item.DrinkBlockSmallItem': 'right click a block (not sneaking); drink in the air',
     'satisfyu.vinery.item.DrinkBlockBigItem': 'right click a block (not sneaking); drink in the air',
     'dev.xkmc.fruitsdelight.content.item.FDBlockItem': 'sneak + right click',
+    'net.satisfy.vinery.core.item.DrinkBlockItem': 'sneak + right click; drink in the air',
 }
 
 # Non-edible block items that are food blocks but the class regex misses (id -> note).

@@ -1952,7 +1952,8 @@ public final class CEConfig {
 
             winemakerEnabled = b.comment(
                     "Spawn Vinery's Wandering Winemaker from its own spawner, independent of the Wandering Trader.",
-                    "Vinery's own swap (config/vinery/config.json5 wine_trader_chance) must be 0, or it still",
+                    "Vinery's own swap (vinery-common.toml [trader] spawnChance, 1.3.10: config/vinery/config.json5",
+                    "wine_trader_chance) must be 0, or it still",
                     "turns that share of Wandering Trader spawns into Winemakers."
             ).define("winemakerEnabled", true);
 

@@ -1,0 +1,112 @@
+package net.satisfy.vinery.legacy.entity;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.satisfy.vinery.legacy.block.LegacyWineRackStorageBlock;
+import net.satisfy.vinery.core.registry.EntityTypeRegistry;
+
+public class LegacyWineRackStorageBlockEntity extends RandomizableContainerBlockEntity {
+   private NonNullList<ItemStack> inventory = NonNullList.withSize(18, ItemStack.EMPTY);
+   private ContainerOpenersCounter stateManager = new ContainerOpenersCounter() {
+      protected void onOpen(Level world, BlockPos pos, BlockState state) {
+         LegacyWineRackStorageBlockEntity.this.setOpen(state, true);
+      }
+
+      protected void onClose(Level world, BlockPos pos, BlockState state) {
+         LegacyWineRackStorageBlockEntity.this.setOpen(state, false);
+      }
+
+      protected void openerCountChanged(Level world, BlockPos pos, BlockState state, int oldViewerCount, int newViewerCount) {
+      }
+
+      protected boolean isOwnContainer(Player player) {
+         if (player.containerMenu instanceof ChestMenu) {
+            Container inventory = ((ChestMenu)player.containerMenu).getContainer();
+            return inventory == LegacyWineRackStorageBlockEntity.this;
+         } else {
+            return false;
+         }
+      }
+   };
+
+   public LegacyWineRackStorageBlockEntity(BlockPos pos, BlockState state) {
+      super((BlockEntityType)EntityTypeRegistry.WINE_RACK_STORAGE.get(), pos, state);
+   }
+
+   protected void saveAdditional(CompoundTag nbt) {
+      super.saveAdditional(nbt);
+      if (!this.trySaveLootTable(nbt)) {
+         ContainerHelper.saveAllItems(nbt, this.inventory);
+      }
+   }
+
+   public void load(CompoundTag nbt) {
+      super.load(nbt);
+      this.inventory = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+      if (!this.tryLoadLootTable(nbt)) {
+         ContainerHelper.loadAllItems(nbt, this.inventory);
+      }
+   }
+
+   public int getContainerSize() {
+      return 18;
+   }
+
+   protected NonNullList<ItemStack> getItems() {
+      return this.inventory;
+   }
+
+   protected void setItems(NonNullList<ItemStack> list) {
+      this.inventory = list;
+   }
+
+   protected Component getDefaultName() {
+      return Component.translatable("container.wine_rack");
+   }
+
+   protected AbstractContainerMenu createMenu(int syncId, Inventory playerInventory) {
+      return new ChestMenu(MenuType.GENERIC_9x2, syncId, playerInventory, this, 2);
+   }
+
+   public void startOpen(Player player) {
+      if (!this.remove && !player.isSpectator()) {
+         this.stateManager.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+      }
+   }
+
+   public void stopOpen(Player player) {
+      if (!this.remove && !player.isSpectator()) {
+         this.stateManager.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+      }
+   }
+
+   public void tick() {
+      if (!this.remove) {
+         this.stateManager.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
+      }
+   }
+
+   public void setOpen(BlockState state, boolean open) {
+      if (state.getBlock() instanceof LegacyWineRackStorageBlock rack) {
+         rack.playSound(this.level, this.getBlockPos(), open);
+      }
+
+      this.level.setBlock(this.getBlockPos(), (BlockState)state.setValue(BlockStateProperties.OPEN, open), 3);
+   }
+}

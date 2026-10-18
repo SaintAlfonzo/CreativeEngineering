@@ -11085,7 +11085,7 @@ i.framed_wall_board                               = 'framedblocks:framed_wall_bo
 i.framed_wrench                                   = 'framedblocks:framed_wrench';
 i.framing_saw                                     = 'framedblocks:framing_saw';
 
-// ===== vinery  -  136 new  (144 items, 8 already mapped) =====
+// ===== vinery  -  136 new  (144 items, 8 already mapped) =====  (+35 backport items below)
 i.acacia_wine_rack_big            = 'vinery:acacia_wine_rack_big';
 i.acacia_wine_rack_mid            = 'vinery:acacia_wine_rack_mid';
 i.acacia_wine_rack_small          = 'vinery:acacia_wine_rack_small';
@@ -11222,6 +11222,42 @@ i.wine_rack_2                     = 'vinery:wine_rack_2';
 i.wine_rack_3                     = 'vinery:wine_rack_3';
 i.wine_rack_5                     = 'vinery:wine_rack_5';
 i.wood_fired_oven                 = 'vinery:wood_fired_oven';
+// vinery backport (1.5.5): new items
+i.acacia_lattice                  = 'vinery:acacia_lattice';
+i.apple_bag                       = 'vinery:apple_bag';
+i.bamboo_lattice                  = 'vinery:bamboo_lattice';
+i.bamboo_wine_rack_big            = 'vinery:bamboo_wine_rack_big';
+i.bamboo_wine_rack_mid            = 'vinery:bamboo_wine_rack_mid';
+i.bamboo_wine_rack_small          = 'vinery:bamboo_wine_rack_small';
+i.birch_lattice                   = 'vinery:birch_lattice';
+i.cherry_bag                      = 'vinery:cherry_bag';
+i.cherry_barrel                   = 'vinery:cherry_barrel';
+i.cherry_big_table                = 'vinery:cherry_big_table';
+i.vinery_cherry_cabinet           = 'vinery:cherry_cabinet';
+i.vinery_cherry_chair             = 'vinery:cherry_chair';
+i.vinery_cherry_drawer            = 'vinery:cherry_drawer';
+i.cherry_lattice                  = 'vinery:cherry_lattice';
+i.vinery_cherry_shelf             = 'vinery:cherry_shelf';
+i.vinery_cherry_table             = 'vinery:cherry_table';
+i.cherry_wine_rack_big            = 'vinery:cherry_wine_rack_big';
+i.cherry_wine_rack_small          = 'vinery:cherry_wine_rack_small';
+i.dark_oak_lattice                = 'vinery:dark_oak_lattice';
+i.dirt_path_slab                  = 'vinery:dirt_path_slab';
+i.jungle_lattice                  = 'vinery:jungle_lattice';
+i.lilitu_wine                     = 'vinery:lilitu_wine';
+i.mangrove_lattice                = 'vinery:mangrove_lattice';
+i.oak_lattice                     = 'vinery:oak_lattice';
+i.red_grape_bag                   = 'vinery:red_grape_bag';
+i.red_jungle_grape_bag            = 'vinery:red_jungle_grape_bag';
+i.red_savanna_grape_bag           = 'vinery:red_savanna_grape_bag';
+i.red_taiga_grape_bag             = 'vinery:red_taiga_grape_bag';
+i.spruce_lattice                  = 'vinery:spruce_lattice';
+i.vinery_standard                 = 'vinery:vinery_standard';
+i.white_grape_bag                 = 'vinery:white_grape_bag';
+i.white_jungle_grape_bag          = 'vinery:white_jungle_grape_bag';
+i.white_savanna_grape_bag         = 'vinery:white_savanna_grape_bag';
+i.white_taiga_grape_bag           = 'vinery:white_taiga_grape_bag';
+i.window_block                    = 'vinery:window_block';
 
 // ===== delightful  -  118 new  (125 items, 7 already mapped) =====
 i.acorn                           = 'delightful:acorn';

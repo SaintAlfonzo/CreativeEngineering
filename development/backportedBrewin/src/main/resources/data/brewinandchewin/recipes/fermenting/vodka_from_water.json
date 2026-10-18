@@ -1,0 +1,28 @@
+{
+  "type": "brewinandchewin:fermenting",
+  "base_fluid": {
+    "amount": 1000,
+    "ingredient": {
+      "tag": "#minecraft:water"
+    },
+    "unit": "millibuckets"
+  },
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "tag": "forge:crops/potato"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    []
+  ],
+  "result": {
+    "amount": 1000,
+    "id": "brewinandchewin:vodka"
+  },
+  "unit": "millibuckets"
+}

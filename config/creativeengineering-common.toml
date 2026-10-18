@@ -1270,6 +1270,11 @@
 		#tries every copy of a piece in a pool, so a bigger factor is more exact but slower to fail.
 		#Range: 1 ~ 100
 		maxFractionScale = 10
+		#Sort every pool's pieces by template id at world load. Mods that add pieces in code leave the pools
+		#in an order that changes from one server start to the next, and jigsaw picks by position in that
+		#list, so the same seed built different villages after each restart. Sorted, a seed gives the same
+		#layouts every time (not vanilla's: new chunks only). false = keep the order the mods left.
+		canonicalOrder = true
 
 	[worldgen.biome_solver]
 		#Biomes considered per climate sample (the closest ones). More = slower, rarely different.
@@ -1641,7 +1646,8 @@
 	#Range: 1 ~ 50
 	rareTrades = 5
 	#Spawn Vinery's Wandering Winemaker from its own spawner, independent of the Wandering Trader.
-	#Vinery's own swap (config/vinery/config.json5 wine_trader_chance) must be 0, or it still
+	#Vinery's own swap (vinery-common.toml [trader] spawnChance, 1.3.10: config/vinery/config.json5
+	#wine_trader_chance) must be 0, or it still
 	#turns that share of Wandering Trader spawns into Winemakers.
 	winemakerEnabled = true
 	#Ticks between Wandering Winemaker spawn rolls.

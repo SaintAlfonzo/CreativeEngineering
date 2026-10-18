@@ -59,6 +59,7 @@ final class StuckInBlock {
         RULES.put(SweetBerryBushBlock.class.getName(), bush);
         RULES.put("umpaz.nethersdelight.common.block.util.PropelplantBlock", bush);
         RULES.put("satisfyu.vinery.block.grape.TaigaGrapeBush", bush);
+        RULES.put("net.satisfy.vinery.core.block.GrapeBushBlock$TaigaGrapeBush", bush);
 
         // only while you're in it; standing on top (leather boots) is the snow tier instead
         RULES.put(PowderSnowBlock.class.getName(), (s, p, on) -> on ? NONE : 0.9);

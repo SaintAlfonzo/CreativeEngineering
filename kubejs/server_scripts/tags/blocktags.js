@@ -212,7 +212,7 @@ ServerEvents.tags('block', e => {
 		'minecraft:dirt_path', 'minecraft:coarse_dirt', '#forge:gravel', '#forge:cobblestone',
 		'minecraft:*cobble*', 'quark:*cobble*_vertical_slab', 'supplementaries:raked_gravel',
 		'immersive_weathering:*cobblestone*', 'botania:metamorphic_*_cobblestone*',
-		'/^davebuildingmod:(ballast|gravel|rocky_dirt)(_slab)?$/', item.twigs_rocky_dirt, item.coarse_dirt_slab,
+		'/^davebuildingmod:(ballast|gravel|rocky_dirt)(_slab)?$/', item.twigs_rocky_dirt, item.coarse_dirt_slab, item.dirt_path_slab,
 		'/^engineersdecor:dense_grit_(dirt|sand)_block$/', '/^sootychimneys:(dirty_)?cobblestone_chimney$/',
 	], { except: ['quark:*cobblestone_bricks*'] })
 
@@ -234,7 +234,7 @@ ServerEvents.tags('block', e => {
 		'/^immersiveengineering:((slab_|stairs_)?(alu|steel)_scaffolding_wooden_top|treated_scaffold)$/',
 		'/^engineersdecor:old_industrial_wood_(planks|slab|slabslice|stairs)$/',
 		'/^davebuildingmod:(full_log_pile|log_palisade|log_pile_[12]_(bottom|top)|half_lumber_[a-z_]+)$/',
-		'/^vinery:(cherry_(beam|floorboard)|stackable_log|[a-z_]*crate)$/', '/^create_compressed:(large_)?cogwheel_block$/',
+		'/^vinery:(cherry_(beam|floorboard)|stackable_log|[a-z_]*crate|[a-z_]*_wine_rack_(big|mid|small)|[a-z_]*_lattice)$/', '/^create_compressed:(large_)?cogwheel_block$/',
 		'farmersdelight:*_crate', 'rusticdelight:*crate', 'delightful:*_crate', 'quarkdelight:*_fruit_crate',
 		'fruitsdelight:*_crate', item.chorus_crate, item.corn_crate,
 	], { except: ['/^(copycats|framedblocks):/'] }) // their copycat/framed trapdoors are camouflage
@@ -274,7 +274,7 @@ ServerEvents.tags('block', e => {
 		// full-block windows, glass trapdoors (top half only), glassy crystal blocks
 		'minecraft:sea_lantern', 'create:*_window', 'everycomp:c/*_window', item.framed_glass_trapdoor,
 		'createframed:*_glass_trapdoor', 'create_crystal_clear:*glass_encased*', item.steel_framed_window,
-		item.metro_window, item.window, '/^immersive_weathering:(vitrified_sand|frosty_glass)$/',
+		item.metro_window, item.window, item.window_block, '/^immersive_weathering:(vitrified_sand|frosty_glass)$/',
 		'/^buzzier_bees:crystallized_(clover_)?honey_block$/', item.crystalized_banana_slug_mucus,
 	])
 
@@ -308,7 +308,7 @@ ServerEvents.tags('block', e => {
 		'davebuildingmod:*_quilted_wool', item.bison_fur_block, 'botania:*_petal_block', 'twigs:bamboo_thatch*',
 		item.paraffin_wax_block,
 		// sacks, bags and bales
-		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag', 'farmersrespite:*_sack', item.corn_kernel_bag,
+		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag', 'vinery:*_bag', 'farmersrespite:*_sack', item.corn_kernel_bag,
 		'/^farmersdelight:(rice_bag|rice_bale|straw_bale|tatami)$/',
 	])
 

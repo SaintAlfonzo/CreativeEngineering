@@ -1,0 +1,42 @@
+#Which unit the fluid display in the keg should use.
+#Should be 'LITER', 'MILLIBUCKET' or 'DROPLET'
+#1 L = 1 mB = 81 d
+#Default: MILLIBUCKET
+#Allowed Values: LITER, MILLIBUCKET, DROPLET
+fluidDisplayUnit = "MILLIBUCKET"
+#When the opposite fluid display unit should be shown.
+#Should be one of 'NEVER', 'ADVANCED_TOOLTIPS' or 'ALWAYS'
+#Default: NEVER
+#Allowed Values: NEVER, ADVANCED_TOOLTIPS, ALWAYS
+oppositeFluidDisplay = "NEVER"
+#Should the numbed hearts obtained from being damaged when Tipsy flicker when you are about to take damage?
+#Default: true
+numbedHeartFlickering = true
+#Should the food bar have a yellow overlay when the player has the Intoxication effect?
+#Default: true
+intoxicationFoodOverlay = true
+#Should the chat scramble when the player has the Tipsy effect?
+#Default: true
+scrambleChat = true
+#Should other player's nametags scramble when the player has the Tipsy effect?
+#Default: true
+scrambleName = true
+#Should signs scramble when the player has the Tipsy effect?
+#Default: true
+scrambleSign = true
+#At what amplifier of Tipsy should the chat scramble? (the sender's Tipsy)
+#Default: 3
+#Range: 1 ~ 10
+levelChatScramble = 3
+#At what amplifier of Tipsy should signs scramble? (your own Tipsy)
+#Default: 3
+#Range: 1 ~ 10
+levelSignScramble = 3
+#At what amplifier of Tipsy should nametags scramble? (your own Tipsy)
+#Default: 3
+#Range: 1 ~ 10
+levelNameScramble = 3
+#Should kegs render the fluid texture in the background of the fluid slot?
+#Default: true
+renderFluidInKeg = true
+

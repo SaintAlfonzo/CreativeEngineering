@@ -1,0 +1,39 @@
+{
+  "type": "brewinandchewin:fermenting",
+  "base_fluid": {
+    "amount": 1000,
+    "ingredient": {
+      "id": "create_central_kitchen:green_tea"
+    },
+    "unit": "millibuckets"
+  },
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "tag": "forge:crops/carrot"
+    },
+    {
+      "item": "minecraft:sweet_berries"
+    },
+    {
+      "item": "farmersrespite:black_tea_leaves"
+    }
+  ],
+  "result": {
+    "amount": 1000,
+    "id": "brewinandchewin:kombucha"
+  },
+  "temperature": 3,
+  "unit": "millibuckets",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "farmersrespite"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create_central_kitchen"
+    }
+  ],
+  "fermenting_time": 9600
+}

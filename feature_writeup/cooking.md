@@ -6,6 +6,11 @@
             - ensure growth seasons are realistic and fair
         - berries
             - wandering trader trade
+        - fruit
+            - apple
+                - only obtainable from apple trees, not oak leafs
+            - melon 
+                - create pressing melon/slices inefficent recipe
         - veggies
             - backport veggie delight, vintage delight, fungi delight
             - potato slices
@@ -15,6 +20,8 @@
         - merge
             - coffee
             - bananas
+        - chorus
+            - crate unpacking recipe missing? vibration table, ie press?
     - meat
         - remove unused meats (venison, goat) from crafting recipes/view
         - fish
@@ -31,15 +38,24 @@
             - more cheese types?
                 - red mushroom, warped fungus, fungi delight mushrooms?
                 - new colors, much longer age times, more cheese per slicing
+            - change cheese making to vintage delight method when added?
     - cooked
-        - soup
+        - soup/stew
             - adjust base soup values to be based on ingredients, mark outliers then make changes
-            - put all in supplementaries jar
+            - put all in supplementaries jar, recolor to single color, add wthit tooltip for filled fluid/item in jar, mixing cookies?
+                - quark delight
+                - delightful
+                - alexs delight
+                - nethers delight
+                - enders delight
+                - golden food
+                - neapolitan
+                - fruits delight
     - baked/fried
         - sliced bread/toast
             - allow/require on recipes with visual square bun
         - yeast
-            - new recipe from mushroom colonies/blocks
+            - new crafting/heated mixing recipe from mushroom colonies/blocks
             - used in new sourdough chain
             - fix in world yeast process
         - sourdough
@@ -83,6 +99,39 @@
             - expensive shapeless
         - scrambled eggs
             - make unheated shapeless and more expensive
+        - omelete
+            - swap eggs to fried eggs in veggie omeletes
+            - shapeless veggie omelete craft w/ omelete
+        - exotic fruit
+            - allow all fruit delights in place of melon\
+            - shapeless
+        - stuffed potato
+            - sequeneced assembly w/ spouting recipe
+        - quiche
+            - sequenced assembly
+        - fruit salad
+            - sequenced assembly
+            - allow cantalope, hamimelon, pineapple, lemon, orange slices in place of melon (new slice tag)
+        - burgers
+            - no milk (cheese only)
+            - sequenced assembly automated recipe only, change to shaped
+            - bread or cornbread only, no sliced bread
+        - chorus stew, endermite stew, crab pasta, baked cod stew, pumpkin soup, pasta w/ meatballs, dumplings, cavern explorer soup, 
+            - expensive cooked shapeless
+        - crispy skewer, crawling sandwich, steak and potatos
+            - make shaped
+            - sequenced assembly
+        - glistening melon
+            - make edible 
+            - heated 'guilding' recipes, heated mixing, arc furnace, etc
+        - feasts
+            - 'use (bowl item) on placed (feast) to plate', jei tab?
+            - add sequenced assembly
+                - roast chicken, sheapards pie, honey glazed ham, pizza, popcorn(make shaped)
+            - pizza
+                - wheat to dough
+                - change placed pizza -> slice removal texture to 8 slices/pizza
+                    - increase dough and cheese cost
     - sweet
         - candy
             - gummies 
@@ -95,6 +144,16 @@
         - cold
             - custard
                 - add more variants
+            - shaved ice
+                - add more variants
+            - popsicles
+                - add more variants
+            - ice cream
+                - unify recipes
+                - fluid for every ice cream, mixing recipe
+                - ice cream blocks for each variant, add block runner compat (sticky like slime block, sink in)
+                - bowl spouting
+                - add more variants
         - baked
             - muffins (make decent food source)
                 - add more variants
@@ -104,21 +163,41 @@
                 - fruit, milk, egg, sugar, flour
                 - serve w/ paper
                 - sequence assembly
+            - cookies
+                - all wheat to flour in recipes
+                - bend shaped recipe
+                - heated compacting recipe
+                - efficient baking recipe?
             - pie 
                 - every pie seq assemble recipe
+                - wheat to flour
                 - pie crust
                     - use to craft all pies
                     - swap wheat to flour
                     - swap milk to egg?
                         - allows using frosting
                     - pressing dough recipe
+                - chorus pie
+                    - use chorus juice? requires new fluid for seq assamble
             - cake
                 - dragon egg cake
                 - cake base
                     - slice dough block to cake bases
                     - cake base recipe for all cakes
+                        - sequenced assembly w/ spouting
+                - unobtainable cake slices
+                    - find mod that adds them, add them manually?
+                - all slices placable
+                - merge chocolate cake
+            - cake paste
+                - integrate with cooking pot
+                - more recipes for waffles
+                - more uses for cake paste
             - tart
                 - add more variants
+            - misc
+                - strange eclair
+                    - wheat to flour
     - drink
         - fd tea-like
             - make placeable w/ display delight
@@ -129,6 +208,10 @@
             - recolor teas, make placeable
         - coffee
             - merge
+        - juice
+            - chorus
+                - heated mixing recipe, cooking pot
+                - ender pasta/pie usage
         - tea
             - merge any duplicate teas?
             - add create mixing recipes, more expensive than manual
@@ -166,11 +249,14 @@
             - nothing sugar only (sugar bag, sugar block, etc)
             - other restrictions?
                 - no drinks, "hard to disolve"
+            - sugar cubes
+                - more uses
+                    - bulk mixing? frosting?
     - batter
         - more uses
     - cornmeal
         - new item, recolored flour
-        - milled or crushed corn
+        - milled or crushed corn, small chance on milling corn kernels
         - usable as flour in some recipes
             - pancakes
             - pies and cakes
@@ -200,6 +286,9 @@
         - more salt crafting recipes
         - ensure create salt automation works globally
         - prevent intermediate ingredients (bone broth) from being salted
+        - split seasoning shapeless crafts into own jei category
+        - merge salt production w/ vintage delight when added
+        - cutting board smashing, milling, crushing recipe for salt cluster/raw rock salt to salt, equal efficiency, >1 output w/ chance
     - new seasonings
         - pepper
         - dill (sea pickle?)
@@ -211,7 +300,7 @@
             - only nutrition (salt?)
             - only saturation
             - nutrition/saturation split
-    - distinct popcorn variants, placeable
+    - distinct popcorn variants, placeable (ensure regular popcorn placable first)
 - processes
     - restrict brewing/chewin slots to allowed items
     - allow input on any side
@@ -251,6 +340,8 @@
     - stove
         - bottle/bucket output slot for ingredient inputs in upgraded cooking pot?
             - feasibility + design: [remainder_buffer.md](remainder_buffer.md)
+    - blockhead stove
+        - doesnt allow burnable fuel to fuel oven
     - sink
         - doesnt provide water?
         - rework to act like well?

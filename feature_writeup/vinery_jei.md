@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**Retired by the Vinery port (2026-10-18, [alcohol.md](alcohol.md) Part B):** when `backportedVinery` is loaded, `VineryJEI` registers nothing; the port ships its own five pages (`vinery:wine_fermentation`, `apple_press_mashing`, `apple_press_fermenting`, `grape_stomping`, `wine_aging`). Everything below describes the 1.3.10 setup and stays true only while 1.3.10 is installed.
+
 | Part | Status |
 |---|---|
 | Aging Barrel fermentation page | BUILT, in `mods/` (patcherMod 1.0.3); **arrow time wrong** (1800 ticks shown, real is about 50, §4) |
