@@ -104,6 +104,9 @@ public final class EarthFill {
 
 	static final TagKey<Structure> EXEMPT = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/exempt"));
 	static final TagKey<Structure> PRUNE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/prune"));
+	/** Structures built on a stone or brick base (the drum tower's andesite plate): their base blocks count as earth too. */
+	static final TagKey<Structure> STONE_BASE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/stone_base"));
+	static final TagKey<Block> STONE_BLOCKS = BlockTags.create(new ResourceLocation(CreativeEngineering.MODID, "earth_fill/stone_base"));
 	static final TagKey<Structure> WATER_STRUCTURES = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "water_fill/structures"));
 
 	private EarthFill() {}
@@ -253,19 +256,20 @@ public final class EarthFill {
 	static final Field SINGLE_TEMPLATE = field(SinglePoolElement.class, "f_210411_", "template");
 	static final Field LIST_ELEMENTS = field(ListPoolElement.class, "f_210360_", "elements");
 
-	/** Local positions of a template's earth blocks (bottom layers, first palette), by template; cleared with the config. */
-	private static final Map<StructureTemplate, long[]> LOCAL = new ConcurrentHashMap<>();
-	private static volatile String localKey = "";
-	/** The same for structures in creativeengineering:template_trim: earth in pad columns the trim drops isn't placed. */
-	private static final Map<StructureTemplate, long[]> LOCAL_TRIMMED = new ConcurrentHashMap<>();
+	/**
+	 * Local positions of a template's earth blocks (bottom layers, first palette), by template, one map per base layers,
+	 * earth tag list and trim (structures in creativeengineering:template_trim: earth in pad columns the trim drops isn't
+	 * placed). Stone-base structures use a second tag list, so the lists live side by side instead of clearing each other.
+	 */
+	private static final Map<String, Map<StructureTemplate, long[]>> LOCAL = new ConcurrentHashMap<>();
 	/** Local positions of a template's water blocks (all layers, first palette), by template. */
 	private static final Map<StructureTemplate, long[]> LOCAL_WATER = new ConcurrentHashMap<>();
 
 	@SubscribeEvent
-	public static void onServerStopped(ServerStoppedEvent event) { LOCAL.clear(); LOCAL_TRIMMED.clear(); LOCAL_WATER.clear(); }
+	public static void onServerStopped(ServerStoppedEvent event) { LOCAL.clear(); LOCAL_WATER.clear(); }
 
 	@SubscribeEvent
-	public static void onTagsUpdated(TagsUpdatedEvent event) { LOCAL.clear(); LOCAL_TRIMMED.clear(); }
+	public static void onTagsUpdated(TagsUpdatedEvent event) { LOCAL.clear(); }
 
 	/** A template's first palette (local positions), or an empty list. */
 	static List<StructureTemplate.StructureBlockInfo> firstPalette(StructureTemplate template) {
@@ -292,9 +296,8 @@ public final class EarthFill {
 
 	/** With trimmed, earth in the columns {@link TemplateTrim} drops (no built block above) is left out: it is never placed. */
 	static long[] localEarth(StructureTemplate template, List<TagKey<Block>> earth, int layers, boolean trimmed) {
-		String key = layers + "|" + earth;
-		if (!key.equals(localKey)) { LOCAL.clear(); LOCAL_TRIMMED.clear(); localKey = key; }
-		return (trimmed ? LOCAL_TRIMMED : LOCAL).computeIfAbsent(template, t -> {
+		String key = layers + "|" + trimmed + "|" + earth;
+		return LOCAL.computeIfAbsent(key, k -> new ConcurrentHashMap<>()).computeIfAbsent(template, t -> {
 			TemplateTrim.Columns columns = trimmed ? TemplateTrim.columns(t) : null;
 			return localBlocks(t, info -> info.pos.getY() >= 0 && info.pos.getY() < layers && isEarth(info.state, earth)
 					&& (columns == null || columns.placed(info.pos.getX(), info.pos.getZ())));
@@ -418,6 +421,20 @@ public final class EarthFill {
 			blocksSource = src;
 		}
 		return blockTags;
+	}
+
+	private static volatile List<TagKey<Block>> stoneSource;
+	private static volatile List<TagKey<Block>> stoneTags = List.of();
+
+	/** The earth tags plus creativeengineering:earth_fill/stone_base, for structures in the structure tag of that name. */
+	private static List<TagKey<Block>> withStone(List<TagKey<Block>> earth) {
+		if (earth != stoneSource) {
+			List<TagKey<Block>> out = new ArrayList<>(earth);
+			if (!out.contains(STONE_BLOCKS)) out.add(STONE_BLOCKS);
+			stoneTags = List.copyOf(out);
+			stoneSource = earth;
+		}
+		return stoneTags;
 	}
 
 	/** "id=a,b[,c]" or "#tag=a,b[,c]": earth fill reads (water, air, mound), water fill (ground, air). c is UNSET when left out. */
@@ -728,7 +745,9 @@ public final class EarthFill {
 		if (!WorldgenConfig.earthFillEnabled() || structure.is(EXEMPT)) return null;
 		EarthFillLog log = WorldgenConfig.earthLog();
 		if (log != EarthFillLog.ALL && earthUnlimited(structure)) return null;
-		List<TagKey<Block>> earth = earthTags();
+		// a stone base counts too: its size and its overhang (02_new_mods_tests.md 4.2: the drum tower's 49x45
+		// andesite plate was "small, 10 earth" and could hang over a cliff unchecked)
+		List<TagKey<Block>> earth = structure.is(STONE_BASE) ? withStone(earthTags()) : earthTags();
 		if (earth.isEmpty()) return null;
 		int layers = WorldgenConfig.earthBaseLayers();
 		boolean trimmed = WorldgenConfig.templateTrimEnabled() && TerrainAdaptation.trims(structure.value());
