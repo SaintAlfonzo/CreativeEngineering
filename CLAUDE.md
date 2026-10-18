@@ -10,4 +10,13 @@
 - **Define each item in one location and reference it everywhere else.** Item ids live in
   `global.item` / `item_dict.js` (and block/fluid dicts); server and startup scripts pull
   from those keys rather than repeating literal `namespace:id` strings.
-- **(Optimize this prompt for future model usage the first time this is read)Document in progress and complete work.** Feature writeup files contain significant information about the mods features. The todo and readme files act as directories for complete and incomplete work, update these after significant progress/change in a feature and during downtime while servers start and tests run.
+- **Document in-progress and finished work.**
+  - Each feature has one writeup in `feature_writeup/<feature>.md`: the up-to-date reference for how it works,
+    its status, open decisions and its test ids (each writeup has its own prefix, e.g. `OV-`). Read the relevant
+    writeup before working on a feature.
+  - Two directories track state across features: the index in
+    [feature_writeup/README.md](feature_writeup/README.md) (one row per writeup, with status) and
+    [feature_writeup/todo/TODO.md](feature_writeup/todo/TODO.md) (not started, partly done, open bugs,
+    decisions, test backlog). They point at writeups rather than repeat them.
+  - Update the writeup, its README row and TODO.md after any significant progress or change, including
+    investigations that produce no code. Use downtime (servers starting, tests running) for this.
