@@ -77,6 +77,7 @@ What is still left across every writeup (not started, partly done, open bugs, op
 | TNT shrapnel (lit TNT, TNT minecarts and burning TNT items fire a ring of no-gravity fragments: 24 pieces, 12 blocks, 3 damage; `[shrapnel]`) | [tnt_shrapnel.md](tnt_shrapnel.md) | `TN-` | DEPLOYED (1.0.3 jar), TN-01 to TN-10 pending; findings F1-F4, F1 (the lighter is immune) needs a decision |
 | Engineering recipes (machine gating: gold deployer, IE-part press / saw / drill, nether-locked alloy kiln, cast-iron blast brick, steel workbench; compressed iron = steel; mechanisms, redstone, rails, resource stones, cinder-flour dusts) | [recipes_engineering.md](recipes_engineering.md) | `RE-` | DEPLOYED (since 1.0.3), RE-01 to RE-20 pending; findings F1-F10, F1 (no blast furnace recipe), F2 (no dispenser recipe), F3 (amethyst crushing clash) need a decision |
 | Metal recipes (one part per metal, mostly IE's; 9-metal ore chain with Create and IE yields 1× / 1.33× / 1.5×; dust, plate and crushed blocks; rods, wires, bars; red electrum, rust washing, spools) | [recipes_metal.md](recipes_metal.md) | `RM-` | DEPLOYED (since 1.0.3), RM-01 to RM-14 pending; findings F1-F7, F1 (plates made three ways) and F4 (hand-crafted rods for 3 metals) need a decision |
+| Wood recipes (species bark from saw and cutting-board stripping, reattach for 6 species; IE sawdust from every wooden shape; ash, creosote sawdust, wood pellets; compost, fertile soil and nulch from mulches; Create saw shapes for 13 species; chimney soot) | [recipes_wood.md](recipes_wood.md) | `RW-` | DEPLOYED (since 1.0.3), RW-01 to RW-10 pending; findings F1-F6, F1 is a bug (IE crusher: planks missing, logs probably 2 sawdust) |
 
 ## Release plans
 
@@ -114,7 +115,7 @@ stopping points and you pick (or reorder). Prefixes are proposals.
 | 17 | ~~TNT shrapnel~~ | done: [tnt_shrapnel.md](tnt_shrapnel.md) | `TN-` |
 | 18 | ~~Nether portal ignition~~ | done: [nether_portal.md](nether_portal.md) | `NP-` |
 | 19 | ~~Mob and block tweaks~~ | done: [mob_block_tweaks.md](mob_block_tweaks.md) | `MT-` |
-| 20 | Recipe progression | the engineering/, metal/, wood/, cooking/, magic/ recipe scripts as a whole (components, power, oil, computing, pneumatic, crystals, metal unification, bark/sawdust/ash, chocolate, cultivated meat, XP, enchants, sculk), removed items and dead recipes; written so far: [recipes_engineering.md](recipes_engineering.md) (`RE-`), [recipes_metal.md](recipes_metal.md) (`RM-`) | `RP-` (split per folder when picked) |
+| 20 | Recipe progression | the engineering/, metal/, wood/, cooking/, magic/ recipe scripts as a whole (components, power, oil, computing, pneumatic, crystals, metal unification, bark/sawdust/ash, chocolate, cultivated meat, XP, enchants, sculk), removed items and dead recipes; written so far: [recipes_engineering.md](recipes_engineering.md) (`RE-`), [recipes_metal.md](recipes_metal.md) (`RM-`), [recipes_wood.md](recipes_wood.md) (`RW-`) | `RP-` (split per folder when picked) |
 | 21 | ~~Archery and bullets~~ | done: [archery.md](archery.md) | `AR-` |
 
 ## Status legend

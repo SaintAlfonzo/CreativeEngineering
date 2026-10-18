@@ -90,6 +90,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Engineering: component and coil disassembly comments promise a screwdriver / wirecutter the recipes do not take; iron and diamond components use a different centre on the blueprint. [engineering.md](../engineering.md) 4 F4, F6.
 - Engineering recipes: `minecraft:blast_furnace` and `minecraft:dispenser` have their recipes removed and no replacement, so Little Logistics locomotives and tugs may be uncraftable (F1, F2); amethyst shards have two crushing recipes in both the crushing wheels and the IE crusher, one dead in each (F3). [recipes_engineering.md](../recipes_engineering.md) 4.
 - Metal recipes: zinc can still be hammer-crushed by IE's own recipes (F3); 9 copper plates → copper plate block has no pack recipe (F2); `console.log('EVENT:', e)` in both base metal files (F7). [recipes_metal.md](../recipes_metal.md) 4.
+- Wood recipes: `sawdust.js` line 28 crushes `i.any_log` a second time where planks were meant, so planks have no IE crusher recipe and logs probably give 2 sawdust instead of 3 (same generated id) (F1). [recipes_wood.md](../recipes_wood.md) 4.
 - Probable, unverified: the air brake's `useDurationTicks` is read before Forge loads the config, so edits never apply (GR-28); the dragon set's 36 armor is over vanilla's 30 cap (GR-02). [gear_tuning.md](../gear_tuning.md) 4 F7, F13.
 - Cool Rain may ignore the season types (WE-25). [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2.
 - 5 Terralith cave biomes have no wild crops (single-player warning). [plan_1.0.5.md](../plan_1.0.5.md) 2.
@@ -235,6 +236,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [tnt_shrapnel.md](../tnt_shrapnel.md) | `TN-` | 10 / 0 | new 2026-10-18; TN-03 settles F1 |
 | [recipes_engineering.md](../recipes_engineering.md) | `RE-` | 20 / 0 | new 2026-10-18; RE-03, RE-08, RE-16 settle F1-F3 |
 | [recipes_metal.md](../recipes_metal.md) | `RM-` | 14 / 0 | new 2026-10-18; RM-07, RM-08, RM-11 check F1, F2, F5 |
+| [recipes_wood.md](../recipes_wood.md) | `RW-` | 10 / 0 | new 2026-10-18; RW-03 checks F1 |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
