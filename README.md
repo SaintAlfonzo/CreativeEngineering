@@ -50,7 +50,8 @@ names stay `:patcherMod` / `:exposureBackport`.
 ```
 
 `development/<mod>/libs/` is gitignored. It holds compile-time copies of mod jars from `mods/`, so
-populate it from a rebuilt `mods/` folder before building. patcherMod only runs
+populate it from a rebuilt `mods/` folder before building (patcherMod also reads Farmer's Delight and
+Farmer's Respite straight from `mods/`). patcherMod only runs
 reobfuscated in the instance (its mixins use SRG names); exposureBackport has real Mixin
 refmaps and also runs in the Gradle dev runs.
 
