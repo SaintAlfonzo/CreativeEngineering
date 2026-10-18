@@ -32,7 +32,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
 | Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (engineering, item physics, biome tuning, fixes and compat, pack tooling, cans, composting, camera bags, WTHIT, TNT shrapnel, portal ignition, mob/block tweaks, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 6-7, 9-11, 13-20 | not written; shields, armor/tool effects, gear, potions, potion buckets, archery, loot and nests are done |
+| Writeups for the rest of the pack (engineering, item physics, biome tuning, fixes and compat, cans, composting, camera bags, TNT shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 6-7, 9-10, 13-15, 17, 20 | not written; 12 of 21 rows done (latest: pack tooling, WTHIT lines, portal ignition, mob/block tweaks) |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
 
 ## 2. Partly done: built vs still to do
@@ -116,6 +116,8 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Component tier names for aluminum (`Light?`) and uranium (`Dense?`). [components.js](../kubejs/server_scripts/engineering/components.js) lines 18 and 22.
 - Whether `kubejs/archive/` and the commented-out old-helper blocks can be deleted (6).
 - Armor/tool effects: dragon bow and crossbow effects look reversed (F4); Magic Resistance on vanilla `isMagic()` or the pack's `magic` damage tag (F6); horse armor Regeneration I or II (F9). [armor_effects.md](../armor_effects.md) 4.
+- Portal: Flint and Terrasteel places Dark Fire anywhere (F1); Dark Fire lights portals in any dimension (F2). [nether_portal.md](../nether_portal.md) 4.
+- Tooling: delete the unused `global.config` framework (F3); keep the metal/wood/sequenced-assembly test recipes that ship in `_lib/` (F4). [pack_tooling.md](../pack_tooling.md) 4.
 - Potions: one batch size across machines or not (F1); keep the Refinery's regular → lingering shortcut (F2). [potions.md](../potions.md) 4.
 - Potion buckets: machine tipping price (F1); keep the glass-bottle remainder on every vanilla potion (F3). [potion_buckets.md](../potion_buckets.md) 4.
 - Archery: fix the bullet blueprint category (F1); split arrow 6 or 4 arrows (F2); the archery blueprint needs a trader-only Ethereal Arrow (F3). [archery.md](../archery.md) 4.
@@ -128,7 +130,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Sawmill recipes off the manual pipeline into an NCH helper. `TODO` in [sawmill.js](../kubejs/generation_scripts/sawmill.js) line 1.
 - Magic Resistance and Luck potions use placeholder reagents. [potions.js](../../kubejs/startup_scripts/cooking/potions.js) lines 70-71 and 86; [potions.md](../potions.md) F3.
 - Advanced Peripherals structures: off by config; remove the warning or the structures outright. [structure_tuning.md](../structure_tuning.md) 7 Todo.
-- Dark Fire portal: `FlintAndTerraSteelItem` is still "TEMPORARY testing behavior" with no frame check and refers to a `TerraFireBlock` that no longer exists. `PortalFailureHandler` keeps a diagnostic log "until confirmed working". [todo.txt](todo.txt).
+- Dark Fire portal: `FlintAndTerraSteelItem` is still "TEMPORARY testing behavior" with no frame check and refers to a `TerraFireBlock` that no longer exists. `PortalFailureHandler` keeps a diagnostic log "until confirmed working". [todo.txt](todo.txt), [nether_portal.md](../nether_portal.md) F1, F5.
 
 ## 5. Parity with newer upstream content
 
@@ -143,7 +145,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Placeable food | [placeable_food.md](../placeable_food.md) | catalog built from fallback data: `/dumpplaceable` never run, so newer mods may be missing |
 | Stack sizes reference | [stack_sizes.md](../stack_sizes.md) | from before the stack size policy; rerun `/dumpstacks` |
 | Item dictionary | [startup_scripts/todo/](../kubejs/startup_scripts/todo/) | 911 candidate entries (`create_ie_dict_additions.txt`) and 689 unmapped ids (`not_in_dict.txt`) not merged; redstone module still on the old dict variant (item_dict "Merge additions from old dict") |
-| Dict validation | `block_dict.js` ~line 45, `fluid_dict.js` ~line 162, `neoCraftHelper.js` ~line 383 | tag entries aren't validated |
+| Dict validation | `block_dict.js` ~line 45, `fluid_dict.js` ~line 162, `neoCraftHelper.js` ~line 383 | tag entries aren't validated; `item_dict.js` does check tags but probably before they load ([pack_tooling.md](../pack_tooling.md) F1, F2) |
 | Sequenced-assembly sprites | [texture_tool.js](../kubejs/client_scripts/texture_tool.js) line 28 | 29 outputs still use the generic incomplete sprite |
 | Mob spawns | [mob_spawns.md](../mob_spawns.md) 9 | Alex's Mobs and duck/goose biome parity not investigated |
 | Loot census | [loot_census.md](../kubejs/server_scripts/loot/loot_census.md) | still lists Exposure 1.6.0's table ([exposure.md](../exposure.md) 4) |
@@ -186,6 +188,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - [todo.txt](todo.txt) items found done on 2026-10-18: all 7 cultures wired; syringe texture; dead `.en_us.json`; `Config.java`; dragon-scale chestplate rocket takeoff (`EasyElytraTakeoffHelperMixin`; check whether Alex's Mobs items need adding to `#creativeengineering:elytra_chestplates`). The loot overhaul line is superseded by [loot.md](../loot.md).
 - Found while writing [armor_effects.md](../armor_effects.md) and [gear_tuning.md](../gear_tuning.md) (2026-10-18): [magic_resistance.js](../../kubejs/startup_scripts/magic/magic_resistance.js) header says there is no potion (there is); [armor_effects.js](../../kubejs/startup_scripts/func/armor_effects.js) header says 6 effects (cap is 7); the `NCH.cfg` example uses toml keys instead of field names ([neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) ~621). (shields.md 2.7 said the felsic shield's values were configurable: corrected the same day.)
 - Found while writing [potions.md](../potions.md), [potion_buckets.md](../potion_buckets.md) and [archery.md](../archery.md) (2026-10-18): `DragonBreathBrewing`'s javadoc names a `changes/dragon_breath.js` that doesn't exist (it's `potions.js` part 3); [tipped_arrows.js](../../kubejs/server_scripts/equipment/tipped_arrows.js) header gives amounts the code doesn't use. Raw `e.custom` recipes in `potion_bottling.js` and `tipped_arrows.js`, and 44 raw tag `e.add` lines in `equipmenttags.js`, are against the NCH / tag-helper rule.
+- Found while writing [pack_tooling.md](../pack_tooling.md), [nether_portal.md](../nether_portal.md) and [wthit_lines.md](../wthit_lines.md) (2026-10-18): `test_crop_growth.sh` names a `crop_growth.md` (it's crops.md 2.9); `neoCraftHelper.js` line 1 names an old path; `DarkFireBlock#onPlace` still describes the removed `isAir()` override; WTHIT plugin toggles probably show raw `config.waila.plugin_*` keys (no lang lines).
 
 ---
 
@@ -206,6 +209,10 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [potions.md](../potions.md) | `PO-` | 26 / 0 | new 2026-10-18; replaces the never-recorded September potion-fluid checklist |
 | [potion_buckets.md](../potion_buckets.md) | `PB-` | 20 / 0 | new 2026-10-18; PB-04 (dome) and PB-11 to PB-17 (recipes, bottle remainder) close the todo.txt gaps |
 | [archery.md](../archery.md) | `AR-` | 18 / 0 | new 2026-10-18; AR-13, AR-14, AR-15 settle findings |
+| [pack_tooling.md](../pack_tooling.md) | `TL-` | 16 / 0 | new 2026-10-18; TL-01 settles F1 |
+| [nether_portal.md](../nether_portal.md) | `NP-` | 12 / 0 | new 2026-10-18; NP-01 to NP-05 let the diagnostic log go |
+| [mob_block_tweaks.md](../mob_block_tweaks.md) | `MT-` | 12 / 0 | new 2026-10-18 (BR-28 stays in blockrunner.md) |
+| [wthit_lines.md](../wthit_lines.md) | `WL-` | 6 / 0 | new 2026-10-18; line tests stay in BR-, CR-, R4- |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
