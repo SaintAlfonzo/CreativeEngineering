@@ -1,0 +1,7 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="MIT"
+[[mods]]
+modId="creativeengineering"
+version="0.0.1"
+displayName="RB test"

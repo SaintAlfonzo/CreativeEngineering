@@ -18,10 +18,12 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import com.SaintAlfonzo.creativeengineering.cooking.RemainderSlot;
+
 /**
  * FD's CookingPotMenu layout (so FD's cooking_pot.png lines up) plus the tool slot left of the ingredient grid, and
  * without the recipe book. Menu slots: 0-5 ingredients, 6 tool, 7 waiting result, 8 container, 9 output, then the
- * player inventory (10-36) and hotbar (37-45).
+ * player inventory (10-36) and hotbar (37-45), then the two leftover slots (46-47, take only).
  */
 public class OvenMenu extends AbstractContainerMenu {
 
@@ -80,6 +82,9 @@ public class OvenMenu extends AbstractContainerMenu {
         for (int column = 0; column < 9; ++column) {
             addSlot(new Slot(playerInventory, column, 8 + column * 18, 142));
         }
+        for (int i = 0; i < blockEntity.getRemainders().getSlots(); ++i) {
+            addSlot(new RemainderSlot(blockEntity.getRemainders(), i));
+        }
 
         addDataSlots(data);
     }
@@ -107,6 +112,16 @@ public class OvenMenu extends AbstractContainerMenu {
         ItemStack copy = ItemStack.EMPTY;
         Slot slot = slots.get(index);
         if (slot.hasItem()) {
+            if (index >= PLAYER_INV_END) {
+                // Leftover slot: set() (not an in-place change) so the buffer marks the oven changed.
+                ItemStack stack = slot.getItem().copy();
+                copy = stack.copy();
+                if (!moveItemStackTo(stack, PLAYER_INV_START, PLAYER_INV_END, true) || stack.getCount() == copy.getCount()) {
+                    return ItemStack.EMPTY;
+                }
+                slot.set(stack);
+                return copy;
+            }
             ItemStack stack = slot.getItem();
             copy = stack.copy();
             if (index < PLAYER_INV_START) {
