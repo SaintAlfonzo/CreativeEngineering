@@ -32,7 +32,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
 | Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (cans, composting, camera bags, tnt shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 13, 14, 15, 17, 20 | not written; 16 of 21 rows done |
+| Writeups for the rest of the pack (composting, camera bags, tnt shrapnel, recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 14, 15, 17, 20 | not written; 17 of 21 rows done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
 
 ## 2. Partly done: built vs still to do
@@ -193,6 +193,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - [todo.txt](todo.txt) items found done on 2026-10-18: all 7 cultures wired; syringe texture; dead `.en_us.json`; `Config.java`; dragon-scale chestplate rocket takeoff (`EasyElytraTakeoffHelperMixin`; check whether Alex's Mobs items need adding to `#creativeengineering:elytra_chestplates`). The loot overhaul line is superseded by [loot.md](../loot.md).
 - Found while writing [armor_effects.md](../armor_effects.md) and [gear_tuning.md](../gear_tuning.md) (2026-10-18): [magic_resistance.js](../../kubejs/startup_scripts/magic/magic_resistance.js) header says there is no potion (there is); [armor_effects.js](../../kubejs/startup_scripts/func/armor_effects.js) header says 6 effects (cap is 7); the `NCH.cfg` example uses toml keys instead of field names ([neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) ~621). (shields.md 2.7 said the felsic shield's values were configurable: corrected the same day.)
 - Found while writing [potions.md](../potions.md), [potion_buckets.md](../potion_buckets.md) and [archery.md](../archery.md) (2026-10-18): `DragonBreathBrewing`'s javadoc names a `changes/dragon_breath.js` that doesn't exist (it's `potions.js` part 3); [tipped_arrows.js](../../kubejs/server_scripts/equipment/tipped_arrows.js) header gives amounts the code doesn't use. Raw `e.custom` recipes in `potion_bottling.js` and `tipped_arrows.js`, and 44 raw tag `e.add` lines in `equipmenttags.js`, are against the NCH / tag-helper rule.
+- [food.md](../food.md) 3.6 numbers are out of date ("34 food cans hold 2", "no food canning recipe exists yet"); see [cans.md](../cans.md) F1.
 - Found while writing [pack_tooling.md](../pack_tooling.md), [nether_portal.md](../nether_portal.md) and [wthit_lines.md](../wthit_lines.md) (2026-10-18): `test_crop_growth.sh` names a `crop_growth.md` (it's crops.md 2.9); `neoCraftHelper.js` line 1 names an old path; `DarkFireBlock#onPlace` still describes the removed `isAir()` override; WTHIT plugin toggles probably show raw `config.waila.plugin_*` keys (no lang lines).
 
 ---
@@ -222,6 +223,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [item_physics.md](../item_physics.md) | `IP-` | 14 / 0 | new 2026-10-18; IP-13 checks the $1 crash |
 | [biome_tuning.md](../biome_tuning.md) | `WG-` | 8 / 0 | new 2026-10-18; WG-06 settles F3 |
 | [fixes_compat.md](../fixes_compat.md) | `FX-` | 20 / 0 | new 2026-10-18; TT-16..18, AR-17 stay in their files |
+| [cans.md](../cans.md) | `CN-` | 6 / 0 | new 2026-10-18; FO-14..22, CP-, R4-07 elsewhere |
 | [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
 | [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
 | [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
