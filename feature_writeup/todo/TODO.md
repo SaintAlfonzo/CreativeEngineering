@@ -25,12 +25,12 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Remainder buffer (bottles/bowls/buckets kept in a slot on the pot, kettle, keg port and oven instead of thrown) | [remainder_buffer.md](../remainder_buffer.md) | feasibility done 2026-10-18 (feasible, ~7 mixins); D1 to D5 open; no code |
 | Canning automation | `TODO` in [canning.js](../kubejs/server_scripts/cooking/canning.js) line 68 | not started |
 | Mob spawn plans beyond the first block (Alex's Mobs / duck parity, pillager overhaul, lone villagers, allay, skylands mooblooms) | [mob_spawns.md](../mob_spawns.md) 9 | first block done; "Investigate" and "Later" not started |
-| Structures: Nether, End and underground grouping pass; cave-structure tuning; move-to-Nether set | [structure_tuning.md](../structure_tuning.md) 7 Todo | not built. Three structures never generate until it's done (3) |
+| Structures: Nether, End and underground grouping pass; cave-structure tuning; move-to-Nether set | [structure_tuning.md](../structure_tuning.md) 7 Todo | not built. The three deep dungeons now generate through `land/any/deep` (1.0.7 source); their grouping and rates still wait on this pass |
 | Structures: vehicle metas (caravans), more raft and wreckage variants | [structure_tuning.md](../structure_tuning.md) 7 Todo, 7.4.9 | marked only; new templates needed |
 | Structures: tuning pass (shipwreck 40%, jungle temple spacing, strip unexplained weights, sky village rate, fresh watchtower `--fit-rates`) | [structure_tuning.md](../structure_tuning.md) 7 Todo | waits on the end of the scratch test run |
 | Swap Overworld netherrack / crimson / warped ground (jasper, crimsite) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Biomes and terrain" | not built |
 | River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
-| Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | candidate list only; no mod picked |
+| Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | researched 2026-10-18 from decompiled jars (tiers corrected, order in 5); nothing ported, D1-D5 open |
 | In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
 | Writeups for the rest of the pack (recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 20 | not written; 20 of 21 rows done |
 | Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
@@ -40,7 +40,8 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Feature | Writeup | Done | Still to do |
 |---|---|---|---|
 | Structure tuning 7.1 to 7.4 (ships INCOMPLETE in 1.0.6) | [structure_tuning.md](../structure_tuning.md), [plan_1.0.6.md](../plan_1.0.6.md) 2.1, [testing/structures/](../testing/structures/00_plan.md) | built; scratch M1, M2, Phases 3 to 6 run | Phase 7 started 2026-10-14 17:43 with no results ([07_phase_7.scratch.md](../testing/structures/07_phase_7.scratch.md)); Phases 8 to 10 and the client list 8.0.11 not run; open bugs in 3; fixes go to 1.0.7 |
-| Locate (folding, non-blocking loads, census, DH clip) | [locate.md](../locate.md) | built and in 1.0.6; LO-02, 06, 08, 12, 15 passed | LO-05 failed (loads still block), LO-03/LO-14 failed (census bug), see 3; LO-01, LO-04 partly |
+| Locate (folding, non-blocking loads, census, DH clip) | [locate.md](../locate.md) | built and in 1.0.6; LO-02, 06, 08, 12, 15 passed | LO-05, LO-03/LO-14 failed in 1.0.6; their fixes are in source for 1.0.7 (next row); LO-01, LO-04 partly |
+| Structure and locate fixes for 1.0.7 (9 bugs from the scratch run) | [structure_tuning.md](../structure_tuning.md) 3.23, [locate.md](../locate.md) 3.2, 3.6, 8 | fixed in source 2026-10-18; offline checks pass against the mapped 1.19.2 jar (PoolTunerTest new) | build patcherMod 1.0.7 and install; run ST-191 to ST-198 and LO-03, LO-05, LO-14, LO-17 on a scratch server; `[worldgen.pools] canonicalOrder` changes every village layout in new chunks (on by default, see 4) |
 | Alcohol Part A: Brewin' and Chewin' 4.5.0 port | [alcohol.md](../alcohol.md) Part A | analysis, plan and decisions 4.1/4.5. **Port begun 2026-10-17** in `development/backportedBrewin` (in `settings.gradle`): ~45 upstream classes copied (blocks, keg block entity, recipes, items, utilities, Forge containers) | registries, config (`BnCConfiguration`), fluids, effects/attachments, network, menu, client, JEI, assets/data, loot, remaps, old-world conversion: 14 imported classes don't exist yet, so it doesn't compile. Heat/cold tag audit 2.7 not applied. Pack-side changes 3.4 not started. The writeup still says "not started" |
 | Food | [food.md](../food.md) | `/dumpfood`, 31 types + tags, catalog, multi-serving cans, raw and generated cans, fried eggs, egg stacks | tuning system and egg migration (1); cooked/prepared can sections pie, feast, meals, drinks, special |
 | Oven | [oven.md](../oven.md) | block, GUI, baking recipe type, JEI (patcherMod), bakeware, 7 baking recipes, muffin dough fix (2026-10-18; compiles, 8 GameTests pass) | patcherMod jar rebuild + OV-01 to OV-14; recipes don't use bakeware or plating yet, pot recipes not moved |
@@ -60,18 +61,14 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 
 ## 3. Open bugs (not fixed)
 
-**Structures and locate** (from [plan_1.0.6.md](../plan_1.0.6.md) 2.1 and the phase writeups):
-- Locate loads block the server thread: `LocateLoads.java` lines 80-82 (LO-05). [05_phase_5.md](../testing/structures/05_phase_5.md) 3.1. Candidate for 1.0.7, your call.
-- `/celocate census` counts most slots as "known" (LO-03, LO-14). [06_phase_6.md](../testing/structures/06_phase_6.md) 3.1. Fix together with the one above.
-- `/celocate stop` labels queued rows `CancellationException`, not `stopped` (cosmetic). [05_phase_5.md](../testing/structures/05_phase_5.md) 3.4.
-- Cloud Storage and Domestication Innovation village pieces dropped on chunk reload (third party; possible PoolTuner fix). [05_phase_5.md](../testing/structures/05_phase_5.md) 3.2.
-- Desert and savanna village layouts differ between JVM runs (cause unknown). [05_phase_5.md](../testing/structures/05_phase_5.md) 3.3.
-- Ground match gives up silently over deep structures. [03_phase_3.md](../testing/structures/03_phase_3.md).
-- Beach, river and swamp driftwood water versions can never place (since 1.0.4). [03_phase_3.md](../testing/structures/03_phase_3.md).
-- Skeleton dungeon, bone dungeon and lost soul city never generate (`land/any` has no cave biomes). [structure_tuning.md](../structure_tuning.md) 7.3.3.
-- Earth fill counts earth bases only, not stone bases (drum tower, piglin camp). [plan_1.0.6.md](../plan_1.0.6.md) 2.1.
+**Structures and locate:** none open. The nine listed here (locate loads blocking the server, census "known",
+`/celocate stop` label, Cloud Storage / Domestication Innovation village pieces, village layouts per JVM run, ground
+match over deep structures, beach/river/swamp driftwood, the three deep dungeons, earth fill and stone bases) were
+fixed in source 2026-10-18 for patcherMod 1.0.7, not built or shipped (2, "Structure and locate fixes for 1.0.7").
+The village-layout cause was found on the way: the pool order changes per JVM run.
 
 **Other features:**
+- Probable, unverified: Death Knell is server-only but its death messages are lang keys from its own jar, so clients likely see raw `message.deathknell.*` keys (FP-01). Rain Should Extinguish Campfires duplicates Unlit Campfire's rain rule: remove. [feature_porting.md](../feature_porting.md) 0, 2.2.
 - Brewin' 2.0 keg gives back an extra glass bottle per `pickled_pickles` brew (fluid-item leftover slot grows by the result count). Goes away with the 4.5.0 port. [remainder_buffer.md](../remainder_buffer.md) 1.3.
 - Vinery JEI fermentation arrow shows 1800 ticks; the real time is about 50. `VineryIds.FERMENTATION_TICKS` is still 1800. [vinery_jei.md](../vinery_jei.md) 4.
 - Canned Goods data: saturation values far too high, crossed ids, wrong effects. [food.md](../food.md) 4.2 findings 1-2 (the tuning system is the planned fix).
@@ -112,7 +109,10 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Can parity `Want` = `?` cells. [can_parity.md](../can_parity.md).
 - Crops G4, G6 to G15, V findings: approve or reject each fix. [crops.md](../crops.md) 4.
 - Structures: undead castle vs earth fill (narrow its fits or relax the mound limit); ST-135 fortified metas against the 120 s timeout; geode drop tuning (ST-133). [plan_1.0.6.md](../plan_1.0.6.md) 2.1.
-- Locate-load and census fixes for 1.0.7 (3); fix or leave the third-party village pieces (3).
+- Canonical pool order (`[worldgen.pools] canonicalOrder`, on by default in 1.0.7 source): keeps a seed's villages the
+  same across restarts, but every jigsaw layout in new chunks changes once. Keep it on, or off. [structure_tuning.md](../structure_tuning.md) 3.23.
+- Stone bases in earth fill are opt-in (tag `earth_fill/stone_base`, only the drum tower): add more structures, or
+  keep it narrow. [structure_tuning.md](../structure_tuning.md) 3.23 item 6.
 - Wood mismatch: 35 structures marked "Restrict". [wood_mismatch.md](../wood_mismatch.md).
 - Bee nest starter rules: your review. [bee_nests.md](../bee_nests.md) 9.
 - More Mooblooms D47 per-biome shares: first pass, open to retuning. [mooblooms.md](../mooblooms.md) 4.13.
@@ -200,7 +200,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - [alcohol.md](../alcohol.md) Part A says the port is "not started"; it has begun (2). [deploy.md](../deploy.md) `IN_TREE_MODS` will need `backportedBrewin` once it builds.
 - [exposure.md](../exposure.md) has no `-04` entry (2).
 - [cooking.md](../cooking.md) lists the fridge sort bug, which has a fix built (2).
-- Writeups not in the README index: [cooking.md](../cooking.md), [feature_porting.md](../feature_porting.md), [meat_blocks.md](../meat_blocks.md), [nether_swaps.md](../nether_swaps.md), [nether_blocks_scan.md](../nether_blocks_scan.md), [wood_mismatch.md](../wood_mismatch.md), [testing/fridge_sort/](../testing/fridge_sort/plan.md).
+- Writeups not in the README index: [cooking.md](../cooking.md), [meat_blocks.md](../meat_blocks.md), [nether_swaps.md](../nether_swaps.md), [nether_blocks_scan.md](../nether_blocks_scan.md), [wood_mismatch.md](../wood_mismatch.md), [testing/fridge_sort/](../testing/fridge_sort/plan.md).
 - [todo.txt](todo.txt) items found done on 2026-10-18: all 7 cultures wired; syringe texture; dead `.en_us.json`; `Config.java`; dragon-scale chestplate rocket takeoff (`EasyElytraTakeoffHelperMixin`; check whether Alex's Mobs items need adding to `#creativeengineering:elytra_chestplates`). The loot overhaul line is superseded by [loot.md](../loot.md).
 - Found while writing [armor_effects.md](../armor_effects.md) and [gear_tuning.md](../gear_tuning.md) (2026-10-18): [magic_resistance.js](../../kubejs/startup_scripts/magic/magic_resistance.js) header says there is no potion (there is); [armor_effects.js](../../kubejs/startup_scripts/func/armor_effects.js) header says 6 effects (cap is 7); the `NCH.cfg` example uses toml keys instead of field names ([neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) ~621). (shields.md 2.7 said the felsic shield's values were configurable: corrected the same day.)
 - Found while writing [potions.md](../potions.md), [potion_buckets.md](../potion_buckets.md) and [archery.md](../archery.md) (2026-10-18): `DragonBreathBrewing`'s javadoc names a `changes/dragon_breath.js` that doesn't exist (it's `potions.js` part 3); [tipped_arrows.js](../../kubejs/server_scripts/equipment/tipped_arrows.js) header gives amounts the code doesn't use. Raw `e.custom` recipes in `potion_bottling.js` and `tipped_arrows.js`, and 44 raw tag `e.add` lines in `equipmenttags.js`, are against the NCH / tag-helper rule.
@@ -215,8 +215,8 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 
 | Writeup | Prefix | Open / passed | Notes |
 |---|---|---|---|
-| [structure_tuning.md](../structure_tuning.md) | `ST-` | 93 / 98 | Phase 7 onward; ST-65 trim half; client list 8.0.11 |
-| [locate.md](../locate.md) | `LO-` | 9 / 7 | LO-03, 05, 14 failed; rerun after the fixes |
+| [structure_tuning.md](../structure_tuning.md) | `ST-` | 101 / 98 | Phase 7 onward; ST-65 trim half; client list 8.0.11; ST-191 to ST-198 (1.0.7 fixes) |
+| [locate.md](../locate.md) | `LO-` | 10 / 7 | LO-03, 05, 14 failed in 1.0.6; rerun with the 1.0.7 fixes, plus LO-17 |
 | [alcohol.md](../alcohol.md) | `AL-`, `VB-` | 81 / 0 | drafted; run once built |
 | [crops.md](../crops.md) | `CR-` | 68 / 0 | none run |
 | [mooblooms.md](../mooblooms.md) | `MB-` | 64 / 10 | client-side checks |
