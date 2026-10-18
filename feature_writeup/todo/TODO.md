@@ -22,6 +22,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Vanilla egg -> `#forge:eggs` migration | [food.md](../food.md) 3.8 | list written, not built (rescan first, the dump can't read IE recipes) |
 | Exposure Catalog port | [exposure.md](../exposure.md) 4 | on hold (user, 2026-10-01); the source set and mods.toml entry are empty |
 | Cooking plans (seasoning, sourdough, vinegar, tools, kitchen, smoking, misc) | [cooking.md](../cooking.md) | outline only, nothing built. Two bugs in it are listed in 3 |
+| Remainder buffer (bottles/bowls/buckets kept in a slot on the pot, kettle, keg port and oven instead of thrown) | [remainder_buffer.md](../remainder_buffer.md) | feasibility done 2026-10-18 (feasible, ~7 mixins); D1 to D5 open; no code |
 | Canning automation | `TODO` in [canning.js](../kubejs/server_scripts/cooking/canning.js) line 68 | not started |
 | Mob spawn plans beyond the first block (Alex's Mobs / duck parity, pillager overhaul, lone villagers, allay, skylands mooblooms) | [mob_spawns.md](../mob_spawns.md) 9 | first block done; "Investigate" and "Later" not started |
 | Structures: Nether, End and underground grouping pass; cave-structure tuning; move-to-Nether set | [structure_tuning.md](../structure_tuning.md) 7 Todo | not built. Three structures never generate until it's done (3) |
@@ -70,6 +71,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 - Earth fill counts earth bases only, not stone bases (drum tower, piglin camp). [plan_1.0.6.md](../plan_1.0.6.md) 2.1.
 
 **Other features:**
+- Brewin' 2.0 keg gives back an extra glass bottle per `pickled_pickles` brew (fluid-item leftover slot grows by the result count). Goes away with the 4.5.0 port. [remainder_buffer.md](../remainder_buffer.md) 1.3.
 - Vinery JEI fermentation arrow shows 1800 ticks; the real time is about 50. `VineryIds.FERMENTATION_TICKS` is still 1800. [vinery_jei.md](../vinery_jei.md) 4.
 - Canned Goods data: saturation values far too high, crossed ids, wrong effects. [food.md](../food.md) 4.2 findings 1-2 (the tuning system is the planned fix).
 - item_dict: `i.catfish_slice` points at a nonexistent id; `i.bacon` is the cooked item. [food.md](../food.md) 4.2 finding 6.
@@ -90,6 +92,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 
 **Waiting on you:**
 - Alcohol Part B: D3, D4, D5, D7 to D10, D12, and **D13 (license) first**. [alcohol.md](../alcohol.md) B5. Note: [cooking.md](../cooking.md) "vinery backport license" says the author refused redistribution, and sketches a plan (MIT code, upstream assets loaded from the old jar). That answer and plan aren't in alcohol.md B3.6 / B5 D13 yet.
+- Remainder buffer D1 to D5 (stall or throw when full, recycle into the container slot, slot count, automation, keg timing). [remainder_buffer.md](../remainder_buffer.md) 5.
 - Food tuning D1 to D6. [food.md](../food.md) 4.3.
 - Can parity `Want` = `?` cells. [can_parity.md](../can_parity.md).
 - Crops G4, G6 to G15, V findings: approve or reject each fix. [crops.md](../crops.md) 4.
