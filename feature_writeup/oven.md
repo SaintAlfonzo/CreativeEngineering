@@ -1,7 +1,7 @@
 # Oven: a Farmer's Delight style baking block
 
-Plan and feasibility study for the "new farmers delight oven block" item in [cooking.md](cooking.md)
-(sweet > baked). Only a placeholder block exists so far. Test prefix `OV-`.
+The "new farmers delight oven block" from [cooking.md](cooking.md) (sweet > baked). Java in patcherMod, recipes and
+tags in KubeJS. Test prefix `OV-`.
 
 The ask, from cooking.md:
 
@@ -14,21 +14,23 @@ The ask, from cooking.md:
 
 | Part | Status |
 |---|---|
-| Placeholder block `creativeengineering:oven` (KubeJS `cardinal` block with a `lit` state, FD stove textures, no function, no crafting recipe) | BUILT 2026-10-18, not booted |
-| Working oven (block entity, GUI, baking recipe type, heat rule, stove heat on top, JEI) | not started. Recommended route: Java in patcherMod (3, 4.1) |
-| Bakeware items (baking sheet, cake pan, pie tin, muffin tin) | not started (3.4) |
-| First baking recipes (muffins, pies, cakes, tarts, bread) | not started (3.7) |
+| Oven block, block entity, menu/screen, `creativeengineering:baking` recipe type, JEI page (patcherMod `oven/`) | BUILT 2026-10-18: compiles against Forge 43.3.9 + JEI 11.8.1; 8 server GameTests pass with FD 1.2.4 loaded (6). Not built into a patcherMod jar yet, not tested in game (OV-01 to OV-14) |
+| Bakeware items: baking sheet, cake pan, pie tin, muffin tin (KubeJS, IE iron plate texture, no durability) | BUILT 2026-10-18, not booted |
+| Baking recipes: copies of the 7 baked-good pot recipes (Fruits Delight muffins, pies, tarts, cake). Pot recipes kept | BUILT 2026-10-18, not booted |
+| Muffin pot recipes on `#forge:dough` | BUILT 2026-10-18, not booted. Whether this was the "not cookable" cause is unconfirmed (3.8) |
+| Crafting recipes: oven, 4 bakeware | BUILT 2026-10-18 (placeholder patterns, 3.6) |
 
 Files to open first:
 
-- [kubejs/startup_scripts/cooking/oven.js](../kubejs/startup_scripts/cooking/oven.js): the placeholder registration
-- `kubejs/assets/creativeengineering/blockstates/oven.json`, `models/block/oven.json`, `models/block/oven_on.json`,
-  `models/item/oven.json`: hand-written models that point at `farmersdelight:block/stove_*`
-- Farmer's Delight 1.2.4 source (branch `1.19` of vectorwing/FarmersDelight, MIT): `CookingPotBlock`,
-  `CookingPotBlockEntity`, `CookingPotMenu`, `CookingPotScreen`, `CookingPotRecipe`, `HeatableBlockEntity`,
-  `StoveBlock`, `integration/jei/category/CookingRecipeCategory`. The oven is mostly a copy of these with a few changes.
+- `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/`: `OvenBlock`, `OvenBlockEntity`,
+  `OvenHeat`, `OvenItemHandler`, `OvenMenu`, `OvenResultSlot`, `BakingRecipe`, `OvenRegistry`, `client/OvenScreen`,
+  `jei/OvenJeiPlugin`, `jei/BakingRecipeCategory`
+- [kubejs/server_scripts/cooking/baking.js](../kubejs/server_scripts/cooking/baking.js): baking and crafting recipes
+- [kubejs/startup_scripts/cooking/bakeware.js](../kubejs/startup_scripts/cooking/bakeware.js): bakeware items
+- `global.NCH.ceBaking` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js)
+- Tags: [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) (heat), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js) (bakeware)
 
-Config knobs: none yet. 3.8 lists the ones the Java oven would add.
+Config knobs: none.
 
 ## 1. Overview: how the FD cooking pot and stove work (1.19.2-1.2.4, the pack's version)
 
@@ -86,250 +88,234 @@ None of them does what the ask needs, so this is a new block.
 
 ## 2. Reference
 
-### 2.1 Placeholder block (built)
+### 2.1 Block
 
 | | |
 |---|---|
-| Id | `creativeengineering:oven` (`global.item.oven`) |
-| Type | KubeJS `cardinal` (`HorizontalDirectionalBlockBuilder`): `facing` faces the player on placement, like the stove |
-| States | `facing` (4) x `lit` (`BlockProperties.LIT`, default `false`). Nothing sets `lit=true` yet |
-| Stats | FD stove's: stone material and sound, hardness 2, resistance 6, needs a pickaxe (`minecraft:mineable/pickaxe`) |
-| Models | `creativeengineering:block/oven` (lit=false) and `oven_on` (lit=true), `orientable_with_bottom` with `farmersdelight:block/stove_{front,front_on,side,top,top_on,bottom}`. The item model uses `block/oven` |
-| Recipe / tags | none. Get it from creative or JEI. It isn't a heat source and has no block entity |
+| Id | `creativeengineering:oven` (`i.oven`, `b.oven`), registered by patcherMod `OvenRegistry` |
+| States | `facing` (front faces the player on placement) x `lit`. `lit` = heated from below, mirrored every server tick by the block entity |
+| Stats | FD stove's (`Properties.copy(Blocks.BRICKS)`): hardness 2, resistance 6, needs a pickaxe; light 13 while lit |
+| Models | `creativeengineering:block/oven` / `oven_on` in the patcherMod jar: `orientable_with_bottom` on `farmersdelight:block/stove_*` (placeholder art) |
+| Item tab | Decorations |
+| Loot | drops itself (patcherMod `loot_tables/blocks/oven.json`); breaking it also drops every slot, the waiting result included |
+| Crafting | `PPP / B B / BBB`, P = `#forge:plates/iron`, B = bricks (`creativeengineering:shaped/oven`) |
 
-The `lit` state is there now so the placeholder's blockstate already matches the planned block (3.1). Placed
-placeholders then keep their state when the Java block replaces the registration under the same id.
+### 2.2 Recipe type `creativeengineering:baking`
 
-### 2.2 Planned recipe type `creativeengineering:baking`
-
-The FD cooking JSON with one more field, `tool`:
+FD's cooking JSON plus an optional `tool`:
 
 ```json
 {
   "type": "creativeengineering:baking",
-  "ingredients": [
-    { "tag": "forge:fruits/blueberry" }, { "tag": "forge:dough/wheat" },
-    { "tag": "forge:milk/milk_bottle" }, { "tag": "forge:eggs" }, { "item": "minecraft:sugar" }
-  ],
-  "tool": { "tag": "creativeengineering:bakeware/muffin_tin" },
+  "ingredients": [ { "tag": "forge:fruits/fig" }, { "item": "farmersdelight:pie_crust" }, { "tag": "forge:eggs" } ],
+  "tool": { "tag": "creativeengineering:bakeware/pie_tin" },
   "container": { "item": "minecraft:paper" },
-  "result": { "item": "fruitsdelight:blueberry_muffin", "count": 4 },
-  "experience": 0.35,
+  "result": { "item": "fruitsdelight:fig_tart", "count": 2 },
+  "experience": 0.1,
   "cookingtime": 200
 }
 ```
 
 | Field | Meaning |
 |---|---|
-| `ingredients` | 1-6, shapeless. Matched like FD's (`RecipeMatcher`), so tags and any order work |
-| `tool` | optional. An ingredient that must be in the tool slot. It isn't used up: it loses `tool_damage` durability per bake, or nothing if it has no durability |
-| `tool_damage` | optional, default 1 |
-| `container` | optional plating item (FD semantics, 1.1). It defaults to the result's crafting remainder |
-| `result`, `experience`, `cookingtime` | as FD (`cookingtime` default 200) |
+| `ingredients` | 1-6, shapeless (FD matching: tags, any order, no extra items) |
+| `tool` | optional ingredient that must sit in the tool slot. Never used up, no durability. A recipe without `tool` ignores the tool slot |
+| `container` | optional plating item (FD semantics: the result waits until one is given). Defaults to the result's crafting remainder |
+| `result`, `experience`, `cookingtime` | as FD (`cookingtime` default 200, `experience` default 0) |
 
-### 2.3 Planned tags
+KubeJS: `R.ceBaking(inputs, output, e, idOverride, { exp, time, container, tool })`, id
+`creativeengineering:baking/<id>`.
 
-| Tag | Members | Use |
+### 2.3 Slots
+
+| Slot | Role | GUI position |
 |---|---|---|
-| `#creativeengineering:oven_heat_sources` (block) | `#farmersdelight:tray_heat_sources` (fire, campfires, lava, nested so it stays live), `minecraft:magma_block`, `minecraft:lava_cauldron`, `create:blaze_burner`, `create:lit_blaze_burner`; decide on `quark:blaze_lantern` and the Brewin `heating_cask` (D3) | what the oven accepts from below. Every stove and oven is left out on purpose (the "non-stove" rule) |
-| `#farmersdelight:heat_sources` (block) | `+ creativeengineering:oven` | gives stove heat on top. FD's `lit` gate means only a heated oven counts |
-| `#creativeengineering:bakeware/{baking_sheet,cake_pan,pie_tin,muffin_tin}` (item) | the bakeware items (3.4) | `tool` ingredients. Tags let other mods' pans join later |
-| `#creativeengineering:bakeware` (item) | all of the above | tool-slot filter and hopper routing (3.3) |
+| 0-5 | ingredients | FD's 3x2 grid |
+| 6 | tool (only `#creativeengineering:bakeware`, stack limit 1) | new slot left of the grid |
+| 7 | result waiting for plating (display only) | FD's meal slot |
+| 8 | plating container | FD's bowl slot |
+| 9 | output (take only; taking awards recipe xp) | FD's output slot |
 
-Both block tags go through `global.tags` in `kubejs/server_scripts/tags/blocktags.js`, as CLAUDE.md asks.
+### 2.4 Tags
 
-## 3. Design: what it would take
-
-### 3.1 Block (`OvenBlock`, Java)
-
-- `BaseEntityBlock` with `facing` and `lit`. It copies the stove's properties, with light 13 while lit, like
-  `litBlockEmission(13)`.
-- **`lit` means "heated from below"**, not "switched on". Two things recompute it: `updateShape` when the block
-  below changes (a campfire being lit or put out is a state change, so its neighbours get the update), and the
-  block entity's server tick as a backstop every 20 ticks. There's no flint-and-steel or shovel handling: the oven
-  has no fire of its own.
-- Heat rule: the block below is in `#creativeengineering:oven_heat_sources` and is active. Active means `lit=true`
-  if the block has `lit`, and a Create blaze burner with `blaze` not `none` (the same rule as
-  `BnCHeatSources.withoutIdleBurner` in the Brewin port, matched by property name, so it needs no Create classes).
-  Heat conductors work as in FD (hopper or chute between the oven and the source) unless D4 says otherwise.
-- **Stove heat on top:** add the oven to `#farmersdelight:heat_sources` (2.3). FD's `HeatableBlockEntity` already
-  respects `lit`, so a cooking pot, skillet or kettle on an oven works only while the oven itself is heated. The
-  stack is campfire -> oven -> cooking pot. The oven is a full block, so the pot sits on it flat with no tray.
-- `stepOn` burns entities while lit, like the stove (D6). Path type is `DAMAGE_FIRE` while lit. `animateTick` shows
-  smoke at the front and the occasional crackle.
-- `use` opens the menu. Right-clicking with a valid container plates the waiting result (FD `useHeldItemOnMeal`).
-- Breaking it drops the inventory. FD's "carry the meal in the item" is skipped (D5).
-
-### 3.2 Block entity (`OvenBlockEntity`)
-
-FD's `CookingPotBlockEntity` with one more slot:
-
-| Slot | Role |
-|---|---|
-| 0-5 | ingredients |
-| 6 | **tool** (filter `#creativeengineering:bakeware`, stack size 1) |
-| 7 | result waiting for plating (display) |
-| 8 | container / plating input |
-| 9 | output |
-
-- The tick is FD's `cookingTick`, plus two checks: the recipe's `tool` must match slot 6, and finishing a bake
-  calls `hurtAndBreak(tool_damage)` on the tool. A tool that breaks stops the next bake.
-- The recipe cache, the "progress counts down while cold" rule, remainder ejection and experience on output all
-  stay as in FD.
-- Synced `ContainerData`: cook time, total time, heated flag (for the GUI flame).
-
-### 3.3 Automation (item handler per side)
-
-The oven's bottom faces its heat source and its top usually carries a pot, so FD's "top = ingredients" layout would
-leave nothing open for automation. Instead (this also covers "allow input on any side" in cooking.md > processes):
-
-- **Any side inserts.** Bakeware goes to the tool slot. An item matching the plating container of the result in
-  slot 7 goes to slot 8. Everything else goes to the ingredient slots.
-- **Any side extracts**, from the output slot only.
-- Create funnels, chutes and hoppers then all work from the sides.
-
-### 3.4 Bakeware items
-
-KubeJS items (`StartupEvents.registry('item')` with `.maxDamage(n)`), with ids in `item_dict.js`, tagged into
-`#creativeengineering:bakeware/<kind>`. Durability is a proposal:
-
-| Item | For | Durability |
+| Tag | Members | Where |
 |---|---|---|
-| `baking_sheet` | cookies, bread, toast, rolls | 128 |
-| `cake_pan` | cakes, cake bases | 64 |
-| `pie_tin` | pies, tarts, quiche, pie crust | 64 |
-| `muffin_tin` | muffins | 64 |
+| `#creativeengineering:oven_heat_sources` (block) | `#farmersdelight:tray_heat_sources` (fire, campfires, lava; nested), `magma_block`, `lava_cauldron`, `create:blaze_burner`, `create:lit_blaze_burner`, `quark:blaze_lantern` | blocktags.js |
+| `#farmersdelight:heat_sources` (block) | `+ creativeengineering:oven` | blocktags.js |
+| `minecraft:mineable/pickaxe` (block) | `+ creativeengineering:oven` | blocktags.js |
+| `#creativeengineering:bakeware/{baking_sheet,cake_pan,pie_tin,muffin_tin}` (item) | the matching item | cookingtags.js |
+| `#creativeengineering:bakeware` (item) | the four kind tags | cookingtags.js |
 
-Recipes come from plates (IE/Create sheets). Bakeware also fits the "decor > pots, pans, baking sheets" line in
-cooking.md, and placeable decor versions could come later.
+### 2.5 Bakeware
 
-### 3.5 Menu and screen
-
-- `OvenMenu`: FD `CookingPotMenu` plus the tool slot. `MenuType` comes from `IForgeMenuType.create` and is opened
-  with `NetworkHooks.openScreen`, sending the position.
-- `OvenScreen`: draw FD's own `farmersdelight:textures/gui/cooking_pot.png` by resource location (FD is installed,
-  so nothing gets copied), then blit one extra slot background for the tool. Reuse its progress arrow and
-  heated/not-heated flame. A dedicated GUI texture can come later; FD is MIT, so copying and editing its texture is
-  allowed with the notice.
-- Leave out FD's recipe book: it needs `RecipeBookType` enum extension and categories, which is a lot of code for
-  little gain.
-
-### 3.6 JEI
-
-- A category for `creativeengineering:baking`, cloned from FD's `CookingRecipeCategory` with the tool slot added
-  (tool shown as a catalyst-style slot, container under the result). The oven item is the catalyst.
-- patcherMod already compiles against JEI (its JEI mixins), so this needs no new dependency, just a `@JeiPlugin`
-  class.
-
-### 3.7 Recipes (KubeJS side)
-
-- Add a **`global.NCH.ceBaking(input, output, e, idOverride, opts)`** helper next to `fdCooking` in
-  `neoCraftHelper.js` (`opts`: `tool`, `toolDamage`, `container`, `exp`, `time`). It emits
-  `e.custom({ type: 'creativeengineering:baking', ... })` with id `creativeengineering:baking/<id>`, which follows
-  CLAUDE.md's helpers-first rule.
-- First recipe pass. Each one moves from the pot to the oven, so remove the old recipe:
-  - **Muffins:** `fruitsdelight:blueberry_muffin` / `cranberry_muffin` are currently `farmersdelight:cooking`
-    recipes from Fruits Delight 0.5.11 (blueberry or cranberry x2, `#forge:dough/wheat`,
-    `#forge:milk/milk_bottle`, `#forge:eggs`, sugar -> 2). The oven version adds the muffin tin and paper plating.
-    cooking.md's muffin variants (orange cranberry, lemon poppy) then become oven recipes.
-  - Pies (pie tin, from the pie crust chain), cakes (cake pan, from cake bases), tarts (pie tin), bread / toast
-    (baking sheet). Each one follows its own cooking.md line.
-- **Lead on the "muffins not cookable?" bug** ([TODO.md](todo/TODO.md) 3): the muffin recipe needs
-  `#forge:dough/wheat`. In FD 1.2.4 that tag holds only `farmersdelight:wheat_dough`, and
-  `kubejs/server_scripts/tags/cookingtags.js` strips every tag from that item (`t.clearAll(e, [..., i.out_dough])`)
-  because the pack uses Create's dough. If nothing else adds `create:dough` to `#forge:dough/wheat`, the tag is
-  empty and no muffin recipe can match. Check the tag in game (JEI tag view, or `/kubejs hand` on Create dough).
-  If it is empty, add `create:dough` to it in `cookingtags.js`. This fix is independent of the oven.
-
-### 3.8 Config (`CEConfig`, `[oven]`)
-
-- `ovenSpeed` (multiplier on `cookingtime`, default 1.0)
-- `allowHeatConductors` (default true, D4)
-- `burnOnStep` (default true, D6)
-
-### 3.9 Size of the job
-
-| Piece | New code |
+| Item | Recipe (P iron plate, N iron nugget) |
 |---|---|
-| Block, block entity, item handler, menu, slots, screen | about 900 lines, mostly adapted from FD (FD's pot set is about 1,500 lines) |
-| Recipe + serializer + type registration | about 200 |
-| JEI plugin + category | about 150 |
-| Registration (`BLOCK_ENTITY_TYPES`, `MENU_TYPES`, `RECIPE_TYPES`, `RECIPE_SERIALIZERS`, `BlockItem`), lang, loot table | about 80 |
-| KubeJS: tags, `ceBaking` helper, bakeware items + textures, recipe pass | about 150 lines plus 4 textures |
+| `creativeengineering:baking_sheet` | `NPN` |
+| `creativeengineering:pie_tin` | `N N / _P_` |
+| `creativeengineering:cake_pan` | `P P / _P_` |
+| `creativeengineering:muffin_tin` | `NNN / PPP` |
 
-On landing, the same release has to **delete `kubejs/startup_scripts/cooking/oven.js`**: patcherMod and KubeJS
-both register in the `creativeengineering` namespace, and a duplicate `creativeengineering:oven` crashes at
-registry time. The on-disk models and blockstate stay as they are (the Java block has the same states).
+All four use `immersiveengineering:item/metal_plate_iron` (IE's iron plate, the pack's `i.plate_iron`) as the texture,
+stack to 64 and have no durability.
+
+### 2.6 Baking recipes (copies of the pot recipes)
+
+| Id `creativeengineering:baking/...` | Ingredients | Result | Container |
+|---|---|---|---|
+| `blueberry_muffin` | blueberry x2, `#forge:dough`, `#forge:milk/milk_bottle`, `#forge:eggs`, `#forge:sugar` | 2 | none |
+| `cranberry_muffin` | cranberry x2, same | 2 | none |
+| `durian_pie` | durian flesh x2, pie crust, egg, sugar | 2 | none |
+| `pineapple_pie` | pineapple slice x2, pie crust, egg, sugar | 2 | none |
+| `lemon_tart` | lemon, pie crust, egg, sugar, milk bottle | 2 | none |
+| `fig_tart` | fig, pie crust, egg, sugar, milk bottle | 2 | none |
+| `mangosteen_cake` | wheat x2, sugar x2, mangosteen x2 | 1 | bowl |
+
+All 200 ticks, 0.1 xp, no tool. Source: Fruits Delight 0.5.11 `data/farmersdelight/recipes/cooking/*.json`. These are
+the only `farmersdelight:cooking` recipes with a baked output across the 27 food mods scanned (FD, its add-ons,
+Brewin, Respite, Neapolitan, Abnormals Delight, Central Kitchen, Create Confectionery/Factory, ...); the scan didn't
+cover every mod in the pack. Sugar is `#forge:sugar`, as the pack-wide sugar swap in cooking.js gives every pot recipe.
+
+## 3. What the pack does, and why
+
+### 3.1 Heat (`OvenHeat`)
+
+- Heated when the block below is in `#creativeengineering:oven_heat_sources` and active, or a
+  `#farmersdelight:heat_conductors` block (hopper, Create chute) sits between the oven and such a source.
+- Active: a block with `lit` counts only while lit (FD's rule); a Create Blaze Burner whose `blaze` heat level is
+  `none` doesn't count (the Brewin port's rule, matched by property name so no Create classes are needed).
+- Every stove and oven is left out of the tag, so the oven can't sit on a stove or on another oven.
+
+### 3.2 Stove heat on top
+
+The oven is in `#farmersdelight:heat_sources`, and FD's `HeatableBlockEntity` honours `lit`, so a cooking pot, skillet
+or kettle on the oven heats only while the oven itself is heated. Proven by GameTest OV-T5.
+
+### 3.3 Baking and plating
+
+The tick loop is FD's: progress counts up while heated and a recipe matches, counts down 2 per tick while cold. Each
+bake takes one of each ingredient, ejects remainders (buckets, bottles) out of the front, and adds the result to
+slot 7. A result without a container moves to output; one with a container waits for it (slot 8, or right-click the
+oven with it).
+
+### 3.4 Tool slot
+
+Recipes can ask for bakeware; none do yet (2.6). The tool is never used up. Filter: `#creativeengineering:bakeware`.
+
+### 3.5 Automation (`OvenItemHandler`), the same on every face
+
+- Insert: bakeware to the tool slot; the plating item (what the waiting result needs, or the last recipe's
+  container) to slot 8; anything else to the ingredient slots.
+- Extract: output slot only.
+- Limit: an item that is the last recipe's plating item can't be inserted as an ingredient by automation.
+
+### 3.6 Changes from FD's pot
+
+No recipe book (it needs a `RecipeBookType` enum extension), no meal kept in the item when broken, no custom name,
+remainders eject from the front instead of the left. The GUI draws FD's own `cooking_pot.png` by resource location
+(including its pot picture behind the result slot) plus a copied slot frame for the tool; JEI does the same.
+
+### 3.7 Lang
+
+`block.creativeengineering.oven`, `container.creativeengineering.oven[.heated|.not_heated|.served_on]`,
+`jei.creativeengineering.baking[.heat]` in the patcherMod `en_us.json`. Bakeware names come from KubeJS `displayName`.
+
+### 3.8 Muffin pot recipes
+
+`farmersdelight:cooking/blueberry_muffin` and `cranberry_muffin` (Fruits Delight) are replaced by
+`creativeengineering:farmersdelightcooking/blueberry_muffin` / `cranberry_muffin`, the same except `#forge:dough`
+instead of `#forge:dough/wheat` (and `#forge:sugar`).
+
+Correction to the first version of this writeup: it guessed that `#forge:dough/wheat` was empty. Create 0.5.1.i adds
+`create:dough` to both `#forge:dough/wheat` and `#forge:dough`, so the tag isn't empty from that. No other scanned jar
+overrides the muffin recipe ids. If muffins still can't be cooked in game, the cause is somewhere else (OV-13).
 
 ## 4. Limits and decisions
 
-### 4.1 Routes considered
-
-| Route | Verdict |
-|---|---|
-| **A. Java oven in patcherMod** (3.1-3.9) | **Recommended.** It keeps the `creativeengineering:oven` id and uses no FD classes (only FD tag ids and its GUI texture by resource location), so no new jar and no FD compile dependency. patcherMod already registers Java blocks, items and a custom recipe type (`fan/DragonBreathingRecipeType`) and builds against JEI. The GUI, automation, JEI and recipe JSON all come out like FD's |
-| B. KubeJS block entity | Possible only as a prototype. KubeJS 1902.6.2-build.73 (checked in the jar) has `blockEntity(info => ...)` with `inventory(w, h)`, `rightClickOpensInventory()`, `serverTick` and `enableSync()`. But that gives a plain chest GUI with no slot roles, progress bar or heat display; `BlockEntityJS` has no item-handler capability, so hoppers and Create can't reach it; the jar has no recipe-type or serializer builder, so recipes would be a JS table invisible to JEI; and the matching logic would run in Rhino every tick per oven |
-| C. Plain FD cooking pot recipes with "bakeware" | **A stopgap you can ship today.** Bakeware with `.containerItem(itself)` in KubeJS is handed back by the pot as an ingredient remainder (the tin isn't used up), and `container: paper` covers plating. What it lacks: no separate block, no heat rule, no stove heat on top, and no durability loss (the remainder is a fresh copy). The recipes move to route A by swapping the helper call |
-| D. New in-tree mod (for example a kitchen mod for all of cooking.md's tools) | Worth it if mortar and pestle, stepstool, sourdough timing and the rest also become Java. It would change the block's namespace (or needs missing-mapping remaps), so decide before any worlds hold placeholders |
-
-### 4.2 Open decisions
-
-| # | Question | Default if you don't choose |
-|---|---|---|
-| D1 | Route: A (patcherMod), D (new mod), or C first as a stopgap? | A, with C only if recipes are wanted before the Java work |
-| D2 | Do furnaces count as heat under the oven (vanilla furnace / smoker / blast furnace once [alcohol.md](alcohol.md) adds them to FD heat, and Nether's Delight's blackstone furnaces)? | no: they sit in the "stoves and ovens" group |
-| D3 | `quark:blaze_lantern` and Brewin `heating_cask` as oven heat? | yes to both: neither is a stove |
-| D4 | Heat through a hopper or chute (FD conductors)? | yes, as FD |
-| D5 | Keep the result in the item when broken (FD pot item behaviour)? | no, drop the contents |
-| D6 | Burn entities on top while lit? | yes, like the stove |
-| D7 | Results per bake (for example 4 muffins per tin) and bakeware durability | as in 2.2 / 3.4 |
-| D8 | Own textures: draw new ones or recolour the FD stove (MIT allows it)? | keep the FD stove textures by reference until art exists |
-
-### 4.3 Known side effects
-
-- Brewin kegs count a lit oven within 5x5x5 as heat (it is in `#farmersdelight:heat_sources`). That's intended.
-- FD's `SkilletItem` (a skillet held near a heat source) checks `#farmersdelight:heat_sources` **without** the
-  `lit` gate, so a cold oven next to you counts, the same as a cold stove does today. This is FD behaviour and
-  stays as is.
+- **Route:** Java in patcherMod (user, 2026-10-18). A KubeJS block entity was rejected: chest GUI only, no item
+  capability for hoppers, no recipe type.
+- **No durability** on bakeware (user, 2026-10-18).
+- **Recipes identical to the pot's for now, pot recipes stay** (user, 2026-10-18). Adding tools, plating (paper for
+  muffins) and moving recipes off the pot are later steps.
+- **Heat conductors allowed** (as FD). **Furnaces aren't oven heat** (stoves-and-ovens group). Brewin's
+  `heating_cask` isn't in the tag: the pack's Brewin 2.0 jar doesn't have that block.
+- Crafting patterns for the oven and bakeware are placeholders; not checked for clashes with every mod's recipes.
+- FD's `SkilletItem` held near a heat source ignores `lit`, so a cold oven counts for it (same as a cold stove).
+- Brewin kegs count a lit oven within range as heat.
 
 ## 5. File map
 
 | File | What |
 |---|---|
-| `kubejs/startup_scripts/cooking/oven.js` | placeholder registration (delete when the Java block lands) |
-| `kubejs/startup_scripts/_lib/item_dict.js` | `i.oven` |
-| `kubejs/assets/creativeengineering/blockstates/oven.json` | `facing` x `lit` -> `block/oven` / `block/oven_on` |
-| `kubejs/assets/creativeengineering/models/block/oven.json`, `oven_on.json` | `orientable_with_bottom` with the FD stove textures |
-| `kubejs/assets/creativeengineering/models/item/oven.json` | parent `block/oven` |
-| planned: `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/` | block, block entity, handler, menu, screen, recipe, JEI |
-| planned: `kubejs/server_scripts/tags/blocktags.js` | the two block tags (2.3) |
-| planned: `kubejs/startup_scripts/func/neoCraftHelper.js` | `ceBaking` |
+| `development/patcherMod/.../oven/OvenRegistry.java` | block, item, block entity, menu, recipe type + serializer |
+| `.../oven/OvenBlock.java` | states, use (plate or open), drops, burn on step, particles, comparator |
+| `.../oven/OvenBlockEntity.java` | inventory, tick (heat, bake, plate), xp, save/sync, capability |
+| `.../oven/OvenHeat.java` | heat rule and tags |
+| `.../oven/OvenItemHandler.java` | automation routing, `BAKEWARE` tag |
+| `.../oven/OvenMenu.java`, `OvenResultSlot.java` | menu layout, shift-click routing, output slot |
+| `.../oven/BakingRecipe.java` | recipe + JSON/network serializer |
+| `.../oven/client/OvenScreen.java` | GUI on FD's texture |
+| `.../oven/jei/OvenJeiPlugin.java`, `BakingRecipeCategory.java` | JEI page, catalyst, click area, transfer |
+| `.../CreativeEngineering.java` | `OvenRegistry.register`, `MenuScreens.register` |
+| `development/patcherMod/src/main/resources/assets/creativeengineering/{blockstates,models/block,models/item}/oven*.json`, `lang/en_us.json` | models, names |
+| `development/patcherMod/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
+| `kubejs/startup_scripts/cooking/bakeware.js` | bakeware items |
+| `kubejs/server_scripts/cooking/baking.js` | baking + crafting recipes |
+| `kubejs/server_scripts/cooking/cooking.js` "Muffins" | the dough fix |
+| `kubejs/server_scripts/tags/blocktags.js`, `cookingtags.js` | tags (2.4) |
+| `kubejs/startup_scripts/func/neoCraftHelper.js` | `ceBaking` |
+| `kubejs/startup_scripts/_lib/item_dict.js`, `block_dict.js` | ids and tag keys |
 
 ## 6. Offline checks
 
-- The JSON files parse (`python3 -m json.tool` on each oven file).
-- The blockstate has all 8 `facing` x `lit` variants and every model it names exists.
-- The textures named in the models exist in FD 1.2.4: `stove_bottom`, `stove_front`, `stove_front_on`, `stove_side`,
-  `stove_top`, `stove_top_on` (checked against the 1.2.4 source 2026-10-18).
+Done 2026-10-18 in a scratch ForgeGradle project (Forge 43.3.9, official mappings, JEI 11.8.1.1034 compile-only,
+FD 1.2.4 at runtime) holding the `oven/` package and a stand-in main class. The patcherMod jar itself wasn't built: it
+needs the ~50 third-party jars in `development/patcherMod/libs/`.
+
+- `compileJava`: clean (the two deprecation warnings are suppressed as in FD).
+- `runGameTestServer`, test datapack (magma/campfire/lava heat tag, iron ingot as bakeware, three test recipes):
+  **all 8 pass**.
+
+| Test | Proves |
+|---|---|
+| OV-T1 `magmaBakes` | magma heats, `lit` follows, a recipe bakes 2 results, output extracts, ingredients don't |
+| OV-T2 `stoveIsNotHeat` | a lit FD stove below gives no heat, nothing bakes |
+| OV-T3 `campfireLitGate` | unlit campfire no, lit campfire yes, heat removed -> `lit` false |
+| OV-T4 `heatThroughHopper` | magma -> hopper -> oven is heated |
+| OV-T5 `potOnTop` | FD cooking pot on a cold oven isn't heated, on a hot oven is |
+| OV-T6 `platingWithPaper` | a result with a container waits; paper from a hopper goes to slot 8 and plates it |
+| OV-T7 `toolRequiredNotConsumed` | no bake without the tool; bakeware goes to the tool slot (one only); bake works and the tool stays |
+| OV-T8 `breakDropsContents` | breaking drops the inventory |
+
+The test sources are scratch-only (not in the repo).
 
 ## 7. In-game test suite
 
-Placeholder:
+Needs a patcherMod build in `mods/`.
 
-- [ ] **OV-01 Boots:** the game loads with no KubeJS startup error for `oven.js`, and `creativeengineering:oven` is
-  in JEI as "Oven".
-- [ ] **OV-02 Looks:** placed, it faces the player and looks like an unlit FD stove from every side, with no missing
-  texture. The held item looks the same.
-- [ ] **OV-03 Lit model:** with a debug stick set `lit=true`: the front and top switch to the animated lit stove
-  textures.
-- [ ] **OV-04 Mining:** breaks with a pickaxe and drops itself. With bare hands it drops nothing.
-- [ ] **OV-05 Inert:** a cooking pot on it isn't heated (not a heat source yet).
-
-Working oven: to be written with the Java build. It should cover heat per source and lit gating, the stove-only
-rule, pot-on-top heating, tool required and damaged, paper plating, side automation, JEI, and the
-placeholder-to-Java upgrade in an old world.
+- [ ] **OV-01 Boot:** no registry, recipe or tag errors for `creativeengineering:oven`, `creativeengineering:baking/*`,
+  bakeware and the oven tags in `latest.log` / KubeJS logs.
+- [ ] **OV-02 Look:** placed oven faces you, looks like an unlit FD stove; lit state shows the lit stove front/top.
+- [ ] **OV-03 Craft:** oven and the four bakeware recipes show in JEI and craft. Bakeware has the IE iron plate icon.
+- [ ] **OV-04 Heat sources:** lit campfire, fire, magma, lava, blaze burner with fuel -> lit; unlit campfire, empty
+  blaze burner, FD stove, Nether's Delight blackstone stove, another oven -> not lit.
+- [ ] **OV-05 GUI:** right-click opens "Oven": FD pot layout, tool slot left of the grid, flame shows heat, arrow
+  fills, heat tooltip reads right.
+- [ ] **OV-06 Bake:** each of the 7 recipes in 2.6 bakes in the oven and still cooks in the pot.
+- [ ] **OV-07 Mangosteen cake plating:** the cake waits for a bowl; right-click with a bowl serves one.
+- [ ] **OV-08 Pot on top:** campfire -> oven -> cooking pot: the pot cooks; put out the campfire: the pot stops.
+- [ ] **OV-09 Tool slot:** only bakeware goes in, one at a time; shift-click routes it there.
+- [ ] **OV-10 Automation:** a hopper or Create funnel on a side fills ingredients; another extracts only output.
+- [ ] **OV-11 JEI:** "Baking" page lists the 7 recipes with the oven as catalyst; clicking the GUI arrow opens it;
+  "+" moves ingredients in.
+- [ ] **OV-12 Break / burn:** breaking drops oven and contents; standing on a lit oven hurts unless sneaking.
+- [ ] **OV-13 Muffins:** blueberry and cranberry muffins cook in the pot with Create dough. If not, record which
+  ingredient slot JEI shows empty.
+- [ ] **OV-14 Server:** the same on a dedicated server with a client (menu opens, slots sync, JEI page present).
 
 ## 8. History
 
-- 2026-10-18: written. Investigated FD 1.2.4 pot, stove and heat code, KubeJS 1902.6.2 block entity support and the
-  existing ovens. Placeholder block added with the FD stove textures. Lead on the muffin bug recorded (3.7).
+- 2026-10-18: written as a plan with a KubeJS placeholder block on the FD stove textures.
+- 2026-10-18: built. Java oven in patcherMod (route A), placeholder registration removed and its models moved into the
+  jar. Bakeware items (IE iron plate texture, no durability), tags, `NCH.ceBaking`, 7 baking recipes copied from the
+  pot, oven and bakeware crafting recipes, muffin pot recipes on `#forge:dough`. Dough lead corrected (3.8). Compiles;
+  8 GameTests pass.
