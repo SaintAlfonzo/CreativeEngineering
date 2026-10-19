@@ -108,7 +108,7 @@
         - stuffed potato
             - sequeneced assembly w/ spouting recipe
         - quiche
-            - sequenced assembly
+            - sequenced assembly (built 2026-10-18, bacon and mushroom: alcohol.md 8.6)
         - fruit salad
             - sequenced assembly
             - allow cantalope, hamimelon, pineapple, lemon, orange slices in place of melon (new slice tag)
@@ -181,6 +181,9 @@
                     - use chorus juice? requires new fluid for seq assamble
             - cake
                 - dragon egg cake
+                    - add, great effects added (flight?)
+                - mangosteen cake
+                    - not actually cake, rename
                 - cake base
                     - slice dough block to cake bases
                     - cake base recipe for all cakes
@@ -243,6 +246,7 @@
     - canned
         - ensure fast eating, effect passthrough
         - fix nutrition and saturation values
+        - cosmetic can opener, makes sound when can opened while in inventory
 - ingredients
     - sugar
         - add glyerol to most sugar recipes
@@ -255,11 +259,34 @@
     - batter
         - more uses
     - cornmeal
+        - built 2026-10-19: [recipes_cooking.md](recipes_cooking.md) 2.1
         - new item, recolored flour
         - milled or crushed corn, small chance on milling corn kernels
+            - create crush corn
+                - 1.5 cornmeal
+                - 0.25 kernels
+                - crate follows ratio
+            - create kernel crushing
+                - 0.333 cornmeal
+                - bag follows ratio
+            - ie crushing
+                - 2 cornmeal
+                - 0.5 kernels
+                - crate follows ratio
+            - ie kernel crushing
+                - 0.5 cornmeal
+                - bag follows ratio
+            - pc explosion, pressure craft
+                - same as flour ratio (0.2, 3)
+                - no kernels
+                - no crates
+            - pc pressure craft kernels
+                - 0.75 corn meal
+                - no bags
         - usable as flour in some recipes
             - pancakes
             - pies and cakes
+            - muffins
         - remove corn-> tortilla washing
         - required in
             - tortilla
@@ -311,6 +338,7 @@
 - tools
     - bowls
         - add bamboo recipe
+        - duplicate bowl given when popping into output buffer (can also pass into plating input at the same time)
     - mortar and pestle
         - old guns mod, used for new kitchen grinding
         - adds food related milling/grinding recipes to shapeless crafting, returns mortar and pestle
@@ -324,6 +352,7 @@
 - kitchen
     - new farmers delight oven block?
         - plan + placeholder block: [oven.md](oven.md)
+        - oven recipes take the baked changes above (flour for wheat/dough, crust in every pie, cake base in every cake): [oven.md](oven.md) 2.6
         - functions almost exactly like cooking pot, but for baking goods
         - can require input tool (baking sheet, cake pan) and plating item (paper for muffins)
         - requires non-stove heat source (magma block, campfire)

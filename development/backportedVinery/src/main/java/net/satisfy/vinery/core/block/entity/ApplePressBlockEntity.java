@@ -241,10 +241,7 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
     private static boolean canProcessFermenting(ApplePressBlockEntity entity, ApplePressFermentingRecipe recipe) {
         if (!recipe.matches(new ApplePressFermentingRecipeInput(entity.getItem(1)), entity.level)) return false;
-        if (recipe.requiresBottle()) {
-            ItemStack bottle = entity.getItem(2);
-            if (!isWineBottle(bottle)) return false;
-        }
+        if (recipe.requiresBottle() && !recipe.getBottle().test(entity.getItem(2))) return false;
         assert entity.level != null;
         return fits(entity.getItem(3), recipe.getResultItem());
     }
@@ -282,10 +279,6 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
         serverLevel.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 0.9F + serverLevel.random.nextFloat() * 0.2F);
     }
 
-    private static boolean isWineBottle(ItemStack stack) {
-        return stack.getItem() == ObjectRegistry.WINE_BOTTLE.get();
-    }
-
     @Override
     public boolean stillValid(Player player) {
         return this.level != null && this.level.getBlockEntity(this.worldPosition) == this && player.distanceToSqr((double) this.worldPosition.getX() + 0.5, (double) this.worldPosition.getY() + 0.5, (double) this.worldPosition.getZ() + 0.5) <= 64.0;
@@ -293,25 +286,12 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        return switch (index) {
-            case 0 -> true;
-            case 2 -> stack.getItem() == ObjectRegistry.WINE_BOTTLE.get();
-            default -> false;
-        };
+        return isValidForSlot(level, index, stack);
     }
 
     @Override
     public boolean canPlaceItemThroughFace(int index, ItemStack stack, @Nullable Direction direction) {
-        assert direction != null;
-        if (direction.getAxis().isHorizontal()) {
-            return switch (index) {
-                case 0 -> isValidForApplePressMashing(stack);
-                case 1 -> isValidForApplePressFermenting(stack);
-                case 2 -> isWineBottle(stack);
-                default -> false;
-            };
-        }
-        return false;
+        return direction != null && direction.getAxis().isHorizontal() && isValidForSlot(level, index, stack);
     }
 
     @Override
@@ -319,19 +299,25 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
         return index == 3 && (direction == Direction.DOWN || direction.getAxis().isHorizontal());
     }
 
-    private boolean isValidForApplePressMashing(ItemStack stack) {
-        if (level == null) return false;
-        return level.getRecipeManager()
-                .getAllRecipesFor(RecipeTypeRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get())
-                .stream()
-                .anyMatch(recipe -> recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
-    }
-
-    private boolean isValidForApplePressFermenting(ItemStack stack) {
-        if (level == null) return false;
-        return level.getRecipeManager()
-                .getAllRecipesFor(RecipeTypeRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get())
-                .stream()
-                .anyMatch(recipe -> recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
+    /**
+     * Port (alcohol.md B7.2): the one rule for what each slot takes, read from the recipes. Backs the menu's slots,
+     * {@link #canPlaceItem}, hoppers and shift-click alike. Slot 0: a mashing input. Slot 1 (left): a fermenting
+     * input, which is what mashing makes (apple mash, honeycomb). Slot 2 (right): a fermenting recipe's bottle (wine
+     * bottle, glass bottle). Slot 3 is output only.
+     */
+    public static boolean isValidForSlot(@Nullable Level level, int slot, ItemStack stack) {
+        if (level == null || stack.isEmpty()) {
+            return false;
+        }
+        RecipeManager recipes = level.getRecipeManager();
+        return switch (slot) {
+            case 0 -> recipes.getAllRecipesFor(RecipeTypeRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get()).stream()
+                    .anyMatch(recipe -> recipe.getInput().test(stack));
+            case 1 -> recipes.getAllRecipesFor(RecipeTypeRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get()).stream()
+                    .anyMatch(recipe -> recipe.getInput().test(stack));
+            case 2 -> recipes.getAllRecipesFor(RecipeTypeRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get()).stream()
+                    .anyMatch(recipe -> recipe.requiresBottle() && recipe.getBottle().test(stack));
+            default -> false;
+        };
     }
 }

@@ -30,6 +30,7 @@ public class BnCConfiguration {
    private static ForgeConfigSpec.IntValue kegHot;
    private static ForgeConfigSpec.BooleanValue kegBiomeTemp;
    private static ForgeConfigSpec.BooleanValue kegDimTemp;
+   private static ForgeConfigSpec.BooleanValue pipeDrainOnlyWhenIdle;
    private static ForgeConfigSpec.BooleanValue enableRecipeBookKeg;
 
    private static ForgeConfigSpec.EnumValue<FluidUnit> fluidDisplayUnit;
@@ -66,6 +67,9 @@ public class BnCConfiguration {
          .define("kegBiomeTemp", kd.biomeTemp());
       kegDimTemp = common.comment("Should the dimension temperature influence the temperature in the Keg?", "Default: " + kd.dimTemp())
          .define("kegDimTemp", kd.dimTemp());
+      pipeDrainOnlyWhenIdle = common.comment("Port setting (not in 4.5.0): may pipes and pumps drain the Keg only while it isn't fermenting?",
+            "Keeps a pump from pulling out the base fluid mid-batch. False drains at any time, as in 4.5.0.", "Default: " + kd.pipeDrainOnlyWhenIdle())
+         .define("pipeDrainOnlyWhenIdle", kd.pipeDrainOnlyWhenIdle());
       common.pop();
       common.push("recipe_book");
       enableRecipeBookKeg = common.comment("Should the Keg have a Recipe Book available on its interface?", "Default: " + Common.RecipeBook.DEFAULT.enabled())
@@ -104,7 +108,8 @@ public class BnCConfiguration {
       CLIENT_SPEC = client.build();
 
       COMMON_CONFIG = new Holder<>(COMMON_SPEC, Common.DEFAULT, () -> new Common(
-         new Common.Keg(kegCapacityUnit.get(), kegCapacity.get(), kegCold.get(), kegChilly.get(), kegWarm.get(), kegHot.get(), kegBiomeTemp.get(), kegDimTemp.get()),
+         new Common.Keg(kegCapacityUnit.get(), kegCapacity.get(), kegCold.get(), kegChilly.get(), kegWarm.get(), kegHot.get(), kegBiomeTemp.get(), kegDimTemp.get(),
+            pipeDrainOnlyWhenIdle.get()),
          new Common.RecipeBook(enableRecipeBookKeg.get())
       ));
       CLIENT_CONFIG = new Holder<>(CLIENT_SPEC, Client.DEFAULT, () -> new Client(
@@ -198,8 +203,9 @@ public class BnCConfiguration {
    public record Common(BnCConfiguration.Common.Keg keg, BnCConfiguration.Common.RecipeBook recipeBook) {
       public static final BnCConfiguration.Common DEFAULT = new BnCConfiguration.Common(Keg.DEFAULT, RecipeBook.DEFAULT);
 
-      public record Keg(FluidUnit capacityUnit, long capacity, int cold, int chilly, int warm, int hot, boolean biomeTemp, boolean dimTemp) {
-         public static final BnCConfiguration.Common.Keg DEFAULT = new BnCConfiguration.Common.Keg(FluidUnit.MILLIBUCKET, 1000L, 2, 1, 1, 2, true, true);
+      public record Keg(FluidUnit capacityUnit, long capacity, int cold, int chilly, int warm, int hot, boolean biomeTemp, boolean dimTemp,
+         boolean pipeDrainOnlyWhenIdle) {
+         public static final BnCConfiguration.Common.Keg DEFAULT = new BnCConfiguration.Common.Keg(FluidUnit.MILLIBUCKET, 1000L, 2, 1, 1, 2, true, true, true);
 
          public long localizedCapacity() {
             return this.capacityUnit.convertToLoader(this.capacity);

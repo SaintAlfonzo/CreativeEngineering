@@ -3,6 +3,7 @@ package umpaz.brewinandchewin.forge.platform;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -118,12 +119,17 @@ public class BnCPlatformHelperForge implements BnCPlatformHelper {
    }
 
    @Override
-   public AbstractedItemHandler createKegInventory(int size, BiConsumer<AbstractedItemHandler, Integer> onContentsChanged) {
+   public AbstractedItemHandler createKegInventory(int size, BiConsumer<AbstractedItemHandler, Integer> onContentsChanged, BiPredicate<Integer, ItemStack> validator) {
       return new KegItemHandlerForge(size) {
          @Override
          protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             onContentsChanged.accept(this, slot);
+         }
+
+         @Override
+         public boolean isItemValid(int slot, ItemStack stack) {
+            return validator.test(slot, stack);
          }
       };
    }

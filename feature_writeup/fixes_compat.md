@@ -26,8 +26,12 @@ feature are documented with that feature and only pointed to here.
 | 2.17 | Legendary Tooltips underline drawn through the item model | `IcebergTitleBreakMixin` | DEPLOYED with 1.0.6, see [tooltips.md](tooltips.md) (TT-16) |
 | 2.18 | GUI title plaque too short for long container titles | `TitlePlaques`, `ContainerTitlePlaqueMixin`, `[gui_title]` | DEPLOYED with 1.0.6 |
 | 2.19 | Others: creative inventory off, XP fluid merge, IE recycling tag order, copper pickaxe tier | various | DEPLOYED |
+| 2.20 | Quark's sort button deletes items from containers holding stacks over the max size | `QuarkSafeSort`, `QuarkSortingHandlerMixin` | DEPLOYED with 1.0.7, see [testing/fridge_sort/plan.md](testing/fridge_sort/plan.md) (FS-01 to FS-05) |
+| 2.21 | Exposure viewfinder outlives its player and eats clicks inside screens | exposureBackport `-04` | DEPLOYED with 1.0.7, see [exposure.md](exposure.md) |
+| 2.22 | IE Engineer's Hammer rotates the FD cutting board instead of running a hammer cutting recipe | `IECompat.registerHammerNoRotate`, `#creativeengineering:hammer_no_rotate` | STAGED for 1.0.8, see [oven.md](oven.md) 2.5 |
+| 2.23 | Server crash: bonemealing a Vinery grass slab with Immersive Weathering (`fertile` property) | Vinery port `SpreadableGrassSlabBlock` | DEPLOYED with 1.0.7 (hotfix), see [alcohol.md](alcohol.md) Part B |
 
-- **Pending:** nothing built and unshipped. FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
+- **Pending:** 2.22 is staged for 1.0.8; nothing else built and unshipped. FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
   there). Findings F1 to F6 (section 4); none needs a decision except F3.
 - **Knobs:** `config/creativeengineering-common.toml`: `[forgiving_void]`, `[armor_overflow]`, `[bonemeal_charm]`,
   `[gui_title]`, `[debug.block_state_sync]`. All live.
@@ -178,6 +182,23 @@ vanilla's label drawing are touched. `[gui_title] stretchPlaque`, `logOverflow` 
 | `IETagUtilsMixin` | IE's recycling picked a material from an item's tags in hash order, so `forge:rods/all_metal` could win over `forge:rods/iron` and recycle to air; now the first candidate with a real ingot tag wins |
 | `CopperPickaxeItemMixin` | Everything Copper's copper pickaxe gets the pack's copper tier instead of stone (`CETiers.COPPER`) |
 
+### 2.20 to 2.23
+
+Each is documented where it belongs; one line each here.
+
+- **2.20 Quark sort:** Quark 3.4 empties every slot and re-inserts through Forge's `InvWrapper`, which caps a slot at
+  the item's max stack size. Stacks from before the 1.0.5 stack-size policy are bigger than that, so the insert fails,
+  Quark's restore fails on the same stack, and the overflow plus every later slot is lost. The mixin splits stacks to
+  the max size, checks that everything fits first, and does nothing when it wouldn't.
+- **2.21 Exposure viewfinder:** the viewfinder is static and survived respawn, dimension change and rejoin; Forge's
+  `MouseButton.Pre` also fires before an open screen gets the click. The port now drops the viewfinder when the
+  ticking player has no active camera or logs out, and ignores clicks while a screen is open.
+- **2.22 IE hammer:** the hammer's `onItemUseFirst` rotates any block without an IE block entity before the block's
+  own `use()`. Blocks in `#creativeengineering:hammer_no_rotate` are added to IE's rotation blacklist.
+- **2.23 Grass slab bonemeal:** the port forwarded the slab's own state to `Blocks.GRASS_BLOCK`, which Immersive
+  Weathering replaces with a block that sets `fertile`; the slab has no such property. It now passes
+  `GRASS_BLOCK.defaultBlockState()`. Logs: `debug/10_18/`.
+
 ## 3. What the pack changes
 
 Every entry above is a patcherMod mixin or class except 2.6 (KubeJS tag script) and 2.14 (exposureBackport). Mixins on
@@ -266,3 +287,5 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-02: map trades through Async Locator (1.0.3); Exposure kick and refmap (1.0.4).
 - 2026-10-05 to 10-11: ghost blocks, Breezy compat, tooltip fixes, title plaque (staged for 1.0.5, shipped in 1.0.6).
 - 2026-10-18: this writeup; findings F1 to F6; tests FX-01 to FX-20. No code changed.
+- 2026-10-19: catalogue entries 2.20 to 2.23 for the fixes in 1.0.7 (Quark sort, Exposure viewfinder, grass slab
+  crash) and 1.0.8 (IE hammer); each keeps its tests in its own writeup.

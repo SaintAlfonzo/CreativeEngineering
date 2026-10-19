@@ -95,8 +95,11 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        // Pass the grass block's own state, not the slab's: Immersive Weathering replaces
+        // Blocks.GRASS_BLOCK and sets its FERTILE property on the state it is given, which
+        // the slab doesn't have (crashed the server via Farmer's Delight rich soil ticks).
         GrassBlock block = (GrassBlock) GRASS_BLOCK;
-        block.performBonemeal(level, random, pos, state);
+        block.performBonemeal(level, random, pos, GRASS_BLOCK.defaultBlockState());
     }
 
     @Override

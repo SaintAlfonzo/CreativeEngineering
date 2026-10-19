@@ -54,13 +54,12 @@ public class StorageTypeRegistry {
         blocks.add(WINE_RACK_1.get());
         blocks.add(WINE_RACK_2.get());
         blocks.add(PRAETORIAN_WINE.get());
-        blocks.add(KING_DANIS_WINE.get());
         blocks.addAll(List.of(
                 NOIR_WINE.get(), CLARK_WINE.get(), BOLVAR_WINE.get(), STAL_WINE.get(),STRAD_WINE.get(), CHERRY_WINE.get(), KELP_CIDER.get(),
                 SOLARIS_WINE.get(), APPLE_WINE.get(), APPLE_CIDER.get(), CHENET_WINE.get(), MELLOHI_WINE.get(),
                 LILITU_WINE.get(), MAGNETIC_WINE.get(), CHORUS_WINE.get(), JELLIE_WINE.get(), AEGIS_WINE.get(), RED_WINE.get(),
                 CRISTEL_WINE.get(), JO_SPECIAL_MIXTURE.get(), GLOWING_WINE.get(), CREEPERS_CRUSH.get(),
-                BOTTLE_MOJANG_NOIR.get(), VILLAGERS_FRIGHT.get(), MEAD.get(), EISWEIN.get()
+                BOTTLE_MOJANG_NOIR.get(), VILLAGERS_FRIGHT.get(), EISWEIN.get()
         ));
 
         return blocks;
@@ -133,10 +132,8 @@ public class StorageTypeRegistry {
                 CREEPERS_CRUSH.get(),
                 BOTTLE_MOJANG_NOIR.get(),
                 VILLAGERS_FRIGHT.get(),
-                MEAD.get(),
                 EISWEIN.get(),
-                PRAETORIAN_WINE.get(),
-                KING_DANIS_WINE.get()
+                PRAETORIAN_WINE.get()
         };
     }
 }

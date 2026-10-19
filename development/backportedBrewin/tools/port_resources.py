@@ -15,7 +15,10 @@ Source: DecompiledMods/BrewinAndChewin-neoforge-4.5.0+1.21.1-src (assets/, data/
     advancement becomes impossible criteria that BnCCommonEvents awards from code
   * the port's deviations: honey pours from create:honey when Create is loaded (4.1), Dread Nog takes a poison potion
     (4.4), kombucha ferments green tea (4.5)
-  * GUI: the four recipe-book filter sprites are packed into one 256x256 sheet (1.19.2 has no GUI sprite atlas)
+  * GUI: the four recipe-book filter sprites are packed into one 256x256 sheet (1.19.2 has no GUI sprite atlas); the
+    keg screen gets two more slot frames, fluid in and empty container out (alcohol.md 8.4)
+  * pack changes (alcohol.md 8): the three jams are left out (8.5), cooking-pot recipes get FD's default cookingtime so
+    KubeJS can read them (8.1), and #minecraft:undead (a 1.21 tag) becomes 1.19.2's undead mobs (8.1)
 """
 import copy
 import json
@@ -82,12 +85,33 @@ SKIP_DATA = (
     'c/tags/item/',  # c:foods, c:foods/soup, c:foods/edible_when_placed: no 1.19.2 consumer
 )
 POISONS = ['minecraft:poison', 'minecraft:long_poison', 'minecraft:strong_poison']
+# alcohol.md 8.5: Fruits Delight covers jams, so these leave the port (every file named after them, lang keys, and their
+# criteria in chef_of_the_ages).
+JAMS = ('sweet_berry_jam', 'glow_berry_marmalade', 'apple_jelly', 'jam_jar')
+# alcohol.md 8.1: 1.19.2 has no #minecraft:undead entity tag; these are the vanilla mobs with MobType.UNDEAD.
+# BnCCommonEvents also checks the mob type, so modded undead are covered without being listed.
+UNDEAD = [
+    'minecraft:zombie', 'minecraft:husk', 'minecraft:drowned', 'minecraft:zombie_villager', 'minecraft:zombified_piglin',
+    'minecraft:zoglin', 'minecraft:skeleton', 'minecraft:stray', 'minecraft:wither_skeleton', 'minecraft:skeleton_horse',
+    'minecraft:zombie_horse', 'minecraft:phantom', 'minecraft:wither',
+]
+# Lang lines for the port's own additions (alcohol.md 8), added to en_us.json.
+PORT_LANG = {
+    'brewinandchewin.tooltip.keg.pipe_drain_idle': "Pipes can only drain it while it isn't fermenting",
+}
+# Farmer's Delight's CookingPotRecipe default; 4.5.0's files leave it out, which KubeJS's recipe schema rejects.
+FD_COOKING_TIME = 200
 
 warnings = []
 
 
 def warn(msg):
     warnings.append(msg)
+
+
+def is_jam_file(rel):
+    stem = os.path.splitext(os.path.basename(rel))[0]
+    return any(j in stem for j in JAMS)
 
 
 def map_tag(name, fluid=False):
@@ -210,6 +234,7 @@ def convert_recipe(rel, d):
         if 'container' in d:
             d['container'] = item_stack(d['container'], rel)
             d['container'].pop('count', None)
+        d.setdefault('cookingtime', FD_COOKING_TIME)
     elif t == 'farmersdelight:cutting':
         d['ingredients'] = [ingredient(i, rel) for i in d['ingredients']]
         d['tool'] = ingredient(d['tool'], rel)
@@ -291,6 +316,12 @@ def convert_advancement(rel, d):
         for crit in d['criteria'].values():
             crit.clear()
             crit['trigger'] = 'minecraft:impossible'
+    jam_criteria = [name for name in d['criteria'] if any(j in name for j in JAMS)]
+    for name in jam_criteria:
+        del d['criteria'][name]
+    if jam_criteria and 'requirements' in d:
+        d['requirements'] = [[c for c in req if c not in jam_criteria] for req in d['requirements']]
+        d['requirements'] = [req for req in d['requirements'] if req]
     return d
 
 
@@ -316,6 +347,9 @@ def convert_tag(rel, d, fluid):
     values = []
     for v in d['values']:
         entry = v if isinstance(v, str) else v['id']
+        if entry == '#minecraft:undead' and rel.split('/')[2] == 'entity_type':
+            values.extend(UNDEAD)
+            continue
         required = True if isinstance(v, str) else v.get('required', True)
         mapped = map_tag(entry, fluid=fluid)
         names = mapped if isinstance(mapped, list) else [mapped]
@@ -360,7 +394,7 @@ def port_data():
         for fn in sorted(files):
             full = os.path.join(root, fn)
             rel = os.path.relpath(full, src).replace(os.sep, '/')
-            if any(rel.startswith(s) for s in SKIP_DATA):
+            if any(rel.startswith(s) for s in SKIP_DATA) or is_jam_file(rel):
                 continue
             if not fn.endswith('.json'):
                 warn(f'non-json data file {rel} skipped')
@@ -434,10 +468,20 @@ def port_assets():
         for fn in files:
             full = os.path.join(root, fn)
             rel = (rel_root + '/' + fn) if rel_root != '.' else fn
+            if is_jam_file(rel):
+                continue
             dest = os.path.join(out, rel)
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             if rel.startswith('brewinandchewin/fluid_item_displays/'):
                 write_json(dest, convert_fluid_display(json.load(open(full))))
+            elif rel.startswith('lang/') and fn.endswith('.json'):
+                lang = json.load(open(full, encoding='utf-8'))
+                lang = {k: v for k, v in lang.items() if not any(j in k for j in JAMS)}
+                if fn == 'en_us.json':
+                    lang.update(PORT_LANG)
+                with open(dest, 'w', encoding='utf-8') as f:
+                    json.dump(lang, f, indent=2, ensure_ascii=False)
+                    f.write('\n')
             elif rel.startswith('models/') and fn.endswith('.json'):
                 text = open(full).read()
                 for old, new in MODEL_REFS.items():
@@ -447,6 +491,7 @@ def port_assets():
                 shutil.copyfile(full, dest)
             count += 1
     copy_fd_tray(os.path.join(out, 'textures', 'block', 'fd_tray.png'))
+    add_keg_fluid_slots(os.path.join(out, 'textures', 'gui', 'keg.png'))
     build_filter_sheet(os.path.join(src, 'textures', 'gui', 'sprites', 'recipe_book'), os.path.join(out, 'textures', 'gui', 'keg_recipe_book.png'))
     return count
 
@@ -459,6 +504,35 @@ def copy_fd_tray(dest):
     with zipfile.ZipFile(FD_121_JAR) as jar:
         with open(dest, 'wb') as f:
             f.write(jar.read('assets/farmersdelight/textures/block/tray.png'))
+
+
+# alcohol.md 8.4: the keg's fluid slot pair (KegMenu slots 6 and 7, items at x 8, y 17 and 53), lined up with the player
+# inventory's first column and the recipe-book button between them. The frames are copies of the container slot's
+# (item at 91, 55); the arrow between them only shows when the recipe book is turned off.
+KEG_SLOT_FRAME = (90, 54)
+KEG_FLUID_SLOTS = ((7, 16), (7, 52))
+KEG_ARROW = (139, 139, 139, 255)
+
+
+def add_keg_fluid_slots(path):
+    try:
+        from PIL import Image
+    except ImportError:
+        warn('PIL missing: keg.png has no fluid slot frames')
+        return
+    im = Image.open(path).convert('RGBA')
+    fx, fy = KEG_SLOT_FRAME
+    frame = im.crop((fx, fy, fx + 18, fy + 18))
+    for pos in KEG_FLUID_SLOTS:
+        im.paste(frame, pos)
+    cx = KEG_FLUID_SLOTS[0][0] + 8
+    for y in range(37, 46):
+        im.putpixel((cx, y), KEG_ARROW)
+        im.putpixel((cx + 1, y), KEG_ARROW)
+    for i, y in enumerate(range(46, 49)):
+        for x in range(cx - 2 + i, cx + 4 - i):
+            im.putpixel((x, y), KEG_ARROW)
+    im.save(path)
 
 
 def build_filter_sheet(sprite_dir, dest):

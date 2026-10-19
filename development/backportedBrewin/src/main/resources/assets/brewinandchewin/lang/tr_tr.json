@@ -19,12 +19,10 @@
   "fluid_type.brewinandchewin.withering_dross": "Solduran Cüruf",
   "fluid_type.brewinandchewin.flaxen_cheese": "Sarı Peynir",
   "fluid_type.brewinandchewin.scarlet_cheese": "Kızıl Peynir",
-
   "block.brewinandchewin.keg": "Fıçı",
   "block.brewinandchewin.heating_cask": "Isıtma Kasası",
   "block.brewinandchewin.ice_crate": "Buz Kasası",
   "block.brewinandchewin.coaster": "Altlık",
-
   "item.brewinandchewin.tankard": "Kupa",
   "item.brewinandchewin.beer": "Bira",
   "item.brewinandchewin.vodka": "Votka",
@@ -63,12 +61,8 @@
   "item.brewinandchewin.ham_and_cheese_sandwich": "Jambon ve Peynirli Sandviç",
   "block.brewinandchewin.quiche": "Kiş",
   "item.brewinandchewin.quiche_slice": "Kiş Dilimi",
-  "item.brewinandchewin.sweet_berry_jam": "Tatlı Orman Meyve Reçeli",
-  "item.brewinandchewin.glow_berry_marmalade": "Parlayan Meyve Reçeli",
-  "item.brewinandchewin.apple_jelly": "Elmalı Jöle",
   "item.brewinandchewin.dread_nog": "Dehşet Likörü",
   "item.brewinandchewin.kombucha": "Kombu Çayı",
-
   "effect.brewinandchewin.tipsy": "İçkili",
   "effect.brewinandchewin.tipsy.description": "Ekrana sallanma efekti verir. Seviye üç ve üzerinde fare sürükleme zorlaşır. Seviye dört ve üzerinde gönderilen mesajlar, başka oyuncuların mesajları ve tabelalardaki yazılar karışık görünür. Gelen hasarı geciktirebilir - bu etki turuncu kalp simgeleriyle belirtilir.",
   "effect.brewinandchewin.intoxication": "Sarhoşluk",
@@ -87,16 +81,12 @@
   "brewinandchewin.container.keg.normal": "Normal",
   "brewinandchewin.container.keg.warm": "Ilık",
   "brewinandchewin.container.keg.hot": "Sıcak",
-
   "brewinandchewin.block.feast.use_knife": "Bunu kesmek için bir Bıçak gerekli.",
-
   "death.attack.brewinandchewin.cardiacArrest": "%1$s yaralandığını sonunda hatırladı",
   "death.attack.brewinandchewin.cardiacArrest.player": "%1$s, %2$s tarafından kalp krizi geçirdi",
-
   "_comment.english": "Intentionally untranslated, as this is the mod's name",
   "_comment.turkish": "Modun adı olduğu için bilerek çevrilmedi",
   "itemGroup.brewinandchewin": "Brewin' and Chewin'",
-
   "_comment.english2": "Well, this is also the mod's name... I don't know, feel free to change",
   "_comment.turkish2": "Ama bu da modun adı... bilmiyorum, değiştirmekten çekinmeyin",
   "brewinandchewin.advancement.root": "Brewin' and Chewin'",
@@ -115,7 +105,6 @@
   "brewinandchewin.advancement.cook_fiery_fondue.desc": "Kazanla bir Tencereden Ateşli Fondü al",
   "brewinandchewin.advancement.chef_of_the_ages": "Çağların Şefi",
   "brewinandchewin.advancement.chef_of_the_ages.desc": "Brewin' and Chewin'de bulunan her yemekten bir porsiyon ye!",
-  
   "brewinandchewin.jei.fermenting": "Mayalanma",
   "brewinandchewin.jei.aging": "Olgunlaşma",
   "brewinandchewin.container.recipe_book.fermentable": "Mayalanabilenler Gösteriliyor",
@@ -125,7 +114,6 @@
   "brewinandchewin.jei.tooltip.error.recipe.transfer.not_enough_fluid": "Yetersiz Sıvı",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.temperature": "Yanlış Derece",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.invalid_fluid": "Geçersiz Sıvı Maddesi",
-
   "emi.category.brewinandchewin.fermenting": "Mayalanma",
   "emi.category.brewinandchewin.pouring": "Dökme",
   "emi.category.brewinandchewin.aging": "Olgunlaşma",
@@ -134,14 +122,11 @@
   "brewinandchewin.emi.cooler_temperature": "Daha soğuk derece gerekli",
   "brewinandchewin.emi.incorrect_fluid": "Yapabilmek için yanlış sıvı",
   "brewinandchewin.emi.cant_empty": "Mevcut sıvı boşaltılamıyor",
-
   "tag.block.brewinandchewin.cheese_wheels.unripe": "Olgunlaşmamış Peynir Tekerleri",
   "tag.block.brewinandchewin.cheese_wheels.ripe": "Peynir Tekerleri",
   "tag.block.brewinandchewin.freeze_sources": "Donma Kaynakları",
   "tag.block.brewinandchewin.player_workstations.kegs": "Fıçılar",
-
   "tag.entity_type.brewinandchewin.immune_to_intoxication": "Sarhoşluk'a Bağışık",
-
   "tag.item.brewinandchewin.cheese_wheels.unripe": "Olgunlaşmamış Peynir Tekerleri",
   "tag.item.brewinandchewin.cheese_wheels.ripe": "Peynir Tekerleri",
   "tag.item.brewinandchewin.fermented_drinks": "Mayalanan İçecekler",
@@ -150,7 +135,6 @@
   "tag.item.brewinandchewin.foods.horror_meat": "Korkunç Etler",
   "tag.item.brewinandchewin.foods.pizza_topping": "Pizza Üstüne Konanlar",
   "tag.item.brewinandchewin.player_workstations.kegs": "Fıçılar",
-
   "tag.fluid.brewinandchewin.beer": "Bira",
   "tag.fluid.brewinandchewin.vodka": "Votka",
   "tag.fluid.brewinandchewin.mead": "Bal Likörü",
@@ -169,9 +153,7 @@
   "tag.fluid.brewinandchewin.kombucha": "Kombu Çayı",
   "tag.fluid.brewinandchewin.flaxen_cheese": "Sarı Peynir",
   "tag.fluid.brewinandchewin.scarlet_cheese": "Kızıl Peynir",
-
   "tag.mob_effect.brewinandchewin.low_priority.milk_bottle": "Süt Şişesi için Düşük Öncelik",
   "tag.mob_effect.brewinandchewin.low_priority.hot_cocoa": "Sıcak Çikolata için Düşük Öncelik",
-
   "tag.damage_type.brewinandchewin.triggers_raging": "Öfke Tetikler"
 }

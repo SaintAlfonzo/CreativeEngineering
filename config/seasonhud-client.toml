@@ -80,7 +80,7 @@
 		#Show the current day of the season/sub-season?
 		#Default is SHOW_DAY.
 		#Allowed Values: NONE, SHOW_DAY, SHOW_WITH_TOTAL_DAYS
-		enable_show_day = "SHOW_DAY"
+		enable_show_day = "SHOW_WITH_TOTAL_DAYS"
 		#Show the current fertility of the biome?
 		#Only shows if not the default fertility of the season
 		#Default is false.

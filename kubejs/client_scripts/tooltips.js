@@ -493,6 +493,16 @@ var i = global.item;
 		[i.fertile_soil, ['Crops grow significantly faster and can\'t be trampled!', col.rare],['Doesn\'t need to be tilled, can be soaked w/ water to increase plant growth', col.rare]],
 		[i.nulch, ['Grows nether crops faster', col.rare],['Can be filled w/ lava, but watch your feet!', col.rare]]
 	);
+
+	// Brewin' and Chewin' keg temperature blocks (alcohol.md 8.3): each source within 2 blocks of a keg counts 1
+	addTooltips(e,
+		[i.heating_cask,
+			['Keg heat source within 2 blocks: on its own, one makes a keg Warm and two make it Hot', col.uncm],
+			['Heats a cooking pot like a stove', col.norm],
+			['Use a water bucket or bottle to vent steam', col.norm]],
+		[i.ice_crate,
+			['Keg cold source within 2 blocks: on its own, one makes a keg Chilly and two make it Cold', col.uncm]]
+	);
 		
 // ############################## Archery ##############################
 

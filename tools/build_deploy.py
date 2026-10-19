@@ -108,6 +108,7 @@ IN_TREE_MODS = [
     ('incubationAdditions', 'incubationAdditions', True),
     ('moreMooblooms', 'moreMooblooms', True),
     ('backportedVinery', 'backportedVinery', True),
+    ('backportedBrewin', 'backportedBrewin', True),
 ]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server

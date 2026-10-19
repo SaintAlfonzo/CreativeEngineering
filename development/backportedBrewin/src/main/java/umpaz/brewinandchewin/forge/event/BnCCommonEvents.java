@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -112,7 +113,10 @@ public class BnCCommonEvents {
 
    @SubscribeEvent
    public static void mobEffectApplicable(MobEffectEvent.Applicable event) {
-      if (event.getEntity().getType().is(BnCTags.EntityTypes.IMMUNE_TO_INTOXICATION) && event.getEffectInstance().getEffect() == BnCEffects.INTOXICATION) {
+      // Port: 1.19.2 has no #minecraft:undead entity tag, so undead mobs are immune by mob type as well as by the tag.
+      LivingEntity living = event.getEntity();
+      if ((living.getType().is(BnCTags.EntityTypes.IMMUNE_TO_INTOXICATION) || living.getMobType() == MobType.UNDEAD)
+         && event.getEffectInstance().getEffect() == BnCEffects.INTOXICATION) {
          event.setResult(Event.Result.DENY);
       }
    }

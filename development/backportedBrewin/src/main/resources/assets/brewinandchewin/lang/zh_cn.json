@@ -18,12 +18,10 @@
   "fluid_type.brewinandchewin.withering_dross_type": "凋零糟粕",
   "fluid_type.brewinandchewin.flaxen_cheese_type": "淡黄奶酪",
   "fluid_type.brewinandchewin.scarlet_cheese_type": "绯红奶酪",
-
   "block.brewinandchewin.keg": "发酵桶",
   "block.brewinandchewin.heating_cask": "加热桶",
   "block.brewinandchewin.ice_crate": "箱装冰",
   "block.brewinandchewin.coaster": "托垫",
-
   "item.brewinandchewin.tankard": "酒杯",
   "item.brewinandchewin.beer": "啤酒",
   "item.brewinandchewin.vodka": "伏特加",
@@ -62,12 +60,8 @@
   "item.brewinandchewin.ham_and_cheese_sandwich": "火腿奶酪三明治",
   "block.brewinandchewin.quiche": "乳蛋饼",
   "item.brewinandchewin.quiche_slice": "乳蛋饼切片",
-  "item.brewinandchewin.sweet_berry_jam": "甜浆果酱",
-  "item.brewinandchewin.glow_berry_marmalade": "发光浆果酱",
-  "item.brewinandchewin.apple_jelly": "苹果果冻",
   "item.brewinandchewin.dread_nog": "畏怖蛋奶酒",
   "item.brewinandchewin.kombucha": "康普茶",
-
   "effect.brewinandchewin.tipsy": "微醺",
   "effect.brewinandchewin.tipsy.description": "使屏幕产生摇晃效果。在III级或更高时，你的鼠标会有拖拽感。在IV级或更高时，你发送的聊天信息、其他玩家在你这边显示的聊天信息和告示牌上的文字将会被打乱。可能会延迟伤害，由橙色的微醺心形表示。",
   "effect.brewinandchewin.intoxication": "酩酊",
@@ -85,12 +79,9 @@
   "brewinandchewin.container.keg.normal": "普通",
   "brewinandchewin.container.keg.warm": "温暖",
   "brewinandchewin.container.keg.hot": "炎热",
-
   "brewinandchewin.block.feast.use_knife": "你需要一把刀来切割它.",
-
   "death.attack.brewinandchewin.cardiacArrest": "%1$s回想神伤",
   "death.attack.brewinandchewin.cardiacArrest.player": "%1$s因%2$s而心脏骤停",
-
   "brewinandchewin.advancement.root": "饮酒作乐",
   "brewinandchewin.advancement.root.desc": "去酿造一场风暴吧！",
   "brewinandchewin.advancement.place_keg": "从此开始进程",
@@ -107,7 +98,6 @@
   "brewinandchewin.advancement.cook_fiery_fondue.desc": "在厨锅中用炼药锅盛出火辣奶酪火锅",
   "brewinandchewin.advancement.chef_of_the_ages": "时代主厨",
   "brewinandchewin.advancement.chef_of_the_ages.desc": "吃下一整套饮酒作乐中提供的所有餐点！",
-
   "itemGroup.brewinandchewin": "饮酒作乐",
   "brewinandchewin.jei.fermenting": "发酵",
   "brewinandchewin.jei.aging": "熟成",
@@ -118,7 +108,6 @@
   "brewinandchewin.jei.tooltip.error.recipe.transfer.not_enough_fluid": "流体不足",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.temperature": "错误温度",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.invalid_fluid": "无效流体物品",
-
   "emi.category.brewinandchewin.fermenting": "发酵",
   "emi.category.brewinandchewin.pouring": "倾倒",
   "emi.category.brewinandchewin.aging": "熟成",
@@ -127,13 +116,11 @@
   "brewinandchewin.emi.cooler_temperature": "需要更冷的温度",
   "brewinandchewin.emi.incorrect_fluid": "错误的流体原料",
   "brewinandchewin.emi.cant_empty": "无法清空现有流体",
-
   "tag.item.brewinandchewin.fermented_drinks": "发酵饮品",
   "tag.item.brewinandchewin.horror_meats": "惊悚肉",
   "tag.item.brewinandchewin.raw_meats": "生肉",
   "tag.item.brewinandchewin.pizza_toppings": "披萨配料",
   "tag.item.brewinandchewin.cheese_wedges": "奶酪块",
-
   "tag.mob_effect.brewinandchewin.low_priority.milk_bottle": "低优先级：奶瓶",
   "tag.mob_effect.brewinandchewin.low_priority.hot_cocoa": "低优先级：热可可"
 }

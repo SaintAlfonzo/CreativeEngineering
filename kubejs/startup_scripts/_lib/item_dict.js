@@ -1255,6 +1255,9 @@ i.crushed_block_electrum = i.none;
 //Component Chain
 i.dust_electrum = 'immersiveengineering:dust_electrum';
 i.dust_block_electrum = 'creativeengineering:electrum_dust_pile';
+
+// any metal dust or grit (metaltags.js; Steel Toe Stout, alcohol.md 8.6). forge:dusts also holds redstone, salt...
+i.t_metal_dusts = '#creativeengineering:metal_dusts';
 i.nugget_electrum = 'immersiveengineering:nugget_electrum';
 i.ingot_electrum = 'immersiveengineering:ingot_electrum';
 i.block_electrum = 'immersiveengineering:storage_electrum';
@@ -1855,8 +1858,10 @@ i.rich_soil = 'farmersdelight:rich_soil';
 
 //Brewin' & Chewin'
 i.scarlet_cheese_wedge = 'brewinandchewin:scarlet_cheese_wedge';
-i.scarlet_pierogies = 'brewinandchewin:scarlet_pierogies';
+i.scarlet_pierogi = 'brewinandchewin:scarlet_pierogi';
 i.horror_lasagna = 'brewinandchewin:horror_lasagna';
+i.t_cheese_wedge = '#brewinandchewin:foods/cheese_wedge';
+i.t_pizza_topping = '#brewinandchewin:foods/pizza_topping';
 
 //Ender's Delight
 i.shulker_mollusk = 'endersdelight:shulker_mollusk';
@@ -1876,6 +1881,11 @@ i.milk = '#forge:milk';
 i.milk_bucket = '#forge:milk';
 i.milk_bottle = '#forge:milk';
 i.flour = '#forge:flour/wheat';
+i.cornmeal = 'creativeengineering:cornmeal';          // startup_scripts/cooking/cornmeal.js
+i.t_flour_corn = '#forge:flour/corn';
+i.t_flour_or_cornmeal = '#creativeengineering:flour_or_cornmeal'; // wheat flour or cornmeal: pancakes, pies, cakes
+i.t_crops_corn = '#forge:crops/corn';
+i.t_seeds_corn = '#forge:seeds/corn';                 // corn kernels
 i.dough = '#forge:dough/wheat';
 i.any_dough = '#forge:dough';
 i.bread = '#forge:bread/wheat';
@@ -1889,6 +1899,11 @@ i.t_fruits_cranberry = '#forge:fruits/cranberry';
 i.t_fruits_lemon = '#forge:fruits/lemon';
 i.t_fruits_fig = '#forge:fruits/fig';
 i.t_fruits_mangosteen = '#forge:fruits/mangosteen';
+i.t_fruits_bayberry = '#forge:fruits/bayberry';
+i.t_fruits_banana = '#forge:fruits/banana';
+i.t_fruits_strawberry = '#forge:fruits/strawberry';
+i.t_fruits_salmonberries = '#forge:fruits/salmonberries';
+i.t_bars_chocolate = '#forge:bars/chocolate';
 i.t_milk_bottle = '#forge:milk/milk_bottle'; // bottles only (i.milk_bottle is all of #forge:milk)
 i.carrot = '#forge:crops/carrot';
 i.potato = '#forge:crops/potato';
@@ -11107,7 +11122,6 @@ i.birch_wine_rack_mid             = 'vinery:birch_wine_rack_mid';
 i.birch_wine_rack_small           = 'vinery:birch_wine_rack_small';
 i.bolvar_wine                     = 'vinery:bolvar_wine';
 i.bottle_mojang_noir              = 'vinery:bottle_mojang_noir';
-i.calendar                        = 'vinery:calendar';
 i.chair                           = 'vinery:chair';
 i.chenet_wine                     = 'vinery:chenet_wine';
 i.cherry                          = 'vinery:cherry';
@@ -11161,7 +11175,6 @@ i.jungle_wine_rack_big            = 'vinery:jungle_wine_rack_big';
 i.jungle_wine_rack_mid            = 'vinery:jungle_wine_rack_mid';
 i.jungle_wine_rack_small          = 'vinery:jungle_wine_rack_small';
 i.kelp_cider                      = 'vinery:kelp_cider';
-i.king_danis_wine                 = 'vinery:king_danis_wine';
 i.kitchen_sink                    = 'vinery:kitchen_sink';
 i.loam                            = 'vinery:loam';
 i.loam_slab                       = 'vinery:loam_slab';
@@ -11170,7 +11183,6 @@ i.magnetic_wine                   = 'vinery:magnetic_wine';
 i.mangrove_wine_rack_big          = 'vinery:mangrove_wine_rack_big';
 i.mangrove_wine_rack_mid          = 'vinery:mangrove_wine_rack_mid';
 i.mangrove_wine_rack_small        = 'vinery:mangrove_wine_rack_small';
-i.mead                            = 'vinery:mead';
 i.mellohi_wine                    = 'vinery:mellohi_wine';
 i.vinery_mule_spawn_egg           = 'vinery:mule_spawn_egg';
 i.noir_wine                       = 'vinery:noir_wine';
@@ -11766,8 +11778,10 @@ i.fiery_fondue_pot            = 'brewinandchewin:fiery_fondue_pot';
 i.flaxen_cheese_wedge         = 'brewinandchewin:flaxen_cheese_wedge';
 i.flaxen_cheese_wheel         = 'brewinandchewin:flaxen_cheese_wheel';
 i.glittering_grenadine        = 'brewinandchewin:glittering_grenadine';
+i.heating_cask                = 'brewinandchewin:heating_cask';
+i.ice_crate                   = 'brewinandchewin:ice_crate';
 i.ham_and_cheese_sandwich     = 'brewinandchewin:ham_and_cheese_sandwich';
-i.item_coaster                = 'brewinandchewin:item_coaster';
+i.coaster                     = 'brewinandchewin:coaster';
 i.jerky                       = 'brewinandchewin:jerky';
 i.keg                         = 'brewinandchewin:keg';
 i.kimchi                      = 'brewinandchewin:kimchi';
@@ -13334,6 +13348,7 @@ i.t_placeable                = '#creativeengineering:placeable';
 i.t_placeable_sneak          = '#creativeengineering:placeable/sneak';
 i.t_placeable_on_plate       = '#creativeengineering:placeable_on_plate';
 i.t_placeable_on_small_plate = '#creativeengineering:placeable_on_small_plate';
+i.t_placeable_on_coaster     = '#creativeengineering:placeable_on_coaster';
 // ===== end placeable food (generated) =====
 
 // ############################## Validation ##############################

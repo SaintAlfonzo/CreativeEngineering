@@ -22,14 +22,17 @@ says otherwise. This part holds the gap analysis (sections 2.1 to 2.6), the port
 | Base fluid choice: honey / milk (4.1) | DECIDED 2026-10-14: the pack's `create:honey` and `minecraft:milk` |
 | Kombucha base (4.5) | DECIDED 2026-10-14: `create_central_kitchen:green_tea` |
 | Heat / cold block audit (2.7) | written 2026-10-14; tag additions proposed, not applied |
-| Port (`development/backportedBrewin`) | BUILT 2026-10-18: everything compiles and `backportedBrewin-4.5.0-ce-19.2-01.jar` builds; offline data check passes (6). Never booted (no scratch server yet, by request); not in `mods/`. Gaps and port decisions: 3.5 |
-| Pack-side changes (3.4) | not started; they go in together with the jar (they would break the 2.0 jar) |
-| In-game tests | AL-01 to AL-48 drafted (7), none run |
+| Port (`development/backportedBrewin`) | `-01` shipped in pack 1.0.7. `backportedBrewin-4.5.0-ce-19.2-02.jar` BUILT 2026-10-18 with the section 8 port changes; offline data check passes (6). In `mods/` since 2026-10-18 evening and STAGED for pack 1.0.8, where it replaces both `-01` and the 2.0 jar (1.0.7 shipped the two together; FML loaded `-01` on the server, [plan_1.0.7.md](plan_1.0.7.md) 2.2). Loaded in single player 2026-10-19, no errors. Gaps and port decisions: 3.5 |
+| Pack-side changes (3.4) | DONE 2026-10-18 except the rows marked open in 3.4 (food types / stack sizes, BlockRunner, the Kimchi can) |
+| Changes to make (8) | DONE 2026-10-18 (port + pack), not tested in game. Q1 to Q5 built with my defaults (8.9) |
+| In-game tests | AL-01 to AL-65 drafted (7), none run |
 
 - **Scope:** everything in 4.5.0 except EMI support, which this pack doesn't have.
 - **Deviations from 4.5.0, by your choice:**
   - Chat, sign and name-tag scrambling happens only on clients, with client settings (4.3).
   - Dread Nog takes a poison potion in place of the ominous bottle, which 1.19.2 doesn't have (4.4).
+  - No jams (8.5); Steel Toe Stout gives Resistance II for 90 s (8.6); the keg has 2.0's fluid slot pair (8.4) and a
+    pipe rule (8.7). Recipe changes live in the pack, not the port (8.6).
 - **Biggest change:** the keg becomes a fluid tank. A batch makes 1000 mB, poured out 250 mB per tankard, so 4 drinks
   per batch instead of 1.
 - **Sizes:**
@@ -407,6 +410,8 @@ Build order. Each step should boot before starting the next:
 - Yield: 4 drinks per batch, 9600 or 4800 ticks.
 - Recipe ingredients, including jerky in Strongroot Ale and the melon block in Saccharine Rum.
 - Withering Dross gives 2.0 xp.
+- Exceptions since 2026-10-18 (section 8): Steel Toe Stout's Resistance (II for 90 s, `BnCFoods`), the jams (gone), the
+  keg's slots 6 and 7 and its pipe rule. The recipe tweaks are pack recipes over unchanged 4.5.0 data.
 
 ### 3.3 Old worlds
 
@@ -423,19 +428,19 @@ Build order. Each step should boot before starting the next:
 
 | File | Change |
 |---|---|
-| [../kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | Rename `i.item_coaster` -> `i.coaster` and `i.scarlet_pierogies` -> `i.scarlet_pierogi`. Add `heating_cask`, `ice_crate`, the 3 jams. Drop `i.horror_lasagna_meat` / `i.cooked_horror_lasagna_meat` (the tags are gone) |
-| [../kubejs/startup_scripts/_lib/fluid_dict.js](../kubejs/startup_scripts/_lib/fluid_dict.js) | Add the 16 drink fluids and the 2 cheese fluids, so scripts never spell out the ids |
-| [../kubejs/server_scripts/cooking/cooking.js](../kubejs/server_scripts/cooking/cooking.js) | Lines 125 and 580-582: the remove targets `brewinandchewin:cooking/scarlet_pierogi`. Rebuild the pack's pierogi recipes against the new id. Lines 409-435: drop the horror lasagna meat tag keys |
-| [../kubejs/server_scripts/tags/cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js) | Line 23: the `cooked_horror_lasagna_meats` tag no longer exists upstream; keep it as a pack tag or drop it |
-| [../kubejs/generation_scripts/food/can_types.json](../kubejs/generation_scripts/food/can_types.json) | Line 3100: a can uses `brewinandchewin:satisfaction`. Switch it to Nourishment and rerun `gen_can_types.py` |
-| [../kubejs/assets/creativeengineering/lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) | JEED descriptions: drop Satisfaction, write Tipsy / Sweet Heart / Intoxication / Raging from 2.4 |
-| `config/ftbquests/quests/chapters/progression.snbt` (line 2111) | `scarlet_pierogies` -> `scarlet_pierogi` |
-| `config/jei/recipe-category-sort-order.ini` + `configs_edited/root_config/jei/` | Replace the 3 old category ids with the new ones (configs_edited backup rule) |
-| [../tools/gen_stack_sizes.py](../tools/gen_stack_sizes.py), [../tools/food_catalog.py](../tools/food_catalog.py), `food_types.json` | Add the jams to the right food types; the stack policy covers the new blocks |
-| Compost framework | Check that the 4.5.0 compost values (O2) don't fight `global.compost` |
-| BlockRunner | Speed tiers for `heating_cask`, `ice_crate`, `coaster` (blocktags.js) |
-| Create spout / drain for tankards (optional, not in 4.5.0) | Through `global.NCH` createFilling / createEmptying: tankard + 250 mB drink <-> drink. Without it, kegs are the only way to bottle |
-| Deploy | Remove the old jar from `mods/` and `server_mods/`, update mod_sides.md, regenerate the pack manifest, `/dumpall` refresh |
+| [../kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | DONE 2026-10-18: `i.coaster`, `i.scarlet_pierogi`, `i.heating_cask`, `i.ice_crate`, plus `i.t_cheese_wedge`, `i.t_pizza_topping`, `i.t_metal_dusts`. No jams (8.5). The horror lasagna meat keys stay: `cookingtags.js` fills that tag itself |
+| [../kubejs/startup_scripts/_lib/fluid_dict.js](../kubejs/startup_scripts/_lib/fluid_dict.js) | DONE 2026-10-18: the 16 drink fluids and the 2 cheese fluids (`f.beer` ... `f.scarlet_cheese`) |
+| [../kubejs/server_scripts/cooking/cooking.js](../kubejs/server_scripts/cooking/cooking.js) | DONE 2026-10-18: the pack's two pierogi recipes are gone (Q4); the beetroot change is in `alcohol.js`. Lines 340-764 are an old commented-out copy, left alone |
+| [../kubejs/server_scripts/tags/cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js) | Kept as a pack tag (the shapeless horror lasagna uses it) |
+| [../kubejs/generation_scripts/food/can_types.json](../kubejs/generation_scripts/food/can_types.json) | OPEN: Canned Kimchi still copies `brewinandchewin:satisfaction` from the 10-02 food dump. 4.5.0 kimchi has no effect, so after a restart with the port: `/dumpfood`, then `python3 tools/food_catalog.py` and `python3 tools/gen_can_types.py` (hand edits would be overwritten) |
+| [../kubejs/assets/creativeengineering/lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) | DONE 2026-10-18: `tools/gen_effect_descriptions.py` rerun; it pruned the Satisfaction / Sweet Heart / Tipsy placeholders, which hid the port's own descriptions (it also pruned 10 stale non-Brewin placeholders) |
+| `config/ftbquests/quests/chapters/progression.snbt` (line 2111) | DONE 2026-10-18 |
+| `config/jei/recipe-category-sort-order.ini` + `configs_edited/root_config/jei/` | DONE 2026-10-18: JEI had already added `brewinandchewin:aging` at the end; moved next to `fermenting` in both files |
+| [../tools/gen_stack_sizes.py](../tools/gen_stack_sizes.py), [../tools/food_catalog.py](../tools/food_catalog.py), `food_types.json` | OPEN: needs the `/dumpall` refresh with the port (no jams to add now) |
+| Compost framework | OPEN: check that the 4.5.0 compost values (O2) don't fight `global.compost` |
+| BlockRunner | OPEN: speed tiers for `heating_cask`, `ice_crate`, `coaster` (blocktags.js) |
+| Create spout / drain for tankards | DONE 2026-10-18 (8.7) |
+| Deploy | DONE 2026-10-18: mod_sides.md row, `backportedBrewin` in build_deploy.py `IN_TREE_MODS`. `server_mods/` still holds the 2.0 jar: it is rebuilt by `tools/dump_server_mods.py` from `mods/`, so rerun that after the jar install. Manifest and `/dumpall` refresh still to do |
 
 ### 3.5 Port status (2026-10-18)
 
@@ -455,10 +460,10 @@ assets and data through `tools/port_resources.py`.
 
 | Upstream | What the port does instead |
 |---|---|
-| `KegStackedContents` / `KegPlaceRecipe`: the recipe book also fills or empties the tank from fluid containers in the inventory | the recipe book places the item ingredients only (vanilla `ServerPlaceRecipe`) |
-| JEI `FermentingTransfer` + `JEITransferKegRecipeServerboundPacket` (about 1,100 lines): the same fluid handling for the JEI `+` button | JEI's basic handler, items only (the fluid slot is filtered out) |
-| AppleSkin hunger-bar wobble while Intoxicated (mixin into AppleSkin's offsets) | AppleSkin only previews no saturation |
-| Tipsy camera: a tiny positional drift on top of the spin | spin only |
+| `KegStackedContents` / `KegPlaceRecipe`: the recipe book also fills or empties the tank from fluid containers in the inventory | not ported: the pack removes the vanilla recipe book (your call, 10.3) |
+| JEI `FermentingTransfer` + `JEITransferKegRecipeServerboundPacket` | PORTED 2026-10-18 as `KegTransfer` (10.3) |
+| AppleSkin hunger-bar wobble while Intoxicated | PORTED 2026-10-18 (10.4) |
+| Tipsy camera: a tiny positional drift on top of the spin | PORTED 2026-10-18 (10.4) |
 
 **Port decisions, where 1.19.2 forced a different shape:**
 
@@ -630,6 +635,14 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [ ] **AL-16 Dread Nog:** poison potion (any of 3) + spider eye + turtle egg + egg grog at Cold -> dread nog; glass bottle comes back
 - [ ] **AL-17 Kombucha:** green tea fluid via Create emptying -> kombucha ferments
 - [ ] **AL-18 Tipsy stacking:** beer twice -> Tipsy II, durations added
+- [ ] **AL-67 JEI fill (10.3):** empty keg at the right temperature, the ingredients and enough filled containers (e.g. water bottles or a water bucket) in the inventory, click [+] -> ingredients in the grid, the tank holds exactly one set, the empty containers are back in the inventory
+- [ ] **AL-68 JEI shift (10.3):** shift-click [+] -> as many sets as the items and fluid allow, the tank a whole multiple of the recipe's amount
+- [ ] **AL-69 JEI empty (10.3):** keg holding beer, a recipe on milk, empty tankards in the inventory -> the beer goes into tankards, then the milk goes in; without enough tankards the button says "Can't Empty Keg" and nothing moves
+- [ ] **AL-70 JEI errors (10.3):** wrong temperature -> "Incorrect Temperature"; no fluid containers -> the fluid slot shows red; a full inventory -> "inventory full"
+- [ ] **AL-71 Intoxicated wobble (10.4):** with AppleSkin, Intoxicated and holding food -> the saturation / food preview icons wobble; `intoxicationFoodOverlay = false` -> they don't
+- [ ] **AL-72 Tipsy drift (10.4):** Tipsy V or higher, stand still -> the view slides slightly as it spins; Distortion Effects 0 -> no spin and no drift
+- [ ] **VB-64 Banner recipe (10.5):** any banner over a nether star, ringed by Jellie, Mojang Noir, Aegis, Apple, Cristel, Lilitu and Chenet wine (any age) -> one Vinery banner; JEI shows the recipe
+- [ ] **VB-65 Stem WTHIT (10.6):** look at a planted grapevine stem -> "Growing: <grape>" plus the growth line; when ripe "Ripe: ready to pick"; a fresh red/white stem shows "Grapevine leaves still to grow" until its leaves appear; an empty lattice -> "Nothing planted"
 - [ ] **AL-19 No nausea / poison:** Tipsy X -> no nausea, no poison, no drift, natural regen works
 - [ ] **AL-20 Numbed hearts:** take damage while Tipsy -> hearts shown numbed, damage lands later as cardiac arrest (ignores armor)
 - [ ] **AL-21 Camera spin and mouse sway:** visible from Tipsy I, stronger at higher levels
@@ -660,52 +673,268 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [ ] **AL-46 Signs sober up:** scrambled signs read normally again the moment Tipsy drops below the threshold
 - [ ] **AL-47 /msg to two players:** a Tipsy sender's both echoes and both receivers' copies scramble the same way
 - [ ] **AL-48 Old coaster block entity:** a 2.0 world's item coaster keeps its item after loading (no "Skipping BlockEntity" in the log)
+- [ ] **AL-49 JEI effects on the fluid output (8.2):** Fermenting page for beer, hover the result tank -> Tipsy and Intoxication lines with the same durations as the beer tankard's tooltip; the flaxen cheese page shows none
+- [ ] **AL-50 Tank tooltip effects (8.2):** keg holding beer, hover the tank in the GUI and the keg item in the inventory -> the same effect lines
+- [ ] **AL-51 Cask / crate tooltips (8.3):** Heating Cask and Ice Crate show the keg source line; the cask also shows the stove line and the steam line
+- [ ] **AL-52 Coaster placing (8.3):** "Placeable on a coaster" on a beer, a Vinery wine and an FD hot cocoa, not on a stone block; right-click a coaster with each -> placed, the beer with its own model; sneak-right-click a coaster holding a Display Delight food -> note what happens
+- [ ] **AL-53 Keg fluid slot (8.4):** water bucket in the fluid slot -> tank +1000 mB, empty bucket in the slot below, output slot untouched; 4 milk bottles -> 1000 mB and 4 bottles below
+- [ ] **AL-54 Keg hoppers (8.4):** side hopper with water buckets and tankards -> buckets to the fluid slot, tankards to the container slot; a hopper below takes the drinks and the empty buckets
+- [ ] **AL-55 No missing texture (8.4):** with only the port in `mods/`, open the keg GUI, its recipe book and the JEI Fermenting page -> no black and purple anywhere
+- [ ] **AL-56 Jams gone (8.5):** JEI search "jam", "marmalade", "jelly" -> only Fruits Delight's; `chef_of_the_ages` can still be earned
+- [ ] **AL-57 Fermenting changes (8.6):** JEI shows the new inputs for flaxen cheese, pale jane (any bark), beer, mead, bloody mary, rice wine and steel toe stout (any metal dust), and not the 4.5.0 ones; one batch of each ferments
+- [ ] **AL-58 Steel Toe Stout (8.6):** drink one -> Resistance II for 90 s
+- [ ] **AL-59 Pierogi (8.6):** JEI lists one scarlet pierogi recipe (cooking pot, beetroot) and no `creativeengineering:` pierogi recipes
+- [ ] **AL-60 Pizza (8.6):** crafts with 1 dough on the bottom row; the 3-wheat shape is gone
+- [ ] **AL-61 Ham and cheese (8.6):** each of the four variants in the 8.6 table crafts with the listed count; bread slices work where listed
+- [ ] **AL-62 Quiche (8.6):** mushroom quiche crafts with a whole cabbage; both sequenced assemblies run on a Create line
+- [ ] **AL-63 Spout and drain (8.7):** spout 250 mB of beer into a tankard -> beer; drain a beer -> tankard + 250 mB; no spout or drain recipe for the cheese fluids
+- [ ] **AL-64 Keg pipe rule (8.7):** a pump on a fermenting keg takes nothing; after the drink is done it pumps the drink out; piping lava in is refused; the keg tooltip shows the idle-only line; with `pipeDrainOnlyWhenIdle = false` the pump drains mid-ferment and the line is gone
+- [ ] ~~**AL-65 Mead merge**~~ retired 2026-10-18 (no conversions); Vinery mead removal is VB-54
 
-## 8. Changes to make
-- jei
-  - add effect tooltips to fluid output on keg
-- tooltips
-  - heating cask, cooling cask
-  - placeable on coaster 
-    - does it work w/ other mods?
-    - does it overlap w/ display delight?
-- ui
-  - keg missing left input fluid slot, fluids pass into output slot
-  - keg plating ui has black/purple missing texture
-- remove jams, marmalades, jelly
-  - handled by fruit delight
-- remove picked pickles
-  - handles by veggies/vintage delight when ported? leave enabled for now
-- cheese
-  - remove pumpkin seed from flaxen cheese, replace with brown mushroom
-- food
-  - change scarlet pierogi nether wart to beetroot
-  - remove creativeengineering kubejs recipe
-- pale jane
-  - swap tree bark for immersive weathering
-- beer
-  - swap seeds to dandelion
-- mead
-  - swap seeds to red muchroom
-  - merge mead from vinery into brewin when added
-- bloody mary
-  - sweet berries to salt
-- rice wine
-  - add 2nd rice ingredient
-- steel-toe stout
-  - change ingot to any metal dust, wheat to blaze powder, boost resistance effect
-- pizza
-  - 3 wheat to 1 dough
-- ham and cheese
-  - allow bread slices
-  - efficient smoked ham recipe, allow other cooked pork
-  - sequenced assembly for both efficiencies
-- quiche
-  - sequence assembly
-  - allow full cabbage in mushroom quiche
-- fluids
-  - create filling and draining recipes for drinks (not cheese)
-  - pumping fluids in and out of kegs
+## 8. Changes to make (planned 2026-10-18, BUILT 2026-10-18)
+
+**Status:** everything below is built: the port in `backportedBrewin-4.5.0-ce-19.2-02.jar` (in `mods/` and
+`server_mods/` since 2026-10-18 evening), the pack side in KubeJS. Nothing tested in game. Each subsection ends with an **Outcome** line where
+the build differs from or adds to the plan.
+
+Your list from 2026-10-18, each item with a plan. **Port** means `development/backportedBrewin` (rebuild the jar);
+**pack** means KubeJS, tags or tooltips. Recipes go through `global.NCH` and ids through `global.item` /
+`global.fluid` (CLAUDE.md). Tests: AL-49 to AL-66 (section 7). Questions for you: 8.9.
+
+**Suggested order:** 8.1, then the port changes (8.2, 8.4, 8.5, the stout effect in 8.6, the pipe rule in 8.7) in one
+rebuild, then the pack changes (8.3, 8.6, 8.7) in one KubeJS pass.
+
+### 8.1 First: one Brewin jar, and two log findings
+
+- `mods/` holds both `BrewinAndChewin-1.19-2.0.jar` and `backportedBrewin-4.5.0-ce-19.2-01.jar`. Today's
+  `latest.log` shows both found and the port loaded. Two jars with one mod id aren't a supported setup, and the 2.0 jar
+  has its own `textures/gui/keg.png`. Remove the 2.0 jar (the 3.4 deploy row) before judging any keg UI or texture bug.
+- **Cooking-pot recipes:** the port's 9 `farmersdelight:cooking` files have no `cookingtime`. FD reads them with its
+  default of 200, but KubeJS logs "Failed to parse recipe ... Falling back to vanilla". So `R.replaceInput` and friends
+  can't see inside them. Fix: `tools/port_resources.py` writes `"cookingtime": 200` into each one.
+- **Tag error:** `#minecraft:undead` is a 1.21 tag. The port's copy of it fails to load ("missing following
+  references"). Point it at the 1.19.2 entity list, or drop it if nothing reads it.
+- **Outcome:** you had already taken the 2.0 jar out of `mods/`; it is still in the generated `server_mods/` folder
+  (see the 3.4 Deploy row). `port_resources.py` now writes `cookingtime: 200` into the cooking-pot files
+  and turns `#minecraft:undead` into the 13 vanilla undead mobs; `BnCCommonEvents` also treats any `MobType.UNDEAD` mob
+  as immune, so modded undead are covered.
+
+### 8.2 JEI: effects on the keg's fluid output (port)
+
+- **Now:** on the Fermenting page, the result tank shows only the fluid name and amount. The effects show only on the
+  poured tankard's item slot below it.
+- **Plan:**
+  - Add a tooltip callback to the result fluid slot in `FermentingRecipeCategory` (about line 174).
+  - The callback appends the effect lines of the drink that the fluid pours into. That drink is
+    `KegFermentingPouringRecipe#getOutput`, already found from the pouring recipe. The lines come from the same call
+    the drink's own tooltip uses (`TextUtils.addFoodEffectTooltip`, `BoozeItem` line 148), so they read exactly like
+    the tankard's tooltip.
+  - Use the same callback for the keg screen's tank tooltip (`KegScreen` / `KegTooltip`) and the keg item's tooltip,
+    so all three places agree.
+  - Cheese fluids get no effect lines.
+- **Test:** AL-49.
+- **Outcome:** `BoozeItem.addFluidEffectLines(fluid, tooltip)` finds the drink by its fluid (every `BoozeItem` knows
+  its fluid) and adds the same lines as the tankard. Used by the JEI result tank (visible-tank mode only; with
+  `renderFluidInKeg = false` the tankard slot already shows them), `KegScreen`'s tank tooltip and `KegItem`.
+
+### 8.3 Tooltips (pack)
+
+Lines go in [../kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) with `addTooltips`, and in
+[tooltips.md](tooltips.md) (update rule).
+
+- **Heating Cask and Ice Crate** (you wrote "cooling cask"; the block is the Ice Crate):
+  - Heating Cask: "Keg heat source within 2 blocks: one makes a keg Warm, two make it Hot". Also "Heats a cooking
+    pot like a stove" (it is in `#farmersdelight:heat_sources`) and "Use a water bucket or bottle to vent steam".
+  - Ice Crate: "Keg cold source within 2 blocks: one makes a keg Chilly, two make it Cold".
+  - The numbers come from the 4.5.0 rules (K9, K12): a 5x5x5 area, each source counts 1, and Normal is 0. Biome
+    and dimension bonuses shift this, so the line says "on its own".
+- **Placeable on a coaster.** What the code does:
+  - The coaster takes **any** item, up to 4 (`CoasterBlockEntity#addItem` has no check).
+  - About 110 items have their own coaster model in the port's `assets/brewinandchewin/brewinandchewin/coaster/`.
+    These are vanilla foods, Farmer's Delight meals and drinks, and every Brewin drink. Anything else is drawn as a
+    plain item.
+  - So it works with other mods' items (Vinery wines, Farmer's Respite teas), but only the modelled ones look placed.
+- **Display Delight overlap.** A plain right-click on a coaster always goes to the coaster: the block's own use runs
+  before the held item's. A **sneak** right-click with something in hand skips the block, so a Display Delight food
+  (which places on sneak) would try to put a plate on top of the coaster. Vinery bottles place on a plain click
+  anywhere except a coaster. AL-52 checks both.
+- **Plan:**
+  - Add a fifth line to the placeable pipeline: "Placeable on a coaster", tag
+    `creativeengineering:placeable_on_coaster`.
+  - `tools/placeable_catalog.py` fills the tag from the coaster model files, plus a short allow-list: Vinery wines
+    and juices, Farmer's Respite drinks.
+  - `placeabletags.js` and `placeable_tooltip.js` gain the new row, and [placeable_food.md](placeable_food.md) gets
+    the category.
+  - Not every item: all items qualify, so a line on everything would be noise (8.9 Q3).
+- **Tests:** AL-50, AL-51, AL-52.
+- **Outcome:** as planned. The tool reads the port's 96 coaster model files and adds every Vinery and Farmer's Respite
+  drink; on today's live `/dumpplaceable` that is 160 items, including non-food models (bowl, glass bottle, tankard,
+  potion). Cask and crate lines are in tooltips.js "Food / Farmers Delight".
+
+### 8.4 Keg UI (port)
+
+- **A fluid slot on the left.**
+  - **Now (4.5.0):** a water bucket or milk bottle goes in the container slot (4). It empties into the tank, and the
+    empty container drops into the output slot (5), mixed in with poured drinks.
+  - **Plan:** 2.0's layout comes back as two slots left of the 2x2 grid: fluid in (6) on top and empty container out
+    (7) below.
+    - Slot 6 takes only items that can fill the tank: a `keg_pouring` recipe with `can_fill`, or a Forge
+      fluid-handler item.
+    - The keg empties slot 6 through the existing `fluidExtractFromContainer` path. The empty container goes to
+      slot 7, never slot 5.
+    - Slot 4 then only takes empty containers, to pour drinks out.
+  - **Hoppers (`SidedKegWrapper`):** from the side, filled containers go to 6 and empty ones to 4. From below, hoppers
+    take from 5 and 7.
+  - **Also changes:**
+    - `keg.png` gets the two slot frames. The texture is Brewin's, under MIT.
+    - Menu indices move, so check `KegMenu#quickMoveStack`, the recipe book placer and JEI's transfer handler.
+- **Black and purple texture on the "plating" UI.** I couldn't find a missing GUI texture offline. Every texture the
+  keg screen, JEI page and recipe book name exists in the jar, and the log has no missing `brewinandchewin` texture.
+  Candidates, in order:
+  1. The 2.0 jar still in `mods/` (8.1).
+  2. A drink fluid without a still texture, drawn in the tank or the JEI gauge.
+  3. The recipe-book filter button.
+
+  Check again after 8.1. If it is still there, I need to know which screen "plating" is (8.9 Q1).
+- **Tests:** AL-53, AL-54, AL-55.
+- **Outcome:**
+  - Slots: fluid in (6) at x 8, y 17 and empty container out (7) at x 8, y 53, in line with the player inventory's
+    first column. The recipe-book button sits between them. `port_resources.py` stamps two copies of the container
+    slot's frame into `keg.png`, plus a small down arrow that only shows when the recipe book is off.
+  - What goes where is the keg inventory's own `isItemValid`: slot 6 takes items that pour into the keg (a filling
+    pouring recipe, such as a beer or water bottle, or a Forge fluid container holding a fluid the keg uses); slot 4
+    takes everything else. Menus, shift-click and hoppers all follow it. Side faces insert into 4 and 6 and extract
+    from 5 and 7.
+  - The keg empties slot 6 one item at a time on its server tick, only while the tank takes it and slot 7 has room.
+  - The black and purple texture (Q1) wasn't reproduced offline; check again with only the port loaded (AL-55).
+
+### 8.5 Removals
+
+- **Jams, marmalade, jelly** (`sweet_berry_jam`, `glow_berry_marmalade`, `apple_jelly`). Fruits Delight covers them.
+  - These are new in 4.5.0, so no 2.0 world has them. That means they can leave the port outright:
+    - Unregister the 3 items and blocks (`BnCItems`, `BnCBlocks`, `JamJarItem`).
+    - `port_resources.py` skips their files: cooking recipes, recipe advancements, models, blockstates, coaster
+      entries, lang.
+    - Take them out of the `chef_of_the_ages` advancement.
+  - Then drop the 3.4 rows that add the jams to `item_dict.js`, food types and stack sizes.
+  - Worlds opened with today's test jar get the missing-registry prompt once. That's fine for test worlds.
+  - **Alternative:** keep them registered, then hide them and remove their recipes in KubeJS. Only worth it if a
+    world you care about already has them.
+- **Pickled pickles:** no change, as you said. Revisit with the veggie / vintage delight ports ([cooking.md](cooking.md)).
+- **Test:** AL-56.
+- **Outcome:** done as planned (items, foods, `JamJarItem`, files, lang keys and the advancement criteria). Worlds
+  opened with the `-01` jar show the missing-registry prompt once.
+
+### 8.6 Recipes (pack, plus one port change)
+
+- **Where:** a new [../kubejs/server_scripts/cooking/alcohol.js](../kubejs/server_scripts/cooking/alcohol.js) holds
+  every Brewin and Vinery tweak.
+- **The port's data stays 4.5.0**, so `port_resources.py` reruns stay clean. Each tweak removes the upstream id and
+  adds the pack recipe.
+- **New NCH helper:** `R.bncFermenting(output, inputs, baseFluid, e, idOverride, opts)`. It writes
+  `brewinandchewin:fermenting`: up to 4 inputs, a `{id, amount}` fluid or item result, and `base_fluid` with the
+  `#tag` form. `opts` takes `temperature`, `time` and `xp`.
+- **Fluid ids** come from `global.fluid` (the 3.4 row adds the 18 Brewin fluids).
+
+| Recipe (upstream id) | 4.5.0 | Change |
+|---|---|---|
+| Flaxen Cheese (`fermenting/flaxen_cheese_from_milk`) | brown mushroom, pumpkin seeds, sugar / 1000 milk | brown mushroom x2, sugar (2.0's shape) |
+| Scarlet Pierogi (`cooking/scarlet_pierogi`) | scarlet wedge, potato, dough, nether wart, cabbage | nether wart -> beetroot (`R.replaceInput` once 8.1 adds `cookingtime`). Delete the pack's two pierogi recipes, which were a 2.0 fix: `cooking.js` lines 124-127 (cooking pot copy and the heatless shapeless one). See Q4 |
+| Pale Jane (`fermenting/pale_jane_from_rice_wine`) | honey bottle, `farmersdelight:tree_bark`, lily of the valley, sugar | tree bark -> `i.any_bark` (`#immersive_weathering:bark`) |
+| Beer (`fermenting/beer_from_water`) | wheat, wheat seeds, brown mushroom | wheat seeds -> dandelion |
+| Mead (`fermenting/mead_from_honey`) | wheat, wheat seeds, sweet berries / 1000 honey | wheat seeds -> red mushroom. Vinery's mead is removed from that port (B7.6), so this is the only mead |
+| Bloody Mary (`fermenting/bloody_mary_from_vodka`) | tomato, cabbage, sweet berries | sweet berries -> `i.salt` (`#forge:salt`) |
+| Rice Wine (`fermenting/rice_wine_from_water`) | rice, brown mushroom | rice x2, brown mushroom |
+| Steel Toe Stout (`fermenting/steel_toe_stout_from_strongroot_ale`) | iron ingot, crimson fungus, nether wart, wheat | iron ingot -> any metal dust, wheat -> blaze powder. New tag `creativeengineering:metal_dusts` through `global.tags`: the IE dusts plus the pack's grits (the `i.dust_<metal>` keys), as `i.metal_dust`. `forge:dusts` is too wide: it holds redstone, glowstone and salt |
+| Steel Toe Stout effect (port, `BnCFoods.STEEL_TOE_STOUT`) | Resistance I, 60 s | Resistance II, 90 s (Q5). It's code, not data, so it goes in the port and in 3.2's list of deviations |
+| Pizza (`pizza`) | pattern `f / ptp / www` | `f / ptp / " d "`: 3 wheat -> 1 `i.dough`. [cooking.md](cooking.md) plans more dough and 8 slices later |
+| Ham and Cheese Sandwich (`ham_and_cheese_sandwich`) | 2 bread, smoked ham, flaxen wedge -> 2 | See below |
+| Quiche (`quiche_from_bacon`, `quiche_from_mushroom`) | shaped, mushroom one uses `cabbage_leaf` | Mushroom quiche takes `cabbage_leaf` or `i.cabbage` (whole). Add sequenced assembly, below |
+
+**Ham and Cheese Sandwich** (my reading; Q6):
+
+| Variant | Inputs | Output |
+|---|---|---|
+| Basic, shapeless | 2 bread slices (or 2 bread), any `i.cooked_pork` (`#forge:cooked_pork`: porkchop, bacon), flaxen wedge | 1 |
+| Smoked ham, shapeless (upstream, kept) | 2 bread or 2 bread slices, `i.smoked_ham`, flaxen wedge | 2 |
+| Sequenced assembly, cooked pork | `i.bread_slice` base; deploy cooked pork, flaxen wedge, bread slice | 2 |
+| Sequenced assembly, smoked ham | `i.bread_slice` base; deploy smoked ham, flaxen wedge, flaxen wedge, bread slice | 4 |
+
+- Note on slices: a sandwich side is one `moredelight:bread_slice`. A whole bread is also allowed, but it costs more
+  for the same result.
+- A smoked ham cuts into 2 cooked porkchops, so the ham recipes give double.
+
+**Sequenced assembly** (Create deployer, like `grilled_salmon` in `cooking.js`). Each needs a row in
+`startup_scripts/changes/transition_items.js`:
+- `ham_and_cheese_sandwich` (texture `brewinandchewin:item/ham_and_cheese_sandwich`)
+- `quiche_bacon` and `quiche_mushroom` (texture `brewinandchewin:item/quiche`)
+
+The quiche steps:
+- Base: `farmersdelight:pie_crust`.
+- Spout 250 mB of milk (`createFilling` with `f.milk`).
+- Deploy 2 eggs, a cheese wedge, cabbage or a cabbage leaf, then bacon or mushrooms.
+- Result: 1 quiche.
+
+This also ticks the "quiche: sequenced assembly" item in [cooking.md](cooking.md).
+
+- **Tests:** AL-57 to AL-62.
+- **Outcome:**
+  - [alcohol.js](../kubejs/server_scripts/cooking/alcohol.js) holds the Brewin changes; `R.bncFermenting` and
+    `R.createEmptying` are in `neoCraftHelper.js`. Pack ids are `creativeengineering:fermenting/<upstream name>`.
+    Base fluids are the exact fluids (`f.water`, `f.milk`, `f.honey`, `f.vodka`...), not tags.
+  - Quiche assembly order changed: the bacon or mushrooms go on first, then milk, eggs, cheese, cabbage. With milk first
+    both recipes start with the same step, and Create only ever picks one of them.
+  - Pizza uses `i.dough` (`#forge:dough/wheat`). The ham and cheese "side" is one ingredient that takes a bread slice or
+    a bread.
+  - A node dry run of `alcohol.js` against the real `neoCraftHelper.js` produced the expected recipe JSON.
+
+### 8.7 Fluids
+
+- **Create spout and drain (pack):**
+  - `R.createFilling` exists; add `R.createEmptying(outputs, input, e, idOverride)` to `neoCraftHelper.js`.
+  - In `alcohol.js`, loop over the 16 drinks. Spout: tankard + 250 mB -> drink. Drain: drink -> tankard + 250 mB.
+  - Leave out the 2 cheese fluids (they can't be poured back in 4.5.0 either).
+- **Pumping in and out (port):**
+  - The keg already gives its tank to every side as a plain Forge `FluidTank` (`KegBlockEntity#getCapability`), so
+    pipes, pumps and IE pipes fill and drain it today (AL-05).
+  - What's missing is a rule. A pump can pull the water you are brewing with out mid-ferment, and a pipe can push in
+    any fluid.
+  - **Plan:** wrap the capability.
+    - Fill only fluids that some fermenting or pouring recipe uses.
+    - Drain only while nothing is fermenting (progress 0), so a pump takes finished drinks, not the base.
+  - **Config:** `brewinandchewin-common.toml` `[keg] pipeDrainOnlyWhenIdle = true`. False gives 4.5.0's
+    drain-any-time.
+  - **Tooltip:** the keg item, and the tank tooltip in the keg GUI, add a line saying "Pipes can only drain it while
+    it isn't fermenting". The line only shows while the setting is on.
+    - It lives in the port (`KegItem#appendHoverText`, `KegTooltip`), because it reads the config. Mention it in
+      [tooltips.md](tooltips.md).
+- **Tests:** AL-63, AL-64.
+- **Outcome:**
+  - Spout and drain: 32 recipes (`creativeengineering:createfilling/<drink>`, `createemptying/<drink>`).
+  - Pipe rule: `KegPipeFluidHandlerForge` wraps the tank for every side. Fill: only fluids a pouring recipe pours or a
+    fermenting recipe takes as its base. Drain, while `pipeDrainOnlyWhenIdle` is on (default): only while the keg isn't
+    fermenting, meaning progress is 0 and the last recipe can't run with what's in the keg. So a keg holding water but
+    no ingredients still gives its water up; once the ingredients are in, it doesn't. The keg GUI, the fluid slot and
+    in-world pouring use the tank directly.
+  - The tooltip line is `brewinandchewin.tooltip.keg.pipe_drain_idle`, added to `en_us.json` by `port_resources.py`.
+
+### 8.8 Mead
+
+- Vinery's mead is removed from that port (B7.6), with no conversion (your rule, 2026-10-18: neither port keeps old
+  items working across versions). Brewin's mead (8.6) is the only one.
+- **Test:** VB-54.
+
+### 8.9 Questions for you
+
+| # | Question | My default |
+|---|---|---|
+| Q1 | The black and purple texture: which screen is "plating"? The keg GUI, the JEI Fermenting page (the pouring row), or the recipe book? | Still open: the 2.0 jar is out of `mods/`; look again with the `-02` jar |
+| Q2 | Keg fluid slot: two slots (in / empty out, 2.0 style) or one slot where the empty container stays put? | BUILT with the default: two slots |
+| Q3 | "Placeable on a coaster": items with a coaster model plus wines and juices, or every item? | BUILT with the default: modelled items plus Vinery and Farmer's Respite drinks |
+| Q4 | Pierogi: drop both pack recipes, including the heatless shapeless one? [cooking.md](cooking.md) likes heatless shapeless meals | BUILT with the default: both dropped |
+| Q5 | Steel Toe Stout boost size | BUILT with the default: Resistance II, 90 s |
+| Q6 | Ham and cheese | DECIDED 2026-10-18: as in the 8.6 table |
+| Q7 | Keg pipe rule | DECIDED 2026-10-18: drain only while idle, as a setting (on by default), with a tooltip line (8.7) |
 
 ## 9. History
 
@@ -721,6 +950,175 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
   screen, recipe book, HUD, camera, scrambling, coaster renderer, JEI, remaps, mixins; `tools/port_resources.py` for
   assets and data, `tools/check_data.py` (0 problems). CCK's keg mixin checked against the bytecode. Not booted, not in
   `mods/`; recipe-book and JEI fluid handling not ported. Added AL-42 to AL-48.
+- 2026-10-18: planned your "changes to make" list (8): JEI effect lines on the keg's fluid output, cask / crate and
+  coaster tooltips, a 2.0-style keg fluid slot, jams removed from the port, eleven recipe tweaks through a new
+  `R.bncFermenting` helper, sequenced assembly for the sandwich and quiche, Create spout / drain through a new
+  `R.createEmptying`, and a keg pipe rule. Found while planning: the 2.0 jar is still in `mods/` beside the port, the
+  port's cooking-pot recipes lack `cookingtime` (KubeJS can't parse them), and `#minecraft:undead` fails to load.
+  Questions Q1 to Q7 (8.9). AL-49 to AL-65 added.
+- 2026-10-18: built section 8. Port `-02` (version bumped because `-01` shipped in 1.0.7): JEI / keg / keg item effect
+  lines, the fluid slot pair with slot rules for menus and hoppers, jams removed, Steel Toe Stout Resistance II 90 s,
+  the pipe rule and its setting, `cookingtime` in the cooking-pot files, the undead tag. Pack: `alcohol.js` (7 fermenting
+  changes, pierogi, pizza, ham and cheese x4, quiche + 2 assemblies, 32 spout / drain), `R.bncFermenting`,
+  `R.createEmptying`, `#creativeengineering:metal_dusts`, cask / crate tooltips, the coaster placeable tag, and most 3.4
+  rows. Not installed in `mods/` (game running); not tested in game.
+- 2026-10-18 late: 10.8: King Danis Wine removed (a second Lilitu), Praetorian tagged a small bottle and shrunk to fit
+  the racks that lay bottles down; B7.11 settled. VB-59 updated, VB-66 added.
+- 2026-10-18 late: 10.5 to 10.7: Vinery banner crafting recipe, WTHIT stem lines (variety, ripe, leaves pending), and
+  the effect-description check (nothing to reuse). VB-64, VB-65 added.
+- 2026-10-18 late: section 10 built. All advancements removed (patcherMod switch), keg JEI [+] fills and empties
+  the tank (`KegTransfer`), Intoxicated AppleSkin wobble and Tipsy camera drift, D3 decided. AL-67 to AL-72 added.
+- 2026-10-18 evening: `-02` installed in `mods/` (replacing `-01`) and `server_mods/` regenerated. `item_dict.js` checked
+  against the registered items: every port item is mapped, the jams were already gone.
+- 2026-10-19: `-02` STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) AL); its removals delete both `-01` and
+  `BrewinAndChewin-1.19-2.0.jar`. Found from the server's 1.0.7 debug log: FML had picked `-01` over the 2.0 jar
+  ("selecting most recent based on version data"), so the live world has run the port since 1.0.7 and had the jams;
+  1.0.8 removes them there. Next build bumped to `-03`.
+
+## 10. Third list (2026-10-18 late, BUILT, not tested in game)
+
+Your list, covering both ports and the time master ([time.md](time.md) 3.9). Jars in `mods/`: Brewin' `-02`, Vinery
+`-02`, patcherMod 1.0.8. None of these has shipped, so they were rebuilt under the same names, and the
+`jar_archive/` copies were replaced by hand.
+
+### 10.1 Decisions
+
+- **D3 (Vinery): DECIDED, keep `trippy`.** It stays registered; the echo "discombobulate" tool effect uses it.
+- **T1, T3, T4, T7 (time): DECIDED, the recommendations** ([time.md](time.md) section 4).
+
+### 10.2 Advancements: all of them are gone
+
+- **What:** `[advancements] enabled = false` in `creativeengineering-common.toml`, patcherMod
+  `ServerAdvancementManagerMixin`. The advancement JSONs (12,940 across vanilla, mods and datapacks) are swapped for an
+  empty map before the tree is built. So nothing shows in the advancement screen, toasts, is awarded or rewards.
+  `/reload` applies a change; `true` brings them back.
+- **Vinery:** `vintage_perfection` is also left out of the upstream layer for good (it checked 1.3.10 NBT the port's
+  wines never carry).
+- **Nothing else needs them:** no FTB Quests task, KubeJS script or port code depends on an advancement existing. Brewin's
+  "temperature block near a keg" award checks for null.
+- **Rewards that went with them**, each now without a source unless you give it one:
+
+| Reward | From | Other source |
+|---|---|---|
+| Vinery banner x2 | `vinery:main/wine_somelier` | crafting recipe since 2026-10-18 (10.5) |
+| Lootr trophy | `lootr:100loot` | none |
+| MCA books (romance, family, infection, death, blueprint, rose gold, supporters) | MCA advancements | some in MCA villager trades / loot |
+| Yuushya guide book on first join | `yuushya:grant_book_on_join` | crafting |
+| IE rare / masterwork shader grab bags; IP coker reward | IE / IP advancements | IE loot chests |
+| Lightman's Currency chocolate coins (event) | LC event advancements | none |
+
+### 10.3 Keg JEI [+]: fills and empties the tank (port)
+
+- **Was:** JEI's basic handler moved the items only.
+- **Now:** `KegTransfer` (common) plans the whole move on copies of the grid, the player inventory and a scratch tank:
+  1. The grid goes back to the inventory.
+  2. One set of ingredients goes in; shift-click puts in as many sets as fit.
+  3. A tank holding a fluid the recipe doesn't use is drained into empty containers from the inventory.
+  4. The base fluid is poured in from filled containers, up to one set (or as many as fit). It never goes past a
+     whole multiple of the recipe's amount: the keg only ferments whole multiples.
+  5. Filled and emptied containers go back to the inventory.
+
+  It uses the keg's own one-item steps (`KegBlockEntity.fillFrom` / `pourInto` / `sourceFluid`), so pouring recipes
+  and plain Forge containers (buckets) both work.
+- **Client and server:** `integration/jei/FermentingTransfer` runs the plan to set the button state, with upstream's
+  messages: temperature, missing items or fluid (red slots), can't empty, not enough fluid, inventory full. The server
+  runs the plan again on its own state and applies it in one go (`JEITransferKegRecipeServerboundPacket` carries only
+  the recipe id and shift). Network protocol is now `4.5.0-2`.
+- **Changes from upstream:**
+  - Upstream sends the client's slot plan and can stop halfway. Here the move is all or nothing.
+  - The vanilla recipe book side (`KegPlaceRecipe` / `KegStackedContents`) isn't ported: the pack has no vanilla
+    recipe book (your call).
+- **Tests:** AL-67 to AL-70.
+
+### 10.4 Tipsy and Intoxicated visuals (port)
+
+- **Intoxication:** AppleSkin's hunger overlay wobbles, with upstream's numbers. AppleSkin 2.4.2 has no offsets cache,
+  so `HUDOverlayHandlerMixin` (`@Pseudo`) adds the wobble when `generateHungerBarOffsets` returns. Client setting
+  `intoxicationFoodOverlay`, as upstream.
+- **Tipsy:** the positional drift on top of the spin. Upstream turns the view around a point half a block off the eye
+  and adds a slow slide. `TipsyCameraDriftMixin` moves the camera by that translation at the end of `Camera.setup`,
+  using the same clock, strength and Distortion Effects scale as the spin. Up to about 0.2 blocks at Tipsy XI. It is
+  the camera that moves, so at that level it can peek a little way into a wall you stand against.
+- The 3.5 "not ported" table is now empty, apart from the vanilla recipe book.
+- **Tests:** AL-71, AL-72.
+
+### 10.5 Vinery banner recipe (pack)
+
+- **Recipe:** shaped, `kubejs/server_scripts/cooking/alcohol.js` (`creativeengineering:shaped/vinery_standard`): any
+  banner (`#minecraft:banners`) in the middle, a nether star below it, the 7 most complex wines around them. A wine's
+  age doesn't matter (item ingredients ignore NBT).
+
+  ```
+  Jellie   Mojang Noir  Aegis
+  Apple    banner       Cristel
+  Lilitu   nether star  Chenet
+  ```
+- **"Most complex", scored per wine:** 1 for the fermentation step; 1 for general juice, 2 for biome juice or apple juice
+  (two press steps); 1 per plain ingredient, 2 per Nether or End ingredient (blaze rod, chorus fruit, glowstone); the
+  full score of any wine or apple juice used as an ingredient.
+
+| Wine | Score | Why |
+|---|---|---|
+| Jellie | 18 | made from Apple Wine, Chenet and Bolvar |
+| Bottle Mojang Noir | 7 | Red Wine + honey + cherry |
+| Aegis | 6 | taiga juice, 3 ingredients |
+| Apple Wine | 6 | apple juice twice (press chain) |
+| Cristel | 6 | 3 ingredients, one a blaze rod |
+| Lilitu | 5 | savanna juice; first of seven at 5 by juice used (14) |
+| Chenet | 5 | jungle juice; tied with King Danis at 12 juice. Chenet kept: a 1.5.5 wine, while King Danis is a 1.3.10 keeper on hold (B7.11) |
+
+- Upstream's smithing recipe (banner + netherite ingot -> 2 banners) is still there, minus the 1.20 template.
+- The banner tooltip's first line now reads "Crafted from the seven finest wines" (port override).
+- **Test:** VB-64.
+
+### 10.6 WTHIT on grapevine stems and lattices (port)
+
+- `VineryWthitClient.stem`, for every `StemBlock` (grapevine stem, the ten lattices, 1.3.10's lattice stem). From the
+  block state, so no server data:
+  - **"Growing: Taiga Red Grapes"**: the variety, named by its grape item;
+  - **"Ripe: ready to pick"** at the last stage;
+  - **"Grapevine leaves still to grow"** while a grapevine stem's leaves are pending (the B4.6 gap);
+  - **"Nothing planted"** on an empty stem or lattice.
+- Growth % stays patcherMod's crop line (`crop_growth.json` already lists the stem and all ten lattices), so nothing
+  shows twice. Toggle: WTHIT config, Vinery page, "Grapevine stems and lattices".
+- **Test:** VB-65.
+
+### 10.7 Effect descriptions: nothing to reuse
+
+- The pack has one effect-description mod, **JEED** 2.1.4. The other one, **Enchantment Descriptions**, covers
+  enchantments only, and neither port adds any.
+- JEED's bundled text has no `vinery` or `brewinandchewin` keys.
+- Every effect the ports register already has a description:
+  - the 12 Vinery effects from the 1.5.5 jar's lang (read through the upstream layer);
+  - `trippy` from the port's own lang;
+  - the 4 Brewin' effects from 4.5.0's lang.
+- The texts match what the port's effects do (checked: frosty armor, jellie, creeper). The pack's overlay
+  (`kubejs/assets/creativeengineering/lang`) has no leftover keys for either mod, and `tools/gen_effect_descriptions.py`
+  already reads the 1.5.5 jar.
+- **Where JEED could help later:** B7.4 (pinned). JEED's bundle describes many food-mod effects, which the
+  `wine_effect_candidates.py` list would read.
+
+### 10.8 King Danis out, Praetorian into every rack (port)
+
+- **King Danis Wine removed.** 1.3.10 named it "Miss Lilitus Wine", and its model is Lilitu's exactly (same 15
+  elements, same bounds). So it was a second Lilitu, and the 1.5.5 Lilitu already places in racks correctly.
+  - Removed: block, item, storage lists, render layer, effect default, keeper data (`REMOVED` in the upstream layer),
+    `data/vinery/recipes/port/king_danis_wine.json`.
+  - Pack side: `vinery-common.toml` effects entry, `i.king_danis_wine`, and the generated placeable, stack-size and
+    food-type lists.
+  - No conversion (your rule).
+- **Praetorian: the asset isn't misplaced.** Its 1.3.10 model is a large bottle, 6 x 18 px, like Stal Wine's. The
+  1.5.5 small template is 4 x 15 px.
+  - It fit no 1.5.5 rack because it was in neither bottle tag. 1.3.10 had no such tags, and its own racks took any wine.
+  - **Done:**
+    - The upstream layer adds it to `#vinery:small_bottle`. So it fits the small rack, the Wine Rack and the big rack,
+      the wine box, and stacks 2 per placed block, as in 1.3.10.
+    - `BottleRenderer` (the racks that lay bottles down) shrinks a BIG-size bottle to 15/18 about its own axis, so it
+      lies in its slot without poking out. Praetorian is the only BIG bottle in the small tag, so nothing else changes.
+    - The big rack stands it upright at its usual 0.8, where an 18 px bottle already fits (Stal Wine).
+  - The shrink is done in code, not with an edited copy of the model (the model is upstream's, All Rights Reserved).
+- B7.11 is settled by this (VQ3: small racks).
+- **Tests:** VB-59 (updated), VB-66.
 
 # Part B: Let's Do Vinery (Backported Vinery)
 
@@ -735,12 +1133,13 @@ resource donors, B4.8, feasible); not built**
 | Migration issues (B3) | 75 issues listed, grouped by kind |
 | License (B3.6) | code MIT, resources All Rights Reserved (Vinery 2026-10-14, Foundation 2026-10-18: same split). Satisfy refused redistribution of assets and features (B3.6) |
 | Upstream jars as resource donors (B4.8) | CHOSEN 2026-10-18 (D13 B). Feasibility checked 2026-10-18: works; the port reads assets/data from the unmodified 1.5.5 and 1.3.10 jars at runtime. Delivery of the jars (D14) open |
-| Decisions (B5) | DECIDED 2026-10-14: D1 keep `cherry_*`, D2 keep every 1.3.10 block and add the new ones, D6 WTHIT, D11 winemaker set damage by config. Aging revamped to a playtime clock (B4.5). 2026-10-18: D13 option B (B4.8). D14 decided 2026-10-18: payload now, download on publish. Worldgen (user, 2026-10-18): 1.20+ worldgen types become the nearest 1.19.2 vanilla type, nothing backported. Still open, built with the recommendation: D3, D4, D5 (non-aging numbers), D7 to D10, D12 |
-| Wine aging (B4.5) | DESIGNED 2026-10-14: vintage clock on real playtime, lengths unchanged for now (16 days per year, 2 years per level) |
-| Port (`development/backportedVinery`) | BUILT 2026-10-18, never booted: Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, upstream-pack layer, WTHIT lines; status and gaps in B4.9 |
-| Pack-side changes (B4.4) | DONE 2026-10-18 except the jar swap in `mods/` (the game was running) and the I25 tool reruns; per-item outcome under B4.4 |
+| Decisions (B5) | DECIDED 2026-10-18: D3 keep `trippy` (section 10.1). DECIDED 2026-10-14: D1 keep `cherry_*`, D2 keep every 1.3.10 block and add the new ones, D6 WTHIT, D11 winemaker set damage by config. Aging revamped to a playtime clock (B4.5). 2026-10-18: D13 option B (B4.8). D14 decided 2026-10-18: payload now, download on publish. Worldgen (user, 2026-10-18): 1.20+ worldgen types become the nearest 1.19.2 vanilla type, nothing backported. Still open, built with the recommendation: D4, D5 (non-aging numbers), D7 to D10, D12 |
+| Wine aging (B4.5) | DESIGNED 2026-10-14: vintage clock on real playtime, lengths unchanged for now (16 days per year, 2 years per level). 2026-10-18: your B7 list changes this to months on the sun clock (sleep ages wine), x2.5 in the dark: [time.md](time.md) 3.7 |
+| Port (`development/backportedVinery`) | BUILT 2026-10-18. `-01` DEPLOYED with 1.0.7 (the first staging crashed the server on the grass slab, fixed under the same name, [fixes_compat.md](fixes_compat.md) 2.23); `-02` STAGED for 1.0.8, loaded in single player 2026-10-19: Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, upstream-pack layer, WTHIT lines; status and gaps in B4.9 |
+| Pack-side changes (B4.4) | DONE 2026-10-18 (jar swap shipped in 1.0.7) except the I25 tool reruns; per-item outcome under B4.4 |
 | Deploy (D14) | `tools/build_deploy.py`: `vinery_upstream/` category (both sides) + sha1 check against the port's pins; `backportedVinery` in IN_TREE_MODS; mod_sides row swapped, doapi row removed |
-| In-game tests | VB-01 to VB-47 drafted (B7); in-game testing is the user's |
+| Changes to make (B7) | BUILT 2026-10-18, not tested in game: everything but B7.4 (pinned) and B7.11 (on hold), plus the port side of [time.md](time.md) 3.7. Port `-02` is in `mods/`. Per-item outcome in B7 "Build status" |
+| In-game tests | VB-01 to VB-60 drafted (B8); in-game testing is the user's |
 
 - **Source jars:**
   - Ours: `mods/letsdo-vinery-forge-1.3.10.jar` (Forge 1.19.2, needs `doapi-1.1.0b`). Behaviour reference:
@@ -1326,10 +1725,15 @@ Rows shared with Part A 3.1 (data components, codecs, packets, `c:` tags) apply 
 | I23 | no change: the Vinery lines in tooltips.js are commented-out placeholders |
 | I24 | `tools/placeable_catalog.py` knows the port's `DrinkBlockItem` (sneak to place) |
 | I25 | NOT DONE: rerun the generators and `/dumpall` after the jar swap |
-| I26 | mod_sides row swapped, doapi row removed (nothing else needs doapi: scanned every mods.toml); `vinery_upstream/` deploy category. NOT DONE: the swap in `mods/` (run `./gradlew :patcherMod:installToMods :backportedVinery:installToMods` with the game closed) |
+| I26 | mod_sides row swapped, doapi row removed (nothing else needs doapi: scanned every mods.toml); `vinery_upstream/` deploy category. Swap in `mods/` DONE 2026-10-18 (port `-02`, patcherMod 1.0.8) |
 | Config | none to write: the port's spec defaults are the pack values (aging 16 days per year, 2 years per level, 28.2 h per year; `[winemaker_set]` as today; `trader.spawnChance` 0). Forge writes `config/vinery-common.toml` on first boot. 1.3.10's `config/vinery/config.json5` becomes unused |
 
 ### B4.5 Wine aging revamp: playtime clock (decided 2026-10-14)
+
+**2026-10-18: partly replaced.** Your B7 list asks for sleeping to age wine, ages in months (one Serene Seasons
+sub-season each), +1 level every 3 months and x2.5 in the dark. The plan is in [time.md](time.md) 3.7. What stays
+from this section: the clock is a counter in the world's saved data, ages re-scale when the settings change, and
+clients get the clock in `VintageClockPacket`.
 
 **Goal:**
 - A wine's age is measured against real playtime, shown in in-game style days and years.
@@ -1592,7 +1996,7 @@ booted yet.
   both files (DEBUG line only) and `placed_feature/tree_apple` pointed at nothing. 1.19.2's `TreeConfiguration` has no
   `sapling_provider`, so `convertWorldgen` now strips it from tree configs. Dropped worldgen / biome-modifier files
   now log at WARN. The other 5 dropped files are the expected cherry-wood and hanging-sign recipes.
-- **Not done yet:** a world join and the VB- tests (the user's); I25 reruns; stem "leaves pending" line.
+- **Not done yet:** a world join and the VB- tests (the user's); I25 reruns. Stem "leaves pending" line: built 2026-10-18 (10.6).
 
 ## B5. Decisions (recommendation first; DECIDED ones say so)
 
@@ -1677,7 +2081,7 @@ The decision goes further than the recommendation below: blocks that have a 1.5.
 - **Alternative:** follow 1.5.5 and drop them. Placed blocks disappear, the quests need new items, and the B&C keg
   loses two heat sources.
 
-### B5 D3. Removed effects
+### B5 D3. Removed effects (DECIDED 2026-10-18: keep `trippy`, section 10.1)
 
 - **Recommended:**
   - Keep `trippy` registered. The pack's echo "discombobulate" uses it (I16), and it's only a client shader.
@@ -1758,36 +2162,233 @@ The decision goes further than the recommendation below: blocks that have a 1.5.
 - A scratch-server boot on a copy of a world with 1.3.10 Vinery blocks placed (scratch-server memory). Grep the log
   for missing mappings and unknown block entities.
 
-## B7 Changes to make
+## B7 Changes to make (planned 2026-10-18)
 
-- jei
-  - add input fluid item in input slot for fermentation barrel
-  - expand fluid bar hover text to cover entire bar even when partially full on fermentation barrel
-- apple press
-  - only allow valid items in each 2nd input slot (apple, honeycomb for left, wine bottle, bottle for right)
-- merge effects
-  - luck
-  - resistance
-  - health effect?
-- shuffle wine effects, integrate w/ fruits delight and other existing mod effects
-  - fall back to default (alt for removed/merged effects) when other mods not added
-- add providers to wine effects
-- remove mead, brewin covers mead
-- change completion banner effect to health boost, configurable
-- merge vinery calendar w/ serene seasons
-  - ensure season, custom day length, and vinery age all work off the same scale. set all time values in one file sleeping should speed up wine age. 
-  - rename wine 'year' description to month everywhere
-  - +1 level every 2 months, 2.5x age in the dark
+Your lists from 2026-10-18, each item with a plan. **Port** means `development/backportedVinery` (rebuild the jar);
+**pack** means KubeJS / tags. Upstream assets and data stay untouched (D13 B). Where wording changes, it goes in the
+port's **own** lang file, which is our text and layers above the donor jars (B4.8). Tests: VB-48 to VB-60 (B8); the
+time items have their own tests in [time.md](time.md). Questions for you: B7.12.
+
+**No conversions (your rule, 2026-10-18):** both ports are in development, so nothing in this list keeps old items,
+effects or ids working across versions. That covers old Vinery to new Vinery, and Vinery to Brewin. Removed things
+are simply removed.
+
+### B7 Build status (2026-10-18, not tested in game)
+
+Port `backportedVinery-1.5.5-ce-19.2-02.jar` is built and in `mods/`, and `server_mods/` is regenerated. The version
+went up because `-01` shipped in 1.0.7, and a rebuild under the same name wouldn't reach clients.
+`config/vinery-common.toml` has the new keys and values.
+
+| Item | Outcome |
+|---|---|
+| B7.1 JEI | Built. The Cask page cycles the recipe's juice bottles in slot 0 with the bottles needed (`JuiceUtil.juiceStacks`). `FermentationBarrelGui.isOverJuiceBar` is the hover box for the screen and JEI: the gauge plus its frame. The Wine Aging text wraps to 146 px in `0x404040` with no shadow, and the page height comes from the line count. **Also fixed:** the JEI transfer handler paired the page's slots in the wrong order, so ingredient 1 went to the juice slot. It now lists juice, the ingredients, then the bottle (`FermentationTransferInfo`). Transfer needs the juice bottles in your inventory |
+| B7.2 Press slots | Built. `ApplePressBlockEntity.isValidForSlot` backs the menu slots (`PressSlot`), `canPlaceItem`, hoppers and shift-click. **Deviations:** slot 1 takes any fermenting-recipe input; today that is apple mash and honeycomb, the same set as "mashing outputs that fermenting takes". There is no cache: it asks the recipe manager, and there are 2 recipes per type. Honey's glass bottle needed a recipe change. Fermenting recipes now carry a `bottle` ingredient (upstream's `wine_bottle.required` still means a wine bottle), and the upstream-pack layer gives `apple_fermenting/honey_bottle` a glass bottle |
+| B7.3 Merged effects | Built. `luck_effect`, `resistance_effect` and `health_effect` are no longer registered (`ResistanceEffect.java` deleted). Stal Wine defaults to `minecraft:health_boost` |
+| B7.4 Effect reshuffle | PINNED, not built |
+| B7.5 JEED providers | Built. Port: `WineEffects.all()` (wine -> effect) and `winesByEffect()` (effect id -> wine ids, strings only, for Rhino). Pack: `R.jeedProvider(effect, providers, e, idOverride)` in NCH, called once per effect at the end of `kubejs/server_scripts/cooking/alcohol.js` (`creativeengineering:jeed/vinery_<effect>`). NCH is a startup script, so it needs a game restart, not just `/reload` |
+| B7.6 Mead out | Built. Block, item, storage lists, render layer and effect default are gone. The upstream-pack layer has a `REMOVED` set: tag entries naming `vinery:mead` are dropped, and so are advancement criteria whose item list it empties. **Found:** `wine_somelier` (the advancement that gives the banner) and `the_noble_drop` list mead. The old "leave out the whole file" rule would have dropped both, banner reward included. Now mead is taken out of their lists: 25 -> 24 criteria (checked headless against the 1.5.5 file). Villager trades never had it |
+| B7.7 Banner | Built. `[banner] effect / amplifier / radius / durationSeconds / refreshBelowSeconds` (Health Boost II, 8, 60, 10). Below the threshold the running effect is extended in place with `MobEffectInstance.update` plus a `ClientboundUpdateMobEffectPacket`, never re-added, so the extra hearts aren't clamped. The tooltip line comes from the settings (`tooltip.foundation.banner.effect`) |
+| B7.8 Time | patcherMod side BUILT too (patcherMod 1.0.8, [time.md](time.md) 3.8): the `[time]` master pushes `daysPerMonth`, the clock, the cellar value and the rest into `vinery-common.toml`; Serene Seasons calendar tooltip; "7:30 pm" clock. Port side built: `[wine] daysPerMonth` 8, `monthsPerEffectLevel` 3, `durationPerMonth` 200, `cellarAgingMultiplier` 2.5; `[aging] clockMode` WORLD_TIME, a new `dayUnit` DAYTIME (24000 clock units a day, forced on WORLD_TIME), `playtimeHoursPerMonth`. Real-time text divides by the measured day-time pace (`Snapshot.realTicks`). "Month" in the tooltip, `/wine` (literal `months`), JEI, WTHIT and the upstream keys. The Vinery calendar is removed (block, item, classes, keeper data; `i.calendar` / `i.mead` out of `item_dict.js` and the generated food / stack JSONs) |
+| B7.9 Cask | Built. **Deviation:** the plan put our wording in the port's `assets/vinery/lang/en_us.json`. The jar can't carry upstream's path (`checkNoUpstreamResources`), and the order between the mod's own pack and the upstream pack isn't guaranteed. So the lines live in `src/main/resources/vinery_port/upstream_lang/en_us.json`, and the upstream-pack layer applies them on top of the merged upstream lang (checked headless). Resource packs still override. `dark_cherry_barrel` and 1.3.10's `barrel` keep their names (VQ2) |
+| B7.10 Apple wine | Built. `BottleSize.SMALL`. The upstream-pack layer moves `vinery:apple_wine` from `large_bottle` to `small_bottle`, in place of an own tag file (same reason as B7.9). Its block still holds 3 |
+| B7.11 Praetorian | ON HOLD (your call), not built |
+
+### B7.1 JEI (port)
+
+- **Aging Barrel page, juice item in the input slot:**
+  - **Now:** the page shows the juice only as a gauge (`VineryJEIPlugin.buildSlotsFromRecipe`).
+  - **Plan:**
+    - Add an INPUT slot where the barrel's juice slot (0) sits.
+    - It cycles the juice bottles of the recipe's juice type (red / white per region, apple; from `JuiceUtil`).
+    - The count is the bottles needed: units / `maxFluidIncrease` (25), rounded up.
+    - Looking up the uses of a juice bottle then lists the wines it makes.
+- **Aging Barrel page, hover text over the whole bar:**
+  - JEI's hover check (`FermentationBarrelCategory#isMouseOverFluidArea`) is a 2 x 10 px box around x 56.
+  - The barrel screen's check (`FermentationBarrelGui`) spans the width but only from 5 above to 10 below
+    `FLUID_Y`.
+  - **Plan:** both use the gauge's full rectangle, empty part included, so a quarter-full bar shows its tooltip
+    anywhere on the bar.
+- **Wine Aging page text:**
+  - **Now:** `WineAgingCategory#draw` writes three single lines centred on a 150 px page (`drawCentered`). They run
+    past the grey background, in white.
+  - **Plan:**
+    - Wrap each line to the page width (`font.split`).
+    - Draw in dark grey with no shadow, like JEI's own text (`0x404040`, decided 2026-10-18).
+    - Size the page height from the number of wrapped lines.
+- **Tests:** VB-48, VB-49, VB-60.
+
+### B7.2 Apple Press: valid items only (port)
+
+- **Now:**
+  - The left slot of the second stage (slot 1) accepts nothing: `canPlaceItem` returns false for it.
+  - The right slot (2) takes only a wine bottle, so honey's glass bottle can't go in, by hand or by hopper
+    (`canPlaceItemThroughFace`).
+  - The menu's slots don't all ask the block entity, so the GUI and hoppers disagree.
+- **Plan:** one rule, built from the recipes and cached per reload:
+  - Slot 0 takes the input of a mashing recipe.
+  - Slot 1 (left) takes the **intermediates**: whatever a mashing recipe outputs and a fermenting recipe takes first.
+    That is apple mash and honeycomb.
+  - Slot 2 (right) takes a fermenting recipe's second ingredient: wine bottle and glass bottle.
+  - The same rule backs the menu's slot classes (`mayPlace`), `canPlaceItem`, `canPlaceItemThroughFace` and
+    shift-click (`quickMoveStack`).
+- **Test:** VB-50.
+
+### B7.3 Merge duplicate effects (port)
+
+| Vinery effect | What it does | Merged into | Used by |
+|---|---|---|---|
+| `luck_effect` | +2 luck | `minecraft:luck` | no wine |
+| `resistance_effect` | +0.2 knockback resistance, +2 armor toughness | `minecraft:resistance` | no wine |
+| `health_effect` | +4 max health | `minecraft:health_boost` (Health Boost I is also +4) | Stal Wine |
+
+- **Plan:** stop registering the three (`MobEffectRegistry`), point Stal Wine's default at `minecraft:health_boost`,
+  and drop their JEED description keys.
+- No remap of the old ids (no-conversions rule).
+- **Test:** VB-51.
+
+### B7.4 Wine effect reshuffle: PINNED (future plan)
+
+- Parked by you on 2026-10-18; nothing here is built in this round.
+- **When it comes back:**
+  - Wines may apply **two** effects. The `[wine] effects` entry then takes a list of effects.
+  - Food-mod effects (Fruits Delight's 18, Neapolitan, Farmer's Delight, Farmer's Respite, Alex's Mobs and others)
+    become candidates, each with a vanilla or Vinery fallback for when its mod is missing.
+  - A `tools/wine_effect_candidates.py` lists every effect with its JEED description, to pick from.
+- Today's one-effect list stays as is, apart from B7.3 and B7.6.
+
+### B7.5 JEED providers for wine effects (pack, small port accessor)
+
+- JEED lists which items give an effect from `jeed:effect_provider` recipes: `{effect, providers: [items or tags]}`
+  (format from its jar, `data/jeed/recipes/*.json`).
+- Wine effects come from config, so the recipes are made at load time, not written as files:
+  - **Port:** `WineEffects.all()` returns the parsed map (wine id -> effect). When the B7.4 reshuffle lands, it maps
+    to a list.
+  - **Pack:** a new `R.jeedProvider(effect, providers, e, idOverride)` in NCH. `alcohol.js` calls it once per effect
+    with every wine that gives it, reading the map with `Java.loadClass('net.satisfy.vinery.core.wine.WineEffects')`.
+  - Changing the config and running `/reload` rebuilds them.
+- **Optional, same helper:** Brewin's drinks (Tipsy, Intoxication, Raging, Sweet Heart) and the pack's own effects.
+  This ties in with "merge backported effect descriptions w/ existing jeed mods" in `todo/change_scratchpad.md`.
+- **Test:** VB-53.
+
+### B7.6 Remove Vinery's mead from the port (Brewin's covers it)
+
+- **Now:** the port registers `vinery:mead` (`ObjectRegistry.MEAD` / `MEAD_ITEM`). It is also listed in
+  `StorageTypeRegistry` (twice), the client render layers (`VineryClientForge`) and the `WineEffects` defaults
+  (Haste). Its barrel recipe comes from the 1.5.5 jar (`wine_fermentation/mead`).
+- **Plan (port):**
+  - Unregister the block and the item, and drop it from those lists and the effect defaults.
+  - The upstream-pack layer leaves out every data file that names `vinery:mead`: the barrel recipe, its recipe
+    advancement, and any tag or loot entry. That is the same mechanism that already leaves out 1.20+ content.
+  - Check the `[villager]` trade lists for it too.
+- No conversion to Brewin's mead; old bottles just disappear (no-conversions rule).
+- **Test:** VB-54.
+
+### B7.7 Banner: Health Boost II for 60 s (port)
+
+- **Now:**
+  - The Vinery banner gives Regeneration II within 8 blocks.
+  - It re-applies a 3 s effect to every player in range every second.
+  - `[banner]` has only `giveEffect` and `showTooltip`.
+- **Plan:**
+  - New `VineryConfig` keys under `[banner]`: `effect = "minecraft:health_boost"`, `amplifier = 1` (Health Boost II,
+    +4 hearts), `radius = 8` and `durationSeconds = 60`.
+  - Plus `refreshBelowSeconds = 10`: a player whose banner effect has 10 s or more left is skipped.
+  - An unknown effect id falls back to Regeneration. The tooltip line is built from the config (new lang key in the
+    port's own file).
+- **Why the refresh threshold:**
+  - **Performance:** the check stays once a second, but it is a lookup in the player's effect map. The effect
+    update and its packet go out about once per 50 s per player instead of every second. The player scan around the
+    banner (one AABB query per banner per second) is unchanged. It could also drop to every 5 s, since nothing
+    expires in under 10 s.
+  - **Correctness:** in 1.19.2, re-applying an effect that is already running calls `onEffectUpdated`, which removes
+    and re-adds the attribute modifiers. Removing Health Boost clamps health to the base max, so every refresh would
+    empty the extra hearts.
+  - The threshold cuts that to once per cycle. The full fix is to extend the duration in place at the refresh
+    (set the instance's duration and send the effect packet, with no remove and re-add). Do both.
+- **Side effect:** with 60 s effects, the hearts stay up to 60 s after a player walks away from the banner.
+- **Test:** VB-55.
+
+### B7.8 Time: seasons, day length, wine months, calendar -> [time.md](time.md)
+
+The time requests are planned in [time.md section 3.7](time.md#37-wine-months-and-the-calendar-alcoholmd-b78), on
+top of the `[time]` master (3.1). In short:
+
+| What | Value |
+|---|---|
+| Day length | about 45 min daylight + 15 min night, so one world day is 60 min |
+| Sub-season | 8 world days (8 h) |
+| Season | 3 sub-seasons, 24 world days, one real day |
+| Year | 4 real days |
+| Wine month | one sub-season |
+| Wine level | +1 every 3 months (one season) |
+| Dark aging | x2.5 |
+| Sleeping | ages wine; wine runs on the same sun clock as the seasons |
+
+Also:
+- "Year" becomes "month" in every wine text.
+- Time of day shows as "6:00 am" / "7:30 pm".
+- The Vinery calendar is removed. The Serene Seasons calendar gets a season, day, year and time tooltip in its
+  place.
+
+This replaces B4.5's "sleeping doesn't age wine" (marked there).
+
+### B7.9 Fermentation barrel -> "Cask" (port)
+
+- **What:** every name that says Fermentation Barrel / Aging Barrel / barrel for Vinery's wine block becomes "Cask".
+  - The block and item name.
+  - The GUI title, and the JEI category (`rei.vinery.fermentation_barrel_category`).
+  - Tooltips (`tooltip.vinery.fermentation_barrel.*`) and WTHIT lines.
+  - The pack's own text: [vinery.md](vinery.md), this file's player-facing tests, `names.md` if it lists it.
+- **How:** the same keys in the port's own `assets/vinery/lang/en_us.json` (upstream lang can't be edited).
+  - Find every key by grepping the 1.5.5 and 1.3.10 jars' `en_us.json` and the port's `vinery_backport` lang for
+    "arrel".
+  - Not the dark-cherry chest barrel or the 1.3.10 decorative barrel, which are storage, not wine.
+- **Ids stay** (`vinery:fermentation_barrel`). Display names only.
+- **Test:** VB-57.
+
+### B7.10 Apple wine: 2 to 3 bottles per block again (port + tag)
+
+- **Why it broke:**
+  - Placed bottles stack only if the item is in `#vinery:small_bottle` (`WineBottleBlock#canInsertStack`).
+  - 1.5.5 moved apple wine to `#vinery:large_bottle` and made its item `BottleSize.BIG`.
+  - The port's block still allows 3, but nothing can be added after the first.
+- **Plan:**
+  - Apple wine goes back to small: the port's own `data/vinery/tags/items/small_bottle.json` (`replace: false`) adds
+    it, and the upstream-pack layer drops it from `large_bottle.json`.
+  - Its item becomes `BottleSize.SMALL`, and its block count stays 3, as in 1.3.10.
+- **Side effect:** it then fits the small wine racks, not the big ones.
+- **Test:** VB-58.
+
+### B7.11 Praetorian wine fits a wine rack again (port tag) (SETTLED 2026-10-18, section 10.8)
+
+- **Why:**
+  - Praetorian Wine (and King Danis Wine) are 1.3.10 keepers that 1.5.5 dropped (D2).
+  - So they are in neither upstream bottle tag, and every rack checks those tags (big racks: `large_bottle`).
+  - The port registers them as `BottleSize.BIG` with a 2-bottle block.
+- **Plan:** the port's own `data/vinery/tags/items/large_bottle.json` (`replace: false`) adds both, so they fit the
+  big racks. If you want them stacking 2 per placed block as in 1.3.10, they go in `small_bottle` instead and fit
+  the small racks (B7.12 VQ3).
+- **Gap check while there:** list every wine item in neither tag. Any that turn up get the same fix.
+- **Test:** VB-59.
+
+### B7.12 Questions for you
+
+| # | Question | My default |
+|---|---|---|
+| VQ1 | Wine Aging page text colour | DECIDED 2026-10-18: dark grey `0x404040` |
+| VQ2 | Cask: the 1.3.10 decorative `barrel` keeps its name? | Yes, only the wine block is renamed |
+| VQ3 | Praetorian / King Danis: big racks (1 per placed block), or small racks with 2 per placed block as in 1.3.10? | DECIDED 2026-10-18 (10.8): small racks, shrunk to fit; King Danis removed |
+| VQ4 | Time questions | [time.md](time.md) section 4 |
 
 ## B8. In-game test suite (drafted, run once built)
 
-- [ ] **VB-01 Juice into barrel:** 4 red grape juice in slot 0 -> gauge 100, 4 wine bottles in slot 4
-- [ ] **VB-02 One juice type:** barrel holding red juice, put white juice in slot 0 -> it stays in the slot
+- [ ] **VB-01 Juice into cask:** 4 red grape juice in slot 0 -> gauge 100, 4 wine bottles in slot 4
+- [ ] **VB-02 One juice type:** cask holding red juice, put white juice in slot 0 -> it stays in the slot
 - [ ] **VB-03 Red wine:** 10 red units + sugar + wine bottle -> red wine after 6000 ticks, 10 units used
 - [ ] **VB-04 No-bottle wine:** solaris (honey, sweet berries, 15 white units, no bottle) -> crafts without a bottle
 - [ ] **VB-05 Output stacks:** two red wines in a row stack in slot 5 (same day)
 - [ ] **VB-06 Empty juice:** sneak-right-click with an empty hand -> juice level 0, splash sound
-- [ ] **VB-07 Barrel hoppers:** juice and bottles from the top, ingredients from the side, output from below; nothing jams
+- [ ] **VB-07 Cask hoppers:** juice and bottles from the top, ingredients from the side, output from below; nothing jams
 - [ ] **VB-08 Apple press:** apples -> mash (600 t); mash + wine bottle -> apple juice (800 t); honeycomb block -> 4 honeycomb -> honey bottle
 - [ ] **VB-09 Press is 2 tall:** breaking either half drops one press and the contents
 - [ ] **VB-10 Pot stomping:** 6 red grapes, 12 jumps -> 2 red juice; with 15+ armor it takes fewer
@@ -1799,27 +2400,27 @@ The decision goes further than the recommendation below: blocks that have a 1.5.
 - [ ] **VB-16 Fox:** fox eats ripe grapes from a bush
 - [ ] **VB-17 Fruit leaves:** apple leaves fruit and drop 1-4 apples; cherry leaves sometimes drop a rotten cherry (D10)
 - [ ] **VB-18 Stackable log:** light with flint and steel, cook 4 raw beef, refuel with a log, put out with a shovel
-- [ ] **VB-19 Wine aging in a cellar:** wine in a rack with no sky light ages x1.5 (`/wine info`)
-- [ ] **VB-20 Aging pace:** default settings -> `/wine time` shows about 28 h per year and 16 days per year; `/wine info` on a new wine says level up after 32 days
+- [ ] **VB-19 Wine aging in a cellar:** wine in a rack with no sky light ages x2.5 (`/wine info`; was x1.5 before B7.8)
+- [ ] ~~**VB-20 Aging pace:**~~ superseded 2026-10-18 by the sun clock in months (B7.8; time.md TI-18, TI-19). default settings -> `/wine time` shows about 28 h per year and 16 days per year; `/wine info` on a new wine says level up after 32 days
 - [ ] **VB-21 Grape juice cures poison:** poisoned, drink juice -> poison gone, wine bottle back
 - [ ] **VB-22 Double jump (clark wine):** second jump in the air on a dedicated server, no kick
 - [ ] **VB-23 Walkers:** kelp cider walks on water, bolvar on lava
 - [ ] **VB-24 Climbing, frosty, armor, health:** jo special climbs walls; eiswein freezes + armor; aegis +2 armor; stal +4 max health
 - [ ] **VB-25 Party:** lilitu wine, hit a zombie -> firework at the target
-- [ ] **VB-26 Banner:** wine_somelier advancement gives 2 banners; standing within 8 blocks gives Regeneration II
+- [ ] ~~**VB-26 Banner from the advancement**~~ retired 2026-10-18: advancements are removed (section 10.2); the banner is crafted now (VB-64)
 - [ ] **VB-27 Winemaker set and charm:** full set + bone meal -> bone meal kept, 30% of uses damage all 4 pieces by 1; set + bonemeal charm -> exactly one refund
-- [ ] **VB-28 JEI:** all five Vinery pages (barrel, press mashing, press fermenting, grape stomping, wine aging) come from the port, in that order after Brewin's; none of patcherMod's `creativeengineering:vinery_*` pages
+- [ ] **VB-28 JEI:** all five Vinery pages (cask, press mashing, press fermenting, grape stomping, wine aging) come from the port, in that order after Brewin's; none of patcherMod's `creativeengineering:vinery_*` pages
 - [ ] **VB-29 Old world: ids kept:** a 1.3.10 world with cherry blocks, crates, wine_press, juice bottles, vinemaker armor, stove, sink, flower box -> all present under the same ids; nothing in the missing-mappings log except effects
 - [ ] **VB-30 Old world: storage:** 1.3.10 wine racks, shelves and placed wine bottles keep their bottles
 - [ ] **VB-31 Old world: barrel and wines:** 1.3.10 barrel with juice and bottles converts per W3; an old 2-year wine shows its age, not "brewed in the future"
 - [ ] **VB-32 Old world: cross-mod cherry:** Every Compat / Dramatic Doors cherry blocks still there (D1)
-- [ ] **VB-33 Clock only on playtime:** dedicated server, note `/wine time`, log everyone off for 10 min, log back in -> clock moved by about 0
-- [ ] **VB-34 Today's pace measured:** play through one full world day with `dayUnit = WORLD`, `worldDayMinutes = 0` -> the measured day length is about 106 min, close to the 28.2 h-per-year default
-- [ ] **VB-35 Sleep and /time don't age:** `/wine info` on a wine, sleep through a night and `/time add 24000` -> the age is unchanged
-- [ ] **VB-36 Rescale:** set `playtimeHoursPerYear` 5, `daysPerYear` 15, reload -> an existing wine's age and level change at once; `/wine clock add 5h` -> exactly 1 more year
-- [ ] **VB-37 Cellar:** two fresh wines, one in a rack in a dark cellar, one in a rack under sky; after the same playtime the cellar one is about 1.5x older
+- [ ] ~~**VB-33 Clock only on playtime:**~~ superseded 2026-10-18 (clock is WORLD_TIME, B7.8): dedicated server, note `/wine time`, log everyone off for 10 min, log back in -> clock moved by about 0
+- [ ] ~~**VB-34 Today's pace measured:**~~ superseded 2026-10-18 (B7.8): play through one full world day with `dayUnit = WORLD`, `worldDayMinutes = 0` -> the measured day length is about 106 min, close to the 28.2 h-per-year default
+- [ ] ~~**VB-35 Sleep and /time don't age:**~~ reversed 2026-10-18: sleeping ages wine (time.md TI-17): `/wine info` on a wine, sleep through a night and `/time add 24000` -> the age is unchanged
+- [ ] ~~**VB-36 Rescale:**~~ superseded 2026-10-18 (keys are months now, B7.8): set `playtimeHoursPerYear` 5, `daysPerYear` 15, reload -> an existing wine's age and level change at once; `/wine clock add 5h` -> exactly 1 more year
+- [ ] **VB-37 Cellar:** two fresh wines, one in a rack in a dark cellar, one in a rack under sky; after the same time the cellar one is about 2.5x older
 - [ ] **VB-38 Old and new blocks side by side:** place old chair / table / crate / barrel / wine_rack_1 next to their new counterparts -> both work; note any look-alikes to hide
-- [ ] **VB-39 WTHIT lines:** look at a pot mid-stomp, a barrel mid-ferment, a press, a rack of wines in a cellar -> lines per B4.6
+- [ ] **VB-39 WTHIT lines:** look at a pot mid-stomp, a cask mid-ferment, a press, a rack of wines in a cellar -> lines per B4.6
 - [ ] **VB-40 Winemaker set settings:** `damageMode = NONE` -> 50 bone meal uses, no durability lost; `ONE_PIECE` + `damageAmount 3` -> one piece loses 3 per damaging use
 - [ ] **VB-41 Upstream jar check:** remove `vinery_upstream/letsdo-vinery-fabric-1.5.5.jar` -> client and server both stop with the file name and download page; a renamed or different jar is refused the same way
 - [ ] **VB-42 Missing art sweep:** first boot, grep the log for missing models and textures under `vinery:` and `foundation:` -> only the 21 known upstream dangling references (B4.8)
@@ -1828,6 +2429,23 @@ The decision goes further than the recommendation below: blocks that have a 1.5.
 - [ ] **VB-45 Boots:** client and dedicated server start with the port and both mod ids (`vinery`, `foundation`) in the mod list; log has `[vinery-upstream] N data files ...` and no `vinery` / `foundation` errors
 - [ ] **VB-46 Plains advancement:** `fruits_of_the_field` is granted on entering plains, not in other biomes
 - [ ] **VB-47 WTHIT config:** the WTHIT config has a Vinery page with 5 toggles; turning one off hides only its lines; a fresh storage pot in a structure shows nothing and still has its loot when opened
+- [ ] **VB-48 JEI juice slot (B7.1):** a wine's Cask page shows its juice bottle in the juice slot with the needed count; looking up the uses of red grape juice lists the red wines
+- [ ] **VB-49 Full-bar hover (B7.1):** a quarter-full cask, hover the empty top of the gauge -> the juice tooltip; the same on the JEI page
+- [ ] **VB-50 Apple press slots (B7.2):** by hand, slot 1 (left) takes apple mash and honeycomb only, slot 2 wine bottles and glass bottles only; a hopper feeds glass bottles into slot 2; shift-click puts mash in slot 1; honeycomb + glass bottle -> honey bottle, and the JEI page shows the glass bottle
+- [ ] **VB-51 Merged effects (B7.3):** Stal Wine gives Health Boost; `/effect give @s vinery:luck_effect` fails (no such effect)
+- [ ] ~~**VB-52 Effect fallbacks**~~ pinned with B7.4 (future plan)
+- [ ] **VB-53 JEED providers (B7.5):** the JEI page of a wine's effect lists that wine as a provider; change the config entry, `/reload` -> the provider moves
+- [ ] **VB-54 Mead gone (B7.6):** no `vinery:mead` in JEI, the creative tab or `/give`; no cask recipe for it; the log has no errors about it
+- [ ] **VB-55 Banner Health Boost II (B7.7):** stand by a Vinery banner at full health -> Health Boost II for 60 s, 4 extra hearts that stay full while you stand there for 2+ min; the effect timer only jumps back up when it falls under 10 s; walk away -> it runs out within 60 s
+- [ ] **VB-56 Months everywhere (B7.8, [time.md](time.md) 3.7):** wine tooltip, `/wine info`, `/wine time`, the JEI Wine Aging page, WTHIT and the config screen all say months, none say years
+- [ ] **VB-57 Cask name (B7.9):** the block, its item, its GUI title, the JEI category, tooltips and WTHIT all say Cask; the decorative barrel and the dark-cherry chest barrel keep their names
+- [ ] **VB-58 Apple wine stacks (B7.10):** right-click a placed apple wine with two more -> 3 bottles in one block; it fits a small wine rack
+- [ ] **VB-59 Praetorian in a rack (10.8):** Praetorian Wine goes into the small rack, the Wine Rack, the big rack and the wine box; lying in a rack it stays inside its slot (shrunk), standing in the big rack it looks like Stal Wine; two stack in one placed block
+- [ ] **VB-66 King Danis gone (10.8):** no `vinery:king_danis_wine` in JEI, the creative tab or `/give`; only one "Miss Lilitus Wine"; no log errors about it
+- [ ] **VB-60 Wine Aging page text (B7.1):** every line stays inside the grey page, wrapped, in dark text without shadow
+- [ ] **VB-61 JEI transfer (B7.1):** with juice bottles, ingredients and a wine bottle in your inventory, click [+] on a Cask page -> juice in slot 0, ingredients in 1-3, the bottle in 4; without the juice bottles the [+] is red
+- [ ] **VB-62 Calendar gone (B7.8):** no `vinery:calendar` in JEI, the creative tab or `/give`; the log has no recipe or loot errors about it
+- [ ] **VB-63 JEED providers move (B7.5):** after editing `[wine] effects` and `/reload`, the JEI page of the old effect no longer lists the wine
 
 ## B9. History
 
@@ -1867,3 +2485,33 @@ The decision goes further than the recommendation below: blocks that have a 1.5.
   category and mod_sides done. Review fixes without a boot: missing `foundation` mods.toml entry (would not start),
   advancement biome predicate. The jar swap in `mods/` waits for the game to be closed. Tests VB-45 to VB-47 added;
   VB-28 updated.
+- 2026-10-18: planned your "changes to make" list (B7): JEI juice slot and full-bar hover, recipe-driven apple press
+  slots, luck / resistance / health effects merged into vanilla, a fallback syntax for wine effects plus a candidates
+  tool, JEED providers from the live config, Vinery mead retired into Brewin's, and a configurable banner effect
+  (Health Boost, with the re-apply gotcha). The time items (calendar, months, sleep ages wine, x2.5 dark) moved to
+  [time.md](time.md) 3.7; B4.5 marked. VB-48 to VB-56 added.
+- 2026-10-18: your second list, folded into B7 and section 8:
+  - No conversions between versions or between the two ports. Vinery mead is removed from the port; AL-65 retired.
+  - Effect reshuffle pinned for later, with two effects per wine possible (B7.4, VB-52 pinned).
+  - New items: Cask rename (B7.9), apple wine stacking (B7.10), Praetorian / King Danis in racks (B7.11), JEI Wine
+    Aging text wrapped in dark text (B7.1). B7.2 now says the left press slot accepts nothing today.
+  - Banner: Health Boost II, 60 s, refreshed under 10 s.
+  - Keg pipe rule made a setting with a tooltip line; ham and cheese table confirmed (Q6, Q7 decided).
+  - Time values settled in [time.md](time.md) 3.7. VB-57 to VB-60 added.
+- 2026-10-18: B7 built (not tested in game), apart from B7.4 (pinned) and B7.11 (on hold). Port `-02` in `mods/`,
+  `server_mods/` regenerated, `config/vinery-common.toml` moved to the new keys. Built with B7.8: the port side of
+  [time.md](time.md) 3.7 (months, sun clock with a DAYTIME day, x2.5 dark, calendar removed). Changes from the plan:
+  - Cask wording and the apple-wine tag move go through the upstream-pack layer, not files at upstream's paths.
+  - The press's slot 1 takes any fermenting input.
+  - Honey's glass bottle needed a per-recipe `bottle` ingredient.
+  Found and fixed:
+  - Dropping every file that names mead would have dropped `wine_somelier`, the banner advancement. Mead is taken
+    out of its criteria instead.
+  - The JEI Cask transfer paired slots in the wrong order.
+  VB-20 and VB-33 to VB-36 superseded by the sun clock. VB-61 to VB-63 added.
+- 2026-10-18 evening: the patcherMod half of B7.8 built ([time.md](time.md) 3.8, patcherMod 1.0.8 in `mods/`).
+  `i.mead` and `i.calendar` removed from `item_dict.js`, and `mead` from the generated placeable, stack-size and
+  food-type lists. Every other port item was already mapped.
+- 2026-10-19: `-01` (with the grass slab hotfix) had gone out in pack 1.0.7, DEPLOYED 2026-10-18 19:43. `-02` (B7,
+  section 10) STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) VB). On the live world it removes `vinery:mead`,
+  `vinery:king_danis_wine` and `vinery:calendar` (all present in `-01`). Next build bumped to `-03`.

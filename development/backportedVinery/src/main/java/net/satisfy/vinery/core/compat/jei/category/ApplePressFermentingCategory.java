@@ -93,9 +93,8 @@ public class ApplePressFermentingCategory implements IRecipeCategory<ApplePressF
                 .addItemStack(recipe.getResultItem());
 
         if (recipe.requiresBottle()) {
-            ItemStack wineBottle = new ItemStack(ObjectRegistry.WINE_BOTTLE.get());
             builder.addSlot(RecipeIngredientRole.INPUT, 119 - X_OFFSET, 50 - Y_OFFSET)
-                    .addIngredients(Ingredient.of(wineBottle));
+                    .addIngredients(recipe.getBottle());
         }
     }
 

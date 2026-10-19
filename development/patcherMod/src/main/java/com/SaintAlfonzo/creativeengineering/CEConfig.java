@@ -52,10 +52,12 @@ public final class CEConfig {
     public static final Cooking COOKING;
     public static final Perf PERF;
     public static final Seasons SEASONS;
+    public static final Time TIME;
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
     public static final TrashSlot TRASH_SLOT;
     public static final WanderingTrader WANDERING_TRADER;
+    public static final Advancements ADVANCEMENTS;
     public static final Debug DEBUG;
 
     static {
@@ -78,10 +80,12 @@ public final class CEConfig {
         COOKING = new Cooking(builder);
         PERF = new Perf(builder);
         SEASONS = new Seasons(builder);
+        TIME = new Time(builder);
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
         TRASH_SLOT = new TrashSlot(builder);
         WANDERING_TRADER = new WanderingTrader(builder);
+        ADVANCEMENTS = new Advancements(builder);
         DEBUG = new Debug(builder);
         COMMON_SPEC = builder.build();
     }
@@ -569,6 +573,7 @@ public final class CEConfig {
     public static final class Cooking {
         public final ForgeConfigSpec.BooleanValue remainderBuffer;
         public final ForgeConfigSpec.BooleanValue stallWhenFull;
+        public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
 
         private Cooking(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -585,6 +590,13 @@ public final class CEConfig {
                     "On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).",
                     "Off = it crafts anyway and throws what doesn't fit."
             ).define("stallWhenFull", true);
+
+            ovenIngredientCounts = b.comment(
+                    "On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat",
+                    "stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every",
+                    "ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of",
+                    "their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload."
+            ).define("ovenIngredientCounts", false);
 
             b.pop(); // cooking
         }
@@ -666,6 +678,92 @@ public final class CEConfig {
             ).defineInRange("snowLineY", 320, -64, 4096);
 
             b.pop(); // seasons
+        }
+    }
+
+    /**
+     * The one place day length, seasons and wine aging are set ({@code time/} package, feature_writeup/time.md).
+     * patcherMod pushes the derived values into Better Days (getter mixin), Serene Seasons and SeasonHUD (their
+     * per-world server configs) and the Vinery port (its common config), so their own files stop being edited by
+     * hand. Every length is in world days of {@code dayMinutes + nightMinutes} real minutes.
+     */
+    public static final class Time {
+        public enum Clock { SUN, TICKS }
+        public enum WineClock { SUN, PLAYTIME }
+        /** {@code time/TimePresets}: CUSTOM is only a label, shown when the values match neither preset. */
+        public enum Preset { SINGLEPLAYER, SERVER, CUSTOM }
+
+        public final ForgeConfigSpec.EnumValue<Preset> preset;
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.BooleanValue pauseWhenEmpty;
+        public final ForgeConfigSpec.BooleanValue hudTimeOfDay;
+        public final ForgeConfigSpec.DoubleValue dayMinutes;
+        public final ForgeConfigSpec.DoubleValue nightMinutes;
+        public final ForgeConfigSpec.DoubleValue dayStart;
+        public final ForgeConfigSpec.DoubleValue nightStart;
+        public final ForgeConfigSpec.EnumValue<Clock> seasonClock;
+        public final ForgeConfigSpec.IntValue daysPerSubSeason;
+        public final ForgeConfigSpec.IntValue startingSubSeason;
+        public final ForgeConfigSpec.EnumValue<WineClock> wineClock;
+        public final ForgeConfigSpec.IntValue monthsPerLevel;
+        public final ForgeConfigSpec.IntValue maxLevel;
+        public final ForgeConfigSpec.DoubleValue cellarMultiplier;
+
+        private Time(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the",
+                    "time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml,",
+                    "and vinery-common.toml [wine]/[aging] are overwritten from here at server start and on every edit.",
+                    "/cetime shows every derived value."
+            ).push("time");
+
+            preset = b.comment(
+                    "SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:",
+                    "1 in single player, 3 on a server). Editing any value by hand turns this into CUSTOM, unless the",
+                    "values then match a preset again. CUSTOM itself changes nothing."
+            ).defineEnum("preset", Preset.SINGLEPLAYER);
+            enabled = b.comment("Master switch. false: Better Days, Serene Seasons, SeasonHUD and Vinery use their own files again.")
+                    .define("enabled", true);
+            pauseWhenEmpty = b.comment(
+                    "Dedicated server with nobody online: the sun stops, so the seasons and wine aging stop with it.",
+                    "Game time, weather and random ticks keep running. Single player is unaffected."
+            ).define("pauseWhenEmpty", true);
+            hudTimeOfDay = b.comment("SeasonHUD shows the time of day after the season, \"Mid Spring (Day 3/24) 7:30 pm\" (client side).")
+                    .define("hudTimeOfDay", true);
+
+            b.push("day");
+            dayMinutes = b.comment("Real minutes from dayStart to nightStart.").defineInRange("dayMinutes", 45.0, 1.0, 10000.0);
+            nightMinutes = b.comment("Real minutes from nightStart to the next dayStart.").defineInRange("nightMinutes", 15.0, 1.0, 10000.0);
+            dayStart = b.comment(
+                    "dayTime of sunrise; the clock reads it as 6:00 am. Better Days reads it once, so a change needs a restart."
+            ).defineInRange("dayStart", 22300.0, 0.0, 24000.0);
+            nightStart = b.comment("dayTime of sunset. Needs a restart, like dayStart.").defineInRange("nightStart", 13000.0, 0.0, 24000.0);
+            b.pop();
+
+            b.push("seasons");
+            seasonClock = b.comment(
+                    "SUN: the seasons count sunrises; sleeping and /time move them as far as the sun.",
+                    "TICKS: Serene Seasons' own counter (one world day of real ticks per day; sleeping skips ahead)."
+            ).defineEnum("clock", Clock.SUN);
+            daysPerSubSeason = b.comment("World days per sub-season (12 sub-seasons a year). Also the length of a wine month.")
+                    .defineInRange("daysPerSubSeason", 8, 1, 1000);
+            startingSubSeason = b.comment("Sub-season a new world starts in: 1 = Early Spring ... 12 = Late Winter, 0 = random.")
+                    .defineInRange("startingSubSeason", 1, 0, 12);
+            b.pop();
+
+            b.push("wine");
+            wineClock = b.comment(
+                    "SUN: wine ages with the world days, sleeping and /time included. PLAYTIME: while a player is online."
+            ).defineEnum("clock", WineClock.SUN);
+            monthsPerLevel = b.comment("A wine month is one sub-season. Months per effect level (SINGLEPLAYER 1, SERVER 3 = one season).")
+                    .defineInRange("monthsPerLevel", 1, 1, 100);
+            maxLevel = b.comment("Highest effect level from aging.").defineInRange("maxLevel", 5, 0, 10);
+            b.push("boosts");
+            cellarMultiplier = b.comment("Aging speed in storage with no sky light.").defineInRange("cellarMultiplier", 2.5, 1.0, 5.0);
+            b.pop();
+            b.pop();
+
+            b.pop(); // time
         }
     }
 
@@ -1961,6 +2059,20 @@ public final class CEConfig {
                     .defineInRange("winemakerIntervalTicks", 96000, 1200, 100_000_000);
 
             b.pop(); // wandering_trader
+        }
+    }
+
+    /** {@code mixin/ServerAdvancementManagerMixin}: the pack has no advancements at all (user, 2026-10-18). */
+    public static final class Advancements {
+        public final ForgeConfigSpec.BooleanValue enabled;
+
+        private Advancements(ForgeConfigSpec.Builder b) {
+            b.comment("Advancements (vanilla, every mod, every datapack).").push("advancements");
+            enabled = b.comment(
+                    "false (the pack's setting): none are loaded, so none show, toast or give rewards.",
+                    "Read when data loads: a change applies on the next /reload or world start."
+            ).define("enabled", false);
+            b.pop();
         }
     }
 

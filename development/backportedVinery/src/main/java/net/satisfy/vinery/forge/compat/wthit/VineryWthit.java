@@ -40,13 +40,14 @@ public final class VineryWthit implements IWailaCommonPlugin {
     public static final ResourceLocation PRESS = Vinery.identifier("apple_press");
     public static final ResourceLocation STORAGE = Vinery.identifier("storage");
     public static final ResourceLocation LOG = Vinery.identifier("stackable_log");
+    public static final ResourceLocation STEM = Vinery.identifier("stem");
     static final String KEY = "vinery";
     /** Storage lines shown before "...and N more". */
     static final int MAX_STACKS = 9;
 
     @Override
     public void register(ICommonRegistrar registrar) {
-        for (ResourceLocation id : List.of(POT, BARREL, PRESS, STORAGE, LOG)) {
+        for (ResourceLocation id : List.of(POT, BARREL, PRESS, STORAGE, LOG, STEM)) {
             registrar.localConfig(id, true);
         }
         Data data = new Data();

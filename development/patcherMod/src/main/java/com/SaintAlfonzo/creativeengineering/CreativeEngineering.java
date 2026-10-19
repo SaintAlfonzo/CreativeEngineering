@@ -141,6 +141,14 @@ public class CreativeEngineering
 
         // BlockRunner tier speeds come from CEConfig [surface.speed] (mixin/BlockRunnerSpeedConfigMixin):
         // re-apply them when the toml is saved, and log an error if the mixin never ran.
+        // [time] master (feature_writeup/time.md): pushes into Serene Seasons / SeasonHUD / Vinery at server start and
+        // on every toml save, the sun-driven season counter, and /cetime. Calendar tooltip: time/TimeClient (client).
+        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.time.TimePush::onConfigReload);
+        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.time.TimePresets::onConfigLoading);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.time.TimePush.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.time.SeasonClock.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.time.TimeCommand.class);
+
         modEventBus.addListener(com.SaintAlfonzo.creativeengineering.surface.SurfaceSpeeds::onConfigReload);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.surface.SurfaceSpeeds.class);
 
@@ -264,6 +272,9 @@ public class CreativeEngineering
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fan.DragonBreathingFanProcessingType::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.potion.PotionBucketDispenser::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.NockRecipeBookSync::register);
+			if (net.minecraftforge.fml.ModList.get().isLoaded("immersiveengineering")) {
+				event.enqueueWork(IECompat::registerHammerNoRotate);
+			}
 			// Can-serving crafting action for KubeJS recipes (NCH re-registers it on every server
 			// script load; this covers clients of a dedicated server).
 			if (net.minecraftforge.fml.ModList.get().isLoaded("kubejs")) {

@@ -13,6 +13,7 @@ import net.satisfy.foundation.storage.StorageBlockEntity;
 import net.satisfy.foundation.storage.StorageTypeRenderer;
 import net.satisfy.vinery.core.block.BottleStorageBlock;
 import net.satisfy.vinery.core.block.WineBottleBlock;
+import net.satisfy.vinery.core.item.DrinkBlockItem;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -21,6 +22,8 @@ public class BottleRenderer implements StorageTypeRenderer {
     private static final long INSERT_ANIMATION_MS = 250;
     private static final float INSERT_DISTANCE = 0.4f;
 
+    /** Small template length / big bottle length (15 / 18 px). */
+    private static final float BIG_IN_SMALL = 15f / 18f;
     private final float[][] offsets;
     private final Map<StorageBlockEntity, long[]> insertTimes = new WeakHashMap<>();
 
@@ -51,6 +54,13 @@ public class BottleRenderer implements StorageTypeRenderer {
             matrices.pushPose();
             matrices.translate(offsets[i][0], offsets[i][1], -INSERT_DISTANCE * (1f - eased));
             matrices.mulPose(Vector3f.XN.rotationDegrees(90f));
+            if (stack.getItem() instanceof DrinkBlockItem drink && drink.getBottleSize() == DrinkBlockItem.BottleSize.BIG) {
+                // alcohol.md 10.8: a big-bottle model (Praetorian, 18 px) in a rack made for small ones (15 px): shrink it
+                // about the bottle's own axis so it lies in its slot without poking out of the rack
+                matrices.translate(0.5, 0, 0.5);
+                matrices.scale(BIG_IN_SMALL, BIG_IN_SMALL, BIG_IN_SMALL);
+                matrices.translate(-0.5, 0, -0.5);
+            }
 
             BlockState state = blockItem.getBlock().defaultBlockState();
             if (state.hasProperty(WineBottleBlock.FAKE_MODEL)) {

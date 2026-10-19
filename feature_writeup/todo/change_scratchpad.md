@@ -175,9 +175,33 @@
     - disable all tutorial toasts
     - disable advancement toasts, keep chat announcement
     - rename pretty pipes to 'item pipes' for clarity
+    - merge backported effect descriptions w/ existing jeed mods
+    - sort jei effects in custom order, vanilla first
     - finish container sorting audit
         - programatic test to ensure no item deletion
     - allow any item in botania trinket case
     - complete crop harvest and replant features audit, ensure new crops covered
     - mod to add writeup: sophisticated storage, decor mods in disabled, tempad
     - audit weed behavior, prevent on rich soil
+    - fortune on shears?
+    - another random item deletion observation
+        - happens after pick item w/ middle mouse button, swapping old block back to newly selected deletes old
+    - more gold obtaining methods?
+        - panning?
+    - find/create watering can item
+    - craft buckets from iron plates, wooden bucket for water
+    - change echo tool potion buffs to be better, but simpler than dragon. give echo tools human generated textures (only non human textures in pack)
+    - increase default tree-leaf life distance
+    - keep cosmetic armor on death, configurable, always in corpse if not kept
+    - merges
+        - permafrost
+            - immersive weathering generates in wild, damages on touch
+            - determine where quark 
+
+    - mca thread and combs consumable, add to starter kit
+    - remove all starting books, add animal dictionary and food dictionary to starter kit
+    - tooltips
+        - straw collection on knives and straw
+        - finish blockrunner audit
+            - ensure new mods
+            - add watcher to flag blocks not flagged with type of 1.0 runspeed

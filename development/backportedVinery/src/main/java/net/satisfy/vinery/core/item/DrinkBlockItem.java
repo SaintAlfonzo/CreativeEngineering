@@ -37,7 +37,7 @@ import java.util.Objects;
 
 /**
  * A wine: drinkable, placeable while sneaking (it then sits in a storage block entity). Its effect comes from the
- * {@code effects} setting; with aging it gains a level per {@code yearsPerEffectLevel} and duration per year.
+ * {@code effects} setting; with aging it gains a level per {@code monthsPerEffectLevel} and duration per month.
  * Port: age, level and the time to the next level run on the vintage clock (alcohol.md B4.5).
  */
 public class DrinkBlockItem extends BlockItem {
@@ -122,7 +122,7 @@ public class DrinkBlockItem extends BlockItem {
             } else {
                 int days = WineYears.getDaysUntilNextLevel(stack, level);
                 long cellar = WineYears.isStored(stack) ? ticksToNext : (long) Math.ceil(ticksToNext * 100.0 / Math.max(100, clock.cellarPercent()));
-                tooltip.add(Component.translatable("tooltip.vinery_backport.next_level", days, realTime(ticksToNext), realTime(cellar))
+                tooltip.add(Component.translatable("tooltip.vinery_backport.next_level", days, realTime(clock.realTicks(ticksToNext)), realTime(clock.realTicks(cellar)))
                         .withStyle(style -> style.withColor(TextColor.fromRgb(0x93c47d))));
             }
             if (WineYears.isStored(stack) && WineYears.currentStorageRate(stack) > 100) {
@@ -131,7 +131,7 @@ public class DrinkBlockItem extends BlockItem {
         }
     }
 
-    /** Clock ticks as real play time: "1 h 20 min", "53 min". */
+    /** Real game ticks as play time: "1 h 20 min", "53 min". Clock ticks go through {@link VintageClock.Snapshot#realTicks} first. */
     public static String realTime(long ticks) {
         long minutes = Math.max(1, Math.round(ticks / 1200.0));
         return minutes >= 60 ? (minutes / 60) + " h " + (minutes % 60) + " min" : minutes + " min";

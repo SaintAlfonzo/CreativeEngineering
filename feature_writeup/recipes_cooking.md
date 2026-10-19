@@ -10,6 +10,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | Part | Status |
 |---|---|
 | One flour and one dough (Create's), from crushing, pressure chamber, explosions; dough from water or eggs; bread blocks | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
+| Cornmeal (new item): from corn and kernels on every crusher and PNC; required in tortillas and cornbread batter; a flour in pancakes, pies and cakes. Pie crust from 3 flour + milk ×2 by hand and compacting | BUILT 2026-10-19, not booted (2.1) |
 | Fluids: tomato sauce and melon juice by squeezer and bottler; sugar → `#forge:sugar` in every recipe | DEPLOYED |
 | Prepared food: about 25 meals get shapeless, sequenced assembly or mixing routes; FD's shaped ones removed | DEPLOYED |
 | Golden carrot / apple by heated mixing and arc furnace; enchanted golden apple by assembly | DEPLOYED |
@@ -40,6 +41,26 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   at 1.5 bar; explosion crafting 1 per wheat (loss rate 50).
 - **Dough:** flour + water bucket; Bottler 250 mB water per flour, 1000 mB per flour pile → dough block; 3 flour + egg → 6.
   FD's, tmted's and Create Central Kitchen's dough recipes and tmted's slime ball from dough are removed.
+- **Cornmeal** (`creativeengineering:cornmeal`, KubeJS item `startup_scripts/cooking/cornmeal.js`, recolored-flour texture;
+  tags `#forge:flour/corn` and `#creativeengineering:flour_or_cornmeal` = wheat flour or cornmeal). From cooking.md:
+
+  | Machine | Corn | Corn crate (9) | Kernels | Kernel bag (9) |
+  |---|---|---|---|---|
+  | Create crushing wheels | 1 + 50 % 1 cornmeal (1.5), 25 % 1 kernel | 13 + 50 % 1 (13.5), 2 + 25 % 1 kernel | 33.3 % 1 | 3 |
+  | IE crusher (3200 RF) | 2, 50 % 1 kernel (replaces Corn Delight's corn -> kernels + straw) | 18, 4 + 50 % 1 kernel | none (see below) | 4 + 50 % 1 (4.5) |
+  | PNC pressure chamber (1.5 bar) | 3 (as wheat -> flour) | - | 4 kernels -> 3 (0.75) | - |
+  | PNC explosion (loss 50) | 1 (as wheat -> flour) | - | - | - |
+
+  The IE crusher takes one item and can't roll its main output, so a single kernel (0.5) has no recipe; the bag
+  gives the ratio. cooking.md's PNC note "(0.2, 3)" was read as "same as flour", whose recipes are 3 at 1.5 bar and
+  1 per item at loss rate 50. Corn has no millstone recipe (Corn Delight's corn and wild corn milling removed), and
+  no corn recipe gives straw: the knife on corn (2 kernels), on wild corn (1) and the IE crusher on wild corn (1)
+  keep their kernels without Corn Delight's straw.
+  Corn Delight's raw tortilla (3 corn + water bucket) and cornbread batter (2 corn, milk, egg; mixing with 250 mB
+  milk) take cornmeal in place of corn, same counts; the splashing corn -> raw tortilla recipe is removed.
+- **Pie crust:** 3 flour or cornmeal in a bowl shape with milk (bucket or bottle) in the middle -> 2; unheated
+  compacting 3 flour or cornmeal + 250 mB milk -> 2. FD's 3 wheat + milk -> 1 stays. (An egg in place of the milk was
+  asked first; it was dropped because the shapeless 3 flour + egg -> 6 dough craft matches the same grid.)
 - **Bread:** FD's furnace and smoker bread removed; dough block → smoke to bread block → saw or knife to 16 bread;
   stonecutter for slab, crustless block, nub (Architect's Palette's own recipes replaced).
 - **Sourdough (PNC):** 8 dough + yeast culture bucket; mixer 500 mB yeast culture + 8 dough heated → 8; Bottler 50 mB per
@@ -61,7 +82,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth |
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice |
 | Scarlet pierogies | pot recipe fixed; shapeless with baked potatoes and bread |
-| Pancakes ×3 (Supplementaries) | shapeless sugar, egg, milk, flour or rice; heated mixing ×5 with 250 mB milk |
+| Pancakes ×3 (Supplementaries) | shapeless sugar, egg, milk, flour, cornmeal or rice; heated mixing ×5 with 250 mB milk |
 | Barbecue stick | shapeless or assembly with any cooked meat |
 | Crab bars | shapeless ×2 (cooked), pot ×4 (raw), assembly ×10 |
 | Grilled salmon, bacon and eggs | shapeless and assembly (FD's shaped removed) |
@@ -152,6 +173,14 @@ None.
 - [ ] **RC-11 Golden carrot:** arc furnace, carrot + 3 gold nuggets → golden carrot.
 - [ ] **RC-12 Enchanted golden apple:** assembly on a golden apple, 4 loops → enchanted golden apple.
 - [ ] **RC-13 Ruby chocolate:** heated mixer with milk, dragon's breath, cocoa beans, sugar → 250 mB ruby chocolate.
+- [ ] **RC-15 Cornmeal item:** shows as "Cornmeal" with the yellow flour texture; in `#forge:flour/corn`.
+- [ ] **RC-16 Cornmeal machines:** crushing wheels on corn give 1-2 cornmeal and sometimes a kernel; the millstone
+  takes no corn; a knife on corn gives 2 kernels and no straw; IE crusher on corn -> 2 cornmeal (+ kernel half the time), on a crate
+  -> 18; PNC pressure chamber 4 kernels -> 3. JEI shows no Corn Delight corn -> kernels IE crusher recipe.
+- [ ] **RC-17 Corn recipes:** raw tortilla and cornbread batter need cornmeal (corn no longer works); splashing corn
+  gives nothing; pancakes accept cornmeal.
+- [ ] **RC-18 Pie crust:** milk bucket (and a milk bottle) in a bowl of 3 flour -> 2 crusts, bucket returned; works with
+  cornmeal; compacting 3 flour + 250 mB milk -> 2; 3 flour + egg still makes 6 dough.
 - [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball → beef culture; heated mixer with diluted
   bone meal and plant oil → 3; knife → 4 raw beef.
 
@@ -161,3 +190,5 @@ None.
 - 2026-10-02: fried egg restore and cooking oil `_manual_only` ([food.md](food.md)).
 - 2026-10-18: muffins on `#forge:dough` ([oven.md](oven.md)).
 - 2026-10-18: this writeup; findings F1 to F7; tests RC-01 to RC-14. No code changed.
+- 2026-10-19: cornmeal item and recipes, pie crust from flour and milk, pancakes take cornmeal (2.1); RC-15 to RC-18.
+- 2026-10-19: cornmeal, pie crust and pancakes STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) OV).

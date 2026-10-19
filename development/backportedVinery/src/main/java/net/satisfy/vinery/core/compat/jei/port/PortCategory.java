@@ -1,5 +1,6 @@
 package net.satisfy.vinery.core.compat.jei.port;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
@@ -10,6 +11,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,8 +63,14 @@ abstract class PortCategory<T> implements IRecipeCategory<T> {
         filling.draw(pose, x, y);
     }
 
+    /** JEI's own text style: dark grey, no shadow. */
     static void drawCentered(PoseStack pose, Component text, int centerX, int y) {
+        drawCentered(pose, text.getVisualOrderText(), centerX, y);
+    }
+
+    static void drawCentered(PoseStack pose, FormattedCharSequence text, int centerX, int y) {
         var font = Minecraft.getInstance().font;
+        RenderSystem.setShaderColor(1, 1, 1, 1);
         font.draw(pose, text, centerX - font.width(text) / 2f, y, TEXT_COLOR);
     }
 

@@ -24,5 +24,6 @@
   "recipe_book_tab": "meals",
   "result": {
     "item": "brewinandchewin:horror_lasagna"
-  }
+  },
+  "cookingtime": 200
 }

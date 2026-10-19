@@ -19,12 +19,10 @@
   "fluid_type.brewinandchewin.withering_dross": "Иссушающий шлак",
   "fluid_type.brewinandchewin.flaxen_cheese": "Льняной сыр",
   "fluid_type.brewinandchewin.scarlet_cheese": "Алый сыр",
-
   "block.brewinandchewin.keg": "Бочонок",
   "block.brewinandchewin.heating_cask": "Нагревательная бочка",
   "block.brewinandchewin.ice_crate": "Ящик для льда",
   "block.brewinandchewin.coaster": "Подставка",
-
   "item.brewinandchewin.tankard": "Кружка",
   "item.brewinandchewin.beer": "Пиво",
   "item.brewinandchewin.vodka": "Водка",
@@ -63,12 +61,8 @@
   "item.brewinandchewin.ham_and_cheese_sandwich": "Сэндвич с ветчиной и сыром",
   "block.brewinandchewin.quiche": "Киш",
   "item.brewinandchewin.quiche_slice": "Кусочек киша",
-  "item.brewinandchewin.sweet_berry_jam": "Сладкое ягодное варенье",
-  "item.brewinandchewin.glow_berry_marmalade": "Светящийся ягодный мармелад",
-  "item.brewinandchewin.apple_jelly": "Яблочное желе",
   "item.brewinandchewin.dread_nog": "Ужасный ног",
   "item.brewinandchewin.kombucha": "Чайный гриб",
-
   "effect.brewinandchewin.tipsy": "Навеселе",
   "effect.brewinandchewin.tipsy.description": "Создаёт эффект колебания экрана. На уровне III или эффект будет перетаскивать ваш курсор мыши. На уровне IV или выше сообщения, отправленные вами в чат, сообщения других игроков для вас, и таблички будут запутаны. Может замедлить нанесение урона, о чём свидетельствуют оранжевые сердца эффекта.",
   "effect.brewinandchewin.intoxication": "Опьянение",
@@ -87,12 +81,9 @@
   "brewinandchewin.container.keg.normal": "Нормально",
   "brewinandchewin.container.keg.warm": "Тёпло",
   "brewinandchewin.container.keg.hot": "Горячо",
-
   "brewinandchewin.block.feast.use_knife": "Нужен нож, чтобы разрезать это.",
-
   "death.attack.brewinandchewin.cardiacArrest": "%1$s вспомнил, что было больно",
   "death.attack.brewinandchewin.cardiacArrest.player": "У %1$s случилась остановка сердца из-за %2$s",
-
   "brewinandchewin.advancement.root": "Варим и Жуём",
   "brewinandchewin.advancement.root.desc": "Давай, зажги по полной!",
   "brewinandchewin.advancement.place_keg": "Здесь и начинается процесс",
@@ -109,7 +100,6 @@
   "brewinandchewin.advancement.cook_fiery_fondue.desc": "Приготовьте огненное фондю в котле",
   "brewinandchewin.advancement.chef_of_the_ages": "Шеф-повар на века",
   "brewinandchewin.advancement.chef_of_the_ages.desc": "Съешьте по одному из всех доступных блюд «Варим и Жуём»",
-
   "itemGroup.brewinandchewin": "Варим и Жуём",
   "brewinandchewin.jei.fermenting": "Ферментация",
   "brewinandchewin.jei.aging": "Выдержка",
@@ -120,7 +110,6 @@
   "brewinandchewin.jei.tooltip.error.recipe.transfer.not_enough_fluid": "Недостаточно жидкости",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.temperature": "Неправильная температура",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.invalid_fluid": "Недопустимые предметы жидкости",
-
   "emi.category.brewinandchewin.fermenting": "Ферментация",
   "emi.category.brewinandchewin.pouring": "Разливание",
   "emi.category.brewinandchewin.aging": "Созревание",
@@ -129,14 +118,11 @@
   "brewinandchewin.emi.cooler_temperature": "Требуется более низкая температура",
   "brewinandchewin.emi.incorrect_fluid": "Неподходящая жидкость для создания",
   "brewinandchewin.emi.cant_empty": "Не удается слить имеющуюся жидкость",
-
   "tag.block.brewinandchewin.cheese_wheels.unripe": "Незрелые сырные круги",
   "tag.block.brewinandchewin.cheese_wheels.ripe": "Сырные круги",
   "tag.block.brewinandchewin.freeze_sources": "Источники замораживания",
   "tag.block.brewinandchewin.player_workstations.kegs": "Бочонки",
-
   "tag.entity_type.brewinandchewin.immune_to_intoxication": "Иммунитет к опьянению",
-
   "tag.item.brewinandchewin.cheese_wheels.unripe": "Незрелые сырные круги",
   "tag.item.brewinandchewin.cheese_wheels.ripe": "Сырные круги",
   "tag.item.brewinandchewin.fermented_drinks": "Ферментированные напитки",
@@ -145,7 +131,6 @@
   "tag.item.brewinandchewin.foods.horror_meat": "Ужасное мясо",
   "tag.item.brewinandchewin.foods.pizza_topping": "Начинки для пиццы",
   "tag.item.brewinandchewin.player_workstations.kegs": "Бочонки",
-
   "tag.fluid.brewinandchewin.beer": "Пиво",
   "tag.fluid.brewinandchewin.vodka": "Водка",
   "tag.fluid.brewinandchewin.mead": "Медовуха",
@@ -164,7 +149,6 @@
   "tag.fluid.brewinandchewin.kombucha": "Чайный гриб",
   "tag.fluid.brewinandchewin.flaxen_cheese": "Льняной сыр",
   "tag.fluid.brewinandchewin.scarlet_cheese": "Алый сыр",
-
   "tag.mob_effect.brewinandchewin.low_priority.milk_bottle": "Низкий приоритет для бутылочки молока",
   "tag.mob_effect.brewinandchewin.low_priority.hot_cocoa": "Низкий приоритет для горячего какао"
 }

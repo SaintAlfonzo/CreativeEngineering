@@ -18,12 +18,10 @@
   "fluid_type.brewinandchewin.withering_dross": "ウィザーリングドロス",
   "fluid_type.brewinandchewin.flaxen_cheese": "亜麻チーズ",
   "fluid_type.brewinandchewin.scarlet_cheese": "スカーレットチーズ",
-
   "block.brewinandchewin.keg": "ビール樽",
   "block.brewinandchewin.heating_cask": "加熱キャスク",
   "block.brewinandchewin.ice_crate": "氷箱",
   "block.brewinandchewin.coaster": "コースター",
-
   "item.brewinandchewin.tankard": "ジョッキ",
   "item.brewinandchewin.beer": "ビール",
   "item.brewinandchewin.vodka": "ウォッカ",
@@ -62,14 +60,10 @@
   "item.brewinandchewin.ham_and_cheese_sandwich": "ハムとチーズのサンドイッチ",
   "block.brewinandchewin.quiche": "キッシュ",
   "item.brewinandchewin.quiche_slice": "キッシュスライス",
-  "item.brewinandchewin.sweet_berry_jam": "スイートベリージャム",
-  "item.brewinandchewin.glow_berry_marmalade": "グローベリーマーマレード",
-  "item.brewinandchewin.apple_jelly": "りんごゼリー",
   "item.brewinandchewin.dread_nog": "ドレッドノッグ",
   "item.brewinandchewin.kombucha": "コンブチャ",
-
   "effect.brewinandchewin.tipsy": "アルコール酔い",
-  "effect.brewinandchewin.tipsy.description": "画面に揺れ効果を与えます。レベルIII以上では、マウスでドラッグできるようになります。レベルIV以上では、あなたが送信したチャット、あなたの側にある他のプレイヤーのチャット、およびサインが乱れます。ダメージを遅らせる可能性があり、オレンジ色の酔いハートで示されます。",  
+  "effect.brewinandchewin.tipsy.description": "画面に揺れ効果を与えます。レベルIII以上では、マウスでドラッグできるようになります。レベルIV以上では、あなたが送信したチャット、あなたの側にある他のプレイヤーのチャット、およびサインが乱れます。ダメージを遅らせる可能性があり、オレンジ色の酔いハートで示されます。",
   "effect.brewinandchewin.intoxication": "中毒",
   "effect.brewinandchewin.intoxication.description": "プレイヤーが食べ物から満腹度を得ることができなくなります。",
   "effect.brewinandchewin.raging": "激怒",
@@ -85,12 +79,9 @@
   "brewinandchewin.container.keg.normal": "常温",
   "brewinandchewin.container.keg.warm": "暖",
   "brewinandchewin.container.keg.hot": "熱",
-
   "brewinandchewin.block.feast.use_knife": "これを切るにはナイフが必要です。",
-
   "death.attack.brewinandchewin.cardiacArrest": "%1$sは怪我をしたことを思い出した",
   "death.attack.brewinandchewin.cardiacArrest.player": "%1$sは%2$sによって心停止に陥った",
-
   "brewinandchewin.advancement.root": "Brewin' and Chewin'",
   "brewinandchewin.advancement.root.desc": "嵐を巻き起こそう！",
   "brewinandchewin.advancement.place_keg": "プロセスを開始します",
@@ -107,7 +98,6 @@
   "brewinandchewin.advancement.cook_fiery_fondue.desc": "大釜で調理鍋から激辛フォンデュを入手する",
   "brewinandchewin.advancement.chef_of_the_ages": "時代を代表するシェフ",
   "brewinandchewin.advancement.chef_of_the_ages.desc": "いらっしゃいませ！提供されているすべてのBrewin' and Chewin'メニューのコースをぜひご賞味ください。",
-
   "itemGroup.brewinandchewin": "Brewin' and Chewin'",
   "brewinandchewin.jei.fermenting": "発酵",
   "brewinandchewin.jei.aging": "老化",

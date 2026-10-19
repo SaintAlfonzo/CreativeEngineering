@@ -89,7 +89,7 @@ public final class WineCommands {
     /** Port (B4.5): moves the vintage clock, for testing. */
     private static ArgumentBuilder<CommandSourceStack, ?> clockNode(String mode) {
         ArgumentBuilder<CommandSourceStack, ?> amount = Commands.argument("amount", IntegerArgumentType.integer(0, MAX_AMOUNT));
-        for (String unit : new String[]{"ticks", "minutes", "hours", "days", "years"}) {
+        for (String unit : new String[]{"ticks", "minutes", "hours", "days", "months"}) {
             amount = amount.then(Commands.literal(unit).executes(ctx -> clock(ctx.getSource(), mode, IntegerArgumentType.getInteger(ctx, "amount"), unit)));
         }
         return Commands.literal(mode).then(amount);
@@ -101,7 +101,7 @@ public final class WineCommands {
             case "minutes" -> 1200;
             case "hours" -> 72000;
             case "days" -> clock.ticksPerDay();
-            case "years" -> clock.ticksPerYear();
+            case "months" -> clock.ticksPerYear();
             default -> 1;
         };
         long ticks = (long) (amount * perUnit);
@@ -110,21 +110,22 @@ public final class WineCommands {
         } else {
             VintageClock.add(source.getServer(), ticks);
         }
-        long now = VintageClock.of(source.getLevel()).ticks();
-        source.sendSuccess(Component.translatable("command.vinery_backport.wine.clock", now, DrinkBlockItem.realTime(now)), true);
+        VintageClock.Snapshot after = VintageClock.of(source.getLevel());
+        long now = after.ticks();
+        source.sendSuccess(Component.translatable("command.vinery_backport.wine.clock", now, DrinkBlockItem.realTime(after.realTicks(now))), true);
         return (int) Math.min(Integer.MAX_VALUE, now);
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> amountNode(String mode, int sign) {
         return Commands.literal(mode).then(Commands.argument("amount", IntegerArgumentType.integer(0, MAX_AMOUNT))
-                .then(targets(Commands.literal("years"), ctx -> ageOperation(ctx, mode, sign, true)))
+                .then(targets(Commands.literal("months"), ctx -> ageOperation(ctx, mode, sign, true)))
                 .then(targets(Commands.literal("days"), ctx -> ageOperation(ctx, mode, sign, false))));
     }
 
-    private static WineOperation ageOperation(CommandContext<CommandSourceStack> ctx, String mode, int sign, boolean years) {
+    private static WineOperation ageOperation(CommandContext<CommandSourceStack> ctx, String mode, int sign, boolean months) {
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         return (wine, level) -> {
-            int days = years ? amount * VintageClock.of(level).daysPerYear() : amount;
+            int days = months ? amount * VintageClock.of(level).daysPerYear() : amount;
             int current = WineYears.getWineAgeDays(wine, level);
             WineYears.setWineAgeDays(wine, level, mode.equals("set") ? days : current + sign * days);
         };
@@ -233,7 +234,8 @@ public final class WineCommands {
         int next = WineYears.getDaysUntilNextLevel(stack, level);
         boolean waitsForStorage = clock.ageOnlyInStorage() && component.getLong("storedSince") < 0;
 
-        source.sendSuccess(line("command.vinery.wine.info.age", "Age: %s years, %s days", WineYears.getWineAgeYears(stack, level), days), false);
+        int months = WineYears.getWineAgeYears(stack, level);
+        source.sendSuccess(line("command.vinery.wine.info.age", "Age: %s months, %s days", months, days - months * clock.daysPerYear()), false);
         source.sendSuccess(line("command.vinery.wine.info.level", "Effect level: %s / %s", levelNow, clock.maxLevel()), false);
         source.sendSuccess(line("command.vinery.wine.info.duration", "Duration: %ss", duration / 20), false);
         if (next < 0) {
@@ -243,7 +245,7 @@ public final class WineCommands {
         } else {
             long ticks = WineYears.getTicksUntilNextLevel(stack, level);
             source.sendSuccess(line("command.vinery.wine.info.next", "Next level in ~%s days", next), false);
-            source.sendSuccess(Component.translatable("command.vinery_backport.wine.info.next_time", DrinkBlockItem.realTime(ticks), DrinkBlockItem.realTime((long) Math.ceil(ticks * 100.0 / Math.max(100, clock.cellarPercent())))), false);
+            source.sendSuccess(Component.translatable("command.vinery_backport.wine.info.next_time", DrinkBlockItem.realTime(clock.realTicks(ticks)), DrinkBlockItem.realTime(clock.realTicks(Math.ceil(ticks * 100.0 / Math.max(100, clock.cellarPercent()))))), false);
         }
         String raw = component.toString();
         source.sendSuccess(line("command.vinery.wine.info.raw", "[Raw data]").withStyle(style -> style
@@ -259,12 +261,12 @@ public final class WineCommands {
         VintageClock.Snapshot clock = VintageClock.of(level);
         int daysPerYear = clock.daysPerYear();
         int day = WineYears.getDays(level);
-        source.sendSuccess(line("command.vinery.wine.time", "Day %s, year %s (%s days per year, %s years per effect level)",
+        source.sendSuccess(line("command.vinery.wine.time", "Day %s, month %s (%s days per month, %s months per effect level)",
                 day, WineYears.getYear(level, daysPerYear), daysPerYear, clock.yearsPerEffectLevel()), false);
-        source.sendSuccess(Component.translatable("command.vinery_backport.wine.time.clock", clock.ticks(), DrinkBlockItem.realTime(clock.ticks()),
+        source.sendSuccess(Component.translatable("command.vinery_backport.wine.time.clock", clock.ticks(), DrinkBlockItem.realTime(clock.realTicks(clock.ticks())),
                 VineryConfig.CLOCK_MODE.get().name(), VineryConfig.DAY_UNIT.get().name()), false);
-        source.sendSuccess(Component.translatable("command.vinery_backport.wine.time.units", DrinkBlockItem.realTime((long) clock.ticksPerDay()),
-                DrinkBlockItem.realTime((long) clock.ticksPerYear()), DrinkBlockItem.realTime((long) (clock.ticksPerYear() * clock.yearsPerEffectLevel()))), false);
+        source.sendSuccess(Component.translatable("command.vinery_backport.wine.time.units", DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerDay())),
+                DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerYear())), DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerYear() * clock.yearsPerEffectLevel()))), false);
         String measured = clock.measuredDayTicks() > 0 ? DrinkBlockItem.realTime((long) clock.measuredDayTicks()) : "-";
         source.sendSuccess(Component.translatable("command.vinery_backport.wine.time.world_day", measured), false);
         return day;

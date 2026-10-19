@@ -69,6 +69,9 @@ public class KegMenu extends RecipeBookMenu<KegRecipeWrapper> {
 
       this.addSlot(BrewinAndChewin.getHelper().createKegContainerSlot(this.inventory, 4, 91, 55));
       this.addSlot(BrewinAndChewin.getHelper().createKegResultSlot(this.inventory, 5, 124, 55));
+      // Port (alcohol.md 8.4): fluid in and empty container out, in the column left of the grid.
+      this.addSlot(BrewinAndChewin.getHelper().createKegSlot(this.inventory, KegBlockEntity.FLUID_IN_SLOT, 8, 17));
+      this.addSlot(BrewinAndChewin.getHelper().createKegResultSlot(this.inventory, KegBlockEntity.FLUID_OUT_SLOT, 8, 53));
       int startPlayerInvY = startY * 4 + 12;
 
       for (int row = 0; row < 3; row++) {
@@ -102,21 +105,28 @@ public class KegMenu extends RecipeBookMenu<KegRecipeWrapper> {
 
    @Override
    public ItemStack quickMoveStack(Player playerIn, int index) {
-      int indexContainerInput = 4;
-      int indexOutput = 5;
-      int startPlayerInv = indexOutput + 1;
+      int indexContainerInput = KegBlockEntity.CONTAINER_SLOT;
+      int indexOutput = KegBlockEntity.OUTPUT_SLOT;
+      int indexFluidInput = KegBlockEntity.FLUID_IN_SLOT;
+      int startPlayerInv = KegBlockEntity.INVENTORY_SIZE;
       int endPlayerInv = startPlayerInv + 36;
       Slot slot = this.slots.get(index);
       ItemStack slotStackCopy = ItemStack.EMPTY;
       if (slot.hasItem()) {
          ItemStack slotStack = slot.getItem();
          slotStackCopy = slotStack.copy();
-         if (index == indexOutput) {
+         if (index == indexOutput || index == KegBlockEntity.FLUID_OUT_SLOT) {
             if (!this.moveItemStackTo(slotStack, startPlayerInv, endPlayerInv, true)) {
                return ItemStack.EMPTY;
             }
-         } else if (index <= indexOutput) {
+         } else if (index < startPlayerInv) {
             if (!this.moveItemStackTo(slotStack, startPlayerInv, endPlayerInv, false)) {
+               return ItemStack.EMPTY;
+            }
+         } else if (this.blockEntity.isFluidSource(slotStack)) {
+            // Port (alcohol.md 8.4): filled containers go to the fluid slot, then the ingredient grid.
+            if (!this.moveItemStackTo(slotStack, indexFluidInput, indexFluidInput + 1, false)
+               && !this.moveItemStackTo(slotStack, 0, indexContainerInput, false)) {
                return ItemStack.EMPTY;
             }
          } else {

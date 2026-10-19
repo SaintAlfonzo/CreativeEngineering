@@ -5,6 +5,7 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.satisfy.vinery.core.menu.FermentationBarrelMenu;
+import net.satisfy.vinery.core.compat.jei.VineryJEIPlugin;
 import net.satisfy.vinery.core.compat.jei.category.FermentationBarrelCategory;
 import net.satisfy.vinery.core.recipe.FermentationBarrelRecipe;
 import net.satisfy.vinery.core.registry.MenuTypeRegistry;
@@ -35,13 +36,20 @@ public class FermentationTransferInfo implements IRecipeTransferInfo<Fermentatio
         return true;
     }
 
+    /**
+     * Port: in the order {@link VineryJEIPlugin#buildSlotsFromRecipe} adds the page's input slots, which JEI pairs up
+     * one by one: juice (slot 0, only when the recipe needs juice), the ingredients (1-3), the wine bottle (4).
+     */
     @Override
     public @NotNull List<Slot> getRecipeSlots(FermentationBarrelMenu container, FermentationBarrelRecipe recipe) {
         List<Slot> slots = new ArrayList<>();
-        slots.add(container.getSlot(0));
-        for(int i = 1; i <= recipe.getIngredients().size() && i < 5; i++){
+        if (recipe.getJuiceData().amount() > 0) {
+            slots.add(container.getSlot(0));
+        }
+        for (int i = 1; i <= recipe.getIngredients().size() && i < 4; i++) {
             slots.add(container.getSlot(i));
         }
+        slots.add(container.getSlot(4));
         return slots;
     }
 

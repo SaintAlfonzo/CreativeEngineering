@@ -7,6 +7,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import umpaz.brewinandchewin.common.network.serverbound.JEITransferKegRecipeServerboundPacket;
 import umpaz.brewinandchewin.BrewinAndChewin;
 import umpaz.brewinandchewin.common.network.BnCPacket;
 import umpaz.brewinandchewin.common.network.clientbound.ClearKegFluidContainerComponentsClientboundPacket;
@@ -16,7 +17,7 @@ import umpaz.brewinandchewin.common.network.clientbound.SyncRagingStacksClientbo
 
 /** Port: upstream's payload registrar ("3") -> one SimpleChannel. Clients and servers must run the same protocol. */
 public class BnCNetwork {
-   private static final String PROTOCOL = "4.5.0-1";
+   private static final String PROTOCOL = "4.5.0-2"; // -2: JEI keg transfer packet
    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(BrewinAndChewin.asResource("main"), () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
    private static int index = 0;
 
@@ -25,7 +26,7 @@ public class BnCNetwork {
       clientbound(MakeNextPlayerChatTipsyClientboundPacket.class, MakeNextPlayerChatTipsyClientboundPacket::new);
       clientbound(SyncNumbedHeartsClientboundPacket.class, SyncNumbedHeartsClientboundPacket::new);
       clientbound(SyncRagingStacksClientboundPacket.class, SyncRagingStacksClientboundPacket::new);
-      // JEI recipe transfer (serverbound) is registered once the JEI integration is ported.
+      serverbound(JEITransferKegRecipeServerboundPacket.class, JEITransferKegRecipeServerboundPacket::new);
    }
 
    private static <T extends BnCPacket> void clientbound(Class<T> type, Function<FriendlyByteBuf, T> decoder) {

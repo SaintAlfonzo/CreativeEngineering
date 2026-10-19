@@ -27,6 +27,9 @@ ServerEvents.tags('block', e => {
 	// Stove heat on top: FD's lit gate means a pot or skillet on the oven only heats while the oven is heated.
 	t.add(e, b.t_fd_heat_sources, b.oven)
 	t.mineable(e, 'pickaxe', null, b.oven)
+	// Bakeware is hammered on the cutting board (NCH.hammering); without this the IE hammer rotates the board
+	// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
+	t.add(e, b.t_hammer_no_rotate, b.cutting_board)
 
 	// Emu, duck and goose nests: Incubation Additions tags them into incubation:bird_nests itself
 

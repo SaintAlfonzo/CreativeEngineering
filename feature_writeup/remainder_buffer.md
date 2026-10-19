@@ -15,7 +15,7 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 |---|---|
 | Feasibility study (1, 2) | DONE 2026-10-18, from the decompiled jars the pack uses |
 | Design (3) | DECIDED 2026-10-18: D1-D5 as recommended (5) |
-| Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: patcherMod compiles and builds (reobf checked); 10 GameTests pass (6). Not in `mods/` yet, not run in game (RB-01 to RB-11) |
+| Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: patcherMod compiles and builds (reobf checked); 10 GameTests pass (6). DEPLOYED with 1.0.7; one leftover per item used (for the oven's ingredient counts) STAGED for 1.0.8; not run in game (RB-01 to RB-11) |
 | Keg | WAITING on the `backportedBrewin` port (D5), see 3.6 |
 | WTHIT line "Holding: ..." | not built (optional, 3.3) |
 
@@ -230,7 +230,7 @@ SRG-named jar in game, Create Central Kitchen alongside.
 
 ## 7. In-game test suite
 
-Needs a patcherMod build (1.0.7) in `mods/`.
+In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 
 - [ ] **RB-01 Pot recycle:** hot cocoa with a milk bottle. Nothing on the ground; the cocoa comes out plated.
 - [ ] **RB-02 Pot bucket:** a milk-bucket recipe. The bucket is in a leftover slot (right of the output).
@@ -436,3 +436,6 @@ milk bottle, check the bottle is in the buffer, fill the buffer, check the stati
 | RB-08 | Save, quit, reload: buffer contents kept |
 | RB-09 | CCK blaze stove under the pot and kettle still signals |
 | RB-10 | Oven: muffin with milk bottle, bottle buffered |
+- 2026-10-19: shipped in pack 1.0.7 (DEPLOYED 2026-10-18 19:43). For 1.0.8, `RemainderBuffer.leftovers` takes a per-slot
+  count, so an oven slot that gives up n items (`[cooking] ovenIngredientCounts`) leaves n containers. The keg is
+  still not covered: the Brewin' port `-02` ships in 1.0.8 without a remainder buffer.
