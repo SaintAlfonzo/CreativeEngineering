@@ -2,13 +2,13 @@
  "_about": "Which pack version each machine runs. Written by `tools/build_deploy.py --snapshot` after a payload is copied out; update payloads are diffed against these versions' history/<version>.json.",
  "server": {
   "version": "1.0.8",
-  "date": "2026-10-19T01:33",
-  "snapshotSha1": "5195e93e81f98152d3657e1cb4b69113bf860bc0"
+  "date": "2026-10-19T10:20",
+  "snapshotSha1": "c1544498c29852392052a3a81d1f1cd2121fec4f"
  },
  "client": {
   "version": "1.0.8",
-  "date": "2026-10-19T01:33",
-  "snapshotSha1": "5195e93e81f98152d3657e1cb4b69113bf860bc0"
+  "date": "2026-10-19T10:20",
+  "snapshotSha1": "c1544498c29852392052a3a81d1f1cd2121fec4f"
  },
  "log": [
   {
@@ -63,7 +63,7 @@
   },
   {
    "version": "1.0.8",
-   "date": "2026-10-19T01:33",
+   "date": "2026-10-19T10:20",
    "targets": [
     "server",
     "client"

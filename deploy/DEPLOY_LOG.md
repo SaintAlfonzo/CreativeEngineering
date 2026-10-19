@@ -5,17 +5,17 @@ version before it and which files the other machines must delete. The full file 
 `history/<version>.json`.
 
 <!-- deploy:1.0.8 -->
-## 1.0.8 - 2026-10-19 01:16
+## 1.0.8 - 2026-10-19 10:06
 
 - Minecraft 1.19.2, Forge 43.3.9
-- Commit: 908e831 + 44 uncommitted file(s)
+- Commit: 2e8687f + 4 uncommitted file(s)
 - Since: 1.0.7
-- Deployed: server, client 2026-10-19 01:33
+- Deployed: server, client 2026-10-19 10:20
 - Contents: 374 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
-- Payload: update from 1.0.7, config functional: 38 files, 5.4 MB (mods 3, kubejs 25, config 8, defaultconfigs 2)
-- Notes: time master, advancements off, Brewin port -02 (replaces the 2.0 jar for good), Vinery port -02, oven recipes + bakeware hammering + cornmeal
+- Payload: update from 1.0.7, config functional: 41 files, 5.5 MB (mods 3, kubejs 28, config 8, defaultconfigs 2)
+- Notes: Restaged 2026-10-19 (replaces the 01:16 staging): patcherMod 1.0.8 rebuilt with the dedicated-server boot fix (Serene Seasons clock mixin split into server + client), flat worlds stay flat (RegistryLoaderPresetOverworldMixin), /ceplace templates lists per pack, /dumpstructuregen reads the protected placement fields (PlacementInfo); type/* structure tags are real tags so earth-fill pruning runs on villages; town companion villages 64-96 blocks out
 - Built with warnings:
-  - 44 uncommitted change(s) in shipped folders (commit 908e831 + working tree)
+  - 4 uncommitted change(s) in shipped folders (commit 2e8687f + working tree)
 
 ### Changes
 
@@ -25,7 +25,7 @@ Mods updated (3):
 - creativeengineering: `creativeengineering-1.0.7.jar` -> `creativeengineering-1.0.8.jar`
 - vinery: `backportedVinery-1.5.5-ce-19.2-01.jar` -> `backportedVinery-1.5.5-ce-19.2-02.jar`
 
-<details><summary>kubejs/: 6 added, 19 changed, 1 removed</summary>
+<details><summary>kubejs/: 6 added, 22 changed, 1 removed</summary>
 
 *added (6)*
 
@@ -36,7 +36,7 @@ Mods updated (3):
 - `server_scripts/cooking/alcohol.js`
 - `startup_scripts/cooking/cornmeal.js`
 
-*changed (19)*
+*changed (22)*
 
 - `assets/creativeengineering/lang/en_us.json`
 - `client_scripts/placeable_tooltip.js`
@@ -45,12 +45,15 @@ Mods updated (3):
 - `generation_scripts/food/placeable.json`
 - `generation_scripts/stacks/stack_sizes.json`
 - `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/meta_structures.json`
+- `server_scripts/_lib/dump_structuregen.js`
 - `server_scripts/cooking/baking.js`
 - `server_scripts/cooking/cooking.js`
 - `server_scripts/tags/blocktags.js`
 - `server_scripts/tags/cookingtags.js`
 - `server_scripts/tags/metaltags.js`
 - `server_scripts/tags/placeabletags.js`
+- `server_scripts/worldgen/structure_overrides.js`
 - `startup_scripts/_lib/block_dict.js`
 - `startup_scripts/_lib/fluid_dict.js`
 - `startup_scripts/_lib/item_dict.js`

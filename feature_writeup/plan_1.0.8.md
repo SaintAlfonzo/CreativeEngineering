@@ -1,8 +1,9 @@
 # 1.0.8: time master, no advancements, both alcohol ports at -02, the baking update
 
-STAGED 2026-10-19 01:16 in `deploy/latest/` (not yet copied to the server or the clients). 1.0.8 is everything built
-after the 1.0.7 deploy (2026-10-18 19:43, commit `908e831`) up to the working tree on 2026-10-19 00:50, when the last
-jars were built. The payload is an update from 1.0.7, which both sides run.
+RESTAGED 2026-10-19 10:06 in `deploy/latest/` (replaces the 01:16 staging, whose patcherMod jar could not boot a dedicated
+server). 1.0.8 is everything built after the 1.0.7 deploy (2026-10-18 19:43, commit `908e831`) up to the working tree on
+2026-10-19 00:50, plus the server crash fix and the worldgen fixes from the structure scratch run (row WG). The payload is
+an update from 1.0.7: the 01:33 1.0.8 snapshot was rolled back to 1.0.7 so the version could be rebuilt.
 
 ## 0. At a glance
 
@@ -19,11 +20,12 @@ Kind: feature, fix, data, config, mods, bookkeeping. Evidence for every row: one
 | PL | Placeable food: "Placeable on a coaster" line and tag (160 items), placeable catalog regenerated | feature + data | STAGED | [placeable_food.md](placeable_food.md), [placeable_catalog.md](placeable_catalog.md), [tooltips.md](tooltips.md) |
 | DR | Data: `food_types.json`, `stack_sizes.json`, `placeable.json`; climate samples and `biome_config.json` resampled 2026-10-18 23:31 (agreement: Overworld 98.9 %, End 80.1 %, Nether 86.4 %); `item_dict.js` / `block_dict.js` / `fluid_dict.js` entries for the ports | data | STAGED | [biome_tuning.md](biome_tuning.md), [stack_sizes.md](stack_sizes.md) |
 | CF | Config: `creativeengineering-common.toml` (`[time]`, `[advancements]`, `[cooking] ovenIngredientCounts`), `brewinandchewin-common.toml` (keg pipe rule), `vinery-common.toml` (new keys), `progression.snbt` (pierogi id), JEI sort orders (`brewinandchewin:aging` next to fermenting), game-rewritten `rare-ice.properties` and WorldEdit; defaultconfigs `sereneseasons-server.toml`, `seasonhud-server.toml` (the pushed 24000 / 8) | config | STAGED | this file 1 |
-| VR | Version records: patcherMod **1.0.8** (md5 f136f818, built 2026-10-19 00:49), backportedVinery **-02** (a3e1164d, 00:50), backportedBrewin **-02** (8441a046, 00:50), all archived; `backportedBrewin` in `IN_TREE_MODS`; `pack/manifest.json` regenerated; next builds bumped to patcherMod 1.0.9, ports `-03` | bookkeeping | DONE 2026-10-19 | [deploy.md](deploy.md), this file 4 |
+| WG | Worldgen fixes from the scratch run ([testing/structures/11_fixes_1_0_8.md](testing/structures/11_fixes_1_0_8.md)): dedicated-server boot (Serene Seasons clock mixin split into server + client), `type/*` structure tags made real so earth-fill pruning runs on villages, `/dumpstructuregen` reads the protected placement fields (`PlacementInfo`), town companion villages 64-96 blocks out (were 112-160), `/ceplace templates` lists per pack, flat / Superflat worlds stay flat with the biome layout on (`RegistryLoaderPresetOverworldMixin`) | fix | STAGED; scratch dedicated server 2026-10-19 (3 boots, all pass) | [structure_tuning.md](structure_tuning.md) 3.10, 3.13, 3.22 |
+| VR | Version records: patcherMod **1.0.8** (md5 d60b5a99, rebuilt 2026-10-19 09:36; the 00:49 f136f818 build is in `jar_archive/displaced/`), backportedVinery **-02** (a3e1164d, 00:50), backportedBrewin **-02** (8441a046, 00:50), all archived; `backportedBrewin` in `IN_TREE_MODS`; `pack/manifest.json` regenerated; next builds bumped to patcherMod 1.0.9, ports `-03` | bookkeeping | DONE 2026-10-19 | [deploy.md](deploy.md), this file 4 |
 
 ## 1. What the payload contains
 
-Update from 1.0.7: 38 files, 5.4 MB (mods 3, kubejs 25, config 8, defaultconfigs 2). The full list is the 1.0.8 entry
+Update from 1.0.7: 41 files, 5.5 MB (mods 3, kubejs 28, config 8, defaultconfigs 2; the 01:16 staging was 38 / 5.4 MB). The full list is the 1.0.8 entry
 in [deploy/DEPLOY_LOG.md](../deploy/DEPLOY_LOG.md).
 
 - **mods (server + client):** `creativeengineering-1.0.8.jar`, `backportedVinery-1.5.5-ce-19.2-02.jar`,
@@ -31,6 +33,8 @@ in [deploy/DEPLOY_LOG.md](../deploy/DEPLOY_LOG.md).
 - **kubejs:** `server_scripts/cooking/alcohol.js` and `startup_scripts/cooking/cornmeal.js` (new), bakeware and
   cornmeal sprites, `baking.js`, `cooking.js`, the dicts, `neoCraftHelper.js` (`ceBaking` counts, `hammering`,
   `bncFermenting`, `createEmptying`), tags, tooltips, generated food / stack / placeable data.
+- **kubejs, from the restage:** `worldgen/structure_overrides.js` (`type/*` tags), `_lib/dump_structuregen.js`,
+  `generation_scripts/worldgen/meta_structures.json` (companion distance).
 - **config / defaultconfigs:** as in row CF.
 - **vinery_upstream/:** nothing new (the 1.0.7 jars stay).
 - **removals, both sides:** `mods/BrewinAndChewin-1.19-2.0.jar`, `mods/backportedBrewin-4.5.0-ce-19.2-01.jar`,
@@ -48,15 +52,23 @@ from 00:53 to 01:11 (`logs/latest.log`):
   follow the sun; sub-season 2 day 3 kept".
 - One error class from our code, the oven JEI [+] (2.2).
 
-Nothing has booted on the dedicated server with this jar set.
+Until the restage nothing had booted on a dedicated server with this jar set (see below).
+
+**Dedicated server (was a BLOCKER, fixed 2026-10-19):** the 00:49 jar did not boot a dedicated server
+(`ClassMetadataNotFoundException: net.minecraft.client.Minecraft` from `SereneSeasonsClockMixin`). Its client inject is
+now `SereneSeasonsClientClockMixin` in the client mixin list. The restaged jar (d60b5a99) booted a scratch dedicated
+server three times on the 1.0.8 mod set (flat world, flat reload, normal world with a 2601-chunk pregen): 0 KubeJS
+errors, `[time]` push and advancements lines present. Details: [testing/structures/11_fixes_1_0_8.md](testing/structures/11_fixes_1_0_8.md).
 
 Before copying:
+- [x] **Fix the dedicated-server crash above** and confirm one scratch-server boot (2026-10-19, three boots).
 - [ ] **Decide the server's `[time] preset`** (2.3). As staged, the server gets SINGLEPLAYER: a wine level every
   sub-season (8 h at the pack's day length) instead of SERVER's one per season.
 - [ ] Back up `world/advancements/` with the world if the progress might be wanted again (2.1).
 
 Copying:
-- [ ] `verify.sh` on each side (it checks they run 1.0.7; both Brewin' jars from 1.0.7 are expected), apply the
+- [ ] `verify.sh` on each side (it checks they run 1.0.7; both Brewin' jars from 1.0.7 are expected; a machine that
+  already took the 01:16 payload shows those 1.0.8 files as drift, which is fine), apply the
   removals, copy, then `python3 tools/build_deploy.py --snapshot 1.0.8`.
 - [ ] The payload README's step 5 (copy changed `*-server.toml` into `<world>/serverconfig/` by hand) isn't needed
   this time: the time master writes the Serene Seasons and SeasonHUD server values itself at server start.
@@ -102,7 +114,10 @@ None added or removed. `brewinandchewin` is now only the port (`mod_sides.md` ro
 
 ## 4. Version records
 
-- patcherMod **1.0.8** ships (md5 f136f818, 2026-10-19 00:49 build, archived). Against 1.0.7 it adds the `time/`
+- patcherMod **1.0.8** ships (md5 d60b5a99, 2026-10-19 09:36 rebuild, archived; the 00:49 f136f818 build, which crashed
+  dedicated servers, is `jar_archive/displaced/creativeengineering-1.0.8-f136f818-server-crash.jar`). Over f136f818 it
+  adds `SereneSeasonsClientClockMixin`, `RegistryLoaderPresetOverworldMixin`, `worldgen/PlacementInfo` and the
+  `MassPlacer` template listing. Against 1.0.7 it adds the `time/`
   package and 5 time mixins, `ServerAdvancementManagerMixin`, `IECompat.registerHammerNoRotate`, the oven ingredient
   counts and the remainder-buffer per-count leftovers. It overwrote an earlier unshipped 22:39 build of 1.0.8 in
   `jar_archive/`, whose changes are all in this one.
