@@ -91,6 +91,49 @@ R.pcExplosionCrafting(Item.of(i.flour, 1), i.wheat, 50, e)
 R.remove({ id: 'tmted:wheat_dough_from_egg' }, e)
 R.remove({ id: 'farmersdelight:wheat_dough_from_eggs' }, e)
 R.shapeless(Item.of(i.dough, 6), [Item.of(i.flour, 3), i.eggs], e)
+
+//######################### Cornmeal #########################
+// creativeengineering:cornmeal (startup_scripts/cooking/cornmeal.js), cooking.md "cornmeal". Corn and kernels
+// (corn_delight:corn_seeds) crush to it; a 9-block (corn crate, kernel bag) gives the same per-item ratio.
+// No millstone route for corn: Corn Delight's corn and wild corn milling are removed. Corn gives no straw: the knife
+// and IE crusher recipes that did keep their kernels only.
+R.remove({ id: 'corn_delight:integration/create/milling/corn' }, e)
+R.remove({ id: 'corn_delight:integration/create/milling/wild_corn' }, e)
+R.remove({ id: 'corn_delight:cutting/corn' }, e)
+R.remove({ id: 'corn_delight:cutting/wild_corn' }, e)
+R.remove({ id: 'corn_delight:integration/immersiveengineering/crusher/wild_corn' }, e)
+R.fdCutting(i.t_crops_corn, i.any_knife, Item.of(i.corn_seeds, 2), e, 'corn_kernels')
+R.fdCutting(i.wild_corn, i.any_knife, i.corn_seeds, e, 'wild_corn_kernels')
+R.ieCrushing(i.corn_seeds, i.wild_corn, e, 'wild_corn_kernels', [], 3200)
+// Create crushing: corn 1.5 cornmeal + 0.25 kernels, kernels 0.333 cornmeal
+R.createCrushing([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25)],
+	i.t_crops_corn, e, 'corn_cornmeal')
+R.createCrushing([Item.of(i.cornmeal, 13), Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 2),
+	Item.of(i.corn_seeds, 1).withChance(0.25)], i.corn_crate, e, 'corn_crate_cornmeal')
+R.createCrushing([Item.of(i.cornmeal, 1).withChance(0.333)], i.t_seeds_corn, e, 'corn_kernels_cornmeal')
+R.createCrushing([Item.of(i.cornmeal, 3)], i.corn_kernel_bag, e, 'corn_kernel_bag_cornmeal')
+// IE crusher: corn 2 cornmeal + 0.5 kernels (replaces Corn Delight's corn -> kernels + straw), kernels 0.5 cornmeal.
+// The crusher takes one item and can't roll its main output, so single kernels have no recipe; the bag does.
+R.remove({ id: 'corn_delight:integration/immersiveengineering/crusher/corn' }, e)
+R.ieCrushing(Item.of(i.cornmeal, 2), i.t_crops_corn, e, 'corn_cornmeal',
+	[{ chance: 0.5, output: i.corn_seeds }], 3200)
+R.ieCrushing(Item.of(i.cornmeal, 18), i.corn_crate, e, 'corn_crate_cornmeal',
+	[{ chance: 1, output: Item.of(i.corn_seeds, 4) }, { chance: 0.5, output: i.corn_seeds }], 3200)
+R.ieCrushing(Item.of(i.cornmeal, 4), i.corn_kernel_bag, e, 'corn_kernel_bag_cornmeal',
+	[{ chance: 0.5, output: i.cornmeal }], 3200)
+// PneumaticCraft: corn as wheat -> flour (3 at 1.5 bar, explosion 1 at 50% loss); kernels 4 -> 3. No crates/bags.
+R.pcPressureChamber(Item.of(i.cornmeal, 3), [i.t_crops_corn], 1.5, e, 'corn_cornmeal')
+R.pcExplosionCrafting(Item.of(i.cornmeal, 1), i.t_crops_corn, 50, e, 'corn_cornmeal')
+R.pcPressureChamber(Item.of(i.cornmeal, 3), [Item.of(i.corn_seeds, 4)], 1.5, e, 'corn_kernels_cornmeal')
+// Required in tortillas and cornbread batter (corn -> cornmeal, same counts); no more washing corn to tortillas.
+R.remove({ id: 'corn_delight:tortilla_raw' }, e)
+R.remove({ id: 'corn_delight:integration/create/splashing/tortilla_raw' }, e)
+R.shaped(Item.of(i.tortilla_raw, 3), ['CCC', ' W '], { C: i.cornmeal, W: i.water_bucket }, e, 'tortilla_raw')
+R.remove({ id: 'corn_delight:cornbread_batter' }, e)
+R.remove({ id: 'corn_delight:integration/create/mixing/cornbread_batter_from_mixing' }, e)
+R.shapeless(Item.of(i.cornbread_batter, 3), [Item.of(i.cornmeal, 2), i.milk, i.eggs], e, 'cornbread_batter')
+R.createMixing(Item.of(i.cornbread_batter, 3), [Item.of(i.cornmeal, 2), Fluid.of(f.milk, 250), i.eggs], e,
+	'cornbread_batter', 'n/a')
 //Add bread block recipes
 R.remove({ id: 'architects_palette:bread_block' }, e)
 R.remove({ id: 'architects_palette:bread_slab' }, e)
@@ -121,17 +164,14 @@ R.remove({ id: 'tmted:metalpress/raw_pasta' }, e)
 R.ieMetalPress(Item.of(i.pasta, 2), i.dough, i.mold_wire, e)
 
 //######################### Prepared #########################
-//Pierogi fix
-R.remove({ id: 'brewinandchewin:cooking/scarlet_pierogies' }, e)
-R.fdCooking([i.potato, i.nether_wart, i.cabbage_roll_veg, i.dough, i.scarlet_cheese_wedge], Item.of(i.scarlet_pierogies, 1), e, undefined, 1, 200, i.bowl)
-R.shapeless(Item.of(i.scarlet_pierogies, 1), [i.baked_potato, i.baked_potato, i.nether_wart, i.cabbage_roll_veg, i.bread, Item.of(i.scarlet_cheese_wedge, 2)], e)
+// Scarlet pierogi: alcohol.js (the cooking pot recipe with beetroot)
 
 //Pancakes
-//Wheat to flour
+//Wheat to flour (or cornmeal, or rice)
 R.remove({ id: 'supplementaries:pancake' }, e)
-R.shapeless(Item.of(i.pancakes, 3), [i.any_sugar, i.egg, i.milk, [i.flour, i.rice]], e)
+R.shapeless(Item.of(i.pancakes, 3), [i.any_sugar, i.egg, i.milk, [i.t_flour_or_cornmeal, i.rice]], e)
 // Efficient mixing, cooking
-R.createMixing(Item.of(i.pancakes, 5), [Fluid.of(f.milk, 250), i.any_sugar, i.egg, [i.flour, i.rice]], e, undefined, 'heated')
+R.createMixing(Item.of(i.pancakes, 5), [Fluid.of(f.milk, 250), i.any_sugar, i.egg, [i.t_flour_or_cornmeal, i.rice]], e, undefined, 'heated')
 
 //Barbecue stick
 //Remove exising, replace w/ cooked meat tag
@@ -251,6 +291,10 @@ R.createSequencedAssembly(Item.of(i.roasted_mutton_chops, 1), i.bowl, [
 
 //######################### Sweets #########################
 //Pie changes
+// Pie crust from flour (or cornmeal): milk in a bowl of 3 flour, 2 crusts. FD's wheat + milk craft stays.
+R.shaped(Item.of(i.pie_crust, 2), ['FMF', ' F '], { F: i.t_flour_or_cornmeal, M: i.milk }, e, 'pie_crust_flour')
+R.createCompacting(Item.of(i.pie_crust, 2),
+	[Fluid.of(f.milk, 250), i.t_flour_or_cornmeal, i.t_flour_or_cornmeal, i.t_flour_or_cornmeal], e, 'pie_crust_flour')
 //Remove redundant pie
 R.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice' }, e)
 R.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice_using_deployer' }, e)

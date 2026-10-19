@@ -74,14 +74,14 @@ public final class VineryClientForge {
                     STACKABLE_LOG.get(), APPLE_LEAVES.get(), POTTED_APPLE_TREE_SAPLING.get(), DARK_CHERRY_WINE_RACK_SMALL.get(),
                     POTTED_DARK_CHERRY_TREE_SAPLING.get(), RED_WINE.get(), DARK_CHERRY_CHAIR.get(), CRISTEL_WINE.get(),
                     VILLAGERS_FRIGHT.get(), EISWEIN.get(), CREEPERS_CRUSH.get(),
-                    GLOWING_WINE.get(), JO_SPECIAL_MIXTURE.get(), MEAD.get(), BOTTLE_MOJANG_NOIR.get(),
+                    GLOWING_WINE.get(), JO_SPECIAL_MIXTURE.get(), BOTTLE_MOJANG_NOIR.get(),
                     DARK_CHERRY_TABLE.get(), OAK_WINE_RACK_MID.get(), DARK_OAK_WINE_RACK_MID.get(), BIRCH_WINE_RACK_MID.get(),
                     SPRUCE_WINE_RACK_MID.get(), JUNGLE_WINE_RACK_MID.get(), MANGROVE_WINE_RACK_MID.get(), BAMBOO_WINE_RACK_MID.get(),
                     ACACIA_WINE_RACK_MID.get(), OAK_LATTICE.get(), SPRUCE_LATTICE.get(),
                     BIRCH_LATTICE.get(), DARK_OAK_LATTICE.get(), BAMBOO_LATTICE.get(), ACACIA_LATTICE.get(), JUNGLE_LATTICE.get(),
                     MANGROVE_LATTICE.get(), DARK_CHERRY_LATTICE.get(), DARK_CHERRY_LEAVES.get(),
                     // 1.3.10 keepers (1.3.10's render types)
-                    PRAETORIAN_WINE.get(), KING_DANIS_WINE.get(), TABLE.get(), GRAPEVINE_LATTICE.get(), FLOWER_POT.get(), CHAIR.get(),
+                    PRAETORIAN_WINE.get(), TABLE.get(), GRAPEVINE_LATTICE.get(), FLOWER_POT.get(), CHAIR.get(),
                     KITCHEN_SINK.get());
             for (Block block : new Block[]{WINDOW.get(), WINDOW_BLOCK.get()}) {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent());

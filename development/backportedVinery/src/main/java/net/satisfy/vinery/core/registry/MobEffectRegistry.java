@@ -21,10 +21,8 @@ public class MobEffectRegistry {
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Vinery.MOD_ID);
     private static final Map<ResourceLocation, RegistryObject<MobEffect>> BY_ID = new HashMap<>();
 
+    // B7.3: health_effect, luck_effect and resistance_effect are gone; minecraft:health_boost / luck / resistance cover them
     public static final ResourceLocation ARMOR_EFFECT = Vinery.identifier("armor_effect");
-    public static final ResourceLocation HEALTH_EFFECT = Vinery.identifier("health_effect");
-    public static final ResourceLocation LUCK_EFFECT = Vinery.identifier("luck_effect");
-    public static final ResourceLocation RESISTANCE_EFFECT = Vinery.identifier("resistance_effect");
     public static final ResourceLocation EXPERIENCE_EFFECT = Vinery.identifier("experience_effect");
     public static final ResourceLocation IMPROVED_JUMP_BOOST = Vinery.identifier("double_jump");
     public static final ResourceLocation PARTY_EFFECT = Vinery.identifier("party_effect");
@@ -41,9 +39,6 @@ public class MobEffectRegistry {
 
     static {
         register(ARMOR_EFFECT, () -> new VineryEffect(MobEffectCategory.BENEFICIAL, 0x56CBFD).withModifier(Attributes.ARMOR, "armor", 2.0).withModifier(Attributes.ARMOR_TOUGHNESS, "armor_toughness", 3.0));
-        register(HEALTH_EFFECT, () -> new VineryEffect(MobEffectCategory.BENEFICIAL, 0x56CBFD).withModifier(Attributes.MAX_HEALTH, "max_health", 4.0));
-        register(LUCK_EFFECT, () -> new VineryEffect(MobEffectCategory.BENEFICIAL, 0x56CBFD).withModifier(Attributes.LUCK, "luck", 2.0));
-        register(RESISTANCE_EFFECT, ResistanceEffect::new);
         register(EXPERIENCE_EFFECT, () -> new VineryEffect(MobEffectCategory.BENEFICIAL, 0x00FF00));
         register(IMPROVED_JUMP_BOOST, () -> new VineryEffect(MobEffectCategory.BENEFICIAL, 0x00FF00));
         register(PARTY_EFFECT, () -> new VineryEffect(MobEffectCategory.BENEFICIAL, 0xFF0000));

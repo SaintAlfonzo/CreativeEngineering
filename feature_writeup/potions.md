@@ -89,7 +89,7 @@ KubeJS's potion registry runs before any mod's mob effects exist, so potions for
 | Alex's Mobs | centipede leg + Poison II → Poison Resistance | AM brews it from a poison-bottle item, which no mixer can use; AM's own stand recipe still works too |
 | Alex's Mobs | Lava Vision base: Create mixer 1000 mB lava + bone serpent tooth, heated ([lava_vision.js](../kubejs/server_scripts/magic/lava_vision.js)); IE Mixer 1500 mB lava + tooth (`PotionRecipeGeneratorsMixin`) | AM brews it from a lava-bottle item |
 | Rustic Delight | golden coffee beans + awkward → Haste; redstone, glowstone steps | RD's own `IBrewingRecipe` class is invisible to both mixers |
-| Buzzier Bees / vanilla | four-leaf clover + awkward → Luck, redstone → long; silverfish bottle + awkward → Unluck, redstone → long | Luck had no brew. Reagent marked "TODO: better/magic ingredient" (`potions.js` line 86) |
+| Buzzier Bees / vanilla | four-leaf clover + awkward → Luck, redstone → long; silverfish bottle + awkward → Unluck, redstone → long | Luck had no brew. Reagent marked "TODO: better/magic ingredient" (`potions.js` line 86). Out of date: Buzzier Bees already brews Luck from the clover, so the first two rows are duplicates ([effects.md](effects.md) F6) |
 
 ### 2.4 Machines
 

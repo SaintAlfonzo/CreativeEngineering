@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.satisfy.vinery.core.Vinery;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,8 +39,17 @@ public final class UpstreamTranslator {
     /** 1.3.10 items 1.5.5 removed (D2): their 1.3.10 recipes and loot tables are read. */
     static final Set<String> KEEPERS = Set.of("white_grape_crate", "red_grape_crate", "cherry_crate", "apple_crate",
             "grapevine_lattice", "chair", "table", "big_table", "shelf", "wine_rack_1", "wine_rack_2", "wine_rack_3",
-            "wine_rack_5", "loam", "loam_slab", "loam_stairs", "flower_box", "flower_pot", "basket", "calendar",
-            "wood_fired_oven", "stove", "kitchen_sink", "barrel", "praetorian_wine", "king_danis_wine");
+            "wine_rack_5", "loam", "loam_slab", "loam_stairs", "flower_box", "flower_pot", "basket",
+            "wood_fired_oven", "stove", "kitchen_sink", "barrel", "praetorian_wine");
+
+    /**
+     * Ids the port removed on purpose (alcohol.md B7.6 mead, time.md 3.7 calendar). Tag entries and advancement criteria
+     * naming them are dropped; any other file naming them is left out by {@link #keep}.
+     */
+    static final Set<String> REMOVED = Set.of("vinery:mead", "vinery:calendar", "vinery:king_danis_wine");
+
+    /** Port-owned lang lines layered over the merged upstream lang (Cask, months: alcohol.md B7.8, B7.9). */
+    private static final String LANG_OVERRIDES = "/vinery_port/upstream_lang/";
 
     /** 1.20+ vanilla items -> what 1.19.2 (and Quark, D12) has. Applied before the unknown-id filter. */
     private static final Map<String, String> VANILLA_SUBSTITUTES = Map.of(
@@ -125,8 +136,32 @@ public final class UpstreamTranslator {
                 }
             });
         });
-        merged.forEach((path, json) -> out.put(path, bytes(json)));
+        merged.forEach((path, json) -> {
+            if (path.startsWith("assets/vinery/lang/")) {
+                applyLangOverrides(path.substring("assets/vinery/lang/".length()), json);
+            }
+            out.put(path, bytes(json));
+        });
         return out;
+    }
+
+    /** Our own wording for upstream keys: the jar can't carry a file at upstream's lang path (D13 B), so it layers here. */
+    private static void applyLangOverrides(String fileName, JsonObject lang) {
+        try (InputStream in = UpstreamTranslator.class.getResourceAsStream(LANG_OVERRIDES + fileName)) {
+            if (in == null) {
+                return;
+            }
+            JsonObject overrides = parseObject(in.readAllBytes());
+            if (overrides != null) {
+                overrides.entrySet().forEach(e -> {
+                    if (!e.getKey().startsWith("_")) {
+                        lang.add(e.getKey(), e.getValue());
+                    }
+                });
+            }
+        } catch (IOException e) {
+            Vinery.LOGGER.warn("[vinery-upstream] couldn't read {}{}", LANG_OVERRIDES, fileName, e);
+        }
     }
 
     private static boolean isMergedByKey(String path) {
@@ -194,8 +229,45 @@ public final class UpstreamTranslator {
                 }
             }
         }
+        patchData(out, tags);
         tags.forEach((path, json) -> out.put(path, bytes(json)));
         return out;
+    }
+
+    /** Port changes to upstream data (alcohol.md B7). */
+    private static void patchData(Map<String, byte[]> out, Map<String, JsonObject> tags) {
+        // B7.10: apple wine is a small bottle again (3 per placed block, small racks), as in 1.3.10; 1.5.5 made it large
+        removeTagEntry(tags, "data/vinery/tags/items/large_bottle.json", "vinery:apple_wine");
+        JsonObject small = new JsonObject();
+        JsonArray values = new JsonArray();
+        values.add("vinery:apple_wine");
+        small.add("values", values);
+        // alcohol.md 10.8: Praetorian is a small bottle too (2 per placed block as in 1.3.10, every rack); racks that
+        // lay bottles down shrink its taller model to the small template's length (BottleRenderer)
+        values.add("vinery:praetorian_wine");
+        mergeTag(tags, "data/vinery/tags/items/small_bottle.json", small);
+
+        // B7.2: honey takes a glass bottle, not a wine bottle (the honey bottle gives a glass bottle back)
+        String honey = "data/vinery/recipes/apple_fermenting/honey_bottle.json";
+        JsonObject recipe = out.containsKey(honey) ? parseObject(out.get(honey)) : null;
+        if (recipe != null) {
+            JsonObject bottle = new JsonObject();
+            bottle.addProperty("item", "minecraft:glass_bottle");
+            recipe.add("bottle", bottle);
+            out.put(honey, bytes(recipe));
+        }
+    }
+
+    private static void removeTagEntry(Map<String, JsonObject> tags, String path, String id) {
+        JsonObject tag = tags.get(path);
+        if (tag != null) {
+            JsonArray values = tag.getAsJsonArray("values");
+            for (int i = values.size() - 1; i >= 0; i--) {
+                if (values.get(i).getAsJsonObject().get("id").getAsString().equals(id)) {
+                    values.remove(i);
+                }
+            }
+        }
     }
 
     /** 1.3.10 data the port reads: keeper recipes and loot, tags, biome placement and its biome tags. */
@@ -235,6 +307,9 @@ public final class UpstreamTranslator {
         }
         if (rest.startsWith("structures/")) {
             return null; // F8: 1.5.5's village houses are unused upstream and not ported
+        }
+        if (rest.equals("advancements/main/vintage_perfection.json")) {
+            return null; // alcohol.md B7: it checks 1.3.10's Year NBT, which the port's wines never carry (user: drop it)
         }
         if (parts[1].equals("vinery") && rest.startsWith("loot_tables/blocks/")) {
             String name = fileName(rest);
@@ -363,6 +438,7 @@ public final class UpstreamTranslator {
 
     private static JsonObject convertAdvancement(JsonObject json) {
         json.remove("sends_telemetry_event");
+        dropRemovedCriteria(json);
         if (json.has("display")) {
             JsonObject display = json.getAsJsonObject("display");
             if (display.has("icon") && display.get("icon").isJsonObject()) {
@@ -417,6 +493,70 @@ public final class UpstreamTranslator {
             }
         }
         return json;
+    }
+
+    /**
+     * Takes {@link #REMOVED} ids out of item lists, and drops a criterion (and its requirement) whose list is then empty:
+     * an empty list matches any item. wine_somelier (the banner) and the_noble_drop list mead among the wines.
+     */
+    private static void dropRemovedCriteria(JsonObject json) {
+        if (!json.has("criteria")) {
+            return;
+        }
+        Set<String> dropped = new HashSet<>();
+        JsonObject criteria = json.getAsJsonObject("criteria");
+        for (Map.Entry<String, JsonElement> criterion : criteria.entrySet()) {
+            if (stripRemoved(criterion.getValue())) {
+                dropped.add(criterion.getKey());
+            }
+        }
+        dropped.forEach(criteria::remove);
+        if (!dropped.isEmpty() && json.has("requirements")) {
+            JsonArray requirements = new JsonArray();
+            for (JsonElement group : json.getAsJsonArray("requirements")) {
+                JsonArray kept = new JsonArray();
+                group.getAsJsonArray().forEach(name -> {
+                    if (!dropped.contains(name.getAsString())) {
+                        kept.add(name);
+                    }
+                });
+                if (!kept.isEmpty()) {
+                    requirements.add(kept);
+                }
+            }
+            json.add("requirements", requirements);
+        }
+    }
+
+    /** Removes {@link #REMOVED} ids from the tree; true if an array that had one is now empty, or a single id went. */
+    private static boolean stripRemoved(JsonElement element) {
+        boolean emptied = false;
+        if (element.isJsonArray()) {
+            JsonArray array = element.getAsJsonArray();
+            boolean had = false;
+            for (int i = array.size() - 1; i >= 0; i--) {
+                JsonElement value = array.get(i);
+                if (value.isJsonPrimitive() && REMOVED.contains(value.getAsString())) {
+                    array.remove(i);
+                    had = true;
+                } else {
+                    emptied |= stripRemoved(value);
+                }
+            }
+            emptied |= had && array.isEmpty();
+        } else if (element.isJsonObject()) {
+            JsonObject object = element.getAsJsonObject();
+            for (String key : Set.copyOf(object.keySet())) {
+                JsonElement value = object.get(key);
+                if (value.isJsonPrimitive() && REMOVED.contains(value.getAsString())) {
+                    object.remove(key); // 1.21's single-id form, "items": "vinery:mead"
+                    emptied = true;
+                } else {
+                    emptied |= stripRemoved(value);
+                }
+            }
+        }
+        return emptied;
     }
 
     private static String firstBlock(JsonElement location) {
@@ -477,7 +617,7 @@ public final class UpstreamTranslator {
         for (JsonElement value : json.getAsJsonArray("values")) {
             String id = value.isJsonObject() ? value.getAsJsonObject().get("id").getAsString() : value.getAsString();
             id = id.startsWith("#") ? id : IdMap.rewrite(id);
-            if (present.add(id)) {
+            if (!REMOVED.contains(id) && present.add(id)) {
                 JsonObject entry = new JsonObject();
                 entry.addProperty("id", id);
                 entry.addProperty("required", false);

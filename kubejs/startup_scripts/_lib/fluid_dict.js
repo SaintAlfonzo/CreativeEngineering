@@ -37,6 +37,26 @@ f.create_potion = 'create:potion';
     f.t_potion = '#forge:fluid/potion';
 f.tea = 'create:tea';
 
+//Brewin' and Chewin' (backport): keg tank fluids, 250 mB per drink (alcohol.md 3.4)
+f.beer = 'brewinandchewin:beer';
+f.vodka = 'brewinandchewin:vodka';
+f.mead = 'brewinandchewin:mead';
+f.egg_grog = 'brewinandchewin:egg_grog';
+f.strongroot_ale = 'brewinandchewin:strongroot_ale';
+f.rice_wine = 'brewinandchewin:rice_wine';
+f.glittering_grenadine = 'brewinandchewin:glittering_grenadine';
+f.steel_toe_stout = 'brewinandchewin:steel_toe_stout';
+f.pale_jane = 'brewinandchewin:pale_jane';
+f.saccharine_rum = 'brewinandchewin:saccharine_rum';
+f.salty_folly = 'brewinandchewin:salty_folly';
+f.bloody_mary = 'brewinandchewin:bloody_mary';
+f.red_rum = 'brewinandchewin:red_rum';
+f.withering_dross = 'brewinandchewin:withering_dross';
+f.kombucha = 'brewinandchewin:kombucha';
+f.dread_nog = 'brewinandchewin:dread_nog';
+f.flaxen_cheese = 'brewinandchewin:flaxen_cheese';
+f.scarlet_cheese = 'brewinandchewin:scarlet_cheese';
+
 //Create: Central Kitchen
 f.apple_cider = 'create_central_kitchen:apple_cider';
 f.dragon_breath = 'create_central_kitchen:dragon_breath';

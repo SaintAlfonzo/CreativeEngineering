@@ -16,13 +16,13 @@
         "file": "climate/minecraft__overworld.json.gz",
         "points": 13498,
         "seed": "7379340783510277000",
-        "generated": "2026-10-14T04:39:34.771Z",
+        "generated": "2026-10-18T23:31:29.642Z",
         "layer_points": {
           "surface": 3000,
           "underground": 10498
         }
       },
-      "model_agreement_pct": 99.148,
+      "model_agreement_pct": 98.881,
       "biomes": {
         "minecraft:badlands": {
           "multiplier": 1,
@@ -1197,13 +1197,13 @@
         "file": "climate/minecraft__the_end.json.gz",
         "points": 7050,
         "seed": "7379340783510277000",
-        "generated": "2026-10-14T04:40:09.366Z",
+        "generated": "2026-10-18T23:32:00.590Z",
         "layer_points": {
           "surface": 3000,
           "underground": 4050
         }
       },
-      "model_agreement_pct": 70.043,
+      "model_agreement_pct": 80.128,
       "biomes": {
         "minecraft:end_highlands": {
           "multiplier": 1,
@@ -1266,13 +1266,13 @@
         "file": "climate/minecraft__the_nether.json.gz",
         "points": 15000,
         "seed": "7379340783510277000",
-        "generated": "2026-10-14T04:39:35.328Z",
+        "generated": "2026-10-18T23:31:29.830Z",
         "layer_points": {
           "surface": 15000,
           "underground": 0
         }
       },
-      "model_agreement_pct": 86.733,
+      "model_agreement_pct": 86.4,
       "biomes": {
         "minecraft:basalt_deltas": {
           "multiplier": 0.666,

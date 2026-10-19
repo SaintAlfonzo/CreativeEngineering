@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.satisfy.foundation.storage.StorageBlockEntity;
 import net.satisfy.vinery.core.block.GrapevinePotBlock;
+import net.satisfy.vinery.core.block.PaleStemBlock;
+import net.satisfy.vinery.core.block.StemBlock;
 import net.satisfy.vinery.core.block.StackableLogBlock;
 import net.satisfy.vinery.core.block.entity.ApplePressBlockEntity;
 import net.satisfy.vinery.core.block.entity.FermentationBarrelBlockEntity;
@@ -46,10 +48,17 @@ public final class VineryWthitClient implements IWailaClientPlugin, IBlockCompon
         registrar.body(this, StorageBlockEntity.class);
         registrar.body(this, StoragePotBlockEntity.class);
         registrar.body(this, StackableLogBlockEntity.class);
+        registrar.body(this, StemBlock.class);
     }
 
     @Override
     public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+        if (accessor.getBlock() instanceof StemBlock) {
+            if (config.getBoolean(VineryWthit.STEM)) {
+                stem(tooltip, accessor.getBlockState());
+            }
+            return;
+        }
         BlockEntity target = accessor.getBlockEntity();
         if (target instanceof GrapevinePotBlockEntity pot) {
             if (config.getBoolean(VineryWthit.POT)) {
@@ -75,6 +84,26 @@ public final class VineryWthitClient implements IWailaClientPlugin, IBlockCompon
             }
         } else if (config.getBoolean(VineryWthit.STORAGE)) {
             storage(tooltip, data.getList("Stacks", Tag.TAG_COMPOUND));
+        }
+    }
+
+    /**
+     * Grapevine stems and lattices (all lattice woods, 1.3.10's too): which grape grows there, ripe when it can be picked,
+     * and the grapevine leaves still to come. Growth % is patcherMod's crop line (crop_growth.json), so not repeated.
+     * Block state only, so no server data.
+     */
+    private static void stem(ITooltip tooltip, BlockState state) {
+        GrapeType type = state.getValue(StemBlock.GRAPE);
+        if (type == GrapeTypeRegistry.NONE || state.getValue(StemBlock.AGE) == 0) {
+            tooltip.addLine(Component.translatable(LANG + "stem.empty").withStyle(ChatFormatting.GRAY));
+            return;
+        }
+        tooltip.addLine(Component.translatable(LANG + "stem.grapes", type.getFruit().getDescription()));
+        if (state.getValue(StemBlock.AGE) >= 4) {
+            tooltip.addLine(Component.translatable(LANG + "stem.ripe").withStyle(ChatFormatting.GREEN));
+        }
+        if (state.hasProperty(PaleStemBlock.LEAVES_PENDING) && state.getValue(PaleStemBlock.LEAVES_PENDING)) {
+            tooltip.addLine(Component.translatable(LANG + "stem.leaves_pending").withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 

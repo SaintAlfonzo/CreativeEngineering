@@ -10,6 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.satisfy.vinery.core.block.entity.ApplePressBlockEntity;
 import net.satisfy.vinery.core.recipe.ApplePressFermentingRecipe;
 import net.satisfy.vinery.core.registry.ObjectRegistry;
 import net.satisfy.foundation.recipe.book.StationRecipeBookMenu;
@@ -44,9 +45,9 @@ public class ApplePressMenu extends AbstractContainerMenu implements StationReci
         this.propertyDelegate = delegate;
         this.playerInventory = playerInventory;
 
-        this.addSlot(new Slot(inventory, 0, 44, 34));
-        this.addSlot(new Slot(inventory, 1, 101, 50));
-        this.addSlot(new Slot(inventory, 2, 119, 50));
+        this.addSlot(new PressSlot(inventory, 0, 44, 34));
+        this.addSlot(new PressSlot(inventory, 1, 101, 50));
+        this.addSlot(new PressSlot(inventory, 2, 119, 50));
         this.addSlot(new FurnaceResultSlot(playerInventory.player, inventory, 3, 119, 18));
 
         addPlayerInventory(playerInventory);
@@ -66,6 +67,18 @@ public class ApplePressMenu extends AbstractContainerMenu implements StationReci
         return maxProgress != 0 && progress != 0 ? progress * barHeight / maxProgress : 0;
     }
 
+    /** Port (alcohol.md B7.2): takes only what {@link ApplePressBlockEntity#isValidForSlot} allows, on both sides. */
+    private class PressSlot extends Slot {
+        PressSlot(Container container, int slot, int x, int y) {
+            super(container, slot, x, y);
+        }
+
+        @Override
+        public boolean mayPlace(@NotNull ItemStack stack) {
+            return ApplePressBlockEntity.isValidForSlot(playerInventory.player.level, getContainerSlot(), stack);
+        }
+    }
+
     @Override
     public @NotNull ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
@@ -77,7 +90,8 @@ public class ApplePressMenu extends AbstractContainerMenu implements StationReci
                 if (!this.moveItemStackTo(originalStack, this.inventory.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(originalStack, 0, this.inventory.getContainerSize(), false)) {
+            } else if (!this.moveItemStackTo(originalStack, 0, OUTPUT_SLOT, false)) {
+                // only into a slot whose PressSlot#mayPlace takes it
                 return ItemStack.EMPTY;
             }
             if (originalStack.isEmpty()) {
@@ -108,7 +122,7 @@ public class ApplePressMenu extends AbstractContainerMenu implements StationReci
     @Override
     public Map<Integer, Ingredient> recipeBookExtraInputs(net.minecraft.world.item.crafting.Recipe<?> recipe) {
         if (recipe instanceof ApplePressFermentingRecipe fermenting && fermenting.requiresBottle()) {
-            return Map.of(BOTTLE_SLOT, Ingredient.of(ObjectRegistry.WINE_BOTTLE.get()));
+            return Map.of(BOTTLE_SLOT, fermenting.getBottle());
         }
         return Map.of();
     }
@@ -120,8 +134,8 @@ public class ApplePressMenu extends AbstractContainerMenu implements StationReci
 
     @Override
     public void appendRecipeBookTooltip(net.minecraft.world.item.crafting.Recipe<?> recipe, List<Component> tooltip) {
-        if (recipe instanceof ApplePressFermentingRecipe fermenting && fermenting.requiresBottle()) {
-            tooltip.add(Component.literal(" 1× ").append(ObjectRegistry.WINE_BOTTLE.get().getDescription()).withStyle(ChatFormatting.DARK_GRAY));
+        if (recipe instanceof ApplePressFermentingRecipe fermenting && fermenting.requiresBottle() && fermenting.getBottle().getItems().length > 0) {
+            tooltip.add(Component.literal(" 1× ").append(fermenting.getBottle().getItems()[0].getHoverName()).withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 

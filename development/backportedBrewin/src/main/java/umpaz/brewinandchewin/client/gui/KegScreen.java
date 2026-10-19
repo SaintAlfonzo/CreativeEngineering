@@ -33,6 +33,8 @@ import umpaz.brewinandchewin.common.block.entity.KegBlockEntity;
 import umpaz.brewinandchewin.common.block.entity.container.KegMenu;
 import umpaz.brewinandchewin.common.crafting.KegFermentingRecipe;
 import umpaz.brewinandchewin.common.crafting.KegPouringRecipe;
+import umpaz.brewinandchewin.common.item.BoozeItem;
+import umpaz.brewinandchewin.common.item.KegItem;
 import umpaz.brewinandchewin.common.registry.BnCRecipeTypes;
 import umpaz.brewinandchewin.common.utility.AbstractedFluidStack;
 import umpaz.brewinandchewin.common.utility.BnCItemUtils;
@@ -163,6 +165,9 @@ public class KegScreen extends AbstractContainerScreen<KegMenu> implements Recip
                   )
             );
          List<Component> components = new ArrayList<>(List.of(component, containerComponent));
+         // Port (alcohol.md 8.2, 8.7): the drink's effects, and the pipe rule while it's on.
+         BoozeItem.addFluidEffectLines(tank.fluid(), components);
+         KegItem.addPipeRuleLine(components);
          if (config.oppositeFluidDisplay() == BnCConfiguration.Client.DisplaySettings.ADVANCED_TOOLTIPS && this.minecraft.options.advancedItemTooltips
             || config.oppositeFluidDisplay() == BnCConfiguration.Client.DisplaySettings.ALWAYS) {
             FluidUnit opposite = FluidUnit.getOpposite(config.displayUnit());

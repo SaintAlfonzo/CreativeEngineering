@@ -24,7 +24,7 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Remainder buffer (bottles/bowls/buckets kept in a slot on the pot, kettle, keg port and oven instead of thrown) | [remainder_buffer.md](../remainder_buffer.md) | feasibility done 2026-10-18 (feasible, ~7 mixins); D1 to D5 open; no code |
 | Canning automation | `TODO` in [canning.js](../kubejs/server_scripts/cooking/canning.js) line 68 | not started |
 | Mob spawn plans beyond the first block (Alex's Mobs / duck parity, pillager overhaul, lone villagers, allay, skylands mooblooms) | [mob_spawns.md](../mob_spawns.md) 9 | first block done; "Investigate" and "Later" not started |
-| Structures: Nether, End and underground grouping pass; cave-structure tuning; move-to-Nether set | [structure_tuning.md](../structure_tuning.md) 7 Todo | not built. The three deep dungeons now generate through `land/any/deep` (1.0.7 source); their grouping and rates still wait on this pass |
+| Structures: Nether, End and underground grouping pass; cave-structure tuning; move-to-Nether set | [structure_tuning.md](../structure_tuning.md) 7 Todo | not built. The three deep dungeons now generate through `land/any/deep` (since 1.0.7); their grouping and rates still wait on this pass |
 | Structures: vehicle metas (caravans), more raft and wreckage variants | [structure_tuning.md](../structure_tuning.md) 7 Todo, 7.4.9 | marked only; new templates needed |
 | Structures: tuning pass (shipwreck 40%, jungle temple spacing, strip unexplained weights, sky village rate, fresh watchtower `--fit-rates`) | [structure_tuning.md](../structure_tuning.md) 7 Todo | waits on the end of the scratch test run |
 | Swap Overworld netherrack / crimson / warped ground (jasper, crimsite) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Biomes and terrain" | not built |
@@ -38,17 +38,18 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 
 | Feature | Writeup | Done | Still to do |
 |---|---|---|---|
-| Structure tuning 7.1 to 7.4 (ships INCOMPLETE in 1.0.6) | [structure_tuning.md](../structure_tuning.md), [plan_1.0.6.md](../plan_1.0.6.md) 2.1, [testing/structures/](../testing/structures/00_plan.md) | built; scratch M1, M2, Phases 3 to 6 run | Phase 7 started 2026-10-14 17:43 with no results ([07_phase_7.scratch.md](../testing/structures/07_phase_7.scratch.md)); Phases 8 to 10 and the client list 8.0.11 not run; open bugs in 3; fixes go to 1.0.7 |
-| Locate (folding, non-blocking loads, census, DH clip) | [locate.md](../locate.md) | built and in 1.0.6; LO-02, 06, 08, 12, 15 passed | LO-05, LO-03/LO-14 failed in 1.0.6; their fixes are in source for 1.0.7 (next row); LO-01, LO-04 partly |
-| Structure and locate fixes for 1.0.7 (9 bugs from the scratch run) | [structure_tuning.md](../structure_tuning.md) 3.23, [locate.md](../locate.md) 3.2, 3.6, 8 | fixed in source 2026-10-18; offline checks pass against the mapped 1.19.2 jar (PoolTunerTest new) | build patcherMod 1.0.7 and install; run ST-191 to ST-198 and LO-03, LO-05, LO-14, LO-17 on a scratch server; `[worldgen.pools] canonicalOrder` changes every village layout in new chunks (on by default, see 4) |
-| Alcohol Part A: Brewin' and Chewin' 4.5.0 port | [alcohol.md](../alcohol.md) Part A | analysis, plan, decisions 4.1/4.5. **Port builds (2026-10-18)**: all code, assets and data in `development/backportedBrewin`; `backportedBrewin-4.5.0-ce-19.2-01.jar`; `tools/check_data.py` 0 problems; CCK keg mixin checked against bytecode (3.5) | boot on a scratch server (AL-42) and AL-01 to AL-48; recipe-book fluid placement and JEI fluid transfer not ported (3.5); pack-side changes 3.4 together with the jar swap; heat/cold tag audit 2.7 not applied |
-| Alcohol Part B: Vinery 1.5.5 port ("Backported Vinery") | [alcohol.md](../alcohol.md) Part B | **Port builds (2026-10-18)**: `development/backportedVinery` (Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, old-world passes, upstream jars as runtime donors, WTHIT lines). patcherMod and pack-side changes done (B4.4 outcome), deploy category + mod_sides | the swap in `mods/` (`./gradlew :patcherMod:installToMods :backportedVinery:installToMods`, game closed); boot and VB-01 to VB-47 (user); I25 tool reruns; stem "leaves pending" WTHIT line; download-on-publish for `vinery_upstream/` (D14 A) |
+| Structure tuning 7.1 to 7.4 (ships INCOMPLETE in 1.0.6) | [structure_tuning.md](../structure_tuning.md), [plan_1.0.6.md](../plan_1.0.6.md) 2.1, [testing/structures/](../testing/structures/00_plan.md) | built; scratch M1, M2, Phases 3 to 6 run | Phase 7 started 2026-10-14 17:43 with no results ([07_phase_7.scratch.md](../testing/structures/07_phase_7.scratch.md)); Phases 8 to 10 and the client list 8.0.11 not run; open bugs in 3; the first fixes shipped in 1.0.7 |
+| Locate (folding, non-blocking loads, census, DH clip) | [locate.md](../locate.md) | built and in 1.0.6; LO-02, 06, 08, 12, 15 passed | LO-05, LO-03/LO-14 failed in 1.0.6; their fixes shipped in 1.0.7 (next row), rerun them; LO-01, LO-04 partly |
+| Structure and locate fixes for 1.0.7 (9 bugs from the scratch run) | [structure_tuning.md](../structure_tuning.md) 3.23, [locate.md](../locate.md) 3.2, 3.6, 8 | fixed 2026-10-18, DEPLOYED with 1.0.7; offline checks pass against the mapped 1.19.2 jar (PoolTunerTest new) | run ST-191 to ST-198 and LO-03, LO-05, LO-14, LO-17 on a scratch server; `[worldgen.pools] canonicalOrder` changes every village layout in new chunks (on by default, see 4) |
+| Alcohol Part A: Brewin' and Chewin' 4.5.0 port | [alcohol.md](../alcohol.md) Part A | analysis, plan, decisions 4.1/4.5. **Port builds (2026-10-18)**: all code, assets and data in `development/backportedBrewin`; `-01` DEPLOYED with 1.0.7 (beside the 2.0 jar, the port loaded), `-02` with sections 8 and 10 STAGED for 1.0.8 and replacing both; `tools/check_data.py` 0 problems; CCK keg mixin checked against bytecode (3.5) | AL-01 to AL-72; recipe-book fluid placement and JEI fluid transfer not ported (3.5); pack-side changes 3.4 together with the jar swap; heat/cold tag audit 2.7 not applied |
+| Alcohol Part B: Vinery 1.5.5 port ("Backported Vinery") | [alcohol.md](../alcohol.md) Part B | **Port builds (2026-10-18)**: `development/backportedVinery` (Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, old-world passes, upstream jars as runtime donors, WTHIT lines). patcherMod and pack-side changes done (B4.4 outcome), deploy category + mod_sides `-01` DEPLOYED with 1.0.7, `-02` (B7, section 10) STAGED for 1.0.8 | VB-01 to VB-66 (user); I25 tool reruns; stem "leaves pending" WTHIT line; download-on-publish for `vinery_upstream/` (D14 A) |
 | Food | [food.md](../food.md) | `/dumpfood`, 31 types + tags, catalog, multi-serving cans, raw and generated cans, fried eggs, egg stacks | tuning system and egg migration (1); cooked/prepared can sections pie, feast, meals, drinks, special |
-| Oven | [oven.md](../oven.md) | block, GUI, baking recipe type, JEI (patcherMod), bakeware, 7 baking recipes, muffin dough fix (2026-10-18; compiles, 8 GameTests pass) | patcherMod jar rebuild + OV-01 to OV-14; recipes don't use bakeware or plating yet, pot recipes not moved |
-| Remainder buffer | [remainder_buffer.md](../remainder_buffer.md) | pot + kettle (mixins), oven (native), `[cooking]` config, GameTest harness (2026-10-18; compiles, 10 GameTests pass) | patcherMod jar into `mods/` + RB-01 to RB-11; keg in the Brewin port (3.6; the port compiles now, 2026-10-18); optional WTHIT line |
+| Oven | [oven.md](../oven.md) | block, GUI, baking recipe type, JEI (patcherMod) DEPLOYED with 1.0.7; 37 recipes with bakeware and plating, counts option, hammered bakeware, cornmeal STAGED for 1.0.8 | OV-01 to OV-19; JEI [+] bug (3) |
+| Time master | [time.md](../time.md) | `[time]` master, push into Better Days / Serene Seasons / SeasonHUD / Vinery, sun seasons, pause when empty, GUI, `/cetime`, presets (patcherMod 1.0.8, STAGED for 1.0.8) | TI-01 to TI-29; T5 wine boosts; `tools/time_table.py` and the SUN GameTest; server preset (4) |
+| Remainder buffer | [remainder_buffer.md](../remainder_buffer.md) | pot + kettle (mixins), oven (native), `[cooking]` config, GameTest harness; DEPLOYED with 1.0.7 | RB-01 to RB-11; keg in the Brewin port (3.6; the port compiles now, 2026-10-18); optional WTHIT line |
 | Can parity | [can_parity.md](../can_parity.md) | every `x` row built, removals done | `?` Want cells; hunger/saturation columns postponed; no can value-audited; meal/pie/feast/drink/hazard values are placeholders (also flagged in [canning.js](../kubejs/server_scripts/cooking/canning.js) lines 504, 542, 557); hand-written raw cans don't carry effects |
 | Names | [names.md](../names.md) | Display Delight + Rustic Delight names; catalog parts 1 and 2 | catalog worked down: 191 partial blocks, 65 items, 53 entities, 20 professions, effects/potions/fluids; no fixes yet |
-| Effect descriptions (JEED) | [todo.txt](todo.txt) "Literal TODO comments" | generator `tools/gen_effect_descriptions.py` | 47 `TODO: write a description` rows left in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) |
+| Effect descriptions (JEED) | [todo.txt](todo.txt) "Literal TODO comments" | generator `tools/gen_effect_descriptions.py` | 17 `TODO: write a description` rows left in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) (2026-10-19): 10 for live effects, 7 stale; PROPOSED text for each in [effects.md](../effects.md) 2.1, F2 and F4 |
 | Tooltips | [tooltips.md](../tooltips.md) 8 | ~455 lines; pack framework lines | "Tooltips To Add" list (straw, knives, food type, can AppleSkin bars, chalk, Pretty Pipes; Botania, Vinery, Cloud Storage, Brewin); AppleSkin bars missing in Let's Do recipe book, FTB Quests, Wares, AE2, Patchouli |
 | Vinery tooltips | [vinery.md](../vinery.md) 0 | flavour lines removed | block lines are commented-out `TODO` placeholders ([tooltips.js](../kubejs/client_scripts/tooltips.js) lines 623-643) |
 | More Mooblooms 1.1 | [mooblooms.md](../mooblooms.md) 5 | 1.0 shipped in 1.0.6 | JEI breeding/shearing outputs, better info text |
@@ -56,20 +57,22 @@ newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in 
 | Crops | [crops.md](../crops.md) 4 | G1-G3, G5 fixed; tobacco parity; wild placement | G4, G6-G15 and V-findings open (each has a suggested fix to approve or reject); 13 land biomes with no wild crop (V19) |
 | Terrain adaptation leftovers | [structure_tuning.md](../structure_tuning.md) 7 Todo, [terrain_adaptation_scan.md](../terrain_adaptation_scan.md) | soft beard, template trim | batch 4 (spire, fish ponds, Philip's ruins, villages); earth-fill limits for modded structures; Beardifier estimate |
 | Cultivated meat | [todo.txt](todo.txt) "Built, but with acknowledged gaps" | all 7 cultures wired; syringe has its own texture | culture food items have no nutrition ([cultures.js](../kubejs/startup_scripts/items/cultures.js) line 6) |
-| Fridge sort item loss | [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) | `QuarkSafeSort` fix built in patcherMod 1.0.7 (2026-10-14) | not in `mods/`, not shipped; FS-01 to FS-05 not run. [cooking.md](../cooking.md) still lists it as a bug |
-| Exposure `-04` (viewfinder ate clicks inside screens and after respawn/rejoin) | [exposure.md](../exposure.md) | fixed in source, `mod_version` -04 (2026-10-17) | not built/shipped; no History line or test in the writeup |
+| Fridge sort item loss | [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) | `QuarkSafeSort` fix in patcherMod 1.0.7, DEPLOYED 2026-10-18 | FS-01 to FS-05 not run. [cooking.md](../cooking.md) still lists it as a bug |
+| Exposure `-04` (viewfinder ate clicks inside screens and after respawn/rejoin) | [exposure.md](../exposure.md) | `-04` built 2026-10-14, DEPLOYED with 1.0.7 | History line added 2026-10-19; no test in the writeup yet |
 
 ## 3. Open bugs (not fixed)
 
 **Structures and locate:** none open. The nine listed here (locate loads blocking the server, census "known",
 `/celocate stop` label, Cloud Storage / Domestication Innovation village pieces, village layouts per JVM run, ground
 match over deep structures, beach/river/swamp driftwood, the three deep dungeons, earth fill and stone bases) were
-fixed in source 2026-10-18 for patcherMod 1.0.7, not built or shipped (2, "Structure and locate fixes for 1.0.7").
+fixed 2026-10-18 and DEPLOYED with patcherMod 1.0.7 (2, "Structure and locate fixes for 1.0.7").
 The village-layout cause was found on the way: the pool order changes per JVM run.
 
 **Other features:**
+- Oven JEI [+] fails: "references crafting slot index [2] but the player cannot pickup from it", 1,413 log lines in one session (since 1.0.7). [plan_1.0.8.md](../plan_1.0.8.md) 2.2, [oven.md](../oven.md).
+- `build_deploy.py` doesn't catch two jars with one mod id in `mods/` (1.0.7 shipped two Brewin' jars that way). [deploy.md](../deploy.md) 4.
 - Probable, unverified: Death Knell is server-only but its death messages are lang keys from its own jar, so clients likely see raw `message.deathknell.*` keys (FP-01). Rain Should Extinguish Campfires duplicates Unlit Campfire's rain rule: remove. [feature_porting.md](../feature_porting.md) 0, 2.2.
-- Brewin' 2.0 keg gives back an extra glass bottle per `pickled_pickles` brew (fluid-item leftover slot grows by the result count). Goes away with the 4.5.0 port. [remainder_buffer.md](../remainder_buffer.md) 1.3.
+- Brewin' 2.0 keg gives back an extra glass bottle per `pickled_pickles` brew (fluid-item leftover slot grows by the result count). Gone: the port replaced the 2.0 keg in 1.0.7 (FML loaded it), and 1.0.8 removes the 2.0 jar. [remainder_buffer.md](../remainder_buffer.md) 1.3.
 - Vinery JEI fermentation arrow shows 1800 ticks; the real time is about 50. `VineryIds.FERMENTATION_TICKS` is still 1800. [vinery_jei.md](../vinery_jei.md) 4. Moot once the Vinery port is in mods/ (patcherMod's pages stand down).
 - Canned Goods data: saturation values far too high, crossed ids, wrong effects. [food.md](../food.md) 4.2 findings 1-2 (the tuning system is the planned fix).
 - item_dict: `i.catfish_slice` points at a nonexistent id; `i.bacon` is the cooked item. [food.md](../food.md) 4.2 finding 6.
@@ -104,13 +107,14 @@ The village-layout cause was found on the way: the pool order changes per JVM ru
 ## 4. Decisions not made, or made but not carried out
 
 **Waiting on you:**
+- Server `[time] preset` for 1.0.8: the payload ships SINGLEPLAYER (wine level every sub-season) to the server too; A set it by hand, B server-only override, C preset follows the side. [plan_1.0.8.md](../plan_1.0.8.md) 2.3, [time.md](../time.md) 3.9.
 - Alcohol Part B: D3, D4, D5, D7 to D10, D12 (built with the recommendation; confirm or change). D13 and D14 decided 2026-10-18. [alcohol.md](../alcohol.md) B5.
 - Remainder buffer D1 to D5 (stall or throw when full, recycle into the container slot, slot count, automation, keg timing). [remainder_buffer.md](../remainder_buffer.md) 5.
 - Food tuning D1 to D6. [food.md](../food.md) 4.3.
 - Can parity `Want` = `?` cells. [can_parity.md](../can_parity.md).
 - Crops G4, G6 to G15, V findings: approve or reject each fix. [crops.md](../crops.md) 4.
 - Structures: undead castle vs earth fill (narrow its fits or relax the mound limit); ST-135 fortified metas against the 120 s timeout; geode drop tuning (ST-133). [plan_1.0.6.md](../plan_1.0.6.md) 2.1.
-- Canonical pool order (`[worldgen.pools] canonicalOrder`, on by default in 1.0.7 source): keeps a seed's villages the
+- Canonical pool order (`[worldgen.pools] canonicalOrder`, on by default since 1.0.7): keeps a seed's villages the
   same across restarts, but every jigsaw layout in new chunks changes once. Keep it on, or off. [structure_tuning.md](../structure_tuning.md) 3.23.
 - Stone bases in earth fill are opt-in (tag `earth_fill/stone_base`, only the drum tower): add more structures, or
   keep it narrow. [structure_tuning.md](../structure_tuning.md) 3.23 item 6.
@@ -218,7 +222,10 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 |---|---|---|---|
 | [structure_tuning.md](../structure_tuning.md) | `ST-` | 101 / 98 | Phase 7 onward; ST-65 trim half; client list 8.0.11; ST-191 to ST-198 (1.0.7 fixes) |
 | [locate.md](../locate.md) | `LO-` | 10 / 7 | LO-03, 05, 14 failed in 1.0.6; rerun with the 1.0.7 fixes, plus LO-17 |
-| [alcohol.md](../alcohol.md) | `AL-`, `VB-` | 92 / 0 | drafted; run once built |
+| [alcohol.md](../alcohol.md) | `AL-`, `VB-` | 92 / 0 | ports in 1.0.7 (`-01`), `-02` STAGED for 1.0.8 |
+| [advancements.md](../advancements.md) | `AV-` | 5 / 0 | new 2026-10-19; STAGED for 1.0.8 |
+| [time.md](../time.md) | `TI-` | 27 / 0 | STAGED for 1.0.8; the push ran in single player 2026-10-19 |
+| [oven.md](../oven.md) | `OV-` | 19 / 0 | first version in 1.0.7, the rest STAGED for 1.0.8 |
 | [crops.md](../crops.md) | `CR-` | 68 / 0 | none run |
 | [mooblooms.md](../mooblooms.md) | `MB-` | 64 / 10 | client-side checks |
 | [shields.md](../shields.md) | `SH-` | 42 / 1 | SH-43 first, then SH-14, 19, 33-42 |
@@ -255,7 +262,7 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [tooltips.md](../tooltips.md) | `TT-` | 18 / 0 | TT-16 to TT-18 (1.0.6) |
 | [wandering_trader.md](../wandering_trader.md) | `WT-` | 16 / 0 | WT-16 natural spawn |
 | [can_parity.md](../can_parity.md) | `CP-` | 14 / 0 | CP-01 to CP-14 |
-| [remainder_buffer.md](../remainder_buffer.md) | `RB-` | 11 / 0 | needs the 1.0.7 jar; 10 offline GameTests pass (`tools/test_remainder_buffer.sh`) |
+| [remainder_buffer.md](../remainder_buffer.md) | `RB-` | 11 / 0 | in 1.0.7 (deployed); 10 offline GameTests pass (`tools/test_remainder_buffer.sh`) |
 | [flowers.md](../flowers.md) | `FL-` | 14 / 0 | |
 | [nests.md](../nests.md) | `NE-` | 14 / 0 | NE-13 client sprites |
 | [plan_1.0.4.md](../plan_1.0.4.md) | `R4-` | 14 / 0 | release checks never ticked |
@@ -268,5 +275,5 @@ Open = unticked boxes in the file (status words in the file win where they diffe
 | [jei_coverage.md](../jei_coverage.md) | `JC-` | 5 / 0 | spot checks |
 | [deploy.md](../deploy.md) | `DP-` | 4 / 3 | DP-03 to DP-05, DP-07 |
 | [jei_craftable_first_port.md](../jei_craftable_first_port.md) | `JEI-` | 6 / 0 | plain list, no boxes |
-| [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) | `FS-` | 5 / 0 | needs the 1.0.7 jar |
+| [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) | `FS-` | 5 / 0 | in 1.0.7 (deployed) |
 | [todo.txt](todo.txt) "Built, but with acknowledged gaps" | none | | potion buckets now PB-04, PB-11 to PB-17; potion-fluid chain now PO-01 to PO-26; sawblade routing still never explicitly checked in game |

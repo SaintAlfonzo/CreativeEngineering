@@ -3,6 +3,7 @@
 //   "Placeable (while sneaking)"    ...and #creativeengineering:placeable/sneak
 //   "Placeable on plate"            #creativeengineering:placeable_on_plate        (Display Delight Food Plate)
 //   "Placeable on small plate"      #creativeengineering:placeable_on_small_plate  (Display Delight Small Food Plate)
+//   "Placeable on a coaster"        #creativeengineering:placeable_on_coaster      (Brewin' and Chewin' coaster)
 //
 // Tags sync from the server on join, so the check runs per tooltip (addAdvancedToAll) rather than on a
 // list fixed when this script loads. stack.hasTag(id) is KubeJS's one-argument kjs$hasTag; vanilla
@@ -22,6 +23,7 @@ ItemEvents.tooltip(e => {
 	var T_SNEAK = tagOf('t_placeable_sneak', 'creativeengineering:placeable/sneak')
 	var T_PLATE = tagOf('t_placeable_on_plate', 'creativeengineering:placeable_on_plate')
 	var T_SMALL = tagOf('t_placeable_on_small_plate', 'creativeengineering:placeable_on_small_plate')
+	var T_COASTER = tagOf('t_placeable_on_coaster', 'creativeengineering:placeable_on_coaster')
 	var STRIP = {
 		'item.displaydelight.tooltip.displayable': true,
 		'item.displaydelight.tooltip.can_placed_on': true,
@@ -41,5 +43,6 @@ ItemEvents.tooltip(e => {
 		}
 		if (item.hasTag(T_PLATE)) text.add(Text.literal('Placeable on plate').gray())
 		if (item.hasTag(T_SMALL)) text.add(Text.literal('Placeable on small plate').gray())
+		if (item.hasTag(T_COASTER)) text.add(Text.literal('Placeable on a coaster').gray())
 	})
 })

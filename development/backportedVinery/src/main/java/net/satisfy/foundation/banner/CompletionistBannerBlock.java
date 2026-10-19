@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -126,8 +127,17 @@ public class CompletionistBannerBlock extends BaseEntityBlock {
         String prefix = this.settings.tooltipPrefix();
         tooltip.add(Component.translatable(prefix + ".thankyou_1").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
         tooltip.add(Component.empty());
-        tooltip.add(Component.translatable(prefix + ".thankyou_2").withStyle(ChatFormatting.DARK_PURPLE));
-        tooltip.add(Component.translatable(prefix + ".thankyou_4").withStyle(ChatFormatting.BLUE));
+        int radius = this.settings.radius().getAsInt();
+        if (radius > 0 && this.settings.showEffect().getAsBoolean()) {
+            // Port (alcohol.md B7.7): from the settings, not upstream's fixed "Regeneration II within 8 blocks"
+            MutableComponent effect = this.settings.effect().get().getDisplayName().copy();
+            int amplifier = this.settings.amplifier().getAsInt();
+            if (amplifier > 0) {
+                effect.append(" ").append(Component.translatable("enchantment.level." + (amplifier + 1)));
+            }
+            tooltip.add(Component.translatable(prefix + ".thankyou_2").withStyle(ChatFormatting.DARK_PURPLE));
+            tooltip.add(Component.translatable("tooltip.foundation.banner.effect", effect, radius, this.settings.durationTicks().getAsInt() / 20).withStyle(ChatFormatting.BLUE));
+        }
         tooltip.add(Component.empty());
         tooltip.add(Component.translatable(prefix + ".thankyou_3").withStyle(ChatFormatting.GOLD));
     }

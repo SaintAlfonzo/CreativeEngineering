@@ -29,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import umpaz.brewinandchewin.BrewinAndChewin;
 import umpaz.brewinandchewin.client.gui.KegScreen;
+import umpaz.brewinandchewin.common.block.entity.KegBlockEntity;
 import umpaz.brewinandchewin.common.block.entity.container.KegMenu;
 import umpaz.brewinandchewin.common.registry.BnCItems;
 import umpaz.brewinandchewin.common.registry.BnCMenuTypes;
@@ -37,9 +38,8 @@ import umpaz.brewinandchewin.integration.jei.category.CheeseRecipeCategory;
 import umpaz.brewinandchewin.integration.jei.category.FermentingRecipeCategory;
 
 /**
- * Port of the JEI plugin onto JEI 11.8 (1.19.2). Port status: the transfer button moves the item ingredients only, through
- * JEI's basic handler (the fluid slot is left out of the transfer). Upstream's FermentingTransfer, which also fills or
- * empties the tank with fluid containers from the inventory, is not ported yet.
+ * Port of the JEI plugin onto JEI 11.8 (1.19.2). The [+] button moves the ingredients and fills or empties the tank from
+ * fluid containers in the inventory ({@link FermentingTransfer}, alcohol.md 10.3).
  */
 @JeiPlugin
 public class JEIPlugin implements IModPlugin {
@@ -102,45 +102,11 @@ public class JEIPlugin implements IModPlugin {
 
    @Override
    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-      IRecipeTransferHandlerHelper helper = registration.getTransferHelper();
-      IRecipeTransferHandler<KegMenu, KegFermentingPouringRecipe> basic = helper.createUnregisteredRecipeTransferHandler(
-         helper.createBasicRecipeTransferInfo(KegMenu.class, BnCMenuTypes.KEG, BnCJEIRecipeTypes.FERMENTING, 0, 4, 6, 36)
-      );
-      registration.addRecipeTransferHandler(new ItemOnlyTransfer(basic, helper), BnCJEIRecipeTypes.FERMENTING);
+      registration.addRecipeTransferHandler(new FermentingTransfer(registration.getTransferHelper()), BnCJEIRecipeTypes.FERMENTING);
    }
 
    @Override
    public ResourceLocation getPluginUid() {
       return ID;
-   }
-
-   /** JEI's basic transfer, shown only the item input slots (the base-fluid slot would count as a fifth input). */
-   private record ItemOnlyTransfer(IRecipeTransferHandler<KegMenu, KegFermentingPouringRecipe> basic, IRecipeTransferHandlerHelper helper)
-      implements IRecipeTransferHandler<KegMenu, KegFermentingPouringRecipe> {
-      @Override
-      public Class<? extends KegMenu> getContainerClass() {
-         return this.basic.getContainerClass();
-      }
-
-      @Override
-      public Optional<MenuType<KegMenu>> getMenuType() {
-         return this.basic.getMenuType();
-      }
-
-      @Override
-      public RecipeType<KegFermentingPouringRecipe> getRecipeType() {
-         return this.basic.getRecipeType();
-      }
-
-      @Nullable
-      @Override
-      public IRecipeTransferError transferRecipe(KegMenu menu, KegFermentingPouringRecipe recipe, IRecipeSlotsView slots, Player player, boolean maxTransfer,
-         boolean doTransfer) {
-         List<IRecipeSlotView> itemSlots = slots.getSlotViews()
-            .stream()
-            .filter(slot -> slot.getRole() != RecipeIngredientRole.INPUT || slot.getItemStacks().findAny().isPresent())
-            .toList();
-         return this.basic.transferRecipe(menu, recipe, this.helper.createRecipeSlotsView(itemSlots), player, maxTransfer, doTransfer);
-      }
    }
 }

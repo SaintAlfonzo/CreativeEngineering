@@ -14,8 +14,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The vintage clock wines age on (feature_writeup/alcohol.md B4.5). One counter per world, saved in the overworld
- * ({@code data/vinery_aging.dat}). Only {@link VineryConfig#CLOCK_MODE} moves it: by default it runs while a player
- * is online, so sleeping, {@code /time} and Better Days' day speeds don't age wine, and an empty server doesn't either.
+ * ({@code data/vinery_aging.dat}). Only {@link VineryConfig#CLOCK_MODE} moves it. The pack runs it on the sun
+ * ({@code WORLD_TIME}, time.md 3.7): it moves with the overworld day time like the seasons, so sleeping ages wine, and
+ * one day is 24000 clock units, sunrise to sunrise. {@code PLAYTIME} (B4.5) is still there.
  * <p>
  * Clients get the clock and the aging settings in {@link VintageClockPacket} (on login and every 5 s), so tooltips
  * show what the server will use.
@@ -42,6 +43,11 @@ public final class VintageClock {
         public double ticksPerYear() {
             return ticksPerDay * daysPerYear;
         }
+
+        /** Clock ticks as real game ticks at the clock's pace: on the sun clock they are day time units. */
+        public long realTicks(double clockTicks) {
+            return (long) Math.ceil(clockTicks / (rate > 0 ? rate : 1.0));
+        }
     }
 
     public static Snapshot of(Level level) {
@@ -52,7 +58,7 @@ public final class VintageClock {
                     client.cellarPercent, client.ageOnlyInStorage, client.agingEnabled, client.rate, client.measuredDayTicks);
         }
         Data data = level instanceof ServerLevel server ? data(server.getServer()) : null;
-        return fromConfig(data == null ? 0 : data.ticks, data == null ? -1 : data.measuredDayTicks(), 1.0);
+        return fromConfig(data == null ? 0 : data.ticks, data == null ? -1 : data.measuredDayTicks(), rate(data));
     }
 
     private static Snapshot fromConfig(long ticks, double measuredDayTicks, double rate) {
@@ -65,6 +71,9 @@ public final class VintageClock {
 
     /** Clock ticks per aging day under the current settings. */
     private static double ticksPerDay(double measuredDayTicks) {
+        if (VineryConfig.CLOCK_MODE.get() == VineryConfig.ClockMode.WORLD_TIME || VineryConfig.DAY_UNIT.get() == VineryConfig.DayUnit.DAYTIME) {
+            return 24000; // the WORLD_TIME clock counts day time units (time.md 3.7)
+        }
         if (VineryConfig.DAY_UNIT.get() == VineryConfig.DayUnit.WORLD) {
             double minutes = VineryConfig.WORLD_DAY_MINUTES.get();
             if (minutes > 0) {
@@ -120,11 +129,22 @@ public final class VintageClock {
 
     private static VintageClockPacket packet(MinecraftServer server) {
         Data data = data(server);
-        double rate = switch (VineryConfig.CLOCK_MODE.get()) {
-            case PLAYTIME, SERVER_TICKS -> 1.0;
-            case WORLD_TIME -> data.measuredTicks > 0 ? (double) data.measuredSteps / data.measuredTicks : 1.0;
-        };
-        return new VintageClockPacket(fromConfig(data.ticks, data.measuredDayTicks(), rate));
+        return new VintageClockPacket(fromConfig(data.ticks, data.measuredDayTicks(), rate(data)));
+    }
+
+    /**
+     * Clock ticks per real tick: 1, or on the sun clock the measured day time pace (worldDayMinutes until a minute of
+     * play has been measured).
+     */
+    private static double rate(Data data) {
+        if (VineryConfig.CLOCK_MODE.get() != VineryConfig.ClockMode.WORLD_TIME) {
+            return 1.0;
+        }
+        if (data != null && data.measuredDayTicks() > 0) {
+            return (double) data.measuredSteps / data.measuredTicks;
+        }
+        double minutes = VineryConfig.WORLD_DAY_MINUTES.get();
+        return minutes > 0 ? 24000 / (minutes * 1200) : 1.0;
     }
 
     /** Moves the clock (/wine clock). */

@@ -9,8 +9,11 @@ import java.util.List;
 
 /**
  * Port: upstream's Cloth AutoConfig file as {@code vinery-common.toml} (ForgeConfigSpec), with 1.5.5's key names.
- * Additions (feature_writeup/alcohol.md): {@code [aging]} is the playtime vintage clock (B4.5) that replaces 1.5.5's
- * game-time days, and {@code [winemaker_set]} the set bonus settings (B4.7). Defaults are the pack's values.
+ * Additions (feature_writeup/alcohol.md): {@code [aging]} is the vintage clock (B4.5) that replaces 1.5.5's game-time
+ * days, and {@code [winemaker_set]} the set bonus settings (B4.7). Defaults are the pack's values.
+ * <p>
+ * Wine ages in months (time.md 3.7, alcohol.md B7.8): a month is one Serene Seasons sub-season of world days, and the
+ * clock follows the sun. The Java names still say "year"; only the keys and the text changed.
  */
 public final class VineryConfig {
     public static final ForgeConfigSpec SPEC;
@@ -52,6 +55,11 @@ public final class VineryConfig {
     // [banner]
     public static final ForgeConfigSpec.BooleanValue BANNER_GIVE_EFFECT;
     public static final ForgeConfigSpec.BooleanValue BANNER_SHOW_TOOLTIP;
+    public static final ForgeConfigSpec.ConfigValue<String> BANNER_EFFECT;
+    public static final ForgeConfigSpec.IntValue BANNER_AMPLIFIER;
+    public static final ForgeConfigSpec.IntValue BANNER_RADIUS;
+    public static final ForgeConfigSpec.IntValue BANNER_DURATION_SECONDS;
+    public static final ForgeConfigSpec.IntValue BANNER_REFRESH_BELOW_SECONDS;
 
     // [trader]
     public static final ForgeConfigSpec.DoubleValue TRADER_SPAWN_CHANCE;
@@ -76,15 +84,17 @@ public final class VineryConfig {
         PLAYTIME,
         /** Every server tick, like 1.5.5. */
         SERVER_TICKS,
-        /** Follows the overworld day time, like 1.3.10 (sleeping and /time move it). */
+        /** Follows the overworld day time, like 1.3.10 and the seasons (sleeping and /time move it). The pack's choice. */
         WORLD_TIME
     }
 
     public enum DayUnit {
-        /** A day is playtimeHoursPerYear / daysPerYear real hours. */
+        /** A day is playtimeHoursPerMonth / daysPerMonth real hours. */
         AGING,
-        /** A day is one world day (worldDayMinutes, or measured when 0). */
-        WORLD
+        /** A day is one world day of real time (worldDayMinutes, or measured when 0). */
+        WORLD,
+        /** A day is 24000 clock units: sunrise to sunrise on the WORLD_TIME clock. Always used with WORLD_TIME. */
+        DAYTIME
     }
 
     public enum DamageMode {
@@ -95,8 +105,8 @@ public final class VineryConfig {
         ForgeConfigSpec.Builder b = new ForgeConfigSpec.Builder();
 
         b.push("blocks");
-        TOTAL_FERMENTATION_TIME = b.comment("Ticks an Aging Barrel takes for one wine").defineInRange("totalFermentationTime", 6000, 1, 10000);
-        MAX_FLUID_LEVEL = b.comment("Juice units an Aging Barrel holds").defineInRange("maxFluidLevel", 100, 100, 10000);
+        TOTAL_FERMENTATION_TIME = b.comment("Ticks a Cask takes for one wine").defineInRange("totalFermentationTime", 6000, 1, 10000);
+        MAX_FLUID_LEVEL = b.comment("Juice units a Cask holds").defineInRange("maxFluidLevel", 100, 100, 10000);
         MAX_FLUID_INCREASE = b.comment("Juice units one juice bottle adds").defineInRange("maxFluidIncrease", 25, 1, 10000);
         APPLE_PRESS_MASHING_TIME = b.defineInRange("applePressMashingTime", 600, 1, 10000);
         APPLE_PRESS_FERMENTATION_TIME = b.defineInRange("applePressFermentationTime", 800, 1, 10000);
@@ -117,21 +127,21 @@ public final class VineryConfig {
         AGE_ONLY_IN_STORAGE = b.comment("Wines only age while they sit in a storage block (rack, shelf, placed bottle...)").define("ageOnlyInStorage", false);
         MAX_DURATION = b.comment("Longest effect a wine can reach, in ticks").defineInRange("maxDuration", 15000, 1, 100000);
         MAX_LEVEL = b.comment("Highest effect level from aging").defineInRange("maxLevel", 5, 0, 10);
-        DURATION_PER_YEAR = b.comment("Effect ticks a wine gains per year of age").defineInRange("durationPerYear", 200, 0, 10000);
-        CELLAR_AGING_MULTIPLIER = b.comment("Aging speed in a storage block with no sky light").defineInRange("cellarAgingMultiplier", 1.5, 1, 5);
-        DAYS_PER_YEAR = b.comment("Aging days per wine year (1.3.10 pack value: 16)").defineInRange("daysPerYear", 16, 1, 100);
-        YEARS_PER_EFFECT_LEVEL = b.comment("Wine years per effect level (1.3.10 pack value: 2)").defineInRange("yearsPerEffectLevel", 2, 1, 100);
+        DURATION_PER_YEAR = b.comment("Effect ticks a wine gains per month of age").defineInRange("durationPerMonth", 200, 0, 10000);
+        CELLAR_AGING_MULTIPLIER = b.comment("Aging speed in a storage block with no sky light").defineInRange("cellarAgingMultiplier", 2.5, 1, 5);
+        DAYS_PER_YEAR = b.comment("Days per wine month: one Serene Seasons sub-season (the pack's 8 world days)").defineInRange("daysPerMonth", 8, 1, 100);
+        YEARS_PER_EFFECT_LEVEL = b.comment("Wine months per effect level (3 = one season)").defineInRange("monthsPerEffectLevel", 3, 1, 100);
         EFFECTS = b.comment("wine|effect|amplifier|durationTicks per wine (1.5.5 defaults plus the two 1.3.10 wines the port keeps)")
                 .defineList("effects", defaultEffects(), o -> o instanceof String);
         b.pop();
 
         b.push("aging");
-        CLOCK_MODE = b.comment("What moves the vintage clock wines age on: PLAYTIME (a player is online), SERVER_TICKS (always, 1.5.5), WORLD_TIME (overworld day time, 1.3.10)")
-                .defineEnum("clockMode", ClockMode.PLAYTIME);
-        PLAYTIME_HOURS_PER_YEAR = b.comment("Real hours of clock time per wine year (dayUnit AGING). 28.2 = the pack's 1.3.10 pace: 16 Better Days days of about 106 min")
-                .defineInRange("playtimeHoursPerYear", 28.2, 0.01, 10000);
-        DAY_UNIT = b.comment("AGING: a day is playtimeHoursPerYear / daysPerYear. WORLD: a day is one world day as players see it (worldDayMinutes)")
-                .defineEnum("dayUnit", DayUnit.AGING);
+        CLOCK_MODE = b.comment("What moves the vintage clock wines age on: PLAYTIME (a player is online), SERVER_TICKS (always, 1.5.5), WORLD_TIME (overworld day time like the seasons; sleeping ages wine)")
+                .defineEnum("clockMode", ClockMode.WORLD_TIME);
+        PLAYTIME_HOURS_PER_YEAR = b.comment("Real hours of clock time per wine month (dayUnit AGING)")
+                .defineInRange("playtimeHoursPerMonth", 8.0, 0.01, 10000);
+        DAY_UNIT = b.comment("AGING: a day is playtimeHoursPerMonth / daysPerMonth. WORLD: a day is one world day as players see it (worldDayMinutes). DAYTIME: sunrise to sunrise; always used when clockMode is WORLD_TIME")
+                .defineEnum("dayUnit", DayUnit.DAYTIME);
         WORLD_DAY_MINUTES = b.comment("dayUnit WORLD: real minutes per world day. 0 = measure it from the overworld day time (follows Better Days)")
                 .defineInRange("worldDayMinutes", 0.0, 0, 100000);
         LEGACY_YEAR_LENGTH_DAYS = b.comment("1.3.10 wines (Year NBT): the year_length_in_days the old jar used, to convert their age once (pack: 16)")
@@ -139,8 +149,15 @@ public final class VineryConfig {
         b.pop();
 
         b.push("banner");
-        BANNER_GIVE_EFFECT = b.comment("The Vinery banner gives Regeneration II to players within 8 blocks").define("giveEffect", true);
+        BANNER_GIVE_EFFECT = b.comment("The Vinery banner gives its effect to players within the radius").define("giveEffect", true);
         BANNER_SHOW_TOOLTIP = b.define("showTooltip", true);
+        BANNER_EFFECT = b.comment("Effect id the banner gives; an unknown id falls back to minecraft:regeneration")
+                .define("effect", "minecraft:health_boost");
+        BANNER_AMPLIFIER = b.comment("Effect amplifier: 0 = level I, 1 = level II (Health Boost II = 4 extra hearts)").defineInRange("amplifier", 1, 0, 255);
+        BANNER_RADIUS = b.comment("Blocks around the banner").defineInRange("radius", 8, 1, 64);
+        BANNER_DURATION_SECONDS = b.comment("Effect length given at each refresh, in seconds").defineInRange("durationSeconds", 60, 1, 3600);
+        BANNER_REFRESH_BELOW_SECONDS = b.comment("A player whose banner effect has this many seconds or more left is skipped; below it the duration is topped up in place")
+                .defineInRange("refreshBelowSeconds", 10, 1, 3600);
         b.pop();
 
         b.push("trader");
@@ -186,7 +203,6 @@ public final class VineryConfig {
     private static List<String> defaultEffects() {
         List<String> effects = new ArrayList<>(WineEffects.DEFAULTS);
         effects.add("vinery:praetorian_wine|minecraft:glowing|0|1800");
-        effects.add("vinery:king_danis_wine|minecraft:instant_health|0|1");
         return effects;
     }
 

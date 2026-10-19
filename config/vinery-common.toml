@@ -1,9 +1,9 @@
 
 [blocks]
-	#Ticks an Aging Barrel takes for one wine
+	#Ticks a Cask takes for one wine
 	#Range: 1 ~ 10000
 	totalFermentationTime = 6000
-	#Juice units an Aging Barrel holds
+	#Juice units a Cask holds
 	#Range: 100 ~ 10000
 	maxFluidLevel = 100
 	#Juice units one juice bottle adds
@@ -46,42 +46,56 @@
 	#Highest effect level from aging
 	#Range: 0 ~ 10
 	maxLevel = 5
-	#Effect ticks a wine gains per year of age
+	#Effect ticks a wine gains per month of age
 	#Range: 0 ~ 10000
-	durationPerYear = 200
+	durationPerMonth = 200
 	#Aging speed in a storage block with no sky light
 	#Range: 1.0 ~ 5.0
-	cellarAgingMultiplier = 1.5
-	#Aging days per wine year (1.3.10 pack value: 16)
+	cellarAgingMultiplier = 2.5
+	#Days per wine month: one Serene Seasons sub-season (the pack's 8 world days)
 	#Range: 1 ~ 100
-	daysPerYear = 16
-	#Wine years per effect level (1.3.10 pack value: 2)
+	daysPerMonth = 8
+	#Wine months per effect level (3 = one season)
 	#Range: 1 ~ 100
-	yearsPerEffectLevel = 2
+	monthsPerEffectLevel = 1
 	#wine|effect|amplifier|durationTicks per wine (1.5.5 defaults plus the two 1.3.10 wines the port keeps)
-	effects = ["vinery:apple_cider|minecraft:strength|0|1800", "vinery:apple_wine|minecraft:resistance|0|1800", "vinery:mead|minecraft:haste|0|1800", "vinery:glowing_wine|minecraft:glowing|0|1800", "vinery:solaris_wine|minecraft:health_boost|0|1800", "vinery:kelp_cider|vinery:water_walker|0|1800", "vinery:eiswein|vinery:frosty_armor|0|1800", "vinery:aegis_wine|vinery:armor_effect|0|1800", "vinery:villagers_fright|minecraft:bad_omen|0|1800", "vinery:clark_wine|vinery:double_jump|0|1800", "vinery:jellie_wine|vinery:jellie|0|1800", "vinery:noir_wine|minecraft:jump_boost|0|1800", "vinery:red_wine|minecraft:slow_falling|0|1800", "vinery:strad_wine|minecraft:night_vision|0|1800", "vinery:cherry_wine|minecraft:invisibility|0|1800", "vinery:cristel_wine|minecraft:water_breathing|0|1800", "vinery:lilitu_wine|vinery:party_effect|0|1800", "vinery:jo_special_mixture|vinery:climbing_effect|0|1800", "vinery:bolvar_wine|vinery:lava_walker|0|1800", "vinery:magnetic_wine|vinery:magnet|0|1800", "vinery:stal_wine|vinery:health_effect|0|1800", "vinery:chenet_wine|vinery:climbing_effect|0|1800", "vinery:bottle_mojang_noir|vinery:experience_effect|0|1800", "vinery:chorus_wine|vinery:teleport|0|10", "vinery:creepers_crush|vinery:creeper_effect|0|100", "vinery:mellohi_wine|minecraft:instant_health|0|1", "vinery:praetorian_wine|minecraft:glowing|0|1800", "vinery:king_danis_wine|minecraft:instant_health|0|1"]
+	effects = ["vinery:apple_cider|minecraft:strength|0|1800", "vinery:apple_wine|minecraft:resistance|0|1800", "vinery:glowing_wine|minecraft:glowing|0|1800", "vinery:solaris_wine|minecraft:health_boost|0|1800", "vinery:kelp_cider|vinery:water_walker|0|1800", "vinery:eiswein|vinery:frosty_armor|0|1800", "vinery:aegis_wine|vinery:armor_effect|0|1800", "vinery:villagers_fright|minecraft:bad_omen|0|1800", "vinery:clark_wine|vinery:double_jump|0|1800", "vinery:jellie_wine|vinery:jellie|0|1800", "vinery:noir_wine|minecraft:jump_boost|0|1800", "vinery:red_wine|minecraft:slow_falling|0|1800", "vinery:strad_wine|minecraft:night_vision|0|1800", "vinery:cherry_wine|minecraft:invisibility|0|1800", "vinery:cristel_wine|minecraft:water_breathing|0|1800", "vinery:lilitu_wine|vinery:party_effect|0|1800", "vinery:jo_special_mixture|vinery:climbing_effect|0|1800", "vinery:bolvar_wine|vinery:lava_walker|0|1800", "vinery:magnetic_wine|vinery:magnet|0|1800", "vinery:stal_wine|minecraft:health_boost|0|1800", "vinery:chenet_wine|vinery:climbing_effect|0|1800", "vinery:bottle_mojang_noir|vinery:experience_effect|0|1800", "vinery:chorus_wine|vinery:teleport|0|10", "vinery:creepers_crush|vinery:creeper_effect|0|100", "vinery:mellohi_wine|minecraft:instant_health|0|1", "vinery:praetorian_wine|minecraft:glowing|0|1800"]
 
 [aging]
-	#What moves the vintage clock wines age on: PLAYTIME (a player is online), SERVER_TICKS (always, 1.5.5), WORLD_TIME (overworld day time, 1.3.10)
+	#What moves the vintage clock wines age on: PLAYTIME (a player is online), SERVER_TICKS (always, 1.5.5), WORLD_TIME (overworld day time like the seasons; sleeping ages wine)
 	#Allowed Values: PLAYTIME, SERVER_TICKS, WORLD_TIME
-	clockMode = "PLAYTIME"
-	#Real hours of clock time per wine year (dayUnit AGING). 28.2 = the pack's 1.3.10 pace: 16 Better Days days of about 106 min
+	clockMode = "WORLD_TIME"
+	#Real hours of clock time per wine month (dayUnit AGING)
 	#Range: 0.01 ~ 10000.0
-	playtimeHoursPerYear = 28.2
-	#AGING: a day is playtimeHoursPerYear / daysPerYear. WORLD: a day is one world day as players see it (worldDayMinutes)
-	#Allowed Values: AGING, WORLD
-	dayUnit = "AGING"
+	playtimeHoursPerMonth = 8.0
+	#AGING: a day is playtimeHoursPerMonth / daysPerMonth. WORLD: a day is one world day as players see it (worldDayMinutes). DAYTIME: sunrise to sunrise; always used when clockMode is WORLD_TIME
+	#Allowed Values: AGING, WORLD, DAYTIME
+	dayUnit = "DAYTIME"
 	#dayUnit WORLD: real minutes per world day. 0 = measure it from the overworld day time (follows Better Days)
 	#Range: 0.0 ~ 100000.0
-	worldDayMinutes = 0.0
+	worldDayMinutes = 60.0
 	#1.3.10 wines (Year NBT): the year_length_in_days the old jar used, to convert their age once (pack: 16)
 	#Range: 1 ~ 1000
 	legacyYearLengthDays = 16
 
 [banner]
-	#The Vinery banner gives Regeneration II to players within 8 blocks
+	#The Vinery banner gives its effect to players within the radius
 	giveEffect = true
 	showTooltip = true
+	#Effect id the banner gives; an unknown id falls back to minecraft:regeneration
+	effect = "minecraft:health_boost"
+	#Effect amplifier: 0 = level I, 1 = level II (Health Boost II = 4 extra hearts)
+	#Range: 0 ~ 255
+	amplifier = 1
+	#Blocks around the banner
+	#Range: 1 ~ 64
+	radius = 8
+	#Effect length given at each refresh, in seconds
+	#Range: 1 ~ 3600
+	durationSeconds = 60
+	#A player whose banner effect has this many seconds or more left is skipped; below it the duration is topped up in place
+	#Range: 1 ~ 3600
+	refreshBelowSeconds = 10
 
 [trader]
 	#Chance that a Wandering Trader spawn is a Wandering Winemaker. The pack spawns the winemaker itself (patcherMod WinemakerSpawner): 0

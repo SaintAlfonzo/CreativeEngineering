@@ -21,6 +21,7 @@ keeps its own writeup.
 | Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | STAGED for 1.0.6 (not deployed), PL-01 to PL-08 |
 | Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, STAGED for 1.0.6; TT-16 |
 | AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | patcherMod `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in patcherMod 1.0.5, STAGED for 1.0.6; other screens still lack bars (Let's Do recipe book, FTB Quests, Wares, AE2 tables, Patchouli); TT-17, TT-18 |
+| Brewin' and Chewin' (backport): Heating Cask / Ice Crate keg-source lines; "Placeable on a coaster"; keg drink effect lines and the pipe-rule line ("Pipes can only drain it while it isn't fermenting", only while `pipeDrainOnlyWhenIdle` is on) on the keg item, the keg GUI's tank and the JEI Fermenting result tank | tooltips.js "Food / Farmers Delight"; placeable_tooltip.js; the port (`KegItem`, `KegScreen`, JEI `FermentingRecipeCategory`) | BUILT 2026-10-18, not in `mods/` yet; [alcohol.md](alcohol.md) 8.2, 8.3, 8.7, AL-49 to AL-52, AL-64 |
 | Shield Shift view "Blocks burning" / "Blocks thorns" lines | patcherMod `ShieldTooltip` ([shields.md](shields.md)) | STAGED for 1.0.6; SH-04 |
 | patcherMod tooltips: tier shields, vanilla shield, echo armor set bonus, D&D jetpack crash fix | patcherMod | VERIFIED / see memories |
 
@@ -223,7 +224,7 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [] Botania
 - [] Vinery + JEI (placeholders in, text TODO; behaviour reference in [vinery.md](vinery.md))
 - [] Cloud Storage
-- [] Brewin Chewing + JEI
+- [x] Brewin Chewing + JEI: cask / crate, coaster, keg effect and pipe lines (2026-10-18, [alcohol.md](alcohol.md) 8)
 
 ## 9. History
 
@@ -242,3 +243,7 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
   (not deployed). The camo-speed wording row was stale: it shipped long ago.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- **2026-10-18:** Brewin' and Chewin' backport lines: Heating Cask and Ice Crate (tooltips.js), "Placeable on a coaster"
+  (fifth placeable tag, [placeable_food.md](placeable_food.md)), and in the port the drink's effect lines plus the pipe
+  rule on the keg item, keg tank and JEI result tank ([alcohol.md](alcohol.md) 8.2, 8.3, 8.7).
+- 2026-10-19: the Brewin' lines above STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) AL).

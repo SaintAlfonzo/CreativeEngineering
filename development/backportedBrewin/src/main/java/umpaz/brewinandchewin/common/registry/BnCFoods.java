@@ -83,7 +83,8 @@ public class BnCFoods {
    public static final FoodProperties STEEL_TOE_STOUT = new Builder()
       .effect(() -> new MobEffectInstance(BnCEffects.TIPSY, 2400, 2), 1.0F)
       .effect(() -> new MobEffectInstance(BnCEffects.INTOXICATION, 1800, 0, false, false), 1.0F)
-      .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 0), 1.0F)
+      // Port (alcohol.md 8.6): Resistance II for 90 s; 4.5.0 gives Resistance I for 60 s.
+      .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1800, 1), 1.0F)
       .alwaysEat()
       .build();
    public static final FoodProperties DREAD_NOG = new Builder()
@@ -151,7 +152,4 @@ public class BnCFoods {
       .saturationMod(0.8F)
       .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 800, 0, false, false), 1.0F)
       .build();
-   public static final FoodProperties SWEET_BERRY_JAM = new Builder().nutrition(6).saturationMod(0.4F).build();
-   public static final FoodProperties GLOW_BERRY_MARMALADE = new Builder().nutrition(6).saturationMod(0.4F).build();
-   public static final FoodProperties APPLE_JELLY = new Builder().nutrition(10).saturationMod(0.6F).build();
 }

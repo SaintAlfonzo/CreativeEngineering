@@ -18,6 +18,8 @@
   "client": [
     "client.GuiMixin",
     "client.TipsyMouseHandlerMixin",
+    "client.TipsyCameraDriftMixin",
+    "client.integration.appleskin.HUDOverlayHandlerMixin",
     "client.TipsySignRendererMixin$TipsyCanvasSignRenderMixin",
     "client.TipsySignRendererMixin$TipsySignRenderMixin"
   ],

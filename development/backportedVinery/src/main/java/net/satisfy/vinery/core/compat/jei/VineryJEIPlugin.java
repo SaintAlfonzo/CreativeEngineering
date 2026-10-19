@@ -26,7 +26,10 @@ import net.satisfy.vinery.core.recipe.ApplePressMashingRecipe;
 import net.satisfy.vinery.core.recipe.FermentationBarrelRecipe;
 import net.satisfy.vinery.core.recipe.ApplePressFermentingRecipe;
 import net.satisfy.vinery.core.registry.ObjectRegistry;
+import net.satisfy.vinery.core.recipe.input.FermentationBarrelRecipeInput;
 import net.satisfy.vinery.core.registry.RecipeTypeRegistry;
+import net.satisfy.vinery.core.wine.JuiceUtil;
+import net.satisfy.vinery.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -96,6 +99,16 @@ public class VineryJEIPlugin implements IModPlugin {
 
     public static void buildSlotsFromRecipe(IRecipeLayoutBuilder builder, FermentationBarrelRecipe recipe) {
         final int BOTTOM_ROW_Y = 45;
+
+        // Port (alcohol.md B7.1): the juice bottles in the Cask's juice slot (0), as many as the recipe's units need
+        FermentationBarrelRecipeInput.JuiceData juice = recipe.getJuiceData();
+        if (juice.amount() > 0) {
+            int bottles = Math.max(1, (juice.amount() + PlatformHelper.getMaxFluidIncrease() - 1) / Math.max(1, PlatformHelper.getMaxFluidIncrease()));
+            List<ItemStack> stacks = JuiceUtil.juiceStacks(juice.type(), bottles);
+            if (!stacks.isEmpty()) {
+                builder.addSlot(RecipeIngredientRole.INPUT, 13, 4).addItemStacks(stacks);
+            }
+        }
 
         final NonNullList<Ingredient> recipeIngredients = recipe.getIngredients();
         final int ingredientCount = recipeIngredients.size();

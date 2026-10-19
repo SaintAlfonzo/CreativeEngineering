@@ -23,12 +23,14 @@ b.lava_cauldron = 'minecraft:lava_cauldron';
 b.blaze_burner = 'create:blaze_burner';             // counts only with blaze != none (OvenHeat.isActive)
 b.lit_blaze_burner = 'create:lit_blaze_burner';
 b.blaze_lantern = 'quark:blaze_lantern';
+b.cutting_board = 'farmersdelight:cutting_board';  // bakeware hammering (feature_writeup/oven.md 2.5)
 
 // Tags
 b.any_bricks = '#minecraft:bricks';
 b.t_oven_heat_sources = '#creativeengineering:oven_heat_sources'; // OvenHeat.OVEN_HEAT_SOURCES
 b.t_fd_heat_sources = '#farmersdelight:heat_sources';
 b.t_fd_tray_heat_sources = '#farmersdelight:tray_heat_sources';   // fire, campfires, lava
+b.t_hammer_no_rotate = '#creativeengineering:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
 
 // ############################## Validation ##############################
 

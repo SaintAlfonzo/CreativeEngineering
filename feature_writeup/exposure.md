@@ -359,3 +359,8 @@ Before deploying 1.0.3:
   the 1.0.5 removals delete `-02` on both machines.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged (`-03`).
+- 2026-10-14: `-04` built: the viewfinder is dropped when the ticking player has no active camera and on logout (it is
+  static, so it outlived respawns, dimension changes and rejoins), and Forge's `MouseButton.Pre` hook ignores clicks
+  while a screen is open. Before, a stuck viewfinder ate clicks inside inventories.
+- 2026-10-19: `-04` had gone out in pack 1.0.7 (DEPLOYED 2026-10-18, [plan_1.0.7.md](plan_1.0.7.md) EX). Unchanged in
+  1.0.8.

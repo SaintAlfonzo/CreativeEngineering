@@ -1604,6 +1604,11 @@
 	#On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).
 	#Off = it crafts anyway and throws what doesn't fit.
 	stallWhenFull = true
+	#On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat
+	#stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every
+	#ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of
+	#their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload.
+	ovenIngredientCounts = false
 
 #TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
 #but TrashSlotSaveState.json in the game folder lists every screen opened so far.
@@ -1749,4 +1754,70 @@
 	#rules. Also the ceiling for the snow_seasons lists in season_types.json.
 	#Range: -64 ~ 4096
 	snowLineY = 320
+
+#Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the
+#time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml,
+#and vinery-common.toml [wine]/[aging] are overwritten from here at server start and on every edit.
+#/cetime shows every derived value.
+[time]
+	#SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:
+	#1 in single player, 3 on a server). Editing any value by hand turns this into CUSTOM, unless the
+	#values then match a preset again. CUSTOM itself changes nothing.
+	#Allowed Values: SINGLEPLAYER, SERVER, CUSTOM
+	preset = "SINGLEPLAYER"
+	#Master switch. false: Better Days, Serene Seasons, SeasonHUD and Vinery use their own files again.
+	enabled = true
+	#Dedicated server with nobody online: the sun stops, so the seasons and wine aging stop with it.
+	#Game time, weather and random ticks keep running. Single player is unaffected.
+	pauseWhenEmpty = true
+	#SeasonHUD shows the time of day after the season, "Mid Spring (Day 3/24) 7:30 pm" (client side).
+	hudTimeOfDay = true
+
+	[time.day]
+		#Real minutes from dayStart to nightStart.
+		#Range: 1.0 ~ 10000.0
+		dayMinutes = 45.0
+		#Real minutes from nightStart to the next dayStart.
+		#Range: 1.0 ~ 10000.0
+		nightMinutes = 15.0
+		#dayTime of sunrise; the clock reads it as 6:00 am. Better Days reads it once, so a change needs a restart.
+		#Range: 0.0 ~ 24000.0
+		dayStart = 22300.0
+		#dayTime of sunset. Needs a restart, like dayStart.
+		#Range: 0.0 ~ 24000.0
+		nightStart = 13000.0
+
+	[time.seasons]
+		#SUN: the seasons count sunrises; sleeping and /time move them as far as the sun.
+		#TICKS: Serene Seasons' own counter (one world day of real ticks per day; sleeping skips ahead).
+		#Allowed Values: SUN, TICKS
+		clock = "SUN"
+		#World days per sub-season (12 sub-seasons a year). Also the length of a wine month.
+		#Range: 1 ~ 1000
+		daysPerSubSeason = 8
+		#Sub-season a new world starts in: 1 = Early Spring ... 12 = Late Winter, 0 = random.
+		#Range: 0 ~ 12
+		startingSubSeason = 1
+
+	[time.wine]
+		#SUN: wine ages with the world days, sleeping and /time included. PLAYTIME: while a player is online.
+		#Allowed Values: SUN, PLAYTIME
+		clock = "SUN"
+		#A wine month is one sub-season. Months per effect level (SINGLEPLAYER 1, SERVER 3 = one season).
+		#Range: 1 ~ 100
+		monthsPerLevel = 1
+		#Highest effect level from aging.
+		#Range: 0 ~ 10
+		maxLevel = 5
+
+		[time.wine.boosts]
+			#Aging speed in storage with no sky light.
+			#Range: 1.0 ~ 5.0
+			cellarMultiplier = 2.5
+
+#Advancements (vanilla, every mod, every datapack).
+[advancements]
+	#false (the pack's setting): none are loaded, so none show, toast or give rewards.
+	#Read when data loads: a change applies on the next /reload or world start.
+	enabled = false
 

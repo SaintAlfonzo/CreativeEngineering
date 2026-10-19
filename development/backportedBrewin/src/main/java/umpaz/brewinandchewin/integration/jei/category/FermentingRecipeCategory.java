@@ -31,6 +31,7 @@ import umpaz.brewinandchewin.client.utility.BnCFluidItemDisplays;
 import umpaz.brewinandchewin.common.BnCConfiguration;
 import umpaz.brewinandchewin.common.crafting.FluidIngredientWithAmount;
 import umpaz.brewinandchewin.common.crafting.KegPouringRecipe;
+import umpaz.brewinandchewin.common.item.BoozeItem;
 import umpaz.brewinandchewin.common.registry.BnCItems;
 import umpaz.brewinandchewin.common.registry.BnCRecipeTypes;
 import umpaz.brewinandchewin.common.utility.AbstractedFluidStack;
@@ -173,7 +174,9 @@ public class FermentingRecipeCategory implements IRecipeCategory<KegFermentingPo
          if (renderFluid) {
             IRecipeSlotBuilder resultSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 100, 2)
                .setFluidRenderer(capacity, false, 26, 30)
-               .setOverlay(this.kegOverlay, 0, 0);
+               .setOverlay(this.kegOverlay, 0, 0)
+               // Port (alcohol.md 8.2): the drink's effect lines on the result tank, as on the poured tankard below it.
+               .addTooltipCallback((view, tooltip) -> BoozeItem.addFluidEffectLines(result.fluid(), tooltip));
             this.addFluids(resultSlot, this.fluidHelper, List.of(result), resultAmount);
          } else {
             this.addInvisibleFluids(builder, RecipeIngredientRole.OUTPUT, this.fluidHelper, List.of(result), resultAmount);

@@ -63,6 +63,8 @@ The juice is the matching `*_grapejuice_*_bottle` for the 8 grape types. An unse
 
 ### 2.3 Aging Barrel (`vinery:fermentation_barrel`), wine
 
+The Vinery port calls this block the **Cask** (alcohol.md B7.9). This section describes 1.3.10.
+
 | | |
 |---|---|
 | Slots (GUI) | 0: only `vinery:wine_bottle`. 1-4: only items that appear in some `vinery:wine_fermentation` recipe. 5: output, nothing can be placed. |
@@ -322,3 +324,5 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
   - Writeup created from the decompiled 1.3.10 jar (`tools/decompile_mod.py` added).
   - Grape and grape seed flavour lines removed. `removeTooltipKey` takes a `*` prefix key. Vinery tooltip placeholders added.
   - Found the 50-tick barrel time (the JEI page says 1800, open).
+- 2026-10-19: this file describes 1.3.10, which left the pack in 1.0.7 (DEPLOYED 2026-10-18) for the port; the port's
+  behaviour is in [alcohol.md](alcohol.md) Part B. Kept as the reference for what changed.

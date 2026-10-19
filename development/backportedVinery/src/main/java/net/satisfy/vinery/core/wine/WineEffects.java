@@ -9,7 +9,9 @@ import net.satisfy.vinery.platform.PlatformHelper;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +21,6 @@ public class WineEffects {
     public static final List<String> DEFAULTS = List.of(
             "vinery:apple_cider|minecraft:strength|0|1800",
             "vinery:apple_wine|minecraft:resistance|0|1800",
-            "vinery:mead|minecraft:haste|0|1800",
             "vinery:glowing_wine|minecraft:glowing|0|1800",
             "vinery:solaris_wine|minecraft:health_boost|0|1800",
             "vinery:kelp_cider|vinery:water_walker|0|1800",
@@ -37,7 +38,7 @@ public class WineEffects {
             "vinery:jo_special_mixture|vinery:climbing_effect|0|1800",
             "vinery:bolvar_wine|vinery:lava_walker|0|1800",
             "vinery:magnetic_wine|vinery:magnet|0|1800",
-            "vinery:stal_wine|vinery:health_effect|0|1800",
+            "vinery:stal_wine|minecraft:health_boost|0|1800",
             "vinery:chenet_wine|vinery:climbing_effect|0|1800",
             "vinery:bottle_mojang_noir|vinery:experience_effect|0|1800",
             "vinery:chorus_wine|vinery:teleport|0|10",
@@ -52,16 +53,33 @@ public class WineEffects {
     private static Map<ResourceLocation, WineEffect> cache = Map.of();
 
     public static @Nullable WineEffect get(Item item) {
+        return all().get(ForgeRegistries.ITEMS.getKey(item));
+    }
+
+    /** Every parsed {@code effects} entry, wine id -> effect. The pack's JEED provider recipes read this (alcohol.md B7.5). */
+    public static Map<ResourceLocation, WineEffect> all() {
         List<? extends String> source = PlatformHelper.getWineEffects();
         if (source != cachedSource) {
             cache = parse(source);
             cachedSource = source;
         }
-        return cache.get(ForgeRegistries.ITEMS.getKey(item));
+        return cache;
+    }
+
+    /** {@link #all()} grouped as effect id -> wine ids, strings only, for KubeJS (Rhino reads plain strings safely). */
+    public static Map<String, List<String>> winesByEffect() {
+        Map<String, List<String>> out = new LinkedHashMap<>();
+        all().forEach((wine, effect) -> {
+            ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(effect.effect());
+            if (id != null) {
+                out.computeIfAbsent(id.toString(), k -> new ArrayList<>()).add(wine.toString());
+            }
+        });
+        return out;
     }
 
     private static Map<ResourceLocation, WineEffect> parse(List<? extends String> entries) {
-        Map<ResourceLocation, WineEffect> result = new HashMap<>();
+        Map<ResourceLocation, WineEffect> result = new LinkedHashMap<>();
         for (String entry : entries) {
             String[] parts = entry.split("\\|");
             ResourceLocation wine = parts.length == 4 ? ResourceLocation.tryParse(parts[0].trim()) : null;
@@ -77,6 +95,6 @@ public class WineEffects {
                 LOGGER.warn("Ignoring wine effect entry '{}': amplifier and duration must be numbers", entry);
             }
         }
-        return result;
+        return Collections.unmodifiableMap(result);
     }
 }

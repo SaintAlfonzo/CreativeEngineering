@@ -1,5 +1,9 @@
 package net.satisfy.vinery.platform;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.satisfy.vinery.api.VineryPlugin;
 import net.satisfy.vinery.core.util.InfoOverlayMode;
 import net.satisfy.vinery.forge.VineryConfig;
@@ -117,6 +121,29 @@ public final class PlatformHelper {
 
     public static boolean shouldShowTooltip() {
         return VineryConfig.BANNER_GIVE_EFFECT.get() && VineryConfig.BANNER_SHOW_TOOLTIP.get();
+    }
+
+    /** alcohol.md B7.7: the configured effect; an unknown id falls back to Regeneration. */
+    public static MobEffect getBannerEffect() {
+        ResourceLocation id = ResourceLocation.tryParse(VineryConfig.BANNER_EFFECT.get());
+        MobEffect effect = id == null ? null : ForgeRegistries.MOB_EFFECTS.getValue(id);
+        return effect != null ? effect : MobEffects.REGENERATION;
+    }
+
+    public static int getBannerAmplifier() {
+        return VineryConfig.BANNER_AMPLIFIER.get();
+    }
+
+    public static int getBannerRadius() {
+        return VineryConfig.BANNER_RADIUS.get();
+    }
+
+    public static int getBannerDurationSeconds() {
+        return VineryConfig.BANNER_DURATION_SECONDS.get();
+    }
+
+    public static int getBannerRefreshBelowSeconds() {
+        return VineryConfig.BANNER_REFRESH_BELOW_SECONDS.get();
     }
 
     public static double getTraderSpawnChance() {

@@ -21,5 +21,6 @@
   "recipe_book_tab": "meals",
   "result": {
     "item": "brewinandchewin:cheesy_pasta"
-  }
+  },
+  "cookingtime": 200
 }

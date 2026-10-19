@@ -32,6 +32,10 @@
 	#Should the dimension temperature influence the temperature in the Keg?
 	#Default: true
 	kegDimTemp = true
+	#Port setting (not in 4.5.0): may pipes and pumps drain the Keg only while it isn't fermenting?
+	#Keeps a pump from pulling out the base fluid mid-batch. False drains at any time, as in 4.5.0.
+	#Default: true
+	pipeDrainOnlyWhenIdle = true
 
 [recipe_book]
 	#Should the Keg have a Recipe Book available on its interface?

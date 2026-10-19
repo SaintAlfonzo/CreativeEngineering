@@ -73,15 +73,6 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentationB
         return this.icon;
     }
 
-    private boolean isMouseOverFluidArea(int mouseX, int mouseY) {
-        int fluidAreaLeft = 56 - 1;
-        int fluidAreaTop = 31 - 5;
-        int fluidAreaRight = 56 + 1;
-        int fluidAreaBottom = 31 + 5;
-
-        return mouseX >= fluidAreaLeft && mouseX <= fluidAreaRight &&
-                mouseY >= fluidAreaTop && mouseY <= fluidAreaBottom;
-    }
 
     private Component getFluidTooltip(String juiceType, int fluidLevel) {
         int maxFluidLevel = PlatformHelper.getMaxFluidLevel();
@@ -112,7 +103,7 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentationB
         if (recipe.getJuiceData().amount() > 0) {
             FermentationBarrelGui.drawJuiceBar(guiGraphics, recipe.getJuiceData().type(), recipe.getJuiceData().amount(), 56, 31);
 
-            if (isMouseOverFluidArea((int) mouseX, (int) mouseY)) {
+            if (FermentationBarrelGui.isOverJuiceBar(mouseX, mouseY, 56, 31)) {
                 Component tooltip = getFluidTooltip(recipe.getJuiceData().type(), recipe.getJuiceData().amount());
                 if (Minecraft.getInstance().screen != null) {
                     Minecraft.getInstance().screen.renderTooltip(guiGraphics, tooltip, (int) mouseX, (int) mouseY);

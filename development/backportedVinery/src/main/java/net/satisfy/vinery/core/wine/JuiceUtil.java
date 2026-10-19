@@ -89,6 +89,22 @@ public class JuiceUtil {
         return id >= 0 && id < TYPE_IDS.size() ? TYPE_IDS.get(id) : "";
     }
 
+    /** Every juice bottle of a type, {@code count} each (JEI's Cask page cycles them, alcohol.md B7.1). */
+    public static List<ItemStack> juiceStacks(String type, int count) {
+        List<ItemStack> stacks = new ArrayList<>();
+        Supplier<Item> item = JUICE_ITEMS.get(type);
+        if (item != null) {
+            stacks.add(new ItemStack(item.get(), count));
+        }
+        TagKey<Item> tag = JUICE_TAGS.get(type);
+        if (tag != null) {
+            for (Holder<Item> holder : Registry.ITEM.getTagOrEmpty(tag)) {
+                stacks.add(new ItemStack(holder.value(), count));
+            }
+        }
+        return stacks;
+    }
+
     public static Item juiceItem(String type) {
         Supplier<Item> item = JUICE_ITEMS.get(type);
         if (item != null) {

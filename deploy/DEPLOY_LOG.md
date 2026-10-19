@@ -4,17 +4,117 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
-<!-- deploy:1.0.7 -->
-## 1.0.7 - 2026-10-18 18:20
+<!-- deploy:1.0.8 -->
+## 1.0.8 - 2026-10-19 01:16
 
 - Minecraft 1.19.2, Forge 43.3.9
-- Commit: dc669e2 + 28 uncommitted file(s)
+- Commit: 908e831 + 44 uncommitted file(s)
+- Since: 1.0.7
+- Deployed: server, client 2026-10-19 01:33
+- Contents: 374 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
+- Payload: update from 1.0.7, config functional: 38 files, 5.4 MB (mods 3, kubejs 25, config 8, defaultconfigs 2)
+- Notes: time master, advancements off, Brewin port -02 (replaces the 2.0 jar for good), Vinery port -02, oven recipes + bakeware hammering + cornmeal
+- Built with warnings:
+  - 44 uncommitted change(s) in shipped folders (commit 908e831 + working tree)
+
+### Changes
+
+Mods updated (3):
+
+- brewinandchewin: `BrewinAndChewin-1.19-2.0.jar` -> `backportedBrewin-4.5.0-ce-19.2-02.jar`
+- creativeengineering: `creativeengineering-1.0.7.jar` -> `creativeengineering-1.0.8.jar`
+- vinery: `backportedVinery-1.5.5-ce-19.2-01.jar` -> `backportedVinery-1.5.5-ce-19.2-02.jar`
+
+<details><summary>kubejs/: 6 added, 19 changed, 1 removed</summary>
+
+*added (6)*
+
+- `assets/creativeengineering/textures/item/baking_sheet.png`
+- `assets/creativeengineering/textures/item/cake_pan.png`
+- `assets/creativeengineering/textures/item/cornmeal.png`
+- `assets/creativeengineering/textures/item/pie_tin.png`
+- `server_scripts/cooking/alcohol.js`
+- `startup_scripts/cooking/cornmeal.js`
+
+*changed (19)*
+
+- `assets/creativeengineering/lang/en_us.json`
+- `client_scripts/placeable_tooltip.js`
+- `client_scripts/tooltips.js`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/food/placeable.json`
+- `generation_scripts/stacks/stack_sizes.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `server_scripts/cooking/baking.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/cookingtags.js`
+- `server_scripts/tags/metaltags.js`
+- `server_scripts/tags/placeabletags.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/fluid_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/changes/transition_items.js`
+- `startup_scripts/cooking/bakeware.js`
+- `startup_scripts/func/neoCraftHelper.js`
+
+*removed (1)*
+
+- `assets/cornmeal.png`
+
+</details>
+
+config/: 0 added, 8 changed, 0 removed:
+
+*changed (8)*
+
+- `brewinandchewin-common.toml`
+- `creativeengineering-common.toml`
+- `rare-ice.properties`
+- `vinery-common.toml`
+- `ftbquests/quests/chapters/progression.snbt`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+defaultconfigs/: 0 added, 2 changed, 0 removed:
+
+*changed (2)*
+
+- `seasonhud-server.toml`
+- `sereneseasons-server.toml`
+
+### Removals (from 1.0.7)
+
+Delete on the server (5, also in removals_server.txt):
+
+- `kubejs/assets/cornmeal.png`
+- `mods/BrewinAndChewin-1.19-2.0.jar`
+- `mods/backportedBrewin-4.5.0-ce-19.2-01.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-01.jar`
+- `mods/creativeengineering-1.0.7.jar`
+
+Delete on the client (5, also in removals_client.txt):
+
+- `kubejs/assets/cornmeal.png`
+- `mods/BrewinAndChewin-1.19-2.0.jar`
+- `mods/backportedBrewin-4.5.0-ce-19.2-01.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-01.jar`
+- `mods/creativeengineering-1.0.7.jar`
+
+<!-- deploy:1.0.7 -->
+## 1.0.7 - 2026-10-18 19:29
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 908e831 + 3 uncommitted file(s)
 - Since: 1.0.6
+- Deployed: server, client 2026-10-18 19:43
 - Contents: 375 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
 - Payload: update from 1.0.6, config functional: 51 files, 15.0 MB (mods 6, kubejs 34, config 7, resourcepacks 2, vinery_upstream 2)
+- Notes: hotfix: backportedVinery grass slab bonemeal crash with Immersive Weathering (fertile property)
 - Built with warnings:
   - pack/manifest.json is out of date with mods/: run tools/gen_pack_manifest.py and commit pack/
-  - 28 uncommitted change(s) in shipped folders (commit dc669e2 + working tree)
+  - 3 uncommitted change(s) in shipped folders (commit 908e831 + working tree)
 
 ### Changes
 

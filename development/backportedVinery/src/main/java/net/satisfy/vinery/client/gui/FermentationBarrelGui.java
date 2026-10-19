@@ -20,6 +20,7 @@ public class FermentationBarrelGui extends StationRecipeBookScreen<FermentationB
     public static final ResourceLocation BACKGROUND = Vinery.identifier("textures/gui/fermentation_barrel_gui.png");
 
     private static final int FLUID_WIDTH = 20;
+    private static final int FLUID_HEIGHT = 4;
     private static final int FLUID_X = 82;
     private static final int FLUID_Y = 44;
 
@@ -108,13 +109,16 @@ public class FermentationBarrelGui extends StationRecipeBookScreen<FermentationB
     }
 
     private boolean isMouseOverFluidArea(int mouseX, int mouseY) {
-        int fluidAreaLeft = this.leftPos + FLUID_X - 1;
-        int fluidAreaTop = this.topPos + FLUID_Y - 5;
-        int fluidAreaRight = this.leftPos + FLUID_X + FLUID_WIDTH + 1;
-        int fluidAreaBottom = this.topPos + FLUID_Y + 10;
+        return isOverJuiceBar(mouseX, mouseY, this.leftPos + FLUID_X, this.topPos + FLUID_Y);
+    }
 
-        return mouseX >= fluidAreaLeft && mouseX <= fluidAreaRight &&
-                mouseY >= fluidAreaTop && mouseY <= fluidAreaBottom;
+    /**
+     * Port (alcohol.md B7.1): the whole gauge and its frame, empty part included, for the screen and the JEI page alike.
+     * {@code originX/Y} is where {@link #drawJuiceBar} draws.
+     */
+    public static boolean isOverJuiceBar(double mouseX, double mouseY, int originX, int originY) {
+        return mouseX >= originX - 2 && mouseX < originX + FLUID_WIDTH + 2
+                && mouseY >= originY - 3 && mouseY < originY + FLUID_HEIGHT + 3;
     }
 
     private boolean isMouseOverCraftingTimeArea(int mouseX, int mouseY) {
@@ -155,7 +159,7 @@ public class FermentationBarrelGui extends StationRecipeBookScreen<FermentationB
             TEXTURE__START = 0;
         }
 
-        blitTexture(poseStack, BACKGROUND, originX, originY , TEXTURE_X_START, TEXTURE__START, scaledWidth, 4);
+        blitTexture(poseStack, BACKGROUND, originX, originY , TEXTURE_X_START, TEXTURE__START, scaledWidth, FLUID_HEIGHT);
     }
 
     @Override

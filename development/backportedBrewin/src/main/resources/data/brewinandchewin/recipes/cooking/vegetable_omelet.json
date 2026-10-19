@@ -24,5 +24,6 @@
   "recipe_book_tab": "meals",
   "result": {
     "item": "brewinandchewin:vegetable_omelet"
-  }
+  },
+  "cookingtime": 200
 }

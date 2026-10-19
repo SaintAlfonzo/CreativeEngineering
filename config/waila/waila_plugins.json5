@@ -3,7 +3,7 @@
     // Grapevine Pot: grapes, stomps, bottles left
     // Default value: [true]
     grapevine_pot: true,
-    // Aging Barrel: juice, wine in progress, bottles
+    // Cask: juice, wine in progress, bottles
     // Default value: [true]
     fermentation_barrel: true,
     // Apple Press: mashing and fermenting
@@ -14,7 +14,10 @@
     storage: true,
     // Stackable Log: fire and cooking
     // Default value: [true]
-    stackable_log: true
+    stackable_log: true,
+    // Grapevine stems and lattices: grape variety, ripe, leaves to come
+    // Default value: [true]
+    stem: true
   },
   securitycraft: {
     // Display Owner?

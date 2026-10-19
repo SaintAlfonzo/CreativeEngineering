@@ -9,6 +9,8 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,8 +29,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Wine aging on the vintage clock (alcohol.md B4.5): fresh wine -> fully aged wine, with the real play time per year
- * and per level, and the cellar speed-up. The stacks carry real WineYear data, so the wine tooltip shows the levels.
+ * Wine aging on the vintage clock (alcohol.md B4.5): fresh wine -> fully aged wine, with the real time per month and
+ * per level, and the cellar speed-up. The stacks carry real WineYear data, so the wine tooltip shows the levels. The
+ * text wraps to the page in JEI's dark grey (B7.1); the page is as tall as the wrapped lines need.
  */
 public class WineAgingCategory extends PortCategory<WineAgingCategory.Display> {
     public static final RecipeType<Display> TYPE = RecipeType.create(Vinery.MOD_ID, "wine_aging", Display.class);
@@ -38,6 +41,8 @@ public class WineAgingCategory extends PortCategory<WineAgingCategory.Display> {
     private static final int RACK_X = X0 + 1, FRESH_X = X0 + 50, RESULT_X = X0 + 104, ROW_Y = 5;
     private static final int STAMP_ARROW_X = X0 + 21, AGE_ARROW_X = X0 + 71, ARROW_Y = 4;
     private static final int TEXT_Y = 31;
+    private static final int LINE_HEIGHT = 10;
+    private static final int TEXT_WIDTH = WIDTH - 4;
 
     public record Display(ItemStack wine) {
     }
@@ -46,7 +51,8 @@ public class WineAgingCategory extends PortCategory<WineAgingCategory.Display> {
     private final IDrawableAnimated ageArrow;
 
     public WineAgingCategory(IGuiHelper gui) {
-        super(gui, TYPE, Component.translatable(LANG), new ItemStack(ObjectRegistry.OAK_WINE_RACK_BIG.get()), WIDTH, 60);
+        super(gui, TYPE, Component.translatable(LANG), new ItemStack(ObjectRegistry.OAK_WINE_RACK_BIG.get()), WIDTH,
+                TEXT_Y + wrapped(VintageClock.of(level())).size() * LINE_HEIGHT);
         this.stampArrow = animatedArrow(100);
         this.ageArrow = animatedArrow(400);
     }
@@ -91,6 +97,22 @@ public class WineAgingCategory extends PortCategory<WineAgingCategory.Display> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, RESULT_X, ROW_Y).addItemStack(aged(recipe.wine(), fullAgeDays(clock)));
     }
 
+    private static List<Component> lines(VintageClock.Snapshot clock) {
+        return List.of(
+                Component.translatable(LANG + ".year", clock.daysPerYear(), DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerYear()))),
+                Component.translatable(LANG + ".level", clock.yearsPerEffectLevel(), DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerYear() * clock.yearsPerEffectLevel()))),
+                Component.translatable(LANG + ".cellar", String.format("%.1f", clock.cellarPercent() / 100.0)));
+    }
+
+    private static List<FormattedCharSequence> wrapped(VintageClock.Snapshot clock) {
+        Font font = Minecraft.getInstance().font;
+        List<FormattedCharSequence> out = new ArrayList<>();
+        for (Component line : lines(clock)) {
+            out.addAll(font.split(line, TEXT_WIDTH));
+        }
+        return out;
+    }
+
     @Override
     public void draw(@NotNull Display recipe, @NotNull IRecipeSlotsView view, @NotNull PoseStack pose, double mouseX, double mouseY) {
         VintageClock.Snapshot clock = VintageClock.of(level());
@@ -99,9 +121,10 @@ public class WineAgingCategory extends PortCategory<WineAgingCategory.Display> {
         drawSlot(pose, FRESH_X, ROW_Y);
         drawArrow(pose, ageArrow, AGE_ARROW_X, ARROW_Y);
         drawBigSlot(pose, RESULT_X, ROW_Y);
-        int center = WIDTH / 2;
-        drawCentered(pose, Component.translatable(LANG + ".year", clock.daysPerYear(), DrinkBlockItem.realTime((long) clock.ticksPerYear())), center, TEXT_Y);
-        drawCentered(pose, Component.translatable(LANG + ".level", clock.yearsPerEffectLevel(), DrinkBlockItem.realTime((long) (clock.ticksPerYear() * clock.yearsPerEffectLevel()))), center, TEXT_Y + 10);
-        drawCentered(pose, Component.translatable(LANG + ".cellar", String.format("%.1f", clock.cellarPercent() / 100.0)), center, TEXT_Y + 20);
+        int y = TEXT_Y;
+        for (FormattedCharSequence line : wrapped(clock)) {
+            drawCentered(pose, line, WIDTH / 2, y);
+            y += LINE_HEIGHT;
+        }
     }
 }

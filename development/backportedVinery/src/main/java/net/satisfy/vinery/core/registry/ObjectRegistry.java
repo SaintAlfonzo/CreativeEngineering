@@ -55,7 +55,6 @@ import net.satisfy.vinery.core.item.*;
 import net.satisfy.vinery.core.world.VineryTreeGrower;
 import net.satisfy.vinery.core.world.VineryWorldGen;
 import net.satisfy.vinery.legacy.block.*;
-import net.satisfy.vinery.legacy.item.LegacyCalendarItem;
 import net.satisfy.vinery.platform.PlatformHelper;
 
 import java.util.function.Supplier;
@@ -166,7 +165,6 @@ public class ObjectRegistry {
     public static final RegistryObject<Block> CRISTEL_WINE = registerWithoutItem("cristel_wine", () -> new WineBottleBlock(getWineSettings(), 1));
     public static final RegistryObject<Block> GLOWING_WINE = registerWithoutItem("glowing_wine", () -> new WineBottleBlock(getWineSettings(), 3));
     public static final RegistryObject<Block> CREEPERS_CRUSH = registerWithoutItem("creepers_crush", () -> new WineBottleBlock(getWineSettings(), 2));
-    public static final RegistryObject<Block> MEAD = registerWithoutItem("mead", () -> new WineBottleBlock(getWineSettings(), 2));
     public static final RegistryObject<Block> RED_WINE = registerWithoutItem("red_wine", () -> new WineBottleBlock(getWineSettings(), 3));
     public static final RegistryObject<Block> JELLIE_WINE = registerWithoutItem("jellie_wine", () -> new WineBottleBlock(getWineSettings(), 1));
     public static final RegistryObject<Block> STAL_WINE = registerWithoutItem("stal_wine", () -> new WineBottleBlock(getWineSettings(), 3));
@@ -185,9 +183,11 @@ public class ObjectRegistry {
     public static final RegistryObject<Block> LILITU_WINE = registerWithoutItem("lilitu_wine", () -> new WineBottleBlock(getWineSettings(), 1));
     public static final RegistryObject<Block> BOTTLE_MOJANG_NOIR = registerWithoutItem("bottle_mojang_noir", () -> new WineBottleBlock(getWineSettings(), 3));
     public static final RegistryObject<Block> VILLAGERS_FRIGHT = registerWithoutItem("villagers_fright", () -> new WineBottleBlock(getWineSettings(), 3));
-    /** D2: the two 1.3.10 wines 1.5.5 removed, as 1.5.5 wines (bottle counts as in 1.3.10). */
+    /**
+     * D2: the 1.3.10 wine 1.5.5 removed, as a 1.5.5 wine (2 per placed block, as in 1.3.10). King Danis Wine is gone
+     * (alcohol.md 10.8): 1.3.10 named it "Miss Lilitus Wine" and drew it with Lilitu's model, so it was a second Lilitu.
+     */
     public static final RegistryObject<Block> PRAETORIAN_WINE = registerWithoutItem("praetorian_wine", () -> new WineBottleBlock(getWineSettings(), 2));
-    public static final RegistryObject<Block> KING_DANIS_WINE = registerWithoutItem("king_danis_wine", () -> new WineBottleBlock(getWineSettings(), 1));
     public static final RegistryObject<Item> APPLE_MASH = registerItem("apple_mash", () -> new Item(getSettings().food(Foods.APPLE)));
     public static final RegistryObject<Block> GRAPEVINE_STEM = registerWithItem("grapevine_stem", () -> new PaleStemBlock(getGrapevineSettings()));
     public static final RegistryObject<Block> STORAGE_POT = registerWithItem("storage_pot", () -> new StoragePotBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD), () -> SoundEvents.DYE_USE, () -> SoundEvents.DYE_USE));
@@ -233,9 +233,12 @@ public class ObjectRegistry {
             ObjectRegistry::wallStandard,
             Vinery.identifier("textures/banner/vinery_banner.png"),
             "tooltip.vinery.banner",
-            () -> MobEffects.REGENERATION,
-            () -> PlatformHelper.shouldGiveEffect() ? BannerSettings.DEFAULT_RADIUS : 0,
-            () -> 1);
+            PlatformHelper::getBannerEffect,
+            () -> PlatformHelper.shouldGiveEffect() ? PlatformHelper.getBannerRadius() : 0,
+            PlatformHelper::getBannerAmplifier,
+            () -> PlatformHelper.getBannerDurationSeconds() * 20,
+            () -> PlatformHelper.getBannerRefreshBelowSeconds() * 20,
+            PlatformHelper::shouldShowTooltip);
     public static final RegistryObject<Block> VINERY_STANDARD = registerWithItem("vinery_standard", () -> new CompletionistBannerBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(1F).noCollission().sound(SoundType.WOOD), BANNER_SETTINGS));
     public static final RegistryObject<Block> VINERY_WALL_STANDARD = registerWithoutItem("vinery_wall_standard", () -> new CompletionistWallBannerBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(1F).noCollission().sound(SoundType.WOOD).lootFrom(VINERY_STANDARD), BANNER_SETTINGS));
     public static final RegistryObject<Block> OAK_LATTICE = registerWithItem("oak_lattice", ObjectRegistry::lattice);
@@ -254,8 +257,8 @@ public class ObjectRegistry {
     public static final RegistryObject<Block> WHITE_JUNGLE_GRAPE_BAG = registerWithItem("white_jungle_grape_bag", ObjectRegistry::bag);
     public static final RegistryObject<Block> RED_JUNGLE_GRAPE_BAG = registerWithItem("red_jungle_grape_bag", ObjectRegistry::bag);
     public static final RegistryObject<Item> APPLE_CIDER_ITEM = registerWineItem("apple_cider", APPLE_CIDER, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> APPLE_WINE_ITEM = registerWineItem("apple_wine", APPLE_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> MEAD_ITEM = registerWineItem("mead", MEAD, true, DrinkBlockItem.BottleSize.BIG);
+    /** alcohol.md B7.10: small again (3 per placed block, small racks), as in 1.3.10; 1.5.5 made it big. */
+    public static final RegistryObject<Item> APPLE_WINE_ITEM = registerWineItem("apple_wine", APPLE_WINE, true, DrinkBlockItem.BottleSize.SMALL);
     public static final RegistryObject<Item> GLOWING_WINE_ITEM = registerWineItem("glowing_wine", GLOWING_WINE, true, DrinkBlockItem.BottleSize.BIG);
     public static final RegistryObject<Item> SOLARIS_WINE_ITEM = registerWineItem("solaris_wine", SOLARIS_WINE, true, DrinkBlockItem.BottleSize.SMALL);
     public static final RegistryObject<Item> KELP_CIDER_ITEM = registerWineItem("kelp_cider", KELP_CIDER, true, DrinkBlockItem.BottleSize.SMALL);
@@ -280,7 +283,6 @@ public class ObjectRegistry {
     public static final RegistryObject<Item> CREEPERS_CRUSH_ITEM = registerWineItem("creepers_crush", CREEPERS_CRUSH, false, DrinkBlockItem.BottleSize.BIG);
     public static final RegistryObject<Item> MELLOHI_WINE_ITEM = registerWineItem("mellohi_wine", MELLOHI_WINE, false, DrinkBlockItem.BottleSize.BIG);
     public static final RegistryObject<Item> PRAETORIAN_WINE_ITEM = registerWineItem("praetorian_wine", PRAETORIAN_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> KING_DANIS_WINE_ITEM = registerWineItem("king_danis_wine", KING_DANIS_WINE, false, DrinkBlockItem.BottleSize.BIG);
 
     // ------------------------------------------------------------------------------------------------------------
     // D2: 1.3.10 blocks that 1.5.5 removed or replaced, kept with their 1.3.10 behaviour and art.
@@ -304,8 +306,6 @@ public class ObjectRegistry {
     public static final RegistryObject<Block> FLOWER_BOX = registerWithItem("flower_box", () -> new LegacyFlowerBoxBlock(BlockBehaviour.Properties.copy(Blocks.FLOWER_POT)));
     public static final RegistryObject<Block> FLOWER_POT = registerWithItem("flower_pot", () -> new LegacyFlowerPotBlock(BlockBehaviour.Properties.copy(Blocks.FLOWER_POT)));
     public static final RegistryObject<Block> BASKET = registerWithItem("basket", () -> new LegacyBasketBlock(BlockBehaviour.Properties.of(Material.DECORATION).instabreak().noOcclusion(), 1));
-    public static final RegistryObject<Block> CALENDAR = registerWithoutItem("calendar", () -> new LegacyCalendarBlock(BlockBehaviour.Properties.of(Material.DECORATION).strength(2.0F, 2.0F)));
-    public static final RegistryObject<Item> CALENDAR_ITEM = registerItem("calendar", () -> new LegacyCalendarItem(CALENDAR.get(), getSettings()));
     /** Already without a creative tab in 1.3.10: kept for old worlds and as Farmer's Delight heat sources. */
     public static final RegistryObject<Block> WOOD_FIRED_OVEN = registerWithoutItem("wood_fired_oven", () -> new LegacyStoveBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
     public static final RegistryObject<Item> WOOD_FIRED_OVEN_ITEM = registerItem("wood_fired_oven", () -> new BlockItem(WOOD_FIRED_OVEN.get(), new Item.Properties()));

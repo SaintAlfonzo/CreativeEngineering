@@ -19,12 +19,10 @@
   "fluid_type.brewinandchewin.withering_dross": "Увяхваща шлака",
   "fluid_type.brewinandchewin.flaxen_cheese": "Ленено сирене",
   "fluid_type.brewinandchewin.scarlet_cheese": "Алено сирене",
-
   "block.brewinandchewin.keg": "Бъчва",
   "block.brewinandchewin.heating_cask": "Загряваща бъчва",
   "block.brewinandchewin.ice_crate": "Изтудяваща касета",
   "block.brewinandchewin.coaster": "Подложка за чаши",
-
   "item.brewinandchewin.tankard": "Халба",
   "item.brewinandchewin.beer": "Бира",
   "item.brewinandchewin.vodka": "Водка",
@@ -63,12 +61,8 @@
   "item.brewinandchewin.ham_and_cheese_sandwich": "Сандвич с шунка и кашкавал",
   "block.brewinandchewin.quiche": "Киш",
   "item.brewinandchewin.quiche_slice": "Парче киш",
-  "item.brewinandchewin.sweet_berry_jam": "Сладко от горски плодове",
-  "item.brewinandchewin.glow_berry_marmalade": "Сладко от светещи боровинки",
-  "item.brewinandchewin.apple_jelly": "Ябълково желе",
   "item.brewinandchewin.dread_nog": "Дреад ног",
   "item.brewinandchewin.kombucha": "Комбуча",
-
   "effect.brewinandchewin.tipsy": "Пийнал",
   "effect.brewinandchewin.tipsy.description": "Клатушка екрана. На ниво III или по-високо, мишката Ви ще се люлее. На ниво IV или по-високо, чатът, изпратен от вас, чатът на другите играчи, както и табелите ще бъдат разбъркани. Ефекта забавя всички получени щети, като тези сърца се отбелязват в оранжево.",
   "effect.brewinandchewin.intoxication": "Интоксикация",
@@ -87,12 +81,9 @@
   "brewinandchewin.container.keg.normal": "Нормално",
   "brewinandchewin.container.keg.warm": "Топло",
   "brewinandchewin.container.keg.hot": "Горещо",
-
   "brewinandchewin.block.feast.use_knife": "Трябва ти нож, за да нарежеш това.",
-
   "death.attack.brewinandchewin.cardiacArrest": "%1$s се сети, че някой го е бил",
   "death.attack.brewinandchewin.cardiacArrest.player": "%1$s бе изпратен в сърдечен удър %2$s",
-
   "brewinandchewin.advancement.root": "Brewin' and Chewin'",
   "brewinandchewin.advancement.root.desc": "Готови ли сте за пиене?",
   "brewinandchewin.advancement.place_keg": "Тук започва пътят",
@@ -109,7 +100,6 @@
   "brewinandchewin.advancement.cook_fiery_fondue.desc": "Придобий Огнено фюнде от тенджера с казан",
   "brewinandchewin.advancement.chef_of_the_ages": "Шефа на векът",
   "brewinandchewin.advancement.chef_of_the_ages.desc": "Опитай всяко ястие от всички налични в Brewin' and Chewin'!",
-
   "itemGroup.brewinandchewin": "Brewin' and Chewin'",
   "brewinandchewin.jei.fermenting": "Ферментация",
   "brewinandchewin.jei.aging": "Стареене",
@@ -120,7 +110,6 @@
   "brewinandchewin.jei.tooltip.error.recipe.transfer.not_enough_fluid": "Няма достатъчно течност",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.temperature": "Некоректна температура",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.invalid_fluid": "Невалидни течности",
-
   "emi.category.brewinandchewin.fermenting": "Ферментация",
   "emi.category.brewinandchewin.pouring": "Изливане",
   "emi.category.brewinandchewin.aging": "Стареене",
@@ -129,14 +118,11 @@
   "brewinandchewin.emi.cooler_temperature": "Изисква по-студена температура",
   "brewinandchewin.emi.incorrect_fluid": "Неправилни течности за изработка",
   "brewinandchewin.emi.cant_empty": "Не може да се изпразни текущата течност",
-
   "tag.block.brewinandchewin.cheese_wheels.unripe": "Неузрели пити от сирене",
   "tag.block.brewinandchewin.cheese_wheels.ripe": "Пити от сирене",
   "tag.block.brewinandchewin.freeze_sources": "Източници на замразяване",
   "tag.block.brewinandchewin.player_workstations.kegs": "Бъчви",
-
   "tag.entity_type.brewinandchewin.immune_to_intoxication": "Имунен към интоксикация",
-
   "tag.item.brewinandchewin.cheese_wheels.unripe": "Неузрели пити от сирене",
   "tag.item.brewinandchewin.cheese_wheels.ripe": "Пити от сирене",
   "tag.item.brewinandchewin.fermented_drinks": "Ферментирани напитки",
@@ -145,7 +131,6 @@
   "tag.item.brewinandchewin.foods.horror_meat": "Ужасни меса",
   "tag.item.brewinandchewin.foods.pizza_topping": "Топинги за пица",
   "tag.item.brewinandchewin.player_workstations.kegs": "Бъчви",
-
   "tag.fluid.brewinandchewin.beer": "Пиво",
   "tag.fluid.brewinandchewin.vodka": "Водка",
   "tag.fluid.brewinandchewin.mead": "Медовина",
@@ -164,9 +149,7 @@
   "tag.fluid.brewinandchewin.kombucha": "Комбуча",
   "tag.fluid.brewinandchewin.flaxen_cheese": "Ленено сирене",
   "tag.fluid.brewinandchewin.scarlet_cheese": "Алено сирене",
-
   "tag.mob_effect.brewinandchewin.low_priority.milk_bottle": "Ниско приоритетно за бутилка с мляко",
   "tag.mob_effect.brewinandchewin.low_priority.hot_cocoa": "Ниско приоритетно за топло какао",
-
   "tag.damage_type.brewinandchewin.triggers_raging": "Предизвиква ярост"
 }

@@ -19,12 +19,10 @@
   "fluid_type.brewinandchewin.withering_dross": "Қаусатқыш қалдық",
   "fluid_type.brewinandchewin.flaxen_cheese": "Сары ірімшік",
   "fluid_type.brewinandchewin.scarlet_cheese": "Қызыл ірімшік",
-
   "block.brewinandchewin.keg": "Кег",
   "block.brewinandchewin.heating_cask": "Қыздырғыш бөшке",
   "block.brewinandchewin.ice_crate": "Мұз жәшігі",
   "block.brewinandchewin.coaster": "Табақша",
-
   "item.brewinandchewin.tankard": "Саптыаяқ",
   "item.brewinandchewin.beer": "Сыра",
   "item.brewinandchewin.vodka": "Арақ",
@@ -63,12 +61,8 @@
   "item.brewinandchewin.ham_and_cheese_sandwich": "Жамбас пен ірімшікті сэндвич",
   "block.brewinandchewin.quiche": "Киш",
   "item.brewinandchewin.quiche_slice": "Киш тілімі",
-  "item.brewinandchewin.sweet_berry_jam": "Тәтті жидек джемі",
-  "item.brewinandchewin.glow_berry_marmalade": "Жарқырауық жидек мармеладі",
-  "item.brewinandchewin.apple_jelly": "Алма желесі",
   "item.brewinandchewin.dread_nog": "Қорқынышты ног",
   "item.brewinandchewin.kombucha": "Комбуча",
-
   "effect.brewinandchewin.tipsy": "Қызыңқырау",
   "effect.brewinandchewin.tipsy.description": "Экранды шайқап тұрады. III деңгейден бастап тінтуір сүйрей бастайды. IV деңгейден бастап чатың, басқа ойыншылар чаты және маңдайшалар бұзылып көрінеді. Зақым кешігуі мүмкін, сарғыш Қызыңқырау жандарымен белгіленеді.",
   "effect.brewinandchewin.intoxication": "Мастық",
@@ -87,12 +81,9 @@
   "brewinandchewin.container.keg.normal": "Қалыпты",
   "brewinandchewin.container.keg.warm": "Жылы",
   "brewinandchewin.container.keg.hot": "Ыстық",
-
   "brewinandchewin.block.feast.use_knife": "Мұны кесу үшін саған пышақ керек.",
-
   "death.attack.brewinandchewin.cardiacArrest": "%1$s жараланғанын есіне алды",
   "death.attack.brewinandchewin.cardiacArrest.player": "%2$s салдарынан %1$s -ның жүрегі тоқтап қалды",
-
   "brewinandchewin.advancement.root": "Дәм мен нәм",
   "brewinandchewin.advancement.root.desc": "Ашытып, дүрліктір!",
   "brewinandchewin.advancement.place_keg": "Процесс басталады",
@@ -109,7 +100,6 @@
   "brewinandchewin.advancement.cook_fiery_fondue.desc": "Қазанда піскен өртенген фондюны ал",
   "brewinandchewin.advancement.chef_of_the_ages": "Ғасыр аспазы",
   "brewinandchewin.advancement.chef_of_the_ages.desc": "Барлық Brewin' and Chewin' тағамдарын же!",
-
   "itemGroup.brewinandchewin": "Дәм мен нәм",
   "brewinandchewin.jei.fermenting": "Ашыту",
   "brewinandchewin.jei.aging": "Сақталуы",
@@ -120,7 +110,6 @@
   "brewinandchewin.jei.tooltip.error.recipe.transfer.not_enough_fluid": "Сұйық жеткіліксіз",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.temperature": "Температура дұрыс емес",
   "brewinandchewin.jei.tooltip.error.recipe.transfer.invalid_fluid": "Сұйық заттар жарамсыз",
-
   "emi.category.brewinandchewin.fermenting": "Ашыту",
   "emi.category.brewinandchewin.pouring": "Құю",
   "emi.category.brewinandchewin.aging": "Сақталуы",
@@ -129,14 +118,11 @@
   "brewinandchewin.emi.cooler_temperature": "Салқындау температура қажет",
   "brewinandchewin.emi.incorrect_fluid": "Жасау үшін сұйық дұрыс емес",
   "brewinandchewin.emi.cant_empty": "Бар сұйықты босата алмайсың",
-
   "tag.block.brewinandchewin.cheese_wheels.unripe": "Піспеген ірімшік шеңбері",
   "tag.block.brewinandchewin.cheese_wheels.ripe": "Ірімшік шеңбері",
   "tag.block.brewinandchewin.freeze_sources": "Салқындату көздері",
   "tag.block.brewinandchewin.player_workstations.kegs": "Кегтер",
-
   "tag.entity_type.brewinandchewin.immune_to_intoxication": "Мастыққа төзімді",
-
   "tag.item.brewinandchewin.cheese_wheels.unripe": "Піспеген ірімшік шеңбері",
   "tag.item.brewinandchewin.cheese_wheels.ripe": "Ірімшік шеңбері",
   "tag.item.brewinandchewin.fermented_drinks": "Ашытылған сусындар",
@@ -145,7 +131,6 @@
   "tag.item.brewinandchewin.foods.horror_meat": "Қорқынышты ет",
   "tag.item.brewinandchewin.foods.pizza_topping": "Пицца үстемесі",
   "tag.item.brewinandchewin.player_workstations.kegs": "Кегтер",
-
   "tag.fluid.brewinandchewin.beer": "Сыра",
   "tag.fluid.brewinandchewin.vodka": "Арақ",
   "tag.fluid.brewinandchewin.mead": "Балсусын",
@@ -164,9 +149,7 @@
   "tag.fluid.brewinandchewin.kombucha": "Комбуча",
   "tag.fluid.brewinandchewin.flaxen_cheese": "Сары ірімшік",
   "tag.fluid.brewinandchewin.scarlet_cheese": "Қызыл ірімшік",
-
   "tag.mob_effect.brewinandchewin.low_priority.milk_bottle": "Сүт бөтелкесі үшін төмен басымдық",
   "tag.mob_effect.brewinandchewin.low_priority.hot_cocoa": "Ыстық какао үшін төмен басымдық",
-
   "tag.damage_type.brewinandchewin.triggers_raging": "Ашуды қоздырады"
 }

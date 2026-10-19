@@ -1,16 +1,6 @@
 {
   "parent": "brewinandchewin:main/cook_fiery_fondue",
   "criteria": {
-    "brewinandchewin:apple_jelly": {
-      "conditions": {
-        "item": {
-          "items": [
-            "brewinandchewin:apple_jelly"
-          ]
-        }
-      },
-      "trigger": "minecraft:consume_item"
-    },
     "brewinandchewin:cheesy_pasta": {
       "conditions": {
         "item": {
@@ -36,16 +26,6 @@
         "item": {
           "items": [
             "brewinandchewin:fiery_fondue"
-          ]
-        }
-      },
-      "trigger": "minecraft:consume_item"
-    },
-    "brewinandchewin:glow_berry_marmalade": {
-      "conditions": {
-        "item": {
-          "items": [
-            "brewinandchewin:glow_berry_marmalade"
           ]
         }
       },
@@ -131,16 +111,6 @@
       },
       "trigger": "minecraft:consume_item"
     },
-    "brewinandchewin:sweet_berry_jam": {
-      "conditions": {
-        "item": {
-          "items": [
-            "brewinandchewin:sweet_berry_jam"
-          ]
-        }
-      },
-      "trigger": "minecraft:consume_item"
-    },
     "brewinandchewin:vegetable_omelet": {
       "conditions": {
         "item": {
@@ -200,15 +170,6 @@
     ],
     [
       "brewinandchewin:ham_and_cheese_sandwich"
-    ],
-    [
-      "brewinandchewin:sweet_berry_jam"
-    ],
-    [
-      "brewinandchewin:glow_berry_marmalade"
-    ],
-    [
-      "brewinandchewin:apple_jelly"
     ]
   ],
   "rewards": {

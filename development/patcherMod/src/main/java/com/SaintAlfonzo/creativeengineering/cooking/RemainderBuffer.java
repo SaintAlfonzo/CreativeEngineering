@@ -138,14 +138,23 @@ public class RemainderBuffer extends ItemStackHandler {
      * stack's crafting remainder, else {@code overrides} (FD's INGREDIENT_REMAINDER_OVERRIDES; null for none).
      */
     public static List<ItemStack> leftovers(IItemHandler inventory, int from, int to, Map<Item, Item> overrides) {
+        return leftovers(inventory, from, to, overrides, null);
+    }
+
+    /** As above, with {@code counts[slot - from]} items used from each slot (one leftover each); null = 1 per slot. */
+    public static List<ItemStack> leftovers(IItemHandler inventory, int from, int to, Map<Item, Item> overrides,
+                                            int[] counts) {
         List<ItemStack> leftovers = new ArrayList<>();
         for (int i = from; i < to; ++i) {
             ItemStack stack = inventory.getStackInSlot(i);
             if (stack.isEmpty()) continue;
-            if (stack.hasCraftingRemainingItem()) {
-                leftovers.add(stack.getCraftingRemainingItem());
-            } else if (overrides != null && overrides.containsKey(stack.getItem())) {
-                leftovers.add(overrides.get(stack.getItem()).getDefaultInstance());
+            int used = counts == null ? 1 : counts[i - from];
+            for (int n = 0; n < used; ++n) {
+                if (stack.hasCraftingRemainingItem()) {
+                    leftovers.add(stack.getCraftingRemainingItem());
+                } else if (overrides != null && overrides.containsKey(stack.getItem())) {
+                    leftovers.add(overrides.get(stack.getItem()).getDefaultInstance());
+                }
             }
         }
         return leftovers;

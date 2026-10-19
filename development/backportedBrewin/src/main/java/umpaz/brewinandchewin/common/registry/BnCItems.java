@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import umpaz.brewinandchewin.BrewinAndChewin;
 import umpaz.brewinandchewin.common.item.BoozeItem;
 import umpaz.brewinandchewin.common.item.DreadNogItem;
-import umpaz.brewinandchewin.common.item.JamJarItem;
 import umpaz.brewinandchewin.common.item.KegItem;
 import vectorwing.farmersdelight.common.item.ConsumableItem;
 
@@ -81,11 +80,7 @@ public class BnCItems {
    public static final Item PICKLED_PICKLES = new ConsumableItem(props().food(BnCFoods.PICKLED_PICKLES));
    public static final Item KIPPERS = new ConsumableItem(props().food(BnCFoods.KIPPERS));
    public static final Item COCOA_FUDGE = new ConsumableItem(props().food(BnCFoods.COCOA_FUDGE));
-   public static final Item SWEET_BERRY_JAM = new JamJarItem(props().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE).food(BnCFoods.SWEET_BERRY_JAM));
-   public static final Item GLOW_BERRY_MARMALADE = new JamJarItem(
-      props().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE).food(BnCFoods.GLOW_BERRY_MARMALADE)
-   );
-   public static final Item APPLE_JELLY = new JamJarItem(props().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE).food(BnCFoods.APPLE_JELLY));
+   // Port (alcohol.md 8.5): 4.5.0's sweet berry jam, glow berry marmalade and apple jelly are left out; Fruits Delight covers them.
 
    /** Port: 1.19.2 items name their creative tab in Properties; an item whose mod is missing gets none. */
    private static Properties props() {
@@ -159,9 +154,6 @@ public class BnCItems {
       registerWithTab("pickled_pickles", PICKLED_PICKLES);
       registerWithTab("kippers", KIPPERS);
       registerWithTab("cocoa_fudge", COCOA_FUDGE);
-      registerWithTab("sweet_berry_jam", SWEET_BERRY_JAM);
-      registerWithTab("glow_berry_marmalade", GLOW_BERRY_MARMALADE);
-      registerWithTab("apple_jelly", APPLE_JELLY);
       helper = null;
    }
 }
