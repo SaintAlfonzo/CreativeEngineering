@@ -23,6 +23,7 @@
 (() => {
 
 	const $Registry = Java.loadClass('net.minecraft.core.Registry')
+	const $PlacementInfo = (() => { try { return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.PlacementInfo') } catch (e) { return null } })()
 
 	function safe(fn, onError) {
 		try { return fn() } catch (e) { onError && onError(e); return undefined }
@@ -68,23 +69,35 @@
 		const className = safe(() => String(placement.getClass().getSimpleName())) || 'unknown'
 		const out = { placement_type: className }
 
+		// locateOffset/frequencyReductionMethod/frequency/salt/exclusionZone are protected: Rhino can't call them,
+		// so patcherMod's worldgen.PlacementInfo reads the fields (older jar: the direct calls, which log errors).
+		const P = $PlacementInfo
+
 		out.locate_offset = safe(() => {
+			if (P) { var offset = P.locateOffset(placement); return [offset[0], offset[1], offset[2]] }
 			const v = placement.locateOffset()
 			return [v.getX(), v.getY(), v.getZ()]
 		}, e => errors.push('locate_offset: ' + e)) || [0, 0, 0]
 
 		out.frequency_reduction_method = safe(
-			() => String(placement.frequencyReductionMethod().name()).toLowerCase(),
+			() => P ? String(P.frequencyReductionMethod(placement)) : String(placement.frequencyReductionMethod().name()).toLowerCase(),
 			e => errors.push('frequency_reduction_method: ' + e)
 		)
 
 		out.frequency = safe(() => {
-			const f = placement.frequency()
+			const f = P ? P.frequency(placement) : placement.frequency()
 			return f == null ? undefined : Number(f)
 		}, e => errors.push('frequency: ' + e))
 		if (out.frequency === 1) delete out.frequency // datapack omits the field when it's 1.0 (no reduction)
 
-		out.salt = safe(() => Number(placement.salt()), e => errors.push('salt: ' + e))
+		out.salt = safe(() => Number(P ? P.salt(placement) : placement.salt()), e => errors.push('salt: ' + e))
+
+		// var + unique names: a block const here hit "redeclaration of var" in this Rhino
+		var exclusionText = P ? safe(() => P.exclusionZone(placement), e => errors.push('exclusion_zone: ' + e)) : null
+		if (exclusionText) {
+			var exclusionParts = String(exclusionText).split(' ')
+			out.exclusion_zone = { other_set: exclusionParts[0], chunk_count: Number(exclusionParts[1]) }
+		}
 
 		if (className === 'RandomSpreadStructurePlacement') {
 			out.spacing = safe(() => Number(placement.spacing()), e => errors.push('spacing: ' + e))

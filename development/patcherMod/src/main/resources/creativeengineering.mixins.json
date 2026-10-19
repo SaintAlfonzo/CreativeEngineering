@@ -109,9 +109,11 @@
     "CookingPotRemainderMixin",
     "CookingPotMenuRemainderMixin",
     "KettleRemainderMixin",
-    "KettleMenuRemainderMixin"
+    "KettleMenuRemainderMixin",
+    "RegistryLoaderPresetOverworldMixin"
   ],
   "client": [
+    "SereneSeasonsClientClockMixin",
     "ItemDrainCategoryMixin",
     "SpoutCategoryMixin",
     "SkullBlockEntityMixin",

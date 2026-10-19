@@ -675,7 +675,7 @@ Status: built. Group: `remote`.
 
 ### `creativeengineering:meta/town_villages`
 
-A fortified town or fort (a meta/fortified_towns anchor, the red roof castle included) with 1 to 3 villages around it, 112 to 160 blocks out (settlements; 40% of fortified town slots, D1 2026-10-14; the three shares sum to 0.8, so 20% of towns stay plain). The villages are companions: full starts in chunks of their own (patcherMod PlacementPriority), so they keep their whole reach; the town outranks them, so a village that would run into it doesn't start.
+A fortified town or fort (a meta/fortified_towns anchor, the red roof castle included) with 1 to 3 villages around it, 64 to 96 blocks out (pulled in from 112 to 160 on 2026-10-19: at that range no companion reached its town, 08_phase_8.md; settlements; 40% of fortified town slots, D1 2026-10-14; the three shares sum to 0.8, so 20% of towns stay plain). The villages are companions: full starts in chunks of their own (patcherMod PlacementPriority), so they keep their whole reach; the town outranks them, so a village that would run into it doesn't start.
 
 Status: built. Group: `settlements`.
 

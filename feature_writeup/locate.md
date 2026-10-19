@@ -273,6 +273,34 @@ Terralith's underground set).
 section 11 reports them. One recording of a Chunky pregen on a scratch server gives the real split before anything
 is built.
 
+**Measured 2026-10-19** (LO-10; scratch server, patcherMod 1.0.7 jar = 1.0.8 worldgen, the instance's own toml at
+density 1, seed 8675309, fresh world; Chunky square radius 64 chunks at 2144 -2592, 92% land: 16,641 chunks in
+24.5 min, about 11 chunks/s; JFR as `server/LaunchServer.sh`; log
+[testing/structures/10_phase_10.md](testing/structures/10_phase_10.md)). Worker time per status over the pregen
+(6,639 s of worker time, about 4.5 cores busy on average):
+
+| Status | Calls | Total s | Share | Mean ms | Median ms | p95 ms |
+|---|---|---|---|---|---|---|
+| `noise` | 27,133 | 2,577 | 38.8% | 95.0 | 87.8 | 232 |
+| `features` | 21,520 | 1,617 | 24.4% | 75.1 | 52.8 | 217 |
+| `light` | 16,641 | 1,249 | 18.8% | 75.0 | 59.2 | 183 |
+| `structure_starts` | 358,852 (22,801 chunks) | 422 | 6.4% | 1.2 | 0.0 | 0.04 |
+| `surface` | 27,133 | 275 | 4.1% | 10.1 | 10.6 | 25 |
+| `full` | 16,641 | 235 | 3.5% | 14.1 | 2.1 | 70 |
+| `biomes` | 32,526 | 195 | 2.9% | 6.0 | 6.7 | 20 |
+| `carvers` | 27,133 | 66 | 1.0% | 2.4 | 2.3 | 6.4 |
+| `spawn`, `structure_references`, `liquid_carvers`, `heightmaps` | | 4 | 0.1% | | | |
+
+- `noise` + `features` + `light` are 82% of chunk generation. The estimate's "light: small" was wrong at the stage
+  level (18.8%), though most of a dark section's light is cheap; the split by height is not in these events (they
+  carry no Y), so the bottom-band share of each stage is still an estimate.
+- `structure_starts` runs about 16 times per chunk (up to 23): the placement-priority neighbour pass and the meta
+  predictions rebuild nearby starts. Nearly all repeats return in well under 0.1 ms; the whole stage is 6.4%.
+- CPU by mod on the worker threads: vanilla/Forge 75.7%, creativeengineering 6.8% (`EarthFill` terrain prediction
+  62% of that, `MetaStructure#generate` 11%), blueprint 3.7% (biome lookup), twigs 3.1% (almost all
+  `ObeliskStructure#canGenerate`), copycats 2.9%, tectonic 1.7%, volcanic_caverns 1.6%, ferritecore 1.3%.
+  Distant Horizons' LOD builder threads took 34.9% of all CPU samples on their own threads during the pregen.
+
 **Ocean floors measured** (`python3 tools/seabed_heights.py`, OCEAN_FLOOR heightmaps of saved chunks; WorldG is
 the current Tectonic setup, Workspace the largest save; coastal chunks add some land columns to the counts):
 
@@ -393,8 +421,8 @@ fresh level-name.
 - [x] **LO-08 stats [scratch]:** `/celocate stats` -> totals match the sum of the batch rows. *2026-10-13 scratch phase 2 (structure_tuning 8.0.2, world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads): `/locate` part PASSED: `locate_stats.json` and `/celocate stats` count every search since boot (35 in boot 1, 7 in boot 4), each row's misses equal its `[locate]` line. The batch-row comparison waits for LO-02 (Phase 5).* *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): batch part PASSED: after two batches on a fresh boot, `/celocate stats` has 43 rows = the 43 batch rows, and misses, loads, candidates and every savedByStage value are equal row by row.*
 - [ ] **LO-09 maps and trades [game]:** a cartographer explorer map and an LC map trade still point at real
   structures with folding on.
-- [ ] **LO-10 deep-terrain measurement [scratch]:** JFR recording of a Chunky pregen (radius 64) -> per-status
-  chunk generation times written into 3.7.
+- [x] **LO-10 deep-terrain measurement [scratch]:** JFR recording of a Chunky pregen (radius 64) -> per-status
+  chunk generation times written into 3.7. *2026-10-19 scratch phase 10 (patcherMod 1.0.7 jar = 1.0.8 worldgen, instance toml, Chunky r 64 chunks at 2144 -2592, 16,641 chunks in 24.5 min; log testing/structures/10_phase_10.md): PASSED: per-status times written into 3.7 (noise 38.8%, features 24.4%, light 18.8%, structure starts 6.4%).*
 - [ ] **LO-11 DH clip [game]:** fly over a fresh area with DH generating -> distant land looks unchanged from
   above (no holes, no walls at cave openings above y 48); with DH `transparency = "COMPLETE"` (test only), deep
   oceans show a rolling floor around y 8 (4 to 12) and other oceans one just under 48 (44 to 47), or their real
