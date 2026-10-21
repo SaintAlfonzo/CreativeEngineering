@@ -14,7 +14,8 @@ picture, the current numbers, and the canned golem dye in full.
 | 202 generated cans (`gen_can_types.py` → `can_types.json`; 20 of them re-valued Canned Goods cans) | DEPLOYED with 1.0.6 (can parity), untested in game | [can_parity.md](can_parity.md) |
 | Canned golem dyeable in 16 colours | DEPLOYED with 1.0.4, R4-07 pending | here, 2.3 |
 
-- **Pending:** nothing built and unshipped. CN-01 to CN-06 are new; the rest of the tests stay in food.md (FO-),
+- **Pending:** the D-D build of 2026-10-20 (sliced-input rule, pumpkin to fruit, Fish Meal, shulker meal, cantaloupe
+  slice values) is built but not shipped: 1.0.9 deployed canning.js / can_types.json / cans.js from before it. CN-01 to CN-06 are new; the rest of the tests stay in food.md (FO-),
   can_parity.md (CP-) and plan_1.0.4.md (R4-07). Findings F1 to F4 (section 4); the open decisions are can
   parity's (`Want = ?` cells, values) and food tuning's D1 to D6.
 - **Knobs:** `[canning]` in `config/creativeengineering-common.toml` (`enabled`, `emptyCanChance` 0.7,
@@ -37,8 +38,8 @@ for 2 foods, its recipes ignored the pack's food types, and only some foods coul
 ### 2.1 Servings (summary of food.md 3.6)
 
 - **Count:** `can_servings.json` maps item_dict keys to servings; `cantags.js` turns it into
-  `#creativeengineering:cans/servings/<n>`. Current spread: 4 servings 67 cans, 10 servings 50 (golden), 3 servings 45,
-  8 servings 35, 2 servings 26, 5 servings 12, 6 servings 9, 1 serving 3 (sodas: return roll only).
+  `#creativeengineering:cans/servings/<n>`. Current spread (2026-10-21): 4 servings 67 cans, 10 servings 50 (golden), 3 servings 46,
+  8 servings 35, 2 servings 25, 5 servings 12, 6 servings 9, 1 serving 3 (sodas: return roll only).
 - **State:** the `CanServings` NBT int on an opened can only; full cans have no NBT and stack to 64. Opened cans show a
   durability-style bar and every multi-serving can shows `Servings: x / y`.
 - **Eating:** `ItemStackCanServingsMixin` on `ItemStack#finishUsingItem` runs the can's own code on a copy (food,
@@ -96,8 +97,9 @@ removals, sprites). Code: patcherMod `food/CanServings`, `food/CanServingsToolti
   for every section. The mechanics described there are current.
 - **F2. Values are placeholders for four sections** (meal, pie, feast, drink) and hand-written raw cans don't carry
   effects ([TODO](todo/TODO.md) `food/canning #1` and `#4`, can_parity.md).
-- **F3. Golden cans hold 10 servings each** (50 cans): each serving is a full golden food's value and effects. Worth a
-  look when tuning runs.
+- **F3. Golden cans hold 10 servings each** (50 cans): each serving is a quarter of the golden food's value
+  (SECTIONS `golden` mult 0.25) with its effects at 0.25x duration (corrected 2026-10-21: this said "a full golden
+  food's value"). Worth a look when tuning runs.
 - **F4. Servings only work in NCH crafting recipes.** Create mixing, mechanical crafting and other mods' recipes use up
   the whole can (food.md 3.6 limits).
 
@@ -108,7 +110,7 @@ Settled in [can_parity.md](can_parity.md) 4; none built yet.
 - **D-A. Own mod.** Canning moves to a new mod, Creative Canning, built like the alcohol mod and Creative Labels. The
   26 hand-written cans are rebuilt there with their effects passed through (closes the effects half of F2).
 - **D-B. Golden cans.** 10 servings, 0.25x nutrition, 0.333x effect length, still following golden food effect changes
-  (revises F3). Later golden effect changes need a recheck of these cans.
+  (revises F3). 10 servings and 0.25x nutrition are what is built; only the effect length (0.25x -> 0.333x) is left. Later golden effect changes need a recheck of these cans.
 - **D-C. Crafting.** Cans are used only in manual shaped or shapeless crafts for now (F4 stays a limit by design).
 - **D-D. Recipes.** BUILT 2026-10-20 (not run in game): every can whose whole item and slice are both edible is defined
   by the whole food, and the slice takes the same slots at the same count (slicing first is the 2x+ boost); no recipe

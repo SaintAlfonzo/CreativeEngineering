@@ -603,8 +603,11 @@ Restart the game first (item_dict gained keys), then load WorldC.
   from 4 IE iron plates; an Empty Can in a furnace or blast furnace no longer smelts to an iron ingot.
 
 - [ ] **FO-14 restart and tags:** after deploying the jar and restarting, `logs/kubejs/server.log` has
-  `[can servings] 39 cans: 3 x 1, 36 x 2` and no `[can servings]` warning. `/kubejs hand` on a Canned Beef lists
-  `creativeengineering:cans/servings/2`, `creativeengineering:cans/servings` and `creativeengineering:cans`.
+  `[can servings] 247 cans: 3 x 1, 25 x 2, 46 x 3, 67 x 4, 12 x 5, 9 x 6, 35 x 8, 50 x 10` (was `39 cans: 3 x 1,
+  36 x 2` before the generated cans) and no `[can servings]` warning. `/kubejs hand` on a Canned Beef lists
+  `creativeengineering:cans/servings/3`, `creativeengineering:cans/servings` and `creativeengineering:cans`.
+  Canned Beef holds 3 servings since 1.0.6 (a cooked meat can): read FO-15 to FO-22's `2 / 2` and `1 / 2` as 3 / 3
+  and 2 / 3, or run them with Canned Carrot (`creativeengineering:canned_carrot`, 2 servings).
 - [ ] **FO-15 tooltip:** a Canned Beef shows `Servings: 2 / 2` under its name; a Soda shows no servings line.
 - [ ] **FO-16 first serving:** hold one Canned Beef (survival), eat it. You get the food, the can stays in hand
   with a bar at half width (yellow) and `Servings: 1 / 2`; no empty can appears.
