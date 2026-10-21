@@ -159,7 +159,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Glow Berries (plant with Glow Berry Pips) | `minecraft:cave_vines` | the underside of a block | own pick | pick, **vine tip only** | no |
 | Mulberries | `upgrade_aquatic:mulberry_vine` | under logs or leaves | own pick at stage 4 (back to 1); shears trim | no | no |
 | Cocoa | `minecraft:cocoa` | side of a jungle log | Quark replant (config list) | replant | no |
-| Jungle grapes (wall vine) | `vinery:jungle_grapes_*` vine | walls, like vines | own pick | no | likely yes (vines are replaceable plants) |
+| Jungle grapes (wall vine) | `vinery:jungle_grape_bush_red`, `_white` (vine) | walls, like vines | own pick | no | likely yes (vines are replaceable plants) |
 | Grapevine Stem / Lattice | `vinery:grapevine_stem`, `vinery:grapevine_lattice` | stem: a full solid block or another stem | own pick (stem: stage 4 back to 2; lattice: stage 3+ back to 1) | no | no |
 | Vanilla | `neapolitan:vanilla_vine` | sideways from `#neapolitan:vanilla_plantable_on` (logs, leaves, dirt-like blocks, Rich Soil, Fertile Soil) | none (break for pods) | no | not checked |
 
@@ -195,7 +195,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 |---|---|---|---|---|---|
 | Sugar Cane | `minecraft:sugar_cane` | Dirt or sand next to water. **Rich Soil and Fertile Soil need no water** | none | no | yes, same height only |
 | Cactus, Bamboo, Kelp | vanilla | vanilla rules | none | no | no |
-| Weeds (pest) | `immersive_weathering:weeds` | spreads onto Dirt, Farmland, Rich, Fertile, cracked and mossy blocks | **Quark replant, so it plants the weed again** | replant (same problem) | yes |
+| Weeds (pest) | `immersive_weathering:weeds` | survives on Dirt, Farmland, Rich Soil, Fertile, cracked and mossy blocks (not Rich Farmland); appears and spreads on its own only on open-sky vanilla Farmland (IW `block_growths/weeds*.json`, owner `minecraft:farmland`) | **Quark replant, so it plants the weed again** | replant (same problem) | yes |
 | Wither Roots (pest) | `farmersrespite:wither_roots`, `wither_roots_plant` | put there by coffee on the crop it drains; survive on Dirt, Farmland, basalt, magma | none | no | yes |
 
 ### 2.2 Right-click replant (Quark Simple Harvest)
@@ -530,7 +530,8 @@ Scope for the planned vegetation system, not yet broken down per biome:
 
 ### 2.8 Pack wild-crop placement (`wild_crops.json`)
 
-**Status: BUILT 2026-10-03, offline-tested (`tools/test_wild_crops.sh`), not run in game.** Your 2026-10-03 spec
+**Status: BUILT 2026-10-03, offline-tested (`tools/test_wild_crops.sh`), DEPLOYED with 1.0.4; rules revised
+2026-10-10 (DEPLOYED with 1.0.6); not looked at in game.** Your 2026-10-03 spec
 decides which biomes each wild crop and fruit tree goes to. The mods' own rates stay; only the biomes change. §2.7
 describes what the mods do on their own, which is what you get with the switch off.
 
@@ -574,34 +575,39 @@ Same rarities as the mods: FD's config chances as the pack sets them (30, 15), F
 and 6. A change to `farmersdelight-common.toml` `[world.wild_cabbages]` or `[world.wild_beetroots]` no longer
 reaches these two crops; edit the placed feature json instead.
 
-**Where each crop goes** (exact lists: [crops_by_biome.md](crops_by_biome.md) §3)
+**Where each crop goes** (exact lists: [crops_by_biome.md](crops_by_biome.md) §3, generated from the current `wild_crops.json`;
+rows corrected 2026-10-21 to the 2026-10-10 rules)
 
 | Crop | Rule | Biomes |
 |---|---|---|
 | Cabbage, Sea Beet | sandy beaches + cliffs | 7: beach, snowy beach, stony shore, basalt/frozen/granite/white cliffs |
-| Carrot, Onion | temperate grassy, not swamp | 26: plains, meadow, every temperate forest (birch, dark, flower), Terralith flower/sakura/lavender/moonlight, steppe, clearings, Yosemite, skylands spring/autumn |
-| Sweet Berries, Potato, Salmonberries, Blueberry | cold grassy (snowy too) | 32: taigas, groves, snowy plains/taiga, windswept hills/forest, Terralith cold forests, highlands, shrublands, Yellowstone, Ice Marsh |
-| Pumpkin | cold grassy forest, not snowy + "autumn" | 12: taigas, windswept forest, birch taiga, cloud forest, forested highlands, haze mountain, shield, siberian taiga, Yellowstone, skylands autumn |
+| Carrot, Onion | temperate grassy, not swamp | 25: plains, meadow, every temperate forest (birch, dark, flower), Terralith flower/sakura/lavender/moonlight, steppe, clearings, Yosemite, skylands spring/autumn |
+| Sweet Berries | cold grassy (snowy too) | 33: taigas, groves, snowy plains/taiga, windswept hills/forest, Terralith cold forests, highlands, shrublands, Yellowstone, Ice Marsh |
+| Potato, Salmonberries | cold grassy, not snowy | 15 |
+| Blueberry | cold grassy snowy | 18 |
+| Pumpkin | cold grassy forest, not snowy + "autumn" | 11: taigas, windswept forest, birch taiga, cloud forest, forested highlands, haze mountain, shield, siberian taiga, Yellowstone, skylands autumn |
 | Melon, Mini Melon, Vanilla, Rice, Bell Pepper, Coffee (RD) | warm wet, not cliff | 11: the 8 jungles, mangrove and orchid swamps, skylands summer |
 | Cocoa | warm wet, not cliff, minus biomes that already grow cocoa trees | 3 new: bamboo jungle, mangrove swamp, orchid swamp (the 8 others keep their own trees) |
 | Sugar Cane | rivers + beaches | 6: river, warm river, frozen river, beach, snowy beach, gravel beach |
 | Tomato, Cotton, Cantaloupe, Corn | warm dry grassy | 12: savannas (plateau, windswept, slopes, ashen, fractured, badlands), wooded badlands, arid highlands, brushland, shrublands |
 | Brown/Red Mushroom Colony | mushroom + dark forest | 2: mushroom fields, dark forest |
 | Tea | temperate wet grassy | 3: swamp, blooming valley, mirage isles |
-| Strawberries | grassy mountain + cold grassy | 48 |
-| Adzuki | temperate grassy forest | 19 |
-| Mint | grassy mountain | 29 |
+| Strawberries | cold grassy mountain, not snowy | 6 |
+| Adzuki | temperate grassy forest | 18 |
+| Mint | cold grassy mountain | 11 |
 | Banana | warm wet forest | 9: common rate in jungle, bamboo jungle, tropical jungle, amethyst rainforest; uncommon rate in the other 5 |
 | Lemon | warm wet forest | 9 jungles |
 | Cranberry | cold wet grassy | 5: Caldera, Cloud Forest, Ice Marsh, Siberian Taiga, Yellowstone |
 | Pineapple | warm beach + warm wet coastal | 4: beach, mangrove swamp, granite cliffs, tropical jungle |
 | Hamimelon | warm sand or terracotta desert | 15: deserts, badlands, Terralith canyons/oases/mesas, painted mountains |
 | Lychee, Mango, Peach, Orange, Kiwi trees | jungle | 9 jungles |
-| Bayberry, Mangosteen, Durian trees | swamp | 4: swamp, mangrove, orchid swamp, ice marsh |
+| Bayberry, Mangosteen, Durian trees | swamp, not cold | 3: swamp, mangrove, orchid swamp |
 | Pear tree | birch | 3: birch forest, old-growth birch, birch taiga |
-| Apple trees (Fruits Delight + Vinery) | oak forest | 6: forest, flower forest, alpha islands (+ winter), temperate highlands, Yosemite lowlands |
-| Fig, Hawberry trees | cold forest (snowy too) | 22 |
-| Persimmon tree | snowy forest | 11 |
+| Apple tree (Vinery only; Fruits Delight's apple modifier is off) | oak forest | 6: forest, flower forest, alpha islands (+ winter), temperate highlands, Yosemite lowlands |
+| Fig, Hawberry trees | cold forest, not snowy | 10 |
+| Rubber tree (Myrtrees, pack copy `wild/rubber_tree`) | jungle | 9 jungles |
+| Cherry tree (Vinery) | mountain forest | 15 |
+| Persimmon tree | snowy forest | 13 |
 
 **Cold wet biomes (for cranberries):** Terralith Caldera (crater lake, tagged wet), Cloud Forest (misty mountain forest),
 Ice Marsh (the cold swamp), Siberian Taiga (downfall 1.2, the wettest cold biome) and Yellowstone (hot-spring wetlands,
@@ -621,7 +627,8 @@ tagged wet). The rest of the cold biomes are moderate (taiga downfall 0.8) or dr
 
 **Choices made** (each is one line in `wild_crops.json`; say if you want it different)
 
-- "Cold" includes snowy biomes unless the rule says `!snowy` (only pumpkin does). This follows from your "cold non-snow
+- "Cold" includes snowy biomes unless the rule says `!snowy` (since 2026-10-10: pumpkin, potato, salmonberry, strawberry,
+  fig and hawberry; blueberry is `snowy` only). This follows from your "cold non-snow
   forests" for pumpkins.
 - "Warm wet" counts the jungles, mangrove and orchid swamps and skylands summer. It leaves out granite cliffs and the
   oases: Terralith tags those wet, but they are a cliff and two deserts.
@@ -630,9 +637,9 @@ tagged wet). The rest of the cold biomes are moderate (taiga downfall 0.8) or dr
   for sugar cane ("beaches").
 - "Pumpkin biomes / orchards": the pack has no orchard biome (the only hit is a BYG leaf file in Separated Leaves, and
   BYG isn't installed). Terralith Skylands Autumn, which already has its own pumpkin patch, stands in. V16.
-- "Strawberries in grassy mountains" is taken literally, so warm grassy mountains (savanna plateaus, jungle mountains)
-  are in. `"grassy mountain !warm"` would drop them.
-- "Swamps" includes the cold Ice Marsh for bayberry, mangosteen and durian.
+- "Strawberries in grassy mountains": since 2026-10-10 the rule is `cold grassy mountain !snowy` (6 biomes); mint is
+  `cold grassy mountain` (11).
+- "Swamps" for bayberry, mangosteen and durian is `swamp !cold` since 2026-10-10, so Ice Marsh is out.
 - "Dark forests" means `minecraft:dark_forest` only. Temperate Highlands has some dark oaks but is a mountain.
 - Mirage Isles is tagged `forge:is_mushroom` but has no mycelium, so it counts as a temperate wet forest, not a mushroom
   biome. Fungal Caves and the Glimmering Weald are caves, where a surface feature never lands.
@@ -766,7 +773,7 @@ WTHIT's own "Crop progress" option also hides the added lines. To change which p
 - **Immersive Weathering mulch growth:** `mulch_grows_crops = true`, bone-meal style for crops,
   `mulch_growth_random_ticks = 10` for stems.
 - **Bushier Flowers** growth is disabled, see the bushier-flowers notes in memory. It isn't a crop here.
-- **Wild crop placement (built 2026-10-03, not run in game):** §2.8. Also oak/dark oak leaves drop no apples,
+- **Wild crop placement (built 2026-10-03, DEPLOYED with 1.0.4, rules revised for 1.0.6; not looked at in game):** §2.8. Also oak/dark oak leaves drop no apples,
   Alex's Mobs leaf bananas are off (`config/alexsmobs.toml`) and Farmer's Respite's Basalt Deltas coffee is off.
 - **Crop parity layer (built 2026-10-02, patcherMod 1.0.4, DEPLOYED with 1.0.4):** tobacco gets farmland
   soils, right-click and hoe replant and the hoe area break. See §2.6 for the tags, the Quark config line
@@ -861,6 +868,8 @@ yet; each has a suggested direction for you to approve or reject.
   2.2 to 25.4 (x11), strawberries 0.5 to 3.5, mushroom colonies 0.2 to 1.2 each, cantaloupe 0.3 to 1.7, fig 1.9 to 5.8,
   salmonberries 1.6 to 5.0. Suggested: a per-crop target and a placed-feature copy with its own rarity (the pack copy
   pattern in §2.8 already does this for the vanilla patches), mint and pumpkin first.
+  Figures above are from 2026-10-03; with the 2026-10-10 rules ([crops_by_biome.md](crops_by_biome.md) §1): mint 12.5
+  (x5.6), strawberries 0.5 (x1.1), salmonberries 3.2, fig 4.5, persimmon 0.6; sugar cane, pumpkin, rice and corn unchanged.
 - **V14 Pineapples still need sand.** Fruits Delight's wild pineapple only survives on sand, red sand or coarse dirt
   (`#fruitsdelight:pineapple_grows_on`), and its feature tests for plain sand. In mangrove swamp, granite cliffs and
   tropical jungle they only appear where the coast has sand. Fix if wanted: a pack feature on that tag plus extending the
@@ -1028,8 +1037,8 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   → cabbages and sea beets on grassy cliff tops (no Sandy Shrub off sand). No cantaloupes on beaches any more.
 - [ ] **CR-49 Temperate:** `plains` and `forest` → wild carrots and onions; no wild corn, no strawberries in plains.
   `forest` also has adzuki sprouts and apple trees (both kinds). `birch_forest` → pear trees.
-- [ ] **CR-50 Cold:** `taiga` → sweet berries, wild potatoes, salmonberries, blueberries, strawberries, pumpkins, fig and
-  hawberry trees. `snowy_taiga` → the same minus pumpkins, plus persimmon trees.
+- [ ] **CR-50 Cold:** `taiga` → sweet berries, wild potatoes, salmonberries, pumpkins, fig and hawberry trees (no
+  blueberries or strawberries since the 2026-10-10 rules). `snowy_taiga` → sweet berries, blueberries and persimmon trees.
 - [ ] **CR-51 Cold wet:** `terralith:ice_marsh` or `yellowstone` → cranberry bushes. Jungles and swamps have none.
 - [ ] **CR-52 Warm wet:** `jungle` → melons, mini melons, vanilla vines, wild rice in shallow water, bell peppers, RD wild coffee,
   bananas, lemon bushes and the five fruit trees (lychee, mango, peach, orange, kiwi). `mangrove_swamp` → a few jungle trees
@@ -1038,7 +1047,7 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   sand. `badlands` → hamimelons on red sand and terracotta.
 - [ ] **CR-54 Mushrooms:** `dark_forest` → brown and red mushroom colonies on the shaded floor (not on leaves). `mushroom_fields`
   → colonies on mycelium.
-- [ ] **CR-55 Tea and mint:** `swamp` → wild tea bushes. `windswept_hills` or `meadow` → mint ponds. No mint in plains.
+- [ ] **CR-55 Tea and mint:** `swamp` → wild tea bushes. `grove` or `terralith:highlands` → mint ponds. No mint in plains, meadow or windswept hills (2026-10-10 rules).
 - [ ] **CR-56 Sugar cane only by rivers and beaches:** a desert lake or swamp has no sugar cane; a river bank has it.
 - [ ] **CR-57 Leaf drops:** break 200 oak leaves and 200 dark oak leaves (or `/loot spawn ~ ~ ~ mine ~ ~ ~` on placed leaves) →
   saplings and sticks, no apples. Break jungle leaves → no Alex's Mobs bananas. Basalt Deltas → no wild coffee bushes.
