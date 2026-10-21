@@ -202,6 +202,8 @@ The 2.0 bottle dupe (1.3) went with the 2.0 jar.
   kettle, their menus or screens): only Create Central Kitchen's two (1.1), which don't overlap.
 - **Mixin aliases**: the official names listed next to the SRG ones (3.5) never match in the pack; `require = 1`
   is met by the SRG name.
+- **Known bug (scratchpad 2026-10-21), oven:** bottle / bucket leftovers held in the buffer disappear when the output
+  item is taken out. Not looked into yet ([TODO](todo/TODO.md) `food/kitchen #14`).
 
 ## 5. Decisions (all taken as recommended, 2026-10-18)
 

@@ -102,6 +102,9 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   so a blind regeneration would be wrong). Fine as is; noted for the tooling list ([pack_tooling.md](pack_tooling.md) F5).
 - **F4. The nulch recipe** sits in `sawdust.js` (line 83) with a note that it belongs with compost ([TODO](todo/TODO.md) `farming/composting #2`).
 
+- **Planned (scratchpad 2026-10-21):** milling seeds gives a small chance of bone meal, worse than the composter
+  (32 seeds to 1 bone meal) ([TODO](todo/TODO.md) `farming/composting #4`).
+
 ### Known limits
 
 - **Composter only:** the rules decide the composter chance, not any other mod's composting machine with its own recipe
