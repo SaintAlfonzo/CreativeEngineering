@@ -66,7 +66,10 @@ for the biome compass, Create's experience block for the XP machines.
 
 - **F1. Explorer's Compass can't be crafted. Your call.** `progression.js` removes its recipe and adds none; the old
   `global.CE` block in `misc_mods.js` did the same. If it's meant as loot only, say so in its tooltip; otherwise give it a
-  late recipe (next to Nature's Compass). Check with RA-07.
+  late recipe (next to Nature's Compass). Check with RA-07. 2026-10-21: it is in no chest loot either
+  (`loot_config.json` has no entry), so today it is creative-only. Its searches go through
+  `ChunkGenerator.getPlacementsForStructure`, which the pack filters (structure_tuning.md "Removed sets"), so removed
+  structures fail fast ([briefs/recipes_magic.md](briefs/recipes_magic.md) #1).
 - **F2. Raw recipe code:** `storage.js` writes the Ender Storage recipes with `e.remove` and `e.custom`, and reads tag
   names through `global.tags._clean`. An NCH helper for `enderstorage:create_recipe` would fit the rule.
 - **F3. Dict duplicates:** `item_dict.js` defines `i.xp_block` and `i.any_sandpaper` three times each, `i.disenchanter`

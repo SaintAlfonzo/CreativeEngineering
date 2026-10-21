@@ -16,7 +16,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | Golden carrot / apple by heated mixing and arc furnace; enchanted golden apple by assembly | DEPLOYED |
 | Ruby chocolate with dragon's breath | DEPLOYED |
 | Cultivated meat: sample syringe → culture → ×3 by mixing → raw meat on the cutting board | DEPLOYED |
-| Removals: vanilla smoker and cake, Quark crop crates, duplicate pie, egg, bread recipes | DEPLOYED; smoker has no recipe (F1) |
+| Removals: vanilla smoker and cake, Quark crop crates, duplicate pie, egg, bread recipes | DEPLOYED; smoker still made by Quark's deepslate / blackstone smoker recipes (F1) |
 
 - **Pending:** the cornmeal millstone mirrors (cooking.js 114-120, commit c82dd31 of 2026-10-20) are in the tree,
   not shipped. RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
@@ -88,7 +88,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Pancakes ×3 (Supplementaries) | shapeless sugar, egg, milk, flour, cornmeal or rice; heated mixing ×5 with 250 mB milk |
 | Barbecue stick | shapeless or assembly with any cooked meat |
 | Crab bars | shapeless ×2 (cooked), pot ×4 (raw), assembly ×10 |
-| Grilled salmon, bacon and eggs | shapeless and assembly (FD's shaped removed) |
+| Grilled salmon, bacon and eggs | shapeless and assembly (FD's own shapeless recipe removed and re-added unchanged under a pack id, F6) |
 | Salmon roll, cod roll | shapeless ×2, assembly ×3 |
 | Kelp roll, rice roll medley, roasted mutton chops | assembly |
 | Fish stew, cabbage rolls, horror lasagna, pasta with mutton (and heated mixing ×4) | shapeless from cooked ingredients |
@@ -125,19 +125,25 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 
 ### Findings (2026-10-18)
 
-- **F1. The vanilla smoker has no recipe. Your call.** `cooking.js` line 13 removes it ("Remove stone smoker recipe");
-  nothing adds one. Smoking is how the pack makes bread blocks, sourdough bread and leather, so a player needs another
-  smoker (Nether's Delight's nether brick smoker, a campfire for single items) or loot. Same pattern as the blast furnace
-  ([recipes_engineering.md](recipes_engineering.md) F1). Check with RC-01.
+- **F1. The vanilla smoker recipe is removed; Quark's make the smoker.** `cooking.js` line 13 removes it ("Remove stone smoker recipe");
+  the pack adds none. Rechecked 2026-10-21: Quark's `quark:building/crafting/furnaces/deepslate_smoker` and
+  `blackstone_smoker` (4 logs around a Quark variant furnace, flag on) still make `minecraft:smoker` (Quark 3.4-418
+  jar); the old `global.CE` copy (line 575, "minus blackstone") also removed the deepslate one, the live code doesn't. Smoking is how the pack makes bread blocks, sourdough bread and leather; the Quark recipes
+  cover that before the Nether (Nether's Delight's nether brick smoker is the late alternative). Same pattern as the
+  blast furnace ([recipes_engineering.md](recipes_engineering.md) F1). Check with RC-01;
+  [briefs/recipes_cooking.md](briefs/recipes_cooking.md) #1.
 - **F2. The vanilla cake recipe is removed as "redundant". Your call.** Fine if another mod's cake recipe makes
-  `minecraft:cake` (Create's or Farmer's Delight's); not checked. RC-02.
+  `minecraft:cake` (Create's or Farmer's Delight's); not checked. RC-02. Jar check 2026-10-21: four recipes make it,
+  `farmersdelight:cake_from_milk_bottle` and `neapolitan:cake` (vanilla's grid with milk tags),
+  `create:crafting/curiosities/cake` and the oven's `creativeengineering:baking/cake`.
 - **F3. Define-once:** `cooking.js` line 9 sets `i.catfish` (the local `i.catfish_slice` was dropped on 2026-10-20
   once the dict's entry was fixed to `alexsdelight:raw_catfish_slice`); `cultivated_meat.js` sets `i.culture_base` ([engineering.md](engineering.md) F8). Fix the
   dict entry and drop the local lines.
 - **F4. Old code:** lines 436-852 of `cooking.js` are the `global.CE` version, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
 - **F5. Golden carrots take rose gold nuggets** through `#forge:nuggets/gold` ([recipes_metal.md](recipes_metal.md) F5).
 - **F6. Comments that don't match:** "Replace shaped recipe w/ shaped" (it's shapeless) on grilled salmon and bacon and
-  eggs; "already shapeless?" on the rolls; one crab bar id is `creativeengineering/crab_bars_shapeless_manual_only` with a
+  eggs; "already shapeless?" on the rolls (yes: FD's grilled salmon, bacon and eggs, salmon roll and cod roll are
+  all shapeless with the same ingredients, so the pack's remove + re-add only renames them); one crab bar id is `creativeengineering/crab_bars_shapeless_manual_only` with a
   slash in the suffix.
 - **F7. Golden apples in machines** cost 5 ingots (mixing) or 3 (arc) against 8 in the grid; the arc furnace is the cheap
   route. Intended progression reward; worth a look with food tuning.
