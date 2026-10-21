@@ -109,7 +109,8 @@ All in [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.j
 | Winemaker | the 13 Fruits Delight tree saplings (5 emeralds) and the pineapple sapling (3); white jungle grape seeds (1; Vinery's own slot sells the grape) | Winemaker pool, 8 uses |
 
 **Never sold, by rule (sequence breaking):** nether wart, chorus flower, Nether's Delight propelplant cane, Farmer's
-Respite coffee beans (its wild coffee only grows in the Nether), Architect's Palette twisted sapling, crimson and
+Respite coffee beans (its wild coffee only grew in the Nether, and `wild_crops.json` has switched that spawn off since
+1.0.4, so the beans have no source at all: crops.md V18), Architect's Palette twisted sapling, crimson and
 warped fungus and roots, nether sprouts, twisting and weeping vines, nylium, soul soil, glowstone, sunstone,
 moonstone, golden chorus fruit, cosmic cod (End) and stradpole (Nether) buckets. The report script's `EXCLUDE`
 table keeps this list so the gap report never proposes them.
