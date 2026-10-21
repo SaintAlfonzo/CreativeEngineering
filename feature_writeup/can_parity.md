@@ -13,14 +13,14 @@ directly; nothing regenerates this file.
 | Every remaining `x` row, `/` removals, alt inputs (2026-10-13) | BUILT, not run in game (CP-07 to CP-14): 17 raw fruit, shulker, 12 raw fish, 4 hazard, 2 special, 11 cookies, 10 cooked veggie, 3 cooked meat, 11 pastas, 9 pie fillings, 9 feasts, 2 drinks; 15 `/` cans removed; sliced alt inputs. 6 pie slices skipped (no source). Meal/pie/feast/drink/hazard values are placeholders ([3.1](#new-sections)) |
 | Hunger/saturation columns | postponed until the food values are settled ([food.md](food.md) tuning) |
 | Priorities (scratchpad 2026-10-21) | can textures (48 of 235 built cans have their own sprite, [5.1](#sprites); [TODO](todo/TODO.md) `food/canning #13`) and can crafts (recipes for the rest of the `Want x` rows, then the `?` rows; `food/canning #14`) |
-| Potential cans (2026-10-20 food audit) | 263 rows at Want `?` waiting on a decision: new edible Brewin drinks (Beer, Vodka, Dread Nog), Gingerbread, two tarts, and every family pulled in from [3](#outside): [Hazard](#hazard) (4 built cans listed for the first time), [Egg and dairy](#egg-dairy), [Preserves](#preserves), [Desserts](#desserts), [Cake](#cake), [Sweets](#sweets), [Handheld](#handheld), [Ingredients](#ingredients) |
+| Potential cans (2026-10-20 food audit) | DECIDED 2026-10-20 (user): no `?` left (258 `x`, 493 `/`); 26 `x` rows have no can yet (20 to build, 6 pie slices with no source), `food/canning #14`. Was: 263 rows at Want `?` waiting on a decision: new edible Brewin drinks (Beer, Vodka, Dread Nog), Gingerbread, two tarts, and every family pulled in from [3](#outside): [Hazard](#hazard) (4 built cans listed for the first time), [Egg and dairy](#egg-dairy), [Preserves](#preserves), [Desserts](#desserts), [Cake](#cake), [Sweets](#sweets), [Handheld](#handheld), [Ingredients](#ingredients) |
 
 **How to use it:** decide the `Want` cell first. Then fill the rest of the row as work lands.
 
 | Cell | Meaning |
 |---|---|
-| `yes` | done (or, for the h/s columns, the value is written in) |
-| `no` | wanted but not done yet |
+| `x` (yes) | done (or, for the h/s columns, the value is written in); in the `Want` column: canned |
+| `/` (no) | wanted but not done yet; in the `Want` column: not canned |
 | `n/a` | not canned (`Want` = no), so the column does not apply |
 | `none` | Effects column only: the food has no effects, nothing to carry |
 | `later` | h/s columns: postponed until hunger values are settled |
@@ -30,8 +30,9 @@ directly; nothing regenerates this file.
 
 **Columns:**
 
-- **Want**: should this food have a can. Prefilled `yes` where a can exists or the canning.js plan names it,
-  `no` where removed or excluded by the plan (reason in the Item cell), `?` for everything else.
+- **Want**: should this food have a can. Prefilled `x` where a can exists or the canning.js plan names it,
+  `/` where removed or excluded by the plan (reason in the Item cell), `?` for everything else (none left since
+  2026-10-20; `x*` = canned in the Cooking Pot).
 - **Item**: name and id. Every food of the family's types in [food_types.json](../kubejs/generation_scripts/food/food_types.json)
   is listed, including the ones that will never be canned. Sliced forms are folded into their whole item's row.
 - **Can**: the can's display name (can differ from the input: Cactus Flesh -> Canned Cactus Flesh, pie slices -> pie filling).
@@ -50,7 +51,7 @@ directly; nothing regenerates this file.
 
 ## 1. Summary
 
-Recounted from the sheet rows 2026-10-20 (Want, Impl, Texture, Recipe and Effects cells marked `x`).
+Recounted from the sheet rows 2026-10-21 after the user's Want decisions (Want, Impl, Texture, Recipe and Effects cells marked `x`; `x*` counts as `x`). Rows, not cans: shared cans count once per row (228 distinct cans are registered).
 
 | Family | Items | Want x | Want ? | Want / | Implemented | Own texture | Recipe | Effects carried |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -66,21 +67,21 @@ Recounted from the sheet rows 2026-10-20 (Want, Impl, Texture, Recipe and Effect
 | [Salad](#salad) | 11 | 8 | 0 | 3 | 8 | 0 | 8 | 6 |
 | [Soup](#soup) | 31 | 27 | 0 | 4 | 27 | 2 | 27 | 22 |
 | [Meals](#meal) | 64 | 15 | 0 | 49 | 11 | 0 | 11 | 10 |
-| [Pie](#pie) | 20 | 16 | 2 | 2 | 10 | 0 | 10 | 10 |
+| [Pie](#pie) | 20 | 18 | 0 | 2 | 10 | 0 | 10 | 10 |
 | [Feasts](#feast) | 12 | 9 | 0 | 3 | 9 | 0 | 9 | 8 |
 | [Drinks](#drink) | 63 | 2 | 0 | 61 | 2 | 1 | 2 | 0 |
-| [Drinks: alcohol](#alcohol) | 44 | 0 | 3 | 41 | 0 | 0 | 0 | 0 |
+| [Drinks: alcohol](#alcohol) | 44 | 0 | 0 | 44 | 0 | 0 | 0 | 0 |
 | [Golden and enchanted golden](#golden) | 50 | 50 | 0 | 0 | 50 | 0 | 50 | 50 |
 | [Special](#special) | 15 | 2 | 0 | 13 | 2 | 1 | 2 | 0 |
-| [Hazard](#hazard) | 11 | 4 | 7 | 0 | 4 | 4 | 4 | 4 |
-| [Egg and dairy](#egg-dairy) | 6 | 0 | 6 | 0 | 0 | 0 | 0 | 0 |
-| [Preserves](#preserves) | 27 | 0 | 27 | 0 | 0 | 0 | 0 | 0 |
-| [Desserts](#desserts) | 37 | 0 | 37 | 0 | 0 | 0 | 0 | 0 |
-| [Cake](#cake) | 18 | 0 | 18 | 0 | 0 | 0 | 0 | 0 |
-| [Sweets](#sweets) | 98 | 0 | 96 | 2 | 0 | 0 | 0 | 0 |
-| [Handheld](#handheld) | 52 | 0 | 52 | 0 | 0 | 0 | 0 | 0 |
-| [Ingredients](#ingredients) | 15 | 0 | 15 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **751** | **248** | **263** | **240** | **235** | **48** | **235** | **133** |
+| [Hazard](#hazard) | 11 | 5 | 0 | 6 | 4 | 4 | 4 | 4 |
+| [Egg and dairy](#egg-dairy) | 6 | 2 | 0 | 4 | 0 | 0 | 0 | 0 |
+| [Preserves](#preserves) | 27 | 1 | 0 | 26 | 0 | 0 | 0 | 0 |
+| [Desserts](#desserts) | 37 | 0 | 0 | 37 | 0 | 0 | 0 | 0 |
+| [Cake](#cake) | 18 | 0 | 0 | 18 | 0 | 0 | 0 | 0 |
+| [Sweets](#sweets) | 98 | 2 | 0 | 96 | 0 | 0 | 0 | 0 |
+| [Handheld](#handheld) | 52 | 1 | 0 | 51 | 0 | 0 | 0 | 0 |
+| [Ingredients](#ingredients) | 15 | 1 | 0 | 14 | 0 | 0 | 0 | 0 |
+| **Total** | **751** | **258** | **0** | **493** | **235** | **48** | **235** | **133** |
 
 ## 2. Sheets
 
@@ -116,7 +117,7 @@ Fruit Meals (5, 3), 3 servings. Additive: sugar or honey.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | x | Apple `minecraft:apple` | Canned Apple | 3 / 2+1 | - | x | x | x | / | none | later | later | later |
 | x | Banana `neapolitan:banana` | Canned Banana | 7 / 5+1 | - | x | x | x | / | / | later | later | later |
-| x | Cantaloupe Slice `delightful:cantaloupe_slice` | Canned Cantaloupe | 4 / 3+1 | - | x | x | x | / | / | later | later | later |
+| x | Cantaloupe Slice `delightful:cantaloupe_slice` | Canned Cantaloupe | 4 / 3+1 | - | x | x | x | / | none | later | later | later |
 | x | Cherry `vinery:cherry` | Canned Cherries | 6 / 4+1 | - | x | x | x | / | none | later | later | later |
 | x | Glow Berries `minecraft:glow_berries` | Canned Glow Berries | 8 / 6+1 | - | x | x | x | / | / | later | later | later |
 | x | Melon Slice `minecraft:melon_slice` | Canned Melon | 6 / 4+1 | - | x | x | x | / | none | later | later | later |
@@ -310,7 +311,7 @@ Same section as cooked meat (cooked_meat in can_types.json).
 
 ### 2.9 Bread <a id="bread"></a>
 
-Bread x2 meals, 4 servings, / additive (honey bread also 5 bread + honey).
+Bread x2 meals, 4 servings, no additive (honey bread also 5 bread + honey).
 
 | Want | Item | Can | Input (basic / +additive) | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -1066,7 +1067,7 @@ fish) of that. Sliced forms share the whole item's slots and count; no recipe ma
 The hazard and low-value fish cans clamp at 8 items, so they come out generous (8 pufferfish -> 4 Meat Meals), the same
 way the hand-written raw chicken can does.
 
-Canned Goods' own cans that / recipe makes any more (their recipes are removed in canning.js). Since 2026-10-13 these
+Canned Goods' own cans that no recipe makes any more (their recipes are removed in canning.js). Since 2026-10-13 these
 have recipes again: Chorus Fruit, Honey Bottles, Poisonous Potatos, Pufferfishs, Tough Jerky, Night Berries, Tropical Fish.
 Canned Apples `canned_goods:canned_apples`, Canned Bread `canned_goods:canned_beetroot_soup`, Canned Beetroots `canned_goods:canned_beets`, Canned Cake `canned_goods:canned_cake`, Canned Pumpkin Pies `canned_goods:canned_carrots`, Canned Chorus Fruit `canned_goods:canned_chorus_fruits`, Canned Notch Apples `canned_goods:canned_enchanted_apples`, Canned Food `canned_goods:canned_food`, Canned Glow Berries `canned_goods:canned_glow_berries`, Canned Golden Apples `canned_goods:canned_golden_apples`, Canned Golden Carrots `canned_goods:canned_golden_carrot`, Canned Honey Bottles `canned_goods:canned_honey_bottles`, Canned Melon Slice `canned_goods:canned_melon_slice`, Canned Poisonous Potatos `canned_goods:canned_posionous_potatos`, Canned Potatos `canned_goods:canned_potatos`, Canned Pufferfishs `canned_goods:canned_pufferfishs`, Canned Golden Carrots `canned_goods:canned_pumpkin_pie`, Canned Tough Jerky `canned_goods:canned_rotten_flesh`, Canned Night Berries `canned_goods:canned_spider_eyes`, Canned Suspicious Stew `canned_goods:canned_suspicious_stew`, Canned Sweet Berries `canned_goods:canned_sweet_berries`, Canned Tropical Fish `canned_goods:canned_tropical_fish`, Hot Hot Hotpot `canned_goods:hot_hot_hotpot`.
 
@@ -1532,8 +1533,7 @@ listed (they use fewer items for the same can).
 | canned_enchanted_golden_rabbit_stew | item.goldenfood.enchanted_golden_rabbit_stew (136) | 2 | 10 x (2 + 32) | 340 | 272 | 272 | 100% |
 | canned_enchanted_golden_sweet_berries | item.goldenfood.enchanted_golden_sweet_berries (136) | 2 | 10 x (2 + 32) | 340 | 272 | 272 | 100% |
 
-**Golden can numbers:** today a golden can serves the golden food's full value for 10 servings ([cans.md](cans.md) F3);
-the decision cuts that to a quarter of the nutrition and a third of the effect time, so ten servings are worth about 2.5
+**Golden can numbers:** a golden can already serves a quarter of the golden food's nutrition for 10 servings (SECTIONS `golden` mult 0.25, the table above), effects at 0.25x; the decision keeps the quarter nutrition and sets a third of the effect time (`dur` 0.25 -> 0.333, not built), so ten servings are worth about 2.5
 golden foods of nutrition and 3.3 of effect time.
 
 **Follow-ups to mark:** golden food effect changes (see [effects.md](effects.md)) must be rechecked against the golden
@@ -1573,14 +1573,14 @@ Canned Goods' beetroot can. Never override `canned_goods:items/canned_beets`: th
 
 - After a restart: `/dumpfood`, then `python3 tools/food_catalog.py --check`. Removed cans should be gone from the
   export and from the `canned` map; the new `canned_white_strawberry` and `canned_cactus_flesh` should be present.
-- `logs/latest.log`: / `[canning] ... skipped` and / `[can servings] not item ids in item_dict` lines.
+- `logs/latest.log`: no `[canning] ... skipped` and no `[can servings] not item ids in item_dict` lines.
 - 2026-10-13 dry run (node, stubbed NCH): canning.js makes 381 recipes, every input is an item_dict id, no duplicate
   recipe ids.
 
 ## 7. In-game tests
 
 - [ ] **CP-01 removed cans gone:** JEI search "Canned Mint", "Canned Acorns", "Canned Grapes", "Canned Mite Crust",
-  "Canned Raw Ham" (and chevon, hoglin, kangaroo, moose, bison, bunfungus) -> / results.
+  "Canned Raw Ham" (and chevon, hoglin, kangaroo, moose, bison, bunfungus) -> no results.
 - [ ] **CP-02 white strawberry can:** JEI on White Strawberries -> Canned White Strawberries (3 berries, or 2 + sugar/honey);
   plain Strawberries -> Canned Strawberries only.
 - [ ] **CP-03 cactus flesh:** the Delightful cactus piece reads "Cactus Flesh"; it cans into "Canned Cactus Flesh"
