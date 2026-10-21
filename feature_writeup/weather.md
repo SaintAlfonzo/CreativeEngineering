@@ -534,8 +534,8 @@ Ice, same day after the ocean-ice change, at real ocean positions from the grid 
 ## 8. In-game test suite
 
 Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-season names: `EARLY_SPRING` ...
-`LATE_WINTER`; it jumps to the start of that sub-season) and force rain with `/weather rain`. Install the current patcherMod jar from
-`development/patcherMod/build/libs/` first (client and server).
+`LATE_WINTER`; it jumps to the start of that sub-season) and force rain with `/weather rain`. The deployed pack
+(patcherMod 1.0.6 or later, live since pack 1.0.6) has everything below; no jar to install.
 
 - [ ] **WE-01 boot:** start the game and join a world → no mixin errors in `logs/latest.log` mentioning `Season` (grep `InvalidInjection\|Season.*Mixin`)
 - [ ] **WE-02 desert dry:** desert, rain, any season → no rain drawn, no rain sound, a fire on sand keeps burning
@@ -574,7 +574,7 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
 - [ ] **WE-36 clouds:** overworld, look up from the ground and fly up: Distant Horizons' clouds at y350 (fly through them there; nothing at y520); rain particles reach the cloud layer. Turn vanilla clouds on (Video Settings) → vanilla layer at the same height
 - [ ] **WE-17 switch off:** `[seasons] enabled = false` in creativeengineering-common.toml, rejoin → deserts rain again in Mid Wet (Serene Seasons alone)
 
-## 7. History
+## 9. History
 
 - 2026-10-08: audit (rain in deserts, snow on warm rivers) and the generated weather_by_biome.md. Season types
   built: arid, frozen, tropical by tag, savanna wet season, adaptive rivers/beaches, SeasonHUD names and day of
@@ -611,6 +611,6 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
 - 2026-10-11 (end): forested_highlands moved from snow_seasons winter-only to cold (22). `DhCloudHeightMixin`: Distant
   Horizons' clouds follow the vanilla cloud height (350) instead of build height + 200. Jar reinstalled (md5 233d304b),
   not run in game.
-- 2026-10-14: ships in pack **1.0.6** (STAGED 2026-10-14, update from 1.0.4; 1.0.5 was never deployed): the season types
+- 2026-10-14: ships in pack **1.0.6** (DEPLOYED 2026-10-14, update from 1.0.4; 1.0.5 was never deployed): the season types
   and Pretty Rain mixin from 1.0.5 plus the 2026-10-11 snow line, snow seasons, cold type, permanent skylands seasons
   and `DhCloudHeightMixin`, all in patcherMod 1.0.6. Not run in game (WE-26 to WE-36). [plan_1.0.6.md](plan_1.0.6.md).

@@ -13,9 +13,9 @@ Where wild bee nests generate, how often, and a tuning file that gives nests to 
 | Extra bee-nest trees (`trees` in a rule: pack placed feature + `forge:add_features`) | BUILT 2026-10-10, offline tests pass |
 | `/dumpbeenests [reset]` (trees, nests, chunks counted per biome as chunks generate; `ChunkGeneratorBeeNestsMixin`) | BUILT 2026-10-10; baseline 41,684 chunks / 73 biomes saved as `bee_nests_baseline.json` |
 | CEConfig `[worldgen.systems] beeNests` | BUILT, same jar |
-| Starter rules (section 9) | IN `bee_nests.json`, calibrated on the baseline; ship as they are in 1.0.5 (staged); your review still open |
+| Starter rules (section 9) | IN `bee_nests.json`, calibrated on the baseline; DEPLOYED as they are with pack 1.0.6 (2026-10-14); your review still open |
 
-- **Jar:** needs patcherMod 1.0.5 or later (in `mods/`, ships in pack 1.0.5). With an older jar, `bee_nests.js`
+- **Jar:** needs patcherMod 1.0.5 or later (in `mods/`; shipped with pack 1.0.6, as 1.0.5 was never deployed). With an older jar, `bee_nests.js`
   writes the `trees` features only (a `chance`/`scale` modifier of an unknown type would stop the world loading),
   and `/dumpbeenests` says the jar is missing.
 - **Knobs:** `kubejs/generation_scripts/worldgen/bee_nests.json` (section 3); CEConfig `[worldgen.systems] beeNests`

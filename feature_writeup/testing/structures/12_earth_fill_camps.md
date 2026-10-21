@@ -75,8 +75,8 @@ assembled during the run. The switch did NOT reload live: Forge kept the old val
 
 ## 3. Deploy state
 
-`mods/creativeengineering-1.0.9.jar` replaced by this build (md5 b82483aa; the 13:50 build was 5b7bb926). Not
-deployed. Instance `config/creativeengineering-common.toml` gains `maxWaterSurplus` and `avoidCoasts` on the next start
+`mods/creativeengineering-1.0.9.jar` replaced by this build (md5 b82483aa; the 13:50 build was 5b7bb926).
+DEPLOYED with pack 1.0.9 (2026-10-19 15:54, [plan_1.0.9.md](../../plan_1.0.9.md) EF). Instance `config/creativeengineering-common.toml` gains `maxWaterSurplus` and `avoidCoasts` on the next start
 (Forge adds missing keys).
 
 ## 4. Still open

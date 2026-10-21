@@ -41,17 +41,17 @@ Share = the biome's % of its layer in the sample set (surface or underground); r
 | Dimension | Biome | Multiplier | Share → result | Solver note |
 |---|---|---|---|---|
 | Overworld | `terralith:skylands_spring` / `summer` / `autumn` / `winter` | 0.15 | 0.065 / 0.08 / 0.225 / 0.225 → 0.01 / 0.01 / 0.035 / 0.035 % | |
-| Overworld | `terralith:volcanic_peaks` | 1.5 | 0.205 → 0.25 % | aimed 0.31 % |
+| Overworld | `terralith:volcanic_peaks` | 1.5 | 0.205 → 0.27 % | aimed 0.31 % |
 | Overworld | `terralith:yellowstone` | 1.5 | 3.175 → 4.775 % | |
 | Overworld | `terralith:yosemite_cliffs`, `yosemite_lowlands` | 1.5 | 0.14 / 0.11 → 0.2 / 0.16 % | |
 | Overworld | rarity floor + targets: 41 rare biomes lifted (37 surface, 4 cave), 9 never-spawning biomes targeted (volcanic crater included), 14 donors (tables below) | see below | | 2026-10-19 |
-| End | `nullscape:shadowlands` | 0.5 | 19.8 → 9.9 % | |
-| End | `nullscape:void_barrens` | 0.75 | 6.0 → 4.9 % | aimed 4.5 % |
-| End | `nullscape:crystal_peaks` | 0.25 | 7.1 → 5.0 % | aimed 1.8 % |
+| End | `nullscape:shadowlands` | 0.5 | 18.933 → 9.633 % | |
+| End | `nullscape:void_barrens` | 0.75 | 3.967 → 2.767 % | aimed 2.967 % |
+| End | `nullscape:crystal_peaks` | 0.25 | 3.067 → 1.667 % | aimed 0.767 % |
 | Nether | `minecraft:nether_wastes` | 2.0 | 34.9 → 46.8 % | aimed 69.8 % |
 | Nether | `minecraft:basalt_deltas` | 0.666 | 18.6 → 12.4 % | |
-| Nether | `minecraft:crimson_forest` | 0.75 | 21.4 → 16.1 % | |
-| Nether | `minecraft:warped_forest` | 0.75 | 7.7 → 5.8 % | |
+| Nether | `minecraft:crimson_forest` | 0.75 | 21.4 → 16.067 % | |
+| Nether | `minecraft:warped_forest` | 0.75 | 7.7 → 5.767 % | |
 | Nether | `minecraft:soul_sand_valley` | 1.25 | 17.4 → 18.9 % | aimed 21.8 % |
 
 **Rarity floor and targets (user, 2026-10-19: "allow the rarest biomes to spawn more frequently, take the chance
@@ -160,7 +160,9 @@ was 3,000 / 111 KB), underground 42,071 points from `/dumpclimatecaves 5000` (ev
 surface to the world bottom; 244 KB), replacing the main dump's four shallow levels; End 7,050, Nether 15,000; all
 seed 7379340783510277000. The denser surface set changed many base shares (volcanic peaks 0.47 → 0.205 %,
 yellowstone 2.8 → 3.175 %): the 3,000-column set was one sample per 0.033 %. Model agreement: Overworld
-96.639 %, Nether 86.7 %, End 70.0 %. The Overworld solve takes about 10 s per world load (about 2 s
+96.639 %, Nether 86.4 %, End 80.1 % (End and Nether samples of 2026-10-18; the End's Nullscape biomes
+are now measured on the surface layer, 3,000 points, where the 2026-10-14 file measured them underground, hence the
+new End shares). The Overworld solve takes about 10 s per world load (about 2 s
 before), once per session (cached on the input hashes).
 
 ### 2.2 The fields
@@ -227,7 +229,8 @@ before), once per session (cached on the input hashes).
 ### Findings (2026-10-18)
 
 - **F1. Five targets aren't reached. Your call.** Nether wastes ×2 gets 46.8 % instead of 69.8 %, soul sand valley 18.9
-  instead of 21.8, crystal peaks 5.0 instead of 1.8, void barrens 4.9 instead of 4.5. The notes say "out of the
+  instead of 21.8, crystal peaks 1.667 instead of 0.767, void barrens 2.767 instead of 2.967 (2026-10-18 samples; the
+  current file also has 10 Overworld notes, mostly near misses of the rarity floor). The notes say "out of the
   penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)". Accept the
   results, or adjust the multipliers to what's reachable so the file says what happens.
 - **F2. Never-sampled biomes. Resolved 2026-10-19.** The 20,000-column dump sampled `skylands_winter`; the 9
@@ -236,8 +239,10 @@ before), once per session (cached on the input hashes).
 - **F3. The skylands are at 15 %, but features target them. Your call.** More Mooblooms spawns in skylands spring,
   and seasons keep the skylands' seasons permanent ([weather.md](weather.md)). At 15 % of an
   already tiny share (under 0.25 % of the surface together) they will be very hard to find. Intended?
-- **F4. End model agreement is 70 %.** The solver's model of which biome wins matches the game only 70 % of the time in
-  the End (99 % Overworld, 87 % Nether), so End results are rough. Likely the End's island noise; not investigated.
+- **F4. End model agreement is 80 %** (70 % before the 2026-10-18 samples). The solver's model of which biome wins
+  matches the game only 80 % of the time in the End (96.6 % Overworld, 86.4 % Nether), so End results are rough.
+  2026-10-21 lead: every mismatch is a live `end_highlands` where the model expects shadowlands, crystal peaks or void
+  barrens, and no End dump has ever held crystal peaks live ([briefs/worldgen_biomes.md](briefs/worldgen_biomes.md) #4).
 - **F5. One seed.** All samples come from one seed; shares are noise-distribution properties, so this should hold for
   other seeds, but it isn't checked.
 

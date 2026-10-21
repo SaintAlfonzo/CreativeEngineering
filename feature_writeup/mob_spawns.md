@@ -371,7 +371,8 @@ First block (down to the ducks) DONE 2026-10-09, see section 3 and 3.1 (not yet 
 # Investigate
 - Alexs mobs biome parity? increase frequencies?
 - duck and goose parity
-- beehive spawning biomes, frequency 
+- beehive spawning biomes, frequency: investigated and tuned 2026-10-10 in [bee_nests.md](bee_nests.md) (bees only come
+  from tree nests; TODO `worldgen/bee-nests #1`, #2)
 
 # Later
 - Pillager overhaul

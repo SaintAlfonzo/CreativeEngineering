@@ -15,7 +15,7 @@ classes and Async Locator 1.3.0; decisions in 4)
 | 3.4 Miss logging (misses before a hit, per search and per structure) | BUILT 2026-10-12 | `worldgen/LocateStats` + `mixin/ChunkGeneratorMetaLocateMixin` |
 | 3.5 `/celocate batch` | BUILT 2026-10-12; `stop` label fixed in 1.0.7 (DEPLOYED 2026-10-18) | `worldgen/LocateCommand`, `compat/AsyncLocatorBridge` |
 | 3.6 `/celocate census` (with generation-time miss reasons) | BUILT 2026-10-12; "known" bug (LO-03, LO-14) FIXED in 1.0.7 (DEPLOYED 2026-10-18) | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
-| 3.7 Distant Horizons generation clipped below y 48 with a fake seabed (deep oceans around y 8, other oceans just under 48); pregen on the final server world | BUILT 2026-10-12 (option A); pregen is a deploy step | `worldgen/DistantClip`, `mixin/NoiseBasedChunkGeneratorDistantClipMixin`, `NoiseChunkDistantClipMixin`, `ConfiguredFeatureDistantClipMixin` |
+| 3.7 Distant Horizons generation clipped below y 48 with a fake seabed (deep oceans around y 8, other oceans just under 48); pregen on the final server world | BUILT 2026-10-12 (option A), DEPLOYED with 1.0.6 (2026-10-14; LO-12 passed on that jar); LO-11 [game] open; pregen is a deploy step | `worldgen/DistantClip`, `mixin/NoiseBasedChunkGeneratorDistantClipMixin`, `NoiseChunkDistantClipMixin`, `ConfiguredFeatureDistantClipMixin` |
 
 **Main findings:**
 1. **A locate miss** happens when the cheap check says a structure could start in a slot, and the chunk is then
@@ -37,7 +37,7 @@ classes and Async Locator 1.3.0; decisions in 4)
 **Knobs:** `config/creativeengineering-common.toml`
 - `[worldgen.locate]`: `foldPlacement` (true), `foldBiomes` (true), `nonBlockingLoads` (true), `threadSafeStructureCheck`
   (true, read when a dimension loads), `logMissesAtLeast` (8; 0 = every search, -1 = never), `batchRadius` (100 chunks),
-  `batchTimeoutSeconds` (120), `censusRegionChunks` (32), `loadTimeoutSeconds` (300).
+  `batchTimeoutSeconds` (120), `censusRegionChunks` (32), `loadTimeoutSeconds` (300), `searchTimeoutSeconds` (120, 3.5).
 - `[worldgen.distant]`: `clip` (true), `clipBelowY` (48, rounded down to a multiple of 16), `oceanFloorY` (48),
   `deepOceanFloorY` (8), `floorVariation` (4), `floorScale` (24 blocks), `skipFeatures` (true).
 - Async Locator: `asyncLocatorThreads` in `<world>/serverconfig/asynclocator-server.toml` (pack default 1; 4 on the
@@ -98,13 +98,13 @@ structure starts of every village slot it passes.
 | R1 | Dead placements (frequency 0) | not generated | removed from the search (`DeadPlacementFilter`) |
 | R2 | Per-member frequency roll (`StructureFrequencies`) | at store time | **yes**, exact (`StructureCheckFrequencyMixin`) |
 | R3 | Meta conversion and replacements (`MetaSlots`) | `tryGenerateStructure` HEAD | **yes** (`StructureCheckMetaMixin`, anchors' biomes + rules via `MetaSlots.fits`) |
-| R4 | Biome rules + biome fits + replacement biome narrowing | valid-biome predicate | fits only (through `Structure#biomes`); rules only for metas and replacements |
+| R4 | Biome rules + biome fits + replacement biome narrowing | valid-biome predicate | **yes**, exact since 2026-10-12: stage B (`LocatePrediction.fits`, `foldBiomes`); metas and replacements through `MetaSlots` |
 | R5 | Surface check (`StructureBiomeRules.surfaceCheck`) | on the built start | no |
 | R6 | Earth fill (`EarthFill.filter`) | on the built start | no |
 | R7 | Placement priority drop + peaceful radius (`PlacementPriority`) | on the built start | no |
 | R8 | Slot veto (an earlier member's frequency miss closes the slot) | `tryGenerateStructure` HEAD | no |
 | R9 | Weighted group pick (another member took the slot) | vanilla | no |
-| R10 | Set frequency, exclusion zone | vanilla | no (2.1) |
+| R10 | Set frequency, exclusion zone | vanilla | **yes**, exact since 2026-10-12: stage A (`LocatePrediction.placementRejects`, `foldPlacement`); vanilla has neither (2.1) |
 
 ### 2.3 Async Locator 1.3.0
 
@@ -337,7 +337,7 @@ never drawn, so a flat floor at 48 is invisible. But the DH toml is a player con
 
 | Option | What it does | Gain | Risk / cost | Verdict |
 |---|---|---|---|---|
-| A. **Skip the band in Distant Horizons' own generation** | DH (`distantGeneratorMode = FEATURES`) generates throwaway chunks on its own threads for LODs. A mixin on the noise fill and feature placement, active only inside DH's batch generation (thread or `BatchGenerationEnvironment` context), fills the band with plain stone/deepslate (single-value palette sections, nearly free) and skips features placed in it | DH LOD builders were about 28% of all CPU during pregen (perf.md). Cave culling (`caveCullingHeight` 60) already hides most underground LODs, so nobody sees the difference | low: those chunks are discarded. **Cutoff: y 48** (decision 4), so the band is -64 to 47; above the cave-culling height's reach of most dark LODs, below most land surfaces. **Known side effect:** columns whose surface lies below 48 (deep oceans, deeper with Tectonic's `deeper_oceans`; ravines; lava rivers) get a flat floor at y 48 in distant LODs. Measured and handled below the options table: per-column clip recommended. To verify: that DH 3.0.2 calls the vanilla `fillFromNoise` / `applyBiomeDecoration`, and how to detect its context. DH's API has a world-generator override register worth checking as the official hook | **DECIDED: build, clip below y 48** |
+| A. **Skip the band in Distant Horizons' own generation** | DH (`distantGeneratorMode = FEATURES`) generates throwaway chunks on its own threads for LODs. A mixin on the noise fill and feature placement, active only inside DH's batch generation (thread or `BatchGenerationEnvironment` context), fills the band with plain stone/deepslate (single-value palette sections, nearly free) and skips features placed in it | DH LOD builders were about 28% of all CPU during pregen (perf.md). Cave culling (`caveCullingHeight` 60) already hides most underground LODs, so nobody sees the difference | low: those chunks are discarded. **Cutoff: y 48** (decision 4), so the band is -64 to 47; above the cave-culling height's reach of most dark LODs, below most land surfaces. **Known side effect:** columns whose surface lies below 48 (deep oceans, deeper with Tectonic's `deeper_oceans`; ravines; lava rivers) get a flat floor at y 48 in distant LODs. Measured and handled below the options table: fake seabed by biome (decision 4). To verify: that DH 3.0.2 calls the vanilla `fillFromNoise` / `applyBiomeDecoration`, and how to detect its context. DH's API has a world-generator override register worth checking as the official hook | **DECIDED: build, clip below y 48** |
 | B. **Pregenerate** | Chunky (already installed) pregenerates the spawn area on the server before players join | moves the load out of play time entirely | disk space; no code | **DECIDED: pregenerate the final server world** (not the scratch/test worlds) |
 | C. **Real deferred band** (retrogen when a player goes deep) | Generate chunks with the band as a solid placeholder and mark them. When a player nears the band (e.g. below y 48 within 3 chunks), replay noise, carvers, features and structure pieces **clipped to the band** on the live chunks, then relight | real chunks: the band's share of noise + features, at the cost of a spike when someone first goes deep | **large**: replay needs a fake `WorldGenRegion` over FULL chunks with their 3 x 3 neighbours; features crossing the boundary (ore blobs, geodes, trees with roots, dripstone) must be split by a block filter in both passes; a feature that tests the world (air above, replaceable target) sees player changes in pass 2; underground structure pieces (ancient city, stronghold, mineshafts) must be placed late with clipped boxes, after their beard has shaped the noise; fluids above the band must never meet air (the placeholder must be solid); lighting and heightmaps must be fixed for columns whose surface lies in the band (Tectonic's deeper oceans and lava rivers make this real); block entities and entities spawn late; DH LODs of the band go stale; every mod that post-processes chunks (Create, Immersive Weathering, structure mods) is untested on a late pass | **not built** unless A + B are not enough and the measurement shows the band dominates |
 | D. Raise `min_y` | shrink the world | permanent gain | removes content, changes the world, not a delay | rejected |
@@ -387,6 +387,10 @@ never drawn, so a flat floor at 48 is invisible. But the DH toml is a player con
   [EarthFill](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/EarthFill.java),
   [PlacementPriority](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/PlacementPriority.java),
   [AsyncMapTrades](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/AsyncMapTrades.java).
+- Pack, built 2026-10-12 (under `development/patcherMod/.../creativeengineering/`): `worldgen/LocatePrediction`, `LocateLoads`,
+  `LocateStats`, `LocateCommand`, `LocateCensus`, `LocateReflect`, `DistantClip`, `compat/AsyncLocatorBridge`;
+  `mixin/StructureCheckThreadSafeMixin`, `NoiseBasedChunkGeneratorDistantClipMixin`, `NoiseChunkDistantClipMixin`,
+  `ConfiguredFeatureDistantClipMixin`. Open work: [briefs/worldgen_locate.md](briefs/worldgen_locate.md).
 - Related writeups: [structure_tuning.md](structure_tuning.md) (rules, groups, metas, priority, 7 Todo),
   [perf.md](perf.md) (JFR, worldgen threads).
 

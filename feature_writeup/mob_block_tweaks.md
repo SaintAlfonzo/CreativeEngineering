@@ -11,10 +11,10 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 | Bushier Flowers: no bone-meal growth, no worldgen; its bushes crafted from 4 flowers | DEPLOYED with 1.0.6 (built 2026-10-10); in-game test pending |
 | Quark feeding trough: a hungry animal that finds no trough waits 30 s before searching again | DEPLOYED with 1.0.4 (perf fix); scratch server checked the mixin applies, not measured under load |
 | Create: Dreams & Desires asphalt: friction and speed factor reset to vanilla (BlockRunner tiers it instead) | DEPLOYED; BR-28 pending |
-| Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19 (patcherMod 1.0.9 rebuild, in `mods/`, not deployed); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23); MT-13 to MT-23 pending in game |
+| Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19 (a patcherMod rebuild after the 1.0.9 deploy, now patcherMod 1.1.01 in `mods/`; not deployed); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23); MT-13 to MT-23 pending in game |
 
 - **Pending:** the leaf decay changes are built and unshipped (next deploy; the release also drops FastLeafDecay-30.jar,
-  now in `disabledmods/`). MT-01 to MT-23 untested in game (BR-28 stays in its writeup). Findings F1 to F7 (section 4);
+  now in `disabledmods/`). MT-01 to MT-25 untested in game (BR-28 stays in its writeup). Findings F1 to F7 (section 4);
   F6 (diagonal-only leaves) is a possible follow-up.
 - **Files to open:** [BubbleColumnImmunityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BubbleColumnImmunityMixin.java),
   [BushierFlowersDisableMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BushierFlowersDisableMixin.java),
