@@ -111,7 +111,7 @@ The check that all four pieces are worn is CDD's; the mixin only swaps the two `
 - **Where it comes from:** felsic and dragon set bonuses (level I), the potions (base 3:00, long 8:00, strong
   1:30 at II, from `MagicResistancePotions`), `/effect`. Felsic gear assembly fills with it (see
   [gear_tuning.md](gear_tuning.md)).
-- **Effect description:** still `TODO` in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) line 8
+- **Effect description:** still `TODO` in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) line 11
   (one of the JEED rows in [TODO](todo/TODO.md) `ui/effects #1`).
 
 ### 2.6 Effect spec format
@@ -190,6 +190,8 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
   2026-10-19.)
 - **F7. Echo Phantom Bane is level II, the tooltip says "Phantom Bane".** The mixin keeps CDD's amplifier 1. Check
   whether Better Beacons scales Phantom Bane with level; if it does, either drop the amplifier to 0 or say "II".
+  Checked 2026-10-21 (Better Beacons 1.0.2 jar): its only consumer, `PhantomSpawnerMixin`, tests `hasEffect`, so the
+  level does nothing; amplifier 0 is cosmetic ([briefs/gear_effects.md](briefs/gear_effects.md)).
 - **F8. One effect packet per effect per tick, unmeasured.** Re-adding an effect with a longer duration fires
   `onEffectUpdated`, which syncs the effect to the client. A dragon set plus a held dragon tool is 8 updates a
   player a tick. [perf.md](perf.md) only measured the horse walk. A cheaper version re-adds only when under, say, 20

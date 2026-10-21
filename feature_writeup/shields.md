@@ -17,7 +17,7 @@
 | Effect ticks never blocked: poison, wither, copper poisoning, Debilitating Sting, Exsanguination, Ender Flu, Phasing (`unblockableEffectTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean (single player 2026-10-11), not tested in game |
 | Banner decoration in the crafting grid for every tier | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean (single player 2026-10-11), not tested in game |
 | Recipe ladder (shaped, smithing, echo / felsic / dragon assembly) | DEPLOYED (KubeJS) |
-| Damage tag layer (32 tag files, reload listener, seen-sources log) | DEPLOYED (30); `burn_tick`, `contact_tick` BUILT 2026-10-05 |
+| Damage tag layer (32 tag files, reload listener, seen-sources log) | DEPLOYED (30 since 1.0.3; `burn_tick`, `contact_tick` built 2026-10-05, DEPLOYED with 1.0.6) |
 | Offline checks `tools/test_shields.sh` (`shield_check.py` + `ShieldConfigTest`) | BUILT 2026-10-05, passes (32 checks) |
 | Smithing to netherite needs Armor Trims' Netherite Upgrade Smithing Template (F8); JEI's vanilla Smithing category no longer lists template-only recipes (`SmithingTemplateJEI`) | template rule: Armor Trims config, kept; JEI fix BUILT 2026-10-05 20:56, in the patcherMod 1.0.5 jar (DEPLOYED with 1.0.6); SH-43 pending |
 
@@ -283,10 +283,11 @@ message ids in `data/creativeengineering/damage_tags/<name>.json`:
   echo, felsic and dragon assemblies carry only enchantments, name, repair cost, Unbreakable and attribute
   modifiers through (`SequencedAssemblyRecipeMixin`). `BlockEntityTag`, which holds the banner design, is not
   carried. Expected from the code, not seen in game; SH-27.
-- **F6. Any reduction fully blocks 1-damage ticks.** Because of the round-down rule. Burning ticks now need
-  `blocksBurnTicks` (netherite and above) and poison/wither ticks are never blocked (2026-10-05). The other
-  1-damage ticks (magma, stoves, powder snow, acid, copper poisoning, modded magic effects) are still blocked
-  fully by any tier with a non-zero percentage; section 2.8 lists them and how to exclude each.
+- **F6. Any reduction fully blocks 1-damage ticks.** Because of the round-down rule. Since 2026-10-05 burning, magma
+  and stove ticks need `blocksBurnTicks` (netherite and above), thorn ticks need `blocksContactTicks` (diamond and
+  above), and every damaging effect tick (poison, wither, copper poisoning, the Alex's Mobs magic effects, Phasing) is
+  never blocked. Only powder snow (`freeze`, cold %) and etching acid (`acid`, chemical %, kept by request) are still
+  blocked fully by any tier with a non-zero percentage; section 2.8 lists them and how to exclude each.
 - ~~**F7. Only the iron shield takes a banner in the crafting grid.**~~ Fixed 2026-10-05
   (`ShieldDecorationRecipeMixin`). SH-33.
 - **F8. Diamond to netherite smithing does nothing without a template.** Not a shield bug: Armor Trims
