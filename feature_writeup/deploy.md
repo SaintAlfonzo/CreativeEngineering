@@ -1,18 +1,22 @@
 # Deploy pipeline: update payloads, deployment snapshots, kubejs classes
 
 BUILT 2026-09-30. Offline checks passed (section 6). Used for real deploys: 1.0.3 (2026-10-02) and 1.0.4 (2026-10-04) went out as
-update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 is STAGED (2026-10-14, update from 1.0.4, folds in 1.0.5).
+update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026-10-14, update from 1.0.4, folds in 1.0.5),
+1.0.7 (2026-10-18), 1.0.8 (2026-10-19 10:20) and 1.0.9 (2026-10-19 15:54) went out as update payloads too. Both sides run
+1.0.9 ([deploy/DEPLOYED.json](../deploy/DEPLOYED.json)).
 
 ## 0. At a glance
 
 | Part | Status | Open |
 |---|---|---|
-| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.0.4 recorded as deployed on both sides (2026-10-04 13:54); after 1.0.6 is copied out: `--snapshot 1.0.6` | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
+| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.0.9 recorded as deployed on both sides (2026-10-19 15:54), 1.0.8 before it (10:20) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
 | `update` / `install` payload modes | BUILT; scratch-tested (DP-01..DP-04 offline) | `select_payload`, `render_readme` |
 | `verify.sh` / `verify.ps1` | BUILT; sh tested, ps1 not run (no PowerShell here) | `VERIFY_SH`, `VERIFY_PS1` |
 | kubejs file classes (`KUBEJS_CLASSES`) | BUILT; every kubejs file classified (2026-10-11: 9 new worldgen files, 6 runtime + 3 dev; 2026-10-14: block swap tables, 2 runtime + 1 dev) | `KUBEJS_CLASSES` |
 | Mod sides (`mod_sides.md`): a jar with no row stops the build; a row whose side changed is listed under "Mods whose side changed" and the jar moves between `mods/` and `client_mods/` | BUILT; 2026-10-11: 4 rows added (Breedable Killer Rabbit server, Cool Rain both, MEED both, Pretty Rain client), JEED moved client -> both; 2026-10-14: 4 rows (Campsite Structures, restApi, Unlit Campfire both; rsec server), 417 rows | [mod_sides.md](../mod_sides.md) |
-| In-tree mods (`IN_TREE_MODS`): patcherMod, exposureBackport, incubationAdditions, moreMooblooms; preflight checks `mods/` equals the build, the shipped jar is archived | BUILT | `IN_TREE_MODS` |
+| Display Delight item models: preflight warns when `gen_display_delight_models.py --check` fails or the DD export is older than the jar ([wthit_lines.md](wthit_lines.md) F3) | BUILT 2026-10-20; passes | `check_display_delight_models` |
+| In-tree mods (`IN_TREE_MODS`): patcherMod, exposureBackport, incubationAdditions, moreMooblooms, backportedVinery and backportedBrewin (2026-10-18); preflight checks `mods/` equals the build, the shipped jar is archived | BUILT; two jars with one mod id in `mods/` stop the build since 1.0.9 (4) | `IN_TREE_MODS` |
+| Vinery donor jars (`vinery_upstream` category, both sides; [alcohol.md](alcohol.md) B4.8, D14): the two unmodified Vinery jars ship in the payload for now (a published pack downloads them from Modrinth / CurseForge instead, not built). Preflight: while the port is in `mods/`, each jar must exist with the sha1 `UpstreamJars.java` pins. README step: copy `vinery_upstream/` next to `mods/` | BUILT 2026-10-18, not run (the port isn't in `mods/` yet) | `vinery_upstream_jars`, `collect` |
 | Climate samples gzipped and moved out of `exported/` | BUILT (patcherMod 1.0.3, copied to `mods/`); tuner output byte-identical | [BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java), [dump_climate.js](../kubejs/server_scripts/_lib/dump_climate.js) |
 
 **Day to day:**
@@ -74,7 +78,7 @@ deploy/latest/
   verify.sh  verify.ps1    sh verify.sh server /path/to/server  |  verify.ps1 client "C:\...\instance"
   verify/server.sha1 verify/client.sha1   the base version's jars per target (sha1sum format)
   removals_server.txt removals_client.txt
-  mods/ client_mods/ kubejs/ config/ defaultconfigs/ server/ resourcepacks/ shaderpacks/
+  mods/ client_mods/ kubejs/ config/ defaultconfigs/ server/ resourcepacks/ shaderpacks/ vinery_upstream/
                            only the new and changed files; folders with nothing new are absent
 ```
 
@@ -165,6 +169,10 @@ an unmatched file is functional.
   even in what was effectively an install.
 - **Not done:** zipping the payload (the jars are already compressed, so it only saves a step); separate
   server and client payloads (one payload from the older mark is enough while both sides move together).
+- **Two jars with one mod id aren't caught.** Mod changes are keyed by mod id, so a second jar for an id that is
+  already shipped is neither listed as added nor stopped by preflight. 1.0.7 shipped `backportedBrewin-...-01.jar`
+  beside `BrewinAndChewin-1.19-2.0.jar` this way ([plan_1.0.7.md](plan_1.0.7.md) 2.2). Proposed: a preflight error
+  when `mods/` (or `client_mods/`) holds two jars with one mod id. Built 2026-10-19 in `collect()` (dev instance only; an installed folder is recorded as it is).
 - `pool_config.json` (1.1 MB) is the largest runtime input left. It's hand-edited and rewritten by
   PoolTuner, so it stays readable.
 
@@ -217,3 +225,19 @@ an unmatched file is functional.
   `nether_block_swaps.json` (runtime, read by TemplateBlockSwaps) and `nether_swap_rules.json` (dev); 4 mod_sides rows;
   `pack/manifest.json` regenerated. Staging archived the shipped 1.0.6 jar over the unshipped 2026-10-11 build of the same
   version (lost nothing: its source is in the shipped jar). Next: copy out, then `--snapshot 1.0.6`.
+- 2026-10-14 13:01: 1.0.6 copied out and recorded with `--snapshot 1.0.6` (both sides).
+- 2026-10-18: `vinery_upstream` category (both sides, sha1 checked against the port's `UpstreamJars` pins),
+  backportedVinery and backportedBrewin in `IN_TREE_MODS`. 1.0.7 staged at 18:20 (from `dc669e2`), went onto the
+  server, which crashed on the Vinery port; restaged at 19:29 with the hotfix under the same jar name (allowed: not
+  yet snapshotted), deployed and recorded 19:43 (both sides). An 18:36 build had auto-bumped to 1.0.8 and left a log
+  section with no history json.
+- 2026-10-19: 1.0.8 STAGED 01:16, update from 1.0.7: 38 files, 5.4 MB; the stray 1.0.8 section was replaced.
+  `pack/manifest.json` regenerated first. Found while writing [plan_1.0.7.md](plan_1.0.7.md): 1.0.7 shipped two
+  Brewin' jars with one mod id unnoticed (4, not fixed). Next: copy out, then `--snapshot 1.0.8`.
+- 2026-10-19: preflight error for two jars with one mod id in `mods/` ([plan_1.0.9.md](plan_1.0.9.md)).
+- 2026-10-19: 1.0.8 restaged 10:06 (replaces the 01:16 staging, whose patcherMod jar could not boot a dedicated server),
+  copied out and recorded 10:20 (both sides). 1.0.9 staged and deployed 15:54 (update from 1.0.8, 35 files, 5.5 MB;
+  both sides), with the warning that `pack/manifest.json` is out of date with `mods/` (TODO `pack/release #1`).
+- 2026-10-20: preflight warning `check_display_delight_models`: runs `tools/gen_display_delight_models.py --check` and
+  warns when DD item models are missing or stale, or the `/dumpitemsbymod displaydelight` export is older than the DD
+  jar ([wthit_lines.md](wthit_lines.md) F3). Passes on the current tree.

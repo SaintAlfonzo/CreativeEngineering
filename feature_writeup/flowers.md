@@ -4,7 +4,7 @@
 
 | Part | Status | Open |
 |---|---|---|
-| Rules engine (`wild_flowers.js`): Botania palettes, pack flower patches, existing-feature scale/remove, Flower Patch mixing | BUILT 2026-10-07, offline checks pass, scratch server verified (History); STAGED for pack 1.0.6 (not deployed); applied in single player 2026-10-11 | FL-01 to FL-14 |
+| Rules engine (`wild_flowers.js`): Botania palettes, pack flower patches, existing-feature scale/remove, Flower Patch mixing | BUILT 2026-10-07, offline checks pass, scratch server verified (History); DEPLOYED with pack 1.0.6 (2026-10-14); applied in single player 2026-10-11 | FL-01 to FL-14 |
 | First tuning pass (palettes for 124 land biomes, 19 flower entries, 2 existing tweaks) | BUILT | your in-game look |
 | CEConfig `[worldgen.systems] wildFlowers` | BUILT, in patcherMod 1.0.5 (ships in 1.0.5), on in the shipped config | |
 | Generator + report (`tools/gen_wild_flowers.py` -> [flowers_by_biome.md](flowers_by_biome.md)) | BUILT | |
@@ -210,3 +210,9 @@ Use a new world (or new chunks). `/locate biome` then fly over.
   tags`, no errors. Only new chunks change.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- 2026-10-19: Terralith's moonlight blue flower patch (`terralith:flower/blue/flowers`) actually generates now. It was
+  a `nether_forest_vegetation` patch, which only places on nylium, so it never fired on grass (the flower model here
+  counted it anyway); [nether_worldgen.md](nether_worldgen.md) B8 turned it into a vanilla flower patch with the same
+  tries and spread and took its warped roots and nether sprouts out. `gen_wild_flowers.py` was rerun so
+  `flower_features.json` (which `wild_flowers.js` rebuilds the feature from) has it; flowers_by_biome.md also
+  refreshed for the new biome shares ([biome_tuning.md](biome_tuning.md)).

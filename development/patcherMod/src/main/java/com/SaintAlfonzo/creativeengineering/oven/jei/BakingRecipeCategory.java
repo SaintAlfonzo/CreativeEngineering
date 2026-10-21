@@ -85,7 +85,7 @@ public class BakingRecipeCategory implements IRecipeCategory<BakingRecipe> {
                 int index = row * 3 + column;
                 if (index < ingredients.size()) {
                     builder.addSlot(RecipeIngredientRole.INPUT, SHIFT + column * 18 + 1, row * 18 + 1)
-                            .addItemStacks(Arrays.asList(ingredients.get(index).getItems()));
+                            .addItemStacks(withCount(ingredients.get(index).getItems(), recipe.getIngredientCount(index)));
                 }
             }
         }
@@ -100,6 +100,17 @@ public class BakingRecipeCategory implements IRecipeCategory<BakingRecipe> {
             builder.addSlot(RecipeIngredientRole.CATALYST, SHIFT + 63, 39).addItemStack(container);
         }
         builder.addSlot(RecipeIngredientRole.OUTPUT, SHIFT + 95, 39).addItemStack(result);
+    }
+
+    // The ingredient's stacks shown at the size one bake takes (JEI's transfer moves that many).
+    private static List<ItemStack> withCount(ItemStack[] stacks, int count) {
+        List<ItemStack> list = new ArrayList<>();
+        for (ItemStack stack : stacks) {
+            ItemStack copy = stack.copy();
+            copy.setCount(count);
+            list.add(copy);
+        }
+        return list;
     }
 
     @Override

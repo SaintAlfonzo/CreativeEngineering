@@ -1,0 +1,9 @@
+{
+  "brewinandchewin:keg": {
+    "entrypoints": {
+      "common": "umpaz.brewinandchewin.integration.wthit.KegWthit",
+      "client": "umpaz.brewinandchewin.integration.wthit.KegWthit"
+    },
+    "side": "*"
+  }
+}

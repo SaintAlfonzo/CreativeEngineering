@@ -1,4 +1,4 @@
-// kubejs/server_scripts/helpers/recipes.js
+// kubejs/startup_scripts/func/neoCraftHelper.js
 
 console.log('Neo Craft Helper starting')
 
@@ -609,7 +609,8 @@ global.NCH = {
   // ========================================================================
 
   // Takes a whole defaults object for a config-driven craft (keys must match the
-  // CEConfig section's field names exactly, e.g. potion/potionMb/loops/hammerBlows) and a
+  // CEConfig section's Java field names exactly, e.g. potion/mb/loops/blows, not the toml
+  // keys potionMb/hammerBlows) and a
   // dotted path to that section (e.g. 'CRAFTING.FELSIC_SWORD'), and returns a new object
   // with each field replaced by its CEConfig value where available. Falls back to the
   // given default field-by-field if patcherMod's CEConfig isn't on the classpath or the
@@ -620,9 +621,9 @@ global.NCH = {
   //
   //   const felsicSword = R.cfg({
   //     potion: 'creativeengineering:magic_resistance',
-  //     potionMb: 250,
+  //     mb: 250,
   //     loops: 1,
-  //     hammerBlows: 3
+  //     blows: 3
   //   }, 'CRAFTING.FELSIC_SWORD')
   //
   // Recipes are baked at datapack-reload time (ServerEvents.recipes) - a toml edit needs
@@ -955,9 +956,29 @@ global.NCH = {
 		.id(`${global.NCH.modId}:farmersdelightcutting/${idSuffix}`)
 	},
 
+	// Hammering by hand with the Engineer's Hammer, two ways to the same result: on a Farmer's Delight cutting
+	// board (the hammer is the cutting tool and loses 1 durability) and in the crafting grid (hammer + input,
+	// shapeless; IE's hammer comes back damaged). Ids farmersdelightcutting/<id>_hammering and
+	// shapeless/<id>_hammering. The board must be in #creativeengineering:hammer_no_rotate (blocktags.js), or the
+	// hammer rotates it instead of cutting.
+	//   R.hammering(i.baking_sheet, i.any_plate_iron, e, 'baking_sheet')
+	hammering(output, input, e, idOverride) {
+		if (!e) throw new Error('hammering called without event object!')
+		var idSuffix = idOverride ? idOverride + '_hammering' : global.NCH.toId(output, input, 'hammering')
+		global.NCH.fdCutting(input, global.item.ie_hammer, output, e, idSuffix)
+		global.NCH.shapeless(output, [global.item.ie_hammer, input], e, idSuffix)
+	},
+
 	// Oven baking, creativeengineering:baking (patcherMod oven/, feature_writeup/oven.md 2.2): the FD
 	// cooking-pot JSON plus an optional `tool` (bakeware in the oven's tool slot, never used up).
-	// input: 1-6 ingredients (an array entry = any of those). opts: { exp, time, container, tool }
+	// input: one oven slot each (an array entry = any of those). Give a repeated ingredient once with a count,
+	// Item.of(i.wheat, 3) or { id: '#tag', count: 3 } for a tag, and write the original recipe's full cost.
+	// What the recipe gets depends on CEConfig [cooking] ovenIngredientCounts:
+	//   on:  the count stays, and the oven takes that many from the one slot (exact cost, up to 6 slots)
+	//   off (default): a count becomes that many slots of 1, FD-pot style. Over 6 slots, one item is dropped
+	//        from the largest repeated group until it fits (ties: the group listed first, so list filler like
+	//        milk/sugar/wheat before the defining ingredient). Each drop is logged.
+	// opts: { exp, time, container, tool }
 	//   R.ceBaking([i.t_fruits_fig, i.pie_crust, i.eggs], Item.of(i.fig_tart, 2), e, undefined,
 	//     { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin, container: i.paper })
 	ceBaking(input, output, e, idOverride, opts) {
@@ -967,13 +988,15 @@ global.NCH = {
 		var ctx = 'ceBaking ' + idSuffix
 
 		var inputs = Array.isArray(input) ? input : [input]
+		if (!global.NCH.cfg({ ovenIngredientCounts: false }, 'COOKING').ovenIngredientCounts)
+			inputs = global.NCH._bakingSlots(inputs, ctx)
 		if (inputs.length < 1 || inputs.length > 6)
 			global.NCH._warn(ctx, 'needs 1-6 ingredients, got ' + inputs.length)
 
 		var json = {
 			type: 'creativeengineering:baking',
 			ingredients: inputs.map((v, idx) =>
-				global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + idx + ']' })),
+				global.NCH._itemJson(v, { countMode: 'flat', context: ctx + ' input[' + idx + ']' })),
 			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
 			experience: opts.exp ?? 0,
 			cookingtime: opts.time ?? 200
@@ -983,6 +1006,81 @@ global.NCH = {
 			json.container = global.NCH._itemJson(opts.container, { allowTag: false, countMode: 'none', context: ctx + ' container' })
 
 		e.custom(json).id(`${global.NCH.modId}:baking/${idSuffix}`)
+	},
+
+	// ceBaking with counts off: counted inputs -> one slot per item, dropping from the largest repeated
+	// group (ties: first listed) while over the oven's 6 slots.
+	_bakingSlots(inputs, ctx) {
+		var groups = inputs.map(v => {
+			if (Array.isArray(v)) return { v: v, id: String(v[0]), count: 1 }
+			var r = global.NCH._resolveIdCount(v)
+			return r.count > 1 ? { v: r.id, id: r.id, count: r.count } : { v: v, id: r.id, count: 1 }
+		})
+		var total = () => groups.reduce((s, g) => s + g.count, 0)
+		var dropped = []
+		while (total() > 6) {
+			var big = null
+			groups.forEach(g => { if (g.count > 1 && (!big || g.count > big.count)) big = g })
+			if (!big) break // all single: too many distinct ingredients, ceBaking warns
+			big.count--
+			dropped.push(big.id)
+		}
+		if (dropped.length) console.log('[NCH] ' + ctx + ': over 6 slots, dropped ' + dropped.join(', '))
+		var slots = []
+		groups.forEach(g => { for (var k = 0; k < g.count; k++) slots.push(g.v) })
+		return slots
+	},
+
+	// Brewin' and Chewin' keg (backport, alcohol.md 8.6): brewinandchewin:fermenting with 4.5.0's field names.
+	// output: Fluid.of(id, mB) for a drink / cheese fluid, or an item (Item.of(...)) for a food result.
+	// inputs: 1-4 ingredients, one keg slot each; an array entry = any of those, Item.of(x, 2) takes two slots.
+	// baseFluid: fluid id, '#tag' or Fluid.of(id, mB) (1000 mB unless given); null = an empty tank.
+	// opts: { temperature: 1 cold, 2 chilly, 3 normal (default), 4 warm, 5 hot; time: ticks (default 9600);
+	//   xp (default 1); category: 'drinks' (default) | 'meals' }
+	//   R.bncFermenting(Fluid.of(f.beer, 1000), [i.wheat, i.dandelion, i.brown_mushroom], f.water, e, 'beer_from_water')
+	bncFermenting(output, inputs, baseFluid, e, idOverride, opts) {
+		opts = opts || {}
+		if (!e) throw new Error('bncFermenting called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, inputs, "fermenting")
+		var ctx = 'bncFermenting ' + idSuffix
+
+		var slots = []
+		;(Array.isArray(inputs) ? inputs : [inputs]).forEach((v, idx) => {
+			var count = Array.isArray(v) ? 1 : global.NCH._resolveIdCount(v).count
+			var entry = global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + idx + ']' })
+			for (var c = 0; c < Math.max(1, count); c++) slots.push(entry)
+		})
+		if (slots.length < 1 || slots.length > 4)
+			global.NCH._warn(ctx, 'needs 1-4 ingredient slots, got ' + slots.length)
+
+		var json = {
+			type: 'brewinandchewin:fermenting',
+			ingredients: slots,
+			experience: opts.xp ?? 1.0,
+			fermenting_time: opts.time ?? 9600,
+			temperature: opts.temperature ?? 3,
+			unit: 'millibuckets'
+		}
+		if (opts.category) json.category = opts.category
+
+		if (baseFluid != null) {
+			var base = global.NCH._fluidJson(baseFluid, { context: ctx + ' base fluid' })
+			json.base_fluid = {
+				amount: base.amount,
+				ingredient: base.tag ? { tag: '#' + base.tag } : { id: base.fluid },
+				unit: 'millibuckets'
+			}
+		}
+
+		var looksLikeFluid = typeof output === 'object' && (typeof output.getAmount === 'function' || output.amount !== undefined)
+		if (looksLikeFluid) {
+			var res = global.NCH._fluidJson(output, { allowTag: false, context: ctx + ' result' })
+			json.result = { id: res.fluid, amount: res.amount }
+		} else {
+			json.result = global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' })
+		}
+
+		e.custom(json).id(`${global.NCH.modId}:fermenting/${idSuffix}`)
 	},
 
   // ========================================================================
@@ -1346,6 +1444,22 @@ global.NCH = {
     .id(`${global.NCH.modId}:createfilling/${idSuffix}`)
 	},
 
+	// Create Item Drain: input -> outputs, an item and/or a fluid.
+	//   R.createEmptying([i.tankard, Fluid.of(f.beer, 250)], i.beer, e, 'beer')
+	createEmptying(outputs, input, e, idOverride) {
+		if (!e) throw new Error('createEmptying called without event object!')
+		var outArr = Array.isArray(outputs) ? outputs : [outputs]
+		var idSuffix = idOverride ?? global.NCH.toId(outArr[0], input, "createemptying")
+		var ctx = 'createEmptying ' + idSuffix
+
+		global.NCH._validateAny(outArr, ctx + ' output')
+		global.NCH._validateAny(input, ctx + ' input')
+
+		e.recipes.create
+		.emptying(outArr, input)
+		.id(`${global.NCH.modId}:createemptying/${idSuffix}`)
+	},
+
 	createRolling(output, input, e, idOverride) {
 		if (!e) throw new Error('createRolling called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "rolling")
@@ -1477,6 +1591,72 @@ global.NCH = {
 		if (processingTime) json.processingTime = processingTime
 
 		return e.custom(json)
+	},
+
+	// ========================================================================
+	// JEED (Just Enough Effect Descriptions)
+	// ========================================================================
+
+	// jeed:effect_provider: JEED's page for an effect lists these items as giving it (effects.md 3).
+	// providers: an item / '#tag' / NBT item ({ item, nbt } or Item.of(id, '{...}')), or an array of them.
+	// JEED drops the whole recipe on one unknown id, so missing items are left out with a warning, and an
+	// effect that isn't registered skips the recipe.
+	//   R.jeedProvider('minecraft:health_boost', [i.stal_wine, i.solaris_wine], e, 'vinery_health_boost')
+	jeedProvider(effect, providers, e, idOverride) {
+		if (!e) throw new Error('jeedProvider called without event object!')
+		var idSuffix = idOverride ?? String(effect).replace(':', '_')
+		var ctx = 'jeedProvider ' + idSuffix
+		if (!global.NCH._effectExists(effect)) {
+			global.NCH._warn(ctx, 'effect "' + effect + '" is not registered')
+			return
+		}
+		var json = global.NCH._jeedProviderJson(providers, ctx)
+		if (json.length < 1) {
+			global.NCH._warn(ctx, 'no providers')
+			return
+		}
+		e.custom({
+			type: 'jeed:effect_provider',
+			effect: String(effect),
+			providers: json
+		}).id(`${global.NCH.modId}:jeed/${idSuffix}`)
+	},
+
+	// jeed:potion_provider: items that carry a potion in NBT (`Potion`, like minecraft:potion). JEED lists
+	// each one, filled with every potion that has the effect, on that effect's page.
+	//   R.jeedPotionProvider([i.ce_potion_bucket, i.potion_bundle], e, 'potion_carriers')
+	jeedPotionProvider(providers, e, idOverride) {
+		if (!e) throw new Error('jeedPotionProvider called without event object!')
+		var idSuffix = idOverride ?? 'potion_provider'
+		var ctx = 'jeedPotionProvider ' + idSuffix
+		var json = global.NCH._jeedProviderJson(providers, ctx)
+		if (json.length < 1) {
+			global.NCH._warn(ctx, 'no providers')
+			return
+		}
+		e.custom({
+			type: 'jeed:potion_provider',
+			providers: json
+		}).id(`${global.NCH.modId}:jeed/${idSuffix}`)
+	},
+
+	_jeedProviderJson(providers, ctx) {
+		var list = Array.isArray(providers) ? providers : [providers]
+		var out = []
+		list.forEach((v, idx) => {
+			var id = (v && typeof v.item === 'string') ? v.item : global.NCH._resolveIdCount(v).id
+			if (!global.NCH._checkItem(id, ctx + ' provider[' + idx + ']')) return
+			out.push(global.NCH._nbtItemJson(v, { countMode: 'none', context: ctx + ' provider[' + idx + ']' }))
+		})
+		return out
+	},
+
+	_effectExists(id) {
+		try {
+			return $NCH_ForgeRegistries.MOB_EFFECTS.containsKey($NCH_ResourceLocation.of(String(id), ':'))
+		} catch (err) {
+			return false
+		}
 	},
 
 	// ========================================================================
@@ -1755,6 +1935,26 @@ global.NCH = {
 		}
 
 		e.custom(json).id(`${global.NCH.modId}:pcthermoplant/${idSuffix}`)
+	},
+
+	// ========================================================================
+	// Creative Labels (development/creativeLabels, feature_writeup/sticky_notes.md 3.6)
+	// ========================================================================
+	// The note recipes are Java CustomRecipes matched in code (any grid size), so their JSON is only the type and
+	// the mod ships none: the pack owns the ids (creativeengineering:creative_labels/<type>). type is one of
+	//   note_dye      N identical notes + 1 dye -> N notes with the dye mixed in, text kept
+	//   note_special  N plain notes + 1 ink sac / glow berries / gunpowder / gold nugget -> N special notes
+	//   note_copy     1 written note + 8 blank notes -> 9 copies of the written one
+	//   note_erase    note + eraser -> text wiped, or a blank note back to plain (the eraser stays)
+	// No item inputs to validate: the ingredients live in the Java matcher.
+	//   R.creativeLabelsSpecial('note_dye', e)
+	creativeLabelsSpecial(type, e, idOverride) {
+		if (!e) throw new Error('creativeLabelsSpecial called without event object!')
+		var types = ['note_dye', 'note_special', 'note_copy', 'note_erase']
+		if (types.indexOf(type) < 0)
+			throw new Error('creativeLabelsSpecial: unknown type "' + type + '" (one of ' + types.join(', ') + ')')
+		var idSuffix = idOverride ?? type
+		return e.custom({ type: 'creative_labels:' + type }).id(`${global.NCH.modId}:creative_labels/${idSuffix}`)
 	},
 }
 

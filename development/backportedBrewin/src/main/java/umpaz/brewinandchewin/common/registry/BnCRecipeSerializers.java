@@ -1,0 +1,26 @@
+package umpaz.brewinandchewin.common.registry;
+
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraftforge.registries.RegisterEvent.RegisterHelper;
+import umpaz.brewinandchewin.BrewinAndChewin;
+import umpaz.brewinandchewin.common.crafting.CreatePotionPouringRecipe;
+import umpaz.brewinandchewin.common.crafting.KegFermentingRecipe;
+import umpaz.brewinandchewin.common.crafting.KegPouringRecipe;
+
+public class BnCRecipeSerializers {
+   public static final RecipeSerializer<?> FERMENTING = new KegFermentingRecipe.Serializer();
+   public static final RecipeSerializer<?> KEG_POURING = new KegPouringRecipe.Serializer();
+   public static final RecipeSerializer<?> CREATE_POTION_POURING = createCreatePotionPouringRecipe();
+
+   public static void registerAll(RegisterHelper<RecipeSerializer<?>> helper) {
+      helper.register(BrewinAndChewin.asResource("fermenting"), FERMENTING);
+      helper.register(BrewinAndChewin.asResource("keg_pouring"), KEG_POURING);
+      if (CREATE_POTION_POURING != null) {
+         helper.register(BrewinAndChewin.asResource("create_potion_pouring"), CREATE_POTION_POURING);
+      }
+   }
+
+   private static RecipeSerializer<?> createCreatePotionPouringRecipe() {
+      return BrewinAndChewin.getHelper().isModLoaded("create") ? new CreatePotionPouringRecipe.Serializer() : null;
+   }
+}

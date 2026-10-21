@@ -713,6 +713,16 @@
         "terralith:ashen_savanna",
         "terralith:basalt_cliffs"
       ]
+    },
+    "coast_river": {
+      "note": "Coasts and rivers (2026-10-19): the beaches, stony shore, Terralith's gravel beach, and every river. With CEConfig [worldgen.meta_structures] avoidCoasts on (off by default), no meta structure part outside meta/coast_ok starts in or reaches into these biomes (patcherMod MetaStructure).",
+      "biomes": [
+        "#minecraft:is_beach",
+        "minecraft:stony_shore",
+        "terralith:gravel_beach",
+        "#minecraft:is_river",
+        "terralith:warm_river"
+      ]
     }
   }
 }

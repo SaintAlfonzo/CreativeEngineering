@@ -57,7 +57,7 @@ config, the Java dump and dev commands, and its jar is built by the root Gradle 
   marked (`===== create - 502 new =====`, placeable food from `tools/placeable_catalog.py`).
 - **State:** 12,511 item keys; 55 keys are assigned twice to the same id (harmless); an "Unsorted (Possible
   duplicates)" section near the top; 911 candidate entries and 689 unmapped ids still in
-  [startup_scripts/todo/](../kubejs/startup_scripts/todo/) ([TODO.md](todo/TODO.md) 5).
+  [startup_scripts/todo/](../kubejs/startup_scripts/todo/) ([TODO](todo/TODO.md) `tooling/dictionaries #3`).
 - **Removed items:** hidden in JEI and given a red "REMOVED ITEM: DO NOT USE" line
   ([jeichanges.js](../kubejs/client_scripts/jeichanges.js)), stripped of every item tag, and every recipe still naming
   one is printed once per session by [recipe_scan.js](../kubejs/server_scripts/_lib/recipe_scan.js) (feeds
@@ -120,13 +120,13 @@ folders through patcherMod because KubeJS can't).
 
 | Command | Writes / used by |
 |---|---|
-| `/dumpbiomes`, `/dumpclimate`, `/dumpspawns`, `/dumpstructures`, `/dumpstructuregen` | biome, climate, spawn and structure data ([weather.md](weather.md), [mob_spawns.md](mob_spawns.md), [structure_tuning.md](structure_tuning.md)) |
+| `/dumpbiomes`, `/dumpclimate`, `/dumpclimatecaves`, `/dumpspawns`, `/dumpstructures`, `/dumpstructuregen` | biome, climate, spawn and structure data ([weather.md](weather.md), [mob_spawns.md](mob_spawns.md), [structure_tuning.md](structure_tuning.md)) |
 | `/dumpitemsbymod`, `/dumptags`, `/dumprecipes`, `/dumpcraftingaudit`, `/dumpfluids`, `/dumppotions`, `/dumpnames` | registries, tags, recipes, names ([jei_coverage.md](jei_coverage.md), [names.md](names.md)) |
 | `/dumpgear`, `/dumpstacks`, `/dumpfood`, `/dumpplaceable`, `/dumpcropgrowth`, `/dumpcompost`, `/dumppaintings` | per-feature tables ([gear_tuning.md](gear_tuning.md), [stack_sizes.md](stack_sizes.md), [food.md](food.md), ...) |
 | `/dumploot`, `/dumptrades`, `/loottuning` | loot and trades ([loot.md](loot.md), [wandering_trader.md](wandering_trader.md)) |
 | `/dumpbeenests [reset]` | measured nests per biome ([bee_nests.md](bee_nests.md)); **not** in `/dumpall` (a session that generated nothing would overwrite a measurement) |
 | `/dumpservermods` (Java) | copies `both`/`server` jars (per `mod_sides.md`) into `server_mods/` |
-| `/dumpall` | runs every dump above except `/dumpbeenests` through the real dispatcher, in order (quick registry dumps first, `/dumpclimate` and `/dumpservermods` last); a failing dump is reported and skipped |
+| `/dumpall` | runs every dump above except `/dumpbeenests` through the real dispatcher, in order (quick registry dumps first, `/dumpclimate`, `/dumpclimatecaves` and `/dumpservermods` last; `/dumpclimate` takes about 4.5 minutes at its 20,000-column default); a failing dump is reported and skipped |
 
 [java_guard.js](../kubejs/server_scripts/_lib/java_guard.js) `guardThrowable(fn)` catches `java.lang.Error`s that
 Rhino's `try/catch` can't (a `NoClassDefFoundError` used to kill `/dumprecipes` silently).
@@ -226,7 +226,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   `logs/latest.log` for `[item_dict] Missing/invalid item IDs` (TL-01). If so, move the tag half to a server-side
   check (`ServerEvents.tags` or the first recipe event).
 - **F2. Block, fluid and NCH fluid tags aren't validated** (each logs "not validated (tag support not yet
-  implemented)"). Already in [TODO.md](todo/TODO.md) 5.
+  implemented)"). In [TODO](todo/TODO.md) `tooling/dictionaries #2`.
 - **F3. `global.config` is dead. Your call.** `func/config.js` (a self-healing JSON config under
   `config/creativeengineering/`) has no caller; dragon autorepair, its first user, moved to CEConfig, and the folder
   doesn't exist. Delete it, or keep it for KubeJS-only knobs.
@@ -240,7 +240,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - **F5. Many Python tools aren't in `generators.json`.** 33 of 55: some on purpose (the `_readme` names 5), but reports
   like `food_catalog.py`, `stack_sizes.py`, `jei_coverage.py`, `wandering_trader_report.py`, `loot_breakdown.py` and
   `gen_crop_worldgen_table.py` could be `/cegen` entries with their dumps.
-- **F6. Stale references:** `test_crop_growth.sh` names `feature_writeup/crop_growth.md` (it's [crops.md](crops.md)
+- **F6.** FIXED 2026-10-19 (all three). **Stale references:** `test_crop_growth.sh` names `feature_writeup/crop_growth.md` (it's [crops.md](crops.md)
   2.9); `neoCraftHelper.js` line 1 says `kubejs/server_scripts/helpers/recipes.js`; the `NCH.cfg` example uses toml
   keys instead of field names ([gear_tuning.md](gear_tuning.md) F12).
 - **F7. Headless tests need this machine's caches.** `java_test_cp.sh` reads `~/.local/share/atlauncher/libraries` and
@@ -321,10 +321,11 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 ## 8. History
 
 - Before 2026-09-27: dictionaries, NCH (migrated from the older `global.CE`, whose blocks are still commented out in
-  three files, [TODO.md](todo/TODO.md) 6), tag helper, CEConfig, the first dump commands.
+  three files, [TODO](todo/TODO.md) `tooling/conventions #3`), tag helper, CEConfig, the first dump commands.
 - 2026-09-27 (initial git commit): root Gradle build and manifest tooling.
 - 2026-09-30: item-loss repro harness run ([plan_1.0.3.md](plan_1.0.3.md) 4.7).
 - 2026-09-27 to 10-02 (first commits): `/dumpall` and `generators.json` (09-27), `java_test_cp.sh` (09-28), the
   `/cegen` command (10-02). The Rhino, node and GameTest harnesses and more dumps came with their features (each
   dated in its feature writeup).
 - 2026-10-18: this writeup; findings F1 to F10; tests TL-01 to TL-16. No code changed.
+- 2026-10-19: F6 fixed (test_crop_growth.sh, neoCraftHelper.js line 1, NCH.cfg example).

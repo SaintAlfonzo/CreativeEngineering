@@ -191,7 +191,7 @@ CE.replaceInput({ id: 'immersive_armors:robe_boots' },
   '#minecraft:wool',['minecraft:white_wool', 'immersiveengineering:hemp_fabric'], e) 
 CE.replaceInput({ id: 'nethersdelight:hoglin_mount' },
   'minecraft:white_wool',['minecraft:white_wool', 'immersiveengineering:hemp_fabric'], e) 
-CE.replaceInput({ id: 'vinery:vinemaker_leggings' },
+CE.replaceInput({ id: 'vinery:winemaker_leggings' },
   'minecraft:white_wool',['minecraft:white_wool', 'immersiveengineering:hemp_fabric'], e) 
 CE.replaceInput({ id: 'railways:sequenced_assembly/white_conductor_cap' },
   'minecraft:white_wool',['minecraft:white_wool', 'immersiveengineering:hemp_fabric'], e) 

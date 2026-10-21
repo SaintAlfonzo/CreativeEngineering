@@ -147,13 +147,13 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
   (also [gear_tuning.md](gear_tuning.md) F3 in the same file). One `global.tags.add` call per tag would do.
 - **F5. `#forge:arrow_shaft/blazing` is unused;** the explosive arrow names the blaze rod directly. Use the tag there or
   drop it.
-- **F6. Probably only two of the three enchantment overrides apply (unverified).** The mixins add `isDiscoverable`,
+- **F6.** CONFIRMED and FIXED 2026-10-19: the 1.0.8 jar named the method `isDiscoverable`; 1.0.9 uses `m_6592_` ([plan_1.0.9.md](plan_1.0.9.md)). **Probably only two of the three enchantment overrides apply (unverified).** The mixins add `isDiscoverable`,
   `canApplyAtEnchantingTable` and `isAllowedOnBooks` without `@Overwrite` and without a refmap. The two Forge
   methods have the same name at runtime, so they work. `isDiscoverable` is a vanilla method (SRG `m_6592_`) and the
   mixin class doesn't extend `Enchantment`, so its Mojmap name is probably not remapped and the method is never
   called. Then `enchant_randomly` loot can still roll the three enchantments, which would explain the red book
   tooltip. Checking that needs `javap` on the built jar; the fix is an SRG-named method or a refmap. The unused
-  `Overwrite` imports are already in [TODO.md](todo/TODO.md) 6.
+  `Overwrite` imports are in [TODO](todo/TODO.md) `tooling/patchermod-cleanup #1`.
 - **F7. `bullets.js` is a stub:** an empty "Removals" section, "Hello!" log lines, one recipe (F1).
 - **F8. Supplementaries' own quiver recipe isn't removed.** If it's enabled in Supplementaries' config, JEI shows two
   quiver recipes. Check in JEI (AR-15).
@@ -231,3 +231,4 @@ replacement or a hidden item.
   bullets; shipped with 1.0.3. `NockRecipeBookSync` was first committed 2026-10-02; when it was first built isn't
   recorded.
 - 2026-10-18: this writeup; findings F1 to F8; tests AR-01 to AR-18. No code changed.
+- 2026-10-19: F6 confirmed with `javap` and fixed in patcherMod 1.0.9 (SRG name `m_6592_` in the three NEA mixins, [plan_1.0.9.md](plan_1.0.9.md)). Not run in game.

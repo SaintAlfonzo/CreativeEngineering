@@ -1,7 +1,9 @@
 package umpaz.brewinandchewin.common.item;
 
 import com.mojang.datafixers.util.Pair;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -26,6 +28,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import umpaz.brewinandchewin.BrewinAndChewin;
 import umpaz.brewinandchewin.common.registry.BnCEffects;
@@ -144,10 +147,16 @@ public class BoozeItem extends Item {
 
    @Override
    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
+      addEffectLines(stack, tooltip);
+   }
+
+   /** The drink's effect lines, Tipsy and Bad Omen in red. Port: shared with the keg's tank tooltips (alcohol.md 8.2). */
+   public static void addEffectLines(ItemStack stack, List<Component> tooltip) {
       if (BrewinAndChewin.getHelper().hasFoodEffectTooltip()) {
+         int start = tooltip.size();
          TextUtils.addFoodEffectTooltip(stack, tooltip, 1.0F);
 
-         for (int i = 0; i < tooltip.size(); i++) {
+         for (int i = start; i < tooltip.size(); i++) {
             Component component = tooltip.get(i);
             if (RED_EFFECTS.stream().anyMatch(effect -> component.contains(Component.translatable(effect.get().getDescriptionId())))) {
                tooltip.set(i, component.copy().withStyle(ChatFormatting.RED));
@@ -155,4 +164,32 @@ public class BoozeItem extends Item {
          }
       }
    }
+
+   /**
+    * Port (alcohol.md 8.2): the effect lines of the drink a keg fluid pours into, so the JEI result tank, the keg screen's
+    * tank and the keg item read like the tankard. Fluids that pour into no drink (water, honey, milk, the cheeses) add none.
+    */
+   public static void addFluidEffectLines(Fluid fluid, List<Component> tooltip) {
+      BoozeItem drink = forFluid(fluid);
+      if (drink != null) {
+         addEffectLines(new ItemStack(drink), tooltip);
+      }
+   }
+
+   @Nullable
+   public static BoozeItem forFluid(Fluid fluid) {
+      if (byFluid == null) {
+         Map<Fluid, BoozeItem> map = new HashMap<>();
+         for (Item item : ForgeRegistries.ITEMS) {
+            if (item instanceof BoozeItem booze) {
+               map.putIfAbsent(booze.getFluid(), booze);
+            }
+         }
+         byFluid = map;
+      }
+      return byFluid.get(fluid);
+   }
+
+   @Nullable
+   private static Map<Fluid, BoozeItem> byFluid;
 }

@@ -1,0 +1,52 @@
+
+[keg]
+	#Which unit the capacity field should use.
+	#Should be 'LITER', 'MILLIBUCKET' or 'DROPLET'
+	#1 L = 1 mB = 81 d
+	#Default: MILLIBUCKET
+	#Allowed Values: LITER, MILLIBUCKET, DROPLET
+	kegCapacityUnit = "MILLIBUCKET"
+	#How much fluid (unit specified by kegCapacityUnit) can the Keg hold?
+	#Default: 1000 (millibuckets)
+	#Range: 1 ~ 810000
+	kegCapacity = 1000
+	#How many cold blocks are required for a cold temperature in the Keg?
+	#Default: 2
+	#Range: > 1
+	kegCold = 2
+	#How many cold blocks are required for a chilly temperature in the Keg?
+	#Default: 1
+	#Range: > 1
+	kegChilly = 1
+	#How many hot blocks are required for a warm temperature in the Keg?
+	#Default: 1
+	#Range: > 1
+	kegWarm = 1
+	#How many hot blocks are required for a hot temperature in the Keg?
+	#Default: 2
+	#Range: > 1
+	kegHot = 2
+	#Should the biome temperature influence the temperature in the Keg?
+	#Default: true
+	kegBiomeTemp = true
+	#Should the dimension temperature influence the temperature in the Keg?
+	#Default: true
+	kegDimTemp = true
+	#Port setting (not in 4.5.0): may pipes and pumps drain the Keg only while it isn't fermenting?
+	#Keeps a pump from pulling out the base fluid mid-batch. False drains at any time, as in 4.5.0.
+	#Default: true
+	pipeDrainOnlyWhenIdle = true
+	#Port setting (not in 4.5.0): keep ingredient leftovers (glass bottles, bowls, buckets) in the Keg instead of throwing them out?
+	#They go to the leftover slot right of the output, then the empty-container slot under the fluid slot. False throws them, as in 4.5.0.
+	#Default: true
+	remainderBuffer = true
+	#Port setting (not in 4.5.0): with remainderBuffer on, should the Keg wait instead of fermenting when a batch's leftovers wouldn't fit?
+	#False ferments anyway and throws what doesn't fit.
+	#Default: true
+	stallWhenFull = true
+
+[recipe_book]
+	#Should the Keg have a Recipe Book available on its interface?
+	#Default: true
+	enableRecipeBookKeg = true
+

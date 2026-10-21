@@ -88,3 +88,16 @@ reference.
   scratch parts passed; LO-04 partly; rate tests skipped; LO-03 and LO-14 FAILED on a census bug (slots run set by set,
   the first set loads the chunk, later sets count as "known"). Older locate code, with the Phase 5 load bug: fix for
   1.0.7 is the user's call. Next: M7 (Phase 7, calibration runs).
+- 2026-10-19 04:30: M7 (Phase 7) done, writeup 07_phase_7.md (session 5 restarted it: the 10-14 server was gone; new
+  scratch server from the Minecraft1192withForge libraries, patcherMod 1.0.7 because the staged 1.0.8 crashes a
+  dedicated server, worldgen identical). Passed ST-162, 159, 169, 67, 54, 58, 59; ST-53 passed but for its "slot stays
+  empty" clause; ST-160 partly; ST-52 / ST-57 data. ST-167 FAILED as shipped (prune tag empty: type/village is not a
+  real tag), ST-167/168 pass with a scratch-only tag fix. For the user: 1.0.8 server crash (plan_1.0.8.md blocker),
+  the tag fix, pruning shrinking the size class, /dumpstructuregen broken. Next: M8 (Phase 8, two-world comparisons).
+- 2026-10-19 07:05: M8 (Phase 8) done, writeup 08_phase_8.md: ST-144, ST-157 (second half), ST-145 (rate skipped),
+  ST-148 (companion distance loosened to 64-96 for the test) passed; no bugs. Next: M9 (Phase 9, flat world /ceplace).
+
+- 2026-10-19 07:50: M9 (Phase 9) done, writeup 09_phase_9.md: ST-42 passed, ST-40 scratch part passed (hills + real flat world), ST-39 partly, ST-41 FAILED (/ceplace templates: vanilla listTemplates throws on a merged-listing structures.nbt path). Finding: no flat world while biomeLayout is on (recipe in 09 3.2). Next: M10 (Phase 10, JFR profiling, LO-10).
+- 2026-10-19 08:35: M10 (Phase 10) done, writeup 10_phase_10.md: LO-10 passed, per-status times in locate.md 3.7. The scratch run 8.0.1-8.0.10 is complete; 8.0.11 (client list) is the user's. Open for the user: 07 3.1-3.4, 09 3.1-3.2, 10 3 (see each writeup's section 5).
+- 2026-10-19 10:10: fixes for the open items (07 3.1-3.4, 08 5.1, 09 3.1-3.2) built and checked on a scratch server, shipped in the restaged pack 1.0.8: writeup 11_fixes_1_0_8.md.
+- 2026-10-19 15:50: earth fill on water (footprint share), Campsite camp plinths (sunk-start beard), avoidCoasts for metas, and the Quark spire teleport mixin, built and checked on a scratch server (ST-199 to ST-205): writeup 12_earth_fill_camps.md, plan structure_tuning.md 7.5.

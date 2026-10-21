@@ -1,0 +1,50 @@
+{
+  "type": "brewinandchewin:fermenting",
+  "base_fluid": {
+    "amount": 1000,
+    "ingredient": {
+      "tag": "#brewinandchewin:egg_grog"
+    },
+    "unit": "millibuckets"
+  },
+  "experience": 1.0,
+  "fermenting_time": 4800,
+  "ingredients": [
+    [
+      {
+        "type": "forge:partial_nbt",
+        "item": "minecraft:potion",
+        "nbt": {
+          "Potion": "minecraft:poison"
+        }
+      },
+      {
+        "type": "forge:partial_nbt",
+        "item": "minecraft:potion",
+        "nbt": {
+          "Potion": "minecraft:long_poison"
+        }
+      },
+      {
+        "type": "forge:partial_nbt",
+        "item": "minecraft:potion",
+        "nbt": {
+          "Potion": "minecraft:strong_poison"
+        }
+      }
+    ],
+    {
+      "item": "minecraft:turtle_egg"
+    },
+    {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    []
+  ],
+  "result": {
+    "amount": 1000,
+    "id": "brewinandchewin:dread_nog"
+  },
+  "temperature": 1,
+  "unit": "millibuckets"
+}

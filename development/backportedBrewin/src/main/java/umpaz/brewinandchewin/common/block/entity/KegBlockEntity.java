@@ -65,14 +65,25 @@ import umpaz.brewinandchewin.common.utility.BnCItemUtils;
 import umpaz.brewinandchewin.common.utility.BnCTextUtils;
 import umpaz.brewinandchewin.common.utility.FluidUnit;
 import umpaz.brewinandchewin.common.utility.KegRecipeWrapper;
+import umpaz.brewinandchewin.forge.container.KegFluidTankForge;
+import umpaz.brewinandchewin.forge.container.KegPipeFluidHandlerForge;
 import vectorwing.farmersdelight.common.block.entity.SyncedBlockEntity;
-import vectorwing.farmersdelight.common.tag.ModTags;
 import vectorwing.farmersdelight.common.utility.ItemUtils;
 
 public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, Nameable, RecipeHolder {
    public static final int CONTAINER_SLOT = 4;
    public static final int OUTPUT_SLOT = 5;
-   public static final int INVENTORY_SIZE = 6;
+   /** Port (alcohol.md 8.4): 2.0's fluid slot pair, filled containers in and the emptied ones out. */
+   public static final int FLUID_IN_SLOT = 6;
+   public static final int FLUID_OUT_SLOT = 7;
+   /**
+    * Port (remainder_buffer.md 3.6): ingredient leftovers (glass bottles, bowls, buckets) wait here, then in
+    * FLUID_OUT_SLOT, instead of being thrown out of the keg. Take-only, like the output.
+    */
+   public static final int REMAINDER_SLOT = 8;
+   public static final int INVENTORY_SIZE = 9;
+   /** Port: marks a port save, whose 9 slots aren't a 2.0 keg's 9 (see isLegacyInventory). */
+   private static final String INVENTORY_VERSION = "BnCInventoryVersion";
    public static final int RANGE = 2;
    /** Port: a 2.0 keg's drink serving, in mB per drink, for the old-world conversion (alcohol.md 3.3). */
    public static final int LEGACY_SERVING = 250;
@@ -95,6 +106,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
    private final Object2IntOpenHashMap<ResourceLocation> usedRecipeTracker;
    private ResourceLocation lastRecipeID;
    private boolean checkNewRecipe;
+   private boolean checkFluidSlot = true;
    /** Port: items a converted 2.0 keg couldn't keep; dropped on the next tick (saved until then). */
    private final List<ItemStack> pendingDrops = new ArrayList<>();
 
@@ -110,14 +122,14 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
       this.recipeWrapper = BrewinAndChewin.getHelper().createRecipeWrapper(this.inventory, this.fluidTank);
       this.inputCap = LazyOptional.of(() -> (IItemHandler)this.inputHandler);
       this.outputCap = LazyOptional.of(() -> (IItemHandler)this.outputHandler);
-      this.fluidCap = LazyOptional.of(() -> this.fluidTank);
+      this.fluidCap = LazyOptional.of(() -> new KegPipeFluidHandlerForge((KegFluidTankForge)this.fluidTank, this));
    }
 
    @Override
    public void load(CompoundTag compound) {
       super.load(compound);
       CompoundTag inventoryTag = compound.getCompound("Inventory");
-      if (inventoryTag.getInt("Size") == 9) {
+      if (isLegacyInventory(compound)) {
          this.loadLegacyInventory(inventoryTag);
       } else {
          this.inventory.readFromNbt(inventoryTag);
@@ -152,6 +164,12 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
       }
 
       this.checkNewRecipe = true;
+      this.checkFluidSlot = true;
+   }
+
+   /** A 2.0 keg saved 9 slots; port saves before the leftover slot had 8, and since then 9 plus the version key. */
+   private static boolean isLegacyInventory(CompoundTag compound) {
+      return compound.getCompound("Inventory").getInt("Size") == 9 && !compound.contains(INVENTORY_VERSION);
    }
 
    /**
@@ -217,7 +235,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
          }
          // Port: a 2.0 keg item shows what its drinks will become once placed.
          CompoundTag inventoryTag = tag.getCompound("Inventory");
-         if (inventoryTag.getInt("Size") == 9) {
+         if (isLegacyInventory(tag)) {
             ItemStackHandler old = new ItemStackHandler(9);
             old.deserializeNBT(inventoryTag);
             return legacyDrinkToFluid(old.getStackInSlot(5), BnCConfiguration.COMMON_CONFIG.get().keg().localizedCapacity(), new ArrayList<>());
@@ -244,6 +262,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
    public void saveAdditional(CompoundTag compound) {
       super.saveAdditional(compound);
       compound.put("Inventory", this.inventory.writeToNbt());
+      compound.putInt(INVENTORY_VERSION, 2);
       compound.put("FluidTank", this.fluidTank.writeToNbt());
       compound.putInt("FermentTime", this.fermentTime);
       compound.putInt("FermentTimeTotal", this.fermentTimeTotal);
@@ -266,6 +285,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
    private CompoundTag writeUpdateTag(CompoundTag compound) {
       super.saveAdditional(compound);
       compound.put("Inventory", this.inventory.writeToNbt());
+      compound.putInt(INVENTORY_VERSION, 2);
       compound.put("FluidTank", this.fluidTank.writeToNbt());
       compound.putInt("FermentTime", this.fermentTime);
       compound.putInt("FermentTimeTotal", this.fermentTimeTotal);
@@ -305,6 +325,8 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
          return false;
       } else if (!isValidTemp(keg.getTemperature(), recipe.getTemperature())) {
          return false;
+      } else if (!this.remaindersFit()) {
+         return false;
       } else if (recipe.getFluidIngredient().isEmpty()) {
          return keg.fluidTank.isEmpty();
       } else {
@@ -333,6 +355,12 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
          List<ItemStack> out = keg.extractInGui(keg.inventory.getStackInSlot(4), keg.inventory.getSlotLimit(5));
          if (!out.isEmpty()) {
             keg.inventory.insertItem(5, out.get(0), false);
+         }
+      }
+
+      if (keg.checkFluidSlot) {
+         keg.checkFluidSlot = false;
+         while (keg.fillOneFromFluidSlot()) {
          }
       }
 
@@ -655,6 +683,215 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
       return outputs;
    }
 
+   /**
+    * Port (alcohol.md 8.4): empties one item from the fluid slot (6) into the tank and puts the empty container in slot 7.
+    * Filling pouring recipes come first (a beer pours back, a water bottle pours water), then any Forge fluid container
+    * holding a fluid the keg uses. Nothing moves unless the tank takes it and slot 7 has room for the container.
+    */
+   private boolean fillOneFromFluidSlot() {
+      ItemStack in = this.inventory.getStackInSlot(FLUID_IN_SLOT);
+      if (in.isEmpty() || this.level == null) {
+         return false;
+      }
+
+      AbstractedFluidStack tank = this.fluidTank.getAbstractedFluid();
+      long space = this.fluidTank.getFluidCapacity() - tank.amount();
+      Optional<KegPouringRecipe> recipe = this.getFillingRecipe(in);
+      if (recipe.isPresent()) {
+         AbstractedFluidStack fluid = recipe.get().getFluid(in);
+         ItemStack container = BnCItemUtils.copyWithCount(recipe.get().getContainer(in), 1);
+         if (!tank.isEmpty() && !tank.matches(fluid) || space < recipe.get().getLoaderAmount() || !this.fluidOutAccepts(container)) {
+            return false;
+         }
+         this.fluidTank.fill(new AbstractedFluidStack(fluid.fluid(), recipe.get().getRawFluid().amount(), fluid.tag(), recipe.get().getUnit(), null), false);
+         this.inventory.extractItem(FLUID_IN_SLOT, 1, false);
+         this.inventory.insertItem(FLUID_OUT_SLOT, container, false);
+         return true;
+      }
+
+      ItemStack single = BnCItemUtils.copyWithCount(in, 1);
+      AbstractedFluidTank item = BrewinAndChewin.getHelper().getFluidContainerFromItem(single);
+      if (item == null || item.isEmpty() || space <= 0L) {
+         return false;
+      }
+      AbstractedFluidStack itemFluid = item.getAbstractedFluid();
+      if (!tank.isEmpty() && !tank.matches(itemFluid) || !this.isKegFluid(itemFluid)) {
+         return false;
+      }
+      long accepted = this.fluidTank.fillAmount(item.drain(space, FluidUnit.getLoaderUnit(), true), true);
+      if (accepted <= 0L) {
+         return false;
+      }
+      // `single` is a copy, so draining it commits nothing until the container is known to fit in slot 7.
+      AbstractedFluidStack moved = item.drain(accepted, FluidUnit.getLoaderUnit(), false);
+      ItemStack emptied = item.getContainer();
+      if (!this.fluidOutAccepts(emptied)) {
+         return false;
+      }
+      this.fluidTank.fillAmount(moved, false);
+      this.inventory.extractItem(FLUID_IN_SLOT, 1, false);
+      this.inventory.insertItem(FLUID_OUT_SLOT, emptied, false);
+      return true;
+   }
+
+   private boolean fluidOutAccepts(ItemStack container) {
+      return container.isEmpty() || this.inventory.insertItem(FLUID_OUT_SLOT, container, true).isEmpty();
+   }
+
+   // ---------------------------------------------------------------- JEI transfer steps (alcohol.md 10, KegTransfer)
+
+   /** The fluid one of this item pours into the keg (amount in loader units), or EMPTY: filling recipes, then Forge containers. */
+   public AbstractedFluidStack sourceFluid(ItemStack stack) {
+      ItemStack one = BnCItemUtils.copyWithCount(stack, 1);
+      Optional<KegPouringRecipe> recipe = this.getFillingRecipe(one);
+      if (recipe.isPresent()) {
+         AbstractedFluidStack fluid = recipe.get().getFluid(one);
+         return new AbstractedFluidStack(fluid.fluid(), recipe.get().getLoaderAmount(), fluid.tag());
+      }
+      AbstractedFluidTank item = BrewinAndChewin.getHelper().getFluidContainerFromItem(one);
+      if (item == null || item.isEmpty() || !this.isKegFluid(item.getAbstractedFluid())) {
+         return AbstractedFluidStack.EMPTY;
+      }
+      return item.getAbstractedFluid();
+   }
+
+   /**
+    * Pours one of this item into `tank` (the keg's or a scratch copy); returns the container left over (EMPTY when the
+    * item is used up), or null when it can't. Same rules as the fluid slot (fillOneFromFluidSlot), minus slot 7.
+    */
+   @Nullable
+   public ItemStack pourInto(AbstractedFluidTank tank, ItemStack stack) {
+      ItemStack one = BnCItemUtils.copyWithCount(stack, 1);
+      AbstractedFluidStack held = tank.getAbstractedFluid();
+      long space = tank.getFluidCapacity() - held.amount();
+      Optional<KegPouringRecipe> recipe = this.getFillingRecipe(one);
+      if (recipe.isPresent()) {
+         AbstractedFluidStack fluid = recipe.get().getFluid(one);
+         if (!held.isEmpty() && !held.matches(fluid) || space < recipe.get().getLoaderAmount()) {
+            return null;
+         }
+         tank.fill(new AbstractedFluidStack(fluid.fluid(), recipe.get().getRawFluid().amount(), fluid.tag(), recipe.get().getUnit(), null), false);
+         return BnCItemUtils.copyWithCount(recipe.get().getContainer(one), 1);
+      }
+      AbstractedFluidTank item = BrewinAndChewin.getHelper().getFluidContainerFromItem(one);
+      if (item == null || item.isEmpty() || space <= 0L) {
+         return null;
+      }
+      AbstractedFluidStack itemFluid = item.getAbstractedFluid();
+      if (!held.isEmpty() && !held.matches(itemFluid) || !this.isKegFluid(itemFluid)) {
+         return null;
+      }
+      long accepted = tank.fillAmount(item.drain(space, FluidUnit.getLoaderUnit(), true), true);
+      if (accepted <= 0L) {
+         return null;
+      }
+      tank.fillAmount(item.drain(accepted, FluidUnit.getLoaderUnit(), false), false);
+      return item.getContainer();
+   }
+
+   /**
+    * Fills one of this empty container from `tank`; returns the filled item, or null. Pouring recipes first (the drink is
+    * built from the keg's own fluid, so call this only while `tank` still holds the keg's fluid), then Forge containers.
+    */
+   @Nullable
+   public ItemStack fillFrom(AbstractedFluidTank tank, ItemStack stack) {
+      ItemStack one = BnCItemUtils.copyWithCount(stack, 1);
+      AbstractedFluidStack held = tank.getAbstractedFluid();
+      if (held.isEmpty() || this.level == null) {
+         return null;
+      }
+      Optional<KegPouringRecipe> recipe = this.level
+         .getRecipeManager()
+         .getAllRecipesFor(BnCRecipeTypes.KEG_POURING)
+         .stream()
+         .sorted(Comparator.comparingInt(value -> value.isStrict() ? 0 : 1))
+         .filter(r -> (r.isStrict() ? ItemStack.isSameItemSameTags(r.getContainer(), one) : r.getContainer().getItem() == one.getItem())
+            && r.getRawFluid().fluid() == held.fluid())
+         .findFirst();
+      if (recipe.isPresent()) {
+         if (held.amount() < recipe.get().getLoaderAmount()) {
+            return null;
+         }
+         ItemStack result = recipe.get().assemble(this.recipeWrapper);
+         tank.drain(recipe.get().getRawFluid().amount(), recipe.get().getUnit(), false);
+         return result;
+      }
+      AbstractedFluidTank item = BrewinAndChewin.getHelper().getFluidContainerFromItem(one);
+      if (item == null || !item.isFluidValid(held)) {
+         return null;
+      }
+      long accepted = item.fillAmount(tank.drain(item.getFluidCapacity(), FluidUnit.getLoaderUnit(), true), true);
+      if (accepted <= 0L) {
+         return null;
+      }
+      item.fillAmount(tank.drain(accepted, FluidUnit.getLoaderUnit(), false), false);
+      return item.getContainer();
+   }
+
+   /** A pouring recipe that fills the keg from this item (the item is the recipe's filled result). */
+   private Optional<KegPouringRecipe> getFillingRecipe(ItemStack stack) {
+      return this.level == null
+         ? Optional.empty()
+         : this.level
+            .getRecipeManager()
+            .getAllRecipesFor(BnCRecipeTypes.KEG_POURING)
+            .stream()
+            .sorted(Comparator.comparingInt(value -> value.isStrict() ? 0 : 1))
+            .filter(r -> r.canFill() && (r.isStrict() ? ItemStack.isSameItemSameTags(r.getOutput(), stack) : r.getOutput().getItem() == stack.getItem()))
+            .findFirst();
+   }
+
+   /**
+    * Port (alcohol.md 8.4): what the fluid slot takes, and what the container slot (4) and side hoppers send there
+    * instead: an item that pours a fluid into the keg. Empty containers go to slot 4 to pour drinks out.
+    */
+   public boolean isFluidSource(ItemStack stack) {
+      if (stack.isEmpty() || this.level == null) {
+         return false;
+      }
+      if (this.getFillingRecipe(stack).isPresent()) {
+         return true;
+      }
+      AbstractedFluidTank item = BrewinAndChewin.getHelper().getFluidContainerFromItem(BnCItemUtils.copyWithCount(stack, 1));
+      return item != null && !item.isEmpty() && this.isKegFluid(item.getAbstractedFluid());
+   }
+
+   /** Port (alcohol.md 8.7): a fluid some pouring recipe pours or some fermenting recipe uses as its base. */
+   public boolean isKegFluid(AbstractedFluidStack stack) {
+      if (stack.isEmpty() || this.level == null) {
+         return false;
+      }
+      return this.level.getRecipeManager().getAllRecipesFor(BnCRecipeTypes.KEG_POURING).stream().anyMatch(r -> r.getRawFluid().fluid().isSame(stack.fluid()))
+         || this.level
+            .getRecipeManager()
+            .getAllRecipesFor(BnCRecipeTypes.FERMENTING)
+            .stream()
+            .anyMatch(r -> r.getFluidIngredient().map(i -> i.ingredient().matches(stack)).orElse(false));
+   }
+
+   /** Port (wthit_lines.md 2.8): ticks the current batch has fermented, for the WTHIT keg line. */
+   public int getFermentTime() {
+      return this.fermentTime;
+   }
+
+   /**
+    * Port (alcohol.md 8.7): fermenting, or about to (the last recipe still matches and can run), so pipes leave the base
+    * fluid alone. No recipe lookup by ingredients here, so calling it changes nothing.
+    */
+   public boolean isFermenting() {
+      if (this.fermentTime > 0) {
+         return true;
+      }
+      if (this.level == null || this.lastRecipeID == null || !this.hasInput()) {
+         return false;
+      }
+      return this.level
+         .getRecipeManager()
+         .byKey(this.lastRecipeID)
+         .filter(r -> r instanceof KegFermentingRecipe fermenting && fermenting.matches(this.recipeWrapper, this.level) && this.canFerment(fermenting, this))
+         .isPresent();
+   }
+
    public Optional<KegPouringRecipe> getPouringRecipe(ItemStack slot) {
       return this.level == null
          ? Optional.empty()
@@ -695,8 +932,9 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
 
    /**
     * Counts heat and freeze sources in the 5x5x5 area around the keg, plus the biome and dimension. Port: one plain
-    * loop, not upstream's streams, and the Blaze Burner rule (alcohol.md 2.6/2.7) built in. The shape matters:
-    * Create Central Kitchen 1.3.11.c ships a required mixin into this method (written for 2.0) with
+    * loop over the port's own heat tag (FD's heat_sources plus the pack's extras), not upstream's streams, and the
+    * Blaze Burner rule (alcohol.md 2.6/2.7) built in. BnCHeatSources.environmentTemperature is the same count for
+    * other blocks (Vinery's cold storage); keep the two in step. The shape matters: Create Central Kitchen 1.3.11.c ships a required mixin into this method (written for 2.0) with
     * defaultRequire 1, so it needs a direct Level.getBlockState call and a second BlockState.is(TagKey) call with a
     * second BlockState local in scope, or the game crashes at boot. Here both its injectors land harmlessly: the first
     * swaps idle burners for air (as withoutIdleBurner does), the second only touches the freeze-source check.
@@ -708,7 +946,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
       for (BlockPos pos : BlockPos.betweenClosed(this.worldPosition.offset(-RANGE, -RANGE, -RANGE), this.worldPosition.offset(RANGE, RANGE, RANGE))) {
          BlockState state = this.level.getBlockState(pos);
          BlockState source = BnCHeatSources.withoutIdleBurner(state);
-         if (source.is(ModTags.HEAT_SOURCES) && BnCHeatSources.isActive(source)) {
+         if (source.is(BnCTags.Blocks.HEAT_SOURCES) && BnCHeatSources.isActive(source)) {
             heat++;
          }
 
@@ -754,7 +992,70 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
       }
    }
 
+   /** Whether one batch's ingredient leftovers fit the leftover slots (always, unless the keg should wait for room). */
+   private boolean remaindersFit() {
+      BnCConfiguration.Common.Keg config = BnCConfiguration.COMMON_CONFIG.get().keg();
+      if (!config.remainderBuffer() || !config.stallWhenFull()) {
+         return true;
+      }
+      ItemStack[] slots = this.remainderSlots();
+      for (int i = 0; i < 4; i++) {
+         ItemStack remainder = BnCItemUtils.getIngredientRemainder(this.inventory.getStackInSlot(i));
+         if (!remainder.isEmpty() && !storeRemainder(slots, remainder).isEmpty()) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   /** Copies of the leftover slots, in fill order: REMAINDER_SLOT, then FLUID_OUT_SLOT. */
+   private ItemStack[] remainderSlots() {
+      return new ItemStack[]{this.inventory.getStackInSlot(REMAINDER_SLOT).copy(), this.inventory.getStackInSlot(FLUID_OUT_SLOT).copy()};
+   }
+
+   /**
+    * Moves {@code remainder} into {@code slots} (see remainderSlots): onto a matching stack first, then into an empty
+    * slot, REMAINDER_SLOT before FLUID_OUT_SLOT so the fluid slot's empties keep their room. Returns what didn't fit.
+    */
+   private ItemStack storeRemainder(ItemStack[] slots, ItemStack remainder) {
+      ItemStack rest = remainder.copy();
+      int[] slotIds = {REMAINDER_SLOT, FLUID_OUT_SLOT};
+      for (boolean empty : new boolean[]{false, true}) {
+         for (int i = 0; i < slots.length && !rest.isEmpty(); i++) {
+            if (slots[i].isEmpty() != empty) {
+               continue;
+            }
+            int limit = Math.min(this.inventory.getSlotLimit(slotIds[i]), rest.getMaxStackSize());
+            if (empty) {
+               int moved = Math.min(limit, rest.getCount());
+               slots[i] = BnCItemUtils.copyWithCount(rest, moved);
+               rest.shrink(moved);
+            } else if (ItemStack.isSameItemSameTags(slots[i], rest)) {
+               int moved = Math.min(limit - slots[i].getCount(), rest.getCount());
+               if (moved > 0) {
+                  slots[i].grow(moved);
+                  rest.shrink(moved);
+               }
+            }
+         }
+      }
+      return rest;
+   }
+
    protected void ejectIngredientRemainder(ItemStack remainderStack) {
+      if (BnCConfiguration.COMMON_CONFIG.get().keg().remainderBuffer()) {
+         ItemStack[] slots = this.remainderSlots();
+         remainderStack = this.storeRemainder(slots, remainderStack);
+         int[] slotIds = {REMAINDER_SLOT, FLUID_OUT_SLOT};
+         for (int i = 0; i < slots.length; i++) {
+            if (!ItemStack.matches(slots[i], this.inventory.getStackInSlot(slotIds[i]))) {
+               this.inventory.setStackInSlot(slotIds[i], slots[i]);
+            }
+         }
+         if (remainderStack.isEmpty()) {
+            return;
+         }
+      }
       Direction direction = this.getBlockState().getValue(KegBlock.FACING).getCounterClockWise();
       double x = (double)this.worldPosition.getX() + 0.5 + (double)direction.getStepX() * 0.25;
       double y = (double)this.worldPosition.getY() + 0.7;
@@ -821,7 +1122,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
    public NonNullList<ItemStack> getDroppableInventory() {
       NonNullList<ItemStack> drops = NonNullList.create();
 
-      for (int i = 0; i < 6; i++) {
+      for (int i = 0; i < INVENTORY_SIZE; i++) {
          drops.add(this.inventory.getStackInSlot(i));
       }
 
@@ -880,7 +1181,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
    }
 
    private AbstractedItemHandler createHandler() {
-      return BrewinAndChewin.getHelper().createKegInventory(6, (handler, slot) -> {
+      return BrewinAndChewin.getHelper().createKegInventory(INVENTORY_SIZE, (handler, slot) -> {
          if (this.level != null && !this.level.isClientSide() && (slot == 4 || slot == 5) && !this.currentlyOperating) {
             this.deferFluidExtraction = true;
          }
@@ -889,8 +1190,47 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
             this.checkNewRecipe = true;
          }
 
+         if (slot == FLUID_IN_SLOT || slot == FLUID_OUT_SLOT) {
+            this.checkFluidSlot = true;
+         }
+
          this.inventoryChanged();
-      });
+      }, this::isItemValidForSlot);
+   }
+
+   /**
+    * Port (alcohol.md 8.4, TODO alcohol/brewinport #7): the ingredient slots take only what some fermenting recipe uses,
+    * the container slot only what some pouring recipe pours into, and the fluid slot only filled containers. The output
+    * and leftover slots are filled by the keg itself (the GUI and the sided wrapper keep players and hoppers out).
+    */
+   private boolean isItemValidForSlot(int slot, ItemStack stack) {
+      if (this.level == null) {
+         return true;
+      }
+      return switch (slot) {
+         case 0, 1, 2, 3 -> this.isFermentingIngredient(stack);
+         case CONTAINER_SLOT -> !this.isFluidSource(stack) && this.isPouringContainer(stack);
+         case FLUID_IN_SLOT -> this.isFluidSource(stack);
+         default -> true;
+      };
+   }
+
+   /** Whether some fermenting recipe takes this item as an ingredient. */
+   public boolean isFermentingIngredient(ItemStack stack) {
+      if (stack.isEmpty() || this.level == null) {
+         return false;
+      }
+      return this.level.getRecipeManager().getAllRecipesFor(BnCRecipeTypes.FERMENTING).stream()
+         .anyMatch(recipe -> recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
+   }
+
+   /** Whether some pouring recipe pours a drink into this item (it goes in the container slot). */
+   public boolean isPouringContainer(ItemStack stack) {
+      if (stack.isEmpty() || this.level == null) {
+         return false;
+      }
+      return this.level.getRecipeManager().getAllRecipesFor(BnCRecipeTypes.KEG_POURING).stream()
+         .anyMatch(recipe -> recipe.getContainer().getItem() == stack.getItem());
    }
 
    private AbstractedFluidTank createFluidTank() {
@@ -905,6 +1245,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
 
          this.inventoryChanged();
          this.checkNewRecipe = true;
+         this.checkFluidSlot = true;
       });
    }
 

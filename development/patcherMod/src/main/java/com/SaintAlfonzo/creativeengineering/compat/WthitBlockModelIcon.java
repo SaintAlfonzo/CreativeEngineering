@@ -1,7 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.compat;
 
-import java.util.Set;
-
+import com.SaintAlfonzo.creativeengineering.CEConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -12,6 +11,7 @@ import mcp.mobius.waila.api.IClientRegistrar;
 import mcp.mobius.waila.api.IPluginConfig;
 import mcp.mobius.waila.api.ITooltipComponent;
 import mcp.mobius.waila.api.IWailaClientPlugin;
+import mcp.mobius.waila.api.component.ItemComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransform;
@@ -19,34 +19,31 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * WTHIT plugin: draws the looked-at block's own model as the overlay icon when its item can't.
  *
  * <p>WTHIT's core icon is {@code Block#getCloneItemStack(level, pos, state)} (the vanilla 3-arg
- * method, not Forge's pick-block one), so for a placed Display Delight food it shows that block's
- * own item. 70 of DD 1.2.0's 191 food blocks have no item (most stackable plates: cookies, burgers,
- * the ad_/cd_/df_ compat plates), which leaves the icon empty. A block item whose model is missing
- * would show the purple/black cube; tools/gen_display_delight_models.py adds those models, and this
- * also covers any that a DD update leaves out.
+ * method, not Forge's pick-block one). A block with no pick item (the 2026-10-20 audit found 272: 70
+ * Display Delight plates, Colored Water's 64 cauldrons, Immersive Posts' 30 post parts, Delightful's and
+ * Central Kitchen's pies, Create belt funnels...) leaves the icon empty, and an item whose model is missing
+ * shows the purple/black cube. Which blocks qualify is
+ * {@link BlockModelIcons#verdict} (any namespace since 2026-10-20; {@code [wthit] iconExclude} opts out). Before the
+ * model it tries {@code [wthit] iconItems} and Forge's hit-aware pick block.
+ * tools/gen_display_delight_models.py still adds DD's missing item models, for JEI.
  *
  * <p>Priority 1000 runs ahead of WTHIT's core block icon (1100) and returns null for every other
- * case, so the core icon still handles them. Facing is pinned to north so the icon matches DD's
- * item models; the stack count is kept, so a plate of three cookies shows three.
+ * case, so the core icon still handles them. Facing is pinned to north so the icon matches how block
+ * items are drawn; the stack count is kept, so a plate of three cookies shows three.
  */
 public final class WthitBlockModelIcon implements IWailaClientPlugin, IBlockComponentProvider {
 
-    private static final Set<String> NAMESPACES = Set.of("displaydelight");
-    // vanilla block/block gui transform, for the few DD models that have none
+    // vanilla block/block gui transform, for models that have none
     private static final ItemTransform BLOCK_GUI = new ItemTransform(
             new Vector3f(30, 225, 0), new Vector3f(0, 0, 0), new Vector3f(0.625f, 0.625f, 0.625f));
 
@@ -58,25 +55,35 @@ public final class WthitBlockModelIcon implements IWailaClientPlugin, IBlockComp
     @Override
     public ITooltipComponent getIcon(IBlockAccessor accessor, IPluginConfig config) {
         BlockState state = accessor.getBlockState();
-        ResourceLocation id = ForgeRegistries.BLOCKS.getKey(state.getBlock());
-        if (id == null || !NAMESPACES.contains(id.getNamespace())) {
+        ItemStack clone = state.getBlock().getCloneItemStack(accessor.getLevel(), accessor.getPosition(), state);
+        BlockModelIcons.Verdict verdict = BlockModelIcons.verdict(state, clone);
+        if (verdict == BlockModelIcons.Verdict.SUBSTITUTE) {
+            return new ItemComponent(BlockModelIcons.substitute(state));
+        }
+        if (verdict == BlockModelIcons.Verdict.ITEM || verdict == BlockModelIcons.Verdict.EXCLUDED) {
             return null;
         }
-        if (hasItemIcon(state.getBlock().getCloneItemStack(accessor.getLevel(), accessor.getPosition(), state))) {
-            return null;
+        if (CEConfig.WTHIT.iconForgePick.get()) {
+            ItemStack picked = forgePick(state, accessor);
+            if (BlockModelIcons.hasItemIcon(picked)) {
+                return new ItemComponent(picked);
+            }
         }
-        if (state.hasProperty(HorizontalDirectionalBlock.FACING)) {
-            state = state.setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH);
-        }
-        return new BlockModelComponent(state);
+        return verdict == BlockModelIcons.Verdict.MODEL && CEConfig.WTHIT.iconBlockModel.get()
+                ? new BlockModelComponent(BlockModelIcons.iconState(state)) : null;
     }
 
-    private static boolean hasItemIcon(ItemStack stack) {
-        if (stack.isEmpty()) {
-            return false;
+    /**
+     * Forge's pick block, the one middle-click uses: it gets the hit, so blocks that hold several things answer with
+     * the part looked at (Supplementaries' skull pile: the upper or lower skull). WTHIT only asks the vanilla method.
+     */
+    private static ItemStack forgePick(BlockState state, IBlockAccessor accessor) {
+        try {
+            return state.getCloneItemStack(accessor.getHitResult(), accessor.getLevel(), accessor.getPosition(),
+                    accessor.getPlayer());
+        } catch (RuntimeException e) {
+            return ItemStack.EMPTY;
         }
-        Minecraft mc = Minecraft.getInstance();
-        return mc.getItemRenderer().getModel(stack, null, null, 0) != mc.getModelManager().getMissingModel();
     }
 
     /** An 18x18 icon slot like WTHIT's ItemComponent, drawn the way ItemRenderer#renderGuiItem draws a block item. */

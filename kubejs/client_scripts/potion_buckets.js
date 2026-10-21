@@ -2,6 +2,9 @@
 // minecraft:potion/splash_potion/lingering_potion bottles (PotionUtils.addPotionTooltip):
 // one line per effect, "Name II (0:30)", coloured blue (beneficial/neutral) or red (harmful),
 // plus a grey "No Effects" line for a blank bucket. Items: startup_scripts/items/potion_buckets.js
+// Durations are the applied ones: the potion's own x the bucket's effectMult
+// (global.potionArea.scaled, startup_scripts/func/potion_area.js), so a lingering bucket of a
+// 3:00 potion reads 3:36.
 //
 // Colouring uses KubeJS's own MutableComponent.blue()/red()/gray() extension methods
 // (dev.latvian.mods.kubejs.core.ComponentKJS - unprefixed per the @RemapPrefixForJS('kjs$')
@@ -49,7 +52,8 @@ ItemEvents.tooltip(e => {
                 text.add(Text.translatable('effect.none').gray())
                 return
             }
-            fx.forEach(inst => {
+            fx.forEach(raw => {
+                const inst = global.potionArea.scaled(id, raw)
                 let line = Text.translatable(inst.getEffect().getDescriptionId())
                 if (inst.getAmplifier() > 0) {
                     line = Text.translatable('potion.withAmplifier', line,

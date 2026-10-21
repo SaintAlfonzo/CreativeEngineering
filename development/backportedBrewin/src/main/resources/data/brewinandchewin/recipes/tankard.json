@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "p": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "p p",
+    "i i",
+    "ppp"
+  ],
+  "result": {
+    "item": "brewinandchewin:tankard",
+    "count": 4
+  }
+}

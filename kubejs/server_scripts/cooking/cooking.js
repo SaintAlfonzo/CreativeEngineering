@@ -7,7 +7,6 @@ var f = global.fluid
 var R = global.NCH
 
 i.catfish = 'alexsmobs:raw_catfish';
-i.catfish_slice = 'alexsdelight:raw_catfish_slice';
 
 //######################### Tools #########################
 //Remove stone smoker recipe
@@ -91,6 +90,56 @@ R.pcExplosionCrafting(Item.of(i.flour, 1), i.wheat, 50, e)
 R.remove({ id: 'tmted:wheat_dough_from_egg' }, e)
 R.remove({ id: 'farmersdelight:wheat_dough_from_eggs' }, e)
 R.shapeless(Item.of(i.dough, 6), [Item.of(i.flour, 3), i.eggs], e)
+
+//######################### Cornmeal #########################
+// creativeengineering:cornmeal (startup_scripts/cooking/cornmeal.js), TODO food/ingredients #1. Corn and kernels
+// (corn_delight:corn_seeds) crush to it; a 9-block (corn crate, kernel bag) gives the same per-item ratio.
+// The Millstone mirrors every Create crushing recipe; Corn Delight's own corn and wild corn milling are removed. Corn
+// gives no straw: the knife and IE crusher recipes that did keep their kernels only.
+R.remove({ id: 'corn_delight:integration/create/milling/corn' }, e)
+R.remove({ id: 'corn_delight:integration/create/milling/wild_corn' }, e)
+R.remove({ id: 'corn_delight:cutting/corn' }, e)
+R.remove({ id: 'corn_delight:cutting/wild_corn' }, e)
+R.remove({ id: 'corn_delight:integration/immersiveengineering/crusher/wild_corn' }, e)
+R.fdCutting(i.t_crops_corn, i.any_knife, Item.of(i.corn_seeds, 2), e, 'corn_kernels')
+R.fdCutting(i.wild_corn, i.any_knife, i.corn_seeds, e, 'wild_corn_kernels')
+R.ieCrushing(i.corn_seeds, i.wild_corn, e, 'wild_corn_kernels', [], 3200)
+// Create crushing: corn 1.5 cornmeal + 0.25 kernels, kernels 0.333 cornmeal
+R.createCrushing([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25)],
+	i.t_crops_corn, e, 'corn_cornmeal')
+R.createCrushing([Item.of(i.cornmeal, 13), Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 2),
+	Item.of(i.corn_seeds, 1).withChance(0.25)], i.corn_crate, e, 'corn_crate_cornmeal')
+R.createCrushing([Item.of(i.cornmeal, 1).withChance(0.333)], i.t_seeds_corn, e, 'corn_kernels_cornmeal')
+R.createCrushing([Item.of(i.cornmeal, 3)], i.corn_kernel_bag, e, 'corn_kernel_bag_cornmeal')
+// Millstone mirrors of the four above
+R.createMilling([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25)],
+	i.t_crops_corn, e, 'corn_cornmeal')
+R.createMilling([Item.of(i.cornmeal, 13), Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 2),
+	Item.of(i.corn_seeds, 1).withChance(0.25)], i.corn_crate, e, 'corn_crate_cornmeal')
+R.createMilling([Item.of(i.cornmeal, 1).withChance(0.333)], i.t_seeds_corn, e, 'corn_kernels_cornmeal')
+R.createMilling([Item.of(i.cornmeal, 3)], i.corn_kernel_bag, e, 'corn_kernel_bag_cornmeal')
+// IE crusher: corn 2 cornmeal + 0.5 kernels (replaces Corn Delight's corn -> kernels + straw), kernels 0.5 cornmeal.
+// The crusher takes one item and can't roll its main output, so single kernels have no recipe; the bag does.
+R.remove({ id: 'corn_delight:integration/immersiveengineering/crusher/corn' }, e)
+R.ieCrushing(Item.of(i.cornmeal, 2), i.t_crops_corn, e, 'corn_cornmeal',
+	[{ chance: 0.5, output: i.corn_seeds }], 3200)
+R.ieCrushing(Item.of(i.cornmeal, 18), i.corn_crate, e, 'corn_crate_cornmeal',
+	[{ chance: 1, output: Item.of(i.corn_seeds, 4) }, { chance: 0.5, output: i.corn_seeds }], 3200)
+R.ieCrushing(Item.of(i.cornmeal, 4), i.corn_kernel_bag, e, 'corn_kernel_bag_cornmeal',
+	[{ chance: 0.5, output: i.cornmeal }], 3200)
+// PneumaticCraft: corn as wheat -> flour (3 at 1.5 bar, explosion 1 at 50% loss); kernels 4 -> 3. No crates/bags.
+R.pcPressureChamber(Item.of(i.cornmeal, 3), [i.t_crops_corn], 1.5, e, 'corn_cornmeal')
+R.pcExplosionCrafting(Item.of(i.cornmeal, 1), i.t_crops_corn, 50, e, 'corn_cornmeal')
+R.pcPressureChamber(Item.of(i.cornmeal, 3), [Item.of(i.corn_seeds, 4)], 1.5, e, 'corn_kernels_cornmeal')
+// Required in tortillas and cornbread batter (corn -> cornmeal, same counts); no more washing corn to tortillas.
+R.remove({ id: 'corn_delight:tortilla_raw' }, e)
+R.remove({ id: 'corn_delight:integration/create/splashing/tortilla_raw' }, e)
+R.shaped(Item.of(i.tortilla_raw, 3), ['CCC', ' W '], { C: i.cornmeal, W: i.water_bucket }, e, 'tortilla_raw')
+R.remove({ id: 'corn_delight:cornbread_batter' }, e)
+R.remove({ id: 'corn_delight:integration/create/mixing/cornbread_batter_from_mixing' }, e)
+R.shapeless(Item.of(i.cornbread_batter, 3), [Item.of(i.cornmeal, 2), i.milk, i.eggs], e, 'cornbread_batter')
+R.createMixing(Item.of(i.cornbread_batter, 3), [Item.of(i.cornmeal, 2), Fluid.of(f.milk, 250), i.eggs], e,
+	'cornbread_batter', 'n/a')
 //Add bread block recipes
 R.remove({ id: 'architects_palette:bread_block' }, e)
 R.remove({ id: 'architects_palette:bread_slab' }, e)
@@ -121,17 +170,60 @@ R.remove({ id: 'tmted:metalpress/raw_pasta' }, e)
 R.ieMetalPress(Item.of(i.pasta, 2), i.dough, i.mold_wire, e)
 
 //######################### Prepared #########################
-//Pierogi fix
-R.remove({ id: 'brewinandchewin:cooking/scarlet_pierogies' }, e)
-R.fdCooking([i.potato, i.nether_wart, i.cabbage_roll_veg, i.dough, i.scarlet_cheese_wedge], Item.of(i.scarlet_pierogies, 1), e, undefined, 1, 200, i.bowl)
-R.shapeless(Item.of(i.scarlet_pierogies, 1), [i.baked_potato, i.baked_potato, i.nether_wart, i.cabbage_roll_veg, i.bread, Item.of(i.scarlet_cheese_wedge, 2)], e)
+// Scarlet Pierogi: beetroot in place of nether wart
+R.replaceInput({ id: 'brewinandchewin:cooking/scarlet_pierogi' }, i.nether_wart, i.beetroot, e)
+
+// Pizza: one dough on the bottom row in place of three wheat
+R.remove({ id: 'brewinandchewin:pizza' }, e)
+R.shaped(i.pizza, [' f ', 'ptp', ' d '], { f: i.t_cheese_wedge, p: i.t_pizza_topping, t: i.tomato_sauce, d: i.dough }, e, 'pizza')
+
+// Ham and Cheese Sandwich: a side is a bread slice or a whole bread. Smoked ham cuts into two porkchops, so it gives double.
+R.remove({ id: 'brewinandchewin:ham_and_cheese_sandwich' }, e)
+var sandwichSide = [i.bread_slice, i.bread]
+R.shapeless(Item.of(i.ham_and_cheese_sandwich, 1), [sandwichSide, i.cooked_pork, i.flaxen_cheese_wedge, sandwichSide], e, 'ham_and_cheese_sandwich')
+R.shapeless(Item.of(i.ham_and_cheese_sandwich, 2), [sandwichSide, i.smoked_ham, i.flaxen_cheese_wedge, sandwichSide], e, 'ham_and_cheese_sandwich_smoked_ham')
+var incSandwich = R.incomplete('ham_and_cheese_sandwich')
+R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 2), i.bread_slice, [
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.cooked_pork]),
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.bread_slice])
+], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_sequenced_assembly', 1)
+R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 4), i.bread_slice, [
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.smoked_ham]),
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.bread_slice])
+], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_smoked_ham_sequenced_assembly', 1)
+
+// Quiche: the mushroom one takes a cabbage leaf or a whole cabbage
+R.remove({ id: 'brewinandchewin:quiche_from_mushroom' }, e)
+R.shaped(i.quiche, ['blb', 'mcm', 'eCe'], {
+	b: i.brown_mushroom, l: [i.cabbage_leaf, i.cabbage], m: i.milk, c: i.t_cheese_wedge, e: i.minecraft_egg, C: i.pie_crust
+}, e, 'quiche_from_mushroom')
+// Sequenced assembly. The filling goes on first: with milk first both recipes would start the same, and Create
+// only ever picks one of them.
+var quicheCabbage = Ingredient.of([i.cabbage, i.cabbage_leaf])
+;[
+	['quiche_bacon', i.cooked_bacon],
+	['quiche_mushroom', i.brown_mushroom],
+].forEach(([key, filling]) => {
+	var inc = R.incomplete(key)
+	R.createSequencedAssembly(i.quiche, i.pie_crust, [
+		e.recipes.create.deploying(inc, [inc, filling]),
+		e.recipes.create.filling(inc, [inc, Fluid.of(f.milk, 250)]),
+		e.recipes.create.deploying(inc, [inc, i.eggs]),
+		e.recipes.create.deploying(inc, [inc, i.eggs]),
+		e.recipes.create.deploying(inc, [inc, i.t_cheese_wedge]),
+		e.recipes.create.deploying(inc, [inc, quicheCabbage])
+	], [key], e, key + '_sequenced_assembly', 1)
+})
 
 //Pancakes
-//Wheat to flour
+//Wheat to flour (or cornmeal, or rice)
 R.remove({ id: 'supplementaries:pancake' }, e)
-R.shapeless(Item.of(i.pancakes, 3), [i.any_sugar, i.egg, i.milk, [i.flour, i.rice]], e)
+R.shapeless(Item.of(i.pancakes, 3), [i.any_sugar, i.egg, i.milk, [i.t_flour_or_cornmeal, i.rice]], e)
 // Efficient mixing, cooking
-R.createMixing(Item.of(i.pancakes, 5), [Fluid.of(f.milk, 250), i.any_sugar, i.egg, [i.flour, i.rice]], e, undefined, 'heated')
+R.createMixing(Item.of(i.pancakes, 5), [Fluid.of(f.milk, 250), i.any_sugar, i.egg, [i.t_flour_or_cornmeal, i.rice]], e, undefined, 'heated')
 
 //Barbecue stick
 //Remove exising, replace w/ cooked meat tag
@@ -251,6 +343,10 @@ R.createSequencedAssembly(Item.of(i.roasted_mutton_chops, 1), i.bowl, [
 
 //######################### Sweets #########################
 //Pie changes
+// Pie crust from flour (or cornmeal): milk in a bowl of 3 flour, 2 crusts. FD's wheat + milk craft stays.
+R.shaped(Item.of(i.pie_crust, 2), ['FMF', ' F '], { F: i.t_flour_or_cornmeal, M: i.milk }, e, 'pie_crust_flour')
+R.createCompacting(Item.of(i.pie_crust, 2),
+	[Fluid.of(f.milk, 250), i.t_flour_or_cornmeal, i.t_flour_or_cornmeal, i.t_flour_or_cornmeal], e, 'pie_crust_flour')
 //Remove redundant pie
 R.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice' }, e)
 R.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice_using_deployer' }, e)
@@ -262,7 +358,7 @@ R.remove({ id: 'minecraft:cake' }, e)
 
 //Muffins
 // Fruits Delight's pot recipes ask for #forge:dough/wheat; use the general #forge:dough tag instead
-// (cooking.md "muffins not cookable?"). Otherwise identical: 2 berries, dough, milk bottle, egg, sugar ->
+// (TODO food/oven #3, "muffins not cookable?"). Otherwise identical: 2 berries, dough, milk bottle, egg, sugar ->
 // 2 muffins, 0.1 xp, 200 ticks. #forge:sugar as the line-59 sugar swap gives every other recipe. The
 // oven copies are in baking.js.
 R.remove({ id: 'farmersdelight:cooking/blueberry_muffin' }, e)
@@ -396,7 +492,6 @@ console.log('The cooking event has finished!')
     i.cooked_pork = '#forge:cooked_pork';
     i.raw_pork = '#forge:raw_pork';
     i.cooked_bacon = 'farmersdelight:cooked_bacon';
-    	i.bacon = 'farmersdelight:cooked_bacon';
     i.raw_chicken = '#forge:raw_chicken';
     i.cooked_chicken = '#forge:cooked_chicken';
     i.cooked_eggs = '#forge:cooked_eggs';
@@ -427,7 +522,6 @@ console.log('The cooking event has finished!')
     i.enderman = '#endersdelight:enderman_loot';
     i.chorus_juice = 'endersdelight:chorus_juice';
     
-    i.scarlet_pierogies = 'brewinandchewin:scarlet_pierogies';
     i.crab_bars = 'quarkdelight:crab_bars';
     i.i_crab_bars = 'kubejs:incomplete_crab_bars';
     i.grilled_salmon = 'farmersdelight:grilled_salmon';
@@ -588,11 +682,6 @@ console.log('The cooking event has finished!')
     CE.ieMetalPress(Item.of(i.pasta, 2), i.dough, 'immersiveengineering:mold_wire', e)
     
     //######################### Prepared #########################
-    //Pierogi fix
-    CE.remove({ id: 'brewinandchewin:cooking/scarlet_pierogies' }, e)
-    CE.fdCooking([i.potato, item.nether_wart, '#farmersdelight:cabbage_roll_ingredients', i.dough, 'brewinandchewin:scarlet_cheese_wedge'], Item.of(i.scarlet_pierogies, 1), e, 1, 200, item.bowl)
-    CE.shapeless(Item.of(i.scarlet_pierogies, 1), [i.baked_potato, i.baked_potato, item.nether_wart, '#farmersdelight:cabbage_roll_ingredients', i.bread, Item.of('brewinandchewin:scarlet_cheese_wedge', 2)], e)
-    
     //Pancakes
     //Wheat to flour
     CE.remove({ id: 'supplementaries:pancake' }, e)
@@ -651,10 +740,10 @@ console.log('The cooking event has finished!')
 		// Bacon and eggs
 		// Replace shaped recipe w/ shaped
     CE.remove({ id: 'farmersdelight:bacon_and_eggs' }, e)
-		CE.shapeless(Item.of(i.bacon_and_eggs, 1), [i.bacon, i.bacon, i.fried_egg, i.fried_egg, item.bowl], e)
+		CE.shapeless(Item.of(i.bacon_and_eggs, 1), [i.cooked_bacon, i.cooked_bacon, i.fried_egg, i.fried_egg, item.bowl], e)
 		// Sequenced assembly
 		CE.createSequencedAssembly(Item.of(i.bacon_and_eggs, 1),item.bowl,
-			[e.recipes.create.deploying(item.incomplete, [item.incomplete, i.bacon]),
+			[e.recipes.create.deploying(item.incomplete, [item.incomplete, i.cooked_bacon]),
 			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.fried_eggs])],
 			item.incomplete,2,e,'bacon_eggs_sequenced_assembly')
 		

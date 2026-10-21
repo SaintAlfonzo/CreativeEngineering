@@ -1,0 +1,13 @@
+// Shared Forge setup (runs, mods.toml expansion, jar manifest, jar_archive, installToMods) comes from
+// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to babyMobs.
+// Build from the instance root (`./gradlew :babyMobs:build`) or from here (`./gradlew build`).
+plugins {
+    id 'ce.forge-mod'
+}
+
+// Same approach as patcherMod: no Mixin refmap, the jar only ever runs reobfuscated, so mixins that
+// touch Minecraft members use SRG names with remap = false. Disable the AP target validator so it
+// doesn't reject those names against the dev-time (Mojmap) classes.
+tasks.named('compileJava', JavaCompile).configure {
+    options.compilerArgs << '-AdisableTargetValidator=true'
+}

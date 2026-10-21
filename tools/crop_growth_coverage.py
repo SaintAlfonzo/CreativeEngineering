@@ -51,8 +51,10 @@ def skip_reason(row):
         return 'column plant / vine (age is a growth counter, nothing to harvest by stage)'
     if classes & {'FireBlock', 'FrostedIceBlock', 'MultifaceBlock', 'HalfTransparentBlock'} or 'ender_residue' in row['id']:
         return 'effect block (fire, ice, spray, residue)'
-    if classes & {'GrassBlock', 'SpreadingSnowyDirtBlock'}:
+    if classes & {'GrassBlock', 'SpreadingSnowyDirtBlock', 'SpreadableGrassSlabBlock'}:
         return 'grass spread counter'
+    if 'LatticeBlock' in classes and row['id'].startswith('vinery:'):
+        return "Vinery lattice vine (the Vinery port's own WTHIT plugin shows the grape and when it's ripe)"
     if 'UnripeCheeseWheelBlock' in classes:
         return 'maturing cheese, not a plant'
     if classes & {'MossyBlock', 'MossySlabBlock', 'MossyStairsBlock', 'MossyWallBlock', 'VerticalSlabBlock'}:

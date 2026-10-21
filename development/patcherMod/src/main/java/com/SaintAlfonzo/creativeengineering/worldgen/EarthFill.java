@@ -77,6 +77,15 @@ import java.util.function.Supplier;
  * pick, as for a wrong biome). For a structure in {@code creativeengineering:template_trim} only earth that
  * {@link TemplateTrim} still places counts.
  *
+ * <p>The footprint's water share, after the limits: the bounding box columns of every earth piece, at the layer the
+ * start was set onto the surface with (the piece's bottom, or higher by the sink of {@link TerrainAdaptation#sink}),
+ * are read from the same predicted terrain. When the water there (filled by the template's earth or the beard, or
+ * left standing where the template has no block) outnumbers the dry ground (replaced or left alone) by more than
+ * {@code maxWaterSurplus} (0.5: water 50% over ground), the start is dropped too: a camp on an island, a ruin
+ * reaching far out over a lake. A spot under more than {@code baseLayers} blocks of predicted terrain counts as neither
+ * (underground structures in aquifers or under the sea). Water structures ({@code creativeengineering:water_fill/structures})
+ * are not checked.
+ *
  * <p>Pruning (structures in {@code creativeengineering:earth_fill/prune}, the villages): before the start is judged,
  * each jigsaw piece but the first is judged alone against [worldgen.earth_fill] pruneMaxHanging and pruneMaxMound. A
  * piece past either is dropped with every piece attached below it in the jigsaw tree (a house over deep water, with its
@@ -119,6 +128,11 @@ public final class EarthFill {
 	/** What the terrain holds at a block position. */
 	interface Terrain {
 		Kind at(int x, int y, int z);
+
+		/** The y of the column's topmost non-air block (water included), or {@link #NO_TOP} when this terrain doesn't know. */
+		default int top(int x, int z) { return NO_TOP; }
+
+		int NO_TOP = Integer.MIN_VALUE;
 
 		/** Open blocks (air or water: what a beard fills) from y downwards, y itself first, at most max. */
 		default int openBelow(int x, int y, int z, int max) {
@@ -224,6 +238,40 @@ public final class EarthFill {
 			}
 		}
 		return new EarthResult(blocks, water, air, mound, over(water, air, mound, limits), true);
+	}
+
+	// ── earth: the footprint's water share ───────────────────────────────────
+
+	/** One piece's footprint: its box's columns at layer y (the layer the start was set onto the surface with). */
+	record Layer(int minX, int minZ, int maxX, int maxZ, int y) {}
+
+	/** The footprint's water blocks (filled by earth or the beard, or left standing) and dry ground blocks. */
+	record Footprint(int water, int ground) {
+		/** More water than ground by more than {@code surplus} (0.5 = water 50% over ground); never with surplus < 0. */
+		boolean tooWet(double surplus) { return surplus >= 0 && water > ground * (1.0 + surplus); }
+	}
+
+	/**
+	 * The level-free footprint count: every column of every layer, a position in two layers once. Seabed and air count
+	 * as neither, and so does a position with more than {@code depth} blocks of terrain above it (a structure underground,
+	 * in an aquifer or under the sea, is no camp on an island).
+	 */
+	static Footprint footprint(List<Layer> layers, Terrain terrain, int depth) {
+		LongOpenHashSet seen = new LongOpenHashSet();
+		int water = 0, ground = 0;
+		for (Layer l : layers) {
+			for (int x = l.minX(); x <= l.maxX(); x++) for (int z = l.minZ(); z <= l.maxZ(); z++) {
+				if (!seen.add(BlockPos.asLong(x, l.y(), z))) continue;
+				int top = terrain.top(x, z);
+				if (top != Terrain.NO_TOP && top - l.y() > depth) continue;
+				switch (terrain.at(x, l.y(), z)) {
+					case WATER -> water++;
+					case SOLID -> ground++;
+					default -> { }
+				}
+			}
+		}
+		return new Footprint(water, ground);
 	}
 
 	private static boolean over(int water, int air, int mound, EarthLimits l) {
@@ -366,40 +414,60 @@ public final class EarthFill {
 
 	// ── predicted terrain ────────────────────────────────────────────────────
 
-	/** One predicted column and, once asked, whether its topmost non-air block is water. */
+	/** One predicted column and, once asked, its topmost non-air block and whether that is water. */
 	private static final class Column {
 		final NoiseColumn blocks;
-		Boolean underWater;
+		int top = Integer.MIN_VALUE;
+		boolean topWater;
 
 		Column(NoiseColumn blocks) { this.blocks = blocks; }
 
-		boolean underWater(LevelHeightAccessor level) {
-			if (underWater == null) underWater = topIsWater(blocks, level);
-			return underWater;
+		private void findTop(LevelHeightAccessor level) {
+			if (top != Integer.MIN_VALUE) return;
+			top = topOf(blocks, level);
+			topWater = top >= level.getMinBuildHeight() && isWater(blocks.getBlock(top));
 		}
+
+		boolean underWater(LevelHeightAccessor level) { findTop(level); return topWater; }
+
+		int top(LevelHeightAccessor level) { findTop(level); return top; }
+	}
+
+	/** The y of a column's topmost non-air block, or one below the bottom for an all-air column. */
+	static int topOf(NoiseColumn column, LevelHeightAccessor level) {
+		for (int y = level.getMaxBuildHeight() - 1; y >= level.getMinBuildHeight(); y--) {
+			if (!column.getBlock(y).isAir()) return y;
+		}
+		return level.getMinBuildHeight() - 1;
 	}
 
 	/** Whether the topmost non-air block of a column is water (a sea, lake or river), not dry land. */
 	static boolean topIsWater(NoiseColumn column, LevelHeightAccessor level) {
-		for (int y = level.getMaxBuildHeight() - 1; y >= level.getMinBuildHeight(); y--) {
-			BlockState state = column.getBlock(y);
-			if (!state.isAir()) return isWater(state);
-		}
-		return false;
+		int top = topOf(column, level);
+		return top >= level.getMinBuildHeight() && isWater(column.getBlock(top));
 	}
 
 	/** The generator's noise terrain, read once per grid x grid cell and cached for this start. */
 	static Terrain predicted(ChunkGenerator generator, RandomState randomState, LevelHeightAccessor level, int grid) {
 		Long2ObjectOpenHashMap<Column> columns = new Long2ObjectOpenHashMap<>();
-		return (x, y, z) -> {
-			int cx = Math.floorDiv(x, grid) * grid + grid / 2, cz = Math.floorDiv(z, grid) * grid + grid / 2;
-			long key = ChunkPos.asLong(cx, cz);
-			Column column = columns.get(key);
-			if (column == null) columns.put(key, column = new Column(generator.getBaseColumn(cx, cz, level, randomState)));
-			BlockState state = column.blocks.getBlock(y);
-			if (state.isAir()) return Kind.AIR;
-			if (isWater(state)) return Kind.WATER;
-			return column.underWater(level) ? Kind.SEABED : Kind.SOLID;
+		return new Terrain() {
+			private Column column(int x, int z) {
+				int cx = Math.floorDiv(x, grid) * grid + grid / 2, cz = Math.floorDiv(z, grid) * grid + grid / 2;
+				long key = ChunkPos.asLong(cx, cz);
+				Column column = columns.get(key);
+				if (column == null) columns.put(key, column = new Column(generator.getBaseColumn(cx, cz, level, randomState)));
+				return column;
+			}
+
+			public Kind at(int x, int y, int z) {
+				Column column = column(x, z);
+				BlockState state = column.blocks.getBlock(y);
+				if (state.isAir()) return Kind.AIR;
+				if (isWater(state)) return Kind.WATER;
+				return column.underWater(level) ? Kind.SEABED : Kind.SOLID;
+			}
+
+			public int top(int x, int z) { return column(x, z).top(level); }
 		};
 	}
 
@@ -636,30 +704,43 @@ public final class EarthFill {
 		return start;
 	}
 
-	/** The earth half, ready to run on a start: the pieces' earth, the structure's beard, limits by the start's size. */
-	private record EarthCheck(EarthFillLog log, Beard beard, Function<StructurePiece, long[]> blocks) {
+	/**
+	 * The earth half, ready to run on a start: the pieces' earth, the structure's beard, limits by the start's size,
+	 * the footprint water surplus (-1 = not checked) and how many layers the start height sinks the pieces (the
+	 * footprint layer is that far above a piece's bottom).
+	 */
+	private record EarthCheck(EarthFillLog log, Beard beard, Function<StructurePiece, long[]> blocks, double surplus, int sink) {
 
 		boolean cancels(List<StructurePiece> startPieces, Holder<Structure> structure, Terrain terrain, ChunkPos chunkPos) {
 			List<EarthPiece> pieces = new ArrayList<>(startPieces.size());
+			List<Layer> layers = new ArrayList<>(startPieces.size());
 			for (StructurePiece piece : startPieces) {
 				long[] earth = blocks.apply(piece);
-				if (earth.length > 0) pieces.add(new EarthPiece(earth, piece.getBoundingBox().minY(), beard));
+				if (earth.length == 0) continue;
+				BoundingBox box = piece.getBoundingBox();
+				pieces.add(new EarthPiece(earth, box.minY(), beard));
+				layers.add(new Layer(box.minX(), box.minZ(), box.maxX(), box.maxZ(), box.minY() + sink));
 			}
 			if (pieces.isEmpty()) return false;
 			int size = sizeOf(earthBlocks(pieces), WorldgenConfig.earthSizeBounds());
 			EarthLimits limits = earthLimitsFor(structure, size);
-			if (limits.none() && log != EarthFillLog.ALL) return false;
+			if (limits.none() && surplus < 0 && log != EarthFillLog.ALL) return false;
 			EarthResult r = countEarth(pieces, terrain, limits, reach(), log != EarthFillLog.ALL);
+			// the water share: only when the limits kept it (or everything is logged)
+			Footprint f = surplus >= 0 && (!r.cancelled() || log == EarthFillLog.ALL) ? footprint(layers, terrain, WorldgenConfig.earthBaseLayers()) : null;
+			boolean wet = f != null && f.tooWet(surplus);
+			boolean cancelled = r.cancelled() || wet;
 
-			if (r.cancelled() ? log != EarthFillLog.OFF : log == EarthFillLog.ALL) {
+			if (cancelled ? log != EarthFillLog.OFF : log == EarthFillLog.ALL) {
 				String plus = r.complete() ? "" : "+";   // counting stopped at the first limit crossed
 				String id = structure.unwrapKey().map(ResourceKey::location).map(ResourceLocation::toString).orElse("?");
+				String share = f == null ? "" : ", footprint " + f.water() + " water / " + f.ground() + " ground (surplus limit " + surplus + (wet ? ", too wet)" : ")");
 				LOG.info("[earth-fill] {} at chunk [{}, {}] ({}, {}): {}{} earth, {}{} over water (limit {}), {}{} over air after beard (limit {}), "
-								+ "{}{} mound columns (limit {}) -> {}",
+								+ "{}{} mound columns (limit {}){} -> {}",
 						id, chunkPos.x, chunkPos.z, SIZES[size], beard.name().toLowerCase(java.util.Locale.ROOT), r.blocks(), plus, r.water(), plus,
-						limits.water(), r.air(), plus, limits.air(), r.mound(), plus, limits.mound(), r.cancelled() ? "CANCELLED" : "kept");
+						limits.water(), r.air(), plus, limits.air(), r.mound(), plus, limits.mound(), share, cancelled ? "CANCELLED" : "kept");
 			}
-			return r.cancelled();
+			return cancelled;
 		}
 
 		/**
@@ -751,7 +832,10 @@ public final class EarthFill {
 		if (earth.isEmpty()) return null;
 		int layers = WorldgenConfig.earthBaseLayers();
 		boolean trimmed = WorldgenConfig.templateTrimEnabled() && TerrainAdaptation.trims(structure.value());
-		return new EarthCheck(log, beardOf(structure.value()), piece -> pieceEarth(piece, templates, earth, layers, trimmed));
+		// water structures stand in water on purpose: no footprint share for them
+		double surplus = structure.is(WATER_STRUCTURES) ? -1 : WorldgenConfig.earthMaxWaterSurplus();
+		return new EarthCheck(log, beardOf(structure.value()), piece -> pieceEarth(piece, templates, earth, layers, trimmed), surplus,
+				TerrainAdaptation.sink(structure.value()));
 	}
 
 	private static Check waterCheck(Holder<Structure> structure, StructureTemplateManager templates) {

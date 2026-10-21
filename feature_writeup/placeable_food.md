@@ -1,21 +1,21 @@
 # Placeable food
 
-Test prefix **PL-** · Last updated **2026-10-11** · Overall status **STAGED for 1.0.6, not deployed** (catalog built from the
+Test prefix **PL-** · Last updated **2026-10-19** · Overall status **DEPLOYED with 1.0.6 (2026-10-14), coaster line with 1.0.8 (2026-10-19), not run in game** (catalog built from the
 2026-10-03 `/dumpfood` export + the Display Delight jar; `/dumpplaceable` not run yet; the tags and client script loaded
 without errors in single player 2026-10-11)
 
 ## 0. At a glance
 
 Every food that can be put down in the world gets one, two or three tooltip lines, for any mod's placement
-mechanic: "Placeable" (with "(while sneaking)" when sneaking is required), "Placeable on plate" and "Placeable on small plate".
-The lines come from four item tags generated from a catalog.
+mechanic: "Placeable" (with "(while sneaking)" when sneaking is required), "Placeable on plate", "Placeable on small plate"
+and "Placeable on a coaster". The lines come from five item tags generated from a catalog.
 
 | Part | Where | Status |
 |---|---|---|
-| `/dumpplaceable` (live Display Delight links + every food-looking block item) | [dump_placeable.js](../kubejs/server_scripts/_lib/dump_placeable.js), also in `/dumpall` | BUILT, not run |
+| `/dumpplaceable` (live Display Delight links + every food-looking block item) | [dump_placeable.js](../kubejs/server_scripts/_lib/dump_placeable.js), also in `/dumpall` | DEPLOYED with 1.0.6, not run |
 | Catalog + tag lists generator | [tools/placeable_catalog.py](../tools/placeable_catalog.py) → [placeable_catalog.md](placeable_catalog.md), [placeable.json](../kubejs/generation_scripts/food/placeable.json) | BUILT, run on the fallback data |
-| Tags `#creativeengineering:placeable`, `placeable/sneak`, `placeable_on_plate`, `placeable_on_small_plate` | [placeabletags.js](../kubejs/server_scripts/tags/placeabletags.js) | BUILT |
-| Tooltip lines + removal of DD / Fruits Delight placement lines | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js) | BUILT |
+| Tags `#creativeengineering:placeable`, `placeable/sneak`, `placeable_on_plate`, `placeable_on_small_plate`, `placeable_on_coaster` | [placeabletags.js](../kubejs/server_scripts/tags/placeabletags.js) | DEPLOYED with 1.0.6 (coaster tag 2026-10-18, with 1.0.8) |
+| Tooltip lines + removal of DD / Fruits Delight placement lines | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js) | DEPLOYED with 1.0.6 (coaster line with 1.0.8) |
 
 **Counts (fallback data):** 164 items in 14 mods. 130 placeable (73 only while sneaking), 29 on a Food Plate, 11 on a Small Food Plate.
 **Open first:** the rules at the top of `tools/placeable_catalog.py` (`INCLUDE`, `EXCLUDE`, `SNEAK_ITEM_CLASSES`).
@@ -36,6 +36,12 @@ There are three ways to put food down in this pack:
    while sneaking. Vinery bottles place on a plain right click against a block; in the air you drink them.
 3. **Edible plants** (carrot, potato, sweet berries, glow berries, onion, corn kernels, blueberry, cranberry,
    mulberry) plant a crop. They are listed but get no line.
+4. **Brewin' and Chewin' coaster** (backport, [alcohol.md](alcohol.md) 8.3, 12): right click a coaster to put an item on
+   it, up to 4. Since 2026-10-20 it takes only items with a coaster model (`#brewinandchewin:placeable_on_coaster`,
+   port setting `[coaster] taggedItemsOnly`): the port's 96 (vanilla foods, Farmer's Delight meals and drinks, every
+   Brewin drink) and the 56 Display Delight foods `tools/gen_coaster_models.py` gives one. "Placeable on a coaster"
+   goes on exactly those; the Vinery and Farmer's Respite drinks lost it. A sneak right click with an item
+   skips the coaster, so a Display Delight food then tries to put its own display block on top (AL-52).
 
 Data flow: `/dumpplaceable` → `kubejs/exported/food/placeable.json` → `tools/placeable_catalog.py` →
 `generation_scripts/food/placeable.json` (item_dict keys) → `placeabletags.js` (tags) → `placeable_tooltip.js` (lines).
@@ -129,3 +135,11 @@ Restart the game (new item_dict keys, new client script). Hover items in JEI or 
   and `dump_placeable.js` are in the payload. Loaded without KubeJS errors in single player. PL-01 to PL-09 still pending.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- **2026-10-18:** fifth tag `#creativeengineering:placeable_on_coaster` ("Placeable on a coaster") for the Brewin'
+  backport's coaster: `add_coaster()` in the tool reads the port's coaster model files and adds the Vinery and Farmer's
+  Respite drinks. Rerun on today's live `/dumpplaceable`: 269 items, 160 on a coaster. Test AL-52 in alcohol.md.
+- 2026-10-19: coaster tag and line STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) PL).
+- 2026-10-19: status sweep: pack 1.0.6 was DEPLOYED 2026-10-14 and 1.0.8 (coaster line and tag) 2026-10-19 10:20. PL-01 to PL-09 pending.
+- **2026-10-20:** coaster tag = modelled items only (alcohol.md 12): `add_coaster()` reads the port's coaster files and
+  the pack's generated Display Delight ones; `COASTER_DRINK_MODS` removed. Rerun on the last dump: 152 on a coaster
+  (60 Vinery / Farmer's Respite drinks out, 56 DD foods in). Tests AL-91 to AL-93.

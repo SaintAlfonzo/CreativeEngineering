@@ -11,6 +11,7 @@
   },
   "jvmArgs": "-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
   "resourcePackOrder": [
+    "vinery_upstream_assets",
     "incubation_additions:untitledduckmod",
     "incubation_additions:alexsmobs",
     "vanilla",
@@ -44,7 +45,8 @@
     "file/Updated_Engineering_v1.7.zip",
     "file/SHC Enhanced Fire.zip",
     "file/IE Breaker Switch Sound.zip",
-    "file/SquirmingSilverfish [1.13 - 26.3]   (v2).zip"
+    "file/SquirmingSilverfish [1.13 - 26.3]   (v2).zip",
+    "file/Fancy Crops v1.2.zip"
   ],
   "mods": [
     {
@@ -200,7 +202,7 @@
       "version": "v4.2.2-1.19.2-Forge",
       "sha1": "959f4abf0d1902c4d805227196444265cdc533fa",
       "modId": "blockrunner",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 442842,
@@ -303,29 +305,6 @@
       }
     },
     {
-      "file": "BrewinAndChewin-1.19-2.0.jar",
-      "name": "Brewin' And Chewin'",
-      "version": "1.19-2.0",
-      "sha1": "04ccef86a671471a6e183caec98aa3b02f5f9996",
-      "modId": "brewinandchewin",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 637808,
-          "fileId": 4468049,
-          "slug": "brewin-and-chewin",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/brewin-and-chewin/files/4468049"
-        },
-        "modrinth": {
-          "projectId": "hIu9KJTT",
-          "versionId": "gj3ERfxM",
-          "slug": "brewin-and-chewin",
-          "url": "https://modrinth.com/mod/brewin-and-chewin/version/gj3ERfxM",
-          "download": "https://cdn.modrinth.com/data/hIu9KJTT/versions/gj3ERfxM/BrewinAndChewin-1.19-2.0.jar"
-        }
-      }
-    },
-    {
       "file": "CBMultipart-1.19.2-3.2.0.139-universal.jar",
       "name": "CB Multipart",
       "version": "3.2.0.139",
@@ -409,7 +388,7 @@
       "version": "CherishedItems-Forge-1.19.2-1.0.2.jar",
       "sha1": "c7f1141fbc3d466c846ab644f216936f4b9288da",
       "modId": "cherisheditems",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 946452,
@@ -441,7 +420,7 @@
       "version": "1.3.38",
       "sha1": "d347c38b359f39d6fdd6dcaa4b5baf54a30d7428",
       "modId": "chunky",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 485681,
@@ -590,22 +569,6 @@
       }
     },
     {
-      "file": "CopperDrops-1.1.jar",
-      "name": "Copper Drops",
-      "version": "Copper Drops 1.1 - 1.19-1.21+",
-      "sha1": "d8fd6758d9472c2e0a8b2d095b0dfd8e2ac38aa6",
-      "modId": "copperdrops",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 599111,
-          "fileId": 4889063,
-          "slug": "copper-drops",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/copper-drops/files/4889063"
-        }
-      }
-    },
-    {
       "file": "CosmeticArmorReworked-1.19.2-v1a.jar",
       "name": "Cosmetic Armor Reworked",
       "version": "CosmeticArmorReworked-1.19.2-v1a.jar",
@@ -673,7 +636,7 @@
       "version": "1.19.2-2.6.1-0.5.1i",
       "sha1": "e1ed5e29f5ce9f7220cd768926451bf34304491d",
       "modId": "createfastschematiccannon",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 1352204,
@@ -687,22 +650,6 @@
           "slug": "create-fast-schematic-cannon",
           "url": "https://modrinth.com/mod/create-fast-schematic-cannon/version/CdU9qA2M",
           "download": "https://cdn.modrinth.com/data/DebMSCVn/versions/CdU9qA2M/CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "Create_Copper_Splashing_v2.jar",
-      "name": "Create: Copper Splashing",
-      "version": "Create_Copper_Splashing_v2.jar",
-      "sha1": "2da9c94e5b6048efbe5638b34598e9f1f8d7e7bf",
-      "modId": "create_copper_splashing",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 1266798,
-          "fileId": 6536354,
-          "slug": "create-copper-splashing",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/create-copper-splashing/files/6536354"
         }
       }
     },
@@ -726,22 +673,6 @@
           "slug": "create-questing",
           "url": "https://modrinth.com/mod/create-questing/version/QXBmxVDA",
           "download": "https://cdn.modrinth.com/data/jUlR3XZM/versions/QXBmxVDA/Create_Questing-FORGE-1.19.2-1.0.0.jar"
-        }
-      }
-    },
-    {
-      "file": "Create_Waystone_Recipes_1.19_v2.jar",
-      "name": "Create Waystone Recipes",
-      "version": "Create Waystone Recipes 1.19 / 1.20",
-      "sha1": "5aa372116471c80a64d353d0dae3fa56d3a07f65",
-      "modId": "create_waystone_recipes",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 1266793,
-          "fileId": 6536359,
-          "slug": "create-waystone-recipes",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/create-waystone-recipes/files/6536359"
         }
       }
     },
@@ -797,7 +728,7 @@
       "version": "6.0.3",
       "sha1": "50d5c985f1044d4c8e6031464d5a9ad7111c468b",
       "modId": "deathknell",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 538316,
@@ -1176,22 +1107,6 @@
           "fileId": 4028348,
           "slug": "fastfurnace",
           "url": "https://www.curseforge.com/minecraft/mc-mods/fastfurnace/files/4028348"
-        }
-      }
-    },
-    {
-      "file": "FastLeafDecay-30.jar",
-      "name": "Fast Leaf Decay",
-      "version": "FastLeafDecay-30.jar",
-      "sha1": "f273fca159131a930c694e47f3734597db95cb6d",
-      "modId": "fastleafdecay",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 230976,
-          "fileId": 3894512,
-          "slug": "fast-leaf-decay",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/fast-leaf-decay/files/3894512"
         }
       }
     },
@@ -2310,7 +2225,7 @@
       "version": "1.19.1-2.1.12",
       "sha1": "6bf17a80ac25a884b938825770b92ab900b561dc",
       "modId": "simplebackups",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 583228,
@@ -2418,7 +2333,7 @@
       "version": "1.4.23",
       "sha1": "3058bb2e9276607ec17483f64212d4c70c868d30",
       "modId": "taxfreelevels",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 462128,
@@ -2882,22 +2797,6 @@
       }
     },
     {
-      "file": "ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar",
-      "name": "AE2 QoL Recipes",
-      "version": "ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar",
-      "sha1": "d7789fbbb085e2ce7754df0058a6f4279a85162c",
-      "modId": "ae2qolrecipes",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 907026,
-          "fileId": 6196957,
-          "slug": "ae2-qol-recipes",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/ae2-qol-recipes/files/6196957"
-        }
-      }
-    },
-    {
       "file": "alexsabnormalities-1.3.jar",
       "name": "Alex's Abnormalities",
       "version": "alexsabnormalities-1.3.jar",
@@ -3135,7 +3034,7 @@
       "version": "1.19.2-1.3.0",
       "sha1": "f1809e3aac6fe7b690127a09716aadfc56012899",
       "modId": "asynclocator",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 625069,
@@ -3151,6 +3050,33 @@
           "download": "https://cdn.modrinth.com/data/rkN8aqci/versions/8vNUDsod/async-locator-forge-1.19.2-1.3.0.jar"
         }
       }
+    },
+    {
+      "file": "babyMobs-1.0.0.jar",
+      "name": "babyMobs-1.0.0",
+      "version": "",
+      "sha1": "25d6e9bfc676396511d927846e898a50bd3dd3f5",
+      "modId": "baby_mobs",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "backportedBrewin-4.5.0-ce-19.2-03.jar",
+      "name": "backportedBrewin-4.5.0-ce-19.2-03",
+      "version": "",
+      "sha1": "b62108d356c465f329a12c58f2a0e0a5a1f487d1",
+      "modId": "brewinandchewin",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "backportedVinery-1.5.5-ce-19.2-04.jar",
+      "name": "backportedVinery-1.5.5-ce-19.2-04",
+      "version": "",
+      "sha1": "610ad864fe995180f2b571a60c3287dc9ef263c5",
+      "modId": "vinery",
+      "side": "both",
+      "source": "local"
     },
     {
       "file": "badpackets-forge-0.2.3.jar",
@@ -3427,29 +3353,6 @@
           "fileId": 4721959,
           "slug": "fishing-bobber-detector",
           "url": "https://www.curseforge.com/minecraft/mc-mods/fishing-bobber-detector/files/4721959"
-        }
-      }
-    },
-    {
-      "file": "bottledair-1.19.2-2.3.jar",
-      "name": "Bottled Air",
-      "version": "1.19.2-2.3-fabric+forge+neo",
-      "sha1": "10b40f303c2f4d88b869f77edd1c6a98f5052667",
-      "modId": "bottledair",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 514444,
-          "fileId": 4965329,
-          "slug": "bottled-air",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/bottled-air/files/4965329"
-        },
-        "modrinth": {
-          "projectId": "hvrrNux3",
-          "versionId": "iU00AmRJ",
-          "slug": "bottled-air",
-          "url": "https://modrinth.com/mod/bottled-air/version/iU00AmRJ",
-          "download": "https://cdn.modrinth.com/data/hvrrNux3/versions/iU00AmRJ/bottledair-1.19.2-2.3.jar"
         }
       }
     },
@@ -3879,29 +3782,6 @@
       }
     },
     {
-      "file": "comfortable-campfires-1.1.2+1.19.2.jar",
-      "name": "Comfortable Campfires",
-      "version": "1.1.2+1.19.2",
-      "sha1": "309ea966d73f5ea11da3882b0e4e7ab316e225b0",
-      "modId": "comfortable_campfires",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 1172718,
-          "fileId": 6108452,
-          "slug": "comfortable-campfires",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/comfortable-campfires/files/6108452"
-        },
-        "modrinth": {
-          "projectId": "lOZBoyio",
-          "versionId": "rbf5I3X0",
-          "slug": "comfortable-campfires",
-          "url": "https://modrinth.com/mod/comfortable-campfires/version/rbf5I3X0",
-          "download": "https://cdn.modrinth.com/data/lOZBoyio/versions/rbf5I3X0/comfortable-campfires-1.1.2%2B1.19.2.jar"
-        }
-      }
-    },
-    {
       "file": "comforts-forge-6.0.7+1.19.2.jar",
       "name": "Comforts",
       "version": "6.0.7+1.19.2",
@@ -4311,29 +4191,6 @@
       }
     },
     {
-      "file": "create_generators-1.0.0-forge-1.19.2.jar",
-      "name": "Create: Easy Stone Generators",
-      "version": "1.0.0",
-      "sha1": "262af504b3ba4311b8bfbc737f35f85262e641c0",
-      "modId": "create_generators",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 1206505,
-          "fileId": 6224616,
-          "slug": "create-stone-generators",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/create-stone-generators/files/6224616"
-        },
-        "modrinth": {
-          "projectId": "aeW9oim1",
-          "versionId": "YZmNhF0J",
-          "slug": "create-stone-generators",
-          "url": "https://modrinth.com/mod/create-stone-generators/version/YZmNhF0J",
-          "download": "https://cdn.modrinth.com/data/aeW9oim1/versions/YZmNhF0J/create_generators-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
       "file": "create_gravity-1.19.2-1.2.0-all.jar",
       "name": "Create : Gravity",
       "version": "1.2.0",
@@ -4484,6 +4341,29 @@
           "fileId": 4714432,
           "slug": "create-recycle-everything",
           "url": "https://www.curseforge.com/minecraft/mc-mods/create-recycle-everything/files/4714432"
+        }
+      }
+    },
+    {
+      "file": "create_salt 1.19.2-1.1.0.jar",
+      "name": "Create : The Salt",
+      "version": "1.1.0",
+      "sha1": "42555b0d3b17f16477d1fc3c2aebf074c44a3d99",
+      "modId": "create__the_salt",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 951106,
+          "fileId": 5000032,
+          "slug": "create-the-salt",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/create-the-salt/files/5000032"
+        },
+        "modrinth": {
+          "projectId": "OXUFUU4x",
+          "versionId": "IwhIDWd7",
+          "slug": "create-the-salt",
+          "url": "https://modrinth.com/mod/create-the-salt/version/IwhIDWd7",
+          "download": "https://cdn.modrinth.com/data/OXUFUU4x/versions/IwhIDWd7/create_salt%201.19.2-1.1.0.jar"
         }
       }
     },
@@ -4640,7 +4520,7 @@
       "version": "2.1.1-1.19.2",
       "sha1": "0e644e8038a3383c8ad02b49d1297f5f1860a6b2",
       "modId": "createliquidfuel",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 840734,
@@ -4658,10 +4538,10 @@
       }
     },
     {
-      "file": "creativeengineering-1.0.6.jar",
-      "name": "creativeengineering-1.0.6.jar",
-      "version": "Unknown",
-      "sha1": "ae9e03b4ed6c4b38ccefa3bda92d89b199c71928",
+      "file": "creativeengineering-1.1.01.jar",
+      "name": "creativeengineering-1.1.01",
+      "version": "",
+      "sha1": "a4cf4f9ea22cdc12f1f4d9b584ab0bd5473de521",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -4810,29 +4690,6 @@
           "slug": "do-a-barrel-roll",
           "url": "https://modrinth.com/mod/do-a-barrel-roll/version/nybnGUJv",
           "download": "https://cdn.modrinth.com/data/6FtRfnLg/versions/nybnGUJv/do-a-barrel-roll-2.6.2%2B1.19.2-forge.jar"
-        }
-      }
-    },
-    {
-      "file": "doapi-1.1.0b.jar",
-      "name": "[Let's Do] API ",
-      "version": "1.1.0b-forge",
-      "sha1": "3be69b24454d1af75d6b386825f5d50a5388732c",
-      "modId": "doapi",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 864599,
-          "fileId": 4676882,
-          "slug": "do-api",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/do-api/files/4676882"
-        },
-        "modrinth": {
-          "projectId": "4XJZeZbM",
-          "versionId": "3albwtm0",
-          "slug": "do-api",
-          "url": "https://modrinth.com/mod/do-api/version/3albwtm0",
-          "download": "https://cdn.modrinth.com/data/4XJZeZbM/versions/3albwtm0/doapi-1.1.0b.jar"
         }
       }
     },
@@ -5234,10 +5091,10 @@
       }
     },
     {
-      "file": "exposureBackport-1.9.19-ce-19.2-03.jar",
-      "name": "exposureBackport-1.9.19-ce-19.2-03.jar",
+      "file": "exposureBackport-1.9.19-ce-19.2-04.jar",
+      "name": "exposureBackport-1.9.19-ce-19.2-04.jar",
       "version": "Unknown",
-      "sha1": "8a2af83f8f5908b91cb36c8f5ca53dff6c142ba5",
+      "sha1": "ebe944e42be1b1f844a10ba5dd7b0fa7abfd2423",
       "modId": "exposure",
       "side": "both",
       "source": "local"
@@ -5509,29 +5366,6 @@
       }
     },
     {
-      "file": "furnacerecycle-1.19.2-2.2.jar",
-      "name": "Furnace Recycle",
-      "version": "1.19.2-2.2-fabric+forge+neo",
-      "sha1": "294e2c0ecfbf6154876305bc3bae21e66540aae6",
-      "modId": "furnacerecycle",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 551140,
-          "fileId": 4964885,
-          "slug": "furnace-recycle",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/furnace-recycle/files/4964885"
-        },
-        "modrinth": {
-          "projectId": "HyKmtI3L",
-          "versionId": "SX0jjroc",
-          "slug": "furnace-recycle",
-          "url": "https://modrinth.com/mod/furnace-recycle/version/SX0jjroc",
-          "download": "https://cdn.modrinth.com/data/HyKmtI3L/versions/SX0jjroc/furnacerecycle-1.19.2-2.2.jar"
-        }
-      }
-    },
-    {
       "file": "gates-1.8.0.jar",
       "name": "Redstone Gates",
       "version": "gates-1.8.0.jar",
@@ -5583,29 +5417,6 @@
           "fileId": 4436710,
           "slug": "geode-plus",
           "url": "https://www.curseforge.com/minecraft/mc-mods/geode-plus/files/4436710"
-        }
-      }
-    },
-    {
-      "file": "glowingraidillagers-1.19.2-1.0.0.jar",
-      "name": "Glowing Illagers",
-      "version": "1.0.0",
-      "sha1": "aadd750911b4bae8d915ec1833cc6a86c182d923",
-      "modId": "glowingraidillagers",
-      "side": "server",
-      "source": {
-        "curseforge": {
-          "projectId": 962468,
-          "fileId": 5034770,
-          "slug": "glowing-illagers",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/glowing-illagers/files/5034770"
-        },
-        "modrinth": {
-          "projectId": "AdgLkXjp",
-          "versionId": "ewGIS3C4",
-          "slug": "glowing-illagers",
-          "url": "https://modrinth.com/mod/glowing-illagers/version/ewGIS3C4",
-          "download": "https://cdn.modrinth.com/data/AdgLkXjp/versions/ewGIS3C4/glowingraidillagers-1.19.2-1.0.0.jar"
         }
       }
     },
@@ -5778,7 +5589,7 @@
       "version": "1.19.2-3.2-fabric+forge+neo",
       "sha1": "5e1a32e5a68851445b70d78a675b6dd14951bd43",
       "modId": "icepreventscropgrowth",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 390161,
@@ -6269,18 +6080,25 @@
       }
     },
     {
-      "file": "letsdo-vinery-forge-1.3.10.jar",
-      "name": "[Let's Do] Vinery",
-      "version": "Vinery - 1.3.10 - FORGE - 1.19.2",
-      "sha1": "fbbd4ae7c10a9d0aa13819e09b70167f3b4ff81c",
-      "modId": "vinery",
+      "file": "labels-1.19.2-1.10.jar",
+      "name": "Storage Labels",
+      "version": "1.19.2-1.10",
+      "sha1": "ecaf8c7c9cba29d46e42a317859b485389df7993",
+      "modId": "labels",
       "side": "both",
       "source": {
         "curseforge": {
-          "projectId": 704465,
-          "fileId": 4793221,
-          "slug": "lets-do-vinery",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/lets-do-vinery/files/4793221"
+          "projectId": 688223,
+          "fileId": 4709789,
+          "slug": "labels",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/labels/files/4709789"
+        },
+        "modrinth": {
+          "projectId": "x6r7yhfi",
+          "versionId": "qAXckCmt",
+          "slug": "labels",
+          "url": "https://modrinth.com/mod/labels/version/qAXckCmt",
+          "download": "https://cdn.modrinth.com/data/x6r7yhfi/versions/qAXckCmt/labels-1.19.2-1.10.jar"
         }
       }
     },
@@ -6313,7 +6131,7 @@
       "version": "1.19.2-0.2.0.3",
       "sha1": "62eff9d1fcde139e31f0a7366699049461b6f29d",
       "modId": "lightmansdiscord",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 545459,
@@ -6375,7 +6193,7 @@
       "version": "loadingprotection-1.0.2-forge-1.19.2.jar",
       "sha1": "e39f92a7855dc11ccabe2382c41c80d5fa7521e9",
       "modId": "loadingprotection",
-      "side": "server",
+      "side": "both",
       "source": {
         "curseforge": {
           "projectId": 1422545,
@@ -6800,29 +6618,6 @@
           "fileId": 4654181,
           "slug": "mystical-oak-tree",
           "url": "https://www.curseforge.com/minecraft/mc-mods/mystical-oak-tree/files/4654181"
-        }
-      }
-    },
-    {
-      "file": "name-tag-crafting-recipe-mod-1.0 (3).jar",
-      "name": "Nametag Crafting",
-      "version": "1.0+mod",
-      "sha1": "19fb956a461e90903930a91b46a6206e28b0d689",
-      "modId": "mr_name_tagcraftingrecipemod",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 1313317,
-          "fileId": 6807242,
-          "slug": "nametag-crafting",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/nametag-crafting/files/6807242"
-        },
-        "modrinth": {
-          "projectId": "q7p1GuHj",
-          "versionId": "nZX0ieOB",
-          "slug": "name-tag-crafting-recipe-mod",
-          "url": "https://modrinth.com/mod/name-tag-crafting-recipe-mod/version/nZX0ieOB",
-          "download": "https://cdn.modrinth.com/data/q7p1GuHj/versions/nZX0ieOB/name-tag-crafting-recipe-mod-1.0.jar"
         }
       }
     },
@@ -7389,29 +7184,6 @@
       }
     },
     {
-      "file": "rsec-1.0-1.19.2-forge.jar",
-      "name": "Rain should extinguish campfires",
-      "version": "1.0-1.19.2-forge",
-      "sha1": "18b1ef2e3f563c75171147c0ed260d6d2e268bc0",
-      "modId": "rsec",
-      "side": "server",
-      "source": {
-        "curseforge": {
-          "projectId": 959784,
-          "fileId": 5029331,
-          "slug": "rain-should-extinguish-campfires",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/rain-should-extinguish-campfires/files/5029331"
-        },
-        "modrinth": {
-          "projectId": "XFk4dAJX",
-          "versionId": "FqhndMyk",
-          "slug": "rain-should-extinguish-campfires",
-          "url": "https://modrinth.com/mod/rain-should-extinguish-campfires/version/FqhndMyk",
-          "download": "https://cdn.modrinth.com/data/XFk4dAJX/versions/FqhndMyk/rsec-1.0-1.19.2-forge.jar"
-        }
-      }
-    },
-    {
       "file": "rubidium-extra-0.4.19+mc1.19.2-build.105.jar",
       "name": "Embeddium (Rubidium) Extra",
       "version": "0.4.19+mc1.19.2-build.105",
@@ -7909,29 +7681,6 @@
           "fileId": 5593593,
           "slug": "stardew-fishing",
           "url": "https://www.curseforge.com/minecraft/mc-mods/stardew-fishing/files/5593593"
-        }
-      }
-    },
-    {
-      "file": "starterkit-1.19.2-7.0.jar",
-      "name": "Starter Kit",
-      "version": "1.19.2-7.0-fabric+forge",
-      "sha1": "91f7b5b02095ada6d8946c2c57c83f1b180a5ba3",
-      "modId": "starterkit",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 390717,
-          "fileId": 5473394,
-          "slug": "starter-kit",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/starter-kit/files/5473394"
-        },
-        "modrinth": {
-          "projectId": "6L3ydNi8",
-          "versionId": "nDDhwn2h",
-          "slug": "starter-kit",
-          "url": "https://modrinth.com/mod/starter-kit/version/nDDhwn2h",
-          "download": "https://cdn.modrinth.com/data/6L3ydNi8/versions/nDDhwn2h/starterkit-1.19.2-7.0.jar"
         }
       }
     },
@@ -8705,6 +8454,51 @@
   ],
   "disabledMods": [
     {
+      "file": "CopperDrops-1.1.jar",
+      "name": "Copper Drops",
+      "version": "Copper Drops 1.1 - 1.19-1.21+",
+      "sha1": "d8fd6758d9472c2e0a8b2d095b0dfd8e2ac38aa6",
+      "modId": "copperdrops",
+      "source": {
+        "curseforge": {
+          "projectId": 599111,
+          "fileId": 4889063,
+          "slug": "copper-drops",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/copper-drops/files/4889063"
+        }
+      }
+    },
+    {
+      "file": "Create_Copper_Splashing_v2.jar",
+      "name": "Create: Copper Splashing",
+      "version": "Create_Copper_Splashing_v2.jar",
+      "sha1": "2da9c94e5b6048efbe5638b34598e9f1f8d7e7bf",
+      "modId": "create_copper_splashing",
+      "source": {
+        "curseforge": {
+          "projectId": 1266798,
+          "fileId": 6536354,
+          "slug": "create-copper-splashing",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/create-copper-splashing/files/6536354"
+        }
+      }
+    },
+    {
+      "file": "Create_Waystone_Recipes_1.19_v2.jar",
+      "name": "Create Waystone Recipes",
+      "version": "Create Waystone Recipes 1.19 / 1.20",
+      "sha1": "5aa372116471c80a64d353d0dae3fa56d3a07f65",
+      "modId": "create_waystone_recipes",
+      "source": {
+        "curseforge": {
+          "projectId": 1266793,
+          "fileId": 6536359,
+          "slug": "create-waystone-recipes",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/create-waystone-recipes/files/6536359"
+        }
+      }
+    },
+    {
       "file": "DustyDecorations_1.19.2Forge_V1.3.jar",
       "name": "Dusty Decorations",
       "version": "Dusty Decorations 1.19.2 Forge V1.3",
@@ -8716,6 +8510,21 @@
           "fileId": 6608831,
           "slug": "dusty-decorations",
           "url": "https://www.curseforge.com/minecraft/mc-mods/dusty-decorations/files/6608831"
+        }
+      }
+    },
+    {
+      "file": "FastLeafDecay-30.jar",
+      "name": "Fast Leaf Decay",
+      "version": "FastLeafDecay-30.jar",
+      "sha1": "f273fca159131a930c694e47f3734597db95cb6d",
+      "modId": "fastleafdecay",
+      "source": {
+        "curseforge": {
+          "projectId": 230976,
+          "fileId": 3894512,
+          "slug": "fast-leaf-decay",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/fast-leaf-decay/files/3894512"
         }
       }
     },
@@ -8776,6 +8585,43 @@
           "fileId": 3974155,
           "slug": "spice-of-life-carrot-edition",
           "url": "https://www.curseforge.com/minecraft/mc-mods/spice-of-life-carrot-edition/files/3974155"
+        }
+      }
+    },
+    {
+      "file": "ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar",
+      "name": "AE2 QoL Recipes",
+      "version": "ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar",
+      "sha1": "d7789fbbb085e2ce7754df0058a6f4279a85162c",
+      "modId": "ae2qolrecipes",
+      "source": {
+        "curseforge": {
+          "projectId": 907026,
+          "fileId": 6196957,
+          "slug": "ae2-qol-recipes",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/ae2-qol-recipes/files/6196957"
+        }
+      }
+    },
+    {
+      "file": "bottledair-1.19.2-2.3.jar",
+      "name": "Bottled Air",
+      "version": "1.19.2-2.3-fabric+forge+neo",
+      "sha1": "10b40f303c2f4d88b869f77edd1c6a98f5052667",
+      "modId": "bottledair",
+      "source": {
+        "curseforge": {
+          "projectId": 514444,
+          "fileId": 4965329,
+          "slug": "bottled-air",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/bottled-air/files/4965329"
+        },
+        "modrinth": {
+          "projectId": "hvrrNux3",
+          "versionId": "iU00AmRJ",
+          "slug": "bottled-air",
+          "url": "https://modrinth.com/mod/bottled-air/version/iU00AmRJ",
+          "download": "https://cdn.modrinth.com/data/hvrrNux3/versions/iU00AmRJ/bottledair-1.19.2-2.3.jar"
         }
       }
     },
@@ -8842,6 +8688,50 @@
           "slug": "cluttered",
           "url": "https://modrinth.com/mod/cluttered/version/oDX1rMxT",
           "download": "https://cdn.modrinth.com/data/UnAEo77V/versions/oDX1rMxT/cluttered-2.1.1-1.19.2.jar"
+        }
+      }
+    },
+    {
+      "file": "comfortable-campfires-1.1.2+1.19.2.jar",
+      "name": "Comfortable Campfires",
+      "version": "1.1.2+1.19.2",
+      "sha1": "309ea966d73f5ea11da3882b0e4e7ab316e225b0",
+      "modId": "comfortable_campfires",
+      "source": {
+        "curseforge": {
+          "projectId": 1172718,
+          "fileId": 6108452,
+          "slug": "comfortable-campfires",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/comfortable-campfires/files/6108452"
+        },
+        "modrinth": {
+          "projectId": "lOZBoyio",
+          "versionId": "rbf5I3X0",
+          "slug": "comfortable-campfires",
+          "url": "https://modrinth.com/mod/comfortable-campfires/version/rbf5I3X0",
+          "download": "https://cdn.modrinth.com/data/lOZBoyio/versions/rbf5I3X0/comfortable-campfires-1.1.2%2B1.19.2.jar"
+        }
+      }
+    },
+    {
+      "file": "create_generators-1.0.0-forge-1.19.2.jar",
+      "name": "Create: Easy Stone Generators",
+      "version": "1.0.0",
+      "sha1": "262af504b3ba4311b8bfbc737f35f85262e641c0",
+      "modId": "create_generators",
+      "source": {
+        "curseforge": {
+          "projectId": 1206505,
+          "fileId": 6224616,
+          "slug": "create-stone-generators",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/create-stone-generators/files/6224616"
+        },
+        "modrinth": {
+          "projectId": "aeW9oim1",
+          "versionId": "YZmNhF0J",
+          "slug": "create-stone-generators",
+          "url": "https://modrinth.com/mod/create-stone-generators/version/YZmNhF0J",
+          "download": "https://cdn.modrinth.com/data/aeW9oim1/versions/YZmNhF0J/create_generators-1.0.0-forge-1.19.2.jar"
         }
       }
     },
@@ -8934,6 +8824,28 @@
       }
     },
     {
+      "file": "furnacerecycle-1.19.2-2.2.jar",
+      "name": "Furnace Recycle",
+      "version": "1.19.2-2.2-fabric+forge+neo",
+      "sha1": "294e2c0ecfbf6154876305bc3bae21e66540aae6",
+      "modId": "furnacerecycle",
+      "source": {
+        "curseforge": {
+          "projectId": 551140,
+          "fileId": 4964885,
+          "slug": "furnace-recycle",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/furnace-recycle/files/4964885"
+        },
+        "modrinth": {
+          "projectId": "HyKmtI3L",
+          "versionId": "SX0jjroc",
+          "slug": "furnace-recycle",
+          "url": "https://modrinth.com/mod/furnace-recycle/version/SX0jjroc",
+          "download": "https://cdn.modrinth.com/data/HyKmtI3L/versions/SX0jjroc/furnacerecycle-1.19.2-2.2.jar"
+        }
+      }
+    },
+    {
       "file": "gemsnjewels-1.19.2-0.3.4.jar",
       "name": "Gems & Jewels",
       "version": "gemsnjewels-1.19.2-0.3.4.jar",
@@ -8945,6 +8857,94 @@
           "fileId": 5300730,
           "slug": "gems-jewels",
           "url": "https://www.curseforge.com/minecraft/mc-mods/gems-jewels/files/5300730"
+        }
+      }
+    },
+    {
+      "file": "glowingraidillagers-1.19.2-1.0.0.jar",
+      "name": "Glowing Illagers",
+      "version": "1.0.0",
+      "sha1": "aadd750911b4bae8d915ec1833cc6a86c182d923",
+      "modId": "glowingraidillagers",
+      "source": {
+        "curseforge": {
+          "projectId": 962468,
+          "fileId": 5034770,
+          "slug": "glowing-illagers",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/glowing-illagers/files/5034770"
+        },
+        "modrinth": {
+          "projectId": "AdgLkXjp",
+          "versionId": "ewGIS3C4",
+          "slug": "glowing-illagers",
+          "url": "https://modrinth.com/mod/glowing-illagers/version/ewGIS3C4",
+          "download": "https://cdn.modrinth.com/data/AdgLkXjp/versions/ewGIS3C4/glowingraidillagers-1.19.2-1.0.0.jar"
+        }
+      }
+    },
+    {
+      "file": "name-tag-crafting-recipe-mod-1.0 (3).jar",
+      "name": "Nametag Crafting",
+      "version": "1.0+mod",
+      "sha1": "19fb956a461e90903930a91b46a6206e28b0d689",
+      "modId": "mr_name_tagcraftingrecipemod",
+      "source": {
+        "curseforge": {
+          "projectId": 1313317,
+          "fileId": 6807242,
+          "slug": "nametag-crafting",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/nametag-crafting/files/6807242"
+        },
+        "modrinth": {
+          "projectId": "q7p1GuHj",
+          "versionId": "nZX0ieOB",
+          "slug": "name-tag-crafting-recipe-mod",
+          "url": "https://modrinth.com/mod/name-tag-crafting-recipe-mod/version/nZX0ieOB",
+          "download": "https://cdn.modrinth.com/data/q7p1GuHj/versions/nZX0ieOB/name-tag-crafting-recipe-mod-1.0.jar"
+        }
+      }
+    },
+    {
+      "file": "rsec-1.0-1.19.2-forge.jar",
+      "name": "Rain should extinguish campfires",
+      "version": "1.0-1.19.2-forge",
+      "sha1": "18b1ef2e3f563c75171147c0ed260d6d2e268bc0",
+      "modId": "rsec",
+      "source": {
+        "curseforge": {
+          "projectId": 959784,
+          "fileId": 5029331,
+          "slug": "rain-should-extinguish-campfires",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/rain-should-extinguish-campfires/files/5029331"
+        },
+        "modrinth": {
+          "projectId": "XFk4dAJX",
+          "versionId": "FqhndMyk",
+          "slug": "rain-should-extinguish-campfires",
+          "url": "https://modrinth.com/mod/rain-should-extinguish-campfires/version/FqhndMyk",
+          "download": "https://cdn.modrinth.com/data/XFk4dAJX/versions/FqhndMyk/rsec-1.0-1.19.2-forge.jar"
+        }
+      }
+    },
+    {
+      "file": "starterkit-1.19.2-7.0.jar",
+      "name": "Starter Kit",
+      "version": "1.19.2-7.0-fabric+forge",
+      "sha1": "91f7b5b02095ada6d8946c2c57c83f1b180a5ba3",
+      "modId": "starterkit",
+      "source": {
+        "curseforge": {
+          "projectId": 390717,
+          "fileId": 5473394,
+          "slug": "starter-kit",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/starter-kit/files/5473394"
+        },
+        "modrinth": {
+          "projectId": "6L3ydNi8",
+          "versionId": "nDDhwn2h",
+          "slug": "starter-kit",
+          "url": "https://modrinth.com/mod/starter-kit/version/nDDhwn2h",
+          "download": "https://cdn.modrinth.com/data/6L3ydNi8/versions/nDDhwn2h/starterkit-1.19.2-7.0.jar"
         }
       }
     },
@@ -9366,7 +9366,7 @@
       "version": "Unknown",
       "sha1": "1fa70b09b66dd113b68f20c5966f60c96dbd6e05",
       "enabled": true,
-      "loadOrder": 12,
+      "loadOrder": 13,
       "flaggedIncompatible": false,
       "source": "local"
     },
@@ -9393,7 +9393,7 @@
       "version": "Copycat Framed Block.zip",
       "sha1": "2e300fb05d0edc238dd96d4356798ca2964ba4ad",
       "enabled": true,
-      "loadOrder": 13,
+      "loadOrder": 14,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9410,7 +9410,7 @@
       "version": "1.2.1",
       "sha1": "2f7e22eb0ca0a3ab7382c290b49995df66bba97e",
       "enabled": true,
-      "loadOrder": 14,
+      "loadOrder": 15,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9434,7 +9434,7 @@
       "version": "Create Tweaks Compats v17.zip",
       "sha1": "a52384c905017e4ba35a3cfa315a0876f5c3ee4c",
       "enabled": true,
-      "loadOrder": 15,
+      "loadOrder": 16,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9451,7 +9451,7 @@
       "version": "1.1.2",
       "sha1": "37230d133003a3574a2380326bfd6faf8a1c3124",
       "enabled": true,
-      "loadOrder": 16,
+      "loadOrder": 17,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9499,7 +9499,7 @@
       "version": "1.0",
       "sha1": "6d5ac607061fa5aedea571ec0c3ae842327dbf7c",
       "enabled": true,
-      "loadOrder": 17,
+      "loadOrder": 18,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9523,7 +9523,7 @@
       "version": "1.3.0",
       "sha1": "e960b4770f08761c294dd67530f94232acadc68e",
       "enabled": true,
-      "loadOrder": 18,
+      "loadOrder": 19,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9547,7 +9547,7 @@
       "version": " \tEngineers_GUIs_1.18.2_v.01.0",
       "sha1": "cdb59cac42a434bb74359f5b1bfa90c44733d9e0",
       "enabled": true,
-      "loadOrder": 19,
+      "loadOrder": 20,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9576,12 +9576,60 @@
       }
     },
     {
+      "file": "Fancy Crops v1.2.zip",
+      "name": "(Bee's) Fancy Crops",
+      "version": "1.2",
+      "sha1": "b7b75543839378884e4e86aa8c0d445f8cf354e4",
+      "enabled": true,
+      "loadOrder": 35,
+      "flaggedIncompatible": false,
+      "source": {
+        "curseforge": {
+          "projectId": 884709,
+          "fileId": 6779837,
+          "slug": "fancy-crops",
+          "url": "https://www.curseforge.com/minecraft/texture-packs/fancy-crops/files/6779837"
+        },
+        "modrinth": {
+          "projectId": "UGEVQ6t9",
+          "versionId": "TQMLlyko",
+          "slug": "fancy-crops",
+          "url": "https://modrinth.com/resourcepack/fancy-crops/version/TQMLlyko",
+          "download": "https://cdn.modrinth.com/data/UGEVQ6t9/versions/TQMLlyko/Fancy%20Crops%20v1.2.zip"
+        }
+      }
+    },
+    {
+      "file": "Fancy_Beds-v4.2.zip",
+      "name": "Fancy Beds",
+      "version": "4.2",
+      "sha1": "40e5ffd45f5c2865ef86760b137ea308ff1a7203",
+      "enabled": false,
+      "loadOrder": null,
+      "flaggedIncompatible": false,
+      "source": {
+        "curseforge": {
+          "projectId": 509339,
+          "fileId": 8672129,
+          "slug": "fancy-beds",
+          "url": "https://www.curseforge.com/minecraft/texture-packs/fancy-beds/files/8672129"
+        },
+        "modrinth": {
+          "projectId": "hFoOkEdk",
+          "versionId": "Zdz7XQhL",
+          "slug": "fancy-beds",
+          "url": "https://modrinth.com/resourcepack/fancy-beds/version/Zdz7XQhL",
+          "download": "https://cdn.modrinth.com/data/hFoOkEdk/versions/Zdz7XQhL/Fancy_Beds-v4.2.zip"
+        }
+      }
+    },
+    {
       "file": "Golden crit.zip",
       "name": "Golden crit - Sr_Paulo",
       "version": "Golden crit.zip",
       "sha1": "2780c0d9711aeca8073ed10d441a7d0c78789fc9",
       "enabled": true,
-      "loadOrder": 20,
+      "loadOrder": 21,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9598,7 +9646,7 @@
       "version": "IE Breaker Switch Sound.zip",
       "sha1": "64b43eeeddee345082edce2f7ac7dfeb2ea5d546",
       "enabled": true,
-      "loadOrder": 32,
+      "loadOrder": 33,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9649,7 +9697,7 @@
       "version": "LootrChestRetexture_v1.1_1.19.zip",
       "sha1": "89baa371773d4783c5b2a21ada4aa0a032e289ff",
       "enabled": true,
-      "loadOrder": 21,
+      "loadOrder": 22,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9666,7 +9714,7 @@
       "version": "26.2",
       "sha1": "96932a034fff4cd0cad08ba12db730450c4772da",
       "enabled": true,
-      "loadOrder": 22,
+      "loadOrder": 23,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9690,7 +9738,7 @@
       "version": "Lower Shield.zip",
       "sha1": "b9f51386e4bcac7f402c15ea9fd4194c05b6dfc3",
       "enabled": true,
-      "loadOrder": 23,
+      "loadOrder": 24,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9741,7 +9789,7 @@
       "version": "v1",
       "sha1": "ee536a8763d6475231dce48b080eed8b20cefc3b",
       "enabled": true,
-      "loadOrder": 31,
+      "loadOrder": 32,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9782,7 +9830,7 @@
       "version": "SquirmingSilverfish [1.13 - 26.3]   (v2).zip",
       "sha1": "f0b0ff9fef3f5e5371ce926a7ab1bbea67d31abf",
       "enabled": true,
-      "loadOrder": 33,
+      "loadOrder": 34,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9799,7 +9847,7 @@
       "version": "Updated_Engineering_v1.7.zip",
       "sha1": "63c38fd48f109d949ddcb0359073c2a16fe8d558",
       "enabled": true,
-      "loadOrder": 30,
+      "loadOrder": 31,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9840,7 +9888,7 @@
       "version": "create_style_pretty_fluid_pipes-1.0.0",
       "sha1": "2c61693b522ffcab036cb850ec9e973fa2de54cf",
       "enabled": true,
-      "loadOrder": 29,
+      "loadOrder": 30,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {

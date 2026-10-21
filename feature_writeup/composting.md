@@ -100,7 +100,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   old rules.
 - **F3. `gen_compost_values.py` isn't in `/cegen`.** It's a manual `--merge` after adding mods (the file is hand-edited,
   so a blind regeneration would be wrong). Fine as is; noted for the tooling list ([pack_tooling.md](pack_tooling.md) F5).
-- **F4. The nulch recipe** sits in `sawdust.js` (line 83) with a note that it belongs with compost ([TODO.md](todo/TODO.md) 6).
+- **F4. The nulch recipe** sits in `sawdust.js` (line 83) with a note that it belongs with compost ([TODO](todo/TODO.md) `farming/composting #2`).
 
 ### Known limits
 

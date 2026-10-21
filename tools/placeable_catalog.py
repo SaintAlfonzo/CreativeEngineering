@@ -9,6 +9,9 @@ Three ways to place food in this pack:
     Delight jams. Some of these place only while sneaking (SNEAK_ITEM_CLASSES).
   * Crops and bushes that are edible (carrot, sweet berries...) plant rather than place. They are listed
     in the catalog but get no tag.
+  * Brewin' and Chewin' coasters (backport) take up to 4 items, and with [coaster] taggedItemsOnly only the ones
+    with a coaster model: the port's own (COASTER_DIR) and the Display Delight foods tools/gen_coaster_models.py
+    writes (PACK_COASTER_DIR, run it first). Those get "Placeable on a coaster" (alcohol.md 8.3, 12).
 
 Outputs:
   kubejs/generation_scripts/food/placeable.json   tag -> item_dict keys, read by
@@ -50,7 +53,13 @@ TAGS = OrderedDict([
     ('placeable/sneak', ('creativeengineering:placeable/sneak', 't_placeable_sneak')),
     ('placeable_on_plate', ('creativeengineering:placeable_on_plate', 't_placeable_on_plate')),
     ('placeable_on_small_plate', ('creativeengineering:placeable_on_small_plate', 't_placeable_on_small_plate')),
+    ('placeable_on_coaster', ('creativeengineering:placeable_on_coaster', 't_placeable_on_coaster')),
 ])
+
+# The Brewin' port's coaster models (one file per item that has its own look on a coaster).
+COASTER_DIR = INSTANCE / 'development/backportedBrewin/src/main/resources/assets/brewinandchewin/brewinandchewin/coaster'
+# The pack's coaster models: Display Delight's placed models, from tools/gen_coaster_models.py.
+PACK_COASTER_DIR = INSTANCE / 'kubejs/assets/creativeengineering/brewinandchewin/coaster'
 
 # Block classes that make a non-edible block item a placed food (same words as dump_food.js FOOD_BLOCK).
 FOOD_BLOCK = re.compile(r'(Cake|Feast|Pie|Pizza|Pudding|Sandwich|Roast|Platter|Food)')
@@ -62,6 +71,7 @@ PLANT = re.compile(r'(Crop|Bush|Vine|Stem|Sapling|GrowingPlant|Flower|Mushroom|F
 # Item classes whose place() only runs while sneaking.
 SNEAK_ITEM_CLASSES = {
     'dev.xkmc.fruitsdelight.content.item.FDBlockItem': 'Fruits Delight: place() passes unless sneaking',
+    'net.satisfy.vinery.core.item.DrinkBlockItem': 'Vinery backport (1.5.5): getPlacementState is null unless crouching',
 }
 # How each own-block family places, by item class (shown in the catalog).
 HOW_BY_ITEM_CLASS = {
@@ -69,6 +79,7 @@ HOW_BY_ITEM_CLASS = {
     'satisfyu.vinery.item.DrinkBlockSmallItem': 'right click a block (not sneaking); drink in the air',
     'satisfyu.vinery.item.DrinkBlockBigItem': 'right click a block (not sneaking); drink in the air',
     'dev.xkmc.fruitsdelight.content.item.FDBlockItem': 'sneak + right click',
+    'net.satisfy.vinery.core.item.DrinkBlockItem': 'sneak + right click; drink in the air',
 }
 
 # Non-edible block items that are food blocks but the class regex misses (id -> note).
@@ -251,6 +262,31 @@ def classify(rows, dd):
     return out, plants, skipped
 
 
+def add_coaster(entries, rows, installed):
+    """Adds placeable_on_coaster to the items with a coaster model, the port's and the pack's."""
+    modelled, from_dd = set(), set()
+    for p in COASTER_DIR.glob('*.json'):
+        modelled.add(json.loads(p.read_text())['item'])
+    if not modelled:
+        print(f'warning: no coaster models in {COASTER_DIR}')
+    for p in PACK_COASTER_DIR.glob('*.json'):
+        from_dd.add(json.loads(p.read_text())['item'])
+    if not from_dd:
+        print(f'warning: no pack coaster models in {PACK_COASTER_DIR} (run tools/gen_coaster_models.py)')
+    for item_id in sorted(modelled | from_dd):
+        present = item_id in rows or item_id in installed or item_id.startswith('minecraft:')
+        if not present or excluded(item_id):
+            continue
+        entry = entries.get(item_id)
+        if entry is None:
+            r = rows.get(item_id, {})
+            entry = {'id': item_id, 'name': r.get('name', item_id), 'mod': item_id.split(':', 1)[0],
+                     'kinds': set(), 'how': [], 'dd': {}}
+            entries[item_id] = entry
+        entry['kinds'].add('placeable_on_coaster')
+        entry['how'].append('coaster: right click a coaster' + ('' if item_id in modelled else ' (Display Delight model)'))
+
+
 def review_candidates(block_items, rows):
     """Non-edible block items whose class matches the wide food net but not the strict one (dump mode)."""
     seen = []
@@ -373,11 +409,12 @@ def build_md(source, entries, plants, skipped, review, untagged, unlinked, new_k
          '## Summary', '',
          *md_table([[f'`#{TAGS[t][0]}`', f'"{label}"', count[t]] for t, label in (
              ('placeable', 'Placeable'), ('placeable/sneak', '(while sneaking)'),
-             ('placeable_on_plate', 'Placeable on plate'), ('placeable_on_small_plate', 'Placeable on small plate'))],
+             ('placeable_on_plate', 'Placeable on plate'), ('placeable_on_small_plate', 'Placeable on small plate'),
+             ('placeable_on_coaster', 'Placeable on a coaster'))],
              ['Tag', 'Tooltip line', 'Items']),
          '', f'{len(entries)} items in total across {len(by_mod)} mods.', '',
          '## Catalog by mod', '',
-         'P = placeable, S = sneak to place, Pl = on Food Plate, SP = on Small Food Plate.', '']
+         'P = placeable, S = sneak to place, Pl = on Food Plate, SP = on Small Food Plate, C = on a Brewin\' coaster.', '']
     for mod in sorted(by_mod):
         rows = []
         for e in sorted(by_mod[mod], key=lambda e: e['name'].lower()):
@@ -385,8 +422,8 @@ def build_md(source, entries, plants, skipped, review, untagged, unlinked, new_k
             rows.append([e['name'], f'`{e["id"]}`',
                          'P' if 'placeable' in k else '', 'S' if 'placeable/sneak' in k else '',
                          'Pl' if 'placeable_on_plate' in k else '', 'SP' if 'placeable_on_small_plate' in k else '',
-                         '; '.join(e['how'])])
-        L += [f'### {mod} ({len(rows)})', '', *md_table(rows, ['Item', 'Id', 'P', 'S', 'Pl', 'SP', 'How']), '']
+                         'C' if 'placeable_on_coaster' in k else '', '; '.join(e['how'])])
+        L += [f'### {mod} ({len(rows)})', '', *md_table(rows, ['Item', 'Id', 'P', 'S', 'Pl', 'SP', 'C', 'How']), '']
 
     L += ['## Edible but planted, not placed (no tag)', '',
           'These place a crop or bush, so they get no "Placeable" line.', '',
@@ -430,9 +467,11 @@ def main():
 
     source, rows, dd, block_items = load()
     entries, plants, skipped = classify(rows, dd)
+    installed = installed_ids()
+    add_coaster(entries, rows, installed)
     keys, new, src = dict_keys(entries)
     text = build_json(entries, keys)
-    untagged, unlinked = dd_gaps(rows, dd, installed_ids())
+    untagged, unlinked = dd_gaps(rows, dd, installed)
     review = review_candidates(block_items, rows) if source == 'dump' else []
 
     if args.check:

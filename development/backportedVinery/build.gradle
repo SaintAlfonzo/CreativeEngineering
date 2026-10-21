@@ -1,0 +1,87 @@
+// backportedVinery: Let's Do Vinery 1.5.5 ported to Forge 1.19.2 (mod id vinery), with the part of Let's Do
+// Foundation 1.0.1 it uses bundled under net.satisfy.foundation.
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
+// Build from the instance root (`./gradlew :backportedVinery:build`) or from here (`./gradlew build`).
+plugins {
+    id 'ce.forge-mod-refmap'
+}
+
+repositories {
+    // Third-party mod jars copied from ../../mods (git-ignored).
+    flatDir { dir 'libs' }
+    mavenCentral()
+}
+
+dependencies {
+    // Optional integrations; every entry point checks the mod is loaded first.
+    // flatDir notation: 'local:<file name without -version>:<version>'
+    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+
+    compileOnly 'io.github.llamalad7:mixinextras-common:0.4.1'
+    // WTHIT lines (B4.6); the pack's jar, shared with patcherMod
+    compileOnly files('../patcherMod/libs/wthit-1.19.2-forge-5.36.1.jar')
+    annotationProcessor 'io.github.llamalad7:mixinextras-common:0.4.1'
+}
+
+// Access transformer (SRG names, generated from tools/accesstransformer.official.cfg by tools/gen_at.py).
+minecraft {
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+}
+
+// Mixins use Mojang names and get a real refmap, like backportedBrewin.
+mixin {
+    add sourceSets.main, 'vinery.refmap.json'
+    mixin_configs.split(',').each { config it.trim() }
+}
+
+// The mixin AP writes the refmap into the compile task's temporary dir, which Gradle doesn't track: declare it as an
+// output so a missing one re-runs the compile (exposureBackport shipped a jar without its refmap once).
+tasks.named('compileJava', JavaCompile).configure {
+    outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
+    options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
+}
+
+// D13 B (alcohol.md B4.8): the jar must not carry upstream resources. Fail the build if a file under
+// src/main/resources has the same path as a file in one of the upstream jars (except the few we write ourselves).
+def upstreamJars = ['letsdo-vinery-fabric-1.5.5.jar', 'letsdo-vinery-forge-1.3.10.jar'].collect {
+    rootProject.file("vinery_upstream/${it}")
+}
+def ownFiles = ['META-INF/mods.toml', 'META-INF/MANIFEST.MF', 'META-INF/accesstransformer.cfg', 'pack.mcmeta',
+                'vinery.mixins.json', 'vinery.refmap.json'] as Set
+tasks.register('checkNoUpstreamResources') {
+    group = 'verification'
+    description = 'Fails if src/main/resources contains a path that also exists in an upstream Vinery jar'
+    def resDir = file('src/main/resources')
+    inputs.dir(resDir)
+    doLast {
+        def ours = [] as Set
+        resDir.eachFileRecurse(groovy.io.FileType.FILES) { ours << resDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
+        def clashes = []
+        upstreamJars.findAll { it.exists() }.each { jar ->
+            new java.util.zip.ZipFile(jar).withCloseable { zip ->
+                zip.entries().each { e ->
+                    if (!e.directory && ours.contains(e.name) && !ownFiles.contains(e.name)) clashes << "${e.name} (${jar.name})"
+                }
+            }
+        }
+        if (clashes) throw new GradleException("upstream files in src/main/resources:\n  " + clashes.join('\n  '))
+    }
+}
+tasks.named('check') { dependsOn 'checkNoUpstreamResources' }
+tasks.named('jar') { dependsOn 'checkNoUpstreamResources' }
+
+// Backstop: every mixin config that lists mixins must find its refmap in the jar.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def jarFile = archiveFile.get().asFile
+        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
+        def slurper = new groovy.json.JsonSlurper()
+        mixin_configs.split(',').collect { it.trim() }.each { config ->
+            def json = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> slurper.parse(zip.getInputStream(zip.getEntry(config))) }
+            def count = ['mixins', 'client', 'server'].sum { (json[it] ?: []).size() }
+            if (count > 0 && json.refmap && !entries.contains(json.refmap)) {
+                throw new GradleException("${config} has ${count} mixin(s) but its refmap ${json.refmap} is not in ${jarFile.name}")
+            }
+        }
+    }
+}

@@ -180,7 +180,8 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
     private boolean hasRoomForLeftovers(BakingRecipe recipe) {
         if (!RemainderBuffer.stalls()) return true;
         return remainders.fits(
-                RemainderBuffer.leftovers(inventory, 0, BakingRecipe.INPUT_SLOTS, INGREDIENT_REMAINDER_OVERRIDES),
+                RemainderBuffer.leftovers(inventory, 0, BakingRecipe.INPUT_SLOTS, INGREDIENT_REMAINDER_OVERRIDES,
+                        recipe.slotCounts(new RecipeWrapper(inventory))),
                 inventory, CONTAINER_SLOT, RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()),
                 getMeal().getCount() + recipe.getResultItem().getCount());
     }
@@ -210,6 +211,10 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
             return false;
         }
 
+        int[] used = recipe.slotCounts(new RecipeWrapper(inventory));
+        if (used == null) {
+            return false;
+        }
         cookTime = 0;
         mealContainerStack = recipe.getOutputContainer().copy();
         ItemStack resultStack = recipe.getResultItem();
@@ -221,17 +226,19 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
         }
         usedRecipeTracker.addTo(recipe.getId(), 1);
 
-        // Ingredients only: the tool in slot 6 stays as it is (no durability).
+        // Ingredients only: the tool in slot 6 stays as it is (no durability). Each slot gives up its ingredient's
+        // count, and one leftover per item taken.
         for (int i = 0; i < BakingRecipe.INPUT_SLOTS; ++i) {
             ItemStack slotStack = inventory.getStackInSlot(i);
-            if (slotStack.hasCraftingRemainingItem()) {
-                ejectIngredientRemainder(slotStack.getCraftingRemainingItem());
-            } else if (INGREDIENT_REMAINDER_OVERRIDES.containsKey(slotStack.getItem())) {
-                ejectIngredientRemainder(INGREDIENT_REMAINDER_OVERRIDES.get(slotStack.getItem()).getDefaultInstance());
+            if (slotStack.isEmpty()) continue;
+            for (int n = 0; n < used[i]; ++n) {
+                if (slotStack.hasCraftingRemainingItem()) {
+                    ejectIngredientRemainder(slotStack.getCraftingRemainingItem());
+                } else if (INGREDIENT_REMAINDER_OVERRIDES.containsKey(slotStack.getItem())) {
+                    ejectIngredientRemainder(INGREDIENT_REMAINDER_OVERRIDES.get(slotStack.getItem()).getDefaultInstance());
+                }
             }
-            if (!slotStack.isEmpty()) {
-                slotStack.shrink(1);
-            }
+            slotStack.shrink(used[i]);
         }
         return true;
     }

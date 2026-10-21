@@ -7,13 +7,12 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 - Java 17
 - JVM args: `-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M`
 
-## Mods (418: 359 both, 45 client, 14 server)
+## Mods (407: 362 both, 45 client)
 
 | Side | Mod | Mod id | Version | File | Source |
 |---|---|---|---|---|---|
 | both | Abnormals Delight | `abnormals_delight` | 4.1.2 | `abnormals_delight-1.19.2-4.1.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/abnormals-delight/files/5220861) [MR](https://modrinth.com/mod/abnormals-delight/version/u2H47I5t) |
 | both | Advanced Peripherals | `advancedperipherals` | AdvancedPeripherals-1.19.2-0.7.37r.jar | `AdvancedPeripherals-1.19.2-0.7.37r.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/advanced-peripherals/files/5788543) |
-| both | AE2 QoL Recipes | `ae2qolrecipes` | ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar | `ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ae2-qol-recipes/files/6196957) |
 | both | Alex's Abnormalities | `alexsabnormalities` | alexsabnormalities-1.3.jar | `alexsabnormalities-1.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/alexs-abnormalities/files/4876265) |
 | both | Alex's Delight | `alexsdelight` | alexsdelight-1.4.1.jar | `alexsdelight-1.4.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/alexs-delight/files/4282385) |
 | both | Alex's Mobs | `alexsmobs` | 1.21.1 | `alexsmobs-1.21.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/alexs-mobs/files/4159154) [MR](https://modrinth.com/mod/alexs-mobs/version/BgeYEhGG) |
@@ -27,9 +26,12 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Architectury API | `architectury` | 6.6.92+forge | `architectury-6.6.92-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/architectury-api/files/5137942) [MR](https://modrinth.com/mod/architectury-api/version/96L7fC9l) |
 | both | Armor Trims Backport | `armor_trims` | 1.3.3 | `armortrims-1.19.2-1.3.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/armor-trims/files/4697214) [MR](https://modrinth.com/mod/armor-trims/version/w4Vf3LmI) |
 | both | AstikorCarts [Horse Carts] | `astikorcarts` | 1.1.2 | `astikorcarts-1.19.2-1.1.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/astikorcarts/files/4367405) [MR](https://modrinth.com/mod/astikorcarts/version/BW5OrZu6) |
-| server | Async Locator | `asynclocator` | 1.19.2-1.3.0 | `async-locator-forge-1.19.2-1.3.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/async-locator/files/4593926) [MR](https://modrinth.com/mod/async-locator/version/8vNUDsod) |
+| both | Async Locator | `asynclocator` | 1.19.2-1.3.0 | `async-locator-forge-1.19.2-1.3.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/async-locator/files/4593926) [MR](https://modrinth.com/mod/async-locator/version/8vNUDsod) |
 | both | Atmospheric Paintings Pack for FORGE and FABRIC | `paintings_pack1` | 1.19.2 | `FORGE_PaintingPack_1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/jess-painting-pack/files/4257294) [MR](https://modrinth.com/mod/atmospheric-paintings/version/WoUSyaxE) |
 | both | AutoRegLib | `autoreglib` | 1.8.2-55 | `AutoRegLib-1.8.2-55.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/autoreglib/files/4100299) [MR](https://modrinth.com/mod/autoreglib/version/pwEa2yJ2) |
+| both | babyMobs-1.0.0 | `baby_mobs` |  | `babyMobs-1.0.0.jar` | local |
+| both | backportedBrewin-4.5.0-ce-19.2-03 | `brewinandchewin` |  | `backportedBrewin-4.5.0-ce-19.2-03.jar` | local |
+| both | backportedVinery-1.5.5-ce-19.2-04 | `vinery` |  | `backportedVinery-1.5.5-ce-19.2-04.jar` | local |
 | both | bad packets | `badpackets` | forge-0.2.3 | `badpackets-forge-0.2.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/badpackets/files/4784364) [MR](https://modrinth.com/mod/badpackets/version/VTOW8XR6) |
 | both | Balm | `balm` | balm-forge-1.19.2-4.6.0.jar | `balm-forge-1.19.2-4.6.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/balm/files/4751735) |
 | both | Beautify! | `beautify` | 1.4.3 | `beautify-1.4.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/beautify-decorate/files/4036351) [MR](https://modrinth.com/mod/beautify/version/xr9tFqJo) |
@@ -38,7 +40,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Better Days | `betterdays` | 1.19.2-3.3.4.3-FORGE | `betterdays-1.19.2-3.3.4.3-FORGE.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/betterdays/files/7013555) [MR](https://modrinth.com/mod/betterdays/version/MdGdgayz) |
 | client | Better Third Person | `betterthirdperson` | BetterThirdPerson - Forge - 1.19 - 1.9.0 | `BetterThirdPerson-Forge-1.19-1.9.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/better-third-person/files/4177088) |
 | client | BetterF3 | `betterf3` | 4.0.1 | `BetterF3-4.0.1-Forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/betterf3/files/4863555) [MR](https://modrinth.com/mod/betterf3/version/mMlLANpz) |
-| server | Block Runner | `blockrunner` | v4.2.2-1.19.2-Forge | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/block-runner/files/4531217) [MR](https://modrinth.com/mod/block-runner/version/MxlSUiGV) |
+| both | Block Runner | `blockrunner` | v4.2.2-1.19.2-Forge | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/block-runner/files/4531217) [MR](https://modrinth.com/mod/block-runner/version/MxlSUiGV) |
 | both | Blocky Siege | `blocky_siege` | Blocky_siege-6.1.91-1.19.2.jar | `blocky_siege-6.1.91-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/luckys-blocky-siege/files/5144430) |
 | both | Blue Flame Burning | `blueflame` | 5 | `blueflame-1.19.2-0.1.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/blueflame/files/4034673) [MR](https://modrinth.com/mod/blueflame/version/uheMFxJl) |
 | both | Blueprint | `blueprint` | 6.2.0 | `blueprint-1.19.2-6.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/blueprint/files/4749000) [MR](https://modrinth.com/mod/blueprint/version/SnLXbWe9) |
@@ -48,10 +50,8 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Book Fishing | `book_fishing` | Book Fishing 1.0.0 | `Book Fishing 1.0.0 - 1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/book-fishing/files/4100208) |
 | both | Bookshelf | `bookshelf` | 16.3.20 | `Bookshelf-Forge-1.19.2-16.3.20.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/bookshelf/files/4556697) [MR](https://modrinth.com/mod/bookshelf-lib/version/IL6yVQcP) |
 | both | Botania | `botania` | 1.19.2-440.2-forge | `Botania-1.19.2-440.2-FORGE.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/botania/files/5608807) [MR](https://modrinth.com/mod/botania/version/aTGY8zMJ) |
-| both | Bottled Air | `bottledair` | 1.19.2-2.3-fabric+forge+neo | `bottledair-1.19.2-2.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/bottled-air/files/4965329) [MR](https://modrinth.com/mod/bottled-air/version/iU00AmRJ) |
 | both | Breedable Killer Rabbit | `breedablekillerrabbit` | 1.19.2-3.5-fabric+forge | `breedablekillerrabbit-1.19.2-3.5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/breedable-killer-rabbit/files/5169084) [MR](https://modrinth.com/mod/breedable-killer-rabbit/version/MRwMqCA2) |
 | both | Breezy | `breezy` | 1.0.8 | `breezy-1.19.2-1.0.8.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/breezy/files/5447685) [MR](https://modrinth.com/mod/breezy/version/NfRgwQsp) |
-| both | Brewin' And Chewin' | `brewinandchewin` | 1.19-2.0 | `BrewinAndChewin-1.19-2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/brewin-and-chewin/files/4468049) [MR](https://modrinth.com/mod/brewin-and-chewin/version/gj3ERfxM) |
 | both | Brick Hopper | `brickhopper` | brickhopper-1.19-1.4.2.1.jar | `brickhopper-1.19-1.4.2.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/brick-hopper/files/4276196) |
 | both | Bushier Flowers | `bushierflowers` | 0.0.2-1.19.2 | `bushierflowers-0.0.2-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/bushier-flowers/files/4035417) [MR](https://modrinth.com/mod/bushier-flowers/version/Gy3954xg) |
 | both | Buzzier Bees | `buzzier_bees` | 5.0.1 | `buzzier_bees-1.19.2-5.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/buzzier-bees/files/4776328) [MR](https://modrinth.com/mod/buzzier-bees/version/d9WQBnra) |
@@ -66,10 +66,10 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Chalk | `chalk` | 1.6.4 | `chalk-1.19.2-1.6.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/chalk/files/7370701) [MR](https://modrinth.com/mod/chalk-mod/version/L6kZscOg) |
 | both | Charm of Undying (Fabric/Forge/Quilt) | `charmofundying` | 6.2.1+1.19.2 | `charmofundying-forge-6.2.1+1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/charm-of-undying/files/4603643) [MR](https://modrinth.com/mod/charm-of-undying/version/cdHZ9sTu) |
 | both | Chef's Delight [Forge] - Farmer's Delight Villagers | `chefsdelight` | 1.0.3-forge-1.19.2 | `chefsdelight-1.0.3-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/chefs-delight-forge/files/7314818) [MR](https://modrinth.com/mod/chefs-delight/version/fDgIzV8G) |
-| server | Cherished Items | `cherisheditems` | CherishedItems-Forge-1.19.2-1.0.2.jar | `CherishedItems-Forge-1.19.2-1.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/cherished-items/files/4927598) |
+| both | Cherished Items | `cherisheditems` | CherishedItems-Forge-1.19.2-1.0.2.jar | `CherishedItems-Forge-1.19.2-1.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/cherished-items/files/4927598) |
 | client | Cherished Worlds | `cherishedworlds` | cherishedworlds-forge-6.0.5+1.19.4.jar | `cherishedworlds-forge-6.0.5+1.19.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/cherished-worlds/files/4500351) |
 | both | Chimes | `chimes` | Chimes-v2.0.1-1.19.2-Forge | `Chimes-v2.0.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/chimes/files/4671793) |
-| server | Chunky (Forge/NeoForge) | `chunky` | 1.3.38 | `Chunky-1.3.38.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator-forge/files/3970964) [MR](https://modrinth.com/mod/chunky/version/WNen5Iom) |
+| both | Chunky (Forge/NeoForge) | `chunky` | 1.3.38 | `Chunky-1.3.38.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator-forge/files/3970964) [MR](https://modrinth.com/mod/chunky/version/WNen5Iom) |
 | both | Citadel | `citadel` | citadel-2.1.4-1.19 | `citadel-2.1.4-1.19.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/citadel/files/4556677) |
 | both | Clayworks | `clayworks` | 2.1.0 | `clayworks-1.19.2-2.1.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/clayworks/files/4776086) [MR](https://modrinth.com/mod/clayworks/version/Skc3zBzk) |
 | client | Clear Void | `clearvoid` | 1.3.0 | `clearvoid-forge-1.3.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/clear-void/files/4734642) [MR](https://modrinth.com/mod/clear-void/version/5YMCJnNn) |
@@ -79,7 +79,6 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | CodeChicken Lib 1.8.+ | `codechickenlib` | 4.3.2.490 | `CodeChickenLib-1.19.2-4.3.2.490-universal.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/codechicken-lib-1-8/files/4965330) [MR](https://modrinth.com/mod/codechicken-lib/version/MoblXfOv) |
 | both | Collective | `collective` | 1.19.2-7.64-fabric+forge | `collective-1.19.2-7.64.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/collective/files/5460518) [MR](https://modrinth.com/mod/collective/version/RKCtWE4y) |
 | both | ColoredWater | `colored_water` | 1.19.2-1.3.7 | `Colored Water-1.19.2-1.3.7.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/coloredwater/files/4585462) [MR](https://modrinth.com/mod/coloredwater/version/X8V4kWng) |
-| both | Comfortable Campfires | `comfortable_campfires` | 1.1.2+1.19.2 | `comfortable-campfires-1.1.2+1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/comfortable-campfires/files/6108452) [MR](https://modrinth.com/mod/comfortable-campfires/version/rbf5I3X0) |
 | both | Comforts | `comforts` | 6.0.7+1.19.2 | `comforts-forge-6.0.7+1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/comforts/files/4977779) [MR](https://modrinth.com/mod/comforts/version/4xI610Ck) |
 | both | Compressed Creativity | `compressedcreativity` | 1.19.2-0.1.8 | `compressedcreativity-1.19.2-0.1.8.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/compressedcreativity/files/4792470) [MR](https://modrinth.com/mod/compressedcreativity/version/f03UZ0sz) |
 | both | Compressed Engineering | `compressedengineering` | compressedengineering-1.3.5.jar | `compressedengineering-1.3.5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/compressed-engineering/files/6771602) |
@@ -90,7 +89,6 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | client | Controlling | `controlling` | 10.0+7 | `Controlling-forge-1.19.2-10.0+7.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/controlling/files/4050343) [MR](https://modrinth.com/mod/controlling/version/cV6fmL90) |
 | both | Cooking for Blockheads | `cookingforblockheads` | cookingforblockheads-forge-1.19.2-13.3.4.jar | `cookingforblockheads-forge-1.19.2-13.3.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/cooking-for-blockheads/files/4942589) |
 | both | Cool Rain Reforged | `coolrain` | 1.0.2 | `coolrain-1.19.2-Forge-1.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/cool-rain-reforged/files/7090668) [MR](https://modrinth.com/mod/cool-rain-reforged/version/5ib5x24J) |
-| both | Copper Drops | `copperdrops` | Copper Drops 1.1 - 1.19-1.21+ | `CopperDrops-1.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/copper-drops/files/4889063) |
 | both | Corn Delight[Forge] | `corn_delight` | 1.0.3-1.19.2 | `corn_delight-1.0.3-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/corn-delight/files/4637286) [MR](https://modrinth.com/mod/corn-delight/version/yOYdkPX6) |
 | both | Corpse | `corpse` | [FORGE][1.19.2] Corpse 1.19.2-1.0.17 | `corpse-forge-1.19.2-1.0.17.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/corpse/files/5816905) |
 | both | Corpse x Cosmetic Armor Reworked Compat | `cosmeticcorpsecompat` | 1.0.0 | `cosmeticcorpsecompat-1.19.x-1.20.x-Forge-1.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/corpse-x-cosmetic-armor-reworked-compat/files/6637829) [MR](https://modrinth.com/mod/corpse-x-cosmetic-armor-reworked-compat/version/IUCHHmk5) |
@@ -99,6 +97,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Create | `create` | 1.19.2-0.5.1.i | `create-1.19.2-0.5.1.i.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create/files/5797604) [MR](https://modrinth.com/mod/create/version/tJVykywJ) |
 | both | Create : Gravity | `create_gravity` | 1.2.0 | `create_gravity-1.19.2-1.2.0-all.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-gravity/files/5164219) [MR](https://modrinth.com/mod/create-gravity/version/o4vhuqrb) |
 | both | Create : Misc & Things | `create_things_and_misc` | 4.0A | `create_misc_and_things_ 1.19.2_4.0A.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-misc-and-things/files/4735325) [MR](https://modrinth.com/mod/create-misc-and-things/version/6Qs4cZl2) |
+| both | Create : The Salt | `create__the_salt` | 1.1.0 | `create_salt 1.19.2-1.1.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-the-salt/files/5000032) [MR](https://modrinth.com/mod/create-the-salt/version/IwhIDWd7) |
 | both | Create Compact Exp | `nocubescreateexp` | nocube's_create_compact_exp_1.0.4_forge_1.19.2.jar | `nocube's_create_compact_exp_1.0.4_forge_1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-compact-exp/files/5559779) |
 | both | Create Compressed | `create_compressed` | 2.0.0 | `create_compressed-2.0.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-compressed/files/6251838) [MR](https://modrinth.com/mod/create-compressed/version/FQZ8irZ8) |
 | both | Create Confectionery | `create_confectionery` | create-confectionery1.19.2_v1.0.9.jar | `create-confectionery1.19.2_v1.0.9.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-confectionery/files/4561123) |
@@ -110,26 +109,23 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | client | Create Questing | `create_questing` | 1.0.0 | `Create_Questing-FORGE-1.19.2-1.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-questing/files/4773361) [MR](https://modrinth.com/mod/create-questing/version/QXBmxVDA) |
 | both | Create Recycle Everything | `create_crush_everything` | create_recycle_1.0.2_forge_1.19.2.jar | `create_recycle_1.0.2_forge_1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-recycle-everything/files/4714432) |
 | both | Create Slice & Dice | `sliceanddice` | 2.4.0 | `sliceanddice-forge-2.4.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/slice-and-dice/files/5736626) [MR](https://modrinth.com/mod/slice-and-dice/version/2YFOoeUh) |
-| both | Create Waystone Recipes | `create_waystone_recipes` | Create Waystone Recipes 1.19 / 1.20 | `Create_Waystone_Recipes_1.19_v2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-waystone-recipes/files/6536359) |
 | both | Create: Applied Kinetics | `createappliedkinetics` | 1.4-1.19.2 | `createappliedkinetics-1.4-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-applied-kinetics/files/5686016) [MR](https://modrinth.com/mod/create-applied-kinetics/version/B4JDMVGM) |
 | both | Create: Bells & Whistles | `bellsandwhistles` | 0.4.4-1.19.2-forge | `bellsandwhistles-v0.4.4-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/bellsandwhistles/files/4876115) [MR](https://modrinth.com/mod/bellsandwhistles/version/zgdMDJ9K) |
 | both | Create: Central Kitchen | `create_central_kitchen` | 1.3.11.c | `create_central_kitchen-1.19.2-for-create-0.5.1.f-1.3.11.c.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-central-kitchen/files/5232209) [MR](https://modrinth.com/mod/create-central-kitchen/version/xfrRlEVH) |
-| both | Create: Copper Splashing | `create_copper_splashing` | Create_Copper_Splashing_v2.jar | `Create_Copper_Splashing_v2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-copper-splashing/files/6536354) |
 | both | Create: Copycats+ | `copycats` | 2.2.2+mc.1.19.2-forge | `copycats-2.2.2+mc.1.19.2-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/copycats/files/6284776) [MR](https://modrinth.com/mod/copycats/version/ZURtfrZY) |
 | both | Create: Crystal Clear | `create_crystal_clear` | 1.19.2-0.2.a | `create_crystal_clear-0.2.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-crystal-clear/files/4554249) [MR](https://modrinth.com/mod/create-crystal-clear/version/YEuo20pc) |
 | both | Create: Deep Dark | `create_deep_dark` | 1.7.0 | `create_deep_dark-1.7.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-deep-dark/files/5868513) [MR](https://modrinth.com/mod/create-deep-dark/version/TIzeij46) |
 | both | Create: Design n' Decor | `design_decor` | 0.4.0 | `design_decor-0.4-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-design-n-decor/files/5291629) [MR](https://modrinth.com/mod/create-design-n-decor/version/fMnWzc4m) |
 | both | Create: Dreams n' Desires | `create_dd` | 1.2cBetaMidDev | `Create-DnDesire-1.19.2-1.2c.Beta Mid-Dev.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-dreams-desires/files/5790716) [MR](https://modrinth.com/mod/create-dreams-and-desires/version/n3bakyiQ) |
 | both | Create: Dynamic Village | `dynamicvillage` | 0.4-1.19.2 | `dynamicvillage-v0.4-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/dynamic-village/files/5565530) [MR](https://modrinth.com/mod/dynamic-village/version/JhQKUR2E) |
-| both | Create: Easy Stone Generators | `create_generators` | 1.0.0 | `create_generators-1.0.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-stone-generators/files/6224616) [MR](https://modrinth.com/mod/create-stone-generators/version/YZmNhF0J) |
 | both | Create: Enchantment Industry | `create_enchantment_industry` | 1.2.9.e | `create_enchantment_industry-1.19.2-for-create-0.5.1.f-1.2.9.e.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-enchantment-industry/files/5342348) [MR](https://modrinth.com/mod/create-enchantment-industry/version/KA5Gf4rg) |
 | both | Create: Extended Cogwheels  | `extendedgears` | 2.1.1-1.19.2-0.5.1.f-forge | `extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-extended-cogs/files/5229924) [MR](https://modrinth.com/mod/extended-cogwheels/version/a2OVeenK) |
 | both | Create: Factory | `create_factory` | 0.0.2-1.19.2 | `create_factory-0.0.2-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-factory/files/4534768) [MR](https://modrinth.com/mod/create-factory/version/OGnDlRJa) |
-| server | Create: Fast SchematicCannon | `createfastschematiccannon` | 1.19.2-2.6.1-0.5.1i | `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-fast-schematiccannon/files/8788985) [MR](https://modrinth.com/mod/create-fast-schematic-cannon/version/CdU9qA2M) |
+| both | Create: Fast SchematicCannon | `createfastschematiccannon` | 1.19.2-2.6.1-0.5.1i | `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-fast-schematiccannon/files/8788985) [MR](https://modrinth.com/mod/create-fast-schematic-cannon/version/CdU9qA2M) |
 | both | Create: Fishing Bobber Detector \| Automatic Fishing with Create | `bobberdetector` | bobberdetector-0.1.9-1.19.2.jar | `bobberdetector-0.1.9-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fishing-bobber-detector/files/4721959) |
 | both | Create: Framed | `createframed` | 1.4.5.1+1.19.2-forge | `createframed-1.19.2-1.4.5.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-framed/files/5602553) [MR](https://modrinth.com/mod/create-framed/version/h9ixfoTK) |
 | both | Create: Interiors | `interiors` | 0.5.6+forge-mc1.19.2 | `interiors-0.5.6+forge-mc1.19.2-build.105.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/interiors/files/5694661) [MR](https://modrinth.com/mod/interiors/version/BRGHEQfA) |
-| server | Create: Liquid Fuel | `createliquidfuel` | 2.1.1-1.19.2 | `createliquidfuel-2.1.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-liquid-fuel/files/5217311) [MR](https://modrinth.com/mod/create-liquid-fuel/version/YNiP5j5K) |
+| both | Create: Liquid Fuel | `createliquidfuel` | 2.1.1-1.19.2 | `createliquidfuel-2.1.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-liquid-fuel/files/5217311) [MR](https://modrinth.com/mod/create-liquid-fuel/version/YNiP5j5K) |
 | both | Create: Netherless (Forge) | `create_netherless` | 1.3.0 | `create_netherless-1.19.2-1.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-netherless/files/4645610) [MR](https://modrinth.com/mod/create-netherless/version/lE63sWyj) |
 | both | Create: Oxidized | `create_oxidized` | 0.1.1 | `create_oxidized-1.19.2-0.1.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-oxidized/files/4986562) [MR](https://modrinth.com/mod/create_oxidized/version/JHaJEgyv) |
 | both | Create: Power Loader | `create_power_loader` | 1.5.0-mc1.19.2 | `create_power_loader-1.5.0-mc1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-power-loader/files/5360822) [MR](https://modrinth.com/mod/create-power-loader/version/GuYzoHQC) |
@@ -138,13 +134,13 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Create: Ultimate Factory | `create_ultimate_factory` | 1.9.0 | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-ultimate-factory/files/6077105) [MR](https://modrinth.com/mod/create-ultimate-factory/version/DgbBwr4p) |
 | both | Create: Vintage Improvements | `vintageimprovements` | 1.19.2-0.2.0.3 | `vintageimprovements-1.19.2-0.2.0.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-vintage-improvements/files/5661435) [MR](https://modrinth.com/mod/create-vintage-improvements/version/nXivVakq) |
 | both | CreativeCore | `creativecore` | 2.11.28 | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/creativecore/files/5491926) [MR](https://modrinth.com/mod/creativecore/version/FHuLs5LQ) |
-| both | creativeengineering-1.0.6.jar | `creativeengineering` | Unknown | `creativeengineering-1.0.6.jar` | local |
+| both | creativeengineering-1.1.01 | `creativeengineering` |  | `creativeengineering-1.1.01.jar` | local |
 | both | Curios API (Forge/NeoForge) | `curios` | curios-forge-1.19.2-5.1.6.4.jar | `curios-forge-1.19.2-5.1.6.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/curios/files/5843737) |
 | both | Customizable Elytra | `customizableelytra` | forge-1.7.4-1.19.0 | `customizableelytra-1.19.0-1.7.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/customizable-elytra/files/4101953) [MR](https://modrinth.com/mod/customizable-elytra/version/gsnrKi46) |
 | both | Cycle Paintings | `cyclepaintings` | 1.19.2-3.5-fabric+forge+neo | `cyclepaintings-1.19.2-3.5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/cycle-paintings/files/4965175) [MR](https://modrinth.com/mod/cycle-paintings/version/fFPVRVpy) |
 | both | Dark Paintings | `darkpaintings` | 13.1.5 | `DarkPaintings-Forge-1.19.2-13.1.5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/dark-paintings/files/4357106) [MR](https://modrinth.com/mod/dark-paintings/version/J5B0QIef) |
 | both | Dave's Building Extended | `davebuildingmod` | dbExtended-1.19.2-6.0.1.jar | `dbExtended-1.19.2-6.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/daves-building-extended/files/4841878) |
-| server | Death Knell | `deathknell` | 6.0.3 | `DeathKnell-Forge-1.19.2-6.0.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/death-knell/files/4014716) [MR](https://modrinth.com/mod/death-knell/version/KCMrvAXI) |
+| both | Death Knell | `deathknell` | 6.0.3 | `DeathKnell-Forge-1.19.2-6.0.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/death-knell/files/4014716) [MR](https://modrinth.com/mod/death-knell/version/KCMrvAXI) |
 | both | Decorative Blocks | `decorative_blocks` | Decorative Blocks-forge-1.19.2-3.0.0.jar | `Decorative Blocks-forge-1.19.2-3.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/decorative-blocks/files/3941638) |
 | both | Delightful | `delightful` | 3.4.1-1.19.2 | `Delightful-1.19.2-3.4.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/delightful/files/4792851) [MR](https://modrinth.com/mod/delightful/version/3kuWUhts) |
 | client | Detail Armor Bar [Forge] | `detailab` | 2.6.4+1.19.2-forge | `DetailArmorBar-2.6.4+1.19.2-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/detail-armor-bar-forge/files/3920487) [MR](https://modrinth.com/mod/detail-armor-bar/version/kKIctwmh) |
@@ -177,13 +173,12 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Every Compat (Wood Good) | `everycomp` | 1.19.2-2.5.36 | `everycomp-1.19.2-2.5.36.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/every-compat/files/7142836) [MR](https://modrinth.com/mod/every-compat/version/xUCsILcc) |
 | both | Everything is Copper | `everythingcopper` | everythingcopper-1.19.2-2.3.4.jar | `everythingcopper-1.19.2-2.3.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/everythingcopper/files/5030661) |
 | both | Explorer's Compass | `explorerscompass` | 1.19.2-1.3.0-forge | `ExplorersCompass-1.19.2-1.3.0-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/explorers-compass/files/4016467) [MR](https://modrinth.com/mod/explorers-compass/version/YkK8Bd84) |
-| both | exposureBackport-1.9.19-ce-19.2-03.jar | `exposure` | Unknown | `exposureBackport-1.9.19-ce-19.2-03.jar` | local |
+| both | exposureBackport-1.9.19-ce-19.2-04.jar | `exposure` | Unknown | `exposureBackport-1.9.19-ce-19.2-04.jar` | local |
 | both | Fairy Lights | `fairylights` | fairylights-6.0.1-1.19.2 | `fairylights-6.0.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fairy-lights/files/4961791) |
 | both | Fantasy's Furniture | `fantasyfurniture` | 6.7.0 | `fantasyfurniture-1.19.2-6.7.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fantasys-furniture/files/4183177) [MR](https://modrinth.com/mod/fantasy-furniture/version/QewqRA2e) |
 | both | Farmer's Delight | `farmersdelight` | 1.19.2-1.2.4 | `FarmersDelight-1.19.2-1.2.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-delight/files/5051241) [MR](https://modrinth.com/mod/farmers-delight/version/rFTKVUtq) |
 | both | Farmer's Respite | `farmersrespite` | 1.19-2.0 | `FarmersRespite-1.19-2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-respite/files/4081312) [MR](https://modrinth.com/mod/farmers-respite/version/4eMRgi1r) |
 | both | Farmers Structures | `farmers_structures` | FarmersStructures-1.0.0-1.19.2.jar | `FarmersStructures-1.0.0-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmers-structures/files/5656711) |
-| both | Fast Leaf Decay | `fastleafdecay` | FastLeafDecay-30.jar | `FastLeafDecay-30.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fast-leaf-decay/files/3894512) |
 | both | FastFurnace | `fastfurnace` | FastFurnace-1.19.2-7.0.0.jar | `FastFurnace-1.19.2-7.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fastfurnace/files/4028348) |
 | both | FastWorkbench | `fastbench` | FastWorkbench-1.19.2-7.1.4.jar | `FastWorkbench-1.19.2-7.1.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fastworkbench/files/4643471) |
 | both | Felsic Gear | `felsic_gear` | Felsic Gear 1.0.0 | `Felsic Gear 1.0.0  - 1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/felsic-gear/files/4380224) |
@@ -202,12 +197,10 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | FTB Teams (NeoForge) | `ftbteams` | ftb-teams-forge-1902.2.14-build.123.jar | `ftb-teams-forge-1902.2.14-build.123.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ftb-teams-forge/files/4611938) |
 | both | Fuel Goes Here | `fuelgoeshere` | 1 | `fuelgoeshere-1.19.2-0.1.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fuelgoeshere/files/3933961) [MR](https://modrinth.com/mod/fuelgoeshere/version/CmwY7pPB) |
 | both | Fullblock Energistics | `fulleng` | forge-1.7.1-1.19.2 | `fulleng-forge-1.7.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fullblock-energistics/files/5296308) [MR](https://modrinth.com/mod/fullblock-energistics/version/4ymCZv2B) |
-| both | Furnace Recycle | `furnacerecycle` | 1.19.2-2.2-fabric+forge+neo | `furnacerecycle-1.19.2-2.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/furnace-recycle/files/4964885) [MR](https://modrinth.com/mod/furnace-recycle/version/SX0jjroc) |
 | both | GeckoLib | `geckolib3` | 3.1.40 | `geckolib-forge-1.19-3.1.40.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/geckolib/files/4407241) [MR](https://modrinth.com/mod/geckolib/version/lxzmD9V4) |
 | both | Geode+ | `geode` | [Forge 1.19.2] 1.1.8 | `geodeforge-1.1.8-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/geode-plus/files/4436710) |
 | both | Geophilic Reforged – Biome Additions | `geophilic_reforged` | 1.2.0 | `GeophilicReforged-v1.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/geophilic-reforged/files/4875199) [MR](https://modrinth.com/mod/geophilic-reforged/version/VF0bzh6B) |
 | both | Glow Ink Plus | `glow_ink_plus` | 1.2.0 | `(Forge)GlowInkPlus-1.19.2-1.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/glow-ink-plus/files/4400281) [MR](https://modrinth.com/mod/glow-ink-plus/version/A1EtjxMU) |
-| server | Glowing Illagers | `glowingraidillagers` | 1.0.0 | `glowingraidillagers-1.19.2-1.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/glowing-illagers/files/5034770) [MR](https://modrinth.com/mod/glowing-illagers/version/ewGIS3C4) |
 | both | Golden Foods! | `goldenfood` | 1.19.2-2.0.0 | `goldenfood-1.19.2-2.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/golden-foods/files/4626468) [MR](https://modrinth.com/mod/golden-foods/version/1dqbhxZp) |
 | both | Golems Are Friends Not Fodder | `golemsarefriends` | 3 | `golemsarefriends-1.19.2-0.1.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/golemsarefriends/files/4088114) [MR](https://modrinth.com/mod/golemsarefriends/version/Bad1xmWA) |
 | both | Greek Villager House | `greek_villager_house` | greek_villager_house-1.0.0-forge-1.19.2.jar | `greek_villager_house-1.0.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/greek-villager-house/files/6534255) |
@@ -218,7 +211,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Hopo Better Underwater Ruins | `hopour` | 1.1.1 | `HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/hopo-better-underwater-ruins/files/4474030) [MR](https://modrinth.com/mod/hopo-better-underwater-ruins/version/vFLT6v90) |
 | both | HT's TreeChop | `treechop` | 0.19.1 | `TreeChop-1.19.2-forge-0.19.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/treechop/files/5570188) [MR](https://modrinth.com/mod/treechop/version/aOob2rJV) |
 | both | Ice Boat Nerf - Reforged | `iceboatnerf` |  [Forge 1.17 - 1.20.5] Ice Boat Nerf | `iceboatnerf-1.1.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ice-boat-nerf-reforged/files/5097023) |
-| server | Ice Prevents Crop Growth | `icepreventscropgrowth` | 1.19.2-3.2-fabric+forge+neo | `icepreventscropgrowth-1.19.2-3.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ice-prevents-crop-growth/files/4964680) [MR](https://modrinth.com/mod/ice-prevents-crop-growth/version/4DjoH1Kn) |
+| both | Ice Prevents Crop Growth | `icepreventscropgrowth` | 1.19.2-3.2-fabric+forge+neo | `icepreventscropgrowth-1.19.2-3.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ice-prevents-crop-growth/files/4964680) [MR](https://modrinth.com/mod/ice-prevents-crop-growth/version/4DjoH1Kn) |
 | client | Iceberg [Neo/Forge] | `iceberg` | 1.1.4 | `Iceberg-1.19.2-forge-1.1.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/iceberg/files/4300529) [MR](https://modrinth.com/mod/iceberg/version/wog3r1ZM) |
 | client | ImmediatelyFast | `immediatelyfast` | 1.4.0+1.19.2-forge | `ImmediatelyFast-Forge-1.4.0+1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/immediatelyfast/files/6312263) [MR](https://modrinth.com/mod/immediatelyfast/version/OWO57F2j) |
 | both | Immersive Armors [Fabric/Forge] | `immersive_armors` | 1.5.6+1.19.2 | `immersive_armors-1.5.6+1.19.2-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/immersive-armors/files/4662406) [MR](https://modrinth.com/mod/immersive-armors/version/rHmDsz9m) |
@@ -259,13 +252,11 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | KubeJS Immersive Engineering | `kubejs_immersive_engineering` | 1902.2.3-build.18 | `kubejs-immersive-engineering-1902.2.3-build.18.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/kubejs-immersive-engineering/files/4842994) [MR](https://modrinth.com/mod/kubejs-immersive-engineering/version/Czk5Kt7t) |
 | client | Lava Clear View | `clearview` | LavaClearView-1.19.2-forge-5.0.0.jar | `LavaClearView-1.19.2-forge-5.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/lava-clear-view/files/3940274) |
 | client | Legendary Tooltips [Neo/Forge] | `legendarytooltips` | LegendaryTooltips-1.19.2-forge-1.4.0.jar | `LegendaryTooltips-1.19.2-forge-1.4.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/legendary-tooltips/files/4278509) |
-| both | [Let's Do] API  | `doapi` | 1.1.0b-forge | `doapi-1.1.0b.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/do-api/files/4676882) [MR](https://modrinth.com/mod/do-api/version/3albwtm0) |
-| both | [Let's Do] Vinery | `vinery` | Vinery - 1.3.10 - FORGE - 1.19.2 | `letsdo-vinery-forge-1.3.10.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/lets-do-vinery/files/4793221) |
 | both | Lightman's Currency | `lightmanscurrency` | 1.19.2-2.2.1.3g | `lightmanscurrency-1.19.2-2.2.1.3g.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/lightmans-currency/files/5807275) [MR](https://modrinth.com/mod/lightmans-currency/version/M1xoIF0K) |
-| server | Lightman's Discord Integration | `lightmansdiscord` | 1.19.2-0.2.0.3 | `lightmansdiscord-1.19.2-0.2.0.3-server.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/lightmans-discord-integration/files/4819648) [MR](https://modrinth.com/mod/ldi/version/KSRsiUEb) |
+| both | Lightman's Discord Integration | `lightmansdiscord` | 1.19.2-0.2.0.3 | `lightmansdiscord-1.19.2-0.2.0.3-server.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/lightmans-discord-integration/files/4819648) [MR](https://modrinth.com/mod/ldi/version/KSRsiUEb) |
 | both | Little Contraptions | `littlecontraptions` | [Forge] 1.19.2.2 | `littlecontraptions-forge-1.19.2.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/little-contraptions/files/4567820) |
 | both | Little Logistics | `littlelogistics` | 1.4.0 | `littlelogistics-mc1.19.2-v1.4.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/little-logistics/files/4563179) [MR](https://modrinth.com/mod/little-logistics/version/B6kUZ7Kf) |
-| server | Loading Protection | `loadingprotection` | loadingprotection-1.0.2-forge-1.19.2.jar | `loadingprotection-1.0.2-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/loading-protection/files/7477302) |
+| both | Loading Protection | `loadingprotection` | loadingprotection-1.0.2-forge-1.19.2.jar | `loadingprotection-1.0.2-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/loading-protection/files/7477302) |
 | both | LootJS: KubeJS Addon | `lootjs` | 1.19.2-2.9.1+forge | `lootjs-forge-1.19.2-2.9.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/lootjs/files/4709099) [MR](https://modrinth.com/mod/lootjs/version/1BTiNfZJ) |
 | both | Lootr (Forge & NeoForge) | `lootr` | 0.4.28.75 | `lootr-forge-1.19-0.4.29.76.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/lootr/files/5976195) [MR](https://modrinth.com/mod/lootr/version/6ULhni05) |
 | both | Lucky's Wardrobe | `wardrobe` | Wardrobe-1.0.3-1.19.2.jar | `wardrobe-1.0.3-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/luckys-wardrobe/files/5156261) |
@@ -292,7 +283,6 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Myrtrees | `myrtrees` | myrtrees-forge-1.2.0-build.32.jar | `myrtrees-forge-1.2.0-build.32.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/myrtrees/files/4371268) |
 | both | Mysterious Mountain Lib | `mysterious_mountain_lib` | 1.2.3-1.19.2 | `mysterious_mountain_lib-1.2.3-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/mysterious-mountain-lib/files/4547401) [MR](https://modrinth.com/mod/mmlib/version/Oe3zPknB) |
 | both | Mystical Oak Tree | `mysticaloaktree` | mysticaloaktree-1.19.2-1.10.jar | `mysticaloaktree-1.19.2-1.10.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/mystical-oak-tree/files/4654181) |
-| both | Nametag Crafting | `mr_name_tagcraftingrecipemod` | 1.0+mod | `name-tag-crafting-recipe-mod-1.0 (3).jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/nametag-crafting/files/6807242) [MR](https://modrinth.com/mod/name-tag-crafting-recipe-mod/version/nZX0ieOB) |
 | both | Nature's Compass | `naturescompass` | 1.19.2-1.10.0-forge | `NaturesCompass-1.19.2-1.10.0-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/natures-compass/files/4118390) [MR](https://modrinth.com/mod/natures-compass/version/N4ONofeB) |
 | both | Neapolitan | `neapolitan` | 4.1.0 | `neapolitan-1.19.2-4.1.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/neapolitan/files/4783978) [MR](https://modrinth.com/mod/neapolitan/version/8qmVV9M7) |
 | client | Neko's Enchanted Books | `nebs` | 1.19-2.0.3 | `NekosEnchantedBooks-1.19-2.0.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/nekos-enchanted-books/files/6180640) [MR](https://modrinth.com/mod/nekos-enchanted-books/version/G0oQtyG8) |
@@ -336,7 +326,6 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Quark Engineering | `quarkengineering` | QuarkEngineering.jar | `QuarkEngineering.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/quark-engineering/files/4428673) |
 | both | Quark Oddities | `quarkoddities` | 1.18 | `QuarkOddities-1.18.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/quark-oddities/files/3575623) [MR](https://modrinth.com/mod/quark-oddities/version/gvWA7HWA) |
 | both | Quests Additions (Forge) | `questsadditions` | questsadditions-1.19.2-1.4.2.jar | `questsadditions-1.19.2-1.4.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/quests-additions/files/4525499) |
-| server | Rain should extinguish campfires | `rsec` | 1.0-1.19.2-forge | `rsec-1.0-1.19.2-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/rain-should-extinguish-campfires/files/5029331) [MR](https://modrinth.com/mod/rain-should-extinguish-campfires/version/FqhndMyk) |
 | both | Rare Ice (Forge/Fabric) | `rare_ice` | 0.5.1 | `rare-ice-0.5.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/rare-ice/files/3909206) [MR](https://modrinth.com/mod/rare-ice/version/NoEF2WWX) |
 | both | Re:Deco - Vanilla Furniture | `redeco` | 1.5.0 | `redeco-1.5.0-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/redeco/files/5000565) [MR](https://modrinth.com/mod/redeco/version/Pxh8DgKL) |
 | both | REBIRTH: Paintings | `rebirth_paintings` | REBIRTH: Paintings 5.0.0 \|Minecon Live Update\|1.19.2\| | `REBIRTH Paintings 5.0.0 Backport 1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/rebirth/files/4821821) |
@@ -359,7 +348,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Separated Leaves | `separatedleaves` | 2.4.0-forge-1.19.2 | `separatedleaves-2.4.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/separatedleaves/files/5095829) [MR](https://modrinth.com/mod/separatedleaves/version/W2N7jwBk) |
 | both | Serene Seasons | `sereneseasons` | 8.1.0.24 | `SereneSeasons-1.19.2-8.1.0.24.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/serene-seasons/files/4037228) [MR](https://modrinth.com/mod/serene-seasons/version/O1v6mc2V) |
 | both | Shulker Box Slot (Fabric/Forge/Quilt) | `shulkerboxslot` | 5.0.0-beta.2+1.19.2 | `shulkerboxslot-forge-5.0.0-beta.2+1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/shulker-box-slot/files/3965294) [MR](https://modrinth.com/mod/shulker-box-slot/version/uQhWYA2s) |
-| server | Simple Backups | `simplebackups` | 1.19.1-2.1.12 | `SimpleBackups-1.19.1-2.1.12.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/simple-backups/files/6608337) [MR](https://modrinth.com/mod/simple-backups/version/cVELjkvu) |
+| both | Simple Backups | `simplebackups` | 1.19.1-2.1.12 | `SimpleBackups-1.19.1-2.1.12.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/simple-backups/files/6608337) [MR](https://modrinth.com/mod/simple-backups/version/cVELjkvu) |
 | both | Simple Hats | `simplehats` | 1.19.2-0.3.2 | `simplehats-forge-1.19.2-0.3.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/simplehats/files/5603818) [MR](https://modrinth.com/mod/simple-hats/version/nxHfpSMn) |
 | both | Simple Netherite Horse Armor | `netherite_horse_armor` | 1.19-1.0.4 | `netherite_horse_armor-forge-1.19-1.0.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/simple-netherite-horse-armor/files/5067633) [MR](https://modrinth.com/mod/simple-netherite-horse-armor/version/EWW1OsYx) |
 | both | Simply Houses | `simply_houses` | [FORGE] SimplyHouses-1.1.3-1.19-forge | `SimplyHouses-1.1.3-1.19-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/simply-houses/files/3854861) |
@@ -371,10 +360,10 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Spice of Life: Apple Pie Edition | `solapplepie` | solapplepie-1.19.2-2.2.0.jar | `solapplepie-1.19.2-2.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/spice-of-life-apple-pie-edition/files/4596169) |
 | client | Spyglass Improvements: Zoom, Quick Access... [Fabric/NeoForge] | `spyglass_improvements` | 1.5.12+mc1.19+forge | `spyglass_improvements-forge-1.5.12+mc1.19+forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/spyglass-improvements/files/7226243) [MR](https://modrinth.com/mod/spyglass-improvements/version/sRCimnZ2) |
 | both | Stardew Fishing | `stardew_fishing` | Stardew Fishing - v1.3 (1.19.2) | `stardew_fishing-1.19.2-1.3-all.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/stardew-fishing/files/5593593) |
-| both | Starter Kit | `starterkit` | 1.19.2-7.0-fabric+forge | `starterkit-1.19.2-7.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/starter-kit/files/5473394) [MR](https://modrinth.com/mod/starter-kit/version/nDDhwn2h) |
 | both | Sticky It! | `sticky_it` | sticky_it-1.2.1-forge-1.19.2.jar | `sticky_it-1.2.1-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/sticky-it/files/7253365) |
 | both | Storage Delight (Forge & Neoforge) | `storagedelight` | 25.12.09-1.19-forge | `storagedelight-25.12.09-1.19-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/storage-delight-forge/files/7313456) [MR](https://modrinth.com/mod/storage-delight/version/Rgf2MFH6) |
 | both | Storage Drawers | `storagedrawers` | 11.4.1 | `StorageDrawers-1.19.2-11.4.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/storage-drawers/files/5648923) [MR](https://modrinth.com/mod/storagedrawers/version/rUXcd0Oi) |
+| both | Storage Labels | `labels` | 1.19.2-1.10 | `labels-1.19.2-1.10.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/labels/files/4709789) [MR](https://modrinth.com/mod/labels/version/qAXckCmt) |
 | both | Subterrestrial | `subterrestrial` | 2.0.0-forge | `subterrestrial-forge-1.19.2-2.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/subterrestrial/files/4125924) [MR](https://modrinth.com/mod/subterrestrial/version/RAFF0TG0) |
 | both | SuperMartijn642's Config Lib | `supermartijn642configlib` | 1.1.8-forge-mc1.19 | `supermartijn642configlib-1.1.8-forge-mc1.19.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/supermartijn642s-config-lib/files/4715406) [MR](https://modrinth.com/mod/supermartijn642s-config-lib/version/HHm0Di8Y) |
 | both | SuperMartijn642's Core Lib | `supermartijn642corelib` | 1.1.21-forge-mc1.19.2 | `supermartijn642corelib-1.1.21-forge-mc1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/supermartijn642s-core-lib/files/7783315) [MR](https://modrinth.com/mod/supermartijn642s-core-lib/version/QDgULOON) |
@@ -383,7 +372,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Survivality | `survivality` | 1.2.4 | `survivality-1.19.2-1.2.4-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/survivality/files/4533526) [MR](https://modrinth.com/mod/survivality/version/qsWFuGRr) |
 | both | SwingThroughGrass | `swingthroughgrass` | swingthroughgrass-1.19.2-1.10.0.jar | `swingthroughgrass-1.19.2-1.10.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/swingthroughgrass/files/3922675) |
 | both | Tactical Fishing | `tactical_fishing` | 1.2 | `TacticalFishing-1.19.x2-v1.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/tactical-fishing/files/4819189) [MR](https://modrinth.com/mod/tactical-fishing/version/g5xGoydC) |
-| server | Tax Free Levels | `taxfreelevels` | 1.4.23 | `TaxFreeLevels-1.4.23-forge-1.20.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/tax-free-levels/files/8232424) [MR](https://modrinth.com/mod/tax-free-levels/version/9ahUaUYx) |
+| both | Tax Free Levels | `taxfreelevels` | 1.4.23 | `TaxFreeLevels-1.4.23-forge-1.20.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/tax-free-levels/files/8232424) [MR](https://modrinth.com/mod/tax-free-levels/version/9ahUaUYx) |
 | both | Tectonic | `tectonic` | 2.3.5a | `tectonic-forge-1.19-2.3.5a.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/tectonic/files/5400769) [MR](https://modrinth.com/mod/tectonic/version/IzZfgym7) |
 | both | Terralith | `terralith` | 2.3.12 | `Terralith_1.19.3_v2.3.12.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/terralith/files/4823693) [MR](https://modrinth.com/mod/terralith/version/FOe2l0tx) |
 | both | The Dirty Stuff (Cigarettes) | `the_dirty_stuff` | the_dirty_stuff-2.1-forge-1.19.2.jar | `the_dirty_stuff-2.1-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/thedirtystuff/files/5351013) |
@@ -436,26 +425,28 @@ Load order is bottom-to-top as in the in-game menu (higher number = higher prior
 
 | Order | Pack | File | Source |
 |---|---|---|---|
-| 12 | CE2 Iron Armor Fix.zip | `CE2 Iron Armor Fix.zip` | local |
-| 13 | Copycat Framed Blocks | `Copycat Framed Block.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/copycat-framed-blocks/files/4809411) |
-| 14 | Create: ComputerCraft (CC: Tweaked) | `Create Computers 1.2.1 - 1.19.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-computercraft/files/5230447) [MR](https://modrinth.com/resourcepack/create-computercraft/version/auMwAVs0) |
-| 15 | Create Tweaks & Compats | `Create Tweaks Compats.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-style-modded-compats/files/5837384) |
-| 16 | Create Energistics | `Create-Energistics-1.1.2-mc1.18.x.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-energistics/files/6688465) [MR](https://modrinth.com/resourcepack/create-energistics/version/vKflaS1Y) |
-| 17 | Created Pretty Pipes | `Created Pretty Pipes1.0 FIXED.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/created-pretty-pipes/files/4356655) [MR](https://modrinth.com/resourcepack/created-pretty-pipes/version/O0rnFr9u) |
-| 18 | Eclectic Trove (Legendary Tooltips) | `EclecticTrove-1.19.2-1.3.0.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/eclectic-trove-legendary-tooltips/files/4934033) [MR](https://modrinth.com/resourcepack/eclectic-trove-legendary-tooltips/version/u6cSdlyB) |
-| 19 | Engineers GUIs | `Engineers_GUIs_1.18.2_v.01.0.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/engineers-guis/files/4126222) |
-| 20 | Golden crit - Sr_Paulo | `Golden crit.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/golden-crit-sr-paulo/files/4346655) |
-| 21 | LootrChestRetexture for Create! | `LootrChestRetexture_v1.1_1.19.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lootrchestretexture-for-create/files/3943489) |
-| 22 | Low On Fire | `LowOnFire v26.1§8.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/low-on-fire/files/7825035) [MR](https://modrinth.com/resourcepack/low-on-fire/version/yQdcUfnr) |
-| 23 | Lower Shield - Enhanced Combat Visibility | `Lower Shield.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lower-shield/files/6089826) |
-| 29 | Create-Style Pretty Fluid Pipes | `create_style_pretty_fluid_pipes.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-style-pretty-fluid-pipes/files/6563691) |
-| 30 | Updated Engineering | `Updated_Engineering_v1.7.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/updated-engineering/files/4613047) |
-| 31 | SHC Enhanced Fire | `SHC Enhanced Fire.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/shc-enhanced-fire/files/4618420) [MR](https://modrinth.com/resourcepack/shc-enhanced-fire/version/e2PWHfW5) |
-| 32 | Immersive Engineering Break Switch Sound Replacement | `IE Breaker Switch Sound.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/immersive-engineering-break-switch-sound/files/2909191) |
-| 33 | Squirming Silverfish (+ LITE version)  | `SquirmingSilverfish [1.13 - 26.3]   (v2).zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/squirming-silverfish/files/9013579) |
+| 13 | CE2 Iron Armor Fix.zip | `CE2 Iron Armor Fix.zip` | local |
+| 14 | Copycat Framed Blocks | `Copycat Framed Block.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/copycat-framed-blocks/files/4809411) |
+| 15 | Create: ComputerCraft (CC: Tweaked) | `Create Computers 1.2.1 - 1.19.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-computercraft/files/5230447) [MR](https://modrinth.com/resourcepack/create-computercraft/version/auMwAVs0) |
+| 16 | Create Tweaks & Compats | `Create Tweaks Compats.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-style-modded-compats/files/5837384) |
+| 17 | Create Energistics | `Create-Energistics-1.1.2-mc1.18.x.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-energistics/files/6688465) [MR](https://modrinth.com/resourcepack/create-energistics/version/vKflaS1Y) |
+| 18 | Created Pretty Pipes | `Created Pretty Pipes1.0 FIXED.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/created-pretty-pipes/files/4356655) [MR](https://modrinth.com/resourcepack/created-pretty-pipes/version/O0rnFr9u) |
+| 19 | Eclectic Trove (Legendary Tooltips) | `EclecticTrove-1.19.2-1.3.0.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/eclectic-trove-legendary-tooltips/files/4934033) [MR](https://modrinth.com/resourcepack/eclectic-trove-legendary-tooltips/version/u6cSdlyB) |
+| 20 | Engineers GUIs | `Engineers_GUIs_1.18.2_v.01.0.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/engineers-guis/files/4126222) |
+| 21 | Golden crit - Sr_Paulo | `Golden crit.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/golden-crit-sr-paulo/files/4346655) |
+| 22 | LootrChestRetexture for Create! | `LootrChestRetexture_v1.1_1.19.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lootrchestretexture-for-create/files/3943489) |
+| 23 | Low On Fire | `LowOnFire v26.1§8.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/low-on-fire/files/7825035) [MR](https://modrinth.com/resourcepack/low-on-fire/version/yQdcUfnr) |
+| 24 | Lower Shield - Enhanced Combat Visibility | `Lower Shield.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lower-shield/files/6089826) |
+| 30 | Create-Style Pretty Fluid Pipes | `create_style_pretty_fluid_pipes.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-style-pretty-fluid-pipes/files/6563691) |
+| 31 | Updated Engineering | `Updated_Engineering_v1.7.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/updated-engineering/files/4613047) |
+| 32 | SHC Enhanced Fire | `SHC Enhanced Fire.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/shc-enhanced-fire/files/4618420) [MR](https://modrinth.com/resourcepack/shc-enhanced-fire/version/e2PWHfW5) |
+| 33 | Immersive Engineering Break Switch Sound Replacement | `IE Breaker Switch Sound.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/immersive-engineering-break-switch-sound/files/2909191) |
+| 34 | Squirming Silverfish (+ LITE version)  | `SquirmingSilverfish [1.13 - 26.3]   (v2).zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/squirming-silverfish/files/9013579) |
+| 35 | (Bee's) Fancy Crops | `Fancy Crops v1.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/fancy-crops/files/6779837) [MR](https://modrinth.com/resourcepack/fancy-crops/version/TQMLlyko) |
 | off | Clear Glass with Connected Textures! [16x] | `Clear Glass Pack 1.21.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/clear-glass-pack/files/5431060) |
 | off | Create Style Sophisticated Backpacks | `CreateSophBackpacks.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-sophisticated-backpacks/files/7707479) [MR](https://modrinth.com/resourcepack/create-sophisticated-backpacks/version/3WMwR0Mh) |
 | off | Exposure-Create Compatibility | `Exposure-CreateCompatibility.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/exposure-create-compatibility/files/5371732) |
+| off | Fancy Beds | `Fancy_Beds-v4.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/fancy-beds/files/8672129) [MR](https://modrinth.com/resourcepack/fancy-beds/version/Zdz7XQhL) |
 | off | Iteratively Engineered | `Iteratively Engineered 1.5.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/iteratively-engineered/files/7236277) |
 | off | Create Style \| Variant Pack for Lightman's Currency | `LCVP_CreateStyle_v1.7.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lightman-variant-pack-create-style/files/6597119) |
 | off | Modded Omelet - Modern Spawn Eggs | `Modded Omelet [120] [162].zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/modded-omelet/files/8239109) [MR](https://modrinth.com/resourcepack/modded-omelet/version/NqoVTZkE) |
@@ -468,6 +459,7 @@ Load order is bottom-to-top as in the in-game menu (higher number = higher prior
 Full enabled list (includes built-in / mod-provided packs):
 
 ```
+vinery_upstream_assets
 incubation_additions:untitledduckmod
 incubation_additions:alexsmobs
 vanilla
@@ -502,6 +494,7 @@ file/Updated_Engineering_v1.7.zip
 file/SHC Enhanced Fire.zip
 file/IE Breaker Switch Sound.zip
 file/SquirmingSilverfish [1.13 - 26.3]   (v2).zip
+file/Fancy Crops v1.2.zip
 ```
 
 ## Shader packs
@@ -523,19 +516,32 @@ file/SquirmingSilverfish [1.13 - 26.3]   (v2).zip
 
 | Mod | File | Source |
 |---|---|---|
+| Copper Drops | `CopperDrops-1.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/copper-drops/files/4889063) |
+| Create: Copper Splashing | `Create_Copper_Splashing_v2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-copper-splashing/files/6536354) |
+| Create Waystone Recipes | `Create_Waystone_Recipes_1.19_v2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-waystone-recipes/files/6536359) |
 | Dusty Decorations | `DustyDecorations_1.19.2Forge_V1.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/dusty-decorations/files/6608831) |
+| Fast Leaf Decay | `FastLeafDecay-30.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fast-leaf-decay/files/3894512) |
 | Fireflies | `Fireflies Mod-1.0.1 (Forge 1.19.2).jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fireflies-mod/files/4086384) |
 | Spice of MineColonies Life: Carrot Flavor | `MineColonies_SoLCarrot-1.19.2-1.5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/minecolonies-sol-carrot/files/8054961) |
 | Paintings N' Discs Backport | `PaintingsN'DiscsBackport_1.19.2Forge_V1.3.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/paintings-n-discs-backport/files/6668150) |
 | Spice of Life: Carrot Edition | `SoL-Carrot-1.19.2-1.14.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/spice-of-life-carrot-edition/files/3974155) |
+| AE2 QoL Recipes | `ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ae2-qol-recipes/files/6196957) |
+| Bottled Air | `bottledair-1.19.2-2.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/bottled-air/files/4965329) [MR](https://modrinth.com/mod/bottled-air/version/iU00AmRJ) |
 | Caverns & Chasms | `caverns_and_chasms-1.19.2-1.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/caverns-and-chasms/files/5222972) [MR](https://modrinth.com/mod/caverns-and-chasms/version/TuFWVSZM) |
 | Chipped | `chipped-forge-1.19.2-2.1.5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/chipped/files/4558849) [MR](https://modrinth.com/mod/chipped/version/Do5hlMJ8) |
 | Cluttered | `cluttered-2.1.1-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/cluttered/files/4729944) [MR](https://modrinth.com/mod/cluttered/version/oDX1rMxT) |
+| Comfortable Campfires | `comfortable-campfires-1.1.2+1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/comfortable-campfires/files/6108452) [MR](https://modrinth.com/mod/comfortable-campfires/version/rbf5I3X0) |
+| Create: Easy Stone Generators | `create_generators-1.0.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-stone-generators/files/6224616) [MR](https://modrinth.com/mod/create-stone-generators/version/YZmNhF0J) |
 | Create: Ender Transmission | `createendertransmission-2.0.7-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-ender-transmission/files/5092558) [MR](https://modrinth.com/mod/create-ender-transmission/version/eMzxaRHJ) |
 | Farmhouse Decorations | `farmhouse_decorations-26.4.0-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/farmhouse-decorations/files/7978741) [MR](https://modrinth.com/mod/farmhouse-decorations/version/y5hlip0i) |
 | Friends&Foes - Flowery Mooblooms (Forge/NeoForge) | `flowerymooblooms-forge-mc1.19.2-2.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/friends-and-foes-flowery-mooblooms-forge/files/5526616) [MR](https://modrinth.com/mod/friends-and-foes-flowery-mooblooms-forge/version/MwifMlri) |
 | Friends&Foes (Forge/NeoForge) | `friendsandfoes-forge-mc1.19.2-3.0.9.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/friends-and-foes-forge/files/6354628) [MR](https://modrinth.com/mod/friends-and-foes-forge/version/Xw3rjCWU) |
+| Furnace Recycle | `furnacerecycle-1.19.2-2.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/furnace-recycle/files/4964885) [MR](https://modrinth.com/mod/furnace-recycle/version/SX0jjroc) |
 | Gems & Jewels | `gemsnjewels-1.19.2-0.3.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/gems-jewels/files/5300730) |
+| Glowing Illagers | `glowingraidillagers-1.19.2-1.0.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/glowing-illagers/files/5034770) [MR](https://modrinth.com/mod/glowing-illagers/version/ewGIS3C4) |
+| Nametag Crafting | `name-tag-crafting-recipe-mod-1.0 (3).jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/nametag-crafting/files/6807242) [MR](https://modrinth.com/mod/name-tag-crafting-recipe-mod/version/nZX0ieOB) |
+| Rain should extinguish campfires | `rsec-1.0-1.19.2-forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/rain-should-extinguish-campfires/files/5029331) [MR](https://modrinth.com/mod/rain-should-extinguish-campfires/version/FqhndMyk) |
+| Starter Kit | `starterkit-1.19.2-7.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/starter-kit/files/5473394) [MR](https://modrinth.com/mod/starter-kit/version/nDDhwn2h) |
 | Tempad | `tempad-forge-1.19.2-1.4.5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/tempad/files/4586186) [MR](https://modrinth.com/mod/tempad/version/lH6QeJfQ) |
 | Yuushya Townscape [Forge/Fabric] | `yuushya-1.19.2-forge-2.2.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/yuushya-townscape/files/6393933) [MR](https://modrinth.com/mod/yuushya-townscape/version/kHuXAxVa) |
 | 1.19.2 | `1.19.2.jar` | local |

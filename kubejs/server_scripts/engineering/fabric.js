@@ -88,7 +88,7 @@ R.replaceInput({ id: i.ia_robe_boots },
   i.any_wool, [i.white_wool, i.hemp_fabric], e)
 R.replaceInput({ id: 'nethersdelight:hoglin_mount' },
   i.white_wool, [i.white_wool, i.hemp_fabric], e)
-R.replaceInput({ id: 'vinery:vinemaker_leggings' },
+R.replaceInput({ id: 'vinery:winemaker_leggings' },
   i.white_wool, [i.white_wool, i.hemp_fabric], e)
 R.replaceInput({ id: 'railways:sequenced_assembly/white_conductor_cap' },
   i.white_wool, [i.white_wool, i.hemp_fabric], e)

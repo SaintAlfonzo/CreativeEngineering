@@ -1,0 +1,17 @@
+{
+  "type": "brewinandchewin:keg_pouring",
+  "fluid": {
+    "amount": 250,
+    "id": "create:honey"
+  },
+  "output": {
+    "item": "minecraft:honey_bottle"
+  },
+  "unit": "millibuckets",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ]
+}

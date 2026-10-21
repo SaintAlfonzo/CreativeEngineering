@@ -1,6 +1,7 @@
 # 1.0.6: everything since 1.0.4, with structure tuning shipped INCOMPLETE
 
-STAGED 2026-10-14 12:52 (not yet copied to the server or clients). 1.0.6 is everything built after the 1.0.4 deploy
+DEPLOYED 2026-10-14 13:01 to the server and the clients (staged 12:52; snapshot in `deploy/DEPLOYED.json`). Followed by
+[plan_1.0.7.md](plan_1.0.7.md), which shipped the structure fixes listed in 2.1. 1.0.6 is everything built after the 1.0.4 deploy
 (2026-10-04 13:54, commit `334c76b`) up to the working tree on 2026-10-14. That means the undistributed 1.0.5 (never
 copied out, see [plan_1.0.5.md](plan_1.0.5.md)) is folded in whole, plus the work done since its 2026-10-11 staging.
 The payload is an update from 1.0.4, because 1.0.4 is still what both sides run.
@@ -53,16 +54,16 @@ scratch dedicated servers through structure Phases 3 and 4 (2026-10-14) without 
 paintings screen, can sprites, Lava Clear View, JEPP) are unchecked.
 
 Open:
-- [ ] Copy `deploy/latest/` to the server and clients (`verify.sh` first, it checks they run 1.0.4), apply the
-  removals, then `python3 tools/build_deploy.py --snapshot 1.0.6`.
+- [x] Copy `deploy/latest/` to the server and clients (`verify.sh` first, it checks they run 1.0.4), apply the
+  removals, then `python3 tools/build_deploy.py --snapshot 1.0.6`. Done 2026-10-14 13:01.
 - [ ] Recommended before copying: one single-player boot with this jar set (not done), since no client has loaded
   1.0.6.
 - [ ] Worldgen changes affect only chunks generated after the update on the server's existing world.
-- [ ] Structure tuning test run continues (structure_tuning 8.0, Phase 5 onward); fixes from it go into 1.0.7.
+- [ ] Structure tuning test run continues (structure_tuning 8.0, Phase 5 onward); its first fixes shipped in 1.0.7.
 - [ ] Older open items carried from [plan_1.0.5.md](plan_1.0.5.md) section 2: Cool Rain vs season types (WE-25),
   5 Terralith cave biomes without wild crops, stale [stack_sizes.md](stack_sizes.md), `kubejs/assets/*bloom.png` (since
   deleted, never shipped), Incubation Additions hay-nest texture license.
-- [ ] Commit: 111 shipped files uncommitted at staging.
+- [x] Commit: 111 shipped files uncommitted at staging (committed as `15c43a0`, "1.0.6 deployed").
 
 ### 2.1 Structure tuning: known open bugs and decisions (why it is INCOMPLETE)
 
@@ -70,21 +71,22 @@ From the scratch runs in [testing/structures/](testing/structures/00_plan.md) an
 
 | Where | Issue | Effect on the live server | Kind |
 |---|---|---|---|
-| Phase 3 | Ground match gives up silently over deep structures (ancient city, deep ruins, mineshafts cover the sample columns) | some grass pads stay on foreign ground, nothing logged | bug, fixed in source 2026-10-18 for 1.0.7 |
-| Phase 3 | Beach, river and swamp driftwood water versions can never place (Upgrade Aquatic needs dirt/sand under the origin) | only ocean driftwood floats; land versions still place | bug (since 1.0.4), fixed 2026-10-18 for 1.0.7 (bank filter) |
+| Phase 3 | Ground match gives up silently over deep structures (ancient city, deep ruins, mineshafts cover the sample columns) | some grass pads stay on foreign ground, nothing logged | bug, fixed in 1.0.7 (DEPLOYED 2026-10-18) |
+| Phase 3 | Beach, river and swamp driftwood water versions can never place (Upgrade Aquatic needs dirt/sand under the origin) | only ocean driftwood floats; land versions still place | bug (since 1.0.4), fixed in 1.0.7 (DEPLOYED 2026-10-18) (bank filter) |
 | Phase 3 | Ocean geodes: the 10-block drop does nothing useful over deep floors near y 0 (ST-133 partly) | geodes behave much like before | tuning |
-| Phase 2 | Cave biomes not in `land/any`: skeleton dungeon, bone dungeon, lost soul city never start (7.3.3 waits for the cave pass) | those 3 structures absent | bug, fixed 2026-10-18 for 1.0.7 (`land/any/deep`) |
+| Phase 2 | Cave biomes not in `land/any`: skeleton dungeon, bone dungeon, lost soul city never start (7.3.3 waits for the cave pass) | those 3 structures absent | bug, fixed in 1.0.7 (DEPLOYED 2026-10-18) (`land/any/deep`) |
 | Phase 2 | ST-135 open: fortified metas rare against the 120 s locate timeout; bastille dropped by peaceful radius | `/locate` of them may time out | open |
 | M2 | Undead castle cancelled 4 of 5 times by earth fill on slopes | very rare castle | decision (narrow fits or relax mound limit) |
-| M2 | Earth fill counts only earth base blocks, not stone bases (drum tower, piglin camp) | a stone-based structure can overhang | bug, fixed in source 2026-10-18 for 1.0.7 (opt-in tag, drum tower) |
-| M2 | `/celocate census` reports every slot "known" | census numbers meaningless (debug tool only) | bug, fixed in source 2026-10-18 for 1.0.7 |
+| M2 | Earth fill counts only earth base blocks, not stone bases (drum tower, piglin camp) | a stone-based structure can overhang | bug, fixed in 1.0.7 (DEPLOYED 2026-10-18) (opt-in tag, drum tower) |
+| M2 | `/celocate census` reports every slot "known" | census numbers meaningless (debug tool only) | bug, fixed in 1.0.7 (DEPLOYED 2026-10-18) |
 | Phase 4 | ST-65 `templateTrim = false` half not run | none | test gap |
 | not run | Phases 5 to 10: batch searches, pregenerated area, calibration, two-world comparisons, flat world, profiling; client list 8.0.11 | performance and rates unmeasured | test gap |
 
-Found later (Phase 5, 2026-10-14), also fixed in source 2026-10-18 for 1.0.7: locate loads still blocked the server
+Found later (Phase 5, 2026-10-14), also fixed in 1.0.7 (DEPLOYED 2026-10-18): locate loads still blocked the server
 thread (LO-05), Cloud Storage / Domestication Innovation village pieces dropped on reload, village layouts different
-after each restart (pool order), `/celocate stop` row label. None of the 1.0.7 fixes is built or shipped;
-[structure_tuning.md](structure_tuning.md) 3.23 and [locate.md](locate.md) 8 list them.
+after each restart (pool order), `/celocate stop` row label. All of these shipped in patcherMod 1.0.7 (DEPLOYED
+2026-10-18, [plan_1.0.7.md](plan_1.0.7.md) SF); [structure_tuning.md](structure_tuning.md) 3.23 and
+[locate.md](locate.md) 8 list them.
 
 ### 2.2 Switches if a structure part misbehaves live
 

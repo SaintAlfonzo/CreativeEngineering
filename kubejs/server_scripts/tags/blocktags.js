@@ -27,6 +27,44 @@ ServerEvents.tags('block', e => {
 	// Stove heat on top: FD's lit gate means a pot or skillet on the oven only heats while the oven is heated.
 	t.add(e, b.t_fd_heat_sources, b.oven)
 	t.mineable(e, 'pickaxe', null, b.oven)
+	// Bakeware is hammered on the cutting board (NCH.hammering); without this the IE hammer rotates the board
+	// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
+	t.add(e, b.t_hammer_no_rotate, b.cutting_board)
+	// Rubidium blends the vanilla grass block's tint per vertex across neighbours (biome blend > 0) but colours
+	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
+	t.add(e, b.t_blendable_blocks, global.item.grass_slab)
+
+	// Keg temperature + Vinery cold storage (Brewin port BnCHeatSources; Vinery WineYears.storageKind). The keg tag
+	// already holds FD heat_sources; these only warm kegs, they don't let FD pots cook. Running gates are in
+	// BnCHeatSources: lit/active/on must be true, blaze heaters (burner, liquid burner, enchanter) need fuel. Skipped
+	// for now: machines whose running state lives only in the block entity (IE arc furnace, advanced blast furnace,
+	// preheater; PneumaticCraft heat blocks; Create steam engines/boilers; Compressed Creativity heater, D&D furnace
+	// engine, Cooking for Blockheads oven, which has no block state and would count while idle).
+	t.add(e, b.t_keg_heat_sources, [
+		b.furnace, b.blast_furnace, b.smoker, b.quark_deepslate_furnace, b.quark_blackstone_furnace,
+		b.keypad_furnace, b.keypad_blast_furnace, b.keypad_smoker,
+		b.bonfire, b.soul_bonfire, b.brazier, b.soul_brazier, b.siege_brazier_on,
+		b.ie_coke_oven, b.ie_blast_furnace, b.ie_alloy_smelter, b.ie_furnace_heater,
+		b.small_lab_furnace, b.small_electrical_furnace, b.small_waste_incinerator, b.clayworks_kiln,
+		b.air_compressor, b.advanced_air_compressor, b.vibration_chamber,
+		b.liquid_blaze_burner, b.blaze_enchanter, b.botania_blaze_block,
+	])
+	// #minecraft:ice nests the port's ice / packed / blue and adds frosted and rare ice
+	t.add(e, b.t_keg_freeze_sources, [
+		b.snow, b.snow_block, b.powder_snow, b.thin_ice, b.iw_permafrost, b.iw_cryosol,
+		b.t_ice, b.polished_packed_ice, b.chiseled_packed_ice,
+	])
+
+	// Campfire rain (patcherMod campfire/CampfireRain.java, CEConfig [campfire]). Unlit Campfire burns campfires
+	// forever; rain puts out the ones in rain_douses unless the block below is in rain_proof_fuel.
+	// Soul campfires stay out of rain_douses; Tinted Campfires aren't CampfireBlocks, so never ticked.
+	t.add(e, b.t_campfire_rain_douses, b.campfire)
+	t.add(e, b.t_campfire_rain_proof_fuel, [b.coal_block, b.quark_charcoal_block, b.architects_palette_charcoal_block])
+
+	// In-world dyeing (Supplementaries [tweaks.dye_blocks], patcherMod SupplementariesDyeBlocksMixin). Blocks with a
+	// block entity never dye in world (sacks lost their contents, canvas signs their text); no_world_dye is for plain
+	// blocks the dyeing audit takes out too (TODO blocks/dyeing #1). Empty until then.
+	t.add(e, b.t_no_world_dye, [])
 
 	// Emu, duck and goose nests: Incubation Additions tags them into incubation:bird_nests itself
 
@@ -212,7 +250,7 @@ ServerEvents.tags('block', e => {
 		'minecraft:dirt_path', 'minecraft:coarse_dirt', '#forge:gravel', '#forge:cobblestone',
 		'minecraft:*cobble*', 'quark:*cobble*_vertical_slab', 'supplementaries:raked_gravel',
 		'immersive_weathering:*cobblestone*', 'botania:metamorphic_*_cobblestone*',
-		'/^davebuildingmod:(ballast|gravel|rocky_dirt)(_slab)?$/', item.twigs_rocky_dirt, item.coarse_dirt_slab,
+		'/^davebuildingmod:(ballast|gravel|rocky_dirt)(_slab)?$/', item.twigs_rocky_dirt, item.coarse_dirt_slab, item.dirt_path_slab,
 		'/^engineersdecor:dense_grit_(dirt|sand)_block$/', '/^sootychimneys:(dirty_)?cobblestone_chimney$/',
 	], { except: ['quark:*cobblestone_bricks*'] })
 
@@ -234,9 +272,11 @@ ServerEvents.tags('block', e => {
 		'/^immersiveengineering:((slab_|stairs_)?(alu|steel)_scaffolding_wooden_top|treated_scaffold)$/',
 		'/^engineersdecor:old_industrial_wood_(planks|slab|slabslice|stairs)$/',
 		'/^davebuildingmod:(full_log_pile|log_palisade|log_pile_[12]_(bottom|top)|half_lumber_[a-z_]+)$/',
-		'/^vinery:(cherry_(beam|floorboard)|stackable_log|[a-z_]*crate)$/', '/^create_compressed:(large_)?cogwheel_block$/',
+		'/^vinery:(cherry_(beam|floorboard)|stackable_log|[a-z_]*crate|[a-z_]*_wine_rack_(big|mid|small)|[a-z_]*_lattice)$/', '/^create_compressed:(large_)?cogwheel_block$/',
 		'farmersdelight:*_crate', 'rusticdelight:*crate', 'delightful:*_crate', 'quarkdelight:*_fruit_crate',
 		'fruitsdelight:*_crate', item.chorus_crate, item.corn_crate,
+		// Brewin' port: both copy oak planks. The coaster stays untiered: it is 1 px thin, so the block under it counts
+		item.heating_cask, item.ice_crate,
 	], { except: ['/^(copycats|framedblocks):/'] }) // their copycat/framed trapdoors are camouflage
 
 	t.addMatching(e, runner.natural_smooth, [
@@ -274,7 +314,7 @@ ServerEvents.tags('block', e => {
 		// full-block windows, glass trapdoors (top half only), glassy crystal blocks
 		'minecraft:sea_lantern', 'create:*_window', 'everycomp:c/*_window', item.framed_glass_trapdoor,
 		'createframed:*_glass_trapdoor', 'create_crystal_clear:*glass_encased*', item.steel_framed_window,
-		item.metro_window, item.window, '/^immersive_weathering:(vitrified_sand|frosty_glass)$/',
+		item.metro_window, item.window, item.window_block, '/^immersive_weathering:(vitrified_sand|frosty_glass)$/',
 		'/^buzzier_bees:crystallized_(clover_)?honey_block$/', item.crystalized_banana_slug_mucus,
 	])
 
@@ -308,7 +348,7 @@ ServerEvents.tags('block', e => {
 		'davebuildingmod:*_quilted_wool', item.bison_fur_block, 'botania:*_petal_block', 'twigs:bamboo_thatch*',
 		item.paraffin_wax_block,
 		// sacks, bags and bales
-		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag', 'farmersrespite:*_sack', item.corn_kernel_bag,
+		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag', 'vinery:*_bag', 'farmersrespite:*_sack', item.corn_kernel_bag,
 		'/^farmersdelight:(rice_bag|rice_bale|straw_bale|tatami)$/',
 	])
 

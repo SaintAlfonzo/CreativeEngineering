@@ -3,6 +3,7 @@ package umpaz.brewinandchewin.platform;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -63,7 +64,8 @@ public interface BnCPlatformHelper {
 
    MenuType<KegMenu> createMenuType(BnCMenuConstructor<KegMenu> constructor);
 
-   AbstractedItemHandler createKegInventory(int size, BiConsumer<AbstractedItemHandler, Integer> onContentsChanged);
+   /** Port: `validator` (slot, stack) backs isItemValid, so menus and hoppers both follow the keg's slot rules. */
+   AbstractedItemHandler createKegInventory(int size, BiConsumer<AbstractedItemHandler, Integer> onContentsChanged, BiPredicate<Integer, ItemStack> validator);
 
    AbstractedFluidTank createKegTank(long capacity, Runnable onContentsChanged);
 
@@ -92,8 +94,6 @@ public interface BnCPlatformHelper {
    ItemStack getCraftingRemainingItem(ItemStack stack);
 
    void initFluids();
-
-   void initCreativeTab();
 
    boolean isEdible(ItemStack stack, LivingEntity entity);
 

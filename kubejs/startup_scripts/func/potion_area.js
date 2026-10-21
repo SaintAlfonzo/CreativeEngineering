@@ -132,6 +132,13 @@ console.log('potion_area func loading')
         BUCKETS: BUCKETS,
         DEFAULT_EFFECTS: DEFAULT_EFFECTS,
 
+        // the effect as a ring applies it (duration x the bucket's effectMult) - the tooltip
+        // in client_scripts/potion_buckets.js shows this, so it matches what the player gets
+        scaled(itemId, inst) {
+            const dial = BUCKETS[itemId] || BUCKETS['creativeengineering:potion_bucket']
+            return scaledInstance(inst, dial.effectMult)
+        },
+
         // level: server-side Level | x,y,z: doubles (base spawn point) | itemId: a key of BUCKETS
         // stack: the potion-bucket ItemStack (read for NBT) | owner: LivingEntity or null
         spawn(level, x, y, z, itemId, stack, owner) {

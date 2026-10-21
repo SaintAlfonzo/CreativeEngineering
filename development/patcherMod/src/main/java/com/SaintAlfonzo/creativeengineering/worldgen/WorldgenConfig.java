@@ -76,6 +76,7 @@ public final class WorldgenConfig {
 
 	// ── meta structures ──────────────────────────────────────────────────────
 	public static boolean metaStructuresLog() { return get(() -> wg().metaStructures.log.get(), false); }
+	public static boolean metaAvoidCoasts() { return get(() -> wg().metaStructures.avoidCoasts.get(), false); }
 
 	// ── ocean geodes ─────────────────────────────────────────────────────────
 	public static int oceanGeodeDrop() { return get(() -> wg().oceanGeodes.drop.get(), 10); }
@@ -108,6 +109,7 @@ public final class WorldgenConfig {
 
 	// ── earth fill ───────────────────────────────────────────────────────────
 	public static int earthMaxOverWater() { return get(() -> wg().earthFill.maxOverWater.get(), 24); }
+	public static double earthMaxWaterSurplus() { return get(() -> wg().earthFill.maxWaterSurplus.get(), 0.5); }
 	public static int earthBeardReach() { return get(() -> wg().earthFill.beardReach.get(), 6); }
 	public static int earthBuryReach() { return get(() -> wg().earthFill.buryReach.get(), 10); }
 	public static int earthMaxMoundHeight() { return get(() -> wg().earthFill.maxMoundHeight.get(), 8); }

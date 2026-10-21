@@ -41,7 +41,8 @@ public class VineryJEI implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        active = ModList.get().isLoaded(VineryIds.MODID);
+        // The Vinery backport ships all of these pages itself (barrel, both press stages, stomping, aging).
+        active = ModList.get().isLoaded(VineryIds.MODID) && !isBackport();
         if (!active) {
             return;
         }
@@ -77,6 +78,15 @@ public class VineryJEI implements IModPlugin {
         catalyst(registration, VineryIds.FERMENTATION_BARREL, FermentationCategory.TYPE, WineAgingCategory.TYPE);
         catalyst(registration, VineryIds.WINE_PRESS, WinePressCategory.TYPE);
         catalyst(registration, VineryIds.GRAPEVINE_POT, GrapeStompingCategory.TYPE);
+    }
+
+    private static boolean isBackport() {
+        try {
+            Class.forName("net.satisfy.vinery.forge.VineryForge", false, VineryJEI.class.getClassLoader());
+            return true;
+        } catch (ClassNotFoundException | LinkageError e) {
+            return false;
+        }
     }
 
     private static void catalyst(IRecipeCatalystRegistration registration, ResourceLocation item,

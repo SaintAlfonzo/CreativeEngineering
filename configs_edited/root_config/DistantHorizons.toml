@@ -57,12 +57,12 @@ _version = 4
 	#
 	# Maximum per-player speed for uploading LODs to the clients, in KB/s.
 	# Value of 0 disables the limit.
-	playerBandwidthLimit = 500
+	playerBandwidthLimit = 200
 	#
 	# Enables adaptive transfer speed based on client performance.
 	# If true, DH will automatically adjust transfer rate to minimize connection lag.
 	# If false, transfer speed will remain fixed.
-	enableAdaptiveTransferSpeed = false
+	enableAdaptiveTransferSpeed = true
 
 	[server.experimental]
 		#

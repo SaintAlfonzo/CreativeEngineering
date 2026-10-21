@@ -7,7 +7,7 @@ var i = global.item;
 // Chestplates that glide but aren't a vanilla ElytraItem — patcherMod's Easy Elytra
 // Takeoff mixins read this (EasyElytraTakeoffHelperMixin = rocket-takeoff is allowed at
 // all; EasyElytraTakeoffGroundCheckMixin = allowed even mid-fall / on thin blocks).
-e.add('creativeengineering:elytra_chestplates', 'dragonloot:upgraded_dragon_chestplate')
+global.tags.add(e, 'creativeengineering:elytra_chestplates', [i.upgraded_dragon_chestplate])
 
 // Dragon-tier gear (every output of end_gear.js's dragonAssembly, dragonloot's own
 // items and our custom ones alike) - drives the passive autorepair in

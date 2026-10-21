@@ -8,7 +8,9 @@ import org.spongepowered.asm.mixin.Overwrite;
 @Mixin(CycleEnchantment.class)
 public class CycleEnchantmentMixin {
 
-    public boolean isDiscoverable() {
+    // Vanilla Enchantment#isDiscoverable: SRG name, since this jar ships no refmap and the method is obfuscated at
+    // runtime (the two below are Forge methods and keep their names).
+    public boolean m_6592_() {
         return false;
     }
 
