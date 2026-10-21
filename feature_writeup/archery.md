@@ -9,12 +9,12 @@
 | Fletching from feathers (knife), emu feather → feathers | DEPLOYED |
 | Torch arrow on Quark's item (5 recipes), NEA's torch arrow and quiver hidden; Supplementaries quiver recipe; slingshot takes leather / hemp fabric / canvas | DEPLOYED |
 | `archery` and `bullet` blueprints | DEPLOYED; the archery blueprint needs a trader-only arrow (F3) |
-| NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; one of the three mixin methods probably doesn't apply (F6) |
+| NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; the `isDiscoverable` override (F6) fixed in 1.0.9 (SRG `m_6592_`), not yet checked in game (`pack/release #4`, `loot/tables #10`) |
 | IE armor-piercing bullets from a dragon scale (64 per scale) | DEPLOYED, **unreachable**: its blueprint category doesn't exist (F1) |
 | Dedicated-server join kick from NEA's fletching recipe book (`NockRecipeBookSync`) | DEPLOYED; belongs to fixes and compat (backlog row 10), noted here because it's NEA |
 
 - **Pending:** nothing built and unshipped. AR-01 to AR-18 have never been run. Findings F1 to F8 (section 4) are
-  open; F1, F2 and F3 need your call.
+  open (F6 fixed in 1.0.9); F1, F2 and F3 need your call.
 - **Files to open:** [archery.js](../kubejs/server_scripts/equipment/archery.js) (every arrow recipe),
   [bullets.js](../kubejs/server_scripts/equipment/bullets.js),
   [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) lines 44-105 (fletching and shaft tags),
@@ -24,8 +24,9 @@
 ## 1. Overview
 
 - **Nock Enough Arrows 1.2.0** adds about 25 special arrows, a fletching table with a head / shaft / fin recipe type
-  (`nock_enough_arrows:fletching`), a quiver, a fletching recipe-book tab, and three bow enchantments (Stockpile,
-  Recovery, Cycle). Four of its arrows (Cupid, Ethereal, Growing, Echoing) are sold by the wandering trader
+  (`nock_enough_arrows:fletching`), a quiver, a fletching recipe-book tab, and three quiver enchantments (Stockpile,
+  Recovery, Cycle; category `QUIVER`, NEA's quiver only, so in this pack they can only appear on books; jar 1.2.0
+  checked 2026-10-21). Four of its arrows (Cupid, Ethereal, Growing, Echoing) are sold by the wandering trader
   ([wandering_trader_catalog.md](wandering_trader_catalog.md)).
 - **Others:** Quark's torch arrow, Alex's Mobs' shark tooth arrow, Cloud Storage's balloon arrow, Supplementaries'
   quiver and slingshot, vanilla's arrow and spectral arrow.
@@ -147,7 +148,7 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
   (also [gear_tuning.md](gear_tuning.md) F3 in the same file). One `global.tags.add` call per tag would do.
 - **F5. `#forge:arrow_shaft/blazing` is unused;** the explosive arrow names the blaze rod directly. Use the tag there or
   drop it.
-- **F6.** CONFIRMED and FIXED 2026-10-19: the 1.0.8 jar named the method `isDiscoverable`; 1.0.9 uses `m_6592_` ([plan_1.0.9.md](plan_1.0.9.md)). **Probably only two of the three enchantment overrides apply (unverified).** The mixins add `isDiscoverable`,
+- **F6.** CONFIRMED and FIXED 2026-10-19: the 1.0.8 jar named the method `isDiscoverable`; 1.0.9 uses `m_6592_` ([plan_1.0.9.md](plan_1.0.9.md)). The finding before the fix: **probably only two of the three enchantment overrides applied.** The mixins add `isDiscoverable`,
   `canApplyAtEnchantingTable` and `isAllowedOnBooks` without `@Overwrite` and without a refmap. The two Forge
   methods have the same name at runtime, so they work. `isDiscoverable` is a vanilla method (SRG `m_6592_`) and the
   mixin class doesn't extend `Enchantment`, so its Mojmap name is probably not remapped and the method is never
@@ -214,7 +215,7 @@ replacement or a hidden item.
   workbench shows IE's cartridges.
 - [ ] **AR-13 Dragon scale bullets (F1):** JEI on armor-piercing cartridges → note the blueprint the dragon-scale recipe
   asks for; try it on the workbench with the bullet blueprint. Expected today: not available.
-- [ ] **AR-14 Enchantments gone:** enchanting table with a bow at level 30, many rolls → never Stockpile, Recovery or
+- [ ] **AR-14 Enchantments gone:** enchanting table with a book at level 30, many rolls → never Stockpile, Recovery or
   Cycle; librarians never sell them; an anvil refuses a book of one. `/give` an enchanted book with Cycle → red "REMOVED
   ITEM: DO NOT USE".
 - [ ] **AR-15 Quiver:** JEI on the Supplementaries quiver → the pack's copper recipe; note whether Supplementaries' own
