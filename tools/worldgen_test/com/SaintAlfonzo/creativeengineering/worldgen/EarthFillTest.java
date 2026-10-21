@@ -141,6 +141,28 @@ public class EarthFillTest {
 		check(er.mound() == 2, "and the deep-water columns are mound columns");
 		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(floor, 62, EarthFill.Beard.NONE)), river, open, reach, false);
 		check(er.water() == 4, "no beard: every earth block in water counts");
+		// the footprint's water share (2026-10-19): a lake (water at y 62, its bed below) for x >= 6, dry ground (top y 62) for x < 6
+		EarthFill.Terrain lakeShore = (x, y, z) -> x >= 6 ? (y <= 58 ? EarthFill.Kind.SEABED : y <= 62 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR)
+				: y <= 62 ? EarthFill.Kind.SOLID : EarthFill.Kind.AIR;
+		EarthFill.Footprint fp = EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 9, 1, 62)), lakeShore, 3);
+		check(fp.water() == 8 && fp.ground() == 12, "footprint: every box column at the layer, water x 6..9 (8), ground x 0..5 (12)");
+		check(!fp.tooWet(0.5), "8 water against 12 ground passes at surplus 0.5");
+		fp = EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 14, 0, 62)), lakeShore, 3);
+		check(fp.water() == 9 && fp.ground() == 6 && !fp.tooWet(0.5), "9 water against 6 ground: exactly 50% more, passes");
+		fp = EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 15, 0, 62)), lakeShore, 3);
+		check(fp.water() == 10 && fp.tooWet(0.5) && !fp.tooWet(1.0) && !fp.tooWet(-1), "10 against 6 is too wet at 0.5, not at 1.0, never at -1");
+		check(EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 15, 0, 62), new EarthFill.Layer(10, 0, 15, 0, 62)), lakeShore, 3).water() == 10,
+				"a position in two layers counts once");
+		check(EarthFill.footprint(List.of(new EarthFill.Layer(6, 0, 9, 0, 57)), lakeShore, 3).water() == 0, "seabed under the layer is neither water nor ground");
+		check(EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 5, 0, 63)), lakeShore, 3).ground() == 0, "air at the layer counts as neither");
+		// buried positions: the same lake shore under 10 blocks of rock from x 0 to 4 (its top at y 72), open from x 5 on
+		EarthFill.Terrain buried = new EarthFill.Terrain() {
+			public EarthFill.Kind at(int x, int y, int z) { return lakeShore.at(x, y, z) == EarthFill.Kind.AIR && x < 5 && y <= 72 ? EarthFill.Kind.SOLID : lakeShore.at(x, y, z); }
+			public int top(int x, int z) { return x < 5 ? 72 : 62; }
+		};
+		fp = EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 9, 0, 62)), buried, 3);
+		check(fp.ground() == 1 && fp.water() == 4, "more than 3 blocks of terrain above: buried, neither (x 0..4 skipped, x 5 ground, x 6..9 water)");
+		check(EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 9, 0, 62)), buried, 10).ground() == 6, "depth 10: the 10 blocks of rock are shallow enough");
 		// pruning: the jigsaw tree from junctions. 0 = street (root), 1 = house on the street, 2 = villager in the house,
 		// 3 = another house on the street, 4 = a lamp on house 3 by an up jigsaw (same column); 5 = a piece with no junctions
 		List<net.minecraft.world.level.levelgen.structure.BoundingBox> boxes = List.of(

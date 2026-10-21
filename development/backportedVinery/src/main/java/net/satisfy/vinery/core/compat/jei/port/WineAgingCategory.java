@@ -101,7 +101,9 @@ public class WineAgingCategory extends PortCategory<WineAgingCategory.Display> {
         return List.of(
                 Component.translatable(LANG + ".year", clock.daysPerYear(), DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerYear()))),
                 Component.translatable(LANG + ".level", clock.yearsPerEffectLevel(), DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerYear() * clock.yearsPerEffectLevel()))),
-                Component.translatable(LANG + ".cellar", String.format("%.1f", clock.cellarPercent() / 100.0)));
+                Component.translatable(LANG + ".cellar", WineYears.formatRate(clock.cellarPercent())),
+                Component.translatable(LANG + ".cold", WineYears.formatRate(clock.coldPercent())),
+                Component.translatable(LANG + ".warm", WineYears.formatRate(clock.warmPercent())));
     }
 
     private static List<FormattedCharSequence> wrapped(VintageClock.Snapshot clock) {

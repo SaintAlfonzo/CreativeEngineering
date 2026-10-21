@@ -70,9 +70,9 @@ public class DarkFireBlock extends BaseFireBlock {
             return;
         }
 
-        // Dark Fire's isAir() override means PortalShape's interior check
-        // already accepts it directly - no need to swap out for vanilla
-        // Blocks.FIRE first. This also means PortalSpawnEvent will see the
+        // Dark Fire is in the minecraft:fire block tag (see the comment
+        // above), so PortalShape's interior check already accepts it
+        // directly - no need to swap out for vanilla Blocks.FIRE first. This also means PortalSpawnEvent will see the
         // real Dark Fire state, not a temporarily-swapped one.
         Optional<PortalShape> optional =
                 PortalShape.findPortalShape(

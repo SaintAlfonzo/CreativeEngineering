@@ -9,9 +9,9 @@ Three ways to place food in this pack:
     Delight jams. Some of these place only while sneaking (SNEAK_ITEM_CLASSES).
   * Crops and bushes that are edible (carrot, sweet berries...) plant rather than place. They are listed
     in the catalog but get no tag.
-  * Brewin' and Chewin' coasters (backport) take any item, up to 4, but only the items with a coaster model look
-    placed. Those get "Placeable on a coaster", and so do the Vinery and Farmer's Respite drinks (COASTER_DRINK_MODS),
-    which are drawn as plain items (alcohol.md 8.3).
+  * Brewin' and Chewin' coasters (backport) take up to 4 items, and with [coaster] taggedItemsOnly only the ones
+    with a coaster model: the port's own (COASTER_DIR) and the Display Delight foods tools/gen_coaster_models.py
+    writes (PACK_COASTER_DIR, run it first). Those get "Placeable on a coaster" (alcohol.md 8.3, 12).
 
 Outputs:
   kubejs/generation_scripts/food/placeable.json   tag -> item_dict keys, read by
@@ -58,8 +58,8 @@ TAGS = OrderedDict([
 
 # The Brewin' port's coaster models (one file per item that has its own look on a coaster).
 COASTER_DIR = INSTANCE / 'development/backportedBrewin/src/main/resources/assets/brewinandchewin/brewinandchewin/coaster'
-# Drinks from these mods also get the coaster line: they sit on it fine, drawn as a plain item.
-COASTER_DRINK_MODS = ('vinery', 'farmersrespite')
+# The pack's coaster models: Display Delight's placed models, from tools/gen_coaster_models.py.
+PACK_COASTER_DIR = INSTANCE / 'kubejs/assets/creativeengineering/brewinandchewin/coaster'
 
 # Block classes that make a non-edible block item a placed food (same words as dump_food.js FOOD_BLOCK).
 FOOD_BLOCK = re.compile(r'(Cake|Feast|Pie|Pizza|Pudding|Sandwich|Roast|Platter|Food)')
@@ -263,15 +263,17 @@ def classify(rows, dd):
 
 
 def add_coaster(entries, rows, installed):
-    """Adds placeable_on_coaster to the modelled coaster items and the COASTER_DRINK_MODS drinks."""
-    modelled = set()
+    """Adds placeable_on_coaster to the items with a coaster model, the port's and the pack's."""
+    modelled, from_dd = set(), set()
     for p in COASTER_DIR.glob('*.json'):
         modelled.add(json.loads(p.read_text())['item'])
     if not modelled:
         print(f'warning: no coaster models in {COASTER_DIR}')
-    drinks = {i for i, r in rows.items()
-              if i.split(':', 1)[0] in COASTER_DRINK_MODS and (r.get('useAnim') == 'DRINK' or 'useTicks' in r)}
-    for item_id in sorted(modelled | drinks):
+    for p in PACK_COASTER_DIR.glob('*.json'):
+        from_dd.add(json.loads(p.read_text())['item'])
+    if not from_dd:
+        print(f'warning: no pack coaster models in {PACK_COASTER_DIR} (run tools/gen_coaster_models.py)')
+    for item_id in sorted(modelled | from_dd):
         present = item_id in rows or item_id in installed or item_id.startswith('minecraft:')
         if not present or excluded(item_id):
             continue
@@ -282,7 +284,7 @@ def add_coaster(entries, rows, installed):
                      'kinds': set(), 'how': [], 'dd': {}}
             entries[item_id] = entry
         entry['kinds'].add('placeable_on_coaster')
-        entry['how'].append('coaster: right click a coaster' + ('' if item_id in modelled else ' (drawn as a plain item)'))
+        entry['how'].append('coaster: right click a coaster' + ('' if item_id in modelled else ' (Display Delight model)'))
 
 
 def review_candidates(block_items, rows):

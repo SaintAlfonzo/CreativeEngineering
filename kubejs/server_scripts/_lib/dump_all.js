@@ -3,7 +3,8 @@
 // dump that throws is reported and skipped rather than stopping the rest.
 //
 // Order: quick registry dumps first, world/worldgen dumps after, then the two slow ones
-// (dumpclimate samples every multi_noise dimension; dumpservermods copies ~300 jars).
+// (dumpclimate samples every multi_noise dimension, about 4.5 min; dumpclimatecaves the Overworld's caves;
+// dumpservermods copies ~300 jars).
 //
 // /dumploot runs without "all" because its trade half writes the same villager_trades.json as
 // /dumptrades. Adding a new /dump* command? Add it to DUMP_ALL_COMMANDS below.
@@ -31,6 +32,7 @@
 		'dumploot',
 		'dumptrades',
 		'dumpclimate',
+		'dumpclimatecaves',
 		'dumpservermods',   // patcherMod (Java): KubeJS can't copy files
 	]
 

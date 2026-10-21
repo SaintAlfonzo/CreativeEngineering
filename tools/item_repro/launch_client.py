@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Launches the throwaway repro client from ATLauncher's last logged launch args.
 
-    python3 launch_client.py GAME_DIR HOST PORT
+    python3 launch_client.py GAME_DIR [HOST PORT]
 
 The logged args have the account details stripped; this swaps in an offline account
-(username Tester) and the scratch game dir, and joins HOST:PORT on start. The command line
+(username Tester) and the scratch game dir, and joins HOST:PORT on start. Without HOST PORT it
+stops at the title screen (the names audit's dump, feature_writeup/names.md section 11). The command line
 is never printed (see memory: patchermod-headless-smoke-test).
 """
 import glob
@@ -13,7 +14,8 @@ import subprocess
 import sys
 import uuid
 
-game_dir, host, port = sys.argv[1], sys.argv[2], sys.argv[3]
+game_dir = sys.argv[1]
+host, port = (sys.argv[2], sys.argv[3]) if len(sys.argv) > 3 else (None, None)
 users = os.path.expanduser("~/.local/share/atlauncher")
 marker = "Launching Minecraft with the following arguments (user related stuff has been removed): ["
 line = None
@@ -46,7 +48,9 @@ while i < len(args):
     out.append(a)
     i += 1
 out += ["--gameDir", game_dir, "--username", "Tester", "--uuid", str(uuid.uuid4()),
-        "--accessToken", "0", "--userType", "legacy", "--server", host, "--port", port]
+        "--accessToken", "0", "--userType", "legacy"]
+if host:
+    out += ["--server", host, "--port", port]
 
 env = dict(os.environ, DISPLAY=os.environ.get("DISPLAY", ":1"))
 with open(os.path.join(game_dir, "launch.out"), "w") as f:

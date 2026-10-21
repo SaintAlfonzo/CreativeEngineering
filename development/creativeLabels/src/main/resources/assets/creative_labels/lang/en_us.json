@@ -1,0 +1,46 @@
+{
+  "block.creative_labels.face_paper": "Face Paper",
+  "item.creative_labels.sticky_note": "Sticky Note",
+  "item.creative_labels.label": "Label",
+  "item.creative_labels.eraser": "Eraser",
+
+  "creative_labels.special.inverted": "Inverted Sticky Note",
+  "creative_labels.special.smile": "Smiley Sticky Note",
+  "creative_labels.special.creeper": "Creeper Sticky Note",
+  "creative_labels.special.gold": "Gold Sticky Note",
+
+  "creative_labels.tooltip.note.1": "Right-click in the air to write",
+  "creative_labels.tooltip.note.2": "Can be placed on blocks",
+  "creative_labels.tooltip.note.3": "Can be dyed when placed",
+  "creative_labels.tooltip.note.4": "Right-click an item in your inventory to add this note to it",
+
+  "creative_labels.tooltip.label.1": "Place on a block face",
+  "creative_labels.tooltip.label.2": "Sneak + right-click with an item: show it",
+  "creative_labels.tooltip.label.3": "Sneak + right-click with an empty hand: clear it",
+  "creative_labels.tooltip.label.4": "Right-click with a dye: colour the icon",
+  "creative_labels.tooltip.label.5": "Glow ink sac: glow",
+  "creative_labels.tooltip.label.6": "Ink sac: stop the glow",
+  "creative_labels.tooltip.label.7": "Feather: show or hide the name",
+  "creative_labels.tooltip.label.8": "Anything else uses the block behind",
+
+  "creative_labels.tooltip.eraser.1": "Right-click a labelled item in your inventory: remove its last label",
+  "creative_labels.tooltip.eraser.2": "Right-click a placed note: wipe it",
+  "creative_labels.tooltip.eraser.3": "Craft with a note: wipe it",
+  "creative_labels.tooltip.eraser.4": "On a blank note: back to plain yellow",
+
+  "creative_labels.screen.note.title": "Sticky Note",
+  "creative_labels.screen.note.done": "Done",
+  "creative_labels.screen.note.day": "Day %s, %s",
+  "creative_labels.label.full": "No room for another label",
+
+  "creative_labels.wthit.note": "Sticky Note",
+  "creative_labels.wthit.note.day": "Day %s, %s",
+  "creative_labels.wthit.note.text": "\"%s\"",
+  "creative_labels.wthit.label": "Label: %s",
+  "creative_labels.wthit.label.empty": "Label",
+
+  "config.creative_labels.common.notes": "Notes",
+  "config.creative_labels.common.item_labels": "Item labels",
+  "config.creative_labels.common.wthit": "WTHIT",
+  "config.creative_labels.client.labels": "Labels"
+}

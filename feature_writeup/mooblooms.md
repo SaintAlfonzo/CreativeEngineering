@@ -8,7 +8,7 @@ Test prefix `MB-`. Sections 1-3 describe Buzzier Bees' moobloom, read from Buzzi
 
 | Part | Status |
 |---|---|
-| More Mooblooms 1.0 | `development/moreMooblooms`, jar `moreMooblooms-1.0.0.jar` (rebuilt and installed in `mods/` 2026-10-11 with azaleabloom's moss spawning; STAGED for pack 1.0.6, its first release, not deployed). Install with `./gradlew :moreMooblooms:installToMods`, on the client and the server (same jar on both, 4.2; the deploy ships it to both). Verified on a scratch server (4.14). Rendering, JEI, feeding, grazing and the soul sand valley spawn still need a client (section 8) |
+| More Mooblooms 1.0 | `development/moreMooblooms`, jar `moreMooblooms-1.0.0.jar` (rebuilt and installed in `mods/` 2026-10-11 with azaleabloom's moss spawning; DEPLOYED with pack 1.0.6 (2026-10-14), its first release). Install with `./gradlew :moreMooblooms:installToMods`, on the client and the server (same jar on both, 4.2; the deploy ships it to both). Verified on a scratch server (4.14). Rendering, JEI, feeding, grazing and the soul sand valley spawn still need a client (section 8) |
 | Variants | 11 (4.4): moobloom (the default), sunbloom, rosebloom, peonybloom, onionbloom, bluebloom, orchidbloom, lilybloom, oxeyebloom, azaleabloom, witherbloom. Each grows a weighted pool of flowers; every vanilla flower is in at least one pool |
 | Variant data | generated from the variant table (4.4) by `python3 tools/gen_moobloom_variants.py`; checked by `python3 tools/check_moobloom_data.py` |
 | Breeding | any two mooblooms breed: 10 colour-mix combinations, otherwise same variant breeds true, otherwise a random calf (4.8) |

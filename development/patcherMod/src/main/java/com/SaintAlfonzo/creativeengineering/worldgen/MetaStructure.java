@@ -82,6 +82,11 @@ import java.util.function.Predicate;
  * satellites sit just outside the anchor. A part short of its minimum count makes the whole meta fail, and the
  * group's weighted pick falls through to its next member, as for a wrong biome.
  *
+ * COASTS AND RIVERS (CEConfig [worldgen.meta_structures] avoidCoasts, off by default): no part may start in, or
+ * reach with its box (centre and corners) into, a biome of creativeengineering:coast_river. A satellite there is
+ * tried elsewhere, an anchor there fails the meta (the slot is then the plain anchor). Metas in the structure tag
+ * creativeengineering:meta/coast_ok (fleets, flotillas, wrecks, sunken ruins) and feature parts are not checked.
+ *
  * The json lives in kubejs/generation_scripts/worldgen/meta_structures.json; structure_overrides.js adds it to
  * the datapack only when this class exists (an older jar would otherwise fail the world load on the unknown type).
  */
@@ -92,6 +97,11 @@ public final class MetaStructure extends Structure {
 	/** Chunks a part's pieces may reach from the start chunk. */
 	static final int REACH = 7;
 	private static final int SALT = 0x6d657461;   // "meta"
+
+	/** Coasts and rivers, which [worldgen.meta_structures] avoidCoasts keeps metas out of. */
+	static final TagKey<Biome> COAST = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "coast_river"));
+	/** Metas that belong on the water and its shores: avoidCoasts leaves them alone. */
+	static final TagKey<Structure> COAST_OK = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "meta/coast_ok"));
 
 	// ── registration ─────────────────────────────────────────────────────────
 
@@ -249,6 +259,7 @@ public final class MetaStructure extends Structure {
 		List<String> log = WorldgenConfig.metaStructuresLog() ? new ArrayList<>() : null;
 
 		StructureFrequencies.anchorChosen(this, null, 0, 0);
+		Predicate<Holder<Biome>> avoid = avoidsCoasts(structures) ? b -> b.is(COAST) : null;
 		BlockPos origin;
 		int cx, cz;
 		if (anchor.isPresent()) {
@@ -262,7 +273,7 @@ public final class MetaStructure extends Structure {
 			while (a == null && !candidates.isEmpty()) {
 				Structure s = weightedPick(candidates, weights, random);   // vanilla's pick: a failure re-picks among the rest
 				candidates.remove(s);
-				a = generate(s, ctx, ctx.chunkPos());
+				a = generate(s, ctx, ctx.chunkPos(), avoid);
 			}
 			// a slot's anchor that doesn't fit here fails on its own too (the group's biome fall-through): not worth a line
 			if (a == null) return forced != null ? Optional.empty() : fail(log, ctx, "no anchor fits");
@@ -283,7 +294,7 @@ public final class MetaStructure extends Structure {
 			if (part.chance() < 1 && random.nextFloat() >= part.chance()) continue;
 			int wanted = part.count().pick(random);
 			int placed = part.structures().isPresent()
-					? placeStructures(part, wanted, resolveStructures(structures, part.structures().get()), ctx, layout, random, cx, cz, log)
+					? placeStructures(part, wanted, resolveStructures(structures, part.structures().get()), ctx, layout, random, cx, cz, log, avoid)
 					: placeFeatures(part, wanted, ctx, layout, random, cx, cz);
 			if (log != null) log.add(placed + "/" + wanted + " " + part.label());
 			if (placed < part.count().min()) return fail(log, ctx, "part " + part.label() + " placed " + placed + " of at least " + part.count().min());
@@ -308,7 +319,7 @@ public final class MetaStructure extends Structure {
 
 	/** Satellites: from the near end of the distance range outwards, each a structure that fits there. */
 	private static int placeStructures(Part part, int wanted, List<Structure> pool, GenerationContext ctx, Layout layout,
-			WorldgenRandom random, int cx, int cz, List<String> log) {
+			WorldgenRandom random, int cx, int cz, List<String> log, Predicate<Holder<Biome>> avoid) {
 		if (pool.isEmpty()) return 0;
 		Registry<Structure> reg = ctx.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
 		List<int[]> centres = new ArrayList<>();
@@ -322,7 +333,7 @@ public final class MetaStructure extends Structure {
 				if (!layout.inReach(at.x, at.z)) continue;
 				Placed p = null;
 				for (Structure s : shuffled(pool, random)) {
-					p = generate(s, ctx, at);
+					p = generate(s, ctx, at, avoid);
 					if (p != null) break;
 				}
 				if (p == null) continue;
@@ -370,10 +381,11 @@ public final class MetaStructure extends Structure {
 
 	/**
 	 * The structure's own start at that chunk, or null when it can't: its own refusal, or a biome its list, its
-	 * biome rules (the water rule) or the meta's rejects. So a part only stands where it could stand alone.
+	 * biome rules (the water rule) or the meta's rejects. So a part only stands where it could stand alone. With
+	 * {@code avoid} (avoidCoasts), also null when its start or its box's centre or a corner is in an avoided biome.
 	 */
-	private static Placed generate(Structure s, GenerationContext ctx, ChunkPos at) {
-		Predicate<Holder<Biome>> biomes = StructureBiomeRules.filter(s, b -> ctx.validBiome().test(b) && s.biomes().contains(b));
+	private static Placed generate(Structure s, GenerationContext ctx, ChunkPos at, Predicate<Holder<Biome>> avoid) {
+		Predicate<Holder<Biome>> biomes = StructureBiomeRules.filter(s, b -> ctx.validBiome().test(b) && s.biomes().contains(b) && (avoid == null || !avoid.test(b)));
 		GenerationContext sub = new GenerationContext(ctx.registryAccess(), ctx.chunkGenerator(), ctx.biomeSource(), ctx.randomState(),
 				ctx.structureTemplateManager(), ctx.seed(), at, ctx.heightAccessor(), biomes);
 		try {
@@ -382,7 +394,9 @@ public final class MetaStructure extends Structure {
 			StructurePiecesBuilder builder = stub.get().getPiecesBuilder();
 			if (builder.isEmpty()) return null;
 			List<StructurePiece> pieces = builder.build().pieces();
-			return new Placed(s, stub.get().position(), pieces, StructurePiece.createBoundingBox(pieces.stream()));
+			BoundingBox box = StructurePiece.createBoundingBox(pieces.stream());
+			if (avoid != null && reaches(box, stub.get().position().getY(), sub, avoid)) return null;
+			return new Placed(s, stub.get().position(), pieces, box);
 		} catch (RuntimeException e) {
 			if (FAILED.add(s)) LOG.error("[meta-structures] {} failed to generate as a part (skipped from now on in this session's log)", s, e);
 			return null;
@@ -390,6 +404,23 @@ public final class MetaStructure extends Structure {
 	}
 
 	private static final Set<Structure> FAILED = ConcurrentHashMap.newKeySet();
+
+	/** Whether the box's centre or one of its corners, at height y, is in a biome the predicate matches. */
+	private static boolean reaches(BoundingBox box, int y, GenerationContext ctx, Predicate<Holder<Biome>> biomes) {
+		int[] xs = {box.minX(), box.maxX(), (box.minX() + box.maxX()) / 2}, zs = {box.minZ(), box.maxZ(), (box.minZ() + box.maxZ()) / 2};
+		for (int i = 0; i < 5; i++) {
+			int x = i < 4 ? xs[i & 1] : xs[2], z = i < 4 ? zs[i >> 1] : zs[2];
+			if (biomes.test(ctx.chunkGenerator().getBiomeSource().getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z),
+					ctx.randomState().sampler()))) return true;
+		}
+		return false;
+	}
+
+	/** avoidCoasts applies to this meta: the switch is on and the meta isn't in meta/coast_ok. */
+	private boolean avoidsCoasts(Registry<Structure> structures) {
+		if (!WorldgenConfig.metaAvoidCoasts()) return false;
+		return structures.getResourceKey(this).flatMap(structures::getHolder).map(h -> !h.is(COAST_OK)).orElse(true);
+	}
 
 	/** Structure#isValidBiome (private in 1.19.2): the biome at the stub's position. */
 	private static boolean validBiome(BlockPos pos, GenerationContext ctx, Predicate<Holder<Biome>> biomes) {

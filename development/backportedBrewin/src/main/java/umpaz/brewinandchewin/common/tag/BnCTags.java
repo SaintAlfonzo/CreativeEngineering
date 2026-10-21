@@ -16,6 +16,9 @@ public class BnCTags {
       public static final TagKey<Block> CHEESE_WHEELS_UNRIPE = modBlockTag("cheese_wheels/unripe");
       public static final TagKey<Block> CHEESE_WHEELS_RIPE = modBlockTag("cheese_wheels/ripe");
       public static final TagKey<Block> FREEZE_SOURCES = modBlockTag("freeze_sources");
+      // Port: the keg's heat tag. Ships as #farmersdelight:heat_sources, so pack additions (furnaces, braziers)
+      // warm kegs without making FD cooking pots cook on them.
+      public static final TagKey<Block> HEAT_SOURCES = modBlockTag("heat_sources");
       public static final TagKey<Block> PLAYER_WORKSTATIONS_KEGS = modBlockTag("player_workstations/kegs");
 
       private static TagKey<Block> modBlockTag(String path) {
@@ -74,6 +77,8 @@ public class BnCTags {
       public static final TagKey<Item> FOOD_JERKY_MEAT = modItemTag("foods/jerky_meat");
       public static final TagKey<Item> FOOD_PIZZA_TOPPING = modItemTag("foods/pizza_topping");
       public static final TagKey<Item> PLAYER_WORKSTATIONS_KEGS = modItemTag("player_workstations/kegs");
+      // Port: the items a coaster takes while [coaster] taggedItemsOnly is on (the ones with a coaster model).
+      public static final TagKey<Item> PLACEABLE_ON_COASTER = modItemTag("placeable_on_coaster");
 
       private static TagKey<Item> modItemTag(String path) {
          return TagKey.create(Registry.ITEM_REGISTRY, BrewinAndChewin.asResource(path));

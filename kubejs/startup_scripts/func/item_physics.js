@@ -2,7 +2,7 @@
 //  Item Physics — fire / lava burning split + float control
 // ─────────────────────────────────────────────────────────────────────────────
 //
-//  Backed by patcherMod (creativeengineering-1.0.2.jar):
+//  Backed by patcherMod (creativeengineering-<version>.jar in mods/):
 //    com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit
 //    + mixin/ItemPhysicServerMixin
 //
@@ -15,7 +15,8 @@
 //
 //    creativeengineering:physics/floats     → floats in water
 //    creativeengineering:physics/sinks      → force-sink (wins over floats)
-//    creativeengineering:physics/lavaproof  → immune to BOTH fire and lava
+//    creativeengineering:physics/fireproof  → survives open fire, still burns in lava
+//    creativeengineering:physics/lavaproof  → immune to BOTH fire and lava (wins over fireproof)
 //
 //  patcherMod ships starter contents for these tags (netherite, boats, …).
 //

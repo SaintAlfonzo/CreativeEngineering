@@ -30,7 +30,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.foundation.storage.StorageBlockEntity;
 import net.satisfy.vinery.core.item.DrinkBlockItem;
 import net.satisfy.vinery.core.registry.StorageTypeRegistry;
-import net.satisfy.vinery.core.registry.TagRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class WineBottleBlock extends StorageBlock {
@@ -131,14 +130,23 @@ public class WineBottleBlock extends StorageBlock {
     public int size() {
         return maxCount;
     }
+
+    /** Bottles per placed block; also the wine's size (DrinkBlockItem.BottleSize). */
+    public int getMaxCount() {
+        return maxCount;
+    }
     @Override
     public ResourceLocation type() {
         return StorageTypeRegistry.WINE_BOTTLE;
     }
 
+    /**
+     * Port: any wine, as in 1.3.10. 1.5.5 narrowed this to {@code #vinery:small_bottle}, which left every 2-per-block
+     * (large) wine unable to take a second bottle; {@link #willFitStack} already caps each block by its smallest maxCount.
+     */
     @Override
     public boolean canInsertStack(ItemStack stack) {
-        return stack.is(TagRegistry.SMALL_BOTTLE);
+        return stack.getItem() instanceof DrinkBlockItem;
     }
 
     public boolean willFitStack(ItemStack itemStack, NonNullList<ItemStack> inventory) {

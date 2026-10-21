@@ -196,6 +196,6 @@ The instance's `config/` and `kubejs/` are unchanged.
 4. **ST-52 / ST-57 limits:** the numbers are in 2.1 and 2.4. Defaults cancel about 8-12% of surface starts, nearly
    all on real cliffs or water. Nothing here argues for a change except the drum tower (huge, 1 of 1 cancelled; the
    M2 item).
-5. **Test text:** ST-53's "the slot stays empty" should read "the set's next member may take the slot". ST-160's
+5. **Test text (done 2026-10-19 in structure_tuning.md):** ST-53's "the slot stays empty" should read "the set's next member may take the slot". ST-160's
    "villages medium or large" should allow small villages.
 6. **3.4:** `/dumpstructuregen` needs a look before the next `check_structure_live.py` run.

@@ -62,7 +62,8 @@ public class OvenScreen extends AbstractContainerScreen<OvenMenu> {
             ItemStack containerStack = menu.blockEntity.getContainer();
             String container = containerStack.isEmpty() ? "" : containerStack.getHoverName().getString();
             tooltip.add(Component.translatable("container.creativeengineering.oven.served_on", container).withStyle(ChatFormatting.GRAY));
-            renderComponentTooltip(poseStack, tooltip, mouseX, mouseY);
+            // Forge's overload with the stack, so AppleSkin and other GatherComponents listeners see the meal
+            renderComponentTooltip(poseStack, tooltip, mouseX, mouseY, mealStack);
         } else {
             renderTooltip(poseStack, hoveredSlot.getItem(), mouseX, mouseY);
         }

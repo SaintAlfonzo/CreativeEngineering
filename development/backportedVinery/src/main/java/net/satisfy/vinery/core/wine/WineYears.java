@@ -1,17 +1,27 @@
 package net.satisfy.vinery.core.wine;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.satisfy.vinery.forge.VineryConfig;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.LoggerFactory;
+
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Wine age on the {@link VintageClock} (feature_writeup/alcohol.md B4.5), keeping upstream's method names.
  * <p>
- * A wine stack carries {@code WineYear {brewedAt, storedSince, storedTicks, bonusTicks, storageRate}}, all in clock
+ * A wine stack carries {@code WineYear {brewedAt, storedSince, storedTicks, bonusTicks, storageRate, storageKind}}, all in clock
  * ticks (upstream's WINE_YEAR component in days). Unlike upstream, the day / year lengths and level settings are read
  * from config when needed rather than copied into each stack, so changing the scale re-scales every wine at once.
  * 1.3.10 wines ({@code Year} = world-day year) convert once, keeping their age in years (W8).
@@ -19,6 +29,15 @@ import org.jetbrains.annotations.Nullable;
 public class WineYears {
     public static final String TAG = "WineYear";
     private static final String LEGACY_YEAR = "Year";
+    private static final String LABEL = "label.vinery_backport.storage.";
+    /**
+     * storageKind bits: no sky light (cellar, otherwise sunny) and a cold or warm spot (Brewin' and Chewin's keg
+     * temperature, otherwise neither).
+     */
+    public static final int CELLAR = 1;
+    public static final int COLD = 2;
+    public static final int WARM = 4;
+    private static final MethodHandle BNC_CLIMATE = bncClimate();
 
     public static boolean isAgingEnabled() {
         return VineryConfig.AGING_ENABLED.get();
@@ -71,6 +90,7 @@ public class WineYears {
         data.putLong("storedTicks", 0);
         data.putLong("bonusTicks", 0);
         data.putInt("storageRate", 100);
+        data.putInt("storageKind", 0);
         return data;
     }
 
@@ -100,7 +120,7 @@ public class WineYears {
     }
 
     private static long bonusTicks(long ticks, int ratePercent) {
-        return Math.max(0, ticks * (ratePercent - 100) / 100);
+        return ticks * (ratePercent - 100) / 100; // negative below x1.0 (warm); the age itself is clamped at 0
     }
 
     public static int getWineAgeDays(ItemStack wine, Level level) {
@@ -111,11 +131,76 @@ public class WineYears {
         return (int) (getWineAgeTicks(wine, level) / VintageClock.of(level).ticksPerYear());
     }
 
-    public static int storageRate(Level level, BlockPos pos) {
-        if (level.getBrightness(LightLayer.SKY, pos) > 0) {
-            return 100;
+    /** CELLAR | COLD / WARM bits for a storage block at pos. */
+    public static int storageKind(Level level, BlockPos pos) {
+        int kind = level.getBrightness(LightLayer.SKY, pos) > 0 ? 0 : CELLAR;
+        int climate = climate(level, pos);
+        return climate < 0 ? kind | COLD : climate > 0 ? kind | WARM : kind;
+    }
+
+    /** Aging speed in percent for a storage kind: the cellar, cold and warm factors multiply (sunny is x1.0). */
+    public static int storageRate(Level level, int kind) {
+        VintageClock.Snapshot clock = VintageClock.of(level);
+        double rate = 100;
+        if ((kind & CELLAR) != 0) {
+            rate *= clock.cellarPercent() / 100.0;
         }
-        return VintageClock.of(level).cellarPercent();
+        if ((kind & COLD) != 0) {
+            rate *= clock.coldPercent() / 100.0;
+        }
+        if ((kind & WARM) != 0) {
+            rate *= clock.warmPercent() / 100.0;
+        }
+        return (int) Math.round(rate);
+    }
+
+    public static int storageRate(Level level, BlockPos pos) {
+        return storageRate(level, storageKind(level, pos));
+    }
+
+    /** "cold cellar", "warm sunny", "sunny"...: the temperature word (if any), then the light word. */
+    public static MutableComponent storageLabel(int kind) {
+        MutableComponent light = Component.translatable(LABEL + ((kind & CELLAR) != 0 ? "cellar" : "sunny"));
+        String climate = (kind & COLD) != 0 ? "cold" : (kind & WARM) != 0 ? "warm" : null;
+        return climate == null ? light : Component.translatable(LABEL + "climate_light", Component.translatable(LABEL + climate), light);
+    }
+
+    /** A rate in percent as a factor: 100 -> "1.0", 75 -> "0.75", 400 -> "4.0". */
+    public static String formatRate(int percent) {
+        String text = String.format(Locale.ROOT, "%.2f", percent / 100.0);
+        return text.endsWith("0") ? text.substring(0, text.length() - 1) : text;
+    }
+
+    /**
+     * Cold and warm come from the Brewin' and Chewin' port's keg temperature (BnCHeatSources.climate: its heat and
+     * freeze source tags, biome and dimension), looked up by reflection so Vinery runs without it.
+     */
+    private static int climate(Level level, BlockPos pos) {
+        if (BNC_CLIMATE == null) {
+            return 0;
+        }
+        try {
+            return (int) BNC_CLIMATE.invokeExact(level, pos);
+        } catch (Throwable e) {
+            return 0;
+        }
+    }
+
+    private static @Nullable MethodHandle bncClimate() {
+        try {
+            Class<?> heat = Class.forName("umpaz.brewinandchewin.common.utility.BnCHeatSources");
+            return MethodHandles.publicLookup().findStatic(heat, "climate", MethodType.methodType(int.class, Level.class, BlockPos.class));
+        } catch (ClassNotFoundException e) {
+            return null;
+        } catch (ReflectiveOperationException e) {
+            LoggerFactory.getLogger("vinery").warn("Brewin' and Chewin' has no BnCHeatSources.climate; wine storage is never cold or warm ({})", e.toString());
+            return null;
+        }
+    }
+
+    /** Tooltip line on the blocks wine ages in. */
+    public static void addStorageHint(List<Component> tooltip) {
+        tooltip.add(Component.translatable("tooltip.vinery_backport.storage_hint").withStyle(ChatFormatting.GRAY));
     }
 
     public static int getEffectLevel(ItemStack wine, Level level) {
@@ -152,8 +237,10 @@ public class WineYears {
         }
         CompoundTag data = data(wine);
         if (data != null && data.getLong("storedSince") < 0) {
+            int kind = storageKind(level, pos);
             data.putLong("storedSince", VintageClock.of(level).ticks());
-            data.putInt("storageRate", storageRate(level, pos));
+            data.putInt("storageRate", storageRate(level, kind));
+            data.putInt("storageKind", kind);
         }
     }
 
@@ -166,6 +253,7 @@ public class WineYears {
             data.putLong("storedTicks", data.getLong("storedTicks") + stored);
             data.putLong("storedSince", -1);
             data.putInt("storageRate", 100);
+            data.putInt("storageKind", 0);
         }
     }
 
@@ -189,7 +277,7 @@ public class WineYears {
         double ticksPerLevel = clock.ticksPerYear() * clock.yearsPerEffectLevel();
         double remaining = (getEffectLevel(wine, level) + 1) * ticksPerLevel - getWineAgeTicks(wine, level);
         CompoundTag data = data(wine);
-        int rate = data != null && data.getLong("storedSince") >= 0 ? Math.max(100, data.getInt("storageRate")) : 100;
+        int rate = data != null && data.getLong("storedSince") >= 0 ? Math.max(1, data.getInt("storageRate")) : 100;
         return Math.max(1, (long) Math.ceil(remaining * 100 / rate));
     }
 
@@ -207,5 +295,14 @@ public class WineYears {
     public static int currentStorageRate(ItemStack wine) {
         CompoundTag data = data(wine);
         return data == null ? 100 : data.getInt("storageRate");
+    }
+
+    /** storageKind of a stored wine; wines stored before cold storage existed only had the cellar bonus. */
+    public static int currentStorageKind(ItemStack wine) {
+        CompoundTag data = data(wine);
+        if (data == null) {
+            return 0;
+        }
+        return data.contains("storageKind", 3) ? data.getInt("storageKind") : data.getInt("storageRate") > 100 ? CELLAR : 0;
     }
 }

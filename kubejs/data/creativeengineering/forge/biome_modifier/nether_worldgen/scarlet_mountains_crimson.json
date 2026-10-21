@@ -1,0 +1,13 @@
+{
+  "type": "forge:remove_features",
+  "biomes": [
+    "terralith:scarlet_mountains"
+  ],
+  "features": [
+    "terralith:mountains/scarlet/crimson_spread",
+    "terralith:mountains/scarlet/crimson_patch"
+  ],
+  "steps": [
+    "raw_generation"
+  ]
+}

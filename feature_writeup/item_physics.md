@@ -106,11 +106,11 @@ When fire or lava destroys a dropped item (ItemPhysic's item health reaches 0 fr
 
 ### Findings (2026-10-18)
 
-- **F1. The `ItemPhysicSplit$1` crash is still in the code.** `burnDecision` switches on the `Burn` enum (line 128), so
+- **F1.** FIXED 2026-10-19 in patcherMod 1.0.9 (DEPLOYED with pack 1.0.9): if-chain, no `ItemPhysicSplit$1` in the jar ([plan_1.0.9.md](plan_1.0.9.md)). **The `ItemPhysicSplit$1` crash is still in the code.** `burnDecision` switches on the `Burn` enum (line 128), so
   javac makes a synthetic `ItemPhysicSplit$1` class that is loaded lazily and isn't covered by the force-load; it
   crashed the server twice in September (`NoClassDefFoundError`). Fix: an if/else chain instead of the switch, or
-  force-load `$1` too. Already in [TODO.md](todo/TODO.md) 3; recurrence since not checked.
-- **F2. Stale comments:** `item_physics.js` says "creativeengineering-1.0.2.jar" and lists three tags (fireproof is
+  force-load `$1` too. Was in the old TODO.md section 3; recurrence since not checked.
+- **F2.** FIXED 2026-10-19 (jar name generic, fireproof listed, "chat" gone, "Future" note points at TODO `gameplay/item-physics #2`). **Stale comments:** `item_physics.js` says "creativeengineering-1.0.2.jar" and lists three tags (fireproof is
   missing); `item_physics_tags.js` says "see the breakdown in chat" (that chat is gone; the header itself is the
   breakdown) and has a "Future" note (Create components sink and fireproof, belts float, flour floats, treated wood
   sinks, "add items from all other mods") that was never done.
@@ -173,3 +173,5 @@ Drop items with Q into the hazard.
   fixed; the `$1` switch class, not fixed).
 - By 2026-09-27 (initial git commit): tags filled; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F6; tests IP-01 to IP-14. No code changed.
+- 2026-10-19: F1 fixed in patcherMod 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). IP-13 still to run.
+- 2026-10-19: F2 fixed (item_physics.js and item_physics_tags.js headers).

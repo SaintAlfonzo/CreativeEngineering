@@ -57,10 +57,6 @@ LITERAL TODO COMMENTS IN LIVE CODE
 FEATURES NOT YET STARTED
 ============================================================
 
-[ ] In-game guidebook. Patchouli is installed + configured (mods/Patchouli-*.jar,
-    config/patchouli-client.toml) but patchouli_books/ is completely empty — no book.json, no
-    single page, anywhere (including patcherMod resources). Hasn't been begun at all.
-
 [ ] Loot overhaul content. kubejs/server_scripts/loot/ is fully scaffolded (global.LOOT API,
     numbered concern files 00-99, README.md) but 00_lib.js's groups{} and tiers{} lists are all
     still empty arrays waiting on a `/dumploot` export + manual fill-in; 20_frequency.js through

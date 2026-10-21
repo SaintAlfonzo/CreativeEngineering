@@ -1,7 +1,6 @@
 ServerEvents.recipes(e => {
 
 console.log('Hello! The metal base event has started!')
-console.log('EVENT:', e)
 
 const R = global.NCH
 var f = global.fluid

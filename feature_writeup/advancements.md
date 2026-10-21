@@ -8,7 +8,7 @@ this file is the reference for the switch.
 
 | Part | Status |
 |---|---|
-| `[advancements] enabled = false` + `ServerAdvancementManagerMixin` | BUILT 2026-10-18 in patcherMod 1.0.8; STAGED for 1.0.8 (2026-10-19). Ran in single player 2026-10-19 00:57: "14828 advancements left out", 931 "Ignored advancement" lines for the saved progress (6) |
+| `[advancements] enabled = false` + `ServerAdvancementManagerMixin` | BUILT 2026-10-18 in patcherMod 1.0.8; DEPLOYED with 1.0.8 (2026-10-19 10:20). Ran in single player 2026-10-19 00:57: "14828 advancements left out", 931 "Ignored advancement" lines for the saved progress (6) |
 | Vinery `vintage_perfection` left out of the upstream layer | BUILT in the Vinery port `-02` ([alcohol.md](alcohol.md) 10.2) |
 | Replacement sources for lost rewards | Vinery banner: crafting recipe ([alcohol.md](alcohol.md) 10.5). The rest have none (3.2) |
 | In-game tests | AV-01 to AV-05 pending |
@@ -33,7 +33,7 @@ the recipe-unlock advancements did nothing useful.
 | Case | What happens with the switch off |
 |---|---|
 | Advancement screen (L) | empty |
-| Toasts, chat announcements | none |
+| Toasts, chat announcements | none (advancement toasts are also filtered on the client by `[toasts] advancement`, [toasts.md](toasts.md)) |
 | `/advancement grant ...` | fails: the id doesn't exist |
 | Mod code awarding a criterion | finds no advancement; Brewin's "temperature block near a keg" award checks for null ([alcohol.md](alcohol.md) 10.2) |
 | FTB Quests | no quest task uses an advancement (checked 2026-10-18) |
@@ -102,3 +102,5 @@ progress through advancements. Use FTB Quests, loot or code.
   the banner crafting recipe ([alcohol.md](alcohol.md) 10.2, 10.5).
 - 2026-10-19: this writeup. Single-player evidence from the 00:57 session added (6). STAGED in pack 1.0.8. AV-01 to
   AV-05 added.
+- 2026-10-19: DEPLOYED with pack 1.0.8 (10:20, server + clients); the first-boot log check on the live server is TODO `pack/release #3`.
+- 2026-10-19: advancement toasts also filtered client-side by `ToastFilterMixin` ([toasts.md](toasts.md)), BUILT.

@@ -1,6 +1,6 @@
-// Brewin' and Chewin' (backport) recipe changes: feature_writeup/alcohol.md 8.6 and 8.7.
+// Brewin' and Chewin' (backport) recipe changes: feature_writeup/alcohol.md 8.6 and 8.7. Food recipes (pierogi, pizza,
+// ham and cheese sandwich, quiche) live in cooking.js, Prepared.
 // The port's data stays 4.5.0, so each change removes the upstream id and adds the pack recipe here.
-// Also the JEED providers for the Vinery port's wine effects (alcohol.md B7.5), at the end.
 ServerEvents.recipes(e => {
 
 console.log('alcohol recipes starting')
@@ -42,55 +42,6 @@ R.remove({ id: 'brewinandchewin:fermenting/steel_toe_stout_from_strongroot_ale' 
 R.bncFermenting(Fluid.of(f.steel_toe_stout, 1000), [i.t_metal_dusts, i.crimson_fungus, i.nether_wart, i.blaze_powder], f.strongroot_ale, e,
 	'steel_toe_stout_from_strongroot_ale', { temperature: 1, time: 4800 })
 
-//######################### Food #########################
-// Scarlet Pierogi: beetroot in place of nether wart
-R.replaceInput({ id: 'brewinandchewin:cooking/scarlet_pierogi' }, i.nether_wart, i.beetroot, e)
-
-// Pizza: one dough on the bottom row in place of three wheat
-R.remove({ id: 'brewinandchewin:pizza' }, e)
-R.shaped(i.pizza, [' f ', 'ptp', ' d '], { f: i.t_cheese_wedge, p: i.t_pizza_topping, t: i.tomato_sauce, d: i.dough }, e, 'pizza')
-
-// Ham and Cheese Sandwich: a side is a bread slice or a whole bread. Smoked ham cuts into two porkchops, so it gives double.
-R.remove({ id: 'brewinandchewin:ham_and_cheese_sandwich' }, e)
-var sandwichSide = [i.bread_slice, i.bread]
-R.shapeless(Item.of(i.ham_and_cheese_sandwich, 1), [sandwichSide, i.cooked_pork, i.flaxen_cheese_wedge, sandwichSide], e, 'ham_and_cheese_sandwich')
-R.shapeless(Item.of(i.ham_and_cheese_sandwich, 2), [sandwichSide, i.smoked_ham, i.flaxen_cheese_wedge, sandwichSide], e, 'ham_and_cheese_sandwich_smoked_ham')
-var incSandwich = R.incomplete('ham_and_cheese_sandwich')
-R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 2), i.bread_slice, [
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.cooked_pork]),
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.bread_slice])
-], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_sequenced_assembly', 1)
-R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 4), i.bread_slice, [
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.smoked_ham]),
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.bread_slice])
-], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_smoked_ham_sequenced_assembly', 1)
-
-// Quiche: the mushroom one takes a cabbage leaf or a whole cabbage
-R.remove({ id: 'brewinandchewin:quiche_from_mushroom' }, e)
-R.shaped(i.quiche, ['blb', 'mcm', 'eCe'], {
-	b: i.brown_mushroom, l: [i.cabbage_leaf, i.cabbage], m: i.milk, c: i.t_cheese_wedge, e: i.minecraft_egg, C: i.pie_crust
-}, e, 'quiche_from_mushroom')
-// Sequenced assembly. The filling goes on first: with milk first both recipes would start the same, and Create
-// only ever picks one of them.
-var quicheCabbage = Ingredient.of([i.cabbage, i.cabbage_leaf])
-;[
-	['quiche_bacon', i.cooked_bacon],
-	['quiche_mushroom', i.brown_mushroom],
-].forEach(([key, filling]) => {
-	var inc = R.incomplete(key)
-	R.createSequencedAssembly(i.quiche, i.pie_crust, [
-		e.recipes.create.deploying(inc, [inc, filling]),
-		e.recipes.create.filling(inc, [inc, Fluid.of(f.milk, 250)]),
-		e.recipes.create.deploying(inc, [inc, i.eggs]),
-		e.recipes.create.deploying(inc, [inc, i.eggs]),
-		e.recipes.create.deploying(inc, [inc, i.t_cheese_wedge]),
-		e.recipes.create.deploying(inc, [inc, quicheCabbage])
-	], [key], e, key + '_sequenced_assembly', 1)
-})
-
 //######################### Spout and drain #########################
 // A tankard holds 250 mB, as the keg pours. The cheese fluids stay keg-only (they can't be poured back in 4.5.0 either).
 ;[
@@ -115,22 +66,11 @@ R.shaped(i.vinery_standard, ['JMA', 'PBC', 'LNH'], {
 	C: i.cristel_wine, L: i.lilitu_wine, H: i.chenet_wine, B: i.any_banner, N: i.nether_star
 }, e, 'vinery_standard')
 
-//######################### JEED: wine effects (Vinery port) #########################
-// The wine -> effect map is the port's [wine] effects config, so editing it and running /reload moves the providers.
-if (Platform.isLoaded('vinery')) {
-	try {
-		var winesByEffect = Java.loadClass('net.satisfy.vinery.core.wine.WineEffects').winesByEffect()
-		var effectIds = winesByEffect.keySet().iterator()
-		while (effectIds.hasNext()) {
-			var effectId = String(effectIds.next())
-			var wineList = winesByEffect.get(effectId)
-			var wines = []
-			for (var n = 0; n < wineList.size(); n++) wines.push(String(wineList.get(n)))
-			R.jeedProvider(effectId, wines, e, 'vinery_' + effectId.replace(':', '_'))
-		}
-	} catch (err) {
-		console.warn('alcohol.js: no JEED wine providers (' + err + ')')
-	}
-}
+//######################### Stained Glass (Vinery window) #########################
+// Renamed "Stained Glass" / "Stained Glass Pane" in the port (alcohol/vineryport #17). Upstream makes each from glass or
+// panes and dyes; this adds the vanilla pane shape, 6 blocks -> 16 panes.
+R.shaped(Item.of(i.window, 16), ['WWW', 'WWW'], { W: i.window_block }, e, 'vinery_window_from_block')
+
+// JEED providers for the wine effects: other/jeed_providers.js (with every other effect source).
 
 })

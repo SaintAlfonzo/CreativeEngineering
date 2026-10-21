@@ -4,6 +4,85 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.0.9 -->
+## 1.0.9 - 2026-10-19 15:54
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: bb67d68 + 37 uncommitted file(s)
+- Since: 1.0.8
+- Deployed: server, client 2026-10-19 15:54
+- Contents: 373 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
+- Payload: update from 1.0.8, config functional: 35 files, 5.5 MB (mods 1, kubejs 34)
+- Built with warnings:
+  - pack/manifest.json is out of date with mods/: run tools/gen_pack_manifest.py and commit pack/
+  - 37 uncommitted change(s) in shipped folders (commit bb67d68 + working tree)
+
+### Changes
+
+Mods updated (1):
+
+- creativeengineering: `creativeengineering-1.0.8.jar` -> `creativeengineering-1.0.9.jar`
+
+Mods removed (1):
+
+- Rain should extinguish campfires 1.0-1.19.2-forge `rsec-1.0-1.19.2-forge.jar` (was both)
+
+<details><summary>kubejs/: 8 added, 26 changed, 0 removed</summary>
+
+*added (8)*
+
+- `data/create_dd/worldgen/configured_feature/striated_eroded_overworld.json`
+- `data/creativeengineering/forge/biome_modifier/nether_worldgen/scarlet_mountains_crimson.json`
+- `data/minecraft/worldgen/noise_settings/large_biomes.json`
+- `data/minecraft/worldgen/noise_settings/overworld.json`
+- `data/terralith/worldgen/configured_feature/enchanted/enchanted_oak.json`
+- `data/terralith/worldgen/configured_feature/flower/blue/flowers.json`
+- `data/terralith/worldgen/configured_feature/flower/blue/nylium_disk.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.caves.json.gz`
+
+*changed (26)*
+
+- `client_scripts/potion_buckets.js`
+- `data/campsite_structures/worldgen/structure/armorer_campsite.json`
+- `data/campsite_structures/worldgen/structure/butcher_campsite.json`
+- `data/campsite_structures/worldgen/structure/cartographer_campsite.json`
+- `data/campsite_structures/worldgen/structure/cleric_campsite.json`
+- `data/campsite_structures/worldgen/structure/farmer_campsite.json`
+- `data/campsite_structures/worldgen/structure/fisher_campsite.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/biome_fits.json`
+- `generation_scripts/worldgen/flower_features.json`
+- `generation_scripts/worldgen/nether_block_swaps.json`
+- `generation_scripts/worldgen/structure_tags.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `server_scripts/_lib/dump_all.js`
+- `server_scripts/_lib/dump_climate.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/equipment/tipped_arrows.js`
+- `server_scripts/metal/metal_base_materials.js`
+- `server_scripts/metal/misc_metal_crafts.js`
+- `server_scripts/tags/equipmenttags.js`
+- `server_scripts/wood/sawdust.js`
+- `server_scripts/worldgen/terrain_adaptation.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/func/armor_effects.js`
+- `startup_scripts/func/potion_area.js`
+- `startup_scripts/items/air_brake.js`
+
+</details>
+
+### Removals (from 1.0.8)
+
+Delete on the server (2, also in removals_server.txt):
+
+- `mods/creativeengineering-1.0.8.jar`
+- `mods/rsec-1.0-1.19.2-forge.jar`
+
+Delete on the client (2, also in removals_client.txt):
+
+- `mods/creativeengineering-1.0.8.jar`
+- `mods/rsec-1.0-1.19.2-forge.jar`
+
 <!-- deploy:1.0.8 -->
 ## 1.0.8 - 2026-10-19 10:06
 

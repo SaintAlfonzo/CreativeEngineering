@@ -57,7 +57,7 @@ Display only. No Vinery behaviour, recipe or config is changed.
   `Year` value for "made 20 years ago"; Vinery's tooltip then shows the max potency.
 - **Fermentation time is wrong (open, found 2026-10-01).** `VineryIds.FERMENTATION_TICKS = 1800` copies
   `COOKING_TIME_IN_TICKS`, which Vinery never reads. The barrel really runs about 50 ticks per wine
-  ([vinery.md §2.3](vinery.md)). Fix the constant and VJ-04's expected text together.
+  ([vinery.md §2.3](vinery.md)). Fix the constant and VJ-04's expected text together. Moot since 2026-10-19: with the port in `mods/` these pages stand down, and the port's own page shows no tick count.
 - **Stomping arrow** has no real timer; it animates at the Apple Press pace.
 - **Rejected:** installing REI (swaps the viewer for the whole pack and puts our own JEI categories
   behind REI's compat layer); KubeJS info pages only (KubeJS 1902 cannot add JEI categories).

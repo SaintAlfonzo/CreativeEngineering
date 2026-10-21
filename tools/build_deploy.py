@@ -64,6 +64,8 @@ Preflight (errors stop the build unless --force; warnings go into the log entry)
     since its --snapshot                                                         (error)
   - in-tree mods (IN_TREE_MODS): jar in mods/ equals the gradle build, no source newer (warning)
   - pack/manifest.json lists the installed mods                                  (warning)
+  - gen_display_delight_models.py --check: every Display Delight item has a model, and the
+    /dumpitemsbymod export isn't older than the DD jar                           (warning)
   - uncommitted changes in shipped folders (recorded with the commit)            (warning)
 
 The log's "Changes" are counted from the newest *other* version in history/ (the changelog); the
@@ -109,6 +111,8 @@ IN_TREE_MODS = [
     ('moreMooblooms', 'moreMooblooms', True),
     ('backportedVinery', 'backportedVinery', True),
     ('backportedBrewin', 'backportedBrewin', True),
+    ('babyMobs', 'babyMobs', True),
+    ('creativeLabels', 'creativeLabels', True),
 ]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
@@ -183,12 +187,16 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/nether_swap_rules.json', 'dev'),      # tools/gen_nether_swaps.py input
     ('generation_scripts/worldgen/bee_nests_baseline.json', 'dev'),     # tools/gen_bee_nests.py calibration
     ('generation_scripts/worldgen/soil_compat_manifest.json', 'dev'),   # tools/gen_soil_compat.py
+    ('generation_scripts/worldgen/nether_worldgen_rules.json', 'dev'),  # tools/gen_nether_worldgen.py input
+    ('generation_scripts/worldgen/nether_worldgen_manifest.json', 'dev'),  # tools/gen_nether_worldgen.py
     ('generation_scripts/worldgen/terrain_adaptation_scan.json', 'dev'),  # tools/terrain_adaptation_scan.py
     ('generation_scripts/food/food_types.json', 'runtime'),             # tags/foodtypetags.js
     ('generation_scripts/food/can_servings.json', 'runtime'),           # tags/cantags.js
     ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
     ('generation_scripts/food/placeable.json', 'runtime'),             # tags/placeabletags.js (placeable food tooltips)
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
+    ('generation_scripts/names/name_fixes.json', 'client'),             # client_scripts/name_fixes.js (tools/name_audit.py)
+    ('generation_scripts/names/name_rules.json', 'dev'),                # tools/name_audit.py input
     ('generation_scripts/recipes/*', 'dev'),                            # sawmill.js output (copied into the jar)
     ('generation_scripts/sawmill.js', 'dev'),                           # node generator
 ]
@@ -341,6 +349,17 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
     if unknown:
         pre.error('jars with no row in mod_sides.md (add a row, see its "Keeping this up to date"):\n'
                   + '\n'.join('    ' + u for u in unknown))
+    # Mod changes are keyed by mod id, so a second jar for a shipped id would slip through the diff
+    # (1.0.7 shipped two Brewin' jars this way). An installed folder is recorded as it is.
+    if root == ROOT:
+        by_id = {}
+        for jar, meta in mods.items():
+            if meta['modId']:
+                by_id.setdefault(meta['modId'], []).append(jar)
+        dupes = {m: jars for m, jars in by_id.items() if len(jars) > 1}
+        if dupes:
+            pre.error('mods/ holds more than one jar for a mod id (FML loads only one; remove the others):\n'
+                      + '\n'.join(f'    {m}: {", ".join(jars)}' for m, jars in sorted(dupes.items())))
 
     unclassified = []
     for tree in TREES:
@@ -475,6 +494,24 @@ def check_climate_reader(pre, files):
             if b'readGzipText' not in cls:
                 pre.error(f'mods/{jar} predates the gzipped climate samples (no WorldgenFiles.readGzipText): '
                           'copy the current development/patcherMod/build/libs jar into mods/ first')
+
+
+def check_display_delight_models(pre):
+    """DD item models the pack generates (wthit_lines.md F3): a DD update can add items with no model, which
+    JEI draws as the purple cube (WTHIT falls back to the block model). The item list comes from
+    /dumpitemsbymod, so an export older than the jar may miss the new items."""
+    jars = [j for j in os.listdir(MODS) if re.match(r'displaydelight-.*\.jar$', j)]
+    if not jars:
+        return
+    export = os.path.join(ROOT, 'kubejs', 'exported', 'items_by_mod', 'displaydelight.json')
+    if not os.path.isfile(export) or os.path.getmtime(export) < os.path.getmtime(os.path.join(MODS, jars[0])):
+        pre.warn(f'kubejs/exported/items_by_mod/displaydelight.json is older than mods/{jars[0]}: run '
+                 '`/dumpitemsbymod displaydelight`, then tools/gen_display_delight_models.py')
+    r = subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'gen_display_delight_models.py'), '--check'],
+                       capture_output=True, text=True, cwd=ROOT)
+    if r.returncode != 0:
+        pre.warn('Display Delight item models are missing or stale: run tools/gen_display_delight_models.py\n    '
+                 + (r.stdout or r.stderr).strip().replace('\n', '\n    '))
 
 
 def check_manifest(pre, files):
@@ -1008,6 +1045,7 @@ def main():
     check_in_tree_mods(pre)
     check_climate_reader(pre, files)
     check_manifest(pre, files)
+    check_display_delight_models(pre)
     commit, dirty = git_state(pre)
 
     deployed = load_deployed()

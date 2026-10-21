@@ -321,6 +321,12 @@ global.removedItems = [
 	// has no source left (Mixer redirected to create:potion, bottling_list removed, see
 	// engineering/potion_bottling.js + patcherMod PotionRecipeGeneratorsMixin), so this is
 	// unreachable in survival; kept hidden/flagged rather than craftable.
+	// Creative Labels donors (sticky_notes.md 3.13): Sticky It! and Labels stay installed as art donors until
+	// phase 5, their items are out of play (recipes removed in server_scripts/other/creative_labels.js, creative
+	// tabs via the mod's ItemHiddenMixin). Hidden from JEI and flagged here.
+	i.sticky_it_sticky_note,
+	i.sticky_it_eraser,
+	i.labels_label,
 ];
 
 console.log(`[jeiRemove] Registered ${global.removedItems.length} removed items to global scope`)

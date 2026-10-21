@@ -41,7 +41,14 @@ import java.util.Set;
  * non-negative number.
  *
  * multiplier 0 drops the biome's entries outright; replace_with relabels them. Neither needs
- * samples. Every other multiplier does.
+ * samples. Every other multiplier does. target_pct (overrides the multiplier) aims at an absolute share
+ * of the biome's layer instead, so it also works for a biome the samples never hit (a multiplier of
+ * nothing is nothing): its entries then win the samples they lose by the smallest margins. A never-hit
+ * biome has no layer of its own; target_layer names it (default: the first layer, "surface").
+ *
+ * Samples: climate/<dim>.json.gz from /dumpclimate; when climate/<dim>.caves.json.gz from
+ * /dumpclimatecaves exists, its points replace the main dump's underground layer (deeper, denser cave
+ * coverage), so the two can be dumped separately.
  *
  * Stats (layer / share_pct / result_pct / note, per dimension samples + model_agreement_pct) are
  * written back into biome_config.json, only when they changed. Results are cached on the input
@@ -191,6 +198,12 @@ public final class BiomeLayoutTuner {
 				} else if (!rw.equals(b)) replaced.add(b);
 				continue;
 			}
+			Double tp = num(c.get("target_pct"));
+			if (c.has("target_pct") && !c.get("target_pct").isJsonNull()) {
+				if (tp == null || !(tp >= 0) || tp > 100) errors.add(dimId + ": " + b + ".target_pct must be a number from 0 to 100");
+				else tuned.add(b);
+				continue;
+			}
 			Double m = num(c.get("multiplier"));
 			if (m == null || !(m >= 0) || m.isInfinite()) {
 				errors.add(dimId + ": " + b + ".multiplier must be a number >= 0");
@@ -209,7 +222,7 @@ public final class BiomeLayoutTuner {
 			String biome = e.get("biome").getAsString();
 			JsonObject c = cfg.has(biome) ? cfg.getAsJsonObject(biome) : null;
 			String rw = c == null ? null : str(c.get("replace_with"));
-			if (rw == null && c != null) {
+			if (rw == null && c != null && num(c.get("target_pct")) == null) {
 				Double m = num(c.get("multiplier"));
 				if (m != null && m == 0) continue;
 			}
@@ -277,14 +290,35 @@ public final class BiomeLayoutTuner {
 			if (biomeIds.get(w).equals(at(dumpBiomes, (int) s[7]))) agree++;
 		}
 
-		// each biome is measured on the layer where it holds the biggest share
+		// Which layer a biome is measured on. With both a surface and an underground layer, a biome with an entry
+		// whose depth range holds 0 is a surface biome, else a cave biome (vanilla and Terralith give surface biomes
+		// entries at depth 0 and 1, cave biomes only depth > 0). The surface ones also win deep samples through
+		// their depth-1 entries, sometimes with a bigger share than on the surface (warm river, the skylands with
+		// /dumpclimatecaves), and cave biomes win a few shallow surface samples: "biggest share" would put both on
+		// the wrong layer and scale the wrong share. Other dimensions: the layer where it holds the biggest share.
+		int surfaceL = layers.indexOf("surface"), underL = layers.indexOf("underground");
+		boolean[] depthZero = new boolean[B], known = new boolean[B];
+		for (int i = 0; i < qOrig.n; i++) {
+			int b = origLabels[i];
+			known[b] = true;
+			if (qOrig.mins[i * 6 + 4] <= 0 && qOrig.maxs[i * 6 + 4] >= 0) depthZero[b] = true;
+		}
 		int[] layerOf = new int[B];
 		for (int b = 0; b < B; b++) {
+			if (surfaceL >= 0 && underL >= 0 && known[b]) {
+				layerOf[b] = depthZero[b] ? surfaceL : underL;
+				continue;
+			}
 			double best = -1;
 			for (int L = 0; L < nL; L++) {
 				double share = layerTotals[L] != 0 ? origCounts[L][b] / layerTotals[L] : 0;
 				if (share > best) { best = share; layerOf[b] = L; }
 			}
+		}
+		for (String b : cfg.keySet()) {   // target_layer for a target the samples never hit
+			Integer i = bIdx.get(b);
+			String tl = str(cfg.getAsJsonObject(b).get("target_layer"));
+			if (i != null && tl != null && layers.contains(tl) && origCounts[layerOf[i]][i] == 0) layerOf[i] = layers.indexOf(tl);
 		}
 
 		// --- candidate lists on the edited layout: per sample, best base fitness per biome within WINDOW ---
@@ -312,7 +346,13 @@ public final class BiomeLayoutTuner {
 		double[] pen = new double[B];
 		int[] tunedIdx = tuned.stream().mapToInt(bIdx::get).toArray();
 		Map<Integer, Long> target = new LinkedHashMap<>();
-		for (int b : tunedIdx) target.put(b, Math.round(num(cfg.getAsJsonObject(biomeIds.get(b)).get("multiplier")) * origCounts[layerOf[b]][b]));
+		for (int b : tunedIdx) {
+			JsonObject c = cfg.getAsJsonObject(biomeIds.get(b));
+			Double tp = num(c.get("target_pct"));
+			target.put(b, tp != null
+					? Math.round(tp / 100 * layerTotals[layerOf[b]])
+					: Math.round(num(c.get("multiplier")) * origCounts[layerOf[b]][b]));
+		}
 		for (int round = 0; round < rounds && tunedIdx.length > 0; round++) {
 			double moved = 0;
 			for (int b : tunedIdx) {
@@ -378,7 +418,7 @@ public final class BiomeLayoutTuner {
 			JsonElement resultPct = pct(resCounts[L][i], layerTotals[L]);
 			c.add("share_pct", pct(origCounts[L][i], layerTotals[L]));
 			c.add("result_pct", resultPct);
-			if (origCounts[L][i] == 0 && tuned.contains(b)) {
+			if (origCounts[L][i] == 0 && tuned.contains(b) && num(c.get("target_pct")) == null) {
 				c.addProperty("note", "never hit in the sample set -- a multiplier has nothing to scale; dump more columns (/dumpclimate 20000)");
 			} else if (target.containsKey(i) && Math.abs(resCounts[L][i] - target.get(i)) > Math.max(2, 0.05 * target.get(i))) {
 				c.addProperty("note", "aimed for " + jsStr(pct(target.get(i), layerTotals[L])) + "%, got " + jsStr(resultPct) + "% -- "
@@ -492,16 +532,70 @@ public final class BiomeLayoutTuner {
 		return dimId.substring(0, c) + ":dimension/" + dimId.substring(c + 1) + ".json";
 	}
 
-	/** The dimension's climate samples (gzipped, else the pre-1.0.3 plain copy in exported/), or null. */
+	/**
+	 * The dimension's climate samples (gzipped, else the pre-1.0.3 plain copy in exported/), or null. With a
+	 * caves dump next to the gzipped file, its points replace the underground layer (see the class comment).
+	 */
 	static String readSamples(String dimId) throws IOException {
 		String gz = sampleFile(dimId) + ".gz";
 		String text = WorldgenFiles.readGzipText(SAMPLE_DIR + gz);
 		if (text != null) {
-			sampleSource.put(dimId, "climate/" + gz);
-			return text;
+			String cavesGz = cavesFile(dimId) + ".gz";
+			String caves = WorldgenFiles.readGzipText(SAMPLE_DIR + cavesGz);
+			if (caves == null) {
+				sampleSource.put(dimId, "climate/" + gz);
+				return text;
+			}
+			sampleSource.put(dimId, "climate/" + gz + " + climate/" + cavesGz);
+			return mergeCaves(text, caves);
 		}
 		sampleSource.put(dimId, "../../exported/worldgen/climate/" + sampleFile(dimId));
 		return WorldgenFiles.readText(LEGACY_SAMPLE_DIR + sampleFile(dimId));
+	}
+
+	static String cavesFile(String dimId) {
+		return sampleFile(dimId).replaceFirst("\\.json$", ".caves.json");
+	}
+
+	/**
+	 * Main dump + caves dump: the main dump's points minus its underground layer, plus every caves point in
+	 * the underground layer. Layer and live-biome indexes of the caves points are remapped to the main lists.
+	 * Point layout (both files): [layer, temperature, humidity, continentalness, erosion, depth, weirdness, live_biome].
+	 */
+	static String mergeCaves(String mainText, String cavesText) {
+		JsonObject main = JsonParser.parseString(mainText).getAsJsonObject();
+		JsonObject caves = JsonParser.parseString(cavesText).getAsJsonObject();
+		JsonArray layers = main.getAsJsonArray("layers");
+		JsonArray biomes = main.getAsJsonArray("biomes");
+		List<String> layerNames = strings(layers), biomeNames = strings(biomes);
+		int under = layerNames.indexOf("underground");
+		if (under < 0) {
+			layers.add("underground");
+			under = layerNames.size();
+		}
+		List<String> caveBiomes = strings(caves.getAsJsonArray("biomes"));
+		int[] remap = new int[caveBiomes.size()];
+		for (int i = 0; i < remap.length; i++) {
+			int j = biomeNames.indexOf(caveBiomes.get(i));
+			if (j < 0) {
+				biomes.add(caveBiomes.get(i));
+				biomeNames.add(caveBiomes.get(i));
+				j = biomeNames.size() - 1;
+			}
+			remap[i] = j;
+		}
+		JsonArray out = new JsonArray();
+		for (JsonElement p : main.getAsJsonArray("points")) if (p.getAsJsonArray().get(0).getAsInt() != under) out.add(p);
+		for (JsonElement p : caves.getAsJsonArray("points")) {
+			JsonArray a = p.getAsJsonArray().deepCopy();
+			a.set(0, new JsonPrimitive(under));
+			int lb = a.get(7).getAsInt();
+			if (lb >= 0 && lb < remap.length) a.set(7, new JsonPrimitive(remap[lb]));
+			out.add(a);
+		}
+		main.add("points", out);
+		if (caves.has("generated")) main.addProperty("caves_generated", caves.get("generated").getAsString());
+		return COMPACT.toJson(main);
 	}
 
 	static String sampleFile(String dimId) {

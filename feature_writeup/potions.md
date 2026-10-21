@@ -173,10 +173,10 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
   mixer and the IE Mixer only convert splash (vanilla's rule). Keep the Refinery as the shortcut, or drop its
   regular → lingering recipes.
 - **F3. Placeholder reagents:** Magic Resistance (amethyst shard, `potions.js` line 72) and Luck (four-leaf clover,
-  line 86). Already in [TODO.md](todo/TODO.md) 4.
+  line 86). In [TODO](todo/TODO.md) `gear/potions #4`.
 - **F4. `TEMP diagnostic` log on every bundle drain** (`PotionFluidHandlerMixin` line 62). One INFO line per bundle
-  emptied. Already in [TODO.md](todo/TODO.md) 6; delete it.
-- **F5. Stale doc:** `DragonBreathBrewing`'s javadoc says the item dragon's breath mixes are stripped by
+  emptied. In [TODO](todo/TODO.md) `tooling/patchermod-cleanup #1`; delete it.
+- **F5.** FIXED 2026-10-19 (javadoc names `potions.js` part 3). **Stale doc:** `DragonBreathBrewing`'s javadoc says the item dragon's breath mixes are stripped by
   `kubejs/startup_scripts/changes/dragon_breath.js`; there is no such file, it's `potions.js` part 3.
 - **F6. Raw `e.custom` in `potion_bottling.js`.** Bottling, filling and emptying are hand-written JSON, against the
   NCH-helper rule in CLAUDE.md. `NCH.ieBottling` already exists (use it with an NBT fluid) and `NCH.createFilling`
@@ -279,3 +279,4 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
 - By 2026-09-27 (initial git commit): all of the above plus the `kubejs:*` potions, Better Beacons and Magic Resistance
   potions, Rustic Delight haste, Luck; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F8; tests PO-01 to PO-26. No code changed.
+- 2026-10-19: F5 fixed (DragonBreathBrewing javadoc; source only, ships with the next patcherMod build).

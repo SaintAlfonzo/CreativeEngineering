@@ -18,12 +18,15 @@ keeps its own writeup.
 | FramedBlocks renamed "Framed Copycat …" | edited resource pack `Copycat Framed Block.zip` | DEPLOYED 2026-09-27; F3+T |
 | BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + patcherMod `CamoSpeedTooltip` | DEPLOYED (incl. the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording) |
 | Framework tooltips: armor effects, tool effects, potion buckets | dedicated client scripts | VERIFIED per their own memories |
-| Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | STAGED for 1.0.6 (not deployed), PL-01 to PL-08 |
-| Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, STAGED for 1.0.6; TT-16 |
-| AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | patcherMod `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in patcherMod 1.0.5, STAGED for 1.0.6; other screens still lack bars (Let's Do recipe book, FTB Quests, Wares, AE2 tables, Patchouli); TT-17, TT-18 |
+| Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | DEPLOYED with 1.0.6 (2026-10-14), PL-01 to PL-08 |
+| Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-16 |
+| AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | patcherMod `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-17, TT-18. The other screens: next row |
+| AppleSkin food bars in the rest of the food screens: FD cooking pot, Farmer's Respite kettle, Central Kitchen cooking/brewing guides and the Oven (finished-meal slot); Brewin' keg tank (GUI, recipe book, JEI tank over the tankard); Vinery recipe book; TrashSlot; Pretty Pipes terminal; FTB Quests task/reward/description items; Wares agreement; Patchouli books; AE2 crafting tables, pattern encoding amount slots and guidebook | patcherMod `compat/MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + 17 client mixins (list in section 3); the Brewin' and Vinery ports | BUILT 2026-10-20 (patcherMod 1.1.01, Brewin' `-03`, Vinery `-04`), in `mods/`, not tested in game; TT-19 to TT-30 |
 | Brewin' and Chewin' (backport): Heating Cask / Ice Crate keg-source lines; "Placeable on a coaster"; keg drink effect lines and the pipe-rule line ("Pipes can only drain it while it isn't fermenting", only while `pipeDrainOnlyWhenIdle` is on) on the keg item, the keg GUI's tank and the JEI Fermenting result tank | tooltips.js "Food / Farmers Delight"; placeable_tooltip.js; the port (`KegItem`, `KegScreen`, JEI `FermentingRecipeCategory`) | BUILT 2026-10-18, not in `mods/` yet; [alcohol.md](alcohol.md) 8.2, 8.3, 8.7, AL-49 to AL-52, AL-64 |
-| Shield Shift view "Blocks burning" / "Blocks thorns" lines | patcherMod `ShieldTooltip` ([shields.md](shields.md)) | STAGED for 1.0.6; SH-04 |
+| Alcoholic drinks: Quark's saturation word reads "Intoxicating Drink" instead of "Disgusting Snack" on every food with the Intoxication food effect; Vinery wines list their food effects | patcherMod `food/IntoxicatingDrinkTooltip` (`[alcohol] quarkLine`); the Vinery port (`DrinkBlockItem`) | BUILT 2026-10-20 (patcherMod 1.1.01), not tested; [alcohol.md](alcohol.md) 11, AL-88. The 2026-10-20 KubeJS effect-line rename (`alcohol_tooltip.js`) was retired the same day |
+| Shield Shift view "Blocks burning" / "Blocks thorns" lines | patcherMod `ShieldTooltip` ([shields.md](shields.md)) | DEPLOYED with 1.0.6; SH-04 |
 | patcherMod tooltips: tier shields, vanilla shield, echo armor set bonus, D&D jetpack crash fix | patcherMod | VERIFIED / see memories |
+| Creative Labels: sticky note (its text in the note's colour, then four grey use lines), label (eight grey lines), eraser (four); labelled items' lines in grey under the name (`CreativeLabels.Lines`); Sticky It's tooltip handler cancelled (its "[Shift]" / "Label:" lines, and the empty `{}` tag it put on every hovered item) | the mod: `appendHoverText` on the three items, `item/ItemLabels` (ItemTooltipEvent), `mixin/StickyItTooltipMixin` | BUILT 2026-10-20 (creativeLabels 1.0.0), not in `mods/` yet; lines in [sticky_notes.md](sticky_notes.md) 3.9 |
 
 **Open first:** [tooltips.js](../kubejs/client_scripts/tooltips.js) (helpers L1-86, colour legend L91-125, then sections).
 **Knobs:** the colour legend (`col.*`); BlockRunner's `block_speed_multiplier_tooltip` in `config/blockrunner-client.toml`.
@@ -121,10 +124,18 @@ Examples:
   - every framed `*double*` item: "Hybrid block: each part holds its own camo"
   - Their Speed Multiplier line reads "matches its camo (newest camo sets walk behaviors for hybrid blocks)" (your wording, 2026-09-27).
 
-**Added for Vinery** ("Vinery" section, 2026-10-01)
-- `TODO` placeholders (gray) on the Grapevine Pot, Apple Press, Aging Barrel, Grapevine Stem and Lattice,
-  apple/cherry leaves and saplings, Kitchen Sink, Stackable Log and the wine storage blocks (`*_wine_rack_mid` by pattern).
-  Text still to be written. The behaviour to describe is in [vinery.md](vinery.md). They show in game until replaced.
+**Added for Vinery** ("Vinery" section; text written 2026-10-19 for the 1.5.5 port, [alcohol.md](alcohol.md) 10.15)
+- `tooltips.js` (gray): Grapevine Pot, Apple Press, Cask (plus "Sneak right-click with an empty hand to pour the juice
+  out"), Grapevine Stem and Lattice (where seeds go; shears give the seed back, breaking a planted one loses it),
+  apple / cherry leaves and saplings, Stackable Log. Chorus Wine: "Makes you wake up in strange places" (light purple).
+- In the port (its sizes live in its code): every wine's size, "N per placed block" and which storage takes it; each
+  rack's and the Wine Box's capacity ("Holds 4 wines (small or medium)"); the Wine Box's sneak line; the aging hint.
+  Since 2026-10-20 the fit line names the racks: "Fits in Single, Small, and Big Wine Rack, and Wine Box" (small),
+  "Fits in Single and Small Wine Rack, and Wine Box" (medium), "Fits in Single Wine Rack" (large); the racks themselves
+  are "Single / Small / Big <Wood> Wine Rack" ([alcohol.md](alcohol.md) 10.18, VB-84, VB-92).
+- Brewin' port, every keg heat / cold source: "Heats / Cools the surrounding environment", then "Useful for keg brewing
+  and wine casking" on its own line (split 2026-10-20, [alcohol.md](alcohol.md) 10.13, 10.18, AL-77).
+- The 2026-10-01 placeholders (1.3.10, incl. Kitchen Sink and Aging Barrel) are gone.
 
 **Added for placeable food** (2026-10-05, [placeable_food.md](placeable_food.md))
 - 164 foods: gray "Placeable" / "Placeable (while sneaking)" / "Placeable on plate" / "Placeable on small plate", drawn from the
@@ -138,9 +149,43 @@ Examples:
 - precision sawblade profile (`addAdvanced`, reads NBT)
 
 **Fixed**
+- **AppleSkin food bars (2026-10-20).** AppleSkin only adds its bars in Forge's `RenderTooltipEvent.GatherComponents`
+  when the event carries an item. Screens that build an item's lines themselves and draw them with the stackless
+  `renderComponentTooltip(pose, lines, x, y)` / `renderTooltip(pose, lines, image, x, y)` send `ItemStack.EMPTY`. Each fix
+  draws the same lines with Forge's overload that takes the stack:
+  - finished-meal slot ("Served on"): FD `CookingPotScreen`, Farmer's Respite `KettleScreen`, Central Kitchen
+    `CookingGuideScreen` / `BrewingGuideScreen` (mixins `CookingPotMealTooltipMixin`, `KettleMealTooltipMixin`,
+    `CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`, helper `compat/MealSlotTooltip`); the Oven
+    (`OvenScreen`, direct edit).
+  - Brewin' port: the keg tank tooltip (keg GUI and its recipe book) carries the item the drink pours into
+    (`BnCFluidItemDisplays`). In JEI the fermenting result tank sits over the tankard icon and JEI shows the first
+    slot under the mouse (the tank): `JeiRecipeLayoutTooltipMixin` now attaches a RENDER_ONLY item slot's stack under
+    the same point when the hovered slot shows no item, so the tank keeps its fluid text and gets the drink's bars.
+  - Vinery port recipe book result buttons (`StationRecipeBook`, direct edit).
+  - TrashSlot trashed item (`TrashSlotGuiHandlerMixin`), Pretty Pipes item terminal (`PrettyPipesTerminalTooltipMixin`),
+    Wares agreement items (`WaresAgreementTooltipMixin`), Patchouli book items (`PatchouliBookTooltipMixin`).
+  - FTB Quests: FTB Library draws hover text with its own text renderer. `FtbTooltipStacks` remembers the stack when an
+    item's tooltip is copied into that text (`GuiHelper.addStackTooltip`, the item task header, item hover events in
+    descriptions); the screen wrappers then draw that list with Forge's renderer. Text-only hovers keep FTB's renderer.
+  - AE2: `AEBaseScreen.drawTooltip` is text-only. Crafting CPU / plan table entries and pattern-encoding amount slots
+    set a pending stack (`AeTooltipStacks`) just before it; the guidebook's `ItemTooltip` returns Forge's gathered
+    components instead of plain text.
+  - Side effect: JEI recipe slots, FTB item hovers and AE2 table entries now go through the normal item tooltip path,
+    so they also get the JEI mod-name line / tooltip images / Legendary Tooltips frame like inventory tooltips.
 - **D&D Jetpack tooltip crash:** `JetpackItemTooltipMixin` stops a crash that used to break client
   tag loading, which delayed JEI (memory `axe-tag-ghost-entries`).
 - **WTHIT growth line** for hemp, tobacco, berry bushes, grapes and other plants WTHIT skips: patcherMod `crops/WthitCropGrowth`, written up in [crops.md](crops.md) 2.9 (tests CR-59 to CR-66).
+
+**Creative Labels** (2026-10-20, [sticky_notes.md](sticky_notes.md) 3.9 and 3.13)
+- The mod's three items carry their own lines (`appendHoverText`, one lang key per line, grey): the sticky note's
+  text in the note's colour when written, then "Right-click in the air to write" and three more use lines; the
+  label's eight; the eraser's four. The exact text is in sticky_notes.md 3.9.
+- Items labelled with a note show their `CreativeLabels.Lines` in grey under the name, no header
+  (`item/ItemLabels`, `ItemTooltipEvent`).
+- Removed: Sticky It's `TooltipRenderProcedure` is cancelled at its head (`mixin/StickyItTooltipMixin`, applied only
+  while `sticky_it` is loaded). It wrote "Label:" lines from the old `LabelName1..3` tags, "[Shift]" on its own
+  note and eraser, and created the empty `{}` tag on every hovered item (the bowl stacking bug). Items already
+  tagged keep their `{}`.
 
 ## 4. Limits and decisions
 
@@ -166,6 +211,7 @@ Examples:
 
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): helpers, colour legend, all hand-written lines, removals
 - [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js): placeable food lines + DD / Fruits Delight removals (tests in [placeable_food.md](placeable_food.md), PL-)
+- patcherMod `food/IntoxicatingDrinkTooltip`: Quark's saturation word -> "Intoxicating Drink" on every food with the Intoxication effect (drinks listed in `global.alcohol`, [alcohol.md](alcohol.md) 11)
 - [armor_effects_tooltip.js](../kubejs/client_scripts/armor_effects_tooltip.js), [tool_effects_tooltip.js](../kubejs/client_scripts/tool_effects_tooltip.js), [potion_buckets.js](../kubejs/client_scripts/potion_buckets.js)
 - patcherMod: [surface/CamoSpeedTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`
 - Lang: [patcherMod lang en_us.json](../development/patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) (`creativeengineering.tooltip.*`)
@@ -202,11 +248,23 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 
 **Vinery**
 - [ ] **TT-14 Grape lines gone:** hover each grape and each grape seed in JEI. → Name (and food / mod lines) only, no italic "can be found in ... Biomes" or "needs sunlight" line.
-- [ ] **TT-15 Vinery placeholders:** hover the Grapevine Pot and any `*_wine_rack_mid`. → A gray "TODO" line under Vinery's own line (until the text is written). `logs/latest.log` shows `[addTooltipPattern] vinery:*_wine_rack_mid -> 8 matches`.
+- ~~**TT-15 Vinery placeholders**~~ moved to VB-84 to VB-86 ([alcohol.md](alcohol.md) 10.15): the text is written.
 
 - [ ] **TT-16 Underline (1.0.5):** hover a diamond chestplate and a netherite sword in the inventory, over a few launches → the line under the name sits below the spinning model, never across it
 - [ ] **TT-17 AppleSkin in JEI (1.0.5):** open the JEI recipe page of bread, hover the output slot and the catalyst column's crafting table → the bread slot shows AppleSkin's hunger/saturation bar; the recipe slots also show tooltip images (bundles), like the item list
 - [ ] **TT-18 AppleSkin in Lightman's Currency (1.0.5):** a trader selling cooked beef → hover the trade button → the food bar shows under the item lines
+- [ ] **TT-19 Cooking pot meal slot:** cook a stew in a Farmer's Delight cooking pot with no bowl in the container slot, hover the finished-meal slot → name, "Served on: Bowl" line and AppleSkin's food bar
+- [ ] **TT-20 Kettle and Oven:** same in a Farmer's Respite kettle (tea) and in the Oven's finished slot → food bar under the "Served on" line
+- [ ] **TT-21 Central Kitchen guides:** open a Cooking Guide set to a cooking pot meal, hover its result slot → food bar
+- [ ] **TT-22 Keg tank:** fill a keg with beer, hover the tank in the keg GUI → fluid lines plus the tankard's food bar; the recipe book's tank preview the same
+- [ ] **TT-23 JEI keg recipe:** JEI Fermenting page of beer, hover the result tank and the tankard drawn inside it → fluid text, and the food bar of the drink
+- [ ] **TT-24 Vinery recipe book:** open a Vinery station's recipe book, hover a wine result → food values shown
+- [ ] **TT-25 TrashSlot:** trash a cooked steak, hover the trash slot → food bar
+- [ ] **TT-26 Pretty Pipes terminal:** store bread in a pipe network, hover it in the item terminal → stored count on the first line and the food bar
+- [ ] **TT-27 FTB Quests:** hover an item task (no custom title) for a food, a food item reward, and a food item linked in a quest description → food bar on each; hovering a quest button still shows FTB's plain tooltip
+- [ ] **TT-28 Wares:** open a delivery agreement requesting food, hover the requested item → food bar
+- [ ] **TT-29 Patchouli:** in any Patchouli book page that shows a food item, hover it → food bar, and the "(Shift for recipe)" line still there
+- [ ] **TT-30 AE2:** request a crafting job for bread; hover bread in the crafting plan and in the CPU status table → food bar; in the pattern encoding terminal, put bread in a processing input and hover it → food bar with the amount lines
 - [ ] **TT-09 No dead patterns:** search `logs/latest.log` for `[addTooltipPattern]`. → Every line reports more than 0 matches.
 
 ## 8. Tooltips To Add
@@ -222,7 +280,7 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 
 ### Mods to Cover
 - [] Botania
-- [] Vinery + JEI (placeholders in, text TODO; behaviour reference in [vinery.md](vinery.md))
+- [x] Vinery: block, wine and storage lines (2026-10-19, [alcohol.md](alcohol.md) 10.15)
 - [] Cloud Storage
 - [x] Brewin Chewing + JEI: cask / crate, coaster, keg effect and pipe lines (2026-10-18, [alcohol.md](alcohol.md) 8)
 
@@ -247,3 +305,13 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
   (fifth placeable tag, [placeable_food.md](placeable_food.md)), and in the port the drink's effect lines plus the pipe
   rule on the keg item, keg tank and JEI result tank ([alcohol.md](alcohol.md) 8.2, 8.3, 8.7).
 - 2026-10-19: the Brewin' lines above STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) AL).
+- 2026-10-19 late: Vinery text written for the port (`tooltips.js` block lines and Chorus Wine; wine size and storage
+  capacity lines in the port), placeholders and the dead grape key removals dropped. TT-15 retired to VB-84 to VB-86
+  ([alcohol.md](alcohol.md) 10.15).
+- 2026-10-20: "Intoxicating Drink" replaces the Intoxication line on every alcoholic drink; Vinery wines list their food
+  effects ([alcohol.md](alcohol.md) 11, AL-88).
+- 2026-10-20 (later): AppleSkin food bars added to the remaining food screens and JEI's keg tank (section 3 "Fixed",
+  TT-19 to TT-30). Built into patcherMod 1.1.01, Brewin' `-03` and Vinery `-04`, installed in `mods/`, not tested in game.
+- 2026-10-20: test round: the Vinery fit lines were clunky, so they now name the racks, renamed Single / Small / Big
+  Wine Rack; the Brewin' heat / cold line puts "Useful for keg brewing and wine casking" on its own line
+  ([alcohol.md](alcohol.md) 10.18; VB-84, VB-92, AL-77).

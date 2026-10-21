@@ -27,7 +27,7 @@
 	grapeGrowthMultiplier = 1.0
 	#Stomps a full Grapevine Pot needs
 	#Range: 1 ~ 100
-	grapevinePotStomps = 12
+	grapevinePotStomps = 4
 	#Extra stomp progress in percent for an entity with 15 or more armor
 	#Range: 0 ~ 100
 	grapevinePotHeavyArmorBonus = 10
@@ -51,7 +51,7 @@
 	durationPerMonth = 200
 	#Aging speed in a storage block with no sky light
 	#Range: 1.0 ~ 5.0
-	cellarAgingMultiplier = 2.5
+	cellarAgingMultiplier = 2.0
 	#Days per wine month: one Serene Seasons sub-season (the pack's 8 world days)
 	#Range: 1 ~ 100
 	daysPerMonth = 8
@@ -60,6 +60,14 @@
 	monthsPerEffectLevel = 1
 	#wine|effect|amplifier|durationTicks per wine (1.5.5 defaults plus the two 1.3.10 wines the port keeps)
 	effects = ["vinery:apple_cider|minecraft:strength|0|1800", "vinery:apple_wine|minecraft:resistance|0|1800", "vinery:glowing_wine|minecraft:glowing|0|1800", "vinery:solaris_wine|minecraft:health_boost|0|1800", "vinery:kelp_cider|vinery:water_walker|0|1800", "vinery:eiswein|vinery:frosty_armor|0|1800", "vinery:aegis_wine|vinery:armor_effect|0|1800", "vinery:villagers_fright|minecraft:bad_omen|0|1800", "vinery:clark_wine|vinery:double_jump|0|1800", "vinery:jellie_wine|vinery:jellie|0|1800", "vinery:noir_wine|minecraft:jump_boost|0|1800", "vinery:red_wine|minecraft:slow_falling|0|1800", "vinery:strad_wine|minecraft:night_vision|0|1800", "vinery:cherry_wine|minecraft:invisibility|0|1800", "vinery:cristel_wine|minecraft:water_breathing|0|1800", "vinery:lilitu_wine|vinery:party_effect|0|1800", "vinery:jo_special_mixture|vinery:climbing_effect|0|1800", "vinery:bolvar_wine|vinery:lava_walker|0|1800", "vinery:magnetic_wine|vinery:magnet|0|1800", "vinery:stal_wine|minecraft:health_boost|0|1800", "vinery:chenet_wine|vinery:climbing_effect|0|1800", "vinery:bottle_mojang_noir|vinery:experience_effect|0|1800", "vinery:chorus_wine|vinery:teleport|0|10", "vinery:creepers_crush|vinery:creeper_effect|0|100", "vinery:mellohi_wine|minecraft:instant_health|0|1", "vinery:praetorian_wine|minecraft:glowing|0|1800"]
+	#Aging speed in a cold storage block: Brewin' and Chewin's freeze sources outweigh its heat sources
+	#nearby (the keg's chilly or colder). Multiplies with the cellar bonus
+	#Range: 1.0 ~ 5.0
+	coldAgingMultiplier = 2.0
+	#Aging speed in a warm storage block: Brewin' and Chewin's heat sources outweigh its freeze sources
+	#nearby (the keg's warm or hotter). Multiplies with the cellar bonus
+	#Range: 0.1 ~ 1.0
+	warmAgingMultiplier = 0.75
 
 [aging]
 	#What moves the vintage clock wines age on: PLAYTIME (a player is online), SERVER_TICKS (always, 1.5.5), WORLD_TIME (overworld day time like the seasons; sleeping ages wine)

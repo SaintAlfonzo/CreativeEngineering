@@ -38,7 +38,7 @@ public final class VintageClock {
 
     /** The settings and clock value the aging math uses. */
     public record Snapshot(long ticks, double ticksPerDay, int daysPerYear, int yearsPerEffectLevel, int maxLevel,
-                           int durationPerYear, int maxDuration, int cellarPercent, boolean ageOnlyInStorage,
+                           int durationPerYear, int maxDuration, int cellarPercent, int coldPercent, int warmPercent, boolean ageOnlyInStorage,
                            boolean agingEnabled, double rate, double measuredDayTicks) {
         public double ticksPerYear() {
             return ticksPerDay * daysPerYear;
@@ -55,7 +55,7 @@ public final class VintageClock {
             long elapsed = Math.max(0, level.getGameTime() - clientReceivedAt);
             return new Snapshot(client.ticks + (long) (elapsed * client.rate), client.ticksPerDay, client.daysPerYear,
                     client.yearsPerEffectLevel, client.maxLevel, client.durationPerYear, client.maxDuration,
-                    client.cellarPercent, client.ageOnlyInStorage, client.agingEnabled, client.rate, client.measuredDayTicks);
+                    client.cellarPercent, client.coldPercent, client.warmPercent, client.ageOnlyInStorage, client.agingEnabled, client.rate, client.measuredDayTicks);
         }
         Data data = level instanceof ServerLevel server ? data(server.getServer()) : null;
         return fromConfig(data == null ? 0 : data.ticks, data == null ? -1 : data.measuredDayTicks(), rate(data));
@@ -65,7 +65,8 @@ public final class VintageClock {
         return new Snapshot(ticks, ticksPerDay(measuredDayTicks), Math.max(1, VineryConfig.DAYS_PER_YEAR.get()),
                 Math.max(1, VineryConfig.YEARS_PER_EFFECT_LEVEL.get()), Math.max(0, VineryConfig.MAX_LEVEL.get()),
                 Math.max(0, VineryConfig.DURATION_PER_YEAR.get()), Math.max(0, VineryConfig.MAX_DURATION.get()),
-                (int) Math.round(VineryConfig.CELLAR_AGING_MULTIPLIER.get() * 100), VineryConfig.AGE_ONLY_IN_STORAGE.get(),
+                (int) Math.round(VineryConfig.CELLAR_AGING_MULTIPLIER.get() * 100), (int) Math.round(VineryConfig.COLD_AGING_MULTIPLIER.get() * 100),
+                (int) Math.round(VineryConfig.WARM_AGING_MULTIPLIER.get() * 100), VineryConfig.AGE_ONLY_IN_STORAGE.get(),
                 VineryConfig.AGING_ENABLED.get(), rate, measuredDayTicks);
     }
 

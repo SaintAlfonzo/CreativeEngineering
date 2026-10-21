@@ -498,7 +498,7 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
     public boolean canPlaceItemThroughFace(int index, ItemStack stack, @Nullable Direction direction) {
         if (direction == Direction.UP) {
             if (index == GRAPEJUICE_INPUT_SLOT && JuiceUtil.isJuice(stack)) {
-                return hasSpace(index, stack);
+                return hasSpace(index, stack) && juiceKeepsWorking(stack);
             } else if (index == WINE_BOTTLE_SLOT && stack.is(ObjectRegistry.WINE_BOTTLE.get())) {
                 return hasSpace(index, stack);
             }
@@ -506,10 +506,62 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
             assert direction != null;
             if (direction.getAxis().isHorizontal()) {
                 if ((index >= 1 && index <= 3) && isIngredient(stack)) {
-                    return hasSpace(index, stack);
+                    return hasSpace(index, stack) && ingredientKeepsWorking(index, stack);
                 } else if (index == WINE_BOTTLE_SLOT && stack.is(ObjectRegistry.WINE_BOTTLE.get())) {
                     return hasSpace(index, stack);
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Port (alcohol/vineryport #7, hopper jams): a recipe needs exactly its own ingredients, one stack each, so a hopper
+     * that spills a second stack of the same item into the next slot, or mixes two recipes, used to stop the cask for
+     * good (only the output can be pulled out). Automation now adds an ingredient only to the slot that already holds
+     * it, or a new one only when some recipe for the cask's juice uses it together with everything already in, and
+     * makes what is already in the output.
+     */
+    private boolean ingredientKeepsWorking(int index, ItemStack stack) {
+        List<ItemStack> held = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            ItemStack slot = getItem(i);
+            if (slot.isEmpty()) continue;
+            if (slot.is(stack.getItem())) return i == index;
+            held.add(slot);
+        }
+        held.add(stack);
+        return someRecipeUses(held, fluidLevel > 0 ? juiceType : null);
+    }
+
+    /** Juice from a hopper: the cask's own type (or any while empty), and only one some recipe can use with the ingredients in. */
+    private boolean juiceKeepsWorking(ItemStack juice) {
+        String type = JuiceUtil.getJuiceType(juice);
+        if (fluidLevel > 0 && !juiceType.equals(type)) return false;
+        List<ItemStack> held = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            if (!getItem(i).isEmpty()) held.add(getItem(i));
+        }
+        return held.isEmpty() || someRecipeUses(held, type);
+    }
+
+    /** True when one recipe (juice {@code type}, or any when null) takes every stack in {@code held}, each by its own ingredient. */
+    private boolean someRecipeUses(List<ItemStack> held, @Nullable String type) {
+        if (level == null) return false;
+        ItemStack output = getItem(OUTPUT_SLOT_GENERAL);
+        return level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get()).stream()
+                .filter(recipe -> type == null || recipe.getJuiceData().amount() <= 0 || type.equals(recipe.getJuiceData().type()))
+                .filter(recipe -> output.isEmpty() || output.is(recipe.getResultItem().getItem()))
+                .anyMatch(recipe -> assign(held, 0, recipe.getIngredients(), new boolean[recipe.getIngredients().size()]));
+    }
+
+    private static boolean assign(List<ItemStack> held, int next, List<Ingredient> ingredients, boolean[] used) {
+        if (next == held.size()) return true;
+        for (int i = 0; i < ingredients.size(); i++) {
+            if (!used[i] && ingredients.get(i).test(held.get(next))) {
+                used[i] = true;
+                if (assign(held, next + 1, ingredients, used)) return true;
+                used[i] = false;
             }
         }
         return false;

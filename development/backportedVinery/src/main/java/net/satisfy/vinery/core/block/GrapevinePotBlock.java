@@ -49,7 +49,7 @@ public class GrapevinePotBlock extends BaseEntityBlock {
     );
     private static final VoxelShape STOMPING_SHAPE = Shapes.or(SHAPE, box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0));
 
-    public static final int MAX_GRAPES = 6;
+    public static final int MAX_GRAPES = 12;
     public static final int GRAPES_PER_BOTTLE = 3;
     public static final int FULL_STAGE = 3;
     public static final int MAX_STAGE = 6;
@@ -154,7 +154,7 @@ public class GrapevinePotBlock extends BaseEntityBlock {
         if (storage >= MAX_GRAPES) {
             return FULL_STAGE;
         }
-        return storage >= GRAPES_PER_BOTTLE ? 2 : 1;
+        return storage >= MAX_GRAPES / 2 ? 2 : 1;
     }
 
     public static boolean canTakeJuice(BlockState state) {

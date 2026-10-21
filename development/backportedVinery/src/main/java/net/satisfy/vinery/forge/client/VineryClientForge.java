@@ -28,7 +28,6 @@ import net.satisfy.vinery.client.model.WinemakerBootsModel;
 import net.satisfy.vinery.client.model.WinemakerChestplateModel;
 import net.satisfy.vinery.client.model.WinemakerLeggingsModel;
 import net.satisfy.vinery.client.render.block.GrapevinePotRenderer;
-import net.satisfy.vinery.client.render.block.LatticeRenderer;
 import net.satisfy.vinery.client.render.block.StackableLogRenderer;
 import net.satisfy.vinery.client.render.block.StoragePotRenderer;
 import net.satisfy.vinery.client.render.block.storage.BigBottleRenderer;
@@ -47,8 +46,6 @@ import net.satisfy.vinery.core.registry.StorageTypeRegistry;
 import net.satisfy.vinery.legacy.LegacyStorageTypes;
 import net.satisfy.vinery.legacy.client.LegacyFlowerBoxRenderer;
 import net.satisfy.vinery.legacy.client.LegacyFlowerPotBlockEntityRenderer;
-import net.satisfy.vinery.legacy.client.LegacyFourBottleRenderer;
-import net.satisfy.vinery.legacy.client.LegacyNineBottleRenderer;
 import net.satisfy.vinery.legacy.client.LegacyShelfRenderer;
 
 import static net.satisfy.vinery.core.registry.ObjectRegistry.*;
@@ -72,17 +69,14 @@ public final class VineryClientForge {
                     GRAPEVINE_STEM.get(), WINE_BOX.get(), DARK_CHERRY_WINE_RACK_MID.get(), DARK_CHERRY_WINE_RACK_BIG.get(),
                     APPLE_PRESS.get(), GRASS_SLAB.get(), DARK_CHERRY_SAPLING.get(), APPLE_TREE_SAPLING.get(),
                     STACKABLE_LOG.get(), APPLE_LEAVES.get(), POTTED_APPLE_TREE_SAPLING.get(), DARK_CHERRY_WINE_RACK_SMALL.get(),
-                    POTTED_DARK_CHERRY_TREE_SAPLING.get(), RED_WINE.get(), DARK_CHERRY_CHAIR.get(), CRISTEL_WINE.get(),
+                    POTTED_DARK_CHERRY_TREE_SAPLING.get(), RED_WINE.get(), CRISTEL_WINE.get(),
                     VILLAGERS_FRIGHT.get(), EISWEIN.get(), CREEPERS_CRUSH.get(),
                     GLOWING_WINE.get(), JO_SPECIAL_MIXTURE.get(), BOTTLE_MOJANG_NOIR.get(),
-                    DARK_CHERRY_TABLE.get(), OAK_WINE_RACK_MID.get(), DARK_OAK_WINE_RACK_MID.get(), BIRCH_WINE_RACK_MID.get(),
+                    OAK_WINE_RACK_MID.get(), DARK_OAK_WINE_RACK_MID.get(), BIRCH_WINE_RACK_MID.get(),
                     SPRUCE_WINE_RACK_MID.get(), JUNGLE_WINE_RACK_MID.get(), MANGROVE_WINE_RACK_MID.get(), BAMBOO_WINE_RACK_MID.get(),
-                    ACACIA_WINE_RACK_MID.get(), OAK_LATTICE.get(), SPRUCE_LATTICE.get(),
-                    BIRCH_LATTICE.get(), DARK_OAK_LATTICE.get(), BAMBOO_LATTICE.get(), ACACIA_LATTICE.get(), JUNGLE_LATTICE.get(),
-                    MANGROVE_LATTICE.get(), DARK_CHERRY_LATTICE.get(), DARK_CHERRY_LEAVES.get(),
+                    ACACIA_WINE_RACK_MID.get(), DARK_CHERRY_LEAVES.get(),
                     // 1.3.10 keepers (1.3.10's render types)
-                    PRAETORIAN_WINE.get(), TABLE.get(), GRAPEVINE_LATTICE.get(), FLOWER_POT.get(), CHAIR.get(),
-                    KITCHEN_SINK.get());
+                    PRAETORIAN_WINE.get(), TABLE.get(), GRAPEVINE_LATTICE.get(), FLOWER_POT.get(), CHAIR.get());
             for (Block block : new Block[]{WINDOW.get(), WINDOW_BLOCK.get()}) {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent());
             }
@@ -94,8 +88,6 @@ public final class VineryClientForge {
             StorageBlockEntityRenderer.registerStorageType(StorageTypeRegistry.WINE_BOX, new WineBoxRenderer());
             StorageBlockEntityRenderer.registerStorageType(StorageTypeRegistry.WINE_BOTTLE, new WineBottleRenderer());
             StorageBlockEntityRenderer.registerStorageType(LegacyStorageTypes.SHELF, new LegacyShelfRenderer());
-            StorageBlockEntityRenderer.registerStorageType(LegacyStorageTypes.NINE_BOTTLE, new LegacyNineBottleRenderer());
-            StorageBlockEntityRenderer.registerStorageType(LegacyStorageTypes.FOUR_BOTTLE, new LegacyFourBottleRenderer());
             StorageBlockEntityRenderer.registerStorageType(LegacyStorageTypes.FLOWER_BOX, new LegacyFlowerBoxRenderer());
 
             MenuScreens.register(MenuTypeRegistry.FERMENTATION_BARREL_MENU.get(), FermentationBarrelGui::new);
@@ -134,7 +126,6 @@ public final class VineryClientForge {
         event.registerLayerDefinition(WinemakerChestplateModel.LAYER_LOCATION, WinemakerChestplateModel::createBodyLayer);
         event.registerLayerDefinition(WinemakerLeggingsModel.LAYER_LOCATION, WinemakerLeggingsModel::createBodyLayer);
         event.registerLayerDefinition(WinemakerBootsModel.LAYER_LOCATION, WinemakerBootsModel::createBodyLayer);
-        event.registerLayerDefinition(LatticeRenderer.LAYER_LOCATION, LatticeRenderer::getTexturedModelData);
         WoodClient.registerBoatLayers(event, VineryWoodType.DARK_CHERRY_BOAT);
     }
 
@@ -147,7 +138,6 @@ public final class VineryClientForge {
 
         event.registerBlockEntityRenderer(EntityTypeRegistry.VINERY_STANDARD.get(), CompletionistBannerRenderer::new);
         event.registerBlockEntityRenderer(EntityTypeRegistry.STORAGE_ENTITY.get(), context -> new StorageBlockEntityRenderer());
-        event.registerBlockEntityRenderer(EntityTypeRegistry.LATTICE.get(), LatticeRenderer::new);
         event.registerBlockEntityRenderer(EntityTypeRegistry.GRAPEVINE_POT.get(), GrapevinePotRenderer::new);
         event.registerBlockEntityRenderer(EntityTypeRegistry.STORAGE_POT_ENTITY.get(), StoragePotRenderer::new);
         event.registerBlockEntityRenderer(EntityTypeRegistry.STACKABLE_LOG.get(), StackableLogRenderer::new);

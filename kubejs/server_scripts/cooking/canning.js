@@ -9,7 +9,7 @@ var i = global.item;
 // section multiplier, effects copied with scaled durations. Each can has its recipes in the json: n of the source(s) (any
 // of the listed alternatives per slot) + an empty can, plus the additive variants. canSection('x') makes the recipes of one
 // section; recipe ids are the can key plus the variant suffix (canned_cookies, canned_cookies_sugar). A recipe with
-// "servings" makes a partly full can (alt inputs too small to fill one in 8 slots); a can with "pie" also turns back
+// "servings" would make a partly full can (none do: sliced inputs share the whole food's count); a can with "pie" also turns back
 // into that pie with a pie crust (the whole can is used, opened or not).
 var canTypes = {}
 try {
@@ -206,13 +206,6 @@ R.shapeless(Item.of(i.canned_cactus_flesh, 1), [i.empty_can, Item.of(i.cactus_fl
 R.shapeless(Item.of(i.canned_gongylidia, 1), [i.empty_can, Item.of(i.gongylidia, 2)], e, 'canned_gongylidia')
 R.shapeless(Item.of(i.canned_gongylidia, 1), [i.empty_can, i.gongylidia, [i.salt, i.bone_broth]], e, 'canned_gongylidia_salt')
 
-// Pumpkin Slice- 3, 1.8
-// 2x  ~= 1BP
-// 4x  -- 1BP, 2M
-// 2x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_pumpkin, 1), [i.empty_can, Item.of(i.pumpkin_slice, 4)], e, 'canned_pumpkin')
-R.shapeless(Item.of(i.canned_pumpkin, 1), [i.empty_can, Item.of(i.pumpkin_slice, 2), [i.sugar, i.honey_bottle]], e, 'canned_pumpkin_salt')
-
 // ============================================================
 // Raw Fruit
 // ============================================================
@@ -240,12 +233,13 @@ R.shapeless(Item.of(i.canned_apple, 1), [i.empty_can, Item.of(i.apple, 2), [i.su
 R.shapeless(Item.of(i.canned_banana, 1), [i.empty_can, Item.of(i.neapolitan_banana, 7)], e, 'canned_banana')
 R.shapeless(Item.of(i.canned_banana, 1), [i.empty_can, Item.of(i.neapolitan_banana, 5), [i.sugar, i.honey_bottle]], e, 'canned_banana_sugar')
 
-// Cantaloupe Slice- 4, 6.4
-// 1x  ~= 1FM
-// 2x  -- 1FM, 3M
-// 1x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_cantaloupe, 1), [i.empty_can, Item.of(i.cantaloupe_slice, 2)], e, 'canned_cantaloupe')
-R.shapeless(Item.of(i.canned_cantaloupe, 1), [i.empty_can, i.cantaloupe_slice, [i.sugar, i.honey_bottle]], e, 'canned_cantaloupe_sugar')
+// Cantaloupe Slice- 3, 1.8 (set to the Pumpkin Slice's values, startup_scripts/cooking/food_values.js)
+// Slices only: the whole cantaloupe can't be eaten. Same for pumpkin, melon, hamimelon and pineapple.
+// 2x  ~= 1FM
+// 4x  -- 1FM, 3M
+// 3x* -> 1FM, 3M
+R.shapeless(Item.of(i.canned_cantaloupe, 1), [i.empty_can, Item.of(i.cantaloupe_slice, 4)], e, 'canned_cantaloupe')
+R.shapeless(Item.of(i.canned_cantaloupe, 1), [i.empty_can, Item.of(i.cantaloupe_slice, 3), [i.sugar, i.honey_bottle]], e, 'canned_cantaloupe_sugar')
 
 // Cherry- 2, 1.2
 // 3x  ~= 1FM
@@ -274,6 +268,13 @@ R.shapeless(Item.of(i.canned_melon, 1), [i.empty_can, Item.of(i.melon, 4), [i.su
 // 3x* -> 1FM, 3M
 R.shapeless(Item.of(i.canned_mulberry, 1), [i.empty_can, Item.of(i.mulberry, 5)], e, 'canned_mulberry')
 R.shapeless(Item.of(i.canned_mulberry, 1), [i.empty_can, Item.of(i.mulberry, 3), [i.sugar, i.honey_bottle]], e, 'canned_mulberry_sugar')
+
+// Pumpkin Slice- 3, 1.8 (slices only, the whole pumpkin is a block)
+// 2x  ~= 1FM
+// 4x  -- 1FM, 3M
+// 3x* -> 1FM, 3M
+R.shapeless(Item.of(i.canned_pumpkin, 1), [i.empty_can, Item.of(i.pumpkin_slice, 4)], e, 'canned_pumpkin')
+R.shapeless(Item.of(i.canned_pumpkin, 1), [i.empty_can, Item.of(i.pumpkin_slice, 3), [i.sugar, i.honey_bottle]], e, 'canned_pumpkin_sugar')
 
 // Salmonberries- 2, 2.4
 // 2x  ~= 1FM
@@ -304,13 +305,14 @@ R.shapeless(Item.of(i.canned_sweet_berry, 1), [i.empty_can, Item.of(i.sweet_berr
 R.shapeless(Item.of(i.canned_sweet_berry, 1), [i.empty_can, Item.of(i.sweet_berries, 6), [i.sugar, i.honey_bottle]], e, 'canned_sweet_berry_sugar')
 
 // The other fruits (fruitsdelight etc.) are generated with the same Fruit Meal and the same sizing rule: the basic
-// recipe is worth about 0.8 of the can, the sugar/honey one 0.7 of that. Sliced lemon/orange are alt inputs.
+// recipe is worth about 0.8 of the can, the sugar/honey one 0.7 of that. Sliced lemon/orange take the whole fruit's
+// slots and count.
 canSection('raw_fruit')
 
 // ============================================================
 // Raw Meat
-// Sliced cuts are alt inputs (own recipe sized by value). Where 8 slices are worth less than the whole recipe
-// (chicken cuts, mutton chops), 8 slices make a half full can.
+// Sliced cuts share the whole meat's recipe: the forge:raw_* tags hold exactly the whole meat and its cut (minced
+// beef, chicken cuts, mutton chops, bacon), so the count is the whole meat's and a can is always full.
 // ============================================================
 
 // Goal
@@ -326,39 +328,29 @@ canSection('raw_fruit')
 // 2x  ~= 1MM
 // 5x  -- 1MM, 4M
 // 4x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_beef, 1), [i.empty_can, Item.of(i.beef, 5)], e, 'canned_raw_beef')
-R.shapeless(Item.of(i.canned_raw_beef, 1), [i.empty_can, Item.of(i.beef, 4), [i.salt, i.bone_broth]], e, 'canned_raw_beef_broth')
-// Minced Beef- 2, 1.2: 8x (6x*) -> full can
-R.shapeless(Item.of(i.canned_raw_beef, 1), [i.empty_can, Item.of(i.minced_beef, 8)], e, 'canned_raw_beef_minced')
-R.shapeless(Item.of(i.canned_raw_beef, 1), [i.empty_can, Item.of(i.minced_beef, 6), [i.salt, i.bone_broth]], e, 'canned_raw_beef_minced_broth')
+R.shapeless(Item.of(i.canned_raw_beef, 1), [i.empty_can, Item.of(i.raw_beef, 5)], e, 'canned_raw_beef')
+R.shapeless(Item.of(i.canned_raw_beef, 1), [i.empty_can, Item.of(i.raw_beef, 4), [i.salt, i.bone_broth]], e, 'canned_raw_beef_broth')
 
 // Chicken- 2, 1.2
 // 3x  ~= 1MM
 // 8x  -- 1MM, 4M
 // 6x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_chicken, 1), [i.empty_can, Item.of(i.chicken, 8)], e, 'canned_raw_chicken')
-R.shapeless(Item.of(i.canned_raw_chicken, 1), [i.empty_can, Item.of(i.chicken, 6), [i.salt, i.bone_broth]], e, 'canned_raw_chicken_broth')
-// Raw Chicken Cuts- 1, 0.6: 8x -> 2 of 4 servings
-R.shapeless(Item.of(i.canned_raw_chicken, 1, '{CanServings:2}'), [i.empty_can, Item.of(i.chicken_cuts, 8)], e, 'canned_raw_chicken_cuts')
+R.shapeless(Item.of(i.canned_raw_chicken, 1), [i.empty_can, Item.of(i.raw_chicken, 8)], e, 'canned_raw_chicken')
+R.shapeless(Item.of(i.canned_raw_chicken, 1), [i.empty_can, Item.of(i.raw_chicken, 6), [i.salt, i.bone_broth]], e, 'canned_raw_chicken_broth')
 
 // Mutton- 2, 1.2
 // 3x  ~= 1MM
 // 8x  -- 1MM, 4M
 // 6x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_mutton, 1), [i.empty_can, Item.of(i.mutton, 8)], e, 'canned_raw_mutton')
-R.shapeless(Item.of(i.canned_raw_mutton, 1), [i.empty_can, Item.of(i.mutton, 6), [i.salt, i.bone_broth]], e, 'canned_raw_mutton_broth')
-// Raw Mutton Chops- 1, 0.6: 8x -> 2 of 4 servings
-R.shapeless(Item.of(i.canned_raw_mutton, 1, '{CanServings:2}'), [i.empty_can, Item.of(i.mutton_chops, 8)], e, 'canned_raw_mutton_chops')
+R.shapeless(Item.of(i.canned_raw_mutton, 1), [i.empty_can, Item.of(i.raw_mutton, 8)], e, 'canned_raw_mutton')
+R.shapeless(Item.of(i.canned_raw_mutton, 1), [i.empty_can, Item.of(i.raw_mutton, 6), [i.salt, i.bone_broth]], e, 'canned_raw_mutton_broth')
 
 // Porkchop- 3, 1.8
 // 2x  ~= 1MM
 // 5x  -- 1MM, 4M
 // 4x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_pork, 1), [i.empty_can, Item.of(i.porkchop, 5)], e, 'canned_raw_pork')
-R.shapeless(Item.of(i.canned_raw_pork, 1), [i.empty_can, Item.of(i.porkchop, 4), [i.salt, i.bone_broth]], e, 'canned_raw_pork_broth')
-// Raw Bacon- 2, 1.2: 8x (6x*) -> full can
-R.shapeless(Item.of(i.canned_raw_pork, 1), [i.empty_can, Item.of(i.farmersdelight_bacon, 8)], e, 'canned_raw_pork_bacon')
-R.shapeless(Item.of(i.canned_raw_pork, 1), [i.empty_can, Item.of(i.farmersdelight_bacon, 6), [i.salt, i.bone_broth]], e, 'canned_raw_pork_bacon_broth')
+R.shapeless(Item.of(i.canned_raw_pork, 1), [i.empty_can, Item.of(i.raw_pork, 5)], e, 'canned_raw_pork')
+R.shapeless(Item.of(i.canned_raw_pork, 1), [i.empty_can, Item.of(i.raw_pork, 4), [i.salt, i.bone_broth]], e, 'canned_raw_pork_broth')
 
 // Rabbit- 3, 1.8
 // 2x  ~= 1MM
@@ -374,8 +366,8 @@ canSection('raw_meat')
 // Raw Fish
 // ============================================================
 
-// Goal: the raw meat one (Meat Meal 5, 3, 4 servings, salt or bone broth). Every sliced fish is an alt input; 8 slices
-// are worth half the whole recipe, so they make a half full can. Tropical Fish reuses Canned Goods' can.
+// Goal: (Fish Meal- 4, 2) sized meals, 4 Meals/Can, salt or bone broth (since 2026-10-20; was the Meat Meal 5, 3). Every sliced fish takes the whole fish's
+// slots and count (a full can either way). Tropical Fish reuses Canned Goods' can.
 canSection('raw_fish')
 
 // ============================================================

@@ -27,6 +27,16 @@
    "to": "minecraft:coarse_dirt"
   },
   {
+   "note": "Underground bunker: nether wart removed (its farm's soul sand is basalt via the catch-all below)",
+   "structures": [
+    "underground_bunkers:underground_bunker"
+   ],
+   "blocks": [
+    "minecraft:nether_wart"
+   ],
+   "to": "air"
+  },
+  {
    "note": "Jungle temple, fortified desert village: netherrack to magma (magma keeps fire burning: vanilla infiniburn_overworld); their soul sand/soil goes to basalt below",
    "structures": [
     "betterjungletemples:jungle_temple",
@@ -208,6 +218,26 @@
     "minecraft:soul_campfire"
    ],
    "to": "minecraft:campfire"
+  },
+  {
+   "note": "Any soul fire left to fire (the frosted dungeon's is put out above)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:soul_fire"
+   ],
+   "to": "minecraft:fire"
+  },
+  {
+   "note": "Any glowstone left to yellow corundum (the Mysticrift mangrove tower's is gold ore above)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:glowstone"
+   ],
+   "to": "quark:yellow_corundum"
   },
   {
    "note": "Potted Nether plants to a potted dead bush",

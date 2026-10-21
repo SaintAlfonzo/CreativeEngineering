@@ -1,9 +1,9 @@
 # Locate: cheaper structure searches, miss logging, batch and census commands, deferred deep terrain
 
-Test prefix **LO-** · Last updated **2026-10-14** · Overall status **INCOMPLETE in pack 1.0.6** (STAGED 2026-10-14 in patcherMod
-1.0.6 as part of the structure tuning, see [plan_1.0.6.md](plan_1.0.6.md); offline checks pass; LO- tests run from structure_tuning 8.0
-Phase 5, which had just started; findings
-come from the decompiled 1.19.2 classes and Async Locator 1.3.0; decisions in 4)
+Test prefix **LO-** · Last updated **2026-10-19** · Overall status **DEPLOYED, in-game test pending** (went out INCOMPLETE with
+pack 1.0.6 on 2026-10-14 as part of the structure tuning, see [plan_1.0.6.md](plan_1.0.6.md); fixes with 1.0.7; offline checks
+pass; LO- tests ran in the structure_tuning 8.0 scratch run, finished 2026-10-19; findings come from the decompiled 1.19.2
+classes and Async Locator 1.3.0; decisions in 4)
 
 ## 0. At a glance
 

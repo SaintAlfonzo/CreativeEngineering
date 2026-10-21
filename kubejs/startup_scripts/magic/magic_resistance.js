@@ -16,11 +16,12 @@
 //   potion/instant-damage, evoker fangs, conduit, dragon's breath, etc.) by 20% per
 //   amplifier level (same scaling as vanilla Resistance), full immunity at amplifier 4+.
 //
-// Not wired into brewing (no "Potion of Magic Resistance" yet) — that would need the same
-// real Java DeferredRegister<Potion> dance BetterBeaconsPotions.java uses (KubeJS's
-// StartupEvents.registry('potion', ...) callback runs too early to see ANY MobEffect,
-// including this one, for the same reason cooking/potions.js documents for modded effects).
-// Can still be applied directly (/effect give, global.armorEffects, etc.) without that.
+// The potions (base, long, strong) are registered in Java by patcherMod's
+// potion/MagicResistancePotions.java (a real DeferredRegister<Potion>, the same dance
+// BetterBeaconsPotions.java uses: KubeJS's StartupEvents.registry('potion', ...) callback runs
+// too early to see ANY MobEffect, including this one). Their brewing mixes are in
+// cooking/potions.js (CE_POTION_MIXES, amethyst shard placeholder reagent). The effect can
+// also be applied directly (/effect give, global.armorEffects, etc.).
 
 StartupEvents.registry('mob_effect', event => {
 	const SimpleColor = Java.loadClass('dev.latvian.mods.rhino.mod.util.color.SimpleColor')

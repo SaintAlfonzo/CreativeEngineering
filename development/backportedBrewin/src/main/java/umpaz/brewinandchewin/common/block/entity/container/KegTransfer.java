@@ -67,7 +67,7 @@ public final class KegTransfer {
 
       List<ItemStack> inv = new ArrayList<>();
       for (int i = 0; i < PLAYER_SLOTS; i++) {
-         inv.add(menu.getSlot(KegBlockEntity.INVENTORY_SIZE + i).getItem().copy());
+         inv.add(menu.getSlot(KegMenu.KEG_MENU_SLOTS + i).getItem().copy());
       }
       for (int i = 0; i < GRID; i++) {
          plan.grid[i] = ItemStack.EMPTY;
@@ -220,7 +220,7 @@ public final class KegTransfer {
          menu.getSlot(i).set(plan.grid[i]);
       }
       for (int i = 0; i < PLAYER_SLOTS; i++) {
-         menu.getSlot(KegBlockEntity.INVENTORY_SIZE + i).set(plan.inventory.get(i));
+         menu.getSlot(KegMenu.KEG_MENU_SLOTS + i).set(plan.inventory.get(i));
       }
       menu.kegTank.setAbstractedFluid(plan.tank);
       KegBlockEntity keg = menu.blockEntity;

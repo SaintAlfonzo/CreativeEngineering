@@ -9,13 +9,16 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.MissingMappingsEvent;
 import net.satisfy.vinery.core.Vinery;
+import net.satisfy.vinery.core.block.WineBoxBlock;
 import net.satisfy.vinery.core.VineryToolActions;
 import net.satisfy.vinery.core.command.VineryCommands;
 import net.satisfy.vinery.core.command.WineCommands;
@@ -59,7 +62,9 @@ public final class VineryCommonEvents {
         bus.addListener(VineryToolActions::onToolModification);
         bus.addListener(VineryCommonEvents::onFuel);
         bus.addListener(VineryCommonEvents::onAttack);
+        bus.addListener(VineryCommonEvents::onRightClickBlock);
         bus.addListener(VineryCommonEvents::onMissingMappings);
+        bus.addListener(net.satisfy.vinery.forge.upstream.VillageHouses::onServerAboutToStart);
         bus.addListener((RegisterCommandsEvent event) -> {
             WineCommands.register(event.getDispatcher());
             VineryCommands.register(event.getDispatcher());
@@ -69,6 +74,13 @@ public final class VineryCommonEvents {
     private static void onAttack(AttackEntityEvent event) {
         if (EventHandler.onAttack(event.getEntity(), event.getEntity().level, event.getTarget())) {
             event.setCanceled(true);
+        }
+    }
+
+    /** alcohol/vineryport #18: a sneaking player with something in hand still reaches the wine box (WineBoxBlock#useItemOn). */
+    private static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getEntity().isShiftKeyDown() && event.getLevel().getBlockState(event.getPos()).getBlock() instanceof WineBoxBlock) {
+            event.setUseBlock(Event.Result.ALLOW);
         }
     }
 

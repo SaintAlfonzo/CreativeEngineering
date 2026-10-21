@@ -8,7 +8,7 @@
 // Sections follow the rule categories (the first rule an item matches), seeds first. Add a new
 // item to any section: the section name only groups the file and labels /dumpcompost.
 // After editing: /kubejs reload startup_scripts, then /reload. Engine: startup_scripts/func/compost.js.
-// 684 items.
+// 688 items.
 
 ;(function () {
 	var i = global.item
@@ -678,10 +678,6 @@
 		// upgrade_aquatic
 		[i.mulberry_punnet,                     1.0],
 		// vinery
-		[i.vinery_apple_crate,                  1.0],
-		[i.cherry_crate,                        1.0],
-		[i.red_grape_crate,                     1.0],
-		[i.white_grape_crate,                   1.0],
 		[i.apple_bag,                           1.0],
 		[i.cherry_bag,                          1.0],
 		[i.red_grape_bag,                       1.0],
@@ -694,7 +690,7 @@
 		[i.white_taiga_grape_bag,               1.0],
 	])
 
-	// ── other (154) ───────────────────────────────────────────────────────────────────
+	// ── other (158) ───────────────────────────────────────────────────────────────────
 	C.values('other', [
 		// minecraft
 		[i.carved_pumpkin,                     0.65],
@@ -871,5 +867,11 @@
 		[i.durian_shell,                       0.3],
 		[i.hamimelon_slice,                    0.5],
 		[i.pineapple_slice,                    0.5],
+		// brewinandchewin: the 4.5.0 port's own chances (BrewinAndChewinForge.commonSetup), added by hand like --merge
+		// would: /dumpcompost predates the port
+		[i.kimchi,                             0.5],
+		[i.pickled_pickles,                    0.5],
+		[i.quiche,                             0.85],
+		[i.quiche_slice,                       0.85],
 	])
 })()

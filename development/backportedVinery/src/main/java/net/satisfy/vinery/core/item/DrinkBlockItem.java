@@ -1,10 +1,13 @@
 package net.satisfy.vinery.core.item;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffect;
@@ -12,6 +15,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
@@ -25,6 +29,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.satisfy.foundation.storage.StorageBlockEntity;
 import net.satisfy.foundation.util.LibUtil;
+import net.satisfy.vinery.core.block.WineBottleBlock;
 import net.satisfy.vinery.core.registry.ObjectRegistry;
 import net.satisfy.vinery.core.wine.VintageClock;
 import net.satisfy.vinery.core.wine.WineEffects;
@@ -33,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -42,16 +48,15 @@ import java.util.Objects;
  */
 public class DrinkBlockItem extends BlockItem {
     private final boolean scaleDurationWithAge;
-    private final BottleSize bottleSize;
 
-    public DrinkBlockItem(Block block, Properties settings, boolean scaleDurationWithAge, BottleSize bottleSize) {
+    public DrinkBlockItem(Block block, Properties settings, boolean scaleDurationWithAge) {
         super(block, settings);
         this.scaleDurationWithAge = scaleDurationWithAge;
-        this.bottleSize = bottleSize;
     }
 
+    /** From the placed block's per-block limit, the one place a wine's size is set (alcohol.md 10.12). */
     public BottleSize getBottleSize() {
-        return bottleSize;
+        return getBlock() instanceof WineBottleBlock wine ? BottleSize.of(wine.getMaxCount()) : BottleSize.LARGE;
     }
 
     private boolean ages() {
@@ -71,9 +76,10 @@ public class DrinkBlockItem extends BlockItem {
         return UseAnim.DRINK;
     }
 
+    /** Port (alcohol/vineryport #18): the sneak key, not the crouch pose, which a flying player never takes. */
     @Override
     protected BlockState getPlacementState(@NotNull BlockPlaceContext context) {
-        if (!Objects.requireNonNull(context.getPlayer()).isCrouching()) {
+        if (!Objects.requireNonNull(context.getPlayer()).isShiftKeyDown()) {
             return null;
         }
         BlockState blockState = this.getBlock().getStateForPlacement(context);
@@ -105,9 +111,11 @@ public class DrinkBlockItem extends BlockItem {
                     ? effectName + amplifierRoman
                     : effectName + amplifierRoman + " (" + formatDuration(duration(stack, level, wineEffect)) + ")";
             tooltip.add(Component.literal(tooltipText).withStyle(effect.getCategory().getTooltipFormatting()));
-        } else {
+        } else if (!hasFoodEffects()) {
             tooltip.add(Component.translatable("effect.none").withStyle(ChatFormatting.GRAY));
         }
+        addFoodEffectLines(tooltip);
+        getBottleSize().addSizeLines(tooltip);
 
         if (level != null && ages() && (WineYears.hasWineYear(stack) || WineYears.hasLegacyYear(stack))) {
             VintageClock.Snapshot clock = VintageClock.of(level);
@@ -125,8 +133,9 @@ public class DrinkBlockItem extends BlockItem {
                 tooltip.add(Component.translatable("tooltip.vinery_backport.next_level", days, realTime(clock.realTicks(ticksToNext)), realTime(clock.realTicks(cellar)))
                         .withStyle(style -> style.withColor(TextColor.fromRgb(0x93c47d))));
             }
-            if (WineYears.isStored(stack) && WineYears.currentStorageRate(stack) > 100) {
-                tooltip.add(Component.translatable("tooltip.vinery_backport.cellar", String.format("%.1f", WineYears.currentStorageRate(stack) / 100.0)).withStyle(ChatFormatting.AQUA));
+            if (WineYears.isStored(stack)) {
+                tooltip.add(Component.translatable("tooltip.vinery_backport.storage", WineYears.storageLabel(WineYears.currentStorageKind(stack)),
+                        WineYears.formatRate(WineYears.currentStorageRate(stack))).withStyle(ChatFormatting.AQUA));
             }
         }
     }
@@ -151,8 +160,41 @@ public class DrinkBlockItem extends BlockItem {
             }
             livingEntity.addEffect(new MobEffectInstance(wineEffect.effect(), duration(itemStack, level, wineEffect), amplifier(itemStack, level, wineEffect)));
         }
-        itemStack.shrink(1);
+        if (itemStack.isEdible()) {
+            livingEntity.eat(level, itemStack);
+        } else {
+            itemStack.shrink(1);
+        }
         return LibUtil.convertStackAfterFinishUsing(livingEntity, itemStack, ObjectRegistry.WINE_BOTTLE.get(), this);
+    }
+
+    /** Port: eat() plays this at the end of drinking, as Brewin's drinks do. */
+    @Override
+    public @NotNull SoundEvent getEatingSound() {
+        return SoundEvents.GENERIC_DRINK;
+    }
+
+    private boolean hasFoodEffects() {
+        FoodProperties food = getFoodProperties();
+        return food != null && !food.getEffects().isEmpty();
+    }
+
+    /** Port (alcohol.md 11): the food effects the pack gives every wine (Intoxication, Nausea), in the wine line's format. */
+    private void addFoodEffectLines(List<Component> tooltip) {
+        FoodProperties food = getFoodProperties();
+        if (food == null) {
+            return;
+        }
+        for (Pair<MobEffectInstance, Float> pair : food.getEffects()) {
+            MobEffectInstance instance = pair.getFirst();
+            MobEffect effect = instance.getEffect();
+            String text = effect.getDisplayName().getString()
+                    + (instance.getAmplifier() > 0 ? " " + toRoman(instance.getAmplifier() + 1) : "");
+            if (!effect.isInstantenous()) {
+                text += " (" + formatDuration(instance.getDuration()) + ")";
+            }
+            tooltip.add(Component.literal(text).withStyle(effect.getCategory().getTooltipFormatting()));
+        }
     }
 
     private String formatDuration(int ticks) {
@@ -205,7 +247,44 @@ public class DrinkBlockItem extends BlockItem {
         };
     }
 
+    /**
+     * alcohol.md 10.12: a wine's size is how many fit in one placed block (3 small, 2 medium, 1 large). Each container
+     * names the largest size it takes: 9x rack small, 4x rack and wine box medium, the single-bottle rack large.
+     */
     public enum BottleSize {
-        SMALL, BIG
+        LARGE(1), MEDIUM(2), SMALL(3);
+
+        public final int perBlock;
+
+        BottleSize(int perBlock) {
+            this.perBlock = perBlock;
+        }
+
+        /** alcohol/vineryport #16: "Small bottle: 3 per placed block" and where it can be stored. */
+        public void addSizeLines(List<Component> tooltip) {
+            tooltip.add(Component.translatable("tooltip.vinery_backport.bottle_size", Component.translatable(key("label.vinery_backport.size.")), perBlock)
+                    .withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable(key("tooltip.vinery_backport.fits.")).withStyle(ChatFormatting.GRAY));
+        }
+
+        /** alcohol/vineryport #16: a storage block's capacity, "Holds 4 wines (small or medium)". */
+        public static void addHoldsLine(List<Component> tooltip, int slots, BottleSize largest) {
+            Component sizes = Component.translatable(largest.key("label.vinery_backport.sizes_up_to."));
+            tooltip.add((slots == 1 ? Component.translatable("tooltip.vinery_backport.holds_one", sizes)
+                    : Component.translatable("tooltip.vinery_backport.holds", slots, sizes)).withStyle(ChatFormatting.GRAY));
+        }
+
+        private String key(String prefix) {
+            return prefix + name().toLowerCase(Locale.ROOT);
+        }
+
+        public static BottleSize of(int perBlock) {
+            return perBlock >= 3 ? SMALL : perBlock == 2 ? MEDIUM : LARGE;
+        }
+
+        /** True for a wine no larger than {@code largest}; false for anything that isn't a wine. */
+        public static boolean fits(ItemStack stack, BottleSize largest) {
+            return stack.getItem() instanceof DrinkBlockItem drink && drink.getBottleSize().perBlock >= largest.perBlock;
+        }
     }
 }

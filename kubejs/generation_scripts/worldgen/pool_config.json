@@ -4708,13 +4708,14 @@
         "minecraft:village/desert/houses/desert_tool_smith_1": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/desert/houses/desert_weaponsmith_1": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/desert_vault": { "original": 15, "current": 15, "enabled": true },
+        "vinery:vinery_desert": { "original": 2, "current": 3, "enabled": true },
         "wares:village/houses/desert_warehouse": { "original": 10, "current": 10, "enabled": true }
       }
     },
     "minecraft:village/desert/streets": {
       "fallback": "minecraft:village/desert/terminators",
       "elements": {
-        "beautify:botanist_house_desert": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_desert": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/desert/streets/corner_01": { "original": 3, "current": 3, "enabled": true },
         "minecraft:village/desert/streets/corner_02": { "original": 3, "current": 3, "enabled": true },
         "minecraft:village/desert/streets/crossroad_01": { "original": 3, "current": 3, "enabled": true },
@@ -4898,13 +4899,14 @@
         "minecraft:village/plains/houses/plains_weaponsmith_1": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/plains_vault": { "original": 15, "current": 15, "enabled": true },
         "pneumaticcraft:villages/mechanic_house_plains": { "original": 8, "current": 8, "enabled": true },
+        "vinery:vinery_plains": { "original": 2, "current": 3, "enabled": true },
         "wares:village/houses/plains_warehouse": { "original": 10, "current": 10, "enabled": true }
       }
     },
     "minecraft:village/plains/streets": {
       "fallback": "minecraft:village/plains/terminators",
       "elements": {
-        "beautify:botanist_house_plains": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_plains": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/plains/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/plains/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/plains/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
@@ -5103,13 +5105,14 @@
         "minecraft:village/savanna/houses/savanna_weaponsmith_2": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/savanna_vault": { "original": 15, "current": 15, "enabled": true },
         "pneumaticcraft:villages/mechanic_house_savanna": { "original": 8, "current": 8, "enabled": true },
+        "vinery:vinery_savanna": { "original": 2, "current": 3, "enabled": true },
         "wares:village/houses/savanna_warehouse": { "original": 10, "current": 10, "enabled": true }
       }
     },
     "minecraft:village/savanna/streets": {
       "fallback": "minecraft:village/savanna/terminators",
       "elements": {
-        "beautify:botanist_house_savanna": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_savanna": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/savanna/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/savanna/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/savanna/streets/crossroad_02": { "original": 1, "current": 1, "enabled": true },
@@ -5327,7 +5330,7 @@
     "minecraft:village/snowy/streets": {
       "fallback": "minecraft:village/snowy/terminators",
       "elements": {
-        "beautify:botanist_house_snowy": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_snowy": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/snowy/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/snowy/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/snowy/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
@@ -5526,13 +5529,14 @@
         "minecraft:village/taiga/houses/taiga_weaponsmith_2": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/taiga_vault": { "original": 15, "current": 15, "enabled": true },
         "pneumaticcraft:villages/mechanic_house_taiga": { "original": 8, "current": 8, "enabled": true },
+        "vinery:vinery_taiga": { "original": 2, "current": 3.5, "enabled": true },
         "wares:village/houses/taiga_warehouse": { "original": 10, "current": 10, "enabled": true }
       }
     },
     "minecraft:village/taiga/streets": {
       "fallback": "minecraft:village/taiga/terminators",
       "elements": {
-        "beautify:botanist_house_taiga": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_taiga": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/taiga/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/taiga/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/taiga/streets/corner_03": { "original": 2, "current": 2, "enabled": true },

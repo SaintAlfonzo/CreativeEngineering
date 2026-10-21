@@ -1835,6 +1835,17 @@
         "eugene:camp"
       ]
     },
+    "meta/coast_ok": {
+      "note": "Metas that belong on the water and its shores: [worldgen.meta_structures] avoidCoasts (off by default) leaves them alone, every other meta stays out of the creativeengineering:coast_river biomes when it is on. The fleets, flotillas, wrecks and sunken ruins (2026-10-19). Real tag: creativeengineering:meta/coast_ok.",
+      "values": [
+        "creativeengineering:meta/driftwood_flotilla",
+        "creativeengineering:meta/raft_convoy",
+        "creativeengineering:meta/pillager_fleet",
+        "creativeengineering:meta/shipwreck_debris",
+        "creativeengineering:meta/shipwreck_graveyard",
+        "creativeengineering:meta/sunken_ruin_cluster"
+      ]
+    },
     "meta/lone_houses": {
       "note": "Lone houses of group/remote: anchors of meta/house_camp and meta/waysign_house_camp. Every remote house except the peaceful towers, the Farmer's Structures (their own meta), temples and churches. Real tag: creativeengineering:meta/lone_houses.",
       "values": [

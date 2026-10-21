@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import com.SaintAlfonzo.creativeengineering.CEConfig;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.world.entity.player.Player;
@@ -106,13 +107,14 @@ final class StuckInBlock {
         return 0;
     }
 
-    // Immersive Weathering LeafPileBlock: over 3 layers, COLLISIONS[layers - 1], unless its
-    // leaf_piles_slow config is off or you wear Depth Strider.
+    // Immersive Weathering LeafPileBlock: from CEConfig [leaf_piles] slowFromLayers (IW: over 3, see
+    // mixin/LeafPileSlowMixin), COLLISIONS[layers - 1], unless its leaf_piles_slow config is off or you
+    // wear Depth Strider.
     private static final float[] LEAF_PILE = {1.0f, 0.999f, 0.998f, 0.997f, 0.996f, 0.994f, 0.993f, 0.992f};
 
     private static double leafPile(BlockState state, @Nullable Player player, boolean standingOnIt) {
         int layers = layers(state);
-        if (layers <= 3 || !LeafPileConfig.slow()) {
+        if (layers < CEConfig.LEAF_PILES.slowFromLayers.get() || !LeafPileConfig.slow()) {
             return NONE;
         }
         if (player != null && EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, player) > 0) {

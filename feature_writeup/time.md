@@ -12,14 +12,14 @@ types, SeasonHUD mixins), [weather_by_biome.md](weather_by_biome.md) (rain per s
 | Part | Status |
 |---|---|
 | Findings on today's three clocks (2) | VERIFIED 2026-10-18 from the decompiled jars and the config files on disk |
-| Master `[time]` section and the push into the other mods (3.1, 3.2) | BUILT 2026-10-18 in patcherMod 1.0.8, STAGED for pack 1.0.8; the push and the sun migration ran in single player 2026-10-19 (`[time]` log lines for every mod and dimension), not tested in game; changes from the design in 3.8 |
-| Seasons that follow the sun (3.3) | BUILT 2026-10-18, not tested |
-| Pause while the server is empty (3.4) | BUILT 2026-10-18, not tested |
+| Master `[time]` section and the push into the other mods (3.1, 3.2) | BUILT 2026-10-18 in patcherMod 1.0.8, DEPLOYED with pack 1.0.8 (2026-10-19 10:20); the push and the sun migration ran in single player 2026-10-19 (`[time]` log lines for every mod and dimension), not tested in game; changes from the design in 3.8 |
+| Seasons that follow the sun (3.3) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested |
+| Pause while the server is empty (3.4) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested |
 | Wine aging lengths and boosts (3.5) | Lengths BUILT and pushed from the master. Boosts beyond the cellar: T5 open, not built |
-| Wine months, sun clock, x2.5 dark, calendar (3.7) | BUILT 2026-10-18, not tested: port side in the Vinery port `-02` ([alcohol.md](alcohol.md) B7), calendar tooltip and "7:30 pm" clock in patcherMod |
-| GUI integration (3.6) | BUILT 2026-10-18, not tested: `[time]` in Create's Configs screen, SeasonHUD "Day x/24" + time of day, calendar tooltip and action bar, `/cetime` |
+| Wine months, sun clock, x2.5 dark, calendar (3.7) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: port side in the Vinery port `-02` ([alcohol.md](alcohol.md) B7), calendar tooltip and "7:30 pm" clock in patcherMod |
+| GUI integration (3.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: `[time]` in Create's Configs screen, SeasonHUD "Day x/24" + time of day, calendar tooltip and action bar, `/cetime` |
 | Offline checks (6) | not built: `tools/time_table.py`, the SUN-counter GameTest |
-| Presets (3.9) | BUILT 2026-10-18, not tested: SINGLEPLAYER (default) / SERVER / CUSTOM |
+| Presets (3.9) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: SINGLEPLAYER (default) / SERVER / CUSTOM |
 | Decisions | DECIDED: T1 (A), T2, T3 (SUN), T4 (on), T6, T7 (rejoin), T8, T9, T10, T12; T11 dropped. Open: T5 |
 
 **Files to open first:** `config/creativeengineering-common.toml` `[time]` (once built), `config/betterdays-common.toml`,
@@ -188,7 +188,10 @@ One section in `creativeengineering-common.toml`. It shows in Create's Configs s
 
 		[time.wine.boosts]
 			#Storage with no sky light.
-			cellarMultiplier = 2.5
+			cellarMultiplier = 2.0
+			#Cold storage (alcohol.md 10.13); multiplies with the cellar.
+			coldMultiplier = 2.0
+			warmMultiplier = 0.75
 			#More boosts: see 3.5 and decision T5.
 ```
 
@@ -306,6 +309,13 @@ Boosts multiply, with a cap of `maxStorageMultiplier` (proposed 2.5). `ageOnlyIn
 own file. The WTHIT line, `/wine info` and the tooltip already show "cellar x1.5". They would show the combined rate
 and name each boost: "cellar x1.5, cold x1.25 = x1.88".
 
+**2026-10-19 (your list, [alcohol.md](alcohol.md) 10.13), BUILT:** cellar is now x2.0 and a *cold* boost x2.0 exists,
+but from blocks, not the biome: Brewin's keg temperature at the storage block (freeze sources minus heat sources
+within 2 blocks, plus the biome and dimension) at chilly or colder. Both multiply with no cap (cold cellar x4.0), and
+the labels name both: "sunny x1.0", "cellar x2.0", "cold sunny x2.0", "cold cellar x4.0". Warm (heat outweighs cold)
+slows it: x0.75, "warm sunny x0.75", "warm cellar x1.5". `[time.wine.boosts] coldMultiplier`, `warmMultiplier`.
+Deep cellar and storage type stay optional (T5).
+
 ### 3.6 GUI integration
 
 | Where | Today | Planned |
@@ -330,7 +340,9 @@ Your Vinery lists of 2026-10-18 ([alcohol.md](alcohol.md) B7) set the time scale
 | Year | 96 world days = 4 real days | derived |
 | Wine month | one sub-season | derived |
 | Wine level | +1 every 3 months (one season) | `wine.monthsPerLevel = 3` |
-| Dark aging | x2.5 | `wine.cellarMultiplier = 2.5` |
+| Dark aging | x2.0 (x2.5 until 2026-10-19) | `wine.boosts.cellarMultiplier = 2.0` |
+| Cold aging | x2.0, x4.0 with dark | `wine.boosts.coldMultiplier = 2.0` |
+| Warm aging | x0.75, x1.5 with dark | `wine.boosts.warmMultiplier = 0.75` |
 | Sleeping | ages wine and moves the seasons | `wine.clock = SUN`, `seasons.clock = SUN` |
 
 Also asked for:
@@ -609,3 +621,4 @@ TI-27 cover what the build added (3.8).
   `YEARS_PER_EFFECT_LEVEL` 3 -> 1, and every dimension "seasons now follow the sun; sub-season 2 day 3 kept". The
   3.9 deploy gotcha is still open: the payload ships SINGLEPLAYER to the server too (plan_1.0.8.md 2.3 lists
   options).
+- 2026-10-19: DEPLOYED with pack 1.0.8 (10:20, server + clients). The server preset is still open (TODO `pack/release #2`); TI-01 to TI-29 pending.

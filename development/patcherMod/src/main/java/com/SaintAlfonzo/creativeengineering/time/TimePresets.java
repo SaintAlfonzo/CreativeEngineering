@@ -48,6 +48,8 @@ public final class TimePresets {
         VALUES.put("wine.monthsPerLevel", t.monthsPerLevel);
         VALUES.put("wine.maxLevel", t.maxLevel);
         VALUES.put("wine.boosts.cellarMultiplier", t.cellarMultiplier);
+        VALUES.put("wine.boosts.coldMultiplier", t.coldMultiplier);
+        VALUES.put("wine.boosts.warmMultiplier", t.warmMultiplier);
 
         Map<String, Object> singleplayer = new LinkedHashMap<>();
         VALUES.forEach((key, value) -> singleplayer.put(key, value.getDefault()));

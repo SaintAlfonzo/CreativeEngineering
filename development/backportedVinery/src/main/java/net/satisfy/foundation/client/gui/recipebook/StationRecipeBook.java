@@ -259,7 +259,8 @@ public class StationRecipeBook extends GuiComponent {
                 lines.add(Component.literal(" " + ingredient.getValue() + "× " + ingredient.getKey()).withStyle(ChatFormatting.DARK_GRAY));
             }
             book.appendRecipeBookTooltip(entry.recipe, lines);
-            screen.renderComponentTooltip(pose, lines, mouseX, mouseY);
+            // Port: Forge's overload with the result stack, so AppleSkin's food bars show on recipe buttons
+            screen.renderComponentTooltip(pose, lines, mouseX, mouseY, entry.result);
         }
     }
 

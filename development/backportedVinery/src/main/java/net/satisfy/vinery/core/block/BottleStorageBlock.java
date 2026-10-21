@@ -1,13 +1,20 @@
 package net.satisfy.vinery.core.block;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.satisfy.vinery.core.wine.WineYears;
+import org.jetbrains.annotations.Nullable;
+import java.util.List;
+
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.satisfy.foundation.storage.StorageBlock;
+import net.satisfy.vinery.core.item.DrinkBlockItem;
 import net.satisfy.vinery.core.registry.EntityTypeRegistry;
 import net.satisfy.vinery.core.registry.StorageTypeRegistry;
-import net.satisfy.vinery.core.registry.TagRegistry;
 
 public class BottleStorageBlock extends StorageBlock {
     private final Layout layout;
@@ -17,9 +24,10 @@ public class BottleStorageBlock extends StorageBlock {
         this.layout = layout;
     }
 
+    /** alcohol.md 10.12: by size (9x small only, 4x small and medium); 1.5.5 used {@code #vinery:small_bottle}. */
     @Override
     public boolean canInsertStack(ItemStack stack) {
-        return stack.is(TagRegistry.SMALL_BOTTLE);
+        return DrinkBlockItem.BottleSize.fits(stack, layout.largest);
     }
 
     @Override
@@ -48,7 +56,7 @@ public class BottleStorageBlock extends StorageBlock {
     }
 
     public enum Layout {
-        FOUR(StorageTypeRegistry.FOUR_BOTTLE, new float[][]{{-0.35f, 0f}, {0f, -0.33f}, {-0.7f, -0.33f}, {-0.35f, -0.66f}}) {
+        FOUR(StorageTypeRegistry.FOUR_BOTTLE, DrinkBlockItem.BottleSize.MEDIUM, new float[][]{{-0.35f, 0f}, {0f, -0.33f}, {-0.7f, -0.33f}, {-0.35f, -0.66f}}) {
             @Override
             int getSection(float x, float y) {
                 if (x > 0.375 && x < 0.625) {
@@ -62,7 +70,7 @@ public class BottleStorageBlock extends StorageBlock {
             }
         },
 
-        NINE(StorageTypeRegistry.NINE_BOTTLE, grid(3, 3)) {
+        NINE(StorageTypeRegistry.NINE_BOTTLE, DrinkBlockItem.BottleSize.SMALL, grid(3, 3)) {
             @Override
             int getSection(float x, float y) {
                 float third = 1f / 3;
@@ -74,10 +82,14 @@ public class BottleStorageBlock extends StorageBlock {
 
         public final ResourceLocation type;
 
+        /** The largest wine this rack takes. */
+        public final DrinkBlockItem.BottleSize largest;
+
         public final float[][] offsets;
 
-        Layout(ResourceLocation type, float[][] offsets) {
+        Layout(ResourceLocation type, DrinkBlockItem.BottleSize largest, float[][] offsets) {
             this.type = type;
+            this.largest = largest;
             this.offsets = offsets;
         }
 
@@ -90,5 +102,13 @@ public class BottleStorageBlock extends StorageBlock {
             }
             return offsets;
         }
+    }
+
+    /** Port: says what speeds up wine aging here (WineYears.storageKind). */
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        DrinkBlockItem.BottleSize.addHoldsLine(tooltip, size(), layout.largest);
+        WineYears.addStorageHint(tooltip);
     }
 }

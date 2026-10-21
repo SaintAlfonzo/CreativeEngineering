@@ -10,7 +10,7 @@ import umpaz.brewinandchewin.common.utility.FluidUnit;
 
 /**
  * Port: upstream's Greenhouse Config (codec-backed toml) -> two ForgeConfigSpec files with the same key names:
- * {@code brewinandchewin-common.toml} ([keg], [recipe_book]) and {@code brewinandchewin-client.toml}. The records keep
+ * {@code brewinandchewin-common.toml} ([keg], [recipe_book], [coaster]) and {@code brewinandchewin-client.toml}. The records keep
  * upstream's accessors, so callers still read {@code COMMON_CONFIG.get().keg().cold()}.
  * <p>
  * Deviation (alcohol.md 4.3): the three scramble thresholds ({@code levelChatScramble} and so on) are client settings,
@@ -31,7 +31,10 @@ public class BnCConfiguration {
    private static ForgeConfigSpec.BooleanValue kegBiomeTemp;
    private static ForgeConfigSpec.BooleanValue kegDimTemp;
    private static ForgeConfigSpec.BooleanValue pipeDrainOnlyWhenIdle;
+   private static ForgeConfigSpec.BooleanValue remainderBuffer;
+   private static ForgeConfigSpec.BooleanValue stallWhenFull;
    private static ForgeConfigSpec.BooleanValue enableRecipeBookKeg;
+   private static ForgeConfigSpec.BooleanValue taggedItemsOnly;
 
    private static ForgeConfigSpec.EnumValue<FluidUnit> fluidDisplayUnit;
    private static ForgeConfigSpec.EnumValue<Client.DisplaySettings> oppositeFluidDisplay;
@@ -44,6 +47,8 @@ public class BnCConfiguration {
    private static ForgeConfigSpec.IntValue levelSignScramble;
    private static ForgeConfigSpec.IntValue levelNameScramble;
    private static ForgeConfigSpec.BooleanValue renderFluidInKeg;
+   /** Port setting (wthit_lines.md 2.8): the WTHIT keg lines; read directly, it isn't part of the upstream records. */
+   public static ForgeConfigSpec.BooleanValue wthitKeg;
 
    static {
       Common.Keg kd = Common.Keg.DEFAULT;
@@ -70,10 +75,23 @@ public class BnCConfiguration {
       pipeDrainOnlyWhenIdle = common.comment("Port setting (not in 4.5.0): may pipes and pumps drain the Keg only while it isn't fermenting?",
             "Keeps a pump from pulling out the base fluid mid-batch. False drains at any time, as in 4.5.0.", "Default: " + kd.pipeDrainOnlyWhenIdle())
          .define("pipeDrainOnlyWhenIdle", kd.pipeDrainOnlyWhenIdle());
+      remainderBuffer = common.comment("Port setting (not in 4.5.0): keep ingredient leftovers (glass bottles, bowls, buckets) in the Keg instead of throwing them out?",
+            "They go to the leftover slot right of the output, then the empty-container slot under the fluid slot. False throws them, as in 4.5.0.",
+            "Default: " + kd.remainderBuffer())
+         .define("remainderBuffer", kd.remainderBuffer());
+      stallWhenFull = common.comment("Port setting (not in 4.5.0): with remainderBuffer on, should the Keg wait instead of fermenting when a batch's leftovers wouldn't fit?",
+            "False ferments anyway and throws what doesn't fit.", "Default: " + kd.stallWhenFull())
+         .define("stallWhenFull", kd.stallWhenFull());
       common.pop();
       common.push("recipe_book");
       enableRecipeBookKeg = common.comment("Should the Keg have a Recipe Book available on its interface?", "Default: " + Common.RecipeBook.DEFAULT.enabled())
          .define("enableRecipeBookKeg", Common.RecipeBook.DEFAULT.enabled());
+      common.pop();
+      common.push("coaster");
+      taggedItemsOnly = common.comment("Port setting (not in 4.5.0): may only items in #brewinandchewin:placeable_on_coaster go on a Coaster?",
+            "The tag lists the items with their own coaster model, so nothing is drawn as a flat item. False takes any item, as in 4.5.0.",
+            "Default: " + Common.Coaster.DEFAULT.taggedItemsOnly())
+         .define("taggedItemsOnly", Common.Coaster.DEFAULT.taggedItemsOnly());
       common.pop();
       COMMON_SPEC = common.build();
 
@@ -105,12 +123,16 @@ public class BnCConfiguration {
          .defineInRange("levelNameScramble", cd.levelNameScramble(), 1, 10);
       renderFluidInKeg = client.comment("Should kegs render the fluid texture in the background of the fluid slot?", "Default: " + cd.renderFluidInKeg())
          .define("renderFluidInKeg", cd.renderFluidInKeg());
+      wthitKeg = client.comment("Port setting (not in 4.5.0): WTHIT lines on a keg (temperature, fermentation progress, the temperature",
+            "a recipe needs). Default: true")
+         .define("wthitKeg", true);
       CLIENT_SPEC = client.build();
 
       COMMON_CONFIG = new Holder<>(COMMON_SPEC, Common.DEFAULT, () -> new Common(
          new Common.Keg(kegCapacityUnit.get(), kegCapacity.get(), kegCold.get(), kegChilly.get(), kegWarm.get(), kegHot.get(), kegBiomeTemp.get(), kegDimTemp.get(),
-            pipeDrainOnlyWhenIdle.get()),
-         new Common.RecipeBook(enableRecipeBookKeg.get())
+            pipeDrainOnlyWhenIdle.get(), remainderBuffer.get(), stallWhenFull.get()),
+         new Common.RecipeBook(enableRecipeBookKeg.get()),
+         new Common.Coaster(taggedItemsOnly.get())
       ));
       CLIENT_CONFIG = new Holder<>(CLIENT_SPEC, Client.DEFAULT, () -> new Client(
          fluidDisplayUnit.get(), oppositeFluidDisplay.get(), numbedHeartFlickering.get(), intoxicationFoodOverlay.get(), scrambleChat.get(),
@@ -200,12 +222,12 @@ public class BnCConfiguration {
       }
    }
 
-   public record Common(BnCConfiguration.Common.Keg keg, BnCConfiguration.Common.RecipeBook recipeBook) {
-      public static final BnCConfiguration.Common DEFAULT = new BnCConfiguration.Common(Keg.DEFAULT, RecipeBook.DEFAULT);
+   public record Common(BnCConfiguration.Common.Keg keg, BnCConfiguration.Common.RecipeBook recipeBook, BnCConfiguration.Common.Coaster coaster) {
+      public static final BnCConfiguration.Common DEFAULT = new BnCConfiguration.Common(Keg.DEFAULT, RecipeBook.DEFAULT, Coaster.DEFAULT);
 
       public record Keg(FluidUnit capacityUnit, long capacity, int cold, int chilly, int warm, int hot, boolean biomeTemp, boolean dimTemp,
-         boolean pipeDrainOnlyWhenIdle) {
-         public static final BnCConfiguration.Common.Keg DEFAULT = new BnCConfiguration.Common.Keg(FluidUnit.MILLIBUCKET, 1000L, 2, 1, 1, 2, true, true, true);
+         boolean pipeDrainOnlyWhenIdle, boolean remainderBuffer, boolean stallWhenFull) {
+         public static final BnCConfiguration.Common.Keg DEFAULT = new BnCConfiguration.Common.Keg(FluidUnit.MILLIBUCKET, 1000L, 2, 1, 1, 2, true, true, true, true, true);
 
          public long localizedCapacity() {
             return this.capacityUnit.convertToLoader(this.capacity);
@@ -214,6 +236,11 @@ public class BnCConfiguration {
 
       public record RecipeBook(boolean enabled) {
          public static final BnCConfiguration.Common.RecipeBook DEFAULT = new BnCConfiguration.Common.RecipeBook(true);
+      }
+
+      /** Port: not in 4.5.0. */
+      public record Coaster(boolean taggedItemsOnly) {
+         public static final BnCConfiguration.Common.Coaster DEFAULT = new BnCConfiguration.Common.Coaster(true);
       }
    }
 }

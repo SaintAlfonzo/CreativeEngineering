@@ -30,6 +30,41 @@ ServerEvents.tags('block', e => {
 	// Bakeware is hammered on the cutting board (NCH.hammering); without this the IE hammer rotates the board
 	// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
 	t.add(e, b.t_hammer_no_rotate, b.cutting_board)
+	// Rubidium blends the vanilla grass block's tint per vertex across neighbours (biome blend > 0) but colours
+	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
+	t.add(e, b.t_blendable_blocks, global.item.grass_slab)
+
+	// Keg temperature + Vinery cold storage (Brewin port BnCHeatSources; Vinery WineYears.storageKind). The keg tag
+	// already holds FD heat_sources; these only warm kegs, they don't let FD pots cook. Running gates are in
+	// BnCHeatSources: lit/active/on must be true, blaze heaters (burner, liquid burner, enchanter) need fuel. Skipped
+	// for now: machines whose running state lives only in the block entity (IE arc furnace, advanced blast furnace,
+	// preheater; PneumaticCraft heat blocks; Create steam engines/boilers; Compressed Creativity heater, D&D furnace
+	// engine, Cooking for Blockheads oven, which has no block state and would count while idle).
+	t.add(e, b.t_keg_heat_sources, [
+		b.furnace, b.blast_furnace, b.smoker, b.quark_deepslate_furnace, b.quark_blackstone_furnace,
+		b.keypad_furnace, b.keypad_blast_furnace, b.keypad_smoker,
+		b.bonfire, b.soul_bonfire, b.brazier, b.soul_brazier, b.siege_brazier_on,
+		b.ie_coke_oven, b.ie_blast_furnace, b.ie_alloy_smelter, b.ie_furnace_heater,
+		b.small_lab_furnace, b.small_electrical_furnace, b.small_waste_incinerator, b.clayworks_kiln,
+		b.air_compressor, b.advanced_air_compressor, b.vibration_chamber,
+		b.liquid_blaze_burner, b.blaze_enchanter, b.botania_blaze_block,
+	])
+	// #minecraft:ice nests the port's ice / packed / blue and adds frosted and rare ice
+	t.add(e, b.t_keg_freeze_sources, [
+		b.snow, b.snow_block, b.powder_snow, b.thin_ice, b.iw_permafrost, b.iw_cryosol,
+		b.t_ice, b.polished_packed_ice, b.chiseled_packed_ice,
+	])
+
+	// Campfire rain (patcherMod campfire/CampfireRain.java, CEConfig [campfire]). Unlit Campfire burns campfires
+	// forever; rain puts out the ones in rain_douses unless the block below is in rain_proof_fuel.
+	// Soul campfires stay out of rain_douses; Tinted Campfires aren't CampfireBlocks, so never ticked.
+	t.add(e, b.t_campfire_rain_douses, b.campfire)
+	t.add(e, b.t_campfire_rain_proof_fuel, [b.coal_block, b.quark_charcoal_block, b.architects_palette_charcoal_block])
+
+	// In-world dyeing (Supplementaries [tweaks.dye_blocks], patcherMod SupplementariesDyeBlocksMixin). Blocks with a
+	// block entity never dye in world (sacks lost their contents, canvas signs their text); no_world_dye is for plain
+	// blocks the dyeing audit takes out too (TODO blocks/dyeing #1). Empty until then.
+	t.add(e, b.t_no_world_dye, [])
 
 	// Emu, duck and goose nests: Incubation Additions tags them into incubation:bird_nests itself
 
@@ -240,6 +275,8 @@ ServerEvents.tags('block', e => {
 		'/^vinery:(cherry_(beam|floorboard)|stackable_log|[a-z_]*crate|[a-z_]*_wine_rack_(big|mid|small)|[a-z_]*_lattice)$/', '/^create_compressed:(large_)?cogwheel_block$/',
 		'farmersdelight:*_crate', 'rusticdelight:*crate', 'delightful:*_crate', 'quarkdelight:*_fruit_crate',
 		'fruitsdelight:*_crate', item.chorus_crate, item.corn_crate,
+		// Brewin' port: both copy oak planks. The coaster stays untiered: it is 1 px thin, so the block under it counts
+		item.heating_cask, item.ice_crate,
 	], { except: ['/^(copycats|framedblocks):/'] }) // their copycat/framed trapdoors are camouflage
 
 	t.addMatching(e, runner.natural_smooth, [

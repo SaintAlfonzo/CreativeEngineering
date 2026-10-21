@@ -98,6 +98,9 @@ UNDEAD = [
 # Lang lines for the port's own additions (alcohol.md 8), added to en_us.json.
 PORT_LANG = {
     'brewinandchewin.tooltip.keg.pipe_drain_idle': "Pipes can only drain it while it isn't fermenting",
+    'brewinandchewin.tooltip.keg.temperature': "Sensitive to hot and cold blocks in the environment",
+    'brewinandchewin.tooltip.heat_source': "Heats the surrounding environment, useful for keg brewing and wine casking",
+    'brewinandchewin.tooltip.freeze_source': "Cools the surrounding environment, useful for keg brewing and wine casking",
 }
 # Farmer's Delight's CookingPotRecipe default; 4.5.0's files leave it out, which KubeJS's recipe schema rejects.
 FD_COOKING_TIME = 200
@@ -417,6 +420,18 @@ def port_data():
             for erel, ed in extra.items():
                 write_json(os.path.join(out, erel), ed)
                 count += 1
+    # Port: the keg's own heat tag (BnCTags.Blocks.HEAT_SOURCES) wraps FD's, so the pack can add keg-only heat.
+    write_json(os.path.join(out, 'brewinandchewin', 'tags', 'blocks', 'heat_sources.json'),
+               {'values': ['#farmersdelight:heat_sources']})
+    count += 1
+    # Port: what a coaster takes ([coaster] taggedItemsOnly): every item with a coaster model. Other mods' ids are
+    # optional (upstream's list has a few 1.21-only Farmer's Delight foods); the pack adds its own models' items.
+    coaster_dir = os.path.join(SRC, 'assets', 'brewinandchewin', 'brewinandchewin', 'coaster')
+    coaster_items = sorted({json.load(open(os.path.join(coaster_dir, fn)))['item']
+                            for fn in os.listdir(coaster_dir) if fn.endswith('.json') and not is_jam_file(fn)})
+    write_json(os.path.join(out, 'brewinandchewin', 'tags', 'items', 'placeable_on_coaster.json'),
+               {'values': [i if i.startswith('brewinandchewin:') else {'id': i, 'required': False} for i in coaster_items]})
+    count += 1
     # Upstream gap: every drink has a fluid tag except kombucha, which default_displays.json still names.
     kombucha = os.path.join(out, 'brewinandchewin', 'tags', 'fluids', 'kombucha.json')
     if not os.path.exists(kombucha):

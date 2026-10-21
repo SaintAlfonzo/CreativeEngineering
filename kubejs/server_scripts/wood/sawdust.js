@@ -25,7 +25,7 @@ ServerEvents.recipes(e => {
 	R.ieCrushing(Item.of(i.sawdust, 3), i.scrap_wood_large, e)
 
 	R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.50)], i.any_planks, e, undefined, true)
-	R.ieCrushing(Item.of(i.sawdust, 2), i.any_log, e)
+	R.ieCrushing(Item.of(i.sawdust, 2), i.any_planks, e)
 
 	R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.25)], i.any_wooden_stairs, e, undefined, true)
 	R.ieCrushing(Item.of(i.sawdust, 2), i.any_wooden_stairs, e)

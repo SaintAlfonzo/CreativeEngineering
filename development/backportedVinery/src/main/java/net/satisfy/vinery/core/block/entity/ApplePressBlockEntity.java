@@ -291,7 +291,58 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
     @Override
     public boolean canPlaceItemThroughFace(int index, ItemStack stack, @Nullable Direction direction) {
-        return direction != null && direction.getAxis().isHorizontal() && isValidForSlot(level, index, stack);
+        return direction != null && direction.getAxis().isHorizontal() && isValidForSlot(level, index, stack) && keepsWorking(index, stack);
+    }
+
+    /**
+     * Port (alcohol/vineryport #7, hopper jams): automation only adds what the press can finish with what it already
+     * holds, so a hopper waits instead of jamming it. Slot 0's mash and slot 1's input must be the item already queued
+     * for fermenting (slot 1, else what slot 0 mashes into), take the bottle in slot 2 if that recipe needs one, and
+     * make what is already in the output. Slot 2 takes only the bottle the queued input needs. By hand anything valid
+     * goes in, as before.
+     */
+    private boolean keepsWorking(int index, ItemStack stack) {
+        if (level == null) return false;
+        return switch (index) {
+            case 0 -> {
+                ItemStack mash = mashResult(stack);
+                yield !mash.isEmpty() && fermentsHere(mash);
+            }
+            case 1 -> fermentsHere(stack);
+            case 2 -> {
+                ItemStack queued = queuedInput();
+                ApplePressFermentingRecipe recipe = queued.isEmpty() ? null : fermentingFor(queued);
+                yield recipe == null || recipe.requiresBottle() && recipe.getBottle().test(stack);
+            }
+            default -> false;
+        };
+    }
+
+    /** True when {@code input} can join the fermenting queue: same item, the bottle in slot 2 fits, the output matches. */
+    private boolean fermentsHere(ItemStack input) {
+        ItemStack queued = queuedInput();
+        if (!queued.isEmpty() && !queued.is(input.getItem())) return false;
+        ApplePressFermentingRecipe recipe = fermentingFor(input);
+        if (recipe == null) return false;
+        ItemStack bottle = getItem(2);
+        if (recipe.requiresBottle() && !bottle.isEmpty() && !recipe.getBottle().test(bottle)) return false;
+        ItemStack output = getItem(3);
+        return output.isEmpty() || output.is(recipe.getResultItem().getItem());
+    }
+
+    /** What ferments next: slot 1, else what slot 0 mashes into. */
+    private ItemStack queuedInput() {
+        return !getItem(1).isEmpty() ? getItem(1) : getItem(0).isEmpty() ? ItemStack.EMPTY : mashResult(getItem(0));
+    }
+
+    private ItemStack mashResult(ItemStack stack) {
+        return level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get()).stream()
+                .filter(recipe -> recipe.getInput().test(stack)).findFirst().map(ApplePressMashingRecipe::getResultItem).orElse(ItemStack.EMPTY);
+    }
+
+    private @Nullable ApplePressFermentingRecipe fermentingFor(ItemStack stack) {
+        return level.getRecipeManager().getAllRecipesFor(RecipeTypeRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get()).stream()
+                .filter(recipe -> recipe.getInput().test(stack)).findFirst().orElse(null);
     }
 
     @Override

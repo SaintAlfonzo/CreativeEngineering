@@ -110,9 +110,9 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
   Improvements' rolling are removed, nothing replaces them). IE press: gold by the pack, the other 8 by IE's own recipes.
   Hammer: gold and zinc by the pack, 7 by IE's own. The header audit in the file asks the same question: keep the IE
   press for the 8 and add Create pressing for the missing 5, or move every metal onto the pack's recipes.
-- **F2. Copper plate block is one-way:** block → 9 plates exists, 9 plates → block doesn't (Create Compressed's recipe
+- **F2.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Copper plate block is one-way:** block → 9 plates exists, 9 plates → block doesn't (Create Compressed's recipe
   covers it today).
-- **F3. Zinc can still be hammer-crushed:** IE's `hammercrushing_zinc` and `raw_hammercrushing_zinc` aren't removed
+- **F3.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Zinc can still be hammer-crushed:** IE's `hammercrushing_zinc` and `raw_hammercrushing_zinc` aren't removed
   (every other metal's are).
 - **F4. Rods by hand only for zinc, iron and aluminium. Your call.** Zinc 2 ingots → 4 by the pack; iron and aluminium by
   IE's own (2 ingots → 1 rod, per the header audit); copper, gold, lead, silver, nickel, uranium have no crafting-table rod. Rolling
@@ -122,7 +122,7 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
   any recipe on `#forge:storage_blocks/gold` (IE's storage crusher recipe, beacon bases) also takes it. Check with RM-11.
 - **F6. Dust → ingot recycling is the pack's for zinc only;** the other 8 use IE's own arc and smelting recipes. Works,
   but uneven.
-- **F7. Leftovers:** `console.log('EVENT:', e)` in both base files (prints the event object every reload);
+- **F7.** PARTLY FIXED 2026-10-19: the two `EVENT:` lines are gone; the rest stays ([plan_1.0.9.md](plan_1.0.9.md)). **Leftovers:** `console.log('EVENT:', e)` in both base files (prints the event object every reload);
   `misc_metal_crafts.js` logs "The metal base event has started!"; the header audit is written as a chat reply ("Want
   me to fill these in?"); the tall rusty iron door washing row says "Broken? Item still craftable".
 
@@ -173,3 +173,4 @@ None.
 - By 2026-09-27 (initial git commit): unification, ore tables, parts, coils, bars and misc crafts; shipped with 1.0.3.
   The folder hasn't changed in git since.
 - 2026-10-18: this writeup; findings F1 to F7; tests RM-01 to RM-14. No code changed.
+- 2026-10-19: F2 (9 copper plates -> plate block), F3 (IE zinc hammer-crushing removed) and the `EVENT:` log lines of F7 fixed ([plan_1.0.9.md](plan_1.0.9.md)). Header audit items 4 and 5 marked done.

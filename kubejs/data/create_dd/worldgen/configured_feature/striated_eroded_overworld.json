@@ -1,0 +1,65 @@
+{
+  "type": "create:layered_ore",
+  "config": {
+    "entry": "create_dd:striated_eroded_overworld",
+    "discard_chance_on_air_exposure": 0.0,
+    "layer_patterns": [
+      [
+        {
+          "targets": [
+            [
+              {
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag": "minecraft:stone_ore_replaceables"
+                },
+                "state": {
+                  "Name": "minecraft:granite"
+                }
+              },
+              {
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag": "minecraft:deepslate_ore_replaceables"
+                },
+                "state": {
+                  "Name": "minecraft:granite"
+                }
+              }
+            ]
+          ],
+          "min_size": 1,
+          "max_size": 1,
+          "weight": 1
+        },
+        {
+          "targets": [
+            [
+              {
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag": "minecraft:stone_ore_replaceables"
+                },
+                "state": {
+                  "Name": "minecraft:granite"
+                }
+              },
+              {
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag": "minecraft:deepslate_ore_replaceables"
+                },
+                "state": {
+                  "Name": "minecraft:granite"
+                }
+              }
+            ]
+          ],
+          "min_size": 1,
+          "max_size": 1,
+          "weight": 1
+        }
+      ]
+    ]
+  }
+}

@@ -11,18 +11,18 @@
 | Scaled durability wear per damage group | DEPLOYED, in-game test pending |
 | Round-down rule (under 1 damage left = full block) and per-tier knockback threshold | DEPLOYED, in-game test pending (the first knockback attempt was wrong and was replaced) |
 | On-block potion effects for holder and attacker (dragon: Regeneration / Poison) | DEPLOYED, in-game test pending |
-| Shield-disable cooldown (`disableCooldownTicks` = 20), player and mob axes, every shield | player axes DEPLOYED; mob axes BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean, not tested in game |
-| Burning and hot-block ticks (fire, campfires, magma, stoves) only blocked by netherite and above (`burn_tick`, `blocksBurnTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean (single player 2026-10-11), not tested in game |
-| Thorn ticks (cactus, berry bushes, thorny plants, barbed panes) only blocked by diamond and above (`contact_tick`, `blocksContactTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean (single player 2026-10-11), not tested in game |
-| Effect ticks never blocked: poison, wither, copper poisoning, Debilitating Sting, Exsanguination, Ender Flu, Phasing (`unblockableEffectTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean (single player 2026-10-11), not tested in game |
-| Banner decoration in the crafting grid for every tier | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, STAGED for 1.0.6; boots clean (single player 2026-10-11), not tested in game |
+| Shield-disable cooldown (`disableCooldownTicks` = 20), player and mob axes, every shield | player axes DEPLOYED; mob axes BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean, not tested in game |
+| Burning and hot-block ticks (fire, campfires, magma, stoves) only blocked by netherite and above (`burn_tick`, `blocksBurnTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean (single player 2026-10-11), not tested in game |
+| Thorn ticks (cactus, berry bushes, thorny plants, barbed panes) only blocked by diamond and above (`contact_tick`, `blocksContactTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean (single player 2026-10-11), not tested in game |
+| Effect ticks never blocked: poison, wither, copper poisoning, Debilitating Sting, Exsanguination, Ender Flu, Phasing (`unblockableEffectTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean (single player 2026-10-11), not tested in game |
+| Banner decoration in the crafting grid for every tier | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean (single player 2026-10-11), not tested in game |
 | Recipe ladder (shaped, smithing, echo / felsic / dragon assembly) | DEPLOYED (KubeJS) |
 | Damage tag layer (32 tag files, reload listener, seen-sources log) | DEPLOYED (30); `burn_tick`, `contact_tick` BUILT 2026-10-05 |
 | Offline checks `tools/test_shields.sh` (`shield_check.py` + `ShieldConfigTest`) | BUILT 2026-10-05, passes (32 checks) |
-| Smithing to netherite needs Armor Trims' Netherite Upgrade Smithing Template (F8); JEI's vanilla Smithing category no longer lists template-only recipes (`SmithingTemplateJEI`) | template rule: Armor Trims config, kept; JEI fix BUILT 2026-10-05 20:56, in the patcherMod 1.0.5 jar (STAGED for 1.0.6); SH-43 pending |
+| Smithing to netherite needs Armor Trims' Netherite Upgrade Smithing Template (F8); JEI's vanilla Smithing category no longer lists template-only recipes (`SmithingTemplateJEI`) | template rule: Armor Trims config, kept; JEI fix BUILT 2026-10-05 20:56, in the patcherMod 1.0.5 jar (DEPLOYED with 1.0.6); SH-43 pending |
 
-- **Pending:** everything from 2026-10-05 ships in pack 1.0.5 (staged 2026-10-11, `creativeengineering-1.0.5.jar`
-  md5 68509043, not deployed). That jar booted in single player on 2026-10-11 with no `InvalidInjectionException`
+- **Pending:** everything from 2026-10-05 was built for pack 1.0.5 (`creativeengineering-1.0.5.jar` md5 68509043),
+  which never shipped, and went out with pack 1.0.6 (DEPLOYED 2026-10-14). That jar booted in single player on 2026-10-11 with no `InvalidInjectionException`
   from the three new vanilla-class mixins (`MobShieldDisableMixin`, `MobEffectTickContextMixin`,
   `ShieldDecorationRecipeMixin`). Still to run in game: SH-43, then SH-14, SH-19, SH-33 to SH-42.
 
@@ -166,7 +166,7 @@ all four, also for blanket tiers.
 | Diamond shield | smithing iron or gold shield + diamond |
 | Netherite shield | smithing diamond shield + netherite ingot |
 | Echo shield | echo sequenced assembly from the netherite shield (Darkness + Night Vision) |
-| Felsic shield | felsic assembly from the echo shield (250 mB Magic Resistance, 1 loop, 8 blows; `end_gear.js` asks for `CRAFTING.FELSIC_SHIELD`, which isn't in CEConfig yet, so these are hardcoded: [gear_tuning.md](gear_tuning.md) F1) |
+| Felsic shield | felsic assembly from the echo shield (250 mB Magic Resistance, 1 loop, 8 blows; `[crafting.felsic_shield]` in `creativeengineering-common.toml` since patcherMod 1.0.9: [gear_tuning.md](gear_tuning.md) F1) |
 | Dragon shield | dragon assembly from the felsic shield (250 mB Long Resistance, 5 scales) |
 
 Any tier takes a banner in the crafting grid (shield + banner, like vanilla). The Engineer starter kit
@@ -535,3 +535,4 @@ on F3+H. "Raise" means hold right click.
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
 - 2026-10-18: felsic shield recipe values corrected to "hardcoded" (no `CRAFTING.FELSIC_SHIELD` section exists); the
   ladder and its assemblies are written up in [gear_tuning.md](gear_tuning.md).
+- 2026-10-19: felsic shield values configurable (`CRAFTING.FELSIC_SHIELD`); `DamageFlag` / `DamageTags` / `DamageTagSnapshot` pre-loaded in `commonSetup` against the 2026-09-24 `NoClassDefFoundError` (patcherMod 1.0.9, [plan_1.0.9.md](plan_1.0.9.md)).

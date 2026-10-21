@@ -17,6 +17,10 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.Beardifier;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -27,6 +31,7 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -60,6 +65,15 @@ import java.util.function.Predicate;
  * {@link Mode} order and is logged. Structures whose class answers terrainAdaptation itself (YUNG's jigsaw
  * structures, which have their own enhanced adaptation) can't be changed this way; that is logged too.
  * {@code creativeengineering:template_trim} is read by {@link TemplateTrim}.
+ *
+ * <p><b>Sunk starts.</b> The beard (vanilla's and the soft one) levels the ground to a piece's bottom layer: right
+ * for a jigsaw start set onto the heightmap with start height 0, whose bottom layer replaces the surface block. A
+ * start height below 0 sinks the template that many layers into the ground (Campsite Structures' camps sit on a dirt
+ * dome 4 layers deep under their grass layer), and the beard then digs the ground down to the dome's
+ * bottom around it: the buried layers stand out of a flat ring as a plinth. For a structure in
+ * {@code creativeengineering:terrain_adaptation/sunk_start} with a constant start height below 0 and a heightmap
+ * projection, every piece's beard is raised by that many layers ({@link #sink}), so it levels the ground to the
+ * surface the start was projected to. Opt-in: other mods sink starts with beard_box on purpose (Philip's crypts).
  *
  * <p><b>Why soft.</b> Vanilla's beard (Beardifier, beard_thin) fills under and carves above the piece's whole
  * bounding box, then fades out over about 8 blocks of straight-line distance from that box. A small structure
@@ -107,6 +121,7 @@ public final class TerrainAdaptation {
 	}
 
 	static final TagKey<Structure> TRIM = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "template_trim"));
+	static final TagKey<Structure> SUNK = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "terrain_adaptation/sunk_start"));
 
 	/** The soft beard's skirt with skirtBump 0, in blocks from the footprint. */
 	static final int MIN_SKIRT = 4;
@@ -119,8 +134,8 @@ public final class TerrainAdaptation {
 
 	// ── tag table ────────────────────────────────────────────────────────────
 
-	/** A tagged structure: its mode (null = its own) and whether it is trimmed. */
-	record Shape(Mode mode, boolean trim) {}
+	/** A tagged structure: its mode (null = its own), whether it is trimmed, and how many layers its start sinks (0 = none). */
+	record Shape(Mode mode, boolean trim, int sink) {}
 
 	private static volatile Map<Structure, Shape> shapes = Map.of();
 
@@ -135,11 +150,17 @@ public final class TerrainAdaptation {
 		if (registry.isEmpty()) return;
 		Map<Structure, Shape> map = new IdentityHashMap<>();
 		Map<Mode, Integer> counts = new EnumMap<>(Mode.class);
-		int trimmed = 0;
+		int trimmed = 0, sunk = 0;
 		for (Holder<Structure> h : registry.get().holders().toList()) {
 			Mode mode = resolve(h::is);
 			boolean trim = h.is(TRIM);
-			if (mode == null && !trim) continue;
+			int sink = 0;
+			if (h.is(SUNK)) {
+				sink = sinkOf(h.value());
+				if (sink > 0) sunk++;
+				else LOG.warn("[terrain-adaptation] {} is in terrain_adaptation/sunk_start but has no constant start height below 0 projected to a heightmap; ignored", id(h));
+			}
+			if (mode == null && !trim && sink == 0) continue;
 			if (mode != null) {
 				counts.merge(mode, 1, Integer::sum);
 				List<String> all = new ArrayList<>();
@@ -147,10 +168,10 @@ public final class TerrainAdaptation {
 				if (all.size() > 1) LOG.warn("[terrain-adaptation] {} is in {}; {} wins", id(h), all, mode.tag.location().getPath());
 			}
 			if (trim) trimmed++;
-			map.put(h.value(), new Shape(mode, trim));
+			map.put(h.value(), new Shape(mode, trim, sink));
 		}
 		shapes = Collections.unmodifiableMap(map);
-		LOG.info("[terrain-adaptation] {}: {} structures tagged, modes {}, {} trimmed{}", when, map.size(), counts, trimmed,
+		LOG.info("[terrain-adaptation] {}: {} structures tagged, modes {}, {} trimmed, {} sunk starts{}", when, map.size(), counts, trimmed, sunk,
 				WorldgenConfig.terrainAdaptationEnabled() ? "" : " (modes off: [worldgen.systems] terrainAdaptation = false)");
 
 		if (!WorldgenConfig.terrainAdaptationEnabled()) return;
@@ -195,6 +216,32 @@ public final class TerrainAdaptation {
 	static boolean soft(Structure structure) {
 		Shape s = shapes.get(structure);
 		return s != null && s.mode() == Mode.SOFT && WorldgenConfig.terrainAdaptationEnabled();
+	}
+
+	/**
+	 * How many layers the beard of a structure in terrain_adaptation/sunk_start is raised (its start height sinks its
+	 * pieces that far below the surface), 0 for every other structure. Follows [worldgen.systems] terrainAdaptation.
+	 */
+	public static int sink(Structure structure) {
+		Shape s = shapes.get(structure);
+		return s == null || !WorldgenConfig.terrainAdaptationEnabled() ? 0 : s.sink();
+	}
+
+	private static final Field START_HEIGHT = EarthFill.field(JigsawStructure.class, "f_227608_", "startHeight");
+	private static final Field PROJECT_START = EarthFill.field(JigsawStructure.class, "f_227610_", "projectStartToHeightmap");
+
+	/** A jigsaw structure's sink: minus its start height, when that is a constant absolute height below 0 and the start is projected to a heightmap. */
+	@SuppressWarnings("unchecked")
+	static int sinkOf(Structure structure) {
+		if (!(structure instanceof JigsawStructure jigsaw)) return 0;
+		try {
+			Optional<Heightmap.Types> projected = (Optional<Heightmap.Types>) PROJECT_START.get(jigsaw);
+			HeightProvider height = (HeightProvider) START_HEIGHT.get(jigsaw);
+			if (projected.isEmpty() || !(height instanceof ConstantHeight constant) || !(constant.getValue() instanceof VerticalAnchor.Absolute absolute)) return 0;
+			return Math.max(0, -absolute.y());
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	/** Structure#terrainAdaptation: the tagged mode's vanilla value, or null to keep the structure's own. */
@@ -353,6 +400,8 @@ public final class TerrainAdaptation {
 			structure = MetaStructure.structureOf(start, box);
 			if (!(structure instanceof MetaStructure)) adjustment = structure.terrainAdaptation();
 		}
+		// a sunk start: the beard levels the ground at the projected surface, not at the sunk bottom layer
+		if (structure != null) groundLevelDelta += sink(structure);
 		if (structure != null && (adjustment == TerrainAdjustment.BEARD_THIN || adjustment == TerrainAdjustment.BEARD_BOX) && soft(structure)) {
 			try {
 				boolean trimmed = WorldgenConfig.templateTrimEnabled() && trims(structure);

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Offline checks for the WTHIT crop growth rules (feature_writeup/crop_growth.md):
+# Offline checks for the WTHIT crop growth rules (feature_writeup/crops.md 2.9):
 #   1. CropGrowth maths + rule parsing, against the shipped crop_growth.json (javac/java, only needs gson)
 #   2. tools/crop_growth_coverage.py: every growing block in the /dumpcropgrowth audit is ruled, fallback or skipped
 # Build the patcherMod classes first: ./gradlew :patcherMod:compileJava --offline

@@ -9,7 +9,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SignItem;
-import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
@@ -40,10 +39,8 @@ import net.satisfy.foundation.banner.CompletionistBannerBlock;
 import net.satisfy.foundation.banner.CompletionistWallBannerBlock;
 import net.satisfy.foundation.block.BigTableBlock;
 import net.satisfy.foundation.block.CabinetBlock;
-import net.satisfy.foundation.block.ChairBlock;
 import net.satisfy.foundation.block.FacingBlock;
 import net.satisfy.foundation.block.WindowBlock;
-import net.satisfy.foundation.storage.WallShelfBlock;
 import net.satisfy.foundation.util.LibUtil;
 import net.satisfy.foundation.wood.WoodBoatItem;
 import net.satisfy.foundation.wood.WoodStandingSignBlock;
@@ -65,9 +62,12 @@ import java.util.function.Supplier;
  *     <li>Field names stay as upstream, so the ported code reads the same; the registered ids are the 1.3.10 ones
  *     where 1.5.5 only renamed something: {@code dark_cherry_*} registers as {@code cherry_*}, the Apple Press as
  *     {@code wine_press}, the juices and the winemaker armor under their 1.3.10 ids.</li>
- *     <li>1.5.5's vanilla-cherry lattice and racks merge into the dark cherry ones ({@code cherry_lattice},
- *     {@code cherry_wine_rack_*}); 1.19.2 has no vanilla cherry. The hanging sign is dropped (D9).</li>
- *     <li>Every 1.3.10 block 1.5.5 removed stays, at the end of the file (net.satisfy.vinery.legacy).</li>
+ *     <li>1.5.5's vanilla-cherry racks merge into the dark cherry ones ({@code cherry_wine_rack_*}); 1.19.2 has no
+ *     vanilla cherry. The hanging sign is dropped (D9).</li>
+ *     <li>1.3.10 blocks 1.5.5 removed stay, at the end of the file (net.satisfy.vinery.legacy).</li>
+ *     <li>Removed (alcohol.md 10.10, 10.11): the 1.3.10 crates, barrel, stove, wood fired oven, kitchen sink and
+ *     wine racks 1, 2, 3, 5; the 1.5.5 chair, table, big table, shelf and wood lattices. The 1.5.5 bags, barrel,
+ *     racks, cabinet and drawer, the 1.3.10 furniture and grapevine lattice cover them.</li>
  * </ul>
  */
 public class ObjectRegistry {
@@ -115,8 +115,6 @@ public class ObjectRegistry {
     public static final RegistryObject<Block> GRAPEVINE_POT = registerWithItem("grapevine_pot", () -> new GrapevinePotBlock(BlockBehaviour.Properties.copy(Blocks.BARREL)));
     public static final RegistryObject<Block> FERMENTATION_BARREL = registerWithItem("fermentation_barrel", () -> new FermentationBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL).noOcclusion()));
     public static final RegistryObject<Block> APPLE_PRESS = registerWithItem("wine_press", () -> new ApplePressBlock(wood(2.0F, 3.0F).noOcclusion()));
-    public static final RegistryObject<Block> DARK_CHERRY_CHAIR = registerWithItem("cherry_chair", () -> new ChairBlock(wood(2.0F, 3.0F)));
-    public static final RegistryObject<Block> DARK_CHERRY_TABLE = registerWithItem("cherry_table", () -> new TableBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)));
     public static final RegistryObject<Block> DARK_CHERRY_CABINET = registerWithItem("cherry_cabinet", () -> new CabinetBlock(wood(2.0F, 3.0F), EntityTypeRegistry.CABINET_BLOCK_ENTITY, SoundEventRegistry.CABINET_OPEN, SoundEventRegistry.CABINET_CLOSE));
     public static final RegistryObject<Block> DARK_CHERRY_DRAWER = registerWithItem("cherry_drawer", () -> new CabinetBlock(wood(2.0F, 3.0F), EntityTypeRegistry.CABINET_BLOCK_ENTITY, SoundEventRegistry.DRAWER_OPEN, SoundEventRegistry.DRAWER_CLOSE));
     public static final RegistryObject<Block> DARK_CHERRY_WINE_RACK_BIG = registerWithItem("cherry_wine_rack_big", () -> new BottleStorageBlock(wood(2.0F, 3.0F).noOcclusion(), BottleStorageBlock.Layout.NINE));
@@ -158,16 +156,21 @@ public class ObjectRegistry {
     public static final RegistryObject<Item> WHITE_TAIGA_GRAPEJUICE = registerItem("taiga_white_grapejuice_bottle", ObjectRegistry::juice);
     public static final RegistryObject<Item> RED_JUNGLE_GRAPEJUICE = registerItem("jungle_red_grapejuice_bottle", ObjectRegistry::juice);
     public static final RegistryObject<Item> WHITE_JUNGLE_GRAPEJUICE = registerItem("jungle_white_grapejuice_bottle", ObjectRegistry::juice);
+    /*
+     * Wines: the number is how many fit in one placed block, and the one place a wine's size is set (alcohol.md 10.12):
+     * 3 small (every rack), 2 medium (not the 9x rack), 1 large (single-bottle rack only). Racks, the wine box, the
+     * small / medium / large_bottle tags and the rack renderer all follow it.
+     */
     public static final RegistryObject<Block> CHORUS_WINE = registerWithoutItem("chorus_wine", () -> new WineBottleBlock(getWineSettings(), 1));
     public static final RegistryObject<Block> CHERRY_WINE = registerWithoutItem("cherry_wine", () -> new WineBottleBlock(getWineSettings(), 3));
-    public static final RegistryObject<Block> MAGNETIC_WINE = registerWithoutItem("magnetic_wine", () -> new WineBottleBlock(getWineSettings(), 1));
+    public static final RegistryObject<Block> MAGNETIC_WINE = registerWithoutItem("magnetic_wine", () -> new WineBottleBlock(getWineSettings(), 2));
     public static final RegistryObject<Block> JO_SPECIAL_MIXTURE = registerWithoutItem("jo_special_mixture", () -> new WineBottleBlock(getWineSettings(), 1));
     public static final RegistryObject<Block> CRISTEL_WINE = registerWithoutItem("cristel_wine", () -> new WineBottleBlock(getWineSettings(), 1));
-    public static final RegistryObject<Block> GLOWING_WINE = registerWithoutItem("glowing_wine", () -> new WineBottleBlock(getWineSettings(), 3));
+    public static final RegistryObject<Block> GLOWING_WINE = registerWithoutItem("glowing_wine", () -> new WineBottleBlock(getWineSettings(), 2));
     public static final RegistryObject<Block> CREEPERS_CRUSH = registerWithoutItem("creepers_crush", () -> new WineBottleBlock(getWineSettings(), 2));
     public static final RegistryObject<Block> RED_WINE = registerWithoutItem("red_wine", () -> new WineBottleBlock(getWineSettings(), 3));
     public static final RegistryObject<Block> JELLIE_WINE = registerWithoutItem("jellie_wine", () -> new WineBottleBlock(getWineSettings(), 1));
-    public static final RegistryObject<Block> STAL_WINE = registerWithoutItem("stal_wine", () -> new WineBottleBlock(getWineSettings(), 3));
+    public static final RegistryObject<Block> STAL_WINE = registerWithoutItem("stal_wine", () -> new WineBottleBlock(getWineSettings(), 2));
     public static final RegistryObject<Block> NOIR_WINE = registerWithoutItem("noir_wine", () -> new WineBottleBlock(getWineSettings(), 3));
     public static final RegistryObject<Block> BOLVAR_WINE = registerWithoutItem("bolvar_wine", () -> new WineBottleBlock(getWineSettings(), 3));
     public static final RegistryObject<Block> SOLARIS_WINE = registerWithoutItem("solaris_wine", () -> new WineBottleBlock(getWineSettings(), 3));
@@ -192,8 +195,6 @@ public class ObjectRegistry {
     public static final RegistryObject<Block> GRAPEVINE_STEM = registerWithItem("grapevine_stem", () -> new PaleStemBlock(getGrapevineSettings()));
     public static final RegistryObject<Block> STORAGE_POT = registerWithItem("storage_pot", () -> new StoragePotBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD), () -> SoundEvents.DYE_USE, () -> SoundEvents.DYE_USE));
     public static final RegistryObject<Block> WINE_BOX = registerWithItem("wine_box", () -> new WineBoxBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).noOcclusion()));
-    public static final RegistryObject<Block> DARK_CHERRY_BIG_TABLE = registerWithItem("cherry_big_table", () -> new BigTableBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 2.0F)));
-    public static final RegistryObject<Block> DARK_CHERRY_SHELF = registerWithItem("cherry_shelf", () -> new WallShelfBlock(wood(2.0F, 3.0F).noOcclusion(), EntityTypeRegistry.STORAGE_ENTITY, StorageTypeRegistry.SHELF, stack -> !(stack.getItem() instanceof BlockItem) || stack.is(TagRegistry.IGNORE_BLOCK_ITEM)));
     public static final RegistryObject<Block> STACKABLE_LOG = registerWithItem("stackable_log", () -> new StackableLogBlock(getLogBlockSettings().noOcclusion().lightLevel(state -> state.getValue(StackableLogBlock.FIRED) ? 13 : 0)));
     public static final RegistryObject<Item> STRAW_HAT = registerItem("straw_hat", () -> new TexturedArmorItem(ArmorMaterials.LEATHER, EquipmentSlot.HEAD, getSettings().rarity(Rarity.EPIC).durability(11 * 5), Vinery.identifier("textures/models/armor/winemaker.png")));
     public static final RegistryObject<Item> WINEMAKER_APRON = registerItem("vinemaker_apron", () -> new TexturedArmorItem(ArmorMaterials.LEATHER, EquipmentSlot.CHEST, getSettings().rarity(Rarity.EPIC).durability(16 * 5), Vinery.identifier("textures/models/armor/winemaker.png")));
@@ -224,7 +225,7 @@ public class ObjectRegistry {
     public static final RegistryObject<Block> MANGROVE_WINE_RACK_BIG = registerWithItem("mangrove_wine_rack_big", ObjectRegistry::rackBig);
     public static final RegistryObject<Block> MANGROVE_WINE_RACK_SMALL = registerWithItem("mangrove_wine_rack_small", ObjectRegistry::rackSmall);
     public static final RegistryObject<Block> MANGROVE_WINE_RACK_MID = registerWithItem("mangrove_wine_rack_mid", ObjectRegistry::rackMid);
-    /** D12: bamboo racks and lattice kept; 1.19.2 has no bamboo planks, the recipes use quark:bamboo_planks. */
+    /** D12: bamboo racks kept; 1.19.2 has no bamboo planks, the recipes use quark:bamboo_planks. */
     public static final RegistryObject<Block> BAMBOO_WINE_RACK_BIG = registerWithItem("bamboo_wine_rack_big", ObjectRegistry::rackBig);
     public static final RegistryObject<Block> BAMBOO_WINE_RACK_SMALL = registerWithItem("bamboo_wine_rack_small", ObjectRegistry::rackSmall);
     public static final RegistryObject<Block> BAMBOO_WINE_RACK_MID = registerWithItem("bamboo_wine_rack_mid", ObjectRegistry::rackMid);
@@ -241,80 +242,53 @@ public class ObjectRegistry {
             PlatformHelper::shouldShowTooltip);
     public static final RegistryObject<Block> VINERY_STANDARD = registerWithItem("vinery_standard", () -> new CompletionistBannerBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(1F).noCollission().sound(SoundType.WOOD), BANNER_SETTINGS));
     public static final RegistryObject<Block> VINERY_WALL_STANDARD = registerWithoutItem("vinery_wall_standard", () -> new CompletionistWallBannerBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(1F).noCollission().sound(SoundType.WOOD).lootFrom(VINERY_STANDARD), BANNER_SETTINGS));
-    public static final RegistryObject<Block> OAK_LATTICE = registerWithItem("oak_lattice", ObjectRegistry::lattice);
-    public static final RegistryObject<Block> SPRUCE_LATTICE = registerWithItem("spruce_lattice", ObjectRegistry::lattice);
-    public static final RegistryObject<Block> BIRCH_LATTICE = registerWithItem("birch_lattice", ObjectRegistry::lattice);
-    public static final RegistryObject<Block> DARK_OAK_LATTICE = registerWithItem("dark_oak_lattice", ObjectRegistry::lattice);
-    public static final RegistryObject<Block> ACACIA_LATTICE = registerWithItem("acacia_lattice", ObjectRegistry::lattice);
-    public static final RegistryObject<Block> BAMBOO_LATTICE = registerWithItem("bamboo_lattice", ObjectRegistry::lattice);
-    public static final RegistryObject<Block> JUNGLE_LATTICE = registerWithItem("jungle_lattice", ObjectRegistry::lattice);
-    public static final RegistryObject<Block> MANGROVE_LATTICE = registerWithItem("mangrove_lattice", ObjectRegistry::lattice);
-    public static final RegistryObject<Block> DARK_CHERRY_LATTICE = registerWithItem("cherry_lattice", ObjectRegistry::lattice);
     public static final RegistryObject<Block> WHITE_SAVANNA_GRAPE_BAG = registerWithItem("white_savanna_grape_bag", ObjectRegistry::bag);
     public static final RegistryObject<Block> RED_SAVANNA_GRAPE_BAG = registerWithItem("red_savanna_grape_bag", ObjectRegistry::bag);
     public static final RegistryObject<Block> WHITE_TAIGA_GRAPE_BAG = registerWithItem("white_taiga_grape_bag", ObjectRegistry::bag);
     public static final RegistryObject<Block> RED_TAIGA_GRAPE_BAG = registerWithItem("red_taiga_grape_bag", ObjectRegistry::bag);
     public static final RegistryObject<Block> WHITE_JUNGLE_GRAPE_BAG = registerWithItem("white_jungle_grape_bag", ObjectRegistry::bag);
     public static final RegistryObject<Block> RED_JUNGLE_GRAPE_BAG = registerWithItem("red_jungle_grape_bag", ObjectRegistry::bag);
-    public static final RegistryObject<Item> APPLE_CIDER_ITEM = registerWineItem("apple_cider", APPLE_CIDER, true, DrinkBlockItem.BottleSize.BIG);
-    /** alcohol.md B7.10: small again (3 per placed block, small racks), as in 1.3.10; 1.5.5 made it big. */
-    public static final RegistryObject<Item> APPLE_WINE_ITEM = registerWineItem("apple_wine", APPLE_WINE, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> GLOWING_WINE_ITEM = registerWineItem("glowing_wine", GLOWING_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> SOLARIS_WINE_ITEM = registerWineItem("solaris_wine", SOLARIS_WINE, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> KELP_CIDER_ITEM = registerWineItem("kelp_cider", KELP_CIDER, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> EISWEIN_ITEM = registerWineItem("eiswein", EISWEIN, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> AEGIS_WINE_ITEM = registerWineItem("aegis_wine", AEGIS_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> VILLAGERS_FRIGHT_ITEM = registerWineItem("villagers_fright", VILLAGERS_FRIGHT, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> CLARK_WINE_ITEM = registerWineItem("clark_wine", CLARK_WINE, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> JELLIE_WINE_ITEM = registerWineItem("jellie_wine", JELLIE_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> NOIR_WINE_ITEM = registerWineItem("noir_wine", NOIR_WINE, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> RED_WINE_ITEM = registerWineItem("red_wine", RED_WINE, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> STRAD_WINE_ITEM = registerWineItem("strad_wine", STRAD_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> CHERRY_WINE_ITEM = registerWineItem("cherry_wine", CHERRY_WINE, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> CRISTEL_WINE_ITEM = registerWineItem("cristel_wine", CRISTEL_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> LILITU_WINE_ITEM = registerWineItem("lilitu_wine", LILITU_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> JO_SPECIAL_MIXTURE_ITEM = registerWineItem("jo_special_mixture", JO_SPECIAL_MIXTURE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> BOLVAR_WINE_ITEM = registerWineItem("bolvar_wine", BOLVAR_WINE, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> MAGNETIC_WINE_ITEM = registerWineItem("magnetic_wine", MAGNETIC_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> STAL_WINE_ITEM = registerWineItem("stal_wine", STAL_WINE, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> CHENET_WINE_ITEM = registerWineItem("chenet_wine", CHENET_WINE, true, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> BOTTLE_MOJANG_NOIR_ITEM = registerWineItem("bottle_mojang_noir", BOTTLE_MOJANG_NOIR, true, DrinkBlockItem.BottleSize.SMALL);
-    public static final RegistryObject<Item> CHORUS_WINE_ITEM = registerWineItem("chorus_wine", CHORUS_WINE, false, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> CREEPERS_CRUSH_ITEM = registerWineItem("creepers_crush", CREEPERS_CRUSH, false, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> MELLOHI_WINE_ITEM = registerWineItem("mellohi_wine", MELLOHI_WINE, false, DrinkBlockItem.BottleSize.BIG);
-    public static final RegistryObject<Item> PRAETORIAN_WINE_ITEM = registerWineItem("praetorian_wine", PRAETORIAN_WINE, true, DrinkBlockItem.BottleSize.BIG);
+    public static final RegistryObject<Item> APPLE_CIDER_ITEM = registerWineItem("apple_cider", APPLE_CIDER, true);
+    public static final RegistryObject<Item> APPLE_WINE_ITEM = registerWineItem("apple_wine", APPLE_WINE, true);
+    public static final RegistryObject<Item> GLOWING_WINE_ITEM = registerWineItem("glowing_wine", GLOWING_WINE, true);
+    public static final RegistryObject<Item> SOLARIS_WINE_ITEM = registerWineItem("solaris_wine", SOLARIS_WINE, true);
+    public static final RegistryObject<Item> KELP_CIDER_ITEM = registerWineItem("kelp_cider", KELP_CIDER, true);
+    public static final RegistryObject<Item> EISWEIN_ITEM = registerWineItem("eiswein", EISWEIN, true);
+    public static final RegistryObject<Item> AEGIS_WINE_ITEM = registerWineItem("aegis_wine", AEGIS_WINE, true);
+    public static final RegistryObject<Item> VILLAGERS_FRIGHT_ITEM = registerWineItem("villagers_fright", VILLAGERS_FRIGHT, true);
+    public static final RegistryObject<Item> CLARK_WINE_ITEM = registerWineItem("clark_wine", CLARK_WINE, true);
+    public static final RegistryObject<Item> JELLIE_WINE_ITEM = registerWineItem("jellie_wine", JELLIE_WINE, true);
+    public static final RegistryObject<Item> NOIR_WINE_ITEM = registerWineItem("noir_wine", NOIR_WINE, true);
+    public static final RegistryObject<Item> RED_WINE_ITEM = registerWineItem("red_wine", RED_WINE, true);
+    public static final RegistryObject<Item> STRAD_WINE_ITEM = registerWineItem("strad_wine", STRAD_WINE, true);
+    public static final RegistryObject<Item> CHERRY_WINE_ITEM = registerWineItem("cherry_wine", CHERRY_WINE, true);
+    public static final RegistryObject<Item> CRISTEL_WINE_ITEM = registerWineItem("cristel_wine", CRISTEL_WINE, true);
+    public static final RegistryObject<Item> LILITU_WINE_ITEM = registerWineItem("lilitu_wine", LILITU_WINE, true);
+    public static final RegistryObject<Item> JO_SPECIAL_MIXTURE_ITEM = registerWineItem("jo_special_mixture", JO_SPECIAL_MIXTURE, true);
+    public static final RegistryObject<Item> BOLVAR_WINE_ITEM = registerWineItem("bolvar_wine", BOLVAR_WINE, true);
+    public static final RegistryObject<Item> MAGNETIC_WINE_ITEM = registerWineItem("magnetic_wine", MAGNETIC_WINE, true);
+    public static final RegistryObject<Item> STAL_WINE_ITEM = registerWineItem("stal_wine", STAL_WINE, true);
+    public static final RegistryObject<Item> CHENET_WINE_ITEM = registerWineItem("chenet_wine", CHENET_WINE, true);
+    public static final RegistryObject<Item> BOTTLE_MOJANG_NOIR_ITEM = registerWineItem("bottle_mojang_noir", BOTTLE_MOJANG_NOIR, true);
+    public static final RegistryObject<Item> CHORUS_WINE_ITEM = registerWineItem("chorus_wine", CHORUS_WINE, false);
+    public static final RegistryObject<Item> CREEPERS_CRUSH_ITEM = registerWineItem("creepers_crush", CREEPERS_CRUSH, false);
+    public static final RegistryObject<Item> MELLOHI_WINE_ITEM = registerWineItem("mellohi_wine", MELLOHI_WINE, false);
+    public static final RegistryObject<Item> PRAETORIAN_WINE_ITEM = registerWineItem("praetorian_wine", PRAETORIAN_WINE, true);
 
     // ------------------------------------------------------------------------------------------------------------
     // D2: 1.3.10 blocks that 1.5.5 removed or replaced, kept with their 1.3.10 behaviour and art.
     // ------------------------------------------------------------------------------------------------------------
-    public static final RegistryObject<Block> WHITE_GRAPE_CRATE = registerWithItem("white_grape_crate", ObjectRegistry::crate);
-    public static final RegistryObject<Block> RED_GRAPE_CRATE = registerWithItem("red_grape_crate", ObjectRegistry::crate);
-    public static final RegistryObject<Block> CHERRY_CRATE = registerWithItem("cherry_crate", ObjectRegistry::crate);
-    public static final RegistryObject<Block> APPLE_CRATE = registerWithItem("apple_crate", ObjectRegistry::crate);
     public static final RegistryObject<Block> GRAPEVINE_LATTICE = registerWithItem("grapevine_lattice", () -> new LegacyLatticeStemBlock(getGrapevineSettings()));
     public static final RegistryObject<Block> CHAIR = registerWithItem("chair", () -> new LegacyChairBlock(wood(2.0F, 3.0F)));
     public static final RegistryObject<Block> TABLE = registerWithItem("table", () -> new TableBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)));
     public static final RegistryObject<Block> BIG_TABLE = registerWithItem("big_table", () -> new BigTableBlock(BlockBehaviour.Properties.of(Material.STONE).strength(2.0F, 2.0F)));
     public static final RegistryObject<Block> SHELF = registerWithItem("shelf", () -> new LegacyShelfBlock(wood(2.0F, 3.0F).noOcclusion()));
-    public static final RegistryObject<Block> WINE_RACK_1 = registerWithItem("wine_rack_1", () -> new LegacyNineBottleStorageBlock(wood(2.0F, 3.0F).noOcclusion()));
-    public static final RegistryObject<Block> WINE_RACK_2 = registerWithItem("wine_rack_2", () -> new LegacyFourBottleStorageBlock(wood(2.0F, 3.0F).noOcclusion()));
-    public static final RegistryObject<Block> WINE_RACK_3 = registerWithItem("wine_rack_3", () -> new LegacyWineRackStorageBlock(wood(2.0F, 3.0F), SoundEventRegistry.WINE_RACK_3_OPEN, SoundEventRegistry.WINE_RACK_3_CLOSE));
-    public static final RegistryObject<Block> WINE_RACK_5 = registerWithItem("wine_rack_5", () -> new LegacyWineRackStorageBlock(wood(2.0F, 3.0F), SoundEventRegistry.WINE_RACK_5_OPEN, SoundEventRegistry.WINE_RACK_5_CLOSE));
     public static final RegistryObject<Block> LOAM = registerWithItem("loam", () -> new Block(loam()));
     public static final RegistryObject<Block> LOAM_STAIRS = registerWithItem("loam_stairs", () -> new StairBlock(() -> LOAM.get().defaultBlockState(), loam()));
     public static final RegistryObject<Block> LOAM_SLAB = registerWithItem("loam_slab", () -> new SlabBlock(loam()));
     public static final RegistryObject<Block> FLOWER_BOX = registerWithItem("flower_box", () -> new LegacyFlowerBoxBlock(BlockBehaviour.Properties.copy(Blocks.FLOWER_POT)));
     public static final RegistryObject<Block> FLOWER_POT = registerWithItem("flower_pot", () -> new LegacyFlowerPotBlock(BlockBehaviour.Properties.copy(Blocks.FLOWER_POT)));
     public static final RegistryObject<Block> BASKET = registerWithItem("basket", () -> new LegacyBasketBlock(BlockBehaviour.Properties.of(Material.DECORATION).instabreak().noOcclusion(), 1));
-    /** Already without a creative tab in 1.3.10: kept for old worlds and as Farmer's Delight heat sources. */
-    public static final RegistryObject<Block> WOOD_FIRED_OVEN = registerWithoutItem("wood_fired_oven", () -> new LegacyStoveBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
-    public static final RegistryObject<Item> WOOD_FIRED_OVEN_ITEM = registerItem("wood_fired_oven", () -> new BlockItem(WOOD_FIRED_OVEN.get(), new Item.Properties()));
-    public static final RegistryObject<Block> STOVE = registerWithoutItem("stove", () -> new LegacyStoveBlock(BlockBehaviour.Properties.copy(Blocks.STONE).lightLevel(state -> 12)));
-    public static final RegistryObject<Item> STOVE_ITEM = registerItem("stove", () -> new BlockItem(STOVE.get(), new Item.Properties()));
-    public static final RegistryObject<Block> KITCHEN_SINK = registerWithoutItem("kitchen_sink", () -> new LegacyKitchenSinkBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion()));
-    public static final RegistryObject<Item> KITCHEN_SINK_ITEM = registerItem("kitchen_sink", () -> new BlockItem(KITCHEN_SINK.get(), new Item.Properties()));
-    public static final RegistryObject<Block> BARREL = registerWithoutItem("barrel", () -> new BarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL)));
-    public static final RegistryObject<Item> BARREL_ITEM = registerItem("barrel", () -> new BlockItem(BARREL.get(), new Item.Properties()));
 
     private static Block wallStandard() {
         return VINERY_WALL_STANDARD.get();
@@ -330,10 +304,6 @@ public class ObjectRegistry {
 
     private static BlockBehaviour.Properties loam() {
         return BlockBehaviour.Properties.of(Material.DIRT).strength(2.0F, 3.0F).sound(SoundType.MUD);
-    }
-
-    private static Block crate() {
-        return new Block(wood(2.0F, 3.0F));
     }
 
     private static Block bag() {
@@ -352,20 +322,15 @@ public class ObjectRegistry {
         return new BigBottleStorageBlock(wood(2.0F, 3.0F).noOcclusion());
     }
 
-    private static Block lattice() {
-        return new LatticeBlock(wood(2.0F, 3.0F).noOcclusion());
-    }
-
     private static Item juice() {
         return new GrapejuiceBottleItem(getSettings().craftRemainder(ObjectRegistry.WINE_BOTTLE.get()));
     }
 
-    private static RegistryObject<Item> registerWineItem(String name, Supplier<Block> wineBlock, boolean scaleDurationWithAge, DrinkBlockItem.BottleSize size) {
+    private static RegistryObject<Item> registerWineItem(String name, Supplier<Block> wineBlock, boolean scaleDurationWithAge) {
         return registerItem(name, () -> new DrinkBlockItem(
                 wineBlock.get(),
                 getSettings().food(new FoodProperties.Builder().alwaysEat().build()),
-                scaleDurationWithAge,
-                size
+                scaleDurationWithAge
         ));
     }
 
