@@ -196,4 +196,5 @@ None.
 - 2026-10-18: muffins on `#forge:dough` ([oven.md](oven.md)).
 - 2026-10-18: this writeup; findings F1 to F7; tests RC-01 to RC-14. No code changed.
 - 2026-10-19: cornmeal item and recipes, pie crust from flour and milk, pancakes take cornmeal (2.1); RC-15 to RC-18.
-- 2026-10-19: cornmeal, pie crust and pancakes STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) OV).
+- 2026-10-19: cornmeal, pie crust and pancakes STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) OV); DEPLOYED
+  with 1.0.8 (2026-10-19 10:20).
