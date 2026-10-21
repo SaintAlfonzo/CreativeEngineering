@@ -13,7 +13,7 @@ Written 2026-10-05. Test prefix `NE-`.
 | Emu nest (`EmuNests`, Alex's Mobs emus) | DEPLOYED in patcherMod 1.0.2 (old id `creativeengineering:emu_nest`), never tested in game |
 | Duck and goose nests (`WaterfowlNests`, Untitled Duck Mod) | moved to Incubation Additions (`incubation_additions:duck_nest` / `goose_nest`); DEPLOYED with pack 1.0.6 (2026-10-14) (the 2026-10-05 staging that had them under the old patcherMod ids was rebuilt before it went out, so the old duck/goose ids never reached a player); scratch-server verified 2026-10-05 |
 | Foreign-nest NPE guard (`LayEggInNestGoalMixin`) | DEPLOYED with the emu nest (1.0.2) |
-| Textures | emu, duck and goose eggs have their own sheets; duck/goose nest base + item textures are swappable copies of the hay nest; the emu nest base + item still use Incubation's twig nest. All in the Incubation Additions jar; override from `kubejs/assets/incubation_additions/`. See 2.3 |
+| Textures | emu, duck and goose eggs have their own sheets (but the duck and goose sheets are byte-identical copies of Incubation's `duck_eggs.png` / `turkey_eggs.png` and the emu sheet is a recolour of `turkey_eggs.png`, checked 2026-10-21: see 4); duck/goose nest base + item textures are swappable copies of the hay nest; the emu nest base + item still use Incubation's twig nest. All in the Incubation Additions jar; override from `kubejs/assets/incubation_additions/`. See 2.3 |
 
 **Files to open first:** [EmuNests.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/nest/EmuNests.java),
 [WaterfowlNests.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/nest/WaterfowlNests.java),
@@ -111,7 +111,7 @@ All texture paths below are inside a resource pack root, so `incubation:block/ha
 |---|---|---|
 | Nest base (empty and filled) | [textures/block/duck_nest.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/duck_nest.png) (copy of Incubation's hay nest) | [models/block/duck_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/duck_nest.json) (twig-nest geometry), used by blockstates [duck_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/blockstates/duck_nest.json) and [duck_egg_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/blockstates/duck_egg_nest.json) |
 | Nest item sprite | [textures/item/duck_nest.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/item/duck_nest.png) (copy of Incubation's hay nest item) | [models/item/duck_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/item/duck_nest.json) |
-| Eggs | [textures/block/duck_eggs.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/duck_eggs.png) (yours, 2026-10-05) | [models/block/one_duck_egg.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/one_duck_egg.json) to `six_duck_eggs.json`, each parented on `incubation:block/*_duck_egg(s)` |
+| Eggs | [textures/block/duck_eggs.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/duck_eggs.png) (byte-identical to Incubation's `duck_eggs.png`, md5 checked 2026-10-21) | [models/block/one_duck_egg.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/one_duck_egg.json) to `six_duck_eggs.json`, each parented on `incubation:block/*_duck_egg(s)` |
 
 **Goose nest** (files in the Incubation Additions jar, `assets/incubation_additions/`)
 
@@ -119,7 +119,7 @@ All texture paths below are inside a resource pack root, so `incubation:block/ha
 |---|---|---|
 | Nest base (empty and filled) | [textures/block/goose_nest.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/goose_nest.png) (copy of Incubation's hay nest) | [models/block/goose_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/goose_nest.json) (twig-nest geometry), used by blockstates [goose_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/blockstates/goose_nest.json) and [goose_egg_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/blockstates/goose_egg_nest.json) |
 | Nest item sprite | [textures/item/goose_nest.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/item/goose_nest.png) (copy of Incubation's hay nest item) | [models/item/goose_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/item/goose_nest.json) |
-| Eggs | [textures/block/goose_eggs.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/goose_eggs.png) (yours, 2026-10-05) | [models/block/one_goose_egg.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/one_goose_egg.json) to `six_goose_eggs.json`, each parented on `incubation:block/*_turkey_egg(s)` |
+| Eggs | [textures/block/goose_eggs.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/goose_eggs.png) (byte-identical to Incubation's `turkey_eggs.png`, md5 checked 2026-10-21) | [models/block/one_goose_egg.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/one_goose_egg.json) to `six_goose_eggs.json`, each parented on `incubation:block/*_turkey_egg(s)` |
 
 **Egg crates and the duck mod's egg items** (Untitled Duck Mod pack)
 
@@ -144,7 +144,8 @@ regions (u, v from the top left, in pixels):
 | Incubation duck models (duck) | 0,0 to 4,7 | 4,0 to 8,4 | 0,7 to 3,12 | 3,7 to 6,10 |
 
 The easiest start is to copy `chicken_eggs.png` / `turkey_eggs.png` / `duck_eggs.png` out of the
-Incubation jar and recolour it, the way `emu_eggs.png` was made.
+Incubation jar and recolour it, the way `emu_eggs.png` was made. A recolour is still a modified copy under the
+Abnormals License: fine for a private test in `kubejs/assets/`, not for the jar (section 4).
 
 **How to hotswap.** KubeJS's `kubejs/assets/` is loaded as a resource pack above every mod jar, so a
 PNG at the same path there replaces the jar's copy and reloads with F3+T. No model edits needed:
@@ -207,8 +208,11 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
   `mods.toml` links `team-abnormals/incubation/.../LICENSE.txt`; the text is quoted in
   [mooblooms.md](mooblooms.md) 4.0). That license forbids publishing or distributing copies or modified copies of
   the software "and/or its associated files". Our GPLv3 jar currently ships the duck and goose nest textures as
-  **copies of Incubation's hay nest** (block and item, 4 PNGs), and the nest models use twig-nest geometry. If the
-  geometry was copied from Incubation's model JSON, that counts too. Fix before publishing the jar anywhere:
+  **copies of Incubation's hay nest** (block and item, 4 PNGs). The nest models only parent
+  `incubation:block/twig_nest` (a reference, not a copy; checked 2026-10-21). Also copied (checked 2026-10-21): the
+  duck and goose egg sheets (identical to Incubation's `duck_eggs.png` / `turkey_eggs.png`), the emu egg sheet (a
+  recolour of `turkey_eggs.png`) and the 4 egg crate top/side PNGs (112 of 256 pixels identical to the chicken egg
+  crate's). Plan: [briefs/mobs_nests.md](briefs/mobs_nests.md) #2. Fix before publishing the jar anywhere:
   - repaint the 4 PNGs (already planned: "placeholder nest looks"), and
   - either write the models from scratch or point them at Incubation's own model/texture by resource location
     (a reference is not a copy).
