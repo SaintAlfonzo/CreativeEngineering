@@ -1829,6 +1829,9 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
   sea, see Done); settlements over water could get a boost.
 - **Fresh watchtower:** `fit_keep` is set; rerun `--fit-rates` to raise it back from 1 per 75 to its old 1 per 67
   (the run re-solves every fitted structure, so check the diff).
+- **Pyramids** (scratchpad 2026-10-21): double their minimum separation. TODO `worldgen/structures/rates-and-groups #10`.
+- **Lone waystones** (scratchpad 2026-10-21): too many, deserts worst; lower the rate, or drop the lone ones and add
+  waystones to existing structures. TODO `worldgen/structures/rates-and-groups #11`.
 
 - strip all structure weights unless an explicit 'increase or decrease' note or change was made. relative frequencies aren't static now
 

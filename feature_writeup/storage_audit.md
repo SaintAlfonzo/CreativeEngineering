@@ -156,3 +156,6 @@ Food 9-blocks only (egg crates, sleeping bags, dyed sacks, IE crates and planter
 1. Bottles: built, slim models included (10.14). Test with VB-59, VB-67, VB-71 to VB-75, VB-81 to VB-83.
 2. Crates: decide the apple survivor (FrD crate or Vinery bag); NCH pack / unpack for every survivor (the Vinery bags
    first, C2), hide the losers, check C3 in the jars.
+3. Mushroom crates (scratchpad 2026-10-21): a crate for mushrooms, merged by the same survivor rule (TODO `blocks/new #7`).
+4. Sacks as bundles (scratchpad 2026-10-21): sacks behave like bundles in the inventory (scroll to cycle items, take
+   out a stack, place 1), and the GUI stays open during world interaction (TODO `gameplay/storage-and-item-loss #7`).
