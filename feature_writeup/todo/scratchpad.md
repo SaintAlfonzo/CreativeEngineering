@@ -33,6 +33,18 @@
 		- sequenced gearshift uses zinc and brass components, double output
 		- laser cut metal blocks to 
 - merge apple ciders
+- change tortilla recipe to bucket or bottle
+- smoothie
+  - only 1 exists, many milkshakes exist. probably remove and fold type into sweet parity expansion
+- ice or ice blocks for all ice foods
+  - add both to fridge ice module
+- change matcha and salmonberry ice creams to not be gross
+  - add saturation?
+  - ice cream parity
+- banana bread
+  - remove wheat recipe
+  - add to baking
+- do baking audit
 - nock enough arrows golem?
   - usage?
 - hide ae2 covers from jei (add tip to cables about cover)
