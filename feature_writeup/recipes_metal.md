@@ -19,7 +19,7 @@ metal half of [tags/metaltags.js](../kubejs/server_scripts/tags/metaltags.js). W
 - **Pending:** nothing built and unshipped. RM-01 to RM-14 have never been run. Findings F1 to F7 (section 4); F1 and F4
   need your call.
 - **Files to open:** [metal_base_materials.js](../kubejs/server_scripts/metal/metal_base_materials.js) (the header
-  comment lines 3-41 is an earlier audit of the gaps, still accurate), [metal_building.js](../kubejs/server_scripts/metal/metal_building.js),
+  comment lines 3-29 is an earlier audit of the gaps; partly stale, see F1 and F4), [metal_building.js](../kubejs/server_scripts/metal/metal_building.js),
   [misc_metal_crafts.js](../kubejs/server_scripts/metal/misc_metal_crafts.js).
 - **Knobs:** none. Server scripts (`/reload`).
 
@@ -59,7 +59,7 @@ and IE's original ore crushing, IE's hand-hammer ore crushing and the IE raw-ore
 | Nugget | IE (copper: IE's, replacing Create's and Everything Copper's in every recipe) | vanilla / IE 9 ↔ 1 |
 | Plate | IE plate (Create's copper, iron and gold sheets replaced everywhere) | see F1: Create pressing for copper, iron, gold, zinc; IE press for all (8 by IE's own recipe, gold by the pack's); hammer for all (7 by IE's own, gold and zinc by the pack's) |
 | Plate block | Create Compressed sheet blocks | 9 plates ↔ 1 block (copper one-way, F2) |
-| Rod | IE rods (and the pack's) | Create rolling (Create Crafts & Additions) ×4 and IE press ×4 for all 9; crafting: zinc 2 ingots → 4, iron and aluminium by IE's own (F4) |
+| Rod | IE rods (and the pack's) | Create rolling (Create Crafts & Additions) ×4 and IE press ×4 for all 9; crafting (2 ingots → 4): zinc by the pack, iron and aluminium by IE's own, the other six by Immersive Posts (F4) |
 | Wire | IE wires | wire cutter + plate → 2; rolling ×4; IE press ×4; 8 metals (no uranium wire) |
 | Dust block | the pack's dust piles (`creativeengineering:<metal>_dust_pile`) | 9 dust ↔ 1 for the 9 metals, the 6 alloys and diamond; crushed ore blocks are Create Compressed's piles |
 | Spool | the pack's (`creativeengineering:spool`) | 2 iron plates + iron nugget → 8; assembly ×12; blueprint ×16. Create Crafts & Additions' copper spool is replaced by the copper wire coil in that mod's recipes |
@@ -87,8 +87,8 @@ removed.
 
 - **Red electrum** (Project Red's red alloy ingot, `projectred_core:red_ingot`): electrum + 8 redstone shapeless, 4 heated mixing, 3 arc
   furnace. Project Red's red iron compound removed.
-- **Rust:** Dustrial Decor's rusty iron and rusty sheet metal recipes all removed; Create washing turns every rusty block
-  back into the clean one (11 pairs).
+- **Rust:** Dustrial Decor's rusty iron and rusty sheet metal recipes all removed; Create washing turns each clean block
+  into its rusty one (11 pairs; `createSplashing(output, input)` with the rusty block as the output).
 - **Billets:** Dustrial Decor's industrial and cast iron billets removed; its recipes take the industrial iron block and
   a cast iron ingot instead.
 - **Gilded blackstone:** deploy a gold block on blackstone; IE crusher → 18 gold nuggets.
@@ -107,7 +107,10 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
 
 - **F1. Plates are made three different ways per metal. Your call.** Create pressing: copper, iron, gold, zinc only;
   aluminium, lead, silver, nickel and uranium have no Create plate recipe (Create Crafts & Additions' and Vintage
-  Improvements' rolling are removed, nothing replaces them). IE press: gold by the pack, the other 8 by IE's own recipes.
+  Improvements' rolling are removed, nothing replaces them). Rechecked 2026-10-21: Vintage Improvements' own
+  `vintageimprovements:pressing/<metal>_ingot` (type `create:pressing`) for aluminium, lead, silver, nickel, uranium,
+  zinc, constantan and cast iron are not removed, so a Create press turns those ingots into VI sheets, which are removed
+  items ([brief](briefs/recipes_metal.md)). IE press: gold by the pack, the other 8 by IE's own recipes.
   Hammer: gold and zinc by the pack, 7 by IE's own. The header audit in the file asks the same question: keep the IE
   press for the 8 and add Create pressing for the missing 5, or move every metal onto the pack's recipes.
 - **F2.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Copper plate block is one-way:** block → 9 plates exists, 9 plates → block doesn't (Create Compressed's recipe
@@ -115,11 +118,16 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
 - **F3.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Zinc can still be hammer-crushed:** IE's `hammercrushing_zinc` and `raw_hammercrushing_zinc` aren't removed
   (every other metal's are).
 - **F4. Rods by hand only for zinc, iron and aluminium. Your call.** Zinc 2 ingots → 4 by the pack; iron and aluminium by
-  IE's own (2 ingots → 1 rod, per the header audit); copper, gold, lead, silver, nickel, uranium have no crafting-table rod. Rolling
-  and the IE press cover all 9.
+  IE's own (2 ingots → 4 rods, IE 9.2.4 jar; the header audit's "2 ingot → 1 rod" is wrong); copper, gold, lead, silver, nickel, uranium have no crafting-table rod. Rolling
+  and the IE press cover all 9. Rechecked 2026-10-21: wrong, Immersive Posts 4.3.0 ships `immersiveposts:has_<metal>_rod`
+  (2 ingots → 4) for copper, gold, lead, silver, nickel, uranium, constantan and electrum, none removed (gold's input is
+  swapped to the vanilla ingot, `metal_base_materials.js` line 121), so all 9 already have a hand rod
+  ([brief](briefs/recipes_metal.md)).
 - **F5. Rose gold counts as gold in tags** (`forge:rods/gold`, `nuggets/gold`, `storage_blocks/gold`). Any recipe asking
   for `#forge:rods/gold` (powered rails, for instance) takes rose gold. Probably intended for rods; the block tag means
-  any recipe on `#forge:storage_blocks/gold` (IE's storage crusher recipe, beacon bases) also takes it. Check with RM-11.
+  any recipe on `#forge:storage_blocks/gold` (IE's storage crusher recipe) also takes it; beacon bases go by the block
+  tag `minecraft:beacon_base_blocks`, which this doesn't touch. Minecraft Comes Alive itself puts the rose gold ingot
+  in `forge:ingots/gold` and the dust in `forge:dusts/gold` (MCA 7.5.20 jar). Check with RM-11.
 - **F6. Dust → ingot recycling is the pack's for zinc only;** the other 8 use IE's own arc and smelting recipes. Works,
   but uneven.
 - **F7.** PARTLY FIXED 2026-10-19: the two `EVENT:` lines are gone; the rest stays ([plan_1.0.9.md](plan_1.0.9.md)). **Leftovers:** `console.log('EVENT:', e)` in both base files (prints the event object every reload);
@@ -165,7 +173,7 @@ None.
 - [ ] **RM-10 Wires:** wire cutter + copper plate → 2 copper wire, cutter damaged not used up.
 - [ ] **RM-11 Rose gold (F5):** powered rail with rose gold rods → note whether it crafts.
 - [ ] **RM-12 Bars:** laser cut an iron block → 64 iron bars; 6 iron rods → 9.
-- [ ] **RM-13 Rust:** wash a rusty iron block with a fan through water → iron block.
+- [ ] **RM-13 Rust:** wash an iron block with a fan through water → rusty iron block.
 - [ ] **RM-14 Red electrum:** heated mixer, electrum + 4 redstone → red electrum ingot.
 
 ## 8. History

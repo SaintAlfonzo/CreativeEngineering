@@ -62,7 +62,7 @@ ingredient); and `recipe_scan.js` lists any recipe still mentioning it.
 
 ### 2.1 Removed items (`_lib/removed_items.js`, priority -10000)
 
-309 ids, grouped by origin: Gates logic and wireless parts; every duplicate sheet, rod, wire and spring from Create
+309 ids in 1.0.9 (312 in the working tree: the three Creative Labels donors added 2026-10-20, unshipped), grouped by origin: Gates logic and wireless parts; every duplicate sheet, rod, wire and spring from Create
 Crafts & Additions, Create Deco and Vintage Improvements for metals the pack standardises on IE parts; parts for metals
 the pack doesn't use (tin, osmium, signalum, slimesteel, shadow steel, vanadium, ...); Dave's Building Mod steel ingot;
 Nock Enough Arrows' quiver and torch arrow; Quark's dragon scale; IE's potion bucket (no source left,
@@ -100,7 +100,12 @@ Nothing beyond the files above; every removal and replacement is in the folder s
 
 ### Findings (2026-10-18)
 
-- **F1. Five vanilla or mod items have no recipe after the pack's removals. Your call, one by one.** Blast furnace
+- **F1. Five vanilla or mod items have no recipe after the pack's removals. Your call, one by one.** Rechecked
+  2026-10-21 against the jars: only the dispenser and Explorer's Compass are left. The blast furnace and smoker are
+  still made by Quark's variant-furnace recipes (`quark:building/crafting/furnaces/{deepslate,blackstone}_blast_furnace`
+  and `..._smoker`, flag `variant_furnaces` on in `quark-common.toml`), and the cake by `farmersdelight:cake_from_milk_bottle`,
+  `create:crafting/curiosities/cake` and the oven's `creativeengineering:baking/cake`
+  ([brief](briefs/recipes_progression.md)). As first written: blast furnace
   ([recipes_engineering.md](recipes_engineering.md) F1; Little Logistics' locomotive and tug need it), dispenser (same,
   F2), smoker ([recipes_cooking.md](recipes_cooking.md) F1), Explorer's Compass ([recipes_magic.md](recipes_magic.md)
   F1), and possibly the cake (recipes_cooking F2). None is in `removed_items.js` ([TODO](todo/TODO.md) `recipes/progression #1`, `tooling/conventions #4`), so they show in

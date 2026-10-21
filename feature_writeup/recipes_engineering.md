@@ -9,13 +9,13 @@ except the parts that already have a writeup: components, coils and the sample s
 
 | Part | Status |
 |---|---|
-| Machine gating: deployer on gold, press / saw / drill on IE parts, alloy kiln nether-locked, IE blast furnace on cast iron, Engineer's Workbench on steel | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); vanilla blast furnace has no recipe (F1) |
+| Machine gating: deployer on gold, press / saw / drill on IE parts, alloy kiln nether-locked, IE blast furnace on cast iron, Engineer's Workbench on steel | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); vanilla blast furnace recipe removed, Quark's deepslate / blackstone furnace recipes still make it (F1) |
 | PneumaticCraft compressed iron folded into IE steel (steel ingot in `#forge:ingots/compressed_iron`, PNC's block is the steel block) | DEPLOYED |
 | Mechanisms: precision on brass, vibration from an echo shard, redstone mechanism by assembly | DEPLOYED |
 | Redstone: vanilla, Create, Gates and Project Red parts rebuilt with assembly and blueprint routes; transmitter and redstone links | DEPLOYED |
 | Rails and Little Logistics: iron-rod rails, plates, Create tanks, redstone links instead of LL wireless | DEPLOYED |
 | Resource stones: Create ore stones by compacting, 3-heat stone generators, crushing tables for 20 stones | DEPLOYED |
-| Dusts: cinder flour + potion → 9 resources, amethyst / diamond dust, sulfur, TNT, obsidian | DEPLOYED; two crushing clashes (F3) |
+| Dusts: cinder flour + potion → 10 resources, amethyst / diamond dust, sulfur, TNT, obsidian | DEPLOYED; two crushing clashes (F3) |
 | Smaller files: crystals, power (Create Crafts & Additions), music, bandage, plant oil, leather from flesh, wool → hemp, seashells, bottles, CC speaker | DEPLOYED |
 
 - **Pending:** nothing built and unshipped. RE-01 to RE-20 have never been run. Findings F1 to F10 (section 4); F1, F2
@@ -57,7 +57,7 @@ Workbench blueprint (usually the best yield).
 | IE blast brick (×3) | 4 nether bricks, 4 cast iron, molten nether bricks | IE blast furnace, steel |
 | Engineer's Workbench | steel instead of iron | every blueprint |
 | Steel (PneumaticCraft) | pressure chamber: iron ingot → steel ingot, iron block → steel block at 6 bar | a second steel route |
-| Vanilla blast furnace | removed, no replacement (F1) | |
+| Vanilla blast furnace | vanilla recipe removed; Quark's deepslate / blackstone furnace recipes still make it (F1) | |
 
 Compressed iron is gone as its own material: the PNC recipes making it are removed, IE steel is tagged
 `#forge:ingots/compressed_iron` (`metaltags.js`) and the dict's `i.block_steel` is PNC's compressed iron block, so 9
@@ -171,7 +171,10 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   comment "require deepslate or blackstone recipe", but no replacement exists in the scripts or `kubejs/data`. Little
   Logistics' locomotive and tug now need one (`transport.js`). Nether's Delight's blackstone blast furnace is a different
   block. Add a recipe (deepslate or blackstone around a furnace and iron), or point the two LL recipes at another block.
-  Check with RE-03.
+  Check with RE-03. Rechecked 2026-10-21 (Quark 3.4-418 jar): Quark's `quark:building/crafting/furnaces/deepslate_blast_furnace`
+  and `blackstone_blast_furnace` (5 iron ingots, a Quark deepslate / blackstone furnace, 3 smooth stone; flag
+  `variant_furnaces` on) still make `minecraft:blast_furnace`, which is what the comment asks for; not yet seen in JEI
+  ([brief](briefs/recipes_engineering.md)).
 - **F2. The dispenser has no recipe. Your call.** `redstone.js` removes it ("must be crafted from dropper") and adds
   nothing. Unless a mod adds dropper → dispenser, dispensers are loot only. Check with RE-08.
 - **F3. Amethyst shards have two crushing recipes in each machine. Your call.** Crushing wheels: 75 % amethyst dust and
@@ -179,8 +182,8 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   other is dead (JEI shows both). The millstone only has glowstone. Pick one per machine, or move one to another input.
 - **F4. Coal blocks in the pressure chamber:** 9 blocks → diamond and 4 blocks → diamond shard at the same pressure.
   With 9 or more in the chamber which one runs depends on PNC's recipe order (not checked). Check with RE-12.
-- **F5. Cinder flour routes don't line up.** Redstone and glowstone have no single-flour Create filling (only the pile);
-  the other seven have both. Shapeless gives 1 per flour, the machines 1 per flour too, so the machines only save the
+- **F5. Cinder flour routes don't line up.** Redstone, glowstone and gunpowder have no single-flour Create filling (only
+  the pile; `dust.js` lines 23-39, rechecked 2026-10-21); the other seven have both. Shapeless gives 1 per flour, the machines 1 per flour too, so the machines only save the
   bottle.
 - **F6. Define-once:** `end.js` sets `i.ender_shard` and `dust.js` `i.matcha`, `redstone.js` `i.mundane_potion`; all
   three are already in `item_dict.js` with the same value. Delete the lines.
