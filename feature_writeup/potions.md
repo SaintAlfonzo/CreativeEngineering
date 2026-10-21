@@ -89,7 +89,7 @@ KubeJS's potion registry runs before any mod's mob effects exist, so potions for
 | Alex's Mobs | centipede leg + Poison II → Poison Resistance | AM brews it from a poison-bottle item, which no mixer can use; AM's own stand recipe still works too |
 | Alex's Mobs | Lava Vision base: Create mixer 1000 mB lava + bone serpent tooth, heated ([lava_vision.js](../kubejs/server_scripts/magic/lava_vision.js)); IE Mixer 1500 mB lava + tooth (`PotionRecipeGeneratorsMixin`) | AM brews it from a lava-bottle item |
 | Rustic Delight | golden coffee beans + awkward → Haste; redstone, glowstone steps | RD's own `IBrewingRecipe` class is invisible to both mixers |
-| Buzzier Bees / vanilla | four-leaf clover + awkward → Luck, redstone → long; silverfish bottle + awkward → Unluck, redstone → long | Luck had no brew. Reagent marked "TODO: better/magic ingredient" (`potions.js` line 86). Out of date: Buzzier Bees already brews Luck from the clover, so the first two rows are duplicates ([effects.md](effects.md) F6) |
+| Buzzier Bees / vanilla | four-leaf clover + awkward → Luck, redstone → long; silverfish bottle + awkward → Unluck, redstone → long | Luck had no brew. Reagent marked "TODO: better/magic ingredient" (`potions.js` line 86). Out of date: Buzzier Bees already brews Luck from the clover and lengthens Bad Luck, so rows 1, 2 and 4 are duplicates; only silverfish → Bad Luck is new ([effects.md](effects.md) F6) |
 
 ### 2.4 Machines
 
@@ -179,8 +179,10 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
 - **F5.** FIXED 2026-10-19 (javadoc names `potions.js` part 3). **Stale doc:** `DragonBreathBrewing`'s javadoc says the item dragon's breath mixes are stripped by
   `kubejs/startup_scripts/changes/dragon_breath.js`; there is no such file, it's `potions.js` part 3.
 - **F6. Raw `e.custom` in `potion_bottling.js`.** Bottling, filling and emptying are hand-written JSON, against the
-  NCH-helper rule in CLAUDE.md. `NCH.ieBottling` already exists (use it with an NBT fluid) and `NCH.createFilling`
-  covers the Spout; only a `createEmptying` helper is missing (also used by [potion_buckets.md](potion_buckets.md)).
+  NCH-helper rule in CLAUDE.md. `NCH.ieBottling` already exists (use it with an NBT fluid), `NCH.createFilling`
+  covers the Spout and `NCH.createEmptying` the Item Drain (`neoCraftHelper.js` line 1449, added in 1.0.8). One gap:
+  `ieBottling` writes its results through `_itemJson`, which drops item NBT, so it needs `_nbtItemJson` before the
+  potion results can move onto it (also used by [potion_buckets.md](potion_buckets.md); TODO `tooling/conventions #1`).
 - **F7. A bottling recipe for every potion, including ones no machine can fill.** The loop skips only
   `minecraft:empty`; `minecraft:water` gets `create:potion{Potion:water}` recipes, but Create stores water bottles
   as plain water, so those never run. Harmless, they only add JEI entries.
@@ -210,7 +212,7 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
 - [server_scripts/magic/lava_vision.js](../kubejs/server_scripts/magic/lava_vision.js): Create mixer lava vision base.
 - [client_scripts/fluid_jei.js](../kubejs/client_scripts/fluid_jei.js): fluids in JEI's list.
 - [server_scripts/tags/fluidtags.js](../kubejs/server_scripts/tags/fluidtags.js): `#forge:fluid/potion`, `#forge:fluid/dragon_breath`.
-- patcherMod [fluidbrewing/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/fluidbrewing/): `DragonBreathBrewing`, `Lingerification`, `PotionMixDedup`; run from common setup (`CreativeEngineering.java` lines 262-263).
+- patcherMod [fluidbrewing/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/fluidbrewing/): `DragonBreathBrewing`, `Lingerification`, `PotionMixDedup`; run from common setup (`CreativeEngineering.java` lines 287-288).
 - patcherMod [potion/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/): `BetterBeaconsPotions`, `MagicResistancePotions` (registered line 85-86).
 - Mixins: [PotionRecipeGeneratorsMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionRecipeGeneratorsMixin.java), [PotionHelperMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionHelperMixin.java), [PotionMixingRecipesMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionMixingRecipesMixin.java), [MechanicalMixerBlockEntityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MechanicalMixerBlockEntityMixin.java), [FluidTagInputMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/FluidTagInputMixin.java), [PotionFluidHandlerMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionFluidHandlerMixin.java), [SpoutCategoryMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SpoutCategoryMixin.java), [ItemDrainCategoryMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemDrainCategoryMixin.java), [JEIHelperMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/JEIHelperMixin.java), and the IE category tooltip mixins (Mixer, BottlingMachine, Refinery, Squeezer, Fermenter `...RecipeCategoryMixin`).
 - JEI: [compat/DragonBreathingJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java) (registers both pages), [AutomatedPotionMixingCategory](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/AutomatedPotionMixingCategory.java), [LingerificationCategory](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/LingerificationCategory.java), [PotionFluidTooltip](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/PotionFluidTooltip.java); lang keys in patcherMod `assets/creativeengineering/lang/en_us.json`.

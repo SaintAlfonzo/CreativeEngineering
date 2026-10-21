@@ -506,10 +506,11 @@ it?
   gives the whole of Phantom Bane for free from tea and coffee, which undercuts the Phantom Bane potion and the echo
   armor set bonus.
 - **F6. Luck is brewed twice.** Buzzier Bees 5.0.1 already registers awkward + four-leaf clover → Luck, Luck + redstone
-  → long, + glowstone → strong, + fermented spider eye → Bad Luck (`BBMobEffects.registerRecipes`). The pack's
-  `LUCK_POTION_MIXES` rows 1 and 2 in `potions.js` add the same two again, which probably shows twice in JEI's brewing
-  and Automatic Brewing pages (EF-05). potions.md 2.3 says "Luck had no brew"; that's out of date. Only the silverfish
-  bottle → Bad Luck row is new.
+  → long, + glowstone → strong, + fermented spider eye → Bad Luck, and Bad Luck + redstone → long, + glowstone → strong
+  (`BBMobEffects.registerRecipes`, all real `PotionBrewing.Mix` entries via Blueprint `DataUtil.addMix`; checked
+  against the 5.0.1 jar 2026-10-21). The pack's `LUCK_POTION_MIXES` rows 1, 2 and 4 in `potions.js` add three of
+  those again, which probably shows twice in JEI's brewing and Automatic Brewing pages (EF-05). potions.md 2.3 says
+  "Luck had no brew"; that's out of date. Only the silverfish bottle → Bad Luck row (row 3) is new.
 - **F7.** DECIDED 2026-10-20: keep it hidden (your call: "hide sunny"). The setting is in both `config/` and
   `configs_edited/root_config/`. It still shows on the HUD from buttercup stew and mooblooms; removing it from the game
   is the separate "purge sunny" item in section 7. **Sunny is hidden from JEI. Your call.** `config/jeed-client.toml` `hidden_effects = ["buzzier_bees:sunny"]`. If
