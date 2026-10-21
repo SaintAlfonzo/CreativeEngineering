@@ -35,4 +35,4 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 |---|---|
 | food | [canning](food_canning.md), [drugs](food_drugs.md), [meals](food_meals.md), [placeable](food_placeable.md), [stack-sizes](food_stack-sizes.md) |
 | farming | [composting](farming_composting.md), [trees](farming_trees.md) |
-| worldgen | [locate](worldgen_locate.md), [seasons](worldgen_seasons.md) |
+| worldgen | [bee-nests](worldgen_bee-nests.md), [biomes](worldgen_biomes.md), [flowers](worldgen_flowers.md), [locate](worldgen_locate.md), [seasons](worldgen_seasons.md), [structures/earthfill](worldgen_structures_earthfill.md), [structures/terrain](worldgen_structures_terrain.md), [structures/testing](worldgen_structures_testing.md) |
