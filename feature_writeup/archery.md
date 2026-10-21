@@ -117,7 +117,10 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
 - Enchantments: Stockpile, Recovery, Cycle.
   - patcherMod mixins make each one not discoverable, not appliable at the enchanting table and not allowed on books.
   - MoreJS filters drop them from the enchanting table's offers and from librarian book trades
-    ([enchants.js](../kubejs/server_scripts/magic/enchants.js)).
+    ([enchants.js](../kubejs/server_scripts/magic/enchants.js)). The trade filter only reaches vanilla's
+    `EnchantBookForEmeralds`; Dynamic Villager Trades builds librarian book offers itself from every enchantment
+    whose `isTradeable` is true, and the mixins don't override that, so DVT librarians can probably still sell the
+    three (DVT 1.2.3 `LibrarianGenerator`, read 2026-10-21; [brief](briefs/gear_enchanting.md) #1).
   - A book that still has one shows a red bold "REMOVED ITEM: DO NOT USE" line ([jeichanges.js](../kubejs/client_scripts/jeichanges.js)).
     The JEI hide for those books is commented out.
 
@@ -137,7 +140,7 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
 
 - **F1. The dragon scale armor-piercing recipe can't be made. Your call.** It uses blueprint category `projectiles`;
   no recipe in the pack makes a `{blueprint:"projectiles"}` and IE's own categories are `bullet` and `specialBullet`
-  (as far as I know; IE jar not in the repo). Fix: change the category to `bullet`, or add a `projectiles` blueprint
+  (checked 2026-10-21 in the IE 9.2.4-170 jar: IE's own armor-piercing recipe is in `bullet`). Fix: change the category to `bullet`, or add a `projectiles` blueprint
   to [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) and its duplication list.
 - **F2. Split arrow costs differ. Your call.** The grid recipe takes 6 arrows + 1 wire for 2 split arrows; the
   blueprint takes 4 arrows + 1 wire for the same 2. Pick one.
@@ -157,7 +160,8 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
   `Overwrite` imports are in [TODO](todo/TODO.md) `tooling/patchermod-cleanup #1`.
 - **F7. `bullets.js` is a stub:** an empty "Removals" section, "Hello!" log lines, one recipe (F1).
 - **F8. Supplementaries' own quiver recipe isn't removed.** If it's enabled in Supplementaries' config, JEI shows two
-  quiver recipes. Check in JEI (AR-15).
+  quiver recipes. Check in JEI (AR-15). Moot (checked 2026-10-21): `supplementaries-1.19.2-2.4.20.jar` has no crafting
+  recipe for the quiver (it is loot-only there); AR-15 only confirms that JEI shows one recipe.
 
 ### Known limits
 
@@ -179,9 +183,9 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
 - [server_scripts/tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js): `#forge:fletching`, `#forge:arrow_shaft/*`.
 - [server_scripts/magic/enchants.js](../kubejs/server_scripts/magic/enchants.js), [client_scripts/jeichanges.js](../kubejs/client_scripts/jeichanges.js): NEA enchantments.
 - [startup_scripts/items/misc_items.js](../kubejs/startup_scripts/items/misc_items.js) (`creativeengineering:arrow_fletching`), [startup_scripts/_lib/removed_items.js](../kubejs/startup_scripts/_lib/removed_items.js) (NEA quiver and torch arrow).
-- [client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) lines 582-608 and 672: one line per arrow.
-- patcherMod: [CycleEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CycleEnchantmentMixin.java), [StockpileEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StockpileEnchantmentMixin.java), [RecoveryEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/RecoveryEnchantmentMixin.java), [compat/NockRecipeBookSync.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/NockRecipeBookSync.java) (`CreativeEngineering.java` line 266).
-- `NCH.fletching` (~line 888) and `NCH.ieBlueprint` (~line 1607) in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
+- [client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) lines 592-618 and 673: one line per arrow.
+- patcherMod: [CycleEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CycleEnchantmentMixin.java), [StockpileEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StockpileEnchantmentMixin.java), [RecoveryEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/RecoveryEnchantmentMixin.java), [compat/NockRecipeBookSync.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/NockRecipeBookSync.java) (`CreativeEngineering.java` line 291).
+- `NCH.fletching` (~line 888) and `NCH.ieBlueprint` (~line 1787) in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
 - Not here: tipped arrows ([potion_buckets.md](potion_buckets.md) 2.5); the dragon bow and crossbow ([gear_tuning.md](gear_tuning.md), [armor_effects.md](armor_effects.md)).
 
 ## 6. Offline checks
