@@ -109,7 +109,7 @@ Findings of the first scan (2026-10-19, before the changes; shares then were fro
 | B9 | `terralith:mirage_isles` | 0.175 % | none | `enchanted/trees` (stripped warped stem in Terralith's enchanted oak; the placed feature is the pack's bee-nest override, the stem is Terralith's configured tree) | stem -> stripped birch / stripped azalea / keep | DONE 2026-10-19: stripped warped stem -> stripped acacia log |
 | B10 | `terralith:cave/thermal_caves` | 1.32 % (cave) | none | `cave/thermal/surface/floor` + `floor_low` (blackstone floor, noise count), `ceiling` + `ceiling_low` (magma ceiling, 512 per chunk each) | blackstone -> scorchia / deepslate; magma -> keep / scorchia; or drop the biome | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | B11 | `terralith:cave/mantle_caves` | 0 % (cave) | none | `cave/mantle/replacer` (blackstone, 250 per chunk, Y bottom to 30), `cave/fuck_art_just_need_performance/blackstone` (blackstone, 256), `cave/mantle/basalt_strip` (blackstone, 140), `cave/mantle/magma_strip` (blackstone + magma, 140) | blackstone -> scorchia / deepslate; magma -> keep | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
-| B12 | `terralith:cave/frostfire_caves` | 0 % (cave) | none | `cave/frostfire/frostfire_patch` (soul fire, 17 per chunk), `frostfire_ceiling` (soul lanterns, 12) | soul fire -> drop / fire; soul lantern -> lantern | |
+| B12 | `terralith:cave/frostfire_caves` | 0 % (cave) at the scan; 1.196 % since the 1.0.9 cave floor | none | `cave/frostfire/frostfire_patch` (soul fire, 17 per chunk), `frostfire_ceiling` (soul lanterns, 12) | soul fire -> drop / fire; soul lantern -> lantern | |
 
 ### 2.2 Features and carvers in many biomes (F)
 
@@ -244,7 +244,7 @@ disabled Nether ship: Overworld ships never take them (scan section 3, "Shared")
 
 ## 3. What the pack changes
 
-Nothing new yet. Already in place: the 19 structure swap rules of 2026-10-12 ([nether_swaps.md](nether_swaps.md),
+Already in place before the sheet: the 19 structure swap rules of 2026-10-12 ([nether_swaps.md](nether_swaps.md),
 [structure_tuning.md](structure_tuning.md) section 7 Done). Their basalt and magma targets show up in section 2 as
 "swapped in".
 
@@ -313,9 +313,11 @@ How each remaining kind of decision would be built:
   last fallback, after its deepslate/blackstone stripes and nylium tops.
 - **Template-placing features** are read through any config `location` (YUNG's Extras is the only user). Vanilla
   fossils are clean.
-- **0 % biomes** (volcanic crater, basalt cliffs, mantle and frostfire caves, caldera) are in Terralith's biome
-  source but never hit in the climate samples ([biome_tuning.md](biome_tuning.md) F1). Their rows matter only if
-  they are reachable.
+- **0 % biomes** (volcanic crater, basalt cliffs, mantle and frostfire caves, caldera) were in Terralith's biome
+  source but never hit in the scan's climate samples. Since the 1.0.9 rarity floor and cave samples
+  ([biome_tuning.md](biome_tuning.md) 2.1) `biome_config.json` gives them shares (volcanic crater 0.15 %, basalt
+  cliffs 0.295 %, caldera 0.24 %; mantle caves 0.725 % and frostfire caves 1.196 % of the cave layer), so B3, B7, B11
+  and B12 should now generate in new worlds (model shares; WG-13 checks the caves in game).
 - **Pool-walk over-reach** (an Overworld ship "reaching" the Nether ship's pieces) is split out as "Shared", the same
   safety rule the swap generator uses.
 
