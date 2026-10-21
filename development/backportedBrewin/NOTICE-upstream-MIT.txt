@@ -5,6 +5,10 @@ It is a port of Brewin' And Chewin' 4.5.0+1.21.1 by Umpaz, Probleyes and Merchan
 requires the notice below to be kept with all copies or substantial portions of its code and assets.
 The upstream jar's NeoForge milk textures (LGPL 2.1, Fabric module only) are not included in this port.
 
+One texture, assets/brewinandchewin/textures/block/fd_tray.png, is Farmer's Delight 1.21's block/tray texture
+(vectorwing, https://github.com/vectorwing/FarmersDelight, MIT License): 4.5.0's coaster tray model uses it and
+Farmer's Delight 1.2.4 for 1.19.2 doesn't have it.
+
 -------------------------------------------------------------------------------------------------------
 MIT License
 

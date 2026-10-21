@@ -8,250 +8,320 @@ Source: **/dumpplaceable (live)**
 
 | Tag | Tooltip line | Items |
 |---|---|---|
-| `#creativeengineering:placeable` | "Placeable" | 130 |
-| `#creativeengineering:placeable/sneak` | "(while sneaking)" | 73 |
+| `#creativeengineering:placeable` | "Placeable" | 132 |
+| `#creativeengineering:placeable/sneak` | "(while sneaking)" | 101 |
 | `#creativeengineering:placeable_on_plate` | "Placeable on plate" | 29 |
 | `#creativeengineering:placeable_on_small_plate` | "Placeable on small plate" | 11 |
+| `#creativeengineering:placeable_on_coaster` | "Placeable on a coaster" | 152 |
 
-164 items in total across 14 mods.
+233 items in total across 14 mods.
 
 ## Catalog by mod
 
-P = placeable, S = sneak to place, Pl = on Food Plate, SP = on Small Food Plate.
+P = placeable, S = sneak to place, Pl = on Food Plate, SP = on Small Food Plate, C = on a Brewin' coaster.
 
 ### alexsdelight (8)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Acacia Blossom Soup | `alexsdelight:acacia_blossom_soup` | P | S |  |  | DD: sneak + right click the top of a block |
-| Bison Burger | `alexsdelight:bison_burger` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Bunfungus Sandwich | `alexsdelight:bunfungus_sandwich` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Gongylidia Bruschetta | `alexsdelight:gongylidia_bruschetta` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Kangaroo Pasta | `alexsdelight:kangaroo_pasta` | P | S |  |  | DD: sneak + right click the top of a block |
-| Kangaroo Stew | `alexsdelight:kangaroo_stew` | P | S |  |  | DD: sneak + right click the top of a block |
-| Lobster Pasta | `alexsdelight:lobster_pasta` | P | S |  |  | DD: sneak + right click the top of a block |
-| Maggot Salad | `alexsdelight:maggot_salad` | P | S |  |  | DD: sneak + right click the top of a block |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Acacia Blossom Soup | `alexsdelight:acacia_blossom_soup` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Bison Burger | `alexsdelight:bison_burger` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Bunfungus Sandwich | `alexsdelight:bunfungus_sandwich` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Gongylidia Bruschetta | `alexsdelight:gongylidia_bruschetta` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Kangaroo Pasta | `alexsdelight:kangaroo_pasta` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Kangaroo Stew | `alexsdelight:kangaroo_stew` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Lobster Pasta | `alexsdelight:lobster_pasta` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Maggot Salad | `alexsdelight:maggot_salad` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
 
-### brewinandchewin (1)
+### brewinandchewin (23)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Pizza | `brewinandchewin:pizza` | P |  |  |  | own block (PizzaBlock): right click |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Beer | `brewinandchewin:beer` |  |  |  |  | C | coaster: right click a coaster |
+| Bloody Mary | `brewinandchewin:bloody_mary` |  |  |  |  | C | coaster: right click a coaster |
+| brewinandchewin:tankard | `brewinandchewin:tankard` |  |  |  |  | C | coaster: right click a coaster |
+| Creamy Onion Soup | `brewinandchewin:creamy_onion_soup` |  |  |  |  | C | coaster: right click a coaster |
+| Dread Nog | `brewinandchewin:dread_nog` |  |  |  |  | C | coaster: right click a coaster |
+| Egg Grog | `brewinandchewin:egg_grog` |  |  |  |  | C | coaster: right click a coaster |
+| Fiery Fondue | `brewinandchewin:fiery_fondue` |  |  |  |  | C | coaster: right click a coaster |
+| Flaxen Cheese Wedge | `brewinandchewin:flaxen_cheese_wedge` |  |  |  |  | C | coaster: right click a coaster |
+| Glittering Grenadine | `brewinandchewin:glittering_grenadine` |  |  |  |  | C | coaster: right click a coaster |
+| Kombucha | `brewinandchewin:kombucha` |  |  |  |  | C | coaster: right click a coaster |
+| Mead | `brewinandchewin:mead` |  |  |  |  | C | coaster: right click a coaster |
+| Pale Jane | `brewinandchewin:pale_jane` |  |  |  |  | C | coaster: right click a coaster |
+| Pizza | `brewinandchewin:pizza` | P |  |  |  |  | own block (PizzaBlock): right click |
+| Quiche | `brewinandchewin:quiche` | P |  |  |  |  | own block (PieBlock): right click |
+| Red Rum | `brewinandchewin:red_rum` |  |  |  |  | C | coaster: right click a coaster |
+| Rice Wine | `brewinandchewin:rice_wine` |  |  |  |  | C | coaster: right click a coaster |
+| Saccharine Rum | `brewinandchewin:saccharine_rum` |  |  |  |  | C | coaster: right click a coaster |
+| Salty Folly | `brewinandchewin:salty_folly` |  |  |  |  | C | coaster: right click a coaster |
+| Scarlet Cheese Wedge | `brewinandchewin:scarlet_cheese_wedge` |  |  |  |  | C | coaster: right click a coaster |
+| Steel-Toe Stout | `brewinandchewin:steel_toe_stout` |  |  |  |  | C | coaster: right click a coaster |
+| Strongroot Ale | `brewinandchewin:strongroot_ale` |  |  |  |  | C | coaster: right click a coaster |
+| Vodka | `brewinandchewin:vodka` |  |  |  |  | C | coaster: right click a coaster |
+| Withering Dross | `brewinandchewin:withering_dross` |  |  |  |  | C | coaster: right click a coaster |
 
 ### corn_delight (10)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Classic Corn Dog | `corn_delight:classic_corn_dog` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Corn Soup | `corn_delight:corn_soup` | P | S |  |  | DD: sneak + right click the top of a block |
-| Cornbread Stuffing | `corn_delight:cornbread_stuffing` | P | S |  |  | DD: sneak + right click the top of a block |
-| Creamed Corn | `corn_delight:creamed_corn` | P | S |  |  | DD: sneak + right click the top of a block |
-| Creamy Corn Drink | `corn_delight:creamy_corn_drink` | P | S |  |  | DD: sneak + right click the top of a block |
-| Grilled Corn | `corn_delight:grilled_corn` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Nachos | `corn_delight:nachos_block` | P |  |  |  | own block (NachosBlock): right click |
-| Nachos | `corn_delight:nachos_bowl` | P | S |  |  | DD: sneak + right click the top of a block |
-| Popcorn Bucket | `corn_delight:popcorn_box` | P |  |  |  | own block (PopcornBoxBlock): right click |
-| Taco | `corn_delight:taco` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Classic Corn Dog | `corn_delight:classic_corn_dog` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Corn Soup | `corn_delight:corn_soup` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Cornbread Stuffing | `corn_delight:cornbread_stuffing` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Creamed Corn | `corn_delight:creamed_corn` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Creamy Corn Drink | `corn_delight:creamy_corn_drink` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Grilled Corn | `corn_delight:grilled_corn` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Nachos | `corn_delight:nachos_block` | P |  |  |  |  | own block (NachosBlock): right click |
+| Nachos | `corn_delight:nachos_bowl` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Popcorn Bucket | `corn_delight:popcorn_box` | P |  |  |  |  | own block (PopcornBoxBlock): right click |
+| Taco | `corn_delight:taco` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
 
 ### createaddition (2)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Chocolate Cake | `createaddition:chocolate_cake` | P |  |  |  | own block (CACakeBlock): right click |
-| Honey Cake | `createaddition:honey_cake` | P |  |  |  | own block (CACakeBlock): right click |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Chocolate Cake | `createaddition:chocolate_cake` | P |  |  |  |  | own block (CACakeBlock): right click |
+| Honey Cake | `createaddition:honey_cake` | P |  |  |  |  | own block (CACakeBlock): right click |
 
 ### delightful (15)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Berry Matcha Latte | `delightful:berry_matcha_latte` | P | S |  |  | DD: sneak + right click the top of a block |
-| Cheeseburger | `delightful:cheeseburger` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Deluxe Cheeseburger | `delightful:deluxe_cheeseburger` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Ender Nectar | `delightful:ender_nectar` | P | S |  |  | DD: sneak + right click the top of a block |
-| Field Salad | `delightful:field_salad` | P | S |  |  | DD: sneak + right click the top of a block |
-| Matcha Ice Cream | `delightful:matcha_ice_cream` | P | S |  |  | DD: sneak + right click the top of a block |
-| Matcha Latte | `delightful:matcha_latte` | P | S |  |  | DD: sneak + right click the top of a block |
-| Nut Butter and Jam Sandwich | `delightful:nut_butter_and_jelly_sandwich` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Roasted Marshmallow on a Stick | `delightful:cooked_marshmallow_stick` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| S'more | `delightful:smore` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Salmonberry Ice Cream | `delightful:salmonberry_ice_cream` | P | S |  |  | DD: sneak + right click the top of a block |
-| Salmonberry Pie | `delightful:salmonberry_pie` | P |  |  |  | own block (PieBlock): right click |
-| Sinigang | `delightful:sinigang` | P | S |  |  | DD: sneak + right click the top of a block |
-| Slice of Pumpkin Pie | `delightful:pumpkin_pie_slice` |  |  |  | SP | DD: right click an empty Small Food Plate |
-| Slice of Salmonberry Pie | `delightful:salmonberry_pie_slice` |  |  |  | SP | DD: right click an empty Small Food Plate |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Berry Matcha Latte | `delightful:berry_matcha_latte` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Cheeseburger | `delightful:cheeseburger` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Deluxe Cheeseburger | `delightful:deluxe_cheeseburger` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Ender Nectar | `delightful:ender_nectar` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Field Salad | `delightful:field_salad` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Matcha Ice Cream | `delightful:matcha_ice_cream` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Matcha Latte | `delightful:matcha_latte` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Nut Butter and Jam Sandwich | `delightful:nut_butter_and_jelly_sandwich` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Roasted Marshmallow on a Stick | `delightful:cooked_marshmallow_stick` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| S'more | `delightful:smore` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Salmonberry Ice Cream | `delightful:salmonberry_ice_cream` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Salmonberry Pie | `delightful:salmonberry_pie` | P |  |  |  |  | own block (PieBlock): right click |
+| Sinigang | `delightful:sinigang` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Slice of Pumpkin Pie | `delightful:pumpkin_pie_slice` |  |  |  | SP | C | DD: right click an empty Small Food Plate; coaster: right click a coaster (Display Delight model) |
+| Slice of Salmonberry Pie | `delightful:salmonberry_pie_slice` |  |  |  | SP | C | DD: right click an empty Small Food Plate; coaster: right click a coaster (Display Delight model) |
 
 ### endersdelight (1)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Chorus Pie | `endersdelight:chorus_pie` | P |  |  |  | own block (PieBlock): right click |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Chorus Pie | `endersdelight:chorus_pie` | P |  |  |  |  | own block (PieBlock): right click |
 
-### farmersdelight (58)
+### farmersdelight (68)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Apple Cider | `farmersdelight:apple_cider` | P | S |  |  | DD: sneak + right click the top of a block |
-| Apple Pie | `farmersdelight:apple_pie` | P |  |  |  | own block (PieBlock): right click |
-| Bacon and Eggs | `farmersdelight:bacon_and_eggs` | P | S |  |  | DD: sneak + right click the top of a block |
-| Bacon Sandwich | `farmersdelight:bacon_sandwich` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Baked Cod Stew | `farmersdelight:baked_cod_stew` | P | S |  |  | DD: sneak + right click the top of a block |
-| Barbecue on a Stick | `farmersdelight:barbecue_stick` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Beef Stew | `farmersdelight:beef_stew` | P | S |  |  | DD: sneak + right click the top of a block |
-| Bone Broth | `farmersdelight:bone_broth` | P | S |  |  | DD: sneak + right click the top of a block |
-| Bowl of Stuffed Pumpkin | `farmersdelight:stuffed_pumpkin` | P | S |  |  | DD: sneak + right click the top of a block |
-| Cabbage Rolls | `farmersdelight:cabbage_rolls` |  |  | Pl | SP | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate |
-| Chicken Sandwich | `farmersdelight:chicken_sandwich` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Chicken Soup | `farmersdelight:chicken_soup` | P | S |  |  | DD: sneak + right click the top of a block |
-| Chocolate Pie | `farmersdelight:chocolate_pie` | P |  |  |  | own block (PieBlock): right click |
-| Cod Roll | `farmersdelight:cod_roll` |  |  | Pl | SP | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate |
-| Cooked Rice | `farmersdelight:cooked_rice` | P | S |  |  | DD: sneak + right click the top of a block |
-| Dumplings | `farmersdelight:dumplings` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Egg Sandwich | `farmersdelight:egg_sandwich` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Fish Stew | `farmersdelight:fish_stew` | P | S |  |  | DD: sneak + right click the top of a block |
-| Fried Rice | `farmersdelight:fried_rice` | P | S |  |  | DD: sneak + right click the top of a block |
-| Fruit Salad | `farmersdelight:fruit_salad` | P | S |  |  | DD: sneak + right click the top of a block |
-| Glow Berry Custard | `farmersdelight:glow_berry_custard` | P | S |  |  | DD: sneak + right click the top of a block |
-| Grilled Salmon | `farmersdelight:grilled_salmon` | P | S |  |  | DD: sneak + right click the top of a block |
-| Hamburger | `farmersdelight:hamburger` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Honey Cookie | `farmersdelight:honey_cookie` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Honey Glazed Ham | `farmersdelight:honey_glazed_ham_block` | P |  |  |  | own block (HoneyGlazedHamBlock): right click |
-| Hot Cocoa | `farmersdelight:hot_cocoa` | P | S |  |  | DD: sneak + right click the top of a block |
-| Kelp Roll | `farmersdelight:kelp_roll` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Kelp Roll Slice | `farmersdelight:kelp_roll_slice` |  |  | Pl | SP | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate |
-| Melon Juice | `farmersdelight:melon_juice` | P | S |  |  | DD: sneak + right click the top of a block |
-| Melon Popsicle | `farmersdelight:melon_popsicle` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Mixed Salad | `farmersdelight:mixed_salad` | P | S |  |  | DD: sneak + right click the top of a block |
-| Mushroom Rice | `farmersdelight:mushroom_rice` | P | S |  |  | DD: sneak + right click the top of a block |
-| Mutton Wrap | `farmersdelight:mutton_wrap` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Noodle Soup | `farmersdelight:noodle_soup` | P | S |  |  | DD: sneak + right click the top of a block |
-| Pasta with Meatballs | `farmersdelight:pasta_with_meatballs` | P | S |  |  | DD: sneak + right click the top of a block |
-| Pasta with Mutton Chop | `farmersdelight:pasta_with_mutton_chop` | P | S |  |  | DD: sneak + right click the top of a block |
-| Plate of Honey Glazed Ham | `farmersdelight:honey_glazed_ham` | P | S |  |  | DD: sneak + right click the top of a block |
-| Plate of Roast Chicken | `farmersdelight:roast_chicken` | P | S |  |  | DD: sneak + right click the top of a block |
-| Plate of Shepherd's Pie | `farmersdelight:shepherds_pie` | P | S |  |  | DD: sneak + right click the top of a block |
-| Pumpkin Soup | `farmersdelight:pumpkin_soup` | P | S |  |  | DD: sneak + right click the top of a block |
-| Ratatouille | `farmersdelight:ratatouille` | P | S |  |  | DD: sneak + right click the top of a block |
-| Rice Roll Medley | `farmersdelight:rice_roll_medley_block` | P |  |  |  | own block (RiceRollMedleyBlock): right click |
-| Roast Chicken | `farmersdelight:roast_chicken_block` | P |  |  |  | own block (RoastChickenBlock): right click |
-| Roasted Mutton Chops | `farmersdelight:roasted_mutton_chops` | P | S |  |  | DD: sneak + right click the top of a block |
-| Salmon Roll | `farmersdelight:salmon_roll` |  |  | Pl | SP | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate |
-| Shepherd's Pie | `farmersdelight:shepherds_pie_block` | P |  |  |  | own block (ShepherdsPieBlock): right click |
-| Slice of Apple Pie | `farmersdelight:apple_pie_slice` |  |  |  | SP | DD: right click an empty Small Food Plate |
-| Slice of Cake | `farmersdelight:cake_slice` |  |  |  | SP | DD: right click an empty Small Food Plate |
-| Slice of Chocolate Pie | `farmersdelight:chocolate_pie_slice` |  |  |  | SP | DD: right click an empty Small Food Plate |
-| Slice of Sweet Berry Cheesecake | `farmersdelight:sweet_berry_cheesecake_slice` |  |  |  | SP | DD: right click an empty Small Food Plate |
-| Squid Ink Pasta | `farmersdelight:squid_ink_pasta` | P | S |  |  | DD: sneak + right click the top of a block |
-| Steak and Potatoes | `farmersdelight:steak_and_potatoes` | P | S |  |  | DD: sneak + right click the top of a block |
-| Stuffed Potato | `farmersdelight:stuffed_potato` |  |  | Pl | SP | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate |
-| Stuffed Pumpkin | `farmersdelight:stuffed_pumpkin_block` | P |  |  |  | own block (FeastBlock): right click |
-| Sweet Berry Cheesecake | `farmersdelight:sweet_berry_cheesecake` | P |  |  |  | own block (PieBlock): right click |
-| Sweet Berry Cookie | `farmersdelight:sweet_berry_cookie` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Vegetable Noodles | `farmersdelight:vegetable_noodles` | P | S |  |  | DD: sneak + right click the top of a block |
-| Vegetable Soup | `farmersdelight:vegetable_soup` | P | S |  |  | DD: sneak + right click the top of a block |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Apple Cider | `farmersdelight:apple_cider` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Apple Pie | `farmersdelight:apple_pie` | P |  |  |  |  | own block (PieBlock): right click |
+| Bacon and Eggs | `farmersdelight:bacon_and_eggs` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Bacon Sandwich | `farmersdelight:bacon_sandwich` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Baked Cod Stew | `farmersdelight:baked_cod_stew` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Barbecue on a Stick | `farmersdelight:barbecue_stick` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Beef Stew | `farmersdelight:beef_stew` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Bone Broth | `farmersdelight:bone_broth` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Bowl of Stuffed Pumpkin | `farmersdelight:stuffed_pumpkin` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Cabbage | `farmersdelight:cabbage` |  |  |  |  | C | coaster: right click a coaster |
+| Cabbage Rolls | `farmersdelight:cabbage_rolls` |  |  | Pl | SP | C | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate; coaster: right click a coaster (Display Delight model) |
+| Chicken Sandwich | `farmersdelight:chicken_sandwich` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Chicken Soup | `farmersdelight:chicken_soup` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Chocolate Pie | `farmersdelight:chocolate_pie` | P |  |  |  |  | own block (PieBlock): right click |
+| Cod Roll | `farmersdelight:cod_roll` |  |  | Pl | SP | C | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate; coaster: right click a coaster |
+| Cooked Rice | `farmersdelight:cooked_rice` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Dog Food | `farmersdelight:dog_food` |  |  |  |  | C | coaster: right click a coaster |
+| Dumplings | `farmersdelight:dumplings` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Egg Sandwich | `farmersdelight:egg_sandwich` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| farmersdelight:rotten_tomato | `farmersdelight:rotten_tomato` |  |  |  |  | C | coaster: right click a coaster |
+| Fish Stew | `farmersdelight:fish_stew` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Fried Egg | `farmersdelight:fried_egg` |  |  |  |  | C | coaster: right click a coaster |
+| Fried Rice | `farmersdelight:fried_rice` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Fruit Salad | `farmersdelight:fruit_salad` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Glow Berry Custard | `farmersdelight:glow_berry_custard` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Grilled Salmon | `farmersdelight:grilled_salmon` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Hamburger | `farmersdelight:hamburger` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Honey Cookie | `farmersdelight:honey_cookie` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster |
+| Honey Glazed Ham | `farmersdelight:honey_glazed_ham_block` | P |  |  |  |  | own block (HoneyGlazedHamBlock): right click |
+| Hot Cocoa | `farmersdelight:hot_cocoa` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Kelp Roll | `farmersdelight:kelp_roll` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster |
+| Kelp Roll Slice | `farmersdelight:kelp_roll_slice` |  |  | Pl | SP | C | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate; coaster: right click a coaster |
+| Melon Juice | `farmersdelight:melon_juice` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Melon Popsicle | `farmersdelight:melon_popsicle` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster |
+| Milk Bottle | `farmersdelight:milk_bottle` |  |  |  |  | C | coaster: right click a coaster |
+| Mixed Salad | `farmersdelight:mixed_salad` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Mushroom Rice | `farmersdelight:mushroom_rice` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Mutton Wrap | `farmersdelight:mutton_wrap` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster (Display Delight model) |
+| Nether Salad | `farmersdelight:nether_salad` |  |  |  |  | C | coaster: right click a coaster |
+| Noodle Soup | `farmersdelight:noodle_soup` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Onion | `farmersdelight:onion` |  |  |  |  | C | coaster: right click a coaster |
+| Pasta with Meatballs | `farmersdelight:pasta_with_meatballs` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Pasta with Mutton Chop | `farmersdelight:pasta_with_mutton_chop` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Plate of Honey Glazed Ham | `farmersdelight:honey_glazed_ham` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Plate of Roast Chicken | `farmersdelight:roast_chicken` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Plate of Shepherd's Pie | `farmersdelight:shepherds_pie` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Pumpkin Slice | `farmersdelight:pumpkin_slice` |  |  |  |  | C | coaster: right click a coaster |
+| Pumpkin Soup | `farmersdelight:pumpkin_soup` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Ratatouille | `farmersdelight:ratatouille` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Rice Roll Medley | `farmersdelight:rice_roll_medley_block` | P |  |  |  |  | own block (RiceRollMedleyBlock): right click |
+| Roast Chicken | `farmersdelight:roast_chicken_block` | P |  |  |  |  | own block (RoastChickenBlock): right click |
+| Roasted Mutton Chops | `farmersdelight:roasted_mutton_chops` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Salmon Roll | `farmersdelight:salmon_roll` |  |  | Pl | SP | C | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate; coaster: right click a coaster |
+| Shepherd's Pie | `farmersdelight:shepherds_pie_block` | P |  |  |  |  | own block (ShepherdsPieBlock): right click |
+| Slice of Apple Pie | `farmersdelight:apple_pie_slice` |  |  |  | SP | C | DD: right click an empty Small Food Plate; coaster: right click a coaster (Display Delight model) |
+| Slice of Cake | `farmersdelight:cake_slice` |  |  |  | SP | C | DD: right click an empty Small Food Plate; coaster: right click a coaster (Display Delight model) |
+| Slice of Chocolate Pie | `farmersdelight:chocolate_pie_slice` |  |  |  | SP | C | DD: right click an empty Small Food Plate; coaster: right click a coaster (Display Delight model) |
+| Slice of Sweet Berry Cheesecake | `farmersdelight:sweet_berry_cheesecake_slice` |  |  |  | SP | C | DD: right click an empty Small Food Plate; coaster: right click a coaster (Display Delight model) |
+| Squid Ink Pasta | `farmersdelight:squid_ink_pasta` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Steak and Potatoes | `farmersdelight:steak_and_potatoes` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Stuffed Potato | `farmersdelight:stuffed_potato` |  |  | Pl | SP | C | DD: right click an empty Food Plate (sneak to put the whole stack); DD: right click an empty Small Food Plate; coaster: right click a coaster (Display Delight model) |
+| Stuffed Pumpkin | `farmersdelight:stuffed_pumpkin_block` | P |  |  |  |  | own block (FeastBlock): right click |
+| Sweet Berry Cheesecake | `farmersdelight:sweet_berry_cheesecake` | P |  |  |  |  | own block (PieBlock): right click |
+| Sweet Berry Cookie | `farmersdelight:sweet_berry_cookie` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster |
+| Tomato | `farmersdelight:tomato` |  |  |  |  | C | coaster: right click a coaster |
+| Tomato Sauce | `farmersdelight:tomato_sauce` |  |  |  |  | C | coaster: right click a coaster |
+| Vegetable Noodles | `farmersdelight:vegetable_noodles` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster (Display Delight model) |
+| Vegetable Soup | `farmersdelight:vegetable_soup` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
 
 ### farmersrespite (2)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Coffee Cake | `farmersrespite:coffee_cake` | P |  |  |  | own block (CoffeeCakeBlock): right click |
-| Rose Hip Pie | `farmersrespite:rose_hip_pie` | P |  |  |  | own block (PieBlock): right click |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Coffee Cake | `farmersrespite:coffee_cake` | P |  |  |  |  | own block (CoffeeCakeBlock): right click |
+| Rose Hip Pie | `farmersrespite:rose_hip_pie` | P |  |  |  |  | own block (PieBlock): right click |
 
 ### fruitsdelight (25)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Apple Jam | `fruitsdelight:apple_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Bayberry Jam | `fruitsdelight:bayberry_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Blueberry Jam | `fruitsdelight:blueberry_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Chorus Jam | `fruitsdelight:chorus_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Cranberry Jam | `fruitsdelight:cranberry_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Durian Jam | `fruitsdelight:durian_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Fig Jam | `fruitsdelight:fig_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Fig Pudding | `fruitsdelight:fig_pudding` | P |  |  |  | own block (FigPuddingBlock): right click |
-| Glowberry Jam | `fruitsdelight:glowberry_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Hamimelon Jam | `fruitsdelight:hamimelon_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Hawberry Jam | `fruitsdelight:hawberry_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Kiwi Jam | `fruitsdelight:kiwi_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Lemon Jam | `fruitsdelight:lemon_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Lychee Jam | `fruitsdelight:lychee_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Mango Jam | `fruitsdelight:mango_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Mangosteen Cake | `fruitsdelight:mangosteen_cake` | P | S |  |  | own block (MangosteenCakeBlock): sneak + right click |
-| Mangosteen Jam | `fruitsdelight:mangosteen_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Melon Jam | `fruitsdelight:melon_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Orange Jam | `fruitsdelight:orange_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Peach Jam | `fruitsdelight:peach_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Pear Jam | `fruitsdelight:pear_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Persimmon Jam | `fruitsdelight:persimmon_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Pineapple Fried Rice | `fruitsdelight:pineapple_fried_rice` | P |  |  |  | own block (PineappleRiceBlock): right click |
-| Pineapple Jam | `fruitsdelight:pineapple_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
-| Sweetberry Jam | `fruitsdelight:sweetberry_jelly` | P | S |  |  | own block (JellyBottleBlock): sneak + right click |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Apple Jam | `fruitsdelight:apple_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Bayberry Jam | `fruitsdelight:bayberry_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Blueberry Jam | `fruitsdelight:blueberry_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Chorus Jam | `fruitsdelight:chorus_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Cranberry Jam | `fruitsdelight:cranberry_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Durian Jam | `fruitsdelight:durian_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Fig Jam | `fruitsdelight:fig_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Fig Pudding | `fruitsdelight:fig_pudding` | P |  |  |  |  | own block (FigPuddingBlock): right click |
+| Glowberry Jam | `fruitsdelight:glowberry_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Hamimelon Jam | `fruitsdelight:hamimelon_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Hawberry Jam | `fruitsdelight:hawberry_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Kiwi Jam | `fruitsdelight:kiwi_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Lemon Jam | `fruitsdelight:lemon_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Lychee Jam | `fruitsdelight:lychee_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Mango Jam | `fruitsdelight:mango_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Mangosteen Cake | `fruitsdelight:mangosteen_cake` | P | S |  |  |  | own block (MangosteenCakeBlock): sneak + right click |
+| Mangosteen Jam | `fruitsdelight:mangosteen_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Melon Jam | `fruitsdelight:melon_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Orange Jam | `fruitsdelight:orange_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Peach Jam | `fruitsdelight:peach_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Pear Jam | `fruitsdelight:pear_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Persimmon Jam | `fruitsdelight:persimmon_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Pineapple Fried Rice | `fruitsdelight:pineapple_fried_rice` | P |  |  |  |  | own block (PineappleRiceBlock): right click |
+| Pineapple Jam | `fruitsdelight:pineapple_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
+| Sweetberry Jam | `fruitsdelight:sweetberry_jelly` | P | S |  |  |  | own block (JellyBottleBlock): sneak + right click |
 
 ### goldenfood (2)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Enchanted Golden Cake | `goldenfood:enchanted_golden_cake` | P |  |  |  | own block (EnchantedGoldenCakeBlock): right click |
-| Golden Cake | `goldenfood:golden_cake` | P |  |  |  | own block (GoldenCakeBlock): right click |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Enchanted Golden Cake | `goldenfood:enchanted_golden_cake` | P |  |  |  |  | own block (EnchantedGoldenCakeBlock): right click |
+| Golden Cake | `goldenfood:golden_cake` | P |  |  |  |  | own block (GoldenCakeBlock): right click |
 
-### minecraft (6)
+### minecraft (42)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Beetroot Soup | `minecraft:beetroot_soup` | P | S |  |  | DD: sneak + right click the top of a block |
-| Cake | `minecraft:cake` | P |  |  |  | own block (CakeBlock): right click |
-| Cookie | `minecraft:cookie` |  |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack) |
-| Mushroom Stew | `minecraft:mushroom_stew` | P | S |  |  | DD: sneak + right click the top of a block |
-| Pumpkin Pie | `minecraft:pumpkin_pie` | P |  | Pl |  | DD: right click an empty Food Plate (sneak to put the whole stack); own block (PieBlock): right click |
-| Rabbit Stew | `minecraft:rabbit_stew` | P | S |  |  | DD: sneak + right click the top of a block |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Apple | `minecraft:apple` |  |  |  |  | C | coaster: right click a coaster |
+| Beetroot | `minecraft:beetroot` |  |  |  |  | C | coaster: right click a coaster |
+| Beetroot Soup | `minecraft:beetroot_soup` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Bread | `minecraft:bread` |  |  |  |  | C | coaster: right click a coaster |
+| Cake | `minecraft:cake` | P |  |  |  |  | own block (CakeBlock): right click |
+| Carrot | `minecraft:carrot` |  |  |  |  | C | coaster: right click a coaster |
+| Chorus Fruit | `minecraft:chorus_fruit` |  |  |  |  | C | coaster: right click a coaster |
+| Cooked Chicken | `minecraft:cooked_chicken` |  |  |  |  | C | coaster: right click a coaster |
+| Cooked Cod | `minecraft:cooked_cod` |  |  |  |  | C | coaster: right click a coaster |
+| Cooked Mutton | `minecraft:cooked_mutton` |  |  |  |  | C | coaster: right click a coaster |
+| Cooked Porkchop | `minecraft:cooked_porkchop` |  |  |  |  | C | coaster: right click a coaster |
+| Cooked Rabbit | `minecraft:cooked_rabbit` |  |  |  |  | C | coaster: right click a coaster |
+| Cooked Salmon | `minecraft:cooked_salmon` |  |  |  |  | C | coaster: right click a coaster |
+| Cookie | `minecraft:cookie` |  |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); coaster: right click a coaster |
+| Enchanted Golden Apple | `minecraft:enchanted_golden_apple` |  |  |  |  | C | coaster: right click a coaster |
+| Glow Berries | `minecraft:glow_berries` |  |  |  |  | C | coaster: right click a coaster |
+| Golden Apple | `minecraft:golden_apple` |  |  |  |  | C | coaster: right click a coaster |
+| Golden Carrot | `minecraft:golden_carrot` |  |  |  |  | C | coaster: right click a coaster |
+| Honey Bottle | `minecraft:honey_bottle` |  |  |  |  | C | coaster: right click a coaster |
+| Melon Slice | `minecraft:melon_slice` |  |  |  |  | C | coaster: right click a coaster |
+| minecraft:bowl | `minecraft:bowl` |  |  |  |  | C | coaster: right click a coaster |
+| minecraft:egg | `minecraft:egg` |  |  |  |  | C | coaster: right click a coaster |
+| minecraft:glass_bottle | `minecraft:glass_bottle` |  |  |  |  | C | coaster: right click a coaster |
+| minecraft:glistering_melon_slice | `minecraft:glistering_melon_slice` |  |  |  |  | C | coaster: right click a coaster |
+| Mushroom Stew | `minecraft:mushroom_stew` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Poisonous Potato | `minecraft:poisonous_potato` |  |  |  |  | C | coaster: right click a coaster |
+| Potato | `minecraft:potato` |  |  |  |  | C | coaster: right click a coaster |
+| Pufferfish | `minecraft:pufferfish` |  |  |  |  | C | coaster: right click a coaster |
+| Pumpkin Pie | `minecraft:pumpkin_pie` | P |  | Pl |  | C | DD: right click an empty Food Plate (sneak to put the whole stack); own block (PieBlock): right click; coaster: right click a coaster |
+| Rabbit Stew | `minecraft:rabbit_stew` | P | S |  |  | C | DD: sneak + right click the top of a block; coaster: right click a coaster |
+| Raw Beef | `minecraft:beef` |  |  |  |  | C | coaster: right click a coaster |
+| Raw Chicken | `minecraft:chicken` |  |  |  |  | C | coaster: right click a coaster |
+| Raw Cod | `minecraft:cod` |  |  |  |  | C | coaster: right click a coaster |
+| Raw Mutton | `minecraft:mutton` |  |  |  |  | C | coaster: right click a coaster |
+| Raw Porkchop | `minecraft:porkchop` |  |  |  |  | C | coaster: right click a coaster |
+| Raw Rabbit | `minecraft:rabbit` |  |  |  |  | C | coaster: right click a coaster |
+| Raw Salmon | `minecraft:salmon` |  |  |  |  | C | coaster: right click a coaster |
+| Steak | `minecraft:cooked_beef` |  |  |  |  | C | coaster: right click a coaster |
+| Suspicious Stew | `minecraft:suspicious_stew` |  |  |  |  | C | coaster: right click a coaster |
+| Sweet Berries | `minecraft:sweet_berries` |  |  |  |  | C | coaster: right click a coaster |
+| Tropical Fish | `minecraft:tropical_fish` |  |  |  |  | C | coaster: right click a coaster |
+| Uncraftable Potion | `minecraft:potion` |  |  |  |  | C | coaster: right click a coaster |
 
 ### neapolitan (6)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Adzuki Cake | `neapolitan:adzuki_cake` | P |  |  |  | own block (FlavoredCakeBlock): right click |
-| Banana Cake | `neapolitan:banana_cake` | P |  |  |  | own block (FlavoredCakeBlock): right click |
-| Chocolate Cake | `neapolitan:chocolate_cake` | P |  |  |  | own block (FlavoredCakeBlock): right click |
-| Mint Cake | `neapolitan:mint_cake` | P |  |  |  | own block (FlavoredCakeBlock): right click |
-| Strawberry Cake | `neapolitan:strawberry_cake` | P |  |  |  | own block (FlavoredCakeBlock): right click |
-| Vanilla Cake | `neapolitan:vanilla_cake` | P |  |  |  | own block (FlavoredCakeBlock): right click |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Adzuki Cake | `neapolitan:adzuki_cake` | P |  |  |  |  | own block (FlavoredCakeBlock): right click |
+| Banana Cake | `neapolitan:banana_cake` | P |  |  |  |  | own block (FlavoredCakeBlock): right click |
+| Chocolate Cake | `neapolitan:chocolate_cake` | P |  |  |  |  | own block (FlavoredCakeBlock): right click |
+| Mint Cake | `neapolitan:mint_cake` | P |  |  |  |  | own block (FlavoredCakeBlock): right click |
+| Strawberry Cake | `neapolitan:strawberry_cake` | P |  |  |  |  | own block (FlavoredCakeBlock): right click |
+| Vanilla Cake | `neapolitan:vanilla_cake` | P |  |  |  |  | own block (FlavoredCakeBlock): right click |
 
 ### upgrade_aquatic (1)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| Mulberry Pie | `upgrade_aquatic:mulberry_pie` | P |  |  |  | own block (PieBlock): right click |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| Mulberry Pie | `upgrade_aquatic:mulberry_pie` | P |  |  |  |  | own block (PieBlock): right click |
 
-### vinery (27)
+### vinery (28)
 
-| Item | Id | P | S | Pl | SP | How |
-|---|---|---|---|---|---|---|
-| A Bottle of 'Creepers Crush' | `vinery:creepers_crush` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| A Bottle of 'Mojang Noir' | `vinery:bottle_mojang_noir` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| A Bottle of 'Villagers Fright' | `vinery:villagers_fright` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Aegis Wine | `vinery:aegis_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Apple Wine | `vinery:apple_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Bolvar Wine | `vinery:bolvar_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Chenet Wine | `vinery:chenet_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Cherry Wine | `vinery:cherry_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Chorus Wine | `vinery:chorus_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Cider | `vinery:apple_cider` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Clark Wine | `vinery:clark_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Cristel Wine | `vinery:cristel_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Eiswein | `vinery:eiswein` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Jellie Wine | `vinery:jellie_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Jo's Special Mixture | `vinery:jo_special_mixture` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Kelp Cider | `vinery:kelp_cider` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Magnetic Wine | `vinery:magnetic_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Mead | `vinery:mead` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Mellohi Wine | `vinery:mellohi_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Miss Lilitus Wine | `vinery:king_danis_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Noir Wine | `vinery:noir_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Praetorian Wine | `vinery:praetorian_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Red Wine | `vinery:red_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Solaris Wine | `vinery:solaris_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Stal Wine | `vinery:stal_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Strad Wine | `vinery:strad_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
-| Sunkissed Wine | `vinery:glowing_wine` | P |  |  |  | own block (WineBottleBlock): right click a block (not sneaking); drink in the air |
+| Item | Id | P | S | Pl | SP | C | How |
+|---|---|---|---|---|---|---|---|
+| A Bottle of 'Creepers Crush' | `vinery:creepers_crush` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| A Bottle of 'Mojang Noir' | `vinery:bottle_mojang_noir` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| A Bottle of 'Villagers Fright' | `vinery:villagers_fright` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Aegis Wine | `vinery:aegis_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Apple Wine | `vinery:apple_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Bolvar Wine | `vinery:bolvar_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Chenet Wine | `vinery:chenet_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Cherry Wine | `vinery:cherry_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Chorus Wine | `vinery:chorus_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Cider | `vinery:apple_cider` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Clark Wine | `vinery:clark_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Cristel Wine | `vinery:cristel_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Eiswein | `vinery:eiswein` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Jellie Wine | `vinery:jellie_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Jo's Special Mixture | `vinery:jo_special_mixture` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Kelp Cider | `vinery:kelp_cider` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Magnetic Wine | `vinery:magnetic_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Mead | `vinery:mead` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Mellohi Wine | `vinery:mellohi_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Miss Lilitus Wine | `vinery:king_danis_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Miss Lilitus Wine | `vinery:lilitu_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Noir Wine | `vinery:noir_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Praetorian Wine | `vinery:praetorian_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Red Wine | `vinery:red_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Solaris Wine | `vinery:solaris_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Stal Wine | `vinery:stal_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Strad Wine | `vinery:strad_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
+| Sun-kissed Wine | `vinery:glowing_wine` | P | S |  |  |  | own block (WineBottleBlock): sneak + right click; drink in the air |
 
 ## Edible but planted, not placed (no tag)
 
@@ -429,32 +499,40 @@ Matched the wide block-class net but not the food rules. Add real foods to `INCL
 | `upgrade_aquatic:red_jelly_torch` | JellyTorchBlock |
 | `upgrade_aquatic:white_jelly_torch` | JellyTorchBlock |
 | `upgrade_aquatic:yellow_jelly_torch` | JellyTorchBlock |
-| `vinery:acacia_wine_rack_big` | NineBottleStorageBlock |
+| `vinery:acacia_wine_rack_big` | BottleStorageBlock |
 | `vinery:acacia_wine_rack_mid` | BigBottleStorageBlock |
-| `vinery:acacia_wine_rack_small` | FourBottleStorageBlock |
-| `vinery:birch_wine_rack_big` | NineBottleStorageBlock |
+| `vinery:acacia_wine_rack_small` | BottleStorageBlock |
+| `vinery:bamboo_wine_rack_big` | BottleStorageBlock |
+| `vinery:bamboo_wine_rack_mid` | BigBottleStorageBlock |
+| `vinery:bamboo_wine_rack_small` | BottleStorageBlock |
+| `vinery:birch_wine_rack_big` | BottleStorageBlock |
 | `vinery:birch_wine_rack_mid` | BigBottleStorageBlock |
-| `vinery:birch_wine_rack_small` | FourBottleStorageBlock |
+| `vinery:birch_wine_rack_small` | BottleStorageBlock |
+| `vinery:cherry_wine_rack_big` | BottleStorageBlock |
 | `vinery:cherry_wine_rack_mid` | BigBottleStorageBlock |
-| `vinery:dark_oak_wine_rack_big` | NineBottleStorageBlock |
+| `vinery:cherry_wine_rack_small` | BottleStorageBlock |
+| `vinery:dark_oak_wine_rack_big` | BottleStorageBlock |
 | `vinery:dark_oak_wine_rack_mid` | BigBottleStorageBlock |
-| `vinery:dark_oak_wine_rack_small` | FourBottleStorageBlock |
-| `vinery:jungle_wine_rack_big` | NineBottleStorageBlock |
+| `vinery:dark_oak_wine_rack_small` | BottleStorageBlock |
+| `vinery:jungle_wine_rack_big` | BottleStorageBlock |
 | `vinery:jungle_wine_rack_mid` | BigBottleStorageBlock |
-| `vinery:jungle_wine_rack_small` | FourBottleStorageBlock |
-| `vinery:mangrove_wine_rack_big` | NineBottleStorageBlock |
+| `vinery:jungle_wine_rack_small` | BottleStorageBlock |
+| `vinery:mangrove_wine_rack_big` | BottleStorageBlock |
 | `vinery:mangrove_wine_rack_mid` | BigBottleStorageBlock |
-| `vinery:mangrove_wine_rack_small` | FourBottleStorageBlock |
-| `vinery:oak_wine_rack_big` | NineBottleStorageBlock |
+| `vinery:mangrove_wine_rack_small` | BottleStorageBlock |
+| `vinery:oak_wine_rack_big` | BottleStorageBlock |
 | `vinery:oak_wine_rack_mid` | BigBottleStorageBlock |
-| `vinery:oak_wine_rack_small` | FourBottleStorageBlock |
-| `vinery:spruce_wine_rack_big` | NineBottleStorageBlock |
+| `vinery:oak_wine_rack_small` | BottleStorageBlock |
+| `vinery:spruce_wine_rack_big` | BottleStorageBlock |
 | `vinery:spruce_wine_rack_mid` | BigBottleStorageBlock |
-| `vinery:spruce_wine_rack_small` | FourBottleStorageBlock |
-| `vinery:wine_box` | WineBox |
-| `vinery:wine_press` | WinePressBlock |
-| `vinery:wine_rack_1` | NineBottleStorageBlock |
-| `vinery:wine_rack_2` | FourBottleStorageBlock |
-| `vinery:wine_rack_3` | WineRackStorageBlock |
-| `vinery:wine_rack_5` | WineRackStorageBlock |
+| `vinery:spruce_wine_rack_small` | BottleStorageBlock |
+| `vinery:wine_box` | WineBoxBlock |
+| `vinery:wine_rack_1` | LegacyNineBottleStorageBlock |
+| `vinery:wine_rack_2` | LegacyFourBottleStorageBlock |
+| `vinery:wine_rack_3` | LegacyWineRackStorageBlock |
+| `vinery:wine_rack_5` | LegacyWineRackStorageBlock |
+
+## New item_dict keys
+
+2 keys added in the generated "Placeable food" block.
 

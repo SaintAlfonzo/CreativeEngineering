@@ -29,33 +29,39 @@ Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later):
 |---|---|---|---|---:|
 | `betterdungeons:zombie_dungeon/floor1/room/floor1_specialroom_0` | `betterdungeons:zombie_dungeon` | `soul_sand` | `minecraft:coarse_dirt` | 97 |
 
-## 3. Jungle temple, fortified desert village: netherrack to magma (magma keeps fire burning: vanilla infiniburn_overworld); their soul sand/soil goes to basalt below (42 blocks)
+## 3. Underground bunker: nether wart removed (its farm's soul sand is basalt via the catch-all below) (30 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `underground_bunkers:underground_bunker/underground_bunkers_room_7` | `underground_bunkers:underground_bunker` | `nether_wart` | `minecraft:air` | 30 |
+
+## 4. Jungle temple, fortified desert village: netherrack to magma (magma keeps fire burning: vanilla infiniburn_overworld); their soul sand/soil goes to basalt below (42 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
 | `betterjungletemples:floor_1/room_back/floor_1_room_back_2` | `betterjungletemples:jungle_temple` | `netherrack` | `minecraft:magma_block` | 34 |
 | `terralith:village/desert/houses/armorsmith1` | `terralith:fortified_desert_village` | `netherrack` | `minecraft:magma_block` | 8 |
 
-## 4. Terralith frosted dungeon: soul soil to permafrost, soul fire put out (32 blocks)
+## 5. Terralith frosted dungeon: soul soil to permafrost, soul fire put out (32 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
 | `terralith:underground/dungeon1` | `terralith:underground/frosted_dungeon` | `soul_soil` | `immersive_weathering:permafrost` | 32 |
 
-## 5. Terralith frosted dungeon: soul fire put out (28 blocks)
+## 6. Terralith frosted dungeon: soul fire put out (28 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
 | `terralith:underground/dungeon1` | `terralith:underground/frosted_dungeon` | `soul_fire` | `minecraft:air` | 28 |
 
-## 6. Simply Houses taiga woodcutter: nether wart and netherrack removed (3 blocks)
+## 7. Simply Houses taiga woodcutter: nether wart and netherrack removed (3 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
 | `simply_houses:taiga_woodcutter/taiga_woodcutter` | `simply_houses:taiga_woodcutter` | `nether_wart_block` | `minecraft:air` | 2 |
 | `simply_houses:taiga_woodcutter/taiga_woodcutter` | `simply_houses:taiga_woodcutter` | `netherrack` | `minecraft:air` | 1 |
 
-## 7. Terralith fortified village: soul campfires to campfires (6 blocks)
+## 8. Terralith fortified village: soul campfires to campfires (6 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
@@ -64,7 +70,7 @@ Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later):
 | `terralith:village/fortified/houses/smith1` | `terralith:fortified_village` | `soul_campfire` | `minecraft:campfire` | 2 |
 | `terralith:village/fortified/start_castle` | `terralith:fortified_village` | `soul_campfire` | `minecraft:campfire` | 2 |
 
-## 8. Simply Houses taiga house: crimson and warped plants, nether sprouts removed (4 blocks)
+## 9. Simply Houses taiga house: crimson and warped plants, nether sprouts removed (4 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
@@ -73,7 +79,7 @@ Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later):
 | `simply_houses:taiga_house/taiga_house` | `simply_houses:taiga_house` | `nether_sprouts` | `minecraft:air` | 1 |
 | `simply_houses:taiga_house/taiga_house` | `simply_houses:taiga_house` | `warped_fungus` | `minecraft:air` | 1 |
 
-## 9. Sky village: glowstone to yellow corundum (8 blocks)
+## 10. Sky village: glowstone to yellow corundum (8 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
@@ -84,13 +90,13 @@ Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later):
 | `skyvillages:loom_1` | `skyvillages:skyvillage` | `glowstone` | `quark:yellow_corundum` | 1 |
 | `skyvillages:weaponsmith_1` | `skyvillages:skyvillage` | `glowstone` | `quark:yellow_corundum` | 1 |
 
-## 10. Simply Houses taiga forge: wart blocks removed (6 blocks)
+## 11. Simply Houses taiga forge: wart blocks removed (6 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
 | `simply_houses:taiga_forge/taiga_forge` | `simply_houses:taiga_forge` | `nether_wart_block` | `minecraft:air` | 6 |
 
-## 11. YUNG's stronghold: nether gold ore to gold ore (172 blocks)
+## 12. YUNG's stronghold: nether gold ore to gold ore (172 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
@@ -107,14 +113,14 @@ Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later):
 | `betterstrongholds:treasure/wall/treasure_wall_4` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 7 |
 | `betterstrongholds:treasure/wall/treasure_wall_5` | `betterstrongholds:stronghold` | `nether_gold_ore` | `minecraft:gold_ore` | 7 |
 
-## 12. T&T mushroom village: twisting vines removed (15 blocks)
+## 13. T&T mushroom village: twisting vines removed (15 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
 | `kaisyn:village/mushroom_fields_fantasy/town_centers/mushroom_meeting_point_1` | `towns_and_towers:village_mushroom_fields` | `twisting_vines` | `minecraft:air` | 1 |
 | `kaisyn:village/mushroom_fields_fantasy/town_centers/mushroom_meeting_point_1` | `towns_and_towers:village_mushroom_fields` | `twisting_vines_plant` | `minecraft:air` | 14 |
 
-## 13. Mysticrift mangrove tower: every Nether block to gold ore (14 blocks)
+## 14. Mysticrift mangrove tower: every Nether block to gold ore (14 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
@@ -122,7 +128,7 @@ Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later):
 | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower_new` | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | `glowstone` | `minecraft:gold_ore` | 6 |
 | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower_new` | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | `respawn_anchor` | `minecraft:gold_ore` | 1 |
 
-## 14. Every nether brick block to its deepslate brick twin (155 blocks)
+## 15. Every nether brick block to its deepslate brick twin (155 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
@@ -145,11 +151,13 @@ Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later):
 | `illagerwarship:illager-warship` | `illagerwarship:warship` | `nether_bricks` | `minecraft:deepslate_bricks` | 69 |
 | `underground_bunkers:underground_bunker/underground_bunkers_large_room_2` | `underground_bunkers:underground_bunker` | `nether_brick_wall` | `minecraft:deepslate_brick_wall` | 14 |
 
-## 15. Any netherrack left to magma (the ruined portals, all off, keep theirs) (0 blocks)
+## 16. Any netherrack left to magma (the ruined portals, all off, keep theirs) (3 blocks)
 
-Nothing matched.
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `eugene:red_roof` | `eugene:red_roof_castle` | `netherrack` | `minecraft:magma_block` | 3 |
 
-## 16. Any soul sand or soil left to basalt (the ancient city and Philip's sculk dungeon keep theirs) (39 blocks)
+## 17. Any soul sand or soil left to basalt (the ancient city and Philip's sculk dungeon keep theirs) (39 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
@@ -159,7 +167,7 @@ Nothing matched.
 | `philipsruins:crypt_room8` | `philipsruins:ancient_crypt` | `soul_sand` | `minecraft:basalt` | 2 |
 | `underground_bunkers:underground_bunker/underground_bunkers_room_7` | `underground_bunkers:underground_bunker` | `soul_sand` | `minecraft:basalt` | 30 |
 
-## 17. Shroomlight to orange corundum (38 blocks)
+## 18. Shroomlight to orange corundum (38 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
@@ -170,14 +178,31 @@ Nothing matched.
 | `terralith:underground/giant_bee_hive_1` | `terralith:underground/giant_bee_hive` | `shroomlight` | `quark:orange_corundum` | 4 |
 | `terralith:underground/giant_bee_hive_2` | `terralith:underground/giant_bee_hive` | `shroomlight` | `quark:orange_corundum` | 3 |
 
-## 18. Any soul campfire left to a campfire (2 blocks)
+## 19. Any soul campfire left to a campfire (2 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|
 | `betterdungeons:skeleton_dungeon/skeleton_shell` | `betterdungeons:skeleton_dungeon` | `soul_campfire` | `minecraft:campfire` | 1 |
 | `simply_houses:forest_fort/forest_fort` | `simply_houses:forest_fort` | `soul_campfire` | `minecraft:campfire` | 1 |
 
-## 19. Potted Nether plants to a potted dead bush (4 blocks)
+## 20. Any soul fire left to fire (the frosted dungeon's is put out above) (177 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `minecraft:ancient_city/city_center/city_center_1` | `minecraft:ancient_city` | `soul_fire` | `minecraft:fire` | 57 |
+| `minecraft:ancient_city/city_center/city_center_2` | `minecraft:ancient_city` | `soul_fire` | `minecraft:fire` | 57 |
+| `minecraft:ancient_city/city_center/city_center_3` | `minecraft:ancient_city` | `soul_fire` | `minecraft:fire` | 57 |
+| `minecraft:ancient_city/structures/barracks` | `minecraft:ancient_city` | `soul_fire` | `minecraft:fire` | 2 |
+| `philipsruins:sculk_dungeon_room1` | `philipsruins:sculk_dungeon` | `soul_fire` | `minecraft:fire` | 4 |
+
+## 21. Any glowstone left to yellow corundum (the Mysticrift mangrove tower's is gold ore above) (5 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `gothic_church:church` | `gothic_church:church` | `glowstone` | `quark:yellow_corundum` | 4 |
+| `plains_villager_tents:villager_plains_tent` | `plains_villager_tents:big_villager_tent` | `glowstone` | `quark:yellow_corundum` | 1 |
+
+## 22. Potted Nether plants to a potted dead bush (4 blocks)
 
 | Template | Structures | From | To | Blocks |
 |---|---|---|---|---:|

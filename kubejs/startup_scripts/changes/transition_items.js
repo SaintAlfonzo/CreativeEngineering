@@ -41,6 +41,9 @@ StartupEvents.registry('item', e => {
 		['bacon_and_eggs'],
 		['roasted_mutton_chops'],
 		['enchanted_golden_apple'],
+		['ham_and_cheese_sandwich'],                                 // alcohol.js (alcohol.md 8.6)
+		['quiche_bacon',             'brewinandchewin:item/quiche'],
+		['quiche_mushroom',          'brewinandchewin:item/quiche'],
 
 		// redstone
 		['redstone_torch'],

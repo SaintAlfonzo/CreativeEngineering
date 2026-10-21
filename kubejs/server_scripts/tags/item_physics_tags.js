@@ -11,7 +11,7 @@
 // untagged: sinks + destroyed by fire and lava. patcherMod's jar seeds a small baseline
 // (netherite via #forge tags, boats, feathers, paper, buckets, …); entries here merge on top.
 //
-// ─── GRAY-AREA CALLS (see the breakdown in chat; flip any of these freely) ───────────────
+// ─── GRAY-AREA CALLS (this list is the breakdown; flip any of these freely) ──────────────
 //   • The pack already commits the WHOLE stone family (#forge:stone / #forge:cobblestone /
 //     every #create:stone_type) to LAVAPROOF. Vanilla stone/andesite/granite/diorite/
 //     deepslate/blackstone shapes below follow that. If you'd rather reserve lavaproof for
@@ -116,11 +116,10 @@ ServerEvents.tags('item', e => {
 	// Adjustments
 	// Totem sinks, crossbow sinks, armor stand sinks, shields sink, trident is fireproof, 
 
-	//Future
+	// Not done yet (feature_writeup/todo/TODO.md gameplay/item-physics #2, item_physics.md F4):
 	// Most create components will sink and be fireproof, belts will float, flour/cinder flour float
-		// Behavior carries to compacted items, 
+		// Behavior carries to compacted items,
 	// Treated wood will sink
-
 	// Add items from all other mods!
 
 	// ═══════════════════════════════ FLOATS ════════════════════════════════

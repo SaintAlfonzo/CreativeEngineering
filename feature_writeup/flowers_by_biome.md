@@ -14,45 +14,45 @@ Every color must stay findable: petals of all 16 are crafting inputs.
 
 | Color | Before per 1000 chunks | After | Biomes after | Main biomes (by area) |
 |---|---|---|---|---|
-| white | 4.6 | 7.3 | 56 | plains, meadow, forest, snowy_plains, terralith:rocky_mountains |
-| orange | 4.6 | 5.7 | 39 | terralith:yellowstone, terralith:brushland, savanna, savanna_plateau, terralith:arid_highlands |
-| magenta | 4.6 | 2.7 | 16 | meadow, terralith:orchid_swamp, terralith:temperate_highlands, terralith:sakura_grove, terralith:lavender_valley |
-| light_blue | 4.6 | 3.6 | 28 | meadow, terralith:orchid_swamp, snowy_plains, snowy_taiga, river |
-| yellow | 4.6 | 7.8 | 40 | terralith:yellowstone, terralith:brushland, plains, savanna, meadow |
-| lime | 4.6 | 2.6 | 23 | plains, forest, swamp, mangrove_swamp, terralith:rocky_jungle |
-| pink | 4.6 | 3.4 | 13 | plains, terralith:sakura_grove, meadow, terralith:orchid_swamp, forest |
-| gray | 4.6 | 2.6 | 22 | dark_forest, terralith:rocky_mountains, windswept_savanna, terralith:rocky_jungle, terralith:stony_spires |
-| light_gray | 4.6 | 3.2 | 27 | snowy_plains, terralith:rocky_mountains, terralith:cold_shrubland, terralith:alpine_highlands, old_growth_birch_forest |
-| cyan | 4.6 | 3.3 | 19 | terralith:yellowstone, terralith:orchid_swamp, river, swamp, terralith:glacial_chasm |
-| purple | 4.6 | 2.7 | 16 | dark_forest, terralith:lavender_valley, terralith:temperate_highlands, old_growth_spruce_taiga, swamp |
-| blue | 4.6 | 5.4 | 28 | plains, meadow, snowy_plains, terralith:rocky_mountains, terralith:forested_highlands |
-| brown | 4.6 | 8.2 | 33 | terralith:yellowstone, dark_forest, terralith:brushland, savanna, forest |
-| green | 4.6 | 6.1 | 26 | terralith:yellowstone, dark_forest, forest, terralith:temperate_highlands, terralith:forested_highlands |
-| red | 4.6 | 6.0 | 34 | terralith:brushland, plains, savanna, forest, terralith:temperate_highlands |
-| black | 4.6 | 2.8 | 8 | dark_forest, old_growth_spruce_taiga, mushroom_fields, terralith:volcanic_peaks, terralith:ashen_savanna |
+| white | 4.1 | 8.6 | 56 | meadow, forest, plains, snowy_plains, terralith:cold_shrubland |
+| orange | 4.1 | 4.6 | 39 | terralith:yellowstone, terralith:brushland, taiga, old_growth_pine_taiga, savanna |
+| magenta | 4.1 | 2.6 | 16 | meadow, terralith:temperate_highlands, terralith:blooming_plateau, terralith:orchid_swamp, terralith:lavender_valley |
+| light_blue | 4.1 | 4.2 | 28 | meadow, snowy_plains, snowy_taiga, terralith:ice_marsh, river |
+| yellow | 4.1 | 6.6 | 40 | terralith:yellowstone, meadow, forest, plains, terralith:brushland |
+| lime | 4.1 | 2.2 | 23 | forest, plains, sparse_jungle, jungle, terralith:valley_clearing |
+| pink | 4.1 | 3.1 | 13 | meadow, forest, plains, terralith:blooming_plateau, terralith:orchid_swamp |
+| gray | 4.1 | 2.3 | 22 | dark_forest, terralith:rocky_mountains, windswept_savanna, terralith:gravel_beach, terralith:stony_spires |
+| light_gray | 4.1 | 3.1 | 27 | snowy_plains, terralith:cold_shrubland, terralith:rocky_mountains, terralith:alpine_highlands, old_growth_birch_forest |
+| cyan | 4.1 | 3.2 | 19 | terralith:yellowstone, terralith:ice_marsh, river, terralith:orchid_swamp, beach |
+| purple | 4.1 | 2.6 | 16 | terralith:lavender_valley, dark_forest, terralith:temperate_highlands, terralith:moonlight_valley, terralith:lavender_forest |
+| blue | 4.1 | 5.8 | 28 | meadow, plains, snowy_plains, taiga, snowy_taiga |
+| brown | 4.1 | 6.0 | 33 | terralith:yellowstone, forest, dark_forest, terralith:brushland, taiga |
+| green | 4.1 | 5.7 | 26 | terralith:yellowstone, forest, dark_forest, taiga, terralith:temperate_highlands |
+| red | 4.1 | 4.4 | 34 | forest, plains, terralith:brushland, terralith:temperate_highlands, terralith:highlands |
+| black | 4.1 | 1.6 | 8 | dark_forest, old_growth_spruce_taiga, terralith:caldera, terralith:basalt_cliffs, terralith:ashen_savanna |
 
 ## 2. Other flowers
 
 | Flower | Color | Before per 1000 chunks | After | Biomes after |
 |---|---|---|---|---|
-| buzzier_bees:pink_clover | pink | 0.1 | 3.2 | 14 |
-| buzzier_bees:white_clover | white | 0.5 | 4.3 | 14 |
-| minecraft:allium | magenta | 5.2 | 10.8 | 20 |
-| minecraft:azure_bluet | white | 2.6 | 10.7 | 39 |
-| minecraft:blue_orchid | light_blue | 12.2 | 19.2 | 14 |
-| minecraft:cornflower | blue | 14.2 | 32.5 | 35 |
-| minecraft:dandelion | yellow | 15.4 | 19.6 | 61 |
-| minecraft:lilac | magenta | 19.4 | 20.2 | 9 |
-| minecraft:lily_of_the_valley | white | 3.6 | 22.4 | 43 |
-| minecraft:orange_tulip | orange | 5.1 | 13.1 | 33 |
-| minecraft:oxeye_daisy | white | 4.5 | 11.5 | 45 |
-| minecraft:peony | pink | 6.6 | 7.4 | 17 |
-| minecraft:pink_tulip | pink | 10.6 | 11.5 | 14 |
-| minecraft:poppy | red | 13.3 | 22.7 | 67 |
-| minecraft:red_tulip | red | 3.2 | 7.8 | 25 |
-| minecraft:rose_bush | red | 3.2 | 4.2 | 17 |
-| minecraft:sunflower | yellow | 1.9 | 5.1 | 11 |
-| minecraft:white_tulip | white | 12.7 | 15.4 | 33 |
+| buzzier_bees:pink_clover | pink | 0.1 | 3.7 | 14 |
+| buzzier_bees:white_clover | white | 0.4 | 4.0 | 14 |
+| minecraft:allium | magenta | 5.2 | 11.0 | 20 |
+| minecraft:azure_bluet | white | 3.1 | 12.7 | 39 |
+| minecraft:blue_orchid | light_blue | 6.9 | 12.3 | 14 |
+| minecraft:cornflower | blue | 12.5 | 32.1 | 35 |
+| minecraft:dandelion | yellow | 13.6 | 15.8 | 61 |
+| minecraft:lilac | magenta | 15.2 | 16.3 | 9 |
+| minecraft:lily_of_the_valley | white | 3.8 | 23.6 | 43 |
+| minecraft:orange_tulip | orange | 9.8 | 14.7 | 33 |
+| minecraft:oxeye_daisy | white | 4.6 | 11.5 | 45 |
+| minecraft:peony | pink | 5.2 | 5.9 | 17 |
+| minecraft:pink_tulip | pink | 9.0 | 9.8 | 14 |
+| minecraft:poppy | red | 13.3 | 21.9 | 67 |
+| minecraft:red_tulip | red | 3.2 | 5.8 | 25 |
+| minecraft:rose_bush | red | 2.7 | 3.6 | 17 |
+| minecraft:sunflower | yellow | 1.0 | 2.9 | 11 |
+| minecraft:white_tulip | white | 11.6 | 14.9 | 33 |
 
 ## 3. Gaps
 
@@ -67,128 +67,128 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 
 | Biome | Area % | Total before | Total after | Botania after | Colors after | Botania palette |
 |---|---|---|---|---|---|---|
-| badlands | 1.50 | 1/8.0 | 1/24 | 1/24 | brown 25%, orange 25%, red 25%, yellow 25% | brown orange red yellow |
-| bamboo_jungle | 0.33 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, yellow 10%, orange 10%, cyan 6%, green 6%, lime 6%, pink 4% | cyan green lime yellow |
-| beach | 0.87 | 1/6.4 | 1/11 | 1/16 | yellow 28%, red 22%, cyan 17%, light_blue 17%, white 17% | cyan light_blue white yellow |
-| birch_forest | 0.30 | 1/1.3 | 1.02 | 1/8.0 | white 68%, pink 14%, red 7%, magenta 4% | light_gray lime pink white yellow |
-| dark_forest | 1.67 | 1/3.3 | 1/1.5 | 1/3.0 | white 22%, black 21%, magenta 14%, red 8%, brown 7%, gray 7%, green 7%, purple 7%, pink 5% | black black black brown gray green purple |
-| desert | 1.20 | 1/6.4 | 1/24 | 1/24 | brown 33%, orange 33%, yellow 33% | brown orange yellow |
-| eroded_badlands | 0.43 | 1/8.0 | 1/24 | 1/24 | brown 33%, orange 33%, red 33% | brown orange red |
-| flower_forest | 0.10 | 1/1.3 | 1.1 | 1/3.0 | white 27%, pink 19%, red 15%, magenta 11%, yellow 8%, orange 8%, blue 4%, light_blue 4%, purple 4% | light_blue magenta orange pink purple red white yellow |
-| forest | 2.87 | 1/3.2 | 1/2.0 | 1/8.0 | white 45%, red 21%, pink 11%, magenta 7%, yellow 6%, brown 4%, green 4%, lime 4% | brown green lime pink red white yellow |
-| frozen_peaks | 0.90 | 1/8.0 | 1/24 | 1/24 | light_blue 33%, light_gray 33%, white 33% | light_blue light_gray white |
-| frozen_river | 0.27 | 1/6.4 | 1/16 | 1/16 | light_blue 50%, white 50% | light_blue white |
-| grove | 0.17 | 1/8.0 | 1/3.4 | 1/8.0 | white 68%, blue 11%, light_blue 11%, light_gray 11% | blue light_blue light_gray white |
-| ice_spikes | 0.23 | 1/6.4 | 1/24 | 1/24 | cyan 33%, light_blue 33%, white 33% | cyan light_blue white |
-| jagged_peaks | 0.47 | 1/8.0 | 1/24 | 1/24 | gray 33%, light_gray 33%, white 33% | gray light_gray white |
-| jungle | 0.53 | 1/5.3 | 1/2.0 | 1/8.0 | red 32%, light_blue 30%, orange 15%, cyan 5%, green 5%, lime 5%, yellow 4%, pink 4% | cyan green lime orange red |
-| mangrove_swamp | 0.67 | 1/8.0 | 1/3.4 | 1/8.0 | light_blue 46%, magenta 11%, brown 11%, cyan 11%, green 11%, lime 11% | brown cyan green lime |
-| meadow | 0.97 | 1/1.1 | 1.54 | 1/3.0 | white 30%, magenta 15%, yellow 15%, blue 15%, red 12%, pink 9%, light_blue 4% | blue light_blue magenta pink white yellow |
-| mushroom_fields | 0.20 | 1/8.0 | 1/4.0 | 1/4.0 | black 20%, brown 20%, gray 20%, purple 20%, red 20% | black brown gray purple red |
-| old_growth_birch_forest | 0.53 | 8.31 | 8.55 | 1/8.0 | magenta 38%, pink 26%, white 18%, blue 16% | light_gray white yellow |
-| old_growth_pine_taiga | 0.73 | 1/6.4 | 1/2.5 | 1/8.0 | blue 38%, white 21%, red 15%, brown 8%, green 8%, orange 8% | blue brown green orange |
-| old_growth_spruce_taiga | 0.90 | 1/6.4 | 1/2.5 | 1/8.0 | blue 37%, white 21%, red 15%, black 6%, brown 6%, green 6%, purple 6% | black blue brown green purple |
-| plains | 2.93 | 1/2.4 | 1/1.6 | 1/8.0 | white 33%, yellow 19%, red 16%, blue 14%, pink 9%, orange 6%, lime 3% | blue lime pink red white yellow |
-| river | 1.80 | 1/6.4 | 1/11 | 1/16 | red 22%, blue 17%, cyan 17%, light_blue 17%, white 17%, yellow 11% | blue cyan light_blue white |
-| savanna | 1.93 | 1/5.3 | 1/2.3 | 1/8.0 | red 34%, yellow 33%, orange 25%, brown 7% | brown orange red yellow |
-| savanna_plateau | 1.03 | 1/5.3 | 1/2.6 | 1/8.0 | red 38%, orange 27%, yellow 26%, brown 8% | brown orange red yellow |
-| snowy_beach | 0.23 | 1/6.4 | 1/16 | 1/16 | light_blue 33%, light_gray 33%, white 33% | light_blue light_gray white |
-| snowy_plains | 1.37 | 1/6.4 | 1/3.4 | 1/8.0 | white 68%, blue 11%, light_blue 11%, light_gray 11% | blue light_blue light_gray white |
-| snowy_slopes | 0.40 | 1/8.0 | 1/8.0 | 1/8.0 | light_blue 33%, light_gray 33%, white 33% | light_blue light_gray white |
-| snowy_taiga | 1.03 | 1/6.4 | 1/3.4 | 1/8.0 | white 68%, blue 11%, green 11%, light_blue 11% | blue green light_blue white |
-| sparse_jungle | 0.50 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 16%, yellow 10%, green 6%, lime 6%, pink 4% | green lime orange yellow |
-| stony_peaks | 0.57 | 1/8.0 | 1/24 | 1/24 | gray 33%, light_gray 33%, white 33% | gray light_gray white |
-| stony_shore | 0.00 | 1/6.4 | 1/11 | 1/16 | red 22%, cyan 22%, gray 22%, light_gray 22%, yellow 11% | cyan gray light_gray |
-| sunflower_plains | 0.00 | 1/1.3 | 1.09 | 1/3.0 | yellow 55%, white 17%, orange 11%, pink 11%, red 5% | orange white yellow yellow |
-| swamp | 1.07 | 1/6.4 | 1/2.8 | 1/8.0 | light_blue 55%, magenta 15%, brown 6%, cyan 6%, green 6%, lime 6%, purple 6% | brown cyan green lime magenta purple |
-| taiga | 1.00 | 1/6.4 | 1/2.5 | 1/8.0 | blue 38%, white 21%, red 15%, brown 8%, green 8%, orange 8% | blue brown green orange |
-| windswept_forest | 0.03 | 1/5.8 | 1/1.6 | 1/8.0 | blue 37%, white 30%, red 10%, magenta 5%, gray 5%, green 5%, light_gray 5% | blue gray green light_gray |
-| windswept_gravelly_hills | 0.20 | 1/6.4 | 1/6.4 | 1/8.0 | gray 40%, light_gray 40%, red 13%, yellow 7% | gray light_gray |
-| windswept_hills | 0.23 | 1/6.4 | 1/2.8 | 1/8.0 | white 37%, blue 27%, magenta 9%, gray 9%, light_gray 9%, red 6% | blue gray light_gray white |
-| windswept_savanna | 0.60 | 1/6.4 | 1/2.5 | 1/8.0 | red 32%, orange 27%, yellow 26%, brown 8%, gray 8% | brown gray orange red |
-| wooded_badlands | 0.87 | 1/8.0 | 1/3.1 | 1/8.0 | orange 33%, red 33%, yellow 15%, brown 10%, green 10% | brown green orange red |
-| terralith:alpha_islands | 0.07 | 1.12 | 1.33 | 1/8.0 | red 43%, yellow 41%, white 13%, lime 3% | lime red yellow |
-| terralith:alpha_islands_winter | 0.00 | 1.12 | 1.29 | 1/8.0 | red 39%, yellow 39%, white 18%, light_blue 5% | light_blue white |
-| terralith:alpine_grove | 0.03 | 1/8.0 | 1/3.4 | 1/8.0 | white 71%, blue 14%, light_blue 14% | blue light_blue white |
-| terralith:alpine_highlands | 0.87 | 1/8.0 | 1/1.9 | 1/8.0 | white 48%, blue 29%, magenta 6%, light_gray 6%, yellow 6%, red 5% | blue light_gray white yellow |
-| terralith:amethyst_canyon | 0.10 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 10%, lime 8%, magenta 8%, purple 8%, yellow 4%, pink 4% | lime magenta purple |
-| terralith:amethyst_rainforest | 0.17 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 10%, green 6%, lime 6%, magenta 6%, purple 6%, yellow 4%, pink 4% | green lime magenta purple |
-| terralith:ancient_sands | 0.00 | 1/6.4 | 1/24 | 1/24 | brown 33%, orange 33%, yellow 33% | brown orange yellow |
-| terralith:arid_highlands | 1.03 | 1/5.3 | 1/2.3 | 1/8.0 | red 34%, yellow 33%, orange 25%, brown 7% | brown orange red yellow |
-| terralith:ashen_savanna | 0.07 | 1/5.3 | 1/2.6 | 1/8.0 | red 38%, orange 27%, yellow 18%, black 8%, gray 8% | black gray orange red |
-| terralith:basalt_cliffs | 0.00 | 1/6.4 | 1/11 | 1/16 | black 33%, gray 33%, red 22%, yellow 11% | black gray |
-| terralith:birch_taiga | 0.37 | 1/6.4 | 1/3.4 | 1/8.0 | white 68%, blue 11%, light_gray 11%, yellow 11% | blue light_gray white yellow |
-| terralith:blooming_plateau | 0.20 | 1.62 | 1.96 | 1/3.0 | white 38%, pink 15%, magenta 11%, yellow 11%, red 11%, blue 7%, orange 7% | magenta pink red white yellow |
-| terralith:blooming_valley | 0.20 | 1.62 | 1.92 | 1/3.0 | white 37%, pink 15%, magenta 11%, blue 7%, yellow 7%, orange 7%, red 7%, light_blue 3%, purple 3% | light_blue magenta pink purple white |
-| terralith:brushland | 2.13 | 1/5.3 | 1/2.3 | 1/8.0 | red 34%, yellow 33%, orange 25%, brown 7% | brown orange red yellow |
-| terralith:bryce_canyon | 0.33 | 1/8.0 | 1/24 | 1/24 | orange 50%, red 50% | orange red |
-| terralith:caldera | 0.00 | 1/6.4 | 1/2.8 | 1/8.0 | white 28%, blue 19%, red 18%, black 12%, gray 12%, magenta 9% | black gray red |
-| terralith:cloud_forest | 0.07 | 1.12 | 1.38 | 1/8.0 | white 81%, blue 9%, red 3% | green light_blue light_gray white |
-| terralith:cold_shrubland | 0.73 | 1/2.4 | 1/1.7 | 1/8.0 | white 46%, yellow 17%, red 8%, brown 7%, light_gray 7%, orange 6%, pink 6% | brown light_gray white |
-| terralith:desert_canyon | 0.33 | 1/6.4 | 1/24 | 1/24 | orange 33%, red 33%, yellow 33% | orange red yellow |
-| terralith:desert_oasis | 0.03 | 1/6.4 | 1/24 | 1/24 | cyan 33%, lime 33%, yellow 33% | cyan lime yellow |
-| terralith:desert_spires | 0.20 | 1/6.4 | 1/24 | 1/24 | orange 50%, yellow 50% | orange yellow |
-| terralith:emerald_peaks | 0.03 | 1/8.0 | 1/24 | 1/24 | green 33%, lime 33%, white 33% | green lime white |
-| terralith:forested_highlands | 1.07 | 1/2.2 | 1/1.4 | 1/8.0 | red 45%, white 24%, blue 22%, brown 4%, green 4% | blue brown green red |
-| terralith:fractured_savanna | 0.20 | 1/5.3 | 1/3.3 | 1/24 | red 43%, orange 29%, yellow 23%, brown 5% | brown orange red |
-| terralith:frozen_cliffs | 0.00 | 1/6.4 | 1/24 | 1/24 | light_blue 50%, white 50% | light_blue white |
-| terralith:glacial_chasm | 1.60 | 1/6.4 | 1/24 | 1/24 | cyan 33%, light_blue 33%, white 33% | cyan light_blue white |
-| terralith:granite_cliffs | 0.00 | 1/6.4 | 1/11 | 1/16 | red 44%, gray 22%, pink 22%, yellow 11% | gray pink red |
-| terralith:gravel_beach | 0.60 | 1/6.4 | 1/11 | 1/16 | red 22%, cyan 22%, gray 22%, light_gray 22%, yellow 11% | cyan gray light_gray |
-| terralith:gravel_desert | 0.40 | 1/6.4 | 1/24 | 1/24 | brown 33%, gray 33%, light_gray 33% | brown gray light_gray |
-| terralith:haze_mountain | 0.13 | 1/6.4 | 1/2.5 | 1/8.0 | white 31%, blue 31%, red 15%, light_gray 10%, purple 10% | light_gray purple white |
-| terralith:highlands | 1.00 | 1/2.2 | 1/1.2 | 1/8.0 | white 44%, magenta 23%, blue 18%, red 7%, pink 4%, yellow 4% | blue red white yellow |
-| terralith:hot_shrubland | 0.50 | 1/2.4 | 1/1.5 | 1/8.0 | yellow 33%, red 23%, orange 22%, white 9%, pink 6%, brown 5% | brown orange red yellow |
-| terralith:ice_marsh | 0.33 | 1/6.4 | 1/2.1 | 1/8.0 | white 61%, light_blue 30%, cyan 9% | cyan light_blue white |
-| terralith:jungle_mountains | 0.03 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 18%, green 8%, lime 8%, yellow 4%, pink 4% | green lime orange |
-| terralith:lavender_forest | 0.03 | 1/1.6 | 1.92 | 1/3.0 | magenta 59%, white 9%, purple 9%, pink 7%, red 5%, light_blue 4% | light_blue magenta purple purple |
-| terralith:lavender_valley | 0.27 | 1/1.6 | 1.92 | 1/3.0 | magenta 59%, pink 11%, white 9%, purple 9%, red 5% | magenta pink purple purple |
-| terralith:lush_desert | 0.07 | 1/6.4 | 1/24 | 1/24 | lime 33%, orange 33%, yellow 33% | lime orange yellow |
-| terralith:lush_valley | 0.13 | 1/6.4 | 1/2.5 | 1/8.0 | blue 38%, white 21%, red 15%, yellow 10%, green 8%, lime 8% | blue green lime yellow |
-| terralith:mirage_isles | 0.07 | 1/3.3 | 1/3.3 | 1/8.0 | magenta 22%, white 22%, red 19%, pink 12%, cyan 10%, light_blue 10%, yellow 3% | cyan light_blue magenta white |
-| terralith:moonlight_grove | 0.10 | 1/1.4 | 1.5 | 1/3.0 | blue 42%, white 31%, light_blue 17%, purple 6%, pink 6% | blue light_blue purple white |
-| terralith:moonlight_valley | 0.10 | 2.58 | 3.38 | 1/3.0 | orange 56%, blue 19%, white 14%, light_blue 7% | blue light_blue purple white |
-| terralith:orchid_swamp | 0.63 | 3.12 | 3.5 | 1/3.0 | light_blue 58%, yellow 17%, blue 17%, magenta 3% | cyan light_blue magenta pink |
-| terralith:painted_mountains | 0.13 | 1/8.0 | 1/24 | 1/24 | orange 25%, purple 25%, red 25%, yellow 25% | orange purple red yellow |
-| terralith:red_oasis | 0.23 | 1/6.4 | 1/24 | 1/24 | cyan 25%, lime 25%, orange 25%, red 25% | cyan lime orange red |
-| terralith:rocky_jungle | 0.43 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 10%, gray 8%, green 8%, lime 8%, yellow 4%, pink 4% | gray green lime |
-| terralith:rocky_mountains | 1.33 | 1/8.0 | 1/3.4 | 1/8.0 | white 68%, blue 11%, gray 11%, light_gray 11% | blue gray light_gray white |
-| terralith:rocky_shrubland | 0.00 | 1/2.4 | 1/1.7 | 1/8.0 | white 39%, yellow 17%, red 8%, brown 7%, gray 7%, light_gray 7%, orange 6%, pink 6% | brown gray light_gray |
-| terralith:sakura_grove | 0.33 | 1.12 | 1.92 | 1/3.0 | pink 57%, magenta 33%, white 10% | magenta pink pink white |
-| terralith:sakura_valley | 0.03 | 1.12 | 1.92 | 1/3.0 | pink 57%, magenta 33%, white 10% | magenta pink pink white |
-| terralith:sandstone_valley | 0.47 | 1/6.4 | 1/24 | 1/24 | brown 33%, orange 33%, yellow 33% | brown orange yellow |
-| terralith:savanna_badlands | 0.33 | 1/5.3 | 1/2.3 | 1/8.0 | red 37%, orange 27%, yellow 26%, brown 10% | brown orange red |
-| terralith:savanna_slopes | 0.00 | 1/5.3 | 1/2.6 | 1/8.0 | red 30%, orange 30%, yellow 29%, brown 11% | brown orange yellow |
-| terralith:scarlet_mountains | 0.33 | 1/8.0 | 1/3.4 | 1/8.0 | white 57%, red 21%, brown 11%, orange 11% | brown orange red red |
-| terralith:shield | 0.67 | 1/6.4 | 1/2.5 | 1/8.0 | blue 38%, white 28%, red 15%, brown 8%, green 8% | blue brown green white |
-| terralith:shield_clearing | 0.00 | 1/8.0 | 1/3.0 | 1/8.0 | white 50%, blue 29%, yellow 12%, red 8% | blue white yellow |
-| terralith:shrubland | 0.47 | 1/8.0 | 1/2.7 | 1/8.0 | yellow 36%, orange 32%, red 20%, brown 11% | brown orange yellow |
-| terralith:siberian_grove | 0.00 | 1/6.4 | 1/3.4 | 1/8.0 | white 71%, blue 14%, light_blue 14% | blue light_blue white |
-| terralith:siberian_taiga | 0.60 | 1/6.4 | 1/3.4 | 1/8.0 | white 71%, blue 14%, green 14% | blue green white |
-| terralith:skylands_autumn | 0.00 | 1/6.4 | 1/2.8 | 1/8.0 | red 36%, orange 30%, yellow 26%, brown 9% | brown orange red yellow |
-| terralith:skylands_spring | 0.00 | 1.16 | 1.45 | 1/3.0 | pink 21%, magenta 16%, red 11%, yellow 11%, blue 10%, white 10%, orange 10%, light_blue 6%, lime 6% | light_blue lime magenta pink |
-| terralith:skylands_summer | 0.03 | 8.12 | 8.12 | 1/8.0 | yellow 90%, white 9% | lime orange yellow |
-| terralith:skylands_winter | 0.03 | 1/6.4 | 1/3.4 | 1/8.0 | white 79%, light_blue 21% | light_blue white |
-| terralith:snowy_badlands | 0.33 | 1/8.0 | 1/24 | 1/24 | orange 33%, red 33%, white 33% | orange red white |
-| terralith:snowy_maple_forest | 0.00 | 1/2.2 | 1/1.6 | 1/8.0 | white 47%, red 46%, orange 7% | orange red white |
-| terralith:snowy_shield | 0.00 | 1/6.4 | 1/3.4 | 1/8.0 | white 79%, blue 21% | blue white |
-| terralith:steppe | 0.53 | 1/8.0 | 1/2.7 | 1/8.0 | white 33%, yellow 22%, blue 15%, brown 11%, light_gray 11%, red 7% | brown light_gray yellow |
-| terralith:stony_spires | 0.23 | 1/8.0 | 1/8.0 | 1/8.0 | gray 50%, light_gray 50% | gray light_gray |
-| terralith:temperate_highlands | 0.57 | 1/1.4 | 1.29 | 1/3.0 | white 35%, red 27%, orange 13%, magenta 10%, green 5%, purple 5%, yellow 5% | green magenta purple red yellow |
-| terralith:tropical_jungle | 0.13 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 16%, cyan 6%, lime 6%, magenta 6%, yellow 4%, pink 4% | cyan lime magenta orange |
-| terralith:valley_clearing | 0.00 | 1/8.0 | 1/2.7 | 1/8.0 | white 44%, yellow 22%, blue 15%, lime 11%, red 7% | lime white yellow |
-| terralith:volcanic_crater | 0.00 | 1/8.0 | 1/24 | 1/24 | black 50%, red 50% | black red |
-| terralith:volcanic_peaks | 0.70 | 1/8.0 | 1/24 | 1/24 | black 33%, gray 33%, red 33% | black gray red |
-| terralith:warm_river | 0.23 | 1/6.4 | 1/11 | 1/16 | cyan 33%, lime 33%, red 22%, yellow 11% | cyan lime |
-| terralith:warped_mesa | 0.03 | 1/8.0 | 1/24 | 1/24 | cyan 33%, orange 33%, purple 33% | cyan orange purple |
-| terralith:white_cliffs | 0.00 | 1/6.4 | 1/11 | 1/16 | light_gray 33%, white 33%, red 22%, yellow 11% | light_gray white |
-| terralith:white_mesa | 0.00 | 1/8.0 | 1/24 | 1/24 | light_gray 33%, orange 33%, white 33% | light_gray orange white |
-| terralith:windswept_spires | 0.10 | 1/6.4 | 1/6.4 | 1/8.0 | gray 27%, light_gray 27%, white 27%, red 13%, yellow 7% | gray light_gray white |
-| terralith:wintry_forest | 0.20 | 1/6.4 | 1/3.4 | 1/8.0 | white 71%, blue 14%, green 14% | blue green white |
-| terralith:wintry_lowlands | 0.03 | 1/6.4 | 1/3.4 | 1/8.0 | white 79%, light_blue 21% | light_blue white |
-| terralith:yellowstone | 4.20 | 1/6.4 | 1/2.0 | 1/8.0 | blue 34%, white 23%, red 16%, yellow 7%, brown 5%, cyan 5%, green 5%, orange 5% | brown cyan green orange yellow |
-| terralith:yosemite_cliffs | 0.10 | 1/8.0 | 1/3.1 | 1/8.0 | white 44%, blue 33%, gray 13%, magenta 10% | blue gray white |
-| terralith:yosemite_lowlands | 0.10 | 1/5.7 | 1/1.6 | 1/8.0 | white 46%, blue 25%, yellow 13%, red 12%, green 5% | blue green white yellow |
+| badlands | 0.26 | 1/8.0 | 1/24 | 1/24 | brown 25%, orange 25%, red 25%, yellow 25% | brown orange red yellow |
+| bamboo_jungle | 0.14 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, yellow 10%, orange 10%, cyan 6%, green 6%, lime 6%, pink 4% | cyan green lime yellow |
+| beach | 1.44 | 1/6.4 | 1/11 | 1/16 | yellow 28%, red 22%, cyan 17%, light_blue 17%, white 17% | cyan light_blue white yellow |
+| birch_forest | 0.29 | 1/1.3 | 1.02 | 1/8.0 | white 68%, pink 14%, red 7%, magenta 4% | light_gray lime pink white yellow |
+| dark_forest | 0.81 | 1/3.3 | 1/1.5 | 1/3.0 | white 22%, black 21%, magenta 14%, red 8%, brown 7%, gray 7%, green 7%, purple 7%, pink 5% | black black black brown gray green purple |
+| desert | 0.47 | 1/6.4 | 1/24 | 1/24 | brown 33%, orange 33%, yellow 33% | brown orange yellow |
+| eroded_badlands | 0.14 | 1/8.0 | 1/24 | 1/24 | brown 33%, orange 33%, red 33% | brown orange red |
+| flower_forest | 0.15 | 1/1.3 | 1.1 | 1/3.0 | white 27%, pink 19%, red 15%, magenta 11%, yellow 8%, orange 8%, blue 4%, light_blue 4%, purple 4% | light_blue magenta orange pink purple red white yellow |
+| forest | 2.58 | 1/3.2 | 1/2.0 | 1/8.0 | white 45%, red 21%, pink 11%, magenta 7%, yellow 6%, brown 4%, green 4%, lime 4% | brown green lime pink red white yellow |
+| frozen_peaks | 0.81 | 1/8.0 | 1/24 | 1/24 | light_blue 33%, light_gray 33%, white 33% | light_blue light_gray white |
+| frozen_river | 0.53 | 1/6.4 | 1/16 | 1/16 | light_blue 50%, white 50% | light_blue white |
+| grove | 0.09 | 1/8.0 | 1/3.4 | 1/8.0 | white 68%, blue 11%, light_blue 11%, light_gray 11% | blue light_blue light_gray white |
+| ice_spikes | 0.14 | 1/6.4 | 1/24 | 1/24 | cyan 33%, light_blue 33%, white 33% | cyan light_blue white |
+| jagged_peaks | 0.38 | 1/8.0 | 1/24 | 1/24 | gray 33%, light_gray 33%, white 33% | gray light_gray white |
+| jungle | 0.66 | 1/5.3 | 1/2.0 | 1/8.0 | red 32%, light_blue 30%, orange 15%, cyan 5%, green 5%, lime 5%, yellow 4%, pink 4% | cyan green lime orange red |
+| mangrove_swamp | 0.36 | 1/8.0 | 1/3.4 | 1/8.0 | light_blue 46%, magenta 11%, brown 11%, cyan 11%, green 11%, lime 11% | brown cyan green lime |
+| meadow | 0.96 | 1/1.1 | 1.54 | 1/3.0 | white 30%, magenta 15%, yellow 15%, blue 15%, red 12%, pink 9%, light_blue 4% | blue light_blue magenta pink white yellow |
+| mushroom_fields | 0.06 | 1/8.0 | 1/4.0 | 1/4.0 | black 20%, brown 20%, gray 20%, purple 20%, red 20% | black brown gray purple red |
+| old_growth_birch_forest | 0.41 | 8.31 | 8.55 | 1/8.0 | magenta 38%, pink 26%, white 18%, blue 16% | light_gray white yellow |
+| old_growth_pine_taiga | 0.85 | 1/6.4 | 1/2.5 | 1/8.0 | blue 38%, white 21%, red 15%, brown 8%, green 8%, orange 8% | blue brown green orange |
+| old_growth_spruce_taiga | 0.65 | 1/6.4 | 1/2.5 | 1/8.0 | blue 37%, white 21%, red 15%, black 6%, brown 6%, green 6%, purple 6% | black blue brown green purple |
+| plains | 2.08 | 1/2.4 | 1/1.6 | 1/8.0 | white 33%, yellow 19%, red 16%, blue 14%, pink 9%, orange 6%, lime 3% | blue lime pink red white yellow |
+| river | 1.83 | 1/6.4 | 1/11 | 1/16 | red 22%, blue 17%, cyan 17%, light_blue 17%, white 17%, yellow 11% | blue cyan light_blue white |
+| savanna | 0.83 | 1/5.3 | 1/2.3 | 1/8.0 | red 34%, yellow 33%, orange 25%, brown 7% | brown orange red yellow |
+| savanna_plateau | 0.44 | 1/5.3 | 1/2.6 | 1/8.0 | red 38%, orange 27%, yellow 26%, brown 8% | brown orange red yellow |
+| snowy_beach | 0.43 | 1/6.4 | 1/16 | 1/16 | light_blue 33%, light_gray 33%, white 33% | light_blue light_gray white |
+| snowy_plains | 1.36 | 1/6.4 | 1/3.4 | 1/8.0 | white 68%, blue 11%, light_blue 11%, light_gray 11% | blue light_blue light_gray white |
+| snowy_slopes | 0.14 | 1/8.0 | 1/8.0 | 1/8.0 | light_blue 33%, light_gray 33%, white 33% | light_blue light_gray white |
+| snowy_taiga | 1.14 | 1/6.4 | 1/3.4 | 1/8.0 | white 68%, blue 11%, green 11%, light_blue 11% | blue green light_blue white |
+| sparse_jungle | 0.54 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 16%, yellow 10%, green 6%, lime 6%, pink 4% | green lime orange yellow |
+| stony_peaks | 0.26 | 1/8.0 | 1/24 | 1/24 | gray 33%, light_gray 33%, white 33% | gray light_gray white |
+| stony_shore | 0.30 | 1/6.4 | 1/11 | 1/16 | red 22%, cyan 22%, gray 22%, light_gray 22%, yellow 11% | cyan gray light_gray |
+| sunflower_plains | 0.14 | 1/1.3 | 1.09 | 1/3.0 | yellow 55%, white 17%, orange 11%, pink 11%, red 5% | orange white yellow yellow |
+| swamp | 0.52 | 1/6.4 | 1/2.8 | 1/8.0 | light_blue 55%, magenta 15%, brown 6%, cyan 6%, green 6%, lime 6%, purple 6% | brown cyan green lime magenta purple |
+| taiga | 1.20 | 1/6.4 | 1/2.5 | 1/8.0 | blue 38%, white 21%, red 15%, brown 8%, green 8%, orange 8% | blue brown green orange |
+| windswept_forest | 0.20 | 1/5.8 | 1/1.6 | 1/8.0 | blue 37%, white 30%, red 10%, magenta 5%, gray 5%, green 5%, light_gray 5% | blue gray green light_gray |
+| windswept_gravelly_hills | 0.15 | 1/6.4 | 1/6.4 | 1/8.0 | gray 40%, light_gray 40%, red 13%, yellow 7% | gray light_gray |
+| windswept_hills | 0.14 | 1/6.4 | 1/2.8 | 1/8.0 | white 37%, blue 27%, magenta 9%, gray 9%, light_gray 9%, red 6% | blue gray light_gray white |
+| windswept_savanna | 0.53 | 1/6.4 | 1/2.5 | 1/8.0 | red 32%, orange 27%, yellow 26%, brown 8%, gray 8% | brown gray orange red |
+| wooded_badlands | 0.15 | 1/8.0 | 1/3.1 | 1/8.0 | orange 33%, red 33%, yellow 15%, brown 10%, green 10% | brown green orange red |
+| terralith:alpha_islands | 0.15 | 1.12 | 1.33 | 1/8.0 | red 43%, yellow 41%, white 13%, lime 3% | lime red yellow |
+| terralith:alpha_islands_winter | 0.15 | 1.12 | 1.29 | 1/8.0 | red 39%, yellow 39%, white 18%, light_blue 5% | light_blue white |
+| terralith:alpine_grove | 0.15 | 1/8.0 | 1/3.4 | 1/8.0 | white 71%, blue 14%, light_blue 14% | blue light_blue white |
+| terralith:alpine_highlands | 0.72 | 1/8.0 | 1/1.9 | 1/8.0 | white 48%, blue 29%, magenta 6%, light_gray 6%, yellow 6%, red 5% | blue light_gray white yellow |
+| terralith:amethyst_canyon | 0.15 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 10%, lime 8%, magenta 8%, purple 8%, yellow 4%, pink 4% | lime magenta purple |
+| terralith:amethyst_rainforest | 0.14 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 10%, green 6%, lime 6%, magenta 6%, purple 6%, yellow 4%, pink 4% | green lime magenta purple |
+| terralith:ancient_sands | 0.15 | 1/6.4 | 1/24 | 1/24 | brown 33%, orange 33%, yellow 33% | brown orange yellow |
+| terralith:arid_highlands | 0.29 | 1/5.3 | 1/2.3 | 1/8.0 | red 34%, yellow 33%, orange 25%, brown 7% | brown orange red yellow |
+| terralith:ashen_savanna | 0.12 | 1/5.3 | 1/2.6 | 1/8.0 | red 38%, orange 27%, yellow 18%, black 8%, gray 8% | black gray orange red |
+| terralith:basalt_cliffs | 0.29 | 1/6.4 | 1/11 | 1/16 | black 33%, gray 33%, red 22%, yellow 11% | black gray |
+| terralith:birch_taiga | 0.15 | 1/6.4 | 1/3.4 | 1/8.0 | white 68%, blue 11%, light_gray 11%, yellow 11% | blue light_gray white yellow |
+| terralith:blooming_plateau | 0.40 | 1.62 | 1.96 | 1/3.0 | white 38%, pink 15%, magenta 11%, yellow 11%, red 11%, blue 7%, orange 7% | magenta pink red white yellow |
+| terralith:blooming_valley | 0.26 | 1.62 | 1.92 | 1/3.0 | white 37%, pink 15%, magenta 11%, blue 7%, yellow 7%, orange 7%, red 7%, light_blue 3%, purple 3% | light_blue magenta pink purple white |
+| terralith:brushland | 1.21 | 1/5.3 | 1/2.3 | 1/8.0 | red 34%, yellow 33%, orange 25%, brown 7% | brown orange red yellow |
+| terralith:bryce_canyon | 0.16 | 1/8.0 | 1/24 | 1/24 | orange 50%, red 50% | orange red |
+| terralith:caldera | 0.24 | 1/6.4 | 1/2.8 | 1/8.0 | white 28%, blue 19%, red 18%, black 12%, gray 12%, magenta 9% | black gray red |
+| terralith:cloud_forest | 0.15 | 1.12 | 1.38 | 1/8.0 | white 81%, blue 9%, red 3% | green light_blue light_gray white |
+| terralith:cold_shrubland | 0.87 | 1/2.4 | 1/1.7 | 1/8.0 | white 46%, yellow 17%, red 8%, brown 7%, light_gray 7%, orange 6%, pink 6% | brown light_gray white |
+| terralith:desert_canyon | 0.15 | 1/6.4 | 1/24 | 1/24 | orange 33%, red 33%, yellow 33% | orange red yellow |
+| terralith:desert_oasis | 0.10 | 1/6.4 | 1/24 | 1/24 | cyan 33%, lime 33%, yellow 33% | cyan lime yellow |
+| terralith:desert_spires | 0.15 | 1/6.4 | 1/24 | 1/24 | orange 50%, yellow 50% | orange yellow |
+| terralith:emerald_peaks | 0.15 | 1/8.0 | 1/24 | 1/24 | green 33%, lime 33%, white 33% | green lime white |
+| terralith:forested_highlands | 0.71 | 1/2.2 | 1/1.4 | 1/8.0 | red 45%, white 24%, blue 22%, brown 4%, green 4% | blue brown green red |
+| terralith:fractured_savanna | 0.48 | 1/5.3 | 1/3.3 | 1/24 | red 43%, orange 29%, yellow 23%, brown 5% | brown orange red |
+| terralith:frozen_cliffs | 0.29 | 1/6.4 | 1/24 | 1/24 | light_blue 50%, white 50% | light_blue white |
+| terralith:glacial_chasm | 0.81 | 1/6.4 | 1/24 | 1/24 | cyan 33%, light_blue 33%, white 33% | cyan light_blue white |
+| terralith:granite_cliffs | 0.30 | 1/6.4 | 1/11 | 1/16 | red 44%, gray 22%, pink 22%, yellow 11% | gray pink red |
+| terralith:gravel_beach | 0.74 | 1/6.4 | 1/11 | 1/16 | red 22%, cyan 22%, gray 22%, light_gray 22%, yellow 11% | cyan gray light_gray |
+| terralith:gravel_desert | 0.24 | 1/6.4 | 1/24 | 1/24 | brown 33%, gray 33%, light_gray 33% | brown gray light_gray |
+| terralith:haze_mountain | 0.15 | 1/6.4 | 1/2.5 | 1/8.0 | white 31%, blue 31%, red 15%, light_gray 10%, purple 10% | light_gray purple white |
+| terralith:highlands | 0.89 | 1/2.2 | 1/1.2 | 1/8.0 | white 44%, magenta 23%, blue 18%, red 7%, pink 4%, yellow 4% | blue red white yellow |
+| terralith:hot_shrubland | 0.23 | 1/2.4 | 1/1.5 | 1/8.0 | yellow 33%, red 23%, orange 22%, white 9%, pink 6%, brown 5% | brown orange red yellow |
+| terralith:ice_marsh | 0.73 | 1/6.4 | 1/2.1 | 1/8.0 | white 61%, light_blue 30%, cyan 9% | cyan light_blue white |
+| terralith:jungle_mountains | 0.19 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 18%, green 8%, lime 8%, yellow 4%, pink 4% | green lime orange |
+| terralith:lavender_forest | 0.15 | 1/1.6 | 1.92 | 1/3.0 | magenta 59%, white 9%, purple 9%, pink 7%, red 5%, light_blue 4% | light_blue magenta purple purple |
+| terralith:lavender_valley | 0.29 | 1/1.6 | 1.92 | 1/3.0 | magenta 59%, pink 11%, white 9%, purple 9%, red 5% | magenta pink purple purple |
+| terralith:lush_desert | 0.14 | 1/6.4 | 1/24 | 1/24 | lime 33%, orange 33%, yellow 33% | lime orange yellow |
+| terralith:lush_valley | 0.17 | 1/6.4 | 1/2.5 | 1/8.0 | blue 38%, white 21%, red 15%, yellow 10%, green 8%, lime 8% | blue green lime yellow |
+| terralith:mirage_isles | 0.17 | 1/3.3 | 1/3.3 | 1/8.0 | magenta 22%, white 22%, red 19%, pink 12%, cyan 10%, light_blue 10%, yellow 3% | cyan light_blue magenta white |
+| terralith:moonlight_grove | 0.15 | 1/1.3 | 1.55 | 1/3.0 | blue 43%, white 30%, light_blue 17%, purple 5%, pink 5% | blue light_blue purple white |
+| terralith:moonlight_valley | 0.34 | 2.64 | 3.43 | 1/3.0 | orange 55%, blue 19%, white 13%, light_blue 8% | blue light_blue purple white |
+| terralith:orchid_swamp | 0.31 | 3.12 | 3.5 | 1/3.0 | light_blue 58%, yellow 17%, blue 17%, magenta 3% | cyan light_blue magenta pink |
+| terralith:painted_mountains | 0.16 | 1/8.0 | 1/24 | 1/24 | orange 25%, purple 25%, red 25%, yellow 25% | orange purple red yellow |
+| terralith:red_oasis | 0.15 | 1/6.4 | 1/24 | 1/24 | cyan 25%, lime 25%, orange 25%, red 25% | cyan lime orange red |
+| terralith:rocky_jungle | 0.21 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 10%, gray 8%, green 8%, lime 8%, yellow 4%, pink 4% | gray green lime |
+| terralith:rocky_mountains | 1.12 | 1/8.0 | 1/3.4 | 1/8.0 | white 68%, blue 11%, gray 11%, light_gray 11% | blue gray light_gray white |
+| terralith:rocky_shrubland | 0.15 | 1/2.4 | 1/1.7 | 1/8.0 | white 39%, yellow 17%, red 8%, brown 7%, gray 7%, light_gray 7%, orange 6%, pink 6% | brown gray light_gray |
+| terralith:sakura_grove | 0.15 | 1.12 | 1.92 | 1/3.0 | pink 57%, magenta 33%, white 10% | magenta pink pink white |
+| terralith:sakura_valley | 0.15 | 1.12 | 1.92 | 1/3.0 | pink 57%, magenta 33%, white 10% | magenta pink pink white |
+| terralith:sandstone_valley | 0.12 | 1/6.4 | 1/24 | 1/24 | brown 33%, orange 33%, yellow 33% | brown orange yellow |
+| terralith:savanna_badlands | 0.38 | 1/5.3 | 1/2.3 | 1/8.0 | red 37%, orange 27%, yellow 26%, brown 10% | brown orange red |
+| terralith:savanna_slopes | 0.14 | 1/5.3 | 1/2.6 | 1/8.0 | red 30%, orange 30%, yellow 29%, brown 11% | brown orange yellow |
+| terralith:scarlet_mountains | 0.29 | 1/8.0 | 1/3.4 | 1/8.0 | white 57%, red 21%, brown 11%, orange 11% | brown orange red red |
+| terralith:shield | 0.95 | 1/6.4 | 1/2.5 | 1/8.0 | blue 38%, white 28%, red 15%, brown 8%, green 8% | blue brown green white |
+| terralith:shield_clearing | 0.15 | 1/8.0 | 1/3.0 | 1/8.0 | white 50%, blue 29%, yellow 12%, red 8% | blue white yellow |
+| terralith:shrubland | 0.26 | 1/8.0 | 1/2.7 | 1/8.0 | yellow 36%, orange 32%, red 20%, brown 11% | brown orange yellow |
+| terralith:siberian_grove | 0.15 | 1/6.4 | 1/3.4 | 1/8.0 | white 71%, blue 14%, light_blue 14% | blue light_blue white |
+| terralith:siberian_taiga | 0.81 | 1/6.4 | 1/3.4 | 1/8.0 | white 71%, blue 14%, green 14% | blue green white |
+| terralith:skylands_autumn | 0.03 | 1/6.4 | 1/2.8 | 1/8.0 | red 36%, orange 30%, yellow 26%, brown 9% | brown orange red yellow |
+| terralith:skylands_spring | 0.01 | 1.16 | 1.45 | 1/3.0 | pink 21%, magenta 16%, red 11%, yellow 11%, blue 10%, white 10%, orange 10%, light_blue 6%, lime 6% | light_blue lime magenta pink |
+| terralith:skylands_summer | 0.01 | 8.12 | 8.12 | 1/8.0 | yellow 90%, white 9% | lime orange yellow |
+| terralith:skylands_winter | 0.04 | 1/6.4 | 1/3.4 | 1/8.0 | white 79%, light_blue 21% | light_blue white |
+| terralith:snowy_badlands | 0.30 | 1/8.0 | 1/24 | 1/24 | orange 33%, red 33%, white 33% | orange red white |
+| terralith:snowy_maple_forest | 0.15 | 1/2.2 | 1/1.6 | 1/8.0 | white 47%, red 46%, orange 7% | orange red white |
+| terralith:snowy_shield | 0.14 | 1/6.4 | 1/3.4 | 1/8.0 | white 79%, blue 21% | blue white |
+| terralith:steppe | 0.33 | 1/8.0 | 1/2.7 | 1/8.0 | white 33%, yellow 22%, blue 15%, brown 11%, light_gray 11%, red 7% | brown light_gray yellow |
+| terralith:stony_spires | 0.22 | 1/8.0 | 1/8.0 | 1/8.0 | gray 50%, light_gray 50% | gray light_gray |
+| terralith:temperate_highlands | 0.54 | 1/1.4 | 1.29 | 1/3.0 | white 35%, red 27%, orange 13%, magenta 10%, green 5%, purple 5%, yellow 5% | green magenta purple red yellow |
+| terralith:tropical_jungle | 0.10 | 1/5.3 | 1/2.0 | 1/8.0 | light_blue 30%, red 27%, orange 16%, cyan 6%, lime 6%, magenta 6%, yellow 4%, pink 4% | cyan lime magenta orange |
+| terralith:valley_clearing | 0.30 | 1/8.0 | 1/2.7 | 1/8.0 | white 44%, yellow 22%, blue 15%, lime 11%, red 7% | lime white yellow |
+| terralith:volcanic_crater | 0.15 | 1/8.0 | 1/24 | 1/24 | black 50%, red 50% | black red |
+| terralith:volcanic_peaks | 0.27 | 1/8.0 | 1/24 | 1/24 | black 33%, gray 33%, red 33% | black gray red |
+| terralith:warm_river | 0.14 | 1/6.4 | 1/11 | 1/16 | cyan 33%, lime 33%, red 22%, yellow 11% | cyan lime |
+| terralith:warped_mesa | 0.15 | 1/8.0 | 1/24 | 1/24 | cyan 33%, orange 33%, purple 33% | cyan orange purple |
+| terralith:white_cliffs | 0.29 | 1/6.4 | 1/11 | 1/16 | light_gray 33%, white 33%, red 22%, yellow 11% | light_gray white |
+| terralith:white_mesa | 0.15 | 1/8.0 | 1/24 | 1/24 | light_gray 33%, orange 33%, white 33% | light_gray orange white |
+| terralith:windswept_spires | 0.17 | 1/6.4 | 1/6.4 | 1/8.0 | gray 27%, light_gray 27%, white 27%, red 13%, yellow 7% | gray light_gray white |
+| terralith:wintry_forest | 0.41 | 1/6.4 | 1/3.4 | 1/8.0 | white 71%, blue 14%, green 14% | blue green white |
+| terralith:wintry_lowlands | 0.14 | 1/6.4 | 1/3.4 | 1/8.0 | white 79%, light_blue 21% | light_blue white |
+| terralith:yellowstone | 4.75 | 1/6.4 | 1/2.0 | 1/8.0 | blue 34%, white 23%, red 16%, yellow 7%, brown 5%, cyan 5%, green 5%, orange 5% | brown cyan green orange yellow |
+| terralith:yosemite_cliffs | 0.21 | 1/8.0 | 1/3.1 | 1/8.0 | white 44%, blue 33%, gray 13%, magenta 10% | blue gray white |
+| terralith:yosemite_lowlands | 0.16 | 1/5.7 | 1/1.6 | 1/8.0 | white 46%, blue 25%, yellow 13%, red 12%, green 5% | blue green white yellow |
 
 ## 5. Existing features (biome files)
 

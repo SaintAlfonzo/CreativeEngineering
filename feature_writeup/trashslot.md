@@ -4,12 +4,12 @@
 
 | Part | Status |
 |---|---|
-| Pack default screens (`[trash_slot] enabledScreens`, switched on once per client) | BUILT, in `mods/` (patcherMod 1.0.3), not deployed |
-| `allContainers` switch for every other container (off) + `excludedScreens` | BUILT, off by default |
-| Starting positions per screen (`positions`) | BUILT |
-| Sophisticated Backpacks: one position and on/off per tier | BUILT |
-| Creative inventory screen + survival inventory while in creative | BUILT |
-| Slot kept on screen at high GUI scale (upstream Y clamp bug) | BUILT |
+| Pack default screens (`[trash_slot] enabledScreens`, switched on once per client) | DEPLOYED with 1.0.3 (patcherMod 1.0.3) |
+| `allContainers` switch for every other container (off) + `excludedScreens` | DEPLOYED with 1.0.3, off by default |
+| Starting positions per screen (`positions`) | DEPLOYED with 1.0.3 |
+| Sophisticated Backpacks: one position and on/off per tier | DEPLOYED with 1.0.3 |
+| Creative inventory screen + survival inventory while in creative | DEPLOYED with 1.0.3 |
+| Slot kept on screen at high GUI scale (upstream Y clamp bug) | DEPLOYED with 1.0.3 |
 
 - **Files to open:** [TrashSlotCompat.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/TrashSlotCompat.java),
   [TrashSlotGuiHandlerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TrashSlotGuiHandlerMixin.java),
@@ -111,3 +111,4 @@ shared one spot even though each tier has a different panel size, and it never a
 
 - 2026-09-30: investigated (plan_1.0.3 section 5.5), then built; compiled as patcherMod 1.0.3 (in `development/patcherMod/build/libs/` and `jar_archive/`, not in `mods/`, not deployed).
 - 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
+- 2026-10-19: status sweep: went out with pack 1.0.3 (DEPLOYED 2026-10-02); TS-01 to TS-13 pending.

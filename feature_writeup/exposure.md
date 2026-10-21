@@ -4,7 +4,7 @@
 
 | Part | Status |
 |---|---|
-| Exposure 1.9.19 base port (`exposure`): camera, films, lightroom, albums, frames, camera stand, projector | DEPLOYED (in `mods/`, ships with 1.0.3), in-game test pending (EX-11, EX-17 PASSED) |
+| Exposure 1.9.19 base port (`exposure`): camera, films, lightroom, albums, frames, camera stand, projector | DEPLOYED (in `mods/`, ships with 1.0.3), in-game test pending (EX-11, EX-17 PASSED); album text fix `-03` with 1.0.6 (EX-13), viewfinder click fix `-04` with 1.0.7 (EX-25) |
 | Exposure Polaroid 1.1.6 (`exposure_polaroid`): Instant Camera + 4 instant slides | DEPLOYED, in-game test pending |
 | Exposure: Expanded 1.0.1 (`exposure_expanded`): 2 lenses, 16 filters, palette / hicap / hires films, 6 instant slides | DEPLOYED, in-game test pending |
 | Build-time merge of addon tags and global loot modifiers into the base mod's files | BUILT, offline checks pass |
@@ -12,7 +12,7 @@
 | Pack customisation (KubeJS recipes, tags, loot rules) | none yet; everything is upstream behaviour |
 
 - **What it is:** our own port of Exposure 1.9.19 and two of its addons from NeoForge 1.21.1 to Forge 1.19.2.
-  Everything is in one jar, `mods/exposureBackport-1.9.19-ce-19.2-03.jar` (STAGED for pack 1.0.6; `-02` shipped with 1.0.4), built from
+  Everything is in one jar, `mods/exposureBackport-1.9.19-ce-19.2-04.jar` (DEPLOYED with pack 1.0.7; `-02` shipped with 1.0.4, `-03` with 1.0.6), built from
   [development/exposureBackport](../development/exposureBackport/). It replaced Exposure 1.6.0.
 - **Files to open:** the port's [README.md](../development/exposureBackport/README.md) (layout, conventions,
   every deviation from upstream), [Exposure.java](../development/exposureBackport/src/main/java/io/github/mortuusars/exposure/Exposure.java)
@@ -222,6 +222,13 @@ palette with `/exposure palette export <id> json <file>`.
    - **The Camera Stand's film count only updated when its menu was opened.** Upstream force-resyncs the
      stand's camera after each shot. That flag was lost in the port, because 1.19.2 has no forced entity-data
      set. `Backport.setEntityData` + `SynchedEntityDataAccessor` restore it.
+6. **Bugs fixed in later builds:**
+   - **`-03` (2026-10-05, pack 1.0.6): album note and title boxes took no keys.** 1.19.2's screen focus never set
+     the widget's focused flag. The backport screens set it (EX-13).
+   - **`-04` (2026-10-14, pack 1.0.7): the viewfinder ate clicks inside screens.** The viewfinder is static, so it
+     outlived respawns, dimension changes and rejoins; a stuck one swallowed clicks in inventories. It is now dropped
+     when the ticking player has no active camera and on logout (`ForgeClientEvents.onLoggingOut`), and the
+     `InputEvent.MouseButton.Pre` hook ignores clicks while a screen is open (EX-25).
 
 ## 4. Limits and decisions
 
@@ -325,6 +332,7 @@ Server and sharing:
 - [ ] **EX-22 export:** view a photo you took → a PNG appears under `exposures/<world>/`.
 - [ ] **EX-23 JEI:** JEI shows Photograph Printing (catalyst Lightroom), Photograph Stacking, and the developing recipes, including the Create ones.
 - [ ] **EX-24 base loot:** open fresh village plains house and shipwreck map chests → aged photographs that show images.
+- [ ] **EX-25 viewfinder and screens (`-04`):** raise the viewfinder, then die and respawn, change dimension, and relog, each with the camera still in hand → after each, open the inventory and a chest and click items → every click moves items, no shutter sound, no shot taken. Also with the viewfinder up: open the inventory (E) and click items → items move, no shot taken.
 
 Polaroid:
 - [ ] **EX-30 instant camera:** craft it, load 12 instant color slides, shoot → the print appears in the inventory and the slide count drops to 11.
@@ -359,3 +367,9 @@ Before deploying 1.0.3:
   the 1.0.5 removals delete `-02` on both machines.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged (`-03`).
+- 2026-10-14: `-04` built: the viewfinder is dropped when the ticking player has no active camera and on logout (it is
+  static, so it outlived respawns, dimension changes and rejoins), and Forge's `MouseButton.Pre` hook ignores clicks
+  while a screen is open. Before, a stuck viewfinder ate clicks inside inventories.
+- 2026-10-19: `-04` had gone out in pack 1.0.7 (DEPLOYED 2026-10-18, [plan_1.0.7.md](plan_1.0.7.md) EX). Unchanged in
+  1.0.8.
+- 2026-10-19: `-03` and `-04` fixes written up in 3.6; EX-25 added for `-04`.

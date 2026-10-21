@@ -4,6 +4,323 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.0.9 -->
+## 1.0.9 - 2026-10-19 15:54
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: bb67d68 + 37 uncommitted file(s)
+- Since: 1.0.8
+- Deployed: server, client 2026-10-19 15:54
+- Contents: 373 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
+- Payload: update from 1.0.8, config functional: 35 files, 5.5 MB (mods 1, kubejs 34)
+- Built with warnings:
+  - pack/manifest.json is out of date with mods/: run tools/gen_pack_manifest.py and commit pack/
+  - 37 uncommitted change(s) in shipped folders (commit bb67d68 + working tree)
+
+### Changes
+
+Mods updated (1):
+
+- creativeengineering: `creativeengineering-1.0.8.jar` -> `creativeengineering-1.0.9.jar`
+
+Mods removed (1):
+
+- Rain should extinguish campfires 1.0-1.19.2-forge `rsec-1.0-1.19.2-forge.jar` (was both)
+
+<details><summary>kubejs/: 8 added, 26 changed, 0 removed</summary>
+
+*added (8)*
+
+- `data/create_dd/worldgen/configured_feature/striated_eroded_overworld.json`
+- `data/creativeengineering/forge/biome_modifier/nether_worldgen/scarlet_mountains_crimson.json`
+- `data/minecraft/worldgen/noise_settings/large_biomes.json`
+- `data/minecraft/worldgen/noise_settings/overworld.json`
+- `data/terralith/worldgen/configured_feature/enchanted/enchanted_oak.json`
+- `data/terralith/worldgen/configured_feature/flower/blue/flowers.json`
+- `data/terralith/worldgen/configured_feature/flower/blue/nylium_disk.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.caves.json.gz`
+
+*changed (26)*
+
+- `client_scripts/potion_buckets.js`
+- `data/campsite_structures/worldgen/structure/armorer_campsite.json`
+- `data/campsite_structures/worldgen/structure/butcher_campsite.json`
+- `data/campsite_structures/worldgen/structure/cartographer_campsite.json`
+- `data/campsite_structures/worldgen/structure/cleric_campsite.json`
+- `data/campsite_structures/worldgen/structure/farmer_campsite.json`
+- `data/campsite_structures/worldgen/structure/fisher_campsite.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/biome_fits.json`
+- `generation_scripts/worldgen/flower_features.json`
+- `generation_scripts/worldgen/nether_block_swaps.json`
+- `generation_scripts/worldgen/structure_tags.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `server_scripts/_lib/dump_all.js`
+- `server_scripts/_lib/dump_climate.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/equipment/tipped_arrows.js`
+- `server_scripts/metal/metal_base_materials.js`
+- `server_scripts/metal/misc_metal_crafts.js`
+- `server_scripts/tags/equipmenttags.js`
+- `server_scripts/wood/sawdust.js`
+- `server_scripts/worldgen/terrain_adaptation.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/func/armor_effects.js`
+- `startup_scripts/func/potion_area.js`
+- `startup_scripts/items/air_brake.js`
+
+</details>
+
+### Removals (from 1.0.8)
+
+Delete on the server (2, also in removals_server.txt):
+
+- `mods/creativeengineering-1.0.8.jar`
+- `mods/rsec-1.0-1.19.2-forge.jar`
+
+Delete on the client (2, also in removals_client.txt):
+
+- `mods/creativeengineering-1.0.8.jar`
+- `mods/rsec-1.0-1.19.2-forge.jar`
+
+<!-- deploy:1.0.8 -->
+## 1.0.8 - 2026-10-19 10:06
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 2e8687f + 4 uncommitted file(s)
+- Since: 1.0.7
+- Deployed: server, client 2026-10-19 10:20
+- Contents: 374 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
+- Payload: update from 1.0.7, config functional: 41 files, 5.5 MB (mods 3, kubejs 28, config 8, defaultconfigs 2)
+- Notes: Restaged 2026-10-19 (replaces the 01:16 staging): patcherMod 1.0.8 rebuilt with the dedicated-server boot fix (Serene Seasons clock mixin split into server + client), flat worlds stay flat (RegistryLoaderPresetOverworldMixin), /ceplace templates lists per pack, /dumpstructuregen reads the protected placement fields (PlacementInfo); type/* structure tags are real tags so earth-fill pruning runs on villages; town companion villages 64-96 blocks out
+- Built with warnings:
+  - 4 uncommitted change(s) in shipped folders (commit 2e8687f + working tree)
+
+### Changes
+
+Mods updated (3):
+
+- brewinandchewin: `BrewinAndChewin-1.19-2.0.jar` -> `backportedBrewin-4.5.0-ce-19.2-02.jar`
+- creativeengineering: `creativeengineering-1.0.7.jar` -> `creativeengineering-1.0.8.jar`
+- vinery: `backportedVinery-1.5.5-ce-19.2-01.jar` -> `backportedVinery-1.5.5-ce-19.2-02.jar`
+
+<details><summary>kubejs/: 6 added, 22 changed, 1 removed</summary>
+
+*added (6)*
+
+- `assets/creativeengineering/textures/item/baking_sheet.png`
+- `assets/creativeengineering/textures/item/cake_pan.png`
+- `assets/creativeengineering/textures/item/cornmeal.png`
+- `assets/creativeengineering/textures/item/pie_tin.png`
+- `server_scripts/cooking/alcohol.js`
+- `startup_scripts/cooking/cornmeal.js`
+
+*changed (22)*
+
+- `assets/creativeengineering/lang/en_us.json`
+- `client_scripts/placeable_tooltip.js`
+- `client_scripts/tooltips.js`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/food/placeable.json`
+- `generation_scripts/stacks/stack_sizes.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/meta_structures.json`
+- `server_scripts/_lib/dump_structuregen.js`
+- `server_scripts/cooking/baking.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/cookingtags.js`
+- `server_scripts/tags/metaltags.js`
+- `server_scripts/tags/placeabletags.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/fluid_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/changes/transition_items.js`
+- `startup_scripts/cooking/bakeware.js`
+- `startup_scripts/func/neoCraftHelper.js`
+
+*removed (1)*
+
+- `assets/cornmeal.png`
+
+</details>
+
+config/: 0 added, 8 changed, 0 removed:
+
+*changed (8)*
+
+- `brewinandchewin-common.toml`
+- `creativeengineering-common.toml`
+- `rare-ice.properties`
+- `vinery-common.toml`
+- `ftbquests/quests/chapters/progression.snbt`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+defaultconfigs/: 0 added, 2 changed, 0 removed:
+
+*changed (2)*
+
+- `seasonhud-server.toml`
+- `sereneseasons-server.toml`
+
+### Removals (from 1.0.7)
+
+Delete on the server (5, also in removals_server.txt):
+
+- `kubejs/assets/cornmeal.png`
+- `mods/BrewinAndChewin-1.19-2.0.jar`
+- `mods/backportedBrewin-4.5.0-ce-19.2-01.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-01.jar`
+- `mods/creativeengineering-1.0.7.jar`
+
+Delete on the client (5, also in removals_client.txt):
+
+- `kubejs/assets/cornmeal.png`
+- `mods/BrewinAndChewin-1.19-2.0.jar`
+- `mods/backportedBrewin-4.5.0-ce-19.2-01.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-01.jar`
+- `mods/creativeengineering-1.0.7.jar`
+
+<!-- deploy:1.0.7 -->
+## 1.0.7 - 2026-10-18 19:29
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 908e831 + 3 uncommitted file(s)
+- Since: 1.0.6
+- Deployed: server, client 2026-10-18 19:43
+- Contents: 375 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
+- Payload: update from 1.0.6, config functional: 51 files, 15.0 MB (mods 6, kubejs 34, config 7, resourcepacks 2, vinery_upstream 2)
+- Notes: hotfix: backportedVinery grass slab bonemeal crash with Immersive Weathering (fertile property)
+- Built with warnings:
+  - pack/manifest.json is out of date with mods/: run tools/gen_pack_manifest.py and commit pack/
+  - 3 uncommitted change(s) in shipped folders (commit 908e831 + working tree)
+
+### Changes
+
+Mods added (2):
+
+- Create : The Salt 1.1.0 `create_salt 1.19.2-1.1.0.jar` (both)
+- Storage Labels 1.19.2-1.10 `labels-1.19.2-1.10.jar` (both)
+
+Mods updated (3):
+
+- creativeengineering: `creativeengineering-1.0.6.jar` -> `creativeengineering-1.0.7.jar`
+- exposure: `exposureBackport-1.9.19-ce-19.2-03.jar` -> `exposureBackport-1.9.19-ce-19.2-04.jar`
+- vinery: `letsdo-vinery-forge-1.3.10.jar` -> `backportedVinery-1.5.5-ce-19.2-01.jar`
+
+Mods removed (1):
+
+- [Let's Do] API  1.1.0b-forge `doapi-1.1.0b.jar` (was both)
+
+Mods whose side changed (14):
+
+- Async Locator `async-locator-forge-1.19.2-1.3.0.jar`: server -> both
+- Block Runner `BlockRunner-v4.2.2-1.19.2-Forge.jar`: server -> both
+- Cherished Items `CherishedItems-Forge-1.19.2-1.0.2.jar`: server -> both
+- Chunky (Forge/NeoForge) `Chunky-1.3.38.jar`: server -> both
+- Create: Fast SchematicCannon `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar`: server -> both
+- Create: Liquid Fuel `createliquidfuel-2.1.1-1.19.2.jar`: server -> both
+- Death Knell `DeathKnell-Forge-1.19.2-6.0.3.jar`: server -> both
+- Glowing Illagers `glowingraidillagers-1.19.2-1.0.0.jar`: server -> both
+- Ice Prevents Crop Growth `icepreventscropgrowth-1.19.2-3.2.jar`: server -> both
+- Lightman's Discord Integration `lightmansdiscord-1.19.2-0.2.0.3-server.jar`: server -> both
+- Loading Protection `loadingprotection-1.0.2-forge-1.19.2.jar`: server -> both
+- Rain should extinguish campfires `rsec-1.0-1.19.2-forge.jar`: server -> both
+- Simple Backups `SimpleBackups-1.19.1-2.1.12.jar`: server -> both
+- Tax Free Levels `TaxFreeLevels-1.4.23-forge-1.20.1.jar`: server -> both
+
+<details><summary>kubejs/: 10 added, 24 changed, 0 removed</summary>
+
+*added (10)*
+
+- `assets/cornmeal.png`
+- `assets/prepared_flesh.png`
+- `client_scripts/jei_order.js`
+- `server_scripts/cooking/baking.js`
+- `server_scripts/tags/jei_order_tags.js`
+- `startup_scripts/_lib/effect_dict.js`
+- `startup_scripts/_lib/multiblock_dict.js`
+- `startup_scripts/cooking/bakeware.js`
+- `startup_scripts/func/jei_order.js`
+- `startup_scripts/jei/order.js`
+
+*changed (24)*
+
+- `assets/creativeengineering/lang/en_us.json`
+- `assets/minecraft/texts/splashes.txt`
+- `client_scripts/fluid_jei.js`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_beach.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_extra.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_river.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/driftwood_swamp.json`
+- `generation_scripts/worldgen/biome_fits.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/structure_tags.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
+- `server_scripts/_lib/villager_trades_dump.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/engineering/fabric.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/cookingtags.js`
+- `server_scripts/worldgen/earth_fill.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/compost/compost_values.js`
+- `startup_scripts/func/neoCraftHelper.js`
+
+</details>
+
+config/: 2 added, 5 changed, 0 removed:
+
+*added (2)*
+
+- `brewinandchewin-common.toml`
+- `vinery-common.toml`
+
+*changed (5)*
+
+- `creativeengineering-common.toml`
+- `rare-ice.properties`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+resourcepacks/: 2 added, 0 changed, 0 removed:
+
+*added (2)*
+
+- `Fancy Crops v1.2.zip`
+- `Fancy_Beds-v4.2.zip`
+
+vinery_upstream/: 2 added, 0 changed, 0 removed:
+
+*added (2)*
+
+- `letsdo-vinery-fabric-1.5.5.jar`
+- `letsdo-vinery-forge-1.3.10.jar`
+
+### Removals (from 1.0.6)
+
+Delete on the server (4, also in removals_server.txt):
+
+- `mods/creativeengineering-1.0.6.jar`
+- `mods/doapi-1.1.0b.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-03.jar`
+- `mods/letsdo-vinery-forge-1.3.10.jar`
+
+Delete on the client (4, also in removals_client.txt):
+
+- `mods/creativeengineering-1.0.6.jar`
+- `mods/doapi-1.1.0b.jar`
+- `mods/exposureBackport-1.9.19-ce-19.2-03.jar`
+- `mods/letsdo-vinery-forge-1.3.10.jar`
+
 <!-- deploy:1.0.6 -->
 ## 1.0.6 - 2026-10-14 12:52
 

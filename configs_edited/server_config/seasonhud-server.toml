@@ -11,10 +11,10 @@
 	#value and are using Fabric Seasons.
 	#Default Minecraft day is 24000.
 	#Range: > 0
-	day_length = 192000
+	day_length = 24000
 	#Change if you are hosting a server and changed the default
 	#sub-season length in the Serene Seasons config.
 	#Default length is 8 days.
 	#Range: > 0
-	sub_season_length = 10
+	sub_season_length = 8
 

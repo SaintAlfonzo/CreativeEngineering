@@ -3,14 +3,20 @@ package com.SaintAlfonzo.creativeengineering.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.ingredients.ITypedIngredient;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.common.gui.JeiTooltip;
+import mezz.jei.common.util.ImmutableRect2i;
 import mezz.jei.library.gui.recipes.RecipeLayout;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
@@ -24,19 +30,50 @@ import java.util.List;
  * Forge. The first redirect remembers the hovered slot's displayed ingredient; the second attaches it to
  * the tooltip just before drawing. The category-tooltip branch never hits the first redirect, so it draws
  * as before. Catalyst slots are handled by {@link JeiRecipesGuiTooltipMixin}.
+ *
+ * <p>JEI picks the first slot under the mouse, so a fluid tank drawn over a RENDER_ONLY item icon (Brewin's
+ * keg: drink fluid over the tankard it pours into) always shows the fluid. When the hovered slot shows no
+ * item, the stack of a RENDER_ONLY item slot under the same point is attached instead: the text stays the
+ * fluid's, and AppleSkin gets the drink item.
  */
 @Mixin(value = RecipeLayout.class, remap = false)
 public class JeiRecipeLayoutTooltipMixin {
+
+    @Shadow
+    @Final
+    private List<IRecipeSlotDrawable> recipeCategorySlots;
+
+    @Shadow
+    private ImmutableRect2i area;
 
     @Unique
     @Nullable
     private ITypedIngredient<?> creativeengineering$hoveredIngredient;
 
+    @Unique
+    private int creativeengineering$mouseX;
+
+    @Unique
+    private int creativeengineering$mouseY;
+
+    @Inject(method = "drawOverlays", remap = false, at = @At("HEAD"))
+    private void creativeengineering$rememberMouse(PoseStack poseStack, int mouseX, int mouseY, CallbackInfo ci) {
+        this.creativeengineering$mouseX = mouseX;
+        this.creativeengineering$mouseY = mouseY;
+    }
+
     @Redirect(method = "drawOverlays", remap = false, require = 1,
             at = @At(value = "INVOKE", remap = false,
                     target = "Lmezz/jei/api/gui/ingredient/IRecipeSlotDrawable;getTooltip()Ljava/util/List;"))
     private List<Component> creativeengineering$rememberIngredient(IRecipeSlotDrawable slot) {
-        this.creativeengineering$hoveredIngredient = slot.getDisplayedIngredient().orElse(null);
+        ITypedIngredient<?> ingredient = slot.getDisplayedIngredient().orElse(null);
+        if (ingredient != null && ingredient.getItemStack().isEmpty()) {
+            ITypedIngredient<?> under = creativeengineering$renderOnlyItemUnderMouse(slot);
+            if (under != null) {
+                ingredient = under;
+            }
+        }
+        this.creativeengineering$hoveredIngredient = ingredient;
         return slot.getTooltip();
     }
 
@@ -49,5 +86,23 @@ public class JeiRecipeLayoutTooltipMixin {
             this.creativeengineering$hoveredIngredient = null;
         }
         tooltip.draw(poseStack, x, y);
+    }
+
+    /** Slot rects are recipe-relative, as in {@code RecipeLayout.getSlotUnderMouse}. */
+    @Unique
+    @Nullable
+    private ITypedIngredient<?> creativeengineering$renderOnlyItemUnderMouse(IRecipeSlotDrawable hovered) {
+        double recipeX = this.creativeengineering$mouseX - this.area.getX();
+        double recipeY = this.creativeengineering$mouseY - this.area.getY();
+        for (IRecipeSlotDrawable other : this.recipeCategorySlots) {
+            if (other == hovered || other.getRole() != RecipeIngredientRole.RENDER_ONLY || !other.isMouseOver(recipeX, recipeY)) {
+                continue;
+            }
+            ITypedIngredient<?> ingredient = other.getDisplayedIngredient().orElse(null);
+            if (ingredient != null && ingredient.getItemStack().isPresent()) {
+                return ingredient;
+            }
+        }
+        return null;
     }
 }

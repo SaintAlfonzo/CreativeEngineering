@@ -1,0 +1,13 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "sticky_it:item/stickyitem"
+  },
+  "overrides": [
+    { "predicate": { "creative_labels:look": 1 }, "model": "creative_labels:item/sticky_note_dyed" },
+    { "predicate": { "creative_labels:look": 2 }, "model": "creative_labels:item/sticky_note_inverted" },
+    { "predicate": { "creative_labels:look": 3 }, "model": "creative_labels:item/sticky_note_smile" },
+    { "predicate": { "creative_labels:look": 4 }, "model": "creative_labels:item/sticky_note_creeper" },
+    { "predicate": { "creative_labels:look": 5 }, "model": "creative_labels:item/sticky_note_gold" }
+  ]
+}

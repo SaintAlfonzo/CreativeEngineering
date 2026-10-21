@@ -103,7 +103,13 @@ function makeVillager(level, profession) {
 // Rhino rejects a const declared inside try {} here ("redeclaration of var"), hence a separate function with var.
 function dumpWinemakerPool(level, rand, samples, result) {
     try {
-        var wmClass = Java.loadClass('satisfyu.vinery.entity.WanderingWinemakerEntity')
+        // the Vinery backport's class, else 1.3.10's
+        var wmClass
+        try {
+            wmClass = Java.loadClass('net.satisfy.vinery.core.entity.WanderingWinemakerEntity')
+        } catch (missing) {
+            wmClass = Java.loadClass('satisfyu.vinery.entity.WanderingWinemakerEntity')
+        }
         var wmType = $EntityType.byString('vinery:wandering_winemaker').orElse(null)
         var wm = wmType ? wmType.create(level) : null
         if (!wm) return

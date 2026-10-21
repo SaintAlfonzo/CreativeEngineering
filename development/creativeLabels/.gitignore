@@ -1,0 +1,9 @@
+# The root .gitignore already excludes these for every in-tree mod; repeated here so the mod folder is
+# self-describing. Tracked: src/, build.gradle, gradle.properties, README.md, LICENSE.txt, BRIEF.md, this file.
+/build/
+/libs/
+/jar_archive/
+/run/
+/run-data/
+/.gradle/
+/.idea/

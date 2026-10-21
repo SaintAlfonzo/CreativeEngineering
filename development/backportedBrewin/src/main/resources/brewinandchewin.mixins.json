@@ -1,0 +1,29 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "umpaz.brewinandchewin.common.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "brewinandchewin.refmap.json",
+  "mixins": [
+    "BlockEntityLegacyIdMixin",
+    "IntoxicationCancelSaturationMixin",
+    "LivingEntityAccessor",
+    "LivingEntityMixin",
+    "MsgCommandMixin",
+    "PlayerMixin",
+    "PreventTaggedEffectRemovalMixin$HotCocoa",
+    "PreventTaggedEffectRemovalMixin$MilkBottle",
+    "ServerGamePacketListenerImplMixin"
+  ],
+  "client": [
+    "client.GuiMixin",
+    "client.TipsyMouseHandlerMixin",
+    "client.TipsyCameraDriftMixin",
+    "client.integration.appleskin.HUDOverlayHandlerMixin",
+    "client.TipsySignRendererMixin$TipsyCanvasSignRenderMixin",
+    "client.TipsySignRendererMixin$TipsySignRenderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

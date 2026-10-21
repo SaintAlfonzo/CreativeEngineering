@@ -1,0 +1,151 @@
+{
+ "_readme": {
+  "what": "Nether blocks in Overworld biomes (feature_writeup/nether_worldgen.md). python3 tools/gen_nether_worldgen.py turns these rules into kubejs/data overrides (listed in nether_worldgen_manifest.json); rerun it after editing this file or after a Terralith update. Structures are not here: they use nether_swap_rules.json.",
+  "surface": "Block results of the Overworld surface rule (Terralith's minecraft:overworld and minecraft:large_biomes noise settings). A rule changes a block result only where every biome condition on its path lies inside `biomes` (rules that apply to every biome are never touched). to: a block id, \"remove\" (the rule is dropped, so the next rule in the sequence decides), or a weighted list [{block, weight}] mixed per block at random (vertical_gradient bands of 16 blocks, about +-0.5 % off the weight).",
+  "features": "Configured features rewritten in place: every placed block state `from` becomes `to` (properties such as axis carry over), or with to \"remove\" its entry is dropped from a weighted state provider.",
+  "literal": "Whole data files written as given (code-registered entries with no json to copy, e.g. Create layered ores).",
+  "remove_features": "forge:remove_features modifiers: the placed features no longer generate in the listed biomes."
+ },
+ "surface": [
+  {
+   "note": "Scarlet Mountains: netherrack body to jasper with 10 % crimsite",
+   "biomes": [
+    "terralith:scarlet_mountains"
+   ],
+   "from": "minecraft:netherrack",
+   "to": [
+    {
+     "block": "quark:jasper",
+     "weight": 90
+    },
+    {
+     "block": "create:crimsite",
+     "weight": 10
+    }
+   ]
+  },
+  {
+   "note": "Scarlet Mountains: crimson nylium top removed (the stone mix shows instead)",
+   "biomes": [
+    "terralith:scarlet_mountains"
+   ],
+   "from": "minecraft:crimson_nylium",
+   "to": "remove"
+  }
+ ],
+ "features": [
+  {
+   "note": "Moonlight grove/valley: underwater warped nylium disks become grass (the disk only targets grass, so nothing changes)",
+   "feature": "terralith:flower/blue/nylium_disk",
+   "from": "minecraft:warped_nylium",
+   "to": "minecraft:grass_block"
+  },
+  {
+   "note": "Moonlight grove/valley: warped roots out of the blue flower mix",
+   "feature": "terralith:flower/blue/flowers",
+   "from": "minecraft:warped_roots",
+   "to": "remove"
+  },
+  {
+   "note": "Moonlight grove/valley: nether sprouts out of the blue flower mix",
+   "feature": "terralith:flower/blue/flowers",
+   "from": "minecraft:nether_sprouts",
+   "to": "remove"
+  },
+  {
+   "note": "Moonlight grove/valley: the blue flower patch places on grass (it was a nylium-only nether vegetation patch)",
+   "feature": "terralith:flower/blue/flowers",
+   "convert": "flower_patch"
+  },
+  {
+   "note": "Mirage isles: enchanted oak trunks stripped acacia instead of stripped warped stem",
+   "feature": "terralith:enchanted/enchanted_oak",
+   "from": "minecraft:stripped_warped_stem",
+   "to": "minecraft:stripped_acacia_log"
+  }
+ ],
+ "literal": [
+  {
+   "note": "Create: Dreams & Desires' deep layered rock (breccia, gabbro, granite, glowstone; Y -64 to 0, every Overworld biome) as granite only (two identical granite layers: Create's LayerPattern.rollNext never repeats the previous layer, and one layer crashes it with nextInt(0)). Same id as D&D's built-in configured feature, which a datapack file replaces; placement and biome modifier stay D&D's",
+   "path": "data/create_dd/worldgen/configured_feature/striated_eroded_overworld.json",
+   "json": {
+    "type": "create:layered_ore",
+    "config": {
+     "entry": "create_dd:striated_eroded_overworld",
+     "discard_chance_on_air_exposure": 0.0,
+     "layer_patterns": [
+      [
+       {
+        "targets": [
+         [
+          {
+           "target": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "minecraft:stone_ore_replaceables"
+           },
+           "state": {
+            "Name": "minecraft:granite"
+           }
+          },
+          {
+           "target": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "minecraft:deepslate_ore_replaceables"
+           },
+           "state": {
+            "Name": "minecraft:granite"
+           }
+          }
+         ]
+        ],
+        "min_size": 1,
+        "max_size": 1,
+        "weight": 1
+       },
+       {
+        "targets": [
+         [
+          {
+           "target": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "minecraft:stone_ore_replaceables"
+           },
+           "state": {
+            "Name": "minecraft:granite"
+           }
+          },
+          {
+           "target": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "minecraft:deepslate_ore_replaceables"
+           },
+           "state": {
+            "Name": "minecraft:granite"
+           }
+          }
+         ]
+        ],
+        "min_size": 1,
+        "max_size": 1,
+        "weight": 1
+       }
+      ]
+     ]
+    }
+   }
+  }
+ ],
+ "remove_features": [
+  {
+   "note": "Scarlet Mountains: crimson nylium spread and crimson roots",
+   "name": "scarlet_mountains_crimson",
+   "biomes": [
+    "terralith:scarlet_mountains"
+   ],
+   "features": [
+    "terralith:mountains/scarlet/crimson_spread",
+    "terralith:mountains/scarlet/crimson_patch"
+   ]
+  }
+ ]
+}

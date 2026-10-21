@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.satisfy.vinery.core.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "vinery.refmap.json",
+  "mixins": [
+    "BlockEntityLegacyIdMixin",
+    "BlockMixin",
+    "BoneMealItemMixin",
+    "BushBlockMixin",
+    "ExperienceOrbMixin",
+    "FoxEatBerriesGoalMixin",
+    "LivingEntityMixin",
+    "ShovelItemMixin",
+    "SpreadingSnowyDirtBlockMixin",
+    "WanderingTraderSpawnerMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

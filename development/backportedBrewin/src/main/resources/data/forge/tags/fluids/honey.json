@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "brewinandchewin:honey",
+      "required": false
+    },
+    {
+      "id": "brewinandchewin:flowing_honey",
+      "required": false
+    }
+  ]
+}

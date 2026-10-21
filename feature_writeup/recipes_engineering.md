@@ -161,7 +161,7 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   output, input and process (`creativeengineering:createcrushing/...` and so on) unless an id is given.
 - Blueprint items (`blueprints.js`): each category from a Create empty schematic, most also from paper + dye (the
   original IE shape); any blueprint + an empty schematic → 2 copies. IE's molds blueprint recipe is replaced.
-- `resource_blocks.js` from line 257 is the old `global.CE` version of the file, commented out ([TODO.md](todo/TODO.md) 6).
+- `resource_blocks.js` from line 257 is the old `global.CE` version of the file, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
 
 ## 4. Limits and decisions
 

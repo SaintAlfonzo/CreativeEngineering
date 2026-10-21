@@ -25,6 +25,13 @@ ServerEvents.tags('item', e => {
 		t.add(e, `forge:${type}/all_metal`, id)
 	})
 
+	// any metal dust or grit (Steel Toe Stout, alcohol.md 8.6)
+	t.add(e, i.t_metal_dusts, [
+		i.dust_copper, i.dust_iron, i.dust_gold, i.dust_zinc, i.dust_aluminum, i.dust_lead, i.dust_nickel,
+		i.dust_silver, i.dust_uranium, i.dust_cast_iron, i.dust_rose_gold, i.dust_brass, i.dust_steel,
+		i.dust_constantan, i.dust_electrum,
+	])
+
 	// spool
 	t.addTag(e, 'forge:spool/iron', i.spool)
 	t.add(e, 'forge:spool/all_metal', i.spool)

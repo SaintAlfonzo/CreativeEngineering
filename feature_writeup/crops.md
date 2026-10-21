@@ -1,6 +1,6 @@
 # Crops: soils, right-click harvest, hoe harvesting
 
-Test prefix **CR-** · Last updated **2026-10-11** · Overall status **reference from the decompiled jars; tobacco parity, hoe areas and wild-crop placement (§2.8) DEPLOYED with 1.0.4; WTHIT growth line (§2.9) and Immersive Weathering soils (§2.8.1) STAGED for 1.0.6 (not deployed); in-game checks pending**
+Test prefix **CR-** · Last updated **2026-10-19** · Overall status **reference from the decompiled jars; tobacco parity, hoe areas and wild-crop placement (§2.8) DEPLOYED with 1.0.4; WTHIT growth line (§2.9) and Immersive Weathering soils (§2.8.1) DEPLOYED with 1.0.6 (2026-10-14); in-game checks pending**
 
 ## 0. At a glance
 
@@ -16,9 +16,9 @@ Test prefix **CR-** · Last updated **2026-10-11** · Overall status **reference
 | Gaps: hemp, grape bushes, weeds, pack hoes | §4 | G1 to G3 (tobacco) fixed; the rest open |
 | 1.0.4 mods: Corn Delight, Farmer's Respite (tea, coffee), Fruits Delight (bushes, lemon, pineapple, hamimelon, 13 fruit trees) | §2.1 | reference from the decompiled jars 2026-10-02; G12 to G15 open; CR-31 to CR-37 |
 | Wild generation: where every crop, bush and fruit tree spawns (biomes, rate, height, ground, side blocks such as Coarse Dirt, Adzuki Soil, mint ponds) | §2.7 + generated [crops_by_biome.md](crops_by_biome.md) | reference 2026-10-03; findings V1 to V12 feed the planned vegetation worldgen system; CR-38 to CR-46 |
-| Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | DEPLOYED with 1.0.4 (2026-10-04); `wild_crops.json` changed again for 1.0.5 (STAGED); not looked at in game; V13 to V20; CR-47 to CR-58 |
-| WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit); in patcherMod 1.0.5 (in `mods/`), STAGED for 1.0.6, not deployed; jar boots clean (single player 2026-10-11); CR-59 to CR-66 |
-| Wild plants, bushes and trees on Immersive Weathering soils (humus, fluvisol, silt, vertisol, cryosol, rooted grass; not permafrost) | §2.8.1 | BUILT 2026-10-05, scratch-server tested (12 features x 9 grounds, before/after); the 65 `kubejs/data` overrides are STAGED for 1.0.6, not deployed; only new chunks change; CR-67, CR-68 |
+| Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | DEPLOYED with 1.0.4 (2026-10-04); `wild_crops.json` changed again for 1.0.5, DEPLOYED with 1.0.6; not looked at in game; V13 to V20; CR-47 to CR-58 |
+| WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit); in patcherMod 1.0.5 (in `mods/`), DEPLOYED with 1.0.6 (2026-10-14); jar boots clean (single player 2026-10-11); CR-59 to CR-66 |
+| Wild plants, bushes and trees on Immersive Weathering soils (humus, fluvisol, silt, vertisol, cryosol, rooted grass; not permafrost) | §2.8.1 | BUILT 2026-10-05, scratch-server tested (12 features x 9 grounds, before/after); the 65 `kubejs/data` overrides are DEPLOYED with 1.0.6 (2026-10-14); only new chunks change; CR-67, CR-68 |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
 - **Knobs:** `config/quark-common.toml` sections `[tweaks.simple_harvest]` and `[tweaks.hoe_harvesting]`.
@@ -687,7 +687,9 @@ block, so it gets nothing. Every other plant in the pack was silent. The pack ad
 with a stage-like blockstate property to `kubejs/exported/crops/crop_growth_audit.json`: 290 blocks on 2026-10-04.
 22 are WTHIT-native, 62 got a rule, 206 are not crops (below). `python3 tools/crop_growth_coverage.py` checks that every
 audited block is ruled, covered by the fallback or has a skip reason, and that each rule's property, stage names and
-numbers fit the real block states; a plant from a newly added mod shows as UNKNOWN until it gets a rule.
+numbers fit the real block states; a plant from a newly added mod shows as UNKNOWN until it gets a rule. The 2026-10-18
+audit (300 blocks) had 10 UNKNOWN, all from the Vinery port: its lattice vines (the port's own WTHIT plugin shows the grape
+and ripeness) and its grass slab, both skip reasons since 2026-10-20 (0 UNKNOWN).
 
 **Confirmed silent before the change, all now covered:** hemp, tobacco, strawberries, salmonberries, mint, grapes,
 blueberries, cranberries, lemons.
@@ -766,7 +768,7 @@ WTHIT's own "Crop progress" option also hides the added lines. To change which p
 - **Bushier Flowers** growth is disabled, see the bushier-flowers notes in memory. It isn't a crop here.
 - **Wild crop placement (built 2026-10-03, not run in game):** §2.8. Also oak/dark oak leaves drop no apples,
   Alex's Mobs leaf bananas are off (`config/alexsmobs.toml`) and Farmer's Respite's Basalt Deltas coffee is off.
-- **Crop parity layer (built 2026-10-02, patcherMod 1.0.4, not deployed):** tobacco gets farmland
+- **Crop parity layer (built 2026-10-02, patcherMod 1.0.4, DEPLOYED with 1.0.4):** tobacco gets farmland
   soils, right-click and hoe replant and the hoe area break. See §2.6 for the tags, the Quark config line
   and the four mixins.
 
@@ -1106,3 +1108,5 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   errors. The ghost-block fix (state id overflow) ships in the same jar.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- 2026-10-20: `crop_growth_coverage.py` skips the Vinery port's lattice vines and grass slab (10 UNKNOWN -> 0), found in
+  the WTHIT coverage audit ([wthit_lines.md](wthit_lines.md) 4.2).

@@ -89,4 +89,14 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	global.tags.add(e, 'creativeengineering:template_trim', portedMods)
 	global.tags.add(e, 'creativeengineering:template_trim', padHouses)
 	global.tags.add(e, 'creativeengineering:template_trim', outposts)
+
+	// Sunk starts (2026-10-19): start_height below 0 sinks these templates into the ground on purpose, and the beard
+	// levels the ground at the surface they were projected to instead of at their sunk bottom layer (patcherMod
+	// TerrainAdaptation#sink). Campsite Structures' camps stand on a 4-layer dirt dome under their grass layer (start
+	// height -4: the grass layer replaces the surface block; their old features used -5, a 1-block dip); with the plain
+	// beard_thin the ground around them was dug down to the dome's bottom and the dome stood 4 blocks out of a flat ring.
+	global.tags.add(e, 'creativeengineering:terrain_adaptation/sunk_start', [
+		'campsite_structures:armorer_campsite', 'campsite_structures:butcher_campsite', 'campsite_structures:cartographer_campsite',
+		'campsite_structures:cleric_campsite', 'campsite_structures:farmer_campsite', 'campsite_structures:fisher_campsite',
+	])
 })

@@ -1,0 +1,28 @@
+{
+  "type": "brewinandchewin:fermenting",
+  "base_fluid": {
+    "amount": 1000,
+    "ingredient": {
+      "tag": "#forge:milk"
+    },
+    "unit": "millibuckets"
+  },
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "tag": "forge:eggs"
+    },
+    {
+      "tag": "forge:crops/cabbage"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    []
+  ],
+  "result": {
+    "amount": 1000,
+    "id": "brewinandchewin:egg_grog"
+  },
+  "unit": "millibuckets"
+}

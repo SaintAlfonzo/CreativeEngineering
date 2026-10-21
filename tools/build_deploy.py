@@ -64,6 +64,8 @@ Preflight (errors stop the build unless --force; warnings go into the log entry)
     since its --snapshot                                                         (error)
   - in-tree mods (IN_TREE_MODS): jar in mods/ equals the gradle build, no source newer (warning)
   - pack/manifest.json lists the installed mods                                  (warning)
+  - gen_display_delight_models.py --check: every Display Delight item has a model, and the
+    /dumpitemsbymod export isn't older than the DD jar                           (warning)
   - uncommitted changes in shipped folders (recorded with the commit)            (warning)
 
 The log's "Changes" are counted from the newest *other* version in history/ (the changelog); the
@@ -107,6 +109,10 @@ IN_TREE_MODS = [
     ('exposureBackport', 'exposureBackport', True),
     ('incubationAdditions', 'incubationAdditions', True),
     ('moreMooblooms', 'moreMooblooms', True),
+    ('backportedVinery', 'backportedVinery', True),
+    ('backportedBrewin', 'backportedBrewin', True),
+    ('babyMobs', 'babyMobs', True),
+    ('creativeLabels', 'creativeLabels', True),
 ]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
@@ -121,6 +127,9 @@ CATEGORIES = {
     'defaultconfigs': (('server', 'client'), 'defaultconfigs'),
     'resourcepacks': (('client',), 'resourcepacks'),
     'shaderpacks': (('client',), 'shaderpacks'),
+    # the unmodified Vinery jars the backport reads its art and data from (alcohol.md B4.8, D14: shipped in the
+    # payload for now; a published pack downloads them from their source instead). Never in mods/.
+    'vinery_upstream': (('server', 'client'), 'vinery_upstream'),
     'server': (('server',), ''),
 }
 TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
@@ -178,12 +187,16 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/nether_swap_rules.json', 'dev'),      # tools/gen_nether_swaps.py input
     ('generation_scripts/worldgen/bee_nests_baseline.json', 'dev'),     # tools/gen_bee_nests.py calibration
     ('generation_scripts/worldgen/soil_compat_manifest.json', 'dev'),   # tools/gen_soil_compat.py
+    ('generation_scripts/worldgen/nether_worldgen_rules.json', 'dev'),  # tools/gen_nether_worldgen.py input
+    ('generation_scripts/worldgen/nether_worldgen_manifest.json', 'dev'),  # tools/gen_nether_worldgen.py
     ('generation_scripts/worldgen/terrain_adaptation_scan.json', 'dev'),  # tools/terrain_adaptation_scan.py
     ('generation_scripts/food/food_types.json', 'runtime'),             # tags/foodtypetags.js
     ('generation_scripts/food/can_servings.json', 'runtime'),           # tags/cantags.js
     ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
     ('generation_scripts/food/placeable.json', 'runtime'),             # tags/placeabletags.js (placeable food tooltips)
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
+    ('generation_scripts/names/name_fixes.json', 'client'),             # client_scripts/name_fixes.js (tools/name_audit.py)
+    ('generation_scripts/names/name_rules.json', 'dev'),                # tools/name_audit.py input
     ('generation_scripts/recipes/*', 'dev'),                            # sawmill.js output (copied into the jar)
     ('generation_scripts/sawmill.js', 'dev'),                           # node generator
 ]
@@ -336,6 +349,17 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
     if unknown:
         pre.error('jars with no row in mod_sides.md (add a row, see its "Keeping this up to date"):\n'
                   + '\n'.join('    ' + u for u in unknown))
+    # Mod changes are keyed by mod id, so a second jar for a shipped id would slip through the diff
+    # (1.0.7 shipped two Brewin' jars this way). An installed folder is recorded as it is.
+    if root == ROOT:
+        by_id = {}
+        for jar, meta in mods.items():
+            if meta['modId']:
+                by_id.setdefault(meta['modId'], []).append(jar)
+        dupes = {m: jars for m, jars in by_id.items() if len(jars) > 1}
+        if dupes:
+            pre.error('mods/ holds more than one jar for a mod id (FML loads only one; remove the others):\n'
+                      + '\n'.join(f'    {m}: {", ".join(jars)}' for m, jars in sorted(dupes.items())))
 
     unclassified = []
     for tree in TREES:
@@ -375,7 +399,27 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
     if os.path.isdir(os.path.join(root, 'shaderpacks')):
         for rel in walk('shaderpacks', root):
             files['shaderpacks'][rel[len('shaderpacks/'):]] = os.path.join(root, rel)
+    upstream = os.path.join(root, 'vinery_upstream')
+    for name in sorted(os.listdir(upstream)) if os.path.isdir(upstream) else []:
+        if name.endswith('.jar') and os.path.isfile(os.path.join(upstream, name)):
+            files['vinery_upstream'][name] = os.path.join(upstream, name)
+    if root == ROOT and any(j.startswith('backportedVinery') for j in mods):
+        need = vinery_upstream_jars()
+        have = {n: sha1(p) for n, p in files['vinery_upstream'].items()}
+        for name, want in need.items():
+            if name not in have:
+                pre.error(f'vinery_upstream/{name} missing: the Vinery backport refuses to start without it')
+            elif have[name] != want:
+                pre.error(f'vinery_upstream/{name} has sha1 {have[name]}, the backport pins {want}')
     return files, mods
+
+
+def vinery_upstream_jars():
+    """{jar: sha1} the Vinery backport pins (UpstreamJars.java), so the build checks the same files the game will."""
+    src = os.path.join(DEVELOPMENT, 'backportedVinery', 'src', 'main', 'java', 'net', 'satisfy', 'vinery', 'forge',
+                       'upstream', 'UpstreamJars.java')
+    text = open(src, encoding='utf8').read()
+    return dict(re.findall(r'new Jar\("([^"]+)", "([0-9a-f]{40})"', text))
 
 
 # ── preflight ────────────────────────────────────────────────────────────────
@@ -450,6 +494,24 @@ def check_climate_reader(pre, files):
             if b'readGzipText' not in cls:
                 pre.error(f'mods/{jar} predates the gzipped climate samples (no WorldgenFiles.readGzipText): '
                           'copy the current development/patcherMod/build/libs jar into mods/ first')
+
+
+def check_display_delight_models(pre):
+    """DD item models the pack generates (wthit_lines.md F3): a DD update can add items with no model, which
+    JEI draws as the purple cube (WTHIT falls back to the block model). The item list comes from
+    /dumpitemsbymod, so an export older than the jar may miss the new items."""
+    jars = [j for j in os.listdir(MODS) if re.match(r'displaydelight-.*\.jar$', j)]
+    if not jars:
+        return
+    export = os.path.join(ROOT, 'kubejs', 'exported', 'items_by_mod', 'displaydelight.json')
+    if not os.path.isfile(export) or os.path.getmtime(export) < os.path.getmtime(os.path.join(MODS, jars[0])):
+        pre.warn(f'kubejs/exported/items_by_mod/displaydelight.json is older than mods/{jars[0]}: run '
+                 '`/dumpitemsbymod displaydelight`, then tools/gen_display_delight_models.py')
+    r = subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'gen_display_delight_models.py'), '--check'],
+                       capture_output=True, text=True, cwd=ROOT)
+    if r.returncode != 0:
+        pre.warn('Display Delight item models are missing or stale: run tools/gen_display_delight_models.py\n    '
+                 + (r.stdout or r.stderr).strip().replace('\n', '\n    '))
 
 
 def check_manifest(pre, files):
@@ -886,8 +948,10 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream')) else None,
+        ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
+         'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
          "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
         ('Existing world only: `defaultconfigs/` is used only when a world has no serverconfig yet. Copy any changed '
@@ -895,7 +959,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),
@@ -981,6 +1045,7 @@ def main():
     check_in_tree_mods(pre)
     check_climate_reader(pre, files)
     check_manifest(pre, files)
+    check_display_delight_models(pre)
     commit, dirty = git_state(pre)
 
     deployed = load_deployed()

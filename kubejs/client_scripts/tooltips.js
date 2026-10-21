@@ -493,6 +493,16 @@ var i = global.item;
 		[i.fertile_soil, ['Crops grow significantly faster and can\'t be trampled!', col.rare],['Doesn\'t need to be tilled, can be soaked w/ water to increase plant growth', col.rare]],
 		[i.nulch, ['Grows nether crops faster', col.rare],['Can be filled w/ lava, but watch your feet!', col.rare]]
 	);
+
+	// Brewin' and Chewin' keg temperature blocks (alcohol.md 8.3): each source within 2 blocks of a keg counts 1
+	addTooltips(e,
+		[i.heating_cask,
+			['Keg heat source within 2 blocks: on its own, one makes a keg Warm and two make it Hot', col.uncm],
+			['Heats a cooking pot like a stove', col.norm],
+			['Use a water bucket or bottle to vent steam', col.norm]],
+		[i.ice_crate,
+			['Keg cold source within 2 blocks: on its own, one makes a keg Chilly and two make it Cold', col.uncm]]
+	);
 		
 // ############################## Archery ##############################
 
@@ -609,38 +619,29 @@ var i = global.item;
 	);
 
 // ############################## Vinery ##############################
-
-	// Remove Vinery's per-variant grape and grape seed flavour lines (keys built from the item id)
-	// removeTooltipKey(e, 'item.vinery.grape.tooltip.*',
-	// 	i.red_grape, i.white_grape, i.savanna_grapes_red, i.savanna_grapes_white,
-	// 	i.taiga_grapes_red, i.taiga_grapes_white, i.jungle_grapes_red, i.jungle_grapes_white);
-	// removeTooltipKey(e, 'item.vinery.grapeseed.tooltip.*',
-	// 	i.grape_seeds_red, i.grape_seeds_white, i.grape_seeds_red_savanna, i.grape_seeds_white_savanna,
-	// 	i.grape_seeds_red_taiga, i.grape_seeds_white_taiga, i.grape_seeds_red_jungle, i.grape_seeds_white_jungle);
-
-	// addTooltips(e,
-	// 	// Processing
-	// 	[i.grapevine_pot, ['TODO', col.norm]],
-	// 	[i.wine_press, ['TODO', col.norm]],
-	// 	[i.fermentation_barrel, ['TODO', col.norm]],
-	// 	// Growing
-	// 	[i.grapevine_stem, ['TODO', col.norm]],
-	// 	[i.grapevine_lattice, ['TODO', col.norm]],
-	// 	[i.apple_leaves, ['TODO', col.norm]],
-	// 	[i.cherry_leaves, ['TODO', col.norm]],
-	// 	[i.apple_tree_sapling, ['TODO', col.norm]],
-	// 	[i.cherry_sapling, ['TODO', col.norm]],
-	// 	// Utility
-	// 	[i.kitchen_sink, ['TODO', col.norm]],
-	// 	[i.stackable_log, ['TODO', col.norm]],
-	// 	// Wine storage
-	// 	[i.wine_rack_1, ['TODO', col.norm]],
-	// 	[i.wine_rack_2, ['TODO', col.norm]],
-	// 	[i.wine_rack_3, ['TODO', col.norm]],
-	// 	[i.wine_rack_5, ['TODO', col.norm]],
-	// 	[i.wine_box, ['TODO', col.norm]]
-	// );
-	// addTooltipPattern(e, 'vinery:*_wine_rack_mid', ['TODO', col.norm]);
+	// Vinery port (alcohol/vineryport #16). Wine sizes, rack and Wine Box capacity and the aging hint come from the port
+	// itself (DrinkBlockItem.BottleSize), since the sizes live in its code; these are the lines it doesn't write.
+	addTooltips(e,
+		// Processing
+		[i.grapevine_pot, ['Fill with grapes of one type, then jump on it to press juice (counts in JEI)', col.norm]],
+		[i.wine_press, ['Mashes apples, then turns the mash and a wine bottle into apple juice', col.norm]],
+		[i.fermentation_barrel, ['Pour in juice (one type at a time) and add the ingredients and a wine bottle', col.norm],
+			['Sneak right-click with an empty hand to pour the juice out', col.norm]],
+		// Growing
+		[i.grapevine_stem, ['Place two high and plant grape seeds on the top one; jungle grapes need a lattice', col.norm],
+			['Shears give the seed back; breaking a planted stem loses it', col.norm]],
+		[i.grapevine_lattice, ['Plant jungle grape seeds on it', col.norm],
+			['Shears give the seed back; breaking a planted lattice loses it', col.norm]],
+		[i.apple_leaves, ['Some leaves grow apples; pick ripe ones with an empty hand', col.norm]],
+		[i.cherry_leaves, ['Some leaves grow cherries; pick ripe ones with an empty hand', col.norm]],
+		[i.apple_tree_sapling, ['Grows an apple tree', col.norm]],
+		[i.cherry_sapling, ['Grows a cherry tree', col.norm]],
+		// Utility
+		[i.stackable_log, ['A campfire: cooks up to 4 foods and burns 10 minutes; rain can put it out', col.norm],
+			['Add logs to refuel; a shovel or a water bottle puts it out', col.norm]],
+		// Wines
+		[i.chorus_wine, ['Makes you wake up in strange places', col.lpurple]]
+	);
 
 // ############################## Quark ##############################
 

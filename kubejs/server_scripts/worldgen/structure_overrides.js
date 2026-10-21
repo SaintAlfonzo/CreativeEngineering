@@ -101,6 +101,7 @@
 	var META_PART_KEYS = ['structures', 'features', 'count', 'chance', 'distance', 'spacing', 'margin', 'tries', 'water_depth', 'radius']
 	var META_MAX_DISTANCE = 112   // MetaStructure.REACH chunks
 	var META_TAG_PREFIX = 'meta/'
+	var TYPE_TAG_PREFIX = 'type/'
 	var WAY_SIGN_GROUP = 'settlements'
 	var WAY_SIGN_DESTINATIONS = 'supplementaries:way_sign_destinations'
 
@@ -1356,8 +1357,10 @@
 	})
 
 	// The meta/* tags of structure_tags.json as real structure tags creativeengineering:meta/<name>: the anchors
-	// and parts meta_structures.json names (patcherMod MetaStructure reads them when it generates). Also every
-	// biome fit's structure tag as creativeengineering:<fit> (for /locate and other datapacks; the fit itself is staged).
+	// and parts meta_structures.json names (patcherMod MetaStructure reads them when it generates). The type/* tags
+	// too (creativeengineering:type/<name>): earth_fill.js prunes #type/village, and [earth_fill] overrides may name
+	// them. Also every biome fit's structure tag as creativeengineering:<fit> (for /locate and other datapacks; the fit
+	// itself is staged).
 	ServerEvents.tags('worldgen/structure', function (e) {
 		var config = readJson(CONFIG_PATH)
 		var tagsDoc = readJson(TAGS_PATH)
@@ -1365,7 +1368,7 @@
 		var metaDoc = readJson(META_PATH)
 		var resolved = resolveTags(tagsDoc.tags, structureIds(config, (metaDoc && metaDoc.structures) || {}))
 		resolved.errors.forEach(function (err) { console.error(TAG + 'meta tags: structure_tags.json: ' + err) })
-		Object.keys(tagsDoc.tags).filter(function (t) { return t.indexOf(META_TAG_PREFIX) === 0 }).forEach(function (t) {
+		Object.keys(tagsDoc.tags).filter(function (t) { return t.indexOf(META_TAG_PREFIX) === 0 || t.indexOf(TYPE_TAG_PREFIX) === 0 }).forEach(function (t) {
 			var ids = Object.keys(resolved.members[t] || {}).sort()
 			if (ids.length) global.tags.add(e, 'creativeengineering:' + t, ids)
 			else console.warn(TAG + 'meta tags: ' + t + ' has no members')

@@ -1,0 +1,30 @@
+{
+  "values": [
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:carrot",
+    "minecraft:beetroot",
+    "farmersdelight:cabbage_leaf",
+    "farmersdelight:onion",
+    {
+      "id": "#forge:cooked_bacon",
+      "required": false
+    },
+    {
+      "id": "#forge:cooked_beef",
+      "required": false
+    },
+    {
+      "id": "#forge:cooked_fishes/cod",
+      "required": false
+    },
+    {
+      "id": "#forge:cooked_mutton",
+      "required": false
+    },
+    {
+      "id": "#forge:cooked_pork",
+      "required": false
+    }
+  ]
+}

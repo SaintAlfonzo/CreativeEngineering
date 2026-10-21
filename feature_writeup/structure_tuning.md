@@ -1,9 +1,10 @@
 # Structure tuning: how often every structure and village house generates
 
-Test prefix **ST-** · Last updated **2026-10-14** · Overall status **INCOMPLETE in pack 1.0.6**: everything through plan 7.4
-ships in the 1.0.6 payload (STAGED 2026-10-14, update from 1.0.4) while the 8.0 scratch run is only partly done (Phases 1 to
-4 and the 7.4 block run, Phase 5 started, 6 to 10 and the client list not run); open bugs and the switches to turn parts off
-are in [plan_1.0.6.md](plan_1.0.6.md) 2.1 and 2.2. Older parts: DEPLOYED, in-game test pending (structure groups
+Test prefix **ST-** · Last updated **2026-10-19** · Overall status **DEPLOYED, in-game test pending**: everything through
+plan 7.4 went out INCOMPLETE with pack 1.0.6 (2026-10-14); fixes from the 8.0 scratch run with 1.0.7 (2026-10-18) and 1.0.8
+(2026-10-19); earth fill on water, camp plinths and metas off coasts (7.5) with 1.0.9 (2026-10-19). The scratch run
+8.0.1 to 8.0.10 finished 2026-10-19 ([testing/structures/00_plan.md](testing/structures/00_plan.md)); the client list
+(8.0.11) is still to run. The 1.0.6 open bugs and switches are in [plan_1.0.6.md](plan_1.0.6.md) 2.1 and 2.2. Older parts: DEPLOYED, in-game test pending (structure groups
 replaced the per-set + multiplier model on 2026-09-27 evening; jar in `mods/`, needs a rejoin: ST-17 onward). Ground
 matching (3.8), the CEConfig `[worldgen]` section with its debug density (3.9) and `/ceplace` (3.10) are DEPLOYED
 2026-09-27 (jar md5 729953e6); the structure lines, live-set check and `/ceplace` ran on a scratch dedicated server, your client not yet: ST-27 to ST-42
@@ -33,18 +34,19 @@ there (a grassy ruin on volcanic peaks sits on basalt instead).
 | Improved Pillager Outpost as a 1-in-8 tower, not a replacement; IPO template names fixed; driftwood at 0.25x | `kubejs/data/{minecraft,ipo,upgrade_aquatic}` | DEPLOYED with 1.0.4 (2026-10-04); the scratch server loaded the pools at 7:1 and created the world with the driftwood overrides. ST-47, ST-48 |
 | Monobank banks 5x rarer in villages | `pool_tags.json` tags `monobank/vault_houses` x0.18 and `monobank/vault_streets` x0.16 | DEPLOYED with 1.0.4 (2026-10-04); chance per pool computed from the 2026-10-03 pool report, not yet read back from a game load. ST-49 |
 | Driftwood: in the water at the 0.25x rate, on land about a tenth of that | `kubejs/data/upgrade_aquatic` (5 placed features gated to water) + `kubejs/data/creativeengineering` (3 land placed features + 3 biome modifiers) | DEPLOYED with 1.0.4 (2026-10-04); the 8 placement lists parse against the 1.19.2 codecs headless. ST-50 |
-| Earth fill: cancel a structure whose foundation needs too much earth over water or air | patcherMod `worldgen/EarthFill` + `ChunkGeneratorEarthFillMixin`, CEConfig `[worldgen.earth_fill]`, tags in `blocktags.js` + `worldgen/earth_fill.js` | DEPLOYED with 1.0.4 (2026-10-04); 21 headless checks + a vanilla terrain simulation. ST-51 to ST-55. Beard-aware counts, mound columns and size limits (7.3.1) BUILT 2026-10-13 (1.0.6 `build/libs`), 48 headless checks + simulation; ST-158 to ST-162 |
-| Water fill: cancel a water structure whose water would replace too much dry ground or air | `worldgen/EarthFill` (same hook), CEConfig `[worldgen.water_fill]`, tags in `worldgen/water_fill.js` | BUILT 2026-10-08, in patcherMod 1.0.5 (in `mods/`), STAGED for pack 1.0.6 (built for 1.0.5, which never shipped), not deployed; the jar booted in single player 2026-10-11 without mixin or KubeJS errors; 32 headless checks; defaults not calibrated. ST-56 to ST-60 |
-| Terrain adaptation by tag (none / bury / beard_thin / beard_box / **soft**) and template trim (no square pads or air notches) | patcherMod `worldgen/TerrainAdaptation` + `TemplateTrim`, 2 new mixins + the ground-match mixin, CEConfig `[worldgen.terrain_adaptation]`, tags in `worldgen/terrain_adaptation.js` + `blocktags.js` | BUILT 2026-10-09, in patcherMod 1.0.5 (in `mods/`), STAGED for pack 1.0.6 (built for 1.0.5, which never shipped), not deployed; the jar booted in single player 2026-10-11 without mixin or KubeJS errors; 50 headless checks (soft beard equals vanilla's at skirt 8, real templates trimmed as a python read predicts); mixin targets checked against the Forge-patched SRG bytecode. ST-61 to ST-68 |
-| Meta structures: a village with 1 to 3 peaceful towers, a driftwood flotilla at sea (3.16) | `meta_structures.json` + `meta/*` tags, staged by `structure_overrides.js`; patcherMod `worldgen/MetaStructure` (structure type `creativeengineering:meta`) + `MetaFeaturePiece`, CEConfig `metaStructures` / `[worldgen.meta_structures]` | BUILT 2026-10-11, in patcherMod 1.0.5 (in `mods/`), STAGED for pack 1.0.6 (built for 1.0.5, which never shipped), not deployed; the jar booted in single player 2026-10-11 without mixin or KubeJS errors (`structure_overrides.js` loaded `MetaStructure` and `MetaSlots`); 26 headless checks (`MetaTest`), node/Rhino parity incl. the old-jar path; a scratch dedicated server generated both (towers and driftwood in place). ST-69 to ST-76 |
-| The other 13 meta structures (ruin clusters, sunken ruins, wrecks, rafts, pillager towers/forts/camps with siege weapons, a pillager fleet), slot conversion so metas never change a structure's rate, `/locate` of structures inside metas (3.16) | the same files + patcherMod `worldgen/MetaSlots`, `ChunkGeneratorMetaLocateMixin`, `StructureCheckMetaMixin`, the conversion in `ChunkGeneratorStructureFrequencyMixin` | BUILT 2026-10-11, in patcherMod 1.0.5 (in `mods/`), STAGED for pack 1.0.6 (built for 1.0.5, which never shipped), not deployed; the jar booted in single player 2026-10-11 without mixin or KubeJS errors; 35 headless checks (`MetaTest`), node/Rhino parity; scratch server: see 3.16. ST-84 to ST-92 |
-| Biome fits: towers in every biome their wood belongs to, Terralith included (3.17) | `biome_fits.json` + `tower`/`tower/*` tags (renamed `land/*` 2026-10-12); staged by `structure_overrides.js`; patcherMod `worldgen/StructureBiomeFits` + `StructureBiomesMixin`, CEConfig `structureBiomeFits`; rates by `gen_structure_groups.py --fit-rates` | BUILT 2026-10-11, in patcherMod 1.0.5 (in `mods/`), STAGED for pack 1.0.6 (built for 1.0.5, which never shipped), not deployed; the jar booted in single player 2026-10-11 without mixin or KubeJS errors; 25 headless checks (`FitTest`), node/Rhino parity; two scratch dedicated server runs applied all 13 and `/locate` found 12 towers, each in a fitted biome. ST-77 to ST-83 |
-| Biome fits for every land structure: 161 structures on `land/*` biome-type and wood families, towers folded in, vanilla outpost by its dark oak, sky village over the oceans (3.17, plan 7.2) | `biome_fits.json` (29 fits) + `land/*` tags in `structure_tags.json`; `fit_keep` + capped report in `gen_structure_groups.py --fit-rates` | BUILT 2026-10-12, data only (the patcherMod 1.0.6 rebuild only renames comments); 30 headless checks (`FitTest`), node/Rhino parity, all 7 worldgen suites; a scratch dedicated server applied 29 fits to 163 structures. ST-93 to ST-101 |
-| Way signs in `group/way_signs` at their current rate; every `settlements` member (metas, fortified villages included) a sign destination (3.21, plan 7.1) | `group/way_signs` tag + group entry; `structure_overrides.js` adds `group/settlements` to `#supplementaries:way_sign_destinations`; `RUNTIME_BIOME_TAGS` in `gen_structure_groups.py` | BUILT 2026-10-12, data only; node sim clean. ST-127 to ST-130 |
-| Standalone structures folded into groups: statues and cats -> `ruins`, It Takes a Pillage -> `pillager_settlements`, Nether ruins -> new `nether_ruins`, Hopo's fossils -> `ocean_ruins`, fresh watchtower -> `remote` (3.20, plan 7.1) | `group/*` tags in `structure_tags.json`, rates in `structure_groups.json` (sync) | BUILT 2026-10-12, data only; node sim clean. ST-117 to ST-123 |
-| Entrance dungeons: YUNG's zombie and spider dungeons in `group/entrance_dungeons`, land only, with a surface check so a crypt staircase or cave mouth never comes up in water (3.19, plan 7.1) | `group/entrance_dungeons` + `surface_check` tags, `biome_rules.water.surface_check`; patcherMod `StructureBiomeRules.surfaceCheck` via `ChunkGeneratorStructureBiomeRulesMixin` | BUILT 2026-10-12 in patcherMod 1.0.6 (`build/libs`, not in `mods/`); builds, node sim clean; not run in game. ST-112 to ST-116 |
-| Replacements (a member takes a share of another member's slots) and `group/witch_huts`: YUNG's hut, witch circle, witch village, and the vanilla swamp hut in 10% of YUNG's hut slots, swamps only (3.18, plan 7.1) | `replaces` + `share` in `structure_groups.json`, staged by `structure_overrides.js`; patcherMod `worldgen/MetaSlots` (conversion, biome narrowing, `/locate`), CEConfig `structureReplacements`; YUNG's "Disable Vanilla Witch Huts" = false | BUILT 2026-10-12 in patcherMod 1.0.6 (`build/libs`, not in `mods/`); 7 new headless checks (`MetaTest` 55), node/Rhino parity incl. the replacement table and the old-jar path; not run in game. ST-102 to ST-111 |
-| Fixes from the scratch run (3.23): pool order fixed per seed, code-added village pieces kept on reload, ground match over deep structures, driftwood on banks, cave fit for the 3 deep dungeons, stone bases in earth fill | patcherMod `PoolTuner`, `GroundMatch`, `EarthFill`, CEConfig `[worldgen.pools] canonicalOrder`; `biome_fits.json` + `structure_tags.json` (`land/any/deep`); `kubejs/data/upgrade_aquatic` driftwood; `earth_fill/stone_base` tags | FIXED in source 2026-10-18 for patcherMod 1.0.7: not built into `mods/`, not shipped. Offline checks pass (PoolTunerTest new, 10 checks); ST-191 to ST-198 pending |
+| Earth fill: cancel a structure whose foundation needs too much earth over water or air | patcherMod `worldgen/EarthFill` + `ChunkGeneratorEarthFillMixin`, CEConfig `[worldgen.earth_fill]`, tags in `blocktags.js` + `worldgen/earth_fill.js` | DEPLOYED with 1.0.4 (2026-10-04); 21 headless checks + a vanilla terrain simulation. ST-51 to ST-55. Beard-aware counts, mound columns and size limits (7.3.1) BUILT 2026-10-13, DEPLOYED with 1.0.6, 48 headless checks + simulation; ST-158 to ST-162 |
+| Water fill: cancel a water structure whose water would replace too much dry ground or air | `worldgen/EarthFill` (same hook), CEConfig `[worldgen.water_fill]`, tags in `worldgen/water_fill.js` | BUILT 2026-10-08, in patcherMod 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14; built for 1.0.5, which never shipped); the jar booted in single player 2026-10-11 without mixin or KubeJS errors; 32 headless checks; defaults not calibrated. ST-56 to ST-60 |
+| Terrain adaptation by tag (none / bury / beard_thin / beard_box / **soft**) and template trim (no square pads or air notches) | patcherMod `worldgen/TerrainAdaptation` + `TemplateTrim`, 2 new mixins + the ground-match mixin, CEConfig `[worldgen.terrain_adaptation]`, tags in `worldgen/terrain_adaptation.js` + `blocktags.js` | BUILT 2026-10-09, in patcherMod 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14; built for 1.0.5, which never shipped); the jar booted in single player 2026-10-11 without mixin or KubeJS errors; 50 headless checks (soft beard equals vanilla's at skirt 8, real templates trimmed as a python read predicts); mixin targets checked against the Forge-patched SRG bytecode. ST-61 to ST-68 |
+| Meta structures: a village with 1 to 3 peaceful towers, a driftwood flotilla at sea (3.16) | `meta_structures.json` + `meta/*` tags, staged by `structure_overrides.js`; patcherMod `worldgen/MetaStructure` (structure type `creativeengineering:meta`) + `MetaFeaturePiece`, CEConfig `metaStructures` / `[worldgen.meta_structures]` | BUILT 2026-10-11, in patcherMod 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14; built for 1.0.5, which never shipped); the jar booted in single player 2026-10-11 without mixin or KubeJS errors (`structure_overrides.js` loaded `MetaStructure` and `MetaSlots`); 26 headless checks (`MetaTest`), node/Rhino parity incl. the old-jar path; a scratch dedicated server generated both (towers and driftwood in place). ST-69 to ST-76 |
+| The other 13 meta structures (ruin clusters, sunken ruins, wrecks, rafts, pillager towers/forts/camps with siege weapons, a pillager fleet), slot conversion so metas never change a structure's rate, `/locate` of structures inside metas (3.16) | the same files + patcherMod `worldgen/MetaSlots`, `ChunkGeneratorMetaLocateMixin`, `StructureCheckMetaMixin`, the conversion in `ChunkGeneratorStructureFrequencyMixin` | BUILT 2026-10-11, in patcherMod 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14; built for 1.0.5, which never shipped); the jar booted in single player 2026-10-11 without mixin or KubeJS errors; 35 headless checks (`MetaTest`), node/Rhino parity; scratch server: see 3.16. ST-84 to ST-92 |
+| Biome fits: towers in every biome their wood belongs to, Terralith included (3.17) | `biome_fits.json` + `tower`/`tower/*` tags (renamed `land/*` 2026-10-12); staged by `structure_overrides.js`; patcherMod `worldgen/StructureBiomeFits` + `StructureBiomesMixin`, CEConfig `structureBiomeFits`; rates by `gen_structure_groups.py --fit-rates` | BUILT 2026-10-11, in patcherMod 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14; built for 1.0.5, which never shipped); the jar booted in single player 2026-10-11 without mixin or KubeJS errors; 25 headless checks (`FitTest`), node/Rhino parity; two scratch dedicated server runs applied all 13 and `/locate` found 12 towers, each in a fitted biome. ST-77 to ST-83 |
+| Biome fits for every land structure: 161 structures on `land/*` biome-type and wood families, towers folded in, vanilla outpost by its dark oak, sky village over the oceans (3.17, plan 7.2) | `biome_fits.json` (29 fits) + `land/*` tags in `structure_tags.json`; `fit_keep` + capped report in `gen_structure_groups.py --fit-rates` | BUILT 2026-10-12, data only, DEPLOYED with 1.0.6 (the patcherMod 1.0.6 rebuild only renames comments); 30 headless checks (`FitTest`), node/Rhino parity, all 7 worldgen suites; a scratch dedicated server applied 29 fits to 163 structures. ST-93 to ST-101 |
+| Way signs in `group/way_signs` at their current rate; every `settlements` member (metas, fortified villages included) a sign destination (3.21, plan 7.1) | `group/way_signs` tag + group entry; `structure_overrides.js` adds `group/settlements` to `#supplementaries:way_sign_destinations`; `RUNTIME_BIOME_TAGS` in `gen_structure_groups.py` | BUILT 2026-10-12, data only, DEPLOYED with 1.0.6; node sim clean. ST-127 to ST-130 |
+| Standalone structures folded into groups: statues and cats -> `ruins`, It Takes a Pillage -> `pillager_settlements`, Nether ruins -> new `nether_ruins`, Hopo's fossils -> `ocean_ruins`, fresh watchtower -> `remote` (3.20, plan 7.1) | `group/*` tags in `structure_tags.json`, rates in `structure_groups.json` (sync) | BUILT 2026-10-12, data only, DEPLOYED with 1.0.6; node sim clean. ST-117 to ST-123 |
+| Entrance dungeons: YUNG's zombie and spider dungeons in `group/entrance_dungeons`, land only, with a surface check so a crypt staircase or cave mouth never comes up in water (3.19, plan 7.1) | `group/entrance_dungeons` + `surface_check` tags, `biome_rules.water.surface_check`; patcherMod `StructureBiomeRules.surfaceCheck` via `ChunkGeneratorStructureBiomeRulesMixin` | BUILT 2026-10-12 in patcherMod 1.0.6, DEPLOYED with 1.0.6; builds, node sim clean; not run in game. ST-112 to ST-116 |
+| Replacements (a member takes a share of another member's slots) and `group/witch_huts`: YUNG's hut, witch circle, witch village, and the vanilla swamp hut in 10% of YUNG's hut slots, swamps only (3.18, plan 7.1) | `replaces` + `share` in `structure_groups.json`, staged by `structure_overrides.js`; patcherMod `worldgen/MetaSlots` (conversion, biome narrowing, `/locate`), CEConfig `structureReplacements`; YUNG's "Disable Vanilla Witch Huts" = false | BUILT 2026-10-12 in patcherMod 1.0.6, DEPLOYED with 1.0.6; 7 new headless checks (`MetaTest` 55), node/Rhino parity incl. the replacement table and the old-jar path; not run in game. ST-102 to ST-111 |
+| Fixes from the scratch run (3.23): pool order fixed per seed, code-added village pieces kept on reload, ground match over deep structures, driftwood on banks, cave fit for the 3 deep dungeons, stone bases in earth fill | patcherMod `PoolTuner`, `GroundMatch`, `EarthFill`, CEConfig `[worldgen.pools] canonicalOrder`; `biome_fits.json` + `structure_tags.json` (`land/any/deep`); `kubejs/data/upgrade_aquatic` driftwood; `earth_fill/stone_base` tags | DEPLOYED with 1.0.7 (2026-10-18, patcherMod 1.0.7 + kubejs data). Offline checks pass (PoolTunerTest new, 10 checks); ST-191 to ST-198 pending |
+| Earth fill on water, camp plinths, metas off coasts (7.5): the footprint water share (`maxWaterSurplus` 0.5), sunk-start beard for the 6 Campsite camps (start height -4), `avoidCoasts` switch (off) | patcherMod `worldgen/EarthFill`, `worldgen/TerrainAdaptation` (`terrain_adaptation/sunk_start`), `worldgen/MetaStructure` (`coast_river` biome tag, `meta/coast_ok`); CEConfig `[worldgen.earth_fill] maxWaterSurplus`, `[worldgen.meta_structures] avoidCoasts` | BUILT 2026-10-19 (patcherMod 1.0.9), scratch-tested (ST-199 to ST-205, testing/structures/12_earth_fill_camps.md); DEPLOYED with 1.0.9 (2026-10-19 15:54) |
 
 **Open first:** [structure_groups.json](../kubejs/generation_scripts/worldgen/structure_groups.json) (every rate),
 [structure_tags.json](../kubejs/generation_scripts/worldgen/structure_tags.json) (`group/*` = who shares a grid),
@@ -256,7 +258,7 @@ blocked fortress falls through to the bastion. Tune the YUNG's replacements inst
 - Singleplayer: vanilla pools are the same Java objects across world loads and some mods append again every
   load. PoolTuner keeps the first weights it saw per pool, so edits never compound and re-added duplicates are dropped.
 - Any error applies no pool tuning at all.
-- Since 2026-10-18 (1.0.7, not built, 3.23): every pool is first sorted into a stable order (`[worldgen.pools]
+- Since 1.0.7 (DEPLOYED 2026-10-18, 3.23): every pool is first sorted into a stable order (`[worldgen.pools]
   canonicalOrder`), and pieces added in code get the world's processor lists, so they survive a chunk reload.
 
 ### 3.6 Lootr container swaps (patcherMod)
@@ -353,7 +355,7 @@ pad, say), add a family tag in `blocktags.js` and list it in `families`. With `l
 its chunk, the family's share, and both palettes. The sampling grid, under-block depth, dig limit and plant height are
 in `[worldgen.ground_match.sampling]`.
 
-Since 2026-10-18 (1.0.7, not built, 3.23): a column is skipped only when a structure piece reaches its sampled ground,
+Since 1.0.7 (DEPLOYED 2026-10-18, 3.23): a column is skipped only when a structure piece reaches its sampled ground,
 not whenever one covers it in XZ, so a mineshaft or an ancient city far below no longer empties the sample.
 
 ### 3.9 CEConfig `[worldgen]`: switches, debug density, constants (added 2026-09-27)
@@ -388,6 +390,11 @@ report and summary line say `DEBUG density xN`, and every live set is written (1
 For looking at structures side by side, typically in a **superflat world with Generate Structures OFF** and cheats on.
 Operator only.
 
+A superflat world (single player) or `level-type=minecraft:flat` (server) stays flat since 2026-10-19:
+`mixin/RegistryLoaderPresetOverworldMixin` keeps a world's own overworld when it isn't a multi-noise noise generator,
+so the data packs' `dimension/overworld.json` (the biome layout's in the KubeJS virtual pack, Terralith's, Tectonic's)
+no longer replace it. Before that every flat world came out as normal terrain (testing/structures/09_phase_9.md 3.2).
+
 - `/ceplace structures <filter>`: rows by type. `/ceplace structures by <type|group|mod|none> <filter>` picks another
   grouping. The filter takes terms like `structure_tags.json` values: an id, a glob (`towns_and_towers:*village*`),
   `@namespace`, `#type/tower` (a pack tag), `#minecraft:village` (a real structure tag), and `!term` to exclude.
@@ -397,6 +404,8 @@ Operator only.
   5, fort 9, ship 2, shipwreck 1, tower 15, village 23, and 1 untagged (`mimic_desert`).
 - `/ceplace templates <glob>`: raw templates, one row per folder, jigsaw blocks turned into what they become. Towns &
   Towers keeps its 742 templates under the `kaisyn` namespace, for example `/ceplace templates kaisyn:village/*/houses/*`.
+  Templates are listed per data pack (`structures/**.nbt`) plus the world's `generated/` folder, not through vanilla
+  `listTemplates()`, which throws on a bare `structures.nbt` path in this pack's merged listing (fixed 2026-10-19).
 - `/ceplace preview structures|templates ...` lists the rows without placing. `/ceplace status` and `/ceplace stop`
   report on or cancel a run.
 - **Layout:** rows start 3 blocks in front of you and run +X; each new row is placed further +Z, with a `rowGap` aisle
@@ -520,7 +529,7 @@ feature with the opposite filter (`not` water below) at one tenth of the attempt
 | swamp | 1 in 10 chunks |
 | extra | 1 in 8 chunks, 1 or 2 logs (3:1) |
 
-Since 2026-10-18 (1.0.7 data, 3.23) the beach, river, swamp and extra versions filter for a bank next to water instead
+Since 1.0.7 (data, DEPLOYED 2026-10-18, 3.23) the beach, river, swamp and extra versions filter for a bank next to water instead
 of water below: Upgrade Aquatic can't float a log outside oceans, so the old filter never placed anything. Rivers and
 oceans have no land version, so a river bank only gets the water-adjacent version. Edit the `chance` in a land file (or
 delete the file and its biome modifier) to change it. Upgrade Aquatic's own feature decides what actually fits (it
@@ -558,7 +567,7 @@ first (the roll is deterministic), so nothing is computed for it.
    sand, gravel, clay, dirt path; extra tags go in the `blocks` config list) in the bottom `baseLayers` (3) template layers,
    first palette. Higher layers are ignored on purpose: above the ground everything is air, so a roof garden would count.
    Structures in the structure tag `earth_fill/stone_base` also count the block tag `earth_fill/stone_base` (stone and
-   brick plates, since 2026-10-18 in 1.0.7, not built; 3.23).
+   brick plates, since 1.0.7, DEPLOYED 2026-10-18; 3.23).
 2. where each stands in the world: piece position + rotation and mirror (the same transform the placement uses).
 3. what the generator's own terrain holds there: `ChunkGenerator#getBaseColumn` for the column (read once per
    `sampleGrid` x `sampleGrid` cell, 2 by default, and cached per start), then the block at that Y: water, air, or
@@ -584,7 +593,11 @@ junctions (vanilla gives each child a first junction at its parent's jigsaw bloc
 next block over, with the opposite deltaY; pieces are listed parents first); the parent forgets its junction to the
 dropped piece, so no beard bump is left at the street's end. The street leading there stays as a dead end. The first
 piece (the town centre) is never dropped. Then the rest is judged as a whole as usual, by its own size, and can still
-be cancelled. The log says `[earth-fill] <id> at chunk [x, z]: pruned K of N pieces; over the piece limits: <template>
+be cancelled. Its size is the pruned start's, so pruning can move a start down a size class and judge it by the
+smaller limits (a large savanna village that lost its pet shop was cancelled as medium on 40 mound columns, Phase 7
+3.3); that is accepted (user, 2026-10-19). The `type/*` tags of `structure_tags.json` are real structure tags since
+2026-10-19 (`structure_overrides.js` adds them with the `meta/*` tags); before that `earth_fill/prune` was empty in game
+and nothing was ever pruned (Phase 7 3.2). The log says `[earth-fill] <id> at chunk [x, z]: pruned K of N pieces; over the piece limits: <template>
 (W water, A air, M mound), ...`. Meta structures (village_towers and the fortified metas are in the type tag) are
 judged part by part and not pruned: a village part over its limits still cancels the meta, and the slot falls back to
 the plain village, which is pruned.
@@ -597,6 +610,7 @@ the ground column by column, so they never hang.
 | Key | Default | Meaning |
 |---|---|---|
 | `maxOverWater` | 24 | earth blocks in water the beard won't fill; -1 = no limit, 0 = none |
+| `maxWaterSurplus` | 0.5 | the footprint water share (below): cancel when the footprint's water outnumbers its dry ground by more than this (0.5 = 50%); -1 = off (added 2026-10-19, 7.5) |
 | `beardReach` | 6 | blocks under a piece the beard still fills (beard_thin, beard_box, soft) |
 | `buryReach` | 10 | the same for bury |
 | `maxMoundHeight` | 8 | ground deeper than this under a piece makes a mound column |
@@ -680,6 +694,20 @@ Dropped pieces seen in plains villages: a medium house (19 air past the beard) w
 villager, an animal pen over 74 blocks of deep water, a pen with its sheep and tree, two extra meeting points over a
 drop. The remaining cancels are starts whose town centre itself, or the sum of its marginal pieces, is over the limits.
 
+
+**The footprint water share** (added 2026-10-19, 7.5). The beard fills water up to `beardReach` deep, so a camp or a
+ruin set on a shallow lake or a lake island never counts toward `maxOverWater`: the lake is filled under it, and the
+structure ends up on a little island. So after the limits, each earth piece's bounding box is read once more, every column
+of it at the layer the start was set onto the surface with (the piece's bottom; for a sunk start, 3.15, its sink higher).
+Water there (filled by the template's earth or the beard, or left standing where the template has no block) against dry
+ground there (replaced or left alone); seabed and air count as neither, and so does a spot under more than `baseLayers`
+blocks of predicted terrain (underground structures sit in aquifers or under the sea). When the water outnumbers the
+ground by more than `maxWaterSurplus` (0.5: 60 water to 40 ground passes, 61 to 39 doesn't), the start is cancelled.
+Structures in `water_fill/structures` are not checked, and an override with every limit -1 skips it too. A meta is
+checked part by part, as for the limits. The log line gains `footprint <water> water / <ground> ground (surplus limit
+0.5[, too wet])`. Inland scratch run (2,601 chunks, 972 starts checked): 14 cancelled by the share alone, among them
+a sunflower-plains village on a lake (739 water / 0 ground), a windmill (255 / 0) and a drum tower (2,123 / 66) whose
+spot is open water; kept starts with any footprint water were 5 of 926, all villages at a shore (113 water / 462 ground up to 470 / 425).
 
 **Limits.**
 - It judges the generator's noise terrain: no carvers, surface rules, features, lakes, or other structures' terrain
@@ -840,6 +868,21 @@ Measured on the real templates (the test reads the ported `.nbt` files; an indep
 |---|---|---|
 | `skirtBump` | 0 | blocks added to the soft beard's minimum skirt of 4; 0 to 8. 4 = vanilla's width |
 
+**Sunk starts** (added 2026-10-19, 7.5). Vanilla's beard (and the soft one) levels the ground to a piece's bottom
+layer: right for a jigsaw start set onto the heightmap with start height 0, whose bottom layer replaces the surface
+block. A start height below 0 sinks the template that many layers into the ground on purpose, and the beard then digs
+the ground down to the sunk bottom around it. Campsite Structures' camps (7.4.1) stand on a 4-layer dirt dome under
+their grass layer: with `beard_thin` the noise surface was dug down 4 to 5 blocks around each camp and the dome stood
+out of a flat ring as a plinth (scratch 2026-10-19: camp grass at y 94, the ring at 90). The structure tag
+`creativeengineering:terrain_adaptation/sunk_start` (`terrain_adaptation.js`) raises every piece's beard by the start's
+sink (minus a constant start height below 0, for a start projected to a heightmap; patcherMod
+`TerrainAdaptation#sink`, read from `JigsawStructure` by reflection), so the ground is levelled at the surface the start
+was projected to. A tagged structure without such a start height is logged and ignored. Tagged: the 6 camps, whose
+start height went from -5 (the old features' offset, a 1-block dip) to -4 (the grass layer replaces the surface
+block). Opt-in, because other structures sink starts with their own beards on purpose and were not looked at in game:
+Philip's ancient crypt, antiquus crypta and ocean fortress (-5, beard_box), ocean ruins (-3), ancient ruins, rare ruin
+and end gate fortress (-1), T&T's nilotic village (-1). The load log line counts them (`6 sunk starts`).
+
 **Limits.**
 - New chunks only, rejoin after changing tags or switches. Already generated structures keep their terrain.
 - YUNG's structures (`YungJigsawStructure`) answer `terrainAdaptation` themselves and have their own enhanced
@@ -927,7 +970,7 @@ village_towers share 0.33 matches its old "about a third where towers fit".
 | `meta/pillager_camp_ruins` | `pillager_settlements` | a pillager camp (15%) | 2 to 4 small ruins; 0 to 1 more camp | 100 |
 | `meta/fortified_ruins` | `settlements` | a fortified town or fort (`meta/fortified_towns`, 20% since 2026-10-14) | 2 to 6 small ruins 44 to 108 out, 18 apart, margin 6 | not re-estimated (7.4) |
 | `meta/fortified_camps` | `settlements` | a fortified town or fort (`meta/fortified_towns`, 20% since 2026-10-14) | 2 to 4 friendly camps 44 to 108 out, 24 apart, margin 6 | not re-estimated (7.4) |
-| `meta/town_villages` | `settlements` | a fortified town or fort (40% since 2026-10-14) | none: 1 to 3 companion villages 112 to 160 out (3.22) | not re-estimated (7.4) |
+| `meta/town_villages` | `settlements` | a fortified town or fort (40% since 2026-10-14) | none: 1 to 3 companion villages 64 to 96 out (3.22; 112 to 160 before 2026-10-19) | not re-estimated (7.4) |
 | `meta/farmers_camp` | `remote` | a Farmer's Structure (30%) | 0 to 2 more Farmer's Structures and 1 to 2 friendly camps, 20 to 64 out | 159 |
 | `meta/house_camp` | `remote` | a lone house (15%) | 1 friendly camp 16 to 48 out | 93 |
 | `meta/waysign_camps` | `remote` | a friendly camp (25%) | 0 to 2 more friendly camps 16 to 56 out; 1 way sign 10 to 40 out | 146 |
@@ -1022,6 +1065,12 @@ has one); the land metas use `beard_thin`, the sea ones `none`. Earth fill sees 
 **Knobs:** the definitions (share, counts, distances, spacing, margin, chance, water depth), the `meta/*` tags,
 `enabled` of each meta in its group, `groups.flotsam.placement`; `[worldgen.systems] metaStructures`;
 `[worldgen.meta_structures] log = true` logs every assembled meta (anchor and part positions, or which part fell short).
+`[worldgen.meta_structures] avoidCoasts` (added 2026-10-19, off by default, 7.5): no part may start in, or reach with
+its box (centre or a corner) into, a biome of `creativeengineering:coast_river` (`biome_fits.json` biome_tags: the
+beaches, stony shore, gravel beach and every river). A satellite there is tried elsewhere, an anchor there leaves the
+slot to the plain anchor. The six water metas in `meta/coast_ok` (flotilla, raft convoy, pillager fleet, shipwreck
+debris and graveyard, sunken ruin cluster) are not affected, nor are feature parts. The switch is read when a meta is
+assembled but Forge did not reload it live on the scratch server: restart after changing it.
 
 **Seen on a scratch server (2026-10-11, seed 8675309):** both registered and staged (`... 2 meta structure(s)`).
 `/locate` found a taiga village with a mini clock tower 83 blocks out, and on the way assembled a Towns & Towers
@@ -1475,8 +1524,8 @@ villages have anything above them (fortified towns and their metas), so shaping 
 **Companions: a fortified town with 1 to 3 villages** (`meta/town_villages`, the meta on hold since 2026-10-11). It
 takes 40% of fortified town slots (with `fortified_ruins` and `fortified_camps` 20% each, 80% of fortified towns are
 metas; D1 2026-10-14, was 30 / 25 / 25; `meta/villages` no longer includes fortified towns, so `village_towers` stays 33% of plain villages). The town is
-the meta (no parts); its villages are **companions**: full starts in chunks of their own 7 to 10 chunks (112 to 160
-blocks) from the town, spread evenly around it, so each keeps its whole reach (a meta part must stay within 7 chunks,
+the meta (no parts); its villages are **companions**: full starts in chunks of their own 4 to 6 chunks (64 to 96
+blocks; 112 to 160 until 2026-10-19, when Phase 8 showed no companion ever reached its town at that range) from the town, spread evenly around it, so each keeps its whole reach (a meta part must stay within 7 chunks,
 which is why the meta was on hold). A chunk makes its companion at the end of `createStructures` when a predicted
 `town_villages` in range names it; the village is picked by weight among `meta/villages` members of `settlements` whose
 biome fits there. Companions skip frequency rolls and meta conversion and rank 94: the town (100) and grid villages
@@ -1508,7 +1557,7 @@ dropped slot, load it, find nothing and move on, as with earth fill); companion 
 `/locate`, explorer maps and way signs don't find them (`/locate creativeengineering:meta/town_villages` finds the
 town); the offline estimates leave companions out and don't count drops.
 
-### 3.23 Fixes from the scratch run (2026-10-18, patcherMod 1.0.7, not built)
+### 3.23 Fixes from the scratch run (2026-10-18, DEPLOYED with 1.0.7)
 
 Six of the open bugs from the 8.0 scratch run ([plan_1.0.6.md](plan_1.0.6.md) 2.1, [testing/structures/](testing/structures/00_plan.md)),
 fixed in source. None is in `mods/` or a deploy yet; the patcherMod parts need `./gradlew build` and a jar install. All
@@ -1793,6 +1842,8 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
 
 **Biomes and terrain**
 - Biome tuning: swap Overworld netherrack and plain crimson/warped ground for other blocks. (quark jasper, create crimsite)
+  Scanned 2026-10-19 with every other Nether block left in Overworld generation: decision sheet in
+  [nether_worldgen.md](nether_worldgen.md) section 2.
 - Chunk generation: leaving out the bottom 64 to 96 blocks: investigated in [locate.md](locate.md) 3.7 (measure
   first; skip the band in Distant Horizons' own generation; a real deferred band is not recommended).
 - Terrain adaptation leftovers (3.15, `terrain_adaptation_scan.md`): batch 4 (the spire, the fish ponds, Philip's
@@ -1915,7 +1966,7 @@ both test scripts pass, node/Rhino parity incl. the priority table; not run in g
 group (settlements > pillagers > dungeons > houses/camps > ruins; monuments > ocean ruins > boats > flotsam; fortified
 towns over villages), a lower-ranked start that would overlap a higher one is dropped before generating, decided from
 predictions so chunk order doesn't matter. `meta/town_villages`: a fortified town with 1 to 3 companion villages
-112 to 160 blocks out; villages near a higher-ranked structure grow around it instead of being dropped (shaping). The
+64 to 96 blocks out (112 to 160 before 2026-10-19); villages near a higher-ranked structure grow around it instead of being dropped (shaping). The
 existing overlap rate is noted in 3.22 (estimated about a third of villages; not measured).
 
 **Wood mismatch reviewed, no changes (2026-10-12):** `tools/wood_mismatch_scan.py` ->
@@ -2271,7 +2322,7 @@ jigsaw children kept: `ser_marrow`, `undead_castle_enemies`, `red_roof_villagers
   radius 8), `meta/fortified_towns` (anchor of `fortified_ruins`, `fortified_camps`, `town_villages`), a `type/*`
   fort tag but **not** `#type/village` (earth-fill pruning drops pieces of villages; the castle is one 42x55x45
   piece). Way-sign destination automatically. Fit: plains/meadow/forest edges. 55 blocks tall: check its
-  `[earth-fill]` size class and that `town_villages` companions (112 to 160 blocks out) clear it.
+  `[earth-fill]` size class and that `town_villages` companions (64 to 96 blocks out since 2026-10-19) clear it.
 - **`eugene:ruined_drum_tower`** -> **ruin:** `group/ruins`, `type/ruin`. Not in `meta/large_ruins` (at 49 across it
   is twice the size the ruin metas were measured for, and adding it would change existing metas). Neutral: neither
   peaceful nor hostile.
@@ -2367,6 +2418,80 @@ Each gets its own `meta/*` tags (not `meta/siege_weapons`), so the existing pill
 | D6 | Drum tower's archaeology blocks | plain gravel/sand, loot lost |
 | D7 | Pig ranger mini-boss (Nether, not a structure) | keep, with the `ride` rewrite |
 | D8 | Drum tower in `meta/large_ruins` | no (size, keeps metas unchanged) |
+
+### 7.5 Plan: earth fill on water, camp plinths, metas off coasts (2026-10-19, BUILT + scratch-tested 2026-10-19)
+
+User, 2026-10-19: "address the structure earth fill issues i outlined in my scratchpad. move the note to the structure
+tuning and work on it there. water replacement cancel should also have a check if the number of water blocks converted
+is a significant (configurable, go with 50% for now) portion higher than the solid blocks replaced or left alone by the
+footprint. a certain mods tent structures are consistantly spawning with 3-4 block high footprint sticking out of the
+ground with the tent on top. also include a disabled by default config switch to turn off metastructure generation in
+any coast/river biome. test these changes as well as the quark spire tp on a scratch server".
+
+The note, moved here from `todo/change_scratchpad.md`:
+
+> - structure earth fill issues
+>     - farmers camp
+>         - some structures spawn on water while missing dirt blocks in footprint
+>         - some structuers (tents) spawn with 4 high dirt column elevating structure
+>             - single tents also spawn with oversized base
+>     - camp ruins metastructure spawning w/ islands in water
+>         - prevent metastructures from spawning on coast biomes?
+>         - stricter %water vs %solid blocks replaced by structure beard/base?
+
+**Findings.**
+- Water: `maxOverWater` only counts water deeper than the beard's reach (6), so a structure on a shallow lake passes
+  with "0 over water" and the beard turns the lake under it into an island. Scratch: a fisher campsite with its whole
+  footprint on water (169 water / 0 ground) was kept by the old check.
+- Tents: the plinths are Campsite Structures' camps (the farmers camp meta's friendly camps include them). Their
+  templates are a dirt dome 4 layers deep under a grass layer; the port's start height -5 sinks it as the old features
+  did (verified in the feature bytecode), but the beard flattens the ground to the template's bottom layer, so it dug
+  the surface down around the dome (verified in the mapped 1.19.2 Beardifier and JigsawPlacement bytecode). The single
+  camps (not in a meta) do the same, hence the "oversized base": the 13x13 dome under a small tent.
+- The other tent mods (villager tents, snowy tent, circus tent) have a 1-layer base and start height 0, so they don't
+  have this problem.
+
+**Changes.**
+
+| # | Change | Where |
+|---|---|---|
+| 1 | Footprint water share: water vs dry ground in each earth piece's box at its surface layer, cancel past `maxWaterSurplus` 0.5 (3.13). "Converted" = filled by earth or the beard, so water under the footprint counts whether or not the template has a block there; buried spots count as neither | `worldgen/EarthFill` (`footprint`, `Layer`, `Footprint`, `Terrain#top`), CEConfig `[worldgen.earth_fill] maxWaterSurplus` |
+| 2 | Sunk starts: the beard levels at the projected surface for structures in `terrain_adaptation/sunk_start` (3.15); the 6 campsites tagged, start height -5 -> -4 | `worldgen/TerrainAdaptation` (`sink`, `sinkOf`, `Shape.sink`), `terrain_adaptation.js`, `kubejs/data/campsite_structures/worldgen/structure/*.json` |
+| 3 | `avoidCoasts` (off by default): metas stay out of coast and river biomes, water metas exempt (3.16) | `worldgen/MetaStructure` (`generate`/`placeStructures` take the avoided biomes, `reaches`, `avoidsCoasts`), CEConfig `[worldgen.meta_structures] avoidCoasts`, `biome_fits.json` biome_tags `coast_river`, `structure_tags.json` `meta/coast_ok` |
+
+Offline: `test_worldgen_tools.sh` all 10 sections pass (earth fill 64 checks, 9 new footprint and burial checks);
+`test_structure_groups.sh` node/Rhino parity identical.
+
+**Tests** (scratch dedicated server, seed 8675309, structureDensity 4, earth fill `log = ALL`, meta log on; log in
+[testing/structures/12_earth_fill_camps.md](testing/structures/12_earth_fill_camps.md)):
+- [x] **ST-199 Camp plinth gone [scratch]:** the armorer campsite at chunk [-7, -9]: old jar, its grass layer at y 94
+  over a ring dug to y 90; new jar (start height -5) grass at 94 inside a ring at 95; start height -4: grass at 95,
+  the ground around at 95. *PASSED 2026-10-19.*
+- [x] **ST-200 Sunk starts load [scratch]:** `[terrain-adaptation] ... 6 sunk starts`, no "ignored" warning. *PASSED.*
+- [x] **ST-201 Footprint share cancels on water [scratch]:** the fisher campsite at [-36, -7] (169 water / 0 ground,
+  kept before) cancelled "too wet"; inland run 14 share-only cancels, a cancelled drum tower's spot probed: open water.
+  *PASSED.*
+- [x] **ST-202 No underground cancels [scratch]:** first build cancelled Philip's ancient dungeon (bury) and
+  Subterrestrial's cabins (seabed and aquifer water deep underground); after the burial rule none in 972 checked
+  starts. *PASSED (after the fix).*
+- [x] **ST-203 avoidCoasts off = unchanged [scratch]:** `/place structure` of farmers_camp, house_camp, ruin_scatter at
+  the spawn beach (-80 -16) builds all three (farmers camp anchored on a beach fish pond). *PASSED.*
+- [x] **ST-204 avoidCoasts on [scratch]:** after a restart (not reloaded live), the same three at the beach: "not
+  placed, no anchor fits"; at 2144 -2592 (nearest river 101 blocks) ruin_scatter, house_camp, farmers_camp,
+  ruin_cluster and waysign_camps all build; `meta/coast_ok` holds the 6 water metas and a driftwood flotilla still
+  generated. *PASSED.*
+- [x] **ST-205 Quark spire teleport [scratch]:** an armor stand `tp`ed to 300016 100 300016 in the Overworld: 4 ms, no
+  region file at the target. The same in the End (hook kept there): 38 s server stall, the target region generated.
+  *PASSED (the mixin from plan_1.0.9.md).*
+
+**Still open.**
+- The End keeps Quark's hook: a `/tp` into unexplored End terrain still generates the target synchronously (38 s on
+  the scratch server). Option: skip the hook when the target chunk isn't loaded, in every dimension.
+- Philip's sunk-start structures and the T&T nilotic village (3.15): look in game before tagging them `sunk_start`.
+- `maxWaterSurplus` is a first value: look at a few share-only cancels in game (`log = ALL`), villages included
+  (a village on a lake goes as a whole; pruning only drops pieces over deep water).
+- `avoidCoasts` near the coast also stops metas whose satellites can't find a spot clear of a beach or river; the
+  off default keeps today's rates.
 
 ## 8. In-game test suite
 
@@ -2528,15 +2653,23 @@ testing/structures/06_phase_6.md.*
 **8.0.7 Phase 7: calibration runs** (heavy logging, density x4, new worlds):
 ST-52 (earth fill `log = ALL`, with ST-159, ST-160, ST-162, ST-167 and ST-168 from the same lines), ST-169, ST-57 (water fill `log = ALL`), ST-67, ST-53, ST-58, ST-54, ST-59.
 
+*Phase 7 run 2026-10-19 (scratch server rebuilt from the Minecraft1192withForge libraries; patcherMod 1.0.7 jar because 1.0.8 crashes a dedicated server at mod loading (Serene Seasons clock mixin references the client `Minecraft` class), worldgen byte-identical; density 4; main square Chunky r 800 at -1400 -2592 in two worlds plus switch boots): ST-162, 159, 169, 67, 54, 58, 59 passed; ST-53 passed except its "slot stays empty" clause (group slots fall through to the next member); ST-160 partly (small villages log `small`; overrides pass); ST-52 and ST-57 data in the log. ST-167 FAILED as shipped: `earth_fill/prune` is empty because `type/village` is not a real structure tag, so pruning never runs; with a scratch-only tag fix ST-167 and ST-168 pass (village cancels 4 -> 2). Also found: pruning can drop a start a size class and tighten its limits; `/dumpstructuregen` broken since 10-14..10-18. Log: testing/structures/07_phase_7.md.*
+
 **8.0.8 Phase 8: two-world comparisons** (same seed, two fresh worlds each, Chunky over the same square):
 ST-144 (approached from opposite sides), ST-148 (shaping on vs off), ST-157 (second half: peaceful on vs off),
 ST-145 (`placementPriority` on vs off, overlap count).
 
+*Phase 8 run 2026-10-19 (seven fresh worlds, same seed, density 4, as shipped: pruning dead; areas r 400 at -1400 -2592, r 256 around a town at -3727 -3564, r 400 at 3450 -1100): ST-144, ST-157 (second half), ST-145 (rate skipped) and ST-148 passed. ST-148 needed the town companion distance pulled in to 64-96 blocks: at the real 112-160 no village reached a town in 8 towns. No bugs. Log: testing/structures/08_phase_8.md.*
+
 **8.0.9 Phase 9: flat world** (superflat, structures off): ST-39, ST-41, ST-42, ST-40 (every Towns & Towers
 structure placed; the longest step).
 
+*Phase 9 run 2026-10-19: ST-42 passed, ST-40 passed its scratch part (55 of 56 placed on hills and on a flat world, signs, no overlaps, illagers; walking the rows is [game]), ST-39 partly and ST-41 FAILED: the `/ceplace templates` mode throws because vanilla `listTemplates()` dies on a `structures.nbt` path a resource-manager mixin adds. Also: no flat world can be created while `[worldgen.systems] biomeLayout` is on (its overworld dimension override outranks presets and world datapacks; Terralith/Tectonic override too); recipe in the log. Log: testing/structures/09_phase_9.md.*
+
 **8.0.10 Phase 10: profiling** (JFR on the scratch server): LO-10 (per-status chunk generation times of a Chunky
 pregen radius 64, written into locate.md 3.7).
+
+*Phase 10 run 2026-10-19 (instance toml at density 1, Chunky radius 64 chunks at 2144 -2592, 16,641 chunks in 24.5 min, JFR as server/LaunchServer.sh): LO-10 passed; per-status times are in locate.md 3.7 (noise 38.8%, features 24.4%, light 18.8%, structure starts 6.4% though rebuilt about 16 times per chunk). Pack-side hot spots: the earth-fill terrain prediction (about 4% of worldgen CPU) and twigs' obelisk check (3.1%). Log: testing/structures/10_phase_10.md. The scratch run (8.0.1 to 8.0.10) is complete.*
 
 **8.0.11 After the scratch run: in a client** ([game]; the scratch run first narrows down where to look):
 ST-27 (grass on grass), ST-29, ST-43, ST-62, ST-63, ST-64, ST-66, ST-68, ST-68 b, ST-71, ST-88, ST-89, ST-90,
@@ -2648,11 +2781,11 @@ biome/start check); **[game]**: needs eyes in a client.
 - [x] **ST-141 Drops happen [scratch]:** after pregenerating an area, the log has `[placement-priority] dropped <ruin/house> ... overlaps <village/...>` lines, losers always lower-ranked than winners. *2026-10-14 scratch phase 6 (structure_tuning 8.0.6, seed 8675309, 1.0.6 jar of 12:44, density 1, world st_p: Chunky square radius 96 chunks at 2144 -2592, census at -1700 1500; log testing/structures/06_phase_6.md): PASSED: 15 rank drop lines over 37249 chunks; the loser ranks below the winner in 15/15.*
 - [ ] **ST-142 No mashups [scratch/game]:** at several logged drops, the winner stands whole and nothing of the loser is there (no blocks, no pad). *2026-10-14 scratch phase 6 (structure_tuning 8.0.6, seed 8675309, 1.0.6 jar of 12:44, density 1, world st_p: Chunky square radius 96 chunks at 2144 -2592, census at -1700 1500; log testing/structures/06_phase_6.md): scratch part PASSED: at all 22 distinct drops the loser's start is absent from its chunk and the winner's start is there; looking at them stays [game].*
 - [x] **ST-143 Town with villages [scratch]:** `/locate structure creativeengineering:meta/town_villages`; the log has 1 to 3 `companion at chunk ... of creativeengineering:meta/town_villages` lines; each village is 7 to 10 chunks from the town and doesn't touch it. *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads): **FAILED / blocked**: `meta/town_villages` answered only once, at -2000 10336 (10073 blocks, desert; 20 other towns assembled, all cancelled by earth fill). After generating the 21 x 21 chunks around it there is no companion village (`/zstarts` lists the area's starts: the town, cabins, a dungeon, no village). Caveat: by then Forge had reset the scratch toml to the 1.0.6 defaults (`maxOverAir` 128, logs off; my edit raced its config watcher), and at 128 the companion predictor cancelled the town's own anchor, so no companions were sent. Retest after the earth-fill change. Also seen there: `philipsruins:badlands_start_dungeon` starts 6 chunks from the town (check against the peaceful radius, ST-156).* *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: `meta/town_villages` answered at 6384 -6000 (from 2448 -624, 95 s), its fortified-village anchor kept (8 over air). After forceloading the 21 x 21 chunks around it: 3 `companion at chunk ... of creativeengineering:meta/town_villages` lines, at [399, -382] (village_taiga, 7 chunks), [392, -371] (T&T village_birch_forest, 8.1) and [406, -371] (village_taiga, 8.1), all kept by earth fill; a pillager outpost/siege meta overlapping the first was dropped for it.*
-- [ ] **ST-144 Order independence [scratch]:** generate the same area twice in two fresh worlds with the same seed, approaching from opposite sides: the same structures in the same places (compare a `/dumpstructuregen`-style list or several `/locate` answers).
-- [ ] **ST-145 Overlap rate [scratch]:** with `placementPriority = false` count villages with another group's structure overlapping them in a pregenerated area (the rough estimate is about a third); with it on, none.
+- [x] **ST-144 Order independence [scratch]:** generate the same area twice in two fresh worlds with the same seed, approaching from opposite sides: the same structures in the same places (compare a `/dumpstructuregen`-style list or several `/locate` answers). *2026-10-19 scratch phase 8 (structure_tuning 8.0.8, seed 8675309, patcherMod 1.0.7 jar (worldgen = 1.0.8), density 4, worlds st_8a..st_8g; log testing/structures/08_phase_8.md): PASSED: Chunky square r 400 at -1400 -2592 in two fresh worlds, one approached from a west strip, one from an east strip (two JVM runs): 674 = 674 starts in full chunks, the same chunks, identical piece boxes.*
+- [x] **ST-145 Overlap rate [scratch]:** with `placementPriority = false` count villages with another group's structure overlapping them in a pregenerated area (the rough estimate is about a third); with it on, none. *2026-10-19 scratch phase 8 (structure_tuning 8.0.8, seed 8675309, patcherMod 1.0.7 jar (worldgen = 1.0.8), density 4, worlds st_8a..st_8g; log testing/structures/08_phase_8.md): PASSED (the "about a third" estimate skipped as a rate): `placementPriority = false`: 2 of 7 settlements have a piece overlapping a ranked other-group structure (a savanna village x a field-stone ruin, a town x a ruin scatter); on: 0 of 30 over four areas. Off also means no companion villages.*
 - [ ] **ST-146 Generation speed [game]:** flying fast over new land feels no slower than before (each higher-ranked slot is generated about twice).
 - [ ] **ST-147 Villages stop at a town [scratch/game]:** at a `town_villages` meta (ST-143) and at grid villages near fortified towns: where a village reaches the town its streets end or turn and no house touches the town's pieces; the village is otherwise whole. The report's priority section lists `settlements` as shaped (34 structures).
-- [ ] **ST-148 Shaping off [scratch]:** with `priority.shape` emptied, the same seed gives villages that are dropped whole instead (log `dropped minecraft:village_...`), proving the shaping did the work. Put it back.
+- [x] **ST-148 Shaping off [scratch]:** with `priority.shape` emptied, the same seed gives villages that are dropped whole instead (log `dropped minecraft:village_...`), proving the shaping did the work. Put it back. *2026-10-19 scratch phase 8 (structure_tuning 8.0.8, seed 8675309, patcherMod 1.0.7 jar (worldgen = 1.0.8), density 4, worlds st_8a..st_8g; log testing/structures/08_phase_8.md): PASSED with the town companion distance loosened to 64-96 (at 112-160 no village reached a town in 8 towns, so on and off were identical): shape on, three companions end 0-1 blocks from their town with no overlapping piece; `priority.shape = []`, the same three slots log `dropped minecraft:village_taiga / village_old_growth_taiga / village_flower_forest ... overlaps creativeengineering:meta/town_villages`, and only one slot finds another village that fits.*
 - [x] **ST-149 Meat blocks [scratch/game]:** the log has `[template-swaps] 5 block swap(s) in 4 template(s)` and no "no longer hold" warning; in a Towns & Towers birch forest, Mediterranean or mushroom village butcher (`/locate` the village, find the butcher) the hanging meat is an upright salmon log, not red glazed terracotta. `templateBlockSwaps = false` brings the terracotta back in new chunks. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): log part passed (combined line now 874 swaps / 69 templates, see ST-150), no "no longer hold"; block part in phase 3.* *2026-10-14 scratch phase 3 (seed 8675309, 1.0.6 jar of 01:28, world st_d at structure density 4 with two Chunky squares; st_e for the off-switch comparisons; log feature_writeup/testing/structures/03_phase_3.md): PASSED: all 5 marked spots are upright salmon logs (each template placed, plus 2 natural sky-village farms), no red glazed terracotta; with `templateBlockSwaps = false` (new world) every spot is red glazed terracotta again.*
 - [x] **ST-150 Nether swaps load [scratch]:** the log has `[template-swaps] 874 block swap(s) in 69 template(s)` (meat + Nether) and no "no longer hold" warning; no `unwrecked_ships:nether_ship` in `/locate` in the Nether. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): PASSED: 874 swaps in 69 templates, no "no longer hold"; Nether /locate unwrecked_ships:nether_ship finds nothing.*
 - [ ] **ST-151 Swapped blocks [game]:** a YUNG's jungle temple has magma (fire on it keeps burning) where netherrack was; a crypt's soul sand is coarse dirt; a YUNG's stronghold's statues use deepslate brick stairs/walls and its gold ore is normal; a Terralith frosted dungeon has permafrost and no soul fire; a fortified village's soul campfires are normal campfires; Philip's ancient crypt has basalt where soul sand was; a sky village has yellow corundum lights.
@@ -2663,17 +2796,17 @@ biome/start check); **[game]**: needs eyes in a client.
 - [x] **ST-154 Drops logged [scratch]:** after pregenerating, `dropped <outpost/temple/hut/dungeon> ... within N chunk(s) of peaceful <id> from chunk [...]` lines appear, N being 8, 5 or 3 by the peaceful structure. *2026-10-14 scratch phase 6 (structure_tuning 8.0.6, seed 8675309, 1.0.6 jar of 12:44, density 1, world st_p: Chunky square radius 96 chunks at 2144 -2592, census at -1700 1500; log testing/structures/06_phase_6.md): PASSED: 24 peaceful drop lines, every loser in a hostile group, N = the peaceful structure's radius (21 x 3 remote, 3 x 5 settlements; no big-settlement drop in the square).*
 - [ ] **ST-155 Camps clear [game]:** `/locate` several `meta/farmers_camp`, `meta/house_camp` and T&T wandering trader camps: no pillager outpost, dungeon entrance, temple or witch hut within about 3 chunks (48 blocks) of any building of the camp.
 - [ ] **ST-156 Villages and towns clear [game]:** around several villages no hostile structure within about 5 chunks (80 blocks) of the outermost house; around a fortified town (`/locate structure #creativeengineering:priority/big_settlements` or a Terralith fortified village) none within about 8 chunks (128 blocks).
-- [ ] **ST-157 Hostiles still spawn [scratch]:** `/locate structure #minecraft:pillager_outpost` (and a T&T outpost) still finds them out in the open; with `priority.peaceful` removed the same seed has hostile starts in the spots ST-154 logged. *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads): first half PASSED: `#minecraft:pillager_outpost` from 2400 1200 answers a T&T old-growth-taiga outpost at 2095 1055 (alpine highlands, inside a stronghold siege) and `towns_and_towers:pillager_outpost_forest` one at 2124 3655 (forest, inside a tower siege): out in the open.*
+- [x] **ST-157 Hostiles still spawn [scratch]:** `/locate structure #minecraft:pillager_outpost` (and a T&T outpost) still finds them out in the open; with `priority.peaceful` removed the same seed has hostile starts in the spots ST-154 logged. *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads): first half PASSED: `#minecraft:pillager_outpost` from 2400 1200 answers a T&T old-growth-taiga outpost at 2095 1055 (alpine highlands, inside a stronghold siege) and `towns_and_towers:pillager_outpost_forest` one at 2124 3655 (forest, inside a tower siege): out in the open.* *2026-10-19 scratch phase 8 (structure_tuning 8.0.8, seed 8675309, patcherMod 1.0.7 jar (worldgen = 1.0.8), density 4, worlds st_8a..st_8g; log testing/structures/08_phase_8.md): second half PASSED: with `priority.peaceful` removed, each of the 7 slots where the baseline world logged peaceful drops (2 in r 400 at -1400 -2592, 5 around a town at -3727 -3564) holds a hostile start (outposts, a stronghold siege, the undead castle, zombie dungeons).*
 
 **Fixes before Phase 3** (2026-10-13, 7.3). The 1.0.6 jar from 2026-10-13 or later; new world or far new land.
 - [ ] **ST-158 Big bearded structures stand [scratch]:** `/locate` a Terralith fortified village (or `meta/fortified_ruins`), a bastille and a Takes A Pillage camp: each answers, and the answer's chunk holds the start (no `CANCELLED ... over air` for them as in 8.0.2). Their `[earth-fill]` lines (`log = ALL`) name a size and `beard`, and air after the beard is far below the old 257+. *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PARTLY PASSED (earth fill part passed): no big bearded structure was cancelled for air any more. Bastille kept 4 times (20 over air after the beard, limit 320, `huge, beard`), TaP camp kept (0) and found at its chunk (2368 -2896, from 117 blocks), a fortified village kept as the anchor of `meta/town_villages` (8 over air). The 2 fortified-village cancels left are real: 681 mound columns (cliff) and 146 over water. Bastille: no answer within 120 s, from 2448 -624 or from 120 blocks of a kept one, because placement priority drops it (3 of 4 kept ones were within the 5-chunk peaceful radius of a village or house). Fortified village on its own: timed out at 120 s from 2448 -624 (14 loads).*
-- [ ] **ST-159 Cliffs and deep water still cancel [scratch]:** with `log = ALL`, pregenerate new land with cliffs and coasts: some starts log `CANCELLED` with mound columns or water past the beard over their limit; probe one or two: a piece over a drop or water deeper than about 6 blocks.
-- [ ] **ST-160 Sizes [scratch]:** among the `log = ALL` lines, small ruins log `small` with limits 24 / 8, villages `medium` or `large`, fortified villages `large` or `huge`; an `overrides` line with 2 numbers keeps the size's mound limit, one with 3 replaces it.
+- [x] **ST-159 Cliffs and deep water still cancel [scratch]:** with `log = ALL`, pregenerate new land with cliffs and coasts: some starts log `CANCELLED` with mound columns or water past the beard over their limit; probe one or two: a piece over a drop or water deeper than about 6 blocks. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED: region-file probes of cancels: T&T beach village [-104, -157] over sea 21 deep (every column > 6), Farmer's Delight cooks [-79, -140] on a cliff (ground y 54-120 around it), Subterrestrial ocean cabins whose fixed height lies in open sea water (kept ones sit under shallow floors).*
+- [ ] **ST-160 Sizes [scratch]:** among the `log = ALL` lines, small ruins log `small` with limits 24 / 8, villages `small`, `medium` or `large` by their size (small villages such as vanilla taiga log `small`), fortified villages `large` or `huge`; an `overrides` line with 2 numbers keeps the size's mound limit, one with 3 replaces it. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PARTLY: ruins log `small` 24 / 8 and most villages `medium` / `large`, but small villages log `small` (vanilla taiga 128-135 earth, T&T beach 126, Mediterranean/Tudor 42-74); no fortified village in the square. Overrides PASSED: `philipsruins:ancient_dungeon=5,7` -> limits 5 / 7 / 8 (size's mound kept), `terralith:underground/witch_hut=5,7,3` -> 5 / 7 / 3.*
 - [x] **ST-161 Old key dropped [scratch]:** after the first boot the toml has `beardReach`, `buryReach`, `maxMoundHeight` and `[worldgen.earth_fill.sizes]`, and no `maxOverAir`; no config error in the log. *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: after the first boot on the old toml, `maxOverAir` is gone, and `beardReach` 6, `buryReach` 10, `maxMoundHeight` 8, `prune`, `pruneMaxHanging` and `[worldgen.earth_fill.sizes]` were added (Forge's usual "corrected from null to its default" notices only); `log = "ALL"` was kept; no config error.*
-- [ ] **ST-162 Mansion exempt [scratch]:** with `log = ALL`, no `[earth-fill] minecraft:mansion` line ever.
-- [ ] **ST-167 Villages pruned, not cancelled [scratch]:** pregenerate new land with rivers and coasts (default log): `[earth-fill] <village> ... pruned K of N pieces; over the piece limits: ...` lines appear, and far fewer villages log `CANCELLED` than in a run with `prune = false`. Probe a pruned one: no house over deep water, the street it hung off ends there, no villager or animal stranded where the dropped piece was.
-- [ ] **ST-168 Only villages are pruned [scratch]:** no `pruned` line names a structure outside `#creativeengineering:type/village` (or a meta); `/locate` of a pruned village still answers at its chunk.
-- [ ] **ST-169 Prune switch [scratch]:** `prune = false` (one reboot, new land): no `pruned` lines; the same seed's village near water logs `CANCELLED` instead.
+- [x] **ST-162 Mansion exempt [scratch]:** with `log = ALL`, no `[earth-fill] minecraft:mansion` line ever. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED: no mansion in the square; `/locate` from a dark forest built 4 mansion starts (3 dropped by peaceful radius, 1 answered at 2560 -5504): no `[earth-fill] minecraft:mansion` line.*
+- [x] **ST-167 Villages pruned, not cancelled [scratch]:** pregenerate new land with rivers and coasts (default log): `[earth-fill] <village> ... pruned K of N pieces; over the piece limits: ...` lines appear, and far fewer villages log `CANCELLED` than in a run with `prune = false`. Probe a pruned one: no house over deep water, the street it hung off ends there, no villager or animal stranded where the dropped piece was. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): FAILED as shipped: no `pruned` line ever: `#creativeengineering:earth_fill/prune` is empty at runtime because `#creativeengineering:type/village` is not a real tag (structure_overrides.js only adds meta/* tags). PASSED with a scratch-only fix (type/village added as a real tag): same square, village cancels 4 -> 2; pruned taiga village (5 of 124 pieces) and savanna village (8 of 171) stand, no junction points at a missing piece, no rigid piece hangs, villagers and golem inside kept pieces.* *2026-10-19 fix rerun (patcherMod 1.0.8 d60b5a99, `type/*` tags real; world st_norm, seed 8675309, density 4, square r 400 at 3450 -1100; testing/structures/11_fixes_1_0_8.md): PASSED as shipped: `#earth_fill/prune` and `#type/village` are filled; `village_savanna` [232, -38] pruned 1 of 132 and `village_taiga` [210, -70] pruned 1 of 112, both kept; no plain village cancelled in the square.*
+- [x] **ST-168 Only villages are pruned [scratch]:** no `pruned` line names a structure outside `#creativeengineering:type/village` (or a meta); `/locate` of a pruned village still answers at its chunk. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED with the tag fix: 4 pruned lines, all villages; `/locate` of both pruned villages answers at their own chunk ([-81, -181], [-142, -130]).* *2026-10-19 fix rerun (same world): PASSED: both pruned lines are villages.*
+- [x] **ST-169 Prune switch [scratch]:** `prune = false` (one reboot, new land): no `pruned` lines; the same seed's village near water logs `CANCELLED` instead. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED: `prune = false` (tag fix on): 0 pruned lines; the taiga village at [-81, -181] and the savanna village at [-142, -130] log CANCELLED with the same numbers as without pruning.*
 - [x] **ST-163 End tower fails fast [scratch]:** from the Overworld, `/locate structure` the End tower of ST-80: "Could not find" within a few seconds (was 900+ s). *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: "Could not find" in 0 s (1 ms, 0 loads) from the Overworld (was 900+ s).*
 - [x] **ST-164 Rare anchors answer or time out [scratch]:** `/locate` the desert tower and the bastille: each answers or ends within 120 s with a `[locate] ... not found (timed out after 120 s)` line; `/celocate stats` shows `meta_target` savings for them and `cutShort` for any that timed out. ST-86 and ST-87 still find a part and an anchor. *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: desert tower and bastille from 2448 -624 each ended at 120 s with `not found (timed out after 120 s)` (13 and 8 loads); `/celocate stats` shows `cutShort` 1 for both and `meta_target` savings of 47 and 23. Loads were slow (about 9 s each with 4 searches at once). The desert tower was kept 4 times by earth fill elsewhere during the searches (2 dropped by peaceful radius).*
 - [x] **ST-165 Stop [scratch]:** start 4 slow searches (desert tower from 4 places), then `/celocate stop`: each logs `... (stopped)` within a second or two and the locator threads are free (a new `/locate` of a village answers at once). *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: 4 desert-tower searches, `/celocate stop` after 20 s: all 4 logged `not found (stopped)` in the same second; a `/locate` of `village_plains` sent 4 s later answered 4 s after that (2064 blocks).*
@@ -2739,7 +2872,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - [ ] **ST-190 Looks right [game]:** fly to one of each new structure: beard/trim fit the ground, no floating
   carts, Campsite's camper entity there, the castles' insides intact.
 
-**Fixes from the scratch run** (2026-10-18, 3.23). Needs the 1.0.7 jar built and installed; new chunks only.
+**Fixes from the scratch run** (2026-10-18, 3.23). In 1.0.7 (DEPLOYED 2026-10-18); new chunks only.
 
 - [ ] **ST-191 Same villages after a restart [scratch]:** fresh world, `/celocate batch towns_and_towers` (and
   `/locate` of `meta/village_towers`), restart the server on the same world copy taken before the first batch, run it
@@ -2775,15 +2908,15 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - [ ] **ST-64 skirtBump:** set `skirtBump = 4`, rejoin, find the same kind of structure in new chunks: the blend is as wide as vanilla's (about 8 blocks) but still follows the building. Set it back to 0.
 - [ ] **ST-65 Switches:** `[worldgen.systems] terrainAdaptation = false`, rejoin, new chunks: the tagged structures get their own beard again (the flat rectangle), with `templateTrim` still on (no pad, no air notch, but the rectangle is flattened). Then `templateTrim = false` too: pads and notches are back. Both back on. *2026-10-14 scratch phase 4 (seed 8675309, 1.0.6 jar of 01:28, density 1, world st_d unless noted; log feature_writeup/testing/structures/04_phase_4.md): PARTLY: terrain adaptation off (new area, same seed as a world with it on): the structures' own beard flattens the 8-block ring around them (550 vs 153 and 559 vs 363 ring columns at floor height, jungle outpost and fresh watchtower); ours keeps the slope. The `templateTrim = false` part was not run (a third world): [game].*
 - [ ] **ST-66 Watchtowers and plates:** `L watchtower_building:fresh_watchtower`: the tower stands complete on its base plate (the foundation piece is never trimmed), with the soft blend around it.
-- [ ] **ST-67 Earth fill sees the trim:** with `[worldgen.earth_fill] log = "ALL"`, a trimmed structure's `[earth-fill]` line counts only earth under its built columns (the circus tent's base count drops by its 264 trimmed pad blocks). Put `log` back.
+- [x] **ST-67 Earth fill sees the trim:** with `[worldgen.earth_fill] log = "ALL"`, a trimmed structure's `[earth-fill]` line counts only earth under its built columns (the circus tent's base count drops by its 264 trimmed pad blocks). Put `log` back. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED: circus tent [-144, -228]: 784 earth with `templateTrim = false`, 520 with it on: exactly the 264 pad blocks (trim off also moves it from medium to large).*
 - [ ] **ST-68b Scan batches:** in new terrain, a Towns & Towers pillager outpost (`L towns_and_towers:pillager_outpost_grove`) and a vanilla one on a slope: level under the tower and pieces only, round 4-block blend, no grass slab or air notch beyond them; the outpost is otherwise complete (tower top, cages, tents). A hobbit house or botanist house: as ST-63. A Takes a Pillage bastille: its courtyards are still flat inside the walls, but outside the walls the ground blends back within about 4 blocks instead of a wide flat apron.
 - [ ] **ST-68 Others unchanged:** a vanilla village, a YUNG's structure and an untagged modded house look as before (the same beard and pads).
 
 **Water fill** (2026-10-08, 3.14)
 - [x] **ST-56 Loads clean:** the toml has `[worldgen.water_fill]` and `systems.waterFill`; no `[water-fill] overrides: ... skipped` warning; no KubeJS error for `worldgen/water_fill.js`; `/dumpstructuregen` still works. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): PASSED: toml section + key, no skipped warning, no KubeJS error, /dumpstructuregen works.*
-- [ ] **ST-57 Log run (calibration):** set `[worldgen.water_fill] log = "ALL"`, rejoin, fly over 2,000+ blocks of new ocean and coast (or `[worldgen.debug] structureDensity = 4`). `latest.log` has `[water-fill] hopo:underwater_ruins at chunk [x, z]: N water blocks, G into dry ground (limit 32), A into air (limit 16) -> kept|CANCELLED` lines. Ruins in open ocean should show 0 or close to it; tell me the numbers and the limits get set from them. Put `log` back to `CANCELLED`.
-- [ ] **ST-58 A cancel:** set `maxIntoGround = 0`, `maxIntoAir = 0` and `overrides = []`, rejoin, fly along a new coast: Hopo ruins near the shore log `CANCELLED` and are missing; the fish ponds and the swamp fisherman house cancel almost everywhere (their water is dug into the ground). Put the values back.
-- [ ] **ST-59 Ponds:** with the default overrides, a fish pond on flat plains or a fisherman house in a swamp still generates (their ground count doesn't matter); one on a steep slope where the pond would spill logs `CANCELLED`.
+- [ ] **ST-57 Log run (calibration):** set `[worldgen.water_fill] log = "ALL"`, rejoin, fly over 2,000+ blocks of new ocean and coast (or `[worldgen.debug] structureDensity = 4`). `latest.log` has `[water-fill] hopo:underwater_ruins at chunk [x, z]: N water blocks, G into dry ground (limit 32), A into air (limit 16) -> kept|CANCELLED` lines. Ruins in open ocean should show 0 or close to it; tell me the numbers and the limits get set from them. Put `log` back to `CANCELLED`. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): DATA: Hopo ruins/fossils 97% at 0 into ground / 0 into air; outliers 111 and 115 into ground (fossil, warm ruin), 14 and 25 into air (large ruins); 32 / 16 cancel 2 of 164 in the main square. Ponds and the swamp house in the log 2.4.*
+- [x] **ST-58 A cancel:** set `maxIntoGround = 0`, `maxIntoAir = 0` and `overrides = []`, rejoin, fly along a new coast: Hopo ruins near the shore log `CANCELLED` and are missing; the fish ponds and the swamp fisherman house cancel almost everywhere (their water is dug into the ground). Put the values back. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED: at 0 / 0 with `overrides = []` (coast square r 400 at -1400 -1000): 4 of 166 cancel (warm ruin 115 into ground, ruin and fossil 4-5 into air, the swamp fisherman house 268 into ground, which stood under the default override), all missing from their chunks; a fish-pond `/locate` cancelled every pond on 41 misses and found none.*
+- [x] **ST-59 Ponds:** with the default overrides, a fish pond on flat plains or a fisherman house in a swamp still generates (their ground count doesn't matter); one on a steep slope where the pond would spill logs `CANCELLED`. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED: default overrides: fish pond kept at [-180, -211] (1 water block) and found by `/locate`; swamp fisherman house kept at [-192, 12] with 268 into dry ground and 0 into air and found by `/locate`; one on a slope ([-283, -70], 108 into air) and the carp ponds on slopes (26 and 67 into air) CANCELLED.*
 - [x] **ST-60 Switch and scope:** `[worldgen.systems] waterFill = false` → no `[water-fill]` lines. Back on: a structure not in `water_fill/structures` (a Better Jungle Temple, a village with farms) never logs a `[water-fill]` line, even at 0 and 0. *2026-10-14 scratch phase 4 (seed 8675309, 1.0.6 jar of 01:28, density 1, world st_d unless noted; log feature_writeup/testing/structures/04_phase_4.md): PASSED: off: no `[water-fill]` lines; on with `log = ALL`: lines only for tagged Hopo ruins/fossils, none for a Better Jungle Temple generated in the same area.*
 
 **Setup:**
@@ -2844,10 +2977,10 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - [x] **ST-38 Pool tuning off:** `systems.poolTuning = false`, rejoin → `pool_tag_report.md` lists the warning "pool tuning is off"; a fresh plains village can have Create: Dynamic Village houses again. *2026-10-14 scratch phase 4 (seed 8675309, 1.0.6 jar of 01:28, density 1, world st_d unless noted; log feature_writeup/testing/structures/04_phase_4.md): PASSED: pool_tag_report.md warns "pool tuning is off"; 24 of 25 generated plains villages have Create: Dynamic Village houses (101 pieces) and some IE ones.*
 
 **`/ceplace`** (superflat world, Generate Structures OFF, cheats on)
-- [ ] **ST-39 Preview:** `/ceplace preview structures @towns_and_towers` → `56 structures in 7 row(s)`: type/camp 5, type/fort 9, type/ship 2, type/shipwreck 1, type/tower 15, type/village 23, (no type/* tag) 1. `/ceplace preview templates kaisyn:village/*/houses/*` → one row per village style. *2026-09-27: the structures preview gave exactly this from a scratch dedicated server's console; templates preview and your client still to do.*
-- [ ] **ST-40 Whole mod in rows:** `/ceplace structures @towns_and_towers` → progress in chat, then `/ceplace done: N of 56 placed in x ..`; a sign in front of each row and each structure; no two structures overlap; failures (if any) listed with a reason. Walk the rows: villages complete, outposts with their pillagers. *2026-09-27, scratch dedicated server on normal terrain: the first version was killed by the 60 s watchdog at 38/56 (a 90-chunk village generated in one tick); after the step/tick-budget rewrite, `done: 55 of 56 placed`, `village_ocean` refused dry land. Flat world and walking the rows still to do.*
-- [ ] **ST-41 Templates:** `/ceplace templates kaisyn:village/meadow_swiss/houses/*` (or any folder from ST-39's list) → houses in a row, no jigsaw blocks left, signs with each template id.
-- [ ] **ST-42 Status and stop:** start `/ceplace structures by group @philipsruins @hopo`, run `/ceplace status` (progress line naming the structure in progress and its chunks loaded/placed), then `/ceplace stop` → `stopped at n/N`, nothing more is placed.
+- [ ] **ST-39 Preview:** `/ceplace preview structures @towns_and_towers` → `56 structures in 7 row(s)`: type/camp 5, type/fort 9, type/ship 2, type/shipwreck 1, type/tower 15, type/village 23, (no type/* tag) 1. `/ceplace preview templates kaisyn:village/*/houses/*` → one row per village style. *2026-09-27: the structures preview gave exactly this from a scratch dedicated server's console; templates preview and your client still to do.* *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): structures part PASSED again (56 in 7 rows, counts exactly as written); templates part FAILED: `/ceplace preview templates kaisyn:village/*/houses/*` throws "An unexpected error occurred" (vanilla listTemplates StringIndexOutOfBoundsException on a `structures.nbt` path at a namespace root; see ST-41).* *2026-10-19 fix rerun: templates part PASSED: `/ceplace preview templates kaisyn:village/*/houses/*` lists 326 templates in 21 rows, one per house folder.*
+- [ ] **ST-40 Whole mod in rows:** `/ceplace structures @towns_and_towers` → progress in chat, then `/ceplace done: N of 56 placed in x ..`; a sign in front of each row and each structure; no two structures overlap; failures (if any) listed with a reason. Walk the rows: villages complete, outposts with their pillagers. *2026-09-27, scratch dedicated server on normal terrain: the first version was killed by the 60 s watchdog at 38/56 (a 90-chunk village generated in one tick); after the step/tick-budget rewrite, `done: 55 of 56 placed`, `village_ocean` refused dry land. Flat world and walking the rows still to do.* *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): scratch part PASSED: on hills and on a real flat world, `done: 55 of 56 placed`, `village_ocean` refused with its reason; a sign in front of each of the 7 rows and at each of the 55 structures; no two boxes overlap; all 29 outposts hold illagers, 22 of 24 villages villagers (the trader camp has traders; T&T `village_forest` is the forest_ruins set, abandoned by design). Walking the rows stays [game]. Note: no flat world is possible while `[worldgen.systems] biomeLayout` is on (its overworld dimension override outranks every preset and world datapack).*
+- [ ] **ST-41 Templates:** `/ceplace templates kaisyn:village/meadow_swiss/houses/*` (or any folder from ST-39's list) → houses in a row, no jigsaw blocks left, signs with each template id. *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): FAILED: every `/ceplace templates` (preview or place) throws: MassPlacer.templateIds calls StructureTemplateManager.listTemplates, which throws StringIndexOutOfBoundsException (begin 11, end 10, length 14) on a merged-listing path `structures.nbt`; no single pack lists it (a resource-manager mixin adds it). Fix: list templates per pack, keeping only `structures/` paths.* *2026-10-19 fix rerun (patcherMod 1.0.8 d60b5a99, world st_flat made with `level-type=minecraft:flat` and biomeLayout on): scratch part PASSED: `/ceplace templates kaisyn:village/meadow_swiss/houses/*` placed 17 of 17 in 1 s on the flat surface (y -61), 0 failed; looking at the houses is [game].*
+- [x] **ST-42 Status and stop:** start `/ceplace structures by group @philipsruins @hopo`, run `/ceplace status` (progress line naming the structure in progress and its chunks loaded/placed), then `/ceplace stop` → `stopped at n/N`, nothing more is placed. *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): PASSED: `/ceplace structures by group @philipsruins @hopo` (33 in 5 rows); `/ceplace status` -> "11/33 started, 10 placed, 0 failed, row 3/5, now philipsruins:ancient_towers (chunks loaded 2/2, placed 0/2)"; `/ceplace stop` -> "stopped at 18/33", nothing placed after.*
 - [ ] **ST-43 Converted structure mods in the client:** the game starts with no `NoSuchMethodException ... <init>()`. In a flat world, `/ceplace structures @mysticrift_pillagers_towers_aris @skyvillages @saloon @villager_forge @illagerwarship` → all placed. Look for supplementaries urns where the 1.20 decorated pots were, Vinery cherry wood on the cherry tower, and Sky Villages with no empty gaps. *2026-09-27: all 56 placed on a scratch dedicated server (0 failed); client not yet.*
 
 **Water biomes, IPO, driftwood** (2026-10-03)
@@ -2861,13 +2994,15 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - [ ] **ST-49 Banks:** rejoin; `pool_tag_report.md` shows `monobank:village/houses/plains_vault` at 2.7 and `monobank:village/streets/plains_straight_fix_01` at 2.4 (final chance about 2.0% and 4.6%), `monobank/vault_houses x0.18` and `monobank/vault_streets x0.16` listed, no errors. Then `L minecraft:village_plains` 6 times and walk each: banks (a vault building with its door, or a straight street with a vault beside it) should be uncommon, roughly 1 village in 4 or 5 instead of most of them. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): pool report: plains vault 15 -> 8 (2.0%), plains straight street 15 -> 5 (4.8%), both multipliers listed; weights are now whole numbers (8 and 5, not 2.7 and 2.4) with the same final chances. Village walk still to do.*
 - [ ] **ST-50 Driftwood:** in new terrain, walk a beach, a swamp, a river and open ocean: driftwood floats in the shallows and on the sea, a log lying on dry sand or grass is now a rare find (beach about 1 per 160 chunks). A river bank has none. `latest.log` has no `upgrade_aquatic:driftwood_*` or `creativeengineering:driftwood_land/*` parse error. *2026-10-14 scratch phase 3 (seed 8675309, 1.0.6 jar of 01:28, world st_d at structure density 4 with two Chunky squares; st_e for the off-switch comparisons; log feature_writeup/testing/structures/03_phase_3.md): FAILED (shallows): no driftwood parse errors of ours, dry-land logs rare (4 in 1055 beach chunks), no river-bank logs, BUT no floating driftwood in 611 river chunks, 454 swamp chunks or any beach water: Upgrade Aquatic's DriftwoodFeature, outside oceans, only places with dirt or sand directly under its origin, and our water versions filter for water there, so they can never place (bug, open).*
 - [ ] **ST-51 Loads clean:** the log has no mixin error for `ChunkGeneratorEarthFillMixin`; the toml has `[worldgen.earth_fill]` and `systems.earthFill`; `/reload` and `/dumpstructuregen` still work. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): mixin/toml part passed, /dumpstructuregen works; /reload not yet run.*
-- [ ] **ST-52 Log run (calibration):** set `[worldgen.earth_fill] log = "ALL"`, rejoin, fly over 2,000+ blocks of fresh terrain (or `[worldgen.debug] structureDensity = 4`). `latest.log` has `[earth-fill] <id> at chunk [x, z] (<size>, <beard>): N earth, W over water (limit 24), A over air after beard (limit L), M mound columns (limit K) -> kept|CANCELLED` lines (format since 7.3.1). Collect them per size, then set `[worldgen.earth_fill.sizes]`, `maxOverWater` and any `overrides` from what you see (the four sizes' numbers are first guesses). Put `log` back to `CANCELLED`.
-- [ ] **ST-53 A cancel:** set every `[worldgen.earth_fill.sizes]` list to `[0, 0]`, `maxOverWater = 0` and `beardReach = 0`, rejoin, fly into new terrain: structures with any earth over a gap in their base now log `CANCELLED` and are missing on slopes and shores, and the slot stays empty. Put the values back. *(Keys changed 2026-10-13, 7.3.1.)*
-- [ ] **ST-54 Overrides and exempt:** set `overrides = ["minecraft:village_plains=-1,-1,-1", "philipsruins:ancient_ruins=0,0,0"]`: plains villages never log a cancel, ruins cancel at any earth over water or air past the beard, or any mound column. A structure in `earth_fill/exempt` (a ship, a sky balloon, the mansion) never logs, even at 0.
+- [ ] **ST-52 Log run (calibration):** set `[worldgen.earth_fill] log = "ALL"`, rejoin, fly over 2,000+ blocks of fresh terrain (or `[worldgen.debug] structureDensity = 4`). `latest.log` has `[earth-fill] <id> at chunk [x, z] (<size>, <beard>): N earth, W over water (limit 24), A over air after beard (limit L), M mound columns (limit K) -> kept|CANCELLED` lines (format since 7.3.1). Collect them per size, then set `[worldgen.earth_fill.sizes]`, `maxOverWater` and any `overrides` from what you see (the four sizes' numbers are first guesses). Put `log` back to `CANCELLED`. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): DATA: main square r 800 at -1400 -2592, default limits, prune working: small 1833 starts / 160 cancelled (141 underground, mostly Subterrestrial ocean cabins in open sea), medium 276 / 22, large 12 / 1, huge 1 / 1 (drum tower); surface-only 9% small, 12% medium. Per-size percentiles in the log 2.1; no limit change proposed.*
+- [ ] **ST-53 A cancel:** set every `[worldgen.earth_fill.sizes]` list to `[0, 0]`, `maxOverWater = 0` and `beardReach = 0`, rejoin, fly into new terrain: structures with any earth over a gap in their base now log `CANCELLED` and are missing on slopes and shores, and the set's next member may take the slot (a one-structure set leaves it empty). Put the values back. *(Text corrected 2026-10-19 after the phase 7 run.)* *(Keys changed 2026-10-13, 7.3.1.)* *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED except one clause: at zero, every start with any water/air/mound gap cancels (85 of 498 that stood at the defaults) and none without one; cancelled starts are missing from their chunks. "The slot stays empty" holds only for one-structure sets: in a group the set tries its next member (vanilla loop), e.g. jungle cabin -> deepslate cabin, taiga village -> T&T OGT village, judged by earth fill too.*
+- [x] **ST-54 Overrides and exempt:** set `overrides = ["minecraft:village_plains=-1,-1,-1", "philipsruins:ancient_ruins=0,0,0"]`: plains villages never log a cancel, ruins cancel at any earth over water or air past the beard, or any mound column. A structure in `earth_fill/exempt` (a ship, a sky balloon, the mansion) never logs, even at 0. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED: `-1,-1,-1` tested on village_savanna (no plains in the square): 5 starts with gaps, none cancelled; `philipsruins:ancient_ruins=0,0,0` cancels at 3 and 7 air, keeps 0; no exempt id logged a line (Hopo ruins in the square logged only water-fill lines).*
 - [x] **ST-55 Switch:** `[worldgen.systems] earthFill = false` → no `[earth-fill]` lines, nothing cancelled. A world with the switch on at the default limits still has villages (simulated with the 7.3.1 rules: 22 to 40% cancelled, nearly all over water deeper than 6; see 3.13). *2026-10-14 scratch phase 4 (seed 8675309, 1.0.6 jar of 01:28, density 1, world st_d unless noted; log feature_writeup/testing/structures/04_phase_4.md): PASSED: no `[earth-fill]` line over 18 new starts that earth fill normally logs; villages exist with it on (Phase 3).*
 
 ## 9. History
 
+- **2026-10-19:** the 3.23 fixes went out in pack 1.0.7 (DEPLOYED 2026-10-18 19:43; [plan_1.0.7.md](plan_1.0.7.md) SF):
+  status lines updated. Nothing in this area changed for 1.0.8. ST-191 to ST-198 still pending.
 - **2026-10-18: six bugs from the scratch run fixed in source (3.23), for patcherMod 1.0.7, not built.** User: "tackle
   the structure and locate bugs in section 3" (TODO.md 3). Found the cause of the per-restart village layouts (pool
   order from the mods changes between JVM runs; 10 report versions in git show 9 desert orders) and fixed it with a
@@ -2908,3 +3043,22 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
   `earth_fill/prune` structures over `pruneMaxHanging` / `pruneMaxMound` are dropped with their jigsaw subtree (tree
   rebuilt from junctions); simulated whole-village cancels 22-40% -> 5-12%. EarthFillTest 53 checks. ST-167 to ST-169,
   not scratch-tested.
+- **2026-10-19: scratch run Phases 7 to 10 (structure tuning testing finished).** User: "pick up structure tuning
+  testing where you left off". New scratch server (Forge libraries from servers/Minecraft1192withForge), patcherMod
+  1.0.7 jar because the staged 1.0.8 crashes a dedicated server (Serene Seasons clock mixin; plan_1.0.8.md blocker);
+  worldgen identical. Phase 7 (calibration): earth-fill pruning never ran live (`earth_fill/prune` empty because
+  `type/village` is not a real structure tag; ST-167 failed as shipped, passed with a scratch-only fix); pruning can
+  drop a start a size class; `/dumpstructuregen` broken. Phase 8 (two-world comparisons): all passed (ST-148 with the
+  town companion distance loosened). Phase 9 (`/ceplace`): templates mode broken (vanilla `listTemplates` on a
+  merged `structures.nbt` path); no flat world while `biomeLayout` is on. Phase 10: per-status worldgen times in
+  locate.md 3.7. Logs: testing/structures/07_phase_7.md to 10_phase_10.md. Nothing in kubejs/, config/ or the
+  patcherMod source was changed.
+
+- **2026-10-19: earth fill on water, camp plinths, metas off coasts (7.5).** User: "address the structure earth fill
+  issues i outlined in my scratchpad ...". The footprint water share in earth fill (`maxWaterSurplus` 0.5, buried spots
+  ignored), sunk-start beard (`terrain_adaptation/sunk_start`, the 6 Campsite camps, start height -4), the
+  `avoidCoasts` switch (off) with `coast_river` and `meta/coast_ok`. Scratch-tested with the Quark spire teleport
+  mixin: ST-199 to ST-205 passed (testing/structures/12_earth_fill_camps.md). patcherMod 1.0.9 build, not deployed.
+- 2026-10-19: status sweep: the 1.0.6 rows marked STAGED / `build/libs` went out with 1.0.6 (2026-10-14); 7.5 (earth fill on
+  water, camps, coasts) DEPLOYED with 1.0.9 (15:54). Header rewritten.
+- 2026-10-19: ST-53 and ST-160 test text corrected from the phase 7 run ([testing/structures/07_phase_7.md](testing/structures/07_phase_7.md) 5.5): the group's next member may take a cancelled start's slot; small villages log `small`.

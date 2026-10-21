@@ -15,7 +15,7 @@ picks, per quart-block, the entry nearest to the local climate noise. In this pa
 Anything using a `preset` reference, a fixed/checkerboard source, or a flat generator (the
 creativeengineering:* sky dimensions) has no layout to tune and is skipped.
 
-Safe to re-run (e.g. after a mod update): per-biome "multiplier"/"replace_with" edits are kept,
+Safe to re-run (e.g. after a mod update): per-biome "multiplier"/"replace_with"/"target_pct" edits are kept,
 baselines + entry counts are refreshed, new biomes appear with multiplier 1.0, biomes that
 vanished are dropped (with a warning if you had edited them).
 
@@ -71,6 +71,10 @@ README = OrderedDict([
                    'climatically unrelated.'),
     ('replace_with', 'A biome id, or null. Relabels every entry of this biome to that one -- an exact swap of '
                      'the same climate space. Overrides multiplier.'),
+    ('target_pct', 'Optional: an absolute share goal (% of the biome\'s layer) instead of a multiplier; overrides it. '
+                   'Works for a biome the samples never hit: its entries win the samples they lose by the smallest '
+                   'margins. tools/biome_rarity_floor.py writes these. "target_layer" (optional) names the layer for '
+                   'a never-hit biome (default surface).'),
     ('read_only', '"entries" (how many climate boxes the biome owns), "layer" (surface or underground -- which '
                   'sample layer its share is measured on), "share_pct" (original % of that layer), "result_pct" '
                   '(% after the last solve), "note" (solver warnings, e.g. target clamped).'),
@@ -143,6 +147,11 @@ def main():
             biomes[b] = OrderedDict([
                 ('multiplier', p.get('multiplier', 1.0)),
                 ('replace_with', p.get('replace_with')),
+            ])
+            for k in ('target_pct', 'target_layer'):
+                if p.get(k) is not None:
+                    biomes[b][k] = p[k]
+            biomes[b].update([
                 ('entries', counts[b]),
                 ('layer', p.get('layer')),
                 ('share_pct', p.get('share_pct')),
@@ -151,7 +160,7 @@ def main():
             if p.get('note'):
                 biomes[b]['note'] = p['note']
         for b, p in prev_biomes.items():
-            if b not in counts and (p.get('multiplier', 1.0) != 1.0 or p.get('replace_with')):
+            if b not in counts and (p.get('multiplier', 1.0) != 1.0 or p.get('replace_with') or p.get('target_pct') is not None):
                 print(f'  ! {dim_id}: {b} no longer exists in the source layout -- your edit to it was dropped')
 
         dims[dim_id] = OrderedDict([

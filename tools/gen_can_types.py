@@ -4,9 +4,9 @@ salad, soup, meal, pie, feast, drink, golden). The hand-written raw veggie/fruit
 
 Two kinds of section (SECTIONS below, mirroring the Goal comments in kubejs/server_scripts/cooking/canning.js):
   mult  a meal is the food it holds x mult (hunger and saturation points); every source shares one recipe.
-  meal  a meal is a fixed size (hunger, saturation points), like the hand-written raw cans. Each source gets its own
-        recipe sized by its value (alt inputs: sliced forms). When the fair count does not fit the grid (8), the recipe
-        takes 8 and the can comes out partly full (CanServings NBT).
+  meal  a meal is a fixed size (hunger, saturation points), like the hand-written raw cans. The recipe is sized by the
+        first (whole) source's value, at most 8 (the grid less the can); the other sources are its sliced forms and
+        share the same slots and count. No recipe makes a partly full can.
 Effects are copied with scaled durations, except for Canned Goods cans whose own code applies them (code_fx).
 Cans without their own sprite (kubejs/assets/creativeengineering/textures/item/<key>.png) get the section's group
 sprite (GROUP_SPRITE) or Canned Goods' beetroot can.
@@ -69,7 +69,7 @@ SECTIONS = OrderedDict([
     ('raw_fruit',    dict(meal=(5, 3), servings=3, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_sugar', SWEET, 0, 1)])),
     ('raw_meat',     dict(meal=(5, 3), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, meat=True,
                           extra=[('_broth', SALT, 0, 1)])),
-    ('raw_fish',     dict(meal=(5, 3), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, extra=[('_broth', SALT, 0, 1)])),
+    ('raw_fish',     dict(meal=(4, 2), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, extra=[('_broth', SALT, 0, 1)])),
     ('hazard',       dict(meal=(5, 3), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, extra=[])),
     ('special',      dict(meal=(5, 3), servings=3, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_sugar', SWEET, 0, 1)])),
     ('cookies',      dict(mult=2,    servings=5,  n=8, dur=1.0,  fast=True,  extra=[('_sugar', ['sugar'], 6, 1)])),
@@ -99,9 +99,10 @@ GROUP_SPRITE = {
 # explicit cans: (section, can key, display name, source keys (first = value source), existing Canned Goods can?[, opts])
 # opts: input = recipe input keys instead of the sources (feast blocks); pie = whole pie a full can + pie crust makes;
 #       code_fx = Canned Goods applies the effects itself (no copy); values = fixed meal for a food not in the catalog
-#       (hunger, modifier, always, clear_effects)
+#       (hunger, modifier, always, clear_effects); meal = this can's own (hunger, saturation points) meal in a meal
+#       section, instead of the section's
 EXPLICIT = [
-    # raw fruit (the first 12 are hand-written in cans.js); sliced citrus is an alt input
+    # raw fruit (the first 12 are hand-written in cans.js); sliced citrus shares the whole fruit's count
     ('raw_fruit', 'canned_bayberry', 'Canned Bayberries', ['bayberry'], False),
     ('raw_fruit', 'canned_blueberry', 'Canned Blueberries', ['blueberry'], False),
     ('raw_fruit', 'canned_cranberry', 'Canned Cranberries', ['cranberry'], False),
@@ -121,9 +122,11 @@ EXPLICIT = [
     ('raw_fruit', 'canned_pineapple', 'Canned Pineapple', ['pineapple_slice'], False),
 
     # raw meat (beef, chicken, mutton, pork, rabbit are hand-written in cans.js)
-    ('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_mollusk', 'shulker_filet'], False),
+    # Shulker: a low value meat (1.2 a mollusk), so its own small meal (2, 1) x 4 keeps a full can at 8 mollusks
+    ('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_mollusk', 'shulker_filet'], False,
+     dict(meal=(2, 1))),
 
-    # raw fish: sliced cuts are alt inputs
+    # raw fish: sliced cuts share the whole fish's count
     ('raw_fish', 'canned_blobfish', 'Canned Blobfish', ['blobfish'], False),
     ('raw_fish', 'canned_flying_fish', 'Canned Flying Fish', ['flying_fish'], False),
     ('raw_fish', 'canned_raw_lobster', 'Canned Lobster Tail', ['lobster_tail'], False),
@@ -138,7 +141,7 @@ EXPLICIT = [
     ('raw_fish', 'canned_tropical_fish', None, ['tropical_fish'], True),
 
     # Canned Goods' hazard cans: its code applies the bad effects on eating
-    ('hazard', 'canned_pufferfishs', None, ['pufferfish'], True, dict(code_fx=True)),
+    ('hazard', 'canned_pufferfishs', None, ['pufferfish'], True, dict(code_fx=True, meal=(4, 2))),   # a fish: Fish Meal
     ('hazard', 'canned_posionous_potatos', None, ['poisonous_potato'], True, dict(code_fx=True)),
     ('hazard', 'canned_spider_eyes', None, ['spider_eye'], True, dict(code_fx=True)),
     ('hazard', 'canned_rotten_flesh', None, ['rotten_flesh'], True, dict(code_fx=True)),
@@ -316,36 +319,18 @@ def value(src):
 
 
 def sized_recipes(spec, sources, srcs):
-    """Recipes for a fixed-meal section: per source, the count whose value is `target` of the can's (at most 8, the
-    grid less the can). Alt sources are sized against the first source's recipe; one that would need more than 8 takes
-    8 and makes a partly full can (servings scaled by value)."""
+    """Recipes for a fixed-meal section: the count of the first (whole) source whose value is `target` of the can's
+    (at most 8, the grid less the can). The other sources are its sliced forms: they share the same slots and count,
+    so slicing first is the cheaper route. Every recipe makes a full can."""
     meal_h, meal_p = spec['meal']
     can_value = spec['servings'] * (meal_h + meal_p)
-    v0 = value(srcs[0])
-    n0 = min(8, max(1, int(can_value * spec['target'] / v0 + 0.5)))
-    recipes = []
-
-    def basic_and_additive(key, n, tag, servings=None):
-        r = OrderedDict([('suffix', tag), ('inputs', [OrderedDict([('any', [key]), ('n', n)])])])
-        if servings:
-            r['servings'] = servings
-        recipes.append(r)
-        if servings:
-            return   # partial cans: no additive variant
-        for suffix, add_keys, _n_src, n_add in spec['extra']:
-            na = max(1, int(n * spec['adv'] + 0.4))
-            recipes.append(OrderedDict([('suffix', tag + suffix), ('inputs', [
-                OrderedDict([('any', [key]), ('n', na)]),
-                OrderedDict([('any', add_keys), ('n', n_add)])])]))
-
-    basic_and_additive(sources[0], n0, '')
-    for key, src in zip(sources[1:], srcs[1:]):
-        fair = n0 * v0 / value(src)
-        if fair <= 8.5:
-            basic_and_additive(key, max(1, int(fair + 0.5)), '_' + key)
-        else:
-            servings = max(1, int(spec['servings'] * 8 / fair + 0.5))
-            basic_and_additive(key, 8, '_' + key, servings)
+    n0 = min(8, max(1, int(can_value * spec['target'] / value(srcs[0]) + 0.5)))
+    recipes = [OrderedDict([('suffix', ''), ('inputs', [OrderedDict([('any', list(sources)), ('n', n0)])])])]
+    for suffix, add_keys, _n_src, n_add in spec['extra']:
+        na = max(1, int(n0 * spec['adv'] + 0.4))
+        recipes.append(OrderedDict([('suffix', suffix), ('inputs', [
+            OrderedDict([('any', list(sources)), ('n', na)]),
+            OrderedDict([('any', add_keys), ('n', n_add)])])]))
     return recipes
 
 
@@ -357,6 +342,8 @@ def build(foods, names, keymap_all, keymap_base, types):
     def add(section, can_key, display, sources, existing, opts=None):
         opts = opts or {}
         spec = SECTIONS[section]
+        if 'meal' in opts:
+            spec = dict(spec, meal=opts['meal'])   # this can's own meal size in a meal section
         for k in sources + opts.get('input', []) + ([opts['pie']] if 'pie' in opts else []):
             if k not in keymap_all:
                 problems.append('%s: key %s is not in item_dict' % (can_key, k))

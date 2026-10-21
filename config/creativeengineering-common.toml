@@ -67,8 +67,7 @@
 	#How many ticks the item reports as its max use duration (bow-style hold-to-use).
 	#The default is the same huge value vanilla's bow uses - effectively unlimited, so
 	#the player releasing the mouse button is what actually ends the hold, not a timeout.
-	#Only read once, when the item is registered - a running game needs a restart to see
-	#a change here (not just the item's config-reload).
+	#Read each time the item is used, so a config reload applies it.
 	#Range: > 1
 	useDurationTicks = 72000
 	#true (default): the brake only slows the player while actually gliding (isFallFlying()).
@@ -231,6 +230,19 @@
 		#Hammer blows required by the hammering step.
 		#Range: 0 ~ 64
 		hammerBlows = 3
+
+	[crafting.felsic_shield]
+		#Potion effect id filled in during assembly.
+		potion = "creativeengineering:magic_resistance"
+		#mB of potion fluid used in the final filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 8
 
 #Tuning for creativeengineering:magic_resistance's damage reduction against
 #magic damage sources (DamageSource#isMagic() - potion/instant damage, evoker
@@ -1270,6 +1282,11 @@
 		#tries every copy of a piece in a pool, so a bigger factor is more exact but slower to fail.
 		#Range: 1 ~ 100
 		maxFractionScale = 10
+		#Sort every pool's pieces by template id at world load. Mods that add pieces in code leave the pools
+		#in an order that changes from one server start to the next, and jigsaw picks by position in that
+		#list, so the same seed built different villages after each restart. Sorted, a seed gives the same
+		#layouts every time (not vanilla's: new chunks only). false = keep the order the mods left.
+		canonicalOrder = true
 
 	[worldgen.biome_solver]
 		#Biomes considered per climate sample (the closest ones). More = slower, rarely different.
@@ -1420,6 +1437,16 @@
 		#Mound columns of one piece before that piece is dropped. -1 = never.
 		#Range: -1 ~ 100000
 		pruneMaxMound = 4
+		#The footprint's water share, checked after the limits: the bounding box of every piece with earth, in the
+		#layer the structure was set onto the surface with. Water there (filled by its earth or the beard, or left
+		#standing) against dry ground there (replaced or left alone): the structure is cancelled when the water
+		#outnumbers the ground by more than this share. 0.5 = water more than 50% over ground (60:40 passes, 61:39
+		#doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,
+		#whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers
+		#blocks of terrain (underground structures, aquifers) counts as neither. Not for structures in
+		#creativeengineering:water_fill/structures; an override with every limit -1 skips it too.
+		#Range: -1.0 ~ 1000.0
+		maxWaterSurplus = 0.5
 
 		#A structure's size is its earth base block count (each start counted as it generates, a meta
 		#structure part by part). Each size has [maxOverAir, maxMound]: earth blocks over air after the beard,
@@ -1486,6 +1513,12 @@
 		#Log every meta structure start that is assembled: its anchor, each part and how many of each
 		#fitted, or which part fell short (the slot is then the plain anchor).
 		log = false
+		#Keep meta structures out of coasts and rivers (the biome tag creativeengineering:coast_river: beaches,
+		#shores, rivers; kubejs biome_fits.json biome_tags). No part may start there or reach there with its box
+		#(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,
+		#which still spawns as it would alone. Metas in the structure tag creativeengineering:meta/coast_ok (fleets,
+		#flotillas, wrecks, sunken ruins) are not affected. New chunks only.
+		avoidCoasts = false
 
 	#Geodes whose column is an ocean (the biome at the sea floor is #minecraft:is_ocean) are moved down before
 	#they generate, so fewer of them poke through the sea floor. Which geodes stay is a fixed roll per position.
@@ -1599,6 +1632,11 @@
 	#On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).
 	#Off = it crafts anyway and throws what doesn't fit.
 	stallWhenFull = true
+	#On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat
+	#stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every
+	#ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of
+	#their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload.
+	ovenIngredientCounts = false
 
 #TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
 #but TrashSlotSaveState.json in the game folder lists every screen opened so far.
@@ -1641,7 +1679,8 @@
 	#Range: 1 ~ 50
 	rareTrades = 5
 	#Spawn Vinery's Wandering Winemaker from its own spawner, independent of the Wandering Trader.
-	#Vinery's own swap (config/vinery/config.json5 wine_trader_chance) must be 0, or it still
+	#Vinery's own swap (vinery-common.toml [trader] spawnChance, 1.3.10: config/vinery/config.json5
+	#wine_trader_chance) must be 0, or it still
 	#turns that share of Wandering Trader spawns into Winemakers.
 	winemakerEnabled = true
 	#Ticks between Wandering Winemaker spawn rolls.
@@ -1743,4 +1782,137 @@
 	#rules. Also the ceiling for the snow_seasons lists in season_types.json.
 	#Range: -64 ~ 4096
 	snowLineY = 320
+
+#Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the
+#time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml,
+#and vinery-common.toml [wine]/[aging] are overwritten from here at server start and on every edit.
+#/cetime shows every derived value.
+[time]
+	#SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:
+	#1 in single player, 3 on a server). Editing any value by hand turns this into CUSTOM, unless the
+	#values then match a preset again. CUSTOM itself changes nothing.
+	#Allowed Values: SINGLEPLAYER, SERVER, CUSTOM
+	preset = "SINGLEPLAYER"
+	#Master switch. false: Better Days, Serene Seasons, SeasonHUD and Vinery use their own files again.
+	enabled = true
+	#Dedicated server with nobody online: the sun stops, so the seasons and wine aging stop with it.
+	#Game time, weather and random ticks keep running. Single player is unaffected.
+	pauseWhenEmpty = true
+	#SeasonHUD shows the time of day after the season, "Mid Spring (Day 3/24) 7:30 pm" (client side).
+	hudTimeOfDay = true
+
+	[time.day]
+		#Real minutes from dayStart to nightStart.
+		#Range: 1.0 ~ 10000.0
+		dayMinutes = 45.0
+		#Real minutes from nightStart to the next dayStart.
+		#Range: 1.0 ~ 10000.0
+		nightMinutes = 15.0
+		#dayTime of sunrise; the clock reads it as 6:00 am. Better Days reads it once, so a change needs a restart.
+		#Range: 0.0 ~ 24000.0
+		dayStart = 22300.0
+		#dayTime of sunset. Needs a restart, like dayStart.
+		#Range: 0.0 ~ 24000.0
+		nightStart = 13000.0
+
+	[time.seasons]
+		#SUN: the seasons count sunrises; sleeping and /time move them as far as the sun.
+		#TICKS: Serene Seasons' own counter (one world day of real ticks per day; sleeping skips ahead).
+		#Allowed Values: SUN, TICKS
+		clock = "SUN"
+		#World days per sub-season (12 sub-seasons a year). Also the length of a wine month.
+		#Range: 1 ~ 1000
+		daysPerSubSeason = 8
+		#Sub-season a new world starts in: 1 = Early Spring ... 12 = Late Winter, 0 = random.
+		#Range: 0 ~ 12
+		startingSubSeason = 1
+
+	[time.wine]
+		#SUN: wine ages with the world days, sleeping and /time included. PLAYTIME: while a player is online.
+		#Allowed Values: SUN, PLAYTIME
+		clock = "SUN"
+		#A wine month is one sub-season. Months per effect level (SINGLEPLAYER 1, SERVER 3 = one season).
+		#Range: 1 ~ 100
+		monthsPerLevel = 1
+		#Highest effect level from aging.
+		#Range: 0 ~ 10
+		maxLevel = 5
+
+		[time.wine.boosts]
+			#Aging speed in storage with no sky light.
+			#Range: 1.0 ~ 5.0
+			cellarMultiplier = 2.0
+			#Aging speed in cold storage (Brewin' keg freeze sources outweigh heat sources nearby).
+			#Multiplies with cellarMultiplier: a cold cellar ages at both.
+			#Range: 1.0 ~ 5.0
+			coldMultiplier = 2.0
+			#Aging speed in warm storage (Brewin' keg heat sources outweigh freeze sources nearby).
+			#Multiplies with cellarMultiplier; below 1.0 slows aging.
+			#Range: 0.1 ~ 1.0
+			warmMultiplier = 0.75
+
+#Advancements (vanilla, every mod, every datapack).
+[advancements]
+	#false (the pack's setting): none are loaded, so none show, toast or give rewards.
+	#Read when data loads: a change applies on the next /reload or world start.
+	enabled = false
+
+#Pop-up toasts in the top-right corner (client side).
+[toasts]
+	#Show tutorial toasts: vanilla's (move, find a tree, punch, craft planks, open inventory,
+	#social interactions, bundles), Exposure's camera/lightroom hints and Fairy Lights' Clippy
+	#balloons. Takes effect for the next toast.
+	tutorial = false
+	#Show advancement toasts (vanilla's "Advancement Made!" and Patchouli's book-unlocked toast).
+	#The pack loads no advancements ([advancements] enabled), so this only matters if that is on.
+	advancement = false
+
+#Natural (not player-placed) leaves decay when no log is close enough. Vanilla allows 6 blocks of
+#leaf path to a log and decays on slow random ticks; big generated trees have outer leaves past
+#that, which fell off on their own. Here a leaf decays shortly after a block next to it changes
+#(Fast Leaf Decay, ported in), and only if a search outward through the other far-out leaves
+#finds no log within maxDistance. Separated Leaves' rules (which leaves count which logs) are
+#kept. Server side.
+[leaf_decay]
+	#Master on/off switch. Off = vanilla decay (range and slow random-tick timing).
+	enabled = true
+	#true: random ticks never decay a natural leaf. A leaf only decays after a block next to it
+	#changes: when its log is cut it rechecks 4-11 ticks later, and a far-out leaf rechecks when a
+	#neighbour changes (so a cut tree's canopy falls away in a cascade). Trees from worldgen and
+	#saplings are placed without neighbour updates, so an untouched tree keeps every leaf, even ones
+	#past maxDistance or touching only diagonally. Cheaper than false: the range search runs only on
+	#a change. false: vanilla timing (random ticks), with the maxDistance range.
+	onlyWhenDisturbed = true
+	#Longest leaf path a natural leaf may be from a log and still live once it is checked, counted in
+	#steps through leaves (a leaf touching the log is 1). Vanilla is 6; 6 here = vanilla range. Keeps a
+	#big tree whole when something next to it changes (snow, vines, a placed block). Cost: a
+	#chopped tree whose canopy touches a standing tree of the same kind keeps leaves out to this
+	#range from the standing tree.
+	#Range: 6 ~ 32
+	maxDistance = 12
+	#Most leaf blocks one search may look at before giving up (the leaf then decays as in
+	#vanilla). Bounds the cost in very large canopies; at maxDistance 12 a search rarely tops a
+	#few hundred.
+	#Range: 64 ~ 65536
+	maxSearchBlocks = 4096
+	#Fast decay delay: a leaf whose log was cut, or that sits next to a block that just became air,
+	#is checked a random number of ticks later between decayMinTicks and decayMaxTicks (Fast Leaf
+	#Decay's MinimumDecayTime / MaximumDecayTime, 4 and 11). Spreads a felled canopy over a moment.
+	#Range: 1 ~ 1200
+	decayMinTicks = 4
+	#Upper end of the fast decay delay (raised to decayMinTicks if lower).
+	#Range: 1 ~ 1200
+	decayMaxTicks = 11
+
+#A lit campfire in #creativeengineering:campfire/rain_douses (the plain campfire; not soul or
+#Tinted campfires) goes out in open rain, unless it sits on a block in
+##creativeengineering:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires
+#burn forever. Server side.
+[campfire]
+	#Master on/off switch. Off = rain never puts a campfire out.
+	rainDouses = true
+	#Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).
+	#Leaving the rain or being on a fuel block resets the count.
+	#Range: 1 ~ 72000
+	rainOutTicks = 160
 

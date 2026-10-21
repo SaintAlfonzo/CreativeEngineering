@@ -8,7 +8,7 @@ the decisions and the tests.
 
 | Part | Status |
 |---|---|
-| Season types (arid, frozen, dry, tropical, temperate, adaptive) | BUILT 2026-10-08, dry + temperate + oceans 2026-10-09, in patcherMod 1.0.5 (in `mods/`, md5 68509043), STAGED for pack 1.0.6 (not deployed). Server side checked on scratch servers (sections 6.2, 6.3); client side (rendering, tint, HUD) not run yet |
+| Season types (arid, frozen, dry, tropical, temperate, adaptive) | BUILT 2026-10-08, dry + temperate + oceans 2026-10-09, in patcherMod 1.0.5 (in `mods/`, md5 68509043), DEPLOYED with pack 1.0.6 (2026-10-14). Server side checked on scratch servers (sections 6.2, 6.3); client side (rendering, tint, HUD) not run yet |
 | Biome lists | `kubejs/generation_scripts/worldgen/season_types.json` -> tags `creativeengineering:seasons/<type>` (`kubejs/server_scripts/tags/seasontags.js`) |
 | Arid | 15 sand/terracotta biomes: no rain all year, no seasonal temperature or tint, summer crops all year. HUD: "Arid", day N of the year |
 | Frozen | 24 cold land biomes plus frozen and deep frozen ocean: snow all year (held at 0.1 or colder), no melting, no seasonal tint, winter crops only. HUD: "Frozen", day N of the year |

@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**Retired by the Vinery port (2026-10-18, [alcohol.md](alcohol.md) Part B):** when `backportedVinery` is loaded, `VineryJEI` registers nothing; the port ships its own five pages (`vinery:wine_fermentation`, `apple_press_mashing`, `apple_press_fermenting`, `grape_stomping`, `wine_aging`). Everything below describes the 1.3.10 setup and stays true only while 1.3.10 is installed.
+
 | Part | Status |
 |---|---|
 | Aging Barrel fermentation page | BUILT, in `mods/` (patcherMod 1.0.3); **arrow time wrong** (1800 ticks shown, real is about 50, §4) |
@@ -55,7 +57,7 @@ Display only. No Vinery behaviour, recipe or config is changed.
   `Year` value for "made 20 years ago"; Vinery's tooltip then shows the max potency.
 - **Fermentation time is wrong (open, found 2026-10-01).** `VineryIds.FERMENTATION_TICKS = 1800` copies
   `COOKING_TIME_IN_TICKS`, which Vinery never reads. The barrel really runs about 50 ticks per wine
-  ([vinery.md §2.3](vinery.md)). Fix the constant and VJ-04's expected text together.
+  ([vinery.md §2.3](vinery.md)). Fix the constant and VJ-04's expected text together. Moot since 2026-10-19: with the port in `mods/` these pages stand down, and the port's own page shows no tick count.
 - **Stomping arrow** has no real timer; it animates at the Apple Press pace.
 - **Rejected:** installing REI (swaps the viewer for the whole pack and puts our own JEI categories
   behind REI's compat layer); KubeJS info pages only (KubeJS 1902 cannot add JEI categories).

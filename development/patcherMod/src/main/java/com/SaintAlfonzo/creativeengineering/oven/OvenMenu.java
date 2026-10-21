@@ -44,10 +44,16 @@ public class OvenMenu extends AbstractContainerMenu {
         this.data = data;
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(blockEntity.getLevel()), blockEntity.getBlockPos());
 
-        // Ingredients, 2 rows x 3 columns
+        // Ingredients, 2 rows x 3 columns. mayPickup is always true (as on a plain Slot): SlotItemHandler's
+        // simulated extract says false for an empty slot, and JEI's [+] refuses any crafting slot that says false.
         for (int row = 0; row < 2; ++row) {
             for (int column = 0; column < 3; ++column) {
-                addSlot(new SlotItemHandler(inventory, row * 3 + column, 30 + column * 18, 17 + row * 18));
+                addSlot(new SlotItemHandler(inventory, row * 3 + column, 30 + column * 18, 17 + row * 18) {
+                    @Override
+                    public boolean mayPickup(Player player) {
+                        return true;
+                    }
+                });
             }
         }
         // Tool: one bakeware item, never used up

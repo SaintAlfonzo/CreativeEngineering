@@ -17,7 +17,7 @@ Prints:
   4. every set the script would write, checked against the live spacing / separation / count and
      members. A mismatch means the configs changed since that world load (rejoin), or something
      replaced the override after it loaded (a mod applying its own config in code).
-The live dump can't read frequency or salt (Rhino method lookup), so those aren't compared, and the
+frequency and salt are in the dump (patcherMod worldgen.PlacementInfo) but aren't compared, and the
 per-structure frequencies live in patcherMod, not the registry (the log line
 "[structure-frequency] N structure(s) in M set(s)" confirms them).
 Exit code 1 when section 1, 2 or 4 has findings.

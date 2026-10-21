@@ -58,3 +58,7 @@ refmaps and also runs in the Gradle dev runs.
 
 Re-run `python3 tools/gen_pack_manifest.py`, update `mod_sides.md` for any new mod, and commit
 `pack/`.
+
+New mods also bring new names. Run `/cedumpnames` in game (any world, or `[debug.names] dumpAtTitle`
+on a scratch client), then `python3 tools/name_audit.py` to fix raw lang keys and capitalization
+(rules in `kubejs/generation_scripts/names/name_rules.json`, see `feature_writeup/names.md` section 11).

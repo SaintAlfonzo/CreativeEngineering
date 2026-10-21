@@ -116,6 +116,13 @@ public class CreativeEngineering
         // itemphysic.ItemBurnTransform instead - see CEConfig.Shrapnel for the tuning knobs).
         MinecraftForge.EVENT_BUS.register(TntShrapnelHandler.class);
 
+        // Leaf decay (CEConfig [leaf_decay]): Fast Leaf Decay's air-neighbour trigger, ported in; the range and
+        // timing rules are mixin.LeavesDecayRangeMixin + block.LeafDecayRange.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.block.FastLeafDecayPort.class);
+
+        // Bottled Air port (item.BottledAir, CEConfig [bottled_air]): glass bottle right-clicked in water refills air.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.item.BottledAir.class);
+
         // Tier shields: per-category damage absorption, scaled wear and on-block potion effects
         // (ShieldBlockEvent listener - see CEConfig.Shields).
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.shield.ShieldBlockHandler.class);
@@ -141,7 +148,16 @@ public class CreativeEngineering
 
         // BlockRunner tier speeds come from CEConfig [surface.speed] (mixin/BlockRunnerSpeedConfigMixin):
         // re-apply them when the toml is saved, and log an error if the mixin never ran.
+        // [time] master (feature_writeup/time.md): pushes into Serene Seasons / SeasonHUD / Vinery at server start and
+        // on every toml save, the sun-driven season counter, and /cetime. Calendar tooltip: time/TimeClient (client).
+        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.time.TimePush::onConfigReload);
+        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.time.TimePresets::onConfigLoading);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.time.TimePush.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.time.SeasonClock.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.time.TimeCommand.class);
+
         modEventBus.addListener(com.SaintAlfonzo.creativeengineering.surface.SurfaceSpeeds::onConfigReload);
+        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.util.ModDisplayNames::onConfigReload);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.surface.SurfaceSpeeds.class);
 
         // Damage tags: data/<ns>/damage_tags/*.json reload listener (backs shield.ShieldCategory and
@@ -240,6 +256,9 @@ public class CreativeEngineering
 
 			IECompat.register();
 
+			// [mod_names]: mod display names in the pack's style, before JEI/WTHIT cache them
+			com.SaintAlfonzo.creativeengineering.util.ModDisplayNames.apply();
+
 			// SawmillProcessMixin applies lazily on the first sawmill tick (minutes into
 			// a session). ModLauncher's Mixin bytecode provider cannot locate classes from
 			// this jar that have never been loaded when it does a late transform, so the
@@ -253,6 +272,12 @@ public class CreativeEngineering
 			// the split registry it references so a late transform can resolve it.
 			forceLoad("com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit");
 
+			// The shield block handler reaches the damage-tag classes only on the first block
+			// (crash 2026-09-24: NoClassDefFoundError on DamageFlag); pre-load them too.
+			forceLoad("com.SaintAlfonzo.creativeengineering.damage.DamageFlag");
+			forceLoad("com.SaintAlfonzo.creativeengineering.damage.DamageTags");
+			forceLoad("com.SaintAlfonzo.creativeengineering.damage.DamageTagSnapshot");
+
 			// ForgivingVoidMixin applies lazily on the first void-fall bounce; pre-load the
 			// config bridge it references so a late transform can resolve it.
 			forceLoad("com.SaintAlfonzo.creativeengineering.forgivingvoid.ForgivingVoidBridge");
@@ -264,6 +289,9 @@ public class CreativeEngineering
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fan.DragonBreathingFanProcessingType::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.potion.PotionBucketDispenser::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.NockRecipeBookSync::register);
+			if (net.minecraftforge.fml.ModList.get().isLoaded("immersiveengineering")) {
+				event.enqueueWork(IECompat::registerHammerNoRotate);
+			}
 			// Can-serving crafting action for KubeJS recipes (NCH re-registers it on every server
 			// script load; this covers clients of a dedicated server).
 			if (net.minecraftforge.fml.ModList.get().isLoaded("kubejs")) {

@@ -24,7 +24,7 @@ also where old food stacks are kept, which is why the report came from a fridge.
 Headless check (Forge InvWrapper + Balm CombinedContainer 27+27, Quark's original code): stock sort
 turned 5 stew (max 1) + 7 apples into 1 stew, with the apples gone. The patched sort kept everything.
 
-## Fix (patcherMod 1.0.7, built 2026-10-14, not in mods/)
+## Fix (patcherMod 1.0.7, built 2026-10-14; DEPLOYED with pack 1.0.7 on 2026-10-18)
 
 `mixin/QuarkSortingHandlerMixin` replaces `SortingHandler.sortInventory(IItemHandler, int, int, int[])`.
 Every Quark sort goes through that method: player inventory, chests, fridges and backpacks. It now

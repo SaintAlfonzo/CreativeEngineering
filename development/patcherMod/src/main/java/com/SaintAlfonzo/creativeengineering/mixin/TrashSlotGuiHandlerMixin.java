@@ -12,6 +12,7 @@ import net.blay09.mods.trashslot.client.TrashSlotSlot;
 import net.blay09.mods.trashslot.client.deletion.DeletionProvider;
 import net.blay09.mods.trashslot.client.gui.TrashSlotComponent;
 import net.blay09.mods.trashslot.config.TrashSlotConfig;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -27,6 +28,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.List;
+
 /**
  * TrashSlot's per-screen setup and two creative-mode fixes; pack defaults themselves live in
  * {@link TrashSlotCompat}.
@@ -41,6 +44,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  * client-side cursor), and the "delete hovered slot" key branch is kept off: it sends the picker
  * menu's slot index to the server, which would apply it to the player's real inventory menu and
  * delete the wrong slot. TrashSlot's own creative delete-key branch, which maps the index, still runs.
+ *
+ * <p>The trashed item's tooltip ({@code onScreenDrawn}) is drawn with Forge's overload that carries the
+ * stack, so AppleSkin's food bars show on a trashed food item.
  */
 @Mixin(value = TrashSlotGuiHandler.class, remap = false)
 public abstract class TrashSlotGuiHandlerMixin {
@@ -122,5 +128,20 @@ public abstract class TrashSlotGuiHandlerMixin {
             return false;
         }
         return settings.isEnabled();
+    }
+
+    @Redirect(
+            method = "onScreenDrawn",
+            remap = false,
+            require = 1,
+            at = @At(
+                    value = "INVOKE",
+                    remap = false,
+                    target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"
+            )
+    )
+    private static void creativeengineering$trashTooltipWithStack(AbstractContainerScreen<?> screen, PoseStack poseStack,
+                                                                 List<Component> lines, int x, int y) {
+        screen.renderComponentTooltip(poseStack, lines, x, y, trashSlot.getItem());
     }
 }

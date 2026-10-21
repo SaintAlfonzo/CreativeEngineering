@@ -63,8 +63,8 @@ registers the items, `canning.js` (`canSection()`) the recipes. 202 cans in 16 s
 | cookies | 12 | drink | 2 |
 | meal | 11 | raw meat | 1 |
 
-A meal is the food it holds times a multiplier, effects copied with scaled durations; an alternative input that would
-need more than 8 items makes a partly full can (`CanServings`). Sprites per section or per can
+A meal is the food it holds times a multiplier, effects copied with scaled durations; a sliced form shares the whole
+item's slots and count, and no recipe makes a partly full can ([can_parity.md](can_parity.md) 4.2). Sprites per section or per can
 (`textureswapper/canned/newcan`). Values for meal, pie, feast and drink cans are placeholders until the food tuning
 system is built ([food.md](food.md) 3.5).
 
@@ -91,15 +91,34 @@ removals, sprites). Code: patcherMod `food/CanServings`, `food/CanServingsToolti
 
 ### Findings (2026-10-18)
 
-- **F1. food.md 3.6 is out of date on numbers.** It says "the 34 food cans, canned_food and the Hot Hot Hotpot hold 2"
+- **F1.** FIXED 2026-10-19 (3.6 now gives 247 cans, 1 to 10 servings, and the canning recipes). **food.md 3.6 was out of date on numbers.** It says "the 34 food cans, canned_food and the Hot Hot Hotpot hold 2"
   and "No food canning recipe exists yet"; today 247 cans have serving counts from 1 to 10 and canning recipes exist
   for every section. The mechanics described there are current.
 - **F2. Values are placeholders for four sections** (meal, pie, feast, drink) and hand-written raw cans don't carry
-  effects ([TODO.md](todo/TODO.md) 2, can_parity.md).
+  effects ([TODO](todo/TODO.md) `food/canning #1` and `#4`, can_parity.md).
 - **F3. Golden cans hold 10 servings each** (50 cans): each serving is a full golden food's value and effects. Worth a
   look when tuning runs.
 - **F4. Servings only work in NCH crafting recipes.** Create mixing, mechanical crafting and other mods' recipes use up
   the whole can (food.md 3.6 limits).
+
+### Decisions (2026-10-20)
+
+Settled in [can_parity.md](can_parity.md) 4; none built yet.
+
+- **D-A. Own mod.** Canning moves to a new mod, Creative Canning, built like the alcohol mod and Creative Labels. The
+  26 hand-written cans are rebuilt there with their effects passed through (closes the effects half of F2).
+- **D-B. Golden cans.** 10 servings, 0.25x nutrition, 0.333x effect length, still following golden food effect changes
+  (revises F3). Later golden effect changes need a recheck of these cans.
+- **D-C. Crafting.** Cans are used only in manual shaped or shapeless crafts for now (F4 stays a limit by design).
+- **D-D. Recipes.** BUILT 2026-10-20 (not run in game): every can whose whole item and slice are both edible is defined
+  by the whole food, and the slice takes the same slots at the same count (slicing first is the 2x+ boost); no recipe
+  makes a partly full can. Pumpkin is a fruit can (3 servings); pumpkin, melon, cantaloupe, hamimelon and pineapple are
+  slice-only (the whole can't be eaten); the Cantaloupe Slice copies the Pumpkin Slice's food values. Still to build:
+  the Neapolitan banana taking over the Alex's Mobs banana's behaviour, and an opened filling can no longer making a
+  pie. Detail in [can_parity.md](can_parity.md) 4.1, 4.2.
+- **D-E. Removed cans.** No remap for cans removed after shipping.
+
+Suggested build order: recipe changes in D-D (KubeJS only), then the golden numbers, then the Creative Canning split.
 
 ### Known limits
 
@@ -137,3 +156,8 @@ Golem: R4-07 ([plan_1.0.4.md](plan_1.0.4.md)).
 - 2026-10-02: canned golem dye (1.0.4).
 - 2026-10-13: can parity: 11 raw cans removed, every remaining row generated (202 generated cans) ([can_parity.md](can_parity.md)).
 - 2026-10-18: this hub; findings F1 to F4; tests CN-01 to CN-06. No code changed.
+- 2026-10-19: F1 fixed: food.md 3.6 numbers brought up to date.
+- 2026-10-20: decisions D-A to D-E recorded from can parity section 4. No code changed.
+- 2026-10-20: D-D sliced-input alignment built (gen_can_types.py, canning.js, food_values.js); see can_parity.md 8.
+- 2026-10-20: raw fish cans use a Fish Meal (4, 2) instead of the Meat Meal ([can_parity.md](can_parity.md) 4.2).
+- 2026-10-20: pufferfish on the Fish Meal, shulker on its own (2, 1) x 4 meal; value-vs-goal per can in [can_parity.md](can_parity.md) 4.3.

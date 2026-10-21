@@ -23,7 +23,7 @@ Other recipe folders have their own writeups: `equipment/` ([gear_tuning.md](gea
 | Five per-folder writeups (RE-, RM-, RW-, RC-, RA-) | written 2026-10-18 |
 | Removed items: 309 ids in `global.removedItems`; hidden in JEI, red tooltip, all item tags stripped, recipes referencing them listed once per session | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
 | `dead_recipe_removal.js`: 21 Vintage Improvements recipes for metals the pack doesn't use (vanadium, shadow steel, refined radiance, ...) | DEPLOYED |
-| Dead code: `kubejs/recipes/` (4 JSONs that never load), three commented-out `global.CE` blocks, `kubejs/archive/` | left in place (TODO 6) |
+| Dead code: `kubejs/recipes/` (4 JSONs that never load), three commented-out `global.CE` blocks, `kubejs/archive/` | left in place ([TODO](todo/TODO.md) `recipes/progression #3`, `tooling/conventions #3`) |
 
 - **Pending:** nothing built and unshipped. RP-01 to RP-08 have never been run. Findings F1 to F6 (section 4); F1 needs
   your call (it collects the per-folder missing-recipe calls).
@@ -79,8 +79,8 @@ Nock Enough Arrows' quiver and torch arrow; Quark's dragon scale; IE's potion bu
 | File | What |
 |---|---|
 | `recipes_to_remove.txt` | a pasted scan log (undated): 83 removed items still referenced, 178 references across 297 items (the list has grown to 309 since) |
-| `remove_list.txt` | ids still to add; one left (`vintageimprovements:rose_gold_rod`, TODO 6) |
-| `create_ie_dict_additions.txt`, `not_in_dict.txt` | dictionary candidates, not recipe work (TODO 5) |
+| `remove_list.txt` | ids still to add; one left (`vintageimprovements:rose_gold_rod`, [TODO](todo/TODO.md) `tooling/conventions #4`) |
+| `create_ie_dict_additions.txt`, `not_in_dict.txt` | dictionary candidates, not recipe work ([TODO](todo/TODO.md) `tooling/dictionaries #3`) |
 
 ### 2.3 Dead recipes
 
@@ -103,7 +103,7 @@ Nothing beyond the files above; every removal and replacement is in the folder s
 - **F1. Five vanilla or mod items have no recipe after the pack's removals. Your call, one by one.** Blast furnace
   ([recipes_engineering.md](recipes_engineering.md) F1; Little Logistics' locomotive and tug need it), dispenser (same,
   F2), smoker ([recipes_cooking.md](recipes_cooking.md) F1), Explorer's Compass ([recipes_magic.md](recipes_magic.md)
-  F1), and possibly the cake (recipes_cooking F2). None is in `removed_items.js` (TODO 6 "Bookkeeping"), so they show in
+  F1), and possibly the cake (recipes_cooking F2). None is in `removed_items.js` ([TODO](todo/TODO.md) `recipes/progression #1`, `tooling/conventions #4`), so they show in
   JEI with no recipe. Either give each a pack recipe, or add it to the removed list.
 - **F2. The scan is slow by construction.** `recipe_scan.js` walks every recipe once per removed item (309 passes,
   serialising each recipe's JSON each time) on the first recipe load of a session. Not measured; one pass that checks
@@ -112,7 +112,7 @@ Nothing beyond the files above; every removal and replacement is in the folder s
 - **F3. The sawmill recycle recipes never loaded.** `kubejs/recipes/recycle/` (slabs, stairs, doors back to sticks) was
   meant for IE's sawmill. They have sawdust secondaries, which `R.ieSawmill` can't do (the KubeJS IE schema bug), so
   porting means moving them to `kubejs/data/creativeengineering/recipes/sawmill/`, where the other sawmill JSONs load;
-  or delete them (TODO 6).
+  or delete them ([TODO](todo/TODO.md) `recipes/progression #3`).
 - **F4. `global.hasRemovedTags` is set and never read.**
 - **F5. Define-once across the recipe folders:** local redefinitions of dict keys in `end.js`, `dust.js`, `redstone.js`,
   `cooking.js`, `cultivated_meat.js`, `ash.js`; duplicate keys inside `item_dict.js` (`mulch_brown` ×4, `xp_block` ×3,

@@ -51,7 +51,7 @@ StartupEvents.registry('item', e => {
     e.create('creativeengineering:canned_strawberry').displayName('Canned Strawberries').food(fruit)
     e.create('creativeengineering:canned_white_strawberry').displayName('Canned White Strawberries').texture(fruitCan).food(fruit)
     e.create('creativeengineering:canned_sweet_berry').displayName('Canned Sweet Berries').food(fruit)
-    // Pumpkin slices only (the whole pumpkin is a block); recipes are in the raw veggie section of canning.js
+    // Pumpkin slices only (the whole pumpkin is a block); a fruit can since 2026-10-20 (3 servings)
     e.create('creativeengineering:canned_pumpkin').displayName('Canned Pumpkin').food(fruit)
 
     // Raw meat

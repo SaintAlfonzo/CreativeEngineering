@@ -21,6 +21,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
@@ -45,6 +48,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -57,6 +63,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * {@code /ceplace}: every structure (or raw template) matching a filter, laid out in rows for inspection,
@@ -84,6 +91,7 @@ public final class MassPlacer {
 
 	private static final Logger LOG = LogManager.getLogger("creativeengineering/ceplace");
 	static final String TAGS = BiomeLayoutTuner.WORLDGEN_DIR + "structure_tags.json";
+	private static final String TEMPLATE_DIR = "structures";
 
 	enum RowBy { TYPE, GROUP, MOD, NONE }
 
@@ -632,8 +640,55 @@ public final class MassPlacer {
 				.orElse(null);
 	}
 
-	private static List<String> templateIds(MinecraftServer server) {
-		return server.getStructureManager().listTemplates().map(ResourceLocation::toString).sorted().toList();
+	private static ResourceManager templateIdsFrom;
+	private static List<String> templateIdsCache = List.of();
+
+	/**
+	 * Every template id: each data pack's {@code structures/**.nbt} plus the world's generated/ folder. Not vanilla
+	 * StructureTemplateManager#listTemplates: the merged resource listing in this pack hands it a bare
+	 * {@code structures.nbt} path and its substring throws (StringIndexOutOfBounds, 09_phase_9.md 3.1), which killed
+	 * the whole templates mode. Per pack, a stray path is just skipped. Cached until the next /reload.
+	 */
+	private static synchronized List<String> templateIds(MinecraftServer server) {
+		ResourceManager rm = server.getResourceManager();
+		if (rm == templateIdsFrom) return templateIdsCache;
+		Set<String> ids = new TreeSet<>();
+		rm.listPacks().forEach(pack -> {
+			for (String ns : pack.getNamespaces(PackType.SERVER_DATA)) {
+				try {
+					for (ResourceLocation rl : pack.getResources(PackType.SERVER_DATA, ns, TEMPLATE_DIR, p -> p.getPath().endsWith(".nbt"))) {
+						String path = rl.getPath();
+						if (path.startsWith(TEMPLATE_DIR + "/") && path.length() > TEMPLATE_DIR.length() + 1 + 4)
+							ids.add(rl.getNamespace() + ":" + path.substring(TEMPLATE_DIR.length() + 1, path.length() - 4));
+					}
+				} catch (RuntimeException e) {
+					LOG.warn("[ceplace] could not list templates in pack {} ({}): {}", pack.getName(), ns, e.toString());
+				}
+			}
+		});
+		Path generated = server.getWorldPath(LevelResource.GENERATED_DIR).normalize();
+		if (Files.isDirectory(generated)) {
+			try (Stream<Path> nsDirs = Files.list(generated)) {
+				nsDirs.filter(Files::isDirectory).forEach(nsDir -> {
+					Path dir = nsDir.resolve(TEMPLATE_DIR);
+					if (!Files.isDirectory(dir)) return;
+					try (Stream<Path> files = Files.walk(dir)) {
+						files.filter(f -> f.toString().endsWith(".nbt")).forEach(f -> {
+							String rel = dir.relativize(f).toString().replace('\\', '/');
+							ids.add(nsDir.getFileName() + ":" + rel.substring(0, rel.length() - 4));
+						});
+					} catch (IOException e) {
+						LOG.warn("[ceplace] could not list {}: {}", dir, e.toString());
+					}
+				});
+			} catch (IOException e) {
+				LOG.warn("[ceplace] could not list {}: {}", generated, e.toString());
+			}
+		}
+		ids.removeIf(id -> ResourceLocation.tryParse(id) == null);
+		templateIdsFrom = rm;
+		templateIdsCache = List.copyOf(ids);
+		return templateIdsCache;
 	}
 
 	// ── suggestions ──────────────────────────────────────────────────────────

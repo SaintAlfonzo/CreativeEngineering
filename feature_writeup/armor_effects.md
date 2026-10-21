@@ -112,7 +112,7 @@ The check that all four pieces are worn is CDD's; the mixin only swaps the two `
   1:30 at II, from `MagicResistancePotions`), `/effect`. Felsic gear assembly fills with it (see
   [gear_tuning.md](gear_tuning.md)).
 - **Effect description:** still `TODO` in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) line 8
-  (one of the 47 JEED rows in [TODO.md](todo/TODO.md) 2).
+  (one of the JEED rows in [TODO](todo/TODO.md) `ui/effects #1`).
 
 ### 2.6 Effect spec format
 
@@ -164,10 +164,10 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
 
 ### Findings (2026-10-18)
 
-- **F1. Iron set registered twice** ([func/armor_effects.js](../kubejs/startup_scripts/func/armor_effects.js) lines
+- **F1.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Iron set registered twice** ([func/armor_effects.js](../kubejs/startup_scripts/func/armor_effects.js) lines
   212-220, two identical `set()` calls). The tooltip dedupes and the effect is the same, so nothing visible; Conductive
   is just added twice a tick. Fix: delete one call.
-- **F2. Stale cap in the header:** the comment says "up to 6 entries"; `MAX_EFFECTS` is 7 and the dragon set uses all
+- **F2.** FIXED 2026-10-19 (comment says 7, MAX_EFFECTS). **Stale cap in the header:** the comment says "up to 6 entries"; `MAX_EFFECTS` is 7 and the dragon set uses all
   7. Doc fix.
 - **F3. `held()` durations are ignored.** Every held spec has a `duration` (dragon bow Glowing 500, crossbow Weakness
   250, ...) but held effects always refresh at 40 ticks. Harmless, misleading. Fix: drop the fields or document them.
@@ -186,9 +186,8 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
 - **F6. Magic Resistance reads vanilla `isMagic()`, shields read the pack's `magic` damage tag. Your call.** The tag
   ([shields.md](shields.md) 2.9) is vanilla magic plus `psychic` and `life_drain`, so a source can count as magic for
   a shield and not for Magic Resistance. Switching `MagicResistanceEffect` to `DamageTags` would line them up (the
-  user asked shields to read only tags). Also stale: the header of
-  [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js) line 19 says there is no potion yet;
-  `MagicResistancePotions` and the brewing mixes exist.
+  user asked shields to read only tags). (The stale magic_resistance.js header about "no potion yet" was fixed
+  2026-10-19.)
 - **F7. Echo Phantom Bane is level II, the tooltip says "Phantom Bane".** The mixin keeps CDD's amplifier 1. Check
   whether Better Beacons scales Phantom Bane with level; if it does, either drop the amplifier to 0 or say "II".
 - **F8. One effect packet per effect per tick, unmeasured.** Re-adding an effect with a longer duration fires
@@ -296,3 +295,5 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
 - 2026-10-03: horse armor effect back on with an interval walk (`mountEffectIntervalTicks`), and its effect id fixed
   (`strong_regeneration` → `regeneration`). [perf.md](perf.md) 7. Shipped with 1.0.4.
 - 2026-10-18: this writeup; findings F1 to F9; tests AE-01 to AE-24. No code changed.
+- 2026-10-19: F1 fixed, the second iron `set()` deleted ([plan_1.0.9.md](plan_1.0.9.md)).
+- 2026-10-19: F2 and the magic_resistance.js part of F6 fixed (comments only; TODO `pack/docs`).

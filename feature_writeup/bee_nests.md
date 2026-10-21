@@ -9,7 +9,7 @@ Where wild bee nests generate, how often, and a tuning file that gives nests to 
 |---|---|
 | Investigation: every nest source per biome (section 2, [bee_nests_by_biome.md](bee_nests_by_biome.md)) | DONE 2026-10-10 |
 | `tools/gen_bee_nests.py` -> [bee_nests_by_biome.md](bee_nests_by_biome.md) (offline before/after + measured table) | BUILT 2026-10-10 |
-| Nest tuning: `bee_nests.json` -> `worldgen/bee_nests.js` -> biome modifier `creativeengineering:bee_nests` (patcherMod `worldgen/BeeNests` + `TreeFeatureBeeNestsMixin`, `BeehiveDecoratorBeeNestsMixin`) | BUILT 2026-10-10, offline tests pass, scratch-server verified with the starter rules (4,301 chunks, no crash after the leaf-only fix); in patcherMod 1.0.5 (in `mods/`), STAGED for pack 1.0.6 (not deployed); single player 2026-10-11 applied `6 rules, 44 biomes tuned` |
+| Nest tuning: `bee_nests.json` -> `worldgen/bee_nests.js` -> biome modifier `creativeengineering:bee_nests` (patcherMod `worldgen/BeeNests` + `TreeFeatureBeeNestsMixin`, `BeehiveDecoratorBeeNestsMixin`) | BUILT 2026-10-10, offline tests pass, scratch-server verified with the starter rules (4,301 chunks, no crash after the leaf-only fix); in patcherMod 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14); single player 2026-10-11 applied `6 rules, 44 biomes tuned` |
 | Extra bee-nest trees (`trees` in a rule: pack placed feature + `forge:add_features`) | BUILT 2026-10-10, offline tests pass |
 | `/dumpbeenests [reset]` (trees, nests, chunks counted per biome as chunks generate; `ChunkGeneratorBeeNestsMixin`) | BUILT 2026-10-10; baseline 41,684 chunks / 73 biomes saved as `bee_nests_baseline.json` |
 | CEConfig `[worldgen.systems] beeNests` | BUILT, same jar |

@@ -10,7 +10,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `server` | Only does anything on the server; harmless on clients | Yes |
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 
-**Current count:** 358 both, 14 server, 45 client (417 rows).
+**Current count:** 364 both, 0 server, 45 client (409 rows).
 
 ## Keeping this up to date
 
@@ -25,7 +25,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 |---|---|---|---|---|
 | both | Dustrial Decor | `dustrial_decor` | `DustrialDecor-1.3.3-1.19.2.jar` |  |
 | both | Advanced Peripherals | `advancedperipherals` | `AdvancedPeripherals-1.19.2-0.7.37r.jar` |  |
-| both | AE2 QoL Recipes | `ae2qolrecipes` | `ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar` |  |
 | both | Alex's Delight | `alexsdelight` | `alexsdelight-1.4.1.jar` |  |
 | both | Alex's Mobs | `alexsmobs` | `alexsmobs-1.21.1.jar` | Required by: Alex's Delight |
 | both | Allurement | `allurement` | `allurement-1.19.2-3.2.1.jar` |  |
@@ -48,10 +47,11 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Book Fishing | `book_fishing` | `Book Fishing 1.0.0 - 1.19.2.jar` |  |
 | both | Bookshelf | `bookshelf` | `Bookshelf-Forge-1.19.2-16.3.20.jar` |  |
 | both | Botania | `botania` | `Botania-1.19.2-440.2-FORGE.jar` | Required by: Applied Botanics, KubeJS Botania |
-| both | Brewin' and Chewin' | `brewinandchewin` | `BrewinAndChewin-1.19-2.0.jar` |  |
+| both | Brewin' and Chewin' (Backport) | `brewinandchewin` | `backportedBrewin-4.5.0-ce-19.2-02.jar` | This pack's port of Brewin' and Chewin' 4.5.0 (development/backportedBrewin); replaces BrewinAndChewin-1.19-2.0.jar |
 | both | Brick Hopper | `brickhopper` | `brickhopper-1.19-1.4.2.1.jar` |  |
 | both | Buzzier Bees | `buzzier_bees` | `buzzier_bees-1.19.2-5.0.1.jar` |  |
 | both | Caelus API | `caelus` | `caelus-forge-1.19.2-3.0.0.6.jar` | Required by: Elytra Slot |
+| both | Carry Cats | `shouldercats` | `Carry Cats 2.5 1.19.2.jar` | Cats ride on the player's shoulder; added 2026-10-20 |
 | both | Cat Loaf | `catloaf` | `catloaf-1.1.1-1.19.x-FORGE.jar` |  |
 | both | CBMultipart | `cb_multipart` | `CBMultipart-1.19.2-3.2.0.139-universal.jar` | Required by: ProjectRed Core, ProjectRed Fabrication, ProjectRed Illumination, ProjectRed Integration, ProjectRed Transmission, cb_microblock (+1 more) |
 | both | CC: Tweaked | `computercraft` | `cc-tweaked-1.19.2-1.101.4.jar` | Required by: Advanced Peripherals, CC:C Bridge, KubeJS + CC: Tweaked |
@@ -68,7 +68,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Clumps | `clumps` | `Clumps-forge-1.19.2-9.0.0+14.jar` |  |
 | both | CodeChicken Lib | `codechickenlib` | `CodeChickenLib-1.19.2-4.3.2.490-universal.jar` | Required by: CBMultipart, EnderStorage, ProjectRed Core, ProjectRed Fabrication, ProjectRed Illumination, ProjectRed Integration (+3 more) |
 | both | Collective | `collective` | `collective-1.19.2-7.64.jar` |  |
-| both | Comfortable Campfires | `comfortable_campfires` | `comfortable-campfires-1.1.2+1.19.2.jar` |  |
 | both | Comforts | `comforts` | `comforts-forge-6.0.7+1.19.2.jar` |  |
 | both | Compressed Creativity | `compressedcreativity` | `compressedcreativity-1.19.2-0.1.8.jar` |  |
 | both | Compressed Engineering | `compressedengineering` | `compressedengineering-1.3.5.jar` |  |
@@ -76,8 +75,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Construction Wand | `constructionwand` | `constructionwand-1.19.2-2.10.jar` |  |
 | both | Control Engineering | `controlengineering` | `ControlEngineering-0.2.0.jar` |  |
 | both | CookingForBlockheads | `cookingforblockheads` | `cookingforblockheads-forge-1.19.2-13.3.4.jar` |  |
-| both | Copper Drops | `copperdrops` | `CopperDrops-1.1.jar` |  |
-| both | Copper Splashing Recipes | `create_copper_splashing` | `Create_Copper_Splashing_v2.jar` |  |
 | both | Corpse | `corpse` | `corpse-forge-1.19.2-1.0.17.jar` | Required by: corpsecurioscompat |
 | both | corpsecurioscompat | `corpsecurioscompat` | `corpsecurioscompat-1.18.x-1.20.x-Forge-2.2.2.jar` |  |
 | both | Cosmetic Armor x Corpse Compat | `cosmeticcorpsecompat` | `cosmeticcorpsecompat-1.19.x-1.20.x-Forge-1.0.0.jar` |  |
@@ -94,7 +91,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create Mechanical Extruder | `create_mechanical_extruder` | `create_mechanical_extruder-1.19.2-1.5.7.e-44.jar` |  |
 | both | Create Recycling | `create_crush_everything` | `create_recycle_1.0.2_forge_1.19.2.jar` |  |
 | both | Create Slice & Dice | `sliceanddice` | `sliceanddice-forge-2.4.0.jar` |  |
-| both | Create Waystone Recipes | `create_waystone_recipes` | `Create_Waystone_Recipes_1.19_v2.jar` |  |
 | both | Create: Bells & Whistles | `bellsandwhistles` | `bellsandwhistles-v0.4.4-1.19.2.jar` |  |
 | both | Create: Central Kitchen | `create_central_kitchen` | `create_central_kitchen-1.19.2-for-create-0.5.1.f-1.3.11.c.jar` |  |
 | both | Create: Copycats+ | `copycats` | `copycats-2.2.2+mc.1.19.2-forge.jar` |  |
@@ -105,7 +101,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Dynamic Village | `dynamicvillage` | `dynamicvillage-v0.4-1.19.2.jar` |  |
 | both | Create: Factory | `create_factory` | `create_factory-0.0.2-1.19.2.jar` |  |
 | both | Create: Framed | `createframed` | `createframed-1.19.2-1.4.5.1.jar` |  |
-| both | Create: Generators | `create_generators` | `create_generators-1.0.0-forge-1.19.2.jar` |  |
 | both | Create: Gravity | `create_gravity` | `create_gravity-1.19.2-1.2.0-all.jar` |  |
 | both | Create: Interiors | `interiors` | `interiors-0.5.6+forge-mc1.19.2-build.105.jar` |  |
 | both | Create: Netherless | `create_netherless` | `create_netherless-1.19.2-1.3.jar` |  |
@@ -116,7 +111,8 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.6.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
+| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.8.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
+| both | Creative Labels | `creative_labels` | `creativeLabels-1.0.0.jar` | This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
 | both | Customizable Elytra | `customizableelytra` | `customizableelytra-1.19.0-1.7.4.jar` |  |
@@ -155,7 +151,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | FarmersStructures | `farmers_structures` | `FarmersStructures-1.0.0-1.19.2.jar` |  |
 | both | Fast Workbench | `fastbench` | `FastWorkbench-1.19.2-7.1.4.jar` |  |
 | both | FastFurnace | `fastfurnace` | `FastFurnace-1.19.2-7.0.0.jar` |  |
-| both | FastLeafDecay | `fastleafdecay` | `FastLeafDecay-30.jar` |  |
 | both | Felsic Gear | `felsic_gear` | `Felsic Gear 1.0.0  - 1.19.2.jar` |  |
 | both | Ferrite Core | `ferritecore` | `ferritecore-5.0.3-forge.jar` |  |
 | both | Fish On The Line | `fishontheline` | `fishontheline-1.19.2-3.2.jar` |  |
@@ -167,7 +162,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | FTB Quests | `ftbquests` | `ftb-quests-forge-1902.5.10-build.497.jar` | Required by: Create Questing, Quests Additions |
 | both | FTB Teams | `ftbteams` | `ftb-teams-forge-1902.2.14-build.123.jar` | Required by: FTB Quests |
 | both | Fullblock Energistics | `fulleng` | `fulleng-forge-1.7.1-1.19.2.jar` |  |
-| both | Furnace Recycle | `furnacerecycle` | `furnacerecycle-1.19.2-2.2.jar` |  |
 | both | Gates | `gates` | `gates-1.8.0.jar` |  |
 | both | GeckoLib | `geckolib3` | `geckolib-forge-1.19-3.1.40.jar` |  |
 | both | Geode+ | `geode` | `geodeforge-1.1.8-1.19.2.jar` |  |
@@ -199,7 +193,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | KubeJS CSV | `kubejs_csv` | `kubejs_csv-1.18.2~1.20.1-1.0.0.jar` |  |
 | both | KubeJS Immersive Engineering | `kubejs_immersive_engineering` | `kubejs-immersive-engineering-1902.2.3-build.18.jar` |  |
 | both | KubeJSDelight | `kubejsdelight` | `kubejsdelight-1.19.2-1.1.2.jar` |  |
-| both | Lets Do Api | `doapi` | `doapi-1.1.0b.jar` | Required by: Vinery |
 | both | Lightman's Currency | `lightmanscurrency` | `lightmanscurrency-1.19.2-2.2.1.3g.jar` |  |
 | both | Little Contraptions | `littlecontraptions` | `littlecontraptions-forge-1.19.2.2.jar` |  |
 | both | Little Logistics | `littlelogistics` | `littlelogistics-mc1.19.2-v1.4.0.jar` | Required by: Little Contraptions |
@@ -215,13 +208,13 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Moonlight Library | `moonlight` | `moonlight-1.19.2-2.3.7-forge.jar` | Required by: Every Compat, Heartstone, Immersive Weathering, MmmMmmMmmmmm, Moyai, Mystical Oak Tree (+2 more) |
 | both | More Immersive Wires | `more_immersive_wires` | `more-immersive-wires-1.19.2-1.1.3.jar` |  |
 | both | More Mooblooms | `more_mooblooms` | `moreMooblooms-1.0.0.jar` | This pack's own mod (development/moreMooblooms): data-driven moobloom variants; cleans up Buzzier Bees' moobloom, buttercup and Sunny. Rebuilt 2026-10-11 at 1.0.0 (azaleabloom spawns on moss), in mods/ |
+| both | Baby Mobs | `baby_mobs` | `babyMobs-1.0.0.jar` | Our own (development/babyMobs): 1.21.2 / 26.1 baby squid, glow squid and dolphins on vanilla classes (age mixins + replacement renderers). Added 2026-10-20 |
 | both | More Mob Variants | `moremobvariants` | `moremobvariants-forge+1.19.2-1.3.0.1.jar` |  |
 | both | MoreJS | `morejs` | `morejs-forge-1.19.2-0.3.0.jar` |  |
 | both | Mosaic Masonry | `mosaic_masonry` | `mosaic_masonry-1.1.jar` |  |
 | both | Moyai | `moyai` | `moyai-1.19.2-2.0.1.jar` |  |
 | both | Myrtrees | `myrtrees` | `myrtrees-forge-1.2.0-build.32.jar` |  |
 | both | Mystical Oak Tree | `mysticaloaktree` | `mysticaloaktree-1.19.2-1.10.jar` |  |
-| both | Name Tag Crafting Recipe | `mr_name_tagcraftingrecipemod` | `name-tag-crafting-recipe-mod-1.0 (3).jar` |  |
 | both | Nature's Compass | `naturescompass` | `NaturesCompass-1.19.2-1.10.0-forge.jar` |  |
 | both | Nether's Delight | `nethersdelight` | `NethersDelight-1.19-3.1.jar` |  |
 | both | Netherite Horse Armor | `netherite_horse_armor` | `netherite_horse_armor-forge-1.19-1.0.4.jar` |  |
@@ -295,7 +288,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Twigs | `twigs` | `twigs-forge-1.19.2-3.0.1.jar` |  |
 | both | Via Romana | `via_romana` | `Via_Romana-1.19.2-1.1.3.jar` |  |
 | both | Villagers Sell Animals (by NoCube) | `villagersellanimals` | `nocube's_villagers_sell_animals_1.2.1_forge_1.19.2.jar` |  |
-| both | Vinery | `vinery` | `letsdo-vinery-forge-1.3.10.jar` |  |
+| both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-01.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
 | both | Vintage KubeJS | `vintage_kubejs` | `vintage_kubejs-1.19.2-1.0.0rc-2.jar` |  |
 | both | Wardrobe | `wardrobe` | `wardrobe-1.0.3-1.19.2.jar` |  |
 | both | Wares | `wares` | `wares-1.19.2-1.2.9.jar` |  |
@@ -314,16 +307,16 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | YUNG's Better Witch Huts | `betterwitchhuts` | `YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar` |  |
 | both | YUNG's Extras | `yungsextras` | `YungsExtras-1.19.2-Forge-3.1.0.jar` |  |
 | both | Yuushya Modelling | `yuushya_modelling` | `yuushya-modelling-1.19.2-forge-2.2.0.jar` |  |
-| server | Async Locator | `asynclocator` | `async-locator-forge-1.19.2-1.3.0.jar` | Off-thread /locate, explorer maps, dolphins, eyes of ender (IGNORE_SERVER_VERSION) |
-| server | Block Runner | `blockrunner` | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | Server-side walk-speed logic |
-| server | CherishedItems | `cherisheditems` | `CherishedItems-Forge-1.19.2-1.0.2.jar` | Item despawn rules |
-| server | Chunky | `chunky` | `Chunky-1.3.38.jar` | Chunk pre-generation |
-| server | Create Liquid Fuel | `createliquidfuel` | `createliquidfuel-2.1.1-1.19.2.jar` | Server-side fuel recipes |
-| server | DeathKnell | `deathknell` | `DeathKnell-Forge-1.19.2-6.0.3.jar` | Death messages |
-| server | Lightmans Discord Integration | `lightmansdiscord` | `lightmansdiscord-1.19.2-0.2.0.3-server.jar` | Discord bot (needs a token) |
-| server | Loading Protection | `loadingprotection` | `loadingprotection-1.0.2-forge-1.19.2.jar` | Join invulnerability |
-| server | Simple Backups | `simplebackups` | `SimpleBackups-1.19.1-2.1.12.jar` | World backups |
-| server | Tax Free Levels | `taxfreelevels` | `TaxFreeLevels-1.4.23-forge-1.20.1.jar` | Server-side enchanting cost |
+| both | Async Locator | `asynclocator` | `async-locator-forge-1.19.2-1.3.0.jar` | Off-thread /locate, explorer maps, dolphins, eyes of ender (IGNORE_SERVER_VERSION) |
+| both | Block Runner | `blockrunner` | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | Server-side walk-speed logic |
+| both | CherishedItems | `cherisheditems` | `CherishedItems-Forge-1.19.2-1.0.2.jar` | Item despawn rules |
+| both | Chunky | `chunky` | `Chunky-1.3.38.jar` | Chunk pre-generation |
+| both | Create Liquid Fuel | `createliquidfuel` | `createliquidfuel-2.1.1-1.19.2.jar` | Server-side fuel recipes |
+| both | DeathKnell | `deathknell` | `DeathKnell-Forge-1.19.2-6.0.3.jar` | Death messages |
+| both | Lightmans Discord Integration | `lightmansdiscord` | `lightmansdiscord-1.19.2-0.2.0.3-server.jar` | Discord bot (needs a token) |
+| both | Loading Protection | `loadingprotection` | `loadingprotection-1.0.2-forge-1.19.2.jar` | Join invulnerability |
+| both | Simple Backups | `simplebackups` | `SimpleBackups-1.19.1-2.1.12.jar` | World backups |
+| both | Tax Free Levels | `taxfreelevels` | `TaxFreeLevels-1.4.23-forge-1.20.1.jar` | Server-side enchanting cost |
 | client | Better Third Person | `betterthirdperson` | `BetterThirdPerson-Forge-1.19-1.9.0.jar` | Camera |
 | client | BetterF3 | `betterf3` | `BetterF3-4.0.1-Forge-1.19.2.jar` | F3 screen |
 | client | Cherished Worlds | `cherishedworlds` | `cherishedworlds-forge-6.0.5+1.19.4.jar` | World-list favourites |
@@ -381,15 +374,14 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Breezy | `breezy` | `breezy-1.19.2-1.0.8.jar` | Hot air balloon entities |
 | both | Canned Goods | `canned_goods` | `CannedGoods-1.19.2-3.jar` | Blocks/items |
 | both | Colored Water | `colored_water` | `Colored Water-1.19.2-1.3.7.jar` | Blocks/items |
-| server | Create: Fast Schematic Cannon | `createfastschematiccannon` | `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar` | Schematicannon block-entity speed mixins |
+| both | Create: Fast Schematic Cannon | `createfastschematiccannon` | `CreateFastSchematicCannon-2.6.1-0.5.1i-forge-1.19.2.jar` | Schematicannon block-entity speed mixins |
 | both | Floral Enchantment | `floralench` | `Floral Enchantment-1.19.2-1.4.3.jar` | Blocks/items |
-| server | GlowingRaidIllagers | `glowingraidillagers` | `glowingraidillagers-1.19.2-1.0.0.jar` | Raid mixin applies vanilla Glowing |
 | both | Golden Food | `goldenfood` | `goldenfood-1.19.2-2.0.0.jar` | Items |
 | both | Greek Villager House | `greek_villager_house` | `greek_villager_house-1.0.0-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
 | both | hobbit house | `hobbit_house_` | `hobbit_house_-1.0.1-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
 | both | Hopo Better Underwater Ruins | `hopour` | `HopoBetterUnderwaterRuins-[1.19-1.19.3]-1.1.1.jar` | Structures only |
 | both | Ice Boat Nerf | `iceboatnerf` | `iceboatnerf-1.1.1.jar` | Boat mixin; boat physics run on the driving client |
-| server | Ice Prevents Crop Growth | `icepreventscropgrowth` | `icepreventscropgrowth-1.19.2-3.2.jar` | Crop-growth event |
+| both | Ice Prevents Crop Growth | `icepreventscropgrowth` | `icepreventscropgrowth-1.19.2-3.2.jar` | Crop-growth event |
 | both | Neapolitan | `neapolitan` | `neapolitan-1.19.2-4.1.0.jar` | Blocks/items/entities |
 | both | old swamp fisherman house | `old_swamp_fisherman_house` | `old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
 | both | Rare Ice | `rare_ice` | `rare-ice-0.5.1.jar` | Blocks |
@@ -397,7 +389,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | SawmillHouse | `sawmillhouse` | `sawmillhouse-1.3.0-forge-1.19.2.jar` | Structures only (data-only jar, loads fine; not ported) |
 | both | Shulker Box Slot | `shulkerboxslot` | `shulkerboxslot-forge-5.0.0-beta.2+1.19.2.jar` | Accessory slot |
 | both | Simply Houses | `simply_houses` | `SimplyHouses-1.1.3-1.19-forge.jar` | Structures only (data-only jar, loads fine; not ported) |
-| both | Starter Kit | `starterkit` | `starterkit-1.19.2-7.0.jar` | Kit choice screen |
 | both | It Takes A Pillage | `takesapillage` | `takesapillage-1.0.3-1.19.2.jar` | Entities + structures |
 | both | The Dirty Stuff | `the_dirty_stuff` | `the_dirty_stuff-2.1-forge-1.19.2.jar` | Blocks/items |
 | both | Tinted Campfires | `tintedcampfires` | `Tinted Campfires-1.19.2-1.2.9.jar` | Blocks |
@@ -418,7 +409,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Cool Rain | `coolrain` | `coolrain-1.19.2-Forge-1.0.2.jar` | Per-block rain sounds (client), but registers a strict `coolrain:main` channel (version "1" both ways) and ships its block tags as data, so like w2w2 the server must have it |
 | both | MEED (Moderately Enough Effect Descriptions) | `meed` | `MEED-1.19.2-7.1.1.jar` | Data only: `jeed:effect_provider` recipes for other mods' effects. Recipes come from the server, so it must be there (and JEED with it) |
 | client | Pretty Rain | `particlerain` | `Pretty Rain-1.19.2-Forge-1.1.1.jar` | Rain/snow/fog particles; no channel. patcherMod's PrettyRainSeasonMixin is in the mixin config's client list |
-| both | Bottled Air | `bottledair` | `bottledair-1.19.2-2.3.jar` | Right-click an empty bottle underwater to refill air; event logic only (Serilum). Requires Collective. Added 2026-10-13 |
 | both | Cycle Paintings | `cyclepaintings` | `cyclepaintings-1.19.2-3.5.jar` | Right-click a placed painting with a painting to cycle same-size variants (sneak = backwards); server event logic only (Serilum). Cycles everything in `#minecraft:placeable`, which all the painting packs fill. Requires Collective. Added 2026-10-14 |
 | both | DarkPaintings | `darkpaintings` | `DarkPaintings-Forge-1.19.2-13.1.5.jar` | Painting variants (Forge registry, synced). Requires Bookshelf. Added 2026-10-13 |
 | both | Dimensional Paintings | `dimpaintings` | `Dimensional-Paintings-1.19.2-1.4.1.jar` | Painting items + recipes. Added 2026-10-13 |
@@ -431,7 +421,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | client | Neko's Enchanted Books | `nebs` | `NekosEnchantedBooks-1.19-2.0.3.jar` | Per-enchantment book textures (clientSideOnly). Added 2026-10-13 |
 | both | Rebirth: Paintings | `rebirth_paintings` | `REBIRTH Paintings 5.0.0 Backport 1.19.2.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
 | both | Splash Milk | `splash_milk` | `splash_milk-1.19.2-1.4.0.jar` | Splash milk item + recipes. Added 2026-10-13 |
-| both | Sticky It! | `sticky_it` | `sticky_it-1.2.1-forge-1.19.2.jar` | Items + recipes. Added 2026-10-13 |
+| both | Sticky It! | `sticky_it` | `sticky_it-1.2.1-forge-1.19.2.jar` | Art donor for Creative Labels, gameplay off (items hidden, recipes removed, tooltip handler cancelled; sticky_notes.md 3.13). Added 2026-10-13 |
 | both | Subterrestrial | `subterrestrial` | `subterrestrial-forge-1.19.2-2.0.0.jar` | Structures only (registers its own structure type). Added 2026-10-13 |
 | both | Too Many Paintings! | `toomanypaintings` | `toomanypaintings-26.08.16-1.19-forge.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
 | both | Underground Bunkers | `underground_bunkers` | `UndergroundBunkers-1.0.4-1.19.2-1.20.4-forge.jar` | Structures only (data-only jar) Added 2026-10-13 |
@@ -439,5 +429,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Witch Mobility | `witchmobility` | `witchmobility-1.3.2-1.19.2.jar` | Broom entities, witch armor, items (GeckoLib). Added 2026-10-13 |
 | both | Campsite Structures | `campsite_structures` | `campsite_structures-1.19.2-FORGE-1.0.3.jar` | MCreator: camper entity + camp features (features overridden to forge:none by the structure work, jar kept for CamperEntity). Added 2026-10-14 |
 | both | restApi | `restapi` | `restApi - 0.7 - 1.19.2 - Forge.jar` | Library by restonic4 (registry/sound/tool-tier helpers). Added 2026-10-14 |
-| server | Rain should extinguish campfires | `rsec` | `rsec-1.0-1.19.2-forge.jar` | One CampfireBlockEntity tick mixin, acts on ServerLevel only. Added 2026-10-14 |
 | both | Unlit Campfire | `unlitcampfire` | `unlitcampfire-forge-1.19-1.7.1.0.jar` | Campfires placed unlit / burn out; block mixins + config, Jade/TOP compat. Added 2026-10-14 |
+| both | Create Salt | `create__the_salt` | `Create salt integration. Added 2026-10-18 |
+| both | Labels | `labels` | `labels-1.19.2-1.10.jar` | Art donor for Creative Labels, gameplay off (item hidden, recipes removed; sticky_notes.md 3.13). Added 2026-10-18 |

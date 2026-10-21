@@ -4,19 +4,78 @@
       "client": "com.SaintAlfonzo.creativeengineering.surface.WthitRunSpeed"
     },
     "side": "client",
-    "required": ["blockrunner"]
+    "required": [
+      "blockrunner"
+    ]
   },
   "creativeengineering:block_model_icon": {
     "entrypoints": {
       "client": "com.SaintAlfonzo.creativeengineering.compat.WthitBlockModelIcon"
     },
-    "side": "client",
-    "required": ["displaydelight"]
+    "side": "client"
   },
   "creativeengineering:crop_growth": {
     "entrypoints": {
       "client": "com.SaintAlfonzo.creativeengineering.crops.WthitCropGrowth"
     },
     "side": "client"
+  },
+  "creativeengineering:coaster": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitCoaster"
+    },
+    "side": "client",
+    "required": [
+      "brewinandchewin"
+    ]
+  },
+  "creativeengineering:holder_contents": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitHolderContents"
+    },
+    "side": "client",
+    "required": [
+      "supplementaries"
+    ]
+  },
+  "creativeengineering:hive": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativeengineering.compat.WthitHive",
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitHive"
+    },
+    "side": "*"
+  },
+  "creativeengineering:state_lines": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitStateLines"
+    },
+    "side": "client"
+  },
+  "creativeengineering:campfire": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativeengineering.compat.WthitCampfire",
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitCampfire"
+    },
+    "side": "*"
+  },
+  "creativeengineering:sheetmetal_tank": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativeengineering.compat.WthitSheetmetalTank"
+    },
+    "side": "*",
+    "required": [
+      "immersiveengineering"
+    ]
+  },
+  "creativeengineering:kitchen_station": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativeengineering.compat.WthitKitchenStation",
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitKitchenStation"
+    },
+    "side": "*",
+    "required": [
+      "appliedcooking",
+      "ae2"
+    ]
   }
 }

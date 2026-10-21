@@ -6,12 +6,12 @@ Written 2026-10-05. Test prefix `NE-`.
 
 | Part | Status |
 |---|---|
-| Own mod: **Incubation Additions** (`incubation_additions`, [development/incubationAdditions](../development/incubationAdditions/README.md), jar `incubationAdditions-1.0.0.jar`) | BUILT 2026-10-05, in `mods/` with patcherMod 1.0.5 and STAGED for pack 1.0.6 (first time it ships; not deployed); booted in single player 2026-10-11 without errors. Scratch server: old `creativeengineering:` nests remap, emu/duck/goose all lay into their nests |
+| Own mod: **Incubation Additions** (`incubation_additions`, [development/incubationAdditions](../development/incubationAdditions/README.md), jar `incubationAdditions-1.0.0.jar`) | BUILT 2026-10-05, in `mods/` with patcherMod 1.0.5 and DEPLOYED with pack 1.0.6 (2026-10-14, first time it ships); booted in single player 2026-10-11 without errors. Scratch server: old `creativeengineering:` nests remap, emu/duck/goose all lay into their nests |
 | Per-mod gating | BUILT 2026-10-05, scratch servers: Incubation only -> nothing registered, no extra packs; + duck mod -> duck/goose nests + crates + duck pack only; + Alex's Mobs -> emu nest + emu pack only; full pack -> both packs, all 7 recipes |
 | Duck and goose egg crates (`WaterfowlEggCrates`) | BUILT 2026-10-05, scratch-server verified (blocks, loot, axe tag, recipes load); not seen in game |
 | New sprites for the duck mod's duck/goose egg items (`client/DuckModEggModels`) | BUILT 2026-10-05, client side NOT run yet (NE-13) |
 | Emu nest (`EmuNests`, Alex's Mobs emus) | DEPLOYED in patcherMod 1.0.2 (old id `creativeengineering:emu_nest`), never tested in game |
-| Duck and goose nests (`WaterfowlNests`, Untitled Duck Mod) | moved to Incubation Additions (`incubation_additions:duck_nest` / `goose_nest`); STAGED for pack 1.0.6, not deployed (the 2026-10-05 staging that had them under the old patcherMod ids was rebuilt before it went out, so the old duck/goose ids never reached a player); scratch-server verified 2026-10-05 |
+| Duck and goose nests (`WaterfowlNests`, Untitled Duck Mod) | moved to Incubation Additions (`incubation_additions:duck_nest` / `goose_nest`); DEPLOYED with pack 1.0.6 (2026-10-14) (the 2026-10-05 staging that had them under the old patcherMod ids was rebuilt before it went out, so the old duck/goose ids never reached a player); scratch-server verified 2026-10-05 |
 | Foreign-nest NPE guard (`LayEggInNestGoalMixin`) | DEPLOYED with the emu nest (1.0.2) |
 | Textures | emu, duck and goose eggs have their own sheets; duck/goose nest base + item textures are swappable copies of the hay nest; the emu nest base + item still use Incubation's twig nest. All in the Incubation Additions jar; override from `kubejs/assets/incubation_additions/`. See 2.3 |
 

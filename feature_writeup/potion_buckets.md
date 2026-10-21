@@ -118,11 +118,11 @@ Lingering `create:potion` only; one recipe pair per potion.
 
 ### Findings (2026-10-18)
 
-- **F1. Machine tipping is cheaper than crafting, and the comment says otherwise. Your call.** The file header says
+- **F1.** FIXED 2026-10-19: discount kept on purpose, comment rewritten ([plan_1.0.9.md](plan_1.0.9.md)). **Machine tipping is cheaper than crafting, and the comment says otherwise. Your call.** The file header says
   "SAME potion cost as the hand craft": bottler 8 arrows per 250 mB, Spout 31 mB per arrow. The code is 1 arrow per
   20 mB (bottler) and 25 mB (Spout): 36% and 20% cheaper than the grid. Either set 31 mB on both (31.25 floors to 31),
   or keep the discount and fix the comment.
-- **F2. Tooltip durations ignore `effectMult`.** A lingering bucket gives 1.2 × what its tooltip says, a splash bucket
+- **F2.** FIXED 2026-10-19: the tooltip shows the applied duration via `global.potionArea.scaled` ([plan_1.0.9.md](plan_1.0.9.md)). **Tooltip durations ignore `effectMult`.** A lingering bucket gives 1.2 × what its tooltip says, a splash bucket
   1.1 ×. Scale the tooltip or add a "× 1.2" line.
 - **F3. The bottle remainder is global. Your call.** Added for the bucket fill recipe, but it also changes vanilla
   tipped arrows (you now get the glass bottle back) and any modded grid recipe that eats a potion. Farmer's Delight's
@@ -214,3 +214,4 @@ recipes)` with N > 0.
   recipes; bottle remainder fixed to `setCraftingRemainder` 2026-09-12.
 - By 2026-09-27 (initial git commit): all of the above plus machine-tipped arrows; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F7; tests PB-01 to PB-20. No code changed.
+- 2026-10-19: F1 (comment now states the machine discount as intended: grid 31.25, Spout 25, Bottler 20 mB an arrow) and F2 (tooltip durations x `effectMult`) fixed for 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). Not run in game.

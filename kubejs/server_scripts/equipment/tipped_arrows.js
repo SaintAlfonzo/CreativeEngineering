@@ -8,13 +8,12 @@ var R = global.NCH
 // Vanilla tips arrows in a crafting table: 8 arrows ringed around 1 lingering
 // potion -> 8 tipped arrows (crafting_special_tippedarrow, still enabled). This
 // mirrors that per-potion for the IE Bottling Machine and Create's Spout, using
-// create:potion (Bottle:LINGERING) fluid, at the SAME potion cost as the hand
-// craft: 8 tipped arrows per 250 mB (= one lingering bottle).
+// create:potion (Bottle:LINGERING) fluid. Each route has its own efficiency on
+// purpose: the machines are cheaper per arrow than the grid (31.25 mB an arrow).
 //
-//   IE Bottler : 8 arrows + 250 mB LINGERING potion -> 8 tipped arrows   (exact)
-//   Create Spout: 1 arrow  +  31 mB LINGERING potion -> 1 tipped arrow    (the
-//     spout fills one item per operation, so 250/8 = 31.25 mB is floored to 31;
-//     ~248 mB per 8, i.e. within a whisker of the hand craft.)
+//   Crafting grid: 8 arrows + 1 lingering bottle (250 mB) -> 8 tipped arrows (31.25 mB each)
+//   Create Spout : 1 arrow  + 25 mB LINGERING potion      -> 1 tipped arrow  (20% cheaper)
+//   IE Bottler   : 1 arrow  + 20 mB LINGERING potion      -> 1 tipped arrow  (36% cheaper)
 //
 // One pair per registered potion, matching how JEI expands the vanilla special
 // recipe (and how potion_bottling.js walks the registry).
@@ -31,7 +30,7 @@ while (it.hasNext()) {
 	var lingeringNbt = '{Bottle:"LINGERING",Potion:"' + pid + '"}'
 	var resultNbt = '{Potion:"' + pid + '"}'
 
-	// IE Bottling Machine — batch of 8, exact hand-craft ratio
+	// IE Bottling Machine — one arrow per operation
 	e.custom({
 		type: 'immersiveengineering:bottling_machine',
 		fluid: { tag: 'forge:fluid/potion', amount: 20, nbt: lingeringNbt },

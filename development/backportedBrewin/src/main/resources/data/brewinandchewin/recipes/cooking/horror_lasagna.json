@@ -1,0 +1,29 @@
+{
+  "type": "farmersdelight:cooking",
+  "container": {
+    "item": "minecraft:bowl"
+  },
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "item": "brewinandchewin:scarlet_cheese_wedge"
+    },
+    {
+      "tag": "forge:crops/beetroot"
+    },
+    {
+      "item": "farmersdelight:tomato_sauce"
+    },
+    {
+      "tag": "forge:pasta"
+    },
+    {
+      "tag": "brewinandchewin:foods/cheese_wedge"
+    }
+  ],
+  "recipe_book_tab": "meals",
+  "result": {
+    "item": "brewinandchewin:horror_lasagna"
+  },
+  "cookingtime": 200
+}
