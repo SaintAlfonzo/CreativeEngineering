@@ -17,14 +17,14 @@ file that changes spawn weights per biome, adds mobs to biomes and removes them.
 | Cow table in [mooblooms.md](mooblooms.md) (first consumer) | PLANNED |
 | Passive animal analysis (farm animals, duck/goose, Alex's Mobs surface animals) | DONE 2026-10-09, section 10; baseline for the cohesion rules |
 
-- **Jar:** needs patcherMod 1.0.5 or later (in `mods/`, ships in pack 1.0.5). With an older jar `/dumpspawns` says so,
+- **Jar:** needs patcherMod 1.0.5 or later (in `mods/`; 1.0.5 was never deployed, so it first shipped in pack 1.0.6). With an older jar `/dumpspawns` says so,
   and `mob_spawns.js` writes nothing (an unknown modifier type would stop the world loading).
 - **Measure:** `/dumpspawns` (or `/dumpall`), then `python3 tools/gen_spawn_table.py` (or `/cegen run spawns_by_biome`).
 - **Knobs:** `kubejs/generation_scripts/worldgen/mob_spawns.json` (rules, section 3); CEConfig
   `[worldgen.systems] mobSpawns` (off = every mob as its mod ships it). Rejoin to apply.
 - **Preview without the game:** edit the rules, run the generator: it applies them to the last dump's untuned spawners.
 - **Offline checks:** `bash tools/test_mob_spawns.sh` (section 6).
-- **Tests:** MS-01 to MS-12 (section 7).
+- **Tests:** MS-01 to MS-23 (section 7).
 
 ## 1. Overview
 
@@ -139,7 +139,7 @@ since the last restart), a WARNING says so.
 ] }
 ```
 
-(Format examples from the test fixture; the pack's file has no rules yet.)
+(Format examples from the test fixture; the pack's own rules are listed under "Rules now" below.)
 
 | Field | Meaning |
 |---|---|
