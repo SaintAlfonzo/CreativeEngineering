@@ -12,6 +12,7 @@ directly; nothing regenerates this file.
 | Generated cans (cookies, cooked, bread, salad, soup, golden; [can_types.json](../kubejs/generation_scripts/food/can_types.json)) | DEPLOYED with 1.0.6, untested in game (see [food.md](food.md)) |
 | Every remaining `x` row, `/` removals, alt inputs (2026-10-13) | BUILT, not run in game (CP-07 to CP-14): 17 raw fruit, shulker, 12 raw fish, 4 hazard, 2 special, 11 cookies, 10 cooked veggie, 3 cooked meat, 11 pastas, 9 pie fillings, 9 feasts, 2 drinks; 15 `/` cans removed; sliced alt inputs. 6 pie slices skipped (no source). Meal/pie/feast/drink/hazard values are placeholders ([3.1](#new-sections)) |
 | Hunger/saturation columns | postponed until the food values are settled ([food.md](food.md) tuning) |
+| Priorities (scratchpad 2026-10-21) | can textures (48 of 235 built cans have their own sprite, [5.1](#sprites); [TODO](todo/TODO.md) `food/canning #13`) and can crafts (recipes for the rest of the `Want x` rows, then the `?` rows; `food/canning #14`) |
 | Potential cans (2026-10-20 food audit) | 263 rows at Want `?` waiting on a decision: new edible Brewin drinks (Beer, Vodka, Dread Nog), Gingerbread, two tarts, and every family pulled in from [3](#outside): [Hazard](#hazard) (4 built cans listed for the first time), [Egg and dairy](#egg-dairy), [Preserves](#preserves), [Desserts](#desserts), [Cake](#cake), [Sweets](#sweets), [Handheld](#handheld), [Ingredients](#ingredients) |
 
 **How to use it:** decide the `Want` cell first. Then fill the rest of the row as work lands.
@@ -831,6 +832,8 @@ Added 2026-10-20 from the sweet type: jello, custard, pudding, ice cream, gelati
 
 Added 2026-10-20 from the sweet type: cake slices and the one whole edible cake item. All undecided. Canned Goods has its own `canned_goods:canned_cake` (no recipe here, [3.1](#new-sections)); slices could work like the pie fillings.
 
+Wanted (scratchpad 2026-10-21, [TODO](todo/TODO.md) `food/canning #15`): one canned cake with 4 servings (a quarter cake each, fast to eat), made from 1 cake + can, or 4 slices + an additive (sugar, honey) + can. The per-slice rows below stay `/`; which id (Canned Goods' `canned_cake` or a pack can) is still open. The slice audit (remove unobtainable slices) is `food/baked-goods #5`.
+
 | Want | Item | Can | Input (basic / +additive) | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | / | Mangosteen Cake `fruitsdelight:mangosteen_cake` | Canned Mangosteen Cake | - | - | - | - | - | - | - | - | - | - |
@@ -1558,6 +1561,8 @@ into the pack by hand:
 | cooked_cod1, cooked_salmon1, mushroom1 | Canned Goods cans reused for Cooked Cod (`canned_fish`), Cooked Salmon, Mushroom Stew (`canned_mushrooms`) | `kubejs/assets/canned_goods/textures/items/<texture>.png` (overrides the mod's sprite) |
 | chorus_fruit1, tropical_fish1, pufferfish1, posionous_potato1, night_berries1, tough_leather1 | Canned Goods' own cans with no recipe here (Chorus Fruit, Tropical Fish, Pufferfishs, Poisonous Potatos, Night Berries = `canned_spider_eyes`, Tough Jerky = `canned_rotten_flesh`) | same, `kubejs/assets/canned_goods/textures/items/` |
 | cranberries1, raw_cod1, raw_salmon1, raw_beef, raw_mutton, raw_pork | `canned_cranberry`, `canned_raw_cod`, `canned_raw_salmon`, `canned_raw_beef`, `canned_raw_mutton`, `canned_raw_pork` | `kubejs/assets/creativeengineering/textures/item/<id>.png` |
+
+Still to draw (scratchpad 2026-10-21, a priority): a sprite for every built can that borrows one ([TODO](todo/TODO.md) `food/canning #13`).
 
 **Group sprites:** a can without its own borrows its group's: raw veggie -> carrot, raw fruit and special -> apple, raw
 meat -> raw beef, raw fish -> raw salmon (cans.js for the hand-written cans, `GROUP_SPRITE` in gen_can_types.py for the
