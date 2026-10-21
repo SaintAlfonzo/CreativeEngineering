@@ -139,6 +139,10 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 - **F7. Golden apples in machines** cost 5 ingots (mixing) or 3 (arc) against 8 in the grid; the arc furnace is the cheap
   route. Intended progression reward; worth a look with food tuning.
 
+- **F8. Cornmeal fixes (scratchpad 2026-10-21, a priority).** "Cornmeal fixes" heads the priority list, but what is
+  broken isn't written down: run RC-15 to RC-18 to find it. Also wanted: the raw tortilla takes a water bucket or a
+  water bottle (bucket only today, 2.1) ([TODO](todo/TODO.md) `food/ingredients #14`).
+
 ### Known limits
 
 - **Machine routes skip effects:** a meal made by assembly or mixing is the same item, so nothing to keep; listed only

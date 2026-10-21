@@ -217,6 +217,8 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 - **Placeholder nest looks.** The duck and goose nest textures are still copies of the hay nest, and
   the emu nest uses the twig nest, so the bases look alike until those PNGs are repainted. The
   eggs are distinct: emu, duck and goose each have their own sheet.
+- **Nest variety in spawning (planned, scratchpad 2026-10-21).** New textures for the duplicated nests (above), and
+  nests generating in goose, duck and emu habitats. TODO `mobs/nests #3`.
 - **Egg geometry follows the painted layout.** The duck sheet is painted to Incubation's duck-egg
   UVs, so duck nests use the `*_duck_eggs` models; the goose sheet fits the turkey UVs, so geese get
   the larger turkey eggs (same as emus).

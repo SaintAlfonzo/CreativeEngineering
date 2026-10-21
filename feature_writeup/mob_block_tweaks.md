@@ -126,6 +126,9 @@ never). `mixin/LeafPileSlowMixin` swaps the 3 in IW's `LeafPileBlock#entityInsid
 (`surface/StuckInBlock`) uses the same value, so a pile shows a line exactly when it slows. Keep it equal on server and
 clients (movement is predicted client-side).
 
+The scratchpad's "restore Immersive Weathering leaf drop on decay" (scratchpad 2026-10-21, listed twice) is this
+fix; MT-24 checks it (TODO `farming/trees #1`).
+
 ## 3. What the pack changes
 
 - **Bubble columns:** `BubbleColumnImmunityMixin` cancels `BubbleColumnBlock#entityInside` (SRG `m_7892_`) at the head

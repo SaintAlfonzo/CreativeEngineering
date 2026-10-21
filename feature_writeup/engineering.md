@@ -186,6 +186,18 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
   a 75% output.
 - **F8. `cultivated_meat.js` redefines `i.culture_base`** (line 18) although `item_dict.js` already has it. Harmless
   (same value), against the define-once rule. Belongs to backlog row 20.
+- **F9. Component plans (scratchpad 2026-10-21).** In [TODO](todo/TODO.md) `engineering/sawmill-and-components`:
+  - `#8` Remove every existing metal chain recipe and generate them all in KubeJS (an NCH helper) from a 2-D table of
+    material x component type (exists or not); hand-tweaked chains are flagged and built separately.
+  - `#9` Wire / wire coil / coil block alternative recipes by conductivity.
+  - `#10` A cover for IE wire connectors.
+  - `#11` Most electron tubes become a tag in recipes (visual ones like nixie tubes stay); fewer vacuum tubes do, lower
+    tier tech only.
+  - `#12` Redstone mechanism: low tier redstone component variety (rose quartz plate, electron tube tag, 2-3 repeats),
+    more efficient low tier recipes (mechanism -> many repeaters, redstone links, Create redstone), used as the redstone
+    in high tier components.
+  - `#13` Gates: basic gates only, simple vanilla-redstone-like crafts, expensive at scale; Project Red for advanced
+    gates, complex crafts but much cheaper at scale, for complex computing / redstone.
 
 ### Known limits
 

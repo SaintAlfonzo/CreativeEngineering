@@ -2971,6 +2971,14 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 | VQ3 | Praetorian / King Danis: big racks (1 per placed block), or small racks with 2 per placed block as in 1.3.10? | DECIDED 2026-10-18 (10.8): small racks, shrunk to fit; King Danis removed |
 | VQ4 | Time questions | [time.md](time.md) section 4 |
 
+### B7.15 Next asks (scratchpad 2026-10-21)
+
+- **Cellar mechanic:** audit how wine storage actually ages (cellar / sunny, cold / warm, 10.13) and write it up where
+  players see it (guide book, tooltip or JEI). [TODO](todo/TODO.md) `alcohol/vineryport #22`.
+- **JEI tab for grape planting types:** which grapes grow where. `alcohol/vineryport #23`.
+- **Apple cider merge:** merge the apple ciders (Farmer's Delight, Farmer's Respite). Vinery's Apple Cider is a wine and
+  alcoholic (section 11), the other two aren't, so the merge has to pick which one survives. `food/drinks #3`.
+
 ## B8. In-game test suite (drafted, run once built)
 
 - [ ] **VB-01 Juice into cask:** 4 red grape juice in slot 0 -> gauge 100, 4 wine bottles in slot 4
