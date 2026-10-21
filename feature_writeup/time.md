@@ -15,12 +15,12 @@ types, SeasonHUD mixins), [weather_by_biome.md](weather_by_biome.md) (rain per s
 | Master `[time]` section and the push into the other mods (3.1, 3.2) | BUILT 2026-10-18 in patcherMod 1.0.8, DEPLOYED with pack 1.0.8 (2026-10-19 10:20); the push and the sun migration ran in single player 2026-10-19 (`[time]` log lines for every mod and dimension), not tested in game; changes from the design in 3.8 |
 | Seasons that follow the sun (3.3) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested |
 | Pause while the server is empty (3.4) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested |
-| Wine aging lengths and boosts (3.5) | Lengths BUILT and pushed from the master. Boosts beyond the cellar: T5 open, not built |
+| Wine aging lengths and boosts (3.5) | Lengths BUILT and pushed from the master. Boosts beyond the cellar (T5): cold x2.0 / warm x0.75 from Brewin' keg temperature BUILT 2026-10-19 ([alcohol.md](alcohol.md) 10.13, cellar now x2.0; Brewin' `-03` in the local `mods/` since 2026-10-20), not deployed, not tested; deep cellar and storage type not built (TODO `alcohol/pack #2`) |
 | Wine months, sun clock, x2.5 dark, calendar (3.7) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: port side in the Vinery port `-02` ([alcohol.md](alcohol.md) B7), calendar tooltip and "7:30 pm" clock in patcherMod |
 | GUI integration (3.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: `[time]` in Create's Configs screen, SeasonHUD "Day x/24" + time of day, calendar tooltip and action bar, `/cetime` |
 | Offline checks (6) | not built: `tools/time_table.py`, the SUN-counter GameTest |
 | Presets (3.9) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: SINGLEPLAYER (default) / SERVER / CUSTOM |
-| Decisions | DECIDED: T1 (A), T2, T3 (SUN), T4 (on), T6, T7 (rejoin), T8, T9, T10, T12; T11 dropped. Open: T5 |
+| Decisions | DECIDED: T1 (A), T2, T3 (SUN), T4 (on), T6, T7 (rejoin), T8, T9, T10, T12, T5 (2026-10-19: cold / warm, 3.5); T11 dropped |
 
 **Files to open first:** `config/creativeengineering-common.toml` `[time]` (once built), `config/betterdays-common.toml`,
 `<world>/serverconfig/sereneseasons-server.toml`, `<world>/serverconfig/seasonhud-server.toml`,
@@ -210,10 +210,10 @@ effects) stay in their own mods' files.
 | Serene Seasons | `sub_season_duration` | `daysPerSubSeason` | 8 | `ServerConfig.subSeasonDuration.set()` |
 | Serene Seasons | `starting_sub_season` | copied | 1 | set |
 | Serene Seasons | `progress_season_while_offline` | `!pauseWhenEmpty` | false | set |
-| SeasonHUD | `day_length`, `sub_season_length` | same as Serene Seasons | 24000, 10 | `SeasonHudServer` values `.set()` |
+| SeasonHUD | `day_length`, `sub_season_length` | same as Serene Seasons | 24000, 8 | `SeasonHudServer` values `.set()` |
 | Vinery | `clockMode` | from `wine.clock`: SUN -> WORLD_TIME, PLAYTIME -> PLAYTIME | WORLD_TIME | `VineryConfig.CLOCK_MODE.set()` |
 | Vinery | `dayUnit`, `worldDayMinutes` | WORLD, `dayMinutes + nightMinutes` (exact, never measured) | DAYTIME (3.7) | set |
-| Vinery | `daysPerMonth` (was `daysPerYear`), `monthsPerEffectLevel`, `maxLevel`, `cellarAgingMultiplier` | `daysPerSubSeason`, then copied (3.7) | 8, 3, 5, 2.5 | set |
+| Vinery | `daysPerMonth` (was `daysPerYear`), `monthsPerEffectLevel`, `maxLevel`, `cellarAgingMultiplier` | `daysPerSubSeason`, then copied (3.7) | 8, 1 or 3 (preset, 3.9), 5, 2.0 | set |
 
 **Better Days:** its config is WhiteNoise, not Forge, so values can't be set from outside the normal way. A `@Pseudo`
 mixin on the static getters of `betterdays.config.ConfigHandler$Common` (`daySpeed`, `nightSpeed`, `dayStart`,
@@ -298,7 +298,7 @@ position, not on something that changes while the bottle sits there.
 
 | Boost | Rule | Default | Fits the fixed-rate model | Recommendation |
 |---|---|---|---|---|
-| Cellar (built) | no sky light at the storage position | x2.5 (your B7 list; was x1.5) | yes | keep |
+| Cellar (built) | no sky light at the storage position | x2.0 since 10.13 (x2.5 from your B7 list; was x1.5) | yes | keep |
 | Cold cellar | biome base temperature below 0.3 at the position | x1.25 | yes | optional (T5) |
 | Deep cellar | cellar and y below 0 | x1.25 | yes | optional (T5) |
 | Storage type | big wine rack / wine box faster than a placed bottle or shelf | x1.1 | yes | optional (T5) |
@@ -484,7 +484,7 @@ per-side default. Not built.
 | T2 | Sub-season length | 3.3 table | **DECIDED 2026-10-18 (your list): 8 world days**, a season is 24 days = one real day |
 | T3 (DECIDED 2026-10-18: SUN) | Season clock | SUN / TICKS | **SUN**: the HUD day matches the sun, sleeping counts, no speed-above-1 bug |
 | T4 (DECIDED 2026-10-18: on) | Pause when empty | on / off | **on** for the dedicated server: sun, seasons and wine stop together |
-| T5 | Wine boosts beyond the cellar | cold, deep, storage type; season rejected | the user's call. Recommended: keep the cellar only until the base lengths have been played, then add cold cellar |
+| T5 (DECIDED 2026-10-19: cold / warm from Brewin' keg temperature, BUILT, 3.5) | Wine boosts beyond the cellar | cold, deep, storage type; season rejected | the user's call. Recommended: keep the cellar only until the base lengths have been played, then add cold cellar |
 | T6 | Time of day on the HUD | none / after the season / a separate line | **DECIDED 2026-10-18 (your list): after the season, "7:30 pm" style** (3.7) |
 | T7 (DECIDED 2026-10-18: rejoin) | Season length edited mid-session on a server | rejoin needed / send our own sync packet | **rejoin**, said in the config comment. A packet would also have to update SeasonHUD's client-side copy |
 | T8 | What a wine month is (3.7) | A one sub-season; B its own length | **DECIDED 2026-10-18 (your list): A**, tied to the sub-season length |
@@ -553,15 +553,15 @@ TI-27 cover what the build added (3.8).
   exactly 1
 - [ ] **TI-06 Old world migration:** open `Workspace` (192000 / 10) after the change -> same sub-season and day number
   as before; the second start doesn't move it again
-- [ ] **TI-07 New single-player world:** create a world -> 24000 / 10, not Serene Seasons' 24000 / 8
+- [ ] **TI-07 New single-player world:** set `daysPerSubSeason = 10`, create a world -> 24000 / 10, not Serene Seasons' 24000 / 8 (the pack's own 8 matches Serene Seasons' default, so it can't tell the two apart); set it back to 8
 - [ ] **TI-08 HUD totals:** `enable_show_day = SHOW_WITH_TOTAL_DAYS` -> "Day x/24" in temperate biomes; arid / frozen
-  biomes count through the 120-day year (SeasonHudHelperMixin)
+  biomes count through the 96-day year, 12 x 8 (SeasonHudHelperMixin)
 - [ ] **TI-09 Pause when empty:** dedicated server, note `/time query daytime`, `/season`, `/wine time`, everyone leaves
   for 5 min -> all three unchanged on rejoin
 - [ ] ~~**TI-10 Wine lengths unchanged**~~ retired 2026-10-18: lengths change on purpose (3.7), no conversions
 - [ ] **TI-11 Wine in world days:** `/wine clock add 1 days` -> the tooltip age goes up by one day; the JEI Wine Aging
   page shows 8 h per month
-- [ ] **TI-12 Cellar boost:** wine in a rack with no sky light -> WTHIT and tooltip show x2.5, `/wine info` shows the
+- [ ] **TI-12 Cellar boost:** wine in a rack with no sky light -> WTHIT and tooltip show x2.0 (x2.5 until 2026-10-19, 3.5), `/wine info` shows the
   shorter time to the next level
 - [ ] **TI-13 Master off:** `[time] enabled = false`, restart -> Better Days uses its own toml again (check with TI-02),
   Serene Seasons files are left as last written
@@ -572,7 +572,7 @@ TI-27 cover what the build added (3.8).
 - [ ] **TI-17 Sleep ages wine (3.7):** `/wine info` on a wine, sleep through a night -> the age goes up by the same fraction of a day as the SeasonHUD day count
 - [ ] **TI-18 Month = sub-season (3.7):** `/wine clock add 8 days` -> the wine is 1 month older and the calendar is one sub-season on; the JEI Wine Aging page shows 8 h per month
 - [ ] **TI-19 Level every 3 months (3.7):** a fresh wine, `/wine clock add 24 days` -> level 1; the tooltip says months, not years
-- [ ] **TI-20 Dark x2.5 (3.7):** two fresh wines, one in a rack with no sky light, one under sky; after the same time the dark one is 2.5 times older; WTHIT shows x2.5
+- [ ] **TI-20 Dark x2.0 (3.7, x2.5 until 2026-10-19):** two fresh wines, one in a rack with no sky light, one under sky; after the same time the dark one is 2.0 times older; WTHIT shows x2.0
 - [ ] ~~**TI-21 Switch keeps ages**~~ retired 2026-10-18: no conversions
 - [ ] **TI-22 Calendar (3.7):** no Vinery calendar in JEI or `/give`; hover and hold the Serene Seasons calendar -> season, day x of 8, year and time of day, matching SeasonHUD and `/cetime`; next sub-season line counts down
 - [ ] **TI-23 Clock format (3.7):** `/time set 22300` -> 6:00 am; `/time set 13000` -> 8:42 pm; `/time set 11800` -> 7:30 pm; the same on SeasonHUD, the calendar and `/cetime`

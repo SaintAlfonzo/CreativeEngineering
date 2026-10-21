@@ -41,3 +41,4 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 | gear | [archery](gear_archery.md), [camera-bags](gear_camera-bags.md), [echo](gear_echo.md), [effects](gear_effects.md), [enchanting](gear_enchanting.md), [potion-buckets](gear_potion-buckets.md), [potions](gear_potions.md), [shields](gear_shields.md), [tuning](gear_tuning.md) |
 | recipes | [cooking](recipes_cooking.md), [engineering](recipes_engineering.md), [magic](recipes_magic.md), [materials](recipes_materials.md), [metal](recipes_metal.md), [progression](recipes_progression.md), [wood](recipes_wood.md) |
 | engineering | [dreams-and-desires](engineering_dreams-and-desires.md), [sawmill-and-components](engineering_sawmill-and-components.md) |
+| gameplay | [blockrunner](gameplay_blockrunner.md), [item-physics](gameplay_item-physics.md), [time](gameplay_time.md) |

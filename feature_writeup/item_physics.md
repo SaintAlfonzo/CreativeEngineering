@@ -4,13 +4,13 @@
 
 | Part | Status |
 |---|---|
-| Fire/lava split on top of ItemPhysic: per item, survive fire, survive lava, both, or neither (`ItemPhysicSplit` + `ItemPhysicServerMixin`) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); a recurring crash in it is unfixed (F1) |
+| Fire/lava split on top of ItemPhysic: per item, survive fire, survive lava, both, or neither (`ItemPhysicSplit` + `ItemPhysicServerMixin`) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); its recurring `$1` crash (F1) was fixed in 1.0.9 |
 | Float/sink control in water, additive to ItemPhysic's own list | DEPLOYED |
 | Four item tags `#creativeengineering:physics/{floats,sinks,fireproof,lavaproof}`, filled in KubeJS (reloadable) with a small jar baseline | DEPLOYED |
 | Burn transforms: glass → dirty glass, wood → 25% ash, TNT / TNT minecart / gunpowder explode (TNT with shrapnel) | DEPLOYED |
 
-- **Pending:** nothing built and unshipped. IP-01 to IP-14 have never been run. Findings F1 to F6 (section 4); F1 is
-  a live crash bug; none needs a decision except F4.
+- **Pending:** nothing built and unshipped. IP-01 to IP-14 have never been run. Findings F1 to F6 (section 4); F1 (a crash)
+  was fixed in 1.0.9, IP-13 checks it; none needs a decision except F4.
 - **Files to open:** [item_physics_tags.js](../kubejs/server_scripts/tags/item_physics_tags.js) (what floats and
   burns), [func/item_physics.js](../kubejs/startup_scripts/func/item_physics.js) (burn transforms),
   [itemphysic/ItemPhysicSplit.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/ItemPhysicSplit.java),
@@ -99,14 +99,14 @@ When fire or lava destroys a dropped item (ItemPhysic's item health reaches 0 fr
   re-applied each launch. Today all float/burn choices live in tags; only the burn transforms use the API.
 - **Tag helper:** `physicsFromTag(e, behaviour, sourceTags, { except })` adds a nested tag reference (live) or, with
   `except`, the expanded members.
-- **Force-load:** `ItemPhysicSplit` is force-loaded at startup (`CreativeEngineering.java` line 254) against the
+- **Force-load:** `ItemPhysicSplit` is force-loaded at startup (`CreativeEngineering.java` line 273) against the
   late-class-load crashes this area has had.
 
 ## 4. Limits and decisions
 
 ### Findings (2026-10-18)
 
-- **F1.** FIXED 2026-10-19 in patcherMod 1.0.9 (DEPLOYED with pack 1.0.9): if-chain, no `ItemPhysicSplit$1` in the jar ([plan_1.0.9.md](plan_1.0.9.md)). **The `ItemPhysicSplit$1` crash is still in the code.** `burnDecision` switches on the `Burn` enum (line 128), so
+- **F1.** FIXED 2026-10-19 in patcherMod 1.0.9 (DEPLOYED with pack 1.0.9): if-chain, no `ItemPhysicSplit$1` in the jar ([plan_1.0.9.md](plan_1.0.9.md)). Was (before the fix): `burnDecision` switched on the `Burn` enum, so
   javac makes a synthetic `ItemPhysicSplit$1` class that is loaded lazily and isn't covered by the force-load; it
   crashed the server twice in September (`NoClassDefFoundError`). Fix: an if/else chain instead of the switch, or
   force-load `$1` too. Was in the old TODO.md section 3; recurrence since not checked.
