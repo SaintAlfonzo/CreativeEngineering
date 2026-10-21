@@ -39,3 +39,4 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 | mobs | [bees](mobs_bees.md), [mooblooms](mobs_mooblooms.md), [nests](mobs_nests.md), [pillagers](mobs_pillagers.md), [spawns](mobs_spawns.md), [tweaks](mobs_tweaks.md) |
 | loot | [lootjs-layer](loot_lootjs-layer.md), [lootr](loot_lootr.md), [tables](loot_tables.md), [trader](loot_trader.md) |
 | gear | [archery](gear_archery.md), [camera-bags](gear_camera-bags.md), [echo](gear_echo.md), [effects](gear_effects.md), [enchanting](gear_enchanting.md), [potion-buckets](gear_potion-buckets.md), [potions](gear_potions.md), [shields](gear_shields.md), [tuning](gear_tuning.md) |
+| engineering | [dreams-and-desires](engineering_dreams-and-desires.md) |
