@@ -196,8 +196,8 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   components; compressor on copper components; extruder on netherite components; laser cutter on a lens, precision
   mechanism, diamond and brass components, with a new laser assembly (sequenced assembly / blueprint); rotation speed
   controller on brass components (double output for the brass craft, plus an expensive brassless recipe with complex
-  components); sequenced gearshift on zinc and brass components, double output. Check the vibration table recipe. The
-  note "laser cut metal blocks to ..." was left unfinished. In [TODO](todo/TODO.md) `recipes/engineering #6`.
+  components); sequenced gearshift on zinc and brass components, double output. Check the vibration table recipe. Laser
+  cutting metal blocks into plates (user 2026-10-21). In [TODO](todo/TODO.md) `recipes/engineering #6`.
 
 ### Known limits
 
