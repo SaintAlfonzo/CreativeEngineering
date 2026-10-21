@@ -30,6 +30,9 @@ import umpaz.brewinandchewin.common.registry.BnCMenuTypes;
 import umpaz.brewinandchewin.common.utility.KegRecipeWrapper;
 
 public class KegMenu extends RecipeBookMenu<KegRecipeWrapper> {
+   /** Keg slots before the player inventory (0-7); the leftover slot comes after it, at REMAINDER_MENU_SLOT. */
+   public static final int KEG_MENU_SLOTS = 8;
+   public static final int REMAINDER_MENU_SLOT = KEG_MENU_SLOTS + 36;
    public static final ResourceLocation EMPTY_CONTAINER_SLOT_TANKARD = BrewinAndChewin.asResource("item/empty_container_slot_tankard");
    public final KegBlockEntity blockEntity;
    public final AbstractedItemHandler inventory;
@@ -84,6 +87,10 @@ public class KegMenu extends RecipeBookMenu<KegRecipeWrapper> {
          this.addSlot(new Slot(playerInventory, column, startX + column * borderSlotSize, 142));
       }
 
+      // Port (remainder_buffer.md 3.6): ingredient leftovers, take-only, right of the output. Added last so the slot
+      // numbers above (and KegTransfer's player-inventory range) stay as they were.
+      this.addSlot(BrewinAndChewin.getHelper().createKegResultSlot(this.inventory, KegBlockEntity.REMAINDER_SLOT, 150, 55));
+
       this.addDataSlots(kegDataIn);
    }
 
@@ -108,14 +115,14 @@ public class KegMenu extends RecipeBookMenu<KegRecipeWrapper> {
       int indexContainerInput = KegBlockEntity.CONTAINER_SLOT;
       int indexOutput = KegBlockEntity.OUTPUT_SLOT;
       int indexFluidInput = KegBlockEntity.FLUID_IN_SLOT;
-      int startPlayerInv = KegBlockEntity.INVENTORY_SIZE;
+      int startPlayerInv = KEG_MENU_SLOTS;
       int endPlayerInv = startPlayerInv + 36;
       Slot slot = this.slots.get(index);
       ItemStack slotStackCopy = ItemStack.EMPTY;
       if (slot.hasItem()) {
          ItemStack slotStack = slot.getItem();
          slotStackCopy = slotStack.copy();
-         if (index == indexOutput || index == KegBlockEntity.FLUID_OUT_SLOT) {
+         if (index == indexOutput || index == KegBlockEntity.FLUID_OUT_SLOT || index == REMAINDER_MENU_SLOT) {
             if (!this.moveItemStackTo(slotStack, startPlayerInv, endPlayerInv, true)) {
                return ItemStack.EMPTY;
             }

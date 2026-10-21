@@ -4,9 +4,10 @@ When a Farmer's Delight style station finishes a recipe, it throws each ingredie
 bottle, bowl, bucket) out of the block as an item. With this feature the leftovers stay in the station: in its
 container slot when the waiting meal is served in them, otherwise in two leftover slots right of the output.
 Java in patcherMod (mixins for the FD cooking pot and the Farmer's Respite kettle, native code in the oven); the
-keg waits for the `backportedBrewin` port. Test prefix `RB-`.
+keg's is native code in the `backportedBrewin` port (3.6). Test prefix `RB-` (the keg's: AL-79 to AL-81, AL-84 in
+[alcohol.md](alcohol.md)).
 
-From [cooking.md](cooking.md): kitchen > stove "bottle/bucket output slot for ingredient inputs in upgraded
+From cooking.md (the cooking plans, folded into [todo/TODO.md](todo/TODO.md) and removed 2026-10-19): kitchen > stove "bottle/bucket output slot for ingredient inputs in upgraded
 cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer system?".
 
 ## 0. At a glance
@@ -15,8 +16,8 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 |---|---|
 | Feasibility study (1, 2) | DONE 2026-10-18, from the decompiled jars the pack uses |
 | Design (3) | DECIDED 2026-10-18: D1-D5 as recommended (5) |
-| Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: patcherMod compiles and builds (reobf checked); 10 GameTests pass (6). DEPLOYED with 1.0.7; one leftover per item used (for the oven's ingredient counts) STAGED for 1.0.8; not run in game (RB-01 to RB-11) |
-| Keg | WAITING on the `backportedBrewin` port (D5), see 3.6 |
+| Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: patcherMod compiles and builds (reobf checked); 10 GameTests pass (6). DEPLOYED with 1.0.7; one leftover per item used (for the oven's ingredient counts) DEPLOYED with 1.0.8 (2026-10-19); not run in game (RB-01 to RB-11) |
+| Keg | BUILT 2026-10-19 in the port's `-03` (`build/libs/`, not installed), see 3.6; not tested |
 | WTHIT line "Holding: ..." | not built (optional, 3.3) |
 
 Files to open first:
@@ -80,7 +81,7 @@ in muffins and tarts).
 `KegBlockEntity.processFermenting` (1.19-2.0): when slot 8 already holds the fluid item's leftover, it grows it by
 `resultStack.getCount()`, not by 1. `pickled_pickles` (honey bottle fluid item, result count 2) gives back 2 glass
 bottles per honey bottle after the first brew. Only that recipe is affected (the other count-2/3 keg recipes have
-no fluid item). It goes away when the 4.5.0 port replaces the keg; until then a one-line `@ModifyArg` would fix it.
+no fluid item). It goes away when the 4.5.0 port replaces the keg; until then a one-line `@ModifyArg` would fix it. Checked 2026-10-19: the port (`-02`) gives one remainder per ingredient and one container per poured item, so the bug is gone.
 
 ## 2. What the stations look like in the original mods
 
@@ -170,12 +171,22 @@ The menu and screen mixins extend the vanilla menu/screen class to call `addSlot
 `leftPos`/`topPos`; the reobfuscated jar was checked to carry the SRG names (`m_38897_`, `m_38903_`, `f_38839_`,
 `f_97735_`, `f_97736_`).
 
-### 3.6 Keg (not built)
+### 3.6 Keg (BUILT 2026-10-19 in the port, not tested in game)
 
-D5: do it in `development/backportedBrewin` once the port compiles, not as a mixin on the 2.0 jar. The port's
-`KegBlockEntity.ejectIngredientRemainder` (line ~757) is the hook. The port is its own mod, so it needs its own copy
-of the buffer + routing (or a soft dependency on patcherMod's `cooking` package). The 2.0 bottle dupe (1.3) stays
-until then.
+Native code in `development/backportedBrewin` (D5), its own copy of the routing rather than a dependency on
+patcherMod; full description in [alcohol.md](alcohol.md) 10.16. Differences from the pot:
+
+- **Slots:** one new take-only slot (8) right of the output, plus the keg's existing empty-container slot (7, under
+  the fluid slot), which already holds the same kind of item. There is no room for a second new slot: the right
+  bubbles fill the space above the output. Fill order: a matching stack, then an empty slot, 8 before 7.
+- **No recycle step:** the keg's container slot is for pouring drinks out of a tank, not for plating one waiting
+  meal, so leftovers never go there.
+- **Settings:** the port's own `brewinandchewin-common.toml [keg] remainderBuffer` / `stallWhenFull` (defaults
+  true), not patcherMod's `[cooking]`, so the port doesn't depend on patcherMod.
+- **Automation and breaking:** the sides and bottom extract slot 8 with the output and slot 7; it is part of the
+  keg inventory, so it drops on break and saves with it.
+
+The 2.0 bottle dupe (1.3) went with the 2.0 jar.
 
 ## 4. Risks
 
@@ -255,6 +266,7 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 - 2026-10-18: built as decided (D1-D5 as recommended). `cooking/` package, six mixins (pot and kettle: block entity,
   menu, screen), native oven buffer, `[cooking]` config, GameTest harness; container-slot recycle capped at what
   the waiting meals need after the first test run. patcherMod compiles and builds; 10 GameTests pass.
+- 2026-10-19: keg built in the Brewin' port `-03` (3.6); compiles, no GameTest (in-game tests in alcohol.md).
 # Remainder buffer: keep bottles, bowls and buckets in FD-style cooking stations
 
 When a Farmer's Delight style station finishes a recipe, it throws each ingredient's leftover container (glass
@@ -262,8 +274,9 @@ bottle, bowl, bucket) out of the block as an item. This writeup looks at whether
 buffer slot on the station instead. Java in patcherMod (and in our own `oven/` and `backportedBrewin` source).
 Test prefix `RB-`.
 
-From [cooking.md](cooking.md): kitchen > stove "bottle/bucket output slot for ingredient inputs in upgraded
+From cooking.md (the cooking plans, folded into [todo/TODO.md](todo/TODO.md) and removed 2026-10-19): kitchen > stove "bottle/bucket output slot for ingredient inputs in upgraded
 cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer system?".
+- 2026-10-19: one leftover per item used DEPLOYED with pack 1.0.8 (10:20). RB-01 to RB-11 pending.
 
 ## 0. At a glance
 

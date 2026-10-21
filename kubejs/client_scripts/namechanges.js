@@ -212,6 +212,10 @@ ClientEvents.lang('en_us', e => {
   e.add('fluid_type.create_confectionery.caramel', 'Molten Caramel')
   e.add('fluid_type.create_things_and_misc.diluted_bonemeal', 'Diluted Bonemeal')
   e.add('fluid_type.create_things_and_misc.slime', 'Liquid Slime')
+
+  // Vinery's wood is "Cherry", not "Dark Cherry" (alcohol.md 10.10; the port renames its own names)
+  e.renameItem(global.item.short_vinery_cherry_door, 'Short Cherry Door')
+  e.renameItem(global.item.tall_vinery_cherry_door, 'Tall Cherry Door')
 })
 
 console.log('Rename Finished')

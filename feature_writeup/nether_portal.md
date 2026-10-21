@@ -90,8 +90,8 @@ the frame, lava lighting the frame interior.
   next block update next to it, then vanishes. The comment says soul fire "is the same flame crying obsidian produces
   when lit", which isn't true in vanilla. Harmless; it reads as a puff.
 - **F5. Diagnostic log on every portal attempt** (`[PortalFailureHandler] PortalSpawnEvent fired, state=...`), kept
-  "until confirmed working". Remove after NP-01 to NP-05 pass. Already in [TODO.md](todo/TODO.md) 4.
-- **F6. Stale comment in `DarkFireBlock#onPlace`:** it still says "Dark Fire's isAir() override means PortalShape's
+  "until confirmed working". Remove after NP-01 to NP-05 pass. In [TODO](todo/TODO.md) `gameplay/tnt-and-portal #4`.
+- **F6.** FIXED 2026-10-19 (comment names the fire tag). **Stale comment in `DarkFireBlock#onPlace`:** it still says "Dark Fire's isAir() override means PortalShape's
   interior check already accepts it"; the override is gone (the class comment above it explains the fire tag).
 
 ### Known limits
@@ -148,3 +148,4 @@ Survival, Overworld, a fresh obsidian frame (4 × 5, corners optional) each time
 - By 2026-09-27 (initial git commit): portal failure handler, Dark Fire (isAir version replaced by the fire tag),
   Flint and Terrasteel (temporary placer); shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F6; tests NP-01 to NP-12. No code changed.
+- 2026-10-19: F6 fixed (DarkFireBlock comment; source only, ships with the next patcherMod build).

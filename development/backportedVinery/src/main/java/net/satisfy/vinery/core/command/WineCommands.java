@@ -277,10 +277,10 @@ public final class WineCommands {
             source.sendFailure(Component.translatable("command.vinery.wine.storage.no_block"));
             return 0;
         }
-        int rate = WineYears.storageRate(source.getLevel(), pos);
-        MutableComponent message = rate > 100
-                ? line("command.vinery.wine.storage.cellar", "Cellar: wine here ages at %s%%", rate).withStyle(ChatFormatting.GREEN)
-                : line("command.vinery.wine.storage.normal", "Sky light reaches this spot, wine ages at %s%%", rate);
+        int kind = WineYears.storageKind(source.getLevel(), pos);
+        int rate = WineYears.storageRate(source.getLevel(), kind);
+        MutableComponent message = Component.translatable("command.vinery_backport.wine.storage", WineYears.storageLabel(kind), rate)
+                .withStyle(rate > 100 ? ChatFormatting.GREEN : rate < 100 ? ChatFormatting.GOLD : ChatFormatting.WHITE);
         source.sendSuccess(message, false);
         return rate;
     }

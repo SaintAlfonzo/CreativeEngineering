@@ -162,7 +162,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
 
 - **F1. The sawmill recipes are on a manual pipeline.** `node sawmill.js` → hand copy into patcherMod → jar rebuild,
   211 copies. The file's TODO plans an NCH helper adding them as raw JSON from `ServerEvents.highPriorityData`.
-  Already in [TODO.md](todo/TODO.md) 4 and 6.
+  In [TODO](todo/TODO.md) `engineering/sawmill-and-components #2`.
 - **F2. JEI probably can't tell which blade a sawmill recipe needs. Your call.** The `"blade"` field is the pack's; IE's
   JEI page shows input and output only, so oak planks shows a dozen outputs with no hint which blade makes which.
   Check in game (EN-04); a tooltip line or a JEI info page would fix it.
@@ -176,7 +176,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
   plates onto a copper ingot", "2 plates + 1 copper ingot").
 - **F5. Component tier names are decided in the item names but not in the code comments.** `components.js` lines 18 and
   22 still say `--- Light? ---` / `--- Dense? ---`; the items are already "Aluminum Light Component" and "Uranium Heavy
-  Component". [TODO.md](todo/TODO.md) 4 lists this as undecided; it can be closed by deleting the comments, or the
+  Component". [TODO](todo/TODO.md) `engineering/sawmill-and-components #6` lists this as undecided; it can be closed by deleting the comments, or the
   names changed.
 - **F6. Disassembly comments promise a tool the recipes don't take.** The component, wire-coil and coil-block
   disassembly comments say a screwdriver or wire cutters is spent per craft; only the HV coil block's recipe lists the

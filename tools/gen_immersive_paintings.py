@@ -19,6 +19,7 @@ player changes the filter. Pixel art stays sharp. Larger ones keep their own res
 Output: kubejs/data/creativeengineering/paintings/<ns>/<id>.png + .json. The folder is generated only
 and is rebuilt from scratch on every run. In game a painting's id is
 creativeengineering:paintings/<ns>/<id>.png, so the screen's search box matches mod ids and names.
+Writeup and tests: feature_writeup/immersive_paintings.md.
 
     python3 tools/gen_immersive_paintings.py
 """

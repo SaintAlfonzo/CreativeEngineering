@@ -17,11 +17,9 @@ R.shaped(rod_zinc …) at line 558 is the only one. immersiveengineering:craftin
 3. Dust → ingot recycle — zinc only
 Lines 458/471/476 do dust_zinc → ingot_zinc (smelt/blast/arc). The other 8 fall back to immersiveengineering:arcfurnace/dust_{copper,iron,gold,aluminum,lead,silver,nickel,uranium} (all 8 exist, unremoved) + IE's smelting/ingot_*_from_dust for aluminum/lead/nickel/silver.
 
-4. hammercrushing_zinc / raw_hammercrushing_zinc — not removed
-Every other metal's immersiveengineering:crafting/(raw_)hammercrushing_<m> is removed (lines 162‑221). Zinc's two slipped through, so zinc can still be hand-crushed while nothing else can.
+4. hammercrushing_zinc / raw_hammercrushing_zinc — removed with the other metals' (2026-10-19).
 
-5. Plate-block ↔ plate: copper missing one direction
-Line 515 only does plate_block_copper → 9 plate_copper. The reverse (9 plate_copper → plate_block_copper) that every other metal has (e.g. line 518 for iron) is missing — create_compressed:copper_sheet_block recipes currently cover it.
+5. Plate-block ↔ plate: copper's 9 plate_copper → plate_block_copper added (2026-10-19).
 
 Minor / probably intentional
 Raw block → storage block smelt/blast: zinc only (with the quark flag). aluminum/lead/silver/nickel/uranium raw blocks have no "smelt to block" path.
@@ -31,7 +29,6 @@ Want me to fill these in? I'd need your call on: plate — keep IE press for the
 */
 
 console.log('Hello! The metal base event has started!')
-console.log('EVENT:', e)
 
 const R = global.NCH
 var i = global.item;
@@ -212,6 +209,8 @@ R.bulk('remove', [
 	[{id: 'create_things_and_misc:zinc_knif_craft'}, e],
 	[{id: 'createaddition:pressing/zinc_ingot'}, e],
 	[{id: 'minecraft:pressing/zinc_sheet'}, e],
+	[{ id: 'immersiveengineering:crafting/hammercrushing_zinc' }, e],
+	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_zinc' }, e],
 	
 	[{ id: 'immersiveengineering:crafting/hammercrushing_aluminum' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_aluminum' }, e],
@@ -578,6 +577,7 @@ R.bulk('shapeless', [
 // ---------- Plate shapeless crafting ----------
 R.bulk('shapeless', [
 	[Item.of(i.plate_copper, 9), i.plate_block_copper, e],
+	[i.plate_block_copper, Item.of(i.plate_copper, 9), e],
 	
 	[Item.of(i.plate_iron, 9), i.plate_block_iron, e],
 	[i.plate_block_iron, Item.of(i.plate_iron, 9), e],

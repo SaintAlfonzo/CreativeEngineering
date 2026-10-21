@@ -39,7 +39,7 @@
 //    identical to piece() (client_scripts/armor_effects_tooltip.js just also loops
 //    MOUNTS), since the tooltip doesn't care who ends up wearing the item.
 //
-//  effects: array of up to 6 entries —
+//  effects: array of up to 7 entries (MAX_EFFECTS) —
 //    { effect: 'namespace:id', amplifier?: 0, name?: 'Display Name', color?: 'a' }
 //    - effect:    a MobEffect id (vanilla or modded). Resolved LAZILY on first actual
 //                 use (tooltip render / tick), never at registration time — KubeJS
@@ -61,7 +61,7 @@
 //                 HARMFUL ones (MobEffect#getCategory()).
 //
 //  Applied every tick while worn as a short, continuously-refreshed effect — the
-//  same "(infinite)" idiom CDD's own echo-armor bonus uses. Max 6 effects per
+//  same "(infinite)" idiom CDD's own echo-armor bonus uses. Max 7 effects per
 //  piece()/set() call (extras are dropped with a console warning).
 //
 //  Tooltip lines are pre-formatted raw strings ("§7- §aNight Vision §7(infinite)",
@@ -206,11 +206,6 @@ global.armorEffects.set(
 
 global.armorEffects.set(
 	[i.copper_helmet, i.copper_chestplate, i.copper_leggings, i.copper_boots],
-	[{ effect: 'immersiveengineering:conductive' }]
-)
-
-global.armorEffects.set(
-	[i.iron_helmet, i.iron_chestplate, i.iron_leggings, i.iron_boots],
 	[{ effect: 'immersiveengineering:conductive' }]
 )
 

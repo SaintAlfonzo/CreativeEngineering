@@ -152,5 +152,14 @@
   "tag.mob_effect.brewinandchewin.low_priority.milk_bottle": "Low Priority for Milk Bottle",
   "tag.mob_effect.brewinandchewin.low_priority.hot_cocoa": "Low Priority for Hot Cocoa",
   "tag.damage_type.brewinandchewin.triggers_raging": "Triggers Raging",
-  "brewinandchewin.tooltip.keg.pipe_drain_idle": "Pipes can only drain it while it isn't fermenting"
+  "brewinandchewin.tooltip.keg.pipe_drain_idle": "Pipes can only drain it while it isn't fermenting",
+  "brewinandchewin.tooltip.keg.temperature": "Sensitive to hot and cold blocks in the environment",
+  "brewinandchewin.tooltip.heat_source": "Heats the surrounding environment",
+  "brewinandchewin.tooltip.freeze_source": "Cools the surrounding environment",
+  "brewinandchewin.tooltip.climate_source.use": "Useful for keg brewing and wine casking",
+  "brewinandchewin.wthit.keg.temperature": "Temperature",
+  "brewinandchewin.wthit.keg.fermenting": "Fermenting",
+  "brewinandchewin.wthit.keg.progress": "%s %s%%",
+  "config.waila.plugin_brewinandchewin": "Brewin' And Chewin'",
+  "config.waila.plugin_brewinandchewin.keg": "Keg Fermentation"
 }

@@ -99,8 +99,19 @@ def removed_pieces(all_pieces):
     return out
 
 
-def main():
-    out_json = sys.argv[sys.argv.index('--json') + 1] if '--json' in sys.argv else None
+def load_swaps():
+    """nether_block_swaps.json as {template: {(x, y, z): (from, to Name)}} (gen_nether_swaps.py output)."""
+    path = T.WORLDGEN / 'nether_block_swaps.json'
+    if not path.exists():
+        return {}
+    return {t: {tuple(e['pos']): (e['from'], e['to']['Name']) for e in es}
+            for t, es in GSG.read_json(path)['templates'].items()}
+
+
+def scan(swaps=None):
+    """Rows for every Overworld structure holding Nether blocks. With swaps (load_swaps()), counts what the templates
+    hold after patcherMod TemplateBlockSwaps: swapped-out blocks drop, and a Nether block a swap puts in is counted
+    and also listed under 'swapped_in'."""
     pack = GSG.Pack()
     dims = GSG.read_json(GSG.BIOME_CONFIG)['dimensions']
     overworld = set(dims['minecraft:overworld']['biomes'])
@@ -119,7 +130,7 @@ def main():
     gone = removed_pieces({k for p in live.values() for k in p.get('elements', {})})
     pad, plants, _ = T.load_tags()
     cache = T.TemplateCache(templates, pad, plants, False)
-    memo = {}
+    memo, swapped_in = {}, defaultdict(Counter)
 
     def nether_in(tid):
         if tid not in memo:
@@ -127,20 +138,25 @@ def main():
             if tid in templates:
                 _, read, name = templates[tid]
                 d = S.read_template(read(name))
+                at = (swaps or {}).get(tid, {})
                 if d:
                     pal = d.get('palette') or (d.get('palettes') or [[]])[0]
                     names = [p.get('Name', 'minecraft:air') for p in pal]
                     for b in d.get('blocks', []):
                         s = b.get('state', 0)
-                        if s < len(names) and classify(names[s]):
-                            c[names[s]] += 1
+                        if s >= len(names):
+                            continue
+                        block, sw = names[s], at.get(tuple(b.get('pos', ())))
+                        if sw and sw[0] == block:
+                            block = sw[1]
+                            if classify(block):
+                                swapped_in[tid][block] += 1
+                        if classify(block):
+                            c[block] += 1
             memo[tid] = c
         return memo[tid]
 
-    rows = []
-    for sid in sorted(pack.pool_all):
-        if sid in pack.meta or not (pack.pool_all[sid] & overworld):
-            continue
+    def reach_of(sid):
         d = structs.get(sid)
         approx = False
         if d and d.get('start_pool'):
@@ -159,13 +175,27 @@ def main():
                 reach = {t: 'rigid' for t in templates if t.startswith(ns + ':')
                          and not any(x in t.split(':', 1)[1] for x in siblings)}
                 approx = bool(reach)
-        reach = {t: p for t, p in reach.items() if t not in gone}
-        blocks, where = Counter(), defaultdict(Counter)
+        return {t: p for t, p in reach.items() if t not in gone}, approx
+
+    reaches = {sid: reach_of(sid) for sid in sorted(pack.pool_all) if sid not in pack.meta}
+    # with swaps: templates a Nether/End-only structure also reaches are never swapped (gen_nether_swaps safety); the
+    # pool walk ignores jigsaw names, so most are that structure's own pieces (the Nether ship's keel) -> 'shared'
+    other_dim = {t for sid, (reach, _) in reaches.items() if not (pack.pool_all[sid] & overworld) for t in reach} \
+        if swaps is not None else set()
+    rows = []
+    for sid, (reach, approx) in reaches.items():
+        if not (pack.pool_all[sid] & overworld):
+            continue
+        blocks, where, added, shared = Counter(), defaultdict(Counter), Counter(), Counter()
         for t in reach:
+            if t in other_dim:
+                shared.update(nether_in(t))
+                continue
             for block, n in nether_in(t).items():
                 blocks[block] += n
                 where[t][block] += n
-        if not blocks:
+            added.update(swapped_in.get(t, {}))
+        if not blocks and not shared:
             continue
         tiers = Counter()
         for block, n in blocks.items():
@@ -173,9 +203,16 @@ def main():
         rows.append({'id': sid, 'group': group_of.get(sid, '-'), 'off': sid in off, 'blocked': sid in pack.blocked,
                      'approx': approx, 'templates': len(reach), 'tiers': dict(tiers),
                      'blocks': blocks.most_common(), 'where': {t: c.most_common() for t, c in where.items()},
+                     'swapped_in': added.most_common(), 'shared': shared.most_common(),
                      'also_nether': bool(pack.pool_all[sid] & nether)})
     cache.save()
     rows.sort(key=lambda r: (-r['tiers'].get(1, 0), -r['tiers'].get(2, 0), -r['tiers'].get(3, 0), r['id']))
+    return rows
+
+
+def main():
+    out_json = sys.argv[sys.argv.index('--json') + 1] if '--json' in sys.argv else None
+    rows = scan()
     if out_json:
         Path(out_json).write_text(json.dumps(rows, indent=1))
     write(rows)

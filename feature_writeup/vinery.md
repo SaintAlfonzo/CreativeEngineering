@@ -257,12 +257,13 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 ## 4. Limits and decisions
 
 - **JEI shows the wrong barrel time.** `VineryIds.FERMENTATION_TICKS = 1800` (hover "90 seconds") copies Vinery's dead constant. The real time is about 50 ticks (§2.3). Open; fix the constant and VJ-04 together.
-- **Hopper jams are Vinery's, not fixed.** The press output slot and every barrel slot take hopper input.
-  - Possible fix: a patcherMod mixin limiting `canPlaceItemThroughFace` / `canPlaceItem` to sensible slots.
-  - Not done; decide after VN-05 / VN-08 confirm it in game.
-- **Breaking a planted stem loses the seed.** Vinery behaviour, left as is. Worth a tooltip line.
+- **Hopper jams were Vinery 1.3.10's.** The press output slot and every barrel slot took hopper input.
+  - Gone with the 1.5.5 port: every slot takes only what a recipe uses there and outputs are take-only (B7.2).
+  - The jams the port still had (cask ingredient overflow and mixed recipes, other-type juice, mismatched press
+    inputs) are fixed in the port's face rules since 2026-10-20 ([alcohol.md](alcohol.md) 10.19, VB-93, VB-94).
+- **Breaking a planted stem loses the seed.** Vinery behaviour, left as is. The stem and lattice tooltips say so since 2026-10-19 ([alcohol.md](alcohol.md) 10.15).
 - **Seed tooltips removed rather than corrected.** The bush requirements now live here. A short pack line on the seeds can come later if wanted.
-- **Placeholder tooltips** are left `TODO` for you to write. Bushes have no item of their own, so any bush text has to go on the seed items.
+- **Placeholder tooltips** were written for the 1.5.5 port on 2026-10-19 ([alcohol.md](alcohol.md) 10.15). Bushes have no item of their own, so any bush text has to go on the seed items.
 - **This file is a code reading of 1.3.10.** Numbers come from the decompiled jar, not from play. Re-check after a Vinery update (rerun §6).
 
 ## 5. File map
@@ -297,10 +298,10 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - [ ] **VN-02 Pot type lock:** 1 white grape, then 5 red → the juice is white.
 - [ ] **VN-03 Mob stomp:** fill a pot, push a mob onto it from 1 block up 3 times → the pot reaches the bottling stage.
 - [ ] **VN-04 Press timing:** 10 apples in the Apple Press → 10 Apple Mash after about 36 s (3.6 s each).
-- [ ] **VN-05 Press hopper jam:** empty press, hopper above it holding 1 cobblestone and then apples → cobblestone goes into the input. Check whether anything ends up in the output slot. Record what happens.
+- [ ] ~~**VN-05 Press hopper jam**~~ retired 2026-10-20: 1.3.10 behaviour; the port refuses junk, see VB-93.
 - [ ] **VN-06 Barrel time:** fill an Aging Barrel with a valid recipe → the wine appears in about 2.5 s, not 90 s.
 - [ ] **VN-07 Barrel output stacks:** 8 wine bottles and 8 of each ingredient, leave the wine in the output → it keeps crafting and the output stack grows to 8 with no one taking it. A wine with a different `Year` in the output stops it.
-- [ ] **VN-08 Barrel hopper:** hopper above an empty barrel with dirt in it → dirt lands in the bottle slot.
+- [ ] ~~**VN-08 Barrel hopper**~~ retired 2026-10-20: 1.3.10 behaviour; the port refuses junk, see VB-94.
 
 **Growing**
 - [ ] **VN-09 Stem pair:** place a stem with 2+ in hand on grass → 2-high stem, 2 used. Red seeds on the lower stem are refused; on the upper stem they plant.

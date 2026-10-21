@@ -198,7 +198,8 @@ public class KegRecipeBookComponent extends RecipeBookComponent {
       }
 
       if (this.minecraft.screen != null) {
-         this.minecraft.screen.renderComponentTooltip(pose, components, mouseX, mouseY);
+         // Port: the drink item the tank pours into goes along, so AppleSkin shows its food values
+         this.minecraft.screen.renderComponentTooltip(pose, components, mouseX, mouseY, BnCFluidItemDisplays.getFluidItemDisplay(stack));
       }
    }
 

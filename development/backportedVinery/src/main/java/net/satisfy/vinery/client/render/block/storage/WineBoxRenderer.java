@@ -8,7 +8,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.satisfy.foundation.render.ClientUtil;
+import net.satisfy.vinery.client.util.ExtraModels;
 import net.satisfy.vinery.core.block.WineBottleBlock;
 import net.satisfy.foundation.storage.StorageBlockEntity;
 
@@ -30,7 +30,7 @@ public class WineBoxRenderer implements StorageTypeRenderer {
         if (renderState.hasProperty(WineBottleBlock.FAKE_MODEL)) {
             renderState = renderState.setValue(WineBottleBlock.FAKE_MODEL, false);
         }
-
-        ClientUtil.renderBlock(renderState, matrices, vertexConsumers, entity);
+        // alcohol.md 10.17: a medium's box look (Strad's shape), else the wine's own model fitted to length
+        BottleRenderer.renderLying(renderState, matrices, vertexConsumers, entity, 1f, ExtraModels.BOX);
     }
 }

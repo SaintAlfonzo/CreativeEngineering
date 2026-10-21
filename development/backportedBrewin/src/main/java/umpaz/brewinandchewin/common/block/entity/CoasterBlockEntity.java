@@ -15,9 +15,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import umpaz.brewinandchewin.common.BnCConfiguration;
 import umpaz.brewinandchewin.common.block.CoasterBlock;
 import umpaz.brewinandchewin.common.registry.BnCBlockEntityTypes;
 import umpaz.brewinandchewin.common.registry.BnCItems;
+import umpaz.brewinandchewin.common.tag.BnCTags;
 import umpaz.brewinandchewin.common.utility.BnCItemUtils;
 import vectorwing.farmersdelight.common.block.entity.SyncedBlockEntity;
 
@@ -81,8 +83,13 @@ public class CoasterBlockEntity extends SyncedBlockEntity {
       }
    }
 
+   /** Port: with [coaster] taggedItemsOnly, only items with a coaster model ({@link BnCTags.Items#PLACEABLE_ON_COASTER}). */
+   public static boolean accepts(ItemStack stack) {
+      return !stack.isEmpty() && (!BnCConfiguration.COMMON_CONFIG.get().coaster().taggedItemsOnly() || stack.is(BnCTags.Items.PLACEABLE_ON_COASTER));
+   }
+
    private boolean addItem(Level level, BlockPos pos, BlockState state, ItemStack stack, boolean instabuild, int index) {
-      if (stack.isEmpty()) {
+      if (!accepts(stack)) {
          return false;
       } else {
          level.setBlock(pos, state.setValue(CoasterBlock.SIZE, index + 1), 3);

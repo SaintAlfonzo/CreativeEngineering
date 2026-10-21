@@ -125,12 +125,13 @@ public final class ItemPhysicSplit {
         if (stack == null || stack.isEmpty()) return null;
         if (stack.is(LAVAPROOF)) return Boolean.FALSE;                      // immune to both
         if (stack.is(FIREPROOF)) return lava ? Boolean.TRUE : Boolean.FALSE; // survives fire, burns in lava
-        switch (burnBehavior(stack)) {
-            case NEVER:     return Boolean.FALSE;
-            case FIRE_ONLY: return !lava;
-            case LAVA_ONLY: return lava;
-            default:        return null;   // BURN
-        }
+        // if-chain, not a switch: an enum switch compiles to a synthetic ItemPhysicSplit$1 that loads lazily and
+        // was missing at runtime (NoClassDefFoundError, crashes 2026-09-09 and 09-17).
+        Burn burn = burnBehavior(stack);
+        if (burn == Burn.NEVER)     return Boolean.FALSE;
+        if (burn == Burn.FIRE_ONLY) return !lava;
+        if (burn == Burn.LAVA_ONLY) return lava;
+        return null;   // BURN
     }
 
     /** Programmatic burn behaviour for this stack; {@link Burn#BURN} if no rule matches. */

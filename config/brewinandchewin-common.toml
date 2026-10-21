@@ -36,6 +36,14 @@
 	#Keeps a pump from pulling out the base fluid mid-batch. False drains at any time, as in 4.5.0.
 	#Default: true
 	pipeDrainOnlyWhenIdle = true
+	#Port setting (not in 4.5.0): keep ingredient leftovers (glass bottles, bowls, buckets) in the Keg instead of throwing them out?
+	#They go to the leftover slot right of the output, then the empty-container slot under the fluid slot. False throws them, as in 4.5.0.
+	#Default: true
+	remainderBuffer = true
+	#Port setting (not in 4.5.0): with remainderBuffer on, should the Keg wait instead of fermenting when a batch's leftovers wouldn't fit?
+	#False ferments anyway and throws what doesn't fit.
+	#Default: true
+	stallWhenFull = true
 
 [recipe_book]
 	#Should the Keg have a Recipe Book available on its interface?

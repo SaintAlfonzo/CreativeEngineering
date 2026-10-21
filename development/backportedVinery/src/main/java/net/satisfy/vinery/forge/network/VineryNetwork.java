@@ -8,7 +8,7 @@ import net.satisfy.vinery.core.Vinery;
 
 /** The port's channel: the vintage clock for wine tooltips (B4.5). */
 public final class VineryNetwork {
-    private static final String VERSION = "1";
+    private static final String VERSION = "2"; // 2: VintageClockPacket carries coldPercent and warmPercent
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(Vinery.identifier("main"), () -> VERSION, VERSION::equals, VERSION::equals);
 
     private VineryNetwork() {

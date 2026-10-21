@@ -8,9 +8,11 @@ import umpaz.brewinandchewin.common.block.entity.KegBlockEntity;
 import umpaz.brewinandchewin.common.container.AbstractedItemHandler;
 
 /**
- * Hopper and pipe access: the top reaches the ingredient slots (0-3); every other side puts containers in and takes
- * results out. Port (alcohol.md 8.4): the sides also feed the fluid slot (6) and drain its empty containers (7). Which of
- * slots 4 and 6 an item may enter is the keg inventory's own isItemValid, so filled containers land in 6.
+ * Hopper and pipe access. Every face puts items in (TODO alcohol/brewinport #7): ingredients (0-3), containers to pour
+ * into (4) and filled containers for the tank (6); which slot an item may enter is the keg inventory's own isItemValid.
+ * On the sides and bottom a filled container skips the ingredient slots, so it lands in the fluid slot; from the top it
+ * may still go in as an ingredient. The top takes ingredients back out; the other faces take the results (5), the fluid
+ * slot's empties (7) and the ingredient leftovers (8).
  */
 public abstract class SidedKegWrapper implements AbstractedItemHandler {
    protected final AbstractedItemHandler itemHandler;
@@ -34,18 +36,12 @@ public abstract class SidedKegWrapper implements AbstractedItemHandler {
    @NotNull
    @Override
    public ItemStack getStackInSlot(int slot) {
-      if (this.side != null && !this.side.equals(Direction.UP) && isSideOutput(slot)) {
-         return this.itemHandler.getStackInSlot(slot);
-      } else {
-         return this.side != null && this.side.equals(Direction.UP) && slot < 4 ? this.itemHandler.getStackInSlot(slot) : ItemStack.EMPTY;
-      }
+      return this.canInsert(slot) || this.canExtract(slot) ? this.itemHandler.getStackInSlot(slot) : ItemStack.EMPTY;
    }
 
    @Override
    public void setStackInSlot(int slot, ItemStack stack) {
-      if (this.side != null && !this.side.equals(Direction.UP) && isSideInput(slot)) {
-         this.itemHandler.setStackInSlot(slot, stack);
-      } else if (this.side != null && this.side.equals(Direction.UP) && slot < 4) {
+      if (this.canInsert(slot)) {
          this.itemHandler.setStackInSlot(slot, stack);
       }
    }
@@ -53,29 +49,36 @@ public abstract class SidedKegWrapper implements AbstractedItemHandler {
    @NotNull
    @Override
    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-      if (this.side != null && !this.side.equals(Direction.UP)) {
-         return isSideInput(slot) ? this.itemHandler.insertItem(slot, stack, simulate) : stack;
-      } else {
-         return slot < 4 ? this.itemHandler.insertItem(slot, stack, simulate) : stack;
+      if (!this.canInsert(slot)) {
+         return stack;
       }
+      if (slot < 4 && !this.isTop() && this.itemHandler.isItemValid(KegBlockEntity.FLUID_IN_SLOT, stack)) {
+         return stack;
+      }
+      return this.itemHandler.insertItem(slot, stack, simulate);
    }
 
    @NotNull
    @Override
    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-      if (this.side != null && !this.side.equals(Direction.UP)) {
-         return isSideOutput(slot) ? this.itemHandler.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
-      } else {
-         return slot < 4 ? this.itemHandler.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
+      return this.canExtract(slot) ? this.itemHandler.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
+   }
+
+   private boolean isTop() {
+      return this.side != null && this.side.equals(Direction.UP);
+   }
+
+   private boolean canInsert(int slot) {
+      return this.side != null && (slot < 4 || slot == KegBlockEntity.CONTAINER_SLOT || slot == KegBlockEntity.FLUID_IN_SLOT);
+   }
+
+   private boolean canExtract(int slot) {
+      if (this.side == null) {
+         return false;
       }
-   }
-
-   private static boolean isSideInput(int slot) {
-      return slot == KegBlockEntity.CONTAINER_SLOT || slot == KegBlockEntity.FLUID_IN_SLOT;
-   }
-
-   private static boolean isSideOutput(int slot) {
-      return slot == KegBlockEntity.OUTPUT_SLOT || slot == KegBlockEntity.FLUID_OUT_SLOT;
+      return this.isTop()
+         ? slot < 4
+         : slot == KegBlockEntity.OUTPUT_SLOT || slot == KegBlockEntity.FLUID_OUT_SLOT || slot == KegBlockEntity.REMAINDER_SLOT;
    }
 
    @Override

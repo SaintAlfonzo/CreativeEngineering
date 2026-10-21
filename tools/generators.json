@@ -73,6 +73,16 @@
       "apply": "restart the server (worldgen is read at world load); only newly generated chunks use it"
     },
     {
+      "id": "nether_worldgen",
+      "script": "tools/gen_nether_worldgen.py",
+      "groups": ["core", "worldgen"],
+      "outputs": [
+        "kubejs/generation_scripts/worldgen/nether_worldgen_manifest.json",
+        "kubejs/data/minecraft/worldgen/noise_settings"
+      ],
+      "apply": "restart the server (worldgen is read at world load); only newly generated chunks use it"
+    },
+    {
       "id": "wild_flowers",
       "script": "tools/gen_wild_flowers.py",
       "groups": ["core", "worldgen"],
@@ -202,6 +212,22 @@
       "dumps": ["dumpnames"],
       "outputs": ["feature_writeup/names.md"],
       "apply": "report only"
+    },
+    {
+      "id": "name_audit",
+      "script": "tools/name_audit.py",
+      "groups": ["client", "names"],
+      "dumps": [],
+      "outputs": ["kubejs/generation_scripts/names/name_fixes.json", "feature_writeup/names.md"],
+      "apply": "reads the client dump: run /cedumpnames first (a client command, so /cegen can't run it); F3+T or restart the client"
+    },
+    {
+      "id": "coaster_models",
+      "script": "tools/gen_coaster_models.py",
+      "groups": ["client", "food"],
+      "dumps": ["dumpplaceable"],
+      "outputs": ["kubejs/assets/creativeengineering/brewinandchewin/coaster"],
+      "apply": "F3+T or restart the client (coaster models are read with the models); placeable_catalog next for the tag"
     },
     {
       "id": "placeable_catalog",

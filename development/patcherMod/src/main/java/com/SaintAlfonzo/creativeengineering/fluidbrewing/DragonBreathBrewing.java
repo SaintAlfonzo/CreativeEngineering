@@ -38,7 +38,8 @@ import java.util.List;
  * </ul>
  *
  * <p>The vanilla item-based dragon-breath container mixes are still stripped by
- * {@code kubejs/startup_scripts/changes/dragon_breath.js}; that script filters on
+ * {@code kubejs/startup_scripts/cooking/potions.js} (part 3, its StartupEvents.postInit
+ * BLACKLIST); that loop filters on
  * an item ingredient test, so it never touches these fluid recipes.
  *
  * <p>Run once from {@code FMLCommonSetupEvent} (after Create's static init,

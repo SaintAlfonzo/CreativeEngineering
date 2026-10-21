@@ -117,6 +117,7 @@ public final class VineryWthit implements IWailaCommonPlugin {
                     tag.putInt("Level", WineYears.getEffectLevel(item, level));
                     if (WineYears.isStored(item)) {
                         tag.putInt("Rate", WineYears.currentStorageRate(item));
+                        tag.putInt("Kind", WineYears.currentStorageKind(item));
                     }
                 }
                 list.add(tag);

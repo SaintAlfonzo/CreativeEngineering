@@ -41,6 +41,8 @@ public final class VineryConfig {
     public static final ForgeConfigSpec.IntValue MAX_LEVEL;
     public static final ForgeConfigSpec.IntValue DURATION_PER_YEAR;
     public static final ForgeConfigSpec.DoubleValue CELLAR_AGING_MULTIPLIER;
+    public static final ForgeConfigSpec.DoubleValue COLD_AGING_MULTIPLIER;
+    public static final ForgeConfigSpec.DoubleValue WARM_AGING_MULTIPLIER;
     public static final ForgeConfigSpec.IntValue DAYS_PER_YEAR;
     public static final ForgeConfigSpec.IntValue YEARS_PER_EFFECT_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> EFFECTS;
@@ -60,6 +62,10 @@ public final class VineryConfig {
     public static final ForgeConfigSpec.IntValue BANNER_RADIUS;
     public static final ForgeConfigSpec.IntValue BANNER_DURATION_SECONDS;
     public static final ForgeConfigSpec.IntValue BANNER_REFRESH_BELOW_SECONDS;
+
+    // [village_houses] (alcohol.md B5 D8, the 1.5.5 village houses in vanilla village pools)
+    public static final ForgeConfigSpec.BooleanValue VILLAGE_HOUSES_ENABLED;
+    public static final ForgeConfigSpec.IntValue VILLAGE_HOUSES_WEIGHT;
 
     // [trader]
     public static final ForgeConfigSpec.DoubleValue TRADER_SPAWN_CHANCE;
@@ -116,7 +122,7 @@ public final class VineryConfig {
                 .defineInRange("rottenCherryChance", 0.15, 0, 1);
         GRAPE_GROWTH_CHANCE = b.defineInRange("grapeGrowthChance", 0.5, 0, 1);
         GRAPE_GROWTH_MULTIPLIER = b.comment("Multiplies the growth chance of grape bushes, stems and lattices").defineInRange("grapeGrowthMultiplier", 1.0, 0, 10);
-        GRAPEVINE_POT_STOMPS = b.comment("Stomps a full Grapevine Pot needs").defineInRange("grapevinePotStomps", 12, 1, 100);
+        GRAPEVINE_POT_STOMPS = b.comment("Stomps a full Grapevine Pot needs").defineInRange("grapevinePotStomps", 4, 1, 100);
         GRAPEVINE_POT_HEAVY_ARMOR_BONUS = b.comment("Extra stomp progress in percent for an entity with 15 or more armor").defineInRange("grapevinePotHeavyArmorBonus", 10, 0, 100);
         GRAPEVINE_POT_SPLASH_PARTICLES = b.define("grapevinePotSplashParticles", true);
         GRAPEVINE_LEAVES_ENABLED = b.comment("Red and white grapevine stems grow grapevine leaves around them").define("grapevineLeavesEnabled", true);
@@ -128,7 +134,11 @@ public final class VineryConfig {
         MAX_DURATION = b.comment("Longest effect a wine can reach, in ticks").defineInRange("maxDuration", 15000, 1, 100000);
         MAX_LEVEL = b.comment("Highest effect level from aging").defineInRange("maxLevel", 5, 0, 10);
         DURATION_PER_YEAR = b.comment("Effect ticks a wine gains per month of age").defineInRange("durationPerMonth", 200, 0, 10000);
-        CELLAR_AGING_MULTIPLIER = b.comment("Aging speed in a storage block with no sky light").defineInRange("cellarAgingMultiplier", 2.5, 1, 5);
+        CELLAR_AGING_MULTIPLIER = b.comment("Aging speed in a storage block with no sky light").defineInRange("cellarAgingMultiplier", 2.0, 1, 5);
+        COLD_AGING_MULTIPLIER = b.comment("Aging speed in a cold storage block: Brewin' and Chewin's freeze sources outweigh its heat sources",
+                "nearby (the keg's chilly or colder). Multiplies with the cellar bonus").defineInRange("coldAgingMultiplier", 2.0, 1, 5);
+        WARM_AGING_MULTIPLIER = b.comment("Aging speed in a warm storage block: Brewin' and Chewin's heat sources outweigh its freeze sources",
+                "nearby (the keg's warm or hotter). Multiplies with the cellar bonus").defineInRange("warmAgingMultiplier", 0.75, 0.1, 1);
         DAYS_PER_YEAR = b.comment("Days per wine month: one Serene Seasons sub-season (the pack's 8 world days)").defineInRange("daysPerMonth", 8, 1, 100);
         YEARS_PER_EFFECT_LEVEL = b.comment("Wine months per effect level (3 = one season)").defineInRange("monthsPerEffectLevel", 3, 1, 100);
         EFFECTS = b.comment("wine|effect|amplifier|durationTicks per wine (1.5.5 defaults plus the two 1.3.10 wines the port keeps)")
@@ -191,6 +201,11 @@ public final class VineryConfig {
         SET_DAMAGE_MODE = b.comment("NONE (no damage), ALL_PIECES (1.3.10 / 1.5.5), ONE_PIECE (one random piece)").defineEnum("damageMode", DamageMode.ALL_PIECES);
         SET_DAMAGE_CHANCE = b.comment("Chance a use deals damage").defineInRange("damageChance", 0.30, 0, 1);
         SET_DAMAGE_AMOUNT = b.comment("Damage per piece per damaging use (1.5.5 hardcodes 2, the pack used 1)").defineInRange("damageAmount", 1, 0, 100);
+        b.pop();
+
+        b.push("village_houses");
+        VILLAGE_HOUSES_ENABLED = b.comment("Add the 1.5.5 winery houses (plains, taiga, savanna, desert) to the vanilla village house pools of the same biome. Takes a restart; the pack's pool_config.json can reweight them afterwards").define("enabled", true);
+        VILLAGE_HOUSES_WEIGHT = b.comment("Pool weight of each house; 0 = the average weight of the pieces already in that pool (about 4 to 5)").defineInRange("weight", 0, 0, 1000);
         b.pop();
 
         b.push("infoOverlay");

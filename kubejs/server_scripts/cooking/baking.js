@@ -10,7 +10,7 @@
 // With the option on, the count stays and the oven takes 3 from one slot (exact cost). Sugar is #forge:sugar,
 // as the pack-wide sugar swap in cooking.js gives the originals.
 //
-// On top of the mirror, the cooking.md "baked" changes (oven.md 2.6): wheat -> flour (cookies, pies; pies also take
+// On top of the mirror, the cooking plan "baked" changes (oven.md 2.6): wheat -> flour (cookies, pies; pies also take
 // cornmeal), flour instead of dough in muffins, a pie crust in every pie, and Create Crafts & Additions' cake base
 // (egg, 2 sugar, dough) in every cake in place of its egg, sugar and wheat/dough.
 //

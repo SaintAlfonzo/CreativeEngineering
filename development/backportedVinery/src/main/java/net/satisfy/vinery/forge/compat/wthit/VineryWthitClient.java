@@ -30,6 +30,7 @@ import net.satisfy.vinery.core.block.entity.StackableLogBlockEntity;
 import net.satisfy.vinery.core.block.entity.StoragePotBlockEntity;
 import net.satisfy.vinery.core.item.DrinkBlockItem;
 import net.satisfy.vinery.core.registry.GrapeTypeRegistry;
+import net.satisfy.vinery.core.wine.WineYears;
 import net.satisfy.vinery.core.wine.GrapeType;
 import net.satisfy.vinery.platform.PlatformHelper;
 
@@ -195,9 +196,9 @@ public final class VineryWthitClient implements IWailaClientPlugin, IBlockCompon
             MutableComponent line = Component.translatable(LANG + "stack", stack.getInt("Count"), item.getDescription());
             if (stack.contains("Years")) {
                 line.append(Component.translatable(LANG + "wine", stack.getInt("Years"), stack.getInt("Level")).withStyle(ChatFormatting.GRAY));
-                int rate = stack.getInt("Rate");
-                if (rate > 100) {
-                    line.append(Component.translatable(LANG + "cellar", String.format("%.1f", rate / 100.0)).withStyle(ChatFormatting.AQUA));
+                if (stack.contains("Kind")) { // stored wines only
+                    line.append(Component.translatable(LANG + "storage", WineYears.storageLabel(stack.getInt("Kind")),
+                            WineYears.formatRate(stack.getInt("Rate"))).withStyle(ChatFormatting.AQUA));
                 }
             }
             tooltip.addLine(line);

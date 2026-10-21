@@ -12,6 +12,7 @@ investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Mult
 | Goals (this file) | written 2026-10-18 |
 | Implementation investigation | done 2026-10-18 (9), design and build plan proposed (10, 11) |
 | Build | steps 1-3 BUILT 2026-10-18 and DEPLOYED with 1.0.7 (patcherMod 1.0.7, KubeJS, first small tree, report tool; 12); not run in game, JO-01 to JO-12 pending; step 4 (fill the tree) not started |
+| Bug: order never reached patcherMod | FIXED 2026-10-20: `client_scripts/jei_order.js` threw "redeclaration of var $PackIngredientOrder" on every client load (top-level `const` inside `try`, a known quirk of this Rhino, reproduced in the pack's Rhino jar), so `define()` never ran and JEI kept its own order. Now `Java.loadClass(...).define(...)` with no binding; a scratch client logs `[jei order] definition: 4 types, 10 nodes` |
 
 ## 1. Why
 
@@ -448,3 +449,7 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
 - 2026-10-18: goals, investigation, design, build plan; steps 1 to 3 built (12).
 - 2026-10-19: steps 1 to 3 went out in pack 1.0.7 (DEPLOYED 2026-10-18 19:43, [plan_1.0.7.md](plan_1.0.7.md) JO). No
   change in 1.0.8. JO-01 to JO-12 pending.
+- 2026-10-20: found that the client script never handed the definition over (Rhino "redeclaration of var" on a
+  top-level `const` in `try`, in the user's client.log since 1.0.7), so nothing in this file had ever applied in game.
+  Fixed in `jei_order.js`; proven on a scratch client (latest.log `[jei order] definition: 4 types, 10 nodes`). JO-01 to
+  JO-12 still need a world.

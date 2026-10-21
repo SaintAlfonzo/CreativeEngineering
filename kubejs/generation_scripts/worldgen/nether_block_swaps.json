@@ -3893,6 +3893,87 @@
     }
    }
   ],
+  "eugene:red_roof": [
+   {
+    "pos": [
+     5,
+     13,
+     22
+    ],
+    "from": "minecraft:netherrack",
+    "to": {
+     "Name": "minecraft:magma_block"
+    }
+   },
+   {
+    "pos": [
+     5,
+     13,
+     23
+    ],
+    "from": "minecraft:netherrack",
+    "to": {
+     "Name": "minecraft:magma_block"
+    }
+   },
+   {
+    "pos": [
+     5,
+     13,
+     24
+    ],
+    "from": "minecraft:netherrack",
+    "to": {
+     "Name": "minecraft:magma_block"
+    }
+   }
+  ],
+  "gothic_church:church": [
+   {
+    "pos": [
+     8,
+     0,
+     13
+    ],
+    "from": "minecraft:glowstone",
+    "to": {
+     "Name": "quark:yellow_corundum"
+    }
+   },
+   {
+    "pos": [
+     8,
+     0,
+     15
+    ],
+    "from": "minecraft:glowstone",
+    "to": {
+     "Name": "quark:yellow_corundum"
+    }
+   },
+   {
+    "pos": [
+     8,
+     0,
+     17
+    ],
+    "from": "minecraft:glowstone",
+    "to": {
+     "Name": "quark:yellow_corundum"
+    }
+   },
+   {
+    "pos": [
+     8,
+     0,
+     19
+    ],
+    "from": "minecraft:glowstone",
+    "to": {
+     "Name": "quark:yellow_corundum"
+    }
+   }
+  ],
   "illagerwarship:illager-warship": [
    {
     "pos": [
@@ -5906,6 +5987,1917 @@
     "from": "minecraft:twisting_vines",
     "to": {
      "Name": "minecraft:air"
+    }
+   }
+  ],
+  "minecraft:ancient_city/city_center/city_center_1": [
+   {
+    "pos": [
+     12,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   }
+  ],
+  "minecraft:ancient_city/city_center/city_center_2": [
+   {
+    "pos": [
+     12,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   }
+  ],
+  "minecraft:ancient_city/city_center/city_center_3": [
+   {
+    "pos": [
+     12,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     12,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     13,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     11
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     13
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     14
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     15
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     16
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     17
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     18
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     20
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     21
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     22
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     23
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     24
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     25
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     27
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     28
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     29
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   }
+  ],
+  "minecraft:ancient_city/structures/barracks": [
+   {
+    "pos": [
+     19,
+     7,
+     6
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     19,
+     7,
+     10
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
     }
    }
   ],
@@ -8428,6 +10420,65 @@
     }
    }
   ],
+  "philipsruins:sculk_dungeon_room1": [
+   {
+    "pos": [
+     3,
+     7,
+     6
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     3,
+     7,
+     12
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     3,
+     7,
+     19
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   },
+   {
+    "pos": [
+     3,
+     7,
+     26
+    ],
+    "from": "minecraft:soul_fire",
+    "to": {
+     "Name": "minecraft:fire"
+    }
+   }
+  ],
+  "plains_villager_tents:villager_plains_tent": [
+   {
+    "pos": [
+     7,
+     0,
+     1
+    ],
+    "from": "minecraft:glowstone",
+    "to": {
+     "Name": "quark:yellow_corundum"
+    }
+   }
+  ],
   "simply_houses:forest_fort/forest_fort": [
    {
     "pos": [
@@ -10358,6 +12409,336 @@
     "from": "minecraft:soul_sand",
     "to": {
      "Name": "minecraft:basalt"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     2
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     3
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     4
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     5
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     6
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     7
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     8
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     9
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     10
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     2,
+     2,
+     11
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     2
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     3
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     4
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     5
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     6
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     7
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     8
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     9
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     10
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     3,
+     2,
+     11
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     2
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     3
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     4
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     5
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     6
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     7
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     8
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     9
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     10
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     4,
+     2,
+     11
+    ],
+    "from": "minecraft:nether_wart",
+    "to": {
+     "Name": "minecraft:air"
     }
    }
   ]

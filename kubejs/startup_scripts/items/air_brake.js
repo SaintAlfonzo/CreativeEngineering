@@ -11,9 +11,9 @@
 //
 // Every deceleration number is a config knob - config/creativeengineering-common.toml
 // under [air_brake], via patcherMod's CEConfig (Forge-native, hot-reloadable through
-// Create's in-game Configs screen). useDurationTicks below is the one exception: it's
-// baked into the item at registration time, so changing it needs a restart, not just a
-// config save - see CEConfig.AirBrake's comment on that field.
+// Create's in-game Configs screen). useDurationTicks is read on every use, not at
+// registration: this script runs before Forge loads common configs, and a value read that
+// early is always the default in production.
 
 const $UseAnim = Java.loadClass('net.minecraft.world.item.UseAnim')
 
@@ -23,7 +23,9 @@ try {
 } catch (err) {
 	console.warn('[air_brake] patcherMod CEConfig not on classpath - falling back to a 72000-tick (bow-length) use duration: ' + err)
 }
-const AIR_BRAKE_USE_DURATION_TICKS = CFG ? CFG.AIR_BRAKE.useDurationTicks.get() : 72000
+function airBrakeUseDurationTicks() {
+	return CFG ? CFG.AIR_BRAKE.useDurationTicks.get() : 72000
+}
 
 StartupEvents.registry('item', event => {
 	event.create('creativeengineering:air_brake')
@@ -32,7 +34,7 @@ StartupEvents.registry('item', event => {
 		.displayName('Air Brake')
 		.texture('creativeengineering:item/air_brake')
 		.useAnimation($UseAnim.BOW)
-		.useDuration(stack => AIR_BRAKE_USE_DURATION_TICKS)
+		.useDuration(stack => airBrakeUseDurationTicks())
 		// useAnimation/useDuration only describe an in-progress use - something still has
 		// to START one. KubeJS's ItemMixin only calls ItemUtils.startUsingItem() on right
 		// click when this callback is present AND returns true (bow/crossbow-type items do

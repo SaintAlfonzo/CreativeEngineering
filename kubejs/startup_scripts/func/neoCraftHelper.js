@@ -1,4 +1,4 @@
-// kubejs/server_scripts/helpers/recipes.js
+// kubejs/startup_scripts/func/neoCraftHelper.js
 
 console.log('Neo Craft Helper starting')
 
@@ -609,7 +609,8 @@ global.NCH = {
   // ========================================================================
 
   // Takes a whole defaults object for a config-driven craft (keys must match the
-  // CEConfig section's field names exactly, e.g. potion/potionMb/loops/hammerBlows) and a
+  // CEConfig section's Java field names exactly, e.g. potion/mb/loops/blows, not the toml
+  // keys potionMb/hammerBlows) and a
   // dotted path to that section (e.g. 'CRAFTING.FELSIC_SWORD'), and returns a new object
   // with each field replaced by its CEConfig value where available. Falls back to the
   // given default field-by-field if patcherMod's CEConfig isn't on the classpath or the
@@ -620,9 +621,9 @@ global.NCH = {
   //
   //   const felsicSword = R.cfg({
   //     potion: 'creativeengineering:magic_resistance',
-  //     potionMb: 250,
+  //     mb: 250,
   //     loops: 1,
-  //     hammerBlows: 3
+  //     blows: 3
   //   }, 'CRAFTING.FELSIC_SWORD')
   //
   // Recipes are baked at datapack-reload time (ServerEvents.recipes) - a toml edit needs
@@ -1596,23 +1597,66 @@ global.NCH = {
 	// JEED (Just Enough Effect Descriptions)
 	// ========================================================================
 
-	// jeed:effect_provider: JEED's page for an effect lists these items as giving it (alcohol.md B7.5).
-	// providers: an item / '#tag', or an array of them.
+	// jeed:effect_provider: JEED's page for an effect lists these items as giving it (effects.md 3).
+	// providers: an item / '#tag' / NBT item ({ item, nbt } or Item.of(id, '{...}')), or an array of them.
+	// JEED drops the whole recipe on one unknown id, so missing items are left out with a warning, and an
+	// effect that isn't registered skips the recipe.
 	//   R.jeedProvider('minecraft:health_boost', [i.stal_wine, i.solaris_wine], e, 'vinery_health_boost')
 	jeedProvider(effect, providers, e, idOverride) {
 		if (!e) throw new Error('jeedProvider called without event object!')
-		var list = Array.isArray(providers) ? providers : [providers]
 		var idSuffix = idOverride ?? String(effect).replace(':', '_')
 		var ctx = 'jeedProvider ' + idSuffix
-		if (list.length < 1) {
+		if (!global.NCH._effectExists(effect)) {
+			global.NCH._warn(ctx, 'effect "' + effect + '" is not registered')
+			return
+		}
+		var json = global.NCH._jeedProviderJson(providers, ctx)
+		if (json.length < 1) {
 			global.NCH._warn(ctx, 'no providers')
 			return
 		}
 		e.custom({
 			type: 'jeed:effect_provider',
 			effect: String(effect),
-			providers: list.map((v, idx) => global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' provider[' + idx + ']' }))
+			providers: json
 		}).id(`${global.NCH.modId}:jeed/${idSuffix}`)
+	},
+
+	// jeed:potion_provider: items that carry a potion in NBT (`Potion`, like minecraft:potion). JEED lists
+	// each one, filled with every potion that has the effect, on that effect's page.
+	//   R.jeedPotionProvider([i.ce_potion_bucket, i.potion_bundle], e, 'potion_carriers')
+	jeedPotionProvider(providers, e, idOverride) {
+		if (!e) throw new Error('jeedPotionProvider called without event object!')
+		var idSuffix = idOverride ?? 'potion_provider'
+		var ctx = 'jeedPotionProvider ' + idSuffix
+		var json = global.NCH._jeedProviderJson(providers, ctx)
+		if (json.length < 1) {
+			global.NCH._warn(ctx, 'no providers')
+			return
+		}
+		e.custom({
+			type: 'jeed:potion_provider',
+			providers: json
+		}).id(`${global.NCH.modId}:jeed/${idSuffix}`)
+	},
+
+	_jeedProviderJson(providers, ctx) {
+		var list = Array.isArray(providers) ? providers : [providers]
+		var out = []
+		list.forEach((v, idx) => {
+			var id = (v && typeof v.item === 'string') ? v.item : global.NCH._resolveIdCount(v).id
+			if (!global.NCH._checkItem(id, ctx + ' provider[' + idx + ']')) return
+			out.push(global.NCH._nbtItemJson(v, { countMode: 'none', context: ctx + ' provider[' + idx + ']' }))
+		})
+		return out
+	},
+
+	_effectExists(id) {
+		try {
+			return $NCH_ForgeRegistries.MOB_EFFECTS.containsKey($NCH_ResourceLocation.of(String(id), ':'))
+		} catch (err) {
+			return false
+		}
 	},
 
 	// ========================================================================
@@ -1891,6 +1935,26 @@ global.NCH = {
 		}
 
 		e.custom(json).id(`${global.NCH.modId}:pcthermoplant/${idSuffix}`)
+	},
+
+	// ========================================================================
+	// Creative Labels (development/creativeLabels, feature_writeup/sticky_notes.md 3.6)
+	// ========================================================================
+	// The note recipes are Java CustomRecipes matched in code (any grid size), so their JSON is only the type and
+	// the mod ships none: the pack owns the ids (creativeengineering:creative_labels/<type>). type is one of
+	//   note_dye      N identical notes + 1 dye -> N notes with the dye mixed in, text kept
+	//   note_special  N plain notes + 1 ink sac / glow berries / gunpowder / gold nugget -> N special notes
+	//   note_copy     1 written note + 8 blank notes -> 9 copies of the written one
+	//   note_erase    note + eraser -> text wiped, or a blank note back to plain (the eraser stays)
+	// No item inputs to validate: the ingredients live in the Java matcher.
+	//   R.creativeLabelsSpecial('note_dye', e)
+	creativeLabelsSpecial(type, e, idOverride) {
+		if (!e) throw new Error('creativeLabelsSpecial called without event object!')
+		var types = ['note_dye', 'note_special', 'note_copy', 'note_erase']
+		if (types.indexOf(type) < 0)
+			throw new Error('creativeLabelsSpecial: unknown type "' + type + '" (one of ' + types.join(', ') + ')')
+		var idSuffix = idOverride ?? type
+		return e.custom({ type: 'creative_labels:' + type }).id(`${global.NCH.modId}:creative_labels/${idSuffix}`)
 	},
 }
 

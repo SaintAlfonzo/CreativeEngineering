@@ -4,12 +4,14 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.RecipeBookCategories;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.event.RegisterRecipeBookCategoriesEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import umpaz.brewinandchewin.BrewinAndChewin;
@@ -22,6 +24,7 @@ import umpaz.brewinandchewin.client.recipebook.BnCRecipeBookCategories;
 import umpaz.brewinandchewin.client.renderer.CoasterBlockEntityRenderer;
 import umpaz.brewinandchewin.client.utility.BnCFluidItemDisplays;
 import umpaz.brewinandchewin.common.BnCRecipeBookTypes;
+import umpaz.brewinandchewin.common.block.entity.container.KegMenu;
 import umpaz.brewinandchewin.common.crafting.KegFermentingRecipe;
 import umpaz.brewinandchewin.common.item.KegTooltipComponent;
 import umpaz.brewinandchewin.common.registry.BnCBlockEntityTypes;
@@ -45,6 +48,7 @@ public class BrewinAndChewinForgeClient {
       modBus.addListener(BrewinAndChewinForgeClient::registerReloadListeners);
       modBus.addListener(BrewinAndChewinForgeClient::registerModels);
       modBus.addListener(BrewinAndChewinForgeClient::registerRecipeBooks);
+      modBus.addListener(BrewinAndChewinForgeClient::stitchTextures);
       BnCClientForgeEvents.register();
    }
 
@@ -77,6 +81,13 @@ public class BrewinAndChewinForgeClient {
       event.register(CoasterBlockEntityRenderer.COASTER_MODEL);
       event.register(CoasterBlockEntityRenderer.COASTER_TRAY_MODEL);
       CoasterBlockEntityRenderer.loadModelEntries(Minecraft.getInstance().getResourceManager()).forEach(event::register);
+   }
+
+   // 1.19.2 has no atlases/*.json: slot icons must be stitched into the block atlas by hand.
+   private static void stitchTextures(TextureStitchEvent.Pre event) {
+      if (event.getAtlas().location().equals(InventoryMenu.BLOCK_ATLAS)) {
+         event.addSprite(KegMenu.EMPTY_CONTAINER_SLOT_TANKARD);
+      }
    }
 
    private static void registerRecipeBooks(RegisterRecipeBookCategoriesEvent event) {

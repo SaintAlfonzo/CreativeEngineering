@@ -44,6 +44,9 @@ import umpaz.brewinandchewin.common.block.entity.CoasterBlockEntity;
  * Up to four items on a coaster, each with its own small model from {@code assets/<ns>/brewinandchewin/coaster/*.json}
  * ({"item", "models": id | [{"model", "texture_modifiers"}]}); items without one render as a flat item.
  * <p>
+ * Port: an optional {@code "scale"} (default 1) shrinks the item's models around the block's bottom centre, so a full-size
+ * block model (the pack's Display Delight entries) fits beside three others.
+ * <p>
  * Port: the models are registered as extra models (ModelEvent.RegisterAdditional) and their quads drawn straight into the
  * buffer with the modifier tint, in place of upstream's per-tint-index wrapped model and block colour handler.
  */
@@ -70,7 +73,7 @@ public class CoasterBlockEntityRenderer implements BlockEntityRenderer<CoasterBl
          try (Reader reader = entry.getValue().openAsReader()) {
             JsonObject json = GsonHelper.convertToJsonObject(JsonParser.parseReader(reader), "coaster model");
             ResourceLocation itemId = new ResourceLocation(GsonHelper.getAsString(json, "item"));
-            List<ModelEntry> entries = parseModels(json.get("models"));
+            List<ModelEntry> entries = parseModels(json.get("models"), GsonHelper.getAsFloat(json, "scale", 1.0F));
             ITEM_TO_MODELS.put(itemId, entries);
             entries.forEach(modelEntry -> models.add(modelEntry.model()));
          } catch (Exception e) {
@@ -80,9 +83,9 @@ public class CoasterBlockEntityRenderer implements BlockEntityRenderer<CoasterBl
       return models;
    }
 
-   private static List<ModelEntry> parseModels(JsonElement json) {
+   private static List<ModelEntry> parseModels(JsonElement json, float scale) {
       if (json.isJsonPrimitive()) {
-         return List.of(new ModelEntry(new ResourceLocation(json.getAsString()), List.of()));
+         return List.of(new ModelEntry(new ResourceLocation(json.getAsString()), List.of(), scale));
       }
       List<ModelEntry> entries = new ArrayList<>();
       for (JsonElement element : (JsonArray)json) {
@@ -96,7 +99,7 @@ public class CoasterBlockEntityRenderer implements BlockEntityRenderer<CoasterBl
             }
             modifiers.add(modifier);
          }
-         entries.add(new ModelEntry(new ResourceLocation(GsonHelper.getAsString(object, "model")), modifiers));
+         entries.add(new ModelEntry(new ResourceLocation(GsonHelper.getAsString(object, "model")), modifiers, scale));
       }
       return entries;
    }
@@ -170,7 +173,14 @@ public class CoasterBlockEntityRenderer implements BlockEntityRenderer<CoasterBl
                   color = modifier.color(entity.getLevel(), entity.getBlockState(), entity.getBlockPos(), stack, color);
                   renderType = modifier.renderType(entity.getLevel(), entity.getBlockState(), entity.getBlockPos(), stack, renderType);
                }
+               poseStack.pushPose();
+               if (modelEntry.scale() != 1.0F) {
+                  poseStack.translate(0.5, 0.0, 0.5);
+                  poseStack.scale(modelEntry.scale(), modelEntry.scale(), modelEntry.scale());
+                  poseStack.translate(-0.5, 0.0, -0.5);
+               }
                renderModel(modelEntry.model(), poseStack, buffer.getBuffer(renderType), random, color, combinedLight, combinedOverlay);
+               poseStack.popPose();
             }
          }
 
@@ -207,6 +217,6 @@ public class CoasterBlockEntityRenderer implements BlockEntityRenderer<CoasterBl
       return true;
    }
 
-   public record ModelEntry(ResourceLocation model, List<? extends TextureModifier> modifiers) {
+   public record ModelEntry(ResourceLocation model, List<? extends TextureModifier> modifiers, float scale) {
    }
 }

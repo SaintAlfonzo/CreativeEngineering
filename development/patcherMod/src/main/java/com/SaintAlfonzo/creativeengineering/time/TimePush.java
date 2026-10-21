@@ -113,6 +113,8 @@ public final class TimePush {
             setField(changes, config, "YEARS_PER_EFFECT_LEVEL", CEConfig.TIME.monthsPerLevel.get());
             setField(changes, config, "MAX_LEVEL", CEConfig.TIME.maxLevel.get());
             setField(changes, config, "CELLAR_AGING_MULTIPLIER", CEConfig.TIME.cellarMultiplier.get());
+            setField(changes, config, "COLD_AGING_MULTIPLIER", CEConfig.TIME.coldMultiplier.get());
+            setField(changes, config, "WARM_AGING_MULTIPLIER", CEConfig.TIME.warmMultiplier.get());
             spec.save();
         } catch (ReflectiveOperationException | ClassCastException e) {
             // the stock 1.3.10 jar has no VineryConfig; anything else is a renamed port field

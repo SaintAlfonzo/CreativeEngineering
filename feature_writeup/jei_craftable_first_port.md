@@ -54,7 +54,7 @@ change while the screen stays open. If live re-sorting is wanted, it is an addit
 | `tick()` builds the next layout | 11.8.1 `UnsortedRecipeLayoutList.tick()` is where layouts tick; the old button's `update` runs from `RecipeLayoutWithButtons.tick(menu, player)` |
 | cache invalidation on stages/category/containerId | 11.8.1 `RecipeGuiLogic` caches `cachedRecipeLayoutsWithButtons` and `cachedRecipeCategory`; add the container id check or the list will be stale across menus |
 
-## Implementation (built 2026-10-05; in the patcherMod 1.0.5 jar, STAGED for pack 1.0.6 2026-10-11, not deployed; the jar booted in single player without mixin errors; JEI-01..06 not run)
+## Implementation (built 2026-10-05; in the patcherMod 1.0.5 jar, DEPLOYED with pack 1.0.6 (2026-10-14); the jar booted in single player without mixin errors; JEI-01..06 not run)
 
 - `compat/jei/CraftableFirstRecipeLayoutList.java`: the sorted list. Applies only when the menu has a
   transfer handler for the category. Group 0 = + button enabled (`error == null || getType().allowsTransfer`,

@@ -8,8 +8,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.satisfy.vinery.core.Vinery;
+import net.satisfy.vinery.core.item.DrinkBlockItem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,9 +20,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Builds the port's view of the upstream jars, in memory (feature_writeup/alcohol.md B4.8):
@@ -37,16 +42,21 @@ public final class UpstreamTranslator {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
 
     /** 1.3.10 items 1.5.5 removed (D2): their 1.3.10 recipes and loot tables are read. */
-    static final Set<String> KEEPERS = Set.of("white_grape_crate", "red_grape_crate", "cherry_crate", "apple_crate",
-            "grapevine_lattice", "chair", "table", "big_table", "shelf", "wine_rack_1", "wine_rack_2", "wine_rack_3",
-            "wine_rack_5", "loam", "loam_slab", "loam_stairs", "flower_box", "flower_pot", "basket",
-            "wood_fired_oven", "stove", "kitchen_sink", "barrel", "praetorian_wine");
+    static final Set<String> KEEPERS = Set.of("grapevine_lattice", "chair", "table", "big_table", "shelf", "loam",
+            "loam_slab", "loam_stairs", "flower_box", "flower_pot", "basket", "praetorian_wine");
 
     /**
-     * Ids the port removed on purpose (alcohol.md B7.6 mead, time.md 3.7 calendar). Tag entries and advancement criteria
-     * naming them are dropped; any other file naming them is left out by {@link #keep}.
+     * Ids the port removed on purpose (alcohol.md B7.6 mead, time.md 3.7 calendar, 10.8 King Danis, 10.10 / 10.11 duplicate
+     * storage / furniture / lattices / racks and the deprecated kitchen blocks). Tag entries and advancement criteria naming
+     * them are dropped; any other file naming them is left out by {@link #keep}.
      */
-    static final Set<String> REMOVED = Set.of("vinery:mead", "vinery:calendar", "vinery:king_danis_wine");
+    static final Set<String> REMOVED = Set.of("vinery:mead", "vinery:calendar", "vinery:king_danis_wine",
+            "vinery:white_grape_crate", "vinery:red_grape_crate", "vinery:cherry_crate", "vinery:apple_crate",
+            "vinery:barrel", "vinery:stove", "vinery:wood_fired_oven", "vinery:kitchen_sink",
+            "vinery:cherry_chair", "vinery:cherry_table", "vinery:cherry_big_table", "vinery:cherry_shelf",
+            "vinery:oak_lattice", "vinery:spruce_lattice", "vinery:birch_lattice", "vinery:dark_oak_lattice",
+            "vinery:acacia_lattice", "vinery:bamboo_lattice", "vinery:jungle_lattice", "vinery:mangrove_lattice",
+            "vinery:cherry_lattice", "vinery:wine_rack_1", "vinery:wine_rack_2", "vinery:wine_rack_3", "vinery:wine_rack_5");
 
     /** Port-owned lang lines layered over the merged upstream lang (Cask, months: alcohol.md B7.8, B7.9). */
     private static final String LANG_OVERRIDES = "/vinery_port/upstream_lang/";
@@ -136,13 +146,73 @@ public final class UpstreamTranslator {
                 }
             });
         });
+        patchAssets(out);
         merged.forEach((path, json) -> {
             if (path.startsWith("assets/vinery/lang/")) {
+                if (path.endsWith("/en_us.json")) {
+                    renameWineRacks(json);
+                    renameDarkCherry(json);
+                }
                 applyLangOverrides(path.substring("assets/vinery/lang/".length()), json);
             }
             out.put(path, bytes(json));
         });
         return out;
+    }
+
+    /**
+     * Port changes to upstream art, in memory (the files stay upstream's). alcohol.md 10.11: 1.5.5's dark cherry
+     * single-bottle rack reuses the dark cherry cabinet's solid door, the only rack wood with no window; it takes the
+     * 1.3.10 cherry cabinet's glass door, same wood palette. alcohol.md 10.17: wine box / 4x rack looks recoloured from
+     * the wines' own textures ({@link BottleLooks}).
+     */
+    private static void patchAssets(Map<String, byte[]> out) {
+        BottleLooks.add(out);
+        for (String state : new String[]{"closed", "open"}) {
+            String path = "assets/vinery/models/block/dark_cherry_wine_rack_3_" + state + ".json";
+            JsonObject model = out.containsKey(path) ? parseObject(out.get(path)) : null;
+            if (model != null && model.has("textures") && out.containsKey("assets/vinery/textures/block/cherry_cabinet_front.png")) {
+                model.getAsJsonObject("textures").addProperty("front", "vinery:block/cherry_cabinet_front");
+                out.put(path, bytes(model));
+            }
+        }
+    }
+
+    /**
+     * alcohol.md 10.10: the port's wood is the only cherry wood in the pack and keeps the {@code cherry_*} ids (D1), so
+     * 1.5.5's "Dark Cherry" names (wood set, cabinet, drawer, barrel, racks, boats, creative tab) read "Cherry".
+     */
+    private static final Pattern WINE_RACK = Pattern.compile("block\\.vinery\\.([a-z_]+)_wine_rack_(big|small|mid)");
+
+    /**
+     * alcohol/vineryport #16 (test updates 2026-10-20): racks by how many they hold, "Single / Small / Big Oak Wine
+     * Rack" (1, 4, 9 bottles), so the wines' "Fits in" lines can name them. Upstream says "Big Oak Wine Bottle Storage",
+     * "Oak Wine Rack", "Small Oak Wine Bottle Storage".
+     */
+    private static void renameWineRacks(JsonObject lang) {
+        for (Map.Entry<String, JsonElement> entry : lang.entrySet()) {
+            Matcher m = WINE_RACK.matcher(entry.getKey());
+            if (!m.matches()) continue;
+            StringBuilder wood = new StringBuilder();
+            for (String word : m.group(1).split("_")) {
+                wood.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1)).append(' ');
+            }
+            String size = switch (m.group(2)) {
+                case "mid" -> "Single";
+                case "small" -> "Small";
+                default -> "Big";
+            };
+            entry.setValue(new JsonPrimitive(size + " " + wood + "Wine Rack"));
+        }
+    }
+
+    private static void renameDarkCherry(JsonObject lang) {
+        for (Map.Entry<String, JsonElement> entry : lang.entrySet()) {
+            JsonElement value = entry.getValue();
+            if (value.isJsonPrimitive() && value.getAsString().contains("Dark Cherry")) {
+                entry.setValue(new JsonPrimitive(value.getAsString().replace("Dark Cherry", "Cherry")));
+            }
+        }
     }
 
     /** Our own wording for upstream keys: the jar can't carry a file at upstream's lang path (D13 B), so it layers here. */
@@ -231,21 +301,30 @@ public final class UpstreamTranslator {
         }
         patchData(out, tags);
         tags.forEach((path, json) -> out.put(path, bytes(json)));
+        VillageHouses.addStructures(out); // B5 D8 revisited: the 4 village houses, palettes rewritten (TODO alcohol/vineryport #14)
         return out;
     }
 
     /** Port changes to upstream data (alcohol.md B7). */
     private static void patchData(Map<String, byte[]> out, Map<String, JsonObject> tags) {
-        // B7.10: apple wine is a small bottle again (3 per placed block, small racks), as in 1.3.10; 1.5.5 made it large
-        removeTagEntry(tags, "data/vinery/tags/items/large_bottle.json", "vinery:apple_wine");
-        JsonObject small = new JsonObject();
-        JsonArray values = new JsonArray();
-        values.add("vinery:apple_wine");
-        small.add("values", values);
-        // alcohol.md 10.8: Praetorian is a small bottle too (2 per placed block as in 1.3.10, every rack); racks that
-        // lay bottles down shrink its taller model to the small template's length (BottleRenderer)
-        values.add("vinery:praetorian_wine");
-        mergeTag(tags, "data/vinery/tags/items/small_bottle.json", small);
+        // alcohol.md 10.12: the bottle tags follow each wine's per-block limit (ObjectRegistry), replacing upstream's lists;
+        // the racks check the size itself, the tags are for anything else reading them
+        Map<DrinkBlockItem.BottleSize, JsonArray> sizes = new LinkedHashMap<>();
+        for (DrinkBlockItem.BottleSize size : DrinkBlockItem.BottleSize.values()) {
+            sizes.put(size, new JsonArray());
+        }
+        for (Item item : ForgeRegistries.ITEMS) {
+            if (item instanceof DrinkBlockItem drink) {
+                sizes.get(drink.getBottleSize()).add(String.valueOf(ForgeRegistries.ITEMS.getKey(item)));
+            }
+        }
+        sizes.forEach((size, values) -> {
+            String path = "data/vinery/tags/items/" + size.name().toLowerCase(Locale.ROOT) + "_bottle.json";
+            tags.remove(path);
+            JsonObject entries = new JsonObject();
+            entries.add("values", values);
+            mergeTag(tags, path, entries);
+        });
 
         // B7.2: honey takes a glass bottle, not a wine bottle (the honey bottle gives a glass bottle back)
         String honey = "data/vinery/recipes/apple_fermenting/honey_bottle.json";
@@ -258,17 +337,6 @@ public final class UpstreamTranslator {
         }
     }
 
-    private static void removeTagEntry(Map<String, JsonObject> tags, String path, String id) {
-        JsonObject tag = tags.get(path);
-        if (tag != null) {
-            JsonArray values = tag.getAsJsonArray("values");
-            for (int i = values.size() - 1; i >= 0; i--) {
-                if (values.get(i).getAsJsonObject().get("id").getAsString().equals(id)) {
-                    values.remove(i);
-                }
-            }
-        }
-    }
 
     /** 1.3.10 data the port reads: keeper recipes and loot, tags, biome placement and its biome tags. */
     private static boolean keeperData(String path, byte[] content) {
@@ -306,7 +374,7 @@ public final class UpstreamTranslator {
             }
         }
         if (rest.startsWith("structures/")) {
-            return null; // F8: 1.5.5's village houses are unused upstream and not ported
+            return null; // the village house NBTs aren't json; VillageHouses serves them with rewritten palettes
         }
         if (rest.equals("advancements/main/vintage_perfection.json")) {
             return null; // alcohol.md B7: it checks 1.3.10's Year NBT, which the port's wines never carry (user: drop it)
@@ -729,7 +797,7 @@ public final class UpstreamTranslator {
         return name.endsWith(".json") ? name.substring(0, name.length() - 5) : name;
     }
 
-    private static JsonObject parseObject(byte[] content) {
+    static JsonObject parseObject(byte[] content) {
         try {
             JsonElement element = JsonParser.parseString(new String(content, StandardCharsets.UTF_8));
             return element.isJsonObject() ? element.getAsJsonObject() : null;
@@ -738,7 +806,7 @@ public final class UpstreamTranslator {
         }
     }
 
-    private static byte[] bytes(JsonObject json) {
+    static byte[] bytes(JsonObject json) {
         return GSON.toJson(json).getBytes(StandardCharsets.UTF_8);
     }
 }

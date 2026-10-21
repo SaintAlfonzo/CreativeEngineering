@@ -91,7 +91,7 @@ are NCH's generated ones, so they ignore counts (F1).
 
 ### Findings (2026-10-18)
 
-- **F1. IE crusher: planks have no recipe and logs probably give 2, not 3.** `sawdust.js` line 28 is
+- **F1.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **IE crusher: planks have no recipe and logs probably give 2, not 3.** `sawdust.js` line 28 is
   `R.ieCrushing(Item.of(i.sawdust, 2), i.any_log, e)` where the pattern (and the Create line above it) says planks. NCH ids
   ignore counts, so both log recipes get the same id and the later one (2) most likely replaces the 3. Fix: `i.any_planks`.
   Check with RW-03.
@@ -142,3 +142,4 @@ None.
 
 - By 2026-09-27 (initial git commit): the folder as it is; shipped with 1.0.3. Unchanged in git since.
 - 2026-10-18: this writeup; findings F1 to F6; tests RW-01 to RW-10. No code changed.
+- 2026-10-19: F1 fixed, `sawdust.js` crushes `i.any_planks` in the IE crusher ([plan_1.0.9.md](plan_1.0.9.md)). RW-03 checks it.

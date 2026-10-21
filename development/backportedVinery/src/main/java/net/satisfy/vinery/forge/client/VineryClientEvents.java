@@ -1,22 +1,29 @@
 package net.satisfy.vinery.forge.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.satisfy.vinery.client.event.DoubleJumpHandler;
 import net.satisfy.vinery.core.Vinery;
 import net.satisfy.vinery.core.registry.MobEffectRegistry;
 import net.satisfy.vinery.core.wine.VintageClock;
+import net.satisfy.vinery.forge.upstream.BottleLooks;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Path;
 
-/** Forge-bus client events: double jump, the trippy shader (D3), the vintage clock on logout. */
+/** Forge-bus client events: double jump, the trippy shader (D3), the vintage clock on logout, /dumpwinetextures. */
 @Mod.EventBusSubscriber(modid = Vinery.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class VineryClientEvents {
     /** 1.3.10's trippy shader list (vanilla post shaders). */
@@ -59,6 +66,23 @@ public final class VineryClientEvents {
         } else {
             minecraft.gameRenderer.shutdownEffect();
         }
+    }
+
+    /** alcohol.md 10.17: every wine texture (upstream and the port's recolours) to kubejs/exported/wine_textures/. */
+    @SubscribeEvent
+    public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
+        event.getDispatcher().register(Commands.literal("dumpwinetextures").executes(context -> {
+            Path dir = FMLPaths.GAMEDIR.get().resolve("kubejs/exported/wine_textures");
+            try {
+                int count = BottleLooks.dump(dir);
+                context.getSource().sendSuccess(Component.literal(count + " wine textures written to " + dir), false);
+                return count;
+            } catch (IOException e) {
+                Vinery.LOGGER.warn("Couldn't dump the wine textures", e);
+                context.getSource().sendFailure(Component.literal("Couldn't write " + dir + ": " + e.getMessage()));
+                return 0;
+            }
+        }));
     }
 
     @SubscribeEvent

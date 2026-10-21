@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-10-19 05:56:35 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-10-20 05:03:07 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Biome rules
 
@@ -75,7 +75,7 @@ A structure whose pieces would overlap a higher-ranked structure's never starts 
 
 - `#priority/big_settlements`: rank 100
 - shaped (jigsaw members grow around higher-ranked structures instead of being dropped): `settlements` (35 structures)
-- companions of `creativeengineering:meta/town_villages`: 1 to 3 of 28 structures, 7 to 10 chunks out, rank 94
+- companions of `creativeengineering:meta/town_villages`: 1 to 3 of 28 structures, 4 to 6 chunks out, rank 94
 
 ### Peaceful radius
 
@@ -1155,6 +1155,7 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - **`meta/pillager_towers`** 15: `minecraft:pillager_outpost`, `towns_and_towers:exclusives/pillager_outpost_oriental`, `towns_and_towers:exclusives/pillager_outpost_swedish`, `towns_and_towers:exclusives/pillager_outpost_tudor`, `towns_and_towers:pillager_outpost_birch_forest`, `towns_and_towers:pillager_outpost_flower_forest`, `towns_and_towers:pillager_outpost_forest`, `towns_and_towers:pillager_outpost_meadow`, `towns_and_towers:pillager_outpost_savanna`, `towns_and_towers:pillager_outpost_snowy_plains`, `towns_and_towers:pillager_outpost_snowy_slopes`, `towns_and_towers:pillager_outpost_snowy_taiga`, `towns_and_towers:pillager_outpost_sunflower_plains`, `towns_and_towers:pillager_outpost_swamp`, `towns_and_towers:pillager_outpost_taiga`
 - **`meta/fortified_towns`** 3: `eugene:red_roof_castle`, `terralith:fortified_desert_village`, `terralith:fortified_village`
 - **`meta/friendly_camps`** 12: `campsite_structures:armorer_campsite`, `campsite_structures:butcher_campsite`, `campsite_structures:cartographer_campsite`, `campsite_structures:cleric_campsite`, `campsite_structures:farmer_campsite`, `campsite_structures:fisher_campsite`, `eugene:camp`, `plains_villager_tents:big_villager_tent`, `snowy_tents:snowy_tent`, `towns_and_towers:exclusives/village_wandering_trader_camp`, `villager_archer_camp:villager_archer_camp`, `villager_circus_tent:villager_circus_tent`
+- **`meta/coast_ok`** 6: `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sunken_ruin_cluster`
 - **`meta/lone_houses`** 40: `animal_barn:barn`, `beautify:botanist_house_desert`, `beautify:botanist_house_plains`, `beautify:botanist_house_savanna`, `beautify:botanist_house_snowy`, `beautify:botanist_house_taiga`, `bighorsestable:big_horse_stable`, `greek_villager_house:greek_house`, `hobbit_house_:hobbit_house`, `llama_stable:llama_stable`, `minecraft:igloo`, `old_swamp_fisherman_house:fisherman_house`, `saloon:saloon`, `sawmillhouse:sawmill`, `simply_houses:forest_chapel`, `simply_houses:forest_fort`, `simply_houses:forest_house`, `simply_houses:forest_stonemason`, `simply_houses:plains_house`, `simply_houses:plains_mansion`, `simply_houses:taiga_forge`, `simply_houses:taiga_house`, `simply_houses:taiga_inn`, `simply_houses:taiga_woodcutter`, `small_viking_villager_house:small_viking_house`, `small_villager_greenhouse:small_villager_greenhouse`, `smallhorsestable:horse_stable`, `villager_butcher_house:butcher_house`, `villager_cartographer_house:villager_cartographer_house`, `villager_cleric_house:villager_cleric_house`, `villager_country_house:country_house`, `villager_farmer_house:villager_farmer_house`, `villager_fish_shop:fish_shop`, `villager_fishermans_hut:villager_fishermans_hut`, `villager_fletcher_house:villager_fletcher_house`, `villager_flower_house:flower_house`, `villager_forge:villager_forge`, `villager_gold_washing_facility:villager_gold_washing_facility`, `villager_tannery:tannery`, `villager_windmill:windmill`
 - **`meta/farmers_structures`** 6: `farmers_structures:aquacultures_beach`, `farmers_structures:aquacultures_carp`, `farmers_structures:aquacultures_common`, `farmers_structures:cooks`, `farmers_structures:cooks_moss`, `farmers_structures:sushis`
 - **`meta/way_signs`** 1: `supplementaries:way_sign`

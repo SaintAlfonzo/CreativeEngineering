@@ -28,10 +28,11 @@ feature are documented with that feature and only pointed to here.
 | 2.19 | Others: creative inventory off, XP fluid merge, IE recycling tag order, copper pickaxe tier | various | DEPLOYED |
 | 2.20 | Quark's sort button deletes items from containers holding stacks over the max size | `QuarkSafeSort`, `QuarkSortingHandlerMixin` | DEPLOYED with 1.0.7, see [testing/fridge_sort/plan.md](testing/fridge_sort/plan.md) (FS-01 to FS-05) |
 | 2.21 | Exposure viewfinder outlives its player and eats clicks inside screens | exposureBackport `-04` | DEPLOYED with 1.0.7, see [exposure.md](exposure.md) |
-| 2.22 | IE Engineer's Hammer rotates the FD cutting board instead of running a hammer cutting recipe | `IECompat.registerHammerNoRotate`, `#creativeengineering:hammer_no_rotate` | STAGED for 1.0.8, see [oven.md](oven.md) 2.5 |
+| 2.22 | IE Engineer's Hammer rotates the FD cutting board instead of running a hammer cutting recipe | `IECompat.registerHammerNoRotate`, `#creativeengineering:hammer_no_rotate` | DEPLOYED with 1.0.8, see [oven.md](oven.md) 2.5 |
 | 2.23 | Server crash: bonemealing a Vinery grass slab with Immersive Weathering (`fertile` property) | Vinery port `SpreadableGrassSlabBlock` | DEPLOYED with 1.0.7 (hotfix), see [alcohol.md](alcohol.md) Part B |
+| 2.24 | AppleSkin bars missing in cooking/meal slots, keg tank, recipe books, TrashSlot, Pretty Pipes, FTB Quests, Wares, Patchouli, AE2 | `MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + client mixins; Brewin' and Vinery ports | BUILT 2026-10-20, not tested, see [tooltips.md](tooltips.md) (TT-19 to TT-30) |
 
-- **Pending:** 2.22 is staged for 1.0.8; nothing else built and unshipped. FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
+- **Pending:** nothing built and unshipped (2.22 went out with 1.0.8, 2026-10-19). FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
   there). Findings F1 to F6 (section 4); none needs a decision except F3.
 - **Knobs:** `config/creativeengineering-common.toml`: `[forgiving_void]`, `[armor_overflow]`, `[bonemeal_charm]`,
   `[gui_title]`, `[debug.block_state_sync]`. All live.
@@ -209,7 +210,7 @@ reobfuscated with no refmap).
 
 ### Findings (2026-10-18)
 
-- **F1. Stale javadoc in `ForgivingVoidMixin`:** it says the dials come from
+- **F1.** FIXED 2026-10-19 (javadoc names `[forgiving_void]` in CEConfig). **Stale javadoc in `ForgivingVoidMixin`:** it says the dials come from
   `config/creativeengineering/forgiving_void.json` via KubeJS; they're `[forgiving_void]` in CEConfig (the bridge says
   so).
 - **F2. The ghost-block fix has a ceiling.** It works for ids below 2^20 (1,048,576). The pack has 761,052 states;
@@ -222,7 +223,7 @@ reobfuscated with no refmap).
   makes it safe, but the same code may misbehave elsewhere.
 - **F5. Banner compat textures need a jar rebuild** for a new pattern mod: both generators write patcherMod resources,
   so they're deliberately not in `/cegen` (`generators.json` `_readme`).
-- **F6. `CopperPickaxeItemMixin` has no javadoc**, unlike every other mixin.
+- **F6.** FIXED 2026-10-19 (javadoc added). **`CopperPickaxeItemMixin` had no javadoc**, unlike every other mixin.
 
 ### Known limits
 
@@ -289,3 +290,4 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-18: this writeup; findings F1 to F6; tests FX-01 to FX-20. No code changed.
 - 2026-10-19: catalogue entries 2.20 to 2.23 for the fixes in 1.0.7 (Quark sort, Exposure viewfinder, grass slab
   crash) and 1.0.8 (IE hammer); each keeps its tests in its own writeup.
+- 2026-10-19: F1 and F6 fixed (ForgivingVoidMixin javadoc, CopperPickaxeItemMixin javadoc; source only, ship with the next patcherMod build).

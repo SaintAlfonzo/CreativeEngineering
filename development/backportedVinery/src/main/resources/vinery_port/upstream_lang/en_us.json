@@ -1,5 +1,5 @@
 {
-  "_comment": "Port-owned wording for upstream keys (assets/vinery/lang). UpstreamTranslator layers these over the merged upstream lang: the jar can't carry a file at upstream's own path (alcohol.md B4.8). Cask: alcohol.md B7.9. Months: B7.8 / time.md 3.7.",
+  "_comment": "Port-owned wording for upstream keys (assets/vinery/lang). UpstreamTranslator layers these over the merged upstream lang: the jar can't carry a file at upstream's own path (alcohol.md B4.8). Cask: alcohol.md B7.9. Months: B7.8 / time.md 3.7. Stained Glass: alcohol/vineryport #17.",
   "block.vinery.fermentation_barrel": "Cask",
   "rei.vinery.fermentation_barrel_category": "Cask",
   "emi.category.vinery.wine_fermentation": "Cask",
@@ -26,5 +26,7 @@
   "text.autoconfig.vinery.option.items.wine.durationPerYear.@Tooltip": "Effect duration in ticks added per wine month (20 ticks = 1 second).",
   "text.autoconfig.vinery.option.items.wine.yearsPerEffectLevel": "Months per Level",
   "text.autoconfig.vinery.option.items.wine.yearsPerEffectLevel.@Tooltip": "Wine months needed for each additional effect level.",
-  "tooltip.vinery.banner.thankyou_1": "Crafted from the seven finest wines"
+  "tooltip.vinery.banner.thankyou_1": "Crafted from the seven finest wines",
+  "block.vinery.window_block": "Stained Glass",
+  "block.vinery.window": "Stained Glass Pane"
 }

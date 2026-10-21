@@ -1,5 +1,12 @@
 package net.satisfy.vinery.core.block;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.TooltipFlag;
+import net.satisfy.vinery.core.wine.WineYears;
+import org.jetbrains.annotations.Nullable;
+import java.util.List;
+
 import net.satisfy.vinery.core.registry.EntityTypeRegistry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.satisfy.foundation.util.ShapeUtil;
@@ -28,7 +35,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.vinery.core.registry.StorageTypeRegistry;
-import net.satisfy.vinery.core.registry.TagRegistry;
+import net.satisfy.vinery.core.item.DrinkBlockItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -38,6 +45,8 @@ import java.util.function.Supplier;
 public class WineBoxBlock extends StorageBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+    /** The largest wine this block takes (alcohol.md 10.12). */
+    private static final DrinkBlockItem.BottleSize LARGEST = DrinkBlockItem.BottleSize.MEDIUM;
 
     private static final Supplier<VoxelShape> shapeOpen = () -> {
         VoxelShape shape = Shapes.empty();
@@ -99,9 +108,13 @@ public class WineBoxBlock extends StorageBlock {
         return true;
     }
 
+    /**
+     * Port (alcohol/vineryport #18): sneaking opens and closes the box whatever is in hand. 1.5.5 needed an empty
+     * hand; vanilla skips the block for a sneaking player holding anything, so VineryCommonEvents lets this through.
+     */
     @Override
     public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (player.isShiftKeyDown() && stack.isEmpty()) {
+        if (player.isShiftKeyDown()) {
             if (!level.isClientSide()) {
                 level.setBlock(pos, state.setValue(OPEN, !state.getValue(OPEN)), Block.UPDATE_ALL);
             }
@@ -117,9 +130,10 @@ public class WineBoxBlock extends StorageBlock {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
+    /** alcohol.md 10.12: small and medium wines; 1.5.5 used {@code #vinery:small_bottle}. */
     @Override
     public boolean canInsertStack(ItemStack stack) {
-        return stack.is(TagRegistry.SMALL_BOTTLE);
+        return DrinkBlockItem.BottleSize.fits(stack, LARGEST);
     }
 
     @Override
@@ -152,5 +166,14 @@ public class WineBoxBlock extends StorageBlock {
         Direction facing = state.getValue(FACING);
         boolean isOpen = state.getValue(OPEN);
         return isOpen ? SHAPE_OPEN.get(facing) : SHAPE_CLOSED.get(facing);
+    }
+
+    /** Port: says what speeds up wine aging here (WineYears.storageKind). */
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        DrinkBlockItem.BottleSize.addHoldsLine(tooltip, size(), LARGEST);
+        tooltip.add(Component.translatable("tooltip.vinery_backport.wine_box.open").withStyle(ChatFormatting.GRAY));
+        WineYears.addStorageHint(tooltip);
     }
 }

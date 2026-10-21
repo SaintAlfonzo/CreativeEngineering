@@ -67,8 +67,7 @@
 	#How many ticks the item reports as its max use duration (bow-style hold-to-use).
 	#The default is the same huge value vanilla's bow uses - effectively unlimited, so
 	#the player releasing the mouse button is what actually ends the hold, not a timeout.
-	#Only read once, when the item is registered - a running game needs a restart to see
-	#a change here (not just the item's config-reload).
+	#Read each time the item is used, so a config reload applies it.
 	#Range: > 1
 	useDurationTicks = 72000
 	#true (default): the brake only slows the player while actually gliding (isFallFlying()).
@@ -232,6 +231,19 @@
 		#Range: 0 ~ 64
 		hammerBlows = 3
 
+	[crafting.felsic_shield]
+		#Potion effect id filled in during assembly.
+		potion = "creativeengineering:magic_resistance"
+		#mB of potion fluid used in the final filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 8
+
 #Tuning for creativeengineering:magic_resistance's damage reduction against
 #magic damage sources (DamageSource#isMagic() - potion/instant damage, evoker
 #fangs, conduit, dragon's breath, etc).
@@ -295,8 +307,10 @@
 	#Range: 1 ~ 9
 	compactRowSpacing = 4
 
-#Tier shields (copper / gold / diamond / netherite / echo / felsic / dragon). Vanilla's
-#shield and Immersive Engineering's shield are NOT affected by anything in here.
+#Tier shields: copper / gold / iron / diamond / netherite / echo / felsic / dragon. 'iron' is
+#the vanilla minecraft:shield itself, tuned like the others. Immersive Engineering's shield
+#and Alex's Mobs' Shield of the Deep are NOT tier shields; only disableCooldownTicks below
+#applies to them.
 #
 #A raised tier shield sorts each incoming hit into one of three kinds and looks that
 #kind up under its own tier, each tuned independently:
@@ -332,15 +346,20 @@
 	#sources (burning, poison ticks) are usually under it; lava and big hits are not.
 	#Range: 0.0 ~ 1000.0
 	wearThreshold = 3.0
-	#Ticks a shield is unusable after an attacker disables it (a vanilla axe hit by default;
-	#Immersive Engineering's shock upgrade and Alex's Mobs' void worm shot trigger the same
-	#mechanic directly). This is a Player-level vanilla mechanic, NOT tier-specific - unlike
-	#everything else in [shields], it also applies to the plain vanilla shield and Immersive
-	#Engineering's shield. 20 (1 second) is vanilla's hardcoded value; lower it to let
-	#blocking recover faster against fast/continuous attackers without removing the
-	#punish-for-turtling mechanic entirely. 0 disables the cooldown outright.
+	#Ticks a raised shield is unusable after an attacker disables it: a player's axe, a mob's
+	#axe (vindicators, piglin brutes; 25% chance per hit, more with Efficiency), Immersive
+	#Engineering's shock upgrade and Alex's Mobs' void worm shot. Not tier-specific - it covers
+	#every shield, tier or not. Vanilla hardcodes 100 (5 seconds); the pack uses 20 (1 second).
+	#0 disables the cooldown outright.
 	#Range: 0 ~ 12000
 	disableCooldownTicks = 20
+	#Potion effects whose periodic damage no shield may block, comma-separated effect ids.
+	#Matched by the effect that is ticking on the shield holder, not by damage tag: poison
+	#ticks use the same 'magic' damage source as Instant Damage, so a tag can't tell them
+	#apart. The shield doesn't attempt the block (no shield sound, full damage). Instant
+	#Damage and other one-off magic hits are unaffected. The default is every effect in the
+	#pack that deals tick damage.
+	unblockableEffectTicks = "minecraft:poison, minecraft:wither, everythingcopper:copper_poisoning, alexsmobs:debilitating_sting, alexsmobs:exsanguination, alexsmobs:ender_flu, endersdelight:phasing"
 
 	#Per damage kind (physical / elemental / magic): how the raised shield's direction is checked.
 	#  REQUIRED       vanilla: the source needs a position and must be in front of you.
@@ -375,12 +394,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 1
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.copper.reduction]
@@ -440,12 +470,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 2
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.gold.reduction]
@@ -505,12 +546,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 4
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.diamond.reduction]
@@ -570,12 +622,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 5
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.netherite.reduction]
@@ -635,12 +698,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 6
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.echo.reduction]
@@ -700,12 +774,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 7
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.felsic.reduction]
@@ -765,12 +850,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = "minecraft:poison;100;0"
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 8
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.dragon.reduction]
@@ -830,12 +926,23 @@
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
 		attackerEffects = ""
-		#Damage amount, AFTER this tier's own reduction, below which a blocked melee hit no
-		#longer knocks its attacker back (vanilla always applies that recoil; this only ever
-		#removes it, never adds knockback to a hit that wouldn't already have had it). 0 = never
-		#suppress (always knock back, vanilla behaviour).
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
 		#Range: 0 ~ 1000
 		knockbackThreshold = 3
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativeengineering:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativeengineering:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
 
 		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
 		[shields.iron.reduction]
@@ -1070,6 +1177,21 @@
 		#Range: 0 ~ 3600
 		startupWaitSeconds = 120
 
+	#Block-state sync diagnostics, for ghost blocks that only appear on a dedicated server (the client
+	#throws 'Error executing task on Client' because a block-update packet names a block state it does
+	#not have, and drops the rest of that packet). Turn it on on the CLIENT, and on the SERVER to get its
+	#half of the comparison.
+	[debug.block_state_sync]
+		#Debug mode. Client: logs every block-update packet containing a state id the client cannot resolve
+		#(the raw id, the block position, the client's state count) and writes
+		#logs/ce_block_state_ranges_client.txt. Dedicated server: writes logs/ce_block_state_ranges_server.txt
+		#when it starts. tools/diff_block_state_ranges.py compares the two files and names the block.
+		enabled = false
+		#Per-packet detail lines to log before falling back to one summary line every 500 bad packets.
+		#Each distinct bad id is always logged the first time it is seen.
+		#Range: 0 ~ 100000
+		maxDetailLines = 200
+
 #World generation: switches per system, a debug rate multiplier, and the constants of the pack's
 #worldgen code. The per-structure, per-piece and per-biome tables are the JSON files in
 #kubejs/generation_scripts/worldgen/ (see feature_writeup/structure_tuning.md). Structure and
@@ -1090,12 +1212,60 @@
 		lootContainerSwaps = true
 		#biome_config.json multipliers / replacements (BiomeLayoutTuner). Only affects worlds created afterwards.
 		biomeLayout = true
-		#biome_merges.json: extra biomes in structure biome tags (kubejs worldgen/biome_merges.js). /reload or rejoin.
-		biomeMerges = true
 		#Explorer maps and /locate skip structure sets at frequency 0 (without it they can hang the server).
 		deadPlacementFilter = true
 		#Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).
 		groundMatch = true
+		#biome_rules in structure_groups.json (patcherMod StructureBiomeRules): only allowed structures start in
+		#the rule's biomes (water: ships, wrecks, ocean ruins...). Off: every structure uses its own biome list. Rejoin.
+		structureBiomeRules = true
+		#Cancel a structure whose foundation would need too much earth over water or air ([worldgen.earth_fill]).
+		#New chunks only.
+		earthFill = true
+		#wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).
+		#Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.
+		wildCrops = true
+		#Cancel a water structure whose water would replace too much dry ground or air ([worldgen.water_fill]).
+		#New chunks only.
+		waterFill = true
+		#wild_flowers.json: flower biomes and rates, Botania colors per biome, Flower Patch blocks in wild flowers
+		#(kubejs worldgen/wild_flowers.js). Off: every flower as its mod ships it. Rejoin to apply; only new chunks change.
+		wildFlowers = true
+		#mob_spawns.json: per-biome mob spawn weights, additions and removals (kubejs worldgen/mob_spawns.js,
+		#patcherMod SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.
+		mobSpawns = true
+		#The creativeengineering:terrain_adaptation/* structure tags replace a structure's own terrain adaptation
+		#(none, bury, beard_thin, beard_box, or the pack's soft beard; [worldgen.terrain_adaptation]). Rejoin; new chunks only.
+		terrainAdaptation = true
+		#Structures in the creativeengineering:template_trim tag skip their template's air and bare pad (grass,
+		#dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.
+		templateTrim = true
+		#bee_nests.json: per-biome bee nest chance on generated trees, plus extra bee-nest trees (kubejs
+		#worldgen/bee_nests.js, patcherMod BeeNests). Off: nests as the mods ship them. Rejoin to apply; only new chunks change.
+		beeNests = true
+		#biome_fits.json + the land/* structure tags (patcherMod StructureBiomeFits): a structure in a fit tag spawns in
+		#its fit's biomes (land/oak: land/oak + land biomes) instead of its own list. Off: its own list. Rejoin; new chunks only.
+		structureBiomeFits = true
+		#meta_structures.json: our structures built from other structures and features (a village with peaceful
+		#towers, ruin clusters, pillager camps with siege weapons, a driftwood flotilla...; patcherMod MetaStructure, [worldgen.meta_structures]).
+		#Off: none generate (their anchors spawn plain). Rejoin; new chunks only.
+		metaStructures = true
+		#Group members with "replaces" + "share" in structure_groups.json take that share of another member's slots
+		#(the vanilla swamp hut in YUNG's witch hut slots; patcherMod MetaSlots). Off: they never generate and the
+		#structures they replace keep every slot. Rejoin; new chunks only.
+		structureReplacements = true
+		#Geodes under oceans generate lower so fewer break through the sea floor ([worldgen.ocean_geodes];
+		#patcherMod OceanGeodes: vanilla amethyst and every Geode Plus geode). Off: at their own height. New chunks only.
+		oceanGeodes = true
+		#Placement priority (structure_groups.json "priority"; patcherMod PlacementPriority): a structure whose
+		#pieces would overlap a higher-ranked structure's never starts (settlements > pillagers > dungeons > houses
+		#and camps > ruins), and companion villages around fortified towns. Off: structures may overlap, no
+		#companions. Rejoin; new chunks only.
+		placementPriority = true
+		#meat_block_swaps.json (patcherMod TemplateBlockSwaps): marked blocks in structure templates are swapped
+		#when the template loads (lone red glazed terracotta "meat" -> Architect's Palette salmon log). Off: templates as
+		#the mods ship them. Rejoin; new chunks only.
+		templateBlockSwaps = true
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
@@ -1112,6 +1282,11 @@
 		#tries every copy of a piece in a pool, so a bigger factor is more exact but slower to fail.
 		#Range: 1 ~ 100
 		maxFractionScale = 10
+		#Sort every pool's pieces by template id at world load. Mods that add pieces in code leave the pools
+		#in an order that changes from one server start to the next, and jigsaw picks by position in that
+		#list, so the same seed built different villages after each restart. Sorted, a seed gives the same
+		#layouts every time (not vanilla's: new chunks only). false = keep the order the mods left.
+		canonicalOrder = true
 
 	[worldgen.biome_solver]
 		#Biomes considered per climate sample (the closest ones). More = slower, rarely different.
@@ -1198,6 +1373,237 @@
 		#Range: 5 ~ 1000
 		tickBudgetMs = 40
 
+	#Structures that would need a lot of earth to stand on. Just before a structure start is stored,
+	#every earth block (tag below) in the bottom layers of its template pieces is compared with the
+	#terrain the generator predicts at that spot. Earth in water counts toward maxOverWater, earth in air
+	#toward the size's air limit, but only where the structure's beard (its terrain adaptation) won't
+	#fill under it: ground deeper than beardReach (buryReach for bury), or always with no adaptation.
+	#Columns whose ground lies more than maxMoundHeight below a piece count toward the size's mound
+	#limit. Past any limit the whole structure is cancelled and its slot stays empty (a slot shared
+	#with other structures tries the next pick). The limits scale with the structure's size (its earth
+	#base block count, [worldgen.earth_fill.sizes]). Village streets that follow the terrain are never
+	#counted. Exempt a structure with the structure tag creativeengineering:earth_fill/exempt. New
+	#chunks only; /place structure is not checked.
+	[worldgen.earth_fill]
+		#Most earth blocks that may stand in water the beard won't fill (a pad reaching out over a lake or the
+		#sea deeper than beardReach). -1 = no limit, 0 = none at all. Vanilla villages set house floors into the
+		#top water layer of rivers and coasts; their beard fills under them, so that doesn't count. Per
+		#structure: see overrides.
+		#Range: -1 ~ 100000
+		maxOverWater = 24
+		#How many template layers from the bottom count as the foundation. Earth higher up (roof gardens,
+		#planters) is not counted: above the ground everything is air.
+		#Range: 1 ~ 16
+		baseLayers = 3
+		#Block tags, one entry each, that count as earth. Fill the default in kubejs blocktags.js; add a tag
+		#here to count another kind of block.
+		blocks = ["creativeengineering:earth_fill/earth"]
+		#Per-structure limits, one entry each: "<structure id or #structure tag>=<water>,<air>[,<mound>]",
+		#e.g. "philipsruins:ancient_ruins=0,16" (never over water, at most 16 over air after the beard,
+		#mound from its size) or "#creativeengineering:type/village=-1,-1,-1" (no limits). They replace the
+		#size's limits. The first matching entry wins; -1 = no limit.
+		overrides = []
+		#The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little
+		#coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too.
+		#Range: 1 ~ 8
+		sampleGrid = 2
+		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
+		#structure that has any earth in its base. For tuning the limits.
+		#Allowed Values: OFF, CANCELLED, ALL
+		log = "CANCELLED"
+		#How deep under a piece the beard (beard_thin, beard_box, the soft beard) still fills the ground, in
+		#blocks between the piece's bottom and the ground (air and water both: the beard fills either). Earth
+		#over a deeper gap hangs and counts; a shallower one is filled and doesn't. Measured with
+		#tools/earth_fill_sim.sh beard on vanilla villages: the whole gap is filled 81% of the time at 6 blocks,
+		#35% at 7.
+		#Range: 0 ~ 32
+		beardReach = 6
+		#The same for bury (the structure sinks into the ground): filled 100% to 10 blocks, 27% at 11.
+		#Range: 0 ~ 32
+		buryReach = 10
+		#A column whose ground lies more than this many blocks below a piece's bottom is a mound column:
+		#the beard would build a tall pillar there, or can't reach the piece at all (an edge of a ravine, a
+		#pad over a cliff). Each column counts once per structure, toward the size's mound limit.
+		#Range: 0 ~ 64
+		maxMoundHeight = 8
+		#For structures in the structure tag creativeengineering:earth_fill/prune (villages): before the whole start
+		#is judged, each jigsaw piece but the first is judged alone, and one past pruneMaxHanging or pruneMaxMound
+		#is dropped with every piece attached below it (a house over deep water with its villagers). The street
+		#that led to it stays as a dead end. Then the rest is judged as usual. Off: the whole start is judged.
+		prune = true
+		#Earth blocks of one piece over water or air the beard won't fill before that piece is dropped. -1 = never.
+		#Range: -1 ~ 100000
+		pruneMaxHanging = 8
+		#Mound columns of one piece before that piece is dropped. -1 = never.
+		#Range: -1 ~ 100000
+		pruneMaxMound = 4
+		#The footprint's water share, checked after the limits: the bounding box of every piece with earth, in the
+		#layer the structure was set onto the surface with. Water there (filled by its earth or the beard, or left
+		#standing) against dry ground there (replaced or left alone): the structure is cancelled when the water
+		#outnumbers the ground by more than this share. 0.5 = water more than 50% over ground (60:40 passes, 61:39
+		#doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,
+		#whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers
+		#blocks of terrain (underground structures, aquifers) counts as neither. Not for structures in
+		#creativeengineering:water_fill/structures; an override with every limit -1 skips it too.
+		#Range: -1.0 ~ 1000.0
+		maxWaterSurplus = 0.5
+
+		#A structure's size is its earth base block count (each start counted as it generates, a meta
+		#structure part by part). Each size has [maxOverAir, maxMound]: earth blocks over air after the beard,
+		#and mound columns; -1 = no limit. First guesses, to calibrate with log = ALL.
+		[worldgen.earth_fill.sizes]
+			#Earth base blocks where medium, large and huge start: under the first is small, from the last on huge.
+			bounds = [150, 600, 2000]
+			#[maxOverAir, maxMound] for small structures (a well, a small ruin, a fish pond).
+			small = [24, 8]
+			#[maxOverAir, maxMound] for medium structures (a house, a camp, a tower).
+			medium = [64, 24]
+			#[maxOverAir, maxMound] for large structures (a village, a fortified village, a mansion).
+			large = [160, 64]
+			#[maxOverAir, maxMound] for huge structures.
+			huge = [320, 128]
+
+	#Water structures that would flood the land. Just before a structure start in the structure tag
+	#creativeengineering:water_fill/structures is stored, every water block of its template pieces (water,
+	#waterlogged blocks, kelp, seagrass; all layers) is compared with the terrain the generator predicts
+	#at that spot. Water in water is fine, and so is water replacing a sea, lake or river bed. Water
+	#replacing dry ground counts toward maxIntoGround, water in air (above the sea surface or on land)
+	#toward maxIntoAir; past either limit the whole structure is cancelled and its slot stays empty.
+	#Uses [worldgen.earth_fill] sampleGrid. New chunks only; /place structure is not checked.
+	[worldgen.water_fill]
+		#Most water blocks that may replace dry ground (a ruin reaching onto a beach or into a hillside).
+		#-1 = no limit, 0 = none at all. Per structure: see overrides.
+		#Range: -1 ~ 100000
+		maxIntoGround = 32
+		#Most water blocks that may land in air (water standing above the sea surface or on land, where it
+		#spills). -1 = no limit, 0 = none at all. Per structure: see overrides.
+		#Range: -1 ~ 100000
+		maxIntoAir = 16
+		#Per-structure limits, one entry each: "<structure id or #structure tag>=<ground>,<air>". The default
+		#lets the structures in creativeengineering:water_fill/ponds (fish ponds, a house on a pond) dig their
+		#water into the ground and allows them 16 in air. The first matching entry wins; -1 = no limit.
+		#Only structures in creativeengineering:water_fill/structures are checked at all.
+		overrides = ["#creativeengineering:water_fill/ponds=-1,16"]
+		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
+		#structure that carries any water. For tuning the limits.
+		#Allowed Values: OFF, CANCELLED, ALL
+		log = "CANCELLED"
+
+	#Terrain around structures. Vanilla's beard flattens the whole template bounding box and blends it out
+	#over about 8 blocks around it, so a small structure with a flat pad or a lot of saved air leaves a flat
+	#rectangle the size of its whole template in a curved hillside. Structures in the structure tag
+	#creativeengineering:terrain_adaptation/soft get the soft beard instead: the same fill and carve, but
+	#only under the template's built columns (pad and air columns left out when the structure is also in
+	#creativeengineering:template_trim), blending out over a short round skirt. Tags: kubejs
+	#worldgen/terrain_adaptation.js. New chunks only.
+	[worldgen.terrain_adaptation]
+		#Blocks added to the soft beard's minimum skirt of 4 (where its fill and carve fade out, measured from
+		#the built footprint). 0 = the tightest blend; 4 = as wide as vanilla's beard (8), but round and
+		#around the footprint; 8 = the most there is room for (12, vanilla's reach). Read per chunk.
+		#Range: 0 ~ 8
+		skirtBump = 0
+
+	#Meta structures: one structure start made of other structures (an anchor such as a village, plus
+	#satellites such as towers around it) and placed features (driftwood on the sea). Every part keeps
+	#within 7 chunks of the start so the whole thing generates; a part that can't fit (biome, room)
+	#is retried elsewhere, and a meta structure short of a part's minimum count doesn't spawn at all.
+	#A meta with an anchor only takes a share of the slots its anchor already won, so no structure's rate
+	#changes. /locate finds a meta by its id and a structure inside one by the structure's own id.
+	[worldgen.meta_structures]
+		#Log every meta structure start that is assembled: its anchor, each part and how many of each
+		#fitted, or which part fell short (the slot is then the plain anchor).
+		log = false
+		#Keep meta structures out of coasts and rivers (the biome tag creativeengineering:coast_river: beaches,
+		#shores, rivers; kubejs biome_fits.json biome_tags). No part may start there or reach there with its box
+		#(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,
+		#which still spawns as it would alone. Metas in the structure tag creativeengineering:meta/coast_ok (fleets,
+		#flotillas, wrecks, sunken ruins) are not affected. New chunks only.
+		avoidCoasts = false
+
+	#Geodes whose column is an ocean (the biome at the sea floor is #minecraft:is_ocean) are moved down before
+	#they generate, so fewer of them poke through the sea floor. Which geodes stay is a fixed roll per position.
+	[worldgen.ocean_geodes]
+		#Blocks a geode under an ocean is moved down.
+		#Range: 0 ~ 64
+		drop = 10
+		#Share of geodes under oceans that keep their own height (0.1 = 1 in 10).
+		#Range: 0.0 ~ 1.0
+		stayShare = 0.1
+		#Geodes whose inner layer is one of these blocks are left at their own height (Geode Plus'
+		#prismarine geode belongs on the sea floor).
+		untouched = ["geode:budding_prismarine"]
+
+	[worldgen.placement_priority]
+		#Log every structure start dropped because a higher-ranked structure overlaps it, and every
+		#companion village. For testing.
+		log = false
+
+	#Structure searches. A miss is a slot the cheap prediction called possible, so the search generated that
+	#chunk's structure starts, and nothing was there. Each fold below makes the prediction say "no" earlier,
+	#only where generation would certainly say no. Async Locator's thread count is its own server config
+	#(serverconfig/asynclocator-server.toml, asyncLocatorThreads).
+	[worldgen.locate]
+		#Stage A: the structure set's own frequency and exclusion zone (vanilla checks both when generating but
+		#not when searching). Exact. Applies to new searches immediately.
+		foldPlacement = true
+		#Stage B: the biome at the structure's generation point, with the pack's biome rules and fits (vanilla
+		#never tests the biome in the prediction). Exact. Applies to new searches immediately.
+		foldBiomes = true
+		#A search running off the server thread (Async Locator) waits for a miss's chunk itself instead of making
+		#the server thread block until the chunk's structure starts exist. Off: vanilla's blocking load.
+		nonBlockingLoads = true
+		#Make vanilla's structure-presence cache safe for several search threads at once (needed before raising
+		#asyncLocatorThreads above 1). Read when a dimension loads (rejoin to apply).
+		threadSafeStructureCheck = true
+		#Log one [locate] line for every search with at least this many misses (0 = every search, -1 = never).
+		#Range: > -1
+		logMissesAtLeast = 8
+		#Default search radius of /celocate batch, in chunks (/locate uses 100).
+		#Range: 1 ~ 1000
+		batchRadius = 100
+		#A /celocate batch search still running after this long is reported as timed out and cancelled (Async
+		#Locator never completes a search that threw).
+		#Range: 5 ~ 3600
+		batchTimeoutSeconds = 120
+		#/celocate census splits its square into regions this many chunks wide; each region is one task on
+		#Async Locator's thread pool.
+		#Range: 4 ~ 256
+		censusRegionChunks = 32
+		#A non-blocking miss load that hasn't finished after this long counts as a miss (protects search threads
+		#from a stopping server).
+		#Range: 10 ~ 3600
+		loadTimeoutSeconds = 300
+		#Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and
+		#logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches
+		#too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.
+		#Range: 0 ~ 3600
+		searchTimeoutSeconds = 120
+
+	#Distant Horizons' distant generation only (chunks it generates for LODs and throws away). Below clipBelowY
+	#no terrain noise is computed: land columns are filled with stone, and an ocean column whose block at
+	#clipBelowY is water keeps water down to a fake sand/gravel floor that rolls around a per-biome height.
+	#Chunks players walk in are never affected.
+	[worldgen.distant]
+		#Clip Distant Horizons' generation below clipBelowY.
+		clip = true
+		#No noise below this y (rounded down to a multiple of 16).
+		#Range: -64 ~ 320
+		clipBelowY = 48
+		#Fake floor height in ocean biomes (capped just under clipBelowY).
+		#Range: -64 ~ 320
+		oceanFloorY = 48
+		#Fake floor height in deep ocean biomes (#minecraft:is_deep_ocean).
+		#Range: -64 ~ 320
+		deepOceanFloorY = 8
+		#How far the fake floor rolls above and below its height, in blocks.
+		#Range: 0 ~ 32
+		floorVariation = 4
+		#Width of the fake floor's rolls, in blocks (seeded from the world seed).
+		#Range: 4 ~ 256
+		floorScale = 24
+		#Skip placed features (ores, geodes, cave decoration) that start below clipBelowY.
+		skipFeatures = true
+
 #Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
 #one takes a serving; the servings left show as a durability bar and a tooltip line. The
 #last serving leaves an empty can, a crushed can or nothing, rolled with the chances below.
@@ -1215,6 +1621,22 @@
 	emptyCanItem = "canned_goods:empty_can"
 	#Item id handed back as the crushed can.
 	crushedCanItem = "canned_goods:crushed_empty_can"
+
+#Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the
+#Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the
+#container slot; the rest goes to two leftover slots right of the output, which hoppers and
+#funnels on the output faces can empty.
+[cooking]
+	#Off = leftovers are thrown out of the station as in the original mods.
+	remainderBuffer = true
+	#On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).
+	#Off = it crafts anyway and throws what doesn't fit.
+	stallWhenFull = true
+	#On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat
+	#stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every
+	#ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of
+	#their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload.
+	ovenIngredientCounts = false
 
 #TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
 #but TrashSlotSaveState.json in the game folder lists every screen opened so far.
@@ -1235,4 +1657,258 @@
 	#true: each Sophisticated Backpacks tier (leather, copper, iron, gold, diamond, netherite)
 	#remembers its own trash slot position and on/off state. false: all backpacks share one.
 	splitBackpacksByTier = true
+
+#Wandering Trader and Wandering Winemaker spawning, and the trader's offer counts.
+#Each spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
+#overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not
+#change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then
+#a free spot near a random player; on average about 14 rolls per spawn.
+#To stop both use /gamerule doTraderSpawning false.
+[wandering_trader]
+	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers) and no Winemaker spawner.
+	enabled = true
+	#Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes.
+	#A change takes effect after the wait already counting down.
+	#Range: 1200 ~ 100000000
+	traderIntervalTicks = 96000
+	#Offers drawn from the common pool. Vanilla: 5. Each offer is a different listing; a pool
+	#smaller than this gives every listing once.
+	#Range: 0 ~ 200
+	commonTrades = 25
+	#Offers drawn from the rare pool, all different items. Vanilla: 1.
+	#Range: 1 ~ 50
+	rareTrades = 5
+	#Spawn Vinery's Wandering Winemaker from its own spawner, independent of the Wandering Trader.
+	#Vinery's own swap (vinery-common.toml [trader] spawnChance, 1.3.10: config/vinery/config.json5
+	#wine_trader_chance) must be 0, or it still
+	#turns that share of Wandering Trader spawns into Winemakers.
+	winemakerEnabled = true
+	#Ticks between Wandering Winemaker spawn rolls.
+	#Range: 1200 ~ 100000000
+	winemakerIntervalTicks = 96000
+
+#Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.
+[perf]
+	#Quark feeding trough: after an animal's trough search finds nothing, it does not search again for
+	#this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a
+	#hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or
+	#refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour).
+	#Range: 0 ~ 72000
+	troughMissCooldownTicks = 600
+	#Serene Seasons snow/ice melt: the per-chunk melt roll runs once every N ticks instead of every
+	#tick, with its chance multiplied by N so the average melt rate is unchanged (a roll's chance
+	#is capped at 1, so N above 4 melts slightly slower in summer). Walking every loaded chunk on
+	#every tick was the cost. Cost: melting is a little lumpier. 1 = off.
+	#Range: 1 ~ 40
+	seasonsMeltIntervalTicks = 4
+	#Create: Gravity runs its biome lookup and gravity-attribute update for every living entity in
+	#every dimension on every tick. On: only entities in the dimensions below run it (entities that
+	#still carry the low-gravity modifier from one run it once more to drop it). Off: the mod's own
+	#behaviour.
+	gravityLimitDimensions = true
+	#Dimensions Create: Gravity is allowed to run in. The pack's biome_configs lists only
+	##minecraft:is_end, so the End is enough. Add a dimension here if you add a gravity biome
+	#outside the End.
+	gravityDimensions = ["minecraft:the_end"]
+	#Ticks between passes that apply a worn horse armor's effects (dragon horse armor: Regeneration).
+	#The pass walks every entity in the level, which cost too much every tick. Effects last
+	#this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval.
+	#Range: 1 ~ 1200
+	mountEffectIntervalTicks = 100
+
+#JEI recipe screen tweaks (client side).
+[jei]
+	#When the recipe screen is opened over a screen that can take recipe transfers (crafting table,
+	#inventory, modded crafting GUIs), list the recipes whose + button is enabled first. The rest follow,
+	#most-complete first (the share of inputs you already have). Other screens keep JEI's own order.
+	#Takes effect the next time a recipe lookup opens.
+	craftableFirst = true
+	#Order JEI's ingredient list by the pack's definition (kubejs/startup_scripts/jei/order.js) and its
+	#creativeengineering:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then
+	#each category's own order. Ingredients with no place keep JEI's own order ([sorting] in
+	#config/jei/jei-client.ini) after the placed ones of their type. Off: JEI's own order only.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	packOrder = true
+	#Write kubejs/exported/jei_order.json at every JEI start: every item, fluid, effect and multiblock with
+	#its place in the pack order and whether JEI shows it (shown / hidden by the pack / hidden by a mod /
+	#hidden in JEI's edit mode / never in JEI), plus problems in the definition. Render it with
+	#python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB.
+	orderReport = false
+
+#WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
+#plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
+#WTHIT's own config, to every other growing plant. The blocks and their stages are in
+#assets/creativeengineering/crop_growth.json (override it from kubejs/assets/creativeengineering/).
+#Client-side only; reads the block state the client already has.
+[crop_growth]
+	#Master on/off switch for the added lines.
+	enabled = true
+	#true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in
+	#crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from
+	#mods added later. false: only the plants in the file.
+	fallback = true
+	#true: plants that can be picked before they are fully grown (salmonberries from stage 3,
+	#grapes from stage 2) read 'Growth: 75% (Harvestable)' until they finish. false: the
+	#percentage only.
+	showHarvestable = true
+
+#Container title plaques from GUI resource packs (client side).
+[gui_title]
+	#When a container title is wider than the plaque the resource pack painted behind it, stretch the
+	#plaque to fit. Titles wider than the whole GUI are cut short with "...". Only screens that draw
+	#their title the vanilla way (chests, barrels, shulker boxes, hoppers, horses, dispensers, furnaces).
+	stretchPlaque = true
+	#Record every title that needed a stretch in kubejs/exported/gui_title_overflow.json
+	#(screen class, texture, title and widths; kept across sessions).
+	logOverflow = true
+
+#Season types on top of Serene Seasons. The biome lists are the tags creativeengineering:seasons/
+#arid, frozen, tropical and adaptive (kubejs/generation_scripts/worldgen/season_types.json).
+#Arid: no rain all year. Frozen: snow all year. Tropical: wet and dry seasons, savannas included.
+#Adaptive (rivers, beaches): each column behaves like the nearest land biome. SeasonHUD shows
+#'Arid' / 'Frozen' with the day of the year. Read live on both sides.
+[seasons]
+	#false: Serene Seasons' own rules everywhere, the tags are ignored.
+	enabled = true
+	#How far (blocks) a river or beach column looks for land to copy, in rings of 8 directions
+	#at 8, 16, 24, 32, 48, 64, ... blocks. The first ring that reaches land decides by majority.
+	#Nothing found: the river or beach keeps its own biome.
+	#Range: 8 ~ 256
+	adaptiveRadius = 64
+	#The snow line (default 320, the overworld build height). Below it height alone never turns rain
+	#into snow (vanilla cools 0.05 per 40 blocks above y80): a column snows only if its biome snows at
+	#y80 in the current sub-season. At and above it temperate and cold biomes always snow, so falling
+	#snow tells a flyer they are above build height. Frozen and permanent-season biomes keep their own
+	#rules. Also the ceiling for the snow_seasons lists in season_types.json.
+	#Range: -64 ~ 4096
+	snowLineY = 320
+
+#Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the
+#time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml,
+#and vinery-common.toml [wine]/[aging] are overwritten from here at server start and on every edit.
+#/cetime shows every derived value.
+[time]
+	#SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:
+	#1 in single player, 3 on a server). Editing any value by hand turns this into CUSTOM, unless the
+	#values then match a preset again. CUSTOM itself changes nothing.
+	#Allowed Values: SINGLEPLAYER, SERVER, CUSTOM
+	preset = "SINGLEPLAYER"
+	#Master switch. false: Better Days, Serene Seasons, SeasonHUD and Vinery use their own files again.
+	enabled = true
+	#Dedicated server with nobody online: the sun stops, so the seasons and wine aging stop with it.
+	#Game time, weather and random ticks keep running. Single player is unaffected.
+	pauseWhenEmpty = true
+	#SeasonHUD shows the time of day after the season, "Mid Spring (Day 3/24) 7:30 pm" (client side).
+	hudTimeOfDay = true
+
+	[time.day]
+		#Real minutes from dayStart to nightStart.
+		#Range: 1.0 ~ 10000.0
+		dayMinutes = 45.0
+		#Real minutes from nightStart to the next dayStart.
+		#Range: 1.0 ~ 10000.0
+		nightMinutes = 15.0
+		#dayTime of sunrise; the clock reads it as 6:00 am. Better Days reads it once, so a change needs a restart.
+		#Range: 0.0 ~ 24000.0
+		dayStart = 22300.0
+		#dayTime of sunset. Needs a restart, like dayStart.
+		#Range: 0.0 ~ 24000.0
+		nightStart = 13000.0
+
+	[time.seasons]
+		#SUN: the seasons count sunrises; sleeping and /time move them as far as the sun.
+		#TICKS: Serene Seasons' own counter (one world day of real ticks per day; sleeping skips ahead).
+		#Allowed Values: SUN, TICKS
+		clock = "SUN"
+		#World days per sub-season (12 sub-seasons a year). Also the length of a wine month.
+		#Range: 1 ~ 1000
+		daysPerSubSeason = 8
+		#Sub-season a new world starts in: 1 = Early Spring ... 12 = Late Winter, 0 = random.
+		#Range: 0 ~ 12
+		startingSubSeason = 1
+
+	[time.wine]
+		#SUN: wine ages with the world days, sleeping and /time included. PLAYTIME: while a player is online.
+		#Allowed Values: SUN, PLAYTIME
+		clock = "SUN"
+		#A wine month is one sub-season. Months per effect level (SINGLEPLAYER 1, SERVER 3 = one season).
+		#Range: 1 ~ 100
+		monthsPerLevel = 1
+		#Highest effect level from aging.
+		#Range: 0 ~ 10
+		maxLevel = 5
+
+		[time.wine.boosts]
+			#Aging speed in storage with no sky light.
+			#Range: 1.0 ~ 5.0
+			cellarMultiplier = 2.0
+			#Aging speed in cold storage (Brewin' keg freeze sources outweigh heat sources nearby).
+			#Multiplies with cellarMultiplier: a cold cellar ages at both.
+			#Range: 1.0 ~ 5.0
+			coldMultiplier = 2.0
+
+#Advancements (vanilla, every mod, every datapack).
+[advancements]
+	#false (the pack's setting): none are loaded, so none show, toast or give rewards.
+	#Read when data loads: a change applies on the next /reload or world start.
+	enabled = false
+
+#Pop-up toasts in the top-right corner (client side).
+[toasts]
+	#Show tutorial toasts: vanilla's (move, find a tree, punch, craft planks, open inventory,
+	#social interactions, bundles), Exposure's camera/lightroom hints and Fairy Lights' Clippy
+	#balloons. Takes effect for the next toast.
+	tutorial = false
+	#Show advancement toasts (vanilla's "Advancement Made!" and Patchouli's book-unlocked toast).
+	#The pack loads no advancements ([advancements] enabled), so this only matters if that is on.
+	advancement = false
+
+#Natural (not player-placed) leaves decay when no log is close enough. Vanilla allows 6 blocks of
+#leaf path to a log and decays on slow random ticks; big generated trees have outer leaves past
+#that, which fell off on their own. Here a leaf decays shortly after a block next to it changes
+#(Fast Leaf Decay, ported in), and only if a search outward through the other far-out leaves
+#finds no log within maxDistance. Separated Leaves' rules (which leaves count which logs) are
+#kept. Server side.
+[leaf_decay]
+	#Master on/off switch. Off = vanilla decay (range and slow random-tick timing).
+	enabled = true
+	#true: random ticks never decay a natural leaf. A leaf only decays after a block next to it
+	#changes: when its log is cut it rechecks 4-11 ticks later, and a far-out leaf rechecks when a
+	#neighbour changes (so a cut tree's canopy falls away in a cascade). Trees from worldgen and
+	#saplings are placed without neighbour updates, so an untouched tree keeps every leaf, even ones
+	#past maxDistance or touching only diagonally. Cheaper than false: the range search runs only on
+	#a change. false: vanilla timing (random ticks), with the maxDistance range.
+	onlyWhenDisturbed = true
+	#Longest leaf path a natural leaf may be from a log and still live once it is checked, counted in
+	#steps through leaves (a leaf touching the log is 1). Vanilla is 6; 6 here = vanilla range. Keeps a
+	#big tree whole when something next to it changes (snow, vines, a placed block). Cost: a
+	#chopped tree whose canopy touches a standing tree of the same kind keeps leaves out to this
+	#range from the standing tree.
+	#Range: 6 ~ 32
+	maxDistance = 12
+	#Most leaf blocks one search may look at before giving up (the leaf then decays as in
+	#vanilla). Bounds the cost in very large canopies; at maxDistance 12 a search rarely tops a
+	#few hundred.
+	#Range: 64 ~ 65536
+	maxSearchBlocks = 4096
+	#Fast decay delay: a leaf whose log was cut, or that sits next to a block that just became air,
+	#is checked a random number of ticks later between decayMinTicks and decayMaxTicks (Fast Leaf
+	#Decay's MinimumDecayTime / MaximumDecayTime, 4 and 11). Spreads a felled canopy over a moment.
+	#Range: 1 ~ 1200
+	decayMinTicks = 4
+	#Upper end of the fast decay delay (raised to decayMinTicks if lower).
+	#Range: 1 ~ 1200
+	decayMaxTicks = 11
+
+#A lit campfire in #creativeengineering:campfire/rain_douses (the plain campfire; not soul or
+#Tinted campfires) goes out in open rain, unless it sits on a block in
+##creativeengineering:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires
+#burn forever. Server side.
+[campfire]
+	#Master on/off switch. Off = rain never puts a campfire out.
+	rainDouses = true
+	#Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).
+	#Leaving the rain or being on a fuel block resets the count.
+	#Range: 1 ~ 72000
+	rainOutTicks = 160
 

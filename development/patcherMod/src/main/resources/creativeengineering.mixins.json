@@ -7,6 +7,7 @@
   "mixins": [
     "IETagUtilsMixin",
     "SupplementariesBreezyCompatMixin",
+    "SupplementariesDyeBlocksMixin",
     "LCItemsForMapTradeMixin",
     "CSSellingMapMixin",
     "MemoryStickItemMixin",
@@ -28,6 +29,7 @@
     "FluidTagInputMixin",
     "PotionRecipeGeneratorsMixin",
     "ForgivingVoidMixin",
+    "CampfireRainMixin",
     "ItemPhysicServerMixin",
     "EchoArmorEffectProcedureMixin",
     "EchoArmorTooltipMixin",
@@ -80,6 +82,7 @@
     "QuarkHoeAreaBreakMixin",
     "QuarkHoeAreaHarvestMixin",
     "QuarkSortingHandlerMixin",
+    "QuarkSpiralSpiresTeleportMixin",
     "CannedGolemColorMixin",
     "WanderingTraderSpawnerMixin",
     "WanderingTraderTradesMixin",
@@ -93,6 +96,7 @@
     "BetterDaysTimePauseMixin",
     "ServerLevelTimePauseMixin",
     "ServerAdvancementManagerMixin",
+    "MobEffectCategoryMixin",
     "FruitsDelightLeafCheckMixin",
     "SectionUpdateEncodeFixMixin",
     "BubbleColumnImmunityMixin",
@@ -110,7 +114,10 @@
     "CookingPotMenuRemainderMixin",
     "KettleRemainderMixin",
     "KettleMenuRemainderMixin",
-    "RegistryLoaderPresetOverworldMixin"
+    "RegistryLoaderPresetOverworldMixin",
+    "LeavesDecayRangeMixin",
+    "LeafPileSlowMixin",
+    "RaidGlowingMixin"
   ],
   "client": [
     "SereneSeasonsClientClockMixin",
@@ -152,6 +159,7 @@
     "BlockUpdateNullStateMixin",
     "IcebergTitleBreakMixin",
     "ContainerTitlePlaqueMixin",
+    "ToastFilterMixin",
     "RenderSystemShaderTextureMixin",
     "SeasonHooksClientMixin",
     "SeasonRainColumnMixin",
@@ -161,7 +169,25 @@
     "PrettyRainSeasonMixin",
     "DhCloudHeightMixin",
     "CookingPotScreenRemainderMixin",
-    "KettleScreenRemainderMixin"
+    "KettleScreenRemainderMixin",
+    "CreativePickBlockSyncMixin",
+    "CookingPotMealTooltipMixin",
+    "KettleMealTooltipMixin",
+    "CckCookingGuideMealTooltipMixin",
+    "CckBrewingGuideMealTooltipMixin",
+    "PrettyPipesTerminalTooltipMixin",
+    "FtbTooltipListAccessor",
+    "FtbGuiHelperMixin",
+    "FtbItemTaskTooltipMixin",
+    "FtbQuestDescriptionTooltipMixin",
+    "FtbScreenWrapperTooltipMixin",
+    "FtbMenuScreenWrapperTooltipMixin",
+    "WaresAgreementTooltipMixin",
+    "PatchouliBookTooltipMixin",
+    "AeBaseScreenTooltipMixin",
+    "AeTableRendererTooltipMixin",
+    "AePatternEncodingTooltipMixin",
+    "AeGuideItemTooltipMixin"
   ],
   "server": []
 }

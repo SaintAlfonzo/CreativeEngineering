@@ -225,7 +225,7 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
 
 ### Findings (2026-10-18)
 
-- **F1. The felsic shield has no config section.** [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js) line 75
+- **F1.** FIXED 2026-10-19 in patcherMod 1.0.9, DEPLOYED with pack 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). **The felsic shield has no config section.** [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js) line 75
   asks for `CRAFTING.FELSIC_SHIELD`, which `CEConfig.Crafting` doesn't define, so every `/reload` logs
   `[NCH.cfg] no CEConfig.CRAFTING.FELSIC_SHIELD section` and the hardcoded 250 mB / 1 loop / 8 blows apply.
   [shields.md](shields.md) 2.7 lists it as if it were configurable. Fix: add
@@ -233,7 +233,7 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
 - **F2. `potionMb` feeds both fills.** `felsicAssembly` uses the same mB for the Long Reach fill and the Magic
   Resistance fill; the toml comment says "used in the final filling step". A felsic helmet costs 500 + 500 mB a loop.
   Fix the comment, or split it into two keys.
-- **F3. Hand-written tag line.** [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) line 10 is
+- **F3.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Hand-written tag line.** [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) line 10 is
   `e.add('creativeengineering:elytra_chestplates', 'dragonloot:upgraded_dragon_chestplate')`, against the
   `global.tags` + item-dict rule. Fix: `global.tags.add(e, 'creativeengineering:elytra_chestplates', [i.upgraded_dragon_chestplate])`.
 - **F4. Mining level 5 probably does nothing over 4. Your call.** As far as I know Forge 43 (unverified, no jars in the
@@ -246,7 +246,7 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
   `BlockEntityTag`) to the carry list is one line each.
 - **F6. Non-damageable items in `#dragon_gear`.** The dragon shield is damageable and should stay. The dragon anvil
   (a block item) and the air brake (no durability) are skipped every pass. Harmless; drop them or leave them.
-- **F7. `useDurationTicks` probably never reaches the item.** `air_brake.js` line 26 reads the config at script load,
+- **F7.** CONFIRMED and FIXED 2026-10-19: Forge 43's `ConfigValue.get()` returns the default in production before load; the script now reads it on each use ([plan_1.0.9.md](plan_1.0.9.md)). **`useDurationTicks` probably never reaches the item.** `air_brake.js` line 26 reads the config at script load,
   in KubeJS's constructor, before Forge loads common configs; a 1.19 Forge config value read that early returns its
   default in production (from memory of Forge 43; unverified). So a toml change is likely ignored even after a restart.
   Harmless at 72000. Check: GR-28.
@@ -260,8 +260,8 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
 - **F11. The ground-check mixin is pinned to one jar.** `@ModifyVariable(index = 8)` targets a local slot in Easy
   Elytra Takeoff 4.2's bytecode; any update of that mod needs a recheck (also in `mod_todo.txt` 16). The Alex's Mobs
   items named in `todo.txt` aren't in `#elytra_chestplates`; the helper mixin already accepts any item with
-  `canElytraFly`, so only the ground rule would differ for them ([TODO.md](todo/TODO.md) 8).
-- **F12. Stale doc in NCH.** The `NCH.cfg` example in
+  `canElytraFly`, so only the ground rule would differ for them ([TODO](todo/TODO.md) `gear/tuning #7`; the version pin is `pack/server #7`).
+- **F12.** FIXED 2026-10-19 (example uses `mb` / `blows`). **Stale doc in NCH.** The `NCH.cfg` example in
   [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js) lines 621-626 uses the toml keys
   (`potionMb`, `hammerBlows`); the helper reads Java field names (`mb`, `blows`). Copying the example would fall back
   to defaults with a warning per field.
@@ -389,3 +389,5 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
   autorepair, air brake item; shipped with 1.0.3. The Java side (air brake handler, elytra duplication, rocket
   takeoff mixins, assembly NBT mixin, armor enchantability mixin) was in the jar and first committed 2026-10-02.
 - 2026-10-18: this writeup; findings F1 to F13; tests GR-01 to GR-30. No code changed.
+- 2026-10-19: F1 (`CRAFTING.FELSIC_SHIELD` in CEConfig, patcherMod 1.0.9), F3 (tag helper) and F7 (`useDurationTicks` read per use) fixed ([plan_1.0.9.md](plan_1.0.9.md)). Not run in game; GR-28 now expects a toml change to apply after a config reload.
+- 2026-10-19: F12 fixed (NCH.cfg example uses the Java field names).

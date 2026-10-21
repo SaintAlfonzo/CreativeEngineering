@@ -1,4 +1,8 @@
-// /dumpclimate [columns] [radius]  ->  kubejs/generation_scripts/worldgen/climate/<ns>__<dim>.json.gz
+// /dumpclimate [columns] [radius]  (default 20000 columns, radius 20000; about 4.5 min)  ->  kubejs/generation_scripts/worldgen/climate/<ns>__<dim>.json.gz
+// /dumpclimatecaves [columns] [radius] [step]  ->  climate/<ns>__<dim>.caves.json.gz (Overworld-like dimensions):
+//   deep cave coverage, every <step> blocks (default 16) from 16 below the surface to the world bottom, default 5000
+//   columns. When it exists, BiomeLayoutTuner takes the underground layer from it instead of /dumpclimate's four
+//   shallow levels (which never reach the depth deep dark, mantle, tuff and frostfire caves need).
 //
 // The samples ship with the pack (BiomeLayoutTuner reads them whenever a world is created), so they're
 // stored small: compact JSON, one point per line, integer climate values (the game quantizes to x10000
@@ -16,7 +20,7 @@
 //
 // Pure noise evaluation: getBaseHeight / sampler.sample / getNoiseBiome never load or generate
 // chunks, so this is safe to run anywhere at any radius -- it just costs server-thread time
-// (~a few seconds for the default 3000 columns).
+// (about 4.5 minutes for the default 20000 columns, all dimensions).
 //
 // Per column (random, deterministic positions within +-radius of 0,0):
 //   surface layer     - the climate at the noise-estimated surface height (for the Nether, which
@@ -44,7 +48,8 @@
 		try { return fn() } catch (e) { return undefined }
 	}
 
-	function dumpLevel(level, columns, radius) {
+	// caves: { step } for /dumpclimatecaves (deep underground only, own file), else null for /dumpclimate
+	function dumpLevel(level, columns, radius, caves) {
 		const dimId = String(level.getDimension())   // not level.dimension(): see dump_biome.js
 		const chunkSource = level.getChunkSource()
 		const generator = chunkSource.getGenerator()
@@ -56,7 +61,7 @@
 		// model_agreement_pct. Wrapping a non-multi_noise source (e.g. vanilla End) gives unused samples.
 		const sourceClass = String(biomeSource.getClass().getName())
 		if (!/\.(MultiNoiseBiomeSource|ModdedBiomeSource)$/.test(sourceClass)) {
-			console.info(`[dumpclimate] skipping ${dimId}: biome source ${sourceClass} is not multi_noise`)
+			console.info(`[dumpclimate${caves ? 'caves' : ''}] skipping ${dimId}: biome source ${sourceClass} is not multi_noise`)
 			return null
 		}
 
@@ -64,6 +69,10 @@
 		const sampler = randomState.sampler()
 		const minY = level.getMinBuildHeight()
 		const hasCeiling = !!level.dimensionType().hasCeiling()
+		if (caves && (hasCeiling || !level.dimensionType().hasSkyLight())) {
+			console.info(`[dumpclimatecaves] skipping ${dimId}: no cave layer (ceiling or no sky: Nether/End-like)`)
+			return null
+		}
 
 		const biomeIndex = {}
 		const biomes = []
@@ -83,10 +92,16 @@
 				biomeIndex[id]])
 		}
 
-		const random = new $Random(45326) // fixed seed so repeated dumps sample the same columns
+		const random = new $Random(caves ? 77131 : 45326) // fixed seed so repeated dumps sample the same columns
 		for (let i = 0; i < columns; i++) {
 			var x = Math.floor((random.nextDouble() * 2 - 1) * radius)
 			var z = Math.floor((random.nextDouble() * 2 - 1) * radius)
+			if (caves) {
+				var top = safe(() => Number(generator.getBaseHeight(x, z, $Types.WORLD_SURFACE_WG, level, randomState)))
+				if (top === undefined) { heightFailures++; top = 64 }
+				for (var cy = top - 16; cy >= minY + 4; cy -= caves.step) record(0, x, cy, z)
+				continue
+			}
 			if (hasCeiling) {
 				;[16, 40, 64, 88, 112].forEach(y => record(0, x, y, z))
 				continue
@@ -102,7 +117,7 @@
 		}
 
 		const [ns, path] = dimId.split(':')
-		const name = `${ns}__${path.replace(/\//g, '__')}.json`
+		const name = `${ns}__${path.replace(/\//g, '__')}${caves ? '.caves' : ''}.json`
 		const header = {
 			dimension: dimId,
 			biome_source: sourceClass,
@@ -110,13 +125,14 @@
 			generated: new Date().toISOString(),
 			columns: columns,
 			radius: radius,
-			layers: ['surface', 'underground'],
+			layers: caves ? ['underground'] : ['surface', 'underground'],
 			fields: ['layer', 'temperature', 'humidity', 'continentalness', 'erosion', 'depth', 'weirdness', 'live_biome'],
 			biomes: biomes,
 		}
+		if (caves) header.step = caves.step
 		var out
 		// Rhino throws, rather than returning undefined, for a static member the class doesn't have
-		if (safe(() => typeof $WorldgenFiles.writeGzipText === 'function')) {
+		if (caves || safe(() => typeof $WorldgenFiles.writeGzipText === 'function')) {
 			out = `kubejs/generation_scripts/worldgen/climate/${name}.gz`
 			$WorldgenFiles.writeGzipText(out, compactJson(header, points))
 		} else {
@@ -124,21 +140,22 @@
 			header.points = points
 			writeExportJson(out, header)
 		}
-		if (heightFailures) console.warn(`[dumpclimate] ${dimId}: getBaseHeight failed on ${heightFailures} columns (sampled at y=64 instead)`)
+		if (heightFailures) console.warn(`[dumpclimate${caves ? 'caves' : ''}] ${dimId}: getBaseHeight failed on ${heightFailures} columns (sampled at y=64 instead)`)
 		return { dim: dimId, points: points.length, biomes: biomes.length, out: out }
 	}
 
-	function run(source, columns, radius) {
+	function run(source, columns, radius, caves) {
+		const tag = caves ? 'dumpclimatecaves' : 'dumpclimate'
 		const started = Date.now()
 		const results = []
 		const it = source.getServer().getAllLevels().iterator()
 		while (it.hasNext()) {
 			var level = it.next()   // var, not const: Rhino re-declares a loop-body const each pass -> "redeclaration of var"
 			try {
-				var r = dumpLevel(level, columns, radius)
+				var r = dumpLevel(level, columns, radius, caves)
 				if (r) results.push(r)
 			} catch (e) {
-				var msg = `[dumpclimate] ${level.getDimension()} failed: ${e}`
+				var msg = `[${tag}] ${level.getDimension()} failed: ${e}`
 				console.error(msg)
 				source.sendFailure(Text.red(msg))
 			}
@@ -147,13 +164,13 @@
 		results.forEach(r => {
 			const msg = `${r.dim}: ${r.points} points, ${r.biomes} live biomes -> ${r.out}`
 			source.sendSuccess(Text.green(msg), false)
-			console.info('[dumpclimate] ' + msg)
+			console.info(`[${tag}] ` + msg)
 		})
 		if (!results.length) {
-			source.sendFailure(Text.red('dumpclimate: no multi_noise dimension found - see the log for each skipped biome source'))
+			source.sendFailure(Text.red(`${tag}: no multi_noise dimension found - see the log for each skipped biome source`))
 			return 0
 		}
-		source.sendSuccess(Text.gray(`dumpclimate done in ${secs}s (${columns} columns, radius ${radius})`), false)
+		source.sendSuccess(Text.gray(`${tag} done in ${secs}s (${columns} columns, radius ${radius}${caves ? ', every ' + caves.step + ' blocks down' : ''})`), false)
 		return results.length
 	}
 
@@ -163,11 +180,25 @@
 		event.register(
 			Commands.literal('dumpclimate')
 				.requires(src => src.hasPermission(2))
-				.executes(ctx => run(ctx.source, 3000, 20000))
+				.executes(ctx => run(ctx.source, 20000, 20000))   // 3000 until 2026-10-19: too coarse for rare biomes (1 sample = 0.033 %)
 				.then(Commands.argument('columns', IntArg.integer(100, 100000))
 					.executes(ctx => run(ctx.source, IntArg.getInteger(ctx, 'columns'), 20000))
 					.then(Commands.argument('radius', IntArg.integer(500, 1000000))
 						.executes(ctx => run(ctx.source, IntArg.getInteger(ctx, 'columns'), IntArg.getInteger(ctx, 'radius')))))
+		)
+		// Deep cave coverage, dumped separately: climate every <step> blocks from 16 below the surface down to the
+		// world bottom, Overworld-like dimensions only. BiomeLayoutTuner uses these points as the underground layer.
+		const caveRun = (ctx, columns, radius, step) => run(ctx.source, columns, radius, { step: step })
+		event.register(
+			Commands.literal('dumpclimatecaves')
+				.requires(src => src.hasPermission(2))
+				.executes(ctx => caveRun(ctx, 5000, 20000, 16))
+				.then(Commands.argument('columns', IntArg.integer(100, 100000))
+					.executes(ctx => caveRun(ctx, IntArg.getInteger(ctx, 'columns'), 20000, 16))
+					.then(Commands.argument('radius', IntArg.integer(500, 1000000))
+						.executes(ctx => caveRun(ctx, IntArg.getInteger(ctx, 'columns'), IntArg.getInteger(ctx, 'radius'), 16))
+						.then(Commands.argument('step', IntArg.integer(4, 64))
+							.executes(ctx => caveRun(ctx, IntArg.getInteger(ctx, 'columns'), IntArg.getInteger(ctx, 'radius'), IntArg.getInteger(ctx, 'step'))))))
 		)
 	})
 

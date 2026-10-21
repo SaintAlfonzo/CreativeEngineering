@@ -1,0 +1,67 @@
+# Creative Labels. The dollar-brace values come from gradle.properties (mod_*) and the root gradle.properties
+# (versions), expanded by build-logic's ce.forge-mod.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+itemIcon="creative_labels:sticky_note"
+description='''${mod_description}'''
+
+[[dependencies.${mod_id}]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+# Moonlight: rendered item textures for label pictures (client), in the pack already.
+[[dependencies.${mod_id}]]
+modId="moonlight"
+mandatory=true
+versionRange="[2.3,)"
+ordering="NONE"
+side="BOTH"
+
+# Art donors until phase 5 (sticky_notes.md 3.12): their textures and models are read from the installed jars at
+# runtime; nothing of theirs is in this jar. Mandatory while they are the donors.
+[[dependencies.${mod_id}]]
+modId="sticky_it"
+mandatory=true
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="labels"
+mandatory=true
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# JEI: note subtypes (plain + specials) and example recipes.
+[[dependencies.${mod_id}]]
+modId="jei"
+mandatory=false
+versionRange="[11,)"
+ordering="NONE"
+side="BOTH"
+
+# WTHIT: note and label lines under the crosshair (waila_plugins.json, client).
+[[dependencies.${mod_id}]]
+modId="wthit"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

@@ -1,6 +1,6 @@
 # Oven: a Farmer's Delight style baking block
 
-The "new farmers delight oven block" from [cooking.md](cooking.md) (sweet > baked). Java in patcherMod, recipes and
+The "new farmers delight oven block" from cooking.md (the cooking plans, folded into [todo/TODO.md](todo/TODO.md) and removed 2026-10-19) (sweet > baked). Java in patcherMod, recipes and
 tags in KubeJS. Test prefix `OV-`.
 
 The ask, from cooking.md:
@@ -14,13 +14,13 @@ The ask, from cooking.md:
 
 | Part | Status |
 |---|---|
-| Oven block, block entity, menu/screen, `creativeengineering:baking` recipe type, JEI page (patcherMod `oven/`) | BUILT 2026-10-18: compiles against Forge 43.3.9 + JEI 11.8.1; 8 server GameTests pass with FD 1.2.4 loaded (6). First version DEPLOYED with 1.0.7; the 1.0.8 jar (with the counts option) STAGED for 1.0.8 and loaded in single player 2026-10-19. JEI [+] fails (open, [plan_1.0.8.md](plan_1.0.8.md) 2.2); not tested in game (OV-01 to OV-19) |
-| Bakeware items: baking sheet, cake pan, pie tin, muffin tin (KubeJS, own textures 2026-10-19 with the muffin tin on the baking sheet's, no durability) | BUILT 2026-10-18, STAGED for 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
-| Baking recipes: 38, from every live muffin, cookie, tart, pie and cake recipe (pot and crafting) with cooking.md's baked changes (flour, pie crust, cake base), each needing its bakeware; muffins plate on paper. Originals kept (2.6) | BUILT 2026-10-18, STAGED for 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
-| Ingredient `count` in `creativeengineering:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: STAGED for 1.0.8 |
-| Muffin pot recipes on `#forge:dough` | BUILT 2026-10-18, STAGED for 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested. Whether this was the "not cookable" cause is unconfirmed (3.8) |
-| Crafting recipes: oven (placeholder pattern, 3.6); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, STAGED for 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
-| IE hammer doesn't rotate the cutting board (`#creativeengineering:hammer_no_rotate`, patcherMod `IECompat`) | BUILT 2026-10-18, STAGED for 1.0.8; loaded in single player 2026-10-19 (no errors), not tested |
+| Oven block, block entity, menu/screen, `creativeengineering:baking` recipe type, JEI page (patcherMod `oven/`) | BUILT 2026-10-18: compiles against Forge 43.3.9 + JEI 11.8.1; 8 server GameTests pass with FD 1.2.4 loaded (6). First version DEPLOYED with 1.0.7; the 1.0.8 jar (with the counts option) DEPLOYED with 1.0.8 and loaded in single player 2026-10-19. JEI [+] fix DEPLOYED with 1.0.9 (patcherMod 1.0.9) ([plan_1.0.9.md](plan_1.0.9.md)); not tested in game (OV-01 to OV-19) |
+| Bakeware items: baking sheet, cake pan, pie tin, muffin tin (KubeJS, own textures 2026-10-19 with the muffin tin on the baking sheet's, no durability) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
+| Baking recipes: 38, from every live muffin, cookie, tart, pie and cake recipe (pot and crafting) with cooking.md's baked changes (flour, pie crust, cake base), each needing its bakeware; muffins plate on paper. Originals kept (2.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
+| Ingredient `count` in `creativeengineering:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
+| Muffin pot recipes on `#forge:dough` | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested. Whether this was the "not cookable" cause is unconfirmed (3.8) |
+| Crafting recipes: oven (placeholder pattern, 3.6); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
+| IE hammer doesn't rotate the cutting board (`#creativeengineering:hammer_no_rotate`, patcherMod `IECompat`) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no errors), not tested |
 | Dummy baking recipes (one per bakeware piece) | REMOVED 2026-10-18 (2.7) |
 
 Files to open first:
@@ -477,3 +477,5 @@ Needs a patcherMod build in `mods/`.
   bug from the 2026-10-19 single-player log: JEI [+] on the baking page fails with "references crafting slot index [2]
   but the player cannot pickup from it" (1,413 lines); the transfer handler is unchanged since 1.0.7, so 1.0.7 has it
   too. Fix for 1.0.9 ([plan_1.0.8.md](plan_1.0.8.md) 2.2).
+- 2026-10-19: JEI [+] fixed for 1.0.9: the ingredient slots answer `mayPickup = true` (Forge's `SlotItemHandler` said false for an empty slot, and JEI checks every crafting slot) ([plan_1.0.9.md](plan_1.0.9.md)). OV-11 checks it.
+- 2026-10-19: status sweep: everything above that was STAGED for 1.0.8 went out with pack 1.0.8 (DEPLOYED 2026-10-19 10:20); the JEI [+] fix with pack 1.0.9 (DEPLOYED 15:54). OV-01 to OV-19 still pending.

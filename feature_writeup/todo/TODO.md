@@ -1,279 +1,694 @@
-# TODO: what is left, pointer by pointer
+# TODO: every open change, by family
 
-Started 2026-10-18. One place to see what still needs doing across the pack. It points at the writeup or file
-that holds the detail and does not repeat it. Detail stays in the linked writeups
-([feature_writeup/README.md](../README.md) is the feature index). The older
-[todo.txt](todo.txt) (2026-09-24) and its two source audits, [kubejs_todo.txt](kubejs_todo.txt) and
-[mod_todo.txt](mod_todo.txt), are folded in below; their items were checked against the 2026-10-18 tree.
+Reworked 2026-10-19. One table per family, one row per significant feature change, bug fix or rebalance, sorted by
+status with finished work at the end; the Sub column names the subfamily. Detail stays in the linked writeups
+([feature_writeup/README.md](../README.md) is the feature index); a row says enough to pick the work up and points at
+the rest.
 
-Sections: 1 not started · 2 partly done · 3 open bugs · 4 decisions not made or not carried out · 5 parity with
-newer upstream content · 6 KubeJS projects and leftovers · 7 TODOs written in files · 8 docs out of date ·
-9 test backlog.
+Sources folded in: the 2026-10-18 version of this file, every writeup's "At a glance", "Limits and decisions" /
+findings, plan and todo sections, the release plans up to 1.0.9, the structure test log
+([testing/structures/](../testing/structures/00_plan.md)), `TODO` comments in the code, and the
+[scratchpad](scratchpad.md) (emptied into this file twice on 2026-10-19; rows from it say "scratchpad 2026-10-19").
+The hand-written cooking plan tree (`feature_writeup/cooking.md`) was folded into the `food`, `farming` and a few other
+rows on 2026-10-19 and removed; rows citing "cooking plan" came from it, with its tree path where one was given. The
+older [todo.txt](todo.txt), [kubejs_todo.txt](kubejs_todo.txt) and [mod_todo.txt](mod_todo.txt) were folded in on
+2026-10-18 and are kept as history.
 
----
+**Pack state at the rework:** 1.0.9 DEPLOYED on server and clients 2026-10-19 15:54
+([deploy/DEPLOYED.json](../../deploy/DEPLOYED.json)), so everything the writeups still call "STAGED for 1.0.8" or
+"BUILT for 1.0.9" is live (the writeups' status blocks and the README index were swept to DEPLOYED on 2026-10-19).
 
-## 1. Not started (or barely started)
+## How to read a row
 
-| Feature | Where it's written up | State |
-|---|---|---|
-| JEI coverage parts 2 and 3 (recipe types with no category; world interactions) | [jei_coverage.md](../jei_coverage.md) 0 | not started. Part 1 is catalogued, but none of its stand-in or info fixes are built (5) |
-| Food tuning system (values per type, SoL complexity, canned parity) | [food.md](../food.md) 3.5, 4.3 | designed, not built; waits on D1 to D6 |
-| Vanilla egg -> `#forge:eggs` migration | [food.md](../food.md) 3.8 | list written, not built (rescan first, the dump can't read IE recipes) |
-| Exposure Catalog port | [exposure.md](../exposure.md) 4 | on hold (user, 2026-10-01); the source set and mods.toml entry are empty |
-| Cooking plans (seasoning, sourdough, vinegar, tools, kitchen, smoking, misc) | [cooking.md](../cooking.md) | outline only, nothing built. Two bugs in it are listed in 3 |
-| Remainder buffer (bottles/bowls/buckets kept in a slot on the pot, kettle, keg port and oven instead of thrown) | [remainder_buffer.md](../remainder_buffer.md) | feasibility done 2026-10-18 (feasible, ~7 mixins); D1 to D5 open; no code |
-| Canning automation | `TODO` in [canning.js](../kubejs/server_scripts/cooking/canning.js) line 68 | not started |
-| Mob spawn plans beyond the first block (Alex's Mobs / duck parity, pillager overhaul, lone villagers, allay, skylands mooblooms) | [mob_spawns.md](../mob_spawns.md) 9 | first block done; "Investigate" and "Later" not started |
-| Structures: Nether, End and underground grouping pass; cave-structure tuning; move-to-Nether set | [structure_tuning.md](../structure_tuning.md) 7 Todo | not built. The three deep dungeons now generate through `land/any/deep` (since 1.0.7); their grouping and rates still wait on this pass |
-| Structures: vehicle metas (caravans), more raft and wreckage variants | [structure_tuning.md](../structure_tuning.md) 7 Todo, 7.4.9 | marked only; new templates needed |
-| Structures: tuning pass (shipwreck 40%, jungle temple spacing, strip unexplained weights, sky village rate, fresh watchtower `--fit-rates`) | [structure_tuning.md](../structure_tuning.md) 7 Todo | waits on the end of the scratch test run |
-| Swap Overworld netherrack / crimson / warped ground (jasper, crimsite) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Biomes and terrain" | not built |
-| River tree / driftwood cleanup (oak logs, drop river log/wood) | [structure_tuning.md](../structure_tuning.md) 7 Todo "Structure contents" | not built |
-| Absorbing small mods into the pack (tiers 1 to 4) | [feature_porting.md](../feature_porting.md) | researched 2026-10-18 from decompiled jars (tiers corrected, order in 5); nothing ported, D1-D5 open |
-| In-game guidebook (Patchouli installed, no book) | [todo.txt](todo.txt) "Features not yet started" | not started (instance-only folder, not in this repo) |
-| Writeups for the rest of the pack (recipe progression) | [feature_writeup/README.md](../README.md) "Backlog" rows 20 | not written; 20 of 21 rows done |
-| Immersive Paintings datapack (475 paintings) | none (header of `tools/gen_immersive_paintings.py`) | shipped in 1.0.6 with no writeup; painting screen untested |
+| Column | Meaning |
+|---|---|
+| Sub | The subfamily. A row's id is `family/sub #n`, e.g. `food/canning #3` |
+| # | Row number inside its subfamily. Numbers stay with the row when the table is re-sorted; new rows take the next free number; a row that moves family gets a new number there |
+| Change | The feature, fix or rebalance, in one line |
+| Status | See below |
+| Work | Where the work lands: **patcherMod** (the in-tree Forge mod), **new jar** (a new or other in-tree mod: the ports, More Mooblooms, Incubation Additions), **KubeJS**, **data** (json / datapack / generated), **config**, **tool** (`tools/*.py`), **mods/** (add or remove a jar), **docs** |
+| Details | How it is (or would be) built, and what is left |
+| Decisions | What has to be decided before or during the work; "none" when it can just be done |
+| Writeup | The detailed writeup and section, plus its pending in-game tests |
 
-## 2. Partly done: built vs still to do
+Status, in table order:
 
-| Feature | Writeup | Done | Still to do |
-|---|---|---|---|
-| Structure tuning 7.1 to 7.4 (ships INCOMPLETE in 1.0.6) | [structure_tuning.md](../structure_tuning.md), [plan_1.0.6.md](../plan_1.0.6.md) 2.1, [testing/structures/](../testing/structures/00_plan.md) | built; scratch M1, M2, Phases 3 to 6 run | Phase 7 started 2026-10-14 17:43 with no results ([07_phase_7.scratch.md](../testing/structures/07_phase_7.scratch.md)); Phases 8 to 10 and the client list 8.0.11 not run; open bugs in 3; the first fixes shipped in 1.0.7 |
-| Locate (folding, non-blocking loads, census, DH clip) | [locate.md](../locate.md) | built and in 1.0.6; LO-02, 06, 08, 12, 15 passed | LO-05, LO-03/LO-14 failed in 1.0.6; their fixes shipped in 1.0.7 (next row), rerun them; LO-01, LO-04 partly |
-| Structure and locate fixes for 1.0.7 (9 bugs from the scratch run) | [structure_tuning.md](../structure_tuning.md) 3.23, [locate.md](../locate.md) 3.2, 3.6, 8 | fixed 2026-10-18, DEPLOYED with 1.0.7; offline checks pass against the mapped 1.19.2 jar (PoolTunerTest new) | run ST-191 to ST-198 and LO-03, LO-05, LO-14, LO-17 on a scratch server; `[worldgen.pools] canonicalOrder` changes every village layout in new chunks (on by default, see 4) |
-| Alcohol Part A: Brewin' and Chewin' 4.5.0 port | [alcohol.md](../alcohol.md) Part A | analysis, plan, decisions 4.1/4.5. **Port builds (2026-10-18)**: all code, assets and data in `development/backportedBrewin`; `-01` DEPLOYED with 1.0.7 (beside the 2.0 jar, the port loaded), `-02` with sections 8 and 10 STAGED for 1.0.8 and replacing both; `tools/check_data.py` 0 problems; CCK keg mixin checked against bytecode (3.5) | AL-01 to AL-72; recipe-book fluid placement and JEI fluid transfer not ported (3.5); pack-side changes 3.4 together with the jar swap; heat/cold tag audit 2.7 not applied |
-| Alcohol Part B: Vinery 1.5.5 port ("Backported Vinery") | [alcohol.md](../alcohol.md) Part B | **Port builds (2026-10-18)**: `development/backportedVinery` (Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, old-world passes, upstream jars as runtime donors, WTHIT lines). patcherMod and pack-side changes done (B4.4 outcome), deploy category + mod_sides `-01` DEPLOYED with 1.0.7, `-02` (B7, section 10) STAGED for 1.0.8 | VB-01 to VB-66 (user); I25 tool reruns; stem "leaves pending" WTHIT line; download-on-publish for `vinery_upstream/` (D14 A) |
-| Food | [food.md](../food.md) | `/dumpfood`, 31 types + tags, catalog, multi-serving cans, raw and generated cans, fried eggs, egg stacks | tuning system and egg migration (1); cooked/prepared can sections pie, feast, meals, drinks, special |
-| Oven | [oven.md](../oven.md) | block, GUI, baking recipe type, JEI (patcherMod) DEPLOYED with 1.0.7; 37 recipes with bakeware and plating, counts option, hammered bakeware, cornmeal STAGED for 1.0.8 | OV-01 to OV-19; JEI [+] bug (3) |
-| Time master | [time.md](../time.md) | `[time]` master, push into Better Days / Serene Seasons / SeasonHUD / Vinery, sun seasons, pause when empty, GUI, `/cetime`, presets (patcherMod 1.0.8, STAGED for 1.0.8) | TI-01 to TI-29; T5 wine boosts; `tools/time_table.py` and the SUN GameTest; server preset (4) |
-| Remainder buffer | [remainder_buffer.md](../remainder_buffer.md) | pot + kettle (mixins), oven (native), `[cooking]` config, GameTest harness; DEPLOYED with 1.0.7 | RB-01 to RB-11; keg in the Brewin port (3.6; the port compiles now, 2026-10-18); optional WTHIT line |
-| Can parity | [can_parity.md](../can_parity.md) | every `x` row built, removals done | `?` Want cells; hunger/saturation columns postponed; no can value-audited; meal/pie/feast/drink/hazard values are placeholders (also flagged in [canning.js](../kubejs/server_scripts/cooking/canning.js) lines 504, 542, 557); hand-written raw cans don't carry effects |
-| Names | [names.md](../names.md) | Display Delight + Rustic Delight names; catalog parts 1 and 2 | catalog worked down: 191 partial blocks, 65 items, 53 entities, 20 professions, effects/potions/fluids; no fixes yet |
-| Effect descriptions (JEED) | [todo.txt](todo.txt) "Literal TODO comments" | generator `tools/gen_effect_descriptions.py` | 17 `TODO: write a description` rows left in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) (2026-10-19): 10 for live effects, 7 stale; PROPOSED text for each in [effects.md](../effects.md) 2.1, F2 and F4 |
-| Tooltips | [tooltips.md](../tooltips.md) 8 | ~455 lines; pack framework lines | "Tooltips To Add" list (straw, knives, food type, can AppleSkin bars, chalk, Pretty Pipes; Botania, Vinery, Cloud Storage, Brewin); AppleSkin bars missing in Let's Do recipe book, FTB Quests, Wares, AE2, Patchouli |
-| Vinery tooltips | [vinery.md](../vinery.md) 0 | flavour lines removed | block lines are commented-out `TODO` placeholders ([tooltips.js](../kubejs/client_scripts/tooltips.js) lines 623-643) |
-| More Mooblooms 1.1 | [mooblooms.md](../mooblooms.md) 5 | 1.0 shipped in 1.0.6 | JEI breeding/shearing outputs, better info text |
-| Loot: LootJS-only layer | [loot.md](../loot.md), [loot/README.md](../kubejs/server_scripts/loot/README.md) | pre-roll framework and catalog live | `10`-`40` scripts are still commented examples; `global.LOOT` groups/tiers in [00_lib.js](../kubejs/server_scripts/loot/00_lib.js) are empty; finding 8 (legacy dump, 40 MB) not deleted |
-| Crops | [crops.md](../crops.md) 4 | G1-G3, G5 fixed; tobacco parity; wild placement | G4, G6-G15 and V-findings open (each has a suggested fix to approve or reject); 13 land biomes with no wild crop (V19) |
-| Terrain adaptation leftovers | [structure_tuning.md](../structure_tuning.md) 7 Todo, [terrain_adaptation_scan.md](../terrain_adaptation_scan.md) | soft beard, template trim | batch 4 (spire, fish ponds, Philip's ruins, villages); earth-fill limits for modded structures; Beardifier estimate |
-| Cultivated meat | [todo.txt](todo.txt) "Built, but with acknowledged gaps" | all 7 cultures wired; syringe has its own texture | culture food items have no nutrition ([cultures.js](../kubejs/startup_scripts/items/cultures.js) line 6) |
-| Fridge sort item loss | [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) | `QuarkSafeSort` fix in patcherMod 1.0.7, DEPLOYED 2026-10-18 | FS-01 to FS-05 not run. [cooking.md](../cooking.md) still lists it as a bug |
-| Exposure `-04` (viewfinder ate clicks inside screens and after respawn/rejoin) | [exposure.md](../exposure.md) | `-04` built 2026-10-14, DEPLOYED with 1.0.7 | History line added 2026-10-19; no test in the writeup yet |
+| Status | Meaning |
+|---|---|
+| **Bug** | A known bug that is not fixed yet |
+| **Planned** | Not started, no progress |
+| **Pinned** | Planned, held on purpose until something else happens (the row says what) |
+| **In Progress** | Started, not complete |
+| **Testing** | Implementation complete, real performance unknown: not built into the pack yet, built but not run in game, run only on a scratch server or in a GameTest, or live too briefly (1.0.6 and later) to count as played |
+| **Complete** | Tested enough from real play to count as functional; its writeup's test cases may still be open. Set for features live since 1.0.4 or earlier that are part of everyday play with nothing in their writeup saying they were never seen in game |
 
-## 3. Open bugs (not fixed)
+When a row is done: tick its tests in the writeup, set **Complete**, and delete it at the next sweep (renumber a
+subfamily only when nothing cites its numbers; grep first). New ideas go in the [scratchpad](scratchpad.md) first and
+move here when they get a family.
 
-**Structures and locate:** none open. The nine listed here (locate loads blocking the server, census "known",
-`/celocate stop` label, Cloud Storage / Domestication Innovation village pieces, village layouts per JVM run, ground
-match over deep structures, beach/river/swamp driftwood, the three deep dungeons, earth fill and stone bases) were
-fixed 2026-10-18 and DEPLOYED with patcherMod 1.0.7 (2, "Structure and locate fixes for 1.0.7").
-The village-layout cause was found on the way: the pool order changes per JVM run.
+## Families
 
-**Other features:**
-- Oven JEI [+] fails: "references crafting slot index [2] but the player cannot pickup from it", 1,413 log lines in one session (since 1.0.7). [plan_1.0.8.md](../plan_1.0.8.md) 2.2, [oven.md](../oven.md).
-- `build_deploy.py` doesn't catch two jars with one mod id in `mods/` (1.0.7 shipped two Brewin' jars that way). [deploy.md](../deploy.md) 4.
-- Probable, unverified: Death Knell is server-only but its death messages are lang keys from its own jar, so clients likely see raw `message.deathknell.*` keys (FP-01). Rain Should Extinguish Campfires duplicates Unlit Campfire's rain rule: remove. [feature_porting.md](../feature_porting.md) 0, 2.2.
-- Brewin' 2.0 keg gives back an extra glass bottle per `pickled_pickles` brew (fluid-item leftover slot grows by the result count). Gone: the port replaced the 2.0 keg in 1.0.7 (FML loaded it), and 1.0.8 removes the 2.0 jar. [remainder_buffer.md](../remainder_buffer.md) 1.3.
-- Vinery JEI fermentation arrow shows 1800 ticks; the real time is about 50. `VineryIds.FERMENTATION_TICKS` is still 1800. [vinery_jei.md](../vinery_jei.md) 4. Moot once the Vinery port is in mods/ (patcherMod's pages stand down).
-- Canned Goods data: saturation values far too high, crossed ids, wrong effects. [food.md](../food.md) 4.2 findings 1-2 (the tuning system is the planned fix).
-- item_dict: `i.catfish_slice` points at a nonexistent id; `i.bacon` is the cooked item. [food.md](../food.md) 4.2 finding 6.
-- Spice of Life default benefit `attribute,generic.speed,2` isn't a real attribute. [food.md](../food.md) 4.2 finding 4.
-- Muffins may not be cookable. [cooking.md](../cooking.md) "errors/bugs". Pot recipes moved to `#forge:dough` (2026-10-18) but the cause isn't confirmed: Create already puts its dough in `#forge:dough/wheat`. OV-13 in [oven.md](../oven.md) 3.8.
-- Bumpy filter (Exposure Expanded) has no source in 1.19.2 (trial chambers only). [exposure.md](../exposure.md) 4.
-- buggylouu (192.168.0.100) keeps getting `lost connection: Timed out` on the home server: 8 times on 10-17/10-18, against 1 for Saint_Alfonzo. Logs: `debug/latest.log` (client), `debug/serverlog/`. The server was not lagging, and it is the side that closes the connection (missed keep-alives). The client logs no error and notices the kick 1 to 10 s late. 2026-10-18 follow-up: the world keeps updating up to the kick and the last 15 to 30 s of input is lost, so client-to-server traffic stalls while server-to-client keeps flowing (not a client freeze). Ruled out: no mod calls `setAutoRead` or touches read control on the game connection (jar scan), and the mixins into `Connection` / `ServerGamePacketListenerImpl` (badpackets, Railways, Copycats, MCA, Supplementaries, Exposure, Quark, IE) don't block reads. Vanilla `Connection.sendPacket` turns auto-read off when a packet's protocol differs from the current one, but a server that stopped reading would still deliver the kick at once, and the 1 to 10 s delay looks like TCP retransmit backoff on a stalled link. Most likely cause: the client's own uplink (Wi-Fi power save or driver drops). The client also timed out on every internet version check at startup. DH changed in `config/` and both `configs_edited/` copies (`playerBandwidthLimit` 500 -> 200, `enableAdaptiveTransferSpeed = true`). `DistantHorizons.toml` is a `player` config class in build_deploy, so copy it to the server by hand. Next: Ethernet test, Wi-Fi power save off, `ping -i 0.2 192.168.0.122` from the client during play, client `journalctl -k` around the kick times.
-- Felsic shield assembly asks for `CRAFTING.FELSIC_SHIELD`, which `CEConfig.Crafting` doesn't define: hardcoded values and an `[NCH.cfg]` warning every `/reload`. [gear_tuning.md](../gear_tuning.md) 4 F1.
-- Felsic `potionMb` feeds both fills, not just the last as its toml comment says. [gear_tuning.md](../gear_tuning.md) 4 F2.
-- Iron armor set bonus registered twice (harmless). [armor_effects.md](../armor_effects.md) 4 F1.
-- `#creativeengineering:elytra_chestplates` is a hand-written `e.add` in `equipmenttags.js` line 10, against the tag-helper rule. [gear_tuning.md](../gear_tuning.md) 4 F3.
-- Dragon scale armor-piercing bullets use blueprint category `projectiles`, which nothing makes: unreachable. [archery.md](../archery.md) 4 F1.
-- Tipped arrows on the Bottler (20 mB) and Spout (25 mB) cost less than the crafting grid (31.25 mB an arrow); the file comment says they're equal. [potion_buckets.md](../potion_buckets.md) 4 F1.
-- Potion bucket tooltips show the potion's durations, not × the bucket's 1.1 / 1.2 effect multiplier. [potion_buckets.md](../potion_buckets.md) 4 F2.
-- Probable, unverified: NEA's three removed enchantments can still roll from `enchant_randomly` loot (the `isDiscoverable` mixin method likely isn't remapped). [archery.md](../archery.md) 4 F6.
-- Engineering: component and coil disassembly comments promise a screwdriver / wirecutter the recipes do not take; iron and diamond components use a different centre on the blueprint. [engineering.md](../engineering.md) 4 F4, F6.
-- Engineering recipes: `minecraft:blast_furnace` and `minecraft:dispenser` have their recipes removed and no replacement, so Little Logistics locomotives and tugs may be uncraftable (F1, F2); amethyst shards have two crushing recipes in both the crushing wheels and the IE crusher, one dead in each (F3). [recipes_engineering.md](../recipes_engineering.md) 4.
-- Metal recipes: zinc can still be hammer-crushed by IE's own recipes (F3); 9 copper plates → copper plate block has no pack recipe (F2); `console.log('EVENT:', e)` in both base metal files (F7). [recipes_metal.md](../recipes_metal.md) 4.
-- Wood recipes: `sawdust.js` line 28 crushes `i.any_log` a second time where planks were meant, so planks have no IE crusher recipe and logs probably give 2 sawdust instead of 3 (same generated id) (F1). [recipes_wood.md](../recipes_wood.md) 4.
-- Recipe scan: `_lib/recipe_scan.js` walks every recipe once per removed item (309 passes) on the first load of a session; not measured (F2). [recipe_progression.md](../recipe_progression.md) 4.
-- Probable, unverified: the air brake's `useDurationTicks` is read before Forge loads the config, so edits never apply (GR-28); the dragon set's 36 armor is over vanilla's 30 cap (GR-02). [gear_tuning.md](../gear_tuning.md) 4 F7, F13.
-- Cool Rain may ignore the season types (WE-25). [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2.
-- 5 Terralith cave biomes have no wild crops (single-player warning). [plan_1.0.5.md](../plan_1.0.5.md) 2.
-
-**Carried from [todo.txt](todo.txt), code unchanged since:**
-- Shield `NoClassDefFoundError` on `damage.DamageFlag` (crash 2026-09-24): `DamageFlag` / `DamageTags` are still not in the `forceLoad` list in `CreativeEngineering.java` (lines 242-252). Recurrence not checked.
-- `ItemPhysicSplit$1` `NoClassDefFoundError`: `burnDecision` still switches on the enum (`ItemPhysicSplit.java` line 128), so the synthetic class is still generated. Recurrence not checked. [item_physics.md](../item_physics.md) F1, IP-13.
-- A 0-byte crash report from 2026-09-11 was never looked into.
-- `createdeco:polished_iron_bars` stonecutting removed with no replacement ([metal_building.js](../kubejs/server_scripts/metal/metal_building.js) line 11): confirm that's intended.
-- `misc_mods.js` dead block has a stray double comma and "all fucked up, fix later" (line 208); it can't be re-enabled as is.
-
-## 4. Decisions not made, or made but not carried out
-
-**Waiting on you:**
-- Server `[time] preset` for 1.0.8: the payload ships SINGLEPLAYER (wine level every sub-season) to the server too; A set it by hand, B server-only override, C preset follows the side. [plan_1.0.8.md](../plan_1.0.8.md) 2.3, [time.md](../time.md) 3.9.
-- Alcohol Part B: D3, D4, D5, D7 to D10, D12 (built with the recommendation; confirm or change). D13 and D14 decided 2026-10-18. [alcohol.md](../alcohol.md) B5.
-- Remainder buffer D1 to D5 (stall or throw when full, recycle into the container slot, slot count, automation, keg timing). [remainder_buffer.md](../remainder_buffer.md) 5.
-- Food tuning D1 to D6. [food.md](../food.md) 4.3.
-- Can parity `Want` = `?` cells. [can_parity.md](../can_parity.md).
-- Crops G4, G6 to G15, V findings: approve or reject each fix. [crops.md](../crops.md) 4.
-- Structures: undead castle vs earth fill (narrow its fits or relax the mound limit); ST-135 fortified metas against the 120 s timeout; geode drop tuning (ST-133). [plan_1.0.6.md](../plan_1.0.6.md) 2.1.
-- Canonical pool order (`[worldgen.pools] canonicalOrder`, on by default since 1.0.7): keeps a seed's villages the
-  same across restarts, but every jigsaw layout in new chunks changes once. Keep it on, or off. [structure_tuning.md](../structure_tuning.md) 3.23.
-- Stone bases in earth fill are opt-in (tag `earth_fill/stone_base`, only the drum tower): add more structures, or
-  keep it narrow. [structure_tuning.md](../structure_tuning.md) 3.23 item 6.
-- Wood mismatch: 35 structures marked "Restrict". [wood_mismatch.md](../wood_mismatch.md).
-- Bee nest starter rules: your review. [bee_nests.md](../bee_nests.md) 9.
-- More Mooblooms D47 per-biome shares: first pass, open to retuning. [mooblooms.md](../mooblooms.md) 4.13.
-- Exposure bumpy filter: add a recipe or a loot entry. [exposure.md](../exposure.md) 4.
-- Metal standardization: plate / rod / dust-recycle gaps and an open question at the top of [metal_base_materials.js](../kubejs/server_scripts/metal/metal_base_materials.js).
-- Component tier names for aluminum (`Light?`) and uranium (`Dense?`). [components.js](../../kubejs/server_scripts/engineering/components.js) lines 18 and 22. The item names already say "Light" and "Heavy" ([engineering.md](../engineering.md) F5).
-- Whether `kubejs/archive/` and the commented-out old-helper blocks can be deleted (6).
-- Armor/tool effects: dragon bow and crossbow effects look reversed (F4); Magic Resistance on vanilla `isMagic()` or the pack's `magic` damage tag (F6); horse armor Regeneration I or II (F9). [armor_effects.md](../armor_effects.md) 4.
-- Portal: Flint and Terrasteel places Dark Fire anywhere (F1); Dark Fire lights portals in any dimension (F2). [nether_portal.md](../nether_portal.md) 4.
-- Tooling: delete the unused `global.config` framework (F3); keep the metal/wood/sequenced-assembly test recipes that ship in `_lib/` (F4). [pack_tooling.md](../pack_tooling.md) 4.
-- Potions: one batch size across machines or not (F1); keep the Refinery's regular → lingering shortcut (F2). [potions.md](../potions.md) 4.
-- Potion buckets: machine tipping price (F1); keep the glass-bottle remainder on every vanilla potion (F3). [potion_buckets.md](../potion_buckets.md) 4.
-- Archery: fix the bullet blueprint category (F1); split arrow 6 or 4 arrows (F2); the archery blueprint needs a trader-only Ethereal Arrow (F3). [archery.md](../archery.md) 4.
-- Engineering: show the sawmill blade in JEI (F2); one centre per component (F4); keep the bucket-eating shulker shell fan recipe (F7). [engineering.md](../engineering.md) 4.
-- Item physics: classify modded items (most sink and burn by default) (F4). [item_physics.md](../item_physics.md) 4.
-- Biomes: accept or retune the 5 unreachable multipliers (F1); skylands at 15 % while mooblooms and seasons target them (F3). [biome_tuning.md](../biome_tuning.md) 4.
-- Fixes: a mod-update checklist for the version-pinned fixes (D&D, Breezy, Create config lambda, EET slot) (F3). [fixes_compat.md](../fixes_compat.md) 4.
-- Camera bags: netherite upgrade blocked by Armor Trims without a template, keep or change the material (F1); tier looks (F2). [camera_bags.md](../camera_bags.md) 4.
-- TNT shrapnel: the player who lit the TNT is immune to its shrapnel, keep or include them (F1). [tnt_shrapnel.md](../tnt_shrapnel.md) 4.
-- Engineering recipes: a blast furnace recipe or another block for the LL locomotive and tug (F1); a dispenser recipe (F2); one amethyst crushing output per machine (F3). [recipes_engineering.md](../recipes_engineering.md) 4.
-- Metal recipes: one plate method per metal or Create pressing for the missing 5 (F1); hand-crafted rods for every metal or none (F4); rose gold in the gold block tag (F5). [recipes_metal.md](../recipes_metal.md) 4.
-- Cooking recipes: a smoker recipe (vanilla's removed, none added) (F1); keep the vanilla cake removal (F2). [recipes_cooking.md](../recipes_cooking.md) 4.
-- Magic recipes: Explorer's Compass has no recipe, loot only or a late recipe (F1). [recipes_magic.md](../recipes_magic.md) 4.
-- Recipe progression: give the blast furnace, dispenser, smoker and Explorer's Compass a recipe or add them to `removed_items.js`; check the cake (F1). [recipe_progression.md](../recipe_progression.md) 4.
-- Gear: dragon mining level 5 vs 4 (F4); carry Armor Trims' `Trim` and shield banners through assemblies (F5); tune the dragon bow, crossbow, trident and horse armor (F10); dragon set over the 30 armor cap (F13); felsic sword durability 2502 vs 2501 (F9). [gear_tuning.md](../gear_tuning.md) 4.
-
-**Decided, not carried out:**
-- Brewin' and Chewin' heat / cold tag additions (2.7) are proposed but not applied. [alcohol.md](../alcohol.md) Part A.
-- Incubation Additions license: repaint the 4 hay-nest PNGs and rewrite or reference the models before the jar is published anywhere. [nests.md](../nests.md) 4.
-- Shield knockback thresholds and a per-tier disable cooldown. [shields.md](../shields.md) 4, `TODO` in `ShieldTier.java` line 46.
-- Sawmill recipes off the manual pipeline into an NCH helper. `TODO` in [sawmill.js](../kubejs/generation_scripts/sawmill.js) line 1.
-- Magic Resistance and Luck potions use placeholder reagents. [potions.js](../../kubejs/startup_scripts/cooking/potions.js) lines 70-71 and 86; [potions.md](../potions.md) F3.
-- Advanced Peripherals structures: off by config; remove the warning or the structures outright. [structure_tuning.md](../structure_tuning.md) 7 Todo.
-- Dark Fire portal: `FlintAndTerraSteelItem` is still "TEMPORARY testing behavior" with no frame check and refers to a `TerraFireBlock` that no longer exists. `PortalFailureHandler` keeps a diagnostic log "until confirmed working". [todo.txt](todo.txt), [nether_portal.md](../nether_portal.md) F1, F5.
-
-## 5. Parity with newer upstream content
-
-| Area | Where | Gap |
-|---|---|---|
-| Brewin' and Chewin' 2.0 -> 4.5.0 | [alcohol.md](../alcohol.md) Part A | port builds, not booted or shipped (2) |
-| Vinery 1.3.10 -> 1.5.5 | [alcohol.md](../alcohol.md) Part B | in mods/; boots 1-2 crashed (fox mixin `this$0` shadow; flower pot static init order), boot 4 world load failed (`vinery:apple` unbound: stale `sapling_provider`), all fixed 10-18; world join + VB- tests pending; 4 upstream wine models use `#missing` (B4.9) |
-| Exposure 1.9.19 addons | [exposure.md](../exposure.md) | Catalog 1.1.2 not ported |
-| JEI 19 "craftable first" | [jei_craftable_first_port.md](../jei_craftable_first_port.md) | backport built, JEI-01 to JEI-06 never run |
-| Crop parity layer | [crops.md](../crops.md) 2.6, 4 | only tobacco brought in line; G-list crops (hemp, grapes, weeds, flax, tea, corn, coffee, pineapple) still differ |
-| Cans for every food | [can_parity.md](../can_parity.md) | `?` rows; 6 pie slices skipped (no source) |
-| Placeable food | [placeable_food.md](../placeable_food.md) | catalog built from fallback data: `/dumpplaceable` never run, so newer mods may be missing |
-| Stack sizes reference | [stack_sizes.md](../stack_sizes.md) | from before the stack size policy; rerun `/dumpstacks` |
-| Item dictionary | [startup_scripts/todo/](../kubejs/startup_scripts/todo/) | 911 candidate entries (`create_ie_dict_additions.txt`) and 689 unmapped ids (`not_in_dict.txt`) not merged; redstone module still on the old dict variant (item_dict "Merge additions from old dict") |
-| Dict validation | `block_dict.js` ~line 45, `fluid_dict.js` ~line 162, `neoCraftHelper.js` ~line 383 | tag entries aren't validated; `item_dict.js` does check tags but probably before they load ([pack_tooling.md](../pack_tooling.md) F1, F2) |
-| Sequenced-assembly sprites | [texture_tool.js](../kubejs/client_scripts/texture_tool.js) line 28 | 29 outputs still use the generic incomplete sprite |
-| Mob spawns | [mob_spawns.md](../mob_spawns.md) 9 | Alex's Mobs and duck/goose biome parity not investigated |
-| Loot census | [loot_census.md](../kubejs/server_scripts/loot/loot_census.md) | still lists Exposure 1.6.0's table ([exposure.md](../exposure.md) 4) |
-
-## 6. KubeJS projects and leftovers
-
-- **Loot overhaul** ([loot/](../kubejs/server_scripts/loot/README.md)): the LootJS-only layer is scaffolding (2).
-- **Dictionary worklists** ([startup_scripts/todo/](../kubejs/startup_scripts/todo/)): four `.txt` lists not merged (5). `recipes_to_remove.txt` is fed by the still-live `_lib/recipe_scan.js`; `remove_list.txt` has one item left, `vintageimprovements:rose_gold_rod` (check before removing).
-- **Helper migration `global.CE` -> `global.NCH`**: old blocks commented out in place: [misc_mods.js](../../kubejs/server_scripts/other/misc_mods.js) from line 60 (and a debug snippet at 280), [resource_blocks.js](../../kubejs/server_scripts/engineering/resource_blocks.js) from line 257, [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) from line 340. `kubejs/archive/` (9 files and `worldgen/`) has no live references. Keep or delete is your call.
-- **`kubejs/recipes/`** (4 JSON files: bonemeal broth, sawmill recycle) is not a KubeJS load path, so they don't load. Port them through NCH or delete them.
-- **`kubejs/quest_working/produce.txt`**: already merged into `food_purchasing.snbt` (per todo.txt); safe to delete.
-- **Sawmill generator** ([sawmill.js](../kubejs/generation_scripts/sawmill.js)): manual pipeline into 211 jar JSON copies (4).
-- **Nulch** recipe is in [sawdust.js](../kubejs/server_scripts/wood/sawdust.js) line 83; the note says it belongs in the compost file.
-- **Transition items**: add `R.incomplete(...)` definitions by file to the item dict ([transition_items.js](../kubejs/startup_scripts/changes/transition_items.js) line 24).
-- **Bookkeeping**: `minecraft:dispenser`, `smoker` and `cake` are removed but not tracked in `_lib/removed_items.js`.
-- **patcherMod leftovers** ([mod_todo.txt](mod_todo.txt)): `CreativeEngineeringItems.javaold`, `build.gradleold`, the MDK `README.txt` and `mods.toml` placeholder text; dead blocks in `CreativeEngineering.java` and `IECompat.java`; the `// TEMP diagnostic` log in `PotionFluidHandlerMixin` (line 62); the per-call log in `IETagUtilsMixin` (line 54); unused `@Overwrite` imports in the Cycle / Stockpile / Recovery enchantment mixins. (`Config.java` and the dead `.en_us.json` are gone.)
-
-## 7. TODOs written in files
-
-| File | Line | Note |
-|---|---|---|
-| [sequence_assembly_processes.js](../kubejs/server_scripts/_lib/sequence_assembly_processes.js) | 51 | helper should return recipes for every valid process, with a comment per helper |
-| [transition_items.js](../kubejs/startup_scripts/changes/transition_items.js) | 24 | `R.incomplete` definitions into the item dict |
-| [canning.js](../kubejs/server_scripts/cooking/canning.js) | 56, 68 | "Other Changes TODO"; canning automation; make sure food effects carry over and bone broth returns its bowl |
-| [potions.js](../kubejs/startup_scripts/cooking/potions.js) | 86 | better or magic brewing ingredient for Luck |
-| [sawmill.js](../kubejs/generation_scripts/sawmill.js) | 1 | move off the manual pipeline |
-| [tooltips.js](../kubejs/client_scripts/tooltips.js) | 623-643 | Vinery block lines, all `TODO` |
-| [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) | (47 rows) | `TODO: write a description` |
-| `development/patcherMod/.../shield/ShieldTier.java` | 46 | knockback thresholds, per-shield cooldown |
-| [cultures.js](../kubejs/startup_scripts/items/cultures.js) | 6 | nutrition once the cooking recipes exist |
-
-## 8. Docs out of date
-
-- **1.0.6 is deployed** ([deploy/DEPLOYED.json](../deploy/DEPLOYED.json): server and client 1.0.6, 2026-10-14 13:01; commit
-  `15c43a0`). But [feature_writeup/README.md](../README.md), [plan_1.0.6.md](../plan_1.0.6.md), [deploy.md](../deploy.md) and most status blocks still say "STAGED for 1.0.6, not deployed". Sweep them to DEPLOYED.
-- [deploy.md](../deploy.md) `IN_TREE_MODS` will need `backportedBrewin` now that it builds ([alcohol.md](../alcohol.md) 3.5).
-- [exposure.md](../exposure.md) has no `-04` entry (2).
-- [cooking.md](../cooking.md) lists the fridge sort bug, which has a fix built (2).
-- Writeups not in the README index: [cooking.md](../cooking.md), [meat_blocks.md](../meat_blocks.md), [nether_swaps.md](../nether_swaps.md), [nether_blocks_scan.md](../nether_blocks_scan.md), [wood_mismatch.md](../wood_mismatch.md), [testing/fridge_sort/](../testing/fridge_sort/plan.md).
-- [todo.txt](todo.txt) items found done on 2026-10-18: all 7 cultures wired; syringe texture; dead `.en_us.json`; `Config.java`; dragon-scale chestplate rocket takeoff (`EasyElytraTakeoffHelperMixin`; check whether Alex's Mobs items need adding to `#creativeengineering:elytra_chestplates`). The loot overhaul line is superseded by [loot.md](../loot.md).
-- Found while writing [armor_effects.md](../armor_effects.md) and [gear_tuning.md](../gear_tuning.md) (2026-10-18): [magic_resistance.js](../../kubejs/startup_scripts/magic/magic_resistance.js) header says there is no potion (there is); [armor_effects.js](../../kubejs/startup_scripts/func/armor_effects.js) header says 6 effects (cap is 7); the `NCH.cfg` example uses toml keys instead of field names ([neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) ~621). (shields.md 2.7 said the felsic shield's values were configurable: corrected the same day.)
-- Found while writing [potions.md](../potions.md), [potion_buckets.md](../potion_buckets.md) and [archery.md](../archery.md) (2026-10-18): `DragonBreathBrewing`'s javadoc names a `changes/dragon_breath.js` that doesn't exist (it's `potions.js` part 3); [tipped_arrows.js](../../kubejs/server_scripts/equipment/tipped_arrows.js) header gives amounts the code doesn't use. Raw `e.custom` recipes in `potion_bottling.js` and `tipped_arrows.js`, and 44 raw tag `e.add` lines in `equipmenttags.js`, are against the NCH / tag-helper rule.
-- [food.md](../food.md) 3.6 numbers are out of date ("34 food cans hold 2", "no food canning recipe exists yet"); see [cans.md](../cans.md) F1.
-- Found while writing [pack_tooling.md](../pack_tooling.md), [nether_portal.md](../nether_portal.md) and [wthit_lines.md](../wthit_lines.md) (2026-10-18): `test_crop_growth.sh` names a `crop_growth.md` (it's crops.md 2.9); `neoCraftHelper.js` line 1 names an old path; `DarkFireBlock#onPlace` still describes the removed `isAir()` override; WTHIT plugin toggles probably show raw `config.waila.plugin_*` keys (no lang lines).
+- [pack](#pack): release, server, docs
+- [food](#food): types and tuning, canning, oven, baked goods, meals, sweets, drinks, ingredients, seasoning, kitchen, placeable, stack sizes, drugs
+- [farming](#farming): crops, wild crops, composting, trees
+- [worldgen](#worldgen): structures (rates and groups, metas, earth fill, terrain, contents, net-new, nether block swap, testing), locate, biomes, nether blocks in biomes, flowers, bee nests, seasons
+- [mobs](#mobs): spawns, pillagers, mooblooms, nests, tweaks and bugs, bees
+- [loot](#loot): tables, LootJS layer, Lootr, wandering trader
+- [gear](#gear): tuning, echo tier, armor and tool effects, shields, archery, potions, potion buckets, camera bags, enchanting
+- [recipes](#recipes): progression, engineering, metal, wood, cooking, magic, materials
+- [engineering](#engineering): sawmill and components, Dreams and Desires
+- [gameplay](#gameplay): time, blockrunner, item physics, storage and item loss, TNT, portal, starter kit, misc
+- [blocks](#blocks): new and backported blocks, framed / copycat, decor, dyeing
+- [ui](#ui): tooltips, names, effects, JEI ordering, JEI coverage, WTHIT, toasts, misc
+- [alcohol](#alcohol): Brewin' port, Vinery port, pack-side alcohol, decisions
+- [largecontent](#largecontent): Exposure port, feature porting, Caverns and Chasms port, baby mob port, karma, mod additions, sticky notes
+- [tooling](#tooling): KubeJS helpers and conventions, dictionaries, patcherMod cleanup, generators and tests
 
 ---
 
-## 9. Test backlog
+# pack
 
-Open = unticked boxes in the file (status words in the file win where they differ). Nothing is VERIFIED yet.
+`pack/docs` has nothing open: rows 1 to 7 of the 2026-10-19 rework were done the same day (status sweep, old TODO
+citations, README index, Immersive Paintings writeup, stale comments, ST-53 / ST-160 text, Exposure `-04`).
 
-| Writeup | Prefix | Open / passed | Notes |
-|---|---|---|---|
-| [structure_tuning.md](../structure_tuning.md) | `ST-` | 101 / 98 | Phase 7 onward; ST-65 trim half; client list 8.0.11; ST-191 to ST-198 (1.0.7 fixes) |
-| [locate.md](../locate.md) | `LO-` | 10 / 7 | LO-03, 05, 14 failed in 1.0.6; rerun with the 1.0.7 fixes, plus LO-17 |
-| [alcohol.md](../alcohol.md) | `AL-`, `VB-` | 92 / 0 | ports in 1.0.7 (`-01`), `-02` STAGED for 1.0.8 |
-| [advancements.md](../advancements.md) | `AV-` | 5 / 0 | new 2026-10-19; STAGED for 1.0.8 |
-| [time.md](../time.md) | `TI-` | 27 / 0 | STAGED for 1.0.8; the push ran in single player 2026-10-19 |
-| [oven.md](../oven.md) | `OV-` | 19 / 0 | first version in 1.0.7, the rest STAGED for 1.0.8 |
-| [crops.md](../crops.md) | `CR-` | 68 / 0 | none run |
-| [mooblooms.md](../mooblooms.md) | `MB-` | 64 / 10 | client-side checks |
-| [shields.md](../shields.md) | `SH-` | 42 / 1 | SH-43 first, then SH-14, 19, 33-42 |
-| [gear_tuning.md](../gear_tuning.md) | `GR-` | 30 / 0 | new 2026-10-18; GR-02, GR-05, GR-28 settle findings |
-| [armor_effects.md](../armor_effects.md) | `AE-` | 24 / 0 | new 2026-10-18; AE-10, AE-19, AE-20 settle findings |
-| [potions.md](../potions.md) | `PO-` | 26 / 0 | new 2026-10-18; replaces the never-recorded September potion-fluid checklist |
-| [potion_buckets.md](../potion_buckets.md) | `PB-` | 20 / 0 | new 2026-10-18; PB-04 (dome) and PB-11 to PB-17 (recipes, bottle remainder) close the todo.txt gaps |
-| [archery.md](../archery.md) | `AR-` | 18 / 0 | new 2026-10-18; AR-13, AR-14, AR-15 settle findings |
-| [pack_tooling.md](../pack_tooling.md) | `TL-` | 16 / 0 | new 2026-10-18; TL-01 settles F1 |
-| [nether_portal.md](../nether_portal.md) | `NP-` | 12 / 0 | new 2026-10-18; NP-01 to NP-05 let the diagnostic log go |
-| [mob_block_tweaks.md](../mob_block_tweaks.md) | `MT-` | 12 / 0 | new 2026-10-18 (BR-28 stays in blockrunner.md) |
-| [wthit_lines.md](../wthit_lines.md) | `WL-` | 6 / 0 | new 2026-10-18; line tests stay in BR-, CR-, R4- |
-| [engineering.md](../engineering.md) | `EN-` | 18 / 0 | new 2026-10-18; EN-04 settles F2 |
-| [item_physics.md](../item_physics.md) | `IP-` | 14 / 0 | new 2026-10-18; IP-13 checks the $1 crash |
-| [biome_tuning.md](../biome_tuning.md) | `WG-` | 8 / 0 | new 2026-10-18; WG-06 settles F3 |
-| [fixes_compat.md](../fixes_compat.md) | `FX-` | 20 / 0 | new 2026-10-18; TT-16..18, AR-17 stay in their files |
-| [cans.md](../cans.md) | `CN-` | 6 / 0 | new 2026-10-18; FO-14..22, CP-, R4-07 elsewhere |
-| [composting.md](../composting.md) | `CM-` | 8 / 0 | new 2026-10-18; prefix CM- (CP- taken) |
-| [camera_bags.md](../camera_bags.md) | `CB-` | 10 / 0 | new 2026-10-18; R4-04..06, R4-11 in plan_1.0.4.md |
-| [tnt_shrapnel.md](../tnt_shrapnel.md) | `TN-` | 10 / 0 | new 2026-10-18; TN-03 settles F1 |
-| [recipes_engineering.md](../recipes_engineering.md) | `RE-` | 20 / 0 | new 2026-10-18; RE-03, RE-08, RE-16 settle F1-F3 |
-| [recipes_metal.md](../recipes_metal.md) | `RM-` | 14 / 0 | new 2026-10-18; RM-07, RM-08, RM-11 check F1, F2, F5 |
-| [recipes_wood.md](../recipes_wood.md) | `RW-` | 10 / 0 | new 2026-10-18; RW-03 checks F1 |
-| [recipes_cooking.md](../recipes_cooking.md) | `RC-` | 14 / 0 | new 2026-10-18; RC-01, RC-02 settle F1, F2 |
-| [recipes_magic.md](../recipes_magic.md) | `RA-` | 8 / 0 | new 2026-10-18; RA-07 settles F1 |
-| [recipe_progression.md](../recipe_progression.md) | `RP-` | 8 / 0 | new 2026-10-18; RP-05 collects the missing-recipe checks; folder tests in RE-, RM-, RW-, RC-, RA- |
-| [blockrunner.md](../blockrunner.md) | `BR-` | 36 / 14 | BR-52 needs a restart |
-| [weather.md](../weather.md) | `WE-` | 36 / 0 | client side never run; WE-26 to WE-36 (1.0.6) |
-| [exposure.md](../exposure.md) | `EX-` | 34 / 5 | EX-13 (album fix), EX-50 (old world) |
-| [food.md](../food.md) | `FO-` | 27 / 1 | FO-02 to FO-28 |
-| [loot.md](../loot.md) | `LT-` | 24 / 3 | LT-14 to LT-27 |
-| [mob_spawns.md](../mob_spawns.md) | `MS-` | 23 / 0 | |
-| [vinery.md](../vinery.md) | `VN-` | 20 / 0 | |
-| [tooltips.md](../tooltips.md) | `TT-` | 18 / 0 | TT-16 to TT-18 (1.0.6) |
-| [wandering_trader.md](../wandering_trader.md) | `WT-` | 16 / 0 | WT-16 natural spawn |
-| [can_parity.md](../can_parity.md) | `CP-` | 14 / 0 | CP-01 to CP-14 |
-| [remainder_buffer.md](../remainder_buffer.md) | `RB-` | 11 / 0 | in 1.0.7 (deployed); 10 offline GameTests pass (`tools/test_remainder_buffer.sh`) |
-| [flowers.md](../flowers.md) | `FL-` | 14 / 0 | |
-| [nests.md](../nests.md) | `NE-` | 14 / 0 | NE-13 client sprites |
-| [plan_1.0.4.md](../plan_1.0.4.md) | `R4-` | 14 / 0 | release checks never ticked |
-| [perf.md](../perf.md) | `PF-` | 13 / 0 | Windows scripts untested |
-| [trashslot.md](../trashslot.md) | `TS-` | 13 / 0 | |
-| [bee_nests.md](../bee_nests.md) | `BN-` | 10 / 0 | |
-| [vinery_jei.md](../vinery_jei.md) | `VJ-` | 10 / 0 | VJ-04 changes with the fermentation fix |
-| [placeable_food.md](../placeable_food.md) | `PL-` | 9 / 0 | run `/dumpplaceable` first |
-| [names.md](../names.md) | `NM-` | 6 / 2 | NM-01 to NM-06 |
-| [jei_coverage.md](../jei_coverage.md) | `JC-` | 5 / 0 | spot checks |
-| [deploy.md](../deploy.md) | `DP-` | 4 / 3 | DP-03 to DP-05, DP-07 |
-| [jei_craftable_first_port.md](../jei_craftable_first_port.md) | `JEI-` | 6 / 0 | plain list, no boxes |
-| [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) | `FS-` | 5 / 0 | in 1.0.7 (deployed) |
-| [todo.txt](todo.txt) "Built, but with acknowledged gaps" | none | | potion buckets now PB-04, PB-11 to PB-17; potion-fluid chain now PO-01 to PO-26; sawblade routing still never explicitly checked in game |
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| server | 4 | buggylouu keeps timing out | Bug | config | 8 `Timed out` kicks on 10-17/18 vs 1 for Saint_Alfonzo; client-to-server traffic stalls while server-to-client flows; no mod blocks reads. Most likely the client's uplink (Wi-Fi power save / driver). Done: DH `playerBandwidthLimit` 500 -> 200, adaptive transfer on (copy `DistantHorizons.toml` to the server by hand). Next: Ethernet test, Wi-Fi power save off, `ping -i 0.2 192.168.0.122` during play, client `journalctl -k` at kick times | none | this file (moved from the old section 3); logs in `debug/latest.log`, `debug/serverlog/` |
+| server | 5 | 0-byte crash report from 2026-09-11 | Bug | none | Never looked into; probably nothing left to find | close or look | [todo.txt](todo.txt) |
+| server | 8 | Off-thread `Level.random` caller never identified | Bug | patcherMod | The thread-safe random fix hides the culprit, which may misbehave elsewhere | whether to hunt it | [fixes_compat.md](../fixes_compat.md) F4 |
+| release | 1 | Commit the 1.0.8 / 1.0.9 work | Planned | docs | 1.0.9 shipped from `bb67d68` + 37 uncommitted files; `pack/manifest.json` is out of date with `mods/` (build warning): run `tools/gen_pack_manifest.py`, then commit | none | [deploy/DEPLOY_LOG.md](../../deploy/DEPLOY_LOG.md) 1.0.9 |
+| release | 2 | Server `[time] preset` | Planned | config / tool | 1.0.8 shipped the dev instance's SINGLEPLAYER preset to the server too (a wine level every sub-season instead of every season). Check the live server's `creativeengineering-common.toml` | A: set `SERVER` by hand (the next payload with that file resets it); B: a server-only override in the payload; C: the preset follows the side | [plan_1.0.8.md](../plan_1.0.8.md) 2.3, [time.md](../time.md) 3.9 |
+| release | 5 | `/dumpall` refresh with the ports | Planned | tool / data | The 2026-10-18 dumps predate the Brewin' and Vinery ports: rerun `/dumpall`, then `food_catalog.py`, `gen_stack_sizes.py`, `gen_can_types.py` (Canned Kimchi still copies Satisfaction), `effect_audit.py` (empty `EFFECT_OVERRIDES`), `/dumppotions` | none | [alcohol.md](../alcohol.md) 3.4, [effects.md](../effects.md) F10, memory `dumpall-refresh-workflow` |
+| server | 1 | Server watchdog kills of 10-19 (heap full) | Planned | config | Both 60 s kills had 169-201 MiB free of 6 GB and 2.1 GB swap on a ~7.5 GB host; one elytra player, 5022 chunks, DH server gen at FEATURES / 2 threads / 4096 distance. Proposals, none applied: DH distant generation off on the server (or shorter distance, fewer threads), pregen with Chunky, view distance 10 -> 8, upload the JFR exit dump to confirm | which proposals to apply | memory `server-crash-triage-1019`, [perf.md](../perf.md) |
+| server | 3 | End teleports into unexplored terrain still stall | Planned | patcherMod | In the End the hook is kept, and a `/tp` there stalled the server 38 s. Option: skip the hook whenever the target chunk isn't loaded, in every dimension | whether to extend the skip | [testing/structures/12_earth_fill_camps.md](../testing/structures/12_earth_fill_camps.md) 4 |
+| server | 6 | Ghost-block fix ceiling | Planned | none | The state-id fix works below 2^20 states; the pack has 761,052. About 290,000 more (a few big block mods) breaks it. Watch the count when adding mods | none | [fixes_compat.md](../fixes_compat.md) F2 |
+| server | 7 | Mod-update checklist for version-pinned fixes | Planned | docs | D&D (1.2c), Breezy compat (Supplementaries 2.4.20 + Breezy 1.0.8), Create config text field (0.5.1.i lambda), Easy Elytra Takeoff slot index: each targets one mod version | how to track (checklist in deploy.md, or preflight) | [fixes_compat.md](../fixes_compat.md) F3, [gear_tuning.md](../gear_tuning.md) F11 |
+| server | 9 | Performance tooling gaps | Planned | patcherMod | Deferred option 3: patcherMod JFR events (per-tick and per-dimension timing, chunk waits, KubeJS handler timing, `/ceperf dump`). PF-01 to PF-13 pending; Windows scripts untested | whether to build | [perf.md](../perf.md) 4 |
+| release | 3 | 1.0.8 first-boot checks on the live server | Testing | none | `latest.log`: `[time]` push lines, "seasons now follow the sun" per dimension, `[advancements] N left out`, missing-registry lines for the removed ids (`vinery:mead`, `king_danis_wine`, `calendar`, the Brewin' jams: any in the world are gone). Back up `world/advancements/` if old progress might be wanted (it is rewritten on each player's next save) | none | [plan_1.0.8.md](../plan_1.0.8.md) 2, 2.1 |
+| release | 4 | 1.0.9 fix checks in game | Testing | none | OV-11 (oven JEI [+], no log spam), an `enchant_randomly` chest never gives Cycle / Stockpile / Recovery, GR-28 (air brake `useDurationTicks`), potion bucket tooltip on splash + lingering, RW-03 (planks in the IE crusher), zinc ore + hammer gives nothing, 9 copper plates -> block, no `DamageFlag` / `ItemPhysicSplit$1` crashes | none | [plan_1.0.9.md](../plan_1.0.9.md) 1, 2 |
+| server | 2 | Quark Spiral Spires teleport hook outside the End | Testing | patcherMod | `QuarkSpiralSpiresTeleportMixin` cancels the hook outside the End (1.0.9). ST-205 on a scratch server: Overworld `/tp` to new terrain 4 ms, no chunk made | none | [plan_1.0.9.md](../plan_1.0.9.md) QS, [testing/structures/12_earth_fill_camps.md](../testing/structures/12_earth_fill_camps.md) |
+
+---
+
+# food
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| types-and-tuning | 2 | Canned Goods data broken | Bug | data | Saturation modifiers 1 to 42 (canned steak 16 / 24), crossed ids (`canned_carrots` is pumpkin pies ...), wrong effects (Oculemonade = Soda, golden apple cans amplified) | fixed by row 1 or by hand first | [food.md](../food.md) 4.2 findings 1-2 |
+| types-and-tuning | 4 | Spice of Life config | Bug | config | Per world, no `defaultconfigs` copy; default benefit `attribute,generic.speed,2` isn't a real attribute; complexity list names two missing mods | add a defaultconfigs copy, fix the benefit | [food.md](../food.md) 2.3, 4.2 finding 4 |
+| canning | 4 | Hand-written raw cans don't carry effects | Bug | KubeJS | Generated cans copy effects with scaled durations; the 26 hand-written raw cans don't. Cooking plan: "ensure fast eating, effect passthrough" | none | [can_parity.md](../can_parity.md) Effects column, [cans.md](../cans.md) F2 |
+| oven | 3 | Muffins may not be cookable | Bug | KubeJS | Pot recipes moved to `#forge:dough` (1.0.8) but the cause isn't confirmed: Create's dough is already in `#forge:dough/wheat`. OV-13 | none | [oven.md](../oven.md) 3.8, cooking plan errors |
+| kitchen | 4 | Duplicate bowl when popping into the buffer | Bug | patcherMod | Cooking plan note: a bowl is duplicated when it pops into the output buffer (can also pass into plating at once) | none | cooking plan tools/bowls |
+| kitchen | 5 | Returned serve items don't stack | Bug | KubeJS / patcherMod | Returned bowls and paper (popcorn bucket) don't stack with normal ones: extra NBT? | none | scratchpad 2026-10-19 |
+| types-and-tuning | 1 | Food tuning system (values per type, Spice of Life complexity, canned parity) | Planned | KubeJS / data / tool | Designed in food.md 3.5 on top of the 31 food-type tags; per-type hunger, saturation, effects and SoL value with per-item exceptions; every can gets the value of what went into it. Also the planned fix for the Canned Goods data (row 2) | D1 bands (review-and-exempt or snap), D2 golden food back to vanilla, D3 SoL complexities and benefit trim, D4 canned code effects, D5 can counts separately from source in SoL, D6 raw meat Hunger chance | [food.md](../food.md) 3.5, 4.3 |
+| types-and-tuning | 3 | Golden food changes vanilla values | Planned | data | Golden carrot 4 (vanilla 6); enchanted golden apple and 23 enchanted golden foods 8 / 8 (vanilla 4 / 1.2), worth 7 SoL each | D2 | [food.md](../food.md) 4.2 finding 3 |
+| types-and-tuning | 5 | Placed pies and non-vanilla cakes don't count for SoL | Planned | patcherMod | Bitten from the block they don't register (only vanilla cake does); slices eaten from hand do | whether to fix | [food.md](../food.md) 4.2 finding 5 |
+| types-and-tuning | 6 | Vanilla egg -> `#forge:eggs` in recipes | Planned | KubeJS | `R.replaceInput` per recipe id (fried eggs, oil fried egg, omelet, quiches, egg grog, dread nog, cake paste, echo cake base); not the egg crate; rescan first (the dump can't read IE recipes). Cooking plan: "cross egg compatibility on almost everything, any egg to fried egg" | whether turtle and parrot eggs belong in `#forge:eggs` | [food.md](../food.md) 3.8, cooking plan |
+| types-and-tuning | 8 | Soup and stew values from their ingredients | Planned | data | Adjust base soup values to their inputs, mark outliers first, then change | part of row 1 | cooking plan cooked/soup |
+| types-and-tuning | 10 | Remove unused meats from recipes and view | Planned | KubeJS | Venison, goat and other unused meats out of crafting recipes / JEI | which meats | cooking plan meat |
+| types-and-tuning | 12 | Spice of Life much slower | Planned | config / KubeJS | Half the pace (2x slower); a shorter chain that ends at triple max health; effects spread along the chain (low-level versions of the high-level effects, which are dropped to make room) | chain length and effect list (with D3 of row 1) | scratchpad 2026-10-19, [food.md](../food.md) 3.5 |
+| canning | 2 | `Want = ?` cells in the can parity worksheet | Planned | data | Every `?` row needs yes / no, then the rest of the row; 6 pie slices skipped (no source) | each `?` | [can_parity.md](../can_parity.md) |
+| canning | 3 | Hunger / saturation audit of every can | Planned | data | Food h/s, craft sum h/s and canned h/s columns postponed until row 1 of food/types-and-tuning settles; no can value-audited yet | none until tuning | [can_parity.md](../can_parity.md) |
+| canning | 5 | Pumpkin can: veggie or fruit | Planned | KubeJS | Recipes sit in the raw veggie section but take sugar / honey, and cans.js gives Fruit Meal values; one side should move | veggie or fruit | [can_parity.md](../can_parity.md) 4 |
+| canning | 6 | Smaller can-parity follow-ups | Planned | KubeJS | White strawberry ratio when h/s columns fill; half cans from raw meat slices feel (CP-09); a partial filling can still makes a whole pie (ingredients ignore NBT); shulker filet cheaper path if a mollusk cuts into 2 | each | [can_parity.md](../can_parity.md) 4 |
+| canning | 7 | Removed cans shipped in 1.0.4 | Planned | patcherMod | Removed raw cans and `canned_cactus` vanish from old inventories; a missing-mappings remap (as Incubation Additions does) would keep them | remap or accept the loss | [can_parity.md](../can_parity.md) 4 |
+| canning | 8 | Canning automation | Planned | KubeJS | `TODO` in canning.js; plus "Other Changes TODO": food effects carry over, bone broth returns its bowl | design | `kubejs/server_scripts/cooking/canning.js` lines 56, 68 |
+| canning | 9 | Servings only work in NCH crafting recipes | Planned | patcherMod / KubeJS | Create mixing, mechanical crafting and other mods' recipes use the whole can | whether to extend | [cans.md](../cans.md) F4 |
+| canning | 10 | Cosmetic can opener | Planned | KubeJS | Makes a sound when a can is opened while in the inventory | none | cooking plan canned |
+| canning | 12 | More cannable foods | Planned | KubeJS / tool | Pear with rock salt, creamed corn; rerun `gen_can_types.py` if they go through the generated cans | none | scratchpad 2026-10-19 |
+| oven | 4 | Oven tooltips for other ovens | Planned | KubeJS | Decorative tooltip on the Fantasy Furniture ovens; furnace / smoker tooltip on the Cooking for Blockheads oven, and make sure it both smelts and smokes | none | cooking plan kitchen |
+| oven | 5 | Muffin yield 4 from baking | Planned | KubeJS | Oven muffin recipes give 4 | none | scratchpad 2026-10-19, [oven.md](../oven.md) |
+| baked-goods | 2 | Muffins as a decent food source | Planned | KubeJS | More variants and combinations with mixed shorter effects (orange cranberry, lemon poppy), fruit + milk + egg + sugar + flour, served on paper, sequenced assembly | variants | cooking plan baked/muffins |
+| baked-goods | 3 | Cookie recipes | Planned | KubeJS | Bend the shaped recipe, heated compacting recipe, efficient baking recipe | none | cooking plan baked/cookies |
+| baked-goods | 4 | Pie sequenced assembly and chorus pie | Planned | KubeJS | Every pie gets a sequenced assembly recipe; chorus pie through chorus juice (needs a new fluid) | chorus juice fluid | cooking plan baked/pie |
+| baked-goods | 5 | Cakes | Planned | KubeJS | Dragon egg cake (great effects, flight?); rename mangosteen cake (not a cake); unobtainable cake slices (find the mod or add them); all slices placeable; merge chocolate cake | effects of dragon egg cake | cooking plan baked/cake |
+| baked-goods | 6 | Cake paste and tarts | Planned | KubeJS | Cake paste into the cooking pot, more waffle recipes and uses; more tart variants | none | cooking plan baked |
+| baked-goods | 7 | Sourdough chain | Planned | KubeJS / patcherMod | Starter -> growing -> fermenting -> sourdough, sprite grows through the chain, timed waits between steps, mill / mortar sourdough back to starter, starter keeps a start date and a name carried into any sourdough made | how the timed wait works (NBT time stamp vs a block) | cooking plan baked/sourdough |
+| baked-goods | 8 | Yeast | Planned | KubeJS | New crafting / heated mixing recipe from mushroom colonies or blocks; used in the sourdough chain; fix the in-world yeast process | none | cooking plan baked/yeast |
+| baked-goods | 9 | Sliced bread / toast in recipes | Planned | KubeJS | Allow or require it on recipes with a visual square bun | none | cooking plan baked/sliced bread |
+| baked-goods | 10 | Bread block | Planned | KubeJS | Cut to a crustless bread block; standard slab recipe | none | cooking plan misc |
+| baked-goods | 11 | Mixed cookie jars | Planned | patcherMod | A Supplementaries jar takes one cookie type (`JarBlockTile#canPlaceItem` wants the same item); let it take mixed cookies (a mixin, and the jar renderer and Contents line would need to list several) | whether | cooking plan cooked/soup ("mixing cookies?"), [wthit_lines.md](../wthit_lines.md) 2.3 |
+| meals | 1 | Cooked ingredients in heatless shapeless meal recipes | Planned | KubeJS | Add cooked ingredients (baked potato, precooked sauce) as the shapeless, heatless route for meals; bone broth as the enabler (food/ingredients #4) | none | cooking plan meals, ingredients/bone broth |
+| meals | 2 | Per-meal recipe changes | Planned | KubeJS | Fried rice + fried egg; baked cod stew + fried egg, baked potato, tomato sauce; chicken soup any cooked veggie; mushroom rice + baked potato; mutton roll needs tortilla; scrambled eggs unheated shapeless and dearer; omelette with fried eggs + shapeless veggie omelette; exotic fruit any Fruits Delight fruit, shapeless; fruit salad sequenced + slice tag (cantaloupe, hami melon, pineapple, lemon, orange); burgers cheese only, shaped, sequenced only, bread or cornbread only | none | cooking plan meals |
+| meals | 4 | Expensive cooked shapeless meals | Planned | KubeJS | Chorus stew, endermite stew, crab pasta, baked cod stew, pumpkin soup, pasta with meatballs, dumplings, cavern explorer soup; squid ink pasta as a dual-fluid mix (ink + tomato sauce) or expensive shapeless | none | cooking plan meals |
+| meals | 5 | Feasts | Planned | KubeJS | "Use bowl on placed feast to plate" with a JEI tab; sequenced assembly for roast chicken, shepherd's pie, honey glazed ham, pizza, popcorn (shaped); pizza: 8 slices per pizza texture, dearer dough and cheese (wheat -> dough done in 1.0.8, [alcohol.md](../alcohol.md) 8.6) | JEI tab route | cooking plan meals/feasts |
+| meals | 6 | Glistening melon edible | Planned | KubeJS | Make it edible, add heated "gilding" recipes (heated mixing, arc furnace) | none | cooking plan meals |
+| meals | 7 | Fish recipes for any fish | Planned | KubeJS | Cooking-oil frying for any fish species; fish and chips (raw potato slices + any raw fish, plated with paper, joke tooltip about "chips"); salmon tempura -> fish tempura on FD frying; remove all PneumaticCraft deep-frying; rename PC chips; diced potato + oil fries | names | cooking plan meat/fish, baked/fried |
+| meals | 8 | Dog food | Planned | KubeJS | Expensive cooked shapeless recipe | none | cooking plan misc |
+| meals | 9 | Gold food cheap in machines | Planned | KubeJS | Golden apples: 5 ingots mixing, 3 arc, 8 grid; intended reward, look again with tuning; golden carrots take rose gold nuggets | none | [recipes_cooking.md](../recipes_cooking.md) F5, F7 |
+| sweets | 1 | Gummies | Planned | KubeJS | For most fruits; slime balls and kelp allowed; manual craft plus efficient pot / Create craft | none | cooking plan sweet/candy |
+| sweets | 2 | Rock candy variants | Planned | KubeJS | 4 or 5 more from corundum | keep rose quartz | cooking plan sweet/candy |
+| sweets | 3 | Cold sweets variants | Planned | KubeJS | More custard, shaved ice and popsicle variants | which | cooking plan sweet/cold |
+| sweets | 4 | Ice cream rework | Planned | KubeJS / data | Unified recipes, a fluid per flavour with mixing recipes, bowl spouting, an ice cream block per flavour with BlockRunner compat (sticky like slime, sink in), more flavours | none | cooking plan sweet/cold |
+| drinks | 1 | Lemonade | Planned | KubeJS / data | New fluid with pink and blue variants, effects from ingredients | none | cooking plan drink |
+| drinks | 2 | Tea cleanup | Planned | KubeJS | Merge duplicate teas; Create mixing recipes dearer than manual; recolor teas and make them placeable (Display Delight); fluid effect-duration tooltip. Upgraded teas (melon juice + honey) throw an extra bottle: the remainder buffer plates them (built), the bottle-plating requirement on these recipes is still to remove | none | cooking plan drink/tea, [remainder_buffer.md](../remainder_buffer.md) |
+| drinks | 3 | Merges | Planned | KubeJS | Coffee (Rustic Delight vs Farmer's Respite), bananas (Alex's Mobs' banana goes), melon juice, chocolate cake; milk bottles (merge them, remove Neapolitan's) | which item wins each merge | cooking plan, scratchpad 2026-10-19, [crops.md](../crops.md) V5, V18 |
+| drinks | 4 | Chorus juice | Planned | KubeJS / data | Heated mixing and pot recipe; used in ender pasta and chorus pie; maybe a progression fluid or diluter | role | cooking plan drink/juice, fluid |
+| drinks | 5 | Berry matcha with Farmer's Respite | Planned | KubeJS | Integrate | none | cooking plan drink |
+| drinks | 6 | Milk from a cow in a jar | Planned | KubeJS | Fill a bottle from a cow in a jar | none | cooking plan dairy |
+| ingredients | 2 | New fluids | Planned | KubeJS / data | Egg solution (egg + milk: omelette, scrambled eggs, cornbread batter, efficient dough, potato salad, quiche, pudding, batter); frosting (milk + sugar: cakes, pies, muffins, custard, tart); beetroot soup as an efficient beetroot; bucket stack size 16? | which fluids | cooking plan fluid |
+| ingredients | 3 | Sugar and glycerol | Planned | KubeJS | Glycerol in most sugar recipes (not sugar-only items, not drinks); more uses for sugar cubes (bulk mixing, frosting) | restrictions | cooking plan ingredients/sugar |
+| ingredients | 4 | Bone broth | Planned | KubeJS | Lets soups, stews and pastas be shapeless instead of pot; no Create shapeless mixing; cover every valid item; cooked variants in heatless shapeless | none | cooking plan ingredients/bone broth |
+| ingredients | 5 | Ice cubes | Planned | KubeJS | Hammer ice on the cutting board (machine crushing less efficient); cubes usable as ice; ice module provides ice / cubes | none | cooking plan ingredients/ice |
+| ingredients | 6 | Vinegar | Planned | KubeJS | New canning additive for fruit, veg, meat and fish (with Veggie Delight?) | source mod | cooking plan ingredients/vinegar |
+| ingredients | 7 | Batter uses | Planned | KubeJS | More uses; replace dough, flour, pie crust in baking | none | cooking plan ingredients/batter |
+| ingredients | 8 | Produce fixes | Planned | KubeJS | Melon pressing inefficient recipe; merge diced potatoes into Rustic Delight potato slices; chorus crate unpacking missing (vibration table, IE press?). Corn milled to cornmeal before cornbread is done by row 1 | none | cooking plan food/crops |
+| ingredients | 9 | Cheese | Planned | KubeJS | More cheese types (red mushroom, warped fungus, Fungi Delight), new colours, longer ageing, more per slice; cheese making to the Vintage Delight method when added; a stackable cheese ripening shelf | which cheeses | cooking plan dairy, processes |
+| ingredients | 10 | Whale blubber | Planned | KubeJS | Whales drop blubber, cooked into cooking oil or refined into burnable whale oil | none | scratchpad 2026-10-19 |
+| ingredients | 11 | Botania bowl of water use | Planned | KubeJS | Find a use | whether | scratchpad 2026-10-19 |
+| ingredients | 12 | Backport Veggie Delight, Vintage Delight, Fungi Delight | Planned | new jar | Named in the cooking plans as sources for vinegar, cheese method and salt production | which, and whether as ports | cooking plan veggies |
+| ingredients | 13 | Every soup and stew as a jar fluid | Planned | data | Supplementaries soft fluids for the soups of Quark Delight, Delightful, Alex's Delight, Nether's Delight, End's Delight, Golden Food, Neapolitan and Fruits Delight, all recoloured to one soup colour (Moonlight already has beetroot / mushroom / rabbit stew). The WTHIT Contents line shows them (`ui/wthit #3`) | the colour | cooking plan cooked/soup, [wthit_lines.md](../wthit_lines.md) 2.3 |
+| seasoning | 1 | Salt system expansion | Planned | KubeJS | Salt improves nutrition (capped); saltable tag covers every valid food; more salt recipes; Create salt automation works pack-wide; intermediates (bone broth) can't be salted; salt from clusters / raw rock salt by cutting board, milling, crushing with equal efficiency and more than one output with a chance; merge with Vintage Delight later | none | cooking plan seasoning |
+| seasoning | 2 | Seasoning crafts in their own JEI category | Planned | patcherMod | Split shapeless seasoning crafts into a JEI category | none | cooking plan seasoning |
+| seasoning | 3 | New seasonings | Planned | KubeJS | Pepper, dill (sea pickle?), cheese, cream and onion, ice cubes for cold drinks; distinct placeable popcorn variants (regular popcorn placeable first) | nutrition vs saturation split per seasoning | cooking plan seasoning |
+| seasoning | 4 | Salt on more foods | Planned | KubeJS | Calamari roll, crab bar, crab ragout, every meat dish; audit the saltable tag (part of row 1) | none | scratchpad 2026-10-19 |
+| kitchen | 3 | Remainder buffer WTHIT line "Holding: ..." | Planned | patcherMod | Optional | whether | [remainder_buffer.md](../remainder_buffer.md) 3.3 |
+| kitchen | 6 | Fridge | Planned | patcherMod / resource pack | The sort deletion is fixed (row 7); patch the 2-tall fridge model to read as a full block horizontally for decor on top | none | cooking plan kitchen/fridge |
+| kitchen | 8 | Counters, stove, sink | Planned | patcherMod | Cutting board placeable on counters; storage in corner cabinets; Blockheads stove doesn't take burnable fuel for the oven; sink doesn't give water (rework like a well?) | none | cooking plan kitchen |
+| kitchen | 10 | Kitchen tools | Planned | KubeJS / patcherMod | Bamboo bowl recipe; mortar and pestle (Old Guns) for food grinding in shapeless crafts, returned; scythe (area harvest only, better area by tier than hoes); stepstool (Terraria style: extra interact height, maybe while space is held; for picking and building) | scope | cooking plan tools |
+| kitchen | 11 | Kitchen decor | Planned | KubeJS | Meat grinder, pots, pans, baking sheets, silverware | source | cooking plan kitchen/decor |
+| kitchen | 12 | Heated dough block + green dye -> slime block | Planned | KubeJS | More efficient route | none | cooking plan processes |
+| kitchen | 13 | Short delay before the bowl pops into the buffer | Planned | patcherMod | So the Farmer's Delight pot reads step by step: the food goes into the pot, the bowl shows in the plate slot for a moment, then the food is plated | how long | scratchpad 2026-10-19, [remainder_buffer.md](../remainder_buffer.md) |
+| placeable | 2 | Run `/dumpplaceable` | Planned | tool | The catalog is built from fallback data; newer mods may be missing; real "Review" entries go into `INCLUDE` | none | [placeable_food.md](../placeable_food.md) 4 |
+| placeable | 3 | Drinks placeable | Planned | KubeJS | FD tea-like drinks placeable with Display Delight | none | cooking plan drink |
+| stack-sizes | 1 | Consistent cooking stack sizes | Planned | tool / data | Bowl ingredients and bottle ingredients (milk, honey) 64; bowl foods incl. jello 32; drinks and bottles (tea, juice, custard, pitcher drinks, shaved ice) 32; dog food 32; cheese wheel 32. Rules in `gen_stack_sizes.py` | none | scratchpad 2026-10-19, memory `stack-size-policy` |
+| stack-sizes | 2 | Stack sizes reference out of date | Planned | tool | Predates the stack size policy; rerun `/dumpstacks` and `tools/stack_sizes.py` | none | [stack_sizes.md](../stack_sizes.md) |
+| drugs | 1 | Smoking | Planned | KubeJS / patcherMod | Rolling and pipe; smoke limit with growing Nausea and tolerance; herb additives give effects; tobacco and smokeleaf positive (Comfort?) and negative effects; maybe a SoL-style tolerance | the tolerance mechanic | cooking plan drugs |
+| types-and-tuning | 9 | Cultivated meat cultures have no nutrition | In Progress | KubeJS | All 7 cultures wired, syringe has a texture; culture items are plain items until the cooking recipes exist; also "inefficient meat culture cultivation with the pot" | values | `kubejs/startup_scripts/items/cultures.js` line 6, cooking plan processes |
+| canning | 1 | Can values for meal, pie, feast, drink and hazard cans | In Progress | KubeJS / data | Placeholder goals picked to get the cans in (canning.js lines ~504, 542, 557 and SECTIONS); set the real goals, rerun `gen_can_types.py`. Golden cans hold 10 servings each, worth a look | the goals per section | [can_parity.md](../can_parity.md) 3.1, 4; [cans.md](../cans.md) F2, F3 |
+| oven | 2 | Oven and bakeware crafting patterns | In Progress | KubeJS | Placeholder patterns, not checked for clashes with every mod's recipes | final patterns | [oven.md](../oven.md) 3.6, 4 |
+| baked-goods | 1 | Flour, crust and cake base in every baked recipe | In Progress | KubeJS | Done in the oven recipes (1.0.8); still to do on the remaining crafting / pot recipes: wheat -> flour in cookies, pies, strange eclair; pie crust in every pie (swap milk to egg so frosting can be used; pressing dough recipe); cake base for every cake (slice a dough block into bases, sequenced assembly with spouting) | swap milk to egg in crust | cooking plan sweet/baked, [oven.md](../oven.md) 2.6 |
+| meals | 3 | Sequenced assembly meals | In Progress | KubeJS | Quiche done (bacon, mushroom, 1.0.8). Left: shepherd's pie (shapeless, cheese for milk), horror lasagna, stuffed potato (spouting), crispy skewer, crawling sandwich, steak and potatoes (shaped + sequenced) | none | cooking plan meals, [alcohol.md](../alcohol.md) 8.6 |
+| types-and-tuning | 11 | Food tests FO-02 to FO-28 | Testing | none | Types, tags, canning recipes, servings, fried eggs, egg stacks | none | [food.md](../food.md) 7 |
+| canning | 11 | Canned golem, generated cans and parity tests | Testing | none | CN-01 to CN-06, CP-01 to CP-14 | none | [cans.md](../cans.md) 7, [can_parity.md](../can_parity.md) |
+| oven | 1 | Oven block, baking recipe type, JEI, bakeware, 37 baking recipes, ingredient counts option, hammered bakeware, hammer no-rotate | Testing | patcherMod / KubeJS | First version in 1.0.7, the rest in 1.0.8, JEI [+] fix in 1.0.9. OV-01 to OV-19 | none | [oven.md](../oven.md) 0, 7 |
+| ingredients | 1 | Cornmeal | Testing | KubeJS | Built 2026-10-19 (1.0.8): milling and crushing ratios, tortilla and cornbread batter need it, corn -> tortilla washing removed. Cornmeal as flour in pancakes, pies, cakes, muffins still to check | none | [recipes_cooking.md](../recipes_cooking.md) 2.1, RC-15 to RC-18 |
+| kitchen | 1 | Remainder buffer on pot, kettle, oven | Testing | patcherMod | DEPLOYED 1.0.7, one leftover per item (1.0.8); D1 to D5 decided as recommended; 10 GameTests pass. RB-01 to RB-11 | none | [remainder_buffer.md](../remainder_buffer.md) |
+| kitchen | 7 | Fridge sort item loss | Testing | patcherMod | `QuarkSafeSort` fix in 1.0.7. FS-01 to FS-05 not run | none | [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) |
+| placeable | 1 | Placeable tooltip lines and coaster line | Testing | KubeJS | 1.0.6 lines, coaster line + tag 1.0.8. PL-01 to PL-09 | none | [placeable_food.md](../placeable_food.md) |
+
+---
+
+# farming
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| crops | 1 | Crop findings G8 to G15 | Planned | data / patcherMod | G8 weeds replant on right-click (blacklist tag); G9 / G13 flax and corn top half ignore right-click; G12 tea refuses farmland (placement mixin like tobacco); G14 coffee eats crops; G15 pineapple only on sand (extend tag). G4, G6, G7, G10, G11 are mod design, no change suggested | approve or reject each | [crops.md](../crops.md) 4 |
+| crops | 2 | Crop parity for G-list crops | Planned | patcherMod / data | Only tobacco is in line; hemp, grapes, weeds, flax, tea, corn, coffee, pineapple still differ | which crops | [crops.md](../crops.md) 2.6, 4 |
+| crops | 3 | Harvest and replant audit for new crops | Planned | data | Complete the crop harvest / replant audit so every new crop is covered | none | scratchpad 2026-10-19 |
+| crops | 4 | Weeds behaviour | Planned | data | Audit weeds; prevent them on rich soil | none | scratchpad 2026-10-19 |
+| crops | 5 | Realistic growth seasons | Planned | config | Make sure crop growth seasons are realistic and fair | none | cooking plan crops/seasons |
+| crops | 6 | Apples only from apple trees | Planned | KubeJS | Not from oak leaves; rubberwood leaves also drop apples (V17: add `myrtrees:blocks/rubberwood_leaves` to `08_leaf_apples.js` TABLES) | none | cooking plan fruit, [crops.md](../crops.md) V17 |
+| crops | 8 | Watering can | Planned | KubeJS | Find or make a watering can item | which mod | scratchpad 2026-10-19 |
+| wild-crops | 1 | Densities moved by the placement system | Planned | data | Per-crop target per 1000 land chunks and a placed-feature copy with its own rarity; mint ponds (x11) and pumpkins (x0.2) first, then sugar cane, persimmon, rice, corn | targets | [crops.md](../crops.md) V9, V13 |
+| wild-crops | 2 | Ground limits | Planned | data | Pineapples need sand (V14: pack feature + tag); cabbages / sea beets on stone cliffs, sugar cane on gravel / ice, melons on mud yield little (V15) | fix or accept | [crops.md](../crops.md) V14, V15 |
+| wild-crops | 3 | Biome gaps and choices | Planned | data | 13 rock / ice / gravel biomes and 5 Terralith cave biomes have no wild crop (single-player warning); no orchard / pumpkin biome (V16); tea in only 3 biomes (V20); jungles crowded (V4); carrot / onion share biomes (V3) | each | [crops.md](../crops.md) V3, V4, V16, V19, V20; [plan_1.0.5.md](../plan_1.0.5.md) 2 |
+| wild-crops | 4 | Sources and duplicates | Planned | data / KubeJS | Two coffees, two apples (V5); wild flax off in Supplementaries (V6); Rustic Delight patches are flower-type, bone meal grows them (V7); Farmer's Respite coffee has no source (V18); Vinery grape bushes still only in vanilla biomes (V1); white berry grow height / biome; berries in the trader | each | [crops.md](../crops.md) V1, V5-V7, V18; cooking plan berries |
+| composting | 2 | Nulch recipe into the compost file | Planned | KubeJS | It sits in `sawdust.js` line 83 | none | [composting.md](../composting.md) F4 |
+| composting | 3 | Composters in more wood types | Planned | KubeJS | Recipes per wood | none | scratchpad 2026-10-19 |
+| trees | 1 | Leaf life distance + decay timing + Fast Leaf Decay port | Testing | patcherMod / config / mods/ | `[leaf_decay]`: range `maxDistance` 12 (vanilla 6; 6 to 32) with Separated Leaves rules kept; `onlyWhenDisturbed`: random ticks never decay a natural leaf, decay runs from the scheduled tick a neighbour change queues; Fast Leaf Decay ported (`FastLeafDecayPort`, `decayMinTicks` / `decayMaxTicks`), its jar in `disabledmods/`. Built 2026-10-19 into patcherMod 1.0.9 in `mods/`, not deployed; scratch server passed. Every tree feature measured: longest path 10 | diagonal-only leaves still fall at placement (F6, options listed) | [mob_block_tweaks.md](../mob_block_tweaks.md) 2.5, MT-13 to MT-23 pending in game |
+| crops | 7 | Crop tests | Complete | none | CR-01 to CR-68 | none | [crops.md](../crops.md) 7 |
+| composting | 1 | Composting tests and rule checks | Complete | KubeJS | CM-01 to CM-08; after new mods, check `/dumpcompost` for odd catches; Brewin' 4.5.0 compost values vs `global.compost` | none | [composting.md](../composting.md) F1, [alcohol.md](../alcohol.md) 3.4 |
+
+---
+
+# worldgen
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| seasons | 2 | Cool Rain may ignore season types | Bug | patcherMod | WE-25 | none | [weather.md](../weather.md), [plan_1.0.5.md](../plan_1.0.5.md) 2 |
+| structures/rates-and-groups | 1 | Nether, End and underground grouping pass | Planned | data | Still standalone: Nether (fortress + bastion, YUNG's fortress, Nether fossil, Hearths towers, lost soul city, FS Nether cooks, Unwrecked Nether ship, YUNG small Nether dungeon), End (end city, dragon skeleton, Philip's End ruins + gate fortress, 16 MES sets), underground (mineshafts, ancient city, strongholds, YUNG skeleton / small dungeons, crypts, Terralith underground set, frosted dungeon). The deep dungeons generate through `land/any/deep` since 1.0.7; grouping and rates wait for this | groups, spacing, rates | [structure_tuning.md](../structure_tuning.md) 7 Todo |
+| structures/rates-and-groups | 2 | Tuning pass after the scratch run | Planned | data | Shipwreck frequency 40 %; bigger minimum distance for jungle temples (split surface dungeons by biome if that gives finer control); lower the sky village rate if still common, maybe boost settlements over water; fresh watchtower `--fit-rates` back to 1 per 67 (check the diff) | each value | [structure_tuning.md](../structure_tuning.md) 7 Todo |
+| structures/rates-and-groups | 3 | Strip unexplained structure weights | Planned | data | Remove every structure weight without an explicit "increase or decrease" note: relative frequencies aren't static any more | none | [structure_tuning.md](../structure_tuning.md) 7 Todo |
+| structures/rates-and-groups | 4 | Placement priority by importance | Planned | patcherMod / data | Priority works by group rank, not as hoped: rank by importance and how hard a structure is to place rather than structure "age" | the new ranking | scratchpad 2026-10-19, memory `placement-priority` |
+| structures/rates-and-groups | 5 | Rare structures hard to test | Planned | config | Loosen soft rules only (frequency, weight, share, spacing, debug density) when testing them; never correctness rules | none | [structure_tuning.md](../structure_tuning.md) 7.4.8 |
+| structures/rates-and-groups | 6 | Fortified metas vs the locate timeout | Planned | data / config | ST-135: fortified metas are rare against the 120 s `/locate` timeout; the bastille is dropped by the peaceful radius | raise the timeout or the rate | [plan_1.0.6.md](../plan_1.0.6.md) 2.1 |
+| structures/rates-and-groups | 7 | Ocean geodes drop does little | Planned | config | ST-133 partly: the 10-block drop does nothing useful over deep floors near y 0 | retune or drop | [plan_1.0.6.md](../plan_1.0.6.md) 2.1 |
+| structures/rates-and-groups | 8 | Advanced Peripherals structures | Planned | data | Off by config; remove the warning or the structures outright | which | [structure_tuning.md](../structure_tuning.md) 7 Todo |
+| structures/metas | 1 | Vehicle metas (caravans) | Planned | data | Witch cart caravan, pillager caravan, trader caravan; own `meta/*` tags so the pillager metas don't change | which caravans | [structure_tuning.md](../structure_tuning.md) 7 Todo, 7.4.9 |
+| structures/metas | 2 | More raft and wreckage variants | Planned | data / templates | Only the 3 villager rafts and the T&T wreckage exist. Save the damaged raft variants and load them into the pack; dynamic wool type on spawn; more floating debris variants with a dynamic wood type; peaceful raft variants | template source | [structure_tuning.md](../structure_tuning.md) 7 Todo; scratchpad 2026-10-19 |
+| structures/metas | 3 | Driftwood rates | Planned | data | Old note: lower individual driftwood frequency, raise the flotilla meta's | values | scratchpad 2026-10-19 |
+| structures/metas | 4 | Travelling boats in groups | Planned | data | A boat-group meta | template source | scratchpad 2026-10-19 |
+| structures/metas | 5 | `avoidCoasts` side effect | Planned | config | With it on, land metas whose satellites can't avoid a nearby beach or river fail (three failed at -104 -150); switch is off | whether to keep the switch off | [testing/structures/12_earth_fill_camps.md](../testing/structures/12_earth_fill_camps.md) 4 |
+| structures/earthfill | 2 | `maxWaterSurplus` first value | Planned | config | Look at share-only cancels in game; a village on a lake goes as a whole | value | [testing/structures/12_earth_fill_camps.md](../testing/structures/12_earth_fill_camps.md) 4 |
+| structures/earthfill | 3 | Sunk-start candidates not tagged | Planned | data | Philip's crypts, ocean fortress, ocean ruins, -1 ruins, T&T nilotic village | which to tag | [testing/structures/12_earth_fill_camps.md](../testing/structures/12_earth_fill_camps.md) 4 |
+| structures/earthfill | 4 | Undead castle cancelled by earth fill | Planned | data | Cancelled 4 of 5 times on slopes | narrow its fits or relax the mound limit | [plan_1.0.6.md](../plan_1.0.6.md) 2.1 |
+| structures/earthfill | 6 | Earth-fill limits for modded structures | Planned | config | Calibrate with a game at `log = ALL` | none | [structure_tuning.md](../structure_tuning.md) 7 Todo |
+| structures/earthfill | 7 | Worldgen hot spots | Planned | patcherMod | Twigs obelisk check and the repeated earth-fill prediction (a per-chunk cache would cover the rebuilds) are the two pack-side costs | whether worldgen speed matters | [testing/structures/10_phase_10.md](../testing/structures/10_phase_10.md) 5 |
+| structures/terrain | 1 | Terrain adaptation batch 4 | Planned | data | The spire, the fish ponds, Philip's padded ruins, the villages: look in game first | which | [structure_tuning.md](../structure_tuning.md) 3.15, 7 Todo; [terrain_adaptation_scan.md](../terrain_adaptation_scan.md) |
+| structures/terrain | 2 | Beardifier fill estimate | Planned | tool | For terrain-adapted structures the template count misses | none | [structure_tuning.md](../structure_tuning.md) 7 Todo |
+| structures/terrain | 3 | Skip the bottom 64-96 blocks | Planned | patcherMod | Measure first; skip the band in Distant Horizons' own generation; a real deferred band is not recommended | whether | [locate.md](../locate.md) 3.7 |
+| structures/contents | 1 | Move soul dungeons to the Nether | Planned | data | Philip's lost soul dungeon and city, rare ruin, blackstone Nether ruin; tag `plan/move_to_nether` (exempt from the swaps until then); do with the Nether grouping pass | none | [structure_tuning.md](../structure_tuning.md) 7 Todo |
+| structures/contents | 2 | River tree and driftwood cleanup | Planned | data / KubeJS | River tree to oak log; remove river log / wood; driftwood crafts to oak planks; remove driftwood logs | none | [structure_tuning.md](../structure_tuning.md) 7 Todo |
+| structures/contents | 3 | Pillager spawners in structures | Planned | data / config | Remove pillager spawner blocks (configurable), maybe a pillager spawn box instead; find how vanilla pillagers spawn first | remove or replace | scratchpad 2026-10-19, [mob_spawns.md](../mob_spawns.md) 9 |
+| structures/new | 1 | Greenhouses | Planned | data / templates | Wide plant pool by biome type: berries, saplings, fruit-tree saplings, flowers (snowy / cold in spruce, jungle crops in jungle, birch flowers and onion in birch ...); variants | template source; pools | scratchpad 2026-10-19 |
+| structures/new | 2 | Camera shop | Planned | data / templates | New structure | template source | scratchpad 2026-10-19 |
+| structures/new | 3 | Starter bases and pioneer structures | Planned | data / templates | New structures | what they hold | scratchpad 2026-10-19 |
+| structures/netherblockswap | 2 | Crying obsidian (K19) | Planned | data | 27 blocks: stronghold portal rooms, jungle pillager tower, villager statue | obsidian or keep | [nether_worldgen.md](../nether_worldgen.md) 2 K19 |
+| structures/netherblockswap | 3 | Soul lanterns and soul wall torches (K25, K32) | Planned | data | 441 lanterns (spire, ancient city, frosted dungeon ...), 8 wall torches | lantern / torch or keep | [nether_worldgen.md](../nether_worldgen.md) 2 K25, K32 |
+| structures/netherblockswap | 4 | Crimson and warped wood pieces (K28 to K31, K33, K35, K36) | Planned | data | Trapdoors, buttons, pressure plates, slabs, stairs, stripped hyphae in desert temple, stronghold, spire, fortified desert village, zombie dungeon, ocean ruins | mangrove / azalea / dark oak per row | [nether_worldgen.md](../nether_worldgen.md) 2 |
+| structures/testing | 1 | Client test list 8.0.11 | Planned | none | The scratch server run 8.0.1 to 8.0.10 is complete; the client list is the user's | none | [structure_tuning.md](../structure_tuning.md) 8.0.11 |
+| structures/testing | 3 | Superflat and the client clock mixin in a client | Planned | none | Superflat in single player and `SereneSeasonsClientClockMixin` only run in a client | none | [testing/structures/11_fixes_1_0_8.md](../testing/structures/11_fixes_1_0_8.md) 4 |
+| locate | 2 | Fold stages C to E | Planned | patcherMod | On hold | whether | [locate.md](../locate.md) 3.1 |
+| locate | 3 | Distant Horizons pregen on the final server world | Planned | none | A deploy step for the clip | none | [locate.md](../locate.md) 3.7 |
+| biomes | 2 | Five unreachable targets | Planned | data | Nether wastes x2, soul sand valley, crystal peaks, void barrens don't reach their targets | accept, or set reachable multipliers | [biome_tuning.md](../biome_tuning.md) F1 |
+| biomes | 3 | Skylands at 15 % | Planned | data | Mooblooms and permanent seasons target them, but they are under 0.25 % of the surface | intended? | [biome_tuning.md](../biome_tuning.md) F3 |
+| biomes | 4 | End model agreement 70 %, one seed | Planned | tool | End results are rough; all samples from one seed | whether to investigate | [biome_tuning.md](../biome_tuning.md) F4, F5 |
+| biomes | 5 | Permafrost merge | Planned | data | Immersive Weathering permafrost generates in the wild and damages on touch. Find where Quark's permafrost generates (structures can keep it), replace it in worldgen with Immersive Weathering's, rename Quark's block, add a packed ice / permafrost + stone recipe | the new name for Quark's block | scratchpad 2026-10-19 |
+| biomes/netherblocks | 2 | Frostfire caves (B12) | Planned | data | Soul fire patches (17 per chunk) and soul lantern ceiling (12) | drop / fire; lantern | [nether_worldgen.md](../nether_worldgen.md) 2 B12 |
+| biomes/netherblocks | 3 | Flower changes need a rerun | Planned | tool | After any nether flower change, rerun `gen_wild_flowers.py` | none | memory `nether-worldgen-decisions` |
+| biomes/netherblocks | 4 | No glowstone in the Overworld | Planned | data / patcherMod | Make sure nothing generates glowstone in the Overworld: D&D glowstone geodes (`engineering/dreams-and-desires #5`), structures (swap rule 21 already turns structure glowstone into yellow corundum), features and ores; check with a scan | none | scratchpad 2026-10-19, [nether_worldgen.md](../nether_worldgen.md) |
+| flowers | 2 | Moobloom rules follow flowers by hand | Planned | tool | After editing `wild_flowers.json`, regenerate mooblooms.md 2.8 and retune moobloom rules; nothing automatic | automate or keep manual | [flowers.md](../flowers.md) 4 |
+| flowers | 3 | Bushier Flowers worldgen off file by file | Planned | data | Only today's 5 modifier files are replaced; an update adding one brings bushes back | none | [mob_block_tweaks.md](../mob_block_tweaks.md) F2 |
+| bee-nests | 2 | Beehive spawning biomes and frequency | Planned | data | Investigate | none | [mob_spawns.md](../mob_spawns.md) 9 |
+| seasons | 3 | Adaptive tint per position | Planned | patcherMod | River / beach grass keeps the temperate tint; fixing it means targeting Serene Seasons' `lambda$` resolvers (fragile) | whether | [weather.md](../weather.md) 4 |
+| structures/rates-and-groups | 9 | Pool tuning switches | Testing | patcherMod | `[worldgen.pools] canonicalOrder` (on since 1.0.7) keeps a seed's villages stable across restarts but changed jigsaw layouts in new chunks once | keep on or off | [structure_tuning.md](../structure_tuning.md) 3.23 |
+| structures/metas | 6 | Companion reach | Testing | data | Town companion villages 64-96 blocks out (1.0.8), scratch-run | none | [testing/structures/11_fixes_1_0_8.md](../testing/structures/11_fixes_1_0_8.md) |
+| structures/earthfill | 1 | Earth fill on water, camp plinths, `avoidCoasts` | Testing | patcherMod / data | 1.0.9: footprint water share (`maxWaterSurplus` 0.5), Campsite plinths (sunk-start beard, start -4); ST-199 to ST-204 on a scratch server | none | [structure_tuning.md](../structure_tuning.md) 7.5 |
+| structures/earthfill | 5 | Stone bases are opt-in | Testing | data | Tag `earth_fill/stone_base` holds only the drum tower | add more structures or keep it narrow | [structure_tuning.md](../structure_tuning.md) 3.23 item 6 |
+| structures/earthfill | 8 | Water fill | Testing | patcherMod / data | Opt-in `water_fill/structures` tag; ST-56 to ST-60 | none | [structure_tuning.md](../structure_tuning.md) |
+| structures/netherblockswap | 1 | Swaps rounds 1 and 2 | Testing | patcherMod / data | 1084 swaps in `nether_block_swaps.json` incl. rules 3, 20, 21 (bunker warts, soul fire -> fire, glowstone -> yellow corundum). NW-06, NW-07, NW-10, NW-11; older ST-150 to ST-152 | none | [nether_worldgen.md](../nether_worldgen.md), [nether_swaps.md](../nether_swaps.md) |
+| structures/netherblockswap | 5 | Meat block swaps | Testing | patcherMod / data | 5 red glazed terracotta -> salmon log; ST-149 | 359 other lone red blocks: review | [meat_blocks.md](../meat_blocks.md) |
+| structures/testing | 2 | Open ST- tests | Testing | none | About 100 open: ST-65 trim half, ST-191 to ST-198 (1.0.7 fixes), the rest per section 8 | none | [structure_tuning.md](../structure_tuning.md) 8 |
+| locate | 1 | Locate folding, non-blocking loads, census, DH clip | Testing | patcherMod | LO-02, 06, 08, 12, 15 passed; rerun LO-03, LO-05, LO-14 with the 1.0.7 fixes, plus LO-17; LO-01, LO-04 partly | none | [locate.md](../locate.md) |
+| biomes | 1 | Rarity floor, `target_pct`, 20,000-column samples, cave samples | Testing | patcherMod / data | 1.0.9, new worlds only; WG-09 to WG-13 (and WG-01 to WG-08 for the 17 edits) | none | [biome_tuning.md](../biome_tuning.md) |
+| biomes/netherblocks | 1 | Biome rounds 1 and 2 | Testing | data | Scarlet Mountains jasper / crimsite, Moonlight flowers, Mirage Isles acacia, D&D deep layer granite (scratch-server verified); NW-01 to NW-05 | none | [nether_worldgen.md](../nether_worldgen.md) |
+| flowers | 1 | Wild flowers system and first tuning pass | Testing | KubeJS / data | FL-01 to FL-14; the user's in-game look at palettes | retune after the look | [flowers.md](../flowers.md) |
+| bee-nests | 1 | Bee nest tuning with starter rules | Testing | patcherMod / data | BN-01 to BN-10; starter rules await review | review the starter rules | [bee_nests.md](../bee_nests.md) 9 |
+| seasons | 1 | Season types | Testing | patcherMod | Client side never run; WE-01 to WE-36 | none | [weather.md](../weather.md) |
+
+---
+
+# mobs
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| tweaks | 2 | MCA villagers glitch while sleeping | Bug | patcherMod | Legs and arms bent out, jittering | none | scratchpad 2026-10-19 |
+| spawns | 2 | Plans after the first block | Planned | data | Mooshrooms in dark forests and Mirage Isles; every dirt spawnable for passive mobs; farm animals by biome type (pigs forests / swamps, sheep hills / peaks, cows plains, chickens beaches / rivers / sky, rabbits savanna / snow); disable shiba; birds spawn in light, land animals light + pathfind check; ducks and geese on beaches, lakes, ponds, swamps (not oceans) | shares | [mob_spawns.md](../mob_spawns.md) 9 |
+| spawns | 3 | Alex's Mobs and duck / goose parity | Planned | data | Investigate biome parity and frequencies; analysis base in 10.1 | none | [mob_spawns.md](../mob_spawns.md) 9, 10 |
+| spawns | 4 | Lone villagers | Planned | data | In plains, temperate hills, fields and meadows | none | [mob_spawns.md](../mob_spawns.md) 9 Later |
+| spawns | 5 | Allay spawns | Planned | data | In pillager cages, mystical biomes and more structures | none | [mob_spawns.md](../mob_spawns.md) 9 Later; scratchpad 2026-10-19 |
+| spawns | 6 | Fireflies | Planned | data | Verify the firefly mod works; catching fireflies with a jar | none | scratchpad 2026-10-19 |
+| pillagers | 1 | Pillager overhaul | Planned | data / KubeJS | Lone pillagers in dark forests, Mirage Isles, swamps, extreme ice, badlands; structure pool / spawn swap (siege equipment pillagers + sometimes a vindicator; camps 0-2 vindicators; towers + 0-1 evoker / illusioner; large towers, specials); remove pillager spawners (worldgen/structures/contents #3) | the mix per structure | [mob_spawns.md](../mob_spawns.md) 9 Later |
+| pillagers | 2 | End pillagers in diving gear | Planned | KubeJS | End pillagers (and the End pillager towers) spawn with diving gear | none | [mob_spawns.md](../mob_spawns.md) 9 Later; scratchpad 2026-10-19 |
+| pillagers | 3 | Evokers and illusioners in some pillager structures | Planned | data | Favour hard, unique structures; part of row 1 but can go first | which structures | scratchpad 2026-10-19 |
+| pillagers | 4 | More vindicators | Planned | data | Vindicators take the pillager's place in single-mob spawn pools | share | scratchpad 2026-10-19 |
+| mooblooms | 2 | More Mooblooms 1.1 JEI | Planned | new jar | Breeding outputs, shearing outputs with each flower's chance (render the entity with every flower), better info text | none | [mooblooms.md](../mooblooms.md) 5 |
+| mooblooms | 4 | Skylands cows and mooblooms | Planned | data | Cows in skylands; spring to autumn skylands 100 % mooblooms, even split over available flowers; depends on worldgen/biomes #3 | none | [mob_spawns.md](../mob_spawns.md) 9 Later; scratchpad 2026-10-19 |
+| mooblooms | 5 | Azaleabloom texture | Planned | new jar | Grey parts to brown; more azalea rings | none | scratchpad 2026-10-19, [mooblooms.md](../mooblooms.md) |
+| nests | 2 | License fix before publishing | Planned | new jar | Duck and goose nest PNGs are copies of Incubation's hay nest (Abnormals License); repaint the 4 PNGs, and write the models from scratch or reference Incubation's by resource location | none (decided) | [nests.md](../nests.md) 4 |
+| tweaks | 4 | Entity dictionary | Planned | KubeJS | Entity ids are literals in `entitytags.js`; an `entity_dict.js` if more entity tags come | none | [mob_block_tweaks.md](../mob_block_tweaks.md) F1 |
+| tweaks | 5 | Quark monster boxes | Planned | config / patcherMod / data | Do they break when they spawn, and is that configurable? Rework to a vault-like box (as later Quark has): once its mobs are dead it spits out items from its own loot table, then waits a cooldown | rework, or config only | scratchpad 2026-10-19 |
+| tweaks | 6 | Named mobs | Planned | patcherMod / KubeJS | Small chance a mob spawns with a random name; kills by and deaths of named mobs are announced in chat; a small karma hit for killing one (`largecontent/karma #1`) | chance, which mobs | scratchpad 2026-10-19 |
+| bees | 1 | Bee breeding flower audit | Planned | data / KubeJS | Which flowers breed bees; cover the pack's flowers | none | scratchpad 2026-10-19 |
+| bees | 2 | Anchored bee hive | Planned | patcherMod / new jar | A Domestic Innovation-like hive: bees bound to one hive respawn there when they die; bees get a random name once they are in a crafted hive | design | scratchpad 2026-10-19 |
+| mooblooms | 3 | Per-biome moobloom shares (D47) | In Progress | data | First pass from flower density; open to retuning | retune | [mooblooms.md](../mooblooms.md) 4.13 |
+| spawns | 1 | First spawn block (12 rules, 3 conditions, spawn ground) | Testing | KubeJS / data | MS-01 to MS-23 | none | [mob_spawns.md](../mob_spawns.md) |
+| mooblooms | 1 | More Mooblooms 1.0 | Testing | new jar | Client-side checks pending; MB-20 to MB-71, MB-97, MB-98 (MB-01 to MB-12 BB reference) | none | [mooblooms.md](../mooblooms.md) |
+| nests | 1 | Incubation Additions 1.0.0 | Testing | new jar | NE-01 to NE-14 (NE-13 client sprites) | none | [nests.md](../nests.md) |
+| tweaks | 1 | Mob and block tweaks | Testing | patcherMod / KubeJS | Bubble column immunity, Bushier Flowers off, trough retry, asphalt friction; MT-01 to MT-12; trough never measured under load | none | [mob_block_tweaks.md](../mob_block_tweaks.md) |
+
+---
+
+# loot
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| tables | 10 | NEA quiver enchanted books still in loot | Bug | KubeJS / data | Stockpile, Recovery and Cycle books still show in loot pools after the 1.0.9 `enchant_randomly` fix (`pack/release #4` checks that fix); find which tables or views still list them | none | scratchpad 2026-10-19, [archery.md](../archery.md) |
+| tables | 1 | Comprehensive loot table system | Planned | KubeJS / data | Remap every loot table (reuse existing tables where possible) into a tree of tags (`container/village/leatherworker/mediocre`, `.../treasure`, `container/ocean/shipwreck/treasure` ...), item merging for many-to-many; draft table contents in loot.md 7 (basic, blacksmith / armorer ...) | tree layout | [loot.md](../loot.md) 7 |
+| tables | 2 | Fold island tables | Planned | data | 172 tables used by only 1 or 2 structures listed; nothing folded | which to fold | [loot_islands.md](../loot_islands.md) |
+| tables | 3 | Chalk frequency | Planned | KubeJS | Lower it; skew towards libraries and underground | none | [loot.md](../loot.md) 7; scratchpad 2026-10-19 |
+| tables | 4 | Crates and sacks | Planned | KubeJS | Boost in village and farming / cooking houses, slight boost underground | none | [loot.md](../loot.md) 7; scratchpad 2026-10-19 |
+| tables | 5 | Cans in loot | Planned | KubeJS | Basic cans in village chests, camps, ships; boost in farming / cooking houses, large boost underground; maybe named / lore cans | named cans | [loot.md](../loot.md) 7; scratchpad 2026-10-19 |
+| tables | 6 | MCA items in village houses | Planned | KubeJS | Combs, thread, rings (rare, homes / blacksmiths / churches), bouquets (boost in flower houses) | none | [loot.md](../loot.md) 7; scratchpad 2026-10-19 |
+| tables | 7 | Coins and PneumaticCraft loot | Planned | KubeJS | Make sure coins are gone from every table; remove PneumaticCraft loot | none | [loot.md](../loot.md) 7 |
+| tables | 8 | Bumpy filter has no source | Planned | KubeJS | Exposure Expanded's only chest (trial chambers) doesn't exist in 1.19.2 | a recipe or a loot entry | [exposure.md](../exposure.md) 4 |
+| tables | 11 | Enchanted book tiers in loot | Planned | KubeJS / data | Every table's enchanted books come from a shared book table per tier, which also keeps unwanted books out: basic (vanilla and vanilla-like such as Domestic Innovation, level 1, no treasure or special enchantments), intermediate (vanilla), higher tiers to define | tier contents | scratchpad 2026-10-19, [loot.md](../loot.md) 7 |
+| tables | 12 | Azalea plants in lush loot | Planned | KubeJS | Azalea flowers, bushes, leaves and leaf layers in lush caves, lush ruins (pick out the mossy, leafy, vine-covered ones) and flower houses | none | scratchpad 2026-10-19 |
+| lootjs-layer | 2 | Legacy loot dump | Planned | none | `dump_loot_tables.sh` and `loot_table_dump/` (40 MB) are superseded | delete | [loot.md](../loot.md) 4.2 row 8 |
+| lootjs-layer | 3 | Loot census stale | Planned | tool | Still lists Exposure 1.6.0's table; regenerate | none | `kubejs/server_scripts/loot/loot_census.md`, [exposure.md](../exposure.md) 4 |
+| lootr | 1 | Missed Lootr chests and fixed-loot chests | Planned | data | Cover missed Lootr chests and fixed loot (bible verse book + golden carrot); additional placed-loot pass; inventory in loot_catalog/handplaced.md | none | [loot.md](../loot.md) 7, [loot_catalog/handplaced.md](../loot_catalog/handplaced.md) |
+| lootr | 2 | Lootr item frames and textures | Planned | resource pack / patcherMod | Item frame integration; resolve chest, barrel, shulker and item frame textures to the resource pack where possible (shulkers and frames may need new textures) | none | scratchpad 2026-10-19 |
+| trader | 2 | Fewer Wares trades | Planned | KubeJS | Lower the Wares listings (x20 today) | how many | scratchpad 2026-10-19, [wandering_trader.md](../wandering_trader.md) 4.1 |
+| trader | 3 | Lightman's Currency with Wares | Planned | KubeJS / data | More trades; Wares delivery contracts as loot and quest rewards | none | scratchpad 2026-10-19, [wandering_trader.md](../wandering_trader.md) |
+| lootjs-layer | 1 | LootJS-only scripts | In Progress | KubeJS | `10`-`40` scripts are commented examples; `global.LOOT` groups and tiers in `00_lib.js` are empty | none | [loot.md](../loot.md), `kubejs/server_scripts/loot/README.md` |
+| tables | 9 | Loot tests | Complete | none | LT-14 to LT-27 | none | [loot.md](../loot.md) |
+| trader | 1 | Wandering Trader and Winemaker | Complete | KubeJS / patcherMod | WT-01 to WT-16 (WT-16 natural spawn) | none | [wandering_trader.md](../wandering_trader.md) |
+
+---
+
+# gear
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| tuning | 6 | Felsic `potionMb` feeds both fills | Bug | patcherMod / config | 500 + 500 mB a loop; fix the toml comment or split the key | comment or split | [gear_tuning.md](../gear_tuning.md) F2 |
+| archery | 2 | Dragon scale bullets unreachable | Bug | KubeJS | Blueprint category `projectiles` nothing makes | change to `bullet`, or add a `projectiles` blueprint | [archery.md](../archery.md) F1 |
+| potions | 5 | Luck brewed twice | Bug | KubeJS | Buzzier Bees already registers awkward + clover and the long / strong rows; `LUCK_POTION_MIXES` rows 1 and 2 duplicate them (EF-05). Only the silverfish Bad Luck row is new | none | [effects.md](../effects.md) F6 |
+| tuning | 2 | Dragon set over the 30 armor cap | Planned | KubeJS | 36 armor, `generic.armor` clamps at 30; GR-02 shows it | accept, trim to 30, or add a cap lift | [gear_tuning.md](../gear_tuning.md) F13 |
+| tuning | 3 | Mining level 5 probably does nothing | Planned | KubeJS | Unsorted tiers fall back to vanilla's check; GR-05 | accept or register tiers | [gear_tuning.md](../gear_tuning.md) F4 |
+| tuning | 4 | Gear upgrades keep every NBT | Planned | patcherMod | Assembly already keeps enchantments, name, repair cost, Unbreakable and attribute modifiers. Every upgrade path (assembly, smithing, crafting) should also keep the Quark rune glint, damage and banner pattern: add `Trim` and `BlockEntityTag` to the `SequencedAssemblyRecipeMixin` carry list (one line each); shields lose banners too (SH-27); check which upgrades bypass the mixin | whether damage carries over | [gear_tuning.md](../gear_tuning.md) F5, [shields.md](../shields.md) F5, scratchpad 2026-10-19 |
+| tuning | 5 | Untuned dragon bow, crossbow, trident, horse armor | Planned | KubeJS | DragonLoot numbers; horse armor protection isn't reachable from `tuneArmor` | values | [gear_tuning.md](../gear_tuning.md) F10 |
+| tuning | 7 | Small gear findings | Planned | KubeJS | Felsic sword durability 2502 vs 2501 (F9); dragon anvil and air brake in `#dragon_gear` (F6); air brake server velocity echo while braking, watch in GR-24 (F8); Alex's Mobs elytra items aren't in `#elytra_chestplates` (only the ground rule differs for them, F11) | each | [gear_tuning.md](../gear_tuning.md) F6, F8, F9 |
+| tuning | 8 | Hardened leather uses | Planned | KubeJS | Backpacks, every armor with leather, horse armor, saddles | which | scratchpad 2026-10-19 |
+| tuning | 9 | PneumaticCraft armor crafts | Planned | KubeJS | New, interesting crafts | design | scratchpad 2026-10-19 |
+| tuning | 10 | Fortune on shears | Planned | KubeJS / patcherMod | Allow it? | whether | scratchpad 2026-10-19 |
+| tuning | 11 | Diving gear for every tier | Planned | KubeJS / data | Helmet, backtank and boots per tier | tiers and looks | scratchpad 2026-10-19 |
+| tuning | 12 | End gear recipes configurable | Planned | KubeJS / config | Every recipe above netherite (all dragon loot gear) reads its values from CEConfig through `global.NCH.cfg`, like the felsic assemblies | none | scratchpad 2026-10-19, memory `config-driven-recipe-values` |
+| tuning | 13 | Fishing rod chain up to dragon | Planned | KubeJS / new item | Review the existing rods; tiers add only durability and enchantability until a new dragon rod with its own bonus (Botania Allurement-like?) | the dragon rod's bonus | scratchpad 2026-10-19 |
+| echo | 1 | Echo tool buffs | Planned | KubeJS | Better but simpler than dragon | the buffs | scratchpad 2026-10-19, memory `echo-tier-gear` |
+| echo | 2 | Human-made echo textures | Planned | resource pack | The echo tools have the only non-human textures in the pack | none | scratchpad 2026-10-19 |
+| effects | 2 | Dragon bow and crossbow look reversed | Planned | KubeJS | Bow today: target Invisibility, wielder Slowness IV + Glowing III; crossbow: target Resistance II, wielder bleeding + Weakness III. Scratchpad 2026-10-19 wants the other way round: bow held Invisibility, inflicts Slowness and Glowing; crossbow held Resistance, inflicts bleeding and Weakness | none (swap) | [armor_effects.md](../armor_effects.md) F4, scratchpad 2026-10-19 |
+| effects | 3 | Magic Resistance vs the `magic` damage tag | Planned | patcherMod | It reads vanilla `isMagic()`; shields read the pack tag (incl. psychic, life drain); switch to `DamageTags` to line them up | switch or keep | [armor_effects.md](../armor_effects.md) F6 |
+| effects | 4 | Horse Regeneration level | Planned | KubeJS | Level I now (the old id never worked) | I or II | [armor_effects.md](../armor_effects.md) F9 |
+| effects | 5 | Small effect findings | Planned | KubeJS | `held()` durations ignored (F3); on-hit keyed to the main hand, thrown trident applies nothing (F5); echo Phantom Bane is level II, tooltip says I (F7); effect packet per tick unmeasured (F8) | F7: amplifier 0 or say "II" | [armor_effects.md](../armor_effects.md) F3, F5, F7, F8 |
+| effects | 6 | Dragon bonus on nearly every piece | Planned | KubeJS / patcherMod | Make every dragon piece unique: hoe, a Vinery bone-meal buff with a configurable durability cost; pickaxe, Haste unless crouching (cancel Haste on crouch rather than a short Haste while standing?); bow and crossbow in row 2; fishing rod in `gear/tuning #13` | the bonus per piece | scratchpad 2026-10-19 |
+| effects | 7 | Faraday armor shock check | Planned | none | Verify the Faraday armor blocks shock / electric damage | none | scratchpad 2026-10-19 |
+| shields | 2 | Knockback thresholds and per-tier disable cooldown | Planned | patcherMod | `TODO` in `ShieldTier.java` line 46 | values | [shields.md](../shields.md) 4 |
+| shields | 3 | 1-damage ticks fully blocked | Planned | patcherMod / data | Magma, stoves, powder snow, acid, copper poisoning, modded magic ticks are blocked by any tier with a reduction | exclude which | [shields.md](../shields.md) F6, 2.8 |
+| shields | 4 | Shield damage-type sanity check | Planned | none / patcherMod | Blocked and unblocked damage per type against the tier tables | none | scratchpad 2026-10-19, [shields.md](../shields.md) |
+| shields | 5 | Resistance while blocking with echo and up | Planned | patcherMod | Short Resistance while blocking with echo or higher shields | level and length | scratchpad 2026-10-19 |
+| archery | 3 | Split arrow cost | Planned | KubeJS | Grid 6 arrows, blueprint 4, for 2 | 6 or 4 | [archery.md](../archery.md) F2 |
+| archery | 4 | Archery blueprint needs an Ethereal Arrow | Planned | KubeJS | Trader-only, so every arrow blueprint waits on a trader roll | keep, or a craftable arrow | [archery.md](../archery.md) F3 |
+| archery | 5 | Archery leftovers | Planned | KubeJS | `#forge:arrow_shaft/blazing` unused (F5); `bullets.js` is a stub (F7); Supplementaries quiver recipe not removed, check JEI (F8, AR-15) | none | [archery.md](../archery.md) F5, F7, F8 |
+| potions | 2 | Batch sizes differ between machines | Planned | patcherMod | Create 1000, IE Mixer 1500 (1000 into lingering), Lingerification 1500 + 250 | one size or not | [potions.md](../potions.md) F1 |
+| potions | 3 | Refinery regular -> lingering shortcut | Planned | patcherMod | Only the Refinery takes regular | keep or drop | [potions.md](../potions.md) F2 |
+| potions | 4 | Placeholder reagents | Planned | KubeJS | Magic Resistance (amethyst shard), Luck (four-leaf clover, `TODO` line 86) | reagents | [potions.md](../potions.md) F3 |
+| potions | 6 | Saturation potion strength | Planned | KubeJS | 5 ticks, no long or strong version | stronger? | [potions.md](../potions.md) F8 |
+| potions | 7 | Potions for unbrewable effects | Planned | KubeJS | Fleet-Footed, Orca's Might, Oiled, Agility / Climbing, Water Walker, Lava Walker, Magnet, Experience, Allure. Scratchpad 2026-10-19 "every effect brewable": Haste (Rustic Delight mixes exist, check them), Vinery / Brewin' effects excluded (`alcohol/decisions #13`), Fruits Delight excluded for now (an end-game potion base for fruit potions?) | which, if any | [effects.md](../effects.md) F12, scratchpad 2026-10-19 |
+| potions | 8 | Total-overlap effect groups | Planned | KubeJS | 12 groups; costly ones: Resilience vs Knockback Resistance (two potion lines, drop one), Caffeinated gives all of Phantom Bane from tea and coffee | which to keep | [effects.md](../effects.md) F5, 2.3 |
+| potions | 9 | Shock and electric effects | Planned | KubeJS / patcherMod | Are there several shock / electric effects (Shocked and others)? Merge them if so | which survives | scratchpad 2026-10-19, [effects.md](../effects.md) |
+| potion-buckets | 2 | Global glass-bottle remainder | Planned | KubeJS | Also changes vanilla tipped arrows and modded grid recipes | keep or scope | [potion_buckets.md](../potion_buckets.md) F3 |
+| potion-buckets | 3 | Small findings | Planned | KubeJS | Recipes for potions no machine holds (JEI noise, F5); dispensed clouds have no owner (F6) | none | [potion_buckets.md](../potion_buckets.md) F5, F6 |
+| camera-bags | 2 | Netherite upgrade needs a template | Planned | KubeJS | Armor Trims blocks it without a Netherite Upgrade template | keep, or another material | [camera_bags.md](../camera_bags.md) F1 |
+| camera-bags | 3 | Tier looks | Planned | resource pack / new jar | Iron and netherite share the leather model | draw outlines or keep | [camera_bags.md](../camera_bags.md) F2 |
+| camera-bags | 4 | Flashes in the bag tag | Planned | KubeJS | Commented example in `equipmenttags.js` | decide in game | [camera_bags.md](../camera_bags.md) F4 |
+| enchanting | 1 | Enchanted books out of villager trades | Planned | KubeJS / data | So enchantments come from adventure, enchanting and printing (automation) | whether | scratchpad 2026-10-19 |
+| enchanting | 2 | XP tomes | Planned | KubeJS / patcherMod | New recipe; stack like books and enchanted books; enchanting power by stored XP; a crafting ingredient for other magic?; tooltip with the levels stored (current / max, from 0); a filling automation recipe; storage cap tuned for enchanting, crafting and player-to-player trading | cap, uses | scratchpad 2026-10-19 |
+| enchanting | 3 | Enchanting overhaul | Planned | config / KubeJS | Easy Magic's max-enchantment limit makes max-level enchants need a higher level (documented in tooltips); enchanting power tuned to the enchantments available | levels | scratchpad 2026-10-19 |
+| enchanting | 4 | Enchanting power item audit | Planned | data / KubeJS | Ender crystals, books and enchanted books, skulls and heads, candles and fancy candles, filled XP tomes (by stored XP), filled bottles (glowstone?), amethyst and other crystal clusters, any others | values | scratchpad 2026-10-19 |
+| potion-buckets | 1 | Potion buckets and machine-tipped arrows | Testing | KubeJS / patcherMod | PB-01 to PB-20; dome shape and liquid brightness (`lum * 1.6`) never seen in game | none | [potion_buckets.md](../potion_buckets.md) F7 |
+| camera-bags | 1 | Camera bags | Testing | new jar | Never run in game; CB-01 to CB-10, R4-04 to 06, R4-11 | none | [camera_bags.md](../camera_bags.md) |
+| tuning | 1 | Gear tuning ladder | Complete | KubeJS / patcherMod | GR-01 to GR-30 | none | [gear_tuning.md](../gear_tuning.md) |
+| effects | 1 | Armor and tool effects | Complete | KubeJS / patcherMod | AE-01 to AE-24 | none | [armor_effects.md](../armor_effects.md) |
+| shields | 1 | Seven tier shields | Complete | patcherMod | SH-43 first, then SH-14, 19, 33 to 42 | none | [shields.md](../shields.md) |
+| archery | 1 | Archery and bullets | Complete | KubeJS | AR-01 to AR-18 | none | [archery.md](../archery.md) |
+| potions | 1 | Potions and brewing | Complete | KubeJS / patcherMod | PO-01 to PO-26 | none | [potions.md](../potions.md) |
+
+---
+
+# recipes
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| engineering | 2 | Amethyst crushing clash | Bug | KubeJS | Two crushing recipes per machine, one dead in each | one output per machine | [recipes_engineering.md](../recipes_engineering.md) F3 |
+| progression | 1 | Items with no recipe after removals | Planned | KubeJS | Blast furnace (LL locomotive and tug need it), dispenser, smoker, Explorer's Compass, maybe cake; none in `removed_items.js`, so they show in JEI with no recipe | per item: a pack recipe or the removed list | [recipe_progression.md](../recipe_progression.md) F1 |
+| progression | 2 | Recipe scan is slow | Planned | KubeJS | `_lib/recipe_scan.js` walks every recipe once per removed item (309 passes) on the first load; one pass against a set, or on demand | none | [recipe_progression.md](../recipe_progression.md) F2 |
+| progression | 3 | `kubejs/recipes/` never loads | Planned | data | 4 JSONs (bonemeal broth, sawmill recycle): move to `kubejs/data/creativeengineering/recipes/sawmill/` or delete | port or delete | [recipe_progression.md](../recipe_progression.md) F3 |
+| engineering | 1 | Blast furnace and dispenser recipes | Planned | KubeJS | Removed with no replacement | recipes, or point LL recipes elsewhere | [recipes_engineering.md](../recipes_engineering.md) F1, F2 |
+| engineering | 3 | Smaller findings | Planned | KubeJS | Coal blocks in the pressure chamber 9 vs 4 (RE-12, F4); cinder flour routes uneven (F5); thunder detector fill NBT lacks `Bottle:"REGULAR"` (F9); stale comments (F8) | none | [recipes_engineering.md](../recipes_engineering.md) |
+| engineering | 4 | Horse cart recipes | Planned | KubeJS | Integrate the horse cart crafting recipes | none | scratchpad 2026-10-19 |
+| engineering | 5 | Bucket recipes | Planned | KubeJS | Buckets from iron plates; a wooden bucket for water | none | scratchpad 2026-10-19 |
+| metal | 1 | Plates made three ways | Planned | KubeJS | Create pressing for 4 metals only; IE press and hammer mixed | IE for 8 + Create for missing 5, or all on pack recipes | [recipes_metal.md](../recipes_metal.md) F1 |
+| metal | 2 | Hand-crafted rods | Planned | KubeJS | Only zinc, iron, aluminium | every metal or none | [recipes_metal.md](../recipes_metal.md) F4 |
+| metal | 3 | Rose gold in gold tags | Planned | data | Counts in rods, nuggets, storage blocks (beacons, IE storage crusher); RM-11 | keep in the block tag? | [recipes_metal.md](../recipes_metal.md) F5 |
+| metal | 4 | Metal standardization gaps | Planned | KubeJS | Plate / rod / dust-recycle gaps (dust -> ingot only zinc is the pack's), header audit written as a chat reply, tall rusty iron door washing row "Broken?", "metal base event" log line | the header question | [recipes_metal.md](../recipes_metal.md) F6, F7; `metal_base_materials.js` |
+| metal | 5 | Polished iron bars stonecutting removed | Planned | KubeJS | `createdeco:polished_iron_bars` has no replacement | intended? | `metal_building.js` line 11 |
+| metal | 6 | More gold sources | Planned | KubeJS | Panning? | whether | scratchpad 2026-10-19 |
+| wood | 1 | Twisted wood duplicate | Planned | KubeJS | Cutting-board recipe added without removing the original; no sawmill removal; check JEI | none | [recipes_wood.md](../recipes_wood.md) F4 |
+| wood | 2 | Leftover comments | Planned | KubeJS | `wood_types.js`, `bark.js` (only removes paper) | none | [recipes_wood.md](../recipes_wood.md) F5 |
+| cooking | 1 | Smoker recipe | Planned | KubeJS | Vanilla's removed, none added; smoking makes bread blocks, sourdough, leather | a recipe or another smoker | [recipes_cooking.md](../recipes_cooking.md) F1 |
+| cooking | 2 | Vanilla cake removed | Planned | KubeJS | Fine if another mod's recipe makes `minecraft:cake`; RC-02 | keep removal | [recipes_cooking.md](../recipes_cooking.md) F2 |
+| cooking | 3 | Comment and id fixes | Planned | KubeJS | "shaped" on shapeless recipes, `crab_bars_shapeless_manual_only` id with a slash | none | [recipes_cooking.md](../recipes_cooking.md) F6 |
+| magic | 1 | Explorer's Compass | Planned | KubeJS | No recipe; RA-07 | loot only, or a late recipe next to Nature's Compass | [recipes_magic.md](../recipes_magic.md) F1 |
+| magic | 2 | New geode shards | Planned | KubeJS | Armor and potion uses for the new shards | which | scratchpad 2026-10-19 |
+| magic | 3 | Botania trinket case takes any item | Planned | KubeJS / patcherMod | Allow any item | none | scratchpad 2026-10-19 |
+| magic | 4 | Magical components | Planned | KubeJS | A magic cousin of the IE components | what they are for | scratchpad 2026-10-19 |
+| materials | 1 | Merge cardboard | Planned | KubeJS | One cardboard item, recipes and tags through NCH / `global.tags` | surviving id | scratchpad 2026-10-19 |
+| materials | 2 | Merge rope | Planned | KubeJS / data | Flax goes; rope arrows use the surviving rope; the rope keeps Farmer's Delight's tomato behaviour | which rope wins | scratchpad 2026-10-19 |
+| progression | 4 | Recipe tests | Complete | none | RP-01 to 08, RE-01 to 20, RM-01 to 14, RW-01 to 10, RC-01 to 14, RA-01 to 08 | none | the five recipe writeups |
+
+---
+
+# engineering
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| sawmill-and-components | 5 | Disassembly tools | Bug | KubeJS | Comments promise a screwdriver / wire cutters the recipes don't take; coil counts wrong in comments | add the tool or fix comments | [engineering.md](../engineering.md) F6 |
+| sawmill-and-components | 2 | Sawmill recipes off the manual pipeline | Planned | KubeJS / patcherMod | `node sawmill.js` -> copy into patcherMod -> jar (211 files); planned NCH helper adding raw JSON from `ServerEvents.highPriorityData` | none | [engineering.md](../engineering.md) F1, `kubejs/generation_scripts/sawmill.js` line 1 |
+| sawmill-and-components | 3 | JEI doesn't show the sawmill blade | Planned | patcherMod / KubeJS | EN-04; a tooltip line or a JEI info page | which | [engineering.md](../engineering.md) F2 |
+| sawmill-and-components | 4 | One centre per component | Planned | KubeJS | Iron: copper ingot vs rod; diamond: gold vs electrum component | which centre | [engineering.md](../engineering.md) F4 |
+| sawmill-and-components | 6 | Tier names in comments | Planned | KubeJS | `components.js` lines 18, 22 `Light?` / `Dense?`; items already "Light" / "Heavy" | delete comments or rename | [engineering.md](../engineering.md) F5 |
+| sawmill-and-components | 7 | Bucket -> shulker shell fan recipe eats buckets | Planned | KubeJS | 3 times in 4 | keep, or bucket back at 75 % | [engineering.md](../engineering.md) F7 |
+| dreams-and-desires | 1 | Smoked wood recipe | Planned | KubeJS | Add it | none | scratchpad 2026-10-19 |
+| dreams-and-desires | 2 | Rubber chain | Planned | KubeJS | Integrate with the rubber tree mod: latex process to rubber; D&D sap machine on rubber logs (less efficient); rubber to belts (more efficient) | none | scratchpad 2026-10-19 |
+| dreams-and-desires | 3 | Rose quartz sand blasting | Planned | KubeJS | 80 % rough / 20 % smooth, recursive split | none | scratchpad 2026-10-19 |
+| dreams-and-desires | 4 | Extra woods | Planned | KubeJS / data | Remove D&D's extra woods? keep smoked / merge with treated | which | scratchpad 2026-10-19 |
+| dreams-and-desires | 5 | Glowstone geodes | Planned | data | Remove D&D glowstone geodes, review geode spawns | none | scratchpad 2026-10-19 |
+| dreams-and-desires | 6 | Painted asphalt | Planned | KubeJS / resource pack | D&D asphalt renamed "Painted Asphalt"; its recipes replaced by 8 IE asphalt + 1 dye -> 8; a soaping recipe back; speed in `gameplay/blockrunner #5` | none | scratchpad 2026-10-19 |
+| sawmill-and-components | 1 | Engineering features | Testing | patcherMod / KubeJS | Sawmill routing, Dragon Breathing, components, coils, syringe; EN-01 to EN-18; sawblade routing never checked in game | none | [engineering.md](../engineering.md) |
+
+---
+
+# gameplay
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| time | 4 | Clock icon frozen while sleeping | Bug | patcherMod | The clock icon stays frozen while sleeping. Cause not looked at; check against the time master's sun clock first | none | scratchpad 2026-10-19 |
+| time | 5 | Season day and day counter misaligned on the GUI | Bug | patcherMod | SeasonHUD vs the time master's day | none | scratchpad 2026-10-19 |
+| item-physics | 3 | Allurement curses and item physics | Bug | patcherMod | Allurement item curses fail, assumed not to interact with item physics | none | scratchpad 2026-10-19 |
+| tnt-and-portal | 3 | Minecart shrapnel and damage | Bug | patcherMod | Fix minecart shrapnel; item damage a fraction but keep the knockback; chain reactions multiply entities (F2); only vanilla TNT bursts (F3) | count, damage fraction | scratchpad 2026-10-19, [tnt_shrapnel.md](../tnt_shrapnel.md) F2, F3 |
+| time | 3 | Offline checks | Planned | tool | `tools/time_table.py` and the SUN-counter GameTest | none | [time.md](../time.md) 6 |
+| blockrunner | 2 | Finish the BlockRunner audit | Planned | KubeJS / tool | Cover new mods (Brewin' `heating_cask`, `ice_crate`, `coaster` are open); a watcher that flags blocks with no tier at 1.0 speed | none | scratchpad 2026-10-19, [alcohol.md](../alcohol.md) 3.4 |
+| blockrunner | 3 | Minimum leaf layer height slowdown | Planned | patcherMod | Set a minimum layer height before leaf layers slow you | value | scratchpad 2026-10-19 |
+| blockrunner | 4 | Slippery blocks and soap | Planned | patcherMod | Soap effect on ice and other slippery blocks (document them), stronger on slipperier blocks; standard ice speed on every slippery block for ice boats; tooltip for ice travel speed? | none | scratchpad 2026-10-19 |
+| blockrunner | 5 | Speed blocks on BlockRunner tiers | Planned | KubeJS / patcherMod | Painted asphalt keeps IE asphalt's run speed; D&D's own speed effect goes (friction reset exists, BR-28); IE asphalt and every other speed block take their speed from BlockRunner tiers | none | scratchpad 2026-10-19, [blockrunner.md](../blockrunner.md) |
+| item-physics | 2 | Classify modded items | Planned | KubeJS | Most sink and burn by default; "Future" list: Create components sink and fireproof, belts float, flour floats, treated wood sinks | how far | [item_physics.md](../item_physics.md) F4 |
+| item-physics | 4 | Water splash from anvils and other entities | Planned | patcherMod | Splash particles when they hit water | none | scratchpad 2026-10-19 |
+| storage-and-item-loss | 4 | Backpack reskin by smithing | Planned | KubeJS | Smith a backpack into another look, e.g. a fruit basket | looks | scratchpad 2026-10-19 |
+| storage-and-item-loss | 5 | Polymorph in the backpack crafting table | Planned | patcherMod | Compat | none | scratchpad 2026-10-19 |
+| tnt-and-portal | 2 | Lighter immune to own shrapnel | Planned | patcherMod | Owner excluded | keep or include | [tnt_shrapnel.md](../tnt_shrapnel.md) F1 |
+| tnt-and-portal | 5 | Flint and Terrasteel is still temporary | Planned | patcherMod | Places Dark Fire on any air block, no frame check; javadoc names a missing `TerraFireBlock` | frame-only or anywhere | [nether_portal.md](../nether_portal.md) F1 |
+| tnt-and-portal | 6 | Dark Fire lights portals in any dimension | Planned | patcherMod | Vanilla only allows Overworld and Nether | add the check or keep | [nether_portal.md](../nether_portal.md) F2 |
+| tnt-and-portal | 7 | Accidental fire ruins frames | Planned | patcherMod | Lightning or spreading fire turns a frame to crying obsidian | intended? | [nether_portal.md](../nether_portal.md) F3 |
+| starter-kit | 1 | Starter kit contents | Planned | KubeJS | Remove all starting books; add an animal dictionary and a food dictionary; MCA thread and combs consumable and in the kit. The kits now live in [starter_kit.js](../../kubejs/server_scripts/other/starter_kit.js) (`STARTER_KITS.kits`, item_dict keys) since the Starter Kit port (largecontent/featureporting #2, 2026-10-20) | which books | scratchpad 2026-10-19, [feature_porting.md](../feature_porting.md) 1.1 |
+| misc | 3 | Keep cosmetic armor on death | Planned | patcherMod / config | Configurable keep-on-death for cosmetic armor, and a second option for whether the corpse takes it anyway; always in the corpse when not kept | defaults | scratchpad 2026-10-19 |
+| misc | 6 | Grass shearing and spreading | Planned | none / KubeJS | Shearing grass-like blocks gives particles: does it stop them spreading? Add a tooltip if it does | none | scratchpad 2026-10-19 |
+| misc | 7 | No "survive the fall above a health" rule | Planned | config / patcherMod | Find the mod or feature and turn it off; falls are only forgiven through Forgiving Void | none | scratchpad 2026-10-19, [fixes_compat.md](../fixes_compat.md) 2.1 |
+| storage-and-item-loss | 1 | Container sorting audit | In Progress | patcherMod / tool | Finish the audit; a programmatic test that sorting never deletes items (`tools/item_repro`) | none | scratchpad 2026-10-19, memory `quark-sort-item-loss`, `item-loss-repro` |
+| misc | 2 | Campfire fuel blocks and rain | In Progress | patcherMod | Built 2026-10-19 (patcherMod 1.0.9 in `mods/`, untested): Unlit Campfire burns forever, `CampfireRain` puts plain campfires out in rain unless they sit on a `campfire/rain_proof_fuel` block (coal and charcoal blocks today). Left: more fuel blocks (hay bales, magma, straw and stick bales), longer smoke over them, a tooltip on the fuel block; audit rain putting fires out, so a fire on a fuel block always stays lit | which blocks | memory `campfire-rain`, scratchpad 2026-10-19 |
+| time | 1 | Time master | Testing | patcherMod / new jar | `[time]`, push, sun seasons, pause when empty, GUI, `/cetime`, presets; TI-01 to TI-29 | none | [time.md](../time.md) |
+| item-physics | 1 | Fire / lava split, float / sink tags, burn transforms | Testing | patcherMod / KubeJS | IP-01 to IP-14 (IP-13 checks the `$1` crash, fixed in 1.0.9) | none | [item_physics.md](../item_physics.md) |
+| storage-and-item-loss | 2 | Items in a sack deleted when dyed | Testing | patcherMod | Cause: Supplementaries' in-world dye tweak (`[tweaks.dye_blocks]`) swaps a block for its Moonlight colour-set sibling without carrying the block entity over. `SupplementariesDyeBlocksMixin` (patcherMod 1.1.01 in `mods/` 2026-10-20, not deployed) skips every block with a block entity and `#creativeengineering:no_world_dye`, so sacks (and shulker boxes, presents, banners, beds) no longer dye in world; crafting-grid dyeing and soap are unchanged. Test: dye a filled sack in world (nothing happens), dye it in the crafting grid (contents kept), wool still dyes in world | none | scratchpad 2026-10-19, `blocks/dyeing #1` |
+| storage-and-item-loss | 3 | Item deleted after middle-click pick | Testing | patcherMod | Vanilla MC-197793: creative pick with a full hotbar moves the held item client-side only, so the server deletes it. `CreativePickBlockSyncMixin` (client) sends every slot the pick changed. In mods/ 1.0.9 jar, not deployed; test on the server in creative with a full hotbar, then move the displaced item in a chest | none | scratchpad 2026-10-19, memory `creative-pick-block-desync` |
+| tnt-and-portal | 1 | TNT shrapnel | Testing | patcherMod | TN-01 to TN-10 | none | [tnt_shrapnel.md](../tnt_shrapnel.md) |
+| tnt-and-portal | 4 | Nether portal ignition | Testing | patcherMod | NP-01 to NP-12; remove the `PortalFailureHandler` diagnostic log after NP-01 to NP-05 | none | [nether_portal.md](../nether_portal.md) F5 |
+| misc | 1 | Advancements off | Testing | patcherMod | AV-01 to AV-05 | none | [advancements.md](../advancements.md) |
+| misc | 5 | Immersive Paintings: every painting variant on the Datapacks page | Testing | tool / data | 475 paintings at 32 px shipped in 1.0.6; the painting screen never checked in game: PA-01 to PA-07 | none | [immersive_paintings.md](../immersive_paintings.md) |
+| blockrunner | 1 | Surface speed tiers | Complete | patcherMod / KubeJS | BR- tests 36 open (BR-52 needs a restart) | none | [blockrunner.md](../blockrunner.md) |
+| storage-and-item-loss | 6 | Trash slot | Complete | patcherMod | TS-01 to TS-13 | none | [trashslot.md](../trashslot.md) |
+| misc | 4 | Forgiving Void, banners, fixes catalogue | Complete | patcherMod | FX-01 to FX-20 | none | [fixes_compat.md](../fixes_compat.md) |
+
+---
+
+# blocks
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| new | 1 | 3-long curtain blocks | Planned | patcherMod | Make 3-long curtains | source mod | scratchpad 2026-10-19 |
+| new | 2 | Collapsible ladders | Planned | patcherMod | Extend like a curtain block; climbable only when down; the iron one needs redstone | none | scratchpad 2026-10-19 |
+| new | 3 | Chiseled bookshelf backport | Planned | patcherMod | With framed and copycat versions? | whether framed / copycat | scratchpad 2026-10-19 |
+| new | 4 | Sculk sensor backport | Planned | patcherMod | Calibrated sculk sensor (1.20)? | scope | scratchpad 2026-10-19 |
+| new | 5 | Lit Botania fel pumpkin | Planned | KubeJS | A lit version | none | scratchpad 2026-10-19 |
+| new | 6 | Wall mushrooms | Planned | mods/ | Mushrooms growing off walls; look for a mod (slightly altered vanilla textures) | which mod | scratchpad 2026-10-19 |
+| framed-and-decor | 1 | Flowers on framed / copycat dirt | Planned | patcherMod | Allow planting flowers on them | none | scratchpad 2026-10-19 |
+| framed-and-decor | 2 | Copycat resource pack keeps the framed block name | Planned | resource pack | Disabled by default on the client | none | scratchpad 2026-10-19 |
+| framed-and-decor | 3 | Trapdoor and Another Furniture shutter variants | Planned | KubeJS / data | Shapes and wood variants | which | scratchpad 2026-10-19 |
+| framed-and-decor | 5 | Botanist workbench as a flower pot | Planned | patcherMod | Make it a working flower pot? | whether | scratchpad 2026-10-19 |
+| framed-and-decor | 6 | Flower potting audit | Planned | data / KubeJS | Which flowers and plants can be potted | none | scratchpad 2026-10-19 |
+| dyeing | 1 | Block dyeing and soaping audit | Planned | patcherMod / KubeJS / docs | Go through every block in game and decide which may be dyed with a dye and which washed with soap in world, and which are disabled. In-world dye is Supplementaries `[tweaks.dye_blocks]` over every Moonlight colour set (any block id with all 16 `<color>_` / `_<color>` variants); since 2026-10-20 blocks with a block entity are skipped and plain blocks go in `#creativeengineering:no_world_dye` (`SupplementariesDyeBlocksMixin`). Soap (`SoapWashableHelper`) clears colour sets back to the base block (copies block-entity data; config `clean_blacklist`, beds skipped), unwaxes / unoxidises, and washes `IWashable` blocks (Supplementaries text holders, bamboo spikes). Sophisticated Backpacks has neither (checked 2026-10-20). To check: a container that drops its contents when removed and is soapable could duplicate; whether shulker boxes, banners, presents should dye in world again (needs block-entity carry-over); other mods with their own in-world dye or wash (vanilla cauldron, signs, Quark, Create, Botania) | allow list per block family; a no_world_soap tag if soap needs one | this file; mixin javadoc |
+| framed-and-decor | 4 | Canvas sign dyeing | Testing | patcherMod | Supplementaries' in-world dye treated the Farmer's Delight canvas signs (standing and wall) as colour sets and swapped the sign (losing its text) before vanilla could dye the text. `SupplementariesDyeBlocksMixin` (patcherMod 1.1.01 in `mods/` 2026-10-20, not deployed) skips blocks with a block entity, so dye on a canvas sign now colours its text like any sign. Test: write on a canvas sign, dye it (text colour changes, sign and text stay), glow ink still works | none | scratchpad 2026-10-19, `blocks/dyeing #1` |
+
+---
+
+# ui
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| tooltips | 2 | Tooltips to add (items) | Planned | KubeJS / patcherMod | Straw and knives (straw from cutting grass), food type line (from the cooking and Spice of Life systems), can AppleSkin bars (needs a mixin: one meal x servings), chalk usage, Pretty Pipes cover with the wrench | none | [tooltips.md](../tooltips.md) 8, scratchpad 2026-10-19 |
+| tooltips | 3 | Tooltips to add (mods) | Planned | KubeJS | Botania, Cloud Storage. The Vinery lines moved to `alcohol/vineryport #16` (built 2026-10-19) | the text | [tooltips.md](../tooltips.md) 8 |
+| effects | 6 | Remove Passion Aloe Nectar | Planned | KubeJS | Passion fruit isn't in the game (Atmospheric isn't installed), so the drink can't be made and its Relief effect doesn't exist; already hidden in JEI (user 2026-10-20). Remove it (recipes, tags, item_dict). Check the other passion fruit items the same way: `abnormals_delight:passion_fruit_glazed_duck`, `create_central_kitchen:passionfruit_cake_slice` | none (decided: remove) | [effects.md](../effects.md) F8 |
+| jei-ordering | 2 | Fill the tree | Planned | KubeJS | Step 4, category by category, catalog check after each; effects in a custom order with vanilla first | tree layout | [jei_ordering.md](../jei_ordering.md) 4.1, 11; scratchpad 2026-10-19 |
+| jei-ordering | 3 | MCA family group in JEI | Planned | KubeJS | Group MCA's items | none | scratchpad 2026-10-19 |
+| jei-coverage | 1 | Part 1 fixes (hidden crafting recipes) | Planned | patcherMod / KubeJS | 70 hidden recipes catalogued with stand-in / info / none; none built (incl. JC-02 dragon scale duplication stand-in) | none | [jei_coverage.md](../jei_coverage.md) 0 |
+| jei-coverage | 2 | Parts 2 and 3 | Planned | tool | Recipe types with no category; world interactions with no recipe (Vinery leaf / bush harvesting, stem pruning, kitchen sink; NEA paint arrow, balloon arrow) | none | [jei_coverage.md](../jei_coverage.md) 0 |
+| misc | 1 | Game process icon | Planned | patcherMod | Change the game's window / taskbar icon | the icon | scratchpad 2026-10-19 |
+| misc | 2 | Item Highlighter first pickups | Planned | patcherMod / config | Option to mark first-time pickups gold and later pickups silver | default | scratchpad 2026-10-19 |
+| effects | 1 | JEED descriptions for 10 effects | In Progress | KubeJS | 10 `TODO: write a description` placeholders kept (user 2026-10-20: leave them until text is written): Long Reach, Patrol Nullifier, Phantom Bane, Magic Resistance, Anti-Fire, Copper Poisoning, 4 Xaero World Map switches. Travel Fatigue ported from Effect Insights; 8 other description mods have nothing for the rest (`gen_effect_descriptions.py --sources`); stale placeholders gone. PROPOSED text in effects.md 2.1 | approve the text | [effects.md](../effects.md) F2, F4 |
+| names | 2 | Raw lang keys in game | Testing | KubeJS / patcherMod | FIXED 2026-10-20: `vinery:trippy` already reads "Sensory Perception" (port lang); `everythingcopper:copper_poisoning` and the Arrow of Intimidation are in the names audit (`names #4`); the WTHIT plugin toggles (four then, all eleven since `wthit #3` to `#8`) got `config.waila.plugin_creativeengineering.*` lines in patcherMod's lang (WL-02 open) | none | [effects.md](../effects.md) F1, [wthit_lines.md](../wthit_lines.md) F2, [names.md](../names.md) 11 |
+| names | 3 | Death Knell on server and client | Testing | mods/ | Checked 2026-10-20: `both` in mod_sides.md since 1.0.7 and shipped in `mods/` to both sides (the deploy's `mods` category always goes to the client too), and the jar's en_us has all 55 keys its code uses. The raw-key worry (FP-01) predates that change; FP-01 still to confirm in game | none | [feature_porting.md](../feature_porting.md) 0 |
+| jei-ordering | 5 | Pack JEI order never reaches patcherMod | Testing | KubeJS | FIXED 2026-10-20: `client_scripts/jei_order.js` held the class in a top-level `const` inside `try`, which this Rhino rejects ("redeclaration of var", reproduced in the pack's Rhino); it now calls `Java.loadClass(...).define(...)` with no binding. Scratch client: latest.log `[jei order] definition: 4 types, 10 nodes`. JO-01 to JO-12 need a world | none | [jei_ordering.md](../jei_ordering.md) 12; found 2026-10-20 |
+| names | 4 | Display-name audit (raw keys + capitalization) | Testing | patcherMod / KubeJS / tool | BUILT 2026-10-20: client dump `/cedumpnames` (patcherMod devtools/DisplayNameDump), `tools/name_audit.py` + `name_rules.json`, `client_scripts/name_fixes.js`: 436 names in 59 namespaces (raw keys: 225 blocks, 24 items, 55 entities, 20 professions, effect, fluids, potion; Title Case: 106, glow ink plus included). NM-09 to NM-11 PASSED (scratch client: every fix shows), NM-12 in game | keep list (death-message entities, XOR gate styling) | [names.md](../names.md) 11, scratchpad 2026-10-19 |
+| names | 5 | Rename Pretty Pipes to "Item Pipes"; mod display names | Testing | patcherMod / KubeJS | Pipes: the items are "Item Pipe ..." (kubejs/assets/prettypipes); the mod name and creative tab stay "Pretty Pipes" (user, 2026-10-20). Mod names: all 430 combed, 116 renamed via CEConfig `[mod_names]` (patcherMod util/ModDisplayNames): spaced words, apostrophes, & for and / 'n, Create addons as "Create: xyz" incl. GBD and CC Bridge, no author handles, Target Dummy, own mods "(Alfonzo)". NM-13 | JS names and -Craft brands kept | [names.md](../names.md) 11, scratchpad 2026-10-19 |
+| names | 1 | Missing-name fixes | Testing | KubeJS / tool | Display Delight and Rustic Delight (NM-01 to NM-06); the rest of the catalog (partial blocks, items, entities, professions, effect, potion, fluids) is now fixed by the names audit, `names #4` | none | [names.md](../names.md) |
+| effects | 8 | Effects reference tests | Testing | none | EF-01 to EF-19 | none | [effects.md](../effects.md) |
+| effects | 2 | Wrong or partial JEED descriptions | Testing | KubeJS | BUILT 2026-10-20: Comfort, Soul Cross, Teleport, Knockback Resistance, Resilience, Power Outage, Shocked, Flashed, Caffeinated, Double Jump, Frosty Armor and 5 JEED typo lines (Sticky too) replaced in the pack lang overlay; EF-17 | none | [effects.md](../effects.md) F3 |
+| effects | 3 | Merge backported effect descriptions with JEED | Testing | KubeJS | BUILT 2026-10-20: one place for effect text (the KubeJS lang overlay, above JEED and the Vinery donor jar) and one for JEI items (`jeed_providers.js`; the Vinery wine loop moved there); the ports' Teleport, Double Jump and Frosty Armor texts fixed with row 2 | none | [effects.md](../effects.md) 3, [alcohol.md](../alcohol.md) B7.5 |
+| effects | 4 | Effect providers in JEI | Testing | KubeJS / tool | BUILT 2026-10-20 (`server_scripts/other/jeed_providers.js`): every effect but hidden Sunny has an item on its JEI page. Added in JEED's own kinds: mob spawn eggs, blocks / fluids / gear, code-applied food, pack gear registries, echo armor, Botania brews (NBT), Vinery wines and banner, a command block for the Xaero switches; potion buckets, potion bundles, IE potion bullet and PNC ammo as potion carriers. JEED already lists FoodProperties foods (F11 was partly wrong). `effect_audit.py` flags `no JEI source`. EF-15, EF-16 | none | [effects.md](../effects.md) 3, F11 |
+| effects | 5 | Sunny hidden from JEI | Testing | config | Decided 2026-10-20: keep hidden (`jeed-client.toml` `hidden_effects`, in config/ and configs_edited/). Still on the HUD from buttercup stew and mooblooms; "purge sunny" (effects.md 7) is separate. EF-19 | none | [effects.md](../effects.md) F7 |
+| effects | 7 | Effect colour audit (harmful / helpful) | Testing | patcherMod | BUILT 2026-10-20 (patcherMod 1.1.01 rebuilt, in mods/ and server_mods/): all 140 effects checked; CEConfig `[effects] categoryOverrides` recolours 6: Rest blue; Debilitating Sting, Scared Still, Power Outage, Slipping and Sensory Perception red (`MobEffectCategoryMixin` on `getCategory` and `isBeneficial`). EF-18 | none | [effects.md](../effects.md) 2.4, F13 |
+| jei-ordering | 1 | Pack ingredient order steps 1 to 3 | Testing | patcherMod / KubeJS | Sorter, mixins, definition, first small tree, report tool (1.0.7); JO-01 to JO-12 | none | [jei_ordering.md](../jei_ordering.md) 12 |
+| jei-ordering | 4 | JEI craftable-first backport | Testing | patcherMod | JEI-01 to JEI-06 never run | none | [jei_craftable_first_port.md](../jei_craftable_first_port.md) |
+| wthit | 1 | WTHIT lines | Testing | patcherMod / new jar | WL-01 to WL-31 (rows 2 to 8 have their own; WL-31: every change has an on/off switch, table in wthit_lines.md 3) | none | [wthit_lines.md](../wthit_lines.md) |
+| wthit | 2 | Icon fix for every mod | Testing | patcherMod / tool | BUILT 2026-10-20: the block model icon works for any namespace (`compat/BlockModelIcons`: no item or missing item model, a baked model of its own), opt-out `[wthit] iconExclude`; client dump `/cedumpicons` (`[debug.wthit] dumpIconsAtTitle`) + `tools/wthit_icon_audit.py`: 272 blocks get the model icon (DD 70, Colored Water cauldrons 64, Immersive Posts 30, Create 17...), 0 items with a missing model, nothing to exclude. Deploy preflight runs `gen_display_delight_models.py --check` (F3). patcherMod 1.1.01 in `mods/` and `server_mods/`. WL-07 to WL-08 | none | [wthit_lines.md](../wthit_lines.md) 2.2, F1, F3 |
+| wthit | 3 | Jar contents line | Testing | patcherMod | BUILT 2026-10-20 (`compat/WthitHolderContents`, `[wthit] holderContents`): Supplementaries jars, goblets, cages: "Contents: Honey (6 / 12)", potions by name, "Cookie (5 / 12)", the captured mob. Plugins load on a scratch client; not seen in a world. The soups-in-jars and mixed cookie parts moved to `food/ingredients #13` and `food/baked-goods #11`. goblet shows the fluid only, potion effects on their own lines (`[wthit] holderPotionEffects`). WL-11 to WL-15 | none | [wthit_lines.md](../wthit_lines.md) 2.3, cooking plan cooked/soup |
+| wthit | 4 | Bees and honey line on hives | Testing | patcherMod | BUILT 2026-10-20 (`compat/WthitHive`, first pack plugin with a server half; `[wthit] hiveBees`, `hiveHoneyMax`): "Bees: 2 / 3" (count sent by the server) and WTHIT's honey line replaced in place with "Honey Level: 3 / 5". All four pack hives are `BeehiveBlock`s. the Bees line takes the place of WTHIT's \"2 Bee\" names line (Bees, then Honey). WL-16 to WL-19 | none | [wthit_lines.md](../wthit_lines.md) 2.4, scratchpad 2026-10-19 |
+| wthit | 5 | State lines: servings, slices, eggs, cauldron levels | Testing | patcherMod | BUILT 2026-10-20 (`compat/WthitStateLines`, rules in `state_lines.json`, `[wthit] stateLines`): feasts' servings, cakes' and pies' slices, Brewin' cheese and pizza slices, Rustic Delight pancakes, nest eggs and hatching, 142 cauldron levels (not vanilla water / lava: WTHIT's bar), anchor charges, sea pickles; 213 blocks. Eggs and cauldron level seen on a scratch server. WL-20 to WL-24 | none | [wthit_lines.md](../wthit_lines.md) 2.5 |
+| wthit | 6 | Jade-only integrations | Testing | patcherMod | BUILT 2026-10-20: campfire burn (Unlit Campfire's words) + the pack's rain rule ("Puts it out" / "Going out in 6s" / "Safe (fuel block below)"), IE sheetmetal tank fluid bar on every part, Applied Cooking kitchen station online / offline; IE icons and Delightful needed nothing. Campfire lines seen on a scratch server. WL-25 to WL-28 | none | [wthit_lines.md](../wthit_lines.md) 2.6, 2.7 |
+| wthit | 7 | Brewin' keg fermentation progress | Testing | new jar | BUILT 2026-10-20 in the Brewin' port (`integration/wthit/KegWthit`, `-03` rebuilt and installed): "Temperature: Warm", "Fermenting: Beer 45%", red "Beer: Must Be Cold". WL-29, WL-30 | lives in the port (decided: its state is private) | [wthit_lines.md](../wthit_lines.md) 2.8 |
+| wthit | 8 | Blank icons left | Testing | patcherMod | BUILT 2026-10-20: Forge's hit-aware pick block before the model icon (Supplementaries skull pile), `[wthit] iconItems` (D&D powered flywheel = Create flywheel); skull candles were already fine in game; fake track and casing collision are technical. WL-09, WL-10 | none | [wthit_lines.md](../wthit_lines.md) 2.2 |
+| toasts | 1 | Disable tutorial toasts | Testing | patcherMod | `ToastFilterMixin` + `[toasts] tutorial = false`: vanilla, Exposure and Fairy Lights tutorial toasts. Built into the 1.0.9 jar in `build/libs/`; copy to `mods/` and ship with the next deploy | none | [toasts.md](../toasts.md); TO-01 to TO-05, TO-07 |
+| toasts | 2 | Advancement toasts | Testing | patcherMod | `[toasts] advancement = false` (vanilla + Patchouli); moot while advancements are off, the chat line is gone with them | none | [toasts.md](../toasts.md), [advancements.md](../advancements.md); TO-06 checks the other toasts still show |
+| tooltips | 4 | AppleSkin bars in more screens | Testing | patcherMod / new jar | BUILT 2026-10-20 (patcherMod 1.1.01, Brewin' `-03`, Vinery `-04`, in `mods/` and `server_mods/`; mixins proven to apply on a scratch client, bars not seen in game): FD cooking pot, Farmer's Respite kettle, Central Kitchen cooking/brewing guides and Oven meal slots; Brewin' keg tank (GUI, recipe book, JEI tank over the tankard); Vinery recipe book; TrashSlot; Pretty Pipes terminal; FTB Quests task/reward/description items; Wares agreement; Patchouli; AE2 crafting tables, pattern encoding amount slots, guidebook. TT-19 to TT-30 | none | [tooltips.md](../tooltips.md) 3, [fixes_compat.md](../fixes_compat.md) 2.24 |
+| tooltips | 1 | Tooltip framework and lines | Complete | KubeJS | TT-01 to TT-18 | none | [tooltips.md](../tooltips.md) |
+
+---
+
+# alcohol
+
+Alcohol is the two ports plus the pack around them, grouped here from `largecontent` and the other families on
+2026-10-19: `brewinport` and `vineryport` (the two jars) and `pack` (pack-side alcohol rows). The open calls are in the
+decisions table under the main one. Rows that stay elsewhere because they cover more than alcohol: `pack/release #5`
+(`/dumpall` refresh with the ports), `ui/names #2` (`vinery:trippy` lang), `ui/jei-coverage #2` (Vinery world
+interactions). Both port jars (`-02`) are live since 1.0.8. First in-game results 2026-10-20 (local `-03`, [alcohol.md](../alcohol.md) 10.18:
+bottle sizes, box looks, Stained Glass, wine box and flying fixes); AL-01 to AL-72 and VB-01 to VB-66 are still the first
+job before any balance change.
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| vineryport | 4 | Upstream jars on publish | Planned | tool | D14: payload now, download from Modrinth / CurseForge when the pack is published | none | [alcohol.md](../alcohol.md) B5 D14, [deploy.md](../deploy.md) |
+| vineryport | 5 | I25 tool reruns and `#missing` models | Planned | tool / new jar | I25 reruns; 4 upstream wine models (`stal`, `aegis`, `strad`, `glowing`) use `#missing` (a port-written override fixes it; in `stal` / `strad` it is only the zero-thick label's underside. Since 10.17 the 4x rack and the wine box draw Strad's shape for all four) | none | [alcohol.md](../alcohol.md) B4.4, B4.9 |
+| vineryport | 8 | 1.3.10 reference tests | Planned | docs | VN-01 to VN-20 describe 1.3.10 and VJ-01 to VJ-10 patcherMod's Vinery pages, which stand down with the port; most no longer apply | alcohol/decisions #12 | [vinery.md](../vinery.md), [vinery_jei.md](../vinery_jei.md) |
+| vineryport | 14 | Vinery village houses | Testing | port `-04` | BUILT 2026-10-20 ([alcohol.md](../alcohol.md) 13): the 4 houses (plains, taiga, savanna pen, desert) read from the donor jar with the palette rewritten in memory (apple press -> wine press, grape crates -> grape bags, hanging sign -> wall sign) and appended to their vanilla village houses pool at server start, weight = the pool's average piece weight (`[village_houses]`, 0 = average); PoolTuner records them in pool_config.json. VB-95 to VB-98 | none (D8 reversed by the user) | [alcohol.md](../alcohol.md) 13, B5 D8 |
+| vineryport | 15 | Vinery ingredient audit | Planned | KubeJS / data | The port's recipe ingredients and tags against the pack's items and merges | none | scratchpad 2026-10-19 |
+| vineryport | 3 | Wine effect reshuffle (B7.4) | Pinned | new jar / tool | Held until `alcohol/decisions #2` unpins it: two effects per wine, food-mod effects with fallbacks, `tools/wine_effect_candidates.py` | alcohol/decisions #2 | [alcohol.md](../alcohol.md) B7.4 |
+| brewinport | 4 | Pack-side leftovers | In Progress | tool / KubeJS | DONE 2026-10-19 ([alcohol.md](../alcohol.md) 10.16): the port's 4 compost chances as `compost_values.js` rows (`global.compost` had dropped them); BlockRunner `heating_cask` / `ice_crate` in `wood`, coaster untiered. Left: food types and stack sizes with the port (pack/release #5) and Canned Kimchi's `satisfaction` copy, both after `/dumpall` in a game with the port | none | [alcohol.md](../alcohol.md) 3.4, 10.16 |
+| vineryport | 12 | Crate and bag merge | In Progress | KubeJS / data | Audit done ([storage_audit.md](../storage_audit.md) 4): one 9-apple pattern makes 3 blocks, Vinery bags / crates can't be unpacked yet the loot rules pack Vinery crates into chests (C2). Was: audit every crate and bag (duplicates, bag vs crate), Vinery's first; then merge to one id per crop with recipes and tags through NCH / `global.tags`, and make sure the port doesn't re-add duplicates | alcohol/decisions #7 | scratchpad 2026-10-19, [alcohol.md](../alcohol.md) B7.12 |
+| vineryport | 7 | Hopper jams | Testing | new jar | BUILT 2026-10-20 ([alcohol.md](../alcohol.md) 10.19). The 1.3.10 jams (anything into the press output and every barrel slot) were already gone in the port: each slot takes only what a recipe uses there, outputs are take-only. What still jammed: a hopper spilling a second stack of one ingredient into the next cask slot, or mixing two recipes (the cask needs exactly one stack per ingredient, and only the output can be pulled), juice of another type sitting in the juice slot, and a press input whose bottle or output didn't match what was in. Automation now only adds what the block can finish with what it holds (hand use unchanged). Port `-03` in the local `mods/`. VB-93, VB-94 | alcohol/decisions #11 (B, done) | [vinery.md](../vinery.md) 4, [alcohol.md](../alcohol.md) 10.19 |
+| pack | 1 | Rotten-food hunger type for alcohol | Testing | KubeJS / new jar | BUILT 2026-10-20 ([alcohol.md](../alcohol.md) 11): all 44 alcoholic drinks (16 Brewin', 26 Vinery, the Bellini, Bottle of Wodka) are half a rotten shank (AppleSkin: Intoxication is harmful), saturation 0, always drinkable, hidden Intoxication, Nausea 5 s (10 s for drinks made from drinks) unless they already make you drunk; tooltip "Intoxicating Drink". No food-like exemptions; FD / Farmer's Respite apple ciders aren't alcoholic and keep their values. Quark's saturation word ("Disgusting Snack", the lowest of six buckets, shared with rotten flesh) is replaced by "Intoxicating Drink" from patcherMod 1.1.01 (`food/IntoxicatingDrinkTooltip`, `[alcohol] quarkLine`) on every food with the Intoxication effect (2026-10-20); the KubeJS effect-line rename was retired. AL-85 to AL-90 | alcohol/decisions #10 (decided by the 11 list) | cooking plan drink/alcohol, [alcohol.md](../alcohol.md) 11 |
+| brewinport | 8 | Coasters | Testing | new jar / KubeJS / patcherMod | BUILT 2026-10-20: coasters take only `#brewinandchewin:placeable_on_coaster` (port `[coaster] taggedItemsOnly`); 56 Display Delight foods get coaster models (`tools/gen_coaster_models.py`, new `"scale"` field); WTHIT "Coaster: n / 4" + item lines (patcherMod `[coaster] wthit`). Brewin' `-03` and patcherMod 1.0.10 rebuilt in `build/libs/`, not installed. AL-91 to AL-96 | none | scratchpad 2026-10-19, [alcohol.md](../alcohol.md) 12 |
+| brewinport | 5 | Black and purple texture ("plating") | Testing | new jar | The keg GUI's tankard slot icon: 1.19.2 needs slot icons stitched into the block atlas (`TextureStitchEvent.Pre` in `BrewinAndChewinForgeClient`). Built into `-03` (`build/libs/`), not installed (AL-78) | none | [alcohol.md](../alcohol.md) 8.9 Q1, 10.16 |
+| vineryport | 6 | Grass slab biome tint | Testing | KubeJS | Tinted, but a shade off grass: Rubidium blends the vanilla grass block's tint per vertex and colours modded blocks flat. `vinery:grass_slab` added to `#c:blendable_blocks` in `blocktags.js` (`/reload`, then F3+A); not checked in game | none | scratchpad 2026-10-19, [alcohol.md](../alcohol.md) 10.16 |
+| brewinport | 6 | Remainder buffer on the keg | Testing | new jar | BUILT 2026-10-19 in `-03` (`build/libs/`, not installed): leftovers go to a new take-only slot right of the output, then the empty-container slot; the keg waits when they wouldn't fit (`[keg] remainderBuffer` / `stallWhenFull`); old 8-slot kegs keep their items (AL-79 to AL-81, AL-84) | none | [remainder_buffer.md](../remainder_buffer.md) 3.6, [alcohol.md](../alcohol.md) 10.16 |
+| brewinport | 7 | Brewin' slots and side input | Testing | new jar | BUILT 2026-10-19 in `-03` (`build/libs/`, not installed): ingredient slots take only fermenting ingredients, the container slot only pouring containers; every face inserts (filled containers from the sides go to the fluid slot) (AL-82, AL-83) | none | cooking plan processes, [alcohol.md](../alcohol.md) 10.16 |
+| brewinport | 1 | Brewin' and Chewin' 4.5.0 port | Testing | new jar | `-02` live since 1.0.8 (still in 1.0.9; replaced the 2.0 jar and `-01`). `-03` BUILT 2026-10-19 with 10.13 (keg heat / cold) and 10.16 (tankard icon, leftover slot, slot rules, any-face input), in `build/libs/` only: install it to `mods/` with the game closed (Vinery `-03` already reads its `climate()`). AL-01 to AL-84 | none | [alcohol.md](../alcohol.md) Part A |
+| brewinport | 2 | Heat / cold tag audit | Testing | KubeJS / new jar | Applied 2026-10-19 (10.13): `#brewinandchewin:heat_sources` / `freeze_sources` in `blocktags.js`, running / fueled gates in `BnCHeatSources`; rerun `/dumptags` after (AL-41). Test 2026-10-20: TWEAK, the source tooltip now puts "Useful for keg brewing and wine casking" on its own line ([alcohol.md](../alcohol.md) 10.18, AL-77); Brewin' `-03` installed in the local `mods/` 2026-10-20 | alcohol/decisions #8 | [alcohol.md](../alcohol.md) 2.7, 10.13, scratchpad 2026-10-20 |
+| vineryport | 1 | Vinery 1.5.5 port | Testing | new jar | `-02` live since 1.0.8 (still in 1.0.9). `-03` (B7.14, 10.9 to 10.14) in the local `mods/` since 2026-10-19 22:27 with patcherMod 1.0.10, not deployed. VB-01 to VB-83 | none | [alcohol.md](../alcohol.md) Part B |
+| vineryport | 2 | Decisions built with the recommendation | Testing | new jar | D4, D5, D7, D8, D9, D10, D12 | none (decided 2026-10-19) | [alcohol.md](../alcohol.md) B5 |
+| vineryport | 9 | Grape stomping: 12 grapes, 4 stomps, 4 bottles | Testing | new jar / config | `MAX_GRAPES` 12, 3 per bottle, `grapevinePotStomps` default and `config/vinery-common.toml` 4. Built into `-03`, in the local `mods/` since 2026-10-19 22:27. 10% heavy-armor bonus no longer saves a stomp at 4 | alcohol/decisions #4 | [alcohol.md](../alcohol.md) B7.14; VB-10 |
+| vineryport | 10 | Wine case and rack fit bugs | Testing | new jar | Fixed 2026-10-19: large wines stack 2 per placed block again (10.9, VB-67); legacy racks removed, the 1.5.5 ones are the only racks and the cherry mid rack has its glass door (10.11, VB-71, VB-72); racks take wines by size (10.12, VB-73 to VB-75); mediums lie slim in the 4x rack and the wine box (10.14, VB-81 to VB-83). The scratchpad's bottle placement notes (audit, Sun-kissed clipping, cherry 4x vs dark oak, small / medium / large rework) are covered by 10.9 to 10.14; "restrict Stal to large cases" is superseded by your 10.14 list (Stal medium). TESTED 2026-10-20 ([alcohol.md](../alcohol.md) 10.18): rack fit by size and case sizes passed (VB-73, VB-74); VB-67 (2-per-block stacking), VB-71, VB-72 (merged racks, cherry window) not reported yet | alcohol/decisions #6 | scratchpad 2026-10-19, [storage_audit.md](../storage_audit.md) B1 to B7 |
+| vineryport | 13 | Duplicate blocks removed, "Cherry" names | Testing | new jar / KubeJS / patcherMod | 1.3.10 crates, barrel, stove, wood fired oven, kitchen sink and 1.5.5 chair / table / big table / shelf / wood lattices removed; "Dark Cherry" -> "Cherry" everywhere. 10.11: 1.3.10 wine racks 1, 2, 3, 5 removed too. Port `-03` and patcherMod 1.0.10 in the local `mods/` since 2026-10-19 22:27, not deployed | none (decided 2026-10-19) | [alcohol.md](../alcohol.md) 10.10, 10.11; VB-68 to VB-72 |
+| pack | 2 | Wine boosts beyond the cellar (T5) | Testing | new jar / patcherMod | BUILT 2026-10-19 ([alcohol.md](../alcohol.md) 10.13): storage is cellar / sunny and cold / warm, factors multiply (cellar x2.0, cold x2.0, warm x0.75; CEConfig `[time.wine.boosts]`). Cold / warm need Brewin' `-03` in `mods/` (not installed yet). Deep and storage type dropped | decided 2026-10-19 (your list) | [time.md](../time.md) 4 T5, [alcohol.md](../alcohol.md) 10.13; VB-76 to VB-80 |
+| vineryport | 16 | Vinery tooltips | Testing | KubeJS / new jar | BUILT 2026-10-19 ([alcohol.md](../alcohol.md) 10.15): wine size, per-block count and fitting storage, rack / Wine Box capacity (port, from the size code); block lines, seed line and Chorus Wine in `tooltips.js`. Port `-03` rebuilt in `build/libs/` only (game running). Test 2026-10-20: TWEAK, the fit lines were clunky. Reworded the same day ([alcohol.md](../alcohol.md) 10.18): racks renamed "Single / Small / Big <Wood> Wine Rack" (port translator), fit lines "Fits in Single, Small, and Big Wine Rack, and Wine Box" / "Fits in Single and Small Wine Rack, and Wine Box" / "Fits in Single Wine Rack"; `-03` rebuilt and installed in the local `mods/`. VB-84, VB-92 | none (text written; change it if wanted) | [alcohol.md](../alcohol.md) 10.15, [tooltips.md](../tooltips.md) 3; VB-84 to VB-86, scratchpad 2026-10-20 |
+| vineryport | 20 | Wine texture dump | Testing | new jar | BUILT 2026-10-19 ([alcohol.md](../alcohol.md) 10.17): client command `/dumpwinetextures` writes every wine texture (upstream `upstream/`, box recolours `generated/`, `index.tsv`) to `kubejs/exported/wine_textures/` for hand texturing. Nothing reads hand-painted files back yet (they can't ship in the jar, D13) | whether hand-painted textures get a local override route | scratchpad 2026-10-19, [alcohol.md](../alcohol.md) 10.17; VB-90 |
+| vineryport | 11 | Bottle size rework | Complete | new jar | 10.12: sizes from the per-block limit in `ObjectRegistry`, racks and tags follow, shrink to slot length (VB-73 to VB-75). 10.14: Stal, Sun-kissed, Magnetic medium; slim 4x rack / wine box models for every medium but Praetorian, Magnetic's box look in Strad's shape, all recoloured in memory from the wines' own textures with the palette swap tool's mapping (nothing shipped) (VB-81 to VB-83). 10.17 replaced the slim models with Strad's shape: `#19`. TESTED 2026-10-20 ([alcohol.md](../alcohol.md) 10.18): VB-73, VB-74, VB-81 passed (VB-75, the one-place rebuild check, not run). Left from `alcohol/decisions #6`: Apple Wine (6 px, small) is the only wide bottle in the 4x / 9x racks; slim it too if it clips | alcohol/decisions #6 | scratchpad 2026-10-19, [alcohol.md](../alcohol.md) 10.12, 10.14, scratchpad 2026-10-20 |
+| vineryport | 17 | Vinery window renamed "Stained Glass" | Complete | new jar / KubeJS | BUILT 2026-10-19 ([alcohol.md](../alcohol.md) 10.15): "Stained Glass" / "Stained Glass Pane" via the port's upstream lang; `alcohol.js` adds 6 blocks -> 16 panes. Port `-03` rebuilt in `build/libs/` only. TESTED 2026-10-20 ([alcohol.md](../alcohol.md) 10.18): VB-87 passed | none (recipe chosen: vanilla pane shape) | [alcohol.md](../alcohol.md) 10.15; VB-87, scratchpad 2026-10-20 |
+| vineryport | 18 | Vinery quality of life | Complete | new jar | BUILT 2026-10-19 ([alcohol.md](../alcohol.md) 10.15): the Wine Box toggles on sneak with anything in hand (RightClickBlock ALLOW); wines place on the sneak key, so also while flying. Single-bottle rack door unchanged. Port `-03` rebuilt in `build/libs/` only. TESTED 2026-10-20 ([alcohol.md](../alcohol.md) 10.18): VB-88, VB-89 passed. Port `-03` in the local `mods/` 2026-10-20 | none | [alcohol.md](../alcohol.md) 10.15; VB-88, VB-89, scratchpad 2026-10-20 |
+| vineryport | 19 | Wine box looks in Strad's shape | Complete | new jar | BUILT 2026-10-19 ([alcohol.md](../alcohol.md) 10.17): Stal, Strad, Magnetic, Aegis, Eiswein, Creeper's Crush, Sun-kissed, Mellohi, Chenet, Apple Cider lie in the wine box as the Strad / Stal bottle (Stal and Strad their own model, the rest Strad's recoloured in their palette); the 4x rack draws the same model at 0.75 scale, no model change; Magnetic's recolour uses the swap tool's `--invert` (more inverted / filtered wines: `#21`). Slim template retired (`SlimBottles` -> `BottleLooks`). Port `-03` rebuilt in `build/libs/` only. TESTED 2026-10-20 ([alcohol.md](../alcohol.md) 10.18): VB-82, VB-83 passed | which shape each wine takes: all Strad's except Stal (one line in `BottleLooks` to change) | scratchpad 2026-10-19, [alcohol.md](../alcohol.md) 10.17; VB-82, VB-83, scratchpad 2026-10-20 |
+| vineryport | 21 | Wine box recolour tweaks | Complete | new jar / tool | BUILT 2026-10-20: Sun-kissed (`glowing_wine`) and Aegis now use the inverted mapping like Magnetic (dark outline, bright fill) in the wine box and 4x rack; Mellohi, Apple Cider and Creeper's Crush drop the brown colours from their palette before the swap, Magnetic drops its near-white (its outline takes the salmon instead). `BottleLooks.INVERT` / `DROPS` + `Drop` (BROWN: hue 10-45, sat >= 0.4, value <= 0.7; WHITE: sat <= 0.15, value >= 0.85). The swap tool got the same filter as `--drop brown,white` (`textureswapper/palette_swap.py`, bounds kept in step with `Drop`). Still built in memory from the upstream art, nothing recoloured ships (license, D13). Port `-03` rebuilt and installed in the local `mods/` 2026-10-20 (takes #16 to #20 along with it); check the looks in game. TESTED 2026-10-20 ([alcohol.md](../alcohol.md) 10.18): VB-91 passed (reported with the bottle shapes) | per-wine invert / drop picks (one line each in `BottleLooks`) | scratchpad 2026-10-20 |
+
+### alcohol/decisions
+
+Open calls, recommendation first, sorted Open, Partly decided, Pinned, Decided, Done. Decided and Done rows stay until
+their tests pass. "Built with" means the jar already does the recommendation and the call only confirms it or asks
+for a change.
+
+| # | Decision | Status | Options (recommended first) | Blocks | Writeup |
+|---|---|---|---|---|---|
+| 12 | 1.3.10 reference tests (VN-, VJ-) | Open | A: retire them (the VB- suite covers the port); B: rewrite for the port | alcohol/vineryport #8 | [vinery.md](../vinery.md), [vinery_jei.md](../vinery_jei.md) |
+| 13 | Brewin' / Vinery effects in the brewing stand | Open | Scratchpad "ensure potion effects brewable" excludes them; confirm they stay unbrewable | none | `gear/potions` |
+| 7 | Crate and bag merge | Partly decided: Vinery part 2026-10-19 (bags kept, crates removed: [alcohol.md](../alcohol.md) 10.10); other mods open, audited | [storage_audit.md](../storage_audit.md) 4: one block per contents, both ways via NCH; survivors suggested there. Then pick the texture and the surviving id per crop; Vinery is the biggest source | alcohol/vineryport #12 | scratchpad 2026-10-19, [alcohol.md](../alcohol.md) B7.12 |
+| 2 | Wine effect reshuffle (B7.4): when to unpin | Pinned | A: after the VB- tests and the effects writeup refresh; B: now. When unpinned: two effects per wine, food-mod effects with vanilla / Vinery fallbacks, `tools/wine_effect_candidates.py` | alcohol/vineryport #3 | [alcohol.md](../alcohol.md) B7.4, VB-52 |
+| 10 | Which drinks skip the rotten-food type | Decided (2026-10-20, your 11 list) | None skip: every alcoholic drink is half a rotten shank with no saturation; only non-alcoholic ciders (FD, Farmer's Respite) are left alone | `alcohol/pack #1` | [alcohol.md](../alcohol.md) 11 |
+| 1 | Vinery wine effects (D4) | Decided (A, 2026-10-19) | A: 1.5.5 default list (one setting, retune later); B: seed with 1.3.10 effects where they still exist | decisions #3 | [alcohol.md](../alcohol.md) B5 D4 |
+| 3 | Vinery balance numbers (D5) | Decided (A, 2026-10-19) | A: 1.5.5 barrel / press / growth defaults, pack ageing pace (16 days a year, 2 years a level, now months via `[time]`); mead's juice cost is moot (mead removed) | alcohol/vineryport #9 | [alcohol.md](../alcohol.md) B5 D5, [time.md](../time.md) |
+| 4 | Grape stomping yield | Decided (A, 2026-10-19) | A: 12 grapes, 4 stomps, 4 bottles (scratchpad); B: keep 1.5.5's 12 stomps | alcohol/vineryport #9 | [alcohol.md](../alcohol.md) B7.14, VB-10 |
+| 5 | Foundation, village houses, hanging sign, rotten cherry, bamboo racks (D7, D8, D9, D10, D12) | Decided (A, 2026-10-19) | A: bundled / skip / drop / keep at 0.15 / keep from `quark:bamboo_planks`; B for each in B5 | none | [alcohol.md](../alcohol.md) B5 |
+| 9 | Scrambling on clients (4.3) and Dread Nog poison potion (4.4) | Decided (A, 2026-10-19) | A: keep the port's shape (client-side scramble settings; poison potion returning its bottle); B: 4.5.0's server-side scramble / ominous bottle | none | [alcohol.md](../alcohol.md) 4.3, 4.4 |
+| 11 | Hopper input on press and cask | Done, testing (2026-10-20): B, limited now; VN-05 / VN-08 were 1.3.10 tests and the port already refused junk, so the fix targets the jams the port still had ([alcohol.md](../alcohol.md) 10.19) | A: check VN-05 / VN-08 with the port first; B: limit now | alcohol/vineryport #7 | [vinery.md](../vinery.md) 4, VB-93, VB-94 |
+| 8 | Keg heat / cold tags (2.7) | Done, testing (your list, [alcohol.md](../alcohol.md) 10.13): furnaces, bonfires, braziers, running machines, fueled burners heat; snow, powder snow, IW thin ice / permafrost / cryosol cool; late the same day the remaining 2.7 "yes" rows (Botania blaze block; `#minecraft:ice`, Architects Palette packed ice); fridge and CFB oven not added. Tags live in `blocktags.js`; cold already works with the installed `-02`, the heat additions and running / fueled gates need Brewin' `-03` in `mods/` (its keg reads `#brewinandchewin:heat_sources`; `-02` reads FD's) | none | alcohol/brewinport #2 | [alcohol.md](../alcohol.md) 2.7, 10.13; AL-73 to AL-77 |
+
+---
+
+# largecontent
+
+Big features with their own writeup: ports, the karma system, mod additions. Alcohol moved out to its own family
+([alcohol](#alcohol)) on 2026-10-19.
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| babymobport | 1 | Baby mob backport | In Progress | new jar (`babyMobs`) | Milestone 1 BUILT 2026-10-20 ([baby_mobs.md](../baby_mobs.md)): 1.21.2 baby squid / glow squid / dolphin (5 % / 5 % / 10 % of natural spawns, 20 min growth, dolphin fish feeding, small hitbox, no drops, passive baby dolphins) with the 26.1 baby models and textures, through mixins on the vanilla classes + replacement renderers. Milestone 2: the 26.1 remodel of the 38 existing babies (models, textures, 5 baby sound sets, undead baby armour), one family at a time. User: no golden dandelion (poisonous potato does it). BM-01 to BM-08 | D4 hitbox 0.5 x 0.5 (26.2) vs 0.63; D6 Mojang textures stay pack-internal | [baby_mobs.md](../baby_mobs.md) |
+| exposureport | 2 | Exposure Catalog 1.1.2 port | Planned | new jar | On hold (user, 2026-10-01); 1230-line GUI needs a 1.19.2 rewrite; source set and mods.toml entry are empty | when to resume | [exposure.md](../exposure.md) 4 |
+| exposureport | 3 | Leftover files | Planned | none | `config/exposure-common-1.toml.bak`; Exposure-Create Compatibility resource pack off | delete | [exposure.md](../exposure.md) 4 |
+| featureporting | 2 | Tier 1 batch (KubeJS / data) | Testing | KubeJS / data | BUILT 2026-10-20 ([feature_porting.md](../feature_porting.md) 1.1): Name Tag Crafting, Copper Splashing (33), Furnace Recycle (26), Create: Generators (6), AE2 QoL Recipes (311, generated), Copper Drops (2 tables), Starter Kit (tracking.json + tag); Create Waystone Recipes was dead (Create Casing missing) and is just removed; 8 jars retired. **Book Fishing left installed on purpose**: it joins the enchanted-book loot pool rebalance. FP-08 to FP-10, FP-14 | D1 Book Fishing into the catch or a separate drop (with the loot rebalance); D6 warp stone corners | [feature_porting.md](../feature_porting.md) 1.1 |
+| featureporting | 3 | Tier 2 batch (patcherMod) | In Progress | patcherMod | DONE 2026-10-20 (patcherMod 1.1.01, [feature_porting.md](../feature_porting.md) 2.4, FP-11 to FP-13): Glowing Illagers, Comfortable Campfires (20-tick gate), Bottled Air. Left: Ice Prevents Crop Growth, Friendly Griefing (check `mobGriefing`, FP-04), Golems Are Friends, Breedable Killer Rabbit, Cherished Items, Loading Protection, Don't Void Arrows (any `AbstractArrow`), Fish On The Line, Waystones Teleport Pets, Elytra Bombing; then both-sided Death Knell, SwingThroughGrass, Ice Boat Nerf, Fuel Goes Here | D2 Ice Boat Nerf ice only or all ground; D3 Loading Protection name icon | [feature_porting.md](../feature_porting.md) 2 |
+| featureporting | 4 | Tier 3 batch | Planned | patcherMod | Responsive Shields and Forgiving Void (delete our own mixins), Easy Elytra Takeoff, Second Chance (players only), Charm of Undying, Sit | none | [feature_porting.md](../feature_porting.md) 3 |
+| featureporting | 5 | Drop Collective | Planned | mods/ | After tiers 1 to 3, 7 of 9 users are gone; Cycle Paintings and Smaller Nether Portals decide; check the 133 CurseForge-only mods for it first | whether | [feature_porting.md](../feature_porting.md) 5 |
+| featureporting | 6 | Tier 4 content mods and Survivality | Planned | patcherMod | Port only under the old namespace; Survivality one tweak at a time if it breaks something | D4 port any tier 4; D5 Survivality | [feature_porting.md](../feature_porting.md) 4, 6 |
+| cavesandchasmsport | 1 | Caverns and Chasms port | Planned | new jar | Named in the 2026-10-19 rework; nothing written yet. Port in small parts, only what's wanted. The pack runs `caverns_and_chasms-1.19.2-1.0.2.jar` (Team Abnormals, Abnormals License: see the mooblooms.md 4.0 rules before copying any asset). Start with a gap analysis like alcohol.md Part A | target version, scope, license route | none yet; scratchpad 2026-10-19 |
+| cavesandchasmsport | 2 | Tin out, nickel in | Planned | data / KubeJS | Remove tin generation; recipes and names that use tin switch to nickel | none | scratchpad 2026-10-19 |
+| karma | 1 | Karma system | Planned | docs | Writeup only for now: good and bad actions move a karma value; past a cutoff it gives good or bad luck, stronger further from neutral; per-action limits (linear / exponential decrease, hard cut-off, time cooldown) and low or high caps. Example actions in the migrated list below | everything | scratchpad 2026-10-19 (list below) |
+| mod-additions | 1 | Writeup of mods to add | Planned | docs | Sophisticated Storage, the decor mods in `disabledmods/`, Tempad | which to add | scratchpad 2026-10-19 |
+| mod-additions | 2 | Mod family tags | Planned | KubeJS | Tags per mod family: Create add-ons; Farmer's Delight add-ons (some `farmers_*`, some `*_delight`) | none | scratchpad 2026-10-19 |
+| stickynotes | 1 | Creative Labels: `face_paper` block + placed sticky notes | Planned | new jar (`creativeLabels`) | Phase 1: new in-tree mod `creative_labels` (GPLv3, root build, IN_TREE_MODS, mod_sides both); block in the air cell in front of a face, one label or up to 5 notes per face; Sticky It's curled note (6 x 5.35 px) on every side, spaced spots; spots by host shape (full / 1/16-inset faces 5, stairs bottom+back 5, sides 3, front and top 2, slabs 5 top/bottom and 2 per side, posts centre top/bottom, nothing else); floors and ceilings turn to the first placer's facing; per-note dye (leather-style mix) / open / sneak-remove / eraser wipe; 5 notes cover the face (only faces that hold 5); carpet-speed breaking of the hovered piece; explosions never remove paper, host breaks drop notes with data; dynamic baked model; WTHIT | none | [sticky_notes.md](../sticky_notes.md) 3.1 to 3.5, 3.15, SN-01 to SN-22, SN-47 |
+| stickynotes | 2 | Creative Labels: note items, screen, item labels, eraser, tooltips | Planned | new jar (`creativeLabels`) | Phase 2: note colour like leather (`DyeableLeatherItem`; any number of notes + 1 dye in the grid, mixes over crafts; dye on placed notes), specials inverted / smile / creeper / gold (ink sac, glow berries, gunpowder, gold nugget; gold also 1 % on placing, firework), `keepSpecialColor` default on; eraser wipes text, then returns a blank note to yellow; unbreakable; JEI lists plain + 4 specials with example recipes; current donor recipes make our items; note screen with Sticky It's screen bars; item labels via inventory, anvil (1 level), off hand (each uses the note; one per click, no drag labelling); 1 written + 8 blank notes copies to 9; labelled items blocked from crafting grids (`blockLabelledCrafting`, default on); tooltips one line each. No Create mixing recipe | none | [sticky_notes.md](../sticky_notes.md) 3.6 to 3.9, SN-23 to SN-35, SN-53 to SN-55 |
+| stickynotes | 3 | Creative Labels: labels on `face_paper` | Planned | new jar (`creativeLabels`) | Phase 3: Labels' interactions, sneak + empty hand clears, dye colours the icon (Moonlight `requestTexture` + own recolour), undyed icons in real colours (`requestFlatItemStackTexture`), pictures within 16 blocks and names within 6 (client config), labels drop blank, WTHIT `getOverride` to the host. No converter | none | [sticky_notes.md](../sticky_notes.md) 3.10, 3.11, SN-36 to SN-46 |
+| stickynotes | 4 | Donor jars with gameplay off (Sticky It, Labels) | Planned | new jar / KubeJS | Phase 4: both jars stay for their art (licences forbid redistribution), referenced and recoloured in memory (Vinery port route); old items removed from play (hidden, uncraftable; recipes kept for ours); Sticky It's tooltip handler cancelled by a mixin (the `{}` bowl bug; can ship first) | none | [sticky_notes.md](../sticky_notes.md) 3.12, 3.13, SN-48 to SN-51 |
+| stickynotes | 5 | Own art for Creative Labels, then drop both donor jars | Pinned | new jar / mods/ | Phase 5, later (user 2026-10-20): custom textures and models for 23 note colours, pen strokes, screen, eraser, label paper and icons; then remove the donor references, the in-memory pack, the jars, their mod_sides rows and the phase 4 mixin/recipe removals. Pinned until phases 1 to 4 ship | none | [sticky_notes.md](../sticky_notes.md) 3.14, SN-52 |
+| featureporting | 1 | Remove rsec | Testing | mods/ | Done in 1.0.9 (jar in `disabledmods/`); FP-06 | none | [feature_porting.md](../feature_porting.md) 2.2 |
+| exposureport | 1 | Exposure 1.9.19 port with Polaroid and Expanded | Complete | new jar | EX-11, EX-17 passed; EX-13, EX-50 and the rest pending | none | [exposure.md](../exposure.md) |
+
+Karma example actions, moved verbatim from the scratchpad:
+- Good: planting saplings (low limit); bonemeal to compost (low); trading with villagers (low); helping in raids
+  (cooldown, high); killing pillagers and witches (cooldown, low); killing the Ender Dragon (exponential decrease,
+  negative offset after x kills?); breeding animals (linear decrease to 0, low); taming pets (linear decrease to low,
+  low); playing with pets (high karma, high limit); setting pet spawn points (linear decrease to low, cooldown, high);
+  curing zombie villagers (slow linear decrease to low, high); tilling, planting, harvesting, planting flowers (high
+  limit, slow linear increase, 5 min cooldown); food pantry server feature?; writing books, signing albums (linear
+  decrease to low, high boost, high limit); taking photos (low boost, low limit); Via Romana path creation (linear
+  increase to high, high limit).
+- Bad: breaking claimed beds (small for villager-owned, large for player-owned, linear increase on repeats); being
+  mean (no cooldown, high limit: talking rude to MCA villagers, punching villagers or baby animals, killing villagers,
+  more for baby villagers and golems); pet respawning (high limit, exponential, no cooldown); killing pacifist or
+  protected mobs (exponential, high limit, 1 min cooldown: bats, dolphins, axolotls, pandas, polar bears, elephants,
+  whales, Alex's Mobs with no drops: review); killing animals (slow linear from low, 10 s cooldown, buffer of no
+  effect); igniting TNT (constant low, no cooldown); breaking a village bell (exponential, no cooldown, high);
+  breaking wild waystones (small linear if never activated, large exponential if another player activated it, and a
+  chat announcement naming the destroyer); igniting a Nether portal (failing: one large decrease with a low limit,
+  chat announcement the first time per player; succeeding: slow linear decrease, low limit, first-time announcement);
+  attacking neutral mobs (slow linear, high cap: zombie pigmen, passive spiders, hitting or looking at endermen);
+  stealing honey without a campfire (low exponential, low limit); refuelling a boat (slow linear, low limit); falling
+  into the void (exponential, 5 min cooldown, high limit); looting another player's corpse (quick exponential, high
+  limit).
+
+---
+
+# tooling
+
+| Sub | # | Change | Status | Work | Details | Decisions | Writeup |
+|---|---|---|---|---|---|---|---|
+| dictionaries | 1 | item_dict tag check runs before tags load | Bug | KubeJS | Probably reports every tag key missing (TL-01); move the tag half to `ServerEvents.tags` | none | [pack_tooling.md](../pack_tooling.md) F1 |
+| conventions | 1 | Raw `e.custom` and `e.add` against the helper rule | Planned | KubeJS | `potion_bottling.js` and `tipped_arrows.js` (`NCH.ieBottling` exists, `createEmptying` added in 1.0.8), 44 raw tag lines in `equipmenttags.js`, `physicsFromTag` in item physics, `mechanisms.js` vibrating step, `ash.js` soot scraping, `storage.js` Ender Storage, the 12 blueprint JSONs and literal shape tags in `engineeringtags.js` | none | [pack_tooling.md](../pack_tooling.md) F9, [recipe_progression.md](../recipe_progression.md) F6, [engineering.md](../engineering.md) F3 |
+| conventions | 2 | Define-once violations | Planned | KubeJS | Local redefinitions in `end.js`, `dust.js`, `redstone.js`, `cooking.js`, `cultivated_meat.js`, `ash.js`; 55 duplicate keys in `item_dict.js` (`mulch_brown` x4, `xp_block` x3, `any_sandpaper` x3, `explorers_compass` / `explore_compass`) | none | [pack_tooling.md](../pack_tooling.md) F8, [recipe_progression.md](../recipe_progression.md) F5 |
+| conventions | 3 | `global.CE` -> `global.NCH` leftovers | Planned | KubeJS | Commented-out blocks in `misc_mods.js` (from line 60; debug snippet at 280; line 208 "fix later" with a stray double comma), `resource_blocks.js` (from 257), `cooking.js` (340-764); `kubejs/archive/` has no live references | delete or keep | [recipe_progression.md](../recipe_progression.md), [recipes_cooking.md](../recipes_cooking.md) F4 |
+| conventions | 4 | Small KubeJS leftovers | Planned | KubeJS | `quest_working/produce.txt` (merged, safe to delete); `R.incomplete(...)` definitions into the item dict (`transition_items.js` line 24); 29 sequenced-assembly outputs use the generic incomplete sprite (`texture_tool.js` line 28; "incomplete textures for every sequence assembly"); `sequence_assembly_processes.js` line 51 helper TODO; `global.hasRemovedTags` never read; dispenser / smoker / cake not in `removed_items.js`; `remove_list.txt` last item `vintageimprovements:rose_gold_rod` | none | [recipe_progression.md](../recipe_progression.md) 2.2, F4 |
+| conventions | 5 | Unused `global.config` | Planned | KubeJS | `func/config.js` has no caller | delete or keep | [pack_tooling.md](../pack_tooling.md) F3 |
+| conventions | 6 | Test recipes shipped | Planned | KubeJS | `metal_test_recipes.js`, `wood_test_recipes.js`, `sequence_assembly_processes.js` show in JEI | keep as showcases or gate | [pack_tooling.md](../pack_tooling.md) F4 |
+| dictionaries | 2 | Block, fluid and NCH fluid tags not validated | Planned | KubeJS | `block_dict.js` ~45, `fluid_dict.js` ~162, `neoCraftHelper.js` ~383 | none | [pack_tooling.md](../pack_tooling.md) F2 |
+| dictionaries | 3 | Dictionary worklists | Planned | KubeJS | 911 candidates in `create_ie_dict_additions.txt`, 689 unmapped in `not_in_dict.txt`; redstone module still on the old dict variant | none | `kubejs/startup_scripts/todo/` |
+| patchermod-cleanup | 1 | Dead files and logs | Planned | patcherMod | `CreativeEngineeringItems.javaold`, `build.gradleold`, MDK `README.txt`, `mods.toml` placeholder text; dead blocks in `CreativeEngineering.java` and `IECompat.java`; `// TEMP diagnostic` in `PotionFluidHandlerMixin` line 62; per-call log in `IETagUtilsMixin` line 54; unused `Overwrite` imports in the three enchantment mixins | none | [mod_todo.txt](mod_todo.txt), [potions.md](../potions.md) F4 |
+| patchermod-cleanup | 2 | Banner compat needs a jar rebuild per pattern mod | Planned | tool | Both generators write patcherMod resources, so they stay out of `/cegen` | none | [fixes_compat.md](../fixes_compat.md) F5 |
+| generators-and-tests | 1 | More tools in `/cegen` | Planned | tool | 33 of 55 aren't in `generators.json`; reports like `food_catalog.py`, `stack_sizes.py`, `jei_coverage.py`, `wandering_trader_report.py`, `loot_breakdown.py`, `gen_crop_worldgen_table.py` could be | which | [pack_tooling.md](../pack_tooling.md) F5 |
+| generators-and-tests | 2 | Headless tests need this machine's caches | Planned | tool | `java_test_cp.sh` reads local ATLauncher libs and the ForgeGradle cache | none | [pack_tooling.md](../pack_tooling.md) F7 |
+| generators-and-tests | 3 | Removed items keep their recipes | Planned | KubeJS | `recipe_scan.js` only lists them | none (by design) | [pack_tooling.md](../pack_tooling.md) F10 |
+| generators-and-tests | 5 | Why the game needs generated dumps | Planned | docs / tool | Climate samples, loot data and other caches come from scripts run on `/dump*` exports. Write down the purpose of each and look at alternatives, e.g. running them on the first deploy (works, keeps the script reliance, may break when players add mods) | keep, auto-run, or compute at runtime | scratchpad 2026-10-19 |
+| generators-and-tests | 4 | Tooling tests | Complete | none | TL-01 to TL-16; DP-03 to DP-05, DP-07; R4- release checks never ticked | none | [pack_tooling.md](../pack_tooling.md), [deploy.md](../deploy.md), [plan_1.0.4.md](../plan_1.0.4.md) |

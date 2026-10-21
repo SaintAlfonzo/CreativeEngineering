@@ -9,7 +9,7 @@ ServerEvents.tags('item', e => {
 	// flour / dough cleanup
 	t.clearAll(e, [i.wheat_flour_pc, i.out_dough])
 	t.add(e, 'forge:dusts/flour', i.in_flour)
-	// cornmeal: its own flour tag, plus the "flour or cornmeal" tag pancakes, pies and cakes take (cooking.md)
+	// cornmeal: its own flour tag, plus the "flour or cornmeal" tag pancakes, pies and cakes take (TODO food/ingredients #1)
 	t.add(e, i.t_flour_corn, i.cornmeal)
 	t.add(e, i.t_flour_or_cornmeal, [i.flour, i.t_flour_corn])
 

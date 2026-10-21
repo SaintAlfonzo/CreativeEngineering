@@ -15,11 +15,6 @@ public class SoundEventRegistry {
     public static final RegistryObject<SoundEvent> DRAWER_OPEN = create("drawer_open");
     public static final RegistryObject<SoundEvent> DRAWER_CLOSE = create("drawer_close");
     // 1.3.10 sounds of the D2 keepers (defined in the 1.3.10 jar's sounds.json)
-    public static final RegistryObject<SoundEvent> KITCHEN_SINK_FAUCET = create("block.kitchen_sink.faucet");
-    public static final RegistryObject<SoundEvent> WINE_RACK_3_OPEN = create("block.wine_rack_3.open");
-    public static final RegistryObject<SoundEvent> WINE_RACK_3_CLOSE = create("block.wine_rack_3.close");
-    public static final RegistryObject<SoundEvent> WINE_RACK_5_OPEN = create("block.wine_rack_5.open");
-    public static final RegistryObject<SoundEvent> WINE_RACK_5_CLOSE = create("block.wine_rack_5.close");
 
     private static RegistryObject<SoundEvent> create(String name) {
         return SOUND_EVENTS.register(name, () -> new SoundEvent(Vinery.identifier(name)));

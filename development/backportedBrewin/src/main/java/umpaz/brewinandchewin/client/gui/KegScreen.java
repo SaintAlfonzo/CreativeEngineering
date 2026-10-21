@@ -191,7 +191,8 @@ public class KegScreen extends AbstractContainerScreen<KegMenu> implements Recip
             }
          }
 
-         this.renderComponentTooltip(pose, components, mouseX, mouseY);
+         // Port: the drink item the tank pours into goes along, so AppleSkin shows its food values
+         this.renderComponentTooltip(pose, components, mouseX, mouseY, BnCFluidItemDisplays.getFluidItemDisplay(tank));
       }
    }
 
@@ -225,6 +226,8 @@ public class KegScreen extends AbstractContainerScreen<KegMenu> implements Recip
       }
       RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
       this.blit(pose, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+      // Port (remainder_buffer.md 3.6): the leftover slot's frame, copied from the output slot's.
+      this.blit(pose, this.leftPos + 149, this.topPos + 54, 123, 54, 18, 18);
       int l = this.menu.getFermentProgressionScaled();
       this.blit(pose, this.leftPos + PROGRESS_ARROW.x(), this.topPos + PROGRESS_ARROW.y(), 176, 4, l + 1, PROGRESS_ARROW.height());
       if (this.menu.isFermenting()) {

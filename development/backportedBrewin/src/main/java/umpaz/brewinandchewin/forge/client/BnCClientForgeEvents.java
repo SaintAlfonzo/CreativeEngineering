@@ -1,17 +1,23 @@
 package umpaz.brewinandchewin.forge.client;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.ModList;
 import umpaz.brewinandchewin.client.utility.BnCClientTextUtils;
 import umpaz.brewinandchewin.common.registry.BnCEffects;
+import umpaz.brewinandchewin.common.tag.BnCTags;
+import umpaz.brewinandchewin.common.utility.BnCTextUtils;
 import umpaz.brewinandchewin.forge.client.integration.IntoxicationAppleSkinCompat;
 
 /** Client game-bus events (port of TipsyEffects and the camera half of TipsyDrunkRendererMixin). */
@@ -20,6 +26,7 @@ public class BnCClientForgeEvents {
       MinecraftForge.EVENT_BUS.addListener(BnCClientForgeEvents::onChat);
       MinecraftForge.EVENT_BUS.addListener(BnCClientForgeEvents::onNameTag);
       MinecraftForge.EVENT_BUS.addListener(BnCClientForgeEvents::onCameraAngles);
+      MinecraftForge.EVENT_BUS.addListener(BnCClientForgeEvents::onItemTooltip);
       if (ModList.get().isLoaded("appleskin")) {
          IntoxicationAppleSkinCompat.init();
       }
@@ -34,6 +41,21 @@ public class BnCClientForgeEvents {
       Component scrambled = BnCClientTextUtils.scrambleChatContent(message.serverContent());
       if (scrambled != null) {
          event.setMessage(event.getBoundChatType().decorate(scrambled));
+      }
+   }
+
+   /** Port: blocks in the keg's heat/freeze tags say so (Vinery's cold storage reads the same tags), use on its own line. */
+   private static void onItemTooltip(ItemTooltipEvent event) {
+      if (!(event.getItemStack().getItem() instanceof BlockItem item)) {
+         return;
+      }
+      BlockState state = item.getBlock().defaultBlockState();
+      if (state.is(BnCTags.Blocks.HEAT_SOURCES)) {
+         event.getToolTip().add(BnCTextUtils.getTranslation("tooltip.heat_source").withStyle(ChatFormatting.GOLD));
+         event.getToolTip().add(BnCTextUtils.getTranslation("tooltip.climate_source.use").withStyle(ChatFormatting.GOLD));
+      } else if (state.is(BnCTags.Blocks.FREEZE_SOURCES)) {
+         event.getToolTip().add(BnCTextUtils.getTranslation("tooltip.freeze_source").withStyle(ChatFormatting.AQUA));
+         event.getToolTip().add(BnCTextUtils.getTranslation("tooltip.climate_source.use").withStyle(ChatFormatting.AQUA));
       }
    }
 

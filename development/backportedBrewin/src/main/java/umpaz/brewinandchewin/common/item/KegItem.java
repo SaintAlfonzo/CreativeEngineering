@@ -54,6 +54,7 @@ public class KegItem extends BlockItem {
          BoozeItem.addFluidEffectLines(mealStack.fluid(), tooltip);
       }
       addPipeRuleLine(tooltip);
+      tooltip.add(BnCTextUtils.getTranslation("tooltip.keg.temperature").withStyle(ChatFormatting.GRAY));
    }
 
    public static void addPipeRuleLine(List<Component> tooltip) {

@@ -44,12 +44,21 @@ public final class CEConfig {
     public static final ArmorOverflow ARMOR_OVERFLOW;
     public static final Jei JEI;
     public static final GuiTitle GUI_TITLE;
+    public static final Toasts TOASTS;
     public static final Shields SHIELDS;
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
     public static final CropGrowth CROP_GROWTH;
+    public static final LeafDecay LEAF_DECAY;
+    public static final LeafPiles LEAF_PILES;
+    public static final Campfire CAMPFIRE;
+    public static final Raids RAIDS;
+    public static final BottledAir BOTTLED_AIR;
     public static final Canning CANNING;
     public static final Cooking COOKING;
+    public static final Coaster COASTER;
+    public static final Wthit WTHIT;
+    public static final Alcohol ALCOHOL;
     public static final Perf PERF;
     public static final Seasons SEASONS;
     public static final Time TIME;
@@ -58,6 +67,8 @@ public final class CEConfig {
     public static final TrashSlot TRASH_SLOT;
     public static final WanderingTrader WANDERING_TRADER;
     public static final Advancements ADVANCEMENTS;
+    public static final Effects EFFECTS;
+    public static final ModNames MOD_NAMES;
     public static final Debug DEBUG;
 
     static {
@@ -72,12 +83,21 @@ public final class CEConfig {
         ARMOR_OVERFLOW = new ArmorOverflow(builder);
         JEI = new Jei(builder);
         GUI_TITLE = new GuiTitle(builder);
+        TOASTS = new Toasts(builder);
         SHIELDS = new Shields(builder);
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
         CROP_GROWTH = new CropGrowth(builder);
+        LEAF_DECAY = new LeafDecay(builder);
+        LEAF_PILES = new LeafPiles(builder);
+        CAMPFIRE = new Campfire(builder);
+        RAIDS = new Raids(builder);
+        BOTTLED_AIR = new BottledAir(builder);
         CANNING = new Canning(builder);
         COOKING = new Cooking(builder);
+        COASTER = new Coaster(builder);
+        WTHIT = new Wthit(builder);
+        ALCOHOL = new Alcohol(builder);
         PERF = new Perf(builder);
         SEASONS = new Seasons(builder);
         TIME = new Time(builder);
@@ -86,6 +106,8 @@ public final class CEConfig {
         TRASH_SLOT = new TrashSlot(builder);
         WANDERING_TRADER = new WanderingTrader(builder);
         ADVANCEMENTS = new Advancements(builder);
+        EFFECTS = new Effects(builder);
+        MOD_NAMES = new ModNames(builder);
         DEBUG = new Debug(builder);
         COMMON_SPEC = builder.build();
     }
@@ -206,8 +228,7 @@ public final class CEConfig {
                     "How many ticks the item reports as its max use duration (bow-style hold-to-use).",
                     "The default is the same huge value vanilla's bow uses - effectively unlimited, so",
                     "the player releasing the mouse button is what actually ends the hold, not a timeout.",
-                    "Only read once, when the item is registered - a running game needs a restart to see",
-                    "a change here (not just the item's config-reload)."
+                    "Read each time the item is used, so a config reload applies it."
             ).defineInRange("useDurationTicks", 72000, 1, Integer.MAX_VALUE);
 
             requireFallFlying = b.comment(
@@ -282,6 +303,7 @@ public final class CEConfig {
         public final FelsicPiece FELSIC_AXE;
         public final FelsicPiece FELSIC_SHOVEL;
         public final FelsicPiece FELSIC_HOE;
+        public final FelsicPiece FELSIC_SHIELD;
 
         private Crafting(ForgeConfigSpec.Builder b) {
             b.push("crafting");
@@ -295,6 +317,7 @@ public final class CEConfig {
             FELSIC_AXE = new FelsicPiece(b, "felsic_axe", magicResistance, 250, 1, 3);
             FELSIC_SHOVEL = new FelsicPiece(b, "felsic_shovel", magicResistance, 250, 1, 3);
             FELSIC_HOE = new FelsicPiece(b, "felsic_hoe", magicResistance, 250, 1, 3);
+            FELSIC_SHIELD = new FelsicPiece(b, "felsic_shield", magicResistance, 250, 1, 8);
             b.pop();
         }
 
@@ -515,6 +538,188 @@ public final class CEConfig {
     }
 
     /**
+     * Leaf life range past vanilla's 7 ({@code block.LeafDecayRange}, {@code mixin/LeavesDecayRangeMixin});
+     * feature_writeup/mob_block_tweaks.md 2.5. Read on every decay check.
+     */
+    public static final class LeafDecay {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.BooleanValue onlyWhenDisturbed;
+        public final ForgeConfigSpec.IntValue maxDistance;
+        public final ForgeConfigSpec.IntValue maxSearchBlocks;
+        public final ForgeConfigSpec.IntValue decayMinTicks;
+        public final ForgeConfigSpec.IntValue decayMaxTicks;
+        public final ForgeConfigSpec.BooleanValue leafPiles;
+
+        private LeafDecay(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Natural (not player-placed) leaves decay when no log is close enough. Vanilla allows 6 blocks of",
+                    "leaf path to a log and decays on slow random ticks; big generated trees have outer leaves past",
+                    "that, which fell off on their own. Here a leaf decays shortly after a block next to it changes",
+                    "(Fast Leaf Decay, ported in), and only if a search outward through the other far-out leaves",
+                    "finds no log within maxDistance. Separated Leaves' rules (which leaves count which logs) are",
+                    "kept. Server side."
+            ).push("leaf_decay");
+
+            enabled = b.comment("Master on/off switch. Off = vanilla decay (range and slow random-tick timing).")
+                    .define("enabled", true);
+
+            onlyWhenDisturbed = b.comment(
+                    "true: random ticks never decay a natural leaf. A leaf only decays after a block next to it",
+                    "changes: when its log is cut it rechecks 4-11 ticks later, and a far-out leaf rechecks when a",
+                    "neighbour changes (so a cut tree's canopy falls away in a cascade). Trees from worldgen and",
+                    "saplings are placed without neighbour updates, so an untouched tree keeps every leaf, even ones",
+                    "past maxDistance or touching only diagonally. Cheaper than false: the range search runs only on",
+                    "a change. false: vanilla timing (random ticks), with the maxDistance range."
+            ).define("onlyWhenDisturbed", true);
+
+            maxDistance = b.comment(
+                    "Longest leaf path a natural leaf may be from a log and still live once it is checked, counted in",
+                    "steps through leaves (a leaf touching the log is 1). Vanilla is 6; 6 here = vanilla range. Keeps a",
+                    "big tree whole when something next to it changes (snow, vines, a placed block). Cost: a",
+                    "chopped tree whose canopy touches a standing tree of the same kind keeps leaves out to this",
+                    "range from the standing tree."
+            ).defineInRange("maxDistance", 12, 6, 32);
+
+            maxSearchBlocks = b.comment(
+                    "Most leaf blocks one search may look at before giving up (the leaf then decays as in",
+                    "vanilla). Bounds the cost in very large canopies; at maxDistance 12 a search rarely tops a",
+                    "few hundred."
+            ).defineInRange("maxSearchBlocks", 4096, 64, 65536);
+
+            decayMinTicks = b.comment(
+                    "Fast decay delay: a leaf whose log was cut, or that sits next to a block that just became air,",
+                    "is checked a random number of ticks later between decayMinTicks and decayMaxTicks (Fast Leaf",
+                    "Decay's MinimumDecayTime / MaximumDecayTime, 4 and 11). Spreads a felled canopy over a moment."
+            ).defineInRange("decayMinTicks", 4, 1, 1200);
+            decayMaxTicks = b.comment("Upper end of the fast decay delay (raised to decayMinTicks if lower).")
+                    .defineInRange("decayMaxTicks", 11, 1, 1200);
+
+            leafPiles = b.comment(
+                    "A leaf that decays may leave an Immersive Weathering leaf pile in its place (which then falls),",
+                    "as it did with Fast Leaf Decay installed. Chance and blacklist are IW's own [leaf_piles]",
+                    "spawn_entity_from_decay / leaf_piles_blacklist. false: decayed leaves only drop their items."
+            ).define("leafPiles", true);
+
+            b.pop(); // leaf_decay
+        }
+    }
+
+    /**
+     * Immersive Weathering leaf piles: how tall a pile must be to slow you ({@code mixin/LeafPileSlowMixin},
+     * read by the WTHIT Run Speed line in {@code surface.StuckInBlock}). Read on every entity-in-pile tick.
+     */
+    public static final class LeafPiles {
+        public final ForgeConfigSpec.IntValue slowFromLayers;
+
+        private LeafPiles(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Immersive Weathering leaf piles (1-8 layers). Their slowdown is still IW's own (on/off: IW",
+                    "leaf_piles_slow; Depth Strider, foxes and bees walk through); this sets the height it starts at."
+            ).push("leaf_piles");
+
+            slowFromLayers = b.comment(
+                    "Layers a leaf pile needs before it slows walking, and before WTHIT shows a Run Speed line for it.",
+                    "IW's own rule is 4 (more than 3 layers). 9 = piles never slow. Movement is worked out on the",
+                    "client too, so keep this the same on the server and every client."
+            ).defineInRange("slowFromLayers", 4, 1, 9);
+
+            b.pop(); // leaf_piles
+        }
+    }
+
+    /**
+     * Rain puts out campfires ({@code campfire.CampfireRain}, {@code mixin/CampfireRainMixin}). Unlit Campfire
+     * still places them unlit but burns them forever with its own rain check off. Read every tick.
+     */
+    public static final class Campfire {
+        public final ForgeConfigSpec.BooleanValue rainDouses;
+        public final ForgeConfigSpec.IntValue rainOutTicks;
+        public final ForgeConfigSpec.BooleanValue comfort;
+        public final ForgeConfigSpec.BooleanValue useComfort;
+        public final ForgeConfigSpec.IntValue comfortDistance;
+        public final ForgeConfigSpec.IntValue comfortSeconds;
+        public final ForgeConfigSpec.IntValue comfortEveryTicks;
+
+        private Campfire(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "A lit campfire in #creativeengineering:campfire/rain_douses (the plain campfire; not soul or",
+                    "Tinted campfires) goes out in open rain, unless it sits on a block in",
+                    "#creativeengineering:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires",
+                    "burn forever. Server side."
+            ).push("campfire");
+
+            rainDouses = b.comment("Master on/off switch. Off = rain never puts a campfire out.")
+                    .define("rainDouses", true);
+
+            rainOutTicks = b.comment(
+                    "Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).",
+                    "Leaving the rain or being on a fuel block resets the count."
+            ).defineInRange("rainOutTicks", 160, 1, 72000);
+
+            comfort = b.comment(
+                    "Comfortable Campfires port (campfire.CampfireComfort): players near a lit campfire get Farmer's",
+                    "Delight's Comfort, refreshed while under 3 s are left."
+            ).define("comfort", true);
+            useComfort = b.comment("Comfort when Farmer's Delight is present; false (or no Farmer's Delight) = Regeneration, as the mod.")
+                    .define("useComfort", true);
+            comfortDistance = b.comment("Blocks around (and above) the campfire that count as near (the mod's 3).")
+                    .defineInRange("comfortDistance", 3, 1, 16);
+            comfortSeconds = b.comment("Seconds of Comfort per application (the mod's 5).")
+                    .defineInRange("comfortSeconds", 5, 1, 600);
+            comfortEveryTicks = b.comment(
+                    "A campfire looks for players once per this many ticks (the mod checked every tick; campfires are",
+                    "spread over the period). 1 = every tick."
+            ).defineInRange("comfortEveryTicks", 20, 1, 200);
+
+            b.pop(); // campfire
+        }
+    }
+
+    /** Glowing Illagers port ({@code mixin/RaidGlowingMixin}). */
+    public static final class Raids {
+        public final ForgeConfigSpec.BooleanValue glowingRaiders;
+        public final ForgeConfigSpec.IntValue glowingAmplifier;
+
+        private Raids(ForgeConfigSpec.Builder b) {
+            b.comment("Raids (server side).").push("raids");
+
+            glowingRaiders = b.comment("Every raider a raid spawns glows for good (Glowing Illagers port).")
+                    .define("glowingRaiders", true);
+            glowingAmplifier = b.comment("Glowing amplifier (the mod used 1 = Glowing II; the level changes nothing for Glowing).")
+                    .defineInRange("glowingAmplifier", 1, 0, 255);
+
+            b.pop(); // raids
+        }
+    }
+
+    /** Bottled Air port ({@code item.BottledAir}). */
+    public static final class BottledAir {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.IntValue airPerBottle;
+        public final ForgeConfigSpec.BooleanValue noDrinkingUnderwater;
+        public final ForgeConfigSpec.BooleanValue fireEvaporates;
+        public final ForgeConfigSpec.DoubleValue bottleBreakChance;
+
+        private BottledAir(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Bottled Air port: right-click a glass bottle in water to breathe from it. The fire sources that",
+                    "evaporate the filled bottle in the other hand are #creativeengineering:bottled_air/fire_sources."
+            ).push("bottled_air");
+
+            enabled = b.define("enabled", true);
+            airPerBottle = b.comment("Air a bottle gives (vanilla's full supply is 300).").defineInRange("airPerBottle", 150, 0, 1000);
+            noDrinkingUnderwater = b.comment("A water bottle can't be drunk while under water (else it is endless air).")
+                    .define("noDrinkingUnderwater", true);
+            fireEvaporates = b.comment("A fire source in the other hand evaporates the water bottle the fill made, giving the glass bottle back.")
+                    .define("fireEvaporates", true);
+            bottleBreakChance = b.comment("Chance the glass bottle breaks when the water is evaporated.")
+                    .defineInRange("bottleBreakChance", 0.5, 0.0, 1.0);
+
+            b.pop(); // bottled_air
+        }
+    }
+
+    /**
      * Throttles for third-party mod code that the server profile (feature_writeup/perf.md section 7) found
      * hot. Each one is a mixin in {@code mixin/} that skips or spaces out work the mod does every tick;
      * the comments say what is traded away. Read live, no rejoin needed.
@@ -599,6 +804,163 @@ public final class CEConfig {
             ).define("ovenIngredientCounts", false);
 
             b.pop(); // cooking
+        }
+    }
+
+    /**
+     * Brewin' and Chewin' coaster (the port) extras: {@code compat.WthitCoaster}. Which items go on a coaster is the
+     * port's own {@code [coaster] taggedItemsOnly} in brewinandchewin-common.toml; feature_writeup/alcohol.md 12.
+     */
+    public static final class Coaster {
+        public final ForgeConfigSpec.BooleanValue wthit;
+
+        private Coaster(ForgeConfigSpec.Builder b) {
+            b.comment("Brewin' and Chewin' coasters (client side).").push("coaster");
+
+            wthit = b.comment(
+                    "WTHIT lines on a coaster: 'Coaster: 3 / 4' ('(put away)' once the coaster itself was taken",
+                    "back) and one line per item on it, in the order they went on."
+            ).define("wthit", true);
+
+            b.pop(); // coaster
+        }
+    }
+
+    /**
+     * The pack's WTHIT lines that have no feature section of their own (client side, display only):
+     * {@code compat.WthitBlockModelIcon}, {@code compat.WthitHolderContents}, {@code compat.WthitHive},
+     * {@code compat.WthitStateLines}, {@code compat.WthitCampfire}, {@code compat.WthitSheetmetalTank},
+     * {@code compat.WthitKitchenStation}. Every change to WTHIT's overlay has a switch here.
+     * feature_writeup/wthit_lines.md. Each is also a WTHIT plugin toggle (config/waila/plugin_toggle.json5).
+     */
+    public static final class Wthit {
+        public final ForgeConfigSpec.BooleanValue iconBlockModel;
+        public final ForgeConfigSpec.BooleanValue iconForgePick;
+        public final ForgeConfigSpec.BooleanValue iconSubstitutes;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> iconExclude;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> iconItems;
+        public final ForgeConfigSpec.BooleanValue holderContents;
+        public final ForgeConfigSpec.BooleanValue holderPotionEffects;
+        public final ForgeConfigSpec.BooleanValue holderSingleName;
+        public final ForgeConfigSpec.BooleanValue hiveBees;
+        public final ForgeConfigSpec.BooleanValue hiveBeesOnTop;
+        public final ForgeConfigSpec.BooleanValue hiveHoneyMax;
+        public final ForgeConfigSpec.BooleanValue stateLines;
+        public final Map<String, ForgeConfigSpec.BooleanValue> stateLine = new java.util.LinkedHashMap<>();
+        public final ForgeConfigSpec.BooleanValue campfireBurn;
+        public final ForgeConfigSpec.BooleanValue campfireRain;
+        public final ForgeConfigSpec.BooleanValue sheetmetalTank;
+        public final ForgeConfigSpec.BooleanValue kitchenStation;
+
+        private Wthit(ForgeConfigSpec.Builder b) {
+            b.comment("WTHIT look-at overlay lines (client side). See feature_writeup/wthit_lines.md.").push("wthit");
+
+            iconBlockModel = b.comment(
+                    "Block model icons: a block with no item (or whose item draws as the purple/black missing model)",
+                    "shows its own block model in WTHIT's icon slot. Off = WTHIT's empty icon, Display Delight included."
+            ).define("iconBlockModel", true);
+
+            iconForgePick = b.comment(
+                    "Block model icons: before drawing the model, ask Forge's hit-aware pick block (what middle-click",
+                    "gives), so a block holding several things shows the part looked at (Supplementaries' skull pile)."
+            ).define("iconForgePick", true);
+
+            iconSubstitutes = b.comment("Block model icons: use the iconItems list below.").define("iconSubstitutes", true);
+
+            iconExclude = b.comment(
+                    "Block model icons: when the looked-at block has no item, or its item draws as the purple/black",
+                    "missing model, WTHIT's icon slot shows the block's own model instead. Blocks listed here keep",
+                    "WTHIT's normal icon. Entries: a namespace ('create') or a block id ('create:belt').",
+                    "/cedumpicons + tools/wthit_icon_audit.py list every block the icon applies to."
+            ).defineListAllowEmpty(List.of("iconExclude"), () -> List.of(), o -> o instanceof String s && !s.isBlank());
+
+            iconItems = b.comment(
+                    "Block model icons: an item to show for a block that has none and draws no model of its own",
+                    "(block-entity rendered). Entries 'block=item'. D&D's powered flywheel is Create's flywheel."
+            ).defineListAllowEmpty(List.of("iconItems"), () -> List.of("create_dd:powered_flywheel=create:flywheel"),
+                    o -> o instanceof String s && s.contains("="));
+
+            holderContents = b.comment(
+                    "Supplementaries jars, goblets and cages: 'Contents: Honey (6 / 12)' (fluid in bottles, with the",
+                    "jar's capacity; a goblet just 'Water'), 'Contents: Cookie (5 / 12)', or the mob inside."
+            ).define("holderContents", true);
+
+            holderPotionEffects = b.comment(
+                    "Under a potion in a jar or goblet, one line per effect with its strength and length, as the",
+                    "potion's own tooltip shows them ('Instant Health II', 'Regeneration (0:45)')."
+            ).define("holderPotionEffects", true);
+
+            holderSingleName = b.comment(
+                    "A one-bottle holder (goblet) shows just the fluid ('Contents: Water'). Off = 'Water (1 / 1)'."
+            ).define("holderSingleName", true);
+
+            hiveBees = b.comment(
+                    "Beehives and bee nests: 'Bees: 2 / 3'. The count comes from the server (WTHIT and the pack's",
+                    "mod on both sides); without it the line is left out."
+            ).define("hiveBees", true);
+
+            hiveBeesOnTop = b.comment(
+                    "The Bees line takes the place of WTHIT's occupant-names line ('2 Bee') and sits above Honey Level.",
+                    "Off = WTHIT's names line stays and Bees goes at the end."
+            ).define("hiveBeesOnTop", true);
+
+            hiveHoneyMax = b.comment(
+                    "Beehives and bee nests: WTHIT's 'Honey Level: 3' becomes 'Honey Level: 3 / 5'. Still follows",
+                    "WTHIT's own 'Show Beehive Honey Level' option."
+            ).define("hiveHoneyMax", true);
+
+            stateLines = b.comment(
+                    "Numbers kept in block state: 'Servings: 3 / 4' (feasts), 'Slices: 5 / 7' (cakes, pies), 'Eggs' and",
+                    "'Hatching' (nests, turtle eggs), 'Level' (cauldrons WTHIT has no fluid bar for), anchor charges,",
+                    "sea pickles. Rules in assets/creativeengineering/state_lines.json (override from kubejs/assets)."
+            ).define("stateLines", true);
+            b.comment("One switch per state line (a label added by an overriding state_lines.json is always on).").push("state_lines");
+            for (String[] line : new String[][] {
+                    {"servings", "'Servings: 3 / 4' (feasts, Rustic Delight pancakes)"},
+                    {"slices", "'Slices: 5 / 7' (cakes, pies, Brewin' cheese wheels and pizza)"},
+                    {"eggs", "'Eggs: 3 / 6' (nests, turtle eggs)"},
+                    {"hatch", "'Hatching: 1 / 2' (turtle, crocodile, terrapin eggs)"},
+                    {"level", "'Level: 2 / 3' (cauldrons)"},
+                    {"charges", "'Charges: 2 / 4' (respawn anchor)"},
+                    {"pickles", "'Pickles: 3 / 4' (sea pickles)"}}) {
+                stateLine.put(line[0], b.comment(line[1]).define(line[0], true));
+            }
+            b.pop(); // state_lines
+
+            campfireBurn = b.comment(
+                    "Lit campfires: Unlit Campfire's burn line ('Burns forever' / 'Burn time: 42s'). Server data."
+            ).define("campfireBurn", true);
+
+            campfireRain = b.comment(
+                    "Lit plain campfires: the pack's rain rule ('Rain: Puts it out', 'Going out in 6s', 'Safe (fuel",
+                    "block below)'). Server data."
+            ).define("campfireRain", true);
+
+            sheetmetalTank = b.comment(
+                    "IE sheetmetal tanks: the tank's fluid bar on every part, not only the two fluid ports. Server side."
+            ).define("sheetmetalTank", true);
+
+            kitchenStation = b.comment(
+                    "Applied Cooking's ME Kitchen Station: online / offline and the security terminal it is tied to."
+            ).define("kitchenStation", true);
+
+            b.pop(); // wthit
+        }
+    }
+
+    /** Alcoholic drinks (alcohol.md 11): the pack side lives in KubeJS {@code global.alcohol}; this is the client tooltip. */
+    public static final class Alcohol {
+        public final ForgeConfigSpec.BooleanValue quarkLine;
+
+        private Alcohol(ForgeConfigSpec.Builder b) {
+            b.comment("Alcoholic drinks (client side).").push("alcohol");
+
+            quarkLine = b.comment(
+                    "Replace Quark's saturation word ('Disgusting Snack') with 'Intoxicating Drink' on every food whose",
+                    "effects include Brewin' and Chewin's Intoxication (food.IntoxicatingDrinkTooltip)."
+            ).define("quarkLine", true);
+
+            b.pop(); // alcohol
         }
     }
 
@@ -708,6 +1070,8 @@ public final class CEConfig {
         public final ForgeConfigSpec.IntValue monthsPerLevel;
         public final ForgeConfigSpec.IntValue maxLevel;
         public final ForgeConfigSpec.DoubleValue cellarMultiplier;
+        public final ForgeConfigSpec.DoubleValue coldMultiplier;
+        public final ForgeConfigSpec.DoubleValue warmMultiplier;
 
         private Time(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -759,7 +1123,11 @@ public final class CEConfig {
                     .defineInRange("monthsPerLevel", 1, 1, 100);
             maxLevel = b.comment("Highest effect level from aging.").defineInRange("maxLevel", 5, 0, 10);
             b.push("boosts");
-            cellarMultiplier = b.comment("Aging speed in storage with no sky light.").defineInRange("cellarMultiplier", 2.5, 1.0, 5.0);
+            cellarMultiplier = b.comment("Aging speed in storage with no sky light.").defineInRange("cellarMultiplier", 2.0, 1.0, 5.0);
+            coldMultiplier = b.comment("Aging speed in cold storage (Brewin' keg freeze sources outweigh heat sources nearby).",
+                    "Multiplies with cellarMultiplier: a cold cellar ages at both.").defineInRange("coldMultiplier", 2.0, 1.0, 5.0);
+            warmMultiplier = b.comment("Aging speed in warm storage (Brewin' keg heat sources outweigh freeze sources nearby).",
+                    "Multiplies with cellarMultiplier; below 1.0 slows aging.").defineInRange("warmMultiplier", 0.75, 0.1, 1.0);
             b.pop();
             b.pop();
 
@@ -1009,6 +1377,33 @@ public final class CEConfig {
             ).define("logOverflow", true);
 
             b.pop(); // gui_title
+        }
+    }
+
+    /**
+     * Dials for {@code mixin/ToastFilterMixin}: drops whole families of toasts before they reach the
+     * toast queue. Client-side only; a server ignores it. Covers every player, unlike Rubidium Extra's
+     * own toggles (config/sodium-extra-options.json is a player file the deploy doesn't ship).
+     */
+    public static final class Toasts {
+        public final ForgeConfigSpec.BooleanValue tutorial;
+        public final ForgeConfigSpec.BooleanValue advancement;
+
+        private Toasts(ForgeConfigSpec.Builder b) {
+            b.comment("Pop-up toasts in the top-right corner (client side).").push("toasts");
+
+            tutorial = b.comment(
+                    "Show tutorial toasts: vanilla's (move, find a tree, punch, craft planks, open inventory,",
+                    "social interactions, bundles), Exposure's camera/lightroom hints and Fairy Lights' Clippy",
+                    "balloons. Takes effect for the next toast."
+            ).define("tutorial", false);
+
+            advancement = b.comment(
+                    "Show advancement toasts (vanilla's \"Advancement Made!\" and Patchouli's book-unlocked toast).",
+                    "The pack loads no advancements ([advancements] enabled), so this only matters if that is on."
+            ).define("advancement", false);
+
+            b.pop(); // toasts
         }
     }
 
@@ -1533,6 +1928,7 @@ public final class CEConfig {
      */
     public static final class EarthFill {
         public final ForgeConfigSpec.IntValue maxOverWater;
+        public final ForgeConfigSpec.DoubleValue maxWaterSurplus;
         public final ForgeConfigSpec.IntValue beardReach;
         public final ForgeConfigSpec.IntValue buryReach;
         public final ForgeConfigSpec.IntValue maxMoundHeight;
@@ -1567,6 +1963,16 @@ public final class CEConfig {
                     "top water layer of rivers and coasts; their beard fills under them, so that doesn't count. Per",
                     "structure: see overrides."
             ).defineInRange("maxOverWater", 24, -1, 100000);
+            maxWaterSurplus = b.comment(
+                    "The footprint's water share, checked after the limits: the bounding box of every piece with earth, in the",
+                    "layer the structure was set onto the surface with. Water there (filled by its earth or the beard, or left",
+                    "standing) against dry ground there (replaced or left alone): the structure is cancelled when the water",
+                    "outnumbers the ground by more than this share. 0.5 = water more than 50% over ground (60:40 passes, 61:39",
+                    "doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,",
+                    "whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers",
+                    "blocks of terrain (underground structures, aquifers) counts as neither. Not for structures in",
+                    "creativeengineering:water_fill/structures; an override with every limit -1 skips it too."
+            ).defineInRange("maxWaterSurplus", 0.5, -1.0, 1000.0);
             beardReach = b.comment(
                     "How deep under a piece the beard (beard_thin, beard_box, the soft beard) still fills the ground, in",
                     "blocks between the piece's bottom and the ground (air and water both: the beard fills either). Earth",
@@ -1872,6 +2278,7 @@ public final class CEConfig {
 
     public static final class MetaStructures {
         public final ForgeConfigSpec.BooleanValue log;
+        public final ForgeConfigSpec.BooleanValue avoidCoasts;
 
         private MetaStructures(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -1886,6 +2293,13 @@ public final class CEConfig {
                     "Log every meta structure start that is assembled: its anchor, each part and how many of each",
                     "fitted, or which part fell short (the slot is then the plain anchor)."
             ).define("log", false);
+            avoidCoasts = b.comment(
+                    "Keep meta structures out of coasts and rivers (the biome tag creativeengineering:coast_river: beaches,",
+                    "shores, rivers; kubejs biome_fits.json biome_tags). No part may start there or reach there with its box",
+                    "(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,",
+                    "which still spawns as it would alone. Metas in the structure tag creativeengineering:meta/coast_ok (fleets,",
+                    "flotillas, wrecks, sunken ruins) are not affected. New chunks only."
+            ).define("avoidCoasts", false);
             b.pop(); // meta_structures
         }
     }
@@ -2076,6 +2490,166 @@ public final class CEConfig {
         }
     }
 
+    /** Mod display names ({@code util.ModDisplayNames}): what JEI, WTHIT and the Mods screen call a mod. */
+    public static final class ModNames {
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> overrides;
+
+        private ModNames(ForgeConfigSpec.Builder b) {
+            b.comment("Mod display names (client side: JEI's mod line and @ search, WTHIT, the Mods screen).").push("mod_names");
+
+            overrides = b.comment(
+                    "\"modid=Name\" entries replacing the name from the mod's mods.toml. Applied at startup and when this",
+                    "file is saved; JEI and WTHIT keep the name they read first, so a change shows after a restart.",
+                    "Removing an entry gives the mod its own name back. The mod id stays the same (JEI @<modid> still works).",
+                    "Pack style (feature_writeup/names.md 12): words spaced, possessive apostrophes, '&' for and / 'n',",
+                    "Title Case, Create addons as \"Create: <name>\", no author handles, the pack's own mods end in (Alfonzo)."
+            ).defineList("overrides", List.of(
+                    "abnormals_delight=Abnormals' Delight",
+                    "apexcore=Apex Core",
+                    "appleskin=Apple Skin",
+                    "astikorcarts=Astikor Carts",
+                    "autoreglib=Auto Reg Lib",
+                    "baby_mobs=Baby Mobs (Alfonzo)",
+                    "betterdays=Better Days",
+                    "betterf3=Better F3",
+                    "boatview360=Boat View 360",
+                    "bobberdetector=Create: Bobber Detector",
+                    "brewinandchewin=Brewin' & Chewin' Backport (Alfonzo)",
+                    "canned_goods=Canned Goods",
+                    "cb_microblock=CB Microblock",
+                    "cb_multipart=CB Multipart",
+                    "cb_multipart_minecraft=CB Multipart Minecraft",
+                    "cccbridge=Create: CC Bridge",
+                    "chefsdelight=Chef's Delight",
+                    "cherisheditems=Cherished Items",
+                    "codechickenlib=Code Chicken Lib",
+                    "compressedcreativity=Create: Compressed Creativity",
+                    "conditional_mixin=Conditional Mixin",
+                    "cookingforblockheads=Cooking for Blockheads",
+                    "corpsecurioscompat=Corpse Curios Compat",
+                    "cosmeticarmorreworked=Cosmetic Armor Reworked",
+                    "create__the_salt=Create: The Salt",
+                    "create_compressed=Create: Compressed",
+                    "create_confectionery=Create: Confectionery",
+                    "create_crush_everything=Create: Recycling",
+                    "create_enchantment_industry=Create: Enchantment Industry",
+                    "create_mechanical_extruder=Create: Mechanical Extruder",
+                    "create_questing=Create: Questing",
+                    "create_things_and_misc=Create: Things & Misc",
+                    "createaddition=Create: Crafts & Additions",
+                    "createappliedkinetics=Create: Applied Kinetics",
+                    "createdeco=Create: Deco",
+                    "creategbd=Create: Guardian Beam Defense",
+                    "creategoggles=Create: Goggles",
+                    "createliquidfuel=Create: Liquid Fuel",
+                    "creative_labels=Creative Labels (Alfonzo)",
+                    "creativecore=Creative Core",
+                    "creativeengineering=Creative Engineering (Alfonzo)",
+                    "ctm=Connected Textures Mod",
+                    "darkpaintings=Dark Paintings",
+                    "deathknell=Death Knell",
+                    "design_decor=Create: Design & Decor",
+                    "do_a_barrel_roll=Do a Barrel Roll",
+                    "dont_void_arrows=Don't Void Arrows",
+                    "dragonloot=Dragon Loot",
+                    "dummmmmmy=Target Dummy",
+                    "enchdesc=Enchantment Descriptions",
+                    "enderstorage=Ender Storage",
+                    "entityculling=Entity Culling",
+                    "everythingcopper=Everything Is Copper",
+                    "exposure=Exposure Backport & Extras (Alfonzo)",
+                    "exposure_catalog=Exposure Catalog Backport (Alfonzo)",
+                    "exposure_expanded=Exposure: Expanded Backport (Alfonzo)",
+                    "exposure_extras=Exposure Extras (Alfonzo)",
+                    "exposure_polaroid=Exposure Polaroid Backport (Alfonzo)",
+                    "extendedgears=Create: Extended Cogwheels",
+                    "farmers_structures=Farmer's Structures",
+                    "fastfurnace=Fast Furnace",
+                    "fireflybushport=Firefly Bush Port",
+                    "fishontheline=Fish on the Line",
+                    "fortuneonneterite_i_ig_z=Fortune on Netherite",
+                    "foundation=Foundation Vinery Backport (Alfonzo)",
+                    "framedblocks=Framed Blocks",
+                    "geckolib3=Gecko Lib",
+                    "hobbit_house_=Hobbit House",
+                    "hopour=Hopo Better Underwater Ruins",
+                    "immediatelyfast=Immediately Fast",
+                    "incubation_additions=Incubation Additions (Alfonzo)",
+                    "ipo=Improved Pillager Outpost",
+                    "itemphysic=Item Physic",
+                    "just_enough_beacons=Just Enough Beacons",
+                    "kotlinforforge=Kotlin for Forge",
+                    "kubejsdelight=KubeJS Delight",
+                    "lightmansdiscord=Lightman's Discord Integration",
+                    "littlecontraptions=Create: Little Contraptions",
+                    "minecraft_style_paintings=Minecraft Style Paintings",
+                    "mixinsquared=Mixin Squared",
+                    "more_mooblooms=More Mooblooms (Alfonzo)",
+                    "netherportalfix=Nether Portal Fix",
+                    "nocubescreateexp=Create: Compact Exp",
+                    "notenoughanimations=Not Enough Animations",
+                    "old_swamp_fisherman_house=Old Swamp Fisherman House",
+                    "oreexcavation=Ore Excavation",
+                    "portablewardrobe=Portable Wardrobe",
+                    "projectred_core=Project Red Core",
+                    "projectred_fabrication=Project Red Fabrication",
+                    "projectred_illumination=Project Red Illumination",
+                    "projectred_integration=Project Red Integration",
+                    "projectred_transmission=Project Red Transmission",
+                    "railways=Create: Steam & Rails",
+                    "restapi=REST API",
+                    "sawmillhouse=Sawmill House",
+                    "seasonhud=Season HUD",
+                    "simplehats=Simple Hats",
+                    "sliceanddice=Create: Slice & Dice",
+                    "spectrelib=Spectre Lib",
+                    "supermartijn642configlib=Config Library",
+                    "supermartijn642corelib=Core Lib",
+                    "swingthroughgrass=Swing Through Grass",
+                    "t_and_t=Towns & Towers",
+                    "takesapillage=It Takes a Pillage",
+                    "tmted=Engineer's Delight",
+                    "transition=Transition",
+                    "trashslot=Trash Slot",
+                    "treechop=HT's Tree Chop",
+                    "villagersellanimals=Villagers Sell Animals",
+                    "vinery=Let's Do Vinery Backport (Alfonzo)",
+                    "w2w2=Waystones 2 Waypoints 2",
+                    "waila=Waila",
+                    "whitenoise=White Noise",
+                    "worldedit=World Edit",
+                    "wthit=WTHIT",
+                    "xaerolib=Xaero Lib",
+                    "xaerozoomout=Xaero Zoomout"
+            ), o -> o instanceof String str && str.indexOf('=') > 0);
+
+            b.pop(); // mod_names
+        }
+    }
+
+    /** Mob effect category overrides ({@code potion.EffectCategories}, {@code mixin/MobEffectCategoryMixin}). */
+    public static final class Effects {
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> categoryOverrides;
+
+        private Effects(ForgeConfigSpec.Builder b) {
+            b.comment("Mob effects (client and server).").push("effects");
+            categoryOverrides = b.comment(
+                    "Category overrides, \"namespace:effect=CATEGORY\" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.",
+                    "The category colours the effect's name in potion, food and gear tooltips (HARMFUL red, the other",
+                    "two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the",
+                    "effects whose own category showed the wrong colour (feature_writeup/effects.md 2.4). Read live."
+            ).defineList("categoryOverrides", List.of(
+                    "create_confectionery:rest=BENEFICIAL",
+                    "alexsmobs:debilitating_sting=HARMFUL",
+                    "alexsmobs:fear=HARMFUL",
+                    "alexsmobs:power_down=HARMFUL",
+                    "neapolitan:slipping=HARMFUL",
+                    "vinery:trippy=HARMFUL"
+            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=(BENEFICIAL|HARMFUL|NEUTRAL)"));
+            b.pop();
+        }
+    }
+
     /** Dev-instance knobs: the Python generator runner ({@code devtools/GeneratorRunner}, /cegen). */
     public static final class Debug {
         public final ForgeConfigSpec.BooleanValue runGeneratorsAtStartup;
@@ -2085,6 +2659,8 @@ public final class CEConfig {
         public final ForgeConfigSpec.IntValue startupWaitSeconds;
         public final ForgeConfigSpec.BooleanValue stateSyncEnabled;
         public final ForgeConfigSpec.IntValue stateSyncMaxDetailLines;
+        public final ForgeConfigSpec.BooleanValue dumpNamesAtTitle;
+        public final ForgeConfigSpec.BooleanValue dumpIconsAtTitle;
 
         private Debug(ForgeConfigSpec.Builder b) {
             b.comment("Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).").push("debug");
@@ -2139,6 +2715,22 @@ public final class CEConfig {
             ).defineInRange("maxDetailLines", 200, 0, 100000);
 
             b.pop(); // block_state_sync
+
+            b.comment("The names audit (feature_writeup/names.md, tools/name_audit.py).").push("names");
+            dumpNamesAtTitle = b.comment(
+                    "Client: write kubejs/exported/display_names.json (every block, item, effect... name and the pack",
+                    "that set it) and names.json the first time the title screen opens, as /cedumpnames does in game.",
+                    "For a scratch client that never joins a world. Off by default."
+            ).define("dumpAtTitle", false);
+            b.pop(); // names
+
+            b.comment("The WTHIT icon audit (feature_writeup/wthit_lines.md, tools/wthit_icon_audit.py).").push("wthit");
+            dumpIconsAtTitle = b.comment(
+                    "Client: write kubejs/exported/wthit_icons.json (every block's WTHIT icon verdict and every item",
+                    "with a missing model) the first time the title screen opens, as /cedumpicons does in game.",
+                    "For a scratch client that never joins a world. Off by default."
+            ).define("dumpIconsAtTitle", false);
+            b.pop(); // wthit
             b.pop(); // debug
         }
     }

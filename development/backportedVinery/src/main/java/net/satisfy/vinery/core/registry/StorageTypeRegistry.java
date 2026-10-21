@@ -21,7 +21,6 @@ public class StorageTypeRegistry {
         blocks.add(DARK_CHERRY_WINE_RACK_SMALL.get());
         blocks.add(DARK_CHERRY_WINE_RACK_BIG.get());
         blocks.add(DARK_CHERRY_WINE_RACK_MID.get());
-        blocks.add(DARK_CHERRY_SHELF.get());
         blocks.add(STORAGE_POT.get());
         blocks.add(ObjectRegistry.WINE_BOX.get());
         blocks.add(OAK_WINE_RACK_BIG.get());
@@ -51,8 +50,6 @@ public class StorageTypeRegistry {
         // D2 keepers that used doapi:storage in 1.3.10 (rewritten to vinery:storage on load)
         blocks.add(ObjectRegistry.SHELF.get());
         blocks.add(ObjectRegistry.FLOWER_BOX.get());
-        blocks.add(WINE_RACK_1.get());
-        blocks.add(WINE_RACK_2.get());
         blocks.add(PRAETORIAN_WINE.get());
         blocks.addAll(List.of(
                 NOIR_WINE.get(), CLARK_WINE.get(), BOLVAR_WINE.get(), STAL_WINE.get(),STRAD_WINE.get(), CHERRY_WINE.get(), KELP_CIDER.get(),
@@ -70,7 +67,6 @@ public class StorageTypeRegistry {
                 DARK_CHERRY_WINE_RACK_SMALL.get(),
                 DARK_CHERRY_WINE_RACK_BIG.get(),
                 DARK_CHERRY_WINE_RACK_MID.get(),
-                DARK_CHERRY_SHELF.get(),
                 ObjectRegistry.WINE_BOX.get(),
                 OAK_WINE_RACK_BIG.get(),
                 OAK_WINE_RACK_SMALL.get(),

@@ -21,6 +21,8 @@ public record VintageClockPacket(VintageClock.Snapshot snapshot) {
         buf.writeVarInt(s.durationPerYear());
         buf.writeVarInt(s.maxDuration());
         buf.writeVarInt(s.cellarPercent());
+        buf.writeVarInt(s.coldPercent());
+        buf.writeVarInt(s.warmPercent());
         buf.writeBoolean(s.ageOnlyInStorage());
         buf.writeBoolean(s.agingEnabled());
         buf.writeDouble(s.rate());
@@ -29,7 +31,7 @@ public record VintageClockPacket(VintageClock.Snapshot snapshot) {
 
     public static VintageClockPacket decode(FriendlyByteBuf buf) {
         return new VintageClockPacket(new VintageClock.Snapshot(buf.readLong(), buf.readDouble(), buf.readVarInt(), buf.readVarInt(),
-                buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readBoolean(), buf.readBoolean(),
+                buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readBoolean(), buf.readBoolean(),
                 buf.readDouble(), buf.readDouble()));
     }
 

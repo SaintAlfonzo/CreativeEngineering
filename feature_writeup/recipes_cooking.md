@@ -131,7 +131,7 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 - **F3. Define-once:** `cooking.js` sets `i.catfish` and `i.catfish_slice` (the dict's `catfish_slice` has the wrong
   namespace, [food.md](food.md)); `cultivated_meat.js` sets `i.culture_base` ([engineering.md](engineering.md) F8). Fix the
   dict entry and drop the local lines.
-- **F4. Old code:** lines 340-764 of `cooking.js` are the `global.CE` version, commented out (TODO 6).
+- **F4. Old code:** lines 340-764 of `cooking.js` are the `global.CE` version, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
 - **F5. Golden carrots take rose gold nuggets** through `#forge:nuggets/gold` ([recipes_metal.md](recipes_metal.md) F5).
 - **F6. Comments that don't match:** "Replace shaped recipe w/ shaped" (it's shapeless) on grilled salmon and bacon and
   eggs; "already shapeless?" on the rolls; one crab bar id is `creativeengineering/crab_bars_shapeless_manual_only` with a

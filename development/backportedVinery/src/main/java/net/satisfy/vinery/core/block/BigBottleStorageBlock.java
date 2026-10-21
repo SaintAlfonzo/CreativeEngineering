@@ -1,5 +1,11 @@
 package net.satisfy.vinery.core.block;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.TooltipFlag;
+import net.satisfy.vinery.core.wine.WineYears;
+import org.jetbrains.annotations.Nullable;
+import java.util.List;
+
 import net.satisfy.vinery.core.registry.EntityTypeRegistry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.satisfy.foundation.storage.StorageBlock;
@@ -24,7 +30,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.satisfy.vinery.core.registry.StorageTypeRegistry;
-import net.satisfy.vinery.core.registry.TagRegistry;
+import net.satisfy.vinery.core.item.DrinkBlockItem;
 import org.jetbrains.annotations.NotNull;
 
 public class BigBottleStorageBlock extends StorageBlock {
@@ -34,6 +40,8 @@ public class BigBottleStorageBlock extends StorageBlock {
     }
 
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+    /** The largest wine this block takes (alcohol.md 10.12). */
+    private static final DrinkBlockItem.BottleSize LARGEST = DrinkBlockItem.BottleSize.LARGE;
     private static final SoundEvent OPEN_SOUND = SoundEvents.WOODEN_DOOR_OPEN;
 
     @Override
@@ -57,9 +65,10 @@ public class BigBottleStorageBlock extends StorageBlock {
         builder.add(OPEN);
     }
 
+    /** alcohol.md 10.12: every size; 1.5.5 used the small / large_bottle tags. */
     @Override
     public boolean canInsertStack(ItemStack stack) {
-        return stack.is(TagRegistry.SMALL_BOTTLE) || stack.is(TagRegistry.LARGE_BOTTLE);
+        return DrinkBlockItem.BottleSize.fits(stack, LARGEST);
     }
 
     @Override
@@ -87,4 +96,11 @@ public class BigBottleStorageBlock extends StorageBlock {
         return 0;
     }
 
+    /** Port: says what speeds up wine aging here (WineYears.storageKind). */
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        DrinkBlockItem.BottleSize.addHoldsLine(tooltip, size(), LARGEST);
+        WineYears.addStorageHint(tooltip);
+    }
 }
