@@ -1,7 +1,7 @@
 # Placeable food
 
 Test prefix **PL-** · Last updated **2026-10-19** · Overall status **DEPLOYED with 1.0.6 (2026-10-14), coaster line with 1.0.8 (2026-10-19), not run in game** (catalog built from the
-2026-10-03 `/dumpfood` export + the Display Delight jar; `/dumpplaceable` not run yet; the tags and client script loaded
+live `/dumpplaceable` export of 2026-10-18, rerun 2026-10-20; the tags and client script loaded
 without errors in single player 2026-10-11)
 
 ## 0. At a glance
@@ -12,12 +12,12 @@ and "Placeable on a coaster". The lines come from five item tags generated from 
 
 | Part | Where | Status |
 |---|---|---|
-| `/dumpplaceable` (live Display Delight links + every food-looking block item) | [dump_placeable.js](../kubejs/server_scripts/_lib/dump_placeable.js), also in `/dumpall` | DEPLOYED with 1.0.6, not run |
-| Catalog + tag lists generator | [tools/placeable_catalog.py](../tools/placeable_catalog.py) → [placeable_catalog.md](placeable_catalog.md), [placeable.json](../kubejs/generation_scripts/food/placeable.json) | BUILT, run on the fallback data |
+| `/dumpplaceable` (live Display Delight links + every food-looking block item) | [dump_placeable.js](../kubejs/server_scripts/_lib/dump_placeable.js), also in `/dumpall` | DEPLOYED with 1.0.6, run 2026-10-18 |
+| Catalog + tag lists generator | [tools/placeable_catalog.py](../tools/placeable_catalog.py) → [placeable_catalog.md](placeable_catalog.md), [placeable.json](../kubejs/generation_scripts/food/placeable.json) | BUILT, run on the 2026-10-18 live dump |
 | Tags `#creativeengineering:placeable`, `placeable/sneak`, `placeable_on_plate`, `placeable_on_small_plate`, `placeable_on_coaster` | [placeabletags.js](../kubejs/server_scripts/tags/placeabletags.js) | DEPLOYED with 1.0.6 (coaster tag 2026-10-18, with 1.0.8) |
 | Tooltip lines + removal of DD / Fruits Delight placement lines | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js) | DEPLOYED with 1.0.6 (coaster line with 1.0.8) |
 
-**Counts (fallback data):** 164 items in 14 mods. 130 placeable (73 only while sneaking), 29 on a Food Plate, 11 on a Small Food Plate.
+**Counts (live dump, catalog of 2026-10-20):** 233 items in 14 mods. 132 placeable (101 only while sneaking), 29 on a Food Plate, 11 on a Small Food Plate, 152 on a coaster.
 **Open first:** the rules at the top of `tools/placeable_catalog.py` (`INCLUDE`, `EXCLUDE`, `SNEAK_ITEM_CLASSES`).
 **Refresh:** `/dumpplaceable` (or `/dumpall`) in game → `python3 tools/placeable_catalog.py` (or `/cegen run placeable_catalog`) →
 `/reload` for the tags (restart if the tool added item_dict keys).
@@ -33,7 +33,7 @@ There are three ways to put food down in this pack:
    - Right click with an empty hand takes the food back.
 2. **The food item is itself a block item.** This covers cakes, pies, feasts, pizza, popcorn and nachos boxes, Vinery wine
    and juice bottles, and Fruits Delight jams. The jams and the Mangosteen Cake use `FDBlockItem`, which places only
-   while sneaking. Vinery bottles place on a plain right click against a block; in the air you drink them.
+   while sneaking. Vinery bottles (backport 1.5.5, `DrinkBlockItem`) also place only while sneaking; in the air you drink them.
 3. **Edible plants** (carrot, potato, sweet berries, glow berries, onion, corn kernels, blueberry, cranberry,
    mulberry) plant a crop. They are listed but get no line.
 4. **Brewin' and Chewin' coaster** (backport, [alcohol.md](alcohol.md) 8.3, 12): right click a coaster to put an item on
@@ -67,7 +67,8 @@ Data flow: `/dumpplaceable` → `kubejs/exported/food/placeable.json` → `tools
 | Hamburger (FD) | Placeable on plate |
 | Cake Slice (FD) | Placeable on small plate |
 | Stuffed Potato (FD) | Placeable on plate, Placeable on small plate |
-| Cake, Apple Pie, Pizza, Cherry Wine | Placeable |
+| Cake, Apple Pie, Pizza | Placeable |
+| Cherry Wine (Vinery) | Placeable (while sneaking) |
 | Apple Jam (Fruits Delight) | Placeable (while sneaking) |
 | Carrot, Sweet Berries | none (planted) |
 
@@ -90,7 +91,7 @@ Data flow: `/dumpplaceable` → `kubejs/exported/food/placeable.json` → `tools
   black powder cakes (not food), Immersive Weathering icicle and moss clump (ordinary blocks that happen to be edible).
 - **Tag check at hover time** (`addAdvancedToAll` + `stack.hasTag`). A list fixed at script load would miss tags,
   which only arrive when you join a world. `ItemStack.is(TagKey)` is ambiguous in this Rhino build.
-- **Fallback data** (until `/dumpplaceable` runs): DD links come from the jar's loot tables and the 2026-10-03 live tags in
+- **Fallback data** (only when there is no `/dumpplaceable` export; the catalog has used the live dump since 2026-10-18): DD links come from the jar's loot tables and the 2026-10-03 live tags in
   `/dumpfood`, and food blocks from dump_food's class regex. That regex misses non-edible food blocks whose class names
   lack Cake/Pie/Feast/..., e.g. a cheese wheel. The dump's wide net lists those under "Review" in the catalog.
   Real ones go into `INCLUDE`.
@@ -117,12 +118,12 @@ Data flow: `/dumpplaceable` → `kubejs/exported/food/placeable.json` → `tools
 
 Restart the game (new item_dict keys, new client script). Hover items in JEI or the inventory.
 
-- [ ] **PL-01 Load:** `logs/latest.log` has `[placeable] placeable=130, placeable/sneak=73, placeable_on_plate=29, placeable_on_small_plate=11` and no `[placeable]` warning. No `Error occurred while handling event 'item.tooltip'`.
+- [ ] **PL-01 Load:** `logs/latest.log` has `[placeable] placeable=132, placeable/sneak=101, placeable_on_plate=29, placeable_on_small_plate=11, placeable_on_coaster=152` and no `[placeable]` warning. No `Error occurred while handling event 'item.tooltip'`.
 - [ ] **PL-02 DD placed:** hover Beef Stew. → "Placeable (while sneaking)" in gray, and no "Can be placed while sneaking" line. Sneak + right click a block top places it.
 - [ ] **PL-03 DD plate:** hover Hamburger. → "Placeable on plate" only; no "Can be plated on:" / "Food Plate" lines. Right click an empty Food Plate plates it.
 - [ ] **PL-04 DD small plate:** hover Cake Slice. → "Placeable on small plate". Right click an empty Small Food Plate plates it.
 - [ ] **PL-05 Both plates:** hover Stuffed Potato. → "Placeable on plate" and "Placeable on small plate".
-- [ ] **PL-06 Own block:** hover Cake, Apple Pie, Pizza and Cherry Wine. → "Placeable" each, no "(while sneaking)".
+- [ ] **PL-06 Own block:** hover Cake, Apple Pie and Pizza. → "Placeable" each, no "(while sneaking)". Cherry Wine → "Placeable (while sneaking)"; it places only on a sneak right click.
 - [ ] **PL-07 Jam:** hover Apple Jam. → "Placeable (while sneaking)", and Fruits Delight's "Shift right click to place down" is gone.
 - [ ] **PL-08 Not tagged:** hover Carrot, Sweet Berries, a Handcrafted plate and the Food Plate item. → No placeable line; the Food Plate still shows its name.
 - [ ] **PL-09 Dump:** run `/dumpplaceable`. → Chat reports about 50 + 29 + 11 = 90 Display Delight links. Then `python3 tools/placeable_catalog.py` prints `[dump]` and the catalog's source line says "/dumpplaceable (live)". Review the "Review" section.

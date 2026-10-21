@@ -33,6 +33,6 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 
 | Family | Briefs |
 |---|---|
-| food | [canning](food_canning.md), [meals](food_meals.md) |
+| food | [canning](food_canning.md), [drugs](food_drugs.md), [meals](food_meals.md), [placeable](food_placeable.md), [stack-sizes](food_stack-sizes.md) |
 | farming | [composting](farming_composting.md), [trees](farming_trees.md) |
 | worldgen | [locate](worldgen_locate.md), [seasons](worldgen_seasons.md) |
