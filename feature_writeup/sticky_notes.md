@@ -519,11 +519,21 @@ a choice (Q1 to Q6 in 4.2).
 
 ### 4.2 Open
 
-Nothing. O1 to O9, P1 (smile uses glow berries) and P2 (any number of notes + one dye per craft) and Q1 to Q6 are all
+Only the colourful ink idea below. O1 to O9, P1 (smile uses glow berries) and P2 (any number of notes + one dye per craft) and Q1 to Q6 are all
 settled (4.1, 3.17).
 
 Carried over, recommended and assumed unless changed: D7 (the in-game day and placer on the note screen and in WTHIT),
 L6 (Create contraptions: later).
+
+New idea, open (scratchpad 2026-10-21, [TODO](todo/TODO.md) `largecontent/stickynotes #6`): **colourful ink**, crafted
+from ancient ink + 8 different dyes. On a label it gives realistic item colours; it also works as a dye, or used in the
+world (an item with durability) gives a random dye colour per use. Open: how it sits next to phase 3's undyed icons,
+which already show real colours (3.10).
+
+The same scratchpad's sticky note list is this design and needs no new work: own logic in place of the donor mods
+(3.1), a block not an entity (3.2, 4.3), several notes per face (3.3), right-click in the inventory (3.8), a short
+multi-line tooltip with no shift-expand (3.9), WTHIT on placed paper (3.15). "Disappearing labels" is the hanging
+entity dying to any damage (2.2); `face_paper` replaces it (`largecontent/stickynotes #1`, `#3`).
 
 ### 4.3 Rejected
 

@@ -191,6 +191,13 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
 - **F9. Thunder detector filling NBT** omits `Bottle:"REGULAR"`, so splash and lingering mundane potion fluid probably
   match too (Create's fluid NBT match is partial; not checked).
 - **F10. Old code left in:** the commented-out `global.CE` copy in `resource_blocks.js` (230 lines).
+- **F11. Create add-on machines on components (scratchpad 2026-10-21).** Wanted: mechanical arm on zinc components and
+  springs; helve hammer on a netherite block and mechanical components; centrifuge, curving press and coiler on zinc
+  components; compressor on copper components; extruder on netherite components; laser cutter on a lens, precision
+  mechanism, diamond and brass components, with a new laser assembly (sequenced assembly / blueprint); rotation speed
+  controller on brass components (double output for the brass craft, plus an expensive brassless recipe with complex
+  components); sequenced gearshift on zinc and brass components, double output. Check the vibration table recipe. The
+  note "laser cut metal blocks to ..." was left unfinished. In [TODO](todo/TODO.md) `recipes/engineering #6`.
 
 ### Known limits
 

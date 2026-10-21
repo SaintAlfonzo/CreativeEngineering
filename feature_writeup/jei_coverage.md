@@ -188,6 +188,9 @@ No crafting recipe has an ingredient that resolves to zero items (empty tag), so
   JEI. Cheap stand-ins if wanted.
 - Recipes for items in `global.removedItems` are hidden from JEI on purpose
   ([jeichanges.js](../kubejs/client_scripts/jeichanges.js)) and are not gaps.
+- **The other way round (scratchpad 2026-10-21):** some items are mass-generated noise rather than gaps. Hide AE2's
+  covers from JEI (a tooltip line on cables says how to make them) and look for other mass-generated items to hide.
+  [TODO](todo/TODO.md) `ui/jei-coverage #3`.
 
 ## 3. Part 2: recipe types with no JEI category
 
@@ -203,6 +206,9 @@ Not started. Candidates to sweep: right-click block/item interactions (Vinery le
 cauldron-style fills), in-world transformations (Botania-style drop-ins, lightning, fire/lava, Create
 fan processing is already a category), mob-specific drops and shearing, and the pack's own KubeJS
 event handlers (`BlockEvents.rightClicked`, `ItemEvents.rightClicked`, `EntityEvents.hurt`...).
+
+Wanted first (scratchpad 2026-10-21): a JEI tab for Vinery's grape planting types (which grapes grow where).
+[TODO](todo/TODO.md) `alcohol/vineryport #23`.
 
 ## 5. Offline checks
 
