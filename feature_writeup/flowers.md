@@ -6,7 +6,7 @@
 |---|---|---|
 | Rules engine (`wild_flowers.js`): Botania palettes, pack flower patches, existing-feature scale/remove, Flower Patch mixing | BUILT 2026-10-07, offline checks pass, scratch server verified (History); DEPLOYED with pack 1.0.6 (2026-10-14); applied in single player 2026-10-11 | FL-01 to FL-14 |
 | First tuning pass (palettes for 124 land biomes, 19 flower entries, 2 existing tweaks) | BUILT | your in-game look |
-| CEConfig `[worldgen.systems] wildFlowers` | BUILT, in patcherMod 1.0.5 (ships in 1.0.5), on in the shipped config | |
+| CEConfig `[worldgen.systems] wildFlowers` | BUILT, in patcherMod 1.0.5; DEPLOYED with pack 1.0.6 (1.0.5 was never deployed), on in the shipped config | |
 | Generator + report (`tools/gen_wild_flowers.py` -> [flowers_by_biome.md](flowers_by_biome.md)) | BUILT | |
 
 - **Edit:** [wild_flowers.json](../kubejs/generation_scripts/worldgen/wild_flowers.json). Rejoin the world; only new chunks change.

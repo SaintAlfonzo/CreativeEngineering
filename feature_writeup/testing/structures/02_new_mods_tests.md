@@ -74,7 +74,7 @@ correctness part was run.
 2. **Earth fill can't see stone bases:** size and checks count only earth base blocks
    (dirt/sand/gravel/clay/path). The drum tower's 49x45 polished andesite base counts as "small, 10 earth", so it
    could hang over a cliff unchecked. Same family as the piglin camp note from M1.
-   **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): opt-in structure tag `earth_fill/stone_base` (the drum tower) counts stone and brick
+   **Fixed in source 2026-10-18** (patcherMod 1.0.7, DEPLOYED 2026-10-18): opt-in structure tag `earth_fill/stone_base` (the drum tower) counts stone and brick
    bases too. [structure_tuning.md](../../structure_tuning.md) 3.23 item 6, ST-197.
 3. **Census reports every slot "known":** `/celocate census` on fresh land showed no prediction path, so its
    false-negative column means nothing yet. Check before Phase 6.

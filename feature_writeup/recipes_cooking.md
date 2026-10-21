@@ -10,7 +10,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | Part | Status |
 |---|---|
 | One flour and one dough (Create's), from crushing, pressure chamber, explosions; dough from water or eggs; bread blocks | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
-| Cornmeal (new item): from corn and kernels on every crusher and PNC; required in tortillas and cornbread batter; a flour in pancakes, pies and cakes. Pie crust from 3 flour + milk ×2 by hand and compacting | BUILT 2026-10-19, not booted (2.1) |
+| Cornmeal (new item): from corn and kernels on every crusher and PNC; required in tortillas and cornbread batter; a flour in pancakes, pies and cakes. Pie crust from 3 flour + milk ×2 by hand and compacting | DEPLOYED (built 2026-10-19, shipped in 1.0.8; 2.1) |
 | Fluids: tomato sauce and melon juice by squeezer and bottler; sugar → `#forge:sugar` in every recipe | DEPLOYED |
 | Prepared food: about 25 meals get shapeless, sequenced assembly or mixing routes; FD's shaped ones removed | DEPLOYED |
 | Golden carrot / apple by heated mixing and arc furnace; enchanted golden apple by assembly | DEPLOYED |
@@ -20,7 +20,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 
 - **Pending:** nothing built and unshipped. RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
   need your call.
-- **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-338; 340-764 is the old
+- **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-433; 436-852 is the old
   `global.CE` copy, commented out), [golden.js](../kubejs/server_scripts/cooking/golden.js),
   [cultivated_meat.js](../kubejs/server_scripts/cooking/cultivated_meat.js).
 - **Knobs:** none. Server scripts (`/reload`).
@@ -81,7 +81,8 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen → 2; shapeless 1 |
 | Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth |
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice |
-| Scarlet pierogies | pot recipe fixed; shapeless with baked potatoes and bread |
+| Scarlet pierogi | Brewin's pot recipe with beetroot in place of nether wart (`R.replaceInput`); the pack's old pot copy and shapeless recipe were removed in 1.0.8 ([alcohol.md](alcohol.md) 8.6) |
+| Pizza, ham and cheese sandwich, quiche (Brewin') | pizza with one dough; sandwich on slices or bread, plus assemblies; quiche mushroom takes cabbage or a leaf, plus assemblies (in `cooking.js` since 2026-10-20; [alcohol.md](alcohol.md) 8.6) |
 | Pancakes ×3 (Supplementaries) | shapeless sugar, egg, milk, flour, cornmeal or rice; heated mixing ×5 with 250 mB milk |
 | Barbecue stick | shapeless or assembly with any cooked meat |
 | Crab bars | shapeless ×2 (cooked), pot ×4 (raw), assembly ×10 |
@@ -131,7 +132,7 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 - **F3. Define-once:** `cooking.js` sets `i.catfish` and `i.catfish_slice` (the dict's `catfish_slice` has the wrong
   namespace, [food.md](food.md)); `cultivated_meat.js` sets `i.culture_base` ([engineering.md](engineering.md) F8). Fix the
   dict entry and drop the local lines.
-- **F4. Old code:** lines 340-764 of `cooking.js` are the `global.CE` version, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
+- **F4. Old code:** lines 436-852 of `cooking.js` are the `global.CE` version, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
 - **F5. Golden carrots take rose gold nuggets** through `#forge:nuggets/gold` ([recipes_metal.md](recipes_metal.md) F5).
 - **F6. Comments that don't match:** "Replace shaped recipe w/ shaped" (it's shapeless) on grilled salmon and bacon and
   eggs; "already shapeless?" on the rolls; one crab bar id is `creativeengineering/crab_bars_shapeless_manual_only` with a
