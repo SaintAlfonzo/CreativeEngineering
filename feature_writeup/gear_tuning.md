@@ -15,8 +15,9 @@
 | Rocket takeoff with the upgraded dragon chestplate (two Easy Elytra Takeoff mixins, `#creativeengineering:elytra_chestplates`) | DEPLOYED (patcherMod), in-game test pending |
 | Air brake (hold-to-use elytra brake, stall; `AirBrakeHandler`) | DEPLOYED; the 2026-09-13 "does nothing" bug was fixed; in-game test pending |
 
-- **Pending:** nothing built and unshipped. GR-01 to GR-30 have never been run. Findings F1 to F13 (section 4) are
-  open; F4, F5, F10 and F13 need your call.
+- **Pending:** nothing built and unshipped. GR-01 to GR-30 have never been run. Findings F2, F4 to F6, F8 to F11
+  and F13 (section 4) are open (F1, F3, F7, F12 fixed in 1.0.9); F4, F5, F10 and F13 need your call. Build plan:
+  [briefs/gear_tuning.md](briefs/gear_tuning.md).
 - **Files to open:** [func/tune_tools.js](../kubejs/startup_scripts/func/tune_tools.js) and
   [func/tune_armor.js](../kubejs/startup_scripts/func/tune_armor.js) (the numbers),
   [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js) (the ladder recipes),
@@ -152,7 +153,8 @@ KubeJS build and silently did nothing.
 
 `Enchantments`, `StoredEnchantments`, `display` (name, lore, dye), `RepairCost`, `Unbreakable`, `AttributeModifiers`.
 
-Not kept: `Damage` (the output is at full durability), `Trim` (Armor Trims), `BlockEntityTag` (shield banners), any
+Not kept: `Damage` (the output is at full durability), `trim` (Armor Trims Backport's lowercase key, checked in the
+1.3.3 jar), `quark:RuneAttached` / `quark:RuneColor` (Quark rune glint), `BlockEntityTag` (shield banners), any
 other mod data (F5). Applies to every sequenced assembly, but only does anything when the input has one of those tags.
 
 ### 2.8 Elytra: dragon scale duplication and rocket takeoff
@@ -242,8 +244,8 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
   for sorted tiers. So echo, felsic and dragon all mine everything, and dragon's 5 is cosmetic. Check: a block in
   `forge:needs_netherite_tool` with an echo pickaxe (GR-05).
 - **F5. What the assembly drops. Your call.** Damage is not carried, so running worn gear through a step also repairs
-  it (likely fine: it's a new item). Armor Trims' `Trim` tag and shield banners are lost. Adding `Trim` (and
-  `BlockEntityTag`) to the carry list is one line each.
+  it (likely fine: it's a new item). Armor Trims' `trim` tag (lowercase), the Quark rune and shield banners are lost.
+  Adding `trim`, `quark:RuneAttached`, `quark:RuneColor` and `BlockEntityTag` to the carry list is one line each.
 - **F6. Non-damageable items in `#dragon_gear`.** The dragon shield is damageable and should stay. The dragon anvil
   (a block item) and the air brake (no durability) are skipped every pass. Harmless; drop them or leave them.
 - **F7.** CONFIRMED and FIXED 2026-10-19: Forge 43's `ConfigValue.get()` returns the default in production before load; the script now reads it on each use ([plan_1.0.9.md](plan_1.0.9.md)). **`useDurationTicks` probably never reaches the item.** `air_brake.js` line 26 reads the config at script load,
@@ -296,7 +298,7 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
 - [server_scripts/equipment/end_gear.js](../kubejs/server_scripts/equipment/end_gear.js): ladder recipes and removals.
 - [server_scripts/equipment/dragon_autorepair.js](../kubejs/server_scripts/equipment/dragon_autorepair.js): autorepair.
 - [server_scripts/tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js): `#dragon_gear`, `#elytra_chestplates`.
-- [startup_scripts/func/neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js): `cfg` (~line 630), `elytraDuplication`, `echoAssembly`, `felsicAssembly`, `dragonAssembly` (~lines 1061-1110).
+- [startup_scripts/func/neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js): `cfg` (~line 630), `elytraDuplication`, `echoAssembly`, `felsicAssembly`, `dragonAssembly` (~lines 1159-1207).
 - [startup_scripts/changes/transition_items.js](../kubejs/startup_scripts/changes/transition_items.js): the incomplete items.
 - [server_scripts/_lib/dump_gear.js](../kubejs/server_scripts/_lib/dump_gear.js): `/dumpgear`.
 - patcherMod: [gear/AirBrakeHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/AirBrakeHandler.java), [gear/ElytraDuplicationRecipe.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/ElytraDuplicationRecipe.java), [gear/ElytraDuplicationSerializers.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/ElytraDuplicationSerializers.java), [util/ElytraChestplates.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/util/ElytraChestplates.java), [util/ArmorEnchantabilityBridge.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/util/ArmorEnchantabilityBridge.java).
