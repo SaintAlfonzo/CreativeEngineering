@@ -74,9 +74,6 @@ shared one spot even though each tier has a different panel size, and it never a
 - **Rejected:** shipping `TrashSlotSaveState.default.json`. TrashSlot only reads it when the player has no
   save state at all, so it would miss every existing player, and it can't express per-tier backpacks.
 - **Rejected:** per-backpack (UUID) positions. One entry per backpack opened; the user chose per tier.
-- **Buffer rework (planned, user 2026-10-21).** Neither creative nor survival has a buffer (the TS-11 undo does not
-  count). Rework: a chest-sized (27-slot) buffer area that holds trashed items until the GUI closes and only deletes
-  them then, so anything can be taken back while the screen is open. TODO `gameplay/storage-and-item-loss #8`.
 
 ## 5. File map
 
