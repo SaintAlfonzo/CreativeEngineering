@@ -132,6 +132,8 @@ on purpose, so it can't be mistaken for the drink.
   correctly in WTHIT.
 - **Rejected: reading the food name at runtime inside `ClientEvents.lang`.** Whether other mods' lang
   is loaded by then depends on load order. The generator runs offline and gives a file you can check.
+- **Wanted rename (scratchpad 2026-10-21):** the chocolate spider eye becomes "Chocolate Night Berries", in line with
+  Canned Goods' `canned_spider_eyes`, already "Night Berries". [TODO](todo/TODO.md) `ui/names #6`.
 
 ## 5. File map
 

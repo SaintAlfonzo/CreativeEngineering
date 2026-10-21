@@ -542,6 +542,14 @@ dragon egg and spawn eggs.
   removes (3.7). Turning off `basin_cooking` in `sliceanddice-common.toml` would drop every copy.
 - **Scratch dedicated server for the dump:** the client was using 10 of 14 GB, so the dump ran in your world instead.
 
+### 4.5 Planned (scratchpad 2026-10-21)
+- **Fats and oils** ([TODO](todo/TODO.md) `food/ingredients #10`): animal fat drops only from cows, pigs and nether
+  cows (knives give more meat and fat); whales drop blubber, made into whale oil that works the same; tallow crafted
+  from animal fat (no tallow drops); animal oil removed, animal fat cooks into cooking oil, which takes animal oil's
+  crafts; more seeds into cooking oil, bottled seed oil; fish oil counts as cooking oil, more fish into fish oil.
+- **Sweets:** the single smoothie goes or becomes a type with variants (`food/sweets #5`); matcha and salmonberry ice
+  creams made not gross, ice cream parity (`food/sweets #4`); every ice food takes ice or ice blocks (`food/ingredients #5`).
+
 ## 5. File map
 
 - [dump_food.js](../kubejs/server_scripts/_lib/dump_food.js): `/dumpfood`

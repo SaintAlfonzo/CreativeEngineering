@@ -881,6 +881,14 @@ yet; each has a suggested direction for you to approve or reject.
 - **V20 Tea is in 3 biomes.** "Wet temperate" by the climate tags is swamp, Blooming Valley and Mirage Isles. Lush
   Valley and dark forest have downfall 0.8 but no wet tag; add them if you want more tea.
 
+Planned (scratchpad 2026-10-21):
+
+- **Bell pepper colours.** Check the harvest share per colour (an even split); the mod page lists more varieties than
+  red / green / yellow, maybe in a newer version ([TODO](todo/TODO.md) `farming/crops #9`).
+- **Melon and pumpkin stages.** Smaller pumpkin / melon stages before full size, maybe with the Fantasy Furniture
+  stackable pumpkin model; large 2x2 / 3x3 pumpkins are `largecontent/autumnityport #3` ([TODO](todo/TODO.md)
+  `farming/crops #10`).
+
 ## 5. File map
 
 - [config/quark-common.toml](../config/quark-common.toml): `[tweaks.simple_harvest]`, `[tweaks.hoe_harvesting]`, module switches `"Simple Harvest"`, `"Hoe Harvesting"`

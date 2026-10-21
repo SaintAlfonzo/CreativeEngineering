@@ -120,6 +120,10 @@ Settled in [can_parity.md](can_parity.md) 4; none built yet.
 
 Suggested build order: recipe changes in D-D (KubeJS only), then the golden numbers, then the Creative Canning split.
 
+**Priorities (scratchpad 2026-10-21):** can textures ([TODO](todo/TODO.md) `food/canning #13`: 48 of the 235 built cans
+have their own sprite) and can crafts (`food/canning #14`: recipes for the remaining wanted cans). Also wanted: one
+canned cake with 4 servings (`food/canning #15`, [can_parity.md](can_parity.md) 2.23).
+
 ### Known limits
 
 Listed in food.md 3.6: a grid slot with a stack of full cans opens a new one per craft; auto-feeders that call the item

@@ -362,6 +362,11 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 - Crafting patterns for the oven and bakeware are placeholders; not checked for clashes with every mod's recipes.
 - FD's `SkilletItem` held near a heat source ignores `lit`, so a cold oven counts for it (same as a cold stove).
 - Brewin kegs count a lit oven within range as heat.
+- **Bug (scratchpad 2026-10-21):** bottles and buckets waiting in the overflow buffer disappear when the output item is
+  taken out ([TODO](todo/TODO.md) `food/kitchen #14`, [remainder_buffer.md](remainder_buffer.md) 4).
+- **Baking audit wanted (scratchpad 2026-10-21):** every baked good gets an oven recipe with flour, not wheat, and no
+  leftover crafting route. Known: banana bread (remove the wheat recipe, add a baking recipe) and honey cake (add a
+  baking recipe) ([TODO](todo/TODO.md) `food/oven #6`).
 
 ## 5. File map
 
