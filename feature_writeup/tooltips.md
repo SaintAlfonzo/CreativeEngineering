@@ -22,7 +22,7 @@ keeps its own writeup.
 | Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-16 |
 | AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | patcherMod `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-17, TT-18. The other screens: next row |
 | AppleSkin food bars in the rest of the food screens: FD cooking pot, Farmer's Respite kettle, Central Kitchen cooking/brewing guides and the Oven (finished-meal slot); Brewin' keg tank (GUI, recipe book, JEI tank over the tankard); Vinery recipe book; TrashSlot; Pretty Pipes terminal; FTB Quests task/reward/description items; Wares agreement; Patchouli books; AE2 crafting tables, pattern encoding amount slots and guidebook | patcherMod `compat/MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + 17 client mixins (list in section 3); the Brewin' and Vinery ports | BUILT 2026-10-20 (patcherMod 1.1.01, Brewin' `-03`, Vinery `-04`), in `mods/`, not tested in game; TT-19 to TT-30 |
-| Brewin' and Chewin' (backport): Heating Cask / Ice Crate keg-source lines; "Placeable on a coaster"; keg drink effect lines and the pipe-rule line ("Pipes can only drain it while it isn't fermenting", only while `pipeDrainOnlyWhenIdle` is on) on the keg item, the keg GUI's tank and the JEI Fermenting result tank | tooltips.js "Food / Farmers Delight"; placeable_tooltip.js; the port (`KegItem`, `KegScreen`, JEI `FermentingRecipeCategory`) | BUILT 2026-10-18, not in `mods/` yet; [alcohol.md](alcohol.md) 8.2, 8.3, 8.7, AL-49 to AL-52, AL-64 |
+| Brewin' and Chewin' (backport): Heating Cask / Ice Crate keg-source lines; "Placeable on a coaster"; keg drink effect lines and the pipe-rule line ("Pipes can only drain it while it isn't fermenting", only while `pipeDrainOnlyWhenIdle` is on) on the keg item, the keg GUI's tank and the JEI Fermenting result tank | tooltips.js "Food / Farmers Delight"; placeable_tooltip.js; the port (`KegItem`, `KegScreen`, JEI `FermentingRecipeCategory`) | BUILT 2026-10-18, DEPLOYED with 1.0.8 (Brewin' `-02`, [plan_1.0.8.md](plan_1.0.8.md) AL); [alcohol.md](alcohol.md) 8.2, 8.3, 8.7, AL-49 to AL-52, AL-64 |
 | Alcoholic drinks: Quark's saturation word reads "Intoxicating Drink" instead of "Disgusting Snack" on every food with the Intoxication food effect; Vinery wines list their food effects | patcherMod `food/IntoxicatingDrinkTooltip` (`[alcohol] quarkLine`); the Vinery port (`DrinkBlockItem`) | BUILT 2026-10-20 (patcherMod 1.1.01), not tested; [alcohol.md](alcohol.md) 11, AL-88. The 2026-10-20 KubeJS effect-line rename (`alcohol_tooltip.js`) was retired the same day |
 | Shield Shift view "Blocks burning" / "Blocks thorns" lines | patcherMod `ShieldTooltip` ([shields.md](shields.md)) | DEPLOYED with 1.0.6; SH-04 |
 | patcherMod tooltips: tier shields, vanilla shield, echo armor set bonus, D&D jetpack crash fix | patcherMod | VERIFIED / see memories |
@@ -145,7 +145,7 @@ Examples:
 - armor effects (`armor_effects_tooltip.js`) and tool effects (`tool_effects_tooltip.js`)
 - potion buckets (`potion_buckets.js`), vanilla-style effect lines
 - tier shields and the vanilla shield (`ShieldTooltip` / `IronShieldTooltip`); the Shift view gained
-  `Blocks burning` and `Blocks thorns` Yes/No lines 2026-10-05 (built, not in `mods/`). Details and tests: [shields.md](shields.md) 2.6, SH-04
+  `Blocks burning` and `Blocks thorns` Yes/No lines 2026-10-05 (DEPLOYED with 1.0.6). Details and tests: [shields.md](shields.md) 2.6, SH-04
 - precision sawblade profile (`addAdvanced`, reads NBT)
 
 **Fixed**
@@ -275,7 +275,7 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [] Knifes- Can be used to collect straw by cutting grass
 - [] Foods- Food type tooltip (Feast, Sweets, Baked, Fruit, etc)
 - [] Cans- Needs appleskin mixin. (shanks, saturation, of single meal, standard appleskin render) x(number of meals in can)
-- [] Chalk- Right click to mark block w/ arrow, hold right click to change mark
+- [] Chalk- Right click to mark block w/ arrow, hold right click to change mark (Chalk 1.6.4 code: it is sneak + right-click that opens the symbol picker; plan in [briefs/ui_tooltips.md](briefs/ui_tooltips.md))
 - [] Pretty Pipes- Use pipe wrench w/ block in off-hand to add cover
 - [] Lunchboxes- number of slots (scratchpad 2026-10-21, [TODO](todo/TODO.md) `ui/tooltips #2`)
 - [] AE2 cables- how to make covers, once the covers are hidden from JEI (scratchpad 2026-10-21, `ui/jei-coverage #3`)

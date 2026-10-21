@@ -133,7 +133,11 @@ on purpose, so it can't be mistaken for the drink.
 - **Rejected: reading the food name at runtime inside `ClientEvents.lang`.** Whether other mods' lang
   is loaded by then depends on load order. The generator runs offline and gives a file you can check.
 - **Wanted rename (scratchpad 2026-10-21):** the chocolate spider eye becomes "Chocolate Night Berries", in line with
-  Canned Goods' `canned_spider_eyes`, already "Night Berries". [TODO](todo/TODO.md) `ui/names #6`.
+  Canned Goods' `canned_spider_eyes`, already "Night Berries". [TODO](todo/TODO.md) `ui/names #6`. Already built
+  (checked 2026-10-21): `namechanges.js` line 66 has renamed `neapolitan:chocolate_spider_eye` to "Chocolate Night
+  Berries" since 1.0.3 (`renameItem` writes the key under the item's own namespace, `neapolitan`), and the 2026-10-18
+  `/dumpfood` export already shows that name ([food_catalog.md](food_catalog.md) 399). Only an in-game look is left
+  ([briefs/ui_names.md](briefs/ui_names.md)).
 
 ## 5. File map
 
