@@ -74,7 +74,7 @@ Immersive Weathering's mulch block and nulch block recipes are removed. The mulc
 The Create saw cuts planks into every shape for the 13 species: vertical planks, stairs, fence, fence gate, door,
 trapdoor, ladder, button, pressure plate, sign, railing (1 each), slab and vertical slab (2 each). Shapes a species lacks
 are `i.na` in the table and skipped. IE's sawmill door and stairs recipes for the 9 vanilla species and Quark Engineering's
-sawmill recipes for the Quark three are removed.
+slab, log and door sawmill recipes for the Quark three are removed (its stairs recipes are not: F5).
 
 ### 2.5 Soot and torches (`ash.js`)
 
@@ -100,8 +100,12 @@ are NCH's generated ones, so they ignore counts (F1).
 - **F3. Define-once:** `ash.js` defines `i.any_animal_fat` locally (not in `item_dict.js`); `item_dict.js` itself defines
   `i.mulch_brown` four times and `i.any_bark` twice (same values).
 - **F4. Twisted wood:** its cutting-board recipe is added without removing an original ("the original also had a bug
-  here"), and it has no sawmill removal (`sawmill: false`); check JEI for a duplicate.
-- **F5. Leftover comments:** `wood_types.js` "(whatever the 4th line is below this)"; `sawdust.js` "Integrate nulch,
+  here"), and it has no sawmill removal (`sawmill: false`); check JEI for a duplicate. Jar check 2026-10-21: no mod
+  in the pack ships a twisted cutting-board recipe and IE has no twisted sawmill recipe, so there is no duplicate; the
+  real one is IE's 7 vanilla `stripped_<x>_log` sawmill recipes next to the pack's identical ones
+  ([briefs/recipes_wood.md](briefs/recipes_wood.md) #1).
+- **F5. Leftover comments:** `wood_types.js` "(whatever the 4th line is below this)" (it is Quark Engineering's
+  `sawmill/<name>/<name>_stairs`, still not removed); `sawdust.js` "Integrate nulch,
   move to compost file" ([composting.md](composting.md) F4); `bark.js` "Replace FD bark recipes with IW" only removes
   paper.
 - **F6. Sawdust everywhere:** every wooden item in the shape tags crushes to sawdust, so any modded stairs or fence in

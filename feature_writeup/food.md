@@ -1,8 +1,8 @@
 # Food: types, values, Spice of Life and canned parity
 
-Test prefix **FO-** · Last updated **2026-10-11** · Overall status **BUILT, restart pending** (the `/dumpfood` export
-ran in game: FO-01 PASSED; the food type tags need a restart because they add item_dict keys: FO-02 to FO-08; can
-recipes FO-09 to FO-13; food canning and the tuning system in 3.5 aren't built yet)
+Test prefix **FO-** · Last updated **2026-10-21** · Overall status **DEPLOYED** (types, tags, can recipes, servings,
+fried eggs shipped from 1.0.2 on, generated cans 1.0.6; FO-01 PASSED, FO-02 to FO-28 not run); the tuning system in
+3.5 and the egg migration in 3.8 aren't built. Build plan: [briefs/food_types-and-tuning.md](briefs/food_types-and-tuning.md)
 
 The full per-item reference (hunger, saturation, effects, type, Spice of Life value, canned version, recipe chains,
 canned parity) is generated: **[food_catalog.md](food_catalog.md)**. This file explains how the pieces fit, what is
@@ -20,15 +20,15 @@ per type, with per-item exceptions, and gives every can the value of what went i
 |---|---|---|
 | `/dumpfood` export | KubeJS command, `_lib/dump_food.js` | Works: ran 2026-09-28 19:24 (629 foods), FO-01 PASSED. Re-run 2026-10-02 22:13 after the 1.0.4 mods: 856 foods, 138 food blocks, 26 drinks, 27,499 recipes. Now part of `/dumpall`. Re-run 2026-10-20 23:12 on a scratch server: 1030 foods, 139 food blocks, 33 drinks, 28,031 recipes (server-side names are raw lang keys for KubeJS items; the export keeps the client names from the 10-18 dump) |
 | Food types (31) + canned map | [food_types.json](../kubejs/generation_scripts/food/food_types.json) | BUILT: 1016 foods typed, 14 excluded, 242 cans mapped to 252 sources (227 new foods typed 2026-10-02, 3.2; 5 on 2026-10-20) |
-| Type tags `#creativeengineering:food_type/...` + `#creativeengineering:canned_source` | [foodtypetags.js](../kubejs/server_scripts/tags/foodtypetags.js) | BUILT; needs a restart (216 new item_dict keys). FO-02 to FO-08 |
+| Type tags `#creativeengineering:food_type/...` + `#creativeengineering:canned_source` | [foodtypetags.js](../kubejs/server_scripts/tags/foodtypetags.js) | DEPLOYED with 1.0.2. FO-02 to FO-08 |
 | item_dict keys for the 216 foods it lacked + 32 tag keys | generated block at the end of [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | BUILT, `node --check` clean |
 | Classifier, checker and catalog | `tools/food_catalog.py` -> [food_catalog.md](food_catalog.md) | BUILT; `--check` passes |
-| Canned Goods recipes removed, new empty-can recipes | [canning.js](../kubejs/server_scripts/cooking/canning.js) | BUILT 2026-09-28, `/reload` applies it. FO-09 to FO-13 |
-| Multi-serving cans, chance can return, cans in recipes | patcherMod `food/CanServings` + `ItemStackCanServingsMixin`, CEConfig `[canning]`, [can_servings.json](../kubejs/generation_scripts/food/can_servings.json), [cantags.js](../kubejs/server_scripts/tags/cantags.js), NCH `cans` argument | BUILT 2026-09-28, jar not in mods/ yet (game was running); needs a restart. FO-14 to FO-22 |
-| Food canning: raw veggie, fruit, meat | [canning.js](../kubejs/server_scripts/cooking/canning.js), 36 cans in [cans.js](../kubejs/startup_scripts/items/cans.js) (beetroot can sprite), servings in can_servings.json | BUILT 2026-09-29, needs a restart (new items). Cooked/prepared cans not built |
+| Canned Goods recipes removed, new empty-can recipes | [canning.js](../kubejs/server_scripts/cooking/canning.js) | DEPLOYED with 1.0.2. FO-09 to FO-13 |
+| Multi-serving cans, chance can return, cans in recipes | patcherMod `food/CanServings` + `ItemStackCanServingsMixin`, CEConfig `[canning]`, [can_servings.json](../kubejs/generation_scripts/food/can_servings.json), [cantags.js](../kubejs/server_scripts/tags/cantags.js), NCH `cans` argument | DEPLOYED (1.0.2 notes "multi-serving cans"; 3.6). FO-14 to FO-22 |
+| Food canning: raw veggie, fruit, meat | [canning.js](../kubejs/server_scripts/cooking/canning.js), 36 cans in [cans.js](../kubejs/startup_scripts/items/cans.js) (beetroot can sprite), servings in can_servings.json | DEPLOYED with 1.0.2. Cooked/prepared cans: next row |
 | Food canning: cookies, cooked veggie/meat/fish, bread, salad, soup, golden | [tools/gen_can_types.py](../tools/gen_can_types.py) -> [can_types.json](../kubejs/generation_scripts/food/can_types.json); items/overrides in cans.js, recipes via `canSection()` in canning.js | BUILT 2026-10-04, 113 new cans + 13 Canned Goods cans re-valued; DEPLOYED with 1.0.6 (2026-10-14); single player 2026-10-11 logged `[cans] registered 113 generated cans`; recipes not checked in game. Pie, feast, meals, drinks, special not built |
 | Tuning system (values, effects, SoL complexity, canned parity) | design in 3.5 | Not built. Decisions D1 to D6 (4.3) first |
-| Fried egg furnace/smoker/campfire restored; cooking oil from pumpkin seeds too; own mixer ratio | [cooking.js](../kubejs/server_scripts/cooking/cooking.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js), NCH `smoking` xp/time | BUILT 2026-09-29, needs a restart (new item_dict key). FO-23 to FO-27 |
+| Fried egg furnace/smoker/campfire restored; cooking oil from pumpkin seeds too; own mixer ratio | [cooking.js](../kubejs/server_scripts/cooking/cooking.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js), NCH `smoking` xp/time | DEPLOYED with 1.0.2. FO-23 to FO-27 |
 | Vanilla egg -> `#forge:eggs` migration | list in 3.8 | TODO, not built |
 | Every raw egg stacks to 64 | now a rule of the stack size policy ([stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js), `tools/gen_stack_sizes.py`); `item_properties.js` is removed in 1.0.5 | DEPLOYED with 1.0.6; single player 2026-10-11 logged `[stack_sizes] set 1052 stack sizes`. FO-28 |
 
@@ -224,7 +224,7 @@ behind, class chain, tags, Spice of Life complexity and whether it came from the
 tags survive, outputs with chances, fluid inputs, heat, cook time, container). It also refreshes the item tag export.
 Every call into a mod class goes through `guardThrowable`, so one odd item or recipe can't end the command silently.
 
-### 3.2 Food types (built, restart pending)
+### 3.2 Food types (DEPLOYED with 1.0.2)
 
 - **Assignments** live in [food_types.json](../kubejs/generation_scripts/food/food_types.json): type -> item_dict keys,
   plus `excluded` (key -> reason) and `canned` (can key -> source keys). It sits in `generation_scripts/` beside the
@@ -292,9 +292,10 @@ The tool gets a `--report` that lists every food outside its band and seeds `ite
 `e.modify(id, item => item.setFoodProperties(food => { food.hunger(n); food.saturation(m); ... }))`. KubeJS's
 consumer form starts from the item's current properties (bytecode-checked: `new FoodBuilder(existing)`), so only the
 named fields change. Needs a restart. Changes show up in AppleSkin, the mods' own tooltips and Spice of Life's
-formula at once. Risk: `setFoodProperties` has two one-argument overloads (`FoodProperties` and a consumer), the kind
-this Rhino build calls ambiguous; prove the call in the headless Rhino harness first, fallback is a patcherMod
-accessor on `Item.foodProperties`.
+formula at once. Both one-argument overloads of `setFoodProperties` (`FoodProperties` and a consumer) work in this
+Rhino build: cans.js uses the consumer form on the Canned Goods cans and food_values.js / alcohol_drinks.js pass a
+built `FoodProperties`, and the 2026-10-20 `/dumpfood` shows their values. The consumer form keeps the old meat /
+always-edible / fast flags and effects unless the script sets them (`meat(false)` etc.).
 
 **Code-side effects are separate.** Canned Goods' procedures, Brewin' and Chewin's Tipsy, Vinery's age-scaled wines,
 Neapolitan's healing items and Farmer's Delight's hot cocoa / milk bottle act in `finishUsingItem`, not through food
@@ -419,7 +420,7 @@ each call; common setup also registers it for clients of a dedicated server.
   the butcher (`canned_food`) and the drink recipes. (Until the generated cans, 2026-10-04, none of the food
   cans had a canning recipe.)
 
-### 3.7 Cooking oil and fried eggs (built, restart pending)
+### 3.7 Cooking oil and fried eggs (DEPLOYED with 1.0.2)
 
 **What was wrong (found 2026-09-29).** Only one recipe made a fried egg: Rustic Delight's egg + cooking oil in the
 Cooking Pot (plus its Slice & Dice mixer copy). Abnormals Delight ships its own `farmersdelight:fried_egg`,
@@ -450,9 +451,12 @@ oil recipes keep their Slice & Dice copies.
 
 ### 3.8 Vanilla egg -> `#forge:eggs` migration (TODO, not built)
 
-Recipes that take `minecraft:egg` as an item don't accept the other eggs. `#forge:eggs` holds 10 items: vanilla,
-turtle, the Alex's Mobs crocodile, emu and terrapin eggs, and 5 Quark parrot eggs. From the 2026-09-28 dump
-(it can't read IE machine recipes, so rescan first):
+Recipes that take `minecraft:egg` as an item don't accept the other eggs. `#forge:eggs` holds 12 items: vanilla,
+turtle (Supplementaries), the Alex's Mobs crocodile, emu and terrapin eggs, 5 Quark parrot eggs (Quark Delight), and
+Untitled Duck Mod's duck and goose eggs (since 1.0.2). From the 2026-09-28 dump (it can't read IE machine recipes, so
+rescan first; a 2026-10-21 jar rescan, with current ids, is in
+[briefs/food_types-and-tuning.md](briefs/food_types-and-tuning.md) #6: the Brewin' 4.5.0 port already uses
+`#forge:eggs` for the omelet and egg grog, Dread Nog takes a turtle egg, and its bacon quiche id is `quiche_from_bacon`):
 
 | Recipe | Migrate? |
 |---|---|
@@ -477,9 +481,9 @@ Notes for the build:
 Since 2026-10-05 this is the `egg` rule of the stack size policy: `tools/gen_stack_sizes.py` gives every item in
 `#forge:eggs` 64, and [stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js) applies the generated
 `stack_sizes.json` (see [stack_sizes.md](stack_sizes.md)). `item_properties.js`, which did it before, is deleted on both
-machines by the 1.0.5 removals. The rule covers all 10 raw eggs in
-`#forge:eggs`: vanilla egg, turtle egg, the Alex's Mobs crocodile, emu and terrapin eggs, and the 5 Quark parrot
-eggs. They are listed by item_dict key, because tags aren't loaded yet when the startup event runs: if a mod adds an
+machines by the 1.0.5 removals. The rule covers all 12 raw eggs in
+`#forge:eggs`: vanilla egg, turtle egg, the Alex's Mobs crocodile, emu and terrapin eggs, the 5 Quark parrot
+eggs, and the Untitled Duck Mod duck and goose eggs. They are listed by item_dict key, because tags aren't loaded yet when the startup event runs: if a mod adds an
 egg to `#forge:eggs` later, rerun `tools/gen_stack_sizes.py` after a tag dump. Not changed: cooked eggs (fried eggs, boiled emu egg), the
 dragon egg and spawn eggs.
 
@@ -511,8 +515,11 @@ dragon egg and spawn eggs.
    all 23 enchanted golden foods are 8 / 8 (vanilla 4 / 1.2), worth 7 Spice of Life each.
 4. **Spice of Life config drift.** Per world, no `defaultconfigs` copy (2.3). Workspace has 31 benefit entries for
    17 thresholds. The default benefits include `attribute,generic.speed,2`, not a real attribute name (probably
-   skipped; check the log on the next start). The default complexity list names two mods that aren't installed
-   (`farmersrespite`, `largemeals`): harmless.
+   skipped; check the log on the next start). The default complexity list names two mods that weren't installed
+   then (`farmersrespite`, `largemeals`): harmless. Farmer's Respite was added 2026-10-02, so its 10 entries (black tea twice;
+   6 teas at 3, rose hip pie and coffee cake slices at 4, Blazing Chili at 5) now apply; only the 4 `largemeals` entries are dead (the jar's
+   `ComplexityParser` logs `Item is not food: largemeals:...` for each). Unknown benefit attributes are dropped
+   silently (`AttributeBenefit.createAttribute` marks them invalid, no log line).
 5. **Placed pies and non-vanilla cakes** don't count for Spice of Life when bitten from the block (only the vanilla
    cake does, as Farmer's Delight's cake slice); their slices do when eaten from the hand.
 6. **item_dict** (FIXED 2026-10-19, [plan_1.0.9.md](plan_1.0.9.md)): `i.catfish_slice` points at `alexsmobs:raw_catfish_slice`, which
@@ -581,7 +588,8 @@ Restart the game first (item_dict gained keys), then load WorldC.
   in `kubejs/exported/food/`. PASSED 2026-09-28 19:24.
 - [ ] **FO-02 tags load:** after the restart, `logs/kubejs/server.log` has
   `[food types] 842 foods in 31 types, 76 canned sources` and no `[food types]` warning (seen on the 2026-10-02
-  scratch server).
+  scratch server; food_types.json now has 1016 typed keys and 252 canned-source keys, so expect about
+  `1016 foods in 31 types, 252 canned sources`).
 - [ ] **FO-03 nested tags:** hold Raw Bacon (`farmersdelight:bacon`), `/kubejs hand` -> tags include
   `creativeengineering:food_type/raw/meat/sliced`, `.../raw/meat`, `.../raw` and `creativeengineering:food_type`.
 - [ ] **FO-04 canned source:** hold a Cooked Porkchop, `/kubejs hand` -> `creativeengineering:food_type/cooked/meat` and

@@ -19,7 +19,7 @@ The ask, from cooking.md:
 | Baking recipes: 38, from every live muffin, cookie, tart, pie and cake recipe (pot and crafting) with cooking.md's baked changes (flour, pie crust, cake base), each needing its bakeware; muffins plate on paper. Originals kept (2.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | Ingredient `count` in `creativeengineering:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
 | Muffin pot recipes on `#forge:dough` | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested. Whether this was the "not cookable" cause is unconfirmed (3.8) |
-| Crafting recipes: oven (placeholder pattern, 3.6); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
+| Crafting recipes: oven (placeholder pattern, 2.1); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | IE hammer doesn't rotate the cutting board (`#creativeengineering:hammer_no_rotate`, patcherMod `IECompat`) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no errors), not tested |
 | Dummy baking recipes (one per bakeware piece) | REMOVED 2026-10-18 (2.7) |
 
@@ -354,12 +354,14 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
   milk after that were merged, keeping the main mod's milk count. No shepherd's pie.
 - **Taking several items from one slot is opt-in** (user, 2026-10-18): `[cooking] ovenIngredientCounts`, default off.
   By default a repeated ingredient takes a slot per item (as in the FD pot), and recipes that won't fit in 6 slots
-  drop repeated items (2.6.1, a third cheaper for those 25). The scripts keep the full cost so the option restores it.
+  drop repeated items (2.6.1, a third cheaper for those 9). The scripts keep the full cost so the option restores it.
 - **Bakeware by hammering** (user, 2026-10-18): plate -> baking sheet -> muffin tin -> pie tin -> cake pan, cutting
   board or grid. The ids stay `pie_tin` / `muffin_tin` (the ask said "pie pan", "muffin pan").
 - **Heat conductors allowed** (as FD). **Furnaces aren't oven heat** (stoves-and-ovens group). Brewin's
-  `heating_cask` isn't in the tag: the pack's Brewin 2.0 jar doesn't have that block.
-- Crafting patterns for the oven and bakeware are placeholders; not checked for clashes with every mod's recipes.
+  `heating_cask` isn't in the tag. It was written when the pack's Brewin 2.0 jar had no such block; the 4.5.0 port
+  (in the pack since 1.0.8) has it, and adding it is still open ([briefs/food_oven.md](briefs/food_oven.md)).
+- The oven's crafting pattern is a placeholder (the bakeware is hammered, 2.5); not checked for clashes with every
+  mod's recipes ([briefs/food_oven.md](briefs/food_oven.md) #2).
 - FD's `SkilletItem` held near a heat source ignores `lit`, so a cold oven counts for it (same as a cold stove).
 - Brewin kegs count a lit oven within range as heat.
 - **Bug (scratchpad 2026-10-21):** bottles and buckets waiting in the overflow buffer disappear when the output item is

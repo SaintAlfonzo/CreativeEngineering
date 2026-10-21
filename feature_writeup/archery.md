@@ -9,12 +9,12 @@
 | Fletching from feathers (knife), emu feather → feathers | DEPLOYED |
 | Torch arrow on Quark's item (5 recipes), NEA's torch arrow and quiver hidden; Supplementaries quiver recipe; slingshot takes leather / hemp fabric / canvas | DEPLOYED |
 | `archery` and `bullet` blueprints | DEPLOYED; the archery blueprint needs a trader-only arrow (F3) |
-| NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; one of the three mixin methods probably doesn't apply (F6) |
+| NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; the `isDiscoverable` override (F6) fixed in 1.0.9 (SRG `m_6592_`), not yet checked in game (`pack/release #4`, `loot/tables #10`) |
 | IE armor-piercing bullets from a dragon scale (64 per scale) | DEPLOYED, **unreachable**: its blueprint category doesn't exist (F1) |
 | Dedicated-server join kick from NEA's fletching recipe book (`NockRecipeBookSync`) | DEPLOYED; belongs to fixes and compat (backlog row 10), noted here because it's NEA |
 
 - **Pending:** nothing built and unshipped. AR-01 to AR-18 have never been run. Findings F1 to F8 (section 4) are
-  open; F1, F2 and F3 need your call.
+  open (F6 fixed in 1.0.9); F1, F2 and F3 need your call.
 - **Files to open:** [archery.js](../kubejs/server_scripts/equipment/archery.js) (every arrow recipe),
   [bullets.js](../kubejs/server_scripts/equipment/bullets.js),
   [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) lines 44-105 (fletching and shaft tags),
@@ -24,8 +24,9 @@
 ## 1. Overview
 
 - **Nock Enough Arrows 1.2.0** adds about 25 special arrows, a fletching table with a head / shaft / fin recipe type
-  (`nock_enough_arrows:fletching`), a quiver, a fletching recipe-book tab, and three bow enchantments (Stockpile,
-  Recovery, Cycle). Four of its arrows (Cupid, Ethereal, Growing, Echoing) are sold by the wandering trader
+  (`nock_enough_arrows:fletching`), a quiver, a fletching recipe-book tab, and three quiver enchantments (Stockpile,
+  Recovery, Cycle; category `QUIVER`, NEA's quiver only, so in this pack they can only appear on books; jar 1.2.0
+  checked 2026-10-21). Four of its arrows (Cupid, Ethereal, Growing, Echoing) are sold by the wandering trader
   ([wandering_trader_catalog.md](wandering_trader_catalog.md)).
 - **Others:** Quark's torch arrow, Alex's Mobs' shark tooth arrow, Cloud Storage's balloon arrow, Supplementaries'
   quiver and slingshot, vanilla's arrow and spectral arrow.
@@ -116,7 +117,10 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
 - Enchantments: Stockpile, Recovery, Cycle.
   - patcherMod mixins make each one not discoverable, not appliable at the enchanting table and not allowed on books.
   - MoreJS filters drop them from the enchanting table's offers and from librarian book trades
-    ([enchants.js](../kubejs/server_scripts/magic/enchants.js)).
+    ([enchants.js](../kubejs/server_scripts/magic/enchants.js)). The trade filter only reaches vanilla's
+    `EnchantBookForEmeralds`; Dynamic Villager Trades builds librarian book offers itself from every enchantment
+    whose `isTradeable` is true, and the mixins don't override that, so DVT librarians can probably still sell the
+    three (DVT 1.2.3 `LibrarianGenerator`, read 2026-10-21; [brief](briefs/gear_enchanting.md) #1).
   - A book that still has one shows a red bold "REMOVED ITEM: DO NOT USE" line ([jeichanges.js](../kubejs/client_scripts/jeichanges.js)).
     The JEI hide for those books is commented out.
 
@@ -136,7 +140,7 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
 
 - **F1. The dragon scale armor-piercing recipe can't be made. Your call.** It uses blueprint category `projectiles`;
   no recipe in the pack makes a `{blueprint:"projectiles"}` and IE's own categories are `bullet` and `specialBullet`
-  (as far as I know; IE jar not in the repo). Fix: change the category to `bullet`, or add a `projectiles` blueprint
+  (checked 2026-10-21 in the IE 9.2.4-170 jar: IE's own armor-piercing recipe is in `bullet`). Fix: change the category to `bullet`, or add a `projectiles` blueprint
   to [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) and its duplication list.
 - **F2. Split arrow costs differ. Your call.** The grid recipe takes 6 arrows + 1 wire for 2 split arrows; the
   blueprint takes 4 arrows + 1 wire for the same 2. Pick one.
@@ -147,7 +151,7 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
   (also [gear_tuning.md](gear_tuning.md) F3 in the same file). One `global.tags.add` call per tag would do.
 - **F5. `#forge:arrow_shaft/blazing` is unused;** the explosive arrow names the blaze rod directly. Use the tag there or
   drop it.
-- **F6.** CONFIRMED and FIXED 2026-10-19: the 1.0.8 jar named the method `isDiscoverable`; 1.0.9 uses `m_6592_` ([plan_1.0.9.md](plan_1.0.9.md)). **Probably only two of the three enchantment overrides apply (unverified).** The mixins add `isDiscoverable`,
+- **F6.** CONFIRMED and FIXED 2026-10-19: the 1.0.8 jar named the method `isDiscoverable`; 1.0.9 uses `m_6592_` ([plan_1.0.9.md](plan_1.0.9.md)). The finding before the fix: **probably only two of the three enchantment overrides applied.** The mixins add `isDiscoverable`,
   `canApplyAtEnchantingTable` and `isAllowedOnBooks` without `@Overwrite` and without a refmap. The two Forge
   methods have the same name at runtime, so they work. `isDiscoverable` is a vanilla method (SRG `m_6592_`) and the
   mixin class doesn't extend `Enchantment`, so its Mojmap name is probably not remapped and the method is never
@@ -156,7 +160,8 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
   `Overwrite` imports are in [TODO](todo/TODO.md) `tooling/patchermod-cleanup #1`.
 - **F7. `bullets.js` is a stub:** an empty "Removals" section, "Hello!" log lines, one recipe (F1).
 - **F8. Supplementaries' own quiver recipe isn't removed.** If it's enabled in Supplementaries' config, JEI shows two
-  quiver recipes. Check in JEI (AR-15).
+  quiver recipes. Check in JEI (AR-15). Moot (checked 2026-10-21): `supplementaries-1.19.2-2.4.20.jar` has no crafting
+  recipe for the quiver (it is loot-only there); AR-15 only confirms that JEI shows one recipe.
 
 ### Known limits
 
@@ -178,9 +183,9 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
 - [server_scripts/tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js): `#forge:fletching`, `#forge:arrow_shaft/*`.
 - [server_scripts/magic/enchants.js](../kubejs/server_scripts/magic/enchants.js), [client_scripts/jeichanges.js](../kubejs/client_scripts/jeichanges.js): NEA enchantments.
 - [startup_scripts/items/misc_items.js](../kubejs/startup_scripts/items/misc_items.js) (`creativeengineering:arrow_fletching`), [startup_scripts/_lib/removed_items.js](../kubejs/startup_scripts/_lib/removed_items.js) (NEA quiver and torch arrow).
-- [client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) lines 582-608 and 672: one line per arrow.
-- patcherMod: [CycleEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CycleEnchantmentMixin.java), [StockpileEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StockpileEnchantmentMixin.java), [RecoveryEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/RecoveryEnchantmentMixin.java), [compat/NockRecipeBookSync.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/NockRecipeBookSync.java) (`CreativeEngineering.java` line 266).
-- `NCH.fletching` (~line 888) and `NCH.ieBlueprint` (~line 1607) in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
+- [client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) lines 592-618 and 673: one line per arrow.
+- patcherMod: [CycleEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CycleEnchantmentMixin.java), [StockpileEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StockpileEnchantmentMixin.java), [RecoveryEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/RecoveryEnchantmentMixin.java), [compat/NockRecipeBookSync.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/NockRecipeBookSync.java) (`CreativeEngineering.java` line 291).
+- `NCH.fletching` (~line 888) and `NCH.ieBlueprint` (~line 1787) in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
 - Not here: tipped arrows ([potion_buckets.md](potion_buckets.md) 2.5); the dragon bow and crossbow ([gear_tuning.md](gear_tuning.md), [armor_effects.md](armor_effects.md)).
 
 ## 6. Offline checks
@@ -214,7 +219,7 @@ replacement or a hidden item.
   workbench shows IE's cartridges.
 - [ ] **AR-13 Dragon scale bullets (F1):** JEI on armor-piercing cartridges → note the blueprint the dragon-scale recipe
   asks for; try it on the workbench with the bullet blueprint. Expected today: not available.
-- [ ] **AR-14 Enchantments gone:** enchanting table with a bow at level 30, many rolls → never Stockpile, Recovery or
+- [ ] **AR-14 Enchantments gone:** enchanting table with a book at level 30, many rolls → never Stockpile, Recovery or
   Cycle; librarians never sell them; an anvil refuses a book of one. `/give` an enchanted book with Cycle → red "REMOVED
   ITEM: DO NOT USE".
 - [ ] **AR-15 Quiver:** JEI on the Supplementaries quiver → the pack's copper recipe; note whether Supplementaries' own

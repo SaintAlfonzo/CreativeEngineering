@@ -1,6 +1,6 @@
 # BlockRunner: walk speed by surface
 
-Test prefix **BR-** · Last updated **2026-09-27** · Overall status **DEPLOYED (2026-09-27 16:45), in-game test pending; restart needed to load the latest jar and json**
+Test prefix **BR-** · Last updated **2026-09-27** · Overall status **DEPLOYED (2026-09-27 16:45; live in every pack release since, 1.0.9 on 2026-10-19), in-game tests pending**
 
 ## 0. At a glance
 
@@ -24,7 +24,7 @@ the block you're looking at.
 | Tooltips (Speed Multiplier line, camo rewrite, IP asphalt line removed) | see [tooltips.md](tooltips.md) | tests moved to TT-01..05 |
 
 **Open first:** `config/creativeengineering-common.toml` `[surface.speed]` (values),
-[blocktags.js L25-380](../kubejs/server_scripts/tags/blocktags.js#L25-L380) (tier contents),
+[blocktags.js L76-435](../kubejs/server_scripts/tags/blocktags.js#L76-L435) (tier contents),
 [patcherMod surface/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/) (Java behaviour).
 
 **Knobs:** everything is under `[surface]` in `creativeengineering-common.toml`, which shows as one
@@ -44,8 +44,8 @@ The two `copyCamo`s are independent, and the whole section reloads live when sav
 - `development/patcherMod/deploy_pending/` is deleted.
 - `pack/` manifest is regenerated.
 
-Forge adds the new `[surface.wthit] hideUntyped` key to the toml on the next launch. Only the
-dedicated server copy is still behind (4, Limits).
+Forge adds the new `[surface.wthit] hideUntyped` key to the toml on the next launch. The
+dedicated server copy was still behind then (4, Limits; caught up since).
 
 **Measuring speed in game:** `M` =
 `/attribute @s minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002`
@@ -137,12 +137,12 @@ tier first, or add a `"namespace:block": 1.2` key to the json (block-id keys alw
 
 ### 3.1 Tier building (KubeJS)
 
-Everything lives in one block in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L25-L380),
+Everything lives in one block in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L76-L435),
 in speed order:
 
-- **`var runner = {…}`** ([L34](../kubejs/server_scripts/tags/blocktags.js#L34)) names every tier and
+- **`var runner = {…}`** ([L85](../kubejs/server_scripts/tags/blocktags.js#L85)) names every tier and
   carries its default multiplier as a comment. Keep the comments in step with `SurfaceTier` defaults.
-- **Wiping the basic tiers:** `t.wipeTag(e, basicTiers)` ([L66](../kubejs/server_scripts/tags/blocktags.js#L66))
+- **Wiping the basic tiers:** `t.wipeTag(e, basicTiers)` ([L117](../kubejs/server_scripts/tags/blocktags.js#L117))
   clears the jar's seeds.
 - **Filling tiers:** each tier is one `t.addMatching(e, tier, [entries], {except})` call. Entries can be ids,
   wildcards (`'minecraft:*_concrete'`, `*` never crosses `:`), `'/regex/'`, `'#tags'` or `'@mod'`.
@@ -155,8 +155,8 @@ in speed order:
   members, because a nested tag reference can't be filtered, and it accepts `#tags` too.
   [tag_helper.js L36](../kubejs/startup_scripts/func/tag_helper.js#L36).
 - **Order matters once:** `dirt` is filled last, as "`#minecraft:dirt` minus every other tier"
-  ([L351](../kubejs/server_scripts/tags/blocktags.js#L351)).
-- **SecurityCraft copies:** `t.mirror(e, runnerTags, rename)` ([L364](../kubejs/server_scripts/tags/blocktags.js#L364),
+  ([L407](../kubejs/server_scripts/tags/blocktags.js#L407)).
+- **SecurityCraft copies:** `t.mirror(e, runnerTags, rename)` ([L420](../kubejs/server_scripts/tags/blocktags.js#L420),
   helper [tag_helper L212](../kubejs/startup_scripts/func/tag_helper.js#L212)) puts every registered
   `securitycraft:reinforced_<x>` and `securitycraft:<x>_mine` in the tier of `minecraft:<x>`
   (`<x>_ore` → `<x>_mine`). A mine with a speed of its own would give itself away. SecurityCraft's own
@@ -392,8 +392,9 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
   camera. This only matters on block edges.
 - **Speed edits need a new block:** a `[surface.speed]` change reaches BlockRunner immediately but, like
   any tier change, applies to you once you step onto another block.
-- **Server copy is stale:** `server_mods/` still has `creativeengineering-1.0.0.jar`, and the facing,
-  camo and `[surface.speed]` logic must run server-side too. The CreEngServer folder is currently in the Trash.
+- **Server copy (fixed):** was stale on 2026-09-27 (`server_mods/` held `creativeengineering-1.0.0.jar`). The
+  dedicated server has run the same patcherMod as the clients since the pack deploys resumed (1.0.9 on 2026-10-19),
+  so facing, camo and `[surface.speed]` run server-side too; BR-27 is still untested.
 - **Twigs bamboo leaves are in the `leaves` tier but can never register:** the block has no collision,
   so you always stand on the block beneath. The tier entry is harmless dead weight. The WTHIT line
   treats the block as a slow-while-inside block (0.34× at 3+ layers).
@@ -422,11 +423,11 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 ## 5. File map
 
 - Values: `config/creativeengineering-common.toml` `[surface]`; one-offs in [config/blockrunner.json](../config/blockrunner.json); client options in [config/blockrunner-client.toml](../config/blockrunner-client.toml)
-- Tier contents: [kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L25-L380)
+- Tier contents: [kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L76-L435)
 - Helpers: [kubejs/startup_scripts/func/tag_helper.js](../kubejs/startup_scripts/func/tag_helper.js) (`addMatching` L36, `_glob` L57, `wipeTag` L102, `overlaps` L188, `mirror` L212)
 - patcherMod behaviour: [surface/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/): SurfaceTier, SurfaceSpeeds, RunSpeed, StuckInBlock, WthitRunSpeed, StickyFacing, CamoSpeed, FramedCamo, CopycatsPlusCamo, CamoSpeedTooltip, SinkingRender, LastInsertedCamo, LastInsertedMaterial
 - patcherMod mixins: BlockRunnerBlockStateMixin, BlockRunnerSpeedConfigMixin, FramedDoubleCamoOrderMixin, CopycatMaterialOrderMixin (common); CameraSinkMixin, EntitySinkRenderMixin (client). All in [mixin/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/)
-- patcherMod config: [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java#L460) `Surface` (`speed`, `Sticky`, `Camouflage`, `Sinking`, `Wthit`); tooltip and SurfaceSpeeds listeners registered in [CreativeEngineering.java L121](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java#L121)
+- patcherMod config: [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java#L1144) `Surface` (`speed`, `Sticky`, `Camouflage`, `Sinking`, `Wthit`); tooltip and SurfaceSpeeds listeners registered in [CreativeEngineering.java L143, L159-161](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java#L143)
 - Text: [patcherMod lang en_us.json](../development/patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) `creativeengineering.tooltip.walk_speed.*` (item tooltip), `creativeengineering.wthit.run_speed*` and `creativeengineering.surface.tier.*` (WTHIT line)
 - Compile-only jars in `development/patcherMod/libs/`: BlockRunner, FramedBlocks, Copycats+, WTHIT
 - WTHIT plugin declaration: [waila_plugins.json](../development/patcherMod/src/main/resources/waila_plugins.json)

@@ -947,7 +947,7 @@ Blueprint's `SpawnEggItemMixin` (it only sorts `minecraft:` eggs in the creative
 **In 1.0:** each variant's egg has an info page (pool odds, food, shearing, bred from), and the "Moobloom Breeding"
 category lists the combinations as parent egg + parent egg -> calf egg with the chance (4.8).
 
-- Still planned, for 1.1
+- Still planned, for 1.1 (plan: [briefs/mobs_mooblooms.md](briefs/mobs_mooblooms.md) #2)
 - Show breeding outputs (just enough breeding?)
 - Show shearing outputs (show percentage chance of each flower, visualize entity with every possible flower on it)
 - Write better JEI info descriptions (short, to the point, human)
@@ -958,7 +958,7 @@ category lists the combinations as parent egg + parent egg -> calf egg with the 
 |---|---|
 | More Mooblooms | `development/moreMooblooms/` (README); Java in `src/main/java/com/SaintAlfonzo/more_mooblooms/`: `entity/` (Moobloom, CowFeeding, MMEntities), `variant/` (MoobloomVariant, MoobloomVariants, MoobloomBreeding), `spawn/MoobloomSpawns`, `item/MoobloomSpawnEggItem`, `client/` (renderer, model, flower layer), `compat/` (BuzzierBeesSet, `jei/`), `mixin/` (NaturalSpawnerMixin, ItemHiddenMixin, TagLoaderStripMixin, MobSunBurnMixin), `network/SyncVariantsPacket`, `MMConfig` |
 | Mod data | `src/main/resources/data/more_mooblooms/` (`moobloom_variants/`, `moobloom_breeding/`, `loot_tables/`, `tags/blocks/spawnable_on_in_dark.json`); `src/main/resources/packs/` (`more_mooblooms/witherbloom_spawns/`, `buzzier_bees/<switch>/`, one folder per compat mod) |
-| Coats | `src/main/resources/assets/more_mooblooms/textures/entity/moobloom/<variant>.png`; working copies and the flower crops in `textureswapper/moobloom/` |
+| Coats | `src/main/resources/assets/more_mooblooms/textures/entity/moobloom/<variant>.png`; working copies and the flower crops in `textureswapper/moobloom/` (a local folder, not in the git repo) |
 | Generators | `tools/gen_moobloom_variants.py` (variant table -> variant and breeding files), `development/moreMooblooms/tools/egg_colors.py` (egg colours from the coats) |
 | Checks | `tools/check_moobloom_data.py` |
 | Config | `config/more_mooblooms-common.toml` (+ `configs_edited/root_config/`) |

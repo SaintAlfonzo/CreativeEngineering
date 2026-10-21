@@ -127,7 +127,7 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | Raging `brewinandchewin:raging` | Brewin' and Chewin' (port) | N | - | N | N | Y | 2: Bloody Mary, Red Rum | | Haste, Orca's Might, Caffeinated: slight | +5% attack speed per melee hit, stacks 4 times. | Allows you to gain a 5% attack speed boost upon dealing melee damage to entities. This stacks up to 4 times. |
 | Sweet Heart `brewinandchewin:sweet_heart` | Brewin' and Chewin' (port) | N | - | N | N | Y | 2: Mead, Saccharine Rum | | Regeneration, Comfort: slight | Spends saturation to heal 1 HP per second (faster per level) at any hunger. | Allows for extra saturation based healing at any hunger level on top of the existing saturation healing. |
 | Tipsy `brewinandchewin:tipsy` | Brewin' and Chewin' (port) | N | - | N | N | Y | 16: Beer, Bloody Mary, Dread Nog, Egg Grog, +12 more | | Nausea, Trippy: slight | Screen wobble; mouse drag at III, scrambled chat at IV; delays damage. | Provides the screen with a wobble effect. At level III or higher, your mouse will have drag to it. At level IV or higher, chat sent by you, other player's chat on your end and signs will be scrambled. May delay damage, notated by orange Tipsy hearts. |
-| Sunny `buzzier_bees:sunny` | Buzzier Bees | N | - | N | N | Y (hidden in JEI) | | | Phantom Bane: slight | Acts as sunlight: undead burn, bees stay awake, phantoms leave you alone. Buttercup stew (12 s), mooblooms. | Simulates sunlight. Phantoms won't attack mobs that have the effect, bees won't sleep if they have the effect, undead that have the effect will burn |
+| Sunny `buzzier_bees:sunny` | Buzzier Bees | N | - | N | N | Y (hidden in JEI) | | | Phantom Bane: slight | Acts as sunlight: undead burn, bees stay awake, phantoms leave you alone. Buttercup stew (12 s), mooblooms: both gone in this pack, and More Mooblooms denies the effect (F7). | Simulates sunlight. Phantoms won't attack mobs that have the effect, bees won't sleep if they have the effect, undead that have the effect will burn |
 | Rest `create_confectionery:rest` | Create Confectionery | N | - | N | N | Y | 3: Bar of White Chocolate, Black Chocolate Candy, Ruby Chocolate Candy | | Phantom Bane: slight | Removes phantoms within 4 blocks every tick. Listed as harmful. | Makes phantoms disappear. |
 | Stimulation `create_confectionery:stimulation` | Create Confectionery | N | - | Y | N | Y | 3: Bar of Black Chocolate, Black Chocolate Candy, Ruby Chocolate Candy | Refreshing, Sweetening (Fruits Delight) | Refreshing: total; Sweetening: total | Clears Slowness and Mining Fatigue every tick. | Removes mining fatigue and slowness |
 | Shocked `createaddition:shocking` | Create Crafts & Additions | N | - | N | N | Y (pack) | | | Scared Still: total | Can't move at all; from a Tesla coil. | PROPOSED: Stops you moving entirely while it lasts. From standing near a Tesla coil. | Stops you moving entirely while it lasts. From standing near a Tesla coil. 
@@ -506,17 +506,23 @@ it?
   gives the whole of Phantom Bane for free from tea and coffee, which undercuts the Phantom Bane potion and the echo
   armor set bonus.
 - **F6. Luck is brewed twice.** Buzzier Bees 5.0.1 already registers awkward + four-leaf clover → Luck, Luck + redstone
-  → long, + glowstone → strong, + fermented spider eye → Bad Luck (`BBMobEffects.registerRecipes`). The pack's
-  `LUCK_POTION_MIXES` rows 1 and 2 in `potions.js` add the same two again, which probably shows twice in JEI's brewing
-  and Automatic Brewing pages (EF-05). potions.md 2.3 says "Luck had no brew"; that's out of date. Only the silverfish
-  bottle → Bad Luck row is new.
+  → long, + glowstone → strong, + fermented spider eye → Bad Luck, and Bad Luck + redstone → long, + glowstone → strong
+  (`BBMobEffects.registerRecipes`, all real `PotionBrewing.Mix` entries via Blueprint `DataUtil.addMix`; checked
+  against the 5.0.1 jar 2026-10-21). The pack's `LUCK_POTION_MIXES` rows 1, 2 and 4 in `potions.js` add three of
+  those again, which probably shows twice in JEI's brewing and Automatic Brewing pages (EF-05). potions.md 2.3 says
+  "Luck had no brew"; that's out of date. Only the silverfish bottle → Bad Luck row (row 3) is new.
 - **F7.** DECIDED 2026-10-20: keep it hidden (your call: "hide sunny"). The setting is in both `config/` and
-  `configs_edited/root_config/`. It still shows on the HUD from buttercup stew and mooblooms; removing it from the game
-  is the separate "purge sunny" item in section 7. **Sunny is hidden from JEI. Your call.** `config/jeed-client.toml` `hidden_effects = ["buzzier_bees:sunny"]`. If
+  `configs_edited/root_config/`. Correction 2026-10-21: it no longer shows anywhere. More Mooblooms (in the pack since
+  1.0.6) removes Buzzier Bees' moobloom and strips the buttercup from every tag (no Sunny stew), and its
+  `disableSunny = true` (`config/more_mooblooms-common.toml` + configs_edited) denies the effect outright, `/effect give`
+  included ([mooblooms.md](mooblooms.md) 4.11, MB-82 passed on a scratch server). That is the "purge sunny" item in
+  section 7, done. **Sunny is hidden from JEI. Your call.** `config/jeed-client.toml` `hidden_effects = ["buzzier_bees:sunny"]`. If
   that was deliberate (it's a mob-side effect), fine; otherwise remove it.
 - **F8.** DECIDED 2026-10-20: remove it. Passion fruit isn't in the game, and the drink is already hidden in JEI
-  (TODO `ui/effects #6`). **Passion Aloe Nectar does nothing.** It gives Atmospheric's Relief effect, and Atmospheric isn't installed. The
-  drink still feeds you.
+  (TODO `ui/effects #6`). **Passion Aloe Nectar does nothing.** It gives Atmospheric's Relief effect, and Atmospheric isn't installed.
+  (Corrected 2026-10-21 from the Abnormals Delight 4.1.2 jar: it has no food value either, so it does nothing at all; it is out
+  of JEI because `NectarItem` only gets a creative tab when `atmospheric` is loaded; its one recipe needs `atmospheric`.
+  Plan: [briefs/ui_effects.md](briefs/ui_effects.md).)
 - **F9.** FIXED 2026-10-19 (header now points at `MagicResistancePotions` and `CE_POTION_MIXES`). **Stale comment:** [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js) lines 19-23 say
   Magic Resistance has no potion; patcherMod's `MagicResistancePotions` added base, long and strong.
 - **F10. Exports predate the ports.** `mob_effects.json`, `potions.json` and `foods.json` are from 2026-10-18 18:30; the
@@ -601,7 +607,7 @@ it?
 - caffinated adds speed too?
   - if not, add. caffinated and phantom bane coexist, caffinated is superset of speed and phantom bane
     - implement phantom bane in caffinated same way as beacon/armor phantom bane, if that is better for performance 
-    - purge sunny from game (w/o patching the mod itself, license)
+    - purge sunny from game (w/o patching the mod itself, license) (done: More Mooblooms `disableSunny`, F7)
     - include the unbrewable effects in the writeup, but keep the brewing limited to the wine until the effect shuffle
 
 ## 8. In-game test suite

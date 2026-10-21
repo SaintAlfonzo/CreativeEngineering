@@ -142,7 +142,9 @@ Lingering `create:potion` only; one recipe pair per potion.
 
 - **Not throwable:** a bucket only bursts against a block, like placing water.
 - **Off hand does nothing** (main hand only).
-- **Cooldown 1 s** on the item, so a hotbar of buckets can't be chained faster.
+- **Cooldown 1 s** on the item, so a hotbar of buckets can't be chained faster. Probably creative only: in survival
+  the handler shrinks the (unstackable) bucket to 0 before `addCooldown(stack.getItem(), 20)`, and an empty stack's
+  `getItem()` is air (read from code 2026-10-21, not seen in game; PB-09, [gear_potion-buckets brief](briefs/gear_potion-buckets.md)).
 - **Effects stack per ring:** a mob inside several rings is re-dosed by each one; for instant effects (Harming,
   Healing) that multiplies the hit.
 
@@ -163,7 +165,7 @@ Lingering `create:potion` only; one recipe pair per potion.
 - [server_scripts/engineering/potion_bottling.js](../kubejs/server_scripts/engineering/potion_bottling.js): `bucketRecipes()`.
 - [client_scripts/potion_buckets.js](../kubejs/client_scripts/potion_buckets.js): tooltip ([tooltips.md](tooltips.md)).
 - [server_scripts/equipment/tipped_arrows.js](../kubejs/server_scripts/equipment/tipped_arrows.js): machine tipping.
-- [potion/PotionBucketDispenser.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/PotionBucketDispenser.java): dispenser (`CreativeEngineering.java` line 265).
+- [potion/PotionBucketDispenser.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/PotionBucketDispenser.java): dispenser (`CreativeEngineering.java` line 290).
 - Textures: `kubejs/assets/creativeengineering/textures/item/{potion,splash_potion,lingering_potion}_bucket[_liquid].png`; [tools/potion_bucket_texture.py](../tools/potion_bucket_texture.py).
 - `item_dict.js`: `i.ce_potion_bucket`, `i.ce_splash_potion_bucket`, `i.ce_lingering_potion_bucket`.
 
