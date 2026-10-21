@@ -211,6 +211,10 @@ the removal list of the next deploy ([deploy.md](deploy.md)), and a check that n
 - D5: Port Survivality tweaks or leave the mod?
 - D6: Warp stone recipe (1.1): Waystones' own (amethyst corners) stands now that the dead Create Waystone Recipes
   override is gone. Gate it with a pack ingredient in the corners, or leave it?
+- D7 (scratchpad 2026-10-21, [TODO](todo/TODO.md) `largecontent/featureporting #7`): backports beyond this list.
+  A trials backport (1.21 trial chambers)? Any other Alex's mods to port (Alex's Mobs, Alex's Delight and Alex's
+  Abnormalities are installed)? Unlike the tiers above these are content ports, so they go the way of the Brewin' and
+  Vinery ports (own jar, gap analysis first).
 
 ## 7. Tests
 

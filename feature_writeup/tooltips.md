@@ -277,6 +277,12 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [] Cans- Needs appleskin mixin. (shanks, saturation, of single meal, standard appleskin render) x(number of meals in can)
 - [] Chalk- Right click to mark block w/ arrow, hold right click to change mark
 - [] Pretty Pipes- Use pipe wrench w/ block in off-hand to add cover
+- [] Lunchboxes- number of slots (scratchpad 2026-10-21, [TODO](todo/TODO.md) `ui/tooltips #2`)
+- [] AE2 cables- how to make covers, once the covers are hidden from JEI (scratchpad 2026-10-21, `ui/jei-coverage #3`)
+- [] Flower pots- a label on every pot, every pot distinct (scratchpad 2026-10-21, `blocks/framed-and-decor #6`)
+
+Not a line but the tooltip box: large item tooltips should run off the bottom of the screen, not the top (scratchpad
+2026-10-21, `ui/tooltips #5`).
 
 ### Mods to Cover
 - [] Botania
