@@ -873,7 +873,7 @@ Lines go in [../kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tool
 | Recipe (upstream id) | 4.5.0 | Change |
 |---|---|---|
 | Flaxen Cheese (`fermenting/flaxen_cheese_from_milk`) | brown mushroom, pumpkin seeds, sugar / 1000 milk | brown mushroom x2, sugar (2.0's shape) |
-| Scarlet Pierogi (`cooking/scarlet_pierogi`) | scarlet wedge, potato, dough, nether wart, cabbage | nether wart -> beetroot (`R.replaceInput` once 8.1 adds `cookingtime`). Delete the pack's two pierogi recipes, which were a 2.0 fix: `cooking.js` lines 124-127 (cooking pot copy and the heatless shapeless one). See Q4 |
+| Scarlet Pierogi (`cooking/scarlet_pierogi`) | scarlet wedge, potato, dough, nether wart, cabbage | nether wart -> beetroot (`R.replaceInput` once 8.1 adds `cookingtime`). Delete the pack's two pierogi recipes, which were a 2.0 fix (cooking pot copy and the heatless shapeless one): done, removed from `cooking.js` with 1.0.8. See Q4 |
 | Pale Jane (`fermenting/pale_jane_from_rice_wine`) | honey bottle, `farmersdelight:tree_bark`, lily of the valley, sugar | tree bark -> `i.any_bark` (`#immersive_weathering:bark`) |
 | Beer (`fermenting/beer_from_water`) | wheat, wheat seeds, brown mushroom | wheat seeds -> dandelion |
 | Mead (`fermenting/mead_from_honey`) | wheat, wheat seeds, sweet berries / 1000 honey | wheat seeds -> red mushroom. Vinery's mead is removed from that port (B7.6), so this is the only mead |
