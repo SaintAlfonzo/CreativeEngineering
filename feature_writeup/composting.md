@@ -8,12 +8,12 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 |---|---|
 | `global.compost`: rebuilds the composter table (`ComposterBlock.COMPOSTABLES`) from nothing every time tags load | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
 | Rules: 10 categories by tag, id pattern, block class and edibility, first match wins | DEPLOYED |
-| Values: 684 explicit per-item chances (generated once from the mods' own table, hand-edited since) | DEPLOYED |
+| Values: 688 explicit per-item chances (generated once from the mods' own table, hand-edited since) | DEPLOYED (684); the 4 Brewin' port rows (2026-10-19, [alcohol.md](alcohol.md) 10.16) are built, not deployed |
 | Exclusions: never compostable (Canned Goods, golden food, incomplete items, Botania world seed and altered grass, ...) | DEPLOYED |
 | `/dumpcompost` (before / after / why) and `tools/gen_compost_values.py` (first run, `--merge` after adding mods) | in use |
 | Compost and fertile soil crafting from mulch (in `sawdust.js`) | DEPLOYED; belongs to recipe progression (backlog row 20) |
 
-- **Pending:** nothing built and unshipped. CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
+- **Pending:** the 4 Brewin' 4.5.0 port rows in `compost_values.js` (built 2026-10-19, not in the 1.0.9 deploy). CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
   needs a decision.
 - **Files to open:** [compost_rules.js](../kubejs/startup_scripts/compost/compost_rules.js) (categories, exclusions),
   [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) (per-item chances),
@@ -61,7 +61,7 @@ Meat, fish, dairy, eggs, soups and meals never match a rule.
 
 ### 2.3 Values and exclusions
 
-- **Values** (684 items): explicit chances that beat the rules. They started as every item the mods had made
+- **Values** (688 items): explicit chances that beat the rules. They started as every item the mods had made
   compostable, at the mods' own chance, grouped by the category the rules would give them; hand-edited since (Botania's
   seeds at full, for example).
 - **Exclusions** (beat everything): `botania:world_seed`, Botania's altered grass blocks, muddy mangrove roots and
@@ -150,3 +150,5 @@ Use a composter and watch its level; or read `/dumpcompost`.
   `/dumpcompost`, the dump and the generator; shipped with 1.0.3.
 - 2026-10-02: values merged for the 1.0.4 mods ([plan_1.0.4.md](plan_1.0.4.md) DR).
 - 2026-10-18: this writeup; findings F1 to F4; tests CM-01 to CM-08. No code changed.
+- 2026-10-19: the Brewin' 4.5.0 port's four chances (kimchi, pickled pickles, quiche, quiche slice) added by hand as
+  rows ([alcohol.md](alcohol.md) 10.16); 688 values. Not deployed yet.
