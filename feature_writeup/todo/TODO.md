@@ -15,6 +15,9 @@ rows on 2026-10-19 and removed; rows citing "cooking plan" came from it, with it
 older [todo.txt](todo.txt), [kubejs_todo.txt](kubejs_todo.txt) and [mod_todo.txt](mod_todo.txt) were folded in on
 2026-10-18 and are kept as history.
 
+**Implementation briefs (2026-10-21):** every open row (Bug, Planned, Pinned, In Progress) has a build plan in
+[briefs/](../briefs/README.md), one file per subfamily, linked as `[brief]` in the row's Writeup cell.
+
 **Priorities (scratchpad 2026-10-21):** cornmeal fixes (`food/ingredients #14`), can textures (`food/canning #13`),
 can crafts (`food/canning #14`).
 
