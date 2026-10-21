@@ -26,20 +26,20 @@ about 20 mod configs with their own loot knobs.
 
 | Part | Layer | Status |
 |---|---|---|
-| Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT, regenerated 2026-10-02 after the 1.0.4 mods: 383 tables (290 roots, 201 placed by templates), 659 items (67 post-roll only) |
+| Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT, regenerated 2026-10-02 after the 1.0.4 mods: 383 tables (290 roots, 201 placed by templates), 659 items (67 post-roll only). Behind since: 21 container tables of Subterrestrial (13), Eugene's (5) and Underground Bunkers (3) are in the 2026-10-14 catalog but not the index (found 2026-10-21); regenerate |
 | Pre-roll framework | KubeJS `ServerEvents.genericLootTables` in `05_tuning.js`, rules in `07_rules.js` | The 2026-09-27 12:00 version ran in game (LT-01, LT-06 PASSED). The full framework is DEPLOYED 2026-09-27 evening. 2026-10-02: the offline sim and a scratch server both log `4 rules -> rewrote 184 tables` (fewer than 204 because The Missing Villages is gone); after the book removal 2026-10-03 the sim says `rewrote 128 tables`; in game LT-14 to LT-27 |
 | Post-roll pass + `/loottuning` | LootJS `LootType.CHEST` modifier in `05_tuning.js` | DEPLOYED; nothing logged or tested yet |
 | PneumaticCraft / Lightman chest loot off at the source | `pneumaticcraft-common.toml`, `lightmanscurrency-common.lcconfig` | DEPLOYED 2026-09-27, guarded by bans |
 | LootJS-only scripts + `global.LOOT` | `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as scaffolding (commented examples of LootJS-only edits) |
 | `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-10-02 21:54 via `/dumpall` (12,326 live tables). Three tables can't be serialised and are skipped with a warning: `brewinandchewin:blocks/keg`, `farmersrespite:blocks/kettle` (custom copy functions), `myrtrees:blocks/wooden_bucket` |
-| Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-02: 0 tables outside scope. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
+| Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-02: 0 tables outside scope. Stale since the 1.0.4 to 1.0.7 mod changes (no Subterrestrial, Underground Bunkers or `eugene` tables; `loot_index.json` / `loot_config.json` from 2026-10-03 miss them too): TODO `loot/lootjs-layer #3`. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
 | Lootr container swaps | patcherMod | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
 | Loot catalog (every container table entry by entry, structures, hand-placed containers) | `tools/loot_breakdown.py` -> [loot_catalog/](loot_catalog/README.md) | BUILT 2026-10-03: 383 tables in 47 namespaces, 963 hand-placed containers; read-only reference for writing replacement tables |
 
 **Findings** (details in 4.2). Fixed 2026-09-27: 1 stale index, 2 scope missed 39 container tables, 3 injected
 entries not cataloged, 4 goldenfood dropped village injections, 5 always-empty containers, 6 Lightman coins,
-7 root rule. Open: 8 housekeeping (legacy `dump_loot_tables.sh` + `loot_table_dump/`, 40 MB, superseded; not
-deleted).
+7 root rule. Open: 8 housekeeping (legacy `loot_table_dump/`, 40 MB, local only, superseded; not deleted; the
+script left the repo in `d0d572c`).
 
 **Open first:** [07_rules.js](../kubejs/server_scripts/loot/07_rules.js) (the rules),
 [loot_config.json](../kubejs/server_scripts/loot/loot_config.json) (per-item knobs),
@@ -588,7 +588,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 | 5 | 12 containers named missing tables | FIXED 2026-09-27: aliases (3.8) |
 | 6 | Lightman coins spawned then stripped | FIXED 2026-09-27: `[loot.chests] enabled=false`, regex kept as a ban |
 | 7 | Root rule dropped borrowed vanilla tables | FIXED 2026-09-27: root = no parent, or placed by a template |
-| 8 | Stale exports, legacy dump | Stale exports: the generator skips them (FIXED). Open: `dump_loot_tables.sh` / `loot_table_dump/` (40 MB) are superseded; delete when you're happy (not done: it's your call) |
+| 8 | Stale exports, legacy dump | Stale exports: the generator skips them (FIXED). `dump_loot_tables.sh` was deleted from the repo in commit `d0d572c` (2026-09-28; `.gitignore` still allow-lists it). Open: the local `loot_table_dump/` folder (40 MB, gitignored, never in the repo) and any local copy of the script; delete when you're happy (it's your call) |
 
 ### 4.3 Other limits
 
@@ -630,7 +630,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 - Exports: `kubejs/exported/loot_tables/` (8 stale files the generator skips: colony4cc, distantfriends,
   domum_ornamentum, minecolonies, multipiston, refinedcooking, refinedstorage, tobacconistmod),
   `kubejs/exported/loot_runtime_additions.json` (written every reload), `tools/.cache/template_loot.json` (scan cache)
-- Legacy, superseded: [dump_loot_tables.sh](../dump_loot_tables.sh), `loot_table_dump/`
+- Legacy, superseded: `dump_loot_tables.sh` (deleted from the repo in `d0d572c`; old copy: `git show 609cd21:dump_loot_tables.sh`), `loot_table_dump/` (local only, gitignored)
 
 ## 6. Offline checks
 
@@ -655,7 +655,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 
   - [x] remove 'golden food enchantment' book from loot tables (2026-10-03: companion + village `L.add` rules deleted from `07_rules.js`; sim checks it; in-game LT-23)
   - Comprehensive loot table system, remapping all loot tables (using existing tables when possible). tree-like tag structure for tables (container/village/leatherworker/mediocre_loot_table, container/village/leatherworker/tresure_loot_table, container/ocean/shipwreck/tresurea, etc), item merging for many-item-to-many-table looting 
-  - Cover missed lootr chests, fixed loot chests (bible verse written book + golden carrot). Inventory of every hand-placed container: [loot_catalog/handplaced.md](loot_catalog/handplaced.md) (2026-10-03)
+  - Cover missed lootr chests, fixed loot chests (bible verse written book + golden carrot). Inventory of every hand-placed container: [loot_catalog/handplaced.md](loot_catalog/handplaced.md) (regenerated 2026-10-14; the verse chest is `philipsruins:ancient_tower_8` (6, 2, 5) and holds a writable book, not a written one)
   - Find island loot tables (only present in 1 or 2 structures), fold into other loot tables (list done 2026-10-03: [loot_islands.md](loot_islands.md), 172 tables; nothing folded yet)
   - lower chalk frequencies
   - ensure coins are removed from loot tables

@@ -33,6 +33,13 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 
 | Family | Briefs |
 |---|---|
-| food | [canning](food_canning.md), [drugs](food_drugs.md), [meals](food_meals.md), [placeable](food_placeable.md), [stack-sizes](food_stack-sizes.md) |
-| farming | [composting](farming_composting.md), [trees](farming_trees.md) |
-| worldgen | [bee-nests](worldgen_bee-nests.md), [biomes](worldgen_biomes.md), [flowers](worldgen_flowers.md), [locate](worldgen_locate.md), [seasons](worldgen_seasons.md), [structures/earthfill](worldgen_structures_earthfill.md), [structures/terrain](worldgen_structures_terrain.md), [structures/testing](worldgen_structures_testing.md) |
+| food | [baked-goods](food_baked-goods.md), [canning](food_canning.md), [drinks](food_drinks.md), [drugs](food_drugs.md), [ingredients](food_ingredients.md), [kitchen](food_kitchen.md), [meals](food_meals.md), [oven](food_oven.md), [placeable](food_placeable.md), [seasoning](food_seasoning.md), [stack-sizes](food_stack-sizes.md), [sweets](food_sweets.md), [types-and-tuning](food_types-and-tuning.md) |
+| farming | [composting](farming_composting.md), [crops](farming_crops.md), [trees](farming_trees.md), [wild-crops](farming_wild-crops.md) |
+| worldgen | [bee-nests](worldgen_bee-nests.md), [biomes](worldgen_biomes.md), [biomes/netherblocks](worldgen_biomes_netherblocks.md), [flowers](worldgen_flowers.md), [locate](worldgen_locate.md), [seasons](worldgen_seasons.md), [structures/contents](worldgen_structures_contents.md), [structures/earthfill](worldgen_structures_earthfill.md), [structures/metas](worldgen_structures_metas.md), [structures/netherblockswap](worldgen_structures_netherblockswap.md), [structures/new](worldgen_structures_new.md), [structures/rates-and-groups](worldgen_structures_rates-and-groups.md), [structures/terrain](worldgen_structures_terrain.md), [structures/testing](worldgen_structures_testing.md) |
+| mobs | [bees](mobs_bees.md), [mooblooms](mobs_mooblooms.md), [nests](mobs_nests.md), [pillagers](mobs_pillagers.md), [spawns](mobs_spawns.md), [tweaks](mobs_tweaks.md) |
+| loot | [lootjs-layer](loot_lootjs-layer.md), [lootr](loot_lootr.md), [tables](loot_tables.md), [trader](loot_trader.md) |
+| gear | [archery](gear_archery.md), [camera-bags](gear_camera-bags.md), [echo](gear_echo.md), [effects](gear_effects.md), [enchanting](gear_enchanting.md), [potion-buckets](gear_potion-buckets.md), [potions](gear_potions.md), [shields](gear_shields.md), [tuning](gear_tuning.md) |
+| recipes | [cooking](recipes_cooking.md), [engineering](recipes_engineering.md), [magic](recipes_magic.md), [materials](recipes_materials.md), [metal](recipes_metal.md), [progression](recipes_progression.md), [wood](recipes_wood.md) |
+| engineering | [dreams-and-desires](engineering_dreams-and-desires.md), [sawmill-and-components](engineering_sawmill-and-components.md) |
+| gameplay | [blockrunner](gameplay_blockrunner.md), [item-physics](gameplay_item-physics.md), [time](gameplay_time.md) |
+| ui | [effects](ui_effects.md), [names](ui_names.md), [tooltips](ui_tooltips.md) |

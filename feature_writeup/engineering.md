@@ -141,7 +141,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
     `SawmillRecipe.findRecipe` to `SawbladeRouting.route`, and saves the profile and the chosen recipe id in the
     process NBT, so the client (which never runs the server step and rebuilds its queue on every sync) shows the same
     recipe.
-  - The routing classes are force-loaded at startup (`CreativeEngineering.java` lines 243-250): the mixin applies on the
+  - The routing classes are force-loaded at startup (`CreativeEngineering.java` lines 262-269): the mixin applies on the
     first sawmill tick, and a late class load there once crashed.
 - **Sawmill recipes:** [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js) is a node script that
   writes JSONs into `generation_scripts/recipes/sawmill/`, copied by hand into patcherMod and rebuilt. They're JSON, not
@@ -197,7 +197,8 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
     more efficient low tier recipes (mechanism -> many repeaters, redstone links, Create redstone), used as the redstone
     in high tier components.
   - `#13` Gates: basic gates only, simple vanilla-redstone-like crafts, expensive at scale; Project Red for advanced
-    gates, complex crafts but much cheaper at scale, for complex computing / redstone.
+    gates, complex crafts but much cheaper at scale, for complex computing / redstone. Project Red (Core, Fabrication,
+    Illumination, Integration, Transmission) is already in the pack; its gate recipes are unchanged.
 
 ### Known limits
 

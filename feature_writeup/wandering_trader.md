@@ -4,9 +4,9 @@
 
 | Part | Status |
 |---|---|
-| Spawn timers in server ticks, Wandering Trader and Winemaker independent (`traderIntervalTicks`, `winemakerIntervalTicks`, both 96000) | BUILT 2026-10-03, patcherMod 1.0.4 in `mods/` (md5 37ce1023). Scratch dedicated server: level.dat `WanderingTraderSpawnDelay 96000`; the Winemaker spawner's saved wait counted 96000 to 94800 after one step. A natural spawn with a player present is not tested yet (WT-16) |
+| Spawn timers in server ticks, Wandering Trader and Winemaker independent (`traderIntervalTicks`, `winemakerIntervalTicks`, both 96000) | DEPLOYED with 1.0.4 (2026-10-04); built 2026-10-03, patcherMod 1.0.4 (md5 37ce1023). Scratch dedicated server: level.dat `WanderingTraderSpawnDelay 96000`; the Winemaker spawner's saved wait counted 96000 to 94800 after one step. A natural spawn with a player present is not tested yet (WT-16) |
 | 25 common + 5 rare offers (`commonTrades`, `rareTrades`; vanilla 5 + 1) | BUILT, same jar; 24 summoned traders all had 31 offers (quill + 25 + 5), no rare item twice |
-| Stock (removals, Wares agreements x20, golden food listings, new saplings/seeds/plants/blocks/mob buckets, Winemaker additions, no Nether/End items) | BUILT 2026-10-03: KubeJS [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.js) through the new `global.trades` helper. Scratch server: common 205 entries, rare 39, Winemaker 35, same after `/reload` |
+| Stock (removals, Wares agreements x20, golden food listings, new saplings/seeds/plants/blocks/mob buckets, Winemaker additions, no Nether/End items) | DEPLOYED with 1.0.4 (2026-10-04); built 2026-10-03: KubeJS [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.js) through the new `global.trades` helper. Scratch server: common 205 entries, rare 39, Winemaker 35, same after `/reload` |
 | Vinery's own Winemaker swap off (`wine_trader_chance` 0) | config edited + backed up in `configs_edited/` (instance and CreEngServer) |
 | Catalog of every offer + gap lists | regenerated 2026-10-03 from the new pools: [wandering_trader_catalog.md](wandering_trader_catalog.md); every category now has 0 missing (sold, or excluded with a reason) |
 
@@ -109,7 +109,8 @@ All in [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.j
 | Winemaker | the 13 Fruits Delight tree saplings (5 emeralds) and the pineapple sapling (3); white jungle grape seeds (1; Vinery's own slot sells the grape) | Winemaker pool, 8 uses |
 
 **Never sold, by rule (sequence breaking):** nether wart, chorus flower, Nether's Delight propelplant cane, Farmer's
-Respite coffee beans (its wild coffee only grows in the Nether), Architect's Palette twisted sapling, crimson and
+Respite coffee beans (its wild coffee only grew in the Nether, and `wild_crops.json` has switched that spawn off since
+1.0.4, so the beans have no source at all: crops.md V18), Architect's Palette twisted sapling, crimson and
 warped fungus and roots, nether sprouts, twisting and weeping vines, nylium, soul soil, glowstone, sunstone,
 moonstone, golden chorus fruit, cosmic cod (End) and stradpole (Nether) buckets. The report script's `EXCLUDE`
 table keeps this list so the gap report never proposes them.
