@@ -18,7 +18,8 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | Cultivated meat: sample syringe → culture → ×3 by mixing → raw meat on the cutting board | DEPLOYED |
 | Removals: vanilla smoker and cake, Quark crop crates, duplicate pie, egg, bread recipes | DEPLOYED; smoker has no recipe (F1) |
 
-- **Pending:** nothing built and unshipped. RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
+- **Pending:** the cornmeal millstone mirrors (cooking.js 114-120, commit c82dd31 of 2026-10-20) are in the tree,
+  not shipped. RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
   need your call.
 - **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-433; 436-852 is the old
   `global.CE` copy, commented out), [golden.js](../kubejs/server_scripts/cooking/golden.js),
@@ -53,8 +54,9 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 
   The IE crusher takes one item and can't roll its main output, so a single kernel (0.5) has no recipe; the bag
   gives the ratio. cooking.md's PNC note "(0.2, 3)" was read as "same as flour", whose recipes are 3 at 1.5 bar and
-  1 per item at loss rate 50. Corn has no millstone recipe (Corn Delight's corn and wild corn milling removed), and
-  no corn recipe gives straw: the knife on corn (2 kernels), on wild corn (1) and the IE crusher on wild corn (1)
+  1 per item at loss rate 50. The millstone mirrors the four crushing-wheel recipes (corn, crate, kernels, bag; added
+  2026-10-20 in c82dd31, not shipped; until then corn had no millstone recipe). Corn Delight's corn and wild corn
+  milling are removed, so wild corn has no Create route, and no corn recipe gives straw: the knife on corn (2 kernels), on wild corn (1) and the IE crusher on wild corn (1)
   keep their kernels without Corn Delight's straw.
   Corn Delight's raw tortilla (3 corn + water bucket) and cornbread batter (2 corn, milk, egg; mixing with 250 mB
   milk) take cornmeal in place of corn, same counts; the splashing corn -> raw tortilla recipe is removed.
@@ -123,14 +125,14 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 
 ### Findings (2026-10-18)
 
-- **F1. The vanilla smoker has no recipe. Your call.** `cooking.js` line 14 removes it ("Remove stone smoker recipe");
+- **F1. The vanilla smoker has no recipe. Your call.** `cooking.js` line 13 removes it ("Remove stone smoker recipe");
   nothing adds one. Smoking is how the pack makes bread blocks, sourdough bread and leather, so a player needs another
   smoker (Nether's Delight's nether brick smoker, a campfire for single items) or loot. Same pattern as the blast furnace
   ([recipes_engineering.md](recipes_engineering.md) F1). Check with RC-01.
 - **F2. The vanilla cake recipe is removed as "redundant". Your call.** Fine if another mod's cake recipe makes
   `minecraft:cake` (Create's or Farmer's Delight's); not checked. RC-02.
-- **F3. Define-once:** `cooking.js` sets `i.catfish` and `i.catfish_slice` (the dict's `catfish_slice` has the wrong
-  namespace, [food.md](food.md)); `cultivated_meat.js` sets `i.culture_base` ([engineering.md](engineering.md) F8). Fix the
+- **F3. Define-once:** `cooking.js` line 9 sets `i.catfish` (the local `i.catfish_slice` was dropped on 2026-10-20
+  once the dict's entry was fixed to `alexsdelight:raw_catfish_slice`); `cultivated_meat.js` sets `i.culture_base` ([engineering.md](engineering.md) F8). Fix the
   dict entry and drop the local lines.
 - **F4. Old code:** lines 436-852 of `cooking.js` are the `global.CE` version, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
 - **F5. Golden carrots take rose gold nuggets** through `#forge:nuggets/gold` ([recipes_metal.md](recipes_metal.md) F5).
@@ -142,7 +144,10 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 
 - **F8. Cornmeal fixes (scratchpad 2026-10-21, a priority).** "Cornmeal fixes" heads the priority list, but what is
   broken isn't written down: run RC-15 to RC-18 to find it. Also wanted: the raw tortilla takes a water bucket or a
-  water bottle (bucket only today, 2.1) ([TODO](todo/TODO.md) `food/ingredients #14`).
+  water bottle (bucket only today, 2.1) ([TODO](todo/TODO.md) `food/ingredients #14`). A static audit of every corn
+  recipe (2026-10-21) is in [briefs/food_ingredients.md](briefs/food_ingredients.md) #14: millstone mirrors added
+  2026-10-20 (unshipped), no automated raw tortilla since the splashing recipe went, no Create route for wild corn,
+  muffins without cornmeal, no hand route to cornmeal.
 
 ### Known limits
 
@@ -180,7 +185,7 @@ None.
 - [ ] **RC-13 Ruby chocolate:** heated mixer with milk, dragon's breath, cocoa beans, sugar → 250 mB ruby chocolate.
 - [ ] **RC-15 Cornmeal item:** shows as "Cornmeal" with the yellow flour texture; in `#forge:flour/corn`.
 - [ ] **RC-16 Cornmeal machines:** crushing wheels on corn give 1-2 cornmeal and sometimes a kernel; the millstone
-  takes no corn; a knife on corn gives 2 kernels and no straw; IE crusher on corn -> 2 cornmeal (+ kernel half the time), on a crate
+  gives the same (from the 2026-10-20 change; on 1.0.9 it may take no corn); a knife on corn gives 2 kernels and no straw; IE crusher on corn -> 2 cornmeal (+ kernel half the time), on a crate
   -> 18; PNC pressure chamber 4 kernels -> 3. JEI shows no Corn Delight corn -> kernels IE crusher recipe.
 - [ ] **RC-17 Corn recipes:** raw tortilla and cornbread batter need cornmeal (corn no longer works); splashing corn
   gives nothing; pancakes accept cornmeal.
@@ -198,3 +203,4 @@ None.
 - 2026-10-19: cornmeal item and recipes, pie crust from flour and milk, pancakes take cornmeal (2.1); RC-15 to RC-18.
 - 2026-10-19: cornmeal, pie crust and pancakes STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) OV); DEPLOYED
   with 1.0.8 (2026-10-19 10:20).
+- 2026-10-20 (c82dd31): millstone mirrors of the four corn crushing recipes; not shipped.

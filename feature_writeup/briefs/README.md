@@ -33,6 +33,6 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 
 | Family | Briefs |
 |---|---|
-| food | [baked-goods](food_baked-goods.md), [canning](food_canning.md), [drugs](food_drugs.md), [kitchen](food_kitchen.md), [meals](food_meals.md), [oven](food_oven.md), [placeable](food_placeable.md), [stack-sizes](food_stack-sizes.md), [types-and-tuning](food_types-and-tuning.md) |
+| food | [baked-goods](food_baked-goods.md), [canning](food_canning.md), [drugs](food_drugs.md), [ingredients](food_ingredients.md), [kitchen](food_kitchen.md), [meals](food_meals.md), [oven](food_oven.md), [placeable](food_placeable.md), [seasoning](food_seasoning.md), [stack-sizes](food_stack-sizes.md), [types-and-tuning](food_types-and-tuning.md) |
 | farming | [composting](farming_composting.md), [crops](farming_crops.md), [trees](farming_trees.md), [wild-crops](farming_wild-crops.md) |
 | worldgen | [bee-nests](worldgen_bee-nests.md), [biomes](worldgen_biomes.md), [flowers](worldgen_flowers.md), [locate](worldgen_locate.md), [seasons](worldgen_seasons.md), [structures/earthfill](worldgen_structures_earthfill.md), [structures/terrain](worldgen_structures_terrain.md), [structures/testing](worldgen_structures_testing.md) |
