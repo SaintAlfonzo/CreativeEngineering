@@ -17,7 +17,7 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 | Feasibility study (1, 2) | DONE 2026-10-18, from the decompiled jars the pack uses |
 | Design (3) | DECIDED 2026-10-18: D1-D5 as recommended (5) |
 | Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: patcherMod compiles and builds (reobf checked); 10 GameTests pass (6). DEPLOYED with 1.0.7; one leftover per item used (for the oven's ingredient counts) DEPLOYED with 1.0.8 (2026-10-19); not run in game (RB-01 to RB-11) |
-| Keg | BUILT 2026-10-19 in the port's `-03` (`build/libs/`, not installed), see 3.6; not tested |
+| Keg | BUILT 2026-10-19 in the port's `-03` (now the jar in `pack/manifest.json`), see 3.6; not tested |
 | WTHIT line "Holding: ..." | not built (optional, 3.3) |
 
 Files to open first:
@@ -203,7 +203,9 @@ The 2.0 bottle dupe (1.3) went with the 2.0 jar.
 - **Mixin aliases**: the official names listed next to the SRG ones (3.5) never match in the pack; `require = 1`
   is met by the SRG name.
 - **Known bug (scratchpad 2026-10-21), oven:** bottle / bucket leftovers held in the buffer disappear when the output
-  item is taken out. Not looked into yet ([TODO](todo/TODO.md) `food/kitchen #14`).
+  item is taken out. Likely cause (code read 2026-10-21): `OvenBlockEntity.getUpdateTag` leaves out `Remainders`
+  and `load` reads it unguarded, so every block update empties the client's copy (the server keeps the items); see
+  [briefs/food_kitchen.md](briefs/food_kitchen.md) #14 ([TODO](todo/TODO.md) `food/kitchen #14`).
 
 ## 5. Decisions (all taken as recommended, 2026-10-18)
 
@@ -269,6 +271,10 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
   menu, screen), native oven buffer, `[cooking]` config, GameTest harness; container-slot recycle capped at what
   the waiting meals need after the first test run. patcherMod compiles and builds; 10 GameTests pass.
 - 2026-10-19: keg built in the Brewin' port `-03` (3.6); compiles, no GameTest (in-game tests in alcohol.md).
+
+> **Superseded copy below (noted 2026-10-21):** everything from here on is the 2026-10-18 feasibility draft, left in
+> the file by mistake. Sections 0-8 above are current; delete the copy once checked.
+
 # Remainder buffer: keep bottles, bowls and buckets in FD-style cooking stations
 
 When a Farmer's Delight style station finishes a recipe, it throws each ingredient's leftover container (glass
