@@ -178,8 +178,8 @@ Weights are relative inside one pool. Vanilla houses are 2 to 4 each, IE's 1 eac
 each, Domestication Innovation's pet shop 17, Monobank's vault 15, Wares' warehouse 10, Advanced Peripherals' house
 10, PneumaticCraft's mechanic house 8, Chef's Delight's houses 2 to 5, Cloud Storage's balloon stand 2. Lowering a
 piece makes the rest of the pool (including its `minecraft:empty` lot) more likely; the number of houses in a
-village doesn't change. Current pool tags remove 57 tech pieces: IE 25, Dynamic Village 20, PneumaticCraft 7,
-Advanced Peripherals 5. Example: in `minecraft:village/desert/houses` a Dynamic Village house was 8.8% of each
+village doesn't change. Current pool tags remove 52 tech pieces: IE 25, Dynamic Village 20, PneumaticCraft 7
+(Advanced Peripherals' 5 were removed the same way until its own config turned them off with 1.0.6). Example: in `minecraft:village/desert/houses` a Dynamic Village house was 8.8% of each
 draw; now it's 0, and a vanilla desert house goes from 0.9% to 1.5%.
 
 ## 3. What the pack changes
@@ -305,7 +305,7 @@ vanilla jungle-temple dispensers) unconverted, on purpose.
 | Domestication Innovation | `domestication-innovation.toml` (backed up) | `petstore_village_weight` = 17 | village-pool weight |
 | Wares | `wares-common.toml` | GenerateWarehouses = true, WarehouseWeight = 10 | village-pool weight |
 | Monobank | `monobank-common.toml` | GenerateVaults = true, VaultWeight = 15 | village-pool weight |
-| Advanced Peripherals | `Advancedperipherals/world.toml` | enableVillagerStructures = true, villagerStructureWeight = 10 | village-pool weight (pool tag x0 removes it anyway) |
+| Advanced Peripherals | `Advancedperipherals/world.toml` | enableVillagerStructures = false (since 1.0.6), villagerStructureWeight = 10 | no scientist houses at all; the pool tag `mod/advancedperipherals` x0 now matches nothing (`pool_tag_report.md` warning) |
 | PneumaticCraft | `pneumaticcraft-common.toml` (backed up) | `addMechanicHouse` = 8 | village-pool weight (pool tag x0 removes it anyway) |
 | Waystones | `waystones-common.toml` | spawnInVillages = true, forceSpawnInVillages = false | waystone pieces in village pools |
 | Lootr | `lootr-common.toml` | decay/refresh_structures empty | converts structure loot containers per player |
@@ -703,7 +703,9 @@ Water there (filled by the template's earth or the beard, or left standing where
 ground there (replaced or left alone); seabed and air count as neither, and so does a spot under more than `baseLayers`
 blocks of predicted terrain (underground structures sit in aquifers or under the sea). When the water outnumbers the
 ground by more than `maxWaterSurplus` (0.5: 60 water to 40 ground passes, 61 to 39 doesn't), the start is cancelled.
-Structures in `water_fill/structures` are not checked, and an override with every limit -1 skips it too. A meta is
+Structures in `water_fill/structures` are not checked, and an override with every limit -1 skips it too (but only
+below `log = ALL`: with `ALL` the share is still checked and can cancel such a structure, a bug noted 2026-10-21 in
+[briefs/worldgen_structures_earthfill.md](briefs/worldgen_structures_earthfill.md), bug A). A meta is
 checked part by part, as for the limits. The log line gains `footprint <water> water / <ground> ground (surplus limit
 0.5[, too wet])`. Inland scratch run (2,601 chunks, 972 starts checked): 14 cancelled by the share alone, among them
 a sunflower-plains village on a lake (739 water / 0 ground), a windmill (255 / 0) and a drum tower (2,123 / 66) whose
@@ -1560,7 +1562,7 @@ town); the offline estimates leave companions out and don't count drops.
 ### 3.23 Fixes from the scratch run (2026-10-18, DEPLOYED with 1.0.7)
 
 Six of the open bugs from the 8.0 scratch run ([plan_1.0.6.md](plan_1.0.6.md) 2.1, [testing/structures/](testing/structures/00_plan.md)),
-fixed in source. None is in `mods/` or a deploy yet; the patcherMod parts need `./gradlew build` and a jar install. All
+fixed in patcherMod 1.0.7 and the worldgen data, DEPLOYED with pack 1.0.7 (2026-10-18). All
 of them act on new chunks only.
 
 1. **Village layouts differed from one server start to the next (05_phase_5.md 3.3).** Cause found: the pools reach
@@ -1827,7 +1829,7 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
   underground pass above. Retest ST-115.
 - **Sky village rate:** lower it if it is still too common once seen in game (it is in `sky` and spawns over land and
   sea, see Done); settlements over water could get a boost.
-- **Fresh watchtower:** `fit_keep` is set; rerun `--fit-rates` to raise it back from 1 per 75 to its old 1 per 67
+- **Fresh watchtower:** `fit_keep` is set; rerun `--fit-rates` to raise it back from 1 per 83 (`structure_group_estimates.md` of 2026-10-14; 75 at the 3.20 fold) to its old 1 per 67
   (the run re-solves every fitted structure, so check the diff).
 - **Pyramids** (scratchpad 2026-10-21): double their minimum separation. TODO `worldgen/structures/rates-and-groups #10`.
 - **Lone waystones** (scratchpad 2026-10-21): too many, deserts worst; lower the rate, or drop the lone ones and add
@@ -1848,10 +1850,13 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
   Scanned 2026-10-19 with every other Nether block left in Overworld generation: decision sheet in
   [nether_worldgen.md](nether_worldgen.md) section 2.
 - Chunk generation: leaving out the bottom 64 to 96 blocks: investigated in [locate.md](locate.md) 3.7 (measure
-  first; skip the band in Distant Horizons' own generation; a real deferred band is not recommended).
+  first; skip the band in Distant Horizons' own generation; a real deferred band is not recommended). The DH clip
+  (option A, `worldgen/DistantClip`, `[worldgen.distant]`) is built and shipped since 1.0.6 and measured (LO-10);
+  only LO-11 [game] is left.
 - Terrain adaptation leftovers (3.15, `terrain_adaptation_scan.md`): batch 4 (the spire, the fish ponds, Philip's
-  padded ruins, the villages: look in game first); calibrate the earth-fill limits for modded structures (needs a
-  game with `log = ALL`); a Beardifier fill estimate for terrain-adapted structures if the template count misses them.
+  padded ruins, the villages: look in game first); calibrate the earth-fill limits for modded structures (ran as
+  ST-52 in Phase 7 at `log = ALL`, 2026-10-19: no change proposed except the drum tower / undead castle; the 1.0.9
+  footprint share still needs its own run); a Beardifier fill estimate for terrain-adapted structures if the template count misses them.
 
 **Meta structures** (3.16)
 - **Vehicle metas** (marked 2026-10-14, not planned, 7.4.9): witch cart caravan, pillager caravan, trader caravan; own `meta/*` tags so the existing pillager metas don't change.
@@ -2422,7 +2427,7 @@ Each gets its own `meta/*` tags (not `meta/siege_weapons`), so the existing pill
 | D7 | Pig ranger mini-boss (Nether, not a structure) | keep, with the `ride` rewrite |
 | D8 | Drum tower in `meta/large_ruins` | no (size, keeps metas unchanged) |
 
-### 7.5 Plan: earth fill on water, camp plinths, metas off coasts (2026-10-19, BUILT + scratch-tested 2026-10-19)
+### 7.5 Plan: earth fill on water, camp plinths, metas off coasts (2026-10-19, BUILT + scratch-tested 2026-10-19, DEPLOYED with 1.0.9 2026-10-19)
 
 User, 2026-10-19: "address the structure earth fill issues i outlined in my scratchpad. move the note to the structure
 tuning and work on it there. water replacement cancel should also have a check if the number of water blocks converted

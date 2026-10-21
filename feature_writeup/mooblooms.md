@@ -986,7 +986,8 @@ category lists the combinations as parent egg + parent egg -> calf egg with the 
   download (license, 4.0).
 - Open: 2.8 and the rules in 4.9 are a hand translation of `tools/gen_wild_flowers.py`'s inventory. After a
   `wild_flowers.json` change, a worldgen mod update or biome tuning, regenerate 2.8 and redo the affected rules by
-  hand, or automate it (the two approaches written up 2026-10-08, History).
+  hand, or automate it (no write-up of the approaches survives in History; the plan is in
+  [briefs/worldgen_flowers.md](briefs/worldgen_flowers.md) flowers #2).
 - Spawn rules: `python3 tools/check_moobloom_data.py` checks biome ids, variants and sums (36 rules on 2026-10-08:
   the pack's 35 plus the witherbloom pack's; 37 since 2026-10-11 with lush caves).
 
