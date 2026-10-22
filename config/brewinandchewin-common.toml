@@ -50,3 +50,9 @@
 	#Default: true
 	enableRecipeBookKeg = true
 
+[coaster]
+	#Port setting (not in 4.5.0): may only items in #brewinandchewin:placeable_on_coaster go on a Coaster?
+	#The tag lists the items with their own coaster model, so nothing is drawn as a flat item. False takes any item, as in 4.5.0.
+	#Default: true
+	taggedItemsOnly = true
+

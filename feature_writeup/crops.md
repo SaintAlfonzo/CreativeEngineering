@@ -616,7 +616,7 @@ tagged wet). The rest of the cold biomes are moderate (taiga downfall 0.8) or dr
 **Side changes in the same pass**
 
 - Oak and dark oak leaves no longer drop apples (`kubejs/server_scripts/loot/08_leaf_apples.js`, pre-roll like the dead
-  maps). Myrtrees rubberwood leaves still do (V17).
+  maps). Myrtrees rubberwood leaves too since 2026-10-21 (V17).
 - Alex's Mobs bananas no longer drop from jungle leaves: `config/alexsmobs.toml` `bananasDropFromLeaves = false`
   (backed up in `configs_edited/root_config/`).
 - Farmer's Respite coffee no longer spawns in Basalt Deltas (its modifier is off, V18).
@@ -775,6 +775,21 @@ WTHIT's own "Crop progress" option also hides the added lines. To change which p
 - **Bushier Flowers** growth is disabled, see the bushier-flowers notes in memory. It isn't a crop here.
 - **Wild crop placement (built 2026-10-03, DEPLOYED with 1.0.4, rules revised for 1.0.6; not looked at in game):** §2.8. Also oak/dark oak leaves drop no apples,
   Alex's Mobs leaf bananas are off (`config/alexsmobs.toml`) and Farmer's Respite's Basalt Deltas coffee is off.
+- **Bell pepper colours (built 2026-10-21, not deployed):** the ripe Rustic Delight roll was red 6 : green 1 : yellow 1
+  plus 15% bonus green and yellow (red 58% of peppers). [09_crop_drops.js](../kubejs/server_scripts/loot/09_crop_drops.js)
+  (pre-roll, like the leaf apples) sets the roll to 1 : 1 : 1 and appends a 15% bonus red pool, so each colour averages
+  0.483 per ripe harvest. Pools are matched by their items, existing positions kept. Wild bell peppers stay red-only
+  (forage hint). TODO `farming/crops #9`, CR-69, CR-70.
+  - Knobs: CEConfig `[crop_drops.bell_peppers]` (patcherMod 1.1.01, server side, `/reload` applies):
+    `enabled` (false = the mod's table untouched), `redWeight` / `greenWeight` / `yellowWeight` (0-100, default 1),
+    `redBonusChance` / `greenBonusChance` / `yellowBonusChance` (0-1, default 0.15). Colour X per ripe harvest =
+    weightX / sum of weights + bonusChanceX. The mod's own split is 6 / 1 / 1 with red bonus 0. Read through
+    `global.NCH.cfg(..., 'CROP_DROPS')`; without patcherMod the script uses the same defaults.
+  - Other colours: Rustic Delight **1.7.0** (July to September 2026, Forge 1.20.1, NeoForge / Fabric 1.21.x and 26.x;
+    the 1.7.0 changelog, not the GitHub wiki or the Modrinth page) added Pale seeds (white, pink, orange) and Dark seeds
+    (black, blue, purple), wild Pale / Dark peppers in jungles, giant pepper blocks, slices, rolls and the Bell Pepper
+    Medley feast. 1.3.0 (2024-11-15) is the last 1.19.2 build, so none of it is in the pack; having them would be our own
+    backport of those items.
 - **Crop parity layer (built 2026-10-02, patcherMod 1.0.4, DEPLOYED with 1.0.4):** tobacco gets farmland
   soils, right-click and hoe replant and the hoe area break. See §2.6 for the tags, the Quark config line
   and the four mixins.
@@ -879,8 +894,9 @@ yet; each has a suggested direction for you to approve or reject.
   mini melons need grass, not mangrove mud. These biomes are in the lists as you asked; they just yield little.
 - **V16 No orchard or pumpkin biome.** Pumpkins use Skylands Autumn as the "pumpkin biome". If you meant something else
   (Vinery/Fruits Delight apple biomes, flower forests), it is one `where` clause.
-- **V17 Rubberwood leaves drop apples.** Myrtrees' rubberwood leaves copy the oak loot table, apple included. Add
-  `myrtrees:blocks/rubberwood_leaves` to `08_leaf_apples.js` TABLES if apples should only come from apple trees.
+- **V17 Rubberwood leaves drop apples.** FIXED 2026-10-21: `myrtrees:blocks/rubberwood_leaves` is in
+  `08_leaf_apples.js` TABLES. The 2026-10-18 loot dump (all mods) has no other leaf table with apples besides the
+  Fruits Delight and Vinery apple trees. CR-57.
 - **V18 Farmer's Respite coffee has no source now.** Its only source was the Basalt Deltas bushes: no chest loot, no
   trades. Options: merge it into Rustic Delight coffee (the item_dict/recipes route), or spawn FR coffee bushes again
   somewhere (they need basalt or magma).
@@ -892,8 +908,7 @@ yet; each has a suggested direction for you to approve or reject.
 
 Planned (scratchpad 2026-10-21):
 
-- **Bell pepper colours.** Check the harvest share per colour (an even split); the mod page lists more varieties than
-  red / green / yellow, maybe in a newer version ([TODO](todo/TODO.md) `farming/crops #9`).
+- **Bell pepper colours.** Done 2026-10-21, see §3 (even split; only red / green / yellow exist).
 - **Melon and pumpkin stages.** Smaller pumpkin / melon stages before full size, maybe with the Fantasy Furniture
   stackable pumpkin model; large 2x2 / 3x3 pumpkins are `largecontent/autumnityport #3` ([TODO](todo/TODO.md)
   `farming/crops #10`).
@@ -932,6 +947,7 @@ Planned (scratchpad 2026-10-21):
   (applier), `kubejs/data/creativeengineering/worldgen/configured_feature/wild/` and `placed_feature/wild/` (pack features),
   patcherMod `CEConfig` `[worldgen.systems] wildCrops` + `worldgen/WorldgenConfig.wildCropsEnabled()`,
   [kubejs/server_scripts/loot/08_leaf_apples.js](../kubejs/server_scripts/loot/08_leaf_apples.js) (leaf apples),
+  [kubejs/server_scripts/loot/09_crop_drops.js](../kubejs/server_scripts/loot/09_crop_drops.js) (crop harvest table fixes: bell pepper colours),
   [config/alexsmobs.toml](../config/alexsmobs.toml) `bananasDropFromLeaves` (copy in `configs_edited/root_config/`),
   [tools/test_wild_crops.sh](../tools/test_wild_crops.sh) + `tools/wild_crops_test/RhinoWildCrops.java` (offline checks)
 
@@ -1049,8 +1065,9 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   → colonies on mycelium.
 - [ ] **CR-55 Tea and mint:** `swamp` → wild tea bushes. `grove` or `terralith:highlands` → mint ponds. No mint in plains, meadow or windswept hills (2026-10-10 rules).
 - [ ] **CR-56 Sugar cane only by rivers and beaches:** a desert lake or swamp has no sugar cane; a river bank has it.
-- [ ] **CR-57 Leaf drops:** break 200 oak leaves and 200 dark oak leaves (or `/loot spawn ~ ~ ~ mine ~ ~ ~` on placed leaves) →
-  saplings and sticks, no apples. Break jungle leaves → no Alex's Mobs bananas. Basalt Deltas → no wild coffee bushes.
+- [ ] **CR-57 Leaf drops:** break 200 oak leaves, 200 dark oak leaves and 200 Myrtrees rubberwood leaves (or
+  `/loot spawn ~ ~ ~ mine ~ ~ ~` on placed leaves) → saplings and sticks, no apples; the log has
+  `[leaf-apples] apples removed from 3 of 3 leaf tables`. Break jungle leaves → no Alex's Mobs bananas. Basalt Deltas → no wild coffee bushes.
 - [ ] **CR-58 Switch off:** set `wildCrops = false` in `config/creativeengineering-common.toml`, new world → the log has
   `[wild-crops] off in CEConfig`; `plains` has strawberries and corn again (mod defaults). Leaf apples stay off (that's loot,
   not this switch).
@@ -1074,6 +1091,12 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   colonies on them like the grass around (adzuki is rare, 1 in 128 chunks; `/place feature neapolitan:patch_adzuki_sprouts` on humus works).
 - [ ] **CR-68 Swamps and badlands:** Ice Marsh fluvisol carries cranberry/blueberry/sweet berry bushes, Orchid Swamp fluvisol carries melons and
   orchids, badlands vertisol can carry hamimelon. Permafrost never carries any of them.
+- [ ] **CR-69 Bell pepper split:** `/reload` → the log has `[crop-drops] rewrote 1 of 1 crop tables`. Harvest 30+ ripe
+  bell peppers (or `/setblock ~ ~ ~ rusticdelight:bell_peppers[age=7]` then `/loot spawn ~ ~1 ~ mine ~ ~ ~` repeatedly) →
+  red, green and yellow each about a third, roughly 1.45 peppers per harvest. Unripe plants drop only a seed.
+- [ ] **CR-70 Pepper config:** in `config/creativeengineering-common.toml` `[crop_drops.bell_peppers]` set
+  `redWeight = 6` and `redBonusChance = 0.0`, `/reload` → the log has `weights 6:1:1` and `[NCH.cfg] CROP_DROPS.redWeight
+  overridden`; harvests are mostly red again. Set `enabled = false`, `/reload` → `rewrote 0 of 1`. Put the defaults back.
 
 ## 8. History
 
@@ -1127,3 +1150,8 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
 - 2026-10-20: `crop_growth_coverage.py` skips the Vinery port's lattice vines and grass slab (10 UNKNOWN -> 0), found in
   the WTHIT coverage audit ([wthit_lines.md](wthit_lines.md) 4.2).
+- 2026-10-21: bell pepper colours even (§3, `loot/09_crop_drops.js`, TODO `farming/crops #9`). Offline sim of the rewritten
+  jar table: red 0.483, green 0.485, yellow 0.483 per ripe harvest; a second pass is a no-op. CR-69 added.
+- 2026-10-21: pepper weights and bonus chances made CEConfig `[crop_drops.bell_peppers]` (patcherMod 1.1.01 rebuilt,
+  not installed). Offline sim matched the formula for four configs; 6:1:1 with no red bonus reproduces the mod. The
+  extra colours some pages mention are Rustic Delight 1.7.0 only (no 1.19.2 build). CR-70 added.

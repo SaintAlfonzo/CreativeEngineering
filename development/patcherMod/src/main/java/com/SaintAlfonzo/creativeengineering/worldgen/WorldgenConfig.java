@@ -48,6 +48,7 @@ public final class WorldgenConfig {
 	public static boolean wildFlowersEnabled() { return get(() -> wg().systems.wildFlowers.get(), true); }
 	public static boolean mobSpawnsEnabled() { return get(() -> wg().systems.mobSpawns.get(), true); }
 	public static boolean beeNestsEnabled() { return get(() -> wg().systems.beeNests.get(), true); }
+	public static boolean permafrostMergeEnabled() { return get(() -> wg().systems.permafrostMerge.get(), true); }
 	public static boolean templateBlockSwapsEnabled() { return get(() -> wg().systems.templateBlockSwaps.get(), true); }
 	public static boolean oceanGeodesEnabled() { return get(() -> wg().systems.oceanGeodes.get(), true); }
 	public static boolean placementPriorityEnabled() { return get(() -> wg().systems.placementPriority.get(), true); }

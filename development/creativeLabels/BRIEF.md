@@ -39,7 +39,7 @@ file pins the technical decisions so every stage agrees. Dated 2026-10-20.
 | licence | `mod_license=GNU GPL3`, LICENSE.txt in the folder |
 | build plugin | `ce.forge-mod-refmap` (mixins in Mojang names, refmap `creative_labels.refmap.json`, config `creative_labels.mixins.json`, `mixin_configs=creative_labels.mixins.json` in gradle.properties); copy the refmap-output and refmap-backstop task blocks from backportedVinery's build.gradle; no access transformer unless needed |
 | libs (git-ignored `libs/`, copied from `mods/`) | `jei-1.19.2-forge-11.8.1.1034.jar` (compileOnly fg.deobf, flatDir `local:jei-1.19.2-forge:11.8.1.1034`), `moonlight-1.19.2-2.3.7-forge.jar` (compileOnly fg.deobf, `local:moonlight-1.19.2:2.3.7-forge`), WTHIT via `files('../patcherMod/libs/wthit-1.19.2-forge-5.36.1.jar')`. No compile dependency on sticky_it, labels or Create |
-| mods.toml dependencies | forge, minecraft (as moreMooblooms); `moonlight` mandatory `[2.3,)`; `sticky_it` mandatory `*` and `labels` mandatory `*` (art donors until phase 5); `jei`, `wthit` optional. ordering NONE, side BOTH |
+| mods.toml dependencies | forge, minecraft (as moreMooblooms); `moonlight` mandatory `[1.19.2-2.3.0,)` (Moonlight versions start with the MC version; a bare `[2.3,)` never matches `1.19.2-2.3.7`); `sticky_it` mandatory `*` and `labels` mandatory `*` (art donors until phase 5); `jei`, `wthit` optional. ordering NONE, side BOTH |
 | Forge APIs available (verified) | `IDynamicBakedModel`, `ModelData`/`ModelProperty`, `QuadBakingVertexConsumer`, `TextureStitchEvent.Pre`, `RenderHighlightEvent.Block`, `ModelEvent.RegisterAdditional`, `RegisterClientReloadListenersEvent` |
 
 Registry ids: block `creative_labels:face_paper` (no item), items `creative_labels:sticky_note`,

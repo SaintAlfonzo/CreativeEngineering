@@ -47,7 +47,13 @@ give every new shapeless craft an id ending `_manual_only` (Create skips those i
 ---
 
 ## ingredients #14: Cornmeal fixes (priority)
-Status **Planned** · Work: KubeJS · id `food/ingredients #14` (follows `food/ingredients #1`, Testing)
+Status **Testing** · Work: KubeJS · id `food/ingredients #14` (follows `food/ingredients #1`, Testing)
+
+**Built 2026-10-21:** step 1 (bottle) as written; step 2 washing and Bottler; step 3 moved to the muffin rebuild
+(`baked-goods #2`); step 4 replaced by exact mortar ratios on the existing `foodGrinding` calls (corn 2 -> 3, the
+Create machines' average; crates and bags off the mortar); step 5 as a full mirror of corn (`foodGrinding` on wild
+corn: 1 + 50 % 1 cornmeal, 25 % 1 kernel, mortar 2 -> 3); step 6 (milk tag) not done; the
+line 97 comment is fixed. Tests are RC-53 and RC-54 (this brief's RC-19 to RC-22 numbers were already taken).
 
 ### Goal
 The 2026-10-21 priority list heads with "cornmeal fixes" but nothing says what is broken; the one concrete ask is "raw

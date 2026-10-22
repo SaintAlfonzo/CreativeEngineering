@@ -162,7 +162,7 @@ public class RemainderBufferTests {
         hotCocoa(pot.getInventory(), new ItemStack(Items.MILK_BUCKET));
         h.succeedWhen(() -> {
             check(pot.getMeal().is(ModItems.HOT_COCOA.get()), "not cooked");
-            check(thrown(h, Items.BUCKET) == 1, "bucket not thrown");
+            check(thrown(h, Items.BUCKET) == 1, "buckets thrown: " + thrown(h, Items.BUCKET) + ", buffer " + buffer(pot).getStackInSlot(0) + " / " + buffer(pot).getStackInSlot(1));
         });
     }
 
@@ -285,5 +285,173 @@ public class RemainderBufferTests {
             check(handler.getSlots() == OvenBlockEntity.INVENTORY_SIZE + 2, "oven handler slots: " + handler.getSlots());
             check(handler.extractItem(OvenBlockEntity.INVENTORY_SIZE, 1, true).is(Items.GLASS_BOTTLE), "oven buffer not extractable");
         });
+    }
+
+    /** RB-T11: the oven's update tag carries the buffer, and a tag without it doesn't wipe the client copy (kitchen #14). */
+    @GameTest(template = TEMPLATE)
+    public static void ovenUpdateTagKeepsBuffer(GameTestHelper h) {
+        floor(h);
+        h.setBlock(POS, OvenRegistry.OVEN.get());
+        OvenBlockEntity oven = (OvenBlockEntity) h.getBlockEntity(POS);
+        oven.getRemainders().setStackInSlot(0, new ItemStack(Items.GLASS_BOTTLE, 3));
+        CompoundTag tag = oven.getUpdateTag();
+        check(tag.contains("Remainders"), "update tag has no buffer: " + tag);
+
+        OvenBlockEntity client = new OvenBlockEntity(h.absolutePos(POS), h.getBlockState(POS));
+        client.getRemainders().setStackInSlot(1, new ItemStack(Items.BUCKET));
+        client.load(tag);
+        ItemStack loaded = client.getRemainders().getStackInSlot(0);
+        check(loaded.is(Items.GLASS_BOTTLE) && loaded.getCount() == 3, "loaded: " + loaded);
+        check(client.getRemainders().getStackInSlot(1).isEmpty(), "stale slot 1 kept: " + client.getRemainders().getStackInSlot(1));
+
+        tag.remove("Remainders");
+        client.load(tag);
+        check(client.getRemainders().getStackInSlot(0).is(Items.GLASS_BOTTLE), "a tag without the buffer wiped it");
+        h.succeed();
+    }
+
+    /** RB-T12: the pot's update tag carries the buffer through ForgeCaps (what the pot and kettle client copies rely on). */
+    @GameTest(template = TEMPLATE)
+    public static void potUpdateTagHasBuffer(GameTestHelper h) {
+        CookingPotBlockEntity pot = pot(h);
+        buffer(pot).setStackInSlot(0, new ItemStack(Items.BOWL, 2));
+        CompoundTag tag = pot.getUpdateTag();
+        check(tag.getCompound("ForgeCaps").contains("creativeengineering:remainder_buffer"), "not in update tag: " + tag);
+        h.succeed();
+    }
+
+    // ------------------------------------------------------------------ bowl count (TODO food/kitchen #4)
+
+    /**
+     * Bowls a station holds: in ingredients that leave one, in the plating slot, in the leftover slots, and one per
+     * plated result. A cook must neither make nor lose one (a thrown bowl counts as lost; not counted from item
+     * entities because RB-T6 drops bowls next door).
+     */
+    private static int bowls(ItemStackHandler inv, RemainderBuffer buffer, int ingredientSlots, int containerSlot,
+                             int outputSlot, Item plated) {
+        int n = 0;
+        for (int i = 0; i < ingredientSlots; ++i) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (stack.getCraftingRemainingItem().is(Items.BOWL)) n += stack.getCount();
+        }
+        if (inv.getStackInSlot(containerSlot).is(Items.BOWL)) n += inv.getStackInSlot(containerSlot).getCount();
+        for (int i = 0; i < buffer.getSlots(); ++i) {
+            if (buffer.getStackInSlot(i).is(Items.BOWL)) n += buffer.getStackInSlot(i).getCount();
+        }
+        if (inv.getStackInSlot(outputSlot).is(plated)) n += inv.getStackInSlot(outputSlot).getCount();
+        return n;
+    }
+
+    /** Test recipe tomato sauce (bowl leftover) + carrot -> beef stew (served in a bowl), {@code sauces} times. */
+    private static void potBowlCase(GameTestHelper h, int containerBowls, int sauces, int mealsWaiting) {
+        CookingPotBlockEntity pot = pot(h);
+        ItemStackHandler inv = pot.getInventory();
+        check(new ItemStack(ModItems.TOMATO_SAUCE.get()).getCraftingRemainingItem().is(Items.BOWL), "tomato sauce leaves no bowl");
+        inv.setStackInSlot(0, new ItemStack(ModItems.TOMATO_SAUCE.get(), sauces));
+        inv.setStackInSlot(1, new ItemStack(Items.CARROT, sauces));
+        if (containerBowls > 0) inv.setStackInSlot(CookingPotBlockEntity.CONTAINER_SLOT, new ItemStack(Items.BOWL, containerBowls));
+        if (mealsWaiting > 0) inv.setStackInSlot(CookingPotBlockEntity.MEAL_DISPLAY_SLOT, new ItemStack(ModItems.BEEF_STEW.get(), mealsWaiting));
+        int before = bowls(inv, buffer(pot), 6, CookingPotBlockEntity.CONTAINER_SLOT, CookingPotBlockEntity.OUTPUT_SLOT, ModItems.BEEF_STEW.get());
+        h.succeedWhen(() -> {
+            check(inv.getStackInSlot(0).isEmpty(), "not all cooked yet: " + inv.getStackInSlot(0));
+            int after = bowls(inv, buffer(pot), 6, CookingPotBlockEntity.CONTAINER_SLOT, CookingPotBlockEntity.OUTPUT_SLOT, ModItems.BEEF_STEW.get());
+            check(after == before, "bowls before " + before + ", after " + after + " (container "
+                    + inv.getStackInSlot(CookingPotBlockEntity.CONTAINER_SLOT) + ", buffer " + buffer(pot).getStackInSlot(0)
+                    + " / " + buffer(pot).getStackInSlot(1) + ", output " + inv.getStackInSlot(CookingPotBlockEntity.OUTPUT_SLOT)
+                    + ", meal " + pot.getMeal() + ")");
+        });
+    }
+
+    /** RB-T13a: plating slot empty: the sauce's bowl plates the stew. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void potBowlsSlotEmpty(GameTestHelper h) {
+        potBowlCase(h, 0, 1, 0);
+    }
+
+    /** RB-T13b: one bowl in the plating slot: it plates the stew, the sauce's bowl goes to a leftover slot. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void potBowlsSlotOne(GameTestHelper h) {
+        potBowlCase(h, 1, 1, 0);
+    }
+
+    /** RB-T13c: ten bowls in the plating slot, three cooks. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 600)
+    public static void potBowlsSlotTen(GameTestHelper h) {
+        potBowlCase(h, 10, 3, 0);
+    }
+
+    /** RB-T13d: two stews already waiting for bowls, plating slot empty. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void potBowlsMealWaiting(GameTestHelper h) {
+        potBowlCase(h, 0, 1, 2);
+    }
+
+    /** RB-T13e: oven test recipe tomato sauce + sugar -> bread plated in a bowl, two bowls in the plating slot. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void ovenBowls(GameTestHelper h) {
+        floor(h);
+        h.setBlock(POS.below(), Blocks.MAGMA_BLOCK);
+        h.setBlock(POS, OvenRegistry.OVEN.get());
+        OvenBlockEntity oven = (OvenBlockEntity) h.getBlockEntity(POS);
+        ItemStackHandler inv = oven.getInventory();
+        inv.setStackInSlot(0, new ItemStack(ModItems.TOMATO_SAUCE.get(), 2));
+        inv.setStackInSlot(1, new ItemStack(Items.SUGAR, 2));
+        inv.setStackInSlot(OvenBlockEntity.CONTAINER_SLOT, new ItemStack(Items.BOWL, 2));
+        int before = bowls(inv, oven.getRemainders(), 6, OvenBlockEntity.CONTAINER_SLOT, OvenBlockEntity.OUTPUT_SLOT, Items.BREAD);
+        h.succeedWhen(() -> {
+            check(inv.getStackInSlot(0).isEmpty(), "not all baked yet: " + inv.getStackInSlot(0));
+            int after = bowls(inv, oven.getRemainders(), 6, OvenBlockEntity.CONTAINER_SLOT, OvenBlockEntity.OUTPUT_SLOT, Items.BREAD);
+            check(after == before, "bowls before " + before + ", after " + after);
+            check(inv.getStackInSlot(OvenBlockEntity.OUTPUT_SLOT).getCount() == 2, "not plated: " + inv.getStackInSlot(OvenBlockEntity.OUTPUT_SLOT));
+        });
+    }
+
+    // ------------------------------------------------------------------ plating delay (TODO food/kitchen #13)
+
+    /**
+     * RB-T14: hot cocoa with a milk bottle: once cooked, the recycled bottle sits in the container slot with the
+     * cocoa unplated; it is plated recycleShowTicks (10) later.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void potRecycleDelay(GameTestHelper h) {
+        CookingPotBlockEntity pot = pot(h);
+        hotCocoa(pot.getInventory(), new ItemStack(ModItems.MILK_BOTTLE.get()));
+        long[] cookedAt = new long[1];
+        h.startSequence()
+                .thenWaitUntil(() -> check(pot.getMeal().is(ModItems.HOT_COCOA.get()), "not cooked yet"))
+                .thenExecute(() -> {
+                    cookedAt[0] = h.getTick();
+                    check(pot.getInventory().getStackInSlot(CookingPotBlockEntity.CONTAINER_SLOT).is(Items.GLASS_BOTTLE),
+                            "recycled bottle not shown in the container slot");
+                    check(pot.getInventory().getStackInSlot(CookingPotBlockEntity.OUTPUT_SLOT).isEmpty(), "plated at once");
+                })
+                .thenWaitUntil(() -> check(pot.getInventory().getStackInSlot(CookingPotBlockEntity.OUTPUT_SLOT)
+                        .is(ModItems.HOT_COCOA.get()), "not plated yet"))
+                .thenExecute(() -> check(h.getTick() - cookedAt[0] >= 9,
+                        "plated after " + (h.getTick() - cookedAt[0]) + " ticks"))
+                .thenSucceed();
+    }
+
+    /** RB-T15: oven (tomato sauce + sugar -> bread in a bowl, plating slot empty): the sauce's bowl shows, then plates. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void ovenRecycleDelay(GameTestHelper h) {
+        floor(h);
+        h.setBlock(POS.below(), Blocks.MAGMA_BLOCK);
+        h.setBlock(POS, OvenRegistry.OVEN.get());
+        OvenBlockEntity oven = (OvenBlockEntity) h.getBlockEntity(POS);
+        oven.getInventory().setStackInSlot(0, new ItemStack(ModItems.TOMATO_SAUCE.get()));
+        oven.getInventory().setStackInSlot(1, new ItemStack(Items.SUGAR));
+        long[] bakedAt = new long[1];
+        h.startSequence()
+                .thenWaitUntil(() -> check(oven.getMeal().is(Items.BREAD), "not baked yet"))
+                .thenExecute(() -> {
+                    bakedAt[0] = h.getTick();
+                    check(oven.getInventory().getStackInSlot(OvenBlockEntity.CONTAINER_SLOT).is(Items.BOWL),
+                            "recycled bowl not shown in the plating slot");
+                })
+                .thenWaitUntil(() -> check(oven.getInventory().getStackInSlot(OvenBlockEntity.OUTPUT_SLOT).is(Items.BREAD),
+                        "not plated yet"))
+                .thenExecute(() -> check(h.getTick() - bakedAt[0] >= 9, "plated after " + (h.getTick() - bakedAt[0]) + " ticks"))
+                .thenSucceed();
     }
 }

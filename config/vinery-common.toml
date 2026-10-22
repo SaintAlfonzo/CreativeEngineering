@@ -142,3 +142,10 @@
 	#Allowed Values: OFF, ON, STRAW_HAT
 	mode = "OFF"
 
+[village_houses]
+	#Add the 1.5.5 winery houses (plains, taiga, savanna, desert) to the vanilla village house pools of the same biome. Takes a restart; the pack's pool_config.json can reweight them afterwards
+	enabled = true
+	#Pool weight of each house; 0 = the average weight of the pieces already in that pool (about 4 to 5)
+	#Range: 0 ~ 1000
+	weight = 0
+

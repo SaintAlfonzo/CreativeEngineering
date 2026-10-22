@@ -1,6 +1,7 @@
 # Brief: food / kitchen
 
-Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# food`, Sub `kitchen`. Reference writeups:
+Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# food`, Sub `kitchen`. What got built is written up in
+[kitchen.md](../kitchen.md) (KT-) and [remainder_buffer.md](../remainder_buffer.md) (RB-). Reference writeups:
 [remainder_buffer.md](../remainder_buffer.md) (pot, kettle, oven leftover slots), [oven.md](../oven.md),
 [wthit_lines.md](../wthit_lines.md) 4.2 F9, [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md).
 Code: patcherMod `cooking/` (`RemainderBuffer`, `RemainderBufferStorage`, `RemainderOutputHandler`, `RemainderSlot`),
@@ -178,41 +179,42 @@ meal, and the bowls in slot + leftover slots + meals add up to 15.
 ---
 
 ## kitchen #5: Returned serve items don't stack
-Status Bug / Work KubeJS / patcherMod / TODO `food/kitchen #5`
+Status Testing / Work new jar (`creativeLabels`) / TODO `food/kitchen #5`
 
-### Goal
-A bowl or paper handed back after eating (or by an emptied feast block) stacks with ordinary bowls and paper.
+**Cause found (2026-10-21):** Sticky It!'s `ItemTooltipEvent` handler read with `getOrCreateTag()`, writing `{}` onto
+every hovered stack ([sticky_notes.md](../sticky_notes.md), its 2.x "Tooltip bug"). Creative Labels cancels that
+handler (3.13, `stickynotes #4`); items tagged before stay apart. In game: SN-48. The kitchen investigation below
+looked only at server-side paths, which is why it came up empty.
 
-### Now
-- Source note (commit `908e831`, 1.0.7 cooking plan): "returned food serve item (bowl, paper for popcorn bucket)
-  dont stack with normal items, extra nbt?". That is the container given back on eating or serving, not the remainder
-  buffer.
-- Paths checked, all building a plain stack (no tag):
-  - Corn Delight 1.0.3 `PopcornBoxBlock.takeServing` (the "popcorn bucket" is `corn_delight:popcorn_box`): gives
-    `new ItemStack(Items.PAPER)` when the last serving is taken. Verified (decompiled).
-  - `corn_delight:caramel_popcorn` / `popcorn` are mmlib `ItemFoodBase`. `finishUsingItem` hands back
-    `getCraftingRemainingItem(stack)`, Forge's default `new ItemStack(item)`. Verified (mysterious_mountain_lib
-    1.2.3).
-  - FD `ConsumableItem.finishUsingItem` returns `stack.getCraftingRemainingItem()`. Vanilla `BowlFoodItem` returns
-    `new ItemStack(Items.BOWL)`.
-  - The pack's own eating hook `food/CanServings.finishServing` handles cans only.
-  - `kubejs/startup_scripts/items/potion_buckets.js` line 35 and `func/potion_area.js` line 82 call
-    `stack.getOrCreateTag()`, which adds an empty `{}` tag. That only touches potion buckets and their clouds, not
-    bowls. It is still a pattern to avoid in any hook that sees other stacks.
-- So the tag (or a missing one: the *normal* stack could be the odd one) comes from somewhere not traced. Candidates:
-  a mod hooking eaten food or item entities. ItemPhysic and Cherished Items mix into `ItemEntity`; Cherished Items
-  1.0.2 only changes despawn time, checked. Also any recipe output with an empty `nbt: {}`. A plain bowl crafted by
-  a recipe that writes `{}` would refuse to stack with an eaten-stew bowl.
+### Investigation 2026-10-21 (cause still unknown)
+- More offline checks after the probe below, all clean: the exported loot tables and villager trades (no bowl,
+  paper or bottle entry with an NBT, name or lore function); every mod jar for Forge's use-item-finish event and
+  mixins on `completeUsingItem` / `finishUsingItem` (only FD's soup and effect handling, Alex's Mobs and Sol's
+  food tracker, none writing item tags); mixins on item entities, the inventory or bowls that create or set tags,
+  and pickup / item-spawn / toss / expire handlers that do (none on these items); the pack's `PlayerEvents.tick`
+  scripts (armor and held items only) and startup food scripts (no container changes).
+- In 1.19.2 `ItemStack#hasTag` is false for an empty tag, but `isSameItemSameTags` compares the tags, so a `{}`
+  from a stray `getOrCreateTag` is invisible to most checks yet stops stacking. The likeliest cause, unconfirmed.
+- A patcherMod inventory sweep that stripped empty tags from bowls, paper, bottles and buckets (and logged other
+  tags) was built and passed a scratch-server test, then removed at the user's request (2026-10-21).
+- Next: when it happens, build step 1 below (`/data get` of both stacks).
 
-### Build
-1. In game: hold the returned bowl, then a normal one, and run `/data get entity @s SelectedItem` (or `/kubejs hand`)
-   for each. Note the `tag` difference.
-2. From the tag, find the writer. `grep -r "<key>"` over `kubejs/`, then the decompiled jar of the mod the key names.
-   A bare `{}` (empty) tag usually means some `getOrCreateTag()` with nothing written. Then look for that call on
-   the path the item took (eat, feast block, drop).
-3. Fix at the source. If it's a pack script, remove the `getOrCreateTag()` (read with `stack.hasTag() &&` first). If
-   it's a mod, a patcherMod mixin on that call. A blanket "strip empty tags from bowls / paper / bottles on inventory
-   change" in KubeJS works too, but hides the cause. Only use it if the writer is a mod that can't be patched cleanly.
+### Probe 2026-10-21 (not reproduced)
+`tools/kitchen_probe/serve_items_probe.js`, run as `/kstest` on a scratch server with the full pack
+(`tools/creative_labels_test/scratch_server.sh`; copy the probe into `srv/kubejs/server_scripts/`):
+
+- All 494 loaded recipes whose result is a bowl, paper, glass bottle or bucket: no tag on any result.
+- A Forge fake player (survival) eats mushroom stew, beetroot soup, FD beef stew, tomato sauce, hot cocoa, caramel
+  popcorn, popcorn, honey bottle and milk bucket, from stacks of 1 and of 2, through `ItemStack.finishUsingItem` then
+  `ForgeEventFactory.onItemUseFinish` (the order `completeUsingItem` uses): every returned container has no tag. The
+  popcorn items give nothing back on eating; the paper comes only from the popcorn box.
+- The popcorn box and FD's roast chicken, shepherd's pie, stuffed pumpkin, honey-glazed ham and rice roll medley,
+  served with right-clicks until gone: the paper and bowls handed over or dropped by the leftover's loot table have
+  no tag.
+
+So the server-side paths are clean. Not covered: client-side stacks, picking a dropped bowl up as an item entity
+(ItemPhysic changes pickup), and bowls from other sources (chests, trades). Build step 1 (an in-game `/data get`
+of both stacks) is what's left.
 
 ### Ids and data
 `minecraft:bowl` (`i.bowl`), `minecraft:paper` (`i.paper`), `corn_delight:popcorn_box` (`i.popcorn_box`),
@@ -233,7 +235,14 @@ popcorn box. Each bowl / paper merges into a stack of crafted bowls / paper.
 ---
 
 ## kitchen #13: Short delay before the bowl pops into the buffer
-Status Planned / Work patcherMod / TODO `food/kitchen #13`
+Status Testing (BUILT 2026-10-21) / Work patcherMod / TODO `food/kitchen #13`
+
+### Built 2026-10-21
+As planned with one change: the hold counter lives on `RemainderBuffer` (`plateHold`, set in `store` when the
+container slot grows, spent by `holdPlating()`), not in a `@Unique` field per station, so the pot, kettle and oven
+share it. `[cooking] recycleShowTicks` (default 10, 0-100) in `CEConfig.Cooking` and the instance toml; the GameTest
+stand-in config was resynced. GameTests RB-T14 `potRecycleDelay`, RB-T15 `ovenRecycleDelay` (19 of 19 pass). Details:
+[remainder_buffer.md](../remainder_buffer.md) 3.1.
 
 ### Goal
 The pot reads step by step: the cooked food shows in the meal slot, the recycled bowl sits in the plating slot for a
@@ -333,7 +342,46 @@ slots full and a recipe waiting, the red line.
 ---
 
 ## kitchen #8: Counters, stove, sink
-Status Planned / Work patcherMod / TODO `food/kitchen #8`
+Status Testing (BUILT 2026-10-21) / Work patcherMod / TODO `food/kitchen #8`
+
+### Built 2026-10-21 (corrections to the plan below)
+- **Oven fuel** (user, 2026-10-21: any fuel like a furnace): `ovenRequiresCookingOil = false` in `config/` and
+  `configs_edited/root_config/` (mirrored to CreEngServer), so CfB's `getBurnTime` asks the furnace fuel list.
+  patcherMod `mixin/CfbOvenFuelMixin` (RETURN on `getBurnTime`) keeps cooking oil burning at CfB's own 800 (x
+  `ovenFuelTimeMultiplier` 0.33 = 264 ticks): `#balm:cooking_oil`, which now holds Rustic Delight's oil
+  (`cookingtags.js`, `i.t_balm_cooking_oil`). The tag had to be Balm's own: its file lists
+  `{"id":"forge:cookingoil","required":false}` with no `#`, an optional *item*, so `#forge:cookingoil` never reaches it.
+- **Fuel containers:** CfB took the remainder (bottle, bucket) only when the fuel stack ran out, so 64 oils gave 1
+  bottle. `CfbOvenFuelMixin` redirects the single `shrink(1)` in `serverTick`: each fuel burned while more remain
+  gives its container to the output slots (merging into a matching stack first), or drops it above the oven when
+  they are full. The last one still goes back into the fuel slot. A hopper on the output side pulls the bottles too.
+- **Tooltip** on `i.cfb_oven` (`kubejs/client_scripts/tooltips.js`): any furnace fuel and cooking oil; empty fuel
+  containers go to the output slots.
+- **Sink:** `sinkRequiresWater = false` (same backups).
+- **Cutting board:** the plan's diagnosis was wrong. `CounterBlock.use` returns FAIL for a block item on its top,
+  which does let the item place itself, but FD's `CuttingBoardBlock.canSurvive` then refuses: it wants a rigid or
+  center support face, and CfB's counter and corner are 15 px tall (`Block.box(0.5, 0, 0, 15.5, 15, 16)`, model
+  worktop at y 15). `mixin/CuttingBoardSupportMixin` (RETURN on `m_7898_`) also accepts blocks in
+  `#creativeengineering:cutting_board_supports` (`b.t_cutting_board_supports`: `b.cfb_counter`, `b.cfb_corner`,
+  `blocktags.js`).
+- **Board drawn on the worktop** (user, 2026-10-21): `compat/CuttingBoardOnCounter.offset` gives the shift for a
+  board above a support block; `mixin/BlockStateCuttingBoardOffsetMixin` (HEAD on `BlockStateBase.getOffset`,
+  m_60824_; the chunk mesher, vanilla and Rubidium, moves the model by it; one reference compare for other blocks)
+  and the client `mixin/CuttingBoardRendererOffsetMixin` (push + translate on FD's `CuttingBoardRenderer.render`, pop
+  at return) move the board and the item on it. Config `[kitchen] cuttingBoardOffsetX/Y/Z` in pixels (Y default -1,
+  X and Z 0, range -8..8), in the frame of a counter facing north (+X east, +Z toward the back) and turned with the
+  counter's `facing`. The hitbox and collision stay where they were (1 px above the drawn board).
+- **Corner storage:** deferred as recommended, now its own row `food/kitchen #15`.
+- **Checked on a scratch server** (`tools/kitchen_probe/cfb_kitchen_probe.js`, `/kttest`, 17 checks): the tag holds
+  the oil; coal and oil are fuel; an oven with 3 oils burns 264 ticks each and has 1 bottle in its output after the
+  first and 2 after the second; an empty bucket on the sink comes back full; a board placed on a counter stays and
+  cuts beef; its offset is (0, -1, 0) px, and with X = 1, Z = 2 it is (1, 2) / (-1, -2) / (-2, 1) / (2, -1) on a
+  north / south / east / west counter; zero off a counter. Not seen: the drawing in a client.
+
+**In-game tests:** KT-01 oven burns coal and oil; KT-02 sink fills a bucket; KT-03 board placed on a counter cuts;
+**KT-04** a stack of oils: one bottle in the output per oil burned; **KT-05** the board sits on the worktop (no gap),
+items on it sit on it too, on counters facing all four ways; set `cuttingBoardOffsetZ = -2`, F3+A: it moves toward
+the door on each.
 
 ### Goal
 Cooking for Blockheads kitchen parts work in this pack: the oven burns normal fuel, the sink gives water, a cutting
@@ -367,6 +415,19 @@ board sits on a counter, corner pieces can store things.
 4. Corner storage: needs a new block entity with an inventory and a menu (a patcherMod mixin on `CornerBlock` /
    `CornerBlockEntity`, or a new patcherMod block extending CfB's `CounterBlock` with a corner model). Medium work.
 
+### Corner storage (split to `food/kitchen #15`, BUILT 2026-10-21)
+CfB's floor corner gets a counter's storage. `mixin/CfbCornerStorageMixin` makes `CornerBlockEntity` a Balm
+`BalmContainerProvider` (a `compat/CfbCornerStorage.CornerContainer`, 27 slots or 54 with `largeCounters`). Balm's
+`buildProviders` then gives it an item handler, and CfB's `BlockKitchen.onRemove` drops its contents. Its
+`getProviders` gains a `DefaultKitchenItemProvider`, so the cooking table reads it like a counter.
+`mixin/CfbCornerUseMixin` turns the corner's FAIL `use` into opening a vanilla chest menu, titled with the block's
+name, except for a block item on the top face (placement, e.g. the cutting board). Saved through an attached
+capability (`ForgeCaps/creativeengineering:corner_storage`). The hanging corner's `newBlockEntity` returns null and
+Farmhouse Decorations' corner cabinets have no block entity, so they stay without storage. Scratch-server probe
+`tools/kitchen_probe/cfb_corner_probe.js` (`/kctest`): storage, chest GUI, save/load, item handler, kitchen
+provider, board on top, dye, drops: all pass. In game: KT-09 to KT-12 in [kitchen.md](../kitchen.md) (the GUI, a
+relog, drops, the cooking table).
+
 ### Ids and data
 `cookingforblockheads:oven`, `:sink`, `:counter`, `:corner` (no item_dict keys yet; add them under a
 `// ===== cookingforblockheads =====` block in item_dict.js and block_dict.js using the file's
@@ -393,7 +454,25 @@ board sits on a counter, corner pieces can store things.
 ---
 
 ## kitchen #6: Fridge
-Status Planned / Work patcherMod / resource pack / TODO `food/kitchen #6`
+Status Testing (BUILT 2026-10-21) / Work resource pack / TODO `food/kitchen #6`
+
+### Built 2026-10-21
+- `tools/gen_cfb_fridge_models.py` reads CfB 13.3.4's own models from the jar and writes six overrides to
+  `kubejs/assets/cookingforblockheads/models/block/`: `fridge_large_upper`, `fridge_large_lower` and the four large
+  door models. CfB loads these by id in code (`client/ModModels`, `block/fridge_large_*`), not through
+  `blockstates/fridge.json`, so the overrides reach them; the dye colours are `tintindex` 0 and stay.
+- Body: side walls x 0-2 / 14-16 and the back out to z 16, the top at y 16 (upper; was 13), the bottom x 0-16; the
+  seals, shelves and inside move out with the walls. Doors: x 0-16, full height (upper door to 16), at their old
+  depth z 1-2 with the handle in front, because `FridgeRenderer` swings them about a hard-coded hinge at x 14.5 (or
+  1.5 flipped), z 1.5. At 90 degrees the 1.5 px past the hinge turns into the side wall, out of sight.
+- Stretched faces take position UVs (no squashed texture); seals and handles keep their single-pixel UVs.
+- Not changed: the 1-tall fridge (`block/fridge`), the item model, the hinge pins (`fridge_large_hinge_*`, legacy
+  blockstate only), collision (already a full block).
+- `python3 tools/gen_cfb_fridge_models.py --check` reports models out of step with the jar (after a CfB update).
+
+**KT-06 Fridge look** (in game): a 2-tall fridge between two counters: no gaps at the sides, top flush with a full
+block next to it, a candle on top sits on its top face. Open and close it (both hinge sides): the door swings
+without a gap at the hinge; a dyed fridge keeps its colour.
 
 ### Goal
 The 2-tall Cooking for Blockheads fridge looks like a full block from the sides, so decor on top and blocks next to it
@@ -429,7 +508,38 @@ line up.
 ---
 
 ## kitchen #10: Kitchen tools
-Status Planned / Work KubeJS / patcherMod / TODO `food/kitchen #10`
+Status Testing (bowl and mortar BUILT 2026-10-21; scythe and stepstool split to `food/kitchen #16`, `#17`) / Work
+KubeJS / TODO `food/kitchen #10`
+
+### Built 2026-10-21
+- **Bamboo bowl:** `R.shaped(i.bowl, ['B B', ' B '], { B: i.bamboo }, e, 'bowl_from_bamboo')` in `cooking.js` (1 bowl).
+- **NCH helpers** (`startup_scripts/func/neoCraftHelper.js`, after `createMilling`):
+  - `mortar(output, input, e, id, inputCount)`: `oldguns:mortar_and_pestle_shapeless` (Old Guns' own type, so the
+    mortar comes back with 1 damage and JEI lists it with Old Guns' recipes), id `mortar/<id>`.
+  - `foodGrinding(outputs, input, e, id, opts)`: the pack's own food grinding. Writes Create crushing and Millstone
+    with the same outputs (ids unchanged: `createcrushing/<id>`, `createmilling/<id>`) and the mortar mirror: the
+    main output's machine average E (sum of count x chance, read with `_itemJson`'s `includeChance`) rounded down,
+    from one input; under 1, one output from ceil(1 / E) inputs (0.02 slack, at most 8). `opts.mortar = { count,
+    inputs }` overrides, `false` skips.
+- **Own recipes moved to `foodGrinding`** (`cooking.js`): corn (mortar 1 -> 1), corn crate (1 -> 13), kernels (3 ->
+  1), kernel bag (1 -> 3), hay bale (1 -> 13 flour; the hay bale also gained a Millstone recipe). IE crusher,
+  PneumaticCraft and wheat -> flour on the IE crusher stay as they were.
+- **Other mods' recipes:** `tools/gen_mortar_catalog.py` (generator `mortar_catalog`, dump `/dumpfood`) reads
+  `exported/food/recipes.json`, keeps Create milling and crushing from other mods whose main output is in a forge
+  flour / sugar / salt / grain / crops tag or the tool's ALLOW list, minus EXCLUDE (ice cubes, nether wart) and scrap
+  recycling, and writes `generation_scripts/food/mortar_catalog.json` (item_dict keys where they exist, and every
+  skipped recipe with its reason). `server_scripts/cooking/mortar.js` loops it through `R.mortar`. Today: wheat ->
+  1 flour, sugar cane -> 2 sugar, raw rock salt -> salt, coffee berries -> beans, crushed cocoa -> cocoa powder, rice
+  panicle and wild rice -> rice. IE crusher recipes export without ingredients, so they can't be catalogued.
+- **Changed 2026-10-21 (user):** food grinding now uses the pack's own `creativeengineering:mortar_and_pestle` (Old
+  Guns' texture, crafting table: lever over polished granite) through shapeless + `damageIngredient`; Old Guns' item is
+  renamed Powder Pestle (`i.powder_pestle`) and left for Old Guns integration later ([kitchen.md](../kitchen.md) 2.6).
+- **Checked on a scratch server** (`tools/kitchen_probe/mortar_probe.js`, runs at server load): every new recipe id
+  loads; wheat + mortar -> 1 flour and the mortar back at 1 damage; 3 kernels + mortar -> 1 cornmeal; sugar cane ->
+  2 sugar; 3 bamboo -> 1 bowl.
+
+**In-game tests:** **KT-07 Bamboo bowl** crafts. **KT-08 Mortar**: wheat + mortar in the crafting table gives flour
+and returns the mortar with 1 damage; JEI shows the grinding crafts on the mortar's uses page.
 
 ### Goal
 Four small tools: a bamboo bowl recipe, the Old Guns mortar and pestle for food grinding, a scythe for area harvest,

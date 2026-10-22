@@ -8,7 +8,7 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 
 | Part | Status | Full detail |
 |---|---|---|
-| Plugin wiring: eleven patcherMod plugins in `waila_plugins.json` (seven client-only, four with a server half) + one in the Brewin' port | BUILT 2026-10-20 (patcherMod 1.1.01 and Brewin' `-03` in `mods/` and `server_mods/`); every plugin initialises on a dedicated scratch server and a scratch client | here, 3 |
+| Plugin wiring: eleven patcherMod plugins in `waila_plugins.json` (six client-only, five with a server half; the eleventh, `remainder_buffer`, added 2026-10-21) + one in the Brewin' port | BUILT 2026-10-20 (patcherMod 1.1.01 and Brewin' `-03` in `mods/` and `server_mods/`); every plugin initialises on a dedicated scratch server and a scratch client | here, 3 |
 | "Run Speed" line (BlockRunner tiers, camo, sticky, sinking) | DEPLOYED (BR-44 to BR-47 pending) | [blockrunner.md](blockrunner.md) 3.8 |
 | "Growth" line for the 62 plants WTHIT skips, plus "(Harvestable)" | DEPLOYED with 1.0.6; CR-59 to CR-66 pending | [crops.md](crops.md) 2.9 |
 | Block model icon for every mod (272 blocks), substitute items, Forge's hit-aware pick block | BUILT 2026-10-20; DD part DEPLOYED with 1.0.4 | here, 2.2 |
@@ -17,13 +17,14 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 | Hive: "Bees: 2 / 3" on top, "Honey Level: 3 / 5" | BUILT 2026-10-20 | here, 2.4 |
 | State lines: servings, slices, eggs, hatching, cauldron level, charges, pickles (213 blocks) | BUILT 2026-10-20; eggs and cauldron level seen in a world | here, 2.5 |
 | Campfire: "Burns forever", "Rain: Puts it out / Going out in 6s / Safe (fuel block below)" | BUILT 2026-10-20; burn, douses and safe lines seen in a world | here, 2.6 |
+| Pot, kettle, oven leftover slots: "Holding: 3 Glass Bottle, 1 Bucket", red "Waiting: leftover slots full" | BUILT 2026-10-21 (patcherMod 1.1.01, not deployed); not seen in game | here, 2.9 |
 | Jade-only ports: IE sheetmetal tank contents on every part, Applied Cooking kitchen station | BUILT 2026-10-20 | here, 2.7 |
 | Brewin' keg: temperature, "Fermenting: Beer 45%", "Must Be Cold" (in the Brewin' port) | BUILT 2026-10-20 | here, 2.8 |
 | Vinery lines (grapevine pot, barrel, press, storage, lattice vines) | BUILT in the Vinery port's own plugin (`vinery:info`) | [alcohol.md](alcohol.md) B4.6 |
 
-- **Pending:** WL-01 to WL-31 in game. The scratch server run (section 6) proved every plugin loads on both sides
+- **Pending:** WL-01 to WL-33 in game. The scratch server run (section 6) proved every plugin loads on both sides
   and showed seven lines in a world before the last round of changes; everything else is unseen.
-- **Findings:** F1 to F3 resolved; the coverage audit's F4 to F10 are built except F9 (its own TODO row).
+- **Findings:** F1 to F3 resolved; the coverage audit's F4 to F10 are all built (F9 on 2026-10-21).
 - **Files to open:** [waila_plugins.json](../development/patcherMod/src/main/resources/waila_plugins.json),
   [compat/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/),
   [state_lines.json](../development/patcherMod/src/main/resources/assets/creativeengineering/state_lines.json),
@@ -58,6 +59,7 @@ nothing under WTHIT; 2.6 to 2.8 port the ones that matter.
 | `creativeengineering:campfire` | `compat/WthitCampfire` | both | nothing (Unlit Campfire optional) | burn and rain lines, 2.6 |
 | `creativeengineering:sheetmetal_tank` | `compat/WthitSheetmetalTank` | both (server data only) | `immersiveengineering` | tank fluid bar, 2.7 |
 | `creativeengineering:kitchen_station` | `compat/WthitKitchenStation` | both | `appliedcooking`, `ae2` | online / offline, 2.7 |
+| `creativeengineering:remainder_buffer` | `compat/WthitRemainderBuffer` | both | nothing (pot / kettle parts only with `farmersdelight` / `farmersrespite`) | leftover slots, 2.9 |
 | `brewinandchewin:keg` (Brewin' port) | `integration/wthit/KegWthit` | both | nothing | keg lines, 2.8 |
 
 "Both" plugins have a server half that sends data the client doesn't otherwise get; WTHIT and the two mods are on
@@ -103,12 +105,12 @@ DD's 89 missing item models for JEI; the deploy preflight warns when they're sta
 | a soft fluid | "Contents: Honey (6 / 12)": bottles against the tank's capacity (jar 12, `[functional.jar] capacity`) |
 | a one-bottle holder (goblet) | "Contents: Water": full or empty is all there is |
 | a potion | "Contents: Splash Potion of Healing (1 / 12)", then one line per effect as the potion's own tooltip writes it: "Instant Health II", "Regeneration (1:30)"; lingering durations at vanilla's ¼; beneficial blue, harmful red. `[wthit] holderPotionEffects` |
-| cookies | "Contents: Cookie (5 / 12)" (WTHIT's extra plugin also shows the cookie as an item line) |
+| cookies | "Contents: Cookie (5 / 12)" (WTHIT's extra plugin also shows the cookie as an item line); a mixed jar "Contents: 3 Cookie, 2 Lemon Cookie (5 / 12)" ([mixed_jars.md](mixed_jars.md), MJ-08) |
 | a captured mob | "Contents: Bee" |
 
 Client-side: the holders sync their contents for their renderers. `SoftFluidTank.capacity` is read by reflection
-(Moonlight 2.3 has no getter). Off with `[wthit] holderContents`. The cooking plan's soups-in-jars and mixed cookie
-jars are food rows: [TODO](todo/TODO.md) `food/ingredients #13`, `food/baked-goods #11`.
+(Moonlight 2.3 has no getter). Off with `[wthit] holderContents`. The cooking plan's soups-in-jars are a food row:
+[TODO](todo/TODO.md) `food/ingredients #13`. Mixed jars: built 2026-10-21, [mixed_jars.md](mixed_jars.md).
 
 ### 2.4 Hive bees and honey
 
@@ -178,9 +180,22 @@ progress.
 
 The keg's items and tank already show through WTHIT's Forge lines. Off with `wthitKeg` in brewinandchewin-client.toml, or WTHIT's plugin list ("Keg Fermentation").
 
+### 2.9 Pot, kettle and oven leftover slots
+
+`compat/WthitRemainderBuffer` (built 2026-10-21, F9, [TODO](todo/TODO.md) `food/kitchen #3`). The FD cooking pot,
+the Farmer's Respite kettle and the oven keep ingredient leftovers in two slots ([remainder_buffer.md](remainder_buffer.md)).
+The server sends what they hold, so the line doesn't depend on the client's copy:
+
+- "Holding: 3 Glass Bottle, 1 Bucket" while either slot holds something.
+- Red "Waiting: leftover slots full" while a craft is held back because its leftovers wouldn't fit
+  (`[cooking] stallWhenFull`). It clears within 2 ticks of a slot being emptied.
+
+The oven's leftover slots may also show in WTHIT's own Forge item line (its item handler includes them on every
+face); unchecked in game. `[wthit] remainderBuffer`.
+
 ## 3. What the pack changes
 
-- **Declaration:** `waila_plugins.json` at the root of patcherMod (ten entries) and of the Brewin' port (one). A
+- **Declaration:** `waila_plugins.json` at the root of patcherMod (eleven entries) and of the Brewin' port (one). A
   missing required mod skips that plugin only.
 - **Toggles:** WTHIT writes each plugin into `config/waila/plugin_toggle.json5` (player config, not shipped).
 - **Switches:** every change to WTHIT's overlay can be turned off on its own (all default on). In
@@ -203,6 +218,7 @@ The keg's items and tank already show through WTHIT's Forge lines. Off with `wth
   | Campfire rain line | `[wthit] campfireRain` |
   | Sheetmetal tank bar on every part (server side) | `[wthit] sheetmetalTank` |
   | Kitchen station lines | `[wthit] kitchenStation` |
+  | Pot / kettle / oven leftover lines | `[wthit] remainderBuffer` |
   | Keg lines | `wthitKeg` in `brewinandchewin-client.toml` (the port) |
   | Coaster lines | `[coaster] wthit` ([alcohol.md](alcohol.md) 12) |
   | Growth line | `[crop_growth] enabled` |
@@ -234,7 +250,7 @@ The keg's items and tank already show through WTHIT's Forge lines. Off with `wth
 | F6 | Cauldron levels (no WTHIT line but vanilla water / lava) | BUILT, 2.5 |
 | F7 | Jade-only integrations (Unlit Campfire, IE tank, Applied Cooking) | BUILT, 2.6 and 2.7; IE icons and Delightful needed nothing |
 | F8 | Brewin' keg fermentation progress | BUILT, 2.8 |
-| F9 | Kitchen remainder buffer "Holding: ..." line | open: [TODO](todo/TODO.md) `food/kitchen #3` |
+| F9 | Kitchen remainder buffer "Holding: ..." line | BUILT 2026-10-21, 2.9 |
 | F10 | Blank icons left | BUILT: skull pile by Forge pick, powered flywheel by `iconItems`; skull candles were fine; fake track and casing collision are technical |
 
 Checked and fine: every hive; every Supplementaries holder; the Vinery port's blocks (its own plugin); the Growth
@@ -267,7 +283,8 @@ TreeChop ship WTHIT plugins.
   [waila_plugins.json](../development/backportedBrewin/src/main/resources/waila_plugins.json) (Brewin' port).
 - [compat/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/):
   `WthitBlockModelIcon` + `BlockModelIcons` (icon), `WthitHolderContents`, `WthitHive`, `WthitStateLines` +
-  `StateLines`, `WthitCampfire`, `WthitSheetmetalTank`, `WthitKitchenStation`, `WthitCoaster`.
+  `StateLines`, `WthitCampfire`, `WthitSheetmetalTank`, `WthitKitchenStation`, `WthitCoaster`,
+  `WthitRemainderBuffer`.
 - [state_lines.json](../development/patcherMod/src/main/resources/assets/creativeengineering/state_lines.json).
 - [KegWthit.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/integration/wthit/KegWthit.java).
 - [devtools/WthitIconDump.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/WthitIconDump.java) → `kubejs/exported/wthit_icons.json` → [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
@@ -368,6 +385,15 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   "Beer: Must Be ..." (the requirement the recipe book shows).
 - [ ] **WL-30 Keg on the server:** WL-29 on the dedicated server.
 
+**Kitchen leftover slots** (patcherMod 1.1.01)
+
+- [ ] **WL-32 Holding line:** cook hot cocoa with a milk bucket in an FD pot → "Holding: 1 Bucket". Bake a milk-bottle
+  recipe in the oven → "Holding: 1 Glass Bottle" (note whether WTHIT's own item line lists the bottle as well). An
+  empty pot shows no line.
+- [ ] **WL-33 Waiting line:** fill both of a pot's leftover slots with different items (cook with a milk bucket, then
+  a honey bottle recipe, or use `/data`), then load a recipe that leaves a third kind → red "Waiting: leftover slots
+  full"; take one slot out → the red line goes and the pot cooks. Repeat once on the dedicated server.
+
 **Switches**
 
 - [ ] **WL-31 Every switch:** set each switch in the section 3 table to false in turn (or all at once, then back) and
@@ -376,7 +402,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   `holderPotionEffects` → no effect lines; `holderSingleName` → goblet "Water (1 / 1)"; `hiveBeesOnTop` → WTHIT's
   "2 Bee" line back and Bees at the end; `[wthit.state_lines] slices` → no Slices on a cake while feasts keep Servings;
   `campfireBurn` / `campfireRain` → that line only; `sheetmetalTank` → the bar only on the two ports; `kitchenStation`
-  → no station lines; `wthitKeg` (brewinandchewin-client.toml) → no keg lines. Set them all back to true.
+  → no station lines; `remainderBuffer` → no Holding / Waiting lines; `wthitKeg` (brewinandchewin-client.toml) → no keg lines. Set them all back to true.
 
 ## 8. History
 
@@ -396,3 +422,6 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   `iconSubstitutes`, `holderSingleName`, `hiveBeesOnTop`, `[wthit.state_lines]` per line, `campfireBurn` /
   `campfireRain` (replacing `campfire`), `sheetmetalTank`, the port's `wthitKeg`). Headless spec check: every key
   present, all true. Jars rebuilt and installed again. WL-31.
+- 2026-10-21: F9 built: pot / kettle / oven leftover lines (2.9, `compat/WthitRemainderBuffer`, `[wthit]
+  remainderBuffer`, TODO `food/kitchen #3`). patcherMod 1.1.01 rebuilt and installed in `mods/` and `server_mods/`.
+  WL-32, WL-33.

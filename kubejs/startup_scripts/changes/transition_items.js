@@ -42,8 +42,24 @@ StartupEvents.registry('item', e => {
 		['roasted_mutton_chops'],
 		['enchanted_golden_apple'],
 		['ham_and_cheese_sandwich'],                                 // alcohol.js (alcohol.md 8.6)
-		['quiche_bacon',             'brewinandchewin:item/quiche'],
-		['quiche_mushroom',          'brewinandchewin:item/quiche'],
+		['quiche'],
+		// meals (cooking.js "Meals", TODO food/meals #2, #3)
+		['mutton_wrap'],
+		['fruit_salad'],
+		['hamburger'],
+		['cheeseburger'],
+		['deluxe_cheeseburger'],
+		['simple_hamburger'],
+		['hamburger_with_egg'],
+		['loaded_hamburger'],
+		['bison_burger'],
+		['kangaroo_burger'],
+		['shepherds_pie'],
+		['horror_lasagna'],
+		['stuffed_potato'],
+		['crispy_skewer'],
+		['crawling_sandwich'],
+		['steak_and_potatoes'],
 
 		// redstone
 		['redstone_torch'],

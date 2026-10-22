@@ -5,7 +5,7 @@ Sources, lowest priority first (a later source wins for the same key, like the g
   1. vanilla 1.19.2 client jar (~/.minecraft/versions/1.19.2/1.19.2.jar) and the Forge client jar
   2. every mod jar in mods/ (assets/<ns>/lang/en_us.json)
   3. KubeJS: kubejs/assets/<ns>/lang/en_us.json, kubejs/assets/*.zip, and the ClientEvents.lang calls
-     in kubejs/client_scripts/*.js (e.add('key', 'Name'), e.renameItem / renameBlock('ns:id', 'Name'))
+     in kubejs/client_scripts/*.js (e.add('key', 'Name'), e.renameItem / renameBlock('ns:id' or global.item.<key>, 'Name'))
   4. the resource-pack zips enabled in options.txt (they sit above the KubeJS pack, see
      memory resource-pack-lang-priority)
 
@@ -70,19 +70,30 @@ def enabled_pack_zips():
 
 SCRIPT_ADD = re.compile(r"""\.add\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]*)['"]""")
 SCRIPT_RENAME = re.compile(r"""\.rename(?:Item|Block)\(\s*['"]([a-z0-9_.\-]+):([a-z0-9_./\-]+)['"]\s*,\s*['"]([^'"]*)['"]""")
+# renameItem(global.item.<key>, 'Name'): the id comes from item_dict.js
+SCRIPT_RENAME_KEY = re.compile(r"""\.rename(?:Item|Block)\(\s*global\.item\.(\w+)\s*,\s*['"]([^'"]*)['"]""")
+ITEM_DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
 
 
 def script_langs():
     """Keys set by ClientEvents.lang in client scripts. renameItem uses the item's description id,
     which is block.* for a block item, so both forms are recorded."""
     out = {}
+    item_ids = None
     for js in sorted((INSTANCE / 'kubejs/client_scripts').rglob('*.js')):
         text = js.read_text(errors='replace')
         if 'ClientEvents.lang' not in text:
             continue
         for key, val in SCRIPT_ADD.findall(text):
             out[key] = val
-        for ns, path, val in SCRIPT_RENAME.findall(text):
+        renames = SCRIPT_RENAME.findall(text)
+        for key, val in SCRIPT_RENAME_KEY.findall(text):
+            if item_ids is None:
+                item_ids = dict(re.findall(r"^\s*i\.(\w+)\s*=\s*'([a-z0-9_.\-]+:[a-z0-9_./\-]+)'",
+                                           ITEM_DICT.read_text(errors='replace'), re.M))
+            if key in item_ids:
+                renames.append(tuple(item_ids[key].split(':', 1)) + (val,))
+        for ns, path, val in renames:
             dotted = path.replace('/', '.')
             out['item.%s.%s' % (ns, dotted)] = val
             out['block.%s.%s' % (ns, dotted)] = val

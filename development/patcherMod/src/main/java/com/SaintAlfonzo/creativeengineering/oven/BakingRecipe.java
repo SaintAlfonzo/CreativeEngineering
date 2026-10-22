@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import com.SaintAlfonzo.creativeengineering.CEConfig;
+import com.SaintAlfonzo.creativeengineering.food.CanServings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -82,6 +83,7 @@ public class BakingRecipe implements Recipe<RecipeWrapper> {
     /**
      * How many items one bake takes from each ingredient slot (index = slot), or null when the ingredients don't
      * match: every non-empty slot must match a different ingredient and hold at least that ingredient's count.
+     * A partly eaten can matches nothing, so a pie filling bakes only from a full can.
      */
     @Nullable
     public int[] slotCounts(RecipeWrapper inv) {
@@ -101,7 +103,7 @@ public class BakingRecipe implements Recipe<RecipeWrapper> {
         for (int i = 0; i < inputItems.size(); ++i) {
             Ingredient ingredient = inputItems.get(i);
             int count = getIngredientCount(i);
-            tests.add(stack -> ingredient.test(stack) && stack.getCount() >= count);
+            tests.add(stack -> ingredient.test(stack) && stack.getCount() >= count && !CanServings.isPartial(stack));
         }
         int[] match = RecipeMatcher.findMatches(inputs, tests);
         if (match == null) {

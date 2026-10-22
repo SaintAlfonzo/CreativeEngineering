@@ -31,6 +31,8 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | Fried egg furnace/smoker/campfire restored; cooking oil from pumpkin seeds too; own mixer ratio | [cooking.js](../kubejs/server_scripts/cooking/cooking.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js), NCH `smoking` xp/time | DEPLOYED with 1.0.2. FO-23 to FO-27 |
 | Vanilla egg -> `#forge:eggs` migration | list in 3.8 | TODO, not built |
 | Every raw egg stacks to 64 | now a rule of the stack size policy ([stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js), `tools/gen_stack_sizes.py`); `item_properties.js` is removed in 1.0.5 | DEPLOYED with 1.0.6; single player 2026-10-11 logged `[stack_sizes] set 1052 stack sizes`. FO-28 |
+| Glistering Melon Slice edible (Golden Melon Slice values, no effects) | [food_values.js](../kubejs/startup_scripts/cooking/food_values.js), `golden` type in food_types.json | BUILT 2026-10-21, not run in game (3.10). FO-29 |
+| Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, jar not in `mods/` yet (3.11). FO-30, FO-31 |
 
 **Open first:** [food_catalog.md](food_catalog.md) (every food), [food_types.json](../kubejs/generation_scripts/food/food_types.json)
 (who is in which type), section 2.3 (Spice of Life), section 4.2 (what is broken today).
@@ -487,6 +489,36 @@ eggs, and the Untitled Duck Mod duck and goose eggs. They are listed by item_dic
 egg to `#forge:eggs` later, rerun `tools/gen_stack_sizes.py` after a tag dump. Not changed: cooked eggs (fried eggs, boiled emu egg), the
 dragon egg and spawn eggs.
 
+### 3.10 Glistering Melon Slice edible (BUILT 2026-10-21)
+
+Vanilla's Glistering Melon Slice (a brewing ingredient) was not food. [food_values.js](../kubejs/startup_scripts/cooking/food_values.js)
+now copies Golden Food's `golden_melon_slice` onto it, the golden food made from the same base item: 4 hunger, 1.2
+modifier (4.8 saturation), always edible, like every `golden` food (they are all 4 / 1.2 whatever the base). Effects are
+left out for now: the copy entry is `{ from: 'golden_melon_slice', effects: false }`, which rebuilds the properties
+without them. It is in the `golden` type in food_types.json, so it joins `#creativeengineering:food_type/golden`.
+Brewing is unchanged. Note: in this pack `minecraft:golden_carrot` is not effect-free: the 2026-10-20 `/dumpfood` has it at
+4 / 1.2 with Regeneration II 5 s and Absorption 2 min, the same as the golden apple. Until the next `/dumpfood`,
+`food_catalog.py --check` reports the slice as "no longer edible" (the export predates the change). FO-29.
+
+### 3.11 Seasoning JEI page (BUILT 2026-10-21)
+
+Salt shows its one `salt:salting` special craft as a Crafting-page extension, and Create: The Salt adds 65
+`create:mixing` recipes (food + `#forge:salts` -> the same food with `{Salted:1b}`), one Mixing page each. patcherMod's
+`SeasoningJEI` (a `@JeiPlugin`, client only) moves them onto one **Seasoning** page (`creativeengineering:seasoning`,
+icon: salt; catalysts: crafting table, mechanical mixer):
+- the salting craft: one page, machine slot = crafting table, every `#salt:can_be_salted` food + salt -> the salted
+  food. Food and output cycle together (a JEI focus link), so "uses of" / "recipes for" a food shows that food only;
+- Create: The Salt's mixes: one page, machine slot = mechanical mixer, the foods those mixes cover. A mix is folded in
+  only if its result carries `Salted`, it has exactly two ingredients and one of them matches the result's item;
+- any crafting recipe whose id starts `creativeengineering:shapeless/season/` with 2 or 3 ingredients (the hook for
+  `food/seasoning #3`: name pack seasoning crafts `R.shapeless(..., 'season/<name>')`), a page each.
+
+`onRuntimeAvailable` hides exactly the recipes it re-showed (by recipe id) from the Crafting and Mixing pages; if
+building the page throws, nothing is hidden. The crafts themselves are unchanged (the grid and basin still do them).
+Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds none. Off switch: CEConfig
+`[jei] seasoningCategory = false` (next JEI start). Compiles against `development/patcherMod/libs/salt-1.19.2-1.2.4.1.jar`
+(git-ignored, copied from `mods/`). FO-30, FO-31.
+
 ## 4. Limits and decisions
 
 ### 4.1 Limits
@@ -501,7 +533,8 @@ dragon egg and spawn eggs.
 
 ### 4.2 Findings (2026-09-28)
 
-1. **Canned Goods saturation is broken.** Its modifiers are 1 to 42 where the game expects about 0.1 to 1.2 (the
+1. **Canned Goods saturation is broken** (FIXED for every Canned Goods food can 2026-10-21: the reused cans since 1.0.6,
+   the 15 no recipe makes now take their family's values from gen_can_types.py, [can_parity.md](can_parity.md) 8). Its modifiers are 1 to 42 where the game expects about 0.1 to 1.2 (the
    MCreator field was filled with saturation points). Every can refills saturation to the hunger level; canned steak
    is 16 / 24, 30 times the saturation of two steaks. The same numbers make cans the top Spice of Life foods
    (canned suspicious stew 11.98, canned steak 10.17): 16 cans reach every threshold.
@@ -567,7 +600,10 @@ dragon egg and spawn eggs.
 - [cooking.js](../kubejs/server_scripts/cooking/cooking.js) "Protein / Egg": fried egg restore, cooking oil pot and mixer
 - [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js): pumpkin seeds in `#rusticdelight:cooking_oil_ingredients`
 - [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js): `smoking(output, input, e, id, xp, cookingtime)`
+- [food_values.js](../kubejs/startup_scripts/cooking/food_values.js): one food's values copied onto another (cantaloupe slice, glistering melon slice)
 - [stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js): egg stack sizes (the `egg` rule; `item_properties.js` removed in 1.0.5)
+- patcherMod [compat/jei/SeasoningJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningJEI.java)
+  and [SeasoningCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
 - [food_catalog.md](food_catalog.md): generated reference; `kubejs/exported/food/catalog.json` (not in git)
 - Spice of Life config: `saves/<world>/serverconfig/solapplepie-server.toml`, client `config/solapplepie-client.toml`
 - Related configs: `config/salt-common.toml`, `config/farmersdelight-common.toml` (vanilla soups get FD effects,
@@ -646,6 +682,17 @@ Cooking oil and fried eggs (3.7), after a restart:
 - [ ] **FO-28 egg stacks:** `/give @s minecraft:egg 64`, `/give @s quark:egg_parrot_blue 64` and
   `/give @s alexsmobs:emu_egg 64`: each is one full stack. Chickens' eggs picked up merge past 16.
   `logs/kubejs/startup.log` has `[stack_sizes] set N stack sizes` and no `no item_dict key` warning.
+- [ ] **FO-29 glistering melon:** after a restart, hold a Glistering Melon Slice in survival with a full hunger bar and
+  eat it: AppleSkin shows 4 hunger / 4.8 saturation (same as a Golden Melon Slice), no effect is applied. It still
+  brews Healing in a brewing stand. `logs/kubejs/startup.log` has `[food values] 2 foods copied` and no warning.
+- [ ] **FO-30 Seasoning page:** after installing the patcherMod jar and restarting, `logs/latest.log` has
+  `[jei] Seasoning page: 2 page(s), moved 1 crafting and 65 mixing recipe(s)` and `[jei] hid 66 seasoning recipe(s)`
+  (counts may differ if Create: The Salt recipes are removed). Press U on Salt: a Seasoning tab with two pages
+  (crafting table, mechanical mixer); the Crafting tab no longer shows the "food + salt" page. R on Cooked Beef: the
+  Mixing tab has no cooked beef + salt mix; the Seasoning pages show only cooked beef -> salted cooked beef.
+- [ ] **FO-31 still crafts, off switch:** cooked beef + salt in the grid still gives salted cooked beef, and a basin
+  under a mixer still salts it. Set `[jei] seasoningCategory = false` in `config/creativeengineering-common.toml`,
+  rejoin: no Seasoning tab, salting back on the Crafting and Mixing tabs.
 
 ## 8. History
 
@@ -699,3 +746,8 @@ Cooking oil and fried eggs (3.7), after a restart:
 - 2026-10-20: `gen_stack_sizes.py` rerun on the fresh food export: `scarlet_pierogies` -> `scarlet_pierogi` (fixes the
   startup `[stack_sizes] no item_dict key` warning), Beer / Vodka / Dread Nog / Miss Lilitus Wine and the two golden
   milk bucket cans added, golden cakes now by dict key.
+- 2026-10-21: Glistering Melon Slice edible at Golden Melon Slice values (4 / 1.2, always edible), no effects;
+  food_values.js entries can drop effects; added to the `golden` type (3.10). FO-29.
+- 2026-10-21: Seasoning JEI page (3.11): Salt's salting craft and Create: The Salt's 65 salting mixes moved off the
+  Crafting and Mixing pages onto one Seasoning page; `creativeengineering:shapeless/season/...` crafts join it.
+  patcherMod built, jar not installed. FO-30, FO-31.

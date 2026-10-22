@@ -248,6 +248,14 @@
       "dumps": ["dumppaintings"],
       "outputs": ["kubejs/data/creativeengineering/paintings"],
       "apply": "/reload (Immersive Paintings re-reads its datapack paintings)"
+    },
+    {
+      "id": "mortar_catalog",
+      "script": "tools/gen_mortar_catalog.py",
+      "groups": ["food"],
+      "dumps": ["dumpfood"],
+      "outputs": ["kubejs/generation_scripts/food/mortar_catalog.json"],
+      "apply": "/reload (kubejs/server_scripts/cooking/mortar.js reads the catalog in the recipe event)"
     }
   ]
 }

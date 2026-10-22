@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Generate the per-type food cans (raw fruit/meat/fish, hazard, special, cookies, cooked veggie/meat/fish, bread,
-salad, soup, meal, pie, feast, drink, golden). The hand-written raw veggie/fruit/meat cans stay in cans.js.
+"""Generate every food can (raw veggie/fruit/meat/fish, hazard, special, cookies, cooked veggie/meat/fish, bread,
+salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert, cake), plus the food values of Canned Goods'
+own cans that no recipe makes (norecipe rows), so none keeps the mod's broken saturation modifiers.
 
 Two kinds of section (SECTIONS below, mirroring the Goal comments in kubejs/server_scripts/cooking/canning.js):
   mult  a meal is the food it holds x mult (hunger and saturation points); every source shares one recipe.
-  meal  a meal is a fixed size (hunger, saturation points), like the hand-written raw cans. The recipe is sized by the
-        first (whole) source's value, at most 8 (the grid less the can); the other sources are its sliced forms and
-        share the same slots and count. No recipe makes a partly full can.
+  meal  a meal is a fixed size (hunger, saturation points), e.g. the Baked Potato meal of raw veggies. The recipe is
+        sized by the first (whole) source's value, at most 8 (the grid less the can); the other sources are its
+        sliced forms and share the same slots and count. No recipe makes a partly full can.
 Effects are copied with scaled durations, except for Canned Goods cans whose own code applies them (code_fx).
-Cans without their own sprite (kubejs/assets/creativeengineering/textures/item/<key>.png) get the section's group
-sprite (GROUP_SPRITE) or Canned Goods' beetroot can.
+Cans without their own sprite (kubejs/assets/creativeengineering/textures/item/<key>.png) get their family's sprite
+(GROUP_SPRITE, one per section).
 
 Input (run /dumpfood in game first):  kubejs/exported/food/catalog.json, foods.json
 Output:
@@ -47,7 +48,7 @@ SPRITES = INSTANCE / 'kubejs/assets/creativeengineering/textures/item'
 
 BEGIN = '// ===== BEGIN GENERATED CANS (tools/gen_can_types.py, do not edit) ====='
 END = '// ===== END GENERATED CANS ====='
-ANCHOR = "i.canned_raw_rabbit             = 'creativeengineering:canned_raw_rabbit';"
+ANCHOR = "i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow"
 
 # ---------------------------------------------------------------------------------------------------------------
 # Spec
@@ -63,9 +64,11 @@ ANCHOR = "i.canned_raw_rabbit             = 'creativeengineering:canned_raw_rabb
 # dur       effect duration multiplier
 # fast      every can in the section is fast to eat
 # meat      meal sections: every can counts as meat (wolves); otherwise the source's flag decides
+# pot       the recipes are Cooking Pot recipes (the empty can goes in the container slot, at most 6 inputs)
 SALT = ['salt', 'bone_broth']
 SWEET = ['sugar', 'honey_bottle']
 SECTIONS = OrderedDict([
+    ('raw_veggie',   dict(meal=(5, 6), servings=2, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_salt', SALT, 0, 1)])),
     ('raw_fruit',    dict(meal=(5, 3), servings=3, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_sugar', SWEET, 0, 1)])),
     ('raw_meat',     dict(meal=(5, 3), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, meat=True,
                           extra=[('_broth', SALT, 0, 1)])),
@@ -85,24 +88,80 @@ SECTIONS = OrderedDict([
     ('feast',        dict(mult=1,    servings=6,  n=1, dur=1.0,  fast=False, extra=[])),
     ('drink',        dict(mult=1,    servings=4,  n=4, dur=1.0,  fast=False, extra=[])),
     ('golden',       dict(mult=0.25, servings=10, n=2, dur=0.25, fast=False, extra=[])),   # honey is required, see below
+    # 2026-10-21 (can_parity 2.20-2.23): cheese is processed in the Cooking Pot; tomato sauce and dough keep their
+    # value; desserts like soups; cake: 1 cake -> 4 servings of 1.75 slices (7 slices a cake), see the cake recipes below
+    ('dairy',        dict(mult=1.25, servings=4,  n=4, dur=1.0,  fast=False, extra=[], pot=True)),
+    ('preserve',     dict(mult=1,    servings=4,  n=4, dur=1.0,  fast=False, extra=[])),
+    ('dessert',      dict(mult=1.25, servings=8,  n=6, dur=0.75, fast=False, extra=[('_sugar', SWEET, 3, 1)])),
+    ('cake',         dict(mult=1.75, servings=4,  n=1, dur=1.0,  fast=True,  extra=[])),
 ])
 
-# Sprite for cans without their own, per section (texture ids). Raw veggie/fruit/meat cans in cans.js use the same
-# carrot / apple / raw beef sprites.
+# Family sprite for cans without their own (texture ids): a drawn CE can or the Canned Goods can of the same family.
+# Canned Goods texture names differ from some item ids (canned_rabbit_stew -> items/canned_rabit_stew).
 GROUP_SPRITE = {
+    'raw_veggie': 'creativeengineering:item/canned_carrot',
     'raw_fruit': 'creativeengineering:item/canned_apple',
     'special': 'creativeengineering:item/canned_apple',
     'raw_meat': 'creativeengineering:item/canned_raw_beef',
     'raw_fish': 'creativeengineering:item/canned_raw_salmon',
+    'hazard': 'canned_goods:items/canned_rotten_flesh',
+    'cookies': 'canned_goods:items/canned_cookies',
+    'cooked_veggie': 'canned_goods:items/canned_baked_potato',
+    'cooked_meat': 'canned_goods:items/canned_beef',
+    'bread': 'canned_goods:items/canned_bread',
+    'salad': 'creativeengineering:item/canned_cabbage',
+    'soup': 'canned_goods:items/canned_rabit_stew',
+    'meal': 'canned_goods:items/canned_food',
+    'pie': 'canned_goods:items/canned_pumpkin_pie',
+    'feast': 'canned_goods:items/canned_food',
+    'drink': 'canned_goods:items/canned_honey_bottles',
+    'golden': 'canned_goods:items/canned_golden_apples',
+    'golden/enchanted': 'canned_goods:items/canned_notch_apples',   # glowing golden cans
+    'dairy': 'canned_goods:items/canned_food',
+    'preserve': 'canned_goods:items/canned_food',
+    'dessert': 'canned_goods:items/canned_cake',
+    'cake': 'canned_goods:items/canned_cake',
 }
 
 # explicit cans: (section, can key, display name, source keys (first = value source), existing Canned Goods can?[, opts])
-# opts: input = recipe input keys instead of the sources (feast blocks); pie = whole pie a full can + pie crust makes;
-#       code_fx = Canned Goods applies the effects itself (no copy); values = fixed meal for a food not in the catalog
-#       (hunger, modifier, always, clear_effects); meal = this can's own (hunger, saturation points) meal in a meal
-#       section, instead of the section's
+# opts: input = recipe input keys instead of the sources (tags, feast blocks); pie = whole pie a full can + pie crust
+#       makes; code_fx = Canned Goods applies the effects itself (no copy); values = fixed meal for a food not in the
+#       catalog (hunger, modifier, meat, always, clear_effects); meal = this can's own (hunger, saturation points) meal
+#       in a meal section, instead of the section's; adv / n / servings = this can's own additive ratio, recipe count,
+#       servings; counts = (basic, additive) item counts in a meal section instead of the sizing rule; fx_ticks = {effect id: ticks} fixed effect lengths; food = False: not edible (an ingredient can);
+#       norecipe = values only (Canned Goods cans that no recipe makes: a pack can of the same food has the recipe)
 EXPLICIT = [
-    # raw fruit (the first 12 are hand-written in cans.js); sliced citrus shares the whole fruit's count
+    # raw veggie: Baked Potato meals. Whole and sliced share a tag (cabbage leaf, potato slices) or the slots (kernels)
+    ('raw_veggie', 'canned_beetroot', 'Canned Beetroot', ['minecraft_beetroot'], False, dict(input=['beetroot'])),
+    ('raw_veggie', 'canned_cabbage', 'Canned Cabbage', ['farmersdelight_cabbage', 'cabbage_leaf'], False,
+     dict(input=['any_cabbage'])),
+    ('raw_veggie', 'canned_carrot', 'Canned Carrot', ['minecraft_carrot'], False, dict(input=['carrot'])),
+    ('raw_veggie', 'canned_onion', 'Canned Onion', ['onion_farmersdelight'], False, dict(input=['onion'])),
+    ('raw_veggie', 'canned_potato', 'Canned Potato', ['minecraft_potato', 'potato_slices'], False,
+     dict(input=['any_potato'])),
+    ('raw_veggie', 'canned_tomato', 'Canned Tomato', ['farmersdelight_tomato'], False, dict(input=['tomato'])),
+    ('raw_veggie', 'canned_bell_pepper', 'Canned Bell Pepper', ['bell_pepper_green', 'bell_pepper_red', 'bell_pepper_yellow'],
+     False, dict(input=['any_bell_pepper'])),
+    ('raw_veggie', 'canned_cactus_flesh', 'Canned Cactus Flesh', ['cactus_flesh'], False),
+    ('raw_veggie', 'canned_gongylidia', 'Canned Gongylidia', ['gongylidia'], False),
+    ('raw_veggie', 'canned_corn', 'Canned Corn', ['corn'], False),   # maize only: kernels (4 a maize) are not canned
+
+    # raw fruit: Fruit Meals; sliced citrus shares the whole fruit's count
+    ('raw_fruit', 'canned_apple', 'Canned Apple', ['apple'], False),
+    ('raw_fruit', 'canned_banana', 'Canned Banana', ['neapolitan_banana'], False),   # Alex's Mobs bananas not canned
+    ('raw_fruit', 'canned_cantaloupe', 'Canned Cantaloupe', ['cantaloupe_slice'], False),
+    ('raw_fruit', 'canned_cherry', 'Canned Cherries', ['cherry'], False),
+    ('raw_fruit', 'canned_glow_berry', 'Canned Glow Berries', ['glow_berries'], False),
+    ('raw_fruit', 'canned_melon', 'Canned Melon', ['melon'], False),
+    ('raw_fruit', 'canned_mulberry', 'Canned Mulberries', ['mulberry'], False),
+    ('raw_fruit', 'canned_pumpkin', 'Canned Pumpkin', ['pumpkin_slice'], False),   # slices only, the pumpkin is a block
+    ('raw_fruit', 'canned_salmonberry', 'Canned Salmonberries', ['salmonberries'], False),
+    ('raw_fruit', 'canned_strawberry', 'Canned Strawberries', ['strawberries'], False),
+    # the old 3 / 2 + sugar recipe with a much bigger serving than the Fruit Meal (can_parity 4: 140 % hunger in -> out,
+    # the family's usual is 125 %)
+    ('raw_fruit', 'canned_white_strawberry', 'Canned White Strawberries', ['white_strawberries'], False,
+     dict(meal=(7, 5), counts=(3, 2))),
+    ('raw_fruit', 'canned_sweet_berry', 'Canned Sweet Berries', ['sweet_berries'], False),
     ('raw_fruit', 'canned_bayberry', 'Canned Bayberries', ['bayberry'], False),
     ('raw_fruit', 'canned_blueberry', 'Canned Blueberries', ['blueberry'], False),
     ('raw_fruit', 'canned_cranberry', 'Canned Cranberries', ['cranberry'], False),
@@ -120,8 +179,16 @@ EXPLICIT = [
     ('raw_fruit', 'canned_pear', 'Canned Pear', ['pear'], False),
     ('raw_fruit', 'canned_persimmon', 'Canned Persimmon', ['persimmon'], False),
     ('raw_fruit', 'canned_pineapple', 'Canned Pineapple', ['pineapple_slice'], False),
+    # the berries' Wither (80 %) is kept but cut to 2 s a serving; Caffeinated as the berries
+    ('raw_fruit', 'canned_coffee_berries', 'Canned Coffee Berries', ['coffee_berries'], False,
+     dict(fx_ticks={'minecraft:wither': 40})),
 
-    # raw meat (beef, chicken, mutton, pork, rabbit are hand-written in cans.js)
+    # raw meat: Meat Meals; the forge:raw_* tags hold the whole meat and its cut
+    ('raw_meat', 'canned_raw_beef', 'Canned Raw Beef', ['beef'], False, dict(input=['raw_beef'])),
+    ('raw_meat', 'canned_raw_chicken', 'Canned Raw Chicken', ['chicken'], False, dict(input=['raw_chicken'])),
+    ('raw_meat', 'canned_raw_mutton', 'Canned Raw Mutton', ['mutton'], False, dict(input=['raw_mutton'])),
+    ('raw_meat', 'canned_raw_pork', 'Canned Raw Pork', ['porkchop'], False, dict(input=['raw_pork'])),
+    ('raw_meat', 'canned_raw_rabbit', 'Canned Raw Rabbit', ['rabbit'], False),
     # Shulker: a low value meat (1.2 a mollusk), so its own small meal (2, 1) x 4 keeps a full can at 8 mollusks
     ('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_mollusk', 'shulker_filet'], False,
      dict(meal=(2, 1))),
@@ -145,6 +212,7 @@ EXPLICIT = [
     ('hazard', 'canned_posionous_potatos', None, ['poisonous_potato'], True, dict(code_fx=True)),
     ('hazard', 'canned_spider_eyes', None, ['spider_eye'], True, dict(code_fx=True)),
     ('hazard', 'canned_rotten_flesh', None, ['rotten_flesh'], True, dict(code_fx=True)),
+    ('hazard', 'canned_maggots', 'Canned Maggots', ['maggot'], False, dict(meal=(2, 1))),   # small meal, like shulker
 
     ('special', 'canned_chorus_fruits', None, ['chorus_fruit'], True, dict(code_fx=True)),   # teleports in code
     ('special', 'canned_ancient_fruit', 'Canned Ancient Fruit', ['ancient_fruit'], False),
@@ -178,6 +246,9 @@ EXPLICIT = [
     ('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['kimchi'], False),
     ('cooked_veggie', 'canned_pickled_pickles', 'Canned Pickled Pickles', ['pickled_pickles'], False),
     ('cooked_veggie', 'canned_roasted_adzuki_beans', 'Canned Roasted Adzuki Beans', ['roasted_adzuki_beans'], False),
+    ('cooked_veggie', 'canned_chips', 'Canned Chips', ['chips'], False),
+    ('cooked_veggie', 'canned_grilled_corn', 'Canned Grilled Corn', ['grilled_corn'], False),
+    ('cooked_veggie', 'canned_tortilla_chip', 'Canned Tortilla Chips', ['tortilla_chip'], False),
 
     # meat: whole cut, or whole + sliced. Patties, bacon, bison, smoked ham, chevon, hoglin, kangaroo, moose,
     # bunfungus, lobster and crab are not canned cooked (can_parity.md Want /, 2026-10-13)
@@ -202,6 +273,7 @@ EXPLICIT = [
     ('soup', 'canned_mushrooms', None, ['mushroom_stew'], True),
 
     ('bread', 'canned_bread', None, ['minecraft_bread'], True),
+    ('bread', 'canned_sweet_roll', 'Canned Sweet Rolls', ['sweet_roll'], False),
 
     # pastas (duck and vegetable noodles are canned as pasta)
     ('meal', 'canned_bell_pepper_pasta', 'Canned Bell Pepper Pasta', ['bell_pepper_pasta'], False),
@@ -215,9 +287,15 @@ EXPLICIT = [
     ('meal', 'canned_pearl_pasta', 'Canned Pearl Pasta', ['pearl_pasta'], False),
     ('meal', 'canned_squid_ink_pasta', 'Canned Squid Ink Pasta', ['squid_ink_pasta'], False),
     ('meal', 'canned_vegetable_pasta', 'Canned Vegetable Pasta', ['vegetable_noodles'], False),
+    ('meal', 'canned_creamy_chicken_pasta', 'Canned Creamy Pasta with Chicken', ['creamy_pasta_with_chicken_cuts'], False),
+    ('meal', 'canned_creamy_ham_pasta', 'Canned Creamy Pasta with Ham', ['creamy_pasta_with_ham'], False),
+    ('meal', 'canned_cornbread_stuffing', 'Canned Cornbread Stuffing', ['cornbread_stuffing'], False),
+    ('meal', 'canned_creamed_corn', 'Canned Creamed Corn', ['creamed_corn'], False),
+    ('meal', 'canned_dumplings', 'Canned Dumplings', ['dumplings'], False),
 
-    # pie filling: 4 slices (or 4 fruitsdelight pies). Blueberry, cherry, crimson berry, green apple, nightshade and
-    # truffle slices have no source in the pack (no whole pie), so no can yet.
+    # pie filling: 4 slices (or 4 fruitsdelight pies). Slices whose whole pie comes from a mod not in the pack get no
+    # can: cherry and truffle (Central Kitchen, pies from Environmental), blueberry, crimson berry, green apple and
+    # nightshade berry (Delightful, pies from BYG), gloomgourd (Undergarden), source berry (Ars Nouveau).
     ('pie', 'canned_apple_pie_filling', 'Canned Apple Pie Filling', ['apple_pie_slice'], False, dict(pie='apple_pie')),
     ('pie', 'canned_chocolate_pie_filling', 'Canned Chocolate Pie Filling', ['chocolate_pie_slice'], False,
      dict(pie='chocolate_pie')),
@@ -230,8 +308,14 @@ EXPLICIT = [
      dict(pie='rose_hip_pie')),
     ('pie', 'canned_salmonberry_pie_filling', 'Canned Salmonberry Pie Filling', ['salmonberry_pie_slice'], False,
      dict(pie='salmonberry_pie')),
+    # Farmer's Delight's sweet berry cheesecake, renamed Sweet Berry Pie (namechanges.js)
+    ('pie', 'canned_sweet_berry_pie_filling', 'Canned Sweet Berry Pie Filling', ['sweet_berry_cheesecake_slice'], False,
+     dict(pie='sweet_berry_cheesecake')),
     ('pie', 'canned_durian_pie_filling', 'Canned Durian Pie Filling', ['durian_pie'], False),
     ('pie', 'canned_pineapple_pie_filling', 'Canned Pineapple Pie Filling', ['pineapple_pie'], False),
+    # tarts are pies to be (renamed and retextured later): 4 tarts fill a can, no tart back
+    ('pie', 'canned_fig_pie_filling', 'Canned Fig Pie Filling', ['fig_tart'], False),
+    ('pie', 'canned_lemon_pie_filling', 'Canned Lemon Pie Filling', ['lemon_tart'], False),
 
     # feasts: one placed feast block -> a can of its servings (value source = the serving)
     ('feast', 'canned_caramel_popcorn', 'Canned Caramel Popcorn', ['caramel_popcorn'], False, dict(input=['popcorn_box'])),
@@ -253,6 +337,34 @@ EXPLICIT = [
     ('drink', 'canned_honey_bottles', None, ['honey_bottle'], True, dict(code_fx=True)),
     ('drink', 'canned_powdered_milk', 'Canned Powdered Milk', ['minecraft_milk_bucket'], False,
      dict(values=dict(hunger=1, modifier=0.1, always=True, clear_effects=True))),
+
+    # cheese wedges: 4 in a Cooking Pot, the empty can in its container slot
+    ('dairy', 'canned_flaxen_cheese', 'Canned Flaxen Cheese', ['flaxen_cheese_wedge'], False),
+    ('dairy', 'canned_scarlet_cheese', 'Canned Scarlet Cheese', ['scarlet_cheese_wedge'], False),
+    ('preserve', 'canned_tomato_sauce', 'Canned Tomato Sauce', ['tomato_sauce'], False),
+    # Create's dough, 8 a can; not a food (like the dough): an ingredient can for crafts that take it a serving at a time
+    ('preserve', 'canned_dough', 'Canned Dough', ['in_dough'], False, dict(food=False, n=8, servings=8)),
+    ('dessert', 'canned_pear_with_rock_sugar', 'Canned Pears in Rock Sugar', ['pear_with_rock_sugar'], False),
+    # Canned Goods' cake can: 1 cake (or 4 slices + sugar / honey, added below)
+    ('cake', 'canned_cake', None, ['cake_slice'], True, dict(input=['cake'])),
+
+    # Canned Goods' cans that no recipe makes (still obtainable from trades, loot and creative): the values of their
+    # family, from the food each one holds (food_types.json canned map; the mod's names are crossed, its sprites follow
+    # the ids). Their own saturation modifiers are saturation points (1 to 42).
+    ('raw_veggie', 'canned_beets', None, ['minecraft_beetroot'], True, dict(norecipe=True)),
+    ('raw_veggie', 'canned_potatos', None, ['minecraft_potato'], True, dict(norecipe=True)),
+    ('raw_fruit', 'canned_apples', None, ['apple'], True, dict(norecipe=True)),
+    ('raw_fruit', 'canned_glow_berries', None, ['glow_berries'], True, dict(norecipe=True, code_fx=True)),
+    ('raw_fruit', 'canned_melon_slice', None, ['melon'], True, dict(norecipe=True)),
+    ('raw_fruit', 'canned_sweet_berries', None, ['sweet_berries'], True, dict(norecipe=True)),
+    ('pie', 'canned_carrots', None, ['delightful_pumpkin_pie_slice'], True, dict(norecipe=True)),   # pumpkin pies
+    ('golden', 'canned_pumpkin_pie', None, ['golden_carrot'], True, dict(norecipe=True)),        # golden carrots
+    ('golden', 'canned_golden_carrot', None, ['golden_carrot'], True, dict(norecipe=True)),
+    ('golden', 'canned_golden_apples', None, ['golden_apple'], True, dict(norecipe=True, code_fx=True)),
+    ('golden', 'canned_enchanted_apples', None, ['enchanted_golden_apple'], True, dict(norecipe=True, code_fx=True)),
+    ('soup', 'canned_beetroot_soup', None, ['beetroot_soup'], True, dict(norecipe=True)),
+    ('soup', 'canned_suspicious_stew', None, ['suspicious_stew'], True, dict(norecipe=True, code_fx=True)),
+    # Canned Food and the Hot Hot Hotpot are removed from the pack (startup_scripts/_lib/removed_items.js)
 ]
 
 # soup keys that are not canned; salads without a can
@@ -263,7 +375,9 @@ SKIP = {
 }
 # sources that already have an explicit can above (not repeated by the type loops)
 STRIP_NAME = re.compile(r'^(Bowl of|Plate of|Slice of|Bar of)\s+')
-CAN_SPRITE_NOTE = 'canned_goods:items/canned_beets'   # fallback sprite
+CAN_SPRITE_NOTE = 'canned_goods:items/canned_food'   # fallback sprite (a section without a GROUP_SPRITE entry)
+# Canned Goods cans removed from the pack (removed_items.js): dropped from can_servings.json and the canned type
+REMOVED = ['canned_food', 'hot_hot_hotpot']
 
 
 def load_json(path):
@@ -303,10 +417,10 @@ def meal_values(src, mult):
     return hunger, modifier
 
 
-def scaled_effects(src, dur):
+def scaled_effects(src, dur, fixed_ticks=None):
     out = []
     for fx in src.get('effects') or []:
-        ticks = max(1, int(round(fx['seconds'] * dur * 20)))
+        ticks = (fixed_ticks or {}).get(fx['effect']) or max(1, int(round(fx['seconds'] * dur * 20)))
         out.append(OrderedDict([('effect', fx['effect']), ('ticks', ticks), ('amp', fx['amplifier']),
                                 ('chance', fx['chance'])]))
     return out
@@ -321,13 +435,16 @@ def value(src):
 def sized_recipes(spec, sources, srcs):
     """Recipes for a fixed-meal section: the count of the first (whole) source whose value is `target` of the can's
     (at most 8, the grid less the can). The other sources are its sliced forms: they share the same slots and count,
-    so slicing first is the cheaper route. Every recipe makes a full can."""
+    so slicing first is the cheaper route. Every recipe makes a full can. `sources` are the recipe keys, `srcs` the
+    catalog foods that size it."""
     meal_h, meal_p = spec['meal']
     can_value = spec['servings'] * (meal_h + meal_p)
     n0 = min(8, max(1, int(can_value * spec['target'] / value(srcs[0]) + 0.5)))
+    if 'counts' in spec:
+        n0 = spec['counts'][0]
     recipes = [OrderedDict([('suffix', ''), ('inputs', [OrderedDict([('any', list(sources)), ('n', n0)])])])]
     for suffix, add_keys, _n_src, n_add in spec['extra']:
-        na = max(1, int(n0 * spec['adv'] + 0.4))
+        na = spec['counts'][1] if 'counts' in spec else max(1, int(n0 * spec['adv'] + 0.4))
         recipes.append(OrderedDict([('suffix', suffix), ('inputs', [
             OrderedDict([('any', list(sources)), ('n', na)]),
             OrderedDict([('any', add_keys), ('n', n_add)])])]))
@@ -344,12 +461,16 @@ def build(foods, names, keymap_all, keymap_base, types):
         spec = SECTIONS[section]
         if 'meal' in opts:
             spec = dict(spec, meal=opts['meal'])   # this can's own meal size in a meal section
+        for k in ('adv', 'n', 'servings', 'counts'):
+            if k in opts:
+                spec = dict(spec, **{k: opts[k]})
         for k in sources + opts.get('input', []) + ([opts['pie']] if 'pie' in opts else []):
             if k not in keymap_all:
                 problems.append('%s: key %s is not in item_dict' % (can_key, k))
                 return
         fixed = opts.get('values')
-        if not fixed:
+        nofood = opts.get('food') is False
+        if not fixed and not nofood:
             for k in sources:
                 if keymap_all[k] not in foods:
                     problems.append('%s: %s (%s) is not in the food catalog' % (can_key, k, keymap_all[k]))
@@ -362,10 +483,14 @@ def build(foods, names, keymap_all, keymap_base, types):
                 display = 'Canned ' + STRIP_NAME.sub('', food_name(ids_of(sources[0]), names))
             c['name'] = display
         c['servings'] = spec['servings']
-        if fixed:
+        if nofood:
+            c['food'] = False
+            c['glow'] = False
+            c['effects'] = []
+        elif fixed:
             c['hunger'] = fixed['hunger']
             c['modifier'] = fixed['modifier']
-            c['meat'] = False
+            c['meat'] = bool(spec.get('meat') or fixed.get('meat'))
             c['fast'] = bool(spec['fast'])
             c['always'] = bool(fixed.get('always'))
             c['glow'] = False
@@ -387,14 +512,16 @@ def build(foods, names, keymap_all, keymap_base, types):
             c['fast'] = bool(spec['fast'] or ('F' in flags and 'meal' not in spec))
             c['always'] = 'A' in flags
             c['glow'] = section == 'golden' and sources[0].startswith('enchanted_')
-            c['effects'] = [] if opts.get('code_fx') else scaled_effects(src, spec['dur'])
+            c['effects'] = [] if opts.get('code_fx') else scaled_effects(src, spec['dur'], opts.get('fx_ticks', {}))
         if opts.get('code_fx'):
             c['code_fx'] = True
         c['sources'] = sources
-        if 'meal' in spec:
-            recipes = sized_recipes(spec, sources, [foods[ids_of(k)] for k in sources])
+        inputs = opts.get('input', sources)
+        if opts.get('norecipe'):
+            recipes = []
+        elif 'meal' in spec:
+            recipes = sized_recipes(spec, inputs, [foods[ids_of(k)] for k in sources])
         else:
-            inputs = opts.get('input', sources)
             recipes = [OrderedDict([('suffix', ''), ('inputs', [OrderedDict([('any', inputs), ('n', spec['n'])])])])]
             for suffix, add_keys, n_src, n_add in spec['extra']:
                 recipes.append(OrderedDict([('suffix', suffix), ('inputs', [
@@ -403,11 +530,14 @@ def build(foods, names, keymap_all, keymap_base, types):
         c['recipes'] = recipes
         if 'pie' in opts:
             c['pie'] = opts['pie']
+        if spec.get('pot') or opts.get('pot'):
+            c['pot'] = True
         if not existing:
             if (SPRITES / (can_key + '.png')).exists():
                 c['texture'] = None
             else:
-                c['texture'] = GROUP_SPRITE.get(section, CAN_SPRITE_NOTE)
+                family = 'golden/enchanted' if c['glow'] else section
+                c['texture'] = GROUP_SPRITE.get(family, CAN_SPRITE_NOTE)
         if can_key in cans:
             problems.append('duplicate can ' + can_key)
         cans[can_key] = c
@@ -423,8 +553,8 @@ def build(foods, names, keymap_all, keymap_base, types):
         if not existing and key in keymap_base:
             problems.append('new can %s collides with an existing dict key' % key)
             continue
-        if add(section, key, display, sources, existing, opts):
-            taken.update(sources)
+        if add(section, key, display, sources, existing, opts) and not (opts or {}).get('norecipe'):
+            taken.update(sources)   # a values-only can leaves its food to the pack can that has the recipe
 
     def loop(section, type_names, skip=()):
         for tname in type_names:
@@ -447,8 +577,12 @@ def build(foods, names, keymap_all, keymap_base, types):
         cans['canned_honey_bread']['recipes'].append(OrderedDict([('suffix', '_honey'), ('inputs', [
             OrderedDict([('any', ['minecraft_bread']), ('n', 5)]),
             OrderedDict([('any', ['honey_bottle']), ('n', 1)])])]))
+    if 'canned_cake' in cans:
+        cans['canned_cake']['recipes'].append(OrderedDict([('suffix', '_slices'), ('inputs', [
+            OrderedDict([('any', ['cake_slice']), ('n', 4)]),
+            OrderedDict([('any', SWEET), ('n', 1)])])]))
     for key, c in cans.items():
-        if c['section'] == 'golden':
+        if c['section'] == 'golden' and c['recipes']:
             c['recipes'] = [OrderedDict([('suffix', ''), ('inputs', [
                 OrderedDict([('any', c['sources']), ('n', SECTIONS['golden']['n'])]),
                 OrderedDict([('any', ['honey_bottle']), ('n', 1)])])])]
@@ -468,8 +602,8 @@ def dict_block(cans):
     lines = [BEGIN]
     new = [(k, c) for k, c in cans.items() if not c['existing']]
     width = max(len(k) for k, _ in new) + 2
-    lines.append('// %d cans: raw fruit/meat/fish, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden'
-                 ' (kubejs/generation_scripts/food/can_types.json)' % len(new))
+    lines.append('// %d cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie,'
+                 ' feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)' % len(new))
     for k, _ in new:
         lines.append("i.%s = 'creativeengineering:%s';" % (k.ljust(width), k))
     lines.append(END)
@@ -531,19 +665,24 @@ def main():
 
     # servings
     servings = load_json(SERVINGS)
-    for k in stale:
+    for k in stale + REMOVED:
         servings['servings'].pop(k, None)
     for k, c in cans.items():
         servings['servings'][k] = c['servings']
     new_servings = json.dumps(servings, indent=1, ensure_ascii=False)
 
-    # food types: every new can is a canned food made from its sources
-    for k in stale:
+    # food types: every new edible can is a canned food made from its sources
+    for k in stale + REMOVED:
         if k in types['canned']:
             types['canned'].remove(k)
         types_json['canned'].pop(k, None)
     for k, c in cans.items():
         if c['existing']:
+            continue
+        if c.get('food') is False:   # an ingredient can is not a food
+            if k in types['canned']:
+                types['canned'].remove(k)
+            types_json['canned'].pop(k, None)
             continue
         if k not in types['canned']:
             types['canned'].append(k)

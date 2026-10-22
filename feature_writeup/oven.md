@@ -16,7 +16,9 @@ The ask, from cooking.md:
 |---|---|
 | Oven block, block entity, menu/screen, `creativeengineering:baking` recipe type, JEI page (patcherMod `oven/`) | BUILT 2026-10-18: compiles against Forge 43.3.9 + JEI 11.8.1; 8 server GameTests pass with FD 1.2.4 loaded (6). First version DEPLOYED with 1.0.7; the 1.0.8 jar (with the counts option) DEPLOYED with 1.0.8 and loaded in single player 2026-10-19. JEI [+] fix DEPLOYED with 1.0.9 (patcherMod 1.0.9) ([plan_1.0.9.md](plan_1.0.9.md)); not tested in game (OV-01 to OV-19) |
 | Bakeware items: baking sheet, cake pan, pie tin, muffin tin (KubeJS, own textures 2026-10-19 with the muffin tin on the baking sheet's, no durability) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
-| Baking recipes: 38, from every live muffin, cookie, tart, pie and cake recipe (pot and crafting) with cooking.md's baked changes (flour, pie crust, cake base), each needing its bakeware; muffins plate on paper. Originals kept (2.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
+| (Superseded 2026-10-22) Baking recipes: 38, from every live muffin, cookie, tart, pie and cake recipe (pot and crafting) with cooking.md's baked changes (flour, pie crust, cake base), each needing its bakeware; muffins plate on paper. Originals kept (2.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
+| Baking overhaul: all cake, pie, cookie, crust and cake base recipes removed and rebuilt on shared bases (cake base, pie crust, frosting, cookie dough) + 2 flavour; pies and cookies oven only; pot pie fillings; crust + filling bakes (2.6) | built, scratch test queued 2026-10-22 ([SQ-BK](testing/scratch_queue.md), probe `tools/baking_probe/baking_probe.js`; node dry-run clean). Needs a restart (new items). In game: OV-25 to OV-32 |
+| Opened cans refused as oven ingredients (`BakingRecipe`) | built, scratch test queued (SQ-BK-05); patcherMod 1.1.01 in `mods/`, not deployed; OV-29 |
 | Ingredient `count` in `creativeengineering:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
 | Muffin pot recipes on `#forge:dough` | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested. Whether this was the "not cookable" cause is unconfirmed (3.8) |
 | Crafting recipes: oven (placeholder pattern, 2.1); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
@@ -30,6 +32,7 @@ Files to open first:
   `jei/OvenJeiPlugin`, `jei/BakingRecipeCategory`
 - [kubejs/server_scripts/cooking/baking.js](../kubejs/server_scripts/cooking/baking.js): baking and crafting recipes
 - [kubejs/startup_scripts/cooking/bakeware.js](../kubejs/startup_scripts/cooking/bakeware.js): bakeware items
+- [kubejs/startup_scripts/cooking/baking_ingredients.js](../kubejs/startup_scripts/cooking/baking_ingredients.js): frosting, cookie dough
 - `global.NCH.ceBaking` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js)
 - Tags: [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) (heat, hammer_no_rotate), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js) (bakeware)
 - `global.NCH.hammering` in neoCraftHelper.js; `IECompat.registerHammerNoRotate` in patcherMod `compat/`
@@ -84,10 +87,10 @@ or remove from `#farmersdelight:heat_sources` today.
 
 ### 1.4 Existing "ovens" that don't fit
 
-- `cookingforblockheads:oven`: a fuel-burning furnace that runs smelting recipes. It has no recipe type of its own,
-  no tools, no plating and no heat rule.
+- `cookingforblockheads:oven`: a fuel-burning furnace that runs smelting recipes (and smoking ones since 2026-10-21,
+  2.8). It has no recipe type of its own, no tools, no plating and no heat rule.
 - `vinery:wood_fired_oven`, `vinery:stove`: heat sources only, and Vinery 1.5.5 removes both ([alcohol.md](alcohol.md) I21).
-- `handcrafted:oven`, `fantasyfurniture:*/oven`: decoration.
+- `handcrafted:oven`: decoration. `fantasyfurniture:*/oven` (7): working smokers (2.8).
 
 None of them does what the ask needs, so this is a new block.
 
@@ -131,7 +134,7 @@ FD's cooking JSON plus an optional `tool`:
 
 KubeJS: `R.ceBaking(inputs, output, e, idOverride, { exp, time, container, tool })`, id
 `creativeengineering:baking/<id>`. A counted input is `Item.of(id, n)` or `{ id: '#tag', count: n }` (baking.js wraps
-both as `n(id, count)`); scripts always write the original's full count. `ceBaking` reads `[cooking] ovenIngredientCounts`
+both as `n(id, count)`); scripts write the recipe's count (the overhaul's only repeats are 2 or 3 of one item). `ceBaking` reads `[cooking] ovenIngredientCounts`
 (via `NCH.cfg`): on, the count goes into the JSON; off, it becomes n slots of 1, trimmed to 6 slots (2.6.1).
 
 ### 2.3 Slots
@@ -183,109 +186,120 @@ has its own. All four stack to 64 and have no durability.
 
 ### 2.6 Baking recipes
 
-Every live recipe whose result is a muffin, cookie, tart, pie or cake (dump of 2026-10-18: `crafting_audit.json` plus
-the pot recipes) has an oven version. The originals stay. Each starts as a mirror (same ingredients, counts, result
-count, plating), then takes the cooking.md "sweet > baked" changes that apply to its kind:
+**Baking overhaul (2026-10-22, from the user's scratchpad notes).** Every recipe of every mod whose result is a
+cake, pie, cookie, pie crust or cake base is removed (baking.js `REMOVED_OUTPUTS`: KubeJS `remove({ output })`, except
+`*_from_slices` reassembly and the pack's own recipes). Each family is rebuilt on one shared base plus 2 of its flavour.
+The old mirrors of every mod's recipe (38, 2026-10-18 to 10-21) are gone. Muffins and tarts are unchanged.
 
-| cooking.md | Oven change |
+"Manual craft" is a shapeless craft with an id ending `_manual_only`, which Create's mixer and mechanical crafter skip.
+Every base is manual craft or oven only: no Create or IE machine recipe (the removal takes every other mod's, and the
+pack adds none; 2026-10-22, user). Sugar is `#forge:sugar`, flour is
+`#creativeengineering:flour_or_cornmeal` (wheat flour or cornmeal), dough is `#forge:dough`, milk is `#forge:milk`
+(bucket or bottle). Times are 200 ticks and 0.1 xp unless noted.
+
+**Bases**
+
+| Item | Recipe | Where |
+|---|---|---|
+| Raw cake base (`createaddition:cake_base`) | 3 flour, 2 egg, 2 sugar; or 3 dough, egg, 2 sugar | manual craft |
+| Baked cake base (`createaddition:cake_base_baked`) | 2 flour, 2 egg, 2 sugar; or 2 dough, egg, 2 sugar; or a raw base (100 ticks, 0 xp) | oven, cake pan |
+| Pie crust, 3 | 3 flour, egg, milk; or 3 dough, milk | manual craft |
+| Frosting (`creativeengineering:frosting`), 2 | sugar, 2 milk | manual craft |
+| Cookie dough (`creativeengineering:cookie_dough`) | dough, 2 sugar | manual craft |
+
+Frosting and cookie dough are new plain items (not food) in `startup_scripts/cooking/baking_ingredients.js`, on
+placeholder textures until they get their own: Rustic Delight's cotton boll (frosting), Create Confectionery's
+gingerdough (cookie dough).
+
+**Cakes** (`CAKES`): baked base + frosting + 2 flavour (manual craft), or raw base + frosting + 2 flavour (oven, cake
+pan). Plain `minecraft:cake`: 3 frosting, or 2 frosting + one sweet berry, cranberry or cherry (`vinery:cherry`), both ways.
+
+| Cake | Flavour (2) |
 |---|---|
-| muffins: "fruit, milk, egg, sugar, flour", "serve w/ paper" | `#forge:dough` -> `#forge:flour/wheat`; plated on paper |
-| cookies: "all wheat to flour" | wheat -> flour, one for one |
-| pie: "wheat to flour"; pie crust "use to craft all pies"; cornmeal "usable as flour in pies and cakes" | wheat -> flour or cornmeal (`#creativeengineering:flour_or_cornmeal`); the two crustless pies gain a crust |
-| cake: "cake base recipe for all cakes" | Create Crafts & Additions' raw cake base (egg, 2 sugar, dough) replaces each cake's egg, sugar and wheat/dough; the oven also makes the base (flour or cornmeal) |
+| `adzuki_cake`, `banana_cake`, `mint_cake`, `strawberry_cake`, `vanilla_cake` (neapolitan) | roasted adzuki beans / banana / mint leaves / strawberry / dried vanilla pods |
+| `chocolate_cake` (createaddition; Neapolitan's merges into it, item_merges.js). Also a spout recipe: baked base + 500 mB `create:chocolate` (C&A's own, restored 2026-10-22, `chocolate_cake_spout`) | `#forge:bars/chocolate` |
+| `honey_cake` (createaddition) | honey bottle |
+| `coffee_cake` (farmersrespite) | coffee beans |
+| `mangosteen_cake` (fruitsdelight) | mangosteen (no bowl now) |
 
-The tables give the full cost. With `ovenIngredientCounts` on that is what the oven takes, a repeated ingredient sharing
-one slot; with it off (the default) repeats take a slot each, and the 9 recipes that then need more than 6 slots are
-trimmed (2.6.1). Sugar is `#forge:sugar` everywhere, as cooking.js gives the originals. Times are 200 ticks and 0.1 xp
-unless noted. `n x` = n of that item; flour is `#forge:flour/wheat` (Create wheat flour).
+**Pies** (`PIES`, pie tin): crust + 2 fruit + 2 sugar in the oven, a honey bottle allowed in either sugar slot. Or crust
++ a full can of that pie's filling, in the oven or by hand (the hand craft is canning.js's, for the cans whose json
+names a `pie`: all but durian and pineapple). The filling comes from the cooking pot: 2 fruit + 2 sugar (honey
+allowed), an empty can in the container slot. The canned fillings from 4 slices (canning.js) stay.
 
-**Muffins** (muffin tin, plated on paper, 2 per bake): `blueberry_muffin`, `cranberry_muffin`: 2x berry, flour, milk
-bottle, egg, sugar (the pot recipes in cooking.js, with flour for their dough; the pot recipes keep dough).
+| Pie | Fruit (2) |
+|---|---|
+| `apple_pie` | apple |
+| `chocolate_pie` | `#forge:bars/chocolate` |
+| `chorus_pie` | chorus fruit |
+| `mulberry_pie` (upgrade_aquatic) | mulberry |
+| `pumpkin_pie` (minecraft) | FD pumpkin slice |
+| `rose_hip_pie` | rose hips |
+| `salmonberry_pie` | salmonberries |
+| `durian_pie`, `pineapple_pie` | durian flesh / pineapple slice (1 pie now, was 2; see below) |
+| `sweet_berry_cheesecake` (renamed Sweet Berry Pie) | sweet berries (a pie since 2026-10-22, pie tin); Canned Sweet Berry Pie Filling |
 
-**Cookies** (baking sheet, 8 per bake), all 2x flour plus:
+Durian and pineapple pies are Fruits Delight's single hand-held items (5 hunger, 4 saturation points each), not
+placeable pies with 4 slices like the others (a whole apple pie is 4 slices of 3 hunger = 12). Fruits Delight's pot made 2
+a batch. Under the "-> 1 pie" rule a batch now gives 5 hunger for the cost of a 12-hunger pie. Their can holds 4 pies
+but bakes back into 1, and they have no hand craft back (no `pie` in the can json). Both are marked for a rework, as they
+are not really pies (TODO `food/baked-goods #12`).
 
-| Id | Plus | Source |
-|---|---|---|
-| `cookie` | cocoa beans | minecraft (Quark's copy) |
-| `honey_cookie`, `sweet_berry_cookie` | honey bottle / sweet berries | farmersdelight |
-| `green_tea_cookie` | green tea leaves | farmersrespite |
-| `bayberry_cookie`, `cranberry_cookie`, `persimmon_cookie` | bayberry / cranberry / dried persimmon | fruitsdelight |
-| `lemon_cookie` | lemon, milk bottle | fruitsdelight |
-| `mulberry_cookie` | mulberry | abnormals_delight |
-| `uncanny_cookies` | mite crust | endersdelight |
+Sweet Berry Pie is Farmer's Delight's `sweet_berry_cheesecake`, renamed (whole, slice, Central Kitchen's incomplete item,
+the Display Delight plates); it is the pack's only sweet berry pie (Central Kitchen's Sweet Berry Cake Slice is a cake).
+It has a filling can like the other pies. Pie slices with no whole pie in the pack (cherry, truffle, four BYG ones,
+gloomgourd, source berry): TODO `food/baked-goods #13`, `#14`.
 
-**Tarts** (baking sheet, 2 per bake): `lemon_tart`, `fig_tart`: fruit, pie crust, egg, sugar, milk bottle (Fruits
-Delight pot, unchanged: no wheat, already on a crust).
+No cherry pie: Create Central Kitchen has the placed block (`create_central_kitchen:cherry_pie`, "Placed Cherry Pie":
+whole and cut-face textures, 3 bite models) and the slice item, but no whole-pie item (the mod expects another mod's).
+It needs an item that places the block first (TODO `food/baked-goods #13`).
 
-**Pies** (pie tin; "flour" is wheat flour or cornmeal):
+A partly eaten can is no ingredient in the oven (patcherMod `BakingRecipe.slotCounts` skips `CanServings.isPartial`).
+That keeps the old craft's full-can rule.
 
-| Id | Ingredients | Result | Source |
-|---|---|---|---|
-| `apple_pie` | 3x flour, 2x sugar, crust, 3x apple | 1 | farmersdelight |
-| `chorus_pie` | 3x flour, 2x sugar, crust, 3x chorus fruit | 1 | endersdelight |
-| `salmonberry_pie` | 3x flour, 2x sugar, crust, 3x salmonberries | 1 | delightful |
-| `mulberry_pie` | 3x flour, 2x sugar, crust, 3x mulberry | 1 | create_central_kitchen |
-| `mulberry_pie_simple` | sugar, egg, **crust**, mulberry | 1 | upgrade_aquatic (crust added) |
-| `chocolate_pie` | 3x `#forge:milk`, 2x sugar, crust, 3x `#forge:bars/chocolate` | 1 | farmersdelight (Delightful's bar version, the live one) |
-| `rose_hip_pie` | 2x milk, honey bottle, 2x sugar, crust, 3x rose hips | 1 | farmersrespite |
-| `pumpkin_pie` | 3x flour, sugar, crust, egg, 3x pumpkin | 1 | delightful |
-| `pumpkin_pie_from_slices` | 2x sugar, crust, 6x pumpkin slice | 1 | create_central_kitchen |
-| `pumpkin_pie_duck_egg` | sugar, duck egg, **crust**, pumpkin | 1 | untitledduckmod (crust added) |
-| `durian_pie`, `pineapple_pie` | 2x flesh / slice, crust, egg, sugar | 2 | fruitsdelight pot |
+**Cookies** (`COOKIES`, baking sheet, oven only): cookie dough + 2 flavour -> 12.
 
-Shepherd's pie isn't baked in the oven (user, 2026-10-18).
+| Cookie | Flavour (2) |
+|---|---|
+| `cookie` | cocoa beans |
+| `honey_cookie`, `sweet_berry_cookie` | honey bottle / sweet berries |
+| `green_tea_cookie` | green tea leaves |
+| `bayberry_cookie`, `cranberry_cookie`, `persimmon_cookie`, `lemon_cookie` | bayberry / cranberry / dried persimmon / lemon |
+| `mulberry_cookie` | mulberry |
+| `uncanny_cookies` | mite crust |
+| `cherry_cookie` (abnormals_delight, new 2026-10-22) | cherry (`vinery:cherry`) |
 
-**Cakes** (cake pan). With the cake base in place of egg, sugar and wheat/dough, the recipes left differ only in milk,
-so they collapse to one per cake, keeping the main mod's milk count:
+**Muffins** (muffin tin, plated on paper, 4 per bake; the pot gives 2): `blueberry_muffin`, `cranberry_muffin`: 2x
+berry, wheat flour, milk bottle, egg, sugar.
 
-| Id | Ingredients | From |
-|---|---|---|
-| `cake` | 3x milk, cake base | farmersdelight = neapolitan:cake. Folded in: Create's (milk bucket + base, exact) and the duck/goose egg cakes |
-| `adzuki_cake`, `banana_cake`, `neapolitan_chocolate_cake`, `mint_cake`, `strawberry_cake`, `vanilla_cake` | 2x milk, cake base, 2x flavour (chocolate: any `#forge:bars/chocolate`, as CCK's) | neapolitan. Folded in: Create Central Kitchen's dough versions (3 milk) |
-| `coffee_cake` | 2x milk, cake base, 2x coffee beans | farmersrespite (its `minecraft:egg` now comes in the base, any egg). Folded in: CCK's dough version |
-| `mangosteen_cake` | cake base, 2x mangosteen; plated in a bowl | fruitsdelight pot (2 wheat, 2 sugar became the base, which adds an egg) |
-| `sweet_berry_cheesecake` | 2x milk, crust, 6x sweet berries | farmersdelight; on a pie crust, so no cake base |
-| `cake_base` | egg, 2x sugar, 2x flour or cornmeal -> 1 raw cake base | pack. Priced between the two: a cake from it (+ 3 milk) is 1 flour cheaper than FD's 3-wheat craft, and Create's compacted base (egg, 2 sugar, 1 dough) stays cheaper |
-| `cake_base_baked` | cake base; 100 ticks, 0 xp (its smoker recipe) | createaddition |
+**Tarts** (baking sheet, 2 per bake): `lemon_tart`, `fig_tart`: fruit, pie crust, egg, sugar, milk bottle.
 
-Cake base comes from Create compacting (`createaddition:compacting/cake_base`: egg, 2 sugar, dough in a basin under a
-press, unchanged) or the oven (`cake_base` above), so oven cakes don't need Create. cooking.md's "slice dough block
-to cake bases" isn't built.
+Not touched: the golden cookie / cake / pumpkin pie (gold around a finished item), Botania's mana cookie, the blaze,
+echo and slime "cakes" (not baked goods), shepherd's pie (savoury, a feast), cans of cookies / cakes, tarts. No
+recipes yet for pies or cookies whose items have no live source: CCK cherry / truffle pies (no whole item), the
+Delightful berry pies, Abnormals Delight's maple cookie.
 
-Not taken from cooking.md, because they aren't oven recipe changes or don't exist yet: frosting / egg solution fluids, sequenced-assembly versions,
-merging the two chocolate cakes, new muffin/tart variants.
+### 2.6.1 Over 6 slots
 
-Not mirrored: `*_from_slices` reassembly, the golden cookie / cake / pumpkin pie (gold around a finished item), canned
-pie fillings + crust (CanServings), pancakes, Create machine recipes (filling, compacting, mixing), and the blaze, echo
-and slime "cakes" (not baked goods).
-
-### 2.6.1 Over 6 slots: what the default drops
-
-With `ovenIngredientCounts` off, `ceBaking` gives each item its own slot. A recipe that needs more than 6 loses one
-item at a time from its largest repeated group until it fits; on a tie, the group listed first in baking.js loses one.
-Counted recipes list filler (milk, sugar, flour) first and the defining ingredient last, so ties take filler. Every
-distinct ingredient keeps at least one slot. `ceBaking` logs each drop (`[NCH] ceBaking <id>: over 6 slots, dropped ...`).
-The other 29 recipes fit as they are. The cake base keeps every cake but the cheesecake under 6.
-
-| Recipe | Full (9 items) | Oven, counts off (6 slots) | Saved per bake |
-|---|---|---|---|
-| `apple_pie` | 3 flour, 2 sugar, crust, 3 apple | flour, 2 sugar, crust, 2 apple | 2 flour, 1 apple |
-| `chorus_pie` | 3 flour, 2 sugar, crust, 3 chorus fruit | flour, 2 sugar, crust, 2 chorus fruit | 2 flour, 1 chorus fruit |
-| `salmonberry_pie` | 3 flour, 2 sugar, crust, 3 salmonberries | flour, 2 sugar, crust, 2 salmonberries | 2 flour, 1 salmonberries |
-| `mulberry_pie` | 3 flour, 2 sugar, crust, 3 mulberry | flour, 2 sugar, crust, 2 mulberry | 2 flour, 1 mulberry |
-| `chocolate_pie` | 3 milk, 2 sugar, crust, 3 chocolate bar | milk, 2 sugar, crust, 2 chocolate bar | 2 milk, 1 chocolate bar |
-| `rose_hip_pie` | 2 milk, honey bottle, 2 sugar, crust, 3 rose hips | milk, honey bottle, sugar, crust, 2 rose hips | 1 milk, 1 sugar, 1 rose hips |
-| `pumpkin_pie` | 3 flour, sugar, crust, egg, 3 pumpkin | flour, sugar, crust, egg, 2 pumpkin | 2 flour, 1 pumpkin |
-| `pumpkin_pie_from_slices` | 2 sugar, crust, 6 pumpkin slice | 2 sugar, crust, 3 pumpkin slice | 3 pumpkin slice |
-| `sweet_berry_cheesecake` | 2 milk, crust, 6 sweet berries | 2 milk, crust, 3 sweet berries | 3 sweet berries |
-
-Every trimmed recipe saves 3 of its 9 items (a third). Milk can be a bucket or a bottle (`#forge:milk`), so a saved
-milk is a bucket's or a bottle's worth. Turning the option on restores the full cost for all of them, with no script
-change, after `/reload`.
+No recipe needs more than 6 slots now. The largest are the flour baked cake base and the muffins (6 each). With
+`ovenIngredientCounts` off nothing is dropped, and the `over 6 slots, dropped` log line no longer appears. Before the
+overhaul 9 pies and the cheesecake were trimmed (history, 2026-10-18).
 
 ### 2.7 Dummy bakeware recipes
 
 Removed 2026-10-18; the real recipes in 2.6 use every bakeware piece.
+
+### 2.8 Other ovens (TODO `food/oven #4`)
+
+| Block | What it does | Tooltip ([tooltips.js](../kubejs/client_scripts/tooltips.js), kitchen section) |
+|---|---|---|
+| `cookingforblockheads:oven` (`i.cfb_oven`) | Smelting recipes with food results (CfB's rule), then smoking recipes with food results: patcherMod `mixin/CfbOvenSmokingMixin`, RETURN of CfB's `getSmeltingResult` when it found nothing. The insert filter uses the same method, so smoker-only food goes in too. Fuel: [kitchen.md](kitchen.md) 2.1 | "Cooks food like a furnace and a smoker" (plus the kitchen #8 fuel lines) |
+| `fantasyfurniture:{royal,nordic,venthyr,necrolord,dunmer,bone/skeleton,bone/wither}/oven` | Their own block entity runs `RecipeType.SMOKING` with normal fuel (6.7.0, decompiled) | "Works like a smoker" (`addTooltipPattern 'fantasyfurniture:*/oven'`, log line expects 7) |
+| Farmhouse Decorations antique ovens | Decorative (no block entity) | None: the mod is in `disabledmods/`. Add "Decorative" if it comes back |
+
+Smoker-only foods that now cook in the CfB oven include `farmersdelight:ham` -> `smoked_ham` and the pack's own
+`sourdough` -> `sourdough_bread`. Probe: [tools/kitchen_probe/cfb_oven_smoking_probe.js](../tools/kitchen_probe/cfb_oven_smoking_probe.js)
+(`/kotest`, scratch server only; not run yet).
 
 ## 3. What the pack does, and why
 
@@ -348,13 +362,13 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 - **Route:** Java in patcherMod (user, 2026-10-18). A KubeJS block entity was rejected: chest GUI only, no item
   capability for hoppers, no recipe type.
 - **No durability** on bakeware (user, 2026-10-18).
-- **Recipes mirror the originals, originals stay** (user, 2026-10-18): every muffin, cookie, cake, pie and tart
-  recipe, with bakeware by kind and paper plating for muffins, then cooking.md's baked changes on top (user,
-  2026-10-18): flour for wheat/dough, a crust in every pie, a cake base in every cake. Cakes that differed only in
-  milk after that were merged, keeping the main mod's milk count. No shepherd's pie.
+- **Recipes mirror the originals, originals stay** (user, 2026-10-18; SUPERSEDED 2026-10-22 by the baking overhaul,
+  2.6): the mirrors are gone. Every cake, pie and cookie recipe is rebuilt on shared bases (cake base, pie crust,
+  frosting, cookie dough), cookies are oven only, and the oven is the efficient route while the hand-craft route stays
+  for cakes and pie fillings. Bakeware by kind and paper plating for muffins are unchanged. No shepherd's pie.
 - **Taking several items from one slot is opt-in** (user, 2026-10-18): `[cooking] ovenIngredientCounts`, default off.
-  By default a repeated ingredient takes a slot per item (as in the FD pot), and recipes that won't fit in 6 slots
-  drop repeated items (2.6.1, a third cheaper for those 9). The scripts keep the full cost so the option restores it.
+  By default a repeated ingredient takes a slot per item (as in the FD pot). With the overhaul no recipe needs more
+  than 6 slots, so nothing is trimmed (2.6.1); the option only changes how repeats are stored.
 - **Bakeware by hammering** (user, 2026-10-18): plate -> baking sheet -> muffin tin -> pie tin -> cake pan, cutting
   board or grid. The ids stay `pie_tin` / `muffin_tin` (the ask said "pie pan", "muffin pan").
 - **Heat conductors allowed** (as FD). **Furnaces aren't oven heat** (stoves-and-ovens group). Brewin's
@@ -364,8 +378,14 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
   mod's recipes ([briefs/food_oven.md](briefs/food_oven.md) #2).
 - FD's `SkilletItem` held near a heat source ignores `lit`, so a cold oven counts for it (same as a cold stove).
 - Brewin kegs count a lit oven within range as heat.
-- **Bug (scratchpad 2026-10-21):** bottles and buckets waiting in the overflow buffer disappear when the output item is
-  taken out ([TODO](todo/TODO.md) `food/kitchen #14`, [remainder_buffer.md](remainder_buffer.md) 4).
+- **Fixed 2026-10-21 (patcherMod 1.1.01, not deployed):** bottles and buckets waiting in the overflow buffer
+  disappeared from the GUI when the output item was taken out: the update tag left the buffer out, so each block
+  update emptied the client's copy ([TODO](todo/TODO.md) `food/kitchen #14`, [remainder_buffer.md](remainder_buffer.md)
+  3.4). RB-12 in game.
+- **Plating delay (2026-10-21, patcherMod 1.1.01, not deployed):** a bowl recycled into the plating slot shows there
+  for `[cooking] recycleShowTicks` (10 ticks) before the result is plated with it ([remainder_buffer.md](remainder_buffer.md)
+  3.1, TODO `food/kitchen #13`; GameTest RB-T15, RB-14 in game). WTHIT shows the leftover slots ("Holding: ...",
+  [wthit_lines.md](wthit_lines.md) 2.9).
 - **Baking audit wanted (scratchpad 2026-10-21):** every baked good gets an oven recipe with flour, not wheat, and no
   leftover crafting route. Known: banana bread (remove the wheat recipe, add a baking recipe) and honey cake (add a
   baking recipe) ([TODO](todo/TODO.md) `food/oven #6`).
@@ -387,6 +407,7 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 | `development/patcherMod/src/main/resources/assets/creativeengineering/{blockstates,models/block,models/item}/oven*.json`, `lang/en_us.json` | models, names |
 | `development/patcherMod/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
 | `kubejs/startup_scripts/cooking/bakeware.js` | bakeware items |
+| `kubejs/startup_scripts/cooking/baking_ingredients.js` | frosting, cookie dough (baking overhaul) |
 | `kubejs/server_scripts/cooking/baking.js` | baking + crafting recipes |
 | `kubejs/server_scripts/cooking/cooking.js` "Muffins" | the dough fix |
 | `kubejs/server_scripts/tags/blocktags.js`, `cookingtags.js` | tags (2.4) |
@@ -430,33 +451,64 @@ Needs a patcherMod build in `mods/`.
   blaze burner, FD stove, Nether's Delight blackstone stove, another oven -> not lit.
 - [ ] **OV-05 GUI:** right-click opens "Oven": FD pot layout, tool slot left of the grid, flame shows heat, arrow
   fills, heat tooltip reads right.
-- [ ] **OV-06 Bake:** a sample from each table in 2.6 bakes in the oven with its bakeware, and the original pot or
-  crafting recipe still works.
-- [ ] **OV-07 Plating:** muffins wait for paper (one per muffin), the mangosteen cake for a bowl; right-click with
-  one serves it.
+- [ ] **OV-06 Bake:** a sample from each table in 2.6 bakes in the oven with its bakeware.
+- [ ] **OV-07 Plating:** muffins wait for paper (one per muffin, so 4 a bake); right-click with one serves them. The
+  mangosteen cake no longer waits for a bowl.
 - [ ] **OV-08 Pot on top:** campfire -> oven -> cooking pot: the pot cooks; put out the campfire: the pot stops.
 - [ ] **OV-09 Tool slot:** only bakeware goes in, one at a time; shift-click routes it there.
 - [ ] **OV-10 Automation:** a hopper or Create funnel on a side fills ingredients; another extracts only output.
-- [ ] **OV-11 JEI:** "Baking" page lists the 38 recipes with the oven as catalyst and the bakeware left of the grid;
-  counted ingredients show their stack size (apple pie with counts on: 3 flour, 2 sugar, 3 apples); clicking the GUI arrow opens
+- [ ] **OV-11 JEI:** "Baking" page lists the 48 recipes with the oven as catalyst and the bakeware left of the grid;
+  counted ingredients show their stack size (apple pie with counts on: crust, 2 apples, sugar, sugar); clicking the GUI arrow opens
   it; "+" moves the counted amounts in.
 - [ ] **OV-12 Break / burn:** breaking drops oven and contents; standing on a lit oven hurts unless sneaking.
 - [ ] **OV-13 Muffins:** blueberry and cranberry muffins cook in the pot with Create dough. If not, record which
   ingredient slot JEI shows empty.
 - [ ] **OV-15 Bakeware required:** no recipe bakes without its bakeware in the tool slot; the tool stays afterwards.
   No `dummy_*` recipe in JEI.
-- [ ] **OV-16 Counts off (default):** JEI's apple pie shows 6 single slots (flour, 2 sugar, crust, 2 apple); it bakes
-  with one item per slot and takes exactly those. The KubeJS log lists the 9 `over 6 slots, dropped` lines of 2.6.1.
-- [ ] **OV-18 Counts on:** set `ovenIngredientCounts = true`, `/reload`: apple pie shows 4 slots (3 flour, 2 sugar,
-  crust, 3 apples); 2 flour in the slot doesn't start, 3 does and takes exactly 3/2/1/3. Chocolate pie on milk
-  buckets gives back 3 buckets (leftover slots).
-- [ ] **OV-19 cooking.md swaps:** cookies, pies and muffins take Create wheat flour, not wheat or dough; every cake
-  takes a cake base (Create-compacted) and bakes from it; the Upgrade Aquatic mulberry pie and duck-egg pumpkin pie
-  need a crust; no shepherd's pie in the oven's JEI page. Pies and the cake base also take cornmeal; cookies and
-  muffins don't. The oven makes a raw cake base from egg, 2 sugar, 2 flour.
+- [ ] **OV-16 Counts off (default):** JEI's apple pie shows 5 single slots (crust, 2 apple, 2 sugar-or-honey); it bakes
+  with one item per slot and takes exactly those. The KubeJS log has no `over 6 slots, dropped` line (2.6.1).
+- [ ] **OV-18 Counts on:** set `ovenIngredientCounts = true`, `/reload`: apple pie shows 4 slots (crust, 2 apples,
+  sugar, sugar); 1 apple in the slot doesn't start, 2 does and takes exactly 1/2/1/1. Honey cake on 2 honey bottles in one
+  slot gives back 2 bottles (leftover slots).
+- [ ] **OV-19 cooking.md swaps:** superseded by the baking overhaul (OV-25 to OV-31). Still checks: muffins take
+  Create wheat flour, not dough; no shepherd's pie in the oven's JEI page.
 - [ ] **OV-17 Hammering:** iron plate on a cutting board + Engineer's Hammer -> baking sheet, the board doesn't turn,
   the hammer loses 1 durability; repeat down the chain (muffin tin, pie tin) to the cake pan. Hammer + piece in the crafting grid does the
   same and returns the damaged hammer. The hammer still rotates other blocks and still forms IE multiblocks.
+- [ ] **OV-20 Muffin yield:** one oven bake of blueberry (and cranberry) muffins gives 4, plated on 4 paper; the
+  FD pot still gives 2.
+- [ ] **OV-23 Other-oven tooltips:** CfB oven shows "Cooks food like a furnace and a smoker"; each of the 7 Fantasy
+  Furniture ovens shows "Works like a smoker" (client log: `fantasyfurniture:*/oven -> 7 matches`).
+- [ ] **OV-24 CfB oven smokes:** raw ham goes into the CfB oven and comes out as smoked ham (smoker-only recipe);
+  beef still cooks; cobblestone is still refused.
+- [ ] **OV-25 Overhaul boot:** after a restart no KubeJS errors for baking.js; Frosting and Cookie Dough exist (cotton
+  boll texture). JEI on any cake, pie or cookie shows only the new recipes plus `*_from_slices`. Uses still list the golden
+  and canned recipes.
+- [ ] **OV-26 Bases:** raw cake base crafts from 3 flour (or cornmeal) + 2 egg + 2 sugar and from 3 dough + egg + 2
+  sugar; the oven (cake pan) bakes a baked base from 2 flour + 2 egg + 2 sugar, from 2 dough + egg + 2 sugar, and from a raw
+  base. Pie crust: 3 flour + egg + milk -> 3 and 3 dough + milk -> 3 by hand. None of the bases, crust, frosting or cookie dough
+  work in a Create mechanical crafter or mixer, and JEI shows no Create or IE recipe for them. Frosting: sugar + 2 milk
+  -> 2. Cookie dough: dough + 2 sugar (gingerdough look).
+- [ ] **OV-27 Cakes:** baked base + frosting + 2 strawberries crafts a strawberry cake; raw base + frosting + 2
+  strawberries bakes one. Baked base + 3 frosting -> cake; baked base + 2 frosting + a cherry -> cake. Honey cake gives
+  back 2 bottles.
+- [ ] **OV-28 Pies:** crust + 2 apples + sugar + honey bottle bakes an apple pie (pie tin), the bottle lands in a
+  leftover slot. No apple pie recipe in the crafting grid. Cooking pot: 2 apples + 2 sugar + empty can in the container slot
+  -> Canned Apple Pie Filling; crust + filling bakes an apple pie, and also crafts one by hand. Cheesecake: crust + 2
+  sweet berries + 2 sugar in the pie tin.
+- [ ] **OV-29 Opened can:** eat one serving of a pie filling can; crust + that can doesn't start in the oven and
+  gives nothing in the grid; a full can does both.
+- [ ] **OV-30 Cookies:** cookie dough + 2 cocoa beans bakes 12 cookies on the baking sheet; no cookie craft in the grid.
+  Cookie dough + 2 Vinery cherries bakes 12 cherry cookies.
+- [ ] **OV-31 Kept:** 7 cake slices -> cake still crafts; golden cookie / cake / pumpkin pie still craft from the
+  finished item; muffins and tarts unchanged (OV-20).
+- [ ] **OV-32 Sweet Berry Pie** (recipes and can values: scratch test queued, SQ-SB-01; names and the oven screen: in game): the cheesecake shows as Sweet Berry Pie (whole, Slice of Sweet Berry Pie, Incomplete
+  Sweet Berry Pie, both Display Delight plates; JEI search "cheesecake" by name finds nothing). Cooking Pot: 2 sweet
+  berries + 2 sugar + empty can -> Canned Sweet Berry Pie Filling; 4 slices + empty can also craft one. Pie crust +
+  full filling bakes a Sweet Berry Pie (pie tin) and crafts one by hand; an opened can does neither. Eating the can:
+  4 servings, 3 hunger each, Speed 30 s.
+- [ ] **OV-33 Chocolate cake spout** (recipe loaded: scratch test queued, SQ-BK-06; the Spout run: in game): a Spout with 500 mB chocolate over a Baked Cake Base on a depot gives a
+  Chocolate Cake; JEI shows the filling recipe on the chocolate cake.
 - [ ] **OV-14 Server:** the same on a dedicated server with a client (menu opens, slots sync, JEI page present).
 
 ## 8. History
@@ -486,3 +538,27 @@ Needs a patcherMod build in `mods/`.
   too. Fix for 1.0.9 ([plan_1.0.8.md](plan_1.0.8.md) 2.2).
 - 2026-10-19: JEI [+] fixed for 1.0.9: the ingredient slots answer `mayPickup = true` (Forge's `SlotItemHandler` said false for an empty slot, and JEI checks every crafting slot) ([plan_1.0.9.md](plan_1.0.9.md)). OV-11 checks it.
 - 2026-10-19: status sweep: everything above that was STAGED for 1.0.8 went out with pack 1.0.8 (DEPLOYED 2026-10-19 10:20); the JEI [+] fix with pack 1.0.9 (DEPLOYED 15:54). OV-01 to OV-19 still pending.
+- 2026-10-21 (patcherMod 1.1.01, not deployed): leftover slots no longer go blank on the client after taking the output
+  (update tag carries the buffer; TODO `food/kitchen #14`, RB-12); a recycled bowl shows in the plating slot for
+  `[cooking] recycleShowTicks` before plating (`#13`, RB-14); WTHIT "Holding" / "Waiting" line (`#3`). Details in
+  [remainder_buffer.md](remainder_buffer.md).
+- 2026-10-21: muffins bake 4 (`food/oven #5`, baking.js). CfB oven also smokes (patcherMod `CfbOvenSmokingMixin`,
+  in `build/libs` only, not installed), tooltips on the CfB and Fantasy Furniture ovens (`food/oven #4`, 2.8).
+  OV-20, OV-23, OV-24.
+- 2026-10-22: baking overhaul (user's scratchpad): every cake, pie, cookie, pie crust and cake base recipe removed
+  (slices -> whole kept) and rebuilt (2.6): cake base crafted raw or baked in the oven, crust 3 a craft (manual), new
+  frosting and cookie dough items (cotton boll texture for now), cakes = base + frosting + 2 flavour (craft or oven),
+  pies = crust + 2 fruit + 2 sugar or crust + canned filling (oven only; filling from the pot), cookies = dough + 2
+  flavour -> 12 (oven only). Crust + filling moved from crafting (canning.js) to the oven. The oven refuses opened cans
+  (patcherMod `BakingRecipe`). OV-25 to OV-31.
+- 2026-10-22 (user follow-up): the hand craft filling + crust -> pie is back beside the oven one; cookie dough on
+  Create Confectionery's gingerdough texture; no Create / IE recipe for the bases (crust compacting dropped, raw cake
+  base manual only); cheesecake is a pie (pie tin); cherry cookie added. No cherry pie (no whole-pie item). Durian /
+  pineapple yield explained in 2.6, left open.
+- 2026-10-22 (user): cheesecake renamed Sweet Berry Pie and given Canned Sweet Berry Pie Filling (pot, 4 slices,
+  crust + filling in the oven and by hand); durian and pineapple pies marked for a rework. OV-32.
+- 2026-10-22: live checks queued as SQ-BK-00 to SQ-BK-05 ([testing/scratch_queue.md](testing/scratch_queue.md), probe
+  `tools/baking_probe/baking_probe.js`: recipe audit, expected ids, no machine recipes for the bases, oven matching
+  with full and opened cans).
+- 2026-10-22 (user): chocolate cake spout recipe restored (baked base + 500 mB chocolate; the removals had swept
+  C&A's). OV-33.

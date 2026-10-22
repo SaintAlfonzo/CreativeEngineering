@@ -70,6 +70,8 @@
 # WorldEdit runtime cache / per-player sessions
 /config/worldedit/.archive-unpack/
 /config/worldedit/sessions/
+# Player changelog read marker (patcherMod changelog/ChangelogStore): each player's own, never shipped
+/config/creativeengineering/changelog_seen.txt
 # Claude Code per-machine settings
 /.claude/settings.local.json
 

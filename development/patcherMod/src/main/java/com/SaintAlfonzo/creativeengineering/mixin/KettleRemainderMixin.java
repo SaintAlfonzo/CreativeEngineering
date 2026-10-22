@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import umpaz.farmersrespite.common.block.entity.KettleBlockEntity;
 import umpaz.farmersrespite.common.crafting.KettleRecipe;
@@ -32,7 +33,8 @@ import vectorwing.farmersdelight.common.utility.ItemUtils;
  * Farmer's Respite kettle (1.19-2.0): the same as CookingPotRemainderMixin for the pot. The kettle has no throw
  * method of its own: {@code processBrewing} calls FD's {@code ItemUtils.spawnItemEntity} inline for each ingredient
  * (slots 0-1) with a crafting remainder, so that call is redirected. Two bottles per "strong"/"long" upgrade: one
- * plates the drink through the container slot, one goes to the buffer.
+ * plates the drink through the container slot, one goes to the buffer. Plating waits {@code [cooking]
+ * recycleShowTicks} after a recycle ({@code useStoredContainersOnMeal} HEAD), as on the pot.
  */
 @Mixin(value = KettleBlockEntity.class, remap = false)
 public abstract class KettleRemainderMixin implements RemainderBufferHolder {
@@ -79,6 +81,13 @@ public abstract class KettleRemainderMixin implements RemainderBufferHolder {
         }
     }
 
+    @Inject(method = "useStoredContainersOnMeal", at = @At("HEAD"), cancellable = true)
+    private void ce$showRecycledContainer(CallbackInfo ci) {
+        if (ce$getRemainderBuffer().holdPlating()) {
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "canBrew", at = @At("RETURN"), cancellable = true)
     private void ce$roomForRemainders(KettleRecipe recipe, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValueZ() || !RemainderBuffer.stalls()) return;
@@ -89,6 +98,8 @@ public abstract class KettleRemainderMixin implements RemainderBufferHolder {
                 getMeal().getCount() + recipe.getResultItem().getCount());
         if (!fits) {
             cir.setReturnValue(false);
+            BlockEntity self = (BlockEntity) (Object) this;
+            if (self.getLevel() != null) ce$getRemainderBuffer().markStalled(self.getLevel().getGameTime());
         }
     }
 

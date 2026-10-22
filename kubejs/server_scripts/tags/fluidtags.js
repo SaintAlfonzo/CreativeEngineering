@@ -13,6 +13,8 @@ ServerEvents.tags('fluid', e => {
 		// food / drink
 		['forge:fluid/tea', f.tea],
 		['forge:fluid/apple_cider', f.apple_cider],
+		['forge:fluid/long_apple_cider', f.long_apple_cider],
+		['forge:fluid/strong_apple_cider', f.strong_apple_cider],
 		['forge:fluid/honey', f.honey],
 		['forge:fluid/chocolate/milk', f.chocolate],
 		['forge:fluid/chocolate/dark', f.black_chocolate],

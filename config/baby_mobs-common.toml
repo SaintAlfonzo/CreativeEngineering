@@ -1,0 +1,29 @@
+
+#Which natural spawns are babies. The first mob of a spawn group is always an adult; each further
+#member rolls this chance (vanilla's AgeableMob rule). Spawn eggs and /summon give adults unless
+#the egg's or command's NBT says Age:-24000.
+[spawns]
+	#Squid (vanilla 0.05)
+	#Range: 0.0 ~ 1.0
+	squidBabyChance = 0.05
+	#Glow squid (vanilla 0.05)
+	#Range: 0.0 ~ 1.0
+	glowSquidBabyChance = 0.05
+	#Dolphin (vanilla 0.10)
+	#Range: 0.0 ~ 1.0
+	dolphinBabyChance = 0.1
+
+#Growing up.
+[growth]
+	#Ticks a baby takes to grow up (vanilla 24000 = 20 minutes)
+	#Range: 1 ~ 1000000
+	growTicks = 24000
+	#Feeding a baby dolphin any #minecraft:fishes item ages it up by 10% of the time left (vanilla)
+	dolphinFishFeeding = true
+
+#Client.
+[client]
+	#Use the 26.1 baby models and textures for young squid, glow squid and dolphins;
+	#false = vanilla's adult model at half size
+	babyModels = true
+

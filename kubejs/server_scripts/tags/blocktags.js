@@ -30,6 +30,9 @@ ServerEvents.tags('block', e => {
 	// Bakeware is hammered on the cutting board (NCH.hammering); without this the IE hammer rotates the board
 	// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
 	t.add(e, b.t_hammer_no_rotate, b.cutting_board)
+	// Cooking for Blockheads worktops are 15 px tall, so FD's cutting board found no support face on them
+	// (patcherMod CuttingBoardSupportMixin, TODO food/kitchen #8).
+	t.add(e, b.t_cutting_board_supports, [b.cfb_counter, b.cfb_corner])
 	// Rubidium blends the vanilla grass block's tint per vertex across neighbours (biome blend > 0) but colours
 	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
 	t.add(e, b.t_blendable_blocks, global.item.grass_slab)

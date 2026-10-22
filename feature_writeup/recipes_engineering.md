@@ -112,10 +112,11 @@ steel ↔ 1 block replaces both mods' storage recipes (IE's slab recipes are poi
 | Stone, cobblestone | water + lava: 1 / 5 / 10 per batch | |
 | Basalt | packed ice (blue ice superheated) + soul soil + lava, soul soil returned | blackstone + aluminium, silver, nickel nuggets |
 | Andesite | mix cobblestone + diorite: 2 per pair, 32 per 16 heated, 48 superheated | IE: cobblestone |
+| Obsidian | mixing water + lava 250 mB each, heated, both used up (the old `create_generators` recipe, kept) | |
 | Deepslate | compact cobblestone + lava (8 / 32 / 48 by heat) | IE: deepslate cobblestone; Create: gravel |
 | Granite, diorite, terracotta, calcite, dripstone, tuff, magma, netherrack, nether bricks, soul sandstone, blackstone, obsidian, galcite, layered obsidian | | crushing tables (tuff: flint and metal nuggets; nether bricks: 0.5-1 % netherite fragment; soul sandstone: glowstone; obsidian: powdered obsidian) |
 
-`create_generators`' stone generators, Create Ultimate Factory's ore-stone compacting and crushing, Create Netherless
+The old `create_generators` cobblestone, stone, basalt, limestone and scoria generators (the mod is gone since 2026-10-21), Create Ultimate Factory's ore-stone compacting and crushing, Create Netherless
 basalt, soul sand and deepslate recipes, and Botania's granite and calcite conversions are removed. Ash ×16 compacts to
 tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and comparator take any stone.
 
@@ -249,6 +250,8 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
 - [ ] **RE-12 Coal (F4):** 9 coal blocks in a pressure chamber at 8 bar → note diamond or shard.
 - [ ] **RE-13 Stone generator:** mixer with water + lava, unheated / heated / superheated → 1 / 5 / 10 cobblestone per
   batch.
+- [ ] **RE-21 Obsidian generator:** heated mixer with 250 mB water + 250 mB lava → 1 obsidian, both fluids used up;
+  unheated → nothing.
 - [ ] **RE-14 Ore stone:** compact 6 iron nuggets + 2 gravel + 250 mB lava → crimsite; IE crush → 5 iron nuggets.
 - [ ] **RE-15 Cinder flour:** 8 cinder flour + a strength potion → 8 redstone and a glass bottle; a pile in the Bottler
   with 180 mB strength → 9 redstone.
@@ -264,3 +267,5 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
 - By 2026-09-27 (initial git commit): the folder built, first on `global.CE` (the commented copy in
   `resource_blocks.js`), then on `global.NCH`; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F10; tests RE-01 to RE-20. No code changed.
+- 2026-10-21: `create_generators` removed from the pack; its obsidian recipe is now in `resource_blocks.js`
+  (`obsidian_generation_heated`), the 5 `R.remove` lines for its other recipes deleted; test RE-21.

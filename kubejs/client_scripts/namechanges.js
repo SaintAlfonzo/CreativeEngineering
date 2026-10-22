@@ -4,6 +4,7 @@ console.log('Rename Started')
 
 ClientEvents.lang('en_us', e => {
 	e.renameItem('create:brass_hand', 'Gold Hand')
+	e.renameItem('oldguns:mortar_and_pestle', 'Powder Pestle')
 	e.add('item.creativeengineering.precision_sawblade', 'Precision Sawblade')
   e.add('item.creativeengineering.creosote_soaked_sawdust', 'Creosote Soaked Sawdust')
   e.add('item.creativeengineering.zinc_grit', 'Zinc Grit')
@@ -65,6 +66,16 @@ ClientEvents.lang('en_us', e => {
   e.renameItem('canned_goods:canned_spider_eyes', 'Canned Night Berries')
   e.renameItem('neapolitan:chocolate_spider_eye', 'Chocolate Night Berries')
   e.renameItem('delightful:cactus_flesh', 'Cactus Flesh') // was Cactus Chunk; its can is Canned Cactus Flesh
+  // Farmer's Delight's cheesecake is the pack's only sweet berry pie (Canned Sweet Berry Pie Filling); the Display
+  // Delight plates are renamed in kubejs/assets/displaydelight/lang
+  e.renameItem(global.item.sweet_berry_cheesecake, 'Sweet Berry Pie')
+  e.renameItem(global.item.sweet_berry_cheesecake_slice, 'Slice of Sweet Berry Pie')
+  e.renameItem(global.item.incomplete_sweet_berry_cheesecake, 'Incomplete Sweet Berry Pie')
+  // PneumaticCraft fried food, now fried in the pot with any fish (TODO food/meals #7)
+  e.renameItem(global.item.salmon_tempura, 'Fish Tempura')
+  e.renameItem(global.item.raw_salmon_tempura, 'Raw Fish Tempura')
+  e.renameItem(global.item.chips, 'Fries')
+  e.renameItem(global.item.cod_n_chips, 'Fish and Chips')
 
 	e.renameItem('create_compressed:copper_sheet_block', 'Copper Plate Block')
   e.renameItem('create_compressed:iron_sheet_block', 'Iron Plate Block')
@@ -149,6 +160,15 @@ ClientEvents.lang('en_us', e => {
 	e.renameItem('quark:limestone_stairs', 'Gabbro Stairs')
 	e.renameItem('quark:limestone_vertical_slab', 'Gabbro Vertical Slab')
 	e.renameItem('quark:limestone_wall', 'Gabbro Wall')
+
+	// Quark's permafrost is Froststone (crafted only); Immersive Weathering's is the world's permafrost (TODO biomes #5)
+	;[
+		['froststone', 'Froststone'], ['froststone_slab', 'Froststone Slab'], ['froststone_stairs', 'Froststone Stairs'],
+		['froststone_vertical_slab', 'Froststone Vertical Slab'], ['froststone_wall', 'Froststone Wall'],
+		['froststone_bricks', 'Froststone Bricks'], ['froststone_bricks_slab', 'Froststone Brick Slab'],
+		['froststone_bricks_stairs', 'Froststone Brick Stairs'], ['froststone_bricks_vertical_slab', 'Froststone Brick Vertical Slab'],
+		['froststone_bricks_wall', 'Froststone Brick Wall'],
+	].forEach(([key, name]) => e.renameItem(global.item[key], name))
 	
 	e.renameItem('immersive_weathering:mulch_block', 'Fertile Soil')
 
@@ -216,6 +236,12 @@ ClientEvents.lang('en_us', e => {
   // Vinery's wood is "Cherry", not "Dark Cherry" (alcohol.md 10.10; the port renames its own names)
   e.renameItem(global.item.short_vinery_cherry_door, 'Short Cherry Door')
   e.renameItem(global.item.tall_vinery_cherry_door, 'Tall Cherry Door')
+  // Vinery's cider is alcoholic; Farmer's Delight's and Farmer's Respite's keep "Apple Cider"
+  e.renameItem(global.item.apple_cider, 'Hard Cider')
+  e.add('item.vinery.juice.tooltip.item.vinery.apple_juice', 'Used to craft Apple Wine and Hard Cider')
+  // Dave's rocky dirt is Pebble Dirt; Twigs' keeps "Rocky Dirt" (item_merges.md 2.5)
+  e.renameItem(global.item.rocky_dirt, 'Pebble Dirt')
+  e.renameItem(global.item.rocky_dirt_slab, 'Pebble Dirt Slab')
 })
 
 console.log('Rename Finished')

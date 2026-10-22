@@ -74,8 +74,9 @@ MoreJSEvents.wandererTrades(e => {
 
 	// ---------- Wandering Winemaker ----------
 	t.winemakerReset()
+	// no Fruits Delight apple sapling: Vinery's apple tree is the pack's apple tree
 	t.winemakerSell([
-		i.apple_sapling, i.bayberry_sapling, i.durian_sapling, i.fig_sapling, i.hawberry_sapling,
+		i.bayberry_sapling, i.durian_sapling, i.fig_sapling, i.hawberry_sapling,
 		i.kiwi_sapling, i.lychee_sapling, i.mango_sapling, i.mangosteen_sapling, i.orange_sapling,
 		i.peach_sapling, i.pear_sapling, i.persimmon_sapling,
 	], { emeralds: 5, maxUses: 8 })

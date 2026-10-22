@@ -30,6 +30,12 @@ ServerEvents.tags('item', e => {
 
 	// cooking oil: Rustic Delight only presses cotton seeds
 	t.add(e, i.t_cooking_oil_ingredients, i.pumpkin_seeds)
+	// Cooking for Blockheads oven fuel (ovenRequiresCookingOil): Balm's tag lists only an optional item
+	// `forge:cookingoil` (no '#', so not the forge tag) and is otherwise empty. TODO food/kitchen #8
+	t.add(e, i.t_balm_cooking_oil, i.cooking_oil)
+
+	// sliced potatoes: only More Delight's diced potatoes were in it; Rustic Delight's slices fry the same (TODO food/meals #7)
+	t.add(e, i.t_sliced_potatoes, i.potato_slices)
 
 	// lasagna meats
 	t.add(e, 'brewinandchewin:cooked_horror_lasagna_meats', [
@@ -54,5 +60,25 @@ ServerEvents.tags('item', e => {
 		i.venison_chops_cooked,
 		i.lobster_tail_cooked,
 		i.cooked_crab,
+	])
+
+
+	// meals (TODO food/meals #1, #2)
+	// cooked veggies for heatless soups and stews: the cooked/veggie food types (food_types.json) minus snacks,
+	// rice and kelp. Listed by key: foodtypetags.js fills those tags after this script runs.
+	t.add(e, i.t_soup_veggie_cooked, [
+		i.baked_potato, i.baked_potato_slices, i.boiled_corn, i.grilled_corn,
+		i.roasted_bell_pepper_green, i.roasted_bell_pepper_red, i.roasted_bell_pepper_yellow,
+		i.boiled_blue_pickerelweed, i.boiled_purple_pickerelweed, i.roasted_adzuki_beans,
+		i.cactus_steak, i.kimchi, i.pickled_pickles,
+	])
+	// exotic fruits bowl: Fruits Delight's fruits, its two melons and the vanilla melon slice
+	t.add(e, i.t_exotic_fruit, [
+		i.pear, i.hawberry, i.lychee, i.mango, i.persimmon, i.peach, i.orange, i.mangosteen,
+		i.bayberry, i.kiwi, i.fig, i.blueberry, i.lemon, i.cranberry, i.pineapple, i.durian_flesh,
+		i.hamimelon_slice, i.melon,
+	])
+	t.add(e, i.t_fruit_salad_slice, [
+		i.melon, i.cantaloupe_slice, i.hamimelon_slice, i.pineapple_slice, i.lemon_slice, i.orange_slice,
 	])
 })

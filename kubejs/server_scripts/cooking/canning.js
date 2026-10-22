@@ -8,9 +8,15 @@ var i = global.item;
 // Generated cans (tools/gen_can_types.py -> generation_scripts/food/can_types.json): one meal = the food it holds x the
 // section multiplier, effects copied with scaled durations. Each can has its recipes in the json: n of the source(s) (any
 // of the listed alternatives per slot) + an empty can, plus the additive variants. canSection('x') makes the recipes of one
-// section; recipe ids are the can key plus the variant suffix (canned_cookies, canned_cookies_sugar). A recipe with
-// "servings" would make a partly full can (none do: sliced inputs share the whole food's count); a can with "pie" also turns back
-// into that pie with a pie crust (the whole can is used, opened or not).
+// section; recipe ids are the can key plus the variant suffix (canned_cookies, canned_cookies_sugar). Cans are only ever
+// crafted full (sliced inputs share the whole food's count). A can with "pie" also turns back into that pie with a pie crust:
+// a full can only, by hand only (NCH cans { whole }: an opened can, Create's mixer / mechanical crafter and other mods'
+// auto-crafters get nothing). The same filling + crust also bakes in the oven, and fillings also come from the Cooking
+// Pot: baking.js PIES.
+// A can with "pot" is made in the Cooking Pot instead, the empty can in its container slot.
+// Every can is generated, the raw veggie / fruit / meat ones too: the hand-written numbers below are what the generator's
+// sizing gives.
+// Cans with no recipe (Canned Goods' own cans the pack doesn't make) only get their food values (cans.js).
 var canTypes = {}
 try {
 	canTypes = JSON.parse(String(JsonIO.readString('kubejs/generation_scripts/food/can_types.json'))).cans
@@ -24,8 +30,12 @@ function canSection(section) {
 		if (can.section !== section) return
 		can.recipes.forEach(rec => {
 			try {
-				var input = [i.empty_can]
+				var input = can.pot ? [] : [i.empty_can]
 				rec.inputs.forEach(inp => {
+					if (can.pot) { // the pot takes one item per slot
+						for (var p = 0; p < inp.n; p++) input.push(inp.any.length === 1 ? i[inp.any[0]] : inp.any.map(k => i[k]))
+						return
+					}
 					var ids = inp.any.map(k => i[k])
 					ids.forEach((id, slot) => {
 						if (typeof id !== 'string') throw new Error(inp.any[slot] + ' is not in item_dict')
@@ -37,8 +47,12 @@ function canSection(section) {
 					}
 				})
 				if (typeof i[key] !== 'string') throw new Error(key + ' is not in item_dict')
-				var out = rec.servings ? Item.of(i[key], 1, '{CanServings:' + rec.servings + '}') : Item.of(i[key], 1)
-				R.shapeless(out, input, e, key + rec.suffix)
+				var out = Item.of(i[key], 1)
+				if (can.pot) {
+					input.forEach((id, slot) => { if (typeof id !== 'string' && !Array.isArray(id)) throw new Error('pot slot ' + slot + ' is not in item_dict') })
+					R.fdCooking(input, out, e, key + rec.suffix, 1.0, 200, i.empty_can)
+				}
+				else R.shapeless(out, input, e, key + rec.suffix)
 				made++
 			} catch (err) {
 				console.warn('[canning] ' + key + rec.suffix + ' skipped: ' + err)
@@ -46,7 +60,7 @@ function canSection(section) {
 		})
 		if (can.pie) {
 			if (typeof i[can.pie] !== 'string') console.warn('[canning] ' + key + '_pie skipped: ' + can.pie + ' is not in item_dict')
-			else { R.shapeless(Item.of(i[can.pie], 1), [i[key], i.pie_crust], e, key + '_pie'); made++ }
+			else { R.shapeless(Item.of(i[can.pie], 1), [i[key], i.pie_crust], e, key + '_pie', null, null, { whole: i[key] }); made++ }
 		}
 	})
 	console.log('[canning] ' + section + ': ' + made + ' recipes')
@@ -62,8 +76,10 @@ function canSection(section) {
 //   a partly eaten can shows a durability-style bar and "Servings: x / y".
 // - The last serving rolls an empty can / crushed can / nothing: CEConfig [canning] emptyCanChance, crushedCanChance.
 // - In recipes: R.shaped(..., cans) / R.shapeless(..., cans), cans = true -> each can loses one serving per craft
-//   (same roll on the last one). Example:
+//   (same roll on the last one); cans = { whole: id } -> the can is used up and must be full. Example:
 //   R.shapeless(Item.of(i.beef_cooked), [i.canned_beef], e, 'uncan_beef', null, null, true)
+//   Every recipe that takes a can goes through this argument: NCH makes it manual only (_manual_only id, no result on
+//   machine crafters), so Create, IE and AE2 never use up a whole can.
 
 // TODO 
 // Canning automation
@@ -147,64 +163,54 @@ R.ieBlueprint(Item.of(i.empty_can, 32), [Item.of(i.plate_iron, 4)], 'components'
 // 5x ==  1BP            
 // 8x --  1BP, 2M 
 // 6x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_beetroot, 1), [i.empty_can, Item.of(i.beetroot, 8)], e, 'canned_beetroot')
-R.shapeless(Item.of(i.canned_beetroot, 1), [i.empty_can, Item.of(i.beetroot, 6), [i.salt, i.bone_broth]], e, 'canned_beetroot_salt')
 
 // Cabbage- 2, 1.6
 // 3x  ~= 1BP
 // 5x  -- 1BP, 2M
 // 3x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_cabbage, 1), [i.empty_can, Item.of(i.any_cabbage, 5)], e, 'canned_cabbage')
-R.shapeless(Item.of(i.canned_cabbage, 1), [i.empty_can, Item.of(i.any_cabbage, 3), [i.salt, i.bone_broth]], e, 'canned_cabbage_salt')
 
 // Carrot- 3, 3.6
 // 2x  ~= 1BP
 // 3x  -- 1BP, 2M
 // 2x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_carrot, 1), [i.empty_can, Item.of(i.carrot, 3)], e, 'canned_carrot')
-R.shapeless(Item.of(i.canned_carrot, 1), [i.empty_can, Item.of(i.carrot, 2), [i.salt, i.bone_broth]], e, 'canned_carrot_salt')
 
 // Onion- 2, 1.6
 // 3x  ~= 1BP
 // 5x  -- 1BP, 2M
 // 3x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_onion, 1), [i.empty_can, Item.of(i.onion, 5)], e, 'canned_onion')
-R.shapeless(Item.of(i.canned_onion, 1), [i.empty_can, Item.of(i.onion, 3), [i.salt, i.bone_broth]], e, 'canned_onion_salt')
 
 // Potato- 1, 0.6
 // 7x  ~= 1BP
 // 8x  -- 1BP, 2M
 // 6x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_potato, 1), [i.empty_can, Item.of(i.any_potato, 8)], e, 'canned_potato')
-R.shapeless(Item.of(i.canned_potato, 1), [i.empty_can, Item.of(i.any_potato, 6), [i.salt, i.bone_broth]], e, 'canned_potato_salt')
 
 // Tomato- 1, 0.6
 // 7x  ~= 1BP
 // 8x  -- 1BP, 2M
 // 6x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_tomato, 1), [i.empty_can, Item.of(i.tomato, 8)], e, 'canned_tomato')
-R.shapeless(Item.of(i.canned_tomato, 1), [i.empty_can, Item.of(i.tomato, 6), [i.salt, i.bone_broth]], e, 'canned_tomato_salt')
 
 // Bell Pepper (Green, Red, Yellow)- 1, 0.2
 // 9x  ~= 1BP
 // 8x  -- 1BP, 2M
 // 6x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_bell_pepper, 1), [i.empty_can, Item.of(i.any_bell_pepper, 8)], e, 'canned_bell_pepper')
-R.shapeless(Item.of(i.canned_bell_pepper, 1), [i.empty_can, Item.of(i.any_bell_pepper, 6), [i.salt, i.bone_broth]], e, 'canned_bell_pepper_salt')
 
 // Cactus Flesh- 3, 1.8
 // 2x  ~= 1BP
 // 4x  -- 1BP, 2M
-// 2x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_cactus_flesh, 1), [i.empty_can, Item.of(i.cactus_flesh, 4)], e, 'canned_cactus_flesh')
-R.shapeless(Item.of(i.canned_cactus_flesh, 1), [i.empty_can, Item.of(i.cactus_flesh, 2), [i.salt, i.bone_broth]], e, 'canned_cactus_flesh_salt')
+// 3x* -> 1BP, 2M
 
 // Gongylidia- 3, 7.2
 // 1x  ~= 1BP
 // 2x  -- 1BP, 2M
 // 1x* -> 1BP, 2M
-R.shapeless(Item.of(i.canned_gongylidia, 1), [i.empty_can, Item.of(i.gongylidia, 2)], e, 'canned_gongylidia')
-R.shapeless(Item.of(i.canned_gongylidia, 1), [i.empty_can, i.gongylidia, [i.salt, i.bone_broth]], e, 'canned_gongylidia_salt')
+
+// Maize- 2, 0.8 (maize only: a maize cuts into 4 kernels, which are not canned)
+// 6x  -- 1BP, 2M
+// 4x* -> 1BP, 2M
+
+// Generated (section raw_veggie): the counts above are the sizing rule's (basic recipe about 0.8 of the can, the
+// salt / bone broth one 0.7 of that).
+canSection('raw_veggie')
 
 // ============================================================
 // Raw Fruit
@@ -223,90 +229,66 @@ R.shapeless(Item.of(i.canned_gongylidia, 1), [i.empty_can, i.gongylidia, [i.salt
 // 1x  ~= 1FM
 // 3x  -- 1FM, 3M
 // 2x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_apple, 1), [i.empty_can, Item.of(i.apple, 3)], e, 'canned_apple')
-R.shapeless(Item.of(i.canned_apple, 1), [i.empty_can, Item.of(i.apple, 2), [i.sugar, i.honey_bottle]], e, 'canned_apple_sugar')
 
 // Banana (Neapolitan only; Alex's Mobs bananas are not canned, can_parity.md)- 2, 0.8
 // 3x  ~= 1FM
 // 7x  -- 1FM, 3M
 // 5x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_banana, 1), [i.empty_can, Item.of(i.neapolitan_banana, 7)], e, 'canned_banana')
-R.shapeless(Item.of(i.canned_banana, 1), [i.empty_can, Item.of(i.neapolitan_banana, 5), [i.sugar, i.honey_bottle]], e, 'canned_banana_sugar')
 
 // Cantaloupe Slice- 3, 1.8 (set to the Pumpkin Slice's values, startup_scripts/cooking/food_values.js)
 // Slices only: the whole cantaloupe can't be eaten. Same for pumpkin, melon, hamimelon and pineapple.
 // 2x  ~= 1FM
 // 4x  -- 1FM, 3M
 // 3x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_cantaloupe, 1), [i.empty_can, Item.of(i.cantaloupe_slice, 4)], e, 'canned_cantaloupe')
-R.shapeless(Item.of(i.canned_cantaloupe, 1), [i.empty_can, Item.of(i.cantaloupe_slice, 3), [i.sugar, i.honey_bottle]], e, 'canned_cantaloupe_sugar')
 
 // Cherry- 2, 1.2
 // 3x  ~= 1FM
 // 6x  -- 1FM, 3M
 // 4x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_cherry, 1), [i.empty_can, Item.of(i.cherry, 6)], e, 'canned_cherry')
-R.shapeless(Item.of(i.canned_cherry, 1), [i.empty_can, Item.of(i.cherry, 4), [i.sugar, i.honey_bottle]], e, 'canned_cherry_sugar')
 
 // Glow Berries- 2, 0.4
 // 3x  ~= 1FM
 // 8x  -- 1FM, 3M
 // 6x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_glow_berry, 1), [i.empty_can, Item.of(i.glow_berries, 8)], e, 'canned_glow_berry')
-R.shapeless(Item.of(i.canned_glow_berry, 1), [i.empty_can, Item.of(i.glow_berries, 6), [i.sugar, i.honey_bottle]], e, 'canned_glow_berry_sugar')
 
 // Melon Slice- 2, 1.2
 // 3x  ~= 1FM
 // 6x  -- 1FM, 3M
 // 4x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_melon, 1), [i.empty_can, Item.of(i.melon, 6)], e, 'canned_melon')
-R.shapeless(Item.of(i.canned_melon, 1), [i.empty_can, Item.of(i.melon, 4), [i.sugar, i.honey_bottle]], e, 'canned_melon_sugar')
 
 // Mulberry- 3, 0.6
 // 2x  ~= 1FM
 // 5x  -- 1FM, 3M
 // 3x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_mulberry, 1), [i.empty_can, Item.of(i.mulberry, 5)], e, 'canned_mulberry')
-R.shapeless(Item.of(i.canned_mulberry, 1), [i.empty_can, Item.of(i.mulberry, 3), [i.sugar, i.honey_bottle]], e, 'canned_mulberry_sugar')
 
 // Pumpkin Slice- 3, 1.8 (slices only, the whole pumpkin is a block)
 // 2x  ~= 1FM
 // 4x  -- 1FM, 3M
 // 3x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_pumpkin, 1), [i.empty_can, Item.of(i.pumpkin_slice, 4)], e, 'canned_pumpkin')
-R.shapeless(Item.of(i.canned_pumpkin, 1), [i.empty_can, Item.of(i.pumpkin_slice, 3), [i.sugar, i.honey_bottle]], e, 'canned_pumpkin_sugar')
 
 // Salmonberries- 2, 2.4
 // 2x  ~= 1FM
 // 4x  -- 1FM, 3M
 // 3x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_salmonberry, 1), [i.empty_can, Item.of(i.salmonberries, 4)], e, 'canned_salmonberry')
-R.shapeless(Item.of(i.canned_salmonberry, 1), [i.empty_can, Item.of(i.salmonberries, 3), [i.sugar, i.honey_bottle]], e, 'canned_salmonberry_sugar')
 
 // Strawberries- 3, 0.3
 // 2x  ~= 1FM
 // 6x  -- 1FM, 3M
 // 4x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_strawberry, 1), [i.empty_can, Item.of(i.strawberries, 6)], e, 'canned_strawberry')
-R.shapeless(Item.of(i.canned_strawberry, 1), [i.empty_can, Item.of(i.strawberries, 4), [i.sugar, i.honey_bottle]], e, 'canned_strawberry_sugar')
 
 // White Strawberries- 5, 0.5
 // 1x  ~= 1FM
-// 3x  -- 1FM, 3M
-// 2x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_white_strawberry, 1), [i.empty_can, Item.of(i.white_strawberries, 3)], e, 'canned_white_strawberry')
-R.shapeless(Item.of(i.canned_white_strawberry, 1), [i.empty_can, Item.of(i.white_strawberries, 2), [i.sugar, i.honey_bottle]], e, 'canned_white_strawberry_sugar')
+// 3x  -- 1WM, 3M (own White Strawberry Meal- 7, 5: a much bigger serving, 140% of the berries' hunger)
+// 2x* -> 1WM, 3M
 
 // Sweet Berries- 2, 0.4
 // 3x  ~= 1FM
 // 8x  -- 1FM, 3M
 // 6x* -> 1FM, 3M
-R.shapeless(Item.of(i.canned_sweet_berry, 1), [i.empty_can, Item.of(i.sweet_berries, 8)], e, 'canned_sweet_berry')
-R.shapeless(Item.of(i.canned_sweet_berry, 1), [i.empty_can, Item.of(i.sweet_berries, 6), [i.sugar, i.honey_bottle]], e, 'canned_sweet_berry_sugar')
 
-// The other fruits (fruitsdelight etc.) are generated with the same Fruit Meal and the same sizing rule: the basic
-// recipe is worth about 0.8 of the can, the sugar/honey one 0.7 of that. Sliced lemon/orange take the whole fruit's
-// slots and count.
+// The fruits above and the other fruits (fruitsdelight etc.) are generated with the same Fruit Meal and the same sizing
+// rule: the basic recipe is worth about 0.8 of the can, the sugar/honey one 0.7 of that. Sliced lemon/orange take the
+// whole fruit's slots and count. Coffee berries keep their Wither, cut to 2 s a serving.
 canSection('raw_fruit')
 
 // ============================================================
@@ -328,38 +310,29 @@ canSection('raw_fruit')
 // 2x  ~= 1MM
 // 5x  -- 1MM, 4M
 // 4x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_beef, 1), [i.empty_can, Item.of(i.raw_beef, 5)], e, 'canned_raw_beef')
-R.shapeless(Item.of(i.canned_raw_beef, 1), [i.empty_can, Item.of(i.raw_beef, 4), [i.salt, i.bone_broth]], e, 'canned_raw_beef_broth')
 
 // Chicken- 2, 1.2
 // 3x  ~= 1MM
 // 8x  -- 1MM, 4M
 // 6x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_chicken, 1), [i.empty_can, Item.of(i.raw_chicken, 8)], e, 'canned_raw_chicken')
-R.shapeless(Item.of(i.canned_raw_chicken, 1), [i.empty_can, Item.of(i.raw_chicken, 6), [i.salt, i.bone_broth]], e, 'canned_raw_chicken_broth')
 
 // Mutton- 2, 1.2
 // 3x  ~= 1MM
 // 8x  -- 1MM, 4M
 // 6x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_mutton, 1), [i.empty_can, Item.of(i.raw_mutton, 8)], e, 'canned_raw_mutton')
-R.shapeless(Item.of(i.canned_raw_mutton, 1), [i.empty_can, Item.of(i.raw_mutton, 6), [i.salt, i.bone_broth]], e, 'canned_raw_mutton_broth')
 
 // Porkchop- 3, 1.8
 // 2x  ~= 1MM
 // 5x  -- 1MM, 4M
 // 4x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_pork, 1), [i.empty_can, Item.of(i.raw_pork, 5)], e, 'canned_raw_pork')
-R.shapeless(Item.of(i.canned_raw_pork, 1), [i.empty_can, Item.of(i.raw_pork, 4), [i.salt, i.bone_broth]], e, 'canned_raw_pork_broth')
 
 // Rabbit- 3, 1.8
 // 2x  ~= 1MM
 // 5x  -- 1MM, 4M
 // 4x* -> 1MM, 4M
-R.shapeless(Item.of(i.canned_raw_rabbit, 1), [i.empty_can, Item.of(i.rabbit, 5)], e, 'canned_raw_rabbit')
-R.shapeless(Item.of(i.canned_raw_rabbit, 1), [i.empty_can, Item.of(i.rabbit, 4), [i.salt, i.bone_broth]], e, 'canned_raw_rabbit_broth')
 
-// Shulker (generated, same Meat Meal and sizing rule; Shulker Filet is an alt input)
+// Generated with the meats above: same Meat Meal and sizing rule. Shulker has its own small meal (Shulker Filet is an
+// alt input).
 canSection('raw_meat')
 
 // ============================================================
@@ -375,7 +348,8 @@ canSection('raw_fish')
 // ============================================================
 
 // Canned Goods' own cans (Pufferfish, Poisonous Potatos, Night Berries = spider eyes, Tough Jerky = rotten flesh):
-// Meat Meal sized, no additive. Canned Goods' code applies the bad effects when a serving is eaten.
+// Meat Meal sized, no additive. Canned Goods' code applies the bad effects when a serving is eaten. Canned Maggots: its own
+// small meal (2, 1), like shulker.
 canSection('hazard')
 
 // ============================================================
@@ -516,8 +490,9 @@ canSection('meal')
 // All pie (pie filling), pie + pie crust recipe
 
 // Generated (section pie): 4 slices -> filling, slice-sized meals, effects as the slice. Fruitsdelight's durian and
-// pineapple pies are single items, 4 of them fill a can (no pie back). Blueberry, cherry, crimson berry, green apple,
-// nightshade and truffle slices have no source in the pack yet, so no can.
+// pineapple pies and the fig and lemon tarts (pies to be) are single items, 4 of them fill a can. Pot fillings and the
+// crust + filling oven recipes: baking.js. Sweet Berry Pie is Farmer's Delight's cheesecake, renamed. Slices whose
+// whole pie is from a mod not in the pack get no can (gen_can_types.py lists them).
 canSection('pie')
 
 // ============================================================
@@ -582,6 +557,53 @@ canSection('golden')
 
 // Fruit Meal sized like raw fruit. Chorus reuses Canned Goods' can (its code teleports).
 canSection('special')
+
+// ============================================================
+// Egg and Dairy
+// ============================================================
+
+// Goal
+// (Cheese Wedge x1.25) sized meals, 4 Meals/can, processed cheese
+// 4 wedges in the Cooking Pot, the empty can in the container slot
+
+// Flaxen Cheese Wedge, Scarlet Cheese Wedge
+canSection('dairy')
+
+// ============================================================
+// Preserves
+// ============================================================
+
+// Goal
+// (Item x1) sized meals, 4 Meals/can
+// 4 items / can
+
+// Tomato Sauce (the bowls come back)
+// Dough: 8 Create dough / can, 8 servings, not edible; an ingredient can for later crafts (NCH cans arg, a serving per craft)
+canSection('preserve')
+
+// ============================================================
+// Desserts
+// ============================================================
+
+// Goal
+// (Dessert Type x1.25) sized meals, 8 Meals/can, like soups
+// 6 desserts / can, sugar or honey additive for 3
+// Copy effect with shorter duration (.75x)
+
+// Pear with Rock Sugar (the bowls come back)
+canSection('dessert')
+
+// ============================================================
+// Cake
+// ============================================================
+
+// Goal
+// 1 Can = 1 Cake
+// (Cake Slice x1.75) sized meals, 4 Meals/can (a cake is 7 slices), fast
+// 1 cake, or 4 slices + sugar / honey
+
+// Canned Goods' own Canned Cake
+canSection('cake')
 
 
 console.log('canning done')

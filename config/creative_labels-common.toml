@@ -1,0 +1,23 @@
+
+[notes]
+	#Longest text a sticky note can hold (characters). The server enforces it.
+	#Range: 1 ~ 256
+	noteLength = 32
+	#A special note (inverted, smiley, creeper, gold) picked up with sneak + empty hand keeps
+	#its look. Off: it comes back as a plain note. Broken notes always keep their look.
+	keepSpecialColor = true
+	#Chance that a plain yellow note lands as a gold note when placed (server roll).
+	#Range: 0.0 ~ 1.0
+	goldChance = 0.01
+
+[item_labels]
+	#Level cost of adding a note's text to an item in the anvil (0 can't be taken by vanilla).
+	#Range: 0 ~ 39
+	anvilCost = 1
+	#A crafting grid holding any labelled item gives no result (erase the labels first).
+	blockLabelledCrafting = true
+
+[wthit]
+	#Show the note or label under the crosshair in WTHIT.
+	lines = true
+

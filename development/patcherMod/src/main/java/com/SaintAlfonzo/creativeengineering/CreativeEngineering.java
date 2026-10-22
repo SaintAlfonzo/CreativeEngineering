@@ -96,6 +96,7 @@ public class CreativeEngineering
         // Remainder buffer: pot/kettle/oven keep ingredient leftovers in two slots instead of throwing them
         // (cooking/ package + mixin/*RemainderMixin; feature_writeup/remainder_buffer.md). Saved as an attached cap.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferStorage.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CfbCornerStorage.class);
         // Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)

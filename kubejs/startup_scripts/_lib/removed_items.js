@@ -327,6 +327,10 @@ global.removedItems = [
 	i.sticky_it_sticky_note,
 	i.sticky_it_eraser,
 	i.labels_label,
+	// Canned Goods' Canned Food (butcher trade removed in server_scripts/economy/trades.js) and Hot Hot Hotpot:
+	// cans with no food in them, out of the can system (feature_writeup/can_parity.md)
+	i.canned_food,
+	i.hot_hot_hotpot,
 ];
 
 console.log(`[jeiRemove] Registered ${global.removedItems.length} removed items to global scope`)

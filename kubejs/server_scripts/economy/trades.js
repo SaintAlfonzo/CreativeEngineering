@@ -73,6 +73,17 @@ MoreJSEvents.villagerTrades((e) => {
   e.addTrade(v.chef, 1, [Item.of(i.emerald, 1)], Item.of(i.bacon_and_eggs, 1)).maxUses(12).villagerExperience(3).priceMultiplier(0.05)
   e.addTrade(v.chef,4,[Item.of(i.in_dough, 9)],Item.of(i.emerald))
 
+  // Butcher: Canned Goods' Canned Food trade (level 2, a Forge BasicItemListing the trade filters don't see); Canned Food
+  // is removed from the pack (startup_scripts/_lib/removed_items.js). BasicItemListing ignores getOffer's arguments.
+  var cannedFood = Ingredient.of(i.canned_food)
+  e.forEachTrades(['minecraft:butcher'], [1, 5], listings => {
+    listings.removeIf(listing => {
+      if (String(listing.getClass().getName()) !== 'net.minecraftforge.common.BasicItemListing') return false
+      var offer = listing.getOffer(null, null)
+      return offer != null && cannedFood.test(offer.getResult())
+    })
+  })
+
   //Cleric
   // ender pearl trade still present, unwanted
   e.removeVanillaTrades([v.cleric], [1, 5])

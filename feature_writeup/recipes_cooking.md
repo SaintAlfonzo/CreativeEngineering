@@ -17,14 +17,20 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | Ruby chocolate with dragon's breath | DEPLOYED |
 | Cultivated meat: sample syringe → culture → ×3 by mixing → raw meat on the cutting board | DEPLOYED |
 | Removals: vanilla smoker and cake, Quark crop crates, duplicate pie, egg, bread recipes | DEPLOYED; smoker still made by Quark's deepslate / blackstone smoker recipes (F1) |
+| Meals (TODO `food/meals` #1 to #3): heatless grid routes from cooked ingredients (rule in 2.3), all `_manual_only`; per-meal fixes (cooked eggs, tortilla wrap, dearer scrambled eggs, fruit tags, shaped burgers, one quiche); assemblies for 8 burgers, mutton wrap, fruit salad, shepherd's pie, horror lasagna, stuffed potato, crispy skewer, crawling sandwich, steak and potatoes | BUILT 2026-10-21, not shipped (2.3); RC-55 to RC-64 |
+| Meals (TODO `food/meals` #4, #7, #8): grid routes for 8 more pot meals plus dog food; squid ink pasta by two-fluid heated mixing; fish frying in the pot with cooking oil for any whole fish (Fish Tempura, Fries, Fish and Chips), PneumaticCraft's Thermopneumatic frying removed | BUILT 2026-10-21, not shipped (2.3); RC-66 to RC-69 |
+| Golden food real gold only, smaller machine discount (TODO `food/meals #9`) | BUILT 2026-10-21, not shipped (2.4); RC-70 |
+| Feast Plating JEI tab (TODO `food/meals #5` part a): what a placed feast gives per right-click, the container it takes and its leftovers | BUILT 2026-10-21, patcherMod 1.1.01 not deployed (2.3); RC-65 |
+| Food grinding by hand: every grinding recipe of the pack's own goes through NCH `foodGrinding` (crushing wheels + Millstone + a mortar and pestle craft with the pack's own mortar); other mods' food milling gets mortar crafts from a generated catalogue; hay bale on the Millstone | BUILT 2026-10-21, not shipped (2.1; the mortar and the catalogue are written up in [kitchen.md](kitchen.md) 2.6) |
 
-- **Pending:** the cornmeal millstone mirrors (cooking.js 114-120, commit c82dd31 of 2026-10-20) are in the tree,
-  not shipped. RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
+- **Pending:** the cornmeal millstone mirrors (commit c82dd31 of 2026-10-20) and the 2026-10-21 `foodGrinding`
+  change (mortar crafts, hay bale on the Millstone) and the F8 cornmeal fixes are in the tree, not shipped. RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
   need your call.
-- **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-433; 436-852 is the old
+- **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-594; 597-1013 is the old
   `global.CE` copy, commented out), [golden.js](../kubejs/server_scripts/cooking/golden.js),
   [cultivated_meat.js](../kubejs/server_scripts/cooking/cultivated_meat.js).
-- **Knobs:** none. Server scripts (`/reload`).
+- **Knobs:** none. Server scripts (`/reload`); the meal assemblies' incomplete items and the new tag keys are
+  startup (`transition_items.js`, `item_dict.js`): restart.
 
 ## 1. Overview
 
@@ -38,8 +44,9 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 
 - **One flour, one dough:** tmted's flour and FD's dough are replaced by Create's in every recipe's inputs and outputs
   (`i.in_flour`, `#forge:flour/wheat`, `#forge:dough/wheat`).
-- **Flour:** IE crusher wheat → 2, hay bale → 18; crushing wheels hay bale → 13 + 25 % 2; PNC pressure chamber wheat → 3
-  at 1.5 bar; explosion crafting 1 per wheat (loss rate 50).
+- **Flour:** IE crusher wheat → 2, hay bale → 18; crushing wheels and (since 2026-10-21) the Millstone hay bale → 13 +
+  25 % 2; mortar and pestle hay bale → 13, wheat → 1 (Create's own wheat milling, through the mortar catalogue); PNC
+  pressure chamber wheat → 3 at 1.5 bar; explosion crafting 1 per wheat (loss rate 50).
 - **Dough:** flour + water bucket; Bottler 250 mB water per flour, 1000 mB per flour pile → dough block; 3 flour + egg → 6.
   FD's, tmted's and Create Central Kitchen's dough recipes and tmted's slime ball from dough are removed.
 - **Cornmeal** (`creativeengineering:cornmeal`, KubeJS item `startup_scripts/cooking/cornmeal.js`, recolored-flour texture;
@@ -55,11 +62,20 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   The IE crusher takes one item and can't roll its main output, so a single kernel (0.5) has no recipe; the bag
   gives the ratio. cooking.md's PNC note "(0.2, 3)" was read as "same as flour", whose recipes are 3 at 1.5 bar and
   1 per item at loss rate 50. The millstone mirrors the four crushing-wheel recipes (corn, crate, kernels, bag; added
-  2026-10-20 in c82dd31, not shipped; until then corn had no millstone recipe). Corn Delight's corn and wild corn
-  milling are removed, so wild corn has no Create route, and no corn recipe gives straw: the knife on corn (2 kernels), on wild corn (1) and the IE crusher on wild corn (1)
+  2026-10-20 in c82dd31, not shipped; until then corn had no millstone recipe). Since 2026-10-21 all four are one
+  `R.foodGrinding` call each, which also writes the mortar and pestle craft at the crushing wheels' and Millstone's
+  exact cornmeal average: corn and wild corn 2 -> 3, kernels 3 -> 1 (byproducts machine-only; the corn ratio is set
+  by hand since 2026-10-21, `food/ingredients #14`, where the helper would round down to 1). Crates and kernel bags
+  have no mortar craft (machine-only since 2026-10-21). Wild corn grinds exactly as corn on the crushing wheels and
+  Millstone (1 + 50 % 1 cornmeal, 25 % 1 kernel; 2026-10-21). Corn Delight's corn and wild corn
+  milling are removed (wild corn now has the corn recipe above), and no corn recipe gives straw: the knife on corn (2 kernels), on wild corn (1) and the IE crusher on wild corn (1)
   keep their kernels without Corn Delight's straw.
   Corn Delight's raw tortilla (3 corn + water bucket) and cornbread batter (2 corn, milk, egg; mixing with 250 mB
-  milk) take cornmeal in place of corn, same counts; the splashing corn -> raw tortilla recipe is removed.
+  milk) take cornmeal in place of corn, same counts. The raw tortilla takes a water bucket or a water bottle (the
+  bottle comes back through `potion_buckets.js`'s glass-bottle remainder), and washing cornmeal with a fan or
+  the IE Bottler (250 mB water, as flour -> dough) gives 1 raw tortilla per cornmeal, in place of Corn Delight's
+  washed corn (all 2026-10-21, `food/ingredients #14`). Muffins don't take cornmeal yet: noted for the muffin rebuild
+  (`food/baked-goods #2`).
 - **Pie crust:** 3 flour or cornmeal in a bowl shape with milk (bucket or bottle) in the middle -> 2; unheated
   compacting 3 flour or cornmeal + 250 mB milk -> 2. FD's 3 wheat + milk -> 1 stays. (An egg in place of the milk was
   asked first; it was dropped because the shapeless 3 flour + egg -> 6 dough craft matches the same grid.)
@@ -81,10 +97,24 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Food | Pack routes |
 |---|---|
 | Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen → 2; shapeless 1 |
-| Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth |
-| Fried rice, mushroom rice, sinigang | shapeless with cooked rice |
+| Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativeengineering:soup_veggies_cooked`) in place of the raw veggie and carrot |
+| Fried rice, mushroom rice, sinigang | shapeless with cooked rice; fried rice takes 2 fried eggs, mushroom rice a baked potato and a second brown mushroom, sinigang a second cooked fish, so each costs one more than the pot (2026-10-21) |
+| Vegetable soup, vegetable noodles, ratatouille, corn soup | heatless shapeless from cooked ingredients (2026-10-21) |
+| Chorus stew, endermite stew, crab pasta, pumpkin soup, pasta with meatballs, dumplings, cavern explorer stew, squid ink pasta | heatless shapeless from cooked ingredients, one more main ingredient than the pot (2 popped chorus fruit; 2 mite crusts; 2 cooked crab legs; bone broth + 2 pumpkin slices + cooked pork; 2 beef patties; cooked meat or brown mushroom, 1 dumpling against the pot's 2; bone broth + 2 glow shrooms; cooked fish + 2 ink sacs) (2026-10-21) |
+| Squid ink pasta ×2 | heated mixing: 250 mB ink + 250 mB tomato sauce, 2 pasta, any raw fish, 2 bowls |
+| Dog food | shapeless: rotten flesh, bone meal, 2 cooked meat, cooked rice (brings the bowl) |
+| Mutton wrap | shapeless or assembly on a tortilla (FD's bread recipe and CCK's bread assembly removed) |
+| Scrambled eggs (Incubation) | 3 eggs + milk + bowl (was 2 eggs) |
+| Vegetable omelet (Brewin') | pot takes 2 fried eggs (`R.replaceInput`); shapeless 2 omelettes + cheese wedge + onion + carrot + bowl |
+| Bowl of exotic fruits (Quark Delight) | any `#creativeengineering:exotic_fruits` (Fruits Delight fruits, hami melon, melon) in the melon slot |
+| Fruit salad | shapeless with `#creativeengineering:fruit_salad_slices` (melon, cantaloupe, hami melon, pineapple, lemon, orange slices) in the melon slots; assembly on a bowl ×2 |
+| Burgers: hamburger, cheeseburger, deluxe cheeseburger, simple hamburger, hamburger with egg, loaded hamburger, bison burger, kangaroo burger | shaped only (toppings top, patty middle, bread bottom), any `#forge:bread`, cheese wedges (Delightful's milk versions removed); one assembly each on bread (the egg burger on the patty). Each assembly starts with a different item: CCK's bacon, chicken and egg sandwiches already start on bread with bacon, chicken and a fried egg |
+| Shepherd's pie | shapeless with a cheese wedge in place of milk; assembly on a bowl |
+| Horror lasagna | shapeless (cooked) and assembly on a bowl ×2 (pasta first, then 250 mB tomato sauce) |
+| Stuffed potato | FD's shapeless; assembly on a baked potato (cooked beef, 250 mB milk) |
+| Crispy skewer, crawling sandwich, steak and potatoes | shaped only (were shapeless) plus an assembly each |
 | Scarlet pierogi | Brewin's pot recipe with beetroot in place of nether wart (`R.replaceInput`); the pack's old pot copy and shapeless recipe were removed in 1.0.8 ([alcohol.md](alcohol.md) 8.6) |
-| Pizza, ham and cheese sandwich, quiche (Brewin') | pizza with one dough; sandwich on slices or bread, plus assemblies; quiche mushroom takes cabbage or a leaf, plus assemblies (in `cooking.js` since 2026-10-20; [alcohol.md](alcohol.md) 8.6) |
+| Pizza, ham and cheese sandwich, quiche (Brewin') | pizza with one dough; sandwich on slices or bread, plus assemblies; quiche: one shaped recipe and one assembly for bacon or mushroom (JEI cycles them), cabbage or a leaf (merged 2026-10-21; [alcohol.md](alcohol.md) 8.6) |
 | Pancakes ×3 (Supplementaries) | shapeless sugar, egg, milk, flour, cornmeal or rice; heated mixing ×5 with 250 mB milk |
 | Barbecue stick | shapeless or assembly with any cooked meat |
 | Crab bars | shapeless ×2 (cooked), pot ×4 (raw), assembly ×10 |
@@ -92,9 +122,38 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Salmon roll, cod roll | shapeless ×2, assembly ×3 |
 | Kelp roll, rice roll medley, roasted mutton chops | assembly |
 | Fish stew, cabbage rolls, horror lasagna, pasta with mutton (and heated mixing ×4) | shapeless from cooked ingredients |
-| Salmon tempura | heated mixing with 250 mB plant oil |
+| Fish Tempura (PneumaticCraft salmon tempura, renamed) | raw: any whole fish (`#creativeengineering:food_type/raw/fish`) + batter (was salmon + sourdough); pot: cooking oil + raw tempura. PneumaticCraft's Thermopneumatic recipe and the pack's plant-oil mixing removed |
+| Fries (PneumaticCraft chips, renamed) | pot: cooking oil + 2 `#forge:sliced_potatoes` (Rustic Delight slices, More Delight diced potatoes) → 2. Thermopneumatic chips removed |
+| Fish and Chips (PneumaticCraft cod 'n' chips, renamed) | pot: cooking oil + any whole fish + 2 sliced potatoes, plated on paper; shapeless fries + cooked fish + paper (`_manual_only`). Tooltip: the chips are fries |
 | Blueberry and cranberry muffins | pot recipes on `#forge:dough` ([oven.md](oven.md)) |
 | Stuffed shulker, ender paella, pearl pasta (Ender's Delight) | shapeless |
+
+**Heatless meal rule** (comment at the top of the "Meals" section of `cooking.js`): a pot meal can also be crafted
+shapeless from the cooked form of each raw ingredient (cooked meat, baked potato, tomato sauce, cooked rice, fried egg,
+a cooked veggie; carrot, beetroot and mushrooms stay raw), soups and stews with bone broth. The grid costs one more
+main ingredient than the pot. Every such recipe, and every shaped meal with an assembly, has an id ending
+`_manual_only`, so Create's unheated basin and mechanical crafters skip it; the pack's older cooked shapeless meals (bone
+broth, beef stew, noodle soup, sinigang, fish stew, cabbage rolls, horror lasagna, pasta with mutton, stuffed shulker,
+ender paella, pearl pasta) were re-id'd the same way. Shepherd's pie already took cooked mutton chops
+(`#forge:cooked_mutton`).
+
+A sequenced assembly's first step is checked before plain spout and deployer recipes, so an assembly must not start
+with a step that is also an ordinary recipe on its base (the horror lasagna does not start by spouting tomato sauce into
+a bowl, which would take over the bowl-filling recipe).
+
+**Feast Plating JEI tab** (patcherMod `compat/jei/FeastPlatingJEI`, `FeastPlatingCategory`). Plating a placed feast
+is a block interaction, not a recipe, so JEI showed nothing. The tab has one page per feast: feast item, what to hold
+(the container, one per serving and consumed; a knife, kept; or nothing), the servings with counts, and the leftovers.
+- Every Farmer's Delight `FeastBlock` in any mod (FD, Corn Delight nachos, Fruits Delight pineapple rice, KubeJS
+  Delight feasts) is read from the block: serving item per servings state (the rice roll medley gives three kinds),
+  container = the serving's crafting remainder.
+- Leftovers are the block's loot table at 0 servings (the last click breaks the plate), read from the table inside
+  its mod jar and evaluated for block-state conditions only (no randomness; a datapack override would not show).
+- Own block classes: Corn Delight popcorn box (empty hand, paper handed over with the last serving); Brewin' pizza
+  (any hand, slices = the block's servings values, so the planned 8-slice port shows 8 without a change); Nether's
+  Delight Stuffed Hoglin (two pages: knife twice for 2 hoglin ears, then 9 bowls for 1 snout, 4 ham, 4 roast; 2 bones
+  left).
+- Not on the tab: pies and Rustic Delight pancakes (eaten or cut in place; FD's cutting-board recipes show pie slices).
 
 Fish on the cutting board give more: salmon and cod → 6 slices + bone meal, catfish → 6 slices.
 
@@ -102,9 +161,14 @@ Fish on the cutting board give more: salmon and cod → 6 slices + bone meal, ca
 
 | Output | Grid | Heated mixing | Arc furnace |
 |---|---|---|---|
-| Golden carrot | carrot in 8 gold nuggets (any `#forge:nuggets/gold`) | carrot + 5 nuggets | carrot + 3 nuggets |
-| Golden apple | vanilla's 8 ingots | apple + 5 gold ingots | apple + 3 ingots |
+| Golden carrot | carrot in 8 gold nuggets | carrot + 6 nuggets | carrot + 5 nuggets |
+| Golden apple | vanilla's 8 ingots | apple + 6 gold ingots | apple + 5 ingots |
 | Enchanted golden apple | | assembly on a golden apple, 4 loops of a gold block, 250 mB liquid XP and pressing | |
+
+Since 2026-10-21 (TODO `food/meals #9`) the machine discount went from 3 and 5 (of 8) to 2 and 3; revisit with food
+tuning (`food/types-and-tuning #1`, #3). Rose gold counts as gold in every golden food recipe (decided 2026-10-22: the
+forge gold tags hold the pack's rose gold nugget and MCA's ingot and block); a one-day restriction to vanilla gold was
+reverted.
 
 ### 2.5 Ruby chocolate and cultivated meat
 
@@ -141,19 +205,21 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
   dict entry and drop the local lines.
 - **F4. Old code:** lines 436-852 of `cooking.js` are the `global.CE` version, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
 - **F5. Golden carrots take rose gold nuggets** through `#forge:nuggets/gold` ([recipes_metal.md](recipes_metal.md) F5).
+  FIXED 2026-10-21 locally in `golden.js` (vanilla gold only, also ingots and blocks); the metal tags are unchanged.
 - **F6. Comments that don't match:** "Replace shaped recipe w/ shaped" (it's shapeless) on grilled salmon and bacon and
   eggs; "already shapeless?" on the rolls (yes: FD's grilled salmon, bacon and eggs, salmon roll and cod roll are
   all shapeless with the same ingredients, so the pack's remove + re-add only renames them); one crab bar id is `creativeengineering/crab_bars_shapeless_manual_only` with a
   slash in the suffix.
 - **F7. Golden apples in machines** cost 5 ingots (mixing) or 3 (arc) against 8 in the grid; the arc furnace is the cheap
-  route. Intended progression reward; worth a look with food tuning.
+  route. Intended progression reward; worth a look with food tuning. 2026-10-21: now 6 (mixing) and 5 (arc), still a
+  discount; final numbers with food tuning.
 
-- **F8. Cornmeal fixes (scratchpad 2026-10-21, a priority).** "Cornmeal fixes" heads the priority list, but what is
-  broken isn't written down: run RC-15 to RC-18 to find it. Also wanted: the raw tortilla takes a water bucket or a
-  water bottle (bucket only today, 2.1) ([TODO](todo/TODO.md) `food/ingredients #14`). A static audit of every corn
-  recipe (2026-10-21) is in [briefs/food_ingredients.md](briefs/food_ingredients.md) #14: millstone mirrors added
-  2026-10-20 (unshipped), no automated raw tortilla since the splashing recipe went, no Create route for wild corn,
-  muffins without cornmeal, no hand route to cornmeal.
+- **F8. Cornmeal fixes (scratchpad 2026-10-21, a priority). BUILT 2026-10-21** ([TODO](todo/TODO.md)
+  `food/ingredients #14`, static audit in [briefs/food_ingredients.md](briefs/food_ingredients.md) #14). Done: the raw
+  tortilla takes a water bottle as well as a bucket; washing cornmeal or the Bottler makes raw tortillas 1:1; the
+  mortar and pestle grinds corn and wild corn 2 -> 3, the crushing wheels' and Millstone's average (the hand route the
+  audit found missing; crates and bags are machine-only); wild corn grinds as corn on the crushing wheels and
+  Millstone. Left: muffins without cornmeal (noted on `food/baked-goods #2`, the muffin rebuild).
 
 ### Known limits
 
@@ -167,8 +233,12 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 ## 5. File map
 
 - [server_scripts/cooking/](../kubejs/server_scripts/cooking/): `cooking.js`, `golden.js`, `chocolate.js`,
-  `cultivated_meat.js` (this writeup); `baking.js` ([oven.md](oven.md)); `canning.js` ([cans.md](cans.md)).
+  `cultivated_meat.js` (this writeup); `baking.js` ([oven.md](oven.md)); `canning.js` ([cans.md](cans.md));
+  `mortar.js` ([kitchen.md](kitchen.md)).
+- NCH `foodGrinding` / `mortar` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
 - Tags: `tags/cookingtags.js` (food tags these recipes read; [food.md](food.md)).
+- patcherMod `compat/jei/FeastPlatingJEI.java`, `FeastPlatingCategory.java` (Feast Plating tab; lang keys
+  `creativeengineering.jei.feast_plating*`).
 
 ## 6. Offline checks
 
@@ -194,9 +264,53 @@ None.
   gives the same (from the 2026-10-20 change; on 1.0.9 it may take no corn); a knife on corn gives 2 kernels and no straw; IE crusher on corn -> 2 cornmeal (+ kernel half the time), on a crate
   -> 18; PNC pressure chamber 4 kernels -> 3. JEI shows no Corn Delight corn -> kernels IE crusher recipe.
 - [ ] **RC-17 Corn recipes:** raw tortilla and cornbread batter need cornmeal (corn no longer works); splashing corn
-  gives nothing; pancakes accept cornmeal.
+  gives nothing, washing cornmeal gives a raw tortilla; pancakes accept cornmeal.
 - [ ] **RC-18 Pie crust:** milk bucket (and a milk bottle) in a bowl of 3 flour -> 2 crusts, bucket returned; works with
   cornmeal; compacting 3 flour + 250 mB milk -> 2; 3 flour + egg still makes 6 dough.
+- [ ] **RC-19 Grinding mirrors:** JEI cornmeal: crushing wheels, Millstone and a mortar and pestle craft for corn,
+  crate, kernels (3 -> 1) and kernel bag; JEI wheat flour: the hay bale on the Millstone and on the mortar (-> 13).
+- [ ] **RC-53 Tortilla water:** 3 cornmeal over a water bottle -> 3 raw tortillas and a glass bottle back; over a
+  water bucket -> 3 and the bucket back. Bottler: cornmeal + 250 mB water -> 1 raw tortilla.
+- [ ] **RC-54 Cornmeal mortar and washing:** 2 corn or 2 wild corn + mortar -> 3 cornmeal (1 corn: no recipe), mortar
+  back with 1 damage; a corn crate or kernel bag + mortar: no recipe; cornmeal through a fan in water -> raw tortillas
+  1:1; wild corn on crushing wheels and the Millstone -> 1-2 cornmeal, sometimes a kernel.
+- [ ] **RC-55 Heatless meals:** JEI shows the shapeless routes for vegetable soup, vegetable noodles, ratatouille and
+  corn soup; each crafts by hand; the same items in a basin under an unheated mixer do nothing.
+- [ ] **RC-56 Cooked inputs:** fried rice, baked cod stew, chicken soup and mushroom rice need the cooked ingredients
+  (fried egg, baked potato, tomato sauce, cooked veggie); the raw ones no longer craft them.
+- [ ] **RC-57 Mutton wrap:** needs a tortilla in the grid and on the deployer belt; bread no longer works.
+- [ ] **RC-58 Omelet and eggs:** vegetable omelet pot needs fried eggs; omelette + cheese + onion + carrot + bowl crafts
+  one from 2 omelettes; scrambled eggs take 3 eggs.
+- [ ] **RC-59 Fruit bowls:** exotic fruits accept a lemon in place of melon; fruit salad accepts a pineapple slice;
+  fruit salad assembly on a bowl gives 2.
+- [ ] **RC-60 Burgers:** each burger has only a shaped grid recipe; JEI shows no milk cheeseburger; each assembly on
+  bread works (the egg burger on a beef patty); a mechanical crafter with a burger pattern does nothing; CCK's bacon,
+  chicken and egg sandwich assemblies still work.
+- [ ] **RC-61 Quiche:** one shaped recipe in JEI cycling bacon / mushroom; one assembly; mushrooms first works.
+- [ ] **RC-62 Shepherd's pie:** 3 cooked mutton chops + a cheese wedge craft it; milk no longer works.
+- [ ] **RC-63 Meal assemblies:** shepherd's pie, horror lasagna (2), stuffed potato, crispy skewer, crawling sandwich and
+  steak and potatoes each run on a belt with deployers / spout; a bowl under a spout of tomato sauce still gives tomato
+  sauce.
+- [ ] **RC-64 Shaped only:** crispy skewer, crawling sandwich and steak and potatoes have only shaped grid recipes.
+- [ ] **RC-65 Feast Plating tab:** JEI "Feast Plating" tab lists roast chicken, honey glazed ham, shepherd's pie, rice
+  roll medley, stuffed pumpkin, nachos, popcorn box, pineapple fried rice, pizza and stuffed hoglin (2 pages), plus any
+  KubeJS Delight feast. Roast chicken: 4 bowls -> 4 roast chicken, leftovers bowl + bone meal; popcorn box: empty
+  hand, 4 caramel popcorn, paper "given"; pizza: any hand, 4 slices. Uses (U) on a bowl shows the tab; R on a roast
+  chicken plate shows it. One plating in game matches the page. `latest.log` has `[jei] Feast Plating: N page(s)`.
+- [ ] **RC-66 Expensive meals:** JEI shows a shapeless grid recipe from cooked ingredients for chorus stew, endermite
+  stew, crab pasta, pumpkin soup, pasta with meatballs, dumplings (1), cavern explorer stew, squid ink pasta; none
+  runs in an unheated basin. Craft one (pasta with meatballs: 2 beef patties + pasta + tomato sauce).
+- [ ] **RC-67 Squid ink pasta mixing:** heated basin with 250 mB ink + 250 mB tomato sauce, 2 pasta, a raw cod, 2
+  bowls -> 2 squid ink pasta.
+- [ ] **RC-68 Dog food:** rotten flesh + bone meal + 2 cooked meat + cooked rice crafts dog food; not in an unheated basin.
+- [ ] **RC-69 Frying:** JEI shows no Thermopneumatic chips or tempura and no plant-oil tempura mixing; names read Fish
+  Tempura, Raw Fish Tempura, Fries, Fish and Chips. Raw tempura from a pufferfish + batter. Pot: cooking oil + raw
+  tempura -> Fish Tempura; cooking oil + 2 potato slices (Rustic) -> 2 Fries, also with diced potatoes; cooking oil +
+  a raw cod + 2 slices with paper in the plate slot -> Fish and Chips; fries + cooked fish +
+  paper in the grid -> Fish and Chips; its tooltip reads "The chips are fries. Don't tell the British."
+- [ ] **RC-70 Gold food in machines:** golden carrot (grid, mixer with 6 nuggets, arc with 5) and golden apple (mixer 6,
+  arc 5 ingots) accept rose gold nuggets / MCA rose gold ingots as well as gold; enchanted golden apple assembly accepts
+  a rose gold block.
 - [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball → beef culture; heated mixer with diluted
   bone meal and plant oil → 3; knife → 4 raw beef.
 
@@ -210,3 +324,21 @@ None.
 - 2026-10-19: cornmeal, pie crust and pancakes STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) OV); DEPLOYED
   with 1.0.8 (2026-10-19 10:20).
 - 2026-10-20 (c82dd31): millstone mirrors of the four corn crushing recipes; not shipped.
+- 2026-10-21: the pack's own food grinding (corn, crate, kernels, bag, hay bale) moved to NCH `foodGrinding`:
+  crushing wheels + Millstone + a mortar and pestle craft; the hay bale gained its Millstone recipe; other mods' food
+  milling got mortar crafts from a catalogue ([kitchen.md](kitchen.md) 2.6, TODO `food/kitchen #10`). RC-19. Not
+  shipped.
+- 2026-10-21: cornmeal fixes (`food/ingredients #14`, F8): raw tortilla takes a water bottle, washing cornmeal ->
+  raw tortilla, Bottler cornmeal + 250 mB water -> raw tortilla, mortar corn 2 -> 3 (the Create machines' average),
+  crates and bags off the mortar, wild corn grinds as corn on Create machines and the mortar; muffins left for
+  `baked-goods #2`. RC-53, RC-54. Not shipped.
+- 2026-10-21: meals (TODO `food/meals` #1 to #3, [brief](briefs/food_meals.md)): heatless meal rule and `_manual_only`
+  ids, four new heatless meals, per-meal fixes, shaped burgers, merged quiche, 16 new assemblies (2.3); tags
+  `soup_veggies_cooked`, `exotic_fruits`, `fruit_salad_slices`. RC-55 to RC-64. Not shipped.
+- 2026-10-21: Feast Plating JEI tab (TODO `food/meals #5` part a; patcherMod 1.1.01, not deployed): every FD
+  feast block plus popcorn box, pizza and stuffed hoglin, leftovers from the loot table (2.3). Loot evaluation
+  checked headless (roast chicken -> bowl + bone meal, hoglin -> 2 bones). RC-65.
+- 2026-10-21: meals #4, #7, #8, #9 ([brief](briefs/food_meals.md)): grid routes for 8 pot meals and dog food, squid
+  ink pasta two-fluid mixing, pot frying for any fish (Fish Tempura, Fries, Fish and Chips; PneumaticCraft frying out;
+  Rustic slices in `#forge:sliced_potatoes`), golden food on vanilla gold with a smaller machine discount (F5, F7).
+  RC-66 to RC-70. Not shipped.

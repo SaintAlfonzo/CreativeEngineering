@@ -1,0 +1,68 @@
+PASS SN-01 five spots: 5 notes, mask 31, sixth click FAIL -> 5
+PASS SN-02 nearest free spot: 2 notes after two clicks on the centre
+PASS SN-03 chests: plain click CONSUME opened ChestMenu; sneak x6 -> 5 notes
+PASS SN-04 stairs facing north, bottom: {"down":5,"north":5,"south":2,"up":2,"east":3,"west":3}
+PASS SN-04 stairs facing east, bottom: {"down":5,"east":5,"west":2,"up":2,"north":3,"south":3}
+PASS SN-04 stairs facing south, top: {"up":5,"south":5,"north":2,"down":2,"east":3,"west":3}
+PASS SN-05 bottom slab: {"up":5,"down":5,"north":2,"south":2,"east":2,"west":2}
+PASS SN-05 top slab: {"up":5,"down":5,"north":2,"south":2,"east":2,"west":2}
+PASS SN-05 double slab: {"up":5,"down":5,"north":5,"south":5,"east":5,"west":5}
+PASS SN-06 oak fence: {"up":1,"down":1,"north":0.0,"south":0.0,"east":0.0,"west":0.0}
+PASS SN-06 cobblestone wall: {"up":1,"down":1,"north":0.0,"east":0.0}
+PASS SN-06 iron bars: {"up":1,"down":1,"north":0.0,"east":0.0}
+PASS SN-06 glass pane: {"up":1,"down":1,"north":0.0,"east":0.0}
+PASS SN-06 end rod: {"up":1,"down":1,"north":0.0,"east":0.0}
+PASS SN-06 lightning rod: {"up":1,"down":1,"north":0.0,"east":0.0}
+PASS SN-06 chain: {"up":1,"down":1,"north":0.0,"east":0.0}
+PASS SN-07 carpet: {"up":0.0,"north":0.0}
+PASS SN-07 button: {"up":0.0,"north":0.0}
+PASS SN-07 ladder: {"north":0.0,"south":0.0}
+PASS SN-07 door: {"north":0.0,"up":0.0}
+PASS SN-07 trapdoor: {"up":0.0,"north":0.0}
+PASS SN-07 flower: {"north":0.0,"up":0.0}
+PASS SN-07 head: {"north":0.0,"up":0.0}
+PASS SN-08 floor direction: first north -> north, then east -> north; fresh face east -> east
+PASS SN-09 notes or label: label on a noted face FAIL (label false); label on the other face CONSUME, both kept true; note on the label face FAIL
+PASS SN-22 water: placed: Block{creative_labels:face_paper}[down=false,east=false,north=false,south=true,up=false,waterlogged=true,west=false]; after pick-up: Block{minecraft:water}
+DONE place: 26 pass, 0 fail
+PASS SN-11 dye placed: red used 1, dyed #b02e26 (leather #b02e26), other none, +blue #ad5398 (leather #ad5398), special after dye none creeper
+PASS SN-13 remove: got {display:{color:11359128}}, 1 left
+PASS SN-14 eraser on a placed note: before "Iron" #b02e26 (special null); 1st "" #b02e26; 2nd none plain true
+PASS SN-15 covered face: 5 notes: stick click CONSUME -> InventoryMenu; 4 notes, click on the freed spot CONSUME -> CraftingMenu
+PASS SN-16 pass-through: coal on a note CONSUME -> FurnaceMenu
+PASS SN-17 break one note: destroyBlock true, 2 left, drops: 1x creative_labels:sticky_note{CreativeLabels:{Text:"Keep"},display:{color:11546150}}
+DONE actions: 6 pass, 0 fail
+PASS SN-18 host mined: picture before 1 diamond; drops: 1x minecraft:cobblestone | 1x creative_labels:label | 1x creative_labels:sticky_note{CreativeLabels:{Text:"N1"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"N2"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"N0"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"N3"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"N4"}}; cells now Block{minecraft:air} / Block{minecraft:air}
+PASS SN-19 explosion, host survives: 5 notes, label true, loose drops: 16x minecraft:dirt | 16x minecraft:dirt | 16x minecraft:dirt | 16x minecraft:dirt | 13x minecraft:dirt
+PASS SN-19 explosion, host destroyed: host now Block{minecraft:air}; written notes dropped 5, labels 1; drops: 1x creative_labels:label | 1x creative_labels:sticky_note{CreativeLabels:{Text:"S1"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"S2"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"S0"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"S3"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"S4"}} | 16x minecraft:dirt | 16x minecraft:dirt | 16x minecraft:dirt | 1x minecraft:cobblestone | 16x minecraft:dirt | 10x minecraft:dirt
+INFO SN-21 piston fired; read with /cltest pistoncheck after a few ticks
+DONE host: 3 pass, 0 fail
+PASS SN-21 pistons: host moved to Block{minecraft:stone}, paper left false, drops: 1x creative_labels:sticky_note{CreativeLabels:{Text:"P1"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"P2"}} | 1x creative_labels:sticky_note{CreativeLabels:{Text:"P0"}}
+DONE pistoncheck: 1 pass, 0 fail
+PASS SN-25 stacking: plain/plain, red/red, plain/written, max 64
+PASS SN-26 colour in the grid: 8+red creativeengineering:creative_labels/note_dye -> 8 #b02e26 (leather #b02e26); 8 red+blue -> 8 #ad5398 (leather #ad5398); written+red -> "Iron"; 8+gunpowder creativeengineering:creative_labels/note_special -> 8 creeper
+PASS SN-26 special + dye gives nothing: creeper + red -> none
+PASS SN-27 eraser in the grid: creativeengineering:creative_labels/note_erase -> "" #b02e26, remainder [16 air, 1 eraser, 16 air, 16 air, 16 air, 16 air, 16 air, 16 air, 16 air]; again -> none; damageable false
+PASS SN-53 copy: creativeengineering:creative_labels/note_copy -> 9 "Iron" #b02e26
+PASS SN-30 inventory: handled true, lines [Iron] on 32, notes left 2
+PASS SN-54 drag gate: second slot same tick: handled true, labelled false, notes left 2
+PASS SN-31 anvil: output 16 cobblestone [Anvil], cost 1
+PASS SN-32 off hand: use CONSUME, sword lines [Mine], notes left 1
+PASS SN-33 three lines: lines [L0, L1, L2], notes used 3 of 4
+PASS SN-34 eraser on items: after 3 erasings: 4 cobblestone tag none
+DONE items: 11 pass, 0 fail
+PASS SN-55 crafting blocked: labelled plank + plank -> 16 air; clean planks -> 4 stick
+PASS SN-36 place: click CONSUME, label true, inset 0.0625, labels left 3
+PASS SN-37 picture: picture 1 diamond, diamonds left 3
+PASS SN-38 picture NBT kept / stripped: stored tag {Potion:"minecraft:healing"}
+PASS SN-40 dyed icon (server half): dye red, used 1
+PASS SN-42 glow, ink, feather (server half): glow ink -> true, ink -> false, feather -> showName true
+PASS SN-43 open through: empty hand CONSUME -> ChestMenu
+PASS SN-41 clear: picture after 16 air
+PASS SN-44 break: destroyBlock true, drops 1x creative_labels:label, cell Block{minecraft:air}
+PASS SN-45 floor label: rotation east
+DONE labels: 9 pass, 0 fail
+PASS SN-49 donor recipes gone: none; recipes making ours {"note":1.0,"label":1.0,"eraser":1.0}
+PASS SN-49 donor items out of the tabs: none shown; our note lists 5 entries in decorations (plain + 4 specials)
+PASS SN-24 gold chance (server half): 7 gold of 400 placed (expect about 4)
+DONE donors: 3 pass, 0 fail
