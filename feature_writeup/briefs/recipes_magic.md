@@ -15,7 +15,7 @@ Geode+ (`geodeforge-1.1.8-1.19.2`), Botania 1.19.2-440.2 (`BaubleBoxItem`, `Baub
 | Row | Change | Status | Size |
 |---|---|---|---|
 | #1 | Explorer's Compass recipe | Planned | tiny KubeJS, one decision |
-| #3 | Botania trinket case takes any item | Planned | small **patcherMod** (not KubeJS: the check is Java) |
+| #3 | Botania trinket case takes any item | BUILT 2026-10-22 ([fixes_compat.md](../fixes_compat.md) 2.25) | small **patcherMod** (not KubeJS: the check is Java) |
 | #4 | Magical components | Planned | medium: new items, textures, NCH Botania helpers, recipes; mostly design |
 | #2 | New geode shard uses | Planned | small once #4 is designed. The potion half is already built |
 
@@ -106,7 +106,7 @@ leave `i.explore_compass` for the dict-duplicate cleanup.
 ---
 
 ## magic #3: Botania trinket case takes any item
-Status Planned / Work patcherMod (TODO says KubeJS / patcherMod) / TODO `recipes/magic #3` (scratchpad 2026-10-19)
+Status BUILT 2026-10-22 (fixes_compat 2.25, tests FX-21 to FX-24) / Work patcherMod / TODO `recipes/magic #3` (scratchpad 2026-10-19)
 
 ### Goal
 Botania's Trinket Case (`botania:bauble_box`) accepts any item, not just trinkets, rods and mana items.

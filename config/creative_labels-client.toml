@@ -1,0 +1,9 @@
+
+[labels]
+	#Label pictures are drawn within this many blocks (farther labels show blank paper).
+	#Range: 0.0 ~ 64.0
+	pictureDistance = 16.0
+	#Label item names (feather) are drawn within this many blocks.
+	#Range: 0.0 ~ 64.0
+	textDistance = 6.0
+

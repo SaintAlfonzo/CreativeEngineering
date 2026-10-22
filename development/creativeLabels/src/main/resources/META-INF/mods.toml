@@ -30,7 +30,7 @@ side="BOTH"
 [[dependencies.${mod_id}]]
 modId="moonlight"
 mandatory=true
-versionRange="[2.3,)"
+versionRange="[1.19.2-2.3.0,)"
 ordering="NONE"
 side="BOTH"
 

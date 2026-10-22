@@ -8714,28 +8714,6 @@
       }
     },
     {
-      "file": "create_generators-1.0.0-forge-1.19.2.jar",
-      "name": "Create: Easy Stone Generators",
-      "version": "1.0.0",
-      "sha1": "262af504b3ba4311b8bfbc737f35f85262e641c0",
-      "modId": "create_generators",
-      "source": {
-        "curseforge": {
-          "projectId": 1206505,
-          "fileId": 6224616,
-          "slug": "create-stone-generators",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/create-stone-generators/files/6224616"
-        },
-        "modrinth": {
-          "projectId": "aeW9oim1",
-          "versionId": "YZmNhF0J",
-          "slug": "create-stone-generators",
-          "url": "https://modrinth.com/mod/create-stone-generators/version/YZmNhF0J",
-          "download": "https://cdn.modrinth.com/data/aeW9oim1/versions/YZmNhF0J/create_generators-1.0.0-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
       "file": "createendertransmission-2.0.7-1.19.2.jar",
       "name": "Create: Ender Transmission",
       "version": "2.0.7-1.18.2",

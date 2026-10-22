@@ -14,5 +14,14 @@
   "creativeengineering:run_speed": true,
   "creativeengineering:block_model_icon": true,
   "creativeengineering:crop_growth": true,
-  "vinery:info": true
+  "vinery:info": true,
+  "creative_labels:face_paper": true,
+  "brewinandchewin:keg": true,
+  "creativeengineering:coaster": true,
+  "creativeengineering:holder_contents": true,
+  "creativeengineering:hive": true,
+  "creativeengineering:state_lines": true,
+  "creativeengineering:campfire": true,
+  "creativeengineering:sheetmetal_tank": true,
+  "creativeengineering:kitchen_station": true
 }

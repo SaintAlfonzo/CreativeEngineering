@@ -129,6 +129,16 @@ clients (movement is predicted client-side).
 The scratchpad's "restore Immersive Weathering leaf drop on decay" (scratchpad 2026-10-21, listed twice) is this
 fix; MT-24 checks it (TODO `farming/trees #1`).
 
+Code check 2026-10-22 (IW 1.2.10 jar disassembled, patcherMod 1.1.01 in `mods/` holds `LeafDecayPiles`): IW has three
+leaf pile paths, and all three still run. (1) Decay piles: IW injects into `LeavesBlock#randomTick` after
+`removeBlock`. With `onlyWhenDisturbed` our HEAD cancel stops that whole random-tick decay, so IW's hook can't fire
+there, and the scheduled-tick decay calls the same `decayLeavesPile` once instead. With `onlyWhenDisturbed = false`
+the random-tick decay runs and IW's own hook fires. No path calls it twice. (2) Ground piles under standing trees: IW's
+builtin `leaf_piles_from_leaves` growth (chance 0.0005, `reach` 12, `max_pile_height` 3) runs from IW's
+`ServerLevelMixin` in `ServerLevel#tickChunk`, outside `LeavesBlock#randomTick`, so our gate never touches it.
+(3) Falling-leaf particles: client `animateTick`, untouched. Scratch queue SQ-LP checks (1) live; (2) is in-game only
+(MT-24), because forceloaded chunks get no random ticks.
+
 ## 3. What the pack changes
 
 - **Bubble columns:** `BubbleColumnImmunityMixin` cancels `BubbleColumnBlock#entityInside` (SRG `m_7892_`) at the head
@@ -280,6 +290,8 @@ fix; MT-24 checks it (TODO `farming/trees #1`).
   over minutes (vanilla, no fast decay). Put it back to true.
 - [ ] **MT-24 Leaf piles from decay:** fell an oak in grass → roughly a third of the canopy's leaves leave leaf piles
   that fall to the ground (as with the old Fast Leaf Decay jar). `[leaf_decay] leafPiles = false` → items only.
+  Ground piles: stand under an untouched oak for a few in-game days (or `/gamerule randomTickSpeed 300` for a minute,
+  then back to 3) → thin leaf piles appear on the grass under its canopy, as before the decay port. Scratch queue SQ-LP.
 - [ ] **MT-25 Pile slow height:** default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles → only the
   4-layer one slows you, and WTHIT shows a Run Speed line on the 4-layer one only. Set 6 (game closed), repeat → 4 and
   5 no longer slow or show; 6 and up do. Depth Strider boots still walk through.

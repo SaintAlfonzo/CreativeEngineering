@@ -491,8 +491,22 @@ var i = global.item;
 		[i.rich_soil, ['Crops grow slightly faster and can\'t be trampled!', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]],
 		[i.rich_farmland, ['Crops grow slightly faster and can\'t be trampled!', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]],
 		[i.fertile_soil, ['Crops grow significantly faster and can\'t be trampled!', col.rare],['Doesn\'t need to be tilled, can be soaked w/ water to increase plant growth', col.rare]],
-		[i.nulch, ['Grows nether crops faster', col.rare],['Can be filled w/ lava, but watch your feet!', col.rare]]
+		[i.nulch, ['Grows nether crops faster', col.rare],['Can be filled w/ lava, but watch your feet!', col.rare]],
+		[i.cod_n_chips, ['The chips are fries. Don\'t tell the British.', col.uncm]]
 	);
+
+	// Cooking for Blockheads kitchen (TODO food/kitchen #8): the oven burns any furnace fuel plus cooking oil
+	// (ovenRequiresCookingOil = false + patcherMod CfbOvenFuelMixin), and fuel containers come back to the output.
+	// It cooks food from furnace and smoker recipes (patcherMod CfbOvenSmokingMixin, TODO food/oven #4).
+	addTooltips(e,
+		[i.cfb_oven,
+			['Cooks food like a furnace and a smoker', col.norm],
+			['Burns any furnace fuel, and Cooking Oil', col.uncm],
+			['Empty fuel containers (bottles, buckets) go to the output slots', col.norm]],
+		[i.cfb_sink, ['Gives infinite water', col.uncm]]
+	);
+	// Fantasy Furniture's seven ovens run smoking recipes with normal fuel (their OvenBlockEntity); expect 7 matches.
+	addTooltipPattern(e, 'fantasyfurniture:*/oven', ['Works like a smoker', col.norm]);
 
 	// Brewin' and Chewin' keg temperature blocks (alcohol.md 8.3): each source within 2 blocks of a keg counts 1
 	addTooltips(e,
@@ -791,7 +805,8 @@ var i = global.item;
 // ############################## Botania ##############################	 
    
    	addTooltips(e,
-		[i.vine_ball, ['Throw to drop vines on target block', col.norm]]
+		[i.vine_ball, ['Throw to drop vines on target block', col.norm]],
+		[i.bauble_box, ['Holds any item; only trinkets equip from it', col.norm]]
 	);
 
 // ############################## End Gear ##############################

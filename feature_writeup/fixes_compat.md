@@ -31,6 +31,7 @@ feature are documented with that feature and only pointed to here.
 | 2.22 | IE Engineer's Hammer rotates the FD cutting board instead of running a hammer cutting recipe | `IECompat.registerHammerNoRotate`, `#creativeengineering:hammer_no_rotate` | DEPLOYED with 1.0.8, see [oven.md](oven.md) 2.5 |
 | 2.23 | Server crash: bonemealing a Vinery grass slab with Immersive Weathering (`fertile` property) | Vinery port `SpreadableGrassSlabBlock` | DEPLOYED with 1.0.7 (hotfix), see [alcohol.md](alcohol.md) Part B |
 | 2.24 | AppleSkin bars missing in cooking/meal slots, keg tank, recipe books, TrashSlot, Pretty Pipes, FTB Quests, Wares, Patchouli, AE2 | `MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + client mixins; Brewin' and Vinery ports | BUILT 2026-10-20, not tested, see [tooltips.md](tooltips.md) (TT-19 to TT-30) |
+| 2.25 | Botania Trinket Case holds any item; Quark sort, transfer and search in its screen | `TrinketCaseRules`, 3 `TrinketCase*Mixin`s, `[botania]`, Quark `Allowed Screens` | built, scratch test queued (SQ-TC-00 to SQ-TC-02); FX-21 to FX-24 in game |
 
 - **Pending:** nothing built and unshipped (2.22 went out with 1.0.8, 2026-10-19). FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
   there). Findings F1 to F6 (section 4); none needs a decision except F3.
@@ -200,6 +201,24 @@ Each is documented where it belongs; one line each here.
   Weathering replaces with a block that sets `fertile`; the slab has no such property. It now passes
   `GRASS_BLOCK.defaultBlockState()`. Logs: `debug/10_18/`.
 
+### 2.25 Trinket Case: any item, sort and search
+
+- **Symptom:** the Trinket Case (`botania:bauble_box`, 24 slots) takes only trinkets, rods and mana items, and its
+  screen has no Quark sort / transfer buttons or search bar.
+- **Cause:** three Botania checks call `EquipmentHandler.isAccessory`: the case's item-backed inventory
+  (`BaubleBoxItem$1.canPlaceItem`, used when a stack is clicked onto the case item and by Quark's wrappers), the menu
+  slots (`BaubleBoxContainer$1.mayPlace`) and shift-click (`BaubleBoxContainer.quickMoveStack`). Quark shows its
+  buttons and search bar only when the screen class is in `Allowed Screens` and the menu has 27+ non-player slots or
+  implements `IQuarkButtonAllowed`; its keybinds check only the screen list.
+- **Fix:** `compat/TrinketCaseRules.allowed` (config `[botania] trinketCaseAnyItem`, default on): any non-empty item
+  except another Trinket Case and items with `canFitInsideContainerItems() == false` (shulker boxes). The two
+  anonymous-class mixins return true at HEAD when it allows the stack, else Botania's check runs; the menu mixin
+  redirects the shift-click check and adds `IQuarkButtonAllowed`. `vazkii.botania.client.gui.box.BaubleBoxGui` is
+  added to Quark's `Allowed Screens` (`quark-common.toml`, backed up in `configs_edited/`). Sorting runs through the
+  pack's safe sort (2.20); the case item in the hotbar is a locked slot and Quark's player sort skips the hotbar.
+- **Limits:** only real trinkets equip from the case (Botania's quick-swap). The `$1` class names are compiler output;
+  a Botania update can move them and the mixins then fail at launch.
+
 ## 3. What the pack changes
 
 Every entry above is a patcherMod mixin or class except 2.6 (KubeJS tag script) and 2.14 (exposureBackport). Mixins on
@@ -242,6 +261,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2.6 [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) lines 6-16; 2.7 `compat/DetailArmorBarCompat`, `compat/ArmorOverflowRenderer`, `mixin/ArmorBarRendererAccessor`, `mixin/ArmorBarRendererOverflowTickMixin`; 2.8 `mixin/SubMenuConfigScreenMixin`, `compat/StringEntry`; 2.9 `mixin/BonemealCharmMixin`, `util/BonemealCharms`, [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js).
 - 2.10 `util/BlockStateIdOverflow`, `mixin/SectionUpdateEncodeFixMixin`, `mixin/SectionUpdateNullStateMixin`, `mixin/BlockUpdateNullStateMixin`, `devtools/BlockStateSyncDebug`, [tools/diff_block_state_ranges.py](../tools/diff_block_state_ranges.py); 2.11 `mixin/SupplementariesBreezyCompatMixin`; 2.12 `mixin/LevelThreadSafeRandomMixin`; 2.13 `compat/AsyncMapTrades`, `compat/AsyncLocatorBridge`, `mixin/LCItemsForMapTradeMixin`, `mixin/CSSellingMapMixin`.
 - 2.15 `compat/LightmansTooltipStacks`, `mixin/LCEasyScreenHelperMixin`, `mixin/LCEasyGuiGraphicsMixin`; 2.16 `mixin/JeiRecipeLayoutTooltipMixin`, `mixin/JeiRecipesGuiTooltipMixin`; 2.17 `mixin/IcebergTitleBreakMixin`; 2.18 `compat/guititle/`, `mixin/ContainerTitlePlaqueMixin`, `mixin/RenderSystemShaderTextureMixin`.
+- 2.25 `compat/TrinketCaseRules`, `mixin/TrinketCaseInventoryMixin`, `mixin/TrinketCaseSlotMixin`, `mixin/TrinketCaseMenuMixin`, [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Botania section), `config/quark-common.toml` `Allowed Screens`.
 - 2.19 `mixin/CreativeMenuDisableMixin`, `mixin/XpHelperMixin`, `mixin/XpPumpUpgradeWrapperMixin`, `mixin/XPFluidManagerMixin`, `mixin/MemoryStickItemMixin`, `mixin/PneumaticCraftUtilsMixin`, `mixin/IETagUtilsMixin`, `mixin/CopperPickaxeItemMixin`, `CETiers`.
 
 ## 6. Offline checks
@@ -279,6 +299,14 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - [ ] **FX-19 XP fluid:** fill a Sophisticated Backpack XP pump, drain to a Create tank → Create's liquid experience, 1 mB
   per point.
 - [ ] **FX-20 IE recycling:** recycle an iron rod in the IE arc furnace (or JEI) → iron, never air.
+- [ ] **FX-21 Trinket case, any item:** put cobblestone, a sword and a stack of food in a Trinket Case by clicking in
+  its screen, by shift-click and by clicking the stack onto the case item in the inventory → all accepted; a shulker
+  box and a second Trinket Case → refused. Close and reopen → contents kept.
+- [ ] **FX-22 Trinket case sort and search:** open the case with mixed items → Quark's sort button and search bar
+  show; sort → items grouped, none lost; the sort keybind works; search dims non-matching slots; the deposit /
+  restock buttons move items in and out.
+- [ ] **FX-23 Trinket case equip:** a trinket in the case still quick-equips from its screen; cobblestone doesn't.
+- [ ] **FX-24 Config off:** `trinketCaseAnyItem = false`, restart → only trinkets, rods and mana items fit.
 
 ## 8. History
 
@@ -291,3 +319,4 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-19: catalogue entries 2.20 to 2.23 for the fixes in 1.0.7 (Quark sort, Exposure viewfinder, grass slab
   crash) and 1.0.8 (IE hammer); each keeps its tests in its own writeup.
 - 2026-10-19: F1 and F6 fixed (ForgivingVoidMixin javadoc, CopperPickaxeItemMixin javadoc; source only, ship with the next patcherMod build).
+- 2026-10-22: 2.25 Trinket Case any item plus Quark sort / search (`recipes/magic #3`); tests FX-21 to FX-24.

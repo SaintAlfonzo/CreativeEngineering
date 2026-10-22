@@ -689,15 +689,21 @@ global.NCH = {
   // Vanilla-style recipes
   // ========================================================================
 
-  // cans: let multi-serving cans in this recipe lose one serving instead of being used up
-  // (patcherMod food.CanServings; the last serving rolls empty/crushed/nothing). true = every can
-  // slot (#creativeengineering:cans), or a filter / array of filters (item, '#tag', slot index).
+  // cans: a recipe that uses food cans (feature_writeup/can_parity.md, decision D-C: manual crafts only).
+  //   true / filter / array of filters (item, '#tag', slot index): the cans lose one serving instead of
+  //     being used up (patcherMod food.CanServings; the last serving rolls empty/crushed/nothing);
+  //     true = every can slot (#creativeengineering:cans).
+  //   { whole: id or [ids] }: those cans are used up whole and must be full (an opened can gives no result).
+  //   { servings: <as above>, whole: [...] }: both.
   //   R.shapeless(Item.of(i.beef_cooked), [i.canned_beef], e, 'uncan_beef', null, null, true)
+  // Every can recipe is manual only: its id ends in _manual_only (Create's mixer, mechanical crafter and
+  // their JEI categories skip it, AllRecipeTypes.shouldIgnoreInAutomation), and it has no result unless a
+  // player's menu holds the grid (IE Assembler, AE2 and other auto-crafters craft on a menu without one).
   // A slot holding a stack of full cans opens a new can per craft (the opened one goes to the
   // inventory): vanilla's remainder rule. Put the opened can in the grid on its own to drain it.
   shaped(output, pattern, keys, e, idOverride, damage, cans) {
     if (!e) throw new Error('shaped called without event object!')
-    var idSuffix = idOverride ?? global.NCH.toId(output, Object.values(keys)[0], "shaped")
+    var idSuffix = global.NCH._canId(idOverride ?? global.NCH.toId(output, Object.values(keys)[0], "shaped"), cans)
     var ctx = 'shaped ' + idSuffix
 
     global.NCH._validateAny(output, ctx + ' output')
@@ -721,7 +727,7 @@ global.NCH = {
 
 	shapeless(output, input, e, idOverride, damage, replace, cans) {
     if (!e) throw new Error('shapeless called without event object!')
-    var idSuffix = idOverride ?? global.NCH.toId(output, input, "shapeless")
+    var idSuffix = global.NCH._canId(idOverride ?? global.NCH.toId(output, input, "shapeless"), cans)
     var ctx = 'shapeless ' + idSuffix
 
     global.NCH._validateAny(output, ctx + ' output')
@@ -759,11 +765,59 @@ global.NCH = {
     return recipe
 	},
 
-  // Attaches the creativeengineering:can_serving ingredient action (see shaped()). KubeJS empties
-  // its custom-action map at the start of every server script load, so the Java callback is put
-  // back here on each call; the action id and the logic both live in patcherMod compat.KubeJSCanAction.
+  // Can recipes are manual only (see shaped()): the id suffix Create looks for.
+  _canId(idSuffix, cans) {
+    if (!cans || String(idSuffix).endsWith('_manual_only')) return idSuffix
+    return idSuffix + '_manual_only'
+  },
+
+  // True when a player crafts: a crafting table / inventory grid, or any menu holding a player's
+  // inventory (storage crafting terminals). Machines build the grid on a menu with no player slots.
+  _playerGrid(grid) {
+    if (grid.getPlayer() != null) return true
+    try {
+      var menu = grid.getMenu()
+      if (menu == null) return false
+      var slots = menu.slots
+      for (var n = 0; n < slots.size(); n++) {
+        var c = slots.get(n).container
+        if (c != null && c.player != null) return true
+      }
+    } catch (err) {
+      if (!global.NCH._playerGridWarned) console.warn('[NCH] can recipe player check failed, crafting-table grids only: ' + err)
+      global.NCH._playerGridWarned = true
+    }
+    return false
+  },
+
+  // The can guard of shaped() / shapeless(): manual only, whole cans full only, then the
+  // creativeengineering:can_serving ingredient action. KubeJS empties its custom-action map at the
+  // start of every server script load, so the Java callback is put back here on each call; the
+  // action id and the logic both live in patcherMod compat.KubeJSCanAction.
   _canServings(recipe, cans, ctx) {
     if (!cans) return
+    var opts = (cans === true || typeof cans === 'string' || typeof cans === 'number' || Array.isArray(cans))
+      ? { servings: cans } : cans
+    var whole = opts.whole ? [].concat(opts.whole) : []
+    var servings = null
+    if (whole.length) {
+      try { servings = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.CanServings') } catch (err) {
+        console.warn('[NCH] ' + ctx + ': patcherMod CanServings not available, opened cans are not refused: ' + err)
+      }
+    }
+    recipe.modifyResult((grid, result) => {
+      if (!global.NCH._playerGrid(grid)) return Item.empty
+      if (servings == null) return result
+      for (var w = 0; w < whole.length; w++) {
+        var found = grid.findAll(Ingredient.of(whole[w]))
+        for (var s = 0; s < found.size(); s++) {
+          if (servings.isPartial(found.get(s))) return Item.empty   // opened: not full
+        }
+      }
+      return result
+    })
+    if (!opts.servings) return
+    cans = opts.servings
     var action
     try {
       action = Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.KubeJSCanAction')
@@ -1233,6 +1287,72 @@ global.NCH = {
 		global.NCH._validateAny(input, ctx + ' input')
 
 		e.recipes.create.milling(output,input).id(`${global.NCH.modId}:createmilling/${idSuffix}`)
+	},
+
+	// Mortar and pestle (creativeengineering:mortar_and_pestle, i.mortar_and_pestle), shapeless in the crafting table:
+	// damageIngredient takes 1 durability and hands the mortar back. inputCount copies of the input (up to 8, the
+	// mortar takes the 9th slot). Id mortar/<id>. TODO food/kitchen #10. Food grinding goes through foodGrinding() (own
+	// recipes) or the generated catalog loop in cooking/mortar.js (other mods' recipes), not straight here.
+	//   R.mortar(Item.of(i.cornmeal, 1), i.t_seeds_corn, e, 'corn_kernels_cornmeal', 3)
+	mortar(output, input, e, idOverride, inputCount) {
+		if (!e) throw new Error('mortar called without event object!')
+		inputCount = inputCount || 1
+		var idSuffix = idOverride ?? global.NCH.toId(output, input, 'mortar')
+		var ctx = 'mortar ' + idSuffix
+		if (inputCount < 1 || inputCount > 8) throw new Error(ctx + ': inputCount ' + inputCount + ' (1-8)')
+		global.NCH._validateAny(output, ctx + ' output')
+		global.NCH._validateAny(input, ctx + ' input')
+		var ingredients = []
+		for (var n = 0; n < inputCount; n++) ingredients.push(input)
+		ingredients.push(global.item.mortar_and_pestle)
+		e.shapeless(output, ingredients)
+			.damageIngredient(global.item.mortar_and_pestle, 1)
+			.id(`${global.NCH.modId}:mortar/${idSuffix}`)
+	},
+
+	// The pack's own food grinding (flour, cornmeal...): one call writes the Create crushing and Millstone recipes
+	// with the same outputs, plus a mortar and pestle mirror (mortar()). The mortar gives the main output (the first
+	// one) rounded down to what the machines average: E = the sum of count x chance over every output of that
+	// item; E >= 1 gives floor(E) from one input, E < 1 gives 1 from ceil(1 / E) inputs (at most 8; both with 0.02
+	// slack, so 0.333 takes 3). Byproducts
+	// (seeds, straw) are machine-only. TODO food/kitchen #10.
+	// opts: { crushing: false, milling: false } leaves a machine out; { mortar: false } leaves the mortar out;
+	//       { mortar: { count, inputs } } sets the hand ratio instead of deriving it.
+	//   R.foodGrinding([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25)],
+	//     i.t_crops_corn, e, 'corn_cornmeal')
+	foodGrinding(output, input, e, idOverride, opts) {
+		if (!e) throw new Error('foodGrinding called without event object!')
+		opts = opts || {}
+		var outputs = Array.isArray(output) ? output : [output]
+		var idSuffix = idOverride ?? global.NCH.toId(outputs[0], input, 'foodgrinding')
+		var ctx = 'foodGrinding ' + idSuffix
+		if (opts.crushing !== false) global.NCH.createCrushing(outputs, input, e, idSuffix)
+		if (opts.milling !== false) global.NCH.createMilling(outputs, input, e, idSuffix)
+		if (opts.mortar === false) return
+
+		var stacks = outputs.map((o, idx) => global.NCH._itemJson(typeof o === 'string' ? Item.of(o) : o,
+			{ countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' output[' + idx + ']' }))
+		var main = stacks[0].item
+		var count, inputs
+		if (opts.mortar && typeof opts.mortar === 'object') {
+			count = opts.mortar.count || 1
+			inputs = opts.mortar.inputs || 1
+		} else {
+			var expected = 0
+			stacks.forEach(st => { if (st.item === main) expected += (st.count || 1) * (st.chance === undefined ? 1 : st.chance) })
+			if (expected >= 0.98) {
+				count = Math.floor(expected + 0.02)
+				inputs = 1
+			} else {
+				count = 1
+				inputs = Math.ceil(1 / expected - 0.02)   // 0.333 -> 3, not 4
+			}
+		}
+		if (inputs > 8) {
+			console.warn('[NCH] ' + ctx + ': mortar would need ' + inputs + ' inputs for 1 ' + main + ', skipped')
+			return
+		}
+		global.NCH.mortar(Item.of(main, count), input, e, idSuffix, inputs)
 	},
 
 	createPressing(output, input, e, idOverride) {
@@ -1763,6 +1883,31 @@ global.NCH = {
 		}
 
 		e.custom(json).id(`${global.NCH.modId}:iesqueezing/${idSuffix}`)
+	},
+
+	// IE Mixer: fluid + up to 4 item inputs -> fluid. The input fluid must be a tag ('#forge:fluid/...'):
+	// IE's FluidTagInput reads only "tag". A tag string carries no amount, so the input takes the output's amount
+	// unless inputAmount is given. Counts go in as IE's base_ingredient form.
+	ieMixer(fluidOutput, inputs, fluidInput, e, idOverride, energy, inputAmount) {
+		if (!e) throw new Error('ieMixer called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(fluidOutput, inputs, "iemixer")
+		var ctx = 'ieMixer ' + idSuffix
+
+		var result = global.NCH._fluidJson(fluidOutput, { defaultAmount: 1000, allowTag: false, context: ctx + ' result' })
+		var fluid = global.NCH._fluidJson(fluidInput, { defaultAmount: inputAmount ?? result.amount, context: ctx + ' fluid input' })
+		if (!fluid.tag) global.NCH._warn(ctx, 'fluid input is not a tag, IE will not read it: ' + fluid.fluid)
+
+		const json = {
+		  type: 'immersiveengineering:mixer',
+		  fluid: fluid,
+		  inputs: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
+		      return global.NCH._itemJson(i, { countMode: 'base_ingredient', context: ctx + ' input[' + idx + ']' })
+		  }),
+		  result: result,
+		  energy: energy ?? 3200
+		}
+
+		e.custom(json).id(`${global.NCH.modId}:iemixer/${idSuffix}`)
 	},
 
 	ieBottling(results, fluid, inputs, e, idOverride, amount) {

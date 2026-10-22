@@ -21,7 +21,7 @@
   "block.displaydelight.cd_cornbread_stuffing": "Placed Cornbread Stuffing",
   "block.displaydelight.cd_creamed_corn": "Placed Creamed Corn",
   "block.displaydelight.cd_creamy_corn_drink": "Placed Creamy Corn Drink",
-  "block.displaydelight.cd_nachos_bowl": "Placed Nachos Bowl",
+  "block.displaydelight.cd_nachos_bowl": "Placed Nachos",
   "block.displaydelight.cd_plated_classic_corn_dog": "Plated Classic Corn Dog",
   "block.displaydelight.cd_plated_grilled_corn": "Plated Grilled Corn",
   "block.displaydelight.cd_plated_taco": "Plated Taco",
@@ -197,11 +197,11 @@
   "block.displaydelight.small_plated_kelp_roll_slice": "Small Plated Kelp Roll Slice",
   "block.displaydelight.small_plated_salmon_roll": "Small Plated Salmon Roll",
   "block.displaydelight.small_plated_stuffed_potato": "Small Plated Stuffed Potato",
-  "block.displaydelight.small_plated_sweet_berry_cheesecake_slice": "Small Plated Slice of Sweet Berry Cheesecake",
+  "block.displaydelight.small_plated_sweet_berry_cheesecake_slice": "Small Plated Slice of Sweet Berry Pie",
   "block.displaydelight.squid_ink_pasta": "Placed Squid Ink Pasta",
   "block.displaydelight.steak_and_potatoes": "Placed Steak and Potatoes",
   "block.displaydelight.stuffed_pumpkin": "Placed Bowl of Stuffed Pumpkin",
-  "block.displaydelight.sweet_berry_cheesecake_slice": "Placed Slice of Sweet Berry Cheesecake",
+  "block.displaydelight.sweet_berry_cheesecake_slice": "Placed Slice of Sweet Berry Pie",
   "block.displaydelight.vegetable_noodles": "Placed Vegetable Noodles",
   "block.displaydelight.vegetable_soup": "Placed Vegetable Soup"
 }

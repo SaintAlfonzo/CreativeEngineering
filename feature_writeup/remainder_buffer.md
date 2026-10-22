@@ -18,7 +18,10 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 | Design (3) | DECIDED 2026-10-18: D1-D5 as recommended (5) |
 | Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: patcherMod compiles and builds (reobf checked); 10 GameTests pass (6). DEPLOYED with 1.0.7; one leftover per item used (for the oven's ingredient counts) DEPLOYED with 1.0.8 (2026-10-19); not run in game (RB-01 to RB-11) |
 | Keg | BUILT 2026-10-19 in the port's `-03` (now the jar in `pack/manifest.json`), see 3.6; not tested |
-| WTHIT line "Holding: ..." | not built (optional, 3.3) |
+| WTHIT line "Holding: ..." | BUILT 2026-10-21 (patcherMod 1.1.01, `compat/WthitRemainderBuffer`, 3.3); not seen in game (WL-31) |
+| Oven client sync (leftovers vanished from the GUI) | FIXED 2026-10-21 (patcherMod 1.1.01, 3.4); GameTest RB-T11; not seen in game (RB-12) |
+| Bowl count ("duplicate bowl", [TODO](todo/TODO.md) `food/kitchen #4`) | no duplication: RB-T13 counts bowls before and after on the pot (4 ways) and oven, all equal (3.1) |
+| Plating delay: a recycled container shows in the container slot before plating (`[cooking] recycleShowTicks`, [TODO](todo/TODO.md) `food/kitchen #13`) | BUILT 2026-10-21 (patcherMod 1.1.01, not deployed); GameTests RB-T14, RB-T15; not seen in game (RB-14) |
 
 Files to open first:
 
@@ -28,11 +31,13 @@ Files to open first:
 - `mixin/`: `CookingPotRemainderMixin`, `CookingPotMenuRemainderMixin`, `CookingPotScreenRemainderMixin`,
   `KettleRemainderMixin`, `KettleMenuRemainderMixin`, `KettleScreenRemainderMixin`
 - `oven/OvenBlockEntity`, `OvenMenu`, `client/OvenScreen` (native buffer)
+- `compat/WthitRemainderBuffer` (the WTHIT "Holding" / "Waiting" lines, 3.3)
 - `CEConfig.Cooking`; `config/creativeengineering-common.toml` `[cooking]`
 - `tools/test_remainder_buffer.sh` + `tools/remainder_buffer_test/` (GameTests, 6)
 
 Config knobs (`creativeengineering-common.toml`, `[cooking]`): `remainderBuffer` (default true; off = thrown as in
-the original mods), `stallWhenFull` (default true; off = craft anyway and throw what doesn't fit).
+the original mods), `stallWhenFull` (default true; off = craft anyway and throw what doesn't fit), `recycleShowTicks`
+(default 10; how long a recycled container shows in the container slot before plating, 0 = at once; 3.1).
 
 ## 1. Which stations throw leftovers, and how (1.19.2 jars in the pack)
 
@@ -121,6 +126,21 @@ cover the mixed cases (a milk bucket and a honey bottle in one pot recipe). Each
 The leftover rule is the stations' own: the stack's crafting remainder, else FD's `INGREDIENT_REMAINDER_OVERRIDES`
 (pot and oven; the kettle has no override map).
 
+A bowl-food ingredient (tomato sauce, a stew) now gives its bowl back where the original pot threw it out of its
+left side. Step 1 can put that bowl straight into the plating slot and plate the meal in the same tick, so a bowl
+seems to appear from nowhere. That is what the "duplicate bowl" note ([TODO](todo/TODO.md) `food/kitchen #4`) saw:
+GameTests RB-T13a-e count every bowl (ingredients, plating slot, leftover slots, plated meals) before and after
+cooking, with the plating slot empty, holding 1, holding 10, and with meals already waiting, plus the oven; the
+totals match in every case.
+
+**Plating delay** (BUILT 2026-10-21, [TODO](todo/TODO.md) `food/kitchen #13`): a step-1 recycle holds the station's
+plating for `[cooking] recycleShowTicks` (10 ticks), so the bowl or bottle is seen in the container slot with the meal
+unplated, then plated. The hold is a counter on the buffer (`RemainderBuffer.holdPlating`, not saved), set by `store`
+when it put something into the container slot and spent by the plating call: a HEAD inject on FD's and Respite's
+private `useStoredContainersOnMeal` (pot, kettle), and the oven's own `serverTick`. A container a player or hopper
+puts in plates at once. A long value would hold the next cook only once the meal slot fills (`canCook` sees the
+unplated meal).
+
 ### 3.2 When the buffer is full: the station waits
 
 `canCook` (pot), `canBrew` (kettle) and the oven's `canBake` get a RETURN check: if the station would craft, the
@@ -144,8 +164,13 @@ once the buffer is full).
   oven's handler is the same on every face, so every face can pull leftovers.
 - **Breaking**: RETURN inject on `getDroppableInventory` (pot, kettle; the oven's own list) drops the buffer with
   the rest. The pot's item form keeps only the meal, as before.
-- **Not built (optional)**: a WTHIT line "Holding: 3 Glass Bottle". A stalled station shows two full leftover
-  slots in its GUI, which is the only hint today.
+- **WTHIT** (BUILT 2026-10-21, `compat/WthitRemainderBuffer`, plugin `creativeengineering:remainder_buffer`):
+  looking at a pot, kettle or oven shows "Holding: 3 Glass Bottle, 1 Bucket" while a leftover slot holds
+  something, and a red "Waiting: leftover slots full" while a craft is held back for room (3.2). The server sends
+  both (`blockData`), so the line doesn't rely on the client's copy of the slots. The stall flag is the game time
+  of the station's last refused room check (`RemainderBuffer.markStalled`, not saved; the check runs every tick
+  while a recipe waits, so the line clears within 2 ticks of a slot being emptied). Off with
+  `[wthit] remainderBuffer`. The pot and kettle parts register only when their mod is loaded.
 
 ### 3.4 Saving
 
@@ -155,6 +180,13 @@ Pot and kettle: the buffer is a mixin field, saved as an attached capability pro
 `saveWithoutMetadata`, so no mixin targets the stations' own load/save (whose SRG names would differ in dev). The
 provider asks for the buffer lazily: the event fires inside the BlockEntity constructor, before mixin fields are
 set. The oven saves its buffer itself under `Remainders`.
+
+Client copy: the pot's and kettle's update tag is FD's full save, so `ForgeCaps` goes along (RB-T12). The oven's
+update tag is its own, and until 2026-10-21 it left `Remainders` out while `load` read it unguarded: every block
+update (taking the output, adding an ingredient, a hopper) emptied the client's two slots while the server kept the
+items, so bottles and buckets seemed to vanish ([TODO](todo/TODO.md) `food/kitchen #14`). Now the update tag
+carries `Remainders`, `load` only reads it when present, and a buffer change sends a block update like any oven slot
+change (RB-T11).
 
 ### 3.5 Mixins (patcherMod `creativeengineering.mixins.json`)
 
@@ -194,18 +226,16 @@ The 2.0 bottle dupe (1.3) went with the 2.0 jar.
   [mod_sides.md](../mod_sides.md) and required on both sides, so this is fine.
 - **Removing the mod** drops nothing: items in the buffer are lost with the NBT key. Same as any modded
   inventory.
-- **Stall surprises**: a player who never empties the slots gets a pot that stops after 16-128 crafts. Today the
-  only hint is the two full slots in the GUI; a WTHIT line would say it without opening the GUI (3.3).
+- **Stall surprises**: a player who never empties the slots gets a pot that stops after 16-128 crafts. The GUI
+  shows two full leftover slots, and WTHIT says "Waiting: leftover slots full" (3.3).
 - **FD/Respite updates**: the pack pins its versions. The HEAD inject on `ejectIngredientRemainder` is stable; the
   two `@Redirect`s depend on the inline code staying the same.
 - **Other mixins**: checked 2026-10-18 across all 414 jars of `pack/manifest.json` (mixin classes naming the pot,
   kettle, their menus or screens): only Create Central Kitchen's two (1.1), which don't overlap.
 - **Mixin aliases**: the official names listed next to the SRG ones (3.5) never match in the pack; `require = 1`
   is met by the SRG name.
-- **Known bug (scratchpad 2026-10-21), oven:** bottle / bucket leftovers held in the buffer disappear when the output
-  item is taken out. Likely cause (code read 2026-10-21): `OvenBlockEntity.getUpdateTag` leaves out `Remainders`
-  and `load` reads it unguarded, so every block update empties the client's copy (the server keeps the items); see
-  [briefs/food_kitchen.md](briefs/food_kitchen.md) #14 ([TODO](todo/TODO.md) `food/kitchen #14`).
+- **Oven leftovers vanishing (scratchpad 2026-10-21):** fixed 2026-10-21, see 3.4 ([TODO](todo/TODO.md)
+  `food/kitchen #14`).
 
 ## 5. Decisions (all taken as recommended, 2026-10-18)
 
@@ -226,6 +256,13 @@ The 2.0 bottle dupe (1.3) went with the 2.0 jar.
   2.0 deobfuscated at runtime, a stand-in main class/config and a small test datapack). **All 10 pass.** The first
   run failed RB-T9: both bottles went to the kettle's container slot, leaving a spare there after plating. That
   led to the "only as many as needed" rule in 3.1.
+- 2026-10-21: **17 tests** (RB-T11 to RB-T13e added). The stand-in config had fallen behind (`ovenIngredientCounts`
+  was missing, so the harness no longer compiled); it is a copy of the real `[cooking]` section again. Three runs:
+  all 17 passed twice; once RB-T4 failed ("bucket not thrown"). RB-T4 counts item entities near the test, and the
+  thrown bucket's random motion can carry it out of range: a flaky test, not a routing fault. The new bowl tests
+  count what the station holds, not item entities, because RB-T6 drops bowls next door.
+- 2026-10-21 (later): **19 tests**, RB-T14 and RB-T15 for the plating delay; stand-in config resynced again
+  (`recycleShowTicks`). All 19 pass.
 
 | Test | Proves |
 |---|---|
@@ -239,6 +276,12 @@ The 2.0 bottle dupe (1.3) went with the 2.0 jar.
 | RB-T8 `menus` | pot menu 9 + 36 + 2 slots, kettle 5 + 36 + 2; take-only; shift-click moves the buffer to the player; FD's own output shift-click still works |
 | RB-T9 `kettleStrongTea` | strong green tea: one bottle plates the drink, one in the buffer, container slot empty, nothing thrown |
 | RB-T10 `ovenBuffer` | oven (test recipe milk bottle + sugar -> bread): bottle buffered, oven handler 10 + 2 slots, buffer extractable |
+| RB-T11 `ovenUpdateTagKeepsBuffer` | the oven's update tag carries `Remainders`; loading it into a second oven replaces that oven's slots; a tag without the key leaves them alone |
+| RB-T12 `potUpdateTagHasBuffer` | the pot's update tag holds `ForgeCaps/creativeengineering:remainder_buffer` (what the pot and kettle client copies rely on) |
+| RB-T13a-d `potBowlsSlotEmpty`, `potBowlsSlotOne`, `potBowlsSlotTen`, `potBowlsMealWaiting` | test recipe tomato sauce + carrot -> beef stew (bowl): bowls in ingredients + plating slot + leftover slots + plated stews are the same before and after, with 0 / 1 / 10 bowls in the plating slot and with 2 stews already waiting |
+| RB-T13e `ovenBowls` | oven test recipe tomato sauce + sugar -> bread plated in a bowl, 2 bowls in the plating slot: the same count holds, 2 plated |
+| RB-T14 `potRecycleDelay` | hot cocoa with a milk bottle: when cooked, the bottle is in the container slot and the output empty; plated 10 ticks later |
+| RB-T15 `ovenRecycleDelay` | oven tomato sauce + sugar -> bread in a bowl, plating slot empty: the sauce's bowl shows in the plating slot, plated 10 ticks later |
 
 Not covered offline: the screens (frames checked only by compositing them onto the two textures), the pack's
 SRG-named jar in game, Create Central Kitchen alongside.
@@ -263,6 +306,15 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 - [ ] **RB-09 CCK:** Create Central Kitchen's blaze stove under the pot and kettle still signals.
 - [ ] **RB-10 Oven:** a baking recipe with a milk bottle (muffin): bottle in a leftover slot.
 - [ ] **RB-11 Server:** the same on a dedicated server with a client (slots sync, shift-click works).
+- [ ] **RB-12 Oven leftovers stay visible** (patcherMod 1.1.01): bake blueberry muffins (milk bottle) with the GUI
+  open, take the muffins out: the bottle stays in the leftover slot. Close and reopen: still there. Take it with a
+  click.
+- [ ] **RB-13 Bowl count** (patcherMod 1.1.01): 10 bowls in the pot's plating slot, cook 5 of a tomato-sauce bowl
+  meal: bowls in the slot + leftover slots + meals add up to 15. Once with Create Central Kitchen's blaze stove under
+  the pot.
+- [ ] **RB-14 Recycle shows** (patcherMod 1.1.01): watch an FD pot cook a tomato-sauce bowl meal with the plating
+  slot empty: the bowl appears in the plating slot for half a second, then the meal is plated. The same with hot
+  cocoa and a milk bottle in the pot, and strong green tea in the kettle.
 
 ## 8. History
 
@@ -271,6 +323,10 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
   menu, screen), native oven buffer, `[cooking]` config, GameTest harness; container-slot recycle capped at what
   the waiting meals need after the first test run. patcherMod compiles and builds; 10 GameTests pass.
 - 2026-10-19: keg built in the Brewin' port `-03` (3.6); compiles, no GameTest (in-game tests in alcohol.md).
+- 2026-10-21 (patcherMod 1.1.01, not deployed): oven client sync fixed (3.4, `food/kitchen #14`); "duplicate bowl"
+  checked and found to be the designed recycle (3.1, `food/kitchen #4`); WTHIT "Holding" / "Waiting" line built
+  (3.3, `food/kitchen #3`). GameTests 17, harness stand-in config resynced.
+- 2026-10-21 (later): plating delay `[cooking] recycleShowTicks` (3.1, `food/kitchen #13`); GameTests 19.
 
 > **Superseded copy below (noted 2026-10-21):** everything from here on is the 2026-10-18 feasibility draft, left in
 > the file by mistake. Sections 0-8 above are current; delete the copy once checked.

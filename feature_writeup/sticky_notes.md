@@ -1,6 +1,6 @@
 # Creative Labels: sticky notes and labels as face paper
 
-Plan for **Creative Labels** (`creative_labels`), a new in-tree mod that replaces two mods' placed entities with one
+Plan and build notes for **Creative Labels** (`creative_labels`), a new in-tree mod that replaces two mods' placed entities with one
 block, `face_paper`: **sticky notes** (after Sticky It! 1.2.1) and **labels** with an item picture (after Labels 1.10).
 It also keeps Sticky It's text labels on items. Until our own art exists, both old jars stay installed as unmodified
 art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tracked in [TODO](todo/TODO.md)
@@ -11,22 +11,25 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
 | Part | Status |
 |---|---|
 | Investigation of Sticky It 1.2.1 and Labels 1.10 (both decompiled, every class read; licences read) | done 2026-10-20 (section 2) |
-| Creative Labels mod (`development/creativeLabels`, mod id `creative_labels`, GPLv3) | PLANNED (3.1) |
-| Phase 1: `face_paper` block, sticky notes placed by host shape, directional floors and ceilings, per-note dye / open / remove / erase, covered face | PLANNED (3.2 to 3.5) |
-| Phase 2: note items (leather-style colour in the grid and when placed, 4 specials, recipes), note screen with Sticky It's screen art, text labels on items (inventory, anvil, off hand), eraser, tooltips | PLANNED (3.6 to 3.9) |
-| Phase 3: labels on `face_paper` (Labels' interactions, real-colour icon, dyed icon, close-only drawing) | PLANNED (3.10, 3.11) |
-| Phase 4: donor jars with gameplay off (recipes, JEI, Sticky It's tooltip handler) | PLANNED (3.13); the tooltip fix (bowl bug) can ship first |
+| Creative Labels mod (`development/creativeLabels`, mod id `creative_labels`, GPLv3) | BUILT 2026-10-20 (`creativeLabels-1.0.0.jar`), installed in `mods/` 2026-10-21; [README](../development/creativeLabels/README.md) maps every part to its class |
+| Phase 1: `face_paper` block, sticky notes placed by host shape, directional floors and ceilings, per-note dye / open / remove / erase, covered face | BUILT (3.2 to 3.5) |
+| Phase 2: note items (leather-style colour in the grid and when placed, 4 specials, recipes), note screen with Sticky It's screen art, text labels on items (inventory, anvil, off hand), eraser, tooltips | BUILT (3.6 to 3.9) |
+| Phase 3: labels on `face_paper` (Labels' interactions, real-colour icon, dyed icon, close-only drawing) | BUILT (3.10, 3.11) |
+| Phase 4: donor jars with gameplay off (recipes, JEI, Sticky It's tooltip handler) | BUILT (3.13): mod side (creative-tab hiding, tooltip mixin) and pack side (JEI hiding, recipes) |
 | Phase 5: our own textures and models, then drop both donor jars | PLANNED, later (3.14) |
-| In-game tests | SN-01 to SN-55 written, nothing built to run them on |
+| Headless tests | `tools/creative_labels_test/run.sh`: 4 suites, all pass (2026-10-21, section 6) |
+| Scratch server tests | 2026-10-21: boots on a dedicated server; 60 checks over 41 SN- tests, all PASSED after 3 fixes (Moonlight range, FastWorkbench crafting path, mixin-package crash); section 6.1 |
+| In-game tests | not run yet; first in game: SN-10, SN-12, SN-23, SN-28, SN-29, SN-39, SN-47, SN-48 (client-only), then SN-55 with the crafting table |
 
-- **Files to open (today):** the decompiled mods, `python3 tools/decompile_mod.py mods/<jar> <dir>`; Sticky It
+- **Files to open:** [development/creativeLabels/README.md](../development/creativeLabels/README.md) (what lives where),
+  [BRIEF.md](../development/creativeLabels/BRIEF.md) (the build brief); the decompiled donor mods, `python3 tools/decompile_mod.py mods/<jar> <dir>`; Sticky It
   `client/model/ModelSticky.java`, `client/gui/StickyNoteTextScreen.java`; Labels `LabelEntity.java`,
   `LabelEntityRenderer.java`.
-- **Knobs (planned):** `creative_labels-client.toml`: `pictureDistance` (16 blocks), `textDistance` (6 blocks).
+- **Knobs:** `creative_labels-client.toml`: `pictureDistance` (16 blocks), `textDistance` (6 blocks).
   `creative_labels-common.toml`: `noteLength` (32), `anvilCost` (1 level), WTHIT lines on/off.
 - **How to measure:** place, dye, open, remove, erase and break notes on each host shape (3.3); punch, shoot and blow
   up papered blocks; JFR ([perf.md](perf.md)) on a wall of 200 labels and 1,000 notes.
-- **Open decisions:** none (4.2). The plan is ready for phase 1.
+- **Open decisions:** none (4.2). Phases 1 to 4 are built; phase 5 is pinned.
 
 ## 1. Overview
 
@@ -318,6 +321,10 @@ removing the last line removes the key, and the tag if it's then empty. A note m
   (`creative_labels-common.toml`, default on), a crafting grid (inventory or crafting table) with any labelled item
   in it gives no result. Erase the labels first. A mixin on the menus' shared result update
   (`CraftingMenu.slotChangedCraftingGrid`, used by both). Machines (furnaces, Create, IE) are not covered.
+  FastWorkbench (in the pack) overwrites both grids' `slotsChanged` to queue its own
+  `FastBenchUtil.slotChangedCraftingGrid`, so vanilla's is never called; `FastBenchResultMixin` makes the same check
+  there and resends the empty result slot (FastWorkbench sends results in its own packet). Found and fixed on the
+  scratch server, 2026-10-21 (6.1).
 - **Tooltip on a labelled item:** its lines under the name, in grey; no header, no `[Shift]`.
 
 ### 3.9 Tooltips
@@ -422,7 +429,8 @@ modpacks that download the jar, the same position as the Vinery donor jars; a pu
 
 - **Sticky It's tooltip handler** cancelled at its head (a Creative Labels mixin on
   `net.mcreator.sticky_it.procedures.TooltipRenderProcedure.execute`, targeted by name). Ends the `{}` tags (the bowl
-  bug) and its `[Shift]` text. Can ship ahead of everything else. Items already tagged keep their `{}`.
+  bug, TODO `food/kitchen #5`, [kitchen.md](kitchen.md)) and its `[Shift]` text. Can ship ahead of everything else.
+  Items already tagged keep their `{}`.
 - **Recipes:** every `sticky_it:` and `labels:` recipe removed (KubeJS through NCH).
 - **Old items removed from play** (user, 2026-10-20): `sticky_it:sticky_note`, `sticky_it:eraser` and `labels:label` are hidden from JEI and the creative tabs and can't be crafted (their recipes now make our items). They can't be unregistered while the jars are donors; leftover stacks stay inert and vanish with the jars in phase 5.
 - **Old placed labels and notes:** still load (the mods are installed) and behave as before until broken; an optional
@@ -572,70 +580,111 @@ Planned, `development/creativeLabels/src/main/java/.../creativelabels/`:
 - **Decompile:** `python3 tools/decompile_mod.py mods/<jar> <dir>`.
 - **Census of a save** (placed notes and labels, text labels, empty `{}` tags): done 2026-10-20 with scratch scripts;
   worth keeping as `tools/nbt_census.py`.
-- **Planned headless tests:** spot geometry and the host-shape table (full, inset, stairs per facing, slabs top and
-  bottom, posts), rotation of floor spots, covered-face rule, NBT round trips (`display.color`, `CreativeLabels.Text` / `.Special` / `.Lines`, tag
-  cleaned when empty), colour and erase recipe results.
+- **Headless tests:** `tools/creative_labels_test/run.sh` from the instance root, after
+  `./gradlew :creativeLabels:build` (runs against `build/classes`, no game). Four suites:
+  - `SpotsTest`: the host table of 3.3 on real vanilla blocks (full, 1/16 and 2/16 insets, stairs per facing and
+    half, slabs, double slab, posts, deny/posts predicates), face frames, floor rotation, piece boxes, hit
+    resolution, the covered-face rule, interactions (spot choice, host-gone re-fit, removal, pick-up and eraser).
+  - `NbtTest`: note item NBT, item label lines, label picture stripping (C2), face / note / label round trips, the
+    Mask remap (C7), colour mixing against vanilla's `dyeArmor`, the note text sanitiser (C6), the four recipe
+    matchers on a 3x3 grid.
+  - `NoteShapeTest`: the fallback note shape on every face (paper plane, curl direction, winding), the label model
+    mapping, DonorArt's image maths on the decompiled donor PNGs.
+  - `LabelRenderTest`: the dyed-icon ramp and pixel packing, the label icon / name view frame on every face, the
+    text rotation quaternion.
+  - 2026-10-21 run: 235 + 142 + 1828 + 394 checks, all pass.
+
+### 6.1 Scratch server (2026-10-21)
+
+A dedicated server on a superflat world, driven from its console; no game client. Scripts:
+[tools/creative_labels_test/scratch_server.sh](../tools/creative_labels_test/scratch_server.sh) (`setup OUT`, `boot
+OUT`, `cmd OUT "<command>"`, `stop OUT`: every non-client jar of `mods/` by [mod_sides.md](../mod_sides.md), copies of
+`kubejs/` and `config/`) and [server_probe.js](../tools/creative_labels_test/server_probe.js) (scratch-only server
+script, `/cltest place|actions|host|pistoncheck|items|labels|donors`). Clicks go through
+`ServerPlayerGameMode.useItemOn` on Forge fake players, the path a client's right-click packet takes on the server
+(RightClickBlock event, the paper's `use`, the item's `useOn`); breaking through `destroyBlock` with the fake player
+aimed at the piece; crafting through the real recipe manager and the inventory menu; the anvil through a real
+`AnvilMenu`. Results: [testing/creative_labels_scratch_2026-10-21.txt](testing/creative_labels_scratch_2026-10-21.txt).
+
+- **Boot (C4):** the server boots with the mod; no client class is loaded by it (the `invalid dist` errors in the
+  log are other mods': the pack's own server shows the same 10 without Creative Labels, and the ones during the run
+  come from other mods' recipe classes while the probe walks every recipe).
+- **Final run, world cl4: 60 checks, all PASSED.** Covered, server half: SN-01 to SN-09, SN-11, SN-13 to SN-19,
+  SN-21, SN-22, SN-24 (gold rate: 4 of 400), SN-25 to SN-27, SN-30 to SN-34, SN-36 to SN-38, SN-40 to SN-45, SN-49,
+  SN-53 to SN-55. The host table of 3.3 checked on 20 hosts (3 stair states, 3 slab states, 7 posts, 7 non-standard).
+- **Not reachable without a client:** SN-10, SN-12, SN-20, SN-23, SN-28, SN-29, SN-35, SN-39, SN-46 to SN-48,
+  SN-50, SN-51 (rendering, screens, JEI, tooltips, WTHIT, hit detection of real rays), and the look of SN-24, SN-36,
+  SN-38, SN-40, SN-42. SN-54 checks the 5-tick gate, not a real Mouse Tweaks drag.
+
+Bugs found and fixed on the way (jar rebuilt and reinstalled each time; the headless suites still pass):
+
+| # | Bug | Fix |
+|---|---|---|
+| 1 | FML refused to load the mod: `moonlight` range `[2.3,)` never matches Moonlight's version `1.19.2-2.3.7` (Maven ordering puts it below 2.3). Client and server alike | `mods.toml`: `[1.19.2-2.3.0,)` (Supplementaries and Labels write theirs the same way) |
+| 2 | `blockLabelledCrafting` did nothing in this pack: FastWorkbench overwrites both grids' `slotsChanged` and queues its own result update, so the vanilla method the mixin sat on never runs | `FastBenchResultMixin` on `FastBenchUtil.slotChangedCraftingGrid` (gated on `fastbench`), shared check in `crafting/LabelledCrafting` |
+| 3 | The first fix put the shared helper in the mixin package; the server crashed on the first craft (Mixin refuses to load ordinary classes from its package) | helper moved to `crafting/` |
 
 ## 7. In-game test suite
 
-Rewritten for the full spec before anything was built (earlier drafts were never run).
+Rewritten for the full spec before anything was built (earlier drafts were never run). Boxes are ticked from real
+play only; "server half PASSED" notes are from the scratch server (6.1).
 
 Placing and shapes:
 
 - [ ] **SN-01 five spots:** right-click a stone face aiming at each corner and the centre → five notes, spaced, none
-  overlapping; a sixth does nothing.
-- [ ] **SN-02 nearest free spot:** click an occupied spot → the note lands on the nearest free spot.
+  overlapping; a sixth does nothing. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-02 nearest free spot:** click an occupied spot → the note lands on the nearest free spot. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-03 chests and barrels:** plain right-click opens them; sneak + right-click places a note; five notes fit on
-  a chest's front.
+  a chest's front. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-04 stairs:** bottom and back faces take five; each side takes three (bottom corners, top corner on the back
-  half); the front and the top take two each; for all four stair facings and upside-down stairs.
+  half); the front and the top take two each; for all four stair facings and upside-down stairs. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-05 slabs:** a bottom slab's top takes five; a top slab's bottom takes five; sides take two (the
-  half's corners); a double slab takes five.
+  half's corners); a double slab takes five. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-06 posts:** fence, wall, iron bars, glass pane, end rod, lightning rod, chain → one note on the centre of
-  top and bottom only.
-- [ ] **SN-07 non-standard:** carpet, button, ladder, door, trapdoor, flower, head → no note.
+  top and bottom only. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-07 non-standard:** carpet, button, ladder, door, trapdoor, flower, head → no note. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-08 floor direction:** place the first note on a floor facing north, then one facing east → both point north;
-  break all, place facing east → east.
+  break all, place facing east → east. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-09 notes or label:** a face with notes refuses a label and the other way round; notes on one face and a
-  label on another face of the same cell both show.
+  label on another face of the same cell both show. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-10 model:** placed notes have Sticky It's curled shape and size on walls, floors and ceilings.
 
 Per-note actions:
 
 - [ ] **SN-11 dye placed:** red dye on one note → only it turns red, one dye used; then blue → a red-blue mix (the same
-  colour as leather dyed red then blue); a special note refuses dye.
+  colour as leather dyed red then blue); a special note refuses dye. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-12 open:** empty-hand right-click → the note screen with Sticky It's bars, the text and the placing day; edit,
   Done → WTHIT shows the new text.
-- [ ] **SN-13 remove:** sneak + empty-hand right-click → that note in your inventory with colour and text.
+- [ ] **SN-13 remove:** sneak + empty-hand right-click → that note in your inventory with colour and text. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-14 eraser on a placed note:** right-click a written red note with the eraser → text gone, still red; again →
-  plain yellow.
+  plain yellow. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-15 covered face:** five notes on a crafting table → clicks between them don't open it; remove one → the
-  empty spot opens it. Three notes on a stair side or two on its front never block anything.
-- [ ] **SN-16 pass-through:** two notes on a furnace; right-click a note holding a coal → the furnace opens.
+  empty spot opens it. Three notes on a stair side or two on its front never block anything. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-16 pass-through:** two notes on a furnace; right-click a note holding a coal → the furnace opens. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-17 break:** left-click one note → breaks about as fast as carpet, drops with its data; the others stay;
-  only the hovered note is outlined; middle-click in creative gives that note.
+  only the hovered note is outlined; middle-click in creative gives that note. Scratch server 2026-10-21: server half PASSED.
 
 Breaking the host, damage:
 
 - [ ] **SN-18 host mined:** mine a block with five notes and a label on another of its faces → notes drop with data,
-  the label drops blank.
+  the label drops blank. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-19 explosion:** TNT beside a papered wall that survives → no paper lost; TNT that destroys the wall → notes
-  drop with data, labels blank, none destroyed by the blast.
+  drop with data, labels blank, none destroyed by the blast. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-20 shrapnel, arrows, punches:** shoot and punch papered blocks → nothing pops.
-- [ ] **SN-21 pistons:** push a papered block → its paper drops as in SN-18.
-- [ ] **SN-22 water:** notes under water keep the water.
+- [ ] **SN-21 pistons:** push a papered block → its paper drops as in SN-18. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-22 water:** notes under water keep the water. Scratch server 2026-10-21: server half PASSED.
 
 Note items:
 
 - [ ] **SN-23 JEI:** JEI lists the plain note and the four specials, with example recipes for the 16 dyes and the
   specials.
 - [ ] **SN-24 any colour:** notes dyed with each of the 16 dyes, and mixes, look like their leather armour colour when
-  placed and as items; place 200 plain notes → about 2 come out gold, with the firework spark.
-- [ ] **SN-25 stacking:** 64 plain notes stack; red notes stack with red; a written note doesn't stack with blank ones.
+  placed and as items; place 200 plain notes → about 2 come out gold, with the firework spark. Scratch server 2026-10-21: server half PASSED (gold rate only: 4 of 400; colours need a client).
+- [ ] **SN-25 stacking:** 64 plain notes stack; red notes stack with red; a written note doesn't stack with blank ones. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-26 colour in the grid:** 12 plain notes + red dye → 12 red notes; 12 red + blue dye → 12 red-blue mixes;
-  the text of a written note survives; 8 plain notes + gunpowder → 8 creeper notes.
+  the text of a written note survives; 8 plain notes + gunpowder → 8 creeper notes. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-27 eraser in the grid:** red "Iron" + eraser → blank red note, eraser stays; that note + eraser → plain
-  yellow. The eraser never breaks.
+  yellow. The eraser never breaks. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-28 write in hand:** right-click a stack of notes in the air → screen; "Iron", Done → one written note, the
   rest unchanged.
 - [ ] **SN-29 tooltips:** note, label and eraser show the lines of 3.9, each on its own line, no `[Shift]`.
@@ -643,33 +692,33 @@ Note items:
 Item labels:
 
 - [ ] **SN-30 inventory:** written note on the cursor, right-click 32 cobblestone in a chest → all 32 show the line;
-  one note used.
-- [ ] **SN-31 anvil:** cobblestone left, written note right → output with the line, 1 level; one note used.
+  one note used. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-31 anvil:** cobblestone left, written note right → output with the line, 1 level; one note used. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-32 off hand:** note in the main hand, sword in the off hand, sneak + right-click in the air → the sword has
-  the line.
-- [ ] **SN-33 three lines:** a fourth line is refused, nothing used.
+  the line. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-33 three lines:** a fourth line is refused, nothing used. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-34 eraser on items:** eraser on the cursor, right-click until no line is left → the stack merges with clean
-  cobblestone.
+  cobblestone. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-35 creative tab:** SN-30 and SN-34 in the creative inventory tab.
 
-- [ ] **SN-53 copy:** written red "Iron" + 8 blank notes of mixed colours → 9 red "Iron" notes.
+- [ ] **SN-53 copy:** written red "Iron" + 8 blank notes of mixed colours → 9 red "Iron" notes. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-54 drag:** Mouse Tweaks right-click drag with a written stack of notes across 5 cobblestone slots → only
-  the first slot is labelled, one note used.
+  the first slot is labelled, one note used. Scratch server 2026-10-21: server half PASSED (5-tick gate; a real drag needs a client).
 - [ ] **SN-55 crafting blocked:** a labelled plank in the inventory grid → no result; set `blockLabelledCrafting =
-  false` → it crafts, unlabelled output.
+  false` → it crafts, unlabelled output. Scratch server 2026-10-21: server half PASSED (after the FastWorkbench fix).
 
 Labels:
 
-- [ ] **SN-36 place:** a label on a chest front sits flush on its face.
-- [ ] **SN-37 picture:** sneak + right-click with a diamond → the diamond in real colours, not used up.
-- [ ] **SN-38 stack tints:** labels showing a healing potion and dyed leather armour → their colours.
+- [ ] **SN-36 place:** a label on a chest front sits flush on its face. Scratch server 2026-10-21: server half PASSED (placement; the look needs a client).
+- [ ] **SN-37 picture:** sneak + right-click with a diamond → the diamond in real colours, not used up. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-38 stack tints:** labels showing a healing potion and dyed leather armour → their colours. Scratch server 2026-10-21: server half PASSED (picture NBT kept and stripped; the colours need a client).
 - [ ] **SN-39 special renderers:** a chest, a shield, a Create cogwheel → like their inventory icons.
-- [ ] **SN-40 dyed icon:** red dye → the icon turns red shades, the paper stays.
-- [ ] **SN-41 clear:** sneak + empty hand → picture cleared.
-- [ ] **SN-42 glow, feather:** glow ink sac → full-bright; ink sac → normal; feather → name under the icon.
-- [ ] **SN-43 open through:** empty-hand right-click the label → the chest opens.
-- [ ] **SN-44 break:** left-click the label → breaks like carpet, drops a blank label.
-- [ ] **SN-45 floor label:** a label on a floor turns to your facing.
+- [ ] **SN-40 dyed icon:** red dye → the icon turns red shades, the paper stays. Scratch server 2026-10-21: server half PASSED (dye stored; the icon needs a client).
+- [ ] **SN-41 clear:** sneak + empty hand → picture cleared. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-42 glow, feather:** glow ink sac → full-bright; ink sac → normal; feather → name under the icon. Scratch server 2026-10-21: server half PASSED (flags stored; the look needs a client).
+- [ ] **SN-43 open through:** empty-hand right-click the label → the chest opens. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-44 break:** left-click the label → breaks like carpet, drops a blank label. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-45 floor label:** a label on a floor turns to your facing. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-46 distances:** pictures disappear past 16 blocks (paper stays), names past 6; change both in
   `creative_labels-client.toml` → they follow.
 - [ ] **SN-47 WTHIT:** a note → "Sticky Note", colour, text; a label → the chest's name and icon plus "Label: Diamond".
@@ -677,7 +726,7 @@ Labels:
 Donor jars and performance:
 
 - [ ] **SN-48 bowls stack:** hover a bowl, put it with fresh bowls → they stack.
-- [ ] **SN-49 donors off:** no `sticky_it:` or `labels:` recipe or item in JEI.
+- [ ] **SN-49 donors off:** no `sticky_it:` or `labels:` recipe or item in JEI. Scratch server 2026-10-21: server half PASSED (recipes and creative tabs; JEI needs a client).
 - [ ] **SN-50 resource reload:** F3+T → notes, labels and icons still right.
 - [ ] **SN-51 performance:** 200 labels and 1,000 notes in view → JFR shows the icon renderer as the only per-frame
   cost.
@@ -713,3 +762,10 @@ Donor jars and performance:
   (1 written + 8 blank = 9), labelled items blocked from crafting grids (`blockLabelledCrafting`, default on), smile
   from glow berries, one dye per multi-note craft, Q1/Q2/Q4/Q5 as recommended. `CELabels` renamed
   `CreativeLabels.Lines` in 3.8 (C5). SN-53 to SN-55 added. No open decisions.
+- 2026-10-20: phases 1 to 4 built (`development/creativeLabels`, `creativeLabels-1.0.0.jar`) with four headless
+  suites (`tools/creative_labels_test/run.sh`); pack side wired (item_dict, NCH `creativeLabelsSpecial`,
+  `creative_labels.js`, mod_sides, build_deploy).
+- 2026-10-21: installed in `mods/`. Scratch dedicated server (6.1): Moonlight range fixed (FML refused the mod),
+  `blockLabelledCrafting` extended to FastWorkbench's crafting path (it bypassed the vanilla one), a mixin-package
+  crash from that fix fixed; final run 60 checks PASSED. Status table, 6 and 7 updated; TODO `largecontent/stickynotes
+  #1-4` to Testing.

@@ -35,6 +35,13 @@ StartupEvents.registry('item', e => {
     e.create('creativeengineering:nickel_wire')
     e.create('creativeengineering:brass_wire')
     e.create('creativeengineering:constantan_wire')
+
+    // Food grinding tool (NCH.mortar / foodGrinding, TODO food/kitchen #10). Texture copied from Old Guns'
+    // mortar_and_pestle (AGPL-3.0), whose item is renamed Powder Pestle and stays out of food recipes.
+    // maxDamage makes it unstackable; the recipe's damageIngredient takes 1 per craft and hands it back.
+    e.create('creativeengineering:mortar_and_pestle')
+        .displayName('Mortar and Pestle')
+        .maxDamage(512)
 })
 
 StartupEvents.registry('block', e => {

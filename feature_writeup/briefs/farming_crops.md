@@ -38,7 +38,7 @@ C; keep the scythe out of C but reuse `HoeHarvestArea` when it is built.
 
 ## crops #6: Apples only from apple trees
 
-Status Planned · Work KubeJS · TODO `farming/crops #6`
+Status Testing (built 2026-10-21, rubberwood added; full loot dump scanned, no other hits) · Work KubeJS · TODO `farming/crops #6`
 
 ### Goal
 No apples from leaves other than apple trees. Oak and dark oak are done; Myrtrees rubberwood leaves still drop them
@@ -84,7 +84,7 @@ existing ones). Item `minecraft:apple` = `global.item.apple`.
 
 ## crops #9: Bell pepper colours
 
-Status Planned · Work data (loot) · TODO `farming/crops #9`
+Status BUILT 2026-10-21 (`kubejs/server_scripts/loot/09_crop_drops.js`, weights from CEConfig `[crop_drops.bell_peppers]`, wild left red-only; extra colours are Rustic Delight 1.7.0 only; CR-69, CR-70 pending) · Work data (loot) · TODO `farming/crops #9`
 
 ### Goal
 Harvests give red, green and yellow peppers in an even split. Check whether the mod has more colours.

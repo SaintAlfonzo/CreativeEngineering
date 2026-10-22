@@ -11,13 +11,14 @@ import java.util.Set;
 
 /**
  * Gates mixins on the mod they target being installed: {@code StickyItTooltipMixin} needs {@code sticky_it}
- * (phase 4). Everything else (vanilla targets) always applies.
+ * (phase 4), {@code FastBenchResultMixin} needs {@code fastbench}. Everything else (vanilla targets) always applies.
  */
 public class CLMixinPlugin implements IMixinConfigPlugin {
 
     /** Mixin simple name -> the mod it needs. */
     private static final Map<String, String> NEEDS_MOD = Map.of(
-            "StickyItTooltipMixin", "sticky_it");
+            "StickyItTooltipMixin", "sticky_it",
+            "FastBenchResultMixin", "fastbench");
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {

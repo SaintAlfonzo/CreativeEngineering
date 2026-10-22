@@ -59,6 +59,11 @@ f.scarlet_cheese = 'brewinandchewin:scarlet_cheese';
 
 //Create: Central Kitchen
 f.apple_cider = 'create_central_kitchen:apple_cider';
+f.long_apple_cider = 'create_central_kitchen:long_apple_cider';
+f.strong_apple_cider = 'create_central_kitchen:strong_apple_cider';
+f.t_apple_cider = '#forge:fluid/apple_cider';
+f.t_long_apple_cider = '#forge:fluid/long_apple_cider';
+f.t_strong_apple_cider = '#forge:fluid/strong_apple_cider';
 f.dragon_breath = 'create_central_kitchen:dragon_breath';
     f.cck_hot_cocoa = 'create_central_kitchen:hot_cocoa';
 

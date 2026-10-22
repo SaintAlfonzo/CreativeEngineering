@@ -14,6 +14,8 @@ public final class CEConfig {
     public static final class Cooking {
         public final ForgeConfigSpec.BooleanValue remainderBuffer;
         public final ForgeConfigSpec.BooleanValue stallWhenFull;
+        public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
+        public final ForgeConfigSpec.IntValue recycleShowTicks;
 
         private Cooking(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -31,7 +33,20 @@ public final class CEConfig {
                     "Off = it crafts anyway and throws what doesn't fit."
             ).define("stallWhenFull", true);
 
+            ovenIngredientCounts = b.comment(
+                    "On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat",
+                    "stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every",
+                    "ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of",
+                    "their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload."
+            ).define("ovenIngredientCounts", false);
+
+            recycleShowTicks = b.comment(
+                    "Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's",
+                    "bottle) stays visible there before the meal is plated with it, so the step can be seen.",
+                    "0 = plate at once. Containers a player or hopper puts in plate at once either way."
+            ).defineInRange("recycleShowTicks", 10, 0, 100);
+
             b.pop(); // cooking
         }
-}
+    }
 }

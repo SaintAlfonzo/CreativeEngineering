@@ -21,7 +21,7 @@ build brief for the agents: [BRIEF.md](BRIEF.md).
 | "No room for another label" (bass note + action bar) when a fourth line is tried; labelled items' lines in grey under the name (`ItemTooltipEvent`) | `item/ItemLabels` |
 | Note screen: Sticky It's `stickygui.png` text bar and `stickyguidatee.png` date bar, EditBox capped at `noteLength`, Done / Enter sends `NoteTextPacket` (hand or placed mode); the server cuts to one line, strips section codes, caps the length, checks reach and that the note is still there (C6) | `client/NoteScreen`, `client/ClientHooks`, `net/NoteTextPacket` |
 | Recipes (Java `CustomRecipe`s; the JSONs are the pack's): `note_dye` N identical notes + 1 dye, `note_special` N plain notes + 1 ingredient, `note_copy` 1 written + 8 blank -> 9, `note_erase` note + eraser | `crafting/` |
-| Labelled items give no crafting result while `blockLabelledCrafting` is on (`CraftingMenu.slotChangedCraftingGrid` head injection, server side) | `mixin/CraftingMenuResultMixin` |
+| Labelled items give no crafting result while `blockLabelledCrafting` is on: head injections on vanilla's `CraftingMenu.slotChangedCraftingGrid` and on FastWorkbench's `FastBenchUtil.slotChangedCraftingGrid` (FastWorkbench replaces both grids' `slotsChanged`, so in this pack only the second runs); the result slot is cleared and resent to the client | `mixin/CraftingMenuResultMixin`, `mixin/FastBenchResultMixin`, `crafting/LabelledCrafting` |
 | JEI: plain note + four specials as entries (subtype on `Special`), example shapeless recipes for 16 dyes, 4 specials, copy and erase under `creative_labels:jei/...` | `compat/jei/CreativeLabelsJei` |
 | Item icon: `creative_labels:look` property picks the model override (plain / dyed grey tinted by `display.color` / special icons) | `client/NoteItemColours` |
 | Dynamic baked model fed by the block entity's `FaceSnapshot[]` model data; geometry loader `creative_labels:face_paper` | `client/FacePaperModel`, `client/FacePaperModelLoader`, `block/FaceSnapshot` |
@@ -57,6 +57,10 @@ Part of the root Gradle build:
 - `libs/` (git-ignored) holds compile-only copies of the JEI and Moonlight jars from `../../mods`; WTHIT comes from
   `../patcherMod/libs`.
 - Mixins use Mojang names with a real refmap (`creative_labels.refmap.json`), like backportedVinery.
+- `mods.toml` asks for Moonlight `[1.19.2-2.3.0,)`: Moonlight's version string starts with the Minecraft version
+  (`1.19.2-2.3.7`), so a bare `[2.3,)` never matches and FML refuses to load (found on the scratch server 2026-10-21).
+- Scratch server tests: `tools/creative_labels_test/scratch_server.sh` + `server_probe.js` (`/cltest <group>`), see
+  sticky_notes.md 6.1.
 - Headless tests: `tools/creative_labels_test/run.sh` from the instance root (spot rules, rotation, NBT round
   trips, colour mixing against vanilla, the fallback note shape placed on every face, the label mapping, the donor
   image maths on the decompiled PNGs).
@@ -102,10 +106,11 @@ src/main/java/com/SaintAlfonzo/creative_labels/
   CLMixinPlugin         gates mod-targeting mixins on that mod being installed
   block/                FacePaperBlock, FacePaperBlockEntity, FaceContent, FaceSnapshot, NoteData, LabelData, Spots, PieceHit
   item/                 StickyNoteItem, LabelItem, EraserItem, NoteColours, ItemLabels, LabelGate, AnvilLabels
-  crafting/             NoteGrid (grid sorter), NoteDyeRecipe, NoteSpecialRecipe, NoteCopyRecipe, NoteEraseRecipe
+  crafting/             LabelledCrafting (blockLabelledCrafting check for both mixins), NoteGrid (grid sorter), NoteDyeRecipe, NoteSpecialRecipe, NoteCopyRecipe, NoteEraseRecipe
   net/                  CLNetwork (SimpleChannel creative_labels:main), NoteTextPacket (C2S)
-  mixin/                CraftingMenuResultMixin, ItemHiddenMixin (donor items out of the creative tabs),
-                        StickyItTooltipMixin (@Pseudo, by name; only while sticky_it is loaded)
+  mixin/                CraftingMenuResultMixin, FastBenchResultMixin (@Pseudo, only while fastbench is loaded),
+                        ArmorDyeRecipeMixin, ItemHiddenMixin (donor items out of the
+                        creative tabs), StickyItTooltipMixin (@Pseudo, by name; only while sticky_it is loaded)
   client/               ClientSetup, ClientHooks, FacePaperModel, FacePaperModelLoader, NoteShape, LabelQuads, DonorArt,
                         MemoryPackResources, FacePaperHighlight, NoteScreen, NoteItemColours,
                         FacePaperRenderer (label icons + names), LabelLayout (view frame), IconDye (dyed-icon ramp)

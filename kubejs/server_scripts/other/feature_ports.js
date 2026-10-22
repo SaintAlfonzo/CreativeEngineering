@@ -5,20 +5,20 @@
 //   Name Tag Crafting Recipe       1 shaped recipe
 //   Create: Copper Splashing        33 create:splashing recipes (copper weathering, 11 shapes x 3 stages)
 //   Furnace Recycle                 26 smelting recipes (iron / gold blocks and tools back to ingots or nuggets)
-//   Create: Generators              6 create:mixing recipes (stone generators; the fluids come back out)
 //   AE2 QoL Recipes                 311 cable recipes (16 colours x 5 cable kinds + 7 fluix), generated from the
 //                                   mod's 19 templates; its two tags are in tags/feature_port_tags.js
 //
 // Create Waystone Recipes is NOT rebuilt: its one recipe overrode waystones:warp_stone with createcasing:chorium_ingot
 // corners, and Create Casing isn't in the pack, so the recipe never loaded (feature_porting.md 1.2, decision D6).
 // Copper Drops is a loot-table override: kubejs/data/minecraft/loot_tables/blocks/{copper_ore,deepslate_copper_ore}.json.
+// Create: Generators is NOT rebuilt here: the pack had already replaced 5 of its 6 recipes with heat-tiered ones in
+// engineering/resource_blocks.js, and its one live recipe (heated obsidian) moved there with them.
 // Starter Kit: other/starter_kit.js. Book Fishing stays a jar (enchanted-book loot rebalance, feature_porting.md 1.1).
 
 ServerEvents.recipes(e => {
 	console.log('feature ports (tier 1) starting')
 
 	var i = global.item
-	var f = global.fluid
 	var R = global.NCH
 	var count = 0
 	var bulk = (fn, sets) => { R.bulk(fn, sets); count += sets.length }
@@ -64,24 +64,6 @@ ServerEvents.recipes(e => {
 	bulk('smelting', smelting)
 
 	// ============================================================
-	// Create: Generators (create_generators): mixing, the fluids are returned with the stone
-	// ============================================================
-	var gen = (output, fluids, back, name, items) => {
-		var inputs = (items || []).map(x => Item.of(x)).concat(fluids.map(x => Fluid.of(x[0], x[1])))
-		var outputs = [Item.of(output)].concat((items || []).map(x => Item.of(x)))
-		if (back) outputs = outputs.concat(fluids.map(x => Fluid.of(x[0], x[1])))
-		return [outputs, inputs, e, 'generator_' + name]
-	}
-	bulk('createMixing', [
-		gen(i.cobblestone, [[f.water, 50], [f.lava, 50]], true, 'cobblestone'),
-		gen(i.stone, [[f.water, 100], [f.lava, 100]], true, 'stone'),
-		gen(i.obsidian, [[f.water, 250], [f.lava, 250]], false, 'obsidian'),
-		gen(i.basalt, [[f.lava, 50]], true, 'basalt', [i.blue_ice, i.soul_soil]),
-		gen(i.limestone, [[f.honey, 250], [f.lava, 250]], true, 'limestone'),
-		gen(i.scoria, [[f.chocolate, 250], [f.lava, 250]], true, 'scoria'),
-	])
-
-	// ============================================================
 	// AE2 QoL Recipes (ae2qolrecipes): the mod's 19 templates x 16 colours + 7 fluix recipes = 311
 	// ============================================================
 	var colors = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple',
@@ -121,5 +103,5 @@ ServerEvents.recipes(e => {
 	bulk('shapeless', shapeless)
 
 	console.log('[feature-ports] tier 1: ' + count + ' recipes (1 name tag, ' + splashing.length + ' splashing, ' + smelting.length +
-		' recycle smelting, 6 generators, ' + (shaped.length + shapeless.length) + ' AE2 cable)')
+		' recycle smelting, ' + (shaped.length + shapeless.length) + ' AE2 cable)')
 })

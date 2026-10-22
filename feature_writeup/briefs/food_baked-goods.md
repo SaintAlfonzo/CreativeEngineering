@@ -31,12 +31,10 @@ Palette 1.3.5, PneumaticCraft 4.3.15, More Delight 25.07.28, Supplementaries 2.4
 
 No Testing / Complete rows in this subfamily.
 
-**The blocking decision (rows 1, 3, and `food/oven #6`).** oven.md 4 says "recipes mirror the originals, originals stay"
-(user, 2026-10-18). `food/oven #6` (scratchpad 2026-10-21) now asks for "no leftover crafting route" for baked goods,
-while row 3 asks for a *bent crafting* cookie recipe and row 1 for flour in the *crafting* recipes. Recommendation: keep a
-hand-craft route for cookies, pies and cakes (it is the only route before an oven and bakeware), make it the expensive one
-(flour, crust, cake base, no yield bonus), and make the oven the efficient one (row 3's "efficient baking"). Read
-`food/oven #6`'s "no leftover crafting route" as "no *wheat* crafting route". Ask before building row 1.
+**The blocking decision (RESOLVED 2026-10-22).** The user chose the baking overhaul ([oven.md](../oven.md) 2.6): every cake,
+pie and cookie recipe is removed and rebuilt on shared bases, cookies are oven only, cakes and pie fillings keep a
+hand-craft route, and the oven is the efficient one. It supersedes "originals stay" (oven.md 4). Rows 1, 3 and
+`food/oven #6` are built (BUILT, not tested); the remaining open parts of row 1 are in TODO.
 
 Build order:
 
@@ -279,7 +277,9 @@ Every obtainable pie can be made by Create sequenced assembly; the chorus pie's 
   (`farmersdelight:integration/create/filling/chocolate_pie`).
 - No SA for: `endersdelight:chorus_pie`, `farmersrespite:rose_hip_pie`, `delightful:salmonberry_pie`,
   `fruitsdelight:durian_pie`, `pineapple_pie`, the two tarts. Obtainable pies: can_parity 2.13 note (apple, chocolate,
-  chorus, mulberry, pumpkin, rose hip, salmonberry, durian, pineapple).
+  chorus, mulberry, pumpkin, rose hip, salmonberry, durian, pineapple, sweet berry). 2026-10-22: the cheesecake is
+  renamed Sweet Berry Pie (filling can added); durian and pineapple are marked for a rework (not really pies,
+  TODO `food/baked-goods #12`); source mods of the slices with no whole pie in TODO `#14`.
 - Chorus juice is only an item (`endersdelight:chorus_juice`, item_dict 1869; chorus fruit + sugar + bottle). No chorus
   fluid in the pack or in any jar read. The pack registers no fluids of its own yet (`fluid_dict.js` names mod fluids only).
 
@@ -505,7 +505,10 @@ Status Planned / Work KubeJS / TODO `food/baked-goods #2` (cooking plan baked/mu
 
 ### Goal
 Muffins worth eating: more variants including two-fruit muffins with mixed, shorter effects (orange cranberry, lemon
-poppy), "fruit, milk, egg, sugar, flour", served on paper, and a sequenced assembly.
+poppy), "fruit, milk, egg, sugar, flour", served on paper, and a sequenced assembly. **Cornmeal too (asked
+2026-10-21 with `food/ingredients #14`):** every rebuilt muffin recipe takes `i.t_flour_or_cornmeal` where it takes
+flour (today the oven muffins use `i.flour`, baking.js 36 and 38, and oven.md OV-19 says they take no cornmeal; update
+OV-19 when this lands). Cookies stay flour-only.
 
 ### Now
 - Two muffins, both Fruits Delight: `blueberry_muffin` (5 / 0.4, night vision + brightening 20 s), `cranberry_muffin`
@@ -748,7 +751,7 @@ New: three starter items; NBT key `Started` (long, world day on the SUN clock) p
 ---
 
 ## baked-goods #11: Mixed cookie jars
-Status Planned / Work patcherMod / TODO `food/baked-goods #11` (cooking plan cooked/soup, [wthit_lines.md](../wthit_lines.md) 2.3, scratchpad 2026-10-21)
+Status BUILT 2026-10-21, see [mixed_jars.md](../mixed_jars.md) (families, slot-per-item design, tests MJ-01 to MJ-10; BG-J1 became MJ-05) / Work patcherMod / TODO `food/baked-goods #11` (cooking plan cooked/soup, [wthit_lines.md](../wthit_lines.md) 2.3, scratchpad 2026-10-21)
 
 ### Goal
 (a) Every cookie and the listed sweets/fruits fit in a Supplementaries jar; (b) one jar can hold several kinds.
@@ -764,6 +767,33 @@ Status Planned / Work patcherMod / TODO `food/baked-goods #11` (cooking plan coo
   `abnormals_delight:mulberry_cookie`, `botania:mana_cookie`, `create:honeyed_apple`, `create:chocolate_glazed_berries`,
   `create:chocolate_bar`, `supplementaries:candy` (plus absent mods) **(jar)**.
 - WTHIT line: patcherMod `compat/WthitHolderContents.java` 100-101 reads `jar.getDisplayedItem()` ("Cookie (5 / 12)").
+
+### Done 2026-10-21
+- Cookies only, in `server_scripts/tags/cookingtags.js` (end) with the dict key `i.t_jar_cookies` (item_dict, next to
+  `i.candy`): cherry, maple, bayberry, cranberry, lemon, persimmon, golden, enchanted golden cookie, uncanny cookies,
+  and `create_confectionery:gingerbread_man` (not in the list below; it is a cookie). Cans and
+  `create_confectionery:gingerbread` (a slab piece) left out. Cherry and maple have no recipe yet (#3) but tagging is harmless.
+
+### Mixing: what has to change (re-checked against the decompiled jar 2026-10-21)
+The jar's inventory is Moonlight `ItemDisplayTile.stacks`, a private `NonNullList` sized 1 by the 3-arg constructor;
+`getMaxStackSize()` (`m_6893_`) returns the jar capacity, so all 12 cookies are one stack in slot 0. Code that reads
+only slot 0: `canPlaceItem` / `canPlaceItemThroughFace` (same-item test), `addItem` (grows slot 0), `extractItem`
+(splits slot 0), `isFull` (slot 0 count), `handleInteraction`'s eat branch (off here: `drink_from_jar = false`),
+`JarBlockTileRenderer.render`, `JarItemRenderer` (reads `Items[0]` only), `JarBlock#getAnalogOutputSignal`
+(`AbstractContainerMenu.getRedstoneSignalFromContainer`, which scales by slot count), and patcherMod
+`WthitHolderContents` 100-103. `JarItem`'s tooltip already loops over up to 27 stored stacks, so it shows a mix as is.
+Nothing else in Supplementaries touches `JarBlockTile`.
+
+A simpler alternative to the `CE_Layers` list below: give the jar `capacity` slots of one item each, in insertion
+order. `@Inject` at RETURN of the `JarBlockTile` constructor calls `setItems` (`m_6520_`, public) with
+`NonNullList.withSize(capacity, EMPTY)`; Moonlight's load rebuilds the list at the current size and
+`ContainerHelper` saves the `Slot` byte, so old single-slot jars load into slot 0 (a 5-cookie stack in slot 0 then
+needs splitting on load, or the code just treats slot counts generally). That keeps the data in the vanilla `Items`
+tag, so the client sync, the jar item's `BlockEntityTag` and the tooltip work with no extra tag. The mixins are then:
+`canPlaceItem` / `canPlaceItemThroughFace` (any cookie while total < capacity), `addItem` (first empty slot),
+`extractItem` (last filled slot), `isFull` (total count), `getMaxStackSize` -> 1 (fixes the comparator; check that
+nothing else depends on it being capacity, the WTHIT line reads it as the capacity and must switch to the
+config value), and the two renderers loop over the slots. Hoppers then see 12 slots, which is fine.
 
 ### Build
 1. (a) Tags, KubeJS only (`server_scripts/tags/cookingtags.js`):
@@ -805,8 +835,11 @@ Cookie ids as #3; `i.golden_cookie` 12352, `i.enchanted_golden_cookie` 12330, `i
   renderer sees it (it does if written in `saveAdditional`, which `getUpdateTag` uses **(unverified)**).
 
 ### Tests (WL- / PL-)
-- WL-32 Jar foods: every item in step 1 goes into an empty jar and stacks up to 12 of the same kind.
-- WL-33 Mixed jar (if built): two cookie kinds in one jar render in order, the WTHIT line lists both, breaking and
+- BG-J1 Jar cookies (built 2026-10-21): each of cherry, maple, bayberry, cranberry, lemon, persimmon, golden, enchanted
+  golden cookie, uncanny cookies and gingerbread man goes into an empty jar and stacks to 12. After a restart (new dict key),
+  `/kubejs hand` on one shows `#supplementaries:cookies`.
+- BG-J2 Jar foods (if the step-1 apples/berries are added): each goes into an empty jar and stacks to 12.
+- BG-J3 Mixed jar (if built): two cookie kinds in one jar render in order, the WTHIT line lists both, breaking and
   replacing the jar keeps them.
 
 ---

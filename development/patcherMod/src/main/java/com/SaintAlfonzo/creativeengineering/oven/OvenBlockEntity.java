@@ -80,7 +80,8 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
     );
 
     private final ItemStackHandler inventory = createHandler();
-    private final RemainderBuffer remainders = new RemainderBuffer(() -> setChanged());
+    // A buffer change also updates the client's copy (WTHIT line, a hopper or shift-click emptying it with no GUI open).
+    private final RemainderBuffer remainders = new RemainderBuffer(this::inventoryChanged);
     private final LazyOptional<IItemHandler> automationHandler =
             LazyOptional.of(() -> new RemainderOutputHandler(new OvenItemHandler(this), remainders));
     private final ContainerData data = createData();
@@ -124,7 +125,7 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
             if (!oven.doesMealHaveContainer(mealStack)) {
                 oven.moveMealToOutput();
                 didInventoryChange = true;
-            } else if (!oven.inventory.getStackInSlot(CONTAINER_SLOT).isEmpty()) {
+            } else if (!oven.inventory.getStackInSlot(CONTAINER_SLOT).isEmpty() && !oven.remainders.holdPlating()) {
                 oven.useStoredContainersOnMeal();
                 didInventoryChange = true;
             }
@@ -179,11 +180,15 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
 
     private boolean hasRoomForLeftovers(BakingRecipe recipe) {
         if (!RemainderBuffer.stalls()) return true;
-        return remainders.fits(
+        boolean fits = remainders.fits(
                 RemainderBuffer.leftovers(inventory, 0, BakingRecipe.INPUT_SLOTS, INGREDIENT_REMAINDER_OVERRIDES,
                         recipe.slotCounts(new RecipeWrapper(inventory))),
                 inventory, CONTAINER_SLOT, RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()),
                 getMeal().getCount() + recipe.getResultItem().getCount());
+        if (!fits && level != null) {
+            remainders.markStalled(level.getGameTime());
+        }
+        return fits;
     }
 
     private boolean hasRoomForResult(BakingRecipe recipe) {
@@ -415,7 +420,10 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
     public void load(CompoundTag compound) {
         super.load(compound);
         inventory.deserializeNBT(compound.getCompound("Inventory"));
-        remainders.deserializeNBT(compound.getCompound("Remainders"));
+        // Guarded: an empty tag would wipe the slots (ItemStackHandler.deserializeNBT makes a new list).
+        if (compound.contains("Remainders")) {
+            remainders.deserializeNBT(compound.getCompound("Remainders"));
+        }
         cookTime = compound.getInt("CookTime");
         cookTimeTotal = compound.getInt("CookTimeTotal");
         mealContainerStack = ItemStack.of(compound.getCompound("Container"));
@@ -444,6 +452,9 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
         CompoundTag compound = new CompoundTag();
         compound.put("Container", mealContainerStack.serializeNBT());
         compound.put("Inventory", inventory.serializeNBT());
+        // The client loads this tag on every block update (taking the output is one); without the buffer its copy
+        // of the two leftover slots went empty while the server still held them (TODO food/kitchen #14).
+        compound.put("Remainders", remainders.serializeNBT());
         return compound;
     }
 

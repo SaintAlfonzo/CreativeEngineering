@@ -17,6 +17,7 @@ update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026
 | Display Delight item models: preflight warns when `gen_display_delight_models.py --check` fails or the DD export is older than the jar ([wthit_lines.md](wthit_lines.md) F3) | BUILT 2026-10-20; passes | `check_display_delight_models` |
 | In-tree mods (`IN_TREE_MODS`): patcherMod, exposureBackport, incubationAdditions, moreMooblooms, backportedVinery and backportedBrewin (2026-10-18); preflight checks `mods/` equals the build, the shipped jar is archived | BUILT; two jars with one mod id in `mods/` stop the build since 1.0.9 (4) | `IN_TREE_MODS` |
 | Vinery donor jars (`vinery_upstream` category, both sides; [alcohol.md](alcohol.md) B4.8, D14): the two unmodified Vinery jars ship in the payload for now (a published pack downloads them from Modrinth / CurseForge instead, not built). Preflight: while the port is in `mods/`, each jar must exist with the sha1 `UpstreamJars.java` pins. README step: copy `vinery_upstream/` next to `mods/` | BUILT 2026-10-18, not run (the port isn't in `mods/` yet) | `vinery_upstream_jars`, `collect` |
+| `world_serverconfig/` payload folder: the full serverconfig set every build, with README steps to copy it into existing worlds (server and single-player saves) | BUILT 2026-10-21; README rendering checked offline, no real build yet (DP-08) | `main` (after `select_payload`), `render_readme` |
 | Climate samples gzipped and moved out of `exported/` | BUILT (patcherMod 1.0.3, copied to `mods/`); tuner output byte-identical | [BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java), [dump_climate.js](../kubejs/server_scripts/_lib/dump_climate.js) |
 
 **Day to day:**
@@ -80,7 +81,15 @@ deploy/latest/
   removals_server.txt removals_client.txt
   mods/ client_mods/ kubejs/ config/ defaultconfigs/ server/ resourcepacks/ shaderpacks/ vinery_upstream/
                            only the new and changed files; folders with nothing new are absent
+  world_serverconfig/      every pack serverconfig file (defaultconfigs + configs_edited/server_config), complete
+                           in both modes; README: copy into <world>/serverconfig/ of existing worlds by hand
 ```
+
+`defaultconfigs/` reaches a world only when Forge finds that world's serverconfig file missing, so worlds
+made before a serverconfig change keep the old values. `world_serverconfig/` is that set again, always
+whole (a world can be any number of versions behind), and the README's server and client steps say to
+copy it into the existing worlds that need it, listing the files changed since the from-version. It is
+not a tracked category: no history entry, removals or verify (which worlds get it is decided by hand).
 
 verify prints `MISSING`, `CHANGED` and `EXTRA` lines and exits 1 on any of them. It exits 0 with `OK`
 when the machine matches. It checks `mods/` only: configs and the tuner-written kubejs files change on the
@@ -138,6 +147,23 @@ an unmatched file is functional.
 - `history/<ver>.json` records only what that version shipped, and `payload.config` records the mode.
 - To push a changed default once, add the version as the rule's third field, e.g.
   `('trashslot-common.toml', 'player', '1.0.3')`.
+
+### Player changelog step
+
+From 1.1.01 every payload carries the players' notes for its version ([changelog.md](changelog.md) 3.5,
+`check_changelog` / `freeze_changelog` in build_deploy.py).
+
+- `kubejs/assets/creativeengineering/changelog/unreleased.md` is the working list: KUBEJS_CLASSES `dev`, never
+  shipped under that name. The other `*.md` files there are `client`.
+- Staging `X`: when the working list has bullets, the payload gets `.../changelog/X.md` with `# X` (the
+  working list's subtitle kept) and `Released <today>` on top. The tree is not touched, so restaging just
+  takes the newer text. No bullets = warning. An `X.md` already in the tree = error.
+- `--snapshot X`: the text that shipped (the payload copy, or the working list restamped with the history
+  date when the payload is gone) becomes the tree's `X.md`, and `unreleased.md` starts over as `# Unreleased`.
+  If the working list changed after staging, it is left alone and the script says to trim it by hand.
+- Preflight: `tools/changelog_lint.py` errors are errors; every changelog file a deployed version shipped must
+  still match the sha1 in that version's history json (edited or deleted = error).
+- `CONFIG_CLASSES`: `creativeengineering/changelog_seen.txt` (the read marker) is `player`; it is git-ignored too.
 
 ## 3. What the pack changes
 
@@ -202,6 +228,7 @@ an unmatched file is functional.
 - [ ] **DP-04 apply on the real server:** removals + copy -> server boots; `[biome-tuning]` logs `override` for 3 dimensions (samples found); no KubeJS errors.
 - [ ] **DP-05 client:** `verify.sh client` (or `verify.ps1` on Windows) -> OK; apply; single-player world creation logs the biome overrides.
 - [x] **DP-06 snapshot:** PASSED (1.0.3 and 1.0.4 recorded; the 1.0.5 build said `update from 1.0.4`). Was: `--snapshot` after DP-04/05 -> DEPLOYED.json at 1.0.3, `- Deployed:` line in the log, next `--dry-run` says `update from 1.0.3`.
+- [ ] **DP-08 world serverconfig:** next build (`--dry-run` is not enough, it writes no folder) -> `deploy/latest/world_serverconfig/` holds every `defaultconfigs` file incl. `configs_edited/server_config` (4 at 1.0.9: brickhopper, seasonhud, sereneseasons, unlitcampfire), in an update too; README server and client steps each have the Existing worlds line naming the changed files. Copy into an existing world's `serverconfig/` -> the world boots with the pack values (e.g. sereneseasons settings in `latest.log`/in game).
 - [ ] **DP-07 /dumpclimate:** in a world, `/dumpclimate` -> writes `generation_scripts/worldgen/climate/*.json.gz` (about 0.2 MB total), `/reload` solves with them.
 
 ## 8. History
@@ -241,3 +268,6 @@ an unmatched file is functional.
 - 2026-10-20: preflight warning `check_display_delight_models`: runs `tools/gen_display_delight_models.py --check` and
   warns when DD item models are missing or stale, or the `/dumpitemsbymod displaydelight` export is older than the DD
   jar ([wthit_lines.md](wthit_lines.md) F3). Passes on the current tree.
+- 2026-10-21: player changelog step (staging stamp, `--snapshot` freeze, frozen deployed changelogs, lint in
+  preflight), see "Player changelog step" above. Checked with `tools/test_changelog.sh` (scratch-folder deploy test)
+  and `--version 1.1.01 --dry-run` (payload lists `changelog/1.1.01.md`, not `unreleased.md`).

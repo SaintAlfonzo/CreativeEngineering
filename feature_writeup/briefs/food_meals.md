@@ -18,16 +18,40 @@ or KubeJS does to them at runtime is only knowable in game (`/dumprecipes`, `/du
 
 | Row | Change | Status | Build group |
 |---|---|---|---|
-| 1 | Cooked ingredients in heatless shapeless meals | Planned | A (the rule, plus a coverage list) |
-| 2 | Per-meal recipe changes (12 meals) | Planned | A |
-| 4 | Expensive cooked shapeless meals (9 meals) | Planned | A |
-| 8 | Dog food | Planned | A |
-| 3 | Sequenced assembly meals | In Progress | B |
-| 5 | Feasts: JEI plating tab, assemblies, pizza 8 slices | Planned | B (assemblies), C (JEI tab, pizza: Java) |
-| 7 | Fish recipes for any fish (tempura, fish and chips, fries, PNC deep frying out) | Planned | D |
+| 1 | Cooked ingredients in heatless shapeless meals | Testing (built 2026-10-21) | A (the rule, plus a coverage list) |
+| 2 | Per-meal recipe changes (12 meals) | Testing (built 2026-10-21) | A |
+| 4 | Expensive cooked shapeless meals (9 meals) | Testing (built 2026-10-21) | A |
+| 8 | Dog food | Testing (built 2026-10-21) | A |
+| 3 | Sequenced assembly meals | Testing (built 2026-10-21) | B |
+| 5 | Feasts: JEI plating tab, assemblies, pizza 8 slices | In Progress (JEI tab built 2026-10-21) | B (assemblies), C (JEI tab, pizza: Java) |
+| 7 | Fish recipes for any fish (tempura, fish and chips, fries, PNC deep frying out) | Testing (built 2026-10-21) | D |
 | 6 | Glistering melon edible + gilding | Planned | E |
-| 9 | Gold food cheap in machines | Planned | E (after `food/types-and-tuning #1`, #3) |
+| 9 | Gold food cheap in machines | Testing (built 2026-10-21; numbers revisited with tuning) | E (after `food/types-and-tuning #1`, #3) |
 | 10 | Shrimp fried rice | Planned | F (tooltip + JEI note; Alex's Mobs already does the rest) |
+
+**Built 2026-10-21 (rows 1-3), as recommended here, with these differences** (writeup:
+[recipes_cooking.md](../recipes_cooking.md) 2.3; tests renumbered RC-55 to RC-64 there, since RC-30 to RC-52 are
+proposed in other briefs):
+- Row 1 coverage: rows 2/4/8 plus vegetable soup, vegetable noodles, ratatouille, corn soup. All the pack's older cooked
+  shapeless meals (fish stew, cabbage rolls, horror lasagna, pasta with mutton, the three Ender's Delight ones) got
+  `_manual_only` ids too. `soup_veggies_cooked` is listed by key (cookingtags.js runs before foodtypetags.js).
+- Burgers: each assembly needs its own first step (CCK's bacon, chicken and egg sandwiches already start on
+  `#forge:bread` with bacon, chicken, fried egg), so the egg burger is built on a beef patty and the others start with
+  salad, cheese, onion, patty, tomato, bison patty, kangaroo. Loaded hamburger's cabbage is `#forge:crops/cabbage`
+  (holds the leaf).
+- Horror lasagna assembly starts by deploying pasta, not by spouting tomato sauce: Create checks sequenced assemblies
+  before plain spout recipes, so a tomato-sauce first step on a bowl would take over bowl filling. A beetroot step was
+  added to match the pot.
+- Quiche shaped id is `quiche_manual_only` (it has an assembly).
+
+**Built 2026-10-21 (rows 4, 7, 8, 9)**, as recommended here, with these differences (tests RC-66 to RC-70 in
+[recipes_cooking.md](../recipes_cooking.md); the RC-40/41/46/47/48 below are the brief's old numbers):
+- Row 7: fries and fish and chips take `#forge:sliced_potatoes` now, after Rustic Delight's slices were added to it
+  (cookingtags.js), so diced potatoes fry too. Not checked: whether the cooking oil bottle comes back from the pot.
+- Row 9: no pure-gold tag; each forge gold tag holds only the vanilla item and the rose gold one, so golden.js names
+  `i.nugget_gold`, `i.ingot_gold`, `i.block_gold`. Ingots too (MCA tags its rose gold ingot as gold). Costs set to
+  the first proposal, mixing 6 and arc 5, for nuggets and ingots alike. IE arc additives are listed 5 times (NCH's
+  `ieArcFurnace` drops counts).
 
 Suggested order:
 
@@ -89,7 +113,7 @@ sequenced assembly only).
 ---
 
 ## meals #1: Cooked ingredients in heatless shapeless meal recipes
-Status: Planned / Work: KubeJS / id `food/meals #1`
+Status: Testing (built 2026-10-21) / Work: KubeJS / id `food/meals #1`
 
 ### Goal
 Every pot meal (soup, stew, pasta, rice dish) also has a heatless shapeless recipe that takes the cooked form of each
@@ -155,7 +179,7 @@ step per ingredient.
 ---
 
 ## meals #2: Per-meal recipe changes
-Status: Planned / Work: KubeJS / id `food/meals #2`
+Status: Testing (built 2026-10-21) / Work: KubeJS / id `food/meals #2`
 
 ### Goal
 Twelve meal fixes from the cooking plan and scratchpad 2026-10-21. Per meal below: now -> change -> sketch.
@@ -267,7 +291,7 @@ Twelve meal fixes from the cooking plan and scratchpad 2026-10-21. Per meal belo
 ---
 
 ## meals #3: Sequenced assembly meals
-Status: In Progress / Work: KubeJS / id `food/meals #3`
+Status: Testing (built 2026-10-21) / Work: KubeJS / id `food/meals #3`
 
 ### Goal
 Create sequenced assembly (deployer, spout) routes for the remaining hand-made meals: shepherd's pie (also shapeless
@@ -408,7 +432,7 @@ R.createMixing(Item.of(i.squid_ink_pasta, 2), [Fluid.of(f.ink, 250), Fluid.of(f.
 ---
 
 ## meals #5: Feasts
-Status: Planned / Work: KubeJS (+ patcherMod for a JEI category, Brewin' port for pizza servings) / id `food/meals #5`
+Status: In Progress (part a built 2026-10-21 as the patcherMod category: [recipes_cooking.md](../recipes_cooking.md) 2.3, RC-65; pies and pancakes left out, eaten in place) / Work: KubeJS (+ patcherMod for a JEI category, Brewin' port for pizza servings) / id `food/meals #5`
 
 ### Goal
 (a) Show "use a bowl on a placed feast to plate it" in JEI. (b) Sequenced assembly for roast chicken, shepherd's pie,

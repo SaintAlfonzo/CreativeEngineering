@@ -75,8 +75,7 @@ R.remove({id:'create_ultimate_factory:crushing_limestone'}, e)
 R.createCrushing([Item.of(i.quartz, 1).withChance(0.25), Item.of(i.lapis, 1).withChance(0.15)], i.limestone, e)
 R.ieCrushing(Item.of(i.clay_ball, 2), i.limestone, e, u, [{ chance: 0.50, output: Item.of(i.quartz, 1) }])
 R.ieCrushing(Item.of(i.clay_ball, 2), i.limestone_stone, e, u, [{ chance: 0.50, output: Item.of(i.quartz, 1) }])
-//Remove generator, implement 3 heat state recipes, superheated +5 limestone bonus
-R.remove({ id: 'create_generators:generator_limestone' }, e)
+//Implement 3 heat state recipes, superheated +5 limestone bonus
 R.createMixing([Item.of(i.limestone, 1), Fluid.of(f.lava, 100)], [Fluid.of(f.honey, 100), Fluid.of(f.lava, 100)], e, "limestone_generation_unheated", "n/a")
 R.createMixing([Item.of(i.limestone, 5), Fluid.of(f.lava, 500)], [Fluid.of(f.honey, 500), Fluid.of(f.lava, 500)], e, "limestone_generation_heated", "heated")
 R.createMixing([Item.of(i.limestone, 15), Fluid.of(f.lava, 1000)], [Fluid.of(f.honey, 1000), Fluid.of(f.lava, 1000)], e, "limestone_generation_superheated", "superheated")
@@ -86,8 +85,7 @@ R.createMixing(Item.of(i.limestone, 4), [Item.of(i.calcite, 2), Item.of(i.boneme
 R.createHaunting(Item.of(i.basalt, 1), Item.of(i.limestone, 1), e)
 
 //Scoria
-//Remove generator, implement 3 heat state recipes, superheated +5 scoria bonus
-R.remove({ id: 'create_generators:generator_scoria' }, e)
+//Implement 3 heat state recipes, superheated +5 scoria bonus
 R.createMixing([Item.of(i.scoria, 1), Fluid.of(f.lava, 100)], [Fluid.of(f.chocolate, 100), Fluid.of(f.lava, 100)], e, "scoria_generation_unheated", "n/a")
 R.createMixing([Item.of(i.scoria, 5), Fluid.of(f.lava, 500)], [Fluid.of(f.chocolate, 500), Fluid.of(f.lava, 500)], e, "scoria_generation_heated", "heated")
 R.createMixing([Item.of(i.scoria, 15), Fluid.of(f.lava, 1000)], [Fluid.of(f.chocolate, 1000), Fluid.of(f.lava, 1000)], e, "scoria_generation_superheated", "superheated")
@@ -171,8 +169,7 @@ R.remove({ id: 'create:crushing/misc/scrap_magma_block' }, e)
 R.ieCrushing(Item.of(i.crushed_magma, 3), i.magma_block, e, u, [{ chance: 0.75, output: Item.of(i.crushed_magma, 1) }, { chance: 0.333, output: Item.of(i.scoria, 1) }])
 
 //Basalt
-//Remove generator, implement 3 heat state recipes, more lava efficient at higher heat, superheated ice -1 bonus
-R.remove({ id: 'create_generators:generator_basalt' }, e)
+//Implement 3 heat state recipes, more lava efficient at higher heat, superheated ice -1 bonus
 R.remove({ id: 'create_netherless:basalt_by_mixing' }, e)
 R.createMixing([Item.of(i.basalt, 1), Item.of(i.soul_soil, 1), Fluid.of(f.lava, 50)], [Item.of(i.packed_ice, 1), Item.of(i.soul_soil, 1), Fluid.of(f.lava, 100)], e, "basalt_generation_unheated", "n/a")
 R.createMixing([Item.of(i.basalt, 5), Item.of(i.soul_soil, 1), Fluid.of(f.lava, 450)], [Item.of(i.packed_ice, 5), Item.of(i.soul_soil, 5), Fluid.of(f.lava, 500)], e, "basalt_generation_heated", "heated")
@@ -206,8 +203,7 @@ R.remove({ id: 'create_ultimate_factory:crushing_blackstone' }, e)
 R.ieCrushing(Item.of(i.coal, 1), i.blackstone, e)
 
 //Stone
-//Remove generator, implement 3 heat state recipes, equal ratios
-R.remove({ id: 'create_generators:generator_stone' }, e)
+//Implement 3 heat state recipes, equal ratios
 R.createMixing([Item.of(i.stone, 1), Fluid.of(f.lava, 100)], [Fluid.of(f.water, 100), Fluid.of(f.lava, 100)], e, "stone_generation_unheated", "n/a")
 R.createMixing([Item.of(i.stone, 5), Fluid.of(f.lava, 500)], [Fluid.of(f.water, 500), Fluid.of(f.lava, 500)], e, "stone_generation_heated", "heated")
 R.createMixing([Item.of(i.stone, 10), Fluid.of(f.lava, 1000)], [Fluid.of(f.water, 1000), Fluid.of(f.lava, 1000)], e, "stone_generation_superheated", "superheated")
@@ -229,11 +225,14 @@ R.replaceInput({ mod: 'gates' },
 	i.stone, i.anystone, e)
 
 //Cobblestone
-//Remove generator, implement 3 heat state recipes, equal ratios
-R.remove({ id: 'create_generators:generator_cobblestone' }, e)
+//Implement 3 heat state recipes, equal ratios
 R.createMixing([Item.of(i.cobblestone, 1), Fluid.of(f.lava, 100)], [Fluid.of(f.water, 100), Fluid.of(f.lava, 100)], e, "cobblestone_generation_unheated", "n/a")
 R.createMixing([Item.of(i.cobblestone, 5), Fluid.of(f.lava, 500)], [Fluid.of(f.water, 500), Fluid.of(f.lava, 500)], e, "cobblestone_generation_heated", "heated")
 R.createMixing([Item.of(i.cobblestone, 10), Fluid.of(f.lava, 1000)], [Fluid.of(f.water, 1000), Fluid.of(f.lava, 1000)], e, "cobblestone_generation_superheated", "superheated")
+
+//Obsidian
+//Water + lava, both used up, heated (was create_generators:generator_obsidian)
+R.createMixing(Item.of(i.obsidian, 1), [Fluid.of(f.water, 250), Fluid.of(f.lava, 250)], e, 'obsidian_generation_heated', "heated")
 
 //Deepslate
 //Remove useless botania conversion

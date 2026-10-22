@@ -106,7 +106,7 @@ All in [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.j
 | Random canned golden | one random member of `#creativeengineering:trades/canned_golden` (canned golden apples, canned golden carrot) | rare, 12, 2 uses |
 | Mob buckets | cod, salmon, tadpole, squid | rare, 3, 4 uses |
 | Mob buckets | glow squid, jellyfish, perch, crab, axolotl, terrapin, small / medium / large catfish, mudskipper, lobster, flying fish | rare, 5, 4 uses |
-| Winemaker | the 13 Fruits Delight tree saplings (5 emeralds) and the pineapple sapling (3); white jungle grape seeds (1; Vinery's own slot sells the grape) | Winemaker pool, 8 uses |
+| Winemaker | 12 Fruits Delight tree saplings (5 emeralds; the apple sapling dropped 2026-10-22, Vinery's apple tree is the pack's) and the pineapple sapling (3); white jungle grape seeds (1; Vinery's own slot sells the grape) | Winemaker pool, 8 uses |
 
 **Never sold, by rule (sequence breaking):** nether wart, chorus flower, Nether's Delight propelplant cane, Farmer's
 Respite coffee beans (its wild coffee only grew in the Nether, and `wild_crops.json` has switched that spawn off since
@@ -240,6 +240,8 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 - [ ] **WT-16 natural spawns:** in a test world set both intervals to 1200, stand near a village with
   `doMobSpawning` on and wait 20 to 30 minutes → both a Wandering Trader (with llamas) and a Winemaker (with two
   mules) arrive on their own, separately. Set the intervals back to 96000.
+- [ ] **WT-17 no Fruits Delight apple sapling:** `/reload`, then summon several Winemakers → Fruits Delight
+  saplings on offer, never `fruitsdelight:apple_sapling`. Scratch test queued (SQ-MG-05).
 
 ## 8. History
 
@@ -253,3 +255,4 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   blocks and 16 mob buckets added, Fruits Delight saplings + white jungle grape seeds to the Winemaker. `/dumptrades`
   now dumps the Winemaker pool; the report shows weights and counts both traders. Jar md5 37ce1023, checked on a
   scratch dedicated server. WT-06 retired, WT-09 to WT-16 added.
+- 2026-10-22: Fruits Delight's apple sapling removed from the Winemaker (Vinery's apple tree is the pack's); WT-17.

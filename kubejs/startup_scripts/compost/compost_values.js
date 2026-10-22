@@ -297,8 +297,7 @@
 		[i.pumpkin,                0.65],
 		[i.sweet_berries,          0.3],
 		[i.wheat,                  0.65],
-		// alexsmobs
-		[i.banana,                 0.65],
+		// alexsmobs (its banana is merged into Neapolitan's: item_merges.js)
 		[i.gongylidia,             0.9],
 		// delightful
 		[i.acorn,                  0.3],
@@ -455,7 +454,7 @@
 		// neapolitan
 		[i.adzuki_cake,                            1.0],
 		[i.banana_cake,                            1.0],
-		[i.neapolitan_chocolate_cake,              1.0],
+		[i.chocolate_cake,                         1.0], // Create Crafts & Additions' (Neapolitan's merged into it)
 		[i.mint_cake,                              1.0],
 		[i.strawberry_cake,                        1.0],
 		[i.vanilla_cake,                           1.0],

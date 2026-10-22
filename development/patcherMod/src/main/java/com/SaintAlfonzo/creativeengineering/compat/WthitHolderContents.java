@@ -1,6 +1,8 @@
 package com.SaintAlfonzo.creativeengineering.compat;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import com.SaintAlfonzo.creativeengineering.CEConfig;
@@ -35,8 +37,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * WTHIT plugin: what is inside a Supplementaries jar, goblet or cage. One "Contents" line: the soft fluid with its
  * amount in bottles against the holder's capacity ("Honey (6 / 12)", "Splash Potion of Healing (1 / 12)"; a goblet,
- * capacity 1, just "Water"), the cookies in a cookie jar ("Cookie (5 / 12)"), or the captured mob ("Bee"). A potion's
- * effects follow on their own lines, as its item tooltip writes them ({@code [wthit] holderPotionEffects}).
+ * capacity 1, just "Water"), the cookies in a cookie jar ("Cookie (5 / 12)"; a mixed jar
+ * "3 Cookie, 2 Lemon Cookie (5 / 12)"), or the captured mob ("Bee"). A potion's effects follow on their own lines, as its item tooltip writes them ({@code [wthit] holderPotionEffects}).
  *
  * <p>Client-side only: the jar, goblet and cage sync all of this to the client for their renderers. Any block
  * entity implementing Moonlight's {@code ISoftFluidTankProvider} or Supplementaries' {@code IMobContainerProvider}
@@ -98,9 +100,26 @@ public final class WthitHolderContents implements IWailaClientPlugin, IBlockComp
             }
         }
         if (be instanceof JarBlockTile jar) {
-            ItemStack stack = jar.getDisplayedItem();
-            if (!stack.isEmpty()) {
-                return amount(stack.getHoverName(), stack.getCount(), ((Container) jar).getMaxStackSize()); // via Container so reobf maps it
+            // Mixed jars (JarMixing): one item per slot, slot count = capacity. Via Container so reobf maps the calls.
+            Container items = (Container) jar;
+            List<ItemStack> kinds = new ArrayList<>();
+            for (int i = 0; i < items.getContainerSize(); i++) {
+                kinds.add(items.getItem(i));
+            }
+            kinds = JarMixing.kinds(kinds);
+            if (kinds.size() == 1) {
+                return amount(kinds.get(0).getHoverName(), kinds.get(0).getCount(), items.getContainerSize());
+            }
+            if (!kinds.isEmpty()) {
+                MutableComponent list = Component.empty();
+                for (int i = 0; i < kinds.size(); i++) {
+                    if (i > 0) {
+                        list.append(", ");
+                    }
+                    list.append(Component.translatable("creativeengineering.wthit.contents.kind",
+                            kinds.get(i).getCount(), kinds.get(i).getHoverName()));
+                }
+                return amount(list, JarMixing.total(items), items.getContainerSize());
             }
         }
         if (be instanceof IMobContainerProvider p) {

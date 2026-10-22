@@ -24,6 +24,8 @@ b.blaze_burner = 'create:blaze_burner';             // counts only with blaze !=
 b.lit_blaze_burner = 'create:lit_blaze_burner';
 b.blaze_lantern = 'quark:blaze_lantern';
 b.cutting_board = 'farmersdelight:cutting_board';  // bakeware hammering (feature_writeup/oven.md 2.5)
+b.cfb_counter = 'cookingforblockheads:counter';   // 15 px worktops: cutting board support (TODO food/kitchen #8)
+b.cfb_corner = 'cookingforblockheads:corner';
 // Campfire rain (patcherMod campfire/CampfireRain.java)
 b.campfire = 'minecraft:campfire';
 b.coal_block = 'minecraft:coal_block';
@@ -76,6 +78,7 @@ b.t_keg_heat_sources = '#brewinandchewin:heat_sources';     // Brewin port: keg 
 b.t_keg_freeze_sources = '#brewinandchewin:freeze_sources';
 b.t_ice = '#minecraft:ice';                          // ice, packed, blue, frosted, rare-ice
 b.t_hammer_no_rotate = '#creativeengineering:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
+b.t_cutting_board_supports = '#creativeengineering:cutting_board_supports'; // CuttingBoardSupportMixin: an FD cutting board stays on these
 b.t_campfire_rain_douses = '#creativeengineering:campfire/rain_douses';         // CampfireRain.RAIN_DOUSES
 b.t_campfire_rain_proof_fuel = '#creativeengineering:campfire/rain_proof_fuel'; // CampfireRain.RAIN_PROOF_FUEL
 b.t_no_world_dye = '#creativeengineering:no_world_dye'; // SupplementariesDyeBlocksMixin: dye can't recolour these in world

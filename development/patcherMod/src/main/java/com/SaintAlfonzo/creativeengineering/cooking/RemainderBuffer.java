@@ -27,12 +27,19 @@ import net.minecraftforge.items.ItemStackHandler;
  *  2. to these slots, merging into a matching stack before taking an empty one;
  *  3. out of the station as before, for whatever is left. With {@code [cooking] stallWhenFull} the station checks
  *     {@link #fits} before it starts a craft, so this only happens with that switch off.
+ *
+ * A step-1 recycle holds the station's plating for {@code [cooking] recycleShowTicks} ({@link #holdPlating}), so the
+ * container is seen in its slot before the meal takes it.
  */
 public class RemainderBuffer extends ItemStackHandler {
 
     public static final int SLOTS = 2;
 
     private final Runnable onChanged;
+    // Game time of the last craft check that failed for want of room here (not saved): WTHIT's "slots full" line.
+    private long stalledAt = -1000L;
+    // Plating calls still to skip after a recycle into the container slot (not saved: a reload plates at once).
+    private int plateHold;
 
     public RemainderBuffer(Runnable onChanged) {
         super(SLOTS);
@@ -52,6 +59,26 @@ public class RemainderBuffer extends ItemStackHandler {
         return enabled() && CEConfig.COOKING.stallWhenFull.get();
     }
 
+    /** The station's room check refused a craft this tick (it runs every tick while a recipe waits). */
+    public void markStalled(long gameTime) {
+        stalledAt = gameTime;
+    }
+
+    /** Whether a craft is waiting for room in these slots (refused within the last couple of ticks). */
+    public boolean isStalled(long gameTime) {
+        return gameTime - stalledAt <= 2;
+    }
+
+    /**
+     * Called where the station would plate the waiting meal (once a tick while the meal and its container wait):
+     * true = skip plating this tick, because a recycled container is still on show.
+     */
+    public boolean holdPlating() {
+        if (plateHold <= 0) return false;
+        --plateHold;
+        return true;
+    }
+
     /**
      * Stores one leftover. {@code inventory}/{@code containerSlot} is the station's container (plating) slot,
      * {@code servedIn} tells whether an item is what the waiting meal is served in and {@code mealsWaiting} is how
@@ -62,6 +89,9 @@ public class RemainderBuffer extends ItemStackHandler {
         List<ItemStack> overflow = new ArrayList<>();
         ItemStack[] planned = plan(List.of(leftover), inventory.getStackInSlot(containerSlot),
                 inventory.getSlotLimit(containerSlot), servedIn, mealsWaiting, overflow);
+        if (planned[0].getCount() > inventory.getStackInSlot(containerSlot).getCount()) {
+            plateHold = CEConfig.COOKING.recycleShowTicks.get();
+        }
         if (!ItemStack.matches(planned[0], inventory.getStackInSlot(containerSlot))) {
             inventory.setStackInSlot(containerSlot, planned[0]);
         }

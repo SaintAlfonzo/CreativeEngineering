@@ -32,6 +32,8 @@ import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
  * (feature_writeup/remainder_buffer.md).
  *
  *  - {@code ejectIngredientRemainder}: FD's single throw point. Stores the leftover; only what doesn't fit is thrown.
+ *  - {@code useStoredContainersOnMeal}: held for {@code [cooking] recycleShowTicks} after a recycle, so the
+ *    container is seen in its slot ({@link RemainderBuffer#holdPlating}).
  *  - {@code canCook}: with {@code [cooking] stallWhenFull}, a craft whose leftovers wouldn't fit doesn't start (the pot
  *    waits as it does with a full meal slot).
  *  - {@code getDroppableInventory}: the buffer drops with the pot.
@@ -85,6 +87,13 @@ public abstract class CookingPotRemainderMixin implements RemainderBufferHolder 
         }
     }
 
+    @Inject(method = "useStoredContainersOnMeal", at = @At("HEAD"), cancellable = true)
+    private void ce$showRecycledContainer(CallbackInfo ci) {
+        if (ce$getRemainderBuffer().holdPlating()) {
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "canCook", at = @At("RETURN"), cancellable = true)
     private void ce$roomForRemainders(CookingPotRecipe recipe, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValueZ() || !RemainderBuffer.stalls()) return;
@@ -95,6 +104,8 @@ public abstract class CookingPotRemainderMixin implements RemainderBufferHolder 
                 getMeal().getCount() + recipe.getResultItem().getCount());
         if (!fits) {
             cir.setReturnValue(false);
+            BlockEntity self = (BlockEntity) (Object) this;
+            if (self.getLevel() != null) ce$getRemainderBuffer().markStalled(self.getLevel().getGameTime());
         }
     }
 

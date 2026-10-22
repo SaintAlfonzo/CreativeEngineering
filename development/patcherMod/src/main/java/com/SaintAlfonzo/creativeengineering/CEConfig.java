@@ -39,16 +39,19 @@ public final class CEConfig {
     public static final AirBrake AIR_BRAKE;
     public static final Crafting CRAFTING;
     public static final Magic MAGIC;
+    public static final Botania BOTANIA;
     public static final ArmorEnchant ARMOR_ENCHANT;
     public static final Shrapnel SHRAPNEL;
     public static final ArmorOverflow ARMOR_OVERFLOW;
     public static final Jei JEI;
     public static final GuiTitle GUI_TITLE;
     public static final Toasts TOASTS;
+    public static final Changelog CHANGELOG;
     public static final Shields SHIELDS;
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
     public static final CropGrowth CROP_GROWTH;
+    public static final CropDrops CROP_DROPS;
     public static final LeafDecay LEAF_DECAY;
     public static final LeafPiles LEAF_PILES;
     public static final Campfire CAMPFIRE;
@@ -56,6 +59,7 @@ public final class CEConfig {
     public static final BottledAir BOTTLED_AIR;
     public static final Canning CANNING;
     public static final Cooking COOKING;
+    public static final Kitchen KITCHEN;
     public static final Coaster COASTER;
     public static final Wthit WTHIT;
     public static final Alcohol ALCOHOL;
@@ -78,16 +82,19 @@ public final class CEConfig {
         AIR_BRAKE = new AirBrake(builder);
         CRAFTING = new Crafting(builder);
         MAGIC = new Magic(builder);
+        BOTANIA = new Botania(builder);
         ARMOR_ENCHANT = new ArmorEnchant(builder);
         SHRAPNEL = new Shrapnel(builder);
         ARMOR_OVERFLOW = new ArmorOverflow(builder);
         JEI = new Jei(builder);
         GUI_TITLE = new GuiTitle(builder);
         TOASTS = new Toasts(builder);
+        CHANGELOG = new Changelog(builder);
         SHIELDS = new Shields(builder);
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
         CROP_GROWTH = new CropGrowth(builder);
+        CROP_DROPS = new CropDrops(builder);
         LEAF_DECAY = new LeafDecay(builder);
         LEAF_PILES = new LeafPiles(builder);
         CAMPFIRE = new Campfire(builder);
@@ -95,6 +102,7 @@ public final class CEConfig {
         BOTTLED_AIR = new BottledAir(builder);
         CANNING = new Canning(builder);
         COOKING = new Cooking(builder);
+        KITCHEN = new Kitchen(builder);
         COASTER = new Coaster(builder);
         WTHIT = new Wthit(builder);
         ALCOHOL = new Alcohol(builder);
@@ -380,6 +388,23 @@ public final class CEConfig {
         }
     }
 
+    /** Botania tweaks ({@code compat/TrinketCaseRules} and the {@code TrinketCase*Mixin}s). */
+    public static final class Botania {
+        public final ForgeConfigSpec.BooleanValue trinketCaseAnyItem;
+
+        private Botania(ForgeConfigSpec.Builder b) {
+            b.comment("Botania tweaks.").push("botania");
+
+            trinketCaseAnyItem = b.comment(
+                    "Let the Trinket Case hold any item, not just trinkets, rods and mana items.",
+                    "Other trinket cases and items that can't go inside container items (shulker",
+                    "boxes) are still refused. Only real trinkets equip from the case. Restart to apply."
+            ).define("trinketCaseAnyItem", true);
+
+            b.pop(); // botania
+        }
+    }
+
     /** Per-armor-material enchantment-value overrides ({@code mixin/ArmorMaterialEnchantabilityMixin}). */
     public static final class ArmorEnchant {
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> overrides;
@@ -534,6 +559,54 @@ public final class CEConfig {
             ).define("showHarvestable", true);
 
             b.pop(); // crop_growth
+        }
+    }
+
+    /**
+     * Crop harvest table values read by {@code kubejs/server_scripts/loot/09_crop_drops.js} (server side);
+     * feature_writeup/crops.md 3. A change needs /reload.
+     */
+    public static final class CropDrops {
+        public final ForgeConfigSpec.BooleanValue bellPeppers;
+        public final ForgeConfigSpec.IntValue redWeight;
+        public final ForgeConfigSpec.IntValue greenWeight;
+        public final ForgeConfigSpec.IntValue yellowWeight;
+        public final ForgeConfigSpec.DoubleValue redBonusChance;
+        public final ForgeConfigSpec.DoubleValue greenBonusChance;
+        public final ForgeConfigSpec.DoubleValue yellowBonusChance;
+
+        private CropDrops(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Pack changes to crop harvest drops (server side, applied on /reload)."
+            ).push("crop_drops");
+
+            b.comment(
+                    "Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each",
+                    "colour has its own bonus chance for one extra. Each colour's share of the picked pepper is",
+                    "weight / (sum of weights). Per harvest, colour X averages",
+                    "  weightX / (sum of weights) + bonusChanceX",
+                    "Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red",
+                    "bonus (red about 58% of peppers). A weight of 0 takes the colour out of the main roll."
+            ).push("bell_peppers");
+
+            bellPeppers = b.comment("true: use the values below. false: the mod's own table, untouched.")
+                    .define("enabled", true);
+
+            redWeight = b.comment("Weight of red in the main roll.")
+                    .defineInRange("redWeight", 1, 0, 100);
+            greenWeight = b.comment("Weight of green in the main roll.")
+                    .defineInRange("greenWeight", 1, 0, 100);
+            yellowWeight = b.comment("Weight of yellow in the main roll.")
+                    .defineInRange("yellowWeight", 1, 0, 100);
+
+            redBonusChance = b.comment("Chance [0-1] of one extra red pepper (0.15 = 15%).")
+                    .defineInRange("redBonusChance", 0.15, 0.0, 1.0);
+            greenBonusChance = b.comment("Chance [0-1] of one extra green pepper.")
+                    .defineInRange("greenBonusChance", 0.15, 0.0, 1.0);
+            yellowBonusChance = b.comment("Chance [0-1] of one extra yellow pepper.")
+                    .defineInRange("yellowBonusChance", 0.15, 0.0, 1.0);
+
+            b.pop(2); // bell_peppers, crop_drops
         }
     }
 
@@ -779,6 +852,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue remainderBuffer;
         public final ForgeConfigSpec.BooleanValue stallWhenFull;
         public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
+        public final ForgeConfigSpec.IntValue recycleShowTicks;
 
         private Cooking(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -803,7 +877,42 @@ public final class CEConfig {
                     "their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload."
             ).define("ovenIngredientCounts", false);
 
+            recycleShowTicks = b.comment(
+                    "Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's",
+                    "bottle) stays visible there before the meal is plated with it, so the step can be seen.",
+                    "0 = plate at once. Containers a player or hopper puts in plate at once either way."
+            ).defineInRange("recycleShowTicks", 10, 0, 100);
+
             b.pop(); // cooking
+        }
+    }
+
+    /**
+     * Cooking for Blockheads kitchen parts with other mods' items: {@code compat.CuttingBoardOnCounter} and
+     * {@code mixin/CuttingBoardSupportMixin} (FD cutting board on a counter), {@code mixin/CfbOvenFuelMixin}.
+     * TODO food/kitchen #8.
+     */
+    public static final class Kitchen {
+        public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetX;
+        public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetY;
+        public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetZ;
+
+        private Kitchen(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Farmer's Delight cutting board on a Cooking for Blockheads counter or corner (the blocks in",
+                    "#creativeengineering:cutting_board_supports). The counter's worktop is 1 px lower than a full",
+                    "block, so the board and what lies on it are drawn shifted by these offsets, in pixels (1/16",
+                    "block). X and Z are as seen on a counter facing north (door to the north, back edge to the",
+                    "south: +X = east, +Z = toward the back) and turn with the counter. Visual only; F3+A redraws."
+            ).push("kitchen");
+
+            cuttingBoardOffsetX = b.comment("Sideways shift.").defineInRange("cuttingBoardOffsetX", 0.0, -8.0, 8.0);
+            cuttingBoardOffsetY = b.comment("Height shift; -1 puts the board on the worktop.")
+                    .defineInRange("cuttingBoardOffsetY", -1.0, -8.0, 8.0);
+            cuttingBoardOffsetZ = b.comment("Shift toward the counter's back (negative = toward the door).")
+                    .defineInRange("cuttingBoardOffsetZ", 0.0, -8.0, 8.0);
+
+            b.pop(); // kitchen
         }
     }
 
@@ -851,6 +960,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue campfireRain;
         public final ForgeConfigSpec.BooleanValue sheetmetalTank;
         public final ForgeConfigSpec.BooleanValue kitchenStation;
+        public final ForgeConfigSpec.BooleanValue remainderBuffer;
 
         private Wthit(ForgeConfigSpec.Builder b) {
             b.comment("WTHIT look-at overlay lines (client side). See feature_writeup/wthit_lines.md.").push("wthit");
@@ -943,6 +1053,11 @@ public final class CEConfig {
             kitchenStation = b.comment(
                     "Applied Cooking's ME Kitchen Station: online / offline and the security terminal it is tied to."
             ).define("kitchenStation", true);
+
+            remainderBuffer = b.comment(
+                    "FD cooking pot, Farmer's Respite kettle and oven: 'Holding: 3 Glass Bottle, 1 Bucket' for the two",
+                    "leftover slots, and 'Waiting: leftover slots full' while a craft waits for room ([cooking] stallWhenFull)."
+            ).define("remainderBuffer", true);
 
             b.pop(); // wthit
         }
@@ -1324,6 +1439,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue craftableFirst;
         public final ForgeConfigSpec.BooleanValue packOrder;
         public final ForgeConfigSpec.BooleanValue orderReport;
+        public final ForgeConfigSpec.BooleanValue seasoningCategory;
 
         private Jei(ForgeConfigSpec.Builder b) {
             b.comment("JEI recipe screen tweaks (client side).").push("jei");
@@ -1349,6 +1465,13 @@ public final class CEConfig {
                     "hidden in JEI's edit mode / never in JEI), plus problems in the definition. Render it with",
                     "python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB."
             ).define("orderReport", false);
+
+            seasoningCategory = b.comment(
+                    "Show seasoning crafts (Salt's food + salt, Create: The Salt's salting mixes, and crafting recipes",
+                    "with ids creativeengineering:shapeless/season/...) on their own Seasoning page instead of the",
+                    "Crafting and Mixing pages. Off: they stay where their mods put them.",
+                    "Takes effect the next time JEI starts (rejoin or /reload)."
+            ).define("seasoningCategory", true);
 
             b.pop(); // jei
         }
@@ -1404,6 +1527,33 @@ public final class CEConfig {
             ).define("advancement", false);
 
             b.pop(); // toasts
+        }
+    }
+
+    /** Player changelog, "What's New" ({@code changelog/} package, feature_writeup/changelog.md). */
+    public static final class Changelog {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.BooleanValue titleButton;
+        public final ForgeConfigSpec.BooleanValue pauseButton;
+        public final ForgeConfigSpec.BooleanValue updatePopup;
+
+        private Changelog(ForgeConfigSpec.Builder b) {
+            b.comment("Player changelog, \"What's New\" (client side). The notes are the pack's",
+                    "assets/creativeengineering/changelog/<version>.md files. Takes effect the next time a menu opens."
+            ).push("changelog");
+
+            enabled = b.comment("Master switch: off removes the book buttons and the update popup.")
+                    .define("enabled", true);
+            titleButton = b.comment("Book button on the title screen, right of Singleplayer.")
+                    .define("titleButton", true);
+            pauseButton = b.comment("Book button on the pause menu, right of Back to Game.")
+                    .define("pauseButton", true);
+            updatePopup = b.comment(
+                    "Speech bubble beside the book button while the newest version's notes are unread. Opening the",
+                    "changelog once acknowledges it (config/creativeengineering/changelog_seen.txt)."
+            ).define("updatePopup", true);
+
+            b.pop(); // changelog
         }
     }
 
@@ -1712,6 +1862,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue oceanGeodes;
         public final ForgeConfigSpec.BooleanValue placementPriority;
         public final ForgeConfigSpec.BooleanValue templateBlockSwaps;
+        public final ForgeConfigSpec.BooleanValue permafrostMerge;
 
         private WorldgenSystems(ForgeConfigSpec.Builder b) {
             b.comment("Switch a system off to see the mods' own behaviour. Off never deletes a config file.").push("systems");
@@ -1785,6 +1936,10 @@ public final class CEConfig {
                     "when the template loads (lone red glazed terracotta \"meat\" -> Architect's Palette salmon log). Off: templates as",
                     "the mods ship them. Rejoin; new chunks only.")
                     .define("templateBlockSwaps", true);
+            permafrostMerge = b.comment("Quark's frozen peaks cave style lays Immersive Weathering's permafrost on floors, ceilings and pillars",
+                    "instead of Quark's own block (renamed Froststone; patcherMod QuarkPermafrostStyleMixin). Walls stay packed ice.",
+                    "Off: Quark's block. New chunks only.")
+                    .define("permafrostMerge", true);
             b.pop(); // systems
         }
     }

@@ -39,4 +39,7 @@ levelNameScramble = 3
 #Should kegs render the fluid texture in the background of the fluid slot?
 #Default: true
 renderFluidInKeg = true
+#Port setting (not in 4.5.0): WTHIT lines on a keg (temperature, fermentation progress, the temperature
+#a recipe needs). Default: true
+wthitKeg = true
 

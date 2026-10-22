@@ -17,6 +17,8 @@ deploy/
                          (the client always gets the full server mod set: it also runs single-player
                          worlds on its integrated server, so server-only mods must be there too)
     kubejs/ config/ defaultconfigs/                  -> both
+    world_serverconfig/  every pack serverconfig file, in both modes -> <world>/serverconfig/ of each
+                         existing world that needs it, by hand (defaultconfigs/ only reaches new worlds)
     server/              server-root files: LaunchServer.sh/.bat, perf/ (always-on JFR recording)
                                                      -> the server folder itself (server only)
     resourcepacks/ shaderpacks/                      -> client
@@ -40,6 +42,11 @@ What goes where:
   kubejs/                  files .gitignore doesn't ignore, filtered by KUBEJS_CLASSES: runtime and client
                            files ship, dev files (notes, reports, generator inputs, /dump output in
                            exported/) never do. An unclassified file is a preflight error.
+                           Player changelog (feature_writeup/changelog.md 3.5): the working list
+                           assets/creativeengineering/changelog/unreleased.md never ships under that name;
+                           the payload gets it as <version>.md with "# <version>" and "Released <today>" on
+                           top (the tree is not touched). --snapshot then writes that same text into the
+                           tree as <version>.md and starts a fresh unreleased.md.
   config/, defaultconfigs/ every file .gitignore doesn't ignore, minus EXCLUDE (*.toml.bak backups, ...).
                            config/ is filtered by CONFIG_CLASSES: --config functional (default) leaves out
                            players' own settings (keybinds, HUD/UI, minimap, video, JEI), --config full ships
@@ -47,6 +54,10 @@ What goes where:
   server/                  the tracked server/ folder, same rules; lands in the server's root folder
   configs_edited/server_config/*   merged into defaultconfigs/ so a new server world starts with the
                            hand-edited serverconfig values (configs_edited wins on a conflict)
+  world_serverconfig/      the same merged defaultconfigs set, always complete (update mode too): Forge copies
+                           defaultconfigs/ into a world only when its serverconfig file is missing, so an
+                           existing world keeps old values until these are copied in. Not tracked in history
+                           (no removals, no verify): the worlds are picked by hand.
   resourcepacks/, shaderpacks/     zips, folder packs (pack.mcmeta) and shader settings files
 
 Removals are what the from-version had at a path on that target and this one doesn't: an updated jar's
@@ -57,6 +68,10 @@ Copying a folder over never deletes anything, so apply them. From the target's g
 Preflight (errors stop the build unless --force; warnings go into the log entry):
   - every jar in mods/ has a mod_sides.md row                                    (error)
   - every kubejs/ file matches a KUBEJS_CLASSES rule                              (error)
+  - tools/changelog_lint.py passes on the changelog folder (its warnings are warnings)  (error)
+  - no <version>.md in the tree for the version being built (one source per version)  (error)
+  - every changelog file a deployed version shipped is unchanged (sha1 in its history json) (error)
+  - unreleased.md has no bullets: this version ships without player notes          (warning)
   - structure_config.json regenerated from the installed jars + kubejs/data matches the file, and
     gen_structure_groups.py sync would change nothing (both run on a scratch copy)   (error)
   - the shipped patcherMod jar can read the gzipped climate samples              (error)
@@ -76,9 +91,11 @@ Run: python3 tools/build_deploy.py [--version X.Y.Z] [--mode update|install] [--
      (no --version: bumps the last version's patch number; the first release is 1.0.0)
 """
 import argparse
+import atexit
 import contextlib
 import datetime
 import fnmatch
+import hashlib
 import io
 import json
 import os
@@ -92,6 +109,8 @@ import zipfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dump_server_mods import MODS, ROOT, SERVER_SIDES, jar_modid, read_doc  # noqa: E402
 from gen_pack_manifest import enabled_resource_packs, sha1, version_of  # noqa: E402
+from changelog_lint import FOLDER as CHANGELOG_DIR, KUBEJS_PREFIX as CHANGELOG_PREFIX, UNRELEASED, count_bullets, \
+    lint_paths, stamp  # noqa: E402
 
 DEPLOY = os.path.join(ROOT, 'deploy')
 OUT = os.path.join(DEPLOY, 'latest')
@@ -157,6 +176,8 @@ KUBEJS_CLASSES = [
     ('exported/*', 'dev'),                 # /dump* output
     ('recipes/*', 'dev'),                  # not a KubeJS load path (KubeJSPaths has no recipes/): unread leftovers
     ('startup_scripts/todo/*', 'dev'),     # .txt work lists
+    ('assets/creativeengineering/changelog/unreleased.md', 'dev'),  # working list: shipped as <version>.md (check_changelog)
+    ('assets/creativeengineering/changelog/*.md', 'client'),        # player changelog, one file per version
     ('*.md', 'dev'),                       # notes and reports; the tuners rewrite their *_report.md on every load
     ('startup_scripts/*', 'runtime'),
     ('server_scripts/*', 'runtime'),       # incl. loot/loot_config.json + loot_index.json (05_tuning.js)
@@ -209,6 +230,7 @@ KUBEJS_CLASSES = [
 # player has stays in place even when the pack stops shipping it.
 CONFIG_CLASSES = [
     ('trashslot-common.toml', 'player', '1.0.3'),   # TrashSlot deletion behaviour; pushed once with 1.0.3
+    ('creativeengineering/changelog_seen.txt', 'player'),  # changelog read marker (also git-ignored)
     ('DistantHorizons.toml', 'player', '1.0.4'),    # LOD distance/quality + DH threads; pushed once with 1.0.4
     ('jei/blacklist.cfg', 'functional'),            # hidden ingredients (pack-defined)
     ('jei/recipe-category-sort-order.ini', 'functional'),   # pack's recipe tab order
@@ -526,6 +548,94 @@ def check_manifest(pre, files):
         pre.warn('pack/manifest.json is out of date with mods/: run tools/gen_pack_manifest.py and commit pack/')
 
 
+def changelog_path(version):
+    return CHANGELOG_PREFIX + version + '.md'
+
+
+def check_changelog(pre, files, version, deployed, stage_dir):
+    """Lint the changelog folder, keep deployed versions' files frozen, and put the working list into the
+    payload as <version>.md (stamped copy written into stage_dir; the tree is not touched)."""
+    if not os.path.isdir(CHANGELOG_DIR):
+        pre.warn('no changelog folder (kubejs/assets/creativeengineering/changelog/): this version has no player notes')
+        return
+    for path, (errors, warnings) in lint_paths([CHANGELOG_DIR]).items():
+        label = path if path.startswith('(') else os.path.relpath(path, ROOT)
+        for e in errors:
+            pre.error(f'changelog lint, {label}: {e}')
+        for w in warnings:
+            pre.warn(f'changelog lint, {label}: {w}')
+    for v in sorted(deployed_versions(deployed), key=parse_version):
+        hist = history_path(v)
+        if not os.path.isfile(hist):
+            continue
+        shipped = json.load(open(hist, encoding='utf8'))['files'].get('kubejs', {})
+        for rel, want in shipped.items():
+            if not rel.startswith(CHANGELOG_PREFIX):
+                continue
+            path = os.path.join(ROOT, 'kubejs', rel)
+            if not os.path.isfile(path):
+                pre.error(f'kubejs/{rel} shipped with {v} and is gone: deployed changelogs are permanent (restore it from git)')
+            elif sha1(path) != want:
+                pre.error(f'kubejs/{rel} changed after it shipped with {v}: deployed changelogs are permanent '
+                          '(restore it from git; put the correction in unreleased.md as its own bullet)')
+    target = changelog_path(version)
+    if os.path.isfile(os.path.join(ROOT, 'kubejs', target)):
+        pre.error(f'kubejs/{target} already exists: {version} is staged from unreleased.md, not from a version file')
+        return
+    src = os.path.join(CHANGELOG_DIR, UNRELEASED + '.md')
+    text = open(src, encoding='utf8').read() if os.path.isfile(src) else ''
+    n = count_bullets(text)
+    if not n:
+        pre.warn(f'unreleased.md has no bullets: {version} ships without player notes')
+        return
+    out = os.path.join(stage_dir, version + '.md')
+    with open(out, 'w', encoding='utf8') as f:
+        f.write(stamp(text, version, datetime.date.today().isoformat()))
+    files['kubejs'][target] = out
+    print(f'changelog: kubejs/{target} from unreleased.md ({n} bullets)')
+
+
+def freeze_changelog(version):
+    """--snapshot: the changelog text that shipped with `version` becomes the tree's <version>.md, and
+    unreleased.md starts over (title line only) when it still holds exactly what shipped."""
+    hist = history_path(version)
+    snap = json.load(open(hist, encoding='utf8'))
+    rel = changelog_path(version)
+    want = snap['files'].get('kubejs', {}).get(rel)
+    if not want:
+        return
+    tree = os.path.join(ROOT, 'kubejs', rel)
+    if os.path.isfile(tree) and sha1(tree) == want:
+        return
+    if os.path.isfile(tree):
+        print(f'WARNING: kubejs/{rel} exists but differs from what shipped with {version}; left as it is')
+        return
+    unreleased = os.path.join(CHANGELOG_DIR, UNRELEASED + '.md')
+    working = open(unreleased, encoding='utf8').read() if os.path.isfile(unreleased) else ''
+    restamped = stamp(working, version, snap['date'][:10])
+    staged = os.path.join(OUT, 'kubejs', rel)
+    text = None
+    if os.path.isfile(staged) and sha1(staged) == want:
+        text = open(staged, encoding='utf8').read()
+    elif hashlib.sha1(restamped.encode('utf8')).hexdigest() == want:
+        text = restamped
+    if text is None:
+        print(f'WARNING: could not rebuild the {version} changelog that shipped (unreleased.md changed and '
+              f'deploy/latest/ no longer holds it): copy kubejs/{rel} from the payload into the tree by hand, '
+              'then trim unreleased.md')
+        return
+    with open(tree, 'w', encoding='utf8') as f:
+        f.write(text)
+    print(f'changelog: wrote kubejs/{rel} (the text that shipped)')
+    if restamped == text:
+        with open(unreleased, 'w', encoding='utf8') as f:
+            f.write('# Unreleased\n')
+        print('changelog: started a fresh unreleased.md')
+    else:
+        print(f'WARNING: unreleased.md changed after {version} was staged; it was left as it is: remove the '
+              f'bullets that shipped with {version} by hand')
+
+
 def git_state(pre):
     head = (git('rev-parse', '--short', 'HEAD') or '').strip() or None
     dirty = (git('status', '--porcelain', '--', 'kubejs', 'config', 'defaultconfigs',
@@ -672,6 +782,7 @@ def snapshot(version, targets, date, notes):
         json.dump(out, f, indent=1, ensure_ascii=False)
         f.write('\n')
     mark_log(version, deployed)
+    freeze_changelog(version)
     print(f"snapshot: {', '.join(targets)} at {version} ({date}); next update builds from "
           f"{default_base(deployed)}")
 
@@ -918,6 +1029,14 @@ def render_readme(cur, prev, d, dpay, base, payload):
     update = pay['mode'] == 'update'
     has = lambda cat: bool(payload.get(cat))
     folders = lambda cats: ', '.join(f'`{c}/`' for c in cats if has(c))
+    changed_wsc = sorted(payload.get('defaultconfigs', {})) if update else []
+    world_step = lambda where: (
+        f"Existing worlds: `defaultconfigs/` only reaches a world created after it. Copy the files in "
+        f"`world_serverconfig/` into `<world>/serverconfig/` of {where}, then start it; this replaces those "
+        f"files' per-world edits, if any."
+        + (f" Changed since {pay['from']}: " + ', '.join(f'`{n}`' for n in changed_wsc) + '.' if changed_wsc
+           else f" None changed since {pay['from']}: only a world made before they shipped needs them." if update
+           else '')) if has('world_serverconfig') else None
     only_changed = ' (only the new and changed files)' if update else ''
     rm = lambda t: ("Delete every path in `removals_%s.txt` (from the %s folder): `xargs -d '\\n' rm -f < removals_%s.txt`"
                     % (t, 'server' if t == 'server' else 'instance', t)) if dpay['removals'][t] else 'Nothing to delete.'
@@ -954,8 +1073,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
          'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
          "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
-        ('Existing world only: `defaultconfigs/` is used only when a world has no serverconfig yet. Copy any changed '
-         '`*-server.toml` from it into `<world>/serverconfig/` by hand.') if has('defaultconfigs') else None,
+        world_step('the server world (`world/`, or the `level-name` folder)'),
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
@@ -967,6 +1085,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
          'set, server-only mods included: the client needs them to host single-player worlds.')
         if has('mods') or has('client_mods') else 'No jars changed.',
         f"Copy {client_trees} over the instance's folders{only_changed}." if client_trees else None,
+        world_step('each single-player save that needs them (`saves/<world>/`)'),
         ('Enable these resource packs, lowest priority first (1 ends up at the bottom of the in-game Selected list, '
          'the last one at the top); packs not listed stay off:') if show_order else None,
     ])
@@ -1049,6 +1168,9 @@ def main():
     commit, dirty = git_state(pre)
 
     deployed = load_deployed()
+    stage_dir = tempfile.mkdtemp(prefix='ce-changelog-')
+    atexit.register(shutil.rmtree, stage_dir, True)
+    check_changelog(pre, files, version, deployed, stage_dir)
     if version in deployed_versions(deployed):
         pre.error(f'{version} is already deployed (DEPLOYED.json): rebuilding it would change the snapshot the '
                   'machines are checked against. Build a new version (omit --version to bump the patch).')
@@ -1102,6 +1224,7 @@ def main():
         if b is not base:
             dpay['removals'][t] = diff(b, cur)['removals'][t]
     payload = select_payload(files, cur, base, mode, args.full)
+    payload['world_serverconfig'] = dict(files['defaultconfigs'])   # complete in both modes (docstring)
     stats = payload_stats(payload)
     entry = render_entry(cur, prev, d, dpay, stats)
     if args.dry_run:

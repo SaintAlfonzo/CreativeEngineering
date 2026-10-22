@@ -103,6 +103,15 @@ and crushing with equal efficiency and more than one output with a chance; merge
 Recipe types `salt:salting` (special crafting), `create:mixing` with NBT result, `create:crushing`, `create:milling`,
 `immersiveengineering:crusher`, `farmersdelight:cutting`. Config `config/salt-common.toml [Salting] SaltingFoodValues`.
 
+### Built 2026-10-21: raw rock salt 4x (`cooking/salt.js`)
+Raw rock salt (salt crystals) -> 4 salt on every route: hand craft (`creativeengineering:shapeless/raw_rock_salt_salt`),
+Create crushing and milling (`raw_rock_salt_salt`), mortar craft (catalog `count` 4). Replaces the three mod recipes
+(`salt:salt_from_raw_rock_salt`, `create__the_salt:salt_create_crushing` / `_milling`). Unchanged: salt block 9 <-> 1,
+raw block -> 9 raw, Create water mixing (20 %), cauldron evaporation. Supersedes the 1 salt + 25 % plan in step 5 and D3.
+Water mixing is now 60 % (was 20 %); cauldron evaporation (full cauldron) bonus salt is 50 % (was 25 %), a loot table override in `kubejs/data/salt/`. Rerun `/dumpfood` and the mortar catalog tool to regenerate the catalog from the new recipes.
+Test **SE-05:** 1 raw rock salt in the grid, crushing wheels, millstone and with the mortar each give 4 salt; the salt
+block still unpacks to 9.
+
 ### Decisions
 - **D1 The cap:** recommend +25 % of the food's hunger rounded, 1 to 2, so a 1-hunger raw food no longer triples.
 - **D2 What is saltable:** recommend savoury cooked food (meals, soups, cooked meat / fish / veg, eggs, handhelds,
@@ -176,8 +185,14 @@ sits in the Crafting tab as one "any saltable food + salt" page. patcherMod alre
 - **Mixer salting in JEI:** recommend hiding the generated `salting/*` mixing recipes from the mixing category and
   listing the mixer as a catalyst on the seasoning page (hundreds of near-identical mixing pages otherwise).
 
+### Built 2026-10-21
+`compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory`; details in [food.md](../food.md) 3.11.
+Step 3 done by hiding (no mixin). Step 4: prefix `creativeengineering:shapeless/season/`, 2 or 3 ingredients. Step 5 /
+the mixer decision: Create: The Salt's mixes are hidden from Mixing and shown as one mixer page; row 1's generated
+`salting/*` mixes will need the same treatment (they will be folded in automatically if their result carries `Salted`).
+
 ### Tests
-- **SE-05 JEI:** uses of salt shows a Seasoning tab; the crafting tab no longer lists salting.
+- **FO-30 / FO-31** in food.md 7 (replace the SE-05 JEI line; SE-05 is the raw rock salt test above).
 
 ---
 
@@ -229,7 +244,7 @@ No pepper (only Rustic Delight bell peppers), dill or spice item in the dict. Sa
 ---
 
 ## Built, needs play
-None (no seasoning row is at Testing or Complete).
+- `seasoning #2` (Testing): patcherMod jar to install, FO-30, FO-31.
 
 ## Proposed TODO corrections (for the TODO owner)
 - `seasoning #4` Change: "crab ragout" is no item in the pack; probably Delightful's crab rangoon. Writeup: this brief.
