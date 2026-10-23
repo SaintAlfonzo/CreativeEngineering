@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 
 /**
- * Farmer's Delight cutting board (1.19.2-1.2.4) on Cooking for Blockheads counters (TODO food/kitchen #8). FD's
+ * Farmer's Delight cutting board (1.19.2-1.2.4) on Cooking for Blockheads counters (TODO cooking/kitchen #8). FD's
  * {@code canSurvive} wants a rigid or center support face below, and CfB's counter and corner are 15 px tall
  * (shape 0-15, worktop at 15), so the board refused to go on them, although CfB's own {@code CounterBlock.use}
  * steps aside for a cutting board on its top face so it can be placed there. Blocks in

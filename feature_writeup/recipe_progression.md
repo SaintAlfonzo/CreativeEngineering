@@ -23,7 +23,7 @@ Other recipe folders have their own writeups: `equipment/` ([gear_tuning.md](gea
 | Five per-folder writeups (RE-, RM-, RW-, RC-, RA-) | written 2026-10-18 |
 | Removed items: 309 ids in `global.removedItems`; hidden in JEI, red tooltip, all item tags stripped, recipes referencing them listed once per session | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
 | `dead_recipe_removal.js`: 21 Vintage Improvements recipes for metals the pack doesn't use (vanadium, shadow steel, refined radiance, ...) | DEPLOYED |
-| Dead code: `kubejs/recipes/` (4 JSONs that never load), three commented-out `global.CE` blocks, `kubejs/archive/` | left in place ([TODO](todo/TODO.md) `recipes/progression #3`, `tooling/conventions #3`) |
+| Dead code: `kubejs/recipes/` (4 JSONs that never load), ~~three commented-out `global.CE` blocks~~ (deleted 2026-10-22), `kubejs/archive/` (all but `worldgen/pre_groups_2026-09-27/` deleted 2026-10-22) | left in place ([TODO](todo/TODO.md) `recipes/progression #3`, `tooling/conventions #3`) |
 
 - **Pending:** nothing built and unshipped. RP-01 to RP-08 have never been run. Findings F1 to F6 (section 4); F1 needs
   your call (it collects the per-folder missing-recipe calls).
@@ -89,8 +89,8 @@ Nock Enough Arrows' quiver and torch arrow; Quark's dragon scale; IE's potion bu
 | Vintage Improvements recipes for unused metals (vanadium storage, plate, rolling, pressing; shadow steel, netherite, refined radiance, andesite, cast iron and uranium coiling; sulfur trioxide pressurizing) | [dead_recipe_removal.js](../kubejs/server_scripts/other/dead_recipe_removal.js) | removed (21 ids) |
 | `kubejs/recipes/food/bonemeal_broth.json` | not a load path | dead; superseded by `cooking.js`'s bone broth pot recipe |
 | `kubejs/recipes/recycle/sawmill_recycle_{slab,stairs,door}.json` (IE sawmill: slabs → 2 sticks + sawdust, ...) | not a load path | dead; never ported (F3) |
-| Old `global.CE` blocks | `misc_mods.js` 60-310, `resource_blocks.js` 257-487, `cooking.js` 340-764 | commented out |
-| `kubejs/archive/` | 9 old scripts and `worldgen/` | not loaded |
+| Old `global.CE` blocks | `misc_mods.js`, `resource_blocks.js`, `cooking.js` | deleted 2026-10-22 |
+| `kubejs/archive/` | only `worldgen/pre_groups_2026-09-27/` left (the 9 old scripts and the other `worldgen/` files deleted 2026-10-22) | not loaded |
 
 ## 3. What the pack changes
 
@@ -118,7 +118,7 @@ Nothing beyond the files above; every removal and replacement is in the folder s
   meant for IE's sawmill. They have sawdust secondaries, which `R.ieSawmill` can't do (the KubeJS IE schema bug), so
   porting means moving them to `kubejs/data/creativeengineering/recipes/sawmill/`, where the other sawmill JSONs load;
   or delete them ([TODO](todo/TODO.md) `recipes/progression #3`).
-- **F4. `global.hasRemovedTags` is set and never read.**
+- **F4. `global.hasRemovedTags` is set and never read.** Fixed 2026-10-22: the assignment was deleted.
 - **F5. Define-once across the recipe folders:** local redefinitions of dict keys in `end.js`, `dust.js`, `redstone.js`,
   `cooking.js`, `cultivated_meat.js`, `ash.js`; duplicate keys inside `item_dict.js` (`mulch_brown` ×4, `xp_block` ×3,
   `any_sandpaper` ×3, ...). Each writeup lists its own; a one-off duplicate-key scan of `item_dict.js` would find the

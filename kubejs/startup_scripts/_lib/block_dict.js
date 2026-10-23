@@ -24,8 +24,11 @@ b.blaze_burner = 'create:blaze_burner';             // counts only with blaze !=
 b.lit_blaze_burner = 'create:lit_blaze_burner';
 b.blaze_lantern = 'quark:blaze_lantern';
 b.cutting_board = 'farmersdelight:cutting_board';  // bakeware hammering (feature_writeup/oven.md 2.5)
-b.cfb_counter = 'cookingforblockheads:counter';   // 15 px worktops: cutting board support (TODO food/kitchen #8)
+b.cfb_counter = 'cookingforblockheads:counter';   // 15 px worktops: cutting board support (TODO cooking/kitchen #8)
 b.cfb_corner = 'cookingforblockheads:corner';
+// Milk and cow jars: glass bottles take milk out (server_scripts/cooking/milk_jar.js, TODO food/drinks #6)
+b.cow_jar = 'cookingforblockheads:cow_jar';
+b.milk_jar = 'cookingforblockheads:milk_jar';
 // Campfire rain (patcherMod campfire/CampfireRain.java)
 b.campfire = 'minecraft:campfire';
 b.coal_block = 'minecraft:coal_block';
@@ -66,6 +69,9 @@ b.powder_snow = 'minecraft:powder_snow';
 b.thin_ice = 'immersive_weathering:thin_ice';
 b.iw_permafrost = 'immersive_weathering:permafrost';
 b.iw_cryosol = 'immersive_weathering:cryosol';
+b.soul_soil = 'minecraft:soul_soil';
+b.rich_soul_soil = 'nethersdelight:rich_soul_soil';
+b.iw_nulch = 'immersive_weathering:nulch_block';
 b.polished_packed_ice = 'architects_palette:polished_packed_ice';
 b.chiseled_packed_ice = 'architects_palette:chiseled_packed_ice';
 
@@ -76,11 +82,15 @@ b.t_fd_heat_sources = '#farmersdelight:heat_sources';
 b.t_fd_tray_heat_sources = '#farmersdelight:tray_heat_sources';   // fire, campfires, lava
 b.t_keg_heat_sources = '#brewinandchewin:heat_sources';     // Brewin port: keg + Vinery cold storage; holds FD heat_sources
 b.t_keg_freeze_sources = '#brewinandchewin:freeze_sources';
+b.t_ghost_pepper_soil = '#vintagedelight:ghost_pepper_soil'; // Vintage port: where ghost pepper seeds plant (vintage_delight.md 2.1)
 b.t_ice = '#minecraft:ice';                          // ice, packed, blue, frosted, rare-ice
 b.t_hammer_no_rotate = '#creativeengineering:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
 b.t_cutting_board_supports = '#creativeengineering:cutting_board_supports'; // CuttingBoardSupportMixin: an FD cutting board stays on these
 b.t_campfire_rain_douses = '#creativeengineering:campfire/rain_douses';         // CampfireRain.RAIN_DOUSES
 b.t_campfire_rain_proof_fuel = '#creativeengineering:campfire/rain_proof_fuel'; // CampfireRain.RAIN_PROOF_FUEL
+b.t_vein_undo_denied = '#creativeengineering:vein_undo_denied'; // VeinUndo.DENIED: an Ore Excavation undo touching these is refused
+b.t_ores = '#forge:ores';
+b.t_storage_blocks = '#forge:storage_blocks';
 b.t_no_world_dye = '#creativeengineering:no_world_dye'; // SupplementariesDyeBlocksMixin: dye can't recolour these in world
 b.t_blendable_blocks = '#c:blendable_blocks';       // Rubidium: per-vertex biome tint blending (vanilla grass gets it built in)
 

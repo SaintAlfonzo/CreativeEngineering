@@ -504,7 +504,6 @@
 		[i.bark_blossom,                     0.8],
 		[i.bark_spruce,                      0.8],
 		[i.upgrade_aquatic_driftwood_bark,   0.8],
-		[i.upgrade_aquatic_river_bark,       0.8],
 		[i.cherry_bark,                      0.8],
 		[i.bark_warped,                      0.8],
 		// neapolitan
@@ -856,8 +855,7 @@
 		[i.taco,                               1.0],
 		[i.tortilla,                           0.75],
 		[i.tortilla_raw,                       0.75],
-		// farmersrespite
-		[i.coffee_berries,                     0.3],
+		// farmersrespite (its coffee is merged into Rustic Delight's: item_merges.js)
 		[i.rose_hips,                          0.3],
 		// fruitsdelight
 		[i.durian,                             0.65],

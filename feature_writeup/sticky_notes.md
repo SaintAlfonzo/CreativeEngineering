@@ -429,7 +429,7 @@ modpacks that download the jar, the same position as the Vinery donor jars; a pu
 
 - **Sticky It's tooltip handler** cancelled at its head (a Creative Labels mixin on
   `net.mcreator.sticky_it.procedures.TooltipRenderProcedure.execute`, targeted by name). Ends the `{}` tags (the bowl
-  bug, TODO `food/kitchen #5`, [kitchen.md](kitchen.md)) and its `[Shift]` text. Can ship ahead of everything else.
+  bug, TODO `cooking/kitchen #5`, [kitchen.md](kitchen.md)) and its `[Shift]` text. Can ship ahead of everything else.
   Items already tagged keep their `{}`.
 - **Recipes:** every `sticky_it:` and `labels:` recipe removed (KubeJS through NCH).
 - **Old items removed from play** (user, 2026-10-20): `sticky_it:sticky_note`, `sticky_it:eraser` and `labels:label` are hidden from JEI and the creative tabs and can't be crafted (their recipes now make our items). They can't be unregistered while the jars are donors; leftover stacks stay inert and vanish with the jars in phase 5.

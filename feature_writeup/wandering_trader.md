@@ -241,7 +241,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   `doMobSpawning` on and wait 20 to 30 minutes → both a Wandering Trader (with llamas) and a Winemaker (with two
   mules) arrive on their own, separately. Set the intervals back to 96000.
 - [ ] **WT-17 no Fruits Delight apple sapling:** `/reload`, then summon several Winemakers → Fruits Delight
-  saplings on offer, never `fruitsdelight:apple_sapling`. Scratch test queued (SQ-MG-05).
+  saplings on offer, never `fruitsdelight:apple_sapling`. Scratch server PASSED 2026-10-22 (SQ-MG-05).
 
 ## 8. History
 

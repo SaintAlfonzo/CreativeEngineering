@@ -209,6 +209,13 @@
   },
 
   "flowers": {
+    "mature_dandelion": {
+      "label": "Mature Dandelion (Veggies Delight)",
+      "blocks": {"veggiesdelight:mature_dandelion": 1},
+      "follows": "minecraft:dandelion",
+      "rate": "1/8",
+      "notes": "Every biome where dandelions generate once the rules above apply ('follows': the generator writes that biome list into flower_features.json). Drops 1 dandelion and 0 to 3 dandelion leaves. No Flower Patch block exists for it."
+    },
     "taiga_floor": {
       "label": "Taiga floor",
       "blocks": {"minecraft:cornflower": 3, "minecraft:lily_of_the_valley": 2, "minecraft:poppy": 1},

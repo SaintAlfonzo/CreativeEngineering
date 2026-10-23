@@ -1,0 +1,28 @@
+{
+ "_note": "Hand-written: Supplementaries 2.4.20 BlackboardBlock.use. Generated rows: tools/jei_world/tab_tools.py.",
+ "rows": [
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "block": "supplementaries:blackboard"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "supplementaries:blackboard",
+     "label": "Waxed"
+    }
+   ],
+   "notes": [
+    "Right-click: locks the drawing.",
+    "Soap takes the wax off."
+   ]
+  }
+ ]
+}

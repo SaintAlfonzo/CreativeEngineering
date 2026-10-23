@@ -1,0 +1,20 @@
+{
+  "color": "#a22a21",
+  "containers": [
+    {
+      "filled": [
+        "rusticdelight:bell_pepper_soup"
+      ],
+      "empty": "minecraft:bowl",
+      "capacity": 2
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 2,
+    "item": "rusticdelight:bell_pepper_soup"
+  },
+  "from_mod": "rusticdelight",
+  "still_texture": "moonlight:soft_fluids/soup_liquid",
+  "translation_key": "item.rusticdelight.bell_pepper_soup"
+}

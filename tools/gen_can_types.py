@@ -67,19 +67,20 @@ ANCHOR = "i.any_bell_pepper               = '#forge:crops/bell_pepper';       //
 # pot       the recipes are Cooking Pot recipes (the empty can goes in the container slot, at most 6 inputs)
 SALT = ['salt', 'bone_broth']
 SWEET = ['sugar', 'honey_bottle']
+VINEGAR = ['vinegar']   # Vintage Delight's vinegar bottle, the pack vinegar (vintage_delight.md S9, dishes/ingredients #6)
 SECTIONS = OrderedDict([
-    ('raw_veggie',   dict(meal=(5, 6), servings=2, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_salt', SALT, 0, 1)])),
-    ('raw_fruit',    dict(meal=(5, 3), servings=3, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_sugar', SWEET, 0, 1)])),
+    ('raw_veggie',   dict(meal=(5, 6), servings=2, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_salt', SALT, 0, 1), ('_vinegar', VINEGAR, 0, 1)])),
+    ('raw_fruit',    dict(meal=(5, 3), servings=3, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_sugar', SWEET, 0, 1), ('_vinegar', VINEGAR, 0, 1)])),
     ('raw_meat',     dict(meal=(5, 3), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, meat=True,
-                          extra=[('_broth', SALT, 0, 1)])),
-    ('raw_fish',     dict(meal=(4, 2), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, extra=[('_broth', SALT, 0, 1)])),
+                          extra=[('_broth', SALT, 0, 1), ('_vinegar', VINEGAR, 0, 1)])),
+    ('raw_fish',     dict(meal=(4, 2), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, extra=[('_broth', SALT, 0, 1), ('_vinegar', VINEGAR, 0, 1)])),
     ('hazard',       dict(meal=(5, 3), servings=4, target=0.8, adv=0.8, dur=1.0, fast=False, extra=[])),
     ('special',      dict(meal=(5, 3), servings=3, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_sugar', SWEET, 0, 1)])),
     ('cookies',      dict(mult=2,    servings=5,  n=8, dur=1.0,  fast=True,  extra=[('_sugar', ['sugar'], 6, 1)])),
     ('cooked_veggie', dict(mult=2,   servings=4,  n=6, dur=1.0,  fast=False, extra=[('_salt', ['salt'], 5, 1)])),
     ('cooked_meat',  dict(mult=2,    servings=3,  n=5, dur=1.0,  fast=False, extra=[('_broth', SALT, 4, 1)])),
     ('bread',        dict(mult=2,    servings=4,  n=6, dur=1.0,  fast=False, extra=[])),
-    ('salad',        dict(mult=1.25, servings=8,  n=6, dur=0.75, fast=True,  extra=[])),   # vinegar additive comes later
+    ('salad',        dict(mult=1.25, servings=8,  n=6, dur=0.75, fast=True,  extra=[('_vinegar', VINEGAR, 5, 1)])),
     ('soup',         dict(mult=1.25, servings=8,  n=6, dur=0.75, fast=False, extra=[('_broth', SALT, 3, 1)])),
     # placeholder goals (canning.js says TBD): pasta 2 bowls -> 4 meals of 0.75 bowl; pie 4 slices -> 4 slice meals
     # (+ pie crust turns a full can back into the pie); feast 1 placed feast -> 6 servings; drink 4 -> 4

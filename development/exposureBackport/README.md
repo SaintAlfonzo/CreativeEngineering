@@ -5,7 +5,7 @@ Exposure **1.9.19** and its addons **Exposure: Expanded 1.0.1**, **Exposure Pola
 (`exposure_extras`, this pack's own additions), in one jar: `exposureBackport-<mod_version>.jar`. The base mod's
 display name is **Exposure (Backport & Extras)** (`mod_name`).
 
-Status (2026-10-01):
+Status (written 2026-10-01; the pack has used the jar since 1.0.3, now at `-04`, see [exposure.md](../../feature_writeup/exposure.md) for the current state and tests):
 - **Base mod (`exposure`) ported:** all of Exposure 1.9.19 compiles for 1.19.2. The dev client reaches the main menu.
   The reobfuscated jar boots a dedicated server both alone and with the pack's server mods, and the camera stand and
   photograph frame summon and save. Gameplay (capture, lightroom, albums, frames, projector, GUIs) is **not yet tested

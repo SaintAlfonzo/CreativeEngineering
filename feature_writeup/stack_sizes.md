@@ -11,7 +11,7 @@ Every item whose max stack size is not 64, as the game reports it after mod conf
 - `minecraft:mushroom_stew`: vanilla 1; Farmer's Delight `enableStackableSoupItems` (on by default) makes it 16 ([farmersdelight-common.toml](../config/farmersdelight-common.toml), `soupItemList`).
 - `minecraft:beetroot_soup`: vanilla 1; Farmer's Delight `enableStackableSoupItems` (on by default) makes it 16 ([farmersdelight-common.toml](../config/farmersdelight-common.toml), `soupItemList`).
 - `minecraft:rabbit_stew`: vanilla 1; Farmer's Delight `enableStackableSoupItems` (on by default) makes it 16 ([farmersdelight-common.toml](../config/farmersdelight-common.toml), `soupItemList`).
-- Raised to 64 (so not listed below) by [item_properties.js](../kubejs/startup_scripts/changes/item_properties.js): `minecraft:egg`, `minecraft:turtle_egg`, `alexsmobs:crocodile_egg`, `alexsmobs:emu_egg`, `alexsmobs:terrapin_egg`, the five Alex's Mobs parrot eggs.
+- Raised to 64 (so not listed below) by the old `item_properties.js` (file no longer exists; where the egg override lives now is not recorded here, check before relying on this line): `minecraft:egg`, `minecraft:turtle_egg`, `alexsmobs:crocodile_egg`, `alexsmobs:emu_egg`, `alexsmobs:terrapin_egg`, the five Alex's Mobs parrot eggs.
 - Per-item gear overrides (`stackSize` in `global.tuneTools` / `global.tuneArmor`) only touch gear, which this list leaves out.
 
 ## Summary

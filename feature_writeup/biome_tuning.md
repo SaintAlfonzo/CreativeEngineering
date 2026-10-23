@@ -196,7 +196,7 @@ before), once per session (cached on the input hashes).
 ## 3. What the pack changes
 
 - **Solver** (`BiomeLayoutTuner.run()`, Java because it brute-forces ~1700 entries against every sample; a port of the
-  old node script `kubejs/archive/worldgen/gen_biome_overrides.js`):
+  old node script `gen_biome_overrides.js`, deleted 2026-10-22):
   - For each sample it computes every entry's base fitness. Adding a penalty P to the offset² of every entry of one
     biome makes it lose exactly the samples it was winning by less than P; a negative P lets it win the ones it was
     losing by less than |P|. One number per tuned biome, chosen so the biome's share lands on multiplier × original.
@@ -222,7 +222,7 @@ before), once per session (cached on the input hashes).
 - **Targets** (2026-10-19): `target_pct` sets the solver's target count directly instead of multiplier x original
   count; the margin solve is the same, so a never-hit biome gets a negative penalty (its boxes widen evenly).
 - **Retired:** biome merges (structure spawn biomes by merged biome groups), replaced 2026-10-11 by biome fits; the old
-  scripts are in `kubejs/archive/worldgen/`.
+  scripts (formerly `kubejs/archive/worldgen/`) were deleted 2026-10-22.
 
 ## 4. Limits and decisions
 
@@ -267,7 +267,7 @@ before), once per session (cached on the input hashes).
 - [tools/gen_biome_config.py](../tools/gen_biome_config.py) (in `generators.json`, groups `core`, `worldgen`).
 - [tools/biome_rarity_floor.py](../tools/biome_rarity_floor.py): writes the rarity-floor multipliers (2.1); rerun after a resample.
 - Readers of the config: `gen_structure_biome_table.py`, `gen_spawn_table.py`, `gen_crop_worldgen_table.py`, `structure_biome_coverage.py`, `gen_weather_table.py` (climate).
-- Archive: `kubejs/archive/worldgen/` (old node solver, biome merges).
+- Archive: the old node solver and biome merges (formerly `kubejs/archive/worldgen/`) were deleted 2026-10-22; git history has them.
 
 ## 6. Offline checks
 

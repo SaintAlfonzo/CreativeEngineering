@@ -23,5 +23,6 @@
   "creativeengineering:state_lines": true,
   "creativeengineering:campfire": true,
   "creativeengineering:sheetmetal_tank": true,
-  "creativeengineering:kitchen_station": true
+  "creativeengineering:kitchen_station": true,
+  "creativeengineering:remainder_buffer": true
 }

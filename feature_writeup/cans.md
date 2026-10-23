@@ -96,7 +96,7 @@ removals, sprites). Code: patcherMod `food/CanServings`, `food/CanServingsToolti
   and "No food canning recipe exists yet"; today 247 cans have serving counts from 1 to 10 and canning recipes exist
   for every section. The mechanics described there are current.
 - **F2. Values are placeholders for four sections** (meal, pie, feast, drink) and hand-written raw cans don't carry
-  effects ([TODO](todo/TODO.md) `food/canning #1` and `#4`, can_parity.md).
+  effects ([TODO](todo/TODO.md) `cans/canning #1` and `#4`, can_parity.md).
 - **F3. Golden cans hold 10 servings each** (50 cans): each serving is a quarter of the golden food's value
   (SECTIONS `golden` mult 0.25) with its effects at 0.25x duration (corrected 2026-10-21: this said "a full golden
   food's value"). Worth a look when tuning runs.
@@ -122,9 +122,9 @@ Settled in [can_parity.md](can_parity.md) 4; none built yet.
 
 Suggested build order: recipe changes in D-D (KubeJS only), then the golden numbers, then the Creative Canning split.
 
-**Priorities (scratchpad 2026-10-21):** can textures ([TODO](todo/TODO.md) `food/canning #13`: 48 of the 235 built cans
-have their own sprite) and can crafts (`food/canning #14`: recipes for the remaining wanted cans). Also wanted: one
-canned cake with 4 servings (`food/canning #15`, [can_parity.md](can_parity.md) 2.23).
+**Priorities (scratchpad 2026-10-21):** can textures ([TODO](todo/TODO.md) `cans/canning #13`: 48 of the 235 built cans
+have their own sprite) and can crafts (`cans/canning #14`: recipes for the remaining wanted cans). Also wanted: one
+canned cake with 4 servings (`cans/canning #15`, [can_parity.md](can_parity.md) 2.23).
 
 ### Known limits
 

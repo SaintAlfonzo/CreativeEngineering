@@ -43,8 +43,10 @@ StartupEvents.registry('item', e => {
 		['enchanted_golden_apple'],
 		['ham_and_cheese_sandwich'],                                 // alcohol.js (alcohol.md 8.6)
 		['quiche'],
-		// meals (cooking.js "Meals", TODO food/meals #2, #3)
+		// meals (cooking.js "Meals", TODO dishes/meals #2, #3)
 		['mutton_wrap'],
+		['chicken_fajitas_wrap'],                                    // Veggies Delight (veggies_delight.md 4.7)
+		['vegetables_wrap'],
 		['fruit_salad'],
 		['hamburger'],
 		['cheeseburger'],

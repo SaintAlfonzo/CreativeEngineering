@@ -16,10 +16,10 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# food`, Sub `stack-sizes`. 
 
 Build #1, restart, then do #2 in the same game session: `/dumpstacks` + `tools/stack_sizes.py`. The fresh reference
 is also how #1 gets checked (see #2's policy-check step). Related rows that touch the same rules:
-- `food/ingredients #2` asks "bucket stack size 16?"; the policy gives filled buckets 8 today.
-- `largecontent/cavesandchasmsport #5` asks about gold bucket stacking and whether milk keeps 64.
+- `dishes/ingredients #2` asks "bucket stack size 16?"; the policy gives filled buckets 8 today.
+- `ports/cavesandchasmsport #5` asks about gold bucket stacking and whether milk keeps 64.
 - `food/drinks #3` merges the two milk bottles; the milk rule below covers both, so either result works.
-- `food/ingredients #9` plans a stackable cheese ripening shelf.
+- `dishes/ingredients #9` plans a stackable cheese ripening shelf.
 
 None of them blocks #1.
 
@@ -125,7 +125,7 @@ All in [tools/gen_stack_sizes.py](../../tools/gen_stack_sizes.py):
 
 ### Decisions
 - **Mangosteen Cake: 32 (bowl food) or 8 (placed cake)?** Recommend 32. It is served in a bowl, and
-  `food/baked-goods #5` already says it is "not a cake" and should be renamed. Add it to `PLACED_FOOD_8` instead if it
+  `baking/baked-goods #5` already says it is "not a cake" and should be renamed. Add it to `PLACED_FOOD_8` instead if it
   should count as a placed cake.
 - **Unripe cheese wheels:** recommend 32 like the ripe ones; ageing happens on the placed block, so stacks don't matter for it.
 - **"Pitcher drinks":** no such item in the pack. Recommend reading it as "every drink" (the non-edible drink rule
@@ -137,7 +137,7 @@ All in [tools/gen_stack_sizes.py](../../tools/gen_stack_sizes.py):
   not "items stacking to 16".
 - `ItemEvents.modification` sets the item's max stack. FD's `enableStackableSoupItems` (config) is overridden for any
   item the JSON lists (stack_sizes.md "What the pack changes").
-- Stacks that don't merge because of NBT (`food/kitchen #5`, returned bowls and paper) are a separate bug. A bigger
+- Stacks that don't merge because of NBT (`cooking/kitchen #5`, returned bowls and paper) are a separate bug. A bigger
   max stack doesn't fix it.
 
 ### Tests

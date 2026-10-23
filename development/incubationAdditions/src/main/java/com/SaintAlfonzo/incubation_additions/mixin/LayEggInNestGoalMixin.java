@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.incubation_additions.mixin;
 
+import com.SaintAlfonzo.incubation_additions.goldenegg.GoldenEggLayer;
 import com.teamabnormals.incubation.common.block.EmptyNestBlock;
 import com.teamabnormals.incubation.common.entity.ai.goal.LayEggInNestGoal;
 import com.teamabnormals.incubation.core.api.EggLayer;
@@ -21,6 +22,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * and hay/twig nests have no emu variant. Reject those empty nests up front in isValidTarget
  * (m_6465_; MoveToBlockGoal re-checks it every tick through canContinueToUse, so tick() never
  * reaches a foreign nest either).
+ *
+ * Also keeps a goose that won the golden egg roll (goldenegg.GoldenEggLayer) off nests: canEggBeLaid
+ * (Incubation's own private method, unobfuscated) gates canUse, canContinueToUse and the lay in tick.
  */
 @Mixin(value = LayEggInNestGoal.class, remap = false)
 public abstract class LayEggInNestGoalMixin {
@@ -34,6 +38,13 @@ public abstract class LayEggInNestGoalMixin {
                                                           CallbackInfoReturnable<Boolean> cir) {
         Block block = level.getBlockState(pos.above()).getBlock();
         if (block instanceof EmptyNestBlock nest && nest.getNest(this.eggLayer.getEggItem()) == null) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "canEggBeLaid", at = @At("HEAD"), cancellable = true)
+    private void incubation_additions$noNestForGoldenEgg(CallbackInfoReturnable<Boolean> cir) {
+        if (this.eggLayer instanceof GoldenEggLayer bird && bird.incubation_additions$isGoldenEggDue()) {
             cir.setReturnValue(false);
         }
     }

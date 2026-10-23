@@ -17,8 +17,12 @@ ServerEvents.recipes(event => {
 	}
 
 	let totalHits = 0
+	// Merged items (item_merges.js) are swapped with replaceInput / replaceOutput in this same event, which KubeJS
+	// applies only after every script has run, so the json here still names them. Not orphans: skip them.
+	const merged = (global.itemMerges || []).map(m => m[0])
 
 	global.removedItems.forEach(itemId => {
+		if (merged.indexOf(itemId) >= 0) return
 		let matches = []
 
 		event.forEachRecipe({}, recipe => {

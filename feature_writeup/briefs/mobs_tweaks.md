@@ -19,7 +19,8 @@ Jars checked (decompiled with vineflower, under `scratchpad/decomp/`): `alexsmob
 | #8 | Merge monkeys | Planned | small once decided: config / data, + JEI hide |
 | #6 | Named mobs | Planned | medium: KubeJS (startup + server), optional patcherMod |
 | #5 | Quark monster boxes | Planned | the question is answered here; vault rework is medium-large patcherMod |
-| #2 | MCA villagers glitch while sleeping | Bug | unknown cause: in-game diagnosis first, then a client mixin |
+| #2 | MCA villagers glitch while sleeping | Bug | reported on adults (user, 2026-10-22), so the baby wobble isn't it; no client or AI cause found in code, MT-38 decides |
+| #12 | MCA villager eye colour | Built | Comb eye controls (`McaCombEyeColourMixin`), 2026-10-22; MT-40 |
 
 Build order:
 
@@ -33,14 +34,14 @@ Build order:
 
 Related rows: `largecontent/karma #1` (karma system, docs only so far; #6 adds the hook), `food/drinks #3` (banana
 merge, which says "Alex's Mobs' banana goes"; it touches #8, see there), `mobs/spawns #2` (farm animals by biome; #8's
-spawn change goes in the same `mob_spawns.json`), `worldgen/structures/contents #3` (remove pillager spawners; same
+spawn change goes in the same `mob_spawns.json`), `structures/contents #3` (remove pillager spawners; same
 area as #5), `gear/archery` ([archery.md](../archery.md); #9's Sputter shoots NEA arrows), `tooling/dictionaries #1`/`#2`
 (dictionary validation; #4 copies the block_dict pattern).
 
 ---
 
 ## tweaks #7: Seagulls can't take lunchboxes
-Status Planned / Work KubeJS / patcherMod (really config) / TODO `mobs/tweaks #7`
+Status Testing (config done 2026-10-22, MT-26; the dropped-box mixin not built) / Work KubeJS / patcherMod (really config) / TODO `mobs/tweaks #7`
 
 ### Goal
 Alex's Mobs seagulls stop stealing Spice of Life lunchboxes from the hotbar. Today they also eat them, contents and
@@ -543,6 +544,26 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
   with the plain humanoid limb animation, rotated flat by `LivingEntityRenderer#setupRotations`. That fits the
   symptom: any leftover limb swing (`limbDistance`) or the `riding` / `crouching` flags would show as bent-out limbs.
   Vanilla's riding pose is exactly "legs splayed out" (legs xRot -1.41, yRot ±π/10).
+- **Baby wobble (verified 2026-10-22, MCA bug):** `VillagerEntityBaseModelMCA#setupAnim` runs for every
+  `AgeState.BABY` villager that isn't riding: `limbDistance = sin(age/12)`, `limbAngle = cos(age/9)*3` and
+  `headYaw += sin(age/2)`. `isSleeping()` isn't checked, so a sleeping baby keeps swinging its arms and legs and shakes
+  its head every frame. `VillagerLikeEntityMCARenderer#scale` also lifts a non-riding baby 0.6 in model space. That
+  runs after `setupRotations` lays the body flat, so in bed the lift becomes a sideways offset. That matches the
+  symptom exactly for babies. Toddlers, children, teens and adults don't get the wobble.
+- **Adults: no client cause found (verified 2026-10-22).** Every other `HumanoidModel` / `LivingEntityRenderer` mixin
+  in `mods/` was decompiled: Citadel and Etched (arm pose events, players / held items), Quark (emotes, players),
+  Pierce Arrow (stuck-arrow part list), Exposure backport (camera pose, `CameraOperator` only), and NEA's
+  `LivingEntityRendererMixin` (empty). None of them touch a sleeping villager. MCA's panic arm wave can't show in
+  bed: panic replaces the REST activity, and `WakeUp` (in `getImportantCorePackage`) then wakes the villager. Sleep
+  itself is vanilla `SleepInBed` (`getRestPackage`). If adults show the symptom, the cause is (b) or (c) below.
+- **Adults confirmed (user, 2026-10-22).** The report was about adults, so the baby wobble is a side bug (still worth
+  the same mixin, low priority). Also checked in code 2026-10-22, nothing found: MCA's rest package matches vanilla's
+  (`ExtendedWalkTowardsTask` to HOME stops within 1 block, which a sleeper always is; the RunOne wander needs HOME
+  absent); no mod in `mods/` mixes into villager sleep or `SleepInBed` (Bedspreads only registers its beds as POI;
+  the vanilla `VillagerGoalPackages` mixins of Etched, Wares and Golems Are Friends don't apply to MCA's own brain);
+  Better Days' day speed (0.125) only slows `dayTime`, it never moves it back, so the REST schedule can't flap.
+  Still open: (b) pose flapping, (c) a vehicle, or (d) the server nudging the sleeper (any position change feeds
+  limb swing, which MCA's humanoid legs show plainly). MT-38 tells them apart; add a `Pos` read to it for (d).
 - **Not Not Enough Animations (verified):** NEA 1.12.2's `PlayerEntityModelMixin` targets `PlayerModel` (MCA doesn't
   use it) and acts only on `AbstractClientPlayer`. MCA's own client mixins (`client.MixinLivingEntityRenderer` etc.)
   only touch players rendered with the villager model.
@@ -610,9 +631,49 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
 - MCA updates often (this jar is a 2026-03 build). Keep the mixin `require = 0` and the target by name.
 
 ### Tests
-- **MT-38 Diagnose:** the `/data` checks in Build 1. Record the result in the row.
+- **MT-38 Diagnose (adults):** the `/data` checks in Build 1, plus `/data get entity <same selector> Pos` a few times (a changing value means (d)). Record the result in the row.
 - **MT-39 Still sleepers:** a village at night → sleeping villagers lie straight and still, in vanilla beds and
   in every modded bed type that villagers use.
+
+## tweaks #12: MCA villager eye colour
+
+Investigated 2026-10-22 against `minecraft-comes-alive-7.5.20+1.19.2-universal.jar` (javap + the face PNGs).
+
+- **No config, no gene for it.** `config/mca.json` has nothing on eyes; `Genetics` has no eye gene. Eye colour is
+  painted into the face textures `assets/mca/skins/face/<normal|zombie>/<male|female>/<n>.png` (`<n>_blink`,
+  `<n>_hetero` alongside), n = 0 to 21. `FaceLayer` has no tint (it keeps `VillagerLayer`'s default colour).
+- **Which face:** `FaceLayer.getSkin` takes `n = (int) min(21, max(0, FACE * 22))`; the `FACE` gene is
+  `RandomSource.nextFloat()` at spawn and mixes from both parents for children. So every face is equally likely.
+- **The 22 faces are 2 eye shapes x 11 colours**, same colour order in both shapes (n and n + 11), both genders:
+  brown, pink, light brown / amber, purple, green, blue, magenta, cyan, red, grey, yellow. So about 6 in 11
+  villagers have an unnatural eye colour (pink, purple, magenta, cyan, red, yellow).
+- **Heterochromia** is a trait (`Traits.HETEROCHROMIA`, on in `enabledTraits`, `traitChance` 0.25 over all traits):
+  the `_hetero` texture paints two colours (e.g. `0_hetero` red + yellow), not a second index.
+- **Per villager by hand:** MCA's editor has a "Face" gene slider (`gene.face`), so a single villager can be set
+  in game; players get only the limited editor (`allowLimitedPlayerEditor` true, full false).
+
+Ways to set it (pick one):
+
+1. **Resource pack (no code, client only).** Override the 88 base faces (+ blink + hetero, 264 files incl. zombie)
+   with the same art recoloured: map the 6 unnatural slots to natural colours (more brown, hazel, blue, green,
+   grey). The weighting is then simply how many of the 11 slots each colour gets. Generated by a tool from MCA's
+   own PNGs (palette swap, like `textureswapper/palette_swap.py`); MCA's art licence must allow a recoloured
+   copy in a shipped pack, check first.
+2. **patcherMod client mixin on `FaceLayer.getSkin`** remapping n to a slot in an allowed list (e.g. 0, 2, 4, 5,
+   9, 13 ... plus their +11). No new art, but cuts the variety to the 5 natural colours MCA ships; existing
+   villagers change look too (the gene is untouched, only the render).
+3. A server mixin on `Genetics.randomize` writing only allowed FACE ranges: affects only new villagers, children
+   of old ones can still inherit an unnatural face. Worse than 2.
+
+**Chosen 2026-10-22 (user): let players pick, not restrict.** Built as an eye-colour and eye-shape row on the MCA
+Comb's hairstyle page (`McaCombEyeColourMixin`, client only), for the player's own look and a combed villager;
+all 11 colours stay. Options 1 to 3 above are kept for the record.
+
+Recommendation was: 2 if the 5 shipped natural colours are enough (smallest, reversible); 1 if more shades are wanted.
+Decision needed: which colours are allowed (and whether heterochromia stays, its pairs are fixed in the art).
+
+### Tests
+- **MT-40 Comb eye colour:** in [mob_block_tweaks.md](../mob_block_tweaks.md) section 7.
 
 ---
 
@@ -621,6 +682,8 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
 | Row | Change | Status | Note |
 |---|---|---|---|
 | #1 | Mob and block tweaks (bubble columns, Bushier Flowers off, trough retry, asphalt) | Testing | Nothing wrong found. MT-01 to MT-12 open. The same writeup now also carries the leaf decay work (MT-13 to MT-25, `farming/trees #1`), built 2026-10-19/20 after the 1.0.9 deploy and correctly marked not deployed |
+| #7 | Seagulls skip lunchboxes | Testing | Config 2026-10-22 (`seagullStealingBlacklist`), MT-26; scratch probe SQ-GM-07 checks the list loads |
+| #12 | MCA Comb eye colour and shape | Testing | Built 2026-10-22 (patcherMod 1.1.01 in `mods/`), MT-40 in [mob_block_tweaks.md](../mob_block_tweaks.md), client only |
 
 ## Writeup corrections made
 

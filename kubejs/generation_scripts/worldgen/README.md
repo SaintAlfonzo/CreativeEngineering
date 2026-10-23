@@ -158,7 +158,7 @@ in `kubejs/archive/worldgen/pre_groups_2026-09-27/`.
 `biome_merges.json` used to widen structures' spawn pools by adding biomes to the additive `has_structure/*` biome
 tags they reference (`biome_merges.js`, CEConfig `biomeMerges`). Retired 2026-10-11 in favour of biome fits
 (`biome_fits.json`), which replace one structure's list instead of widening a shared tag. The files, the proposal
-analyzer and the builder are archived in `kubejs/archive/worldgen/biome_merges_2026-10-11/`; see
+analyzer and the builder were deleted from the tree (still in git history); see
 `feature_writeup/structure_tuning.md` 7.2.
 
 ## Wild crops (which biomes each wild crop and fruit tree spawns in)

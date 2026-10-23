@@ -14,10 +14,10 @@ Build order: A any time (one restart: item_dict and removed_items are startup sc
 (F3+T reloads lang; the JEED config needs a client restart).
 
 Cross-family links:
-- `gear/effects #3` ([brief](gear_effects.md)): switching Magic Resistance to the pack's `magic` damage tag changes what
+- `potions/effects #3` ([brief](potions_effects.md)): switching Magic Resistance to the pack's `magic` damage tag changes what
   its description must say; that brief has its own wording. Write the Magic Resistance text with or after it.
 - `food/types-and-tuning #10` ([brief](food_types-and-tuning.md)) already removes `passion_fruit_glazed_duck`;
-  `food/baked-goods #5` part c ([brief](food_baked-goods.md)) already removes `create_central_kitchen:passionfruit_cake_slice`
+  `baking/baked-goods #5` part c ([brief](baking_baked-goods.md)) already removes `create_central_kitchen:passionfruit_cake_slice`
   (and the aloe / yucca cake slices). `#6` here only needs to check them, as its Details ask: both are handled there.
 - `food/placeable` ([brief](food_placeable.md) "not placeable today") and `food/stack-sizes` ([brief](food_stack-sizes.md)
   "drinks with no food value") list `passion_aloe_nectar` and `cherry_cream_soda`; both are unobtainable (below), so
@@ -47,14 +47,14 @@ untagged, flagged if a stack turns up, and not listed as an effect source.
   - `abnormals_delight:passion_fruit_glazed_duck`: compat item for `atmospheric` + `environmental` (no tab), recipe needs
     both. Removal planned in `food/types-and-tuning #10`.
   - `create_central_kitchen:passionfruit_cake_slice`: its cut and craft recipes need `peculiars` (not installed). Removal
-    planned in `food/baked-goods #5` (c). Whether CCK puts it in a creative tab is unverified: check JEI.
+    planned in `baking/baked-goods #5` (c). Whether CCK puts it in a creative tab is unverified: check JEI.
 - More Abnormals Delight items in the same state (gated on mods not in pack/MODLIST.md):
   - Atmospheric: `dune_platter` (typed `meal`), `yucca_gateau_slice` (typed `sweet`, compost_values.js 699).
   - Environmental: `cherry_cream_soda` (`EffectDrinkItem(SLOW_FALLING, ..., "environmental")`, recipe needs
     `environmental`) — but it is listed as a Slow Falling source in
     [jeed_providers.js](../../kubejs/server_scripts/other/jeed_providers.js) line 106, so JEI shows an item no one can
-    make. `cherry_cookie`, duck and venison items: owned by `food/baked-goods #3` and `food/types-and-tuning #10`.
-  - Autumnity: `maple_cookie`, `maple_glazed_bacon`, `escargot`. Leave them: `largecontent/autumnityport` may bring the
+    make. `cherry_cookie`, duck and venison items: owned by `baking/baked-goods #3` and `food/types-and-tuning #10`.
+  - Autumnity: `maple_cookie`, `maple_glazed_bacon`, `escargot`. Leave them: `ports/autumnityport` may bring the
     `autumnity` mod id back, which would make them live.
 - Removal path ([removed_items.js](../../kubejs/startup_scripts/_lib/removed_items.js)): `global.removedItems` ->
   hidden in JEI ([jeichanges.js](../../kubejs/client_scripts/jeichanges.js) 4-10), red "REMOVED ITEM: DO NOT USE"
@@ -132,7 +132,7 @@ the text (decision "approve the text").
 ### Build
 1. On approval, replace the nine placeholders (all but Anti-Fire, D1) with the 2.1 texts, e.g.
    `"effect.better_beacons.long_reach.description": "Extends your block reach by 3 blocks per level, for placing, breaking and using blocks. Attack range is unchanged. From a beacon, felsic and dragon armor, or a Potion of Long Reach."`
-   Magic Resistance: take the wording settled in `gear/effects #3` (the `magic` tag version if that lands).
+   Magic Resistance: take the wording settled in `potions/effects #3` (the `magic` tag version if that lands).
 2. Anti-Fire (D1): add `"immersivepetroleum:anti_fire"` to `hidden_effects` in `config/jeed-client.toml` **and**
    `configs_edited/root_config/jeed-client.toml` (they must stay equal, as for Sunny). Then extend
    `gen_effect_descriptions.py` to read that list (`hidden_effects = [...]`, the same regex as effect_audit.py's `hidden_effects()`, line 123) and
@@ -150,7 +150,7 @@ JEED toml take raw ids anyway, so no dict key is needed.
 
 ### Decisions
 - **D0 Approve the text** (the row's decision): the nine texts in effects.md 2.1. Recommend approving as written, with
-  Magic Resistance following `gear/effects #3`.
+  Magic Resistance following `potions/effects #3`.
 - **D1 Anti-Fire:** recommend hiding it in JEED (it is a one-tick internal effect with no name) instead of describing
   it. Alternative: keep the PROPOSED text and also give it a name ("Anti-Fire") through name_rules.json `names`.
 

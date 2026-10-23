@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "veggiesdelight:zucchini_quiche_slice"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "item": "veggiesdelight:zucchini_quiche"
+  },
+  "show_notification": true
+}

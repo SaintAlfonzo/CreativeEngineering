@@ -1,0 +1,1953 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "alexsdelight",
+    "creativeengineering"
+   ],
+   "inputs": [
+    {
+     "item": "alexsdelight:acacia_blossom_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:acacia_blossom_soup\",Count:2,CachedColor:-2700384}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "neapolitan"
+   ],
+   "inputs": [
+    {
+     "item": "neapolitan:adzuki_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:adzuki_stew\",Count:2,CachedColor:-7983825}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "fruitsdelight"
+   ],
+   "inputs": [
+    {
+     "item": "fruitsdelight:bayberry_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bayberry_soup\",Count:1,CachedColor:-8185793}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    },
+    {
+     "fluid": "fruitsdelight:bayberry_soup",
+     "amount": 250,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "rusticdelight"
+   ],
+   "inputs": [
+    {
+     "item": "rusticdelight:bell_pepper_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bell_pepper_soup\",Count:2,CachedColor:-6149599}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "farmersrespite"
+   ],
+   "inputs": [
+    {
+     "item": "farmersrespite:blazing_chili"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:blazing_chili\",Count:2,CachedColor:-6673390}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:bone_broth"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bone_broth\",Count:2,CachedColor:-3623798}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "moredelight"
+   ],
+   "inputs": [
+    {
+     "item": "moredelight:carrot_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:carrot_soup\",Count:2,CachedColor:-1735679}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "quarkdelight"
+   ],
+   "inputs": [
+    {
+     "item": "quarkdelight:cavern_explorer_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cavern_explorer_stew\",Count:2,CachedColor:-13865884}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "endersdelight:chorus_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:chorus_stew\",Count:2,CachedColor:-6657376}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "endersdelight:shulker_bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "corn_delight",
+    "creativeengineering"
+   ],
+   "inputs": [
+    {
+     "item": "corn_delight:corn_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:corn_soup\",Count:2,CachedColor:-932019}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "brewinandchewin",
+    "creativeengineering"
+   ],
+   "inputs": [
+    {
+     "item": "brewinandchewin:creamy_onion_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:creamy_onion_soup\",Count:2,CachedColor:-3437020}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "goldenfood"
+   ],
+   "inputs": [
+    {
+     "item": "goldenfood:enchanted_golden_beetroot_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:enchanted_golden_beetroot_soup\",Count:2,CachedColor:-9495798}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "goldenfood"
+   ],
+   "inputs": [
+    {
+     "item": "goldenfood:enchanted_golden_mushroom_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:enchanted_golden_mushroom_stew\",Count:2,CachedColor:-3631750}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "goldenfood"
+   ],
+   "inputs": [
+    {
+     "item": "goldenfood:enchanted_golden_rabbit_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:enchanted_golden_rabbit_stew\",Count:2,CachedColor:-1258683}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "endersdelight:endermite_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:endermite_stew\",Count:2,CachedColor:-11912612}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "endersdelight:shulker_bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "fruitsdelight"
+   ],
+   "inputs": [
+    {
+     "item": "fruitsdelight:fig_chicken_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:fig_chicken_stew\",Count:2,CachedColor:-6920366}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "goldenfood"
+   ],
+   "inputs": [
+    {
+     "item": "goldenfood:golden_beetroot_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:golden_beetroot_soup\",Count:2,CachedColor:-9495798}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "goldenfood"
+   ],
+   "inputs": [
+    {
+     "item": "goldenfood:golden_mushroom_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:golden_mushroom_stew\",Count:2,CachedColor:-3631750}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "goldenfood"
+   ],
+   "inputs": [
+    {
+     "item": "goldenfood:golden_rabbit_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:golden_rabbit_stew\",Count:2,CachedColor:-1258683}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "alexsdelight",
+    "creativeengineering"
+   ],
+   "inputs": [
+    {
+     "item": "alexsdelight:kangaroo_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:kangaroo_stew\",Count:2,CachedColor:-8895183}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "quarkdelight"
+   ],
+   "inputs": [
+    {
+     "item": "quarkdelight:miso_with_bamboo_sprouts"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:miso_with_bamboo_sprouts\",Count:2,CachedColor:-10189511}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:noodle_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:noodle_soup\",Count:2,CachedColor:-3828941}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "delightful"
+   ],
+   "inputs": [
+    {
+     "item": "delightful:sinigang"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:sinigang\",Count:2,CachedColor:-5736898}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "nethersdelight:strider_moss_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:strider_moss_stew\",Count:2,CachedColor:-10081230}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:beetroot_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:beetroot_soup\",Count:2,CachedColor:-3591116}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:dragon_breath"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:dragon_breath\",Count:1,CachedColor:-52225}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:experience_bottle"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:experience\",Count:1,CachedColor:-1}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:ghast_tear"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:ghast_tear\",Count:1,CachedColor:-4198160}}}",
+     "label": "1 of 12 filled"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar.",
+    "Cannot be poured back out."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:honey_bottle"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:honey\",Count:1,CachedColor:-1}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    },
+    {
+     "fluid": "create:honey",
+     "amount": 250,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:honey_block"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:honey\",Count:4,CachedColor:-1}}}",
+     "label": "4 of 12 filled"
+    },
+    {
+     "fluid": "create:honey",
+     "amount": 1000,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 4 of 12; 3 fill a jar.",
+    "Cannot be poured back out."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:lava_bucket"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:lava\",Count:4,CachedColor:-1}}}",
+     "label": "4 of 12 filled"
+    },
+    {
+     "item": "minecraft:bucket"
+    },
+    {
+     "fluid": "minecraft:lava",
+     "amount": 1000,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 4 of 12; 3 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:magma_cream"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:magma_cream\",Count:1,CachedColor:-24320}}}",
+     "label": "1 of 12 filled"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar.",
+    "Cannot be poured back out."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:milk_bottle"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:milk\",Count:1,CachedColor:-1}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    },
+    {
+     "fluid": "minecraft:milk",
+     "amount": 250,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:milk_bucket"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:milk\",Count:4,CachedColor:-1}}}",
+     "label": "4 of 12 filled"
+    },
+    {
+     "item": "minecraft:bucket"
+    },
+    {
+     "fluid": "minecraft:milk",
+     "amount": 1000,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 4 of 12; 3 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:mushroom_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:mushroom_stew\",Count:2,CachedColor:-21111}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "items": [
+      "minecraft:potion",
+      "minecraft:splash_potion",
+      "minecraft:lingering_potion"
+     ],
+     "nbt": "{Potion:\"minecraft:swiftness\"}",
+     "label": "Any potion"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:potion\",Count:1,CachedColor:-524040}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    },
+    {
+     "fluid": "create:potion",
+     "amount": 250,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar.",
+    "One potion kind per jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:powder_snow_bucket"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:powder_snow\",Count:4,CachedColor:-1}}}",
+     "label": "4 of 12 filled"
+    },
+    {
+     "item": "minecraft:bucket"
+    }
+   ],
+   "notes": [
+    "Each adds 4 of 12; 3 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:rabbit_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:rabbit_stew\",Count:2,CachedColor:-28593}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:slime_ball"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:slime\",Count:1,CachedColor:-1}}}",
+     "label": "1 of 12 filled"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar.",
+    "Cannot be poured back out."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:slime_block"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:slime\",Count:9,CachedColor:-1}}}",
+     "label": "9 of 12 filled"
+    }
+   ],
+   "notes": [
+    "Each adds 9 of 12; 1 fill a jar.",
+    "Cannot be poured back out."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:suspicious_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:suspicious_stew\",Count:2,CachedColor:-4528033}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar.",
+    "One potion kind per jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:water_bucket"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:water\",Count:4,CachedColor:-12618012}}}",
+     "label": "4 of 12 filled"
+    },
+    {
+     "item": "minecraft:bucket"
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 4 of 12; 3 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:potion",
+     "nbt": "{Potion:\"minecraft:water\"}"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:water\",Count:1,CachedColor:-12618012}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 250,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:baked_cod_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:baked_cod_stew\",Count:2,CachedColor:-1258090}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:beef_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:beef_stew\",Count:2,CachedColor:-9355475}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersrespite"
+   ],
+   "inputs": [
+    {
+     "item": "farmersrespite:black_tea"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:black_tea\",Count:1,CachedColor:-8962777}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "item": "create:builders_tea"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:builders_tea\",Count:1,CachedColor:-1}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    },
+    {
+     "fluid": "create:tea",
+     "amount": 250,
+     "label": "Same fluid as this"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:chicken_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:chicken_soup\",Count:2,CachedColor:-2185370}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersrespite"
+   ],
+   "inputs": [
+    {
+     "item": "farmersrespite:dandelion_tea"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:dandelion_tea\",Count:1,CachedColor:-1848469}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "minecraft:dirt"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:dirt\",Count:4,CachedColor:-1}}}",
+     "label": "4 of 12 filled"
+    }
+   ],
+   "notes": [
+    "Each adds 4 of 12; 3 fill a jar.",
+    "Cannot be poured back out."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "item": "alexsmobs:fish_oil"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:fish_oil\",Count:1,CachedColor:-5988}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:fish_stew"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:fish_stew\",Count:2,CachedColor:-5028832}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersrespite"
+   ],
+   "inputs": [
+    {
+     "item": "farmersrespite:green_tea"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:green_tea\",Count:1,CachedColor:-6314437}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:hot_cocoa"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:hot_cocoa\",Count:1,CachedColor:-7383493}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "item": "alexsmobs:komodo_spit_bottle"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:komodo_spit\",Count:1,CachedColor:-5719706}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "item": "alexsmobs:mimicream"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:mimicream\",Count:1,CachedColor:-8359509}}}",
+     "label": "1 of 12 filled"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar.",
+    "Cannot be poured back out."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "item": "upgrade_aquatic:mulberry_jam_bottle"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:mulberry_jam\",Count:1,CachedColor:-1}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "item": "alexsmobs:poison_bottle"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:poison\",Count:1,CachedColor:-7672985}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:pumpkin_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:pumpkin_soup\",Count:2,CachedColor:-1865187}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersrespite"
+   ],
+   "inputs": [
+    {
+     "item": "farmersrespite:purulent_tea"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:purulent_tea\",Count:1,CachedColor:-4440503}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersrespite"
+   ],
+   "inputs": [
+    {
+     "item": "farmersrespite:rose_hip_tea"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:rose_hip_tea\",Count:1,CachedColor:-4381400}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "item": "alexsmobs:sopa_de_macaco"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:sopa_de_macaco\",Count:2,CachedColor:-4800124}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:tomato_sauce"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:tomato_sauce\",Count:2,CachedColor:-4180961}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "item": "farmersdelight:vegetable_soup"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:vegetable_soup\",Count:2,CachedColor:-7702491}}}",
+     "label": "2 of 12 filled"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "notes": [
+    "Each adds 2 of 12; 6 fill a jar."
+   ]
+  },
+  {
+   "requires": [
+    "farmersrespite"
+   ],
+   "inputs": [
+    {
+     "item": "farmersrespite:yellow_tea"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:yellow_tea\",Count:1,CachedColor:-5668031}}}",
+     "label": "1 of 12 filled"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "notes": [
+    "Each adds 1 of 12; 12 fill a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/apples"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/berries"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/candied_apples"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/candied_berries"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/candies"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/chocolate_bars"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/cookies"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/dried_fruit"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "tag": "creativeengineering:jar_family/marshmallows"
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Any mix of the group shares a jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "items": [
+      "create_enchantment_industry:hyper_experience_bottle",
+      "moredelight:toast"
+     ]
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "notes": [
+    "Up to 12, one per layer.",
+    "Only one kind per jar."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entities": [
+      "alexsmobs:cockroach",
+      "alexsmobs:enderiophage",
+      "alexsmobs:fly",
+      "alexsmobs:hummingbird",
+      "alexsmobs:leafcutter_ant",
+      "minecraft:allay",
+      "minecraft:bee",
+      "minecraft:magma_cube",
+      "minecraft:slime",
+      "quark:crab"
+     ]
+    }
+   ],
+   "action": {
+    "item": "supplementaries:jar"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "label": "Holding the mob"
+    }
+   ],
+   "notes": [
+    "Use an empty jar on the mob.",
+    "Place it to let the mob out."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:rabbit"
+     ]
+    }
+   ],
+   "action": {
+    "item": "supplementaries:jar"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "label": "Holding the mob"
+    }
+   ],
+   "notes": [
+    "Babies only.",
+    "Use an empty jar on the mob."
+   ]
+  }
+ ]
+}

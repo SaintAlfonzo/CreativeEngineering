@@ -15,152 +15,168 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 
 | Crop | Biomes now | Per 1000 now | Mod default | Change |
 |---|---|---|---|---|
-| Adzuki Beans | 18 | 0.6 | 0.4 | x1.34 |
-| Apple (tree) | 0 | 0.0 | 1.9 | gone |
-| Apple (Vinery tree) | 6 | 0.4 | 0.7 | x0.51 |
-| Bamboo | 9 | 3.5 | 3.5 | x1.00 |
-| Banana | 9 | 9.8 | 7.4 | x1.33 |
-| Bayberry (tree) | 3 | 1.6 | 1.8 | x0.88 |
-| Beetroot (Sea Beet) | 7 | 0.4 | 0.3 | x1.27 |
-| Bell Pepper | 11 | 2.4 | 1.5 | x1.60 |
-| Blueberry | 18 | 2.1 | 3.6 | x0.57 |
-| Brown Mushroom Colony | 2 | 1.2 | 0.2 | x6.99 |
-| Cabbage | 7 | 0.4 | 0.3 | x1.27 |
-| Cactus | 15 | 384.3 | 384.3 | x1.00 |
-| Cantaloupe | 12 | 1.7 | 0.3 | x5.39 |
-| Carrot | 25 | 1.0 | 1.8 | x0.57 |
-| Cherry (Vinery tree) | 15 | 0.4 | 0.7 | x0.48 |
+| Adzuki Beans | 18 | 0.5 | 0.3 | x1.60 |
+| Apple (tree) | 0 | 0.0 | 2.2 | gone |
+| Apple (Vinery tree) | 6 | 0.4 | 0.7 | x0.52 |
+| Bamboo | 9 | 3.6 | 3.6 | x1.00 |
+| Banana | 9 | 9.0 | 7.4 | x1.21 |
+| Bayberry (tree) | 3 | 0.8 | 1.1 | x0.73 |
+| Beetroot (Sea Beet) | 7 | 1.1 | 0.5 | x2.34 |
+| Bell Pepper | 11 | 1.9 | 1.4 | x1.32 |
+| Blueberry | 18 | 2.5 | 3.5 | x0.71 |
+| Broccoli | 25 | 0.5 | 0.0 | new |
+| Brown Mushroom Colony | 2 | 0.6 | 0.2 | x3.70 |
+| Cabbage | 7 | 1.1 | 0.5 | x2.34 |
+| Cactus | 15 | 200.7 | 200.7 | x1.00 |
+| Cantaloupe | 12 | 0.9 | 0.5 | x1.94 |
+| Carrot | 25 | 0.9 | 1.7 | x0.54 |
+| Cauliflower | 25 | 0.5 | 0.0 | new |
+| Cherry (Vinery tree) | 15 | 0.4 | 0.7 | x0.53 |
 | Chorus Fruit | 1 | 0.0 | 0.0 | - |
-| Cocoa | 11 | 605.9 | 600.4 | x1.01 |
+| Cocoa | 11 | 632.7 | 630.0 | x1.00 |
 | Coffee (Farmer's Respite) | 0 | 0.0 | 0.0 | - |
-| Coffee (Rustic Delight) | 11 | 2.4 | 1.5 | x1.60 |
-| Corn | 12 | 3.1 | 7.1 | x0.43 |
-| Cotton | 12 | 1.0 | 0.6 | x1.60 |
-| Cranberry | 5 | 1.6 | 1.6 | x0.99 |
-| Durian (tree) | 3 | 0.1 | 0.2 | x0.58 |
-| Fig (tree) | 10 | 4.5 | 1.9 | x2.31 |
-| Glow Berries | 3 | 30.4 | 30.4 | x1.00 |
-| Grapes: jungle red | 4 | 4.5 | 4.5 | x1.00 |
-| Grapes: jungle white | 4 | 4.5 | 4.5 | x1.00 |
-| Grapes: red | 7 | 1.1 | 1.1 | x1.00 |
-| Grapes: savanna red | 4 | 0.5 | 0.5 | x1.00 |
-| Grapes: savanna white | 4 | 0.5 | 0.5 | x1.00 |
-| Grapes: taiga red | 4 | 0.4 | 0.4 | x1.00 |
-| Grapes: taiga white | 4 | 0.4 | 0.4 | x1.00 |
-| Grapes: white | 7 | 1.1 | 1.1 | x1.00 |
-| Hamimelon | 15 | 0.9 | 0.4 | x2.54 |
-| Hawberry (tree) | 10 | 4.5 | 3.5 | x1.28 |
-| Kiwi (tree) | 9 | 1.1 | 1.9 | x0.59 |
-| Lemon | 9 | 0.7 | 1.5 | x0.47 |
-| Lychee (tree) | 9 | 5.7 | 4.6 | x1.24 |
-| Mango (tree) | 9 | 5.7 | 4.6 | x1.24 |
-| Mangosteen (tree) | 3 | 0.6 | 0.9 | x0.66 |
-| Melon | 11 | 5.9 | 3.0 | x2.00 |
-| Mini Melon | 11 | 1.0 | 2.0 | x0.50 |
-| Mint | 11 | 12.5 | 2.2 | x5.56 |
-| Mulberries | 2 | 41.3 | 41.3 | x1.00 |
-| Onion | 25 | 1.0 | 1.8 | x0.57 |
-| Orange (tree) | 9 | 1.1 | 1.9 | x0.59 |
-| Peach (tree) | 9 | 2.8 | 1.8 | x1.55 |
-| Pear (tree) | 3 | 0.8 | 1.2 | x0.69 |
-| Persimmon (tree) | 13 | 0.6 | 1.4 | x0.40 |
-| Pineapple | 4 | 0.5 | 0.3 | x1.92 |
-| Potato | 15 | 1.1 | 1.2 | x0.93 |
+| Coffee (Rustic Delight) | 11 | 1.9 | 1.4 | x1.32 |
+| Corn | 12 | 1.7 | 7.0 | x0.24 |
+| Cotton | 12 | 0.5 | 0.5 | x1.09 |
+| Cranberry | 5 | 2.1 | 1.0 | x2.06 |
+| Cucumbers | 19 | 1.4 | 0.0 | new |
+| Durian (tree) | 3 | 0.1 | 0.1 | x0.40 |
+| Fig (tree) | 10 | 4.9 | 2.2 | x2.27 |
+| Garlic | 25 | 0.5 | 0.0 | new |
+| Glow Berries | 3 | 9.2 | 9.2 | x1.00 |
+| Grapes: jungle red | 11 | 2.8 | 1.5 | x1.88 |
+| Grapes: jungle white | 11 | 2.8 | 1.5 | x1.88 |
+| Grapes: red | 23 | 4.5 | 3.8 | x1.17 |
+| Grapes: savanna red | 12 | 2.3 | 0.9 | x2.59 |
+| Grapes: savanna white | 12 | 2.3 | 0.9 | x2.59 |
+| Grapes: taiga red | 10 | 4.5 | 1.7 | x2.55 |
+| Grapes: taiga white | 10 | 4.5 | 1.7 | x2.55 |
+| Grapes: white | 23 | 4.5 | 3.8 | x1.17 |
+| Hamimelon | 15 | 0.4 | 0.2 | x2.28 |
+| Hawberry (tree) | 10 | 4.9 | 3.7 | x1.32 |
+| Kiwi (tree) | 9 | 1.1 | 2.2 | x0.50 |
+| Lemon | 9 | 0.7 | 1.5 | x0.45 |
+| Lychee (tree) | 9 | 5.4 | 3.9 | x1.38 |
+| Mango (tree) | 9 | 5.4 | 3.9 | x1.38 |
+| Mangosteen (tree) | 3 | 0.3 | 0.6 | x0.49 |
+| Melon | 11 | 4.7 | 2.8 | x1.71 |
+| Mini Melon | 11 | 0.8 | 1.8 | x0.45 |
+| Mint | 11 | 11.7 | 3.7 | x3.18 |
+| Oats | 26 | 1.2 | 0.0 | new |
+| Onion | 25 | 0.9 | 1.7 | x0.54 |
+| Orange (tree) | 9 | 1.1 | 2.2 | x0.50 |
+| Peach (tree) | 9 | 2.7 | 1.6 | x1.68 |
+| Peanuts | 26 | 1.2 | 0.0 | new |
+| Pear (tree) | 3 | 0.6 | 1.5 | x0.37 |
+| Persimmon (tree) | 13 | 0.8 | 1.5 | x0.52 |
+| Pineapple | 4 | 0.7 | 0.4 | x1.53 |
+| Potato | 15 | 1.2 | 1.4 | x0.88 |
 | Propelplant | 1 | 0.0 | 0.0 | - |
-| Pumpkin | 11 | 0.3 | 1.7 | x0.17 |
-| Red Mushroom Colony | 2 | 1.2 | 0.2 | x6.99 |
-| Rice | 11 | 1.8 | 5.7 | x0.31 |
-| Rubber tree | 9 | 5.7 | 0.0 | new |
-| Salmonberries | 15 | 3.2 | 1.6 | x1.92 |
-| Strawberries | 6 | 0.5 | 0.5 | x1.07 |
-| Sugar Cane | 6 | 6.7 | 116.4 | x0.06 |
-| Sweet Berries | 33 | 5.5 | 3.6 | x1.51 |
-| Tea | 3 | 13.3 | 10.7 | x1.25 |
-| Tomato | 12 | 0.9 | 1.3 | x0.71 |
-| Vanilla | 11 | 0.6 | 0.6 | x1.00 |
+| Pumpkin | 11 | 0.4 | 1.6 | x0.24 |
+| Red Mushroom Colony | 2 | 0.6 | 0.2 | x3.70 |
+| Rice | 11 | 1.4 | 6.5 | x0.22 |
+| Rubber tree | 9 | 5.4 | 0.0 | new |
+| Salmonberries | 15 | 3.4 | 1.3 | x2.57 |
+| Strawberries | 6 | 0.4 | 0.3 | x1.37 |
+| Sugar Cane | 6 | 8.5 | 97.1 | x0.09 |
+| Sweet Berries | 33 | 6.2 | 3.9 | x1.58 |
+| Sweet Potato | 12 | 0.5 | 0.0 | new |
+| Tea | 20 | 59.3 | 5.2 | x11.51 |
+| Tomato | 12 | 0.5 | 0.8 | x0.68 |
+| Turnip | 7 | 1.1 | 0.0 | new |
+| Vanilla | 11 | 0.4 | 0.3 | x1.56 |
+| Zucchini | 12 | 0.5 | 0.0 | new |
 
 ## 2. Summary per feature
 
 | Crop | Feature | Rate | Height | Biomes | Share | Per 1000 chunks |
 |---|---|---|---|---|---|---|
-| Adzuki Beans | `neapolitan:patch_adzuki_sprouts` | 1 in 128 chunks | surface | 18 | overworld 7.3% | 0.6 |
+| Adzuki Beans | `neapolitan:patch_adzuki_sprouts` | 1 in 128 chunks | surface | 18 | overworld 6.8% | 0.5 |
 | Apple (Vinery tree) | `vinery:tree_apple` | 1 in 100 chunks | surface or sea floor | 6 | overworld 3.7% | 0.4 |
-| Bamboo | `minecraft:bamboo` | variable | surface (feature finds it) | 1 | overworld 0.3% | - |
-| Bamboo | `minecraft:bamboo_light` | 1 in 4.0 chunks | surface (feature finds it) | 6 | overworld 1.4% | 3.5 |
-| Bamboo | `terralith:cherry/bamboo` | variable | surface (feature finds it) | 2 | overworld 0.4% | - |
-| Banana | `neapolitan:banana_plant_common` | 1 in 1.3 chunks | surface (feature finds it) | 4 | overworld 1.2% | 8.7 |
+| Bamboo | `minecraft:bamboo` | variable | surface (feature finds it) | 1 | overworld 0.1% | - |
+| Bamboo | `minecraft:bamboo_light` | 1 in 4.0 chunks | surface (feature finds it) | 6 | overworld 1.5% | 3.6 |
+| Bamboo | `terralith:cherry/bamboo` | variable | surface (feature finds it) | 2 | overworld 0.3% | - |
+| Banana | `neapolitan:banana_plant_common` | 1 in 1.3 chunks | surface (feature finds it) | 4 | overworld 1.1% | 7.9 |
 | Banana | `neapolitan:banana_plant_uncommon` | 1 in 10 chunks | surface (feature finds it) | 5 | overworld 1.1% | 1.1 |
-| Bayberry (tree) | `fruitsdelight:tree/bayberry_tree` | 1 in 15 chunks | surface or sea floor | 3 | overworld 2.4% | 1.6 |
-| Beetroot (Sea Beet) | `creativeengineering:wild/beetroots` | 1 in 30 chunks | surface | 7 | overworld 1.1% | 0.4 |
-| Bell Pepper | `rusticdelight:wild_bell_peppers_placed` | 1 in 15 chunks | surface | 11 | overworld 3.6% | 2.4 |
-| Blueberry | `fruitsdelight:blueberry_bush` | 1 in 32 chunks | surface | 18 | overworld 6.6% | 2.1 |
-| Brown Mushroom Colony | `creativeengineering:wild/brown_mushroom_colonies` | 1 in 15 chunks | surface | 2 | overworld 1.9% | 1.2 |
-| Cabbage | `creativeengineering:wild/cabbages` | 1 in 30 chunks | surface | 7 | overworld 1.1% | 0.4 |
-| Cactus | `immersive_weathering:sand_patch` | 16 per chunk | Y bottom+64 to 64 | 6 | overworld 2.3% | 368.0 |
-| Cactus | `minecraft:patch_cactus_decorated` | 1 in 13 chunks | surface (feature finds it) | 7 | overworld 3.5% | 2.7 |
-| Cactus | `minecraft:patch_cactus_desert` | 1 in 6.0 chunks | surface (feature finds it) | 7 | overworld 2.5% | 4.2 |
-| Cactus | `terralith:desert/lush/cacti` | 10 per chunk | surface | 1 | overworld 0.1% | 6.7 |
-| Cactus | `terralith:skylands/summer/cactus` | 8 per chunk | WORLD_SURFACE | 1 | overworld 0.0% | 2.6 |
-| Cantaloupe | `delightful:patch_cantaloupe` | 1 in 55 chunks | surface | 12 | overworld 9.2% | 1.7 |
-| Carrot | `farmersdelight:patch_wild_carrots` | 1 in 120 chunks | surface | 25 | overworld 12.1% | 1.0 |
-| Cherry (Vinery tree) | `vinery:tree_cherry` | 1 in 100 chunks | surface or sea floor | 15 | overworld 3.5% | 0.4 |
-| Chorus Fruit | `nullscape:chorus_quadratic` | variable | surface (feature finds it) | 1 | the_end 76.2% | - |
-| Chorus Fruit | `nullscape:chorus_variation` | variable | surface (feature finds it) | 1 | the_end 76.2% | - |
-| Cocoa | `creativeengineering:wild/cocoa_jungle_tree` | 1 in 3.0 chunks (trees) | surface or sea floor | 3 | overworld 1.6% | 5.4 trees |
-| Cocoa | `minecraft:trees_jungle` | 50.1 per chunk (trees) | surface (feature finds it) | 2 | overworld 0.5% | 233.5 trees |
-| Cocoa | `minecraft:trees_jungle_edge` | 2.1 per chunk (trees) | surface (feature finds it) | 1 | overworld 0.5% | 10.5 trees |
-| Cocoa | `terralith:coastal/trees_hawaii` | 15.1 per chunk (trees) | surface (feature finds it) | 1 | overworld 0.1% | 20.1 trees |
-| Cocoa | `terralith:jungle/vanilla/trees_jungle` | 50.1 per chunk (trees) | surface (feature finds it) | 1 | overworld 0.5% | 267.0 trees |
-| Cocoa | `terralith:jungle/violet/trees` | 24.1 per chunk (trees) | surface (feature finds it) | 2 | overworld 0.3% | 64.3 trees |
-| Cocoa | `terralith:skylands/summer/trees` | 15.1 per chunk (trees) | surface (feature finds it) | 1 | overworld 0.0% | 5.0 trees |
-| Coffee (Rustic Delight) | `rusticdelight:wild_coffee_placed` | 1 in 15 chunks | surface | 11 | overworld 3.6% | 2.4 |
-| Corn | `corn_delight:patch_wild_corn` | 1 in 30 chunks | surface | 12 | overworld 9.2% | 3.1 |
-| Cotton | `rusticdelight:wild_cotton_placed` | 1 in 96 chunks | surface | 12 | overworld 9.2% | 1.0 |
-| Cranberry | `fruitsdelight:cranberry_bush` | 1 in 32 chunks | surface | 5 | overworld 5.2% | 1.6 |
-| Durian (tree) | `fruitsdelight:tree/durian_tree` | 1 in 200 chunks | surface or sea floor | 3 | overworld 2.4% | 0.1 |
-| Fig (tree) | `fruitsdelight:tree/fig_tree` | 1 in 20 chunks | surface or sea floor | 10 | overworld 8.9% | 4.5 |
+| Bayberry (tree) | `fruitsdelight:tree/bayberry_tree` | 1 in 15 chunks | surface or sea floor | 3 | overworld 1.2% | 0.8 |
+| Beetroot (Sea Beet) | `creativeengineering:wild/beetroots` | 1 in 30 chunks | surface | 7 | overworld 3.4% | 1.1 |
+| Bell Pepper | `rusticdelight:wild_bell_peppers_placed` | 1 in 15 chunks | surface | 11 | overworld 2.8% | 1.9 |
+| Blueberry | `fruitsdelight:blueberry_bush` | 1 in 32 chunks | surface | 18 | overworld 8.0% | 2.5 |
+| Broccoli | `veggiesdelight:patch_wild_broccoli` | 1 in 240 chunks | surface | 25 | overworld 11.2% | 0.5 |
+| Brown Mushroom Colony | `creativeengineering:wild/brown_mushroom_colonies` | 1 in 15 chunks | surface | 2 | overworld 0.9% | 0.6 |
+| Cabbage | `creativeengineering:wild/cabbages` | 1 in 30 chunks | surface | 7 | overworld 3.4% | 1.1 |
+| Cactus | `immersive_weathering:sand_patch` | 16 per chunk | Y bottom+64 to 64 | 6 | overworld 1.1% | 183.2 |
+| Cactus | `minecraft:patch_cactus_decorated` | 1 in 13 chunks | surface (feature finds it) | 7 | overworld 1.3% | 1.0 |
+| Cactus | `minecraft:patch_cactus_desert` | 1 in 6.0 chunks | surface (feature finds it) | 7 | overworld 1.3% | 2.2 |
+| Cactus | `terralith:desert/lush/cacti` | 10 per chunk | surface | 1 | overworld 0.1% | 13.5 |
+| Cactus | `terralith:skylands/summer/cactus` | 8 per chunk | WORLD_SURFACE | 1 | overworld 0.0% | 0.8 |
+| Cantaloupe | `delightful:patch_cantaloupe` | 1 in 55 chunks | surface | 12 | overworld 5.1% | 0.9 |
+| Carrot | `farmersdelight:patch_wild_carrots` | 1 in 120 chunks | surface | 25 | overworld 11.2% | 0.9 |
+| Cauliflower | `veggiesdelight:patch_wild_cauliflowers` | 1 in 240 chunks | surface | 25 | overworld 11.2% | 0.5 |
+| Cherry (Vinery tree) | `vinery:tree_cherry` | 1 in 100 chunks | surface or sea floor | 15 | overworld 3.8% | 0.4 |
+| Chorus Fruit | `nullscape:chorus_quadratic` | variable | surface (feature finds it) | 1 | the_end 76.6% | - |
+| Chorus Fruit | `nullscape:chorus_variation` | variable | surface (feature finds it) | 1 | the_end 76.6% | - |
+| Cocoa | `creativeengineering:wild/cocoa_jungle_tree` | 1 in 3.0 chunks (trees) | surface or sea floor | 3 | overworld 0.8% | 2.7 trees |
+| Cocoa | `minecraft:trees_jungle` | 50.1 per chunk (trees) | surface (feature finds it) | 2 | overworld 0.4% | 200.4 trees |
+| Cocoa | `minecraft:trees_jungle_edge` | 2.1 per chunk (trees) | surface (feature finds it) | 1 | overworld 0.5% | 11.2 trees |
+| Cocoa | `terralith:coastal/trees_hawaii` | 15.1 per chunk (trees) | surface (feature finds it) | 1 | overworld 0.1% | 15.1 trees |
+| Cocoa | `terralith:jungle/vanilla/trees_jungle` | 50.1 per chunk (trees) | surface (feature finds it) | 1 | overworld 0.7% | 330.7 trees |
+| Cocoa | `terralith:jungle/violet/trees` | 24.1 per chunk (trees) | surface (feature finds it) | 2 | overworld 0.3% | 71.1 trees |
+| Cocoa | `terralith:skylands/summer/trees` | 15.1 per chunk (trees) | surface (feature finds it) | 1 | overworld 0.0% | 1.5 trees |
+| Coffee (Rustic Delight) | `rusticdelight:wild_coffee_placed` | 1 in 15 chunks | surface | 11 | overworld 2.8% | 1.9 |
+| Corn | `corn_delight:patch_wild_corn` | 1 in 30 chunks | surface | 12 | overworld 5.1% | 1.7 |
+| Cotton | `rusticdelight:wild_cotton_placed` | 1 in 96 chunks | surface | 12 | overworld 5.1% | 0.5 |
+| Cranberry | `fruitsdelight:cranberry_bush` | 1 in 32 chunks | surface | 5 | overworld 6.7% | 2.1 |
+| Cucumbers | `vintagedelight:patch_wild_cucumbers` | 1 in 75 chunks | surface | 19 | overworld 10.4% | 1.4 |
+| Durian (tree) | `fruitsdelight:tree/durian_tree` | 1 in 200 chunks | surface or sea floor | 3 | overworld 1.2% | 0.1 |
+| Fig (tree) | `fruitsdelight:tree/fig_tree` | 1 in 20 chunks | surface or sea floor | 10 | overworld 9.8% | 4.9 |
+| Garlic | `veggiesdelight:patch_wild_garlic` | 1 in 240 chunks | surface | 25 | overworld 11.2% | 0.5 |
 | Glow Berries | `minecraft:cave_vines` | 188 per chunk | Y bottom to 256 | 1 | no area data | - |
 | Glow Berries | `terralith:cave/jungle/ceiling_moss` | 125 per chunk | Y bottom to 256 | 1 | no area data | - |
-| Glow Berries | `terralith:skylands/summer/glowberries` | 92 per chunk | Y 130 to 160 | 1 | overworld 0.0% | 30.4 |
-| Grapes: jungle red | `vinery:jungle_red_grape_bush_chance` | 1 in 5.0 chunks | surface | 4 | overworld 2.2% | 4.5 |
-| Grapes: jungle white | `vinery:jungle_white_grape_bush_chance` | 1 in 5.0 chunks | surface | 4 | overworld 2.2% | 4.5 |
-| Grapes: red | `vinery:red_grape_bush_chance` | 1 in 92 chunks | surface | 7 | overworld 9.9% | 1.1 |
-| Grapes: savanna red | `vinery:savanna_red_grape_bush_chance` | 1 in 92 chunks | surface | 4 | overworld 4.4% | 0.5 |
-| Grapes: savanna white | `vinery:savanna_white_grape_bush_chance` | 1 in 92 chunks | surface | 4 | overworld 4.4% | 0.5 |
-| Grapes: taiga red | `vinery:taiga_red_grape_bush_chance` | 1 in 92 chunks | surface | 4 | overworld 3.7% | 0.4 |
-| Grapes: taiga white | `vinery:taiga_white_grape_bush_chance` | 1 in 92 chunks | surface | 4 | overworld 3.7% | 0.4 |
-| Grapes: white | `vinery:white_grape_bush_chance` | 1 in 92 chunks | surface | 7 | overworld 9.9% | 1.1 |
-| Hamimelon | `creativeengineering:wild/hamimelon` | 1 in 64 chunks | surface | 15 | overworld 5.8% | 0.9 |
-| Hawberry (tree) | `fruitsdelight:tree/hawberry_tree` | 1 in 20 chunks | surface or sea floor | 10 | overworld 8.9% | 4.5 |
-| Kiwi (tree) | `fruitsdelight:tree/kiwi_tree` | 1 in 20 chunks | surface or sea floor | 9 | overworld 2.3% | 1.1 |
-| Lemon | `fruitsdelight:lemon_tree` | 1 in 32 chunks | surface | 9 | overworld 2.3% | 0.7 |
-| Lychee (tree) | `fruitsdelight:tree/lychee_tree` | 1 in 4.0 chunks | surface or sea floor | 9 | overworld 2.3% | 5.7 |
-| Mango (tree) | `fruitsdelight:tree/mango_tree` | 1 in 4.0 chunks | surface or sea floor | 9 | overworld 2.3% | 5.7 |
-| Mangosteen (tree) | `fruitsdelight:tree/mangosteen_tree` | 1 in 40 chunks | surface or sea floor | 3 | overworld 2.4% | 0.6 |
-| Melon | `creativeengineering:wild/melon` | 1 in 6.0 chunks | surface | 11 | overworld 3.6% | 5.9 |
-| Mini Melon | `delightful:patch_mini_melon` | 1 in 35 chunks | surface | 11 | overworld 3.6% | 1.0 |
-| Mint | `neapolitan:mint_pond` | 1 in 4.0 chunks | surface | 11 | overworld 5.0% | 12.5 |
-| Mulberries | `upgrade_aquatic:trees_river` | 2 per chunk | surface or sea floor | 2 | overworld 2.1% | 41.3 |
-| Onion | `farmersdelight:patch_wild_onions` | 1 in 120 chunks | surface | 25 | overworld 12.1% | 1.0 |
-| Orange (tree) | `fruitsdelight:tree/orange_tree` | 1 in 20 chunks | surface or sea floor | 9 | overworld 2.3% | 1.1 |
-| Peach (tree) | `fruitsdelight:tree/peach_tree` | 1 in 8.0 chunks | surface or sea floor | 9 | overworld 2.3% | 2.8 |
-| Pear (tree) | `fruitsdelight:tree/pear_tree` | 1 in 15 chunks | surface or sea floor | 3 | overworld 1.2% | 0.8 |
-| Persimmon (tree) | `fruitsdelight:tree/persimmon_tree` | 1 in 50 chunks | surface or sea floor | 13 | overworld 2.8% | 0.6 |
-| Pineapple | `fruitsdelight:pineapple` | 1 in 32 chunks | surface | 4 | overworld 1.7% | 0.5 |
-| Potato | `farmersdelight:patch_wild_potatoes` | 1 in 100 chunks | surface | 15 | overworld 11.0% | 1.1 |
+| Glow Berries | `terralith:skylands/summer/glowberries` | 92 per chunk | Y 130 to 160 | 1 | overworld 0.0% | 9.2 |
+| Grapes: jungle red | `vinery:jungle_red_grape_bush_chance` | 1 in 10 chunks | surface | 11 | overworld 2.8% | 2.8 |
+| Grapes: jungle white | `vinery:jungle_white_grape_bush_chance` | 1 in 10 chunks | surface | 11 | overworld 2.8% | 2.8 |
+| Grapes: red | `vinery:red_grape_bush_chance` | 1 in 22 chunks | surface | 23 | overworld 9.9% | 4.5 |
+| Grapes: savanna red | `vinery:savanna_red_grape_bush_chance` | 1 in 22 chunks | surface | 12 | overworld 5.1% | 2.3 |
+| Grapes: savanna white | `vinery:savanna_white_grape_bush_chance` | 1 in 22 chunks | surface | 12 | overworld 5.1% | 2.3 |
+| Grapes: taiga red | `vinery:taiga_red_grape_bush_chance` | 1 in 22 chunks | surface | 10 | overworld 9.8% | 4.5 |
+| Grapes: taiga white | `vinery:taiga_white_grape_bush_chance` | 1 in 22 chunks | surface | 10 | overworld 9.8% | 4.5 |
+| Grapes: white | `vinery:white_grape_bush_chance` | 1 in 22 chunks | surface | 23 | overworld 9.9% | 4.5 |
+| Hamimelon | `creativeengineering:wild/hamimelon` | 1 in 64 chunks | surface | 15 | overworld 2.6% | 0.4 |
+| Hawberry (tree) | `fruitsdelight:tree/hawberry_tree` | 1 in 20 chunks | surface or sea floor | 10 | overworld 9.8% | 4.9 |
+| Kiwi (tree) | `fruitsdelight:tree/kiwi_tree` | 1 in 20 chunks | surface or sea floor | 9 | overworld 2.1% | 1.1 |
+| Lemon | `fruitsdelight:lemon_tree` | 1 in 32 chunks | surface | 9 | overworld 2.1% | 0.7 |
+| Lychee (tree) | `fruitsdelight:tree/lychee_tree` | 1 in 4.0 chunks | surface or sea floor | 9 | overworld 2.1% | 5.4 |
+| Mango (tree) | `fruitsdelight:tree/mango_tree` | 1 in 4.0 chunks | surface or sea floor | 9 | overworld 2.1% | 5.4 |
+| Mangosteen (tree) | `fruitsdelight:tree/mangosteen_tree` | 1 in 40 chunks | surface or sea floor | 3 | overworld 1.2% | 0.3 |
+| Melon | `creativeengineering:wild/melon` | 1 in 6.0 chunks | surface | 11 | overworld 2.8% | 4.7 |
+| Mini Melon | `delightful:patch_mini_melon` | 1 in 35 chunks | surface | 11 | overworld 2.8% | 0.8 |
+| Mint | `neapolitan:mint_pond` | 1 in 4.0 chunks | surface | 11 | overworld 4.7% | 11.7 |
+| Oats | `vintagedelight:patch_wild_oats` | 1 in 100 chunks | surface | 26 | overworld 11.7% | 1.2 |
+| Onion | `farmersdelight:patch_wild_onions` | 1 in 120 chunks | surface | 25 | overworld 11.2% | 0.9 |
+| Orange (tree) | `fruitsdelight:tree/orange_tree` | 1 in 20 chunks | surface or sea floor | 9 | overworld 2.1% | 1.1 |
+| Peach (tree) | `fruitsdelight:tree/peach_tree` | 1 in 8.0 chunks | surface or sea floor | 9 | overworld 2.1% | 2.7 |
+| Peanuts | `vintagedelight:patch_wild_peanuts` | 1 in 100 chunks | surface | 26 | overworld 11.7% | 1.2 |
+| Pear (tree) | `fruitsdelight:tree/pear_tree` | 1 in 15 chunks | surface or sea floor | 3 | overworld 0.9% | 0.6 |
+| Persimmon (tree) | `fruitsdelight:tree/persimmon_tree` | 1 in 50 chunks | surface or sea floor | 13 | overworld 3.8% | 0.8 |
+| Pineapple | `fruitsdelight:pineapple` | 1 in 32 chunks | surface | 4 | overworld 2.2% | 0.7 |
+| Potato | `farmersdelight:patch_wild_potatoes` | 1 in 100 chunks | surface | 15 | overworld 11.9% | 1.2 |
 | Propelplant | `nethersdelight:patch_propelplant` | 8 per chunk | Y bottom to top | 1 | the_nether 16.1% | 1285.4 |
-| Pumpkin | `creativeengineering:wild/pumpkin` | 1 in 300 chunks | surface | 11 | overworld 8.9% | 0.3 |
-| Pumpkin | `terralith:skylands/patch_pumpkin` | 1 in 4.0 chunks | surface | 1 | no area data | - |
-| Red Mushroom Colony | `creativeengineering:wild/red_mushroom_colonies` | 1 in 15 chunks | surface | 2 | overworld 1.9% | 1.2 |
-| Rice | `farmersdelight:patch_wild_rice` | 1 in 20 chunks | surface | 11 | overworld 3.6% | 1.8 |
-| Rubber tree | `creativeengineering:wild/rubber_tree` | 1 in 4.0 chunks | surface or sea floor | 9 | overworld 2.3% | 5.7 |
-| Salmonberries | `delightful:patch_wild_salmonberries` | 1 in 35 chunks | surface | 15 | overworld 11.0% | 3.2 |
-| Strawberries | `neapolitan:patch_strawberry_bush` | 1 in 64 chunks | surface | 6 | overworld 3.1% | 0.5 |
-| Sugar Cane | `creativeengineering:wild/sugar_cane` | 1 in 6.0 chunks | surface | 6 | overworld 4.0% | 6.7 |
-| Sweet Berries | `creativeengineering:wild/sweet_berries` | 1 in 32 chunks | surface | 33 | overworld 17.6% | 5.5 |
-| Tea | `farmersrespite:patch_wild_tea_bush` | 1 per chunk | surface | 3 | overworld 1.3% | 13.3 |
-| Tomato | `farmersdelight:patch_wild_tomatoes` | 1 in 100 chunks | surface | 12 | overworld 9.2% | 0.9 |
-| Vanilla | `neapolitan:patch_vanilla_vine` | 1 in 64 chunks | surface | 11 | overworld 3.6% | 0.6 |
+| Pumpkin | `creativeengineering:wild/pumpkin` | 1 in 300 chunks | surface | 11 | overworld 9.8% | 0.3 |
+| Pumpkin | `terralith:skylands/patch_pumpkin` | 1 in 4.0 chunks | surface | 1 | overworld 0.0% | 0.1 |
+| Red Mushroom Colony | `creativeengineering:wild/red_mushroom_colonies` | 1 in 15 chunks | surface | 2 | overworld 0.9% | 0.6 |
+| Rice | `farmersdelight:patch_wild_rice` | 1 in 20 chunks | surface | 11 | overworld 2.8% | 1.4 |
+| Rubber tree | `creativeengineering:wild/rubber_tree` | 1 in 4.0 chunks | surface or sea floor | 9 | overworld 2.1% | 5.4 |
+| Salmonberries | `delightful:patch_wild_salmonberries` | 1 in 35 chunks | surface | 15 | overworld 11.9% | 3.4 |
+| Strawberries | `neapolitan:patch_strawberry_bush` | 1 in 64 chunks | surface | 6 | overworld 2.9% | 0.4 |
+| Sugar Cane | `creativeengineering:wild/sugar_cane` | 1 in 6.0 chunks | surface | 6 | overworld 5.1% | 8.5 |
+| Sweet Berries | `creativeengineering:wild/sweet_berries` | 1 in 32 chunks | surface | 33 | overworld 20.0% | 6.2 |
+| Sweet Potato | `veggiesdelight:patch_wild_sweet_potatoes` | 1 in 100 chunks | surface | 12 | overworld 5.1% | 0.5 |
+| Tea | `farmersrespite:patch_wild_tea_bush` | 1 per chunk | surface | 20 | overworld 5.9% | 59.3 |
+| Tomato | `farmersdelight:patch_wild_tomatoes` | 1 in 100 chunks | surface | 12 | overworld 5.1% | 0.5 |
+| Turnip | `veggiesdelight:patch_wild_turnips` | 1 in 30 chunks | surface | 7 | overworld 3.4% | 1.1 |
+| Vanilla | `neapolitan:patch_vanilla_vine` | 1 in 64 chunks | surface | 11 | overworld 2.8% | 0.4 |
+| Zucchini | `veggiesdelight:patch_wild_zucchinis` | 1 in 100 chunks | surface | 12 | overworld 5.1% | 0.5 |
 
 ## 3. wild_crops.json rules
 
@@ -168,8 +184,15 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 |---|---|---|---|
 | cabbage | Cabbage | `sandy beach` or `cliff` | 7: beach, snowy_beach, stony_shore, terralith:basalt_cliffs, terralith:frozen_cliffs, terralith:granite_cliffs, terralith:white_cliffs |
 | beetroot | Beetroot (Sea Beet) | `sandy beach` or `cliff` | 7: beach, snowy_beach, stony_shore, terralith:basalt_cliffs, terralith:frozen_cliffs, terralith:granite_cliffs, terralith:white_cliffs |
+| turnip | Turnip | `sandy beach` or `cliff` | 7: beach, snowy_beach, stony_shore, terralith:basalt_cliffs, terralith:frozen_cliffs, terralith:granite_cliffs, terralith:white_cliffs |
 | carrot | Carrot | `temperate grassy !swamp` | 25: birch_forest, dark_forest, flower_forest, forest, meadow, old_growth_birch_forest, plains, sunflower_plains, terralith:alpha_islands, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_cliffs, terralith:yosemite_lowlands |
 | onion | Onion | `temperate grassy !swamp` | 25: birch_forest, dark_forest, flower_forest, forest, meadow, old_growth_birch_forest, plains, sunflower_plains, terralith:alpha_islands, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_cliffs, terralith:yosemite_lowlands |
+| broccoli | Broccoli | `temperate grassy !swamp` | 25: birch_forest, dark_forest, flower_forest, forest, meadow, old_growth_birch_forest, plains, sunflower_plains, terralith:alpha_islands, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_cliffs, terralith:yosemite_lowlands |
+| cauliflower | Cauliflower | `temperate grassy !swamp` | 25: birch_forest, dark_forest, flower_forest, forest, meadow, old_growth_birch_forest, plains, sunflower_plains, terralith:alpha_islands, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_cliffs, terralith:yosemite_lowlands |
+| garlic | Garlic | `temperate grassy !swamp` | 25: birch_forest, dark_forest, flower_forest, forest, meadow, old_growth_birch_forest, plains, sunflower_plains, terralith:alpha_islands, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_cliffs, terralith:yosemite_lowlands |
+| oats | Oats | `temperate grassy` | 26: birch_forest, dark_forest, flower_forest, forest, meadow, old_growth_birch_forest, plains, sunflower_plains, swamp, terralith:alpha_islands, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_cliffs, terralith:yosemite_lowlands |
+| peanuts | Peanuts | `temperate grassy` | 26: birch_forest, dark_forest, flower_forest, forest, meadow, old_growth_birch_forest, plains, sunflower_plains, swamp, terralith:alpha_islands, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_cliffs, terralith:yosemite_lowlands |
+| cucumbers | Cucumbers | `wet grassy` or `wet muddy` or `swamp` | 19: bamboo_jungle, jungle, mangrove_swamp, sparse_jungle, swamp, terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:blooming_valley, terralith:caldera, terralith:cloud_forest, terralith:ice_marsh, terralith:jungle_mountains, terralith:mirage_isles, terralith:orchid_swamp, terralith:rocky_jungle, terralith:siberian_taiga, terralith:skylands_summer, terralith:tropical_jungle, terralith:yellowstone |
 | sweet_berries | Sweet Berries | `cold grassy` | 33: grove, old_growth_pine_taiga, old_growth_spruce_taiga, snowy_plains, snowy_taiga, taiga, windswept_forest, windswept_hills, terralith:alpha_islands_winter, terralith:alpine_grove, terralith:alpine_highlands, terralith:birch_taiga, terralith:caldera, terralith:cloud_forest, terralith:cold_shrubland, terralith:forested_highlands, terralith:haze_mountain, terralith:highlands, terralith:ice_marsh, terralith:lush_valley, terralith:rocky_mountains, terralith:rocky_shrubland, terralith:scarlet_mountains, terralith:shield, terralith:shield_clearing, terralith:siberian_grove, terralith:siberian_taiga, terralith:skylands_winter, terralith:snowy_maple_forest, terralith:snowy_shield, terralith:wintry_forest, terralith:wintry_lowlands, terralith:yellowstone |
 | pumpkin | Pumpkin | `cold grassy forest !snowy` or `autumn` | 11: old_growth_pine_taiga, old_growth_spruce_taiga, taiga, windswept_forest, terralith:cloud_forest, terralith:forested_highlands, terralith:haze_mountain, terralith:lush_valley, terralith:shield, terralith:skylands_autumn, terralith:yellowstone |
 | melon | Melon | `warm wet !cliff` | 11: bamboo_jungle, jungle, mangrove_swamp, sparse_jungle, terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:orchid_swamp, terralith:rocky_jungle, terralith:skylands_summer, terralith:tropical_jungle |
@@ -182,6 +205,8 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 | sugar_cane | Sugar Cane | `river` or `beach` | 6: beach, frozen_river, river, snowy_beach, terralith:gravel_beach, terralith:warm_river |
 | tomato | Tomato | `warm dry grassy` | 12: savanna, savanna_plateau, windswept_savanna, wooded_badlands, terralith:arid_highlands, terralith:ashen_savanna, terralith:brushland, terralith:fractured_savanna, terralith:hot_shrubland, terralith:savanna_badlands, terralith:savanna_slopes, terralith:shrubland |
 | cotton | Cotton | `warm dry grassy` | 12: savanna, savanna_plateau, windswept_savanna, wooded_badlands, terralith:arid_highlands, terralith:ashen_savanna, terralith:brushland, terralith:fractured_savanna, terralith:hot_shrubland, terralith:savanna_badlands, terralith:savanna_slopes, terralith:shrubland |
+| sweet_potato | Sweet Potato | `warm dry grassy` | 12: savanna, savanna_plateau, windswept_savanna, wooded_badlands, terralith:arid_highlands, terralith:ashen_savanna, terralith:brushland, terralith:fractured_savanna, terralith:hot_shrubland, terralith:savanna_badlands, terralith:savanna_slopes, terralith:shrubland |
+| zucchini | Zucchini | `warm dry grassy` | 12: savanna, savanna_plateau, windswept_savanna, wooded_badlands, terralith:arid_highlands, terralith:ashen_savanna, terralith:brushland, terralith:fractured_savanna, terralith:hot_shrubland, terralith:savanna_badlands, terralith:savanna_slopes, terralith:shrubland |
 | cantaloupe | Cantaloupe | `warm dry grassy` | 12: savanna, savanna_plateau, windswept_savanna, wooded_badlands, terralith:arid_highlands, terralith:ashen_savanna, terralith:brushland, terralith:fractured_savanna, terralith:hot_shrubland, terralith:savanna_badlands, terralith:savanna_slopes, terralith:shrubland |
 | corn | Corn | `warm dry grassy` | 12: savanna, savanna_plateau, windswept_savanna, wooded_badlands, terralith:arid_highlands, terralith:ashen_savanna, terralith:brushland, terralith:fractured_savanna, terralith:hot_shrubland, terralith:savanna_badlands, terralith:savanna_slopes, terralith:shrubland |
 | rice | Rice | `warm wet !cliff` | 11: bamboo_jungle, jungle, mangrove_swamp, sparse_jungle, terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:orchid_swamp, terralith:rocky_jungle, terralith:skylands_summer, terralith:tropical_jungle |
@@ -189,7 +214,8 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 | coffee | Coffee (Rustic Delight) | `warm wet !cliff` | 11: bamboo_jungle, jungle, mangrove_swamp, sparse_jungle, terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:orchid_swamp, terralith:rocky_jungle, terralith:skylands_summer, terralith:tropical_jungle |
 | brown_mushroom_colony | Brown Mushroom Colony | `mushroom` or `dark_oak forest !mountain` | 2: dark_forest, mushroom_fields |
 | red_mushroom_colony | Red Mushroom Colony | `mushroom` or `dark_oak forest !mountain` | 2: dark_forest, mushroom_fields |
-| tea | Tea | `temperate wet grassy` | 3: swamp, terralith:blooming_valley, terralith:mirage_isles |
+| tea | Tea | `temperate wet grassy` or `swamp` or `jungle` or `cherry` + add dark_forest, terralith:lush_valley, terralith:cloud_forest | 20: bamboo_jungle, dark_forest, jungle, mangrove_swamp, sparse_jungle, swamp, terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:blooming_valley, terralith:cloud_forest, terralith:ice_marsh, terralith:jungle_mountains, terralith:lush_valley, terralith:mirage_isles, terralith:orchid_swamp, terralith:rocky_jungle, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_summer, terralith:tropical_jungle |
+| flax | Flax (off) |  | 0:  |
 | strawberry | Strawberries | `cold grassy mountain !snowy` | 6: terralith:alpine_highlands, terralith:caldera, terralith:cloud_forest, terralith:forested_highlands, terralith:haze_mountain, terralith:highlands |
 | adzuki | Adzuki Beans | `temperate grassy forest` | 18: birch_forest, dark_forest, flower_forest, forest, old_growth_birch_forest, terralith:alpha_islands, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:temperate_highlands, terralith:yosemite_lowlands |
 | mint | Mint | `cold grassy mountain` | 11: grove, terralith:alpine_grove, terralith:alpine_highlands, terralith:caldera, terralith:cloud_forest, terralith:forested_highlands, terralith:haze_mountain, terralith:highlands, terralith:rocky_mountains, terralith:scarlet_mountains, terralith:siberian_grove |
@@ -209,6 +235,10 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 | durian | Durian (tree) | `swamp !cold` | 3: mangrove_swamp, swamp, terralith:orchid_swamp |
 | pear | Pear (tree) | `birch` | 3: birch_forest, old_growth_birch_forest, terralith:birch_taiga |
 | apple | Apple (tree) | `oak forest` | 6: flower_forest, forest, terralith:alpha_islands, terralith:alpha_islands_winter, terralith:temperate_highlands, terralith:yosemite_lowlands |
+| grape | Grapes (red and white bushes) | `temperate grassy !swamp !dark_oak` | 23: birch_forest, flower_forest, forest, meadow, old_growth_birch_forest, plains, sunflower_plains, terralith:alpha_islands, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:mirage_isles, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_autumn, terralith:skylands_spring, terralith:steppe, terralith:valley_clearing, terralith:yosemite_cliffs, terralith:yosemite_lowlands |
+| grape_savanna | Grapes (savanna bushes) | `warm dry grassy` | 12: savanna, savanna_plateau, windswept_savanna, wooded_badlands, terralith:arid_highlands, terralith:ashen_savanna, terralith:brushland, terralith:fractured_savanna, terralith:hot_shrubland, terralith:savanna_badlands, terralith:savanna_slopes, terralith:shrubland |
+| grape_taiga | Grapes (taiga bushes) | `cold grassy forest !snowy` | 10: old_growth_pine_taiga, old_growth_spruce_taiga, taiga, windswept_forest, terralith:cloud_forest, terralith:forested_highlands, terralith:haze_mountain, terralith:lush_valley, terralith:shield, terralith:yellowstone |
+| grape_jungle | Grapes (jungle vines) | `jungle` or `warm wet swamp` | 11: bamboo_jungle, jungle, mangrove_swamp, sparse_jungle, terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:orchid_swamp, terralith:rocky_jungle, terralith:skylands_summer, terralith:tropical_jungle |
 | cherry | Cherry (tree) | `mountain forest` | 15: grove, terralith:alpine_grove, terralith:amethyst_canyon, terralith:blooming_valley, terralith:cloud_forest, terralith:forested_highlands, terralith:haze_mountain, terralith:jungle_mountains, terralith:lavender_valley, terralith:moonlight_valley, terralith:rocky_jungle, terralith:sakura_valley, terralith:scarlet_mountains, terralith:siberian_grove, terralith:temperate_highlands |
 | rubber | Rubber tree | `jungle` | 9: bamboo_jungle, jungle, sparse_jungle, terralith:amethyst_canyon, terralith:amethyst_rainforest, terralith:jungle_mountains, terralith:rocky_jungle, terralith:skylands_summer, terralith:tropical_jungle |
 | fig | Fig (tree) | `cold forest !snowy` | 10: old_growth_pine_taiga, old_growth_spruce_taiga, taiga, windswept_forest, terralith:cloud_forest, terralith:forested_highlands, terralith:haze_mountain, terralith:lush_valley, terralith:shield, terralith:yellowstone |
@@ -222,245 +252,273 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 - Rate 1 in 128 chunks, height: surface; ground: grass block
 - 256 tries within 3; ripe sprouts (age 6); the grass under each becomes Dirt
 - Added by: wild_crops.json adzuki
-- 18 biomes: birch_forest (0.30%), dark_forest (1.67%), flower_forest (0.10%), forest (2.87%), old_growth_birch_forest (0.53%), terralith:alpha_islands (0.07%), terralith:blooming_valley (0.20%), terralith:lavender_forest (0.03%), terralith:lavender_valley (0.27%), terralith:mirage_isles (0.07%), terralith:moonlight_grove (0.10%), terralith:moonlight_valley (0.10%), terralith:sakura_grove (0.33%), terralith:sakura_valley (0.03%), terralith:skylands_autumn (not sampled), terralith:skylands_spring (not sampled), terralith:temperate_highlands (0.57%), terralith:yosemite_lowlands (0.10%)
+- 18 biomes: birch_forest (0.29%), dark_forest (0.81%), flower_forest (0.15%), forest (2.58%), old_growth_birch_forest (0.41%), terralith:alpha_islands (0.15%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:temperate_highlands (0.54%), terralith:yosemite_lowlands (0.16%)
 
 ### `vinery:tree_apple` (Apple (Vinery tree))
 
 - Rate 1 in 100 chunks, height: surface or sea floor
 - dry land; Vinery apple tree. Oak/dark oak leaves no longer drop apples (loot/08_leaf_apples.js).
 - Added by: wild_crops.json apple
-- 6 biomes: flower_forest (0.10%), forest (2.87%), terralith:alpha_islands (0.07%), terralith:alpha_islands_winter (not sampled), terralith:temperate_highlands (0.57%), terralith:yosemite_lowlands (0.10%)
+- 6 biomes: flower_forest (0.15%), forest (2.58%), terralith:alpha_islands (0.15%), terralith:alpha_islands_winter (0.15%), terralith:temperate_highlands (0.54%), terralith:yosemite_lowlands (0.16%)
 
 ### `minecraft:bamboo` (Bamboo)
 
 - Rate variable, height: surface (feature finds it)
 - noise-based count
 - Added by: biome json (Terralith)
-- 1 biomes: bamboo_jungle (0.33%)
+- 1 biomes: bamboo_jungle (0.14%)
 
 ### `minecraft:bamboo_light` (Bamboo)
 
 - Rate 1 in 4.0 chunks, height: surface (feature finds it)
 - Added by: biome json (Terralith)
-- 6 biomes: jungle (0.53%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:tropical_jungle (0.13%)
+- 6 biomes: jungle (0.66%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:tropical_jungle (0.10%)
 
 ### `terralith:cherry/bamboo` (Bamboo)
 
 - Rate variable, height: surface (feature finds it)
 - noise-based count
 - Added by: biome json (Terralith)
-- 2 biomes: terralith:sakura_grove (0.33%), terralith:sakura_valley (0.03%)
+- 2 biomes: terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%)
 
 ### `neapolitan:banana_plant_common` (Banana)
 
 - Rate 1 in 1.3 chunks, height: surface (feature finds it); ground: grass block, sand or gravel
 - stalk 3-6 tall with fronds, maybe a bundle (chimpanzees spawn with 25%); grass around turns to Gravel; Dense jungles keep Neapolitan's common rate; the beach spawn (rare) is switched off.
 - Added by: wild_crops.json banana
-- 4 biomes: bamboo_jungle (0.33%), jungle (0.53%), terralith:amethyst_rainforest (0.17%), terralith:tropical_jungle (0.13%)
+- 4 biomes: bamboo_jungle (0.14%), jungle (0.66%), terralith:amethyst_rainforest (0.14%), terralith:tropical_jungle (0.10%)
 
 ### `neapolitan:banana_plant_uncommon` (Banana)
 
 - Rate 1 in 10 chunks, height: surface (feature finds it); ground: grass block, sand or gravel
 - see banana_plant_common
 - Added by: wild_crops.json banana_sparse
-- 5 biomes: sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%)
+- 5 biomes: sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%)
 
 ### `fruitsdelight:tree/bayberry_tree` (Bayberry (tree))
 
 - Rate 1 in 15 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 15 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json bayberry
-- 3 biomes: mangrove_swamp (0.67%), swamp (1.07%), terralith:orchid_swamp (0.63%)
+- 3 biomes: mangrove_swamp (0.36%), swamp (0.52%), terralith:orchid_swamp (0.31%)
 
 ### `creativeengineering:wild/beetroots` (Beetroot (Sea Beet))
 
 - Rate 1 in 30 chunks, height: surface
 - Added by: wild_crops.json beetroot
-- 7 biomes: beach (0.87%), snowy_beach (0.23%), stony_shore (not sampled), terralith:basalt_cliffs (not sampled), terralith:frozen_cliffs (not sampled), terralith:granite_cliffs (not sampled), terralith:white_cliffs (not sampled)
+- 7 biomes: beach (1.44%), snowy_beach (0.43%), stony_shore (0.30%), terralith:basalt_cliffs (0.29%), terralith:frozen_cliffs (0.29%), terralith:granite_cliffs (0.30%), terralith:white_cliffs (0.29%)
 
 ### `rusticdelight:wild_bell_peppers_placed` (Bell Pepper)
 
 - Rate 1 in 15 chunks, height: surface; ground: #minecraft:dirt
 - 48 tries within 4; flower-type feature (bone meal on grass)
 - Added by: wild_crops.json bell_pepper
-- 11 biomes: bamboo_jungle (0.33%), jungle (0.53%), mangrove_swamp (0.67%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:orchid_swamp (0.63%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 11 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `fruitsdelight:blueberry_bush` (Blueberry)
 
 - Rate 1 in 32 chunks, height: surface; ground: grass block
 - 20 tries, ripe (age 4)
 - Added by: wild_crops.json blueberry
-- 18 biomes: grove (0.17%), snowy_plains (1.37%), snowy_taiga (1.03%), terralith:alpha_islands_winter (not sampled), terralith:alpine_grove (0.03%), terralith:birch_taiga (0.37%), terralith:cold_shrubland (0.73%), terralith:ice_marsh (0.33%), terralith:rocky_mountains (1.33%), terralith:rocky_shrubland (not sampled), terralith:scarlet_mountains (0.33%), terralith:siberian_grove (not sampled), terralith:siberian_taiga (0.60%), terralith:skylands_winter (0.03%), terralith:snowy_maple_forest (not sampled), terralith:snowy_shield (not sampled), terralith:wintry_forest (0.20%), terralith:wintry_lowlands (0.03%)
+- 18 biomes: grove (0.09%), snowy_plains (1.36%), snowy_taiga (1.14%), terralith:alpha_islands_winter (0.15%), terralith:alpine_grove (0.15%), terralith:birch_taiga (0.15%), terralith:cold_shrubland (0.87%), terralith:ice_marsh (0.73%), terralith:rocky_mountains (1.12%), terralith:rocky_shrubland (0.15%), terralith:scarlet_mountains (0.29%), terralith:siberian_grove (0.15%), terralith:siberian_taiga (0.81%), terralith:skylands_winter (0.04%), terralith:snowy_maple_forest (0.15%), terralith:snowy_shield (0.14%), terralith:wintry_forest (0.41%), terralith:wintry_lowlands (0.14%)
+
+### `veggiesdelight:patch_wild_broccoli` (Broccoli)
+
+- Rate 1 in 240 chunks, height: surface
+- Veggies Delight backport: the port ships the feature with its rarity and no biome modifier. 1 in 240 chunks, half the carrot and onion rate.
+- Added by: wild_crops.json broccoli
+- 25 biomes: birch_forest (0.29%), dark_forest (0.81%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:temperate_highlands (0.54%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
 
 ### `creativeengineering:wild/brown_mushroom_colonies` (Brown Mushroom Colony)
 
 - Rate 1 in 15 chunks, height: surface
 - Pack feature: FD's own needs mycelium; this one also takes podzol/grass in shade (dark forest floor).
 - Added by: wild_crops.json brown_mushroom_colony
-- 2 biomes: dark_forest (1.67%), mushroom_fields (0.20%)
+- 2 biomes: dark_forest (0.81%), mushroom_fields (0.06%)
 
 ### `creativeengineering:wild/cabbages` (Cabbage)
 
 - Rate 1 in 30 chunks, height: surface
 - Pack feature: FD's own only tests for sand below; this one also takes dirt/grass (cliff tops).
 - Added by: wild_crops.json cabbage
-- 7 biomes: beach (0.87%), snowy_beach (0.23%), stony_shore (not sampled), terralith:basalt_cliffs (not sampled), terralith:frozen_cliffs (not sampled), terralith:granite_cliffs (not sampled), terralith:white_cliffs (not sampled)
+- 7 biomes: beach (1.44%), snowy_beach (0.43%), stony_shore (0.30%), terralith:basalt_cliffs (0.29%), terralith:frozen_cliffs (0.29%), terralith:granite_cliffs (0.30%), terralith:white_cliffs (0.29%)
 
 ### `immersive_weathering:sand_patch` (Cactus)
 
 - Rate 16 per chunk, height: Y bottom+64 to 64
 - Added by: modifier immersive_weathering:underground_desert
-- 6 biomes: desert (1.20%), terralith:desert_canyon (0.33%), terralith:desert_oasis (0.03%), terralith:desert_spires (0.20%), terralith:lush_desert (0.07%), terralith:sandstone_valley (0.47%)
+- 6 biomes: desert (0.47%), terralith:desert_canyon (0.15%), terralith:desert_oasis (0.10%), terralith:desert_spires (0.15%), terralith:lush_desert (0.14%), terralith:sandstone_valley (0.12%)
 
 ### `minecraft:patch_cactus_decorated` (Cactus)
 
 - Rate 1 in 13 chunks, height: surface (feature finds it)
 - Added by: biome json (Terralith)
-- 7 biomes: badlands (1.50%), eroded_badlands (0.43%), wooded_badlands (0.87%), terralith:bryce_canyon (0.33%), terralith:snowy_badlands (0.33%), terralith:warped_mesa (0.03%), terralith:white_mesa (not sampled)
+- 7 biomes: badlands (0.26%), eroded_badlands (0.14%), wooded_badlands (0.15%), terralith:bryce_canyon (0.16%), terralith:snowy_badlands (0.30%), terralith:warped_mesa (0.15%), terralith:white_mesa (0.15%)
 
 ### `minecraft:patch_cactus_desert` (Cactus)
 
 - Rate 1 in 6.0 chunks, height: surface (feature finds it)
 - Added by: biome json (Terralith)
-- 7 biomes: desert (1.20%), terralith:desert_canyon (0.33%), terralith:desert_oasis (0.03%), terralith:desert_spires (0.20%), terralith:lush_desert (0.07%), terralith:red_oasis (0.23%), terralith:sandstone_valley (0.47%)
+- 7 biomes: desert (0.47%), terralith:desert_canyon (0.15%), terralith:desert_oasis (0.10%), terralith:desert_spires (0.15%), terralith:lush_desert (0.14%), terralith:red_oasis (0.15%), terralith:sandstone_valley (0.12%)
 
 ### `terralith:desert/lush/cacti` (Cactus)
 
 - Rate 10 per chunk, height: surface
 - Added by: biome json (Terralith)
-- 1 biomes: terralith:lush_desert (0.07%)
+- 1 biomes: terralith:lush_desert (0.14%)
 
 ### `terralith:skylands/summer/cactus` (Cactus)
 
 - Rate 8 per chunk, height: WORLD_SURFACE
 - Added by: biome json (Terralith)
-- 1 biomes: terralith:skylands_summer (0.03%)
+- 1 biomes: terralith:skylands_summer (0.01%)
 
 ### `delightful:patch_cantaloupe` (Cantaloupe)
 
 - Rate 1 in 55 chunks, height: surface; ground: #delightful:cantaloupe_spawns (dirt, grass, sand, red sand, mud...)
 - 64 tries within 3
 - Added by: wild_crops.json cantaloupe
-- 12 biomes: savanna (1.93%), savanna_plateau (1.03%), windswept_savanna (0.60%), wooded_badlands (0.87%), terralith:arid_highlands (1.03%), terralith:ashen_savanna (0.07%), terralith:brushland (2.13%), terralith:fractured_savanna (0.20%), terralith:hot_shrubland (0.50%), terralith:savanna_badlands (0.33%), terralith:savanna_slopes (not sampled), terralith:shrubland (0.47%)
+- 12 biomes: savanna (0.83%), savanna_plateau (0.44%), windswept_savanna (0.53%), wooded_badlands (0.15%), terralith:arid_highlands (0.29%), terralith:ashen_savanna (0.12%), terralith:brushland (1.21%), terralith:fractured_savanna (0.48%), terralith:hot_shrubland (0.23%), terralith:savanna_badlands (0.38%), terralith:savanna_slopes (0.14%), terralith:shrubland (0.26%)
 
 ### `farmersdelight:patch_wild_carrots` (Carrot)
 
 - Rate 1 in 120 chunks, height: surface; ground: #minecraft:dirt
 - companion: Grass; turns the dirt floor of the patch to Coarse Dirt
 - Added by: wild_crops.json carrot
-- 25 biomes: birch_forest (0.30%), dark_forest (1.67%), flower_forest (0.10%), forest (2.87%), meadow (0.97%), old_growth_birch_forest (0.53%), plains (2.93%), sunflower_plains (not sampled), terralith:alpha_islands (0.07%), terralith:blooming_plateau (0.20%), terralith:blooming_valley (0.20%), terralith:lavender_forest (0.03%), terralith:lavender_valley (0.27%), terralith:mirage_isles (0.07%), terralith:moonlight_grove (0.10%), terralith:moonlight_valley (0.10%), terralith:sakura_grove (0.33%), terralith:sakura_valley (0.03%), terralith:skylands_autumn (not sampled), terralith:skylands_spring (not sampled), terralith:steppe (0.53%), terralith:temperate_highlands (0.57%), terralith:valley_clearing (not sampled), terralith:yosemite_cliffs (0.10%), terralith:yosemite_lowlands (0.10%)
+- 25 biomes: birch_forest (0.29%), dark_forest (0.81%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:temperate_highlands (0.54%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
+
+### `veggiesdelight:patch_wild_cauliflowers` (Cauliflower)
+
+- Rate 1 in 240 chunks, height: surface
+- 1 in 240 chunks.
+- Added by: wild_crops.json cauliflower
+- 25 biomes: birch_forest (0.29%), dark_forest (0.81%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:temperate_highlands (0.54%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
 
 ### `vinery:tree_cherry` (Cherry (Vinery tree))
 
 - Rate 1 in 100 chunks, height: surface or sea floor
 - dry land
 - Added by: wild_crops.json cherry
-- 15 biomes: grove (0.17%), terralith:alpine_grove (0.03%), terralith:amethyst_canyon (0.10%), terralith:blooming_valley (0.20%), terralith:cloud_forest (0.07%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:jungle_mountains (0.03%), terralith:lavender_valley (0.27%), terralith:moonlight_valley (0.10%), terralith:rocky_jungle (0.43%), terralith:sakura_valley (0.03%), terralith:scarlet_mountains (0.33%), terralith:siberian_grove (not sampled), terralith:temperate_highlands (0.57%)
+- 15 biomes: grove (0.09%), terralith:alpine_grove (0.15%), terralith:amethyst_canyon (0.15%), terralith:blooming_valley (0.26%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:jungle_mountains (0.19%), terralith:lavender_valley (0.29%), terralith:moonlight_valley (0.34%), terralith:rocky_jungle (0.21%), terralith:sakura_valley (0.15%), terralith:scarlet_mountains (0.29%), terralith:siberian_grove (0.15%), terralith:temperate_highlands (0.54%)
 
 ### `nullscape:chorus_quadratic` (Chorus Fruit)
 
 - Rate variable, height: surface (feature finds it)
 - noise-based count
 - Added by: biome json (Nullscape)
-- 1 biomes: end_highlands (76.20%)
+- 1 biomes: end_highlands (76.60%)
 
 ### `nullscape:chorus_variation` (Chorus Fruit)
 
 - Rate variable, height: surface (feature finds it)
 - noise-based count
 - Added by: biome json (Nullscape)
-- 1 biomes: end_highlands (76.20%)
+- 1 biomes: end_highlands (76.60%)
 
 ### `creativeengineering:wild/cocoa_jungle_tree` (Cocoa)
 
 - Rate 1 in 3.0 chunks, height: surface or sea floor
 - dry land; Cocoa only comes on vanilla-style jungle trees. The excepted biomes already grow them; the rest get a jungle tree in 1 chunk of 3.; rate counts trees; cocoa only on vanilla-style jungle trees (CocoaDecorator 0.2)
 - Added by: wild_crops.json cocoa
-- 3 biomes: bamboo_jungle (0.33%), mangrove_swamp (0.67%), terralith:orchid_swamp (0.63%)
+- 3 biomes: bamboo_jungle (0.14%), mangrove_swamp (0.36%), terralith:orchid_swamp (0.31%)
 
 ### `minecraft:trees_jungle` (Cocoa)
 
 - Rate 50.1 per chunk, height: surface (feature finds it)
 - dry land; rate counts trees; cocoa only on vanilla-style jungle trees (CocoaDecorator 0.2)
 - Added by: biome json (Terralith)
-- 2 biomes: terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%)
+- 2 biomes: terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%)
 
 ### `minecraft:trees_jungle_edge` (Cocoa)
 
 - Rate 2.1 per chunk, height: surface (feature finds it)
 - dry land; rate counts trees; cocoa only on vanilla-style jungle trees (CocoaDecorator 0.2)
 - Added by: biome json (Terralith)
-- 1 biomes: sparse_jungle (0.50%)
+- 1 biomes: sparse_jungle (0.54%)
 
 ### `terralith:coastal/trees_hawaii` (Cocoa)
 
 - Rate 15.1 per chunk, height: surface (feature finds it)
 - rate counts trees; cocoa only on vanilla-style jungle trees (CocoaDecorator 0.2)
 - Added by: biome json (Terralith)
-- 1 biomes: terralith:tropical_jungle (0.13%)
+- 1 biomes: terralith:tropical_jungle (0.10%)
 
 ### `terralith:jungle/vanilla/trees_jungle` (Cocoa)
 
 - Rate 50.1 per chunk, height: surface (feature finds it)
 - dry land; rate counts trees; cocoa only on vanilla-style jungle trees (CocoaDecorator 0.2)
 - Added by: biome json (Terralith)
-- 1 biomes: jungle (0.53%)
+- 1 biomes: jungle (0.66%)
 
 ### `terralith:jungle/violet/trees` (Cocoa)
 
 - Rate 24.1 per chunk, height: surface (feature finds it)
 - rate counts trees; cocoa only on vanilla-style jungle trees (CocoaDecorator 0.2)
 - Added by: biome json (Terralith)
-- 2 biomes: terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%)
+- 2 biomes: terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%)
 
 ### `terralith:skylands/summer/trees` (Cocoa)
 
 - Rate 15.1 per chunk, height: surface (feature finds it)
 - rate counts trees; cocoa only on vanilla-style jungle trees (CocoaDecorator 0.2)
 - Added by: biome json (Terralith)
-- 1 biomes: terralith:skylands_summer (0.03%)
+- 1 biomes: terralith:skylands_summer (0.01%)
 
 ### `rusticdelight:wild_coffee_placed` (Coffee (Rustic Delight))
 
 - Rate 1 in 15 chunks, height: surface; ground: #minecraft:dirt
 - 48 tries within 6; flower-type feature (bone meal on grass); farmersrespite:coffee_bush is the Basalt Deltas spawn of Farmer's Respite's coffee; switched off.
 - Added by: wild_crops.json coffee
-- 11 biomes: bamboo_jungle (0.33%), jungle (0.53%), mangrove_swamp (0.67%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:orchid_swamp (0.63%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 11 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `corn_delight:patch_wild_corn` (Corn)
 
 - Rate 1 in 30 chunks, height: surface; ground: #minecraft:dirt
 - companion: Grass; Coarse Dirt floor like wild carrots
 - Added by: wild_crops.json corn
-- 12 biomes: savanna (1.93%), savanna_plateau (1.03%), windswept_savanna (0.60%), wooded_badlands (0.87%), terralith:arid_highlands (1.03%), terralith:ashen_savanna (0.07%), terralith:brushland (2.13%), terralith:fractured_savanna (0.20%), terralith:hot_shrubland (0.50%), terralith:savanna_badlands (0.33%), terralith:savanna_slopes (not sampled), terralith:shrubland (0.47%)
+- 12 biomes: savanna (0.83%), savanna_plateau (0.44%), windswept_savanna (0.53%), wooded_badlands (0.15%), terralith:arid_highlands (0.29%), terralith:ashen_savanna (0.12%), terralith:brushland (1.21%), terralith:fractured_savanna (0.48%), terralith:hot_shrubland (0.23%), terralith:savanna_badlands (0.38%), terralith:savanna_slopes (0.14%), terralith:shrubland (0.26%)
 
 ### `rusticdelight:wild_cotton_placed` (Cotton)
 
 - Rate 1 in 96 chunks, height: surface; ground: #minecraft:dirt
 - 32 tries within 6; flower-type feature, so bone meal on grass here can grow it
 - Added by: wild_crops.json cotton
-- 12 biomes: savanna (1.93%), savanna_plateau (1.03%), windswept_savanna (0.60%), wooded_badlands (0.87%), terralith:arid_highlands (1.03%), terralith:ashen_savanna (0.07%), terralith:brushland (2.13%), terralith:fractured_savanna (0.20%), terralith:hot_shrubland (0.50%), terralith:savanna_badlands (0.33%), terralith:savanna_slopes (not sampled), terralith:shrubland (0.47%)
+- 12 biomes: savanna (0.83%), savanna_plateau (0.44%), windswept_savanna (0.53%), wooded_badlands (0.15%), terralith:arid_highlands (0.29%), terralith:ashen_savanna (0.12%), terralith:brushland (1.21%), terralith:fractured_savanna (0.48%), terralith:hot_shrubland (0.23%), terralith:savanna_badlands (0.38%), terralith:savanna_slopes (0.14%), terralith:shrubland (0.26%)
 
 ### `fruitsdelight:cranberry_bush` (Cranberry)
 
 - Rate 1 in 32 chunks, height: surface; ground: grass block
 - 20 tries, ripe (age 4); Cold wet = Caldera, Cloud Forest, Ice Marsh, Siberian Taiga, Yellowstone (the cold biomes with 'wet').
 - Added by: wild_crops.json cranberry
-- 5 biomes: terralith:caldera (not sampled), terralith:cloud_forest (0.07%), terralith:ice_marsh (0.33%), terralith:siberian_taiga (0.60%), terralith:yellowstone (4.20%)
+- 5 biomes: terralith:caldera (0.24%), terralith:cloud_forest (0.15%), terralith:ice_marsh (0.73%), terralith:siberian_taiga (0.81%), terralith:yellowstone (4.75%)
+
+### `vintagedelight:patch_wild_cucumbers` (Cucumbers)
+
+- Rate 1 in 75 chunks, height: surface
+- Vintage's filter was #forge:is_wet (swamps, jungles, mangroves). The port's patch takes any dirt soil (sand dropped).
+- Added by: wild_crops.json cucumbers
+- 19 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), swamp (0.52%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:blooming_valley (0.26%), terralith:caldera (0.24%), terralith:cloud_forest (0.15%), terralith:ice_marsh (0.73%), terralith:jungle_mountains (0.19%), terralith:mirage_isles (0.17%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:siberian_taiga (0.81%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%), terralith:yellowstone (4.75%)
 
 ### `fruitsdelight:tree/durian_tree` (Durian (tree))
 
 - Rate 1 in 200 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 200 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json durian
-- 3 biomes: mangrove_swamp (0.67%), swamp (1.07%), terralith:orchid_swamp (0.63%)
+- 3 biomes: mangrove_swamp (0.36%), swamp (0.52%), terralith:orchid_swamp (0.31%)
 
 ### `fruitsdelight:tree/fig_tree` (Fig (tree))
 
 - Rate 1 in 20 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 20 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json fig
-- 10 biomes: old_growth_pine_taiga (0.73%), old_growth_spruce_taiga (0.90%), taiga (1.00%), windswept_forest (0.03%), terralith:cloud_forest (0.07%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:lush_valley (0.13%), terralith:shield (0.67%), terralith:yellowstone (4.20%)
+- 10 biomes: old_growth_pine_taiga (0.85%), old_growth_spruce_taiga (0.65%), taiga (1.20%), windswept_forest (0.20%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:lush_valley (0.17%), terralith:shield (0.95%), terralith:yellowstone (4.75%)
+
+### `veggiesdelight:patch_wild_garlic` (Garlic)
+
+- Rate 1 in 240 chunks, height: surface
+- 1 in 240 chunks.
+- Added by: wild_crops.json garlic
+- 25 biomes: birch_forest (0.29%), dark_forest (0.81%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:temperate_highlands (0.54%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
 
 ### `minecraft:cave_vines` (Glow Berries)
 
@@ -481,180 +539,191 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 - Rate 92 per chunk, height: Y 130 to 160
 - scans for a ceiling/floor
 - Added by: biome json (Terralith)
-- 1 biomes: terralith:skylands_summer (0.03%)
+- 1 biomes: terralith:skylands_summer (0.01%)
 
 ### `vinery:jungle_red_grape_bush_chance` (Grapes: jungle red)
 
-- Rate 1 in 5.0 chunks, height: surface
-- Added by: modifier vinery:add_jungle_red_grape
-- 4 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), wooded_badlands (0.87%)
+- Rate 1 in 10 chunks, height: surface
+- Vines hang off tree trunks and walls, so only tree-covered warm wet biomes (1 chunk in 10 each, Vinery's rate).
+- Added by: wild_crops.json grape_jungle
+- 11 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `vinery:jungle_white_grape_bush_chance` (Grapes: jungle white)
 
-- Rate 1 in 5.0 chunks, height: surface
-- Added by: modifier vinery:add_jungle_white_grape
-- 4 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), wooded_badlands (0.87%)
+- Rate 1 in 10 chunks, height: surface
+- Vines hang off tree trunks and walls, so only tree-covered warm wet biomes (1 chunk in 10 each, Vinery's rate).
+- Added by: wild_crops.json grape_jungle
+- 11 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `vinery:red_grape_bush_chance` (Grapes: red)
 
-- Rate 1 in 92 chunks, height: surface
-- Added by: modifier vinery:add_red_grape
-- 7 biomes: birch_forest (0.30%), forest (2.87%), meadow (0.97%), plains (2.93%), river (1.80%), sunflower_plains (not sampled), swamp (1.07%)
+- Rate 1 in 22 chunks, height: surface
+- Vinery's rate (1 chunk in 22 each). Vinery's own lists were vanilla tags only (forests, rivers, mountains, plains).
+- Added by: wild_crops.json grape
+- 23 biomes: birch_forest (0.29%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
 
 ### `vinery:savanna_red_grape_bush_chance` (Grapes: savanna red)
 
-- Rate 1 in 92 chunks, height: surface
-- Added by: modifier vinery:add_savanna_red_grape
-- 4 biomes: savanna (1.93%), savanna_plateau (1.03%), windswept_savanna (0.60%), wooded_badlands (0.87%)
+- Rate 1 in 22 chunks, height: surface
+- Added by: wild_crops.json grape_savanna
+- 12 biomes: savanna (0.83%), savanna_plateau (0.44%), windswept_savanna (0.53%), wooded_badlands (0.15%), terralith:arid_highlands (0.29%), terralith:ashen_savanna (0.12%), terralith:brushland (1.21%), terralith:fractured_savanna (0.48%), terralith:hot_shrubland (0.23%), terralith:savanna_badlands (0.38%), terralith:savanna_slopes (0.14%), terralith:shrubland (0.26%)
 
 ### `vinery:savanna_white_grape_bush_chance` (Grapes: savanna white)
 
-- Rate 1 in 92 chunks, height: surface
-- Added by: modifier vinery:add_savanna_white_grape
-- 4 biomes: savanna (1.93%), savanna_plateau (1.03%), windswept_savanna (0.60%), wooded_badlands (0.87%)
+- Rate 1 in 22 chunks, height: surface
+- Added by: wild_crops.json grape_savanna
+- 12 biomes: savanna (0.83%), savanna_plateau (0.44%), windswept_savanna (0.53%), wooded_badlands (0.15%), terralith:arid_highlands (0.29%), terralith:ashen_savanna (0.12%), terralith:brushland (1.21%), terralith:fractured_savanna (0.48%), terralith:hot_shrubland (0.23%), terralith:savanna_badlands (0.38%), terralith:savanna_slopes (0.14%), terralith:shrubland (0.26%)
 
 ### `vinery:taiga_red_grape_bush_chance` (Grapes: taiga red)
 
-- Rate 1 in 92 chunks, height: surface
-- Added by: modifier vinery:add_taiga_red_grape
-- 4 biomes: old_growth_pine_taiga (0.73%), old_growth_spruce_taiga (0.90%), snowy_taiga (1.03%), taiga (1.00%)
+- Rate 1 in 22 chunks, height: surface
+- Added by: wild_crops.json grape_taiga
+- 10 biomes: old_growth_pine_taiga (0.85%), old_growth_spruce_taiga (0.65%), taiga (1.20%), windswept_forest (0.20%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:lush_valley (0.17%), terralith:shield (0.95%), terralith:yellowstone (4.75%)
 
 ### `vinery:taiga_white_grape_bush_chance` (Grapes: taiga white)
 
-- Rate 1 in 92 chunks, height: surface
-- Added by: modifier vinery:add_taiga_white_grape
-- 4 biomes: old_growth_pine_taiga (0.73%), old_growth_spruce_taiga (0.90%), snowy_taiga (1.03%), taiga (1.00%)
+- Rate 1 in 22 chunks, height: surface
+- Added by: wild_crops.json grape_taiga
+- 10 biomes: old_growth_pine_taiga (0.85%), old_growth_spruce_taiga (0.65%), taiga (1.20%), windswept_forest (0.20%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:lush_valley (0.17%), terralith:shield (0.95%), terralith:yellowstone (4.75%)
 
 ### `vinery:white_grape_bush_chance` (Grapes: white)
 
-- Rate 1 in 92 chunks, height: surface
-- Added by: modifier vinery:add_white_grape
-- 7 biomes: birch_forest (0.30%), forest (2.87%), meadow (0.97%), plains (2.93%), river (1.80%), sunflower_plains (not sampled), swamp (1.07%)
+- Rate 1 in 22 chunks, height: surface
+- Vinery's rate (1 chunk in 22 each). Vinery's own lists were vanilla tags only (forests, rivers, mountains, plains).
+- Added by: wild_crops.json grape
+- 23 biomes: birch_forest (0.29%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
 
 ### `creativeengineering:wild/hamimelon` (Hamimelon)
 
 - Rate 1 in 64 chunks, height: surface
 - Pack feature: Fruits Delight's own needs plain sand; this one takes sand, red sand and terracotta.
 - Added by: wild_crops.json hamimelon
-- 15 biomes: badlands (1.50%), desert (1.20%), eroded_badlands (0.43%), wooded_badlands (0.87%), terralith:ancient_sands (not sampled), terralith:bryce_canyon (0.33%), terralith:desert_canyon (0.33%), terralith:desert_oasis (0.03%), terralith:desert_spires (0.20%), terralith:lush_desert (0.07%), terralith:painted_mountains (0.13%), terralith:red_oasis (0.23%), terralith:sandstone_valley (0.47%), terralith:warped_mesa (0.03%), terralith:white_mesa (not sampled)
+- 15 biomes: badlands (0.26%), desert (0.47%), eroded_badlands (0.14%), wooded_badlands (0.15%), terralith:ancient_sands (0.15%), terralith:bryce_canyon (0.16%), terralith:desert_canyon (0.15%), terralith:desert_oasis (0.10%), terralith:desert_spires (0.15%), terralith:lush_desert (0.14%), terralith:painted_mountains (0.16%), terralith:red_oasis (0.15%), terralith:sandstone_valley (0.12%), terralith:warped_mesa (0.15%), terralith:white_mesa (0.15%)
 
 ### `fruitsdelight:tree/hawberry_tree` (Hawberry (tree))
 
 - Rate 1 in 20 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 20 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json hawberry
-- 10 biomes: old_growth_pine_taiga (0.73%), old_growth_spruce_taiga (0.90%), taiga (1.00%), windswept_forest (0.03%), terralith:cloud_forest (0.07%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:lush_valley (0.13%), terralith:shield (0.67%), terralith:yellowstone (4.20%)
+- 10 biomes: old_growth_pine_taiga (0.85%), old_growth_spruce_taiga (0.65%), taiga (1.20%), windswept_forest (0.20%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:lush_valley (0.17%), terralith:shield (0.95%), terralith:yellowstone (4.75%)
 
 ### `fruitsdelight:tree/kiwi_tree` (Kiwi (tree))
 
 - Rate 1 in 20 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 20 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json kiwi
-- 9 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 9 biomes: bamboo_jungle (0.14%), jungle (0.66%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `fruitsdelight:lemon_tree` (Lemon)
 
 - Rate 1 in 32 chunks, height: surface; ground: grass block
 - 20 tries, ripe two-high bush
 - Added by: wild_crops.json lemon
-- 9 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 9 biomes: bamboo_jungle (0.14%), jungle (0.66%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `fruitsdelight:tree/lychee_tree` (Lychee (tree))
 
 - Rate 1 in 4.0 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 4 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json lychee
-- 9 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 9 biomes: bamboo_jungle (0.14%), jungle (0.66%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `fruitsdelight:tree/mango_tree` (Mango (tree))
 
 - Rate 1 in 4.0 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 4 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json mango
-- 9 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 9 biomes: bamboo_jungle (0.14%), jungle (0.66%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `fruitsdelight:tree/mangosteen_tree` (Mangosteen (tree))
 
 - Rate 1 in 40 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 40 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json mangosteen
-- 3 biomes: mangrove_swamp (0.67%), swamp (1.07%), terralith:orchid_swamp (0.63%)
+- 3 biomes: mangrove_swamp (0.36%), swamp (0.52%), terralith:orchid_swamp (0.31%)
 
 ### `creativeengineering:wild/melon` (Melon)
 
 - Rate 1 in 6.0 chunks, height: surface
 - Added by: wild_crops.json melon
-- 11 biomes: bamboo_jungle (0.33%), jungle (0.53%), mangrove_swamp (0.67%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:orchid_swamp (0.63%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 11 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `delightful:patch_mini_melon` (Mini Melon)
 
 - Rate 1 in 35 chunks, height: surface; ground: #minecraft:dirt
 - 64 tries within 4
 - Added by: wild_crops.json mini_melon
-- 11 biomes: bamboo_jungle (0.33%), jungle (0.53%), mangrove_swamp (0.67%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:orchid_swamp (0.63%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 11 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `neapolitan:mint_pond` (Mint)
 
 - Rate 1 in 4.0 chunks, height: surface; ground: flat grass/dirt
 - digs a small pond (1-9 water) with grown mint around it and often one spruce tree; The mint pond needs a flat grass spot, so rocky and snowy peaks are left out by 'grassy'.
 - Added by: wild_crops.json mint
-- 11 biomes: grove (0.17%), terralith:alpine_grove (0.03%), terralith:alpine_highlands (0.87%), terralith:caldera (not sampled), terralith:cloud_forest (0.07%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:highlands (1.00%), terralith:rocky_mountains (1.33%), terralith:scarlet_mountains (0.33%), terralith:siberian_grove (not sampled)
+- 11 biomes: grove (0.09%), terralith:alpine_grove (0.15%), terralith:alpine_highlands (0.72%), terralith:caldera (0.24%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:highlands (0.89%), terralith:rocky_mountains (1.12%), terralith:scarlet_mountains (0.29%), terralith:siberian_grove (0.15%)
 
-### `upgrade_aquatic:trees_river` (Mulberries)
+### `vintagedelight:patch_wild_oats` (Oats)
 
-- Rate 2 per chunk, height: surface or sea floor; ground: under river tree leaves
-- river trees; each leaf with air below has 1 in 6 to grow a ripe mulberry vine
-- Added by: modifier upgrade_aquatic:add_feature/river_tree
-- 2 biomes: frozen_river (0.27%), river (1.80%)
+- Rate 1 in 100 chunks, height: surface
+- Vintage Delight backport: the port ships the feature and no biome modifier. Vintage's own filter was overworld 0.4 to 0.9 temperature (the temperate band, swamps included). Grows on any dirt soil.
+- Added by: wild_crops.json oats
+- 26 biomes: birch_forest (0.29%), dark_forest (0.81%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), swamp (0.52%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:temperate_highlands (0.54%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
 
 ### `farmersdelight:patch_wild_onions` (Onion)
 
 - Rate 1 in 120 chunks, height: surface; ground: #minecraft:dirt
 - companion: Allium
 - Added by: wild_crops.json onion
-- 25 biomes: birch_forest (0.30%), dark_forest (1.67%), flower_forest (0.10%), forest (2.87%), meadow (0.97%), old_growth_birch_forest (0.53%), plains (2.93%), sunflower_plains (not sampled), terralith:alpha_islands (0.07%), terralith:blooming_plateau (0.20%), terralith:blooming_valley (0.20%), terralith:lavender_forest (0.03%), terralith:lavender_valley (0.27%), terralith:mirage_isles (0.07%), terralith:moonlight_grove (0.10%), terralith:moonlight_valley (0.10%), terralith:sakura_grove (0.33%), terralith:sakura_valley (0.03%), terralith:skylands_autumn (not sampled), terralith:skylands_spring (not sampled), terralith:steppe (0.53%), terralith:temperate_highlands (0.57%), terralith:valley_clearing (not sampled), terralith:yosemite_cliffs (0.10%), terralith:yosemite_lowlands (0.10%)
+- 25 biomes: birch_forest (0.29%), dark_forest (0.81%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:temperate_highlands (0.54%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
 
 ### `fruitsdelight:tree/orange_tree` (Orange (tree))
 
 - Rate 1 in 20 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 20 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json orange
-- 9 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 9 biomes: bamboo_jungle (0.14%), jungle (0.66%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `fruitsdelight:tree/peach_tree` (Peach (tree))
 
 - Rate 1 in 8.0 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 8 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json peach
-- 9 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 9 biomes: bamboo_jungle (0.14%), jungle (0.66%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
+
+### `vintagedelight:patch_wild_peanuts` (Peanuts)
+
+- Rate 1 in 100 chunks, height: surface
+- Same filter as oats in Vintage. Any dirt soil.
+- Added by: wild_crops.json peanuts
+- 26 biomes: birch_forest (0.29%), dark_forest (0.81%), flower_forest (0.15%), forest (2.58%), meadow (0.96%), old_growth_birch_forest (0.41%), plains (2.08%), sunflower_plains (0.14%), swamp (0.52%), terralith:alpha_islands (0.15%), terralith:blooming_plateau (0.40%), terralith:blooming_valley (0.26%), terralith:lavender_forest (0.15%), terralith:lavender_valley (0.29%), terralith:mirage_isles (0.17%), terralith:moonlight_grove (0.15%), terralith:moonlight_valley (0.34%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_autumn (0.03%), terralith:skylands_spring (0.01%), terralith:steppe (0.33%), terralith:temperate_highlands (0.54%), terralith:valley_clearing (0.30%), terralith:yosemite_cliffs (0.21%), terralith:yosemite_lowlands (0.16%)
 
 ### `fruitsdelight:tree/pear_tree` (Pear (tree))
 
 - Rate 1 in 15 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 15 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json pear
-- 3 biomes: birch_forest (0.30%), old_growth_birch_forest (0.53%), terralith:birch_taiga (0.37%)
+- 3 biomes: birch_forest (0.29%), old_growth_birch_forest (0.41%), terralith:birch_taiga (0.15%)
 
 ### `fruitsdelight:tree/persimmon_tree` (Persimmon (tree))
 
 - Rate 1 in 50 chunks, height: surface or sea floor; ground: sapling soil, no water above
 - 1 tree per 50 chunks; natural leaves flower and fruit
 - Added by: wild_crops.json persimmon
-- 13 biomes: grove (0.17%), snowy_taiga (1.03%), terralith:alpha_islands_winter (not sampled), terralith:alpine_grove (0.03%), terralith:birch_taiga (0.37%), terralith:scarlet_mountains (0.33%), terralith:siberian_grove (not sampled), terralith:siberian_taiga (0.60%), terralith:skylands_winter (0.03%), terralith:snowy_maple_forest (not sampled), terralith:snowy_shield (not sampled), terralith:wintry_forest (0.20%), terralith:wintry_lowlands (0.03%)
+- 13 biomes: grove (0.09%), snowy_taiga (1.14%), terralith:alpha_islands_winter (0.15%), terralith:alpine_grove (0.15%), terralith:birch_taiga (0.15%), terralith:scarlet_mountains (0.29%), terralith:siberian_grove (0.15%), terralith:siberian_taiga (0.81%), terralith:skylands_winter (0.04%), terralith:snowy_maple_forest (0.15%), terralith:snowy_shield (0.14%), terralith:wintry_forest (0.41%), terralith:wintry_lowlands (0.14%)
 
 ### `fruitsdelight:pineapple` (Pineapple)
 
 - Rate 1 in 32 chunks, height: surface; ground: sand
 - 24 tries within 5; Wild Pineapple; Fruits Delight's feature needs sand below; outside beaches it only takes where the coast has sand.
 - Added by: wild_crops.json pineapple
-- 4 biomes: beach (0.87%), mangrove_swamp (0.67%), terralith:granite_cliffs (not sampled), terralith:tropical_jungle (0.13%)
+- 4 biomes: beach (1.44%), mangrove_swamp (0.36%), terralith:granite_cliffs (0.30%), terralith:tropical_jungle (0.10%)
 
 ### `farmersdelight:patch_wild_potatoes` (Potato)
 
 - Rate 1 in 100 chunks, height: surface; ground: #minecraft:dirt
 - companion: Fern
 - Added by: wild_crops.json potato
-- 15 biomes: old_growth_pine_taiga (0.73%), old_growth_spruce_taiga (0.90%), taiga (1.00%), windswept_forest (0.03%), windswept_hills (0.23%), terralith:alpine_highlands (0.87%), terralith:caldera (not sampled), terralith:cloud_forest (0.07%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:highlands (1.00%), terralith:lush_valley (0.13%), terralith:shield (0.67%), terralith:shield_clearing (not sampled), terralith:yellowstone (4.20%)
+- 15 biomes: old_growth_pine_taiga (0.85%), old_growth_spruce_taiga (0.65%), taiga (1.20%), windswept_forest (0.20%), windswept_hills (0.14%), terralith:alpine_highlands (0.72%), terralith:caldera (0.24%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:highlands (0.89%), terralith:lush_valley (0.17%), terralith:shield (0.95%), terralith:shield_clearing (0.15%), terralith:yellowstone (4.75%)
 
 ### `nethersdelight:patch_propelplant` (Propelplant)
 
@@ -668,80 +737,101 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 - Rate 1 in 300 chunks, height: surface
 - No orchard biome exists in the pack; 'autumn' = Terralith Skylands Autumn, which also keeps its own pumpkin patch.
 - Added by: wild_crops.json pumpkin
-- 11 biomes: old_growth_pine_taiga (0.73%), old_growth_spruce_taiga (0.90%), taiga (1.00%), windswept_forest (0.03%), terralith:cloud_forest (0.07%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:lush_valley (0.13%), terralith:shield (0.67%), terralith:skylands_autumn (not sampled), terralith:yellowstone (4.20%)
+- 11 biomes: old_growth_pine_taiga (0.85%), old_growth_spruce_taiga (0.65%), taiga (1.20%), windswept_forest (0.20%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:lush_valley (0.17%), terralith:shield (0.95%), terralith:skylands_autumn (0.03%), terralith:yellowstone (4.75%)
 
 ### `terralith:skylands/patch_pumpkin` (Pumpkin)
 
 - Rate 1 in 4.0 chunks, height: surface
 - Added by: biome json (Terralith)
-- 1 biomes: terralith:skylands_autumn (not sampled)
+- 1 biomes: terralith:skylands_autumn (0.03%)
 
 ### `creativeengineering:wild/red_mushroom_colonies` (Red Mushroom Colony)
 
 - Rate 1 in 15 chunks, height: surface
 - Added by: wild_crops.json red_mushroom_colony
-- 2 biomes: dark_forest (1.67%), mushroom_fields (0.20%)
+- 2 biomes: dark_forest (0.81%), mushroom_fields (0.06%)
 
 ### `farmersdelight:patch_wild_rice` (Rice)
 
 - Rate 1 in 20 chunks, height: surface; ground: full water source 1 deep, air above, on #minecraft:dirt or sand
 - 96 tries within 7 xz of the sea/lake floor
 - Added by: wild_crops.json rice
-- 11 biomes: bamboo_jungle (0.33%), jungle (0.53%), mangrove_swamp (0.67%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:orchid_swamp (0.63%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 11 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `creativeengineering:wild/rubber_tree` (Rubber tree)
 
 - Rate 1 in 4.0 chunks, height: surface or sea floor
 - dry land; Myrtrees adds its tree from Java (Architectury biome modification, id minecraft:rubber_tree_placement; 1% of chunks x 5 trees, any forest/taiga/jungle). Removed everywhere, pack copy in 1 chunk of 4 in jungles.
 - Added by: wild_crops.json rubber
-- 9 biomes: bamboo_jungle (0.33%), jungle (0.53%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 9 biomes: bamboo_jungle (0.14%), jungle (0.66%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `delightful:patch_wild_salmonberries` (Salmonberries)
 
 - Rate 1 in 35 chunks, height: surface; ground: #minecraft:dirt
 - Farmer's Delight wild-crop patch, companion: Grass
 - Added by: wild_crops.json salmonberry
-- 15 biomes: old_growth_pine_taiga (0.73%), old_growth_spruce_taiga (0.90%), taiga (1.00%), windswept_forest (0.03%), windswept_hills (0.23%), terralith:alpine_highlands (0.87%), terralith:caldera (not sampled), terralith:cloud_forest (0.07%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:highlands (1.00%), terralith:lush_valley (0.13%), terralith:shield (0.67%), terralith:shield_clearing (not sampled), terralith:yellowstone (4.20%)
+- 15 biomes: old_growth_pine_taiga (0.85%), old_growth_spruce_taiga (0.65%), taiga (1.20%), windswept_forest (0.20%), windswept_hills (0.14%), terralith:alpine_highlands (0.72%), terralith:caldera (0.24%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:highlands (0.89%), terralith:lush_valley (0.17%), terralith:shield (0.95%), terralith:shield_clearing (0.15%), terralith:yellowstone (4.75%)
 
 ### `neapolitan:patch_strawberry_bush` (Strawberries)
 
 - Rate 1 in 64 chunks, height: surface; ground: grass block or coarse dirt
 - 512 tries within 5; 90% red bushes at age 6, 10% unripe on Coarse Dirt; turns nearby ground to Coarse Dirt
 - Added by: wild_crops.json strawberry
-- 6 biomes: terralith:alpine_highlands (0.87%), terralith:caldera (not sampled), terralith:cloud_forest (0.07%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:highlands (1.00%)
+- 6 biomes: terralith:alpine_highlands (0.72%), terralith:caldera (0.24%), terralith:cloud_forest (0.15%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:highlands (0.89%)
 
 ### `creativeengineering:wild/sugar_cane` (Sugar Cane)
 
 - Rate 1 in 6.0 chunks, height: surface
 - Added by: wild_crops.json sugar_cane
-- 6 biomes: beach (0.87%), frozen_river (0.27%), river (1.80%), snowy_beach (0.23%), terralith:gravel_beach (0.60%), terralith:warm_river (0.23%)
+- 6 biomes: beach (1.44%), frozen_river (0.53%), river (1.83%), snowy_beach (0.43%), terralith:gravel_beach (0.74%), terralith:warm_river (0.14%)
 
 ### `creativeengineering:wild/sweet_berries` (Sweet Berries)
 
 - Rate 1 in 32 chunks, height: surface
 - Added by: wild_crops.json sweet_berries
-- 33 biomes: grove (0.17%), old_growth_pine_taiga (0.73%), old_growth_spruce_taiga (0.90%), snowy_plains (1.37%), snowy_taiga (1.03%), taiga (1.00%), windswept_forest (0.03%), windswept_hills (0.23%), terralith:alpha_islands_winter (not sampled), terralith:alpine_grove (0.03%), terralith:alpine_highlands (0.87%), terralith:birch_taiga (0.37%), terralith:caldera (not sampled), terralith:cloud_forest (0.07%), terralith:cold_shrubland (0.73%), terralith:forested_highlands (1.07%), terralith:haze_mountain (0.13%), terralith:highlands (1.00%), terralith:ice_marsh (0.33%), terralith:lush_valley (0.13%), terralith:rocky_mountains (1.33%), terralith:rocky_shrubland (not sampled), terralith:scarlet_mountains (0.33%), terralith:shield (0.67%), terralith:shield_clearing (not sampled), terralith:siberian_grove (not sampled), terralith:siberian_taiga (0.60%), terralith:skylands_winter (0.03%), terralith:snowy_maple_forest (not sampled), terralith:snowy_shield (not sampled), terralith:wintry_forest (0.20%), terralith:wintry_lowlands (0.03%), terralith:yellowstone (4.20%)
+- 33 biomes: grove (0.09%), old_growth_pine_taiga (0.85%), old_growth_spruce_taiga (0.65%), snowy_plains (1.36%), snowy_taiga (1.14%), taiga (1.20%), windswept_forest (0.20%), windswept_hills (0.14%), terralith:alpha_islands_winter (0.15%), terralith:alpine_grove (0.15%), terralith:alpine_highlands (0.72%), terralith:birch_taiga (0.15%), terralith:caldera (0.24%), terralith:cloud_forest (0.15%), terralith:cold_shrubland (0.87%), terralith:forested_highlands (0.71%), terralith:haze_mountain (0.15%), terralith:highlands (0.89%), terralith:ice_marsh (0.73%), terralith:lush_valley (0.17%), terralith:rocky_mountains (1.12%), terralith:rocky_shrubland (0.15%), terralith:scarlet_mountains (0.29%), terralith:shield (0.95%), terralith:shield_clearing (0.15%), terralith:siberian_grove (0.15%), terralith:siberian_taiga (0.81%), terralith:skylands_winter (0.04%), terralith:snowy_maple_forest (0.15%), terralith:snowy_shield (0.14%), terralith:wintry_forest (0.41%), terralith:wintry_lowlands (0.14%), terralith:yellowstone (4.75%)
+
+### `veggiesdelight:patch_wild_sweet_potatoes` (Sweet Potato)
+
+- Rate 1 in 100 chunks, height: surface
+- 1 in 100 chunks.
+- Added by: wild_crops.json sweet_potato
+- 12 biomes: savanna (0.83%), savanna_plateau (0.44%), windswept_savanna (0.53%), wooded_badlands (0.15%), terralith:arid_highlands (0.29%), terralith:ashen_savanna (0.12%), terralith:brushland (1.21%), terralith:fractured_savanna (0.48%), terralith:hot_shrubland (0.23%), terralith:savanna_badlands (0.38%), terralith:savanna_slopes (0.14%), terralith:shrubland (0.26%)
 
 ### `farmersrespite:patch_wild_tea_bush` (Tea)
 
 - Rate 1 per chunk, height: surface; ground: #minecraft:dirt
-- only 3 tries (crop within 3 xz, Fern within 5): a bush or two
+- only 3 tries (crop within 3 xz, Fern within 5): a bush or two; Wet and misty ground: every swamp and jungle, the sakura biomes, plus the damp forests (downfall 0.8 or cloud cover). The bush needs #minecraft:dirt, which holds mud.
 - Added by: wild_crops.json tea
-- 3 biomes: swamp (1.07%), terralith:blooming_valley (0.20%), terralith:mirage_isles (0.07%)
+- 20 biomes: bamboo_jungle (0.14%), dark_forest (0.81%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), swamp (0.52%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:blooming_valley (0.26%), terralith:cloud_forest (0.15%), terralith:ice_marsh (0.73%), terralith:jungle_mountains (0.19%), terralith:lush_valley (0.17%), terralith:mirage_isles (0.17%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:sakura_grove (0.15%), terralith:sakura_valley (0.15%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
 
 ### `farmersdelight:patch_wild_tomatoes` (Tomato)
 
 - Rate 1 in 100 chunks, height: surface; ground: #farmersdelight:terrain (dirt, grass, sand, red sand, mud...)
 - companion: Dead Bush
 - Added by: wild_crops.json tomato
-- 12 biomes: savanna (1.93%), savanna_plateau (1.03%), windswept_savanna (0.60%), wooded_badlands (0.87%), terralith:arid_highlands (1.03%), terralith:ashen_savanna (0.07%), terralith:brushland (2.13%), terralith:fractured_savanna (0.20%), terralith:hot_shrubland (0.50%), terralith:savanna_badlands (0.33%), terralith:savanna_slopes (not sampled), terralith:shrubland (0.47%)
+- 12 biomes: savanna (0.83%), savanna_plateau (0.44%), windswept_savanna (0.53%), wooded_badlands (0.15%), terralith:arid_highlands (0.29%), terralith:ashen_savanna (0.12%), terralith:brushland (1.21%), terralith:fractured_savanna (0.48%), terralith:hot_shrubland (0.23%), terralith:savanna_badlands (0.38%), terralith:savanna_slopes (0.14%), terralith:shrubland (0.26%)
+
+### `veggiesdelight:patch_wild_turnips` (Turnip)
+
+- Rate 1 in 30 chunks, height: surface
+- Wherever sea beets grow; the port takes sand or dirt below, as the pack sea beet feature does. 1 in 30 chunks.
+- Added by: wild_crops.json turnip
+- 7 biomes: beach (1.44%), snowy_beach (0.43%), stony_shore (0.30%), terralith:basalt_cliffs (0.29%), terralith:frozen_cliffs (0.29%), terralith:granite_cliffs (0.30%), terralith:white_cliffs (0.29%)
 
 ### `neapolitan:patch_vanilla_vine` (Vanilla)
 
 - Rate 1 in 64 chunks, height: surface; ground: side of #neapolitan:vanilla_plantable_on (logs, leaves, dirt)
 - 64 tries per direction within 7
 - Added by: wild_crops.json vanilla
-- 11 biomes: bamboo_jungle (0.33%), jungle (0.53%), mangrove_swamp (0.67%), sparse_jungle (0.50%), terralith:amethyst_canyon (0.10%), terralith:amethyst_rainforest (0.17%), terralith:jungle_mountains (0.03%), terralith:orchid_swamp (0.63%), terralith:rocky_jungle (0.43%), terralith:skylands_summer (0.03%), terralith:tropical_jungle (0.13%)
+- 11 biomes: bamboo_jungle (0.14%), jungle (0.66%), mangrove_swamp (0.36%), sparse_jungle (0.54%), terralith:amethyst_canyon (0.15%), terralith:amethyst_rainforest (0.14%), terralith:jungle_mountains (0.19%), terralith:orchid_swamp (0.31%), terralith:rocky_jungle (0.21%), terralith:skylands_summer (0.01%), terralith:tropical_jungle (0.10%)
+
+### `veggiesdelight:patch_wild_zucchinis` (Zucchini)
+
+- Rate 1 in 100 chunks, height: surface
+- 1 in 100 chunks.
+- Added by: wild_crops.json zucchini
+- 12 biomes: savanna (0.83%), savanna_plateau (0.44%), windswept_savanna (0.53%), wooded_badlands (0.15%), terralith:arid_highlands (0.29%), terralith:ashen_savanna (0.12%), terralith:brushland (1.21%), terralith:fractured_savanna (0.48%), terralith:hot_shrubland (0.23%), terralith:savanna_badlands (0.38%), terralith:savanna_slopes (0.14%), terralith:shrubland (0.26%)
 
 ## 5. Crops per biome
 
@@ -749,131 +839,131 @@ Every overworld land biome, with its traits from `wild_crops.json`, plus other d
 
 | Biome | Area | Traits | Crops (feature rate) |
 |---|---|---|---|
-| badlands | overworld 1.50% | badlands dry sandy terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
-| bamboo_jungle | overworld 0.33% | forest grassy jungle warm wet | Bamboo (variable), Banana (1 in 1.3 chunks), Bell Pepper (1 in 15 chunks), Cocoa (1 in 3.0 chunks), Coffee (Rustic Delight) (1 in 15 chunks), Grapes: jungle red (1 in 5.0 chunks), Grapes: jungle white (1 in 5.0 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
-| beach | overworld 0.87% | beach coastal sandy warm | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Pineapple (1 in 32 chunks), Sugar Cane (1 in 6.0 chunks) |
-| birch_forest | overworld 0.30% | birch forest grassy temperate | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Grapes: red (1 in 92 chunks), Grapes: white (1 in 92 chunks), Onion (1 in 120 chunks), Pear (tree) (1 in 15 chunks) |
-| dark_forest | overworld 1.67% | dark_oak forest grassy temperate | Adzuki Beans (1 in 128 chunks), Brown Mushroom Colony (1 in 15 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks), Red Mushroom Colony (1 in 15 chunks) |
-| desert | overworld 1.20% | desert dry sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
-| eroded_badlands | overworld 0.43% | badlands dry sandy terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
-| flower_forest | overworld 0.10% | flower forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| forest | overworld 2.87% | forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Carrot (1 in 120 chunks), Grapes: red (1 in 92 chunks), Grapes: white (1 in 92 chunks), Onion (1 in 120 chunks) |
-| frozen_peaks | overworld 0.90% | cold icy mountain peak rocky snowy | **none** |
-| frozen_river | overworld 0.27% | cold river snowy | Mulberries (2 per chunk), Sugar Cane (1 in 6.0 chunks) |
-| grove | overworld 0.17% | cold coniferous forest grassy mountain snowy | Blueberry (1 in 32 chunks), Cherry (Vinery tree) (1 in 100 chunks), Mint (1 in 4.0 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| ice_spikes | overworld 0.23% | cold icy plains snowy | **none** |
-| jagged_peaks | overworld 0.47% | cold mountain peak rocky snowy | **none** |
-| jungle | overworld 0.53% | forest grassy jungle warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 1.3 chunks), Bell Pepper (1 in 15 chunks), Cocoa (50.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Grapes: jungle red (1 in 5.0 chunks), Grapes: jungle white (1 in 5.0 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
+| badlands | overworld 0.26% | badlands dry sandy terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
+| bamboo_jungle | overworld 0.14% | forest grassy jungle warm wet | Bamboo (variable), Banana (1 in 1.3 chunks), Bell Pepper (1 in 15 chunks), Cocoa (1 in 3.0 chunks), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| beach | overworld 1.44% | beach coastal sandy warm | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Pineapple (1 in 32 chunks), Sugar Cane (1 in 6.0 chunks), Turnip (1 in 30 chunks) |
+| birch_forest | overworld 0.29% | birch forest grassy temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks), Pear (tree) (1 in 15 chunks) |
+| dark_forest | overworld 0.81% | dark_oak forest grassy temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Brown Mushroom Colony (1 in 15 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks), Red Mushroom Colony (1 in 15 chunks), Tea (1 per chunk) |
+| desert | overworld 0.47% | desert dry sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
+| eroded_badlands | overworld 0.14% | badlands dry sandy terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
+| flower_forest | overworld 0.15% | flower forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| forest | overworld 2.58% | forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| frozen_peaks | overworld 0.81% | cold icy mountain peak rocky snowy | **none** |
+| frozen_river | overworld 0.53% | cold river snowy | Sugar Cane (1 in 6.0 chunks) |
+| grove | overworld 0.09% | cold coniferous forest grassy mountain snowy | Blueberry (1 in 32 chunks), Cherry (Vinery tree) (1 in 100 chunks), Mint (1 in 4.0 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| ice_spikes | overworld 0.14% | cold icy plains snowy | **none** |
+| jagged_peaks | overworld 0.38% | cold mountain peak rocky snowy | **none** |
+| jungle | overworld 0.66% | forest grassy jungle warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 1.3 chunks), Bell Pepper (1 in 15 chunks), Cocoa (50.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
 | lush_caves | overworld underground | cave | Glow Berries (188 per chunk) |
-| mangrove_swamp | overworld 0.67% | coastal muddy swamp warm wet | Bayberry (tree) (1 in 15 chunks), Bell Pepper (1 in 15 chunks), Cocoa (1 in 3.0 chunks), Coffee (Rustic Delight) (1 in 15 chunks), Durian (tree) (1 in 200 chunks), Mangosteen (tree) (1 in 40 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Pineapple (1 in 32 chunks), Rice (1 in 20 chunks), Vanilla (1 in 64 chunks) |
-| meadow | overworld 0.97% | flower grassy mountain plains temperate | Carrot (1 in 120 chunks), Grapes: red (1 in 92 chunks), Grapes: white (1 in 92 chunks), Onion (1 in 120 chunks) |
-| mushroom_fields | overworld 0.20% | coastal mushroom mycelium temperate wet | Brown Mushroom Colony (1 in 15 chunks), Red Mushroom Colony (1 in 15 chunks) |
-| old_growth_birch_forest | overworld 0.53% | birch forest grassy temperate | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks), Pear (tree) (1 in 15 chunks) |
-| old_growth_pine_taiga | overworld 0.73% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 92 chunks), Grapes: taiga white (1 in 92 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| old_growth_spruce_taiga | overworld 0.90% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 92 chunks), Grapes: taiga white (1 in 92 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| plains | overworld 2.93% | grassy plains temperate | Carrot (1 in 120 chunks), Grapes: red (1 in 92 chunks), Grapes: white (1 in 92 chunks), Onion (1 in 120 chunks) |
-| river | overworld 1.80% | river temperate | Grapes: red (1 in 92 chunks), Grapes: white (1 in 92 chunks), Mulberries (2 per chunk), Sugar Cane (1 in 6.0 chunks) |
-| savanna | overworld 1.93% | dry grassy savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 92 chunks), Grapes: savanna white (1 in 92 chunks), Tomato (1 in 100 chunks) |
-| savanna_plateau | overworld 1.03% | dry grassy mountain savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 92 chunks), Grapes: savanna white (1 in 92 chunks), Tomato (1 in 100 chunks) |
-| snowy_beach | overworld 0.23% | beach coastal cold sandy snowy | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Sugar Cane (1 in 6.0 chunks) |
-| snowy_plains | overworld 1.37% | cold grassy plains snowy | Blueberry (1 in 32 chunks), Sweet Berries (1 in 32 chunks) |
-| snowy_slopes | overworld 0.40% | cold mountain rocky snowy | **none** |
-| snowy_taiga | overworld 1.03% | cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Grapes: taiga red (1 in 92 chunks), Grapes: taiga white (1 in 92 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| sparse_jungle | overworld 0.50% | forest grassy jungle warm wet | Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cocoa (2.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Grapes: jungle red (1 in 5.0 chunks), Grapes: jungle white (1 in 5.0 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
-| stony_peaks | overworld 0.57% | mountain peak rocky warm | **none** |
-| stony_shore | overworld 0.00% | cliff coastal rocky temperate | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks) |
-| sunflower_plains | overworld 0.00% | flower grassy plains temperate | Carrot (1 in 120 chunks), Grapes: red (1 in 92 chunks), Grapes: white (1 in 92 chunks), Onion (1 in 120 chunks) |
-| swamp | overworld 1.07% | grassy swamp temperate wet | Bayberry (tree) (1 in 15 chunks), Durian (tree) (1 in 200 chunks), Grapes: red (1 in 92 chunks), Grapes: white (1 in 92 chunks), Mangosteen (tree) (1 in 40 chunks), Tea (1 per chunk) |
-| taiga | overworld 1.00% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 92 chunks), Grapes: taiga white (1 in 92 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| windswept_forest | overworld 0.03% | cold coniferous forest grassy rocky | Fig (tree) (1 in 20 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| windswept_gravelly_hills | overworld 0.20% | cold gravelly rocky | **none** |
-| windswept_hills | overworld 0.23% | cold grassy rocky | Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| windswept_savanna | overworld 0.60% | dry grassy rocky savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 92 chunks), Grapes: savanna white (1 in 92 chunks), Tomato (1 in 100 chunks) |
-| wooded_badlands | overworld 0.87% | badlands dry grassy sandy terracotta warm | Cactus (1 in 13 chunks), Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: jungle red (1 in 5.0 chunks), Grapes: jungle white (1 in 5.0 chunks), Grapes: savanna red (1 in 92 chunks), Grapes: savanna white (1 in 92 chunks), Hamimelon (1 in 64 chunks), Tomato (1 in 100 chunks) |
-| terralith:alpha_islands | overworld 0.07% | coastal forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:alpha_islands_winter | overworld 0.00% | coastal cold forest grassy oak snowy | Apple (Vinery tree) (1 in 100 chunks), Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:alpine_grove | overworld 0.03% | cold coniferous forest grassy mountain snowy | Blueberry (1 in 32 chunks), Cherry (Vinery tree) (1 in 100 chunks), Mint (1 in 4.0 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:alpine_highlands | overworld 0.87% | cold dry grassy mountain plains | Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:amethyst_canyon | overworld 0.10% | forest grassy jungle mountain warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cherry (Vinery tree) (1 in 100 chunks), Cocoa (24.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
-| terralith:amethyst_rainforest | overworld 0.17% | forest grassy jungle warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 1.3 chunks), Bell Pepper (1 in 15 chunks), Cocoa (24.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
-| terralith:ancient_sands | overworld 0.00% | desert dry sandy warm | Hamimelon (1 in 64 chunks) |
-| terralith:arid_highlands | overworld 1.03% | dry grassy plains savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Tomato (1 in 100 chunks) |
-| terralith:ashen_savanna | overworld 0.07% | dry grassy mountain savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Tomato (1 in 100 chunks) |
-| terralith:basalt_cliffs | overworld 0.00% | cliff coastal dry rocky warm | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks) |
-| terralith:birch_taiga | overworld 0.37% | birch cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Pear (tree) (1 in 15 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:blooming_plateau | overworld 0.20% | flower grassy mountain plains temperate | Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:blooming_valley | overworld 0.20% | flower forest grassy mountain temperate wet | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Cherry (Vinery tree) (1 in 100 chunks), Onion (1 in 120 chunks), Tea (1 per chunk) |
-| terralith:brushland | overworld 2.13% | dry grassy savanna shrubland warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Tomato (1 in 100 chunks) |
-| terralith:bryce_canyon | overworld 0.33% | badlands dry sandy terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
-| terralith:caldera | overworld 0.00% | cold grassy mountain wet | Cranberry (1 in 32 chunks), Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
+| mangrove_swamp | overworld 0.36% | coastal muddy swamp warm wet | Bayberry (tree) (1 in 15 chunks), Bell Pepper (1 in 15 chunks), Cocoa (1 in 3.0 chunks), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Durian (tree) (1 in 200 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Mangosteen (tree) (1 in 40 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Pineapple (1 in 32 chunks), Rice (1 in 20 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| meadow | overworld 0.96% | flower grassy mountain plains temperate | Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| mushroom_fields | overworld 0.06% | coastal mushroom mycelium temperate wet | Brown Mushroom Colony (1 in 15 chunks), Red Mushroom Colony (1 in 15 chunks) |
+| old_growth_birch_forest | overworld 0.41% | birch forest grassy temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks), Pear (tree) (1 in 15 chunks) |
+| old_growth_pine_taiga | overworld 0.85% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
+| old_growth_spruce_taiga | overworld 0.65% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
+| plains | overworld 2.08% | grassy plains temperate | Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| river | overworld 1.83% | river temperate | Sugar Cane (1 in 6.0 chunks) |
+| savanna | overworld 0.83% | dry grassy savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| savanna_plateau | overworld 0.44% | dry grassy mountain savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| snowy_beach | overworld 0.43% | beach coastal cold sandy snowy | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Sugar Cane (1 in 6.0 chunks), Turnip (1 in 30 chunks) |
+| snowy_plains | overworld 1.36% | cold grassy plains snowy | Blueberry (1 in 32 chunks), Sweet Berries (1 in 32 chunks) |
+| snowy_slopes | overworld 0.14% | cold mountain rocky snowy | **none** |
+| snowy_taiga | overworld 1.14% | cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| sparse_jungle | overworld 0.54% | forest grassy jungle warm wet | Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cocoa (2.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| stony_peaks | overworld 0.26% | mountain peak rocky warm | **none** |
+| stony_shore | overworld 0.30% | cliff coastal rocky temperate | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Turnip (1 in 30 chunks) |
+| sunflower_plains | overworld 0.14% | flower grassy plains temperate | Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| swamp | overworld 0.52% | grassy swamp temperate wet | Bayberry (tree) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Durian (tree) (1 in 200 chunks), Mangosteen (tree) (1 in 40 chunks), Oats (1 in 100 chunks), Peanuts (1 in 100 chunks), Tea (1 per chunk) |
+| taiga | overworld 1.20% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
+| windswept_forest | overworld 0.20% | cold coniferous forest grassy rocky | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
+| windswept_gravelly_hills | overworld 0.15% | cold gravelly rocky | **none** |
+| windswept_hills | overworld 0.14% | cold grassy rocky | Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
+| windswept_savanna | overworld 0.53% | dry grassy rocky savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| wooded_badlands | overworld 0.15% | badlands dry grassy sandy terracotta warm | Cactus (1 in 13 chunks), Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Hamimelon (1 in 64 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:alpha_islands | overworld 0.15% | coastal forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:alpha_islands_winter | overworld 0.15% | coastal cold forest grassy oak snowy | Apple (Vinery tree) (1 in 100 chunks), Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:alpine_grove | overworld 0.15% | cold coniferous forest grassy mountain snowy | Blueberry (1 in 32 chunks), Cherry (Vinery tree) (1 in 100 chunks), Mint (1 in 4.0 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:alpine_highlands | overworld 0.72% | cold dry grassy mountain plains | Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:amethyst_canyon | overworld 0.15% | forest grassy jungle mountain warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cherry (Vinery tree) (1 in 100 chunks), Cocoa (24.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| terralith:amethyst_rainforest | overworld 0.14% | forest grassy jungle warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 1.3 chunks), Bell Pepper (1 in 15 chunks), Cocoa (24.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| terralith:ancient_sands | overworld 0.15% | desert dry sandy warm | Hamimelon (1 in 64 chunks) |
+| terralith:arid_highlands | overworld 0.29% | dry grassy plains savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:ashen_savanna | overworld 0.12% | dry grassy mountain savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:basalt_cliffs | overworld 0.29% | cliff coastal dry rocky warm | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Turnip (1 in 30 chunks) |
+| terralith:birch_taiga | overworld 0.15% | birch cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Pear (tree) (1 in 15 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:blooming_plateau | overworld 0.40% | flower grassy mountain plains temperate | Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:blooming_valley | overworld 0.26% | flower forest grassy mountain temperate wet | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Cherry (Vinery tree) (1 in 100 chunks), Cucumbers (1 in 75 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks), Tea (1 per chunk) |
+| terralith:brushland | overworld 1.21% | dry grassy savanna shrubland warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:bryce_canyon | overworld 0.16% | badlands dry sandy terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
+| terralith:caldera | overworld 0.24% | cold grassy mountain wet | Cranberry (1 in 32 chunks), Cucumbers (1 in 75 chunks), Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
 | terralith:cave/underground_jungle | overworld underground | cave | Glow Berries (125 per chunk) |
-| terralith:cloud_forest | overworld 0.07% | cold coniferous forest grassy mountain wet | Cherry (Vinery tree) (1 in 100 chunks), Cranberry (1 in 32 chunks), Fig (tree) (1 in 20 chunks), Hawberry (tree) (1 in 20 chunks), Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:cold_shrubland | overworld 0.73% | cold dry grassy plains shrubland snowy | Blueberry (1 in 32 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:desert_canyon | overworld 0.33% | desert dry mountain sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
-| terralith:desert_oasis | overworld 0.03% | desert oasis sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
-| terralith:desert_spires | overworld 0.20% | desert dry mountain sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
-| terralith:emerald_peaks | overworld 0.03% | cold mountain peak rocky snowy | **none** |
-| terralith:forested_highlands | overworld 1.07% | cold coniferous forest grassy mountain | Cherry (Vinery tree) (1 in 100 chunks), Fig (tree) (1 in 20 chunks), Hawberry (tree) (1 in 20 chunks), Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:fractured_savanna | overworld 0.20% | dry grassy mountain peak savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Tomato (1 in 100 chunks) |
-| terralith:frozen_cliffs | overworld 0.00% | cliff coastal cold icy rocky snowy | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks) |
-| terralith:glacial_chasm | overworld 1.60% | cold icy mountain snowy | **none** |
-| terralith:granite_cliffs | overworld 0.00% | cliff coastal rocky warm wet | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Pineapple (1 in 32 chunks) |
-| terralith:gravel_beach | overworld 0.60% | beach coastal gravelly temperate wet | Sugar Cane (1 in 6.0 chunks) |
-| terralith:gravel_desert | overworld 0.40% | cold desert gravelly snowy | **none** |
-| terralith:haze_mountain | overworld 0.13% | cold forest grassy mountain | Cherry (Vinery tree) (1 in 100 chunks), Fig (tree) (1 in 20 chunks), Hawberry (tree) (1 in 20 chunks), Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:highlands | overworld 1.00% | cold grassy mountain plains | Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:hot_shrubland | overworld 0.50% | dry grassy savanna shrubland warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Tomato (1 in 100 chunks) |
-| terralith:ice_marsh | overworld 0.33% | cold grassy muddy snowy swamp wet | Blueberry (1 in 32 chunks), Cranberry (1 in 32 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:jungle_mountains | overworld 0.03% | forest grassy jungle mountain warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cherry (Vinery tree) (1 in 100 chunks), Cocoa (50.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
-| terralith:lavender_forest | overworld 0.03% | flower forest grassy temperate | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:lavender_valley | overworld 0.27% | flower forest grassy mountain temperate | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Cherry (Vinery tree) (1 in 100 chunks), Onion (1 in 120 chunks) |
-| terralith:lush_desert | overworld 0.07% | desert dry sandy warm | Cactus (1 in 6.0 chunks), Cactus (10 per chunk), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
-| terralith:lush_valley | overworld 0.13% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:mirage_isles | overworld 0.07% | coastal forest grassy temperate wet | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks), Tea (1 per chunk) |
-| terralith:moonlight_grove | overworld 0.10% | flower forest grassy temperate | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:moonlight_valley | overworld 0.10% | flower forest grassy mountain temperate | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Cherry (Vinery tree) (1 in 100 chunks), Onion (1 in 120 chunks) |
-| terralith:orchid_swamp | overworld 0.63% | flower grassy swamp warm wet | Bayberry (tree) (1 in 15 chunks), Bell Pepper (1 in 15 chunks), Cocoa (1 in 3.0 chunks), Coffee (Rustic Delight) (1 in 15 chunks), Durian (tree) (1 in 200 chunks), Mangosteen (tree) (1 in 40 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Rice (1 in 20 chunks), Vanilla (1 in 64 chunks) |
-| terralith:painted_mountains | overworld 0.13% | badlands dry mountain terracotta warm | Hamimelon (1 in 64 chunks) |
-| terralith:red_oasis | overworld 0.23% | desert oasis sandy terracotta warm | Cactus (1 in 6.0 chunks), Hamimelon (1 in 64 chunks) |
-| terralith:rocky_jungle | overworld 0.43% | forest grassy jungle mountain rocky warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cherry (Vinery tree) (1 in 100 chunks), Cocoa (50.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
-| terralith:rocky_mountains | overworld 1.33% | cold grassy mountain rocky snowy | Blueberry (1 in 32 chunks), Mint (1 in 4.0 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:rocky_shrubland | overworld 0.00% | cold dry grassy plains shrubland snowy | Blueberry (1 in 32 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:sakura_grove | overworld 0.33% | cherry flower forest grassy temperate | Adzuki Beans (1 in 128 chunks), Bamboo (variable), Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:sakura_valley | overworld 0.03% | cherry flower forest grassy mountain temperate | Adzuki Beans (1 in 128 chunks), Bamboo (variable), Carrot (1 in 120 chunks), Cherry (Vinery tree) (1 in 100 chunks), Onion (1 in 120 chunks) |
-| terralith:sandstone_valley | overworld 0.47% | desert dry mountain sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
-| terralith:savanna_badlands | overworld 0.33% | dry grassy savanna terracotta warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Tomato (1 in 100 chunks) |
-| terralith:savanna_slopes | overworld 0.00% | dry grassy mountain savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Tomato (1 in 100 chunks) |
-| terralith:scarlet_mountains | overworld 0.33% | cold coniferous forest grassy mountain snowy | Blueberry (1 in 32 chunks), Cherry (Vinery tree) (1 in 100 chunks), Mint (1 in 4.0 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:shield | overworld 0.67% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:shield_clearing | overworld 0.00% | cold grassy plains | Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:shrubland | overworld 0.47% | dry grassy savanna shrubland warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Tomato (1 in 100 chunks) |
-| terralith:siberian_grove | overworld 0.00% | cold coniferous forest grassy mountain snowy | Blueberry (1 in 32 chunks), Cherry (Vinery tree) (1 in 100 chunks), Mint (1 in 4.0 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:siberian_taiga | overworld 0.60% | cold coniferous forest grassy snowy wet | Blueberry (1 in 32 chunks), Cranberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:skylands_autumn | overworld 0.00% | autumn forest grassy sky temperate | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks), Pumpkin (1 in 300 chunks), Pumpkin (1 in 4.0 chunks) |
-| terralith:skylands_spring | overworld 0.00% | flower forest grassy sky temperate | Adzuki Beans (1 in 128 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:skylands_summer | overworld 0.03% | forest grassy jungle sky warm wet | Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cactus (8 per chunk), Cocoa (15.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Glow Berries (92 per chunk), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
-| terralith:skylands_winter | overworld 0.03% | cold coniferous forest grassy sky snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:snowy_badlands | overworld 0.33% | badlands cold dry snowy terracotta | Cactus (1 in 13 chunks) |
-| terralith:snowy_maple_forest | overworld 0.00% | cold forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:snowy_shield | overworld 0.00% | cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:steppe | overworld 0.53% | dry grassy plains temperate | Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:stony_spires | overworld 0.23% | dry mountain rocky temperate | **none** |
-| terralith:temperate_highlands | overworld 0.57% | dark_oak forest grassy mountain oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Carrot (1 in 120 chunks), Cherry (Vinery tree) (1 in 100 chunks), Onion (1 in 120 chunks) |
-| terralith:tropical_jungle | overworld 0.13% | coastal forest grassy jungle warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 1.3 chunks), Bell Pepper (1 in 15 chunks), Cocoa (15.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Pineapple (1 in 32 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Vanilla (1 in 64 chunks) |
-| terralith:valley_clearing | overworld 0.00% | dry grassy plains temperate | Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:volcanic_crater | overworld 0.00% | mountain peak rocky warm | **none** |
-| terralith:volcanic_peaks | overworld 0.70% | mountain peak rocky warm | **none** |
-| terralith:warm_river | overworld 0.23% | river warm | Sugar Cane (1 in 6.0 chunks) |
-| terralith:warped_mesa | overworld 0.03% | badlands dry mountain terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
-| terralith:white_cliffs | overworld 0.00% | cliff coastal rocky temperate wet | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks) |
-| terralith:white_mesa | overworld 0.00% | badlands dry terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
-| terralith:windswept_spires | overworld 0.10% | mountain rocky temperate | **none** |
-| terralith:wintry_forest | overworld 0.20% | cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:wintry_lowlands | overworld 0.03% | cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:yellowstone | overworld 4.20% | cold coniferous forest grassy wet | Cranberry (1 in 32 chunks), Fig (tree) (1 in 20 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
-| terralith:yosemite_cliffs | overworld 0.10% | grassy mountain rocky temperate | Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| terralith:yosemite_lowlands | overworld 0.10% | coniferous forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Carrot (1 in 120 chunks), Onion (1 in 120 chunks) |
-| end_highlands | the_end 76.20% | - | Chorus Fruit (variable) |
+| terralith:cloud_forest | overworld 0.15% | cold coniferous forest grassy mountain wet | Cherry (Vinery tree) (1 in 100 chunks), Cranberry (1 in 32 chunks), Cucumbers (1 in 75 chunks), Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks), Tea (1 per chunk) |
+| terralith:cold_shrubland | overworld 0.87% | cold dry grassy plains shrubland snowy | Blueberry (1 in 32 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:desert_canyon | overworld 0.15% | desert dry mountain sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
+| terralith:desert_oasis | overworld 0.10% | desert oasis sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
+| terralith:desert_spires | overworld 0.15% | desert dry mountain sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
+| terralith:emerald_peaks | overworld 0.15% | cold mountain peak rocky snowy | **none** |
+| terralith:forested_highlands | overworld 0.71% | cold coniferous forest grassy mountain | Cherry (Vinery tree) (1 in 100 chunks), Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:fractured_savanna | overworld 0.48% | dry grassy mountain peak savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:frozen_cliffs | overworld 0.29% | cliff coastal cold icy rocky snowy | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Turnip (1 in 30 chunks) |
+| terralith:glacial_chasm | overworld 0.81% | cold icy mountain snowy | **none** |
+| terralith:granite_cliffs | overworld 0.30% | cliff coastal rocky warm wet | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Pineapple (1 in 32 chunks), Turnip (1 in 30 chunks) |
+| terralith:gravel_beach | overworld 0.74% | beach coastal gravelly temperate wet | Sugar Cane (1 in 6.0 chunks) |
+| terralith:gravel_desert | overworld 0.24% | cold desert gravelly snowy | **none** |
+| terralith:haze_mountain | overworld 0.15% | cold forest grassy mountain | Cherry (Vinery tree) (1 in 100 chunks), Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:highlands | overworld 0.89% | cold grassy mountain plains | Mint (1 in 4.0 chunks), Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Strawberries (1 in 64 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:hot_shrubland | overworld 0.23% | dry grassy savanna shrubland warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:ice_marsh | overworld 0.73% | cold grassy muddy snowy swamp wet | Blueberry (1 in 32 chunks), Cranberry (1 in 32 chunks), Cucumbers (1 in 75 chunks), Sweet Berries (1 in 32 chunks), Tea (1 per chunk) |
+| terralith:jungle_mountains | overworld 0.19% | forest grassy jungle mountain warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cherry (Vinery tree) (1 in 100 chunks), Cocoa (50.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| terralith:lavender_forest | overworld 0.15% | flower forest grassy temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:lavender_valley | overworld 0.29% | flower forest grassy mountain temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Cherry (Vinery tree) (1 in 100 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:lush_desert | overworld 0.14% | desert dry sandy warm | Cactus (1 in 6.0 chunks), Cactus (10 per chunk), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
+| terralith:lush_valley | overworld 0.17% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks), Tea (1 per chunk) |
+| terralith:mirage_isles | overworld 0.17% | coastal forest grassy temperate wet | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Cucumbers (1 in 75 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks), Tea (1 per chunk) |
+| terralith:moonlight_grove | overworld 0.15% | flower forest grassy temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:moonlight_valley | overworld 0.34% | flower forest grassy mountain temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Cherry (Vinery tree) (1 in 100 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:orchid_swamp | overworld 0.31% | flower grassy swamp warm wet | Bayberry (tree) (1 in 15 chunks), Bell Pepper (1 in 15 chunks), Cocoa (1 in 3.0 chunks), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Durian (tree) (1 in 200 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Mangosteen (tree) (1 in 40 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Rice (1 in 20 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| terralith:painted_mountains | overworld 0.16% | badlands dry mountain terracotta warm | Hamimelon (1 in 64 chunks) |
+| terralith:red_oasis | overworld 0.15% | desert oasis sandy terracotta warm | Cactus (1 in 6.0 chunks), Hamimelon (1 in 64 chunks) |
+| terralith:rocky_jungle | overworld 0.21% | forest grassy jungle mountain rocky warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cherry (Vinery tree) (1 in 100 chunks), Cocoa (50.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| terralith:rocky_mountains | overworld 1.12% | cold grassy mountain rocky snowy | Blueberry (1 in 32 chunks), Mint (1 in 4.0 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:rocky_shrubland | overworld 0.15% | cold dry grassy plains shrubland snowy | Blueberry (1 in 32 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:sakura_grove | overworld 0.15% | cherry flower forest grassy temperate | Adzuki Beans (1 in 128 chunks), Bamboo (variable), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks), Tea (1 per chunk) |
+| terralith:sakura_valley | overworld 0.15% | cherry flower forest grassy mountain temperate | Adzuki Beans (1 in 128 chunks), Bamboo (variable), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Cherry (Vinery tree) (1 in 100 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks), Tea (1 per chunk) |
+| terralith:sandstone_valley | overworld 0.12% | desert dry mountain sandy warm | Cactus (1 in 6.0 chunks), Cactus (16 per chunk), Hamimelon (1 in 64 chunks) |
+| terralith:savanna_badlands | overworld 0.38% | dry grassy savanna terracotta warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:savanna_slopes | overworld 0.14% | dry grassy mountain savanna warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:scarlet_mountains | overworld 0.29% | cold coniferous forest grassy mountain snowy | Blueberry (1 in 32 chunks), Cherry (Vinery tree) (1 in 100 chunks), Mint (1 in 4.0 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:shield | overworld 0.95% | cold coniferous forest grassy | Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:shield_clearing | overworld 0.15% | cold grassy plains | Potato (1 in 100 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:shrubland | overworld 0.26% | dry grassy savanna shrubland warm | Cantaloupe (1 in 55 chunks), Corn (1 in 30 chunks), Cotton (1 in 96 chunks), Grapes: savanna red (1 in 22 chunks), Grapes: savanna white (1 in 22 chunks), Sweet Potato (1 in 100 chunks), Tomato (1 in 100 chunks), Zucchini (1 in 100 chunks) |
+| terralith:siberian_grove | overworld 0.15% | cold coniferous forest grassy mountain snowy | Blueberry (1 in 32 chunks), Cherry (Vinery tree) (1 in 100 chunks), Mint (1 in 4.0 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:siberian_taiga | overworld 0.81% | cold coniferous forest grassy snowy wet | Blueberry (1 in 32 chunks), Cranberry (1 in 32 chunks), Cucumbers (1 in 75 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:skylands_autumn | overworld 0.03% | autumn forest grassy sky temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks), Pumpkin (1 in 300 chunks), Pumpkin (1 in 4.0 chunks) |
+| terralith:skylands_spring | overworld 0.01% | flower forest grassy sky temperate | Adzuki Beans (1 in 128 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:skylands_summer | overworld 0.01% | forest grassy jungle sky warm wet | Banana (1 in 10 chunks), Bell Pepper (1 in 15 chunks), Cactus (8 per chunk), Cocoa (15.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Glow Berries (92 per chunk), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| terralith:skylands_winter | overworld 0.04% | cold coniferous forest grassy sky snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:snowy_badlands | overworld 0.30% | badlands cold dry snowy terracotta | Cactus (1 in 13 chunks) |
+| terralith:snowy_maple_forest | overworld 0.15% | cold forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:snowy_shield | overworld 0.14% | cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:steppe | overworld 0.33% | dry grassy plains temperate | Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:stony_spires | overworld 0.22% | dry mountain rocky temperate | **none** |
+| terralith:temperate_highlands | overworld 0.54% | dark_oak forest grassy mountain oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Cherry (Vinery tree) (1 in 100 chunks), Garlic (1 in 240 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:tropical_jungle | overworld 0.10% | coastal forest grassy jungle warm wet | Bamboo (1 in 4.0 chunks), Banana (1 in 1.3 chunks), Bell Pepper (1 in 15 chunks), Cocoa (15.1 per chunk), Coffee (Rustic Delight) (1 in 15 chunks), Cucumbers (1 in 75 chunks), Grapes: jungle red (1 in 10 chunks), Grapes: jungle white (1 in 10 chunks), Kiwi (tree) (1 in 20 chunks), Lemon (1 in 32 chunks), Lychee (tree) (1 in 4.0 chunks), Mango (tree) (1 in 4.0 chunks), Melon (1 in 6.0 chunks), Mini Melon (1 in 35 chunks), Orange (tree) (1 in 20 chunks), Peach (tree) (1 in 8.0 chunks), Pineapple (1 in 32 chunks), Rice (1 in 20 chunks), Rubber tree (1 in 4.0 chunks), Tea (1 per chunk), Vanilla (1 in 64 chunks) |
+| terralith:valley_clearing | overworld 0.30% | dry grassy plains temperate | Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:volcanic_crater | overworld 0.15% | mountain peak rocky warm | **none** |
+| terralith:volcanic_peaks | overworld 0.27% | mountain peak rocky warm | **none** |
+| terralith:warm_river | overworld 0.14% | river warm | Sugar Cane (1 in 6.0 chunks) |
+| terralith:warped_mesa | overworld 0.15% | badlands dry mountain terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
+| terralith:white_cliffs | overworld 0.29% | cliff coastal rocky temperate wet | Beetroot (Sea Beet) (1 in 30 chunks), Cabbage (1 in 30 chunks), Turnip (1 in 30 chunks) |
+| terralith:white_mesa | overworld 0.15% | badlands dry terracotta warm | Cactus (1 in 13 chunks), Hamimelon (1 in 64 chunks) |
+| terralith:windswept_spires | overworld 0.17% | mountain rocky temperate | **none** |
+| terralith:wintry_forest | overworld 0.41% | cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:wintry_lowlands | overworld 0.14% | cold coniferous forest grassy snowy | Blueberry (1 in 32 chunks), Persimmon (tree) (1 in 50 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:yellowstone | overworld 4.75% | cold coniferous forest grassy wet | Cranberry (1 in 32 chunks), Cucumbers (1 in 75 chunks), Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks) |
+| terralith:yosemite_cliffs | overworld 0.21% | grassy mountain rocky temperate | Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| terralith:yosemite_lowlands | overworld 0.16% | coniferous forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Broccoli (1 in 240 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Peanuts (1 in 100 chunks) |
+| end_highlands | the_end 76.60% | - | Chorus Fruit (variable) |
 | crimson_forest | the_nether 16.07% | - | Propelplant (8 per chunk) |
 
 ## 6. Coverage checks

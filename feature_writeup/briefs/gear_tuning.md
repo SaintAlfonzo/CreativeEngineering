@@ -51,7 +51,7 @@ Open rows: #6 (Bug), #2 to #5, #7 to #13 (Planned). #1 is Complete (table at the
    fishing rods (the dragon rod needs Java), #11 diving gear (largest: Java items, blocks, block entity, textures).
 4. Close by decision: #10 (recommend no, or a moobloom-only bonus).
 
-Dependencies on other families: #13's dragon rod bonus is also `gear/effects #6`; #4 overlaps `gear/shields` (SH-27);
+Dependencies on other families: #13's dragon rod bonus is also `potions/effects #6`; #4 overlaps `gear/shields` (SH-27);
 #8 touches `gear/camera-bags` (leather bag) and `gear/archery` (quiver); #11 overlaps `worldgen` pillager notes
 ("end pillagers spawn with diving gear", not a row).
 
@@ -622,7 +622,7 @@ durability and enchantability, the dragon rod with its own bonus.
 - D1 dragon rod bonus: candidates: built-in Luck of the Sea + Lure (simple, stacks with books up to the vanilla cap),
   lava fishing, a held Luck effect, or an Allurement-style reel that pulls a hooked mob. **Recommend held Luck I plus
   +1 Lure speed in the item class** (`FishingHook` lure speed comes from the enchantment; add it in `use()` like
-  vanilla does). Needs your call; also `gear/effects #6`.
+  vanilla does). Needs your call; also `potions/effects #6`.
 - D2 fix gold: **yes**, make it 400 durability so the chain only goes up.
 
 ### Gotchas

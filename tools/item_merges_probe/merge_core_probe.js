@@ -30,8 +30,9 @@
     }
     function idOf(st) { return String($MCForgeReg.ITEMS.getKey(st.getItem())) }
     function desc(st) { return st == null ? 'nothing' : st.getCount() + 'x ' + idOf(st) }
-    // ItemStack.is / BlockState.is have several one-argument overloads Rhino can't pick between
-    function hasTag(obj, tag) { return obj['is(net.minecraft.tags.TagKey)'](tag) }
+    // ItemStack.is / BlockState.is have several one-argument overloads Rhino can't pick between (and the runtime name
+    // is obfuscated, so the 'is(Type)' signature form fails too); both have getTags()
+    function hasTag(obj, tag) { return obj.getTags().anyMatch(t => t.equals(tag)) }
     function itemTag(tag) { return $MCTagKey.create($MCRegistry.ITEM_REGISTRY, new $MCRL(tag)) }
     function blockTag(tag) { return $MCTagKey.create($MCRegistry.BLOCK_REGISTRY, new $MCRL(tag)) }
     function recipe(rm, id) {

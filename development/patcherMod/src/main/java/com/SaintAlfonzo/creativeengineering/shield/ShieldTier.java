@@ -55,10 +55,12 @@ public enum ShieldTier { //TODO: ajdust kbthreshold to be more reasonable, add v
     IRON("iron",             336, "minecraft:iron_ingot",             60,  new int[]{25,0,0,0},    0, false, Rarity.COMMON, 3),
     DIAMOND("diamond",      1561, "minecraft:diamond",                70,  new int[]{50,0,0,0},   25, false, Rarity.RARE,   4),
     NETHERITE("netherite",  2031, "minecraft:netherite_ingot",        80,  new int[]{100,0,0,0},  50, true,  Rarity.RARE,   5),
-    ECHO("echo",            2124, "create_deep_dark:echo_ingot",      90,  50,                    60, true,  Rarity.EPIC,   6),
-    FELSIC("felsic",        2501, "felsic_gear:felsic_ingot",         95,  75,                    75, true,  Rarity.EPIC,   7),
+    ECHO("echo",            2124, "create_deep_dark:echo_ingot",      90,  50,                    60, true,  Rarity.EPIC,   6,
+        "minecraft:resistance;40;0", ""),
+    FELSIC("felsic",        2501, "felsic_gear:felsic_ingot",         95,  75,                    75, true,  Rarity.EPIC,   7,
+        "minecraft:resistance;40;1", ""),
     DRAGON("dragon",        3350, "dragonloot:dragon_scale",          100, 100,                  100, true,  Rarity.EPIC,   8,
-        "minecraft:regeneration;100;0", "minecraft:poison;100;0");
+        "minecraft:regeneration;100;0, minecraft:resistance;40;1", "minecraft:poison;100;0");
 
     private final String id;
     private final int defaultDurability;
@@ -84,7 +86,7 @@ public enum ShieldTier { //TODO: ajdust kbthreshold to be more reasonable, add v
                 fireproof, rarity, defaultKnockbackThreshold, "", "");
     }
 
-    /** Blanket mode, with on-block effects (only {@link #DRAGON} uses this one). */
+    /** Blanket mode, with on-block effects ({@link #ECHO}, {@link #FELSIC}, {@link #DRAGON}). */
     ShieldTier(String id, int defaultDurability, String defaultRepairItem,
                int defaultPhysical, int defaultElemental, int defaultMagic, boolean fireproof, Rarity rarity,
                int defaultKnockbackThreshold, String defaultShielderEffects, String defaultAttackerEffects) {

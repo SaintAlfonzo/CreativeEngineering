@@ -2,7 +2,7 @@
 
 Rewritten by patcherMod `worldgen/PoolTuner` at every world load from `pool_config.json` + `pool_tags.json`. Don't edit.
 
-- 1416 pools, 7182 pieces
+- 1416 pools, 7187 pieces
 - 39 pool(s) retuned
 - 1 pool(s) restored to first-seen weights (a mod re-added its pieces on this world load, or a previous edit was reverted)
 
@@ -39,33 +39,33 @@ Pool scaled x3 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `chefsdelight:desert_chef_house` | 5 | 2.3% | 15 | 4.1% |  |
-| `chefsdelight:desert_cook_house` | 3 | 1.4% | 9 | 2.5% |  |
+| `chefsdelight:desert_chef_house` | 5 | 2.3% | 15 | 4.0% |  |
+| `chefsdelight:desert_cook_house` | 3 | 1.4% | 9 | 2.4% |  |
 | `cloudstorage:balloon_stand_desert` | 2 | 0.9% | 6 | 1.6% |  |
-| `domesticationinnovation:desert_petshop` | 17 | 7.8% | 51 | 14.0% |  |
-| `dynamicvillage:desert/desert_mech` | 20 | 9.2% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:desert/desert_miner` | 20 | 9.2% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:desert/desert_plumber` | 20 | 9.2% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:desert/desert_train` | 20 | 9.2% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `domesticationinnovation:desert_petshop` | 17 | 7.7% | 51 | 13.7% |  |
+| `dynamicvillage:desert/desert_mech` | 20 | 9.0% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:desert/desert_miner` | 20 | 9.0% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:desert/desert_plumber` | 20 | 9.0% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:desert/desert_train` | 20 | 9.0% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
 | `etched:village/desert/houses/desert_bard_house_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `farmersdelight:village/houses/desert_compost_pile` | 3 | 1.4% | 9 | 2.5% |  |
+| `farmersdelight:village/houses/desert_compost_pile` | 3 | 1.4% | 9 | 2.4% |  |
 | `immersiveengineering:village/houses/desert_electrician` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/desert_engineer` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/desert_gunsmith` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/desert_machinist` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/desert_outfitter` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `incubation:village/desert_chicken_coop_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:empty` | 5 | 2.3% | 15 | 4.1% |  |
+| `minecraft:empty` | 5 | 2.3% | 15 | 4.0% |  |
 | `minecraft:village/desert/houses/desert_animal_pen_1` | 2 | 0.9% | 6 | 1.6% |  |
 | `minecraft:village/desert/houses/desert_animal_pen_2` | 2 | 0.9% | 6 | 1.6% |  |
 | `minecraft:village/desert/houses/desert_armorer_1` | 1 | 0.5% | 3 | 0.8% |  |
 | `minecraft:village/desert/houses/desert_butcher_shop_1` | 2 | 0.9% | 6 | 1.6% |  |
 | `minecraft:village/desert/houses/desert_cartographer_house_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/desert/houses/desert_farm_1` | 4 | 1.8% | 12 | 3.3% |  |
-| `minecraft:village/desert/houses/desert_farm_2` | 4 | 1.8% | 12 | 3.3% |  |
+| `minecraft:village/desert/houses/desert_farm_1` | 4 | 1.8% | 12 | 3.2% |  |
+| `minecraft:village/desert/houses/desert_farm_2` | 4 | 1.8% | 12 | 3.2% |  |
 | `minecraft:village/desert/houses/desert_fisher_1` | 2 | 0.9% | 6 | 1.6% |  |
 | `minecraft:village/desert/houses/desert_fletcher_house_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/desert/houses/desert_large_farm_1` | 11 | 5.0% | 33 | 9.0% |  |
+| `minecraft:village/desert/houses/desert_large_farm_1` | 11 | 5.0% | 33 | 8.9% |  |
 | `minecraft:village/desert/houses/desert_library_1` | 2 | 0.9% | 6 | 1.6% |  |
 | `minecraft:village/desert/houses/desert_mason_1` | 2 | 0.9% | 6 | 1.6% |  |
 | `minecraft:village/desert/houses/desert_medium_house_1` | 2 | 0.9% | 6 | 1.6% |  |
@@ -84,9 +84,10 @@ Pool scaled x3 to hold fractional weights.
 | `minecraft:village/desert/houses/desert_temple_2` | 2 | 0.9% | 6 | 1.6% |  |
 | `minecraft:village/desert/houses/desert_tool_smith_1` | 2 | 0.9% | 6 | 1.6% |  |
 | `minecraft:village/desert/houses/desert_weaponsmith_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `monobank:village/houses/desert_vault` | 15 | 6.9% | 8 | 2.2% | monobank/vault_houses x0.18 |
-| `vinery:vinery_desert` | 2 | 0.9% | 9 | 2.5% | current 3 |
-| `wares:village/houses/desert_warehouse` | 10 | 4.6% | 30 | 8.2% |  |
+| `monobank:village/houses/desert_vault` | 15 | 6.8% | 8 | 2.2% | monobank/vault_houses x0.18 |
+| `veggiesdelight:village/houses/desert_depot_house` | 4 | 1.8% | 6 | 1.6% | mod/veggiesdelight x0.5 |
+| `vinery:vinery_desert` | 2 | 0.9% | 9 | 2.4% | current 3 |
+| `wares:village/houses/desert_warehouse` | 10 | 4.5% | 30 | 8.1% |  |
 
 ### `minecraft:village/desert/streets`
 
@@ -115,63 +116,64 @@ Pool scaled x3 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `chefsdelight:plains_chef_house` | 5 | 2.1% | 15 | 3.6% |  |
-| `chefsdelight:plains_cook_house` | 2 | 0.8% | 6 | 1.5% |  |
-| `cloudstorage:balloon_stand_plains` | 2 | 0.8% | 6 | 1.5% |  |
-| `domesticationinnovation:plains_petshop` | 17 | 7.0% | 51 | 12.3% |  |
-| `dynamicvillage:plains/plains_mech` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:plains/plains_miner` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:plains/plains_plumber` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:plains/plains_train` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `etched:village/plains/houses/plains_bard_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `farmersdelight:village/houses/plains_compost_pile` | 5 | 2.1% | 15 | 3.6% |  |
+| `chefsdelight:plains_chef_house` | 5 | 2.0% | 15 | 3.6% |  |
+| `chefsdelight:plains_cook_house` | 2 | 0.8% | 6 | 1.4% |  |
+| `cloudstorage:balloon_stand_plains` | 2 | 0.8% | 6 | 1.4% |  |
+| `domesticationinnovation:plains_petshop` | 17 | 6.9% | 51 | 12.2% |  |
+| `dynamicvillage:plains/plains_mech` | 20 | 8.1% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:plains/plains_miner` | 20 | 8.1% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:plains/plains_plumber` | 20 | 8.1% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:plains/plains_train` | 20 | 8.1% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `etched:village/plains/houses/plains_bard_house_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `farmersdelight:village/houses/plains_compost_pile` | 5 | 2.0% | 15 | 3.6% |  |
 | `immersiveengineering:village/houses/plains_electrician` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/plains_engineer` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/plains_gunsmith` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/plains_machinist` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/plains_outfitter` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
-| `incubation:village/plains_chicken_coop_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:empty` | 10 | 4.1% | 30 | 7.3% |  |
+| `incubation:village/plains_chicken_coop_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:empty` | 10 | 4.1% | 30 | 7.2% |  |
 | `minecraft:village/plains/houses/plains_accessory_1` | 1 | 0.4% | 3 | 0.7% |  |
 | `minecraft:village/plains/houses/plains_animal_pen_1` | 1 | 0.4% | 3 | 0.7% |  |
 | `minecraft:village/plains/houses/plains_animal_pen_2` | 1 | 0.4% | 3 | 0.7% |  |
-| `minecraft:village/plains/houses/plains_animal_pen_3` | 5 | 2.1% | 15 | 3.6% |  |
-| `minecraft:village/plains/houses/plains_armorer_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_big_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_butcher_shop_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_butcher_shop_2` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/plains/houses/plains_animal_pen_3` | 5 | 2.0% | 15 | 3.6% |  |
+| `minecraft:village/plains/houses/plains_armorer_house_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_big_house_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_butcher_shop_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_butcher_shop_2` | 2 | 0.8% | 6 | 1.4% |  |
 | `minecraft:village/plains/houses/plains_cartographer_1` | 1 | 0.4% | 3 | 0.7% |  |
-| `minecraft:village/plains/houses/plains_fisher_cottage_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_fletcher_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_large_farm_1` | 4 | 1.7% | 12 | 2.9% |  |
-| `minecraft:village/plains/houses/plains_library_1` | 5 | 2.1% | 15 | 3.6% |  |
+| `minecraft:village/plains/houses/plains_fisher_cottage_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_fletcher_house_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_large_farm_1` | 4 | 1.6% | 12 | 2.9% |  |
+| `minecraft:village/plains/houses/plains_library_1` | 5 | 2.0% | 15 | 3.6% |  |
 | `minecraft:village/plains/houses/plains_library_2` | 1 | 0.4% | 3 | 0.7% |  |
-| `minecraft:village/plains/houses/plains_masons_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_medium_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_medium_house_2` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_meeting_point_4` | 3 | 1.2% | 9 | 2.2% |  |
+| `minecraft:village/plains/houses/plains_masons_house_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_medium_house_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_medium_house_2` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_meeting_point_4` | 3 | 1.2% | 9 | 2.1% |  |
 | `minecraft:village/plains/houses/plains_meeting_point_5` | 1 | 0.4% | 3 | 0.7% |  |
-| `minecraft:village/plains/houses/plains_shepherds_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_small_farm_1` | 4 | 1.7% | 12 | 2.9% |  |
-| `minecraft:village/plains/houses/plains_small_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_small_house_2` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_small_house_3` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_small_house_4` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_small_house_5` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/plains/houses/plains_shepherds_house_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_small_farm_1` | 4 | 1.6% | 12 | 2.9% |  |
+| `minecraft:village/plains/houses/plains_small_house_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_small_house_2` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_small_house_3` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_small_house_4` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_small_house_5` | 2 | 0.8% | 6 | 1.4% |  |
 | `minecraft:village/plains/houses/plains_small_house_6` | 1 | 0.4% | 3 | 0.7% |  |
-| `minecraft:village/plains/houses/plains_small_house_7` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_small_house_8` | 3 | 1.2% | 9 | 2.2% |  |
-| `minecraft:village/plains/houses/plains_stable_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_stable_2` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_tannery_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_temple_3` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_temple_4` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_tool_smith_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/plains/houses/plains_weaponsmith_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `monobank:village/houses/plains_vault` | 15 | 6.2% | 8 | 1.9% | monobank/vault_houses x0.18 |
+| `minecraft:village/plains/houses/plains_small_house_7` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_small_house_8` | 3 | 1.2% | 9 | 2.1% |  |
+| `minecraft:village/plains/houses/plains_stable_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_stable_2` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_tannery_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_temple_3` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_temple_4` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_tool_smith_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `minecraft:village/plains/houses/plains_weaponsmith_1` | 2 | 0.8% | 6 | 1.4% |  |
+| `monobank:village/houses/plains_vault` | 15 | 6.1% | 8 | 1.9% | monobank/vault_houses x0.18 |
 | `pneumaticcraft:villages/mechanic_house_plains` | 8 | 3.3% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
-| `vinery:vinery_plains` | 2 | 0.8% | 9 | 2.2% | current 3 |
-| `wares:village/houses/plains_warehouse` | 10 | 4.1% | 30 | 7.3% |  |
+| `veggiesdelight:village/houses/plains_depot_house` | 4 | 1.6% | 6 | 1.4% | mod/veggiesdelight x0.5 |
+| `vinery:vinery_plains` | 2 | 0.8% | 9 | 2.1% | current 3 |
+| `wares:village/houses/plains_warehouse` | 10 | 4.1% | 30 | 7.2% |  |
 
 ### `minecraft:village/plains/streets`
 
@@ -205,15 +207,15 @@ Pool scaled x3 to hold fractional weights.
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
 | `chefsdelight:savanna_chef_house` | 5 | 2.1% | 15 | 3.7% |  |
-| `chefsdelight:savanna_cook_house` | 3 | 1.3% | 9 | 2.2% |  |
+| `chefsdelight:savanna_cook_house` | 3 | 1.2% | 9 | 2.2% |  |
 | `cloudstorage:balloon_stand_savanna` | 2 | 0.8% | 6 | 1.5% |  |
-| `domesticationinnovation:savanna_petshop` | 17 | 7.1% | 51 | 12.7% |  |
-| `dynamicvillage:savanna/savanna_mech` | 20 | 8.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:savanna/savanna_miner` | 20 | 8.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:savanna/savanna_plumber` | 20 | 8.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:savanna/savanna_train` | 20 | 8.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `etched:village/savanna/houses/savanna_bard_house_1` | 4 | 1.7% | 12 | 3.0% |  |
-| `farmersdelight:village/houses/savanna_compost_pile` | 4 | 1.7% | 12 | 3.0% |  |
+| `domesticationinnovation:savanna_petshop` | 17 | 7.0% | 51 | 12.5% |  |
+| `dynamicvillage:savanna/savanna_mech` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:savanna/savanna_miner` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:savanna/savanna_plumber` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:savanna/savanna_train` | 20 | 8.3% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `etched:village/savanna/houses/savanna_bard_house_1` | 4 | 1.7% | 12 | 2.9% |  |
+| `farmersdelight:village/houses/savanna_compost_pile` | 4 | 1.7% | 12 | 2.9% |  |
 | `immersiveengineering:village/houses/savanna_electrician` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/savanna_engineer` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/savanna_gunsmith` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
@@ -228,16 +230,16 @@ Pool scaled x3 to hold fractional weights.
 | `minecraft:village/savanna/houses/savanna_butchers_shop_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_butchers_shop_2` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_cartographer_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/savanna/houses/savanna_fisher_cottage_1` | 3 | 1.3% | 9 | 2.2% |  |
+| `minecraft:village/savanna/houses/savanna_fisher_cottage_1` | 3 | 1.2% | 9 | 2.2% |  |
 | `minecraft:village/savanna/houses/savanna_fletcher_house_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/savanna/houses/savanna_large_farm_1` | 4 | 1.7% | 12 | 3.0% |  |
-| `minecraft:village/savanna/houses/savanna_large_farm_2` | 6 | 2.5% | 18 | 4.5% |  |
+| `minecraft:village/savanna/houses/savanna_large_farm_1` | 4 | 1.7% | 12 | 2.9% |  |
+| `minecraft:village/savanna/houses/savanna_large_farm_2` | 6 | 2.5% | 18 | 4.4% |  |
 | `minecraft:village/savanna/houses/savanna_library_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_mason_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_medium_house_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_medium_house_2` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_shepherd_1` | 7 | 2.9% | 21 | 5.2% |  |
-| `minecraft:village/savanna/houses/savanna_small_farm` | 4 | 1.7% | 12 | 3.0% |  |
+| `minecraft:village/savanna/houses/savanna_small_farm` | 4 | 1.7% | 12 | 2.9% |  |
 | `minecraft:village/savanna/houses/savanna_small_house_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_small_house_2` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_small_house_3` | 2 | 0.8% | 6 | 1.5% |  |
@@ -248,14 +250,15 @@ Pool scaled x3 to hold fractional weights.
 | `minecraft:village/savanna/houses/savanna_small_house_8` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_tannery_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_temple_1` | 2 | 0.8% | 6 | 1.5% |  |
-| `minecraft:village/savanna/houses/savanna_temple_2` | 3 | 1.3% | 9 | 2.2% |  |
+| `minecraft:village/savanna/houses/savanna_temple_2` | 3 | 1.2% | 9 | 2.2% |  |
 | `minecraft:village/savanna/houses/savanna_tool_smith_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_weaponsmith_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/savanna/houses/savanna_weaponsmith_2` | 2 | 0.8% | 6 | 1.5% |  |
-| `monobank:village/houses/savanna_vault` | 15 | 6.3% | 8 | 2.0% | monobank/vault_houses x0.18 |
-| `pneumaticcraft:villages/mechanic_house_savanna` | 8 | 3.4% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
+| `monobank:village/houses/savanna_vault` | 15 | 6.2% | 8 | 2.0% | monobank/vault_houses x0.18 |
+| `pneumaticcraft:villages/mechanic_house_savanna` | 8 | 3.3% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
+| `veggiesdelight:village/houses/savanna_depot_house` | 4 | 1.7% | 6 | 1.5% | mod/veggiesdelight x0.5 |
 | `vinery:vinery_savanna` | 2 | 0.8% | 9 | 2.2% | current 3 |
-| `wares:village/houses/savanna_warehouse` | 10 | 4.2% | 30 | 7.5% |  |
+| `wares:village/houses/savanna_warehouse` | 10 | 4.1% | 30 | 7.4% |  |
 
 ### `minecraft:village/savanna/streets`
 
@@ -291,32 +294,32 @@ Pool scaled x3 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `chefsdelight:snowy_chef_house` | 4 | 1.9% | 12 | 3.5% |  |
-| `chefsdelight:snowy_cook_house` | 3 | 1.4% | 9 | 2.6% |  |
+| `chefsdelight:snowy_chef_house` | 4 | 1.8% | 12 | 3.4% |  |
+| `chefsdelight:snowy_cook_house` | 3 | 1.4% | 9 | 2.5% |  |
 | `cloudstorage:balloon_stand_snowy` | 2 | 0.9% | 6 | 1.7% |  |
-| `domesticationinnovation:snowy_petshop` | 17 | 8.0% | 51 | 14.7% |  |
-| `dynamicvillage:snowy/snowy_mech` | 20 | 9.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:snowy/snowy_miner` | 20 | 9.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:snowy/snowy_plumber` | 20 | 9.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:snowy/snowy_train` | 20 | 9.4% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `etched:village/snowy/houses/snowy_bard_house_1` | 4 | 1.9% | 12 | 3.5% |  |
-| `farmersdelight:village/houses/snowy_compost_pile` | 3 | 1.4% | 9 | 2.6% |  |
+| `domesticationinnovation:snowy_petshop` | 17 | 7.8% | 51 | 14.4% |  |
+| `dynamicvillage:snowy/snowy_mech` | 20 | 9.2% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:snowy/snowy_miner` | 20 | 9.2% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:snowy/snowy_plumber` | 20 | 9.2% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:snowy/snowy_train` | 20 | 9.2% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `etched:village/snowy/houses/snowy_bard_house_1` | 4 | 1.8% | 12 | 3.4% |  |
+| `farmersdelight:village/houses/snowy_compost_pile` | 3 | 1.4% | 9 | 2.5% |  |
 | `immersiveengineering:village/houses/snowy_electrician` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/snowy_engineer` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/snowy_gunsmith` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/snowy_machinist` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/snowy_outfitter` | 1 | 0.5% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `incubation:village/snowy_chicken_coop_1` | 2 | 0.9% | 6 | 1.7% |  |
-| `minecraft:empty` | 6 | 2.8% | 18 | 5.2% |  |
+| `minecraft:empty` | 6 | 2.8% | 18 | 5.1% |  |
 | `minecraft:village/snowy/houses/snowy_animal_pen_1` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_animal_pen_2` | 2 | 0.9% | 6 | 1.7% |  |
-| `minecraft:village/snowy/houses/snowy_armorer_house_1` | 1 | 0.5% | 3 | 0.9% |  |
-| `minecraft:village/snowy/houses/snowy_armorer_house_2` | 1 | 0.5% | 3 | 0.9% |  |
+| `minecraft:village/snowy/houses/snowy_armorer_house_1` | 1 | 0.5% | 3 | 0.8% |  |
+| `minecraft:village/snowy/houses/snowy_armorer_house_2` | 1 | 0.5% | 3 | 0.8% |  |
 | `minecraft:village/snowy/houses/snowy_butchers_shop_1` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_butchers_shop_2` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_cartographer_house_1` | 2 | 0.9% | 6 | 1.7% |  |
-| `minecraft:village/snowy/houses/snowy_farm_1` | 3 | 1.4% | 9 | 2.6% |  |
-| `minecraft:village/snowy/houses/snowy_farm_2` | 3 | 1.4% | 9 | 2.6% |  |
+| `minecraft:village/snowy/houses/snowy_farm_1` | 3 | 1.4% | 9 | 2.5% |  |
+| `minecraft:village/snowy/houses/snowy_farm_2` | 3 | 1.4% | 9 | 2.5% |  |
 | `minecraft:village/snowy/houses/snowy_fisher_cottage` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_fletcher_house_1` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_library_1` | 2 | 0.9% | 6 | 1.7% |  |
@@ -325,11 +328,11 @@ Pool scaled x3 to hold fractional weights.
 | `minecraft:village/snowy/houses/snowy_medium_house_1` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_medium_house_2` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_medium_house_3` | 2 | 0.9% | 6 | 1.7% |  |
-| `minecraft:village/snowy/houses/snowy_shepherds_house_1` | 3 | 1.4% | 9 | 2.6% |  |
+| `minecraft:village/snowy/houses/snowy_shepherds_house_1` | 3 | 1.4% | 9 | 2.5% |  |
 | `minecraft:village/snowy/houses/snowy_small_house_1` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_small_house_2` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_small_house_3` | 2 | 0.9% | 6 | 1.7% |  |
-| `minecraft:village/snowy/houses/snowy_small_house_4` | 3 | 1.4% | 9 | 2.6% |  |
+| `minecraft:village/snowy/houses/snowy_small_house_4` | 3 | 1.4% | 9 | 2.5% |  |
 | `minecraft:village/snowy/houses/snowy_small_house_5` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_small_house_6` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_small_house_7` | 2 | 0.9% | 6 | 1.7% |  |
@@ -338,8 +341,9 @@ Pool scaled x3 to hold fractional weights.
 | `minecraft:village/snowy/houses/snowy_temple_1` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_tool_smith_1` | 2 | 0.9% | 6 | 1.7% |  |
 | `minecraft:village/snowy/houses/snowy_weapon_smith_1` | 2 | 0.9% | 6 | 1.7% |  |
-| `monobank:village/houses/snowy_vault` | 15 | 7.0% | 8 | 2.3% | monobank/vault_houses x0.18 |
-| `wares:village/houses/snowy_warehouse` | 10 | 4.7% | 30 | 8.6% |  |
+| `monobank:village/houses/snowy_vault` | 15 | 6.9% | 8 | 2.3% | monobank/vault_houses x0.18 |
+| `veggiesdelight:village/houses/snowy_depot_house` | 4 | 1.8% | 6 | 1.7% | mod/veggiesdelight x0.5 |
+| `wares:village/houses/snowy_warehouse` | 10 | 4.6% | 30 | 8.5% |  |
 
 ### `minecraft:village/snowy/streets`
 
@@ -375,12 +379,12 @@ Pool scaled x3 to hold fractional weights.
 |---|---:|---:|---:|---:|---|
 | `chefsdelight:taiga_chef_house` | 4 | 1.7% | 12 | 3.1% |  |
 | `chefsdelight:taiga_cook_house` | 3 | 1.3% | 9 | 2.3% |  |
-| `cloudstorage:balloon_stand_taiga` | 2 | 0.9% | 6 | 1.6% |  |
-| `domesticationinnovation:taiga_petshop` | 17 | 7.3% | 51 | 13.2% |  |
-| `dynamicvillage:taiga/taiga_mech` | 20 | 8.6% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:taiga/taiga_miner` | 20 | 8.6% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:taiga/taiga_plumber` | 20 | 8.6% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
-| `dynamicvillage:taiga/taiga_train` | 20 | 8.6% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `cloudstorage:balloon_stand_taiga` | 2 | 0.8% | 6 | 1.5% |  |
+| `domesticationinnovation:taiga_petshop` | 17 | 7.2% | 51 | 13.0% |  |
+| `dynamicvillage:taiga/taiga_mech` | 20 | 8.5% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:taiga/taiga_miner` | 20 | 8.5% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:taiga/taiga_plumber` | 20 | 8.5% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
+| `dynamicvillage:taiga/taiga_train` | 20 | 8.5% | **removed** | 0.0% | mod/dynamicvillage x0, tech x0 |
 | `etched:village/taiga/houses/taiga_bard_house_1` | 4 | 1.7% | 12 | 3.1% |  |
 | `farmersdelight:village/houses/taiga_compost_pile` | 4 | 1.7% | 12 | 3.1% |  |
 | `immersiveengineering:village/houses/taiga_electrician` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
@@ -388,39 +392,40 @@ Pool scaled x3 to hold fractional weights.
 | `immersiveengineering:village/houses/taiga_gunsmith` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/taiga_machinist` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
 | `immersiveengineering:village/houses/taiga_outfitter` | 1 | 0.4% | **removed** | 0.0% | mod/immersiveengineering x0, tech x0 |
-| `incubation:village/taiga_chicken_coop_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:empty` | 6 | 2.6% | 18 | 4.7% |  |
-| `minecraft:village/taiga/houses/taiga_animal_pen_1` | 2 | 0.9% | 6 | 1.6% |  |
+| `incubation:village/taiga_chicken_coop_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:empty` | 6 | 2.5% | 18 | 4.6% |  |
+| `minecraft:village/taiga/houses/taiga_animal_pen_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/taiga/houses/taiga_armorer_2` | 1 | 0.4% | 3 | 0.8% |  |
 | `minecraft:village/taiga/houses/taiga_armorer_house_1` | 1 | 0.4% | 3 | 0.8% |  |
-| `minecraft:village/taiga/houses/taiga_butcher_shop_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_cartographer_house_1` | 2 | 0.9% | 6 | 1.6% |  |
+| `minecraft:village/taiga/houses/taiga_butcher_shop_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_cartographer_house_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/taiga/houses/taiga_fisher_cottage_1` | 3 | 1.3% | 9 | 2.3% |  |
-| `minecraft:village/taiga/houses/taiga_fletcher_house_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_large_farm_1` | 6 | 2.6% | 18 | 4.7% |  |
-| `minecraft:village/taiga/houses/taiga_large_farm_2` | 6 | 2.6% | 18 | 4.7% |  |
-| `minecraft:village/taiga/houses/taiga_library_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_masons_house_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_medium_house_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_medium_house_2` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_medium_house_3` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_medium_house_4` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_shepherds_house_1` | 2 | 0.9% | 6 | 1.6% |  |
+| `minecraft:village/taiga/houses/taiga_fletcher_house_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_large_farm_1` | 6 | 2.5% | 18 | 4.6% |  |
+| `minecraft:village/taiga/houses/taiga_large_farm_2` | 6 | 2.5% | 18 | 4.6% |  |
+| `minecraft:village/taiga/houses/taiga_library_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_masons_house_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_medium_house_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_medium_house_2` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_medium_house_3` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_medium_house_4` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_shepherds_house_1` | 2 | 0.8% | 6 | 1.5% |  |
 | `minecraft:village/taiga/houses/taiga_small_farm_1` | 1 | 0.4% | 3 | 0.8% |  |
 | `minecraft:village/taiga/houses/taiga_small_house_1` | 4 | 1.7% | 12 | 3.1% |  |
 | `minecraft:village/taiga/houses/taiga_small_house_2` | 4 | 1.7% | 12 | 3.1% |  |
 | `minecraft:village/taiga/houses/taiga_small_house_3` | 4 | 1.7% | 12 | 3.1% |  |
 | `minecraft:village/taiga/houses/taiga_small_house_4` | 4 | 1.7% | 12 | 3.1% |  |
 | `minecraft:village/taiga/houses/taiga_small_house_5` | 4 | 1.7% | 12 | 3.1% |  |
-| `minecraft:village/taiga/houses/taiga_tannery_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_temple_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_tool_smith_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_weaponsmith_1` | 2 | 0.9% | 6 | 1.6% |  |
-| `minecraft:village/taiga/houses/taiga_weaponsmith_2` | 2 | 0.9% | 6 | 1.6% |  |
-| `monobank:village/houses/taiga_vault` | 15 | 6.5% | 8 | 2.1% | monobank/vault_houses x0.18 |
+| `minecraft:village/taiga/houses/taiga_tannery_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_temple_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_tool_smith_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_weaponsmith_1` | 2 | 0.8% | 6 | 1.5% |  |
+| `minecraft:village/taiga/houses/taiga_weaponsmith_2` | 2 | 0.8% | 6 | 1.5% |  |
+| `monobank:village/houses/taiga_vault` | 15 | 6.4% | 8 | 2.0% | monobank/vault_houses x0.18 |
 | `pneumaticcraft:villages/mechanic_house_taiga` | 8 | 3.4% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
-| `vinery:vinery_taiga` | 2 | 0.9% | 11 | 2.9% | current 3.5 |
-| `wares:village/houses/taiga_warehouse` | 10 | 4.3% | 30 | 7.8% |  |
+| `veggiesdelight:village/houses/taiga_depot_house` | 4 | 1.7% | 6 | 1.5% | mod/veggiesdelight x0.5 |
+| `vinery:vinery_taiga` | 2 | 0.8% | 11 | 2.8% | current 3.5 |
+| `wares:village/houses/taiga_warehouse` | 10 | 4.2% | 30 | 7.7% |  |
 
 ### `minecraft:village/taiga/streets`
 
@@ -980,72 +985,72 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 
 ### chefsdelight
 
-- `minecraft:village/desert/houses` (pool total weight 218): `chefsdelight:desert_chef_house` 5 -> 15, `chefsdelight:desert_cook_house` 3 -> 9
-- `minecraft:village/plains/houses` (pool total weight 242): `chefsdelight:plains_chef_house` 5 -> 15, `chefsdelight:plains_cook_house` 2 -> 6
-- `minecraft:village/savanna/houses` (pool total weight 238): `chefsdelight:savanna_chef_house` 5 -> 15, `chefsdelight:savanna_cook_house` 3 -> 9
-- `minecraft:village/snowy/houses` (pool total weight 213): `chefsdelight:snowy_chef_house` 4 -> 12, `chefsdelight:snowy_cook_house` 3 -> 9
-- `minecraft:village/taiga/houses` (pool total weight 232): `chefsdelight:taiga_chef_house` 4 -> 12, `chefsdelight:taiga_cook_house` 3 -> 9
+- `minecraft:village/desert/houses` (pool total weight 222): `chefsdelight:desert_chef_house` 5 -> 15, `chefsdelight:desert_cook_house` 3 -> 9
+- `minecraft:village/plains/houses` (pool total weight 246): `chefsdelight:plains_chef_house` 5 -> 15, `chefsdelight:plains_cook_house` 2 -> 6
+- `minecraft:village/savanna/houses` (pool total weight 242): `chefsdelight:savanna_chef_house` 5 -> 15, `chefsdelight:savanna_cook_house` 3 -> 9
+- `minecraft:village/snowy/houses` (pool total weight 217): `chefsdelight:snowy_chef_house` 4 -> 12, `chefsdelight:snowy_cook_house` 3 -> 9
+- `minecraft:village/taiga/houses` (pool total weight 236): `chefsdelight:taiga_chef_house` 4 -> 12, `chefsdelight:taiga_cook_house` 3 -> 9
 
 ### cloudstorage
 
-- `minecraft:village/desert/houses` (pool total weight 218): `cloudstorage:balloon_stand_desert` 2 -> 6
-- `minecraft:village/plains/houses` (pool total weight 242): `cloudstorage:balloon_stand_plains` 2 -> 6
-- `minecraft:village/savanna/houses` (pool total weight 238): `cloudstorage:balloon_stand_savanna` 2 -> 6
-- `minecraft:village/snowy/houses` (pool total weight 213): `cloudstorage:balloon_stand_snowy` 2 -> 6
-- `minecraft:village/taiga/houses` (pool total weight 232): `cloudstorage:balloon_stand_taiga` 2 -> 6
+- `minecraft:village/desert/houses` (pool total weight 222): `cloudstorage:balloon_stand_desert` 2 -> 6
+- `minecraft:village/plains/houses` (pool total weight 246): `cloudstorage:balloon_stand_plains` 2 -> 6
+- `minecraft:village/savanna/houses` (pool total weight 242): `cloudstorage:balloon_stand_savanna` 2 -> 6
+- `minecraft:village/snowy/houses` (pool total weight 217): `cloudstorage:balloon_stand_snowy` 2 -> 6
+- `minecraft:village/taiga/houses` (pool total weight 236): `cloudstorage:balloon_stand_taiga` 2 -> 6
 
 ### domesticationinnovation
 
-- `minecraft:village/desert/houses` (pool total weight 218): `domesticationinnovation:desert_petshop` 17 -> 51
-- `minecraft:village/plains/houses` (pool total weight 242): `domesticationinnovation:plains_petshop` 17 -> 51
-- `minecraft:village/savanna/houses` (pool total weight 238): `domesticationinnovation:savanna_petshop` 17 -> 51
-- `minecraft:village/snowy/houses` (pool total weight 213): `domesticationinnovation:snowy_petshop` 17 -> 51
-- `minecraft:village/taiga/houses` (pool total weight 232): `domesticationinnovation:taiga_petshop` 17 -> 51
+- `minecraft:village/desert/houses` (pool total weight 222): `domesticationinnovation:desert_petshop` 17 -> 51
+- `minecraft:village/plains/houses` (pool total weight 246): `domesticationinnovation:plains_petshop` 17 -> 51
+- `minecraft:village/savanna/houses` (pool total weight 242): `domesticationinnovation:savanna_petshop` 17 -> 51
+- `minecraft:village/snowy/houses` (pool total weight 217): `domesticationinnovation:snowy_petshop` 17 -> 51
+- `minecraft:village/taiga/houses` (pool total weight 236): `domesticationinnovation:taiga_petshop` 17 -> 51
 
 ### dynamicvillage
 
-- `minecraft:village/desert/houses` (pool total weight 218): `dynamicvillage:desert/desert_mech` 20 -> 0, `dynamicvillage:desert/desert_miner` 20 -> 0, `dynamicvillage:desert/desert_plumber` 20 -> 0, `dynamicvillage:desert/desert_train` 20 -> 0
-- `minecraft:village/plains/houses` (pool total weight 242): `dynamicvillage:plains/plains_mech` 20 -> 0, `dynamicvillage:plains/plains_miner` 20 -> 0, `dynamicvillage:plains/plains_plumber` 20 -> 0, `dynamicvillage:plains/plains_train` 20 -> 0
-- `minecraft:village/savanna/houses` (pool total weight 238): `dynamicvillage:savanna/savanna_mech` 20 -> 0, `dynamicvillage:savanna/savanna_miner` 20 -> 0, `dynamicvillage:savanna/savanna_plumber` 20 -> 0, `dynamicvillage:savanna/savanna_train` 20 -> 0
-- `minecraft:village/snowy/houses` (pool total weight 213): `dynamicvillage:snowy/snowy_mech` 20 -> 0, `dynamicvillage:snowy/snowy_miner` 20 -> 0, `dynamicvillage:snowy/snowy_plumber` 20 -> 0, `dynamicvillage:snowy/snowy_train` 20 -> 0
-- `minecraft:village/taiga/houses` (pool total weight 232): `dynamicvillage:taiga/taiga_mech` 20 -> 0, `dynamicvillage:taiga/taiga_miner` 20 -> 0, `dynamicvillage:taiga/taiga_plumber` 20 -> 0, `dynamicvillage:taiga/taiga_train` 20 -> 0
+- `minecraft:village/desert/houses` (pool total weight 222): `dynamicvillage:desert/desert_mech` 20 -> 0, `dynamicvillage:desert/desert_miner` 20 -> 0, `dynamicvillage:desert/desert_plumber` 20 -> 0, `dynamicvillage:desert/desert_train` 20 -> 0
+- `minecraft:village/plains/houses` (pool total weight 246): `dynamicvillage:plains/plains_mech` 20 -> 0, `dynamicvillage:plains/plains_miner` 20 -> 0, `dynamicvillage:plains/plains_plumber` 20 -> 0, `dynamicvillage:plains/plains_train` 20 -> 0
+- `minecraft:village/savanna/houses` (pool total weight 242): `dynamicvillage:savanna/savanna_mech` 20 -> 0, `dynamicvillage:savanna/savanna_miner` 20 -> 0, `dynamicvillage:savanna/savanna_plumber` 20 -> 0, `dynamicvillage:savanna/savanna_train` 20 -> 0
+- `minecraft:village/snowy/houses` (pool total weight 217): `dynamicvillage:snowy/snowy_mech` 20 -> 0, `dynamicvillage:snowy/snowy_miner` 20 -> 0, `dynamicvillage:snowy/snowy_plumber` 20 -> 0, `dynamicvillage:snowy/snowy_train` 20 -> 0
+- `minecraft:village/taiga/houses` (pool total weight 236): `dynamicvillage:taiga/taiga_mech` 20 -> 0, `dynamicvillage:taiga/taiga_miner` 20 -> 0, `dynamicvillage:taiga/taiga_plumber` 20 -> 0, `dynamicvillage:taiga/taiga_train` 20 -> 0
 
 ### etched
 
-- `minecraft:village/desert/houses` (pool total weight 218): `etched:village/desert/houses/desert_bard_house_1` 2 -> 6
+- `minecraft:village/desert/houses` (pool total weight 222): `etched:village/desert/houses/desert_bard_house_1` 2 -> 6
 - `minecraft:village/desert/zombie/houses` (pool total weight 70): `etched:village/desert/houses/desert_bard_house_1` 2
-- `minecraft:village/plains/houses` (pool total weight 242): `etched:village/plains/houses/plains_bard_house_1` 2 -> 6
+- `minecraft:village/plains/houses` (pool total weight 246): `etched:village/plains/houses/plains_bard_house_1` 2 -> 6
 - `minecraft:village/plains/zombie/houses` (pool total weight 85): `etched:village/plains/houses/plains_bard_house_1` 2
-- `minecraft:village/savanna/houses` (pool total weight 238): `etched:village/savanna/houses/savanna_bard_house_1` 4 -> 12
+- `minecraft:village/savanna/houses` (pool total weight 242): `etched:village/savanna/houses/savanna_bard_house_1` 4 -> 12
 - `minecraft:village/savanna/zombie/houses` (pool total weight 76): `etched:village/savanna/houses/savanna_bard_house_1` 4
-- `minecraft:village/snowy/houses` (pool total weight 213): `etched:village/snowy/houses/snowy_bard_house_1` 4 -> 12
+- `minecraft:village/snowy/houses` (pool total weight 217): `etched:village/snowy/houses/snowy_bard_house_1` 4 -> 12
 - `minecraft:village/snowy/zombie/houses` (pool total weight 69): `etched:village/snowy/houses/snowy_bard_house_1` 4
-- `minecraft:village/taiga/houses` (pool total weight 232): `etched:village/taiga/houses/taiga_bard_house_1` 4 -> 12
+- `minecraft:village/taiga/houses` (pool total weight 236): `etched:village/taiga/houses/taiga_bard_house_1` 4 -> 12
 - `minecraft:village/taiga/zombie/houses` (pool total weight 78): `etched:village/taiga/houses/taiga_bard_house_1` 4
 
 ### farmersdelight
 
-- `minecraft:village/desert/houses` (pool total weight 218): `farmersdelight:village/houses/desert_compost_pile` 3 -> 9
-- `minecraft:village/plains/houses` (pool total weight 242): `farmersdelight:village/houses/plains_compost_pile` 5 -> 15
-- `minecraft:village/savanna/houses` (pool total weight 238): `farmersdelight:village/houses/savanna_compost_pile` 4 -> 12
-- `minecraft:village/snowy/houses` (pool total weight 213): `farmersdelight:village/houses/snowy_compost_pile` 3 -> 9
-- `minecraft:village/taiga/houses` (pool total weight 232): `farmersdelight:village/houses/taiga_compost_pile` 4 -> 12
+- `minecraft:village/desert/houses` (pool total weight 222): `farmersdelight:village/houses/desert_compost_pile` 3 -> 9
+- `minecraft:village/plains/houses` (pool total weight 246): `farmersdelight:village/houses/plains_compost_pile` 5 -> 15
+- `minecraft:village/savanna/houses` (pool total weight 242): `farmersdelight:village/houses/savanna_compost_pile` 4 -> 12
+- `minecraft:village/snowy/houses` (pool total weight 217): `farmersdelight:village/houses/snowy_compost_pile` 3 -> 9
+- `minecraft:village/taiga/houses` (pool total weight 236): `farmersdelight:village/houses/taiga_compost_pile` 4 -> 12
 
 ### immersiveengineering
 
-- `minecraft:village/desert/houses` (pool total weight 218): `immersiveengineering:village/houses/desert_electrician` 1 -> 0, `immersiveengineering:village/houses/desert_engineer` 1 -> 0, `immersiveengineering:village/houses/desert_gunsmith` 1 -> 0, `immersiveengineering:village/houses/desert_machinist` 1 -> 0, `immersiveengineering:village/houses/desert_outfitter` 1 -> 0
-- `minecraft:village/plains/houses` (pool total weight 242): `immersiveengineering:village/houses/plains_electrician` 1 -> 0, `immersiveengineering:village/houses/plains_engineer` 1 -> 0, `immersiveengineering:village/houses/plains_gunsmith` 1 -> 0, `immersiveengineering:village/houses/plains_machinist` 1 -> 0, `immersiveengineering:village/houses/plains_outfitter` 1 -> 0
-- `minecraft:village/savanna/houses` (pool total weight 238): `immersiveengineering:village/houses/savanna_electrician` 1 -> 0, `immersiveengineering:village/houses/savanna_engineer` 1 -> 0, `immersiveengineering:village/houses/savanna_gunsmith` 1 -> 0, `immersiveengineering:village/houses/savanna_machinist` 1 -> 0, `immersiveengineering:village/houses/savanna_outfitter` 1 -> 0
-- `minecraft:village/snowy/houses` (pool total weight 213): `immersiveengineering:village/houses/snowy_electrician` 1 -> 0, `immersiveengineering:village/houses/snowy_engineer` 1 -> 0, `immersiveengineering:village/houses/snowy_gunsmith` 1 -> 0, `immersiveengineering:village/houses/snowy_machinist` 1 -> 0, `immersiveengineering:village/houses/snowy_outfitter` 1 -> 0
-- `minecraft:village/taiga/houses` (pool total weight 232): `immersiveengineering:village/houses/taiga_electrician` 1 -> 0, `immersiveengineering:village/houses/taiga_engineer` 1 -> 0, `immersiveengineering:village/houses/taiga_gunsmith` 1 -> 0, `immersiveengineering:village/houses/taiga_machinist` 1 -> 0, `immersiveengineering:village/houses/taiga_outfitter` 1 -> 0
+- `minecraft:village/desert/houses` (pool total weight 222): `immersiveengineering:village/houses/desert_electrician` 1 -> 0, `immersiveengineering:village/houses/desert_engineer` 1 -> 0, `immersiveengineering:village/houses/desert_gunsmith` 1 -> 0, `immersiveengineering:village/houses/desert_machinist` 1 -> 0, `immersiveengineering:village/houses/desert_outfitter` 1 -> 0
+- `minecraft:village/plains/houses` (pool total weight 246): `immersiveengineering:village/houses/plains_electrician` 1 -> 0, `immersiveengineering:village/houses/plains_engineer` 1 -> 0, `immersiveengineering:village/houses/plains_gunsmith` 1 -> 0, `immersiveengineering:village/houses/plains_machinist` 1 -> 0, `immersiveengineering:village/houses/plains_outfitter` 1 -> 0
+- `minecraft:village/savanna/houses` (pool total weight 242): `immersiveengineering:village/houses/savanna_electrician` 1 -> 0, `immersiveengineering:village/houses/savanna_engineer` 1 -> 0, `immersiveengineering:village/houses/savanna_gunsmith` 1 -> 0, `immersiveengineering:village/houses/savanna_machinist` 1 -> 0, `immersiveengineering:village/houses/savanna_outfitter` 1 -> 0
+- `minecraft:village/snowy/houses` (pool total weight 217): `immersiveengineering:village/houses/snowy_electrician` 1 -> 0, `immersiveengineering:village/houses/snowy_engineer` 1 -> 0, `immersiveengineering:village/houses/snowy_gunsmith` 1 -> 0, `immersiveengineering:village/houses/snowy_machinist` 1 -> 0, `immersiveengineering:village/houses/snowy_outfitter` 1 -> 0
+- `minecraft:village/taiga/houses` (pool total weight 236): `immersiveengineering:village/houses/taiga_electrician` 1 -> 0, `immersiveengineering:village/houses/taiga_engineer` 1 -> 0, `immersiveengineering:village/houses/taiga_gunsmith` 1 -> 0, `immersiveengineering:village/houses/taiga_machinist` 1 -> 0, `immersiveengineering:village/houses/taiga_outfitter` 1 -> 0
 
 ### incubation
 
-- `minecraft:village/desert/houses` (pool total weight 218): `incubation:village/desert_chicken_coop_1` 2 -> 6
-- `minecraft:village/plains/houses` (pool total weight 242): `incubation:village/plains_chicken_coop_1` 2 -> 6
-- `minecraft:village/savanna/houses` (pool total weight 238): `incubation:village/savanna_chicken_coop_1` 2 -> 6
-- `minecraft:village/snowy/houses` (pool total weight 213): `incubation:village/snowy_chicken_coop_1` 2 -> 6
-- `minecraft:village/taiga/houses` (pool total weight 232): `incubation:village/taiga_chicken_coop_1` 2 -> 6
+- `minecraft:village/desert/houses` (pool total weight 222): `incubation:village/desert_chicken_coop_1` 2 -> 6
+- `minecraft:village/plains/houses` (pool total weight 246): `incubation:village/plains_chicken_coop_1` 2 -> 6
+- `minecraft:village/savanna/houses` (pool total weight 242): `incubation:village/savanna_chicken_coop_1` 2 -> 6
+- `minecraft:village/snowy/houses` (pool total weight 217): `incubation:village/snowy_chicken_coop_1` 2 -> 6
+- `minecraft:village/taiga/houses` (pool total weight 236): `incubation:village/taiga_chicken_coop_1` 2 -> 6
 
 ### ipo
 
@@ -1119,39 +1124,47 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 
 ### monobank
 
-- `minecraft:village/desert/houses` (pool total weight 218): `monobank:village/houses/desert_vault` 15 -> 8
+- `minecraft:village/desert/houses` (pool total weight 222): `monobank:village/houses/desert_vault` 15 -> 8
 - `minecraft:village/desert/streets` (pool total weight 53): `monobank:village/streets/desert_straight_fix_01` 15 -> 5
-- `minecraft:village/plains/houses` (pool total weight 242): `monobank:village/houses/plains_vault` 15 -> 8
+- `minecraft:village/plains/houses` (pool total weight 246): `monobank:village/houses/plains_vault` 15 -> 8
 - `minecraft:village/plains/streets` (pool total weight 65): `monobank:village/streets/plains_straight_fix_01` 15 -> 5
-- `minecraft:village/savanna/houses` (pool total weight 238): `monobank:village/houses/savanna_vault` 15 -> 8
+- `minecraft:village/savanna/houses` (pool total weight 242): `monobank:village/houses/savanna_vault` 15 -> 8
 - `minecraft:village/savanna/streets` (pool total weight 72): `monobank:village/streets/savanna_straight_fix_01` 15 -> 5
-- `minecraft:village/snowy/houses` (pool total weight 213): `monobank:village/houses/snowy_vault` 15 -> 8
+- `minecraft:village/snowy/houses` (pool total weight 217): `monobank:village/houses/snowy_vault` 15 -> 8
 - `minecraft:village/snowy/streets` (pool total weight 65): `monobank:village/streets/snowy_straight_fix_01` 15 -> 5
-- `minecraft:village/taiga/houses` (pool total weight 232): `monobank:village/houses/taiga_vault` 15 -> 8
+- `minecraft:village/taiga/houses` (pool total weight 236): `monobank:village/houses/taiga_vault` 15 -> 8
 - `minecraft:village/taiga/streets` (pool total weight 65): `monobank:village/streets/taiga_straight_fix_01` 15 -> 5
 
 ### pneumaticcraft
 
 - `minecraft:village/desert/streets` (pool total weight 53): `pneumaticcraft:villages/custom_street_desert` 2 -> 0
-- `minecraft:village/plains/houses` (pool total weight 242): `pneumaticcraft:villages/mechanic_house_plains` 8 -> 0
-- `minecraft:village/savanna/houses` (pool total weight 238): `pneumaticcraft:villages/mechanic_house_savanna` 8 -> 0
+- `minecraft:village/plains/houses` (pool total weight 246): `pneumaticcraft:villages/mechanic_house_plains` 8 -> 0
+- `minecraft:village/savanna/houses` (pool total weight 242): `pneumaticcraft:villages/mechanic_house_savanna` 8 -> 0
 - `minecraft:village/snowy/streets` (pool total weight 65): `pneumaticcraft:villages/custom_street_snowy` 2 -> 0
-- `minecraft:village/taiga/houses` (pool total weight 232): `pneumaticcraft:villages/mechanic_house_taiga` 8 -> 0
+- `minecraft:village/taiga/houses` (pool total weight 236): `pneumaticcraft:villages/mechanic_house_taiga` 8 -> 0
+
+### veggiesdelight
+
+- `minecraft:village/desert/houses` (pool total weight 222): `veggiesdelight:village/houses/desert_depot_house` 4 -> 6
+- `minecraft:village/plains/houses` (pool total weight 246): `veggiesdelight:village/houses/plains_depot_house` 4 -> 6
+- `minecraft:village/savanna/houses` (pool total weight 242): `veggiesdelight:village/houses/savanna_depot_house` 4 -> 6
+- `minecraft:village/snowy/houses` (pool total weight 217): `veggiesdelight:village/houses/snowy_depot_house` 4 -> 6
+- `minecraft:village/taiga/houses` (pool total weight 236): `veggiesdelight:village/houses/taiga_depot_house` 4 -> 6
 
 ### vinery
 
-- `minecraft:village/desert/houses` (pool total weight 218): `vinery:vinery_desert` 2 -> 9
-- `minecraft:village/plains/houses` (pool total weight 242): `vinery:vinery_plains` 2 -> 9
-- `minecraft:village/savanna/houses` (pool total weight 238): `vinery:vinery_savanna` 2 -> 9
-- `minecraft:village/taiga/houses` (pool total weight 232): `vinery:vinery_taiga` 2 -> 11
+- `minecraft:village/desert/houses` (pool total weight 222): `vinery:vinery_desert` 2 -> 9
+- `minecraft:village/plains/houses` (pool total weight 246): `vinery:vinery_plains` 2 -> 9
+- `minecraft:village/savanna/houses` (pool total weight 242): `vinery:vinery_savanna` 2 -> 9
+- `minecraft:village/taiga/houses` (pool total weight 236): `vinery:vinery_taiga` 2 -> 11
 
 ### wares
 
-- `minecraft:village/desert/houses` (pool total weight 218): `wares:village/houses/desert_warehouse` 10 -> 30
-- `minecraft:village/plains/houses` (pool total weight 242): `wares:village/houses/plains_warehouse` 10 -> 30
-- `minecraft:village/savanna/houses` (pool total weight 238): `wares:village/houses/savanna_warehouse` 10 -> 30
-- `minecraft:village/snowy/houses` (pool total weight 213): `wares:village/houses/snowy_warehouse` 10 -> 30
-- `minecraft:village/taiga/houses` (pool total weight 232): `wares:village/houses/taiga_warehouse` 10 -> 30
+- `minecraft:village/desert/houses` (pool total weight 222): `wares:village/houses/desert_warehouse` 10 -> 30
+- `minecraft:village/plains/houses` (pool total weight 246): `wares:village/houses/plains_warehouse` 10 -> 30
+- `minecraft:village/savanna/houses` (pool total weight 242): `wares:village/houses/savanna_warehouse` 10 -> 30
+- `minecraft:village/snowy/houses` (pool total weight 217): `wares:village/houses/snowy_warehouse` 10 -> 30
+- `minecraft:village/taiga/houses` (pool total weight 236): `wares:village/houses/taiga_warehouse` 10 -> 30
 
 ## Tags
 
@@ -1197,6 +1210,10 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 ### mod/farmersdelight x1 (5 pieces)
 
 `farmersdelight:village/houses/desert_compost_pile`, `farmersdelight:village/houses/plains_compost_pile`, `farmersdelight:village/houses/savanna_compost_pile`, `farmersdelight:village/houses/snowy_compost_pile`, `farmersdelight:village/houses/taiga_compost_pile`
+
+### mod/veggiesdelight x0.5 (5 pieces)
+
+`veggiesdelight:village/houses/desert_depot_house`, `veggiesdelight:village/houses/plains_depot_house`, `veggiesdelight:village/houses/savanna_depot_house`, `veggiesdelight:village/houses/snowy_depot_house`, `veggiesdelight:village/houses/taiga_depot_house`
 
 ### mod/waystones x1 (2 pieces)
 

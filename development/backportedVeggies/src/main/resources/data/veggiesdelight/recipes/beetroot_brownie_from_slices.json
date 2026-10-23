@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "veggiesdelight:beetroot_brownie"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "item": "veggiesdelight:beetroot_brownie_tray"
+  },
+  "show_notification": true
+}

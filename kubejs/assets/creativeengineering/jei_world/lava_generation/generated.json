@@ -1,0 +1,420 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Beside the lava"
+    },
+    {
+     "block": "minecraft:diorite",
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:andesite"
+    }
+   ],
+   "notes": [
+    "Needs water beside, diorite touching"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:basalt",
+     "label": "Below the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Flowing lava only"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:basalt"
+    }
+   ],
+   "notes": [
+    "Needs basalt below",
+    "Flowing lava only"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:magma_block",
+     "label": "Touching the lava"
+    },
+    {
+     "block": "minecraft:blue_ice",
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:blackstone"
+    }
+   ],
+   "notes": [
+    "Needs magma block touching, blue ice touching"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "immersive_weathering:mossy_brick_slab",
+      "immersive_weathering:mossy_brick_stairs",
+      "immersive_weathering:mossy_brick_wall",
+      "immersive_weathering:mossy_bricks",
+      "immersive_weathering:mossy_chiseled_stone_bricks",
+      "immersive_weathering:mossy_stone",
+      "immersive_weathering:mossy_stone_slab",
+      "immersive_weathering:mossy_stone_stairs",
+      "immersive_weathering:mossy_stone_wall",
+      "minecraft:mossy_cobblestone",
+      "minecraft:mossy_cobblestone_slab",
+      "minecraft:mossy_cobblestone_stairs",
+      "minecraft:mossy_cobblestone_wall",
+      "minecraft:mossy_stone_brick_slab",
+      "minecraft:mossy_stone_brick_stairs",
+      "minecraft:mossy_stone_brick_wall",
+      "minecraft:mossy_stone_bricks"
+     ],
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "blocks": [
+      "minecraft:brick_slab",
+      "minecraft:brick_stairs",
+      "minecraft:brick_wall",
+      "minecraft:bricks",
+      "minecraft:chiseled_stone_bricks",
+      "minecraft:stone",
+      "minecraft:stone_slab",
+      "minecraft:stone_stairs",
+      "immersive_weathering:stone_wall",
+      "minecraft:cobblestone",
+      "minecraft:cobblestone_slab",
+      "minecraft:cobblestone_stairs",
+      "minecraft:cobblestone_wall",
+      "minecraft:stone_brick_slab",
+      "minecraft:stone_brick_stairs",
+      "minecraft:stone_brick_wall",
+      "minecraft:stone_bricks"
+     ]
+    }
+   ],
+   "notes": [
+    "Lava burns the moss off",
+    "Stops it getting mossy"
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:magma_block",
+     "label": "Touching the lava"
+    },
+    {
+     "block": "minecraft:blue_ice",
+     "label": "Touching the lava"
+    },
+    {
+     "block": "minecraft:bone_block",
+     "label": "Below the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:calcite"
+    }
+   ],
+   "notes": [
+    "Needs magma block touching, blue ice touching, bone block below"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:soul_fire",
+     "label": "Touching the lava"
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava source only"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:crying_obsidian"
+    }
+   ],
+   "notes": [
+    "Needs soul fire touching, water touching",
+    "Lava source only"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:blue_ice",
+     "label": "Above the lava"
+    },
+    {
+     "block": "minecraft:blue_ice",
+     "label": "Below the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:deepslate"
+    }
+   ],
+   "notes": [
+    "Needs blue ice above, blue ice below"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Beside the lava"
+    },
+    {
+     "block": "minecraft:smooth_quartz",
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:diorite"
+    }
+   ],
+   "notes": [
+    "Needs water beside, smooth quartz block touching"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Beside the lava"
+    },
+    {
+     "block": "minecraft:diorite",
+     "label": "Touching the lava"
+    },
+    {
+     "block": "minecraft:smooth_quartz",
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:granite"
+    }
+   ],
+   "notes": [
+    "Needs water beside, diorite touching, smooth quartz block touching"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:bubble_column",
+     "label": "Below the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:magma_block"
+    }
+   ],
+   "notes": [
+    "Needs bubble column below"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Beside the lava"
+    },
+    {
+     "block": "minecraft:blue_ice",
+     "label": "Touching the lava"
+    },
+    {
+     "block": "minecraft:soul_soil",
+     "label": "Below the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:smooth_basalt"
+    }
+   ],
+   "notes": [
+    "Needs water beside, blue ice touching, soul soil below"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:clay",
+     "label": "Next to the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:terracotta"
+    }
+   ],
+   "notes": [
+    "Flowing lava next to it converts it"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "immersive_weathering:ash",
+     "label": "Touching the lava"
+    },
+    {
+     "block": "minecraft:blue_ice",
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:tuff"
+    }
+   ],
+   "notes": [
+    "Needs ash touching, blue ice touching"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "minecraft:sand",
+     "label": "Next to the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:vitrified_sand"
+    }
+   ],
+   "notes": [
+    "Flowing lava next to it converts it"
+   ]
+  }
+ ]
+}

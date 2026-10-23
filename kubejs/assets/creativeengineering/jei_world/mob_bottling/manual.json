@@ -1,0 +1,148 @@
+{
+ "_note": "Hand-written, verified against the mod jars (see feature_writeup/jei_coverage.md 4).",
+ "rows": [
+  {
+   "requires": [
+    "buzzier_bees"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:bee"
+    }
+   ],
+   "action": {
+    "item": "minecraft:glass_bottle"
+   },
+   "outputs": [
+    {
+     "item": "buzzier_bees:bee_bottle"
+    }
+   ],
+   "notes": [
+    "Keeps nectar, anger, age, health, name.",
+    "Use on a block to let it out."
+   ]
+  },
+  {
+   "requires": [
+    "buzzier_bees"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:silverfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:glass_bottle"
+   },
+   "outputs": [
+    {
+     "item": "buzzier_bees:silverfish_bottle"
+    }
+   ],
+   "notes": [
+    "Use on a block to let it out."
+   ]
+  },
+  {
+   "requires": [
+    "buzzier_bees"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:endermite"
+    }
+   ],
+   "action": {
+    "item": "minecraft:glass_bottle"
+   },
+   "outputs": [
+    {
+     "item": "buzzier_bees:endermite_bottle"
+    }
+   ],
+   "notes": [
+    "Use on a block to let it out."
+   ]
+  },
+  {
+   "requires": [
+    "untitledduckmod"
+   ],
+   "inputs": [
+    {
+     "entity": "untitledduckmod:duck"
+    }
+   ],
+   "action": {
+    "item": "untitledduckmod:empty_duck_sack"
+   },
+   "outputs": [
+    {
+     "item": "untitledduckmod:duck_sack"
+    }
+   ],
+   "notes": [
+    "Use on a block to let it out."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:slime",
+     "label": "Smallest size only"
+    }
+   ],
+   "action": {
+    "item": "minecraft:bucket"
+   },
+   "outputs": [
+    {
+     "item": "quark:slime_in_a_bucket"
+    }
+   ],
+   "notes": [
+    "Only the smallest slimes fit."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:squid"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:squid_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:glow_squid"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:glow_squid_bucket"
+    }
+   ]
+  }
+ ]
+}

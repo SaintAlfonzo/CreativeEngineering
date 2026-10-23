@@ -10,24 +10,27 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | Part | Status |
 |---|---|
 | One flour and one dough (Create's), from crushing, pressure chamber, explosions; dough from water or eggs; bread blocks | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
-| Cornmeal (new item): from corn and kernels on every crusher and PNC; required in tortillas and cornbread batter; a flour in pancakes, pies and cakes. Pie crust from 3 flour + milk ×2 by hand and compacting | DEPLOYED (built 2026-10-19, shipped in 1.0.8; 2.1) |
+| Cornmeal (new item): from corn and kernels on every crusher and PNC; required in tortillas and cornbread batter; a flour in pancakes, pies and cakes. Pie crust from 3 flour + milk by hand and compacting (×2 when built; the 2026-10-22 baking overhaul makes 3, [oven.md](oven.md)) | DEPLOYED (built 2026-10-19, shipped in 1.0.8; 2.1); recipe level scratch server PASSED 2026-10-22 (SQ-OF-04), RC-15 to RC-17 in game |
 | Fluids: tomato sauce and melon juice by squeezer and bottler; sugar → `#forge:sugar` in every recipe | DEPLOYED |
 | Prepared food: about 25 meals get shapeless, sequenced assembly or mixing routes; FD's shaped ones removed | DEPLOYED |
 | Golden carrot / apple by heated mixing and arc furnace; enchanted golden apple by assembly | DEPLOYED |
 | Ruby chocolate with dragon's breath | DEPLOYED |
 | Cultivated meat: sample syringe → culture → ×3 by mixing → raw meat on the cutting board | DEPLOYED |
-| Removals: vanilla smoker and cake, Quark crop crates, duplicate pie, egg, bread recipes | DEPLOYED; smoker still made by Quark's deepslate / blackstone smoker recipes (F1) |
-| Meals (TODO `food/meals` #1 to #3): heatless grid routes from cooked ingredients (rule in 2.3), all `_manual_only`; per-meal fixes (cooked eggs, tortilla wrap, dearer scrambled eggs, fruit tags, shaped burgers, one quiche); assemblies for 8 burgers, mutton wrap, fruit salad, shepherd's pie, horror lasagna, stuffed potato, crispy skewer, crawling sandwich, steak and potatoes | BUILT 2026-10-21, not shipped (2.3); RC-55 to RC-64 |
-| Meals (TODO `food/meals` #4, #7, #8): grid routes for 8 more pot meals plus dog food; squid ink pasta by two-fluid heated mixing; fish frying in the pot with cooking oil for any whole fish (Fish Tempura, Fries, Fish and Chips), PneumaticCraft's Thermopneumatic frying removed | BUILT 2026-10-21, not shipped (2.3); RC-66 to RC-69 |
-| Golden food real gold only, smaller machine discount (TODO `food/meals #9`) | BUILT 2026-10-21, not shipped (2.4); RC-70 |
-| Feast Plating JEI tab (TODO `food/meals #5` part a): what a placed feast gives per right-click, the container it takes and its leftovers | BUILT 2026-10-21, patcherMod 1.1.01 not deployed (2.3); RC-65 |
+| Removals: vanilla smoker and cake, Quark crop crates, duplicate pie, egg, bread recipes | DEPLOYED; smoker made by Quark's deepslate / blackstone smoker recipes (F1), cake by the baking overhaul's recipes and slice reassembly (F2); both closed 2026-10-22 |
+| Meals (TODO `dishes/meals` #1 to #3): heatless grid routes from cooked ingredients (rule in 2.3), all `_manual_only`; per-meal fixes (cooked eggs, tortilla wrap, dearer scrambled eggs, fruit tags, shaped burgers, one quiche); assemblies for 8 burgers, mutton wrap, fruit salad, shepherd's pie, horror lasagna, stuffed potato, crispy skewer, crawling sandwich, steak and potatoes | built, scratch server PASSED 2026-10-22 (SQ-OF-07, SQ-OF-08: ids, inputs, removed ids, one grid recipe per burger), not shipped (2.3); in game RC-55 to RC-64 |
+| Meals (TODO `dishes/meals` #4, #7, #8): grid routes for 8 more pot meals plus dog food; squid ink pasta by two-fluid heated mixing; fish frying in the pot with cooking oil for any whole fish (Fish Tempura, Fries, Fish and Chips), PneumaticCraft's Thermopneumatic frying removed | built, scratch server PASSED 2026-10-22 (SQ-OF-09 to SQ-OF-11), not shipped (2.3); in game RC-66 to RC-69 |
+| Drinks (TODO `food/drinks` #4 to #6): chorus juice fluid and its routes; berry matcha latte in the kettle and a grid recipe that keeps its bottle; glass bottles on CfB milk and cow jars | built, scratch server PASSED 2026-10-22 (SQ-DR-00 to SQ-DR-03: load, recipe ids, jar clicks), not shipped (2.2); in game RC-71 to RC-74 (JEI, kettle screen, sounds) |
+| Bone broth routes and ice cubes (TODO `dishes/ingredients` #4, #5): grid routes for 6 more soups and stews (bone broth) and 7 mod pastas; ice hammered into 4 cubes, IE crusher 3; every ice food takes ice or cubes | built, scratch server PASSED 2026-10-22 (SQ-IN-01, SQ-IN-02), not shipped (2.3); in game RC-75, RC-76 |
+| Cooking fluids (TODO `dishes/ingredients #2`): egg solution (1 egg + 250 mB milk -> 500 mB) with Create routes for dough, cornbread batter, pancakes, batter, scrambled eggs, vegetable omelet, potato salad, two custards, vanilla pudding and quiche; frosting fluid (mixer, compactor, cake spout) | built, scratch server PASSED 2026-10-22 (SQ-FL-01, SQ-FL-02), not shipped (2.2); in game RC-77, RC-78. Needs a restart (new fluids) |
+| Golden food real gold only, smaller machine discount (TODO `dishes/meals #9`) | BUILT 2026-10-21, not shipped (2.4); RC-70 |
+| Feast Plating JEI tab (TODO `dishes/meals #5` part a): what a placed feast gives per right-click, the container it takes and its leftovers | BUILT 2026-10-21, patcherMod 1.1.01 not deployed (2.3); RC-65 |
 | Food grinding by hand: every grinding recipe of the pack's own goes through NCH `foodGrinding` (crushing wheels + Millstone + a mortar and pestle craft with the pack's own mortar); other mods' food milling gets mortar crafts from a generated catalogue; hay bale on the Millstone | BUILT 2026-10-21, not shipped (2.1; the mortar and the catalogue are written up in [kitchen.md](kitchen.md) 2.6) |
 
 - **Pending:** the cornmeal millstone mirrors (commit c82dd31 of 2026-10-20) and the 2026-10-21 `foodGrinding`
   change (mortar crafts, hay bale on the Millstone) and the F8 cornmeal fixes are in the tree, not shipped. RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
-  need your call.
+  closed 2026-10-22 (removals kept).
 - **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-594; 597-1013 is the old
-  `global.CE` copy, commented out), [golden.js](../kubejs/server_scripts/cooking/golden.js),
+  `global.CE` copy, deleted 2026-10-22), [golden.js](../kubejs/server_scripts/cooking/golden.js),
   [cultivated_meat.js](../kubejs/server_scripts/cooking/cultivated_meat.js).
 - **Knobs:** none. Server scripts (`/reload`); the meal assemblies' incomplete items and the new tag keys are
   startup (`transition_items.js`, `item_dict.js`): restart.
@@ -65,7 +68,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   2026-10-20 in c82dd31, not shipped; until then corn had no millstone recipe). Since 2026-10-21 all four are one
   `R.foodGrinding` call each, which also writes the mortar and pestle craft at the crushing wheels' and Millstone's
   exact cornmeal average: corn and wild corn 2 -> 3, kernels 3 -> 1 (byproducts machine-only; the corn ratio is set
-  by hand since 2026-10-21, `food/ingredients #14`, where the helper would round down to 1). Crates and kernel bags
+  by hand since 2026-10-21, `dishes/ingredients #14`, where the helper would round down to 1). Crates and kernel bags
   have no mortar craft (machine-only since 2026-10-21). Wild corn grinds exactly as corn on the crushing wheels and
   Millstone (1 + 50 % 1 cornmeal, 25 % 1 kernel; 2026-10-21). Corn Delight's corn and wild corn
   milling are removed (wild corn now has the corn recipe above), and no corn recipe gives straw: the knife on corn (2 kernels), on wild corn (1) and the IE crusher on wild corn (1)
@@ -74,8 +77,8 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   milk) take cornmeal in place of corn, same counts. The raw tortilla takes a water bucket or a water bottle (the
   bottle comes back through `potion_buckets.js`'s glass-bottle remainder), and washing cornmeal with a fan or
   the IE Bottler (250 mB water, as flour -> dough) gives 1 raw tortilla per cornmeal, in place of Corn Delight's
-  washed corn (all 2026-10-21, `food/ingredients #14`). Muffins don't take cornmeal yet: noted for the muffin rebuild
-  (`food/baked-goods #2`).
+  washed corn (all 2026-10-21, `dishes/ingredients #14`). Muffins don't take cornmeal yet: noted for the muffin rebuild
+  (`baking/baked-goods #2`).
 - **Pie crust:** 3 flour or cornmeal in a bowl shape with milk (bucket or bottle) in the middle -> 2; unheated
   compacting 3 flour or cornmeal + 250 mB milk -> 2. FD's 3 wheat + milk -> 1 stays. (An egg in place of the milk was
   asked first; it was dropped because the shapeless 3 flour + egg -> 6 dough craft matches the same grid.)
@@ -90,6 +93,42 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 - **Tomato sauce:** IE squeezer 250 mB per tomato, Bottler into a bowl; 4 tomatoes + bowl shapeless. tmted's removed.
 - **Melon juice:** squeezer 125 mB per slice, 1250 per melon; Bottler 250 mB per bottle; unheated mixing sugar + 3 slices →
   250 mB. tmted's and Create Central Kitchen's removed.
+- **Chorus juice** (TODO `food/drinks #4`): the pack's first own fluid, `creativeengineering:chorus_juice`
+  (`startup_scripts/cooking/fluids.js`; no block, no bucket, like Central Kitchen's drink fluids; `f.chorus_juice`,
+  `#forge:fluid/chorus_juice`). Ender's Delight's item: grid 1 fruit + sugar + bottle (theirs, kept); FD pot 2 fruit +
+  sugar -> 2 bottles (`chorus_juice_manual_only`); heated mixer 1 fruit + sugar + 250 mB water -> 250 mB; spout,
+  drain and IE Bottling Machine at 250 mB. JEI shows Absorption on the fluid through the drain recipe. Pearl pasta
+  already takes the item; the chorus pie spouting step is `baking/baked-goods #4`. Decisions taken from the brief: a
+  drink and cooking fluid only (no diluter role yet); the shapeless stays.
+- **Egg solution** (TODO `dishes/ingredients #2`): `creativeengineering:egg_solution` (`fluids.js`, tank-only like chorus
+  juice; `f.egg_solution`, `#forge:fluid/egg_solution`). Unheated mixer 1 egg + 250 mB milk -> 500 mB; 250 mB stands
+  in for one egg and its milk, so the fluid doubles an egg. All uses are Create recipes in one cooking.js section
+  ("Egg solution", after chorus juice): unheated mixer 3 flour + 250 -> 6 Create dough, 2 cornmeal + 250
+  -> 3 cornbread batter, potato + onion + bowl + 250 -> Rustic potato salad; heated mixer 250 + sugar + flour /
+  cornmeal / rice -> 5 pancakes, 2 wheat + 2 bowls + 250 -> 2 Rustic batter (row 7 moves batter to flour), bowl + 750
+  -> scrambled eggs (the grid takes 3 eggs), cheese + onion + carrot + bowl + 500 -> vegetable omelet, glow berries /
+  2 blueberries + sugar + bottle + 250 -> the two custards, dried vanilla pods + sugar + bowl + 250 -> vanilla
+  pudding; quiche assembly with one 500 mB spout step in place of the milk spout and two egg deploys
+  (`quiche_egg_solution_sequenced_assembly`, same incomplete quiche). Not in the oven (it takes no fluids): muffins,
+  tarts, cake base stay on eggs; pie crust stays without a machine route (oven.md 2.6). Decisions (2026-10-22, the
+  user): tank-only, 500 mB per egg.
+- **Frosting fluid** (TODO `dishes/ingredients #2`): `creativeengineering:frosting` (tank-only, `#forge:fluid/frosting`),
+  the Create route to oven.md 2.6's frosting item (baking.js): heated mixer sugar + 250 mB milk -> 500 mB (the grid's
+  sugar + 2 milk -> 2); compacting 250 mB -> 1 frosting (fluid-only, like Create's chocolate bar); spout 750 mB on a
+  baked cake base -> plain cake (`cake_frosting_spout`, beside the chocolate cake spout). Flavoured cakes stay on the
+  item. Beetroot soup as an efficient beetroot was deferred to `ingredients #13` (the user, 2026-10-22).
+- **Berry matcha latte** (TODO `food/drinks #5`): with Farmer's Respite loaded Delightful drops its grid lattes, so the
+  berry latte had only `food/berry_matcha_latte_from_matcha_latte_neapolitan` (bottle + latte + berries + ice), which
+  ate an extra bottle. Removed. New: kettle tier `farmersrespitebrewing/berry_matcha_latte` (latte +
+  `#forge:fruits/berries`, no water, glass bottle container, like FR's long / strong teas; the latte's bottle goes
+  through the remainder buffer) and grid `shapeless/berry_matcha_latte` (latte + berries + `#forge:ice_cubes`, the
+  latte's bottle comes back). New NCH helper `frBrewing(input, output, e, id, opts)` for kettle recipes.
+- **Milk from jars** (TODO `food/drinks #6`, [milk_jar.js](../kubejs/server_scripts/cooking/milk_jar.js)): a glass
+  bottle on a CfB Milk Jar or Cow in a Jar takes 250 mB out as FD's milk bottle; a milk bottle puts 250 mB back
+  (refused when it would overflow). CfB itself only handles buckets. The Cow in a Jar refills at 1 mB/tick (a bottle
+  every 12.5 s). The item check uses `Ingredient.of(id).test(stack)`: the first version called `stack.is(id)`, which
+  this Rhino build rejects as an ambiguous overload (memory `rhino-fieldandmethods-gotcha`), so the handler would
+  have thrown on every click (fixed 2026-10-22 in the doc audit, before any run).
 - **Sugar:** every recipe asking for sugar takes `#forge:sugar` (so glycerol-made sugar works); sugar cube from 9 sugar.
 
 ### 2.3 Prepared food
@@ -101,6 +140,9 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice; fried rice takes 2 fried eggs, mushroom rice a baked potato and a second brown mushroom, sinigang a second cooked fish, so each costs one more than the pot (2026-10-21) |
 | Vegetable soup, vegetable noodles, ratatouille, corn soup | heatless shapeless from cooked ingredients (2026-10-21) |
 | Chorus stew, endermite stew, crab pasta, pumpkin soup, pasta with meatballs, dumplings, cavern explorer stew, squid ink pasta | heatless shapeless from cooked ingredients, one more main ingredient than the pot (2 popped chorus fruit; 2 mite crusts; 2 cooked crab legs; bone broth + 2 pumpkin slices + cooked pork; 2 beef patties; cooked meat or brown mushroom, 1 dumpling against the pot's 2; bone broth + 2 glow shrooms; cooked fish + 2 ink sacs) (2026-10-21) |
+| Acacia blossom soup, carrot soup, creamy onion soup, fig chicken stew, kangaroo stew, miso with bamboo sprouts | shapeless with bone broth, one more main ingredient than the pot (2 acacia blossoms; 3 carrots; 2 onions + a cooked veggie; cooked chicken + 3 figs; 2 cooked kangaroo; 2 dried kelp + cooked fish) (2026-10-22). Not given one: mushroom and rabbit stew, beetroot, bell pepper and adzuki soups, sopa de macaco (shapeless already), bayberry soup (sweet), blazing chili and strider moss stew (Nether) |
+| Bell pepper, cheesy, creamy chicken, creamy ham, kangaroo, lobster pasta; duck noodles | heatless shapeless, no broth (bowl, or the tomato sauce's): 3 roasted peppers + a cooked veggie; flaxen wedge + tomato sauce + 2 cooked fish; milk + 2 cooked chicken cuts + onion; milk + smoked ham + 2 onions; 2 cooked kangaroo + tomato sauce; 2 cooked lobster tails + tomato sauce; 2 cooked duck (`#forge:cooked_duck`) + carrot + a cooked veggie (2026-10-22) |
+| Ice cubes | Engineer's Hammer on ice on a cutting board, or hammer + ice in the grid -> 4; IE crusher 3; Create's own crushing 3 + 25 % 3; 9 -> 1 ice (Neapolitan). Neapolitan's pickaxe cutting recipe (named a missing item) removed. Every ice food (Neapolitan ice creams, melon / chocolate / kiwi / hamimelon popsicles, hamimelon shaved ice, bellini in pot and mixer) takes `#forge:ice_cubes`, which holds ice and cubes, so the CfB fridge's ice unit counts (2026-10-22) |
 | Squid ink pasta ×2 | heated mixing: 250 mB ink + 250 mB tomato sauce, 2 pasta, any raw fish, 2 bowls |
 | Dog food | shapeless: rotten flesh, bone meal, 2 cooked meat, cooked rice (brings the bowl) |
 | Mutton wrap | shapeless or assembly on a tortilla (FD's bread recipe and CCK's bread assembly removed) |
@@ -165,7 +207,7 @@ Fish on the cutting board give more: salmon and cod → 6 slices + bone meal, ca
 | Golden apple | vanilla's 8 ingots | apple + 6 gold ingots | apple + 5 ingots |
 | Enchanted golden apple | | assembly on a golden apple, 4 loops of a gold block, 250 mB liquid XP and pressing | |
 
-Since 2026-10-21 (TODO `food/meals #9`) the machine discount went from 3 and 5 (of 8) to 2 and 3; revisit with food
+Since 2026-10-21 (TODO `dishes/meals #9`) the machine discount went from 3 and 5 (of 8) to 2 and 3; revisit with food
 tuning (`food/types-and-tuning #1`, #3). Rose gold counts as gold in every golden food recipe (decided 2026-10-22: the
 forge gold tags hold the pack's rose gold nugget and MCA's ingot and block); a one-day restriction to vanilla gold was
 reverted.
@@ -189,21 +231,28 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 
 ### Findings (2026-10-18)
 
-- **F1. The vanilla smoker recipe is removed; Quark's make the smoker.** `cooking.js` line 13 removes it ("Remove stone smoker recipe");
+- **F1. The vanilla smoker recipe is removed; Quark's make the smoker.** Closed 2026-10-22 (TODO `recipes/cooking #1`):
+  removal kept, comment at `cooking.js` 12 names Quark's recipes; the 2026-10-22 recipe dump lists both Quark smokers
+  and `nethersdelight:nether_brick_smoker`, no `minecraft:smoker`. `cooking.js` line 14 removes it;
   the pack adds none. Rechecked 2026-10-21: Quark's `quark:building/crafting/furnaces/deepslate_smoker` and
   `blackstone_smoker` (4 logs around a Quark variant furnace, flag on) still make `minecraft:smoker` (Quark 3.4-418
   jar); the old `global.CE` copy (line 575, "minus blackstone") also removed the deepslate one, the live code doesn't. Smoking is how the pack makes bread blocks, sourdough bread and leather; the Quark recipes
   cover that before the Nether (Nether's Delight's nether brick smoker is the late alternative). Same pattern as the
   blast furnace ([recipes_engineering.md](recipes_engineering.md) F1). Check with RC-01;
   [briefs/recipes_cooking.md](briefs/recipes_cooking.md) #1.
-- **F2. The vanilla cake recipe is removed as "redundant". Your call.** Fine if another mod's cake recipe makes
+- **F2. The vanilla cake recipe is removed as "redundant".** Closed 2026-10-22 (TODO `recipes/cooking #2`): removal kept.
+  The baking overhaul ([oven.md](oven.md) 2.6, `baking.js`) now removes every recipe that makes `minecraft:cake`
+  except `*_from_slices` and the pack's own, so the four recipes below are gone except the oven's. In the 2026-10-22 dump the
+  cake comes from `creativeengineering:baking/cake`, `baking/cake_berry`, `shapeless/cake_manual_only`,
+  `shapeless/cake_berry_manual_only` and `farmersdelight:cake_from_slices` (slice reassembly kept, user 2026-10-22).
+  Earlier text: Fine if another mod's cake recipe makes
   `minecraft:cake` (Create's or Farmer's Delight's); not checked. RC-02. Jar check 2026-10-21: four recipes make it,
   `farmersdelight:cake_from_milk_bottle` and `neapolitan:cake` (vanilla's grid with milk tags),
   `create:crafting/curiosities/cake` and the oven's `creativeengineering:baking/cake`.
 - **F3. Define-once:** `cooking.js` line 9 sets `i.catfish` (the local `i.catfish_slice` was dropped on 2026-10-20
   once the dict's entry was fixed to `alexsdelight:raw_catfish_slice`); `cultivated_meat.js` sets `i.culture_base` ([engineering.md](engineering.md) F8). Fix the
   dict entry and drop the local lines.
-- **F4. Old code:** lines 436-852 of `cooking.js` are the `global.CE` version, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
+- **F4. Old code:** the commented-out `global.CE` copy in `cooking.js` was deleted 2026-10-22 ([TODO](todo/TODO.md) `tooling/conventions #3`).
 - **F5. Golden carrots take rose gold nuggets** through `#forge:nuggets/gold` ([recipes_metal.md](recipes_metal.md) F5).
   FIXED 2026-10-21 locally in `golden.js` (vanilla gold only, also ingots and blocks); the metal tags are unchanged.
 - **F6. Comments that don't match:** "Replace shaped recipe w/ shaped" (it's shapeless) on grilled salmon and bacon and
@@ -215,11 +264,11 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
   discount; final numbers with food tuning.
 
 - **F8. Cornmeal fixes (scratchpad 2026-10-21, a priority). BUILT 2026-10-21** ([TODO](todo/TODO.md)
-  `food/ingredients #14`, static audit in [briefs/food_ingredients.md](briefs/food_ingredients.md) #14). Done: the raw
+  `dishes/ingredients #14`, static audit in [briefs/dishes_ingredients.md](briefs/dishes_ingredients.md) #14). Done: the raw
   tortilla takes a water bottle as well as a bucket; washing cornmeal or the Bottler makes raw tortillas 1:1; the
   mortar and pestle grinds corn and wild corn 2 -> 3, the crushing wheels' and Millstone's average (the hand route the
   audit found missing; crates and bags are machine-only); wild corn grinds as corn on the crushing wheels and
-  Millstone. Left: muffins without cornmeal (noted on `food/baked-goods #2`, the muffin rebuild).
+  Millstone. Left: muffins without cornmeal (noted on `baking/baked-goods #2`, the muffin rebuild).
 
 ### Known limits
 
@@ -235,7 +284,10 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 - [server_scripts/cooking/](../kubejs/server_scripts/cooking/): `cooking.js`, `golden.js`, `chocolate.js`,
   `cultivated_meat.js` (this writeup); `baking.js` ([oven.md](oven.md)); `canning.js` ([cans.md](cans.md));
   `mortar.js` ([kitchen.md](kitchen.md)).
-- NCH `foodGrinding` / `mortar` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
+- `milk_jar.js` (2.2); pack fluids in `startup_scripts/cooking/fluids.js`.
+- Scratch probe: [tools/food_drinks_probe/food_drinks_probe.js](../tools/food_drinks_probe/food_drinks_probe.js)
+  (`/fdtest fluids|recipes|ice|milkjar|soupjar|sol|coffee|all`), scratch-only.
+- NCH `foodGrinding` / `mortar` / `frBrewing` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
 - Tags: `tags/cookingtags.js` (food tags these recipes read; [food.md](food.md)).
 - patcherMod `compat/jei/FeastPlatingJEI.java`, `FeastPlatingCategory.java` (Feast Plating tab; lang keys
   `creativeengineering.jei.feast_plating*`).
@@ -246,8 +298,10 @@ None.
 
 ## 7. In-game test suite
 
-- [ ] **RC-01 Smoker (F1):** JEI `minecraft:smoker` → note any recipe.
-- [ ] **RC-02 Cake (F2):** JEI `minecraft:cake` → note which recipes make it.
+- [ ] **RC-01 Smoker (F1):** JEI `minecraft:smoker` → Quark's deepslate and blackstone smoker (furnace in a plus of 4
+  logs) and Nether's Delight's nether brick smoker; no vanilla cobblestone recipe.
+- [ ] **RC-02 Cake (F2):** JEI `minecraft:cake` → oven (cake base + 3 frosting, or + 2 frosting + red berry), the same
+  two by hand from a baked cake base, and 7 cake slices → cake; no vanilla, FD milk-bottle, Neapolitan or Create grid cake.
 - [ ] **RC-03 One flour:** JEI wheat flour → only Create's; tmted's flour absent from recipes.
 - [ ] **RC-04 Flour machines:** IE crusher on a hay bale → 18 flour; crushing wheels → 13-15.
 - [ ] **RC-05 Dough:** 3 flour + an egg → 6 dough; Bottler with water on a flour pile → dough block.
@@ -259,11 +313,11 @@ None.
 - [ ] **RC-11 Golden carrot:** arc furnace, carrot + 3 gold nuggets → golden carrot.
 - [ ] **RC-12 Enchanted golden apple:** assembly on a golden apple, 4 loops → enchanted golden apple.
 - [ ] **RC-13 Ruby chocolate:** heated mixer with milk, dragon's breath, cocoa beans, sugar → 250 mB ruby chocolate.
-- [ ] **RC-15 Cornmeal item:** shows as "Cornmeal" with the yellow flour texture; in `#forge:flour/corn`.
-- [ ] **RC-16 Cornmeal machines:** crushing wheels on corn give 1-2 cornmeal and sometimes a kernel; the millstone
+- [ ] **RC-15 Cornmeal item** (tag: scratch server PASSED 2026-10-22, SQ-OF-04; name and texture: in game): shows as "Cornmeal" with the yellow flour texture; in `#forge:flour/corn`.
+- [ ] **RC-16 Cornmeal machines** (knife, IE crusher, PNC recipes, Corn Delight ids gone: scratch server PASSED 2026-10-22, SQ-OF-04; crushing wheels, millstone, JEI: in game): crushing wheels on corn give 1-2 cornmeal and sometimes a kernel; the millstone
   gives the same (from the 2026-10-20 change; on 1.0.9 it may take no corn); a knife on corn gives 2 kernels and no straw; IE crusher on corn -> 2 cornmeal (+ kernel half the time), on a crate
   -> 18; PNC pressure chamber 4 kernels -> 3. JEI shows no Corn Delight corn -> kernels IE crusher recipe.
-- [ ] **RC-17 Corn recipes:** raw tortilla and cornbread batter need cornmeal (corn no longer works); splashing corn
+- [ ] **RC-17 Corn recipes** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-04, no raw tortilla or batter recipe takes corn; crafting and washing: in game): raw tortilla and cornbread batter need cornmeal (corn no longer works); splashing corn
   gives nothing, washing cornmeal gives a raw tortilla; pancakes accept cornmeal.
 - [ ] **RC-18 Pie crust:** milk bucket (and a milk bottle) in a bowl of 3 flour -> 2 crusts, bucket returned; works with
   cornmeal; compacting 3 flour + 250 mB milk -> 2; 3 flour + egg still makes 6 dough.
@@ -274,43 +328,68 @@ None.
 - [ ] **RC-54 Cornmeal mortar and washing:** 2 corn or 2 wild corn + mortar -> 3 cornmeal (1 corn: no recipe), mortar
   back with 1 damage; a corn crate or kernel bag + mortar: no recipe; cornmeal through a fan in water -> raw tortillas
   1:1; wild corn on crushing wheels and the Millstone -> 1-2 cornmeal, sometimes a kernel.
-- [ ] **RC-55 Heatless meals:** JEI shows the shapeless routes for vegetable soup, vegetable noodles, ratatouille and
+- [ ] **RC-55 Heatless meals** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): JEI shows the shapeless routes for vegetable soup, vegetable noodles, ratatouille and
   corn soup; each crafts by hand; the same items in a basin under an unheated mixer do nothing.
-- [ ] **RC-56 Cooked inputs:** fried rice, baked cod stew, chicken soup and mushroom rice need the cooked ingredients
+- [ ] **RC-56 Cooked inputs** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): fried rice, baked cod stew, chicken soup and mushroom rice need the cooked ingredients
   (fried egg, baked potato, tomato sauce, cooked veggie); the raw ones no longer craft them.
-- [ ] **RC-57 Mutton wrap:** needs a tortilla in the grid and on the deployer belt; bread no longer works.
-- [ ] **RC-58 Omelet and eggs:** vegetable omelet pot needs fried eggs; omelette + cheese + onion + carrot + bowl crafts
+- [ ] **RC-57 Mutton wrap** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): needs a tortilla in the grid and on the deployer belt; bread no longer works.
+- [ ] **RC-58 Omelet and eggs** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): vegetable omelet pot needs fried eggs; omelette + cheese + onion + carrot + bowl crafts
   one from 2 omelettes; scrambled eggs take 3 eggs.
-- [ ] **RC-59 Fruit bowls:** exotic fruits accept a lemon in place of melon; fruit salad accepts a pineapple slice;
+- [ ] **RC-59 Fruit bowls** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): exotic fruits accept a lemon in place of melon; fruit salad accepts a pineapple slice;
   fruit salad assembly on a bowl gives 2.
-- [ ] **RC-60 Burgers:** each burger has only a shaped grid recipe; JEI shows no milk cheeseburger; each assembly on
+- [ ] **RC-60 Burgers** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): each burger has only a shaped grid recipe; JEI shows no milk cheeseburger; each assembly on
   bread works (the egg burger on a beef patty); a mechanical crafter with a burger pattern does nothing; CCK's bacon,
   chicken and egg sandwich assemblies still work.
-- [ ] **RC-61 Quiche:** one shaped recipe in JEI cycling bacon / mushroom; one assembly; mushrooms first works.
-- [ ] **RC-62 Shepherd's pie:** 3 cooked mutton chops + a cheese wedge craft it; milk no longer works.
-- [ ] **RC-63 Meal assemblies:** shepherd's pie, horror lasagna (2), stuffed potato, crispy skewer, crawling sandwich and
+- [ ] **RC-61 Quiche** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): one shaped recipe in JEI cycling bacon / mushroom; one assembly; mushrooms first works.
+- [ ] **RC-62 Shepherd's pie** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game): 3 cooked mutton chops + a cheese wedge craft it; milk no longer works.
+- [ ] **RC-63 Meal assemblies** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game): shepherd's pie, horror lasagna (2), stuffed potato, crispy skewer, crawling sandwich and
   steak and potatoes each run on a belt with deployers / spout; a bowl under a spout of tomato sauce still gives tomato
   sauce.
-- [ ] **RC-64 Shaped only:** crispy skewer, crawling sandwich and steak and potatoes have only shaped grid recipes.
+- [ ] **RC-64 Shaped only** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game): crispy skewer, crawling sandwich and steak and potatoes have only shaped grid recipes.
 - [ ] **RC-65 Feast Plating tab:** JEI "Feast Plating" tab lists roast chicken, honey glazed ham, shepherd's pie, rice
   roll medley, stuffed pumpkin, nachos, popcorn box, pineapple fried rice, pizza and stuffed hoglin (2 pages), plus any
   KubeJS Delight feast. Roast chicken: 4 bowls -> 4 roast chicken, leftovers bowl + bone meal; popcorn box: empty
   hand, 4 caramel popcorn, paper "given"; pizza: any hand, 4 slices. Uses (U) on a bowl shows the tab; R on a roast
   chicken plate shows it. One plating in game matches the page. `latest.log` has `[jei] Feast Plating: N page(s)`.
-- [ ] **RC-66 Expensive meals:** JEI shows a shapeless grid recipe from cooked ingredients for chorus stew, endermite
+- [ ] **RC-66 Expensive meals** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-09; crafting and JEI: in game): JEI shows a shapeless grid recipe from cooked ingredients for chorus stew, endermite
   stew, crab pasta, pumpkin soup, pasta with meatballs, dumplings (1), cavern explorer stew, squid ink pasta; none
   runs in an unheated basin. Craft one (pasta with meatballs: 2 beef patties + pasta + tomato sauce).
-- [ ] **RC-67 Squid ink pasta mixing:** heated basin with 250 mB ink + 250 mB tomato sauce, 2 pasta, a raw cod, 2
+- [ ] **RC-67 Squid ink pasta mixing** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-09; crafting and JEI: in game): heated basin with 250 mB ink + 250 mB tomato sauce, 2 pasta, a raw cod, 2
   bowls -> 2 squid ink pasta.
-- [ ] **RC-68 Dog food:** rotten flesh + bone meal + 2 cooked meat + cooked rice crafts dog food; not in an unheated basin.
-- [ ] **RC-69 Frying:** JEI shows no Thermopneumatic chips or tempura and no plant-oil tempura mixing; names read Fish
+- [ ] **RC-68 Dog food** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-11; crafting and JEI: in game): rotten flesh + bone meal + 2 cooked meat + cooked rice crafts dog food; not in an unheated basin.
+- [ ] **RC-69 Frying** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-10; crafting and JEI: in game): JEI shows no Thermopneumatic chips or tempura and no plant-oil tempura mixing; names read Fish
   Tempura, Raw Fish Tempura, Fries, Fish and Chips. Raw tempura from a pufferfish + batter. Pot: cooking oil + raw
   tempura -> Fish Tempura; cooking oil + 2 potato slices (Rustic) -> 2 Fries, also with diced potatoes; cooking oil +
   a raw cod + 2 slices with paper in the plate slot -> Fish and Chips; fries + cooked fish +
   paper in the grid -> Fish and Chips; its tooltip reads "The chips are fries. Don't tell the British."
 - [ ] **RC-70 Gold food in machines:** golden carrot (grid, mixer with 6 nuggets, arc with 5) and golden apple (mixer 6,
   arc 5 ingots) accept rose gold nuggets / MCA rose gold ingots as well as gold; enchanted golden apple assembly accepts
-  a rose gold block.
+  a rose gold block. (Scratch server 2026-10-22, `tools/golden_food_probe.js`: every gold input of these recipes
+  accepts its rose gold twin, 16 of 16; the crafting itself in game.)
+- [ ] **RC-71 Chorus juice fluid** (recipe ids: scratch server PASSED 2026-10-22, SQ-DR-01; client: JEI, the basin and spout runs): JEI shows the Chorus Juice fluid with an Absorption line. Heated basin: chorus
+  fruit + sugar + 250 mB water -> 250 mB; spout fills a bottle, drain empties one, Bottling Machine fills one.
+- [ ] **RC-72 Chorus juice pot** (id: scratch server PASSED 2026-10-22, SQ-DR-01; client: pot and JEI): Cooking Pot, 2 chorus fruit + sugar with bottles -> 2 Chorus Juice; not in a basin
+  as a Slice & Dice recipe.
+- [ ] **RC-73 Berry matcha latte** (ids, ice tag, bottle remainder: scratch server PASSED 2026-10-22, SQ-DR-02, exactly 2 berry latte recipes; client: JEI, kettle screen, the grid bottle): JEI has no recipe that takes a glass bottle plus a latte. Kettle: matcha latte +
+  sweet berries (no water) with a glass bottle -> berry matcha latte, the leftover bottle goes to the leftover slot.
+  Grid: latte + berries + ice -> berry latte and one glass bottle back.
+- [ ] **RC-74 Milk from jars** (tank and inventory part: scratch server PASSED 2026-10-22, SQ-DR-03, both jars 1000 -> 750 mB and back; client: sound, a real player, creative): glass bottle on a Cow in a Jar with 250 mB or more -> Farmer's Delight milk bottle,
+  bottle fill sound; on an empty Milk Jar nothing happens. Milk bottle on a Milk Jar adds 250 mB (refused when
+  full). Buckets still fill and empty both jars. Creative keeps the bottle.
+- [ ] **RC-75 Broth soups and pastas** (ids: scratch server PASSED 2026-10-22, SQ-IN-01, 13 ids; client: crafting, the basin): grid: bone broth + 2 cooked kangaroo + carrot + beetroot -> kangaroo stew; bone
+  broth + milk + 3 carrots -> carrot soup; 2 cooked lobster tails + pasta + tomato sauce -> lobster
+  pasta; 2 cooked duck + pasta + carrot + baked potato + bowl -> duck noodles. The kangaroo stew items in an unheated
+  basin do nothing.
+- [ ] **RC-76 Ice cubes** (ids and ice inputs: scratch server PASSED 2026-10-22, SQ-IN-02; client: JEI, the hammer on the board, the CfB book): JEI shows no pickaxe ice cutting. Hammer on ice on a cutting board -> 4 ice cubes (hammer
+  loses 1); hammer + ice in the grid -> 4; IE crusher ice -> 3. Vanilla ice crafts a Neapolitan ice cream and a melon
+  popsicle (Abnormals Delight's recipe) takes ice cubes; an ice cream crafts in the CfB crafting book with ice only from a fridge with the ice unit.
+  9 cubes still make 1 ice.
+- [ ] **RC-77 Egg solution** (fluid, tag and ids: scratch server PASSED 2026-10-22, SQ-FL-01; client: JEI, the machine runs): after a restart JEI shows the Egg Solution fluid. Unheated basin: egg + 250 mB milk ->
+  500 mB. Unheated: 3 flour + 250 mB -> 6 dough; 2 cornmeal + 250 mB -> 3 cornbread batter. Heated: sugar + flour +
+  250 mB -> 5 pancakes; bowl + 750 mB -> scrambled eggs. Quiche assembly in JEI has a second recipe with one egg
+  solution spout step; run it on a pie crust -> quiche. No KubeJS errors for cooking.js in `logs/kubejs/server.log`.
+- [ ] **RC-78 Frosting fluid** (fluid, tag and ids: scratch server PASSED 2026-10-22, SQ-FL-02; client: the machine runs, JEI): heated basin sugar + 250 mB milk -> 500 mB frosting; compactor over a basin with
+  250 mB -> 1 Frosting item; spout 750 mB on a Baked Cake Base -> Cake. JEI lists the Frosting fluid next to the item.
 - [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball → beef culture; heated mixer with diluted
   bone meal and plant oil → 3; knife → 4 raw beef.
 
@@ -326,19 +405,44 @@ None.
 - 2026-10-20 (c82dd31): millstone mirrors of the four corn crushing recipes; not shipped.
 - 2026-10-21: the pack's own food grinding (corn, crate, kernels, bag, hay bale) moved to NCH `foodGrinding`:
   crushing wheels + Millstone + a mortar and pestle craft; the hay bale gained its Millstone recipe; other mods' food
-  milling got mortar crafts from a catalogue ([kitchen.md](kitchen.md) 2.6, TODO `food/kitchen #10`). RC-19. Not
+  milling got mortar crafts from a catalogue ([kitchen.md](kitchen.md) 2.6, TODO `cooking/kitchen #10`). RC-19. Not
   shipped.
-- 2026-10-21: cornmeal fixes (`food/ingredients #14`, F8): raw tortilla takes a water bottle, washing cornmeal ->
+- 2026-10-21: cornmeal fixes (`dishes/ingredients #14`, F8): raw tortilla takes a water bottle, washing cornmeal ->
   raw tortilla, Bottler cornmeal + 250 mB water -> raw tortilla, mortar corn 2 -> 3 (the Create machines' average),
   crates and bags off the mortar, wild corn grinds as corn on Create machines and the mortar; muffins left for
   `baked-goods #2`. RC-53, RC-54. Not shipped.
-- 2026-10-21: meals (TODO `food/meals` #1 to #3, [brief](briefs/food_meals.md)): heatless meal rule and `_manual_only`
+- 2026-10-21: meals (TODO `dishes/meals` #1 to #3, [brief](briefs/dishes_meals.md)): heatless meal rule and `_manual_only`
   ids, four new heatless meals, per-meal fixes, shaped burgers, merged quiche, 16 new assemblies (2.3); tags
   `soup_veggies_cooked`, `exotic_fruits`, `fruit_salad_slices`. RC-55 to RC-64. Not shipped.
-- 2026-10-21: Feast Plating JEI tab (TODO `food/meals #5` part a; patcherMod 1.1.01, not deployed): every FD
+- 2026-10-21: Feast Plating JEI tab (TODO `dishes/meals #5` part a; patcherMod 1.1.01, not deployed): every FD
   feast block plus popcorn box, pizza and stuffed hoglin, leftovers from the loot table (2.3). Loot evaluation
   checked headless (roast chicken -> bowl + bone meal, hoglin -> 2 bones). RC-65.
-- 2026-10-21: meals #4, #7, #8, #9 ([brief](briefs/food_meals.md)): grid routes for 8 pot meals and dog food, squid
+- 2026-10-21: meals #4, #7, #8, #9 ([brief](briefs/dishes_meals.md)): grid routes for 8 pot meals and dog food, squid
   ink pasta two-fluid mixing, pot frying for any fish (Fish Tempura, Fries, Fish and Chips; PneumaticCraft frying out;
   Rustic slices in `#forge:sliced_potatoes`), golden food on vanilla gold with a smaller machine discount (F5, F7).
   RC-66 to RC-70. Not shipped.
+- 2026-10-22: drinks #4 to #6 ([brief](briefs/food_drinks.md)): chorus juice fluid (the pack's first, new
+  `startup_scripts/cooking/fluids.js`) with pot, mixer, spout, drain and Bottling Machine routes; berry matcha latte
+  in the kettle (new NCH `frBrewing`) and a grid recipe that no longer eats a bottle; glass bottles on CfB milk and
+  cow jars (`milk_jar.js`). RC-71 to RC-74. Not shipped.
+- 2026-10-22: ingredients #4, #5 ([brief](briefs/dishes_ingredients.md)): bone broth grid routes for 6 soups / stews
+  and heatless routes for 7 mod pastas (new key `i.t_cooked_duck`); ice cubes by hammer (4) and IE crusher (3),
+  Neapolitan's broken cutting recipe removed, every ice food on `#forge:ice_cubes`. RC-75, RC-76. Not shipped.
+- 2026-10-22: F1 and F2 closed (TODO `recipes/cooking #1`, #2): both removals kept, smoker comment fixed, RC-01 and
+  RC-02 given expected answers. No recipe change.
+- 2026-10-22: ingredients #2 ([brief](briefs/dishes_ingredients.md)): egg solution and frosting fluids (`fluids.js`,
+  tank-only); egg solution Create routes for 11 foods, frosting by mixer, compactor and cake spout (2.2). RC-77,
+  RC-78. Not shipped.
+- 2026-10-22 (doc audit): none of drinks #4 to #6, ingredients #2, #4, #5 has run yet (the bulk scratch run was
+  before them). `milk_jar.js` item check fixed (`stack.is(id)` is ambiguous in this Rhino build, now
+  `Ingredient.of(id).test(stack)`); the ice food list named `farmersdelight:melon_popsicle`, which doesn't load
+  (Abnormals Delight's `abnormals_delight:neapolitan/melon_popsicle` replaces it), now that id. Scratch checks
+  queued with `tools/food_drinks_probe/food_drinks_probe.js` (SQ-DR, SQ-IN, SQ-FL); RC-71 to RC-78 marked client or
+  scratch per part.
+- 2026-10-22: server-side checks of cornmeal (2.1, RC-15 to RC-17) and the meals of 2.3 (TODO `dishes/meals #1` to `#4`,
+  `#7`, `#8`: ids, inputs, removed ids, one grid recipe per burger) queued as SQ-OF-04, SQ-OF-07 to SQ-OF-11
+  ([testing/scratch_queue.md](testing/scratch_queue.md), probe `tools/older_food_probe.js`, `/ofprobe`). JEI, names and
+  crafting by hand stay in game.
+- 2026-10-22 (second bulk run): SQ-DR-00 to SQ-DR-03, SQ-FL-01, SQ-FL-02, SQ-IN-01, SQ-IN-02, SQ-OF-04 and SQ-OF-07 to
+  SQ-OF-11 all PASS on the scratch server (results in [testing/scratch_queue.md](testing/scratch_queue.md)); the
+  client and crafting halves of RC-15 to RC-17, RC-55 to RC-69 and RC-71 to RC-78 stay in game.

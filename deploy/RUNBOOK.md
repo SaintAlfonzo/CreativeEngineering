@@ -15,6 +15,12 @@ otherwise. In the server console, type commands without the leading `/`.
 ## 2. Apply the update (server)
 
 ```
+sh /path/to/payload/apply.sh server .    # verify, removals, copy, world serverconfig, verify --installed
+```
+
+`apply.sh` keeps `MEMORY` and `JAVAPATH` of the old `LaunchServer.sh`. By hand, the same steps:
+
+```
 xargs -d '\n' rm -f < /path/to/payload/removals_server.txt   # run from the server folder
 cp -r /path/to/payload/mods/. mods/                          # NOT client_mods/
 cp -r /path/to/payload/kubejs/. kubejs/

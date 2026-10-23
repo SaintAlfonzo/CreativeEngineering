@@ -1,0 +1,20 @@
+{
+  "color": "#662c32",
+  "containers": [
+    {
+      "filled": [
+        "nethersdelight:strider_moss_stew"
+      ],
+      "empty": "minecraft:bowl",
+      "capacity": 2
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 2,
+    "item": "nethersdelight:strider_moss_stew"
+  },
+  "from_mod": "nethersdelight",
+  "still_texture": "moonlight:soft_fluids/soup_liquid",
+  "translation_key": "item.nethersdelight.strider_moss_stew"
+}

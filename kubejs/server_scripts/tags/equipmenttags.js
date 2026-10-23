@@ -115,7 +115,7 @@ e.add('forge:arrow_shaft/wooden', i.stick_treated)
 //   #exposure:developed_film_rolls and the 10 instant slides (Polaroid has no slide tag).
 // Exposure's own tags are nested references, so lenses / filters / films added to them later fit too.
 // Exposure counts every glass pane and the Interplanar Projector as filters, so those fit as well.
-// Not in the defaults: flashes (i.t_exposure_flashes), photographs, albums, frames.
+// Not in the defaults: flashes (added below), photographs, albums, frames.
 // Adjust here: ADD puts items or '#tags' in, REMOVE takes default members out. REMOVE only works on
 // direct members: to drop one item that comes in through a nested tag (e.g. one glass pane via
 // #exposure:filters), remove the whole nested tag and add back what you want.
@@ -123,7 +123,7 @@ e.add('forge:arrow_shaft/wooden', i.stick_treated)
 ServerEvents.tags('item', e => {
 	var i = global.item
 	global.tags.add(e, i.t_camera_equipment, [
-		// e.g. i.t_exposure_flashes,
+		i.t_exposure_flashes,
 	])
 	global.tags.remove(e, i.t_camera_equipment, [
 		// e.g. i.camera_stand,

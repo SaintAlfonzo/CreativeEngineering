@@ -15,7 +15,7 @@ Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `biome
 | #4 no glowstone in the Overworld | Planned | close the two blind spots (processors, a real-world census), then act on anything found | **third**; mostly verification, the known sources are already fixed |
 | #1 | Testing | NW-01 to NW-05, NW-08, NW-09 | listed at the end |
 
-Related: `worldgen/structures/netherblockswap #3` (soul lanterns in structures: same lantern choice as B12, decide
+Related: `structures/netherblockswap #3` (soul lanterns in structures: same lantern choice as B12, decide
 together); `engineering/dreams-and-desires #5` (the "D&D glowstone geodes" this brief finds already gone, see #4);
 `worldgen/biomes #1` (the 1.0.9 rarity floor that made the frostfire caves reachable).
 

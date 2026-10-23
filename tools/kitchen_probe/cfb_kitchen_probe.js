@@ -1,4 +1,4 @@
-// TODO food/kitchen #8 probe: Cooking for Blockheads oven fuel, sink water, FD cutting board on a counter.
+// TODO cooking/kitchen #8 probe: Cooking for Blockheads oven fuel, sink water, FD cutting board on a counter.
 // Scratch-only: copy into a scratch server's kubejs/server_scripts (tools/creative_labels_test/scratch_server.sh),
 // never into the pack. Run /kttest; results are "[kttest] PASS|FAIL|INFO ..." lines in logs/latest.log, and
 // the oven's burn check reports a few seconds later.

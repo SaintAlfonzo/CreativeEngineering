@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "forge:dough"
+    },
+    "E": {
+      "item": "farmersdelight:tomato_sauce"
+    },
+    "A": {
+      "tag": "forge:cheese"
+    }
+  },
+  "pattern": [
+    "   ",
+    "AAA",
+    "CEC"
+  ],
+  "result": {
+    "item": "vintagedelight:cheese_pizza"
+  }
+}

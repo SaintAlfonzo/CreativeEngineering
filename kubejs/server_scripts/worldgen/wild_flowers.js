@@ -74,6 +74,13 @@
 			console.error(LOG + 'could not read ' + CONFIG_PATH + ', ' + SNAPSHOT_PATH + ' or ' + TRAITS_PATH + ', nothing changed: ' + err)
 			return null
 		}
+		var follows = out.snap.follows || {}
+		Object.keys(out.cfg.flowers || {}).forEach(function (key) {
+			var entry = out.cfg.flowers[key]
+			if (!entry.follows) return
+			entry._follows = follows[key] || []
+			if (!follows[key]) console.warn(LOG + key + ': follows ' + entry.follows + ' but ' + SNAPSHOT_PATH + ' has no biome list for it (rerun tools/gen_wild_flowers.py)')
+		})
 		return out
 	}
 
@@ -111,8 +118,10 @@
 		return false
 	}
 
-	// where/add/except, as wild_crops.js
+	// where/add/except, as wild_crops.js. An entry with 'follows' takes the biome list the generator resolved for it
+	// (snapshot 'follows': every biome where that flower generates after the pack's rules), stored in load().
 	function resolve(traits, entry) {
+		if (entry.follows) return (entry._follows || []).slice()
 		var out = {}
 		Object.keys(traits).forEach(function (b) {
 			var tr = traits[b]

@@ -10,7 +10,7 @@
 // Kit = the mod's two active kits (config/starterkit/kits/Default.txt, Engineer.txt), slots as the mod stored them:
 // the inventory is emptied, kit slots set, then whatever the player held is given back (addExistingItemsAfterKitSet).
 // Not ported: the kit-choice GUI (randomizeMultipleKitsToggle was on, so it never showed), effects (both kits had
-// none), the "select hotbar slot 1" packet, /sk commands. Contents changes are TODO gameplay/starter-kit #1.
+// none), the "select hotbar slot 1" packet, /sk commands. Contents changes are TODO items/starter-kit #1.
 
 var STARTER_KITS = {
 	marker: 'collective.firstJoin.starterkit',

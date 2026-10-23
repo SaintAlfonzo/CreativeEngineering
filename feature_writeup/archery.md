@@ -8,13 +8,13 @@
 | Shaft tags `#forge:arrow_shaft[/wooden|light|quick|metal|heavy|blazing]` and `#forge:fletching` | DEPLOYED |
 | Fletching from feathers (knife), emu feather → feathers | DEPLOYED |
 | Torch arrow on Quark's item (5 recipes), NEA's torch arrow and quiver hidden; Supplementaries quiver recipe; slingshot takes leather / hemp fabric / canvas | DEPLOYED |
-| `archery` and `bullet` blueprints | DEPLOYED; the archery blueprint needs a trader-only arrow (F3) |
+| `archery` and `bullet` blueprints | DEPLOYED; the archery blueprint needs the trader-only Ethereal Arrow, kept on purpose (F3) |
 | NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; the `isDiscoverable` override (F6) fixed in 1.0.9 (SRG `m_6592_`), not yet checked in game (`pack/release #4`, `loot/tables #10`) |
-| IE armor-piercing bullets from a dragon scale (64 per scale) | DEPLOYED, **unreachable**: its blueprint category doesn't exist (F1) |
+| IE armor-piercing bullets from a dragon scale (64 per scale) | DEPLOYED unreachable; moved to the `bullet` blueprint (F1), BUILT 2026-10-22, not run |
 | Dedicated-server join kick from NEA's fletching recipe book (`NockRecipeBookSync`) | DEPLOYED; belongs to fixes and compat (backlog row 10), noted here because it's NEA |
 
-- **Pending:** nothing built and unshipped. AR-01 to AR-18 have never been run. Findings F1 to F8 (section 4) are
-  open (F6 fixed in 1.0.9); F1, F2 and F3 need your call.
+- **Pending:** F1, F5 and F7 built 2026-10-22, unshipped (`/reload`); built, scratch server PASSED 2026-10-22 (SQ-GM-04); in game AR-07, AR-13 (JEI, workbench screen). AR-01 to AR-18 have never been run. F6 fixed
+  in 1.0.9, F3 kept, F8 moot; F2 needs your call, F4 is open.
 - **Files to open:** [archery.js](../kubejs/server_scripts/equipment/archery.js) (every arrow recipe),
   [bullets.js](../kubejs/server_scripts/equipment/bullets.js),
   [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) lines 44-105 (fletching and shaft tags),
@@ -61,7 +61,7 @@ count. "Any" shaft = `#forge:arrow_shaft`; fin is `#forge:fletching` unless stat
 | Repulsive Arrow | NEA | poisonous potato | any | | 2 | |
 | Teleportation Arrow | NEA | ender pearl | quick | | 2 | |
 | Seeker Arrow | NEA | eye of ender | light | | 3 | |
-| Explosive Arrow | NEA | TNT | blaze rod | | 4 | |
+| Explosive Arrow | NEA | TNT | `#forge:arrow_shaft/blazing` (blaze rod) | | 4 | |
 | Pufferfish Arrow | NEA | pufferfish | any | | 1 | |
 | Prismarine Arrow | NEA | prismarine shard | metal | | 6 | |
 | Party Arrow | NEA | firework rocket | any | | 3 | |
@@ -83,7 +83,7 @@ count. "Any" shaft = `#forge:arrow_shaft`; fin is `#forge:fletching` unless stat
 | `#forge:arrow_shaft/quick` | silver, electrum, gold, rose gold rods |
 | `#forge:arrow_shaft/heavy` | lead, uranium rods |
 | `#forge:arrow_shaft/metal` | every metal rod above, plus copper, iron, zinc, nickel, brass, constantan, steel |
-| `#forge:arrow_shaft/blazing` | blaze rod (no recipe reads it, F5) |
+| `#forge:arrow_shaft/blazing` | blaze rod (the explosive arrow's shaft) |
 | `#forge:arrow_shaft` | all of the above |
 | `#forge:fletching` | feather, `creativeengineering:arrow_fletching`, roadrunner feather (AM) |
 
@@ -97,15 +97,15 @@ feathers. So one feather makes 12 arrows at the fletching table (4 in the crafti
 | Blueprint | Made from | Category used by |
 |---|---|---|
 | `archery` | echoing + ethereal + reinforced arrow over 3 blue dye + 3 paper, or over an empty schematic | every arrow in 2.1 |
-| `bullet` | gunpowder + empty casing + gunpowder over an empty schematic | IE's own cartridges |
+| `bullet` | gunpowder + empty casing + gunpowder over an empty schematic | IE's own cartridges, the dragon scale armor-piercing recipe |
 
 Any blueprint + an empty schematic → 2 copies.
 
 ### 2.4 Bullets
 
 [bullets.js](../kubejs/server_scripts/equipment/bullets.js) adds one recipe: 64 empty casings + 32 gunpowder + a dragon
-scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Nothing makes a `projectiles` blueprint
-(F1). IE's own cartridge recipes are untouched.
+scale → 64 armor-piercing cartridges, in blueprint category `bullet` (was `projectiles`, which nothing made; F1).
+IE's own cartridge recipes are untouched.
 
 ### 2.5 Removed or hidden
 
@@ -120,9 +120,9 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
     ([enchants.js](../kubejs/server_scripts/magic/enchants.js)). The trade filter only reaches vanilla's
     `EnchantBookForEmeralds`; Dynamic Villager Trades builds librarian book offers itself from every enchantment
     whose `isTradeable` is true, and the mixins don't override that, so DVT librarians can probably still sell the
-    three (DVT 1.2.3 `LibrarianGenerator`, read 2026-10-21; [brief](briefs/gear_enchanting.md) #1).
+    three (DVT 1.2.3 `LibrarianGenerator`, read 2026-10-21; [brief](briefs/potions_enchanting.md) #1).
   - A book that still has one shows a red bold "REMOVED ITEM: DO NOT USE" line ([jeichanges.js](../kubejs/client_scripts/jeichanges.js)).
-    The JEI hide for those books is commented out.
+    The JEI hide for those books was a commented-out block, deleted 2026-10-22.
 
 ## 3. What the pack changes
 
@@ -138,19 +138,21 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
 
 ### Findings (2026-10-18)
 
-- **F1. The dragon scale armor-piercing recipe can't be made. Your call.** It uses blueprint category `projectiles`;
+- **F1. The dragon scale armor-piercing recipe can't be made.** FIXED 2026-10-22 (TODO `gear/archery #2`): category
+  `bullet`. The finding before the fix: It uses blueprint category `projectiles`;
   no recipe in the pack makes a `{blueprint:"projectiles"}` and IE's own categories are `bullet` and `specialBullet`
   (checked 2026-10-21 in the IE 9.2.4-170 jar: IE's own armor-piercing recipe is in `bullet`). Fix: change the category to `bullet`, or add a `projectiles` blueprint
   to [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) and its duplication list.
 - **F2. Split arrow costs differ. Your call.** The grid recipe takes 6 arrows + 1 wire for 2 split arrows; the
   blueprint takes 4 arrows + 1 wire for the same 2. Pick one.
-- **F3. The archery blueprint needs an Ethereal Arrow. Your call.** Ethereal arrows only come from the wandering
+- **F3. The archery blueprint needs an Ethereal Arrow.** KEPT 2026-10-22 (TODO `gear/archery #4`): intended, the
+  blueprint's arrows are all trader arrows. The finding: Ethereal arrows only come from the wandering
   trader (6 emeralds), so every arrow blueprint recipe waits on a trader roll. Fine if intended;
   otherwise swap it for a craftable arrow (e.g. a seeker or teleportation arrow).
 - **F4. Hand-written tags.** The fletching and shaft tags are 44 `e.add` lines, against the `global.tags` rule
   (also [gear_tuning.md](gear_tuning.md) F3 in the same file). One `global.tags.add` call per tag would do.
-- **F5. `#forge:arrow_shaft/blazing` is unused;** the explosive arrow names the blaze rod directly. Use the tag there or
-  drop it.
+- **F5. `#forge:arrow_shaft/blazing` is unused;** the explosive arrow named the blaze rod directly. FIXED 2026-10-22
+  (TODO `gear/archery #5`): both explosive arrow recipes take the tag.
 - **F6.** CONFIRMED and FIXED 2026-10-19: the 1.0.8 jar named the method `isDiscoverable`; 1.0.9 uses `m_6592_` ([plan_1.0.9.md](plan_1.0.9.md)). The finding before the fix: **probably only two of the three enchantment overrides applied.** The mixins add `isDiscoverable`,
   `canApplyAtEnchantingTable` and `isAllowedOnBooks` without `@Overwrite` and without a refmap. The two Forge
   methods have the same name at runtime, so they work. `isDiscoverable` is a vanilla method (SRG `m_6592_`) and the
@@ -158,7 +160,8 @@ scale → 64 armor-piercing cartridges, in blueprint category `projectiles`. Not
   called. Then `enchant_randomly` loot can still roll the three enchantments, which would explain the red book
   tooltip. Checking that needs `javap` on the built jar; the fix is an SRG-named method or a refmap. The unused
   `Overwrite` imports are in [TODO](todo/TODO.md) `tooling/patchermod-cleanup #1`.
-- **F7. `bullets.js` is a stub:** an empty "Removals" section, "Hello!" log lines, one recipe (F1).
+- **F7. `bullets.js` is a stub:** an empty "Removals" section, "Hello!" log lines, one recipe (F1). FIXED 2026-10-22:
+  the empty section, the log lines and an unused `global.fluid` are gone; one recipe is left.
 - **F8. Supplementaries' own quiver recipe isn't removed.** If it's enabled in Supplementaries' config, JEI shows two
   quiver recipes. Check in JEI (AR-15). Moot (checked 2026-10-21): `supplementaries-1.19.2-2.4.20.jar` has no crafting
   recipe for the quiver (it is loot-only there); AR-15 only confirms that JEI shows one recipe.
@@ -207,7 +210,9 @@ replacement or a hidden item.
   and NEA torch arrow don't show in JEI.
 - [ ] **AR-06 Big yields:** reinforced arrow from a dragon scale + steel rod + fletching → 32; drill arrow from a steel
   drill head → 64.
-- [ ] **AR-07 Explosive arrow:** TNT + blaze rod + fletching → 4.
+- [ ] **AR-07 Explosive arrow (F5):** TNT + blaze rod (any `#forge:arrow_shaft/blazing`, only the blaze rod today) +
+  fletching → 4, at the fletching table and the archery blueprint; JEI shows the shaft slot as the tag. Recipes:
+  scratch server PASSED 2026-10-22 (SQ-GM-04, blueprint and fletching take a blaze rod); the JEI view: client.
 - [ ] **AR-08 Split arrow:** grid, 6 arrows around electrum wire → 2; brass wire works too. Workbench with the archery
   blueprint: 4 arrows + wire → 2 (F2).
 - [ ] **AR-09 Balloon arrow:** grid, balloon + arrow → balloon arrow.
@@ -217,8 +222,9 @@ replacement or a hidden item.
   stick + feather → 6 arrows.
 - [ ] **AR-12 Bullet blueprint:** gunpowder + empty casing + gunpowder over an empty schematic → bullet blueprint; the
   workbench shows IE's cartridges.
-- [ ] **AR-13 Dragon scale bullets (F1):** JEI on armor-piercing cartridges → note the blueprint the dragon-scale recipe
-  asks for; try it on the workbench with the bullet blueprint. Expected today: not available.
+- [ ] **AR-13 Dragon scale bullets (F1)** (recipe category and input match: scratch server PASSED 2026-10-22, SQ-GM-04, `bullet` only, 64 out; the workbench
+  screen: in game): Engineer's Workbench with the bullet blueprint → the dragon scale recipe is
+  listed; 64 casings + 32 gunpowder + a dragon scale → 64 armor-piercing cartridges.
 - [ ] **AR-14 Enchantments gone:** enchanting table with a book at level 30, many rolls → never Stockpile, Recovery or
   Cycle; librarians never sell them; an anvil refuses a book of one. `/give` an enchanted book with Cycle → red "REMOVED
   ITEM: DO NOT USE".
@@ -237,3 +243,6 @@ replacement or a hidden item.
   recorded.
 - 2026-10-18: this writeup; findings F1 to F8; tests AR-01 to AR-18. No code changed.
 - 2026-10-19: F6 confirmed with `javap` and fixed in patcherMod 1.0.9 (SRG name `m_6592_` in the three NEA mixins, [plan_1.0.9.md](plan_1.0.9.md)). Not run in game.
+- 2026-10-22: F1 (`bullet` category), F5 (blazing shaft tag on the explosive arrow) and F7 (`bullets.js` cleanup)
+  fixed; F3 kept (Ethereal Arrow stays in the archery blueprint); AR-07, AR-13 updated.
+- 2026-10-22 (second bulk run): SQ-GM-04 PASS on the scratch server; JEI and the workbench screen stay in game.

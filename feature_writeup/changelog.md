@@ -14,7 +14,7 @@ in-game test yet. Open decisions in 4.1.
 | Version list + read marker (newest version the player has opened) | BUILT | `changelog/ChangelogStore.java`; `config/creativeengineering/changelog_seen.txt` (player config, git-ignored) |
 | Deploy integration (ship `unreleased.md` as `<version>.md`, rename on snapshot, deployed files frozen, lint) | BUILT | `tools/build_deploy.py` (`check_changelog`, `freeze_changelog`), `tools/changelog_lint.py` |
 | Writing rules for entries | DESIGN | section 3.6 of this file |
-| 1.1.01 changelog (every change since 1.0.9) | WRITTEN 2026-10-21, audited 2026-10-22 (section 8) | `unreleased.md`: intro + 70 bullets in 7 families, from the `--dry-run` change list against 1.0.9 and each feature's writeup; lint 0 errors, 18 length warnings (the lint counts sub-bullets into the 300, every single bullet and sub-bullet is under it). Same-behaviour ports (tier 1, Glowing Illagers, Comfortable Campfires, Bottled Air, Fast Leaf Decay's cascade) have no bullet |
+| 1.1.01 changelog (every change since 1.0.9) | WRITTEN 2026-10-21, audited 2026-10-22 (section 8) | `unreleased.md`: one bullet per player-visible change in 9 families, kept true as work lands (re-synced 2026-10-22 against the working tree); lint 0 errors, length warnings only (the lint counts sub-bullets into the 300, every single bullet and sub-bullet is under it). Same-behaviour ports (tier 1, Glowing Illagers, Comfortable Campfires, Bottled Air, Fast Leaf Decay's cascade) have no bullet |
 | Historic changelogs 1.0.0 to 1.0.9 (brief) | Planned | TODO `ui/changelog #2` |
 
 Knobs (CEConfig `[changelog]`, client side): `enabled` (true), `titleButton` (true), `pauseButton` (true),
@@ -430,3 +430,10 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
   The four new server configs got bullets after the user kept them: Spice of Life (10 foods to activate, reset on
   death, 256 remembered; tier bonuses still WIP, no bullet), Create schematics 256, Netherite Backpack 8 upgrade
   slots and Looting Upgrade +5% per level, fishing experience x2 / x3 / x5.
+- 2026-10-22 (doc sweep against the code): every 2026-10-22 feature has a bullet. Fixed: hand-only meals line
+  (no Create recipe makes Pie Crust since the baking overhaul; Scrambled Eggs, Vegetable Omelet, Quiche and Frosting
+  have Create routes through the new fluids), Dragon Bow / Crossbow lines (hits not only arrows, old value wording,
+  "bleeding" is Exsanguination II), sacks "place 1" sub-bullet removed (Supplementaries' own behaviour), undo refusal
+  covers every block with stored data, camera bag flashes named. Added: the `/undo_excavation` logout crash fix.
+  Conditional: if extra stem fruit keeps ignoring seasons (TODO `farming/crops #12`), its bullet needs "Extra fruit
+  grows in any season."

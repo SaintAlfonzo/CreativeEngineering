@@ -52,6 +52,7 @@ public final class WorldgenConfig {
 	public static boolean templateBlockSwapsEnabled() { return get(() -> wg().systems.templateBlockSwaps.get(), true); }
 	public static boolean oceanGeodesEnabled() { return get(() -> wg().systems.oceanGeodes.get(), true); }
 	public static boolean placementPriorityEnabled() { return get(() -> wg().systems.placementPriority.get(), true); }
+	public static boolean mulberrySaplingEnabled() { return get(() -> wg().systems.mulberrySapling.get(), true); }
 	public static boolean placementPriorityLog() { return get(() -> wg().placementPriority.log.get(), false); }
 
 	// ── locate ───────────────────────────────────────────────────────────────
@@ -80,7 +81,9 @@ public final class WorldgenConfig {
 	public static boolean metaAvoidCoasts() { return get(() -> wg().metaStructures.avoidCoasts.get(), false); }
 
 	// ── ocean geodes ─────────────────────────────────────────────────────────
-	public static int oceanGeodeDrop() { return get(() -> wg().oceanGeodes.drop.get(), 10); }
+	public static int oceanGeodeLowestFloorY() { return get(() -> wg().oceanGeodes.lowestFloorY.get(), -8); }
+	public static int oceanGeodeClearance() { return get(() -> wg().oceanGeodes.clearance.get(), 2); }
+	public static int oceanGeodeSpread() { return get(() -> wg().oceanGeodes.spread.get(), 8); }
 	public static double oceanGeodeStayShare() { return get(() -> wg().oceanGeodes.stayShare.get(), 0.1); }
 	public static java.util.List<? extends String> oceanGeodeUntouched() {
 		return get(() -> wg().oceanGeodes.untouched.get(), java.util.List.of("geode:budding_prismarine"));

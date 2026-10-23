@@ -9,19 +9,20 @@
 console.log('sample_syringe func loading')
 
 ;(function () {
-    const EMPTY_ID = 'creativeengineering:sample_syringe'
+    const i = global.item
+    const EMPTY_ID = i.sample_syringe
 
     // Sampleable passive mobs. Keyed by entity type id -> { name, filledId }.
     // Written out one entry per line on purpose - add more as they're needed.
     const SAMPLES = {}
-    SAMPLES['minecraft:cow'] = { name: 'Cow', filledId: 'creativeengineering:cow_sample_syringe' }
-    SAMPLES['more_mooblooms:moobloom'] = { name: 'Moobloom', filledId: 'creativeengineering:cow_sample_syringe' }
-    SAMPLES['minecraft:pig'] = { name: 'Pig', filledId: 'creativeengineering:pig_sample_syringe' }
-    SAMPLES['minecraft:chicken'] = { name: 'Chicken', filledId: 'creativeengineering:chicken_sample_syringe' }
-    SAMPLES['minecraft:sheep'] = { name: 'Sheep', filledId: 'creativeengineering:sheep_sample_syringe' }
-    SAMPLES['minecraft:rabbit'] = { name: 'Rabbit', filledId: 'creativeengineering:rabbit_sample_syringe' }
-    SAMPLES['minecraft:cod'] = { name: 'Cod', filledId: 'creativeengineering:cod_sample_syringe' }
-    SAMPLES['minecraft:salmon'] = { name: 'Salmon', filledId: 'creativeengineering:salmon_sample_syringe' }
+    SAMPLES['minecraft:cow'] = { name: 'Cow', filledId: i.cow_sample_syringe }
+    SAMPLES['more_mooblooms:moobloom'] = { name: 'Moobloom', filledId: i.cow_sample_syringe }
+    SAMPLES['minecraft:pig'] = { name: 'Pig', filledId: i.pig_sample_syringe }
+    SAMPLES['minecraft:chicken'] = { name: 'Chicken', filledId: i.chicken_sample_syringe }
+    SAMPLES['minecraft:sheep'] = { name: 'Sheep', filledId: i.sheep_sample_syringe }
+    SAMPLES['minecraft:rabbit'] = { name: 'Rabbit', filledId: i.rabbit_sample_syringe }
+    SAMPLES['minecraft:cod'] = { name: 'Cod', filledId: i.cod_sample_syringe }
+    SAMPLES['minecraft:salmon'] = { name: 'Salmon', filledId: i.salmon_sample_syringe }
 
     global.sampleSyringe = {
         ITEM_ID: EMPTY_ID,
@@ -46,5 +47,31 @@ console.log('sample_syringe func loading')
 
             return Item.of(sample.filledId, 1)
         },
+    }
+
+    // JEI "Sample Syringe" world-interaction tab (patcherMod compat/jei/world, row format in WorldRow.java):
+    // one row per filled syringe, every mob that gives it as the input. Built from SAMPLES so the list lives here only.
+    const byFilled = {}
+    const order = []
+    Object.keys(SAMPLES).forEach(typeId => {
+        const filledId = SAMPLES[typeId].filledId
+        if (!byFilled[filledId]) {
+            byFilled[filledId] = []
+            order.push(filledId)
+        }
+        byFilled[filledId].push(typeId)
+    })
+    const rows = order.map(filledId => ({
+        inputs: [{ entities: byFilled[filledId] }],
+        action: { item: EMPTY_ID, label: 'Right-click or hit the mob' },
+        outputs: [{ item: filledId }],
+        notes: ['Main hand. A hit also deals normal damage.'],
+    }))
+    try {
+        const $WorldRows = Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.jei.world.WorldRows')
+        $WorldRows.clear('sample_syringe')
+        $WorldRows.add('sample_syringe', JSON.stringify(rows))
+    } catch (err) {
+        console.warn('sample_syringe: JEI world rows not added: ' + err)
     }
 })()

@@ -1,0 +1,1900 @@
+{
+ "_note": "Hand-written: Create SailBlock.applyDye, SeatBlock.use, ValveHandleBlock.clicked (0.5.1i). Generated rows: tools/jei_world/tab_tools.py.",
+ "rows": [
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/white"
+   },
+   "outputs": [
+    {
+     "block": "create:white_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/orange"
+   },
+   "outputs": [
+    {
+     "block": "create:orange_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/magenta"
+   },
+   "outputs": [
+    {
+     "block": "create:magenta_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/light_blue"
+   },
+   "outputs": [
+    {
+     "block": "create:light_blue_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/yellow"
+   },
+   "outputs": [
+    {
+     "block": "create:yellow_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/lime"
+   },
+   "outputs": [
+    {
+     "block": "create:lime_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/pink"
+   },
+   "outputs": [
+    {
+     "block": "create:pink_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/gray"
+   },
+   "outputs": [
+    {
+     "block": "create:gray_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/light_gray"
+   },
+   "outputs": [
+    {
+     "block": "create:light_gray_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/cyan"
+   },
+   "outputs": [
+    {
+     "block": "create:cyan_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/purple"
+   },
+   "outputs": [
+    {
+     "block": "create:purple_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/blue"
+   },
+   "outputs": [
+    {
+     "block": "create:blue_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/brown"
+   },
+   "outputs": [
+    {
+     "block": "create:brown_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/green"
+   },
+   "outputs": [
+    {
+     "block": "create:green_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:black_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/red"
+   },
+   "outputs": [
+    {
+     "block": "create:red_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/black"
+   },
+   "outputs": [
+    {
+     "block": "create:black_sail"
+    }
+   ],
+   "notes": [
+    "Joined sails change too, up to 100.",
+    "Bare frames take no dye."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_sail",
+      "create:orange_sail",
+      "create:magenta_sail",
+      "create:light_blue_sail",
+      "create:yellow_sail",
+      "create:lime_sail",
+      "create:pink_sail",
+      "create:gray_sail",
+      "create:light_gray_sail",
+      "create:cyan_sail",
+      "create:purple_sail",
+      "create:blue_sail",
+      "create:brown_sail",
+      "create:green_sail",
+      "create:red_sail",
+      "create:black_sail"
+     ]
+    }
+   ],
+   "action": {
+    "item": "minecraft:shears"
+   },
+   "outputs": [
+    {
+     "block": "create:sail_frame"
+    }
+   ],
+   "notes": [
+    "Right-click a sail: cuts the canvas off.",
+    "Joined sails change too."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/white"
+   },
+   "outputs": [
+    {
+     "block": "create:white_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/orange"
+   },
+   "outputs": [
+    {
+     "block": "create:orange_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/magenta"
+   },
+   "outputs": [
+    {
+     "block": "create:magenta_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/light_blue"
+   },
+   "outputs": [
+    {
+     "block": "create:light_blue_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/yellow"
+   },
+   "outputs": [
+    {
+     "block": "create:yellow_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/lime"
+   },
+   "outputs": [
+    {
+     "block": "create:lime_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/pink"
+   },
+   "outputs": [
+    {
+     "block": "create:pink_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/gray"
+   },
+   "outputs": [
+    {
+     "block": "create:gray_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/light_gray"
+   },
+   "outputs": [
+    {
+     "block": "create:light_gray_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/cyan"
+   },
+   "outputs": [
+    {
+     "block": "create:cyan_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/purple"
+   },
+   "outputs": [
+    {
+     "block": "create:purple_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/blue"
+   },
+   "outputs": [
+    {
+     "block": "create:blue_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:green_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/brown"
+   },
+   "outputs": [
+    {
+     "block": "create:brown_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:red_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/green"
+   },
+   "outputs": [
+    {
+     "block": "create:green_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:black_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/red"
+   },
+   "outputs": [
+    {
+     "block": "create:red_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:white_seat",
+      "create:orange_seat",
+      "create:magenta_seat",
+      "create:light_blue_seat",
+      "create:yellow_seat",
+      "create:lime_seat",
+      "create:pink_seat",
+      "create:gray_seat",
+      "create:light_gray_seat",
+      "create:cyan_seat",
+      "create:purple_seat",
+      "create:blue_seat",
+      "create:brown_seat",
+      "create:green_seat",
+      "create:red_seat"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/black"
+   },
+   "outputs": [
+    {
+     "block": "create:black_seat"
+    }
+   ],
+   "notes": [
+    "Right-click a seat, not sneaking."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/white"
+   },
+   "outputs": [
+    {
+     "block": "create:white_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/orange"
+   },
+   "outputs": [
+    {
+     "block": "create:orange_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/magenta"
+   },
+   "outputs": [
+    {
+     "block": "create:magenta_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/light_blue"
+   },
+   "outputs": [
+    {
+     "block": "create:light_blue_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/yellow"
+   },
+   "outputs": [
+    {
+     "block": "create:yellow_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/lime"
+   },
+   "outputs": [
+    {
+     "block": "create:lime_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/pink"
+   },
+   "outputs": [
+    {
+     "block": "create:pink_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/gray"
+   },
+   "outputs": [
+    {
+     "block": "create:gray_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/light_gray"
+   },
+   "outputs": [
+    {
+     "block": "create:light_gray_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/cyan"
+   },
+   "outputs": [
+    {
+     "block": "create:cyan_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/purple"
+   },
+   "outputs": [
+    {
+     "block": "create:purple_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/blue"
+   },
+   "outputs": [
+    {
+     "block": "create:blue_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/brown"
+   },
+   "outputs": [
+    {
+     "block": "create:brown_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:red_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/green"
+   },
+   "outputs": [
+    {
+     "block": "create:green_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:black_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/red"
+   },
+   "outputs": [
+    {
+     "block": "create:red_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "create:copper_valve_handle",
+      "create:white_valve_handle",
+      "create:orange_valve_handle",
+      "create:magenta_valve_handle",
+      "create:light_blue_valve_handle",
+      "create:yellow_valve_handle",
+      "create:lime_valve_handle",
+      "create:pink_valve_handle",
+      "create:gray_valve_handle",
+      "create:light_gray_valve_handle",
+      "create:cyan_valve_handle",
+      "create:purple_valve_handle",
+      "create:blue_valve_handle",
+      "create:brown_valve_handle",
+      "create:green_valve_handle",
+      "create:red_valve_handle"
+     ],
+     "label": "Copper or any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/black"
+   },
+   "outputs": [
+    {
+     "block": "create:black_valve_handle"
+    }
+   ],
+   "notes": [
+    "Right-click a placed valve handle."
+   ]
+  }
+ ]
+}

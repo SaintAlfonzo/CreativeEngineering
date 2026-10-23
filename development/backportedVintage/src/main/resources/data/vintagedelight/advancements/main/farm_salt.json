@@ -1,0 +1,31 @@
+{
+  "parent": "vintagedelight:main/harvest_salt",
+  "criteria": {
+    "salt_block": {
+      "conditions": {
+        "block": "vintagedelight:salt_block"
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "vintagedelight.advancement.place_salt_block.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "vintagedelight:salt_block"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "vintagedelight.advancement.place_salt_block"
+    }
+  },
+  "requirements": [
+    [
+      "salt_block"
+    ]
+  ]
+}

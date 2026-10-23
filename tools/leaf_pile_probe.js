@@ -11,6 +11,7 @@ var ZLP_Leaves = Java.loadClass('net.minecraft.world.level.block.LeavesBlock')
 var ZLP_BlockPos = Java.loadClass('net.minecraft.core.BlockPos')
 var ZLP_Blocks = Java.loadClass('net.minecraft.world.level.block.Blocks')
 var ZLP_Registry = Java.loadClass('net.minecraft.core.Registry')
+var ZLP_ScheduledTick = Java.loadClass('net.minecraft.world.ticks.ScheduledTick')
 var ZLP_RL = Java.loadClass('net.minecraft.resources.ResourceLocation')
 var ZLP_BlockTags = Java.loadClass('net.minecraft.tags.BlockTags')
 var ZLP_Pile = Java.loadClass('com.ordana.immersive_weathering.blocks.LeafPileBlock')
@@ -41,7 +42,9 @@ function zlpFloor(level, x0, x1, z0, z1, y, top) {
 	}
 }
 
-// 20 lone leaves 2 blocks apart, default state (distance 7, not persistent): no log anywhere near, so each decays when checked.
+// 20 lone leaves 2 blocks apart, distance 7, not persistent: no log anywhere near, so each decays when checked.
+// PERSISTENT is set explicitly: Vinery's apple leaves default to persistent (as upstream 1.5.5; its tree features
+// place them with persistent false).
 function zlpRow(level) {
 	zlpFloor(level, 299, 339, 299, 301, ZLP_Y, 3)
 	var list = []
@@ -49,24 +52,27 @@ function zlpRow(level) {
 		var id = ZLP_TYPES[i % ZLP_TYPES.length], b = ZLP_Registry.BLOCK.get(new ZLP_RL(id))
 		if (!(b instanceof ZLP_Leaves)) { console.info('[zlp] ERROR ' + id + ' is not a LeavesBlock'); continue }
 		var p = new ZLP_BlockPos(300 + 2 * i, ZLP_Y, 300)
-		level.setBlock(p, b.defaultBlockState(), 2 | 16)
+		// setValue(PERSISTENT, false) finds no overload (a JS boolean is not a Comparable): cycle the property instead
+		var st = b.defaultBlockState()
+		if (String(st.getValue(ZLP_Leaves.PERSISTENT)) === 'true') st = st.cycle(ZLP_Leaves.PERSISTENT)
+		level.setBlock(p, st, 2 | 16)
 		list.push({ p: p, id: id })
 	}
 	return list
 }
 
 function zlpRowResult(level, label, list) {
-	var leaves = 0, piles = 0, layers = 0, byType = {}
+	var leaves = 0, piles = 0, layers = 0, byType = {}, left = {}
 	list.forEach(e => {
 		var st = level.getBlockState(e.p)
-		if (st.getBlock() instanceof ZLP_Leaves) leaves++
+		if (st.getBlock() instanceof ZLP_Leaves) { leaves++; left[e.id] = (left[e.id] || 0) + 1 }
 		else if (st.getBlock() instanceof ZLP_Pile) {
 			piles++; layers += st.getValue(ZLP_Pile.LAYERS)
 			byType[e.id] = (byType[e.id] || 0) + 1
 		}
 	})
 	console.info('[zlp] ' + label + ': leaves ' + list.length + ' -> ' + leaves + ', piles ' + piles + ' (layers ' + layers
-		+ ') by type ' + JSON.stringify(byType) + ' cfg ' + zlpCfg())
+		+ ') by type ' + JSON.stringify(byType) + (leaves ? ' leaves left ' + JSON.stringify(left) : '') + ' cfg ' + zlpCfg())
 }
 
 function zlpTreeCount(level) {
@@ -94,7 +100,11 @@ ServerEvents.commandRegistry(event => {
 	var root = Commands.literal('zlp')
 	root.then(Commands.literal('tick').executes(ctx => { try {
 		var level = ctx.source.level, list = zlpRow(level), now = ctx.source.server.tickCount
-		list.forEach(e => level.scheduleTick(e.p, level.getBlockState(e.p).getBlock(), 1))
+		// level.scheduleTick(pos, block, 1) is ambiguous in Rhino (Block and Fluid overloads share one obfuscated
+		// name); schedule on the block tick container directly, as LevelAccessor.scheduleTick does
+		var due = level.getLevelData().getGameTime() + 1
+		list.forEach(e => level.getBlockTicks().schedule(
+			new ZLP_ScheduledTick(level.getBlockState(e.p).getBlock(), e.p, due, level.nextSubTickCount())))
 		ZLP_pending = { due: now + 10, run: () => zlpRowResult(level, 'tick', list) }
 		return 1 } catch (e) { console.info('[zlp] ERROR ' + e); return 0 } }))
 	root.then(Commands.literal('rt').executes(ctx => { try {

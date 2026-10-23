@@ -1,0 +1,35 @@
+# Vintage Delight 0.1.6 ported to Forge 1.19.2. Keeps the upstream mod id so every resource location, recipe and tag
+# matches the upstream data.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="vintagedelight"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+itemIcon="vintagedelight:peanut"
+description='''${mod_description}'''
+
+[[dependencies.vintagedelight]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.vintagedelight]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.vintagedelight]]
+modId="farmersdelight"
+mandatory=true
+versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"

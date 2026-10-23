@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "veggiesdelight:zucchini"
+    }
+  ],
+  "result": {
+    "item": "veggiesdelight:zucchini_seeds"
+  }
+}

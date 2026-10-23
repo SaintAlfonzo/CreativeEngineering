@@ -1,0 +1,202 @@
+{
+ "_note": "Hand-written: Salt 1.2.4.1 Dissolving, Melting, ISaltBlock.onSaltRandomTick, Salt$Blocks dissolved states (javap), values from config/salt-common.toml. Melting.meltBlock places water only when the dimension is ultra-warm (bytecode tests ultraWarm(), the config text says water), so outside the Nether a melted block becomes air. Salt clusters and evaporation have Salt's own JEI pages.",
+ "rows": [
+  {
+   "requires": [
+    "salt"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "salt:salt_block",
+      "salt:raw_rock_salt_block"
+     ]
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Touching a side or the top"
+    }
+   ],
+   "outputs": [
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Only from a water source beside it; else nothing is left"
+    }
+   ],
+   "notes": [
+    "Random tick 35%: dissolves",
+    "Source beside: leaves water"
+   ]
+  },
+  {
+   "requires": [
+    "salt"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "salt:rock_salt_ore",
+      "salt:deepslate_rock_salt_ore",
+      "salt:salt_lamp"
+     ]
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Touching a side or the top"
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "minecraft:stone",
+      "minecraft:deepslate",
+      "minecraft:spruce_slab"
+     ],
+     "label": "The slab is waterlogged by a water source"
+    }
+   ],
+   "notes": [
+    "Random tick 35%: the salt dissolves in touching water"
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "salt"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "salt:salt_block",
+      "salt:raw_rock_salt_block"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:air",
+     "label": "Dissolves away"
+    }
+   ],
+   "notes": [
+    "In rain under open sky, 15%: dissolves",
+    "Leaves no water"
+   ]
+  },
+  {
+   "requires": [
+    "salt"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "salt:rock_salt_ore",
+      "salt:deepslate_rock_salt_ore",
+      "salt:salt_lamp"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "minecraft:stone",
+      "minecraft:deepslate",
+      "minecraft:spruce_slab"
+     ],
+     "label": "What is left"
+    }
+   ],
+   "notes": [
+    "In rain under open sky, 15%: dissolves",
+    "Leaves no water"
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "salt"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "salt:salt_block",
+      "salt:raw_rock_salt_block",
+      "salt:rock_salt_ore",
+      "salt:deepslate_rock_salt_ore",
+      "salt:salt_lamp"
+     ],
+     "label": "Any salt block"
+    },
+    {
+     "block_tag": "salt:meltables",
+     "label": "Touching the salt"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:air",
+     "label": "Melts away"
+    }
+   ],
+   "notes": [
+    "Random tick 40%: melts touching ice or snow",
+    "Water is only left in the Nether"
+   ]
+  },
+  {
+   "requires": [
+    "salt"
+   ],
+   "inputs": [
+    {
+     "block_tag": "salt:meltables"
+    }
+   ],
+   "action": {
+    "tag": "forge:salts",
+    "label": "Use on the block"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:air",
+     "label": "Melts away"
+    }
+   ],
+   "notes": [
+    "Use salt on ice or snow; uses one",
+    "Water is only left in the Nether"
+   ]
+  },
+  {
+   "requires": [
+    "salt"
+   ],
+   "inputs": [
+    {
+     "item": "minecraft:dispenser",
+     "label": "Facing the block"
+    },
+    {
+     "block_tag": "salt:meltables"
+    }
+   ],
+   "action": {
+    "tag": "forge:salts",
+    "label": "In the dispenser"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:air",
+     "label": "Melts away"
+    }
+   ],
+   "notes": [
+    "A dispenser melts the block in front; uses one",
+    "Water is only left in the Nether"
+   ]
+  }
+ ]
+}

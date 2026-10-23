@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Catalog of other mods' food grinding recipes for the mortar and pestle (TODO food/kitchen #10).
+"""Catalog of other mods' food grinding recipes for the mortar and pestle (TODO cooking/kitchen #10).
 
 Reads the /dumpfood recipe export (kubejs/exported/food/recipes.json: every loaded recipe with its ingredients and
 outputs) and writes kubejs/generation_scripts/food/mortar_catalog.json, which kubejs/server_scripts/cooking/mortar.js
@@ -38,7 +38,7 @@ ALLOW = {
     'create_confectionery:cocoa_powder': 'cocoa powder (untagged)',
 }
 EXCLUDE = {
-    'neapolitan:ice_cubes': 'ice is hammered on the cutting board (TODO food/ingredients #5), not ground',
+    'neapolitan:ice_cubes': 'ice is hammered on the cutting board (TODO dishes/ingredients #5), not ground',
     'minecraft:nether_wart': 'nether wart block back to wart is unpacking a decor block, not food grinding',
 }
 

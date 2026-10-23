@@ -278,7 +278,7 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [] Chalk- Right click to mark block w/ arrow, hold right click to change mark (Chalk 1.6.4 code: it is sneak + right-click that opens the symbol picker; plan in [briefs/ui_tooltips.md](briefs/ui_tooltips.md))
 - [] Pretty Pipes- Use pipe wrench w/ block in off-hand to add cover
 - [] Lunchboxes- number of slots (scratchpad 2026-10-21, [TODO](todo/TODO.md) `ui/tooltips #2`)
-- [] AE2 cables- how to make covers, once the covers are hidden from JEI (scratchpad 2026-10-21, `ui/jei-coverage #3`)
+- [] AE2 cables- how to make covers, once the covers are hidden from JEI (scratchpad 2026-10-21, `jei/jei-coverage #3`)
 - [] Flower pots- a label on every pot, every pot distinct (scratchpad 2026-10-21, `blocks/framed-and-decor #6`)
 
 Not a line but the tooltip box: large item tooltips should run off the bottom of the screen, not the top (scratchpad

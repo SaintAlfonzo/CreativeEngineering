@@ -11,10 +11,10 @@ directly; nothing regenerates this file.
 | Raw veggie / fruit / meat cans (hand-written, [cans.js](../kubejs/startup_scripts/items/cans.js)) | 2026-10-13: removed mint, acorn, grapes, mite crust, raw ham/chevon/hoglin/kangaroo/moose/bison/bunfungus; White Strawberries got their own can; Canned Cactus is now Canned Cactus Flesh (and the item Cactus Chunk is renamed Cactus Flesh). Not run in game (CP-01 to CP-05) |
 | Generated cans (cookies, cooked, bread, salad, soup, golden; [can_types.json](../kubejs/generation_scripts/food/can_types.json)) | DEPLOYED with 1.0.6, untested in game (see [food.md](food.md)) |
 | Every remaining `x` row, `/` removals, alt inputs (2026-10-13) | BUILT, not run in game (CP-07 to CP-14): 17 raw fruit, shulker, 12 raw fish, 4 hazard, 2 special, 11 cookies, 10 cooked veggie, 3 cooked meat, 11 pastas, 9 pie fillings, 9 feasts, 2 drinks; 15 `/` cans removed; sliced alt inputs. 6 pie slices skipped (no source). Meal/pie/feast/drink/hazard values are placeholders ([3.1](#new-sections)) |
-| Can crafts, family sprites, values (2026-10-21) | BUILT, not run in game (CP-15 to CP-21): the 20 buildable `Want x` rows without a can ([TODO](todo/TODO.md) `food/canning #14`); the hand-written raw veggie / fruit / meat cans moved into gen_can_types.py (same items, recipes, values and servings; they now carry their food's effects, `#4`; Cactus Flesh follows the rule); Canned Cake 1 cake or 4 slices + sugar / honey (`#15`); Canned Goods' 13 cans that no recipe makes get their family's values, Canned Food and the Hot Hot Hotpot are removed; can-consuming recipes (filling + crust -> pie) are manual only and take full cans only (CP-22 to CP-25); every can without a sprite borrows its family's ([5.1](#sprites)). The 6 pie slices stay without a can (no source) |
+| Can crafts, family sprites, values (2026-10-21) | BUILT; values, recipes and removals scratch server PASSED 2026-10-22 (SQ-OF-00 to SQ-OF-03); not run in game (CP-15 to CP-21): the 20 buildable `Want x` rows without a can ([TODO](todo/TODO.md) `cans/canning #14`); the hand-written raw veggie / fruit / meat cans moved into gen_can_types.py (same items, recipes, values and servings; they now carry their food's effects, `#4`; Cactus Flesh follows the rule); Canned Cake 1 cake or 4 slices + sugar / honey (`#15`); Canned Goods' 13 cans that no recipe makes get their family's values, Canned Food and the Hot Hot Hotpot are removed; can-consuming recipes (filling + crust -> pie) are manual only and take full cans only (CP-22 to CP-25); every can without a sprite borrows its family's ([5.1](#sprites)). The 6 pie slices stay without a can (no source) |
 | Hunger/saturation columns | FILLED 2026-10-21 by `tools/can_audit.py` (rerun after `gen_can_types.py`): Food / Craft sum / Canned h/s, In -> out and Out vs target per row, the full table in [4.3](#value-vs-goal). Values are what the files build; the game confirms them after a restart and `/dumpfood` |
-| Priorities (scratchpad 2026-10-21) | can textures (48 of 235 built cans have their own sprite, [5.1](#sprites); [TODO](todo/TODO.md) `food/canning #13`) and can crafts (recipes for the rest of the `Want x` rows, then the `?` rows; `food/canning #14`) |
-| Potential cans (2026-10-20 food audit) | DECIDED 2026-10-20 (user): no `?` left (258 `x`, 493 `/`); 26 `x` rows have no can yet (20 to build, 6 pie slices with no source), `food/canning #14`. Was: 263 rows at Want `?` waiting on a decision: new edible Brewin drinks (Beer, Vodka, Dread Nog), Gingerbread, two tarts, and every family pulled in from [3](#outside): [Hazard](#hazard) (4 built cans listed for the first time), [Egg and dairy](#egg-dairy), [Preserves](#preserves), [Desserts](#desserts), [Cake](#cake), [Sweets](#sweets), [Handheld](#handheld), [Ingredients](#ingredients) |
+| Priorities (scratchpad 2026-10-21) | can textures (48 of 235 built cans have their own sprite, [5.1](#sprites); [TODO](todo/TODO.md) `cans/canning #13`) and can crafts (recipes for the rest of the `Want x` rows, then the `?` rows; `cans/canning #14`) |
+| Potential cans (2026-10-20 food audit) | DECIDED 2026-10-20 (user): no `?` left (258 `x`, 493 `/`); 26 `x` rows have no can yet (20 to build, 6 pie slices with no source), `cans/canning #14`. Was: 263 rows at Want `?` waiting on a decision: new edible Brewin drinks (Beer, Vodka, Dread Nog), Gingerbread, two tarts, and every family pulled in from [3](#outside): [Hazard](#hazard) (4 built cans listed for the first time), [Egg and dairy](#egg-dairy), [Preserves](#preserves), [Desserts](#desserts), [Cake](#cake), [Sweets](#sweets), [Handheld](#handheld), [Ingredients](#ingredients) |
 
 **How to use it:** decide the `Want` cell first. Then fill the rest of the row as work lands.
 
@@ -468,7 +468,7 @@ Pasta, duck noodles -> Pasta with Duck).
 4 slices + can -> pie filling (4 servings, slice-sized meals); filling can + pie crust -> the whole pie. Fruitsdelight's
 durian and pineapple pies are single items: 4 fill a can, no pie back (both marked for a rework, not really pies).
 Sweet Berry Pie is Farmer's Delight's cheesecake, renamed. Source mods of the slices with no whole pie: TODO
-`food/baked-goods #14`.
+`baking/baked-goods #14`.
 
 | Want | Item | Can | Input (basic / +additive) | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s | In -> out | Out vs target |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -478,12 +478,12 @@ Sweet Berry Pie is Farmer's Delight's cheesecake, renamed. Source mods of the sl
 | x | Slice of Chocolate Pie `farmersdelight:chocolate_pie_slice` | Canned Chocolate Pie Filling | 4 | - | x | / | x | x | x | 3 / 1.8 | 12 / 7.2 | 12 / 7.2 | 100% / 100% | 100% / 100% |
 | x | Chorus Pie Slice `endersdelight:chorus_pie_slice` | Canned Chorus Pie Filling | 4 | - | x | / | x | x | x | 3 / 1.8 | 12 / 7.2 | 12 / 7.2 | 100% / 100% | 100% / 100% |
 | x | Slice of Crimson Berry Pie `delightful:crimson_berry_pie_slice` (no source in the pack: the whole pie is BYG `byg:crimson_berry_pie`, not installed) | Canned Crimson Berry Pie Filling | - | - | / | / | / | / | / | later | later | later | - | - |
-| x | Durian Pie `fruitsdelight:durian_pie` (not really a pie, marked for rework: TODO `food/baked-goods #12`) | Canned Durian Pie Filling | 4 | - | x | / | x | x | x | 5 / 4 | 20 / 16 | 20 / 16 | 100% / 100% | 100% / 100% |
+| x | Durian Pie `fruitsdelight:durian_pie` (not really a pie, marked for rework: TODO `baking/baked-goods #12`) | Canned Durian Pie Filling | 4 | - | x | / | x | x | x | 5 / 4 | 20 / 16 | 20 / 16 | 100% / 100% | 100% / 100% |
 | / | Slice of Gloomgourd Pie `delightful:gloomgourd_pie_slice` (whole pie is The Undergarden `undergarden:gloomgourd_pie`, not installed) | Canned Gloomgourd Pie Filling | n/a | - | / | / | / | / | / | later | later | later | n/a | n/a |
 | x | Slice of Green Apple Pie `delightful:green_apple_pie_slice` (no source in the pack: the whole pie is BYG `byg:green_apple_pie`, not installed) | Canned Green Apple Pie Filling | - | - | / | / | / | / | / | later | later | later | - | - |
 | x | Slice of Mulberry Pie `create_central_kitchen:mulberry_pie_slice` | Canned Mulberry Pie Filling | 4 | - | x | / | x | x | x | 3 / 1.8 | 12 / 7.2 | 12 / 7.2 | 100% / 100% | 100% / 100% |
 | x | Slice of Nightshade Berry Pie `delightful:nightshade_berry_pie_slice` (no source in the pack: the whole pie is BYG `byg:nightshade_berry_pie`, not installed) | Canned Nightshade Berry Pie Filling | - | - | / | / | / | / | / | later | later | later | - | - |
-| x | Pineapple Pie `fruitsdelight:pineapple_pie` (not really a pie, marked for rework: TODO `food/baked-goods #12`) | Canned Pineapple Pie Filling | 4 | - | x | / | x | x | x | 5 / 4 | 20 / 16 | 20 / 16 | 100% / 100% | 100% / 100% |
+| x | Pineapple Pie `fruitsdelight:pineapple_pie` (not really a pie, marked for rework: TODO `baking/baked-goods #12`) | Canned Pineapple Pie Filling | 4 | - | x | / | x | x | x | 5 / 4 | 20 / 16 | 20 / 16 | 100% / 100% | 100% / 100% |
 | x | Slice of Pumpkin Pie `delightful:pumpkin_pie_slice` | Canned Pumpkin Pie Filling | 4 | - | x | / | x | x | x | 3 / 1.8 | 12 / 7.2 | 12 / 7.2 | 100% / 100% | 100% / 100% |
 | x | Slice of Pumpkin Pie `create_central_kitchen:pumpkin_pie_slice` | Canned Pumpkin Pie Filling | 4 | - | x | / | x | x | x | 3 / 1.8 | 12 / 7.2 | 12 / 7.2 | 100% / 100% | 100% / 100% |
 | x | Rose Hip Pie Slice `farmersrespite:rose_hip_pie_slice` | Canned Rose Hip Pie Filling | 4 | - | x | / | x | x | x | 3 / 1.8 | 12 / 7.2 | 12 / 7.2 | 100% / 100% | 100% / 100% |
@@ -506,7 +506,7 @@ Sweet Berry Pie is Farmer's Delight's cheesecake, renamed. Source mods of the sl
   - Rechecked 2026-10-22 in the jars (recipe conditions and class strings): Central Kitchen cherry and truffle from
     Environmental; Delightful blueberry, crimson berry, green apple, nightshade berry from BYG, gloomgourd from The
     Undergarden, source berry from Ars Nouveau. Sweet berry (Farmer's Delight's cheesecake, renamed Sweet Berry Pie)
-    added. Durian and pineapple marked for a rework (not really pies). Open: TODO `food/baked-goods #12`, `#14`.
+    added. Durian and pineapple marked for a rework (not really pies). Open: TODO `baking/baked-goods #12`, `#14`.
 
 ### 2.14 Feasts <a id="feast"></a>
 
@@ -847,7 +847,7 @@ Added 2026-10-20 from the sweet type: jello, custard, pudding, ice cream, gelati
 
 Added 2026-10-20 from the sweet type: cake slices and the one whole edible cake item. All undecided. Canned Goods has its own `canned_goods:canned_cake` (no recipe here, [3.1](#new-sections)); slices could work like the pie fillings.
 
-Wanted (scratchpad 2026-10-21, [TODO](todo/TODO.md) `food/canning #15`): one canned cake with 4 servings (a quarter cake each, fast to eat), made from 1 cake + can, or 4 slices + an additive (sugar, honey) + can. The per-slice rows below stay `/`; which id (Canned Goods' `canned_cake` or a pack can) is still open. The slice audit (remove unobtainable slices) is `food/baked-goods #5`.
+Wanted (scratchpad 2026-10-21, [TODO](todo/TODO.md) `cans/canning #15`): one canned cake with 4 servings (a quarter cake each, fast to eat), made from 1 cake + can, or 4 slices + an additive (sugar, honey) + can. The per-slice rows below stay `/`; which id (Canned Goods' `canned_cake` or a pack can) is still open. The slice audit (remove unobtainable slices) is `baking/baked-goods #5`.
 
 | Want | Item | Can | Input (basic / +additive) | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s | In -> out | Out vs target |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -1613,7 +1613,7 @@ into the pack by hand:
 | chorus_fruit1, tropical_fish1, pufferfish1, posionous_potato1, night_berries1, tough_leather1 | Canned Goods' own cans with no recipe here (Chorus Fruit, Tropical Fish, Pufferfishs, Poisonous Potatos, Night Berries = `canned_spider_eyes`, Tough Jerky = `canned_rotten_flesh`) | same, `kubejs/assets/canned_goods/textures/items/` |
 | cranberries1, raw_cod1, raw_salmon1, raw_beef, raw_mutton, raw_pork | `canned_cranberry`, `canned_raw_cod`, `canned_raw_salmon`, `canned_raw_beef`, `canned_raw_mutton`, `canned_raw_pork` | `kubejs/assets/creativeengineering/textures/item/<id>.png` |
 
-Still to draw (scratchpad 2026-10-21, a priority): a sprite for every built can that borrows one ([TODO](todo/TODO.md) `food/canning #13`).
+Still to draw (scratchpad 2026-10-21, a priority): a sprite for every built can that borrows one ([TODO](todo/TODO.md) `cans/canning #13`).
 
 **Family sprites (2026-10-21):** a can without its own borrows its family's, set per section in `GROUP_SPRITE`
 (gen_can_types.py): raw veggie -> carrot, raw fruit and special -> apple, salad -> cabbage, raw meat -> raw beef, raw
@@ -1652,7 +1652,7 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
 - [ ] **CP-08 sprites:** Canned Raw Beef / Mutton / Pork / Cod / Salmon and Canned Cranberries show their own sprites;
   Canned Raw Chicken and Raw Rabbit show the raw beef can, Canned Cactus Flesh the carrot can, Canned White
   Strawberries and the new fruit cans the apple can, Canned Raw Pike (etc.) the raw salmon can. No missing textures.
-- [ ] **CP-09 sliced inputs (2026-10-20):** 5 Minced Beef, 5 Raw Beef, or a mix -> a full Canned Raw Beef; 8 Raw Chicken
+- [ ] **CP-09 sliced inputs (2026-10-20)** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02, no recipe makes a partly full can; JEI, eating: in game): 5 Minced Beef, 5 Raw Beef, or a mix -> a full Canned Raw Beef; 8 Raw Chicken
   Cuts -> a full Canned Raw Chicken (no bar); 3 Lemon Slices -> Canned Lemon; 8 Cod Slices -> a full Canned Raw Cod.
   JEI shows no recipe making a partly full can. 4 Cantaloupe Slices -> Canned Cantaloupe; a Cantaloupe Slice eats as
   3 hunger with no Resistance. Pumpkin: 3 slices + sugar -> Canned Pumpkin (3 servings).
@@ -1666,23 +1666,23 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   Milk, 4 buckets back; eating a serving with any effect active clears it.
 - [ ] **CP-14 chorus:** Canned Chorus Fruit (3 chorus fruit) teleports on each serving; Canned Ancient Fruit uses the
   apple sprite.
-- [ ] **CP-15 corn:** 6 maize, or 4 + salt -> Canned Corn (2 servings); corn kernels make no can. A knife cuts 1 maize
+- [ ] **CP-15 corn** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-02, SQ-OF-04; crafting: in game): 6 maize, or 4 + salt -> Canned Corn (2 servings); corn kernels make no can. A knife cuts 1 maize
   into 4 kernels.
-- [ ] **CP-16 cheese:** 4 Flaxen Cheese Wedges in a heated Cooking Pot with an empty can in the container slot -> Canned
+- [ ] **CP-16 cheese** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01; the pot run: in game): 4 Flaxen Cheese Wedges in a heated Cooking Pot with an empty can in the container slot -> Canned
   Flaxen Cheese (4 servings); same for Scarlet. No crafting-grid recipe.
-- [ ] **CP-17 bowls:** 2 Creamed Corn + can -> can and 2 bowls back; 6 Pears with Rock Sugar -> 6 bowls back.
-- [ ] **CP-18 coffee:** a Canned Coffee Berries serving gives Caffeinated 10 s and, 80 % of the time, Wither for 2 s.
-- [ ] **CP-19 new cans:** every can of the 2026-10-21 build shows its family sprite (no purple/black) and its JEI
-  recipe; startup log `[cans] registered 227 generated cans`; server log has no `[canning] ... skipped` line.
-- [ ] **CP-20 migrated raw cans:** 8 beetroot -> Canned Beetroot, 6 + salt the same; 3 apples / 2 + sugar; 5 raw beef /
+- [ ] **CP-17 bowls** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01; crafting: in game): 2 Creamed Corn + can -> can and 2 bowls back; 6 Pears with Rock Sugar -> 6 bowls back.
+- [ ] **CP-18 coffee** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-02, wither 40 t at 0.8, caffeinated 200 t; eating: in game): a Canned Coffee Berries serving gives Caffeinated 10 s and, 80 % of the time, Wither for 2 s.
+- [ ] **CP-19 new cans** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-00, SQ-OF-01, `[cans] registered 228 generated cans`, no `skipped` line; sprites, JEI: in game): every can of the 2026-10-21 build shows its family sprite (no purple/black) and its JEI
+  recipe; startup log `[cans] registered 228 generated cans`; server log has no `[canning] ... skipped` line.
+- [ ] **CP-20 migrated raw cans** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02; crafting, eating: in game): 8 beetroot -> Canned Beetroot, 6 + salt the same; 3 apples / 2 + sugar; 5 raw beef /
   4 + bone broth; 4 / 3 + salt Cactus Flesh (the rule; was 4 / 2 + salt). Values unchanged (5 hunger; 2 / 3 / 4 servings). A Canned Banana /
   Glow Berries / Salmonberries serving gives Agility 15 s / Glowing 15 s / Water Breathing 5 s; Canned Raw Chicken
   sometimes Hunger.
-- [ ] **CP-21 Canned Goods values:** AppleSkin on Canned Cake shows 4 hunger and about 0.4 saturation (was 28 / 112);
-  Canned Apples 5 hunger, 1.5 saturation (3 servings); Canned Suspicious Stew 8 hunger (8 servings, Canned Goods' own
+- [ ] **CP-21 Canned Goods values** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02, no can above modifier 10; AppleSkin: in game): AppleSkin on Canned Cake shows 4 hunger and about 0.7 saturation (was 28 / 112;
+  saturation as shown = hunger x modifier x 2); Canned Apples 5 hunger, 3.0 saturation (3 servings); Canned Suspicious Stew 8 hunger (8 servings, Canned Goods' own
   effects still apply). No Canned Goods can shows more saturation than its family's formula gives. Canned Cake: 1 cake
   + can, or 4 slices + sugar -> 4 fast servings.
-- [ ] **CP-22 removed:** Canned Food and the Hot Hot Hotpot are hidden in JEI; a butcher (any level) never offers Canned
+- [ ] **CP-22 removed** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-03, after the trade fix in 8, 0 of 240 level 2 butcher offers; JEI: in game): Canned Food and the Hot Hot Hotpot are hidden in JEI; a butcher (any level) never offers Canned
   Food; the butcher's other trades are still there.
 - [ ] **CP-23 opened filling:** an opened Canned Apple Pie Filling (2 / 4) + Pie Crust gives no result; a full one gives
   an Apple Pie.
@@ -1691,16 +1691,26 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   crafting terminal with the player's inventory (AE2) the recipe works. Canning recipes (empty can + food) still run in
   the mixer.
 - [ ] **CP-25 dough:** 8 Create dough + can -> Canned Dough (8 servings, not edible, servings bar after a craft uses one).
-- [ ] **CP-26 sweet berry pie** (scratch test queued, SQ-01): 4 Slice of Sweet Berry Pie + can -> Canned Sweet Berry Pie Filling (4 servings, 3 hunger,
+- [ ] **CP-26 sweet berry pie** (recipes and can values: scratch server PASSED 2026-10-22; names: in game): 4 Slice of Sweet Berry Pie + can -> Canned Sweet Berry Pie Filling (4 servings, 3 hunger,
   Speed 30 s); full can + pie crust -> Sweet Berry Pie by hand and in the oven (OV-32).
 
 ## 8. History
 
+- 2026-10-22 (second bulk run): SQ-OF-00 to SQ-OF-03 PASS on the scratch server (`[cans] registered 228`). The
+  trade half of SQ-OF-03 failed first: butchers still sold Canned Food (24 of 240 level 2 offers). MoreJS 0.3.0 reads a
+  level range `[1, 5]` as level 1 only (both ends from the first entry), so the `trades.js` Canned Food filter (and the
+  cleric, chef and engineer removals) never reached levels 2 to 5; every range is a real
+  `IntRange(1, 5)` now, 0 offers left. CP-09, CP-15 to CP-22 keep their sprite, JEI and eating halves.
+- 2026-10-22: server-side checks queued as SQ-OF-00 to SQ-OF-03 ([testing/scratch_queue.md](testing/scratch_queue.md),
+  `tools/older_food_probe.js`, `/ofprobe cans|canextra|canremoved`): every can of can_types.json against its food values,
+  effects, servings and recipe ids; the TODO rows' named values (raw-can effects, coffee, pumpkin, cactus, Canned Cake);
+  no partly full can, Canned Food or Hot Hot Hotpot recipe, no Canned Food butcher trade. Covers the server half of CP-09,
+  CP-15 to CP-22; sprites, JEI and eating stay in game. CP-19 says 227 registered; can_types.json now has 228 non-existing cans (the probe prints the expected count).
 - 2026-10-21 (audit): `tools/can_audit.py` fills Food / Craft sum / Canned h/s, Food audit and two new columns
   (In -> out, Out vs target) for every row with a can, and generates 4.3 for all 261 cans. Findings: golden cans lose
   hunger (71 to 111%: the required honey bottle counts as input), feasts run 55% (Stuffed Hoglin, 11 plates -> 6) to
   150% (4-serving feasts -> 6), additive soups about 3x, normal strawberries 83% hunger. White Strawberries got their
-  numbers: own serving 7 / 5, 140% hunger (TODO `food/canning #6`).
+  numbers: own serving 7 / 5, 140% hunger (TODO `cans/canning #6`).
 - 2026-10-21 (later): Canned Food (also its butcher trade) and the Hot Hot Hotpot removed (removed_items.js, trades.js);
   Cactus Flesh follows the sizing rule (4 / 3+1); a maize cuts into 4 kernels and kernels are not canned (row `/`);
   coffee berries keep their Wither at 2 s; Fig and Lemon Tart cans are pie fillings (`canned_fig_pie_filling`,

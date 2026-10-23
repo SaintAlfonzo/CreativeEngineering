@@ -52,7 +52,7 @@
 
     EntityEvents.hurt(event => {
         let attacker
-        try { attacker = event.getSource().getEntity() } catch (err) { return }
+        try { attacker = event.getSource().getActual() } catch (err) { return } // KubeJS renames DamageSource.getEntity() to getActual()
         if (!attacker || !(attacker instanceof $Player)) return
 
         let stack

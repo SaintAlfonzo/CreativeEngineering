@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Cooking for Blockheads 13.3.4 kitchen corner gets a counter's storage ({@link CfbCornerStorage}, TODO food/kitchen
+ * Cooking for Blockheads 13.3.4 kitchen corner gets a counter's storage ({@link CfbCornerStorage}, TODO cooking/kitchen
  * #15). As a {@link BalmContainerProvider} it gets Balm's item handler (hoppers) and CfB's drop-on-break; the extra
  * {@code getProviders} entry lets the cooking table use its contents, as a counter's.
  */

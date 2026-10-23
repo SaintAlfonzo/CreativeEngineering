@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    [
+      {
+        "tag": "forge:crops/cauliflower"
+      },
+      {
+        "tag": "forge:crops/potato"
+      },
+      {
+        "tag": "forge:crops/zucchini"
+      }
+    ],
+    {
+      "tag": "forge:crops/onion"
+    },
+    {
+      "tag": "forge:grain"
+    }
+  ],
+  "result": {
+    "item": "veggiesdelight:raw_vegetarian_patty"
+  }
+}

@@ -43,13 +43,13 @@ Open rows: #1, #3, #5, #6, #8, #10, #12 (Planned), #2, #4 (Bug), #9 (In Progress
 4. **#12 SoL pace and benefits** on top of #1's complexities (it changes the same toml as #4).
 5. **#5 placed pies and cakes** (patcherMod), any time after #1C (it needs complexities for non-food block items).
 
-Rows of other subfamilies that depend on this: `food/canning #1`, `#3` (can values follow #1), `food/canning #4`
-(effect passthrough, waits on D6), `food/meals #9` (gold food cost, look again after #3).
+Rows of other subfamilies that depend on this: `cans/canning #1`, `#3` (can values follow #1), `cans/canning #4`
+(effect passthrough, waits on D6), `dishes/meals #9` (gold food cost, look again after #3).
 
 ---
 
 ## types-and-tuning #4: Spice of Life config
-Status Bug / Work config / `food/types-and-tuning #4`
+Status Bug (the pack config is in place: `defaultconfigs/solapplepie-server.toml` 2026-10-22, same file as `configs_edited/server_config/`, new-world values checked on the scratch server by SQ-CF-01; the speed benefit stays open for the tier rework) / Work config / `food/types-and-tuning #4`
 
 ### Goal
 One pack-level Spice of Life server config that every new world gets, with the broken benefit fixed.
@@ -104,7 +104,7 @@ Config keys verified in the jar: `thresholds`, `benefitsUnparsed`, `complexityUn
 ---
 
 ## types-and-tuning #2: Canned Goods data broken
-Status Bug / Work data / `food/types-and-tuning #2`
+Status Testing (fixed 2026-10-21, see the TODO row) / Work data / `food/types-and-tuning #2`
 
 ### Goal
 No can in play with Canned Goods' broken values (modifiers 1 to 42, crossed ids, meat flags, amplified effects).
@@ -151,7 +151,7 @@ No can in play with Canned Goods' broken values (modifiers 1 to 42, crossed ids,
    `client_scripts/jeichanges.js` line 5, tags stripped in `server_scripts/_lib/recipe_scan.js` line 50, red "REMOVED
    ITEM" tooltip). Keys: `canned_enchanted_apples`, `canned_suspicious_stew`, `canned_carrots`, `canned_pumpkin_pie`,
    `canned_beetroot_soup`, `canned_apples`, `canned_beets`, `canned_potatos`, `canned_melon_slice`,
-   `canned_sweet_berries`, `canned_glow_berries`, `hot_hot_hotpot`, and `canned_cake` **unless** `food/canning #15`
+   `canned_sweet_berries`, `canned_glow_berries`, `hot_hot_hotpot`, and `canned_cake` **unless** `cans/canning #15`
    takes it (its brief recommends reusing `canned_cake`: then leave it out of the list). Then move those keys from
    food_types.json `types.canned` / `canned` into `excluded` with reason `"removed item (Canned Goods leftover)"` and
    drop them from can_servings.json (via `tools/gen_can_types.py`'s preserved entries, not by hand, if the tool
@@ -246,7 +246,7 @@ vanilla.
 ### Decisions
 - D2 enchanted foods: recommend 4 / 1.2 (vanilla) and keep the notch effects.
 - Golden carrot: recommend fully vanilla (6 / 1.2, no effects, not always edible): it costs 8 nuggets (the pack makes
-  it from rose gold nuggets, `food/meals #9`), a ninth of a golden apple, so golden-apple effects on it are cheap
+  it from rose gold nuggets, `dishes/meals #9`), a ninth of a golden apple, so golden-apple effects on it are cheap
   healing. Alternative: 6 / 1.2 and keep the effects.
 - Stack size of the notch apple: leave the policy's 16.
 
@@ -455,7 +455,7 @@ food_types.json), with named exceptions; cans follow their source.
   value writers already at startup: cans.js (generated cans + 20 Canned Goods overrides), food_values.js (whole-food
   copies, 1 entry), alcohol_drinks.js (44 drinks: 1 / 0, Intoxication, Nausea).
 - Canned parity has moved: it is no longer the 3.5 rule but `tools/gen_can_types.py` SECTIONS (per-section
-  multipliers and servings, can_parity.md 3.1, 4.2), owned by `food/canning #1` / `#3`. What #1 still owes cans:
+  multipliers and servings, can_parity.md 3.1, 4.2), owned by `cans/canning #1` / `#3`. What #1 still owes cans:
   tuned source values (they flow in on the next `gen_can_types.py` run) and the SoL value per can (D5).
 - SoL internals **(jar)**: `ConfigHandler.complexityMap` is a public static `Map<FoodInstance, Double>`, replaced at
   `ServerStartingEvent` from the config; `FoodList.getComplexity(FoodInstance)` reads the map first, then the formula
@@ -545,7 +545,7 @@ Farmer's Delight ones are not in the dict yet: add `ef.comfort = 'farmersdelight
   (pufferfish, spider eye, poisonous potato, rotten flesh: that is their point).
 - D5: accept; value cans at the source's SoL.
 - D6: 30% Hunger 30 s on `raw/meat` and `raw/meat/sliced` (Farmer's Delight's own raw-meat rule); not on raw fish
-  (sushi and the fish cans use it raw). Pairs with `food/canning #4` (raw can effect passthrough).
+  (sushi and the fish cans use it raw). Pairs with `cans/canning #4` (raw can effect passthrough).
 
 ### Gotchas
 - A startup change needs a restart and then a new `/dumpfood` before the generator: two restarts per value round.
@@ -607,7 +607,7 @@ stew, kangaroo stew, miso, strider moss stew, suspicious stew) need tag resoluti
 ### Decisions
 - Rule multiplier: recommend 1.5, with the band clamp.
 - Bayberry Soup: recommend re-type as `drink` (bottle, drink animation) and leave its values.
-- Pack recipe changes (bone broth in shapeless soups, `food/ingredients #4`) change the sums: run the report after
+- Pack recipe changes (bone broth in shapeless soups, `dishes/ingredients #4`) change the sums: run the report after
   those land too.
 
 ### Gotchas
@@ -674,7 +674,13 @@ knockback resistance). food.md 3.5's ladder (1 to 26) was sized for the per-type
 ---
 
 ## types-and-tuning #5: Placed pies and non-vanilla cakes don't count for SoL
-Status Planned / Work patcherMod / `food/types-and-tuning #5`
+Status Testing / Work patcherMod / `food/types-and-tuning #5`
+
+BUILT 2026-10-22 (patcherMod jar in `mods/` since 11:06, not run; scratch server PASSED 2026-10-22 for load and map (SQ-SOL-01), the bite itself is client-only FO-43), differing from the build plan below: the mixin is on `ServerPlayerGameMode#useItemOn` (m_7179_;
+server only, so no side check and Create's deployer never reaches it), not `BlockStateBase#use`; cakes without a
+slice item count as `farmersdelight:cake_slice` (mirrors the vanilla cake; SoL drops non-food items on load, so a
+cake block item can't be recorded); map at `generation_scripts/food/placed_food_slices.json`. See food.md 4.2
+finding 5, FO-43.
 
 ### Goal
 A bite from a placed pie or cake counts as eating its slice, like the vanilla cake does.
@@ -724,8 +730,8 @@ A bite from a placed pie or cake counts as eating its slice, like the vanilla ca
 - Don't double-count `minecraft:cake`: SoL already records it.
 
 ### Tests
-- FO-43: bite a placed Apple Pie and a Golden Cake; the food book's eaten list shows Slice of Apple Pie and Golden
-  Cake; a knife on the pie gives a slice and records nothing.
+- FO-43 (as built, in food.md 7): bite a placed Apple Pie and a Golden Cake; the food book's eaten list shows Slice
+  of Apple Pie and Slice of Cake; a knife on the pie gives a slice and records nothing.
 
 ---
 

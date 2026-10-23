@@ -13,6 +13,7 @@ Written 2026-10-05. Test prefix `NE-`.
 | Emu nest (`EmuNests`, Alex's Mobs emus) | DEPLOYED in patcherMod 1.0.2 (old id `creativeengineering:emu_nest`), never tested in game |
 | Duck and goose nests (`WaterfowlNests`, Untitled Duck Mod) | moved to Incubation Additions (`incubation_additions:duck_nest` / `goose_nest`); DEPLOYED with pack 1.0.6 (2026-10-14) (the 2026-10-05 staging that had them under the old patcherMod ids was rebuilt before it went out, so the old duck/goose ids never reached a player); scratch-server verified 2026-10-05 |
 | Foreign-nest NPE guard (`LayEggInNestGoalMixin`) | DEPLOYED with the emu nest (1.0.2) |
+| Goose golden egg (`goldenegg/`, 3.11; [vintage_delight.md](vintage_delight.md) §2.5) | BUILT 2026-10-23 in 1.1.0 (`./gradlew :incubationAdditions:build` passes; `DropSpot` logic test 9/9 in plain Java); not in `mods/` yet, not run in game (NE-15, NE-16) |
 | Textures | emu, duck and goose eggs have their own sheets (but the duck and goose sheets are byte-identical copies of Incubation's `duck_eggs.png` / `turkey_eggs.png` and the emu sheet is a recolour of `turkey_eggs.png`, checked 2026-10-21: see 4); duck/goose nest base + item textures are swappable copies of the hay nest; the emu nest base + item still use Incubation's twig nest. All in the Incubation Additions jar; override from `kubejs/assets/incubation_additions/`. See 2.3 |
 
 **Files to open first:** [EmuNests.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/nest/EmuNests.java),
@@ -20,7 +21,8 @@ Written 2026-10-05. Test prefix `NE-`.
 [LayEggInNestGoalMixin.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/LayEggInNestGoalMixin.java),
 [IncubationAdditions.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/IncubationAdditions.java) (gating, packs).
 
-**Knobs:** none. There is no CEConfig section. Egg timers are the mobs' own (6000 to 12000 ticks).
+**Knobs:** `config/incubation_additions-common.toml`, `[goose] goldenEggChance` (1 in N, default 1000, 0 = off; since
+1.1.0). No CEConfig section. Egg timers are the mobs' own (6000 to 12000 ticks).
 
 **How to measure:** put a nest in a pen with the bird, wait one lay cycle (5 to 10 minutes), check the
 nest fills instead of an egg dropping. A hopper under the nest pulls the eggs out.
@@ -201,6 +203,18 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 10. **KubeJS keeps only pack-level bits:** `i.*` / `b.*` keys for the nests and crates in the dicts,
    compost values. The nest recipes (`misc_mods.js`) and the `bird_nests` tag (`blocktags.js`) moved
    into the mod.
+11. **Goose golden egg** (1.1.0, Untitled Duck Mod set, only while Vintage Delight is loaded and
+   `vintagedelight:golden_egg` exists). [GooseEntityEggLayerMixin](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/GooseEntityEggLayerMixin.java):
+   at the head of `aiStep`, on the first tick the egg timer is 400 or less (the nest goal's window, before
+   the goals run that tick), it rolls `goldenEggChance` once per egg. A win sets a "golden egg due" flag:
+   `LayEggInNestGoalMixin` makes `canEggBeLaid` false for that goose, so it never starts or continues a nest
+   walk, and the `spawnAtLocation` call at 0 is redirected to `goldenegg.GoldenGooseEgg.drop`, which drops the
+   Golden Egg block item instead of the goose egg. The goose's own sound before it and its 6000 + rand(6000)
+   reset after it are unchanged. Drop spot (`goldenegg.DropSpot`): standable spots within 3 blocks (circle,
+   one block up or down, nearest first) in the goose's line of sight, scored by solid blocks among the 8
+   neighbours at foot and head height; the first with 0 wins, else the lowest if it beats the goose's own
+   spot, else where it stands. Not saved: a goose reloaded inside the 400-tick window rolls again. If the item
+   is gone at drop time the normal egg drops.
 
 ## 4. Limits and decisions
 
@@ -311,6 +325,9 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 - [ ] **NE-13 duck mod egg sprites:** hold a duck egg and a goose egg -> the new teal duck egg and pale pink goose egg sprites, not the duck mod's originals; also when thrown (thrown eggs use the item model).
 - [ ] **NE-14 egg crates:** 9 duck eggs -> Duck Egg Crate, crate -> 9 duck eggs; same for goose; crates show the new top/side textures with the chicken crate's bottom, mine fastest with an axe, drop themselves.
 
+- [ ] **NE-15 goose golden egg** (VTD-32): set `goldenEggChance` to 1, pen a goose with a goose nest -> it drops a Golden Egg on the ground at lay time, never walks to the nest, the nest stays empty. Set it to 0 -> geese lay into nests as before. Without Vintage Delight nothing changes.
+- [ ] **NE-16 golden egg away from walls** (VTD-32a): chance 1; a goose against a wall or in a corner with open ground within 3 blocks drops the egg on the open ground; in a closed 1x1 pen it drops where it stands; never on the far side of a fence.
+
 ## 8. History
 
 - 2026-09-29: emu nest built (EmuNests, emu EggLayer mixin, foreign-nest guard). Shipped in the
@@ -336,3 +353,5 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
   Both jars booted in single player 2026-10-11 without errors.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- 2026-10-23: 1.1.0, goose golden egg for the Vintage Delight port (3.11, config `goldenEggChance`). Built,
+  `DropSpot` logic test 9/9; not in `mods/`. NE-15, NE-16 added.

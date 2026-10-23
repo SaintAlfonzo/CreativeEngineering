@@ -147,10 +147,10 @@ global.toolEffects.held(i.dragon_shovel, { effect: 'alexsmobs:knockback_resistan
 global.toolEffects.onHit(i.dragon_trident, { effect: 'minecraft:mining_fatigue', amplifier: 1, duration: 60 })
 global.toolEffects.held(i.dragon_trident, { effect: 'minecraft:slow_falling', amplifier: 1, duration: 50 })
 
-global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:invisibility', amplifier: 1, duration: 60 })
-global.toolEffects.held(i.dragon_bow, { effect: 'minecraft:slowness', amplifier: 3, duration: 50 })
-global.toolEffects.held(i.dragon_bow, { effect: 'minecraft:glowing', amplifier: 2, duration: 500 })
+global.toolEffects.held(i.dragon_bow, { effect: 'minecraft:invisibility', amplifier: 0, duration: 60 })
+global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:slowness', amplifier: 3, duration: 50 })
+global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:glowing', amplifier: 0, duration: 500 })
 
-global.toolEffects.onHit(i.dragon_crossbow, { effect: 'minecraft:resistance', amplifier: 1, duration: 60 })
-global.toolEffects.held(i.dragon_crossbow, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
-global.toolEffects.held(i.dragon_crossbow, { effect: 'minecraft:weakness', amplifier: 2, duration: 250 })
+global.toolEffects.held(i.dragon_crossbow, { effect: 'minecraft:resistance', amplifier: 1, duration: 60 })
+global.toolEffects.onHit(i.dragon_crossbow, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
+global.toolEffects.onHit(i.dragon_crossbow, { effect: 'minecraft:weakness', amplifier: 2, duration: 250 })

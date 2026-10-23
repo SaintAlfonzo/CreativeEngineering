@@ -13,8 +13,8 @@ Quark Delight 1.0.0 (all in `scratchpad/jars`).
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #1 | Smoker recipe | Planned | **probably nothing to build**: Quark makes the vanilla smoker; confirm with RC-01 |
-| #2 | Vanilla cake removed | Planned | **nothing to build**: three mod recipes and the oven make `minecraft:cake`; folds into `food/baked-goods #1` |
+| #1 | Smoker recipe | Done 2026-10-22 (comment only) | **probably nothing to build**: Quark makes the vanilla smoker; confirm with RC-01 |
+| #2 | Vanilla cake removed | Done 2026-10-22 (nothing built; the baking overhaul covers it) | **nothing to build**: three mod recipes and the oven make `minecraft:cake`; folds into `baking/baked-goods #1` |
 | #3 | Comment and id fixes | Planned | tiny, plus a cleanup: four of the "replaced" FD recipes are identical to FD's own |
 
 **Findings that change the rows:**
@@ -33,8 +33,8 @@ Quark Delight 1.0.0 (all in `scratchpad/jars`).
 - **#3: FD's grilled salmon, bacon and eggs, salmon roll and cod roll are already shapeless,** with the same
   ingredients the pack re-adds. So the "replace shaped with shapeless" blocks only rename the recipe ids.
 
-Build order: #3 in one `/reload`. #1 and #2 need only the in-game checks (RC-01, RC-02) and then closing. `food/baked-goods
-#1` step 3 ([brief](food_baked-goods.md)) will replace the cake recipes anyway.
+Build order: #3 in one `/reload`. #1 and #2 need only the in-game checks (RC-01, RC-02) and then closing. `baking/baked-goods
+#1` step 3 ([brief](baking_baked-goods.md)) will replace the cake recipes anyway.
 
 ---
 
@@ -113,12 +113,12 @@ Confirm that `minecraft:cake` stays craftable with vanilla's recipe gone, and cl
   - `create:crafting/curiosities/cake`: `" M " / "SES" / " P "`, milk bucket, 2 sugar, `#forge:eggs`, `#forge:dough`;
   - `creativeengineering:baking/cake`: oven, 3 milk + cake base, cake pan (baking.js 96, [oven.md](../oven.md)).
   - Vanilla's own was 3 milk buckets, 2 sugar, egg, 3 wheat: covered by the first two, which take bottles as well.
-- `food/baked-goods #1` step 3 ([brief](food_baked-goods.md), "Cakes still built from egg + sugar + wheat/dough")
+- `baking/baked-goods #1` step 3 ([brief](baking_baked-goods.md), "Cakes still built from egg + sugar + wheat/dough")
   plans to replace FD's, Neapolitan's and Create's cake recipes with a shaped cake-base recipe.
 
 ### Build
 Nothing now. Keep the removal, and change the comment to "Vanilla's cake: FD's cake_from_milk_bottle and
-neapolitan:cake are the same grid with milk tags; food/baked-goods #1 replaces all hand cakes". Close the row after RC-02.
+neapolitan:cake are the same grid with milk tags; baking/baked-goods #1 replaces all hand cakes". Close the row after RC-02.
 FD and Neapolitan's two identical grids conflict with each other, which is harmless (one wins). Leave that to
 baked-goods #1, which removes both.
 

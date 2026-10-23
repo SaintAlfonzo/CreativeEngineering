@@ -40,7 +40,7 @@ nones = [p for p, d in files.items() if d['type'] == 'forge:none']
 rem = [d for d in files.values() if d['type'] == 'forge:remove_features']
 want_nones = {m for c in cfg['crops'].values() for m in c.get('disable_modifiers', [])}
 want_rem = sorted({f for c in cfg['crops'].values() for f in c.get('remove_features', [])})
-ok = len(adds) == len(cfg['crops']) and len(nones) == len(want_nones) and len(rem) == 1 and rem[0]['features'] == want_rem
+ok = len(adds) == sum(1 for c in cfg['crops'].values() if c.get('features')) and len(nones) == len(want_nones) and len(rem) == 1 and rem[0]['features'] == want_rem
 for d in adds:
     ok &= d['step'] == 'vegetal_decoration' and d['biomes'].startswith('#creativeengineering:wild_crops/') and bool(d['features'])
 print(f"{len(cfg['crops'])} crop tags match the generator" if not bad else f'{bad} tags differ')

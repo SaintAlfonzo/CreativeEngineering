@@ -34,7 +34,7 @@ Geode+ (`geodeforge-1.1.8-1.19.2`), Botania 1.19.2-440.2 (`BaubleBoxItem`, `Baub
 Build order: #1 (one `/reload`). #3 rides the next patcherMod build. #4 and #2 together, after a design pass (both
 are "what for" decisions), with a restart for the new items.
 
-Related rows: `gear/potions #4` (placeholder reagents: Magic Resistance on amethyst) and `#7` (potions for unbrewable
+Related rows: `potions/potions #4` (placeholder reagents: Magic Resistance on amethyst) and `#7` (potions for unbrewable
 effects) could use the shards too. `engineering/sawmill-and-components` (the metal components #4 mirrors).
 `recipes/progression #1` (Explorer's Compass is one of its "no recipe" items). `tooling/conventions` (dict duplicates
 `i.explorers_compass` / `i.explore_compass`, recipes_magic.md F3).
@@ -286,7 +286,7 @@ Armor and potion uses for the Geode+ shards.
 - **Potions, built:** [potions.js](../../kubejs/startup_scripts/cooking/potions.js) 59-65 (`CE_POTION_MIXES`):
   thick + wrappist -> `creativeengineering:long_reach`, thick + celestite -> `creativeengineering:phantom_bane`, each
   with redstone / glowstone steps; [potions.md](../potions.md) 80-81, test PO-04. Magic Resistance still uses
-  amethyst as a placeholder (potions.js 72, `gear/potions #4`).
+  amethyst as a placeholder (potions.js 72, `potions/potions #4`).
 - **Armor:** Armor Trims 1.3.3 has no data-driven trim materials (only templates and loot modifiers in its jar). The
   shards can't become trim colours without a mixin.
 
@@ -294,7 +294,7 @@ Armor and potion uses for the Geode+ shards.
 1. Fold the armor half into #4: the two "warding" components (celestite, wrappist) go into armor recipes. Which armor
    is part of #4's decision. A proposal: celestite into the felsic set's assembly (mid game; Phantom Bane theme) and
    wrappist into the dragon set (End).
-2. Optional potion follow-up with `gear/potions #4`: if Magic Resistance needs a non-placeholder reagent, a third
+2. Optional potion follow-up with `potions/potions #4`: if Magic Resistance needs a non-placeholder reagent, a third
    Geode+ material isn't available. Use a warding component, or leave amethyst. Recommendation: leave it to that row.
 3. Docs: potions.md already covers the potions. Add the armor uses to the gear writeup that gets them.
 

@@ -93,10 +93,18 @@ public class CreativeEngineering
         // Oven: FD cooking-pot style baking block + the creativeengineering:baking recipe type
         // (oven/ package; feature_writeup/oven.md). Recipes and tags are KubeJS.
         com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.register(modEventBus);
+        // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
+        com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinSerializers.register(modEventBus);
+        if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinCurios.class);
+        }
         // Remainder buffer: pot/kettle/oven keep ingredient leftovers in two slots instead of throwing them
         // (cooking/ package + mixin/*RemainderMixin; feature_writeup/remainder_buffer.md). Saved as an attached cap.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferStorage.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CfbCornerStorage.class);
+        // Sacks work like bundles in inventory screens (compat.SackBundle, mixin.SupplementariesSackItemMixin):
+        // the scroll-to-rotate packet. The scroll listener is compat.SackBundleScroll (client).
+        com.SaintAlfonzo.creativeengineering.compat.SackBundle.register();
         // Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)
@@ -104,6 +112,13 @@ public class CreativeEngineering
 
         // Register IECompat for FORGE bus events (e.g. onServerAboutToStart)
         MinecraftForge.EVENT_BUS.register(IECompat.class);
+
+        // Polymorph recipe selection in the Sophisticated crafting upgrade, the IE Engineer's
+        // Crafting Table and the Pretty Pipes Crafting Terminal (server half)
+        if (net.minecraftforge.fml.ModList.get().isLoaded("polymorph")) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.SophisticatedPolymorphCompat.class);
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CraftingMenuPolymorphCompat.class);
+        }
 
         // Damage-reduction half of creativeengineering:magic_resistance (the MobEffect
         // itself is registered in KubeJS - startup_scripts/magic/magic_resistance.js)
@@ -138,6 +153,10 @@ public class CreativeEngineering
         // reload + the "Servings: x / y" tooltip line. Eating and the bar are mixin.ItemStackCanServingsMixin.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServings.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServingsTooltip.class);
+
+        // Bites from placed pies and cakes count for Spice of Life (food.PlacedFoodSol; the bite itself is
+        // mixin.ServerPlayerGameModePlacedFoodMixin). This loads its cake -> slice map at server start.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.PlacedFoodSol.class);
 
         // Framed / copycat blocks: say on BlockRunner's speed tooltip line whether they walk like
         // their camo (surface.CamoSpeed, CEConfig.Surface.Camouflage).
@@ -434,6 +453,10 @@ public class CreativeEngineering
             if (net.minecraftforge.fml.ModList.get().isLoaded("trashslot")) {
                 com.SaintAlfonzo.creativeengineering.compat.TrashSlotCompat.register();
             }
+            if (net.minecraftforge.fml.ModList.get().isLoaded("polymorph")) {
+                com.SaintAlfonzo.creativeengineering.compat.SophisticatedPolymorphClient.register();
+                com.SaintAlfonzo.creativeengineering.compat.CraftingMenuPolymorphClient.register();
+            }
             com.SaintAlfonzo.creativeengineering.shield.client.TierShieldClient.setup(event);
             event.enqueueWork(() -> net.minecraft.client.gui.screens.MenuScreens.register(
                     com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.OVEN_MENU.get(),
@@ -448,167 +471,3 @@ public class CreativeEngineering
         }
     }
 }
-
-/*	package com.SaintAlfonzo.creativeengineering;
-	
-	import com.SaintAlfonzo.creativeengineering.compat.IECompat;
-	import net.minecraft.world.item.CreativeModeTab;
-	import com.SaintAlfonzo.creativeengineering.items.CreativeEngineeringItems;
-	import com.mojang.logging.LogUtils;
-	import net.minecraft.client.Minecraft;
-	import net.minecraft.world.item.BlockItem;
-	import net.minecraft.world.item.CreativeModeTab;
-	import net.minecraft.world.item.Item;
-	import net.minecraft.world.level.block.Block;
-	import net.minecraft.world.level.block.Blocks;
-	import net.minecraft.world.level.block.state.BlockBehaviour;
-	import net.minecraft.world.level.material.Material;
-	import net.minecraftforge.api.distmarker.Dist;
-	import net.minecraftforge.common.MinecraftForge;
-	import net.minecraftforge.eventbus.api.IEventBus;
-	import net.minecraftforge.eventbus.api.SubscribeEvent;
-	import net.minecraftforge.fml.ModLoadingContext;
-	import net.minecraftforge.fml.InterModComms;
-	import net.minecraftforge.fml.common.Mod;
-	import net.minecraftforge.fml.config.ModConfig;
-	import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-	import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-	import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-	import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-	import net.minecraftforge.event.server.ServerStartingEvent;
-	import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-	import net.minecraftforge.registries.DeferredRegister;
-	import net.minecraftforge.registries.ForgeRegistries;
-	import net.minecraftforge.registries.RegistryObject;
-	import org.slf4j.Logger;
-	import net.minecraft.core.Direction;
-	import net.minecraft.resources.ResourceLocation;
-	import net.minecraft.world.item.ItemStack;
-	import net.minecraftforge.common.capabilities.Capability;
-	import net.minecraftforge.common.capabilities.ForgeCapabilities;
-	import net.minecraftforge.common.capabilities.ICapabilityProvider;
-	import net.minecraftforge.common.util.LazyOptional;
-	import net.minecraftforge.event.AttachCapabilitiesEvent;
-	import net.minecraftforge.eventbus.api.SubscribeEvent;
-	import com.SaintAlfonzo.creativeengineering.items.fluid.SawdustFalseFluidHandler;
-	import javax.annotation.Nonnull;
-	import javax.annotation.Nullable;
-	import net.minecraft.core.Registry;
-	import net.minecraft.tags.TagKey;
-	import blusunrize.immersiveengineering.api.IEApi;
-	import blusunrize.immersiveengineering.api.IETags;
-	import net.minecraftforge.fml.ModList;
-	import net.minecraftforge.event.server.ServerAboutToStartEvent;
-
-	// The value here should match an entry in the META-INF/mods.toml file
-	@Mod(CreativeEngineering.MODID)
-	public class CreativeEngineering
-	{
-		  // Define mod id in a common place for everything to reference
-		  public static final String MODID = "creativeengineering";
-		  // Directly reference a slf4j logger
-		  private static final Logger LOGGER = LogUtils.getLogger();
-		  // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
-		  public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-		  // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
-
-		  // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
-		  //public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block", () -> new Block(BlockBehaviour.Properties.of(Material.STONE)));
-		  // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
-		  //public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
-
-		  public CreativeEngineering() {
-					IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-					modEventBus.addListener(this::commonSetup);
-
-					//BLOCKS.register(modEventBus);
-					CreativeEngineeringItems.register(modEventBus);
-
-					MinecraftForge.EVENT_BUS.register(this);
-					MinecraftForge.EVENT_BUS.register(IECompat.class);
-			}
-
-		  private void commonSetup(final FMLCommonSetupEvent event)
-			{
-					LOGGER.info("CommonSetup starting");
-					IECompat.register();
-					LOGGER.info("CreativeEngineering setup complete");
-			}
-
-		  @SubscribeEvent(priority = net.minecraftforge.eventbus.api.EventPriority.LOWEST)
-			public void onServerStarted(net.minecraftforge.event.server.ServerStartedEvent event)
-			{
-					// --- your existing debug logging, unchanged ---
-					LOGGER.info("=== prefixToIngotMap at server start ===");
-					blusunrize.immersiveengineering.api.IEApi.prefixToIngotMap.forEach((k, v) -> {
-						  LOGGER.info("  {} -> {}", k, java.util.Arrays.toString(v));
-					});
-
-					net.minecraft.core.RegistryAccess registryAccess = event.getServer().registryAccess();
-					var itemRegistry = registryAccess.registryOrThrow(Registry.ITEM_REGISTRY);
-
-					String[] testIngotMetals = {"iron", "copper", "gold", "steel"};
-					for (String metal : testIngotMetals) {
-						  var ingotTag = TagKey.create(Registry.ITEM_REGISTRY,
-						          new ResourceLocation("forge", "ingots/" + metal));
-						  var items = blusunrize.immersiveengineering.api.utils.TagUtils
-						          .elementStream(itemRegistry, ingotTag)
-						          .toList();
-						  LOGGER.info("forge:ingots/{} contains: {}", metal, items);
-					}
-			}
-			
-			@SubscribeEvent(priority = net.minecraftforge.eventbus.api.EventPriority.LOWEST)
-				public static void onServerAboutToStart(ServerAboutToStartEvent event) {
-						if (!ModList.get().isLoaded("immersiveengineering")) return;
-						LOGGER.info("Overriding prefixToIngotMap at LOWEST priority ServerAboutToStart");
-						IEApi.prefixToIngotMap.put("wires",         new Integer[]{2, 9});
-						IEApi.prefixToIngotMap.put("rods",          new Integer[]{2, 9});
-						IEApi.prefixToIngotMap.put("springs",       new Integer[]{2, 9});
-						IEApi.prefixToIngotMap.put("small_springs", new Integer[]{2, 9});
-						LOGGER.info("wires now:         {}", java.util.Arrays.toString(IEApi.prefixToIngotMap.get("wires")));
-						LOGGER.info("rods now:          {}", java.util.Arrays.toString(IEApi.prefixToIngotMap.get("rods")));
-						LOGGER.info("springs now:       {}", java.util.Arrays.toString(IEApi.prefixToIngotMap.get("springs")));
-						LOGGER.info("small_springs now: {}", java.util.Arrays.toString(IEApi.prefixToIngotMap.get("small_springs")));
-				}
-
-		  // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-		  @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-		  public static class ClientModEvents
-		  {
-		      @SubscribeEvent
-		      public static void onClientSetup(FMLClientSetupEvent event)
-		      {
-		          // Some client setup code
-		          LOGGER.info("HELLO FROM CLIENT SETUP");
-		          LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-		      }
-		  }
-		  
-		  @Mod.EventBusSubscriber(modid = CreativeEngineering.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-			public static class CapabilityEvents {
-
-		  @SubscribeEvent
-		  public static void attachCaps(AttachCapabilitiesEvent<ItemStack> event) {
-		      if (event.getObject().getItem() == 
-		          net.minecraftforge.registries.ForgeRegistries.ITEMS
-		              .getValue(new net.minecraft.resources.ResourceLocation("immersiveengineering", "dust_wood"))) {
-		          event.addCapability(
-		              new net.minecraft.resources.ResourceLocation("creativeengineering", "sawdust_fluid"),
-		              new ICapabilityProvider() {
-		                  private final LazyOptional<SawdustFalseFluidHandler> handler =
-		                      LazyOptional.of(() -> new SawdustFalseFluidHandler(event.getObject()));
-
-		                  @Nonnull
-		                  @Override
-		                  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-		                      if (cap == ForgeCapabilities.FLUID_HANDLER_ITEM)
-		                          return handler.cast();
-		                      return LazyOptional.empty();
-		                  }
-		              }
-		          );
-		       }
-				}
-		}
-}*/

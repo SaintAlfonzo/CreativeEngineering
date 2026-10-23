@@ -162,7 +162,7 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   output, input and process (`creativeengineering:createcrushing/...` and so on) unless an id is given.
 - Blueprint items (`blueprints.js`): each category from a Create empty schematic, most also from paper + dye (the
   original IE shape); any blueprint + an empty schematic → 2 copies. IE's molds blueprint recipe is replaced.
-- `resource_blocks.js` from line 257 is the old `global.CE` version of the file, commented out ([TODO](todo/TODO.md) `tooling/conventions #3`).
+- The old commented-out `global.CE` version of `resource_blocks.js` (from line 257) was deleted 2026-10-22 ([TODO](todo/TODO.md) `tooling/conventions #3`).
 
 ## 4. Limits and decisions
 
@@ -194,7 +194,7 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   springs and an iron block); the vehicle link step ids say `step2_ingot` for a nugget step.
 - **F9. Thunder detector filling NBT** omits `Bottle:"REGULAR"`, so splash and lingering mundane potion fluid probably
   match too (Create's fluid NBT match is partial; not checked).
-- **F10. Old code left in:** the commented-out `global.CE` copy in `resource_blocks.js` (230 lines).
+- **F10. Old code:** the commented-out `global.CE` copy in `resource_blocks.js` (230 lines) was deleted 2026-10-22.
 - **F11. Create add-on machines on components (scratchpad 2026-10-21).** Wanted: mechanical arm on zinc components and
   springs; helve hammer on a netherite block and mechanical components; centrifuge, curving press and coiler on zinc
   components; compressor on copper components; extruder on netherite components; laser cutter on a lens, precision

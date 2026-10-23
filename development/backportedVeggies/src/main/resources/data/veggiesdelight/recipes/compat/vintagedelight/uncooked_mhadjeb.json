@@ -1,0 +1,32 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "vintagedelight"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dough"
+    },
+    {
+      "item": "farmersdelight:tomato_sauce"
+    },
+    {
+      "tag": "forge:crops/onion"
+    },
+    [
+      {
+        "item": "vintagedelight:ghost_pepper"
+      },
+      {
+        "tag": "forge:cheese"
+      }
+    ]
+  ],
+  "result": {
+    "item": "veggiesdelight:uncooked_mhadjeb",
+    "count": 2
+  }
+}

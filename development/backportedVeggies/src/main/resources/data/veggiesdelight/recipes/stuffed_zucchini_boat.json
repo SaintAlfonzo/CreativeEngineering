@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "veggiesdelight:roasted_zucchini"
+    },
+    [
+      {
+        "tag": "forge:cooked_mutton"
+      },
+      {
+        "tag": "forge:cooked_chicken"
+      },
+      {
+        "tag": "forge:cooked_beef"
+      }
+    ],
+    {
+      "tag": "forge:milk"
+    }
+  ],
+  "result": {
+    "item": "veggiesdelight:stuffed_zucchini_boat"
+  }
+}

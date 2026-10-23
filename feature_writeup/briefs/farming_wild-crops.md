@@ -30,7 +30,7 @@ Order: **A** quick data fixes that need no decisions (classify the missing cave 
 system, Rustic Delight patches as plain patches, trader berries); then **B** in one pass because both edit
 `wild_crops.json` + `kubejs/data/creativeengineering/worldgen/*/wild/` and both are judged by the generator's density
 table (add the target column first); then **C**, the choices that wait on other rows: V16 waits on
-`largecontent/autumnityport #2` (pumpkin patch / autumn biomes), V5/V18 coffee waits on `food/drinks #3` (coffee
+`ports/autumnityport #2` (pumpkin patch / autumn biomes), V5/V18 coffee waits on `food/drinks #3` (coffee
 merge), wild pineapple ground shares a tag with `farming/crops #1` G15.
 
 Every change here is worldgen: **new chunks only**, rejoin to apply (CEConfig `[worldgen.systems] wildCrops`), and rerun
@@ -208,7 +208,7 @@ Every land biome either has wild crops or is a deliberate "none"; the choices in
   ice spikes, glacial chasm, gravel desert, windswept gravelly hills, stony and windswept spires), crops_by_biome.md §6.
   All rock, ice or gravel.
 - **V16:** pumpkin "orchard" = Terralith Skylands Autumn only. A real pumpkin patch / autumn biome is
-  `largecontent/autumnityport #2`.
+  `ports/autumnityport #2`.
 - **V20:** tea `temperate wet grassy` = swamp, Blooming Valley, Mirage Isles.
 - **V4:** jungles carry the whole warm-wet group plus bananas, lemons and five fruit trees, plus rubber trees.
 - **V3:** carrot and onion share one rule (`temperate grassy !swamp`, 25 biomes).
@@ -237,7 +237,7 @@ Biome ids above (Terralith verified). No item ids.
 ### Decisions
 - V3 and V4 moves (above): user's call, recommendations given.
 - V20 tea biomes: recommendation add Lush Valley and Dark Forest.
-- V16: wait for `largecontent/autumnityport #2`.
+- V16: wait for `ports/autumnityport #2`.
 
 ### Gotchas
 - A biome tagged `cave` gets nothing even if it is reachable from the surface (Terralith Underground Jungle is
@@ -346,7 +346,18 @@ Verified: `supplementaries:wild_flax` (placed, configured, block; `i.wild_flax` 
 
 ## Built, needs play
 
-None at Testing / Complete in this subfamily.
+2026-10-22 (user's picks, not the recommendations above where they differ): tea to 20 biomes (#3 V20: every swamp
+and jungle, the `cherry` trait, `add` dark forest, Lush Valley, Cloud Forest; density now 59 per 1000, see #1); Vinery
+grapes as four keys `grape`, `grape_savanna`, `grape_taiga`, `grape_jungle` (#4 V1, modifier ids `vinery:add_*_grape`
+from the 1.3.10 upstream jar; jungle grapes are the vines); wild flax **stays off** (#4 build step 2 replaced by a
+disable-only `flax` key, so CR-85 is dropped); white strawberry height 192, not 160, plus a tooltip. CR-83, CR-87 in
+crops.md, CR-88 new (white strawberries). Rustic Delight patches (V7) converted by overriding RD's own configured feature ids (not pack copies), so the RD placed features and config chances stay; CR-86 added. Generator now reads
+`vinery_upstream/`.
+
+Test state (doc audit 2026-10-22): `tools/test_wild_crops.sh` passes on the 11:09 `wild_crops.json` (53 crop
+tags, 52 add modifiers, 54 `forge:none`); the user's last log still shows 48 crop tags, so no game has loaded the
+batch. Not in the 2026-10-22 scratch run. Scratch queue SQ-WC (`tools/farm_worldgen_probe.js` `zfw wild` / `zfw straw`:
+biome feature lists, bone-meal flower lists, no flax, white strawberries at Y 192); CR-83, CR-86 to CR-88 in game.
 
 ## Writeup corrections made
 

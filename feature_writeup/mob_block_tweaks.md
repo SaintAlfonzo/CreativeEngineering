@@ -11,7 +11,9 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 | Bushier Flowers: no bone-meal growth, no worldgen; its bushes crafted from 4 flowers | DEPLOYED with 1.0.6 (built 2026-10-10); in-game test pending |
 | Quark feeding trough: a hungry animal that finds no trough waits 30 s before searching again | DEPLOYED with 1.0.4 (perf fix); scratch server checked the mixin applies, not measured under load |
 | Create: Dreams & Desires asphalt: friction and speed factor reset to vanilla (BlockRunner tiers it instead) | DEPLOYED; BR-28 pending |
-| Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19 (a patcherMod rebuild after the 1.0.9 deploy, now patcherMod 1.1.01 in `mods/`; not deployed); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23); MT-13 to MT-23 pending in game |
+| Alex's Mobs seagulls don't steal a Lunchbox, Lunch Bag or Golden Lunchbox from the hotbar (`seagullStealingBlacklist`; a dropped box is not covered) | Config 2026-10-22 (`alexsmobs.toml`, backed up in `configs_edited/`), not deployed; list load scratch server PASSED 2026-10-22 (SQ-GM-07: 3 ids, each exists); MT-26 in game |
+| MCA Comb sets eye colour (11 colours) and eye shape (2) on its hairstyle page, for the player's own look and for a combed villager | BUILT 2026-10-22 (patcherMod 1.1.01 in `mods/`, not deployed); MT-40 pending in game |
+| Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19 (a patcherMod rebuild after the 1.0.9 deploy, now patcherMod 1.1.01 in `mods/`; not deployed); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23, MT-24 decay piles); MT-13 to MT-24 pending in game |
 
 - **Pending:** the leaf decay changes are built and unshipped (next deploy; the release also drops FastLeafDecay-30.jar,
   now in `disabledmods/`). MT-01 to MT-25 untested in game (BR-28 stays in its writeup). Findings F1 to F7 (section 4);
@@ -136,8 +138,13 @@ there, and the scheduled-tick decay calls the same `decayLeavesPile` once instea
 the random-tick decay runs and IW's own hook fires. No path calls it twice. (2) Ground piles under standing trees: IW's
 builtin `leaf_piles_from_leaves` growth (chance 0.0005, `reach` 12, `max_pile_height` 3) runs from IW's
 `ServerLevelMixin` in `ServerLevel#tickChunk`, outside `LeavesBlock#randomTick`, so our gate never touches it.
-(3) Falling-leaf particles: client `animateTick`, untouched. Scratch queue SQ-LP checks (1) live; (2) is in-game only
-(MT-24), because forceloaded chunks get no random ticks.
+(3) Falling-leaf particles: client `animateTick`, untouched. (1) passed live on a scratch server 2026-10-22
+(`tools/leaf_pile_probe.js`, patcherMod md5 37bb7049): scheduled-tick decay of 20 lone leaves of 5 types leaves IW piles
+(5 of 20 at IW's 0.3, 20 of 20 at 1.0, every type), random ticks decay nothing with `onlyWhenDisturbed`, a felled oak
+decays fully with its piles on the ground (none left in the air), `leafPiles = false` leaves none, and with
+`onlyWhenDisturbed = false` IW's own random-tick hook makes 20 of 20. Vinery's apple leaves default to persistent
+(as upstream 1.5.5); its tree features place them non-persistent, so natural ones decay. (2) is in-game only (MT-24),
+because forceloaded chunks get no random ticks.
 
 ## 3. What the pack changes
 
@@ -233,6 +240,7 @@ builtin `leaf_piles_from_leaves` growth (chance 0.0005, `reach` 12, `max_pile_he
 
 - patcherMod mixins: [BubbleColumnImmunityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BubbleColumnImmunityMixin.java), [BushierFlowersDisableMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BushierFlowersDisableMixin.java), [FeedingTroughModuleMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/FeedingTroughModuleMixin.java), [TemptGoalTroughRetryMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TemptGoalTroughRetryMixin.java); [compat/TroughRetryAccess.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/TroughRetryAccess.java); `CEConfig.Perf.troughMissCooldownTicks`.
 - Leaf decay: [LeavesDecayRangeMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/LeavesDecayRangeMixin.java), [block/LeafDecayRange.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/LeafDecayRange.java), [block/FastLeafDecayPort.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/FastLeafDecayPort.java) (registered in `CreativeEngineering`), `CEConfig.LeafDecay`; tools [leaf_path_scan.py](../tools/leaf_path_scan.py), [leaf_path_probe.js](../tools/leaf_path_probe.js), [leaf_decay_probe.js](../tools/leaf_decay_probe.js). `disabledmods/FastLeafDecay-30.jar` (removed, row gone from [mod_sides.md](../mod_sides.md)).
+- MCA eyes: [McaCombEyeColourMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaCombEyeColourMixin.java) (client), lang `creativeengineering.mca_eyes.*`; how MCA picks eyes: [briefs/mobs_tweaks.md](briefs/mobs_tweaks.md) tweaks #12.
 - KubeJS: [entitytags.js](../kubejs/server_scripts/tags/entitytags.js), [flowers.js](../kubejs/server_scripts/other/flowers.js), [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js), `kubejs/data/bushierflowers/forge/biome_modifier/` (5 files).
 
 ## 6. Offline checks
@@ -291,10 +299,21 @@ builtin `leaf_piles_from_leaves` growth (chance 0.0005, `reach` 12, `max_pile_he
 - [ ] **MT-24 Leaf piles from decay:** fell an oak in grass → roughly a third of the canopy's leaves leave leaf piles
   that fall to the ground (as with the old Fast Leaf Decay jar). `[leaf_decay] leafPiles = false` → items only.
   Ground piles: stand under an untouched oak for a few in-game days (or `/gamerule randomTickSpeed 300` for a minute,
-  then back to 3) → thin leaf piles appear on the grass under its canopy, as before the decay port. Scratch queue SQ-LP.
-- [ ] **MT-25 Pile slow height:** default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles → only the
+  then back to 3) → thin leaf piles appear on the grass under its canopy, as before the decay port. Decay piles and
+  the switch: scratch server PASSED 2026-10-22; the fall in a real forest, ground piles and particles: in game.
+- [ ] **MT-25 Pile slow height:** *Logic half: scratch server PASSED 2026-10-22 (SQ-OM-09: 3 layers no slow, 4 and 5 slow; SQ-OM-14 with 6: 5 no slow, 6 and 7 slow); walking and WTHIT: in game.* default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles → only the
   4-layer one slows you, and WTHIT shows a Run Speed line on the 4-layer one only. Set 6 (game closed), repeat → 4 and
   5 no longer slow or show; 6 and up do. Depth Strider boots still walk through.
+- [ ] **MT-26 Seagulls skip lunchboxes** (needs a real player: gulls only target players in the world; the list loading:
+  scratch server PASSED 2026-10-22, SQ-GM-07): a Lunchbox, Lunch Bag and Golden Lunchbox in the hotbar on a beach
+  with seagulls (no other food): no gull takes one in a few minutes. With a carrot added, a gull still steals the
+  carrot. Config `alexsmobs.toml seagullStealingBlacklist` (2026-10-22). Dropped boxes are not covered.
+- [ ] **MT-40 Comb eye colour** (client only): hold an MCA Comb, right-click the air. The hairstyle page has `<` `Brown Eyes` `>`
+  top right and `Eye Shape 1` top left. Step the colour through all 11 and toggle the shape → the hair previews show
+  the new eyes each time. Press Done → your villager-model look keeps the eyes (switch to the villager model in the
+  full editor if needed), the comb lost 1 use. Repeat by using the comb on an MCA villager: its eyes change in the
+  world, also after a relog. Change the eyes, press Escape → nothing saved, no use lost. Pick a hairstyle after
+  changing the eyes → both saved, 2 uses lost. A heterochromia villager shows its fixed two-colour art.
 
 ## 8. History
 
@@ -313,3 +332,12 @@ builtin `leaf_piles_from_leaves` growth (chance 0.0005, `reach` 12, `max_pile_he
 - 2026-10-20: IW leaf piles from the ported decay (`LeafDecayPiles`, `[leaf_decay] leafPiles`) and configurable pile
   slow height (`[leaf_piles] slowFromLayers`, `LeafPileSlowMixin`, WTHIT line follows). patcherMod 1.1.01 rebuilt into
   `mods/`. MT-24, MT-25 untested.
+- 2026-10-22: leaf piles from decay passed on the scratch server (SQ-LP-00 to SQ-LP-06, `tools/leaf_pile_probe.js`,
+  patcherMod md5 37bb7049; probe fixed in the run: `scheduleTick` overload, Vinery apple leaves set non-persistent).
+  MT-24 ground piles and the fall in a real forest, and MT-25, stay in game.
+- 2026-10-22: MCA Comb eye colour and shape (`McaCombEyeColourMixin`, TODO `mobs/tweaks #12`); patcherMod 1.1.01
+  rebuilt into `mods/`. MT-40 untested.
+- 2026-10-22: seagulls skip lunchboxes (`mobs/tweaks #7`): Alex's Mobs `seagullStealingBlacklist` holds the three
+  Spice of Life lunchboxes (config only; the dropped-box mixin not built). MT-26 untested.
+- 2026-10-22 (second bulk run): SQ-GM-07 (seagull list) and SQ-OM-09 / SQ-OM-14 (pile slow height, default and 6)
+  PASS on the scratch server; MT-25 and MT-26 keep their in-game halves.

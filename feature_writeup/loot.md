@@ -664,7 +664,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
   - add cans to loot pool, appear in villager chests, camps, ships, boosted in farming/cooking structures
   - mca comb, thread, bouquets (boosted in flower houses), rings (rare, in homes or blacksmith) to villager houses
   - override Quark's Lootr chests so every one gets the resource pack skin (scratchpad 2026-10-21, TODO `loot/lootr #2`)
-  - Autumnity port: maple banner patterns in a new autumn loot table (scratchpad 2026-10-21, TODO `largecontent/autumnityport #5`)
+  - Autumnity port: maple banner patterns in a new autumn loot table (scratchpad 2026-10-21, TODO `ports/autumnityport #5`)
   
 ### Loot table changes
 

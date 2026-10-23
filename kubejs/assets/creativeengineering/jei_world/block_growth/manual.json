@@ -1,0 +1,111 @@
+{
+ "_note": "Hand-written: Immersive Weathering 1.2.10 builtin growths (CampfireSootGrowth, FireSootGrowth, SnowIcicleGrowth, IceGrowth), read with javap. Generated rows: tools/jei_world/tab_weathering.py.",
+ "rows": [
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "minecraft:campfires",
+     "label": "Lit"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:soot",
+     "label": "On a solid wall face above"
+    }
+   ],
+   "notes": [
+    "Random tick: soot on walls up to 8 above",
+    "23 above a signal fire"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "minecraft:fire"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:soot",
+     "label": "On a solid wall face above"
+    }
+   ],
+   "notes": [
+    "Random tick: fire puts soot on walls up to 6 above",
+    "Needs doFireTick on"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:snow",
+     "label": "Snowfall on the top block of an overhang"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:icicle",
+     "label": "Hangs under the block"
+    }
+   ],
+   "notes": [
+    "Snow: icicles under overhangs open to the sky",
+    "At about 1 in 12 spots"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "minecraft:ice"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:icicle",
+     "label": "Needs air below the ice"
+    }
+   ],
+   "notes": [
+    "Random tick 0.3%, cold biome",
+    "By day or under water; not in rain or storms"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:ice",
+      "minecraft:frosted_ice"
+     ],
+     "label": "Hot biome: desert, savanna, badlands, Nether"
+    }
+   ],
+   "outputs": [
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000
+    }
+   ],
+   "notes": [
+    "Random tick by day in hot biomes: melts",
+    "Evaporates in the Nether"
+   ]
+  }
+ ]
+}

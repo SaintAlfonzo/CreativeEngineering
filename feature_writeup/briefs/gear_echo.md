@@ -20,7 +20,7 @@ Open rows: #1, #2 (both Planned). No Testing / Complete rows in this subfamily.
   joins). Restart for tooltips, nothing else.
 - **#2 any time** (art; the pipeline exists). Independent of #1.
 
-Related rows: `gear/effects #5` (F5 main-hand keying, F7 echo Phantom Bane level) and `gear/effects #6` (dragon
+Related rows: `potions/effects #5` (F5 main-hand keying, F7 echo Phantom Bane level) and `potions/effects #6` (dragon
 bonuses; echo must stay below them). `gear/tuning #12` makes the echo assembly configurable but not the effects.
 
 ---
@@ -59,7 +59,7 @@ five echo tools including the sword.
 | Echo shovel | | Haste I |
 | Echo hoe | Weakness II 5 s | |
 
-   Dragon pickaxe is planned at Haste (`gear/effects #6`); make it Haste II there so echo Haste I stays below it.
+   Dragon pickaxe is planned at Haste (`potions/effects #6`); make it Haste II there so echo Haste I stays below it.
 2. [tool_effects.js](../../kubejs/startup_scripts/func/tool_effects.js) 117-133: replace `echoHit` with the new
    specs (`{ effect: 'minecraft:slowness', amplifier: 1, duration: 60 }` etc.), add
    `global.toolEffects.held(i.echo_pickaxe, { effect: 'minecraft:haste', amplifier: 0, duration: 50 })`.

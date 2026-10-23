@@ -192,12 +192,13 @@ ServerEvents.recipes(e => {
 	}
 
 	//######################### Xaero's map switches #########################
-	// Server-side feature switches with no item or mob source: only /effect gives them.
+	// Server-side feature switches with no item or mob source: only /effect gives them. Client-only mods: a
+	// dedicated server does not register these effects, so skip them there.
 	var xaeroSwitches = ['xaerominimap:no_minimap', 'xaerominimap:no_minimap_harmful', 'xaerominimap:no_entity_radar',
 		'xaerominimap:no_entity_radar_harmful', 'xaerominimap:no_waypoints', 'xaerominimap:no_waypoints_harmful',
 		'xaerominimap:no_cave_maps', 'xaerominimap:no_cave_maps_harmful', 'xaeroworldmap:no_world_map',
 		'xaeroworldmap:no_world_map_harmful', 'xaeroworldmap:no_cave_maps', 'xaeroworldmap:no_cave_maps_harmful']
-	xaeroSwitches.forEach(id => add(id, i.command_block))
+	xaeroSwitches.filter(id => Platform.isLoaded(id.split(':')[0])).forEach(id => add(id, i.command_block))
 
 	//######################### Write #########################
 	var written = 0

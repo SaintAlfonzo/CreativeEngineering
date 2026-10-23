@@ -468,7 +468,7 @@ named cans.
 ### Decisions
 - **Named / lore cans:** recommend yes, a handful, villages only, written in a list in 07_rules.js.
 - **Shares:** as above, tuned in the sim.
-- Depends on `food/canning #13/#14` only for which cans look finished; borrowed-sprite cans can wait.
+- Depends on `cans/canning #13/#14` only for which cans look finished; borrowed-sprite cans can wait.
 
 ### Gotchas
 - Generated cans exist only after a startup with `can_types.json`; `define` must skip ids `Item.exists` doesn't know.

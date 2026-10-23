@@ -73,6 +73,20 @@ f.t_melon_juice = '#forge:fluid/melon_juice';
 f.tomato_sauce = 'create_central_kitchen:tomato_sauce';
 f.t_tomato_sauce = '#forge:fluid/tomato_sauce';
 
+//Pack fluids (startup_scripts/cooking/fluids.js)
+f.chorus_juice = 'creativeengineering:chorus_juice';
+f.t_chorus_juice = '#forge:fluid/chorus_juice';
+f.carrot_juice = 'creativeengineering:carrot_juice';
+f.t_carrot_juice = '#forge:fluid/carrot_juice';
+f.dandelion_juice = 'creativeengineering:dandelion_juice';
+f.t_dandelion_juice = '#forge:fluid/dandelion_juice';
+f.turnip_water = 'creativeengineering:turnip_water';
+f.t_turnip_water = '#forge:fluid/turnip_water';
+f.egg_solution = 'creativeengineering:egg_solution';
+f.t_egg_solution = '#forge:fluid/egg_solution';
+f.frosting = 'creativeengineering:frosting';
+f.t_frosting = '#forge:fluid/frosting';
+
 //Create: Confectionery
 f.black_chocolate = 'create_confectionery:black_chocolate';
 f.caramel = 'create_confectionery:caramel';

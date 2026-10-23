@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smoking",
+  "cookingtime": 100,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "veggiesdelight:raw_vegetarian_patty"
+  },
+  "result": "veggiesdelight:cooked_vegetarian_patty"
+}

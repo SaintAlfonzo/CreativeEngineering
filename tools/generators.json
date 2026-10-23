@@ -256,6 +256,24 @@
       "dumps": ["dumpfood"],
       "outputs": ["kubejs/generation_scripts/food/mortar_catalog.json"],
       "apply": "/reload (kubejs/server_scripts/cooking/mortar.js reads the catalog in the recipe event)"
+    },
+    {
+      "id": "soup_soft_fluids",
+      "script": "tools/gen_soup_soft_fluids.py",
+      "groups": ["food"],
+      "dumps": ["dumpfood"],
+      "outputs": ["kubejs/data/creativeengineering/moonlight/soft_fluids"],
+      "warnExit": [1],
+      "apply": "/reload (Moonlight re-reads soft fluids and syncs them to players)"
+    },
+    {
+      "id": "jei_world",
+      "script": "tools/gen_jei_world.py",
+      "groups": ["jei"],
+      "dumps": ["dumpworldjei", "dumploot"],
+      "outputs": ["kubejs/assets/creativeengineering/jei_world"],
+      "warnExit": [1],
+      "apply": "F3+T, then rejoin the world (JEI reads the tabs when it starts)"
     }
   ]
 }

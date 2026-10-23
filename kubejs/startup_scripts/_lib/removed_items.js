@@ -4,7 +4,6 @@
 // ============================================================
 
 global.hasScannedRemovedItemRecipes = false
-global.hasRemovedTags = false
 
 var i = global.item;
 
@@ -327,6 +326,9 @@ global.removedItems = [
 	i.sticky_it_sticky_note,
 	i.sticky_it_eraser,
 	i.labels_label,
+	// Simple Hats' chef's hat: Vintage Delight's 16 chef hats replace it (vintage_delight.md S15); hat bag weight 0
+	// in config/simplehats.json
+	i.simplehats_chefshat,
 	// Canned Goods' Canned Food (butcher trade removed in server_scripts/economy/trades.js) and Hot Hot Hotpot:
 	// cans with no food in them, out of the can system (feature_writeup/can_parity.md)
 	i.canned_food,

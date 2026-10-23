@@ -10,8 +10,9 @@
 | Old `creativeengineering:*_camera_bag` items remapped to the new ids | DEPLOYED with 1.0.4; R4-04 never run |
 | Recipes: leather bag crafted; iron and netherite by smithing | DEPLOYED; the netherite step probably needs Armor Trims' template (F1) |
 
-- **Pending:** nothing built and unshipped. CB-01 to CB-10 are new; R4-04 to R4-06 and R4-11 stay in
-  [plan_1.0.4.md](plan_1.0.4.md). Findings F1 to F4 (section 4); F1 and F2 need your call.
+- **Pending:** F4 (flashes in the bag tag, `equipmenttags.js`, `/reload`) built 2026-10-22, unshipped, scratch server PASSED 2026-10-22
+  (SQ-GM-03). CB-01 to CB-11 are new; R4-04 to R4-06 and R4-11 stay in
+  [plan_1.0.4.md](plan_1.0.4.md). Findings F1 to F4 (section 4); F1 and F2 need your call; F4 done 2026-10-22.
 - **Files to open:** [camerabag/](../development/exposureBackport/src/extras/java/com/SaintAlfonzo/exposure_extras/camerabag/),
   [camera_bag.js](../kubejs/server_scripts/equipment/camera_bag.js) (recipes),
   [camera_equipment.json](../development/exposureBackport/src/extras/resources/data/exposure_extras/tags/items/camera_equipment.json)
@@ -44,7 +45,8 @@ cauldron). All three currently share the leather look (two-layer model: a tinted
 the camera stand, `#exposure:lenses`, `#exposure:filters` (every glass pane and the Interplanar Projector count as
 filters in Exposure), `#exposure:film_rolls`, `#exposure:developed_film_rolls`, and the 10 instant slides. Not in by
 default: flashes (`#exposure:flashes`), photographs, albums, frames. Never: another bag, or anything that refuses to go
-in containers (shulker boxes). The pack's lists in `equipmenttags.js` are empty today.
+in containers (shulker boxes). The pack adds `#exposure:flashes` (redstone lamp, IE light bulb) in `equipmenttags.js`
+(2026-10-22, F4); its remove list is empty.
 
 ### 2.3 Using one
 
@@ -81,8 +83,8 @@ in containers (shulker boxes). The pack's lists in `equipmenttags.js` are empty 
   outlines are drawn ([plan_1.0.4.md](plan_1.0.4.md) 2, "still open" 4).
 - **F3. Never run in game.** GUI, slot locking, upgrades keeping contents, tooltip, overflow spill and the old-id remap
   have only been checked by the build (plan_1.0.4 "still open" 1 to 3).
-- **F4. Flashes are left out** of the default tag; a commented example line in `equipmenttags.js` adds them. Decide
-  once in game.
+- **F4. Flashes are left out** of the default tag. DONE 2026-10-22 (TODO `gear/camera-bags #4`): `equipmenttags.js`
+  adds `#exposure:flashes` to the bag tag. CB-11.
 
 ### Known limits
 
@@ -125,6 +127,8 @@ Also R4-04 (remap), R4-05 (basics), R4-06 (slot count), R4-11 (dye) in [plan_1.0
 - [ ] **CB-08 Dye:** dye a leather bag blue in the grid → blue; wash it in a water cauldron → undyed; upgrade a blue bag
   → still blue.
 - [ ] **CB-09 Destroyed:** throw a full leather bag into lava → its contents drop out (and burn, by item physics).
+- [ ] **CB-11 Flashes (F4):** a redstone lamp and an IE light bulb go into a bag. The accept rule
+  (`CameraBag.canHold`) scratch server PASSED 2026-10-22 (SQ-GM-03: lamp and bulb accepted, stick refused); clicking them into the bag screen: in game.
 - [ ] **CB-10 Multiplayer:** on the dedicated server with `netheriteSlots = 20`, open a netherite bag → 20 slots
   shown, as the server says.
 
@@ -133,3 +137,5 @@ Also R4-04 (remap), R4-05 (basics), R4-06 (slot count), R4-11 (dye) in [plan_1.0
 - By 2026-10-02: camera bags in patcherMod (1.0.3, boot-tested only).
 - 2026-10-03: moved to Exposure Extras, made dyeable, old ids remapped (exposureBackport `-02`, 1.0.4).
 - 2026-10-18: this writeup; findings F1 to F4; tests CB-01 to CB-10. No code changed.
+- 2026-10-22: F4, flashes added to the bag tag; CB-11.
+- 2026-10-22 (second bulk run): SQ-GM-03 PASS on the scratch server; the CB-11 click stays in game.

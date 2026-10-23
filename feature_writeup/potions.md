@@ -173,7 +173,7 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
   mixer and the IE Mixer only convert splash (vanilla's rule). Keep the Refinery as the shortcut, or drop its
   regular → lingering recipes.
 - **F3. Placeholder reagents:** Magic Resistance (amethyst shard, `potions.js` line 72) and Luck (four-leaf clover,
-  line 86). In [TODO](todo/TODO.md) `gear/potions #4`.
+  line 86). In [TODO](todo/TODO.md) `potions/potions #4`.
 - **F4. `TEMP diagnostic` log on every bundle drain** (`PotionFluidHandlerMixin` line 62). One INFO line per bundle
   emptied. In [TODO](todo/TODO.md) `tooling/patchermod-cleanup #1`; delete it.
 - **F5.** FIXED 2026-10-19 (javadoc names `potions.js` part 3). **Stale doc:** `DragonBreathBrewing`'s javadoc says the item dragon's breath mixes are stripped by

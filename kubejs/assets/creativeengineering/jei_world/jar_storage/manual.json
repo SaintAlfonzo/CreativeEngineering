@@ -1,0 +1,34 @@
+{
+ "rows": [
+  {
+   "inputs": [
+    {
+     "items": [
+      "minecraft:cod_bucket",
+      "minecraft:salmon_bucket",
+      "minecraft:pufferfish_bucket",
+      "minecraft:tropical_fish_bucket",
+      "minecraft:axolotl_bucket",
+      "minecraft:tadpole_bucket"
+     ]
+    },
+    {
+     "item": "supplementaries:jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "label": "Holding the mob in water"
+    },
+    {
+     "item": "minecraft:bucket"
+    }
+   ],
+   "notes": [
+    "Use the bucket on a placed empty jar.",
+    "Works with any mob bucket."
+   ]
+  }
+ ]
+}

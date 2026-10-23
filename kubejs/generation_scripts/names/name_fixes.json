@@ -519,7 +519,7 @@
    "block.upgrade_aquatic.moss_coral_wall_fan": "Moss Coral Fan",
    "block.upgrade_aquatic.petal_coral_wall_fan": "Petal Coral Fan",
    "block.upgrade_aquatic.pillow_coral_wall_fan": "Pillow Coral Fan",
-   "block.upgrade_aquatic.potted_river_sapling": "Potted River Sapling",
+   "block.upgrade_aquatic.potted_river_sapling": "Potted Mulberry Sapling",
    "block.upgrade_aquatic.prismarine_coral_wall_fan": "Prismarine Coral Fan",
    "block.upgrade_aquatic.rock_coral_wall_fan": "Rock Coral Fan",
    "block.upgrade_aquatic.silk_coral_wall_fan": "Silk Coral Fan",
@@ -3030,7 +3030,7 @@
    "id": "upgrade_aquatic:pillow_coral_wall_fan"
   },
   "block.upgrade_aquatic.potted_river_sapling": {
-   "name": "Potted River Sapling",
+   "name": "Potted Mulberry Sapling",
    "ns": "upgrade_aquatic",
    "was": "block.upgrade_aquatic.potted_river_sapling",
    "why": "raw",

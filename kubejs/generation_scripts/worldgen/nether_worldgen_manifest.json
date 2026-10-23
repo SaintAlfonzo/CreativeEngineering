@@ -3,6 +3,7 @@
  "files": [
   "kubejs/data/create_dd/worldgen/configured_feature/striated_eroded_overworld.json",
   "kubejs/data/creativeengineering/forge/biome_modifier/nether_worldgen/scarlet_mountains_crimson.json",
+  "kubejs/data/creativeengineering/forge/biome_modifier/vintage_wild_ghost_peppers.json",
   "kubejs/data/minecraft/worldgen/noise_settings/large_biomes.json",
   "kubejs/data/minecraft/worldgen/noise_settings/overworld.json",
   "kubejs/data/terralith/worldgen/configured_feature/enchanted/enchanted_oak.json",

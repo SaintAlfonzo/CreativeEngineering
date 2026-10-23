@@ -51,11 +51,11 @@ pass.
   #2 step 3.
 - **#3: Caverns & Chasms is not loaded.** `pack/MODLIST.md` lists `caverns_and_chasms-1.19.2-1.0.2.jar` under
   "Disabled mods (in disabledmods/, not loaded)". The live rocky dirts are Twigs' and Dave's Building Extended's.
-  C&C's only matters when `largecontent/cavesandchasmsport` brings C&C content in.
+  C&C's only matters when `ports/cavesandchasmsport` brings C&C content in.
 
-Related rows: `largecontent/cavesandchasmsport #4` (C&C block merges, same helper), `loot/tables`
+Related rows: `ports/cavesandchasmsport #4` (C&C block merges, same helper), `loot/tables`
 ([brief](loot_tables.md), the loot_config.json edits in #2), `farming/crops` (flax is a listed crop in
-[crops.md](../crops.md) 92), `food/kitchen`, `recipes/wood #3` (same helper), `recipes/progression #2` (every id in
+[crops.md](../crops.md) 92), `cooking/kitchen`, `recipes/wood #3` (same helper), `recipes/progression #2` (every id in
 `global.removedItems` costs a recipe pass).
 
 ---
@@ -160,7 +160,7 @@ Kept `twigs:rocky_dirt`; removed `davebuildingmod:rocky_dirt`; kept `davebuildin
   it too. Recommendation: keep it and retexture to match.
 - **C&C's rocky dirt** when C&C content arrives: merge it into Twigs' with the same helper, and drop its ore feature
   (or keep it as a Twigs rocky-dirt ore through a datapack placed-feature override). Leave it to
-  `largecontent/cavesandchasmsport #4`.
+  `ports/cavesandchasmsport #4`.
 
 ### Gotchas
 - `global.removedItems` strips only *item* tags (recipe_scan.js 50-54). `#minecraft:mineable/*` are block tags, so a

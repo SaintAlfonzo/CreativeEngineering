@@ -20,8 +20,8 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 | Keg | BUILT 2026-10-19 in the port's `-03` (now the jar in `pack/manifest.json`), see 3.6; not tested |
 | WTHIT line "Holding: ..." | BUILT 2026-10-21 (patcherMod 1.1.01, `compat/WthitRemainderBuffer`, 3.3); not seen in game (WL-31) |
 | Oven client sync (leftovers vanished from the GUI) | FIXED 2026-10-21 (patcherMod 1.1.01, 3.4); GameTest RB-T11; not seen in game (RB-12) |
-| Bowl count ("duplicate bowl", [TODO](todo/TODO.md) `food/kitchen #4`) | no duplication: RB-T13 counts bowls before and after on the pot (4 ways) and oven, all equal (3.1) |
-| Plating delay: a recycled container shows in the container slot before plating (`[cooking] recycleShowTicks`, [TODO](todo/TODO.md) `food/kitchen #13`) | BUILT 2026-10-21 (patcherMod 1.1.01, not deployed); GameTests RB-T14, RB-T15; not seen in game (RB-14) |
+| Bowl count ("duplicate bowl", [TODO](todo/TODO.md) `cooking/kitchen #4`) | no duplication: RB-T13 counts bowls before and after on the pot (4 ways) and oven, all equal (3.1) |
+| Plating delay: a recycled container shows in the container slot before plating (`[cooking] recycleShowTicks`, [TODO](todo/TODO.md) `cooking/kitchen #13`) | BUILT 2026-10-21 (patcherMod 1.1.01, not deployed); GameTests RB-T14, RB-T15; not seen in game (RB-14) |
 
 Files to open first:
 
@@ -128,12 +128,12 @@ The leftover rule is the stations' own: the stack's crafting remainder, else FD'
 
 A bowl-food ingredient (tomato sauce, a stew) now gives its bowl back where the original pot threw it out of its
 left side. Step 1 can put that bowl straight into the plating slot and plate the meal in the same tick, so a bowl
-seems to appear from nowhere. That is what the "duplicate bowl" note ([TODO](todo/TODO.md) `food/kitchen #4`) saw:
+seems to appear from nowhere. That is what the "duplicate bowl" note ([TODO](todo/TODO.md) `cooking/kitchen #4`) saw:
 GameTests RB-T13a-e count every bowl (ingredients, plating slot, leftover slots, plated meals) before and after
 cooking, with the plating slot empty, holding 1, holding 10, and with meals already waiting, plus the oven; the
 totals match in every case.
 
-**Plating delay** (BUILT 2026-10-21, [TODO](todo/TODO.md) `food/kitchen #13`): a step-1 recycle holds the station's
+**Plating delay** (BUILT 2026-10-21, [TODO](todo/TODO.md) `cooking/kitchen #13`): a step-1 recycle holds the station's
 plating for `[cooking] recycleShowTicks` (10 ticks), so the bowl or bottle is seen in the container slot with the meal
 unplated, then plated. The hold is a counter on the buffer (`RemainderBuffer.holdPlating`, not saved), set by `store`
 when it put something into the container slot and spent by the plating call: a HEAD inject on FD's and Respite's
@@ -184,7 +184,7 @@ set. The oven saves its buffer itself under `Remainders`.
 Client copy: the pot's and kettle's update tag is FD's full save, so `ForgeCaps` goes along (RB-T12). The oven's
 update tag is its own, and until 2026-10-21 it left `Remainders` out while `load` read it unguarded: every block
 update (taking the output, adding an ingredient, a hopper) emptied the client's two slots while the server kept the
-items, so bottles and buckets seemed to vanish ([TODO](todo/TODO.md) `food/kitchen #14`). Now the update tag
+items, so bottles and buckets seemed to vanish ([TODO](todo/TODO.md) `cooking/kitchen #14`). Now the update tag
 carries `Remainders`, `load` only reads it when present, and a buffer change sends a block update like any oven slot
 change (RB-T11).
 
@@ -203,7 +203,7 @@ The menu and screen mixins extend the vanilla menu/screen class to call `addSlot
 `leftPos`/`topPos`; the reobfuscated jar was checked to carry the SRG names (`m_38897_`, `m_38903_`, `f_38839_`,
 `f_97735_`, `f_97736_`).
 
-### 3.6 Keg (BUILT 2026-10-19 in the port, not tested in game)
+### 3.6 Keg (BUILT 2026-10-19 in the port, slot rules scratch server PASSED 2026-10-22, not tested in game)
 
 Native code in `development/backportedBrewin` (D5), its own copy of the routing rather than a dependency on
 patcherMod; full description in [alcohol.md](alcohol.md) 10.16. Differences from the pot:
@@ -220,6 +220,10 @@ patcherMod; full description in [alcohol.md](alcohol.md) 10.16. Differences from
 
 The 2.0 bottle dupe (1.3) went with the 2.0 jar.
 
+Scratch server 2026-10-22 (SQ-OM-01, alcohol.md AL-81 to AL-84): 9 slots; the output, empty-container and leftover
+slots take nothing from any face; bottom and sides pull output, empties and leftovers, the top only ingredients; an
+8-slot `-02` keg loads into the same slots. The leftover overflow and stall (AL-79, AL-80) stay in game.
+
 ## 4. Risks
 
 - **Menu sync**: the extra slots exist only where patcherMod is loaded. It is `both` in
@@ -235,7 +239,7 @@ The 2.0 bottle dupe (1.3) went with the 2.0 jar.
 - **Mixin aliases**: the official names listed next to the SRG ones (3.5) never match in the pack; `require = 1`
   is met by the SRG name.
 - **Oven leftovers vanishing (scratchpad 2026-10-21):** fixed 2026-10-21, see 3.4 ([TODO](todo/TODO.md)
-  `food/kitchen #14`).
+  `cooking/kitchen #14`).
 
 ## 5. Decisions (all taken as recommended, 2026-10-18)
 
@@ -323,10 +327,10 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
   menu, screen), native oven buffer, `[cooking]` config, GameTest harness; container-slot recycle capped at what
   the waiting meals need after the first test run. patcherMod compiles and builds; 10 GameTests pass.
 - 2026-10-19: keg built in the Brewin' port `-03` (3.6); compiles, no GameTest (in-game tests in alcohol.md).
-- 2026-10-21 (patcherMod 1.1.01, not deployed): oven client sync fixed (3.4, `food/kitchen #14`); "duplicate bowl"
-  checked and found to be the designed recycle (3.1, `food/kitchen #4`); WTHIT "Holding" / "Waiting" line built
-  (3.3, `food/kitchen #3`). GameTests 17, harness stand-in config resynced.
-- 2026-10-21 (later): plating delay `[cooking] recycleShowTicks` (3.1, `food/kitchen #13`); GameTests 19.
+- 2026-10-21 (patcherMod 1.1.01, not deployed): oven client sync fixed (3.4, `cooking/kitchen #14`); "duplicate bowl"
+  checked and found to be the designed recycle (3.1, `cooking/kitchen #4`); WTHIT "Holding" / "Waiting" line built
+  (3.3, `cooking/kitchen #3`). GameTests 17, harness stand-in config resynced.
+- 2026-10-21 (later): plating delay `[cooking] recycleShowTicks` (3.1, `cooking/kitchen #13`); GameTests 19.
 
 > **Superseded copy below (noted 2026-10-21):** everything from here on is the 2026-10-18 feasibility draft, left in
 > the file by mistake. Sections 0-8 above are current; delete the copy once checked.

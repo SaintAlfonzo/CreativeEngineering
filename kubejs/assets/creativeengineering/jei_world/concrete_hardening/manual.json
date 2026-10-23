@@ -1,0 +1,47 @@
+{
+ "_note": "Hand-written: Immersive Engineering 9.2.4-170 ConcreteFluid.tick (javap): tick delay 20, a timer state counts up once per fluid tick and the fluid sets at 31; a source waits while liquid concrete is beside it; legacy level 5 to 7 (amount 1 to 3) sets as a slab; living entities inside get Concrete Feet.",
+ "rows": [
+  {
+   "requires": [
+    "immersiveengineering"
+   ],
+   "inputs": [
+    {
+     "fluid": "immersiveengineering:concrete",
+     "amount": 1000,
+     "label": "Placed in the world"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersiveengineering:concrete",
+     "label": "Mobs inside when it sets get Concrete Feet"
+    }
+   ],
+   "notes": [
+    "Sets after about 31 s",
+    "Waits while concrete flows beside"
+   ]
+  },
+  {
+   "requires": [
+    "immersiveengineering"
+   ],
+   "inputs": [
+    {
+     "fluid": "immersiveengineering:concrete",
+     "amount": 250,
+     "label": "Thin flow, 1 to 3 of 8 deep"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersiveengineering:slab_concrete"
+    }
+   ],
+   "notes": [
+    "A shallow flow sets as a slab after about 31 s"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+{
+  "parent": "vintagedelight:main/farm_salt",
+  "criteria": {
+    "evaporator": {
+      "conditions": {
+        "block": "vintagedelight:evaporator"
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "vintagedelight.advancement.place_evaporator.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "vintagedelight:evaporator"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "vintagedelight.advancement.place_evaporator"
+    }
+  },
+  "requirements": [
+    [
+      "evaporator"
+    ]
+  ]
+}

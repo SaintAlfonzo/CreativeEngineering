@@ -24,6 +24,12 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/caramel', f.caramel],
 		['forge:fluid/tomato_sauce', f.tomato_sauce],
 		['forge:fluid/melon_juice', f.melon_juice],
+		['forge:fluid/chorus_juice', f.chorus_juice],
+		['forge:fluid/carrot_juice', f.carrot_juice],
+		['forge:fluid/dandelion_juice', f.dandelion_juice],
+		['forge:fluid/turnip_water', f.turnip_water],
+		['forge:fluid/egg_solution', f.egg_solution],
+		['forge:fluid/frosting', f.frosting],
 		['forge:fluid/yeast_culture', f.yeast_culture],
 
 		// plant growth

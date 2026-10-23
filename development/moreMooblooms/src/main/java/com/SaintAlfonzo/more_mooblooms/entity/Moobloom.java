@@ -170,6 +170,11 @@ public class Moobloom extends Cow implements Shearable, IForgeShearable {
         entityData.set(DATA_FLOWERS, sb.toString());
     }
 
+    /** JEI render only: sets the drawn flowers on a client-side display entity. */
+    public void setDisplayFlowers(List<BlockState> states) {
+        setFlowers(states);
+    }
+
     /**
      * Server side: keeps {@code Flowers} in step with the moobloom's state. Not showing flowers -> none. Showing
      * them -> one per position from the variant's pool; with {@code reroll} every position is rolled fresh,

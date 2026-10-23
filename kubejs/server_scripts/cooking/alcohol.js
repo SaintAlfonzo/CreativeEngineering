@@ -9,6 +9,14 @@ var i = global.item
 var f = global.fluid
 var R = global.NCH
 
+//######################### Pickling moves to the Pickling Jar #########################
+// The keg is for beer fluids, the cask for wine, the Vintage Pickling Jar for all pickling (vintage_delight.md S7, 3.2).
+// Same inputs as the keg; the 250 mB of honey becomes a honey bottle; the jar's pickle time.
+R.remove({ id: 'brewinandchewin:fermenting/kimchi' }, e)
+R.vdPickling(Item.of(i.kimchi, 2), [i.cabbage, i.vegetables, i.kelp], e, 'brewin_kimchi')
+R.remove({ id: 'brewinandchewin:fermenting/pickled_pickles_from_honey' }, e)
+R.vdPickling(Item.of(i.pickled_pickles, 2), [Item.of(i.sea_pickle, 2), i.glow_berries, i.honey_bottle], e, 'brewin_pickled_pickles')
+
 //######################### Keg fermenting #########################
 // Flaxen Cheese: 2.0's shape (brown mushroom x2, sugar)
 R.remove({ id: 'brewinandchewin:fermenting/flaxen_cheese_from_milk' }, e)

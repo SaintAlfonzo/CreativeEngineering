@@ -57,6 +57,10 @@ STAND_INS = {
     'net.p3pp3rf1y.sophisticatedbackpacks.crafting.BackpackDyeRecipe': 'Sophisticated Backpacks DyeRecipesMaker',
     'net.p3pp3rf1y.sophisticatedbackpacks.crafting.BackpackUpgradeRecipe': 'Sophisticated Backpacks SBPPlugin (REGISTERED_RECIPES)',
     'net.p3pp3rf1y.sophisticatedcore.crafting.UpgradeNextTierRecipe': 'Sophisticated Core CorePlugin (REGISTERED_RECIPES)',
+    'com.SaintAlfonzo.creative_labels.crafting.NoteCopyRecipe': 'Creative Labels CreativeLabelsJei',
+    'com.SaintAlfonzo.creative_labels.crafting.NoteDyeRecipe': 'Creative Labels CreativeLabelsJei',
+    'com.SaintAlfonzo.creative_labels.crafting.NoteEraseRecipe': 'Creative Labels CreativeLabelsJei',
+    'com.SaintAlfonzo.creative_labels.crafting.NoteSpecialRecipe': 'Creative Labels CreativeLabelsJei',
     'dan200.computercraft.shared.turtle.recipes.TurtleUpgradeRecipe': 'CC: Tweaked RecipeResolver (recipe manager plugin)',
     'dan200.computercraft.shared.pocket.recipes.PocketComputerUpgradeRecipe': 'CC: Tweaked RecipeResolver (recipe manager plugin)',
     'appeng.recipes.game.FacadeRecipe': 'AE2 FacadeRegistryPlugin (recipe manager plugin)',
@@ -68,6 +72,72 @@ for _c in ('TatteredBookRecipe', 'TippedBambooSpikesRecipe', 'BlackboardDuplicat
 
 # What each uncovered recipe does, keyed by serializer id. Group: pack (our own code), mod, vanilla.
 # Fix: stand-in = shapeless/shaped display recipes from a JEI plugin; info = a JEI information page.
+# Recipe ids patcherMod's CyclingCraftingJEI builds a cycling page for (compat/jei/cycling/CyclingCraftingPages.java).
+# Keep in step with that file.
+CYCLING_PAGES = {
+    'creativeengineering:elytraduplication/dragon_scale_elytra',
+    'minecraft:repair_item',
+    'immersiveengineering:ie_item_repair',
+    'alexsmobs:mimicream_repair_recipe',
+    'minecraft:banner_duplicate',
+    'minecraft:book_cloning',
+    'minecraft:map_cloning',
+    'minecraft:firework_star',
+    'minecraft:firework_star_fade',
+    'minecraft:firework_rocket',
+    'minecraft:armor_dye',
+    'quark:dye_item',
+    'immersiveengineering:crafting/curtain_colour',
+    'fantasyfurniture:dyeable',
+    'suppsquared:sack_dye',
+    'bedspreads:add_pattern',
+    'bedspreads:remove_pattern',
+    'botania:dynamic/cosmetic_attach',
+    'botania:dynamic/cosmetic_remove',
+    'botania:dynamic/keep_ivy',
+    'botania:dynamic/phantom_ink_apply',
+    'botania:dynamic/spell_cloth_apply',
+    'botania:dynamic/laputa_shard_upgrade',
+    'botania:dynamic/lens_dye',
+    'botania:dynamic/mana_gun_add_clip',
+    'botania:dynamic/mana_gun_add_lens',
+    'botania:dynamic/mana_gun_remove_lens',
+    'botania:dynamic/merge_vial',
+    'botania:dynamic/split_lens',
+    'botania:dynamic/black_hole_talisman_extract',
+    'chimes:glass_bells_custom',
+    'cloudstorage:balloon_arrow',
+    'computercraft:colour',
+    'computercraft:disk',
+    'computercraft:printout',
+    'constructionwand:dynamic/wand_upgrade',
+    'minecraft:elytra_dye_recipe',
+    'minecraft:elytra_banner_recipe',
+    'minecraft:elytra_hide_cape_recipe',
+    'minecraft:elytra_wing_glow_recipe',
+    'minecraft:elytra_wing_split_recipe',
+    'minecraft:elytra_wing_combination_recipe',
+    'enderstorage:recolour_ender_chest',
+    'enderstorage:recolour_ender_tank',
+    'enderstorage:recolour_ender_pouch',
+    'fairylights:copy_color',
+    'immersiveengineering:earmuffs_attach',
+    'immersiveengineering:powerpack_attach',
+    'immersiveengineering:flare_bullet_color',
+    'immersiveengineering:potion_bullet_fill',
+    'immersiveengineering:jerrycan_refill',
+    'immersiveengineering:speedloader_load',
+    'immersiveengineering:shaderbag_downgrading',
+    'immersiveengineering:revolver_cycle',
+    'littlelogistics:tug_route_copy',
+    'littlelogistics:loco_route_copy',
+    'nock_enough_arrows:paint_arrow_dye',
+    'oldguns:refill_powder_horn',
+    'quark:tweaks/crafting/utility/chests/mixed_chest_wood',
+    'quark:building/crafting/chests/mixed_chest',
+    'storagedrawers:add_upgrade',
+}
+
 UNCOVERED = {
     'creativeengineering:elytra_duplication': ('pack', 'Elytra + Dragon Scale: crafts a fresh elytra and keeps the original.', 'stand-in'),
     'alexsmobs:mimicream_repair': ('mod', 'Damaged item + Mimicream: repairs it (AMConfig mimicreamRepair, with a blacklist).', 'stand-in'),
@@ -149,7 +219,9 @@ def mod_of(rid):
 
 
 def coverage(row, classes):
-    """('shown' | 'extension' | 'stand-in' | 'uncovered', source)"""
+    """('shown' | 'extension' | 'stand-in' | 'cycling' | 'uncovered', source)"""
+    if row['id'] in CYCLING_PAGES:
+        return 'cycling', 'patcherMod CyclingCraftingJEI'
     if not row.get('special'):
         n = row.get('ingredients')
         if row.get('result') and isinstance(n, int) and 1 <= n <= 9:
@@ -178,7 +250,7 @@ def build(audit):
             uncovered.append(r)
             if r['serializer'] not in UNCOVERED:
                 unknown.append(r)
-        elif kind in ('extension', 'stand-in'):
+        elif kind in ('extension', 'stand-in', 'cycling'):
             covered[(kind, src, r['serializer'])].append(r['id'])
     return counts, uncovered, covered, unknown, dead
 
@@ -189,7 +261,7 @@ def render(audit, counts, uncovered, covered, dead, stamp):
     special = sum(1 for r in audit['recipes'] if r.get('special'))
     out.append(f'Generated by `python3 tools/jei_coverage.py` from the `/dumpcraftingaudit` export of {stamp}: '
                f'{total} crafting-table recipes, {special} of them `isSpecial()`. '
-               f'**{counts["uncovered"]} have no JEI page**; {counts["extension"] + counts["stand-in"]} special ones are covered by a plugin.')
+               f'**{counts["uncovered"]} have no JEI page**; {counts["extension"] + counts["stand-in"]} special ones are covered by a plugin, {counts["cycling"]} by patcherMod cycling pages.')
     out.append('')
 
     by_ser = defaultdict(list)
@@ -213,7 +285,8 @@ def render(audit, counts, uncovered, covered, dead, stamp):
     out.append('### Special recipes a plugin does cover')
     out.append('')
     out.append('Listed so they are not re-investigated. "extension" = the plugin draws the recipe itself; '
-               '"stand-in" = the plugin adds ordinary display recipes in its place.')
+               '"stand-in" = the plugin adds ordinary display recipes in its place; '
+               '"cycling" = patcherMod adds one page per kind whose slots cycle together (results from the mod\'s own recipe).')
     out.append('')
     out.append('| Serializer | Recipes | How | Source |')
     out.append('|---|---:|---|---|')
@@ -250,7 +323,7 @@ def main():
     a, b = doc.index(BEGIN) + len(BEGIN), doc.index(END)
     DOC.write_text(doc[:a] + '\n' + body + '\n' + doc[b:])
     print(f'{DOC.relative_to(INSTANCE)}: {counts["uncovered"]} uncovered, '
-          f'{counts["extension"]} by extension, {counts["stand-in"]} by stand-in, {counts["shown"]} shown normally')
+          f'{counts["extension"]} by extension, {counts["stand-in"]} by stand-in, {counts["cycling"]} by cycling page, {counts["shown"]} shown normally')
 
 
 if __name__ == '__main__':

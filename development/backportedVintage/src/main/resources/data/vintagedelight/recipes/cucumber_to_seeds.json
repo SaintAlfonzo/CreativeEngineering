@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:cucumber"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "item": "vintagedelight:cucumber_seeds"
+  }
+}

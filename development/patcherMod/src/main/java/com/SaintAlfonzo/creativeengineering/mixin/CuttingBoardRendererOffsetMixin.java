@@ -14,7 +14,7 @@ import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
 
 /**
  * The item lying on a Farmer's Delight cutting board moves with the board's model offset on a Cooking for Blockheads
- * counter ({@link CuttingBoardOnCounter}, TODO food/kitchen #8): push + translate at the start, pop at every return.
+ * counter ({@link CuttingBoardOnCounter}, TODO cooking/kitchen #8): push + translate at the start, pop at every return.
  */
 @Mixin(value = CuttingBoardRenderer.class, remap = false)
 public abstract class CuttingBoardRendererOffsetMixin {

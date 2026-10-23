@@ -116,7 +116,7 @@ ServerEvents.tags('item', e => {
 	// Adjustments
 	// Totem sinks, crossbow sinks, armor stand sinks, shields sink, trident is fireproof, 
 
-	// Not done yet (feature_writeup/todo/TODO.md gameplay/item-physics #2, item_physics.md F4):
+	// Not done yet (feature_writeup/todo/TODO.md items/item-physics #2, item_physics.md F4):
 	// Most create components will sink and be fireproof, belts will float, flour/cinder flour float
 		// Behavior carries to compacted items,
 	// Treated wood will sink

@@ -1,1 +1,0 @@
-{"type":"immersiveengineering:sawmill","energy":800,"input":{"tag":"minecraft:wooden_doors"},"result":{"count":4,"item":"minecraft:stick"},"secondaries":[{"output":{"tag":"forge:dusts/wood"},"stripping":false}]}

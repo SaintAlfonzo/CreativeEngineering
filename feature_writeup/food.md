@@ -31,8 +31,10 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | Fried egg furnace/smoker/campfire restored; cooking oil from pumpkin seeds too; own mixer ratio | [cooking.js](../kubejs/server_scripts/cooking/cooking.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js), NCH `smoking` xp/time | DEPLOYED with 1.0.2. FO-23 to FO-27 |
 | Vanilla egg -> `#forge:eggs` migration | list in 3.8 | TODO, not built |
 | Every raw egg stacks to 64 | now a rule of the stack size policy ([stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js), `tools/gen_stack_sizes.py`); `item_properties.js` is removed in 1.0.5 | DEPLOYED with 1.0.6; single player 2026-10-11 logged `[stack_sizes] set 1052 stack sizes`. FO-28 |
-| Glistering Melon Slice edible (Golden Melon Slice values, no effects) | [food_values.js](../kubejs/startup_scripts/cooking/food_values.js), `golden` type in food_types.json | BUILT 2026-10-21, not run in game (3.10). FO-29 |
+| Glistering Melon Slice edible (Golden Melon Slice values, no effects) | [food_values.js](../kubejs/startup_scripts/cooking/food_values.js), `golden` type in food_types.json | built, scratch server PASSED 2026-10-22 (SQ-OF-12), not run in game (3.10). FO-29 |
 | Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, jar not in `mods/` yet (3.11). FO-30, FO-31 |
+| Spice of Life pack config (10 foods to activate, reset on death, queue 256; tier bonuses still WIP) | `defaultconfigs/solapplepie-server.toml` = `configs_edited/server_config/solapplepie-server.toml` | Shipped with 1.1.01 through the deploy's `defaultconfigs`; the instance copy added 2026-10-22. New-world values: scratch server PASSED 2026-10-22 (SQ-CF-01). FO-32 |
+| Bites from placed pies and cakes count for Spice of Life | patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`, [placed_food_slices.json](../kubejs/generation_scripts/food/placed_food_slices.json) | BUILT 2026-10-22, patcherMod 1.1.01 jar in `mods/` (11:06, md5 b5f60533) (4.2 finding 5); scratch server PASSED 2026-10-22 (SQ-SOL-01: load, 14 map entries, mixin); the bite: FO-43 in game |
 
 **Open first:** [food_catalog.md](food_catalog.md) (every food), [food_types.json](../kubejs/generation_scripts/food/food_types.json)
 (who is in which type), section 2.3 (Spice of Life), section 4.2 (what is broken today).
@@ -41,8 +43,10 @@ per type, with per-item exceptions, and gives every can the value of what went i
 - Move a food to another type: move its item_dict key between lists in `food_types.json`, then `/reload`.
 - Exclude an edible item from typing: add its key under `excluded` with a reason.
 - Mark a food as having a can: `canned` maps each can's key to the keys of what it holds.
-- Spice of Life: the per-world `saves/<world>/serverconfig/solapplepie-server.toml` (2.3). There is no pack-level
-  copy in `defaultconfigs/` yet.
+- Spice of Life: the pack copy `defaultconfigs/solapplepie-server.toml` (new worlds; keep it equal to
+  `configs_edited/server_config/solapplepie-server.toml`), then each world's `saves/<world>/serverconfig/` copy (2.3).
+- Placed cakes for Spice of Life: block -> slice item in `kubejs/generation_scripts/food/placed_food_slices.json`
+  (restart). Pies need no entry.
 
 **Recipes:** reference the tags through the dict keys, e.g. `i.t_food_cooked_meat` (`#creativeengineering:food_type/cooked/meat`),
 `i.t_food_raw` (every raw food), `i.t_canned_source`. The list is at the end of item_dict.js.
@@ -201,8 +205,9 @@ average complexity `c` is `c x (k - k(k-1)/64)`):
 
 So today the best way to max Spice of Life is to eat 16 different cans, and the second best is Golden Food.
 
-**Config is per world.** The server config lives in each world's `serverconfig/`, and there is no pack copy in
-`defaultconfigs/`, so every new world gets the mod defaults. WorldC has the defaults; Workspace was hand-edited
+**Config is per world.** The server config lives in each world's `serverconfig/`. Until 2026-10-22 there was no pack
+copy in `defaultconfigs/`, so every new world got the mod defaults (since then: `defaultconfigs/solapplepie-server.toml`,
+shipped with 1.1.01). WorldC has the defaults; Workspace was hand-edited
 (queue 1000, 10 foods before any benefit, reset on death, and 31 benefit entries for 17 thresholds).
 
 ### 2.4 Canned Goods
@@ -546,15 +551,26 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
    (Speed II). The golden apple cans amplify their source (regeneration III, absorption V).
 3. **Golden Food changes vanilla.** Golden carrot is 4 hunger here (vanilla 6), and the enchanted golden apple plus
    all 23 enchanted golden foods are 8 / 8 (vanilla 4 / 1.2), worth 7 Spice of Life each.
-4. **Spice of Life config drift.** Per world, no `defaultconfigs` copy (2.3). Workspace has 31 benefit entries for
+4. **Spice of Life config drift.** Per world; a `defaultconfigs` copy since 2026-10-22 (2.3, FO-32), older worlds
+   keep their own. Workspace has 31 benefit entries for
    17 thresholds. The default benefits include `attribute,generic.speed,2`, not a real attribute name (probably
    skipped; check the log on the next start). The default complexity list names two mods that weren't installed
    then (`farmersrespite`, `largemeals`): harmless. Farmer's Respite was added 2026-10-02, so its 10 entries (black tea twice;
    6 teas at 3, rose hip pie and coffee cake slices at 4, Blazing Chili at 5) now apply; only the 4 `largemeals` entries are dead (the jar's
    `ComplexityParser` logs `Item is not food: largemeals:...` for each). Unknown benefit attributes are dropped
    silently (`AttributeBenefit.createAttribute` marks them invalid, no log line).
-5. **Placed pies and non-vanilla cakes** don't count for Spice of Life when bitten from the block (only the vanilla
-   cake does, as Farmer's Delight's cake slice); their slices do when eaten from the hand.
+5. **Placed pies and non-vanilla cakes** didn't count for Spice of Life when bitten from the block (only the vanilla
+   cake does, as Farmer's Delight's cake slice); their slices do when eaten from the hand. FIXED 2026-10-22
+   (`types-and-tuning #5`): patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`
+   (`useItemOn` HEAD/RETURN state compare, server side, no fake players, nothing with a knife in hand) records the
+   slice through SoL's `FoodTracker.updateFoodList`. Pies (any FD `PieBlock`) count as their slice item; cakes and
+   puddings come from `kubejs/generation_scripts/food/placed_food_slices.json` (own slice where one exists:
+   Neapolitan -> Abnormals Delight slices, coffee cake, Create C&A's chocolate cake -> Abnormals Delight's chocolate
+   slice (what the knife gives since the merge, item_merges.md 2.3; was Central Kitchen's slice until 2026-10-22),
+   C&A's honey cake -> Central Kitchen's honey slice, fig pudding; golden
+   cakes have none and count as `farmersdelight:cake_slice` like the vanilla cake; mangosteen cake counts as its
+   own edible item). Candle cakes count as the cake they turn into (vanilla's included: SoL skips those). The map
+   must name food items (SoL drops non-food entries on load). Read at server start. FO-43.
 6. **item_dict** (FIXED 2026-10-19, [plan_1.0.9.md](plan_1.0.9.md)): `i.catfish_slice` points at `alexsmobs:raw_catfish_slice`, which
    doesn't exist (it's `alexsdelight:`; `cooking.js` overrides it at runtime); `i.bacon` is
    `farmersdelight:cooked_bacon` (the raw bacon's key is another).
@@ -583,12 +599,12 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - **Scratch dedicated server for the dump:** the client was using 10 of 14 GB, so the dump ran in your world instead.
 
 ### 4.5 Planned (scratchpad 2026-10-21)
-- **Fats and oils** ([TODO](todo/TODO.md) `food/ingredients #10`): animal fat drops only from cows, pigs and nether
+- **Fats and oils** ([TODO](todo/TODO.md) `dishes/ingredients #10`): animal fat drops only from cows, pigs and nether
   cows (knives give more meat and fat); whales drop blubber, made into whale oil that works the same; tallow crafted
   from animal fat (no tallow drops); animal oil removed, animal fat cooks into cooking oil, which takes animal oil's
   crafts; more seeds into cooking oil, bottled seed oil; fish oil counts as cooking oil, more fish into fish oil.
-- **Sweets:** the single smoothie goes or becomes a type with variants (`food/sweets #5`); matcha and salmonberry ice
-  creams made not gross, ice cream parity (`food/sweets #4`); every ice food takes ice or ice blocks (`food/ingredients #5`).
+- **Sweets:** the single smoothie goes or becomes a type with variants (`baking/sweets #5`); matcha and salmonberry ice
+  creams made not gross, ice cream parity (`baking/sweets #4`); every ice food takes ice or ice blocks (`dishes/ingredients #5`).
 
 ## 5. File map
 
@@ -605,7 +621,8 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - patcherMod [compat/jei/SeasoningJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningJEI.java)
   and [SeasoningCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
 - [food_catalog.md](food_catalog.md): generated reference; `kubejs/exported/food/catalog.json` (not in git)
-- Spice of Life config: `saves/<world>/serverconfig/solapplepie-server.toml`, client `config/solapplepie-client.toml`
+- Spice of Life config: `defaultconfigs/solapplepie-server.toml` (pack copy), `saves/<world>/serverconfig/solapplepie-server.toml`, client `config/solapplepie-client.toml`
+- Placed food for Spice of Life: patcherMod `food/PlacedFoodSol.java`, `mixin/ServerPlayerGameModePlacedFoodMixin.java`; `kubejs/generation_scripts/food/placed_food_slices.json`; scratch probe `tools/food_drinks_probe/food_drinks_probe.js` (`/fdtest sol`)
 - Related configs: `config/salt-common.toml`, `config/farmersdelight-common.toml` (vanilla soups get FD effects,
   stack to 16), `config/survivality-common.toml` (`more_snacks`)
 
@@ -682,7 +699,7 @@ Cooking oil and fried eggs (3.7), after a restart:
 - [ ] **FO-28 egg stacks:** `/give @s minecraft:egg 64`, `/give @s quark:egg_parrot_blue 64` and
   `/give @s alexsmobs:emu_egg 64`: each is one full stack. Chickens' eggs picked up merge past 16.
   `logs/kubejs/startup.log` has `[stack_sizes] set N stack sizes` and no `no item_dict key` warning.
-- [ ] **FO-29 glistering melon:** after a restart, hold a Glistering Melon Slice in survival with a full hunger bar and
+- [ ] **FO-29 glistering melon** (values, no effects, golden type: scratch server PASSED 2026-10-22, SQ-OF-12; eating and brewing: in game): after a restart, hold a Glistering Melon Slice in survival with a full hunger bar and
   eat it: AppleSkin shows 4 hunger / 4.8 saturation (same as a Golden Melon Slice), no effect is applied. It still
   brews Healing in a brewing stand. `logs/kubejs/startup.log` has `[food values] 2 foods copied` and no warning.
 - [ ] **FO-30 Seasoning page:** after installing the patcherMod jar and restarting, `logs/latest.log` has
@@ -693,6 +710,21 @@ Cooking oil and fried eggs (3.7), after a restart:
 - [ ] **FO-31 still crafts, off switch:** cooked beef + salt in the grid still gives salted cooked beef, and a basin
   under a mixer still salts it. Set `[jei] seasoningCategory = false` in `config/creativeengineering-common.toml`,
   rejoin: no Seasoning tab, salting back on the Crafting and Mixing tabs.
+- [ ] **FO-32 Spice of Life defaults in a new world** (scratch server PASSED 2026-10-22, SQ-CF-01, with the same
+  file through the deploy's `defaultconfigs`; left: one single-player world, client): create a new world: its
+  `serverconfig/solapplepie-server.toml` has `minFoodsToActivate = 10`, `resetOnDeath = true`, `queueSize = 256`
+  (copied from `defaultconfigs/`, added 2026-10-22).
+- [ ] **FO-43 Placed pies and cakes count for Spice of Life** (client: needs a real player, fake players are skipped
+  on purpose): in survival, hungry, bite a placed Apple Pie, a Chocolate Cake (Create Crafts & Additions'), a
+  Strawberry Cake, a Golden Cake and a vanilla candle cake (one bite each); open the food book: Slice of Apple Pie,
+  Chocolate Cake Slice (Abnormals Delight's, the one a knife gives), Strawberry Cake Slice and Slice of Cake are
+  listed. A knife on a placed pie drops a slice and adds
+  nothing until the slice is eaten. A Create deployer biting a cake adds nothing. `logs/latest.log` has no
+  `PlacedFoodSol` warning.
+- [x] **FO-44 Placed food map loads** (scratch server PASSED 2026-10-22, SQ-SOL-01: 14 entries, chocolate cake -> Abnormals Delight's slice): after a boot with the patcherMod jar,
+  `logs/latest.log` has no `PlacedFoodSol` warning or error and no mixin failure for
+  `ServerPlayerGameModePlacedFoodMixin`; every block in `placed_food_slices.json` exists and maps to an edible item
+  (`/fdtest sol`).
 
 ## 8. History
 
@@ -751,3 +783,10 @@ Cooking oil and fried eggs (3.7), after a restart:
 - 2026-10-21: Seasoning JEI page (3.11): Salt's salting craft and Create: The Salt's 65 salting mixes moved off the
   Crafting and Mixing pages onto one Seasoning page; `creativeengineering:shapeless/season/...` crafts join it.
   patcherMod built, jar not installed. FO-30, FO-31.
+- 2026-10-22: Spice of Life pack config in `defaultconfigs/` (FO-32, new-world values passed on the scratch server,
+  SQ-CF-01). Placed pies and cakes count for Spice of Life (4.2 finding 5, patcherMod `PlacedFoodSol`, jar in
+  `mods/`, not run; FO-43 in game, FO-44 / SQ-SOL-01 on a scratch server). Doc audit: Create C&A's chocolate cake
+  bite now counts as Abnormals Delight's chocolate slice (the knife's slice after the merge), not Central Kitchen's.
+- **2026-10-22** Glistering Melon Slice values (3.10, FO-29: hunger and modifier of the Golden Melon Slice, always
+  edible, no effects, golden type) queued as scratch SQ-OF-12 (`tools/older_food_probe.js`); eating it stays in game.
+- 2026-10-22 (second bulk run): SQ-SOL-01 and SQ-OF-12 PASS on the scratch server. FO-44 done; FO-29 and FO-43 in game.

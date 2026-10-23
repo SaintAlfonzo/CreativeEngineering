@@ -8,14 +8,14 @@ Test prefix `MB-`. Sections 1-3 describe Buzzier Bees' moobloom, read from Buzzi
 
 | Part | Status |
 |---|---|
-| More Mooblooms 1.0 | `development/moreMooblooms`, jar `moreMooblooms-1.0.0.jar` (rebuilt and installed in `mods/` 2026-10-11 with azaleabloom's moss spawning; DEPLOYED with pack 1.0.6 (2026-10-14), its first release). Install with `./gradlew :moreMooblooms:installToMods`, on the client and the server (same jar on both, 4.2; the deploy ships it to both). Verified on a scratch server (4.14). Rendering, JEI, feeding, grazing and the soul sand valley spawn still need a client (section 8) |
+| More Mooblooms 1.0 | `development/moreMooblooms`, jar `moreMooblooms-1.0.0.jar` in `mods/`; 1.1.0 (JEI, section 5) built 2026-10-22; `mods/` holds an earlier 1.1.0 build (md5 c2df0ab6, without Moobloom Conversion) that passed the scratch server boot check 2026-10-22 (SQ-GM-09); the rebuilt jar (with Conversion) is waiting to be copied to `mods/`; not deployed (rebuilt and installed in `mods/` 2026-10-11 with azaleabloom's moss spawning; DEPLOYED with pack 1.0.6 (2026-10-14), its first release). Install with `./gradlew :moreMooblooms:installToMods`, on the client and the server (same jar on both, 4.2; the deploy ships it to both). Verified on a scratch server (4.14). Rendering, JEI, feeding, grazing and the soul sand valley spawn still need a client (section 8) |
 | Variants | 11 (4.4): moobloom (the default), sunbloom, rosebloom, peonybloom, onionbloom, bluebloom, orchidbloom, lilybloom, oxeyebloom, azaleabloom, witherbloom. Each grows a weighted pool of flowers; every vanilla flower is in at least one pool |
 | Variant data | generated from the variant table (4.4) by `python3 tools/gen_moobloom_variants.py`; checked by `python3 tools/check_moobloom_data.py` |
 | Breeding | any two mooblooms breed: 10 colour-mix combinations, otherwise same variant breeds true, otherwise a random calf (4.8) |
 | Spawning | the pack's rules follow the wild flowers (2.8): 25-100% of cows become mooblooms in 18 flower biomes (set per biome), 25% in 5 flowery ones, 2% in 34 with some flowers, each biome's variants matching its flowers; `rareChance` 0.002 applies to every other cow; azaleablooms on moss in lush caves. The mod's own: rare witherblooms in soul sand valleys (4.9) |
 | Buzzier Bees | its moobloom, buttercup and Sunny are removed from outside, one config switch each (4.11). BB is under the Abnormals License 1.0: nothing of BB's ships in our jar (4.0) |
 | Pack side | per-biome spawn rules, cows in meadow, blooming plateau and skylands spring, `rareChance`, syringe line, `i.more_moobloom_spawn_egg`, JEED hides Sunny, Quark restock ignores the egg (4.12) |
-| JEI | one egg per variant with an info page, and a "Moobloom Breeding" category. More is planned for 1.1 (section 5) |
+| JEI | one egg per variant with a short info page, "Moobloom Breeding" (combinations with the miss, breeds true, random calf, each parent's food), "Moobloom Shearing" (drops per shear, the moobloom rendered with its flowers) and "Moobloom Conversion" (cow + the variant's food, feed chance, shared-food share). 1.1.0 built; the Conversion page is only in the rebuilt jar, not yet in `mods/`, not deployed (section 5) |
 
 **Files to open first:** in `development/moreMooblooms/src/main/java/com/SaintAlfonzo/more_mooblooms/`:
 `entity/Moobloom.java` (all the entity logic), `variant/MoobloomVariant.java` (the data format),
@@ -360,7 +360,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 
 | | |
 |---|---|
-| Name / id | **More Mooblooms**, `more_mooblooms`, version 1.0.0 (D22; kept at 1.0.0 for the 2026-10-11 azaleabloom `spawns_in_dark_on` rebuild, by the user's choice). Folder `development/moreMooblooms`, jar `moreMooblooms-<ver>.jar`, package `com.SaintAlfonzo.more_mooblooms`, GPLv3 |
+| Name / id | **More Mooblooms**, `more_mooblooms`, version 1.1.0 (1.1: the JEI pages, section 5; 1.0.0 was D22, kept for the 2026-10-11 azaleabloom `spawns_in_dark_on` rebuild, by the user's choice). Folder `development/moreMooblooms`, jar `moreMooblooms-<ver>.jar`, package `com.SaintAlfonzo.more_mooblooms`, GPLv3 |
 | Build | a project in the root Gradle build (`settings.gradle`, `ce.forge-mod` convention plugin), the same as Incubation Additions: `./gradlew :moreMooblooms:build`, `./gradlew :moreMooblooms:installToMods` (moves other versions to `jar_archive/displaced/`) |
 | Hard dependencies | Forge, Minecraft 1.19.2 |
 | Optional dependencies | `buzzier_bees` (the O14 set), `jei` (plugin), `blueprint` (advancement modifier), the tag-compat mods (4.10), `farmersdelight` (wild onions on onionbloom, 4.4) |
@@ -388,7 +388,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 | core (always) | entity, renderer + flower layer, variant and breeding tables (reload listeners + client sync), shearing and regrowth, feeding, spawn swap (`NaturalSpawnerMixin`), spawn egg, config | jar resources: `assets/more_mooblooms/` (11 coats, lang, egg model), `data/more_mooblooms/` (variants, breeding, loot table, block tag `spawnable_on_in_dark`), `data/forge/tags/entity_types/milkable.json` |
 | core switch `witherbloom_spawns` (config `witherbloomSpawns`) | spawn placement and the direct-spawn variant (4.9) are core code | `packs/more_mooblooms/witherbloom_spawns/`: biome tag, biome modifier, spawn rule (witherbloom's `spawns_in_dark_on` is in its variant file) |
 | `buzzier_bees` | BB moobloom removal, trade removal, compost entry removal, creative hiding, Sunny off (4.11) | `packs/buzzier_bees/<switch>/`, one sub-pack per data switch |
-| `jei` | variant egg subtypes, info pages, the "Moobloom Breeding" category, hiding the buttercup, BB's egg and Sunny when BB is loaded | none |
+| `jei` | variant egg subtypes, info pages, the "Moobloom Breeding", "Moobloom Shearing" and "Moobloom Conversion" categories, hiding the buttercup, BB's egg, Sunny and Just Enough Breeding's BB moobloom page when BB is loaded | none |
 | `blueprint` | none | `packs/blueprint/`: Two by Two asks for our moobloom |
 | `alexsmobs`, `supplementaries`, `abnormals_delight`, `botania`, `delightful` | none | entity type tag files adding `more_mooblooms:moobloom` to that mod's cow tags (4.10) |
 
@@ -579,8 +579,7 @@ variant id (weight 1). The mod ships one file per child variant, generated from 
 ids are logged at load.
 
 - A calf carries no flowers; it rolls its own when it grows up.
-- **JEI:** the "Moobloom Breeding" category shows parent egg + parent egg -> calf egg with the chance (the rule's
-  chance times the result's share of the weights); each egg's info page has a "Bred from" line.
+- **JEI:** the "Moobloom Breeding" category (section 5).
 - A spawn egg used on a moobloom makes a calf of the egg's variant, not a bred one (4.3).
 
 ### 4.9 Spawning (O6, O7, O8, R7)
@@ -944,13 +943,44 @@ Blueprint's `SpawnEggItemMixin` (it only sorts `minecraft:` eggs in the creative
 
 ## 5. JEI changes
 
-**In 1.0:** each variant's egg has an info page (pool odds, food, shearing, bred from), and the "Moobloom Breeding"
-category lists the combinations as parent egg + parent egg -> calf egg with the chance (4.8).
+**1.1.0** (BUILT 2026-10-22, plan and decisions: [briefs/mobs_mooblooms.md](briefs/mobs_mooblooms.md) #2). All in
+`compat/jei/`; JEI reads the client's synced variant and breeding tables (4.14).
 
-- Still planned, for 1.1 (plan: [briefs/mobs_mooblooms.md](briefs/mobs_mooblooms.md) #2)
-- Show breeding outputs (just enough breeding?)
-- Show shearing outputs (show percentage chance of each flower, visualize entity with every possible flower on it)
-- Write better JEI info descriptions (short, to the point, human)
+- **Info page** per variant egg, short: "Grows: <pool odds>.", the cow feed line with the config chance, shears take
+  the flowers and grass regrows them, the bare shear (only with `shearBareToCow`; "+3 flowers" with
+  `bareShearDrops`), "Breeds and grows on its flowers, not wheat.", "Never a random calf." for `breed_weight` 0. The
+  1.0 drop-chance and "Bred from" lines are gone: the two categories show them.
+- **Moobloom Breeding** (`MoobloomBreedingCategory`, 150x40): parent egg + parent egg, each parent's food below it
+  (pool items and feed tags, cycling), -> every outcome with its % under the slot. Pages, in order:
+  - each combination rule that applies (an earlier rule for the same pair wins): each result at rule chance x
+    result share, then the miss at `1 - chance`: the same kind for a same-kind pair (moobloom + moobloom: sunbloom
+    10 %, moobloom 90 %), otherwise a random-calf slot;
+  - "breeds true" (A + A -> A, 100 %) for every variant with no rule for itself;
+  - one random-calf page: two plain eggs (tooltip "Any two different kinds with no combination") -> one slot
+    cycling every variant with `breed_weight > 0`; its tooltip gives the kind's share and the overall %.
+  Three outcome slots fit; a rule with more than two results would overflow the page.
+- **Moobloom Shearing** (`MoobloomShearingCategory`, 150x56, catalyst shears): one page per variant, its egg ->
+  each pool item (entries with the same item merged, highest first) with tooltip "<n> per shear (<p>% per spot)",
+  p = sum of weight x chance / pool weight, n = 3p (both shears, 4.6); with `shearBareToCow` a cow spawn egg slot
+  ("Shear it bare: back to a cow"). The page renders a client-side moobloom (one per recipe, made again when the
+  level changes) with JEI's PoseStack, turning with the mouse; position i shows pool entry (i + gameTime/30) % size,
+  so every flower appears. `Moobloom.setDisplayFlowers` (public wrapper of the private setter) exists for this only.
+- **Moobloom Conversion** (`MoobloomConversionCategory`): one page per variant that has a cow-conversion food, a
+  plain cow (calf or adult; a calf stays a calf) + the variant's food -> the moobloom rendered with its flowers.
+  Tooltips give the chance per food item fed (each try uses one) and, for foods several variants share (the
+  dandelion split: moobloom 90 % / sunbloom 10 %), this kind's share of the conversions. Lang keys
+  `jei.more_mooblooms.conversion*`. Test: JW-15 in [jei_world_tabs.md](jei_world_tabs.md); MB-104 below.
+- **Just Enough Breeding's BB page**: JEBr hardcodes a `buzzier_bees:moobloom` + wheat page keyed on BB's egg. With
+  BB loaded, `onRuntimeAvailable` hides every `justenoughbreeding:breeding` recipe with BB's egg as input or output
+  (lookup by recipe type id, no compile dependency). Whether the page showed before is unverified (MB-103).
+- **Install:** `moreMooblooms-1.1.0.jar` (md5 c2df0ab6, built 08:58, without the Conversion category) was installed into
+  `mods/` in place of 1.0.0 for the 2026-10-22 scratch run. The jar was then rebuilt in place at the same version
+  (md5 3440dbc0, 16:58, with Conversion); it still has to be copied to `mods/` (`:moreMooblooms:installToMods`).
+  Two different jars carry the name 1.1.0, so bump the version before the next deploy if the earlier one could have
+  reached anyone; `server_mods/` still holds 1.0.0 until the next deploy. Same jar on the server: nothing in
+  1.1.0 changes server behaviour, and it boots there (scratch server PASSED 2026-10-22, SQ-GM-09: `Done (`, no error naming
+  `more_mooblooms` or `compat.jei`).
+  MB-100 to MB-104 are client only (JEI).
 
 ## 6. File map
 
@@ -1008,8 +1038,13 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
 - [x] **MB-89 Flowers NBT:** `/summon ... {Variant:"more_mooblooms:rosebloom",Flowers:["minecraft:poppy","minecraft:dandelion","minecraft:rose_bush[half=upper]"]}` -> the dandelion position is re-rolled from the pool, the other two kept (scratch)
 
 **Spawn eggs and JEI**
-- [ ] **MB-71 JEI eggs:** JEI search "moobloom" -> 11 eggs named "<Name> Spawn Egg" in their colours, each with an info page (pool odds, food, shearing, bred from); middle-click a moobloom in creative -> its own egg
+- [ ] **MB-71 JEI eggs:** JEI search "moobloom" -> 11 eggs named "<Name> Spawn Egg" in their colours, each with an info page (pool odds, food, shearing); middle-click a moobloom in creative -> its own egg
 - [ ] **MB-81 JEI breeding:** JEI uses of the rosebloom egg -> "Moobloom Breeding" pages, e.g. rosebloom + lilybloom -> peonybloom 35%
+- [ ] **MB-100 JEI shearing:** JEI uses of shears -> "Moobloom Shearing", 11 pages; rosebloom shows rose bush 1.5, poppy 1.2, red tulip 0.3 per shear; witherbloom wither rose 0.3; the rendered moobloom cycles through every pool flower and turns with the mouse; the cow egg slot appears (and is gone with `shearBareToCow = false` after a restart)
+- [ ] **MB-101 JEI breeding outputs:** rosebloom egg -> pages for rosebloom + rosebloom -> rosebloom 100%, rosebloom + lilybloom -> peonybloom 35% / random 65%, the random-calf page (no witherbloom); each parent shows its food cycling; moobloom + moobloom -> sunbloom 10% / moobloom 90%
+- [ ] **MB-102 Info text:** each egg's info page reads in a few short lines, numbers match the config
+- [ ] **MB-103 No BB moobloom in JEI:** JEI search "moobloom" and BB's egg via recipe lookup -> no Just Enough Breeding page for Buzzier Bees' moobloom
+- [ ] **MB-104 JEI conversion:** JEI uses of Dandelion (or a cow spawn egg's recipes) -> "Moobloom Conversion": a cow + dandelion -> moobloom 90 % / sunbloom 10 % shares in the hover, chance per food item, the rendered moobloom; a calf note on the cow slot (same as JW-15)
 - [ ] **MB-72 Egg swap:** survival; a Rosebloom egg in hotbar slot 1, a Lilybloom egg in the main inventory; use the last Rosebloom egg -> slot 1 stays empty (Quark ignores the egg). With the egg taken out of Quark's "Ignored Items" -> slot 1 refills with the Lilybloom egg
 - [ ] **MB-73 Egg on a moobloom:** right-click a lilybloom with a rosebloom egg -> a rosebloom calf; a plain egg -> a lilybloom calf
 
@@ -1130,3 +1165,9 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
   37 spawn rules and 10 breeding rules without errors. The version stays 1.0.0 for this first release.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- 2026-10-22: **More Mooblooms 1.1.0 JEI** (section 5) BUILT, not installed: breeding pages with food and every
+  outcome (combination + miss, breeds true, random calf), a shearing category with drops per shear and the rendered
+  moobloom cycling its flowers, short info text, JEBr's BB moobloom page hidden. MB-71 reworded, MB-100 to MB-104
+  added.
+- 2026-10-22 (second bulk run): 1.1.0 installed into `mods/` in place of 1.0.0; the dedicated server boots with it
+  (SQ-GM-09 PASS). MB-100 to MB-104 (JEI) stay in game.

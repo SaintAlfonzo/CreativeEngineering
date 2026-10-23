@@ -6,7 +6,7 @@
 //   cake base    raw: 3 flour/cornmeal + 2 egg + 2 sugar, or 3 dough + egg + 2 sugar (manual craft)
 //                baked: 2 flour/cornmeal + 2 egg + 2 sugar, or 2 dough + egg + 2 sugar, or a raw base (oven)
 //   pie crust    3 flour/cornmeal + egg + milk, or 3 dough + milk -> 3 (manual craft)
-//   frosting     sugar + 2 milk -> 2 (manual craft)
+//   frosting     sugar + 2 milk -> 2 (manual craft), or the frosting fluid (mixer, compactor, spout)
 //   cookie dough dough + 2 sugar (manual craft)
 //   cake         baked base + frosting + 2 flavour (manual craft), or raw base + frosting + 2 flavour (oven).
 //                Plain cake: 3 frosting, or 2 frosting + a red berry.
@@ -15,7 +15,7 @@
 //                Filling + crust also crafts by hand (canning.js, from the can json's "pie" field).
 //   cookie       oven only: cookie dough + 2 flavour -> 12
 // "Manual craft" = an NCH id ending in _manual_only, which Create's mixer and mechanical crafter skip. The bases have
-// no Create or IE machine recipe (every other mod's is removed below).
+// no Create or IE machine recipe (every other mod's is removed below), except frosting through its fluid.
 //
 // A repeated ingredient is written once with a count, n(id, 2). With CEConfig [cooking] ovenIngredientCounts off
 // (the default) NCH.ceBaking turns that into 2 slots of 1; with it on the oven takes 2 from one slot. Sugar is
@@ -44,8 +44,9 @@ ServerEvents.recipes(e => {
 		['adzuki_cake', i.roasted_adzuki_beans], ['banana_cake', i.t_fruits_banana],
 		['chocolate_cake', i.t_bars_chocolate],          // Crafts & Additions' (Neapolitan's merges into it, item_merges.js)
 		['honey_cake', i.honey_bottle], ['mint_cake', i.mint_leaves], ['strawberry_cake', i.t_fruits_strawberry],
-		['vanilla_cake', i.dried_vanilla_pods], ['coffee_cake', i.farmersrespite_coffee_beans],
+		['vanilla_cake', i.dried_vanilla_pods], ['coffee_cake', i.roasted_coffee_beans],
 		['mangosteen_cake', i.t_fruits_mangosteen],
+		['carrot_cake', i.carrot],                       // Veggies Delight's (veggies_delight.md 4.8)
 	]
 	var PIES = [
 		['apple_pie', i.apple, 'canned_apple_pie_filling'],
@@ -58,6 +59,7 @@ ServerEvents.recipes(e => {
 		['durian_pie', i.durian_flesh, 'canned_durian_pie_filling'],
 		['pineapple_pie', i.pineapple_slice, 'canned_pineapple_pie_filling'],
 		['sweet_berry_cheesecake', i.sweet_berries, 'canned_sweet_berry_pie_filling'],
+		['sweet_potato_pie', i.baked_sweet_potato, null],    // Veggies Delight's; no filling can yet
 	]
 	var COOKIES = [
 		['cookie', i.cocoa_beans], ['honey_cookie', i.honey_bottle], ['sweet_berry_cookie', i.sweet_berries],
@@ -90,6 +92,10 @@ ServerEvents.recipes(e => {
 	R.shapeless(Item.of(i.pie_crust, 3), [Item.of(i.any_dough, 3), i.milk], e, 'pie_crust_dough_manual_only')
 
 	R.shapeless(Item.of(i.frosting, 2), [i.any_sugar, Item.of(i.milk, 2)], e, 'frosting_manual_only')
+	// Frosting fluid (TODO dishes/ingredients #2): the Create route. Heated mixer sugar + 250 mB milk -> 500 mB, the
+	// grid's 2 frosting; the compactor presses 250 mB into 1 frosting; a spout tops a baked base with 750 mB (below).
+	R.createMixing(Fluid.of(global.fluid.frosting, 500), [i.any_sugar, Fluid.of(global.fluid.milk, 250)], e, 'frosting', 'heated')
+	R.createCompacting(i.frosting, [Fluid.of(global.fluid.frosting, 250)], e, 'frosting')
 	R.shapeless(i.cookie_dough, [i.any_dough, Item.of(i.any_sugar, 2)], e, 'cookie_dough_manual_only')
 
 	//######################### Cakes (cake pan) #########################
@@ -105,6 +111,8 @@ ServerEvents.recipes(e => {
 	})
 	// Chocolate cake also spouts: baked base + 500 mB chocolate (Crafts & Additions' recipe, swept by the removals).
 	R.createFilling(i.chocolate_cake, [Fluid.of(global.fluid.chocolate, 500), i.cake_base_baked], e, 'chocolate_cake_spout')
+	// Plain cake spouts too: baked base + 750 mB frosting fluid (3 frosting).
+	R.createFilling(i.cake, [Fluid.of(global.fluid.frosting, 750), i.cake_base_baked], e, 'cake_frosting_spout')
 
 	//######################### Pies (pie tin) #########################
 	// The oven refuses an opened can (BakingRecipe skips partial CanServings), so only a full filling bakes a pie.
@@ -134,6 +142,12 @@ ServerEvents.recipes(e => {
 		Item.of(i.lemon_tart, 2), e, 'lemon_tart', SHEET)
 	R.ceBaking([i.t_fruits_fig, i.pie_crust, i.eggs, i.any_sugar, i.t_milk_bottle],
 		Item.of(i.fig_tart, 2), e, 'fig_tart', SHEET)
+
+	//######################### Breads (baking sheet) #########################
+	// Veggies Delight's cauliflower bread: dough baked with the cauliflower, not raw wheat crafted into bread
+	// (veggies_delight.md 4.7). Its garlic bread starts from baked bread and keeps its grid recipe.
+	R.remove({ id: 'veggiesdelight:cauliflower_bread' }, e)
+	R.ceBaking([i.any_dough, n(i.cauliflower, 2)], Item.of(i.cauliflower_bread, 1), e, 'cauliflower_bread', SHEET)
 
 	//######################### Oven and bakeware #########################
 	// Oven: an iron-plate top over a hollow brick box.

@@ -250,7 +250,7 @@ the group's spacing. Only the split between members changes.
   shared tag. Fits replace one structure's list instead.
 - **Removed:**
   - The JSON, the script, `build_biome_merges.py`, the proposal analyzer and its reports moved to
-    `kubejs/archive/worldgen/biome_merges_2026-10-11/` (with a README; nothing loads from there).
+    `kubejs/archive/worldgen/biome_merges_2026-10-11/` (deleted 2026-10-22; git history has it).
   - Both `/cegen` generator entries.
   - Both `build_deploy.py` file rules. The next deploy removes `biome_merges.js` and `biome_merges.json` from
     clients and the server.

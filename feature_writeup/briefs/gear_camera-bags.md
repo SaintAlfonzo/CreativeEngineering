@@ -142,7 +142,7 @@ all blue bodies, outlines still distinct; wash → back to each tier's own colou
 ---
 
 ## camera-bags #4: Flashes in the bag tag
-Status **Planned** · Work: KubeJS · id `gear/camera-bags #4`
+Status **Testing** (built 2026-10-22, CB-11) · Work: KubeJS · id `gear/camera-bags #4`
 
 ### Goal
 Decide whether camera flashes go in `#exposure_extras:camera_equipment`, and add them if so.

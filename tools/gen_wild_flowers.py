@@ -37,7 +37,7 @@ OUT_MD = INSTANCE / 'feature_writeup/flowers_by_biome.md'
 # Visual color of every ornamental flower (what the player sees, not the dye it crafts into). A block in
 # #minecraft:flowers that is missing here is not counted as a flower (wild crops, azalea leaves, propagules).
 COLORS = {
-    'minecraft:dandelion': 'yellow', 'minecraft:poppy': 'red', 'minecraft:blue_orchid': 'light_blue',
+    'minecraft:dandelion': 'yellow', 'veggiesdelight:mature_dandelion': 'yellow', 'minecraft:poppy': 'red', 'minecraft:blue_orchid': 'light_blue',
     'minecraft:allium': 'magenta', 'minecraft:azure_bluet': 'white', 'minecraft:red_tulip': 'red',
     'minecraft:orange_tulip': 'orange', 'minecraft:white_tulip': 'white', 'minecraft:pink_tulip': 'pink',
     'minecraft:oxeye_daisy': 'white', 'minecraft:cornflower': 'blue', 'minecraft:lily_of_the_valley': 'white',
@@ -112,7 +112,30 @@ def rate_for(biome, traits, entry, density):
 
 
 def resolve_entry(all_traits, entry):
+    if entry.get('follows'):
+        return list(entry.get('_follows', []))
     return g.resolve_crop(all_traits, entry)
+
+
+def resolve_follows(world, cfg, all_traits, snap):
+    """A flowers entry with 'follows': <block> goes in every biome where that block generates once the pack's other
+    flower rules apply (its Flower Patch block counts too). Sets entry['_follows'] and returns {key: [biomes]}, which
+    the snapshot carries to wild_flowers.js."""
+    keys = [k for k, e in cfg.get('flowers', {}).items() if e.get('follows')]
+    for k in keys:
+        cfg['flowers'][k]['_follows'] = []
+    if not keys:
+        return {}
+    pre, _ = inventory(world, cfg, all_traits, snap, after=True)
+    patch_blocks = cfg.get('flower_patch', {}).get('blocks', {})
+    out = {}
+    for k in keys:
+        block = cfg['flowers'][k]['follows']
+        wanted = {block, patch_blocks.get(block)} - {None}
+        out[k] = sorted(b for b, dist in pre.items() if any(dist.get(x, 0) > 0 for x in wanted)
+                        and b in all_traits and not all_traits[b] & g.NEVER)
+        cfg['flowers'][k]['_follows'] = out[k]
+    return out
 
 
 def normalize_palette(p):
@@ -755,6 +778,7 @@ def main():
     world = load_world()
     fp = cfg['flower_patch']
     snap = build_snapshot(world, all_traits, fp)
+    snap['follows'] = resolve_follows(world, cfg, all_traits, snap)
     text = json.dumps(snap, indent=1, sort_keys=False) + '\n'
     old = SNAPSHOT.read_text() if SNAPSHOT.exists() else ''
     SNAPSHOT.write_text(text)

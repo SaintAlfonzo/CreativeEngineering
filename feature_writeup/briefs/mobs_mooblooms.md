@@ -11,7 +11,7 @@ Written 2026-10-21 from [TODO](../todo/TODO.md) `# mobs`, Sub `mooblooms`. Featu
 | #4 | Skylands cows and mooblooms | Planned | small: data (rule file + one biome modifier), `/reload` + new chunks |
 | #3 | Per-biome moobloom shares (D47) retune | In Progress | small to medium: data, best done through the `worldgen/flowers #2` generator |
 | #5 | Azaleabloom texture | Planned | small: one PNG, then the 1.1 jar |
-| #2 | More Mooblooms 1.1 JEI | Planned | medium: Java in the mod's `compat/jei/`, lang, one new public setter on the entity |
+| #2 | More Mooblooms 1.1 JEI | BUILT 2026-10-22 (what was built: mooblooms.md 5) | medium: Java in the mod's `compat/jei/`, lang, one new public setter on the entity |
 
 Build order:
 
@@ -216,7 +216,7 @@ Status Planned / Work new jar / TODO `mobs/mooblooms #5` (scratchpad 2026-10-19)
 ---
 
 ## mooblooms #2: More Mooblooms 1.1 JEI
-Status Planned / Work new jar / TODO `mobs/mooblooms #2` (mooblooms.md 5)
+Status BUILT 2026-10-22, jar not installed (as built: mooblooms.md 5) / Work new jar / TODO `mobs/mooblooms #2` (mooblooms.md 5)
 
 ### Goal
 mooblooms.md 5: show breeding outputs, show shearing outputs with each flower's chance and the entity rendered with

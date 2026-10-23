@@ -117,7 +117,7 @@
         let fromCan = recipe('baking/apple_pie_from_filling')
         if (pie == null || fromCan == null) { ok(false, 'oven: apple pie recipes loaded'); return }
         // [cooking] ovenIngredientCounts off (the default): n(apple, 2) is 2 slots of 1; on: 2 in one slot
-        let counts = $BKConfig.COOKING.ovenIngredientCounts.get()
+        let counts = String($BKConfig.COOKING.ovenIngredientCounts.get()) === 'true'  // boxed Boolean: compare as text
         let apples = counts ? [Item.of(i.apple, 2)] : [Item.of(i.apple), Item.of(i.apple)]
         ok(pie.matches(inv([Item.of(i.pie_crust)].concat(apples, [Item.of(i.sugar), Item.of(i.honey_bottle)]), true), level),
             'oven: crust + 2 apples + sugar + honey bottle matches apple_pie (ovenIngredientCounts ' + counts + ')')

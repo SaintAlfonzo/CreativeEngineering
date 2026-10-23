@@ -4708,6 +4708,7 @@
         "minecraft:village/desert/houses/desert_tool_smith_1": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/desert/houses/desert_weaponsmith_1": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/desert_vault": { "original": 15, "current": 15, "enabled": true },
+        "veggiesdelight:village/houses/desert_depot_house": { "original": 4, "current": 4, "enabled": true },
         "vinery:vinery_desert": { "original": 2, "current": 3, "enabled": true },
         "wares:village/houses/desert_warehouse": { "original": 10, "current": 10, "enabled": true }
       }
@@ -4899,6 +4900,7 @@
         "minecraft:village/plains/houses/plains_weaponsmith_1": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/plains_vault": { "original": 15, "current": 15, "enabled": true },
         "pneumaticcraft:villages/mechanic_house_plains": { "original": 8, "current": 8, "enabled": true },
+        "veggiesdelight:village/houses/plains_depot_house": { "original": 4, "current": 4, "enabled": true },
         "vinery:vinery_plains": { "original": 2, "current": 3, "enabled": true },
         "wares:village/houses/plains_warehouse": { "original": 10, "current": 10, "enabled": true }
       }
@@ -5105,6 +5107,7 @@
         "minecraft:village/savanna/houses/savanna_weaponsmith_2": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/savanna_vault": { "original": 15, "current": 15, "enabled": true },
         "pneumaticcraft:villages/mechanic_house_savanna": { "original": 8, "current": 8, "enabled": true },
+        "veggiesdelight:village/houses/savanna_depot_house": { "original": 4, "current": 4, "enabled": true },
         "vinery:vinery_savanna": { "original": 2, "current": 3, "enabled": true },
         "wares:village/houses/savanna_warehouse": { "original": 10, "current": 10, "enabled": true }
       }
@@ -5324,6 +5327,7 @@
         "minecraft:village/snowy/houses/snowy_tool_smith_1": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/snowy/houses/snowy_weapon_smith_1": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/snowy_vault": { "original": 15, "current": 15, "enabled": true },
+        "veggiesdelight:village/houses/snowy_depot_house": { "original": 4, "current": 4, "enabled": true },
         "wares:village/houses/snowy_warehouse": { "original": 10, "current": 10, "enabled": true }
       }
     },
@@ -5529,6 +5533,7 @@
         "minecraft:village/taiga/houses/taiga_weaponsmith_2": { "original": 2, "current": 2, "enabled": true },
         "monobank:village/houses/taiga_vault": { "original": 15, "current": 15, "enabled": true },
         "pneumaticcraft:villages/mechanic_house_taiga": { "original": 8, "current": 8, "enabled": true },
+        "veggiesdelight:village/houses/taiga_depot_house": { "original": 4, "current": 4, "enabled": true },
         "vinery:vinery_taiga": { "original": 2, "current": 3.5, "enabled": true },
         "wares:village/houses/taiga_warehouse": { "original": 10, "current": 10, "enabled": true }
       }

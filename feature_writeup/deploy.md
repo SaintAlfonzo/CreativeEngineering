@@ -11,20 +11,21 @@ update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026
 |---|---|---|
 | Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.0.9 recorded as deployed on both sides (2026-10-19 15:54), 1.0.8 before it (10:20) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
 | `update` / `install` payload modes | BUILT; scratch-tested (DP-01..DP-04 offline) | `select_payload`, `render_readme` |
-| `verify.sh` / `verify.ps1` | BUILT; sh tested, ps1 not run (no PowerShell here) | `VERIFY_SH`, `VERIFY_PS1` |
+| `verify.sh` / `verify.ps1` | BUILT; sh tested, ps1 not run (no PowerShell here). 2026-10-22: `--installed` / `-Installed` checks against the new version (`verify/<target>.installed.*`, both modes); ps1 usage line no longer has a tab for `\t` | `VERIFY_SH`, `VERIFY_PS1` |
+| `apply.sh` / `apply.ps1`: verify (update; stops on DRIFT unless `--force`), removals, copy each folder to its place per target (`CATEGORIES`), `world_serverconfig/` into the server's `level-name` world or the client's `--world` saves, keeps `MEMORY`/`JAVAPATH` (`.bat`: `maxmemory`/`javapath`), verify `--installed`. Install mode moves old jars to `mods_before_<version>/` | BUILT 2026-10-22; sh scratch-tested (synthetic payload: update server + client, rerun refused as DRIFT, install mode, unsafe removal path skipped), ps1 not run | `APPLY_SH`, `APPLY_PS1`, `write_scripts` |
 | kubejs file classes (`KUBEJS_CLASSES`) | BUILT; every kubejs file classified (2026-10-11: 9 new worldgen files, 6 runtime + 3 dev; 2026-10-14: block swap tables, 2 runtime + 1 dev) | `KUBEJS_CLASSES` |
 | Mod sides (`mod_sides.md`): a jar with no row stops the build; a row whose side changed is listed under "Mods whose side changed" and the jar moves between `mods/` and `client_mods/` | BUILT; 2026-10-11: 4 rows added (Breedable Killer Rabbit server, Cool Rain both, MEED both, Pretty Rain client), JEED moved client -> both; 2026-10-14: 4 rows (Campsite Structures, restApi, Unlit Campfire both; rsec server), 417 rows | [mod_sides.md](../mod_sides.md) |
 | Display Delight item models: preflight warns when `gen_display_delight_models.py --check` fails or the DD export is older than the jar ([wthit_lines.md](wthit_lines.md) F3) | BUILT 2026-10-20; passes | `check_display_delight_models` |
 | In-tree mods (`IN_TREE_MODS`): patcherMod, exposureBackport, incubationAdditions, moreMooblooms, backportedVinery and backportedBrewin (2026-10-18); preflight checks `mods/` equals the build, the shipped jar is archived | BUILT; two jars with one mod id in `mods/` stop the build since 1.0.9 (4) | `IN_TREE_MODS` |
 | Vinery donor jars (`vinery_upstream` category, both sides; [alcohol.md](alcohol.md) B4.8, D14): the two unmodified Vinery jars ship in the payload for now (a published pack downloads them from Modrinth / CurseForge instead, not built). Preflight: while the port is in `mods/`, each jar must exist with the sha1 `UpstreamJars.java` pins. README step: copy `vinery_upstream/` next to `mods/` | BUILT 2026-10-18, not run (the port isn't in `mods/` yet) | `vinery_upstream_jars`, `collect` |
-| `world_serverconfig/` payload folder: the full serverconfig set every build, with README steps to copy it into existing worlds (server and single-player saves) | BUILT 2026-10-21; README rendering checked offline, no real build yet (DP-08) | `main` (after `select_payload`), `render_readme` |
+| `world_serverconfig/` payload folder: the full serverconfig set every build, with README steps to copy it into existing worlds (server and single-player saves) | BUILT 2026-10-21; scratch server PASSED 2026-10-22 (SQ-OM-17 scratch build, SQ-OM-18 world boot); a real release build and a single-player save in game (DP-08) | `main` (after `select_payload`), `render_readme` |
 | Climate samples gzipped and moved out of `exported/` | BUILT (patcherMod 1.0.3, copied to `mods/`); tuner output byte-identical | [BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java), [dump_climate.js](../kubejs/server_scripts/_lib/dump_climate.js) |
 
 **Day to day:**
 
 ```
 python3 tools/build_deploy.py --notes "..."          # update payload from the deployed version
-# copy deploy/latest/ out, run verify.sh first, apply
+# copy deploy/latest/ out, then on each machine: sh apply.sh server|client <folder> (verifies before and after)
 python3 tools/build_deploy.py --snapshot             # record that deploy/latest's version is now deployed
 ```
 
@@ -77,7 +78,10 @@ deploy/latest/
   VERSION.txt              1.0.3 (update from 1.0.2)
   README.md                verify, then server and client steps; this version's changes; removals
   verify.sh  verify.ps1    sh verify.sh server /path/to/server  |  verify.ps1 client "C:\...\instance"
+                           --installed / -Installed: the same check against this version, after applying
   verify/server.sha1 verify/client.sha1   the base version's jars per target (sha1sum format)
+  verify/<target>.installed.sha1          this version's jars per target (both modes)
+  apply.sh  apply.ps1      sh apply.sh server /path/to/server  |  apply.ps1 client "C:\...\instance" -World saves\<w>
   removals_server.txt removals_client.txt
   mods/ client_mods/ kubejs/ config/ defaultconfigs/ server/ resourcepacks/ shaderpacks/ vinery_upstream/
                            only the new and changed files; folders with nothing new are absent
@@ -118,6 +122,8 @@ Runtime inputs in `generation_scripts/`, with their readers:
 | `worldgen/structure_config.json`, `structure_groups.json`, `structure_tags.json` | `structure_overrides.js` (+ MassPlacer for tags) |
 | `food/food_types.json`, `food/can_servings.json` | `tags/foodtypetags.js`, `tags/cantags.js` |
 | `food/can_types.json` | `items/cans.js` (generated per-type cans) |
+| `food/mortar_catalog.json` | `cooking/mortar.js` (added 2026-10-22) |
+| `food/placed_food_slices.json` | patcherMod `PlacedFoodSol` (added 2026-10-22) |
 | `food/placeable.json` | `tags/placeabletags.js` |
 | `stacks/stack_sizes.json` | `changes/stack_sizes.js` |
 | `worldgen/wild_crops.json` | `worldgen/wild_crops.js` |
@@ -204,7 +210,7 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
 
 ## 5. File map
 
-- [tools/build_deploy.py](../tools/build_deploy.py): `KUBEJS_CLASSES`, `snapshot`, `load_base`, `select_payload`, `write_verify`, `render_readme`
+- [tools/build_deploy.py](../tools/build_deploy.py): `KUBEJS_CLASSES`, `snapshot`, `load_base`, `select_payload`, `write_scripts`, `render_readme`
 - [deploy/DEPLOYED.json](../deploy/DEPLOYED.json), [deploy/DEPLOY_LOG.md](../deploy/DEPLOY_LOG.md), `deploy/history/<ver>.json`
 - [WorldgenFiles.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/WorldgenFiles.java): gzip read/write
 - [BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java): `readSamples`, `SAMPLE_DIR`, `LEGACY_SAMPLE_DIR`
@@ -228,7 +234,8 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
 - [ ] **DP-04 apply on the real server:** removals + copy -> server boots; `[biome-tuning]` logs `override` for 3 dimensions (samples found); no KubeJS errors.
 - [ ] **DP-05 client:** `verify.sh client` (or `verify.ps1` on Windows) -> OK; apply; single-player world creation logs the biome overrides.
 - [x] **DP-06 snapshot:** PASSED (1.0.3 and 1.0.4 recorded; the 1.0.5 build said `update from 1.0.4`). Was: `--snapshot` after DP-04/05 -> DEPLOYED.json at 1.0.3, `- Deployed:` line in the log, next `--dry-run` says `update from 1.0.3`.
-- [ ] **DP-08 world serverconfig:** next build (`--dry-run` is not enough, it writes no folder) -> `deploy/latest/world_serverconfig/` holds every `defaultconfigs` file incl. `configs_edited/server_config` (4 at 1.0.9: brickhopper, seasonhud, sereneseasons, unlitcampfire), in an update too; README server and client steps each have the Existing worlds line naming the changed files. Copy into an existing world's `serverconfig/` -> the world boots with the pack values (e.g. sereneseasons settings in `latest.log`/in game).
+- [ ] **DP-08 world serverconfig:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-17: a scratch build with `tools/changelog_test/scratch_deploy_build.py` holds 8 files, each equal to its source, also in an update build, both README steps name them; SQ-OM-18: mod defaults 2000 / 160 / 2000 without them, 0 / -1 / 0 read from the world's `serverconfig/` with them).* next build (`--dry-run` is not enough, it writes no folder) -> `deploy/latest/world_serverconfig/` holds every `defaultconfigs` file incl. `configs_edited/server_config` (4 at 1.0.9: brickhopper, seasonhud, sereneseasons, unlitcampfire), in an update too; README server and client steps each have the Existing worlds line naming the changed files. Copy into an existing world's `serverconfig/` -> the world boots with the pack values (e.g. sereneseasons settings in `latest.log`/in game).
+- [ ] **DP-09 apply script:** on the real server, `sh apply.sh server <server folder>` -> verify `OK ... matches 1.0.9`, removals deleted, folders copied, `LaunchServer.sh` keeps its `MEMORY`/`JAVAPATH`, world `serverconfig/` refreshed, ends `OK ... is at 1.1.01`; server boots. On the Windows client, `apply.ps1 client <instance> -World saves\<world>` -> the same, ends `OK`; game starts.
 - [ ] **DP-07 /dumpclimate:** in a world, `/dumpclimate` -> writes `generation_scripts/worldgen/climate/*.json.gz` (about 0.2 MB total), `/reload` solves with them.
 
 ## 8. History
@@ -271,3 +278,10 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
 - 2026-10-21: player changelog step (staging stamp, `--snapshot` freeze, frozen deployed changelogs, lint in
   preflight), see "Player changelog step" above. Checked with `tools/test_changelog.sh` (scratch-folder deploy test)
   and `--version 1.1.01 --dry-run` (payload lists `changelog/1.1.01.md`, not `unreleased.md`).
+- 2026-10-22 (second bulk run, SQ-OM-17): the release preflight refused to build because `mortar_catalog.json` and
+  `placed_food_slices.json` had no `KUBEJS_CLASSES` rule; both are runtime now. New
+  `tools/changelog_test/scratch_deploy_build.py` runs the release build into a scratch folder. DP-08 server half
+  passed (SQ-OM-17, SQ-OM-18).
+- 2026-10-22: `apply.sh` / `apply.ps1` added to every payload, and `verify --installed` (`write_verify` -> `write_scripts`;
+  the four templates now use `@name@` tokens instead of `str.format`). The staged 1.1.01 payload got the new scripts,
+  `verify/*.installed.*` and README from its history json without a rebuild (payload files unchanged).

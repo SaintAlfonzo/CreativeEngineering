@@ -1,0 +1,1785 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:budding_amethyst"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:small_amethyst_bud"
+    },
+    {
+     "block": "minecraft:medium_amethyst_bud"
+    },
+    {
+     "block": "minecraft:large_amethyst_bud"
+    },
+    {
+     "block": "minecraft:amethyst_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:budding_amethyst"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:barrier",
+     "label": "Drops nothing"
+    }
+   ],
+   "notes": [
+    "Drops nothing, even with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:small_amethyst_bud",
+      "minecraft:medium_amethyst_bud",
+      "minecraft:large_amethyst_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "minecraft:small_amethyst_bud",
+      "minecraft:medium_amethyst_bud",
+      "minecraft:large_amethyst_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:amethyst_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:amethyst_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:amethyst_shard",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 4
+    },
+    {
+     "item": "minecraft:amethyst_shard",
+     "label": "Other tool or hand",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:flawless_budding_quartz",
+      "ae2:flawed_budding_quartz",
+      "ae2:chipped_budding_quartz",
+      "ae2:damaged_budding_quartz"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "ae2:small_quartz_bud"
+    },
+    {
+     "block": "ae2:medium_quartz_bud"
+    },
+    {
+     "block": "ae2:large_quartz_bud"
+    },
+    {
+     "block": "ae2:quartz_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face.",
+    "Every tier grows alike."
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "block": "ae2:flawed_budding_quartz"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "ae2:chipped_budding_quartz"
+    },
+    {
+     "block": "ae2:damaged_budding_quartz"
+    },
+    {
+     "block": "ae2:quartz_block"
+    }
+   ],
+   "notes": [
+    "Each growth: 1 in 12 to drop a tier. Flawless never decays."
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:flawless_budding_quartz"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ae2:flawed_budding_quartz",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "ae2:quartz_block",
+     "label": "Any other tool"
+    }
+   ],
+   "notes": [
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:flawed_budding_quartz"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ae2:chipped_budding_quartz",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "ae2:quartz_block",
+     "label": "Any other tool"
+    }
+   ],
+   "notes": [
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:chipped_budding_quartz"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ae2:damaged_budding_quartz",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "ae2:quartz_block",
+     "label": "Any other tool"
+    }
+   ],
+   "notes": [
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:damaged_budding_quartz"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ae2:quartz_block",
+     "label": "Any tool"
+    }
+   ],
+   "notes": [
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:small_quartz_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ae2:small_quartz_bud",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "ae2:certus_quartz_dust",
+     "label": "Any other tool"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:medium_quartz_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ae2:medium_quartz_bud",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "ae2:certus_quartz_dust",
+     "label": "Any other tool"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:large_quartz_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ae2:large_quartz_bud",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "ae2:certus_quartz_dust",
+     "label": "Any other tool"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "ae2"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "ae2:quartz_cluster"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ae2:quartz_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "ae2:certus_quartz_crystal",
+     "label": "Any other tool, Fortune adds more",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_celestite"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_celestite_bud"
+    },
+    {
+     "block": "geode:medium_celestite_bud"
+    },
+    {
+     "block": "geode:large_celestite_bud"
+    },
+    {
+     "block": "geode:celestite_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_celestite"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_celestite",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_celestite_bud",
+      "geode:medium_celestite_bud",
+      "geode:large_celestite_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_celestite_bud",
+      "geode:medium_celestite_bud",
+      "geode:large_celestite_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:celestite_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:celestite_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "geode:celestite_shard",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 4
+    },
+    {
+     "item": "geode:celestite_shard",
+     "label": "Other tool or hand",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_diamond",
+      "geode:budding_deepslate_diamond",
+      "geode:budding_sculk_diamond"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_diamond_bud"
+    },
+    {
+     "block": "geode:medium_diamond_bud"
+    },
+    {
+     "block": "geode:large_diamond_bud"
+    },
+    {
+     "block": "geode:diamond_crystal"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_diamond",
+      "geode:budding_deepslate_diamond",
+      "geode:budding_sculk_diamond"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_diamond",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_diamond_bud",
+      "geode:medium_diamond_bud",
+      "geode:large_diamond_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_diamond_bud",
+      "geode:medium_diamond_bud",
+      "geode:large_diamond_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:diamond_crystal"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:diamond_crystal",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:diamond",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 2
+    },
+    {
+     "item": "minecraft:diamond",
+     "label": "Other tool or hand"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_echo"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_echo_bud"
+    },
+    {
+     "block": "geode:medium_echo_bud"
+    },
+    {
+     "block": "geode:large_echo_bud"
+    },
+    {
+     "block": "geode:echo_crystal"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_echo"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_echo",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_echo_bud",
+      "geode:medium_echo_bud",
+      "geode:large_echo_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_echo_bud",
+      "geode:medium_echo_bud",
+      "geode:large_echo_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:echo_crystal"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:echo_crystal",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:echo_shard",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 4
+    },
+    {
+     "item": "minecraft:echo_shard",
+     "label": "Other tool or hand",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_emerald",
+      "geode:budding_deepslate_emerald",
+      "geode:budding_sculk_emerald"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_emerald_bud"
+    },
+    {
+     "block": "geode:medium_emerald_bud"
+    },
+    {
+     "block": "geode:large_emerald_bud"
+    },
+    {
+     "block": "geode:emerald_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_emerald",
+      "geode:budding_deepslate_emerald",
+      "geode:budding_sculk_emerald"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_emerald",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_emerald_bud",
+      "geode:medium_emerald_bud",
+      "geode:large_emerald_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_emerald_bud",
+      "geode:medium_emerald_bud",
+      "geode:large_emerald_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:emerald_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:emerald_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:emerald",
+     "label": "Pickaxe, Fortune adds more"
+    },
+    {
+     "item": "minecraft:emerald",
+     "label": "Other tool or hand"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_lapis",
+      "geode:budding_deepslate_lapis",
+      "geode:budding_sculk_lapis"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_lapis_bud"
+    },
+    {
+     "block": "geode:medium_lapis_bud"
+    },
+    {
+     "block": "geode:large_lapis_bud"
+    },
+    {
+     "block": "geode:lapis_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_lapis",
+      "geode:budding_deepslate_lapis",
+      "geode:budding_sculk_lapis"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_lapis",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_lapis_bud",
+      "geode:medium_lapis_bud",
+      "geode:large_lapis_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_lapis_bud",
+      "geode:medium_lapis_bud",
+      "geode:large_lapis_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:lapis_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:lapis_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:lapis_lazuli",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 3
+    },
+    {
+     "item": "minecraft:lapis_lazuli",
+     "label": "Other tool or hand"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_nether_ancient_debris",
+      "geode:budding_basalt_ancient_debris",
+      "geode:budding_blackstone_ancient_debris"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_nether_ancient_debris_bud"
+    },
+    {
+     "block": "geode:medium_nether_ancient_debris_bud"
+    },
+    {
+     "block": "geode:large_nether_ancient_debris_bud"
+    },
+    {
+     "block": "geode:nether_ancient_debris_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_nether_ancient_debris",
+      "geode:budding_basalt_ancient_debris",
+      "geode:budding_blackstone_ancient_debris"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_nether_ancient_debris",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_nether_ancient_debris_bud",
+      "geode:medium_nether_ancient_debris_bud",
+      "geode:large_nether_ancient_debris_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_nether_ancient_debris_bud",
+      "geode:medium_nether_ancient_debris_bud",
+      "geode:large_nether_ancient_debris_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:nether_ancient_debris_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:nether_ancient_debris_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:netherite_scrap",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 2
+    },
+    {
+     "item": "minecraft:netherite_scrap",
+     "label": "Other tool or hand"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_nether_glowstone",
+      "geode:budding_basalt_glowstone",
+      "geode:budding_blackstone_glowstone"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_nether_glowstone_bud"
+    },
+    {
+     "block": "geode:medium_nether_glowstone_bud"
+    },
+    {
+     "block": "geode:large_nether_glowstone_bud"
+    },
+    {
+     "block": "geode:nether_glowstone_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_nether_glowstone",
+      "geode:budding_basalt_glowstone",
+      "geode:budding_blackstone_glowstone"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_nether_glowstone",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_nether_glowstone_bud",
+      "geode:medium_nether_glowstone_bud",
+      "geode:large_nether_glowstone_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_nether_glowstone_bud",
+      "geode:medium_nether_glowstone_bud",
+      "geode:large_nether_glowstone_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:nether_glowstone_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:nether_glowstone_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:glowstone_dust",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 3
+    },
+    {
+     "item": "minecraft:glowstone_dust",
+     "label": "Other tool or hand",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_nether_gold_nugget",
+      "geode:budding_basalt_gold_nugget",
+      "geode:budding_blackstone_gold_nugget"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_nether_gold_nugget_bud"
+    },
+    {
+     "block": "geode:medium_nether_gold_nugget_bud"
+    },
+    {
+     "block": "geode:large_nether_gold_nugget_bud"
+    },
+    {
+     "block": "geode:nether_gold_nugget_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_nether_gold_nugget",
+      "geode:budding_basalt_gold_nugget",
+      "geode:budding_blackstone_gold_nugget"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_nether_gold_nugget",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_nether_gold_nugget_bud",
+      "geode:medium_nether_gold_nugget_bud",
+      "geode:large_nether_gold_nugget_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_nether_gold_nugget_bud",
+      "geode:medium_nether_gold_nugget_bud",
+      "geode:large_nether_gold_nugget_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:nether_gold_nugget_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:nether_gold_nugget_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:gold_nugget",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 4
+    },
+    {
+     "item": "minecraft:gold_nugget",
+     "label": "Other tool or hand",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_nether_quartz",
+      "geode:budding_basalt_quartz",
+      "geode:budding_blackstone_quartz"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_nether_quartz_bud"
+    },
+    {
+     "block": "geode:medium_nether_quartz_bud"
+    },
+    {
+     "block": "geode:large_nether_quartz_bud"
+    },
+    {
+     "block": "geode:nether_quartz_crystal"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_nether_quartz",
+      "geode:budding_basalt_quartz",
+      "geode:budding_blackstone_quartz"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_nether_quartz",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_nether_quartz_bud",
+      "geode:medium_nether_quartz_bud",
+      "geode:large_nether_quartz_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_nether_quartz_bud",
+      "geode:medium_nether_quartz_bud",
+      "geode:large_nether_quartz_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:nether_quartz_crystal"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:nether_quartz_crystal",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:quartz",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 4
+    },
+    {
+     "item": "minecraft:quartz",
+     "label": "Other tool or hand",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_prismarine"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_prismarine_bud"
+    },
+    {
+     "block": "geode:medium_prismarine_bud"
+    },
+    {
+     "block": "geode:large_prismarine_bud"
+    },
+    {
+     "block": "geode:prismarine_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_prismarine"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_prismarine",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_prismarine_bud",
+      "geode:medium_prismarine_bud",
+      "geode:large_prismarine_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_prismarine_bud",
+      "geode:medium_prismarine_bud",
+      "geode:large_prismarine_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:prismarine_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:prismarine_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:prismarine_shard",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 4
+    },
+    {
+     "item": "minecraft:prismarine_shard",
+     "label": "Other tool or hand"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_redstone",
+      "geode:budding_deepslate_redstone",
+      "geode:budding_sculk_redstone"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_redstone_bud"
+    },
+    {
+     "block": "geode:medium_redstone_bud"
+    },
+    {
+     "block": "geode:large_redstone_bud"
+    },
+    {
+     "block": "geode:redstone_crystal"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_redstone",
+      "geode:budding_deepslate_redstone",
+      "geode:budding_sculk_redstone"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_redstone",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_redstone_bud",
+      "geode:medium_redstone_bud",
+      "geode:large_redstone_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_redstone_bud",
+      "geode:medium_redstone_bud",
+      "geode:large_redstone_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:redstone_crystal"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:redstone_crystal",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "minecraft:redstone",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 6
+    },
+    {
+     "item": "minecraft:redstone",
+     "label": "Other tool or hand",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_wrappist"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "block": "geode:small_wrappist_bud"
+    },
+    {
+     "block": "geode:medium_wrappist_bud"
+    },
+    {
+     "block": "geode:large_wrappist_bud"
+    },
+    {
+     "block": "geode:wrappist_cluster"
+    }
+   ],
+   "notes": [
+    "Random tick, 1 in 5: a bud grows or steps up on an open face."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:budding_wrappist"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": "geode:budding_wrappist",
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Only with Silk Touch.",
+    "A piston breaks it."
+   ]
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:small_wrappist_bud",
+      "geode:medium_wrappist_bud",
+      "geode:large_wrappist_bud"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "geode:small_wrappist_bud",
+      "geode:medium_wrappist_bud",
+      "geode:large_wrappist_bud"
+     ],
+     "label": "Silk Touch"
+    }
+   ],
+   "notes": [
+    "Buds drop only with Silk Touch."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "geode"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "geode:wrappist_cluster"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "minecraft:cluster_max_harvestables"
+   },
+   "outputs": [
+    {
+     "item": "geode:wrappist_cluster",
+     "label": "Silk Touch"
+    },
+    {
+     "item": "geode:wrappist_shard",
+     "label": "Pickaxe, Fortune adds more",
+     "count": 4
+    },
+    {
+     "item": "geode:wrappist_shard",
+     "label": "Other tool or hand",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "quark:black_corundum",
+      "quark:blue_corundum",
+      "quark:green_corundum",
+      "quark:indigo_corundum",
+      "quark:orange_corundum",
+      "quark:red_corundum",
+      "quark:violet_corundum",
+      "quark:white_corundum",
+      "quark:yellow_corundum"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "quark:black_corundum",
+      "quark:blue_corundum",
+      "quark:green_corundum",
+      "quark:indigo_corundum",
+      "quark:orange_corundum",
+      "quark:red_corundum",
+      "quark:violet_corundum",
+      "quark:white_corundum",
+      "quark:yellow_corundum"
+     ],
+     "label": "Grows upward"
+    },
+    {
+     "blocks": [
+      "quark:black_corundum_cluster",
+      "quark:blue_corundum_cluster",
+      "quark:green_corundum_cluster",
+      "quark:indigo_corundum_cluster",
+      "quark:orange_corundum_cluster",
+      "quark:red_corundum_cluster",
+      "quark:violet_corundum_cluster",
+      "quark:white_corundum_cluster",
+      "quark:yellow_corundum_cluster"
+     ],
+     "label": "On an open side"
+    }
+   ],
+   "notes": [
+    "1 in 5 random ticks below y 24: grows up (max 4), sprouts clusters. Not waxed."
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "quark:black_corundum_cluster",
+      "quark:blue_corundum_cluster",
+      "quark:green_corundum_cluster",
+      "quark:indigo_corundum_cluster",
+      "quark:orange_corundum_cluster",
+      "quark:red_corundum_cluster",
+      "quark:violet_corundum_cluster",
+      "quark:white_corundum_cluster",
+      "quark:yellow_corundum_cluster"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "quark:black_corundum_cluster",
+      "quark:blue_corundum_cluster",
+      "quark:green_corundum_cluster",
+      "quark:indigo_corundum_cluster",
+      "quark:orange_corundum_cluster",
+      "quark:red_corundum_cluster",
+      "quark:violet_corundum_cluster",
+      "quark:white_corundum_cluster",
+      "quark:yellow_corundum_cluster"
+     ],
+     "label": "Any tool"
+    }
+   ],
+   "notes": [
+    "Drops itself with any tool."
+   ],
+   "linked": true
+  }
+ ]
+}

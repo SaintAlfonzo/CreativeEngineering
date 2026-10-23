@@ -66,6 +66,7 @@
     "kubejs/data/vinery/worldgen/configured_feature/savanna_white_grape_bush.json",
     "kubejs/data/vinery/worldgen/configured_feature/taiga_red_grape_bush.json",
     "kubejs/data/vinery/worldgen/configured_feature/taiga_white_grape_bush.json",
-    "kubejs/data/vinery/worldgen/configured_feature/white_grape_bush.json"
+    "kubejs/data/vinery/worldgen/configured_feature/white_grape_bush.json",
+    "kubejs/data/vintagedelight/worldgen/configured_feature/patch_salt.json"
   ]
 }

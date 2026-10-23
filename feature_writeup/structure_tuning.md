@@ -1,6 +1,6 @@
 # Structure tuning: how often every structure and village house generates
 
-Test prefix **ST-** · Last updated **2026-10-19** · Overall status **DEPLOYED, in-game test pending**: everything through
+Test prefix **ST-** · Last updated **2026-10-22** · Overall status **DEPLOYED, in-game test pending**: everything through
 plan 7.4 went out INCOMPLETE with pack 1.0.6 (2026-10-14); fixes from the 8.0 scratch run with 1.0.7 (2026-10-18) and 1.0.8
 (2026-10-19); earth fill on water, camp plinths and metas off coasts (7.5) with 1.0.9 (2026-10-19). The scratch run
 8.0.1 to 8.0.10 finished 2026-10-19 ([testing/structures/00_plan.md](testing/structures/00_plan.md)); the client list
@@ -220,6 +220,7 @@ The five house mods added on 2026-09-27 (Greek Villager House, Hobbit House, Old
 House, Simply Houses) and the 10 MCreator houses converted to `kubejs/data` bring 17 sets and 24 structures. They
 were already in the config but had no tags, so category knobs skipped them. Now:
 - a `mod/<namespace>` tag for each of the 15 house namespaces (Simply Houses included), plus `mod/ae2`
+- `mod/veggiesdelight` (the 5 depot houses Veggies Delight adds to vanilla villages; pool multiplier 0.5, [veggies_delight.md](veggies_delight.md) 4.12)
 - `mod/villager_houses` groups the 14 one-building mods (each is a lone house with a villager in it)
 - `type/house` now includes `#mod/villager_houses` and `simply_houses:*` (Simply Houses' buildings have no villagers;
   its "forest fort" is house-sized, 22×24×29, so it stays a house rather than `type/fort`, which also avoids a set split)
@@ -282,7 +283,7 @@ vanilla jungle-temple dispensers) unconverted, on purpose.
 | `structure_config.json` | read-only baseline | rebuilt by the scanner |
 | `pool_config.json` / `pool_tags.json` | village house weights | no per-piece edits; tags remove the 4 tech-house mods |
 | `loot_container_swaps.json` | loot containers in templates | 4 swap rules |
-| ~~`biome_merges.json`~~ | retired 2026-10-11 (archived in `kubejs/archive/worldgen/biome_merges_2026-10-11/`); **where** structures spawn is biome fits now (3.17, 7.2) | was 209 biome adds in 45 `has_structure/*` tags |
+| ~~`biome_merges.json`~~ | retired 2026-10-11 (archived in `kubejs/archive/worldgen/biome_merges_2026-10-11/`, deleted 2026-10-22); **where** structures spawn is biome fits now (3.17, 7.2) | was 209 biome adds in 45 `has_structure/*` tags |
 | `biome_config.json` | biome shares; structures follow their biomes | 9 overworld + 3 End biomes tuned |
 
 **Mods' own configs** (values as of 2026-09-27; `configs_edited/` has backups of those marked "backed up"):
@@ -705,7 +706,7 @@ blocks of predicted terrain (underground structures sit in aquifers or under the
 ground by more than `maxWaterSurplus` (0.5: 60 water to 40 ground passes, 61 to 39 doesn't), the start is cancelled.
 Structures in `water_fill/structures` are not checked, and an override with every limit -1 skips it too (but only
 below `log = ALL`: with `ALL` the share is still checked and can cancel such a structure, a bug noted 2026-10-21 in
-[briefs/worldgen_structures_earthfill.md](briefs/worldgen_structures_earthfill.md), bug A). A meta is
+[briefs/structures_earthfill.md](briefs/structures_earthfill.md), bug A). A meta is
 checked part by part, as for the limits. The log line gains `footprint <water> water / <ground> ground (surplus limit
 0.5[, too wet])`. Inland scratch run (2,601 chunks, 972 starts checked): 14 cancelled by the share alone, among them
 a sunflower-plains village on a lake (739 water / 0 ground), a windmill (255 / 0) and a drum tower (2,123 / 66) whose
@@ -1611,7 +1612,7 @@ of them act on new chunks only.
    The template cache now keeps one map per earth tag list, so the two lists don't clear each other.
 
 Still open from 2.1: the undead castle vs earth fill (a decision), ST-135 (fortified metas vs the 120 s timeout), the
-ocean geode drop (tuning), the piglin camp (Nether, out of scope; the stone-base tag could take it later).
+ocean geode drop (reworked 2026-10-22 to the lowest-floor cap, ST-133 scratch part scratch server PASSED 2026-10-22, SQ-GE), the piglin camp (Nether, out of scope; the stone-base tag could take it later).
 
 ## 4. Limits and decisions
 
@@ -1719,7 +1720,7 @@ ocean geode drop (tuning), the piglin camp (Nether, out of scope; the stone-base
 - Offline tools: [tools/structure_tuning_sim.js](../tools/structure_tuning_sim.js), [tools/test_structure_groups.sh](../tools/test_structure_groups.sh) (+ [tools/structure_groups_test/](../tools/structure_groups_test/)), [tools/check_structure_live.py](../tools/check_structure_live.py), [tools/audit_loot_containers.py](../tools/audit_loot_containers.py)
 - Archive of the old model (config with `current`, tags with multipliers, old applier, old report): `kubejs/archive/worldgen/pre_groups_2026-09-27/`
 - Converted structure mods: `kubejs/data/<modid>/`, made by [tools/port_structure_jars.py](../tools/port_structure_jars.py) (3.11)
-- Old node generators (don't run, they would double-apply): `kubejs/archive/worldgen/`
+- Old node generators (deleted 2026-10-22 from `kubejs/archive/worldgen/`; git history has them)
 
 ## 6. Offline checks
 
@@ -1831,9 +1832,9 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
   sea, see Done); settlements over water could get a boost.
 - **Fresh watchtower:** `fit_keep` is set; rerun `--fit-rates` to raise it back from 1 per 83 (`structure_group_estimates.md` of 2026-10-14; 75 at the 3.20 fold) to its old 1 per 67
   (the run re-solves every fitted structure, so check the diff).
-- **Pyramids** (scratchpad 2026-10-21): double their minimum separation. TODO `worldgen/structures/rates-and-groups #10`.
+- **Pyramids** (scratchpad 2026-10-21): double their minimum separation. TODO `structures/rates-and-groups #10`.
 - **Lone waystones** (scratchpad 2026-10-21): too many, deserts worst; lower the rate, or drop the lone ones and add
-  waystones to existing structures. TODO `worldgen/structures/rates-and-groups #11`.
+  waystones to existing structures. TODO `structures/rates-and-groups #11`.
 
 - strip all structure weights unless an explicit 'increase or decrease' note or change was made. relative frequencies aren't static now
 
@@ -1843,7 +1844,7 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
   swaps leave them untouched. Philip's lost soul city is underground (`type/underground`); the Nether pass in the
   grouping Todo above is the natural place.
 - advanced periph structures are disabled by config, disable warning/remove structure directly 
-- swap river tree to oak log, remove river log/wood, swap driftwood craft to oak planks, remove driftwood/logs
+- ~~swap river tree to oak log, remove river log/wood~~ (done 2026-10-22, [recipes_wood.md](recipes_wood.md) 2.6), swap driftwood craft to oak planks, remove driftwood/logs
 
 **Biomes and terrain**
 - Biome tuning: swap Overworld netherrack and plain crimson/warped ground for other blocks. (quark jasper, create crimsite)
@@ -2026,6 +2027,26 @@ layer is on the `untouched` list (default `geode:budding_prismarine`) keep their
 `[worldgen.ocean_geodes] drop = 10, stayShare = 0.1, untouched = ["geode:budding_prismarine"]`, switch
 `[worldgen.systems] oceanGeodes`. Rates and the land are unchanged; Terralith's cave/mountain geodes are other
 feature types and untouched.
+
+**2026-10-22: ocean geodes go under the deepest floor** (patcherMod 1.1.01, built 2026-10-22, in the `mods/` jar of
+11:06 (md5 b5f60533) and the newer `build/libs` one; `server_mods/` and the 2026-10-22 scratch-run jar 37bb7049
+still have `drop`; `mods/` holds md5 a4d48336 since the second 2026-10-22 scratch run; not deployed, scratch server PASSED 2026-10-22 (SQ-GE-00 to SQ-GE-04);
+user decision, replaces the fixed 10-block drop that ST-133 showed does little over floors near y 0): a moved
+geode's origin goes to at most `lowestFloorY - clearance - maxGenOffset` (the geode config's own placement-box
+bound, 16 for vanilla amethyst), then down a further 0 to `spread` blocks (seed+position roll, so the moved
+geodes don't share one layer). Geodes already that deep don't move. `stayShare` 0.1 still keeps its height.
+Keys: `lowestFloorY` -8 (Terralith deep floors measured near y 0; Tectonic `deeper_oceans` is on), `clearance`
+2, `spread` 8; `drop` removed. Defaults put moved amethyst origins at y -34 to -26. A geode whose box would reach
+the world bottom keeps its height (not reached at the defaults). Moved geode tops (origin + `maxGenOffset`) end at
+y -10 or lower (`lowestFloorY - clearance`). A config edit needs a restart and only changes new chunks. Scratch
+queue SQ-GE (`tools/farm_worldgen_probe.js` `zfw geode`: places the amethyst and the prismarine geode at ocean and
+land sites in a fresh normal world and reports where each landed).
+
+**Fixed in the scratch run (2026-10-22, SQ-GE-03): prismarine geodes were moved too.** Geode Plus' prismarine geode
+keeps its budding prismarine in the alternate inner layer (its inner layer is plain prismarine), so the `untouched`
+check on the inner layer never matched. `OceanGeodes.untouched` now checks the alternate inner layer as well. Rerun:
+23 of 24 ocean amethyst geodes moved, tops 10+ blocks under the floor; prismarine and the 32 land geodes kept their
+height; with `oceanGeodes = false` 0 moved.
 
 **2026-10-12: biome fits for every land structure** (3.17, plan 7.2): 29 fits, 161 structures (166 now with the
 three vanilla replacements), towers folded in, vanilla outpost by its dark oak, sky village over land and sea.
@@ -2774,7 +2795,7 @@ biome/start check); **[game]**: needs eyes in a client.
 - [x] **ST-130 Sign points at a towered village [scratch/game]:** `/place structure supplementaries:way_sign` near a `meta/village_towers` village (found by `/locate`): the sign's text names that village's direction and distance. *2026-10-14 scratch phase 3 (seed 8675309, 1.0.6 jar of 01:28, world st_d at structure density 4 with two Chunky squares; st_e for the off-switch comparisons; log feature_writeup/testing/structures/03_phase_3.md): PASSED: a placed way sign reads "200" and its yaw (176.8) points exactly at a `meta/village_towers` start 197 blocks away.*
 - [x] **ST-131 Aether / Undergarden houses gone [scratch]:** the report lists `farmers_structures:aethers_with_all` and `undergardens_sea_with_all` as written with every member disabled; `/locate structure farmers_structures:aethers` fails quickly instead of searching. *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads; spawn -80 76 is open ocean): PASSED: the report lists both sets as "Every member disabled: written with no structures"; `/locate` fails without a search (aethers 4.2 s, 12.9 s while 3 other searches ran; undergardens_sea 0.3 s).*
 - [x] **ST-132 Ocean fortress deep only [scratch]:** `/locate structure philipsruins:ocean_fortress` from 3+ ocean positions: every answer in a deep ocean biome (deep, deep cold, deep frozen, deep lukewarm); the log line `[structure-biome-fits]` counts 30 fits. *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads; spawn -80 76 is open ocean): PASSED: from 4 ocean positions: one fortress at 400 304 (deep ocean, start there) found 3 times, and one inside a `meta/sunken_ruin_cluster` at -4316 -5588 (deep lukewarm ocean). The last search took 268 s for 1233 blocks. The fits line counts 30 (phase 1).*
-- [ ] **ST-133 Ocean geodes lower [scratch/game]:** `creativeengineering-common.toml` has `systems.oceanGeodes` and `[worldgen.ocean_geodes]`; in a new ocean area (spectator, or a scratch KubeJS count of `minecraft:budding_amethyst` / calcite tops per y in pregenerated ocean chunks), far fewer geode shells break the sea floor than on land-equivalent depths, and the geode tops sit about 10 blocks lower than with `oceanGeodes = false`; prismarine geodes (budding prismarine) sit where they did. No `GeodeFeature` mixin errors in the log. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): toml part passed, no GeodeFeature mixin errors; ocean count in phase 3.* *2026-10-14 scratch phase 3 (seed 8675309, 1.0.6 jar of 01:28, world st_d at structure density 4 with two Chunky squares; st_e for the off-switch comparisons; log feature_writeup/testing/structures/03_phase_3.md): PARTLY: same chunks with the system on and off: ocean amethyst geodes 7-15 lower (mostly 9-11) in 38 of 42 chunks, 4 kept their height, land geodes unchanged; Geode Plus geodes lowered too (ocean-land gap 9-17 on vs 0-4 off; Geode Plus is not reproducible per seed, so only distributions compare). But shells reaching the sea floor barely change (14 of 80 ocean geode chunks on vs 16 of 71 off): this seed's deep ocean floors sit near y 0, so a fixed 10-block drop still leaves them breaking through (tuning question, open).*
+- [ ] **ST-133 Ocean geodes lower [scratch/game]:** `creativeengineering-common.toml` has `systems.oceanGeodes` and `[worldgen.ocean_geodes]`; in a new ocean area (spectator, or a scratch KubeJS count of `minecraft:budding_amethyst` / calcite tops per y in pregenerated ocean chunks), far fewer geode shells break the sea floor than on land-equivalent depths, and the geode tops sit about 10 blocks lower than with `oceanGeodes = false`; prismarine geodes (budding prismarine) sit where they did. No `GeodeFeature` mixin errors in the log. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): toml part passed, no GeodeFeature mixin errors; ocean count in phase 3.* *2026-10-14 scratch phase 3 (seed 8675309, 1.0.6 jar of 01:28, world st_d at structure density 4 with two Chunky squares; st_e for the off-switch comparisons; log feature_writeup/testing/structures/03_phase_3.md): PARTLY: same chunks with the system on and off: ocean amethyst geodes 7-15 lower (mostly 9-11) in 38 of 42 chunks, 4 kept their height, land geodes unchanged; Geode Plus geodes lowered too (ocean-land gap 9-17 on vs 0-4 off; Geode Plus is not reproducible per seed, so only distributions compare). But shells reaching the sea floor barely change (14 of 80 ocean geode chunks on vs 16 of 71 off): this seed's deep ocean floors sit near y 0, so a fixed 10-block drop still leaves them breaking through (tuning question, open).* *2026-10-22: reworked to the lowest-floor cap (the dated 2026-10-22 ocean geode note above). Expected: moved ocean amethyst geode tops at or below y -10, shells reaching the sea floor in ocean chunks only from the 1 in 10 that keep their height; land and prismarine geodes unchanged; the toml has `lowestFloorY`, `clearance`, `spread` and no `drop`.* *2026-10-22 second bulk run: scratch part scratch server PASSED 2026-10-22 (SQ-GE-00 to SQ-GE-04; SQ-GE-03 after the prismarine fix above): toml keys right, 23 of 24 ocean geodes moved with tops 10+ blocks under the floor, 32 land geodes kept their height, prismarine kept, system off 0 moved. Left: the look of a real ocean floor, in game.*
 
 **New and tweaked meta structures** (2026-10-12, 3.16). `[worldgen.meta_structures] log = true`, new world.
 - [x] **ST-134 Loads clean [scratch]:** `[structure-tuning] ... 22 meta structure(s)` with no `meta_structures.json` warning; `[meta-structures] 21 meta structure(s) take slots from ...` (22 / 21 since `town_villages`, 3.22). *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): PASSED: 22 meta structures; 21 take slots from 155 anchors.*
@@ -3069,4 +3090,8 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
   mixin: ST-199 to ST-205 passed (testing/structures/12_earth_fill_camps.md). patcherMod 1.0.9 build, not deployed.
 - 2026-10-19: status sweep: the 1.0.6 rows marked STAGED / `build/libs` went out with 1.0.6 (2026-10-14); 7.5 (earth fill on
   water, camps, coasts) DEPLOYED with 1.0.9 (15:54). Header rewritten.
-- 2026-10-19: ST-53 and ST-160 test text corrected from the phase 7 run ([testing/structures/07_phase_7.md](testing/structures/07_phase_7.md) 5.5): the group's next member may take a cancelled start's slot; small villages log `small`.
+- 2026-10-19: ST-53 and ST-160 test text corrected from the phase 7 run ([testing/structures/07_phase_7.md](testing/structures/07_phase_7.md) 5.5): the group's next member may take a cancelled start's slot; small villages log `small`.- 2026-10-22 (doc audit): ocean geode lowest-floor cap: jar state (in the `mods/` jar of 11:06, not in `server_mods/`
+  or the scratch-run jar), ST-133 expectation corrected (moved tops at or below y -10, not -12), scratch queue SQ-GE
+  and probe `tools/farm_worldgen_probe.js`.
+- 2026-10-22 (second bulk run): SQ-GE-00 to SQ-GE-04 PASS on the scratch server after the prismarine fix
+  (`OceanGeodes.untouched` reads the alternate inner layer); ST-133 scratch part recorded, the in-game look stays.

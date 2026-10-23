@@ -34,7 +34,7 @@ import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
  * WTHIT plugin: what the leftover slots of the FD cooking pot, the Farmer's Respite kettle and the oven hold
  * ("Holding: 3 Glass Bottle, 1 Bucket"), and "Waiting: leftover slots full" while a craft is held back for room
  * ({@code [cooking] stallWhenFull}). The buffer is read on the server, so the line doesn't depend on the client copy.
- * Off with {@code [wthit] remainderBuffer}. feature_writeup/remainder_buffer.md 3.3, TODO food/kitchen #3.
+ * Off with {@code [wthit] remainderBuffer}. feature_writeup/remainder_buffer.md 3.3, TODO cooking/kitchen #3.
  */
 public final class WthitRemainderBuffer implements IWailaCommonPlugin, IWailaClientPlugin, IBlockComponentProvider,
         IDataProvider<BlockEntity> {

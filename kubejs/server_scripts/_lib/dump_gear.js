@@ -204,8 +204,12 @@ function dumpGear(filter) {
 			let mat = null
 			try { mat = item.getMaterial() } catch (err) {}
 
+			// material calls through guardThrowable (java_guard.js): some mods' ArmorMaterial lacks a method
+			// (Dustrial Decor's CardboardArmorMaterial has no getName), an AbstractMethodError try/catch can't stop
+			let matCall = (fn, fallback) => { let r = guardThrowable(fn); return r.ok ? r.value : fallback }
+
 			let material = 'unknown'
-			try { if (mat) material = String(mat.getName()) } catch (err) {}
+			if (mat) material = matCall(() => String(mat.getName()), 'unknown')
 
 			let defense = 0
 			try { defense = item.getDefense() } catch (err) {}
@@ -214,13 +218,13 @@ function dumpGear(filter) {
 			try { toughness = item.getToughness() } catch (err) {}
 
 			let knockbackRes = 0
-			try { if (mat) knockbackRes = mat.getKnockbackResistance() } catch (err) {}
+			if (mat) knockbackRes = matCall(() => mat.getKnockbackResistance(), 0)
 
 			let equipSound = ''
-			try { if (mat) equipSound = mat.getEquipSound().getLocation().toString() } catch (err) {}
+			if (mat) equipSound = matCall(() => mat.getEquipSound().getLocation().toString(), '')
 
 			let repair = []
-			try { if (mat) repair = ingredientIds(mat.getRepairIngredient()) } catch (err) {}
+			if (mat) repair = matCall(() => ingredientIds(mat.getRepairIngredient()), [])
 
 			// what the game actually applies while worn
 			var wornMods    = slotMods[slotName] || []

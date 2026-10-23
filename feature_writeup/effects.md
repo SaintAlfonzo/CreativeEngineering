@@ -7,7 +7,8 @@
 | Effect table (2.1): 140 effects from vanilla and 25 mods, with brewing, tipped arrow, superset, JEI potion fluid, JEI description, food sources, subset effects, overlaps, brief and detailed descriptions | reference, written 2026-10-19 from code (decompiled jars and the two ports), the `/dumppotions` and `/dumpfood` exports, and every lang table the client loads |
 | `tools/effect_audit.py`: offline check of names, JEED descriptions, placeholders and potion / arrow names | BUILT 2026-10-19 |
 | Findings F1 to F13 (section 4): 3 effects or arrows with no name, 11 effects with no real description, 11 wrong or incomplete descriptions, 12 total-overlap groups, a duplicate Luck brew | F3, F4, F7, F11, F13 done 2026-10-20; F2 down to 10 `TODO`s (kept, your call); F5 and F12 need your call |
-| JEI item lists for every effect (3, [jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js)): mobs, blocks, gear, code-applied food, brews, wines, potion carriers | BUILT 2026-10-20, not seen in game (EF-15, EF-16) |
+| JEI item lists for every effect (3, [jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js)): mobs, blocks, gear, code-applied food, brews, wines, potion carriers | BUILT 2026-10-20, server half scratch server PASSED 2026-10-22 (SQ-OM-00, SQ-OM-16); not seen in game (EF-15, EF-16) |
+| Update 2026-10-22: Rustic Delight's five coffees (Coffee, Milk, Honey, Chocolate, Dark) give Farmer's Respite's Caffeinated instead of Speed + Haste (food_values.js, [item_merges.md](item_merges.md) 2.8); the Speed, Haste and Caffeinated food-source cells in 2.1 predate this | reference note |
 | Description fixes (3): 16 wrong, partial or misspelt JEED texts replaced, Travel Fatigue ported from Effect Insights, 7 stale placeholders gone | BUILT 2026-10-20, not seen in game (EF-17) |
 | Category audit (2.4): all 140 effects checked for red / blue; 6 overridden in CEConfig `[effects]` | BUILT 2026-10-20 (patcherMod 1.1.01, rebuilt and installed), not seen in game (EF-18) |
 
@@ -455,7 +456,8 @@ it?
     - the pack's gear, read from `global.armorEffects` / `global.toolEffects`, plus the echo armor set;
     - Botania brews (vial, flask, incense stick, blood pendant, by `brewKey` NBT);
     - Vinery wines (moved here from `alcohol.js`) and the Vinery standard banner's configured effect;
-    - the command block for the 12 Xaero's switches.
+    - the command block for the 12 Xaero's switches, only when Xaero's mods are loaded (fixed 2026-10-22, scratch
+      run: they are client-only, so every dedicated server boot logged 12 `[NCH] jeedProvider failed` errors).
   - **Potion carriers:** a `jeed:potion_provider` for the potion buckets, potion bundles, the IE potion bullet and
     PneumaticCraft gun ammo, so each appears filled with every potion of the effect.
   - **Coverage:** every effect but hidden Sunny now has at least one item on its JEI page. 83 provider recipes; the
@@ -637,7 +639,7 @@ ingredient type.
 - [ ] **EF-13 Pack effect potions as fluid:** JEI fluid list → "Potion of Long Reach", "Potion of Magic Resistance" and
   "Potion of Intimidation" `create:potion` stacks exist.
 - [ ] **EF-14 Heal Aura hits undead:** eat Peach Jam near a zombie → the zombie takes damage every 3 s.
-- [ ] **EF-15 JEI item lists:** check `logs/latest.log` for `jeed_providers.js: 83 effect provider recipes` and no
+- [ ] **EF-15 JEI item lists:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-00 the 83 line, no warning after the Xaero skip; SQ-OM-16 no empty ingredient, Health Boost lists the Vinery standard, Solaris and Stal Wine, Sunny none; Cherry Cream Soda still has no recipe, its bug stays open).* check `logs/latest.log` for `jeed_providers.js: 83 effect provider recipes` and no
   `jeedProvider` warnings. Then open these pages in JEI:
   - Rest: four Create Confectionery chocolates.
   - Allure: a brew vial, flask, incense stick and blood pendant, all of Allure.
@@ -670,3 +672,6 @@ ingredient type.
   - F11 corrected: JEED already lists `FoodProperties` foods.
   - Tests EF-15 to EF-19.
   - F8: Passion Aloe Nectar marked for removal (passion fruit isn't in the game).
+- 2026-10-22 (second bulk run): `jeed_providers.js` skips Xaero's map effects when the mod is not loaded (12
+  `[NCH] jeedProvider failed` errors on every dedicated server boot); SQ-OM-00 and SQ-OM-16 then PASS on the scratch
+  server. EF-15's JEI pages and EF-16 stay in game.

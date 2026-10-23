@@ -320,7 +320,7 @@ public class RemainderBufferTests {
         h.succeed();
     }
 
-    // ------------------------------------------------------------------ bowl count (TODO food/kitchen #4)
+    // ------------------------------------------------------------------ bowl count (TODO cooking/kitchen #4)
 
     /**
      * Bowls a station holds: in ingredients that leave one, in the plating slot, in the leftover slots, and one per
@@ -406,7 +406,7 @@ public class RemainderBufferTests {
         });
     }
 
-    // ------------------------------------------------------------------ plating delay (TODO food/kitchen #13)
+    // ------------------------------------------------------------------ plating delay (TODO cooking/kitchen #13)
 
     /**
      * RB-T14: hot cocoa with a milk bottle: once cooked, the recycled bottle sits in the container slot with the

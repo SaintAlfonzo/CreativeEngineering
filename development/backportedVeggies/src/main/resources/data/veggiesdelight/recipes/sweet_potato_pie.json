@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "O": {
+      "item": "farmersdelight:pie_crust"
+    },
+    "p": {
+      "item": "veggiesdelight:baked_sweet_potato"
+    },
+    "s": {
+      "item": "minecraft:sugar"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "sOs"
+  ],
+  "result": {
+    "item": "veggiesdelight:sweet_potato_pie"
+  },
+  "show_notification": true
+}

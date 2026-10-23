@@ -7,6 +7,7 @@
 | Three potion buckets (`creativeengineering:potion_bucket`, `splash_potion_bucket`, `lingering_potion_bucket`): right-click a block to burst a dome of potion clouds | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); the dome shape was never confirmed in game |
 | Dispenser bursts a bucket (`PotionBucketDispenser`) | DEPLOYED, in-game test pending |
 | Recipes: bucket ↔ 4 bottles in the crafting grid, Create Spout fill and Item Drain empty, IE Bottling Machine fill (1000 mB) | DEPLOYED; never confirmed in game ([todo.txt](todo/todo.txt)) |
+| JEI pages for Tipped Arrows and Potion Buckets (config `[jei]` toggles `tippedArrowCategory`, `potionBucketCategory`) | BUILT 2026-10-22, not in `mods/` yet; see [jei_coverage.md](jei_coverage.md) |
 | Vanilla potion bottles leave a glass bottle when used in a crafting grid | DEPLOYED (fixed 2026-09-12); never confirmed in game |
 | Vanilla-style effect tooltip on the buckets, two-layer tinted textures | DEPLOYED |
 | Machine-tipped arrows: IE Bottling Machine and Create Spout, lingering `create:potion` | DEPLOYED; cheaper than the crafting-grid recipe (F1) |
@@ -144,7 +145,7 @@ Lingering `create:potion` only; one recipe pair per potion.
 - **Off hand does nothing** (main hand only).
 - **Cooldown 1 s** on the item, so a hotbar of buckets can't be chained faster. Probably creative only: in survival
   the handler shrinks the (unstackable) bucket to 0 before `addCooldown(stack.getItem(), 20)`, and an empty stack's
-  `getItem()` is air (read from code 2026-10-21, not seen in game; PB-09, [gear_potion-buckets brief](briefs/gear_potion-buckets.md)).
+  `getItem()` is air (read from code 2026-10-21, not seen in game; PB-09, [gear_potion-buckets brief](briefs/potions_potion-buckets.md)).
 - **Effects stack per ring:** a mob inside several rings is re-dosed by each one; for instant effects (Harming,
   Healing) that multiplies the hit.
 

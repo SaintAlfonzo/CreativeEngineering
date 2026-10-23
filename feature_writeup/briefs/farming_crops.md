@@ -27,11 +27,12 @@ Pickle Tweaks 7.0.3 (not in the pack; `WateringCanItem`, `mods.toml`). The in-tr
 | crops #5 | Realistic growth seasons | KubeJS tags + config | D |
 | crops #8 | Watering can | patcherMod item (or a mod) | E |
 | crops #10 | Melon and pumpkin growth stages | patcherMod blocks + models | E |
+| crops #11 | Extra stem fruit (up to 4 per stem) | patcherMod | built 2026-10-22, see "Built, needs play" |
 
 Suggested order: **A** (two small loot edits, one `/reload`), then **B** (the audit gives #1/#2/#4 their checklist and
 catches crops this brief misses), then **C** in one patcherMod build (#1, #2 and #4 share `CropParity`, the Quark
 mixins and the "Crop parity" tag section; G8 is also #4's main fix), then **D**, then **E** (new content; #8 and #10
-are independent of each other). `food/kitchen #10` (scythe, area harvest by tier) touches the same Quark hoe code as
+are independent of each other). `cooking/kitchen #10` (scythe, area harvest by tier) touches the same Quark hoe code as
 C; keep the scythe out of C but reuse `HoeHarvestArea` when it is built.
 
 ---
@@ -551,7 +552,7 @@ New: `creativeengineering:watering_can` (+ optional `brass_watering_can`). Ingre
 
 ### Decisions
 - Own item (recommended: small, one class, no extra library, tuned to the soils and seasons) or Pickle Tweaks +
-  Cucumber (also gives the scythe of `food/kitchen #10` and sickles, but brings paxels and grid repair that overlap
+  Cucumber (also gives the scythe of `cooking/kitchen #10` and sickles, but brings paxels and grid repair that overlap
   the pack's tool balance; all toggleable)?
 - Growth boost or hydration only? Recommendation: hydration + a small random-tick chance, below bone meal.
 
@@ -582,7 +583,7 @@ A pumpkin or melon starts small beside the stem and grows to full size, instead 
 - Models: Fantasy Furniture 6.7.0 ships `fantasyfurniture:block/decorations/stackable_pumpkins_0/1/2` (1, 2 or 3
   small pumpkins; verified names). A model in the pack can `"parent"` those by id while Fantasy Furniture is
   installed; do not copy its textures (licence not checked).
-- Large 2x2 / 3x3 pumpkins are `largecontent/autumnityport #3`; this row only adds the stages before full size.
+- Large 2x2 / 3x3 pumpkins are `ports/autumnityport #3`; this row only adds the stages before full size.
 
 ### Build
 1. patcherMod blocks `creativeengineering:growing_pumpkin` and `growing_melon` (and `growing_hamimelon` if wanted),
@@ -628,6 +629,9 @@ New blocks above. Vanilla `minecraft:pumpkin_stem`, `attached_pumpkin_stem`, `me
 
 | Row | Status | Note |
 |---|---|---|
+| crops #6 Apples only from apple trees | Testing | Built 2026-10-21 (`08_leaf_apples.js`); not in the 2026-10-22 scratch run; CR-57, scratch SQ-CD-02 (`tools/farm_worldgen_probe.js` `zfw loot`) |
+| crops #9 Bell pepper colours | Testing | Built 2026-10-21 (`09_crop_drops.js`, CEConfig `[crop_drops.bell_peppers]`, in every 1.1.01 jar incl. `mods/`); not scratch-run; CR-69, CR-70, scratch SQ-CD-01 |
+| crops #11 Extra stem fruit | Testing | Built 2026-10-22 11:07, only in the `build/libs` jar (md5 4daad5bb), not in `mods/`; scratch SQ-SF queued; CR-71 to CR-77; finding F-SS1 (extra fruit ignores Serene Seasons, [crops.md](../crops.md) §4) needs a decision |
 | crops #7 Crop tests (CR-01 to CR-68) | Complete | Several §2.8 tests had stale expectations after the 2026-10-10 rule change (CR-50, CR-55); corrected. CR-16 and CR-09/CR-31/CR-33/CR-36 change when crops #1 is built |
 
 ## Writeup corrections made

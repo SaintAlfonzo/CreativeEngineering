@@ -25,7 +25,7 @@ The NCH fix is helper work that `tooling` would normally own. **Propose a new TO
 ---
 
 ## archery #2: Dragon scale bullets unreachable
-Status **Bug** · Work: KubeJS · id `gear/archery #2`
+Status **Testing** (fixed 2026-10-22, AR-13) · Work: KubeJS · id `gear/archery #2`
 
 ### Goal
 Make the dragon-scale armor-piercing cartridge recipe reachable.
@@ -150,7 +150,7 @@ Settle grid 6 arrows vs blueprint 4 arrows (both + 1 electrum or brass wire → 
 ---
 
 ## archery #4: Archery blueprint needs an Ethereal Arrow
-Status **Planned** · Work: KubeJS · id `gear/archery #4`
+Status **Complete** (decided 2026-10-22: Ethereal Arrow kept, no code change; archery.md F3) · Work: KubeJS · id `gear/archery #4`
 
 ### Goal
 Decide whether the `archery` blueprint may depend on a trader-only arrow.
@@ -186,7 +186,7 @@ AR-10 updated to the chosen arrow.
 ---
 
 ## archery #5: Archery leftovers
-Status **Planned** · Work: KubeJS · id `gear/archery #5`
+Status **Testing** (F5, F7 built 2026-10-22; F8 moot; AR-07) · Work: KubeJS · id `gear/archery #5`
 
 ### Goal
 Close archery.md F5 (unused blazing shaft tag), F7 (bullets.js stub) and F8 (Supplementaries quiver recipe).

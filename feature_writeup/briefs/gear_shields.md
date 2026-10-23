@@ -12,8 +12,8 @@ Feature writeup: [shields.md](../shields.md) (test prefix `SH-`, last id SH-43).
 | 3 | `shields #2` knockback thresholds + per-tier disable cooldown | patcherMod + config | The only real Java work: new per-tier keys, both disable mixins, tooltip, `ShieldConfigTest` |
 | 4 | `shields #5` Resistance while blocking | **config only** (recommended) | `shielderEffects` already does this. Can ship any time, even before 1-3 |
 
-Steps 2 and 3 go into one patcherMod build together with `gear/effects #3` and the F7 mixin change
-([gear_effects.md](gear_effects.md), group B). Run `tools/test_shields.sh` (needs `./gradlew build`) after each.
+Steps 2 and 3 go into one patcherMod build together with `potions/effects #3` and the F7 mixin change
+([potions_effects.md](potions_effects.md), group B). Run `tools/test_shields.sh` (needs `./gradlew build`) after each.
 
 Related rows: `gear/tuning #4` (assemblies drop the shield's banner, shields.md F5, SH-27). It touches
 `SequencedAssemblyRecipeMixin`, not shield code, and is briefed under tuning.
@@ -259,7 +259,7 @@ Config `[shields.<tier>] disableCooldownTicks` (new, -1 default) and `[shields.<
 ---
 
 ## shields #5: Resistance while blocking with echo and up
-Status **Planned** · Work: patcherMod (per the row; config is enough) · id `gear/shields #5`
+Status **Testing** (built 2026-10-22, patcherMod 1.1.01 in `mods/`; SH-44) · Work: patcherMod (per the row; config is enough) · id `gear/shields #5`
 
 ### Goal
 A short Resistance for the holder while blocking with the echo, felsic and dragon shields.

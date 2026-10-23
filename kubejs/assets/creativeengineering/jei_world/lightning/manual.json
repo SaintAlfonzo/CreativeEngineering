@@ -1,0 +1,105 @@
+{
+ "_note": "Hand-written: vanilla 1.19.2 LightningBolt.clearCopperOnLightningStrike (forge 43.3.9 mapped jar, javap). Waxed copper is not WeatheringCopper and is not affected. Generated rows: tools/jei_world/tab_weathering.py.",
+ "rows": [
+  {
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:exposed_copper",
+      "minecraft:weathered_copper",
+      "minecraft:oxidized_copper"
+     ]
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Strike on the block or a rod on it; 3 to 5 random walks of up to 8 steps clean nearby copper"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:copper_block",
+     "label": "Waxed copper is not affected"
+    }
+   ],
+   "notes": [
+    "Struck block loses all oxidation",
+    "Nearby copper loses a stage"
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:exposed_cut_copper",
+      "minecraft:weathered_cut_copper",
+      "minecraft:oxidized_cut_copper"
+     ]
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Strike on the block or a rod on it; 3 to 5 random walks of up to 8 steps clean nearby copper"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper",
+     "label": "Waxed copper is not affected"
+    }
+   ],
+   "notes": [
+    "Struck block loses all oxidation",
+    "Nearby copper loses a stage"
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:exposed_cut_copper_stairs",
+      "minecraft:weathered_cut_copper_stairs",
+      "minecraft:oxidized_cut_copper_stairs"
+     ]
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Strike on the block or a rod on it; 3 to 5 random walks of up to 8 steps clean nearby copper"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_stairs",
+     "label": "Waxed copper is not affected"
+    }
+   ],
+   "notes": [
+    "Struck block loses all oxidation",
+    "Nearby copper loses a stage"
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:exposed_cut_copper_slab",
+      "minecraft:weathered_cut_copper_slab",
+      "minecraft:oxidized_cut_copper_slab"
+     ]
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Strike on the block or a rod on it; 3 to 5 random walks of up to 8 steps clean nearby copper"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_slab",
+     "label": "Waxed copper is not affected"
+    }
+   ],
+   "notes": [
+    "Struck block loses all oxidation",
+    "Nearby copper loses a stage"
+   ]
+  }
+ ]
+}
