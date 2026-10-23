@@ -162,6 +162,9 @@ R.remove({ id: 'tmted:slime_ball' }, e)
 R.remove({ id: 'tmted:crusher/wheat_flour_from_bale' }, e)
 R.remove({ id: 'farmersdelight:bread_from_smelting' }, e)
 R.remove({ id: 'farmersdelight:bread_from_smoking' }, e)
+// Vintage Delight's oat dough is a #forge:dough: no furnace bread either (its 3 raw oats -> bread craft stays, as wheat)
+R.remove({ id: 'vintagedelight:bread_from_smelting' }, e)
+R.remove({ id: 'vintagedelight:bread_from_smoking' }, e)
 R.remove({ id: 'create_central_kitchen:crafting/dough_1' }, e)
 R.remove({ id: 'create_central_kitchen:crafting/dough_2' }, e)
 R.remove({ id: 'create_central_kitchen:crafting/dough_3' }, e)
@@ -491,9 +494,12 @@ var VD_COOKED_MEAT = [i.cooked_beef, i.cooked_chicken, i.cooked_mutton]
 	['vegetarian_burger', 'veggiesdelight:vegetarian_burger'],
 	['coleslaw', 'veggiesdelight:coleslaw'],
 	['turnip_salad', 'veggiesdelight:turnip_salad'],
+	// its Vintage Delight compat versions (live with the Vintage port): the cheese goes in the recipes below
+	['cesar_salad', 'veggiesdelight:compat/vintagedelight/cesar_salad'],
+	['stuffed_zucchini_boat', 'veggiesdelight:compat/vintagedelight/stuffed_zucchini_boat'],
 ].forEach(m => R.remove({ id: m[1] }, e))
 R.shapeless(i.broccoli_salad, [i.broccoli, i.tomato, i.onion, i.bowl], e, 'broccoli_salad_manual_only')
-R.shapeless(i.cesar_salad, [i.cabbage, i.t_bread, i.garlic_clove, i.tomato, i.bowl], e, 'cesar_salad_manual_only')
+R.shapeless(i.cesar_salad, [i.cabbage, i.t_bread, [i.garlic_clove, i.any_cheese], i.tomato, i.bowl], e, 'cesar_salad_manual_only')
 R.shapeless(i.coleslaw, [i.zucchini, i.potato, i.carrot, i.cabbage, i.bowl], e, 'coleslaw_manual_only')
 R.shapeless(i.turnip_salad, [i.salad_ingredients, i.turnip, i.bowl], e, 'turnip_salad_manual_only')
 R.shapeless(i.steak_and_broccoli, [i.cooked_beef, i.broccoli, i.cooked_rice], e, 'steak_and_broccoli_cooked_manual_only')
@@ -501,7 +507,7 @@ R.shapeless(i.garlic_rice_with_cauliflower, [i.roasted_garlic_clove, Item.of(i.r
 	'garlic_rice_with_cauliflower_cooked_manual_only')
 R.shapeless(i.garlic_baked_cod, [i.cooked_cod, Item.of(i.roasted_garlic_clove, 2), i.onion, i.bowl], e, 'garlic_baked_cod_cooked_manual_only')
 R.shapeless(i.dandelion_and_eggs, [Item.of(i.dandelion_leaf, 2), Item.of(i.cooked_eggs, 3), i.bowl], e, 'dandelion_and_eggs_cooked_manual_only')
-R.shapeless(i.stuffed_zucchini_boat, [i.roasted_zucchini, VD_COOKED_MEAT, i.milk], e, 'stuffed_zucchini_boat_cooked_manual_only')
+R.shapeless(i.stuffed_zucchini_boat, [i.roasted_zucchini, VD_COOKED_MEAT, [i.milk, i.any_cheese]], e, 'stuffed_zucchini_boat_cooked_manual_only')
 R.shapeless(i.turnip_mutton_skewer, [i.cooked_mutton, i.turnip, i.stick], e, 'turnip_mutton_skewer_cooked_manual_only')
 R.shapeless(i.zucchini_sandwich, [i.t_bread, i.zucchini, i.salad_ingredients, i.tomato], e, 'zucchini_sandwich_cooked_manual_only')
 R.shapeless(i.vegetarian_burger, [i.t_bread, i.cabbage, i.cooked_vegetarian_patty, i.tomato], e, 'vegetarian_burger_cooked_manual_only')
@@ -566,6 +572,7 @@ R.createSequencedAssembly(i.mutton_wrap, i.t_tortilla, [
 // replace them as manual-only grid recipes plus an assembly). feature_writeup/veggies_delight.md 4.7
 R.remove({ id: 'veggiesdelight:compat/corndelight/chicken_fajitas_wrap' }, e)
 R.remove({ id: 'veggiesdelight:compat/corndelight/vegetable_wrap' }, e)
+R.remove({ id: 'veggiesdelight:compat/vintagedelight/chicken_fajitas_wrap' }, e)   // on dough
 var VEG_WRAP_GREENS = [i.broccoli, i.salad_ingredients]
 var VEG_WRAP_FILLING = [i.t_roasted_bell_pepper, i.roasted_zucchini, i.mushrooms]
 R.shapeless(i.chicken_fajitas_wrap, [i.t_tortilla, i.onion, i.cooked_chicken, i.t_roasted_bell_pepper], e, 'chicken_fajitas_wrap_manual_only')
@@ -583,6 +590,54 @@ R.createSequencedAssembly(i.vegetables_wrap, i.t_tortilla, [
 	e.recipes.create.deploying(incVegWrap, [incVegWrap, i.onion]),
 	e.recipes.create.deploying(incVegWrap, [incVegWrap, i.cooked_rice])
 ], ['vegetables_wrap'], e, 'vegetables_wrap_sequenced_assembly', 1)
+
+// Vintage Delight (feature_writeup/vintage_delight.md 4 step 9), by the rules above. Grid meals re-id'd manual only;
+// the stuffed burrito is a wrap on a tortilla (its ghost pepper, or a roasted bell pepper as Veggies Delight's compat
+// version), the assembly starting on the pepper. Heatless routes for its pot meals: cheese pasta, pad thai, pickle
+// soup. Not given one: oatmeal (oats have no cooked form), ghostly chili (Nether, as blazing chili), the jams, curds
+// and nut milk (cooked preserves and a drink). Burgers are in "Burgers"; the oatmeal cookie bakes (baking.js).
+;['vintagedelight:pb_j', 'vintagedelight:cucumber_salad', 'vintagedelight:stuffed_burrito',
+	'veggiesdelight:compat/vintagedelight/stuffed_burrito'].forEach(id => R.remove({ id: id }, e))
+R.shapeless(i.pb_j, [i.t_bread, i.nut_mash_bottle, i.t_sweet_jam_bottles], e, 'pb_j_manual_only')
+R.shapeless(i.cucumber_salad, [i.salad_ingredients, i.pickled_beetroot, i.pickled_onion, i.cucumber, i.bowl], e, 'cucumber_salad_manual_only')
+var VTD_BURRITO_PEPPER = [i.ghost_pepper, i.t_roasted_bell_pepper]
+R.shapeless(i.stuffed_burrito, [i.t_tortilla, i.beef_patty, i.salad_ingredients, i.tomato, i.any_cheese, VTD_BURRITO_PEPPER], e,
+	'stuffed_burrito_manual_only')
+var incBurrito = R.incomplete('stuffed_burrito')
+R.createSequencedAssembly(i.stuffed_burrito, i.t_tortilla, [
+	e.recipes.create.deploying(incBurrito, [incBurrito, VTD_BURRITO_PEPPER]),
+	e.recipes.create.deploying(incBurrito, [incBurrito, i.beef_patty]),
+	e.recipes.create.deploying(incBurrito, [incBurrito, i.any_cheese]),
+	e.recipes.create.deploying(incBurrito, [incBurrito, i.salad_ingredients]),
+	e.recipes.create.deploying(incBurrito, [incBurrito, i.tomato])
+], ['stuffed_burrito'], e, 'stuffed_burrito_sequenced_assembly', 1)
+R.shapeless(i.cheese_pasta, [i.pasta, i.any_cheese, i.any_cheese, i.any_cheese, i.bowl], e, 'cheese_pasta_cooked_manual_only')
+R.shapeless(i.pad_thai, [i.pasta, i.ghost_pepper, Item.of(i.chicken_cuts_cooked, 2), i.nut_mash_bottle, i.roasted_peanut, i.bowl], e,
+	'pad_thai_cooked_manual_only')
+R.shapeless(i.pickle_soup, [i.bone_broth, Item.of(i.pickle, 2), i.carrot, i.baked_potato, i.beetroot, i.salad_ingredients], e,
+	'pickle_soup_cooked_manual_only')
+
+// Fungi Delight (feature_writeup/fungi_delight.md 4 step 9), by the rules above. Grid meals re-id'd manual only; the
+// truffle ice cream grid recipe is a placeholder until the ice cream family is decided (TODO sweets #4). Heatless
+// routes for all 7 pot meals, one more main ingredient than the pot; the mushrooms stay raw.
+;['fungidelight:inky_cap_salad', 'fungidelight:inky_cap_scrambled_eggs', 'fungidelight:truffle_ice_cream']
+	.forEach(id => R.remove({ id: id }, e))
+R.shapeless(i.inky_caps_salad, [i.salad_ingredients, i.cleaned_cap, i.bowl], e, 'inky_caps_salad_manual_only')
+R.shapeless(i.inky_cap_scrambled_eggs, [i.cooked_eggs, i.cooked_eggs, i.cooked_cleaned_cap, i.bowl], e,
+	'inky_cap_scrambled_eggs_manual_only')
+R.shapeless(i.truffle_ice_cream, [i.truffle_slice, i.snowball, i.sugar, i.milk, i.bowl], e, 'truffle_ice_cream_manual_only')   // placeholder (sweets #4)
+R.shapeless(i.creamy_morel_soup, [i.bone_broth, Item.of(i.morel_mushroom, 3), i.milk, i.onion], e, 'creamy_morel_soup_cooked_manual_only')
+R.shapeless(i.mutton_chops_with_truffle, [Item.of(i.cooked_mutton, 2), i.truffle, i.baked_potato, i.onion, i.bowl], e,
+	'mutton_chops_with_truffle_cooked_manual_only')
+R.shapeless(i.pork_marsala_with_mushrooms, [Item.of(i.cooked_pork, 2), i.onion, Item.of(i.red_mushroom, 2), i.tomato_sauce], e,
+	'pork_marsala_with_mushrooms_cooked_manual_only')
+R.shapeless(i.rabbit_with_morels, [Item.of(i.rabbit_cooked, 2), Item.of(i.morel_mushroom, 2), i.carrot, i.onion, i.bowl], e,
+	'rabbit_with_morels_cooked_manual_only')
+R.shapeless(i.steak_with_mushrooms, [Item.of(i.cooked_beef, 2), i.brown_mushroom, i.onion, i.milk, i.bowl], e,
+	'steak_with_mushrooms_cooked_manual_only')
+R.shapeless(i.stuffed_morels, [Item.of(i.morel_mushroom, 3), i.cooked_rice, i.tomato_sauce, i.cooked_chicken], e,
+	'stuffed_morels_cooked_manual_only')
+R.shapeless(i.truffle_pasta, [i.pasta, Item.of(i.truffle, 2), i.milk, i.onion, i.bowl], e, 'truffle_pasta_cooked_manual_only')
 
 // Scrambled eggs: one more egg than Incubation's
 R.remove({ id: 'incubation:scrambled_eggs' }, e)
@@ -621,8 +676,14 @@ R.createSequencedAssembly(Item.of(i.fruit_salad, 2), i.bowl, [
 	'delightful:food/deluxe_cheeseburger', 'delightful:food/deluxe_cheeseburger_from_milk',
 	'moredelight:simple_hamburger', 'moredelight:hamburger_with_egg', 'moredelight:loaded_hamburger',
 	'alexsdelight:bison_burger', 'alexsmobs:kangaroo_burger',
+	'vintagedelight:cheese_burger', 'vintagedelight:deluxe_burger',
+	'veggiesdelight:compat/vintagedelight/cheese_burger', 'veggiesdelight:compat/vintagedelight/deluxe_burger',
 ].forEach(id => R.remove({ id: id }, e))
 var burgerCheese = i.t_cheese_wedge
+// Vintage Delight's two burgers (vintage_delight.md 4 step 9): its cheese slice, so neither grid matches Delightful's
+// cheeseburgers (wedges) while both lines ship; beef or Veggies Delight's vegetarian patty (Veggies' compat versions).
+// The assemblies start on the slice; the deluxe one on the patty, like the egg burger
+var vtdPatty = [i.beef_patty, i.cooked_vegetarian_patty]
 ;[
 	// [key, pattern, keys, assembly base, deploy steps in order]
 	['hamburger', ['STO', ' P ', ' B '], { S: i.salad_ingredients, T: i.tomato, O: i.onion, P: i.beef_patty, B: i.t_bread },
@@ -641,6 +702,10 @@ var burgerCheese = i.t_cheese_wedge
 		i.t_bread, [i.bison_patty, i.salad_ingredients, i.tomato, i.beetroot]],
 	['kangaroo_burger', ['S C', 'K K', ' B '], { S: i.salad_ingredients, C: i.carrot, K: i.t_cooked_kangaroo, B: i.t_bread },
 		i.t_bread, [i.t_cooked_kangaroo, i.t_cooked_kangaroo, i.salad_ingredients, i.carrot]],
+	['cheese_burger', ['STO', 'CP ', ' B '], { S: i.salad_ingredients, T: i.tomato, O: i.onion, C: i.cheese_slice, P: vtdPatty, B: i.t_bread },
+		i.t_bread, [i.cheese_slice, vtdPatty, i.salad_ingredients, i.tomato, i.onion]],
+	['deluxe_burger', ['STO', 'APE', 'CB '], { S: i.salad_ingredients, T: i.tomato, O: i.onion, A: i.cooked_bacon, P: vtdPatty, E: i.cooked_eggs, C: i.cheese_slice, B: i.t_bread },
+		i.beef_patty, [i.cheese_slice, i.cooked_eggs, i.cooked_bacon, i.salad_ingredients, i.tomato, i.onion, i.t_bread]],
 ].forEach(([key, pattern, keys, base, steps]) => {
 	R.shaped(i[key], pattern, keys, e, key + '_manual_only')
 	var inc = R.incomplete(key)

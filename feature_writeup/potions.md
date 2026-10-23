@@ -89,6 +89,7 @@ KubeJS's potion registry runs before any mod's mob effects exist, so potions for
 | Alex's Mobs | centipede leg + Poison II → Poison Resistance | AM brews it from a poison-bottle item, which no mixer can use; AM's own stand recipe still works too |
 | Alex's Mobs | Lava Vision base: Create mixer 1000 mB lava + bone serpent tooth, heated ([lava_vision.js](../kubejs/server_scripts/magic/lava_vision.js)); IE Mixer 1500 mB lava + tooth (`PotionRecipeGeneratorsMixin`) | AM brews it from a lava-bottle item |
 | Rustic Delight | golden coffee beans + awkward → Haste; redstone, glowstone steps | RD's own `IBrewingRecipe` class is invisible to both mixers |
+| Fungi Delight (port, 2026-10-23) | truffle + awkward → Burrowing 3:00; redstone → 8:00; glowstone → Burrowing II 1:30. Registered in the port's Java as vanilla `PotionBrewing` mixes, not Forge brewing recipes, so the stand, Create Automatic Brewing, both mixers, bottling, splash / lingering, the potion buckets and tipped arrows all see them. Burrowing: shovel-mineable blocks break 1.5x (I) / 2x (II) faster. Weak Stomach (harmful, from inky caps and durian) has no potion | upstream used `BrewingRecipeRegistry`, which the mixers miss ([fungi_delight.md](fungi_delight.md) 5.1.4) |
 | Buzzier Bees / vanilla | four-leaf clover + awkward → Luck, redstone → long; silverfish bottle + awkward → Unluck, redstone → long | Luck had no brew. Reagent marked "TODO: better/magic ingredient" (`potions.js` line 86). Out of date: Buzzier Bees already brews Luck from the clover and lengthens Bad Luck, so rows 1, 2 and 4 are duplicates; only silverfish → Bad Luck is new ([effects.md](effects.md) F6) |
 
 ### 2.4 Machines
@@ -272,6 +273,7 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
 - [ ] **PO-24 Strong Magic Resistance:** thick + amethyst shard → Magic Resistance; + glowstone → Magic Resistance II.
 - [ ] **PO-25 Luck:** awkward + four-leaf clover → Potion of Luck; + redstone → long Luck.
 - [ ] **PO-26 Speed III:** Swiftness II + gazelle horn → Speed III (AM), on the brewing stand and in the Create mixer.
+- [ ] **PO-27 Burrowing:** awkward + truffle → Burrowing, + redstone → long, + glowstone → Burrowing II, on the brewing stand, in the Create mixer and the IE Mixer; JEED shows the Burrowing and Weak Stomach descriptions (= FGD-18, FGD-37).
 
 ## 8. History
 
@@ -282,3 +284,5 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
   potions, Rustic Delight haste, Luck; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F8; tests PO-01 to PO-26. No code changed.
 - 2026-10-19: F5 fixed (DragonBreathBrewing javadoc; source only, ships with the next patcherMod build).
+- 2026-10-23: Fungi Delight port: Burrowing potions as `PotionBrewing` mixes (2.3), JEED text for Burrowing and Weak
+  Stomach, PO-27. Built, scratch test queued.

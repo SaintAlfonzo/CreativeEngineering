@@ -1,0 +1,17 @@
+{
+  "type": "farmersdelight:cutting",
+  "ingredients": [
+    {
+      "item": "fungidelight:morel_mushroom_colony"
+    }
+  ],
+  "result": [
+    {
+      "count": 5,
+      "item": "fungidelight:morel_mushroom"
+    }
+  ],
+  "tool": {
+    "tag": "forge:tools/knives"
+  }
+}

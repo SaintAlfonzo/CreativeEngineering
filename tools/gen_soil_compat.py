@@ -89,6 +89,13 @@ JAVA_BASES = {
         state('fruitsdelight:lemon_tree', {'age': '4'}), [GRASS]),
 }
 
+# Data the Backported Vinery port serves at runtime from its donor jars (vinery_upstream/, never in mods/; the port
+# translates 1.5.5 data to 1.19.2 in memory, alcohol.md B4.8). Only the grape bush patches are read: they pass through
+# the translation unchanged, while other 1.5.5 worldgen (trees) is rewritten by the port and must not be copied raw.
+DONOR_JARS = {
+    'vinery_upstream/letsdo-vinery-fabric-1.5.5.jar': re.compile(r'^vinery:(taiga_|savanna_)?(red|white)_grape_bush$'),
+}
+
 # Java-only features that test grass_block inside the feature code; no JSON override can reach them.
 # None of them generates in a biome that has an Immersive Weathering soil, so they are left alone.
 JAVA_UNREACHABLE = {
@@ -149,6 +156,16 @@ def jar_sources():
                 print(f'  (unparseable, skipped: {Path(jar).name} {n})')
                 continue
             found.setdefault(key, []).append((Path(jar).name, body))
+    for rel, wanted in DONOR_JARS.items():
+        jar = INSTANCE / rel
+        if not jar.exists():
+            print(f'  ! donor jar missing: {rel}; its features are not widened')
+            continue
+        z = zipfile.ZipFile(jar)
+        for n in z.namelist():
+            m = re.match(r'data/([^/]+)/worldgen/(placed_feature|configured_feature)/(.+)\.json$', n)
+            if m and wanted.match(f'{m[1]}:{m[3]}'):
+                found.setdefault((m[2], f'{m[1]}:{m[3]}'), []).append((jar.name, json.loads(z.read(n).decode('utf8'))))
     return found
 
 

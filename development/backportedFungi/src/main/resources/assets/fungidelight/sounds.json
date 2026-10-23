@@ -1,0 +1,65 @@
+{
+  "pig_happy": {
+    "category": "neutral",
+    "subtitle": "subtitles.fungidelight.pig_happy",
+    "sounds": [
+      "fungidelight:pig_happy"
+    ]
+  },
+  "pig_dig": {
+    "category": "neutral",
+    "subtitle": "subtitles.fungidelight.pig_dig",
+    "sounds": [
+      {
+        "name": "minecraft:block.rooted_dirt.break",
+        "type": "event"
+      }
+    ]
+  },
+  "pig_drop": {
+    "category": "neutral",
+    "subtitle": "subtitles.fungidelight.pig_drop",
+    "sounds": [
+      {
+        "name": "minecraft:entity.chicken.egg",
+        "type": "event"
+      }
+    ]
+  },
+  "dog_sniff_truffle": {
+    "category": "neutral",
+    "subtitle": "subtitles.fungidelight.dog_sniff_truffle",
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf.pant",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 0.7
+      }
+    ]
+  },
+  "dog_found_truffle": {
+    "category": "neutral",
+    "subtitle": "subtitles.fungidelight.dog_found_truffle",
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf.growl",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "dog_alert_truffle": {
+    "category": "neutral",
+    "subtitle": "subtitles.fungidelight.dog_alert_truffle",
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf.howl",
+        "type": "event",
+        "volume": 0.8,
+        "pitch": 1.3
+      }
+    ]
+  }
+}

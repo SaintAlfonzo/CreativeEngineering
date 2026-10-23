@@ -265,6 +265,10 @@ def rule_error(rule, seen):
         return 'min must be 1 or more'
     if rule.get('max') is not None and not rule['max'] >= (rule.get('min') or 1):
         return 'max must be >= min'
+    if rule.get('brown_chance') is not None and not (num(rule['brown_chance']) and 0 <= rule['brown_chance'] <= 1):
+        return 'brown_chance must be 0 to 1'
+    if rule.get('brown_chance') is not None and rule.get('mob') != 'minecraft:mooshroom':
+        return 'brown_chance is for minecraft:mooshroom only'
     return None
 
 
@@ -610,6 +614,8 @@ def write_md(dump, tuned, untuned, rows, problems, warnings, stale, changes, are
             act = {'set': lambda r: f"set {r['weight']}" + (f" ({group(r.get('min') or 1, r.get('max') or r.get('min') or 1)})"
                                                              if r.get('min') or r.get('max') else ''),
                    'scale': lambda r: f"x{r['factor']}", 'remove': lambda r: 'remove'}[rule['action']](rule)
+            if rule.get('brown_chance') is not None:
+                act += f", brown {rule['brown_chance'] * 100:g} %"
             w(f"| `{rule['id']}` | `{rule['mob']}` | {act} | {len(hit)} | {changed} | "
               f"{(rule.get('label') or '') + (' ' if rule.get('label') and rule.get('notes') else '') + (rule.get('notes') or '')} |")
         w('')

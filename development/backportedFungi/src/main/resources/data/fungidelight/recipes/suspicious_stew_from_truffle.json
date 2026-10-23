@@ -1,0 +1,22 @@
+{
+  "type": "fungidelight:effect_stew",
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:brown_mushroom"
+    },
+    {
+      "item": "minecraft:red_mushroom"
+    },
+    {
+      "item": "fungidelight:truffle"
+    }
+  ],
+  "result": {
+    "item": "minecraft:suspicious_stew"
+  },
+  "effect": "minecraft:haste",
+  "duration": 160
+}

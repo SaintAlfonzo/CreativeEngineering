@@ -1,0 +1,20 @@
+{
+  "color": "#e3a33c",
+  "containers": [
+    {
+      "filled": [
+        "veggiesdelight:fermented_garlic_honey"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "veggiesdelight:fermented_garlic_honey"
+  },
+  "from_mod": "veggiesdelight",
+  "still_texture": "moonlight:soft_fluids/honey_liquid",
+  "translation_key": "item.veggiesdelight.fermented_garlic_honey"
+}

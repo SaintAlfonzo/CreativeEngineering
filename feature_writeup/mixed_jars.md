@@ -139,6 +139,8 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 
 ## 8. History
 
+- 2026-10-23: 8 more soup fluids (Veggies, Vintage) and 5 hand-written drink fluids; the generator keeps the
+  hand-written ones (its delete pass would have removed `nut_milk.json`). Not run in game (VTD-53).
 - 2026-10-22: soups and stews in jars (section 9, TODO `dishes/ingredients #13`): 24 generated soft fluids, own
   colour each. Data only; not tested in game (MJ-11 to MJ-14).
 - 2026-10-22 (doc audit): soups in jars not run yet; scratch checks queued (SQ-MJ-01, SQ-MJ-02,
@@ -166,11 +168,16 @@ soup and stew goes in a jar:
 - Chorus Stew and Endermite Stew, shulker bowl only. Ender's Delight's wooden-bowl versions are removed from the pack
   (removed_items.js) and the generator skips every removed item, so a wooden bowl takes nothing out of these jars;
 - Bayberry Soup, a bottle: 1 unit per bottle, and Fruits Delight's bayberry soup fluid counts as the same liquid;
-- Golden and Enchanted Golden Beetroot Soup, Mushroom Stew, Rabbit Stew (one fluid each).
+- Golden and Enchanted Golden Beetroot Soup, Mushroom Stew, Rabbit Stew (one fluid each);
+- 2026-10-23: the 5 Veggies Delight soups and Vintage Delight's Pickle Soup, Ghostly Chili and Oatmeal (32 in all).
+
+Bottled drinks of the two ports are hand-written files in the same folder, kept by the generator (`HAND_WRITTEN`):
+Vintage's Nut Milk, Veggies' Carrot Juice, Dandelion Juice and Turnip Water (their tank fluids count as the same
+liquid, `equivalent_fluids`) and Fermented Garlic Honey. Vintage's own jar contents ship in its jar.
 
 **Generator:** `python3 tools/gen_soup_soft_fluids.py` (`/cegen run soup_soft_fluids`, reads `/dumpfood`'s
 foods.json for each item's empty container) writes one json per uncovered soup and deletes stale ones; the folder is
-the tool's. A soup a mod already covers is skipped (its colour stays the mod's). New soups: put the key in the soup
+the tool's, except the `HAND_WRITTEN` drink files. A soup a mod already covers is skipped (its colour stays the mod's). New soups: put the key in the soup
 type in food_types.json and rerun. Applies on `/reload`.
 
 **Colour:** each soup its own, decided 2026-10-22 (not one shared soup colour). The tool takes the largest

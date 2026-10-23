@@ -202,6 +202,8 @@ public class CreativeEngineering
         // kubejs/server_scripts/worldgen/mob_spawns.js); its change record feeds /dumpspawns and is cleared on stop.
         com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.class);
+        // Brown mooshrooms on natural spawns (mob_spawns.json brown_chance); the family's breeding is in mixins.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mooshroom.MooshroomFamily.class);
 
         // Bee nest tuning: biome modifier type creativeengineering:bee_nests (bee_nests.json, written by
         // kubejs/server_scripts/worldgen/bee_nests.js) + the tree/nest/chunk counters behind /dumpbeenests.

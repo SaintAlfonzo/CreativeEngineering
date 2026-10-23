@@ -63,9 +63,9 @@ ServerEvents.tags('item', e => {
 	])
 
 
-	// Vintage Delight port (vintage_delight.md 3.1): its doughs are named ingredients for their own recipes, never
-	// stand-ins for Create dough. Cucumber noodles stay in #forge:pasta until the VTD-40 overlap review.
-	t.remove(e, i.any_dough, i.oat_dough)
+	// Vintage Delight port (vintage_delight.md 3.1): oat dough is a #forge:dough (owner, 2026-10-23); cucumber dough
+	// stays a named ingredient. Cucumber noodles stay in #forge:pasta until the VTD-40 overlap review.
+	t.add(e, i.any_dough, i.oat_dough)
 	// Crop, seed and crate tags for the Vintage crops, the Veggies port's pattern (vintage_delight.md 4 step 2)
 	t.add(e, 'forge:crops/oat', i.oat)
 	t.add(e, 'forge:crops/peanut', i.peanut)
@@ -80,6 +80,18 @@ ServerEvents.tags('item', e => {
 	t.add(e, 'forge:storage_blocks/peanut', i.peanut_crate)
 	t.add(e, 'forge:storage_blocks/cucumber', i.cucumber_crate)
 	t.add(e, 'forge:storage_blocks/ghost_pepper', i.ghost_pepper_crate)
+	// Fungi Delight port (fungi_delight.md 5.1.6): every mushroom-type item in #forge:mushrooms and its type tag.
+	// The port ships inky cap + cleaned cap, morel, truffle + slice; the cooked cap and the colonies are added here.
+	// Dishes and crates stay out (a dish must not count as "any mushroom").
+	t.add(e, i.t_mushrooms_inky_cap, [i.inky_cap_mushroom, i.cleaned_cap, i.cooked_cleaned_cap, i.inky_cap_mushroom_colony])
+	t.add(e, i.t_mushrooms_morel, [i.morel_mushroom, i.morel_mushroom_colony])
+	t.add(e, i.t_mushrooms_truffle, [i.truffle, i.truffle_slice])
+	t.add(e, i.mushrooms, [i.t_mushrooms_inky_cap, i.t_mushrooms_morel, i.t_mushrooms_truffle])
+	t.add(e, 'forge:storage_blocks/brown_mushroom', i.brown_mushroom_crate)
+	t.add(e, 'forge:storage_blocks/red_mushroom', i.red_mushroom_crate)
+	t.add(e, 'forge:storage_blocks/inky_cap', i.inky_cap_mushroom_crate)
+	t.add(e, 'forge:storage_blocks/morel', i.morel_mushroom_crate)
+	t.add(e, 'forge:storage_blocks/truffle', i.truffle_crate)
 
 	// meals (TODO dishes/meals #1, #2)
 	// cooked veggies for heatless soups and stews: the cooked/veggie food types (food_types.json) minus snacks,

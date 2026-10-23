@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "up": "fungidelight:block/morel_mushroom_crate_top",
+    "down": "farmersdelight:block/crate_bottom",
+    "north": "fungidelight:block/morel_mushroom_crate_side",
+    "south": "fungidelight:block/morel_mushroom_crate_side",
+    "east": "fungidelight:block/morel_mushroom_crate_side",
+    "west": "fungidelight:block/morel_mushroom_crate_side",
+    "particle": "fungidelight:block/morel_mushroom_crate_top"
+  }
+}

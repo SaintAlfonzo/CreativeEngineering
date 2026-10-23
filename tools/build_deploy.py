@@ -139,6 +139,7 @@ IN_TREE_MODS = [
     ('creativeLabels', 'creativeLabels', True),
     ('backportedVeggies', 'backportedVeggies', True),
     ('backportedVintage', 'backportedVintage', True),
+    ('backportedFungi', 'backportedFungi', True),
 ]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
@@ -202,6 +203,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
     ('generation_scripts/worldgen/wild_crops.json', 'runtime'),         # worldgen/wild_crops.js
     ('generation_scripts/worldgen/mob_spawns.json', 'runtime'),         # worldgen/mob_spawns.js
+    ('generation_scripts/worldgen/mushroom_spawns.json', 'runtime'),    # worldgen mushroom spawns (Fungi Delight)
     ('generation_scripts/worldgen/bee_nests.json', 'runtime'),          # worldgen/bee_nests.js (BeeNests)
     ('generation_scripts/worldgen/biome_fits.json', 'runtime'),         # structure_overrides.js (StructureBiomeFits)
     ('generation_scripts/worldgen/meta_structures.json', 'runtime'),    # structure_overrides.js (MetaStructure)

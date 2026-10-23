@@ -285,3 +285,7 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
 - 2026-10-22: `apply.sh` / `apply.ps1` added to every payload, and `verify --installed` (`write_verify` -> `write_scripts`;
   the four templates now use `@name@` tokens instead of `str.format`). The staged 1.1.01 payload got the new scripts,
   `verify/*.installed.*` and README from its history json without a rebuild (payload files unchanged).
+- 2026-10-23: 1.1.02 restaged (undistributed; the server is on 1.1.01). The earlier client `--snapshot` had marked it
+  deployed and frozen `changelog/1.1.02.md`; both were undone (client mark back to 1.1.01, the file merged back into
+  `unreleased.md`) so `--version 1.1.02` could rebuild. pack/manifest.json regenerated. Update from 1.1.01: 98 files /
+  8.2 MB, removals 3 server / 3 client. Next: copy, then `--snapshot 1.1.02`.

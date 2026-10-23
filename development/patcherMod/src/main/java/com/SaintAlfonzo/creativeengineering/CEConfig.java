@@ -1935,6 +1935,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue metaStructures;
         public final ForgeConfigSpec.BooleanValue structureReplacements;
         public final ForgeConfigSpec.BooleanValue wildCrops;
+        public final ForgeConfigSpec.BooleanValue mushroomSpawns;
         public final ForgeConfigSpec.BooleanValue wildFlowers;
         public final ForgeConfigSpec.BooleanValue mobSpawns;
         public final ForgeConfigSpec.BooleanValue beeNests;
@@ -1995,6 +1996,9 @@ public final class CEConfig {
             wildCrops = b.comment("wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).",
                     "Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.")
                     .define("wildCrops", true);
+            mushroomSpawns = b.comment("mushroom_spawns.json: wild mushrooms, colonies and huge Fungi Delight mushrooms at the surface and in caves",
+                    "(kubejs worldgen/mushroom_spawns.js). Off: mushrooms as their mods ship them. Rejoin to apply; only new chunks change.")
+                    .define("mushroomSpawns", true);
             wildFlowers = b.comment("wild_flowers.json: flower biomes and rates, Botania colors per biome, Flower Patch blocks in wild flowers",
                     "(kubejs worldgen/wild_flowers.js). Off: every flower as its mod ships it. Rejoin to apply; only new chunks change.")
                     .define("wildFlowers", true);
@@ -2934,6 +2938,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.IntValue stateSyncMaxDetailLines;
         public final ForgeConfigSpec.BooleanValue dumpNamesAtTitle;
         public final ForgeConfigSpec.BooleanValue dumpIconsAtTitle;
+        public final ForgeConfigSpec.BooleanValue recipeScanAtLoad;
 
         private Debug(ForgeConfigSpec.Builder b) {
             b.comment("Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).").push("debug");
@@ -3004,6 +3009,14 @@ public final class CEConfig {
                     "For a scratch client that never joins a world. Off by default."
             ).define("dumpIconsAtTitle", false);
             b.pop(); // wthit
+
+            b.comment("The removed-item recipe scan (kubejs/server_scripts/_lib/recipe_scan.js, /recipescan).").push("recipe_scan");
+            recipeScanAtLoad = b.comment(
+                    "Server: once per session, when the server has loaded (after every recipe change is applied), log",
+                    "each recipe that still uses or makes a removed item ([jeiRemove] lines). /recipescan runs it on",
+                    "demand whatever this says. Off by default."
+            ).define("runAtLoad", false);
+            b.pop(); // recipe_scan
             b.pop(); // debug
         }
     }

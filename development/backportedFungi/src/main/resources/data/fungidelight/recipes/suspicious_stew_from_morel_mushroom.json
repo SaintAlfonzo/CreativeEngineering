@@ -1,0 +1,22 @@
+{
+  "type": "fungidelight:effect_stew",
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:brown_mushroom"
+    },
+    {
+      "item": "minecraft:red_mushroom"
+    },
+    {
+      "item": "fungidelight:morel_mushroom"
+    }
+  ],
+  "result": {
+    "item": "minecraft:suspicious_stew"
+  },
+  "effect": "farmersdelight:comfort",
+  "duration": 160
+}

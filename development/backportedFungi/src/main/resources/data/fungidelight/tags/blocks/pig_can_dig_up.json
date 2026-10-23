@@ -1,0 +1,12 @@
+{
+  "values": [
+    "minecraft:podzol",
+    "minecraft:mud",
+    "minecraft:rooted_dirt",
+    "fungidelight:truffle_dirt",
+    {
+      "id": "environmental:buried_truffle",
+      "required": false
+    }
+  ]
+}

@@ -56,7 +56,7 @@ Read across the folders, the recipes set this order (each step names the writeup
 KubeJS can't unregister another mod's item. The pack removes items in four layers: recipes producing them are removed
 by hand in the feature scripts; the id goes in `global.removedItems`; at startup and tag load the list hides it in JEI,
 gives it a red "REMOVED ITEM: DO NOT USE" tooltip and strips every item tag from it (so it can't satisfy a tag
-ingredient); and `recipe_scan.js` lists any recipe still mentioning it.
+ingredient); and `recipe_scan.js` can list any recipe still using or making it (off by default).
 
 ## 2. Reference
 
@@ -72,7 +72,7 @@ Nock Enough Arrows' quiver and torch arrow; Quark's dragon scale; IE's potion bu
 |---|---|
 | `client_scripts/jeichanges.js` | `e.hide(id)` in JEI; red bold tooltip |
 | `server_scripts/_lib/recipe_scan.js` (tags event) | `removeAllTagsFrom(id)` on item tags |
-| `server_scripts/_lib/recipe_scan.js` (recipes event, once per session) | for each id, walks every recipe's JSON and logs `[jeiRemove] <id> -> N recipe(s)` and the ids |
+| `server_scripts/_lib/recipe_scan.js` (server loaded, once per session, only with CEConfig `[debug.recipe_scan] runAtLoad = true`; or `/recipescan` on demand) | one pass over the live RecipeManager (every script's removals, replacements and merges already applied) checking ingredients, result, Create rollable and IE item outputs against the removed set; logs `[jeiRemove] <id> -> N recipe(s)` and `<recipe id> (input/output)` lines |
 
 ### 2.2 Worklists (`startup_scripts/todo/`)
 
@@ -110,10 +110,11 @@ Nothing beyond the files above; every removal and replacement is in the folder s
   F2), smoker ([recipes_cooking.md](recipes_cooking.md) F1), Explorer's Compass ([recipes_magic.md](recipes_magic.md)
   F1), and possibly the cake (recipes_cooking F2). None is in `removed_items.js` ([TODO](todo/TODO.md) `recipes/progression #1`, `tooling/conventions #4`), so they show in
   JEI with no recipe. Either give each a pack recipe, or add it to the removed list.
-- **F2. The scan is slow by construction.** `recipe_scan.js` walks every recipe once per removed item (309 passes,
-  serialising each recipe's JSON each time) on the first recipe load of a session. Not measured; one pass that checks
-  each recipe against a set would cost a 309th. It only logs, so it could also run on demand (a `/dump` command) instead
-  ([pack_tooling.md](pack_tooling.md) F10).
+- **F2. Fixed 2026-10-23: the scan was slow and ran too early.** It walked every recipe's JSON once per removed item
+  (309 passes) inside the recipes event, before KubeJS applied removals and replacements (merge false positives).
+  Now one pass over the live RecipeManager after load, off by default (CEConfig `[debug.recipe_scan] runAtLoad`) or
+  `/recipescan`. Limit: it reads compiled recipes, so an output a mod keeps outside `getResultItem`,
+  `getRollableResults` (Create) or `getItemOutputs` (IE) is not seen; the old JSON text match also caught those.
 - **F3. The sawmill recycle recipes never loaded.** `kubejs/recipes/recycle/` (slabs, stairs, doors back to sticks) was
   meant for IE's sawmill. They have sawdust secondaries, which `R.ieSawmill` can't do (the KubeJS IE schema bug), so
   porting means moving them to `kubejs/data/creativeengineering/recipes/sawmill/`, where the other sawmill JSONs load;
@@ -147,15 +148,18 @@ Nothing beyond the files above; every removal and replacement is in the folder s
 
 ## 6. Offline checks
 
-None. The scan runs in game; its output is in `logs/kubejs/server.log` under `[jeiRemove]`.
+None. The scan runs in game (`/recipescan`, or at load with the config on); its output is in `logs/kubejs/server.log` under `[jeiRemove]`.
 
 ## 7. In-game test suite
 
 The per-folder suites carry the recipe tests: RE-01 to RE-20, RM-01 to RM-14, RW-01 to RW-10, RC-01 to RC-14, RA-01 to
 RA-08.
 
-- [ ] **RP-01 Scan:** first `/reload` of a session → `[recipe_scan] Scan complete. N total recipe references found
-  across 309 removed items`; second `/reload` → "Skipping". Note N and the time the reload takes (F2).
+- [ ] **RP-01 Scan:** default config: world load prints no `[recipe_scan]` line. `/recipescan` → chat "Recipe scan: N
+  references to M removed items"; log has `[jeiRemove]` blocks with `(input)`/`(output)` and `[recipe_scan] Scan
+  complete. ... N recipes read, U unreadable`. No `[jeiRemove]` line for a merged id (item_merges.md). With
+  `[debug.recipe_scan] runAtLoad = true`: one scan when the server finishes loading, none on `/reload` or a second
+  world in the same session.
 - [ ] **RP-02 Hidden:** JEI search for `vanadium` → nothing; `/give` a Vintage Improvements vanadium ingot → red "REMOVED
   ITEM" tooltip.
 - [ ] **RP-03 Tags stripped:** `/kubejs hand` on a removed sheet (e.g. a Create Crafts & Additions zinc sheet) → no

@@ -14,7 +14,7 @@ reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) (`drinks #3`, 
 | Piece | File | What it does |
 |---|---|---|
 | Merge list | `kubejs/startup_scripts/_lib/item_merges.js` | `global.itemMerges`: `[purged, survivor]` pairs (item dict keys). Adds each purged id to `global.removedItems` |
-| Hide and strip | `removed_items.js` consumers | JEI hides the purged item (`client_scripts/jeichanges.js`); its item tags are stripped and `recipe_scan.js` logs any recipe that still names it (`[jeiRemove] <id> -> n recipe(s)`) |
+| Hide and strip | `removed_items.js` consumers | JEI hides the purged item (`client_scripts/jeichanges.js`); its item tags are stripped and `recipe_scan.js` (`/recipescan`, off at load by default) logs any recipe that still uses or makes it (`[jeiRemove] <id> -> n recipe(s)`) |
 | Recipes | `kubejs/server_scripts/other/item_merges.js` (priority -100) | `NCH.replaceInput` / `replaceOutput` over every recipe, then the per-merge removals of duplicates |
 | Tags | same file | The survivor joins the tags recipes or mobs read |
 | Loot | same file, LootJS | Every table: purged entry -> survivor, same count (`CE/item_merges`) |

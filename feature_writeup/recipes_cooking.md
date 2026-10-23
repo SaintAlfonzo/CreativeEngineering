@@ -150,7 +150,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Vegetable omelet (Brewin') | pot takes 2 fried eggs (`R.replaceInput`); shapeless 2 omelettes + cheese wedge + onion + carrot + bowl |
 | Bowl of exotic fruits (Quark Delight) | any `#creativeengineering:exotic_fruits` (Fruits Delight fruits, hami melon, melon) in the melon slot |
 | Fruit salad | shapeless with `#creativeengineering:fruit_salad_slices` (melon, cantaloupe, hami melon, pineapple, lemon, orange slices) in the melon slots; assembly on a bowl ×2 |
-| Burgers: hamburger, cheeseburger, deluxe cheeseburger, simple hamburger, hamburger with egg, loaded hamburger, bison burger, kangaroo burger | shaped only (toppings top, patty middle, bread bottom), any `#forge:bread`, cheese wedges (Delightful's milk versions removed); one assembly each on bread (the egg burger on the patty). Each assembly starts with a different item: CCK's bacon, chicken and egg sandwiches already start on bread with bacon, chicken and a fried egg |
+| Burgers: hamburger, cheeseburger, deluxe cheeseburger, simple hamburger, hamburger with egg, loaded hamburger, bison burger, kangaroo burger; Vintage Delight's cheese burger and deluxe burger (2026-10-23: on its cheese slice, beef or vegetarian patty; the deluxe assembly starts on the patty) | shaped only (toppings top, patty middle, bread bottom), any `#forge:bread`, cheese wedges (Delightful's milk versions removed); one assembly each on bread (the egg burger on the patty). Each assembly starts with a different item: CCK's bacon, chicken and egg sandwiches already start on bread with bacon, chicken and a fried egg |
 | Shepherd's pie | shapeless with a cheese wedge in place of milk; assembly on a bowl |
 | Horror lasagna | shapeless (cooked) and assembly on a bowl ×2 (pasta first, then 250 mB tomato sauce) |
 | Stuffed potato | FD's shapeless; assembly on a baked potato (cooked beef, 250 mB milk) |
@@ -169,6 +169,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Fish and Chips (PneumaticCraft cod 'n' chips, renamed) | pot: cooking oil + any whole fish + 2 sliced potatoes, plated on paper; shapeless fries + cooked fish + paper (`_manual_only`). Tooltip: the chips are fries |
 | Blueberry and cranberry muffins | pot recipes on `#forge:dough` ([oven.md](oven.md)) |
 | Stuffed shulker, ender paella, pearl pasta (Ender's Delight) | shapeless |
+| Vintage Delight (2026-10-23, [vintage_delight.md](vintage_delight.md) step 9) | stuffed burrito on a tortilla (ghost pepper or roasted bell pepper) + assembly; PB & J and cucumber salad `_manual_only`; heatless cheese pasta (pasta + 3 cheese + bowl), pad thai (2 cooked chicken cuts, roasted peanut) and pickle soup (bone broth, 2 pickles, baked potato); no furnace bread from oat dough; oatmeal cookie oven only. No route: oatmeal (no cooked oat), ghostly chili (Nether, as blazing chili) |
 
 **Heatless meal rule** (comment at the top of the "Meals" section of `cooking.js`): a pot meal can also be crafted
 shapeless from the cooked form of each raw ingredient (cooked meat, baked potato, tomato sauce, cooked rice, fried egg,

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "fungidelight:block/inky_cap_mushroom_stem"
+  }
+}

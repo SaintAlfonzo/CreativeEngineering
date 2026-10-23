@@ -18,11 +18,14 @@ How it works:
   have no json, so JAVA_PLACED below restates them from the decompiled jars (feature_writeup/crops.md 2.7).
   Config-driven chances are read from config/*.toml.
 
-- The pack's own placement, kubejs/generation_scripts/worldgen/wild_crops.json (applied in game by
-  kubejs/server_scripts/worldgen/wild_crops.js), is evaluated with the same rules: the mods' modifiers it
-  switches off are dropped, its remove_features run after every add (Forge's order), and each crop's features
-  go to the biomes its rule matches. The CEConfig wildCrops switch can't be read offline: the tables assume it
-  is on, and the summary's "mod default" column shows the numbers with it off.
+- The pack's own placement, kubejs/generation_scripts/worldgen/wild_crops.json and mushroom_spawns.json (applied
+  in game by kubejs/server_scripts/worldgen/wild_crops.js and mushroom_spawns.js), is evaluated with the same rules:
+  the mods' modifiers they switch off are dropped, remove_features run after every add (Forge's order), and each
+  rule's features go to the biomes it matches (mushroom rules in cave mode also match ocean and cave biomes). The
+  CEConfig wildCrops / mushroomSpawns switches can't be read offline: the tables assume both are on, and the
+  summary's "mod default" column shows the numbers with them off.
+- The Fungi Delight port (development/backportedFungi) ships only configured features, under the upstream ids. While
+  no jar in mods/ has them, they are read from the upstream jar in the ATLauncher downloads folder.
 
 Rates are patch attempts per chunk (1/N = one chunk in N on average). "Per 1000 chunks" multiplies the
 rate by the share of the dimension the crop's biomes cover; it is an upper bound, since an attempt still
@@ -43,6 +46,9 @@ BIOME_CONFIG = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_config.json'
 OUT_MD = INSTANCE / 'feature_writeup/crops_by_biome.md'
 OUT_JSON = INSTANCE / 'kubejs/exported/worldgen/crop_worldgen.json'
 WILD_CROPS = INSTANCE / 'kubejs/generation_scripts/worldgen/wild_crops.json'
+MUSHROOM_SPAWNS = INSTANCE / 'kubejs/generation_scripts/worldgen/mushroom_spawns.json'
+FUNGI_UPSTREAM = Path.home() / '.local/share/atlauncher/downloads/FungiDelight-1.20.1-1.3.jar'
+FUNGI_CONFIGURED = 'data/fungidelight/worldgen/configured_feature/'
 
 LIBS = Path.home() / '.local/share/atlauncher/libraries'
 _vj = sorted(glob.glob(str(LIBS / 'net/minecraft/client/1.19.2*/*-extra.jar')))
@@ -208,6 +214,12 @@ NESTED_ONLY = {'minecraft:jungle_tree'}
 JAVA_CONFIGURED = {
     'minecraft:jungle_tree': ['cocoa'],
     'minecraft:trees_jungle': ['cocoa'],     # random_selector whose default is jungle_tree_checked (with cocoa)
+    # Fungi Delight huge mushrooms: Java features with an empty config
+    'fungidelight:huge_inky_cap_mushroom': ['Huge Inky Cap'],
+    'fungidelight:huge_morel_mushroom': ['Huge Morel'],
+    # Fungi Delight's rooted dirt blob (an ore feature on vanilla rooted dirt: labelled here, not via CROP_BLOCKS,
+    # which would also catch azalea trees)
+    'fungidelight:rooted_dirt_blob': ['Rooted Dirt (truffle ground)'],
 }
 
 # Blocks found in json features that count as a crop, and the label they get.
@@ -234,6 +246,10 @@ CROP_BLOCKS = {
     # Vintage Delight backport (development/backportedVintage); wild ghost peppers are Nether-only
     'vintagedelight:wild_oats': 'Oats', 'vintagedelight:wild_peanuts': 'Peanuts',
     'vintagedelight:wild_cucumbers': 'Cucumbers',
+    # Fungi Delight backport (development/backportedFungi); placement in mushroom_spawns.json / wild_crops.json
+    'fungidelight:inky_cap_mushroom': 'Inky Cap', 'fungidelight:morel_mushroom': 'Morel',
+    'fungidelight:inky_cap_mushroom_colony': 'Inky Cap Colony', 'fungidelight:morel_mushroom_colony': 'Morel Colony',
+    'fungidelight:truffle_dirt': 'Truffle Dirt',
 }
 COCOA = 'Cocoa'
 
@@ -249,13 +265,20 @@ def iter_sources():
     """(label, {path: bytes-reader}) in load order: vanilla, forge, mods, kubejs/data."""
     # the Vinery port ships code only and reads its data from the upstream jars at runtime (1.5.5 wins over 1.3.10)
     upstream = [INSTANCE / 'vinery_upstream' / n for n in ('letsdo-vinery-forge-1.3.10.jar', 'letsdo-vinery-fabric-1.5.5.jar')]
+    fungi = False
     for jar in BASE_JARS + sorted(MODS.glob('*.jar')) + upstream:
         try:
             z = zipfile.ZipFile(jar)
         except (zipfile.BadZipFile, FileNotFoundError):
             continue
-        yield jar.name, [(n, (lambda z=z, n=n: z.read(n))) for n in z.namelist()
-                         if n.startswith('data/') and n.endswith('.json')]
+        names = [n for n in z.namelist() if n.startswith('data/') and n.endswith('.json')]
+        fungi = fungi or any(n.startswith(FUNGI_CONFIGURED) for n in names)
+        yield jar.name, [(n, (lambda z=z, n=n: z.read(n))) for n in names]
+    # the Fungi Delight port ships the upstream configured features (only those) under the same ids
+    if not fungi and FUNGI_UPSTREAM.exists():
+        z = zipfile.ZipFile(FUNGI_UPSTREAM)
+        yield FUNGI_UPSTREAM.name, [(n, (lambda z=z, n=n: z.read(n))) for n in z.namelist()
+                                    if n.startswith(FUNGI_CONFIGURED) and n.endswith('.json')]
     kd = INSTANCE / 'kubejs'
     yield 'kubejs/data', [(str(p.relative_to(kd)), (lambda p=p: p.read_bytes())) for p in (kd / 'data').rglob('*.json')]
 
@@ -339,9 +362,10 @@ def crops_in(fid, placed, configured, kind, seen):
         if fid in JAVA_PLACED:
             return {JAVA_PLACED[fid]['crop']}
         return set()
+    out = {COCOA if c == 'cocoa' else c for c in JAVA_CONFIGURED.get(fid, [])}
     if fid in configured:
-        return crops_in_value(configured[fid][1], placed, configured, seen)
-    return {COCOA if c == 'cocoa' else c for c in JAVA_CONFIGURED.get(fid, [])}
+        out |= crops_in_value(configured[fid][1], placed, configured, seen)
+    return out
 
 
 def crops_in_value(v, placed, configured, seen, configured_ref=False):
@@ -452,8 +476,18 @@ NEVER = {'ocean', 'cave'}      # surface features land on water or in another bi
 
 
 def load_wild_crops():
+    """(config, biome traits). The config's crops also carry mushroom_spawns.json's rules, keys prefixed
+    'mushroom_spawns:' and marked '_mushroom': both systems share the biome table and the clause rules."""
     cfg = loads_lenient(WILD_CROPS.read_text())
+    if MUSHROOM_SPAWNS.exists():
+        for key, rule in loads_lenient(MUSHROOM_SPAWNS.read_text()).get('rules', {}).items():
+            cfg['crops']['mushroom_spawns:' + key] = dict(rule, _mushroom=True)
     return cfg, {b: set(t.split()) for b, t in cfg['biomes'].items()}
+
+
+def rule_never(crop):
+    """Traits that keep a biome out of a rule: none for a mushroom rule in cave mode."""
+    return set() if crop.get('mode') == 'cave' else NEVER
 
 
 def clause_matches(traits, clause):
@@ -462,7 +496,8 @@ def clause_matches(traits, clause):
 
 def resolve_crop(traits, crop):
     """Clauses OR'ed, traits in a clause AND'ed ('!x' negated), then add / except."""
-    out = {b for b, tr in traits.items() if not tr & NEVER and any(clause_matches(tr, c) for c in crop.get('where', []))}
+    never = rule_never(crop)
+    out = {b for b, tr in traits.items() if not tr & never and any(clause_matches(tr, c) for c in crop.get('where', []))}
     return sorted((out | set(crop.get('add', []))) - set(crop.get('except', [])))
 
 
@@ -675,9 +710,10 @@ def write_md(rows, rows_default, wild, area, dim_of, dropped, checks):
     L.append('# Crops by biome (generated)\n')
     L.append('Generated by `python3 tools/gen_crop_worldgen_table.py`. Do not edit by hand; the explanations, ground rules and '
              'gaps are in [crops.md](crops.md) sections 2.7 and 2.8. Rerun after adding or updating mods, after `/dumpbiomes`, '
-             'after retuning biomes (`biome_config.json`) or after editing `wild_crops.json`.\n')
-    L.append('Every table assumes the pack\'s placement (`kubejs/generation_scripts/worldgen/wild_crops.json`, CEConfig '
-             '`[worldgen.systems] wildCrops = true`). Section 1 also shows each crop with the switch off (the mods\' own spawns).\n')
+             'after retuning biomes (`biome_config.json`) or after editing `wild_crops.json` or `mushroom_spawns.json`.\n')
+    L.append('Every table assumes the pack\'s placement (`kubejs/generation_scripts/worldgen/wild_crops.json` and '
+             '`mushroom_spawns.json`, CEConfig `[worldgen.systems] wildCrops = true`, `mushroomSpawns = true`). Section 1 also '
+             'shows each crop with the switches off (the mods\' own spawns).\n')
     L.append('- **Rate**: patch attempts per chunk. "1 in 30 chunks" means a chunk tries once with probability 1/30.')
     L.append('- **Share**: the part of the dimension (post-tuning biome areas from `biome_config.json`) covered by the biomes '
              'the feature is added to. Ocean biomes (`#minecraft:is_ocean`, about 41% of the overworld) and underground '
@@ -709,17 +745,35 @@ def write_md(rows, rows_default, wild, area, dim_of, dropped, checks):
         L.append(f"| {r['crop']} | `{r['feature']}` | {fmt_rate(r['rate'])}{' (trees)' if r['trees'] else ''} | {r['where']} | {len(r['biomes'])} | {share} | {per} |")
     L.append('')
 
-    L.append('## 3. wild_crops.json rules\n')
-    L.append('| Key | Crop | Rule | Biomes |')
-    L.append('|---|---|---|---|')
-    for key, crop in cfg['crops'].items():
+    def rule_text(crop):
         rule = ' or '.join(f'`{c}`' for c in crop.get('where', []))
         if crop.get('add'):
             rule += (' + ' if rule else '') + 'add ' + ', '.join(short(b) for b in crop['add'])
         if crop.get('except'):
             rule += ' except ' + ', '.join(short(b) for b in crop['except'])
-        bs = resolve_crop(traits, crop)
-        L.append(f"| {key} | {crop.get('label', key)} | {rule} | {len(bs)}: {', '.join(short(b) for b in bs)} |")
+        return rule
+
+    def biome_text(bs):
+        return f"{len(bs)}: {', '.join(short(b) for b in bs)}" if len(bs) <= 40 else f'{len(bs)}: every classified biome but ' + (
+            ', '.join(short(b) for b in sorted(set(traits) - set(bs))) or 'none')
+
+    L.append('## 3. wild_crops.json rules\n')
+    L.append('| Key | Crop | Rule | Biomes |')
+    L.append('|---|---|---|---|')
+    for key, crop in cfg['crops'].items():
+        if crop.get('_mushroom'):
+            continue
+        step = f" ({crop['step']})" if crop.get('step') else ''
+        L.append(f"| {key} | {crop.get('label', key)}{step} | {rule_text(crop)} | {biome_text(resolve_crop(traits, crop))} |")
+    L.append('')
+    L.append('### 3.1 mushroom_spawns.json rules\n')
+    L.append('Same biome words and clause rules; `surface` mode skips ocean and cave biomes, `cave` mode matches them too.\n')
+    L.append('| Key | Mushroom | Mode | Rule | Biomes |')
+    L.append('|---|---|---|---|---|')
+    for key, crop in cfg['crops'].items():
+        if crop.get('_mushroom'):
+            L.append(f"| {key.split(':', 1)[1]} | {crop.get('label', key)} | {crop.get('mode', 'surface')} | {rule_text(crop)} | "
+                     f"{biome_text(resolve_crop(traits, crop))} |")
     L.append('')
 
     L.append('## 4. Biomes per feature\n')

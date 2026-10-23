@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fungidelight:item/rabbit_with_morels"
+  }
+}

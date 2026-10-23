@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.mehdinoui.fungidelight.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "fungidelight.refmap.json",
+  "mixins": [
+    "HoglinMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

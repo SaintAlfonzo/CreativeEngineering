@@ -188,7 +188,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 |---|---|---|---|---|---|
 | Nether Wart | `minecraft:nether_wart` | Soul Sand, **Nulch** (`immersive_weathering:nulch_block`). Not Fertile Soil | Quark replant (config list) | replant | yes |
 | Propelplant | `nethersdelight:propelplant_*` | nylium, netherrack, Rich Soul Soil | own pick of pearls | pick | yes |
-| Mushroom colonies | `farmersdelight:brown_mushroom_colony`, `red_mushroom_colony` | grow only on Rich Soil (also Rich Planter); survive on most soils in the dark | shears take one mushroom (stage −1) | no | yes |
+| Mushroom colonies | `farmersdelight:brown_mushroom_colony`, `red_mushroom_colony`; Fungi Delight port `fungidelight:inky_cap_mushroom_colony`, `morel_mushroom_colony` (FD's class, [fungi_delight.md](fungi_delight.md)) | grow only on Rich Soil (also Rich Planter); survive on most soils in the dark | shears take one mushroom (stage −1) | no | yes |
 | Fungus colonies | `nethersdelight:crimson_fungus_colony`, `warped_fungus_colony` | nylium, mycelium, Soul Soil, Rich Soul Soil, dirt | shears, same as above | no | yes |
 
 **Column plants and pests**
@@ -287,7 +287,7 @@ height in the hoe's area breaks too:
 | Rich Soil | `farmersdelight:rich_soil` | anything that **isn't** a farmland crop, Nether plant or water plant. So bushes, saplings, flowers, rice and sugar cane, but **not** wheat, cabbage, flax, hemp or tobacco | 20% chance per random tick to bone-meal the plant above (`richSoilBoostChance = 0.2`); turns a mushroom above into a colony |
 | Rich Farmland | `farmersdelight:rich_soil_farmland` | farmland crops and plains plants. Grape bushes refuse it because they check the block below directly. Tobacco accepts it through the pack's soil tag (§2.6) | same 20% boost, but only while fully moist; never reverts to dirt; can't be trampled |
 | Fertile Soil | `immersive_weathering:mulch_block` | everything except Nether plants, with no tilling. Grape bushes check the block below directly, so the soil's rule doesn't apply to them. Tobacco accepts it through the pack's soil tag (§2.6) | always counts as fertile (moist-farmland speed). While soaked (water bucket, rain, touching water) and light 9+: farmland crops get a bone-meal step per soil random tick (`CropBlock`s from IW, tobacco from the pack, §2.6), stems get 10 extra random ticks, other plants nothing extra. Never dries out to dirt; can't be trampled |
-| Nulch | `immersive_weathering:nulch_block` | Nether Wart (and other Nether-type plants) | none for crops |
+| Fertile Soul Soil (Nulch; renamed 2026-10-23) | `immersive_weathering:nulch_block` | Nether Wart (and other Nether-type plants), Ghost Pepper seeds | none for crops |
 
 Rich Soil and Fertile Soil are both in `#minecraft:dirt`. That's why plain bushes accept them through
 the normal bush rule as well. Rich Farmland isn't in that tag.
@@ -678,6 +678,12 @@ left alone (they shape terrain). The pack's own `wild/hamimelon` takes the tag d
 never overwrites a hand-written file. Rerun after updating Terralith, Vinery, Neapolitan, Fruits Delight or Geophilic
 (`/cegen run soil_compat`).
 
+Vinery grapes (2026-10-23): the Backported Vinery port has no worldgen JSON in its jar; it serves 1.5.5's at runtime
+from the donor jars in `vinery_upstream/` as a bottom-priority pack, so the KubeJS overrides win. The script reads the
+grape bush patches from that donor jar (`DONOR_JARS`, the six bush ids only; other 1.5.5 worldgen is rewritten by the
+port and must not be copied raw). Before this the six overrides were 1.3.10 leftovers (36 tries; 1.5.5 has 32 and 33)
+and the next run would have deleted them. The Vintage salt patch is the 66th feature.
+
 Not reachable from JSON: Neapolitan's mint pond and banana plant test `grass_block` inside the Java feature. Neither spawns
 in a biome that has an IW soil, so they are left alone. Side effects: an adzuki patch on humus turns the block under each
 sprout into plain Dirt (same as it does to grass); hamimelon can now also land on the grass in Wooded Badlands.
@@ -1064,7 +1070,8 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
 - [ ] **CR-11 Rice:** right-click ripe panicles → rice drops and the panicles go back to stage 0.
 - [ ] **CR-12 Berry pips on soils:** Sweet Berry Pips plant on Rich Soil, Rich Farmland and Fertile Soil. Iron hoe right-click on a ripe bush patch picks 3x3 bushes.
 - [ ] **CR-13 Grape bush on Fertile Soil:** red grape seeds on Fertile Soil in full light → record whether they plant (unknown, see §2.1). On Farmland → refused.
-- [ ] **CR-14 Nether Wart soils:** plants on Nulch. Refused on Fertile Soil.
+- [ ] **CR-14 Nether Wart soils:** plants on Fertile Soul Soil (Nulch). Refused on Fertile Soil.
+- [ ] **CR-14a Grape bushes on IW soils:** stand on a humus or fluvisol patch and run `/place feature vinery:red_grape_bush`, then `/place feature vinery:taiga_white_grape_bush` → bushes land on the soil blocks as well as on grass (before the fix they skipped them).
 - [ ] **CR-15 Ender Crop light:** ender seeds on Rich Farmland in daylight → refused. Under a roof with no light → plant.
 - [ ] **CR-16 Weeds:** right-click ripe weeds → they come back at stage 0 (G8).
 - [ ] **CR-17 Tomatoes:** right-click a ripe bottom vine → replanted at stage 0. Right-click a ripe vine on a rope → tomatoes picked, back to stage 0.

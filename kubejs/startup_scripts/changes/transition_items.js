@@ -56,6 +56,9 @@ StartupEvents.registry('item', e => {
 		['loaded_hamburger'],
 		['bison_burger'],
 		['kangaroo_burger'],
+		['cheese_burger'],                                           // Vintage Delight (vintage_delight.md 4 step 9)
+		['deluxe_burger'],
+		['stuffed_burrito'],
 		['shepherds_pie'],
 		['horror_lasagna'],
 		['stuffed_potato'],

@@ -2,31 +2,6 @@
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
-- increase separation between pillager/metastructrues and villages/metastructures
-- lower siege equipment, pillager metastructure rates
-- add structure variants to t&t greenhouses, wider spawning
-- ensure sky stone meteorites are ~5x as rare as cloud structures, decrease sky structure seperation, add more metastructures, mega cloud, hot air balloon fleet
-- find recipe/rename for flax bale when flax removed
-- village + meteorite in the middle metastructure
-- avoid straight lines in worldgen noise
-- remake pillager structures as villager
-  - recaptured
-- remake villager structures as pillager
-  - pillager takeover
-  - ransacked? new outpost?
-  - new loot tables
-- pickling recipe for fermented spider eyes. 
-- 9 cheese wedges to cheese block for each cheese
-- identify mob spawns in structures to add/expand
-  - fish in fishtanks
-    - petstore
-    - t&t castle
-
-## Writeup Plans (ToDo-ToDo, agents mark brief note here when a new feature/change requires a writeup, defer to later to save context)
-
-- placeholder
-
-
 ## Oldest Unrun Tests
 
 The 47 oldest unchecked tests in the writeups (by last git change, all 2026-09-27; copies, the originals stay in their writeups and get ticked there).

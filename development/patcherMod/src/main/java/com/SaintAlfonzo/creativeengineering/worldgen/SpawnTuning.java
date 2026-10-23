@@ -58,6 +58,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * /dumpspawns; {@link #summary()} is the one-line load report mob_spawns.js logs. Biome modifiers apply at every
  * server start, so changes reach existing worlds too.
  *
+ * <p>{@code brown_chance} (minecraft:mooshroom rules only) is not a biome change either: the biomes the rule matches
+ * get that chance of a brown mooshroom, read by {@link com.SaintAlfonzo.creativeengineering.mooshroom.MooshroomFamily}
+ * on natural and chunk-generation spawns. When several rules give a biome a chance, the last one wins.
+ *
  * <p>The optional {@code conditions} list (light_only, water_only) is not a biome change: it is handed to
  * {@link SpawnConditions}, which the spawn checks read.
  */
@@ -79,7 +83,7 @@ public record SpawnTuning(List<Rule> rules, List<SpawnConditions.Condition> cond
 
 	public record Rule(String id, HolderSet<Biome> biomes, ResourceLocation mob, Action action,
 					   Optional<MobCategory> category, int weight, double factor,
-					   Optional<Integer> min, Optional<Integer> max) {
+					   Optional<Integer> min, Optional<Integer> max, Optional<Double> brownChance) {
 		static final Codec<Rule> CODEC = RecordCodecBuilder.create(i -> i.group(
 				Codec.STRING.fieldOf("id").forGetter(Rule::id),
 				Biome.LIST_CODEC.fieldOf("biomes").forGetter(Rule::biomes),
@@ -89,7 +93,8 @@ public record SpawnTuning(List<Rule> rules, List<SpawnConditions.Condition> cond
 				Codec.INT.optionalFieldOf("weight", 0).forGetter(Rule::weight),
 				Codec.DOUBLE.optionalFieldOf("factor", 1.0).forGetter(Rule::factor),
 				Codec.INT.optionalFieldOf("min").forGetter(Rule::min),
-				Codec.INT.optionalFieldOf("max").forGetter(Rule::max)
+				Codec.INT.optionalFieldOf("max").forGetter(Rule::max),
+				Codec.DOUBLE.optionalFieldOf("brown_chance").forGetter(Rule::brownChance)
 		).apply(i, Rule::new));
 	}
 
@@ -121,6 +126,13 @@ public record SpawnTuning(List<Rule> rules, List<SpawnConditions.Condition> cond
 	private static final Map<String, Integer> MATCHED = new ConcurrentHashMap<>();
 	private static final Set<String> WARNED = ConcurrentHashMap.newKeySet();
 	private static volatile List<String> ruleIds = List.of();
+	private static final Map<String, Double> BROWN_CHANCE = new ConcurrentHashMap<>();
+	private static final ResourceLocation MOOSHROOM = new ResourceLocation("minecraft", "mooshroom");
+
+	/** Chance (0-1) that a naturally spawned mooshroom in this biome is brown; 0 when no rule gives one. */
+	public static double brownChance(String biomeId) {
+		return BROWN_CHANCE.getOrDefault(biomeId, 0.0);
+	}
 
 	/** Biome id -> record, for the biomes a rule changed, sorted by id. */
 	public static Map<String, BiomeRecord> records() {
@@ -158,6 +170,7 @@ public record SpawnTuning(List<Rule> rules, List<SpawnConditions.Condition> cond
 		MATCHED.clear();
 		WARNED.clear();
 		ruleIds = List.of();
+		BROWN_CHANCE.clear();
 		SpawnConditions.clear();
 	}
 
@@ -178,6 +191,10 @@ public record SpawnTuning(List<Rule> rules, List<SpawnConditions.Condition> cond
 		for (Rule rule : rules) {
 			if (!rule.biomes().contains(biome)) continue;
 			MATCHED.merge(rule.id(), 1, Integer::sum);
+			if (rule.brownChance().isPresent()) {
+				if (MOOSHROOM.equals(rule.mob())) BROWN_CHANCE.put(biomeId, Math.max(0.0, Math.min(1.0, rule.brownChance().get())));
+				else if (WARNED.add(rule.id() + "#brown")) LOGGER.warn("[mob-spawns] rule {}: brown_chance only works on minecraft:mooshroom, ignored", rule.id());
+			}
 			EntityType<?> type = resolve(rule);
 			if (type == null) continue;
 			if (before == null) before = snapshot(spawns);

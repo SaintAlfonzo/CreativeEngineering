@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Offline checks for the wild crop placement (feature_writeup/crops.md section 2.8):
 #   1. generator: tools/gen_crop_worldgen_table.py runs with no config problems
-#   2. Rhino: kubejs/server_scripts/worldgen/wild_crops.js in the pack's Rhino fork; every crop tag must equal the
-#      generator's resolved list, and every data file must be valid JSON with the expected modifiers
+#   2. Rhino: kubejs/server_scripts/worldgen/wild_crops.js (+ _biome_rules.js) in the pack's Rhino fork; every crop tag
+#      must equal the generator's resolved list, and every data file must be valid JSON with the expected modifiers
+#      at the crop's step
 #   3. Rhino with CEConfig wildCrops off: no tags, no files
 #   4. Rhino with a mod missing (neapolitan): its features/modifiers skipped, nothing else changes
 # Needs the ATLauncher library folder (Rhino's gson). No game needed.
@@ -27,6 +28,7 @@ import json, sys, glob, os
 sys.path.insert(0, 'tools')
 import gen_crop_worldgen_table as g
 cfg, traits = g.load_wild_crops()
+cfg['crops'] = {k: c for k, c in cfg['crops'].items() if not c.get('_mushroom')}   # mushroom_spawns.json: own test
 tags = json.load(open(os.path.join(sys.argv[1], 'tags.json')))
 bad = 0
 for key, crop in cfg['crops'].items():
@@ -42,7 +44,8 @@ want_nones = {m for c in cfg['crops'].values() for m in c.get('disable_modifiers
 want_rem = sorted({f for c in cfg['crops'].values() for f in c.get('remove_features', [])})
 ok = len(adds) == sum(1 for c in cfg['crops'].values() if c.get('features')) and len(nones) == len(want_nones) and len(rem) == 1 and rem[0]['features'] == want_rem
 for d in adds:
-    ok &= d['step'] == 'vegetal_decoration' and d['biomes'].startswith('#creativeengineering:wild_crops/') and bool(d['features'])
+    crop = cfg['crops'][d['biomes'].split('/', 1)[1]]
+    ok &= d['step'] == crop.get('step', 'vegetal_decoration') and d['biomes'].startswith('#creativeengineering:wild_crops/') and bool(d['features'])
 print(f"{len(cfg['crops'])} crop tags match the generator" if not bad else f'{bad} tags differ')
 print(f'{len(adds)} add modifiers, {len(nones)} forge:none, {len(rem)} remove modifier: ' + ('as expected' if ok else 'UNEXPECTED'))
 sys.exit(1 if bad or not ok else 0)

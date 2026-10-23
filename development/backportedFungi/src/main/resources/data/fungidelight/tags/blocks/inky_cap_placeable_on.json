@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#minecraft:dirt",
+    "#minecraft:logs",
+    "#minecraft:mushroom_grow_block",
+    "#forge:cobblestone",
+    "#forge:stone",
+    "minecraft:sculk"
+  ]
+}

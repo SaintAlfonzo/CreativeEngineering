@@ -1,0 +1,29 @@
+{
+  "type": "farmersdelight:cooking",
+  "container": {
+    "item": "minecraft:bowl"
+  },
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "tag": "forge:mushrooms/morel"
+    },
+    {
+      "tag": "forge:mushrooms/morel"
+    },
+    {
+      "tag": "forge:grain/rice"
+    },
+    {
+      "tag": "forge:crops/tomato"
+    },
+    {
+      "tag": "forge:cooked_chicken"
+    }
+  ],
+  "recipe_book_tab": "meals",
+  "result": {
+    "item": "fungidelight:stuffed_morels"
+  }
+}
