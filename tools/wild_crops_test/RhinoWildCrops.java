@@ -3,11 +3,11 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Runs kubejs/server_scripts/worldgen/wild_crops.js in the pack's own Rhino fork with the KubeJS globals stubbed
- * (tag_helper.js loaded first for global.tags). Fires the worldgen/biome tags handler and highPriorityData, and
+ * Runs kubejs/server_scripts/worldgen/wild_crops.js (or mushroom_spawns.js with script=mushroom_spawns) in the pack's
+ * own Rhino fork with the KubeJS globals stubbed (tag_helper.js and _biome_rules.js loaded first). Fires the worldgen/biome tags handler and highPriorityData, and
  * writes tags.json (tag -> biomes) and every data file the script adds under <out>/data/. ServerEvents.loaded
  * needs the live registry and is not fired.
- * Usage: RhinoWildCrops <instance root> <out dir> [off] [missing=<modid>]
+ * Usage: RhinoWildCrops <instance root> <out dir> [off] [missing=<modid>] [script=<name>]
  */
 public class RhinoWildCrops {
 	static final Map<String, List<String>> tags = new TreeMap<>();
@@ -16,6 +16,7 @@ public class RhinoWildCrops {
 	static Path root;
 	static boolean off;
 	static final Set<String> missing = new HashSet<>();
+	static String script = "wild_crops";
 
 	public static class Host {
 		public String read(String p) throws Exception { return Files.readString(root.resolve(p)); }
@@ -31,6 +32,7 @@ public class RhinoWildCrops {
 		for (int i = 2; i < a.length; i++) {
 			if (a[i].equals("off")) off = true;
 			else if (a[i].startsWith("missing=")) missing.add(a[i].substring(8));
+			else if (a[i].startsWith("script=")) script = a[i].substring(7);
 		}
 		Context cx = Context.enter();
 		ScriptableObject scope = cx.initStandardObjects();
@@ -44,12 +46,14 @@ public class RhinoWildCrops {
 			"var Platform = { isLoaded: function (ns) { return __HOST.loaded(ns) } };",
 			"var Java = { loadClass: function (n) {",
 			"  if (n.indexOf('WorldgenConfig') >= 0) return { wildCropsEnabled: function () { return __HOST.enabled() } };",
+			"  if (n.indexOf('CEConfig') >= 0) return { WORLDGEN: { systems: { mushroomSpawns: { get: function () { return __HOST.enabled() } } } } };",
 			"  return {} } };",
 			"var ServerEvents = { tags: function (type, fn) { if (type === 'worldgen/biome') __tags = fn },",
 			"  highPriorityData: function (fn) { __data = fn }, loaded: function (fn) {} };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/startup_scripts/func/tag_helper.js")), "tag_helper.js", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/wild_crops.js")), "wild_crops.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/_biome_rules.js")), "_biome_rules.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/" + script + ".js")), script + ".js", 1, null);
 		cx.evaluateString(scope, "__tags({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);
 		cx.evaluateString(scope, "__data({ add: function (p, t) { __HOST.add(String(p), String(t)) } });", "fire_data", 1, null);
 		Path out = Paths.get(a[1]);

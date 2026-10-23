@@ -59,8 +59,8 @@ config, the Java dump and dev commands, and its jar is built by the root Gradle 
   [startup_scripts/todo/](../kubejs/startup_scripts/todo/) ([TODO](todo/TODO.md) `tooling/dictionaries #3`).
 - **Removed items:** hidden in JEI and given a red "REMOVED ITEM: DO NOT USE" line
   ([jeichanges.js](../kubejs/client_scripts/jeichanges.js)), stripped of every item tag, and every recipe still naming
-  one is printed once per session by [recipe_scan.js](../kubejs/server_scripts/_lib/recipe_scan.js) (feeds
-  `todo/recipes_to_remove.txt`). The recipes themselves are removed by hand in the feature scripts.
+  one can be listed by [recipe_scan.js](../kubejs/server_scripts/_lib/recipe_scan.js) (`/recipescan`, or once per
+  session at load with CEConfig `[debug.recipe_scan] runAtLoad`; off by default; feeds `todo/recipes_to_remove.txt`). The recipes themselves are removed by hand in the feature scripts.
 
 ### 2.2 Recipe helpers (`global.NCH`, [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js))
 

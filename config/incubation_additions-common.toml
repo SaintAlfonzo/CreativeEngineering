@@ -1,0 +1,10 @@
+
+#Untitled Duck Mod geese.
+[goose]
+	#Chance, as 1 in N, that a goose lays a Golden Egg (Vintage Delight) instead of its
+	#next goose egg. Rolled once per egg, before the goose looks for a nest; a golden egg is always
+	#dropped on the ground near the goose, never laid in a nest. 0 = never.
+	#Does nothing without Vintage Delight.
+	#Range: 0 ~ 1000000
+	goldenEggChance = 1000
+

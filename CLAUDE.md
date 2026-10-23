@@ -27,7 +27,10 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
 - Hand-edited config: also copy it to `configs_edited/root_config/<same path>` (or `server_config/`).
 - Backports and ports: no old-version or cross-mod conversions. Never use advancements (the pack
   drops them all at load) for rewards or unlocks.
-- Never `pgrep -af` / `ps -f` the game: the command line leaks the access token.
+- Checking whether the game is running: process command lines are allowed, but the game's args contain the access
+  token, so redact it in the same command and never print it raw. Use
+  `ps -eo pid,etime,args | grep "[j]ava" | sed -E 's/(--accessToken|--uuid|--username)[= ][^ ]+/\1 ***/g'`
+  (or `pgrep -x java` for pids only, then `readlink /proc/PID/cwd`). Never run bare `pgrep -af` / `ps -f` / `ps aux`.
 - **Keep context lean.** Write Bash commands to return only what the task needs (`head`/`tail`/`grep`,
   tail of build logs); grep or offset/limit big docs instead of reading them whole. When context nears
   ~150k, or a task ends / the next step is a different subsystem / debugging has become a long loop,
@@ -41,6 +44,9 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
 - Logic tests without the game: plain `javac`/`java` harness (patcherMod `build/classes`, Mojmap, an
   `FMLEnvironment` stub first on the classpath). Live checks: throwaway dedicated server in the
   scratchpad. Details: memory `patchermod-headless-smoke-test`, `scratch-server-verify`.
+- **Scratch server tests default to the queue.** Add every live check a change needs to
+  [scratch_queue.md](feature_writeup/testing/scratch_queue.md) in the same session; only boot a scratch server when the
+  user says to. Details: memory `scratch-test-now-or-batch`.
 - Script-only change: `/reload` is enough for server scripts; startup scripts, items and any
   patcherMod change need a full restart.
 - Add a mod: mod_sides.md row, then `/dumpall` and the generators (order in memory

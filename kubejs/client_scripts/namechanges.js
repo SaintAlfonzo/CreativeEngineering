@@ -250,6 +250,10 @@ ClientEvents.lang('en_us', e => {
   e.renameItem(global.item.river_leaf_carpet, 'Mulberry Leaf Carpet')
   e.renameItem(global.item.river_hedge, 'Mulberry Hedge')
   e.renameItem(global.item.upgrade_aquatic_river_leaf_pile, 'Mulberry Leaf Pile')
+  // Immersive Weathering's nulch is the Nether counterpart of Fertile Soil (crops.md 2.4); the ghost pepper seed
+  // tooltip names it too
+  e.renameItem(global.item.nulch, 'Fertile Soul Soil')
+  e.add('item.vintagedelight.ghost_pepper.planting_soil', 'Plant on Soul Soil, Rich Soul Soil or Fertile Soul Soil')
 })
 
 console.log('Rename Finished')

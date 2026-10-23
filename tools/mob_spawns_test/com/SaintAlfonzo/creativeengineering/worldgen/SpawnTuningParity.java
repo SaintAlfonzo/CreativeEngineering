@@ -69,7 +69,7 @@ public class SpawnTuningParity {
 						r.has("weight") ? r.get("weight").getAsInt() : 0,
 						r.has("factor") ? r.get("factor").getAsDouble() : 1.0,
 						r.has("min") ? Optional.of(r.get("min").getAsInt()) : Optional.empty(),
-						r.has("max") ? Optional.of(r.get("max").getAsInt()) : Optional.empty());
+						r.has("max") ? Optional.of(r.get("max").getAsInt()) : Optional.empty(), Optional.empty());
 				String line = SpawnTuning.apply(spawns, rule, type);
 				changes.add(line);
 			}

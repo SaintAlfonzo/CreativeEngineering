@@ -111,7 +111,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.1.01.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
+| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.1.02.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
 | both | Creative Labels | `creative_labels` | `creativeLabels-1.0.0.jar` | This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
@@ -162,6 +162,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | FTB Quests | `ftbquests` | `ftb-quests-forge-1902.5.10-build.497.jar` | Required by: Create Questing, Quests Additions |
 | both | FTB Teams | `ftbteams` | `ftb-teams-forge-1902.2.14-build.123.jar` | Required by: FTB Quests |
 | both | Fullblock Energistics | `fulleng` | `fulleng-forge-1.7.1-1.19.2.jar` |  |
+| both | Fungi Delight (Backport) | `fungidelight` | `backportedFungi-1.3-ce-19.2-01.jar` | This pack's port of Fungi Delight 1.3 (development/backportedFungi); no 1.19.2 build of the mod exists. Entities with a client renderer, so both sides. Added 2026-10-23 (feature_writeup/fungi_delight.md) |
 | both | Gates | `gates` | `gates-1.8.0.jar` |  |
 | both | GeckoLib | `geckolib3` | `geckolib-forge-1.19-3.1.40.jar` |  |
 | both | Geode+ | `geode` | `geodeforge-1.1.8-1.19.2.jar` |  |
@@ -257,6 +258,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Scholar | `scholar` | `scholar-1.19.2-1.0.0-forge.jar` |  |
 | both | Sculk Transporting | `sculktransporting` | `sculktransporting-1.19.2-1.1.jar` |  |
 | both | SeasonHud | `seasonhud` | `seasonhud-forge-1.19.2-2.0.4.jar` | Registers a SERVER config the server syncs to players - must be on the server |
+| both | Sky Structures | `sky_structures` | `Sky Structures 1.0.0 - 1.19.2.jar` | Sky structures (worldgen); added 2026-10-23, side set by the deploy build (mods.toml dependency side BOTH) |
 | both | Sebastrn Lib | `sebastrnlib` | `sebastrnlib-2.0.2.jar` |  |
 | both | Second Chance Forge | `secondchanceforge` | `secondchanceforge-1.19-1.5.1.jar` |  |
 | both | SecurityCraft | `securitycraft` | `[1.19.2] SecurityCraft v1.9.6.1.jar` |  |
@@ -287,7 +289,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | TrashSlot | `trashslot` | `trashslot-forge-1.19.2-12.1.0.jar` |  |
 | both | Twigs | `twigs` | `twigs-forge-1.19.2-3.0.1.jar` |  |
 | both | Veggies Delight (Backport) | `veggiesdelight` | `backportedVeggies-1.9.2-ce-19.2-02.jar` | This pack's port of Veggies Delight 1.9.2 (development/backportedVeggies); no 1.19.2 build of the mod exists. Added 2026-10-22; -02 2026-10-23 ships the Vintage Delight compat recipes (feature_writeup/veggies_delight.md) |
-| both | Vintage Delight (Backport) | `vintagedelight` | `backportedVintage-0.1.6-ce-19.2-01.jar` | This pack's port of Vintage Delight 0.1.6 (development/backportedVintage) with KOTS 0.3.1's jar ids; no 1.19.2 build of the mod exists. Added 2026-10-23 (feature_writeup/vintage_delight.md) |
+| both | Vintage Delight (Backport) | `vintagedelight` | `backportedVintage-0.1.6-ce-19.2-02.jar` | This pack's port of Vintage Delight 0.1.6 (development/backportedVintage) with KOTS 0.3.1's jar ids; no 1.19.2 build of the mod exists. Added 2026-10-23 (feature_writeup/vintage_delight.md) |
 | both | Via Romana | `via_romana` | `Via_Romana-1.19.2-1.1.3.jar` |  |
 | both | Villagers Sell Animals (by NoCube) | `villagersellanimals` | `nocube's_villagers_sell_animals_1.2.1_forge_1.19.2.jar` |  |
 | both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-04.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
@@ -434,3 +436,8 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Unlit Campfire | `unlitcampfire` | `unlitcampfire-forge-1.19-1.7.1.0.jar` | Campfires placed unlit / burn out; block mixins + config, Jade/TOP compat. Added 2026-10-14 |
 | both | Create Salt | `create__the_salt` | `Create salt integration. Added 2026-10-18 |
 | both | Labels | `labels` | `labels-1.19.2-1.10.jar` | Art donor for Creative Labels, gameplay off (item hidden, recipes removed; sticky_notes.md 3.13). Added 2026-10-18 |
+| both | End's Delight | `ends_delight` | `ends_delight-1.19.2-2.1.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
+| both | Hostile Delight | `hostiledelight` | `Hostile_Delight_0.2.2_1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
+| both | Miner's Delight | `miners_delight` | `miners_delight-1.19.2-1.1.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated; OLD version, newer 1.4.5 exists for 1.21.1 (feature_writeup/delight_addons_2026_10.md) |
+| both | Oceanic Delight | `oceanic_delight` | `oceanic_delight-1.0.1-forge-1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
+| both | Ocean's Delight | `oceansdelight` | `oceansdelight-1.0.2-1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |

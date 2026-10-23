@@ -13,7 +13,8 @@ the shulker bowl is the only container for the Chorus and Endermite Stew fluids.
 
 The colour is the average of the item texture's pixels that are not the empty container's own colours,
 so the bowl drops out and the soup is left. COLOR_OVERRIDE wins over that. The output folder belongs to
-this tool: a json there that no longer matches a soup is deleted.
+this tool: a json there that no longer matches a soup is deleted, except the hand-written drink fluids in
+HAND_WRITTEN.
 
   python3 tools/gen_soup_soft_fluids.py [--dry-run]
 """
@@ -40,6 +41,9 @@ SOFT_FLUID_RE = re.compile(r'^data/[^/]+/moonlight/soft_fluids/.+\.json$')
 CAPACITY = {'minecraft:glass_bottle': 1}   # everything else is a bowl: 2 per item, as Supplementaries' soups
 # Forge fluids of the same soup: the jar takes them from a bucket or a pipe as this soft fluid
 EQUIVALENT = {'fruitsdelight:bayberry_soup': ['fruitsdelight:bayberry_soup']}
+# hand-written soft fluids for bottled drinks in the same folder: never written or deleted by this tool
+HAND_WRITTEN = {'nut_milk.json', 'carrot_juice.json', 'dandelion_juice.json', 'turnip_water.json',
+                'fermented_garlic_honey.json'}
 # item id -> '#rrggbb', where the patch picks garnish, shadow or a gold bowl (checked against the textures)
 COLOR_OVERRIDE = {
     'alexsdelight:acacia_blossom_soup': '#d6cba0',
@@ -50,6 +54,8 @@ COLOR_OVERRIDE = {
     'delightful:sinigang': '#a8763e',
     'goldenfood:golden_mushroom_stew': '#c8957a',
     'goldenfood:enchanted_golden_mushroom_stew': '#c8957a',
+    'vintagedelight:oatmeal': '#b29a7c',       # the patch is the bowl's shadow side
+    'vintagedelight:pickle_soup': '#e3bf74',   # the broth, not the pickle
 }
 
 
@@ -195,7 +201,7 @@ def main():
             path.write_text(text)
 
     for p in OUT.glob('*.json'):
-        if p.name not in written:
+        if p.name not in written and p.name not in HAND_WRITTEN:
             print(f'  removed {p.name}')
             if not a.dry_run:
                 p.unlink()

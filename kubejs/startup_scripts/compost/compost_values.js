@@ -8,7 +8,7 @@
 // Sections follow the rule categories (the first rule an item matches), seeds first. Add a new
 // item to any section: the section name only groups the file and labels /dumpcompost.
 // After editing: /kubejs reload startup_scripts, then /reload. Engine: startup_scripts/func/compost.js.
-// 688 items.
+// 745 items.
 
 ;(function () {
 	var i = global.item
@@ -236,7 +236,7 @@
 		[i.fruitsdelight_persimmon_leaf_pile,      0.3],
 	])
 
-	// ── flowers (27) ─────────────────────────────────────────────────────────────────
+	// ── flowers (26) ─────────────────────────────────────────────────────────────────
 	C.values('flowers', [
 		// minecraft
 		[i.allium,                              1.0],
@@ -271,7 +271,7 @@
 		[i.white_searocket,                     1.0],
 	])
 
-	// ── mushrooms (5) ───────────────────────────────────────────────────────────────
+	// ── mushrooms (8) ───────────────────────────────────────────────────────────────
 	C.values('mushrooms', [
 		// minecraft
 		[i.brown_mushroom, 0.65],
@@ -280,9 +280,13 @@
 		[i.warped_fungus,  0.65],
 		// quark
 		[i.glow_shroom,    0.65],
+		// fungidelight (upstream values, fungi_delight.md step 13)
+		[i.inky_cap_mushroom, 0.65],
+		[i.morel_mushroom,    0.65],
+		[i.truffle,           1.0],
 	])
 
-	// ── crops (80) ───────────────────────────────────────────────────────────────────
+	// ── crops (89) ───────────────────────────────────────────────────────────────────
 	C.values('crops', [
 		// minecraft
 		[i.apple,                  0.65],
@@ -376,6 +380,17 @@
 		[i.pear,                   0.65],
 		[i.persimmon,              0.65],
 		[i.pineapple,              0.65],
+		// veggiesdelight, vintagedelight: wild crops at the crops' chance, like the other wild crops (both ports, 2026-10-23)
+		[i.wild_broccoli,          0.65],
+		[i.wild_cauliflowers,      0.65],
+		[i.wild_garlic,            0.65],
+		[i.wild_sweet_potatoes,    0.65],
+		[i.wild_turnips,           0.65],
+		[i.wild_zucchinis,         0.65],
+		[i.wild_cucumbers,         0.65],
+		[i.wild_ghost_peppers,     0.65],
+		[i.wild_oats,              0.65],
+		[i.wild_peanuts,           0.65],
 	])
 
 	// ── baked (20) ───────────────────────────────────────────────────────────────────
@@ -467,7 +482,7 @@
 		[i.rose_hip_pie_slice,                     0.85],
 	])
 
-	// ── plant_matter (62) ────────────────────────────────────────────────────────────
+	// ── plant_matter (67) ────────────────────────────────────────────────────────────
 	C.values('plant_matter', [
 		// minecraft
 		[i.brown_mushroom_block,             0.85],
@@ -478,6 +493,13 @@
 		[i.nether_wart_block,                0.85],
 		[i.red_mushroom_block,               0.85],
 		[i.warped_wart_block,                0.85],
+		// fungidelight
+		[i.inky_cap_mushroom_block,          0.85],
+		[i.inky_cap_mushroom_edge,           0.85],
+		[i.inky_cap_mushroom_stem,           0.65],
+		[i.morel_mushroom_block,             0.85],
+		[i.morel_mushroom_stem,              0.65],
+		[i.inky_goo_veil,                    0.65],
 		// farmersdelight
 		[i.straw,                            0.3],
 		[i.tree_bark,                        0.3],
@@ -539,7 +561,7 @@
 		[i.tongue_kelp_block,                0.5],
 	])
 
-	// ── plants (44) ──────────────────────────────────────────────────────────────────
+	// ── plants (46) ──────────────────────────────────────────────────────────────────
 	C.values('plants', [
 		// minecraft
 		[i.big_dripleaf,          0.65],
@@ -570,6 +592,9 @@
 		// farmersdelight
 		[i.brown_mushroom_colony, 1.0],
 		[i.red_mushroom_colony,   1.0],
+		// fungidelight
+		[i.inky_cap_mushroom_colony, 1.0],
+		[i.morel_mushroom_colony,    1.0],
 		[i.sandy_shrub,           0.3],
 		// immersive_weathering
 		[i.moss_clump,            0.5],
@@ -597,7 +622,7 @@
 		[i.wild_pineapple,        0.65],
 	])
 
-	// ── crates (68) ──────────────────────────────────────────────────────────────────
+	// ── crates (89) ──────────────────────────────────────────────────────────────────
 	C.values('crates', [
 		// berry_good
 		[i.glow_berry_basket,                   1.0],
@@ -686,10 +711,31 @@
 		[i.white_savanna_grape_bag,             1.0],
 		[i.red_taiga_grape_bag,                 1.0],
 		[i.white_taiga_grape_bag,               1.0],
+		// veggiesdelight, vintagedelight (2026-10-23)
+		[i.broccoli_crate,                      1.0],
+		[i.cauliflower_crate,                   1.0],
+		[i.garlic_crate,                        1.0],
+		[i.sweet_potato_crate,                  1.0],
+		[i.turnip_crate,                        1.0],
+		[i.zucchini_crate,                      1.0],
+		[i.cucumber_crate,                      1.0],
+		[i.ghost_pepper_crate,                  1.0],
+		[i.peanut_crate,                        1.0],
+		[i.oat_bag,                             1.0],
+		// fungidelight
+		[i.brown_mushroom_crate,                1.0],
+		[i.red_mushroom_crate,                  1.0],
+		[i.inky_cap_mushroom_crate,             1.0],
+		[i.morel_mushroom_crate,                1.0],
+		[i.truffle_crate,                       1.0],
 	])
 
-	// ── other (158) ───────────────────────────────────────────────────────────────────
+	// ── other (176) ───────────────────────────────────────────────────────────────────
 	C.values('other', [
+		// fungidelight (prepared ingredients)
+		[i.cleaned_cap,                        0.5],
+		[i.cooked_cleaned_cap,                 0.65],
+		[i.truffle_slice,                      0.5],
 		// minecraft
 		[i.carved_pumpkin,                     0.65],
 		[i.shroomlight,                        0.65],
@@ -870,5 +916,21 @@
 		[i.pickled_pickles,                    0.5],
 		[i.quiche,                             0.85],
 		[i.quiche_slice,                       0.85],
+		// vintagedelight: the port's own chances (VintageDelight.commonSetup), added by hand like --merge would:
+		// /dumpcompost predates the port. Without a row the eggs would not compost (eggs match no rule)
+		[i.oat,                                0.3],
+		[i.oat_seeds,                          0.3],
+		[i.cucumber,                           0.3],
+		[i.cucumber_seeds,                     0.3],
+		[i.peanut,                             0.4],
+		[i.ghost_pepper,                       0.4],
+		[i.ghost_pepper_seeds,                 0.3],
+		[i.pickle,                             0.4],
+		[i.pickled_pepper,                     0.4],
+		[i.pickled_beetroot,                   0.6],
+		[i.pickled_onion,                      0.6],
+		[i.pickled_egg,                        0.6],
+		[i.century_egg,                        0.9],
+		[i.magic_peanut,                       0.85],
 	])
 })()

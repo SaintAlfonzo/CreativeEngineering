@@ -212,6 +212,12 @@ because forceloaded chunks get no random ticks.
   some contraption moves): the leaves stay until another neighbour changes. Fast Leaf Decay behaved the same. Scratch:
   flags 18 kept all 575 leaves; flags 19 (notify, no shape update) cleared 987 through the ported event.
 
+### Pending review with the mob food overhaul (TODO `tweaks #13`)
+
+- Fungi Delight port (2026-10-23, [fungi_delight.md](fungi_delight.md) 5.1.3): pigs eat brown and red mushrooms, inky
+  caps, morels and truffles (`Pig.FOOD_ITEMS`, combined with the Veggies and Vintage additions); truffle-bred litters get
+  extra piglets; hoglins breed with truffles; piglins take them. No other pig-food change until the overhaul.
+
 ### Known limits
 
 - **Bubble column immunity is by entity type:** a modded mob added later needs a tag line.

@@ -151,6 +151,8 @@
 		if (rule.category != null && !CATEGORIES[rule.category]) return 'unknown category ' + rule.category
 		if (rule.min != null && !(rule.min >= 1)) return 'min must be 1 or more'
 		if (rule.max != null && !(rule.max >= (rule.min != null ? rule.min : 1))) return 'max must be >= min'
+		if (rule.brown_chance != null && !(typeof rule.brown_chance === 'number' && rule.brown_chance >= 0 && rule.brown_chance <= 1)) return 'brown_chance must be 0 to 1'
+		if (rule.brown_chance != null && String(rule.mob) !== 'minecraft:mooshroom') return 'brown_chance is for minecraft:mooshroom only'
 		return null
 	}
 
@@ -332,6 +334,7 @@
 				factor: r.action === 'scale' ? r.factor : undefined,
 				min: r.action === 'set' ? r.min : undefined,
 				max: r.action === 'set' ? r.max : undefined,
+				brown_chance: r.brown_chance,
 			}
 		})
 		var conds = usableConditions(cfg, rules, false).map(function (u) {

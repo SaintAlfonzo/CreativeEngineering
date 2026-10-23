@@ -238,6 +238,7 @@ allowed), an empty can in the container slot. The canned fillings from 4 slices 
 | `rose_hip_pie` | rose hips |
 | `salmonberry_pie` | salmonberries |
 | `durian_pie`, `pineapple_pie` | durian flesh / pineapple slice (1 pie now, was 2; see below) |
+| `sweet_potato_pie` (veggiesdelight) | baked sweet potato; filling can since 2026-10-23 (pot, oven and hand routes as the others) |
 | `sweet_berry_cheesecake` (renamed Sweet Berry Pie) | sweet berries (a pie since 2026-10-22, pie tin); Canned Sweet Berry Pie Filling |
 
 Durian and pineapple pies are Fruits Delight's single hand-held items (5 hunger, 4 saturation points each), not
@@ -269,6 +270,7 @@ That keeps the old craft's full-can rule.
 | `mulberry_cookie` | mulberry |
 | `uncanny_cookies` | mite crust |
 | `cherry_cookie` (abnormals_delight, new 2026-10-22) | cherry (`vinery:cherry`) |
+| `oatmeal_cookie` (vintagedelight, 2026-10-23; was 2 raw oats + honey -> 8 in the grid) | raw oats |
 
 **Muffins** (muffin tin, plated on paper, 4 per bake; the pot gives 2): `blueberry_muffin`, `cranberry_muffin`: 2x
 berry, wheat flour, milk bottle, egg, sugar.

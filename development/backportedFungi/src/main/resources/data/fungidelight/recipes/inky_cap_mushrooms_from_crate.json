@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "fungidelight:inky_cap_mushroom_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "fungidelight:inky_cap_mushroom"
+  }
+}

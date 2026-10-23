@@ -24,6 +24,9 @@
     "  category        for 'set' when the mob is added: monster, creature, ambient, water_creature, water_ambient,",
     "                  underground_water_creature, axolotls, misc",
     "  disable_modifiers  a mod's own biome modifiers this rule replaces (each becomes forge:none). Optional.",
+    "  brown_chance    minecraft:mooshroom rules only: chance (0-1) that a mooshroom spawning naturally or with the chunk",
+    "                  in the rule's biomes is brown (patcherMod mooshroom/MooshroomFamily). Not eggs, breeding or commands.",
+    "                  Works on any action, so 'scale' with factor 1 sets it without touching the weights.",
     "  label, notes    shown in the report, for the reader.",
     "",
     "conditions: [ { ... }, ... ]   spawn checks instead of biome lists (patcherMod worldgen/SpawnConditions). Natural spawns",
@@ -56,8 +59,78 @@
         "minecraft:dark_forest",
         "terralith:mirage_isles"
       ],
+      "brown_chance": 0.5,
       "label": "Plan 9.1",
-      "notes": "Mooshrooms in dark forests and the mirage isles. Needs spawn_ground: their rule wants #mooshrooms_spawnable_on below (mycelium only in vanilla)."
+      "notes": "Mooshrooms in dark forests and the mirage isles, half of them brown. Needs spawn_ground: their rule wants #mooshrooms_spawnable_on below (mycelium only in vanilla)."
+    },
+    {
+      "id": "mooshroom_mushroom_fields",
+      "mob": "minecraft:mooshroom",
+      "action": "scale",
+      "factor": 1,
+      "where": [
+        "mushroom"
+      ],
+      "brown_chance": 0.25,
+      "label": "Fungi Delight 5.1.2",
+      "notes": "Vanilla's mushroom fields spawn unchanged; 1 in 4 is brown."
+    },
+    {
+      "id": "inky_cap_cow_dark_forests",
+      "mob": "fungidelight:inky_cap_cow",
+      "action": "set",
+      "weight": 2,
+      "min": 3,
+      "max": 4,
+      "add": [
+        "minecraft:dark_forest",
+        "terralith:mirage_isles"
+      ],
+      "label": "Fungi Delight 5.1.2",
+      "notes": "Inky Cap Cows next to the dark forest mooshrooms (8). Mooshroom spawn rule: needs spawn_ground #mooshrooms_spawnable_on."
+    },
+    {
+      "id": "inky_cap_cow_mushroom_fields",
+      "mob": "fungidelight:inky_cap_cow",
+      "action": "set",
+      "weight": 8,
+      "min": 3,
+      "max": 4,
+      "where": [
+        "mushroom"
+      ],
+      "label": "Fungi Delight 5.1.2",
+      "notes": "Upstream weight, next to the mooshroom's 8."
+    },
+    {
+      "id": "morel_cow_dark_forests_swamps",
+      "mob": "fungidelight:morel_cow",
+      "action": "set",
+      "weight": 2,
+      "min": 3,
+      "max": 4,
+      "where": [
+        "swamp"
+      ],
+      "add": [
+        "minecraft:dark_forest",
+        "terralith:mirage_isles"
+      ],
+      "label": "Fungi Delight 5.1.2",
+      "notes": "Morel Cows in dark forests and every swamp. Mooshroom spawn rule: needs spawn_ground #mooshrooms_spawnable_on."
+    },
+    {
+      "id": "morel_cow_mushroom_fields",
+      "mob": "fungidelight:morel_cow",
+      "action": "set",
+      "weight": 8,
+      "min": 3,
+      "max": 4,
+      "where": [
+        "mushroom"
+      ],
+      "label": "Fungi Delight 5.1.2",
+      "notes": "Upstream weight, next to the mooshroom's 8."
     },
     {
       "id": "pig_forests",

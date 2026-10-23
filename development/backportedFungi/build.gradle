@@ -1,0 +1,44 @@
+// backportedFungi: Fungi Delight 1.3 (Forge 1.20.1) ported to Forge 1.19.2 (mod id fungidelight).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
+// Build from the instance root (`./gradlew :backportedFungi:build`) or from here (`./gradlew build`).
+// Resources come from the upstream jar through tools/port_resources.py (run it again after changing it).
+plugins {
+    id 'ce.forge-mod-refmap'
+}
+
+repositories {
+    // Third-party mod jars copied from ../../mods (git-ignored).
+    flatDir { dir 'libs' }
+}
+
+dependencies {
+    // Farmer's Delight is the one hard dependency (MushroomColonyBlock/Item, ConsumableItem, effects, tags).
+    // flatDir notation: 'local:<file name without -version>:<version>'
+    compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
+}
+
+// Access transformer (SRG names): Pig.FOOD_ITEMS and PotionBrewing.addMix.
+minecraft {
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+}
+
+// The Hoglin mixin uses Mojang names and gets a real refmap, like backportedVintage.
+mixin {
+    add sourceSets.main, 'fungidelight.refmap.json'
+    mixin_configs.split(',').each { config it.trim() }
+}
+
+tasks.named('compileJava', JavaCompile).configure {
+    outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
+}
+
+// Backstop: the mixin config must find its refmap in the jar.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def jarFile = archiveFile.get().asFile
+        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
+        if (!entries.contains('fungidelight.refmap.json')) {
+            throw new GradleException("fungidelight.refmap.json is not in ${jarFile.name}")
+        }
+    }
+}

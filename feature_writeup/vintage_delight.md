@@ -32,9 +32,9 @@ This file has three parts:
 | Decisions taken 2026-10-23 (purges, keep-all duplicates, wild placement, soils, pickling, no Dehydrated, vinegar, loot unwired, geese) | §1 | SETTLED |
 | Mod inventory after the purges (3 crops: oats, peanuts, cucumbers; ghost peppers; 4 wild plants; pickling jar, salt line, cheese mold, mason jars, about 127 items, about 232 recipe files) | §2 | reference, from `vintagedelight-0.1.6.jar` and `vintagedelight-kots-0.3.1.jar` |
 | Overlap list, all marked `*overlaps w/` | §3 | analysis; every duplicate ships, review after play |
-| Integration list in build order | §4 | BUILT 2026-10-23 except the dump-driven and design steps (§4.0) |
+| Integration list in build order | §4 | BUILT 2026-10-23 except the dump-driven steps (§4.0); food types, cans (configured), jar fluids, compost and cooking rules built the same day |
 | Open questions | §5 | Mixed Seeds (§2.3a, owner decides after the build); vine tree set is on test (S1) |
-| Tests | §8 | VTD-01 to VTD-47 drafted, none run |
+| Tests | §8 | VTD-01 to VTD-53 drafted, none run |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/vintagedelight-0.1.6.jar` (Forge 1.20.1, closest API,
   109 classes). Decompile with `python3 tools/decompile_mod.py <jar> <out dir>` (94 sources). The KOTS jar
@@ -79,7 +79,7 @@ This file has three parts:
 | Oats | Oat Seeds | `oat_crop`, 7 | oat + 1 to 2 seeds; a knife (`#farmersdelight:straw_harvesters`) adds straw | farmland | autumn, winter | none of its own: Quark replant and hoe area (§4 step 3) |
 | Peanuts | Peanut (no seeds) | `peanut_crop`, 7 | peanuts; 1 % a Magic Peanut (tree test set, S1) | farmland | autumn, winter | none of its own: Quark replant and hoe area |
 | Cucumbers | Cucumber Seeds | `cucumber_crop`, 7 | break: cucumber + seeds (binomial); **right-click at 7: 1 to 2 cucumbers, back to age 5** | farmland | spring, summer | **own pick**: test `VTD-02` |
-| Ghost peppers | Ghost Pepper Seeds | `ghost_pepper_crop`, 7 | as cucumber (right-click 7 -> 5) | **Soul Soil, Rich Soul Soil, Nulch** (was nylium only) | spring, summer | **own pick**: test `VTD-03` |
+| Ghost peppers | Ghost Pepper Seeds | `ghost_pepper_crop`, 7 | as cucumber (right-click 7 -> 5) | **Soul Soil, Rich Soul Soil, Fertile Soul Soil (Nulch)** (was nylium only) | spring, summer | **own pick**: test `VTD-03` |
 
 - Oats, peanuts, cucumbers and ghost peppers `extend CropBlock`; oats and peanuts override only age and shape.
   Cucumber and ghost pepper add their own `use()` (the 7 -> 5 pick); ghost pepper adds the soil check.
@@ -106,9 +106,9 @@ This file has three parts:
 
 | Feature | Vintage placement (switched off) | Pack placement | Ground |
 |---|---|---|---|
-| Wild Oats (FD `wild_crop`) | FD filter: overworld, temperature 0.4 to 0.9 | a rule in `wild_crops.json` (traits), one `add_features` modifier | every dirt soil |
-| Wild Peanuts (FD `wild_crop`) | same as oats | `wild_crops.json` | every dirt soil |
-| Wild Cucumbers (FD `wild_crop`) | `#forge:is_wet` | `wild_crops.json` | every dirt soil (the old list of dirt, grass, coarse dirt, sand and red sand is replaced; sand is out) |
+| Wild Oats (FD `wild_crop`) | FD filter: overworld, temperature 0.4 to 0.9 | a rule in `wild_crops.json`: `cold grassy`, `temperate grassy` (59 biomes; owner, 2026-10-23) | every dirt soil |
+| Wild Peanuts (FD `wild_crop`) | same as oats | `wild_crops.json`: `warm dry grassy` (12 biomes: savannas, wooded badlands, Terralith shrublands; owner, 2026-10-23) | every dirt soil |
+| Wild Cucumbers (FD `wild_crop`) | `#forge:is_wet` | `wild_crops.json`: `wet grassy`, `wet muddy`, `swamp`, plus `cold grassy`, `temperate grassy` (70 biomes; owner, 2026-10-23) | every dirt soil (the old list of dirt, grass, coarse dirt, sand and red sand is replaced; sand is out) |
 | Wild Ghost Peppers (`GhostPepperWildCropBlock`, `random_patch`, 50 tries) | every Nether biome | `nether_worldgen_rules.json` feature entry for **crimson forest and warped forest**, run through `tools/gen_nether_worldgen.py` | nylium (crimson and warped) |
 | Salt patch (FD `wild_crop` of salt layers) | `#vintagedelight:is_salt_spawn` = beach, snowy beach, stony shore | kept as shipped (S2/S4), *overlaps w/ The Salt* | dirt, grass, sand, gravel, stone |
 
@@ -118,6 +118,11 @@ This file has three parts:
 - The wild plants' own survival check (`mayPlaceOn` / `canSurvive`) also uses the dirt-soil rule so the block can be
   placed by hand and by `/ceplace` on any dirt soil. The wild ghost pepper is the exception: its block keeps nylium and
   the three seed soils, so it grows where it is generated and where the seeds go.
+- **1.1.02 boot failure (fixed in port build -03, 2026-10-23):** the four placed features using FD's
+  `farmersdelight:biome_tag` filter (oats, peanuts, cucumbers, salt) wrote the key as `tag`; FD 1.2.4 reads
+  `biome_tag`. Every world failed at datapack load with `Not a JSON object: ["vintagedelight:patch_wild_peanuts"]`
+  (DFU's either codec reports only its last branch, the inline object, so the message hides the real field error;
+  peanuts was simply the first modifier read). Test `SQ-VP-00`.
 - `tools/gen_soil_compat.py` runs over the new features; [crops_by_biome.md](crops_by_biome.md) is regenerated;
   `tools/test_wild_crops.sh` covers the new crop tags.
 
@@ -266,7 +271,9 @@ and are not ported (S8); `VTD-27` checks the registry.
   jar's 7 `farmersdelight:add_loot_table` modifiers are not shipped and the pack's loot pipeline gets no rule for them.
   Block loot tables ship in full. The `add_item` straw modifier on ripe oats stays (it is a crop drop, FD's own rule for
   wheat).
-- **Compost:** values at common setup for the kept items; the pack rebuilds the table from tags (no action).
+- **Compost:** the mod sets 14 chances at common setup, but the pack's compost engine rebuilds the table, so they are
+  rows in `compost_values.js` (`other`, as Brewin's), with the wild plants at 0.65 and the crates and oat bag at 1.0
+  (§4.0, step 7a).
 - **Tags for other mods:** Serene Seasons (S16), Create (`blaze_burner_fuel`), C&A, forge nutrients. Diet is not in the
   pack.
 - **Moonlight soft fluids:** one per jar content (8 after the gearo purge), so Supplementaries jars take the bottles;
@@ -307,7 +314,7 @@ Every row ships. The marker is the text to put in this file, in the JEI / names 
 | Honey Jar | pack honey fluid, honey bottle, honey blocks | `*overlaps w/ honey bottle and blocks*` |
 | Vinegar (bottle, jar) | none; `dishes/ingredients #6` planned a KubeJS vinegar | not an overlap: it becomes the pack vinegar (S9) |
 | Pickle, pickled beetroot / egg / onion / pepper | Brewin' Pickled Pickles (sea pickles, canned) | different foods; "Pickle" vs "Pickled Pickles" is a names check |
-| Oat dough, cucumber dough | Create dough, the pack's only `#forge:dough` | `*overlaps w/ Create dough*` (named ingredients for their own recipes, never `#forge:dough`) |
+| Oat dough, cucumber dough | Create dough | `*overlaps w/ Create dough*`. **Oat dough is a `#forge:dough`** (owner, 2026-10-23), so it works in every dough recipe; cucumber dough stays a named ingredient |
 | Cheese pizza, meat pizza | Brewin' Pizza (placeable, sliced) | `*overlaps w/ Brewin' Pizza*` (different fillings) |
 | Cheese pasta, cucumber noodles | FD pasta dishes, `#forge:pasta` | `*overlaps w/ FD pasta*` (check the noodles in the tag cannot stand in for cooked pasta) |
 | Salted Cod, Salted Salmon | The Salt's salting (`Salted` tag on any food, Create mixing pack-wide planned) | `*overlaps w/ The Salt's salting*` |
@@ -368,19 +375,20 @@ back to this table; removal of a side is a separate change at that point.
 | Step | State | Where / note |
 |---|---|---|
 | 1 Port | BUILT | `development/backportedVintage`, jar `backportedVintage-0.1.6-ce-19.2-01.jar` in `mods/`. 134 items, 68 blocks. Java from the 0.1.6 decompile, resources from the jar through `tools/port_resources.py` (MIT notice kept). §7 string check: no `dehydrated`, `gearo`, `pitcher` or `sniffer` in the jar. Port notes below |
-| 2 Ids, tags | BUILT | 134 keys in `item_dict.js` (`vintagedelight_kimchi`, `vintagedelight_salt` prefixed); `i.vinegar` = vinegar bottle. `cookingtags.js`: `#forge:crops/*`, `#forge:seeds/*`, `#forge:storage_blocks/*` for the 4 crops; oat dough out of `#forge:dough`. Cucumber noodles stay in `#forge:pasta` for `VTD-40` |
+| 2 Ids, tags | BUILT | 134 keys in `item_dict.js` (`vintagedelight_kimchi`, `vintagedelight_salt` prefixed); `i.vinegar` = vinegar bottle. `cookingtags.js`: `#forge:crops/*`, `#forge:seeds/*`, `#forge:storage_blocks/*` for the 4 crops; oat dough in `#forge:dough` (owner, 2026-10-23; was taken out), cucumber dough not. Cucumber noodles stay in `#forge:pasta` for `VTD-40` |
 | 3 Crop parity | soil tag BUILT; crops.md rows OPEN | `#vintagedelight:ghost_pepper_soil` = soul soil, rich soul soil, nulch (`blocktags.js`). Quark replant interplay is `VTD-02` / `VTD-03` |
-| 4 Wild crops | BUILT | 3 rules in `wild_crops.json` (oats and peanuts temperate grassy, cucumbers wet / swamp); ghost peppers: `literal` biome modifier in `nether_worldgen_rules.json` (crimson, warped forest). `test_wild_crops.sh` passes; `crops_by_biome.md` regenerated; `gen_soil_compat.py` adds the salt patch |
+| 4 Wild crops | BUILT | 3 rules in `wild_crops.json` (oats cold and temperate grassy, peanuts warm dry grassy, cucumbers wet / swamp and cold and temperate grassy; rules changed 2026-10-23); ghost peppers: `literal` biome modifier in `nether_worldgen_rules.json` (crimson, warped forest). `test_wild_crops.sh` passes; `crops_by_biome.md` regenerated; `gen_soil_compat.py` adds the salt patch |
 | 5 Crop docs, WTHIT | OPEN | `/dumpcropgrowth` + `crop_growth_coverage.py` need the game |
 | 6 Seasons | BUILT | the jar's tags, as shipped |
-| 7 Food types | OPEN | `/dumpfood`, `food_catalog.py`; no Dehydrated on any food (in the jar) |
-| 8 Cans | config BUILT, run OPEN | `gen_can_types.py`: `_vinegar` additive on raw veggie, fruit, meat, fish (meal sections) and salad (5 + 1). The run stops on problems that need `/dumpfood` (the Veggies foods are not in the catalog yet) |
-| 9 Cooking rules | OPEN | heatless routes, `_manual_only` ids, pizzas to the oven, granola / cookies: decided per food type after step 7 |
+| 7 Food types | BUILT | 54 foods typed by hand in `food_types.json` (existing types only): produce raw veggie / fruit, pickles and kimchi cooked veggie (Brewin's precedent), roasted peanut cooked fruit, salted fish and surströmming cooked fish, the two eggs egg, cheese slice dairy, cookies / granola / honey roasted peanuts sweet, burgers / PB & J / burrito / pizza slices handheld, cucumber salad salad, pickle soup / ghostly chili / oatmeal soup (soup band and Comfort), cheese pasta / pad thai / overnight oats meal, nut milk and honey jar drink, doughs / noodles / curds / vinegar / every jam, sauce, relish and nut mash jar and bottle ingredient. `food_catalog.py` flags all 54 as not installed until a dump has them. No Dehydrated on any food (in the jar). Veggies: all 64 foods were already typed |
+| 7a Compost | BUILT | `compost_values.js`: the port's 14 chances (`other`), wild oats / peanuts / cucumbers / ghost peppers 0.65 (`crops`), 3 crates + oat bag 1.0 (`crates`); the Veggies wild crops and crates the same. Startup reload + `/reload` |
+| 8 Cans | config BUILT, Vintage run OPEN | `gen_can_types.py`: 16 Vintage cans (cucumber, ghost pepper, pickled beetroot / onion / pepper, roasted peanuts, Surströmming, cheese slices, oatmeal cookies, cheese pasta, pad thai; cucumber salad and the 3 soups by type) and 4 shared sources (Vintage kimchi and pickle in Brewin's cans, salted cod and salmon in the cooked fish cans), skipped through `AWAIT_DUMP` until a dump has them. The vinegar additive ran (66 cans). Veggies: 24 cans generated. Rows in [can_parity.md](can_parity.md), CP-27 to CP-31 |
+| 9 Cooking rules | BUILT | `cooking.js`: burger rule for both burgers (shaped on the cheese slice so Delightful's wedge cheeseburgers keep their grids, beef or vegetarian patty; assemblies start on the slice, the deluxe on the patty), stuffed burrito on `#forge:tortilla` + assembly (ghost pepper or roasted bell pepper first), PB & J and cucumber salad `_manual_only`, heatless cheese pasta (pasta + 3 cheese + bowl), pad thai (2 cooked chicken cuts, roasted peanut) and pickle soup (bone broth, 2 pickles, baked potato), oat dough's furnace bread removed (3 raw oats -> bread stays); the Veggies compat grid recipes folded in (§3.4). `baking.js`: oatmeal cookie oven only (cookie dough + 2 raw oats -> 12). No rule applies: pizzas (one `#forge:dough` each already; oven.md has no pizza rule), granola bars, oatmeal (no cooked oat), ghostly chili (Nether, as blazing chili), jams, curds, nut milk |
 | 10, 11 Salt, cheese | BUILT (both lines ship) | `#forge:salt` holds salt dust from the jar; JEI info / WTHIT slices line OPEN |
 | 12 Pickling jar | BUILT; remainder buffer OPEN | NCH `R.vdPickling`. `alcohol.js`: Brewin' kimchi and pickled pickles moved from the keg (honey 250 mB -> honey bottle). Fermented garlic honey: the Veggies port ships Vintage's jar recipe (Veggies `-02`), its pot route is gone. The jar keeps no leftover bottles (a honey bottle input loses its glass bottle); a remainder-buffer slot is a TODO row |
 | 13 Potions | BUILT | no Dehydrated class, registry entry or brewing mix in the port; the 6 brews use vanilla effect ids only (checked); `VTD-23` records the mixers |
 | 14 Placeables, stacks | OPEN | `/dumpplaceable`, `gen_stack_sizes.py` |
-| 15 Jar fluids | BUILT | 8 soft fluids in the jar (1.19.2 texture paths, `*_jar` ids); nut milk: `kubejs/data/creativeengineering/moonlight/soft_fluids/nut_milk.json` |
+| 15 Jar fluids | BUILT | 8 soft fluids in the jar (1.19.2 texture paths, `*_jar` ids); nut milk: `kubejs/data/creativeengineering/moonlight/soft_fluids/nut_milk.json`; pickle soup, ghostly chili, oatmeal from `gen_soup_soft_fluids.py` (which now keeps the hand-written drink fluids). Veggies: carrot juice, dandelion juice, turnip water (with their tank fluids as equivalents) and fermented garlic honey |
 | 16 Loot | BUILT (unwired) | 8 chest tables ship, no GLM; straw modifier kept. Crops loot tables row in TODO |
 | 17 Machines | BUILT | Create milling, IE recipes as shipped (IE gated) |
 | 18 Mob audit | BUILT | Vintage and Veggies both edit `Chicken.FOOD_ITEMS`, `Pig.FOOD_ITEMS`, `Villager.WANTED_ITEMS` (and Vintage `Parrot.TAME_FOOD`); both combine with the current value, so load order does not matter. The pack has no other edit of these fields; Quark troughs read the chicken / pig temptation, so they take the new foods too. Baby mobs: no food hook. Result: no conflict |
@@ -403,6 +411,35 @@ Port notes (what the jar does differently from 0.1.6, all in `development/backpo
 - Upstream id bugs fixed: Frost Fermenta's `minecraft:rotten_tomato` -> FD's; the pickled pepper potato-cannon type;
   `#forge:protein` named an undefined tag (now optional); the jam advancement's tag.
 - Mixed Seeds is not registered (§2.3a); its texture and table ship.
+
+### 4.0a Systems not yet updated, both ports (audit 2026-10-23)
+
+Read from the files each system uses, not from the plans. The game dumps (`kubejs/exported/`) were last taken
+2026-10-22 21:28 with Veggies loaded and **never with Vintage loaded**. So the Veggies gaps below can be closed offline
+(the generators just have not been rerun on that dump); every Vintage gap needs a `/dumpall` first.
+
+| System | Veggies | Vintage | Closes with |
+|---|---|---|---|
+| Food types (`food_types.json`) | 64 foods typed by hand | 54 typed by hand (2026-10-23) | done |
+| Food catalog (`food_catalog.py`, `exported/food/catalog.json`) | rerun 2026-10-23 from the 10-22 dump | not in the dump | dump + rerun (Vintage) |
+| Food values (type values, Spice of Life) | follow the catalog | follow the types | after the two rows above |
+| Cans (`gen_can_types.py`) | 24 generated 2026-10-23 | 16 cans + 4 shared sources configured, waiting (`AWAIT_DUMP`); vinegar additive ran | dump, empty `AWAIT_DUMP`, rerun, restart |
+| Jar fluids (soft fluids) | 5 soups, 3 juices and garlic honey done (2026-10-23) | 8 jar contents, nut milk and the 3 soups done (2026-10-23) | done |
+| Jar families (solid foods, `jartags.js`) | none | none (candidates: oatmeal cookie into `cookies`, granola bars, roasted and honey roasted peanuts) | hand list |
+| Stack sizes (`gen_stack_sizes.py`) | in the dump, generator not rerun (0 Veggies rows in `stack_sizes.json`) | not in the dump (16 chef hats, jars, pizzas) | rerun / dump + rerun |
+| Placeables (`placeable_catalog.py`) | in the dump; `--check` says OUT OF DATE | not in the dump (jars, pizzas, cheese mold, golden egg) | rerun / dump + rerun; then placeable tooltips, Display Delight icons |
+| Compost | rules cover produce, seeds, cooked veggies; wild crops and crates added as rows (2026-10-23) | the port's 14 chances, wild crops and crates added as rows (2026-10-23) | `/dumpcompost` to confirm |
+| Crop growth (WTHIT) | covered (`crop_growth_coverage.py`: 0 UNKNOWN) | not in the audit | `/dumpcropgrowth` + rerun |
+| crops.md §2.1 rows (replant, hoe area, soils) | open | open (oats, peanuts, cucumbers, ghost peppers; zucchini row) | hand edit |
+| Seasons | shipped tags, overhaul due | shipped tags, overhaul due | `farming/crops #5` |
+| Cooking rules (heatless, `_manual_only`, mixer) | BUILT; its Vintage compat recipes folded in 2026-10-23 | BUILT 2026-10-23 (step 9) | done |
+| Baking / oven | BUILT; sweet potato pie filling can added 2026-10-23 | oatmeal cookie in the oven, oat dough furnace bread removed; pizzas and granola have no rule | done |
+| Crops loot tables (single, crates) | open | open | `vintageport #5` |
+| Chest loot, trades, houses | BUILT | none by design (tables unwired, S11; no trades upstream) | n/a |
+| Names audit, JEI coverage, BlockRunner tiers, WTHIT icons | names dump has Veggies; audits not rerun; `wthit_icons.json` is from 10-20 | not in any dump | `/dumpall` + the UI generators |
+| Overlap and merge review | pinned (`veggiesport #2`) | pinned (`vintageport #6`, `VTD-40`) | after play |
+| Pickling Jar remainders | n/a | open: honey bottles lose their glass bottle (`vintageport #4`) | port or mixin |
+| Potion handling of the 6 brews | n/a | no mixer reads their NBT (`VTD-23`) | record only |
 
 Steps that are the same as the Veggies port are only named; see [veggies_delight.md](veggies_delight.md) §4 for the
 detail.
@@ -505,7 +542,7 @@ Crops and worldgen
   seeds where they have them); a knife on ripe oats gives straw; right-click and the hoe area harvest and replant them.
 - [ ] VTD-02 **Cucumber replant mark:** right-click at age 7 gives 1 to 2 and drops to age 5; note whether Quark's
   generic replant fires instead; with a hoe over an area, note what each plant does.
-- [ ] VTD-03 **Ghost pepper replant mark:** same as VTD-02. Seeds plant on Soul Soil, Rich Soul Soil and Nulch; they
+- [ ] VTD-03 **Ghost pepper replant mark:** same as VTD-02. Seeds plant on Soul Soil, Rich Soul Soil and Fertile Soul Soil; the seed tooltip names those three; they
   refuse nylium, farmland, dirt and the rest.
 - [ ] VTD-04 Zucchini (Veggies, `VD-25`) with a hoe over an area: picks and drops back 3 ages without double-firing.
 - [ ] VTD-05 WTHIT shows a growth line on every Vintage crop.
@@ -534,6 +571,8 @@ Machines
 Food and recipes
 
 - [ ] VTD-20 Every Vintage food has a food type tag and the type's values.
+- [ ] VTD-20a Oat dough works in the `#forge:dough` recipes (cake base, pie crust, cookie dough, dumplings, cucumber
+  dough); JEI lists it in those recipes. Cucumber dough does not.
 - [ ] VTD-21 Pizzas bake in the oven; oat bread follows the pack's bread chain.
 - [ ] VTD-22 Each Vintage pot meal has a heatless grid route where the rule says so.
 - [ ] VTD-23 The 6 custom-effect brews come out of the jar (Goblin's Piss with a fermented spider eye, not a gearo berry); record how the potion mixers and fluid handle them.
@@ -563,6 +602,24 @@ Overlap review and UI
   recipes, in cans and in food types; write keep both / keep one / merge back into §3.1.
 - [ ] VTD-45 Names audit fixes; every Vintage item in JEI has a recipe or a use.
 - [ ] VTD-46 Mixed Seeds: after the owner's decision (§2.3a), the item is either absent or its function works.
+- [ ] VTD-48 **Burgers:** Cheese Burger is shaped (salad, tomato, onion / cheese slice, patty / bread) with a beef or
+  vegetarian patty; a flaxen wedge in the cheese slot gives Delightful's Cheeseburger instead. The Deluxe Burger is
+  shaped (salad, tomato, onion / bacon, patty, fried egg / cheese slice, bread). JEI shows one sequenced assembly
+  each (cheese burger on bread, deluxe on a beef patty), none in the Create mixer or mechanical crafter.
+- [ ] VTD-49 **Stuffed burrito:** a tortilla, beef patty, salad, tomato, cheese and a ghost pepper or roasted bell
+  pepper; no bread recipe; an assembly on a tortilla starting with the pepper.
+- [ ] VTD-50 **Manual only and heatless:** PB & J and Cucumber Salad craft by hand only; Cheese Pasta (pasta, 3
+  cheese, bowl), Pad Thai (pasta, ghost pepper, 2 cooked chicken cuts, nut mash bottle, roasted peanut, bowl) and
+  Pickle Soup (bone broth, 2 pickles, carrot, baked potato, beetroot, salad) craft in the grid and not in the
+  unheated mixer.
+- [ ] VTD-51 **Dough and cookies:** Oat Dough does not smelt or smoke into bread; 3 Raw Oats still craft Bread.
+  Cookie dough + 2 Raw Oats bakes 12 Oatmeal Cookies on the baking sheet; no oatmeal cookie grid recipe.
+- [ ] VTD-52 **Veggies compat folded:** Cesar Salad takes garlic or cheese, the Stuffed Zucchini Boat milk or cheese,
+  both by hand only; the Chicken Fajitas Wrap has no dough recipe.
+- [ ] VTD-53 **Types, fluids, compost:** `/dumpfood` then `python3 tools/food_catalog.py --check` lists no new
+  Vintage food; Pickle Soup, Ghostly Chili and Oatmeal go in a Supplementaries jar in their own colour (VD: Carrot
+  Juice, Dandelion Juice, Turnip Water, Fermented Garlic Honey too, and a jar of carrot juice fills from a tank);
+  Pickled Egg and Century Egg compost (0.6, 0.9), a Cucumber Crate composts at 1.0.
 
 ## 9. History
 
@@ -582,3 +639,14 @@ Overlap review and UI
 - 2026-10-23: built (§4.0). Port jar `backportedVintage-0.1.6-ce-19.2-01`, goose golden egg in incubationAdditions
   1.1.0, Veggies port `-02` with the 22 Vintage compat recipes, pack integration. Mixed Seeds investigated: not a
   registered item upstream (§2.3a); Organic Mash is a live item. Open: the dump-driven steps and the cooking rules.
+- 2026-10-23 (after the build): oat dough joins `#forge:dough`; Nulch renamed Fertile Soul Soil (lang; recipe review in
+  TODO `farming/composting #2`); wild oats and cucumbers also in cold and temperate grassy biomes, wild peanuts moved to
+  warm dry grassy; `gen_soil_compat.py` reads the Vinery donor jar so the grape bush soil overrides survive its runs
+  (they had come from 1.3.10 and would have been deleted by the next run). Systems still not updated for either port:
+  §4.0a.
+- 2026-10-23 (food integration, both ports): Vintage foods typed (54, existing types); cans configured for Vintage
+  (waiting on a dump) and generated for Veggies (24) after the food catalog was rerun from the 10-22 dump; the vinegar
+  additive ran; jar fluids for the Vintage soups and the Veggies juices and garlic honey (the soup tool would have
+  deleted the hand-written ones; it now keeps them); compost rows; cooking rules (step 9), including the Veggies
+  compat recipes that went live with this port. The old §2.7 note that the compost table needed no action was
+  wrong: the engine clears the mod's own values.

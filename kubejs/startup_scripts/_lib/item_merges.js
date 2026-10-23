@@ -4,7 +4,7 @@
 // ============================================================
 // One item is purged and the survivor takes over everything it did. Each entry is
 // purged id -> surviving id. Runs after removed_items.js and adds the purged ids to
-// global.removedItems (hidden in JEI, item tags stripped, recipe_scan.js logs any recipe that
+// global.removedItems (hidden in JEI, item tags stripped, /recipescan logs any recipe that
 // still names them). The rest is in server_scripts/other/item_merges.js: recipe inputs and
 // outputs swapped, loot swapped, and any purged item that reaches a player inventory (mod code,
 // old chests) swapped for its survivor. Per-merge recipe and tag work sits in the feature's own

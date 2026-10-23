@@ -1,0 +1,23 @@
+{
+  "type": "farmersdelight:cutting",
+  "ingredients": [
+    {
+      "item": "fungidelight:inky_cap_mushroom"
+    }
+  ],
+  "result": [
+    {
+      "item": "fungidelight:cleaned_cap"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    },
+    {
+      "chance": 0.2,
+      "item": "minecraft:ink_sac"
+    }
+  ],
+  "tool": {
+    "tag": "forge:tools/knives"
+  }
+}

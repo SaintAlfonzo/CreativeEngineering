@@ -146,6 +146,18 @@ EXPLICIT = [
     ('raw_veggie', 'canned_cactus_flesh', 'Canned Cactus Flesh', ['cactus_flesh'], False),
     ('raw_veggie', 'canned_gongylidia', 'Canned Gongylidia', ['gongylidia'], False),
     ('raw_veggie', 'canned_corn', 'Canned Corn', ['corn'], False),   # maize only: kernels (4 a maize) are not canned
+    # Veggies Delight and Vintage Delight (2026-10-23): a whole veggie and its 2 cut pieces share the slots, as cabbage.
+    # Not canned: garlic and dandelion leaves (seasoning), raw oats (a grain, as corn kernels)
+    ('raw_veggie', 'canned_broccoli', 'Canned Broccoli', ['broccoli'], False),
+    ('raw_veggie', 'canned_cauliflower', 'Canned Cauliflower', ['cauliflower', 'cauliflower_floret'], False),
+    ('raw_veggie', 'canned_sweet_potato', 'Canned Sweet Potato', ['sweet_potato'], False),
+    ('raw_veggie', 'canned_turnip', 'Canned Turnip', ['turnip'], False),
+    ('raw_veggie', 'canned_zucchini', 'Canned Zucchini', ['zucchini', 'zucchini_slice'], False),
+    ('raw_veggie', 'canned_cucumber', 'Canned Cucumber', ['cucumber'], False),
+    ('raw_veggie', 'canned_ghost_pepper', 'Canned Ghost Pepper', ['ghost_pepper'], False),
+    # Fungi Delight (fungi_delight.md step 8): the truffle and its slices share the slots. Not canned: the cleaned
+    # inky cap (raw, Weak Stomach), its cooked form fills its own can
+    ('raw_veggie', 'canned_truffle', 'Canned Truffle', ['truffle', 'truffle_slice'], False),
 
     # raw fruit: Fruit Meals; sliced citrus shares the whole fruit's count
     ('raw_fruit', 'canned_apple', 'Canned Apple', ['apple'], False),
@@ -230,6 +242,7 @@ EXPLICIT = [
     ('cookies', 'canned_persimmon_cookie', 'Canned Persimmon Cookies', ['persimmon_cookie'], False),
     ('cookies', 'canned_sweet_berry_cookie', 'Canned Sweet Berry Cookies', ['sweet_berry_cookie'], False),
     ('cookies', 'canned_uncanny_cookie', 'Canned Uncanny Cookies', ['uncanny_cookies'], False),
+    ('cookies', 'canned_oatmeal_cookie', 'Canned Oatmeal Cookies', ['oatmeal_cookie'], False),   # Vintage Delight
 
     ('cooked_veggie', 'canned_baked_potato', None, ['baked_potato', 'baked_potato_slices'], True),
     ('cooked_veggie', 'canned_cooked_cactus_steak', 'Canned Cactus Steak', ['cactus_steak'], False),
@@ -244,12 +257,24 @@ EXPLICIT = [
     ('cooked_veggie', 'canned_boiled_corn', 'Canned Boiled Corn', ['boiled_corn'], False),
     ('cooked_veggie', 'canned_dried_banana', 'Canned Dried Banana', ['dried_banana'], False),
     ('cooked_veggie', 'canned_dried_persimmon', 'Canned Dried Persimmon', ['dried_persimmon'], False),
-    ('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['kimchi'], False),
-    ('cooked_veggie', 'canned_pickled_pickles', 'Canned Pickled Pickles', ['pickled_pickles'], False),
+    # Vintage Delight's kimchi and pickle are the same foods as Brewin's (vintage_delight.md 3.1, both ship until VTD-40):
+    # they fill the same can; the value source stays Brewin's
+    ('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['kimchi', 'vintagedelight_kimchi'], False),
+    ('cooked_veggie', 'canned_pickled_pickles', 'Canned Pickled Pickles', ['pickled_pickles', 'pickle'], False),
     ('cooked_veggie', 'canned_roasted_adzuki_beans', 'Canned Roasted Adzuki Beans', ['roasted_adzuki_beans'], False),
     ('cooked_veggie', 'canned_chips', 'Canned Chips', ['chips'], False),
     ('cooked_veggie', 'canned_grilled_corn', 'Canned Grilled Corn', ['grilled_corn'], False),
     ('cooked_veggie', 'canned_tortilla_chip', 'Canned Tortilla Chips', ['tortilla_chip'], False),
+    # Veggies Delight and Vintage Delight (2026-10-23); roasted florets alone (no whole roasted cauliflower). Not canned:
+    # the vegetarian patty (patties are not canned cooked), roasted garlic (seasoning), honey roasted peanuts (a sweet)
+    ('cooked_veggie', 'canned_baked_sweet_potato', 'Canned Baked Sweet Potato', ['baked_sweet_potato'], False),
+    ('cooked_veggie', 'canned_roasted_zucchini', 'Canned Roasted Zucchini', ['roasted_zucchini'], False),
+    ('cooked_veggie', 'canned_roasted_cauliflower', 'Canned Roasted Cauliflower', ['roasted_cauliflower_floret'], False),
+    ('cooked_veggie', 'canned_pickled_beetroot', 'Canned Pickled Beetroot', ['pickled_beetroot'], False),
+    ('cooked_veggie', 'canned_pickled_onion', 'Canned Pickled Onions', ['pickled_onion'], False),
+    ('cooked_veggie', 'canned_pickled_pepper', 'Canned Pickled Peppers', ['pickled_pepper'], False),
+    ('cooked_veggie', 'canned_roasted_peanut', 'Canned Roasted Peanuts', ['roasted_peanut'], False),
+    ('cooked_veggie', 'canned_cooked_inky_cap', 'Canned Cooked Inky Cap', ['cooked_cleaned_cap'], False),   # Fungi Delight
 
     # meat: whole cut, or whole + sliced. Patties, bacon, bison, smoked ham, chevon, hoglin, kangaroo, moose,
     # bunfungus, lobster and crab are not canned cooked (can_parity.md Want /, 2026-10-13)
@@ -262,13 +287,15 @@ EXPLICIT = [
     ('cooked_meat', 'canned_jerky', 'Canned Jerky', ['jerky'], False),
     ('cooked_meat', 'canned_maple_glazed_bacon', 'Canned Maple Glazed Bacon', ['maple_glazed_bacon'], False),
     # fish: all accept the sliced cut
-    ('cooked_meat', 'canned_fish', None, ['cod_cooked', 'cod_slice_cooked'], True),
-    ('cooked_meat', 'canned_cooked_salmon', None, ['salmon_cooked', 'salmon_slice_cooked'], True),
+    # Vintage Delight's salted cod and salmon fill the cooked fish's can (2026-10-23)
+    ('cooked_meat', 'canned_fish', None, ['cod_cooked', 'cod_slice_cooked', 'salted_cod'], True),
+    ('cooked_meat', 'canned_cooked_salmon', None, ['salmon_cooked', 'salmon_slice_cooked', 'salted_salmon'], True),
     ('cooked_meat', 'canned_cooked_calamari', 'Canned Cooked Calamari', ['cooked_calamari', 'cooked_calamari_slice'], False),
     ('cooked_meat', 'canned_cooked_catfish', 'Canned Cooked Catfish', ['catfish_cooked_mob', 'catfish_slice_cooked'], False),
     ('cooked_meat', 'canned_cooked_perch', 'Canned Cooked Perch', ['cooked_perch', 'cooked_perch_slice'], False),
     ('cooked_meat', 'canned_cooked_pike', 'Canned Cooked Pike', ['cooked_pike', 'cooked_pike_slice'], False),
     ('cooked_meat', 'canned_cooked_lionfish', 'Canned Cooked Lionfish', ['cooked_lionfish'], False),
+    ('cooked_meat', 'canned_surstromming', 'Canned Surströmming', ['surstromming'], False),
 
     ('soup', 'canned_rabbit_stew', None, ['rabbit_stew'], True),
     ('soup', 'canned_mushrooms', None, ['mushroom_stew'], True),
@@ -293,6 +320,12 @@ EXPLICIT = [
     ('meal', 'canned_cornbread_stuffing', 'Canned Cornbread Stuffing', ['cornbread_stuffing'], False),
     ('meal', 'canned_creamed_corn', 'Canned Creamed Corn', ['creamed_corn'], False),
     ('meal', 'canned_dumplings', 'Canned Dumplings', ['dumplings'], False),
+    # Veggies Delight and Vintage Delight pastas and noodles (2026-10-23)
+    ('meal', 'canned_pasta_with_broccoli', 'Canned Pasta with Broccoli', ['pasta_with_broccoli'], False),
+    ('meal', 'canned_potato_noodles', 'Canned Potato Noodles', ['potato_noodles'], False),
+    ('meal', 'canned_cheese_pasta', 'Canned Cheese Pasta', ['cheese_pasta'], False),
+    ('meal', 'canned_pad_thai', 'Canned Pad Thai', ['pad_thai'], False),
+    ('meal', 'canned_truffle_pasta', 'Canned Truffle Pasta', ['truffle_pasta'], False),   # Fungi Delight
 
     # pie filling: 4 slices (or 4 fruitsdelight pies). Slices whose whole pie comes from a mod not in the pack get no
     # can: cherry and truffle (Central Kitchen, pies from Environmental), blueberry, crimson berry, green apple and
@@ -314,6 +347,8 @@ EXPLICIT = [
      dict(pie='sweet_berry_cheesecake')),
     ('pie', 'canned_durian_pie_filling', 'Canned Durian Pie Filling', ['durian_pie'], False),
     ('pie', 'canned_pineapple_pie_filling', 'Canned Pineapple Pie Filling', ['pineapple_pie'], False),
+    ('pie', 'canned_sweet_potato_pie_filling', 'Canned Sweet Potato Pie Filling', ['sweet_potato_pie_slice'], False,
+     dict(pie='sweet_potato_pie')),   # Veggies Delight
     # tarts are pies to be (renamed and retextured later): 4 tarts fill a can, no tart back
     ('pie', 'canned_fig_pie_filling', 'Canned Fig Pie Filling', ['fig_tart'], False),
     ('pie', 'canned_lemon_pie_filling', 'Canned Lemon Pie Filling', ['lemon_tart'], False),
@@ -342,6 +377,7 @@ EXPLICIT = [
     # cheese wedges: 4 in a Cooking Pot, the empty can in its container slot
     ('dairy', 'canned_flaxen_cheese', 'Canned Flaxen Cheese', ['flaxen_cheese_wedge'], False),
     ('dairy', 'canned_scarlet_cheese', 'Canned Scarlet Cheese', ['scarlet_cheese_wedge'], False),
+    ('dairy', 'canned_cheese_slice', 'Canned Cheese Slices', ['cheese_slice'], False),   # Vintage Delight
     ('preserve', 'canned_tomato_sauce', 'Canned Tomato Sauce', ['tomato_sauce'], False),
     # Create's dough, 8 a can; not a food (like the dough): an ingredient can for crafts that take it a serving at a time
     ('preserve', 'canned_dough', 'Canned Dough', ['in_dough'], False, dict(food=False, n=8, servings=8)),
@@ -374,6 +410,11 @@ SKIP = {
     'soup': {'cavern_explorer_stew', 'chorus_stew_wood', 'endermite_stew_wood', 'suspicious_stew'},
     'bread': {'strawberry_scones', 'bread_slice', 'toast', 'tortilla'},
 }
+# Mod namespaces installed but not yet in a /dumpfood: their cans are configured above and skipped (listed as waiting)
+# until the catalog has their foods. Empty this once the dump is taken. Vintage Delight: vintage_delight.md 4.0 step 8;
+# Fungi Delight: fungi_delight.md step 8.
+AWAIT_DUMP = {'vintagedelight', 'fungidelight'}
+WAITING = []
 # sources that already have an explicit can above (not repeated by the type loops)
 STRIP_NAME = re.compile(r'^(Bowl of|Plate of|Slice of|Bar of)\s+')
 CAN_SPRITE_NOTE = 'canned_goods:items/canned_food'   # fallback sprite (a section without a GROUP_SPRITE entry)
@@ -471,6 +512,15 @@ def build(foods, names, keymap_all, keymap_base, types):
                 return
         fixed = opts.get('values')
         nofood = opts.get('food') is False
+        # mods whose foods are not in the catalog yet: a can whose value source waits is left out (WAITING), an
+        # extra source that waits is dropped from this run
+        pending = [k for k in sources if keymap_all[k].split(':')[0] in AWAIT_DUMP and keymap_all[k] not in foods]
+        if pending and not fixed and not nofood:
+            if sources[0] in pending:
+                WAITING.append(can_key)
+                return None
+            sources = [k for k in sources if k not in pending]
+            WAITING.append('%s (extra source %s)' % (can_key, ', '.join(pending)))
         if not fixed and not nofood:
             for k in sources:
                 if keymap_all[k] not in foods:
@@ -626,6 +676,8 @@ def main():
     types = types_json['types']
 
     cans, problems = build(foods, names, keymap_base, keymap_base, types)
+    if WAITING:
+        print('waiting for /dumpfood (%s): %s' % (', '.join(sorted(AWAIT_DUMP)), ', '.join(WAITING)))
     if problems:
         print('PROBLEMS:')
         for p in problems:

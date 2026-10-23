@@ -50,6 +50,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "beetroot"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -95,6 +112,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "any_cabbage"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -147,6 +181,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "carrot"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -191,6 +242,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "onion"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -244,6 +312,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "any_potato"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -288,6 +373,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "tomato"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -342,6 +444,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "any_bell_pepper"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -386,6 +505,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cactus_flesh"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -438,6 +574,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "gongylidia"
+       ],
+       "n": 1
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -486,6 +639,356 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "corn"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_carrot"
+  },
+  "canned_broccoli": {
+   "section": "raw_veggie",
+   "existing": false,
+   "name": "Canned Broccoli",
+   "servings": 2,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "broccoli"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "broccoli"
+       ],
+       "n": 5
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "broccoli"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "broccoli"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_carrot"
+  },
+  "canned_cauliflower": {
+   "section": "raw_veggie",
+   "existing": false,
+   "name": "Canned Cauliflower",
+   "servings": 2,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cauliflower",
+    "cauliflower_floret"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cauliflower",
+        "cauliflower_floret"
+       ],
+       "n": 2
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "cauliflower",
+        "cauliflower_floret"
+       ],
+       "n": 1
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cauliflower",
+        "cauliflower_floret"
+       ],
+       "n": 1
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_carrot"
+  },
+  "canned_sweet_potato": {
+   "section": "raw_veggie",
+   "existing": false,
+   "name": "Canned Sweet Potato",
+   "servings": 2,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "sweet_potato"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "sweet_potato"
+       ],
+       "n": 5
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "sweet_potato"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "sweet_potato"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_carrot"
+  },
+  "canned_turnip": {
+   "section": "raw_veggie",
+   "existing": false,
+   "name": "Canned Turnip",
+   "servings": 2,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "turnip"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "turnip"
+       ],
+       "n": 5
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "turnip"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "turnip"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_carrot"
+  },
+  "canned_zucchini": {
+   "section": "raw_veggie",
+   "existing": false,
+   "name": "Canned Zucchini",
+   "servings": 2,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "zucchini",
+    "zucchini_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "zucchini",
+        "zucchini_slice"
+       ],
+       "n": 3
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "zucchini",
+        "zucchini_slice"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "zucchini",
+        "zucchini_slice"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_carrot"
@@ -530,6 +1033,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "apple"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -589,6 +1109,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "neapolitan_banana"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -637,6 +1174,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cantaloupe_slice"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -681,6 +1235,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cherry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -740,6 +1311,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "glow_berries"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -784,6 +1372,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "melon"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -836,6 +1441,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "mulberry"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -880,6 +1502,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "pumpkin_slice"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -939,6 +1578,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "salmonberries"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -983,6 +1639,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "strawberries"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1035,6 +1708,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "white_strawberries"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1079,6 +1769,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "sweet_berries"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1131,6 +1838,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "bayberry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1175,6 +1899,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "blueberry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1227,6 +1968,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cranberry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -1271,6 +2029,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "durian_flesh"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1323,6 +2098,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "fig"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1367,6 +2159,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "hamimelon_slice"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1419,6 +2228,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "hawberry"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1463,6 +2289,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "kiwi"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1518,6 +2361,24 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "lemon",
+        "lemon_slice"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1562,6 +2423,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "lychee"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1614,6 +2492,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "mango"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1658,6 +2553,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "mangosteen"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1713,6 +2625,24 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "orange",
+        "orange_slice"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1757,6 +2687,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "peach"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1809,6 +2756,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "pear"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1857,6 +2821,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "persimmon"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -1901,6 +2882,23 @@
        "any": [
         "sugar",
         "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "pineapple_slice"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -1966,6 +2964,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "coffee_berries"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_apple"
@@ -2010,6 +3025,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "raw_beef"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -2069,6 +3101,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "raw_chicken"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_raw_beef"
@@ -2113,6 +3162,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "raw_mutton"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -2165,6 +3231,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "raw_pork"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -2209,6 +3292,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "rabbit"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -2271,6 +3371,24 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "shulker_mollusk",
+        "shulker_filet"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_raw_beef"
@@ -2326,6 +3444,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "blobfish"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_raw_salmon"
@@ -2374,6 +3509,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "flying_fish"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_raw_salmon"
@@ -2418,6 +3570,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "lobster_tail"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -2473,6 +3642,24 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "calamari",
+        "calamari_slice"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_raw_salmon"
@@ -2520,6 +3707,24 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "catfish",
+        "raw_catfish_slice"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -2575,6 +3780,24 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cod",
+        "cod_slice"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -2619,6 +3842,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "raw_crab"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -2684,6 +3924,23 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "lionfish"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_raw_salmon"
@@ -2738,6 +3995,24 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "perch",
+        "perch_slice"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -2800,6 +4075,24 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "pike",
+        "pike_slice"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_raw_salmon"
@@ -2851,6 +4144,24 @@
        "n": 1
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "salmon",
+        "salmon_slice"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": null
@@ -2894,6 +4205,23 @@
        "any": [
         "salt",
         "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "tropical_fish"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "vinegar"
        ],
        "n": 1
       }
@@ -4651,6 +5979,147 @@
    ],
    "texture": "canned_goods:items/canned_baked_potato"
   },
+  "canned_baked_sweet_potato": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Baked Sweet Potato",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.5,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "baked_sweet_potato"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "baked_sweet_potato"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "baked_sweet_potato"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
+  "canned_roasted_zucchini": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Roasted Zucchini",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.4,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "roasted_zucchini"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "roasted_zucchini"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "roasted_zucchini"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
+  "canned_roasted_cauliflower": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Roasted Cauliflower",
+   "servings": 4,
+   "hunger": 4,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "roasted_cauliflower_floret"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "roasted_cauliflower_floret"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "roasted_cauliflower_floret"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
   "canned_beef": {
    "section": "cooked_meat",
    "existing": true,
@@ -6116,6 +7585,86 @@
    ],
    "texture": "canned_goods:items/canned_food"
   },
+  "canned_pasta_with_broccoli": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Pasta with Broccoli",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "pasta_with_broccoli"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pasta_with_broccoli"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_potato_noodles": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Potato Noodles",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:resistance",
+     "ticks": 75,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "potato_noodles"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "potato_noodles"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
   "canned_apple_pie_filling": {
    "section": "pie",
    "existing": false,
@@ -6518,6 +8067,37 @@
      ]
     }
    ],
+   "texture": "canned_goods:items/canned_pumpkin_pie"
+  },
+  "canned_sweet_potato_pie_filling": {
+   "section": "pie",
+   "existing": false,
+   "name": "Canned Sweet Potato Pie Filling",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "sweet_potato_pie_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "sweet_potato_pie_slice"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pie": "sweet_potato_pie",
    "texture": "canned_goods:items/canned_pumpkin_pie"
   },
   "canned_fig_pie_filling": {
@@ -7561,6 +9141,36 @@
    ],
    "texture": "canned_goods:items/canned_bread"
   },
+  "canned_cauliflower_bread": {
+   "section": "bread",
+   "existing": false,
+   "name": "Canned Cauliflower Bread",
+   "servings": 4,
+   "hunger": 12,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cauliflower_bread"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cauliflower_bread"
+       ],
+       "n": 6
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_bread"
+  },
   "canned_cornbread": {
    "section": "bread",
    "existing": false,
@@ -7583,6 +9193,36 @@
       {
        "any": [
         "cornbread"
+       ],
+       "n": 6
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_bread"
+  },
+  "canned_garlic_bread": {
+   "section": "bread",
+   "existing": false,
+   "name": "Canned Garlic Bread",
+   "servings": 4,
+   "hunger": 10,
+   "modifier": 0.4,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "garlic_bread"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "garlic_bread"
        ],
        "n": 6
       }
@@ -7632,6 +9272,36 @@
         "honey_bottle"
        ],
        "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_bread"
+  },
+  "canned_mhadjeb": {
+   "section": "bread",
+   "existing": false,
+   "name": "Canned Mhadjeb",
+   "servings": 4,
+   "hunger": 24,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "mhadjeb"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "mhadjeb"
+       ],
+       "n": 6
       }
      ]
     }
@@ -7761,6 +9431,131 @@
        "n": 6
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "bowl_of_exotic_fruits"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_cabbage"
+  },
+  "canned_broccoli_salad": {
+   "section": "salad",
+   "existing": false,
+   "name": "Canned Broccoli Salad",
+   "servings": 8,
+   "hunger": 8,
+   "modifier": 0.562,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:resistance",
+     "ticks": 75,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "broccoli_salad"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "broccoli_salad"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "broccoli_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_cabbage"
+  },
+  "canned_cesar_salad": {
+   "section": "salad",
+   "existing": false,
+   "name": "Canned Cesar Salad",
+   "servings": 8,
+   "hunger": 13,
+   "modifier": 0.673,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:strength",
+     "ticks": 75,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cesar_salad"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cesar_salad"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cesar_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_cabbage"
@@ -7796,6 +9591,77 @@
         "chicken_salad"
        ],
        "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "chicken_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_cabbage"
+  },
+  "canned_coleslaw": {
+   "section": "salad",
+   "existing": false,
+   "name": "Canned Coleslaw",
+   "servings": 8,
+   "hunger": 10,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "coleslaw"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "coleslaw"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "coleslaw"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
       }
      ]
     }
@@ -7841,6 +9707,23 @@
        "n": 6
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "field_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_cabbage"
@@ -7878,6 +9761,23 @@
        "n": 6
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "fruit_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_cabbage"
@@ -7906,6 +9806,23 @@
         "lush_moss_salad"
        ],
        "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "lush_moss_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
       }
      ]
     }
@@ -7951,6 +9868,23 @@
        "n": 6
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "mango_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_cabbage"
@@ -7988,6 +9922,23 @@
        "n": 6
       }
      ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "mixed_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
     }
    ],
    "texture": "creativeengineering:item/canned_cabbage"
@@ -8023,6 +9974,77 @@
         "nether_salad"
        ],
        "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "nether_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_cabbage"
+  },
+  "canned_turnip_salad": {
+   "section": "salad",
+   "existing": false,
+   "name": "Canned Turnip Salad",
+   "servings": 8,
+   "hunger": 8,
+   "modifier": 0.562,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:haste",
+     "ticks": 75,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "turnip_salad"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "turnip_salad"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "turnip_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
       }
      ]
     }
@@ -8517,6 +10539,116 @@
    ],
    "texture": "canned_goods:items/canned_rabit_stew"
   },
+  "canned_broccoli_soup": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Broccoli Soup",
+   "servings": 8,
+   "hunger": 13,
+   "modifier": 0.673,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 450,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "broccoli_soup"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "broccoli_soup"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "broccoli_soup"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
+  "canned_cacciatore": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Cacciatore",
+   "servings": 8,
+   "hunger": 18,
+   "modifier": 0.729,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cacciatore"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cacciatore"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "cacciatore"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
   "canned_carrot_soup": {
    "section": "soup",
    "existing": false,
@@ -8557,6 +10689,61 @@
       {
        "any": [
         "carrot_soup"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
+  "canned_cauliflower_soup": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Cauliflower Soup",
+   "servings": 8,
+   "hunger": 13,
+   "modifier": 0.673,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 450,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cauliflower_soup"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cauliflower_soup"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "cauliflower_soup"
        ],
        "n": 3
       },
@@ -8975,6 +11162,61 @@
    ],
    "texture": "canned_goods:items/canned_rabit_stew"
   },
+  "canned_garlic_chicken_stew": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Garlic Chicken Stew",
+   "servings": 8,
+   "hunger": 15,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "garlic_chicken_stew"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "garlic_chicken_stew"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "garlic_chicken_stew"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
   "canned_kangaroo_stew": {
    "section": "soup",
    "existing": false,
@@ -9352,6 +11594,61 @@
    ],
    "texture": "canned_goods:items/canned_rabit_stew"
   },
+  "canned_turnip_beef_stew": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Turnip Beef Stew",
+   "servings": 8,
+   "hunger": 18,
+   "modifier": 0.729,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "turnip_beef_stew"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "turnip_beef_stew"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "turnip_beef_stew"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
   "canned_vegetable_soup": {
    "section": "soup",
    "existing": false,
@@ -9406,6 +11703,42 @@
     }
    ],
    "texture": "canned_goods:items/canned_rabit_stew"
+  },
+  "canned_glistering_melon_slice": {
+   "section": "golden",
+   "existing": false,
+   "name": "Canned Glistering Melon Slice",
+   "servings": 10,
+   "hunger": 1,
+   "modifier": 1.2,
+   "meat": false,
+   "fast": false,
+   "always": true,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "glistering_melon_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "glistering_melon_slice"
+       ],
+       "n": 2
+      },
+      {
+       "any": [
+        "honey_bottle"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_golden_apples"
   },
   "canned_golden_apple": {
    "section": "golden",

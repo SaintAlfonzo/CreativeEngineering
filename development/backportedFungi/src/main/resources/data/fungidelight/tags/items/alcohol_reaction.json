@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    "fungidelight:cleaned_cap",
+    "fungidelight:cooked_cleaned_cap",
+    "fungidelight:inky_caps_salad",
+    "fungidelight:inky_cap_scrambled_eggs",
+    {
+      "id": "fruitsdelight:buried_truffle",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:durian_jam",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:durian_jelly",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:baked_durian",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:durian_flesh",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:durian_pie",
+      "required": false
+    }
+  ]
+}

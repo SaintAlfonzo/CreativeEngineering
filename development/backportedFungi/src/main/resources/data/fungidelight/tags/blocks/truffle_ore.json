@@ -1,0 +1,9 @@
+{
+  "values": [
+    "fungidelight:truffle_dirt",
+    {
+      "id": "environmental:buried_truffle",
+      "required": false
+    }
+  ]
+}

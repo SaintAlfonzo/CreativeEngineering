@@ -129,6 +129,8 @@
     "SpawnPlacementsConditionsMixin",
     "AnimalWalkTargetMixin",
     "MushroomCowWalkTargetMixin",
+    "MushroomCowBreedingMixin",
+    "AnimalCanMateMooshroomMixin",
     "StructureCheckThreadSafeMixin",
     "NoiseBasedChunkGeneratorDistantClipMixin",
     "NoiseChunkDistantClipMixin",

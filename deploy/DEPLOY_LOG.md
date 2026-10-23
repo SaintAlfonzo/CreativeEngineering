@@ -4,6 +4,155 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.1.02 -->
+## 1.1.02 - 2026-10-23 17:38
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 1b1d45f + 48 uncommitted file(s)
+- Since: 1.1.01
+- Contents: 373 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
+- Payload: update from 1.1.01, config functional: 98 files, 8.2 MB (mods 11, kubejs 71, config 8, world_serverconfig 8)
+- Notes: Vintage Delight, Veggies Delight, Fungi Delight ports, mooshroom breeding, Sky Structures, spawn and worldgen tuning; fix worlds failing to load
+- Built with warnings:
+  - 48 uncommitted change(s) in shipped folders (commit 1b1d45f + working tree)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 8: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 14: bullet is 306 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 39: bullet is 404 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 59: bullet is 425 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 84: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 105: bullet is 358 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 118: bullet is 497 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 132: bullet is 593 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 142: bullet is 453 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 147: bullet is 491 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 155: bullet is 386 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 173: bullet is 427 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 207: bullet is 325 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 221: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 240: bullet is 458 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 246: bullet is 331 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 249: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 254: bullet is 412 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 266: bullet is 316 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 272: bullet is 320 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 367: bullet is 362 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 394: bullet is 447 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 408: bullet is 726 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 425: bullet is 483 characters (over 300: split it or use a sub-bullet)
+
+### Changes
+
+Mods added (8):
+
+- End's Delight 1.19.2-2.1 `ends_delight-1.19.2-2.1.jar` (both)
+- fungidelight `backportedFungi-1.3-ce-19.2-01.jar` (both)
+- Miner's Delight + `miners_delight-1.19.2-1.1.2.jar` (both)
+- Ocean's Delight 1.0.2-1.19.2 `oceansdelight-1.0.2-1.19.2.jar` (both)
+- Oceanic Delight 1.0.1 `oceanic_delight-1.0.1-forge-1.19.2.jar` (both)
+- Sky Structures 1.0.0 `Sky Structures 1.0.0 - 1.19.2.jar` (both)
+- Unusual Delight (Hostile Delight) `Hostile_Delight_0.2.2_1.19.2.jar` (both)
+- vintagedelight `backportedVintage-0.1.6-ce-19.2-03.jar` (both)
+
+Mods updated (3):
+
+- creativeengineering: `creativeengineering-1.1.01.jar` -> `creativeengineering-1.1.02.jar`
+- incubation_additions: `incubationAdditions-1.0.0.jar` -> `incubationAdditions-1.1.0.jar`
+- veggiesdelight: `backportedVeggies-1.9.2-ce-19.2-01.jar` -> `backportedVeggies-1.9.2-ce-19.2-02.jar`
+
+<details><summary>kubejs/: 37 added, 34 changed, 0 removed</summary>
+
+*added (37)*
+
+- `assets/creativeengineering/changelog/1.1.02.md`
+- `client_scripts/jei_info.js`
+- `data/creativeengineering/forge/biome_modifier/vintage_wild_ghost_peppers.json`
+- `data/creativeengineering/moonlight/soft_fluids/carrot_juice.json`
+- `data/creativeengineering/moonlight/soft_fluids/dandelion_juice.json`
+- `data/creativeengineering/moonlight/soft_fluids/fermented_garlic_honey.json`
+- `data/creativeengineering/moonlight/soft_fluids/ghostly_chili.json`
+- `data/creativeengineering/moonlight/soft_fluids/nut_milk.json`
+- `data/creativeengineering/moonlight/soft_fluids/oatmeal.json`
+- `data/creativeengineering/moonlight/soft_fluids/pickle_soup.json`
+- `data/creativeengineering/moonlight/soft_fluids/turnip_water.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/inky_cap_mushroom_colonies.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/morel_mushroom_colonies.json`
+- `data/creativeengineering/worldgen/placed_feature/wild/rooted_dirt_blob.json`
+- `data/creativeengineering/worldgen/placed_feature/wild/truffle_dirt_ore.json`
+- `data/creativeengineering/worldgen/placed_feature/wild/mushrooms/` (18 files)
+- `data/vintagedelight/worldgen/configured_feature/patch_salt.json`
+- `generation_scripts/worldgen/mushroom_spawns.json`
+- `server_scripts/worldgen/_biome_rules.js`
+- `server_scripts/worldgen/mushroom_spawns.js`
+
+*changed (34)*
+
+- `assets/creativeengineering/lang/en_us.json`
+- `client_scripts/namechanges.js`
+- `client_scripts/tooltips.js`
+- `data/vinery/worldgen/configured_feature/savanna_red_grape_bush.json`
+- `data/vinery/worldgen/configured_feature/savanna_white_grape_bush.json`
+- `data/vinery/worldgen/configured_feature/taiga_white_grape_bush.json`
+- `data/vinery/worldgen/configured_feature/white_grape_bush.json`
+- `generation_scripts/food/can_servings.json`
+- `generation_scripts/food/can_types.json`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/stacks/stack_sizes.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/mob_spawns.json`
+- `generation_scripts/worldgen/wild_crops.json`
+- `server_scripts/_lib/recipe_scan.js`
+- `server_scripts/cooking/alcohol.js`
+- `server_scripts/cooking/baking.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/cooking/mortar.js`
+- `server_scripts/other/starter_kit.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/cookingtags.js`
+- `server_scripts/tags/item_physics_tags.js`
+- `server_scripts/worldgen/mob_spawns.js`
+- `server_scripts/worldgen/wild_crops.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/_lib/item_merges.js`
+- `startup_scripts/_lib/removed_items.js`
+- `startup_scripts/changes/transition_items.js`
+- `startup_scripts/compost/compost_values.js`
+- `startup_scripts/cooking/fluids.js`
+- `startup_scripts/func/neoCraftHelper.js`
+- `startup_scripts/items/misc_items.js`
+
+</details>
+
+config/: 2 added, 6 changed, 0 removed:
+
+*added (2)*
+
+- `incubation_additions-common.toml`
+- `vintagedelight-common.toml`
+
+*changed (6)*
+
+- `creativeengineering-common.toml`
+- `rare-ice.properties`
+- `simplehats.json`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+### Removals (from 1.1.01)
+
+Delete on the server (3, also in removals_server.txt):
+
+- `mods/backportedVeggies-1.9.2-ce-19.2-01.jar`
+- `mods/creativeengineering-1.1.01.jar`
+- `mods/incubationAdditions-1.0.0.jar`
+
+Delete on the client (3, also in removals_client.txt):
+
+- `mods/backportedVeggies-1.9.2-ce-19.2-01.jar`
+- `mods/creativeengineering-1.1.01.jar`
+- `mods/incubationAdditions-1.0.0.jar`
+
 <!-- deploy:1.1.01 -->
 ## 1.1.01 - 2026-10-22 21:46
 

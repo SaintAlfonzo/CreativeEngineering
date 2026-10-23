@@ -59,7 +59,8 @@ ServerEvents.recipes(e => {
 		['durian_pie', i.durian_flesh, 'canned_durian_pie_filling'],
 		['pineapple_pie', i.pineapple_slice, 'canned_pineapple_pie_filling'],
 		['sweet_berry_cheesecake', i.sweet_berries, 'canned_sweet_berry_pie_filling'],
-		['sweet_potato_pie', i.baked_sweet_potato, null],    // Veggies Delight's; no filling can yet
+		['sweet_potato_pie', i.baked_sweet_potato, 'canned_sweet_potato_pie_filling'],   // Veggies Delight's
+		['truffle_pie', i.truffle, null],                // CCK's (dead: gated on Environmental), from Fungi Delight's truffle (fungi_delight.md 5.1.6)
 	]
 	var COOKIES = [
 		['cookie', i.cocoa_beans], ['honey_cookie', i.honey_bottle], ['sweet_berry_cookie', i.sweet_berries],
@@ -67,6 +68,7 @@ ServerEvents.recipes(e => {
 		['cranberry_cookie', i.t_fruits_cranberry], ['persimmon_cookie', i.dried_persimmon],
 		['lemon_cookie', i.t_fruits_lemon], ['mulberry_cookie', i.mulberry], ['uncanny_cookies', i.mite_crust],
 		['cherry_cookie', i.cherry],                     // abnormals_delight, Vinery's cherry
+		['oatmeal_cookie', i.raw_oats],                  // Vintage Delight (was 2 raw oats + honey -> 8 in the grid)
 	]
 
 	//######################### Removals #########################

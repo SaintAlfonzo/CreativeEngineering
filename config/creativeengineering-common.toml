@@ -1295,6 +1295,9 @@
 		#trunk tree that worldgen places by rivers (patcherMod MulberrySapling). Off: UA's built-in tree with river logs,
 		#which drop oak logs. Applies at once.
 		mulberrySapling = true
+		#mushroom_spawns.json: wild mushrooms, colonies and huge Fungi Delight mushrooms at the surface and in caves
+		#(kubejs worldgen/mushroom_spawns.js). Off: mushrooms as their mods ship them. Rejoin to apply; only new chunks change.
+		mushroomSpawns = true
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
