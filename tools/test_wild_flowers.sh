@@ -34,6 +34,10 @@ out = sys.argv[1]
 cfg = g.loads_lenient(f.CONFIG_PATH.read_text())
 _, traits = g.load_wild_crops()
 snap = json.loads(f.SNAPSHOT.read_text())
+# 'follows' entries take the biome list the generator wrote into the snapshot (as wild_flowers.js does)
+for k, e in cfg.get('flowers', {}).items():
+    if e.get('follows'):
+        e['_follows'] = snap.get('follows', {}).get(k, [])
 tags = json.load(open(os.path.join(out, 'tags.json')))
 bad = []
 

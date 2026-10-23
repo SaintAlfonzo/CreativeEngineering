@@ -9,7 +9,7 @@ ServerEvents.tags('item', e => {
 	// flour / dough cleanup
 	t.clearAll(e, [i.wheat_flour_pc, i.out_dough])
 	t.add(e, 'forge:dusts/flour', i.in_flour)
-	// cornmeal: its own flour tag, plus the "flour or cornmeal" tag pancakes, pies and cakes take (TODO food/ingredients #1)
+	// cornmeal: its own flour tag, plus the "flour or cornmeal" tag pancakes, pies and cakes take (TODO dishes/ingredients #1)
 	t.add(e, i.t_flour_corn, i.cornmeal)
 	t.add(e, i.t_flour_or_cornmeal, [i.flour, i.t_flour_corn])
 
@@ -31,10 +31,10 @@ ServerEvents.tags('item', e => {
 	// cooking oil: Rustic Delight only presses cotton seeds
 	t.add(e, i.t_cooking_oil_ingredients, i.pumpkin_seeds)
 	// Cooking for Blockheads oven fuel (ovenRequiresCookingOil): Balm's tag lists only an optional item
-	// `forge:cookingoil` (no '#', so not the forge tag) and is otherwise empty. TODO food/kitchen #8
+	// `forge:cookingoil` (no '#', so not the forge tag) and is otherwise empty. TODO cooking/kitchen #8
 	t.add(e, i.t_balm_cooking_oil, i.cooking_oil)
 
-	// sliced potatoes: only More Delight's diced potatoes were in it; Rustic Delight's slices fry the same (TODO food/meals #7)
+	// sliced potatoes: only More Delight's diced potatoes were in it; Rustic Delight's slices fry the same (TODO dishes/meals #7)
 	t.add(e, i.t_sliced_potatoes, i.potato_slices)
 
 	// lasagna meats
@@ -63,7 +63,25 @@ ServerEvents.tags('item', e => {
 	])
 
 
-	// meals (TODO food/meals #1, #2)
+	// Vintage Delight port (vintage_delight.md 3.1): its doughs are named ingredients for their own recipes, never
+	// stand-ins for Create dough. Cucumber noodles stay in #forge:pasta until the VTD-40 overlap review.
+	t.remove(e, i.any_dough, i.oat_dough)
+	// Crop, seed and crate tags for the Vintage crops, the Veggies port's pattern (vintage_delight.md 4 step 2)
+	t.add(e, 'forge:crops/oat', i.oat)
+	t.add(e, 'forge:crops/peanut', i.peanut)
+	t.add(e, 'forge:crops/cucumber', i.cucumber)
+	t.add(e, 'forge:crops/ghost_pepper', i.ghost_pepper)
+	t.add(e, 'forge:crops', ['#forge:crops/oat', '#forge:crops/peanut', '#forge:crops/cucumber', '#forge:crops/ghost_pepper'])
+	t.add(e, 'forge:seeds/oat', i.oat_seeds)
+	t.add(e, 'forge:seeds/cucumber', i.cucumber_seeds)
+	t.add(e, 'forge:seeds/ghost_pepper', i.ghost_pepper_seeds)
+	t.add(e, 'forge:seeds', ['#forge:seeds/oat', '#forge:seeds/cucumber', '#forge:seeds/ghost_pepper'])
+	t.add(e, 'forge:storage_blocks/oat', i.oat_bale)
+	t.add(e, 'forge:storage_blocks/peanut', i.peanut_crate)
+	t.add(e, 'forge:storage_blocks/cucumber', i.cucumber_crate)
+	t.add(e, 'forge:storage_blocks/ghost_pepper', i.ghost_pepper_crate)
+
+	// meals (TODO dishes/meals #1, #2)
 	// cooked veggies for heatless soups and stews: the cooked/veggie food types (food_types.json) minus snacks,
 	// rice and kelp. Listed by key: foodtypetags.js fills those tags after this script runs.
 	t.add(e, i.t_soup_veggie_cooked, [
@@ -71,7 +89,10 @@ ServerEvents.tags('item', e => {
 		i.roasted_bell_pepper_green, i.roasted_bell_pepper_red, i.roasted_bell_pepper_yellow,
 		i.boiled_blue_pickerelweed, i.boiled_purple_pickerelweed, i.roasted_adzuki_beans,
 		i.cactus_steak, i.kimchi, i.pickled_pickles,
+		i.baked_sweet_potato, i.roasted_zucchini,
 	])
+	// any roasted bell pepper: Veggies Delight's smoked pepper is not ported, its recipes take these
+	t.add(e, i.t_roasted_bell_pepper, [i.roasted_bell_pepper_red, i.roasted_bell_pepper_green, i.roasted_bell_pepper_yellow])
 	// exotic fruits bowl: Fruits Delight's fruits, its two melons and the vanilla melon slice
 	t.add(e, i.t_exotic_fruit, [
 		i.pear, i.hawberry, i.lychee, i.mango, i.persimmon, i.peach, i.orange, i.mangosteen,

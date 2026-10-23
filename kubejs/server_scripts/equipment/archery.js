@@ -193,9 +193,9 @@ R.ieBlueprint({ item: i.seeker_arrow, count: 3 }, [i.ender_eye, i.light_arrow_sh
 // Explosive Arrow
 // ============================================================
 //Fletching
-R.fletching(i.tnt, i.blaze_rod, i.any_fletching, { item: i.explosive_arrow, count: 4 }, e);
+R.fletching(i.tnt, i.blazing_arrow_shaft, i.any_fletching, { item: i.explosive_arrow, count: 4 }, e);
 //IE Blueprint
-R.ieBlueprint({ item: i.explosive_arrow, count: 4 }, [i.tnt, i.blaze_rod, i.any_fletching], 'archery', e, 'explosive_arrow');
+R.ieBlueprint({ item: i.explosive_arrow, count: 4 }, [i.tnt, i.blazing_arrow_shaft, i.any_fletching], 'archery', e, 'explosive_arrow');
 
 // ============================================================
 // Pufferfish Arrow

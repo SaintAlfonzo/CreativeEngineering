@@ -1,8 +1,10 @@
 {
  "_about": "Hand-written rules for tools/name_audit.py (feature_writeup/names.md section 11). names = exact names by lang key; keep = keys whose name is right as it is; keepWords = words whose case is right as written; minorForce = small words lowercased mid-name; minorKeep = particles left in either case; skip = key regexes never fixed (only reported).",
  "names": {
+  "item.veggiesdelight.cesar_salad": "Caesar Salad",
   "block.create_central_kitchen.cherry_pie": "Placed Cherry Pie",
   "block.create_central_kitchen.mulberry_pie": "Placed Mulberry Pie",
+  "block.upgrade_aquatic.potted_river_sapling": "Potted Mulberry Sapling",
   "block.create_central_kitchen.pumpkin_pie": "Placed Pumpkin Pie",
   "block.create_central_kitchen.truffle_pie": "Placed Truffle Pie",
   "block.supplementaries.rope_tomatoes": "Tomatoes on Rope",

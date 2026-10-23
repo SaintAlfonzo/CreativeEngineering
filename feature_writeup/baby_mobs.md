@@ -1,8 +1,8 @@
 # Baby mobs: the 1.21.2 / 26.1 "Tiny Takeover" babies on 1.19.2 (Baby Mobs, our own jar)
 
 Test prefix `BM-`. Status: **milestone 1 BUILT 2026-10-20 (babyMobs-1.0.0.jar in `mods/`, not deployed): baby squid, glow
-squid and dolphin with the 26.1 baby models and textures; BM-01 and BM-02 PASSED on the scratch server, the rest need a client. Milestone 2 (the 26.1
-remodel of the ~38 existing babies) is planned, not built.** [TODO](todo/TODO.md) `largecontent/babymobport #1`.
+squid and dolphin with the 26.1 baby models and textures; BM-01 and BM-02 PASSED on the scratch server, the server halves of BM-04 to BM-07 scratch server PASSED 2026-10-22 (SQ-OM-13, SQ-OM-14), the rest need a client. Milestone 2 (the 26.1
+remodel of the ~38 existing babies) is planned, not built.** [TODO](todo/TODO.md) `ports/babymobport #1`.
 
 ## 0. At a glance
 
@@ -115,15 +115,17 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 - [ ] **BM-03 Looks [game]:** a baby squid / glow squid / dolphin shows the 26.1 baby shape and texture (stubby body,
   short tentacles; short dolphin with a round head), floating at the right height; the hitbox (F3+B) is small; a glow
   squid baby still glows and dims when hit
-- [ ] **BM-04 Sounds, drops [game]:** baby sounds are high-pitched; killing a baby drops nothing and no experience
-- [ ] **BM-05 Dolphin feeding [game]:** a baby dolphin fed cod ages up 10 % per fish (eat sound, fish gone); it never
+- [ ] **BM-04 Sounds, drops [game]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-13, no items or orbs from babies).* baby sounds are high-pitched; killing a baby drops nothing and no experience
+- [ ] **BM-05 Dolphin feeding [game]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-13, age -24000 -> -21600 per cod).* a baby dolphin fed cod ages up 10 % per fish (eat sound, fish gone); it never
   attacks when hit; an adult fed cod still leads to treasure
-- [ ] **BM-06 Natural babies [game]:** in a fresh ocean, among many squid / dolphins about 1 in 20 squid and 1 in 10
+- [ ] **BM-06 Natural babies [game]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-13, first of a pack never a baby).* in a fresh ocean, among many squid / dolphins about 1 in 20 squid and 1 in 10
   dolphins are babies (never the first of a group); `glowSquidBabyChance` likewise in caves
-- [ ] **BM-07 Config [game]:** `babyModels = false` -> babies render as half-size adults; `squidBabyChance = 1` -> every
+- [ ] **BM-07 Config [game]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-14, 1200 of 1200 pack members after the first are babies).* `babyModels = false` -> babies render as half-size adults; `squidBabyChance = 1` -> every
   squid after the first of a group is a baby
 - [ ] **BM-08 Without the jar [game]:** remove the jar -> existing babies are adults, no errors
 
 ## 8. History
 
 - 2026-10-20: milestone 1 built (babyMobs-1.0.0) after the tier-1 / tier-2 feature ports; milestone 2 planned.
+- 2026-10-22 (second bulk run): SQ-OM-13 and SQ-OM-14 PASS on the scratch server (drops, dolphin feeding, pack shares,
+  `squidBabyChance = 1.0`: 1200 of 1200). Looks, sounds and the `babyModels` switch of BM-04 to BM-07 stay in game.

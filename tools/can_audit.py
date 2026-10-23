@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Hunger / saturation audit of every can (feature_writeup/can_parity.md, TODO food/canning #3).
+"""Hunger / saturation audit of every can (feature_writeup/can_parity.md, TODO cans/canning #3).
 
 For each can in kubejs/generation_scripts/food/can_types.json (what is built) it compares three totals, each as
 hunger / saturation points (saturation points = hunger x modifier x 2, what AppleSkin shows doubled):

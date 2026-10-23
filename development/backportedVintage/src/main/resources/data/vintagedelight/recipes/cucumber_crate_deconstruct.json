@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "vintagedelight:cucumber_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "vintagedelight:cucumber"
+  }
+}

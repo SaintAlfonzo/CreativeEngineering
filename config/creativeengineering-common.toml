@@ -700,7 +700,7 @@
 		#              kinds of hit. Omit = every kind.
 		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
 		#Unknown effect ids are skipped with one warning in the log.
-		shielderEffects = ""
+		shielderEffects = "minecraft:resistance;40;0"
 		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
@@ -776,7 +776,7 @@
 		#              kinds of hit. Omit = every kind.
 		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
 		#Unknown effect ids are skipped with one warning in the log.
-		shielderEffects = ""
+		shielderEffects = "minecraft:resistance;40;1"
 		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
@@ -852,7 +852,7 @@
 		#              kinds of hit. Omit = every kind.
 		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
 		#Unknown effect ids are skipped with one warning in the log.
-		shielderEffects = "minecraft:regeneration;100;0"
+		shielderEffects = "minecraft:regeneration;100;0, minecraft:resistance;40;1"
 		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
 		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
 		#poison) or the attacker is the shield holder.
@@ -1287,6 +1287,14 @@
 		#when the template loads (lone red glazed terracotta "meat" -> Architect's Palette salmon log). Off: templates as
 		#the mods ship them. Rejoin; new chunks only.
 		templateBlockSwaps = true
+		#Quark's frozen peaks cave style lays Immersive Weathering's permafrost on floors, ceilings and pillars
+		#instead of Quark's own block (renamed Froststone; patcherMod QuarkPermafrostStyleMixin). Walls stay packed ice.
+		#Off: Quark's block. New chunks only.
+		permafrostMerge = true
+		#Upgrade Aquatic's river sapling (Mulberry Sapling) grows the datapack's upgrade_aquatic:river_tree, the oak
+		#trunk tree that worldgen places by rivers (patcherMod MulberrySapling). Off: UA's built-in tree with river logs,
+		#which drop oak logs. Applies at once.
+		mulberrySapling = true
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
@@ -1542,11 +1550,21 @@
 		avoidCoasts = false
 
 	#Geodes whose column is an ocean (the biome at the sea floor is #minecraft:is_ocean) are moved down before
-	#they generate, so fewer of them poke through the sea floor. Which geodes stay is a fixed roll per position.
+	#they generate, so they stay under the deepest sea floor the world can have. A moved geode's top (its
+	#origin + the geode's own maxGenOffset) ends at least clearance blocks under lowestFloorY; geodes already
+	#that deep stay where they are. Which geodes stay and how far each spreads is a fixed roll per position.
 	[worldgen.ocean_geodes]
-		#Blocks a geode under an ocean is moved down.
-		#Range: 0 ~ 64
-		drop = 10
+		#The lowest sea floor y any ocean in the pack generates (ST-133: Terralith deep oceans near y 0;
+		#Tectonic deeper_oceans can go lower).
+		#Range: -64 ~ 64
+		lowestFloorY = -8
+		#Blocks of stone kept between a moved geode's top and lowestFloorY.
+		#Range: 0 ~ 16
+		clearance = 2
+		#Moved geodes land up to this many blocks under the highest allowed origin (a roll per position),
+		#so they don't all sit on one layer.
+		#Range: 0 ~ 32
+		spread = 8
 		#Share of geodes under oceans that keep their own height (0.1 = 1 in 10).
 		#Range: 0.0 ~ 1.0
 		stayShare = 0.1
@@ -1776,6 +1794,25 @@
 	#hidden in JEI's edit mode / never in JEI), plus problems in the definition. Render it with
 	#python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB.
 	orderReport = false
+	#Show seasoning crafts (Salt's food + salt, Create: The Salt's salting mixes, and crafting recipes
+	#with ids creativeengineering:shapeless/season/...) on their own Seasoning page instead of the
+	#Crafting and Mixing pages. Off: they stay where their mods put them.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	seasoningCategory = true
+	#Show the potion bucket recipes on one Potion Buckets page per potion and bucket: filling and
+	#draining by hand, the Spout, the Item Drain and the Bottling Machine together. Off: they stay on the
+	#Crafting, Spout Filling, Item Draining and Bottling Machine pages.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	potionBucketCategory = true
+	#Show tipped arrow recipes on one Tipped Arrows page per potion: by hand (8 arrows + a lingering
+	#potion), the Spout and the Bottling Machine together. Off: they stay on the Crafting, Spout Filling
+	#and Bottling Machine pages.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	tippedArrowCategory = true
+	#Show can crafts on two pages of their own: Canning (food + an empty can -> a can) and Using Cans
+	#(crafts that take a can). Off: they stay on the Crafting page.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	canCategories = true
 
 #WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
 #plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
@@ -2106,4 +2143,86 @@
 	#Pack style (feature_writeup/names.md 12): words spaced, possessive apostrophes, '&' for and / 'n',
 	#Title Case, Create addons as "Create: <name>", no author handles, the pack's own mods end in (Alfonzo).
 	overrides = ["abnormals_delight=Abnormals' Delight", "apexcore=Apex Core", "appleskin=Apple Skin", "astikorcarts=Astikor Carts", "autoreglib=Auto Reg Lib", "baby_mobs=Baby Mobs (Alfonzo)", "betterdays=Better Days", "betterf3=Better F3", "boatview360=Boat View 360", "bobberdetector=Create: Bobber Detector", "brewinandchewin=Brewin' & Chewin' Backport (Alfonzo)", "canned_goods=Canned Goods", "cb_microblock=CB Microblock", "cb_multipart=CB Multipart", "cb_multipart_minecraft=CB Multipart Minecraft", "cccbridge=Create: CC Bridge", "chefsdelight=Chef's Delight", "cherisheditems=Cherished Items", "codechickenlib=Code Chicken Lib", "compressedcreativity=Create: Compressed Creativity", "conditional_mixin=Conditional Mixin", "cookingforblockheads=Cooking for Blockheads", "corpsecurioscompat=Corpse Curios Compat", "cosmeticarmorreworked=Cosmetic Armor Reworked", "create__the_salt=Create: The Salt", "create_compressed=Create: Compressed", "create_confectionery=Create: Confectionery", "create_crush_everything=Create: Recycling", "create_enchantment_industry=Create: Enchantment Industry", "create_mechanical_extruder=Create: Mechanical Extruder", "create_questing=Create: Questing", "create_things_and_misc=Create: Things & Misc", "createaddition=Create: Crafts & Additions", "createappliedkinetics=Create: Applied Kinetics", "createdeco=Create: Deco", "creategbd=Create: Guardian Beam Defense", "creategoggles=Create: Goggles", "createliquidfuel=Create: Liquid Fuel", "creativecore=Creative Core", "creativeengineering=Creative Engineering (Alfonzo)", "ctm=Connected Textures Mod", "darkpaintings=Dark Paintings", "deathknell=Death Knell", "design_decor=Create: Design & Decor", "do_a_barrel_roll=Do a Barrel Roll", "dont_void_arrows=Don't Void Arrows", "dragonloot=Dragon Loot", "dummmmmmy=Target Dummy", "enchdesc=Enchantment Descriptions", "enderstorage=Ender Storage", "entityculling=Entity Culling", "everythingcopper=Everything Is Copper", "exposure=Exposure Backport & Extras (Alfonzo)", "exposure_catalog=Exposure Catalog Backport (Alfonzo)", "exposure_expanded=Exposure: Expanded Backport (Alfonzo)", "exposure_extras=Exposure Extras (Alfonzo)", "exposure_polaroid=Exposure Polaroid Backport (Alfonzo)", "extendedgears=Create: Extended Cogwheels", "farmers_structures=Farmer's Structures", "fastfurnace=Fast Furnace", "fireflybushport=Firefly Bush Port", "fishontheline=Fish on the Line", "fortuneonneterite_i_ig_z=Fortune on Netherite", "foundation=Foundation Vinery Backport (Alfonzo)", "framedblocks=Framed Blocks", "geckolib3=Gecko Lib", "hobbit_house_=Hobbit House", "hopour=Hopo Better Underwater Ruins", "immediatelyfast=Immediately Fast", "incubation_additions=Incubation Additions (Alfonzo)", "ipo=Improved Pillager Outpost", "itemphysic=Item Physic", "just_enough_beacons=Just Enough Beacons", "kotlinforforge=Kotlin for Forge", "kubejsdelight=KubeJS Delight", "lightmansdiscord=Lightman's Discord Integration", "littlecontraptions=Create: Little Contraptions", "minecraft_style_paintings=Minecraft Style Paintings", "mixinsquared=Mixin Squared", "more_mooblooms=More Mooblooms (Alfonzo)", "netherportalfix=Nether Portal Fix", "nocubescreateexp=Create: Compact Exp", "notenoughanimations=Not Enough Animations", "old_swamp_fisherman_house=Old Swamp Fisherman House", "oreexcavation=Ore Excavation", "portablewardrobe=Portable Wardrobe", "projectred_core=Project Red Core", "projectred_fabrication=Project Red Fabrication", "projectred_illumination=Project Red Illumination", "projectred_integration=Project Red Integration", "projectred_transmission=Project Red Transmission", "railways=Create: Steam & Rails", "restapi=REST API", "sawmillhouse=Sawmill House", "seasonhud=Season HUD", "simplehats=Simple Hats", "sliceanddice=Create: Slice & Dice", "spectrelib=Spectre Lib", "supermartijn642configlib=Config Library", "supermartijn642corelib=Core Lib", "swingthroughgrass=Swing Through Grass", "t_and_t=Towns & Towers", "takesapillage=It Takes a Pillage", "tmted=Engineer's Delight", "transition=Transition", "trashslot=Trash Slot", "treechop=HT's Tree Chop", "villagersellanimals=Villagers Sell Animals", "vinery=Let's Do Vinery Backport (Alfonzo)", "w2w2=Waystones 2 Waypoints 2", "waila=Waila", "whitenoise=White Noise", "worldedit=World Edit", "wthit=WTHIT", "xaerolib=Xaero Lib", "xaerozoomout=Xaero Zoomout"]
+
+#Player changelog, "What's New" (client side). The notes are the pack's
+#assets/creativeengineering/changelog/<version>.md files. Takes effect the next time a menu opens.
+[changelog]
+	#Master switch: off removes the book buttons and the update popup.
+	enabled = true
+	#Book button on the title screen, right of Singleplayer.
+	titleButton = true
+	#Book button on the pause menu, right of Back to Game.
+	pauseButton = true
+	#Speech bubble beside the book button while the newest version's notes are unread. Opening the
+	#changelog once acknowledges it (config/creativeengineering/changelog_seen.txt).
+	updatePopup = true
+
+#Pack changes to crop harvest drops (server side, applied on /reload).
+[crop_drops]
+
+	#Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each
+	#colour has its own bonus chance for one extra. Each colour's share of the picked pepper is
+	#weight / (sum of weights). Per harvest, colour X averages
+	#  weightX / (sum of weights) + bonusChanceX
+	#Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red
+	#bonus (red about 58% of peppers). A weight of 0 takes the colour out of the main roll.
+	[crop_drops.bell_peppers]
+		#true: use the values below. false: the mod's own table, untouched.
+		enabled = true
+		#Weight of red in the main roll.
+		#Range: 0 ~ 100
+		redWeight = 1
+		#Weight of green in the main roll.
+		#Range: 0 ~ 100
+		greenWeight = 1
+		#Weight of yellow in the main roll.
+		#Range: 0 ~ 100
+		yellowWeight = 1
+		#Chance [0-1] of one extra red pepper (0.15 = 15%).
+		#Range: 0.0 ~ 1.0
+		redBonusChance = 0.15
+		#Chance [0-1] of one extra green pepper.
+		#Range: 0.0 ~ 1.0
+		greenBonusChance = 0.15
+		#Chance [0-1] of one extra yellow pepper.
+		#Range: 0.0 ~ 1.0
+		yellowBonusChance = 0.15
+
+#A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free
+#sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and
+#hydration count the same) and also waits a minimum time since the stem's last fruit. The
+#wait counts from the first random tick after a fruit grows. When the fruit the stem faces is
+#taken, the stem turns to another of its fruits instead of back into a plain stem. Server side.
+[stem_fruit]
+	#Master on/off switch. Off = vanilla (one fruit per stem).
+	enabled = true
+	#Most fruits next to one stem (1 = vanilla, 4 = every side).
+	#Range: 1 ~ 4
+	maxFruits = 4
+	#Minimum game minutes (1200 ticks) after the first fruit before a 2nd can grow.
+	#Range: 0 ~ 1440
+	secondFruitMinutes = 10
+	#Minimum game minutes after the 2nd fruit before a 3rd can grow.
+	#Range: 0 ~ 1440
+	thirdFruitMinutes = 20
+	#Minimum game minutes after the 3rd fruit before a 4th can grow.
+	#Range: 0 ~ 1440
+	fourthFruitMinutes = 40
+
+#Ore Excavation's /undo_excavation. An undo is refused when the vein mine broke a block in
+##creativeengineering:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient
+#debris; filled by KubeJS). Server side.
+[vein_undo]
+	#Seconds a player waits after a successful undo before the next one. 0 = none.
+	#Range: 0 ~ 3600
+	cooldownSeconds = 5
+	#Also refuse when the vein mine broke a block with a block entity (chests, furnaces...).
+	#A restored chest keeps its unrolled loot table, so mine-and-undo would reroll structure loot.
+	denyBlockEntities = true
+
+#Sophisticated Backpacks skins: a block smithed onto a backpack changes how it looks.
+[backpackSkins]
+	#Off: a skinned backpack cannot go in the chest slot or a Curios slot (so it is never worn).
+	#On: it can, and the skin block is drawn on the back.
+	allowEquip = false
 

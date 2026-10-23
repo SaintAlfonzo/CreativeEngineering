@@ -34,7 +34,7 @@ Build #2 and #3 together: both need D&D recipe types that no NCH helper covers (
 
 Related rows: `worldgen/biomes/netherblocks #4` (no glowstone in the Overworld; its brief
 [worldgen_biomes_netherblocks.md](worldgen_biomes_netherblocks.md) #4 already records the D&D finding),
-`worldgen/structures/rates-and-groups #7` (ocean geode depth, [brief](worldgen_structures_rates-and-groups.md)),
+`structures/rates-and-groups #7` (ocean geode depth, [brief](structures_rates-and-groups.md)),
 `magic #2` (uses for the Geode+ shards), `gameplay/blockrunner #5` (asphalt speed, owns the speed half of #6).
 
 Tests: no writeup prefix exists for D&D. Proposed: a new writeup `feature_writeup/dreams_desires.md` with prefix
@@ -514,7 +514,7 @@ Only after the decisions:
 - Geode+ placements are not reproducible per seed (structure test log `03_phase_3.md`); compare counts, not chunks.
 - The ocean depth system (`worldgen/OceanGeodes`, CEConfig `[worldgen.ocean_geodes]`) moves every vanilla-`GeodeFeature`
   geode under oceans, Geode+ included except prismarine; rate changes here change that row's numbers
-  (`worldgen/structures/rates-and-groups #7`).
+  (`structures/rates-and-groups #7`).
 
 ### Tests
 

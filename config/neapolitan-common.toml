@@ -15,7 +15,7 @@
 
 	[blocks.strawberry_bush]
 		#The minimum height required for Strawberry Bushes to grow White Strawberries
-		"White Strawberry minimum height" = 256
+		"White Strawberry minimum height" = 192
 		#If arthropods that go through Strawberry Bushes are given Invisibility
 		"Strawberry Bushes give arthropods Invisibility" = true
 

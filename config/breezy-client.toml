@@ -19,13 +19,13 @@
 			#Wind freq multiplier for low_wind biomes
 			#Default: 0.005
 			#Range: 0.0 ~ 1.0
-			low_wind_frequency = 0.005
+			low_wind_frequency = 0.015
 			#Wind freq multiplier by default
 			#Default: 0.01
 			#Range: 0.0 ~ 1.0
-			medium_wind_frequency = 0.01
+			medium_wind_frequency = 0.03
 			#Wind freq multiplier for high_wind biomes
 			#Default: 0.015
 			#Range: 0.0 ~ 1.0
-			high_wind_frequency = 0.015
+			high_wind_frequency = 0.045
 

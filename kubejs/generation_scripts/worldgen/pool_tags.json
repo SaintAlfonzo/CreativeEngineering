@@ -47,6 +47,7 @@
       "values": ["monobank:village/streets/*"]
     },
     "mod/farmersdelight":          { "multiplier": 1, "values": ["farmersdelight:*"] },
+    "mod/veggiesdelight":          { "multiplier": 0.5, "note": "Veggies Delight backport: one depot house per vanilla village style, weight 4 each (added in the port's code). Low start: 2.", "values": ["veggiesdelight:*"] },
     "mod/waystones":               { "multiplier": 1, "values": ["waystones:*"] },
     "mod/cloudstorage":            { "multiplier": 1, "values": ["cloudstorage:*"] },
     "mod/etched":                  { "multiplier": 1, "values": ["etched:*"] },

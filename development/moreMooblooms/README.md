@@ -32,7 +32,7 @@ mod is installed:
 | Set (needs) | Code | Data |
 |---|---|---|
 | `buzzier_bees` | `compat/BuzzierBeesSet` (removes BB mooblooms on join, trader listing, compost value; `disableSunny`: denies the effect and strips it on join), `mixin/ItemHiddenMixin` (creative hiding), `mixin/TagLoaderStripMixin` (buttercup out of every tag), `mixin/MobSunBurnMixin` (priority 900, ahead of BB's Sunny burn check) | `packs/buzzier_bees/<switch>/`, one sub-pack per config switch |
-| `jei` | `compat/jei/MoreMoobloomsJeiPlugin`: egg subtypes, info pages (pool odds, food, bred from), "Moobloom Breeding" category (`MoobloomBreedingCategory`), hides buttercup / BB egg / Sunny | - |
+| `jei` | `compat/jei/MoreMoobloomsJeiPlugin`: egg subtypes, info pages (pool odds, food, shearing), "Moobloom Breeding" (`MoobloomBreedingCategory`: combinations with the miss, breeds true, random calf, parent food) and "Moobloom Shearing" (`MoobloomShearingCategory`: drops per shear, rendered moobloom), "Moobloom Conversion" (`MoobloomConversionCategory`: cow + the variant's food, feed chance and shared-food share, rendered moobloom), hides buttercup / BB egg / Sunny / JEBr's BB moobloom page | - |
 | `blueprint` | - | `packs/blueprint/`: Two by Two needs our moobloom |
 | `alexsmobs`, `supplementaries`, `abnormals_delight`, `botania`, `delightful` | - | `packs/<mod>/`: the moobloom joins that mod's cow tags |
 

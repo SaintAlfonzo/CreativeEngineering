@@ -1,0 +1,34 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "corn_delight"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "corn_delight:tortilla"
+    },
+    {
+      "tag": "forge:crops/onion"
+    },
+    {
+      "tag": "forge:cooked_chicken"
+    },
+    [
+      {
+        "item": "rusticdelight:roasted_bell_pepper_red"
+      },
+      {
+        "item": "rusticdelight:roasted_bell_pepper_green"
+      },
+      {
+        "item": "rusticdelight:roasted_bell_pepper_yellow"
+      }
+    ]
+  ],
+  "result": {
+    "item": "veggiesdelight:chicken_fajitas_wrap"
+  }
+}

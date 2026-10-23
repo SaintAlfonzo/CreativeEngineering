@@ -222,10 +222,18 @@ CROP_BLOCKS = {
     'vinery:taiga_grape_bush_red': 'Grapes: taiga red', 'vinery:taiga_grape_bush_white': 'Grapes: taiga white',
     'vinery:jungle_grape_bush_red': 'Grapes: jungle red', 'vinery:jungle_grape_bush_white': 'Grapes: jungle white',
     'vinery:apple_leaves': 'Apple (Vinery tree)', 'vinery:cherry_leaves': 'Cherry (Vinery tree)',
+    'vinery:dark_cherry_leaves': 'Cherry (Vinery tree)',  # 1.5.5 id; the port renames dark_cherry_* to cherry_*
     # the pack's own json versions of Java features (kubejs/data/creativeengineering/worldgen/*/wild/)
     'farmersdelight:wild_cabbages': 'Cabbage', 'farmersdelight:wild_beetroots': 'Beetroot (Sea Beet)',
     'farmersdelight:brown_mushroom_colony': 'Brown Mushroom Colony', 'farmersdelight:red_mushroom_colony': 'Red Mushroom Colony',
     'fruitsdelight:hamimelon': 'Hamimelon',
+    # Veggies Delight backport (development/backportedVeggies)
+    'veggiesdelight:wild_broccoli': 'Broccoli', 'veggiesdelight:wild_cauliflowers': 'Cauliflower',
+    'veggiesdelight:wild_garlic': 'Garlic', 'veggiesdelight:wild_sweet_potatoes': 'Sweet Potato',
+    'veggiesdelight:wild_turnips': 'Turnip', 'veggiesdelight:wild_zucchinis': 'Zucchini',
+    # Vintage Delight backport (development/backportedVintage); wild ghost peppers are Nether-only
+    'vintagedelight:wild_oats': 'Oats', 'vintagedelight:wild_peanuts': 'Peanuts',
+    'vintagedelight:wild_cucumbers': 'Cucumbers',
 }
 COCOA = 'Cocoa'
 
@@ -239,7 +247,9 @@ def loads_lenient(raw):
 
 def iter_sources():
     """(label, {path: bytes-reader}) in load order: vanilla, forge, mods, kubejs/data."""
-    for jar in BASE_JARS + sorted(MODS.glob('*.jar')):
+    # the Vinery port ships code only and reads its data from the upstream jars at runtime (1.5.5 wins over 1.3.10)
+    upstream = [INSTANCE / 'vinery_upstream' / n for n in ('letsdo-vinery-forge-1.3.10.jar', 'letsdo-vinery-fabric-1.5.5.jar')]
+    for jar in BASE_JARS + sorted(MODS.glob('*.jar')) + upstream:
         try:
             z = zipfile.ZipFile(jar)
         except (zipfile.BadZipFile, FileNotFoundError):
@@ -643,7 +653,7 @@ def coverage_checks(world, wild, crop_set, area, oceans, rows):
         for m in crop.get('disable_modifiers', []):
             if m not in modifiers:
                 problems.append(f'{key}: disable_modifiers names {m}, which no jar ships')
-        if not resolve_crop(traits, crop):
+        if crop.get('features') and not resolve_crop(traits, crop):
             problems.append(f'{key}: the rule matches no biome')
     land = [b for b in sorted(traits) if not traits[b] & NEVER and b in bdata
             and area.get(b, ('', 'surface', 0))[1] == 'surface' and b not in oceans]

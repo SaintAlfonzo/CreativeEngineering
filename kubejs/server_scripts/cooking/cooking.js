@@ -9,13 +9,14 @@ var R = global.NCH
 i.catfish = 'alexsmobs:raw_catfish';
 
 //######################### Tools #########################
-//Remove stone smoker recipe
+// Vanilla's cobblestone smoker removed: the smoker comes from Quark's deepslate / blackstone furnace + 4 logs
+// (quark:building/crafting/furnaces/{deepslate,blackstone}_smoker, Variant Furnaces on). Same rule as the blast furnace.
 R.remove({ id: 'minecraft:smoker' }, e)
 // Bamboo bowl: the vanilla bowl shape in bamboo, 1 bowl (planks give 4, so bamboo isn't the cheap route).
-// TODO food/kitchen #10
+// TODO cooking/kitchen #10
 R.shaped(i.bowl, ['B B', ' B '], { B: i.bamboo }, e, 'bowl_from_bamboo')
 // Mortar and pestle: Old Guns' Gunsmith's Bench shape (now its Powder Pestle) in the crafting table.
-// TODO food/kitchen #10
+// TODO cooking/kitchen #10
 R.shaped(i.mortar_and_pestle, [' L ', 'G G', ' G '], { L: i.lever, G: i.polished_granite }, e, 'mortar_and_pestle')
 
 //######################### Soups and bases #########################
@@ -80,6 +81,73 @@ R.ieBottling(i.farmersdelight_apple_cider, f.t_apple_cider, i.glass_bottle, e, u
 R.ieBottling(i.long_apple_cider, f.t_long_apple_cider, i.glass_bottle, e, undefined, 250)
 R.ieBottling(i.strong_apple_cider, f.t_strong_apple_cider, i.glass_bottle, e, undefined, 250)
 
+//Chorus juice
+// The pack's chorus juice fluid (startup_scripts/cooking/fluids.js, TODO food/drinks #4). Grid: Ender's Delight's
+// 1 fruit + sugar + bottle (kept). Pot: 2 fruit + sugar -> 2 bottles (manual only: the fluid is the mixer route).
+// Create mixer, heated: 1 fruit + sugar + 250 mB water -> 250 mB; spout, drain and IE Bottling Machine at 250 mB.
+R.fdCooking([i.chorus_fruit, i.chorus_fruit, i.any_sugar], Item.of(i.chorus_juice, 2), e, 'chorus_juice_manual_only', 0.35, 200, i.glass_bottle)
+R.createMixing(Fluid.of(f.chorus_juice, 250), [i.chorus_fruit, i.any_sugar, Fluid.of(f.water, 250)], e, 'chorus_juice', 'heated')
+R.createFilling(i.chorus_juice, [i.glass_bottle, Fluid.of(f.chorus_juice, 250)], e, 'chorus_juice')
+R.createEmptying([i.glass_bottle, Fluid.of(f.chorus_juice, 250)], i.chorus_juice, e, 'chorus_juice')
+R.ieBottling(i.chorus_juice, f.t_chorus_juice, i.glass_bottle, e, undefined, 250)
+
+//Veggies Delight juices
+// Fluids like chorus juice (startup_scripts/cooking/fluids.js; feature_writeup/veggies_delight.md 4.9). Pot: Veggies
+// Delight's own inputs, re-id'd manual only. Create mixer, heated: the same inputs + 250 mB water -> 250 mB; spout, drain
+// and IE Bottling Machine at 250 mB. The juice and tea rule (TODO food/drinks #8) may change the ratios.
+;[
+	['carrot_juice', [i.minecraft_carrot, i.minecraft_carrot, i.any_sugar]],
+	['dandelion_juice', [i.dandelion_leaf, i.dandelion_leaf, i.sugar_cane]],
+	['turnip_water', [i.turnip, i.turnip, i.any_sugar]],
+].forEach(j => {
+	var item = i[j[0]], fluid = f[j[0]]
+	R.remove({ id: 'veggiesdelight:cooking/' + j[0] }, e)
+	R.fdCooking(j[1], Item.of(item, 1), e, j[0] + '_manual_only', 1.0, 200, i.glass_bottle)
+	R.createMixing(Fluid.of(fluid, 250), j[1].concat([Fluid.of(f.water, 250)]), e, j[0], 'heated')
+	R.createFilling(item, [i.glass_bottle, Fluid.of(fluid, 250)], e, j[0])
+	R.createEmptying([i.glass_bottle, Fluid.of(fluid, 250)], item, e, j[0])
+	R.ieBottling(item, f['t_' + j[0]], i.glass_bottle, e, undefined, 250)
+})
+
+//Egg solution
+// The pack's egg solution fluid (startup_scripts/cooking/fluids.js, TODO dishes/ingredients #2). Mixer: 1 egg + 250 mB
+// milk -> 500 mB. Each 250 mB stands in for one egg and its milk, so an egg goes twice as far in the mixer and spout.
+// Tank-only, so every use is a Create recipe; the grid and pot recipes keep their eggs.
+R.createMixing(Fluid.of(f.egg_solution, 500), [i.eggs, Fluid.of(f.milk, 250)], e, 'egg_solution', 'n/a')
+R.createMixing(Item.of(i.in_dough, 6), [Item.of(i.flour, 3), Fluid.of(f.egg_solution, 250)], e, 'dough_egg_solution', 'n/a')
+R.createMixing(Item.of(i.cornbread_batter, 3), [Item.of(i.cornmeal, 2), Fluid.of(f.egg_solution, 250)], e,
+	'cornbread_batter_egg_solution', 'n/a')
+R.createMixing(Item.of(i.pancakes, 5), [Fluid.of(f.egg_solution, 250), i.any_sugar, [i.t_flour_or_cornmeal, i.rice]], e,
+	'pancakes_egg_solution', 'heated')
+R.createMixing(Item.of(i.batter, 2), [Item.of(i.wheat, 2), Item.of(i.bowl, 2), Fluid.of(f.egg_solution, 250)], e,
+	'batter_egg_solution', 'heated')
+R.createMixing(i.scrambled_eggs, [i.bowl, Fluid.of(f.egg_solution, 750)], e, 'scrambled_eggs_egg_solution', 'heated')
+R.createMixing(i.vegetable_omelet, [i.t_cheese_wedge, i.onion, i.carrot, i.bowl, Fluid.of(f.egg_solution, 500)], e,
+	'vegetable_omelet_egg_solution', 'heated')
+R.createMixing(i.potato_salad, [i.potato, i.onion, i.bowl, Fluid.of(f.egg_solution, 250)], e, 'potato_salad_egg_solution', 'n/a')
+R.createMixing(i.glow_berry_custard, [i.glow_berries, i.any_sugar, i.glass_bottle, Fluid.of(f.egg_solution, 250)], e,
+	'glow_berry_custard_egg_solution', 'heated')
+R.createMixing(i.blueberry_custard, [Item.of(i.t_fruits_blueberry, 2), i.any_sugar, i.glass_bottle, Fluid.of(f.egg_solution, 250)], e,
+	'blueberry_custard_egg_solution', 'heated')
+R.createMixing(i.vanilla_pudding, [i.dried_vanilla_pods, i.any_sugar, i.bowl, Fluid.of(f.egg_solution, 250)], e,
+	'vanilla_pudding_egg_solution', 'heated')
+// Quiche: one 500 mB spout in place of the milk and the two eggs of the assembly below
+var incQuicheEgg = R.incomplete('quiche')
+R.createSequencedAssembly(i.quiche, i.pie_crust, [
+	e.recipes.create.deploying(incQuicheEgg, [incQuicheEgg, Ingredient.of([i.cooked_bacon, i.brown_mushroom])]),
+	e.recipes.create.filling(incQuicheEgg, [incQuicheEgg, Fluid.of(f.egg_solution, 500)]),
+	e.recipes.create.deploying(incQuicheEgg, [incQuicheEgg, i.t_cheese_wedge]),
+	e.recipes.create.deploying(incQuicheEgg, [incQuicheEgg, Ingredient.of([i.cabbage, i.cabbage_leaf])])
+], ['quiche'], e, 'quiche_egg_solution_sequenced_assembly', 1)
+
+//Berry matcha latte
+// With Farmer's Respite loaded Delightful drops its grid lattes, so the berry latte had only a grid recipe that ate
+// an extra bottle (TODO food/drinks #5). Kettle: a tier like FR's, latte + berries, no water. Grid: latte + berries
+// + ice; the latte's bottle comes back.
+R.remove({ id: 'delightful:food/berry_matcha_latte_from_matcha_latte_neapolitan' }, e)
+R.frBrewing([i.matcha_latte, i.t_fruits_berries], i.berry_matcha_latte, e, 'berry_matcha_latte', { needWater: false })
+R.shapeless(i.berry_matcha_latte, [i.matcha_latte, i.t_fruits_berries, i.t_ice_cubes], e, 'berry_matcha_latte')
+
 //######################### Sugar #########################
 // Replace sugar recipes w/ sugar forge tag, allows glyceral, change sugar cube recipe to reflect
 R.replaceInput({ input: i.sugar }, i.sugar, i.any_sugar, e)
@@ -107,7 +175,7 @@ R.ieBottling(i.dough, f.t_water, i.flour, e, undefined, 250)
 R.ieBottling(i.dough_block, f.t_water, i.wheat_flour_pile, e, undefined, 1000)
 R.ieCrushing(Item.of(i.flour, 2), i.wheat, e)
 R.ieCrushing(Item.of(i.flour, 18), i.hay_bale, e)
-// Crushing wheels + Millstone + mortar and pestle (foodGrinding, TODO food/kitchen #10)
+// Crushing wheels + Millstone + mortar and pestle (foodGrinding, TODO cooking/kitchen #10)
 R.foodGrinding([Item.of(i.flour, 13), Item.of(i.flour, 2).withChance(0.25)], i.hay_bale, e, 'hay_block_flour')
 // PC wheat compat
 R.remove({ id: 'pneumaticcraft:pressure_chamber/wheat_flour' }, e)
@@ -120,7 +188,7 @@ R.remove({ id: 'farmersdelight:wheat_dough_from_eggs' }, e)
 R.shapeless(Item.of(i.dough, 6), [Item.of(i.flour, 3), i.eggs], e)
 
 //######################### Cornmeal #########################
-// creativeengineering:cornmeal (startup_scripts/cooking/cornmeal.js), TODO food/ingredients #1. Corn and kernels
+// creativeengineering:cornmeal (startup_scripts/cooking/cornmeal.js), TODO dishes/ingredients #1. Corn and kernels
 // (corn_delight:corn_seeds) crush to it; a 9-block (corn crate, kernel bag) gives the same per-item ratio.
 // The Millstone mirrors the crushing recipes below; Corn Delight's own corn and wild corn milling are removed (wild corn
 // now grinds as corn). Corn gives no straw: the knife and IE crusher recipes that did keep their kernels only.
@@ -132,8 +200,8 @@ R.remove({ id: 'corn_delight:integration/immersiveengineering/crusher/wild_corn'
 R.fdCutting(i.t_crops_corn, i.any_knife, Item.of(i.corn_seeds, 4), e, 'corn_kernels')   // 4 kernels a maize
 R.fdCutting(i.wild_corn, i.any_knife, i.corn_seeds, e, 'wild_corn_kernels')
 R.ieCrushing(i.corn_seeds, i.wild_corn, e, 'wild_corn_kernels', [], 3200)
-// Crushing wheels, Millstone (same outputs) and mortar and pestle (foodGrinding; TODO food/kitchen #10,
-// food/ingredients #14). Corn and wild corn 1.5 cornmeal + 0.25 kernels, kernels 0.333, crate 13.5, kernel bag 3.
+// Crushing wheels, Millstone (same outputs) and mortar and pestle (foodGrinding; TODO cooking/kitchen #10,
+// dishes/ingredients #14). Corn and wild corn 1.5 cornmeal + 0.25 kernels, kernels 0.333, crate 13.5, kernel bag 3.
 // The mortar matches the machines' cornmeal average exactly: corn and wild corn 2 -> 3, kernels 3 -> 1. Crates and
 // bags are machine-only, as are the kernels.
 R.foodGrinding([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25)],
@@ -159,7 +227,7 @@ R.pcExplosionCrafting(Item.of(i.cornmeal, 1), i.t_crops_corn, 50, e, 'corn_cornm
 R.pcPressureChamber(Item.of(i.cornmeal, 3), [Item.of(i.corn_seeds, 4)], 1.5, e, 'corn_kernels_cornmeal')
 // Required in tortillas and cornbread batter (corn -> cornmeal, same counts). Raw tortilla: 3 cornmeal over a water
 // bucket or bottle (the container comes back), or 1:1 by washing or the Bottler (250 mB water, as flour -> dough)
-// in place of Corn Delight's washed corn (food/ingredients #14).
+// in place of Corn Delight's washed corn (dishes/ingredients #14).
 R.remove({ id: 'corn_delight:tortilla_raw' }, e)
 R.remove({ id: 'corn_delight:integration/create/splashing/tortilla_raw' }, e)
 R.shaped(Item.of(i.tortilla_raw, 3), ['CCC', ' W '], { C: i.cornmeal, W: [i.water_bucket, i.water_bottle] }, e, 'tortilla_raw')
@@ -225,7 +293,7 @@ R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 4), i.bread_slice, 
 	e.recipes.create.deploying(incSandwich, [incSandwich, i.bread_slice])
 ], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_smoked_ham_sequenced_assembly', 1)
 
-// Quiche: one recipe for bacon and mushroom (JEI cycles them), a cabbage leaf or a whole cabbage. TODO food/meals #2
+// Quiche: one recipe for bacon and mushroom (JEI cycles them), a cabbage leaf or a whole cabbage. TODO dishes/meals #2
 R.remove({ id: 'brewinandchewin:quiche_from_bacon' }, e)
 R.remove({ id: 'brewinandchewin:quiche_from_mushroom' }, e)
 var quicheFilling = [i.cooked_bacon, i.brown_mushroom]
@@ -292,7 +360,7 @@ R.createSequencedAssembly(Item.of(i.grilled_salmon, 1), i.bowl, [
 	e.recipes.create.deploying(incGrilledSalmon, [incGrilledSalmon, i.cooked_salmon])
 ], ['grilled_salmon'], e, 'grilled_salmon_sequenced_assembly', 1)
 
-// Frying with cooking oil in the pot, any whole fish (TODO food/meals #7). PneumaticCraft's Thermopneumatic deep
+// Frying with cooking oil in the pot, any whole fish (TODO dishes/meals #7). PneumaticCraft's Thermopneumatic deep
 // frying is gone; Slice & Dice gives each pot recipe its heated mixing copy. Renames in namechanges.js:
 // Fish Tempura, Raw Fish Tempura, Fries, Fish and Chips.
 R.remove({ id: 'pneumaticcraft:thermo_plant/chips' }, e)
@@ -373,7 +441,7 @@ R.createSequencedAssembly(Item.of(i.roasted_mutton_chops, 1), i.bowl, [
 ], ['roasted_mutton_chops'], e, 'roast_mutton_sequenced_assembly', 1)
 
 //######################### Meals #########################
-// Heatless meal rule (TODO food/meals #1). A pot meal can also be crafted shapeless from the cooked form of each raw
+// Heatless meal rule (TODO dishes/meals #1). A pot meal can also be crafted shapeless from the cooked form of each raw
 // ingredient: raw meat -> i.cooked_beef / cooked_pork / cooked_chicken / cooked_mutton / cooked_fish / cooked_meat;
 // potato -> i.baked_potato; tomato -> i.tomato_sauce (bowl, consumed); rice -> i.cooked_rice; egg -> i.cooked_eggs;
 // any veggie -> i.t_soup_veggie_cooked; raw pasta stays i.pasta. Soups and stews add i.bone_broth, which brings the
@@ -390,7 +458,7 @@ var cookedCorn = [i.boiled_corn, i.grilled_corn]
 R.shapeless(i.corn_soup, [i.bone_broth, cookedCorn, cookedCorn, i.salad_ingredients,
 	[i.cooked_chicken, i.cooked_pork, i.cooked_beef, i.brown_mushroom], i.milk], e, 'corn_soup_cooked_manual_only')
 
-// Expensive grid routes for pot meals (TODO food/meals #4). Baked cod stew is in "Soups and bases".
+// Expensive grid routes for pot meals (TODO dishes/meals #4). Baked cod stew is in "Soups and bases".
 // Chorus and endermite stews come in Ender's Delight's shulker bowl; the grid dumplings make 1 (the pot makes 2).
 R.shapeless(i.chorus_stew, [i.popped_chorus_fruit, i.popped_chorus_fruit, i.chorus_flower, i.shulker_bowl], e, 'chorus_stew_cooked_manual_only')
 R.shapeless(i.endermite_stew, [i.enderman, i.mite_crust, i.mite_crust, i.shulker_bowl], e, 'endermite_stew_cooked_manual_only')
@@ -404,10 +472,86 @@ R.shapeless(i.squid_ink_pasta, [i.cooked_fish, i.pasta, i.tomato_sauce, i.ink_sa
 R.createMixing(Item.of(i.squid_ink_pasta, 2), [Fluid.of(f.ink, 250), Fluid.of(f.tomato_sauce, 250),
 	i.pasta, i.pasta, i.raw_fish, Item.of(i.bowl, 2)], e, 'squid_ink_pasta_mixing', 'heated')
 
-// Dog food: two cooked meats for the pot's one raw; cooked rice brings the bowl (TODO food/meals #8)
+// Veggies Delight (feature_writeup/veggies_delight.md 4.7). Its own grid meals on cooked food are re-id'd manual only;
+// its pot meals get heatless routes by the rule above. Cooked forms: cauliflower -> roasted florets (2 a head),
+// garlic -> roasted cloves, sweet potato -> baked, zucchini -> roasted, bell pepper -> Rustic's roasted peppers.
+// Broccoli and turnip have none and stay raw. Fish and chips keeps the pack's frying; potato noodles start from an
+// already-cooked noodle; the lasagna pan is a feast.
+var VD_COOKED_MEAT = [i.cooked_beef, i.cooked_chicken, i.cooked_mutton]
+;[
+	['broccoli_salad', 'veggiesdelight:broccoli_salad'],
+	['cesar_salad', 'veggiesdelight:cesar_salad'],
+	['steak_and_broccoli', 'veggiesdelight:steak_and_broccoli'],
+	['garlic_rice_with_cauliflower', 'veggiesdelight:garlic_rice_with_cauliflower'],
+	['garlic_baked_cod', 'veggiesdelight:garlic_baked_cod'],
+	['dandelion_and_eggs', 'veggiesdelight:dandelion_and_eggs'],
+	['stuffed_zucchini_boat', 'veggiesdelight:stuffed_zucchini_boat'],
+	['turnip_mutton_skewer', 'veggiesdelight:turnip_mutton_skewer'],
+	['zucchini_sandwich', 'veggiesdelight:zucchini_sandwich'],
+	['vegetarian_burger', 'veggiesdelight:vegetarian_burger'],
+	['coleslaw', 'veggiesdelight:coleslaw'],
+	['turnip_salad', 'veggiesdelight:turnip_salad'],
+].forEach(m => R.remove({ id: m[1] }, e))
+R.shapeless(i.broccoli_salad, [i.broccoli, i.tomato, i.onion, i.bowl], e, 'broccoli_salad_manual_only')
+R.shapeless(i.cesar_salad, [i.cabbage, i.t_bread, i.garlic_clove, i.tomato, i.bowl], e, 'cesar_salad_manual_only')
+R.shapeless(i.coleslaw, [i.zucchini, i.potato, i.carrot, i.cabbage, i.bowl], e, 'coleslaw_manual_only')
+R.shapeless(i.turnip_salad, [i.salad_ingredients, i.turnip, i.bowl], e, 'turnip_salad_manual_only')
+R.shapeless(i.steak_and_broccoli, [i.cooked_beef, i.broccoli, i.cooked_rice], e, 'steak_and_broccoli_cooked_manual_only')
+R.shapeless(i.garlic_rice_with_cauliflower, [i.roasted_garlic_clove, Item.of(i.roasted_cauliflower_floret, 2), i.cooked_rice], e,
+	'garlic_rice_with_cauliflower_cooked_manual_only')
+R.shapeless(i.garlic_baked_cod, [i.cooked_cod, Item.of(i.roasted_garlic_clove, 2), i.onion, i.bowl], e, 'garlic_baked_cod_cooked_manual_only')
+R.shapeless(i.dandelion_and_eggs, [Item.of(i.dandelion_leaf, 2), Item.of(i.cooked_eggs, 3), i.bowl], e, 'dandelion_and_eggs_cooked_manual_only')
+R.shapeless(i.stuffed_zucchini_boat, [i.roasted_zucchini, VD_COOKED_MEAT, i.milk], e, 'stuffed_zucchini_boat_cooked_manual_only')
+R.shapeless(i.turnip_mutton_skewer, [i.cooked_mutton, i.turnip, i.stick], e, 'turnip_mutton_skewer_cooked_manual_only')
+R.shapeless(i.zucchini_sandwich, [i.t_bread, i.zucchini, i.salad_ingredients, i.tomato], e, 'zucchini_sandwich_cooked_manual_only')
+R.shapeless(i.vegetarian_burger, [i.t_bread, i.cabbage, i.cooked_vegetarian_patty, i.tomato], e, 'vegetarian_burger_cooked_manual_only')
+// Heatless routes for its pot meals
+R.shapeless(i.broccoli_soup, [i.bone_broth, Item.of(i.broccoli, 3), i.milk], e, 'broccoli_soup_cooked_manual_only')
+R.shapeless(i.cauliflower_soup, [i.bone_broth, Item.of(i.roasted_cauliflower_floret, 5), i.milk], e, 'cauliflower_soup_cooked_manual_only')
+R.shapeless(i.garlic_chicken_stew, [i.bone_broth, Item.of(i.roasted_garlic_clove, 2), Item.of(i.cooked_chicken, 2), i.milk], e,
+	'garlic_chicken_stew_cooked_manual_only')
+R.shapeless(i.turnip_beef_stew, [i.bone_broth, Item.of(i.turnip, 2), i.carrot, i.cooked_beef], e, 'turnip_beef_stew_cooked_manual_only')
+R.shapeless(i.cacciatore, [i.t_roasted_bell_pepper, Item.of(i.cooked_chicken, 2), i.tomato_sauce], e, 'cacciatore_cooked_manual_only')
+R.shapeless(i.cauliflower_kuku, [Item.of(i.roasted_cauliflower_floret, 3), i.onion, i.roasted_garlic_clove, i.milk, i.bowl], e,
+	'cauliflower_kuku_cooked_manual_only')
+R.shapeless(i.veggiesdelight_mashed_potatoes, [i.baked_sweet_potato, Item.of(i.baked_potato, 2), i.milk, i.bowl], e,
+	'veggiesdelight_mashed_potatoes_cooked_manual_only')
+R.shapeless(i.pasta_with_broccoli, [i.pasta, Item.of(i.broccoli, 2), i.milk, i.bowl], e, 'pasta_with_broccoli_cooked_manual_only')
+R.shapeless(i.rice_and_vegetables, [i.cooked_rice, i.carrot, i.onion, i.roasted_zucchini, i.t_soup_veggie_cooked, i.t_soup_veggie_cooked], e,
+	'rice_and_vegetables_cooked_manual_only')
+R.shapeless(i.roasted_vegetables, [i.baked_potato, i.carrot, i.onion, i.tomato_sauce, i.t_soup_veggie_cooked, i.t_soup_veggie_cooked,
+	i.t_roasted_bell_pepper], e, 'roasted_vegetables_cooked_manual_only')
+R.shapeless(i.shakshouka, [i.t_roasted_bell_pepper, i.onion, i.tomato_sauce, Item.of(i.cooked_eggs, 2)], e, 'shakshouka_cooked_manual_only')
+R.shapeless(i.stuffed_zucchinis, [Item.of(i.roasted_zucchini, 3), i.tomato_sauce, VD_COOKED_MEAT], e, 'stuffed_zucchinis_cooked_manual_only')
+R.shapeless(i.turnip_cake, [Item.of(i.turnip, 2), i.wheat, i.cooked_rice, i.cooked_meat], e, 'turnip_cake_cooked_manual_only')
+R.shapeless(i.garlic_stuffed_mushrooms, [Item.of(i.roasted_garlic_clove, 2), i.cabbage, Item.of(i.brown_mushroom, 2)], e,
+	'garlic_stuffed_mushrooms_cooked_manual_only')
+
+// Bone broth routes for the rest of the soup / stew list and the mod pastas (TODO dishes/ingredients #4), same rule.
+// Left out: mushroom stew, rabbit stew, beetroot soup, sopa de macaco, bell pepper soup, adzuki stew (all shapeless
+// already, as is pearl pasta in "Ender"); bayberry soup (sweet); blazing chili, strider moss stew (Nether, no
+// water-like filler).
+R.shapeless(i.acacia_blossom_soup, [i.bone_broth, i.onion, i.pasta, i.acacia_blossom, i.acacia_blossom], e, 'acacia_blossom_soup_cooked_manual_only')
+R.shapeless(i.carrot_soup, [i.bone_broth, i.milk, i.carrot, i.carrot, i.carrot], e, 'carrot_soup_cooked_manual_only')
+R.shapeless(i.creamy_onion_soup, [i.bone_broth, i.t_cheese_wedge, i.onion, i.onion, i.t_soup_veggie_cooked, i.t_bread], e, 'creamy_onion_soup_cooked_manual_only')
+R.shapeless(i.fig_chicken_stew, [i.bone_broth, i.cooked_chicken, i.t_fruits_fig, i.t_fruits_fig, i.t_fruits_fig], e, 'fig_chicken_stew_cooked_manual_only')
+R.shapeless(i.kangaroo_stew, [i.bone_broth, i.t_cooked_kangaroo, i.t_cooked_kangaroo, i.carrot, i.beetroot], e, 'kangaroo_stew_cooked_manual_only')
+R.shapeless(i.miso_with_bamboo_sprouts, [i.bone_broth, i.log_bamboo_stripped, i.cooked_fish, i.onion, i.moss_paste,
+	i.dried_kelp, i.dried_kelp], e, 'miso_with_bamboo_sprouts_cooked_manual_only')
+// Pastas take no broth: the pot's bowl (tomato sauce brings its own)
+R.shapeless(i.bell_pepper_pasta, [i.pasta, i.roasted_bell_pepper_green, i.roasted_bell_pepper_yellow, i.roasted_bell_pepper_red,
+	i.t_soup_veggie_cooked, i.bowl], e, 'bell_pepper_pasta_cooked_manual_only')
+R.shapeless(i.cheesy_pasta, [i.flaxen_cheese_wedge, i.pasta, i.tomato_sauce, i.cooked_fish, i.cooked_fish], e, 'cheesy_pasta_cooked_manual_only')
+R.shapeless(i.creamy_pasta_with_chicken_cuts, [i.milk, i.pasta, i.chicken_cuts_cooked, i.chicken_cuts_cooked, i.onion, i.bowl], e, 'creamy_pasta_with_chicken_cuts_cooked_manual_only')
+R.shapeless(i.creamy_pasta_with_ham, [i.milk, i.pasta, i.smoked_ham, i.onion, i.onion, i.bowl], e, 'creamy_pasta_with_ham_cooked_manual_only')
+R.shapeless(i.kangaroo_pasta, [i.t_cooked_kangaroo, i.t_cooked_kangaroo, i.pasta, i.tomato_sauce], e, 'kangaroo_pasta_cooked_manual_only')
+R.shapeless(i.lobster_pasta, [i.lobster_tail_cooked, i.lobster_tail_cooked, i.pasta, i.tomato_sauce], e, 'lobster_pasta_cooked_manual_only')
+R.shapeless(i.duck_noodles, [i.t_cooked_duck, i.t_cooked_duck, i.pasta, i.carrot, i.t_soup_veggie_cooked, i.bowl], e, 'duck_noodles_cooked_manual_only')
+
+// Dog food: two cooked meats for the pot's one raw; cooked rice brings the bowl (TODO dishes/meals #8)
 R.shapeless(i.dog_food, [i.rotten_flesh, i.bonemeal, i.cooked_meat, i.cooked_meat, i.cooked_rice], e, 'dog_food_cooked_manual_only')
 
-// Mutton wrap: a tortilla, not bread (FD's grid recipe and CCK's assembly both took bread). TODO food/meals #2
+// Mutton wrap: a tortilla, not bread (FD's grid recipe and CCK's assembly both took bread). TODO dishes/meals #2
 R.remove({ id: 'farmersdelight:mutton_wrap' }, e)
 R.remove({ id: 'create_central_kitchen:sequenced_assembly/mutton_wrap' }, e)
 R.shapeless(i.mutton_wrap, [i.t_tortilla, i.cooked_mutton, i.salad_ingredients, i.onion], e, 'mutton_wrap_manual_only')
@@ -417,6 +561,28 @@ R.createSequencedAssembly(i.mutton_wrap, i.t_tortilla, [
 	e.recipes.create.deploying(incMuttonWrap, [incMuttonWrap, i.salad_ingredients]),
 	e.recipes.create.deploying(incMuttonWrap, [incMuttonWrap, i.onion])
 ], ['mutton_wrap'], e, 'mutton_wrap_sequenced_assembly', 1)
+
+// Veggies Delight wraps: a tortilla, as the mutton wrap (the port ships only its Corn Delight tortilla recipes; these
+// replace them as manual-only grid recipes plus an assembly). feature_writeup/veggies_delight.md 4.7
+R.remove({ id: 'veggiesdelight:compat/corndelight/chicken_fajitas_wrap' }, e)
+R.remove({ id: 'veggiesdelight:compat/corndelight/vegetable_wrap' }, e)
+var VEG_WRAP_GREENS = [i.broccoli, i.salad_ingredients]
+var VEG_WRAP_FILLING = [i.t_roasted_bell_pepper, i.roasted_zucchini, i.mushrooms]
+R.shapeless(i.chicken_fajitas_wrap, [i.t_tortilla, i.onion, i.cooked_chicken, i.t_roasted_bell_pepper], e, 'chicken_fajitas_wrap_manual_only')
+R.shapeless(i.vegetables_wrap, [i.t_tortilla, i.onion, VEG_WRAP_GREENS, VEG_WRAP_FILLING, i.cooked_rice], e, 'vegetables_wrap_manual_only')
+var incFajitasWrap = R.incomplete('chicken_fajitas_wrap')
+R.createSequencedAssembly(i.chicken_fajitas_wrap, i.t_tortilla, [
+	e.recipes.create.deploying(incFajitasWrap, [incFajitasWrap, i.cooked_chicken]),
+	e.recipes.create.deploying(incFajitasWrap, [incFajitasWrap, i.t_roasted_bell_pepper]),
+	e.recipes.create.deploying(incFajitasWrap, [incFajitasWrap, i.onion])
+], ['chicken_fajitas_wrap'], e, 'chicken_fajitas_wrap_sequenced_assembly', 1)
+var incVegWrap = R.incomplete('vegetables_wrap')
+R.createSequencedAssembly(i.vegetables_wrap, i.t_tortilla, [
+	e.recipes.create.deploying(incVegWrap, [incVegWrap, VEG_WRAP_GREENS]),
+	e.recipes.create.deploying(incVegWrap, [incVegWrap, VEG_WRAP_FILLING]),
+	e.recipes.create.deploying(incVegWrap, [incVegWrap, i.onion]),
+	e.recipes.create.deploying(incVegWrap, [incVegWrap, i.cooked_rice])
+], ['vegetables_wrap'], e, 'vegetables_wrap_sequenced_assembly', 1)
 
 // Scrambled eggs: one more egg than Incubation's
 R.remove({ id: 'incubation:scrambled_eggs' }, e)
@@ -483,7 +649,7 @@ var burgerCheese = i.t_cheese_wedge
 		[key], e, key + '_sequenced_assembly', 1)
 })
 
-// Assembly meals (TODO food/meals #3)
+// Assembly meals (TODO dishes/meals #3)
 // Shepherd's pie: a cheese wedge in place of milk
 R.remove({ id: 'farmersdelight:shepherds_pie_block' }, e)
 R.shapeless(i.shepherds_pie_block, [i.baked_potato, i.baked_potato, i.t_cheese_wedge, i.cooked_mutton, i.cooked_mutton,
@@ -556,9 +722,24 @@ R.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice' }, e)
 R.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice_using_deployer' }, e)
 R.remove({ id: 'create_central_kitchen:crafting/pumpkin_pie_from_slices' }, e)
 
+//Ice cubes (TODO dishes/ingredients #5)
+// Neapolitan's pickaxe-on-board recipe names neapolitan:ice_cube (no such item) and never loads; the hammer does it
+// instead: 4 cubes by hand, 3 by machine (Create's own crushing gives 3 + 25% 3), 9 cubes back to 1 ice.
+R.remove({ id: 'neapolitan:ice_cutting' }, e)
+R.hammering(Item.of(i.ice_cubes, 4), i.ice, e, 'ice_cubes')
+R.ieCrushing(Item.of(i.ice_cubes, 3), i.ice, e, 'ice_cubes')
+// Every ice food takes ice or cubes: #forge:ice_cubes holds both (cookingtags.js), so the Cooking for Blockheads
+// fridge's ice unit (it lends minecraft:ice) covers them too. Not the 9 cubes -> ice recipe.
+R.replaceInput({ not: { id: 'neapolitan:ice' } }, i.ice_cubes, i.t_ice_cubes, e)
+// FD's melon popsicle recipe is Abnormals Delight's while Neapolitan is loaded (farmersdelight:melon_popsicle doesn't load)
+var iceFoods = ['abnormals_delight:neapolitan/melon_popsicle', 'moredelight:chocolate_popsicle', 'fruitsdelight:kiwi_popsicle',
+	'fruitsdelight:hamimelon_popsicle', 'fruitsdelight:hamimelon_shaved_ice', 'farmersdelight:cooking/bellini_cocktail',
+	'fruitsdelight:mixing/flowing_bellini_cocktail']
+R.replaceInput(iceFoods.map(id => ({ id: id })), i.ice, i.t_ice_cubes, e)
+
 //Muffins
 // Fruits Delight's pot recipes ask for #forge:dough/wheat; use the general #forge:dough tag instead
-// (TODO food/oven #3, "muffins not cookable?"). Otherwise identical: 2 berries, dough, milk bottle, egg, sugar ->
+// (TODO cooking/oven #3, "muffins not cookable?"). Otherwise identical: 2 berries, dough, milk bottle, egg, sugar ->
 // 2 muffins, 0.1 xp, 200 ticks. #forge:sugar as the line-59 sugar swap gives every other recipe. The
 // oven copies are in baking.js.
 R.remove({ id: 'farmersdelight:cooking/blueberry_muffin' }, e)
@@ -631,423 +812,3 @@ R.remove({ id: 'quark:building/crafting/compressed/apple_crate_uncompress' }, e)
 
 console.log('The cooking event has finished!')
 })
-
-
-/*ServerEvents.recipes(e => {
-
-    console.log('Hello! The cooking event has started!')
-
-    const CE = global.CE
-
-    let food = {};
-    let item = {};
-    let fluid = {};
-    //Frequently used food assignments
-    f.milk = '#forge:milk';
-    i.bone_broth = 'farmersdelight:bone_broth';
-    i.cooked_rice = 'farmersdelight:cooked_rice';
-    i.out_flour = 'tmted:wheat_flour';
-    i.out_dough = 'farmersdelight:wheat_dough';
-    i.in_flour = 'create:wheat_flour';
-    i.in_dough = 'create:dough';
-    i.hay_bale = 'minecraft:hay_bale';
-    i.wheat = 'minecraft:wheat';
-    i.flour = '#forge:flour/wheat';
-    i.dough = '#forge:dough/wheat';
-    i.bread = '#forge:bread/wheat';
-    i.bread_block = 'architects_palette:bread_block';
-    i.sourdough = 'pneumaticcraft:sourdough';
-    i.sourdough_bread = 'pneumaticcraft:sourdough_bread';
-    i.pasta = '#forge:pasta';
-    i.sugar = '#forge:sugar';
-    i.vegetables = '#forge:vegetables';
-    i.salad_ingredients = '#forge:salad_ingredients';
-    i.tomato_sauce = 'farmersdelight:tomato_sauce';
-    i.fruit = '#forge:fruits';
-    i.sweet_berries = 'minecraft:sweet_berries';
-    i.melon = 'minecraft:melon_slice';
-    i.melon_block = 'minecraft:melon';
-    i.chorus_fruit = 'minecraft:chorus_fruit';
-    i.chorus_flower = 'minecraft:chorus_flower';
-    i.carrot = '#forge:crops/carrot';
-    i.potato = '#forge:crops/potato';
-    i.beetroot = '#forge:crops/beetroot'
-    i.beetroot_soup = 'minecraft:beetroot_soup'
-    i.baked_potato = 'minecraft:baked_potato';
-    i.onion = '#forge:crops/onion';
-    i.tomato = '#forge:crops/tomato';
-    i.rice = '#forge:crops/rice';
-    i.mushrooms = '#forge:mushrooms';
-    i.brown_mushroom = 'minecraft:brown_mushroom';
-    i.dried_kelp = 'minecraft:dried_kelp';
-    i.cabbage = '#forge:crops/cabbage';
-    i.cabbage_rolls = 'farmersdelight:cabbage_rolls';
-    i.cabbage_roll_veg = '#farmersdelight:cabbage_roll_ingredients';
-    i.cooked_beef = '#forge:cooked_beef';
-    i.cooked_meat = '#forge:cooked_meat';
-    i.raw_beef = '#forge:raw_beef';
-    i.raw_mutton = '#forge:raw_mutton';
-    i.cooked_mutton = '#forge:cooked_mutton';
-    i.cooked_mutton_chops = 'farmersdelight:cooked_mutton_chops';
-    i.cooked_pork = '#forge:cooked_pork';
-    i.raw_pork = '#forge:raw_pork';
-    i.cooked_bacon = 'farmersdelight:cooked_bacon';
-    i.raw_chicken = '#forge:raw_chicken';
-    i.cooked_chicken = '#forge:cooked_chicken';
-    i.cooked_eggs = '#forge:cooked_eggs';
-    	i.cooked_egg = '#forge:cooked_eggs';
-    	i.fried_eggs = '#forge:cooked_eggs';
-    	i.fried_egg = '#forge:cooked_eggs';
-    i.eggs = '#forge:eggs';
-    	i.egg = '#forge:eggs';
-    	i.raw_eggs = '#forge:eggs';
-    	i.raw_egg = '#forge:eggs';
-    i.cooked_cod = '#forge:cooked_fishes/cod';
-    i.cooked_salmon = '#forge:cooked_fishes/salmon';
-    i.raw_salmon_slice = 'farmersdelight:salmon_slice';
-    	i.salmon_slice = 'farmersdelight:salmon_slice';
-    i.raw_cod_slice = 'farmersdelight:cod_slice';
-    	i.cod_slice = 'farmersdelight:cod_slice';
-    i.raw_fish = '#forge:raw_fishes';
-    i.cooked_fish = '#forge:cooked_fishes';
-    i.crab = 'quark:crab_leg';
-    	i.raw_crab = 'quark:crab_leg';
-    i.cooked_crab = 'quark:cooked_crab_leg';
-    i.scarlet_cheese_wedge = 'brewinandchewin:scarlet_cheese_wedge';
-    
-    i.shulker_mollusk = 'endersdelight:shulker_mollusk';
-    i.shulker_flesh = '#endersdelight:shulker_loot';
-    	i.shulker_loot = '#endersdelight:shulker_loot';
-    i.ender_sight = '#endersdelight:enderman_sight';
-    i.enderman = '#endersdelight:enderman_loot';
-    i.chorus_juice = 'endersdelight:chorus_juice';
-    
-    i.crab_bars = 'quarkdelight:crab_bars';
-    i.i_crab_bars = 'kubejs:incomplete_crab_bars';
-    i.grilled_salmon = 'farmersdelight:grilled_salmon';
-    i.fish_stew = 'farmersdelight:fish_stew';
-    i.bacon_and_eggs = 'farmersdelight:bacon_and_eggs';
-    i.salmon_roll = 'farmersdelight:salmon_roll';
-    i.i_salmon_roll = 'kubejs:incomplete_salmon_roll';
-    i.cod_roll = 'farmersdelight:cod_roll';
-    i.i_cod_roll = 'kubejs:incomplete_cod_roll';
-    i.kelp_roll = 'farmersdelight:kelp_roll';
-    i.i_kelp_roll = 'kubejs:incomplete_kelp_roll';
-    i.kelp_roll_slice = 'farmersdelight:kelp_roll_slice';
-    i.rice_medley = 'farmersdelight:rice_roll_medley_block';
-   	i.i_rice_medley = 'kubejs:incomplete_rice_medley';
-    i.horror_lasagna = 'brewinandchewin:horror_lasagna';
-    i.horror_lasagna_meat = '#brewinandchewin:horror_lasagna_meats';
-    i.cooked_horror_lasagna_meat = '#brewinandchewin:cooked_horror_lasagna_meats';
-    i.pasta_with_mutton_chop = 'farmersdelight:pasta_with_mutton_chop';
-    	i.pasta_with_mutton = 'farmersdelight:pasta_with_mutton_chop';
-  	i.barbecue_stick = 'farmersdelight:barbecue_stick';
-  		i.bbq_stick = 'farmersdelight:barbecue_stick';
-		i.roasted_mutton_chops = 'farmersdelight:roasted_mutton_chops';
-			i.roast_mutton_chops = 'farmersdelight:roasted_mutton_chops';
-			i.roast_mutton = 'farmersdelight:roasted_mutton_chops';
-		i.pancakes = 'supplementaries:pancake';
-			i.pancake = 'supplementaries:pancake';
-		i.melon_juice = 'farmersdelight:melon_juice';
-		i.raw_salmon_tempura = 'pneumaticcraft:raw_salmon_tempura';
-		i.salmon_tempura = 'pneumaticcraft:salmon_tempura';
-    
-    // Items
-    item.bowl = 'minecraft:bowl';
-    item.stick = 'minecraft:stick';
-    item.bottle = 'minecraft:glass_bottle';
-    item.shulker_bowl ='endersdelight:shulker_bowl';
-    item.bonemeal = 'minecraft:bone_meal';
-    	item.bone_meal = 'minecraft:bone_meal'; // Both spellings
-    item.nether_wart = 'minecraft:nether_wart';
-    item.incomplete = 'kubejs:incomplete_item';
-    //Fluids
-   	fluid.water = '#forge:fluid/water';
-   	fluid.milk = 'minecraft:milk';
-   	fluid.tomato_sauce = 'create_central_kitchen:tomato_sauce';
-   	fluid.melon_juice = 'create_central_kitchen:melon_juice';
-   	fluid.yeast = 'pneumaticcraft:yeast_culture';
-   	fluid.plant_oil = 'immersiveengineering:plantoil';
-   	
-   	//######################### Tools #########################
-   	//Remove smoker recipes minus blackstone
-		CE.remove({ id: 'minecraft:smoker' }, e)
-		CE.remove({ id: 'quark:building/crafting/furnaces/deepslate_smoker' }, e)
-		
-		//######################### Soups and bases #########################
-		//Bone broth
-    // Updated bone broth to accept bone meal + shapeless recipe
-    CE.remove({ id: 'farmersdelight:cooking/bone_broth' }, e)
-    CE.fdCooking([['minecraft:bone', 'minecraft:bone_meal'], ['minecraft:glow_berries', i.mushrooms, 'minecraft:hanging_roots', 'minecraft:glow_lichen']], Item.of(i.bone_broth, 2), e, 1, 200, item.bowl)
-    CE.shapeless(Item.of(i.bone_broth, 1), [['minecraft:bone', 'minecraft:bone_meal'], ['minecraft:glow_berries', 'minecraft:hanging_roots', "minecraft:glow_lichen", i.mushrooms], item.bowl], e)
-    // Shapeless craft some stews w/ bonebroth 
-    CE.shapeless(Item.of('farmersdelight:beef_stew', 1), [i.bone_broth, i.cooked_beef, i.carrot, i.baked_potato], e)
-    CE.shapeless(Item.of('farmersdelight:baked_cod_stew', 1), [i.bone_broth, i.cooked_cod, i.eggs, i.potato, i.tomato], e)
-    CE.shapeless(Item.of('farmersdelight:noodle_soup', 1), [i.bone_broth, i.cooked_pork, i.cooked_eggs, i.pasta, i.dried_kelp], e)
-    CE.shapeless(Item.of('farmersdelight:chicken_soup', 1), [i.bone_broth, i.cooked_chicken, i.vegetables, i.salad_ingredients, i.carrot], e)
-    CE.shapeless(Item.of(i.cooked_rice, 1), [i.rice, i.bone_broth], e)
-    
-    //Cooked rice
-    // Shapeless craft rice dishes w/ cooked_rice 
-    CE.shapeless(Item.of('farmersdelight:fried_rice', 1), [i.cooked_rice, i.eggs, i.carrot, i.onion], e)
-    CE.shapeless(Item.of('farmersdelight:mushroom_rice', 1), [i.cooked_rice, 'minecraft:brown_mushroom', 'minecraft:red_mushroom', [i.carrot, i.potato]], e)
-    CE.shapeless(Item.of('delightful:sinigang', 1), [i.cooked_rice, i.cooked_fish, i.cooked_pork, i.tomato_sauce, i.onion, i.fruit], e)
-    
-    //######################### Fluids #########################
-    
-    //Tomato sauce
-    // Tomato sauce merge
-    CE.remove({ id: 'tmted:squeezer/tomato' }, e)
-    CE.remove({ id: 'tmted:bottling/tomato_sauce' }, e)
-    CE.ieSqueezing(Fluid.of('create_central_kitchen:tomato_sauce', 250), i.tomato, e, undefined, 6400)
-    CE.ieBottling(i.tomato_sauce, '#forge:fluid/tomato_sauce', 250, item.bowl, e)
-    //Expensive shapeless craft
-    CE.shapeless(Item.of(i.tomato_sauce, 1), [item.bowl, Item.of(i.tomato, 4)], e)
-    
-    //Melon juice
-    //melon juice merge
-    CE.remove({ id: 'tmted:squeezer/melon_juice_from_slice' }, e)
-    CE.remove({ id: 'tmted:squeezer/melon_juice_from_block' }, e)
-    CE.remove({ id: 'tmted:bottling/melon_juice' }, e)
-    CE.remove({ id: 'create_central_kitchen:mixing/melon_juice' }, e)
-    CE.ieSqueezing(Fluid.of(fluid.melon_juice, 125), i.melon, e, undefined, 6400)
-		CE.ieSqueezing(Fluid.of(fluid.melon_juice, 1250), i.melon_block, e, undefined, 6400)
-		CE.ieBottling(i.melon_juice, '#forge:fluid/melon_juice', 250, item.bottle, e)
-		CE.createMixing(Fluid.of(fluid.melon_juice, 250), [i.sugar, Item.of(i.melon, 3)], "n/a", e)
-    
-    //######################### Sugar #########################
-    // Replace sugar recipes w/ sugar forge tag, allows glyceral, change sugar cube recipe to reflect
-    CE.replaceInput({ input: 'minecraft:sugar' }, 'minecraft:sugar', i.sugar, e)
-    CE.remove({id: 'supplementaries:sugar_cube' }, e)
-    CE.shapeless(Item.of('supplementaries:sugar_cube', 1), Item.of(i.sugar, 9), e)
-    
-    //######################### Flour, dough, bread
-    // Combine wheat flours and doughs into create version
-    CE.remove({ id: 'create:crushing/misc/scrap_hay_block' }, e)
-    CE.remove({ id: 'tmted:wheat_dough_from_waterbucket' }, e)
-    CE.remove({ id: 'tmted:slime_ball' }, e)
-    CE.remove({ id: 'tmted:crusher/wheat_flour_from_bale' }, e)
-    CE.remove({ id: 'farmersdelight:bread_from_smelting' }, e)
-    CE.remove({ id: 'farmersdelight:bread_from_smoking' }, e)
-    CE.remove({ id: 'create_central_kitchen:crafting/dough_1' }, e)
-    CE.remove({ id: 'create_central_kitchen:crafting/dough_2' }, e)
-    CE.remove({ id: 'create_central_kitchen:crafting/dough_3' }, e)
-    CE.remove({ id: 'create_central_kitchen:crafting/dough_4' }, e)
-    CE.remove({ id: 'farmersdelight:wheat_dough_from_water' }, e)
-    CE.remove({ id: 'tmted:bottling/wheat_dough' }, e)
-    CE.replaceOutput({ out: i.out_flour }, i.out_flour, i.flour_in, e)
-    CE.replaceInput({ in: i.out_flour }, i.out_flour, i.flour_in, e)
-    CE.shapeless(Item.of(i.dough, 1), [i.flour, 'minecraft:water_bucket'], e)
-    CE.ieBottling(i.dough, fluid.water, 250, i.flour, e)
-    CE.ieBottling('create_compressed:dough_block', fluid.water, 1000, 'create_compressed:wheat_flour_pile', e)
-    CE.ieCrushing(Item.of(i.flour, 2),i.wheat, e)
-    CE.ieCrushing(Item.of(i.flour, 18),'minecraft:hay_block', e)
-    CE.createCrushing([Item.of(i.flour, 13),Item.of(i.flour, 2).withChance(0.25)], 'minecraft:hay_block', e)
-    // PC wheat compat
-    CE.remove({ id: 'pneumaticcraft:pressure_chamber/wheat_flour' }, e)
-    CE.remove({ id: 'pneumaticcraft:explosion_crafting/wheat_flour' }, e)
-    CE.pcPressureChamber(Item.of(i.flour, 3), [i.wheat], 1.5, e)
-    CE.pcExplosionCrafting(Item.of(i.flour, 1), i.wheat, 50, e)
-    // More efficient craft w/ egg
-    CE.remove({ id: 'tmted:wheat_dough_from_egg' }, e)
-    CE.remove({ id: 'farmersdelight:wheat_dough_from_eggs' }, e)
-    CE.shapeless(Item.of(i.dough, 6), [Item.of(i.flour, 3), i.eggs], e)
-    //Add bread block recipes
-    CE.remove({id:'architects_palette:bread_block'}, e)
-    CE.remove({id:'architects_palette:bread_slab'}, e)
-    CE.remove({id:'architects_palette:stonecutting/bread_nub'}, e)
-    CE.smoking('architects_palette:bread_block', 'create_compressed:dough_block', e)
-    CE.createSaw(Item.of(i.bread, 16), i.bread_block, e)
-    CE.fdCutting(i.bread_block, '#forge:tools/knives', Item.of(i.bread, 16), e)
-    CE.stonecutting('architects_palette:bread_slab', i.bread_block, e)
-    CE.stonecutting('architects_palette:crustless_bread_block', i.bread_block, e)
-    CE.stonecutting('architects_palette:bread_nub', 'architects_palette:bread_slab', e)
-    // Sourdough
-    //Swap flour to dough
-    CE.remove({ id: 'pneumaticcraft:sourdough' }, e)
-    CE.shapeless(Item.of(i.sourdough, 1), ['pneumaticcraft:yeast_culture_bucket', Item.of(i.dough, 8)], e)
-    // Make smoking
-    CE.remove({ id: 'pneumaticcraft:sourdough_bread' }, e)
-    CE.smoking(i.sourdough_bread, i.sourdough, e)
-    // slice to 2 bread 
-    CE.fdCutting(i.sourdough_bread, '#forge:tools/knives', Item.of(i.bread, 2), e)
-    // Mixing
-    CE.createMixing(Item.of(i.sourdough, 8), [Fluid.of(fluid.yeast, 500), Item.of(i.dough, 8)], "heated", e)
-    // Bottling
-    CE.ieBottling(i.sourdough, '#forge:fluid/yeast_culture', 50, i.dough, e)
-    
-    //######################### Pasta #########################
-    // More efficient press recipe for pasta
-    CE.remove({ id: 'tmted:metalpress/raw_pasta' }, e)
-    CE.ieMetalPress(Item.of(i.pasta, 2), i.dough, 'immersiveengineering:mold_wire', e)
-    
-    //######################### Prepared #########################
-    //Pancakes
-    //Wheat to flour
-    CE.remove({ id: 'supplementaries:pancake' }, e)
-    CE.shapeless(Item.of(i.pancakes, 3), [i.sugar, i.egg, i.milk, [i.flour, i.rice]], e)
-    // Efficient mixing, cooking
-    CE.createMixing(Item.of(i.pancakes, 5), [Fluid.of(fluid.milk, 250), i.sugar, i.egg, [i.flour, i.rice]], "heated", e)
-  
-    //Barbecue stick
-    //Remove exising, replace w/ cooked meat tag
-    CE.remove({ id: 'farmersdelight:barbecue_stick' }, e)
-    CE.shapeless(Item.of(i.bbq_stick, 1), [i.onion, i.tomato, i.cooked_meat, item.stick], e)
-    CE.createSequencedAssembly(Item.of(i.bbq_stick, 1),item.stick,
-			[e.recipes.create.deploying(item.incomplete, [item.incomplete, i.onion]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.tomato]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.cooked_meat])],
-    	item.incomplete,1,e,'bbq_stick_sequenced_assembly')
-    // Crab Bar
-    //	Remove raw shapeless crab bar recipe, replace w/ cooked at lower efficiency
-    CE.remove({ id: 'quarkdelight:crab_bars' }, e)
-    CE.shapeless(Item.of(i.crab_bars, 2), [i.cooked_fish, i.cooked_crab, item.bonemeal], e, 'creativeengineering/crab_bars_shapeless_manual_only')
-    // Add raw ingredient cooking crab bar recipe
-    CE.fdCooking([i.raw_fish, i.crab, item.bonemeal], Item.of(i.crab_bars, 4), e, 1, 200)
-    	//Unneeded if sliceanddice adds mixing for fd cooking	//CE.createMixing(Item.of(i.crab_bars, 4), [i.raw_fish, i.crab, item.bonemeal], "heated", e)
-    // Sequenced assembly 
-		CE.createSequencedAssembly(Item.of(i.crab_bars, 10),item.bonemeal,
-			[e.recipes.create.deploying(i.i_crab_bars, [i.i_crab_bars, i.cooked_crab]),
-			e.recipes.create.deploying(i.i_crab_bars, [i.i_crab_bars, i.cooked_fish]),
-			e.recipes.create.pressing(i.i_crab_bars, i.i_crab_bars)],
-			i.i_crab_bars,2,e,'crab_bars_sequenced_assembly')
-		// Fish stew
-		CE.shapeless(Item.of(i.fish_stew, 1), [i.cooked_fish, i.cooked_fish, Item.of(i.tomato_sauce, 2), i.onion, item.bowl], e)
-		
-		// Cabbage rolls
-		CE.shapeless(Item.of(i.cabbage_rolls, 1), [i.cabbage, i.cabbage, i.cabbage_roll_veg, i.cabbage_roll_veg], e)
-		
-		//Grilled salmon
-		// Replace shaped recipe w/ shaped
-    CE.remove({ id: 'farmersdelight:grilled_salmon' }, e)
-		CE.shapeless(Item.of(i.grilled_salmon, 1), [i.onion, i.cabbage, i.sweet_berries, i.cooked_salmon, item.bowl], e)
-		// Sequenced assembly
-		CE.createSequencedAssembly(Item.of(i.grilled_salmon, 1),item.bowl,[
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.onion]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.cabbage]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.sweet_berries]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.cooked_salmon])
-			],item.incomplete,1,e,'grilled_salmon_sequenced_assembly')
-		
-		// Tempura 
-		CE.createMixing(Item.of(i.salmon_tempura, 1), [Fluid.of(fluid.plant_oil, 250), i.raw_salmon_tempura], "heated", e)
-		CE.replaceInput(
-			{ id: 'pneumaticcraft:raw_salmon_tempura' },
-			'minecraft:salmon',
-			'#forge:raw_fishes/salmon', e
-		)
-		
-		// Bacon and eggs
-		// Replace shaped recipe w/ shaped
-    CE.remove({ id: 'farmersdelight:bacon_and_eggs' }, e)
-		CE.shapeless(Item.of(i.bacon_and_eggs, 1), [i.cooked_bacon, i.cooked_bacon, i.fried_egg, i.fried_egg, item.bowl], e)
-		// Sequenced assembly
-		CE.createSequencedAssembly(Item.of(i.bacon_and_eggs, 1),item.bowl,
-			[e.recipes.create.deploying(item.incomplete, [item.incomplete, i.cooked_bacon]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.fried_eggs])],
-			item.incomplete,2,e,'bacon_eggs_sequenced_assembly')
-		
-		//Salmon roll
-		//Make shapeless, already shapeless?
-		CE.remove({ id: 'farmersdelight:salmon_roll' }, e)
-		CE.shapeless(Item.of(i.salmon_roll, 2), [i.salmon_slice, i.salmon_slice, i.cooked_rice], e)
-		// Sequenced assembly
-		CE.createSequencedAssembly(Item.of(i.salmon_roll, 3),i.cooked_rice,
-			[e.recipes.create.deploying(i.i_salmon_roll, [i.i_salmon_roll, i.salmon_slice])],
-			i.i_salmon_roll,3,e,'salmon_roll_sequenced_assembly')
-		//Cod roll
-		//Make shapeless, already shapeless?
-		CE.remove({ id: 'farmersdelight:cod_roll' }, e)
-		CE.shapeless(Item.of(i.cod_roll, 2), [i.cod_slice, i.cod_slice, i.cooked_rice], e)
-		// Sequenced assembly
-		CE.createSequencedAssembly(Item.of(i.cod_roll, 3),i.cooked_rice,
-			[e.recipes.create.deploying(i.i_cod_roll, [i.i_cod_roll, i.cod_slice])],
-			i.i_cod_roll,3,e,'cod_roll_sequenced_assembly')
-		//Kelp roll
-		// Sequenced assembly
-		CE.createSequencedAssembly(Item.of(i.kelp_roll, 1),i.cooked_rice,
-			[e.recipes.create.deploying(i.i_kelp_roll, [i.i_kelp_roll, i.carrot]),
-			e.recipes.create.deploying(i.i_kelp_roll, [i.i_kelp_roll, i.dried_kelp]),
-			e.recipes.create.deploying(i.i_kelp_roll, [i.i_kelp_roll, i.dried_kelp])],
-			i.i_kelp_roll,1,e,'kelp_roll_sequenced_assembly')
-		//Rice Medley
-		// Sequenced assembly
-		CE.createSequencedAssembly(Item.of(i.rice_medley, 1),item.bowl,
-			[e.recipes.create.deploying(i.i_rice_medley, [i.i_rice_medley, i.cod_roll]),
-			e.recipes.create.deploying(i.i_rice_medley, [i.i_rice_medley, i.salmon_roll]),
-			e.recipes.create.deploying(i.i_rice_medley, [i.i_rice_medley, i.kelp_roll_slice])],
-			i.i_rice_medley,2,e,'rice_medley_sequenced_assembly')
-		
-		//Horror Lasagna
-		//Make cooked shapeless
-		CE.shapeless(Item.of(i.horror_lasagna, 1), [i.scarlet_cheese_wedge, i.scarlet_cheese_wedge, i.beetroot_soup, i.tomato_sauce, i.tomato_sauce, i.pasta, i.cooked_horror_lasagna_meat, i.cooked_horror_lasagna_meat, item.bowl], e)
-		
-		//Pasta w/ mutton
-		//Make cooked shapeless
-		CE.shapeless(Item.of(i.pasta_with_mutton, 1), [i.tomato_sauce, i.tomato_sauce, i.pasta, i.cooked_mutton, i.cooked_mutton, item.bowl], e)
-		//Add bulk mixing
-		CE.createMixing(Item.of(i.pasta_with_mutton, 4), [Fluid.of(fluid.tomato_sauce, 1000), i.pasta, i.pasta, i.pasta, i.raw_mutton, i.raw_mutton, Item.of(item.bowl, 4)], "heated", e)
-		
-		//Roasted mutton chops 
-		// Sequenced assembly
-		CE.createSequencedAssembly(Item.of(i.roast_mutton, 1),item.bowl,[
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.tomato]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.beetroot]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.cooked_rice]),
-			e.recipes.create.deploying(item.incomplete, [item.incomplete, i.cooked_mutton_chops])
-			],item.incomplete,1,e,'roast_mutton_sequenced_assembly')
-			
-    //######################### Sweets #########################
-    //Pie changes
-    //Remove redundant pie
-    CE.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice' }, e)
-    CE.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice_using_deployer' }, e)
-    CE.remove({ id: 'create_central_kitchen:crafting/pumpkin_pie_from_slices' }, e)
-    
-    //Cake
-    // Redundant cake recipe
-    CE.remove({ id: 'minecraft:cake' }, e)
-    
-    //Honey
-    //Honey item removals
-    CE.remove({ id:'buzzier_bees:honey/honey_apple' }, e)
-    
-    //######################### Protein #########################
-    //Egg
-    //Remove redundant fried egg
-    CE.remove({ id: 'incubation:fried_egg' }, e)
-    CE.remove({ id: 'incubation:fried_egg_from_smoking' }, e)
-    CE.remove({ id: 'incubation:fried_egg_from_campfire_cooking' }, e)
-    
-    //######################### Ender #########################
-    //Ender food changes
-    //Remove wood bowl items
-    CE.remove({ id: 'endersdelight:twisted_cereal_wood' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/chorus_fruit_block' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/chorus_fruit_block_uncompress' }, e)
-    // Stuffed shulker shapeless
-		//CE.shapeless(Item.of('endersdelight:stuffed_shulker', 1), [i.tomato_sauce, i.tomato_sauce, i.cooked_rice, i.cooked_rice, i.brown_mushroom, i.chorus_fruit, item.shulker_mollusk, 'minecraft:shulker_shell'], e)
-		CE.shapeless(Item.of('endersdelight:stuffed_shulker', 1), [i.tomato_sauce, i.tomato_sauce, i.cooked_rice, i.cooked_rice, i.brown_mushroom, i.chorus_fruit, 'endersdelight:shulker_mollusk', 'minecraft:shulker_shell'], e)
-		//Ender paella shapeless
-		CE.shapeless(Item.of('endersdelight:ender_paella', 1), [i.cooked_rice, i.cooked_rice, i.shulker_flesh, i.chorus_flower, i.chorus_flower, i.ender_sight, item.shulker_bowl], e)
-    //Pearl pasta shapeless
-    CE.shapeless(Item.of('endersdelight:pearl_pasta', 1), [i.enderman, i.pasta, i.pasta, i.chorus_juice, i.chorus_juice, item.shulker_bowl], e)
-    
- 		//******************************************************************************************************************************************************************************************************************************  
-    
-    //######################### Misc #########################
-    //Crates
-    //Remove redundant crates
-    CE.remove({ id: 'quark:building/crafting/compressed/carrot_crate' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/carrot_crate_uncompress' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/beetroot_crate' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/beetroot_crate_uncompress' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/potato_crate' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/potato_crate_uncompress' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/apple_crate' }, e)
-    CE.remove({ id: 'quark:building/crafting/compressed/apple_crate_uncompress' }, e)
-    
-    console.log('The cooking event has finished!')
-
-})
-*/

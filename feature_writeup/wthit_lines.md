@@ -109,8 +109,8 @@ DD's 89 missing item models for JEI; the deploy preflight warns when they're sta
 | a captured mob | "Contents: Bee" |
 
 Client-side: the holders sync their contents for their renderers. `SoftFluidTank.capacity` is read by reflection
-(Moonlight 2.3 has no getter). Off with `[wthit] holderContents`. The cooking plan's soups-in-jars are a food row:
-[TODO](todo/TODO.md) `food/ingredients #13`. Mixed jars: built 2026-10-21, [mixed_jars.md](mixed_jars.md).
+(Moonlight 2.3 has no getter). Off with `[wthit] holderContents`. Soups in jars: built 2026-10-22, [mixed_jars.md](mixed_jars.md) section 9
+(TODO `dishes/ingredients #13`). Mixed jars: built 2026-10-21, [mixed_jars.md](mixed_jars.md).
 
 ### 2.4 Hive bees and honey
 
@@ -182,7 +182,7 @@ The keg's items and tank already show through WTHIT's Forge lines. Off with `wth
 
 ### 2.9 Pot, kettle and oven leftover slots
 
-`compat/WthitRemainderBuffer` (built 2026-10-21, F9, [TODO](todo/TODO.md) `food/kitchen #3`). The FD cooking pot,
+`compat/WthitRemainderBuffer` (built 2026-10-21, F9, [TODO](todo/TODO.md) `cooking/kitchen #3`). The FD cooking pot,
 the Farmer's Respite kettle and the oven keep ingredient leftovers in two slots ([remainder_buffer.md](remainder_buffer.md)).
 The server sends what they hold, so the line doesn't depend on the client's copy:
 
@@ -423,5 +423,5 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   `campfireRain` (replacing `campfire`), `sheetmetalTank`, the port's `wthitKeg`). Headless spec check: every key
   present, all true. Jars rebuilt and installed again. WL-31.
 - 2026-10-21: F9 built: pot / kettle / oven leftover lines (2.9, `compat/WthitRemainderBuffer`, `[wthit]
-  remainderBuffer`, TODO `food/kitchen #3`). patcherMod 1.1.01 rebuilt and installed in `mods/` and `server_mods/`.
+  remainderBuffer`, TODO `cooking/kitchen #3`). patcherMod 1.1.01 rebuilt and installed in `mods/` and `server_mods/`.
   WL-32, WL-33.

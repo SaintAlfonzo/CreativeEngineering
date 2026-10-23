@@ -1,0 +1,20 @@
+{
+  "color": "#adc285",
+  "containers": [
+    {
+      "filled": [
+        "veggiesdelight:broccoli_soup"
+      ],
+      "empty": "minecraft:bowl",
+      "capacity": 2
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 2,
+    "item": "veggiesdelight:broccoli_soup"
+  },
+  "from_mod": "veggiesdelight",
+  "still_texture": "moonlight:soft_fluids/soup_liquid",
+  "translation_key": "item.veggiesdelight.broccoli_soup"
+}

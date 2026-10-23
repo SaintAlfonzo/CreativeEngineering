@@ -14,9 +14,9 @@ Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `biome
 | biomes #4 | Planned | find out why the live End never has crystal peaks (and void barrens only once) | **first**. It is a bug lead, not just a rough number (see "the finding" in #4), and it decides #2's End half |
 | biomes #2 | Planned | settle the unreachable targets: Nether + Overworld accept or set reachable values; End by #4's result | after #4; a 10-minute config edit once decided |
 | biomes #3 | Planned | skylands multiplier 0.15: keep or raise | any time; one number, user decision |
-| biomes #5 | Planned | permafrost merge: Quark's cave style uses IW permafrost, rename Quark's block, add a recipe | independent; patcherMod + KubeJS + config |
-| biomes #6 | Planned | leafless dead trees, grouped, some in shallow pools | independent; data + one `wild_crops.json` entry. Ties in with `worldgen/structures/contents #2` (driftwood) |
-| biomes #7 | Planned | small "texture not found" area low in the End | last; new blocks + a hand-built template. Uses the new-structure pipeline of `worldgen/structures/new` |
+| biomes #5 | Testing | permafrost merge built 2026-10-22, scratch server PASSED 2026-10-22 (SQ-MG, [item_merges.md](../item_merges.md) 2.7, MG-21, MG-22); left: MG names in game, PF-01 | done; in-game checks only |
+| biomes #6 | Planned | leafless dead trees, grouped, some in shallow pools | independent; data + one `wild_crops.json` entry. Ties in with `structures/contents #2` (driftwood) |
+| biomes #7 | Planned | small "texture not found" area low in the End | last; new blocks + a hand-built template. Uses the new-structure pipeline of `structures/new` |
 
 #2, #3 and #4 are all `biome_config.json` edits, so do them in one pass with one `/reload`. They all apply to **new
 worlds only** (biome_tuning.md 4). #5 and #6 change new chunks of any world. #7 is a structure, so it reaches new End
@@ -252,7 +252,7 @@ Decide whether the four Terralith skylands stay at 0.15x, given how many feature
 
 ## biomes #5: Permafrost merge
 
-Status Planned · Work data (really patcherMod + KubeJS + config) · TODO `worldgen / biomes #5`
+Status Testing (built 2026-10-22; scratch server PASSED 2026-10-22, SQ-MG-00 to SQ-MG-07; see [item_merges.md](../item_merges.md) 2.7) · Work patcherMod + KubeJS + config · TODO `worldgen / biomes #5`
 
 ### Goal
 
@@ -365,7 +365,7 @@ Now): check it before doing anything about it.
   does freeze, the server config differs: compare the server's `config/immersive_weathering-common.toml`.
 - PF-02 Generation: new frozen peaks chunks, caves at y 105-140 → IW permafrost floors and ceilings, packed ice walls,
   no `quark:permafrost`.
-- PF-03 Names: JEI shows "Frost Stone" and its 10 variants.
+- PF-03 Names: JEI shows "Froststone" and its 10 variants (name as built; the plan said "Frost Stone").
 - PF-04 Recipe: 2 packed ice + 2 stone → 2 Frost Stone.
 
 ---
@@ -435,7 +435,7 @@ stagnant pools.
   are cheap and tunable. Hand-built NBT templates (structures) only if the user wants specific shapes; they would go
   through the structure pipeline.
 - **Which wood?** Recommend oak / stripped oak (bleached look), spruce / dark oak for the forked ones, IW charred log in
-  ash biomes. Not driftwood: `worldgen/structures/contents #2` removes driftwood logs.
+  ash biomes. Not driftwood: `structures/contents #2` removes driftwood logs.
 - **Replace the land driftwood?** `kubejs/data/creativeengineering/forge/biome_modifier/driftwood_land_{swamp,beach,extra}.json`
   put Upgrade Aquatic driftwood logs on swamp and beach land. When `structures/contents #2` removes driftwood logs,
   point `driftwood_land_swamp` at `creativeengineering:wild/dead_tree/group` instead. Recommend doing it then.
@@ -495,7 +495,7 @@ cane, grass, flowers and fluid.
    - pieces: a missing-texture tree, cane by a pool of the fluid, grass and flowers;
    - save as `creativeengineering:end/missing_island_1` in `kubejs/data/creativeengineering/structures/end/`.
 3. **Structure** (data, the pipeline in [structure_tuning.md](../structure_tuning.md) 7.4.7; same steps as
-   `worldgen/structures/new #1-3`):
+   `structures/new #1-3`):
    - `worldgen/structure/end/missing_island.json`: `minecraft:jigsaw`, one-piece pool,
      `start_height` `{"absolute": 30}` to `uniform 20-50`, `project_start_to_heightmap` absent, `terrain_adaptation`
      `none`, biomes `#minecraft:is_end` without `minecraft:the_end`;

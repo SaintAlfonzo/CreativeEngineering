@@ -157,5 +157,48 @@ Food 9-blocks only (egg crates, sleeping bags, dyed sacks, IE crates and planter
 2. Crates: decide the apple survivor (FrD crate or Vinery bag); NCH pack / unpack for every survivor (the Vinery bags
    first, C2), hide the losers, check C3 in the jars.
 3. Mushroom crates (scratchpad 2026-10-21): a crate for mushrooms, merged by the same survivor rule (TODO `blocks/new #7`).
-4. Sacks as bundles (scratchpad 2026-10-21): sacks behave like bundles in the inventory (scroll to cycle items, take
-   out a stack, place 1), and the GUI stays open during world interaction (TODO `gameplay/storage-and-item-loss #7`).
+4. Sacks as bundles: built 2026-10-22, scratch server PASSED 2026-10-22 for the logic (SQ-GM-10; patcherMod 1.1.01 in `mods/`, not deployed), section 6. Test SB-01 to SB-09.
+
+## 6. Sacks as bundles (TODO `items/storage-and-item-loss #7`)
+
+Scratchpad 2026-10-21: "make sacks act as bundles in inventory: scroll to cycle items, take out stack, place 1 w/
+bundle; keep gui open in world interaction". BUILT 2026-10-22, patcherMod 1.1.01; logic scratch server PASSED 2026-10-22 (SQ-GM-10), client tests open.
+
+- **Scope:** every `SackItem` (Supplementaries sack and the 16 Supp Squared dyed sacks). Slot count unchanged
+  (`[functional.sack] slots = 16`); no bundle weight limit. Loot-table sacks (`LootTable` tag) are left alone.
+- **Selected stack** = the first stored stack (lowest slot), the first cell of the Quark contents tooltip.
+- **Scroll** over a sack holding 2+ stacks in any container screen: the stacks rotate one step (down = selected to
+  the back, up = last to the front) and are compacted into the first slots. Client `compat/SackBundleScroll`
+  cancels `ScreenEvent.MouseScrolled.Pre` (so Mouse Tweaks' wheel tweak, on Post, does not also move it) and sends
+  `SackBundle.Rotate` (channel `creativeengineering:sack_bundle`). Player-inventory slots go by inventory index (the
+  creative screen's slots are not the server menu's); other creative-tab slots are ignored.
+- **Take out:** right-click a filled sack in a slot with an empty cursor: the selected stack goes to the cursor
+  (`mixin/SupplementariesSackItemMixin`, head of `overrideOtherStackedOnMe`). An empty sack is picked up as before.
+- **Unchanged** (Supplementaries' Quark drop-in, on with Quark's `Enable Shulker Box Interaction`): right-click an item
+  onto a sack inserts it; carrying a sack, right-click a slot: an empty slot gets 1 of the selected item, a filled one
+  is inserted. Placed sacks still open their own screen ("keep gui open in world interaction" read as: world use is
+  unchanged).
+- An emptied sack loses its `BlockEntityTag` (by our take-out), so it matches a new one.
+
+### Tests (patcherMod 1.1.01)
+
+In `mods/` (11:06 jar, md5 b5f60533, and the 11:08 `build/libs` one), not in `server_mods/` (01:54). The
+rotate and take-out logic and the empty-sack tag (SB-01, SB-03, SB-04 server halves, SB-02 one-stack rule): scratch server PASSED 2026-10-22
+(SQ-GM-10, `tools/gear_misc_probe.js sack`); scrolling, the tooltip, Mouse Tweaks and the packet need a client.
+
+
+- [ ] **SB-01 Scroll** (rotate down then up restores the order: scratch server PASSED 2026-10-22, SQ-GM-10; scrolling: client): sack with 3 kinds in the inventory. Scroll down over it: the Quark tooltip's first cell
+  becomes the 2nd kind; scroll up returns it. No item moves to another inventory (Mouse Tweaks).
+- [ ] **SB-02 Single stack** (a one-stack sack never rotates: scratch server PASSED 2026-10-22, SQ-GM-10; scrolling: client): sack with one stack: scrolling over it does nothing to it (Mouse Tweaks may act as usual).
+- [ ] **SB-03 Take stack** (empty-cursor right-click puts 2 cobblestone on the cursor, 2 stacks left: scratch server PASSED 2026-10-22, SQ-GM-10; the screen and resync: client): empty cursor, right-click the sack: the selected stack is on the cursor, the rest stay.
+  Close and reopen the inventory: same contents (server agrees).
+- [ ] **SB-04 Empty sack** (an emptied sack has no tag: scratch server PASSED 2026-10-22, SQ-GM-10; tooltip: client): right-click an empty sack: it is picked up. Empty one with SB-03 until empty: it has no
+  contents tooltip and no tag (F3+H advanced tooltip shows no NBT line).
+- [ ] **SB-05 Place 1:** carry a sack, right-click an empty slot: 1 of the selected item lands there.
+- [ ] **SB-06 Insert:** right-click a stack onto a sack: it goes in; a 17th kind is refused (16 slots).
+- [ ] **SB-07 Chest:** SB-01 and SB-03 with the sack in a chest slot, and in a backpack.
+- [ ] **SB-08 Creative:** in creative mode the pack opens the survival inventory (`CreativeMenuDisableMixin`, fixes_compat
+  2.19), so the creative-tab branch of `SackBundleScroll` is unused: SB-01 and SB-03 in creative work as in survival
+  (client).
+- [ ] **SB-09 World:** place the sack, right-click it: its screen opens with the rotated order. Dedicated server:
+  repeat SB-01 and SB-03 (packet and mixin on both sides).

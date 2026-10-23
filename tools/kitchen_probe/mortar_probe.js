@@ -1,4 +1,4 @@
-// TODO food/kitchen #10 probe: mortar and pestle crafts (NCH.mortar via foodGrinding and cooking/mortar.js) and
+// TODO cooking/kitchen #10 probe: mortar and pestle crafts (NCH.mortar via foodGrinding and cooking/mortar.js) and
 // the bamboo bowl. Scratch-only: copy into a scratch server's kubejs/server_scripts
 // (tools/creative_labels_test/scratch_server.sh). Run /kmtest; results are "[kmtest] PASS|FAIL ..." lines.
 (() => {
@@ -60,12 +60,12 @@
                 check('KM-06 mortar craft', r5 != null && r5.out == '1x creativeengineering:mortar_and_pestle', r5 == null ? 'no recipe' : r5.id + ' -> ' + r5.out)
                 let r6 = craft(level, p, [Item.of('minecraft:wheat'), Item.of('oldguns:mortar_and_pestle')])
                 check('KM-07 wheat + Powder Pestle gives nothing', r6 == null, r6 == null ? 'no recipe' : r6.id + ' -> ' + r6.out)
-                // corn: the machines average 1.5 cornmeal, so the mortar takes 2 corn for 3 (food/ingredients #14)
+                // corn: the machines average 1.5 cornmeal, so the mortar takes 2 corn for 3 (dishes/ingredients #14)
                 let r7 = craft(level, p, [Item.of('corn_delight:corn'), Item.of('corn_delight:corn'), mortar()])
                 check('KM-08 2 corn + mortar', r7 != null && r7.out == '3x creativeengineering:cornmeal' && r7.rem.indexOf('mortar_and_pestle dmg 1') >= 0,
                     r7 == null ? 'no recipe' : r7.id + ' -> ' + r7.out + ' / ' + r7.rem)
                 let r8 = craft(level, p, [Item.of('corn_delight:corn'), mortar()])
-                // crates and bags are machine-only (food/ingredients #14)
+                // crates and bags are machine-only (dishes/ingredients #14)
                 ;['corn_crate_cornmeal', 'corn_kernel_bag_cornmeal'].forEach(id => check('KM-12 no mortar/' + id,
                     !rm.byKey(new $KMRL('creativeengineering:mortar/' + id)).isPresent(), ''))
                 let r11 = craft(level, p, [Item.of('corn_delight:wild_corn'), Item.of('corn_delight:wild_corn'), mortar()])

@@ -453,7 +453,7 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider {
         compound.put("Container", mealContainerStack.serializeNBT());
         compound.put("Inventory", inventory.serializeNBT());
         // The client loads this tag on every block update (taking the output is one); without the buffer its copy
-        // of the two leftover slots went empty while the server still held them (TODO food/kitchen #14).
+        // of the two leftover slots went empty while the server still held them (TODO cooking/kitchen #14).
         compound.put("Remainders", remainders.serializeNBT());
         return compound;
     }

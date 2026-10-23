@@ -110,7 +110,7 @@ When fire or lava destroys a dropped item (ItemPhysic's item health reaches 0 fr
   javac makes a synthetic `ItemPhysicSplit$1` class that is loaded lazily and isn't covered by the force-load; it
   crashed the server twice in September (`NoClassDefFoundError`). Fix: an if/else chain instead of the switch, or
   force-load `$1` too. Was in the old TODO.md section 3; recurrence since not checked.
-- **F2.** FIXED 2026-10-19 (jar name generic, fireproof listed, "chat" gone, "Future" note points at TODO `gameplay/item-physics #2`). **Stale comments:** `item_physics.js` says "creativeengineering-1.0.2.jar" and lists three tags (fireproof is
+- **F2.** FIXED 2026-10-19 (jar name generic, fireproof listed, "chat" gone, "Future" note points at TODO `items/item-physics #2`). **Stale comments:** `item_physics.js` says "creativeengineering-1.0.2.jar" and lists three tags (fireproof is
   missing); `item_physics_tags.js` says "see the breakdown in chat" (that chat is gone; the header itself is the
   breakdown) and has a "Future" note (Create components sink and fireproof, belts float, flour floats, treated wood
   sinks, "add items from all other mods") that was never done.

@@ -32,19 +32,6 @@ const unwantedEnchants = {
 };
 
 // ============================================================
-// JEI hide (all levels of each enchantment)
-// ============================================================
-/*JEIEvents.hideItems(e => {
-	for (let id in unwantedEnchants) {
-		let maxLevel = unwantedEnchants[id];
-		for (let lvl = 1; lvl <= maxLevel; lvl++) {
-			e.hide(Item.of('minecraft:enchanted_book').enchant(id, lvl));
-		}
-	}
-});
-*/
-
-// ============================================================
 // Tooltip flag (any level, checked at runtime via NBT)
 // ============================================================
 ItemEvents.tooltip(e => {

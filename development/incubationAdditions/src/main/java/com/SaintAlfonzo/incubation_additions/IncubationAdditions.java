@@ -17,7 +17,9 @@ import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -38,7 +40,8 @@ import java.util.function.Consumer;
  * - Alex's Mobs: emu nest ({@link EmuNests}, mixin/EntityEmuEggLayerMixin)
  * - Untitled Duck Mod: duck and goose nests ({@link WaterfowlNests}, mixin/Duck/GooseEntityEggLayerMixin),
  *   duck and goose egg crates ({@link WaterfowlEggCrates}), new item sprites for the duck mod's eggs
- *   (client/DuckModEggModels)
+ *   (client/DuckModEggModels), and with Vintage Delight too the goose golden egg (goldenegg.GoldenGooseEgg,
+ *   chance in {@link IAConfig})
  * - either: mixin/LayEggInNestGoalMixin keeps every bird off nests that have no variant for its egg
  *
  * A set's assets, recipes, loot tables and tags are not in the jar's root resources but in
@@ -68,6 +71,8 @@ public class IncubationAdditions {
                     bus -> {
                         WaterfowlNests.register(bus);
                         WaterfowlEggCrates.register(bus);
+                        // Only setting so far is the goose golden egg chance.
+                        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, IAConfig.SPEC);
                         // Client only; the lambda keeps client classes out of the server's class loading.
                         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> DuckModEggModels.register(bus));
                     },

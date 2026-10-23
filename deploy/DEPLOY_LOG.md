@@ -4,6 +4,327 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.1.01 -->
+## 1.1.01 - 2026-10-22 21:46
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: a0aeb14 + 105 uncommitted file(s)
+- Since: 1.0.9
+- Deployed: server, client 2026-10-22 22:39
+- Contents: 365 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
+- Payload: update from 1.0.9, config functional: 245 files, 11.2 MB (mods 8, kubejs 208, config 16, defaultconfigs 5, world_serverconfig 8)
+- Notes: 1.1.01: big changes, changelog implementation
+- Built with warnings:
+  - 105 uncommitted change(s) in shipped folders (commit a0aeb14 + working tree)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 7: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 13: bullet is 306 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 38: bullet is 404 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 58: bullet is 425 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 83: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 104: bullet is 358 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 117: bullet is 497 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 131: bullet is 593 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 141: bullet is 453 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 146: bullet is 491 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 154: bullet is 386 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 172: bullet is 427 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 206: bullet is 325 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 220: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 239: bullet is 458 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 245: bullet is 331 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 248: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 253: bullet is 412 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 265: bullet is 316 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 271: bullet is 320 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 366: bullet is 362 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 393: bullet is 447 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 407: bullet is 726 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 424: bullet is 483 characters (over 300: split it or use a sub-bullet)
+
+### Changes
+
+Mods added (4):
+
+- baby_mobs `babyMobs-1.0.0.jar` (both)
+- Carry cats! 2.5+mc1.19.2-forge `Carry Cats 2.5 1.19.2.jar` (both)
+- creative_labels `creativeLabels-1.0.0.jar` (both)
+- veggiesdelight `backportedVeggies-1.9.2-ce-19.2-01.jar` (both)
+
+Mods updated (4):
+
+- brewinandchewin: `backportedBrewin-4.5.0-ce-19.2-02.jar` -> `backportedBrewin-4.5.0-ce-19.2-03.jar`
+- creativeengineering: `creativeengineering-1.0.9.jar` -> `creativeengineering-1.1.01.jar`
+- more_mooblooms: `moreMooblooms-1.0.0.jar` -> `moreMooblooms-1.1.0.jar`
+- vinery: `backportedVinery-1.5.5-ce-19.2-02.jar` -> `backportedVinery-1.5.5-ce-19.2-04.jar`
+
+Mods removed (12):
+
+- AE2 QoL Recipes `ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar` (was both)
+- Bottled Air 1.19.2-2.3-fabric+forge+neo `bottledair-1.19.2-2.3.jar` (was both)
+- Comfortable Campfires 1.1.2+1.19.2 `comfortable-campfires-1.1.2+1.19.2.jar` (was both)
+- Copper Drops 1.1 - 1.19-1.21+ `CopperDrops-1.1.jar` (was both)
+- Create Waystone Recipes 1.19 / 1.20 `Create_Waystone_Recipes_1.19_v2.jar` (was both)
+- Create: Copper Splashing `Create_Copper_Splashing_v2.jar` (was both)
+- Create: Easy Stone Generators 1.0.0 `create_generators-1.0.0-forge-1.19.2.jar` (was both)
+- Fast Leaf Decay `FastLeafDecay-30.jar` (was both)
+- Furnace Recycle 1.19.2-2.2-fabric+forge+neo `furnacerecycle-1.19.2-2.2.jar` (was both)
+- Glowing Illagers 1.0.0 `glowingraidillagers-1.19.2-1.0.0.jar` (was both)
+- Nametag Crafting 1.0+mod `name-tag-crafting-recipe-mod-1.0 (3).jar` (was both)
+- Starter Kit 1.19.2-7.0-fabric+forge `starterkit-1.19.2-7.0.jar` (was both)
+
+<details><summary>kubejs/: 148 added, 60 changed, 1 removed</summary>
+
+*added (148)*
+
+- `assets/cookingforblockheads/models/block/fridge_large_door_lower.json`
+- `assets/cookingforblockheads/models/block/fridge_large_door_lower_flipped.json`
+- `assets/cookingforblockheads/models/block/fridge_large_door_upper.json`
+- `assets/cookingforblockheads/models/block/fridge_large_door_upper_flipped.json`
+- `assets/cookingforblockheads/models/block/fridge_large_lower.json`
+- `assets/cookingforblockheads/models/block/fridge_large_upper.json`
+- `assets/creativeengineering/brewinandchewin/coaster/` (56 files)
+- `assets/creativeengineering/changelog/1.1.01.md`
+- `assets/creativeengineering/jei_world/block_growth/generated.json`
+- `assets/creativeengineering/jei_world/block_growth/manual.json`
+- `assets/creativeengineering/jei_world/budding/generated.json`
+- `assets/creativeengineering/jei_world/concrete_hardening/manual.json`
+- `assets/creativeengineering/jei_world/dyeing/generated.json`
+- `assets/creativeengineering/jei_world/dyeing/manual.json`
+- `assets/creativeengineering/jei_world/grass_drops/generated.json`
+- `assets/creativeengineering/jei_world/jar_interaction/generated.json`
+- `assets/creativeengineering/jei_world/jar_interaction/manual.json`
+- `assets/creativeengineering/jei_world/jar_storage/generated.json`
+- `assets/creativeengineering/jei_world/jar_storage/manual.json`
+- `assets/creativeengineering/jei_world/knife_drops/generated.json`
+- `assets/creativeengineering/jei_world/lava_generation/generated.json`
+- `assets/creativeengineering/jei_world/lava_generation/manual.json`
+- `assets/creativeengineering/jei_world/lightning/generated.json`
+- `assets/creativeengineering/jei_world/lightning/manual.json`
+- `assets/creativeengineering/jei_world/mob_bottling/manual.json`
+- `assets/creativeengineering/jei_world/mob_transformation/manual.json`
+- `assets/creativeengineering/jei_world/salt/manual.json`
+- `assets/creativeengineering/jei_world/soaping/generated.json`
+- `assets/creativeengineering/jei_world/soaping/manual.json`
+- `assets/creativeengineering/jei_world/stripping/generated.json`
+- `assets/creativeengineering/jei_world/waxing/generated.json`
+- `assets/creativeengineering/jei_world/waxing/manual.json`
+- `assets/creativeengineering/textures/item/mortar_and_pestle.png`
+- `client_scripts/name_fixes.js`
+- `data/creativeengineering/moonlight/soft_fluids/` (29 files)
+- `data/minecraft/loot_tables/blocks/copper_ore.json`
+- `data/minecraft/loot_tables/blocks/deepslate_copper_ore.json`
+- `data/rusticdelight/worldgen/configured_feature/wild_bell_peppers_feature.json`
+- `data/rusticdelight/worldgen/configured_feature/wild_coffee_feature.json`
+- `data/rusticdelight/worldgen/configured_feature/wild_cotton_feature.json`
+- `data/salt/loot_tables/cauldron_evaporation/salt_full.json`
+- `data/upgrade_aquatic/worldgen/configured_feature/river_tree.json`
+- `data/upgrade_aquatic/worldgen/placed_feature/trees_river.json`
+- `generation_scripts/food/mortar_catalog.json`
+- `generation_scripts/food/placed_food_slices.json`
+- `generation_scripts/names/name_fixes.json`
+- `server_scripts/cooking/milk_jar.js`
+- `server_scripts/cooking/mortar.js`
+- `server_scripts/cooking/salt.js`
+- `server_scripts/loot/09_crop_drops.js`
+- `server_scripts/other/backpack_skins.js`
+- `server_scripts/other/creative_labels.js`
+- `server_scripts/other/feature_ports.js`
+- `server_scripts/other/item_merges.js`
+- `server_scripts/other/jeed_providers.js`
+- `server_scripts/other/starter_kit.js`
+- `server_scripts/tags/feature_port_tags.js`
+- `server_scripts/tags/jartags.js`
+- `server_scripts/wood/removed_woods.js`
+- `startup_scripts/_lib/item_merges.js`
+- `startup_scripts/_lib/removed_woods.js`
+- `startup_scripts/cooking/alcohol_drinks.js`
+- `startup_scripts/cooking/baking_ingredients.js`
+- `startup_scripts/cooking/fluids.js`
+- `startup_scripts/cooking/food_values.js`
+
+*changed (60)*
+
+- `assets/creativeengineering/lang/en_us.json`
+- `assets/displaydelight/lang/en_us.json`
+- `client_scripts/jei_order.js`
+- `client_scripts/jeichanges.js`
+- `client_scripts/namechanges.js`
+- `client_scripts/tooltips.js`
+- `generation_scripts/food/can_servings.json`
+- `generation_scripts/food/can_types.json`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/food/placeable.json`
+- `generation_scripts/stacks/stack_sizes.json`
+- `generation_scripts/worldgen/flower_features.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/pool_tags.json`
+- `generation_scripts/worldgen/wild_crops.json`
+- `generation_scripts/worldgen/wild_flowers.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.caves.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
+- `server_scripts/_lib/dump_all.js`
+- `server_scripts/_lib/dump_gear.js`
+- `server_scripts/_lib/recipe_scan.js`
+- `server_scripts/cooking/alcohol.js`
+- `server_scripts/cooking/baking.js`
+- `server_scripts/cooking/canning.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/cooking/golden.js`
+- `server_scripts/economy/trades.js`
+- `server_scripts/economy/wandering_trades.js`
+- `server_scripts/engineering/resource_blocks.js`
+- `server_scripts/engineering/sample_syringe.js`
+- `server_scripts/equipment/archery.js`
+- `server_scripts/equipment/bullets.js`
+- `server_scripts/loot/07_rules.js`
+- `server_scripts/loot/08_leaf_apples.js`
+- `server_scripts/magic/tool_effects.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/cookingtags.js`
+- `server_scripts/tags/equipmenttags.js`
+- `server_scripts/tags/fluidtags.js`
+- `server_scripts/tags/item_physics_tags.js`
+- `server_scripts/tags/placeabletags.js`
+- `server_scripts/worldgen/wild_flowers.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/fluid_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/_lib/removed_items.js`
+- `startup_scripts/changes/transition_items.js`
+- `startup_scripts/compost/compost_values.js`
+- `startup_scripts/cooking/cornmeal.js`
+- `startup_scripts/func/armor_effects.js`
+- `startup_scripts/func/item_physics.js`
+- `startup_scripts/func/neoCraftHelper.js`
+- `startup_scripts/func/sample_syringe.js`
+- `startup_scripts/func/tool_effects.js`
+- `startup_scripts/items/cans.js`
+- `startup_scripts/items/misc_items.js`
+- `startup_scripts/magic/magic_resistance.js`
+
+*removed (1)*
+
+- `startup_scripts/func/config.js`
+
+</details>
+
+<details><summary>config/: 3 added, 13 changed, 13 removed</summary>
+
+*added (3)*
+
+- `baby_mobs-common.toml`
+- `creative_labels-common.toml`
+- `shouldercats.json`
+
+*changed (13)*
+
+- `/` (10 files)
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+*removed (13)*
+
+- `bottledair.json5`
+- `comfortable_campfires.json`
+- `starterkit.json5`
+- `starterkit/descriptions/Archer.txt`
+- `starterkit/descriptions/Default.txt`
+- `starterkit/descriptions/Engineer.txt`
+- `starterkit/descriptions/Lumberjack.txt`
+- `starterkit/descriptions/Witch.txt`
+- `starterkit/kits/Default.txt`
+- `starterkit/kits/Engineer.txt`
+- `starterkit/kits/inactive/Archer.txt`
+- `starterkit/kits/inactive/Lumberjack.txt`
+- `starterkit/kits/inactive/Witch.txt`
+
+</details>
+
+defaultconfigs/: 4 added, 1 changed, 0 removed:
+
+*added (4)*
+
+- `create-server.toml`
+- `solapplepie-server.toml`
+- `sophisticatedbackpacks-server.toml`
+- `stardew_fishing-server.toml`
+
+*changed (1)*
+
+- `unlitcampfire-server.toml`
+
+### Removals (from 1.0.9)
+
+Delete on the server (30, also in removals_server.txt):
+
+- `config/bottledair.json5`
+- `config/comfortable_campfires.json`
+- `config/starterkit.json5`
+- `config/starterkit/descriptions/Archer.txt`
+- `config/starterkit/descriptions/Default.txt`
+- `config/starterkit/descriptions/Engineer.txt`
+- `config/starterkit/descriptions/Lumberjack.txt`
+- `config/starterkit/descriptions/Witch.txt`
+- `config/starterkit/kits/Default.txt`
+- `config/starterkit/kits/Engineer.txt`
+- `config/starterkit/kits/inactive/Archer.txt`
+- `config/starterkit/kits/inactive/Lumberjack.txt`
+- `config/starterkit/kits/inactive/Witch.txt`
+- `kubejs/startup_scripts/func/config.js`
+- `mods/CopperDrops-1.1.jar`
+- `mods/Create_Copper_Splashing_v2.jar`
+- `mods/Create_Waystone_Recipes_1.19_v2.jar`
+- `mods/FastLeafDecay-30.jar`
+- `mods/ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar`
+- `mods/backportedBrewin-4.5.0-ce-19.2-02.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-02.jar`
+- `mods/bottledair-1.19.2-2.3.jar`
+- `mods/comfortable-campfires-1.1.2+1.19.2.jar`
+- `mods/create_generators-1.0.0-forge-1.19.2.jar`
+- `mods/creativeengineering-1.0.9.jar`
+- `mods/furnacerecycle-1.19.2-2.2.jar`
+- `mods/glowingraidillagers-1.19.2-1.0.0.jar`
+- `mods/moreMooblooms-1.0.0.jar`
+- `mods/name-tag-crafting-recipe-mod-1.0 (3).jar`
+- `mods/starterkit-1.19.2-7.0.jar`
+
+Delete on the client (30, also in removals_client.txt):
+
+- `config/bottledair.json5`
+- `config/comfortable_campfires.json`
+- `config/starterkit.json5`
+- `config/starterkit/descriptions/Archer.txt`
+- `config/starterkit/descriptions/Default.txt`
+- `config/starterkit/descriptions/Engineer.txt`
+- `config/starterkit/descriptions/Lumberjack.txt`
+- `config/starterkit/descriptions/Witch.txt`
+- `config/starterkit/kits/Default.txt`
+- `config/starterkit/kits/Engineer.txt`
+- `config/starterkit/kits/inactive/Archer.txt`
+- `config/starterkit/kits/inactive/Lumberjack.txt`
+- `config/starterkit/kits/inactive/Witch.txt`
+- `kubejs/startup_scripts/func/config.js`
+- `mods/CopperDrops-1.1.jar`
+- `mods/Create_Copper_Splashing_v2.jar`
+- `mods/Create_Waystone_Recipes_1.19_v2.jar`
+- `mods/FastLeafDecay-30.jar`
+- `mods/ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar`
+- `mods/backportedBrewin-4.5.0-ce-19.2-02.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-02.jar`
+- `mods/bottledair-1.19.2-2.3.jar`
+- `mods/comfortable-campfires-1.1.2+1.19.2.jar`
+- `mods/create_generators-1.0.0-forge-1.19.2.jar`
+- `mods/creativeengineering-1.0.9.jar`
+- `mods/furnacerecycle-1.19.2-2.2.jar`
+- `mods/glowingraidillagers-1.19.2-1.0.0.jar`
+- `mods/moreMooblooms-1.0.0.jar`
+- `mods/name-tag-crafting-recipe-mod-1.0 (3).jar`
+- `mods/starterkit-1.19.2-7.0.jar`
+
 <!-- deploy:1.0.9 -->
 ## 1.0.9 - 2026-10-19 15:54
 

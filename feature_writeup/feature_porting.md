@@ -2,7 +2,7 @@
 
 Test prefix `FP-`. Status: **research done 2026-10-18; ported: Fast Leaf Decay (2026-10-19), tier 1 (8 mods, 2026-10-20,
 KubeJS + data, section 1.1) and Glowing Illagers, Comfortable Campfires, Bottled Air (2026-10-20, patcherMod 1.1.01,
-section 2.4); all BUILT, scratch-tested where section 7 says so, not deployed. Book Fishing stays (1.1).** The first version of this file (a
+section 2.4); all BUILT, scratch-tested where section 7 says so (tier 1 recipes, Glowing raiders, Bottled Air scratch server PASSED 2026-10-22, SQ-OM-00, SQ-OM-10 to SQ-OM-12, SQ-OM-14), not deployed. Book Fishing stays (1.1).** The first version of this file (a
 candidate list from mod names and configs) is replaced: every tier 1-3 mod was decompiled
 (`tools/decompile_mod.py`, jars fetched from the manifest links and checked against its sha1) and read, plus about 50
 other small mods for the wider survey in section 3.
@@ -64,7 +64,7 @@ other small mods for the wider survey in section 3.
 User: "execute each of the feature ports tier 1, excluding the book fishing, which will be part of a larger ebook
 loot pool rebalance". Eight jars went to `disabledmods/`, their `mod_sides.md` rows and config files are gone,
 `server_mods/` and `pack/` regenerated. **Book Fishing stays installed** (jar, row, FP-02 and D1 open) until the
-enchanted-book loot rebalance ([loot.md](loot.md)); [TODO](todo/TODO.md) `largecontent/featureporting #2` notes it.
+enchanted-book loot rebalance ([loot.md](loot.md)); [TODO](todo/TODO.md) `ports/featureporting #2` notes it.
 
 | Mod | Port | Where | Count | Notes |
 |---|---|---|---|---|
@@ -87,7 +87,7 @@ player in neither, then writes the same file and adds the tag. Not ported: the k
 packet. The three inactive kits were: Archer (leather helmet and boots, Power I bow, 6 baked potatoes, 32 arrows),
 Lumberjack (iron boots, 4 oak saplings off hand, Efficiency I iron axe, 8 steak), Witch (golden boots, stick, 16
 apples, splash potions of strong swiftness, healing, poison, 2x harming). Content changes are
-[TODO](todo/TODO.md) `gameplay/starter-kit #1`.
+[TODO](todo/TODO.md) `items/starter-kit #1`.
 
 Moved out of tier 1: JRFTL (`jrftl:prepared_flesh` is a pack ingredient in `mob_resources.js`), Create Recycle
 Everything (3 items, all mapped in `item_dict`), Create: Netherless (4 items), Death Knell and Glowing Illagers (now tier
@@ -211,7 +211,7 @@ the removal list of the next deploy ([deploy.md](deploy.md)), and a check that n
 - D5: Port Survivality tweaks or leave the mod?
 - D6: Warp stone recipe (1.1): Waystones' own (amethyst corners) stands now that the dead Create Waystone Recipes
   override is gone. Gate it with a pack ingredient in the corners, or leave it?
-- D7 (scratchpad 2026-10-21, [TODO](todo/TODO.md) `largecontent/featureporting #7`): backports beyond this list.
+- D7 (scratchpad 2026-10-21, [TODO](todo/TODO.md) `ports/featureporting #7`): backports beyond this list.
   A trials backport (1.21 trial chambers)? Any other Alex's mods to port (Alex's Mobs, Alex's Delight and Alex's
   Abnormalities are installed)? Unlike the tiers above these are content ports, so they go the way of the Brewin' and
   Vinery ports (own jar, gap analysis first).
@@ -228,13 +228,13 @@ the removal list of the next deploy ([deploy.md](deploy.md)), and a check that n
 - [ ] **FP-05 Ice boats [scratch]:** after the port a boat on ice and on grass matches the mod's speeds (or the D2 choice).
 - [x] **FP-06 rsec removed [scratch]:** campfire in the rain goes out via the pack's rain rule (patcherMod `CampfireRain`, 8 s; Unlit Campfire's own rain check is off since 2026-10-19); no rsec log line. *PASSED scratch 2026-10-20: `/weather rain`, lit campfire on stone at 0 151 0 -> `lit=false` within the first check (47 s later; the 8 s itself wasn't timed)*
 - [x] **FP-08 Tier 1 recipes load [scratch]:** *PASSED scratch 2026-10-20: the 377 line, no `[NCH]` error, no `Parsing error loading recipe`.* boot log had `[feature-ports] tier 1: 377 recipes (1 name tag, 33 splashing, 26 recycle smelting, 6 generators, 311 AE2 cable)` (371 and no generators since 2026-10-21, FP-15) and no `[NCH]` error from feature_ports.js; `/kubejs export` lists `creativeengineering:shaped/name_tag`, `createsplashing/copper_block_exposed`, `smelting/recycle_anvil`, `createmixing/generator_cobblestone`, `shaped/ae2_black_smart_cable_ring`
-- [ ] **FP-09 Tier 1 in game [game]:** craft a name tag (leather, paper, 2 string); a fan over water weathers a copper block to exposed; smelt a hopper -> iron ingot, a rail -> nugget, an anvil -> iron block; 8 smart cables around black dye -> 8 black smart cables, 8 black around a water bucket -> 8 fluix; mine copper ore -> 1 raw copper (silk touch: the ore)
+- [ ] **FP-09 Tier 1 in game [game]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-12: 311 cable, 26 recycle, 33 splashing, name tag, copper ore drops).* craft a name tag (leather, paper, 2 string); a fan over water weathers a copper block to exposed; smelt a hopper -> iron ingot, a rail -> nugget, an anvil -> iron block; 8 smart cables around black dye -> 8 black smart cables, 8 black around a water bucket -> 8 fluix; mine copper ore -> 1 raw copper (silk touch: the ore)
 - [ ] **FP-10 Starter Kit port [scratch]:** a new player on the scratch server gets Default or Engineer (boots and shield equipped, items in slots 1-3), log `[starter-kit] <kit> kit given to <name>`, `world/data/starterkit/tracking.json` lists the uuid and the player has tag `collective.firstJoin.starterkit`; relog -> nothing; a uuid pre-written into tracking.json -> nothing on first join
-- [ ] **FP-11 Glowing raiders [scratch]:** `/raid start` (or a raid) -> every raider spawned has Glowing (`/effect` shows Glowing II, no icon); `[raids] glowingRaiders = false` + restart -> none
+- [ ] **FP-11 Glowing raiders [scratch]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-10 Glowing on a wave pillager, no particles; SQ-OM-14 off: no Glowing).* `/raid start` (or a raid) -> every raider spawned has Glowing (`/effect` shows Glowing II, no icon); `[raids] glowingRaiders = false` + restart -> none
 - [ ] **FP-12 Campfire comfort [scratch]:** stand within 3 blocks of a lit campfire -> Comfort (Farmer's Delight) within a second, kept up while standing there, gone a few seconds after leaving; `useComfort = false` -> Regeneration instead; an unlit campfire gives nothing
-- [ ] **FP-13 Bottled Air [scratch]:** under water with a glass bottle: right-click -> air bar refills by half and the bottle fills with water; with a lava bucket in the other hand the water bottle is taken back and about half the time the empty bottle returns; a water bottle can't be drunk under water
+- [ ] **FP-13 Bottled Air [scratch]:** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-11: air 0 -> 150, lava-bucket bottle gone, under-water drink cancelled).* under water with a glass bottle: right-click -> air bar refills by half and the bottle fills with water; with a lava bucket in the other hand the water bottle is taken back and about half the time the empty bottle returns; a water bottle can't be drunk under water
 - [x] **FP-14 Jars gone [offline]:** *PASSED 2026-10-20 (11 jars in `disabledmods/`, 0 rows, 0 config files; 361 server jars).* `mods/` has none of the 11 retired jars, `mod_sides.md` has none of their rows, `server_mods/` and `pack/manifest.json` regenerated, `config/` has no starterkit / bottledair / comfortable_campfires files
-- [ ] **FP-15 Generators folded back [scratch]:** boot log `[feature-ports] tier 1: 371 recipes (1 name tag, 33 splashing, 26 recycle smelting, 311 AE2 cable)`, no `[NCH]` error; `/kubejs export` has no `creativeengineering:createmixing/generator_*` and no `create_generators:*`, and has `creativeengineering:obsidian_generation_heated`; JEI obsidian -> mixing water + lava 250 mB each, heated; JEI cobblestone mixing shows only the 3 heat tiers (1 / 5 / 10)
+- [ ] **FP-15 Generators folded back [scratch]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-00 371 line, SQ-OM-12 no generator ids, one heated obsidian).* boot log `[feature-ports] tier 1: 371 recipes (1 name tag, 33 splashing, 26 recycle smelting, 311 AE2 cable)`, no `[NCH]` error; `/kubejs export` has no `creativeengineering:createmixing/generator_*` and no `create_generators:*`, and has `creativeengineering:obsidian_generation_heated`; JEI obsidian -> mixing water + lava 250 mB each, heated; JEI cobblestone mixing shows only the 3 heat tiers (1 / 5 / 10)
 - [ ] **FP-07 each port [scratch]:** per ported mod, its behaviour from the tables above with the jar removed, and
   existing world data intact (tamed killer rabbits, mid-fall void players, enchanted items untouched).
 
@@ -257,3 +257,5 @@ the removal list of the next deploy ([deploy.md](deploy.md)), and a check that n
 - 2026-10-21: the Create: Generators port removed (it brought back 5 recipes `resource_blocks.js` had replaced); its one
   live recipe, heated obsidian, moved to `resource_blocks.js`; the jar deleted from `disabledmods/`, its `pack/` rows
   removed. FP-09 loses the cobblestone step, FP-15 added.
+- 2026-10-22 (second bulk run): SQ-OM-00, SQ-OM-10 to SQ-OM-12 and SQ-OM-14 PASS on the scratch server; server halves of
+  FP-09, FP-11, FP-15 and the logic of FP-13 recorded. FP-12 (Comfort, a real player in range) and the in-game halves stay.

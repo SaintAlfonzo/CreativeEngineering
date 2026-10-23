@@ -15,7 +15,7 @@ Jars read for this brief (all in `scratchpad/jars`): Farmer's Delight 1.2.4, Qua
 |---|---|---|---|
 | #1 | Twisted wood duplicate | Planned | tiny: there is no duplicate; tidy the code, plus one real duplicate found next to it |
 | #2 | Leftover comments | Planned | tiny, plus one real gap (Quark Engineering stairs) and the Abnormals Delight bark recipes |
-| #3 | Mulberry (Upgrade Aquatic river) wood -> oak | Planned | medium: KubeJS recipes + startup list + one datapack JSON + a patcherMod event for saplings |
+| #3 | Mulberry (Upgrade Aquatic river) wood -> oak | Built 2026-10-22 (recipes_wood.md 2.6) | medium: KubeJS recipes + startup list + one datapack JSON + a patcherMod event for saplings |
 
 **Findings that change the rows:**
 
@@ -36,7 +36,7 @@ needs a restart (startup list, datapack worldgen, patcherMod) and should ride th
 
 Related rows: `farming/composting #2` ([brief](farming_composting.md)) removes the other leftover comment
 (`sawdust.js` "Integrate nulch, move to compost file") and moves the soil recipes. Don't repeat it here.
-`largecontent/cavesandchasmsport #4` wants "azalea wood -> oak as usual", and structure_tuning.md's todo wants
+`ports/cavesandchasmsport #4` wants "azalea wood -> oak as usual", and structure_tuning.md's todo wants
 "swap river tree to oak log ... remove driftwood". #3 is the first wood removal actually built, so build its helper
 to be reused (#3 Decisions). `tooling/conventions #4` (removed-items coverage) and `recipes/progression #2` (the
 recipe scan cost, which grows with every id #3 adds to `global.removedItems`).
@@ -204,7 +204,15 @@ Clear the F5 comments in `wood_types.js` and `bark.js`, and do the work they poi
 ---
 
 ## wood #3: Mulberry wood -> oak
-Status Planned / Work KubeJS / data (+ patcherMod, see below) / TODO `recipes/wood #3` (scratchpad 2026-10-21)
+Status Built 2026-10-22, needs play (RW-15 to RW-18) / Work KubeJS / data (+ patcherMod, see below) / TODO `recipes/wood #3` (scratchpad 2026-10-21)
+
+**As built (2026-10-22), where it differs from the plan below:** every river item is an item merge into its oak twin
+(`global.removedWoods` joins `global.itemMerges`), so recipe inputs, loot (old placed logs drop oak, step 6) and
+inventories come from the merge system; no conversion recipes and no loot-table JSONs. All 92 ids have a twin (dict
+section "removed woods"). Recipes making them: one OR-filter `R.remove`. The hedge recipe is removed and re-added
+with an oak log. Sapling: the Forge event route (`SaplingGrowTreeEvent.setFeature` exists in 43.3.9), class
+`MulberrySapling`, switch `[worldgen.systems] mulberrySapling`. The kept blocks are renamed Mulberry (user request).
+Driftwood not included.
 
 ### Goal
 Remove Upgrade Aquatic's river wood set (the "mulberry" tree is UA's river tree: river leaves with mulberry vines
@@ -383,7 +391,7 @@ mulberry vines stay. Every recipe that made or used river wood points at oak.
 
 ## Built, needs play
 
-None. The `recipes` family's only Complete row is `progression #4` (the recipe test suites), not a wood row.
+- `wood #3` (2026-10-22): built; `MulberrySapling` is in the `mods/` jar (11:06); scratch SQ-MB queued; RW-15 to RW-20 in [recipes_wood.md](../recipes_wood.md) 7.
 
 ## Writeup corrections made
 

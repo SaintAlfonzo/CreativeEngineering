@@ -5,7 +5,7 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# food`, Sub `drinks` (rows 
 RB-03), [crops.md](../crops.md) V5 / V18 (coffee), [placeable_food.md](../placeable_food.md) and the
 [food_placeable brief](food_placeable.md) (Display Delight placing, `food/placeable #3`), [alcohol.md](../alcohol.md)
 (milk / honey fluids, apple cider note B7.15). Tests use `RC-` ([recipes_cooking.md](../recipes_cooking.md));
-[food_sweets.md](food_sweets.md) proposes RC-19 to RC-32, so these start at RC-33. The cooking plan these rows came
+[baking_sweets.md](baking_sweets.md) proposes RC-19 to RC-32, so these start at RC-33. The cooking plan these rows came
 from is in git (`git show c82dd31^:feature_writeup/cooking.md`, "drink", "dairy", "fluid").
 
 **Verified against jars** (scratchpad cache, Vineflower): Farmer's Respite (FR) 1.19-2.0, Farmer's Delight (FD) 1.2.4,
@@ -21,7 +21,7 @@ R.1.3, Cooking for Blockheads (CfB) 13.3.4, KubeJS 1902.6.2-build.73. Facts that
 | `food/drinks #6` Milk from a cow in a jar | small | after the milk bottle merge |
 | `food/drinks #5` Berry matcha with Farmer's Respite | small | adds the NCH kettle helper `frBrewing` (used by #1, #2, #4) |
 | `food/drinks #2` Tea cleanup | medium | with `food/placeable #3` (placing), after #5 (helper) |
-| `food/drinks #4` Chorus juice | small-medium | creates the shared startup fluid file (also `food/sweets #4`, #1); before `food/baked-goods #4` (chorus pie) |
+| `food/drinks #4` Chorus juice | small-medium | creates the shared startup fluid file (also `baking/sweets #4`, #1); before `baking/baked-goods #4` (chorus pie) |
 | `food/drinks #1` Lemonade | medium (3 fluids, 3 items) | after #4 (fluid file), #5 (helper) |
 
 **Shared pieces:**
@@ -57,7 +57,9 @@ R.1.3, Cooking for Blockheads (CfB) 13.3.4, KubeJS 1902.6.2-build.73. Facts that
 - After new drinks: `/dumpfood` → `tools/food_catalog.py` (type `drink`), `gen_stack_sizes.py`, a `/` row in
   can_parity.md, and `food/placeable #3`'s tool picks them up.
 
-Built, needs play: none (no drinks row is at Testing or Complete).
+Built, needs play: #4, #5, #6 (2026-10-22, [recipes_cooking.md](../recipes_cooking.md) 2.2). Tests were renumbered
+RC-71 to RC-74 (RC-43 to RC-46 are proposed in the food_meals brief). The NCH `frBrewing` helper and the startup
+fluid file now exist; #1 and #2 build on them.
 
 ---
 
@@ -80,7 +82,7 @@ A lemonade fluid with pink and blue variants; their effects come from what goes 
    `thinTexture(0x...)`, `noBlock()`; keys `f.lemonade` ...; `f.lemon_juice = 'fruitsdelight:lemon_juice'`.
 2. Items `creativeengineering:lemonade`, `pink_lemonade`, `blue_lemonade` (drink item shape from Shared), food e.g.
    `f.hunger(2).saturation(0.3).alwaysEdible()` + effects (D2). Keys `i.lemonade` ... in a "Pack sweets and drinks"
-   section of item_dict.js (shared with food_sweets.md). Sprites: recolour Fruits Delight's lemon juice bottle.
+   section of item_dict.js (shared with baking_sweets.md). Sprites: recolour Fruits Delight's lemon juice bottle.
 3. Recipes (`server_scripts/cooking/drinks.js`, new):
    - Create: `R.createMixing(Fluid.of(f.lemonade, 500), [Fluid.of(f.lemon_juice, 250), Fluid.of(f.water, 250), i.any_sugar], e, 'lemonade')`;
      pink: `[Fluid.of(f.lemonade, 500), i.t_fruits_strawberry]` → 500 pink; blue: `[Fluid.of(f.lemonade, 500), i.t_fruits_blueberry]` → 500 blue.
@@ -95,7 +97,7 @@ Verified: lemon juice item / fluid / recipes above. New: 3 fluids, 3 items under
 
 ### Decisions
 - **D1 Bucket.** Recommend `noBucket()` (drinks move in bottles and pipes, like CCK's); a bucket also needs a stack size
-  decision (`food/ingredients #2` asks "bucket stack size 16?").
+  decision (`dishes/ingredients #2` asks "bucket stack size 16?").
 - **D2 Effects.** Recommend lemonade = lemon juice's effects at 3x duration (Haste + Refreshing 30 s); pink = lemonade +
   Regeneration I 5 s (strawberries carry no effect, so either borrow a mild one or give it more saturation instead);
   blue = lemonade + Night Vision + Brightening 20 s (blueberry's).
@@ -196,7 +198,7 @@ bottle or need plating by hand.
 ---
 
 ## drinks #3: Merges
-Status **Planned** · Work: KubeJS · id `food/drinks #3`
+Status **In Progress** (banana, milk bottle, chocolate cake and apple cider merges built 2026-10-22, scratch server PASSED; see [item_merges.md](../item_merges.md)) · Work: KubeJS · id `food/drinks #3`
 
 ### Goal
 One item per drink or crop where two mods add the same thing: coffee, bananas (Alex's Mobs' goes), melon juice,
@@ -266,7 +268,7 @@ IE bottling and a Create mixing on `create_central_kitchen:melon_juice`; `tmted:
 - Build: `R.remove` the two tmted ids; optional IE routes on the CCK fluid as for melon juice. Keep Vinery's as the
   alcoholic one (D3).
 
-**f. Chocolate cake:** the same merge is in `food/baked-goods #5` with its decision (keep the Crafts & Additions
+**f. Chocolate cake:** the same merge is in `baking/baked-goods #5` with its decision (keep the Crafts & Additions
 texture, both the spout and the baking recipe). Build it there.
 
 ### Ids and data
@@ -275,7 +277,8 @@ Verified: every recipe id and tag above. Dict keys to add: `i.neapolitan_milk_bo
 ### Decisions
 - **D1 Neapolitan milk cauldron.** Recommend turning "Milk Cauldron" off (one bottle in the pack) unless cauldron milk
   storage is wanted; then accept the conversion recipe.
-- **D2 Coffee drinks.** Recommend keeping both families (FR = Caffeinated, kettle tiers; RD = Speed + Haste, pot) and
+- **D2 Coffee drinks.** DECIDED 2026-10-22 (other way): Farmer's Respite's crop and drinks removed, Rustic's coffees
+  give Caffeinated, gambler's tea takes Rustic's beans ([item_merges.md](../item_merges.md) 2.8). Was: recommend keeping both families (FR = Caffeinated, kettle tiers; RD = Speed + Haste, pot) and
   renaming RD's plain one "Brewed Coffee" or FR's "Kettle Coffee" in namechanges.js so the two "Coffee" items differ.
   Gambler's tea needs coffee berries: either keep FR berries as a cut product of RD beans or drop the tea.
 - **D3 Apple cider.** Recommend FD's cider (+ FR tiers) as the only non-alcoholic one, Vinery's renamed "Hard Cider".
@@ -294,7 +297,7 @@ Verified: every recipe id and tag above. Dict keys to add: `i.neapolitan_milk_bo
 ---
 
 ## drinks #4: Chorus juice
-Status **Planned** · Work: KubeJS / data · id `food/drinks #4` · needed by `food/baked-goods #4` (chorus pie)
+Status **Testing** (built 2026-10-22, [recipes_cooking.md](../recipes_cooking.md) 2.2, RC-71, RC-72; not run in game) · Work: KubeJS / data · id `food/drinks #4` · needed by `baking/baked-goods #4` (chorus pie)
 
 ### Goal
 Chorus juice gets a heated mixing recipe and a pot recipe, becomes a fluid, and is used in the ender pasta and the
@@ -320,7 +323,7 @@ chorus pie. Maybe a progression fluid or a diluter later.
      `R.createEmptying([i.glass_bottle, Fluid.of(f.chorus_juice, 250)], i.chorus_juice, e)`
    - keep or drop the shapeless (D2).
 3. Uses: pearl pasta already takes chorus juice (pot + the pack's shapeless). Chorus pie: a sequenced assembly with a
-   chorus juice spouting step is `food/baked-goods #4`; it needs only the fluid from step 1.
+   chorus juice spouting step is `baking/baked-goods #4`; it needs only the fluid from step 1.
 
 ### Ids and data
 Verified: item, recipes and uses above. New: fluid `creativeengineering:chorus_juice`.
@@ -331,7 +334,7 @@ Verified: item, recipes and uses above. New: fluid `creativeengineering:chorus_j
 - **D2 Shapeless craft.** Recommend keeping it (an early route before the pot), at 1 fruit + sugar + bottle.
 
 ### Gotchas
-- Chorus fruit block unpacking is missing (`food/ingredients #8`); a bulk chorus route for the mixer depends on it.
+- Chorus fruit block unpacking is missing (`dishes/ingredients #8`); a bulk chorus route for the mixer depends on it.
 
 ### Tests
 - RC-43 heated mixer → chorus juice fluid; spout fills, drain empties; pot makes 2 bottles from 2 fruit + sugar.
@@ -339,7 +342,7 @@ Verified: item, recipes and uses above. New: fluid `creativeengineering:chorus_j
 ---
 
 ## drinks #5: Berry matcha with Farmer's Respite
-Status **Planned** · Work: KubeJS · id `food/drinks #5`
+Status **Testing** (built 2026-10-22, [recipes_cooking.md](../recipes_cooking.md) 2.2, RC-73; not run in game) · Work: KubeJS · id `food/drinks #5`
 
 ### Goal
 Integrate Delightful's (berry) matcha lattes with Farmer's Respite's kettle.
@@ -368,7 +371,7 @@ Integrate Delightful's (berry) matcha lattes with Farmer's Respite's kettle.
 4. Create: CCK-style fluids aren't needed; skip unless lattes join the drink fluids later.
 
 ### Ids and data
-Add `i.t_fruits_berries = '#forge:fruits/berries'`, `i.t_ice_cubes` (shared with food_sweets.md).
+Add `i.t_fruits_berries = '#forge:fruits/berries'`, `i.t_ice_cubes` (shared with baking_sweets.md).
 
 ### Decisions
 - **D1 Kettle or shapeless.** Recommend both (kettle for the FR route, a fixed shapeless as the cold "iced" route).
@@ -384,7 +387,7 @@ Add `i.t_fruits_berries = '#forge:fruits/berries'`, `i.t_ice_cubes` (shared with
 ---
 
 ## drinks #6: Milk from a cow in a jar
-Status **Planned** · Work: KubeJS · id `food/drinks #6` · after `drinks #3 a` (which bottle)
+Status **Testing** (built 2026-10-22, [recipes_cooking.md](../recipes_cooking.md) 2.2, RC-74; not run in game) · Work: KubeJS · id `food/drinks #6` · after `drinks #3 a` (which bottle)
 
 ### Goal
 Right click a Cooking for Blockheads Cow in a Jar with a glass bottle to get a milk bottle.
@@ -430,6 +433,71 @@ Create switches Forge milk on); `e.block.entity` returning the CfB block entity 
 
 ### Tests
 - RC-46 bottle on a full Cow in a Jar → FD milk bottle, tank −250 mB; empty jar does nothing; buckets still work.
+
+## drinks #7: Kettle with 6 ingredient slots; drinks move to the Kettle
+
+### Goal
+Drinks brew in the Kettle, not the Cooking Pot. Blocked by the Kettle's 2 ingredient slots (`KettleRecipe.matches`
+reads slots 0-1 only, one item each, and ignores the container and water, so two recipes with the same pair clash).
+Planned: 6 slots like the pot and oven (patcherMod), then the recipes with `NCH.frBrewing`. Until then every drink
+below keeps its current recipes. Grid (manual) crafts stay either way.
+
+### Decided (user 2026-10-22)
+- **Move to the Kettle** (pot recipe removed when the Kettle one goes in): Coffee, Milk / Honey / Chocolate / Dark
+  Coffee, Apple Cider, Hot Cocoa, Creamy Corn Drink, Ender Nectar, Pickerelweed Juice, Cloud Latte, Mango Milkshake,
+  Hawberry / Lychee Cherry / Mango / Mangosteen / Peach Tea, Chorus Juice. Apple Cider and Hot Cocoa already have
+  a Farmer's Respite Kettle recipe; only their pot recipe goes.
+- **Stays in the pot:** Bellini Cocktail (alcoholic; not in the user's list).
+- **Every drinkable juice gets a Kettle recipe more efficient than its manual one**, made in the pot or not (table 2).
+- **Later (`drinks #8`):** one standard crafting rule for the juice and tea families (hand, Kettle, Create, IE).
+  The Kettle recipes here can be rough until then, but must beat the grid.
+
+### 1. Pot drink audit (2026-10-22)
+Live pot recipes from `kubejs/exported/recipes/all.csv` (dump of 2026-10-22 02:14), checked against the jars
+(conditional wrappers unwrapped), filtered to the `drink` food type or the pot's drinks tab. Not drinks and left out:
+the Fruits Delight jellies, custard and bayberry soup, Rustic Delight's cooking oil.
+
+| Drink | Pot recipe | Ingredients | Kettle today | Plan |
+|---|---|---|---|---|
+| Coffee | `rusticdelight:cooking/coffee` | 4 roasted coffee beans | none | Kettle |
+| Milk Coffee | `rusticdelight:cooking/milk_coffee` | milk, 3 roasted beans | none (grid: coffee + milk) | Kettle |
+| Honey Coffee | `rusticdelight:cooking/honey_coffee` | milk, 3 roasted beans, honey bottle, sugar | none (grid) | Kettle |
+| Chocolate Coffee | `rusticdelight:cooking/chocolate_coffee` | milk, 3 roasted beans, 2 cocoa beans | none (grid) | Kettle |
+| Dark Coffee | `rusticdelight:cooking/dark_coffee` | 6 roasted beans | none | Kettle |
+| Apple Cider | `farmersdelight:cooking/apple_cider` | 2 apples, sugar | yes (FR `brewing/apple_cider`) | drop pot |
+| Hot Cocoa | `farmersdelight:cooking/hot_cocoa` | milk, sugar, 2 cocoa beans | yes (FR `brewing/hot_cocoa`, milk bottle container) | drop pot |
+| Creamy Corn Drink | `corn_delight:cooking/creamy_corn_drink` | corn, milk, sugar | none | Kettle |
+| Ender Nectar | `delightful:food/cooking/ender_nectar` | ender eye, milk, sugar | none | Kettle |
+| Pickerelweed Juice | `abnormals_delight:pickerelweed_juice` | blue + purple pickerelweed, sugar | none | Kettle |
+| Cloud Latte | `quarkdelight:cooking/cloud_latte` | milk, sugar, 2 cocoa beans (bottled cloud container) | none | Kettle |
+| Bellini Cocktail | `farmersdelight:cooking/bellini_cocktail` | sugar, ice cubes, 2 peaches (alcoholic) | none | stays in pot |
+| Mango Milkshake | `farmersdelight:cooking/mango_milkshake` | mango, milk bottle, sugar | none | Kettle |
+| Hawberry Tea | `farmersdelight:cooking/hawberry_tea` | sugar, leaves, 4 hawberries | none | Kettle |
+| Lychee Cherry Tea | `farmersdelight:cooking/lychee_cherry_tea` | sugar, spore blossom, 4 lychees | none | Kettle |
+| Mango Tea | `farmersdelight:cooking/mango_tea` | sugar, leaves, 2 mangoes | none | Kettle |
+| Mangosteen Tea | `farmersdelight:cooking/mangosteen_tea` | sugar, leaves, 2 mangosteens | none | Kettle |
+| Peach Tea | `farmersdelight:cooking/peach_tea` | sugar, leaves, 2 peaches | none | Kettle |
+| Chorus Juice (pack) | `creativeengineering:farmersdelightcooking/chorus_juice_manual_only` | 2 chorus fruit, sugar -> 2 | none | Kettle |
+
+The Fruits Delight drinks use `farmersdelight:` recipe ids.
+
+### 2. Juices not made in the pot (2026-10-22)
+Every `juice` item in `item_dict.js`, recipes read from the jars and checked live against `all.csv`.
+
+| Juice | Made today (live) | Kettle today | Plan |
+|---|---|---|---|
+| Melon Juice | grid 4 slices + sugar + bottle | yes, FR 1 slice + sugar (already beats the grid) | keep |
+| Strong Melon Juice | Kettle only (melon juice + honey) | yes | keep |
+| Hamimelon Juice | grid 4 slices + bottle; Create mixing | none | Kettle, beat 4 slices |
+| Kiwi Juice | grid 2 kiwis + bottle; Create mixing | none | Kettle, beat 2 kiwis |
+| Lemon Juice | grid water bottle + 2 lemons + sugar; Create mixing with water | none | Kettle, beat 2 lemons |
+| Orange Juice | grid water bottle + 2 oranges + sugar; Create mixing with water | none | Kettle, beat 2 oranges |
+| Pear Juice | grid water bottle + 2 pears + sugar; Create mixing with water | none | Kettle, beat 2 pears |
+| Prickly Pear Juice | none: Delightful's grid recipe (4 cooked prickly pears + sugar + bottle) does not load | none | Kettle; needs a source decision |
+| Chorus Juice | grid 1 chorus + sugar + bottle (Ender's Delight); pot | none | Kettle (table 1) |
+
+Not drinkable, left out: Vinery's apple juice and six grape juices (`GrapejuiceBottleItem`, wine ingredients that
+return a wine bottle, not foods). `tmted:melon_juice` is merged into FD's at the fluid level (cooking.js).
 
 ## Writeup corrections made
 

@@ -131,7 +131,8 @@
         event.register(Commands.literal('tcprobe').executes(ctx => {
             let level = ctx.source.getLevel()
             fails = 0
-            let anyItem = Boolean($TCConfig.BOTANIA.trinketCaseAnyItem.get())
+            // ConfigValue.get() is a boxed java.lang.Boolean: Boolean(...) of the wrapper is always true in Rhino
+            let anyItem = String($TCConfig.BOTANIA.trinketCaseAnyItem.get()) === 'true'
             log('trinketCaseAnyItem = ' + anyItem)
             try { rules(level, anyItem) } catch (e) { fails++; log('rules ERROR ' + e) }
             try { slots(level, anyItem) } catch (e) { fails++; log('slots ERROR ' + e) }

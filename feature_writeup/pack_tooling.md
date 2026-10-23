@@ -12,9 +12,8 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 | Recipe helpers `global.NCH` (about 60 recipe types, id generation, validation, `strict` mode, `bulk`, `cfg`) | in use |
 | Tag helper `global.tags` (add/remove, wildcard `addMatching`, families, mineable, storage blocks, overlaps, mirror) | in use |
 | `CEConfig` (patcherMod): one Forge common config, 23 sections, live-editable in Create's config screen; `NCH.cfg` reads recipe values from it | in use ([gear_tuning.md](gear_tuning.md) for `NCH.cfg`) |
-| `global.config` JSON config framework (`func/config.js`) | **unused** (F3) |
-| 23 `/dump*` commands writing `kubejs/exported/`, and `/dumpall` | in use |
-| `/cegen`: runs `tools/generators.json` (22 Python generators) in game, optionally at startup | in use; startup run off |
+| 24 `/dump*` commands writing `kubejs/exported/`, and `/dumpall` | in use |
+| `/cegen`: runs `tools/generators.json` (28 Python generators) in game, optionally at startup | in use; startup run off |
 | Headless tests: 9 `tools/test_*.sh` suites (Java on patcherMod classes, the pack's Rhino fork, node sims, Python), plus GameTest projects | in use; machine-specific paths (F7) |
 | Root Gradle build: one build for the 5 in-tree mods, `ce.forge-mod` convention plugin, `installToMods` | in use |
 | Item-loss repro harness (`tools/item_repro/`) | ran 2026-09-30; found the Sophisticated Backpacks wipe ([plan_1.0.3.md](plan_1.0.3.md) 4.7) |
@@ -77,12 +76,16 @@ config, the Java dump and dev commands, and its jar is built by the root Gradle 
   mechanical crafting, sequenced assembly + incomplete items), Create Crafts & Additions (rolling, charging),
   Create: Vintage Improvements (vibrating, laser cutting, polishing), extruding, IE (metal press, crusher, alloy, arc
   furnace, squeezer, bottling, blueprint, sawmill), PneumaticCraft (pressure chamber, explosion crafting, thermo
-  plant).
-- **Utilities:** `remove`, `replaceInput`, `replaceOutput`, `bulk(name, rows)` (call a helper once per row),
+  plant), Farmer's Respite kettle (`frBrewing`), hammering, mortar and food grinding, Sophisticated Backpacks skin
+  smithing (`backpackSkin`, `backpackSkinClear`).
+- **Utilities:** `remove`, `replaceInput`, `replaceOutput` (option `includeAdded`, below), `bulk(name, rows)` (call a helper once per row),
   `cfg(defaults, 'CRAFTING.X')` (values from CEConfig), `incomplete(key)` / `registerIncomplete` (transitional items
   from [transition_items.js](../kubejs/startup_scripts/changes/transition_items.js)).
-- **Known gaps** (documented at each helper): `ieSawmill` can't do secondaries (a datapack JSON instead); no
-  `createEmptying` helper yet (F9).
+- **Known gaps** (documented at each helper): `ieSawmill` can't do secondaries (a datapack JSON instead) (F9).
+- **`includeAdded` (2026-10-22):** KubeJS 1902.6's `replaceInput` / `replaceOutput` swap only recipes loaded from
+  data, never script-added ones. `R.replaceInput` / `R.replaceOutput` with `includeAdded` also swap the script-added
+  recipes (item merges use it: `[itemMerges] 2 swaps in script-added recipes`). Opt-in: a swap replaces the whole
+  matching slot, so sugar -> `#forge:sugar` on added recipes turned a `[sugar, honey]` slot into the tag alone.
 
 ### 2.3 Tag helper (`global.tags`, [tag_helper.js](../kubejs/startup_scripts/func/tag_helper.js))
 
@@ -122,6 +125,7 @@ folders through patcherMod because KubeJS can't).
 |---|---|
 | `/dumpbiomes`, `/dumpclimate`, `/dumpclimatecaves`, `/dumpspawns`, `/dumpstructures`, `/dumpstructuregen` | biome, climate, spawn and structure data ([weather.md](weather.md), [mob_spawns.md](mob_spawns.md), [structure_tuning.md](structure_tuning.md)) |
 | `/dumpitemsbymod`, `/dumptags`, `/dumprecipes`, `/dumpcraftingaudit`, `/dumpfluids`, `/dumppotions`, `/dumpnames` | registries, tags, recipes, names ([jei_coverage.md](jei_coverage.md), [names.md](names.md)) |
+| `/dumpworldjei` | world-interaction JEI facts (patcherMod `devtools/WorldJeiDump`; feeds `tools/gen_jei_world.py`, [jei_world_tabs.md](jei_world_tabs.md)) |
 | `/dumpgear`, `/dumpstacks`, `/dumpfood`, `/dumpplaceable`, `/dumpcropgrowth`, `/dumpcompost`, `/dumppaintings` | per-feature tables ([gear_tuning.md](gear_tuning.md), [stack_sizes.md](stack_sizes.md), [food.md](food.md), ...) |
 | `/dumploot`, `/dumptrades`, `/loottuning` | loot and trades ([loot.md](loot.md), [wandering_trader.md](wandering_trader.md)) |
 | `/dumpbeenests [reset]` | measured nests per biome ([bee_nests.md](bee_nests.md)); **not** in `/dumpall` (a session that generated nothing would overwrite a measurement) |
@@ -133,8 +137,8 @@ Rhino's `try/catch` can't (a `NoClassDefFoundError` used to kill `/dumprecipes` 
 
 ### 2.6 Generators and `/cegen`
 
-[tools/generators.json](../tools/generators.json) lists 22 Python generators in run order, each with `groups`
-(`core`, `worldgen`, `loot`, `client`, `pack`, `reports`, `names`, `food`, `blockrunner`, `slow`), the `dumps` it
+[tools/generators.json](../tools/generators.json) lists 28 Python generators in run order, each with `groups`
+(`core`, `worldgen`, `loot`, `client`, `pack`, `reports`, `names`, `food`, `blockrunner`, `jei`, `slow`), the `dumps` it
 reads, its `outputs` and an `apply` hint. patcherMod's `devtools/GeneratorRunner` runs them as child processes from the
 instance root, hashes the outputs before and after, and reports changes.
 
@@ -149,8 +153,8 @@ Output goes to chat (status lines and highlighted lines), `latest.log` (`[cegen:
 load complete (up to `startupWaitSeconds`), so the first world load reads fresh files; results go to the first player
 to join. Python and timeout are configurable (`python`, `timeoutSeconds`).
 
-33 Python tools aren't in the manifest; 5 are excluded on purpose (listed in its `_readme`), the rest are run by hand
-(F5).
+About 42 of the 70 Python tools aren't in the manifest; 5 are excluded on purpose (listed in its `_readme`), the rest are run by hand
+(F5). Newest manifest entries: `soup_soft_fluids` (`tools/gen_soup_soft_fluids.py`, jar soft fluids, [veggies_delight.md](veggies_delight.md)) and `jei_world` (`tools/gen_jei_world.py` + `tools/jei_world/`, group `jei`, [jei_world_tabs.md](jei_world_tabs.md)).
 
 ### 2.7 Headless tests
 
@@ -175,7 +179,7 @@ to join. Python and timeout are configurable (`python`, `timeoutSeconds`).
 ### 2.8 Root Gradle build
 
 - `settings.gradle` includes `patcherMod`, `exposureBackport`, `incubationAdditions`, `moreMooblooms`,
-  `backportedBrewin` from `development/`; project names stay the bare mod names (`:patcherMod`).
+  `backportedBrewin`, `backportedVinery`, `babyMobs`, `creativeLabels`, `backportedVeggies` from `development/`; project names stay the bare mod names (`:patcherMod`).
 - `build-logic/` holds the `ce.forge-mod` convention plugin (ForgeGradle setup, official 1.19.2 mappings, Java 17,
   mods.toml expansion from `<mod>/gradle.properties`, jar manifest with mixin configs, dev runs, `installToMods`) and
   `ce.forge-mod-refmap` for mods with real Mixin refmaps (exposureBackport).
@@ -227,9 +231,9 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   check (`ServerEvents.tags` or the first recipe event).
 - **F2. Block, fluid and NCH fluid tags aren't validated** (each logs "not validated (tag support not yet
   implemented)"). In [TODO](todo/TODO.md) `tooling/dictionaries #2`.
-- **F3. `global.config` is dead. Your call.** `func/config.js` (a self-healing JSON config under
+- **F3.** DELETED 2026-10-22. **`global.config` was dead.** `func/config.js` (a self-healing JSON config under
   `config/creativeengineering/`) has no caller; dragon autorepair, its first user, moved to CEConfig, and the folder
-  doesn't exist. Delete it, or keep it for KubeJS-only knobs.
+  didn't exist.
 - **F4. Test recipes ship in the pack. Your call.** In `server_scripts/_lib/`:
   - `metal_test_recipes.js`: a mechanical crafting recipe per metal (15 metals + netherite) that takes one of every form
     of the metal (ore to component, up to 20 items) for 1 ingot;
@@ -272,7 +276,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 ## 5. File map
 
 - Dictionaries: [startup_scripts/_lib/](../kubejs/startup_scripts/_lib/) (`item_dict.js`, `block_dict.js`, `fluid_dict.js`, `effect_dict.js`, `multiblock_dict.js`, `removed_items.js`); worklists in [startup_scripts/todo/](../kubejs/startup_scripts/todo/).
-- Helpers: [startup_scripts/func/](../kubejs/startup_scripts/func/) (`neoCraftHelper.js`, `tag_helper.js`, `config.js`, plus the feature helpers: `tune_tools.js`, `armor_effects.js`, `compost.js`, `trade_helper.js`, `jei_order.js`, `item_physics.js`, ...); [changes/transition_items.js](../kubejs/startup_scripts/changes/transition_items.js).
+- Helpers: [startup_scripts/func/](../kubejs/startup_scripts/func/) (`neoCraftHelper.js`, `tag_helper.js`, plus the feature helpers: `tune_tools.js`, `armor_effects.js`, `compost.js`, `trade_helper.js`, `jei_order.js`, `item_physics.js`, ...); [changes/transition_items.js](../kubejs/startup_scripts/changes/transition_items.js).
 - Server `_lib/`: the `dump_*.js` commands, `dump_all.js`, `export_io.js`, `java_guard.js`, `recipe_scan.js`, `loot_dump.js`, `structure_dump.js`, `villager_trades_dump.js`, and the test recipes (F4).
 - patcherMod: [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java), [devtools/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/) (`GeneratorCommand`, `GeneratorRunner`, `ServerModsDump`, `BlockStateSyncDebug`).
 - Tools: [tools/generators.json](../tools/generators.json), `tools/*.py` (generators, reports, scans), `tools/test_*.sh` + `tools/*_test/`, [java_test_cp.sh](../tools/java_test_cp.sh), [lang_index.py](../tools/lang_index.py) (shared paths and jar/lang lookups for the Python tools), [tools/item_repro/](../tools/item_repro/README.md), [tools/perf/](../tools/perf/) ([perf.md](perf.md)), [build_deploy.py](../tools/build_deploy.py) ([deploy.md](deploy.md)), [gen_pack_manifest.py](../tools/gen_pack_manifest.py), [dump_server_mods.py](../tools/dump_server_mods.py), [decompile_mod.py](../tools/decompile_mod.py).
@@ -320,8 +324,8 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 
 ## 8. History
 
-- Before 2026-09-27: dictionaries, NCH (migrated from the older `global.CE`, whose blocks are still commented out in
-  three files, [TODO](todo/TODO.md) `tooling/conventions #3`), tag helper, CEConfig, the first dump commands.
+- Before 2026-09-27: dictionaries, NCH (migrated from the older `global.CE`, whose commented-out blocks in
+  three files were deleted 2026-10-22, [TODO](todo/TODO.md) `tooling/conventions #3`), tag helper, CEConfig, the first dump commands.
 - 2026-09-27 (initial git commit): root Gradle build and manifest tooling.
 - 2026-09-30: item-loss repro harness run ([plan_1.0.3.md](plan_1.0.3.md) 4.7).
 - 2026-09-27 to 10-02 (first commits): `/dumpall` and `generators.json` (09-27), `java_test_cp.sh` (09-28), the
@@ -329,3 +333,5 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   dated in its feature writeup).
 - 2026-10-18: this writeup; findings F1 to F10; tests TL-01 to TL-16. No code changed.
 - 2026-10-19: F6 fixed (test_crop_growth.sh, neoCraftHelper.js line 1, NCH.cfg example).
+- 2026-10-22: `R.replaceInput` / `R.replaceOutput` take `includeAdded` (2.2), found in the second scratch bulk run
+  (SQ-CO-01: Canned Coffee Berries still took Respite's berries).

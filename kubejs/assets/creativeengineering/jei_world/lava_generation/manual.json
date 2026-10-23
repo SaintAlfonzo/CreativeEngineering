@@ -1,0 +1,339 @@
+{
+ "_note": "Hand-written: Forge 43.3.9 FluidInteractionRegistry defaults and vanilla LavaFluid.spreadTo; Create 0.5.1i AllFluids.registerFluidInteractions; Create: Dreams and Desires 1.2c DesiresFluids.addMilkshakeInteraction (chances from serverconfig create_dd-server.toml chanceForOreStone 25, chanceForArtificialOreStone 5); Vintage Improvements 0.2.0.3 VintageFluids. Read with javap. Generated rows (Immersive Weathering fluid_generators): tools/jei_world/tab_weathering.py.",
+ "rows": [
+  {
+   "inputs": [
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cobblestone",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava sets to cobblestone; a source sets to obsidian"
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Below the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Flowing lava"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stone"
+    }
+   ],
+   "notes": [
+    "Lava flowing down into water turns the water to stone"
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:soul_soil",
+     "label": "Below the lava"
+    },
+    {
+     "block": "minecraft:blue_ice",
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:basalt"
+    }
+   ],
+   "notes": [
+    "Lava over soul soil next to blue ice sets to basalt"
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "fluid": "create:honey",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "create:limestone",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava sets to limestone; a source sets to obsidian"
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "fluid": "create:chocolate",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "create:scoria",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava sets to scoria; a source sets to obsidian"
+   ]
+  },
+  {
+   "requires": [
+    "create_dd"
+   ],
+   "inputs": [
+    {
+     "fluid": "create_dd:chocolate_milkshake",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "create:scorchia",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "create:veridium",
+     "chance": 0.25,
+     "label": "Lava over bedrock: 25%; over a beacon, netherite block, dragon egg, end portal or reinforced deepslate: 5%"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava: stone; a source: obsidian",
+    "Over bedrock: 25% ore stone"
+   ]
+  },
+  {
+   "requires": [
+    "create_dd"
+   ],
+   "inputs": [
+    {
+     "fluid": "create_dd:vanilla_milkshake",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:dolomite",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "create:asurine",
+     "chance": 0.25,
+     "label": "Lava over bedrock: 25%; over a beacon, netherite block, dragon egg, end portal or reinforced deepslate: 5%"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava: stone; a source: obsidian",
+    "Over bedrock: 25% ore stone"
+   ]
+  },
+  {
+   "requires": [
+    "create_dd"
+   ],
+   "inputs": [
+    {
+     "fluid": "create_dd:strawberry_milkshake",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cobbled_deepslate",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "create:crimsite",
+     "chance": 0.25,
+     "label": "Lava over bedrock: 25%; over a beacon, netherite block, dragon egg, end portal or reinforced deepslate: 5%"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava: stone; a source: obsidian",
+    "Over bedrock: 25% ore stone"
+   ]
+  },
+  {
+   "requires": [
+    "create_dd"
+   ],
+   "inputs": [
+    {
+     "fluid": "create_dd:glowberry_milkshake",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:gabbro",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "create:ochrum",
+     "chance": 0.25,
+     "label": "Lava over bedrock: 25%; over a beacon, netherite block, dragon egg, end portal or reinforced deepslate: 5%"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava: stone; a source: obsidian",
+    "Over bedrock: 25% ore stone"
+   ]
+  },
+  {
+   "requires": [
+    "create_dd"
+   ],
+   "inputs": [
+    {
+     "fluid": "create_dd:pumpkin_milkshake",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:dripstone_block",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "create_dd:breccia",
+     "chance": 0.25,
+     "label": "Lava over bedrock: 25%; over a beacon, netherite block, dragon egg, end portal or reinforced deepslate: 5%"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava: stone; a source: obsidian",
+    "Over bedrock: 25% ore stone"
+   ]
+  },
+  {
+   "requires": [
+    "vintageimprovements",
+    "create"
+   ],
+   "inputs": [
+    {
+     "fluid": "vintageimprovements:sulfuric_acid",
+     "amount": 1000,
+     "label": "Touching the lava"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket",
+    "label": "Lava, source or flowing"
+   },
+   "outputs": [
+    {
+     "block": "create:scoria",
+     "label": "From flowing lava"
+    },
+    {
+     "block": "minecraft:obsidian",
+     "label": "From a lava source"
+    }
+   ],
+   "notes": [
+    "Flowing lava sets to scoria; a source sets to obsidian"
+   ]
+  }
+ ]
+}

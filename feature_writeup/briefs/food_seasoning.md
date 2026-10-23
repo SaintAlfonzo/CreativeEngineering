@@ -2,7 +2,7 @@
 
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# food`, Sub `seasoning` (rows 1 to 4, all Planned). Layout
 per [README.md](README.md). Related writeups: [food.md](../food.md) (1 "Salt", 3.5 "Salt (optional)"),
-[recipes_cooking.md](../recipes_cooking.md); sister brief [food_ingredients.md](food_ingredients.md) (bone broth #4,
+[recipes_cooking.md](../recipes_cooking.md); sister brief [dishes_ingredients.md](dishes_ingredients.md) (bone broth #4,
 ice cubes #5, Vintage Delight #12).
 
 **Verified against jars** (scratchpad cache, 2026-10-21): The Salt 1.2.4.1 (`salt`, decompiled: `SaltingRecipe`,
@@ -83,7 +83,7 @@ and crushing with equal efficiency and more than one output with a chance; merge
    `R.remove` passes a filter object through to `e.remove`. Tags are bound in the recipe event, so `itemIds` is the
    live tag. Gotcha: the input matches salted food too (plain item ingredients ignore NBT), so a salted stack in a basin
    wastes salt; acceptable, or use `{ type: 'forge:nbt', item: id, nbt: '{}' }` only if tested (NBT ingredients have
-   a history of matching nothing in this pack, item_dict.js comments and food_canning.md).
+   a history of matching nothing in this pack, item_dict.js comments and cans_canning.md).
 5. **Salt production, equal efficiency, several outputs with chance** (raw rock salt -> 1 salt + 25 % 1 by every route):
    ```js
    R.remove({ id: 'salt:salt_from_raw_rock_salt' }, e)       // hand craft: keep or make it 1 flat (decision D3)
@@ -97,7 +97,7 @@ and crushing with equal efficiency and more than one output with a chance; merge
    ```
    Clusters (silk touch only gives the block): `salt_cluster` -> 3 salt + 50 % 1 on the same routes; buds smaller.
    Check `R.hammering` with a single output (FD cutting allows only result lists; NCH passes a string, as other calls do).
-6. **Vintage Delight merge:** waits on `food/ingredients #12`.
+6. **Vintage Delight merge:** waits on `dishes/ingredients #12`.
 
 ### Ids and data
 Recipe types `salt:salting` (special crafting), `create:mixing` with NBT result, `create:crushing`, `create:milling`,
@@ -219,7 +219,7 @@ No pepper (only Rustic Delight bell peppers), dill or spice item in the dict. Sa
    crop), `creativeengineering:dill` (from sea pickles on the cutting board, per the row's hint), cheese = any
    `#brewinandchewin:foods/cheese_wedge`, cream and onion = a powder from milk + onion (heated mixing). Dict keys
    `i.ground_pepper`, `i.dill`, `i.cream_onion_seasoning`.
-3. **Ice cubes for cold drinks:** the same recipe type with `i.t_ice_cubes` (food_ingredients.md #5) on
+3. **Ice cubes for cold drinks:** the same recipe type with `i.t_ice_cubes` (dishes_ingredients.md #5) on
    `#creativeengineering:food_type/drink` minus hot ones; or simply chilled variants (decision).
 4. **Popcorn variants:** regular popcorn placeable first (`food/placeable`, see [food_placeable.md](food_placeable.md));
    then salted / cheese / caramel popcorn boxes as distinct block items (KubeJS blocks or Display Delight style), made

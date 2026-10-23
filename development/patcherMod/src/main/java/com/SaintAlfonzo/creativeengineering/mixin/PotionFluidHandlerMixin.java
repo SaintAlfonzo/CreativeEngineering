@@ -59,12 +59,6 @@ public class PotionFluidHandlerMixin {
             NBTHelper.writeEnum(fluid.getOrCreateTag(), "Bottle", type);
         }
 
-        // TEMP diagnostic
-        com.mojang.logging.LogUtils.getLogger().info(
-                "[CE] bundle empty: {} type={} -> {} mB, fluid={} tag={}",
-                item, type, fluid.getAmount(), fluid.getFluid(),
-                fluid.hasTag() ? fluid.getTag() : "<none>");
-
         if (!simulate) stack.shrink(1);
         cir.setReturnValue(Pair.of(fluid, new ItemStack(Items.GLASS_BOTTLE, uses)));
     }

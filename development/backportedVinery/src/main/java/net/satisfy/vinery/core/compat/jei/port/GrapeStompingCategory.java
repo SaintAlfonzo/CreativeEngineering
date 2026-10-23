@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Grape stomping in the Grapevine Pot (code, not a recipe type): six grapes of one type, a number of stomps
- * (setting {@code grapevinePotStomps}, 10% more progress per stomp with 15+ armor), then each wine bottle takes 3
- * grapes' worth of juice.
+ * Grape stomping in the Grapevine Pot (code, not a recipe type): a full pot of grapes of one type (12), a number of
+ * stomps (setting {@code grapevinePotStomps}, 10% more progress per stomp with 15+ armor), then each wine bottle takes
+ * 3 grapes' worth of juice.
  */
 public class GrapeStompingCategory extends PortCategory<GrapeStompingCategory.Display> {
     public static final RecipeType<Display> TYPE = RecipeType.create(Vinery.MOD_ID, "grape_stomping", Display.class);

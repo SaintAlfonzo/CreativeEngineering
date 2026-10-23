@@ -1,0 +1,138 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:glass",
+      "minecraft:red_stained_glass"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/lime"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:lime_stained_glass"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Uses one dye."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:glass",
+      "minecraft:lime_stained_glass"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/red"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:red_stained_glass"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Uses one dye."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:terracotta",
+      "minecraft:red_terracotta",
+      "minecraft:blue_terracotta"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/white"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:white_terracotta"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Uses one dye."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:terracotta",
+      "minecraft:white_terracotta",
+      "minecraft:red_terracotta"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/blue"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:blue_terracotta"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Uses one dye."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:terracotta",
+      "minecraft:white_terracotta",
+      "minecraft:blue_terracotta"
+     ],
+     "label": "Any other colour"
+    }
+   ],
+   "action": {
+    "tag": "forge:dyes/red"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:red_terracotta"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Uses one dye."
+   ]
+  }
+ ]
+}

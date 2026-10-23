@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Cooking for Blockheads oven (13.3.4) fuel (TODO food/kitchen #8). The pack sets {@code ovenRequiresCookingOil =
+ * Cooking for Blockheads oven (13.3.4) fuel (TODO cooking/kitchen #8). The pack sets {@code ovenRequiresCookingOil =
  * false}, so the oven burns what a furnace burns; this adds:
  *
  *  - {@code getBurnTime}: cooking oil ({@code #balm:cooking_oil}) still burns, for CfB's oil time (800 before

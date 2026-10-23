@@ -1,0 +1,40 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "vintagedelight"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:bread"
+    },
+    {
+      "item": "farmersdelight:beef_patty"
+    },
+    {
+      "tag": "forge:salad_ingredients"
+    },
+    {
+      "tag": "forge:crops/tomato"
+    },
+    {
+      "tag": "forge:cheese"
+    },
+    [
+      {
+        "item": "rusticdelight:roasted_bell_pepper_red"
+      },
+      {
+        "item": "rusticdelight:roasted_bell_pepper_green"
+      },
+      {
+        "item": "rusticdelight:roasted_bell_pepper_yellow"
+      }
+    ]
+  ],
+  "result": {
+    "item": "vintagedelight:stuffed_burrito"
+  }
+}

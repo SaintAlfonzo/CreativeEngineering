@@ -199,6 +199,10 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
   - `#13` Gates: basic gates only, simple vanilla-redstone-like crafts, expensive at scale; Project Red for advanced
     gates, complex crafts but much cheaper at scale, for complex computing / redstone. Project Red (Core, Fabrication,
     Illumination, Integration, Transmission) is already in the pack; its gate recipes are unchanged.
+- **F10. Sampling by hitting never worked.** FIXED 2026-10-22 (found in the scratch run, SQ-GM-02): the hurt handler in
+  `server_scripts/engineering/sample_syringe.js` called `event.getSource().getEntity()`, which throws in this KubeJS
+  (the name is `getActual()`), so a hit never took a sample; right-click was unaffected. Same bug as the tool on-hit
+  effects ([armor_effects.md](armor_effects.md) F10). Hit sampling still untested in game (EN-17).
 
 ### Known limits
 
@@ -251,7 +255,8 @@ patcherMod's copies to see whether the jar is current.
   the workbench disassembly gives 4 coils back.
 - [ ] **EN-16 HV coil:** 2 steel + 2 aluminum wire + spool → 4 HV wire coils.
 - [ ] **EN-17 Syringe:** right-click a cow with an empty syringe → glinting Sample Syringe (Cow), "Sampled Cow."; a
-  moobloom gives the cow one too; right-click a zombie → nothing.
+  moobloom gives the cow one too; right-click a zombie → nothing. Hitting a cow with the empty syringe samples it too
+  (F10, fixed 2026-10-22).
 - [ ] **EN-18 Syringe used up:** cow syringe + culture base + slimeball → culture beef, empty syringe left in the grid.
 
 ## 8. History
@@ -260,3 +265,4 @@ patcherMod's copies to see whether the jar is current.
   sawmill generator, Dragon Breathing fan type and JEI page, components, coils, the syringe; shipped with 1.0.3.
 - 2026-10-10 (More Mooblooms): moobloom added to the syringe list ([mooblooms.md](mooblooms.md) O5).
 - 2026-10-18: this writeup; findings F1 to F8; tests EN-01 to EN-18. No code changed.
+- 2026-10-22: F10 fixed (syringe hit sampling, `getActual()`), found in the second scratch bulk run.

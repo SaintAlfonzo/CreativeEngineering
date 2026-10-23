@@ -392,7 +392,7 @@ Added from the scratchpad 2026-10-21:
 - Fireflies can be jarred when near a bush at night (TODO `mobs/spawns #6`).
 - Alex's Mobs seagulls can't take lunchboxes (TODO `mobs/tweaks #7`).
 - Merge the monkeys across mods, Alex's Mobs and Neapolitan (TODO `mobs/tweaks #8`).
-- Autumnity port: turkeys replace chicken spawns in the autumn biomes (TODO `largecontent/autumnityport #4`).
+- Autumnity port: turkeys replace chicken spawns in the autumn biomes (TODO `ports/autumnityport #4`).
 - Environmental features: deer and reindeer (venison), koi, muddy pigs (TODO `largecontent/mod-additions #3`).
 
 ## 10. Passive overworld animals (analysis 2026-10-09)

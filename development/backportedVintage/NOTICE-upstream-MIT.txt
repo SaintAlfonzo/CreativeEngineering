@@ -1,0 +1,30 @@
+backportedVintage is licensed under the GNU General Public License v3 (see LICENSE).
+
+It is a port of Vintage Delight 0.1.6 for Forge 1.20.1 by Ribs (https://modrinth.com/mod/vintage-delight), whose
+mods.toml declares the MIT License for the whole mod. The port includes that mod's assets and data (converted to
+1.19.2 formats by tools/port_resources.py) and Java code ported from it. A few fixes and one item (Cucumber Dough) are
+taken from the community "Vintage Delight KOTS" 0.3.1 (NeoForge 1.21.1), which is GPL-3.0. The MIT License requires
+the notice below to be kept with all copies or substantial portions of the 0.1.6 code and assets.
+
+-------------------------------------------------------------------------------------------------------
+MIT License
+
+Copyright (c) Ribs
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

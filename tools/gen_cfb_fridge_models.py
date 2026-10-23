@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reshape Cooking for Blockheads' 2-tall fridge so it reads as a full block (TODO food/kitchen #6).
+"""Reshape Cooking for Blockheads' 2-tall fridge so it reads as a full block (TODO cooking/kitchen #6).
 
 The 13.3.4 fridge body is x 1-15, z 3-15 and its upper half stops at y 13, so it leaves gaps beside counters and
 decor on top floats 3 px above it. This reads CfB's own models from the jar in mods/ and writes overrides to
@@ -67,7 +67,7 @@ def keeps_uv(name):
 def reshape(model, moves):
     out = copy.deepcopy(model)
     out['credit'] = ('Cooking for Blockheads model reshaped to a full block by tools/gen_cfb_fridge_models.py '
-                     '(CreativeEngineering, TODO food/kitchen #6)')
+                     '(CreativeEngineering, TODO cooking/kitchen #6)')
     seen = set()
     for e in out['elements']:
         name = e.get('name')

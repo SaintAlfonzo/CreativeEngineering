@@ -8,14 +8,15 @@
 | Set bonuses on wooden (Immersive Armors), copper, iron, gold, diamond, netherite, felsic, dragon (both chestplates) | DEPLOYED, in-game test pending |
 | Dragon horse armor (`mount()`): Regeneration I, horse walk once per `mountEffectIntervalTicks` | DEPLOYED with 1.0.4 (perf fix + wrong effect id fixed 2026-10-03), in-game test pending |
 | Tool effects framework `global.toolEffects`: `onHit()` (to the target) and `held()` (to the wielder) | DEPLOYED, in-game test pending |
-| Echo tools on-hit Weakness II + Darkness II; dragon sword / axe / shovel / trident / bow / crossbow on-hit and held effects | DEPLOYED, in-game test pending; dragon bow and crossbow values look reversed (F4) |
+| Echo tools on-hit Weakness II + Darkness II; dragon sword / axe / shovel / trident / bow / crossbow on-hit and held effects | DEPLOYED, in-game test pending; dragon bow and crossbow swapped 2026-10-22 (F4); on-hit never applied until F10 (fixed 2026-10-22); built, scratch server PASSED 2026-10-22 for the on-hit half (SQ-GM-02); held effects in game (AE-19, AE-20) |
 | Echo armor set bonus swapped from Resistance II + Strength II to Night Vision + Phantom Bane (`EchoArmorEffectProcedureMixin`), tooltip to match (`EchoArmorTooltipMixin`) | DEPLOYED (patcherMod), in-game test pending |
 | `creativeengineering:magic_resistance` effect (KubeJS) and its damage cut (`MagicResistanceEffect`, 20% per level on `isMagic()` damage) | DEPLOYED, in-game test pending |
 | Magic Resistance potions (base, long, strong) and their brewing | DEPLOYED; brewing and reagent belong to the potions writeup (backlog row 4); reagent is a placeholder |
 | Tooltip lines for all of the above (`armor_effects_tooltip.js`, `tool_effects_tooltip.js`) | DEPLOYED |
 
-- **Pending:** nothing built and unshipped. AE-01 to AE-24 have never been run. Findings F1 to F9 (section 4) are
-  open; F4 and F6 need your call.
+- **Pending:** F4 (dragon bow and crossbow swap, `tool_effects.js`, startup script: restart) built 2026-10-22, unshipped;
+  on-hit half scratch server PASSED 2026-10-22 (SQ-GM-02, after F10). AE-01 to AE-24 have never been run. Findings F1 to F10 (section 4) are
+  open; F6 needs your call (F4 done 2026-10-22).
 - **Files to open:** [func/armor_effects.js](../kubejs/startup_scripts/func/armor_effects.js) (armor data + API),
   [func/tool_effects.js](../kubejs/startup_scripts/func/tool_effects.js) (tool data + API),
   [magic/armor_effects.js](../kubejs/server_scripts/magic/armor_effects.js) and
@@ -85,8 +86,8 @@ the item is in either hand. Tooltip headers: "On hit, inflicts to target:" (with
 | Dragon axe | Levitation II 3 s, Exsanguination II 7.5 s | Jump Boost III |
 | Dragon shovel ("discombobulate") | Nausea II 5 s, Hunger II 5 s, Overencumbered II 5 s, Trippy II 5.5 s, Earthquake II 0.5 s, Fear II 0.5 s | Knockback Resistance II (AM) |
 | Dragon trident | Mining Fatigue II 3 s | Slow Falling II |
-| Dragon bow | Invisibility II 3 s | Slowness IV, Glowing III |
-| Dragon crossbow | Resistance II 3 s | Exsanguination II, Weakness III |
+| Dragon bow | Slowness IV 2.5 s, Glowing I 25 s | Invisibility I |
+| Dragon crossbow | Exsanguination II 7.5 s, Weakness III 12.5 s | Resistance II |
 
 `held` specs also carry a `duration`; it is ignored (F3). Hand-written flavour lines for the dragon tools are in
 [tooltips.js](../kubejs/client_scripts/tooltips.js) around line 815 (none for the bow or crossbow).
@@ -169,9 +170,11 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
   is just added twice a tick. Fix: delete one call.
 - **F2.** FIXED 2026-10-19 (comment says 7, MAX_EFFECTS). **Stale cap in the header:** the comment says "up to 6 entries"; `MAX_EFFECTS` is 7 and the dragon set uses all
   7. Doc fix.
-- **F3. `held()` durations are ignored.** Every held spec has a `duration` (dragon bow Glowing 500, crossbow Weakness
-  250, ...) but held effects always refresh at 40 ticks. Harmless, misleading. Fix: drop the fields or document them.
-- **F4. Dragon bow and crossbow look reversed. Your call.**
+- **F3. `held()` durations are ignored.** Every held spec has a `duration` (dragon bow Invisibility 60, crossbow
+  Resistance 60, ...) but held effects always refresh at 40 ticks. Harmless, misleading. Fix: drop the fields or document them.
+- **F4. Dragon bow and crossbow look reversed.** FIXED 2026-10-22 (TODO `potions/effects #2`): on-hit and held swapped in
+  `tool_effects.js`, durations and levels kept (Invisibility and Glowing set to level I, their level does nothing).
+  The finding before the fix:
   - Bow: the target gets **Invisibility** on hit; the wielder gets **Slowness IV** and **Glowing III** while holding it.
   - Crossbow: the target gets **Resistance II** on hit; the wielder gets **Exsanguination** (bleeding) and **Weakness
     III** while holding it.
@@ -191,7 +194,7 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
 - **F7. Echo Phantom Bane is level II, the tooltip says "Phantom Bane".** The mixin keeps CDD's amplifier 1. Check
   whether Better Beacons scales Phantom Bane with level; if it does, either drop the amplifier to 0 or say "II".
   Checked 2026-10-21 (Better Beacons 1.0.2 jar): its only consumer, `PhantomSpawnerMixin`, tests `hasEffect`, so the
-  level does nothing; amplifier 0 is cosmetic ([briefs/gear_effects.md](briefs/gear_effects.md)).
+  level does nothing; amplifier 0 is cosmetic ([briefs/potions_effects.md](briefs/potions_effects.md)).
 - **F8. One effect packet per effect per tick, unmeasured.** Re-adding an effect with a longer duration fires
   `onEffectUpdated`, which syncs the effect to the client. A dragon set plus a held dragon tool is 8 updates a
   player a tick. [perf.md](perf.md) only measured the horse walk. A cheaper version re-adds only when under, say, 20
@@ -199,6 +202,9 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
 - **F9. Horse Regeneration level undecided.** The old registration named `minecraft:strong_regeneration` (a potion
   id, so it never worked); it is now `minecraft:regeneration` level I. Whether II was meant is open
   ([perf.md](perf.md) 7).
+- **F10. No tool on-hit effect ever applied.** FIXED 2026-10-22 (scratch run, SQ-GM-02): `tool_effects.js` called
+  `event.getSource().getEntity()`, which throws in this KubeJS (the name is `getActual()`), so every on-hit entry (echo
+  tools, dragon tools) did nothing. The sample syringe had the same bug ([engineering.md](engineering.md) 2.5).
 
 ### Known limits
 
@@ -278,10 +284,11 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
   higher).
 - [ ] **AE-17 Dragon shovel:** hit a player or mob → all six discombobulate effects; while held, Knockback Resistance.
 - [ ] **AE-18 Dragon trident:** melee hit → Mining Fatigue II 3 s; thrown hit → nothing (F5). While held: Slow Falling.
-- [ ] **AE-19 Dragon bow (F4):** shoot a zombie with the bow in the main hand → the zombie turns invisible for 3 s.
-  Holding it: Slowness IV (FOV narrows) and Glowing. Record whether that's wanted.
-- [ ] **AE-20 Dragon crossbow (F4):** shoot a zombie → it gets Resistance II. Holding it: Exsanguination and Weakness
-  III. Record whether that's wanted.
+- [ ] **AE-19 Dragon bow (F4)** (on-hit tables and a main-hand hit: scratch server PASSED 2026-10-22, SQ-GM-02, slowness 3 + glowing 0, no Invisibility
+  on the target; held effects need a real ticking player: in game): holding it → Invisibility, no Slowness or Glowing on you. Shoot a zombie with the bow
+  in the main hand → it gets Slowness IV 2.5 s and Glowing 25 s; tooltip lists Invisibility under held.
+- [ ] **AE-20 Dragon crossbow (F4)** (same split as AE-19; on-hit: scratch server PASSED 2026-10-22, SQ-GM-02, exsanguination 1 + weakness 2): holding it → Resistance II, no bleeding or Weakness on you. Shoot a zombie → it
+  gets Exsanguination II 7.5 s and Weakness III 12.5 s.
 - [ ] **AE-21 Held in either hand:** dragon axe in the off hand → Jump Boost III still applies.
 - [ ] **AE-22 Magic Resistance cut:** `/effect give @s creativeengineering:magic_resistance 60 0`, then
   `/effect give @s minecraft:instant_damage 1 0` → 4.8 damage instead of 6 (20%). Amplifier 1 → 3.6.
@@ -299,3 +306,6 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
 - 2026-10-18: this writeup; findings F1 to F9; tests AE-01 to AE-24. No code changed.
 - 2026-10-19: F1 fixed, the second iron `set()` deleted ([plan_1.0.9.md](plan_1.0.9.md)).
 - 2026-10-19: F2 and the magic_resistance.js part of F6 fixed (comments only; TODO `pack/docs`).
+- 2026-10-22: F4 fixed, dragon bow and crossbow on-hit and held swapped; AE-19 and AE-20 rewritten.
+- 2026-10-22 (second bulk run): F10 found and fixed (no on-hit tool effect had ever applied); SQ-GM-02 then PASS on
+  the scratch server. Held effects of AE-19 / AE-20 stay in game.

@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Right-clicking Cooking for Blockheads' kitchen corner opens its storage as a chest ({@link CfbCornerStorage}, TODO
- * food/kitchen #15). CfB's own {@code use} only recolours with dye and answers FAIL otherwise; that FAIL is kept for
+ * cooking/kitchen #15). CfB's own {@code use} only recolours with dye and answers FAIL otherwise; that FAIL is kept for
  * a block item on the top face, so a cutting board (or anything else) can still be placed on the corner, as on a
  * counter. SRG name with {@code remap = false}: m_6227_ use.
  */

@@ -52,6 +52,7 @@ public final class CEConfig {
     public static final BonemealCharm BONEMEAL_CHARM;
     public static final CropGrowth CROP_GROWTH;
     public static final CropDrops CROP_DROPS;
+    public static final StemFruit STEM_FRUIT;
     public static final LeafDecay LEAF_DECAY;
     public static final LeafPiles LEAF_PILES;
     public static final Campfire CAMPFIRE;
@@ -68,7 +69,9 @@ public final class CEConfig {
     public static final Time TIME;
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
+    public static final VeinUndo VEIN_UNDO;
     public static final TrashSlot TRASH_SLOT;
+    public static final BackpackSkins BACKPACK_SKINS;
     public static final WanderingTrader WANDERING_TRADER;
     public static final Advancements ADVANCEMENTS;
     public static final Effects EFFECTS;
@@ -95,6 +98,7 @@ public final class CEConfig {
         BONEMEAL_CHARM = new BonemealCharm(builder);
         CROP_GROWTH = new CropGrowth(builder);
         CROP_DROPS = new CropDrops(builder);
+        STEM_FRUIT = new StemFruit(builder);
         LEAF_DECAY = new LeafDecay(builder);
         LEAF_PILES = new LeafPiles(builder);
         CAMPFIRE = new Campfire(builder);
@@ -111,13 +115,30 @@ public final class CEConfig {
         TIME = new Time(builder);
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
+        VEIN_UNDO = new VeinUndo(builder);
         TRASH_SLOT = new TrashSlot(builder);
+        BACKPACK_SKINS = new BackpackSkins(builder);
         WANDERING_TRADER = new WanderingTrader(builder);
         ADVANCEMENTS = new Advancements(builder);
         EFFECTS = new Effects(builder);
         MOD_NAMES = new ModNames(builder);
         DEBUG = new Debug(builder);
         COMMON_SPEC = builder.build();
+    }
+
+    /** Backpack skins (backpackskin/ package, feature_writeup/backpack_skins.md). */
+    public static final class BackpackSkins {
+        public final ForgeConfigSpec.BooleanValue allowEquip;
+
+        private BackpackSkins(ForgeConfigSpec.Builder b) {
+            b.comment("Sophisticated Backpacks skins: a block smithed onto a backpack changes how it looks.")
+                    .push("backpackSkins");
+            allowEquip = b.comment(
+                    "Off: a skinned backpack cannot go in the chest slot or a Curios slot (so it is never worn).",
+                    "On: it can, and the skin block is drawn on the back."
+            ).define("allowEquip", false);
+            b.pop();
+        }
     }
 
     /** Dials for {@code mixin/ForgivingVoidMixin}'s origin-pull behaviour. */
@@ -611,6 +632,41 @@ public final class CEConfig {
     }
 
     /**
+     * Extra fruit on melon, pumpkin and other stems ({@code crops.StemExtraFruit},
+     * {@code mixin/AttachedStemExtraFruitMixin}); feature_writeup/crops.md 2.10. Read on every random tick.
+     */
+    public static final class StemFruit {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.IntValue maxFruits;
+        public final ForgeConfigSpec.IntValue secondFruitMinutes;
+        public final ForgeConfigSpec.IntValue thirdFruitMinutes;
+        public final ForgeConfigSpec.IntValue fourthFruitMinutes;
+
+        private StemFruit(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free",
+                    "sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and",
+                    "hydration count the same) and also waits a minimum time since the stem's last fruit. The",
+                    "wait counts from the first random tick after a fruit grows. When the fruit the stem faces is",
+                    "taken, the stem turns to another of its fruits instead of back into a plain stem. Server side."
+            ).push("stem_fruit");
+
+            enabled = b.comment("Master on/off switch. Off = vanilla (one fruit per stem).")
+                    .define("enabled", true);
+            maxFruits = b.comment("Most fruits next to one stem (1 = vanilla, 4 = every side).")
+                    .defineInRange("maxFruits", 4, 1, 4);
+            secondFruitMinutes = b.comment("Minimum game minutes (1200 ticks) after the first fruit before a 2nd can grow.")
+                    .defineInRange("secondFruitMinutes", 10, 0, 1440);
+            thirdFruitMinutes = b.comment("Minimum game minutes after the 2nd fruit before a 3rd can grow.")
+                    .defineInRange("thirdFruitMinutes", 20, 0, 1440);
+            fourthFruitMinutes = b.comment("Minimum game minutes after the 3rd fruit before a 4th can grow.")
+                    .defineInRange("fourthFruitMinutes", 40, 0, 1440);
+
+            b.pop(); // stem_fruit
+        }
+    }
+
+    /**
      * Leaf life range past vanilla's 7 ({@code block.LeafDecayRange}, {@code mixin/LeavesDecayRangeMixin});
      * feature_writeup/mob_block_tweaks.md 2.5. Read on every decay check.
      */
@@ -890,7 +946,7 @@ public final class CEConfig {
     /**
      * Cooking for Blockheads kitchen parts with other mods' items: {@code compat.CuttingBoardOnCounter} and
      * {@code mixin/CuttingBoardSupportMixin} (FD cutting board on a counter), {@code mixin/CfbOvenFuelMixin}.
-     * TODO food/kitchen #8.
+     * TODO cooking/kitchen #8.
      */
     public static final class Kitchen {
         public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetX;
@@ -1440,6 +1496,9 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue packOrder;
         public final ForgeConfigSpec.BooleanValue orderReport;
         public final ForgeConfigSpec.BooleanValue seasoningCategory;
+        public final ForgeConfigSpec.BooleanValue potionBucketCategory;
+        public final ForgeConfigSpec.BooleanValue tippedArrowCategory;
+        public final ForgeConfigSpec.BooleanValue canCategories;
 
         private Jei(ForgeConfigSpec.Builder b) {
             b.comment("JEI recipe screen tweaks (client side).").push("jei");
@@ -1472,6 +1531,26 @@ public final class CEConfig {
                     "Crafting and Mixing pages. Off: they stay where their mods put them.",
                     "Takes effect the next time JEI starts (rejoin or /reload)."
             ).define("seasoningCategory", true);
+
+            potionBucketCategory = b.comment(
+                    "Show the potion bucket recipes on one Potion Buckets page per potion and bucket: filling and",
+                    "draining by hand, the Spout, the Item Drain and the Bottling Machine together. Off: they stay on the",
+                    "Crafting, Spout Filling, Item Draining and Bottling Machine pages.",
+                    "Takes effect the next time JEI starts (rejoin or /reload)."
+            ).define("potionBucketCategory", true);
+
+            tippedArrowCategory = b.comment(
+                    "Show tipped arrow recipes on one Tipped Arrows page per potion: by hand (8 arrows + a lingering",
+                    "potion), the Spout and the Bottling Machine together. Off: they stay on the Crafting, Spout Filling",
+                    "and Bottling Machine pages.",
+                    "Takes effect the next time JEI starts (rejoin or /reload)."
+            ).define("tippedArrowCategory", true);
+
+            canCategories = b.comment(
+                    "Show can crafts on two pages of their own: Canning (food + an empty can -> a can) and Using Cans",
+                    "(crafts that take a can). Off: they stay on the Crafting page.",
+                    "Takes effect the next time JEI starts (rejoin or /reload)."
+            ).define("canCategories", true);
 
             b.pop(); // jei
         }
@@ -1863,6 +1942,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue placementPriority;
         public final ForgeConfigSpec.BooleanValue templateBlockSwaps;
         public final ForgeConfigSpec.BooleanValue permafrostMerge;
+        public final ForgeConfigSpec.BooleanValue mulberrySapling;
 
         private WorldgenSystems(ForgeConfigSpec.Builder b) {
             b.comment("Switch a system off to see the mods' own behaviour. Off never deletes a config file.").push("systems");
@@ -1940,6 +2020,10 @@ public final class CEConfig {
                     "instead of Quark's own block (renamed Froststone; patcherMod QuarkPermafrostStyleMixin). Walls stay packed ice.",
                     "Off: Quark's block. New chunks only.")
                     .define("permafrostMerge", true);
+            mulberrySapling = b.comment("Upgrade Aquatic's river sapling (Mulberry Sapling) grows the datapack's upgrade_aquatic:river_tree, the oak",
+                    "trunk tree that worldgen places by rivers (patcherMod MulberrySapling). Off: UA's built-in tree with river logs,",
+                    "which drop oak logs. Applies at once.")
+                    .define("mulberrySapling", true);
             b.pop(); // systems
         }
     }
@@ -2294,17 +2378,27 @@ public final class CEConfig {
      */
     /** worldgen/OceanGeodes: how far geodes under oceans are pushed down; on/off is [worldgen.systems] oceanGeodes. */
     public static final class OceanGeodes {
-        public final ForgeConfigSpec.IntValue drop;
+        public final ForgeConfigSpec.IntValue lowestFloorY;
+        public final ForgeConfigSpec.IntValue clearance;
+        public final ForgeConfigSpec.IntValue spread;
         public final ForgeConfigSpec.DoubleValue stayShare;
         public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> untouched;
 
         private OceanGeodes(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Geodes whose column is an ocean (the biome at the sea floor is #minecraft:is_ocean) are moved down before",
-                    "they generate, so fewer of them poke through the sea floor. Which geodes stay is a fixed roll per position."
+                    "they generate, so they stay under the deepest sea floor the world can have. A moved geode's top (its",
+                    "origin + the geode's own maxGenOffset) ends at least clearance blocks under lowestFloorY; geodes already",
+                    "that deep stay where they are. Which geodes stay and how far each spreads is a fixed roll per position."
             ).push("ocean_geodes");
-            drop = b.comment("Blocks a geode under an ocean is moved down.")
-                    .defineInRange("drop", 10, 0, 64);
+            lowestFloorY = b.comment("The lowest sea floor y any ocean in the pack generates (ST-133: Terralith deep oceans near y 0;",
+                    "Tectonic deeper_oceans can go lower).")
+                    .defineInRange("lowestFloorY", -8, -64, 64);
+            clearance = b.comment("Blocks of stone kept between a moved geode's top and lowestFloorY.")
+                    .defineInRange("clearance", 2, 0, 16);
+            spread = b.comment("Moved geodes land up to this many blocks under the highest allowed origin (a roll per position),",
+                    "so they don't all sit on one layer.")
+                    .defineInRange("spread", 8, 0, 32);
             stayShare = b.comment("Share of geodes under oceans that keep their own height (0.1 = 1 in 10).")
                     .defineInRange("stayShare", 0.1, 0.0, 1.0);
             untouched = b.comment("Geodes whose inner layer is one of these blocks are left at their own height (Geode Plus'",
@@ -2502,6 +2596,30 @@ public final class CEConfig {
      * the toggle key. A screen listed here is switched on once per client (the first time it opens
      * after being listed), so a player's later toggle still sticks.
      */
+    /** Rules on Ore Excavation's {@code /undo_excavation} ([[excavation.VeinUndo]]). */
+    public static final class VeinUndo {
+        public final ForgeConfigSpec.IntValue cooldownSeconds;
+        public final ForgeConfigSpec.BooleanValue denyBlockEntities;
+
+        private VeinUndo(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Ore Excavation's /undo_excavation. An undo is refused when the vein mine broke a block in",
+                    "#creativeengineering:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient",
+                    "debris; filled by KubeJS). Server side."
+            ).push("vein_undo");
+
+            cooldownSeconds = b.comment("Seconds a player waits after a successful undo before the next one. 0 = none.")
+                    .defineInRange("cooldownSeconds", 5, 0, 3600);
+
+            denyBlockEntities = b.comment(
+                    "Also refuse when the vein mine broke a block with a block entity (chests, furnaces...).",
+                    "A restored chest keeps its unrolled loot table, so mine-and-undo would reroll structure loot."
+            ).define("denyBlockEntities", true);
+
+            b.pop();
+        }
+    }
+
     public static final class TrashSlot {
         /** Vanilla workstations, both inventories, chests and Sophisticated Backpacks. */
         public static final List<String> DEFAULT_SCREENS = List.of(

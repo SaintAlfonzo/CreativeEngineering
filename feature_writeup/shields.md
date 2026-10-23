@@ -11,6 +11,7 @@
 | Scaled durability wear per damage group | DEPLOYED, in-game test pending |
 | Round-down rule (under 1 damage left = full block) and per-tier knockback threshold | DEPLOYED, in-game test pending (the first knockback attempt was wrong and was replaced) |
 | On-block potion effects for holder and attacker (dragon: Regeneration / Poison) | DEPLOYED, in-game test pending |
+| Resistance on block from echo up (echo I, felsic II, dragon II, 2 s; `gear/shields #5`) | BUILT 2026-10-22: `ShieldTier` defaults + the instance `creativeengineering-common.toml` (ships in `config/`), patcherMod 1.1.01 in `mods/` (11:06, md5 b5f60533; not deployed); built, scratch server PASSED 2026-10-22 (SQ-GM-01); tooltip and a real block in game (SH-44) |
 | Shield-disable cooldown (`disableCooldownTicks` = 20), player and mob axes, every shield | player axes DEPLOYED; mob axes BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean, not tested in game |
 | Burning and hot-block ticks (fire, campfires, magma, stoves) only blocked by netherite and above (`burn_tick`, `blocksBurnTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean (single player 2026-10-11), not tested in game |
 | Thorn ticks (cactus, berry bushes, thorny plants, barbed panes) only blocked by diamond and above (`contact_tick`, `blocksContactTicks`) | BUILT 2026-10-05, in the patcherMod 1.0.5 jar, DEPLOYED with 1.0.6; boots clean (single player 2026-10-11), not tested in game |
@@ -137,6 +138,8 @@ untouched. In order:
   blocked hit. Format: `effectId;ticks[;amplifier[;category|category]]`, comma separated. The filter takes
   group names (physical, elemental, magic) or categories (melee, projectile, explosion, other, ...). Bad
   entries log one warning and are skipped.
+  Defaults (2026-10-22): echo `minecraft:resistance;40;0`, felsic `minecraft:resistance;40;1`, dragon
+  `minecraft:regeneration;100;0, minecraft:resistance;40;1` (attacker: poison 5 s); lower tiers none.
 
 ### 2.5 Elemental breakdown
 
@@ -500,6 +503,11 @@ on F3+H. "Raise" means hold right click.
   the vanilla Smithing page. A trim template (e.g. U on a coast template) shows Armor Trimming pages.
   `logs/latest.log` has both `[jei] Armor Trims pages: ...` and `[jei] hid N ...` lines, and no Armor Trims
   "no recipe category registered" error from our plugin.
+- [ ] **SH-44 Resistance on block (echo and up)** (effects: scratch server PASSED 2026-10-22, SQ-GM-01 with `tools/gear_misc_probe.js`, echo amplifier 0, felsic
+  and dragon 1, dragon Regeneration and attacker Poison, netherite none, 40 ticks; the tooltip: client): raise an echo shield and let a zombie hit you: Resistance I
+  for 2 s. Felsic: Resistance II for 2 s. Dragon: Regeneration I (5 s) and Resistance II (2 s); the zombie gets
+  Poison. Netherite and below: no effect. The tooltip "On block, you gain:" lists the same. Defaults in
+  `ShieldTier` (patcherMod 1.1.01, 2026-10-22) and in the dev `creativeengineering-common.toml`.
 
 ## 8. History
 
@@ -537,3 +545,6 @@ on F3+H. "Raise" means hold right click.
 - 2026-10-18: felsic shield recipe values corrected to "hardcoded" (no `CRAFTING.FELSIC_SHIELD` section exists); the
   ladder and its assemblies are written up in [gear_tuning.md](gear_tuning.md).
 - 2026-10-19: felsic shield values configurable (`CRAFTING.FELSIC_SHIELD`); `DamageFlag` / `DamageTags` / `DamageTagSnapshot` pre-loaded in `commonSetup` against the 2026-09-24 `NoClassDefFoundError` (patcherMod 1.0.9, [plan_1.0.9.md](plan_1.0.9.md)).
+- 2026-10-22: Resistance on block for echo (I), felsic and dragon (II), 2 s (`gear/shields #5`): `ShieldTier` defaults and
+  the instance toml's `shielderEffects`. patcherMod 1.1.01 in `mods/`, not run. SH-44; scratch probe SQ-GM-01.
+- 2026-10-22 (second bulk run): SQ-GM-01 PASS on the scratch server (pillager attackers); the SH-44 tooltip stays in game.

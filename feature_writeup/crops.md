@@ -1,6 +1,6 @@
 # Crops: soils, right-click harvest, hoe harvesting
 
-Test prefix **CR-** · Last updated **2026-10-19** · Overall status **reference from the decompiled jars; tobacco parity, hoe areas and wild-crop placement (§2.8) DEPLOYED with 1.0.4; WTHIT growth line (§2.9) and Immersive Weathering soils (§2.8.1) DEPLOYED with 1.0.6 (2026-10-14); in-game checks pending**
+Test prefix **CR-** · Last updated **2026-10-22** · Overall status **reference from the decompiled jars; tobacco parity, hoe areas and wild-crop placement (§2.8) DEPLOYED with 1.0.4; WTHIT growth line (§2.9) and Immersive Weathering soils (§2.8.1) DEPLOYED with 1.0.6 (2026-10-14); in-game checks pending**
 
 ## 0. At a glance
 
@@ -18,6 +18,8 @@ Test prefix **CR-** · Last updated **2026-10-19** · Overall status **reference
 | Wild generation: where every crop, bush and fruit tree spawns (biomes, rate, height, ground, side blocks such as Coarse Dirt, Adzuki Soil, mint ponds) | §2.7 + generated [crops_by_biome.md](crops_by_biome.md) | reference 2026-10-03; findings V1 to V12 feed the planned vegetation worldgen system; CR-38 to CR-46 |
 | Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | DEPLOYED with 1.0.4 (2026-10-04); `wild_crops.json` changed again for 1.0.5, DEPLOYED with 1.0.6; not looked at in game; V13 to V20; CR-47 to CR-58 |
 | WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit); in patcherMod 1.0.5 (in `mods/`), DEPLOYED with 1.0.6 (2026-10-14); jar boots clean (single player 2026-10-11); CR-59 to CR-66 |
+| Extra stem fruit: melon, pumpkin and hamimelon stems grow up to 4 fruits, each later one after a longer minimum wait | §2.10 | BUILT 2026-10-22 (patcherMod 1.1.01, in `mods/` since the 2026-10-22 scratch run, md5 a4d48336 with the fix below); built, scratch server PASSED 2026-10-22 (SQ-SF-00 to SQ-SF-05, 17 of 17, `tools/farm_worldgen_probe.js`); CR-71 to CR-75 in game; F-SS1 (extra fruit ignores seasons) open |
+| Wild-crops batch 2026-10-22: tea in 20 biomes, Vinery grapes under the system, wild flax off, Rustic Delight patches out of bone meal, white strawberries from Y 192 | §2.8, §4 V1, V6, V7, V20 | BUILT 2026-10-22 (data + KubeJS, not deployed); `tools/test_wild_crops.sh` passes (53 crop tags, 52 add modifiers); built, scratch server PASSED 2026-10-22 (SQ-WC-00 to SQ-WC-05); CR-83, CR-86 to CR-88 in game |
 | Wild plants, bushes and trees on Immersive Weathering soils (humus, fluvisol, silt, vertisol, cryosol, rooted grass; not permafrost) | §2.8.1 | BUILT 2026-10-05, scratch-server tested (12 features x 9 grounds, before/after); the 65 `kubejs/data` overrides are DEPLOYED with 1.0.6 (2026-10-14); only new chunks change; CR-67, CR-68 |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
@@ -506,8 +508,9 @@ from Neapolitan's).
   heights per chunk in Crimson Forest, then only on nylium within ±1 of each).
 - Caves: glow berries attempt below Y 256 under a solid ceiling. Terralith Skylands Summer glow berries
   are at Y 130 to 160.
-- Neapolitan's `White Strawberry minimum height = 256`: white strawberries only grow above Y 256, so
-  in practice none form in normal terrain.
+- Neapolitan's `White Strawberry minimum height`: the pack sets 192 (2026-10-22; Neapolitan's default 256 meant none
+  formed in normal terrain). A strawberry bush at Y 192 or higher grows white strawberries, wild or planted; only the
+  upper slopes of the highland biomes that carry wild strawberries reach that height. The item's tooltip says so.
 
 #### 2.7.4 Other vegetation mods (not crops)
 
@@ -531,7 +534,7 @@ Scope for the planned vegetation system, not yet broken down per biome:
 ### 2.8 Pack wild-crop placement (`wild_crops.json`)
 
 **Status: BUILT 2026-10-03, offline-tested (`tools/test_wild_crops.sh`), DEPLOYED with 1.0.4; rules revised
-2026-10-10 (DEPLOYED with 1.0.6); not looked at in game.** Your 2026-10-03 spec
+2026-10-10 (DEPLOYED with 1.0.6) and 2026-10-22 (tea, grapes, flax; not deployed); not looked at in game.** Your 2026-10-03 spec
 decides which biomes each wild crop and fruit tree goes to. The mods' own rates stay; only the biomes change. §2.7
 describes what the mods do on their own, which is what you get with the switch off.
 
@@ -591,7 +594,7 @@ rows corrected 2026-10-21 to the 2026-10-10 rules)
 | Sugar Cane | rivers + beaches | 6: river, warm river, frozen river, beach, snowy beach, gravel beach |
 | Tomato, Cotton, Cantaloupe, Corn | warm dry grassy | 12: savannas (plateau, windswept, slopes, ashen, fractured, badlands), wooded badlands, arid highlands, brushland, shrublands |
 | Brown/Red Mushroom Colony | mushroom + dark forest | 2: mushroom fields, dark forest |
-| Tea | temperate wet grassy | 3: swamp, blooming valley, mirage isles |
+| Tea | temperate wet grassy + every swamp + every jungle + cherry (sakura) + dark forest, Lush Valley, Cloud Forest (2026-10-22) | 20: swamp, mangrove, orchid swamp, ice marsh, the 9 jungles, sakura grove and valley, dark forest, Lush Valley, Cloud Forest, Blooming Valley, Mirage Isles |
 | Strawberries | cold grassy mountain, not snowy | 6 |
 | Adzuki | temperate grassy forest | 18 |
 | Mint | cold grassy mountain | 11 |
@@ -608,6 +611,11 @@ rows corrected 2026-10-21 to the 2026-10-10 rules)
 | Rubber tree (Myrtrees, pack copy `wild/rubber_tree`) | jungle | 9 jungles |
 | Cherry tree (Vinery) | mountain forest | 15 |
 | Persimmon tree | snowy forest | 13 |
+| Grapes, red and white bushes (Vinery, 2026-10-22) | temperate grassy, not swamp, not dark oak | 23: plains, meadow, forests, flower and birch forests, the lavender, moonlight, sakura, blooming and Yosemite biomes, steppe, valley clearing, alpha islands, Mirage Isles, skylands spring and autumn |
+| Grapes, savanna bushes (Vinery) | warm dry grassy | 12: the savanna group (as tomato) |
+| Grapes, taiga bushes (Vinery) | cold grassy forest, not snowy | 10: taigas, windswept forest, Cloud Forest, forested highlands, Haze Mountain, Lush Valley, Shield, Yellowstone |
+| Grapes, jungle vines (Vinery) | jungle + warm wet swamp | 11: the 9 jungles, mangrove and orchid swamps |
+| Wild flax (Supplementaries) | none: modifier off (2026-10-22) | 0 |
 
 **Cold wet biomes (for cranberries):** Terralith Caldera (crater lake, tagged wet), Cloud Forest (misty mountain forest),
 Ice Marsh (the cold swamp), Siberian Taiga (downfall 1.2, the wettest cold biome) and Yellowstone (hot-spring wetlands,
@@ -623,7 +631,7 @@ tagged wet). The rest of the cold biomes are moderate (taiga downfall 0.8) or dr
 - Neapolitan's beach bananas (rare tier) are off.
 - Vinery's cherry tree keeps its own biomes. Vinery's apple tree shares that biome tag, so only the apple modifier was
   replaced.
-- Untouched: the grapes, cherry trees, mulberries, glow berries, chorus, propelplant, bamboo, cactus.
+- Untouched: cherry trees, mulberries, glow berries, chorus, propelplant, bamboo, cactus.
 
 **Choices made** (each is one line in `wild_crops.json`; say if you want it different)
 
@@ -762,6 +770,40 @@ WTHIT's own "Crop progress" option also hides the added lines. To change which p
 `crop_growth.json`; the copy in the jar is the default, a copy at
 `kubejs/assets/creativeengineering/crop_growth.json` overrides it (F3+T reloads it).
 
+### 2.10 Extra stem fruit
+
+Vanilla stems stop at one fruit: when a stem grows its fruit it becomes the attached stem, which has no random tick, and
+when that fruit is taken it turns back into a fully grown plain stem that grows a new one. The pack lets an attached stem
+grow more fruit on its other sides. Applies to every `AttachedStemBlock`: melon, pumpkin and Fruits Delight's hamimelon.
+
+- **Roll:** on each random tick of an attached stem, vanilla's stem growth roll (1 in 25/speed + 1, speed from soil,
+  hydration and the row bonus, light 9 or more) and Forge's crop-grow event, fired with the attached stem's state.
+  Serene Seasons looks the block id up in its season tags, which list `melon_stem`, `pumpkin_stem` and
+  `fruitsdelight:hamimelon_stem` but no attached stem, and treats unlisted blocks as always fertile: so the first fruit
+  follows the seasons (the plain stem rolls it) but the extra fruits grow in any season (finding F-SS1, §4).
+- **Where:** a random free side: empty, on farmland, dirt or any soil that takes the stem (vanilla's check). Fruits next to
+  the stem of the same kind count toward the cap, even ones placed by hand.
+- **Minimum wait:** since the stem's last fruit. 2nd fruit 10 minutes after the 1st, 3rd 20 minutes after the 2nd, 4th 40
+  minutes after the 3rd (game time, 1200 ticks a minute; counts while the chunk is unloaded too). The clock starts on the
+  attached stem's first random tick, so the first wait starts about a minute after the first fruit grows (random ticks
+  come every 68 seconds on average at `randomTickSpeed` 3). Without the wait a 2nd fruit would come about as fast as the
+  first (a few minutes on hydrated farmland).
+- **Harvesting:** when the fruit the stem points at is taken and another of its fruits is still next to it, the stem
+  points at that one instead of turning back into a plain stem. The wait keeps counting from the last fruit, so after
+  harvesting one of four the next one comes after the 40 minute wait. With all fruits taken the stem turns back into a
+  plain stem (vanilla), its clock is forgotten, and the next first fruit follows vanilla.
+- **Saved state:** the last-fruit game time per attached stem, in each dimension's
+  `data/creativeengineering_stem_fruit.dat`. A stem's entry goes when the stem is broken or turns back into a plain stem.
+- **Knobs:** `[stem_fruit]` in `config/creativeengineering-common.toml`: `enabled`, `maxFruits` (1-4, default 4),
+  `secondFruitMinutes` (10), `thirdFruitMinutes` (20), `fourthFruitMinutes` (40). Read on every tick; no restart needed.
+- **Code:** patcherMod `crops/StemExtraFruit.java` (logic, saved data) and `mixin/AttachedStemExtraFruitMixin` (adds
+  the random tick and the removal hook to `AttachedStemBlock` under their SRG names, and the re-point on `updateShape`).
+  The attached stem always counts as random ticking, even with `enabled = false`, since chunk sections cache the
+  count of ticking blocks; a ticking stem that does nothing costs next to nothing.
+- **Own fruit only** (fixed 2026-10-22, scratch run SQ-SF): an attached stem grows and re-points only at its own
+  fruit. Delightful's melon slices and cantaloupe blocks extend the vanilla blocks and report the vanilla stem, so the
+  first build could grow them as extra fruit, which re-pointing (it only knew the real fruit) could not follow.
+
 ## 3. What the pack changes
 
 - **Fertile Soil** is a rename of Immersive Weathering's Mulch Block ([namechanges.js](../kubejs/client_scripts/namechanges.js)).
@@ -790,6 +832,8 @@ WTHIT's own "Crop progress" option also hides the added lines. To change which p
     (black, blue, purple), wild Pale / Dark peppers in jungles, giant pepper blocks, slices, rolls and the Bell Pepper
     Medley feast. 1.3.0 (2024-11-15) is the last 1.19.2 build, so none of it is in the pack; having them would be our own
     backport of those items.
+- **Extra stem fruit (built 2026-10-22, patcherMod 1.1.01 in `build/libs` only, not tested):** up to 4 fruits per melon, pumpkin or
+  hamimelon stem, each later one after a longer minimum wait (§2.10). CR-71 to CR-75.
 - **Crop parity layer (built 2026-10-02, patcherMod 1.0.4, DEPLOYED with 1.0.4):** tobacco gets farmland
   soils, right-click and hoe replant and the hoe area break. See §2.6 for the tags, the Quark config line
   and the four mixins.
@@ -837,7 +881,7 @@ G1 to G3 are fixed (§2.6). The rest are open, each with a suggested fix for you
 yet; each has a suggested direction for you to approve or reject.
 
 - **V1 Several crops only reach vanilla biomes.** ADDRESSED 2026-10-03 by §2.8 for every crop in it; the Vinery grape
-  bushes are untouched and still only reach vanilla biomes. Their biome tags name vanilla biomes and Terralith's
+  bushes and jungle vines joined §2.8 on 2026-10-22 (four rules, Vinery's own rates). Their biome tags name vanilla biomes and Terralith's
   similar biomes were never added: strawberries (Plains only), tea (Swamp only), cabbage, sea beet and
   pineapple (Beach only), vanilla vine (the three vanilla savannas), all Vinery grape bushes, Neapolitan
   adzuki (5 vanilla forests). Terralith makes the vanilla biomes a small part of the world, so these crops
@@ -858,10 +902,18 @@ yet; each has a suggested direction for you to approve or reject.
   Deltas) are different items. Vinery apple trees (plains, meadow) and Fruits Delight apple trees (forests)
   also differ. Decide whether both stay, or unify them through tags/recipes (the item_dict rule).
 - **V6 Wild flax is switched off** in `supplementaries-common.toml` (hand-edited copy in `configs_edited/`).
-  Its biome tag is built at runtime by Supplementaries, so with it switched off no biome gets it. Decide
-  whether it comes back under the new system.
-- **V7 Rustic Delight patches are flower-type.** Bone meal on grass in forests and jungles can grow wild
-  cotton, peppers and coffee. Keep that (it's a renewable source), or register them as plain patches.
+  Its biome tag is built at runtime by Supplementaries, so with it switched off no biome gets it. DECIDED 2026-10-22:
+  it stays off. `wild_crops.json` key `flax` (no rule, no features) also turns `supplementaries:wild_flax` into
+  `forge:none`, so turning the config back on does not bring it back.
+- **V7 Rustic Delight patches are flower-type.** Rustic Delight registers its three wild patches with the
+  `minecraft:flower` feature type instead of `minecraft:random_patch` (they place the same way). Bone meal on a grass
+  block picks a random **flower** feature from the biome, so in every biome that carries a patch (cotton: warm dry
+  grassy; peppers and coffee: warm wet) bone-mealing grass can grow wild cotton, wild bell peppers or wild coffee next
+  to the flowers. DECIDED 2026-10-22: plain patches. The pack overrides the three configured features
+  (`kubejs/data/rusticdelight/worldgen/configured_feature/wild_{cotton,bell_peppers,coffee}_feature.json`) with the same
+  `minecraft:random_patch` settings (32/6/2, 48/4/4, 48/6/4 tries / xz / y, one block into air), so worldgen is
+  unchanged: Rustic Delight's placed features, config chances and the §2.8 rules still apply. Bone meal no longer grows
+  them (CR-43 inverted, CR-86).
 - **V8 Tea is one or two bushes per Swamp chunk, every chunk.** §2.8 widens it to the three temperate wet biomes (V20). It's dense in one small biome and absent
   everywhere else.
 - **V9 Rates span three orders of magnitude.** Banana plants try 0.75 times per jungle chunk, pumpkins
@@ -903,14 +955,22 @@ yet; each has a suggested direction for you to approve or reject.
 - **V19 Biomes with no wild crop.** 13 land biomes match no rule: the stone and ice peaks (frozen, jagged, stony,
   emerald, volcanic crater/peaks), snowy slopes, ice spikes, glacial chasm, gravel desert, windswept gravelly hills,
   stony spires and windswept spires. All rock, ice or gravel, where none of the crop blocks survives.
-- **V20 Tea is in 3 biomes.** "Wet temperate" by the climate tags is swamp, Blooming Valley and Mirage Isles. Lush
-  Valley and dark forest have downfall 0.8 but no wet tag; add them if you want more tea.
+- **V20 Tea is in 3 biomes.** ADDRESSED 2026-10-22: 20 biomes (every swamp and jungle, the sakura biomes, dark forest,
+  Lush Valley, Cloud Forest, plus the old three). The rate is still FR's every-chunk patch, so density went from 5.2 to
+  59.3 per 1000 chunks (crops_by_biome.md §1); a pack placed copy with a rarity would bring it down (wild-crops #1).
+
+- **F-SS1 Extra stem fruit ignores the seasons.** Found 2026-10-22 (code check, Serene Seasons 8.1.0.24 decompiled):
+  `StemExtraFruit` fires the crop-grow event with the attached stem's state; Serene Seasons' season tags hold no
+  attached stem, and an unlisted block is always fertile. A melon stem therefore fruits once in season and then keeps
+  adding fruit in winter. Fix options: add the three attached stems to the same season tags as their stems
+  (`sereneseasons:summer_crops` for melon and hamimelon, `autumn_crops` for pumpkin, through `global.tags`), or fire
+  the event with the plain stem's state. Decision open; SQ-SF and CR-71 to CR-75 don't cover it (CR-76 does).
 
 Planned (scratchpad 2026-10-21):
 
 - **Bell pepper colours.** Done 2026-10-21, see §3 (even split; only red / green / yellow exist).
 - **Melon and pumpkin stages.** Smaller pumpkin / melon stages before full size, maybe with the Fantasy Furniture
-  stackable pumpkin model; large 2x2 / 3x3 pumpkins are `largecontent/autumnityport #3` ([TODO](todo/TODO.md)
+  stackable pumpkin model; large 2x2 / 3x3 pumpkins are `ports/autumnityport #3` ([TODO](todo/TODO.md)
   `farming/crops #10`).
 
 ## 5. File map
@@ -926,6 +986,7 @@ Planned (scratchpad 2026-10-21):
   `MulchBlockCropGrowthMixin`, `QuarkHoeHarvestMixin` (compile jars for The Dirty Stuff, Quark and IW in `libs/`)
 - patcherMod `crops/HoeHarvestArea.java`, `crops/HoeHarvestTooltip.java`, `mixin/QuarkHoeAreaHarvestMixin`,
   `mixin/QuarkHoeAreaBreakMixin`; [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) "Hoe harvest area"
+- Extra stem fruit (§2.10): patcherMod `crops/StemExtraFruit.java`, `mixin/AttachedStemExtraFruitMixin`, `CEConfig` `[stem_fruit]`
 - [kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js): Fertile Soil rename
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): soil tooltips
 - [kubejs/server_scripts/wood/sawdust.js](../kubejs/server_scripts/wood/sawdust.js): Fertile Soil recipes
@@ -1036,7 +1097,7 @@ Wild generation (§2.7). Use a new world, or chunks nobody has explored. `/locat
 - [ ] **CR-40 Strawberries and adzuki:** vanilla `plains` → strawberry patches, most bushes red and ripe, a few unripe on Coarse Dirt. Vanilla `forest` → adzuki sprouts on plain Dirt. Break a ripe sprout → the dirt under it becomes Adzuki Soil and a new sprout appears later.
 - [ ] **CR-41 Mint pond:** `windswept_hills` → a small pond ringed by mint, usually with one spruce beside it.
 - [ ] **CR-42 Jungle:** `jungle` → banana plants on gravel patches (sometimes with chimpanzees), wild bell peppers, Rustic Delight wild coffee, melons, cocoa on jungle trees, lychee or mango trees.
-- [ ] **CR-43 Bone meal flowers:** bone-meal a big grass area in a `jungle` several times → now and then a wild bell pepper or wild coffee grows among the flowers (V7).
+- [ ] **CR-43 Bone meal flowers:** bone-meal a big grass area in a `jungle` several times → flowers only, never a wild bell pepper or wild coffee (V7, plain patches since 2026-10-22).
 - [ ] **CR-44 Swamp and Nether:** vanilla `swamp` → one or two wild tea bushes with ferns in most chunks. `basalt_deltas` → wild coffee bushes and Wither Roots on basalt. `crimson_forest` → propelplant on nylium.
 - [ ] **CR-45 River trees:** `river` → small river trees on the banks, some with mulberry vines hanging from the leaves.
 - [ ] **CR-46 No wild flax:** search a river or beach area → no wild flax (V6).
@@ -1063,9 +1124,9 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   sand. `badlands` → hamimelons on red sand and terracotta.
 - [ ] **CR-54 Mushrooms:** `dark_forest` → brown and red mushroom colonies on the shaded floor (not on leaves). `mushroom_fields`
   → colonies on mycelium.
-- [ ] **CR-55 Tea and mint:** `swamp` → wild tea bushes. `grove` or `terralith:highlands` → mint ponds. No mint in plains, meadow or windswept hills (2026-10-10 rules).
+- [ ] **CR-55 Tea and mint:** `swamp`, `mangrove_swamp` and `jungle` → wild tea bushes (CR-83 for the rest). `grove` or `terralith:highlands` → mint ponds. No mint in plains, meadow or windswept hills (2026-10-10 rules).
 - [ ] **CR-56 Sugar cane only by rivers and beaches:** a desert lake or swamp has no sugar cane; a river bank has it.
-- [ ] **CR-57 Leaf drops:** break 200 oak leaves, 200 dark oak leaves and 200 Myrtrees rubberwood leaves (or
+- [ ] **CR-57 Leaf drops [scratch server PASSED 2026-10-22, SQ-CD-02, 2000 rolls each / game]:** break 200 oak leaves, 200 dark oak leaves and 200 Myrtrees rubberwood leaves (or
   `/loot spawn ~ ~ ~ mine ~ ~ ~` on placed leaves) → saplings and sticks, no apples; the log has
   `[leaf-apples] apples removed from 3 of 3 leaf tables`. Break jungle leaves → no Alex's Mobs bananas. Basalt Deltas → no wild coffee bushes.
 - [ ] **CR-58 Switch off:** set `wildCrops = false` in `config/creativeengineering-common.toml`, new world → the log has
@@ -1091,12 +1152,44 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   colonies on them like the grass around (adzuki is rare, 1 in 128 chunks; `/place feature neapolitan:patch_adzuki_sprouts` on humus works).
 - [ ] **CR-68 Swamps and badlands:** Ice Marsh fluvisol carries cranberry/blueberry/sweet berry bushes, Orchid Swamp fluvisol carries melons and
   orchids, badlands vertisol can carry hamimelon. Permafrost never carries any of them.
-- [ ] **CR-69 Bell pepper split:** `/reload` → the log has `[crop-drops] rewrote 1 of 1 crop tables`. Harvest 30+ ripe
+- [ ] **CR-69 Bell pepper split [scratch server PASSED 2026-10-22, SQ-CD-01, each colour 0.40 to 0.56 / game]:** `/reload` → the log has `[crop-drops] rewrote 1 of 1 crop tables`. Harvest 30+ ripe
   bell peppers (or `/setblock ~ ~ ~ rusticdelight:bell_peppers[age=7]` then `/loot spawn ~ ~1 ~ mine ~ ~ ~` repeatedly) →
   red, green and yellow each about a third, roughly 1.45 peppers per harvest. Unripe plants drop only a seed.
-- [ ] **CR-70 Pepper config:** in `config/creativeengineering-common.toml` `[crop_drops.bell_peppers]` set
+- [ ] **CR-70 Pepper config [game]:** in `config/creativeengineering-common.toml` `[crop_drops.bell_peppers]` set
   `redWeight = 6` and `redBonusChance = 0.0`, `/reload` → the log has `weights 6:1:1` and `[NCH.cfg] CROP_DROPS.redWeight
   overridden`; harvests are mostly red again. Set `enabled = false`, `/reload` → `rewrote 0 of 1`. Put the defaults back.
+- [ ] **CR-71 Second melon [scratch server PASSED 2026-10-22, SQ-SF-01 to SQ-SF-03 / game]:** for speed set `[stem_fruit]` `secondFruitMinutes = 1`, `thirdFruitMinutes = 2`,
+  `fourthFruitMinutes = 3` and `/gamerule randomTickSpeed 100`. Plant a melon stem on hydrated farmland with dirt on all
+  four sides, bone-meal it until the first melon grows → within a few minutes a 2nd, 3rd and 4th melon appear on the
+  other sides, one at a time, each later one taking longer. No 5th. Same for a pumpkin stem.
+- [ ] **CR-72 Re-point [scratch server PASSED 2026-10-22, SQ-SF-04 / game, the stem model's bend is client]:** on a stem with 3 or 4 melons break the melon the stem bends toward → the stem bends to another
+  melon (it does not straighten). Break all melons → it straightens into the grown plain stem and grows a new first melon.
+- [ ] **CR-73 Wait holds [scratch server PASSED 2026-10-22, SQ-SF-02 at 1 minute / game at the defaults]:** put the defaults back (10 / 20 / 40) and `randomTickSpeed` 100 → a stem with one melon grows
+  no 2nd for about 10 minutes, then grows one. Put `randomTickSpeed` back to 3.
+- [x] **CR-74 Off switch [scratch server PASSED 2026-10-22, SQ-SF-05]:** `enabled = false` (or `maxFruits = 1`) → no new extra fruit grows; existing ones stay. Back on.
+- [ ] **CR-75 Hamimelon [scratch server PASSED 2026-10-22, SQ-SF-01 / game]:** a Fruits Delight hamimelon stem grows extra hamimelons the same way.
+- [ ] **CR-76 Seasons [game]:** in winter (`/season set winter`), a melon stem with one melon and `randomTickSpeed` 100:
+  note whether extra melons still grow (expected today: yes, F-SS1; after a fix: no, or slowly as Serene Seasons'
+  `out_of_season_crop_behavior` 0 allows). A plain melon stem grows its first melon slowly or not at all.
+- [ ] **CR-77 Saved wait across restart [game]:** a stem with one melon, defaults (10 minutes); stop and restart the
+  world after 5 minutes of play → the 2nd melon still comes about 5 minutes later, not straight away and not 10 more
+  (`data/creativeengineering_stem_fruit.dat` keeps the time).
+
+Wild-crops batch 2026-10-22 (new chunks only; rejoin a world):
+- [ ] **CR-83 Tea spread [biome lists: scratch server PASSED 2026-10-22, SQ-WC-01 / game]:** `terralith:lush_valley`, `terralith:sakura_grove`, `terralith:orchid_swamp` and
+  `terralith:tropical_jungle` → wild tea bushes with ferns. `plains` → none.
+- [ ] **CR-87 Grapes in Terralith [scratch server PASSED 2026-10-22, SQ-WC-02 / game]:** `terralith:lavender_forest` → red and white grape bushes; `terralith:shrubland` →
+  savanna grape bushes; `terralith:shield` → taiga grape bushes; `terralith:tropical_jungle` or `mangrove_swamp` →
+  red and white grape vines hanging off trunks. `snowy_taiga` and `dark_forest` → no grapes.
+- [ ] **CR-88 White strawberries [scratch server PASSED 2026-10-22, SQ-WC-05, y 200 white, y 191 red / game, the tooltip is client]:** plant a strawberry bush at Y 192 or higher (or find one on a highland peak) and
+  let it ripen → white strawberries; one at Y 150 → red. The White Strawberries tooltip names Y 192.
+- [ ] **CR-86 No bone-meal cotton, wild patches still spawn [scratch server PASSED 2026-10-22, SQ-WC-04 / game]:** bone-meal a large grass area in `savanna` many times →
+  flowers only, no wild cotton. New chunks in `savanna` and `jungle` → wild cotton, bell pepper and coffee patches as
+  before.
+- CR-46 (no wild flax) still holds: the flax modifier is now off in the pack as well (SQ-WC-03, scratch server PASSED 2026-10-22: no wild flax in any biome).
+
+Scratch-checkable parts go through `tools/farm_worldgen_probe.js` (queue SQ-SF, SQ-WC, SQ-CD); `[game]` parts need
+the real client (rendering, tooltips, JEI, natural random ticks with a player nearby).
 
 ## 8. History
 
@@ -1155,3 +1248,18 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
 - 2026-10-21: pepper weights and bonus chances made CEConfig `[crop_drops.bell_peppers]` (patcherMod 1.1.01 rebuilt,
   not installed). Offline sim matched the formula for four configs; 6:1:1 with no red bonus reproduces the mod. The
   extra colours some pages mention are Rustic Delight 1.7.0 only (no 1.19.2 build). CR-70 added.
+- 2026-10-22: extra stem fruit (§2.10): up to 4 fruits per attached stem with 10 / 20 / 40 minute minimum waits, re-point
+  on harvest, CEConfig `[stem_fruit]`. patcherMod 1.1.01 built, not installed, not tested in game. CR-71 to CR-75 added.
+- 2026-10-22: wild-crops batch (§2.8, TODO `farming/wild-crops #3`, `#4`): tea to 20 biomes (V20), Vinery grape bushes
+  and jungle vines under the system (V1, four rules), wild flax modifier off (V6), white strawberry height 256 -> 192 plus
+  a tooltip, V7 explained. The generator now reads the Vinery port's upstream jars (`vinery_upstream/`), so apple, cherry
+  and grape features resolve. `tools/test_wild_crops.sh` passes. CR-83, CR-87, CR-88 added; not tested in game.
+- 2026-10-22 (doc audit): §2.10 Serene Seasons claim corrected (F-SS1: extra fruit ignores seasons); jar state: the
+  stem fruit classes are only in the `build/libs` jar (md5 4daad5bb), not in `mods/`. Scratch probe
+  `tools/farm_worldgen_probe.js` written (stem fruit, wild-crop biome lists, white strawberries, pepper and leaf
+  loot); tests tagged scratch / game; CR-76, CR-77 added.
+- 2026-10-22: white strawberry height 256 (the mod default) -> 192 (doc audit: this line said 128; the toml in git and the jar default are 256). Rustic Delight wild patches overridden as plain `random_patch` (V7),
+  same settings, so bone meal no longer grows them. CR-43 inverted, CR-86 added.
+- 2026-10-22 (second bulk run): SQ-SF-00 to SQ-SF-05 (17 of 17 after the own-fruit fix, §2.10), SQ-WC-00 to SQ-WC-05
+  and SQ-CD-00 to SQ-CD-02 PASS on the scratch server. CR-74 done; the rest keep their game halves. `[wild-crops]` also
+  warns that 5 Terralith cave biomes are not in `wild_crops.json` (no crops there; not an error).

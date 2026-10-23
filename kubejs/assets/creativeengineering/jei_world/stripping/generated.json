@@ -1,0 +1,73 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:oak_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_oak_log"
+    },
+    {
+     "item": "immersive_weathering:oak_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:oak_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_oak_wood"
+    },
+    {
+     "item": "immersive_weathering:oak_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:crimson_stem"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_crimson_stem"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  }
+ ]
+}

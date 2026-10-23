@@ -31,7 +31,11 @@ feature are documented with that feature and only pointed to here.
 | 2.22 | IE Engineer's Hammer rotates the FD cutting board instead of running a hammer cutting recipe | `IECompat.registerHammerNoRotate`, `#creativeengineering:hammer_no_rotate` | DEPLOYED with 1.0.8, see [oven.md](oven.md) 2.5 |
 | 2.23 | Server crash: bonemealing a Vinery grass slab with Immersive Weathering (`fertile` property) | Vinery port `SpreadableGrassSlabBlock` | DEPLOYED with 1.0.7 (hotfix), see [alcohol.md](alcohol.md) Part B |
 | 2.24 | AppleSkin bars missing in cooking/meal slots, keg tank, recipe books, TrashSlot, Pretty Pipes, FTB Quests, Wares, Patchouli, AE2 | `MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + client mixins; Brewin' and Vinery ports | BUILT 2026-10-20, not tested, see [tooltips.md](tooltips.md) (TT-19 to TT-30) |
-| 2.25 | Botania Trinket Case holds any item; Quark sort, transfer and search in its screen | `TrinketCaseRules`, 3 `TrinketCase*Mixin`s, `[botania]`, Quark `Allowed Screens` | built, scratch test queued (SQ-TC-00 to SQ-TC-02); FX-21 to FX-24 in game |
+| 2.25 | Botania Trinket Case holds any item; Quark sort, transfer and search in its screen | `TrinketCaseRules`, 3 `TrinketCase*Mixin`s, `ItemBackedInventoryAccessor`, `[botania]`, Quark `Allowed Screens` | built, scratch server PASSED 2026-10-22 (rules, slots, shift-click, sort, config off); FX-21 to FX-23 client halves in game |
+| 2.26 | Ore Excavation undo: cooldown, denied blocks, drops into the inventory, XP taken once | `excavation/VeinUndo`, 5 `OreExcavation*Mixin`s, `#creativeengineering:vein_undo_denied`, `[vein_undo]`, OE `Auto Pickup = true` | built 2026-10-22, patcherMod 1.1.01 in `mods/`, built, scratch server PASSED 2026-10-22 for the refusal rules, cooldown, Auto Pickup, the offline guard and both config keys (SQ-GM-08, SQ-GM-05); FX-29 to FX-33 in game |
+| 2.27 | Config-only (2026-10-22): JEI tooltip search behind `$`, Breezy wind particles x3, every Chalk symbol unlocked; Cosmetic Armor keep-on-death checked, unchanged | `jei-client.ini`, `breezy-client.toml`, `chalk-common.toml` (all in `configs_edited/root_config/`) | done, not deployed, untested: FX-25, FX-26 client only; FX-27 server half scratch server PASSED 2026-10-22 (SQ-GM-06); FX-28 in game |
+| 2.28 | Polymorph recipe choice in the Sophisticated Backpacks crafting upgrade | `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `SophisticatedCraftingPolymorphMixin`, `SophisticatedUpgradeOpenMixin`, `PolymorphRecipeSelectionPacketMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-35 to FX-38 in game |
+| 2.29 | Polymorph recipe choice in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal | `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `IECraftingTablePolymorphMixin`, `PrettyPipesCraftingTerminalPolymorphMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-39 to FX-42 in game |
 
 - **Pending:** nothing built and unshipped (2.22 went out with 1.0.8, 2026-10-19). FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
   there). Findings F1 to F6 (section 4); none needs a decision except F3.
@@ -210,18 +214,107 @@ Each is documented where it belongs; one line each here.
   slots (`BaubleBoxContainer$1.mayPlace`) and shift-click (`BaubleBoxContainer.quickMoveStack`). Quark shows its
   buttons and search bar only when the screen class is in `Allowed Screens` and the menu has 27+ non-player slots or
   implements `IQuarkButtonAllowed`; its keybinds check only the screen list.
-- **Fix:** `compat/TrinketCaseRules.allowed` (config `[botania] trinketCaseAnyItem`, default on): any non-empty item
-  except another Trinket Case and items with `canFitInsideContainerItems() == false` (shulker boxes). The two
-  anonymous-class mixins return true at HEAD when it allows the stack, else Botania's check runs; the menu mixin
-  redirects the shift-click check and adds `IQuarkButtonAllowed`. `vazkii.botania.client.gui.box.BaubleBoxGui` is
+- **Fix:** `compat/TrinketCaseRules.allowed` (config `[botania] trinketCaseAnyItem`, default on): any non-empty item,
+  shulker boxes and other Trinket Cases included (the case works as a chest; user decision 2026-10-22). The one
+  refusal, in both config modes, is the open case's own stack (`TrinketCaseRules.isOpenCase`, an identity check on
+  the stack behind the case's `ItemBackedInventory`, read through `mixin/ItemBackedInventoryAccessor`): Botania
+  doesn't override `clicked`, so a hotbar-key swap onto an empty case slot would otherwise move the open case into
+  itself and lose it with its contents. The two anonymous-class mixins return false at HEAD for the open case, true
+  when `allowed`, else Botania's check runs; the menu mixin redirects the shift-click check (never the menu's `box`)
+  and adds `IQuarkButtonAllowed`. With the config off, shulker boxes still fit: Shulker Box Slot makes them curios
+  and Botania takes every curio. `vazkii.botania.client.gui.box.BaubleBoxGui` is
   added to Quark's `Allowed Screens` (`quark-common.toml`, backed up in `configs_edited/`). Sorting runs through the
   pack's safe sort (2.20); the case item in the hotbar is a locked slot and Quark's player sort skips the hotbar.
 - **Limits:** only real trinkets equip from the case (Botania's quick-swap). The `$1` class names are compiler output;
   a Botania update can move them and the mixins then fail at launch.
 
+### 2.26 Ore Excavation undo rules
+
+- **Symptom:** Ore Excavation's `/undo_excavation` (any player, last 3 vein mines) had no cooldown and undid any
+  vein mine, chests included: a restored chest keeps its unrolled loot table, so mine-and-undo rerolled structure
+  loot. The undo needs the exact drops back in the inventory, but the drops landed at the first block mined, often
+  out of reach or in a spot being restored (which counts as obstructed). A restore spread over several ticks by the
+  TPS guard took the XP again each tick, and a player logging out mid-restore crashed the server tick.
+- **Fix:** `mixin/OreExcavationCommandUndoMixin` runs `excavation/VeinUndo.refusal` at the head of the command:
+  a per-player cooldown after each successful undo (`[vein_undo] cooldownSeconds`, default 5; a normal return from
+  OE's command is a success, every failure throws) and a refusal when the newest vein mine broke a block in
+  `#creativeengineering:vein_undo_denied` (KubeJS blocktags.js: `#forge:ores`, `#forge:storage_blocks`, ancient
+  debris, spawner, every `*:budding_*`) or, with `denyBlockEntities` (default on), any block with a block entity.
+  The message names the block. OE's `Auto Pickup = true` (`oreexcavation-common.toml`, backed up in
+  `configs_edited/`); OE alone only spawns the drops at the player's feet, so `mixin/OreExcavationMiningAgentMixin`
+  redirects the spawn in `MiningAgent.lambda$dropEverything$1` to `Inventory.add` and spawns only the remainder.
+  `mixin/OreExcavationHistoryMixin` zeroes the history's XP after the first take and makes `tickRestore` wait
+  (return false) while the player is offline.
+- **Access:** OE's obfuscator marks every field synthetic, which javac won't reference and the Mixin processor
+  can't check (build warnings "Cannot find target for @Shadow field"). Instance fields come through `@Shadow` in
+  `OreExcavationSchedulerMixin` / `HistoryMixin` / `BlockHistoryMixin` (matched by name and type at runtime);
+  `MiningScheduler.INSTANCE` and `ExcavationSettings.autoPickup` through reflection in `excavation/VeinUndoAccess`.
+  OE's jar is in `development/patcherMod/libs/` for compiling.
+- **Limits:** only the newest vein mine is checked; a refused one stays on top of the stack, so older ones can't be
+  undone until 3 newer vein mines push it out. The cooldown is in memory (resets on restart, like OE's history).
+  Drops that don't fit the inventory lie at the player's feet and must be picked up before an undo. Items a
+  Sophisticated Backpack pickup upgrade would catch go to the main inventory instead (direct insert, no pickup
+  event). The D&D drill, PneumaticCraft drill and TreeChop have no undo.
+
+### 2.27 Config-only changes (2026-10-22)
+
+- **JEI tooltip search** (`ui/misc #3`): `jei-client.ini` `TooltipSearchMode = REQUIRE_PREFIX` (was `ENABLED`): a plain
+  search matches names only, tooltip text needs `$`. Every other JEI search mode was already prefix-only. Client.
+- **Breezy wind particles** (`gameplay/misc #11`): `breezy-client.toml` `low / medium / high_wind_frequency` 0.015 /
+  0.03 / 0.045 (was 0.005 / 0.01 / 0.015). Client.
+- **Chalk symbols** (`gameplay/misc #8`): `chalk-common.toml` `Skull / Heart / Pickaxe / House UnlockAdvancement = ""`
+  (Cross and Check were already empty). Chalk's `SymbolUnlocking.getUnlockedSymbols` adds a symbol whose advancement
+  string is empty without asking for the advancement, so every symbol is on for everyone. The pack drops every
+  advancement at load, so the four could never unlock before. Server side (the server sends the list), common config.
+- **Cosmetic armor on death** (`gameplay/misc #3`): checked, no change (history 2026-10-22, FX-28).
+
+### 2.28 Polymorph in the Sophisticated crafting upgrade
+
+Polymorph (0.46.6) only hooks the vanilla crafting table, inventory grid, smithing table and furnaces. Sophisticated
+Core's crafting upgrade (`CraftingUpgradeContainer`, 0.6.4) takes the first matching recipe through its own
+`RecipeHelper.safeGetRecipeFor`, and keeps it in `lastRecipe` while it still matches, so a conflicting recipe could
+never be picked. Polymorph's fallback widget did attach to the backpack screen (it finds the first `ResultContainer`
+slot), but at the slot's hidden position (-100, -100) and with nothing on the server listening to it.
+
+- **Server:** `SophisticatedCraftingPolymorphMixin` makes `updateCraftingResult` skip the `lastRecipe` shortcut and
+  ask `RecipeSelection.getPlayerRecipe` (the same call Polymorph puts in `CraftingMenu`). `lastRecipe` is still
+  set from the answer, so crafting remainders on take are unchanged. The result is recomputed (Polymorph then sends the
+  candidate list) after a selection packet (`PolymorphRecipeSelectionPacketMixin`, Polymorph's handler only calls
+  `slotsChanged`, which the storage menu does not pass on), when a crafting tab opens (`SophisticatedUpgradeOpenMixin`,
+  a backpack can hold several crafting upgrades), and on `PlayerContainerEvent.Open` (the upgrade's first result is
+  worked out before the menu is the player's open menu, and Polymorph only sends to the open menu).
+- **Client:** `SophisticatedPolymorphClient` registers a widget for every `StorageContainerMenuBase` screen, before
+  Polymorph's fallback. It follows the open crafting tab's result slot each tick, sits just right of the result frame
+  (above the slot it would cover the grid's bottom row), and draws and takes clicks only while a crafting tab is open.
+- The choice lives in Polymorph's per-player data, as at a crafting table; shift-click crafting repeats it.
+- Applies to every Sophisticated Core storage screen (backpacks; Sophisticated Storage is not installed).
+
+### 2.29 Polymorph in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal
+
+Both menus (IE `CraftingTableMenu` 9.2.4, Pretty Pipes `CraftingTerminalContainer` 1.13.6) look their crafting recipe up
+themselves in `slotsChanged`, so Polymorph never chose for them; its fallback button did show above the result slot,
+but changed nothing on the server.
+
+- **Server:** each mixin redirects that `getRecipeFor` to `RecipeSelection.getPlayerRecipe`, passing the menu itself
+  (Polymorph only sends the recipe list for the player's open menu). IE's lookup sits in the `ContainerLevelAccess`
+  lambda `lambda$slotsChanged$0`. Polymorph's selection packet already calls `slotsChanged`, so a pick shows at once.
+  `CraftingMenuPolymorphCompat` recomputes on `PlayerContainerEvent.Open`: the Crafting Terminal's grid is kept in the
+  block and its first result is worked out in the menu's constructor, before the menu is open.
+- **Client:** `CraftingMenuPolymorphClient` registers a widget for both menus (marker interface `PolymorphCraftingMenu`
+  added by the mixins, so no class from either mod is referenced outside the mixins). The button sits 23px right of
+  the result slot, beside its 26px frame; Polymorph's default spot (22px above) covers the Crafting Terminal's grid and
+  the Engineer's table's title.
+- The Crafting Terminal's grid is shared by everyone looking at it; each viewer's result follows their own pick.
+- Remainders on take come from the first matching recipe, as at the vanilla table (Polymorph does not change
+  `ResultSlot.onTake`); only matters if two conflicting recipes have different remainders.
+- Not covered (audit 2026-10-22, bytecode scan of every jar for own recipe lookups): Curios and Cosmetic Armor screens
+  (own 2x2 grids), Create Crafting Blueprint, the Engineers Decor lab and electrical furnaces, the Cooking for
+  Blockheads and Fantasy Furniture ovens; automation (mechanical crafter, Crafty Crate, turtles, drones, compacting
+  drawers). AE2 terminals are covered by Polymorphic Energistics (installed). No Forge 1.19.2 addon found for the rest.
+
 ## 3. What the pack changes
 
-Every entry above is a patcherMod mixin or class except 2.6 (KubeJS tag script) and 2.14 (exposureBackport). Mixins on
+Every entry above is a patcherMod mixin or class except 2.6 (KubeJS tag script), 2.14 (exposureBackport) and 2.27 (config only). Mixins on
 mod classes use `remap = false` with the mod's own names; mixins on vanilla classes use SRG names (the pack runs
 reobfuscated with no refmap).
 
@@ -261,8 +354,10 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2.6 [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) lines 6-16; 2.7 `compat/DetailArmorBarCompat`, `compat/ArmorOverflowRenderer`, `mixin/ArmorBarRendererAccessor`, `mixin/ArmorBarRendererOverflowTickMixin`; 2.8 `mixin/SubMenuConfigScreenMixin`, `compat/StringEntry`; 2.9 `mixin/BonemealCharmMixin`, `util/BonemealCharms`, [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js).
 - 2.10 `util/BlockStateIdOverflow`, `mixin/SectionUpdateEncodeFixMixin`, `mixin/SectionUpdateNullStateMixin`, `mixin/BlockUpdateNullStateMixin`, `devtools/BlockStateSyncDebug`, [tools/diff_block_state_ranges.py](../tools/diff_block_state_ranges.py); 2.11 `mixin/SupplementariesBreezyCompatMixin`; 2.12 `mixin/LevelThreadSafeRandomMixin`; 2.13 `compat/AsyncMapTrades`, `compat/AsyncLocatorBridge`, `mixin/LCItemsForMapTradeMixin`, `mixin/CSSellingMapMixin`.
 - 2.15 `compat/LightmansTooltipStacks`, `mixin/LCEasyScreenHelperMixin`, `mixin/LCEasyGuiGraphicsMixin`; 2.16 `mixin/JeiRecipeLayoutTooltipMixin`, `mixin/JeiRecipesGuiTooltipMixin`; 2.17 `mixin/IcebergTitleBreakMixin`; 2.18 `compat/guititle/`, `mixin/ContainerTitlePlaqueMixin`, `mixin/RenderSystemShaderTextureMixin`.
-- 2.25 `compat/TrinketCaseRules`, `mixin/TrinketCaseInventoryMixin`, `mixin/TrinketCaseSlotMixin`, `mixin/TrinketCaseMenuMixin`, [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Botania section), `config/quark-common.toml` `Allowed Screens`.
+- 2.25 `compat/TrinketCaseRules`, `mixin/TrinketCaseInventoryMixin`, `mixin/TrinketCaseSlotMixin`, `mixin/TrinketCaseMenuMixin`, `mixin/ItemBackedInventoryAccessor`, [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Botania section), `config/quark-common.toml` `Allowed Screens`.
 - 2.19 `mixin/CreativeMenuDisableMixin`, `mixin/XpHelperMixin`, `mixin/XpPumpUpgradeWrapperMixin`, `mixin/XPFluidManagerMixin`, `mixin/MemoryStickItemMixin`, `mixin/PneumaticCraftUtilsMixin`, `mixin/IETagUtilsMixin`, `mixin/CopperPickaxeItemMixin`, `CETiers`.
+- 2.28 `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `mixin/SophisticatedCraftingPolymorphMixin`, `mixin/SophisticatedUpgradeOpenMixin`, `mixin/PolymorphRecipeSelectionPacketMixin`; compile dep `development/patcherMod/libs/polymorph-forge-0.46.6+1.19.2.jar` (copied from `mods/`, git-ignored).
+- 2.29 `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `mixin/IECraftingTablePolymorphMixin`, `mixin/PrettyPipesCraftingTerminalPolymorphMixin`; compile deps `libs/ImmersiveEngineering-1.19.2-9.2.4-170.jar`, `libs/PrettyPipes-1.13.6.jar`.
 
 ## 6. Offline checks
 
@@ -300,13 +395,65 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   per point.
 - [ ] **FX-20 IE recycling:** recycle an iron rod in the IE arc furnace (or JEI) → iron, never air.
 - [ ] **FX-21 Trinket case, any item:** put cobblestone, a sword and a stack of food in a Trinket Case by clicking in
-  its screen, by shift-click and by clicking the stack onto the case item in the inventory → all accepted; a shulker
-  box and a second Trinket Case → refused. Close and reopen → contents kept.
+  its screen, by shift-click and by clicking the stack onto the case item in the inventory → all accepted, a shulker
+  box and a second Trinket Case too. With the case open, hover an empty case slot and press the hotbar key of the
+  case itself → nothing moves. Close and reopen → contents kept. (Scratch server 2026-10-22: canPlaceItem, slot
+  mayPlace and shift-click PASS for every item, the open case refused; the clicks themselves need a client.)
 - [ ] **FX-22 Trinket case sort and search:** open the case with mixed items → Quark's sort button and search bar
   show; sort → items grouped, none lost; the sort keybind works; search dims non-matching slots; the deposit /
-  restock buttons move items in and out.
+  restock buttons move items in and out. (Scratch server: menu is `IQuarkButtonAllowed`, Quark's transfer handler
+  accepts it, a sort keeps every count and packs to the front, NBT read back 132 of 132: PASS.)
 - [ ] **FX-23 Trinket case equip:** a trinket in the case still quick-equips from its screen; cobblestone doesn't.
-- [ ] **FX-24 Config off:** `trinketCaseAnyItem = false`, restart → only trinkets, rods and mana items fit.
+- [x] **FX-24 Config off:** `trinketCaseAnyItem = false`, restart → only trinkets, rods, mana items and curios
+  (shulker boxes, through Shulker Box Slot) fit; the open case still refused. Scratch server PASS 2026-10-22.
+- [ ] **FX-25 JEI tooltip search needs `$`** (client only): in JEI type `edible`: no items match by tooltip text alone; `$edible`
+  matches. Name search still works without a prefix. `jei-client.ini TooltipSearchMode = REQUIRE_PREFIX`
+  (2026-10-22).
+- [ ] **FX-26 Breezy wind particles** (client only): above y 83 in the open (sea level + 20), wind particles show about 3 times as
+  often as before (`breezy-client.toml` frequencies x3: 0.015 / 0.03 / 0.045, 2026-10-22).
+- [ ] **FX-27 Chalk symbols unlocked** (the server's unlock list: scratch server PASSED 2026-10-22, SQ-GM-06, every special symbol unlocked for a new fake player; the symbol screen and drawing:
+  client): a new player with no advancements opens the chalk symbol menu (sneak-use
+  chalk): Skull, Cross, Heart, Check, Pickaxe and House are all selectable and draw. `chalk-common.toml` every
+  `*UnlockAdvancement = ""` (2026-10-22).
+- [ ] **FX-28 Cosmetic armor kept on death** (real player death, in game): wear a cosmetic helmet, die: it is still in the cosmetic slot after
+  respawn, not in the corpse. Then set `CosArmorKeepThroughDeath = false`, restart, die: it is in the corpse and goes
+  back to the cosmetic slot when the corpse is opened (no config change shipped; checks the existing setup).
+- [ ] **FX-29 Drops into the inventory** (vein mining needs the client keybind: in game; Auto Pickup on: scratch server PASSED 2026-10-22,
+  SQ-GM-08): vein-mine 20 stone or dirt with room in the inventory: every drop is in the
+  inventory, none on the ground. With a full inventory: the drops lie at your feet.
+- [ ] **FX-30 Undo works** (in game): right after FX-29 (inventory case), `/undo_excavation`: the blocks come back and the
+  drops leave the inventory; message "Excavation undone" (OE's text).
+- [ ] **FX-31 Cooldown** (rule and message: scratch server PASSED 2026-10-22, SQ-GM-08; the real command: in game): vein-mine twice, undo, undo again at once: refused, "You can undo another vein mine in 5 s"
+  (or 4). After 5 s it works. A refused undo (FX-32) starts no cooldown.
+- [ ] **FX-32 Denied blocks** (rule and message per block: scratch server PASSED 2026-10-22, SQ-GM-08, iron ore, deepslate coal ore, diamond block, budding amethyst, spawner, ancient debris, chest refused; the real command: in game): vein-mine iron ore (or coal ore, deepslate ores), undo: refused, "This vein mine can't
+  be undone: it broke Iron Ore." Same with a few Blocks of Iron, budding amethyst (silk-touch-free mining, it
+  drops nothing), and two chests side by side.
+- [ ] **FX-33 XP once** (in game; the offline-player guard on the same restore: scratch server PASSED 2026-10-22, SQ-GM-08): note your XP, vein-mine sculk without Silk Touch (not denied, drops XP; ores are denied),
+  note the gain, undo: your XP drops by that gain once, not more (a large vein mine restores over several ticks).
+- [x] **FX-34 Config** (both keys: scratch server PASSED 2026-10-22, SQ-GM-05, chest allowed and no cooldown after the restart): `[vein_undo] cooldownSeconds = 0` in `creativeengineering-common.toml`, restart: undos back to
+  back work. `denyBlockEntities = false`: two chests can be undone.
+- [ ] **FX-35 Backpack Polymorph choice** (in game): backpack with a crafting upgrade, open its tab, fill the grid with
+  a recipe that has two outputs (e.g. a conflicting plank or slab recipe; JEI shows both). The Polymorph button
+  shows right of the result slot; pick the other output: the result slot changes, taking it gives that item and
+  uses the grid as that recipe does. Shift-click crafts the picked one repeatedly.
+- [ ] **FX-36 Button follows the tab** (in game): close the crafting tab: the button is gone and its spot takes no
+  clicks. Reopen: button back next to the result slot. With an unambiguous recipe the button stays hidden.
+- [ ] **FX-37 Reopen and second upgrade** (in game): leave a conflicting recipe in the grid, close and reopen the
+  backpack: button and list come back without touching the grid. With two crafting upgrades holding different
+  conflicting grids, switching tabs shows each grid's own list.
+- [ ] **FX-38 No regressions** (in game): normal crafting in the upgrade (including a recipe with a remainder, e.g. a
+  bucket recipe), the vanilla crafting table's Polymorph button, and JEI transfer into the upgrade grid all work.
+- [ ] **FX-39 Engineer's Crafting Table choice** (in game): fill the IE Engineer's Crafting Table grid with a recipe
+  that has two outputs (JEI shows both). The Polymorph button shows right of the result frame, clear of the title;
+  pick the other output: the result changes, taking it gives that item. Shift-click crafts the picked one repeatedly.
+  Close and reopen with the grid still filled: the button and list come back without touching the grid.
+- [ ] **FX-40 Crafting Terminal choice** (in game): same in a Pretty Pipes Crafting Terminal (needs a pipe network).
+  The button sits right of the result frame and covers no grid slot or the Request button. Reopen with the grid
+  filled: the list comes back.
+- [ ] **FX-41 Shared terminal** (in game, two players): both open one Crafting Terminal with a conflicting grid; each
+  picks a different output: each sees and takes their own pick.
+- [ ] **FX-42 No regressions** (in game): plain crafting in both (no button with an unambiguous recipe), the vanilla
+  crafting table's Polymorph button, JEI transfer into both grids, Crafting Terminal ghost items and Request button.
 
 ## 8. History
 
@@ -320,3 +467,23 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   crash) and 1.0.8 (IE hammer); each keeps its tests in its own writeup.
 - 2026-10-19: F1 and F6 fixed (ForgivingVoidMixin javadoc, CopperPickaxeItemMixin javadoc; source only, ship with the next patcherMod build).
 - 2026-10-22: 2.25 Trinket Case any item plus Quark sort / search (`recipes/magic #3`); tests FX-21 to FX-24.
+- 2026-10-22: 2.25 scratch server run (`tools/trinket_case_probe.js`): shulker boxes were accepted even with the
+  exclusion, through Botania's curio check. User decision: any item, shulker boxes and other cases included. The open
+  case's own stack is refused instead (hotbar-swap loss). patcherMod 1.1.01 md5 37bb7049, all checks PASS, config
+  on and off.
+- 2026-10-22: chalk symbols always unlocked (`gameplay/misc #8`): Chalk's unlock advancements never fire because the
+  pack drops every advancement, so Skull, Heart, Pickaxe and House could not be unlocked. Config only; FX-27.
+- 2026-10-22: cosmetic armor on death (`gameplay/misc #3`) checked, no change: Cosmetic Armor's
+  `CosArmorKeepThroughDeath` (on) is the keep option; when off, its drops join `LivingDropsEvent` before Corpse
+  collects at LOWEST, and Cosmetic Armor x Corpse Compat puts them back in the cosmetic slots. User decision: no
+  second "corpse takes it anyway" option, keep the default. FX-28.
+- 2026-10-22: 2.26 Ore Excavation undo rules (`gameplay/misc #12`): cooldown, denied-block tag, block-entity
+  refusal, Auto Pickup on with drops inserted straight into the inventory, XP taken once, offline-player crash
+  guard. Built, not run in game; FX-29 to FX-34.
+- 2026-10-22: 2.27 written up (the JEI, Breezy and Chalk config changes had only tests and history lines); test
+  lines marked client / scratch / in game; scratch queue entries SQ-GM-06 and SQ-GM-08 (`tools/gear_misc_probe.js`).
+- 2026-10-22 (second bulk run): SQ-GM-05, SQ-GM-06, SQ-GM-08 PASS on the scratch server. FX-34 done; FX-27, FX-29 to
+  FX-33 keep their in-game halves.
+- 2026-10-22: 2.28 Polymorph in the Sophisticated crafting upgrade; tests FX-35 to FX-38. Built, not run in game.
+- 2026-10-22: 2.29 Polymorph in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal, after an audit of
+  crafting screens Polymorph misses (gaps listed in 2.29); tests FX-39 to FX-42. Built, not run in game.

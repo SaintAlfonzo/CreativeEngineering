@@ -1,0 +1,502 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "farmersdelight:sandy_shrub"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:beetroot_seeds",
+     "chance": 0.125
+    }
+   ],
+   "notes": [
+    "Any tool but shears or a knife.",
+    "Fortune: up to +2 seeds per level."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "farmersdelight:sandy_shrub"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:beetroot_seeds",
+     "chance": 0.125
+    },
+    {
+     "item": "farmersdelight:straw",
+     "chance": 0.3
+    }
+   ],
+   "notes": [
+    "Broken with a knife.",
+    "Fortune: up to +2 seeds per level."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "farmersdelight:sandy_shrub"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:sandy_shrub"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:frosty_fern"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "immersive_weathering:frosty_fern"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:frosty_grass"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "immersive_weathering:frosty_grass"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:dead_bush"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:stick"
+    }
+   ],
+   "notes": [
+    "Any tool but shears."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:dead_bush"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:dead_bush"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:fern"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:wheat_seeds",
+     "chance": 0.125
+    }
+   ],
+   "notes": [
+    "Any tool but shears.",
+    "Fortune: up to +2 seeds per level."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:fern"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:fern"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "requires": [
+    "immersiveengineering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:grass"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:wheat_seeds",
+     "chance": 0.125
+    },
+    {
+     "item": "immersiveengineering:seed",
+     "chance": 0.1
+    }
+   ],
+   "notes": [
+    "Any tool but shears or a knife.",
+    "Fortune: up to +2 seeds per level."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "immersiveengineering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:grass"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:wheat_seeds",
+     "chance": 0.125
+    },
+    {
+     "item": "farmersdelight:straw",
+     "chance": 0.2
+    },
+    {
+     "item": "immersiveengineering:seed",
+     "chance": 0.1
+    }
+   ],
+   "notes": [
+    "Broken with a knife.",
+    "Fortune: up to +2 seeds per level."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:grass"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:grass"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:large_fern"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:wheat_seeds",
+     "chance": 0.125
+    }
+   ],
+   "notes": [
+    "Any tool but shears."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:large_fern"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:fern",
+     "count": 2
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:nether_sprouts"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:nether_sprouts"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:seagrass"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:seagrass"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "requires": [
+    "immersiveengineering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:tall_grass"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:wheat_seeds",
+     "chance": 0.125
+    },
+    {
+     "item": "immersiveengineering:seed",
+     "chance": 0.1
+    }
+   ],
+   "notes": [
+    "Any tool but shears or a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "immersiveengineering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:tall_grass"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:wheat_seeds",
+     "chance": 0.125
+    },
+    {
+     "item": "farmersdelight:straw",
+     "chance": 0.2
+    },
+    {
+     "item": "immersiveengineering:seed",
+     "chance": 0.1
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:tall_grass"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:grass",
+     "count": 2
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:tall_seagrass"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:seagrass",
+     "count": 2
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:beachgrass"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:beetroot_seeds",
+     "chance": 0.125
+    }
+   ],
+   "notes": [
+    "Any tool but shears.",
+    "Fortune: up to +2 seeds per level."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:beachgrass"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:beachgrass"
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:tall_beachgrass"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:beetroot_seeds",
+     "chance": 0.125
+    }
+   ],
+   "notes": [
+    "Any tool but shears."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:tall_beachgrass"
+    }
+   ],
+   "action": {
+    "tag": "forge:shears"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:beachgrass",
+     "count": 2
+    }
+   ],
+   "notes": [
+    "Broken with shears."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,972 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "delightful"
+   ],
+   "inputs": [
+    {
+     "entities": [
+      "buzzier_bees:grizzly_bear",
+      "buzzier_bees:moobloom",
+      "minecraft:cat",
+      "minecraft:cod",
+      "minecraft:cow",
+      "minecraft:dolphin",
+      "minecraft:donkey",
+      "minecraft:fox",
+      "minecraft:glow_squid",
+      "minecraft:goat",
+      "minecraft:hoglin",
+      "minecraft:horse",
+      "minecraft:llama",
+      "minecraft:mooshroom",
+      "minecraft:mule",
+      "minecraft:ocelot",
+      "minecraft:panda",
+      "minecraft:pig",
+      "minecraft:piglin",
+      "minecraft:piglin_brute",
+      "minecraft:polar_bear",
+      "minecraft:pufferfish",
+      "minecraft:rabbit",
+      "minecraft:salmon",
+      "minecraft:sheep",
+      "minecraft:squid",
+      "minecraft:tropical_fish",
+      "minecraft:turtle",
+      "minecraft:wolf",
+      "more_mooblooms:moobloom",
+      "neapolitan:chimpanzee",
+      "quark:crab",
+      "quark:foxhound",
+      "quark:shiba"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/scavenging"
+   },
+   "outputs": [
+    {
+     "item": "delightful:animal_fat",
+     "count": 3,
+     "label": "1 to 3",
+     "chance": 0.6
+    }
+   ],
+   "notes": [
+    "Killed with a knife by a player.",
+    "Looting makes it certain."
+   ]
+  },
+  {
+   "requires": [
+    "delightful"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:dark_oak_leaves",
+      "minecraft:oak_leaves"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/scavenging"
+   },
+   "outputs": [
+    {
+     "item": "delightful:acorn",
+     "chance": 0.05
+    }
+   ],
+   "notes": [
+    "Broken with a knife.",
+    "Not with Silk Touch."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:pig"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:ham",
+     "chance": 0.5
+    }
+   ],
+   "notes": [
+    "Killed with a knife.",
+    "Not if burning.",
+    "Looting: +10% per level."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:hoglin"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:ham"
+    }
+   ],
+   "notes": [
+    "Killed with a knife.",
+    "Not if burning."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:pig"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:smoked_ham",
+     "chance": 0.5
+    }
+   ],
+   "notes": [
+    "Killed with a knife.",
+    "Only if burning.",
+    "Looting: +10% per level."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:hoglin"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:smoked_ham"
+    }
+   ],
+   "notes": [
+    "Killed with a knife.",
+    "Only if burning."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:chicken"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:feather"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:cow",
+      "minecraft:donkey",
+      "minecraft:horse",
+      "minecraft:llama",
+      "minecraft:mule",
+      "more_mooblooms:moobloom"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:leather"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:rabbit"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:rabbit_hide"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:shulker"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:shulker_shell"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:spider",
+      "minecraft:cave_spider"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:string"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:cake"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:cake_slice",
+     "count": 7,
+     "label": "7 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:candle_cake",
+      "minecraft:white_candle_cake",
+      "minecraft:orange_candle_cake",
+      "minecraft:magenta_candle_cake",
+      "minecraft:light_blue_candle_cake",
+      "minecraft:yellow_candle_cake",
+      "minecraft:lime_candle_cake",
+      "minecraft:pink_candle_cake",
+      "minecraft:gray_candle_cake",
+      "minecraft:light_gray_candle_cake",
+      "minecraft:cyan_candle_cake",
+      "minecraft:purple_candle_cake",
+      "minecraft:blue_candle_cake",
+      "minecraft:brown_candle_cake",
+      "minecraft:green_candle_cake",
+      "minecraft:red_candle_cake",
+      "minecraft:black_candle_cake"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:cake_slice",
+     "count": 7
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "farmersdelight:apple_pie"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:apple_pie_slice",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "farmersdelight:sweet_berry_cheesecake"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:sweet_berry_cheesecake_slice",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "farmersdelight:chocolate_pie"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:chocolate_pie_slice",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:grass"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:straw",
+     "chance": 0.2
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "farmersdelight:sandy_shrub"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:straw",
+     "chance": 0.3
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:tall_grass"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:straw",
+     "chance": 0.2
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:wheat"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:straw"
+    }
+   ],
+   "notes": [
+    "Broken with a knife.",
+    "Fully grown only."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "farmersdelight:rice_panicles"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:straw"
+    }
+   ],
+   "notes": [
+    "Broken with a knife.",
+    "Fully grown only."
+   ]
+  },
+  {
+   "requires": [
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:hoglin"
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/hunting_tools"
+   },
+   "outputs": [
+    {
+     "item": "nethersdelight:hoglin_hide"
+    }
+   ],
+   "notes": [
+    "Killed with a knife or machete."
+   ]
+  },
+  {
+   "requires": [
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:chicken"
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:feather"
+    }
+   ],
+   "notes": [
+    "Killed with a machete."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:hoglin"
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:ham"
+    }
+   ],
+   "notes": [
+    "Killed with a machete.",
+    "Not if burning."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:pig"
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:ham",
+     "chance": 0.5
+    }
+   ],
+   "notes": [
+    "Killed with a machete.",
+    "Not if burning.",
+    "Looting: +10% per level."
+   ]
+  },
+  {
+   "requires": [
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:cow",
+      "minecraft:donkey",
+      "minecraft:horse",
+      "minecraft:llama",
+      "minecraft:mule"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:leather"
+    }
+   ],
+   "notes": [
+    "Killed with a machete."
+   ]
+  },
+  {
+   "requires": [
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:rabbit"
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:rabbit_hide"
+    }
+   ],
+   "notes": [
+    "Killed with a machete."
+   ]
+  },
+  {
+   "requires": [
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:shulker"
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:shulker_shell"
+    }
+   ],
+   "notes": [
+    "Killed with a machete."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:hoglin"
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:smoked_ham"
+    }
+   ],
+   "notes": [
+    "Killed with a machete.",
+    "Only if burning."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:pig"
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:smoked_ham",
+     "chance": 0.5
+    }
+   ],
+   "notes": [
+    "Killed with a machete.",
+    "Only if burning.",
+    "Looting: +10% per level."
+   ]
+  },
+  {
+   "requires": [
+    "nethersdelight"
+   ],
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:spider",
+      "minecraft:cave_spider"
+     ]
+    }
+   ],
+   "action": {
+    "tag": "nethersdelight:tools/machetes"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:string"
+    }
+   ],
+   "notes": [
+    "Killed with a machete."
+   ]
+  },
+  {
+   "requires": [
+    "brewinandchewin"
+   ],
+   "inputs": [
+    {
+     "block": "brewinandchewin:pizza"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "brewinandchewin:pizza_slice",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "brewinandchewin"
+   ],
+   "inputs": [
+    {
+     "block": "brewinandchewin:flaxen_cheese_wheel"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "brewinandchewin:flaxen_cheese_wedge",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife; without, drops itself."
+   ]
+  },
+  {
+   "requires": [
+    "brewinandchewin"
+   ],
+   "inputs": [
+    {
+     "block": "brewinandchewin:scarlet_cheese_wheel"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "brewinandchewin:scarlet_cheese_wedge",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife; without, drops itself."
+   ]
+  },
+  {
+   "requires": [
+    "brewinandchewin"
+   ],
+   "inputs": [
+    {
+     "block": "brewinandchewin:quiche"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "brewinandchewin:quiche_slice",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:enderman"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "endersdelight:enderman_sight"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:endermite"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "endersdelight:mite_crust"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:shulker"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "endersdelight:shulker_mollusk"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "endersdelight:chorus_pie"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "endersdelight:chorus_pie_slice",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Broken with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "block": "supplementaries:flax"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:straw"
+    }
+   ],
+   "notes": [
+    "Broken with a knife.",
+    "Fully grown only."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,200 @@
+{
+ "rows": [
+  {
+   "inputs": [
+    {
+     "block": "minecraft:water_cauldron"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:water\",Count:12,CachedColor:-12618012}}}",
+     "label": "Water"
+    }
+   ],
+   "notes": [
+    "Faucet on the source.",
+    "One bottle per cauldron level."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:lava_cauldron"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:lava\",Count:12,CachedColor:-1}}}",
+     "label": "Lava"
+    }
+   ],
+   "notes": [
+    "Faucet on the source.",
+    "Empties the cauldron: one bucket."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:powder_snow_cauldron"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:powder_snow\",Count:12,CachedColor:-1}}}",
+     "label": "Powder snow"
+    }
+   ],
+   "notes": [
+    "Faucet on the source."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block_tag": "minecraft:beehives"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:honey\",Count:12,CachedColor:-1}}}",
+     "label": "Honey"
+    }
+   ],
+   "notes": [
+    "Faucet on the source.",
+    "Full hives only: one bottle, empties it."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:water"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:water\",Count:12,CachedColor:-12618012}}}",
+     "label": "Water"
+    }
+   ],
+   "notes": [
+    "Faucet on the source.",
+    "A water source never runs dry."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:brewing_stand"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:potion\",Count:12,CachedColor:-524040}}}",
+     "label": "The brewed potion"
+    }
+   ],
+   "notes": [
+    "Faucet on the source.",
+    "Drains the stand's potions."
+   ]
+  },
+  {
+   "requires": [
+    "farmersrespite"
+   ],
+   "inputs": [
+    {
+     "block": "farmersrespite:kettle"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:water\",Count:12,CachedColor:-12618012}}}",
+     "label": "Water"
+    }
+   ],
+   "notes": [
+    "Faucet on the source.",
+    "From a kettle holding water."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:honey\",Count:12,CachedColor:-1}}}",
+     "label": "Any jar contents"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:honey\",Count:12,CachedColor:-1}}}",
+     "label": "The same contents"
+    }
+   ],
+   "notes": [
+    "Faucet on the source.",
+    "Jar to jar: moves the liquid down."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:fluid_tank"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:faucet"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:milk\",Count:12,CachedColor:-1}}}",
+     "label": "The matching jar liquid"
+    }
+   ],
+   "notes": [
+    "Faucet on the source.",
+    "Any tank whose fluid has a jar version."
+   ]
+  }
+ ]
+}

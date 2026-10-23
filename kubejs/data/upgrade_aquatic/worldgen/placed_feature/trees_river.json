@@ -1,0 +1,24 @@
+{
+  "__comment": "Mulberry trees at 4x Upgrade Aquatic's rate: 8 tries per chunk (was count 1, 1 in 2 chunks +2, about 2). The tree needs a dry, open column on sapling ground inside a #is_river biome, and most river columns are water, so most tries place nothing (feature_writeup/recipes_wood.md 2.6). Same feature and filters otherwise (UAFeatures$UAPlacedFeatures, VegetationPlacements.treePlacement, registered in Java).",
+  "feature": "upgrade_aquatic:river_tree",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 8
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -51,7 +51,6 @@ public class IETagUtilsMixin {
 
     @Overwrite
 		public static String[] getMatchingPrefixAndRemaining(RegistryAccess tags, ItemStack stack, String... componentTypes) {
-				LOGGER.info("Called arc recycling mixin func");
 				String[] fallback = null;
 
 				for (ResourceLocation name : TagUtils.getMatchingTagNames(tags, stack)) {

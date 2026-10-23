@@ -9,11 +9,12 @@
 | Layers drawn per item (placed jar, jar item) | BUILT 2026-10-21 | `mixin/SupplementariesJarRendererMixin`, `mixin/SupplementariesJarItemRendererMixin` (client) |
 | Jar item tooltip, one line per kind | BUILT 2026-10-21 | `mixin/SupplementariesJarItemTooltipMixin` |
 | WTHIT "Contents" line lists kinds | BUILT 2026-10-21 | `compat/WthitHolderContents` ([wthit_lines.md](wthit_lines.md) 2.3) |
+| Every soup and stew as a jar soft fluid (section 9) | built, scratch server PASSED 2026-10-22 (SQ-MJ-01, SQ-MJ-02: registry, pour in and out, containers; data, KubeJS tree); in game: colours and WTHIT (MJ-11, MJ-12) | `kubejs/data/creativeengineering/moonlight/soft_fluids/`, `tools/gen_soup_soft_fluids.py` |
 
 Scratch server 2026-10-21: `/jartest` 18 pass, 0 fail (server side: tags, storage, item handler, comparator, old jars,
 jar item). patcherMod jar installed in `mods/` 2026-10-21. In game: MJ-01 to MJ-10 pending (rendering, tooltip, WTHIT are
 client-only and untested).
-TODO `food/baked-goods #11`. Knobs: Supplementaries `[functional.jar]` capacity (12) and jar_cookies; which items
+TODO `baking/baked-goods #11`. Knobs: Supplementaries `[functional.jar]` capacity (12) and jar_cookies; which items
 mix = the family tags.
 
 ## 1. Overview
@@ -95,7 +96,7 @@ refused. Candy cane then honey candy: mixes. Toast then toast: fine; toast then 
 - [mixin/SupplementariesJarItemTooltipMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SupplementariesJarItemTooltipMixin.java)
 - [compat/WthitHolderContents.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/WthitHolderContents.java)
 - [tools/jar_mixing_test/probe.js](../tools/jar_mixing_test/probe.js): scratch-server probe
-- Brief: [briefs/food_baked-goods.md](briefs/food_baked-goods.md) #11
+- Brief: [briefs/baking_baked-goods.md](briefs/baking_baked-goods.md) #11
 
 ## 6. Offline checks
 
@@ -125,9 +126,58 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 - [ ] **MJ-09 Hopper:** a hopper with 20 mixed cookies above an empty jar → the jar fills to 12 in order; a
   comparator next to it reads 15. An apple in the hopper stays there.
 - [ ] **MJ-10 Old jar:** a cookie jar filled before this update (one kind, 5 cookies) still shows 5 and gives 5 back.
+- [ ] **MJ-11 Soup in, soup out** (counts: scratch server PASSED 2026-10-22, SQ-MJ-02; client: the colour and the WTHIT line): right-click an empty jar with a bowl of Corn Soup → soup-coloured liquid, one bowl
+  back in hand; right-click with an empty bowl → Corn Soup. Six bowls fill it; a seventh stays in hand. WTHIT reads
+  "Contents: Corn Soup (2 / 12)" after one bowl.
+- [ ] **MJ-12 Every soup** (in and out: scratch server PASSED 2026-10-22, SQ-MJ-01 / SQ-MJ-02, all 24 as themselves; client: the colours): each soup in section 9 goes into an empty jar, and each shows a colour close to its texture
+  (none black, purple-black or grey). Golden and Enchanted Golden soups come back out as the same item.
+- [x] **MJ-13 Shulker bowl only** (scratch server PASSED 2026-10-22, SQ-MJ-02; nothing client-only): Chorus Stew into a jar, one bowl → the shulker bowl comes back; an empty wooden
+  bowl on the jar does nothing; an empty shulker bowl takes the Chorus Stew out and the jar is empty again (2 units in,
+  2 out, no extra stew).
+- [ ] **MJ-14 Bottle soup** (one bottle: scratch server PASSED 2026-10-22, SQ-MJ-02; 12 bottles: client): a Bayberry Soup bottle pours 1 unit (12 bottles fill a jar); an empty glass bottle takes
+  one back.
 
 ## 8. History
 
+- 2026-10-22: soups and stews in jars (section 9, TODO `dishes/ingredients #13`): 24 generated soft fluids, own
+  colour each. Data only; not tested in game (MJ-11 to MJ-14).
+- 2026-10-22 (doc audit): soups in jars not run yet; scratch checks queued (SQ-MJ-01, SQ-MJ-02,
+  `tools/food_drinks_probe/food_drinks_probe.js`, `/fdtest soupjar`), colours and WTHIT stay in game.
+- 2026-10-22 (second bulk run): SQ-MJ-01, SQ-MJ-02 PASS on the scratch server (24 soups; the first try failed only
+  because Moonlight's soft-fluid map is empty before a player joins, probe fixed). MJ-13 done; MJ-11, MJ-12, MJ-14
+  client halves stay in game.
 - 2026-10-21: built. Cookie tags first (brief step (a)), then families, the slot-per-item jar, renderers, tooltip
   and WTHIT line. Scratch server (Forge 1.19.2 dedicated, the built jar swapped in): every mixin applied, `/jartest`
   J1-J10 18 pass, 0 fail.
+
+## 9. Soups and stews in jars
+
+Supplementaries jars hold liquids as Moonlight *soft fluids*, data files at
+`data/<ns>/moonlight/soft_fluids/<name>.json`. A bowl of soup on a jar pours in 2 units (a jar holds 12, so 6 bowls);
+an empty bowl on the jar takes one bowl (2 units) back out. In and out move the same amount, so a jar
+cannot duplicate soup (a bottle soup is 1 unit both ways). Moonlight and Supplementaries ship 11 soups (beetroot soup, mushroom,
+rabbit and suspicious stew; beef stew, baked cod stew, chicken soup, fish stew, pumpkin soup, vegetable soup, sopa de
+macaco). The pack adds the other 24, so every item in `#creativeengineering:food_type/soup` and every Golden Food
+soup and stew goes in a jar:
+
+- Acacia Blossom Soup, Kangaroo Stew, Adzuki Stew, Bell Pepper Soup, Blazing Chili, Bone Broth, Carrot Soup, Cavern
+  Explorer Stew, Miso with Bamboo Sprouts, Corn Soup, Creamy Onion Soup, Fig Chicken Stew, Noodle Soup, Sinigang,
+  Strider Moss Stew;
+- Chorus Stew and Endermite Stew, shulker bowl only. Ender's Delight's wooden-bowl versions are removed from the pack
+  (removed_items.js) and the generator skips every removed item, so a wooden bowl takes nothing out of these jars;
+- Bayberry Soup, a bottle: 1 unit per bottle, and Fruits Delight's bayberry soup fluid counts as the same liquid;
+- Golden and Enchanted Golden Beetroot Soup, Mushroom Stew, Rabbit Stew (one fluid each).
+
+**Generator:** `python3 tools/gen_soup_soft_fluids.py` (`/cegen run soup_soft_fluids`, reads `/dumpfood`'s
+foods.json for each item's empty container) writes one json per uncovered soup and deletes stale ones; the folder is
+the tool's. A soup a mod already covers is skipped (its colour stays the mod's). New soups: put the key in the soup
+type in food_types.json and rerun. Applies on `/reload`.
+
+**Colour:** each soup its own, decided 2026-10-22 (not one shared soup colour). The tool takes the largest
+one-colour patch of the item texture that is not the bowl's colours; `COLOR_OVERRIDE` in the tool fixes the eight
+where that picked garnish, shadow or a gold bowl (acacia blossom, bone broth, blazing chili, chorus, endermite,
+sinigang, both golden mushroom stews). Contact sheet checked against the textures.
+
+**Limits:** drinking from a placed jar (`drink_from_jar`) is off in this pack, so a jar of soup is storage only. The
+curries (Coconut Curry, Tea Curry, Adzuki Curry) and the canned soups are not soups here and stay out. Display
+Delight's placed soups are blocks, not bowls.

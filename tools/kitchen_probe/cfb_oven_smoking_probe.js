@@ -1,4 +1,4 @@
-// TODO food/oven #4 probe: the Cooking for Blockheads oven cooks smoker recipes too (patcherMod CfbOvenSmokingMixin).
+// TODO cooking/oven #4 probe: the Cooking for Blockheads oven cooks smoker recipes too (patcherMod CfbOvenSmokingMixin).
 // Scratch-only: copy into a scratch server's kubejs/server_scripts (tools/creative_labels_test/scratch_server.sh),
 // never into the pack. Run /kotest; results are "[kotest] PASS|FAIL|INFO ..." lines in logs/latest.log, and the
 // live cook check reports 30 s later.

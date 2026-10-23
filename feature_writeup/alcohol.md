@@ -4,11 +4,12 @@ Two backports live in this file:
 
 - **Part A (sections 0 to 10, tests `AL-`): Brewin' and Chewin'.** A full port of 4.5.0+1.21.1 as "Backported Brewin";
   `-02` DEPLOYED with pack 1.0.8 (2026-10-19) in place of the 2.0 jar, still the live jar in 1.0.9. `-03` (10.13) is
-  built, not in `mods/` yet.
+  in the local `mods/` since 2026-10-20, not deployed.
 - **Part B (sections B0 to B8, tests `VB-`): Let's Do Vinery.** The pack ships Forge 1.3.10; ported from Fabric
   1.5.5 (Minecraft 1.21.1) as "Backported Vinery"; `-02` DEPLOYED with pack 1.0.8 (2026-10-19) in place of 1.3.10,
-  still the live jar in 1.0.9. `-03` (B7.14, 10.9 to 10.14) is in the local `mods/` since 2026-10-19 22:27, not
-  deployed. It starts after Part A's History.
+  still the live jar in 1.0.9. `-03` (B7.14, 10.9 to 10.14) then `-04` (village houses, section 13) are in the local `mods/`
+  since 2026-10-19/20, not deployed. `-04` was rebuilt in place on 2026-10-22 with the Grape Planting JEI page; the jar
+  in `mods/` and `server_mods/` is the earlier `-04` build, so bump to `-05` before the next deploy. It starts after Part A's History.
 
 # Part A: Brewin' and Chewin' (Backported Brewin)
 
@@ -157,6 +158,11 @@ Every row is a change the port has to make (IDs are used in section 3).
 | Kippers | 2 raw fish, kelp / none / 3 / 12000, x3 | 2 safe raw fish, dried kelp / none / 4 / 9600, x2 |
 
 All old recipes give 0.6 xp. New ones give 1.0, and Withering Dross gives 2.0.
+
+**Since 2026-10-23** Kimchi and Pickled Pickles are no longer keg recipes: they are made in Vintage Delight's Pickling
+Jar (`alcohol.js`, same inputs, 250 mB honey -> a honey bottle, 2400 ticks). Station split ([vintage_delight.md](vintage_delight.md)
+S7): Pickling Jar for all pickling, keg for beer fluids, cask (the Vinery port's fermentation barrel) for wine fluids
+that age. The wider keg / cask fluid audit is still open. Tests VTD-16.
 
 **Other recipe changes in 4.5.0:**
 - Cooking pot:
@@ -659,17 +665,17 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [ ] **AL-78 Tankard slot icon (10.16):** open an empty keg -> the container slot shows the grey tankard outline, not black and purple
 - [ ] **AL-79 Leftover slot (10.16):** ferment a recipe with a honey bottle ingredient -> the glass bottle lands in the new slot right of the output, nothing pops out; it can't be placed into; shift-click moves it to the inventory
 - [ ] **AL-80 Leftovers overflow and stall (10.16):** with the leftover slot full of glass bottles (64) -> the next bottle goes to the empty-container slot under the fluid slot; with that slot holding buckets instead (empty milk buckets through the fluid slot first) the next honey-bottle batch waits at 0 progress and resumes once the bottles are taken out; `stallWhenFull = false` -> it ferments and throws the bottle
-- [ ] **AL-81 Old keg loads (10.16):** a keg placed with `-02` holding ingredients, a tankard and a drink keeps all of them after the `-03` install
-- [ ] **AL-82 Slot rules (10.16):** dirt won't go in the ingredient grid or the container slot by hand or shift-click; a tankard goes in the container slot; a honey bottle goes in the fluid slot by shift-click
-- [ ] **AL-83 Input from every face (10.16):** hoppers into the side and the bottom feed wheat to the grid, tankards to the container slot and honey bottles to the fluid slot; a hopper on top still feeds the grid
-- [ ] **AL-84 Leftovers by hopper (10.16):** a hopper under the keg pulls finished items, empty bottles from the fluid slot and the leftover slot
-- [ ] **AL-85 Drink food values (11):** hover Beer, Red Wine, the Bellini and Bottle of Wodka -> AppleSkin shows half a rotten (green) shank and no saturation; drink one at full hunger -> it can be drunk, hunger goes up by half a shank, saturation doesn't
-- [ ] **AL-86 Intoxication everywhere (11):** drink Red Wine, the Bellini and Bottle of Wodka (one at a time, after milk) -> the hunger bar turns Intoxicated for 1:30, no Intoxication icon or particles; eat bread -> hunger fills, saturation doesn't
-- [ ] **AL-87 Nausea (11):** Red Wine -> Nausea 0:05; Jellie Wine and Mojang Noir -> 0:10; the Bellini -> one Nausea 0:05 (not two); Beer -> no Nausea; Bottle of Wodka -> its own Nausea 1:00 only
+- [ ] **AL-81 Old keg loads (10.16):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-01).* a keg placed with `-02` holding ingredients, a tankard and a drink keeps all of them after the `-03` install
+- [ ] **AL-82 Slot rules (10.16):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-01).* dirt won't go in the ingredient grid or the container slot by hand or shift-click; a tankard goes in the container slot; a honey bottle goes in the fluid slot by shift-click
+- [ ] **AL-83 Input from every face (10.16):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-01).* hoppers into the side and the bottom feed wheat to the grid, tankards to the container slot and honey bottles to the fluid slot; a hopper on top still feeds the grid
+- [ ] **AL-84 Leftovers by hopper (10.16):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-01).* a hopper under the keg pulls finished items, empty bottles from the fluid slot and the leftover slot
+- [ ] **AL-85 Drink food values (11):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-04).* hover Beer, Red Wine, the Bellini and Bottle of Wodka -> AppleSkin shows half a rotten (green) shank and no saturation; drink one at full hunger -> it can be drunk, hunger goes up by half a shank, saturation doesn't
+- [ ] **AL-86 Intoxication everywhere (11):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-04).* drink Red Wine, the Bellini and Bottle of Wodka (one at a time, after milk) -> the hunger bar turns Intoxicated for 1:30, no Intoxication icon or particles; eat bread -> hunger fills, saturation doesn't
+- [ ] **AL-87 Nausea (11):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-04).* Red Wine -> Nausea 0:05; Jellie Wine and Mojang Noir -> 0:10; the Bellini -> one Nausea 0:05 (not two); Beer -> no Nausea; Bottle of Wodka -> its own Nausea 1:00 only
 - [ ] **AL-88 Tooltip name (11):** Beer, Vodka, the Bellini, Bottle of Wodka and a wine show Quark's grey saturation word as "Intoxicating Drink" (not "Disgusting Snack"); rotten flesh still says "Disgusting Snack"; the effect lines read "Intoxication (m:ss)"; a wine lists its own effect, then Intoxication and Nausea; `[alcohol] quarkLine = false` brings "Disgusting Snack" back
 - [ ] **AL-89 Wine still a wine (11):** drink a wine in survival -> its own effect (aged level and duration), the empty wine bottle back; in creative the bottle stays; sneak-place still works; Apple Cider from Farmer's Delight unchanged (no rotten shank)
-- [ ] **AL-90 Log (11):** after the restart `logs/latest.log` has `[alcohol] food values set on 44 of 44 drinks` and no `[alcohol]` warnings
-- [ ] **AL-91 Coaster takes modelled items only (12):** right-click an empty coaster with a Vinery wine, a Farmer's Respite tea and a stone block -> none goes on; with a beer, an apple and FD hot cocoa -> each goes on with its own model; `[coaster] taggedItemsOnly = false` in `brewinandchewin-common.toml` -> the wine goes on again, drawn flat
+- [ ] **AL-90 Log (11):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-00, 44 of 44 drinks).* after the restart `logs/latest.log` has `[alcohol] food values set on 44 of 44 drinks` and no `[alcohol]` warnings
+- [ ] **AL-91 Coaster takes modelled items only (12):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-02).* right-click an empty coaster with a Vinery wine, a Farmer's Respite tea and a stone block -> none goes on; with a beer, an apple and FD hot cocoa -> each goes on with its own model; `[coaster] taggedItemsOnly = false` in `brewinandchewin-common.toml` -> the wine goes on again, drawn flat
 - [ ] **AL-92 Display Delight foods on a coaster (12):** put a Hamburger, Bacon and Eggs, a Cake Slice and a Corn Delight Taco on one coaster (plain right-click) -> each drawn with its Display Delight model, about bowl size, none of them a flat item, none sticking far past the tray
 - [ ] **AL-93 Tooltip follows the tag (12):** "Placeable on a coaster" on the Hamburger and on a beer, not on a Vinery wine or a Farmer's Respite tea
 - [ ] **AL-94 WTHIT on a coaster (12):** look at a coaster with beer, beer, apple -> body "Coaster: 3 / 4", "2x Beer", "Apple"; sneak-right-click with an empty hand (coaster put away) -> "Coaster: 3 / 4 (put away)"; an empty coaster -> "Coaster: 0 / 4"; `[coaster] wthit = false` in `creativeengineering-common.toml` -> no lines
@@ -1027,6 +1033,9 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
 - 2026-10-20: WTHIT keg lines in the port (`integration/wthit/KegWthit`, its own `waila_plugins.json`,
   `KegBlockEntity#getFermentTime()`): temperature, "Fermenting: Beer 45%", "Beer: Must Be Cold". `-03` rebuilt and
   installed in `mods/` and `server_mods/`. Tests WL-29, WL-30 ([wthit_lines.md](wthit_lines.md) 2.8).
+- 2026-10-22 (second bulk run): SQ-OM-00 to SQ-OM-04 PASS on the scratch server (keg slots and faces, old `-02` keg
+  NBT, coasters, compost and BlockRunner rows, the 44 drink food values); the logic and server halves of AL-81 to
+  AL-87, AL-90, AL-91 recorded, their in-game halves stay open.
 
 ## 10. Third list (2026-10-18 late, BUILT, not tested in game)
 
@@ -1282,7 +1291,7 @@ Your rule, 2026-10-19: a wine's size is how many fit in one placed block, and th
   9x rack and gain the wine box; the 6 larges leave every 4x / 9x rack (10.11 had let them in).
 - **Tests:** VB-73 to VB-75.
 
-### 10.13 Keg and wine storage temperature (Brewin + Vinery ports, pack tags) (BUILT 2026-10-19, not tested in game)
+### 10.13 Keg and wine storage temperature (Brewin + Vinery ports, pack tags) (BUILT 2026-10-19, wine storage kinds and rates scratch server PASSED 2026-10-22 (SQ-OM-05), not tested in game)
 
 Your list, 2026-10-19: furnaces, bonfires and braziers heat kegs while lit; industrial heat only while the machine
 runs (skip machines that aren't as easy); blaze burners, liquid burners and the blaze enchanter only when fueled;
@@ -1409,7 +1418,7 @@ stays as it is.
 - **Not changed:** the single-bottle rack's door (`BigBottleStorageBlock`) still opens only with an empty hand.
 - **Tests:** VB-84 to VB-89.
 
-### 10.16 Keg fixes, leftover slot, slot rules, any-face input; compost and BlockRunner (port + pack) (BUILT 2026-10-19, not tested in game)
+### 10.16 Keg fixes, leftover slot, slot rules, any-face input; compost and BlockRunner (port + pack) (BUILT 2026-10-19, scratch server PASSED 2026-10-22 (SQ-OM-01, SQ-OM-03), not tested in game)
 
 [TODO](todo/TODO.md) `alcohol/brewinport #4`, `#5`, `#6`, `#7`; `alcohol/vineryport #6`.
 
@@ -1509,7 +1518,7 @@ round on the local `-03` jars (10.15, 10.17 and the recolour tweaks below were a
   Brewin' `-03` carries 10.13, 10.16 and the port side of 12, so cold / warm wine storage is live locally now.
 - **Tests:** VB-73, VB-74, VB-81 to VB-83, VB-87 to VB-89, VB-91 PASSED; VB-84 reworded; VB-92 added; AL-77 reworded.
 
-### 10.19 Hopper jams on the press and the cask (port) (BUILT 2026-10-20, not tested in game)
+### 10.19 Hopper jams on the press and the cask (port) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-07), not tested in game)
 
 [TODO](todo/TODO.md) `alcohol/vineryport #7`, `alcohol/decisions #11`.
 
@@ -1541,7 +1550,7 @@ round on the local `-03` jars (10.15, 10.17 and the recolour tweaks below were a
 - **Jar:** Vinery `-03` rebuilt and installed in the local `mods/` 2026-10-20.
 - **Tests:** VB-93, VB-94.
 
-## 11. Every alcoholic drink: half a rotten shank, Intoxication, Nausea (pack + Vinery port) (BUILT 2026-10-20, not tested in game)
+## 11. Every alcoholic drink: half a rotten shank, Intoxication, Nausea (pack + Vinery port) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-00, SQ-OM-04), not tested in game)
 
 User, 2026-10-20: every alcoholic drink gets the alcohol food effect (Intoxication), Fruits Delight's Bellini
 included; every drink gives half a shank of rotten hunger and no saturation and can be drunk at any time; drinks
@@ -1587,7 +1596,7 @@ reads "Intoxicating Drink".
 - **History:** 2026-10-20 built (KubeJS food values + port `-03`). 2026-10-20 later: Quark's saturation word
   replaced from patcherMod (1.1.01), effect-line rename retired, AL-88 rewritten.
 
-## 12. Coasters: modelled items only, Display Delight models, WTHIT (port + pack + patcherMod) (BUILT 2026-10-20, not tested in game)
+## 12. Coasters: modelled items only, Display Delight models, WTHIT (port + pack + patcherMod) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game)
 
 Your scratchpad note (2026-10-19, TODO `alcohol/brewinport #8`): remove anything without a model from coasters; add
 Display Delight models to the coaster; add WTHIT info.
@@ -1620,7 +1629,7 @@ Display Delight models to the coaster; add WTHIT info.
   `/dumpplaceable` rerun (the catalog used the last dump).
 - **Tests:** AL-91 to AL-96.
 
-## 13. Village houses in vanilla villages (port `-04`) (BUILT 2026-10-20, not tested in game)
+## 13. Village houses in vanilla villages (port `-04`) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-00, SQ-OM-08, SQ-OM-14, SQ-OM-15), not tested in game)
 
 User, 2026-10-20: wire up all of the Vinery village houses to spawn in their respective village, as often as the
 flower houses (without competing; boost if rarer than the average house type), blocks remapped to the port.
@@ -3050,7 +3059,7 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - [x] **VB-73 Rack fit by size (10.12, 10.14):** PASSED 2026-10-20 ("all vinery bottle shape and case size"). Was: 9x rack takes Red, refuses Stal, Sun-kissed, Eiswein and Cristel; 4x rack and wine box take Red and Eiswein, refuse Cristel; the single-bottle rack takes all three; juice bottles go nowhere
 - [x] **VB-74 Shrink to slot (10.12):** PASSED 2026-10-20 ("all vinery bottle shape and case size"). Was: Praetorian (no box look) lies inside its 4x slot and the wine box without poking out the back or front; Red Wine draws at full size; the box-look wines are VB-82 / VB-83
 - [ ] **VB-75 One place to change (10.12):** set Red Wine's limit to 1 in `ObjectRegistry`, build -> Red stacks 1 per block, goes only in the single-bottle rack, and `/kubejs` or JEI shows it under `#vinery:large_bottle`; set it back
-- [ ] **VB-76 Storage labels (10.13):** wine put in a rack in daylight -> WTHIT "sunny x1.0"; ringed by snow blocks -> "cold sunny x2.0"; next to a lit furnace -> "warm sunny x0.75"; underground with nothing -> "cellar x2.0"; underground with ice -> "cold cellar x4.0"; underground with a lit furnace -> "warm cellar x1.5"
+- [ ] **VB-76 Storage labels (10.13):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-05).* wine put in a rack in daylight -> WTHIT "sunny x1.0"; ringed by snow blocks -> "cold sunny x2.0"; next to a lit furnace -> "warm sunny x0.75"; underground with nothing -> "cellar x2.0"; underground with ice -> "cold cellar x4.0"; underground with a lit furnace -> "warm cellar x1.5"
 - [ ] **VB-77 Wine tooltip + command (10.13):** the stored wine's tooltip says "In storage: <label> x<rate>" as in VB-76; `/wine storage` says "Storage here: <label>, wine ages at <percent>%" (green above 100, gold below)
 - [ ] **VB-78 Rack tooltips (10.13):** every 9x / 4x / single-bottle rack and the wine box -> "Wine aging is sped up by dark and cold environments, slowed by warm ones"; JEI Wine Aging page shows the cold and warm lines
 - [ ] **VB-80 Warm slows (10.13):** a fresh wine racked by a lit furnace in daylight -> its tooltip's next-level estimate is 4/3 of an unracked one; `/wine info` on it over time -> the age only goes up
@@ -3067,12 +3076,12 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - [ ] **VB-90 Wine texture dump (10.17):** `/dumpwinetextures` -> chat says how many were written; `kubejs/exported/wine_textures/upstream/block/wine/` holds every wine's textures (Praetorian's too), `generated/block/wine_box/` 8 PNGs (Magnetic's the inverted one), `index.tsv` one line per wine
 - [x] **VB-91 Recolour tweaks (10.18):** PASSED 2026-10-20 (in the jar that was tested, reported with "all vinery bottle shape and case size"). Was: in the wine box and the 4x rack, Sun-kissed and Aegis are inverted (dark glass, light outline) like Magnetic; Magnetic has no white; Mellohi, Apple Cider and Creeper's Crush show no brown
 - [ ] **VB-92 Rack names (10.18):** JEI search "wine rack": every wood has "Single <Wood> Wine Rack" (1 bottle), "Small <Wood> Wine Rack" (4x) and "Big <Wood> Wine Rack" (9x), cherry included; no "Wine Bottle Storage" or "Dark Cherry" left; WTHIT shows the same names
-- [ ] **VB-93 Cask automation (10.19):** a hopper above with red grape juice, one beside with a recipe's ingredients in 128s -> the first ingredient fills one slot only and the rest waits in the hopper; add an ingredient of another recipe to the side hopper -> it stays in the hopper; a white juice bottle with red juice in the cask stays in the hopper; the wine comes out the bottom
+- [ ] **VB-93 Cask automation (10.19):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-07).* a hopper above with red grape juice, one beside with a recipe's ingredients in 128s -> the first ingredient fills one slot only and the rest waits in the hopper; add an ingredient of another recipe to the side hopper -> it stays in the hopper; a white juice bottle with red juice in the cask stays in the hopper; the wine comes out the bottom
 - [x] **VB-95 Houses served (13):** `logs/latest.log` after a world load has four `[vinery-houses] vinery:vinery_<biome> added to minecraft:village/<biome>/houses at weight 2 (... pool average)` lines and no `[vinery-houses]` warning; `kubejs/generation_scripts/worldgen/pool_config.json` lists the four pieces under their pools (current 3 / 3.5 / 3 / 3); `pool_tag_report.md` shows them retuned. *PASSED on the scratch server 2026-10-20 (weight 2 lines; second boot: report rows 2 -> 9 / 11 "current 3 / 3.5", shares 2.2 to 2.9 %)*
 - [x] **VB-96 Houses load (13):** `/place template vinery:vinery_plains` (and taiga, savanna, desert) places the house with a wine press, cask, grapevine stems, cherry furniture, a Big Wine Rack holding wines and, in the desert one, red and white grape bags and a chain stub under the eave where the sign hung; nothing is missing or air where the press, crates or sign were; *PASSED scratch 2026-10-20 (3 boots): all four placed and counted (plains: 2 wine press blocks, cask, 4 stems, cabinet, big rack, Noir wine, storage pot, 4 windows ...; desert: 4 red + 2 white grape bags, Cherry wine, rack, drawer, basket, chair, table, 1 chain); a wall sign and then a lantern popped, the chain stays*; `/place jigsaw minecraft:village/plains/houses minecraft:building_entrance 1 ~ ~ ~` can place a Vinery house among the vanilla ones
-- [ ] **VB-97 Houses in villages (13):** `/locate structure minecraft:village_plains` a few times and walk the villages: about one village in two or three has a winery house, which fits the street grid (entrance on the road) and sits on the ground like its neighbours; the cask gives an unemployed villager the Winemaker job
-- [ ] **VB-98 Houses config (13):** `[village_houses] weight = 20` + restart -> the log line says weight 20 (configured) and the house turns up in most villages; `enabled = false` -> no log lines and `/place template vinery:vinery_plains` says the template is missing
-- [ ] **VB-94 Press automation (10.19):** hopper beside the press with apples and wine bottles -> apple mash and cider as before; put honeycomb in that hopper -> it waits until the apples are done and the output emptied; glass bottles wait while wine bottles' recipe is queued; by hand honeycomb still goes in
+- [ ] **VB-97 Houses in villages (13):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-08, 2 of 8 placed villages have a winery).* `/locate structure minecraft:village_plains` a few times and walk the villages: about one village in two or three has a winery house, which fits the street grid (entrance on the road) and sits on the ground like its neighbours; the cask gives an unemployed villager the Winemaker job
+- [ ] **VB-98 Houses config (13):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-14 / SQ-OM-15, weight 20 read; `enabled = false`: no `[vinery-houses]` line, template unknown).* `[village_houses] weight = 20` + restart -> the log line says weight 20 (configured) and the house turns up in most villages; `enabled = false` -> no log lines and `/place template vinery:vinery_plains` says the template is missing
+- [ ] **VB-94 Press automation (10.19):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-07).* hopper beside the press with apples and wine bottles -> apple mash and cider as before; put honeycomb in that hopper -> it waits until the apples are done and the output emptied; glass bottles wait while wine bottles' recipe is queued; by hand honeycomb still goes in
 - [ ] **VB-60 Wine Aging page text (B7.1):** every line stays inside the grey page, wrapped, in dark text without shadow
 - [ ] **VB-61 JEI transfer (B7.1):** with juice bottles, ingredients and a wine bottle in your inventory, click [+] on a Cask page -> juice in slot 0, ingredients in 1-3, the bottle in 4; without the juice bottles the [+] is red
 - [ ] **VB-62 Calendar gone (B7.8):** no `vinery:calendar` in JEI, the creative tab or `/give`; the log has no recipe or loot errors about it
@@ -3173,3 +3182,6 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - 2026-10-20: 10.19 built: the press and cask take from automation only what they can finish with what they hold
   (cask ingredient overflow, mixed recipes, other-type juice; press bottle / input / output mismatches). VB-93, VB-94
   added; VN-05 / VN-08 retired. `-03` installed in the local `mods/`.
+- 2026-10-22 (second bulk run): SQ-OM-05 (wine storage kinds and rates), SQ-OM-07 (cask and press hoppers), SQ-OM-08
+  (2 of 8 placed villages with a winery), SQ-OM-14 and SQ-OM-15 (weight 20; off: no `[vinery-houses]` line, template
+  unknown) PASS on the scratch server; logic and server halves of VB-76, VB-93, VB-94, VB-97, VB-98 recorded.

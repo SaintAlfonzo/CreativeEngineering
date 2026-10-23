@@ -25,7 +25,7 @@ const HELD_REFRESH_TICKS = 40 // 2 sec — same buffer-against-a-tick-hiccup idi
 
 EntityEvents.hurt(event => {
 	let attacker
-	try { attacker = event.getSource().getEntity() } catch (err) { return }
+	try { attacker = event.getSource().getActual() } catch (err) { return } // KubeJS renames DamageSource.getEntity() to getActual()
 	if (!attacker) return
 
 	let heldId

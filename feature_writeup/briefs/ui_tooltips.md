@@ -16,13 +16,13 @@ Build order: A (needs the user's OK on the text, `tooltips #3` decision "the tex
 build. A and B are client-only KubeJS (no restart, F3+T); C needs a client restart.
 
 Cross-family links:
-- `food/ingredients #10` (fats and oils, [brief](food_ingredients.md)) also wants a knife tooltip ("knives give more meat and
+- `dishes/ingredients #10` (fats and oils, [brief](dishes_ingredients.md)) also wants a knife tooltip ("knives give more meat and
   fat"). Write both knife lines in one place (part a below), so the knife carries one block of lines.
 - `gameplay/misc #8` (every chalk symbol unlocked) changes what the chalk line should say about symbols (part d).
 - `mobs/tweaks #7` (seagulls can't take lunchboxes, [brief](mobs_tweaks.md)) is about the same three items as part f.
 - `food/types-and-tuning #1` part C (SoL complexity per type, [brief](food_types-and-tuning.md)) can later add the type's
   diversity value to the part b line.
-- tooltips.md 8 also lists an AE2 cable line (`ui/jei-coverage #3`) and flower pot labels (`blocks/framed-and-decor #6`):
+- tooltips.md 8 also lists an AE2 cable line (`jei/jei-coverage #3`) and flower pot labels (`blocks/framed-and-decor #6`):
   those rows own them.
 
 ---
@@ -64,7 +64,8 @@ the wrench, (f) lunchbox slot count.
   wording "hold right click to change mark" was wrong (tooltips.md 8 corrected). Off hand is ignored when the main hand
   holds chalk. Uses: `ChalkUses = 64` ([chalk-common.toml](../../config/chalk-common.toml) line 3). Symbols unlock by
   advancement (Skull, Heart, Pickaxe, House have one; Cross and Check are always on), and the pack loads no
-  advancements, which is `gameplay/misc #8`. The Chalk Box has its own lines ("Drawing with:", "<Right Click to open>").
+  advancements, which was `gameplay/misc #8`: done 2026-10-22, every `*UnlockAdvancement = ""` in chalk-common.toml, so all
+  six symbols are on from the start (fixes_compat.md FX-27). The Chalk Box has its own lines ("Drawing with:", "<Right Click to open>").
   Dict: `i.chalk_<colour>` (item_dict 489-504), `i.t_chalks = '#chalk:chalks'` (129), `i.chalk_box` (12016).
   Supplementaries' blackboard line already mentions chalk (tooltips.js 721).
 - **(e) Pretty Pipes 1.13.6 (verified).** `WrenchItem.useOn`: right-click a pipe that has no cover while holding a block
@@ -100,11 +101,11 @@ the wrench, (f) lunchbox slot count.
    - `addTooltipTags(e, [i.t_straw_harvesters, ['Cutting grass, tall grass, mature wheat or rice can give straw', col.norm]])`.
      Key it on `straw_harvesters`, the tag the loot modifiers read, not `#forge:tools/knives` (a mod knife in only the
      forge tag would get a line but no straw).
-   - When `food/ingredients #10` lands, its "more meat and fat" line goes in the same `addTooltipTags` rule (that
+   - When `dishes/ingredients #10` lands, its "more meat and fat" line goes in the same `addTooltipTags` rule (that
      drop reads `#forge:tools/scavenging`, Delightful's tag: give it its own rule if the tags differ).
 3. **(d)** "Misc Mods" or a new "Chalk" block: `addTooltipTags(e, [i.t_chalks, ['Right-click a block to draw a mark: a dot in the middle, an arrow off-centre', col.norm], ['Sneak + right-click to pick a symbol', col.norm]])`;
-   add "64 marks per chalk" only if wanted (it is already the durability bar). If `gameplay/misc #8` does not land, add
-   "More symbols are learned as you play" (they can't be while advancements are off).
+   add "64 marks per chalk" only if wanted (it is already the durability bar). `gameplay/misc #8` landed 2026-10-22 (every
+   symbol unlocked), so no line about learning symbols.
 4. **(e)** item_dict: `i.pp_pipe = 'prettypipes:pipe';`, `i.pp_wrench = 'prettypipes:wrench';` (short mod prefix, like
    `i.sup_wrench`, `i.fd_basket`; `i.pipe` is Quark's). tooltips.js "Transport" (L478):
    `[i.pp_pipe, ['Cover it: hold a block in your off hand and right-click it with the Item Pipe Wrench', col.norm]]`,
@@ -199,7 +200,7 @@ Botania and Cloud Storage get the practical lines a player needs without opening
   to be?"), so nothing practical. Pack changes to Botania that a line could explain: none in recipes that needs one
   (resource_blocks.js removes two mana infusions, storage.js the Third Eye recipe, fabric.js swaps cloak / flower bag
   inputs). Open rows that will need a line later: `recipes/magic #3` (trinket case takes any item),
-  `food/ingredients #11` (a use for the bowl of water).
+  `dishes/ingredients #11` (a use for the bowl of water).
 - **Cloud Storage 1.3.4 (verified, the mod's guide book `storage_clouds.txt`).** No pack lines. Mechanics: a Balloon
   (dyeable, colour = cloud account) tied to a chest and released uploads that chest's space to the colour's cloud; a
   Cloud Chest with a balloon of that colour opens it, needs sky access, not in the Nether, private to you (hoppers

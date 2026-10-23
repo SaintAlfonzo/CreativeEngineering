@@ -1,0 +1,20 @@
+{
+  "color": "#f5e7c2",
+  "containers": [
+    {
+      "filled": [
+        "vintagedelight:nut_milk_bottle"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "vintagedelight:nut_milk_bottle"
+  },
+  "from_mod": "vintagedelight",
+  "still_texture": "moonlight:soft_fluids/milk_liquid",
+  "translation_key": "item.vintagedelight.nut_milk_bottle"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:cooked_mutton"
+    },
+    {
+      "tag": "forge:crops/turnip"
+    },
+    {
+      "item": "minecraft:stick"
+    }
+  ],
+  "result": {
+    "item": "veggiesdelight:turnip_mutton_skewer"
+  }
+}

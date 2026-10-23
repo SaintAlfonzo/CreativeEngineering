@@ -24,6 +24,16 @@ global.itemMerges = [
 	[i.diced_potatoes, i.potato_slices],
 	// Decorative Blocks' rocky dirt goes, Twigs' stays (Dave's is a separate block, renamed Pebble Dirt)
 	[i.decorative_blocks_rocky_dirt, i.twigs_rocky_dirt],
+	// Farmer's Respite's coffee goes, Rustic Delight's stays: crop, beans, sack, wild bush and the three drinks.
+	// Rustic Delight's coffees give Caffeinated (food_values.js). Berries are the raw crop (Rustic's beans),
+	// Respite's beans the processed one (Rustic's roasted beans); long coffee folds into plain, strong into dark.
+	[i.coffee_berries, i.coffee_beans],
+	[i.farmersrespite_coffee_beans, i.roasted_coffee_beans],
+	[i.coffee_beans_sack, i.coffee_beans_bag],
+	[i.wild_coffee_bush, i.wild_coffee],
+	[i.farmersrespite_coffee, i.coffee],
+	[i.long_coffee, i.coffee],
+	[i.strong_coffee, i.dark_coffee],
 ];
 
 global.itemMerges.forEach(m => global.removedItems.push(m[0]));

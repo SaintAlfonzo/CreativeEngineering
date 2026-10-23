@@ -71,7 +71,7 @@ ClientEvents.lang('en_us', e => {
   e.renameItem(global.item.sweet_berry_cheesecake, 'Sweet Berry Pie')
   e.renameItem(global.item.sweet_berry_cheesecake_slice, 'Slice of Sweet Berry Pie')
   e.renameItem(global.item.incomplete_sweet_berry_cheesecake, 'Incomplete Sweet Berry Pie')
-  // PneumaticCraft fried food, now fried in the pot with any fish (TODO food/meals #7)
+  // PneumaticCraft fried food, now fried in the pot with any fish (TODO dishes/meals #7)
   e.renameItem(global.item.salmon_tempura, 'Fish Tempura')
   e.renameItem(global.item.raw_salmon_tempura, 'Raw Fish Tempura')
   e.renameItem(global.item.chips, 'Fries')
@@ -242,6 +242,14 @@ ClientEvents.lang('en_us', e => {
   // Dave's rocky dirt is Pebble Dirt; Twigs' keeps "Rocky Dirt" (item_merges.md 2.5)
   e.renameItem(global.item.rocky_dirt, 'Pebble Dirt')
   e.renameItem(global.item.rocky_dirt_slab, 'Pebble Dirt Slab')
+  // Upgrade Aquatic's river tree is the Mulberry tree: oak trunk, its wood merged into oak (recipes_wood.md 2.6). The
+  // potted sapling is a block-only key, named in name_rules.json.
+  e.renameItem(global.item.river_leaves, 'Mulberry Leaves')
+  e.renameItem(global.item.river_sapling, 'Mulberry Sapling')
+  e.renameItem(global.item.river_leaf_pile, 'Pile of Mulberry Leaves')
+  e.renameItem(global.item.river_leaf_carpet, 'Mulberry Leaf Carpet')
+  e.renameItem(global.item.river_hedge, 'Mulberry Hedge')
+  e.renameItem(global.item.upgrade_aquatic_river_leaf_pile, 'Mulberry Leaf Pile')
 })
 
 console.log('Rename Finished')

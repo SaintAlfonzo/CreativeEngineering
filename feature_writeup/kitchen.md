@@ -3,7 +3,7 @@
 The kitchen blocks and hand tools around cooking: Cooking for Blockheads' (CfB 13.3.4) oven, sink, counter, corner
 and fridge made to work and fit in this pack, Farmer's Delight's cutting board on a counter, a bamboo bowl, and the
 pack's own mortar and pestle as a hand grinder for food. Test prefix `KT-`. TODO family `food`, sub `kitchen`
-([TODO.md](todo/TODO.md)); the plan for each row is in [briefs/food_kitchen.md](briefs/food_kitchen.md).
+([TODO.md](todo/TODO.md)); the plan for each row is in [briefs/cooking_kitchen.md](briefs/cooking_kitchen.md).
 
 The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, #14) have their own writeup:
 [remainder_buffer.md](remainder_buffer.md). The baking oven is [oven.md](oven.md).
@@ -12,7 +12,7 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 
 | Part | Status | TODO |
 |---|---|---|
-| CfB oven: any furnace fuel plus cooking oil; every fuel container comes back | BUILT 2026-10-21 (patcherMod 1.1.01 + config), scratch server PASSED, not in game | `food/kitchen #8` |
+| CfB oven: any furnace fuel plus cooking oil; every fuel container comes back | BUILT 2026-10-21 (patcherMod 1.1.01 + config), scratch server PASSED, not in game | `cooking/kitchen #8` |
 | CfB sink: infinite water | BUILT 2026-10-21 (config), scratch server PASSED | `#8` |
 | FD cutting board on a CfB counter or corner, drawn on the worktop, config offset | BUILT 2026-10-21 (patcherMod), placement and cutting PASSED on a scratch server; the drawing not seen | `#8` |
 | CfB 2-tall fridge reshaped to a full block | BUILT 2026-10-21 (resource override), not seen in a client | `#6` |
@@ -124,7 +124,7 @@ water".
   Millstone with the same outputs, plus a mortar mirror. The mortar gives the main output's machine average E (sum of
   count x chance) rounded down from one input; under 1, one output from ceil(1 / E) inputs (0.02 slack, so 0.333
   takes 3). Byproducts stay machine-only. `opts.mortar = { count, inputs }` overrides, `false` skips. In use: corn
-  and wild corn 2 -> 3 cornmeal (set by `opts.mortar` to the machines' exact 1.5 average, `food/ingredients #14`),
+  and wild corn 2 -> 3 cornmeal (set by `opts.mortar` to the machines' exact 1.5 average, `dishes/ingredients #14`),
   kernels 3 -> 1 (corn crate and kernel bag: `mortar: false`, machine-only), hay bale 1 -> 13 wheat flour (which also
   gave the hay bale a Millstone recipe; [recipes_cooking.md](recipes_cooking.md) 2.1).
 - **Other mods' grinding:** `tools/gen_mortar_catalog.py` (generator `mortar_catalog`, dump `/dumpfood`) reads
@@ -225,7 +225,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 ## 8. History
 
 - 2026-10-21: writeup started from the kitchen brief's built sections. Built the same day (patcherMod 1.1.01, not
-  deployed): CfB oven fuel and bottles, sink, cutting board support and offset (`food/kitchen #8`), fridge models
+  deployed): CfB oven fuel and bottles, sink, cutting board support and offset (`cooking/kitchen #8`), fridge models
   (`#6`), corner storage (`#15`), bamboo bowl and mortar grinding (`#10`); scythe and stepstool split to `#16`,
   `#17`. Row `#5`'s cause found in Sticky It!'s tooltip handler (fixed by Creative Labels). Corner tests renamed from
   the brief's KC-01 to KC-04 to KT-09 to KT-12.

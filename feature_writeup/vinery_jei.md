@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**Numbers below are the retired plugin's (6 grapes, 3 stomps, 2 bottles).** The port's Grape Stomping page follows the pot's current values (12 grapes, `grapevinePotStomps` stomps [4], 4 bottles); its Grape Planting page is documented in [jei_world_tabs.md](jei_world_tabs.md) (JW-16).
+
 **Retired by the Vinery port (2026-10-18, [alcohol.md](alcohol.md) Part B):** when `backportedVinery` is loaded, `VineryJEI` registers nothing; the port ships its own five pages (`vinery:wine_fermentation`, `apple_press_mashing`, `apple_press_fermenting`, `grape_stomping`, `wine_aging`). Everything below describes the 1.3.10 setup and stays true only while 1.3.10 is installed.
 
 | Part | Status |

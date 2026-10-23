@@ -1,0 +1,409 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "inputs": [
+    {
+     "block": "minecraft:copper_block"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_copper_block"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_exposed_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:cut_iron"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_copper_block"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:copper_block"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_exposed_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:copper_block"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage.",
+    "Exposed iron needs steel wool."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage.",
+    "Exposed iron needs steel wool."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:copper_block"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_copper_block"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:copper_block"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_exposed_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  }
+ ]
+}

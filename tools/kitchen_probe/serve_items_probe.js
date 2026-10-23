@@ -1,4 +1,4 @@
-// TODO food/kitchen #5 probe: do returned serve items (bowl, paper, bottle) carry a tag that ordinary ones don't?
+// TODO cooking/kitchen #5 probe: do returned serve items (bowl, paper, bottle) carry a tag that ordinary ones don't?
 // Scratch-only: copy into a scratch server's kubejs/server_scripts (tools/creative_labels_test/scratch_server.sh),
 // never into the pack. Run /kstest; results are "[kstest] ..." lines in logs/latest.log.
 //

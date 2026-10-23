@@ -34,6 +34,7 @@
 		'dumpclimate',
 		'dumpclimatecaves',
 		'dumpservermods',   // patcherMod (Java): KubeJS can't copy files
+		'dumpworldjei',     // patcherMod (Java): world-interaction JEI facts (tools/gen_jei_world.py)
 	]
 
 	function runAll(source) {

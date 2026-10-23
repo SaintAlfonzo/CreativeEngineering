@@ -1,5 +1,6 @@
 package net.satisfy.vinery.core.compat.jei;
 
+import net.satisfy.vinery.core.compat.jei.port.GrapePlantingCategory;
 import net.satisfy.vinery.core.compat.jei.port.GrapeStompingCategory;
 import net.satisfy.vinery.core.compat.jei.port.WineAgingCategory;
 
@@ -45,6 +46,8 @@ public class VineryJEIPlugin implements IModPlugin {
         // Port: the two pages patcherMod showed for 1.3.10, now with the port's numbers (vinery_jei.md)
         registration.addRecipeCategories(new GrapeStompingCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new WineAgingCategory(registration.getJeiHelpers().getGuiHelper()));
+        // Port: which grapes grow where (alcohol/vineryport #23)
+        registration.addRecipeCategories(new GrapePlantingCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -62,6 +65,7 @@ public class VineryJEIPlugin implements IModPlugin {
 
         registration.addRecipes(GrapeStompingCategory.TYPE, GrapeStompingCategory.collect());
         registration.addRecipes(WineAgingCategory.TYPE, WineAgingCategory.collect(fermentationBarrelRecipes));
+        registration.addRecipes(GrapePlantingCategory.TYPE, GrapePlantingCategory.collect());
     }
 
     @Override
@@ -82,6 +86,8 @@ public class VineryJEIPlugin implements IModPlugin {
         registration.addRecipeCatalyst(ObjectRegistry.APPLE_PRESS.get().asItem().getDefaultInstance(), ApplePressMashingCategory.APPLE_PRESS_MASHING_TYPE);
         registration.addRecipeCatalyst(ObjectRegistry.GRAPEVINE_POT.get().asItem().getDefaultInstance(), GrapeStompingCategory.TYPE);
         registration.addRecipeCatalyst(ObjectRegistry.OAK_WINE_RACK_BIG.get().asItem().getDefaultInstance(), WineAgingCategory.TYPE);
+        registration.addRecipeCatalyst(ObjectRegistry.GRAPEVINE_STEM.get().asItem().getDefaultInstance(), GrapePlantingCategory.TYPE);
+        registration.addRecipeCatalyst(ObjectRegistry.GRAPEVINE_LATTICE.get().asItem().getDefaultInstance(), GrapePlantingCategory.TYPE);
     }
 
     public static void addSlot(IRecipeLayoutBuilder builder, int x, int y, Ingredient ingredient){

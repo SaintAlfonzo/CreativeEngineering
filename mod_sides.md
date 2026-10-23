@@ -47,7 +47,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Book Fishing | `book_fishing` | `Book Fishing 1.0.0 - 1.19.2.jar` |  |
 | both | Bookshelf | `bookshelf` | `Bookshelf-Forge-1.19.2-16.3.20.jar` |  |
 | both | Botania | `botania` | `Botania-1.19.2-440.2-FORGE.jar` | Required by: Applied Botanics, KubeJS Botania |
-| both | Brewin' and Chewin' (Backport) | `brewinandchewin` | `backportedBrewin-4.5.0-ce-19.2-02.jar` | This pack's port of Brewin' and Chewin' 4.5.0 (development/backportedBrewin); replaces BrewinAndChewin-1.19-2.0.jar |
+| both | Brewin' and Chewin' (Backport) | `brewinandchewin` | `backportedBrewin-4.5.0-ce-19.2-03.jar` | This pack's port of Brewin' and Chewin' 4.5.0 (development/backportedBrewin); replaces BrewinAndChewin-1.19-2.0.jar |
 | both | Brick Hopper | `brickhopper` | `brickhopper-1.19-1.4.2.1.jar` |  |
 | both | Buzzier Bees | `buzzier_bees` | `buzzier_bees-1.19.2-5.0.1.jar` |  |
 | both | Caelus API | `caelus` | `caelus-forge-1.19.2-3.0.0.6.jar` | Required by: Elytra Slot |
@@ -111,7 +111,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.0.8.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
+| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.1.01.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
 | both | Creative Labels | `creative_labels` | `creativeLabels-1.0.0.jar` | This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
@@ -143,7 +143,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Every Compat | `everycomp` | `everycomp-1.19.2-2.5.36.jar` |  |
 | both | Everything is Copper | `everythingcopper` | `everythingcopper-1.19.2-2.3.4.jar` |  |
 | both | Explorer's Compass | `explorerscompass` | `ExplorersCompass-1.19.2-1.3.0-forge.jar` |  |
-| both | Exposure (Backport & Extras) | `exposure` | `exposureBackport-1.9.19-ce-19.2-03.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded, plus exposure_extras (camera bags). Replaced exposure-1.19.2-1.6.0-forge.jar |
+| both | Exposure (Backport & Extras) | `exposure` | `exposureBackport-1.9.19-ce-19.2-04.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded, plus exposure_extras (camera bags). Replaced exposure-1.19.2-1.6.0-forge.jar |
 | both | Extended Cogwheels | `extendedgears` | `extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar` |  |
 | both | Fairy Lights | `fairylights` | `fairylights-6.0.1-1.19.2.jar` |  |
 | both | Fantasy's Furniture | `fantasyfurniture` | `fantasyfurniture-1.19.2-6.7.0.jar` |  |
@@ -179,7 +179,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Immersive Posts | `immersiveposts` | `ImmersivePosts-1.19.2-4.3.0-8.jar` |  |
 | both | Immersive Weathering | `immersive_weathering` | `immersive_weathering-1.19.2-1.2.10-forge.jar` |  |
 | both | Incubation | `incubation` | `incubation-1.19.2-3.0.1.jar` |  |
-| both | Incubation Additions | `incubation_additions` | `incubationAdditions-1.0.0.jar` | This pack's own mod (development/incubationAdditions): emu, duck and goose nests for Incubation. Moved out of creativeengineering 2026-10-05; in mods/ since 2026-10-05 |
+| both | Incubation Additions | `incubation_additions` | `incubationAdditions-1.1.0.jar` | This pack's own mod (development/incubationAdditions): emu, duck and goose nests for Incubation; goose golden egg with Vintage Delight (1.1.0, 2026-10-23). Moved out of creativeengineering 2026-10-05; in mods/ since 2026-10-05 |
 | both | Iron Fishing Rods | `iron_fishing_rods` | `Iron Fishing Rods 1.0.0 - 1.19.2.jar` |  |
 | both | Item Filters | `itemfilters` | `item-filters-forge-1902.2.9-build.51.jar` | Required by: FTB Quests |
 | both | ItemPhysic | `itemphysic` | `ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar` |  |
@@ -207,7 +207,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Moog's End Structures | `mes` | `mes-1.3.1-1.19.2-forge.jar` |  |
 | both | Moonlight Library | `moonlight` | `moonlight-1.19.2-2.3.7-forge.jar` | Required by: Every Compat, Heartstone, Immersive Weathering, MmmMmmMmmmmm, Moyai, Mystical Oak Tree (+2 more) |
 | both | More Immersive Wires | `more_immersive_wires` | `more-immersive-wires-1.19.2-1.1.3.jar` |  |
-| both | More Mooblooms | `more_mooblooms` | `moreMooblooms-1.0.0.jar` | This pack's own mod (development/moreMooblooms): data-driven moobloom variants; cleans up Buzzier Bees' moobloom, buttercup and Sunny. Rebuilt 2026-10-11 at 1.0.0 (azaleabloom spawns on moss), in mods/ |
+| both | More Mooblooms | `more_mooblooms` | `moreMooblooms-1.1.0.jar` | This pack's own mod (development/moreMooblooms): data-driven moobloom variants; cleans up Buzzier Bees' moobloom, buttercup and Sunny. Rebuilt 2026-10-22 at 1.1.0 (adds the Moobloom Conversion JEI page; the jar in mods/ is the earlier 1.1.0 build, the rebuilt one still has to be copied) |
 | both | Baby Mobs | `baby_mobs` | `babyMobs-1.0.0.jar` | Our own (development/babyMobs): 1.21.2 / 26.1 baby squid, glow squid and dolphins on vanilla classes (age mixins + replacement renderers). Added 2026-10-20 |
 | both | More Mob Variants | `moremobvariants` | `moremobvariants-forge+1.19.2-1.3.0.1.jar` |  |
 | both | MoreJS | `morejs` | `morejs-forge-1.19.2-0.3.0.jar` |  |
@@ -286,9 +286,11 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Trash Cans | `trashcans` | `trashcans-1.0.18-forge-mc1.19.jar` |  |
 | both | TrashSlot | `trashslot` | `trashslot-forge-1.19.2-12.1.0.jar` |  |
 | both | Twigs | `twigs` | `twigs-forge-1.19.2-3.0.1.jar` |  |
+| both | Veggies Delight (Backport) | `veggiesdelight` | `backportedVeggies-1.9.2-ce-19.2-02.jar` | This pack's port of Veggies Delight 1.9.2 (development/backportedVeggies); no 1.19.2 build of the mod exists. Added 2026-10-22; -02 2026-10-23 ships the Vintage Delight compat recipes (feature_writeup/veggies_delight.md) |
+| both | Vintage Delight (Backport) | `vintagedelight` | `backportedVintage-0.1.6-ce-19.2-01.jar` | This pack's port of Vintage Delight 0.1.6 (development/backportedVintage) with KOTS 0.3.1's jar ids; no 1.19.2 build of the mod exists. Added 2026-10-23 (feature_writeup/vintage_delight.md) |
 | both | Via Romana | `via_romana` | `Via_Romana-1.19.2-1.1.3.jar` |  |
 | both | Villagers Sell Animals (by NoCube) | `villagersellanimals` | `nocube's_villagers_sell_animals_1.2.1_forge_1.19.2.jar` |  |
-| both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-01.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
+| both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-04.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
 | both | Vintage KubeJS | `vintage_kubejs` | `vintage_kubejs-1.19.2-1.0.0rc-2.jar` |  |
 | both | Wardrobe | `wardrobe` | `wardrobe-1.0.3-1.19.2.jar` |  |
 | both | Wares | `wares` | `wares-1.19.2-1.2.9.jar` |  |

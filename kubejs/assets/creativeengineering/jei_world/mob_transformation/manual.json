@@ -1,0 +1,518 @@
+{
+ "_note": "Hand-written, verified against the mod jars (see feature_writeup/jei_coverage.md 4).",
+ "rows": [
+  {
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:zombie_villager",
+      "mca:male_zombie_villager",
+      "mca:female_zombie_villager"
+     ]
+    },
+    {
+     "item": "minecraft:potion",
+     "nbt": "{Potion:\"minecraft:weakness\"}",
+     "label": "Weakness effect (potion or splash)"
+    }
+   ],
+   "action": {
+    "item": "minecraft:golden_apple"
+   },
+   "outputs": [
+    {
+     "entities": [
+      "minecraft:villager",
+      "mca:male_villager",
+      "mca:female_villager"
+     ]
+    }
+   ],
+   "notes": [
+    "Golden apple while weakened.",
+    "3 to 5 min; faster near beds, iron bars."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:villager",
+      "mca:male_villager",
+      "mca:female_villager"
+     ]
+    }
+   ],
+   "action": {
+    "entity": "minecraft:zombie",
+    "label": "Killed by a zombie"
+   },
+   "outputs": [
+    {
+     "entities": [
+      "minecraft:zombie_villager",
+      "mca:male_zombie_villager",
+      "mca:female_zombie_villager"
+     ]
+    }
+   ],
+   "notes": [
+    "Killed by a zombie on Normal or Hard.",
+    "Never on Easy or Peaceful."
+   ]
+  },
+  {
+   "requires": [
+    "mca"
+   ],
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:villager",
+      "mca:male_villager",
+      "mca:female_villager"
+     ]
+    }
+   ],
+   "action": {
+    "entity": "minecraft:zombie",
+    "label": "Bitten by a zombie"
+   },
+   "outputs": [
+    {
+     "entities": [
+      "minecraft:zombie_villager",
+      "mca:male_zombie_villager",
+      "mca:female_zombie_villager"
+     ]
+    }
+   ],
+   "notes": [
+    "MCA: 5% per zombie bite, less with armour.",
+    "Turns after 60 min."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:pig"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Lightning strike"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:zombified_piglin"
+    }
+   ],
+   "notes": [
+    "Not on Peaceful."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:villager",
+      "mca:male_villager",
+      "mca:female_villager"
+     ]
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Lightning strike"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:witch"
+    }
+   ],
+   "notes": [
+    "Not on Peaceful."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:mooshroom"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Lightning strike"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:mooshroom",
+     "nbt": "{EntityTag:{Type:\"brown\"}}",
+     "label": "Brown"
+    }
+   ],
+   "notes": [
+    "Red turns brown and brown turns red."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:creeper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Lightning strike"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:creeper",
+     "nbt": "{EntityTag:{powered:1b}}",
+     "label": "Charged"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "survivality"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:horse"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lightning_rod",
+    "label": "Lightning strike"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:zombie_horse"
+    }
+   ],
+   "notes": [
+    "Survivality. Not on Peaceful."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:zombie"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket",
+    "label": "Head under water"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:drowned"
+    }
+   ],
+   "notes": [
+    "30 s with its head under water, then 15 s shaking."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:husk"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket",
+    "label": "Head under water"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:zombie"
+    }
+   ],
+   "notes": [
+    "30 s with its head under water, then 15 s shaking."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:skeleton"
+    }
+   ],
+   "action": {
+    "item": "minecraft:powder_snow_bucket",
+    "label": "Stuck in powder snow"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:stray"
+    }
+   ],
+   "notes": [
+    "7 s in powder snow, then 15 s shaking."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entities": [
+      "minecraft:piglin",
+      "minecraft:piglin_brute"
+     ]
+    }
+   ],
+   "action": {
+    "item": "minecraft:netherrack",
+    "label": "Outside the Nether"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:zombified_piglin"
+    }
+   ],
+   "notes": [
+    "15 s outside the Nether."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:hoglin"
+    }
+   ],
+   "action": {
+    "item": "minecraft:netherrack",
+    "label": "Outside the Nether"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:zoglin"
+    }
+   ],
+   "notes": [
+    "15 s outside the Nether."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:tadpole"
+    }
+   ],
+   "action": {
+    "item": "minecraft:slime_ball",
+    "label": "Optional: speeds growth"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:frog"
+    }
+   ],
+   "notes": [
+    "Grows up in 20 min; each slime ball fed takes 10% off.",
+    "Frog kind follows the biome."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:mooshroom"
+    }
+   ],
+   "action": {
+    "item": "minecraft:shears"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:cow"
+    },
+    {
+     "count": 5,
+     "label": "Red or brown, as the mooshroom",
+     "items": [
+      "minecraft:red_mushroom",
+      "minecraft:brown_mushroom"
+     ]
+    }
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:skeleton_horse",
+     "label": "Tamed adult"
+    }
+   ],
+   "action": {
+    "item": "minecraft:rotten_flesh",
+    "count": 64
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:zombie_horse"
+    }
+   ],
+   "notes": [
+    "Feed 64 rotten flesh to a tamed adult.",
+    "Turns 10 s later."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:zombie_horse",
+     "label": "Has Weakness"
+    }
+   ],
+   "action": {
+    "item": "minecraft:golden_carrot"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:horse"
+    }
+   ],
+   "notes": [
+    "Golden carrot while it has Weakness.",
+    "Turns after about 4 min."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:crimson_mosquito"
+    }
+   ],
+   "action": {
+    "item": "alexsmobs:warped_mixture"
+   },
+   "outputs": [
+    {
+     "entity": "alexsmobs:warped_mosco"
+    }
+   ],
+   "notes": [
+    "Use the mixture on it; turns 8 s later."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:crimson_mosquito"
+    }
+   ],
+   "action": {
+    "entity": "alexsmobs:mungus",
+    "label": "Drinks its blood"
+   },
+   "outputs": [
+    {
+     "entity": "alexsmobs:warped_mosco"
+    }
+   ],
+   "notes": [
+    "After eating a mungus; turns 8 s later."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:stradpole"
+    }
+   ],
+   "action": {
+    "item": "alexsmobs:mosquito_larva"
+   },
+   "outputs": [
+    {
+     "entity": "alexsmobs:straddler",
+     "chance": 0.45
+    }
+   ],
+   "notes": [
+    "45% chance per mosquito larva fed."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:rabbit"
+    }
+   ],
+   "action": {
+    "item": "alexsmobs:mungal_spores"
+   },
+   "outputs": [
+    {
+     "entity": "alexsmobs:bunfungus",
+     "chance": 0.15
+    }
+   ],
+   "notes": [
+    "15% chance per mungal spores fed."
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:tusklin"
+    }
+   ],
+   "action": {
+    "item": "minecraft:netherrack",
+    "label": "In the Nether"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:hoglin"
+    }
+   ],
+   "notes": [
+    "15 s in the Nether."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:slime"
+    }
+   ],
+   "action": {
+    "item": "minecraft:magma_block",
+    "label": "Killed by a magma block"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:magma_cube"
+    }
+   ],
+   "notes": [
+    "A slime killed on a magma block splits into magma cubes."
+   ]
+  }
+ ]
+}

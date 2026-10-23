@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Cooking for Blockheads oven (13.3.4) smokes as well as smelts (TODO food/oven #4). CfB's
+ * Cooking for Blockheads oven (13.3.4) smokes as well as smelts (TODO cooking/oven #4). CfB's
  * {@code getSmeltingResult} checks its own registry, then {@code RecipeType.SMELTING} (food results only, or CfB's
  * non-food list). When that finds nothing, this tries {@code RecipeType.SMOKING} with the same rule, so smoker-only
  * food cooks too. The insert filter calls the same method, so such food is also accepted into the input slots.

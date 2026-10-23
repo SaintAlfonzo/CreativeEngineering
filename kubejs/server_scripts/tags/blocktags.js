@@ -2,6 +2,7 @@ console.log('block tags starting')
 
 var t = global.tags
 var b = global.blocks
+var item = global.item
 
 ServerEvents.tags('block', e => {
 	// Create D&D 1.2c Mid-Dev ships data/minecraft/tags/blocks/mineable/axe.json naming 7 creative_*
@@ -17,6 +18,10 @@ ServerEvents.tags('block', e => {
 
 	t.add(e, 'minecraft:fire', b.dark_fire)
 
+	// Vintage Delight port (vintage_delight.md 2.1, S6): ghost pepper seeds plant only on these. Nylium is left out on
+	// purpose: the wild ghost pepper still generates there (its own block accepts nylium too).
+	t.add(e, b.t_ghost_pepper_soil, [b.soul_soil, b.rich_soul_soil, b.iw_nulch])
+
 	// Oven (patcherMod oven/, feature_writeup/oven.md 2.4, 3.1). What heats it from below: FD's open-fire
 	// sources (fire, campfires, lava; nested, so it stays live) + magma, lava cauldron, blaze burners and
 	// the blaze lantern. Every stove and oven is left out on purpose ("non-stove" rule). OvenHeat gates
@@ -31,7 +36,7 @@ ServerEvents.tags('block', e => {
 	// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
 	t.add(e, b.t_hammer_no_rotate, b.cutting_board)
 	// Cooking for Blockheads worktops are 15 px tall, so FD's cutting board found no support face on them
-	// (patcherMod CuttingBoardSupportMixin, TODO food/kitchen #8).
+	// (patcherMod CuttingBoardSupportMixin, TODO cooking/kitchen #8).
 	t.add(e, b.t_cutting_board_supports, [b.cfb_counter, b.cfb_corner])
 	// Rubidium blends the vanilla grass block's tint per vertex across neighbours (biome blend > 0) but colours
 	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
@@ -68,6 +73,11 @@ ServerEvents.tags('block', e => {
 	// block entity never dye in world (sacks lost their contents, canvas signs their text); no_world_dye is for plain
 	// blocks the dyeing audit takes out too (TODO blocks/dyeing #1). Empty until then.
 	t.add(e, b.t_no_world_dye, [])
+
+	// Ore Excavation undo (patcherMod excavation/VeinUndo.java, CEConfig [vein_undo]). An undo whose vein mine broke
+	// any of these is refused; blocks with a block entity are refused in code (a restored chest rerolls its loot).
+	t.add(e, b.t_vein_undo_denied, [b.t_ores, b.t_storage_blocks, item.ancient_debris, item.spawner])
+	t.addMatching(e, b.t_vein_undo_denied, '*:budding_*')
 
 	// Emu, duck and goose nests: Incubation Additions tags them into incubation:bird_nests itself
 
@@ -122,7 +132,6 @@ ServerEvents.tags('block', e => {
 	// Create/D&D palette stones: <stone>, cut_<stone>, polished_cut_<stone>, layered_<stone>,
 	// <stone>_pillar, cut_<stone>_bricks, small_<stone>_bricks (+ _slab/_stairs/_wall).
 	var palette = '(create|create_dd):'
-	var item = global.item
 
 	t.addMatching(e, runner.asphalt, [
 		'#forge:asphalt', 'immersivepetroleum:asphalt_*', 'create_dd:*_asphalt_block',

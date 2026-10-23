@@ -188,6 +188,12 @@
       "features": ["creativeengineering:wild/beetroots"],
       "disable_modifiers": ["farmersdelight:wild_beetroots"]
     },
+    "turnip": {
+      "label": "Turnip",
+      "where": ["sandy beach", "cliff"],
+      "features": ["veggiesdelight:patch_wild_turnips"],
+      "notes": "Wherever sea beets grow; the port takes sand or dirt below, as the pack sea beet feature does. 1 in 30 chunks."
+    },
     "carrot": {
       "label": "Carrot",
       "where": ["temperate grassy !swamp"],
@@ -199,6 +205,42 @@
       "where": ["temperate grassy !swamp"],
       "features": ["farmersdelight:patch_wild_onions"],
       "disable_modifiers": ["farmersdelight:wild_onions"]
+    },
+    "broccoli": {
+      "label": "Broccoli",
+      "where": ["temperate grassy !swamp"],
+      "features": ["veggiesdelight:patch_wild_broccoli"],
+      "notes": "Veggies Delight backport: the port ships the feature with its rarity and no biome modifier. 1 in 240 chunks, half the carrot and onion rate."
+    },
+    "cauliflower": {
+      "label": "Cauliflower",
+      "where": ["temperate grassy !swamp"],
+      "features": ["veggiesdelight:patch_wild_cauliflowers"],
+      "notes": "1 in 240 chunks."
+    },
+    "garlic": {
+      "label": "Garlic",
+      "where": ["temperate grassy !swamp"],
+      "features": ["veggiesdelight:patch_wild_garlic"],
+      "notes": "1 in 240 chunks."
+    },
+    "oats": {
+      "label": "Oats",
+      "where": ["temperate grassy"],
+      "features": ["vintagedelight:patch_wild_oats"],
+      "notes": "Vintage Delight backport: the port ships the feature and no biome modifier. Vintage's own filter was overworld 0.4 to 0.9 temperature (the temperate band, swamps included). Grows on any dirt soil."
+    },
+    "peanuts": {
+      "label": "Peanuts",
+      "where": ["temperate grassy"],
+      "features": ["vintagedelight:patch_wild_peanuts"],
+      "notes": "Same filter as oats in Vintage. Any dirt soil."
+    },
+    "cucumbers": {
+      "label": "Cucumbers",
+      "where": ["wet grassy", "wet muddy", "swamp"],
+      "features": ["vintagedelight:patch_wild_cucumbers"],
+      "notes": "Vintage's filter was #forge:is_wet (swamps, jungles, mangroves). The port's patch takes any dirt soil (sand dropped)."
     },
     "sweet_berries": {
       "label": "Sweet Berries",
@@ -276,6 +318,18 @@
       "features": ["rusticdelight:wild_cotton_placed"],
       "disable_modifiers": ["rusticdelight:add_wild_cotton"]
     },
+    "sweet_potato": {
+      "label": "Sweet Potato",
+      "where": ["warm dry grassy"],
+      "features": ["veggiesdelight:patch_wild_sweet_potatoes"],
+      "notes": "1 in 100 chunks."
+    },
+    "zucchini": {
+      "label": "Zucchini",
+      "where": ["warm dry grassy"],
+      "features": ["veggiesdelight:patch_wild_zucchinis"],
+      "notes": "1 in 100 chunks."
+    },
     "cantaloupe": {
       "label": "Cantaloupe",
       "where": ["warm dry grassy"],
@@ -322,9 +376,17 @@
     },
     "tea": {
       "label": "Tea",
-      "where": ["temperate wet grassy"],
+      "where": ["temperate wet grassy", "swamp", "jungle", "cherry"],
+      "add": ["minecraft:dark_forest", "terralith:lush_valley", "terralith:cloud_forest"],
       "features": ["farmersrespite:patch_wild_tea_bush"],
-      "disable_modifiers": ["farmersrespite:wild_tea_bush"]
+      "disable_modifiers": ["farmersrespite:wild_tea_bush"],
+      "notes": "Wet and misty ground: every swamp and jungle, the sakura biomes, plus the damp forests (downfall 0.8 or cloud cover). The bush needs #minecraft:dirt, which holds mud."
+    },
+    "flax": {
+      "label": "Flax (off)",
+      "where": [],
+      "disable_modifiers": ["supplementaries:wild_flax"],
+      "notes": "Wild flax is off: Supplementaries' config has it disabled and its modifier is forge:none here too, so flipping the config does not bring it back."
     },
     "strawberry": {
       "label": "Strawberries",
@@ -397,6 +459,32 @@
     "pear": { "label": "Pear (tree)", "where": ["birch"], "features": ["fruitsdelight:tree/pear_tree"], "disable_modifiers": ["fruitsdelight:pear"] },
     "apple": { "label": "Apple (tree)", "where": ["oak forest"], "features": ["vinery:tree_apple"], "disable_modifiers": ["vinery:add_apple_tree", "fruitsdelight:apple"], 
       "notes": "Vinery apple tree. Oak/dark oak leaves no longer drop apples (loot/08_leaf_apples.js)."
+    },
+    "grape": {
+      "label": "Grapes (red and white bushes)",
+      "where": ["temperate grassy !swamp !dark_oak"],
+      "features": ["vinery:red_grape_bush_chance", "vinery:white_grape_bush_chance"],
+      "disable_modifiers": ["vinery:add_red_grape", "vinery:add_white_grape"],
+      "notes": "Vinery's rate (1 chunk in 22 each). Vinery's own lists were vanilla tags only (forests, rivers, mountains, plains)."
+    },
+    "grape_savanna": {
+      "label": "Grapes (savanna bushes)",
+      "where": ["warm dry grassy"],
+      "features": ["vinery:savanna_red_grape_bush_chance", "vinery:savanna_white_grape_bush_chance"],
+      "disable_modifiers": ["vinery:add_savanna_red_grape", "vinery:add_savanna_white_grape"]
+    },
+    "grape_taiga": {
+      "label": "Grapes (taiga bushes)",
+      "where": ["cold grassy forest !snowy"],
+      "features": ["vinery:taiga_red_grape_bush_chance", "vinery:taiga_white_grape_bush_chance"],
+      "disable_modifiers": ["vinery:add_taiga_red_grape", "vinery:add_taiga_white_grape"]
+    },
+    "grape_jungle": {
+      "label": "Grapes (jungle vines)",
+      "where": ["jungle", "warm wet swamp"],
+      "features": ["vinery:jungle_red_grape_bush_chance", "vinery:jungle_white_grape_bush_chance"],
+      "disable_modifiers": ["vinery:add_jungle_red_grape", "vinery:add_jungle_white_grape"],
+      "notes": "Vines hang off tree trunks and walls, so only tree-covered warm wet biomes (1 chunk in 10 each, Vinery's rate)."
     },
     "cherry": { "label": "Cherry (tree)", "where": ["mountain forest"], "features": ["vinery:tree_cherry"], "disable_modifiers": ["vinery:add_cherry_tree"] },
     "rubber": {

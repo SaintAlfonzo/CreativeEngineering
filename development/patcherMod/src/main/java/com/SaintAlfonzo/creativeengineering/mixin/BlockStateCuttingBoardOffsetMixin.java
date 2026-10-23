@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Model offset for a Farmer's Delight cutting board on a Cooking for Blockheads counter ({@link CuttingBoardOnCounter},
- * TODO food/kitchen #8). {@code getOffset} is what the chunk mesher (vanilla and Rubidium) moves a block model by; the
+ * TODO cooking/kitchen #8). {@code getOffset} is what the chunk mesher (vanilla and Rubidium) moves a block model by; the
  * board's offset type is NONE, so without this it is always zero. One reference compare for every other block.
  * SRG name with {@code remap = false}: m_60824_ getOffset.
  */

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "O": {
+      "item": "farmersdelight:tomato_sauce"
+    },
+    "a": {
+      "tag": "forge:crops/bell_pepper"
+    },
+    "b": {
+      "tag": "forge:vegetables"
+    },
+    "c": {
+      "tag": "forge:crops/onion"
+    },
+    "x": {
+      "tag": "forge:dough"
+    }
+  },
+  "pattern": [
+    "abc",
+    "xOx"
+  ],
+  "result": {
+    "item": "veggiesdelight:vegan_pizza"
+  },
+  "show_notification": true
+}

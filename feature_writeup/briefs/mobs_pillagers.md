@@ -2,8 +2,8 @@
 
 Written 2026-10-21 from [TODO](../todo/TODO.md) `# mobs`, Sub `pillagers`. Writeups: [mob_spawns.md](../mob_spawns.md)
 9 "Later" (test prefix `MS-`) for the biome spawns, [structure_tuning.md](../structure_tuning.md) (`ST-`) for the
-structures. Sibling briefs: [worldgen_structures_contents.md](worldgen_structures_contents.md) (`structures/contents #3`,
-pillager spawners), [mobs_spawns.md](mobs_spawns.md) (same rule file), [worldgen_structures_metas.md](worldgen_structures_metas.md).
+structures. Sibling briefs: [structures_contents.md](structures_contents.md) (`structures/contents #3`,
+pillager spawners), [mobs_spawns.md](mobs_spawns.md) (same rule file), [structures_metas.md](structures_metas.md).
 
 ## Scope and order
 
@@ -64,7 +64,7 @@ Status Planned / Work data / KubeJS / TODO `mobs/pillagers #1` ([mob_spawns.md](
 (a) Lone pillagers roam dark forests, Mirage Isles, swamps, extreme ice and badlands. (b) Each pillager structure type
 gets its own mix: siege equipment = pillagers + sometimes one vindicator; camps = pillagers + 0-2 vindicators; towers =
 pillagers + vindicators + 0-1 evoker / illusioner; large towers and special structures their own. (c) Pillager spawners
-removed (that is `worldgen/structures/contents #3`, briefed there).
+removed (that is `structures/contents #3`, briefed there).
 
 ### Now
 - No pillager biome spawner anywhere (spawns_by_biome.md 7 Gaps: "patrols (PatrolSpawner), outposts (structure

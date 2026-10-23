@@ -8,13 +8,19 @@ v.mechanical_engineer = 'dynamicvillage:mechanical_engineer';
 v.hydraulic_engineer = 'dynamicvillage:hydraulic_engineer';
 v.chef = 'chefsdelight:delightchef';
 v.cleric = 'minecraft:cleric'
+v.farmer = 'minecraft:farmer'
+
+// Every level, 1 to 5. Not the list [1, 5]: MoreJS 0.3.0's range wrapper reads the list's first entry for both ends,
+// so [1, 5] matched level 1 only.
+const $MoreJSIntRange = Java.loadClass('com.almostreliable.morejs.features.villager.IntRange')
+var allLevels = new $MoreJSIntRange(1, 5)
 
 MoreJSEvents.villagerTrades((e) => {
   // Fires at server start, long after load: re-read the dict, top-level `i` is shared by every server script
   var i = global.item
 
   // Mechanical Engineer
-  e.removeModdedTrades([v.mechanical_engineer], [1, 5])
+  e.removeModdedTrades([v.mechanical_engineer], allLevels)
   // Level 1
   e.addTrade(v.mechanical_engineer, 1, [Item.of(i.emerald, 2)], Item.of(i.andesite_alloy, 8)).maxUses(8).villagerExperience(8).priceMultiplier(0.02)
   e.addTrade(v.mechanical_engineer, 1, [Item.of(i.coal, 20)], Item.of(i.emerald, 1)).maxUses(8).villagerExperience(8).priceMultiplier(0.01)
@@ -41,7 +47,7 @@ MoreJSEvents.villagerTrades((e) => {
   e.addTrade(v.mechanical_engineer, 5, [Item.of(i.emerald, 3)], Item.of(i.display_link, 2)).maxUses(8).villagerExperience(12).priceMultiplier(0.01)
 
   //Hydraulic Engineer
-  e.removeModdedTrades([v.hydraulic_engineer], [1, 5])
+  e.removeModdedTrades([v.hydraulic_engineer], allLevels)
   // Level 1
   e.addTrade(v.hydraulic_engineer, 1, [Item.of(i.emerald, 2)], Item.of(i.plate_copper, 8)).maxUses(8).villagerExperience(8).priceMultiplier(0.02)
   e.addTrade(v.hydraulic_engineer, 1, [Item.of(i.ingot_copper, 20)], Item.of(i.emerald, 1)).maxUses(8).villagerExperience(8).priceMultiplier(0.01)
@@ -66,7 +72,7 @@ MoreJSEvents.villagerTrades((e) => {
   e.addTrade(v.hydraulic_engineer, 5, [Item.of(i.emerald, 7)], Item.of(i.copper_backtank, 1)).maxUses(3).villagerExperience(16).priceMultiplier(0.02)
 
   //Chef
-  e.removeModdedTrades([v.chef], [1, 5])
+  e.removeModdedTrades([v.chef], allLevels)
   e.addTrade(v.chef, 1, [Item.of(i.fd_rope, 9)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
   e.addTrade(v.chef, 1, [Item.of(i.onion_farmersdelight, 9)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
   e.addTrade(v.chef, 1, [Item.of(i.emerald, 1)], Item.of(i.mixed_salad, 1)).maxUses(12).villagerExperience(3).priceMultiplier(0.05)
@@ -76,7 +82,7 @@ MoreJSEvents.villagerTrades((e) => {
   // Butcher: Canned Goods' Canned Food trade (level 2, a Forge BasicItemListing the trade filters don't see); Canned Food
   // is removed from the pack (startup_scripts/_lib/removed_items.js). BasicItemListing ignores getOffer's arguments.
   var cannedFood = Ingredient.of(i.canned_food)
-  e.forEachTrades(['minecraft:butcher'], [1, 5], listings => {
+  e.forEachTrades(['minecraft:butcher'], allLevels, listings => {
     listings.removeIf(listing => {
       if (String(listing.getClass().getName()) !== 'net.minecraftforge.common.BasicItemListing') return false
       var offer = listing.getOffer(null, null)
@@ -86,8 +92,8 @@ MoreJSEvents.villagerTrades((e) => {
 
   //Cleric
   // ender pearl trade still present, unwanted
-  e.removeVanillaTrades([v.cleric], [1, 5])
-  e.removeModdedTrades([v.cleric], [1, 5])
+  e.removeVanillaTrades([v.cleric], allLevels)
+  e.removeModdedTrades([v.cleric], allLevels)
   // Level 1 - Novice
   e.addTrade(v.cleric, 1, [Item.of(i.rotten_flesh, 32)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
   e.addTrade(v.cleric, 1, [Item.of(i.emerald, 1)], Item.of(i.redstone, 2)).maxUses(12).villagerExperience(1).priceMultiplier(0.05)
@@ -104,6 +110,16 @@ MoreJSEvents.villagerTrades((e) => {
   e.addTrade(v.cleric, 5, [Item.of(i.nether_wart, 22)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(30).priceMultiplier(0.05)
   e.addTrade(v.cleric, 5, [Item.of(i.emerald, 3)], Item.of(i.experience_bottle, 1)).maxUses(12).villagerExperience(30).priceMultiplier(0.05)
   e.addTrade(v.cleric, 5, [Item.of(i.emerald, 4)], Item.of(i.echo_shard, 1)).maxUses(16).villagerExperience(6).priceMultiplier(0.1)
+
+  // Farmer: Veggies Delight's produce trades, as upstream had them in code (feature_writeup/veggies_delight.md 4.13).
+  // Its bell pepper trade is dropped with the crop.
+  // Level 1 - Novice
+  e.addTrade(v.farmer, 1, [Item.of(i.broccoli, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
+  e.addTrade(v.farmer, 1, [Item.of(i.cauliflower, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
+  e.addTrade(v.farmer, 1, [Item.of(i.garlic, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
+  e.addTrade(v.farmer, 1, [Item.of(i.sweet_potato, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
+  e.addTrade(v.farmer, 1, [Item.of(i.turnip, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
+  e.addTrade(v.farmer, 1, [Item.of(i.zucchini, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
 })
 
 console.log('The trade event has finished!')

@@ -10,8 +10,13 @@ deploy/
     README.md            steps for this payload's mode, this version's changes, the removals
     RUNBOOK.md           copy of deploy/RUNBOOK.md: server update, perf capture and data-dump commands
     VERSION.txt          "1.0.3 (update from 1.0.2)" / "1.0.3 (full install)"
-    verify.sh verify.ps1 update mode: proves a machine is at the from-version before anything is copied
+    verify.sh verify.ps1 update mode: proves a machine is at the from-version before anything is copied;
+                         --installed / -Installed (both modes): proves it is at this version afterwards
     verify/<target>.sha1   (hashes of the jars the from-version put in that target's mods/)
+    verify/<target>.installed.sha1   (the same for this version)
+    apply.sh apply.ps1   verify, removals, copy every folder below to its place for that target,
+                         world_serverconfig/ into the chosen worlds (server: its level-name world), verify
+                         --installed. Keeps MEMORY/JAVAPATH of LaunchServer.sh (maxmemory/javapath of the .bat)
     mods/                server jars (both + server) -> server mods/  AND  client mods/
     client_mods/         client-only jars                 -> client mods/ only
                          (the client always gets the full server mod set: it also runs single-player
@@ -132,6 +137,8 @@ IN_TREE_MODS = [
     ('backportedBrewin', 'backportedBrewin', True),
     ('babyMobs', 'babyMobs', True),
     ('creativeLabels', 'creativeLabels', True),
+    ('backportedVeggies', 'backportedVeggies', True),
+    ('backportedVintage', 'backportedVintage', True),
 ]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
@@ -172,9 +179,7 @@ EXCLUDE = [
 KUBEJS_CLASSES = [
     ('README.txt', 'dev'),
     ('archive/*', 'dev'),                  # old worldgen tuning, never loaded
-    ('quest_working/*', 'dev'),            # notes
     ('exported/*', 'dev'),                 # /dump* output
-    ('recipes/*', 'dev'),                  # not a KubeJS load path (KubeJSPaths has no recipes/): unread leftovers
     ('startup_scripts/todo/*', 'dev'),     # .txt work lists
     ('assets/creativeengineering/changelog/unreleased.md', 'dev'),  # working list: shipped as <version>.md (check_changelog)
     ('assets/creativeengineering/changelog/*.md', 'client'),        # player changelog, one file per version
@@ -215,6 +220,8 @@ KUBEJS_CLASSES = [
     ('generation_scripts/food/can_servings.json', 'runtime'),           # tags/cantags.js
     ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
     ('generation_scripts/food/placeable.json', 'runtime'),             # tags/placeabletags.js (placeable food tooltips)
+    ('generation_scripts/food/mortar_catalog.json', 'runtime'),        # cooking/mortar.js (tools/gen_mortar_catalog.py)
+    ('generation_scripts/food/placed_food_slices.json', 'runtime'),    # PlacedFoodSol (Spice of Life bites of placed cakes)
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
     ('generation_scripts/names/name_fixes.json', 'client'),             # client_scripts/name_fixes.js (tools/name_audit.py)
     ('generation_scripts/names/name_rules.json', 'dev'),                # tools/name_audit.py input
@@ -831,22 +838,27 @@ def mb(n):
     return f'{n / 1e6:.1f} MB' if n >= 1e5 else f'{n / 1e3:.0f} KB'
 
 
+# The four scripts below are filled by fill_script(): @name@ tokens, so shell and PowerShell braces stay as written.
 VERIFY_SH = r"""#!/bin/sh
-# Checks that a game folder is at the version this update expects for that target (verify/<target>.version:
-# {base}) before it is applied: every jar in its mods/ must be the one that version shipped, nothing missing,
-# nothing extra. Needs only sh + sha1sum (or shasum).
-#   sh verify.sh server /path/to/server
-#   sh verify.sh client /path/to/instance
+# Checks a game folder's mods/ against a pack version for that target: every jar must be the one that version
+# shipped, nothing missing, nothing extra. Needs only sh + sha1sum (or shasum).
+#   sh verify.sh server /path/to/server               before applying: at the version this update expects (@base@)?
+#   sh verify.sh client /path/to/instance --installed after applying: at @version@?
 set -u
 here=$(cd "$(dirname "$0")" && pwd)
-target=${{1:-}}
-dir=${{2:-.}}
-case "$target" in server|client) ;; *) echo "usage: sh verify.sh server|client [game folder]"; exit 2 ;; esac
-command -v sha1sum >/dev/null 2>&1 || sha1sum() {{ shasum -a 1 "$@"; }}
-list="$here/verify/$target.sha1"
-base=$(cat "$here/verify/$target.version")
+target=${1:-}
+case "$target" in server|client) ;; *) echo "usage: sh verify.sh server|client [game folder] [--installed]"; exit 2 ;; esac
+shift
+dir=. stem=$target
+for a in "$@"; do case "$a" in --installed) stem=$target.installed ;; *) dir=$a ;; esac; done
+list="$here/verify/$stem.sha1"
+if [ ! -f "$list" ]; then
+  echo "Full install payload: nothing to check before applying (--installed checks the result)."; exit 0
+fi
+command -v sha1sum >/dev/null 2>&1 || sha1sum() { shasum -a 1 "$@"; }
+base=$(cat "$here/verify/$stem.version")
 cd "$dir" || exit 2
-[ -d mods ] || {{ echo "no mods/ folder in $(pwd): pass the $target's game folder"; exit 2; }}
+[ -d mods ] || { echo "no mods/ folder in $(pwd): pass the $target's game folder"; exit 2; }
 bad=0
 while read -r sum path; do
   if [ ! -f "$path" ]; then echo "MISSING  $path"; bad=$((bad + 1))
@@ -854,67 +866,329 @@ while read -r sum path; do
 done < "$list"
 for f in mods/*.jar; do
   [ -e "$f" ] || continue
-  cut -d' ' -f3- "$list" | grep -qxF "$f" || {{ echo "EXTRA    $f"; bad=$((bad + 1)); }}
+  cut -d' ' -f3- "$list" | grep -qxF "$f" || { echo "EXTRA    $f"; bad=$((bad + 1)); }
 done
-if [ "$bad" -eq 0 ]; then
+if [ "$bad" -eq 0 ] && [ "$stem" = "$target" ]; then
   echo "OK: $(pwd) matches $base ($(wc -l < "$list") jars). Apply the update."
-else
+elif [ "$bad" -eq 0 ]; then
+  echo "OK: $(pwd) is at $base ($(wc -l < "$list") jars)."
+elif [ "$stem" = "$target" ]; then
   echo "DRIFT: $bad difference(s) from $base. Don't apply this update: use an install payload"
   echo "(python3 tools/build_deploy.py --mode install), or fix the listed jars by hand."
+  exit 1
+else
+  echo "DRIFT: $bad difference(s) from $base: the copy is incomplete or a jar it should have deleted is"
+  echo "still there. Fix the listed jars by hand."
   exit 1
 fi
 """
 
-VERIFY_PS1 = r"""# Checks that a game folder is at the version this update expects for that target (verify\<target>.version:
-# {base}) before it is applied: every jar in its mods/ must be the one that version shipped.
-#   powershell -ExecutionPolicy Bypass -File verify.ps1 client "C:\path	o\instance"
+VERIFY_PS1 = r"""# Checks a game folder's mods\ against a pack version for that target: every jar must be the one that version
+# shipped, nothing missing, nothing extra.
+#   powershell -ExecutionPolicy Bypass -File verify.ps1 client "C:\path\to\instance"             before applying (@base@)
+#   powershell -ExecutionPolicy Bypass -File verify.ps1 client "C:\path\to\instance" -Installed  after applying (@version@)
 param(
   [Parameter(Mandatory = $true)][ValidateSet('server', 'client')][string]$Target,
-  [string]$Dir = '.'
+  [string]$Dir = '.',
+  [switch]$Installed
 )
-$base = (Get-Content -LiteralPath (Join-Path $PSScriptRoot "verify\$Target.version") -TotalCount 1).Trim()
-$expected = @{{}}
-foreach ($line in Get-Content -LiteralPath (Join-Path $PSScriptRoot "verify\$Target.sha1")) {{
+$stem = if ($Installed) { "$Target.installed" } else { $Target }
+$list = Join-Path $PSScriptRoot "verify\$stem.sha1"
+if (-not (Test-Path -LiteralPath $list)) { 'Full install payload: nothing to check before applying (-Installed checks the result).'; exit 0 }
+$base = (Get-Content -LiteralPath (Join-Path $PSScriptRoot "verify\$stem.version") -TotalCount 1).Trim()
+$expected = @{}
+foreach ($line in Get-Content -LiteralPath $list) {
   $sum, $path = $line -split '  ', 2
   $expected[$path] = $sum
-}}
-if (-not (Test-Path -LiteralPath (Join-Path $Dir 'mods'))) {{ "no mods\ folder in ${{Dir}}: pass the $Target's game folder"; exit 2 }}
+}
+if (-not (Test-Path -LiteralPath (Join-Path $Dir 'mods'))) { "no mods\ folder in ${Dir}: pass the $Target's game folder"; exit 2 }
 $bad = 0
-foreach ($path in $expected.Keys) {{
+foreach ($path in $expected.Keys) {
   $f = Join-Path $Dir $path
-  if (-not (Test-Path -LiteralPath $f)) {{ "MISSING  $path"; $bad++ }}
-  elseif ((Get-FileHash -LiteralPath $f -Algorithm SHA1).Hash.ToLower() -ne $expected[$path]) {{ "CHANGED  $path"; $bad++ }}
-}}
-Get-ChildItem -LiteralPath (Join-Path $Dir 'mods') -Filter *.jar -File | ForEach-Object {{
+  if (-not (Test-Path -LiteralPath $f)) { "MISSING  $path"; $bad++ }
+  elseif ((Get-FileHash -LiteralPath $f -Algorithm SHA1).Hash.ToLower() -ne $expected[$path]) { "CHANGED  $path"; $bad++ }
+}
+Get-ChildItem -LiteralPath (Join-Path $Dir 'mods') -Filter *.jar -File | ForEach-Object {
   $p = 'mods/' + $_.Name
-  if (-not $expected.ContainsKey($p)) {{ "EXTRA    $p"; $bad++ }}
-}}
-if ($bad -eq 0) {{ "OK: $Dir matches $base ($($expected.Count) jars). Apply the update." }}
-else {{
+  if (-not $expected.ContainsKey($p)) { "EXTRA    $p"; $bad++ }
+}
+if ($bad -eq 0 -and -not $Installed) { "OK: $Dir matches $base ($($expected.Count) jars). Apply the update." }
+elseif ($bad -eq 0) { "OK: $Dir is at $base ($($expected.Count) jars)." }
+elseif (-not $Installed) {
   "DRIFT: $bad difference(s) from $base. Don't apply this update: use an install payload"
   "(python3 tools/build_deploy.py --mode install), or fix the listed jars by hand."
   exit 1
-}}
+}
+else {
+  "DRIFT: $bad difference(s) from $base: the copy is incomplete or a jar it should have deleted is"
+  'still there. Fix the listed jars by hand.'
+  exit 1
+}
+"""
+
+APPLY_SH = r"""#!/bin/sh
+# Applies this payload (@version@, @label@) to a server folder or a client instance. Stop the server or close
+# the game first. Steps: verify.sh (update payload; stops on DRIFT), delete removals_<target>.txt, copy each
+# payload folder to its place on that target, world_serverconfig/ into the chosen worlds, verify.sh --installed.
+#   sh apply.sh server /path/to/server                     also refreshes the server world's serverconfig/
+#   sh apply.sh client /path/to/instance [--world saves/<world>]...
+#   --world <folder>  a world (from the game folder, or absolute) that gets world_serverconfig/; repeat for more.
+#                     The server defaults to its level-name world. Replaces those files' per-world edits.
+#   --no-world        no world gets world_serverconfig/
+#   --force           apply even when verify reports drift
+# LaunchServer.sh keeps its MEMORY and JAVAPATH lines.
+set -u
+here=$(cd "$(dirname "$0")" && pwd)
+mode=@mode@
+version=@version@
+target=${1:-}
+case "$target" in server|client) ;; *) echo "usage: sh apply.sh server|client [game folder] [--world <folder>]... [--no-world] [--force]"; exit 2 ;; esac
+shift
+dir=. force=0 noworld=0 worlds=
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --force) force=1 ;;
+    --no-world) noworld=1 ;;
+    --world) [ $# -ge 2 ] || { echo "--world needs a folder"; exit 2; }; worlds="$worlds
+$2"; shift ;;
+    *) dir=$1 ;;
+  esac
+  shift
+done
+[ -d "$dir" ] || { echo "no folder $dir"; exit 2; }
+dir=$(cd "$dir" && pwd)
+echo "applying $version ($mode) to the $target in $dir"
+
+if [ "$mode" = update ]; then
+  if ! sh "$here/verify.sh" "$target" "$dir"; then
+    [ "$force" = 1 ] || { echo "Nothing changed. Fix the drift, or pass --force to apply anyway."; exit 1; }
+    echo "--force: applying anyway"
+  fi
+elif ls "$dir"/mods/*.jar >/dev/null 2>&1; then
+  old="$dir/mods_before_$version"
+  mkdir -p "$old" && mv "$dir"/mods/*.jar "$old/" || exit 1
+  echo "full install: moved the old jars to $old"
+fi
+
+keep=
+[ "$target" = server ] && [ -f "$dir/LaunchServer.sh" ] && keep=$(grep -E '^(MEMORY|JAVAPATH)=' "$dir/LaunchServer.sh")
+
+n=0
+if [ -f "$here/removals_$target.txt" ]; then
+  while IFS= read -r p; do
+    [ -n "$p" ] || continue
+    case "/$p/" in //*|*/../*) echo "skipped unsafe path: $p"; continue ;; esac
+    [ -e "$dir/$p" ] && rm -f "$dir/$p" && n=$((n + 1))
+  done < "$here/removals_$target.txt"
+fi
+echo "deleted $n path(s) of removals_$target.txt"
+
+copy() {  # payload folder, folder on the target ('' = its root)
+  [ -d "$here/$1" ] || return 0
+  mkdir -p "$dir/$2" && cp -R "$here/$1/." "$dir/$2/" || exit 1
+  echo "copied $1/ -> ${2:-.}/ ($(find "$here/$1" -type f | wc -l | tr -d ' ') files)"
+}
+case "$target" in
+@copies@
+esac
+
+if [ "$target" = server ] && [ -f "$dir/LaunchServer.sh" ]; then
+  if [ -n "$keep" ]; then
+    tmp=$(mktemp)
+    printf '%s\n' "$keep" | awk 'NR == FNR { k = $0; sub(/=.*/, "", k); v[k] = $0; next }
+      /^(MEMORY|JAVAPATH)=/ { k = $0; sub(/=.*/, "", k); if (k in v) { print v[k]; delete v[k]; next } }
+      { print }' - "$dir/LaunchServer.sh" > "$tmp" && cat "$tmp" > "$dir/LaunchServer.sh"
+    rm -f "$tmp"
+    echo "LaunchServer.sh: kept $(printf '%s' "$keep" | tr '\n' ' ')"
+  fi
+  chmod +x "$dir/LaunchServer.sh" "$dir"/perf/*.sh 2>/dev/null
+fi
+
+if [ "$target" = server ] && [ "$noworld" = 0 ] && [ -z "$worlds" ]; then
+  name=$(sed -n 's/^level-name=//p' "$dir/server.properties" 2>/dev/null | head -n 1 | tr -d '\r')
+  worlds=${name:-world}
+fi
+[ "$noworld" = 1 ] && worlds=
+if [ -d "$here/world_serverconfig" ]; then
+  printf '%s\n' "$worlds" | while IFS= read -r w; do
+    [ -n "$w" ] || continue
+    case "$w" in /*) wd=$w ;; *) wd=$dir/$w ;; esac
+    if [ ! -f "$wd/level.dat" ]; then echo "no world in $wd (no level.dat): skipped, defaultconfigs/ covers a new one"; continue; fi
+    mkdir -p "$wd/serverconfig" && cp "$here"/world_serverconfig/* "$wd/serverconfig/" &&
+      echo "copied world_serverconfig/ -> $wd/serverconfig/"
+  done
+  [ "$target" = client ] && [ -z "$worlds" ] &&
+    echo "no --world given: existing single-player saves keep their serverconfig/ (README, client step 5)"
+fi
+
+echo
+sh "$here/verify.sh" "$target" "$dir" --installed || exit 1
+echo "Done. On the dev machine: python3 tools/build_deploy.py --snapshot $version (--target $target if the other side isn't updated yet)"
+"""
+
+APPLY_PS1 = r"""# Applies this payload (@version@, @label@) to a server folder or a client instance. Stop the server or close
+# the game first. Steps: verify.ps1 (update payload; stops on DRIFT), delete removals_<target>.txt, copy each
+# payload folder to its place on that target, world_serverconfig\ into the chosen worlds, verify.ps1 -Installed.
+#   powershell -ExecutionPolicy Bypass -File apply.ps1 client "C:\path\to\instance" [-World saves\<world>,...]
+#   powershell -ExecutionPolicy Bypass -File apply.ps1 server "C:\path\to\server"
+#   -World    worlds (from the game folder, or absolute) that get world_serverconfig\. The server defaults to its
+#             level-name world. Replaces those files' per-world edits.
+#   -NoWorld  no world gets world_serverconfig\
+#   -Force    apply even when verify reports drift
+# LaunchServer.bat keeps its maxmemory and javapath lines.
+param(
+  [Parameter(Mandatory = $true, Position = 0)][ValidateSet('server', 'client')][string]$Target,
+  [Parameter(Position = 1)][string]$Dir = '.',
+  [string[]]$World = @(),
+  [switch]$NoWorld,
+  [switch]$Force
+)
+$ErrorActionPreference = 'Stop'
+$mode = '@mode@'
+$version = '@version@'
+if (-not (Test-Path -LiteralPath $Dir -PathType Container)) { "no folder $Dir"; exit 2 }
+$Dir = (Resolve-Path -LiteralPath $Dir).Path
+"applying $version ($mode) to the $Target in $Dir"
+
+if ($mode -eq 'update') {
+  & (Join-Path $PSScriptRoot 'verify.ps1') $Target $Dir
+  if ($LASTEXITCODE -ne 0) {
+    if (-not $Force) { 'Nothing changed. Fix the drift, or pass -Force to apply anyway.'; exit 1 }
+    '-Force: applying anyway'
+  }
+}
+elseif (Test-Path -LiteralPath (Join-Path $Dir 'mods')) {
+  $jars = @(Get-ChildItem -LiteralPath (Join-Path $Dir 'mods') -Filter *.jar -File)
+  if ($jars.Count) {
+    $old = Join-Path $Dir "mods_before_$version"
+    [IO.Directory]::CreateDirectory($old) | Out-Null
+    foreach ($j in $jars) { [IO.File]::Move($j.FullName, (Join-Path $old $j.Name)) }
+    "full install: moved the old jars to $old"
+  }
+}
+
+$bat = Join-Path $Dir 'LaunchServer.bat'
+$keep = @()
+if ($Target -eq 'server' -and (Test-Path -LiteralPath $bat)) {
+  $keep = @(Get-Content -LiteralPath $bat | Where-Object { $_ -match '^set (maxmemory|javapath)=' })
+}
+
+$n = 0
+$list = Join-Path $PSScriptRoot "removals_$Target.txt"
+if (Test-Path -LiteralPath $list) {
+  foreach ($p in Get-Content -LiteralPath $list) {
+    if (-not $p) { continue }
+    if ([IO.Path]::IsPathRooted($p) -or ("/$p/" -like '*/../*')) { "skipped unsafe path: $p"; continue }
+    $f = Join-Path $Dir $p
+    if (Test-Path -LiteralPath $f -PathType Leaf) { Remove-Item -LiteralPath $f -Force; $n++ }
+  }
+}
+"deleted $n path(s) of removals_$Target.txt"
+
+function Copy-Tree($from, $to) {  # payload folder, folder on the target ('' = its root)
+  $src = Join-Path $PSScriptRoot $from
+  if (-not (Test-Path -LiteralPath $src -PathType Container)) { return }
+  $src = (Resolve-Path -LiteralPath $src).Path
+  $dst = if ($to) { Join-Path $Dir $to } else { $Dir }
+  $files = @(Get-ChildItem -LiteralPath $src -Recurse -File)
+  foreach ($f in $files) {
+    $out = Join-Path $dst $f.FullName.Substring($src.Length + 1)
+    [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($out)) | Out-Null
+    [IO.File]::Copy($f.FullName, $out, $true)
+  }
+  "copied $from\ -> $(if ($to) { $to } else { '.' })\ ($($files.Count) files)"
+}
+@copies@
+
+if ($keep.Count -and (Test-Path -LiteralPath $bat)) {
+  $vals = @{}
+  foreach ($l in $keep) { $vals[($l -split '=', 2)[0]] = $l }
+  $lines = foreach ($l in Get-Content -LiteralPath $bat) {
+    $k = ($l -split '=', 2)[0]
+    if ($l -match '^set (maxmemory|javapath)=' -and $vals.ContainsKey($k)) { $vals[$k]; $vals.Remove($k) } else { $l }
+  }
+  Set-Content -LiteralPath $bat -Value $lines -Encoding ASCII
+  "LaunchServer.bat: kept $($keep -join ' ')"
+}
+
+$worlds = @($World)
+if ($Target -eq 'server' -and -not $NoWorld -and -not $worlds.Count) {
+  $name = 'world'
+  $props = Join-Path $Dir 'server.properties'
+  if (Test-Path -LiteralPath $props) {
+    $m = Get-Content -LiteralPath $props | Where-Object { $_ -match '^level-name=' } | Select-Object -First 1
+    if ($m) { $name = ($m -split '=', 2)[1].Trim() }
+  }
+  $worlds = @($name)
+}
+if ($NoWorld) { $worlds = @() }
+$wsc = Join-Path $PSScriptRoot 'world_serverconfig'
+if (Test-Path -LiteralPath $wsc -PathType Container) {
+  foreach ($w in $worlds) {
+    $wd = if ([IO.Path]::IsPathRooted($w)) { $w } else { Join-Path $Dir $w }
+    if (-not (Test-Path -LiteralPath (Join-Path $wd 'level.dat'))) { "no world in $wd (no level.dat): skipped, defaultconfigs\ covers a new one"; continue }
+    $sc = Join-Path $wd 'serverconfig'
+    [IO.Directory]::CreateDirectory($sc) | Out-Null
+    foreach ($f in Get-ChildItem -LiteralPath $wsc -File) { [IO.File]::Copy($f.FullName, (Join-Path $sc $f.Name), $true) }
+    "copied world_serverconfig\ -> $sc\"
+  }
+  if ($Target -eq 'client' -and -not $worlds.Count) {
+    'no -World given: existing single-player saves keep their serverconfig\ (README, client step 5)'
+  }
+}
+
+''
+& (Join-Path $PSScriptRoot 'verify.ps1') $Target $Dir -Installed
+if ($LASTEXITCODE -ne 0) { exit 1 }
+"Done. On the dev machine: python3 tools/build_deploy.py --snapshot $version (--target $Target if the other side isn't updated yet)"
 """
 
 
-def write_verify(out, bases):
-    """verify.sh / verify.ps1 + verify/<target>.sha1 and .version: the jars each target's base version put
-    in its mods/ (bases: {target: history snapshot})."""
+def fill_script(body, **values):
+    for k, v in values.items():
+        body = body.replace(f'@{k}@', v)
+    return body
+
+
+def target_copies():
+    """{target: [(payload folder, folder on the target)]} from CATEGORIES, in their order."""
+    return {t: [(cat, dest) for cat, (targets, dest) in CATEGORIES.items() if t in targets] for t in ('server', 'client')}
+
+
+def write_scripts(out, bases, cur):
+    """verify.sh / verify.ps1 + verify/<target>.sha1 and .version (the jars each target's base version put in
+    its mods/; bases: {target: history snapshot}, empty for an install payload) and verify/<target>.installed.*
+    (the same for this version), and apply.sh / apply.ps1."""
     os.makedirs(os.path.join(out, 'verify'), exist_ok=True)
-    for target, base in bases.items():
-        lines = sorted(f'{h}  mods/{rel}' for cat, paths in base['files'].items()
-                       for rel, h in paths.items()
-                       if CATEGORIES[cat][1] == 'mods' and target in CATEGORIES[cat][0])
-        with open(os.path.join(out, 'verify', f'{target}.sha1'), 'w', encoding='utf8', newline='\n') as f:
-            f.write('\n'.join(lines) + '\n')
-        with open(os.path.join(out, 'verify', f'{target}.version'), 'w', encoding='utf8', newline='\n') as f:
-            f.write(base['version'] + '\n')
-    label = ', '.join(f"{t} {b['version']}" for t, b in bases.items())
-    for name, body in (('verify.sh', VERIFY_SH), ('verify.ps1', VERIFY_PS1)):
+    for target in ('server', 'client'):
+        for stem, snap in ((target, bases.get(target)), (f'{target}.installed', cur)):
+            if not snap:
+                continue
+            lines = sorted(f'{h}  mods/{rel}' for cat, paths in snap['files'].items()
+                           for rel, h in paths.items()
+                           if CATEGORIES[cat][1] == 'mods' and target in CATEGORIES[cat][0])
+            with open(os.path.join(out, 'verify', f'{stem}.sha1'), 'w', encoding='utf8', newline='\n') as f:
+                f.write('\n'.join(lines) + '\n')
+            with open(os.path.join(out, 'verify', f'{stem}.version'), 'w', encoding='utf8', newline='\n') as f:
+                f.write(snap['version'] + '\n')
+    mode = cur['payload']['mode']
+    values = {
+        'base': ', '.join(f"{t} {b['version']}" for t, b in bases.items()) or 'none: full install',
+        'version': cur['version'],
+        'mode': mode,
+        'label': f"update from {cur['payload']['from']}" if mode == 'update' else 'full install',
+    }
+    copies = target_copies()
+    sh_copies = '\n'.join(f'  {t})\n' + ''.join(f"    copy {c} '{d}'\n" for c, d in copies[t]) + '    ;;'
+                          for t in copies)
+    ps_copies = '\n'.join(("if ($Target -eq '%s') {\n" % t) + ''.join(f"  Copy-Tree '{c}' '{d}'\n" for c, d in copies[t]) + '}'
+                          for t in copies)
+    for name, body, extra in (('verify.sh', VERIFY_SH, {}), ('verify.ps1', VERIFY_PS1, {}),
+                              ('apply.sh', APPLY_SH, {'copies': sh_copies}), ('apply.ps1', APPLY_PS1, {'copies': ps_copies})):
         with open(os.path.join(out, name), 'w', encoding='utf8', newline='\n') as f:
-            f.write(body.format(base=label))
-    os.chmod(os.path.join(out, 'verify.sh'), 0o755)
+            f.write(fill_script(body, **values, **extra))
+    for name in ('verify.sh', 'apply.sh'):
+        os.chmod(os.path.join(out, name), 0o755)
 
 
 # ── rendering ────────────────────────────────────────────────────────────────
@@ -1055,10 +1329,24 @@ def render_readme(cur, prev, d, dpay, base, payload):
                   '- Windows: `powershell -ExecutionPolicy Bypass -File verify.ps1 client "C:\\path\\to\\instance"`', '',
                   "It hashes every jar in that `mods/` and compares it with what that target's version shipped. `OK`: carry on. "
                   "`DRIFT` (a missing, changed or extra jar): don't apply this payload; fix the listed jars by hand or "
-                  'use a full install (`python3 tools/build_deploy.py --mode install`).', '']
+                  'use a full install (`python3 tools/build_deploy.py --mode install`). After applying, the same '
+                  f"command with `--installed` (`-Installed`) checks the machine against {cur['version']}.", '']
     else:
         lines += ['**Full install.** Everything the pack needs. Use it for a new machine, or for one whose `verify` '
-                  'reported drift: in that case move its `mods/` aside first, so no stale jar survives.', '']
+                  'reported drift: in that case move its `mods/` aside first, so no stale jar survives '
+                  '(`apply` does that: `mods_before_<version>/`).', '']
+    lines += ['## Apply with the script', '',
+              '- Linux/macOS: `sh apply.sh server /path/to/server` or '
+              '`sh apply.sh client /path/to/instance [--world saves/<world>]...`',
+              '- Windows: `powershell -ExecutionPolicy Bypass -File apply.ps1 client "C:\\path\\to\\instance" '
+              '[-World saves\\<world>,...]`', '',
+              'Stop the server or close the game first. '
+              + ('It runs verify and stops on `DRIFT` (`--force` / `-Force` applies anyway), then does ' if update
+                 else 'It does ')
+              + "the numbered steps below for that target: removals, every folder copied to its place, "
+              "`world_serverconfig/` into the server's `level-name` world (client: only the `--world` saves; "
+              '`--no-world` for none). `LaunchServer.sh` keeps its `MEMORY` and `JAVAPATH` (`.bat`: `maxmemory`, '
+              f"`javapath`). It ends with verify `--installed` against {cur['version']}.", '']
     if pay.get('config') == 'functional':
         lines += ["`config/` holds the pack's functional settings only. Players' own settings (keybinds, HUD and UI, "
                   "minimap, video, JEI layout and bookmarks) are neither shipped nor deleted.", '']
@@ -1245,8 +1533,7 @@ def main():
         if dpay['removals'][target]:
             with open(os.path.join(OUT, f'removals_{target}.txt'), 'w', encoding='utf8') as f:
                 f.write('\n'.join(dpay['removals'][target]) + '\n')
-    if base:
-        write_verify(OUT, bases)
+    write_scripts(OUT, bases, cur)
     with open(os.path.join(OUT, 'README.md'), 'w', encoding='utf8') as f:
         f.write(render_readme(cur, prev, d, dpay, base, payload))
     if os.path.isfile(RUNBOOK):

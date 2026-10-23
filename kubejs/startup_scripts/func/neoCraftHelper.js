@@ -590,18 +590,40 @@ global.NCH = {
     e.remove(id)
   },
 
-  replaceInput(filter, oldInput, newInput, e) {
+  replaceInput(filter, oldInput, newInput, e, includeAdded) {
     if (!e) throw new Error('replaceInput called without event object!')
     global.NCH._validateAny(oldInput, 'replaceInput old input')
     global.NCH._validateAny(newInput, 'replaceInput new input')
     e.replaceInput(filter, oldInput, newInput)
+    return includeAdded ? global.NCH._replaceInAdded(filter, 'input', oldInput, newInput, e) : 0
   },
 
-  replaceOutput(filter, oldOutput, newOutput, e) {
+  replaceOutput(filter, oldOutput, newOutput, e, includeAdded) {
     if (!e) throw new Error('replaceOutput called without event object!')
     global.NCH._validateAny(oldOutput, 'replaceOutput old output')
     global.NCH._validateAny(newOutput, 'replaceOutput new output')
     e.replaceOutput(filter, oldOutput, newOutput)
+    return includeAdded ? global.NCH._replaceInAdded(filter, 'output', oldOutput, newOutput, e) : 0
+  },
+
+  // KubeJS 1902.6's e.replaceInput / e.replaceOutput / e.remove only walk the recipes loaded from data
+  // (originalRecipes), never the ones scripts added (addedRecipes). With includeAdded, replaceInput /
+  // replaceOutput repeat the swap on the added recipes for a plain { input: X } / { output: X } filter (item
+  // merges: a purged id must go everywhere). Opt-in because a swap replaces the whole matching slot: sugar ->
+  // #forge:sugar would turn a [sugar, honey] slot into the tag alone. Returns the number of added recipes changed.
+  _replaceInAdded(filter, key, oldValue, newValue, e) {
+    if (filter == null || typeof filter !== 'object' || Array.isArray(filter)) return 0
+    var keys = Object.keys(filter)
+    if (keys.length !== 1 || keys[0] !== key) return 0
+    var changed = 0
+    var it = e.addedRecipes.iterator()
+    while (it.hasNext()) {
+      var r = it.next()
+      if (key === 'input') {
+        if (r.hasInput(filter.input) && r.replaceInput(oldValue, newValue)) changed++
+      } else if (r.hasOutput(filter.output) && r.replaceOutput(oldValue, newValue)) changed++
+    }
+    return changed
   },
 
   // ========================================================================
@@ -1010,6 +1032,30 @@ global.NCH = {
 		.id(`${global.NCH.modId}:farmersdelightcutting/${idSuffix}`)
 	},
 
+	// Farmer's Respite kettle (farmersrespite:brewing). input: 1-2 ingredients. opts: { container (default glass
+	// bottle), time (2400), exp (0.35), needWater (true), tab ('drinks') }. A drink tier like FR's long / strong
+	// teas is the drink + one ingredient with needWater false.
+	//   R.frBrewing([i.matcha_latte, i.t_fruits_berries], i.berry_matcha_latte, e, 'berry_matcha_latte', { needWater: false })
+	frBrewing(input, output, e, idOverride, opts) {
+		if (!e) throw new Error('frBrewing called without event object!')
+		opts = opts || {}
+		var inputs = Array.isArray(input) ? input : [input]
+		var idSuffix = idOverride ?? global.NCH.toId(output, input, 'frbrewing')
+		var ctx = 'frBrewing ' + idSuffix
+		if (inputs.length < 1 || inputs.length > 2) global.NCH._warn(ctx, 'the kettle takes 1-2 ingredients')
+
+		e.custom({
+			type: 'farmersrespite:brewing',
+			recipe_book_tab: opts.tab ?? 'drinks',
+			ingredients: inputs.map((v, n) => global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + n + ']' })),
+			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
+			container: global.NCH._itemJson(opts.container ?? global.item.glass_bottle, { allowTag: false, countMode: 'none', context: ctx + ' container' }),
+			experience: opts.exp ?? 0.35,
+			cookingtime: opts.time ?? 2400,
+			needwater: opts.needWater ?? true
+		}).id(`${global.NCH.modId}:farmersrespitebrewing/${idSuffix}`)
+	},
+
 	// Hammering by hand with the Engineer's Hammer, two ways to the same result: on a Farmer's Delight cutting
 	// board (the hammer is the cutting tool and loses 1 durability) and in the crafting grid (hammer + input,
 	// shapeless; IE's hammer comes back damaged). Ids farmersdelightcutting/<id>_hammering and
@@ -1083,6 +1129,41 @@ global.NCH = {
 		var slots = []
 		groups.forEach(g => { for (var k = 0; k < g.count; k++) slots.push(g.v) })
 		return slots
+	},
+
+	// Vintage Delight Pickling Jar (backport, vintage_delight.md 2.3): vintagedelight:fermenting. No heat, no fluid.
+	// output: item (Item.of(...) for a count or NBT). inputs: 1-6 ingredients, one jar slot each; Item.of(x, 2) takes
+	// two slots, an array entry = any of those.
+	// opts: { time: ticks (default 2400, the mod's pickles); secondary: item for the second output slot;
+	//   container: item the jar consumes from its container slot (e.g. a glass bottle) }
+	//   R.vdPickling(Item.of(i.kimchi, 2), [i.cabbage, i.vegetables, i.kelp, i.salt], e, 'kimchi')
+	vdPickling(output, inputs, e, idOverride, opts) {
+		opts = opts || {}
+		if (!e) throw new Error('vdPickling called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, inputs, "pickling")
+		var ctx = 'vdPickling ' + idSuffix
+
+		var slots = []
+		;(Array.isArray(inputs) ? inputs : [inputs]).forEach((v, idx) => {
+			var count = Array.isArray(v) ? 1 : global.NCH._resolveIdCount(v).count
+			var entry = global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + idx + ']' })
+			for (var c = 0; c < Math.max(1, count); c++) slots.push(entry)
+		})
+		if (slots.length < 1 || slots.length > 6)
+			global.NCH._warn(ctx, 'needs 1-6 ingredient slots, got ' + slots.length)
+
+		var json = {
+			type: 'vintagedelight:fermenting',
+			ingredients: slots,
+			output: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
+			processingTime: opts.time ?? 2400
+		}
+		if (opts.secondary)
+			json.secondaryOutput = global.NCH._itemJson(opts.secondary, { allowTag: false, context: ctx + ' secondary' })
+		if (opts.container)
+			json.container = global.NCH._itemJson(opts.container, { countMode: 'none', context: ctx + ' container' })
+
+		e.custom(json).id(`${global.NCH.modId}:pickling/${idSuffix}`)
 	},
 
 	// Brewin' and Chewin' keg (backport, alcohol.md 8.6): brewinandchewin:fermenting with 4.5.0's field names.
@@ -1210,6 +1291,23 @@ global.NCH = {
 		}).id(`${global.NCH.modId}:dragonbreathing/${idSuffix}`)
 	},
 
+	// Backpack skins (patcherMod backpackskin/): smithing a block from the skin tag onto any Sophisticated Backpack
+	// keeps the backpack's data and sets its skin; the clear recipe (backpack alone in the grid) removes it.
+	backpackSkin(skinTag, e, idOverride) {
+		if (!e) throw new Error('backpackSkin called without event object!')
+		var idSuffix = idOverride ?? 'backpack_skin'
+		e.custom({
+			type: `${global.NCH.modId}:backpack_skin`,
+			addition: { tag: skinTag }
+		}).id(`${global.NCH.modId}:smithing/${idSuffix}`)
+	},
+
+	backpackSkinClear(e, idOverride) {
+		if (!e) throw new Error('backpackSkinClear called without event object!')
+		var idSuffix = idOverride ?? 'backpack_skin_clear'
+		e.custom({ type: `${global.NCH.modId}:backpack_skin_clear` }).id(`${global.NCH.modId}:backpackskin/${idSuffix}`)
+	},
+
 	elytraDuplication(catalyst, result, e, idOverride) {
 		if (!e) throw new Error('elytraDuplication called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(result, catalyst, "elytraduplication")
@@ -1291,7 +1389,7 @@ global.NCH = {
 
 	// Mortar and pestle (creativeengineering:mortar_and_pestle, i.mortar_and_pestle), shapeless in the crafting table:
 	// damageIngredient takes 1 durability and hands the mortar back. inputCount copies of the input (up to 8, the
-	// mortar takes the 9th slot). Id mortar/<id>. TODO food/kitchen #10. Food grinding goes through foodGrinding() (own
+	// mortar takes the 9th slot). Id mortar/<id>. TODO cooking/kitchen #10. Food grinding goes through foodGrinding() (own
 	// recipes) or the generated catalog loop in cooking/mortar.js (other mods' recipes), not straight here.
 	//   R.mortar(Item.of(i.cornmeal, 1), i.t_seeds_corn, e, 'corn_kernels_cornmeal', 3)
 	mortar(output, input, e, idOverride, inputCount) {
@@ -1315,7 +1413,7 @@ global.NCH = {
 	// one) rounded down to what the machines average: E = the sum of count x chance over every output of that
 	// item; E >= 1 gives floor(E) from one input, E < 1 gives 1 from ceil(1 / E) inputs (at most 8; both with 0.02
 	// slack, so 0.333 takes 3). Byproducts
-	// (seeds, straw) are machine-only. TODO food/kitchen #10.
+	// (seeds, straw) are machine-only. TODO cooking/kitchen #10.
 	// opts: { crushing: false, milling: false } leaves a machine out; { mortar: false } leaves the mortar out;
 	//       { mortar: { count, inputs } } sets the hand ratio instead of deriving it.
 	//   R.foodGrinding([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25)],

@@ -14,10 +14,12 @@ ServerEvents.recipes(e => {
 	var i = global.item
 	var R = global.NCH
 
+	var addedSwaps = 0
 	global.itemMerges.forEach(m => {
-		R.replaceInput({ input: m[0] }, m[0], m[1], e)
-		R.replaceOutput({ output: m[0] }, m[0], m[1], e)
+		addedSwaps += R.replaceInput({ input: m[0] }, m[0], m[1], e, true)
+		addedSwaps += R.replaceOutput({ output: m[0] }, m[0], m[1], e, true)
 	})
+	console.log('[itemMerges] ' + addedSwaps + ' swaps in script-added recipes')
 
 	// Milk bottle. Abnormals Delight turns Farmer's Delight's bucket <-> bottle recipes off while Neapolitan is
 	// loaded, so Neapolitan's two stay: bucket -> 3 bottles (output swapped above) and 3 #forge:bottles/milk ->
@@ -48,6 +50,27 @@ ServerEvents.recipes(e => {
 	R.shaped(Item.of(i.rocky_dirt, 8), ['DP', 'PD'], { D: i.coarse_dirt, P: i.twigs_pebble }, e, 'pebble_dirt_from_coarse_dirt')
 	R.shapeless(Item.of(i.twigs_rocky_dirt, 4), [i.dirt, i.dirt, i.cobblestone, i.cobblestone], e, 'rocky_dirt')
 	R.shapeless(Item.of(i.twigs_rocky_dirt, 8), [i.coarse_dirt, i.coarse_dirt, i.cobblestone, i.cobblestone], e, 'rocky_dirt_from_coarse_dirt')
+
+	// Coffee. Rustic Delight's crop and drinks stay; Farmer's Respite's coffee cake, blazing chili and gambler's tea
+	// now take Rustic's beans (swapped above). Removed: Respite's three kettle coffees and Central Kitchen's coffee
+	// fluid recipes (the swap would make Rustic's coffee from the kettle and pour it into Respite's coffee fluid), and
+	// the berry / bean / sack recipes the swap turns into loops or duplicates of Rustic's (beans -> beans, bag -> 9
+	// beans, berries -> red dye next to Rustic's beans -> yellow dye).
+	var FR_COFFEES = ['coffee', 'long_coffee', 'strong_coffee']
+	FR_COFFEES.forEach(c => {
+		R.remove({ id: 'farmersrespite:brewing/' + c }, e)
+		R.remove({ id: 'create_central_kitchen:filling/' + c }, e)
+		R.remove({ id: 'create_central_kitchen:emptying/' + c }, e)
+	})
+	R.remove({ id: 'create_central_kitchen:mixing/coffee' }, e)
+	R.remove({ id: 'create_central_kitchen:milling/coffee_berries' }, e)
+	R.remove({ id: 'farmersrespite:cutting/coffee_berries' }, e)
+	R.remove({ id: 'farmersrespite:coffee_beans' }, e)
+	R.remove({ id: 'farmersrespite:coffee_beans_sack' }, e)
+	R.remove({ id: 'minecraft:red_dye' }, e)
+	// The kettle type has no KubeJS schema, so the swap above can't edit it: gambler's tea is rebuilt on Rustic's beans.
+	R.remove({ id: 'farmersrespite:brewing/gamblers_tea' }, e)
+	R.frBrewing([i.coffee_beans, i.glow_berries], i.gamblers_tea, e, 'gamblers_tea')
 
 	// Permafrost. Immersive Weathering's is the only one in the world (patcherMod QuarkPermafrostStyleMixin);
 	// Quark's is Froststone and gets IW's craft with stone for dirt. Its bricks, slabs, stairs and walls keep Quark's.

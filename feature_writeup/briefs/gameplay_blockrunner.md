@@ -37,8 +37,8 @@ Build order:
 4. **#4** last: one patcherMod build with the soap slip and the boat friction, and the tooltip in KubeJS.
 
 Related rows: `engineering/dreams-and-desires #6` (painted asphalt recipes and names; its brief
-[engineering_dreams-and-desires.md](engineering_dreams-and-desires.md) leaves speed to #5 here), `food/sweets` D5
-([food_sweets.md](food_sweets.md): ice cream blocks' tier; the Neapolitan ones are untiered today, so #2's audit should
+[engineering_dreams-and-desires.md](engineering_dreams-and-desires.md) leaves speed to #5 here), `baking/sweets` D5
+([baking_sweets.md](baking_sweets.md): ice cream blocks' tier; the Neapolitan ones are untiered today, so #2's audit should
 settle them with that decision), `farming/trees #1` (the leaf pile work that built #3), `alcohol` 3.4 (Brewin' blocks).
 
 ---
@@ -109,7 +109,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
   new block ids only show in a game dump; `blocktags.js` covers it with `vinery:` patterns (262, 275, 351, 409).
 - **KubeJS blocks:** culture blocks are tiered (`'creativeengineering:*_culture_block'`, spongy, blocktags.js 387);
   prepared flesh, layered obsidian, coils, plates and dust piles are tiered (blockrunner.md 2).
-- **Known open ones:** Neapolitan ice cream blocks are in no tier ([food_sweets.md](food_sweets.md), D5).
+- **Known open ones:** Neapolitan ice cream blocks are in no tier ([baking_sweets.md](baking_sweets.md), D5).
 - **Tools:** [tools/blockrunner_scan.py](../../tools/blockrunner_scan.py) (writes `tools/blockrunner_untagged_blocks.json`;
   with a tiers file it prints every untiered block that could register, per mod) and
   [tools/blockrunner_tag_sim.js](../../tools/blockrunner_tag_sim.js) (runs blocktags.js in node against the last
@@ -146,7 +146,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
 ### Ids and data
 - Item dict keys exist for the Brewin' blocks (`i.heating_cask`, `i.ice_crate`, `i.coaster`, alcohol.md 3.4).
 - Neapolitan ice cream blocks: `neapolitan:{vanilla,chocolate,strawberry,banana,mint,adzuki}_ice_cream_block`
-  (food_sweets.md, verified there).
+  (baking_sweets.md, verified there).
 - No new mod ids needed for the tooling.
 
 ### Decisions
@@ -155,7 +155,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
   blocktags.js 96-98), so every walkable block is typed and the watcher flags anything untyped. B is the literal
   reading of "flag blocks not flagged with type of 1.0 runspeed" and makes WTHIT name furniture's tier, but means
   triaging ~3000 blocks. Recommendation: A now, B later if WTHIT should name them.
-- **Neapolitan ice cream blocks**: follow `food/sweets` D5 (recommended there: `very_sticky`); in any case put them in
+- **Neapolitan ice cream blocks**: follow `baking/sweets` D5 (recommended there: `very_sticky`); in any case put them in
   the same tier as Delightful's (`confectionery` today, blocktags.js 367).
 
 ### Gotchas

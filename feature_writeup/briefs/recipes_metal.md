@@ -26,7 +26,7 @@ catwalk recipes), Dramatic Doors 3.2.7 (no rusty-door recipe JSON in the jar). P
 Suggested order: **A** (one `/reload`), then **B** as one pass over `metal_base_materials.js` (#1's plate table and
 #4's dust-recycle and leftovers touch the same sections), with `recipes/engineering #6`'s laser-cut plates
 ([recipes_engineering.md](recipes_engineering.md)) using the same metal list. **C** next: it changes what counts as
-gold, which `food/meals #9` ([food_meals.md](food_meals.md)) depends on and which #6 should be balanced against. **D**
+gold, which `dishes/meals #9` ([dishes_meals.md](dishes_meals.md)) depends on and which #6 should be balanced against. **D**
 last.
 
 ---
@@ -180,7 +180,7 @@ Decide where rose gold may stand in for gold, and make the tags say exactly that
 - `forge:ingots/rose_gold` and `forge:dusts/rose_gold` are empty, so IE's `arcfurnace/alloy_rose_gold` (3 copper +
   `#forge:ingots/gold` → 4 rose gold) and `crusher/ingot_rose_gold` are switched off by their `tag_empty` conditions.
   VI does tag `forge:plates/rose_gold`, `rods/rose_gold`, `wires/rose_gold` (**jar**).
-- [food_meals.md](food_meals.md) `food/meals #9` wants rose gold out of the golden foods and recommends a local
+- [dishes_meals.md](dishes_meals.md) `dishes/meals #9` wants rose gold out of the golden foods and recommends a local
   pure-gold tag there, "since rose gold rods in `forge:rods/gold` may be intended".
 
 ### Build
@@ -202,7 +202,7 @@ Recommended: rose gold is its own metal; only the rods stay interchangeable.
    should become craftable; it would make a cheap gold multiplier for the rods.
 3. `metal_base_materials.js` line 121 (`immersiveposts:has_gold_rod` input swap) becomes unnecessary; leave it or
    delete it.
-4. Then `food/meals #9` step 1 is "nothing to do" (its own brief says so).
+4. Then `dishes/meals #9` step 1 is "nothing to do" (its own brief says so).
 5. Writeup: F5 rewritten as built, 2.3 tags paragraph, RM-11.
 
 ### Ids and data
@@ -214,7 +214,7 @@ Recommended: rose gold is its own metal; only the rods stay interchangeable.
 - **Keep rose gold in the block tag?** (the row's question) Recommend no: the block tag only makes the enchanted golden
   apple and IE's storage crusher take it. Recommend also taking it out of the ingot, dust and nugget gold tags (above),
   and keeping only the rod tag.
-- **Fix in the tags or locally in golden.js (`food/meals #9`)?** Recommend the tags: MCA's ingot and dust tags make
+- **Fix in the tags or locally in golden.js (`dishes/meals #9`)?** Recommend the tags: MCA's ingot and dust tags make
   the conversion through IE's crusher and arc furnace, which a local golden.js change can't stop.
 
 ### Gotchas

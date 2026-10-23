@@ -16,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Farmer's Delight cutting board on a Cooking for Blockheads counter (TODO food/kitchen #8). The counter and corner are
+ * Farmer's Delight cutting board on a Cooking for Blockheads counter (TODO cooking/kitchen #8). The counter and corner are
  * 15 px tall, so a board on top would float 1 px above the worktop: its model ({@code BlockStateCuttingBoardOffsetMixin}
  * on {@code BlockState#getOffset}) and its item renderer ({@code CuttingBoardRendererOffsetMixin}) are shifted by
  * {@code [kitchen] cuttingBoardOffset*}. Support itself is {@code CuttingBoardSupportMixin}. The hitbox is not moved.

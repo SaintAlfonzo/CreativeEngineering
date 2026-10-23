@@ -1,0 +1,103 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:red_terracotta",
+      "minecraft:blue_terracotta"
+     ]
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:terracotta"
+    }
+   ],
+   "notes": [
+    "Right-click: washes the dye out.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:red_stained_glass"
+     ]
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:glass"
+    }
+   ],
+   "notes": [
+    "Right-click: washes the dye out.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:sticky_piston"
+     ]
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:piston"
+    }
+   ],
+   "notes": [
+    "Right-click: washes the slime off.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:exposed_copper",
+      "minecraft:waxed_exposed_copper"
+     ]
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:copper_block"
+    }
+   ],
+   "notes": [
+    "Right-click: takes off wax and all oxidation.",
+    "Uses one soap."
+   ]
+  }
+ ]
+}

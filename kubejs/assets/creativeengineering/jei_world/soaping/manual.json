@@ -1,0 +1,210 @@
+{
+ "_note": "Hand-written: Supplementaries 2.4.20 IWashable blocks (GlobeBlock, BambooSpikesBlock, BlackboardBlock, ITextHolderProvider, sign capability) and SoapItem.interactWithPet. Generated rows: tools/jei_world/tab_tools.py.",
+ "rows": [
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "block": "supplementaries:globe_sepia"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "block": "supplementaries:globe"
+    }
+   ],
+   "notes": [
+    "Right-click: washes the sepia off.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:bamboo_spikes_tipped"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:bamboo_spikes"
+    }
+   ],
+   "notes": [
+    "Right-click placed spikes: washes the potion off.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "block": "supplementaries:blackboard"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "block": "supplementaries:blackboard"
+    }
+   ],
+   "notes": [
+    "Takes off the glow, then the wax, then the drawing.",
+    "Uses one soap each time."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "tag": "minecraft:signs"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "tag": "minecraft:signs"
+    }
+   ],
+   "linked": true,
+   "notes": [
+    "Right-click: wipes the text.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "tag": "supplementaries:sign_posts"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "tag": "supplementaries:sign_posts"
+    }
+   ],
+   "linked": true,
+   "notes": [
+    "Right-click: wipes the text.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "tag": "supplementaries:hanging_signs"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "tag": "supplementaries:hanging_signs"
+    }
+   ],
+   "linked": true,
+   "notes": [
+    "Right-click: wipes the text.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:doormat"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "item": "supplementaries:doormat"
+    }
+   ],
+   "notes": [
+    "Right-click: wipes the text.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:sheep",
+     "label": "Dyed"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:sheep",
+     "label": "White"
+    }
+   ],
+   "notes": [
+    "Right-click: washes the wool white.",
+    "Uses one soap."
+   ]
+  },
+  {
+   "requires": [
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:wolf",
+     "label": "Tamed by you"
+    }
+   ],
+   "action": {
+    "item": "supplementaries:soap"
+   },
+   "outputs": [
+    {
+     "entity": "minecraft:wolf",
+     "label": "Red collar"
+    }
+   ],
+   "notes": [
+    "Your own wolf: collar back to red.",
+    "Other pets just get a bath."
+   ]
+  }
+ ]
+}

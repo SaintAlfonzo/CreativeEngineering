@@ -3,7 +3,7 @@
 Written 2026-10-21 from [TODO](../todo/TODO.md) `# mobs`, Sub `spawns`. Feature writeup: [mob_spawns.md](../mob_spawns.md)
 (test prefix `MS-`), generated report [spawns_by_biome.md](../spawns_by_biome.md). Related briefs:
 [mobs_pillagers.md](mobs_pillagers.md) (lone pillagers use the same rule file), [mobs_bees.md](mobs_bees.md),
-[worldgen_bee-nests.md](worldgen_bee-nests.md), [worldgen_structures_contents.md](worldgen_structures_contents.md).
+[worldgen_bee-nests.md](worldgen_bee-nests.md), [structures_contents.md](structures_contents.md).
 
 ## Scope and order
 
