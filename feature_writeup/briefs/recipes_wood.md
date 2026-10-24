@@ -389,6 +389,37 @@ mulberry vines stay. Every recipe that made or used river wood points at oak.
 
 ---
 
+## wood #4: Leather from fermenting bark
+Status: Planned / Work: KubeJS / TODO `recipes/wood #4` ([recipes_wood.md](../recipes_wood.md))
+
+### Goal
+New leather fermenting recipes: any tree bark ferments into leather.
+
+### Now
+- Bark: every species' bark comes from stripping ([bark.js](../../kubejs/server_scripts/wood/bark.js)); the dict key
+  `i.any_bark` = `#immersive_weathering:bark` (item_dict 585; that the tag holds every species' bark and the Upgrade
+  Aquatic driftwood bark is *unverified*).
+- Leather today: prepared flesh smoked ([mob_resources.js](../../kubejs/server_scripts/engineering/mob_resources.js) lines
+  31-32), Ersatz leather from hemp fabric and honeycomb; `i.leather`.
+- Fermenting helpers: `R.vdPickling` (Vintage Pickling Jar, no heat, no fluid, default 2400 ticks) and `R.bncFermenting`
+  (Brewin' keg, needs a base fluid, used in alcohol.js line 28 with `i.any_bark`).
+
+### Build
+One recipe, e.g. `R.vdPickling(Item.of(i.leather, 1), [Item.of(i.any_bark, N), i.salt, ...], e, 'leather_from_bark')`
+in a new section of bark.js (or sawdust.js neighbours); N and the second input are the numbers to set.
+
+### Decisions
+Machine and cost: the Pickling Jar (recommend, matches "fermenting" and needs no fluid) or the keg with water and a
+tanning-style input. Number of bark per leather (recommend 4 bark + salt -> 1, time 2400).
+
+### Gotchas
+Leather feeds bookshelves, saddles and armour: keep it dearer than prepared flesh smoking (RE-19 balance).
+
+### Tests
+RW-23 Bark + inputs in the jar give leather; non-bark logs do not; keg route absent.
+
+---
+
 ## Built, needs play
 
 - `wood #3` (2026-10-22): built; `MulberrySapling` is in the `mods/` jar (11:06); scratch SQ-MB queued; RW-15 to RW-20 in [recipes_wood.md](../recipes_wood.md) 7.

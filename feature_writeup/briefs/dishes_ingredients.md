@@ -639,6 +639,100 @@ full port, like the Brewin' and Vinery ports).
 
 ---
 
+## ingredients #20: Sweet potato slices
+Status: Planned / Work: KubeJS (+ new item) / TODO `dishes/ingredients #20` ([veggies_delight.md](../veggies_delight.md))
+
+### Goal
+A cut sweet potato gives 3 sweet potato slices.
+
+### Now
+- No sweet potato slice item exists (Veggies Delight jar and `item_dict.js`: only `sweet_potato`, `baked_sweet_potato`,
+  dough, pie, cupcake, pancakes). The potato analogue is Rustic Delight `potato_slices` (`i.potato_slices`, a knife
+  cut of `minecraft:potato` gives 2, verified in the jar) and `baked_potato_slices`; tag `#forge:sliced_potatoes`
+  (`i.t_sliced_potatoes`, set in [cookingtags.js](../../kubejs/server_scripts/tags/cookingtags.js) line 38 and
+  [item_merges.js](../../kubejs/server_scripts/other/item_merges.js) line 85) is what fries and fish and chips read.
+- VD is in-tree (`development/backportedVeggies`), so a new item can be registered there (Java) or as a KubeJS
+  startup item.
+
+### Build
+1. Item `sweet_potato_slices` (food, recoloured Rustic `potato_slices` texture; also a baked form if the potato has one).
+2. `R.fdCutting(i.sweet_potato, i.any_knife, Item.of(i.sweet_potato_slices, 3), e, 'sweet_potato_slices')`.
+3. `t.add(e, i.t_sliced_potatoes, i.sweet_potato_slices)` through `global.tags`, so fries (`dishes/meals #34`) take it.
+4. Dict key, `food_types.json` entry (ingredient), changelog line.
+
+### Decisions
+Slices from a potato give 2 and from a sweet potato 3 (the row's number): recommend as asked. Item registered in
+Java (VD port) or KubeJS: recommend KubeJS startup, no port edit (`dishes/ingredients #12`).
+
+### Tests
+RC-110 Knife a sweet potato: 3 slices. RC-111 Slices count in the fries recipe.
+
+---
+
+## ingredients #21: Potato and sweet potato compatibility
+Status: Planned / Work: KubeJS / TODO `dishes/ingredients #21` ([veggies_delight.md](../veggies_delight.md))
+
+### Goal
+Recipes that take a potato also take a sweet potato, and the same for the cooked and sliced forms.
+
+### Now
+- `i.potato` is `#forge:crops/potato` (item_dict 1934); VD tags the sweet potato under its own `#forge:crops/sweet_potato`
+  and `#forge:vegetables/sweet_potato` (jar), so it is not in the potato tags. Baked potato is `i.baked_potato`
+  (vanilla); `i.baked_sweet_potato` is VD's.
+- Potato users already read tags: `#forge:sliced_potatoes` (fries, fish and chips, More Delight potato salad),
+  `#forge:vegetables/potato` (VD fish and chips, Rustic potato salad, `potato_noodle`), vanilla `minecraft:potato`
+  items in Create / Oceanic recipes.
+
+### Build
+1. Audit with `/dumprecipes`: recipes whose inputs name `minecraft:potato`, `#forge:crops/potato`,
+   `#forge:vegetables/potato`, `minecraft:baked_potato`, `#forge:sliced_potatoes`.
+2. Prefer tag edits (`global.tags`): add sweet potato to the potato crop and vegetable tags, baked sweet potato to a
+   baked-potato tag, sweet potato slices (`#20`) to `#forge:sliced_potatoes`. Item-only recipes get `R.replaceInput`.
+
+### Decisions
+Which recipes (the row's decision). Adding the sweet potato to `#forge:crops/potato` also changes everything else that
+reads the tag (compost, trades, mob food, planting tags): recommend tagging only the recipe-facing vegetable tags and
+replacing inputs by id for the rest.
+
+### Gotchas
+Dishes named for the potato (mashed potatoes, VD's version already has a sweet potato mix) need a look at output names.
+
+### Tests
+RC-112 A sweet potato works in each audited recipe; RC-113 compost and trades unchanged.
+
+---
+
+## ingredients #22: Honeycomb as sugar, honey and spread
+Status: Planned / Work: KubeJS / TODO `dishes/ingredients #22` ([food.md](../food.md))
+
+### Goal
+Honeycomb counts as sugar in heated mixing (2 sugar per honeycomb), as honey in some recipes, and spreads on toast.
+
+### Now
+- `i.any_sugar` is `#forge:sugar` (item_dict 1914); `i.honeycomb` = `minecraft:honeycomb` (557). Sugar steps in
+  Create heated mixing are written with `R.createMixing(..., 'heated')` (cooking.js line 803 orange jam, baking.js
+  frosting); the pot copies are turned into mixer twins by Slice & Dice unless the id ends `_manual_only`.
+- Toast is More Delight `moredelight:toast` (bread slice smoked); `toast_with_honey` is toast + honey bottle + glass
+  bottle (shapeless, jar). Honeycomb has no toast recipe.
+
+### Build
+1. Spread: `R.shapeless(i.toast_with_honey, [i.toast, i.honeycomb], e, 'toast_with_honey_comb_manual_only')` (remove
+   the honey bottle recipe or keep both).
+2. Sugar: a tag cannot give "2 per comb", so add a second mixer recipe per sugar-using heated mix with honeycomb at
+   half the count, by a helper loop in the file that owns the mix; do not add honeycomb to `#forge:sugar` (it would
+   make 1 comb = 1 sugar everywhere, including crafting and cans).
+3. Honey: list recipes that take `i.honey_bottle` as a flavour (cakes, cookies, pies via `SWEET` in baking.js);
+   honeycomb joins where that reads as a comb dish.
+
+### Decisions
+Which recipes (the row's decision): recommend heated mixing only, the toast, honey cake (`baking/baked-goods #26`),
+and the `SWEET` pie slot; not every honey use.
+
+### Tests
+RC-114 Heated mix with honeycomb gives the sugar recipe's result; honeycomb on toast gives honey toast.
+
+---
+
 ## Built, needs play
 
 | Row | Change | Note |

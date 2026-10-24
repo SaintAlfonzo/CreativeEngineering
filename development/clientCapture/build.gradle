@@ -1,0 +1,21 @@
+// Shared Forge setup (runs, mods.toml expansion, jar manifest, jar archive) comes from
+// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to clientCapture.
+// Dev-only: the jar goes into tools/client_capture's own game dir, never into the instance's mods/
+// (feature_writeup/client_capture.md). Don't run installToMods for this mod.
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Third-party mod jars copied from ../../mods (git-ignored): only jei (recipe screens and their bounds).
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
+}
+
+// Same approach as patcherMod: no Mixin refmap, mixins use SRG names with remap = false.
+tasks.named('compileJava', JavaCompile).configure {
+    options.compilerArgs << '-AdisableTargetValidator=true'
+}
+
+tasks.named('installToMods').configure {
+    doFirst { throw new GradleException('clientCapture is dev-only: tools/client_capture/run_captures.py picks it up from build/libs') }
+}

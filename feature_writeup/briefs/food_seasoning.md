@@ -53,6 +53,10 @@ Salt improves nutrition, capped; the saltable tag covers every valid food; more 
 pack-wide; intermediates (bone broth) can't be salted; salt from clusters / raw rock salt by cutting board, milling
 and crushing with equal efficiency and more than one output with a chance; merge with Vintage Delight later.
 
+Added 2026-10-24 (future, not this pass): one JEI category per seasoning type instead of the single Seasoning tab
+(`SeasoningJEI`, [food.md](../food.md) 3.11); the pack seasoning pages (3.12) would split by seasoning. Needs the
+category list first (`seasoning #3`); no work before it.
+
 ### Build
 1. **Dict keys** (item_dict.js, next to `i.salt`): `i.salt_item = 'salt:salt'`, `i.raw_rock_salt = 'salt:raw_rock_salt'`,
    `i.raw_rock_salt_block = 'salt:raw_rock_salt_block'`, `i.salt_cluster = 'salt:salt_cluster'`,
@@ -237,9 +241,136 @@ No pepper (only Rustic Delight bell peppers), dill or spice item in the dict. Sa
   it); same as salt today.
 - Food-tuning values (`food/types-and-tuning #1`) must be applied before seasoning bonuses are tuned.
 
+### Built 2026-10-23: the framework (step 1) and a popcorn test set
+Step 1 built as planned except: definitions live in KubeJS startup (`global.seasoning` in
+`startup_scripts/cooking/seasonings.js`, passed to `food/Seasonings.define`), not CEConfig; the recipe carries its food
+ingredient and seasoning items (no per-seasoning `seasonable` tag); bonus by a `LivingEntityUseItemEvent.Finish`
+handler; saturation is absolute points; `heal` and `combines` (which seasonings may share a food) added. Test set:
+cheese (+2 saturation), onion (+2 nutrition), garlic (Speed I 10 s) on popcorn; onion and garlic combine. Details and
+tests: [food.md](../food.md) 3.12, FO-45 to FO-48. Steps 2 to 4 not started.
+
 ### Tests
 - **SE-06 Pepper:** cooked beef + ground pepper -> peppered cooked beef with the bonus line; eating it gives the extra
   saturation.
+
+---
+
+## seasoning #6: Merge salts; all salt is Vintage pink
+Status **Planned** / Work: KubeJS / data / id `food/seasoning #6`
+
+### Goal
+One salt in the whole pack: the salt items of the salt mods merge into Vintage Delight's pink salt, and textures,
+recipes and tags use it.
+
+### Now
+- Salt sources: The Salt (`salt:salt` = `i.salt_item`, `raw_rock_salt`, `salt:salt_block`, `salt:salt_lamp`, buds,
+  clusters, ores; tags `forge:salt`, `forge:salts`, `forge:dusts/salt`), Create: The Salt (recipes only, no item), Vintage
+  Delight (`vintagedelight:salt_dust` = `i.salt_dust`, `salt_block`, `salt_bucket`, 17 lamps, bricks, a layer block
+  `vintagedelight:salt`). `salt_dust.png` is the pink one (checked: pink crystal icon).
+- Pack code writes `i.salt_item` as an output: `server_scripts/cooking/salt.js` lines 21-27; `i.salt` is the tag
+  `#forge:salt`. Recipes that take the tag already accept either salt.
+- The merge framework: `startup_scripts/_lib/item_merges.js` (`[purged, survivor]`), recipes and loot swapped by
+  `server_scripts/other/item_merges.js`, design in [item_merges.md](../item_merges.md).
+
+### Build
+1. Dict: add `i.vintagedelight_salt_block` etc. only where missing; point `i.salt_item` at the survivor (or drop it).
+2. `item_merges.js`: `[i.salt_item, i.salt_dust]` and the block / lamp pairs; The Salt's world gen (ore, clusters, buds)
+   keeps dropping `salt:raw_rock_salt`, so merge that to the survivor's input route (raw rock salt -> salt dust, 4x,
+   `salt.js`) rather than purging it.
+3. Retexture: if the survivor is Vintage's, nothing; if The Salt's, a pink recolour of `salt:item/salt` in a resource pack.
+4. `salt-common.toml` needs no change: `SaltingRecipe` takes `#forge:salts`; check Salt's evaporation / `SaltJeiPlugin`
+   output still names `salt:salt` (unverified; the JEI page in 3.11 shows it).
+
+### Decisions
+- **Which salt wins.** Options: (a) Vintage's `salt_dust` survives (the row's wording); (b) The Salt's `salt:salt`
+  survives, recoloured pink. Recommend (a), but keep `salt:raw_rock_salt` and Salt's ore/cluster worldgen producing it,
+  because The Salt's block and lamp ids are referenced by its own worldgen (unverified).
+- The Salt's blocks and lamps vs Vintage's: merge only the items first; decide blocks with `vintage_delight.md` 3.1.
+
+### Gotchas
+- Tests SE-03 and the canning `_salt` recipes (`canning.js`) name the salt tag; re-run `/cegen` after any dict change.
+
+### Tests
+- FO-50 One salt in JEI: search Salt shows one item (pink); raw rock salt crushing gives it; salting still works.
+
+---
+
+## seasoning #7: Salt layers: place from inside, retexture
+Status **Planned** / Work: patcherMod / resource pack / id `food/seasoning #7`
+
+### Goal
+Place salt layers while standing in them (no push out); retexture the salt layer as a palette swap of another layer block.
+
+### Now
+- Vintage Delight's layer is `SaltLayerBlock extends SnowLayerBlock` (`development/backportedVintage/.../block/custom/
+  SaltLayerBlock.java`); `SaltDustItem.useOn` writes layers 1 to 8 with `setBlock` and no entity check. Snow's collision
+  shape is one layer shorter than its height, so a thicker layer shoves a player standing in it upward.
+- Texture: `assets/vintagedelight/textures/block/` (the layer model uses `salt_height2` ... `salt_height14`).
+
+### Build
+1. Fix in the port (it is the port's block, so this is `new jar`, not patcherMod): override `getCollisionShape` in
+   `SaltLayerBlock` to return empty (or a thin shape) when an entity is inside, or skip the entity push in
+   `SaltDustItem`. Rebuild with `:backportedVintage:build`, then `installToMods`.
+2. Retexture: a palette swap of a snow-layer-like block texture (which one: decision) in the port's resources; the
+   `_height` models stay.
+
+### Decisions
+- Which layer block is the palette source: options snow, sand layers (IW), Create's; recommend snow (same model).
+- Collision: empty always (walk through salt) vs only while standing in it; recommend only while an entity overlaps.
+
+### Tests
+- VTD-54 Stand in a salt layer, right-click salt dust at your feet: the layer thickens, you are not pushed up.
+
+---
+
+## seasoning #8: Show seasoning on AppleSkin
+Status **Planned** / Work: patcherMod / id `food/seasoning #8`
+
+### Goal
+A seasoned food's seasoning shows in the AppleSkin tooltip.
+
+### Now
+- Pack seasonings (3.12) are already added to AppleSkin's food values: `compat/AppleSkinSeasonings.java` (`FoodValuesEvent`,
+  nutrition and saturation only; FO-49). Salt's own `Salted` bonus is not shown (the file's comment: "Salt's `Salted` is
+  its own mechanism and untouched"; Salt's mixin applies it on eating).
+- So the gap is Salt's `Salted` (and heal / effect seasonings, which AppleSkin cannot show as values).
+
+### Build
+1. In `AppleSkinSeasonings.onFoodValues`, if the stack has `Salted:1b`, add `Salting.getAdditionalFoodValue(stack)`
+   (Salt's API, as `SeasoningJEI` compiles against `libs/salt-...jar`). Check it is not counted twice if a merge changes
+   `FoodDataMixin`.
+2. If the intended "seasoning" is only the pack ones, the row is already built (FO-49); confirm in game first.
+
+### Decisions
+- Show the seasoning's name line too? AppleSkin has no line API; the pack's own tooltip line already exists
+  (`food/SeasoningTooltip`). Recommend values only.
+
+### Tests
+- FO-51 Salted cooked beef: AppleSkin tooltip bar shows the salted hunger and saturation; unsalted is unchanged.
+
+---
+
+## seasoning #9: Seasoned icon for every new seasoning
+Status **Planned** / Work: resource pack / id `food/seasoning #9`
+
+### Goal
+Each new seasoning (`seasoning #3`) gets its own seasoned icon.
+
+### Now
+- Salt draws a layered overlay on salted foods (`salt:item/salted_overlay`, `LayeredBakedModel`); the pack seasonings
+  have none: only a tooltip line (`SeasoningTooltip`) and lang (`seasoning_lang.js`). "Seasoned icon" is read as this
+  overlay (unverified: the note does not say).
+
+### Build
+1. One 16x16 overlay per seasoning (garlic, onion, cheese so far) in `kubejs/assets/creativeengineering/textures/item/`.
+2. A client model hook that layers the overlay for each id in `Seasonings:[...]` (model override on the NBT, or a
+   `LayeredBakedModel`-style baker in patcherMod). Salt's baked model is the pattern to copy.
+
+### Decisions
+- One combined icon per combination vs layers per seasoning; recommend layers (garlic + onion = both overlays).
+
+### Tests
+- FO-52 Seasoned popcorn (cheese, onion, garlic) shows the matching overlay(s) in inventory, hand and JEI.
 
 ---
 

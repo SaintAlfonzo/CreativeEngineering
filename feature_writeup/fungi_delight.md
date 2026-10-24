@@ -345,6 +345,8 @@ after the first `/dumpall` with `tools/test_wild_crops.sh`; they are starting va
 
 ### 5.1.1 Mushroom spawn system (new, own system)
 
+*Added 2026-10-24: the Miner's Delight cave carrots use this system's cave mode (rule `cave_carrots`, three Y bands, nothing above Y 48; unlike the mushrooms they accept `cave_air`, so they grow in carver caves too): [miners_delight.md](miners_delight.md) 4.3.*
+
 Mushroom plant spawning gets its own system instead of being spread over `wild_crops.json` rules, because the
 wild-crops rules never match cave biomes (`NEVER = {ocean, cave}`) and mushrooms need a cave mode.
 

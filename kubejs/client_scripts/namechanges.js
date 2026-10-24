@@ -76,6 +76,8 @@ ClientEvents.lang('en_us', e => {
   e.renameItem(global.item.raw_salmon_tempura, 'Raw Fish Tempura')
   e.renameItem(global.item.chips, 'Fries')
   e.renameItem(global.item.cod_n_chips, 'Fish and Chips')
+  // FD's fried rice is made with eggs; Display Delight's placed copy is renamed in kubejs/assets/displaydelight/lang
+  e.renameItem(global.item.fried_rice, 'Egg Fried Rice')
 
 	e.renameItem('create_compressed:copper_sheet_block', 'Copper Plate Block')
   e.renameItem('create_compressed:iron_sheet_block', 'Iron Plate Block')

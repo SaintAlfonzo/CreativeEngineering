@@ -511,6 +511,46 @@ detail.
 Also confirm the golden egg replaces the normal egg on a winning roll (it does in §2.5) rather than being laid in
 addition.
 
+### Planned from the scratchpad (2026-10-24)
+
+Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](briefs/dishes_pickles-and-ferments.md),
+[ports_vintageport](briefs/ports_vintageport.md), [alcohol_pack](briefs/alcohol_pack.md). Nothing is built.
+
+- **Jams** ([TODO](todo/TODO.md) `dishes/jams #1`): every jam becomes Fruits Delight's jam item with Vintage's jam block, in
+  mason jars; mason jars take glass panes; a new empty-jar texture; jams recolour per fruit. Replaces S2's "keep both" for
+  the Vintage jams (§3.1). Open: which jar item stays (recommend the mason jar).
+- **Nut mash** (`dishes/jams #5`): merged with Delightful's nut butter. Open: which survives (recommend Vintage's nut mash).
+- **Pickled sea pickle** (`dishes/pickles-and-ferments #1`): Brewin's Pickled Pickles is removed; a recoloured pickle is the
+  new Pickled Sea Pickle, crafted without honey. Open: the craft (recommend 5 sea pickles + salt).
+- **Real pickles only** (`pickles-and-ferments #2`): pickle recipes (squid and pickles, sea pickle roll, others) take
+  `vintagedelight:pickle`, never pickled pickles or raw sea pickles; squid and pickles swaps the onion for a pickle.
+- **Pickle soup** (`pickles-and-ferments #3`): the soup takes a pickle or another pickled veggie, plus a veggie variant.
+  Open: the exact ingredients.
+- **Enzyme and vinegar** (`pickles-and-ferments #5`, `#6`): mushrooms crushed or milled into an enzyme; vinegar becomes
+  3 apple mash + an enzyme (replaces the jam + mushroom recipes of §2.7; organic mash needs a new source). Open: which
+  mushrooms and machines.
+- **Foul Taste** (`pickles-and-ferments #7`): foods with vinegar added carry a Foul Taste effect. Open: the effect (none
+  exists yet) and the foods.
+- **Kimchi** (`pickles-and-ferments #8`): Vintage's kimchi wins over Brewin's (the jar copy of the Brewin' craft goes), and any
+  pickleable veggie works as the base. Replaces the "keep both, `VTD-40`" state for kimchi.
+- **Century egg** (`pickles-and-ferments #9`): takes a pickled egg instead of any egg (changes §2.7 and VTD-35).
+- **Fermented garlic honey** (`pickles-and-ferments #10`): Regeneration II 5 s and Health Boost 30 s. Open: "3 hearts" is not
+  a Health Boost level (I = 2 hearts, II = 4).
+- **Fermented veg in uncooked crafts** (`dishes/meals #29`): allow fermented garlic, onion and the like where the raw one is
+  used (burgers, the listed salads). Open: which crafts.
+- **Vintage brews** (`alcohol/pack #3`): the six jar brews (§2.7a) all have vanilla effects; they get their own category and a
+  redesign. Open: the category and the effects ([alcohol.md](alcohol.md) §11).
+- **Salted fish out** (`ports/vintageport #11`): Salted Cod and Salted Salmon are removed again (restored 2026-10-23);
+  Surstromming stays. Open: whether the note meant The Salt's own salted fish.
+- **Wild ghost pepper seeds** (`ports/vintageport #12`): 2 seeds from milling and crushing, 3 in the IE Crusher (confirm).
+- **Ghost charcoal** (`ports/vintageport #13`): edible, gives Wither and Fire Resistance. Open: durations.
+- **Golden egg off the tree** (`ports/vintageport #14`): the Magic Peanut tree no longer carries the 80 % golden egg
+  (§2.4, S1, VTD-08); the goose egg (§2.5) stays. Needs a port change.
+- **Jar fixes** (`ports/vintageport #15`, `#16`, `#17`): JEI shows seconds under a minute; the jar gets a bottle output buffer
+  (the keg's pattern, port-native); the slime block pickling recipe is removed.
+- **JEI pages** (`jei/jei-coverage #15`): Vintage's machines and jar recipes get a category or description per recipe type,
+  as part of the dump-driven steps (`ports/vintageport #2`).
+
 ## 6. File map (planned)
 
 | File | Role |
@@ -650,3 +690,4 @@ Overlap review and UI
   deleted the hand-written ones; it now keeps them); compost rows; cooking rules (step 9), including the Veggies
   compat recipes that went live with this port. The old §2.7 note that the compost table needed no action was
   wrong: the engine clears the mod's own values.
+- 2026-10-24: planned from the scratchpad (section 5, "Planned from the scratchpad"): jam and nut mash merges, pickled sea pickle, real-pickle recipes, pickle soup, enzyme and vinegar, Foul Taste, kimchi merge, century egg and garlic honey changes, salted fish and slime block pickling removed, ghost pepper and charcoal changes, golden egg off the tree, jar fixes (seconds, bottle buffer). Nothing built.

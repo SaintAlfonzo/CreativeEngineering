@@ -523,6 +523,71 @@ Only after the decisions:
 
 ---
 
+## dreams-and-desires #7: Tune milkshake lava generation
+Status **Planned** / Work KubeJS / data / TODO `engineering/dreams-and-desires #7`
+
+### Goal
+Tune what lava touching a milkshake generates, and fold the same results into mixing / extruding (machine recipes).
+
+### Now
+- The generation is code in D&D 1.2c (`DesiresFluids.addMilkshakeInteraction`, read with `javap` for the JEI manual rows):
+  lava beside a milkshake makes a stone (flowing lava) or obsidian (a lava source) by flavour: chocolate -> scorchia,
+  vanilla -> dolomite, strawberry -> cobbled deepslate, glowberry -> gabbro, pumpkin -> dripstone block; over bedrock an
+  ore stone (veridium, asurine, crimsite, ochrum, breccia) at `chanceForOreStone` 25 %, over artificial bedrock (beacon,
+  netherite block, dragon egg, end portal, reinforced deepslate) at `chanceForArtificialOreStone` 5 %.
+- Those two numbers are in the **server config** `serverconfig/create_dd-server.toml` (per world: `saves/WorldB/serverconfig`,
+  `WorldC`, `Workspace`; no `defaultconfigs/create_dd-server.toml` exists), range 1 to 100 and 0 to 100.
+- The pack's machine route for ore stones exists: `kubejs/server_scripts/engineering/resource_blocks.js` has
+  `R.createExtruding(i.veridium, [lava 1000, water 1000], e, 'veridium_extruding', catalyst dust block, 10)` and the same for
+  crimsite and the other stones, plus compacting (250 mB lava + 2 gravel + 6 nuggets). Extruding with milkshake instead of
+  water for the base stones (scorchia, dolomite, ...) is not defined: unverified (grep `milkshake` in server_scripts finds nothing).
+- JEI shows the world rows in the Lava Generation tab (`jei_world/lava_generation/manual.json`, renamed by
+  `jei/jei-coverage #21`).
+
+### Build
+1. Choose values (Decisions). Config: add `defaultconfigs/create_dd-server.toml` with the new chances (hand-edited, so copy it
+   to `configs_edited/server_config/`), and note that existing worlds keep their own serverconfig file.
+2. Folding: `R.createExtruding` / `R.createMixing` rows for each milkshake stone through `global.NCH`, with the chance
+   outputs of the ore stones kept lower than the machine rows; ids from `global.item` / `global.fluid` (the milkshake fluids
+   `create_dd:*_milkshake`, check the keys in fluid_dict).
+3. Update the JEI manual rows and notes for the new chances.
+
+### Decisions
+The new values (the row says "values"); recommend lowering `chanceForOreStone` only if the machine route is as cheap, so the
+world trick is not the best ore source. Whether the world interaction stays: it is hardcoded, so only the numbers can change.
+
+### Gotchas
+Config read per world; a pack release needs the new numbers in `world_serverconfig/` of the deploy payload (deploy.md).
+
+### Tests (EN-)
+- EN-19 (proposed): lava over bedrock beside chocolate milkshake gives scorchia and veridium at the configured share (50 trials).
+
+---
+
+## dreams-and-desires #8: Tune sulfuric acid lava generation
+Status **Planned** / Work KubeJS / data / TODO `engineering/dreams-and-desires #8`
+
+### Goal
+Tune what lava generates against Vintage Improvements' sulfuric acid.
+
+### Now
+- Vintage Improvements 0.2.0.3 (`VintageFluids`): sulfuric acid + lava: flowing lava sets to `create:scoria`, a lava source
+  to obsidian (`jei_world/lava_generation/manual.json`, requires `vintageimprovements` and `create`). The class is code; no
+  option for it was found in `config/vintageimprovements-common.toml` (grep for lava / acid is empty).
+- Acid fluid key `f.sulfuric_acid` (fluid_dict line 178), bucket `i.sulfuric_acid_bucket`.
+
+### Build
+Same two routes as #7: values (needs a mixin if the numbers are hardcoded: read `VintageFluids` first) and folding the result
+into mixing / extruding rows through `global.NCH`. Likely only a recipe route, since no config exists.
+
+### Decisions
+Values (the row names none). Recommend recipe route only and a note in the JEI row.
+
+### Tests (EN-)
+- EN-20 (proposed): the acid + lava rows in JEI match the world result; the machine recipe gives the same block.
+
+---
+
 ## Built, needs play
 
 None: every row of this subfamily is Planned.

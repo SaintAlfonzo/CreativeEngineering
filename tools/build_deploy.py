@@ -157,6 +157,9 @@ CATEGORIES = {
     # the unmodified Vinery jars the backport reads its art and data from (alcohol.md B4.8, D14: shipped in the
     # payload for now; a published pack downloads them from their source instead). Never in mods/.
     'vinery_upstream': (('server', 'client'), 'vinery_upstream'),
+    # the unmodified Miner's Delight jar the merged backport reads its art and data from (miners_delight.md D12), as
+    # for Vinery. Never in mods/: it has the port's mod id.
+    'miners_upstream': (('server', 'client'), 'miners_upstream'),
     'server': (('server',), ''),
 }
 TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
@@ -430,25 +433,32 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
     if os.path.isdir(os.path.join(root, 'shaderpacks')):
         for rel in walk('shaderpacks', root):
             files['shaderpacks'][rel[len('shaderpacks/'):]] = os.path.join(root, rel)
-    upstream = os.path.join(root, 'vinery_upstream')
-    for name in sorted(os.listdir(upstream)) if os.path.isdir(upstream) else []:
-        if name.endswith('.jar') and os.path.isfile(os.path.join(upstream, name)):
-            files['vinery_upstream'][name] = os.path.join(upstream, name)
-    if root == ROOT and any(j.startswith('backportedVinery') for j in mods):
-        need = vinery_upstream_jars()
-        have = {n: sha1(p) for n, p in files['vinery_upstream'].items()}
-        for name, want in need.items():
-            if name not in have:
-                pre.error(f'vinery_upstream/{name} missing: the Vinery backport refuses to start without it')
-            elif have[name] != want:
-                pre.error(f'vinery_upstream/{name} has sha1 {have[name]}, the backport pins {want}')
+    for folder, (port, label, _src) in UPSTREAM_DONORS.items():
+        upstream = os.path.join(root, folder)
+        for name in sorted(os.listdir(upstream)) if os.path.isdir(upstream) else []:
+            if name.endswith('.jar') and os.path.isfile(os.path.join(upstream, name)):
+                files[folder][name] = os.path.join(upstream, name)
+        if root == ROOT and any(j.startswith(port) for j in mods):
+            have = {n: sha1(p) for n, p in files[folder].items()}
+            for name, want in upstream_jars(folder).items():
+                if name not in have:
+                    pre.error(f'{folder}/{name} missing: the {label} backport refuses to start without it')
+                elif have[name] != want:
+                    pre.error(f'{folder}/{name} has sha1 {have[name]}, the backport pins {want}')
     return files, mods
 
 
-def vinery_upstream_jars():
-    """{jar: sha1} the Vinery backport pins (UpstreamJars.java), so the build checks the same files the game will."""
-    src = os.path.join(DEVELOPMENT, 'backportedVinery', 'src', 'main', 'java', 'net', 'satisfy', 'vinery', 'forge',
-                       'upstream', 'UpstreamJars.java')
+# Donor folders: {folder: (port jar prefix, name in messages, UpstreamJars.java that pins the jars)}.
+UPSTREAM_DONORS = {
+    'vinery_upstream': ('backportedVinery', 'Vinery', ('backportedVinery', 'net', 'satisfy', 'vinery', 'forge', 'upstream')),
+    'miners_upstream': ('backportedMiners', "Miner's Delight", ('backportedMiners', 'com', 'sammy', 'minersdelight', 'upstream')),
+}
+
+
+def upstream_jars(folder):
+    """{jar: sha1} a backport pins (its UpstreamJars.java), so the build checks the same files the game will."""
+    mod, *package = UPSTREAM_DONORS[folder][2]
+    src = os.path.join(DEVELOPMENT, mod, 'src', 'main', 'java', *package, 'UpstreamJars.java')
     text = open(src, encoding='utf8').read()
     return dict(re.findall(r'new Jar\("([^"]+)", "([0-9a-f]{40})"', text))
 
@@ -1357,17 +1367,19 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream')) else None,
         ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
          'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
+        ("`miners_upstream/` goes next to `mods/`, never inside it: the Miner's Delight backport reads that jar and "
+         'stops the game with a message if it is missing.') if has('miners_upstream') else None,
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
          "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
         world_step('the server world (`world/`, or the `level-name` folder)'),
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),

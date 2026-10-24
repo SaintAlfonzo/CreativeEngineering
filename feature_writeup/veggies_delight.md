@@ -418,6 +418,28 @@ Not ported now; kept in the source jar for when either mod comes in.
   taco, eggplant burger, hearty salad, mutton sandwich, vegetable wrap; pot: empanada, roasted veggies, shakshouka,
   spicy curry, turnip cake. **Cultural Delights itself is pinned as a possible `largecontent` addition.**
 
+### 5.4 Planned from the scratchpad (2026-10-24)
+
+Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dishes_ingredients](briefs/dishes_ingredients.md),
+[dishes_meals](briefs/dishes_meals.md), [baking_baked-goods](briefs/baking_baked-goods.md),
+[ports_veggiesport](briefs/ports_veggiesport.md). No tests are drafted until a row is built.
+
+- [TODO](todo/TODO.md) `baking/baked-goods #17` (folded): the dough unification also gives each dough a texture and a recoloured
+  dough block (`baking/baked-goods #27`). Open: which doughs stay distinct. Note `dishes/meals #32` removes the mhadjeb, so
+  the "uncooked mhadjeb stays" rule above ends.
+- [TODO](todo/TODO.md) `dishes/ingredients #20`: a cut sweet potato gives 3 sweet potato slices (a new item; the potato slice is
+  Rustic Delight's).
+- [TODO](todo/TODO.md) `dishes/ingredients #21`: recipes that take a potato also take a sweet potato, and the cooked and sliced
+  forms. Open: which recipes.
+- [TODO](todo/TODO.md) `dishes/meals #25`: new cauliflower soup texture.
+- [TODO](todo/TODO.md) `dishes/meals #33`: potato noodles renamed Creamy Gnocchi (milk, gnocchi, onion or garlic, either may be
+  pickled); cutting potato dough and sweet potato dough gives gnocchi. There is no potato dough item today.
+- [TODO](todo/TODO.md) `dishes/meals #34`: fries from any potato slice, sweet potato slices included (the fries recipe already
+  reads `#forge:sliced_potatoes`; the work is the slice item).
+- [TODO](todo/TODO.md) `dishes/meals #35`: steak and broccoli accepts rice, mashed potatoes, any baked potato plus a bowl, and other
+  baked veggies plus a bowl.
+- [TODO](todo/TODO.md) `ports/veggiesport #2` (folded): merge fish and cod and chips (marked merge M1 above).
+
 ## 6. File map
 
 | File | Role |
@@ -515,3 +537,4 @@ UI
   blockstates (same content). Nothing built.
 - 2026-10-23: `-02`: the 22 Vintage Delight compat recipes ship (the Vintage port is built); fermented garlic honey moves
   from the pot to the Pickling Jar.
+- 2026-10-24: planned scratchpad rows added (5.4: doughs, sweet potato slices, gnocchi, fries, steak and broccoli sides, soup texture, fish and chips merge); no code changed.

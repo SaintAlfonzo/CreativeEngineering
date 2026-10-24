@@ -37,7 +37,7 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 | cans | [canning](cans_canning.md) |
 | cooking | [kitchen](cooking_kitchen.md), [oven](cooking_oven.md) |
 | baking | [baked-goods](baking_baked-goods.md), [sweets](baking_sweets.md) |
-| dishes | [ingredients](dishes_ingredients.md), [meals](dishes_meals.md) |
+| dishes | [ingredients](dishes_ingredients.md), [meals](dishes_meals.md), [jams](dishes_jams.md), [ocean](dishes_ocean.md), [pickles-and-ferments](dishes_pickles-and-ferments.md) |
 | farming | [composting](farming_composting.md), [crops](farming_crops.md), [trees](farming_trees.md), [wild-crops](farming_wild-crops.md) |
 | worldgen | [bee-nests](worldgen_bee-nests.md), [biomes/netherblocks](worldgen_biomes_netherblocks.md), [biomes](worldgen_biomes.md), [flowers](worldgen_flowers.md), [locate](worldgen_locate.md), [seasons](worldgen_seasons.md) |
 | structures | [contents](structures_contents.md), [earthfill](structures_earthfill.md), [metas](structures_metas.md), [netherblockswap](structures_netherblockswap.md), [new](structures_new.md), [rates-and-groups](structures_rates-and-groups.md), [terrain](structures_terrain.md), [testing](structures_testing.md) |
@@ -47,6 +47,11 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 | potions | [effects](potions_effects.md), [enchanting](potions_enchanting.md), [potion-buckets](potions_potion-buckets.md), [potions](potions_potions.md) |
 | recipes | [cooking](recipes_cooking.md), [engineering](recipes_engineering.md), [magic](recipes_magic.md), [materials](recipes_materials.md), [metal](recipes_metal.md), [progression](recipes_progression.md), [wood](recipes_wood.md) |
 | engineering | [dreams-and-desires](engineering_dreams-and-desires.md), [sawmill-and-components](engineering_sawmill-and-components.md) |
-| gameplay | [blockrunner](gameplay_blockrunner.md), [time](gameplay_time.md) |
-| items | [item-physics](items_item-physics.md) |
-| ui | [effects](ui_effects.md), [names](ui_names.md), [tooltips](ui_tooltips.md) |
+| gameplay | [blockrunner](gameplay_blockrunner.md), [time](gameplay_time.md), [misc](gameplay_misc.md) |
+| items | [item-physics](items_item-physics.md), [jars](items_jars.md) |
+| ui | [effects](ui_effects.md), [names](ui_names.md), [tooltips](ui_tooltips.md), [wthit](ui_wthit.md) |
+| alcohol | [pack](alcohol_pack.md), [vineryport](alcohol_vineryport.md) |
+| blocks | [new](blocks_new.md) |
+| jei | [jei-coverage](jei_jei-coverage.md) |
+| largecontent | [mod-additions](largecontent_mod-additions.md) |
+| ports | [veggiesport](ports_veggiesport.md), [vintageport](ports_vintageport.md) |

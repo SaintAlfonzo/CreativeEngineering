@@ -312,6 +312,22 @@ but changed nothing on the server.
   Blockheads and Fantasy Furniture ovens; automation (mechanical crafter, Crafty Crate, turtles, drones, compacting
   drawers). AE2 terminals are covered by Polymorphic Energistics (installed). No Forge 1.19.2 addon found for the rest.
 
+### 2.30 Biome-tinted moss
+
+Moss Block and Moss Carpet take the biome's grass colour (`gameplay/misc #13`), client only. Vanilla moss has no tint
+index, so with `[moss] biomeTint` on (default) `block/MossTint` swaps every moss block / carpet state and item model at
+bake time for `creativeengineering:block/moss_block_tinted` / `moss_carpet_tinted` (tint index 0 on a grayscale copy of
+the vanilla texture). Off: nothing is swapped, moss is vanilla. Read at model load (F3+T or restart).
+
+- Tint = `0x738E3A` (the fit that turns the grayscale texture back into vanilla moss, max 13 per channel off on the
+  6 texture colours) times biome grass / Lush Caves grass per channel, scaled by `[moss] tintStrength` (0-1, default
+  1). Moss in Lush Caves stays vanilla green; elsewhere it moves as far as grass does (yellower in deserts and
+  savannas, darker in swamps). Uses `BiomeColors.getAverageGrassColor`, so the biome blend radius and anything that
+  recolours grass applies.
+- Items and other places without a position get the base colour.
+- No jar or resource pack in the pack overrides the vanilla moss models (checked 2026-10-23); a later pack that does
+  is replaced while `biomeTint` is on.
+
 ## 3. What the pack changes
 
 Every entry above is a patcherMod mixin or class except 2.6 (KubeJS tag script), 2.14 (exposureBackport) and 2.27 (config only). Mixins on
@@ -347,6 +363,14 @@ reobfuscated with no refmap).
 - **Dropping the broken mods:** each is used; a mixin was cheaper.
 - **Real banner textures on beds and elytra:** wrong placement (2.2).
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/gameplay_misc.md](briefs/gameplay_misc.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `gameplay/misc #15`: Immersive Weathering weathering on Upgrade Aquatic's coral. IW has one `block_growths/<kind>_coral.json` per vanilla
+  coral (warm ocean, fans and wall fans, wet sponge). UA 5.1.0 has 11 kinds (acan to star); generate matching growth files into
+  `kubejs/data/immersive_weathering/block_growths/` with a `/cegen` tool, with UA's reef biomes as the predicate (ids unverified).
+
 ## 5. File map
 
 All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless noted:
@@ -358,6 +382,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2.19 `mixin/CreativeMenuDisableMixin`, `mixin/XpHelperMixin`, `mixin/XpPumpUpgradeWrapperMixin`, `mixin/XPFluidManagerMixin`, `mixin/MemoryStickItemMixin`, `mixin/PneumaticCraftUtilsMixin`, `mixin/IETagUtilsMixin`, `mixin/CopperPickaxeItemMixin`, `CETiers`.
 - 2.28 `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `mixin/SophisticatedCraftingPolymorphMixin`, `mixin/SophisticatedUpgradeOpenMixin`, `mixin/PolymorphRecipeSelectionPacketMixin`; compile dep `development/patcherMod/libs/polymorph-forge-0.46.6+1.19.2.jar` (copied from `mods/`, git-ignored).
 - 2.29 `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `mixin/IECraftingTablePolymorphMixin`, `mixin/PrettyPipesCraftingTerminalPolymorphMixin`; compile deps `libs/ImmersiveEngineering-1.19.2-9.2.4-170.jar`, `libs/PrettyPipes-1.13.6.jar`.
+- 2.30 `block/MossTint`, `CEConfig.Moss`; `assets/creativeengineering/models/block/moss_block_tinted.json`, `moss_carpet_tinted.json`, `textures/block/moss_block_tinted.png` (grayscale made with a one-off PIL script: luminance / brightest pixel).
 
 ## 6. Offline checks
 
@@ -454,6 +479,14 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   picks a different output: each sees and takes their own pick.
 - [ ] **FX-42 No regressions** (in game): plain crafting in both (no button with an unambiguous recipe), the vanilla
   crafting table's Polymorph button, JEI transfer into both grids, Crafting Terminal ghost items and Request button.
+- [ ] **FX-43 Moss follows the biome** (in game, client): place moss block and moss carpet in Plains, Desert, Swamp
+  and Lush Caves: they match the grass shade of each (desert yellower, swamp darker, Lush Caves the vanilla green).
+  Across a biome border the colour blends like grass. Breaking particles share the tint.
+- [ ] **FX-44 Moss items and off switch** (in game, client): moss in the inventory, JEI and in hand is the vanilla
+  green, not gray. Set `[moss] biomeTint = false`, F3+T: placed moss is vanilla everywhere. `tintStrength = 0.5`, F3+A:
+  moss shifts half as far.
+- [ ] **FX-45 Moss renders with shaders and Embeddium** (in game, client): no z-fighting, no missing texture, carpet
+  sides still 1 px.
 
 ## 8. History
 
@@ -487,3 +520,5 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-22: 2.28 Polymorph in the Sophisticated crafting upgrade; tests FX-35 to FX-38. Built, not run in game.
 - 2026-10-22: 2.29 Polymorph in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal, after an audit of
   crafting screens Polymorph misses (gaps listed in 2.29); tests FX-39 to FX-42. Built, not run in game.
+- 2026-10-23: 2.30 biome-tinted moss (patcherMod 1.1.02, in `mods/`); tests FX-43 to FX-45. Built, not run in game.
+- 2026-10-24: planned from the scratchpad: IW growths for Upgrade Aquatic coral (`gameplay/misc #15`). No code changed.

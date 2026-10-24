@@ -43,6 +43,10 @@ pass.
 
 **Findings:**
 
+- **Correction 2026-10-23: not a bug.** The tag dump (`kubejs/exported/tags/item_tags.json`) has `forge:rope` =
+  `farmersdelight:rope`, `quark:rope`, `supplementaries:rope`; `forge:ropes` holds only Supplementaries' rope. The
+  pulley recipe works with all three; `materials #4` closed with no change. Step 3 of `materials #2` below should keep
+  `#forge:rope` (or move to `#forge:ropes` only once FD's and Quark's ropes are merged away).
 - **Bug, rope pulley:** `i.any_rope = '#forge:rope'` (item_dict 681, again at 1578) is singular. The only Forge rope
   tag in the cached jars is `forge:ropes` (Supplementaries, holding `supplementaries:rope`), and no pack script fills
   `forge:rope`. [create_utilities.js](../../kubejs/server_scripts/engineering/create_utilities.js) 55-60 replaces
@@ -179,6 +183,13 @@ Status Planned / Work KubeJS / data (+ config) / TODO `recipes/materials #2` (sc
 One rope. Flax goes. Rope arrows use the surviving rope, and tomato vines keep climbing it (Farmer's Delight's
 behaviour).
 
+Folded scope (scratchpad 2026-10-24): the flax bale becomes a grass bale. The flax bale is Supplementaries'
+`flax_block` (`i.flax_block`); [misc_mods.js](../../kubejs/server_scripts/other/misc_mods.js) lines 25-27 already
+replace it in the fodder recipe with a rice bale + straw bale. "Grass bale" is not an existing item: either rename and
+recolour `flax_block` as a Grass Bale made from grass and ferns (`recipes/materials #7` parity) or leave the rice /
+straw replacement and drop the bale. Recommend the rename plus a craft from grass (with fern parity), which gives
+`forge:mulch/green` plants (wood_tags.js lines 25-28) a use.
+
 ### Now
 - **Three ropes (verified, jars):**
   - `farmersdelight:rope` (`i.fd_rope`, item_dict 195): 2 straw (vertical) -> 4. Chef trade sells 9 for an emerald
@@ -286,6 +297,36 @@ verified in the files and jars).
   Supplementaries rope.
 - **RS-05 Rope arrow:** craft a rope arrow with the rope, shoot it at a fence -> rope knot and rope hanging down.
 - **RS-06 Doormat and sack:** 2 straw -> doormat; the wheat sack recipe shows.
+
+---
+
+## materials #7: Fern, grass and leaf parity in crafts
+Status: Planned / Work: KubeJS / TODO `recipes/materials #7` ([recipes_wood.md](../recipes_wood.md))
+
+### Goal
+Ferns count as grass, tall ferns as tall grass, and leaves match in many crafts.
+
+### Now
+- Items: `i.grass`, `i.tall_grass`, `i.fern`, `i.large_fern` (item_dict 611-614), `i.t_leaves` = `#minecraft:leaves`.
+- One tag already treats them alike: `forge:mulch/green` = grass, tall grass, fern, large fern
+  ([wood_tags.js](../../kubejs/server_scripts/tags/wood_tags.js) lines 25-28, written with bare `e.add`: move to
+  `global.tags` when touched). The wandering trader pool lists grass, tall grass and large fern but not the fern
+  (wandering_trades.js line 52).
+- Crafts that take leaves by tag (verified): Create tea, Fruits Delight's mango, mangosteen, hawberry and peach teas
+  (pot and mixing). Hostile Delight's `candiedsalad` takes `minecraft:fern` only. Which crafts use `minecraft:grass`
+  directly was not found in the extracted jars: *unverified*, needs `/dumprecipes`.
+
+### Build
+1. `/dumprecipes`, list every recipe naming `minecraft:grass`, `tall_grass`, `fern`, `large_fern` or a single leaf item.
+2. Tags through `global.tags`: `#creativeengineering:grass_like` (grass, fern), `...:tall_grass_like` (tall grass, large
+   fern); `R.replaceInput` per recipe that names one.
+
+### Decisions
+Which crafts (the row's decision). Recommend only recipes that take grass or fern by item id, plus the Hostile Delight salad
+when integrated; leave leaf tags as they are.
+
+### Tests
+RM-22 A fern works in each audited grass craft and a large fern in each tall grass craft.
 
 ---
 

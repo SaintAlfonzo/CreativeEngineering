@@ -12,7 +12,7 @@ rows `largecontent/mod-additions #4` to `#9` in [todo/TODO.md](todo/TODO.md).
 | Mod | Jar | Version | Items | Loot / worldgen | Verdict so far |
 |---|---|---|---|---|---|
 | End's Delight | `ends_delight-1.19.2-2.1.jar` | 2.1 | 64 | Dragon, shulker, enderman, endermite drops (loot modifiers); 1 worldgen file | Overlaps Ender's Delight on chorus and shulker; see §1 |
-| Hostile Delight | `Hostile_Delight_0.2.2_1.19.2.jar` | 0.2.2 | 69 | No loot modifiers, no worldgen | Mostly standalone; heavy overlap with Unusual Delight (§5) |
+| Hostile Delight | `Hostile_Delight_0.2.2_1.19.2.jar` | 0.2.2 | 69 | No loot modifiers, but replaces the vanilla ghast, guardian and endermite tables; no worldgen | Plan: [hostile_delight.md](hostile_delight.md); heavy overlap with Unusual Delight (§5) |
 | Miner's Delight | `miners_delight-1.19.2-1.1.2.jar` | 1.1.2 | 37 | Squid, glow squid, bat wing, silverfish eggs drops | **OLD** (§4); 1.4.5 for 1.21.1 is the newer line |
 | Oceanic Delight | `oceanic_delight-1.0.1-forge-1.19.2.jar` | 1.0.1 | 47 | Squid / elder guardian / salmon drops; wild sea grape worldgen | See §2 and §3 |
 | Ocean's Delight | `oceansdelight-1.0.2-1.19.2.jar` | 1.0.2 | 22 | Squid / guardian / elder guardian knife drops | See §2 and §3 |
@@ -92,6 +92,11 @@ The installed `miners_delight-1.19.2-1.1.2.jar` is the **OLD** version. The newe
 Delight). Not a drop-in: different mod id (`minersdelight` vs `miners_delight`), different loader, so a newer
 Miner's Delight on 1.19.2 would be a backport in the Veggies / Vintage style, not an update.
 
+**2026-10-24: the merged backport is planned in [miners_delight.md](miners_delight.md)** (behaviour reference: the Forge 1.20.1
+build of 1.4.5, mod id `miners_delight`; licence all rights reserved, so the Vinery donor-jar method; all 1.1.2 and 1.4.5 content except
+the hot cocoa cup, overlaps reviewed in game before any drop; onion soup cup = Brewin' Creamy Onion Soup; cave carrots now placed by the
+cave mushroom system).
+
 | | Old (1.1.2, 1.19.2) | New (1.4.5, 1.21.1) |
 |---|---|---|
 | Items | 37 | 69 |
@@ -159,3 +164,38 @@ Unusual Delight and Hostile Delight clash conceptually, not literally (different
 | Overlap survey (this file) | Written 2026-10-23 |
 | Integration of the five jars | Not started; rows `largecontent/mod-additions #4` to `#9` |
 | Test list | None yet (nothing integrated) |
+| Scratchpad rows (2026-10-24: ocean, End's, Miner's cup, rolls) | Planned, listed below; no code changed |
+
+### Planned from the scratchpad (2026-10-24)
+
+Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built, so the test list stays empty. Plans:
+[dishes_ocean](briefs/dishes_ocean.md) and [largecontent_mod-additions](briefs/largecontent_mod-additions.md).
+
+**Ocean's Delight and Oceanic Delight (section 2; `largecontent/mod-additions #5`)**
+- [TODO](todo/TODO.md) `dishes/ocean #1`: fishing net with a cooldown, tooltips and a loot table, drops by biome (shrimp in the
+  ocean, boosted; salmon eggs in rivers and lakes). The net is Oceanic Delight's `fishing_net` (the row says Ocean's), with two
+  gameplay loot tables today. Investigate the mechanic first.
+- [TODO](todo/TODO.md) `dishes/ocean #2`: fish egg roll accepts fish eggs. Open: salmon and ancient fish eggs only, or chicken eggs too.
+- [TODO](todo/TODO.md) `dishes/ocean #3`: keep the squid and glow squid items (Miner's Delight); a cut squid gives calamari and ink
+  sacs; add glowing calamari, cooked glow calamari and a glow calamari roll. Open: drop rates.
+- [TODO](todo/TODO.md) `dishes/ocean #4`: remove the tentacle items of the three mods; any tentacle cuts to calamari. This answers
+  the open decision "one squid-tentacle tag" in section 2 (calamari survives).
+- [TODO](todo/TODO.md) `dishes/ocean #5`: salmon eggs renamed caviar, with a caviar roll, a caviar noodle soup and caviar in the sea
+  pickle roll (the roll and soup already exist as Fish Egg Roll and Fish Egg Noodle Soup).
+- [TODO](todo/TODO.md) `dishes/pickles-and-ferments #4`: braised sea pickle (Ocean's Delight) also takes a sliced sea pickle.
+
+**End's Delight (section 1; `largecontent/mod-additions #4`)**
+- [TODO](todo/TODO.md) `largecontent/mod-additions #4`: gains the succulent and fungus options, tracked as
+  `largecontent/mod-additions #15`.
+- [TODO](todo/TODO.md) `largecontent/mod-additions #15`: decide whether `chorus_succulent` (a worldgen plant, 9 food recipes) is kept
+  or replaced, and widen the fungus inputs (crimson fungus today) to more End and Nether fungi with `ports/fungiport`.
+  Open: keep or replace the succulent.
+
+**Miner's Delight (section 4; `largecontent/mod-additions #7`)**
+- [TODO](todo/TODO.md) `largecontent/mod-additions #7`: gains an investigation of the soup cup. Finding so far: the cups come from the
+  data file `miners_delight/cup_conversion/default_conversions.json` (bowl -> cup pairs), not from recipes, which is why JEI
+  shows none.
+
+**Rolls**
+- [TODO](todo/TODO.md) `largecontent/mod-additions #14`: when a rolls Delight mod is added, any roll works in any roll recipe across
+  the mods and rolls become placeable blocks. Open: which mod, and whether it is added at all.

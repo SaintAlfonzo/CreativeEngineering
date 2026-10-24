@@ -16,8 +16,8 @@ frozen" and "season day and day counter on gui are misaligned". Nothing else des
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #5 | Season day and day counter misaligned on the GUI | Bug | small: one client mixin on Xaero's minimap (or one config line) |
-| #4 | Clock icon frozen while sleeping | Bug | unknown cause: a 5-minute in-game diagnosis first, then likely a small client mixin or a config line |
+| #5 | Season day and day counter misaligned on the GUI | Testing (built 2026-10-23, TI-30) | small: one client mixin on Xaero's minimap |
+| #4 | Clock icon frozen while sleeping | Bug (offline check 2026-10-23 found no cause; TI-31 next) | unknown cause: a 5-minute in-game diagnosis first, then likely a small client mixin or a config line |
 | #3 | Offline checks (`tools/time_table.py`, SUN-counter test) | Planned | small: one Python tool + one headless Java test |
 
 Build order:

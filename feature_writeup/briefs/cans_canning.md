@@ -568,6 +568,46 @@ One canned cake: 4 servings, a quarter cake each, fast; 1 cake + can, or 4 slice
 
 ---
 
+## canning #17: All feasts cannable
+Status: Planned / Work: KubeJS (+ `tools/gen_can_types.py`) / TODO `cans/canning #17` (scratchpad 2026-10-24)
+
+### Goal
+Every feast (a placed block with servings) can be canned, as the nine existing feast cans are. Related: `dishes/meals #5`.
+
+### Now
+- Feast cans are rows in [gen_can_types.py](../../tools/gen_can_types.py) lines 356-370, section `feast`
+  (`mult=1, servings=6, n=1`, `input=` the feast block item, value source = the serving); output goes to
+  `kubejs/generation_scripts/food/can_types.json`; recipes come from `canSection('feast')`
+  ([canning.js](../../kubejs/server_scripts/cooking/canning.js) line 511).
+- Covered: popcorn box, stuffed hoglin (one can for its three plates), honey glazed ham, nachos, pineapple fried
+  rice, roast chicken, shepherd's pie, stuffed pumpkin, stuffed shulker.
+- No can row found (by absence in gen_can_types.py and `food_types.json` `canned_*`): Brewin' pizza, Vintage
+  cheese pizza and meat pizza, Veggies Delight vegan pizza and stuffed bell peppers feast, Brewin' quiche, Oceanic
+  Delight paella plate and stuffed pufferfish blocks. Which of these count as feasts is *unverified*: the dump
+  `kubejs/exported/food/food_blocks.json` (2026-10-22, before the new delights) lists only the block classes.
+
+### Build
+1. `/dumpall`, then list every block whose class is `FeastBlock`, `PizzaBlock` or a mod's own multi-serving plate
+   (`food_blocks.json`, `blockClasses`); that list is "all feasts".
+2. One `('feast', 'canned_<name>', '<Name>', ['<serving key>'], False, dict(input=['<block item key>']))` row per
+   missing feast, keys from `global.item`; run `/cegen`; add can textures per `can_parity.md`.
+3. Later feasts (End's, Hostile, Ocean delights, `meals #5` new assemblies) add a row when integrated.
+
+### Decisions
+- Servings per can for 8-slice pizzas: recommend keep the section rule (6), so no per-feast exception.
+- Pizza block versions with partial servings (SERVINGS 0-3) are not whole feasts: recommend input = the whole
+  pizza item only.
+
+### Gotchas
+Generated files are never hand-edited. `canned_hoglin_feast` shares one can across three plates: do the same for
+any feast with several plate items.
+
+### Tests
+- CN-07 JEI shows a can recipe for each feast listed in the generator section.
+- CN-08 Eat a canned pizza and a canned stuffed pepper can: serving values match the serving item.
+
+---
+
 ## Built, needs play
 
 | Row | What | Note |

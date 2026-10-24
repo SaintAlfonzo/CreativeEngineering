@@ -1291,6 +1291,32 @@ global.NCH = {
 		}).id(`${global.NCH.modId}:dragonbreathing/${idSuffix}`)
 	},
 
+	// Seasoning craft (patcherMod food/SeasoningRecipe): food + one of each seasoning's item, shapeless, gives the same
+	// food with those seasonings added as NBT. seasonings: a global.seasoning key or an array of them
+	// (startup_scripts/cooking/seasonings.js, which holds each one's item, bonus and what it combines with). Ids
+	// shapeless/season/<keys>_on_<food>, so the Seasoning JEI page lists them.
+	season(food, seasonings, e, idOverride) {
+		if (!e) throw new Error('season called without event object!')
+		var keys = Array.isArray(seasonings) ? seasonings : [seasonings]
+		var foodId = global.NCH._resolveIdCount(food).id
+		var idSuffix = idOverride ?? (keys.join('_') + '_on_' + String(foodId).replace(/^#/, '').replace(/[^a-zA-Z0-9_]/g, '_'))
+		var ctx = 'season ' + idSuffix
+		var parts = []
+		for (var k = 0; k < keys.length; k++) {
+			var s = global.seasoning && global.seasoning[keys[k]]
+			if (!s) {
+				global.NCH._warn(ctx, 'unknown seasoning ' + keys[k])
+				return
+			}
+			parts.push({ seasoning: s.id, ingredient: global.NCH._itemJson(s.item, { countMode: 'none', context: ctx + ' ' + keys[k] }) })
+		}
+		e.custom({
+			type: `${global.NCH.modId}:seasoning`,
+			food: global.NCH._itemJson(food, { countMode: 'none', context: ctx + ' food' }),
+			seasonings: parts
+		}).id(`${global.NCH.modId}:shapeless/season/${idSuffix}`)
+	},
+
 	// Backpack skins (patcherMod backpackskin/): smithing a block from the skin tag onto any Sophisticated Backpack
 	// keeps the backpack's data and sets its skin; the clear recipe (backpack alone in the grid) removes it.
 	backpackSkin(skinTag, e, idOverride) {

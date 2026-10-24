@@ -18,13 +18,15 @@ var species = [
 	{ log: i.log_warped, wood: i.wood_warped, strippedLog: i.log_warped_stripped, strippedWood: i.wood_warped_stripped, bark: i.bark_warped, hollowLog: i.log_warped_hollow, cutLog: 'create:cutting/warped_stem', cutWood: 'create:cutting/warped_hyphae', fdLog: 'farmersdelight:cutting/warped_stem', fdWood: 'farmersdelight:cutting/warped_hyphae' },
 ]
 
-// Compat species (architects_palette / quark): different create:cutting id shape,
-// farmers-delight cutting removal via quarkdelight instead of farmersdelight for the quark trio.
+// Compat species (architects_palette / quark / upgrade_aquatic): different create:cutting id shape,
+// cutting-board removal via quarkdelight (quark trio) or abnormals_delight (driftwood) instead of farmersdelight.
 var compatSpecies = [
 	{ log: i.log_twisted, wood: i.wood_twisted, strippedLog: i.log_twisted_stripped, strippedWood: i.wood_twisted_stripped, bark: i.bark_twisted, hollowLog: i.log_twisted_hollow, cutLog: 'create:cutting/compat/architects_palette/twisted_log', cutWood: 'create:cutting/compat/architects_palette/twisted_wood', reattach: true },
 	{ log: i.log_blossom, wood: i.wood_blossom, strippedLog: i.log_blossom_stripped, strippedWood: i.wood_blossom_stripped, bark: i.bark_blossom, hollowLog: i.log_blossom_hollow, cutLog: 'create:cutting/compat/quark/blossom_log', cutWood: 'create:cutting/compat/quark/blossom_wood', fdLog: 'quarkdelight:cutting/axe/blossom_log', fdWood: 'quarkdelight:cutting/axe/blossom_wood', reattach: true },
 	{ log: i.log_ancient, wood: i.wood_ancient, strippedLog: i.log_ancient_stripped, strippedWood: i.wood_ancient_stripped, bark: i.bark_ancient, hollowLog: i.log_ancient_hollow, cutLog: 'create:cutting/compat/quark/ancient_log', cutWood: 'create:cutting/compat/quark/ancient_wood', fdLog: 'quarkdelight:cutting/axe/ancient_log', fdWood: 'quarkdelight:cutting/axe/ancient_wood', reattach: true },
 	{ log: i.log_azalea, wood: i.wood_azalea, strippedLog: i.log_azalea_stripped, strippedWood: i.wood_azalea_stripped, bark: i.bark_azalea, hollowLog: i.log_azalea_hollow, cutLog: 'create:cutting/compat/quark/azalea_log', cutWood: 'create:cutting/compat/quark/azalea_wood', fdLog: 'quarkdelight:cutting/axe/azalea_log', fdWood: 'quarkdelight:cutting/axe/azalea_wood', reattach: true },
+	// Upgrade Aquatic driftwood: Abnormals Delight's cutting-board recipes (river wood goes with recipes/wood #3)
+	{ log: i.log_driftwood, wood: i.wood_driftwood, strippedLog: i.log_driftwood_stripped, strippedWood: i.wood_driftwood_stripped, bark: i.upgrade_aquatic_driftwood_bark, cutLog: 'create:cutting/compat/upgrade_aquatic/driftwood_log', cutWood: 'create:cutting/compat/upgrade_aquatic/driftwood', fdLog: 'abnormals_delight:upgrade_aquatic/cutting/driftwood_log', fdWood: 'abnormals_delight:upgrade_aquatic/cutting/driftwood' },
 ]
 
 var all = species.concat(compatSpecies)
@@ -61,16 +63,12 @@ R.bulk('fdCutting', fdSpecies.map(s => [s.wood, R.AXE, [s.strippedWood, Item.of(
 R.fdCutting(i.log_twisted, R.AXE, [i.log_twisted_stripped, Item.of(i.bark_twisted).withChance(0.50)], e)
 R.fdCutting(i.wood_twisted, R.AXE, [i.wood_twisted_stripped, Item.of(i.bark_twisted).withChance(0.75)], e)
 
-// Quark trio: quarkdelight-based fdCutting removal/add
-var quarkTrio = [
-	all.find(s => s.log === i.log_blossom),
-	all.find(s => s.log === i.log_ancient),
-	all.find(s => s.log === i.log_azalea),
-]
-R.bulk('remove', quarkTrio.map(s => [{ id: s.fdLog }, e]))
-R.bulk('remove', quarkTrio.map(s => [{ id: s.fdWood }, e]))
-R.bulk('fdCutting', quarkTrio.map(s => [s.log, R.AXE, [s.strippedLog, Item.of(s.bark).withChance(0.50)], e]))
-R.bulk('fdCutting', quarkTrio.map(s => [s.wood, R.AXE, [s.strippedWood, Item.of(s.bark).withChance(0.75)], e]))
+// Quark trio + driftwood: quarkdelight / abnormals_delight fdCutting removal/add
+var compatFd = compatSpecies.filter(s => s.fdLog)
+R.bulk('remove', compatFd.map(s => [{ id: s.fdLog }, e]))
+R.bulk('remove', compatFd.map(s => [{ id: s.fdWood }, e]))
+R.bulk('fdCutting', compatFd.map(s => [s.log, R.AXE, [s.strippedLog, Item.of(s.bark).withChance(0.50)], e]))
+R.bulk('fdCutting', compatFd.map(s => [s.wood, R.AXE, [s.strippedWood, Item.of(s.bark).withChance(0.75)], e]))
 
 // ── Remove quark hollow log cutting, replace with addition of specific bark ──
 R.remove({ id: 'quarkdelight:cutting/axe/hollow_logs' }, e)
@@ -94,7 +92,8 @@ R.bulk('remove', [
 	'stripped_crimson_log', 'stripped_warped_log',
 ].map(name => [{ id: 'immersiveengineering:sawmill/' + name }, e]))
 
-// ── Replace FD bark recipes with IW ──
+// ── FD's tree bark: its paper recipe removed; every cutting-board stripping recipe now gives Immersive
+// Weathering's species bark (FD's, Quark Delight's and Abnormals Delight's replaced above) ──
 R.remove({ id: 'farmersdelight:paper_from_tree_bark' }, e)
 
 console.log('BarkServerScriptComplete')

@@ -12,7 +12,7 @@
 | Vanilla-style effect tooltip on the buckets, two-layer tinted textures | DEPLOYED |
 | Machine-tipped arrows: IE Bottling Machine and Create Spout, lingering `create:potion` | DEPLOYED; cheaper than the crafting-grid recipe (F1) |
 
-- **Pending:** nothing built and unshipped. PB-01 to PB-20 have never been run. Findings F1 to F7 (section 4) are
+- **Pending:** nothing built and unshipped. PB-01 to PB-23 have never been run. Findings F1 to F7 (section 4) are
   open; F1 and F3 need your call.
 - **Files to open:** [potion_area.js](../kubejs/startup_scripts/func/potion_area.js) (all the cloud tuning),
   [server_scripts/engineering/potion_buckets.js](../kubejs/server_scripts/engineering/potion_buckets.js) (right click),
@@ -58,7 +58,10 @@ Unstackable, Brewing tab, carry the potion as vanilla bottles do (`Potion`, `Cus
 ### 2.2 Using one
 
 - **Right click:** main hand, against a block only (never in the air). Spawns at the hit point + 0.1 up; you are the
-  clouds' owner. Non-creative: the bucket becomes an empty bucket. 1 s cooldown on the item.
+  clouds' owner. Non-creative: the bucket becomes an empty bucket. 1 s cooldown on the item (the item is read before
+  the stack shrinks; until 2026-10-23 it was read after and landed on air, so survival had no cooldown). A bucket of a
+  potion with no effects (awkward, thick, mundane, water) does nothing and is kept; only a bucket with no potion NBT
+  at all bursts the Night Vision default.
 - **Dispenser:** bursts at the centre of the block in front, + 0.1 up, with no owner; the dispenser keeps the empty
   bucket. If the KubeJS handler failed to install, it ejects the bucket like vanilla and logs a warning.
 
@@ -74,7 +77,9 @@ One bucket = 1000 mB = 4 bottles. The tier must match the bottle type (splash bo
 | Create Item Drain (`create:emptying`) | potion bucket | empty bucket + 1000 mB `create:potion` |
 | IE Bottling Machine | empty bucket + 1000 mB `#forge:fluid/potion` | potion bucket |
 
-One recipe per potion per bucket type for each route (15 per potion).
+One recipe per potion per bucket type for each route (15 per potion), for potions with effects only (2026-10-23).
+Water gets no recipes at all (Create never holds it as `create:potion`); awkward, thick and mundane keep their 3 IE
+bottle recipes but get no bucket recipes. Machine tipped arrows also skip no-effect potions.
 
 ### 2.4 Tooltip
 
@@ -131,7 +136,7 @@ Lingering `create:potion` only; one recipe pair per potion.
   this way. Keep, or scope it.
 - **F4. Raw `e.custom` for the bucket and arrow machine recipes** (Create filling/emptying, IE bottling), against the
   NCH-helper rule. Same fix as [potions.md](potions.md) F6.
-- **F5. Recipes for potions no machine holds.** 15 bucket recipes and 2 arrow recipes per registered potion, water,
+- **F5.** FIXED 2026-10-23 (TODO `potions/potion-buckets #5`, with the Night Vision fallback bug). **Recipes for potions no machine holds.** 15 bucket recipes and 2 arrow recipes per registered potion, water,
   awkward, thick and mundane included. Water never exists as `create:potion` (Create uses plain water), so those
   never run; the arrow ones give vanilla's Arrow of Splashing / uncraftable arrows. Harmless JEI noise.
 - **F6. Dispensed clouds have no owner.** Kills from a dispensed harming or poison bucket credit nobody, and
@@ -210,6 +215,12 @@ recipes)` with N > 0.
 - [ ] **PB-19 Spout tipping:** Spout with lingering Poison over arrows → one tipped arrow per 25 mB.
 - [ ] **PB-20 JEI:** look up Arrow of Poison → crafting, Bottling Machine and Spout recipes; look up the potion bucket →
   crafting, Spout, Bottling Machine; U on it → drain and Item Drain.
+- [ ] **PB-21 No noise:** JEI: Arrow of Awkward and Water Potion Bucket have no recipe; Swiftness bucket recipes are
+  still there; the `potion bottling done (N recipes)` log count drops.
+- [ ] **PB-22 No-effect bucket:** `/give @s creativeengineering:potion_bucket{Potion:"minecraft:awkward"}`, right-click
+  a block: nothing happens, bucket kept. A bucket with no NBT still bursts Night Vision.
+- [ ] **PB-23 Survival cooldown:** survival, two Swiftness buckets in the hotbar, burst one and switch to the other
+  within a second: the second is on cooldown (white sweep on the slot).
 
 ## 8. History
 
@@ -218,3 +229,6 @@ recipes)` with N > 0.
 - By 2026-09-27 (initial git commit): all of the above plus machine-tipped arrows; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F7; tests PB-01 to PB-20. No code changed.
 - 2026-10-19: F1 (comment now states the machine discount as intended: grid 31.25, Spout 25, Bottler 20 mB an arrow) and F2 (tooltip durations x `effectMult`) fixed for 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). Not run in game.
+- 2026-10-23: survival cooldown fixed (`potions/potion-buckets #4`); no-effect potion buckets no longer burst Night
+  Vision and are kept, and no bucket / tipped arrow recipes are made for no-effect potions (`#5`, F5). Tests PB-21 to
+  PB-23. Dispensed no-effect buckets are still emptied (the dispenser path ignores the empty result). Not run in game.

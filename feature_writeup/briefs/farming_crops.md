@@ -625,6 +625,67 @@ New blocks above. Vanilla `minecraft:pumpkin_stem`, `attached_pumpkin_stem`, `me
 
 ---
 
+## crops #14: Bone meal in planters
+Status **Planned** / Work patcherMod / KubeJS / TODO `farming/crops #14`
+
+### Goal
+Bone meal on a crop standing in a Supplementaries planter does what the pack intends (the row names no intent).
+
+### Now
+- Planters: `i.planter` (`supplementaries:planter`) and `i.planter_rich` (`supplementaries:planter_rich`), item_dict 3683-3684.
+  Supplementaries 2.4.20 `PlanterBlock` (decompiled outline with `javap`) extends Moonlight's `WaterBlock` and has shape,
+  `EXTENDED`, `onTreeGrow`, and `canConnect`: no `randomTick`, no `BonemealableBlock`, no `canSustainPlant` in the class. The plant
+  is an ordinary block on top of the planter, so vanilla bone meal on the plant works if the crop is bonemealable; the planter
+  adds nothing. Whether the rich planter is another class or only a block tag is unverified.
+- What the pack does with soils ([crops.md](../crops.md) 2.4): Rich Soil and Rich Farmland give a 20% bone meal step on random
+  ticks; Fertile Soil (`immersive_weathering:mulch_block`) gives a step per soaked random tick (`MulchBlockCropGrowthMixin`).
+  `planter_rich` is not in any of those rules.
+
+### Build
+1. Test first: bone meal on wheat, a bush and a tomato in a planter and a rich planter, and on dirt next to them.
+2. If the wanted rule is "a rich planter acts like Rich Soil" (20% step per random tick on the plant above): the planter has no
+   random tick, so a patcherMod mixin on `PlanterBlock` (implement `isRandomlyTicking` + `randomTick` calling the same helper as
+   the Rich Soil rule: `richSoilBoostChance`) or a block-tag-driven hook in the existing soil mixins.
+3. If the wanted rule is only "bone meal works": nothing to build; document it.
+
+### Decisions
+Intended behaviour: (a) bone meal works as on soil (probably true already), (b) rich planter boosts like Rich Soil, (c) planters
+block bone meal. Recommend (a)+(b).
+
+### Tests (CR-)
+- CR-89 (proposed): bone meal on a planted crop in each planter kind grows it; (b) a rich planter crop grows faster over time
+  than a plain one at `randomTickSpeed 100`.
+
+---
+
+## crops #15: Other plants in random growth?
+Status **Planned** (question) / Work KubeJS / data / TODO `farming/crops #15`
+
+### Goal
+Settle which "random growth" mechanic the scratchpad question means and which plants it should cover.
+
+### Now
+The note names no system. Candidates in the pack:
+- **Soil boost on random ticks** (crops.md 2.4): Rich Soil's `richSoilBoostChance` (20% per random tick to bone-meal the plant above;
+  not for farmland crops on plain Rich Soil) and Fertile Soil via `MulchBlockCropGrowthMixin` (tag-driven, skips `CropBlock`s; IW
+  grows those). Adding plants = adding them to the tag the mixin reads (tag name unverified: read the mixin).
+- **Immersive Weathering block growths** (the Weathering and Growth JEI tab, `jei_world/block_growth`): data-driven spread
+  (moss, weeds, leaf piles, coral); plants are added by datapack json in `block_growths/`.
+- **Stem extra fruit** (`StemExtraFruit`, [crops.md](../crops.md) 2.10, CEConfig `[stem_fruit]`): melons and pumpkins already.
+- **Mushroom colonies / Fruits Delight bushes / tea** random-tick growth (crops.md lines 149-150, 191).
+
+### Build
+After the user names the system: for (1) add the plants to the soil tag through `global.tags`; for (2) a datapack growth json in
+`kubejs/data/immersive_weathering/block_growths/` (see `gameplay/misc #15` for the format); for (3) extend the stem list.
+
+### Decisions
+Which system and which plants. Recommend asking; the most likely reading is the soil boost (row `#14` is about the same area).
+
+### Tests (CR-)
+- CR-90 (proposed): after the answer, one plant of the new set grows faster on the boosted soil than on plain dirt.
+
+---
+
 ## Built, needs play
 
 | Row | Status | Note |

@@ -79,11 +79,16 @@ for key, rule in cfg['crops'].items():
         ok = 'minecraft:rarity_filter' in types and types[-1] == 'minecraft:biome'
         if rule.get('mode') == 'cave':
             byt = {m['type']: m for m in d['placement']}
-            ok &= byt.get('minecraft:height_range', {}).get('height', {}).get('max_inclusive') == {'absolute': 62}
+            top = byt.get('minecraft:height_range', {}).get('height', {}).get('max_inclusive', {}).get('absolute', 999)
+            # carrots never above Y 48: origin <= 44, the patch spreads 3 up and the scan offset adds 1
+            ok &= top <= (44 if 'cave_carrots' in fid else 62)
             ok &= byt.get('minecraft:environment_scan', {}).get('direction_of_search') == 'down'
             ok &= byt.get('minecraft:surface_relative_threshold_filter', {}).get('max_inclusive', 0) <= -13
             pred = byt.get('minecraft:block_predicate_filter', {}).get('predicate', {})
-            ok &= pred.get('type') == 'minecraft:all_of' and pred['predicates'][0] == {'type': 'minecraft:matching_blocks', 'blocks': ['minecraft:air']}
+            air = ['minecraft:air', 'minecraft:cave_air'] if 'cave_carrots' in fid else ['minecraft:air']  # carrots also fill carver caves
+            ok &= pred.get('type') == 'minecraft:all_of' and pred['predicates'][0] == {'type': 'minecraft:matching_blocks', 'blocks': air}
+            if 'cave_carrots' in fid:
+                ok &= byt['minecraft:environment_scan']['allowed_search_condition'] == {'type': 'minecraft:matching_blocks', 'blocks': air}
         else:
             ok &= 'minecraft:heightmap' in types
         if not ok:

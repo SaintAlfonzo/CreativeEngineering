@@ -670,6 +670,98 @@ All in item_dict.js already. Recipe type `create:mixing`, heated, through `NCH.c
 
 ---
 
+## kitchen #18: Lava bottles in jars
+Status **Planned** / Work KubeJS / patcherMod / TODO `cooking/kitchen #18` (no section existed; added 2026-10-24)
+
+### Goal
+A lava bottle can be poured into a jar (and back out).
+
+Scope added 2026-10-24: part of the wider jar contents list, `items/jars #3` (brief [items_jars.md](items_jars.md)).
+
+### Now
+- Moonlight 2.3.7's `data/moonlight/moonlight/soft_fluids/lava.json` already lists `alexsmobs:lava_bottle` as a lava
+  container (capacity 1, lava bucket 4, luminosity 15) but with `"empty": "minecraft:bottle"`, which is not an item (the water
+  file uses `minecraft:glass_bottle`). That invalid empty item is the probable reason a lava bottle does nothing on a jar.
+  Unverified in game; no override exists in `kubejs/data` (no `moonlight` folder).
+
+### Build
+1. Datapack override `kubejs/data/moonlight/moonlight/soft_fluids/lava.json`, a copy with `"empty": "minecraft:glass_bottle"`.
+2. Reload and test; `latest.log` may name the broken container at load.
+
+### Decisions
+None. Check the amounts once `items/jars #1` rescales (capacity 1 of 12 becomes 5 of 60).
+
+### Tests (MJ-)
+- MJ-17 (proposed, shared with `items/jars #3`): lava bottle on a jar fills 1 unit and returns a glass bottle; the jar glows.
+
+---
+
+## kitchen #19: Fridge texture
+Status **Planned** / Work resource pack / TODO `cooking/kitchen #19`
+
+### Goal
+The fridge texture stops looking wrong: pad it with white box area at the bottom, no stretching, no model rebuild.
+
+### Now
+- The 2-tall fridge models are the overrides built by `tools/gen_cfb_fridge_models.py` into
+  `kubejs/assets/cookingforblockheads/models/block/fridge_large_{upper,lower}.json` and the four door models (built
+  2026-10-21, see `kitchen #6` above): faces are stretched to the full block with position UVs.
+- CfB 13.3.4 textures `textures/block/fridge_side.png` (374 B), `fridge_back.png`, `fridge_top.png`, `fridge_inside.png`; no
+  override exists in `kubejs/assets/cookingforblockheads/` (only `models/`). Which texture looks wrong, and its pixel size,
+  is unverified: extract the PNGs from the jar and look.
+
+### Build
+1. Extract `fridge_side.png` (and the one the user means) and add white rows at the bottom: a padded copy under
+   `kubejs/assets/cookingforblockheads/textures/block/` with the same name (resource override), image grows, content not scaled.
+2. Change the override models' UVs for the affected faces to the new image height (the generator writes them: edit
+   `gen_cfb_fridge_models.py` and rerun; `--check` compares with the jar).
+3. Keep the dye tint (`tintindex 0`) on the same faces.
+
+### Gotchas
+A texture of another size changes every model that shares it (the 1-tall `block/fridge`, the item model): give the padded
+image a new name and point only the override models at it.
+
+### Tests (KT-)
+- KT-14 (proposed): both fridges next to counters: sides show white padding at the bottom, no stretched pixels; dyed fridge keeps colour.
+
+---
+
+## kitchen #20: Plates and coasters on the Blockhead counter
+Status **Testing** (BUILT 2026-10-24, [kitchen.md](../kitchen.md) 2.3; KT-15 / KT-16 are final there, SQ-KT queued) / Work patcherMod / KubeJS / TODO `cooking/kitchen #20`
+
+### Goal
+Display Delight plates and Brewin' coasters can be placed on a Cooking for Blockheads counter, drawn shifted down so the
+plate and the food sit on the worktop.
+
+### Now
+- The same problem and solution exist for Farmer's Delight cutting boards (`kitchen #8` above): the counter top is 15 px
+  tall, so `canSurvive` of the placed block fails; `mixin/CuttingBoardSupportMixin` accepts blocks in
+  `#creativeengineering:cutting_board_supports` (`b.t_cutting_board_supports`, [blocktags.js](../../kubejs/server_scripts/tags/blocktags.js)
+  line 40: `b.cfb_counter`, `b.cfb_corner`), and the drawing shift is `compat/CuttingBoardOnCounter.offset` plus
+  `BlockStateCuttingBoardOffsetMixin` (`getOffset`) and the renderer mixin.
+- Plate blocks (Display Delight 1.2.0, `com.jkvin114.displaydelight.block`): `displaydelight:food_plate`,
+  `small_food_plate` (`EmptyPlateBlock`, `EmptySmallPlateBlock`) and every plated food block (`PlatedBlocks`,
+  `SmallPlatedBlocks`, ids like `displaydelight:ad_plated_*`); coaster `brewinandchewin:coaster` (the pack's own Brewin' port,
+  `development/backportedBrewin`). Whether their `canSurvive` fails on a counter is unverified.
+
+### Build
+1. Check each placed block on a counter; if refused, generalise `CuttingBoardSupportMixin` to a second tag
+   `#creativeengineering:counter_toppers` (the plate family and the coaster) or add the same support check for the plate
+   classes (`AbstractItemBlock`, `EmptyPlateBlock`, ...), not blocks by id.
+2. Generalise the render shift: `CuttingBoardOnCounter.offset` takes a block and returns the shift when the block is a
+   counter topper above a counter; apply to the plate block and its food (the plated models draw the food inside the block
+   model, so the `getOffset` mixin alone moves both; block entity renderers need the renderer mixin).
+3. Config: reuse `[kitchen] cuttingBoardOffsetX/Y/Z` or add `plateOffsetY` (default -1 px, same frame as the board).
+
+### Decisions
+Shared offset with the cutting board (simplest) or its own. Recommend its own `plateOffset*` keys defaulting to the board's.
+
+### Tests (KT-)
+- KT-15 (proposed): plate, plated burger and coaster placed on a counter and a corner counter: stay, sit on the worktop, face
+  the counter's `facing`; breaking the counter pops them.
+
+---
+
 ## Built, needs play
 
 | Row | Change | Status | Note |

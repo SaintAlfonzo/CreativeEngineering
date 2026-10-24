@@ -1,4 +1,5 @@
-// TODO cooking/kitchen #8 probe: Cooking for Blockheads oven fuel, sink water, FD cutting board on a counter.
+// TODO cooking/kitchen #8, #20 probe: Cooking for Blockheads oven fuel, sink water, FD cutting board, Display Delight
+// plates and the Brewin' coaster on a counter.
 // Scratch-only: copy into a scratch server's kubejs/server_scripts (tools/creative_labels_test/scratch_server.sh),
 // never into the pack. Run /kttest; results are "[kttest] PASS|FAIL|INFO ..." lines in logs/latest.log, and
 // the oven's burn check reports a few seconds later.
@@ -139,12 +140,69 @@
         check('KT-05c no offset off a counter', stone.y() == 0, String(stone))
     }
 
+    // cooking/kitchen #20: plates and the coaster placed on a counter / corner stay, survive a re-check, drawn 1 px lower
+    function toppers(level) {
+        let cases = [
+            ['displaydelight:food_plate', 'cookingforblockheads:counter'],
+            ['displaydelight:small_food_plate', 'cookingforblockheads:counter'],
+            ['brewinandchewin:coaster', 'cookingforblockheads:counter'],
+            ['displaydelight:food_plate', 'cookingforblockheads:corner'],
+        ]
+        cases.forEach((c, n) => {
+            let h = pos(10, Y, n)
+            set(level, h, c[1])
+            let r = clickTop(fake(level), level, h, Item.of(c[0]))
+            let b = h.above()
+            let above = blockId(level, b)
+            check('KT-15a ' + c[0] + ' on a ' + c[1], above == c[0], 'use ' + r + ', above: ' + above)
+            if (above != c[0]) return
+            check('KT-15b ' + c[0] + ' survives a re-check', level.getBlockState(b).canSurvive(level, b), '')
+            let off = level.getBlockState(b).getOffset(level, b)
+            check('KT-16a ' + c[0] + ' drawn 1 px lower', Math.abs(off.y() + 1 / 16) < 1e-6 && off.x() == 0 && off.z() == 0, String(off))
+        })
+        // a plated food (made in world by putting food on a plate) set straight on a counter
+        let h = pos(11, Y, 0)
+        set(level, h, 'cookingforblockheads:counter')
+        set(level, h.above(), 'displaydelight:plated_hamburger')
+        check('KT-15c plated hamburger stays on a counter', level.getBlockState(h.above()).canSurvive(level, h.above()), '')
+        // the plate keys move plates only, the board keys the board only
+        let K = $KTCEConfig.KITCHEN
+        K.plateOffsetY.set(-3.0)
+        let o = level.getBlockState(h.above()).getOffset(level, h.above())
+        check('KT-16b plateOffsetY moves the plate', Math.abs(o.y() * 16 + 3) < 1e-6, 'px y ' + (o.y() * 16))
+        K.plateOffsetY.set(-1.0)
+        // not a support: a plate over air is refused as before
+        let air = pos(11, Y + 2, 2)
+        set(level, air, 'displaydelight:food_plate')
+        check('KT-15d plate over air is refused', !level.getBlockState(air).canSurvive(level, air), '')
+    }
+
+    // plates, plated foods and the coaster break with drops when the block below goes (on a counter or a full block)
+    function pops(level) {
+        let cases = [
+            ['displaydelight:food_plate', 'minecraft:stone'],
+            ['displaydelight:plated_hamburger', 'minecraft:stone'],
+            ['displaydelight:food_plate', 'cookingforblockheads:counter'],
+            ['brewinandchewin:coaster', 'cookingforblockheads:counter'],
+        ]
+        cases.forEach((c, n) => {
+            let h = pos(12, Y, n)
+            set(level, h, c[1])
+            set(level, h.above(), c[0])
+            drops(level, h)
+            level.destroyBlock(h, false)
+            let above = blockId(level, h.above())
+            check('KT-17 ' + c[0] + ' pops when its ' + c[1] + ' is broken', above == 'minecraft:air',
+                'above: ' + above + ', drops: ' + drops(level, h.above()))
+        })
+    }
+
     ServerEvents.commandRegistry(event => {
         const { commands: Commands } = event
         event.register(Commands.literal('kttest').executes(ctx => {
             let level = ctx.source.getLevel()
             let server = ctx.source.getServer()
-            for (let x = -2; x <= 12; x++) for (let z = -2; z <= 4; z++) {
+            for (let x = -2; x <= 13; x++) for (let z = -2; z <= 4; z++) {
                 set(level, pos(x, Y - 1, z), 'minecraft:stone')
                 for (let y = Y; y <= Y + 3; y++) level.setBlockAndUpdate(pos(x, y, z), $KTBlocks.AIR.defaultBlockState())
             }
@@ -152,6 +210,8 @@
             try { oven(level, server) } catch (e) { log('FAIL', 'oven', 'ERROR ' + e) }
             try { sink(level) } catch (e) { log('FAIL', 'sink', 'ERROR ' + e) }
             try { board(level) } catch (e) { log('FAIL', 'board', 'ERROR ' + e) }
+            try { toppers(level) } catch (e) { log('FAIL', 'toppers', 'ERROR ' + e) }
+            try { pops(level) } catch (e) { log('FAIL', 'pops', 'ERROR ' + e) }
             log('INFO', 'done', 'oven results follow at 3 s and 16 s')
             return 1
         }))

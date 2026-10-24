@@ -982,6 +982,14 @@ Blueprint's `SpawnEggItemMixin` (it only sorts `minecraft:` eggs in the creative
   `more_mooblooms` or `compat.jei`).
   MB-100 to MB-104 are client only (JEI).
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/mobs_mooblooms.md](briefs/mobs_mooblooms.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `mobs/mooblooms #6` (bug): the sunflower of a sunbloom faces backwards on the Moobloom Conversion JEI tab. The tab draws the mob
+  with `MoobloomShearingCategory.renderEntity` and the flower layer rotates each slot by `slot.yaw()`; the sunflower model faces one
+  fixed way. Check whether the world render is also backwards, then add 180 degrees for sunflower slots (layer or tab only).
+
 ## 6. File map
 
 | What | Where |
@@ -1171,3 +1179,4 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
   added.
 - 2026-10-22 (second bulk run): 1.1.0 installed into `mods/` in place of 1.0.0; the dedicated server boots with it
   (SQ-GM-09 PASS). MB-100 to MB-104 (JEI) stay in game.
+- 2026-10-24: planned from the scratchpad: sunflower facing on the Moobloom Conversion tab (`mobs/mooblooms #6`). No code changed.

@@ -1,6 +1,6 @@
 # items / item-physics: implementation brief
 
-Written 2026-10-21 from [TODO](../todo/TODO.md) `# items`, Sub `item-physics`. Feature writeup:
+Written 2026-10-21 from [TODO](../todo/TODO.md) `# items`, Sub `item-physics` (row 5 added 2026-10-24). Feature writeup:
 [item_physics.md](../item_physics.md) (test prefix `IP-`, used up to IP-14; new tests here start at IP-15, check the
 next free number before adding them). Related: [tnt_shrapnel.md](../tnt_shrapnel.md) (burning TNT items).
 
@@ -261,6 +261,44 @@ lava), starting with the "Future" list the user wrote in the tag file.
 - **IP-19 Adjustments:** a totem, a crossbow, an armor stand and a shield in water -> sink; a trident in fire ->
   survives.
 - **IP-20 Flour and treated wood:** Create wheat flour and a flour pile in water -> float; IE treated planks -> sink.
+
+---
+
+## item-physics #5: Golden egg gets gravity
+Status **Planned** / Work patcherMod / tags / TODO `items/item-physics #5`
+
+### Goal
+The goose's golden egg (`vintagedelight:golden_egg`, `i.golden_egg`) behaves as an ordinary dropped item: it falls with
+gravity and floats on water.
+
+### Now
+- The egg is dropped by `incubationAdditions` `goldenegg/GoldenGooseEgg.drop` (line 58-98): a plain
+  `bird.spawnAtLocation(item)` then `setPos` onto the chosen spot. No `setNoGravity` or velocity edit appears in the
+  incubationAdditions code (grep), so gravity itself is not removed there. What the user saw (hovering, or sinking) is
+  not reproduced: unverified.
+- Item physics classes: [item_physics_tags.js](../../kubejs/server_scripts/tags/item_physics_tags.js). Eggs float:
+  `'egg', 'turtle_egg', 'frogspawn'` (line 193, in the vanilla list of `physicsFromTag(e, 'floats', ...)`);
+  anything untagged sinks and burns. `golden_egg` is in none of the four tags, so it sinks. `i.golden_egg` is item_dict
+  line 13836; the block is `GoldenEggBlock` in the Vintage port jar (a block item).
+- ItemPhysic's own flat-lying render and physics (`ItemPhysicServerMixin`, `ItemPhysicSplit` in patcherMod) may treat a
+  block item differently: unverified.
+
+### Build
+1. Reproduce: drop a golden egg in water and over a pit; note whether it falls and whether it floats.
+2. Floats: add `i.golden_egg` to the `floats` group with the eggs (a `add('floats', ...)` with the key, since the file
+   lists vanilla by short name; modded items use `i.` keys elsewhere in the file).
+3. Fire: gold items are `fireproof` (`gold_block`, `golden_*`); decide whether the egg is too (Decisions).
+4. If gravity really is missing in game, read `GoldenEggBlock` / the item class in the Vintage jar for `isNoGravity` or
+   a custom `ItemEntity`.
+
+### Decisions
+Fireproof or lavaproof as well? Recommend fireproof like the gold block (it drops 8 to 32 gold nuggets when broken).
+
+### Gotchas
+Tag changes need only `/reload`; a mixin change needs a restart. Only the tag edit is expected.
+
+### Tests (IP-)
+- IP-15 (proposed): goose or `/give` egg: falls off a ledge, floats in water, survives open fire.
 
 ---
 

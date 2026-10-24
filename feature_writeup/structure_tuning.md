@@ -132,11 +132,12 @@ structureDensity` to see many structures fast, `/ceplace` to see every structure
 | `settlements` | 35: vanilla and T&T villages, Terralith fortified villages, C.C.C.'s red roof castle (7.4.4), their metas | 48 | 12 (208 blocks) | set by hand 2026-09-27 (was 24 / 10); The Missing Villages removed the same day |
 | `pillager_settlements` | 47: vanilla outpost + every T&T tower/fort/camp outpost but the ship, Mysticrift towers, Takes A Pillage, C.C.C.'s pillager camp and fake trader camp (7.4.3), the pillager metas | 32 | 8 (144 blocks) | kept 4 chunks off `settlements` grid slots; siege weapons moved to `vehicles` 2026-10-14 |
 | `ruins` | 31: Philip's surface ruins, Forest Ruins, Terralith glacial hut, statues and cats (3.20), C.C.C.'s ruined drum tower (7.4.4), the ruin metas | 16 | 8 (144 blocks) | underground ruins stay standalone |
-| `surface_dungeons` | 9: YUNG's desert and jungle temples, the vanilla desert pyramid and jungle temple (replacements, 10% of YUNG's slots, 3.18), mansion, Terralith spire, T&T mimic, Philip's badlands dungeon, C.C.C.'s undead castle (7.4.4) | 16 | 10 (176 blocks) | witch huts moved out 2026-10-12 |
+| `surface_dungeons` | 7: YUNG's jungle temple, the vanilla jungle temple (a replacement, 10% of YUNG's slots, 3.18; the desert pair moved to `desert_temples` 2026-10-23, 3.24), mansion, Terralith spire, T&T mimic, Philip's badlands dungeon, C.C.C.'s undead castle (7.4.4) | 16 | 10 (176 blocks) | witch huts moved out 2026-10-12 |
 | `way_signs` | 1: Supplementaries' way sign | 19 | 10 (176 blocks) | added 2026-10-12; the old set's placement, kept 8 chunks off `settlements` grid slots (3.21) |
 | `nether_ruins` | 4: Twigs' bloodstone obelisk, Philip's Nether dungeon, sealed ghast statue, lava ruins | 14 | 7 (128 blocks) | added 2026-10-12 (7.1 decision 6, widened to all Nether ruins); grid from their crowding (3.20) |
 | `entrance_dungeons` | 2: YUNG's zombie dungeon (crypt) + spider dungeon (spider cave) | 32 | 16 (272 blocks) | added 2026-10-12 (7.1 decisions 7, 8); land only, surface check (3.19) |
 | `witch_huts` | 4: YUNG's witch hut + witch circle, Villages & Pillages witch village, vanilla swamp hut (a replacement, 3.18) | 16 | 8 (144 blocks) | added 2026-10-12 (7.1 decisions 2, 3); swamps only (`land/swamp`) |
+| `desert_temples` | 2: YUNG's desert temple, the vanilla desert pyramid (a replacement, 10% of YUNG's slots) | 32 | 20 (336 blocks) | added 2026-10-23 (3.24): twice the surface dungeons' separation; temple frequency 0.285 keeps 1 per 63; rank 82, hostile |
 | `vehicles` | 8: the 6 Illager Siege Weapons camps, C.C.C.'s pillager loot carriage (with the villager chase and golem prison van) and witch wagon | 52 | 16 (272 blocks) | added 2026-10-14 (7.4.5); hostile, rank 76, kept 4 chunks off `settlements` grid slots; `biome_frequency` harsh 1.0 / default 0.5 |
 | `ocean_ruins` | 14: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, shipwrecks, T&T wreckage, fossils (3.20), the ocean metas | 8 | 3 (64 blocks) | |
 | `ocean_dungeons` | 1: ocean monument | 32 | 6 (112 blocks) | the monuments' own salt; monument frequency 0.1 |
@@ -1614,6 +1615,25 @@ of them act on new chunks only.
 Still open from 2.1: the undead castle vs earth fill (a decision), ST-135 (fortified metas vs the 120 s timeout), the
 ocean geode drop (reworked 2026-10-22 to the lowest-floor cap, ST-133 scratch part scratch server PASSED 2026-10-22, SQ-GE), the piglin camp (Nether, out of scope; the stone-base tag could take it later).
 
+### 3.24 Desert temples: own group, double the gap (added 2026-10-23, TODO `structures/rates-and-groups #10`)
+
+`group/desert_temples` (structure_tags.json) holds `betterdeserttemples:desert_temple` and `minecraft:desert_pyramid`
+and is excluded from `group/surface_dungeons`. Placement 32 / 20: starts at least 21 chunks (336 blocks) apart, was
+11 (176) in `surface_dungeons` (16 / 10, whose separation can't reach 20 below its spacing). The pyramid keeps its
+`replaces` + `share` 0.1 entry (restored by hand after the sync re-added it as a plain meta member). YUNG's temple
+frequency 0.285 on the new grid keeps the estimate at 1 per 63 (was 63). Priority rank 82 (above `surface_dungeons`
+80, so a temple drops an overlapping mimic), and in `peaceful.hostile`. The T&T desert mimic gained the slots the
+temples used to win (estimate 1 per 25 -> 21); its frequency went 0.739 -> 0.521 (1 per 24). Philip's badlands dungeon
+did not move (1 per 26). The jungle temple pair stays in `surface_dungeons` (its distance is #2). Sync, `--check` and
+`tools/test_structure_groups.sh` (28 checks) pass. New chunks only.
+
+- [ ] **ST-225 Groups:** `structure_tag_report.md` lists `desert_temples` (32 / 20) with the pyramid as a replacement; no
+  config error in latest.log.
+- [ ] **ST-226 Distance:** census over a pregenerated desert square: no two desert temple / pyramid starts closer than
+  21 chunks; about 1 per 63 x 63 chunks of desert.
+- [ ] **ST-227 Priority:** a temple overlapping a desert mimic drops the mimic (`[placement-priority] dropped
+  towns_and_towers:mimic_desert ... overlaps betterdeserttemples:desert_temple`), never the reverse.
+
 ## 4. Limits and decisions
 
 - **Only structure_set documents are written, never the structure.** Frequency, `locate_offset` and on/off all live
@@ -1832,7 +1852,8 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
   sea, see Done); settlements over water could get a boost.
 - **Fresh watchtower:** `fit_keep` is set; rerun `--fit-rates` to raise it back from 1 per 83 (`structure_group_estimates.md` of 2026-10-14; 75 at the 3.20 fold) to its old 1 per 67
   (the run re-solves every fitted structure, so check the diff).
-- **Pyramids** (scratchpad 2026-10-21): double their minimum separation. TODO `structures/rates-and-groups #10`.
+- ~~**Pyramids** (scratchpad 2026-10-21): double their minimum separation.~~ BUILT 2026-10-23 for the desert pair (3.24);
+  the jungle temple distance stays with TODO `structures/rates-and-groups #2`.
 - **Lone waystones** (scratchpad 2026-10-21): too many, deserts worst; lower the rate, or drop the lone ones and add
   waystones to existing structures. TODO `structures/rates-and-groups #11`.
 
@@ -2522,6 +2543,18 @@ Offline: `test_worldgen_tools.sh` all 10 sections pass (earth fill 64 checks, 9 
 - `avoidCoasts` near the coast also stops metas whose satellites can't find a spot clear of a beach or river; the
   off default keeps today's rates.
 
+### Planned from the scratchpad (2026-10-24)
+
+Briefs: [briefs/structures_earthfill.md](briefs/structures_earthfill.md), [briefs/blocks_new.md](briefs/blocks_new.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `structures/earthfill #11`: desert structures (pyramids) spawn in water. The row's `maxWaterSurplus` cancels a start when water
+  outnumbers ground, so raising it keeps more flooded starts; the knob that fills water is `maxOverWater` (24), which already has
+  per-structure and per-tag overrides (`<id or #tag>=water,air,mound`). Plan: one override on `group/desert_temples` and the other desert
+  groups; extend the override with a surplus value only if the share is what cancels. Open: the value and the scope.
+- [TODO](todo/TODO.md) `blocks/new #12`: rare ice hidden and configurable. The Rare Ice mod's block has no item, sits in `#minecraft:ice`, and
+  already has `probabilityOfRareIce` in `config/rare-ice.properties`; its biome modifier can be overridden by a datapack. Open: what
+  "hidden" means (recommended: rarer and cold biomes only, out of the JEI world tabs; keep it in the ice tag).
+
 ## 8. In-game test suite
 
 ### 8.0 Scratch-server run order, easiest to hardest (2026-10-12)
@@ -3095,3 +3128,6 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
   and probe `tools/farm_worldgen_probe.js`.
 - 2026-10-22 (second bulk run): SQ-GE-00 to SQ-GE-04 PASS on the scratch server after the prismarine fix
   (`OceanGeodes.untouched` reads the alternate inner layer); ST-133 scratch part recorded, the in-game look stays.
+- 2026-10-23: desert temples split into `group/desert_temples`, 32 / 20 (3.24, `structures/rates-and-groups #10`);
+  mimic frequency lowered to keep its rate. Tests ST-225 to ST-227. Not run.
+- 2026-10-24: planned from the scratchpad: desert structures in water, rare ice (`structures/earthfill #11`, `blocks/new #12`). No code changed.

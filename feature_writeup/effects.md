@@ -12,7 +12,7 @@
 | Description fixes (3): 16 wrong, partial or misspelt JEED texts replaced, Travel Fatigue ported from Effect Insights, 7 stale placeholders gone | BUILT 2026-10-20, not seen in game (EF-17) |
 | Category audit (2.4): all 140 effects checked for red / blue; 6 overridden in CEConfig `[effects]` | BUILT 2026-10-20 (patcherMod 1.1.01, rebuilt and installed), not seen in game (EF-18) |
 
-- **Pending:** EF-01 to EF-19 have never been run. The 2026-10-20 work (providers, description fixes, category
+- **Pending:** EF-01 to EF-20 have never been run. The 2026-10-20 work (providers, description fixes, category
   overrides) is built but not seen in game. The exports are from 2026-10-18 18:30, before the Vinery and Brewin ports
   went into `mods/` (2026-10-19 00:50), so rerun `/dumppotions` and `/dumpfood` on the next boot (F10).
 - **Files to open:** the table below; [potions.md](potions.md) for how potions are brewed on every machine;
@@ -91,7 +91,7 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | Levitation `minecraft:levitation` | Minecraft | Y (pack) | Y | N | Y | Y | 2: Bowl Of Stuffed Shulker, +1 more | | | Float upwards. | Make affected entities float upwards. |
 | Luck `minecraft:luck` | Minecraft | Y (Buzzier Bees) | Y | N | Y | Y | Canned Pickled Pickles | | | +1 luck (better loot and fishing). | Can increase chances of high-quality and more loot; higher levels increase the chances of better loot. |
 | Bad Luck `minecraft:unluck` | Minecraft | Y (Buzzier Bees, pack) | Y | N | Y | Y | | | | -1 luck. | Can reduce chances of high-quality and more loot; higher levels reduce the chance of good loot. |
-| Slow Falling `minecraft:slow_falling` | Minecraft | Y | Y | N | Y | Y | 2: Cherry Cream Soda, Red Wine | | Sunbird's Blessing: total; Feather Feet: slight | Fall slowly, no fall damage. | Decreases falling speed and negates fall damage. |
+| Slow Falling `minecraft:slow_falling` | Minecraft | Y | Y | N | Y | Y | 1: Red Wine (Cherry Cream Soda removed 2026-10-23) | | Sunbird's Blessing: total; Feather Feet: slight | Fall slowly, no fall damage. | Decreases falling speed and negates fall damage. |
 | Conduit Power `minecraft:conduit_power` | Minecraft | N | - | Y | N | Y | | Water Breathing, Night Vision, Haste (underwater only) | Water Breathing: total; Night Vision, Haste: total underwater | From an active conduit. | Increases underwater visibility and mining speed, prevents drowning. |
 | Dolphin's Grace `minecraft:dolphins_grace` | Minecraft | N | - | N | N | Y | | | Oiled: slight | Much faster swimming; from dolphins. | Drastically increases swimming speed. Effect given by dolphins |
 | Bad Omen `minecraft:bad_omen` | Minecraft | N | - | N | N | Y | 2: A Bottle of 'Villagers Fright', Dread Nog | | Thief: slight | Starts a raid when you enter a village. | Causes an illager raid to start upon entering a village; higher levels increase the raid difficulty. |
@@ -507,7 +507,10 @@ it?
   Resistance are two brewable potion lines for one stat (drop Quark's crab brew or AM's bear-fur brew), and Caffeinated
   gives the whole of Phantom Bane for free from tea and coffee, which undercuts the Phantom Bane potion and the echo
   armor set bonus.
-- **F6. Luck is brewed twice.** Buzzier Bees 5.0.1 already registers awkward + four-leaf clover → Luck, Luck + redstone
+- **F6.** FIXED 2026-10-23 (user: remove Buzzier Bees' luck brews, keep the pack's; TODO `potions/potions #5`):
+  `potions.js` removes every `Mix` whose output is a luck or bad luck potion, then adds the pack's four rows (clover,
+  redstone, silverfish bottle, redstone). Strong luck / bad luck and the fermented spider eye corruption no longer brew.
+  **Luck is brewed twice.** Buzzier Bees 5.0.1 already registers awkward + four-leaf clover → Luck, Luck + redstone
   → long, + glowstone → strong, + fermented spider eye → Bad Luck, and Bad Luck + redstone → long, + glowstone → strong
   (`BBMobEffects.registerRecipes`, all real `PotionBrewing.Mix` entries via Blueprint `DataUtil.addMix`; checked
   against the 5.0.1 jar 2026-10-21). The pack's `LUCK_POTION_MIXES` rows 1, 2 and 4 in `potions.js` add three of
@@ -520,7 +523,8 @@ it?
   included ([mooblooms.md](mooblooms.md) 4.11, MB-82 passed on a scratch server). That is the "purge sunny" item in
   section 7, done. **Sunny is hidden from JEI. Your call.** `config/jeed-client.toml` `hidden_effects = ["buzzier_bees:sunny"]`. If
   that was deliberate (it's a mob-side effect), fine; otherwise remove it.
-- **F8.** DECIDED 2026-10-20: remove it. Passion fruit isn't in the game, and the drink is already hidden in JEI
+- **F8.** FIXED 2026-10-23: the nectar, Cherry Cream Soda, Dune Platter and Yucca Gateau Slice are in `removedItems`
+  (D1 of the brief: all four); the soda is no longer a Slow Falling provider. DECIDED 2026-10-20: remove it. Passion fruit isn't in the game, and the drink is already hidden in JEI
   (TODO `ui/effects #6`). **Passion Aloe Nectar does nothing.** It gives Atmospheric's Relief effect, and Atmospheric isn't installed.
   (Corrected 2026-10-21 from the Abnormals Delight 4.1.2 jar: it has no food value either, so it does nothing at all; it is out
   of JEI because `NectarItem` only gets a creative tab when `atmospheric` is loaded; its one recipe needs `atmospheric`.
@@ -566,6 +570,19 @@ it?
   searches as a whole.
 - **Generating the table:** the behaviour, overlap and description columns are judgement, not data. The mechanical
   columns are checked by `effect_audit.py` instead.
+
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/ui_effects.md](briefs/ui_effects.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `ui/effects #9` (bug): the three Potion Bundles items do not render on the JEI effect provider pages although they are in
+  the `potion_carriers` provider list ([jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js)). Cause unverified
+  (the bundle's NBT or a JEI filter); reproduce, then give JEED fully formed stacks.
+- [TODO](todo/TODO.md) `ui/effects #10`: the "Hostile Mobs" effect's provider page collapses to one grouped entry and gets descriptions. Open: which
+  effect this is (no effect of that name in the dump or the Hostile Delight lang), and whether JEED's provider recipe accepts a
+  tag as one entry (else a stand-in item).
+- [TODO](todo/TODO.md) `ui/effects #11`: Weak Stomach (`fungidelight:weak_stomach`) gets a provider listing the cap foods; the cause (foods in
+  `fungidelight:alcohol_reaction`) and the trigger (alcohol or any non-water potion) are worded separately.
 
 ## 5. File map
 
@@ -624,8 +641,9 @@ ingredient type.
 - [ ] **EF-03 Comfort (F3):** survival, saturation empty (AppleSkin), hurt, no Regeneration, eat Beef Stew → half a
   heart every 4 s; no Slowness/Hunger/Weakness removal (`/effect give @s slowness` first, it stays).
 - [ ] **EF-04 Soul Cross (F3):** with Soul Cross, kill a cow (10 HP) → heal 0.5 HP; kill an iron golem (100 HP) → heal 5.
-- [ ] **EF-05 Luck duplicate (F6):** JEI → Potion of Luck → R: count the awkward + four-leaf clover recipes on the
-  brewing page and on Automatic Brewing. Two of each confirms F6.
+- [ ] **EF-05 Luck once (F6, after the 2026-10-23 fix):** JEI → Potion of Luck → R: one awkward + four-leaf clover
+  recipe on the brewing page and one per bottle type on Automatic Brewing; no strong luck recipe; Luck + fermented
+  spider eye gives nothing. Awkward + silverfish bottle → Bad Luck, + redstone → long Bad Luck.
 - [ ] **EF-06 Resilience = Knockback Resistance (F5):** drink Potion of Stability, get hit by a zombie → half knockback;
   add Knockback Resistance (AM) → none. Strong Stability alone → none.
 - [ ] **EF-07 Caffeinated vs phantoms (F5):** stay awake 3+ nights drinking Black Tea before each night → no phantoms.
@@ -634,8 +652,11 @@ ingredient type.
   within 8 blocks.
 - [ ] **EF-10 Double Jump:** drink Clark Wine → jump height as with Jump Boost I; press jump in mid-air → second jump.
 - [ ] **EF-11 Sunny in JEI (F7):** search JEI for "Sunny" → no effect entry.
-- [ ] **EF-12 Passion Aloe Nectar (F8):** after its removal, `/give @s abnormals_delight:passion_aloe_nectar` fails
-  (or gives nothing) and no recipe in JEI uses it.
+- [ ] **EF-12 Passion Aloe Nectar (F8):** `/give @s abnormals_delight:passion_aloe_nectar` → the item shows the red
+  REMOVED line (`removedItems` doesn't unregister it); JEI search "nectar" / "Passion" → no Abnormals Delight
+  entries; latest.log `[jeiRemove]` lists no recipe for it. Same for Cherry Cream Soda, Dune Platter, Yucca Gateau
+  Slice.
+- [ ] **EF-20 Slow Falling sources:** JEI → Slow Falling effect page → Red Wine and the potions, no Cherry Cream Soda.
 - [ ] **EF-13 Pack effect potions as fluid:** JEI fluid list → "Potion of Long Reach", "Potion of Magic Resistance" and
   "Potion of Intimidation" `create:potion` stacks exist.
 - [ ] **EF-14 Heal Aura hits undead:** eat Peach Jam near a zombie → the zombie takes damage every 3 s.
@@ -675,3 +696,7 @@ ingredient type.
 - 2026-10-22 (second bulk run): `jeed_providers.js` skips Xaero's map effects when the mod is not loaded (12
   `[NCH] jeedProvider failed` errors on every dedicated server boot); SQ-OM-00 and SQ-OM-16 then PASS on the scratch
   server. EF-15's JEI pages and EF-16 stay in game.
+- 2026-10-23: F6 fixed (Buzzier Bees' luck mixes removed, the pack's kept) and F8 fixed (nectar and three more
+  Atmospheric / Environmental items removed, soda out of the Slow Falling providers). EF-05 and EF-12 reworded, EF-20
+  added. Not run in game.
+- 2026-10-24: planned from the scratchpad: potion bundles in provider pages, Hostile Mobs and Weak Stomach providers (`ui/effects #9` to `#11`). No code changed.

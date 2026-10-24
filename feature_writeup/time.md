@@ -476,6 +476,26 @@ set to SERVER is put back to SINGLEPLAYER by the next payload, and the push then
 server's Vinery config. It needs a server-only copy of `creativeengineering-common.toml` in the payload, or a
 per-side default. Not built.
 
+### 3.10 Minimap time line and bed clock (2026-10-23, TODO time #4 / #5)
+
+**Minimap line (built, TI-30).** Xaero's minimap info display shows SeasonHUD's line ("Mid Spring (Day 3/24) 7:30 pm")
+and, one line below, Xaero's own time ("Day 57, 17:48"). Xaero used vanilla's clock (midnight at dayTime 18000, day
+change there), so the two read 1:42 apart and changed day at different hours. `XaeroTimeInfoMixin` (client only)
+rewrites all four Xaero formats with `TimeSettings.clock` / `clock24` and `TimeSettings.dayNumber`: the day number
+steps at the pack's sunrise like SeasonHUD's, and is 1 at dayTime 0 like Xaero's (it counts from the sunrise nearest
+dayTime 0, -1700 for the pack's 22300). Xaero's text is kept in the Nether / End, with `[time] enabled = false`, and if
+the Xaero lambda (`lambda$static$14` in 25.3.10) moves after an update (`require = 0`).
+
+Left as is: Better Days still wakes players at vanilla morning (dayTime % 24000 == 0), which the pack clock reads as
+7:42 am, 1:42 after the season day changed.
+
+**Bed clock (open, TI-31).** "The clock icon freezes while sleeping." Better Days' bed clock (top right of the bed
+screen) and any hotbar clock share vanilla's `time` item property, which eases toward `getTimeOfDay` once per game
+tick. Read from Better Days 3.3.4.3 (`SleepGui`, `TimeInterpolator`, `TimeService`), vanilla 1.19.2 and the pack's
+mixins, nothing stops it: sleeping runs at 110 units per tick, Better Days sends time every tick, no mod overrides the
+clock model, and no pack code touches client time. No log errors. The cause needs one in-game look (TI-31) to tell
+apart: night not fast-forwarding, client time standing still in bed, or the clock property itself.
+
 ## 4. Limits and decisions
 
 | # | Decision | Options | Recommendation |
@@ -524,7 +544,7 @@ per-side default. Not built.
 | [../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java) | wine age, storage rate, cellar boost |
 | [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) | `Time` section |
 | [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/) | `TimeSettings` (derived values, clock text), `TimePush`, `SeasonClock` (SUN counter, migration), `TimePause`, `TimeCommand` (`/cetime`), `CalendarDate`, `TimeClient` (calendar) |
-| `../development/patcherMod/.../mixin/BetterDaysConfigMixin.java`, `BetterDaysTimePauseMixin.java`, `ServerLevelTimePauseMixin.java`, `SereneSeasonsClockMixin.java`, `SereneSeasonsClientClockMixin.java`, `SereneSeasonsTimeSkipMixin.java`, `SeasonHudCurrentSeasonMixin.java` | the mixins (3.8) |
+| `../development/patcherMod/.../mixin/BetterDaysConfigMixin.java`, `BetterDaysTimePauseMixin.java`, `ServerLevelTimePauseMixin.java`, `SereneSeasonsClockMixin.java`, `SereneSeasonsClientClockMixin.java`, `SereneSeasonsTimeSkipMixin.java`, `SeasonHudCurrentSeasonMixin.java`, `XaeroTimeInfoMixin.java` | the mixins (3.8, 3.10) |
 | [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SeasonHudHelperMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SeasonHudHelperMixin.java) | season-type HUD day; reads the same lengths |
 
 ## 6. Offline checks
@@ -582,6 +602,8 @@ TI-27 cover what the build added (3.8).
 - [ ] **TI-28 Presets (3.9):** fresh config -> `preset = "SINGLEPLAYER"`, `monthsPerLevel = 1`; pick SERVER in Create's Configs screen -> `monthsPerLevel` becomes 3 and `vinery-common.toml` `monthsPerEffectLevel` 3; set `daysPerSubSeason` to 10 -> the preset reads CUSTOM; set it back to 8 -> SERVER again
 - [ ] **TI-29 Preset picked offline (3.9):** game closed, change only `preset` to SERVER in the file, start -> the log writes `monthsPerLevel 1 -> 3`, no CUSTOM
 - [ ] **TI-27 Push log (3.8):** first start of `Workspace` -> latest.log lists `[time] sereneseasons day_duration 192000 -> 24000` and `sub_season_duration 10 -> 8`, then `[time] minecraft:overworld: seasons now follow the sun; sub-season N day M kept`; the second start lists no changes
+- [ ] **TI-30 Minimap lines agree (3.10):** overworld, Xaero's time line on (default profile) -> `/time set 11800`: the SeasonHUD line ends "7:30 pm" and Xaero's reads "Day N, 19:30"; `/time set 22250`, wait for sunrise -> SeasonHUD's "Day x/24" and Xaero's "Day N" step together at 6:00 am; in the Nether Xaero's line is unchanged
+- [ ] **TI-31 Bed clock turns (3.10):** single player, clock in the hotbar, sleep at dusk -> note how long the night takes (about 5 s expected), whether Better Days' bed clock (top right) and the hotbar clock turn, and whether SeasonHUD's time races. Report which of the three moved
 
 ## 8. History
 
@@ -622,3 +644,4 @@ TI-27 cover what the build added (3.8).
   3.9 deploy gotcha is still open: the payload ships SINGLEPLAYER to the server too (plan_1.0.8.md 2.3 lists
   options).
 - 2026-10-19: DEPLOYED with pack 1.0.8 (10:20, server + clients). The server preset is still open (TODO `pack/release #2`); TI-01 to TI-29 pending.
+- 2026-10-23: 3.10 built: Xaero minimap time line on the pack clock (`XaeroTimeInfoMixin`, `TimeSettings.clock24` / `dayNumber`). Bed clock freeze (TODO time #4) investigated offline, no cause found; TI-30, TI-31 added.

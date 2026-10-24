@@ -55,6 +55,7 @@ public final class CEConfig {
     public static final StemFruit STEM_FRUIT;
     public static final LeafDecay LEAF_DECAY;
     public static final LeafPiles LEAF_PILES;
+    public static final Moss MOSS;
     public static final Campfire CAMPFIRE;
     public static final Raids RAIDS;
     public static final BottledAir BOTTLED_AIR;
@@ -101,6 +102,7 @@ public final class CEConfig {
         STEM_FRUIT = new StemFruit(builder);
         LEAF_DECAY = new LeafDecay(builder);
         LEAF_PILES = new LeafPiles(builder);
+        MOSS = new Moss(builder);
         CAMPFIRE = new Campfire(builder);
         RAIDS = new Raids(builder);
         BOTTLED_AIR = new BottledAir(builder);
@@ -756,6 +758,29 @@ public final class CEConfig {
         }
     }
 
+    /** Biome-tinted moss block and moss carpet ({@code block.MossTint}). Client side only. */
+    public static final class Moss {
+        public final ForgeConfigSpec.BooleanValue biomeTint;
+        public final ForgeConfigSpec.DoubleValue tintStrength;
+
+        private Moss(ForgeConfigSpec.Builder b) {
+            b.comment("Moss block and moss carpet colour (client only; the server ignores this section).").push("moss");
+
+            biomeTint = b.comment(
+                    "On: moss block and moss carpet take the biome's grass colour, like grass blocks.",
+                    "Off: vanilla's fixed green moss. Read when models load: press F3+T or restart after changing it."
+            ).define("biomeTint", true);
+
+            tintStrength = b.comment(
+                    "How far moss follows the grass colour. 1.0 = shifts as much as grass does from Lush Caves",
+                    "grass (where moss keeps its vanilla green); 0.0 = vanilla green everywhere. Chunks pick up",
+                    "a change when they re-render (F3+A)."
+            ).defineInRange("tintStrength", 1.0, 0.0, 1.0);
+
+            b.pop(); // moss
+        }
+    }
+
     /**
      * Rain puts out campfires ({@code campfire.CampfireRain}, {@code mixin/CampfireRainMixin}). Unlit Campfire
      * still places them unlit but burns them forever with its own rain check off. Read every tick.
@@ -944,22 +969,27 @@ public final class CEConfig {
     }
 
     /**
-     * Cooking for Blockheads kitchen parts with other mods' items: {@code compat.CuttingBoardOnCounter} and
-     * {@code mixin/CuttingBoardSupportMixin} (FD cutting board on a counter), {@code mixin/CfbOvenFuelMixin}.
-     * TODO cooking/kitchen #8.
+     * Cooking for Blockheads kitchen parts with other mods' items: {@code compat.CounterToppers} and
+     * {@code mixin/BlockStateCounterTopperMixin} (FD cutting board, Display Delight plates, Brewin' coaster on a
+     * counter), {@code mixin/CfbOvenFuelMixin}. TODO cooking/kitchen #8, #20.
      */
     public static final class Kitchen {
         public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetX;
         public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetY;
         public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetZ;
+        public final ForgeConfigSpec.DoubleValue plateOffsetX;
+        public final ForgeConfigSpec.DoubleValue plateOffsetY;
+        public final ForgeConfigSpec.DoubleValue plateOffsetZ;
 
         private Kitchen(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Farmer's Delight cutting board on a Cooking for Blockheads counter or corner (the blocks in",
-                    "#creativeengineering:cutting_board_supports). The counter's worktop is 1 px lower than a full",
-                    "block, so the board and what lies on it are drawn shifted by these offsets, in pixels (1/16",
-                    "block). X and Z are as seen on a counter facing north (door to the north, back edge to the",
-                    "south: +X = east, +Z = toward the back) and turn with the counter. Visual only; F3+A redraws."
+                    "Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):",
+                    "Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's",
+                    "coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full",
+                    "block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):",
+                    "cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as",
+                    "seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward",
+                    "the back) and turn with the counter. Visual only; F3+A redraws."
             ).push("kitchen");
 
             cuttingBoardOffsetX = b.comment("Sideways shift.").defineInRange("cuttingBoardOffsetX", 0.0, -8.0, 8.0);
@@ -967,6 +997,11 @@ public final class CEConfig {
                     .defineInRange("cuttingBoardOffsetY", -1.0, -8.0, 8.0);
             cuttingBoardOffsetZ = b.comment("Shift toward the counter's back (negative = toward the door).")
                     .defineInRange("cuttingBoardOffsetZ", 0.0, -8.0, 8.0);
+            plateOffsetX = b.comment("Plates and coasters: sideways shift.").defineInRange("plateOffsetX", 0.0, -8.0, 8.0);
+            plateOffsetY = b.comment("Plates and coasters: height shift; -1 puts them on the worktop.")
+                    .defineInRange("plateOffsetY", -1.0, -8.0, 8.0);
+            plateOffsetZ = b.comment("Plates and coasters: shift toward the counter's back (negative = toward the door).")
+                    .defineInRange("plateOffsetZ", 0.0, -8.0, 8.0);
 
             b.pop(); // kitchen
         }

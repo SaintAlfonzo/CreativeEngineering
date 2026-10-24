@@ -6,8 +6,6 @@ var i = global.item
 var f = global.fluid
 var R = global.NCH
 
-i.catfish = 'alexsmobs:raw_catfish';
-
 //######################### Tools #########################
 // Vanilla's cobblestone smoker removed: the smoker comes from Quark's deepslate / blackstone furnace + 4 logs
 // (quark:building/crafting/furnaces/{deepslate,blackstone}_smoker, Variant Furnaces on). Same rule as the blast furnace.
@@ -332,9 +330,9 @@ R.createSequencedAssembly(Item.of(i.bbq_stick, 1), i.stick, [
 	e.recipes.create.deploying(incBbqStick, [incBbqStick, i.cooked_meat])
 ], ['bbq_stick'], e, 'bbq_stick_sequenced_assembly', 1)
 // Crab Bar
-//	Remove raw shapeless crab bar recipe, replace w/ cooked at lower efficiency
+//	Quark Delight's raw crab bars (shaped, x4) replaced by a cooked shapeless x2 (hand only) and a raw pot recipe x4
 R.remove({ id: 'quarkdelight:crab_bars' }, e)
-R.shapeless(Item.of(i.crab_bars, 2), [i.cooked_fish, i.cooked_crab, i.bonemeal], e, 'creativeengineering/crab_bars_shapeless_manual_only')
+R.shapeless(Item.of(i.crab_bars, 2), [i.cooked_fish, i.cooked_crab, i.bonemeal], e, 'crab_bars_manual_only')
 // Add raw ingredient cooking crab bar recipe
 R.fdCooking([i.raw_fish, i.crab, i.bonemeal], Item.of(i.crab_bars, 4), e, undefined, 1, 200)
 // Sequenced assembly
@@ -350,11 +348,7 @@ R.shapeless(Item.of(i.fish_stew, 1), [i.cooked_fish, i.cooked_fish, Item.of(i.to
 // Cabbage rolls
 R.shapeless(Item.of(i.cabbage_rolls, 1), [i.cabbage, i.cabbage, i.cabbage_roll_veg, i.cabbage_roll_veg], e, 'cabbage_rolls_manual_only')
 
-//Grilled salmon
-// Replace shaped recipe w/ shaped
-R.remove({ id: 'farmersdelight:grilled_salmon' }, e)
-R.shapeless(Item.of(i.grilled_salmon, 1), [i.onion, i.cabbage, i.sweet_berries, i.cooked_salmon, i.bowl], e)
-// Sequenced assembly
+// Grilled salmon: FD's shapeless kept; sequenced assembly added
 const incGrilledSalmon = R.incomplete('grilled_salmon')
 R.createSequencedAssembly(Item.of(i.grilled_salmon, 1), i.bowl, [
 	e.recipes.create.deploying(incGrilledSalmon, [incGrilledSalmon, i.onion]),
@@ -377,31 +371,19 @@ R.fdCooking([i.t_cooking_oil, i.t_food_raw_fish, i.t_sliced_potatoes, i.t_sliced
 	'fish_and_chips', 0.35, 200, i.paper)
 R.shapeless(i.cod_n_chips, [i.chips, i.cooked_fish, i.paper], e, 'fish_and_chips_cooked_manual_only')
 
-// Bacon and eggs
-// Replace shaped recipe w/ shaped
-R.remove({ id: 'farmersdelight:bacon_and_eggs' }, e)
-R.shapeless(Item.of(i.bacon_and_eggs, 1), [i.cooked_bacon, i.cooked_bacon, i.cooked_eggs, i.cooked_eggs, i.bowl], e)
-// Sequenced assembly
+// Bacon and eggs: FD's shapeless kept; sequenced assembly added
 const incBaconAndEggs = R.incomplete('bacon_and_eggs')
 R.createSequencedAssembly(Item.of(i.bacon_and_eggs, 1), i.bowl, [
 	e.recipes.create.deploying(incBaconAndEggs, [incBaconAndEggs, i.cooked_bacon]),
 	e.recipes.create.deploying(incBaconAndEggs, [incBaconAndEggs, i.cooked_eggs])
 ], ['bacon_and_eggs'], e, 'bacon_eggs_sequenced_assembly', 2)
 
-//Salmon roll
-//Make shapeless, already shapeless?
-R.remove({ id: 'farmersdelight:salmon_roll' }, e)
-R.shapeless(Item.of(i.salmon_roll, 2), [i.salmon_slice, i.salmon_slice, i.cooked_rice], e)
-// Sequenced assembly
+// Salmon roll: FD's shapeless kept; sequenced assembly added
 const incSalmonRoll = R.incomplete('salmon_roll')
 R.createSequencedAssembly(Item.of(i.salmon_roll, 3), i.cooked_rice, [
 	e.recipes.create.deploying(incSalmonRoll, [incSalmonRoll, i.salmon_slice])
 ], ['salmon_roll'], e, 'salmon_roll_sequenced_assembly', 3)
-//Cod roll
-//Make shapeless, already shapeless?
-R.remove({ id: 'farmersdelight:cod_roll' }, e)
-R.shapeless(Item.of(i.cod_roll, 2), [i.cod_slice, i.cod_slice, i.cooked_rice], e)
-// Sequenced assembly
+// Cod roll: FD's shapeless kept; sequenced assembly added
 const incCodRoll = R.incomplete('cod_roll')
 R.createSequencedAssembly(Item.of(i.cod_roll, 3), i.cooked_rice, [
 	e.recipes.create.deploying(incCodRoll, [incCodRoll, i.cod_slice])
@@ -813,6 +795,16 @@ R.fdCooking([i.t_fruits_blueberry, i.t_fruits_blueberry, i.any_dough, i.t_milk_b
 	Item.of(i.blueberry_muffin, 2), e, 'blueberry_muffin', 0.1, 200)
 R.fdCooking([i.t_fruits_cranberry, i.t_fruits_cranberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sugar],
 	Item.of(i.cranberry_muffin, 2), e, 'cranberry_muffin', 0.1, 200)
+
+//Orange jam (TODO baking/sweets #6)
+// Fruits Delight's 2-orange pot and heated mixing recipes stay; one orange's 4 slices also work
+R.fdCooking([i.orange_slice, i.orange_slice, i.orange_slice, i.orange_slice, i.any_sugar, i.lemon_slice],
+	i.orange_jelly, e, 'orange_jam_from_slices', 0.1, 200, i.glass_bottle)
+R.createMixing(Fluid.of(f.orange_jam, 125), [Item.of(i.orange_slice, 4), i.lemon_slice, i.any_sugar, Fluid.of(f.water, 100)],
+	e, 'orange_jam_from_slices', 'heated')
+
+//Fruit beignet: removed item (dishes/meals #19); its pot recipe and Slice & Dice's mixing copy go
+R.remove({ output: i.fruit_beignet }, e)
 
 //Honey
 //Honey item removals

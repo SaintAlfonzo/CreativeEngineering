@@ -103,7 +103,6 @@ ServerEvents.recipes(e => {
 	add('minecraft:saturation', [i.bar_of_ruby_chocolate, i.full_ruby_chocolate_bar, i.ruby_chocolate_candy,
 		i.ruby_chocolate_candy_2, i.ruby_chocolate_candy_3])
 	add('minecraft:water_breathing', i.pickerelweed_juice)
-	add('minecraft:slow_falling', i.cherry_cream_soda)
 	add('minecraft:nausea', i.candy)
 	var gamblersTea = [i.gamblers_tea, i.long_gamblers_tea, i.strong_gamblers_tea]
 	add('minecraft:glowing', gamblersTea)

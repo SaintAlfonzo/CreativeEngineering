@@ -165,6 +165,102 @@ JEED toml take raw ids anyway, so no dict key is needed.
 
 ---
 
+## effects #9: Potion bundles do not render in the effect provider
+Status **Bug** / Work patcherMod / TODO `ui/effects #9`
+
+### Goal
+JEI effect pages (JEED's provider page) show the three potion bundle items with their potion, like the potion buckets.
+
+### Now
+- [jeed_providers.js](../../kubejs/server_scripts/other/jeed_providers.js) lines 209-212 pass `i.potion_bundle`,
+  `i.splash_potion_bundle`, `i.lingering_potion_bundle` (Potion Bundles 1.6, `com.github.ichhabehunger54.potionbundles`)
+  to `R.jeedPotionProvider(..., 'potion_carriers')`: JEED then fills each stack with a `Potion` tag per potion.
+- The bundles keep their potion and a `Uses` count through `PotionBundleUtils` (strings in the class; exact NBT keys
+  unverified). A bare `{Potion:...}` stack may render as an empty bundle, or be hidden by a JEI filter. Cause unverified.
+
+### Build
+1. Reproduce: JEI -> Regeneration; note whether the bundles are missing, blank or show no potion; read `latest.log`
+   for JEED warnings.
+2. Read `PotionBundleUtils` for the NBT the bundle needs (decompile or `javap -p -c`).
+3. Fix by giving JEED fully formed stacks: either extend `NCH.jeedPotionProvider` (neoCraftHelper.js 1872) to accept
+   `{item, nbt}` templates with a placeholder, or a patcherMod hook that completes the stack (like the
+   `CraftableFirstRecipeLayoutList` style patches).
+
+### Ids and data
+`i.potion_bundle`, `i.splash_potion_bundle`, `i.lingering_potion_bundle` (item_dict), mod `potionbundles`.
+
+### Gotchas
+The potion buckets use the same list and work (EF-16); change only the bundle entries.
+
+### Tests (EF-)
+- EF-21 (proposed): JEI -> Regeneration lists the three bundles with the Regeneration potion shown.
+
+---
+
+## effects #10: Hostile Mobs effect provider
+Status **Planned** / Work patcherMod / KubeJS / TODO `ui/effects #10`
+
+### Goal
+The "Hostile Mobs" effect's provider page shows one grouped entry (a cycling slot or tag) instead of a long item list,
+and the effect gets a description.
+
+### Now
+- **Which effect is unverified.** No effect named "Hostile Mobs" is in `kubejs/exported/mob_effects.json` (the dump
+  predates the Fungi and Hostile Delight jars) or in Hostile Delight 0.2.2's lang (`hostiledelight:collapsing`,
+  `hostiledelight:dioxide` are its effects). Find the key in game (`/effect give @s <tab>` or JEI effect search).
+- `jeed_providers.js` writes one `jeed:effect_provider` recipe per effect with an explicit item list
+  (`R.jeedProvider`, neoCraftHelper.js 1848); `_jeedProviderJson` (1887) accepts item ids and `{item,nbt}` only, no tags.
+- Descriptions live in `kubejs/assets/creativeengineering/lang/en_us.json` (`effect.<ns>.<id>.description`, JEED lang
+  overlay; see `effects.md` 3).
+
+### Build
+1. Identify the effect id; list what its provider page shows now.
+2. Extend `NCH._jeedProviderJson` to accept an item tag (`#ns:tag`) as one entry; check that JEED's recipe codec
+   (`jeed:effect_provider`) takes a tag ingredient (unverified; else collapse to a single representative item).
+3. Add a tag in tags (via `global.tags`) for the group, point the effect at it, add the description key.
+
+### Decisions
+Collapse by tag (one slot that cycles) or by a single stand-in item. Recommend tag, if JEED accepts it.
+
+### Tests (EF-)
+- EF-22 (proposed): the effect's page shows one cycling slot; the hover text and description read well.
+
+---
+
+## effects #11: Weak Stomach effect provider
+Status **Planned** / Work patcherMod / KubeJS / TODO `ui/effects #11`
+
+### Goal
+Weak Stomach (`fungidelight:weak_stomach`, Backported Fungi Delight) has an effect provider page, and its text no longer
+says only alcohol causes the reaction.
+
+### Now
+- Source (jar `development/backportedFungi`, `ModEffectEvents.onFoodEaten`): eating an item in
+  `FungiDelightTags.ALCOHOL_REACTION` gives Weak Stomach for 1200 ticks; while it lasts, eating or drinking an
+  `ALCOHOL` tagged item or any potion except water gives Nausea, Poison and Weakness (200 ticks, level 2).
+- JEED finds only FoodProperties effects, so no provider exists: [jeed_providers.js](../../kubejs/server_scripts/other/jeed_providers.js)
+  has no `fungidelight:weak_stomach` line.
+- Existing text mentioning alcohol: `kubejs/assets/creativeengineering/lang/en_us.json` line 30
+  (`effect.fungidelight.weak_stomach.description`: "From eating inky caps or durian. Drinking alcohol or any potion
+  other than water ...") and [jei_info.js](../../kubejs/client_scripts/jei_info.js) line 15-17 ("Causes Weak Stomach:
+  drinking alcohol or a potion ..."). Which line is the "from alcohol" wording the row means is unverified.
+
+### Build
+1. `add('fungidelight:weak_stomach', [i.cleaned_cap, i.cooked_cleaned_cap, i.inky_caps_salad, i.inky_cap_scrambled_eggs, ...])`
+   in the food and drink section of `jeed_providers.js`; read the real members of `fungidelight:alcohol_reaction` from the
+   mod's tag file (and durian, if tagged) instead of hand-listing.
+2. Reword the two texts so the cause (the tagged foods) and the trigger (alcohol, any non-water potion) are separate
+   sentences.
+
+### Ids and data
+Keys `i.cleaned_cap`, `i.inky_caps_salad`, `i.inky_cap_scrambled_eggs` exist (item_dict 13939-13950); durian is
+`fruitsdelight:*` (check which durian item is in the tag).
+
+### Tests (EF-)
+- EF-23 (proposed): JEI -> Weak Stomach lists the cap foods; the description names the cause and the trigger separately.
+
+---
+
 ## Built, needs play
 
 | Row | Change | Status | Notes |

@@ -386,6 +386,48 @@ Vanilla: `ChunkGenerator#tryGenerateStructure` `m_223104_`, `getBaseColumn` `m_2
 
 ---
 
+## structures/earthfill #11: Desert structures spawn in water
+Status **Planned** / Work data / config / TODO `structures/earthfill #11`
+
+### Goal
+Pyramids and other desert structures no longer start flooded.
+
+### Now
+- **The row names the wrong knob.** `maxWaterSurplus` (default 0.5, `CEConfig.java:1966-1975`, read by
+  `WorldgenConfig.earthMaxWaterSurplus()` line 116, rule `EarthFill.Footprint.tooWet` and its use at `EarthFill.java:836`) makes
+  the start CANCEL when the footprint's water outnumbers its ground; raising it lets more water-covered starts through, which
+  is the opposite of clearing the water. Config comment: `config/creativeengineering-common.toml` lines 1472-1480.
+- The knob that fills water is `[worldgen.earth_fill] maxOverWater` (default 24; "most earth blocks that may stand in water the
+  beard won't fill", `earthMaxOverWater()` line 115): raising it lets the earth fill and the beard cover more water instead of
+  cancelling. `maxWaterSurplus` is global only; `maxOverWater` has per-structure and per-tag overrides:
+  `overrides = ["<structure id or #tag>=<water>,<air>,<mound>"]` (`EarthFill.parseOverrides` line 514, `Override(key, a, b, c)`,
+  a = water, b = air, c = mound; `-1` = no limit).
+- The desert temples are the group tag `group/desert_temples` (structure_tuning.md 3.24: `betterdeserttemples:desert_temple` and
+  `minecraft:desert_pyramid`); other desert structures are in `structure_groups.json` (`village_desert`,
+  `philipsruins:desert_structures`, the desert watchtower and pillager outpost). Whether the flooded pyramids are cancelled-then-
+  missing or placed in water is the first thing to find out (the earth-fill log, `[earth-fill]` lines in `latest.log`).
+
+### Build
+1. Reproduce a flooded pyramid with the earth-fill log on (`[worldgen.debug]` / `log = ALL` as in
+   `testing/structures/12_earth_fill_camps.md`); read its water / air / mound numbers.
+2. Add a per-tag override line for the desert group, e.g. `"#creativeengineering:group/desert_temples=100000,-1,-1"` (a large
+   `maxOverWater`, the other limits unchanged), in `config/creativeengineering-common.toml` and `configs_edited/root_config/config/`.
+3. If the water share (`maxWaterSurplus`) is what cancels them, the override format has no slot for it: extend `Override`
+   with a fourth value (surplus) and its parser, `EarthFill.java:509-526`, or raise the global default.
+
+### Decisions
+Which limit and which scope: the row says "the new value; one desert-wide override or a per-structure one". Recommend `maxOverWater`
+through one tag override on the desert groups (the machinery exists), keeping the global surplus at 0.5.
+
+### Gotchas
+New chunks only. `/place structure` is not checked by earth fill. Related: `structures/rates-and-groups #10` (pyramid separation).
+
+### Tests (ST-)
+- ST-229 (proposed): census of 30 desert pyramid starts (scratch server, new chunks): none stands in standing water; the log
+  shows the fill instead of a cancel.
+
+---
+
 ## Built, needs play
 
 | Row | Status | Notes from this pass |

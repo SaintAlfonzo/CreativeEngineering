@@ -1,87 +1,62 @@
 #!/usr/bin/env python3
-"""Reshape Cooking for Blockheads' 2-tall fridge so it reads as a full block (TODO cooking/kitchen #6).
+"""Fill Cooking for Blockheads' 2-tall fridge up to a full block (TODO cooking/kitchen #6, #19).
 
-The 13.3.4 fridge body is x 1-15, z 3-15 and its upper half stops at y 13, so it leaves gaps beside counters and
-decor on top floats 3 px above it. This reads CfB's own models from the jar in mods/ and writes overrides to
-kubejs/assets/cookingforblockheads/models/block/ with:
+The 13.3.4 fridge's upper half stops at y 13, so decor on top floats 3 px above it. This reads CfB's own
+fridge_large_upper model from the jar in mods/ and writes an override to
+kubejs/assets/cookingforblockheads/models/block/ that is CfB's model unchanged plus one solid box over the fridge's
+outline (x 1-15, z 1-15: the body and the closed door's front) from y 13 to y 16. The box uses a flat white texture
+(creativeengineering:block/fridge_top_fill, the body's own white) with tintindex 0, so a dyed fridge's box takes the
+dye too.
 
-  - body walls out to x 0 / 16 and back to z 16, the top at y 16 (upper) and full-height walls (lower);
-  - seals, shelves and the inside moved out with the walls;
-  - doors x 0-16 and full height, at their old depth (z 1-2), so FridgeRenderer's hinge pivot (x 14.5 or 1.5,
-    z 1.5) still swings them; handles unchanged.
-
-Faces of stretched elements lose their explicit uv and take position UVs (so the textures don't squash); seals and
-handles keep theirs (they pick single texture pixels). tintindex is kept, so dyed fridges still colour. The 1-tall
-fridge (block/fridge) is left as it is. Run from anywhere: python3 tools/gen_cfb_fridge_models.py [--check]
+The earlier version stretched the body walls and doors out to a full block; that reshaping is gone (its five other
+overrides are deleted by this script), and the lower half and doors are CfB's own again. The 1-tall fridge
+(block/fridge) is left as it is. Run from anywhere: python3 tools/gen_cfb_fridge_models.py [--check]
 """
 import copy
 import glob
 import json
 import os
+import struct
 import sys
 import zipfile
+import zlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'kubejs', 'assets', 'cookingforblockheads', 'models', 'block')
+TEX = os.path.join(ROOT, 'kubejs', 'assets', 'creativeengineering', 'textures', 'block', 'fridge_top_fill.png')
 SRC = 'assets/cookingforblockheads/models/block/'
 
-# element name -> new [from, to]; None keeps it. Elements not listed are kept unchanged.
-UPPER = {
-    'Static_Right': ([0, 0, 3], [2, 16, 16]),
-    'Static_Left': ([14, 0, 3], [16, 16, 16]),
-    'Static_Top': ([2, 14, 3], [14, 16, 16]),
-    'Static_Back': ([2, 0, 12.5], [14, 14, 16]),
-    'Static_SealRight': ([0.5, 0, 2], [1.5, 15.5, 3]),
-    'Static_SealLeft': ([14.5, 0, 2], [15.5, 15.5, 3]),
-    'Static_SealTop': ([1.5, 14.5, 2], [14.5, 15.5, 3]),
-    'Static_TopShelf': ([2, 4.5, 3.5], [14, 5.5, 12.5]),
-}
-LOWER = {
-    'Static_Bottom': ([0, 0, 3], [16, 2, 16]),
-    'Static_Right': ([0, 2, 3], [2, 16, 16]),
-    'Static_Left': ([14, 2, 3], [16, 16, 16]),
-    'Static_Back': ([2, 2, 12.5], [14, 16, 16]),
-    'Static_SealRight': ([0.5, 0.5, 2], [1.5, 16, 3]),
-    'Static_SealLeft': ([14.5, 0.5, 2], [15.5, 16, 3]),
-    'Static_SealBottom': ([1.5, 0.5, 2], [14.5, 1.5, 3]),
-    'Static_InsideBottom': ([2, 2, 4], [14, 8.5, 12.5]),
-    'Static_BottomShelf': ([2, 8.5, 3.5], [14, 9.5, 12.5]),
-    'Static_MiddleShelf': ([2, 14.5, 3.5], [14, 15.5, 12.5]),
-}
-DOOR = {'Door_Main': ([0, 0, 1], [16, 16, 2])}
+MODEL = 'fridge_large_upper'
+# overrides written by the reshaping version, now removed so CfB's own models load
+OLD = ['fridge_large_lower', 'fridge_large_door_upper', 'fridge_large_door_upper_flipped',
+       'fridge_large_door_lower', 'fridge_large_door_lower_flipped']
 
-MODELS = {
-    'fridge_large_upper': UPPER,
-    'fridge_large_lower': LOWER,
-    'fridge_large_door_upper': DOOR,
-    'fridge_large_door_upper_flipped': DOOR,
-    'fridge_large_door_lower': DOOR,
-    'fridge_large_door_lower_flipped': DOOR,
-}
+FILL_FROM, FILL_TO = [1, 13, 1], [15, 16, 15]
+WHITE = (246, 246, 246, 255)
 
 
-def keeps_uv(name):
-    return 'Seal' in name or 'Handle' in name
+def fill_element():
+    # down shows over the door's gap when it swings open
+    faces = {d: {'texture': '#ce_top_fill', 'tintindex': 0} for d in ('north', 'east', 'south', 'west', 'up', 'down')}
+    faces['up']['cullface'] = 'up'
+    return {'name': 'CE_TopFill', 'from': FILL_FROM, 'to': FILL_TO, 'faces': faces}
 
 
-def reshape(model, moves):
+def build(model):
     out = copy.deepcopy(model)
-    out['credit'] = ('Cooking for Blockheads model reshaped to a full block by tools/gen_cfb_fridge_models.py '
-                     '(CreativeEngineering, TODO cooking/kitchen #6)')
-    seen = set()
-    for e in out['elements']:
-        name = e.get('name')
-        if name not in moves:
-            continue
-        seen.add(name)
-        e['from'], e['to'] = moves[name]
-        if not keeps_uv(name):
-            for face in e['faces'].values():
-                face.pop('uv', None)
-    missing = set(moves) - seen
-    if missing:
-        sys.exit(f'element(s) {sorted(missing)} not found; did CfB change its models?')
+    out['credit'] = ('Cooking for Blockheads model with a top fill to a full block by tools/gen_cfb_fridge_models.py '
+                     '(CreativeEngineering, TODO cooking/kitchen #6, #19)')
+    out['textures']['ce_top_fill'] = 'creativeengineering:block/fridge_top_fill'
+    out['elements'].append(fill_element())
     return out
+
+
+def png(rgba):
+    row = b'\x00' + bytes(rgba) * 16
+    def chunk(kind, data):
+        return struct.pack('>I', len(data)) + kind + data + struct.pack('>I', zlib.crc32(kind + data) & 0xffffffff)
+    return (b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', 16, 16, 8, 6, 0, 0, 0))
+            + chunk(b'IDAT', zlib.compress(row * 16)) + chunk(b'IEND', b''))
 
 
 def main():
@@ -89,22 +64,32 @@ def main():
     if len(jars) != 1:
         sys.exit(f'expected one cookingforblockheads jar in mods/, found {jars}')
     check = '--check' in sys.argv
-    stale = []
     with zipfile.ZipFile(jars[0]) as z:
-        for name, moves in MODELS.items():
-            text = json.dumps(reshape(json.loads(z.read(SRC + name + '.json')), moves), indent='\t') + '\n'
-            path = os.path.join(OUT, name + '.json')
-            if check:
-                if not os.path.exists(path) or open(path).read() != text:
-                    stale.append(name)
-                continue
-            os.makedirs(OUT, exist_ok=True)
-            with open(path, 'w') as f:
-                f.write(text)
-            print('wrote', os.path.relpath(path, ROOT))
+        text = json.dumps(build(json.loads(z.read(SRC + MODEL + '.json'))), indent='\t') + '\n'
+    path = os.path.join(OUT, MODEL + '.json')
+    tex = png(WHITE)
     if check:
+        stale = []
+        if not os.path.exists(path) or open(path).read() != text:
+            stale.append(MODEL)
+        if not os.path.exists(TEX) or open(TEX, 'rb').read() != tex:
+            stale.append('fridge_top_fill.png')
+        stale += [n + ' (should be deleted)' for n in OLD if os.path.exists(os.path.join(OUT, n + '.json'))]
         print('stale: ' + ', '.join(stale) if stale else 'fridge models up to date')
         sys.exit(1 if stale else 0)
+    os.makedirs(OUT, exist_ok=True)
+    with open(path, 'w') as f:
+        f.write(text)
+    print('wrote', os.path.relpath(path, ROOT))
+    os.makedirs(os.path.dirname(TEX), exist_ok=True)
+    with open(TEX, 'wb') as f:
+        f.write(tex)
+    print('wrote', os.path.relpath(TEX, ROOT))
+    for n in OLD:
+        p = os.path.join(OUT, n + '.json')
+        if os.path.exists(p):
+            os.remove(p)
+            print('deleted', os.path.relpath(p, ROOT))
 
 
 if __name__ == '__main__':

@@ -333,6 +333,32 @@ global.removedItems = [
 	// cans with no food in them, out of the can system (feature_writeup/can_parity.md)
 	i.canned_food,
 	i.hot_hot_hotpot,
+	// Abnormals Delight compat items whose mod isn't installed (ui/effects #6): no recipe loads, no creative tab
+	i.passion_aloe_nectar,   // Atmospheric: Relief effect doesn't exist, no food value
+	i.cherry_cream_soda,     // Environmental
+	i.dune_platter,          // Atmospheric
+	i.yucca_gateau_slice,    // Atmospheric
+	// Rustic Delight's fruit beignet (dishes/meals #19); recipes removed in server_scripts/cooking/cooking.js
+	i.fruit_beignet,
+	// Upgrade Aquatic bedrolls (gameplay/misc #10); recipes removed in server_scripts/other/misc_mods.js, leatherworker
+	// trade off in config/upgrade_aquatic-common.toml
+	i.bedroll,
+	i.white_bedroll,
+	i.orange_bedroll,
+	i.magenta_bedroll,
+	i.light_blue_bedroll,
+	i.yellow_bedroll,
+	i.lime_bedroll,
+	i.pink_bedroll,
+	i.gray_bedroll,
+	i.light_gray_bedroll,
+	i.cyan_bedroll,
+	i.purple_bedroll,
+	i.blue_bedroll,
+	i.brown_bedroll,
+	i.green_bedroll,
+	i.red_bedroll,
+	i.black_bedroll,
 ];
 
 console.log(`[jeiRemove] Registered ${global.removedItems.length} removed items to global scope`)

@@ -1036,6 +1036,7 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
 - 2026-10-22 (second bulk run): SQ-OM-00 to SQ-OM-04 PASS on the scratch server (keg slots and faces, old `-02` keg
   NBT, coasters, compost and BlockRunner rows, the 44 drink food values); the logic and server halves of AL-81 to
   AL-87, AL-90, AL-91 recorded, their in-game halves stay open.
+- 2026-10-24: planned from the scratchpad: Vintage Delight's six jar brews get their own category and a redesign (`alcohol/pack #3`, section 11).
 
 ## 10. Third list (2026-10-18 late, BUILT, not tested in game)
 
@@ -1595,6 +1596,15 @@ reads "Intoxicating Drink".
 
 - **History:** 2026-10-20 built (KubeJS food values + port `-03`). 2026-10-20 later: Quark's saturation word
   replaced from patcherMod (1.1.01), effect-line rename retired, AL-88 rewritten.
+
+### Planned from the scratchpad (2026-10-24)
+
+- [TODO](todo/TODO.md) `alcohol/pack #3` **Vintage brews.** The six Pickling Jar brews (Goblin's Piss, Berserker's Brew,
+  Brashing Tonic, Dragon's Belch, Frost Fermenta, Oily Oaf; [vintage_delight.md](vintage_delight.md) §2.7a) all carry
+  vanilla effects in the NBT of a `minecraft:potion`. Plan: put them in their own category and redesign their effects and
+  crafts. They are potions, not registered items, so they are outside the 44 drinks of this section. Open: what "own
+  category" means (JEI category, real items with a tab group, or a tooltip line) and the effects per brew. Brief:
+  [briefs/alcohol_pack.md](briefs/alcohol_pack.md).
 
 ## 12. Coasters: modelled items only, Display Delight models, WTHIT (port + pack + patcherMod) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game)
 

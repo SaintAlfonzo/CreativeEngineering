@@ -86,6 +86,33 @@ pipe-spill collisions; Farmer's Delight bark (cutting board only); candle-skull 
 - The axe dump simulates on the world-bottom block under spawn with a fake player; doors skip the Forge event because
   everythingcopper's listener writes the other half even when simulating.
 
+### Planned from the scratchpad (2026-10-24)
+
+Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `jei/jei-coverage #16`, [TODO](todo/TODO.md) `jei/jei-coverage #17`, [TODO](todo/TODO.md) `jei/jei-coverage #18` (Stripping, Soap Washing, Block Dyeing): the tool dump has been run (no
+  `_fixture` key, 0 errors) but `generated.json` was not regenerated after it, so these tabs still show the fixture
+  rows (3, 4 and 5 rows). Run `/cegen run jei_world` first, then decide: Stripping one row per log pair or one cycling
+  row; Soap Washing keeps cycling dyed glass and copper (the generator groups by target) and already covers copper oxidation
+  (its `unoxidise` rule, so the open "should soap remove oxidation" is answered by the data); Block Dyeing cycles every dye
+  input after a load-time check of the up to about 2,500 rows, and the Create sail inputs are added.
+- [TODO](todo/TODO.md) `jei/jei-coverage #19` (bug): itemless blocks (frosted ice, rare ice, bubble column, candle cakes, rice, tall sea grass, tomato vine
+  and stick, attached hamimelon stem) become a renamed Barrier in `WorldRow.blockStack`. Plan: stand-in items (ice, cake),
+  the Budding tab's barrier output becomes the "Nothing" slot, other rows dropped. Open: stand-in or drop per block.
+- [TODO](todo/TODO.md) `jei/jei-coverage #20` (bug): Burning notes are separate strings per row (`BurnRows`), so a wrapped first note plus the second hits the
+  3-line cut; join them.
+- [TODO](todo/TODO.md) `jei/jei-coverage #21`: the tab is renamed "Lava Interactions" (lang only); open whether basalt gets a water row.
+- [TODO](todo/TODO.md) `jei/jei-coverage #22`: draw mobs instead of spawn eggs (a custom slot renderer reusing More Mooblooms' entity drawing). Open: whether to do it.
+- [TODO](todo/TODO.md) `jei/jei-coverage #23` (bug): Jar Storage potion row is one generic "Any potion" row with an uncraftable potion fluid; replace by a Java
+  provider with one row per potion (like the Potion Buckets pages).
+- [TODO](todo/TODO.md) `jei/jei-coverage #25`: the jar tabs' empty jar icon becomes a "jar with spout". Open: what that is (no such item exists; recommend
+  a drawn jar plus faucet icon).
+- [TODO](todo/TODO.md) `jei/jei-coverage #26`: Knife and Machete Drops (and Grass Drops) say "Cut", not "Broken"; shorter cheese note. Generator text in
+  `tab_drops.py`.
+- [TODO](todo/TODO.md) `jei/jei-coverage #27`: concrete sets after 30 s, not 31: IE's timer is hardcoded, so a mixin on `ConcreteFluid` plus the note text.
+- [TODO](todo/TODO.md) `jei/jei-coverage #28`: drop the one Survivality row from Mob Transformations. The TODO says Survivality is on a removal list, but
+  [feature_porting.md](feature_porting.md) 6 only says port its tweaks one at a time and the jar is still in `mods/`: confirm first.
+
 ## 4. Tests
 
 Install patcherMod 1.1.01, moreMooblooms-1.1.0 and backportedVinery-1.5.5-ce-19.2-04 (all rebuilt 2026-10-22) first.

@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
-import com.SaintAlfonzo.creativeengineering.compat.CuttingBoardOnCounter;
+import com.SaintAlfonzo.creativeengineering.compat.CounterToppers;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,7 +14,7 @@ import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
 
 /**
  * The item lying on a Farmer's Delight cutting board moves with the board's model offset on a Cooking for Blockheads
- * counter ({@link CuttingBoardOnCounter}, TODO cooking/kitchen #8): push + translate at the start, pop at every return.
+ * counter ({@link CounterToppers}, TODO cooking/kitchen #8): push + translate at the start, pop at every return.
  */
 @Mixin(value = CuttingBoardRenderer.class, remap = false)
 public abstract class CuttingBoardRendererOffsetMixin {
@@ -25,7 +25,7 @@ public abstract class CuttingBoardRendererOffsetMixin {
                                 MultiBufferSource buffer, int light, int overlay, CallbackInfo ci) {
         poseStack.pushPose();
         if (board.getLevel() != null) {
-            Vec3 offset = CuttingBoardOnCounter.offset(board.getLevel(), board.getBlockPos());
+            Vec3 offset = CounterToppers.offset(board.getBlockState().getBlock(), board.getLevel(), board.getBlockPos());
             poseStack.translate(offset.x, offset.y, offset.z);
         }
     }

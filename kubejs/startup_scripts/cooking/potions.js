@@ -77,20 +77,25 @@ const CE_POTION_MIXES = [
 const LENGTHEN_REAGENT = 'minecraft:redstone'
 const AMPLIFY_REAGENT = 'minecraft:glowstone_dust'
 
-// Luck / Unluck already exist as real potion items (vanilla minecraft:luck; buzzier_bees's
-// own base unluck + long_/strong_ variants for both) — no CUSTOM_POTIONS registration
-// needed, just the brewing-stand mixes. Modeled on vanilla Water Breathing: base brew +
-// lengthen only, no amplify step (there's no "Luck II" potion in vanilla or buzzier_bees).
+// Luck / Unluck: the potion types are vanilla minecraft:luck plus buzzier_bees's unluck and long_ variants (no
+// CUSTOM_POTIONS registration needed). Buzzier Bees brews them itself (clover base, redstone / glowstone steps,
+// fermented spider eye corruption); those mixes are all removed in section 2 and these are the only luck brews.
+// Base brew + lengthen + amplify; no fermented spider eye corruption step.
 // [reagent, fromPotion, toPotion]
 
 //TODO: give better/magic brewing ingredient
 const LUCK_POTION_MIXES = [
-	['buzzier_bees:four_leaf_clover',  'minecraft:awkward',   'minecraft:luck'],
-	['minecraft:redstone',             'minecraft:luck',      'buzzier_bees:long_luck'],
+	[global.item.four_leaf_clover,  'minecraft:awkward',   'minecraft:luck'],
+	[global.item.redstone,          'minecraft:luck',      'buzzier_bees:long_luck'],
+	[global.item.glowstone,         'minecraft:luck',      'buzzier_bees:strong_luck'],
 
-	['buzzier_bees:silverfish_bottle', 'minecraft:awkward',       'buzzier_bees:unluck'],
-	['minecraft:redstone',             'buzzier_bees:unluck',     'buzzier_bees:long_unluck'],
+	[global.item.silverfish_bottle, 'minecraft:awkward',   'buzzier_bees:unluck'],
+	[global.item.redstone,          'buzzier_bees:unluck', 'buzzier_bees:long_unluck'],
+	[global.item.glowstone,         'buzzier_bees:unluck', 'buzzier_bees:strong_unluck'],
 ]
+// every potion a Buzzier Bees luck mix can output; removeByPotion(null, null, <this>) clears them
+const LUCK_POTIONS = ['minecraft:luck', 'buzzier_bees:long_luck', 'buzzier_bees:strong_luck',
+	'buzzier_bees:unluck', 'buzzier_bees:long_unluck', 'buzzier_bees:strong_unluck']
 
 // Haste — Rustic Delight registers rusticdelight:haste / long_haste / strong_haste, but brews
 // them through its own IBrewingRecipe class (regular potion item only). Create's
@@ -191,7 +196,12 @@ MoreJSEvents.registerPotionBrewing(event => {
 	// patcherMod-registered potions (modded effect, can't go through CUSTOM_POTIONS — see above)
 	CE_POTION_MIXES.forEach(row => mix(row[0], row[1], row[2]))
 
-	// Luck / Unluck — existing vanilla + buzzier_bees potion items, base + lengthen only
+	// Luck / Unluck — Buzzier Bees' own mixes out (MoreJS fires in client / dedicated-server setup, after
+	// its commonSetup enqueueWork registered them), then the pack's base + lengthen rows
+	LUCK_POTIONS.forEach(id => {
+		const p = potion(id)
+		if (p !== null) event.removeByPotion(null, null, p)
+	})
 	LUCK_POTION_MIXES.forEach(row => mix(row[0], row[1], row[2]))
 
 	// Haste — Rustic Delight's own potions, made item-agnostic

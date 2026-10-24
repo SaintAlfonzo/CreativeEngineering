@@ -438,6 +438,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Labels | `labels` | `labels-1.19.2-1.10.jar` | Art donor for Creative Labels, gameplay off (item hidden, recipes removed; sticky_notes.md 3.13). Added 2026-10-18 |
 | both | End's Delight | `ends_delight` | `ends_delight-1.19.2-2.1.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
 | both | Hostile Delight | `hostiledelight` | `Hostile_Delight_0.2.2_1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
-| both | Miner's Delight | `miners_delight` | `miners_delight-1.19.2-1.1.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated; OLD version, newer 1.4.5 exists for 1.21.1 (feature_writeup/delight_addons_2026_10.md) |
+| both | Miner's Delight (Backport) | `miners_delight` | `backportedMiners-1.4.5-ce-19.2-01.jar` | This pack's merged port of Miner's Delight 1.4.5 + 1.1.2 (development/backportedMiners), needs Farmer's Delight. Reads its art and data from the jar in `miners_upstream/` (not mods/). Replaces miners_delight-1.19.2-1.1.2.jar (live since 1.1.02); built 2026-10-24, installed by `:backportedMiners:installToMods` (feature_writeup/miners_delight.md) |
 | both | Oceanic Delight | `oceanic_delight` | `oceanic_delight-1.0.1-forge-1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
 | both | Ocean's Delight | `oceansdelight` | `oceansdelight-1.0.2-1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |

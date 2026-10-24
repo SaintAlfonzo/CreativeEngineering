@@ -18,6 +18,8 @@
     "  fields = mushroom fields, Fungi Delight's defaults: inky cap 16 / 15 / 3, morel 12 / 15 / 4;",
     "  cave patches 1 in 1024 (a third of the mean vanilla brown/red patch rate), cave colonies 1 in 120 (an eighth of",
     "    the 1 in 15 surface colony); a rolled cave chunk tries 8 floor spots.",
+    "Cave carrots (Miner's Delight) are the cave_carrots rule: three Y bands (core -24 to 24 1 in 2 chunks, deep -64 to -25 1 in 5,",
+    "    high 25 to 44 1 in 8; 8 floor spots tried per rolled chunk), nothing above Y 48. Placed features: placed_feature/wild/cave_carrots/.",
     "Vanilla's own brown and red patches and huge mushrooms are not touched."
   ],
   "rules": {
@@ -77,6 +79,14 @@
       "where": ["!ocean", "ocean"],
       "features": ["creativeengineering:wild/mushrooms/brown_colonies_cave", "creativeengineering:wild/mushrooms/red_colonies_cave", "creativeengineering:wild/mushrooms/inky_cap_colonies_cave", "creativeengineering:wild/mushrooms/morel_colonies_cave"],
       "notes": "Every overworld biome. 1 in 120 chunks each; a rolled chunk tries 8 cave floor spots (crops_by_biome.md counts all 8 as attempts, most land in rock). Only on #minecraft:mushroom_grow_block or #minecraft:dirt (moss, rooted dirt, dirt pockets), never on bare stone."
+    },
+    "cave_carrots": {
+      "label": "Cave Carrots (caves)",
+      "mode": "cave",
+      "where": ["!ocean", "ocean"],
+      "features": ["creativeengineering:wild/cave_carrots/core", "creativeengineering:wild/cave_carrots/deep", "creativeengineering:wild/cave_carrots/high"],
+      "disable_modifiers": ["miners_delight:cave_carrots"],
+      "notes": "Miner's Delight wild cave carrots, every overworld biome, never above Y 48 (patch origin Y 44 at most; a patch spreads 3 up). Three bands, each 1 in N chunks, 8 floor spots tried: core Y -24 to 24 1 in 2, deep Y -64 to -25 1 in 5, high Y 25 to 44 1 in 8 (per Y layer the deep and high bands are about half the core density). On stone, deepslate or dirt, in noise caves and in carver caves (air and cave_air; the mushrooms are noise caves only). Replaces the mod's own modifier (1 in 3 chunks, Y -54 to 48, no cave check)."
     }
   }
 }

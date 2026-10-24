@@ -32,7 +32,8 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | Vanilla egg -> `#forge:eggs` migration | list in 3.8 | TODO, not built |
 | Every raw egg stacks to 64 | now a rule of the stack size policy ([stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js), `tools/gen_stack_sizes.py`); `item_properties.js` is removed in 1.0.5 | DEPLOYED with 1.0.6; single player 2026-10-11 logged `[stack_sizes] set 1052 stack sizes`. FO-28 |
 | Glistering Melon Slice edible (Golden Melon Slice values, no effects) | [food_values.js](../kubejs/startup_scripts/cooking/food_values.js), `golden` type in food_types.json | built, scratch server PASSED 2026-10-22 (SQ-OF-12), not run in game (3.10). FO-29 |
-| Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, jar not in `mods/` yet (3.11). FO-30, FO-31 |
+| Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, in the patcherMod 1.1.02 jar installed 2026-10-23 (3.11). FO-30, FO-31 |
+| Pack seasonings framework (NBT seasonings, combine rules, bonus on eating; test set cheese / onion / garlic on popcorn) | patcherMod `food/Seasonings`, `SeasoningRecipe`, `SeasoningTooltip`; [seasonings.js](../kubejs/startup_scripts/cooking/seasonings.js), [seasoning.js](../kubejs/server_scripts/cooking/seasoning.js), NCH `season` | BUILT 2026-10-23, patcherMod 1.1.02 jar in `mods/` (23:46, md5 57feef44); logic harness 11/11; scratch test queued (SQ-SN-00, 01) (3.12). FO-45 to FO-48 |
 | Spice of Life pack config (10 foods to activate, reset on death, queue 256; tier bonuses still WIP) | `defaultconfigs/solapplepie-server.toml` = `configs_edited/server_config/solapplepie-server.toml` | Shipped with 1.1.01 through the deploy's `defaultconfigs`; the instance copy added 2026-10-22. New-world values: scratch server PASSED 2026-10-22 (SQ-CF-01). FO-32 |
 | Bites from placed pies and cakes count for Spice of Life | patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`, [placed_food_slices.json](../kubejs/generation_scripts/food/placed_food_slices.json) | BUILT 2026-10-22, patcherMod 1.1.01 jar in `mods/` (11:06, md5 b5f60533) (4.2 finding 5); scratch server PASSED 2026-10-22 (SQ-SOL-01: load, 14 map entries, mixin); the bite: FO-43 in game |
 
@@ -524,6 +525,42 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 `[jei] seasoningCategory = false` (next JEI start). Compiles against `development/patcherMod/libs/salt-1.19.2-1.2.4.1.jar`
 (git-ignored, copied from `mods/`). FO-30, FO-31.
 
+### 3.12 Pack seasonings framework (BUILT 2026-10-23)
+
+`food/seasoning #3`'s mechanism, separate from Salt's `Salted`. A seasoning is NBT on the food,
+`Seasonings:["creativeengineering:garlic", ...]`, kept sorted so the order they went on doesn't split stacks.
+- **Definitions:** [seasonings.js](../kubejs/startup_scripts/cooking/seasonings.js) (`global.seasoning`, startup, both
+  sides) holds each seasoning once: id, display name, grid item, bonus (`nutrition` hunger points, `saturation` points
+  capped at the food level, `heal` health points, timed `effects`) and `combines` (keys it may share a food with;
+  either side listing the other is enough, unlisted pairs don't combine). It passes each one to patcherMod
+  `food/Seasonings.define` as JSON. The client lang hook [seasoning_lang.js](../kubejs/client_scripts/seasoning_lang.js)
+  adds the names (`seasoning.<ns>.<path>`).
+- **Craft:** recipe type `creativeengineering:seasoning` (`food/SeasoningRecipe`, special shapeless): one food
+  matching `food` + one of each listed seasoning's item gives the same food (all NBT kept, so salted food stays salted)
+  with those seasonings added, count 1. No match if the food already has one of them or any pair among old + new
+  doesn't combine. Emitted by `NCH.season(food, key | [keys], e)`, id `shapeless/season/<keys>_on_<food>`; recipes in
+  [seasoning.js](../kubejs/server_scripts/cooking/seasoning.js).
+- **Eating:** `Seasonings.onEaten` (`LivingEntityUseItemEvent.Finish`, server, players, edible items) applies each
+  seasoning's bonus after the food's own.
+- **Tooltip:** `food/SeasoningTooltip`, one line per seasoning under the name: "Garlic: Speed (0:10)", "Onion: +2
+  nutrition".
+- **JEI:** each seasoning recipe is a page on the Seasoning tab (3.11): food | seasoning item(s) -> seasoned food,
+  food and result cycling together.
+
+Test set on popcorn (first values, not tuned): Cheese (any cheese wedge) +2 saturation; Onion (any onion) +2
+nutrition; Garlic Speed I 10 s. Onion and garlic combine (garlic popcorn + onion, onion popcorn + garlic, or both at
+once give the same stack, both bonuses apply); cheese combines with nothing. `heal` is supported but no seasoning uses
+it yet.
+
+AppleSkin: `compat/AppleSkinSeasonings` (registered only if AppleSkin is loaded) listens to AppleSkin's
+`FoodValuesEvent` and adds each seasoning's nutrition and absolute saturation to `modifiedFoodValues`, so the tooltip
+bar and HUD overlay show the seasoned total (saturation modifier recomputed from the new hunger). Compiles against
+`libs/appleskin-forge-mc1.19-2.4.2.jar`. Heal and effects are not shown. FO-49.
+
+Limits: a seasoned food used as a
+recipe input loses the seasoning; JEI shows seasoned and plain popcorn as one entry (no subtype interpreter). Not built
+from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to FO-48.
+
 ## 4. Limits and decisions
 
 ### 4.1 Limits
@@ -606,6 +643,23 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - **Sweets:** the single smoothie goes or becomes a type with variants (`baking/sweets #5`); matcha and salmonberry ice
   creams made not gross, ice cream parity (`baking/sweets #4`); every ice food takes ice or ice blocks (`dishes/ingredients #5`).
 
+### 4.6 Planned from the scratchpad (2026-10-24)
+- **Merge salts, pink salt** ([TODO](todo/TODO.md) `food/seasoning #6`): the salt items of The Salt and Vintage Delight
+  become one, Vintage's pink salt dust (textures, recipes, tags). Open: which salt wins (recommend Vintage's `salt_dust`).
+- **Salt layers** (`food/seasoning #7`): place a layer while standing in it without being pushed up, and retexture the
+  layer as a palette swap of another layer block. Port change (`SaltLayerBlock`, a snow layer). No open decision beyond
+  which layer block is the palette source.
+- **AppleSkin** (`food/seasoning #8`): pack seasonings already reach AppleSkin (3.12, FO-49); the gap is Salt's own
+  `Salted` bonus, which the tooltip does not show. Confirm which one the note meant.
+- **Seasoned icons** (`food/seasoning #9`): every new seasoning gets its own icon overlay on the food (as Salt's salted
+  overlay); none exist for the pack seasonings yet.
+- **Honeycomb** (`dishes/ingredients #22`): counts as sugar in heated mixing (2 sugar per honeycomb) and as honey in some
+  recipes; spreads on toast. Open: which recipes.
+- **Jams** (`dishes/jams #1`, `#5`): one jam family (Fruits Delight's jam item, Vintage's jam block, mason jars take glass
+  panes, recolour per jam) and nut butter merged with nut mash. Open: which jar item stays, which nut item survives.
+- **Seasoning JEI split** (`food/seasoning #1`, future): one JEI category per seasoning type instead of the single
+  Seasoning page of 3.11.
+
 ## 5. File map
 
 - [dump_food.js](../kubejs/server_scripts/_lib/dump_food.js): `/dumpfood`
@@ -620,6 +674,9 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - [stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js): egg stack sizes (the `egg` rule; `item_properties.js` removed in 1.0.5)
 - patcherMod [compat/jei/SeasoningJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningJEI.java)
   and [SeasoningCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
+- Pack seasonings (3.12): patcherMod `food/Seasonings.java`, `SeasoningRecipe.java`, `SeasoningTooltip.java`;
+  [seasonings.js](../kubejs/startup_scripts/cooking/seasonings.js) (definitions), [seasoning.js](../kubejs/server_scripts/cooking/seasoning.js) (crafts),
+  [seasoning_lang.js](../kubejs/client_scripts/seasoning_lang.js) (names), NCH `season`
 - [food_catalog.md](food_catalog.md): generated reference; `kubejs/exported/food/catalog.json` (not in git)
 - Spice of Life config: `defaultconfigs/solapplepie-server.toml` (pack copy), `saves/<world>/serverconfig/solapplepie-server.toml`, client `config/solapplepie-client.toml`
 - Placed food for Spice of Life: patcherMod `food/PlacedFoodSol.java`, `mixin/ServerPlayerGameModePlacedFoodMixin.java`; `kubejs/generation_scripts/food/placed_food_slices.json`; scratch probe `tools/food_drinks_probe/food_drinks_probe.js` (`/fdtest sol`)
@@ -725,6 +782,22 @@ Cooking oil and fried eggs (3.7), after a restart:
   `logs/latest.log` has no `PlacedFoodSol` warning or error and no mixin failure for
   `ServerPlayerGameModePlacedFoodMixin`; every block in `placed_food_slices.json` exists and maps to an edible item
   (`/fdtest sol`).
+- [ ] **FO-45 Seasoning crafts** (load and recipe ids: scratch SQ-SN-00, 01): Popcorn + any Cheese Wedge, Popcorn +
+  Onion, Popcorn + Garlic, Popcorn + Garlic + Onion each craft one seasoned popcorn. The tooltip under the name reads
+  "Cheese: +2 saturation", "Onion: +2 nutrition", "Garlic: Speed (0:10)" (both onion and garlic lines on the last).
+  Popcorn + Salt still salts it. JEI: U on Garlic shows two Seasoning pages (garlic, garlic + onion).
+- [ ] **FO-46 Combine rules:** Garlic Popcorn + Onion and Onion Popcorn + Garlic both give popcorn that stacks with the
+  Garlic + Onion craft's. Garlic Popcorn + Garlic, Cheese Popcorn + Onion, Cheese Popcorn + Garlic and Onion Popcorn +
+  Cheese give no result.
+- [ ] **FO-47 Bonus on eating** (survival, `/effect clear`, hunger at about 10: `/effect give @s hunger 30 100`, then
+  clear): AppleSkin's numbers before and after eating each: onion popcorn gives 2 more hunger than plain popcorn, cheese
+  popcorn 2 more saturation (never above the hunger bar), garlic popcorn gives Speed I for 10 s, garlic + onion popcorn
+  both. Plain popcorn gives none of these.
+- [ ] **FO-49 AppleSkin:** hover plain popcorn, then onion popcorn: the onion one's hunger bar is 2 drumsticks longer; cheese
+  popcorn's saturation icon is 2 points longer; hold onion popcorn: HUD overlay previews the extra hunger. Eating it
+  fills by the amount shown. Plain popcorn unchanged.
+- [ ] **FO-48 Stacking:** 2 Garlic + Onion popcorns made in different orders stack in one slot; seasoned and plain
+  popcorn don't. `logs/latest.log` has no `Seasonings` error.
 
 ## 8. History
 
@@ -790,3 +863,7 @@ Cooking oil and fried eggs (3.7), after a restart:
 - **2026-10-22** Glistering Melon Slice values (3.10, FO-29: hunger and modifier of the Golden Melon Slice, always
   edible, no effects, golden type) queued as scratch SQ-OF-12 (`tools/older_food_probe.js`); eating it stays in game.
 - 2026-10-22 (second bulk run): SQ-SOL-01 and SQ-OF-12 PASS on the scratch server. FO-44 done; FO-29 and FO-43 in game.
+- 2026-10-23: Pack seasonings framework (3.12, `food/seasoning #3` mechanism): NBT seasonings with combine rules and a
+  bonus on eating; test set cheese / onion / garlic on popcorn. patcherMod 1.1.02 jar installed (also carries the 3.11
+  Seasoning page). FO-45 to FO-48; scratch SQ-SN-00, 01 queued.
+- 2026-10-24: planned from the scratchpad (4.6): merged pink salt, salt layers placed from inside, seasoning on AppleSkin and per-seasoning icons, honeycomb as sugar, one jam family and merged nut butter. Nothing built.

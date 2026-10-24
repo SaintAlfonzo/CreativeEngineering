@@ -864,14 +864,6 @@
         "salt": 1261620025
       },
       "structures": {
-        "betterdeserttemples:desert_temple": {
-          "weight": 40,
-          "frequency": 0.249618,
-          "fit_base": {
-            "weight": 40,
-            "frequency": 0.2
-          }
-        },
         "betterjungletemples:jungle_temple": {
           "weight": 1,
           "frequency": 0.7481,
@@ -906,18 +898,11 @@
         },
         "towns_and_towers:mimic_desert": {
           "weight": 79,
-          "frequency": 0.738952,
+          "frequency": 0.521,
           "fit_base": {
             "weight": 79,
             "frequency": 0.7049
           }
-        },
-        "minecraft:desert_pyramid": {
-          "weight": 1,
-          "frequency": 1.0,
-          "replaces": "betterdeserttemples:desert_temple",
-          "share": 0.1,
-          "note": "Replacement: never picked by this weight; takes 10% of the slots YUNG's desert temple wins and keeps (where both can stand), so temples stay as common as before and 1 in 10 is vanilla. Keep the weight at 1."
         },
         "minecraft:jungle_pyramid": {
           "weight": 1,
@@ -1821,6 +1806,31 @@
           }
         }
       }
+    },
+    "desert_temples": {
+      "note": "Desert temples: YUNG's desert temple and the vanilla desert pyramid, which takes a share of YUNG's temple slots (\"replaces\" in structure_groups.json). Own grid with twice the surface dungeons' minimum distance (structures/rates-and-groups #10).",
+      "placement": {
+        "spacing": 32,
+        "separation": 20,
+        "salt": 1965760655
+      },
+      "structures": {
+        "minecraft:desert_pyramid": {
+          "weight": 1,
+          "frequency": 1.0,
+          "replaces": "betterdeserttemples:desert_temple",
+          "share": 0.1,
+          "note": "Replacement: never picked by this weight; takes 10% of the slots YUNG's desert temple wins and keeps (where both can stand), so temples stay as common as before and 1 in 10 is vanilla. Keep the weight at 1."
+        },
+        "betterdeserttemples:desert_temple": {
+          "weight": 40,
+          "frequency": 0.285,
+          "fit_base": {
+            "weight": 40,
+            "frequency": 0.2
+          }
+        }
+      }
     }
   },
   "standalone": {
@@ -2456,6 +2466,7 @@
       "settlements": 95,
       "pillager_settlements": 90,
       "surface_dungeons": 80,
+      "desert_temples": 82,
       "witch_huts": 79,
       "entrance_dungeons": 78,
       "vehicles": 76,
@@ -2487,6 +2498,7 @@
       "hostile": [
         "pillager_settlements",
         "surface_dungeons",
+        "desert_temples",
         "witch_huts",
         "entrance_dungeons",
         "vehicles"

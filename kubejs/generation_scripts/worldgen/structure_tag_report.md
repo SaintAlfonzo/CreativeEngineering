@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-10-23 21:41:12 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-10-24 08:24:18 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Biome rules
 
@@ -59,6 +59,7 @@ A structure whose pieces would overlap a higher-ranked structure's never starts 
 |---|---:|
 | `settlements` | 95 |
 | `pillager_settlements` | 90 |
+| `desert_temples` | 82 |
 | `surface_dungeons` | 80 |
 | `witch_huts` | 79 |
 | `entrance_dungeons` | 78 |
@@ -87,7 +88,7 @@ No hostile structure starts with a piece within this many chunks (square, XZ) of
 | `settlements` | 5 |
 | `remote` | 3 |
 
-- hostile: `pillager_settlements`, `surface_dungeons`, `witch_huts`, `entrance_dungeons`, `vehicles` (70 structures)
+- hostile: `pillager_settlements`, `surface_dungeons`, `desert_temples`, `witch_huts`, `entrance_dungeons`, `vehicles` (70 structures)
 
 ## Groups
 
@@ -237,19 +238,28 @@ Grid: spacing 16, separation 8, salt 1418638049. Members never start closer than
 
 Surface dungeons: YUNG's desert and jungle temples, the vanilla desert pyramid and jungle temple (each in 10% of its YUNG's version's slots, "replaces" in structure_groups.json), the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The witch huts have their own group (group/witch_huts).
 
-Grid: spacing 16, separation 10, salt 1261620025. Members never start closer than 11 chunks (176 blocks). 9 of 9 members live.
+Grid: spacing 16, separation 10, salt 1261620025. Members never start closer than 11 chunks (176 blocks). 7 of 7 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `betterdeserttemples:desert_temple` | 40 | 0.249618 | 32 | `betterdeserttemples:desert_temples` |  |
 | `betterjungletemples:jungle_temple` | 1 | 0.7481 | 18 | `betterjungletemples:jungle_temples` |  |
 | `eugene:undead_castle` | 1 | 0.026314 | 99 | `eugene:castle` |  |
-| `minecraft:desert_pyramid` | 1 | 1 | 16 | `minecraft:desert_pyramids` | replaces `betterdeserttemples:desert_temple`: takes 10% of the slots it wins and keeps; this weight is never used |
 | `minecraft:jungle_pyramid` | 1 | 1 | 16 | `minecraft:jungle_temples` | replaces `betterjungletemples:jungle_temple`: takes 10% of the slots it wins and keeps; this weight is never used |
 | `minecraft:mansion` | 1 | 0.1191 | 46 | `minecraft:woodland_mansions` |  |
 | `philipsruins:badlands_start_dungeon` | 106 | 0.441692 | 24 | `philipsruins:desert_structures` |  |
 | `terralith:spire` | 1 | 0.445566 | 24 | `terralith:rare_dungeon` |  |
-| `towns_and_towers:mimic_desert` | 79 | 0.738952 | 19 | `towns_and_towers:other` |  |
+| `towns_and_towers:mimic_desert` | 79 | 0.521 | 22 | `towns_and_towers:other` |  |
+
+### `desert_temples` -> `creativeengineering:group/desert_temples`
+
+Desert temples: YUNG's desert temple and the vanilla desert pyramid, which takes a share of YUNG's temple slots ("replaces" in structure_groups.json). Own grid with twice the surface dungeons' minimum distance (structures/rates-and-groups #10).
+
+Grid: spacing 32, separation 20, salt 1965760655. Members never start closer than 21 chunks (336 blocks). 2 of 2 members live.
+
+| Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
+|---|---|---|---|---|---|
+| `betterdeserttemples:desert_temple` | 40 | 0.285 | 60 | `betterdeserttemples:desert_temples` |  |
+| `minecraft:desert_pyramid` | 1 | 1 | 32 | `minecraft:desert_pyramids` | replaces `betterdeserttemples:desert_temple`: takes 10% of the slots it wins and keeps; this weight is never used |
 
 ### `witch_huts` -> `creativeengineering:group/witch_huts`
 
@@ -831,7 +841,7 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - `beautify:botanist_house_savanna`: `beautify:botanist_house_savanna` -> remote
 - `beautify:botanist_house_snowy`: `beautify:botanist_house_snowy` -> remote
 - `beautify:botanist_house_taiga`: `beautify:botanist_house_taiga` -> remote
-- `betterdeserttemples:desert_temples`: `betterdeserttemples:desert_temple` -> surface_dungeons
+- `betterdeserttemples:desert_temples`: `betterdeserttemples:desert_temple` -> desert_temples
 - `betterdungeons:spider_dungeons`: `betterdungeons:spider_dungeon` -> entrance_dungeons
 - `betterdungeons:zombie_dungeons`: `betterdungeons:zombie_dungeon` -> entrance_dungeons
 - `betterjungletemples:jungle_temples`: `betterjungletemples:jungle_temple` -> surface_dungeons
@@ -884,7 +894,7 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - `illager_viking_longship:illager_longship`: `illager_viking_longship:illager_longship` -> boats
 - `illagerwarship:warship`: `illagerwarship:warship` -> boats
 - `llama_stable:llama_stable`: `llama_stable:llama_stable` -> remote
-- `minecraft:desert_pyramids`: `minecraft:desert_pyramid` -> surface_dungeons
+- `minecraft:desert_pyramids`: `minecraft:desert_pyramid` -> desert_temples
 - `minecraft:igloos`: `minecraft:igloo` -> remote
 - `minecraft:jungle_temples`: `minecraft:jungle_pyramid` -> surface_dungeons
 - `minecraft:ocean_monuments`: `minecraft:monument` -> ocean_dungeons
@@ -1097,7 +1107,8 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - **`group/settlements`** 35: `creativeengineering:meta/fortified_camps`, `creativeengineering:meta/fortified_ruins`, `creativeengineering:meta/town_villages`, `creativeengineering:meta/village_towers`, `eugene:red_roof_castle`, `minecraft:village_desert`, `minecraft:village_plains`, `minecraft:village_savanna`, `minecraft:village_snowy`, `minecraft:village_taiga`, `terralith:fortified_desert_village`, `terralith:fortified_village`, `towns_and_towers:exclusives/village_classic`, `towns_and_towers:exclusives/village_iberian`, `towns_and_towers:exclusives/village_mediterranean`, `towns_and_towers:exclusives/village_nilotic`, `towns_and_towers:exclusives/village_rustic`, `towns_and_towers:exclusives/village_swedish`, `towns_and_towers:exclusives/village_tudor`, `towns_and_towers:village_badlands`, `towns_and_towers:village_beach`, `towns_and_towers:village_birch_forest`, `towns_and_towers:village_flower_forest`, `towns_and_towers:village_forest`, `towns_and_towers:village_grove`, `towns_and_towers:village_jungle`, `towns_and_towers:village_meadow`, `towns_and_towers:village_mushroom_fields`, `towns_and_towers:village_old_growth_taiga`, `towns_and_towers:village_snowy_slopes`, `towns_and_towers:village_snowy_taiga`, `towns_and_towers:village_sparse_jungle`, `towns_and_towers:village_sunflower_plains`, `towns_and_towers:village_swamp`, `towns_and_towers:village_wooded_badlands`
 - **`group/pillager_settlements`** 47: `creativeengineering:meta/pillager_camp_ruin`, `creativeengineering:meta/pillager_camp_ruins`, `creativeengineering:meta/pillager_camp_siege`, `creativeengineering:meta/pillager_great_tower_siege`, `creativeengineering:meta/pillager_stronghold_siege`, `creativeengineering:meta/pillager_tower_siege`, `eugene:fake_trader_camp`, `eugene:pillager_camp`, `minecraft:pillager_outpost`, `mysticrift_pillagers_towers_aris:acacia_pillager_tower`, `mysticrift_pillagers_towers_aris:birch_pillager_tower`, `mysticrift_pillagers_towers_aris:cherry_pillager_tower`, `mysticrift_pillagers_towers_aris:desert_pillager_tower`, `mysticrift_pillagers_towers_aris:end_pillager_tower`, `mysticrift_pillagers_towers_aris:jungle_pillager_tower`, `mysticrift_pillagers_towers_aris:mangrove_pillager_tower`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `takesapillage:bastille`, `takesapillage:pillager_camp`, `towns_and_towers:exclusives/pillager_outpost_classic`, `towns_and_towers:exclusives/pillager_outpost_iberian`, `towns_and_towers:exclusives/pillager_outpost_mediterranean`, `towns_and_towers:exclusives/pillager_outpost_oriental`, `towns_and_towers:exclusives/pillager_outpost_rustic`, `towns_and_towers:exclusives/pillager_outpost_swedish`, `towns_and_towers:exclusives/pillager_outpost_tudor`, `towns_and_towers:pillager_outpost_badlands`, `towns_and_towers:pillager_outpost_beach`, `towns_and_towers:pillager_outpost_birch_forest`, `towns_and_towers:pillager_outpost_desert`, `towns_and_towers:pillager_outpost_flower_forest`, `towns_and_towers:pillager_outpost_forest`, `towns_and_towers:pillager_outpost_grove`, `towns_and_towers:pillager_outpost_jungle`, `towns_and_towers:pillager_outpost_meadow`, `towns_and_towers:pillager_outpost_mushroom_fields`, `towns_and_towers:pillager_outpost_old_growth_taiga`, `towns_and_towers:pillager_outpost_savanna`, `towns_and_towers:pillager_outpost_snowy_beach`, `towns_and_towers:pillager_outpost_snowy_plains`, `towns_and_towers:pillager_outpost_snowy_slopes`, `towns_and_towers:pillager_outpost_snowy_taiga`, `towns_and_towers:pillager_outpost_sparse_jungle`, `towns_and_towers:pillager_outpost_sunflower_plains`, `towns_and_towers:pillager_outpost_swamp`, `towns_and_towers:pillager_outpost_taiga`, `towns_and_towers:pillager_outpost_wooded_badlands`
 - **`group/ruins`** 31: `creativeengineering:meta/ruin_cluster`, `creativeengineering:meta/ruin_scatter`, `eugene:ruined_drum_tower`, `forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `forgotten_church:forgotten_church`, `old_illager_statue:old_illager_statue`, `oldvillagerstatue:old_villager_statue`, `philipsruins:ancient_ruins`, `philipsruins:ancient_towers`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:field_stone_ruins`, `philipsruins:field_stone_ruins_rocks`, `philipsruins:level_one_ruins`, `philipsruins:level_three_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:pumpkin_ruins`, `philipsruins:rare_ruin`, `philipsruins:start_nether_ruin`, `small_cat_statues:cat_1`, `small_cat_statues:cat_2`, `small_cat_statues:cat_3`, `terralith:glacial_hut`, `watchtower_building:abandoned_watchtower`
-- **`group/surface_dungeons`** 9: `betterdeserttemples:desert_temple`, `betterjungletemples:jungle_temple`, `eugene:undead_castle`, `minecraft:desert_pyramid`, `minecraft:jungle_pyramid`, `minecraft:mansion`, `philipsruins:badlands_start_dungeon`, `terralith:spire`, `towns_and_towers:mimic_desert`
+- **`group/surface_dungeons`** 7: `betterjungletemples:jungle_temple`, `eugene:undead_castle`, `minecraft:jungle_pyramid`, `minecraft:mansion`, `philipsruins:badlands_start_dungeon`, `terralith:spire`, `towns_and_towers:mimic_desert`
+- **`group/desert_temples`** 2: `betterdeserttemples:desert_temple`, `minecraft:desert_pyramid`
 - **`group/witch_huts`** 4: `betterwitchhuts:witch_circle`, `betterwitchhuts:witch_hut`, `minecraft:swamp_hut`, `villagesandpillages:village_witch`
 - **`group/entrance_dungeons`** 2: `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon`
 - **`group/nether_ruins`** 4: `philipsruins:nether_lava_ruins`, `philipsruins:sealedruinedghaststatue1`, `philipsruins:start_nether_dungeon`, `twigs:bloodstone_obelisk`
