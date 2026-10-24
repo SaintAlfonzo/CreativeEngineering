@@ -202,6 +202,45 @@ New patcherMod package `com.SaintAlfonzo.creativeengineering.bees`:
 
 ---
 
+## bees #3: Honeycomb shearing yield
+Status **Planned** / Work data / KubeJS (a patcherMod mixin is the likely route) / TODO `mobs/bees #3`
+
+### Goal
+Shearing a beehive or bee nest with a full honey level gives 2.5 honeycombs on average; Looting adds more.
+
+### Now
+- Vanilla 1.19.2 gives a fixed 3 honeycombs: `BeehiveBlock.use` (shears) and the dispenser shears behaviour both call
+  `BeehiveBlock.dropHoneycomb` -> `popResource(level, pos, new ItemStack(Items.HONEYCOMB, 3))`. Unverified in this jar
+  (read it with `javap`); it is code, not a loot table, so a KubeJS loot edit cannot change it.
+- Nothing in the pack touches the amount: patcherMod's bee code is `worldgen/BeeNests`, `BeehiveDecoratorBeeNestsMixin`,
+  `TreeFeatureBeeNestsMixin`, `compat/WthitHive` (see [bee_nests.md](../bee_nests.md)); `i.honeycomb` is
+  `minecraft:honeycomb` (item_dict line 557).
+- Honeycomb is also a recipe ingredient and sugar source (`dishes/ingredients #22`: 2 sugar per honeycomb), so the yield
+  feeds that economy.
+
+### Build
+1. patcherMod mixin on `BeehiveBlock.dropHoneycomb` (`@ModifyArg` on the count, or `@Redirect` the `ItemStack`
+   constructor): count = 2 + 50% chance of +1 (mean 2.5), plus Looting.
+2. Looting: shears cannot carry Looting from the enchanting table or an anvil (Looting is a weapon enchantment), so the
+   level has to be read from the held item's NBT (`EnchantmentHelper.getItemEnchantmentLevel(LOOTING, shears)`); it only
+   exists on shears if another mod or command puts it there. Add `[bees] honeycombBase`, `honeycombBonusChance`,
+   `honeycombLootingBonus` to `CEConfig` (and `configs_edited/` as usual).
+3. Dispenser shears: the same static is used, so it needs no extra code; the held-tool level is 0 there.
+
+### Decisions
+- Exact numbers ("about 2.5"). Recommend base 2, +1 at 50%, Looting adds +1 chance per level (mean 2.5, 3 and more).
+- What "Looting" means on shears. Recommend a config switch `honeycombLootingFromShears`, default on, and tell the user
+  it only matters when something puts Looting on shears (else make Fortune count: unverified whether the pack allows it).
+
+### Gotchas
+Does nothing for the nest items bees leave in structures (hive loot is separate). WTHIT/JEI text for honeycomb sources
+(`jei_world` tab Knife and Machete Drops does not list hive shearing).
+
+### Tests (BN-)
+- BN-11 (proposed): shear 40 full hives: mean yield 2.4 to 2.6; with a Looting III shear the mean is higher.
+
+---
+
 ## Built, needs play
 
 None (no Testing / Complete rows in this subfamily).

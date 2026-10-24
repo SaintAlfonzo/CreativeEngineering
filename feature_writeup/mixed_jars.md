@@ -86,6 +86,24 @@ refused. Candy cane then honey candy: mixes. Toast then toast: fine; toast then 
 - **Render look:** every layer is drawn as a flat item, so apples and bars stack like coins. Check in game (MJ-06).
 - The jar capacity config (12) also sets the slot count. Lowering it drops the layers above the new capacity on load.
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/items_jars.md](briefs/items_jars.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `items/jars #1`: capacity 60 (config `[functional.jar] capacity`, now 12) with every other jar value scaled to the same ratios;
+  raw fruit holds 36 (a per-family cap). Soft fluids and item caps all need scaling; old jars need a conversion. Open: per-family caps.
+- [TODO](todo/TODO.md) `items/jars #2`: new contents: all candy mixes, cotton candy, diamond, emerald, redstone (opaque red with black accents, holds 36,
+  glows slightly; glowstone and gunpowder follow), coal, charcoal. New families in `jartags.js`, a pile look in the renderer mixins.
+- [TODO](todo/TODO.md) `items/jars #3`: more foods: raw and cooked fruit, candy, honeycomb, Hostile Delight cookies, jams, dried vanilla, kelp, dried
+  kelp, tobacco leaves, seashells and the lava bottle ([TODO](todo/TODO.md) `cooking/kitchen #18`: Moonlight's lava soft fluid lists
+  the lava bottle with an invalid empty item, `minecraft:bottle`, so a datapack override with `glass_bottle` is the probable fix).
+  This overturns the "left out" list in section 4 for fruit and jams.
+- [TODO](todo/TODO.md) `items/jars #4`: soups and stews take 1 jar space instead of 2 (soft fluid `capacity` and `divider` in the generator); enchanted
+  ones glint in the jar. Open: 1 of 12 or 5 of 60 once `#1` lands.
+- [TODO](todo/TODO.md) `items/jars #5`: storage for pickled veg: a crate or large jars. Open: recommended a crate.
+- [TODO](todo/TODO.md) `items/jars #6`: why hyperxp and toast look like a family: they are in `#supplementaries:cookies` but in no family; the Jar Storage
+  tab's last "one kind per jar" row cycles every such item. Reword that row.
+
 ## 5. File map
 
 - [kubejs/server_scripts/tags/jartags.js](../kubejs/server_scripts/tags/jartags.js): families
@@ -139,6 +157,7 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 
 ## 8. History
 
+- 2026-10-24: planned from the scratchpad: capacity 60, new contents, more foods, soup space, pickle storage, the toast / hyperxp row (`items/jars #1` to `#6`). No code changed.
 - 2026-10-23: 8 more soup fluids (Veggies, Vintage) and 5 hand-written drink fluids; the generator keeps the
   hand-written ones (its delete pass would have removed `nut_milk.json`). Not run in game (VTD-53).
 - 2026-10-22: soups and stews in jars (section 9, TODO `dishes/ingredients #13`): 24 generated soft fluids, own

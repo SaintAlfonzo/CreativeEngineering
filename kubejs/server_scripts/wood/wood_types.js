@@ -44,11 +44,13 @@ R.bulk('remove', species.filter(s => s.sawmill).reduce((acc, s) => acc.concat([
 ]), []))
 
 // ── Remove quarkengineering sawmill recipes for the quark trio ──
+// the pack's sawmill JSONs (patcherMod) replace Quark Engineering's slab / log / door / stairs recipes;
+// its bookshelf recipes stay
 R.bulk('remove', species.filter(s => s.quarkSawmill).reduce((acc, s) => acc.concat([
 	[{ id: 'quarkengineering:sawmill/' + s.name + '/' + s.name + '_slab' }, e],
 	[{ id: 'quarkengineering:sawmill/' + s.name + '/' + s.name + '_log' }, e],
 	[{ id: 'quarkengineering:sawmill/' + s.name + '/' + s.name + '_door' }, e],
-	// (whatever the 4th line is below this)
+	[{ id: 'quarkengineering:sawmill/' + s.name + '/' + s.name + '_stairs' }, e],
 ]), []))
 
 console.log('The wood type event has finished!')

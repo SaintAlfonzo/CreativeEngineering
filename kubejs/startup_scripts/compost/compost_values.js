@@ -740,7 +740,6 @@
 		[i.carved_pumpkin,                     0.65],
 		[i.shroomlight,                        0.65],
 		// abnormals_delight
-		[i.yucca_gateau_slice,                 0.85],
 		// botania
 		[i.fel_pumpkin,                        0.65],
 		// buzzier_bees

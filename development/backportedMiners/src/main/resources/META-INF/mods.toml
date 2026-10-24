@@ -1,0 +1,34 @@
+# Miner's Delight 1.4.5 + 1.1.2 merged and ported to Forge 1.19.2. Keeps the upstream mod id so every resource location,
+# recipe and tag matches the upstream data, which is read from miners_upstream/ at runtime.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="miners_delight"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.miners_delight]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.miners_delight]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.miners_delight]]
+modId="farmersdelight"
+mandatory=true
+versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"

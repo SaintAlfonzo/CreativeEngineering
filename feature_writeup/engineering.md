@@ -216,6 +216,17 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
 - **NBT-tagged single syringe item:** NBT ingredient matching kept failing; one item per animal instead.
 - **`NCH.ieSawmill` for the sawmill recipes:** the kjs-IE schema breaks secondaries (documented at the helper).
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/engineering_dreams-and-desires.md](briefs/engineering_dreams-and-desires.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `engineering/dreams-and-desires #7`: tune the milkshake lava generation and fold it into mixing / extruding. The world interaction is
+  D&D code; its only knobs are `chanceForOreStone` (25) and `chanceForArtificialOreStone` (5) in the per-world
+  `serverconfig/create_dd-server.toml`. The machine route (`resource_blocks.js` extruding with lava and water) exists for the ore stones.
+  Open: the values.
+- [TODO](todo/TODO.md) `engineering/dreams-and-desires #8`: tune the sulfuric acid lava generation (Vintage Improvements; hardcoded, no config found), most
+  likely as a recipe route. Open: the values.
+
 ## 5. File map
 
 - Sawmill: patcherMod [sawmill/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/) (`SawbladeRouting`, `duck/SawmillProcessExt`, `duck/SawmillRecipeExt`), mixins `SawmillProcessMixin`, `SawmillRecipeMixin`, `SawmillRecipeSerializerMixin`, [item/PrecisionSawbladeItem.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/item/PrecisionSawbladeItem.java), `data/forge/tags/items/sawblades.json`, `data/creativeengineering/recipes/sawmill/` (211); [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js); `kubejs/data/creativeengineering/recipes/{blueprint,sawmill}/`; [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) (blueprint item); [tooltips.js](../kubejs/client_scripts/tooltips.js) line 446.
@@ -266,3 +277,4 @@ patcherMod's copies to see whether the jar is current.
 - 2026-10-10 (More Mooblooms): moobloom added to the syringe list ([mooblooms.md](mooblooms.md) O5).
 - 2026-10-18: this writeup; findings F1 to F8; tests EN-01 to EN-18. No code changed.
 - 2026-10-22: F10 fixed (syringe hit sampling, `getActual()`), found in the second scratch bulk run.
+- 2026-10-24: planned from the scratchpad: milkshake and sulfuric acid lava generation (`engineering/dreams-and-desires #7`, `#8`). No code changed.

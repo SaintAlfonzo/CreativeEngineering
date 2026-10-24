@@ -137,6 +137,28 @@ Client-only halves are in round 2 (CQ-VP).
 | SQ-VP-16 | B | `/locate` or `/ceplace` a village, plain / desert / savanna / snowy / taiga | VD-30: Veggies depot houses appear in the 5 vanilla village styles at weight 4 x `mod/veggiesdelight` multiplier 0.5, in `pool_config.json` after the first world load; their chests are Lootr chests | `pool_tags.json`, port injection (normal priority, PoolTuner LOWEST) |
 | SQ-VP-17 | A | boot | Fertile Soul Soil (renamed Nulch): recipe still crafts (3 netherrack, 2 scales, ash, magma cream, nether wart, blaze powder -> 6; Create mixing 2 netherrack, 1 scale) with the same item id; name is lang only | `sawdust.js` line 83; recipe review is a TODO (`composting #2`), not a test |
 
+#### SQ-MD: Miner's Delight cave carrot worldgen (built 2026-10-24, works with the 1.1.2 jar)
+
+Features: [../miners_delight.md](../miners_delight.md) 4.3, `kubejs/generation_scripts/worldgen/mushroom_spawns.json` rule `cave_carrots`,
+placed features `kubejs/data/creativeengineering/worldgen/placed_feature/wild/cave_carrots/`. New world needed (only new chunks change).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-MD-01 | B (new world) | boot; Chunky pregen radius 400; count `miners_delight:wild_cave_carrots` offline by Y (region files, one histogram per 8 layers) and by biome | `[mushroom-spawns] ... 3 mod modifiers off` (FD brown, red, `miners_delight:cave_carrots`) in the log; no error naming `cave_carrots`; **zero blocks above Y 48**; counts per Y layer: core (-24..24) about twice the layers 25..44 and -64..-25, all clearly non-zero; none within 13 blocks of the surface; found in noise and carver caves alike | height cap: lower `max_inclusive` of `high.json` (origin is Y 44 + 1 offset + 3 patch spread); too few: `rarity_filter` chances in the three bands; carver caves empty: the `cave_air` entries in the scan and the predicate |
+
+#### SQ-MDP: Miner's Delight merged backport (built 2026-10-24, jar not yet in `mods/`)
+
+Features: [../miners_delight.md](../miners_delight.md) 4.1, `development/backportedMiners`. The scratch server needs
+`backportedMiners-1.4.5-ce-19.2-01.jar` in `mods/` **instead of** `miners_delight-1.19.2-1.1.2.jar` (same mod id; take it
+from `development/backportedMiners/build/libs/` if not installed yet) and `miners_upstream/` next to `mods/`.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-MDP-01 | A | boot | MND-01 server half: `Done (`; `Miner's Delight upstream data: 182 files`; `Cup conversions: 15 bowl foods`; no registry, mixin, recipe, loot table or loot modifier error naming `miners_delight` (in particular none for `scavenging_cooked_*` or `any_of`); CCK applies `CopperPotBlockEntityMixin`, `StickyBasketBlockEntityMixin`, `StickyBasketBlockEntityAccessor` without "target not found" | translator (`MinersTranslator`) or the CCK hook shapes (P6) |
+| SQ-MDP-02 | A | boot without `miners_upstream/` | MND-04: startup stops with the message naming `miners_upstream` and the Modrinth link | `UpstreamJars.verifyOrFail` |
+| SQ-MDP-03 | A | `/setblock` a lit campfire and a copper pot on it; `/data merge block` the pot's `Inventory` slots 0-3 with `miners_delight:cave_carrot`, `minecraft:red_mushroom`, 2 x `minecraft:brown_mushroom` (the cave soup recipe, 200 ticks, so 160 in the pot); wait 10 s; `/data get block` | MND-10 / MND-12 server half: the meal slot holds 2 `cave_soup_cup` and `Container` is `copper_cup` | `CopperPotBlockEntity.servedResult` or the cup table |
+| SQ-MDP-04 | A | `/loot spawn ~ ~ ~ kill @e[type=squid,limit=1]` with and without a knife in the mainhand (a fake player or `/loot ... mainhand`) | MND-30 server half: knifeless squid gives tentacles 1-3; knife adds the squid item | the GLM types (`miners_delight:add_items` / `replace_items`) or `any_of` translation |
+
 #### SQ-AD: five unintegrated Delight add-ons (boot only)
 
 Features: [../delight_addons_2026_10.md](../delight_addons_2026_10.md), TODO `ports/mod-additions #4-#12`. Nothing is integrated, so
@@ -144,7 +166,7 @@ the only server check is that they load beside everything else.
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-AD-00 | A | boot | `ends_delight`, `hostiledelight`, `miners_delight`, `oceanic_delight`, `oceansdelight` all appear in the mod list; `Done (`; no registry, mixin or tag error naming them; recipes load (no `Failed to parse`) | Remove the jar from `mods/` and say so in `mod_sides.md`; Farmer's Delight needs to be present |
+| SQ-AD-00 | A | boot | `ends_delight`, `hostiledelight`, `miners_delight`, `oceanic_delight`, `oceansdelight` all appear in the mod list; `Done (`; no registry, mixin or tag error naming them; recipes load (no `Failed to parse`, except Hostile Delight's `grollrecp` / `grolllrecp`: known upstream bug B1 in [../hostile_delight.md](../hostile_delight.md), removed at integration) | Remove the jar from `mods/` and say so in `mod_sides.md`; Farmer's Delight needs to be present |
 | SQ-AD-01 | A | `/dumpall` (recipes, tags, loot) copied into `kubejs/exported/` | Dumps exist for the overlap work (`mod-additions #4-#6, #9`); tag overlap counts for tentacle, chorus, guardian written to `delight_addons_2026_10.md` section 3 | none |
 
 #### SQ-RS: removed-item recipe scan (redesigned 2026-10-23)
@@ -156,6 +178,80 @@ Features: [../recipe_progression.md](../recipe_progression.md) F2, RP-01; TODO `
 |---|---|---|---|---|
 | SQ-RS-01 | A | boot with default config; then `/recipescan`; then set `[debug.recipe_scan] runAtLoad = true` in the scratch copy of `creativeengineering-common.toml`, restart, `/reload` once | Default boot: no `[recipe_scan]` or `[jeiRemove]` line. `/recipescan`: chat line with the counts, `[recipe_scan] Scan complete. ... N recipes read, U unreadable` in `logs/kubejs/server.log`, entries end in `(input)` / `(output)`, no merged id (`global.itemMerges` first column) listed. Config on: exactly one scan after `Done (`, none after `/reload`. Note the scan time from log timestamps and N, U | `ServerEvents.loaded` not firing (try the command alone); `stack.id` on Rhino; a large U means `getIngredients` throws for a whole recipe class: log the class |
 
+#### SQ-LE: low-effort TODO batch (added 2026-10-23)
+
+Features: [../potion_buckets.md](../potion_buckets.md) PB-21 to PB-23, [../effects.md](../effects.md) EF-05, EF-12,
+EF-20, [../recipes_cooking.md](../recipes_cooking.md) RC-79 to RC-81, [../recipes_wood.md](../recipes_wood.md) RW-21,
+RW-22, [../structure_tuning.md](../structure_tuning.md) 3.24 (ST-225 to ST-227); TODO `potions/potion-buckets #4, #5`,
+`potions/potions #5`, `recipes/cooking #3`, `recipes/wood #2`, `dishes/meals #17, #19`, `gameplay/misc #10`,
+`blocks/framed-and-decor #9`, `ui/effects #6`, `ui/tooltips #6`, `baking/sweets #6`, `structures/rates-and-groups #10`.
+All KubeJS / data / config: needs a restart (startup scripts), no jar.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-LE-00 | A | boot | `Done (`; no `Error occurred while handling event` from `potions.js`, `potion_area.js`, `pnc_tooltips.js`, `bark.js`, `misc_mods.js`, `cooking.js`, `potion_bottling.js`, `tipped_arrows.js`; no `[NCH]` missing item / fluid for `i.log_driftwood`, `f.orange_jam`, the bedroll keys; `[jeiRemove] Registered` count up by 22 | the named file |
+| SQ-LE-01 | A | grep `latest.log` | `[CE potions] added N item-agnostic potion mixes` (N as before plus 2: the 6 luck rows stay) and MoreJS `removeByPotion` lines for the Buzzier Bees luck mixes; `potion bottling done (N recipes)` and `tipped arrow tipping done` counts lower than the last run's | `potions.js` section 2: MoreJS event timing (fires in client / dedicated setup) |
+| SQ-LE-02 | A | recipe probe (`/recipescan`, or a KubeJS `RecipeManager` id dump) | Present: `creativeengineering:farmersdelightcooking/orange_jam_from_slices`, `creativeengineering:createmixing/orange_jam_from_slices`, `farmersdelight:{grilled_salmon,bacon_and_eggs,salmon_roll,cod_roll}`, `creativeengineering:shapeless/crab_bars_manual_only`, driftwood fdCutting / createSaw recipes with `immersive_weathering:upgrade_aquatic/driftwood_bark`. Absent: `rusticdelight:cooking/fruit_beignet` and its Slice & Dice copy, every `upgrade_aquatic:*bedroll` recipe, `design_decor:mechanical_crafting/enchanted_golden_apple`, `abnormals_delight:upgrade_aquatic/cutting/driftwood{,_log}`, `create:cutting/compat/upgrade_aquatic/driftwood{,_log}`, `quarkengineering:sawmill/*/*_stairs`, `creativeengineering:shapeless/{grilled_salmon,bacon_and_eggs,salmon_roll,cod_roll}`, every bucket / arrow recipe for `minecraft_water`, `_awkward`, `_thick`, `_mundane` | the named script |
+| SQ-LE-03 | A | `/give` an awkward potion bucket, a Swiftness bucket and a blank bucket to a fake player or run `global.potionArea.spawn` from a probe on each stack | awkward: returns 0 rings, no cloud; Swiftness: rings, Swiftness cloud; blank: Night Vision cloud (PB-22) | `potion_area.js` NBT test (`getOrCreateTag().contains`) |
+| SQ-LE-04 | A | probe `PotionBrewing.POTION_MIXES` | Exactly one mix each: awkward + clover -> luck, luck + redstone -> long_luck, luck + glowstone -> strong_luck, unluck + glowstone -> strong_unluck, awkward + silverfish bottle -> unluck, unluck + redstone -> long_unluck; none from luck + fermented spider eye (EF-05) | `removeByPotion` wildcard |
+| SQ-LE-05 | A | probe Villager trades for the leatherworker | No bedroll in any leatherworker level (config `Leatherworkers sell bedrolls = false`) | `config/upgrade_aquatic-common.toml` |
+| SQ-LE-06 | B (new normal world) | boot; `structure_tag_report.md`; `forceload` / census a desert square (the SQ-ST census probe) | ST-225: `desert_temples` 32 / 20 with the pyramid replacement, no config error; ST-226: no two desert temple / pyramid starts closer than 21 chunks; ST-227: `[placement-priority] dropped towns_and_towers:mimic_desert ... overlaps betterdeserttemples:desert_temple` if any overlap, never the reverse | `structure_groups.json` desert_temples |
+
+Client halves (round 2, any client window): PB-21 JEI, PB-23 survival cooldown, EF-12 / EF-20 JEI, RC-79 to RC-81 JEI and
+names, RW-21, RW-22 JEI, glycerol tooltip ("Tastes sweet!" in aqua without Shift, once with Shift), bedrolls and
+Fruit Beignet hidden in JEI.
+
+#### Pack seasonings framework (added 2026-10-23)
+
+Feature: [../food.md](../food.md) 3.12, FO-45 to FO-48; TODO `food/seasoning #3`. patcherMod 1.1.02 jar (installed
+2026-10-23 23:46, md5 57feef44) + startup / server scripts: restart.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-SN-00 | A | boot | `latest.log` has `[seasoning] defined creativeengineering:cheese`, `...:onion`, `...:garlic` and no `[seasoning] bad definition`; `server.log` has `seasoning done`, no `[NCH] season` warning; no `Parsing error loading recipe creativeengineering:shapeless/season/` | `startup_scripts/cooking/seasonings.js` load order (needs `global.item`, `global.effect`) or `NCH.season` JSON |
+| SQ-SN-01 | A | recipe probe (RecipeManager id dump) | Present, type `creativeengineering:seasoning`: `creativeengineering:shapeless/season/{cheese,onion,garlic,garlic_onion}_on_corn_delight_popcorn` | serializer registration (`SeasoningRecipe.register`) |
+
+#### SQ-TI: pack clock helpers and 1.1.02 client-class boot (added 2026-10-24)
+
+Features: [../time.md](../time.md) 3.10 (TI-30), [../fixes_compat.md](../fixes_compat.md) 2.30 (FX-43 to FX-45).
+patcherMod 1.1.02 (in `mods/`) added `XaeroTimeInfoMixin` (client only, `@Pseudo`, `require = 0`), `TimeSettings.clock24` /
+`dayNumber` and the client-only `[moss]` config section (`block/MossTint`). The rendering is client work (round 2,
+CQ-NEW); the server only has to boot with them and the clock math can be probed.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-TI-00 | A | boot | `Done (`; no mixin error naming `XaeroTimeInfoMixin` (Xaero is not on a dedicated server, so `@Pseudo` must skip it silently); no `ClassNotFound` / `NoClassDefFound` for `MossTint`, `net.minecraft.client` or `xaero`; `creativeengineering-common.toml` has `[moss]` `biomeTint`, `tintStrength` | `creativeengineering.mixins.json` client list vs common list; `MossTint` registration guarded by `FMLEnvironment.dist` |
+| SQ-TI-01 | A | probe via KubeJS `Java.loadClass('com.SaintAlfonzo.creativeengineering.time.TimeSettings')` (allowed class?) or a `tools/` probe command: `clock(11800)`, `clock24(11800)`, `dayNumber(0)`, `dayNumber(22299)`, `dayNumber(22300)`, `dayNumber(46299)` with `[time] enabled` true, then false | enabled: `clock` "7:30 pm", `clock24` "19:30"; `dayNumber` is 1 at 0 and steps at the pack sunrise (dayTime 22300 mod 24000, i.e. -1700); enabled false: vanilla clock (`clock24` at 0 is "06:00"). Same numbers as the SeasonHUD "Day x/24" line | `TimeSettings.dayNumber` sunrise maths; TI-30 |
+
+#### SQ-KT: plates and coasters on the Blockhead counter (added 2026-10-24)
+
+Features: [../kitchen.md](../kitchen.md) 2.3 (KT-15, KT-16), TODO `cooking/kitchen #20`. patcherMod 1.1.02 (in `mods/`)
+replaced `CuttingBoardSupportMixin` / `BlockStateCuttingBoardOffsetMixin` with `BlockStateCounterTopperMixin` (support +
+model offset for every `#creativeengineering:counter_toppers` block) and added the client `CoasterRendererOffsetMixin`.
+The tag was renamed `cutting_board_supports` -> `counter_supports`, so the board's own checks (KT-03, KT-05) rerun too.
+2026-10-25: the same mixin also hooks `updateShape` (m_60728_) so Display Delight blocks and toppers pop when the block
+below goes (KT-17); install the rebuilt 1.1.02 jar first.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-KT-00 | A | boot | `Done (`; no mixin error naming `BlockStateCounterTopperMixin` (the coaster renderer mixin is client only, not loaded here) | mixin target names (`m_60710_`, `m_60728_`, `m_60824_`) |
+| SQ-KT-01 | A | copy `tools/kitchen_probe/cfb_kitchen_probe.js` into `srv/kubejs/server_scripts/`, `/kttest` | every `[kttest]` line PASS, in particular KT-03a/b, KT-05a/b/c (the board, unchanged behaviour) and KT-15a-d, KT-16a/b (plates, coaster, plated hamburger, corner; plate over air refused) | KT-15a FAIL with `above: minecraft:air`: tag not filled (`/kubejs` errors in `blocktags.js`, `addMatching` wildcard `displaydelight:*plated_*`); KT-16 FAIL: the per-state cache never saw the tag (`CounterToppers.init` / `TagsUpdatedEvent`) |
+| SQ-KT-02 | A | same `/kttest` run | KT-17 PASS for all four (plate and plated hamburger on stone, plate and coaster on a counter): `above: minecraft:air` with drops listed | `above` still the plate: the `updateShape` hook did not apply (mixin error at boot) or `popsUnsupported` is false (namespace check); air but `drops: none`: loot table or `destroyBlock` flags |
+
+#### SQ-OPEN: older [scratch]-tagged tests still unchecked, not covered by an entry above (added 2026-10-24)
+
+No new commands: the steps and expected results are in the named test (the writeup is the spec). Several have partial results
+in the writeup or in `testing/structures/*.scratch.md`; read those first so a rerun does not start cold. Run only after the
+jar set is the current one, and tick in the writeup.
+
+| ID | Group | Tests | Notes |
+|---|---|---|---|
+| SQ-OPEN-LO | B | [../locate.md](../locate.md) LO-01, LO-03, LO-04, LO-05, LO-13, LO-14, LO-17 | `/celocate` baseline, census 128 with stages A + B, rates, non-blocking loads, config switches, miss reasons, stop label. LO-03/04/14 share one census run |
+| SQ-OPEN-FP | B (new player join) | [../feature_porting.md](../feature_porting.md) FP-02, FP-03, FP-05, FP-07, FP-10, FP-12; server halves of FP-11, FP-13, FP-15 already PASSED (SQ-OM) | FP-10 duplicates FP-03: run once, tick both. FP-12 needs a real or fake player beside a lit campfire. FP-05 ice boats is client-feel; only the speed numbers are server |
+| SQ-OPEN-ST1 | B | [../structure_tuning.md](../structure_tuning.md) ST-106, ST-114, ST-115, ST-118, ST-120, ST-135, ST-136 | Phase 2 / 6 results are already in the entries (ST-115 and ST-135 FAILED then); recheck against the current jar before blaming code |
+| SQ-OPEN-ST2 | B | ST-133, ST-137, ST-142, ST-147 (the `[scratch/game]` ones: the scratch half only) | Ocean geode count by y; way sign text and no-mashup / town village checks need eyes |
+| SQ-OPEN-ST3 | B | ST-158, ST-160, ST-176, ST-186, ST-188, ST-191 to ST-198 | Earth-fill `log = ALL` lines, ground match, restart determinism of villages, deep dungeons, drum tower, stone tag |
+
 ### Round 2: with a client window
 
 One JVM at a time (memory `one-game-instance-at-a-time`): this round is run with the scratch server stopped. Either a
@@ -164,6 +260,9 @@ fresh `config/`, so client defaults are the pack's) or the user's own game. A si
 server, so server probes (`/vtdtest`, `/fdtest`) also run there. Rows say what to look at; the full steps are in the
 named writeup test. Cheapest order: CQ-DUMP first (everything after the Vintage rows depends on it), then one creative
 superflat world for the visual groups, then a normal world for the world-feel groups.
+
+Planned (not built): [../client_capture.md](../client_capture.md) runs the capturable rows unattended and leaves one
+cropped PNG per test ID in `test_captures/`; once it exists these rows get a `Capture` column (spec / manual / partial).
 
 #### CQ-DUMP: client-only dumps (unblocks the Vintage rows and the UI generators)
 
@@ -206,6 +305,14 @@ Colours / WTHIT / JEI / GUI each need the client.
 | CQ-OLD-06 | AE-01 to AE-24, GR-28, FX-21 to FX-24 | Armor and tool effects in play (the on-hit half passed on the server), air brake `useDurationTicks`, Trinket Case refuses only the open case |
 | CQ-OLD-07 | MB-100 to MB-104, MT-25, SN, CP-15 to CP-26 | More Mooblooms JEI, leaf pile slow height walking and WTHIT, can crafts and effects in play |
 | CQ-OLD-08 | DP-08, OV | First join of a world with the release's `world_serverconfig` README steps for a single-player save (client half of DP-08) |
+
+#### CQ-NEW: client halves added 2026-10-24
+
+| ID | Existing test | What to do and look at |
+|---|---|---|
+| CQ-NEW-01 | TI-30, TI-31 | Xaero minimap time line agrees with SeasonHUD (default profile, `/time set 11800`, sunrise step; Nether unchanged); bed clock: sleep at dusk, note whether Better Days' and the hotbar clock turn |
+| CQ-NEW-02 | FX-43 to FX-45 | Moss block and carpet follow the biome grass colour; items stay vanilla green in inventory, JEI and hand; `biomeTint = false` (F3+T) vanilla; `tintStrength = 0.5` (F3+A) |
+| CQ-NEW-03 | FO-49 | AppleSkin: onion popcorn's hunger bar 2 drumsticks longer than plain; cheese and garlic lines; JEI seasoning page (`SeasoningJEI`) |
 
 Anything that fails here is written to the feature's writeup first, then fixed; a pass is ticked in the writeup and the
 TODO row's status word changes.

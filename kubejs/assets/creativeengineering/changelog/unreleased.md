@@ -2,108 +2,83 @@
 
 ## Farming & Nature <!-- icon: vintagedelight:oat -->
 
-- **New:** Vintage Delight: Oat, Peanut, Cucumber and Ghost Pepper crops, with crates, an oat bag and an oat bale.
-  Ripe Cucumber and Ghost Pepper plants are picked by right-click and grow back. A knife on ripe oats gives straw.
-- **New:** Ghost Pepper Seeds plant only on Soul Soil, Rich Soul Soil and Fertile Soul Soil.
-- **Changed:** Nulch is renamed Fertile Soul Soil.
-- **New:** Wild Oats: cold and temperate grassland and forests. Wild Peanuts: savannas and other hot, dry grassland.
-  Wild Cucumbers: swamps, jungles, other wet biomes, and cold and temperate grassland. New chunks only.
-- **New:** Wild Ghost Peppers: Crimson and Warped Forests. Salt patches on beaches and stony shores. New chunks only.
-- **New:** Ripe peanuts sometimes drop a Magic Peanut. Planted, it grows a Magic Vine tree with Lush Grass under it
-  and often a Golden Egg on top. A hoe turns Lush Grass into Rich Soil Farmland.
-- **New:** Geese rarely lay a Golden Egg on open ground instead of an egg (1 in 1000 lays). They never take it to a
-  nest.
-- **New:** Composting: Vintage Delight's produce, seeds, pickles, Pickled Egg, Century Egg and Magic Peanut; the wild
-  crops (0.65) and crates (always a layer) of Vintage Delight and Veggies Delight, and the Oat Bag.
-- **New:** Fungi Delight: Inky Cap and Morel mushrooms with colonies and huge mushrooms, Truffles, Truffle Dirt,
-  Inky Goo Veil, and crates for brown, red, inky cap and morel mushrooms and truffles.
-- **New:** Inky Caps: dark forests, mushroom fields and caves. Morels: dark forests, swamps, mushroom fields and caves.
-  Rare colonies of brown, red, inky cap and morel mushrooms in caves. New chunks only.
-- **New:** Truffle Dirt inside Rooted Dirt patches in dark forests and cold forests. It drops 1 to 2 Truffles (more
-  with Fortune). New chunks only.
-- **New:** Inky Goo Veil grows down from the underside of an inky cap, up to 16 blocks.
-- **New:** Composting: Fungi Delight's mushrooms, colonies, huge mushroom blocks, Inky Goo Veil, truffles and crates.
+- **Changed:** Wild Cave Carrots (Miner's Delight) generate in caves of every biome, most often around Y 0, less often
+  from Y 25 to 48 and from Y -64 to -25, never above Y 48 [was Y -54 to 48 in a third of all chunks]. New chunks only.
 
 ## Food & Cooking <!-- icon: vintagedelight:fermenting_jar -->
 
-- **New:** Pickling Jar: 6 ingredients, a container slot and 2 outputs, no heat. It makes pickles, pickled beetroot,
-  eggs, onions and peppers, kimchi, surströmming, century eggs (any egg), overnight oats, vinegar and six brews.
-- **New:** Vintage Delight's foods: oatmeal, pickle soup, ghostly chili, pad thai, cheese pasta, cucumber salad,
-  burgers, a burrito, PB & J, salted cod and salmon, granola bars, oatmeal cookies, cheese and meat pizzas.
-- **New:** Vintage Delight's Cheese Burger and Deluxe Burger are shaped recipes on a Cheese Slice, with a beef or
-  vegetarian patty, plus a sequenced assembly each. The Stuffed Burrito is wrapped in a Tortilla, with a ghost pepper
-  or a roasted bell pepper, plus a sequenced assembly.
-- **New:** Cheese Pasta, Pad Thai and Pickle Soup also craft by hand from cooked ingredients. Oatmeal Cookies bake in
-  the oven (cookie dough + 2 Raw Oats -> 12). Oat Dough does not smelt into bread.
-- **New:** Mason Jars of apple sauce, jams, relish, nut mash, honey and vinegar. Up to 4 stand on one block; a jar
-  holds 3 bottles.
-- **New:** Vinegar, Nut Milk, every jar filling, Pickle Soup, Ghostly Chili and Oatmeal go in a Supplementaries jar.
-- **New:** Carrot Juice, Dandelion Juice, Turnip Water and Fermented Garlic Honey go in a Supplementaries jar.
-- **New:** Oat Dough works in every dough recipe.
-- **New:** Cheese Mold: 4 Cheese Curds turn into a Cheese Wheel, cut into 4 slices.
-- **New:** Salt Blocks and the Evaporator grow salt layers next to water. Salt Dust works in every salt recipe.
-- **Changed:** Kimchi and Pickled Pickles are made in the Pickling Jar (was the Keg). Pickled Pickles take a Honey
-  Bottle (was 250 mB of honey).
-- **Changed:** Fermented Garlic Honey is made in the Pickling Jar (was the Cooking Pot).
-- **New:** Veggies Delight dishes take Vintage Delight ingredients where Veggies Delight has recipes for them: cheese
-  versions of its soups, pastas and stews, Cesar Salad and Stuffed Zucchini Boat; ghost pepper versions; Veggies
-  vegetables in pad thai, ghostly chili and pickle soup.
-- **New:** 24 cans: Broccoli, Cauliflower, Sweet Potato, Turnip, Zucchini, Baked Sweet Potato, Roasted Zucchini,
-  Roasted Cauliflower, Pasta with Broccoli, Potato Noodles, Cauliflower Bread, Garlic Bread, Mhadjeb, 4 Veggies Delight
-  salads, 5 soups, Sweet Potato Pie Filling, Glistering Melon Slice.
-- **New:** Sweet Potato Pie Filling also comes from the Cooking Pot (2 Baked Sweet Potatoes, 2 sugar) and bakes into
-  a Sweet Potato Pie with a Pie Crust.
-- **New:** Vinegar is a canning additive for every raw vegetable, fruit, meat and fish can and every salad can.
-- **New:** Mods: End's Delight, Hostile Delight, Miner's Delight, Oceanic Delight and Ocean's Delight. Their foods and
-  mob drops are in the game; recipes and balance are not yet adjusted to the pack.
-- **New:** Fungi Delight's foods: Inky Caps Salad, Creamy Morel Soup, Truffle Ice Cream, Inky Cap Scrambled Eggs,
-  Truffle Pasta, Stuffed Morels, Steak with Mushrooms, Mutton Chops with Truffle, Rabbit with Morels, Pork Marsala
-  with Mushrooms; Cleaned and Cooked Inky Cap, Truffle Slices.
-- **New:** All 7 Fungi Delight Cooking Pot meals also craft by hand from cooked ingredients.
-- **New:** Truffle Pie bakes in the oven (Pie Crust, 2 Truffles, 2 sugar).
-- **New:** Suspicious Stew from a brown and a red mushroom with an Inky Cap (Luck), a Morel (Comfort) or a Truffle
-  (Haste).
+- **New:** Orange Jam from 4 Orange Slices, a Lemon Slice and sugar in the Cooking Pot, and in a heated Create mixer
+  with 100 mB of water (125 mB of jam). The 2-orange recipes stay.
+- **New:** Seasonings on Popcorn in the crafting grid: Cheese (any wedge, +2 saturation), Onion (+2 nutrition) and
+  Garlic (Speed I for 10 s). Onion and Garlic go on the same popcorn, in either order or together; Cheese goes on
+  alone. Tooltips and AppleSkin show the bonus.
+- **Changed:** Fried Rice is renamed Egg Fried Rice.
+- **Removed:** Fruit Beignet.
+- **Removed:** Passion Aloe Nectar, Cherry Cream Soda, Dune Platter and Yucca Gateau Slice. None of them could be made.
+- **New:** Food Plates, Small Food Plates, plated foods and Coasters can be placed on a Kitchen Counter or Kitchen
+  Corner.
+- **Changed:** A two-high Fridge has its own shape again, with a white box on top filling it to a full block (was
+  stretched to fill the block).
+- **Fixed:** Plates, plated foods and other Display Delight foods stayed in the air when the block under them was
+  broken.
+
+- **New:** Miner's Delight spider and insect foods: Arthropod, Cooked Arthropod, Seasoned Arthropods, Spider Leg,
+  Baked Spider Leg, Glazed Arachnid Limbs (feast), Insect Stew, Insect Sandwich, Insect Wrap.
+- **New:** Miner's Delight bat and squid foods: Bat Cookie, Bat Rolls, Bat Soup, Squid Sandwich, Takoyaki, Glow Ink
+  Pasta, Tentacles On A Stick.
+- **New:** Miner's Delight vegan foods: Vegan Patty, Vegan Hamburger, Vegan Wrap, Vegan Steak And Potatoes, Fake
+  Meatloaf (feast), Cave Hamburger.
+- **New:** Crunchy Bar, Nutritional Bar and Golden Nutritional Bar (both cure Poison), Moss and Copper Carrot.
+- **New:** Bat Soup Cup, Insect Stew Cup, Bone Broth Cup and Onion Soup Cup. The Copper Pot serves Bat Soup, Insect
+  Stew, Bone Broth and Creamy Onion Soup as 2 cups per bowl.
+- **Changed:** Redrawn: Cave Carrot, Baked Cave Carrot, Cave Carrot crops, Wild Cave Carrots, Gossypium, Weird Caviar,
+  Bowl Of Stuffed Squid, Tentacles, Baked Tentacles and the Sticky Basket's sides.
+- **Removed:** Hot Cocoa Cup. Hot Cocoa Cups already in a world are lost.
 
 ## Blocks & Building <!-- icon: vintagedelight:salt_bricks -->
 
-- **New:** Salt Bricks, Mixed Salt Bricks (slabs, stairs, walls), Smooth Salt, Salt Pillar and 17 Salt Lamps.
-- **New:** Magic Vine logs and wood, Vine Tiles (slab, stairs) and Vine Net.
-
-## Gear & Combat <!-- icon: vintagedelight:white_chefs_hat -->
-
-- **New:** Chef's Hats in 16 colours.
-- **Removed:** Simple Hats' Chef's Hat no longer comes from hat bags.
-
-## Mobs & Animals <!-- icon: minecraft:chicken_spawn_egg -->
-
-- **New:** Chickens eat Oat, Cucumber and Ghost Pepper Seeds, and parrots are tamed with them. Pigs eat cucumbers,
-  ghost peppers, raw oats and peanuts. Villagers pick up ghost peppers, cucumbers, peanuts and oats.
-- **New:** Inky Cap Cows (dark forests, mushroom fields) and Morel Cows (dark forests, swamps, mushroom fields).
-  Shears turn them into a cow and drop 5 of their mushroom.
-- **New:** Brown Mooshrooms spawn in dark forests (half of them) and mushroom fields (a quarter).
-- **New:** Mooshrooms, Inky Cap Cows and Morel Cows breed with each other. The calf is one parent's kind.
-- **New:** Pigs eat brown and red mushrooms, Inky Caps, Morels and Truffles. Pigs bred with a Truffle sometimes have 1
-  or 2 extra piglets.
-- **New:** Pigs sometimes dig in podzol, mud, rooted dirt and Truffle Dirt for truffles and other items. The block
-  turns into coarse dirt. Pigs do not dig when mob griefing is off.
-- **New:** A Truffle used on a tamed wolf (not used up): for 2 minutes the wolf looks for Truffle Dirt nearby and
-  scratches the ground above it.
-- **New:** Hoglins breed with Truffles. Piglins take Truffles.
-- **New:** Farmers (level 3) buy mushroom colonies and Truffles. Wandering Traders sell Inky Caps, Morels and Inky Goo
-  Veil.
+- **Changed:** Moss Blocks and Moss Carpets take the biome's grass colour [always green].
 
 ## Brewing & Drinks <!-- icon: minecraft:brewing_stand -->
 
-- **New:** Potion of Burrowing (Awkward Potion + Truffle; Redstone, Glowstone): blocks a shovel mines break 50 %
-  faster, 100 % at level II. Brews in the brewing stand, the Create mixer and the IE Mixer.
-- **New:** Weak Stomach: eating Inky Caps or durian. Drinking alcohol or any potion other than water while it lasts
-  gives Nausea II, Poison II and Weakness II for 10 seconds.
+- **Changed:** Luck brews: Awkward Potion + Four Leaf Clover gives Luck, Awkward Potion + Silverfish Bottle gives Bad
+  Luck, Redstone lengthens both, Glowstone Dust strengthens both. Fermented Spider Eye on Luck no longer brews.
+- **Fixed:** Potion buckets had no cooldown in survival.
+- **Fixed:** Awkward, Thick, Mundane and Water potion buckets burst a Night Vision cloud. They now do nothing and are
+  not used up.
+- **Removed:** Potion bucket and machine tipped arrow recipes for Water, Awkward, Thick and Mundane Potions.
+
+- **New:** Potions of Haste (Awkward Potion + Copper Carrot) and Mining Fatigue (Potion of Haste + Fermented Spider
+  Eye). Redstone lengthens both, Glowstone Dust strengthens both.
 
 ## Interface & Tooltips <!-- icon: minecraft:written_book -->
 
-- **New:** JEI information pages for mushroom colonies, truffles (pig digging, wolf search) and the foods that cause
-  Weak Stomach.
+- **Changed:** Drop of Glycerol's tooltip reads "Tastes sweet!" and shows without holding Shift.
+- **Fixed:** The minimap's day and time line read 1:42 behind the season line and changed day at a different hour.
+  Both now show the same time and change day at sunrise.
+
+## Mobs & Animals <!-- icon: miners_delight:arthropod -->
+
+- **New:** Spiders and Cave Spiders killed with a knife drop 1 to 3 Arthropods; Spiders also drop Spider Legs (40%), and
+  both sometimes drop a Cobweb. Killed while on fire, they drop Cooked Arthropods and Baked Spider Legs instead.
+- **New:** Silverfish killed with a knife drop an Arthropod and Silverfish Eggs (50%); without a knife, Silverfish Eggs
+  only (5%).
 
 ## World Generation <!-- icon: minecraft:amethyst_cluster -->
 
-- **Fixed:** Worlds and servers failed to load on 1.1.02.
+- **Changed:** Desert temples and desert pyramids start at least 336 blocks apart (was 176). They are as common as
+  before. New chunks only.
+
+## Loot & Trading <!-- icon: minecraft:chest -->
+
+- **New:** Abandoned mineshaft chests can hold Copper Carrots and Cave Carrots.
+
+## Crafting & Recipes <!-- icon: minecraft:crafting_table -->
+
+- **Changed:** Driftwood logs and wood give Driftwood Bark when stripped on a cutting board (was Tree Bark) or in a
+  Create saw (was none).
+- **Removed:** Design Decor's Enchanted Golden Apple mechanical crafting recipe.
+
+## Gameplay <!-- icon: minecraft:red_bed -->
+
+- **Removed:** Bedrolls. Leatherworkers no longer sell them.

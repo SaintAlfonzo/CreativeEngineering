@@ -145,6 +145,14 @@ with the rules emptied (the generator refuses a baseline taken with rules).
   dump are noisy.
 - Distant Horizons generates its own LOD terrain on the server; the scratch-server measurement ran without it.
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `mobs/bees #3`: shearing a hive gives about 2.5 honeycombs on average (vanilla gives a fixed 3 from `BeehiveBlock.dropHoneycomb`,
+  unverified in the jar), Looting adds more. Needs a patcherMod mixin and config values (base 2, +1 at 50%). Open: exact numbers, and
+  what Looting means on shears (it only counts when something puts it on the shears). See `dishes/ingredients #22` for honeycomb as sugar.
+
 ## 5. File map
 
 - [kubejs/generation_scripts/worldgen/bee_nests.json](../kubejs/generation_scripts/worldgen/bee_nests.json): the rules
@@ -207,6 +215,7 @@ Install the jar first (section 0). Use a new world or unexplored terrain.
   files: `6 rules, 44 biomes tuned`, 2 bee-tree features, no errors. Only new chunks change. BN-01 to BN-10 pending.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- 2026-10-24: planned from the scratchpad: honeycomb shearing yield (`mobs/bees #3`). No code changed.
 
 ## 9. Starter rules
 

@@ -131,6 +131,14 @@ canned cake with 4 servings (`cans/canning #15`, [can_parity.md](can_parity.md) 
 Listed in food.md 3.6: a grid slot with a stack of full cans opens a new one per craft; auto-feeders that call the item
 directly eat a whole can; a dedicated-server client guesses nothing for a last-serving craft until the server answers.
 
+### Planned from the scratchpad (2026-10-24)
+
+- [TODO](todo/TODO.md) `cans/canning #17`: every feast is cannable, as the nine existing feast cans are (see `dishes/meals #5`).
+  Not canned yet by the generator: the pizzas (Brewin', Vintage cheese and meat, vegan), Veggies Delight's stuffed bell peppers
+  feast, quiche and Oceanic Delight's plated blocks (unverified which count as feasts). Plan:
+  [cans_canning](briefs/cans_canning.md) `canning #17`. Open: none beyond keeping the section's 6-serving rule. Tests CN-07 and
+  CN-08 are proposed there and not added to section 7 until built.
+
 ## 5. File map
 
 - patcherMod: [food/CanServings.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/food/CanServings.java), [food/CanServingsTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/food/CanServingsTooltip.java), `mixin/ItemStackCanServingsMixin`, `compat/KubeJSCanAction`, `compat/DyeableCannedGolem`, `mixin/CannedGolemColorMixin`, `mixin/CannedGolemRendererMixin`; `CEConfig.Canning`.
@@ -167,3 +175,4 @@ Golem: R4-07 ([plan_1.0.4.md](plan_1.0.4.md)).
 - 2026-10-20: D-D sliced-input alignment built (gen_can_types.py, canning.js, food_values.js); see can_parity.md 8.
 - 2026-10-20: raw fish cans use a Fish Meal (4, 2) instead of the Meat Meal ([can_parity.md](can_parity.md) 4.2).
 - 2026-10-20: pufferfish on the Fish Meal, shulker on its own (2, 1) x 4 meal; value-vs-goal per can in [can_parity.md](can_parity.md) 4.3.
+- 2026-10-24: planned `cans/canning #17` (all feasts cannable) added; no code changed.

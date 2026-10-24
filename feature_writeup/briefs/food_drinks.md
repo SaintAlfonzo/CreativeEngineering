@@ -189,6 +189,8 @@ bottle or need plating by hand.
 - CCK's recipes live in a built-in datapack loaded with the mod; `R.remove` reaches them like any recipe (they are in the
   recipe manager by the time KubeJS runs), but check JEI.
 - The Brewin' port's kombucha uses `create_central_kitchen:green_tea` (alcohol.md 4.5); keep that fluid.
+- Added scope (scratchpad 2026-10-24): the azalea tea recipe and a full tea audit are `drinks #10`; do them with this
+  row's merges so each tea is checked once.
 
 ### Tests
 - RC-36 JEI: long and strong teas show their own names and colours.
@@ -451,6 +453,9 @@ below keeps its current recipes. Grid (manual) crafts stay either way.
 - **Every drinkable juice gets a Kettle recipe more efficient than its manual one**, made in the pot or not (table 2).
 - **Later (`drinks #8`):** one standard crafting rule for the juice and tea families (hand, Kettle, Create, IE).
   The Kettle recipes here can be rough until then, but must beat the grid.
+- **Added 2026-10-24:** teas are made in both the Kettle and the pot. The Kettle recipe is 2x as efficient as the pot's
+  (twice the output per input); the pot tea takes 2 fruit per tea (today 2 to 4 plus sugar, table 1); sugar, honey and
+  honeycomb go in the pot recipe only, never the Kettle. Applies to the five Fruits Delight teas in table 1.
 
 ### 1. Pot drink audit (2026-10-22)
 Live pot recipes from `kubejs/exported/recipes/all.csv` (dump of 2026-10-22 02:14), checked against the jars
@@ -498,6 +503,99 @@ Every `juice` item in `item_dict.js`, recipes read from the jars and checked liv
 
 Not drinkable, left out: Vinery's apple juice and six grape juices (`GrapejuiceBottleItem`, wine ingredients that
 return a wine bottle, not foods). `tmted:melon_juice` is merged into FD's at the fluid level (cooking.js).
+
+---
+
+## drinks #8: Standard crafting rule for juices and teas
+Status **Planned** (after `drinks #7`) / Work: KubeJS / id `food/drinks #8`
+
+### Goal
+One rule for every juice and tea (Veggies Delight juices included): inputs per bottle by hand, Kettle, Create mixing
+and IE Mixer, each machine route more efficient than hand, as the can and cider families already are.
+
+### Now
+Juices are listed in `drinks #7` table 2; Create mixing for Hamimelon, Kiwi, Lemon, Orange and Pear exists; the IE Mixer
+route is unverified. The cider family is the model
+(Kettle beats the grid, `drinks #3`). Veggies' carrot, dandelion and turnip water juices are in `drinks #2`'s audit.
+
+### Build
+1. Write the rule once as a table in this section after the audit: fruit per bottle by hand, in the Kettle (2x the
+   pot, 2026-10-24), in a Create mixer (heated), in an IE mixer; sugar / honey / honeycomb pot-only.
+2. Apply it with `NCH.frBrewing` (Kettle), `NCH.createMixing`, the IE mixer helper (unverified name; grep
+   `neoCraftHelper.js`) and `R.shapeless` for the hand craft; no `e.custom`.
+
+### Decisions
+- "2x efficient" is read as twice the output per input compared with the pot recipe; the other reading is twice the
+  speed. Recommend output per input, and a cooking time no longer than the pot's.
+- Whether machines also beat hand for juices that have no pot recipe: recommend yes (the row says every juice).
+
+### Tests
+- RC-D1 per family: the hand, Kettle, mixer routes of one juice and one tea give 1x / 2x / better output, JEI lists all.
+
+---
+
+## drinks #9: Bayberry soup becomes juice or tea
+Status **Planned** / Work: KubeJS (+ lang) / id `food/drinks #9`
+
+### Goal
+Fruits Delight's Bayberry Soup (`i.bayberry_soup`, `fruitsdelight:bayberry_soup`) becomes a drink. The scratchpad says
+juice in one place and tea in another.
+
+### Now
+- Pot recipe `farmersdelight:cooking/bayberry_soup` (verified in the jar): 4 `#forge:fruits/bayberry`, glass bottle,
+  200 ticks. Create heated mixing 4 bayberries + 250 mB water -> 250 mB `fruitsdelight:bayberry_soup` fluid, plus
+  filling and emptying recipes. It is a bottle drink already (container glass bottle, leaf piercing 10 s,
+  food_catalog.md line 672) but typed `soup`.
+- The pack types it `soup` (`generation_scripts/food/food_types.json`), has `canned_bayberry_soup`
+  (`tools/gen_soup_soft_fluids.py` line 43 maps it as its own equivalent), and `cooking.js` line 520 leaves it out of the
+  bone-broth routes ("sweet"). MJ-14 tests 12 bottles filling a jar.
+
+### Build
+1. Rename (lang) and retype it `drink` in `food_types.json` (the generated file; change the source list the tool reads,
+   unverified which); keep the id (a new id means a merge, `item_merges.js`).
+2. Pot recipe per `drinks #7` / `#8`: a Kettle recipe with `NCH.frBrewing` if juice; a tea needs a leaf input.
+3. Rework `canned_bayberry_soup`: the can family (`can_parity.md` line 401), then rerun `/cegen`.
+
+### Decisions
+- **Juice or tea.** Bayberries only, no leaves, no brew: it reads as a juice. A tea needs tea leaves (FR / FD teas
+  take `forge:tea_leaves`). Recommend juice, renamed Bayberry Juice, with the same fluid id.
+- Does the can keep a soup type? Recommend retyping it `drink` with the can (parity row changes).
+
+### Gotchas
+- Retyping a canned source changes `can_types.json` rows: rerun `gen_can_types.py`.
+
+### Tests
+- RC-D2 Bayberry Juice shows its new name in the pot, JEI, jar and can; the fluid still fills a jar (MJ-14).
+
+---
+
+## drinks #10: Azalea tea and tea audit
+Status **Planned** / Work: KubeJS / id `food/drinks #10`
+
+### Goal
+Add an azalea tea recipe and audit every tea (Kettle and pot recipes, `drinks #7`, `drinks #8`).
+
+### Now
+- `delightful:azalea_tea` (`i.azalea_tea`) exists but has **no live recipe**: both Delightful recipes
+  (`food/kettle/azalea_tea`: tea leaves + `ecologics:azalea_flower`, water, 2400 ticks; `integration/ecologics/azalea_tea`)
+  are conditional on `ecologics:azalea_flower`, and Ecologics is not in `mods/` (checked).
+- Candidate flowers in the pack: `i.azalea_flowers` (`twigs:azalea_flowers`), `i.immersive_weathering_azalea_flowers`,
+  `i.flowering_azalea`. Which is the intended one is unverified.
+- Food catalog: azalea tea 0 / 0, Nourishment 60 s and Caffeinated 10 s; no can (`can_parity.md` 607).
+
+### Build
+1. `R.frBrewing([i.t_tea_leaves, <flower>], i.azalea_tea, e, 'azalea_tea')` (`i.t_tea_leaves` is in the dict).
+2. Audit table in this section: every tea item (FR, Delightful, FD), its Kettle and pot recipe, its efficiency vs
+   `drinks #8`, name, texture (`drinks #2`).
+
+### Decisions
+- **Flower.** Options: Twigs azalea flowers (craftable, renewable), Immersive Weathering's, the azalea bush block.
+  Recommend `twigs:azalea_flowers`.
+
+### Tests
+- RC-D3 JEI: azalea tea has a Kettle recipe; brewing gives the tea with its bottle plated (RB-03).
+
+---
 
 ## Writeup corrections made
 

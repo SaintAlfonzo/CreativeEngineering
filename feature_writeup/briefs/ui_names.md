@@ -59,6 +59,34 @@ None.
 
 ---
 
+## names #8: Rename Roll of Ender Guardian
+Status **Planned** / Work lang / TODO `ui/names #8`
+
+### Goal
+The Ocean's Delight roll reads "Elder Guardian Roll" (the row says "Ender Guardian Roll", see Decisions).
+
+### Now
+- No "Ender Guardian" item exists. The match is `oceansdelight:elder_guardian_roll`, named "Roll of Elder Guardian" in
+  `oceansdelight-1.0.2-1.19.2.jar` (`item.oceansdelight.elder_guardian_roll`). Its siblings: "Slab of Elder Guardian",
+  "Slice of Elder Guardian", "Cooked Slice of Elder Guardian".
+- Display Delight's placed versions already read "Plated Elder Guardian Roll" / "Small Plated Elder Guardian Roll"
+  (`kubejs/assets/displaydelight/lang/en_us.json` 153, 157), so the new name matches them.
+- Renames live in [namechanges.js](../../kubejs/client_scripts/namechanges.js) (`e.renameItem('mod:id', 'Name')`, 211 lines).
+
+### Build
+1. `e.renameItem('oceansdelight:elder_guardian_roll', 'Elder Guardian Roll')` in namechanges.js. CLAUDE.md prefers `global.item`
+   keys: add `i.elder_guardian_roll = 'oceansdelight:elder_guardian_roll'` to item_dict if the file's other renames are
+   moved to keys; the existing renames use literal ids, so follow the file.
+2. Check the sibling names for the same pattern (a "X of Y" form) and rename only if the user wants it.
+
+### Decisions
+"Ender" or "Elder"? The item is the Elder Guardian's. Recommend "Elder Guardian Roll" (the row's "Ender" looks like a slip).
+
+### Tests (NM-)
+- NM-15 (proposed): JEI and inventory hover show "Elder Guardian Roll"; WTHIT on the placed plate unchanged.
+
+---
+
 ## Built, needs play
 
 | Row | Change | Status | Notes |

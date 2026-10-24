@@ -1,0 +1,5 @@
+# Acknowledged log warning groups, read by tools/log_warnings_scan.py
+# Format: <category> <namespace>   # <reason / date>
+# Categories: blockstate, texref, chain, missingfile, modelload
+# Example (not active):
+# blockstate colored_water   # fluid blocks, never rendered from these models (2026-10-24)

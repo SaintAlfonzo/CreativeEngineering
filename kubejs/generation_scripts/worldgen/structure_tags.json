@@ -942,11 +942,19 @@
       ]
     },
     "group/surface_dungeons": {
-      "note": "Surface dungeons: YUNG's desert and jungle temples, the vanilla desert pyramid and jungle temple (each in 10% of its YUNG's version's slots, \"replaces\" in structure_groups.json), the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The witch huts have their own group (group/witch_huts).",
+      "note": "Surface dungeons: YUNG's jungle temple, the vanilla jungle temple (in 10% of YUNG's temple slots, \"replaces\" in structure_groups.json), the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The witch huts and desert temples have their own groups (group/witch_huts, group/desert_temples).",
       "values": [
         "#dungeon/surface",
         "!#type/sky",
-        "!#group/witch_huts"
+        "!#group/witch_huts",
+        "!#group/desert_temples"
+      ]
+    },
+    "group/desert_temples": {
+      "note": "Desert temples: YUNG's desert temple and the vanilla desert pyramid, which takes a share of YUNG's temple slots (\"replaces\" in structure_groups.json). Own grid with twice the surface dungeons' minimum distance (structures/rates-and-groups #10).",
+      "values": [
+        "betterdeserttemples:desert_temple",
+        "minecraft:desert_pyramid"
       ]
     },
     "group/witch_huts": {

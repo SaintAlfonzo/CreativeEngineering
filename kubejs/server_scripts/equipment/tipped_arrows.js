@@ -15,7 +15,7 @@ var R = global.NCH
 //   Create Spout : 1 arrow  + 25 mB LINGERING potion      -> 1 tipped arrow  (20% cheaper)
 //   IE Bottler   : 1 arrow  + 20 mB LINGERING potion      -> 1 tipped arrow  (36% cheaper)
 //
-// One pair per registered potion, matching how JEI expands the vanilla special
+// One pair per registered potion that has effects, matching how JEI expands the vanilla special
 // recipe (and how potion_bottling.js walks the registry).
 
 var POTIONS = Java.loadClass('net.minecraft.core.Registry').POTION
@@ -23,8 +23,10 @@ var POTIONS = Java.loadClass('net.minecraft.core.Registry').POTION
 var n = 0
 var it = POTIONS.keySet().iterator()
 while (it.hasNext()) {
-	var pid = it.next().toString()
-	if (pid === 'minecraft:empty') continue
+	var potionKey = it.next()
+	var pid = potionKey.toString()
+	// no tipped arrow for a potion with no effects (water, awkward, thick, mundane)
+	if (pid === 'minecraft:empty' || POTIONS.get(potionKey).getEffects().isEmpty()) continue
 	var idBase = pid.split(':').join('_').split('/').join('_')
 
 	var lingeringNbt = '{Bottle:"LINGERING",Potion:"' + pid + '"}'

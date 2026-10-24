@@ -247,6 +247,7 @@ CROP_BLOCKS = {
     'vintagedelight:wild_oats': 'Oats', 'vintagedelight:wild_peanuts': 'Peanuts',
     'vintagedelight:wild_cucumbers': 'Cucumbers',
     # Fungi Delight backport (development/backportedFungi); placement in mushroom_spawns.json / wild_crops.json
+    'miners_delight:wild_cave_carrots': 'Cave Carrot',
     'fungidelight:inky_cap_mushroom': 'Inky Cap', 'fungidelight:morel_mushroom': 'Morel',
     'fungidelight:inky_cap_mushroom_colony': 'Inky Cap Colony', 'fungidelight:morel_mushroom_colony': 'Morel Colony',
     'fungidelight:truffle_dirt': 'Truffle Dirt',

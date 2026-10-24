@@ -49,7 +49,7 @@ console.log('potion_area func loading')
         },
     }
 
-    // used only when the bucket carries no potion NBT — { id, seconds, amplifier }
+    // used only when the bucket carries no potion NBT (no Potion / CustomPotionEffects tag) — { id, seconds, amplifier }
     const DEFAULT_EFFECTS = [
         { id: 'minecraft:night_vision', seconds: 8, amplifier: 0 },
     ]
@@ -146,11 +146,15 @@ console.log('potion_area func loading')
             const ringCount = Math.max(1, Math.round(dial.rings || 1))
 
             // effects: prefer the bucket's own potion (getMobEffects is a single, unambiguous
-            // overload - unlike getColor above), else fall back to DEFAULT_EFFECTS
+            // overload - unlike getColor above), else fall back to DEFAULT_EFFECTS - but only for a
+            // bucket with no potion NBT at all. A no-effect potion (awkward, thick, mundane, water)
+            // spawns nothing and returns [], so the caller keeps the bucket.
             const stackEffects = stack ? $PotionUtils.getMobEffects(stack) : null
             let baseEffects = []
             if (stackEffects && !stackEffects.isEmpty()) {
                 stackEffects.forEach(inst => baseEffects.push(inst))
+            } else if (stack && (stack.getOrCreateTag().contains('Potion') || stack.getOrCreateTag().contains('CustomPotionEffects'))) {
+                return []
             } else {
                 DEFAULT_EFFECTS.forEach(d => {
                     const me = mobEffect(d.id)

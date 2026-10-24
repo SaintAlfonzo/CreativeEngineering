@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import com.SaintAlfonzo.creativeengineering.CEConfig;
 import com.SaintAlfonzo.creativeengineering.CreativeEngineering;
 import com.SaintAlfonzo.creativeengineering.compat.jei.SeasoningCategory.Display;
+import com.SaintAlfonzo.creativeengineering.food.SeasoningRecipe;
+import com.SaintAlfonzo.creativeengineering.food.Seasonings;
 import com.mojang.logging.LogUtils;
 
 import io.github.mortuusars.salt.Salting;
@@ -44,8 +46,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  *   <li>Salt's {@code salt:salting} special craft (Salt shows it as a Crafting extension): one page, any
  *       {@code #salt:can_be_salted} food + salt, food and salted food cycling together;</li>
  *   <li>Create: The Salt's mixes (food + salt -> the same food with {@code Salted}): one page with the mixer;</li>
- *   <li>crafting recipes with ids {@code creativeengineering:shapeless/season/...} (the pack's own seasonings), a
- *       page each.</li>
+ *   <li>the pack's seasoning crafts ({@link SeasoningRecipe}, special, so never on the Crafting page) and crafting
+ *       recipes with ids {@code creativeengineering:shapeless/season/...}, a page each.</li>
  * </ol>
  * {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] seasoningCategory}; re-run on
  * every JEI reload.
@@ -102,7 +104,10 @@ public class SeasoningJEI implements IModPlugin {
             boolean salt = ModList.get().isLoaded("salt");
 
             for (CraftingRecipe recipe : manager.getAllRecipesFor(RecipeType.CRAFTING)) {
-                Display display = salt ? SaltPages.salting(recipe, table) : null;
+                Display display = recipe instanceof SeasoningRecipe seasoning ? pack(seasoning, table) : null;
+                if (display == null && salt) {
+                    display = SaltPages.salting(recipe, table);
+                }
                 if (display == null && isPackSeasoning(recipe)) {
                     display = plain(recipe, table);
                 }
@@ -174,6 +179,24 @@ public class SeasoningJEI implements IModPlugin {
         int size = recipe.getIngredients().size();
         return id.getNamespace().equals(CreativeEngineering.MODID) && id.getPath().startsWith(SEASON_PREFIX)
                 && size >= 2 && size <= SeasoningCategory.MAX_INPUTS;
+    }
+
+    /** A {@link SeasoningRecipe} page: every food it takes, seasoned in step; null if it matches nothing or is too long. */
+    private static Display pack(SeasoningRecipe recipe, ItemStack machine) {
+        List<ItemStack> foods = Arrays.asList(recipe.getFood().getItems());
+        if (foods.isEmpty() || recipe.getParts().size() + 1 > SeasoningCategory.MAX_INPUTS) {
+            return null;
+        }
+        List<List<ItemStack>> inputs = new ArrayList<>();
+        inputs.add(foods);
+        for (SeasoningRecipe.Part part : recipe.getParts()) {
+            inputs.add(Arrays.asList(part.ingredient().getItems()));
+        }
+        List<ItemStack> outputs = new ArrayList<>(foods.size());
+        for (ItemStack food : foods) {
+            outputs.add(Seasonings.with(food.copy(), recipe.seasonings()));
+        }
+        return new Display(recipe.getId(), machine, inputs, outputs, true);
     }
 
     private static Display plain(CraftingRecipe recipe, ItemStack machine) {

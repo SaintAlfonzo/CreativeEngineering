@@ -844,6 +844,195 @@ Cookie ids as #3; `i.golden_cookie` 12352, `i.enchanted_golden_cookie` 12330, `i
 
 ---
 
+## baked-goods #13: Cherry pie
+Status: Planned / Work: patcherMod / KubeJS / TODO `baking/baked-goods #13` ([oven.md](../oven.md) 2.6; no earlier section here)
+
+### Goal
+A whole cherry pie item that places Create Central Kitchen's `create_central_kitchen:cherry_pie` block (the whole
+pie is Environmental's, not in the pack). Folded scope (scratchpad 2026-10-24): cherry jelly, jam and pie, so the
+pie filling and the jam share one cherry route (jam: `dishes/jams #4`).
+
+### Build
+- Add `['cherry_pie', i.cherry, 'canned_cherry_pie_filling']` to `PIES` in
+  [baking.js](../../kubejs/server_scripts/cooking/baking.js) once the item exists (pie crust, 2 cherries, 2 sugar in
+  the pie tin; the loop also makes the pot filling and the `_from_filling` bake); a 4-slice knife cut exists in CCK.
+- The item itself needs a registered block item (patcherMod or startup script): *unverified* which; decide with the row.
+- `i.cherry` is already in `item_dict` (the `cherry_cookie` flavour in `COOKIES`).
+
+### Decisions
+Whether to add the item at all (row says so); recommend yes, via a startup item placing the CCK block.
+
+---
+
+## baked-goods #17: Dough unification
+Status: Planned / Work: KubeJS / TODO `baking/baked-goods #17` ([veggies_delight.md](../veggies_delight.md) 5.2; no earlier section here)
+
+Folded scope (scratchpad 2026-10-24): a dough texture for each dough, and a recoloured dough block for each dough
+(see `baking/baked-goods #27`, below). Doughs today (verified in `item_dict.js`): Create `create:dough`, Farmer's
+Delight `wheat_dough`, `#forge:dough` (`i.any_dough`), Veggies Delight `sweet_potato_dough`, Vintage Delight
+`oat_dough` and `cucumber_dough`, Create Confectionery `gingerdough`, the pack's `cookie_dough`, Pneumaticcraft
+`sourdough`, Farmer's Respite `nether_wart_sourdough`. `cookingtags.js` line 68 adds `oat_dough` to `#forge:dough`.
+
+---
+
+## baked-goods #22: Chorus cookie from the uncanny cookie
+Status: Planned / Work: KubeJS / resource pack / TODO `baking/baked-goods #22` ([recipes_cooking.md](../recipes_cooking.md))
+
+### Goal
+The chorus cookie is made from an uncanny cookie.
+
+### Now
+- `ends_delight:chorus_cookie` is End's Delight (jar installed, not integrated, no dict keys yet; `mod-additions #4`).
+  Its recipe `ends_delight:food/chorus_cookie` is shapeless `chorus_fruit_grain` + `minecraft:wheat`
+  (verified in the jar).
+- The uncanny cookie is `endersdelight:uncanny_cookies` (`i.uncanny_cookies`), baked in the oven 12 a batch from
+  cookie dough + 2 mite crust (`COOKIES` in [baking.js](../../kubejs/server_scripts/cooking/baking.js)).
+
+### Build
+After End's Delight is integrated (`/dumpall` for the keys): `R.remove({ id: 'ends_delight:food/chorus_cookie' }, e)`
+and a `R.shapeless` of uncanny cookie plus the chorus ingredient, id ending `_manual_only` if a heat route exists.
+
+### Decisions
+Recipe shape not stated. Options: uncanny cookie + chorus fruit grain (keeps End's own ingredient), or uncanny
+cookie + popped chorus fruit. Recommend the first. Blocked on `largecontent/mod-additions #4`.
+
+### Tests
+RC-100 Craft a chorus cookie from an uncanny cookie; the wheat recipe is gone from JEI.
+
+---
+
+## baked-goods #23: Oatmeal cookies from oat dough
+Status: Planned / Work: KubeJS / resource pack / TODO `baking/baked-goods #23` ([recipes_cooking.md](../recipes_cooking.md))
+
+### Goal
+Oatmeal cookie uses oat dough. Oatmeal raisin cookie: oat dough + 1 raw oat + 1 grape, textured from the oatmeal
+cookie.
+
+### Now
+- `['oatmeal_cookie', i.raw_oats]` is in `COOKIES` (baking.js): cookie dough (any dough + 2 sugar) + 2 raw oats ->
+  12 cookies in the baking sheet. Vintage's own recipe `vintagedelight:oatmeal_cookie` (raw oats + honey bottle) is
+  removed by the `REMOVED_OUTPUTS` sweep.
+- `i.oat_dough` = `vintagedelight:oat_dough` (raw oats + water bucket or egg), in `#forge:dough`.
+- No raisin item. Grapes: `i.red_grape`, `i.white_grape` (Vinery); a "raisin" cookie takes a grape directly.
+
+### Build
+1. Take `oatmeal_cookie` out of `COOKIES`; add `R.ceBaking([i.oat_dough, n(i.raw_oats, 2)], Item.of(i.oatmeal_cookie, 12),
+   e, 'oatmeal_cookie', SHEET)` (inputs and count are a decision).
+2. New item `oatmeal_raisin_cookie` (startup script like `startup_scripts/cooking/baking_ingredients.js`, texture =
+   `vintagedelight:item/oatmeal_cookie` recoloured, food values in `food_values.js` copying the oatmeal cookie);
+   dict key, `food_types.json` entry (`baked`), can row if the other cookies have one.
+3. Which grape (red, white or either through a tag) is open.
+
+### Decisions
+Inputs and batch size are not stated. Recommend keeping the `COOKIES` shape (12 cookies, 2 raw oats) and swapping
+cookie dough for oat dough (oat dough has no sugar, so decide whether the sugar still goes in). The raisin cookie
+takes 1 oat dough + 1 raw oat + 1 grape as the row says; batch size there is also open.
+
+### Tests
+RC-101 Oatmeal cookie bakes from oat dough. RC-102 Oatmeal raisin cookie bakes from oat dough, raw oat, grape.
+
+---
+
+## baked-goods #24: No shapeless pie-to-crust recipes
+Status: Planned / Work: KubeJS / TODO `baking/baked-goods #24` ([recipes_cooking.md](../recipes_cooking.md))
+
+### Goal
+Remove the shapeless recipes that turn a pie into a crust.
+
+### Now (unverified)
+No recipe with `farmersdelight:pie_crust` as output and a pie as input was found: Farmer's Delight 1.2.4 has only
+`pie_crust` (shaped, wheat + milk) and the Create mixing copy; Create 0.5.1.i and the extracted delight jars have
+none; the 2026-10-22 recipe id dump (`kubejs/exported/recipes/all.csv`) lists only the pack's own two crust recipes.
+`baking.js` already removes every crust-making recipe except the pack's (`REMOVED_OUTPUTS` includes `i.pie_crust`),
+and `canning.js` line 63 makes the opposite direction (can + crust -> pie), which stays.
+
+### Build
+Find the recipe first: `/dumprecipes` then search for pie slice or pie inputs with a crust output (JEI: output pie
+crust). Then add the output or the id to the removal sweep in baking.js, not a new hand-written `R.remove` event.
+
+### Decisions
+If nothing exists the row is already satisfied: recommend close it after one JEI check.
+
+### Tests
+RC-103 JEI on pie crust: only the flour, dough and Create mixing routes.
+
+---
+
+## baked-goods #25: Sponge cake becomes sponge pie
+Status: Planned / Work: KubeJS / lang / TODO `baking/baked-goods #25` ([recipes_cooking.md](../recipes_cooking.md))
+
+### Goal
+Rename the sponge cake to sponge pie.
+
+### Now
+- `oceanic_delight:sponge_cake` (+ `sponge_cake_slice`), Oceanic Delight, installed, not integrated. Its recipe is
+  already pie-shaped: shaped sponge + prismarine shard + sugar + `farmersdelight:pie_crust` (verified), knife cut
+  to slices, slices back by a shaped recipe. It is a placed block (`SpongeCakeBlock`).
+- Names live in [namechanges.js](../../kubejs/client_scripts/namechanges.js) (client lang overrides); no entry yet.
+
+### Build
+Name entries for the block item and the slice ("Sponge Pie", "Sponge Pie Slice"); put the id in the `PIES` list of
+baking.js only if its recipe should join the oven route (pie tin) - optional, decide with `mod-additions #5`.
+
+### Tests
+RC-104 JEI and the item tooltip say Sponge Pie, slice and whole.
+
+---
+
+## baked-goods #26: Honey cake honey and comb split
+Status: Planned / Work: KubeJS / TODO `baking/baked-goods #26` ([recipes_cooking.md](../recipes_cooking.md))
+
+### Goal
+Split the honey cake's flavour between honey and honeycomb, 50 / 50.
+
+### Now
+`['honey_cake', i.honey_bottle]` in `CAKES` ([baking.js](../../kubejs/server_scripts/cooking/baking.js) line 46):
+every cake takes 2 of its flavour item (`Item.of(c[1], 2)`) in both the grid and the oven recipe. Honey cake is
+`createaddition:honey_cake` (`i.honey_cake`).
+
+### Build
+Let a `CAKES` entry's flavour be a list: `['honey_cake', [i.honey_bottle, i.honeycomb]]` meaning one of each, and
+expand it in the two `R.shapeless` / `R.ceBaking` lines (`[].concat(...)`). Honeycomb is `i.honeycomb`
+(`minecraft:honeycomb`). Check the canned honey bread and other users of honey stay unaffected.
+
+### Decisions
+"50 / 50" read as 1 honey bottle + 1 honeycomb (the cake takes 2 flavour items). Recommend that.
+
+### Gotchas
+The honey bottle returns a glass bottle in the grid; the oven slot recipe has no remainder rule: *unverified*.
+
+### Tests
+RC-105 Honey cake bakes from base, frosting, 1 honey bottle, 1 honeycomb; the 2-honey recipe is gone.
+
+---
+
+## baked-goods #27: Dough block for every dough
+Status: Planned / Work: KubeJS / resource pack / TODO `baking/baked-goods #27` ([recipes_cooking.md](../recipes_cooking.md))
+
+### Goal
+A recoloured dough block for each dough, and a texture for each dough item (with `baking/baked-goods #17`).
+
+### Now
+- One dough block exists: `create_compressed:dough_block` (`i.dough_block`, 9 dough); made by the IE bottler
+  (cooking.js line 176), smoked into a bread block (line 246), cut to 3 cake bases (brief `baked-goods #1`).
+- Other doughs (oat, sweet potato, cucumber, ginger, cookie, sourdough) have no block; several share Create's
+  texture: *unverified* which share (check `assets/*/textures/item`).
+
+### Build
+1. Per dough: a new block (startup script, the `create_compressed` dough block texture recoloured), a 3x3 compress and un-compress recipe through `global.NCH`
+   (`R.shaped` / `R.shapeless`), and the smoke-to-bread-block recipe if each should bake.
+2. Per dough item: a recoloured item texture in `kubejs/assets/<ns>/textures/item`.
+3. Dict keys via `/dumpall`; names in namechanges.js.
+
+### Decisions
+Whether each coloured block bakes to the same bread block (recommend yes, one bread block) and whether the blocks
+get slabs: recommend neither extra.
+
+### Tests
+RC-106 Each dough crafts into its block and back; RC-107 each block smokes to a bread block; textures differ.
+
+---
+
 ## Built, needs play
 
 None: no baked-goods row is at Testing or Complete.

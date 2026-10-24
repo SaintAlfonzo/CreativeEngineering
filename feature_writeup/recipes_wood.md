@@ -41,9 +41,10 @@ of by-products: species bark from stripping, IE sawdust from crushing, and soil 
 | IE sawmill | [engineering.md](engineering.md) 2.1 | |
 
 Species: oak, spruce, birch, dark oak, acacia, jungle, mangrove, crimson, warped, Architect's Palette twisted, Quark
-blossom, ancient, azalea; bamboo on the saw only. Reattach (shapeless bark + stripped log → log, bark + stripped wood →
+blossom, ancient, azalea, Upgrade Aquatic driftwood (2026-10-23: Abnormals Delight's cutting-board and Create's compat
+saw recipes replaced, IW driftwood bark); bamboo on the saw only. Reattach (shapeless bark + stripped log → log, bark + stripped wood →
 wood, bark + log → wood) for mangrove, twisted, blossom, ancient, azalea and bamboo, the species that had it before.
-Create's, Farmer's Delight's and Quark Delight's own stripping recipes are removed; FD's tree bark → paper is removed.
+Create's, Farmer's Delight's, Quark Delight's and Abnormals Delight's (driftwood) own stripping recipes are removed; FD's tree bark → paper is removed.
 
 ### 2.2 Sawdust and what it makes (`sawdust.js`)
 
@@ -76,7 +77,8 @@ Immersive Weathering's mulch block and nulch block recipes are removed. The mulc
 The Create saw cuts planks into every shape for the 13 species: vertical planks, stairs, fence, fence gate, door,
 trapdoor, ladder, button, pressure plate, sign, railing (1 each), slab and vertical slab (2 each). Shapes a species lacks
 are `i.na` in the table and skipped. IE's sawmill door and stairs recipes for the 9 vanilla species and Quark Engineering's
-slab, log and door sawmill recipes for the Quark three are removed (its stairs recipes are not: F5).
+slab, log, door and (since 2026-10-23) stairs sawmill recipes for the Quark three are removed (F5); its bookshelf
+recipes stay.
 
 ### 2.5 Soot and torches (`ash.js`)
 
@@ -143,7 +145,8 @@ are NCH's generated ones, so they ignore counts (F1).
   in the pack ships a twisted cutting-board recipe and IE has no twisted sawmill recipe, so there is no duplicate; the
   real one is IE's 7 vanilla `stripped_<x>_log` sawmill recipes next to the pack's identical ones
   ([briefs/recipes_wood.md](briefs/recipes_wood.md) #1).
-- **F5. Leftover comments:** `wood_types.js` "(whatever the 4th line is below this)" (it is Quark Engineering's
+- **F5.** FIXED 2026-10-23 (TODO `recipes/wood #2`): stairs removal added, driftwood bark done, comments rewritten;
+  the `sawdust.js` note stays with `farming/composting #2`. **Leftover comments:** `wood_types.js` "(whatever the 4th line is below this)" (it is Quark Engineering's
   `sawmill/<name>/<name>_stairs`, still not removed); `sawdust.js` "Integrate nulch,
   move to compost file" ([composting.md](composting.md) F4); `bark.js` "Replace FD bark recipes with IW" only removes
   paper.
@@ -157,6 +160,14 @@ are NCH's generated ones, so they ignore counts (F1).
 ### Rejected options
 
 - **FD's generic tree bark:** one bark item per species matches Immersive Weathering's blocks and the reattach recipes.
+
+### Planned from the scratchpad (2026-10-24)
+
+- [TODO](todo/TODO.md) `recipes/wood #4`: any tree bark ferments into leather (new recipes). Open: machine (Vintage Pickling Jar,
+  recommended, or the Brewin' keg) and the bark count per leather. Plan: [recipes_wood](briefs/recipes_wood.md).
+- [TODO](todo/TODO.md) `recipes/materials #7`: ferns count as grass, tall ferns as tall grass, and leaves match in many crafts.
+  Today only the `forge:mulch/green` tag (grass, tall grass, fern, large fern; `wood_tags.js`) treats them alike. Open: which crafts.
+  Plan: [recipes_materials](briefs/recipes_materials.md) `materials #7`.
 
 ## 5. File map
 
@@ -199,6 +210,10 @@ None.
   leaf pile show as Mulberry (Mulberry Leaves, Mulberry Sapling, ...) in hand, JEI and WTHIT; no "River" name left.
 - [ ] **RW-20 Hedge recipe [scratch server PASSED 2026-10-22, SQ-MB-00, one recipe, oak log, x2 / game]:** JEI shows one Mulberry Hedge recipe: Mulberry Leaves over an
   Oak Log -> 2; `upgrade_aquatic:river_hedge` (the old recipe id) is gone.
+- [ ] **RW-21 Driftwood bark:** a driftwood log on the cutting board with an axe → stripped driftwood log, about half
+  the time Driftwood Bark (no Tree Bark); driftwood (wood) → 75 %; the same on the Create saw. JEI shows no Abnormals
+  Delight driftwood cutting recipe.
+- [ ] **RW-22 Quark stairs:** JEI → blossom planks stairs → U: no Quark Engineering sawmill recipe back to planks.
 
 ## 8. History
 
@@ -213,3 +228,6 @@ None.
 - 2026-10-22 (second bulk run): SQ-MB-00 to SQ-MB-04 PASS on the scratch server; RW-17 done. SQ-MB-04 found that
   river trees almost never generate (no dry land in the sampled river biomes, 2.6 finding); probe `zfw rivertrees R` added.
 - 2026-10-22: `trees_river` placed feature overridden, 8 tries per chunk (was about 2), 4x the Mulberry trees by rivers.
+- 2026-10-23: F5 fixed (`recipes/wood #2`): Quark Engineering stairs sawmill recipes removed, driftwood added to
+  the bark species. Tests RW-21, RW-22. Not run in game.
+- 2026-10-24: planned `recipes/wood #4` and `recipes/materials #7` added; no code changed.

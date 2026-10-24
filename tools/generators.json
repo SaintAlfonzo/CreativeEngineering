@@ -242,6 +242,14 @@
       "apply": "restart if item_dict.js changed, else /reload (tags) - tooltips follow the tags"
     },
     {
+      "id": "food_families",
+      "script": "tools/food_families.py",
+      "groups": ["reports", "food"],
+      "dumps": ["dumpfood", "dumpplaceable", "dumptags item"],
+      "outputs": ["feature_writeup/food_families.md"],
+      "apply": "nothing in game reads it (writeup only)"
+    },
+    {
       "id": "immersive_paintings",
       "script": "tools/gen_immersive_paintings.py",
       "groups": ["pack"],

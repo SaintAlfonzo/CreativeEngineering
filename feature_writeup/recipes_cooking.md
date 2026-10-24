@@ -137,6 +137,8 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 |---|---|
 | Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen → 2; shapeless 1 |
 | Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativeengineering:soup_veggies_cooked`) in place of the raw veggie and carrot |
+| Orange jam | Fruits Delight's 2-orange pot and heated mixing recipes kept; since 2026-10-23 also pot: 4 orange slices + sugar + lemon slice + bottle; heated mixing: 4 slices + lemon slice + sugar + 100 mB water → 125 mB jam (TODO `baking/sweets #6`) |
+| Fruit beignet | removed item since 2026-10-23 (TODO `dishes/meals #19`): every recipe with it as output removed |
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice; fried rice takes 2 fried eggs, mushroom rice a baked potato and a second brown mushroom, sinigang a second cooked fish, so each costs one more than the pot (2026-10-21) |
 | Vegetable soup, vegetable noodles, ratatouille, corn soup | heatless shapeless from cooked ingredients (2026-10-21) |
 | Chorus stew, endermite stew, crab pasta, pumpkin soup, pasta with meatballs, dumplings, cavern explorer stew, squid ink pasta | heatless shapeless from cooked ingredients, one more main ingredient than the pot (2 popped chorus fruit; 2 mite crusts; 2 cooked crab legs; bone broth + 2 pumpkin slices + cooked pork; 2 beef patties; cooked meat or brown mushroom, 1 dumpling against the pot's 2; bone broth + 2 glow shrooms; cooked fish + 2 ink sacs) (2026-10-21) |
@@ -160,7 +162,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Pancakes ×3 (Supplementaries) | shapeless sugar, egg, milk, flour, cornmeal or rice; heated mixing ×5 with 250 mB milk |
 | Barbecue stick | shapeless or assembly with any cooked meat |
 | Crab bars | shapeless ×2 (cooked), pot ×4 (raw), assembly ×10 |
-| Grilled salmon, bacon and eggs | shapeless and assembly (FD's own shapeless recipe removed and re-added unchanged under a pack id, F6) |
+| Grilled salmon, bacon and eggs | shapeless and assembly (FD's own shapeless recipe, kept under its FD id since 2026-10-23, F6) |
 | Salmon roll, cod roll | shapeless ×2, assembly ×3 |
 | Kelp roll, rice roll medley, roasted mutton chops | assembly |
 | Fish stew, cabbage rolls, horror lasagna, pasta with mutton (and heated mixing ×4) | shapeless from cooked ingredients |
@@ -256,7 +258,9 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 - **F4. Old code:** the commented-out `global.CE` copy in `cooking.js` was deleted 2026-10-22 ([TODO](todo/TODO.md) `tooling/conventions #3`).
 - **F5. Golden carrots take rose gold nuggets** through `#forge:nuggets/gold` ([recipes_metal.md](recipes_metal.md) F5).
   FIXED 2026-10-21 locally in `golden.js` (vanilla gold only, also ingots and blocks); the metal tags are unchanged.
-- **F6. Comments that don't match:** "Replace shaped recipe w/ shaped" (it's shapeless) on grilled salmon and bacon and
+- **F6.** FIXED 2026-10-23 (TODO `recipes/cooking #3`): comments fixed, crab bar id now
+  `creativeengineering:shapeless/crab_bars_manual_only`, the four FD re-adds deleted (FD's ids back), duplicate
+  `i.catfish` line dropped. **Comments that don't match:** "Replace shaped recipe w/ shaped" (it's shapeless) on grilled salmon and bacon and
   eggs; "already shapeless?" on the rolls (yes: FD's grilled salmon, bacon and eggs, salmon roll and cod roll are
   all shapeless with the same ingredients, so the pack's remove + re-add only renames them); one crab bar id is `creativeengineering/crab_bars_shapeless_manual_only` with a
   slash in the suffix.
@@ -279,6 +283,60 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 ### Rejected options
 
 - **Keeping tmted's flour:** two flours split every bread recipe in JEI.
+
+### Planned from the scratchpad (2026-10-24)
+
+Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans are in the linked briefs
+([dishes_meals](briefs/dishes_meals.md), [dishes_jams](briefs/dishes_jams.md), [baking_baked-goods](briefs/baking_baked-goods.md),
+[food_drinks](briefs/food_drinks.md), [recipes_cooking](briefs/recipes_cooking.md)). The test list above is not extended
+until a row is built.
+
+**Drinks**
+- [TODO](todo/TODO.md) `food/drinks #9`: Bayberry soup becomes a drink. Open: juice or tea (the notes say both).
+- [TODO](todo/TODO.md) `food/drinks #10`: azalea tea recipe and an audit of every tea (Kettle and pot recipes, with `food/drinks #7`
+  and `#8`).
+
+**Jams**
+- [TODO](todo/TODO.md) `dishes/jams #2`: jam in the pot from 4 fruit, 1 sugar and 1 lemon slice (a lemon gives 5 slices), output
+  doubled to 2 jam.
+- [TODO](todo/TODO.md) `dishes/jams #3`: recipes use jam, never bottled jam or jelly (mason-jarred jam is the same item in recipes);
+  mulberry bread merges into bread with jam; jelly bread is renamed bread with jam.
+- [TODO](todo/TODO.md) `dishes/jams #4`: grape and cherry jelly / jam (cherry pie is `baking/baked-goods #13`). Open: jam or jelly
+  names.
+
+**Meals**
+- [TODO](todo/TODO.md) `dishes/meals #21`: audit meals that take only vanilla or one specific meat, veggie or fruit; keep where
+  the dish is the specific thing (glazed salmon), otherwise open to any. Open: keep or open per meal.
+- [TODO](todo/TODO.md) `dishes/meals #22`: overnight oats from 3 oats, 1 fruit slice, 1 berry fruit and 1 milk. The item already
+  exists (Vintage Delight, Pickling Jar recipe only); this adds the new recipe. Open: grid, pot or Pickling Jar.
+- [TODO](todo/TODO.md) `dishes/meals #23`: cooking oil + 3 eggs gives 3 fried eggs; the pot turns 4 fried eggs into 4 omelettes.
+- [TODO](todo/TODO.md) `dishes/meals #24`: extra vegetable omelette recipe with tomato, beetroot, any bell pepper or ghost pepper
+  swapped in. Open: which slot.
+- [TODO](todo/TODO.md) `dishes/meals #26`: Brewin' pizza renamed Deluxe Pizza (tomato, peppers, mushrooms, cheese, cooked meat or
+  fish). Open: whether Vintage's meat pizza merges into it.
+- [TODO](todo/TODO.md) `dishes/meals #27`: Tropical Pizza (pineapple and bacon) with a funny tooltip. Open: tooltip text.
+- [TODO](todo/TODO.md) `dishes/meals #28`: merge Brewin's pasta with cheese and Vintage's cheese pasta. Open: survivor.
+- [TODO](todo/TODO.md) `dishes/meals #30`: merge the two Caesar salads (Veggies Delight "Cesar", Oceanic Delight "Caesar").
+- [TODO](todo/TODO.md) `dishes/meals #31`: nut butter sandwich takes more jams and only square bread.
+- [TODO](todo/TODO.md) `dishes/meals #32`: remove the mhadjeb (ends the "kept until dough unification" rule in
+  [veggies_delight.md](veggies_delight.md) 5.2).
+- [TODO](todo/TODO.md) `dishes/meals #36`: cacciatore accepts chicken cuts; a whole-versus-cut audit of the other meals (joins `#21`).
+- [TODO](todo/TODO.md) `dishes/meals #37`: review Supplementaries pancake coverings, the JEI screen and the tooltip; jam coverings
+  take the jam's colour.
+
+**Baking**
+- [TODO](todo/TODO.md) `baking/baked-goods #22`: chorus cookie made from an uncanny cookie (needs End's Delight integrated).
+  Open: recipe shape.
+- [TODO](todo/TODO.md) `baking/baked-goods #23`: oatmeal cookie from oat dough; new oatmeal raisin cookie (oat dough, 1 raw oat,
+  1 grape) textured from the oatmeal cookie.
+- [TODO](todo/TODO.md) `baking/baked-goods #24`: remove the shapeless pie-to-crust recipes. No such recipe was found in the
+  dumps or jars; check in game first.
+- [TODO](todo/TODO.md) `baking/baked-goods #25`: sponge cake renamed sponge pie (Oceanic Delight; its recipe already uses a pie crust).
+- [TODO](todo/TODO.md) `baking/baked-goods #26`: honey cake flavour split between honey and honeycomb, 50 / 50.
+- [TODO](todo/TODO.md) `baking/baked-goods #27`: a recoloured dough block and a dough texture for each dough (with `#17`).
+
+**Other**
+- [TODO](todo/TODO.md) `recipes/cooking #4`: a shulker shell crafts into 12 shulker bowls (now 1).
 
 ## 5. File map
 
@@ -393,6 +451,14 @@ None.
   250 mB -> 1 Frosting item; spout 750 mB on a Baked Cake Base -> Cake. JEI lists the Frosting fluid next to the item.
 - [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball → beef culture; heated mixer with diluted
   bone meal and plant oil → 3; knife → 4 raw beef.
+- [ ] **RC-79 Orange jam from slices:** JEI orange jam → R: the 2-orange pot recipe and a pot recipe with 4 orange
+  slices + sugar + lemon slice (bottle); a heated basin with 4 slices + lemon slice + sugar + 100 mB water gives 125 mB
+  orange jam. Both 2-orange recipes still there.
+- [ ] **RC-80 FD ids and crab bars:** JEI grilled salmon, bacon and eggs, salmon roll, cod roll → one shapeless recipe
+  each under `farmersdelight:` (F3 + advanced tooltips show the id), plus the sequenced assembly; crab bars: shapeless
+  `creativeengineering:shapeless/crab_bars_manual_only` (2), not offered by a Create mixer.
+- [ ] **RC-81 Beignet gone, egg fried rice:** JEI search "beignet" → nothing; `/give` one → red REMOVED line. Fried
+  rice shows as "Egg Fried Rice", placed on a block as "Placed Egg Fried Rice".
 
 ## 8. History
 
@@ -447,3 +513,6 @@ None.
 - 2026-10-22 (second bulk run): SQ-DR-00 to SQ-DR-03, SQ-FL-01, SQ-FL-02, SQ-IN-01, SQ-IN-02, SQ-OF-04 and SQ-OF-07 to
   SQ-OF-11 all PASS on the scratch server (results in [testing/scratch_queue.md](testing/scratch_queue.md)); the
   client and crafting halves of RC-15 to RC-17, RC-55 to RC-69 and RC-71 to RC-78 stay in game.
+- 2026-10-23: F6 fixed (`recipes/cooking #3`); orange jam from slices (`baking/sweets #6`), fruit beignet removed
+  (`dishes/meals #19`), fried rice renamed Egg Fried Rice (`dishes/meals #17`). Tests RC-79 to RC-81. Not run in game.
+- 2026-10-24: planned scratchpad rows added to section 4 (drinks, jams, meals, baking, shulker bowl); no code changed.

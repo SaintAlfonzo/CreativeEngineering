@@ -102,6 +102,8 @@ public class CreativeEngineering
         // (cooking/ package + mixin/*RemainderMixin; feature_writeup/remainder_buffer.md). Saved as an attached cap.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferStorage.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CfbCornerStorage.class);
+        // Cutting board, plates, coaster on CfB counters: the per-state topper cache resets on tag reload.
+        com.SaintAlfonzo.creativeengineering.compat.CounterToppers.init();
         // Sacks work like bundles in inventory screens (compat.SackBundle, mixin.SupplementariesSackItemMixin):
         // the scroll-to-rotate packet. The scroll listener is compat.SackBundleScroll (client).
         com.SaintAlfonzo.creativeengineering.compat.SackBundle.register();
@@ -153,6 +155,15 @@ public class CreativeEngineering
         // reload + the "Servings: x / y" tooltip line. Eating and the bar are mixin.ItemStackCanServingsMixin.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServings.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServingsTooltip.class);
+
+        // Pack seasonings (food.Seasonings, defined by KubeJS startup_scripts/cooking/seasonings.js): the
+        // creativeengineering:seasoning craft, the bonus on eating and the per-seasoning tooltip lines.
+        com.SaintAlfonzo.creativeengineering.food.SeasoningRecipe.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.Seasonings.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.SeasoningTooltip.class);
+        if (net.minecraftforge.fml.ModList.get().isLoaded("appleskin")) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.AppleSkinSeasonings.class);
+        }
 
         // Bites from placed pies and cakes count for Spice of Life (food.PlacedFoodSol; the bite itself is
         // mixin.ServerPlayerGameModePlacedFoodMixin). This loads its cake -> slice map at server start.

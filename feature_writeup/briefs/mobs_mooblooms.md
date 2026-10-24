@@ -319,6 +319,38 @@ its flowers, better (short, human) info text.
 
 ---
 
+## mooblooms #6: Sunflowers face backwards on the Moobloom JEI tab
+Status **Bug** / Work patcherMod (the More Mooblooms mod) / TODO `mobs/mooblooms #6`
+
+### Goal
+The sunflower on a sunbloom shown in the Moobloom Conversion tab faces the viewer.
+
+### Now
+- Sunbloom's flowers (`moobloom_variants/sunbloom.json`): `minecraft:sunflower[half=upper]` (weight 5), dandelion,
+  orange tulip. The sunflower head faces one fixed direction in its block model (east), so a mob turned to the viewer
+  shows it from behind.
+- The tab draws the mob through `MoobloomShearingCategory.renderEntity` (line 138; body yaw `(x - mouseX)/2 + 35`, a
+  `ZP 180` flip) with `moobloom.setDisplayFlowers(states)` (`MoobloomConversionCategory.entity` line 117). The flowers
+  are drawn by `client/MoobloomFlowerLayer.renderSlot` (line 66-86): translate by the slot, `YP` rotation by
+  `slot.yaw()`, scale `(-s, -s, s)`.
+- Whether the same backwards sunflower shows in the world (and in the Shearing / Breeding tabs) is unverified: look first.
+
+### Build
+1. Compare a sunbloom in the world with the three JEI tabs. If only JEI is wrong, the cause is the tab's body yaw
+   (35 degrees plus the viewer flip); if all are wrong, it is the layer.
+2. Layer fix: in `renderSlot`, when the state is a sunflower (`state.is(Blocks.SUNFLOWER)`), add 180 to `slot.yaw()`.
+   Tab-only fix: rotate the sunflower slots in `renderEntity` by 180.
+3. Rebuild and install the jar (`./gradlew :moreMooblooms:build --offline`, `:installToMods`) with the game closed.
+
+### Decisions
+None; fix at the layer if the world is wrong too.
+
+### Tests (MB-)
+- MB-105 (proposed): sunbloom in the world and on all three Moobloom JEI tabs: the sunflower head faces the viewer or
+  the cow's front, consistently.
+
+---
+
 ## Built, needs play
 
 | Row | Change | Status | Notes |

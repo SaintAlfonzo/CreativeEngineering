@@ -979,6 +979,16 @@ Planned (scratchpad 2026-10-21):
   stackable pumpkin model; large 2x2 / 3x3 pumpkins are `ports/autumnityport #3` ([TODO](todo/TODO.md)
   `farming/crops #10`).
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/farming_crops.md](briefs/farming_crops.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `farming/crops #14`: define bone meal for crops in Supplementaries planters. `PlanterBlock` has no random tick or bone meal code, so
+  bone meal on the plant above already works as vanilla; the open part is whether a rich planter should boost like Rich Soil (20% per
+  random tick, 2.4). Open: intended behaviour (recommended: works, plus the Rich Soil boost for the rich planter).
+- [TODO](todo/TODO.md) `farming/crops #15`: "other plants in random growth": the note names no system. Candidates: the soil boost (Rich Soil, Fertile Soil
+  via `MulchBlockCropGrowthMixin`), Immersive Weathering growths, stem fruit (2.10). Open: which system and which plants.
+
 ## 5. File map
 
 - [config/quark-common.toml](../config/quark-common.toml): `[tweaks.simple_harvest]`, `[tweaks.hoe_harvesting]`, module switches `"Simple Harvest"`, `"Hoe Harvesting"`
@@ -1270,3 +1280,4 @@ the real client (rendering, tooltips, JEI, natural random ticks with a player ne
 - 2026-10-22 (second bulk run): SQ-SF-00 to SQ-SF-05 (17 of 17 after the own-fruit fix, §2.10), SQ-WC-00 to SQ-WC-05
   and SQ-CD-00 to SQ-CD-02 PASS on the scratch server. CR-74 done; the rest keep their game halves. `[wild-crops]` also
   warns that 5 Terralith cave biomes are not in `wild_crops.json` (no crops there; not an error).
+- 2026-10-24: planned from the scratchpad: bone meal in planters, other plants in random growth (`farming/crops #14`, `#15`). No code changed.

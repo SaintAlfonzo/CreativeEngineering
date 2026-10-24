@@ -200,6 +200,30 @@ salmon_roll,cod_roll}`.
 
 ---
 
+## cooking #4: 12 shulker bowls from a shell
+Status: Planned / Work: KubeJS / TODO `recipes/cooking #4` ([recipes_cooking.md](../recipes_cooking.md))
+
+### Goal
+A shulker shell crafts into 12 shulker bowls.
+
+### Now
+`endersdelight:shulker_bowl` (`i.shulker_bowl`, item_dict line 141): one shapeless recipe, 1 `minecraft:shulker_shell` -> 1
+bowl (verified in the jar, `shulker_bowl.json`). The pack's `chorus_stew` and `endermite_stew` grid recipes take it
+(cooking.js lines 448-449); Ender's Delight's stuffed shulker bowl is a separate item.
+
+### Build
+`R.remove({ id: 'endersdelight:shulker_bowl' }, e)` and `R.shapeless(Item.of(i.shulker_bowl, 12), [i.shulker_shell], e,
+'shulker_bowl')` (confirm the shell key in `item_dict`). Check the wooden-bowl variants of Ender's Delight stews are
+untouched.
+
+### Decisions
+None; 12 is the user's number. Check balance with `meals #5` feasts (stuffed shulker feast).
+
+### Tests
+RC-151 Shell -> 12 shulker bowls; the 1-bowl recipe is gone.
+
+---
+
 ## Built, needs play
 
 None in this subfamily.

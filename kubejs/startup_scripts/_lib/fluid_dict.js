@@ -92,6 +92,7 @@ f.black_chocolate = 'create_confectionery:black_chocolate';
 f.caramel = 'create_confectionery:caramel';
 f.hot_chocolate = 'create_confectionery:hot_chocolate';
 f.ruby_chocolate = 'create_confectionery:ruby_chocolate';
+f.orange_jam = 'fruitsdelight:orange_jam';
 f.white_chocolate = 'create_confectionery:white_chocolate';
 
 //Create: Enchantment Industry

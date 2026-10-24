@@ -10,6 +10,7 @@ version before it and which files the other machines must delete. The full file 
 - Minecraft 1.19.2, Forge 43.3.9
 - Commit: 1b1d45f + 48 uncommitted file(s)
 - Since: 1.1.01
+- Deployed: server, client 2026-10-23
 - Contents: 373 server+client mods, 45 client-only mods, 30 resource pack files, 16 shader pack files
 - Payload: update from 1.1.01, config functional: 98 files, 8.2 MB (mods 11, kubejs 71, config 8, world_serverconfig 8)
 - Notes: Vintage Delight, Veggies Delight, Fungi Delight ports, mooshroom breeding, Sky Structures, spawn and worldgen tuning; fix worlds failing to load

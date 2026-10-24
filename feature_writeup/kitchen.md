@@ -15,21 +15,25 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 | CfB oven: any furnace fuel plus cooking oil; every fuel container comes back | BUILT 2026-10-21 (patcherMod 1.1.01 + config), scratch server PASSED, not in game | `cooking/kitchen #8` |
 | CfB sink: infinite water | BUILT 2026-10-21 (config), scratch server PASSED | `#8` |
 | FD cutting board on a CfB counter or corner, drawn on the worktop, config offset | BUILT 2026-10-21 (patcherMod), placement and cutting PASSED on a scratch server; the drawing not seen | `#8` |
-| CfB 2-tall fridge reshaped to a full block | BUILT 2026-10-21 (resource override), not seen in a client | `#6` |
+| Display Delight plates and plated foods, Brewin' coaster on a CfB counter or corner, drawn on the worktop, own offset | BUILT 2026-10-24 (patcherMod 1.1.02 + KubeJS tags), scratch test queued (SQ-KT) | `#20` |
+| CfB 2-tall fridge filled to a full block with a white box on top (the 2026-10-21 stretch reverted) | BUILT 2026-10-25 (resource override), not seen in a client | `#6`, `#19` |
+| Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (patcherMod 1.1.02, not in `mods/`), scratch test queued (SQ-KT) | `#20` |
 | CfB kitchen corner storage (27 slots, chest GUI, hoppers, cooking table) | BUILT 2026-10-21 (patcherMod), scratch server PASSED | `#15` |
 | Bamboo bowl | BUILT 2026-10-21 (KubeJS), scratch server PASSED | `#10` |
 | Mortar and pestle food grinding (own recipes through `foodGrinding`, other mods' through a catalogue) | BUILT 2026-10-21 (KubeJS + generator), scratch server PASSED | `#10` |
 | Returned bowls that wouldn't stack | cause found elsewhere: Sticky It!'s tooltip handler, fixed by Creative Labels ([sticky_notes.md](sticky_notes.md) 3.13, SN-48) | `#5` |
 | Scythe, stepstool | Planned | `#16`, `#17` |
 
-- **Pending:** nothing here has been deployed (patcherMod 1.1.01 is in `mods/` and `server_mods/`). KT-01 to KT-13.
-- **Files to open:** patcherMod `mixin/CfbOvenFuelMixin`, `mixin/CuttingBoardSupportMixin`,
-  `mixin/BlockStateCuttingBoardOffsetMixin`, `mixin/CuttingBoardRendererOffsetMixin`, `compat/CuttingBoardOnCounter`,
+- **Pending:** nothing here has been deployed (patcherMod 1.1.01 is in `mods/` and `server_mods/`; 1.1.02 with the
+  counter toppers is in `mods/` only). KT-01 to KT-16.
+- **Files to open:** patcherMod `mixin/CfbOvenFuelMixin`, `mixin/BlockStateCounterTopperMixin`,
+  `mixin/CuttingBoardRendererOffsetMixin`, `mixin/CoasterRendererOffsetMixin`, `compat/CounterToppers`,
   `mixin/CfbCornerStorageMixin`, `mixin/CfbCornerUseMixin`, `compat/CfbCornerStorage`;
   [tools/gen_cfb_fridge_models.py](../tools/gen_cfb_fridge_models.py);
   [cooking/mortar.js](../kubejs/server_scripts/cooking/mortar.js) and NCH `mortar` / `foodGrinding`;
   [tools/gen_mortar_catalog.py](../tools/gen_mortar_catalog.py).
-- **Knobs:** `config/creativeengineering-common.toml` `[kitchen] cuttingBoardOffsetX / Y / Z` (pixels; Y default -1);
+- **Knobs:** `config/creativeengineering-common.toml` `[kitchen] cuttingBoardOffsetX / Y / Z` and `plateOffsetX / Y / Z`
+  (pixels; Y default -1);
   `config/cookingforblockheads-common.toml` `ovenRequiresCookingOil = false`, `sinkRequiresWater = false` (both also
   in `configs_edited/root_config/`).
 
@@ -65,35 +69,55 @@ make flour and cornmeal.
 `sinkRequiresWater = false`: the sink gives infinite water (a bucket on it comes back full). Tooltip "Gives infinite
 water".
 
-### 2.3 Cutting board on a counter
+### 2.3 Cutting board, plates and coasters on a counter
 
-- CfB's `CounterBlock.use` returns FAIL for a block item on its top face (and for CfB's cutting board item), which
-  lets the item place itself; CfB means boards to sit there. FD 1.2.4's `CuttingBoardBlock.canSurvive` then refused:
-  it wants a rigid or center support face below, and CfB's counter and corner are 15 px tall (`Block.box(0.5, 0, 0,
-  15.5, 15, 16)`, model worktop at y 15, backsplash to y 17 at the back).
-- `CuttingBoardSupportMixin` (RETURN on `m_7898_`) also accepts a block in `#creativeengineering:cutting_board_supports`
-  (`b.t_cutting_board_supports` = `b.cfb_counter`, `b.cfb_corner`, `blocktags.js`).
-- Drawn on the worktop: `CuttingBoardOnCounter.offset` gives the shift for a board above a support block.
-  `BlockStateCuttingBoardOffsetMixin` (HEAD on `BlockStateBase.getOffset`, m_60824_) returns it for the board, so the
-  chunk mesher (vanilla and Rubidium both call it) moves the model; for every other block it is one reference compare.
+- CfB's `CounterBlock.use` returns FAIL for any block item on its top face (and for CfB's cutting board item), which
+  lets the item place itself; CfB means boards to sit there. The placed block's `canSurvive` then refused: FD 1.2.4's
+  cutting board wants a rigid or center support face below, Display Delight 1.2.0's plates and plated foods
+  (`AbstractItemBlock`, `EmptyPlateBlock`, `EmptySmallPlateBlock`, `SmallPlatedFoodBlock`) a center face, the Brewin'
+  port's coaster either. CfB's counter and corner are 15 px tall (`Block.box(0.5, 0, 0, 15.5, 15, 16)`, model worktop
+  at y 15, backsplash to y 17 at the back), so they have no top face at all.
+- "Counter toppers" (`compat/CounterToppers`, TODO `cooking/kitchen #8`, `#20`): a block in
+  `#creativeengineering:counter_toppers` (`b.t_counter_toppers` = FD `cutting_board`, Display Delight `food_plate`,
+  `small_food_plate`, every `*plated_*` block, `brewinandchewin:coaster`) above a block in
+  `#creativeengineering:counter_supports` (`b.t_counter_supports` = `b.cfb_counter`, `b.cfb_corner`; `blocktags.js`;
+  was `cutting_board_supports` until 2026-10-24) stays.
+- `BlockStateCounterTopperMixin` on `BlockStateBase`: RETURN on `canSurvive` (m_60710_) turns a `false` into `true`
+  for a topper on a support. `BlockItem.canPlace` and the board's and coaster's `updateShape` all ask through the
+  state, so one hook covers every topper (it replaced the FD-only `CuttingBoardSupportMixin`).
+- Breaking the block below: Display Delight's blocks check survival only when placed, so they stayed in the air when
+  the counter (or any block) under them was broken. The same mixin's RETURN on `updateShape` (m_60728_) answers air for
+  a change from below when the state can no longer survive, for every topper and every `displaydelight` block (bowls and
+  drinks too; `CounterToppers.popsUnsupported`, cached per state with the topper flag). Vanilla's `updateOrDestroy`
+  then breaks it with its loot. The board and the coaster already did this in their own `updateShape` (the coaster
+  drops its drinks in `onRemove`).
+- Drawn on the worktop: `CounterToppers.offset` gives the shift for a topper above a support. The same mixin's HEAD
+  on `getOffset` (m_60824_) returns it for a topper, so the chunk mesher (vanilla and Rubidium both call it) moves the
+  model; plated foods draw the food inside the block model, so plate and food move together. Whether a state is a
+  topper is cached per state for one tag generation (`CounterToppers.init` bumps it on `TagsUpdatedEvent`), so
+  `getOffset`, run for every block the mesher draws, does no tag lookup. Block entity renderers:
   `CuttingBoardRendererOffsetMixin` (client) pushes and translates FD's `CuttingBoardRenderer.render`, so the item on
-  the board moves too. The hitbox and collision stay where they were (1 px above the drawn board).
-- Offset config `[kitchen] cuttingBoardOffsetX / Y / Z` in pixels, -8 to 8 (Y -1, X and Z 0): X and Z in the frame
-  of a counter facing north (+X east, +Z toward its back), turned with the counter's `facing` (south (-x, -z), east
-  (-z, x), west (z, -x)). Visual only: F3+A redraws after a restart.
+  the board moves too; `CoasterRendererOffsetMixin` (client) does the same for the port's `CoasterBlockEntityRenderer`,
+  which draws the coaster itself and its drinks (no block model). The port jar is a compileOnly lib in
+  `development/patcherMod/libs/` (copied from `mods/`). The hitbox and collision stay where they were (1 px above).
+- Offset config `[kitchen]` in pixels, -8 to 8: `cuttingBoardOffsetX / Y / Z` for the board, `plateOffsetX / Y / Z`
+  for the plates, plated foods and the coaster (Y -1, X and Z 0 for both). X and Z in the frame of a counter facing
+  north (+X east, +Z toward its back), turned with the counter's `facing` (south (-x, -z), east (-z, x), west
+  (z, -x)). Visual only: F3+A redraws after a restart.
 
 ### 2.4 Fridge
 
-- The 2-tall fridge (two fridges stacked) was x 1-15, z 3-15 with its upper top at y 13. `tools/gen_cfb_fridge_models.py`
-  reads CfB's own models from the jar and writes six overrides to
-  `kubejs/assets/cookingforblockheads/models/block/`: `fridge_large_upper`, `fridge_large_lower` and the four large
-  door models. CfB loads them by id in code (`client/ModModels`), not through `blockstates/fridge.json`.
-- Body: walls x 0-2 / 14-16 out to z 16, top at y 16, bottom x 0-16; seals, shelves and the inside move out with the
-  walls. Doors: x 0-16 and full height, at their old depth (z 1-2, handle in front), because `FridgeRenderer` swings
-  them about a hard-coded hinge at x 14.5 (1.5 flipped), z 1.5; at 90 degrees the 1.5 px past the hinge turns into the
-  side wall, out of sight.
-- Stretched faces take position UVs; seals and handles keep their single-pixel UVs; `tintindex` stays, so dyed
-  fridges colour. `--check` reports overrides out of step with the jar.
+- The 2-tall fridge (two fridges stacked) is x 1-15, z 3-15 (door front at z 1) with its upper top at y 13, so decor
+  on top floated 3 px above it. `tools/gen_cfb_fridge_models.py` reads CfB's `fridge_large_upper` from the jar and
+  writes it to `kubejs/assets/cookingforblockheads/models/block/` unchanged plus one element `CE_TopFill`: x 1-15,
+  y 13-16, z 1-15 (the body and the closed door's front), all six faces (the bottom shows over the door's gap when it
+  swings open). CfB loads the model by id in code (`client/ModModels`), not through `blockstates/fridge.json`.
+- Texture `creativeengineering:block/fridge_top_fill` (written by the script): flat white 246, the body's own white;
+  `tintindex` 0, so a dyed fridge's box takes the dye like the body.
+- Was (2026-10-21 to 2026-10-25): six overrides stretched the body walls out to x 0-16 / z 16 and the doors to full
+  width and height, with position UVs on the stretched faces. The textures looked wrong (`#19`), so it was reverted
+  (user): the script deletes those overrides, and the lower half and doors are CfB's own again. `--check` reports
+  the override or texture out of step with the jar, and any old override left behind.
 
 ### 2.5 Corner storage
 
@@ -140,11 +164,11 @@ water".
 
 - Config: `cookingforblockheads-common.toml` (`ovenRequiresCookingOil`, `sinkRequiresWater`); `creativeengineering-common.toml`
   `[kitchen]`.
-- Tags: `#balm:cooking_oil` + Rustic Delight oil; `#creativeengineering:cutting_board_supports`.
-- patcherMod mixins (all `remap = false`, SRG names): CfB oven fuel, FD cutting board support, `BlockStateBase#getOffset`,
-  FD board renderer (client), CfB corner block entity and use. CfB 13.3.4's jar is in `development/patcherMod/libs/`
-  to compile against.
-- Resource overrides: six CfB fridge models.
+- Tags: `#balm:cooking_oil` + Rustic Delight oil; `#creativeengineering:counter_supports`, `#creativeengineering:counter_toppers`.
+- patcherMod mixins (all `remap = false`, SRG names): CfB oven fuel, `BlockStateBase#canSurvive` / `#getOffset`
+  (counter toppers), FD board and Brewin' coaster renderers (client), CfB corner block entity and use. CfB 13.3.4's and
+  the Brewin' port's jars are in `development/patcherMod/libs/` to compile against.
+- Resource overrides: CfB's `fridge_large_upper` (top fill box) and its texture.
 - Recipes: bamboo bowl; mortar crafts (own and catalogue).
 - Tooltips: CfB oven, sink.
 
@@ -154,7 +178,8 @@ water".
 - Cutting board: drawn 1 px lower with a config offset (user); the hitbox is not moved, so a VoxelShape outside its
   cell can't upset clicks on the board.
 - Fridge: only the 2-tall form (user); the 1-tall fridge and the item model are unchanged; collision was already a
-  full block.
+  full block. A white box on top instead of stretching the model (user, 2026-10-25); it does not reach the block's
+  sides, so the 1 px gaps beside counters stay.
 - Corner storage: the floor corner only; a chest GUI (vanilla `ChestMenu`) rather than CfB's counter screen, whose
   menu is tied to `CounterBlockEntity`.
 - Mortar: hand yield = machine average rounded down, no bonus rolls or byproducts; the mortar is the pack's own item
@@ -162,21 +187,29 @@ water".
 - Rejected: an inventory sweep stripping empty tags from returned bowls (row #5) was built and removed (user); the
   cause was Sticky It!'s tooltip handler, fixed in Creative Labels.
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/cooking_kitchen.md](briefs/cooking_kitchen.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `cooking/kitchen #18` (lava bottles in jars) is folded into `items/jars #3`; probable cause: Moonlight's lava soft fluid has an
+  invalid empty container (see [mixed_jars.md](mixed_jars.md) planned block).
+
 ## 5. File map
 
 - patcherMod [mixin/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/):
-  `CfbOvenFuelMixin`, `CuttingBoardSupportMixin`, `BlockStateCuttingBoardOffsetMixin`,
-  `CuttingBoardRendererOffsetMixin`, `CfbCornerStorageMixin`, `CfbCornerUseMixin`;
+  `CfbOvenFuelMixin`, `BlockStateCounterTopperMixin`, `CuttingBoardRendererOffsetMixin`, `CoasterRendererOffsetMixin`,
+  `CfbCornerStorageMixin`, `CfbCornerUseMixin`;
   [compat/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/):
-  `CuttingBoardOnCounter`, `CfbCornerStorage`; `CEConfig.Kitchen`.
+  `CounterToppers`, `CfbCornerStorage`; `CEConfig.Kitchen`.
 - KubeJS: [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (bamboo bowl, `foodGrinding` calls),
   [mortar.js](../kubejs/server_scripts/cooking/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
   [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), [tooltips.js](../kubejs/client_scripts/tooltips.js),
   NCH in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js); dict keys `i.mortar_and_pestle`, `i.powder_pestle`,
-  `i.t_balm_cooking_oil`, `i.cfb_*`, `b.cfb_counter`, `b.cfb_corner`, `b.t_cutting_board_supports`.
+  `i.t_balm_cooking_oil`, `i.cfb_*`, `b.cfb_counter`, `b.cfb_corner`, `b.dd_food_plate`,
+  `b.dd_small_food_plate`, `b.dd_plated_foods`, `b.coaster`, `b.t_counter_supports`, `b.t_counter_toppers`.
 - Generated: [mortar_catalog.json](../kubejs/generation_scripts/food/mortar_catalog.json) by
-  [gen_mortar_catalog.py](../tools/gen_mortar_catalog.py); fridge models in
-  `kubejs/assets/cookingforblockheads/models/block/` by [gen_cfb_fridge_models.py](../tools/gen_cfb_fridge_models.py).
+  [gen_mortar_catalog.py](../tools/gen_mortar_catalog.py); fridge model in
+  `kubejs/assets/cookingforblockheads/models/block/` and `textures/block/fridge_top_fill.png` by [gen_cfb_fridge_models.py](../tools/gen_cfb_fridge_models.py).
 - Probes: [tools/kitchen_probe/](../tools/kitchen_probe/).
 
 ## 6. Offline checks
@@ -196,6 +229,11 @@ Scratch dedicated server (`tools/creative_labels_test/scratch_server.sh`, the pr
   tortilla from 3 cornmeal + water bottle or bucket, container back (KM-10, KM-11); sugar cane -> 2 sugar; 3 bamboo -> 1 bowl.
 - `python3 tools/gen_cfb_fridge_models.py --check`; `python3 tools/gen_mortar_catalog.py` (prints the crafts).
 
+Queued (SQ-KT, not run): `/kttest` now also places a plate, a small plate and a coaster on a counter and a plate on a
+corner (KT-15a/b, KT-16a), sets a plated hamburger on a counter (KT-15c), moves it with `plateOffsetY` (KT-16b) and
+checks a plate over air is still refused (KT-15d); and breaks the block under a plate and a plated hamburger on
+stone and a plate and a coaster on a counter, each must pop (KT-17).
+
 Not covered offline: anything drawn (board offset, fridge), the corner's GUI on a client, JEI.
 
 ## 7. In-game test suite
@@ -208,9 +246,9 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   output slots; when the last oil burns, its bottle is in the fuel slot.
 - [ ] **KT-05 Board drawn on the worktop:** the board and an item on it sit on the counter top with no gap, on
   counters facing all four ways; set `cuttingBoardOffsetZ = -2`, restart, F3+A → it moves toward the door on each.
-- [ ] **KT-06 Fridge look:** a 2-tall fridge between two counters: no gaps at the sides, top flush with a full block
-  next to it, a candle on top sits on it; the door opens and closes cleanly on both hinge sides; a dyed fridge keeps
-  its colour.
+- [ ] **KT-06 Fridge look:** a 2-tall fridge: CfB's own body and doors (not stretched), a white box on top level
+  with a full block next to it, a candle on top sits on it; the door opens and closes cleanly on both hinge sides and
+  passes under the box; a dyed fridge's body and box both take the colour.
 - [ ] **KT-07 Bamboo bowl:** 3 bamboo in a V → 1 bowl.
 - [ ] **KT-08 Mortar:** wheat + Mortar and Pestle in the crafting table → wheat flour, the mortar back with 1 damage;
   JEI's uses page for the mortar lists the grinding crafts.
@@ -221,6 +259,16 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   recipes from ingredients kept only in the corner.
 - [ ] **KT-13 Mortar item:** lever over 3 polished granite (Old Guns' shape) in the crafting table → Mortar and
   Pestle with the Old Guns texture; Old Guns' item reads "Powder Pestle" and wheat + Powder Pestle gives nothing.
+- [ ] **KT-15 Plates and coasters on a counter:** a Food Plate, a Small Food Plate and a Coaster each place on a
+  Kitchen Counter's top and a Kitchen Corner's; put a hamburger on the plate (plated hamburger) and drinks on the
+  coaster: both stay; reload the world: still there. Placing a coaster on a counter, then breaking the counter, pops
+  the coaster.
+- [ ] **KT-16 Plates drawn on the worktop:** the plate, its food, the coaster and its drinks sit on the counter top with
+  no gap, on counters facing all four ways; set `plateOffsetY = -3`, restart, F3+A → plates and coaster sink 2 px
+  more, the cutting board does not move.
+- [ ] **KT-17 Plates pop when the block below goes:** a Food Plate, a plated food and a Display Delight bowl on stone,
+  and a plate and a Coaster with drinks on a counter: break the block under each → it breaks and drops (the plated
+  food its food, the coaster its drinks); nothing is left floating.
 
 ## 8. History
 
@@ -229,3 +277,10 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   (`#6`), corner storage (`#15`), bamboo bowl and mortar grinding (`#10`); scythe and stepstool split to `#16`,
   `#17`. Row `#5`'s cause found in Sticky It!'s tooltip handler (fixed by Creative Labels). Corner tests renamed from
   the brief's KC-01 to KC-04 to KT-09 to KT-12.
+- 2026-10-24: planned from the scratchpad: fridge texture padding, plates and coasters on the counter (`cooking/kitchen #19`, `#20`). No code changed.
+- 2026-10-24: built `#20` (patcherMod 1.1.02, in `mods/` only): the cutting board route generalised to counter toppers
+  (2.3), `plateOffset*` config, coaster renderer mixin; `cutting_board_supports` renamed `counter_supports`. KT-15, KT-16
+  added; `/kttest` extended, scratch run queued (SQ-KT).
+- 2026-10-25: Display Delight blocks, toppers and the coaster break when the block below goes (2.3, KT-17, patcherMod
+  1.1.02 rebuilt, not in `mods/`). Fridge stretch reverted, white top fill box instead (2.4, `#6`, `#19`); KT-06
+  rewritten.

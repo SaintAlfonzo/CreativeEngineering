@@ -39,14 +39,18 @@ Object.keys(global.potionArea.BUCKETS).forEach(id => {
         const y = t.hit.y() + 0.1
         const z = t.hit.z()
 
-        global.potionArea.spawn(level, x, y, z, id, stack, player)
+        // a no-effect potion (awkward, thick, mundane, water) spawns no rings: keep the bucket
+        const rings = global.potionArea.spawn(level, x, y, z, id, stack, player)
+        if (!rings || rings.length === 0) return
 
+        // take the item before shrink(1): the unstackable bucket empties and an empty stack is air
+        const bucketItem = stack.getItem()
         if (!player.isCreative()) {
             stack.shrink(1)
             const empty = Item.of('minecraft:bucket')
             if (!player.getInventory().add(empty)) player.drop(empty, false)
         }
-        player.getCooldowns().addCooldown(stack.getItem(), 20)
+        player.getCooldowns().addCooldown(bucketItem, 20)
 
         return e.success()
     })

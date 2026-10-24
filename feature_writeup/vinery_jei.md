@@ -66,6 +66,14 @@ Display only. No Vinery behaviour, recipe or config is changed.
 - World interactions (leaf/bush harvesting, stem pruning, kitchen sink) are not covered; KubeJS
   `JEIEvents.information` pages would suit them.
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/alcohol_vineryport.md](briefs/alcohol_vineryport.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `alcohol/vineryport #26`: shorten the JEI description texts of the Backported Vinery items (same trim as the planting text,
+  `jei/jei-coverage #12`). The pages in this writeup stand down when the port is in `mods/`; the texts to cut are the port's own lang
+  (`development/backportedVinery`). Not looked at yet.
+
 ## 5. File map
 
 - [VineryJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/VineryJEI.java): plugin, registration, catalysts
@@ -97,3 +105,4 @@ Display only. No Vinery behaviour, recipe or config is changed.
 - 2026-10-01: built (patcherMod 1.0.3). Not copied to `mods/` because a game instance was running.
 - 2026-10-01: the real barrel time is about 50 ticks, not 1800 (from the decompiled jar); fix open. Full Vinery behaviour reference: [vinery.md](vinery.md).
 - 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
+- 2026-10-24: planned from the scratchpad: shorter Vinery port JEI descriptions (`alcohol/vineryport #26`). No code changed.

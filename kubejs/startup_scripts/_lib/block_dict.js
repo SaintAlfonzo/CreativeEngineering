@@ -26,6 +26,11 @@ b.blaze_lantern = 'quark:blaze_lantern';
 b.cutting_board = 'farmersdelight:cutting_board';  // bakeware hammering (feature_writeup/oven.md 2.5)
 b.cfb_counter = 'cookingforblockheads:counter';   // 15 px worktops: cutting board support (TODO cooking/kitchen #8)
 b.cfb_corner = 'cookingforblockheads:corner';
+// Counter toppers (patcherMod CounterToppers, TODO cooking/kitchen #20): plates, plated foods, coaster on a counter
+b.dd_food_plate = 'displaydelight:food_plate';
+b.dd_small_food_plate = 'displaydelight:small_food_plate';
+b.dd_plated_foods = 'displaydelight:*plated_*';    // every plated / small_plated food block (ctd_plated_*, plated_* ...)
+b.coaster = 'brewinandchewin:coaster';               // the Brewin' port
 // Milk and cow jars: glass bottles take milk out (server_scripts/cooking/milk_jar.js, TODO food/drinks #6)
 b.cow_jar = 'cookingforblockheads:cow_jar';
 b.milk_jar = 'cookingforblockheads:milk_jar';
@@ -85,7 +90,8 @@ b.t_keg_freeze_sources = '#brewinandchewin:freeze_sources';
 b.t_ghost_pepper_soil = '#vintagedelight:ghost_pepper_soil'; // Vintage port: where ghost pepper seeds plant (vintage_delight.md 2.1)
 b.t_ice = '#minecraft:ice';                          // ice, packed, blue, frosted, rare-ice
 b.t_hammer_no_rotate = '#creativeengineering:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
-b.t_cutting_board_supports = '#creativeengineering:cutting_board_supports'; // CuttingBoardSupportMixin: an FD cutting board stays on these
+b.t_counter_supports = '#creativeengineering:counter_supports'; // CounterToppers.SUPPORTS: toppers stay on these, drawn shifted
+b.t_counter_toppers = '#creativeengineering:counter_toppers';   // CounterToppers.TOPPERS: cutting board, plates, coaster
 b.t_campfire_rain_douses = '#creativeengineering:campfire/rain_douses';         // CampfireRain.RAIN_DOUSES
 b.t_campfire_rain_proof_fuel = '#creativeengineering:campfire/rain_proof_fuel'; // CampfireRain.RAIN_PROOF_FUEL
 b.t_vein_undo_denied = '#creativeengineering:vein_undo_denied'; // VeinUndo.DENIED: an Ore Excavation undo touching these is refused

@@ -135,6 +135,14 @@ When fire or lava destroys a dropped item (ItemPhysic's item health reaches 0 fr
 - **Editing ItemPhysic's two lists:** one list can't separate fire from lava, and the config can't be reloaded; tags
   can.
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/items_item-physics.md](briefs/items_item-physics.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `items/item-physics #5`: the goose's golden egg (`vintagedelight:golden_egg`) falls and floats like an ordinary item. The drop code
+  (`GoldenGooseEgg.drop`) removes no gravity, and the egg is in none of the four physics tags (eggs float, untagged items sink and burn):
+  reproduce first, then add it to the `floats` group in `item_physics_tags.js`; decide fireproof. Open: what exactly is wrong in game.
+
 ## 5. File map
 
 - patcherMod: [itemphysic/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/) (`ItemPhysicSplit`, `ItemBurnTransform`, `BurnBlastDamage`), [mixin/ItemPhysicServerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java), `data/creativeengineering/tags/items/physics/*.json` (seed).
@@ -175,3 +183,4 @@ Drop items with Q into the hazard.
 - 2026-10-18: this writeup; findings F1 to F6; tests IP-01 to IP-14. No code changed.
 - 2026-10-19: F1 fixed in patcherMod 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). IP-13 still to run.
 - 2026-10-19: F2 fixed (item_physics.js and item_physics_tags.js headers).
+- 2026-10-24: planned from the scratchpad: golden egg physics (`items/item-physics #5`). No code changed.

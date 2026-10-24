@@ -2,14 +2,16 @@
 
 BUILT 2026-09-30. Offline checks passed (section 6). Used for real deploys: 1.0.3 (2026-10-02) and 1.0.4 (2026-10-04) went out as
 update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026-10-14, update from 1.0.4, folds in 1.0.5),
-1.0.7 (2026-10-18), 1.0.8 (2026-10-19 10:20) and 1.0.9 (2026-10-19 15:54) went out as update payloads too. Both sides run
-1.0.9 ([deploy/DEPLOYED.json](../deploy/DEPLOYED.json)).
+1.0.7 (2026-10-18), 1.0.8 (2026-10-19 10:20), 1.0.9 (2026-10-19 15:54), 1.1.01 (2026-10-22 22:39) and 1.1.02
+(2026-10-23, recorded 2026-10-24) went out as update payloads too. Both sides run 1.1.02
+([deploy/DEPLOYED.json](../deploy/DEPLOYED.json)); 1.1.02 does not load, see the hotfix note in
+[TODO.md](todo/TODO.md).
 
 ## 0. At a glance
 
 | Part | Status | Open |
 |---|---|---|
-| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.0.9 recorded as deployed on both sides (2026-10-19 15:54), 1.0.8 before it (10:20) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
+| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.1.02 recorded as deployed on both sides (2026-10-23, time not known), 1.1.01 before it (2026-10-22 22:39) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
 | `update` / `install` payload modes | BUILT; scratch-tested (DP-01..DP-04 offline) | `select_payload`, `render_readme` |
 | `verify.sh` / `verify.ps1` | BUILT; sh tested, ps1 not run (no PowerShell here). 2026-10-22: `--installed` / `-Installed` checks against the new version (`verify/<target>.installed.*`, both modes); ps1 usage line no longer has a tab for `\t` | `VERIFY_SH`, `VERIFY_PS1` |
 | `apply.sh` / `apply.ps1`: verify (update; stops on DRIFT unless `--force`), removals, copy each folder to its place per target (`CATEGORIES`), `world_serverconfig/` into the server's `level-name` world or the client's `--world` saves, keeps `MEMORY`/`JAVAPATH` (`.bat`: `maxmemory`/`javapath`), verify `--installed`. Install mode moves old jars to `mods_before_<version>/` | BUILT 2026-10-22; sh scratch-tested (synthetic payload: update server + client, rerun refused as DRIFT, install mode, unsafe removal path skipped), ps1 not run | `APPLY_SH`, `APPLY_PS1`, `write_scripts` |
@@ -289,3 +291,7 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
   deployed and frozen `changelog/1.1.02.md`; both were undone (client mark back to 1.1.01, the file merged back into
   `unreleased.md`) so `--version 1.1.02` could rebuild. pack/manifest.json regenerated. Update from 1.1.01: 98 files /
   8.2 MB, removals 3 server / 3 client. Next: copy, then `--snapshot 1.1.02`.
+- 2026-10-24: `--snapshot 1.1.02 --date 2026-10-23` run after the fact (deployed to players 2026-10-23, exact time not
+  recorded; DEPLOYED.json and the DEPLOY_LOG "Deployed" line say 2026-10-23). It froze `changelog/1.1.02.md` (the text that
+  shipped) and flagged `unreleased.md` as edited since staging; the shipped bullets were removed from it by hand, the
+  post-1.1.02 bullets stay (next version is 1.1.03). Next update builds from 1.1.02.

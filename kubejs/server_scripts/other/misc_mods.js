@@ -44,6 +44,20 @@ R.remove({id: 'quarkdelight:cutting/knife/bamboo_mat_carpet'}, e)
 R.remove({id: 'create:crafting/tree_fertilizer'}, e)
 
 // ============================================================
+// Upgrade Aquatic
+// ============================================================
+
+// Bedrolls: removed items (gameplay/misc #10), craft and every dye recipe
+R.bulk('remove', [i.bedroll, i.white_bedroll, i.orange_bedroll, i.magenta_bedroll, i.light_blue_bedroll, i.yellow_bedroll, i.lime_bedroll, i.pink_bedroll, i.gray_bedroll, i.light_gray_bedroll, i.cyan_bedroll, i.purple_bedroll, i.blue_bedroll, i.brown_bedroll, i.green_bedroll, i.red_bedroll, i.black_bedroll].map(id => [{ output: id }, e]))
+
+// ============================================================
+// Design Decor
+// ============================================================
+
+// Enchanted golden apple mechanical craft (blocks/framed-and-decor #9)
+R.remove({ id: 'design_decor:mechanical_crafting/enchanted_golden_apple' }, e)
+
+// ============================================================
 // Incubation
 // ============================================================
 

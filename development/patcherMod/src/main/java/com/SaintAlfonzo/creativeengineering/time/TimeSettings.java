@@ -67,13 +67,34 @@ public final class TimeSettings {
      * dayStart = 6:00 am. Only the pack's displays use this; Better Days' bed clock and /time query keep vanilla's.
      */
     public static String clock(long dayTime) {
-        double start = active() ? dayStart() : 0;
-        long units = Math.floorMod(dayTime - (long) start, (long) DAY_UNITS);
-        int minutesOfDay = (int) ((units * 60 / 1000 + 6 * 60) % (24 * 60));
+        int minutesOfDay = minutesOfDay(dayTime);
         int hour = minutesOfDay / 60;
         int minute = minutesOfDay % 60;
         int hour12 = hour % 12 == 0 ? 12 : hour % 12;
         return String.format("%d:%02d %s", hour12, minute, hour < 12 ? "am" : "pm");
+    }
+
+    /** The same clock in 24 h form, "19:30" (Xaero's minimap time line). */
+    public static String clock24(long dayTime) {
+        int minutesOfDay = minutesOfDay(dayTime);
+        return String.format("%02d:%02d", minutesOfDay / 60, minutesOfDay % 60);
+    }
+
+    private static int minutesOfDay(long dayTime) {
+        double start = active() ? dayStart() : 0;
+        long units = Math.floorMod(dayTime - (long) start, (long) DAY_UNITS);
+        return (int) ((units * 60 / 1000 + 6 * 60) % (24 * 60));
+    }
+
+    /**
+     * Day number since the world began, 1 at dayTime 0, stepping at the pack's sunrise like SeasonHUD's "Day x/24"
+     * rather than at vanilla's 6000-before-midnight. The sunrise counted from is the one nearest dayTime 0 (the pack's
+     * 22300 is -1700), so the number matches vanilla's for the hours both call daytime.
+     */
+    public static long dayNumber(long dayTime) {
+        long start = active() ? (long) dayStart() : 0;
+        long sunrise = Math.floorMod(start + DAY_UNITS / 4, (long) DAY_UNITS) - DAY_UNITS / 4; // into [-6000, 18000)
+        return Math.floorDiv(dayTime - sunrise, (long) DAY_UNITS) + 1;
     }
 
     /** Real minutes as "5 h 20 min" / "45 min". */

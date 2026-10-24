@@ -103,8 +103,10 @@ function bucketRecipes(pid, idBase) {
 var n = 0
 var it = POTIONS.keySet().iterator()
 while (it.hasNext()) {
-	var pid = it.next().toString()
-	if (pid === 'minecraft:empty') continue
+	var potionKey = it.next()
+	var pid = potionKey.toString()
+	// Create stores water bottles as plain water, so create:potion never holds minecraft:water
+	if (pid === 'minecraft:empty' || pid === 'minecraft:water') continue
 	var idBase = pid.split(':').join('_').split('/').join('_')
 
 	BOTTLES.forEach(function (bt) {
@@ -118,7 +120,8 @@ while (it.hasNext()) {
 		n++
 	})
 
-	bucketRecipes(pid, idBase)
+	// brewing bases (awkward, thick, mundane) keep their bottles but get no buckets: they do nothing
+	if (!POTIONS.get(potionKey).getEffects().isEmpty()) bucketRecipes(pid, idBase)
 }
 
 console.log('potion bottling done (' + n + ' recipes)')

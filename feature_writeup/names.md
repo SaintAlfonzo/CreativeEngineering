@@ -139,6 +139,14 @@ on purpose, so it can't be mistaken for the drink.
   `/dumpfood` export already shows that name ([food_catalog.md](food_catalog.md) 399). Only an in-game look is left
   ([briefs/ui_names.md](briefs/ui_names.md)).
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/ui_names.md](briefs/ui_names.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `ui/names #8`: "Roll of Ender Guardian" to "Ender Guardian Roll". The item is `oceansdelight:elder_guardian_roll`, named "Roll of
+  Elder Guardian" by Ocean's Delight; Display Delight's plated copies already read "Plated Elder Guardian Roll". Open: Ender or Elder
+  (recommended: "Elder Guardian Roll"). One `renameItem` in `namechanges.js`.
+
 ## 5. File map
 
 - [tools/lang_index.py](../tools/lang_index.py): key index (vanilla jar from `~/.minecraft/versions/1.19.2/`,
@@ -198,6 +206,7 @@ Restart the game, or reload resources with F3+T (lang only).
   All 430 mod display names combed (section 12): 116 renamed through CEConfig `[mod_names]` (author handles dropped,
   Target Dummy, your mods marked "(Alfonzo)").
   NM-09, NM-10 PASSED.
+- 2026-10-24: planned from the scratchpad: rename of Ocean's Delight's elder guardian roll (`ui/names #8`). No code changed.
 
 ## 9. Catalog part 1: partial blocks
 

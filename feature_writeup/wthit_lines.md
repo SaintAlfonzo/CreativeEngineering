@@ -277,6 +277,15 @@ TreeChop ship WTHIT plugins.
   code and the Vinery port already carries its own WTHIT plugin.
 - **A literal Unlit Campfire port:** in this pack every campfire burns forever, so the useful line is the rain rule.
 
+### Planned from the scratchpad (2026-10-24)
+
+Brief: [briefs/ui_wthit.md](briefs/ui_wthit.md). Nothing here is built.
+
+- [TODO](todo/TODO.md) `ui/wthit #11`: a Silk Touch required icon on blocks that only drop themselves with Silk Touch. Loot tables are server
+  data, so either the server plugin scans the block's loot table and sends a flag, or a `/cegen` generator writes a block tag from
+  the loot dump that the client plugin reads. Open: runtime scan or generated tag (recommended: the tag); hide the icon when the
+  held tool already has Silk Touch.
+
 ## 5. File map
 
 - [waila_plugins.json](../development/patcherMod/src/main/resources/waila_plugins.json) (patcherMod),
@@ -425,3 +434,4 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
 - 2026-10-21: F9 built: pot / kettle / oven leftover lines (2.9, `compat/WthitRemainderBuffer`, `[wthit]
   remainderBuffer`, TODO `cooking/kitchen #3`). patcherMod 1.1.01 rebuilt and installed in `mods/` and `server_mods/`.
   WL-32, WL-33.
+- 2026-10-24: planned from the scratchpad: Silk Touch required icon (`ui/wthit #11`). No code changed.

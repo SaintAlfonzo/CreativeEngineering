@@ -1213,6 +1213,13 @@
 		#For a scratch client that never joins a world. Off by default.
 		dumpIconsAtTitle = false
 
+	#The removed-item recipe scan (kubejs/server_scripts/_lib/recipe_scan.js, /recipescan).
+	[debug.recipe_scan]
+		#Server: once per session, when the server has loaded (after every recipe change is applied), log
+		#each recipe that still uses or makes a removed item ([jeiRemove] lines). /recipescan runs it on
+		#demand whatever this says. Off by default.
+		runAtLoad = false
+
 #World generation: switches per system, a debug rate multiplier, and the constants of the pack's
 #worldgen code. The per-structure, per-piece and per-biome tables are the JSON files in
 #kubejs/generation_scripts/worldgen/ (see feature_writeup/structure_tuning.md). Structure and
@@ -1685,11 +1692,13 @@
 	#Range: 0 ~ 100
 	recycleShowTicks = 10
 
-#Farmer's Delight cutting board on a Cooking for Blockheads counter or corner (the blocks in
-##creativeengineering:cutting_board_supports). The counter's worktop is 1 px lower than a full
-#block, so the board and what lies on it are drawn shifted by these offsets, in pixels (1/16
-#block). X and Z are as seen on a counter facing north (door to the north, back edge to the
-#south: +X = east, +Z = toward the back) and turn with the counter. Visual only; F3+A redraws.
+#Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):
+#Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's
+#coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full
+#block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):
+#cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as
+#seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward
+#the back) and turn with the counter. Visual only; F3+A redraws.
 [kitchen]
 	#Sideways shift.
 	#Range: -8.0 ~ 8.0
@@ -1700,6 +1709,15 @@
 	#Shift toward the counter's back (negative = toward the door).
 	#Range: -8.0 ~ 8.0
 	cuttingBoardOffsetZ = 0.0
+	#Plates and coasters: sideways shift.
+	#Range: -8.0 ~ 8.0
+	plateOffsetX = 0.0
+	#Plates and coasters: height shift; -1 puts them on the worktop.
+	#Range: -8.0 ~ 8.0
+	plateOffsetY = -1.0
+	#Plates and coasters: shift toward the counter's back (negative = toward the door).
+	#Range: -8.0 ~ 8.0
+	plateOffsetZ = 0.0
 
 #TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
 #but TrashSlotSaveState.json in the game folder lists every screen opened so far.
@@ -2228,4 +2246,15 @@
 	#Off: a skinned backpack cannot go in the chest slot or a Curios slot (so it is never worn).
 	#On: it can, and the skin block is drawn on the back.
 	allowEquip = false
+
+#Moss block and moss carpet colour (client only; the server ignores this section).
+[moss]
+	#On: moss block and moss carpet take the biome's grass colour, like grass blocks.
+	#Off: vanilla's fixed green moss. Read when models load: press F3+T or restart after changing it.
+	biomeTint = true
+	#How far moss follows the grass colour. 1.0 = shifts as much as grass does from Lush Caves
+	#grass (where moss keeps its vanilla green); 0.0 = vanilla green everywhere. Chunks pick up
+	#a change when they re-render (F3+A).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 1.0
 

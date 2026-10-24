@@ -470,6 +470,20 @@ so the JEI order report still counts them as hidden by the pack ([jei_ordering.m
 
 Leave visible: the generated cans (208, real food), potion buckets (already 3 entries), dust piles, coils, components.
 
+### Planned from the scratchpad (2026-10-24)
+
+Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). World-tab rows of this batch are in
+[jei_world_tabs.md](jei_world_tabs.md).
+
+- [TODO](todo/TODO.md) `jei/jei-coverage #14`: Miner's Delight soup cups have no JEI recipe. They come from a Java conversion table
+  (`cup_conversion/default_conversions.json`), not a recipe type. Describe the conversion or hide the cups; the jar is the
+  old 1.1.2 (see `largecontent/mod-additions #7`), so do it after that row. Open: keep or remove.
+- [TODO](todo/TODO.md) `jei/jei-coverage #15`: Vintage Delight machines. The port ships only the Fermenting (Pickling Jar) category; the Cheese Mold, salt growth
+  and the jam type have none. List what shows today from a `/dumprecipes` of the loaded jar, then add a page per type the
+  player cannot guess ([vintage_delight.md](vintage_delight.md) 2.3).
+- [TODO](todo/TODO.md) `jei/jei-coverage #24`: the Tipped Arrows, Potion Buckets (`RowPagesCategory`) and Seasoning (`SeasoningCategory`) pages draw JEI's
+  crafting-table arrow; switch them to the Feast Plating / world-tab arrow (sprite 82,128, 24 x 17).
+
 ## 6. Offline checks
 
 - `python3 tools/jei_coverage.py --check`: every hidden crafting recipe has a description.
@@ -556,3 +570,4 @@ The covered/uncovered split comes from bytecode, not a running JEI. A few looks 
 - 2026-10-22: Part 4 bulk-set catalog (section 5) and its first fixes: Tipped Arrows, Potion Buckets, Canning and
   Using Cans pages (patcherMod `PotionPagesJEI`, `CanPagesJEI`, `RowPagesCategory`, `CanCraftingCategory`,
   `RecipeRows`; config `[jei] tippedArrowCategory`, `potionBucketCategory`, `canCategories`).
+- 2026-10-24: planned from the scratchpad: soup cups, Vintage Delight screens, arrow update (`jei/jei-coverage #14`, `#15`, `#24`). No code changed.

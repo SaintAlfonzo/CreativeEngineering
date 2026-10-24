@@ -2,14 +2,20 @@
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
+- add SOL carrot just for food dictionary?
+- readd cherry cream soda, determine removed recipe
+  - many fruit sodas?
+  - most glass bottles
+  - some cans, dyes, cheap and worse
+
 ## Oldest Unrun Tests
 
 The 47 oldest unchecked tests in the writeups (by last git change, all 2026-09-27; copies, the originals stay in their writeups and get ticked there).
 
 ### BlockRunner (blockrunner.md)
 
-- [ ] **BR-04 Slow tiers:** `M` on sand → **−0.015**; on wool → **−0.012**; on a honey block → **−0.055** (jumping on honey is still damped).
-- [ ] **BR-05 1.00 tiers:** `M` on glass and on grass → "no modifier". `T blockrunner:surface/glass` on glass passes.
+- [x] **BR-04 Slow tiers:** `M` on sand → **−0.015**; on wool → **−0.012**; on a honey block → **−0.055** (jumping on honey is still damped).
+- [x] **BR-05 1.00 tiers:** `M` on glass and on grass → "no modifier". `T blockrunner:surface/glass` on glass passes.
 - [ ] **BR-08 Mobs too:** walk a horse onto asphalt, then `/attribute @e[type=minecraft:horse,limit=1,sort=nearest] minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002` → half the horse's base speed (a positive number).
 - [ ] **BR-09 Soul sand untouched:** `M` on soul sand → "no modifier". You are still slowed, and Soul Speed boots still cancel it.
 - [ ] **BR-10 Thin blocks don't register:** put a carpet on concrete and stand on it. `M` → **+0.04** (the concrete's value).
@@ -75,6 +81,55 @@ Client-only in-game tests for unreleased 1.1.01 (all work since 1.0.9 shipped, 2
 scratch server fully covers are left out; where it covers part, the entry says so (the `SQ-` ids are in
 [testing/scratch_queue.md](../testing/scratch_queue.md)). Before testing: install the `build/libs` patcherMod jar (extra
 stem fruit is only there) and More Mooblooms 1.1.0, both with the game closed; startup scripts changed, so restart.
+
+### 1.1.02 and later work (added 2026-10-23, newest first; client halves only)
+
+Covers the 1.1.02 commit (Vintage Delight, Fungi Delight, misc delights) and the uncommitted work after it. Full lists:
+[vintage_delight.md](../vintage_delight.md) section 8 (VTD), [fungi_delight.md](../fungi_delight.md) section 8 (FGD). Startup
+scripts and the removed-items list changed: restart the client, and `/reload` is not enough.
+
+#### Uncommitted after 1.1.02 (no writeup ids yet)
+
+- [-] **N-01 Egg Fried Rice name:** Farmer's Delight's Fried Rice reads "Egg Fried Rice" in the inventory, JEI and WTHIT; the
+  Display Delight placed copy reads "Placed Egg Fried Rice".
+- [-] **N-02 Glycerol tooltip:** hover Glycerol with no Shift: the aqua line "Tastes sweet!" shows and the "Hold Shift" hint is gone.
+  Other PneumaticCraft items still show "Hold Shift"; the Liquid Experience Bucket tooltip still reads "Experience in liquid form."
+- [-] **N-03 Bedrolls gone:** search JEI and every creative tab for "bedroll": nothing. No Leatherworker offers one (check a few).
+- [-] **N-04 Abnormals Delight leftovers gone:** JEI and creative: no Passion Aloe Nectar, Cherry Cream Soda, Dune Platter,
+  Yucca Gateau Slice, Fruit Beignet; no Fruit Beignet recipe page.
+- [ ] **N-05 Luck brewing in JEI:** Potion of Luck and Potion of Bad Luck (and their long forms) each list one pack route
+  (clover or silverfish bottle on awkward, redstone to lengthen); no Buzzier Bees duplicate, no strong or corruption route
+  (compare EF-05 in [effects.md](../effects.md)).
+- [ ] **N-06 No-effect potions:** JEI shows no bucket or tipped-arrow recipe for awkward, thick, mundane or water; bottling
+  recipes for awkward, thick and mundane remain. Right-click an awkward potion bucket on the ground: nothing spawns and the bucket is kept.
+  An effect bucket (e.g. Speed) still spawns rings, becomes an empty bucket and goes on a 1 second cooldown.
+- [ ] **N-07 Driftwood bark:** JEI: driftwood log and wood stripping on the cutting board give Immersive Weathering's driftwood bark
+  (not Abnormals Delight's); Create cutting and the pack sawmill still list their driftwood recipes.
+- [ ] **N-08 Quark Engineering stairs:** the sawmill recipes for the quark trio (blossom, ancient, azalea) stairs in JEI are the
+  pack's only ones; the bookshelf recipes remain.
+- [ ] **N-09 Food types:** Cheese Pasta and the sweet entries changed in `food_types.json`: hover them, the type line and AppleSkin
+  values match their neighbours (spot check three).
+
+#### Vintage Delight (vintage_delight.md section 8)
+
+- [ ] **VTD-25 Placed tooltips:** placed jars, pizzas and the cheese mold show the placeable tooltip.
+- [ ] **VTD-03 Seed tooltip:** the Ghost Pepper Seeds tooltip names Soul Soil, Rich Soul Soil and Fertile Soul Soil. Nulch reads "Fertile Soul Soil".
+- [ ] **VTD-05 WTHIT growth line** on every Vintage crop; **VTD-14** mason jars: up to 4 on a block, look right placed.
+- [ ] **VTD-13 Cheese mold** JEI explanation page; **VTD-45** every Vintage item in JEI has a recipe or a use, names are sensible.
+- [ ] **VTD-33 Chef's hats:** 16 colours exist and render on the head; Simple Hats' chef's hat is gone from hat bags.
+- [ ] **VTD-26 Supplementaries jar:** vinegar, nut milk and the jar fillings show their colour in a Supplementaries jar.
+- [ ] **VTD-48/49 Burgers and burrito:** the sequenced-assembly JEI pages show the steps in order.
+
+#### Fungi Delight (fungi_delight.md section 8)
+
+- [ ] **FGD-03 Mushroom fields:** colonies, both huge mushrooms and the Inky Cap and Morel cows render (the cow cap layer included).
+- [ ] **FGD-04 / FGD-35 Inky Goo Veil:** bone meal on an inky cap in low light grows a huge form and the veil hangs under it; the
+  veil stops at 16 segments and looks right (no missing texture).
+- [/] **FGD-16 Weak Stomach:** the effect icon and name show in the HUD and the inventory after eating a Cleaned Inky Cap.
+  - remove 'from' language, add to effect provider
+- [/] **FGD-18 Burrowing:** the effect name, icon and potion item tint render; the potion shows in JEI.
+- [ ] **FGD-20 / FGD-31 JEI:** all 7 pot meals and 3 grid meals; the mushroom info page lists the four mushrooms.
+- [ ] **FGD-26 Join check:** a client joining the dedicated server sees no missing-class or registry mismatch message.
 
 ### Recently added tests (not yet in a section above; collected from the writeups, 2026-10-22)
 
@@ -863,3 +918,6 @@ stem fruit is only there) and More Mooblooms 1.1.0, both with the game closed; s
 - [ ] **FP-01 Death Knell lang [game]:** on the live server, die to a zombie and a fall a few times: the chat shows
   Death Knell's flavour messages ("was bonked by", "fell victim to gravity"), no raw `message.deathknell.*` keys.
   The jar is on both sides since 1.0.7, so raw keys would mean a client missed the update.
+### Log warnings (log_warnings.md)
+
+- [ ] **LW-01 Play audit [game]:** after a long play session and a dedicated-server run, repeat the warning scan on `logs/latest.log` and add a "during play" table to [log_warnings.md](../log_warnings.md) (section 7); also place the section 3 blocks (redeco fences/chairs, interiors chairs, belt grinder, Display Delight plates at 2 to 6 servings, wine boxes) and acknowledge or fix each.
