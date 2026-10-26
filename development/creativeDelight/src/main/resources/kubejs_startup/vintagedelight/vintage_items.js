@@ -22,3 +22,16 @@ ItemEvents.modification(e => {
 			.build())
 	})
 })
+
+// Pickled Sea Pickle (TODO dishes/pickles-and-ferments #1): sea pickles from the Pickling Jar, no honey (recipe in
+// data/creative_delight/kubejs/vintagedelight/recipes.js). It replaces Brewin' and Chewin's Pickled Pickles, which merge
+// into it (recipes, loot and inventories swap; the server half is the pack's item_merges.js). Values: the Pickled
+// Pickles' 4 hunger, modifier 0.3, eaten fast like a Pickle. Art: Vintage's pickle (GPL) in the sea pickle's colours
+// (textureswapper/palette_swap.py), kubejs/assets/creativeengineering/textures/item/pickled_sea_pickle.png (the owner's pick).
+StartupEvents.registry('item', e => {
+	e.create(global.item.pickled_sea_pickle).displayName('Pickled Sea Pickle').food(f => {
+		f.hunger(4).saturation(0.3).fastToEat(true)
+	})
+})
+global.itemMerges.push([global.item.pickled_pickles, global.item.pickled_sea_pickle])
+global.removedItems.push(global.item.pickled_pickles)

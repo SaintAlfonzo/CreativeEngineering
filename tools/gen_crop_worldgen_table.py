@@ -235,6 +235,9 @@ CROP_BLOCKS = {
     'minecraft:cactus': 'Cactus', 'minecraft:chorus_flower': 'Chorus Fruit',
     'myrtrees:rubberwood_log': 'Rubber tree',
     'supplementaries:wild_flax': 'Flax',
+    'endersdelight:amberveil_mushroom': 'Amberveils', 'endersdelight:chorus_flame_block': 'Chorusflame',
+    'endersdelight:ethereal_saffron_bush': 'Ethereal Saffron', 'endersdelight:voidpepper_block': 'Void Pepper',
+    'ends_delight:chorus_succulent': 'Chorus Succulent',
     'vinery:red_grape_bush': 'Grapes: red', 'vinery:white_grape_bush': 'Grapes: white',
     'vinery:savanna_grape_bush_red': 'Grapes: savanna red', 'vinery:savanna_grape_bush_white': 'Grapes: savanna white',
     'vinery:taiga_grape_bush_red': 'Grapes: taiga red', 'vinery:taiga_grape_bush_white': 'Grapes: taiga white',
@@ -400,6 +403,8 @@ def crops_in_value(v, placed, configured, seen, configured_ref=False):
             out.add(COCOA)
         if v.get('type') == 'minecraft:chorus_plant':
             out.add('Chorus Fruit')
+        if v.get('type') == 'ends_delight:chorus_succulent':   # End's Delight's Java feature (count config)
+            out.add('Chorus Succulent')
         if 'placement' in v and isinstance(v.get('feature'), str):   # inline placed feature: feature = configured id
             out |= crops_in(v['feature'], placed, configured, 'c', seen)
         for k, x in v.items():
@@ -690,8 +695,9 @@ def coverage_checks(world, wild, crop_set, area, oceans, rows):
                 if t.lstrip('!') not in vocab:
                     problems.append(f'{key}: trait "{t.lstrip("!")}" is on no biome (typo?)')
         for b in crop.get('add', []) + crop.get('except', []):
-            if b not in traits:
-                problems.append(f'{key}: add/except names {b}, which is not in "biomes"')
+            # End and Nether biomes have no traits; a rule names them through add (the End plants)
+            if b not in traits and b not in bdata:
+                problems.append(f'{key}: add/except names {b}, which is neither in "biomes" nor a registered biome')
         for f in crop.get('features', []):
             if f not in placed and f not in JAVA_PLACED:
                 problems.append(f'{key}: feature {f} is neither a json placed feature nor in JAVA_PLACED')

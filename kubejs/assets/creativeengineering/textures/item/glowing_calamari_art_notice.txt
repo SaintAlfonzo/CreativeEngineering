@@ -1,0 +1,8 @@
+glowing_calamari, glowing_calamari_slice, glowing_calamari_roll: palette swaps (textureswapper/palette_swap.py) of Rustic
+Delight's calamari, calamari slice and calamari roll sprites onto the glow ink sac's colours; the roll's rice is Rustic's
+own layer put back on top.
+
+Rustic Delight is All Rights Reserved on the Forge versions' mods.toml; the owner gave MIT for its Forge files
+(rustic_delight.md). Get the upstream licence file confirmed before a release ships these.
+
+pickled_sea_pickle: Vintage Delight's pickle (GPL) in the sea pickle's colours.

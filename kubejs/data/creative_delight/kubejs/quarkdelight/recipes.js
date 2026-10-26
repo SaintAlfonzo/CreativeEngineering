@@ -19,7 +19,7 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.raw_fish, i.crab, i.bonemeal], Item.of(i.crab_bars, 4), e, undefined, 1, 200)
 		// Sequenced assembly
 		if (Platform.isLoaded('create')) {
-			const incCrabBars = R.incomplete('crab_bars')
+			let incCrabBars = R.incomplete('crab_bars')
 			R.createSequencedAssembly(Item.of(i.crab_bars, 10), i.bonemeal, [
 				e.recipes.create.deploying(incCrabBars, [incCrabBars, i.cooked_crab]),
 				e.recipes.create.deploying(incCrabBars, [incCrabBars, i.cooked_fish]),

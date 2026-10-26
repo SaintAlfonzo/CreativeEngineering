@@ -427,7 +427,8 @@ Both items stay in the pack, unmerged, until the user decides. When decided, the
 - **Grow season overhaul:** VD's seasons are copied, not reviewed (`farming/crops #5`).
 - **Tea audit:** the three VD juices go through the tea cleanup and the juice / tea rule with the teas
   (`food/drinks #2`, `#8`).
-- **Dough unification:** sweet potato dough and uncooked mhadjeb stay as VD has them until doughs are unified.
+- **Dough unification:** sweet potato dough stays as VD has it until doughs are unified. The mhadjeb was removed
+  2026-10-25 (`dishes/meals #32`, 5.5).
 - **Mob food overhaul:** VD's mob food is copied as is; the whole mob food system needs an overhaul.
 
 ### 5.3 Recipes for mods that may be added later
@@ -455,7 +456,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
   Rustic Delight's).
 - [TODO](todo/TODO.md) `dishes/ingredients #21`: recipes that take a potato also take a sweet potato, and the cooked and sliced
   forms. Open: which recipes.
-- [TODO](todo/TODO.md) `dishes/meals #25`: new cauliflower soup texture.
+- [TODO](todo/TODO.md) `textures/food #2`: new cauliflower soup texture.
 - [TODO](todo/TODO.md) `dishes/meals #33`: potato noodles renamed Creamy Gnocchi (milk, gnocchi, onion or garlic, either may be
   pickled); cutting potato dough and sweet potato dough gives gnocchi. There is no potato dough item today.
 - [TODO](todo/TODO.md) `dishes/meals #34`: fries from any potato slice, sweet potato slices included (the fries recipe already
@@ -463,6 +464,19 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
 - [TODO](todo/TODO.md) `dishes/meals #35`: steak and broccoli accepts rice, mashed potatoes, any baked potato plus a bowl, and other
   baked veggies plus a bowl.
 - [TODO](todo/TODO.md) `ports/veggiesport #2` (folded): merge fish and cod and chips (marked merge M1 above).
+
+### 5.5 Built 2026-10-25: mhadjeb removed, gnocchi (TODO `dishes/meals #32`, `#33`)
+
+- **Mhadjeb:** `uncooked_mhadjeb` and `mhadjeb` pushed to `global.removedItems` (CD `kubejs_startup/veggiesdelight/veggies_items.js`);
+  every recipe that makes them removed by output (CD `veggiesdelight/recipes.js`, the Vintage cheese variant too); out of
+  `food_types.json` (excluded) and the food dict. `canned_mhadjeb` goes at the next can regeneration.
+- **Gnocchi:** `potato_noodle` is named Gnocchi, `potato_noodles` Creamy Gnocchi, its can Canned Creamy Gnocchi
+  (`namechanges.js`; ids unchanged). Creamy Gnocchi: pot milk + 2 gnocchi + onion, garlic or pickled onion + bowl
+  (replaces VD's; Vintage's cheese variant stays). A knife cuts sweet potato dough into 2 gnocchi; the potato pot recipe
+  stays (no potato dough yet). Open: both sprites still show the noodle art.
+- **Cacciatore** (`dishes/meals #36`): nothing to build; the heatless recipe's `#forge:cooked_chicken` already holds the
+  cooked chicken cuts.
+- Tests: RC-132, RC-133, RC-136 (SQ-CDB-10, -11).
 
 ## 6. File map
 

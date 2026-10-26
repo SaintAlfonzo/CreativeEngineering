@@ -21,6 +21,9 @@ import net.minecraft.world.level.block.state.BlockState;
  *       vanilla farmland under them doesn't revert to dirt ({@code mixin/FarmBlockUnderCropsMixin}),
  *       soaked Fertile Soil bone-meals them like {@code CropBlock}s ({@code mixin/MulchBlockCropGrowthMixin}),
  *       and Quark's hoe area break includes them ({@code mixin/QuarkHoeHarvestMixin}).</li>
+ *   <li>{@link #OWN_PICK_CROPS}: {@code CropBlock}s with their own ripe right-click (pick the fruit, drop back a few
+ *       stages). Quark's search would harvest and replant them to stage 0 first; instead an empty hand or a 1x1 hoe
+ *       leaves them to the block, and a hoe area clicks them like berry bushes ({@code mixin/QuarkOwnPickMixin}).</li>
  * </ul>
  *
  * Right-click and hoe right-click replant aren't here: those are Quark's {@code Harvestable Blocks}
@@ -35,6 +38,8 @@ public final class CropParity {
             new ResourceLocation(CreativeEngineering.MODID, "crops/farmland_soils"));
     public static final TagKey<Block> FARMLAND_CROPS = BlockTags.create(
             new ResourceLocation(CreativeEngineering.MODID, "crops/farmland_crops"));
+    public static final TagKey<Block> OWN_PICK_CROPS = BlockTags.create(
+            new ResourceLocation(CreativeEngineering.MODID, "crops/own_pick"));
 
     public static boolean isFarmlandSoil(BlockState soil) {
         return soil.is(Blocks.FARMLAND) || soil.is(FARMLAND_SOILS);
@@ -42,5 +47,9 @@ public final class CropParity {
 
     public static boolean isFarmlandCrop(BlockState plant) {
         return plant.is(FARMLAND_CROPS);
+    }
+
+    public static boolean isOwnPickCrop(BlockState plant) {
+        return plant.is(OWN_PICK_CROPS);
     }
 }

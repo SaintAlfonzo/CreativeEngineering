@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "C C",
+    "BBB"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:polished_diorite_slab"
+    },
+    "B": {
+      "item": "quark:bamboo_planks_slab"
+    },
+    "C": {
+      "item": "quark:bamboo_trapdoor"
+    }
+  },
+  "result": {
+    "item": "storagedelight:bamboo_cabinet_with_polished_diorite_countertop"
+  }
+}

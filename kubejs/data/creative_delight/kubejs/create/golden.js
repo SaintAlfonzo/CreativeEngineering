@@ -22,7 +22,7 @@ ServerEvents.recipes(e => {
 		R.createMixing(i.golden_apple, [i.apple, Ingredient.of([i.any_ingot_gold]).withCount(6)], e, 'golden_apple_gilding', 'heated')
 
 		//Enchanted Golden Apple
-		const incEnchGoldApple = R.incomplete('enchanted_golden_apple')
+		let incEnchGoldApple = R.incomplete('enchanted_golden_apple')
 		R.createSequencedAssembly(Item.of(i.enchanted_golden_apple, 1), i.golden_apple, [
 			e.recipes.create.deploying(incEnchGoldApple, [incEnchGoldApple, i.any_block_gold]),
 			e.recipes.create.filling(incEnchGoldApple, [incEnchGoldApple, Fluid.of(f.xp, 250)]),

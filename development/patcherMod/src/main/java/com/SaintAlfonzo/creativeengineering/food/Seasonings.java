@@ -18,15 +18,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -92,6 +95,29 @@ public final class Seasonings {
         } catch (Exception e) {
             LOGGER.error("[seasoning] bad definition {}", json, e);
         }
+    }
+
+    /** Every defined seasoning id, in definition order. */
+    public static List<ResourceLocation> ids() {
+        return List.copyOf(DEFINITIONS.keySet());
+    }
+
+    /**
+     * The tag listing the foods a seasoning may go on, {@code #<ns>:seasonable/<path>}: built from food families plus
+     * single adds and removals by Creative Delight's {@code creativeengineering/seasoning_tags.js}.
+     */
+    public static TagKey<Item> seasonableTag(ResourceLocation id) {
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(id.getNamespace(), "seasonable/" + id.getPath()));
+    }
+
+    /** True if the food is in the seasonable tag of every one of {@code adding}. */
+    public static boolean accepts(ItemStack food, List<ResourceLocation> adding) {
+        for (ResourceLocation id : adding) {
+            if (!food.is(seasonableTag(id))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static Definition get(ResourceLocation id) {

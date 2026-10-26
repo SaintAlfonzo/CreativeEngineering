@@ -42,7 +42,7 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.garlic_rice_with_cauliflower, [i.roasted_garlic_clove, Item.of(i.roasted_cauliflower_floret, 2), i.cooked_rice], e,
 			'garlic_rice_with_cauliflower_cooked_manual_only')
 		R.shapeless(i.garlic_baked_cod, [i.cooked_cod, Item.of(i.roasted_garlic_clove, 2), i.onion, i.bowl], e, 'garlic_baked_cod_cooked_manual_only')
-		R.shapeless(i.dandelion_and_eggs, [Item.of(i.dandelion_leaf, 2), Item.of(i.cooked_eggs, 3), i.bowl], e, 'dandelion_and_eggs_cooked_manual_only')
+		R.shapeless(i.dandelion_and_eggs, [Item.of(i.dandelion_leaf, 2), i.cooked_eggs, i.cooked_eggs, i.cooked_eggs, i.bowl], e, 'dandelion_and_eggs_cooked_manual_only')
 		R.shapeless(i.stuffed_zucchini_boat, [i.roasted_zucchini, VD_COOKED_MEAT, [i.milk, i.any_cheese]], e, 'stuffed_zucchini_boat_cooked_manual_only')
 		R.shapeless(i.turnip_mutton_skewer, [i.cooked_mutton, i.turnip, i.stick], e, 'turnip_mutton_skewer_cooked_manual_only')
 		R.shapeless(i.zucchini_sandwich, [i.t_bread, i.zucchini, i.salad_ingredients, i.tomato], e, 'zucchini_sandwich_cooked_manual_only')
@@ -50,10 +50,10 @@ ServerEvents.recipes(e => {
 		// Heatless routes for its pot meals
 		R.shapeless(i.broccoli_soup, [i.bone_broth, Item.of(i.broccoli, 3), i.milk], e, 'broccoli_soup_cooked_manual_only')
 		R.shapeless(i.cauliflower_soup, [i.bone_broth, Item.of(i.roasted_cauliflower_floret, 5), i.milk], e, 'cauliflower_soup_cooked_manual_only')
-		R.shapeless(i.garlic_chicken_stew, [i.bone_broth, Item.of(i.roasted_garlic_clove, 2), Item.of(i.cooked_chicken, 2), i.milk], e,
+		R.shapeless(i.garlic_chicken_stew, [i.bone_broth, Item.of(i.roasted_garlic_clove, 2), i.cooked_chicken, i.cooked_chicken, i.milk], e,
 			'garlic_chicken_stew_cooked_manual_only')
 		R.shapeless(i.turnip_beef_stew, [i.bone_broth, Item.of(i.turnip, 2), i.carrot, i.cooked_beef], e, 'turnip_beef_stew_cooked_manual_only')
-		R.shapeless(i.cacciatore, [i.t_roasted_bell_pepper, Item.of(i.cooked_chicken, 2), i.tomato_sauce], e, 'cacciatore_cooked_manual_only')
+		R.shapeless(i.cacciatore, [i.t_roasted_bell_pepper, i.cooked_chicken, i.cooked_chicken, i.tomato_sauce], e, 'cacciatore_cooked_manual_only')
 		R.shapeless(i.cauliflower_kuku, [Item.of(i.roasted_cauliflower_floret, 3), i.onion, i.roasted_garlic_clove, i.milk, i.bowl], e,
 			'cauliflower_kuku_cooked_manual_only')
 		R.shapeless(i.veggiesdelight_mashed_potatoes, [i.baked_sweet_potato, Item.of(i.baked_potato, 2), i.milk, i.bowl], e,
@@ -63,7 +63,7 @@ ServerEvents.recipes(e => {
 			'rice_and_vegetables_cooked_manual_only')
 		R.shapeless(i.roasted_vegetables, [i.baked_potato, i.carrot, i.onion, i.tomato_sauce, i.t_soup_veggie_cooked, i.t_soup_veggie_cooked,
 			i.t_roasted_bell_pepper], e, 'roasted_vegetables_cooked_manual_only')
-		R.shapeless(i.shakshouka, [i.t_roasted_bell_pepper, i.onion, i.tomato_sauce, Item.of(i.cooked_eggs, 2)], e, 'shakshouka_cooked_manual_only')
+		R.shapeless(i.shakshouka, [i.t_roasted_bell_pepper, i.onion, i.tomato_sauce, i.cooked_eggs, i.cooked_eggs], e, 'shakshouka_cooked_manual_only')
 		R.shapeless(i.stuffed_zucchinis, [Item.of(i.roasted_zucchini, 3), i.tomato_sauce, VD_COOKED_MEAT], e, 'stuffed_zucchinis_cooked_manual_only')
 		R.shapeless(i.turnip_cake, [Item.of(i.turnip, 2), i.wheat, i.cooked_rice, i.cooked_meat], e, 'turnip_cake_cooked_manual_only')
 		R.shapeless(i.garlic_stuffed_mushrooms, [Item.of(i.roasted_garlic_clove, 2), i.cabbage, Item.of(i.brown_mushroom, 2)], e,

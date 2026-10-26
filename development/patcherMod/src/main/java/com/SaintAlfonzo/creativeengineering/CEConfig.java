@@ -2970,6 +2970,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue dumpNamesAtTitle;
         public final ForgeConfigSpec.BooleanValue dumpIconsAtTitle;
         public final ForgeConfigSpec.BooleanValue recipeScanAtLoad;
+        public final ForgeConfigSpec.BooleanValue levelRandomProbe;
 
         private Debug(ForgeConfigSpec.Builder b) {
             b.comment("Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).").push("debug");
@@ -3048,6 +3049,14 @@ public final class CEConfig {
                     "demand whatever this says. Off by default."
             ).define("runAtLoad", false);
             b.pop(); // recipe_scan
+
+            b.comment("Finds the off-thread caller of Level.random (feature_writeup/fixes_compat.md F4).").push("level_random");
+            levelRandomProbe = b.comment(
+                    "Debug mode. When true, a Level's shared random logs the stack trace of every access from a thread other",
+                    "than the one that created the Level ([LevelRandomProbe] lines in latest.log, at most 20 distinct",
+                    "callers per session). Read when the world loads: restart to apply. Off by default."
+            ).define("probe", false);
+            b.pop(); // level_random
             b.pop(); // debug
         }
     }

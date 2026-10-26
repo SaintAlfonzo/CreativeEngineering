@@ -1,0 +1,20 @@
+{
+  "color": "#4d6059",
+  "containers": [
+    {
+      "filled": [
+        "hostiledelight:guardiansoup"
+      ],
+      "empty": "minecraft:bowl",
+      "capacity": 2
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 2,
+    "item": "hostiledelight:guardiansoup"
+  },
+  "from_mod": "hostiledelight",
+  "still_texture": "moonlight:soft_fluids/soup_liquid",
+  "translation_key": "item.hostiledelight.guardiansoup"
+}

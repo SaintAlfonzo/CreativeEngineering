@@ -1,0 +1,19 @@
+
+#Growth of the End plants. Each plant only grows on its soil: blocks in the block tag
+#creative_delight:end_plant_soil_fast use the Fast chance, blocks in creative_delight:end_plant_soil_slow
+#the Slow chance. Off those blocks the plants cannot be placed and break.
+[growth]
+	#Chance per random tick that a Chorusflame on slow soil grows one stage (3 stages).
+	#Range: 0.0 ~ 1.0
+	chorusflameGrowthSlow = 0.1
+	#Chance per random tick that a Chorusflame on fast soil grows one stage. Ender's Delight 1.1.4: 0.2.
+	#Range: 0.0 ~ 1.0
+	chorusflameGrowthFast = 0.2
+	#Chance per random tick that a spreading Void Pepper Sprout attached to slow soil acts:
+	#then 2 in 3 it spreads to a free spot near soil, 1 in 3 it fruits and stops spreading.
+	#Range: 0.0 ~ 1.0
+	voidpepperTickSlow = 0.5
+	#The same for a sprout attached to fast soil. Ender's Delight 1.1.4: 1.0 (acts on every random tick).
+	#Range: 0.0 ~ 1.0
+	voidpepperTickFast = 1.0
+

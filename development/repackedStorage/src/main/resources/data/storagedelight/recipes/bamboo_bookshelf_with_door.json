@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "BAC",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "quark:bamboo_planks_slab"
+    },
+    "B": {
+      "item": "quark:bamboo_trapdoor"
+    },
+    "C": {
+      "item": "minecraft:bookshelf"
+    }
+  },
+  "result": {
+    "item": "storagedelight:bamboo_bookshelf_with_door"
+  }
+}

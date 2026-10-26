@@ -200,6 +200,28 @@ Slice, Fish Egg Noodle Soup -> Caviar Noodle Soup; ids unchanged (dict key `cavi
 salmon eggs JEI page reads as caviar and names both sources (knife-killed salmon, the net in rivers). Ancient Fish Eggs keep
 their name. Caviar in the sea pickle roll was deferred by the user to the caviar use audit (TODO `dishes/ocean #6`).
 
+### 5.3 Squid chain and glow calamari (2026-10-25, TODO `dishes/ocean #3`)
+
+- **Drops** (CD `miners_delight/loot.js`, LootJS, which runs after the mods' loot modifiers): a squid drops one
+  Miner's Delight squid item every kill, a glow squid one glow squid item; their ink sacs, Rustic's calamari and the
+  tentacles of Miner's, Ocean's and Oceanic are taken off the mob (the tentacle items themselves wait for `dishes/ocean #4`).
+- **Cuts** (CD `miners_delight/recipes.js`, Miner's tentacle cuts removed): squid -> calamari 1 + 50 % 1, ink sac 1 +
+  50 % 2 (Rustic's 1-2 calamari drop, Miner's own ink); glow squid -> the same in glow calamari and glow ink sacs; baked
+  squid -> cooked calamari 1 + 50 % 1.
+- **Glowing calamari line** (`creativeengineering:` glowing_calamari, glowing_calamari_slice, glowing_calamari_roll; CD
+  `rusticdelight/glowing_calamari.js`): Rustic's calamari, slice and roll sprites palette-swapped (`textureswapper/palette_swap.py`)
+  to the glow ink sac (the roll's meat swapped, Rustic's rice layer put back on top); notice
+  `glowing_calamari_art_notice.txt` beside them. Values as the plain line plus Glowing 30 s. No cooked glowing items
+  (owner, 2026-10-25): glowing calamari and its slice cook into Rustic's Cooked Calamari and Cooked Calamari Slice (cooking
+  trio, CD `rusticdelight/recipes.js`). Knife cut 2 slices + bone meal; roll from 2 raw slices + cooked rice -> 2. In
+  `#forge:raw_fishes/calamari`, so Fried Calamari, Calamari Soup and the plain roll take it.
+- Open: Rustic's licence file (the sprites are recolours of its art); glowing cans (need `/dumpfood`, then the can generator).
+
+### 5.4 Braised sea pickle from slices (2026-10-25, TODO `dishes/pickles-and-ferments #4`)
+
+CD `oceansdelight/recipes.js`: a second pot recipe, 2 Sea Pickle Slices + 2 brown mushrooms + bowl (Ocean's own
+one-pickle recipe stays). Only with Oceanic Delight on (the slices are its item).
+
 ## 6. In-game tests
 
 | ID | Setup | Action | Expected |
@@ -207,6 +229,9 @@ their name. Caviar in the sea pickle roll was deferred by the user to the caviar
 | DA-01 | Survival, a fishing net, kelp in a warm ocean and in a cold ocean | Search each about 30 times | Warm: shrimp and coral (plant or fan) drop; cold: no shrimp, no coral; clay and kelp in both |
 | DA-02 | Kelp or seagrass in a river | Search about 20 times | Caviar drops; no shrimp, no coral |
 | DA-03 | Hover the net; search twice quickly | Read the tooltip; watch the cooldown | Three tooltip lines (blocks, biome drops, ocean treasure); 2.5 s cooldown after a search |
+| DA-05 | Survival, a sword and a knife | Kill squids with each; cut a squid item on a board | One squid item per kill, no ink or calamari; the cut gives calamari and ink sacs |
+| DA-06 | Glow squids | Kill one; cut the item; cut, cook and roll the glowing calamari | Glow squid item; glowing calamari and glow ink sacs; slices, Cooked Calamari from cooking, and 2 rolls |
+| VTD-58 | A cooking pot | 2 sea pickle slices + 2 brown mushrooms + a bowl | Braised sea pickle |
 | DA-08 | JEI | Look up Caviar, the roll, the slice, the noodle soup; open the Caviar and Shrimp info pages | Names read Caviar, Caviar Roll, Caviar Roll Slice, Caviar Noodle Soup; Ancient Fish Eggs unchanged; the pages name the knife, the net and the biomes |
 | DA-09 | Upgrade Aquatic kelp (any colour) with kelp above; tall seagrass; wild sea grape; pickerelweed | Search each | Kelps give the kelp table (kelp item, clay); the others the sea grass table (no kelp item, scute possible) |
 | DA-10 | A stack of nets, an ocean | Search about 200 times | A few nautilus shells; a heart of the sea is rare; junk about 1 in 20; never a lily pad, water bottle, rod or ink sacs |

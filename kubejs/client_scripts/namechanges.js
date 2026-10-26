@@ -276,6 +276,17 @@ ClientEvents.lang('en_us', e => {
     'Salmon roe.\n\nDrops from Salmon killed with a Knife, and from a Fishing Net used on kelp or seagrass in rivers.')
   e.add('jei.oceanic_delight.shrimp_information',
     'Found in kelp and seagrass in oceans that are not cold.\n\nUse a Fishing Net on them to catch some.')
+  // Fruits Delight's bayberry soup is a drink (food/drinks #9): item, its Forge fluid and the can. Ids unchanged.
+  e.renameItem(global.item.bayberry_soup, 'Bayberry Juice')
+  e.add('fluid.fruitsdelight.bayberry_soup', 'Bayberry Juice')
+  e.renameItem(global.item.canned_bayberry_soup, 'Canned Bayberry Juice')
+  // Veggies Delight's potato noodle is Gnocchi and potato noodles are Creamy Gnocchi (dishes/meals #33). The two
+  // sprites are still the noodle art (texture swap open in the TODO row).
+  e.renameItem(global.item.potato_noodle, 'Gnocchi')
+  e.renameItem(global.item.potato_noodles, 'Creamy Gnocchi')
+  e.renameItem(global.item.canned_potato_noodles, 'Canned Creamy Gnocchi')
+  // Brewin's Pickled Pickles merged into the Pickled Sea Pickle (dishes/pickles-and-ferments #1): the can holds pickles
+  e.renameItem(global.item.canned_pickled_pickles, 'Canned Pickles')
 })
 
 console.log('Rename Finished')

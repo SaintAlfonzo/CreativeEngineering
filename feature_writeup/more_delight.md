@@ -97,7 +97,7 @@ Prefix `MRD-`. Restart needed (startup scripts and a CD jar change).
 Knives: `kubejs/startup_scripts/func/tune_tools.js` (More Delight block). Fast toasts and the Cheese Toast item: Creative
 Delight startup script `kubejs_startup/moredelight/toast.js` (list `global.fastToasts`). Item
 `creativeengineering:cheese_toast` (`i.cheese_toast`, food type `handheld`), art from More Delight's Toast with Cheese
-(`kubejs/assets/creativeengineering/textures/item/cheese_toast.png`, notice in `more_delight_art_NOTICE.txt`). Recipe in
+(`kubejs/assets/creativeengineering/textures/item/cheese_toast.png`, notice in `more_delight_art_notice.txt`). Recipe in
 `data/creative_delight/kubejs/moredelight/recipes.js`.
 
 ### 5.2 Family rule

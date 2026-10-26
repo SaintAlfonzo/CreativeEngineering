@@ -25,8 +25,9 @@ import net.minecraftforge.registries.RegistryObject;
 
 /**
  * Crafting grid, shapeless: one food matching {@code food} plus one of each seasoning's ingredient gives the same food
- * (all NBT kept, count 1) with those seasonings added ({@link Seasonings}). It doesn't match if the food already has
- * one of them or any two of the food's seasonings don't combine. Type {@code creativeengineering:seasoning}; emitted by
+ * (all NBT kept, count 1) with those seasonings added ({@link Seasonings}). It doesn't match if the food is outside
+ * any of their seasonable tags ({@link Seasonings#seasonableTag}), already has one of them, or any two of the food's
+ * seasonings don't combine. Type {@code creativeengineering:seasoning}; emitted by
  * {@code global.NCH.season}. Shown on the Seasoning JEI page.
  */
 public class SeasoningRecipe extends CustomRecipe {
@@ -92,7 +93,7 @@ public class SeasoningRecipe extends CustomRecipe {
     @Override
     public boolean matches(CraftingContainer inv, Level level) {
         ItemStack s = findFood(inv);
-        return !s.isEmpty() && Seasonings.canAdd(Seasonings.of(s), seasonings());
+        return !s.isEmpty() && Seasonings.accepts(s, seasonings()) && Seasonings.canAdd(Seasonings.of(s), seasonings());
     }
 
     @Override

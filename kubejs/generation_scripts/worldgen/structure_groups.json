@@ -1192,14 +1192,6 @@
           "weight": 64,
           "frequency": 0.0307
         },
-        "farmers_structures:aquacultures_carp": {
-          "weight": 42,
-          "frequency": 1.0,
-          "fit_base": {
-            "weight": 42,
-            "frequency": 0.9679
-          }
-        },
         "farmers_structures:aquacultures_common": {
           "weight": 42,
           "frequency": 1.0,
@@ -1681,6 +1673,30 @@
             "weight": 148,
             "frequency": 1.0
           }
+        },
+        "farmers_structures:aquacultures_cod": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "farmers_structures:cacaos": {
+          "weight": 1,
+          "frequency": 0.1561
+        },
+        "farmers_structures:fishs_stew": {
+          "weight": 387,
+          "frequency": 1.0
+        },
+        "farmers_structures:ratatouilles": {
+          "weight": 129,
+          "frequency": 1.0
+        },
+        "farmers_structures:shepherd_farms": {
+          "weight": 33,
+          "frequency": 1.0
+        },
+        "farmers_structures:squids": {
+          "weight": 389,
+          "frequency": 1.0
         }
       }
     },
@@ -2477,6 +2493,14 @@
       "placement": {},
       "structures": {
         "subterrestrial:taiga_cabin": {
+          "frequency": 1.0
+        }
+      }
+    },
+    "endersdelight:end_house": {
+      "placement": {},
+      "structures": {
+        "endersdelight:end_house": {
           "frequency": 1.0
         }
       }

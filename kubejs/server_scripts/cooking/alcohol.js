@@ -14,18 +14,19 @@ var R = global.NCH
 // Same inputs as the keg; the 250 mB of honey becomes a honey bottle; the jar's pickle time.
 R.remove({ id: 'brewinandchewin:fermenting/kimchi' }, e)
 R.vdPickling(Item.of(i.kimchi, 2), [i.cabbage, i.vegetables, i.kelp], e, 'brewin_kimchi')
+// Pickled Pickles are merged into Creative Delight's Pickled Sea Pickle (sea pickles + salt, no honey; TODO
+// dishes/pickles-and-ferments #1), so the honey recipe is not rebuilt.
 R.remove({ id: 'brewinandchewin:fermenting/pickled_pickles_from_honey' }, e)
-R.vdPickling(Item.of(i.pickled_pickles, 2), [Item.of(i.sea_pickle, 2), i.glow_berries, i.honey_bottle], e, 'brewin_pickled_pickles')
 
 //######################### Keg fermenting #########################
 // Flaxen Cheese: 2.0's shape (brown mushroom x2, sugar)
 R.remove({ id: 'brewinandchewin:fermenting/flaxen_cheese_from_milk' }, e)
-R.bncFermenting(Fluid.of(f.flaxen_cheese, 1000), [i.brown_mushroom, i.brown_mushroom, i.sugar], f.milk, e, 'flaxen_cheese_from_milk',
+R.bncFermenting(Fluid.of(f.flaxen_cheese, 1000), [i.brown_mushroom, i.brown_mushroom, i.any_sweetener_brewing], f.milk, e, 'flaxen_cheese_from_milk',
 	{ temperature: 4, category: 'meals' })
 
 // Pale Jane: any bark, not just Farmer's Delight's
 R.remove({ id: 'brewinandchewin:fermenting/pale_jane_from_rice_wine' }, e)
-R.bncFermenting(Fluid.of(f.pale_jane, 1000), [i.honey_bottle, i.any_bark, i.lily_of_the_valley, i.sugar], f.rice_wine, e, 'pale_jane_from_rice_wine',
+R.bncFermenting(Fluid.of(f.pale_jane, 1000), [i.honey_bottle, i.any_bark, i.lily_of_the_valley, i.any_sweetener_brewing], f.rice_wine, e, 'pale_jane_from_rice_wine',
 	{ temperature: 4, time: 4800 })
 
 // Beer: dandelion in place of wheat seeds

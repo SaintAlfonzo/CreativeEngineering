@@ -1912,6 +1912,14 @@ i.corncob = 'creativeengineering:corncob';
 i.corn_popsicle = 'creativeengineering:corn_popsicle';
 i.cob_pipe = 'creativeengineering:cob_pipe';          // head slot: patcherMod mixin/MobCobPipeSlotMixin, compat/CornDelightCompat
 i.cheese_toast = 'creativeengineering:cheese_toast';          // CD moredelight/cheese_toast.js
+// Glowing calamari line (TODO dishes/ocean #3); it cooks into Rustic's cooked calamari. Items: CD rusticdelight/glowing_calamari.js
+i.glowing_calamari = 'creativeengineering:glowing_calamari';
+i.glowing_calamari_slice = 'creativeengineering:glowing_calamari_slice';
+i.glowing_calamari_roll = 'creativeengineering:glowing_calamari_roll';
+i.pickled_sea_pickle = 'creativeengineering:pickled_sea_pickle';  // CD vintagedelight/vintage_items.js (TODO dishes/pickles-and-ferments #1)
+i.t_raw_calamari = '#forge:raw_fishes/calamari';
+i.t_cooked_calamari = '#forge:cooked_fishes/calamari';
+i.t_pickled_veg = '#creativeengineering:pickled_veg';  // pickle soup's pickle slot (TODO dishes/pickles-and-ferments #3)
 i.t_curios_head = '#curios:head';
 i.t_curios_mouth = '#curios:mouth';                   // no such slot; the pack's face slot covers it (feature_writeup/curios_slots.md)
 i.t_curios_face = '#curios:face';                     // pack slot: kubejs/data/creativeengineering/curios/slots/face.json
@@ -1936,6 +1944,10 @@ i.any_dough = '#forge:dough';
 i.bread = '#forge:bread/wheat';
 i.pasta = '#forge:pasta';
 i.any_sugar = '#forge:sugar';
+i.any_sweetener = '#creativeengineering:sweeteners'; // #forge:sugar (sugar, powdered sugar, glycerol) + honey bottle + honeycomb: cooking sugar slots
+i.any_sweetener_drink = '#creativeengineering:sweeteners/drink';       // sugar, powdered sugar, honey bottle: drink sugar slots
+i.any_sweetener_brewing = '#creativeengineering:sweeteners/brewing';   // sugar, powdered sugar, honey bottle, honeycomb: keg and wine brewing
+i.any_sweetener_plain = '#creativeengineering:sweeteners/plain';       // sugar, powdered sugar: non-food sugar uses (Botania, modules, ethanol, potions)
 i.vegetables = '#forge:vegetables';
 i.salad_ingredients = '#forge:salad_ingredients';
 i.fruit = '#forge:fruits';
@@ -1964,6 +1976,8 @@ i.carrot = '#forge:crops/carrot';
 i.potato = '#forge:crops/potato';
 i.beetroot = '#forge:crops/beetroot';
 i.onion = '#forge:crops/onion';
+i.t_crops_garlic = '#forge:crops/garlic';
+i.t_sea_pickles = '#forge:sea_pickles';            // sea pickle and Oceanic's sea pickle slices
 i.tomato = '#forge:crops/tomato';
 i.rice = '#forge:crops/rice';
 i.mushrooms = '#forge:mushrooms';
@@ -11748,6 +11762,7 @@ i.rope_fence                    = 'farmersdelight:rope_fence';
 i.rope_fence_gate               = 'farmersdelight:rope_fence_gate';
 i.gleaming_salad                = 'farmersdelight:gleaming_salad';
 i.gleaming_salad_block          = 'farmersdelight:gleaming_salad_block';
+i.hanging_canvas_sign          = 'farmersdelight:hanging_canvas_sign';
 i.fd_pumpkin_pie_slice          = 'farmersdelight:pumpkin_pie_slice';
 
 // ===== dustrial_decor  -  84 new  (106 items, 22 already mapped) =====
@@ -12106,6 +12121,36 @@ i.strange_eclair       = 'endersdelight:strange_eclair';
 i.stuffed_shulker_bowl = 'endersdelight:stuffed_shulker_bowl';
 i.twisted_cereal       = 'endersdelight:twisted_cereal';
 i.uncanny_cookies      = 'endersdelight:uncanny_cookies';
+
+// ===== endersdelight 1.1.4 content (Creative Delight member enders_additions, ends_delight.md 3.1) =====
+i.amberveil              = 'endersdelight:amberveil';
+i.ethereal_saffron       = 'endersdelight:ethereal_saffron';
+i.chorusflame            = 'endersdelight:chorusflame';
+i.voidpepper             = 'endersdelight:voidpepper';
+i.crushed_voidpepper     = 'endersdelight:crushed_voidpepper';
+i.amberveil_stew         = 'endersdelight:amberveil_stew';
+i.amberveiled_curry      = 'endersdelight:amberveiled_curry';
+i.chicken_curry          = 'endersdelight:chicken_curry';
+i.steak_fries            = 'endersdelight:steak_fries';
+i.veil_of_flames_risotto = 'endersdelight:veil_of_flames_risotto';
+
+// ===== ends_delight non-food (knives, tooth, shell, crate, stove; ends_delight.md 3.1, 3.3) =====
+i.chorus_fruit_crate          = 'ends_delight:chorus_fruit_crate';
+i.dragon_egg_shell_knife      = 'ends_delight:dragon_egg_shell_knife';
+i.dragon_leg_with_sauce_block = 'ends_delight:dragon_leg_with_sauce_block';
+i.dragon_tooth                = 'ends_delight:dragon_tooth';
+i.dragon_tooth_knife          = 'ends_delight:dragon_tooth_knife';
+i.end_stone_knife             = 'ends_delight:end_stone_knife';
+i.end_stove                   = 'ends_delight:end_stove';
+i.half_dragon_egg_shell       = 'ends_delight:half_dragon_egg_shell';
+i.purpur_knife                = 'ends_delight:purpur_knife';
+
+// End food tags (ends_delight.md 3.1; filled in Creative Delight's ends_delight / endersdelight tags.js)
+i.t_storage_chorus_fruit  = '#forge:storage_blocks/chorus_fruit';   // both chorus crates
+i.t_cookable_fungi        = '#creativeengineering:cookable_fungi';  // End's crimson fungus inputs (mod-additions #15)
+i.t_chorus_pie_slice      = '#creativeengineering:chorus_pie_slice';
+i.t_shulker_meat          = '#forge:shulker_meat';                  // End's raw shulker meat + slice, Ender's filet
+i.t_spices                = '#creativeengineering:spices';          // seasoning work (briefs/food_seasoning.md); void pepper only so far
 
 // ===== alexsdelight  -  15 new  (23 items, 8 already mapped) =====
 i.acacia_blossom_soup     = 'alexsdelight:acacia_blossom_soup';
@@ -14388,6 +14433,37 @@ i.stuffed_pufferfish              = 'oceanic_delight:stuffed_pufferfish';
 i.oceanic_takoyaki                = 'oceanic_delight:takoyaki';
 i.wild_sea_grape                  = 'oceanic_delight:wild_sea_grape';
 i.t_fishing_net_coral              = '#creativeengineering:fishing_net/coral';  // live corals and fans the net drops in warm oceans
+
+// ===== Abnormals Delight 6.0.3 salvaging and recipes (abnormals_delight.md 3.1-3.4; 2026-10-25) =====
+// Driftwood set and Boatload boats for the cutting-board salvaging (farmersdelight/recipes.js), the pickerelweed tag
+// (upgrade_aquatic/tags.js), Neapolitan's milk bucket tag and the raw pike tag.
+i.planks_driftwood                 = 'upgrade_aquatic:driftwood_planks';
+i.door_driftwood                   = 'upgrade_aquatic:driftwood_door';
+i.trapdoor_driftwood               = 'upgrade_aquatic:driftwood_trapdoor';
+i.sign_driftwood                   = 'upgrade_aquatic:driftwood_sign';
+i.fence_driftwood                  = 'upgrade_aquatic:driftwood_fence';
+i.fencegate_driftwood              = 'upgrade_aquatic:driftwood_fence_gate';
+i.pressureplate_driftwood          = 'upgrade_aquatic:driftwood_pressure_plate';
+i.button_driftwood                 = 'upgrade_aquatic:driftwood_button';
+i.driftwood_cabinet                = 'abnormals_delight:driftwood_cabinet';
+i.driftwood_boat                   = 'upgrade_aquatic:driftwood_boat';
+i.driftwood_chest_boat             = 'upgrade_aquatic:driftwood_chest_boat';
+i.driftwood_furnace_boat           = 'upgrade_aquatic:driftwood_furnace_boat';
+i.spruce_furnace_boat              = 'boatload:spruce_furnace_boat';
+i.birch_furnace_boat               = 'boatload:birch_furnace_boat';
+i.jungle_furnace_boat              = 'boatload:jungle_furnace_boat';
+i.acacia_furnace_boat              = 'boatload:acacia_furnace_boat';
+i.dark_oak_furnace_boat            = 'boatload:dark_oak_furnace_boat';
+i.mangrove_furnace_boat            = 'boatload:mangrove_furnace_boat';
+i.crimson_furnace_boat             = 'boatload:crimson_furnace_boat';
+i.warped_furnace_boat              = 'boatload:warped_furnace_boat';
+i.boatload_crimson_boat            = 'boatload:crimson_boat';
+i.boatload_warped_boat             = 'boatload:warped_boat';
+i.boatload_crimson_chest_boat      = 'boatload:crimson_chest_boat';
+i.boatload_warped_chest_boat       = 'boatload:warped_chest_boat';
+i.t_pickerelweed                   = '#creativeengineering:pickerelweed';  // blue and purple (1.21 Upgrade Aquatic has one)
+i.t_buckets_milk                   = '#forge:buckets/milk';
+i.raw_pike                         = '#forge:raw_fishes/pike';
 
 // ===== Removed items with no other key (2026-10-23, removed_items.js) =====
 i.passion_aloe_nectar           = 'abnormals_delight:passion_aloe_nectar';  // needs Atmospheric (ui/effects #6)

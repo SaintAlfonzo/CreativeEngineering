@@ -29,8 +29,8 @@ ServerEvents.recipes(e => {
 	global.itemMergeSwaps(e, 'pack')
 
 	// Milk bottle. Abnormals Delight turns Farmer's Delight's bucket <-> bottle recipes off while Neapolitan is
-	// loaded, so Neapolitan's two stay: bucket -> 3 bottles (output swapped above) and 3 #forge:bottles/milk ->
-	// bucket (Farmer's Delight's bottle joins that tag below). Create's spout / drain and Delightful's matcha latte
+	// loaded; Creative Delight replaces Neapolitan's two (3 per bucket) with 4 per bucket both ways
+	// (abnormals_delight/neapolitan.js). Farmer's Delight's bottle joins #forge:bottles/milk below. Create's spout / drain and Delightful's matcha latte
 	// already have a Farmer's Delight copy.
 	R.remove({ id: 'create:filling/compat/neapolitan/milk_bottle' }, e)
 	R.remove({ id: 'create:emptying/compat/neapolitan/milk_bottle' }, e)

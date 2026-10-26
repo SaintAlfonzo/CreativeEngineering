@@ -208,12 +208,16 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
    at the head of `aiStep`, on the first tick the egg timer is 400 or less (the nest goal's window, before
    the goals run that tick), it rolls `goldenEggChance` once per egg. A win sets a "golden egg due" flag:
    `LayEggInNestGoalMixin` makes `canEggBeLaid` false for that goose, so it never starts or continues a nest
-   walk, and the `spawnAtLocation` call at 0 is redirected to `goldenegg.GoldenGooseEgg.drop`, which drops the
-   Golden Egg block item instead of the goose egg. The goose's own sound before it and its 6000 + rand(6000)
+   walk, and the `spawnAtLocation` call at 0 is redirected to `goldenegg.GoldenGooseEgg.lay`, which lays the
+   Golden Egg instead of the goose egg: since 2026-10-25 as a placed block (the backported Golden Egg block falls
+   like sand), at the spot `DropSpot.pickBlock` picks, never the goose's own block, and only where the block there
+   is replaceable (no torch, flower or rail is overwritten). With no such spot (a closed 1x1 pen) it drops as the
+   item, as before. The goose's own sound before it and its 6000 + rand(6000)
    reset after it are unchanged. Drop spot (`goldenegg.DropSpot`): standable spots within 3 blocks (circle,
    one block up or down, nearest first) in the goose's line of sight, scored by solid blocks among the 8
    neighbours at foot and head height; the first with 0 wins, else the lowest if it beats the goose's own
-   spot, else where it stands. Not saved: a goose reloaded inside the 400-tick window rolls again. If the item
+   spot, else where it stands (item drop). `pickBlock` is the same without the goose's own spot: the first
+   with 0, else the lowest, else none. Not saved: a goose reloaded inside the 400-tick window rolls again. If the item
    is gone at drop time the normal egg drops.
 
 ## 4. Limits and decisions
@@ -325,8 +329,9 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 - [ ] **NE-13 duck mod egg sprites:** hold a duck egg and a goose egg -> the new teal duck egg and pale pink goose egg sprites, not the duck mod's originals; also when thrown (thrown eggs use the item model).
 - [ ] **NE-14 egg crates:** 9 duck eggs -> Duck Egg Crate, crate -> 9 duck eggs; same for goose; crates show the new top/side textures with the chicken crate's bottom, mine fastest with an axe, drop themselves.
 
-- [ ] **NE-15 goose golden egg** (VTD-32): set `goldenEggChance` to 1, pen a goose with a goose nest -> it drops a Golden Egg on the ground at lay time, never walks to the nest, the nest stays empty. Set it to 0 -> geese lay into nests as before. Without Vintage Delight nothing changes.
-- [ ] **NE-16 golden egg away from walls** (VTD-32a): chance 1; a goose against a wall or in a corner with open ground within 3 blocks drops the egg on the open ground; in a closed 1x1 pen it drops where it stands; never on the far side of a fence.
+- [ ] **NE-15 goose golden egg** (VTD-32): set `goldenEggChance` to 1, pen a goose with a goose nest -> it places a Golden Egg block beside itself at lay time, never walks to the nest, the nest stays empty. Set it to 0 -> geese lay into nests as before. Without Vintage Delight nothing changes.
+- [ ] **NE-16 golden egg away from walls** (VTD-32a): chance 1; a goose against a wall or in a corner with open ground within 3 blocks places the egg block on the open ground; in a closed 1x1 pen it drops the item where it stands; never on the far side of a fence.
+- [ ] **NE-17 golden egg block placement**: chance 1; the egg block never lands on the goose, never replaces a torch, flower or rail (a free spot with one is skipped), and falls like sand if the block under it is broken. Breaking it gives its loot table.
 
 ## 8. History
 
@@ -355,3 +360,6 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
 - 2026-10-23: 1.1.0, goose golden egg for the Vintage Delight port (3.11, config `goldenEggChance`). Built,
   `DropSpot` logic test 9/9; not in `mods/`. NE-15, NE-16 added.
+- 2026-10-25: the goose lays the Golden Egg as a block (`GoldenGooseEgg.lay`, `DropSpot.pickBlock`); item only
+  in a closed 1x1 pen. Built (`:incubationAdditions:build` passes, `pickBlock` checked in plain Java: open ground
+  gives the next block over); not in `mods/`, not run in game. NE-15, NE-16 updated, NE-17 added.

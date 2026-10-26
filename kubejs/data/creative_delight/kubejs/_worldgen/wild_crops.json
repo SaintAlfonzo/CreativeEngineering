@@ -350,6 +350,47 @@
       "where": ["dark_oak", "cold forest"],
       "features": ["creative_delight:wild/truffle_dirt_ore"],
       "notes": "Fungi Delight's ore (size 6, replaces rooted dirt only): every chunk, 5 tries near the surface, so it only lands where a rooted dirt blob is. Its modifier id sorts after rooted_dirt (Forge applies biome modifiers in registry order, which is id order for datapack files), so the blob is placed first."
+    },
+    "end_amberveil": {
+      "label": "Amberveils (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
+      "features": ["creative_delight:wild/end_amberveil"],
+      "requires": "enders_additions",
+      "notes": "Ender's Delight 1.1.4's patch (10 tries, spread 3), 1 in 10 chunks, on end stone only. Rebuilt in the enders_additions member; 1.1.4's biome modifiers are not shipped. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+    },
+    "end_chorusflame": {
+      "label": "Chorusflame (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
+      "features": ["creative_delight:wild/end_chorusflame"],
+      "requires": "enders_additions",
+      "notes": "1.1.4's patch, ages 0 to 2 mixed, 1 in 15 chunks, on end stone only. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+    },
+    "end_saffron": {
+      "label": "Ethereal Saffron (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
+      "features": ["creative_delight:wild/end_saffron"],
+      "requires": "enders_additions",
+      "notes": "1.1.4's patch (4 tries, spread 1), 1 in 25 chunks, on end stone only. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+    },
+    "end_voidpepper": {
+      "label": "Void Pepper Sprout (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
+      "features": ["creative_delight:wild/end_voidpepper"],
+      "requires": "enders_additions",
+      "notes": "1.1.4's patch, spreading sprouts on the ground, 1 in 15 chunks, on end stone only; they spread and fruit by random tick. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+    },
+    "chorus_succulent": {
+      "label": "Chorus Succulent (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands"],
+      "features": ["creative_delight:wild/chorus_succulent"],
+      "disable_modifiers": ["ends_delight:add_chorus_succulent"],
+      "requires": "ends_delight",
+      "notes": "End's Delight 2.1 places it from Java (its placed feature ends_delight:chorus_succulent: 1 in 8 chunks, 20 tries, 1 to 3 per block) in the End Highlands only; same feature and biome here, its modifier off (ends_delight.md 3.1, mod-additions #15: kept)."
     }
   }
 }

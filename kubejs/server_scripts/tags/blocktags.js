@@ -481,6 +481,8 @@ ServerEvents.tags('block', e => {
 		'#minecraft:base_stone_overworld', item.cobblestone, item.mossy_cobblestone, item.stone_bricks,
 		item.mossy_stone_bricks, item.cracked_stone_bricks, item.smooth_stone, item.polished_andesite,
 		item.polished_diorite, item.polished_granite, item.polished_deepslate, item.deepslate_bricks,
+		// End builds (the End House): end stone, its bricks and purpur
+		item.end_stone, item.end_stone_bricks, item.purpur_block,
 	])
 
 	// ── Template trim (patcherMod worldgen/TemplateTrim, CEConfig [worldgen.terrain_adaptation]) ──

@@ -176,7 +176,7 @@ MB-38, MB-94, MB-95, MB-96 (existing). Counting: stand in the biome after it gen
 ---
 
 ## mooblooms #5: Azaleabloom texture
-Status Planned / Work new jar / TODO `mobs/mooblooms #5` (scratchpad 2026-10-19)
+Status Planned / Work new jar / TODO `textures/art #2` (scratchpad 2026-10-19)
 
 ### Goal
 "Grey parts to brown; more azalea rings" on the azaleabloom coat.

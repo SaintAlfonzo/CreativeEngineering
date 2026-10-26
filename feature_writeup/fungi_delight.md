@@ -376,9 +376,10 @@ wild-crops rules never match cave biomes (`NEVER = {ocean, cave}`) and mushrooms
 is the result. Terralith's own mushroom biomes (`dark/patch_mushroom`, enchanted `small_shrooms_*`) count as dark
 forest / mushroom by their biome words; the table in [crops_by_biome.md](crops_by_biome.md) is regenerated.
 
-**Growth seasons mirror the existing mushrooms.** Inky cap, morel and both colonies go into the same Serene
-Seasons tags the pack gives brown and red mushrooms and their FD colonies (year-round, unbreakable-infertile),
-read from the live tag files at build time; no season of their own.
+**Growth seasons mirror the existing mushrooms.** Inky cap and morel go into the Serene Seasons tags
+(year-round, unbreakable-infertile), read from the live tag files at build time; no season of their own. The
+colonies stay out: FD's own colonies are in neither tag (live check 2026-10-25), so the mirror adds none. Open
+question from that check: `year_round_crops` holds only the two Fungi mushrooms, not vanilla brown and red.
 
 **JEI:** a mushroom on rich soil becomes its colony (random-tick chance as FD's). Add a JEI info page "Mushroom
 colonies" listing brown, red, inky cap, morel: "A mushroom placed on rich soil slowly grows into a colony",

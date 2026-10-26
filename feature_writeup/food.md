@@ -538,8 +538,17 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - **Craft:** recipe type `creativeengineering:seasoning` (`food/SeasoningRecipe`, special shapeless): one food
   matching `food` + one of each listed seasoning's item gives the same food (all NBT kept, so salted food stays salted)
   with those seasonings added, count 1. No match if the food already has one of them or any pair among old + new
-  doesn't combine. Emitted by `NCH.season(food, key | [keys], e)`, id `shapeless/season/<keys>_on_<food>`; recipes in
-  [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js).
+  doesn't combine, or the food is outside the seasonable tag of any seasoning it adds (below). Emitted by
+  `NCH.season(food, key | [keys], e)`; [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js) makes them from the
+  definitions: one craft per seasoning (`shapeless/season/<key>`, food = its seasonable tag) and one per pair that
+  combines (`shapeless/season/<a>_<b>`, the first key's tag; the craft checks the food is in both).
+- **Which foods (2026-10-26), by family first:** each seasoning's foods are the item tag `#<ns>:seasonable/<path>`,
+  built by [seasoning_tags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning_tags.js) from the definition, in order:
+  `families` (every member of each listed food family and its subfamilies, [food_families.md](food_families.md)),
+  then `add` (single items or tags), then `remove` (single items; an item that comes in only through a tag in `add`
+  can't be removed). The same script builds `#creativeengineering:food_family/<path>` for every family (a subfamily is
+  also in its parents) from `generation_scripts/food/food_families.json`, which `tools/food_families.py` now writes
+  next to the tables. A seasoning with no foods gets no craft. Salt keeps its own `#salt:can_be_salted`.
 - **Eating:** `Seasonings.onEaten` (`LivingEntityUseItemEvent.Finish`, server, players, edible items) applies each
   seasoning's bonus after the food's own.
 - **Tooltip:** `food/SeasoningTooltip`, one line per seasoning under the name: "Garlic: Speed (0:10)", "Onion: +2
@@ -547,15 +556,35 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - **JEI:** each seasoning recipe is a page on the Seasoning tab (3.11): food | seasoning item(s) -> seasoned food,
   food and result cycling together.
 
-Test set on popcorn (first values, not tuned): Cheese (any cheese wedge) +2 saturation; Onion (any onion) +2
-nutrition; Garlic Speed I 10 s. Onion and garlic combine (garlic popcorn + onion, onion popcorn + garlic, or both at
+Test set on popcorn only (2026-10-26: no family yet, popcorn by `add`; first values, not tuned): Cheese (any cheese
+wedge) +2 saturation; Onion (any onion) +2 nutrition; Garlic Speed I 10 s; Void Pepper (Ender's Delight's Crushed Void
+Pepper) +2 nutrition and +0.4 saturation, which is Salt's bonus (`SaltingNutrition` 2, modifier 0.1 x 2 x 2 hunger);
+a `needs` field skips a seasoning's tag and crafts while its member (`enders_additions`) is off. Void pepper combines
+with nothing. Sugar is defined with no foods (its waffle
+test craft is gone; popcorn + sugar stays Corn Delight's caramel popcorn). Onion and garlic combine (garlic popcorn + onion, onion popcorn + garlic, or both at
 once give the same stack, both bonuses apply); cheese combines with nothing. `heal` is supported but no seasoning uses
 it yet.
 
 AppleSkin: `compat/AppleSkinSeasonings` (registered only if AppleSkin is loaded) listens to AppleSkin's
 `FoodValuesEvent` and adds each seasoning's nutrition and absolute saturation to `modifiedFoodValues`, so the tooltip
 bar and HUD overlay show the seasoned total (saturation modifier recomputed from the new hunger). Compiles against
-`libs/appleskin-forge-mc1.19-2.4.2.jar`. Heal and effects are not shown. FO-49.
+`libs/appleskin-forge-mc1.19-2.4.2.jar`. Heal and effects are not shown. FO-49. Salt has its own AppleSkin handler
+for `Salted` (hunger + Salt's nutrition, modifier + Salt's modifier, as its eating mixin does). Since 2026-10-26 the
+pack handler runs at `LOWEST` priority, after Salt's, so a salted and seasoned food shows salt's total plus the pack
+bonus; before, the order was undefined and Salt's modifier could be added on top of the pack's recomputed one. FO-54.
+
+**Seasoned icons (2026-10-26):** patcherMod `food/SeasonedItemModel` (client) draws one overlay per seasoning over a
+seasoned food's own model, salt first (Salt's `salt:item/salted_overlay`), then each pack seasoning in NBT order
+(`creativeengineering:item/seasoned/<path>`, a missing model draws nothing). Hooked by `mixin/SeasonedItemModelMixin`
+at the return of `ItemRenderer.getModel`, so inventory, hand, dropped items and JEI show it; cached per base model and
+seasoning list, cleared on resource reload; custom-rendered items are left alone. The overlays keep the shape of Salt's
+salted overlay in three shades of the seasoning's own item (cheese wedge, onion bulb, garlic, sugar), made by
+[textureswapper/seasoning/make_seasoning.py](../textureswapper/seasoning/make_seasoning.py) into `kubejs/assets/creativeengineering/textures/item/seasoned/`
+(a new seasoning needs a source texture and a row in the script; they were hand-picked shades before the move to the
+texture swapper, so the colours shifted slightly). Salt's own overlay is off (`config/salt-client.toml` `SaltingOverlayEnabled =
+false`, backup in `configs_edited/`): Salt caches its layered model per item, so it would show the first seasoned stack's
+icon on every salted one. All overlays share one shape, so on a food with several the last one drawn covers the
+others. FO-55.
 
 Limits: a seasoned food used as a
 recipe input loses the seasoning; JEI shows seasoned and plain popcorn as one entry (no subtype interpreter). Not built
@@ -585,6 +614,31 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
   powder snow; bucket = the same palette on the powder snow bucket's snow pixels.
 
 FO-50 to FO-53.
+
+### 3.14 Sweeteners (BUILT 2026-10-25, not run; TODO `dishes/ingredients #3`)
+
+Owner, 2026-10-25 (revised the same day): a sugar slot takes a sweetener tag by kind of recipe. Tags in CD
+`creativeengineering/tags.js`; honeycomb and the honey bottle stay out of `#forge:sugar`, so cans and the strict recipes
+do not take them.
+
+| Kind | Tag (`i.` key) | Takes |
+|---|---|---|
+| Cooking (the rest) | `#creativeengineering:sweeteners` (`any_sweetener`) | sugar, powdered sugar, glycerol, honey bottle, honeycomb |
+| Drinks | `sweeteners/drink` (`any_sweetener_drink`) | sugar, powdered sugar, honey bottle |
+| Keg and wine brewing | `sweeteners/brewing` (`any_sweetener_brewing`) | sugar, powdered sugar, honey bottle, honeycomb |
+| Not food | `sweeteners/plain` (`any_sweetener_plain`) | sugar, powdered sugar |
+| Strict | plain `minecraft:sugar` | powdered sugar, its bucket, the sugar cube |
+
+- **Data recipes:** four disjoint swap passes in CD `minecraft/recipes.js` (a swapped slot holds a tag with sugar in it, so
+  a later pass would match it again): brewing (Brewin' keg, Vinery wine), plain (Botania, Pretty Pipes and SecurityCraft
+  modules, PNC speed upgrade and ethanol, bioethanol, blaze cake, potions, fermented spider eye), drinks (the drink food
+  type plus 20 recipe ids: fluid drinks, and Farmer's hot cocoa and melon juice, which have no food type), then cooking.
+  Lists from a scan of every jar's recipes taking `minecraft:sugar` (215 with nested jars; none take `#forge:sugar`).
+- **Script recipes:** cooking slots use `i.any_sweetener` (pie / cake `SWEET` is the one tag); drink slots (Veggies
+  juices, chorus juice, melon juice, IE cider, Kettle cider / melon juice / hot cocoa, pickerelweed juice) use
+  `i.any_sweetener_drink`; the pack's keg flaxen cheese and pale jane (`alcohol.js`) use `i.any_sweetener_brewing`.
+- The sugar seasoning (3.12) stays sugar or powdered sugar.
+- Test: RC-25 (SQ-CDB-02).
 
 ## 4. Limits and decisions
 
@@ -674,10 +728,10 @@ FO-50 to FO-53.
 - **Salt layers** (`food/seasoning #7`): place a layer while standing in it without being pushed up, and retexture the
   layer as a palette swap of another layer block. Port change (`SaltLayerBlock`, a snow layer). No open decision beyond
   which layer block is the palette source.
-- **AppleSkin** (`food/seasoning #8`): pack seasonings already reach AppleSkin (3.12, FO-49); the gap is Salt's own
-  `Salted` bonus, which the tooltip does not show. Confirm which one the note meant.
-- **Seasoned icons** (`food/seasoning #9`): every new seasoning gets its own icon overlay on the food (as Salt's salted
-  overlay); none exist for the pack seasonings yet.
+- **AppleSkin** (`food/seasoning #8`): BUILT 2026-10-26 (3.12): Salt's handler already showed `Salted`; the pack
+  handler now runs after it, so salted and seasoned food shows both. FO-54.
+- **Seasoned icons** (`food/seasoning #9`): BUILT 2026-10-26 (3.12): one overlay per seasoning, salt's shape in the
+  seasoning's colours. FO-55.
 - **Honeycomb** (`dishes/ingredients #22`): counts as sugar in heated mixing (2 sugar per honeycomb) and as honey in some
   recipes; spreads on toast. Open: which recipes.
 - **Jams** (`dishes/jams #1`, `#5`): one jam family (Fruits Delight's jam item, Vintage's jam block, mason jars take glass
@@ -701,7 +755,9 @@ FO-50 to FO-53.
   and [SeasoningCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
 - Pack seasonings (3.12): patcherMod `food/Seasonings.java`, `SeasoningRecipe.java`, `SeasoningTooltip.java`;
   [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js) (definitions), [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js) (crafts),
-  [seasoning_lang.js](../kubejs/client_scripts/seasoning_lang.js) (names), NCH `season`
+  [seasoning_lang.js](../kubejs/client_scripts/seasoning_lang.js) (names), NCH `season`; [seasoning_tags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning_tags.js)
+  (family and seasonable tags); `food/SeasonedItemModel.java` + `mixin/SeasonedItemModelMixin.java` and
+  [make_seasoning.py](../textureswapper/seasoning/make_seasoning.py) (icons)
 - Powdered sugar (3.13): patcherMod `food/PowderedSugarBlock.java`, `PowderedSugarRegistry.java`;
   [powdered_sugar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/powdered_sugar.js) (recipes), item in `baking_ingredients.js`, NCH `viVacuumizing`
 - [food_catalog.md](food_catalog.md): generated reference; `kubejs/exported/food/catalog.json` (not in git)
@@ -833,8 +889,26 @@ Cooking oil and fried eggs (3.7), after a restart:
 - [ ] **FO-52 Block:** place the bucket on the ground: a powdered sugar block, empty bucket in hand. Walk in: you sink
   slowly, no frost overlay or freezing damage after 20 s. With leather boots you stand on top. Fall 10 blocks into it: no
   damage. Right-click it with an empty bucket: the block goes, Powdered Sugar Bucket in hand. Break it by hand: no drop.
-- [ ] **FO-53 Sugar seasoning:** Waffle + Sugar and Waffle + Powdered Sugar both give a waffle with the line "Sugar: +1
-  nutrition"; the two stack together; Seasoning JEI tab shows it. Popcorn + Sugar still gives Caramel Popcorn.
+- [ ] **FO-53 Sugar seasoning (no foods since 2026-10-26):** Waffle + Sugar gives nothing; the Seasoning JEI tab has no
+  Sugar page. Popcorn + Sugar still gives Caramel Popcorn.
+- [ ] **FO-54 AppleSkin with salt** (restart, patcherMod with this change): hover plain popcorn, salted popcorn, onion
+  popcorn and salted onion popcorn. Salted shows Salt's extra hunger and saturation; salted onion shows that plus 2
+  hunger, and its saturation is salted popcorn's plus nothing (onion adds hunger only); salted cheese popcorn shows
+  salted popcorn's saturation plus 2. Eat each at about 10 hunger: the bars fill by what was shown.
+- [ ] **FO-55 Seasoned icons** (restart; `salt-client.toml` overlay off): popcorn with Cheese, Onion, Garlic each shows
+  the salt-shaped sparkle in yellow, tan, pale pink; salted popcorn shows Salt's white one as before; in the hotbar,
+  held in hand, dropped on the ground and on the JEI Seasoning page. Plain popcorn has none. Salted cooked beef still
+  shows the salt overlay. F3+T: still shown, no missing-texture squares.
+- [ ] **FO-57 Void pepper:** Popcorn + Crushed Void Pepper gives popcorn with the line "Void Pepper: +2 nutrition, +0.4
+  saturation" and a dark purple sparkle; eating it at about 10 hunger gives 2 more hunger and 0.4 more saturation than
+  plain popcorn, same as salted popcorn. Void pepper popcorn + Onion, + Cheese, + Garlic give nothing. Salted void pepper
+  popcorn shows both overlays and both bonuses in AppleSkin. Tortilla Chip + Crushed Void Pepper gives nothing.
+- [ ] **FO-56 Seasonings by family:** `/kubejs hand` (or JEI tag view) on Popcorn lists `creativeengineering:seasonable/cheese`,
+  `/onion`, `/garlic` and `creativeengineering:food_family/snack`; Tortilla Chip has the family tag but no seasonable
+  tag. Tortilla Chip + Cheese Wedge, Waffle + Onion give nothing; Popcorn + Cheese Wedge works. JEI: the Seasoning tab
+  shows one page per seasoning (cheese, onion, garlic) and one for garlic + onion, each with popcorn only.
+  Server half PASSED on a scratch server 2026-10-26 (SQ-SNF-01 to -03: tags, recipe ids, `/sntest` grid matches 5/5);
+  the JEI tab is the open client half.
 
 ## 8. History
 
@@ -903,6 +977,14 @@ Cooking oil and fried eggs (3.7), after a restart:
 - 2026-10-23: Pack seasonings framework (3.12, `food/seasoning #3` mechanism): NBT seasonings with combine rules and a
   bonus on eating; test set cheese / onion / garlic on popcorn. patcherMod 1.1.02 jar installed (also carries the 3.11
   Seasoning page). FO-45 to FO-48; scratch SQ-SN-00, 01 queued.
+- 2026-10-26: Seasonings by food family (3.12): `seasonable/<seasoning>` tags from families, then single adds and
+  removals; `food_family/<path>` tags from the new `food_families.json`; crafts generated per seasoning and per
+  combining pair. Popcorn only for now (cheese, onion, garlic); sugar's waffle craft removed. AppleSkin handler after
+  Salt's (FO-54); seasoned icons per seasoning, Salt's overlay drawn by the pack (FO-55, FO-56). patcherMod 1.1.03 and
+  Creative Delight rebuilt, not installed.
+- 2026-10-26 (later): Void Pepper seasoning (Crushed Void Pepper, Salt's bonus, popcorn only; FO-57). The seasoning
+  overlays are generated by `textureswapper/seasoning/make_seasoning.py` (palette_swap, sources in `src/`) instead of the
+  hand-picked-shade script, which is removed. Creative Delight rebuilt, not installed.
 - 2026-10-24: planned from the scratchpad (4.6): merged pink salt, salt layers placed from inside, seasoning on AppleSkin and per-seasoning icons, honeycomb as sugar, one jam family and merged nut butter. Nothing built.
 - 2026-10-25: Powdered sugar (3.13, `dishes/ingredients #16`): item, powder-snow-like block and bucket, vacuum
   chamber bucket recipe, `#forge:sugar`, sugar seasoning (sugar or powdered sugar) tested on the waffle. patcherMod
@@ -917,3 +999,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   passion fruit glazed duck, Canned Food, Hot Hot Hotpot (types-and-tuning #10 built, [food_families.md](food_families.md) 4.4).
   `gen_can_types.py` rerun: the 20 configured Vintage and Fungi cans built (`AWAIT_DUMP` emptied); the five new mods are
   held out of the type loops (`UNDECIDED_MODS`) until their cans are decided.
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Spice of Life carrot for the food dictionary only, no obtain route: `food/types-and-tuning #16` (open question whether it is wanted).

@@ -3,6 +3,10 @@
 ## Farming & Nature <!-- icon: vintagedelight:oat -->
 
 - **Fixed:** A Wild Tea Bush could not be put in a Flower Pot.
+- **Fixed:** Ghost Pepper Seeds could be planted on Farmland, and Wild Ghost Peppers placed on grass and dirt. Ghost
+  Peppers already on Farmland break.
+- **Fixed:** Right-clicking a ripe Cucumber, Ghost Pepper or Zucchini replanted it from the start and dropped seeds. It
+  now picks the fruit and grows back from a later stage; a hoe picks every ripe one in its area.
 - **Changed:** Rich Soil Farmland can no longer be trampled (was turned into Dirt).
 - **New:** Farmer villagers work Rich Soil Farmland and Fertile Soil as well as Farmland.
 - **Changed:** Wild Cave Carrots (Miner's Delight) generate in caves of every biome, most often around Y 0, less often
@@ -15,6 +19,11 @@
 - **Changed:** Village farms (vanilla, Towns & Towers, Terralith, sky villages, small farmer structures) grow crops that suit
   the village's climate: each field is replaced 35% of the time, half of it with the new crop [Rustic crops in savanna
   villages only, 25% per block]. New villages only.
+- **New:** Four End plants (Ender's Delight): Amberveils, Ethereal Saffron, Chorusflame and Void Pepper. They grow wild on
+  End Stone in the End (new chunks only) and can be planted on End Stone or Tilled End Stone, nowhere else.
+  - Chorusflame grows in 3 stages and drops 1 to 3.
+  - Void Pepper spreads over nearby End Stone, then fruits: 3 Void Pepper when fruiting, 1 before.
+  - Chorusflame and Void Pepper grow twice as fast on Tilled End Stone.
 
 ## Food & Cooking <!-- icon: vintagedelight:fermenting_jar -->
 
@@ -43,13 +52,14 @@
   with 100 mB of water (125 mB of jam). The 2-orange recipes stay.
 - **New:** Seasonings on Popcorn in the crafting grid: Cheese (any wedge, +2 saturation), Onion (+2 nutrition) and
   Garlic (Speed I for 10 s). Onion and Garlic go on the same popcorn, in either order or together; Cheese goes on
-  alone. Tooltips and AppleSkin show the bonus.
+  alone. Tooltips and AppleSkin show the bonus, salt included.
+- **New:** Void Pepper seasoning on Popcorn: Crushed Void Pepper, +2 nutrition and +0.4 saturation like Salt.
+- **New:** Seasoned food shows a sparkle on its icon for each seasoning, in that seasoning's colour.
 - **New:** Powdered Sugar, ground from Sugar 1 to 1 (Create crusher, Millstone, mortar and pestle). Works wherever
   Sugar does.
 - **New:** Powdered Sugar Bucket: a bucket and 3 Sugar in a Vacuum Chamber. It places a Powdered Sugar block you sink
   into like Powder Snow (leather boots walk on it, no fall damage) but it doesn't freeze. An empty bucket picks it up;
   the bucket alone in the crafting grid gives 3 Powdered Sugar.
-- **New:** Sugar seasoning on Waffles: Sugar or Powdered Sugar, +1 nutrition.
 - **Changed:** Fried Rice is renamed Egg Fried Rice.
 - **Removed:** Fruit Beignet.
 
@@ -122,6 +132,8 @@
   below take them out.
 - **Changed:** The Pickling Jar's JEI page shows times under a minute in seconds [0min].
 - **Changed:** A Honey Jar holds honey in a Supplementaries jar [apple sauce].
+- **New:** Miner's Delight, Hostile Delight, Oceanic Delight, End's Delight and Fungi Delight soups and stews go in a jar,
+  Miner's Delight cups included.
 - **Changed:** A cut Carrot Cake shows its inside on the cut face [the frosted top].
 
 - **New:** Vegetable Omelet, Shulker Omelette, Inky Cap Scrambled Eggs, Suspicious Bacon And Eggs, Diced Potatoes with
@@ -141,7 +153,8 @@
   Peppers, Roasted Peanuts, Surströmming, Cheese Slices, Oatmeal Cookies.
 - **New:** 9 cans: Cheese Pasta, Pad Thai, Truffle Pasta, Cucumber Salad, Inky Caps Salad, Pickle Soup, Ghostly Chili,
   Creamy Morel Soup, Oatmeal.
-- **Changed:** Vintage Delight's Kimchi and Pickle also fill Canned Kimchi and Canned Pickled Pickles.
+- **Changed:** Vintage Delight's Kimchi also fills Canned Kimchi. Canned Pickled Pickles is Canned Pickles, filled from a
+  Pickle or a Pickled Sea Pickle.
 - **Changed:** Hunger and saturation of Cheeseburger [12 / 0.8] 11 / 0.85, Deluxe Cheeseburger [13 / 0.9] 13 / 1.0, Sinigang [15 / 0.9] 12 / 0.7,
   S'more [9 / 0.5] 8 / 0.4, Marshmallow Stick [1 / 0.3] 3 / 0.35, Cooked Marshmallow Stick [2 / 0.4] 5 / 0.35, Crab Rangoon
   [9 / 0.4] 10 / 0.5, Field Salad [10 / 0.55] 10 / 0.6, Matcha and Salmonberry Ice Cream [6 / 0.5 or 0.4] 6 / 0.3, Rose Rock
@@ -168,12 +181,61 @@
   Rose Rock Candy.
 - **New:** Cheese Toast (Toast and a Flaxen Cheese Wedge).
 - **Changed:** Toast, every toast with a topping, Caviar Toast and Cheese Toast are eaten fast [normal speed].
+- **Changed:** Perch Slice and Pike Slice give 0.35 XP in a Furnace [1.0].
+- **Changed:** Adzuki Curry in the crafting grid takes Roasted Adzuki Beans and Dried Banana [Adzuki Beans and Banana]. The
+  Cooking Pot recipe is unchanged.
+- **Changed:** Pickerelweed Juice and Pike with Beetroot take any 2 Pickerelweed [one Blue and one Purple].
+- **Changed:** A Milk Bucket and 4 Glass Bottles make 4 Milk Bottles, and 4 Milk Bottles fill a Bucket [3].
+
+- **Changed:** Recipes that take sugar [Sugar or Drop of Glycerol]:
+  - Cooking: Sugar, Powdered Sugar, Drop of Glycerol, a Honey Bottle or a Honeycomb.
+  - Drinks: Sugar, Powdered Sugar or a Honey Bottle.
+  - Keg and wine brewing: Sugar, Powdered Sugar, a Honey Bottle or a Honeycomb.
+- **Changed:** Botania, speed modules and upgrades, ethanol, potions and the Fermented Spider Eye take Sugar or Powdered
+  Sugar [Sugar or Drop of Glycerol]. Powdered Sugar, the Powdered Sugar Bucket and the Sugar Cube take Sugar only.
+- **Removed:** Bowl of Water (Botania).
+- **Changed:** Bayberry Soup is Bayberry Juice: the bottle, the fluid and the can.
+- **Removed:** Mhadjeb, Uncooked Mhadjeb and Canned Mhadjeb.
+- **Changed:** Potato Noodle is Gnocchi and Potato Noodles is Creamy Gnocchi. Creamy Gnocchi in the Cooking Pot: Milk,
+  2 Gnocchi and an Onion, Garlic or Pickled Onion [2 Potato Noodles and Garlic or an Onion].
+- **New:** Sweet Potato Dough on a Cutting Board gives 2 Gnocchi.
+- **New:** Glowing Calamari, Glowing Calamari Slice and Glowing Calamari Roll (2 Glowing Calamari Slices and Cooked Rice
+  give 2). Each gives Glowing for 30 s. Fried Calamari and Calamari Soup also take Glowing Calamari.
+- **New:** Glowing Calamari cooks into Cooked Calamari and its slice into Cooked Calamari Slice.
+- **Changed:** A Squid on a Cutting Board gives 1 Calamari (50% a second) and 1 Ink Sac (50% 2 more); a Glow Squid the
+  same in Glowing Calamari and Glow Ink Sacs; a Baked Squid gives Cooked Calamari [Tentacles or Baked Tentacles].
+- **New:** Pickled Sea Pickle: 5 Sea Pickles and Salt in the Pickling Jar give 5. Pickle Soup's heatless recipe takes it.
+- **Removed:** Pickled Pickles. Ones already in a world turn into Pickled Sea Pickles.
+- **Changed:** Pickle Soup takes any pickled vegetable (Pickle, Pickled Sea Pickle, Pickled Beetroot, Pickled Onions,
+  Pickled Peppers, Kimchi) and any 2 vegetables [a Pickle, a Carrot and a Potato].
+- **New:** Braised Sea Pickle also from 2 Sea Pickle Slices and 2 Brown Mushrooms.
+- **Fixed:** Lava Bottles, Neapolitan's milkshakes, Strawberry Banana Smoothie and Splash Milk's Milk Bottle did not go
+  into jars.
+- **New:** Crushed Void Pepper: Void Pepper on the cutting board with a knife (2), in the Millstone (2, 30% a third) or
+  with the Mortar and Pestle (2).
+- **New:** Five dishes served in a Shulker Bowl, from the Cooking Pot, or from the crafting grid with one more main
+  ingredient: Amberveil Stew, Amberveiled Curry, Veil of Flames Risotto, Chicken Curry and Steak with French Fries.
+- **New:** End's Delight meals also craft in the crafting grid from cooked ingredients, with one more main ingredient
+  than the Cooking Pot:
+  - Shulker Soup, Enderman Gristle Stew, Ender Congee, Ender Noodle, Ender Bamboo Rice, Stir Fried Shulker Meat,
+    Dragon's Breath and Chorus Soup, Dragon Meat Stew, Steamed Dragon Egg.
+- **Changed:** Assorted Salad, Roasted Dragon Steak and Dragon Leg with Sauce take Crimson Fungus, Warped Fungus, Inky
+  Cap, Morel or Truffle [Crimson Fungus only].
+- **Changed:** Shulker Filet works in End's Delight recipes that take Shulker Meat; Shulker Meat and Shulker Meat Slice
+  work in Ender's Delight recipes that take Shulker Filet or Shulker Mollusk.
 
 ## Blocks & Building <!-- icon: vintagedelight:salt_bricks -->
 
+- **Changed:** The Golden Egg block falls like sand when unsupported.
+- **Fixed:** Magic Peanut, Smooth Salt Block and Vine Tile dropped nothing when broken.
+- **Changed:** The Salt layer item shows a thin layer of salt, as the Snow layer does [the Salt Dust icon].
+- **Changed:** A broken Cheese Wheel, Cheese Pizza or Meat Pizza drops its remaining slices [nothing].
 - **New:** Rope Fence (4 Rope and 2 Sticks make 3) and Rope Fence Gate (2 Rope and 4 Sticks). They connect to each
   other and to solid blocks, not to other fences, and take a lead.
+- **New:** Hanging Canvas Sign (Farmer's Delight): 2 Chains, 4 logs and 2 Canvas make 6. It hangs under a block, faces 16 directions, and can be waterlogged. It has no text and no dyed versions.
 - **Changed:** Moss Blocks and Moss Carpets take the biome's grass colour [always green].
+- **New:** Storage Delight countertop cabinets in Polished Blackstone, Polished Diorite, Stone Bricks and Polished Tuff
+  for all nine woods, and a bamboo set (every cabinet type, six countertops).
 
 ## Brewing & Drinks <!-- icon: minecraft:brewing_stand -->
 
@@ -218,9 +280,22 @@
   (Creative Delight)" in the mod list, JEI and WTHIT.
 - **Fixed:** The minimap's day and time line read 1:42 behind the season line and changed day at a different hour.
   Both now show the same time and change day at sunrise.
+- **New:** Tooltips and JEI pages for End mob drops, naming the mob and the tool: Raw Dragon Meat, Dragon Leg, Dragon
+  Tooth, Shulker Meat, Enderman Gristle, Raw Endermite Meat, Dried Endermite Meat, Enderman Sight, Mite Crust and Shulker
+  Mollusk.
+- **Changed:** New textures from later End's Delight and Ender's Delight versions:
+  - Bowl Of Stuffed Shulker (now in a Shulker Bowl), Stuffed Shulker, Shulker Bowl, Mite Crust, Chorus Stew, Ender
+    Paella, Enderman Sight, Endermite Stew, Pearl Pasta, Sight Fragments, Strange Eclair, Twisted Cereal.
+  - Shulker Meat, Shulker Meat Slice, Roasted Shulker Meat, Roasted Shulker Meat Slice, Stir Fried Shulker Meat, Shulker
+    Omelette, Raw Ender Sausage, Ender Sausage, Dragon Leg, Smoked Dragon Leg, Chorus Fruit Wine, Dragon Meat Stew,
+    Steamed Dragon Egg.
+- **Fixed:** Eating from a Stuffed Shulker without a Shulker Bowl said "You need a bowl to eat this".
+- **Fixed:** The Sample Syringe's JEI page, listing which mob gives which sample, was missing.
 
 ## Mobs & Animals <!-- icon: miners_delight:arthropod -->
 
+- **Changed:** Geese lay the Golden Egg as a placed block next to themselves [dropped as an item]. In a closed 1x1 pen
+  it still drops as an item.
 - **New:** Villagers pick up and share Corn, and Corn counts as food for breeding.
 - **New:** Spiders and Cave Spiders killed with a knife drop 1 to 3 Arthropods; Spiders also drop Spider Legs (40%), and
   both sometimes drop a Cobweb. Killed while on fire, they drop Cooked Arthropods and Baked Spider Legs instead.
@@ -231,14 +306,22 @@
 
 - **Changed:** Desert temples and desert pyramids start at least 336 blocks apart (was 176). They are as common as
   before. New chunks only.
+- **New:** Five Farmer's Structures: a jungle cocoa farm, a snowy fish stew hut, a swamp cellar kitchen and a taiga squid
+  tank (both underground), and a shepherd farm. New chunks only.
+- **Changed:** The Farmer's Structures pond holds cod, with pike and perch in some, in place of the carp pond (which had no fish).
+  The cook houses have 45 more pieces. New chunks only.
 - **Removed:** The Golden Egg on top of Magic Peanut trees.
 - **Changed:** Tree stumps and fallen logs (Geophilic Reforged) generate twice as often. New chunks only.
 - **New:** Deadwood patches: 3 to 6 stumps and 2 to 4 fallen logs together, in the wood of the biome (acacia, birch,
   cherry, jungle, oak, spruce), about one per 256 by 256 blocks of those biomes. New chunks only.
+- **New:** End House (Ender's Delight): a small house in the End Highlands and End Midlands, never over the void. New
+  chunks only.
 
 ## Loot & Trading <!-- icon: minecraft:chest -->
 
 - **New:** Mature Corn broken with a knife drops a Corncob 25% of the time (not with Silk Touch).
+- **Changed:** Squids and Glow Squids drop a Squid or a Glow Squid every kill, and no Ink Sacs, Glow Ink Sacs, Calamari
+  or Tentacles [ink sacs and Calamari; the Squid or Tentacles with a knife].
 - **New:** Novice Farmers buy 24 Corn for an Emerald; Apprentice Farmers sell 8 Cornbread or 8 Tortillas for 8 Emeralds.
 - **New:** The Wandering Trader sometimes sells Corn (1 Emerald) and, rarely, a Popcorn Box (2 Emeralds).
 - **New:** Zombies, Husks, Zombie Villagers, Pillagers, Evokers and Vindicators killed by a player drop an Onion 2% of
@@ -260,6 +343,11 @@
   Ghost Peppers and their seeds.
 - **New:** Chests that hold Oats, Raw Oats, Peanuts, Cucumbers, Ghost Peppers or Bell Peppers sometimes hold their
   crates, bales, bags or the Bell Pepper Seed Bag instead.
+- **Changed:** The Ender Dragon always drops 5 to 7 Raw Dragon Meat, 2 Dragon Legs and 1 or 2 Dragon Teeth [only when
+  killed with a knife, axe or sword]. Killed with a knife or a machete: 2 more Raw Dragon Meat and 1 more Dragon Tooth
+  [a machete kill gave a second full set].
+- **Fixed:** The Chorus Crate and the Endstone Stove (Ender's Delight) dropped nothing when broken. The crate now mines
+  faster with an axe, the stove with a pickaxe.
 
 ## Gear & Combat <!-- icon: delightful:fluix_knife -->
 
@@ -271,21 +359,30 @@
   (Smithing Table: Certus Quartz Knife and a Fluix Block): always at least Looting I.
 - **Changed:** Wooden Knife: attack damage 1.5 [2.2], attack speed 2.0 [2.2], mining speed 2 [8], harvest level 0 [4], enchantability 15 [10].
 - **Changed:** Stone Knife: attack damage 2.5 [2.8], attack speed 2.0 [2.2], mining speed 4 [8], harvest level 1 [3], enchantability 5 [10].
+- **Changed:** Dragon Tooth Knife: Dragon Egg Shell Knife and a Dragon Tooth in the Smithing Table [crafting grid].
+- **Fixed:** The Dragon Tooth Knife was repaired with a Bone Block; it now takes a Dragon Tooth.
 
 ## Crafting & Recipes <!-- icon: minecraft:crafting_table -->
 
-- **Changed:** Wooden doors, trapdoors, signs, fences, fence gates, pressure plates, buttons, boats and Farmer's Delight
-  cabinets break down into 1 plank on the cutting board with an axe, 75% of the time (was doors, trapdoors and signs only,
+- **Changed:** Wooden doors, trapdoors, signs, fences, fence gates, pressure plates, buttons, boats and cabinets (Driftwood
+  included) break down into 1 plank on the cutting board with an axe, 75% of the time (was doors, trapdoors and signs only,
   always).
-- **New:** Cutting board salvaging: a chest boat gives its boat and a Chest (axe); Minecarts with a Chest, Furnace, Hopper
-  or TNT give the Minecart and that block (hoe).
+- **New:** Cutting board salvaging: a chest boat gives its boat and a Chest (axe); a Boat with Furnace gives its boat and
+  a Furnace (hoe); Minecarts with a Chest, Furnace, Hopper or TNT give the Minecart and that block (hoe).
 - **Changed:** Driftwood logs and wood give Driftwood Bark when stripped on a cutting board (was Tree Bark) or in a
   Create saw (was none).
 - **Removed:** Design Decor's Enchanted Golden Apple mechanical crafting recipe.
 - **New:** Slime Block from a Dough Block and Green Dye in a heated Create mixer.
 - **Changed:** Wild Ghost Peppers give 2 Ghost Pepper Seeds in a Millstone or Crushing Wheels and 3 in an IE Crusher [1].
+- **Fixed:** Crafting grid recipes that take 2 or more of a kind accepted only one item of that kind (Cake Base wanted
+  Parrot Eggs and plain Sugar): Cake Base, Pie Crust, Frosting, Cookie Dough, Dough, Tomato Sauce and Sourdough.
+- **Fixed:** The same in the crafting grid Cacciatore, Garlic Chicken Stew, Shakshouka, Dandelion and Eggs, Pickle Soup,
+  Mutton Chops with Truffle, Pork Marsala and Steak with Mushrooms.
+- **Fixed:** The same in the Create mixer (Dough, Sourdough, Blueberry Custard) and the IE Workbench (Transmitter, Spring
+  and Brass Hand take any copper or gold plate and any iron wire).
 
 ## Gameplay <!-- icon: minecraft:red_bed -->
 
+- **Fixed:** Teleporting into unexplored End terrain froze the server for up to a minute.
 - **Fixed:** The Wither Roots death message read "whie", and showed a raw text key when a mob had hit you.
 - **Removed:** Bedrolls. Leatherworkers no longer sell them.

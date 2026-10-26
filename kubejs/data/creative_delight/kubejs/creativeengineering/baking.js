@@ -21,7 +21,7 @@
 //
 // A repeated ingredient is written once with a count, n(id, 2). With CEConfig [cooking] ovenIngredientCounts off
 // (the default) NCH.ceBaking turns that into 2 slots of 1; with it on the oven takes 2 from one slot. Sugar is
-// #forge:sugar, as the pack-wide sugar swap in server_scripts/cooking/cooking.js gives other recipes.
+// any sweetener (i.any_sweetener), as the pack-wide sugar swap in minecraft/recipes.js gives other recipes.
 //
 // Bakeware (the oven's tool slot, never used up):
 //   baking sheet  cookies, tarts
@@ -44,7 +44,7 @@ ServerEvents.recipes(e => {
 		var PIE = { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin }
 		var CAKE = { exp: 0.1, time: 200, tool: i.t_bakeware_cake_pan }
 		var MUFFIN = { exp: 0.1, time: 200, tool: i.t_bakeware_muffin_tin, container: i.paper }
-		var SWEET = [i.any_sugar, i.honey_bottle]   // one pie sugar slot
+		var SWEET = i.any_sweetener   // one pie sugar slot (any sweetener, honey bottle included)
 
 		// [result key, flavour (2 per cake / pie / batch of cookies), pie filling can key (null: none)]
 		var CAKES = [
@@ -86,26 +86,26 @@ ServerEvents.recipes(e => {
 
 		//######################### Bases #########################
 		// Cake base: crafted raw by hand, baked in the oven.
-		R.shapeless(i.cake_base, [Item.of(i.t_flour_or_cornmeal, 3), Item.of(i.eggs, 2), Item.of(i.any_sugar, 2)], e,
+		R.shapeless(i.cake_base, [i.t_flour_or_cornmeal, i.t_flour_or_cornmeal, i.t_flour_or_cornmeal, i.eggs, i.eggs, i.any_sweetener, i.any_sweetener], e,
 			'cake_base_flour_manual_only')
-		R.shapeless(i.cake_base, [Item.of(i.any_dough, 3), i.eggs, Item.of(i.any_sugar, 2)], e, 'cake_base_dough_manual_only')
-		R.ceBaking([n(i.t_flour_or_cornmeal, 2), n(i.eggs, 2), n(i.any_sugar, 2)], Item.of(i.cake_base_baked, 1), e,
+		R.shapeless(i.cake_base, [i.any_dough, i.any_dough, i.any_dough, i.eggs, i.any_sweetener, i.any_sweetener], e, 'cake_base_dough_manual_only')
+		R.ceBaking([n(i.t_flour_or_cornmeal, 2), n(i.eggs, 2), n(i.any_sweetener, 2)], Item.of(i.cake_base_baked, 1), e,
 			'cake_base_baked_flour', CAKE)
-		R.ceBaking([n(i.any_dough, 2), i.eggs, n(i.any_sugar, 2)], Item.of(i.cake_base_baked, 1), e,
+		R.ceBaking([n(i.any_dough, 2), i.eggs, n(i.any_sweetener, 2)], Item.of(i.cake_base_baked, 1), e,
 			'cake_base_baked_dough', CAKE)
 		R.ceBaking([i.cake_base], Item.of(i.cake_base_baked, 1), e, 'cake_base_baked',
 			{ exp: 0, time: 100, tool: i.t_bakeware_cake_pan })
 
 		// Pie crust, 3 a craft.
-		R.shapeless(Item.of(i.pie_crust, 3), [Item.of(i.t_flour_or_cornmeal, 3), i.eggs, i.milk], e, 'pie_crust_flour_manual_only')
-		R.shapeless(Item.of(i.pie_crust, 3), [Item.of(i.any_dough, 3), i.milk], e, 'pie_crust_dough_manual_only')
+		R.shapeless(Item.of(i.pie_crust, 3), [i.t_flour_or_cornmeal, i.t_flour_or_cornmeal, i.t_flour_or_cornmeal, i.eggs, i.milk], e, 'pie_crust_flour_manual_only')
+		R.shapeless(Item.of(i.pie_crust, 3), [i.any_dough, i.any_dough, i.any_dough, i.milk], e, 'pie_crust_dough_manual_only')
 
-		R.shapeless(Item.of(i.frosting, 2), [i.any_sugar, Item.of(i.milk, 2)], e, 'frosting_manual_only')
+		R.shapeless(Item.of(i.frosting, 2), [i.any_sweetener, i.milk, i.milk], e, 'frosting_manual_only')
 		// Frosting fluid (TODO dishes/ingredients #2): the Create route. Heated mixer sugar + 250 mB milk -> 500 mB, the
 		// grid's 2 frosting; the compactor presses 250 mB into 1 frosting; a spout tops a baked base with 750 mB (below).
-		R.createMixing(Fluid.of(global.fluid.frosting, 500), [i.any_sugar, Fluid.of(global.fluid.milk, 250)], e, 'frosting', 'heated')
+		R.createMixing(Fluid.of(global.fluid.frosting, 500), [i.any_sweetener, Fluid.of(global.fluid.milk, 250)], e, 'frosting', 'heated')
 		R.createCompacting(i.frosting, [Fluid.of(global.fluid.frosting, 250)], e, 'frosting')
-		R.shapeless(i.cookie_dough, [i.any_dough, Item.of(i.any_sugar, 2)], e, 'cookie_dough_manual_only')
+		R.shapeless(i.cookie_dough, [i.any_dough, i.any_sweetener, i.any_sweetener], e, 'cookie_dough_manual_only')
 
 		//######################### Cakes (cake pan) #########################
 		// Plain cake: 3 frosting, or 2 frosting and a red berry on top (the vanilla look).

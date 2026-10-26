@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativedelight.farmers;
 
 import com.SaintAlfonzo.creativedelight.farmers.block.GleamingSaladBlock;
+import com.SaintAlfonzo.creativedelight.farmers.block.HangingCanvasSignBlock;
 import com.SaintAlfonzo.creativedelight.farmers.block.PumpkinPieBlock;
 import com.SaintAlfonzo.creativedelight.farmers.block.RopeFenceBlock;
 import com.SaintAlfonzo.creativedelight.farmers.block.RopeFenceGateBlock;
@@ -63,6 +64,13 @@ public final class FDBackportRegistry {
 					.strength(0.5F).sound(SoundType.WOOL).lightLevel(state -> state.getValue(GleamingSaladBlock.SERVINGS) * 3),
 					FDBackportRegistry.GLEAMING_SALAD, true));
 
+	/** Undyed ceiling Hanging Canvas Sign: no text, block entity, dyes or wall variant (farmers_delight.md). */
+	public static final RegistryObject<Block> HANGING_CANVAS_SIGN = BLOCKS.register("hanging_canvas_sign",
+			() -> new HangingCanvasSignBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).noCollission()
+					.strength(1.0F).sound(SoundType.WOOD)));
+
+	public static final RegistryObject<Item> HANGING_CANVAS_SIGN_ITEM = ITEMS.register("hanging_canvas_sign",
+			() -> new BlockItem(HANGING_CANVAS_SIGN.get(), ModItems.basicItem().stacksTo(16)));
 	public static final RegistryObject<Item> ROPE_FENCE_ITEM = ITEMS.register("rope_fence",
 			() -> new FuelBlockItem(ROPE_FENCE.get(), ModItems.basicItem(), 200));
 	public static final RegistryObject<Item> ROPE_FENCE_GATE_ITEM = ITEMS.register("rope_fence_gate",

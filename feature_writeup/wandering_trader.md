@@ -256,3 +256,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   now dumps the Winemaker pool; the report shows weights and counts both traders. Jar md5 37ce1023, checked on a
   scratch dedicated server. WT-06 retired, WT-09 to WT-16 added.
 - 2026-10-22: Fruits Delight's apple sapling removed from the Winemaker (Vinery's apple tree is the pack's); WT-17.
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Rare Rustic pepper seed offer: `loot/trader #4`.

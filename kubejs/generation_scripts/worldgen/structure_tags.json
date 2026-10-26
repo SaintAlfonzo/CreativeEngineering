@@ -422,6 +422,12 @@
         "campsite_structures:*"
       ]
     },
+    "mod/endersdelight": {
+      "note": "Ender's Delight (1.1.4 End House, MIT, Axedgaming): its data ships in Creative Delight's enders member (nested jar), the installed 1.2.2 jar has no structure. A glob, so the tags stay valid until the rebuilt Creative Delight jar is installed and the scanner has seen it.",
+      "values": [
+        "endersdelight:*"
+      ]
+    },
     "mod/subterrestrial": {
       "note": "Subterrestrial 2.0.0 (added to mods/ 2026-10-13): 8 underground cabins (y 6..42), standalone at the mod's rates. Classified only (type/underground, so water_ok keeps the ocean cabin's ocean biomes); not in plan 7.4.",
       "values": [
@@ -663,7 +669,9 @@
         "philipsruins:underground_structures",
         "philipsruins:lost_soul_city",
         "minecraft:buried_treasure",
-        "#mod/subterrestrial"
+        "#mod/subterrestrial",
+        "farmers_structures:ratatouilles",
+        "farmers_structures:squids"
       ]
     },
     "type/environmental": {
@@ -742,13 +750,15 @@
       ]
     },
     "type/end_constructed": {
-      "note": "Built End structures: end cities, the rest of MES (purpur / end-stone-brick builds), Philip's End ruins and gate fortress.",
+      "note": "Built End structures: end cities, the rest of MES (purpur / end-stone-brick builds), Philip's End ruins and gate fortress, Ender's Delight's End House, Mysticrift's End pillager tower (2026-10-25; type tag only: the tower still takes its slots from group/pillager_settlements, and type/end_constructed is no group, so none of these share a grid).",
       "values": [
         "minecraft:end_city",
         "mes:*",
         "!#type/end_environmental",
         "philipsruins:end_ruins",
-        "philipsruins:end_gate_fortress"
+        "philipsruins:end_gate_fortress",
+        "#mod/endersdelight",
+        "mysticrift_pillagers_towers_aris:end_pillager_tower"
       ]
     },
     "dungeon/surface_vanilla": {
@@ -1137,7 +1147,7 @@
         "eugene:red_roof_castle",
         "eugene:ruined_drum_tower",
         "eugene:undead_castle",
-        "farmers_structures:aquacultures_carp",
+        "farmers_structures:aquacultures_cod",
         "farmers_structures:aquacultures_common",
         "farmers_structures:cooks",
         "forest_ruins:ruin_1",
@@ -1196,7 +1206,8 @@
         "villager_fletcher_house:villager_fletcher_house",
         "villager_forge:villager_forge",
         "villager_tannery:tannery",
-        "villager_windmill:windmill"
+        "villager_windmill:windmill",
+        "farmers_structures:shepherd_farms"
       ]
     },
     "land/highlands": {
@@ -1214,7 +1225,7 @@
         "eugene:pillager_camp",
         "eugene:ruined_drum_tower",
         "eugene:undead_castle",
-        "farmers_structures:aquacultures_carp",
+        "farmers_structures:aquacultures_cod",
         "farmers_structures:aquacultures_common",
         "farmers_structures:cooks",
         "forest_ruins:ruin_1",
@@ -1270,7 +1281,8 @@
         "villager_fletcher_house:villager_fletcher_house",
         "villager_forge:villager_forge",
         "villager_tannery:tannery",
-        "villager_windmill:windmill"
+        "villager_windmill:windmill",
+        "farmers_structures:shepherd_farms"
       ]
     },
     "land/forest": {
@@ -1286,7 +1298,7 @@
         "eugene:fake_trader_camp",
         "eugene:pillager_camp",
         "eugene:red_roof_castle",
-        "farmers_structures:aquacultures_carp",
+        "farmers_structures:aquacultures_cod",
         "farmers_structures:aquacultures_common",
         "farmers_structures:cooks",
         "forest_ruins:ruin_1",
@@ -1326,7 +1338,8 @@
         "towns_and_towers:village_forest",
         "villager_archer_camp:villager_archer_camp",
         "villager_circus_tent:villager_circus_tent",
-        "villager_tannery:tannery"
+        "villager_tannery:tannery",
+        "farmers_structures:shepherd_farms"
       ]
     },
     "land/birch": {
@@ -1364,7 +1377,7 @@
         "eugene:fake_trader_camp",
         "eugene:pillager_camp",
         "eugene:witch_wagon",
-        "farmers_structures:aquacultures_carp",
+        "farmers_structures:aquacultures_cod",
         "farmers_structures:aquacultures_common",
         "forest_ruins:ruin_1",
         "forest_ruins:ruin_2",
@@ -1399,7 +1412,8 @@
         "simply_houses:forest_fort",
         "simply_houses:forest_house",
         "simply_houses:forest_stonemason",
-        "villager_tannery:tannery"
+        "villager_tannery:tannery",
+        "farmers_structures:squids"
       ]
     },
     "land/taiga": {
@@ -1410,7 +1424,7 @@
         "eugene:fake_trader_camp",
         "eugene:pillager_camp",
         "eugene:undead_castle",
-        "farmers_structures:aquacultures_carp",
+        "farmers_structures:aquacultures_cod",
         "farmers_structures:aquacultures_common",
         "forest_ruins:ruin_1",
         "forest_ruins:ruin_2",
@@ -1467,7 +1481,8 @@
         "villager_fletcher_house:villager_fletcher_house",
         "villager_forge:villager_forge",
         "villager_tannery:tannery",
-        "villager_windmill:windmill"
+        "villager_windmill:windmill",
+        "farmers_structures:squids"
       ]
     },
     "land/snowy": {
@@ -1504,7 +1519,8 @@
         "towns_and_towers:pillager_outpost_snowy_taiga",
         "towns_and_towers:village_grove",
         "towns_and_towers:village_snowy_slopes",
-        "towns_and_towers:village_snowy_taiga"
+        "towns_and_towers:village_snowy_taiga",
+        "farmers_structures:fishs_stew"
       ]
     },
     "land/icy": {
@@ -1563,7 +1579,7 @@
       "note": "Biome fit: Vanilla savanna village; T&T savanna outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Greek house, country house; Llama stable; Farmer's aquaculture ponds; Farmer's cooks; Philip's ancient ruins + ancient towers; Philip's field stone rocks; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/savanna biomes. Real tag: creativeengineering:land/savanna.",
       "values": [
         "eugene:pillager_loot_carriage",
-        "farmers_structures:aquacultures_carp",
+        "farmers_structures:aquacultures_cod",
         "farmers_structures:aquacultures_common",
         "farmers_structures:cooks",
         "greek_villager_house:greek_house",
@@ -1588,7 +1604,8 @@
         "takesapillage:bastille",
         "takesapillage:pillager_camp",
         "towns_and_towers:pillager_outpost_savanna",
-        "villager_country_house:country_house"
+        "villager_country_house:country_house",
+        "farmers_structures:shepherd_farms"
       ]
     },
     "land/warm_dry": {
@@ -1635,7 +1652,8 @@
         "towns_and_towers:pillager_outpost_jungle",
         "towns_and_towers:pillager_outpost_sparse_jungle",
         "towns_and_towers:village_jungle",
-        "towns_and_towers:village_sparse_jungle"
+        "towns_and_towers:village_sparse_jungle",
+        "farmers_structures:cacaos"
       ]
     },
     "land/swamp": {
@@ -1663,7 +1681,8 @@
         "philipsruins:rare_ruin",
         "towns_and_towers:pillager_outpost_swamp",
         "towns_and_towers:village_swamp",
-        "villagesandpillages:village_witch"
+        "villagesandpillages:village_witch",
+        "farmers_structures:ratatouilles"
       ]
     },
     "land/beach": {
@@ -1723,9 +1742,10 @@
       ]
     },
     "land/end": {
-      "note": "Biome fit: End tower (Mysticrift). Spawn in the land/end biomes. Real tag: creativeengineering:land/end.",
+      "note": "Biome fit: End tower (Mysticrift) and Ender's Delight's End House (end highlands and midlands, the mod's own list). Spawn in the land/end biomes. Real tag: creativeengineering:land/end.",
       "values": [
-        "mysticrift_pillagers_towers_aris:end_pillager_tower"
+        "mysticrift_pillagers_towers_aris:end_pillager_tower",
+        "#mod/endersdelight"
       ]
     },
     "land/any": {
@@ -1889,9 +1909,12 @@
         "farmers_structures:cooks",
         "farmers_structures:cooks_moss",
         "farmers_structures:aquacultures_beach",
-        "farmers_structures:aquacultures_carp",
+        "farmers_structures:aquacultures_cod",
         "farmers_structures:aquacultures_common",
-        "farmers_structures:sushis"
+        "farmers_structures:sushis",
+        "farmers_structures:cacaos",
+        "farmers_structures:fishs_stew",
+        "farmers_structures:shepherd_farms"
       ]
     },
     "meta/way_signs": {

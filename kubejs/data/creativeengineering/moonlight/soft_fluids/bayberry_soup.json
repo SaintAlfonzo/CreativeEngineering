@@ -18,6 +18,6 @@
     "item": "fruitsdelight:bayberry_soup"
   },
   "from_mod": "fruitsdelight",
-  "still_texture": "moonlight:soft_fluids/soup_liquid",
+  "still_texture": "moonlight:soft_fluids/potion_still",
   "translation_key": "item.fruitsdelight.bayberry_soup"
 }

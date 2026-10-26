@@ -18,7 +18,7 @@ ServerEvents.recipes(e => {
 		// of the food they make (corn_delight, supplementaries, rusticdelight, incubation, farmersdelight, fruitsdelight,
 		// neapolitan); Brewin' and Chewin's omelet and quiche stay in the pack's cooking.js.
 		R.createMixing(Fluid.of(f.egg_solution, 500), [i.eggs, Fluid.of(f.milk, 250)], e, 'egg_solution', 'n/a')
-		R.createMixing(Item.of(i.in_dough, 6), [Item.of(i.flour, 3), Fluid.of(f.egg_solution, 250)], e, 'dough_egg_solution', 'n/a')
+		R.createMixing(Item.of(i.in_dough, 6), [i.flour, i.flour, i.flour, Fluid.of(f.egg_solution, 250)], e, 'dough_egg_solution', 'n/a')
 
 		//######################### Flour, dough, bread
 		// Combine wheat flours and doughs into create version
@@ -61,6 +61,6 @@ ServerEvents.recipes(e => {
 		// More efficient craft w/ egg
 		R.remove({ id: 'tmted:wheat_dough_from_egg' }, e)
 		R.remove({ id: 'farmersdelight:wheat_dough_from_eggs' }, e)
-		R.shapeless(Item.of(i.dough, 6), [Item.of(i.flour, 3), i.eggs], e)
+		R.shapeless(Item.of(i.dough, 6), [i.flour, i.flour, i.flour, i.eggs], e, '3_wheat_flour_to_6_dough_by_shapeless')
 	})
 })

@@ -1,7 +1,8 @@
 # Farmer's Structures 1.0.6 against the installed 1.0.0
 
-**Nothing built.** Installed: `FarmersStructures-1.0.0-1.19.2.jar` (`mods/`, `server_mods/`), mod id `farmers_structures`,
-data only (one class). Evaluated 2026-10-25 against
+**BUILT 2026-10-25, not run in game.** Installed: `FarmersStructures-1.0.0-1.19.2.jar` (`mods/`, `server_mods/`), mod id
+`farmers_structures`, data only (one class). The 1.0.6 NeoForge jar is a resource donor (section 5): all 6 new Overworld
+structures, the cod pond and the grown cook house pools are served from it, converted in memory. Evaluated against
 `devmods/checkNewerVersionForContent/FarmersStructures-1.0.6-1.21.1_neoforge.jar` (1.21.1 / NeoForge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #27` in [todo/TODO.md](todo/TODO.md). How the pack runs these structures today:
@@ -105,16 +106,44 @@ and override the jar's pools by id.
   `remote`. Harmless (a slot it would win falls through to the other members), but it could be emptied like the
   Aether set, or given Cherry Grove-like biomes (owner's call).
 
-## 3. Open questions for the owner
+## 3. Owner decisions (2026-10-25)
 
-1. Licence: carry ARR templates into `kubejs/data` (as the 43 MCreator structure jars were), or only use them from the
-   unmodified jar? Only the second is allowed for code and art in the Miner's / Vinery ports.
-2. Cod pond in place of the carp pond: yes?
-3. Which of the 5 new Overworld structures (2.1) to add, and should they join `remote` or get their own rates?
-4. The 45 new cook house pieces: add them (needs the converter in 2.4)?
-5. Rope fence remap target: wait for the FD rope fence, or oak fence now?
+1. Licence: the jar is a donor, like Vinery. Nothing is copied into `kubejs/data`; the unmodified jar sits in
+   `farmers_upstream/` and is converted in memory (section 5).
+2. Cod pond replaces the carp pond: yes. Pike and perch (Upgrade Aquatic) may take cod places, and the stew hut's salmon places.
+3. Add cacaos, fish stews, ratatouilles, squids and shepherd farms, all in group `remote`.
+4. The 45 new cook house pieces: yes, through the same conversion.
+5. Rope fence: the pack's FD rope fence and gate. Pink petals -> Immersive Weathering azalea flowers, cherry -> Vinery cherry,
+   bamboo blocks -> Quark bamboo blocks, wooden / bamboo basket -> the FD basket, Gleaming Salad -> the pack's feast block,
+   hanging canvas sign -> the new `farmersdelight:hanging_canvas_sign` ([farmers_delight.md](farmers_delight.md)).
 
-## 4. Tests (once built)
+## 4. Tests
 
-None yet. Each carried-over structure would get a `/place structure` check on a scratch server and a pass through
-`tools/check_structure_live.py`; entries go in [testing/scratch_queue.md](testing/scratch_queue.md) when built.
+Section "Farmer's Structures donor" of [testing/scratch_queue.md](testing/scratch_queue.md) (SQ-FSD-01 to 08). 2026-10-26 scratch run: SQ-FSD-01, -03, -04 (placement) and -06 PASSED (donor 177 files, all 7 kinds place, carp not locatable, squids at 552 blocks). SQ-FSD-05 and -08 found that 4 cook house expansion connectors and the back-connectors name `minecraft:cook_*_pool` (no namespace): `Empty or non-existent pool`, those 4 never expand (same upstream on 1.21); TODO `ports` row 30. Still open: SQ-FSD-02, -07 and the client checks (chest / frame / pot contents, cook variety).
+Needs patcherMod rebuilt and installed, `farmers_upstream/` in the game folder, and the Creative Delight jar for the sign.
+
+## 5. How it is built
+
+- **Reader:** patcherMod `worldgen/donor/` ([FarmersDonor](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/donor/FarmersDonor.java),
+  [FarmersTranslator](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/donor/FarmersTranslator.java),
+  `UpstreamJars` pins the sha1). A built-in server data pack `farmers_structures_donor` at the top of the data packs (below
+  KubeJS) over the installed 1.0.0 mod pack. A missing or different jar adds nothing and logs one warning.
+- **What it converts:** `structure/` -> `structures/`, `tags/block` -> `tags/blocks`; templates: item `count` -> `Count`
+  plus the 4 components 1.19.2 has, blocks via the table in 2.4 (unknown ones become air), entities of absent mods and 1.21
+  keys stripped, unknown items dropped; `liquid_settings` removed from structures. Foreign-dimension structures, sets,
+  pools and templates (Aether, Undergarden, Afterdark, Deeper and Darker, flesh, Bumblezone) are not served.
+- **Fish:** the cod pond and the stew hut pools get 3 extra pieces each: every second fish a pike, a perch, or alternating
+  pike / perch (1 in 4 ponds keeps cod only). Needs Upgrade Aquatic.
+- **Carp:** the donor serves an empty `aquacultures_carp_with_all`, and the pack tags no longer name the carp pond.
+- **Pack data:** land fits in `structure_tags.json` (cacaos `land/jungle`, fishs_stew `land/snowy`, ratatouilles `land/swamp`,
+  squids `land/taiga` + `land/dark_forest`, shepherd farms and the cod pond with the old cook / carp fits), the first four plus
+  shepherds in `meta/farmers_structures`, ratatouilles and squids in `type/underground` and exempt from earth fill.
+  `gen_structure_config.py` reads the donor jar (its sets and structures replace the installed jar's, foreign ones excluded);
+  `gen_structure_groups.py` fitted the new members into `remote`.
+- **The underground step in the group sim:** the sim and the fitter judge a structure only by the surface biomes of its fit
+  tag (`surface_mean` counts `layer: surface` biomes). Ratatouilles start at surface -55 and squids at -40, and a jigsaw start
+  is biome-checked where the start y lies, not at the surface. At those depths the biome is nearly always the surface biome
+  continuing down (cave biomes only in pockets, Terralith's deep ones start lower, hence `land/any/deep` for -50 to -30
+  absolute), so they use the surface fits and their rates are right to within the cave pockets. A real underground step
+  would sample the 3D biome at the start y and use `land/any/deep`-like cave fits for starts below about y 0; it is not
+  built, since these two don't need it. They are `type/underground` so the sea check lets them sit under the seabed.

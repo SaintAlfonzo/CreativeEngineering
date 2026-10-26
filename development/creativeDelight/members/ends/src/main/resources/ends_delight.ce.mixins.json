@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.creativedelight.ends.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "DragonToothTierMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

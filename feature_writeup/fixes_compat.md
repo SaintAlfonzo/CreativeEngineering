@@ -16,7 +16,7 @@ feature are documented with that feature and only pointed to here.
 | 2.7 | Detail Armor Bar: icons for unsupported armor; rows past 20 armor | `DetailArmorBarCompat`, `ArmorOverflowRenderer`, `[armor_overflow]` | DEPLOYED |
 | 2.8 | Create's config screen can edit text values | `SubMenuConfigScreenMixin`, `StringEntry` | DEPLOYED |
 | 2.9 | Bonemeal charm: chance to refund bone meal used with a charm in the other hand | `BonemealCharmMixin`, `#bonemeal_charms`, `[bonemeal_charm]` | DEPLOYED |
-| 2.10 | Ghost blocks on the dedicated server (block-state ids past 2^19) | `SectionUpdateEncodeFixMixin` + client guards, `[debug.block_state_sync]` | DEPLOYED with 1.0.6 |
+| 2.10 | Ghost blocks on the dedicated server (block-state ids past 2^19) | `SectionUpdateEncodeFixMixin` + client guards, `[debug.block_state_sync]` | DEPLOYED with 1.0.6; long-shift encoder (no 2^20 ceiling) BUILT 2026-10-26, untested (FX-47) |
 | 2.11 | Supplementaries wind vane crash with Breezy 1.0.8 | `SupplementariesBreezyCompatMixin` | DEPLOYED with 1.0.6 |
 | 2.12 | "Accessing LegacyRandomSource from multiple threads" server crash | `LevelThreadSafeRandomMixin` | DEPLOYED (since 1.0.3) |
 | 2.13 | Server freeze from modded explorer-map trades (Lightman's Currency, Cloud Storage) | `AsyncMapTrades` + 2 mixins | DEPLOYED with 1.0.3 |
@@ -38,7 +38,7 @@ feature are documented with that feature and only pointed to here.
 | 2.29 | Polymorph recipe choice in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal | `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `IECraftingTablePolymorphMixin`, `PrettyPipesCraftingTerminalPolymorphMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-39 to FX-42 in game |
 
 - **Pending:** nothing built and unshipped (2.22 went out with 1.0.8, 2026-10-19). FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
-  there). Findings F1 to F6 (section 4); none needs a decision except F3.
+  there). Findings F1 to F6 (section 4); none needs a decision.
 - **Knobs:** `config/creativeengineering-common.toml`: `[forgiving_void]`, `[armor_overflow]`, `[bonemeal_charm]`,
   `[gui_title]`, `[debug.block_state_sync]`. All live.
 
@@ -114,8 +114,9 @@ exist).
 
 Create's Configs screen (pause menu, used for every mod's Forge config including CEConfig) only had widgets for
 booleans, enums and numbers; text values showed "Impl missing". `SubMenuConfigScreenMixin` adds a text field
-(`StringEntry`) in the screen's private builder lambda (`lambda$init$12` in Create 0.5.1.i; fails loudly if Create
-renames it). Used by e.g. `[crafting.felsic_*] potion` and the shield effect strings.
+(`StringEntry`) in the screen's private builder lambda (`lambda$init$12` in Create 0.5.1.i). It has no `require`, so if Create renumbers the lambda the fix silently
+stops (text values show "Impl missing" again); only a changed local list fails, when the screen opens. Recheck on a
+Create update: [deploy.md](deploy.md) "Mod updates". Used by e.g. `[crafting.felsic_*] potion` and the shield effect strings.
 
 ### 2.9 Bonemeal charm
 
@@ -131,8 +132,11 @@ item from `#creativeengineering:bonemeal_charms` in the **other** hand: `chance`
   maths; for ids from 2^19 (524,288) that goes negative. This pack has 761,052 states, so the last ~237,000 (about
   4,700 blocks from Every Compat, Quark, Upgrade Aquatic, Neapolitan, Supplementaries...) broke, and the error dropped
   the rest of the packet. Single player never encodes packets, so it never showed.
-- **Fix:** the server masks the packed value to 32 bits (`SectionUpdateEncodeFixMixin`); the client adds 2^20 back to a
-  negative id (`SectionUpdateNullStateMixin`, `BlockUpdateNullStateMixin`), so either side alone fixes it.
+- **Fix:** the server writes each entry with the shift done in long (`SectionUpdateEncodeFixMixin` replaces `write`,
+  same layout), which the vanilla reader decodes for any id, so there is no state-count ceiling (since 2026-10-26;
+  before, it masked vanilla's value to 32 bits, which only worked below 2^20 states). The client adds 2^20 back to a
+  negative id (`SectionUpdateNullStateMixin`, `BlockUpdateNullStateMixin`), which covers an unpatched server below
+  2^20 states.
 - **Diagnostics:** `[debug.block_state_sync] enabled` (off) logs every id the client still can't resolve and dumps each
   block's id range on both sides for `tools/diff_block_state_ranges.py` (a block with a different number of states on
   client and server shifts every later id).
@@ -341,14 +345,19 @@ reobfuscated with no refmap).
 - **F1.** FIXED 2026-10-19 (javadoc names `[forgiving_void]` in CEConfig). **Stale javadoc in `ForgivingVoidMixin`:** it says the dials come from
   `config/creativeengineering/forgiving_void.json` via KubeJS; they're `[forgiving_void]` in CEConfig (the bridge says
   so).
-- **F2. The ghost-block fix has a ceiling.** It works for ids below 2^20 (1,048,576). The pack has 761,052 states;
-  about 290,000 more (a few big block mods) and the fix stops working. Watch the state count when adding mods.
-- **F3. Version-pinned fixes. Your call on how to track them.** The D&D fixes (1.2c Beta Mid-Dev), the Breezy compat
+- **F2. The ghost-block fix had a ceiling.** It worked for ids below 2^20 (1,048,576); the pack has 761,052 states.
+  FIXED 2026-10-26: the server now shifts in long (2.10), so the count no longer matters with the pack's server.
+  Only the client-side guard against an unpatched server keeps the 2^20 limit. FX-47.
+- **F3.** FIXED 2026-10-26 (checklist in [deploy.md](deploy.md) "Mod updates", plus a preflight warning when a pinned
+  jar in `mods/` changes; [TODO](todo/TODO.md) `pack/server #7`). **Version-pinned fixes.** The D&D fixes (1.2c Beta Mid-Dev), the Breezy compat
   (Supplementaries 2.4.20 + Breezy 1.0.8), the config text field (Create 0.5.1.i lambda name) and the Easy Elytra
   Takeoff slot ([gear_tuning.md](gear_tuning.md) F11) each target one mod version. Most fail loudly at launch on an
   update (`require`); a checklist in [deploy.md](deploy.md) for mod updates would catch the rest.
 - **F4. Thread-safe random hides the culprit.** The off-thread code using `Level.random` was never identified; the fix
-  makes it safe, but the same code may misbehave elsewhere.
+  makes it safe, but the same code may misbehave elsewhere. Hunt tool added 2026-10-26: config
+  `debug.level_random.probe` (default off) swaps in `LevelRandomProbe`, which logs `[LevelRandomProbe]` stack traces of
+  off-thread callers (max 20 distinct). Test SQ-LR-01 in [scratch_queue.md](testing/scratch_queue.md). Close F4 once a
+  caller is named and fixed, or a long probe session logs none.
 - **F5. Banner compat textures need a jar rebuild** for a new pattern mod: both generators write patcherMod resources,
   so they're deliberately not in `/cegen` (`generators.json` `_readme`).
 - **F6.** FIXED 2026-10-19 (javadoc added). **`CopperPickaxeItemMixin` had no javadoc**, unlike every other mixin.
@@ -487,6 +496,9 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   moss shifts half as far.
 - [ ] **FX-45 Moss renders with shaders and Embeddium** (in game, client): no z-fighting, no missing texture, carpet
   sides still 1 px.
+- [ ] **FX-47 Ghost blocks after the long-shift encoder** (scratch server + client, then the live server): repeat
+  FX-13 (an explosion among Quark / Every Compat blocks, high state ids) and a few vanilla blocks (low ids): every
+  change shows; no "Error executing task on Client"; with `[debug.block_state_sync] enabled` no unresolved id.
 
 ## 8. History
 
@@ -522,3 +534,35 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   crafting screens Polymorph misses (gaps listed in 2.29); tests FX-39 to FX-42. Built, not run in game.
 - 2026-10-23: 2.30 biome-tinted moss (patcherMod 1.1.02, in `mods/`); tests FX-43 to FX-45. Built, not run in game.
 - 2026-10-24: planned from the scratchpad: IW growths for Upgrade Aquatic coral (`gameplay/misc #15`). No code changed.
+- 2026-10-26: F2 fixed (TODO `server #6`): `SectionUpdateEncodeFixMixin` writes the multi-block packet with a long
+  shift instead of masking, no 2^20 ceiling. patcherMod 1.1.03 in `mods/`, not run; FX-47.
+- 2026-10-26: F3 closed: version-pinned fixes tracked in [deploy.md](deploy.md) "Mod updates" plus a staging warning; 2.8 corrected (the text-field mixin is silent on a renamed lambda, not loud).
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Symbols on Xaero's maps: `ui/misc #5` (no detail yet).
+
+## Client checks after 1.1.02 (N-01 to N-09, moved from the scratchpad 2026-10-26)
+
+Checks for the uncommitted work after the 1.1.02 commit. Startup scripts and the removed-items list changed: restart the
+client, `/reload` is not enough. `[-]` and `[/]` are the owner's partial marks, kept as written.
+
+- [-] **N-01 Egg Fried Rice name:** Farmer's Delight's Fried Rice reads "Egg Fried Rice" in the inventory, JEI and WTHIT; the
+  Display Delight placed copy reads "Placed Egg Fried Rice".
+- [-] **N-02 Glycerol tooltip:** hover Glycerol with no Shift: the aqua line "Tastes sweet!" shows and the "Hold Shift" hint is gone.
+  Other PneumaticCraft items still show "Hold Shift"; the Liquid Experience Bucket tooltip still reads "Experience in liquid form."
+- [-] **N-03 Bedrolls gone:** search JEI and every creative tab for "bedroll": nothing. No Leatherworker offers one (check a few).
+- [-] **N-04 Abnormals Delight leftovers gone:** JEI and creative: no Passion Aloe Nectar, Cherry Cream Soda, Dune Platter,
+  Yucca Gateau Slice, Fruit Beignet; no Fruit Beignet recipe page.
+- [ ] **N-05 Luck brewing in JEI:** Potion of Luck and Potion of Bad Luck (and their long forms) each list one pack route
+  (clover or silverfish bottle on awkward, redstone to lengthen); no Buzzier Bees duplicate, no strong or corruption route
+  (compare EF-05 in [effects.md](../effects.md)).
+- [ ] **N-06 No-effect potions:** JEI shows no bucket or tipped-arrow recipe for awkward, thick, mundane or water; bottling
+  recipes for awkward, thick and mundane remain. Right-click an awkward potion bucket on the ground: nothing spawns and the bucket is kept.
+  An effect bucket (e.g. Speed) still spawns rings, becomes an empty bucket and goes on a 1 second cooldown.
+- [ ] **N-07 Driftwood bark:** JEI: driftwood log and wood stripping on the cutting board give Immersive Weathering's driftwood bark
+  (not Abnormals Delight's); Create cutting and the pack sawmill still list their driftwood recipes.
+- [ ] **N-08 Quark Engineering stairs:** the sawmill recipes for the quark trio (blossom, ancient, azalea) stairs in JEI are the
+  pack's only ones; the bookshelf recipes remain.
+- [ ] **N-09 Food types:** Cheese Pasta and the sweet entries changed in `food_types.json`: hover them, the type line and AppleSkin
+  values match their neighbours (spot check three).

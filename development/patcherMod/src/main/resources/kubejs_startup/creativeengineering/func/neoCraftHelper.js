@@ -531,8 +531,8 @@ global.NCH = {
     return json
   },
 
-  // NBT-aware ingredient / result JSON. Currently used ONLY by ieBlueprint (the Engineer's
-  // Workbench) — every other ie* / create* helper still goes through plain _itemJson.
+  // NBT-aware ingredient / result JSON. Used by ieBlueprint (the Engineer's Workbench) and the
+  // vdPickling results — every other ie* / create* helper still goes through plain _itemJson.
   //
   // Recognises, in addition to everything _itemJson handles:
   //   - a hand-written ingredient object: { type: 'forge:partial_nbt'|'forge:nbt', item, nbt }
@@ -551,10 +551,11 @@ global.NCH = {
 
     var stackNbt
     try {
-      if (v && typeof v.getTag === 'function') {
-        var t = v.getTag()
-        if (t) { var s = String(t); if (s && s !== '{}') stackNbt = s }
-      }
+      // KubeJS hides ItemStack.getTag() from scripts; its `.nbt` bean property is the readable one
+      var t = null
+      if (v && typeof v.getTag === 'function') t = v.getTag()
+      else if (v && typeof v.getItem === 'function' && v.nbt != null && typeof v.nbt === 'object') t = v.nbt
+      if (t) { var s = String(t); if (s && s !== '{}') stackNbt = s }
     } catch (err) {}
 
     // No NBT anywhere -> behave exactly like _itemJson.
@@ -1192,11 +1193,12 @@ global.NCH = {
 		var json = {
 			type: 'vintagedelight:fermenting',
 			ingredients: slots,
-			output: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
+			// the jar reads output NBT (a string), e.g. Berserker's Brew's potion effects
+			output: global.NCH._nbtItemJson(output, { allowTag: false, role: 'result', context: ctx + ' result' }),
 			processingTime: opts.time ?? 2400
 		}
 		if (opts.secondary)
-			json.secondaryOutput = global.NCH._itemJson(opts.secondary, { allowTag: false, context: ctx + ' secondary' })
+			json.secondaryOutput = global.NCH._nbtItemJson(opts.secondary, { allowTag: false, role: 'result', context: ctx + ' secondary' })
 		if (opts.container)
 			json.container = global.NCH._itemJson(opts.container, { countMode: 'none', context: ctx + ' container' })
 

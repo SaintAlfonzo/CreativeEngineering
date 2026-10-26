@@ -697,7 +697,7 @@ None. Check the amounts once `items/jars #1` rescales (capacity 1 of 12 becomes 
 ---
 
 ## kitchen #19: Fridge texture
-Status **Planned** / Work resource pack / TODO `cooking/kitchen #19`
+Status **Planned** / Work resource pack / TODO `textures/art #1`
 
 ### Goal
 The fridge texture stops looking wrong: pad it with white box area at the bottom, no stretching, no model rebuild.

@@ -46,7 +46,7 @@ Most of the 1.3 delta is 1.20 porting: hanging signs, cherry and bamboo woods, t
 | Tomatoes on Rope (`HangingTomatoBlock`) | split out of the tomato block | 1.2.4 tomatoes already climb rope | skip (same behaviour) |
 | Basket renamed `wooden_basket`, new Bamboo Basket | | `farmersdelight:basket` | skip (id rename only; bamboo variant needs 1.20 bamboo) |
 | Bamboo and Cherry Cabinets | | Every Compat `i.bamboo_cabinet` (Quark), `i.cherry_cabinet` (Vinery) | skip (covered) |
-| Hanging Canvas Signs (17), wall canvas sign keys | 1.20 hanging signs | Supplementaries hanging signs | skip (1.19.2 has no hanging signs) |
+| Hanging Canvas Signs (17), wall canvas sign keys | 1.20 hanging signs | Supplementaries hanging signs | **BUILT** only the undyed ceiling `farmersdelight:hanging_canvas_sign` (state `rotation` 0-15, `attached`, `waterlogged`, so Farmer's Structures places); no text, block entity, renderer, dyes or wall variant. See 4.2 |
 
 ### 2.3 Recipes
 
@@ -140,7 +140,7 @@ item and is meant to accept a modded one is the only place it would matter. **De
 |---|---|---|
 | Comfort vs Nourishment | **A: keep Comfort** on all 10 FD soups and stews, at 1.2.4 values; Comfort stays in Creative Delight | nothing |
 | Veggies 9 foods | stay Comfort (they already are) | nothing |
-| Salvaging (cutting board recycling) | **BUILT** **carry over, with the 75% chance**: every wood's furniture recipe (door, trapdoor, sign, fence, gate, pressure plate, button, boat, cabinet) returns 1 plank at 75%, replacing the 1.2.4 guaranteed plank on doors, signs and trapdoors; chest boats -> boat + chest; chest / furnace / hopper / TNT minecarts -> minecart + part; 4 leather armor pieces -> leather by shears | `NCH.fdCutting`, vanilla 1.19.2 items and the cabinets the pack has; player-visible: changelog bullet. Also (2026-10-25, proposed): Boatload furnace boats and the driftwood set from Abnormals Delight 6.0.3 ([abnormals_delight.md](abnormals_delight.md) 2.3) |
+| Salvaging (cutting board recycling) | **BUILT** **carry over, with the 75% chance**: every wood's furniture recipe (door, trapdoor, sign, fence, gate, pressure plate, button, boat, cabinet) returns 1 plank at 75%, replacing the 1.2.4 guaranteed plank on doors, signs and trapdoors; chest boats -> boat + chest; chest / furnace / hopper / TNT minecarts -> minecart + part; 4 leather armor pieces -> leather by shears | `NCH.fdCutting`, vanilla 1.19.2 items and the cabinets the pack has; player-visible: changelog bullet. Also (2026-10-25, decided, not built): Boatload furnace boats and the driftwood set from Abnormals Delight 6.0.3 ([abnormals_delight.md](abnormals_delight.md) 3.1); milk bucket <-> 4 bottles (3.4) |
 | Gleaming Salad feast | **BUILT** **add** (recipe in 2.2, 14 / 0.75, Nourishment 6000, 4 servings) | new feast block: patcherMod or KubeJS block, loot, tag, cans and food type tag |
 | Rope Fence and Gate | **BUILT** **add** (4 rope + 2 sticks -> 3; 2 rope + 4 sticks) | fence and gate blocks; rope connection by a patcherMod mixin; `fences` / `fence_gates` tags; ties to `materials #2` (rope merge: use the surviving rope) |
 | Onion drops | **BUILT** **add** (2%, +1% per Looting level, player kill: zombie, husk, zombie villager, pillager, evoker, vindicator) | KubeJS loot rule in `loot/07_rules.js`; check against the pack's loot config |
@@ -210,6 +210,13 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
 - **Rope Fence / Gate**: 1.3.4 classes on 1.19.2. The gate re-implements `use` / `neighborChanged` because 1.19.2's
   `FenceGateBlock` hardcodes the wooden sounds (level events 1008 / 1014). Recipes take `#forge:rope` (any of the three
   ropes; `materials #2`). Fuel 200 ticks.
+- **Hanging Canvas Sign** (`HangingCanvasSignBlock`, registry id `farmersdelight:hanging_canvas_sign`, stack 16): a no-collision JSON-model
+  block (board and chains from 1.3.4's entity texture `entity/signs/hanging/canvas.png`, copied to `textures/block/`; 8 models,
+  `attached` V chains or straight chains, 22.5 degree steps by element rotation plus blockstate y) with 1.3.4's property names. Placed
+  under a block that supports the centre (or any non-air block); sneaking while placing sets `attached`, which then pops off when
+  the support above goes (unattached never pops). Recipe 6 from 2 Chains, 4 logs, 2 Canvas (1.3.4's, `creative_delight:` id
+  `crafting_shaped/hanging_canvas_sign`). Tag `minecraft:mineable/axe`; loot drops itself. Limits: no text, dyes, wall variant
+  or hanging-sign tag.
 - **Feedback lines**: of 2.4's list only two changed meaning. Rice: "This seed must be planted in shallow water." (lang).
   Held skillet: will not start underwater, "Can't cook underwater..." (mixin). Not ported: "Can't cook while flooded"
   (the 1.2.4 skillet block cannot be waterlogged) and the cutting board's "%s remaining" (1.2.4 boards hold one item).
@@ -220,7 +227,8 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
 - Salvaging: `farmersdelight:cutting/<wood>_door|sign|trapdoor` (27) removed; per wood one axe recipe (door, trapdoor,
   sign, fence, gate, pressure plate, button, FD cabinet, boat where it exists) -> plank at 75%. Chest boats (7) -> boat +
   chest. Chest / furnace / hopper / TNT minecart -> minecart + block, hoe. Leather armor unchanged (same result as 1.3.4).
-  The proposed Boatload furnace boats and driftwood set (abnormals_delight.md 2.3) are not in.
+  Since 2026-10-25 also Abnormals Delight 6.0.3's set (abnormals_delight.md 3.1): Boatload furnace boats (9, hoe),
+  Boatload crimson / warped boat and chest boat, and the driftwood furniture, chest boat and furnace boat.
 - Rabbit Stew: baked potato -> `#forge:crops/potato`. Vegetable Noodles: brown mushroom -> `#forge:mushrooms` (FD pot
   recipe only; the pack's `vegetable_noodles_cooked_manual_only` craft in `cooking.js` still names the brown mushroom).
 - Dog Food: `#farmersdelight:wolf_prey` -> `#creativeengineering:food_type/raw/meat` (30 meats). 1.3.4's `#forge:raw_meat`

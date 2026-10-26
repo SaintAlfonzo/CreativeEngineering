@@ -1,4 +1,5 @@
 {
+  "curios.identifier.face": "Face",
   "effect.alexsmobs.knockback_resistance.description": "Gives 50% knockback resistance per level; at level II and above you ignore knockback entirely.",
   "effect.alexsmobs.power_down.description": "Freezes you in place (no walking or jumping) and plays a power-outage sound. Only from Alex's Mobs' April Fools grizzly bear.",
   "effect.better_beacons.long_reach.description": "TODO: write a description for Long Reach.",
@@ -12,6 +13,10 @@
   "effect.everythingcopper.copper_poisoning.description": "TODO: write a description for Copper Poisoning.",
   "effect.farmersdelight.comfort.description": "Heals half a heart every 4 seconds while your saturation is empty and you don't have Regeneration.",
   "effect.farmersrespite.caffeinated.description": "Increases walk speed by 10% and attack speed by 20%, and keeps resetting the time since you last slept, so phantoms don't come.",
+  "effect.fungidelight.burrowing.description": "+50% Mining Speed on soil (level I), +100% (level II): blocks a shovel mines.",
+  "effect.fungidelight.weak_stomach.description": "From eating inky caps or durian. Drinking alcohol or any potion other than water while it lasts gives Nausea II, Poison II and Weakness II for 10 seconds.",
+  "effect.hostiledelight.collapsing.description": "TODO: write a description for Collapsing.",
+  "effect.hostiledelight.dioxide.description": "TODO: write a description for Dioxide.",
   "effect.immersiveengineering.flashed.description": "Players affected by it will have their screen flash white, rendering them temporarily blind, and walk 15% slower.",
   "effect.immersiveengineering.sticky.description": "Heavily slows down the target and impedes jumping.",
   "effect.immersivepetroleum.anti_fire.description": "TODO: write a description for immersivepetroleum:anti_fire.",
@@ -25,8 +30,5 @@
   "effect.xaeroworldmap.no_cave_maps.description": "TODO: write a description for No WM Cave Maps.",
   "effect.xaeroworldmap.no_cave_maps_harmful.description": "TODO: write a description for No WM Cave Maps.",
   "effect.xaeroworldmap.no_world_map.description": "TODO: write a description for No World Map.",
-  "effect.xaeroworldmap.no_world_map_harmful.description": "TODO: write a description for No World Map.",
-  "effect.fungidelight.burrowing.description": "+50% Mining Speed on soil (level I), +100% (level II): blocks a shovel mines.",
-  "effect.fungidelight.weak_stomach.description": "From eating inky caps or durian. Drinking alcohol or any potion other than water while it lasts gives Nausea II, Poison II and Weakness II for 10 seconds.",
-  "curios.identifier.face": "Face"
+  "effect.xaeroworldmap.no_world_map_harmful.description": "TODO: write a description for No World Map."
 }

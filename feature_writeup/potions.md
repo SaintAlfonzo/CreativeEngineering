@@ -286,3 +286,7 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
 - 2026-10-19: F5 fixed (DragonBreathBrewing javadoc; source only, ships with the next patcherMod build).
 - 2026-10-23: Fungi Delight port: Burrowing potions as `PotionBrewing` mixes (2.3), JEED text for Burrowing and Weak
   Stomach, PO-27. Built, scratch test queued.
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Every vanilla effect (luck, haste, ...) brewable through the pack's own systems, overriding other mods' routes: `potions/potions #10`. Luck in JEI is N-05.

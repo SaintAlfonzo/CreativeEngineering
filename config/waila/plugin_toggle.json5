@@ -24,5 +24,7 @@
   "creativeengineering:campfire": true,
   "creativeengineering:sheetmetal_tank": true,
   "creativeengineering:kitchen_station": true,
-  "creativeengineering:remainder_buffer": true
+  "creativeengineering:remainder_buffer": true,
+  "creative_delight:crop_growth": true,
+  "creative_delight:kettle_tank": true
 }

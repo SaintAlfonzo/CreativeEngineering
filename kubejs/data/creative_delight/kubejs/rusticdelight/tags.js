@@ -10,6 +10,9 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_roasted_bell_pepper, roasted)
 	t.add(e, i.t_soup_veggie_cooked, roasted)
 
+	// Glowing calamari (TODO dishes/ocean #3) counts as raw calamari: fried calamari, calamari soup and the calamari roll take it
+	t.add(e, i.t_raw_calamari, [i.glowing_calamari, i.glowing_calamari_slice])
+
 	// Cooking for Blockheads oven fuel (ovenRequiresCookingOil): Balm's tag lists only an optional item
 	// `forge:cookingoil` (no '#', so not the forge tag) and is otherwise empty. TODO cooking/kitchen #8
 	t.add(e, i.t_balm_cooking_oil, i.cooking_oil)

@@ -73,7 +73,7 @@ R.createSequencedAssembly(Item.of(i.ll_spring, 6), i.nugget_iron, [
 		.id(`createdeploying/vehicle_link_step3_nugget`)
 ], ['ll_spring'], e, 'vehicle_link_sequenced_assembly', 1)
 //workbench recipe for vehicle links
-R.ieBlueprint(Item.of(i.ll_spring, 6), [Item.of(i.any_wire_iron, 2), Item.of(i.nugget_iron, 2)], 'railtransport', e)
+R.ieBlueprint(Item.of(i.ll_spring, 6), [{ id: i.any_wire_iron, count: 2 }, Item.of(i.nugget_iron, 2)], 'railtransport', e, '2_iron_wire_to_6_spring_by_railtransport')
  
 // ############################## Train Cars and Barges ############################## 
  

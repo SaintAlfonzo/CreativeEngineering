@@ -25,6 +25,22 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'vintagedelight:fermenting/leather_from_fermenting' }, e)
 		R.vdPickling(Item.of(i.leather, 2), [Item.of(i.rotten_flesh, 2), Item.of(i.tree_bark, 2), i.salt, i.vinegar], e,
 			'leather_from_fermenting', { time: 4800, secondary: i.glass_bottle })
+		// Fermented spider eye: the sugar slot takes the plain sweetener tag like the crafting recipe (minecraft/recipes.js;
+		// replaceInput does not reach this recipe type). Rest as upstream.
+		R.remove({ id: 'vintagedelight:fermenting/fermented_spider_eye_from_fermenting' }, e)
+		R.vdPickling(Item.of(i.fermented_spider_eye, 5), [Item.of(i.spider_eye, 5), i.any_sweetener_plain], e,
+			'fermented_spider_eye_from_fermenting', { time: 1200 })
+		// Pickled Sea Pickle (dishes/pickles-and-ferments #1): the Pickle recipe's pattern, 5 sea pickles + salt -> 5, no
+		// honey. It replaces Brewin's Pickled Pickles (merged, vintage_items.js); their honey recipe is gone from alcohol.js.
+		R.vdPickling(Item.of(i.pickled_sea_pickle, 5), [Item.of(i.sea_pickle, 5), i.salt], e, 'pickled_sea_pickle')
+
+		//######################### Pickle soup #########################
+		// Pickle soup (dishes/pickles-and-ferments #3): the pickle slot takes any pickled veggie (#creativeengineering:pickled_veg,
+		// tags.js), and the carrot and potato slots any vegetable (the veggie variant). Beetroot, salad ingredient, time and
+		// xp as upstream.
+		R.remove({ id: 'vintagedelight:cooking/pickle_soup' }, e)
+		R.fdCooking([i.t_pickled_veg, i.vegetables, i.vegetables, i.beetroot, i.salad_ingredients], i.pickle_soup, e,
+			'pickle_soup', 1.0, 200)
 
 		//######################### Salted fish #########################
 		// Salted cod and salmon are out (vintageport #11, removed_items.js); Surstromming stays. The Salt's Salted

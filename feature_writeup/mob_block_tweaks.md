@@ -347,3 +347,7 @@ because forceloaded chunks get no random ticks.
   Spice of Life lunchboxes (config only; the dropped-box mixin not built). MT-26 untested.
 - 2026-10-22 (second bulk run): SQ-GM-07 (seagull list) and SQ-OM-09 / SQ-OM-14 (pile slow height, default and 6)
   PASS on the scratch server; MT-25 and MT-26 keep their in-game halves.
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Villagers can't use the tall doors of Dramatic Doors; check the short doors too: `mobs/tweaks #15`.

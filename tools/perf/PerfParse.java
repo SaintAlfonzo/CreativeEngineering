@@ -9,7 +9,9 @@
 //   samples.tsv   epochMs  thread  stackId                          (jdk.ExecutionSample)
 //   alloc.tsv     epochMs  thread  stackId  weightBytes  objectClass  (jdk.ObjectAllocationSample)
 //   blocked.tsv   epochMs  thread  eventType  durationMs  stackId      (Server thread only)
-//   events.jsonl  selected events field-by-field; durations in ms, timestamps in epoch ms
+//   events.jsonl  selected events field-by-field; durations in ms, timestamps in epoch ms. The pack's own
+//                 creativeengineering.* events (patcherMod, perf.md 3.6) are all kept; a ChunkWait also
+//                 gets "stack" (a stacks.tsv id: who asked for the chunk).
 import jdk.jfr.EventType;
 import jdk.jfr.ValueDescriptor;
 import jdk.jfr.consumer.*;
@@ -99,7 +101,7 @@ public class PerfParse {
                                 blocked.println(t + "\t" + name(e.getThread()) + "\t" + type + "\t"
                                     + ms(e.getDuration()) + "\t" + stackId(e.getStackTrace()));
                             }
-                        } else if (GENERIC.contains(type)) {
+                        } else if (GENERIC.contains(type) || type.startsWith("creativeengineering.")) {
                             events.println(json(e, type, t));
                         }
                     }
@@ -150,6 +152,7 @@ public class PerfParse {
     static String json(RecordedEvent e, String type, long t) {
         StringBuilder sb = new StringBuilder("{\"type\":").append(str(type)).append(",\"t\":").append(t)
             .append(",\"dur\":").append(ms(e.getDuration()));
+        if (type.equals("creativeengineering.ChunkWait")) sb.append(",\"stack\":").append(stackId(e.getStackTrace()));
         for (ValueDescriptor f : e.getFields()) {
             String k = f.getName();
             if (k.equals("startTime") || k.equals("duration") || k.equals("stackTrace")) continue;

@@ -33,6 +33,7 @@ b.fd_pumpkin_pie = 'farmersdelight:pumpkin_pie';        // placed vanilla pie; n
 b.rope_fence = 'farmersdelight:rope_fence';
 b.rope_fence_gate = 'farmersdelight:rope_fence_gate';
 b.gleaming_salad_block = 'farmersdelight:gleaming_salad_block';
+b.hanging_canvas_sign = 'farmersdelight:hanging_canvas_sign';
 b.dd_small_food_plate = 'displaydelight:small_food_plate';
 b.dd_plated_foods = 'displaydelight:*plated_*';    // every plated / small_plated food block (ctd_plated_*, plated_* ...)
 b.coaster = 'brewinandchewin:coaster';               // the Brewin' port
@@ -95,6 +96,10 @@ b.tongue_kelp_plant = 'upgrade_aquatic:tongue_kelp_plant';
 b.corn_crop = 'corn_delight:corn_crop';            // knife harvest Corncob (CD corn_delight/loot.js)
 b.tall_blue_pickerelweed ='upgrade_aquatic:tall_blue_pickerelweed';
 b.tall_purple_pickerelweed = 'upgrade_aquatic:tall_purple_pickerelweed';
+// Crops with their own ripe right-click pick (crops.md 2.2, patcherMod QuarkOwnPickMixin)
+b.cucumber_crop = 'vintagedelight:cucumber_crop';
+b.ghost_pepper_crop = 'vintagedelight:ghost_pepper_crop';
+b.zucchini_crop = 'veggiesdelight:zucchini_crop';
 
 // Tags
 b.any_bricks = '#minecraft:bricks';
@@ -106,9 +111,21 @@ b.t_forge_fences = '#forge:fences';
 b.t_forge_fence_gates = '#forge:fence_gates';
 b.t_keg_heat_sources = '#brewinandchewin:heat_sources';     // Brewin port: keg + Vinery cold storage; holds FD heat_sources
 b.t_keg_freeze_sources = '#brewinandchewin:freeze_sources';
+b.t_own_pick_crops = '#creativeengineering:crops/own_pick'; // CropParity.OWN_PICK_CROPS: Quark leaves these to their own pick
 b.t_ghost_pepper_soil = '#vintagedelight:ghost_pepper_soil'; // Vintage port: where ghost pepper seeds plant (vintage_delight.md 2.1)
 b.t_ice = '#minecraft:ice';                          // ice, packed, blue, frosted, rare-ice
 b.t_hammer_no_rotate = '#creativeengineering:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
+b.t_end_plant_soil_slow = '#creative_delight:end_plant_soil_slow'; // enders_additions: End plants survive here, grow slowly (ends_delight.md 3.1)
+b.t_end_plant_soil_fast = '#creative_delight:end_plant_soil_fast'; // same, grow fast
+b.t_mineable_axe = '#minecraft:mineable/axe';
+b.t_mineable_pickaxe = '#minecraft:mineable/pickaxe';
+
+// End food blocks (ends_delight.md 3.1)
+b.end_stone = 'minecraft:end_stone';
+b.tilled_end_stone = 'endercrop:tilled_end_stone';
+b.chorus_crate = 'endersdelight:chorus_crate';
+b.endstone_stove = 'endersdelight:endstone_stove';
+b.chorus_fruit_crate = 'ends_delight:chorus_fruit_crate';
 b.t_counter_supports = '#creativeengineering:counter_supports'; // CounterToppers.SUPPORTS: toppers stay on these, drawn shifted
 b.t_counter_toppers = '#creativeengineering:counter_toppers';   // CounterToppers.TOPPERS: cutting board, plates, coaster
 b.t_campfire_rain_douses = '#creativeengineering:campfire/rain_douses';         // CampfireRain.RAIN_DOUSES

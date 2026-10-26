@@ -3,3 +3,10 @@
 	#Whether magic vine trees convert nearby dirt-like blocks into lush grass during generation.
 	magicVineConvertsDirtToLushGrass = true
 
+[pickling_jar]
+	#Port setting: keep ingredient leftovers (glass bottles, bowls, buckets) in the Pickling Jar's leftover slot instead of throwing them out?
+	remainderBuffer = true
+	#Port setting: with remainderBuffer on, should the jar wait instead of pickling when a batch's leftovers would not fit?
+	#False pickles anyway and throws what does not fit.
+	stallWhenFull = true
+

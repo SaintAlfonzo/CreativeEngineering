@@ -15,7 +15,9 @@ When it lags, save the last minutes to a file and turn that file into a per-mod 
   temp folder.
 
 `ce-server.jfc` lists what is recorded: CPU stack samples every 10 ms, allocation samples, GC, lock waits
-over 20 ms, and Minecraft's own tick-time and chunk-generation events. Its header comment has the details.
+over 20 ms, Minecraft's own tick-time and chunk-generation events, and the pack's own `creativeengineering.*`
+events: every tick, each dimension's tick, chunk waits, KubeJS handlers by script and line, entity and block
+entity time by type. Its header comment has the details.
 
 **Cost.** A/B-tested 2026-09-28 on a scratch copy of this server: boot took 51.2 s and a 2601-chunk Chunky
 pregen took 1:34 both with and without the recording. The difference was smaller than the run-to-run noise.
@@ -77,6 +79,18 @@ This writes `perf/recordings/server-<date>-<time>.jfr`, tens to a few hundred MB
 anything older than 30 minutes is gone. Copy it to the dev instance's `perf/recordings/` and run
 `python3 tools/perf/perf_report.py perf/recordings/server-<date>-<time>.jfr`; the report is
 `perf/reports/<name>.html`.
+
+## From in game: `/ceperf`
+
+For an op (level 3) without shell access to the server:
+
+```
+/ceperf status            # is the recording running, which pack events it records, hooks not run yet
+/ceperf dump              # saves everything kept (up to 30 minutes) to perf/recordings/server-<date>-<time>.jfr
+/ceperf dump lagspike     # adds a word to the file name
+```
+
+`/ceperf dump` cannot cut a shorter window; `perf_report.py --last 600` does that on the dev machine.
 
 ## If `dump` says there is no jcmd
 

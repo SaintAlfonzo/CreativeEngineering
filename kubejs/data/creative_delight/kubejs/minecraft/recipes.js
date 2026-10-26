@@ -17,9 +17,34 @@ ServerEvents.recipes(e => {
 		R.shaped(i.bowl, ['B B', ' B '], { B: i.bamboo }, e, 'bowl_from_bamboo')
 
 		//######################### Sugar #########################
-		// Replace sugar recipes w/ sugar forge tag, allows glyceral (the sugar cube is in supplementaries/recipes.js).
-		// Runs after every pack script now; it walks only the recipes loaded from data, as before.
-		R.replaceInput({ input: i.sugar }, i.sugar, i.any_sugar, e)
+		// Every sugar slot takes a sweetener tag by kind of recipe (TODO dishes/ingredients #3; tags in creativeengineering/tags.js):
+		//   brewing (keg, wine)   sugar, powdered sugar, honey bottle, honeycomb (no glycerol)
+		//   plain (not food)      sugar, powdered sugar: Botania, speed modules and upgrades, ethanol, potions, spider eye, blaze cake
+		//   drinks                sugar, powdered sugar, honey bottle (no honeycomb, no glycerol)
+		//   cooking (the rest)    sugar, powdered sugar, glycerol, honey bottle, honeycomb
+		// The four passes are disjoint (a swapped slot holds a tag with sugar in it, so a later pass would match it again).
+		// Drinks: the drink food type, plus fluid drinks and the two drinks with no food type, by recipe id. Recipes that need
+		// real sugar (powdered sugar, sugar cube, powdered sugar bucket) are script-added on i.sugar, so no pass sees them.
+		// The passes walk only the recipes loaded from data; scripts write the tags themselves.
+		var BREWING = [{ type: 'vinery:wine_fermentation' }, { type: 'brewinandchewin:fermenting' }]
+		var PLAIN = [
+			{ mod: 'botania' }, { mod: 'prettypipes' }, { mod: 'securitycraft' },
+			{ id: 'pneumaticcraft:speed_upgrade' }, { type: 'pneumaticcraft:thermo_plant' }, { id: 'createaddition:mixing/bioethanol' },
+			{ id: 'create:compacting/blaze_cake' }, { output: 'minecraft:potion' }, { output: 'minecraft:fermented_spider_eye' },
+		]
+		var DRINK = [{ output: i.t_food_drink }].concat([
+			'create_confectionery:hot_chocolate_recipe', 'tmted:mixer/apple_cider',
+			'farmersdelight:cooking/hot_cocoa', 'farmersdelight:melon_juice', 'farmersrespite:brewing/hot_cocoa',
+			'farmersrespite:brewing/melon_juice', 'fruitsdelight:mixing/flowing_bellini_cocktail',
+		].concat(['chocolate', 'glowberry', 'pumpkin', 'strawberry', 'vanilla'].map(m => 'create_dd:mixing/flowing_' + m + '_milkshake'),
+			['hawberry_tea', 'lychee_cherry_tea', 'mango_tea', 'mangosteen_tea', 'peach_tea', 'lemon_juice', 'orange_juice',
+				'pear_juice'].map(d => 'fruitsdelight:mixing/flowing_' + d)).map(id => ({ id: id })))
+		var swap = (only, not, tag) => R.replaceInput(only.map(x => Object.assign(not.length ? { input: i.sugar, not: not } : { input: i.sugar }, x)),
+			i.sugar, tag, e)
+		swap(BREWING, [], i.any_sweetener_brewing)
+		swap(PLAIN, BREWING, i.any_sweetener_plain)
+		swap(DRINK, BREWING.concat(PLAIN), i.any_sweetener_drink)
+		R.replaceInput({ input: i.sugar, not: BREWING.concat(PLAIN, DRINK) }, i.sugar, i.any_sweetener, e)
 
 		//######################### Sweets #########################
 		// Cakes, pies, cookies, pie crust and cake base: all in creativeengineering/baking.js (baking overhaul,

@@ -81,8 +81,9 @@ DEPLOYED with pack 1.0.9 (2026-10-19 15:54, [plan_1.0.9.md](../../plan_1.0.9.md)
 
 ## 4. Still open
 
-- End teleports into unexplored terrain still stall on Quark's hook. Option: skip it when the target chunk isn't
-  loaded, in every dimension.
+- End teleports into unexplored terrain stalled on Quark's hook. BUILT 2026-10-26 (patcherMod 1.1.03, in `mods/`):
+  in the End the hook is skipped when the 3 x 3 chunks around the target aren't loaded; other dimensions still skip
+  it always. Not run (ST-232, scratch queue SQ-SV-01).
 - `maxWaterSurplus` 0.5 is a first value: look at share-only cancels in game. A village on a lake goes as a whole.
 - Sunk-start candidates not tagged: Philip's crypts, ocean fortress, ocean ruins, -1 ruins, T&T nilotic village.
 - `avoidCoasts` on in a coastal area also stops land metas whose satellites can't avoid a nearby beach or river

@@ -829,3 +829,7 @@ Revert every temporary edit and `/reload` afterwards.
   with rolls, entries (id, count, weight, chance, functions), structures and templates; hand-placed containers
   (no table) with positions and fixed contents; a by-structure index; dead references (11 missing tables, 17 containers
   that always open empty). Reference only, nothing applied.
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Seed, crate and raw food loot tables by biome: `loot/tables #14` (see also the Pale and Dark seed rows, `loot/tables #13`).
