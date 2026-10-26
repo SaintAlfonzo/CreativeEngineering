@@ -93,17 +93,17 @@
 	coconut_curry = true
 	cooked_goat = false
 	cooked_marshmallow_stick = true
-	cooked_venison_chops = true
+	cooked_venison_chops = false
 	crab_rangoon = true
 	crimson_berry_sack = true
 	deluxe_cheeseburger = true
 	ender_nectar = true
 	field_salad = true
-	glow_jelly_bottle = true
+	glow_jelly_bottle = false
 	green_apple_crate = true
 	green_tea_leaf = false
 	honey_glazed_walnut = true
-	jelly_bottle = true
+	jelly_bottle = false
 	joshua_fruit_crate = true
 	lavender_tea = true
 	marshmallow_stick = true
@@ -115,7 +115,7 @@
 	nightshade_berry_sack = true
 	nut_butter_and_jelly_sandwich = true
 	nut_butter_bottle = true
-	prickly_pear_juice = true
+	prickly_pear_juice = false
 	quartz_cabinet = true
 	raw_goat = false
 	rock_candy = true
@@ -128,7 +128,7 @@
 	salmonberry_sack = true
 	sinigang = true
 	smore = true
-	venison_chops = true
+	venison_chops = false
 	wild_salmonberries = true
 	#Force the replacement of forge:cheese item tag in recipes with forge:milk
 	use_milk_tag = false

@@ -246,7 +246,7 @@ override is checked in game (HTD-05).
 | # | Bug | Effect | Fix in the plan |
 |---|---|---|---|
 | B1 | `grolllrecp` (Ghast Roll) and `grollrecp` (Guardian Roll) are `crafting_shapeless` with `pattern` / `key` | Fail at load (`latest.log` line 30515-30516); both rolls have no recipe | Remove, re-add through `global.NCH` by the roll rule (step 6) |
-| B2 | `ppicklerecp` outputs `hostiledelight:preapredseapickle` (typo) | Prepared Sea Pickle has no working recipe | Remove, re-add with the right id |
+| B2 | `ppicklerecp` outputs `hostiledelight:preapredseapickle` (typo) | Prepared Sea Pickle has no working recipe | Remove, re-add with the right id. **Built 2026-10-25** (Creative Delight `hostiledelight/recipes.js`, with the campfire recipes the family rule wants; [food_families.md](food_families.md) 4.4, FF-02, FF-04) |
 | B3 | Lang key `item.hostile_delight.blazingale` (wrong namespace) beside the right one | Harmless duplicate | none |
 | B4 | Collapsing's handler calls `setHealth(health - 3)` on any hurt event | Bypasses armour, absorption and the death path (no damage source; `die()` is not called if it reaches 0) | patcherMod: cancel the handler, or route it through a real damage source (D9) |
 | B5 | Gazing cookie sets air to 20 (of 300) | Under water it empties the air bar instead of filling it (the tooltip reads as a breathing food) | Set to max air (D9) |
@@ -318,11 +318,40 @@ literally; every overlap is a concept.
 
 ### 3.4 Unusual Delight
 
-`unusual_delight` 5.0 (1.20.1, in `DecompiledMods` only, TODO `mod-additions #8`) shares about 24 concepts with
-Hostile ([delight_addons_2026_10.md](delight_addons_2026_10.md) section 5) and reads as its later, larger cousin. The
-TODO row asks "integrate or hold for Unusual Delight". Recommendation (D1): integrate Hostile now. A later Unusual
+Only one build is on disk: `DecompiledMods/unusual_delight-5.0.jar` (mod id `unusual_delight`, Forge 1.20.1,
+MCreator-generated, Academic Free License v3.0). There is **no older or 1.19.2 Unusual Delight** in `mods/`,
+`disabledmods/` or `DecompiledMods/`, so a current-vs-old comparison is not possible from the files; this is the
+version to compare against when one turns up. If the owner meant Hostile Delight as the "old" one, see the table.
+
+| Fact | Value |
+|---|---|
+| Items | about 306 (by far the biggest) |
+| Blocks (blockstates) | 26 |
+| Recipes | 345 |
+| Advancements | 20 (pack drops all advancements: do not port as an unlock path) |
+| Depends on | `minecraft` only in `mods.toml`; recipes also use Farmer's Delight (cooking pot, cutting board, rice) |
+| Soft mod content | Ice and Fire (about 33 references: dragon chunks, scales, stymphalian feathers, pixie dust), Alex's Mobs (15: crocodile egg, deathworm, sniffer-like items), Alex's Caves (8: fiddlehead) |
+| Installed in pack | Alex's Mobs (the 1.21.1 jar in `mods/`, unusual name), Citadel; **not** Ice and Fire, **not** Alex's Caves |
+| Port needed | Yes (1.20.1 only): a Veggies / Vintage style backport of an MCreator mod with hundreds of items |
+
+Overlap with Hostile Delight 0.2.2 (installed): about 24 shared concepts (ids with underscores stripped):
+`blazingale`, `blazingapple`, `bonegelatin`, `candiedslime`, `candiedslimeblock`, `carrotmite`, `cookedrottenham`,
+`friedturtleegg`, `frozenflesh`, `ghastblood`, `ghastbrew`, `ghastpudding`, `ghastroll`, `ghasttentacle`,
+`glowapple`, `glowgummy`, `miteymeal`, `popsiclime`, `preparedseapickle`, `refinedgelatin`, `rottenham`, `slimestew`,
+`soda`, `turtleeggsandwich`. Hostile Delight reads as an earlier cousin of Unusual Delight; installing both would give
+two of each of these.
+
+Overlap with other installed content: `braised_sea_pickle` (Ocean's Delight), `spider_leg` and spider dishes
+(Miner's Delight 1.4.5), dragon loaf / chunk lines (End's Delight dragon meat, if Ice and Fire is present), chorus
+honey apple (End's/Ender's chorus), soul / Nether foods (Nether's Delight), wart / strider foods (Nether's Delight).
+
+Considerations: 306 items is larger than every Delight port already done (Veggies, Vintage, Fungi), so the port cost
+is of that order or more, and half the mod needs Ice and Fire or Alex's Caves content the pack lacks. The ids of
+Unusual Delight and Hostile Delight clash conceptually, not literally (different namespaces).
+
+Recommendation (D1): integrate Hostile now. A later Unusual
 Delight port would merge onto Hostile's items, or skip the shared ones; both are cheaper than holding 69 live items
-with broken loot in the pack meanwhile.
+with broken loot in the pack meanwhile. TODO row: `mod-additions #8` (integrate or hold for Unusual Delight).
 
 ## 4. Part 3: what folds into existing systems (build order)
 
@@ -385,7 +414,7 @@ with broken loot in the pack meanwhile.
 11. **Stack sizes.** `tools/gen_stack_sizes.py` rules: bowl meals 32, drinks 32, special bottles 16 (Dragon Tonic),
     ingredients and handheld 64; Ender Substance stays 1 or goes to 16 (D16).
 12. **Cans.** `gen_can_types.py`: meats and the meals by type loops; Hostile in `AWAIT_DUMP` until step 0.
-13. **Compost.** `compost_values.js` rows (`gen_compost_values.py --merge` after the dump): raw meats and gelatin as the
+13. **Compost.** `compost_values.js` rows (`gen_compost_values.py --add-new` after the dump): raw meats and gelatin as the
     pack's meat and slime values.
 14. **Names and lang.** Fix B9 in the pack lang (`kubejs/assets/hostiledelight/lang/en_us.json`) or
     `namechanges.js` as the pack does: Slime Syrup, Guardian Patty, Marine Cocktail, Guardian Rosti (or as the owner

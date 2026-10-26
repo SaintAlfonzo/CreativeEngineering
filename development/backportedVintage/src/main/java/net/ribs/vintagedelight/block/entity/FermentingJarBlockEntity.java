@@ -20,6 +20,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -29,12 +31,14 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.ribs.vintagedelight.config.VintageDelightCommonConfig;
 import net.ribs.vintagedelight.item.ModTags;
 import net.ribs.vintagedelight.recipe.FermentingRecipe;
 import net.ribs.vintagedelight.screen.FermentingJarMenu;
 
 /**
- * The Pickling Jar (upstream's fermenting jar; the id is kept). Slots 0-5 ingredients, 6 container, 7-8 outputs.
+ * The Pickling Jar (upstream's fermenting jar; the id is kept). Slots 0-5 ingredients, 6 container, 7-8 outputs, 9
+ * leftovers (port: the empty bottles and bowls of the ingredients, take-only, as the keg's; config remainderBuffer).
  * Upstream 0.1.6's crafting loop with KOTS 0.3.1's slot rules and sided handler (FermentingJarItemHandler).
  */
 public class FermentingJarBlockEntity extends BlockEntity implements MenuProvider {
@@ -43,11 +47,13 @@ public class FermentingJarBlockEntity extends BlockEntity implements MenuProvide
     public static final int CONTAINER_SLOT = 6;
     public static final int FIRST_OUTPUT_SLOT = 7;
     public static final int SECOND_OUTPUT_SLOT = 8;
+    public static final int REMAINDER_SLOT = 9;
+    public static final int SLOT_COUNT = 10;
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(9) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(SLOT_COUNT) {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if (slot == FIRST_OUTPUT_SLOT || slot == SECOND_OUTPUT_SLOT) {
+            if (slot == FIRST_OUTPUT_SLOT || slot == SECOND_OUTPUT_SLOT || slot == REMAINDER_SLOT) {
                 return false;
             }
             return slot != CONTAINER_SLOT || stack.is(ModTags.CONTAINER_ITEMS);
@@ -100,7 +106,7 @@ public class FermentingJarBlockEntity extends BlockEntity implements MenuProvide
         };
     }
 
-    /** The full 9-slot inventory, for the screen. */
+    /** The full inventory, for the screen. */
     public IItemHandler getInventory() {
         return this.itemHandler;
     }
@@ -168,7 +174,12 @@ public class FermentingJarBlockEntity extends BlockEntity implements MenuProvide
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        this.itemHandler.deserializeNBT(tag.getCompound("inventory"));
+        CompoundTag inventory = tag.getCompound("inventory");
+        // jars saved before the leftover slot hold 9 slots; deserializeNBT would shrink the handler to that
+        if (inventory.getInt("Size") < SLOT_COUNT) {
+            inventory.putInt("Size", SLOT_COUNT);
+        }
+        this.itemHandler.deserializeNBT(inventory);
         this.progress = tag.getInt("fermenting_jar.progress");
     }
 
@@ -185,7 +196,7 @@ public class FermentingJarBlockEntity extends BlockEntity implements MenuProvide
             ItemStack result = recipe.getResultItem();
             ItemStack secondaryResult = recipe.getSecondaryResultItem();
             this.maxProgress = recipe.getProcessingTime();
-            if (this.canOutput(result, secondaryResult)) {
+            if (this.canOutput(result, secondaryResult) && this.remaindersFit(recipe)) {
                 this.progress++;
                 if (this.progress >= this.maxProgress) {
                     this.craftItem(recipe);
@@ -222,7 +233,10 @@ public class FermentingJarBlockEntity extends BlockEntity implements MenuProvide
         this.placeOutput(FIRST_OUTPUT_SLOT, result);
         this.placeOutput(SECOND_OUTPUT_SLOT, secondaryResult);
         for (Ingredient ingredient : recipe.getIngredients()) {
-            this.consumeIngredient(ingredient);
+            ItemStack remainder = this.consumeIngredient(ingredient);
+            if (!remainder.isEmpty()) {
+                this.storeOrDropRemainder(remainder);
+            }
         }
         // Port fix: upstream always took one item from the container slot, even for recipes without a container
         if (recipe.hasContainer()) {
@@ -245,13 +259,74 @@ public class FermentingJarBlockEntity extends BlockEntity implements MenuProvide
         }
     }
 
-    private void consumeIngredient(Ingredient ingredient) {
+    /** Takes one item the ingredient matches; returns its leftover (empty bottle, bowl, bucket) or EMPTY. */
+    private ItemStack consumeIngredient(Ingredient ingredient) {
         for (int i = FIRST_INGREDIENT_SLOT; i <= LAST_INPUT_SLOT; i++) {
-            if (ingredient.test(this.itemHandler.getStackInSlot(i))) {
+            ItemStack stack = this.itemHandler.getStackInSlot(i);
+            if (ingredient.test(stack)) {
+                ItemStack remainder = remainderOf(stack);
                 this.itemHandler.extractItem(i, 1, false);
-                break;
+                return remainder;
             }
         }
+        return ItemStack.EMPTY;
+    }
+
+    /** With stallWhenFull, true only when every leftover of this batch fits in the leftover slot. */
+    private boolean remaindersFit(FermentingRecipe recipe) {
+        if (!VintageDelightCommonConfig.remainderBuffer() || !VintageDelightCommonConfig.stallWhenFull()) {
+            return true;
+        }
+        ItemStack slot = this.itemHandler.getStackInSlot(REMAINDER_SLOT).copy();
+        // the same first-match walk as craftItem, on counts
+        int[] left = new int[LAST_INPUT_SLOT + 1];
+        for (int i = FIRST_INGREDIENT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+            left[i] = this.itemHandler.getStackInSlot(i).getCount();
+        }
+        for (Ingredient ingredient : recipe.getIngredients()) {
+            for (int i = FIRST_INGREDIENT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+                ItemStack stack = this.itemHandler.getStackInSlot(i);
+                if (left[i] > 0 && ingredient.test(stack)) {
+                    left[i]--;
+                    ItemStack remainder = remainderOf(stack);
+                    if (!remainder.isEmpty()) {
+                        if (slot.isEmpty()) {
+                            slot = remainder.copy();
+                        } else if (ItemStack.isSameItemSameTags(slot, remainder) && slot.getCount() + remainder.getCount() <= slot.getMaxStackSize()) {
+                            slot.grow(remainder.getCount());
+                        } else {
+                            return false;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+
+    /** The item's crafting leftover; a potion leaves its glass bottle (vanilla gives potions none). */
+    private static ItemStack remainderOf(ItemStack stack) {
+        if (stack.hasCraftingRemainingItem()) {
+            return stack.getCraftingRemainingItem();
+        }
+        return stack.getItem() instanceof PotionItem ? new ItemStack(Items.GLASS_BOTTLE) : ItemStack.EMPTY;
+    }
+
+    /** Into the leftover slot (config remainderBuffer), else or when full dropped on top of the jar. */
+    private void storeOrDropRemainder(ItemStack remainder) {
+        if (VintageDelightCommonConfig.remainderBuffer()) {
+            ItemStack existing = this.itemHandler.getStackInSlot(REMAINDER_SLOT);
+            if (existing.isEmpty()) {
+                this.itemHandler.setStackInSlot(REMAINDER_SLOT, remainder.copy());
+                return;
+            }
+            if (ItemStack.isSameItemSameTags(existing, remainder) && existing.getCount() + remainder.getCount() <= existing.getMaxStackSize()) {
+                this.placeOutput(REMAINDER_SLOT, remainder);
+                return;
+            }
+        }
+        Containers.dropItemStack(this.level, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.0, this.worldPosition.getZ() + 0.5, remainder.copy());
     }
 
     @Nullable

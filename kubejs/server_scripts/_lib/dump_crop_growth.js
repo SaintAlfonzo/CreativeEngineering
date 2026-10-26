@@ -8,7 +8,7 @@
 //   stems, nether wart, cocoa and sweet berry bush by exact block (a modded stem or berry bush class gets
 //   nothing, because the check is `block == Blocks.X`, not instanceof).
 //
-// The patcherMod WTHIT plugin (crops/WthitCropGrowth) is driven from this audit: whatever lands in the
+// The WTHIT plugin (Creative Delight compat/wthit/WthitCropGrowth, QoL-6) is driven from this audit: whatever lands in the
 // "missing" list needs a row in its table.
 
 ServerEvents.commandRegistry(event => {

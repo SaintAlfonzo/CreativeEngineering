@@ -3,8 +3,9 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Runs kubejs/server_scripts/worldgen/wild_crops.js (or mushroom_spawns.js with script=mushroom_spawns) in the pack's
- * own Rhino fork with the KubeJS globals stubbed (tag_helper.js and _biome_rules.js loaded first). Fires the worldgen/biome tags handler and highPriorityData, and
+ * Runs Creative Delight's kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js (or the pack's
+ * kubejs/server_scripts/worldgen/mushroom_spawns.js with script=mushroom_spawns) in the pack's own Rhino fork with the
+ * KubeJS globals and global.CD stubbed (tag_helper.js and _biome_rules.js loaded first). Fires the worldgen/biome tags handler and highPriorityData, and
  * writes tags.json (tag -> biomes) and every data file the script adds under <out>/data/. ServerEvents.loaded
  * needs the live registry and is not fired.
  * Usage: RhinoWildCrops <instance root> <out dir> [off] [missing=<modid>] [script=<name>]
@@ -38,22 +39,23 @@ public class RhinoWildCrops {
 		ScriptableObject scope = cx.initStandardObjects();
 		ScriptableObject.putProperty(scope, "__HOST", Context.javaToJS(cx, new Host(), scope), cx);
 		String prelude = String.join("\n",
-			"var global = {};",
+			"var global = { CD: { worldgen: function (id) { return __HOST.enabled() } } };",
 			"var __tags = null, __data = null;",
 			"var console = { info: function (m) { __HOST.log('', String(m)) }, log: function (m) { __HOST.log('', String(m)) },",
 			"  warn: function (m) { __HOST.log('WARN ', String(m)) }, error: function (m) { __HOST.log('ERROR ', String(m)) } };",
 			"var JsonIO = { readString: function (p) { return __HOST.read(p) } };",
 			"var Platform = { isLoaded: function (ns) { return __HOST.loaded(ns) } };",
 			"var Java = { loadClass: function (n) {",
-			"  if (n.indexOf('WorldgenConfig') >= 0) return { wildCropsEnabled: function () { return __HOST.enabled() } };",
 			"  if (n.indexOf('CEConfig') >= 0) return { WORLDGEN: { systems: { mushroomSpawns: { get: function () { return __HOST.enabled() } } } } };",
 			"  return {} } };",
 			"var ServerEvents = { tags: function (type, fn) { if (type === 'worldgen/biome') __tags = fn },",
 			"  highPriorityData: function (fn) { __data = fn }, loaded: function (fn) {} };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/startup_scripts/func/tag_helper.js")), "tag_helper.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js")), "tag_helper.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/_biome_rules.js")), "_biome_rules.js", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/" + script + ".js")), script + ".js", 1, null);
+		String path = script.equals("wild_crops") ? "kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js"
+				: "kubejs/server_scripts/worldgen/" + script + ".js";
+		cx.evaluateString(scope, Files.readString(root.resolve(path)), script + ".js", 1, null);
 		cx.evaluateString(scope, "__tags({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);
 		cx.evaluateString(scope, "__data({ add: function (p, t) { __HOST.add(String(p), String(t)) } });", "fire_data", 1, null);
 		Path out = Paths.get(a[1]);

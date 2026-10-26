@@ -97,8 +97,9 @@ const LUCK_POTION_MIXES = [
 const LUCK_POTIONS = ['minecraft:luck', 'buzzier_bees:long_luck', 'buzzier_bees:strong_luck',
 	'buzzier_bees:unluck', 'buzzier_bees:long_unluck', 'buzzier_bees:strong_unluck']
 
-// Haste — Rustic Delight registers rusticdelight:haste / long_haste / strong_haste, but brews
-// them through its own IBrewingRecipe class (regular potion item only). Create's
+// Haste — Rustic Delight registers rusticdelight:haste / long_haste / strong_haste. 1.3.0 brews
+// them through its own IBrewingRecipe class (regular potion item only); Creative Delight's 1.7.0
+// port registers no brewing at all, so these mixes are the only route there. Create's
 // PotionMixingRecipes and IE's PotionHelper only read `instanceof BrewingRecipe` from the
 // Forge registry, so RD's haste is invisible to every mixer and has no splash/lingering
 // modifier steps. Re-add the same three steps as item-agnostic PotionBrewing.Mix entries

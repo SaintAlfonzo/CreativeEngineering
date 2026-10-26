@@ -3,7 +3,8 @@
 
 Sources, lowest priority first (a later source wins for the same key, like the game's pack stack):
   1. vanilla 1.19.2 client jar (~/.minecraft/versions/1.19.2/1.19.2.jar) and the Forge client jar
-  2. every mod jar in mods/ (assets/<ns>/lang/en_us.json)
+  2. the upstream jars the ports read at runtime (<name>_upstream/*.jar), then every mod jar in mods/
+     (assets/<ns>/lang/en_us.json) with the jars nested in it (META-INF/jarjar/, Creative Delight's members)
   3. KubeJS: kubejs/assets/<ns>/lang/en_us.json, kubejs/assets/*.zip, and the ClientEvents.lang calls
      in kubejs/client_scripts/*.js (e.add('key', 'Name'), e.renameItem / renameBlock('ns:id' or global.item.<key>, 'Name'))
   4. the resource-pack zips enabled in options.txt (they sit above the KubeJS pack, see
@@ -41,8 +42,23 @@ def parse_lang(raw):
             return {}
 
 
+def mod_archives():
+    """(label, path or file object) for every archive whose assets the game loads, lowest priority first."""
+    for jar in sorted(INSTANCE.glob('*_upstream/*.jar')):
+        yield jar.parent.name + '/' + jar.name, jar
+    for jar in sorted(MODS.glob('*.jar')):
+        yield jar.name, jar
+        try:
+            with zipfile.ZipFile(jar) as z:
+                nested = [n for n in z.namelist() if n.startswith('META-INF/jarjar/') and n.endswith('.jar')]
+                for n in nested:
+                    yield jar.name + '!' + n.rsplit('/', 1)[1], io.BytesIO(z.read(n))
+        except (zipfile.BadZipFile, OSError):
+            pass
+
+
 def zip_langs(path):
-    """{key: value} from every assets/*/lang/en_us.json inside a jar or zip."""
+    """{key: value} from every assets/*/lang/en_us.json inside a jar or zip (a path or a file object)."""
     out = {}
     try:
         with zipfile.ZipFile(path) as z:
@@ -128,8 +144,8 @@ def build(skip_kubejs_ns=()):
         put(zip_langs(VANILLA_JAR), 'vanilla')
     if FORGE_JAR.exists():
         put(zip_langs(FORGE_JAR), 'forge')
-    for jar in sorted(MODS.glob('*.jar')):
-        put(zip_langs(jar), jar.name)
+    for label, jar in mod_archives():
+        put(zip_langs(jar), label)
     put(kubejs_asset_langs(skip_kubejs_ns), 'kubejs/assets')
     put(script_langs(), 'kubejs/client_scripts')
     for z in enabled_pack_zips():
@@ -142,7 +158,7 @@ def mod_namespaces():
     """Namespaces that exist at runtime: every assets/ or data/ top folder in the mod jars, plus
     minecraft/forge, plus the namespaces KubeJS registers into."""
     out = {'minecraft', 'forge', 'kubejs', 'creativeengineering'}
-    for jar in MODS.glob('*.jar'):
+    for _, jar in mod_archives():
         try:
             with zipfile.ZipFile(jar) as z:
                 for name in z.namelist():

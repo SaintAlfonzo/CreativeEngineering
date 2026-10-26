@@ -262,6 +262,21 @@ Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 b
 |---|---|---|---|---|---|---|
 | `creativeengineering:meta/driftwood_flotilla` | 100 | 1.0 | - | 32 | new |  |
 
+### `deadwood` -> `creativeengineering:group/deadwood`
+
+Patches of dead wood on land: stumps and fallen logs by wood type (meta structures). Its own grid, so it takes no slots from buildings or ruins.
+
+Grid: spacing 16, separation 5 (members never start closer than 6 chunks = 96 blocks apart). At most 1 structure per 16 x 16 chunks anywhere.
+
+| Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
+|---|---|---|---|---|---|---|
+| `creativeengineering:meta/deadwood_acacia` | 100 | 1.0 | - | 16 | new |  |
+| `creativeengineering:meta/deadwood_birch` | 100 | 1.0 | - | 20 | new |  |
+| `creativeengineering:meta/deadwood_cherry` | 100 | 1.0 | - | 16 | new |  |
+| `creativeengineering:meta/deadwood_jungle` | 100 | 1.0 | - | 16 | new |  |
+| `creativeengineering:meta/deadwood_oak` | 100 | 1.0 | - | 20 | new |  |
+| `creativeengineering:meta/deadwood_spruce` | 100 | 1.0 | - | 16 | new |  |
+
 ### `remote` -> `creativeengineering:group/remote`
 
 Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer's Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.

@@ -43,6 +43,15 @@ versionRange="1.19.2"
 ordering="NONE"
 side="BOTH"
 
+# KubeJS: required. KubeJSVirtualDataPackListMixin and KubeJSCanAction use its classes, and
+# Creative Delight relies on patcherMod to supply KubeJS (pack tested on 1902.6.2-build.73).
+[[dependencies.creativeengineering]]
+modId="kubejs"
+mandatory=true
+versionRange="[1902.6.0,)"
+ordering="AFTER"
+side="BOTH"
+
 # Create: MechanicalMixerBlockEntityMixin + DragonBreathBrewing patch it. Not
 # strictly mandatory (the patch no-ops if absent) but must load first.
 [[dependencies.creativeengineering]]

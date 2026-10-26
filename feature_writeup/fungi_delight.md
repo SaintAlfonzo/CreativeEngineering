@@ -1,5 +1,7 @@
 # Fungi Delight: backport investigation and integration plan
 
+> **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Fungi Delight; its registry namespace and test prefix do not change.
+
 Investigation written 2026-10-23; **built 2026-10-23, scratch test queued** (§4.0; jars not in `mods/` yet). The owner's plan (2026-10-23) is §5.1 and overrides the §5
 defaults where they differ (§5 lists the original questions with a recommendation and a default each). Fungi Delight (Eggmain, the Veggies Delight author: same `net.mehdinoui` code base, same Modrinth owner)
 has no 1.19.2 build: Modrinth lists 1.0 to 1.3 for Forge 1.20.1 and 1.3 for NeoForge 1.21.1, with the same content.
@@ -221,7 +223,7 @@ none from these). The overlaps are dish families and systems.
 | Spawns | Fungi cows spawn in mushroom fields at weight 8 each next to the mooshroom (8): two thirds of mushroom cows become Fungi cows. The pack spawns mooshrooms in dark forests (`mooshroom_dark_forests` rule) | `mob_spawns.json` rules with `disable_modifiers` (D7) |
 | Wild plants | FD's colonies are already in `wild_crops.json` (mushroom fields, dark forest) | Fungi's patches and colonies go in the same file (D6) |
 | `#forge:mushrooms` | Adding truffles, truffle slices and cleaned caps makes them valid wherever a recipe takes any mushroom | Check the users of the tag after `/dumpall` (step 2) |
-| Compost | Fungi writes the compost table directly; the pack's engine rebuilds it from its own rules and values | Drop the hook, add the rows through `gen_compost_values.py --merge` (step 13) |
+| Compost | Fungi writes the compost table directly; the pack's engine rebuilds it from its own rules and values | Drop the hook, add the rows through `gen_compost_values.py --add-new` (step 13) |
 | Trades | Java trades | Drop them, re-add through the pack's trade tools if wanted, as for Veggies (step 14) |
 
 ### 3.3 Overlap with the Veggies and Vintage ports
@@ -267,7 +269,7 @@ Steps that match the Veggies or Vintage ports are only named; see [veggies_delig
     IE mixers; Burrowing and Weak Stomach in [potions.md](potions.md), JEED text, effect export.
 11. **Weak Stomach.** Alcohol tag -> pack tag (D2); decide the "any potion" trigger (D2); config item list empty.
 12. **Placeables and stack sizes.** Dishes at 16 by the stack size policy; `/dumpplaceable` (none expected).
-13. **Compost.** `gen_compost_values.py --merge` after the first dump; upstream values as the starting point
+13. **Compost.** `gen_compost_values.py --add-new` after the first dump; upstream values as the starting point
     (truffle, colonies 1.0; huge blocks 0.85; mushrooms, stems, veil, cooked cap 0.65; cleaned cap, slice 0.5).
 14. **Trades.** Farmer and wandering trader rows through the pack's trade tools, or none (D9).
 15. **Loot.** Ship the block, cow and pig digging tables. **Crops loot tables TODO** (`vintageport #5`): add truffle,
@@ -295,9 +297,9 @@ fails to load. Game closed: `./gradlew :backportedFungi:installToMods :patcherMo
 | Mushroom spawn system (§5.1.1) | `mushroom_spawns.json` / `.js`, shared code `worldgen/_biome_rules.js`, CEConfig `[worldgen.systems] mushroomSpawns`, `tools/test_mushroom_spawns.sh` | Table below. FD brown / red colony rules moved here unchanged. Pack copies of the colony feature for inky cap and morel (dirt and podzol, not mycelium only). Cave mode: no light predicate in 1.19.2 placement, so vanilla's underground test (`surface_relative_threshold_filter` OCEAN_FLOOR_WG at most -13) after an `environment_scan` to a floor; colonies only over `#minecraft:mushroom_grow_block` or `#minecraft:dirt`; noise caves only (features accept `air`, carvers leave `cave_air`) |
 | Truffle dirt | `wild_crops.json` rules `rooted_dirt` (1 in 3) and `truffle_dirt` (every chunk, count 5), new per-rule `step` (`underground_ores`), `dark_oak` or `cold forest` (25 biomes) | Order relies on modifier id order (rooted before truffle): FGD-32 |
 | Items, tags | `item_dict.js` (32 + truffle pie + 3 tags), `cookingtags.js` | `#forge:mushrooms/inky_cap` (+ cooked cap, colony), `/morel` (+ colony), `/truffle`; all in `#forge:mushrooms`; 5 `#forge:storage_blocks/*`. Pack users of `#forge:mushrooms`: bone broth, veg wrap filling (fine) |
-| Recipes | `cooking.js`, `baking.js` | Grid meals re-id'd `_manual_only` (ice cream marked placeholder for `sweets #4`); heatless routes for the 7 pot meals; truffle pie in the oven pie list (crust + 2 truffles + 2 sugar, no can) |
+| Recipes | `cooking.js`, `baking.js`; since 2026-10-25 the meal rows below are Creative Delight QoL-5 (`kubejs/data/creative_delight/kubejs/fungidelight/cooking.js`) | Grid meals re-id'd `_manual_only` (ice cream marked placeholder for `sweets #4`); heatless routes for the 7 pot meals; truffle pie in the oven pie list (crust + 2 truffles + 2 sugar, no can) |
 | Food, cans, compost | `food_types.json` (16 foods), `gen_can_types.py` (truffle, cooked inky cap, truffle pasta; soup and salad by the type loops; `AWAIT_DUMP` holds `fungidelight`), `compost_values.js` (19 rows, upstream values) | Values are tuned after `/dumpfood` (CQ-FGD-DUMP) |
-| Effects, JEI | `kubejs/assets/creativeengineering/lang/en_us.json` (JEED text), `client_scripts/jei_info.js` (the pack's first JEI info pages: mushroom colonies, truffle, Weak Stomach foods) | [potions.md](potions.md) 2.3 row, PO-27 |
+| Effects, JEI | `kubejs/assets/creativeengineering/lang/en_us.json` (JEED text), `kubejs/assets/creative_delight/kubejs/fungidelight/jei_info.js` (Creative Delight QoL-6 since 2026-10-25) (the pack's first JEI info pages: mushroom colonies, truffle, Weak Stomach foods) | [potions.md](potions.md) 2.3 row, PO-27 |
 
 Mushroom rules (1 in N chunks; brown / red rates read from vanilla, Terralith and FD data; a Fungi form compared
 with the mean of brown and red):
@@ -472,7 +474,7 @@ using the existing info-page route (step 18).
 - **Villager trades kept** in code as upstream (farmer level 3, wandering trader) and **sounds kept** (pig happy,
   dig, drop, wolf); the trades are reviewed against the pack's trade tooling after play (replaces D9's "none").
 - **Compost folds into the pack's engine:** upstream hook dropped; values merged with
-  `gen_compost_values.py --merge` into `compost_values.js` (step 13).
+  `gen_compost_values.py --add-new` into `compost_values.js` (step 13).
 
 ### 5.1.7 Decisions after this plan
 
@@ -503,11 +505,11 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 | `kubejs/generation_scripts/worldgen/wild_crops.json`, `kubejs/server_scripts/worldgen/wild_crops.js` | wild rules, `step` field |
 | `kubejs/generation_scripts/worldgen/mob_spawns.json` | cow spawns, `brown_chance` |
 | `kubejs/generation_scripts/worldgen/mushroom_spawns.json`, `kubejs/server_scripts/worldgen/mushroom_spawns.js` | mushroom spawn system with cave mode (§5.1.1) |
-| `kubejs/server_scripts/` (cooking, potions), `startup_scripts/compost/compost_values.js` | recipes and compost |
+| `kubejs/server_scripts/` (cooking, potions), CD `kubejs_startup/fungidelight/compost.js` (was `compost_values.js`) | recipes and compost |
 | `mod_sides.md`, `tools/build_deploy.py` | release |
 | `kubejs/server_scripts/worldgen/_biome_rules.js` | code shared by wild crops and mushroom spawns |
 | `development/patcherMod/.../mooshroom/`, `mixin/MushroomCowBreedingMixin.java`, `mixin/AnimalCanMateMooshroomMixin.java`, `worldgen/SpawnTuning.java` | brown mooshrooms, breeding |
-| `kubejs/client_scripts/jei_info.js`, `kubejs/assets/creativeengineering/lang/en_us.json` | JEI info pages, JEED text |
+| `kubejs/assets/creative_delight/kubejs/fungidelight/jei_info.js` (CD), `kubejs/assets/creativeengineering/lang/en_us.json` | JEI info pages, JEED text |
 | `tools/test_mushroom_spawns.sh`, `tools/test_wild_crops.sh`, `tools/gen_crop_worldgen_table.py` | offline checks, [crops_by_biome.md](crops_by_biome.md) |
 | `kubejs/assets/creativeengineering/changelog/unreleased.md` | bullets when built |
 

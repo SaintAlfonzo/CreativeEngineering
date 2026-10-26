@@ -19,6 +19,7 @@ Source: the upstream jar (MIT), read directly. What changes on the way (feature_
   * structures: DataVersion set to 1.19.2's; the desert house's VD bell pepper crate becomes Rustic's red one
   * recipes and loot tables lose the 1.20 'category' and 'random_sequence' fields; lang drops removed keys and gets the
     1.19.2 creative tab key
+  * from upstream 1.9.3: carrot cake slices 1 to 6 show carrot_cake_inner on the cut face (1.9.2 showed the top)
 At the end it lists every item id and tag a recipe names that the pack's last dumps do not know (kubejs/exported).
 """
 import gzip
@@ -87,7 +88,6 @@ def skipped(path):
 # Upstream mistakes and names from newer mod versions, fixed on the way
 INGREDIENT_FIXES = {
     ('item', 'fveggiesdelight:wild_broccolis'): ('item', 'veggiesdelight:wild_broccoli'),  # IE crusher typo
-    ('tag', 'forge:sliced_potato'): ('tag', 'forge:sliced_potatoes'),  # More Delight 1.19's tag name
 }
 
 
@@ -288,6 +288,10 @@ def main():
                 write_json(path, convert_placed_feature(name, json.loads(raw)))
             elif '/lang/' in path:
                 write_json(path, convert_lang(json.loads(raw)))
+            elif re.search(r'/models/block/carrot_cake_slice[1-6]\.json$', path):
+                d = json.loads(raw)
+                d['textures']['inside'] = 'veggiesdelight:block/carrot_cake_inner'
+                write_json(path, d)
             else:
                 write_json(path, json.loads(raw))
             counts[kind] = counts.get(kind, 0) + 1

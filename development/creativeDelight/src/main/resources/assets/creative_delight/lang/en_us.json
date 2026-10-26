@@ -1,0 +1,13 @@
+{
+  "creative_delight.wthit.crop_harvestable": "(Harvestable)",
+  "creative_delight.kettle.tank.empty": "Empty",
+  "creative_delight.kettle.tank.level": "%s: %s / %s",
+  "creative_delight.kettle.tank.mb": "%s / %s mB",
+  "creative_delight.kettle.box.fill": "Pour in",
+  "creative_delight.kettle.box.fill.hint": "Drinks put here fill the tank, one bottle at a time",
+  "creative_delight.kettle.box.empty": "Bottle up",
+  "creative_delight.kettle.box.empty.hint": "Glass bottles put here fill from the tank",
+  "creative_delight.kettle.item.tank": "Tank: %s, %s / %s",
+  "creative_delight.wthit.kettle_tank": "Tank",
+  "creative_delight.wthit.kettle_tank.value": "%s %s / %s"
+}

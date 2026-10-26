@@ -39,7 +39,7 @@ Every Miner's Delight soup cup is either reachable in JEI (how it is made, how i
   not a recipe type, so JEI cannot list it. What triggers the conversion (a copper pot with a cup as container, or a
   right-click) is unverified: read `CupConversionReloadListener` and its users first.
 - The jar is the OLD one (`largecontent/mod-additions #7`: compare with 1.4.5, which adds `onion_soup_cup`,
-  `bone_broth_cup`, `insect_stew` + cup; [delight_addons_2026_10.md](../delight_addons_2026_10.md) 4).
+  `bone_broth_cup`, `insect_stew` + cup; [miners_delight.md](../miners_delight.md) 10).
 
 ### Build
 1. Decide with the user what a cup is for (see Decisions), after reading the trigger in the jar.

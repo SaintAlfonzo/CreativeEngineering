@@ -7,6 +7,56 @@
   - many fruit sodas?
   - most glass bottles
   - some cans, dyes, cheap and worse
+- villagers cant use dramatic doors tall doors
+  - check short doors
+- dragon hoe doesnt consume tree ferilizer either
+- symbols on xaeros maps
+- glow dye item
+  - efficient glow-to-dye ratio
+  - glow and dye in one step
+- apply buckets, water bottles to farmland, rich farmland, fertile soil to wet
+- merge cantaloupe and hamimellon, keep cantaloup name. examine delightful
+- all vanilla effects brewable through own systems, override other mods
+  - luck, haste, etc
+- change dough texture to fd
+  - recolor ginger dough to fd texture
+  - recolor create dough with oat dough for cookie dough
+- all dough blocks
+- seed/crate/raw food by biome loot tables
+
+- rustic delight changes 
+  - implement new peppers
+    - dark seeds found in ancient cities, sculk loot chests (mark for loot overhaul)
+    - pale seeds found in sky villages, cloud storage loot
+    - all pepper slices, roasted slices, rolls, stuffed peppers
+    - include bell pepper medly, dark and pale medley, rice rill medly
+    - giant pepper blocks, giat pepper patches spawn in hot dry grassy like wild peppers
+  - add pancake rework
+    - add new pancakes
+    - evaluate w/ supplementaties pancakes
+    - use new recipes
+  - syrup changes
+  - coffee food, including the cake
+  - fried foods, including fried fish (for eval)
+  - calamari pot (eval for overlap)
+  - cherry blossom foods, w/ vinery cherry leaves or quark pink blossom leaves
+  - bell pepper pasta
+  - bell pepper soup
+  - gold and honey coffee
+  - coffee beef
+  - calamari roll
+  - brown dye from roasted beans
+  - new bell pepper/slice values
+  - golden coffee bean, chocolate and veggie pancake, honey and chocolate speed, vegetable hast, potato salad regen
+  - remove fruit beignet
+  - villager farms grow rustic crops by wild crop rules
+  - wandering trader pepper seeds (rare)
+  - add bell peppers to pizza topping, rename default brewing to supreme and require many ingredients
+  - follow cotton rename
+  - coaster: cut every coaster item without its own model, or add a model for each (all raw/cooked/egg/dairy foods are in
+    the coaster tag now and the ones without a model lie flat; food_families.md 4.4)
+  - maple foods stay (Maple Glazed Bacon, Maple Cookie): add a syrup from Rustic Delight to make them (Autumnity syrup is
+    not installed)
 
 ## Oldest Unrun Tests
 

@@ -19,7 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Small blocks on a Cooking for Blockheads counter (TODO cooking/kitchen #8, #20): Farmer's Delight's cutting board,
- * Display Delight's plates and plated foods, Brewin' and Chewin's coaster ({@code #creativeengineering:counter_toppers}).
+ * Display Delight's plates and plated foods (and the pack's own, {@link DisplayDelightDishes}), Brewin' and Chewin's coaster ({@code #creativeengineering:counter_toppers}).
  * The counter and corner ({@code #creativeengineering:counter_supports}) are 15 px tall with no full top face, so these
  * refused to stay on them, and would float 1 px above the worktop. {@code BlockStateCounterTopperMixin} lets them stay
  * ({@code canSurvive}), breaks them (and every Display Delight block) when the block below goes ({@code updateShape}),
@@ -73,7 +73,7 @@ public final class CounterToppers {
     public static boolean popsUnsupported(BlockState state) {
         if (state.is(TOPPERS)) return true;
         ResourceLocation id = ForgeRegistries.BLOCKS.getKey(state.getBlock());
-        return id != null && DISPLAY_DELIGHT.equals(id.getNamespace());
+        return id != null && (DISPLAY_DELIGHT.equals(id.getNamespace()) || DisplayDelightDishes.isDish(id));
     }
 
     /** Whether a topper at {@code pos} sits on a support (and so may stay there). */

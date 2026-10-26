@@ -53,7 +53,6 @@
   "creativeengineering.wthit.run_speed.block_below": "block below",
   "creativeengineering.wthit.run_speed.source.native": "own speed",
   "creativeengineering.wthit.run_speed.source.in_block": "walking through",
-  "creativeengineering.wthit.crop_harvestable": "(Harvestable)",
   "creativeengineering.wthit.coaster": "Coaster",
   "creativeengineering.wthit.coaster.put_away": "(put away)",
   "creativeengineering.wthit.coaster.stack": "%sx %s",
@@ -127,6 +126,8 @@
   "creativeengineering.jei.vinery.wine_aging.aged": "Aged %s years: potency %s (max)",
   "desc.seasonhud.season.arid": "Arid",
   "desc.seasonhud.season.frozen": "Frozen",
+  "block.creativeengineering.powdered_sugar_block": "Powdered Sugar",
+  "item.creativeengineering.powdered_sugar_bucket": "Powdered Sugar Bucket",
   "block.creativeengineering.oven": "Oven",
   "container.creativeengineering.oven": "Oven",
   "container.creativeengineering.oven.heated": "Heated from below",
@@ -174,5 +175,15 @@
   "creativeengineering.mca_eyes.colour.grey": "Grey Eyes",
   "creativeengineering.mca_eyes.colour.yellow": "Yellow Eyes",
   "creativeengineering.vein_undo.cooldown": "You can undo another vein mine in %s s.",
-  "creativeengineering.vein_undo.denied": "This vein mine can't be undone: it broke %s."
+  "creativeengineering.vein_undo.denied": "This vein mine can't be undone: it broke %s.",
+  "block.creativeengineering.placed_vegetable_omelet": "Placed Vegetable Omelet",
+  "block.creativeengineering.placed_shulker_omelette": "Placed Shulker Omelette",
+  "block.creativeengineering.placed_inky_cap_scrambled_eggs": "Placed Inky Cap Scrambled Eggs",
+  "block.creativeengineering.placed_suspicious_bacon_and_eggs": "Placed Suspicious Bacon And Eggs",
+  "block.creativeengineering.placed_diced_potatoes_with_egg_and_tomato": "Placed Diced Potatoes with Egg and Tomato",
+  "block.creativeengineering.placed_omelette": "Placed Omelet",
+  "block.creativeengineering.placed_cauliflower_kuku": "Placed Cauliflower Kuku",
+  "block.creativeengineering.placed_dandelion_and_eggs": "Placed Dandelion Greens And Eggs",
+  "block.creativeengineering.placed_shakshouka": "Placed Shakshouka",
+  "block.creativeengineering.placed_corn_popsicle": "Placed Corn Popsicle"
 }

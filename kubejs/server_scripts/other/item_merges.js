@@ -10,16 +10,23 @@
 //   inventory  a purged item that still reaches a player (mod code, old chests, old worlds) turns into the
 //              survivor, same count
 
-ServerEvents.recipes(e => {
-	var i = global.item
+// The swap pass is a global so Creative Delight's scripts, which run after every pack script, can run it again over
+// the recipes they add (kubejs/data/creative_delight/kubejs/_core/item_merges.js).
+global.itemMergeSwaps = (e, where) => {
 	var R = global.NCH
-
 	var addedSwaps = 0
 	global.itemMerges.forEach(m => {
 		addedSwaps += R.replaceInput({ input: m[0] }, m[0], m[1], e, true)
 		addedSwaps += R.replaceOutput({ output: m[0] }, m[0], m[1], e, true)
 	})
-	console.log('[itemMerges] ' + addedSwaps + ' swaps in script-added recipes')
+	console.log('[itemMerges] ' + addedSwaps + ' swaps in script-added recipes (' + where + ')')
+}
+
+ServerEvents.recipes(e => {
+	var i = global.item
+	var R = global.NCH
+
+	global.itemMergeSwaps(e, 'pack')
 
 	// Milk bottle. Abnormals Delight turns Farmer's Delight's bucket <-> bottle recipes off while Neapolitan is
 	// loaded, so Neapolitan's two stay: bucket -> 3 bottles (output swapped above) and 3 #forge:bottles/milk ->
@@ -35,7 +42,7 @@ ServerEvents.recipes(e => {
 	R.fdCutting(i.chocolate_cake, i.any_knife, Item.of(i.abnormals_delight_chocolate_cake_slice, 7), e, 'chocolate_cake')
 
 	// Diced potatoes. Rustic Delight's potato -> 2 slices stays, More Delight's potato -> 1 diced goes. More
-	// Delight's dishes read #forge:sliced_potatoes (tags below).
+	// Delight's dishes read #forge:sliced_potato (tags below).
 	R.remove({ id: 'moredelight:cutting/diced_potatoes' }, e)
 
 	// Rocky dirt. Decorative Blocks' goes into Twigs'; its 4 dirt -> 1 and 1 -> 4 dirt recipes go (the second would
@@ -82,7 +89,7 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	t.add(e, i.t_crops_banana, i.neapolitan_banana)          // Alex's Mobs' monkeys read #alexsmobs:bananas
 	t.add(e, i.t_bottles_milk, i.farmersdelight_milk_bottle)
-	t.add(e, i.t_sliced_potatoes, i.potato_slices)
+	t.add(e, i.t_sliced_potato, i.potato_slices)
 })
 
 ServerEvents.tags('block', e => {

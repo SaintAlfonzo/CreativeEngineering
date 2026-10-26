@@ -1,8 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.SaintAlfonzo.creativeengineering.mixin",
+  "package": "com.SaintAlfonzo.creativedelight.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": ["CookingPotRemainderMixin", "CookingPotMenuRemainderMixin", "KettleRemainderMixin", "KettleMenuRemainderMixin"],
+  "mixins": ["farmersdelight.CookingPotRemainderMixin", "farmersdelight.CookingPotMenuRemainderMixin",
+    "farmersrespite.KettleRemainderMixin", "farmersrespite.KettleMenuRemainderMixin"],
   "injectors": { "defaultRequire": 1 }
 }

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "creativeengineering:block/placed_suspicious_bacon_and_eggs"
+    },
+    "facing=south": {
+      "model": "creativeengineering:block/placed_suspicious_bacon_and_eggs",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "creativeengineering:block/placed_suspicious_bacon_and_eggs",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "creativeengineering:block/placed_suspicious_bacon_and_eggs",
+      "y": 90
+    }
+  }
+}

@@ -5806,6 +5806,42 @@
       ],
       "share": 0.4,
       "required_parts": []
+    },
+    "creativeengineering:meta/deadwood_acacia": {
+      "biomes": "#geophilic_reforged:wood_type/mc/acacia",
+      "anchor": [],
+      "share": 0,
+      "required_parts": []
+    },
+    "creativeengineering:meta/deadwood_birch": {
+      "biomes": "#geophilic_reforged:wood_type/mc/birch",
+      "anchor": [],
+      "share": 0,
+      "required_parts": []
+    },
+    "creativeengineering:meta/deadwood_cherry": {
+      "biomes": "#geophilic_reforged:wood_type/mc/cherry",
+      "anchor": [],
+      "share": 0,
+      "required_parts": []
+    },
+    "creativeengineering:meta/deadwood_jungle": {
+      "biomes": "#geophilic_reforged:wood_type/mc/jungle",
+      "anchor": [],
+      "share": 0,
+      "required_parts": []
+    },
+    "creativeengineering:meta/deadwood_oak": {
+      "biomes": "#geophilic_reforged:wood_type/mc/oak",
+      "anchor": [],
+      "share": 0,
+      "required_parts": []
+    },
+    "creativeengineering:meta/deadwood_spruce": {
+      "biomes": "#geophilic_reforged:wood_type/mc/spruce",
+      "anchor": [],
+      "share": 0,
+      "required_parts": []
     }
   }
 }

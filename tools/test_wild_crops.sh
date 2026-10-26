@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Offline checks for the wild crop placement (feature_writeup/crops.md section 2.8):
 #   1. generator: tools/gen_crop_worldgen_table.py runs with no config problems
-#   2. Rhino: kubejs/server_scripts/worldgen/wild_crops.js (+ _biome_rules.js) in the pack's Rhino fork; every crop tag
+#   2. Rhino: Creative Delight's kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js (+ the pack's _biome_rules.js)
+#      in the pack's Rhino fork; every crop tag
 #      must equal the generator's resolved list, and every data file must be valid JSON with the expected modifiers
 #      at the crop's step
-#   3. Rhino with CEConfig wildCrops off: no tags, no files
+#   3. Rhino with creative_delight-common.toml [worldgen] wildCrops off: no tags, no files
 #   4. Rhino with a mod missing (neapolitan): its features/modifiers skipped, nothing else changes
 # Needs the ATLauncher library folder (Rhino's gson). No game needed.
 set -euo pipefail
@@ -33,7 +34,7 @@ tags = json.load(open(os.path.join(sys.argv[1], 'tags.json')))
 bad = 0
 for key, crop in cfg['crops'].items():
     want = g.resolve_crop(traits, crop)
-    got = tags.get('creativeengineering:wild_crops/' + key, [])
+    got = tags.get('creative_delight:wild_crops/' + key, [])
     if want != got:
         bad += 1; print('MISMATCH', key, sorted(set(want) ^ set(got)))
 files = {p: json.load(open(p)) for p in glob.glob(os.path.join(sys.argv[1], 'data/**/*.json'), recursive=True)}
@@ -45,7 +46,7 @@ want_rem = sorted({f for c in cfg['crops'].values() for f in c.get('remove_featu
 ok = len(adds) == sum(1 for c in cfg['crops'].values() if c.get('features')) and len(nones) == len(want_nones) and len(rem) == 1 and rem[0]['features'] == want_rem
 for d in adds:
     crop = cfg['crops'][d['biomes'].split('/', 1)[1]]
-    ok &= d['step'] == crop.get('step', 'vegetal_decoration') and d['biomes'].startswith('#creativeengineering:wild_crops/') and bool(d['features'])
+    ok &= d['step'] == crop.get('step', 'vegetal_decoration') and d['biomes'].startswith('#creative_delight:wild_crops/') and bool(d['features'])
 print(f"{len(cfg['crops'])} crop tags match the generator" if not bad else f'{bad} tags differ')
 print(f'{len(adds)} add modifiers, {len(nones)} forge:none, {len(rem)} remove modifier: ' + ('as expected' if ok else 'UNEXPECTED'))
 sys.exit(1 if bad or not ok else 0)

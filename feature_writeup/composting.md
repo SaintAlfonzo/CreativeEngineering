@@ -10,14 +10,16 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 | Rules: 10 categories by tag, id pattern, block class and edibility, first match wins | DEPLOYED |
 | Values: 688 explicit per-item chances (generated once from the mods' own table, hand-edited since) | DEPLOYED (684); the 4 Brewin' port rows (2026-10-19, [alcohol.md](alcohol.md) 10.16) are built, not deployed |
 | Exclusions: never compostable (Canned Goods, golden food, incomplete items, Botania world seed and altered grass, ...) | DEPLOYED |
-| `/dumpcompost` (before / after / why) and `tools/gen_compost_values.py` (first run, `--merge` after adding mods) | in use |
+| `/dumpcompost` (before / after / why) and `tools/gen_compost_values.py` (`--add-new` after adding mods, `--check`) | in use |
 | Compost and fertile soil crafting from mulch (in `sawdust.js`) | DEPLOYED; belongs to recipe progression (backlog row 20) |
 
 - **Pending:** the 4 Brewin' 4.5.0 port rows in `compost_values.js` (built 2026-10-19, not in the 1.0.9 deploy). CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
   needs a decision.
-- **Files to open:** [compost_rules.js](../kubejs/startup_scripts/compost/compost_rules.js) (categories, exclusions),
+- **Files to open:** [compost_rules.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js) (categories, exclusions),
   [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) (per-item chances),
-  [func/compost.js](../kubejs/startup_scripts/func/compost.js) (engine).
+  Creative Delight's `kubejs_startup/<mod>/compost.js` (the Farmer's, Fungi, Veggies and Vintage Delight rows, QoL-4
+  since 2026-10-25, switch `[qol] compost`; `values(..., { when })`), patcherMod
+  [func/compost.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/compost.js) (engine).
 - **Knobs:** the two data files. After editing: `/kubejs reload startup_scripts`, then `/reload`.
 
 ## 1. Overview
@@ -84,9 +86,11 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   build the same table from the same scripts, and categories that read tags see the live tags.
 - **Rebuild order:** clear → rules → values (beat rules) → exclusions (beat both). The log has `[compost] <cause>: N
   compostable (...)` and warnings for values naming items that don't exist or an unknown tier.
-- **Generator:** `tools/gen_compost_values.py` wrote `compost_values.js` from a `/dumpcompost` once (it refuses to
-  overwrite without `--force`). After adding mods, `--merge` appends only the new mods' own compostables at their
-  original chance and leaves every existing row alone. Ids the item dict lacks get keys in a generated block of
+- **Generator:** since 2026-10-25 (creative_delight.md 29) the rows are 35 generated `<mod>/compost_values.js` files in
+  Creative Delight's startup tree (`development/creativeDelight/src/main/resources/kubejs_startup/`), and
+  `tools/gen_compost_values.py` regenerates them exactly from a `/dumpcompost` (its `value` rows); hand rows go in a
+  `<mod>/compost.js` there, which the generator skips and which win by load order. `--add-new` adds the new mods' own
+  compostables at their original chance; `--check` writes nothing and exits 1 on any difference. Ids the item dict lacks get keys in a generated block of
   `item_dict.js`.
 
 ## 4. Limits and decisions
@@ -98,7 +102,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   check `/dumpcompost`'s `now` for surprises (CM-06).
 - **F2. A two-step reload.** Edits need `/kubejs reload startup_scripts` and then `/reload`; `/reload` alone keeps the
   old rules.
-- **F3. `gen_compost_values.py` isn't in `/cegen`.** It's a manual `--merge` after adding mods (the file is hand-edited,
+- **F3. `gen_compost_values.py` isn't in `/cegen`.** It's a manual `--add-new` after adding mods (output is now deterministic, so it could join; was: the file is hand-edited,
   so a blind regeneration would be wrong). Fine as is; noted for the tooling list ([pack_tooling.md](pack_tooling.md) F5).
 - **F4. The nulch recipe** sits in `sawdust.js` (line 83) with a note that it belongs with compost ([TODO](todo/TODO.md) `farming/composting #2`).
 
@@ -118,14 +122,14 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 
 ## 5. File map
 
-- [startup_scripts/func/compost.js](../kubejs/startup_scripts/func/compost.js), [startup_scripts/compost/compost_rules.js](../kubejs/startup_scripts/compost/compost_rules.js), [startup_scripts/compost/compost_values.js](../kubejs/startup_scripts/compost/compost_values.js).
+- [startup_scripts/func/compost.js](../kubejs/startup_scripts/func/compost.js), [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js), [startup_scripts/compost/compost_values.js](../kubejs/startup_scripts/compost/compost_values.js).
 - [server_scripts/_lib/dump_compost.js](../kubejs/server_scripts/_lib/dump_compost.js) (`/dumpcompost`).
 - [tools/gen_compost_values.py](../tools/gen_compost_values.py).
 - Related recipes: [wood/sawdust.js](../kubejs/server_scripts/wood/sawdust.js) (compost, fertile soil, mulch).
 
 ## 6. Offline checks
 
-`python3 tools/gen_compost_values.py --merge --dry-run` against a fresh `/dumpcompost` lists any mod compostables that
+`python3 tools/gen_compost_values.py --add-new --dry-run` against a fresh `/dumpcompost` lists any mod compostables that
 have no row yet.
 
 ## 7. In-game test suite

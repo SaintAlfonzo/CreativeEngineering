@@ -1,0 +1,45 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "brewinandchewin:vegetable_omelet",
+      "required": false
+    },
+    {
+      "id": "ends_delight:shulker_omelette",
+      "required": false
+    },
+    {
+      "id": "fungidelight:inky_cap_scrambled_eggs",
+      "required": false
+    },
+    {
+      "id": "hostiledelight:suspiciousbaconandaggs",
+      "required": false
+    },
+    {
+      "id": "moredelight:diced_potatoes_with_egg_and_tomato",
+      "required": false
+    },
+    {
+      "id": "moredelight:omelette",
+      "required": false
+    },
+    {
+      "id": "veggiesdelight:cauliflower_kuku",
+      "required": false
+    },
+    {
+      "id": "veggiesdelight:dandelion_and_eggs",
+      "required": false
+    },
+    {
+      "id": "veggiesdelight:shakshouka",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:corn_popsicle",
+      "required": false
+    }
+  ]
+}

@@ -9,13 +9,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelSimulatedReader;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer.FoliageAttachment;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
-import net.ribs.vintagedelight.block.ModBlocks;
 
 public class VineTrunkPlacer extends TrunkPlacer {
    public static final Codec<VineTrunkPlacer> CODEC = RecordCodecBuilder.create(instance -> trunkPlacerParts(instance).apply(instance, VineTrunkPlacer::new));
@@ -39,8 +37,6 @@ public class VineTrunkPlacer extends TrunkPlacer {
       List<FoliageAttachment> foliageAttachments = new ArrayList<>();
       MutableBlockPos mutablePos = startPos.mutable();
       int height = this.getTreeHeight(random);
-      BlockPos topPosition = null;
-
       for (int y = 0; y < height; y++) {
          int thickness = this.calculateThickness(y, height);
          int xOffset = this.calculateOffset(y, height, random);
@@ -58,16 +54,9 @@ public class VineTrunkPlacer extends TrunkPlacer {
                }
             }
          }
-
-         if (y == height - 1) {
-            topPosition = mutablePos.immutable();
-         }
       }
 
-      if (topPosition != null && (double)random.nextFloat() < 0.8) {
-         BlockState goldBlockState = ((Block)ModBlocks.GOLDEN_EGG.get()).defaultBlockState();
-         blockSetter.accept(topPosition, goldBlockState);
-      }
+      // Port: no golden egg on top of the trunk (upstream 80 %); the goose lays the pack's golden eggs
 
       return foliageAttachments;
    }

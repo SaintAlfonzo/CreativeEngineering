@@ -1,8 +1,8 @@
 // priority: 1
-// Shared machinery of the biome-rule worldgen systems: wild_crops.js (wild_crops.json) and mushroom_spawns.js
-// (mushroom_spawns.json). Both read the biome words of the "biomes" table in wild_crops.json, match rules with the
-// same clause rules, and write the same three kinds of data. global.biomeRules.system(opts) returns the three
-// handlers ({ tags, data, loaded }) a system script hands to ServerEvents.
+// Shared machinery of the biome-rule worldgen systems: mushroom_spawns.js (mushroom_spawns.json) and Creative Delight's
+// wild crops (kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js, shipped in the CD jar). Both read the biome
+// words of biome_traits.json, match rules with the same clause rules, and write the same three kinds of data.
+// global.biomeRules.system(opts) returns the three handlers ({ tags, data, loaded }) a system script hands to ServerEvents.
 //
 // Per rule key in the config:
 //   - biome tag <tagPrefix><key> = the biomes its rule matches (ServerEvents.tags);
@@ -11,7 +11,7 @@
 //     (ServerEvents.highPriorityData: KubeJS's top-priority virtual datapack, above the mod jars);
 //   - remove_features (vanilla patches that Terralith's biome files list) go into one forge:remove_features
 //     modifier over #minecraft:is_overworld. Forge removes after it adds, which is why those rules add the
-//     pack's copies (creativeengineering:wild/*) instead of the original ids.
+//     copies (creative_delight:wild/*) instead of the original ids.
 // A feature or modifier of a mod that isn't loaded is skipped: an unknown feature id stops the world loading.
 //
 // Rule matching is the same as tools/gen_crop_worldgen_table.py: clauses OR'ed, the traits in a clause AND'ed,
@@ -22,6 +22,7 @@
 // tag load without calling the script again. So the loaded handler compares the live tags with the rules.
 //
 // opts: name (log prefix word), configPath, biomesPath (optional: read "biomes" from this file instead),
+//   readConfig() (optional: returns the config's JSON text, or null for none; configPath then only names it in logs),
 //   rulesKey ('crops' / 'rules'), tagPrefix, modifierPrefix, enabled() (CEConfig switch), offMessage,
 //   never(rule) -> { trait: true }, step(rule) -> decoration step, ruleWord (log noun), reportUnclassified.
 //
@@ -109,7 +110,8 @@
 			}
 			var cfg
 			try {
-				cfg = JSON.parse(String(JsonIO.readString(opts.configPath)))
+				cfg = JSON.parse(String(opts.readConfig ? opts.readConfig() : JsonIO.readString(opts.configPath)))
+				if (!cfg) throw 'no such file'
 				if (opts.biomesPath) cfg.biomes = JSON.parse(String(JsonIO.readString(opts.biomesPath))).biomes
 			} catch (err) {
 				console.error(LOG + 'could not read ' + opts.configPath + (opts.biomesPath ? ' or ' + opts.biomesPath : '')
@@ -156,6 +158,12 @@
 			var skipped = []
 			Object.keys(c.rules).forEach(function (key) {
 				var rule = c.rules[key]
+				// "requires": a mod id the rule's features need beyond their own namespace (a feature only one build of
+				// that mod has, e.g. Rustic Delight 1.7.0's giant peppers, registered by Creative Delight's port)
+				if (rule.requires && !Platform.isLoaded(rule.requires)) {
+					skipped.push(key + ': needs ' + rule.requires)
+					return
+				}
 				;(rule.disable_modifiers || []).forEach(function (id) {
 					if (modLoaded(id)) disabled[id] = true
 				})

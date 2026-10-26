@@ -48,7 +48,7 @@ public class RhinoWildFlowers {
 			"var ServerEvents = { tags: function (type, fn) { if (type === 'worldgen/biome') __tags = fn },",
 			"  highPriorityData: function (fn) { __data = fn }, loaded: function (fn) {} };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/startup_scripts/func/tag_helper.js")), "tag_helper.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js")), "tag_helper.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/wild_flowers.js")), "wild_flowers.js", 1, null);
 		cx.evaluateString(scope, "__tags({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);
 		cx.evaluateString(scope, "__data({ add: function (p, t) { __HOST.add(String(p), String(t)) } });", "fire_data", 1, null);

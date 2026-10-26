@@ -18,8 +18,8 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
 ## Preferences
 
 - **Recipes and tags go through helpers, not hand-written events.** Recipes: `global.NCH`
-  ([neoCraftHelper.js](kubejs/startup_scripts/func/neoCraftHelper.js)); tags: `global.tags`
-  ([tag_helper.js](kubejs/startup_scripts/func/tag_helper.js)). No `e.shaped(...)` / `e.custom(...)` /
+  ([neoCraftHelper.js](development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)); tags: `global.tags`
+  ([tag_helper.js](development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js)). No `e.shaped(...)` / `e.custom(...)` /
   `event.add(...)` in server scripts when a helper covers it; extend the helper instead.
 - **Define each item once.** Ids live in `global.item` / `item_dict.js` (and block/fluid dicts);
   scripts use those keys, not literal `namespace:id` strings.
@@ -49,6 +49,9 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
   user says to. Details: memory `scratch-test-now-or-batch`.
 - Script-only change: `/reload` is enough for server scripts; startup scripts, items and any
   patcherMod change need a full restart.
+- The shared helpers (`neoCraftHelper.js`, `tag_helper.js`, `compost.js`) live in patcherMod's jar
+  (`src/main/resources/kubejs_startup/`, loaded before `startup_scripts/`): an edit needs a patcherMod rebuild, install
+  and restart. Creative Delight (`development/creativeDelight`) nests its members; build/install via `:creativeDelight:`.
 - Add a mod: mod_sides.md row, then `/dumpall` and the generators (order in memory
   `dumpall-refresh-workflow`). Release: `python3 tools/build_deploy.py --notes "..."`.
 

@@ -238,7 +238,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
   - Everycomp / Immersive Weathering grapevine leaf carpet and pile
 
   Source: [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js).
-- **Canning:** `#creativeengineering:canning/grapes` (the six small grapes) and `canning/jungle_grapes`, because Vinery's own grape tags mix the two sizes ([cantags.js](../kubejs/server_scripts/tags/cantags.js)).
+- **Canning:** `#creativeengineering:canning/grapes` (the six small grapes) and `canning/jungle_grapes`, because Vinery's own grape tags mix the two sizes ([cantags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js)).
   - `creativeengineering:canned_grape` exists with 3 servings. Canned cherries are craftable from 6 cherries, or 4 + sugar/honey.
   - Grape canning status: see [food.md](food.md).
 - **Loot:** chest loot packs and unpacks the apple, cherry, red grape and white grape crates against the fruit ([07_rules.js](../kubejs/server_scripts/loot/07_rules.js), [loot.md](loot.md)).
@@ -272,7 +272,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 - Pack tooltips: [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Vinery section, `removeTooltipKey`)
 - JEI pages: `development/patcherMod/.../compat/vinery/` ([vinery_jei.md](vinery_jei.md))
 - Item keys: Vinery block of `global.item` in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) (`i.grapevine_pot`, `i.wine_press`, `i.fermentation_barrel`, `i.grape_seeds_*`, ...)
-- Pack scripts touching Vinery: [oil.js](../kubejs/server_scripts/engineering/oil.js), [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js), [cantags.js](../kubejs/server_scripts/tags/cantags.js), [07_rules.js](../kubejs/server_scripts/loot/07_rules.js), [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js), [fabric.js](../kubejs/server_scripts/engineering/fabric.js), [wood_tags.js](../kubejs/server_scripts/tags/wood_tags.js), [blocktags.js](../kubejs/server_scripts/tags/blocktags.js)
+- Pack scripts touching Vinery: [oil.js](../kubejs/server_scripts/engineering/oil.js), [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js), [cantags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js), [07_rules.js](../kubejs/server_scripts/loot/07_rules.js), [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js), [fabric.js](../kubejs/server_scripts/engineering/fabric.js), [wood_tags.js](../kubejs/server_scripts/tags/wood_tags.js), [blocktags.js](../kubejs/server_scripts/tags/blocktags.js)
 - Decompile helper: [tools/decompile_mod.py](../tools/decompile_mod.py)
 - Vinery classes behind §2:
   - `block/GrapevinePotBlock`

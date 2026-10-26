@@ -449,7 +449,7 @@ named cans.
 ### Now
 - No can is in any loot table (catalog). Cans: 41 Canned Goods items (`i.canned_*`, item_dict.js lines 12142-12183)
   and the pack's 228 cans (`creativeengineering:canned_*`, 26 hand-written in
-  [cans.js](../../kubejs/startup_scripts/items/cans.js), the rest generated from `can_types.json`). Full cans carry no
+  [cans.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js), the rest generated from `can_types.json`). Full cans carry no
   NBT and stack to 64 (cans.md 2.1), so they're plain item entries.
 
 ### Build

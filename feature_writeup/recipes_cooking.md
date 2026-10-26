@@ -31,7 +31,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
   closed 2026-10-22 (removals kept).
 - **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-594; 597-1013 is the old
   `global.CE` copy, deleted 2026-10-22), [golden.js](../kubejs/server_scripts/cooking/golden.js),
-  [cultivated_meat.js](../kubejs/server_scripts/cooking/cultivated_meat.js).
+  [cultivated_meat.js](../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js).
 - **Knobs:** none. Server scripts (`/reload`); the meal assemblies' incomplete items and the new tag keys are
   startup (`transition_items.js`, `item_dict.js`): restart.
 
@@ -52,7 +52,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   pressure chamber wheat → 3 at 1.5 bar; explosion crafting 1 per wheat (loss rate 50).
 - **Dough:** flour + water bucket; Bottler 250 mB water per flour, 1000 mB per flour pile → dough block; 3 flour + egg → 6.
   FD's, tmted's and Create Central Kitchen's dough recipes and tmted's slime ball from dough are removed.
-- **Cornmeal** (`creativeengineering:cornmeal`, KubeJS item `startup_scripts/cooking/cornmeal.js`, recolored-flour texture;
+- **Cornmeal** (`creativeengineering:cornmeal`, KubeJS item `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cornmeal.js`, recolored-flour texture;
   tags `#forge:flour/corn` and `#creativeengineering:flour_or_cornmeal` = wheat flour or cornmeal). From cooking.md:
 
   | Machine | Corn | Corn crate (9) | Kernels | Kernel bag (9) |
@@ -94,7 +94,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 - **Melon juice:** squeezer 125 mB per slice, 1250 per melon; Bottler 250 mB per bottle; unheated mixing sugar + 3 slices →
   250 mB. tmted's and Create Central Kitchen's removed.
 - **Chorus juice** (TODO `food/drinks #4`): the pack's first own fluid, `creativeengineering:chorus_juice`
-  (`startup_scripts/cooking/fluids.js`; no block, no bucket, like Central Kitchen's drink fluids; `f.chorus_juice`,
+  (`development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js`; no block, no bucket, like Central Kitchen's drink fluids; `f.chorus_juice`,
   `#forge:fluid/chorus_juice`). Ender's Delight's item: grid 1 fruit + sugar + bottle (theirs, kept); FD pot 2 fruit +
   sugar -> 2 bottles (`chorus_juice_manual_only`); heated mixer 1 fruit + sugar + 250 mB water -> 250 mB; spout,
   drain and IE Bottling Machine at 250 mB. JEI shows Absorption on the fluid through the drain recipe. Pearl pasta
@@ -123,7 +123,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   `#forge:fruits/berries`, no water, glass bottle container, like FR's long / strong teas; the latte's bottle goes
   through the remainder buffer) and grid `shapeless/berry_matcha_latte` (latte + berries + `#forge:ice_cubes`, the
   latte's bottle comes back). New NCH helper `frBrewing(input, output, e, id, opts)` for kettle recipes.
-- **Milk from jars** (TODO `food/drinks #6`, [milk_jar.js](../kubejs/server_scripts/cooking/milk_jar.js)): a glass
+- **Milk from jars** (TODO `food/drinks #6`, [milk_jar.js](../kubejs/data/creative_delight/kubejs/cookingforblockheads/milk_jar.js)): a glass
   bottle on a CfB Milk Jar or Cow in a Jar takes 250 mB out as FD's milk bottle; a milk bottle puts 250 mB back
   (refused when it would overflow). CfB itself only handles buckets. The Cow in a Jar refills at 1 mB/tick (a bottle
   every 12.5 s). The item check uses `Ingredient.of(id).test(stack)`: the first version called `stack.is(id)`, which
@@ -136,7 +136,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Food | Pack routes |
 |---|---|
 | Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen → 2; shapeless 1 |
-| Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativeengineering:soup_veggies_cooked`) in place of the raw veggie and carrot |
+| Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativeengineering:soup_veggie_cooked`) in place of the raw veggie and carrot |
 | Orange jam | Fruits Delight's 2-orange pot and heated mixing recipes kept; since 2026-10-23 also pot: 4 orange slices + sugar + lemon slice + bottle; heated mixing: 4 slices + lemon slice + sugar + 100 mB water → 125 mB jam (TODO `baking/sweets #6`) |
 | Fruit beignet | removed item since 2026-10-23 (TODO `dishes/meals #19`): every recipe with it as output removed |
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice; fried rice takes 2 fried eggs, mushroom rice a baked potato and a second brown mushroom, sinigang a second cooked fish, so each costs one more than the pot (2026-10-21) |
@@ -150,8 +150,8 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Mutton wrap | shapeless or assembly on a tortilla (FD's bread recipe and CCK's bread assembly removed) |
 | Scrambled eggs (Incubation) | 3 eggs + milk + bowl (was 2 eggs) |
 | Vegetable omelet (Brewin') | pot takes 2 fried eggs (`R.replaceInput`); shapeless 2 omelettes + cheese wedge + onion + carrot + bowl |
-| Bowl of exotic fruits (Quark Delight) | any `#creativeengineering:exotic_fruits` (Fruits Delight fruits, hami melon, melon) in the melon slot |
-| Fruit salad | shapeless with `#creativeengineering:fruit_salad_slices` (melon, cantaloupe, hami melon, pineapple, lemon, orange slices) in the melon slots; assembly on a bowl ×2 |
+| Bowl of exotic fruits (Quark Delight) | any `#creativeengineering:exotic_fruit` (Fruits Delight fruits, hami melon, melon) in the melon slot |
+| Fruit salad | shapeless with `#creativeengineering:fruit_salad_slice` (melon, cantaloupe, hami melon, pineapple, lemon, orange slices) in the melon slots; assembly on a bowl ×2 |
 | Burgers: hamburger, cheeseburger, deluxe cheeseburger, simple hamburger, hamburger with egg, loaded hamburger, bison burger, kangaroo burger; Vintage Delight's cheese burger and deluxe burger (2026-10-23: on its cheese slice, beef or vegetarian patty; the deluxe assembly starts on the patty) | shaped only (toppings top, patty middle, bread bottom), any `#forge:bread`, cheese wedges (Delightful's milk versions removed); one assembly each on bread (the egg burger on the patty). Each assembly starts with a different item: CCK's bacon, chicken and egg sandwiches already start on bread with bacon, chicken and a fried egg |
 | Shepherd's pie | shapeless with a cheese wedge in place of milk; assembly on a bowl |
 | Horror lasagna | shapeless (cooked) and assembly on a bowl ×2 (pasta first, then 250 mB tomato sauce) |
@@ -167,7 +167,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Kelp roll, rice roll medley, roasted mutton chops | assembly |
 | Fish stew, cabbage rolls, horror lasagna, pasta with mutton (and heated mixing ×4) | shapeless from cooked ingredients |
 | Fish Tempura (PneumaticCraft salmon tempura, renamed) | raw: any whole fish (`#creativeengineering:food_type/raw/fish`) + batter (was salmon + sourdough); pot: cooking oil + raw tempura. PneumaticCraft's Thermopneumatic recipe and the pack's plant-oil mixing removed |
-| Fries (PneumaticCraft chips, renamed) | pot: cooking oil + 2 `#forge:sliced_potatoes` (Rustic Delight slices, More Delight diced potatoes) → 2. Thermopneumatic chips removed |
+| Fries (PneumaticCraft chips, renamed) | pot: cooking oil + 2 `#forge:sliced_potato` (Rustic Delight slices, More Delight diced potatoes) → 2. Thermopneumatic chips removed |
 | Fish and Chips (PneumaticCraft cod 'n' chips, renamed) | pot: cooking oil + any whole fish + 2 sliced potatoes, plated on paper; shapeless fries + cooked fish + paper (`_manual_only`). Tooltip: the chips are fries |
 | Blueberry and cranberry muffins | pot recipes on `#forge:dough` ([oven.md](oven.md)) |
 | Stuffed shulker, ender paella, pearl pasta (Ender's Delight) | shapeless |
@@ -343,7 +343,7 @@ until a row is built.
 - [server_scripts/cooking/](../kubejs/server_scripts/cooking/): `cooking.js`, `golden.js`, `chocolate.js`,
   `cultivated_meat.js` (this writeup); `baking.js` ([oven.md](oven.md)); `canning.js` ([cans.md](cans.md));
   `mortar.js` ([kitchen.md](kitchen.md)).
-- `milk_jar.js` (2.2); pack fluids in `startup_scripts/cooking/fluids.js`.
+- `milk_jar.js` (2.2); pack fluids in `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js`.
 - Scratch probe: [tools/food_drinks_probe/food_drinks_probe.js](../tools/food_drinks_probe/food_drinks_probe.js)
   (`/fdtest fluids|recipes|ice|milkjar|soupjar|sol|coffee|all`), scratch-only.
 - NCH `foodGrinding` / `mortar` / `frBrewing` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
@@ -480,16 +480,16 @@ None.
   `baked-goods #2`. RC-53, RC-54. Not shipped.
 - 2026-10-21: meals (TODO `dishes/meals` #1 to #3, [brief](briefs/dishes_meals.md)): heatless meal rule and `_manual_only`
   ids, four new heatless meals, per-meal fixes, shaped burgers, merged quiche, 16 new assemblies (2.3); tags
-  `soup_veggies_cooked`, `exotic_fruits`, `fruit_salad_slices`. RC-55 to RC-64. Not shipped.
+  `soup_veggie_cooked`, `exotic_fruit`, `fruit_salad_slice`. RC-55 to RC-64. Not shipped.
 - 2026-10-21: Feast Plating JEI tab (TODO `dishes/meals #5` part a; patcherMod 1.1.01, not deployed): every FD
   feast block plus popcorn box, pizza and stuffed hoglin, leftovers from the loot table (2.3). Loot evaluation
   checked headless (roast chicken -> bowl + bone meal, hoglin -> 2 bones). RC-65.
 - 2026-10-21: meals #4, #7, #8, #9 ([brief](briefs/dishes_meals.md)): grid routes for 8 pot meals and dog food, squid
   ink pasta two-fluid mixing, pot frying for any fish (Fish Tempura, Fries, Fish and Chips; PneumaticCraft frying out;
-  Rustic slices in `#forge:sliced_potatoes`), golden food on vanilla gold with a smaller machine discount (F5, F7).
+  Rustic slices in `#forge:sliced_potato`), golden food on vanilla gold with a smaller machine discount (F5, F7).
   RC-66 to RC-70. Not shipped.
 - 2026-10-22: drinks #4 to #6 ([brief](briefs/food_drinks.md)): chorus juice fluid (the pack's first, new
-  `startup_scripts/cooking/fluids.js`) with pot, mixer, spout, drain and Bottling Machine routes; berry matcha latte
+  `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js`) with pot, mixer, spout, drain and Bottling Machine routes; berry matcha latte
   in the kettle (new NCH `frBrewing`) and a grid recipe that no longer eats a bottle; glass bottles on CfB milk and
   cow jars (`milk_jar.js`). RC-71 to RC-74. Not shipped.
 - 2026-10-22: ingredients #4, #5 ([brief](briefs/dishes_ingredients.md)): bone broth grid routes for 6 soups / stews

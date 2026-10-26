@@ -47,7 +47,7 @@ the wrench, (f) lunchbox slot count.
 - **(b) Food types.** 31 types in [food_types.json](../../kubejs/generation_scripts/food/food_types.json) (`types`:
   type -> item_dict keys, one type per food, `excluded` list, `canned` map), turned into
   `#creativeengineering:food_type/<type>` (nested types also land in their parents) by
-  [foodtypetags.js](../../kubejs/server_scripts/tags/foodtypetags.js). Type list and meaning: [food.md](../food.md) 2.1.
+  [foodtypetags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js). Type list and meaning: [food.md](../food.md) 2.1.
   Spice of Life: Apple Pie Edition 2.2.0 already adds its own diversity line (`tooltip.solapplepie.*`).
 - **(c) Cans.** Each serving is the full food value, so AppleSkin already draws one serving's bars. patcherMod
   `food/CanServingsTooltip` inserts "Servings: x / y" at line 1; `food/CanServings.servingsLeft(stack)` /

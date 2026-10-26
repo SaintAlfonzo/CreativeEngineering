@@ -359,6 +359,24 @@ global.removedItems = [
 	i.green_bedroll,
 	i.red_bedroll,
 	i.black_bedroll,
+	// Meats with no source in the pack (food/types-and-tuning #10, briefs/food_types-and-tuning.md): venison needs
+	// Environmental or Twilight Forest, goat is off in delightful-common.toml. Passion fruit glazed duck needs
+	// Atmospheric. The rest of Abnormals Delight's duck line is wired to Untitled Duck Mod (cooking.js).
+	i.venison_chops,
+	i.venison_chops_cooked,
+	i.venison_shanks,
+	i.cooked_venison_shanks,
+	i.seared_venison,
+	i.venison_with_bamboo_shoots,
+	i.raw_goat,
+	i.cooked_goat,
+	i.passion_fruit_glazed_duck,
+	// Delightful's own jams are off beside Fruits Delight's (delightful-common.toml; feature_writeup/delightful.md 2.3).
+	// Nut butter and jam sandwiches take the forge:jams tag, so Fruits Delight's jams cover them.
+	i.jelly_bottle,
+	i.glow_jelly_bottle,
+	// No prickly pear source in the pack (Ecologics is not installed), so the juice cannot be made (delightful.md 2.6).
+	i.prickly_pear_juice,
 ];
 
 console.log(`[jeiRemove] Registered ${global.removedItems.length} removed items to global scope`)

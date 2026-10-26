@@ -30,7 +30,7 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
   `mixin/CuttingBoardRendererOffsetMixin`, `mixin/CoasterRendererOffsetMixin`, `compat/CounterToppers`,
   `mixin/CfbCornerStorageMixin`, `mixin/CfbCornerUseMixin`, `compat/CfbCornerStorage`;
   [tools/gen_cfb_fridge_models.py](../tools/gen_cfb_fridge_models.py);
-  [cooking/mortar.js](../kubejs/server_scripts/cooking/mortar.js) and NCH `mortar` / `foodGrinding`;
+  [cooking/mortar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/mortar.js) and NCH `mortar` / `foodGrinding`;
   [tools/gen_mortar_catalog.py](../tools/gen_mortar_catalog.py).
 - **Knobs:** `config/creativeengineering-common.toml` `[kitchen] cuttingBoardOffsetX / Y / Z` and `plateOffsetX / Y / Z`
   (pixels; Y default -1);
@@ -169,7 +169,9 @@ water".
   (counter toppers), FD board and Brewin' coaster renderers (client), CfB corner block entity and use. CfB 13.3.4's and
   the Brewin' port's jars are in `development/patcherMod/libs/` to compile against.
 - Resource overrides: CfB's `fridge_large_upper` (top fill box) and its texture.
-- Recipes: bamboo bowl; mortar crafts (own and catalogue).
+- Recipes: bamboo bowl; mortar crafts (own and catalogue); slime block from a dough block + green dye in a heated mixer
+  (`cooking/kitchen #12`, Creative Delight script `kubejs/data/creative_delight/kubejs/create/slime.js`, id
+  `creative_delight:createmixing/slime_block_from_dough_block`; it replaces the Pickling Jar's slime block).
 - Tooltips: CfB oven, sink.
 
 ## 4. Limits and decisions
@@ -202,7 +204,7 @@ Brief: [briefs/cooking_kitchen.md](briefs/cooking_kitchen.md). Nothing here is b
   [compat/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/):
   `CounterToppers`, `CfbCornerStorage`; `CEConfig.Kitchen`.
 - KubeJS: [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (bamboo bowl, `foodGrinding` calls),
-  [mortar.js](../kubejs/server_scripts/cooking/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
+  [mortar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
   [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), [tooltips.js](../kubejs/client_scripts/tooltips.js),
   NCH in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js); dict keys `i.mortar_and_pestle`, `i.powder_pestle`,
   `i.t_balm_cooking_oil`, `i.cfb_*`, `b.cfb_counter`, `b.cfb_corner`, `b.dd_food_plate`,
@@ -269,6 +271,8 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - [ ] **KT-17 Plates pop when the block below goes:** a Food Plate, a plated food and a Display Delight bowl on stone,
   and a plate and a Coaster with drinks on a counter: break the block under each → it breaks and drops (the plated
   food its food, the coaster its drinks); nothing is left floating.
+- [ ] **KT-18 Slime block in the mixer:** a dough block + green dye in a heated basin → slime block; JEI lists it under
+  Mixing (needs the Creative Delight jar).
 
 ## 8. History
 
@@ -284,3 +288,5 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - 2026-10-25: Display Delight blocks, toppers and the coaster break when the block below goes (2.3, KT-17, patcherMod
   1.1.02 rebuilt, not in `mods/`). Fridge stretch reverted, white top fill box instead (2.4, `#6`, `#19`); KT-06
   rewritten.
+- 2026-10-25: slime block mixing (`cooking/kitchen #12`, KT-18; the brief's KT-08 number was taken), written as a
+  Creative Delight script.

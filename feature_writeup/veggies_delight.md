@@ -1,5 +1,7 @@
 # Veggies Delight: backport and implementation description
 
+> **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Veggies Delight; its registry namespace and test prefix do not change.
+
 Plan written 2026-10-22; implementation decided by the user the same day (§4, §5). **BUILT 2026-10-22** (port jar in
 `mods/`, pack integration in scripts and data; §4.0 lists what is done and what waits for an in-game dump). Veggies Delight
 (mehdinoui) has no 1.19.2 build: the newest are 1.9.2 for Forge 1.20.1 and 1.9.3 for NeoForge 1.21.1, with identical
@@ -25,12 +27,12 @@ This file has four parts:
 | Port jar `backportedVeggies-1.9.2-ce-19.2-01.jar` | §4.1 | BUILT 2026-10-22, installed in `mods/`; not yet loaded in game |
 | Implementation description (port, wild plants, mature dandelion, seasons, food, cooking rules, baking, drinks, jars, mob food, loot, houses, trades, compost, UI) | §4 | BUILT 2026-10-22 except the dump-driven steps (§4.0) |
 | Marked merges and pins (Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers; Cultural Delight; Vintage and Cultural recipes; doughs; mob food; seasons; tea audit) | §5 | marked 2026-10-22 |
-| Tests | §8 | VD-01 to VD-40 drafted (not all numbers used) |
+| Tests | §8 | VD-01 to VD-41 drafted (not all numbers used) |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/VeggiesDelight-1.20.1-1.9.2.jar` (Forge, closest API to
   1.19.2). `DecompiledMods/VeggiesDelight-1.21.1-1.9.3.jar` is the NeoForge build, not decompiled, same content.
   Re-decompile with `python3 tools/decompile_mod.py <jar> <out dir>` (36 classes).
-- **Licence:** `mods.toml` says MIT for the whole mod (code and assets; unlike Vinery's split licence there is no
+- **Licence:** MIT (owner-supplied 2026-10-25; `mods.toml` agrees) for the whole mod (code and assets; unlike Vinery's split licence there is no
   separate assets clause). A GPLv3 port may include MIT code and assets as long as the MIT notice is kept.
 - **Dependencies:** Forge and Farmer's Delight only (`farmersdelight [1.2.3,)`). Every FD type it uses exists in the
   pack's FD 1.19.2-1.2.4: `WildCropBlock` / `wild_crop` feature, `add_features_by_filter` biome modifier,
@@ -156,6 +158,28 @@ glass bottle; fish and chips is a pot recipe from raw fish, potato and egg.
 `chance<Crop>` per wild patch (rarity), `generateVanillaVillageStructures` plus one switch per compat village mod,
 `enableVillagerTrades`, `enableWanderingTraderTrades`.
 
+### 2.7 Upstream 1.9.3 against the ported 1.9.2 (evaluated 2026-10-25)
+
+Jars: `devmods/checkNewerVersionForContent/VeggiesDelight-1.20.1-1.9.3.jar` against the port source
+`VeggiesDelight-1.20.1-1.9.2.jar` (`python3 tools/jar_diff.py`, bytecode by `javap`). 1.9.3 requires Farmer's Delight
+`[1.3.1,)` (was `[1.2.3,)`); most of the delta follows FD 1.3. No item, block, lang key, food value or worldgen change.
+The 1.21.1 build of 1.9.3 has the same content as the 1.20.1 one apart from the item icons in the last row.
+
+| Kind | Change in 1.9.3 | Decision (proposed) |
+|---|---|---|
+| Food effect | 9 foods give FD Nourishment instead of Comfort, same durations: sweet potato pancakes (the Comfort half; Speed stays), coleslaw, broccoli soup, cauliflower soup, garlic chicken stew, turnip beef stew, cacciatore, mashed potatoes, potato noodles. FD 1.3.4 has no Comfort in any of its own foods, so this follows FD 1.3 | **skip, decided 2026-10-25** ([farmers_delight.md](farmers_delight.md) 2.5): Comfort stays on the pack's FD soups, so the port keeps Comfort. The 9 foods are Comfort in the port and in the food dump. Cans copy these effects, so a change reruns `gen_can_types.py` |
+| Recipe (code) | Sweet potato dough from water is a custom recipe (`SweetPotatoDoughRecipe`, `ModRecipeSerializers`): 2 sweet potato + wheat + any `#forge:buckets/water`, gives 3 dough and returns the empty bucket. Same inputs and output as the 1.9.2 shapeless recipe | skip (no gameplay change; the pack's dough rules, §5.4, own this recipe) |
+| Tags | New `farmersdelight:feasts` (blocks), `pies` (blocks, items), `snacks`, `sweets` (items); pie and feast blocks move from `forge:mineable/knife` to `minecraft:mineable/axe` | skip: FD 1.2.4 defines none of these tags and nothing in the pack reads them; knife stays right for FD 1.2.4 |
+| Create milling | 10 recipes rename `processingTime` to `processing_time` (Create 6 field) | skip: the pack's Create reads `processingTime` |
+| Models | 24 crop stage models use `farmersdelight:block/template_crop_cross` (FD 1.3 only) | skip |
+| Models | Lasagna pan models use FD 1.3's `block/tray` texture | skip (FD 1.2.4 has only `tray_top`) |
+| Models | Carrot cake slices 1 to 6 show `carrot_cake_inner` on the cut face (1.9.2 showed the top texture). The texture is already in the port jar | **carry over** (data, `port_resources.py`): an upstream visual fix |
+| Structures | The 4 depot houses (plains and 3 Repurposed Structures variants) replace the vanilla horse-pool jigsaw with 2 or 3 placed untamed horses of fixed variants | skip: the pool jigsaw already spawns a horse |
+| Item icons (1.21.1 build only) | The 8 wild plants and the mature dandelion get their own `item/` textures (1.20.1 uses the block texture) | optional, visual only; owner's call |
+
+Carrot cake cut face: built 2026-10-25 (`veggiesport #3`): `port_resources.py` writes `carrot_cake_inner` into slices 1 to 6,
+port `1.9.2-ce-19.2-03` (built, not in `mods/`); VD-41.
+
 ## 3. Part 2: overlap with what the pack already has
 
 ### 3.1 Item overlaps, as decided (user 2026-10-22)
@@ -223,19 +247,19 @@ decision.
 | 4.4 Mature dandelion | BUILT | `wild_flowers.json` entry with `follows`; the generator writes the resolved list into `flower_features.json` (`follows`), `wild_flowers.js` reads it. 61 biomes (no snowy, desert, bare badlands, swamp). New loot table in the port. `test_wild_flowers.sh` passes |
 | 4.5 Crops, seasons | seasons BUILT (VD's tags, bell pepper entries stripped); crops.md rows and coverage OPEN | WTHIT coverage (`/dumpcropgrowth`) needs the game |
 | 4.6 Food types, cans, jars, stacks | types, jars, cans BUILT; stacks, placeables OPEN | 64 foods typed by hand in `food_types.json` (checked 2026-10-23: none missing); the 5 soups have soft fluids (`gen_soup_soft_fluids.py`). 2026-10-23: `food_catalog.py` rerun from the 10-22 dump, 24 cans generated (broccoli, cauliflower with florets, sweet potato, turnip, zucchini with slices; baked sweet potato, roasted zucchini, roasted florets; 2 pastas; 3 breads, 4 salads, 5 soups by type; sweet potato pie filling, also baked into the pie). Not canned: garlic, dandelion leaf, patties, roasted garlic, handhelds, sweets, drinks, other meals ([can_parity.md](can_parity.md), CP-27 to CP-29). `gen_stack_sizes.py`, `placeable_catalog.py` still to run |
-| 4.7 Cooking rules | BUILT | `cooking.js` Meals: 12 VD grid meals re-id'd `_manual_only`, 15 heatless pot-meal routes; wraps on `#forge:tortilla` (manual only) plus two sequenced assemblies; cauliflower bread in the oven (`baking.js`, on dough). Tag `#creativeengineering:roasted_bell_peppers`; baked sweet potato and roasted zucchini joined `soup_veggies_cooked`. 2026-10-23, with the Vintage port: its compat grid recipes folded in (Cesar salad garlic or cheese, zucchini boat milk or cheese, vegetarian patty in Vintage's burgers, roasted pepper in the burrito), the dough fajitas wrap removed; the pot versions stay ([vintage_delight.md](vintage_delight.md) step 9) |
+| 4.7 Cooking rules | BUILT | (Since 2026-10-25 the grid-meal moves, heatless routes and wraps are Creative Delight QoL-5: `kubejs/data/creative_delight/kubejs/veggiesdelight/cooking.js`, ids `creative_delight:`, switch `[qol] manualOnlyRoutes`.) `cooking.js` Meals: 12 VD grid meals re-id'd `_manual_only`, 15 heatless pot-meal routes; wraps on `#forge:tortilla` (manual only) plus two sequenced assemblies; cauliflower bread in the oven (`baking.js`, on dough). Tag `#creativeengineering:roasted_bell_pepper`; baked sweet potato and roasted zucchini joined `soup_veggie_cooked`. 2026-10-23, with the Vintage port: its compat grid recipes folded in (Cesar salad garlic or cheese, zucchini boat milk or cheese, vegetarian patty in Vintage's burgers, roasted pepper in the burrito), the dough fajitas wrap removed; the pot versions stay ([vintage_delight.md](vintage_delight.md) step 9) |
 | 4.8 Baking | BUILT | Carrot cake in `CAKES` (2 carrots), sweet potato pie in `PIES` (2 baked sweet potatoes, no filling can). The removal sweep takes VD's own recipes, slices-to-whole stay |
 | 4.9 Drinks | BUILT | Fluids `creativeengineering:carrot_juice`, `dandelion_juice`, `turnip_water`; pot route `_manual_only` (VD's inputs), heated mixer = the same inputs + 250 mB water, spout, drain, bottler at 250 mB. Jar soft fluids (2026-10-23) for the 3 juices (tank fluid as equivalent) and fermented garlic honey, hand-written beside `nut_milk.json` |
 | 4.10 Mob food | BUILT | In the port (`ModMobsEvents`), Rustic's 3 peppers and seeds in place of VD's |
 | 4.11 Loot | BUILT | `loot/07_rules.js`: VD's 9 injections as `L.add` entries in each table's main pool (0.015 to 0.04 a roll per item), and `L.pack` for the 6 VD crates. Wagon tables kept in the port |
 | 4.12 Houses | BUILT | Port injects the 5 vanilla depot houses at weight 4 (normal priority, before PoolTuner at LOWEST). `pool_tags.json` `mod/veggiesdelight` multiplier 0.5. They appear in `pool_config.json` after the next world load. Lootr converts their chests (wooden chests) |
 | 4.13 Trades | BUILT | `trades.js` farmer level 1 (VD's counts); `wandering_trades.js` common pool, 7 items |
-| 4.14 Compost | BUILT, check OPEN | The rules cover its produce, seeds and cooked veggies; its 6 wild crops (0.65) and 6 crates (1.0) are rows in `compost_values.js` (2026-10-23), as the other mods'. `/dumpcompost` to confirm |
+| 4.14 Compost | BUILT, check OPEN | The rules cover its produce, seeds and cooked veggies; its 6 wild crops (0.65) and 6 crates (1.0) are rows in Creative Delight's `kubejs_startup/veggiesdelight/compost.js` (2026-10-23; moved from `compost_values.js` 2026-10-25, QoL-4). `/dumpcompost` to confirm |
 | 4.15 UI, release | changelog BUILT; JEI, BlockRunner, WTHIT icons OPEN | Changelog bullets under Farming & Nature, Food & Cooking, World Generation. No `plan_1.1.01.md` exists; the release notes are `unreleased.md` |
 
 Port fixes to upstream data (`port_resources.py`): the IE crusher recipe for wild broccoli named
 `fveggiesdelight:wild_broccolis` (typo); the More Delight compat recipes used `#forge:sliced_potato`, which More
-Delight for 1.19 calls `#forge:sliced_potatoes`.
+Delight for 1.19 calls `#forge:sliced_potato`.
 
 Build order. Every recipe through `global.NCH`, every tag through `global.tags`, every id through the item and block
 dicts (CLAUDE.md).
@@ -343,7 +367,7 @@ Where a pack rule exists ([recipes_cooking.md](recipes_cooking.md)), the VD reci
 ### 4.9 Drinks
 
 Carrot Juice, Dandelion Juice and Turnip Water join the juice family the way chorus juice did
-([recipes_cooking.md](recipes_cooking.md) §2.2): a fluid each in `startup_scripts/cooking/fluids.js` (no block, no
+([recipes_cooking.md](recipes_cooking.md) §2.2): a fluid each in `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js` (no block, no
 bucket), heated mixer route, FD pot route `_manual_only`, spout / drain / IE Bottling Machine at 250 mB, effects shown on
 the fluid in JEI. Marked for the tea audit (§5.2).
 
@@ -435,7 +459,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
 - [TODO](todo/TODO.md) `dishes/meals #33`: potato noodles renamed Creamy Gnocchi (milk, gnocchi, onion or garlic, either may be
   pickled); cutting potato dough and sweet potato dough gives gnocchi. There is no potato dough item today.
 - [TODO](todo/TODO.md) `dishes/meals #34`: fries from any potato slice, sweet potato slices included (the fries recipe already
-  reads `#forge:sliced_potatoes`; the work is the slice item).
+  reads `#forge:sliced_potato`; the work is the slice item).
 - [TODO](todo/TODO.md) `dishes/meals #35`: steak and broccoli accepts rice, mashed potatoes, any baked potato plus a bowl, and other
   baked veggies plus a bowl.
 - [TODO](todo/TODO.md) `ports/veggiesport #2` (folded): merge fish and cod and chips (marked merge M1 above).
@@ -447,14 +471,14 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
 | `development/backportedVeggies/` | The port. `tools/port_resources.py` rewrites `src/main/resources/{assets,data}` from the upstream jar (run it after changing it) |
 | `kubejs/startup_scripts/_lib/item_dict.js` | VD keys |
 | `kubejs/generation_scripts/worldgen/wild_crops.json`, `wild_flowers.json`; `tools/gen_wild_flowers.py`, `server_scripts/worldgen/wild_flowers.js` (`follows`) | Wild placement |
-| `kubejs/server_scripts/cooking/` (`cooking.js`, `baking.js`), `startup_scripts/cooking/fluids.js` | Recipes, juice fluids |
+| `kubejs/server_scripts/cooking/` (`cooking.js`, `baking.js`), `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js` | Recipes, juice fluids |
 | `kubejs/generation_scripts/food/food_types.json`, `can_types.json`, `stacks/stack_sizes.json`; soup soft fluids | Generated food data |
 | `kubejs/server_scripts/loot/07_rules.js` | Chest loot (`L.add`, `L.pack`) |
 | `kubejs/generation_scripts/worldgen/pool_tags.json` (`pool_config.json` after a world load) | Depot house weights |
 | `kubejs/startup_scripts/changes/transition_items.js`, `server_scripts/tags/cookingtags.js`, `fluidtags.js`, `_lib/fluid_dict.js` | Wrap assembly items, cooking tags, juice fluid ids and tags |
 | `tools/gen_crop_worldgen_table.py` (`CROP_BLOCKS`), `tools/test_wild_flowers.sh` (`follows`) | Tool support |
 | `kubejs/server_scripts/economy/trades.js`, `wandering_trades.js` | Trades |
-| `kubejs/startup_scripts/compost/compost_rules.js` | Compost (only for items no rule covers) |
+| `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js` | Compost (only for items no rule covers) |
 | names layer (`name_rules.json`, `client_scripts/name_fixes.js`) | Names |
 | `mod_sides.md` | Jar row |
 
@@ -520,6 +544,8 @@ UI
 
 - [ ] VD-40 Names follow the pack's rules (Caesar Salad, Zucchini Seeds); every VD item in JEI has a
   recipe or a use.
+- [ ] VD-41 Place a carrot cake and eat one slice, then more: the cut face shows the cake's inside texture, not the
+  frosted top.
 
 ## 9. History
 
@@ -538,3 +564,6 @@ UI
 - 2026-10-23: `-02`: the 22 Vintage Delight compat recipes ship (the Vintage port is built); fermented garlic honey moves
   from the pot to the Pickling Jar.
 - 2026-10-24: planned scratchpad rows added (5.4: doughs, sweet potato slices, gnocchi, fries, steak and broccoli sides, soup texture, fish and chips merge); no code changed.
+- 2026-10-25: upstream 1.9.3 evaluated against 1.9.2 (§2.7, `tools/jar_diff.py`). Proposed: carry the carrot cake cut
+  face over; Nourishment on 9 foods waits for the FD 1.3.4 survey; the rest skipped. No code changed.
+- 2026-10-25: carrot cake cut face carried over from 1.9.3 (§2.7, port `-03`, VD-41).

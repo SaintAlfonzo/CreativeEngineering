@@ -3,12 +3,12 @@
 Written 2026-10-24 from [todo/TODO.md](../todo/TODO.md) `# largecontent`, Sub `mod-additions`. Only the rows that
 gained scratchpad 2026-10-24 scope are covered here (rows 4, 5, 6, 7 folded; rows 13, 14, 15 new); the other rows have
 no brief yet. Layout per [README.md](README.md). Feature writeup:
-[delight_addons_2026_10.md](../delight_addons_2026_10.md) (survey of the five 2026-10-23 jars; sections 1 to 4 per jar) and
+[ends_delight.md](../ends_delight.md), [ocean_delight.md](../ocean_delight.md), [miners_delight.md](../miners_delight.md), [hostile_delight.md](../hostile_delight.md) (survey of the five 2026-10-23 jars) and
 [hostile_delight.md](../hostile_delight.md). Jars read 2026-10-24 from `mods/`: `ends_delight-1.19.2-2.1`,
 `oceansdelight-1.0.2`, `oceanic_delight-1.0.1`, `miners_delight-1.19.2-1.1.2`, `Hostile_Delight_0.2.2`.
 
 ## mod-additions #4: Integrate End's Delight (alongside Ender's Delight)
-Status: Planned / Work: KubeJS / data / TODO `largecontent/mod-additions #4` ([delight_addons_2026_10.md](../delight_addons_2026_10.md) 1)
+Status: Planned / Work: KubeJS / data / TODO `largecontent/mod-additions #4` ([ends_delight.md](../ends_delight.md))
 
 Base work is in the writeup (section 1, checklist section 3). Folded scope (scratchpad 2026-10-24): the succulent and
 fungus options, now `largecontent/mod-additions #15` below. Other 2026-10-24 rows that depend on this integration:
@@ -17,7 +17,7 @@ fungus options, now `largecontent/mod-additions #15` below. Other 2026-10-24 row
 ---
 
 ## mod-additions #5: Integrate Ocean's Delight and Oceanic Delight
-Status: Planned / Work: KubeJS / data / TODO `largecontent/mod-additions #5` ([delight_addons_2026_10.md](../delight_addons_2026_10.md) 2)
+Status: Planned / Work: KubeJS / data / TODO `largecontent/mod-additions #5` ([ocean_delight.md](../ocean_delight.md))
 
 Base work is in the writeup (section 2). Folded scope (scratchpad 2026-10-24): the ocean work is now five rows in
 [dishes_ocean.md](dishes_ocean.md): `dishes/ocean #1` fishing net, `#2` fish egg roll, `#3` squid items and the calamari
@@ -41,7 +41,7 @@ Base work is in the writeup. Folded scope (scratchpad 2026-10-24), two items:
 ---
 
 ## mod-additions #7: Miner's Delight: installed jar is OLD, compare with 1.4.5
-Status: Planned / Work: docs / port / TODO `largecontent/mod-additions #7` ([delight_addons_2026_10.md](../delight_addons_2026_10.md) 4)
+Status: Planned / Work: docs / port / TODO `largecontent/mod-additions #7` ([miners_delight.md](../miners_delight.md) 10)
 
 Base work is in the writeup (section 4). Folded scope (scratchpad 2026-10-24): investigate the Miner's Delight soup cup (what
 it is for, and why JEI shows no recipe). Finding from the installed 1.1.2 jar: the soup cups (`beef_stew_cup`,
@@ -83,7 +83,7 @@ actions it needs.
 ---
 
 ## mod-additions #14: Rolls Delight, when added
-Status: Planned / Work: mods/ / KubeJS / TODO `largecontent/mod-additions #14` ([delight_addons_2026_10.md](../delight_addons_2026_10.md))
+Status: Planned / Work: mods/ / KubeJS / TODO `largecontent/mod-additions #14` ([ocean_delight.md](../ocean_delight.md))
 
 ### Goal
 When a rolls Delight mod is added: any roll works in any roll recipe across the mods, and new roll blocks (placeable rolls).
@@ -108,7 +108,7 @@ Which mod and whether to add it at all (the TODO row's decision). Recommend wait
 ---
 
 ## mod-additions #15: End's Delight: succulent and fungus options
-Status: Planned / Work: KubeJS / data / TODO `largecontent/mod-additions #15` ([delight_addons_2026_10.md](../delight_addons_2026_10.md)); see `#4` (folded text)
+Status: Planned / Work: KubeJS / data / TODO `largecontent/mod-additions #15` ([ends_delight.md](../ends_delight.md)); see `#4` (folded text)
 
 ### Goal
 Decide on End's Delight's succulent (is a chorus succulent kept: find where it comes from, then remove and replace it) and

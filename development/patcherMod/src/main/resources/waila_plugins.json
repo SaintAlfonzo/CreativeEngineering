@@ -14,12 +14,6 @@
     },
     "side": "client"
   },
-  "creativeengineering:crop_growth": {
-    "entrypoints": {
-      "client": "com.SaintAlfonzo.creativeengineering.crops.WthitCropGrowth"
-    },
-    "side": "client"
-  },
   "creativeengineering:coaster": {
     "entrypoints": {
       "client": "com.SaintAlfonzo.creativeengineering.compat.WthitCoaster"

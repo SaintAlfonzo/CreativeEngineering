@@ -119,7 +119,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Dave's Building Extended | `davebuildingmod` | `dbExtended-1.19.2-6.0.1.jar` |  |
 | both | Decorative Blocks | `decorative_blocks` | `Decorative Blocks-forge-1.19.2-3.0.0.jar` |  |
 | both | Delightful | `delightful` | `Delightful-1.19.2-3.4.1.jar` |  |
-| both | Display Delight | `displaydelight` | `displaydelight-1.2.0.jar` |  |
+| both | Display Delight (Backport) | `displaydelight` | `backportedDisplay-1.7.0-ce-19.2-01.jar` | This pack's port of Display Delight 1.7.0 (development/backportedDisplay); replaces displaydelight-1.2.0.jar. Added 2026-10-25 |
 | both | Distant Horizons | `distanthorizons` | `DistantHorizons-3.0.2-b-1.19.2-fabric-forge.jar` | Optional on server: sends distant terrain to players |
 | both | Do A Barrel Roll | `do_a_barrel_roll` | `do-a-barrel-roll-2.6.2+1.19.2-forge.jar` | Optional on server: enforces its settings |
 | both | Domestication Innovation | `domesticationinnovation` | `domesticationinnovation-1.6.1-1.19.2.jar` |  |
@@ -436,6 +436,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Unlit Campfire | `unlitcampfire` | `unlitcampfire-forge-1.19-1.7.1.0.jar` | Campfires placed unlit / burn out; block mixins + config, Jade/TOP compat. Added 2026-10-14 |
 | both | Create Salt | `create__the_salt` | `Create salt integration. Added 2026-10-18 |
 | both | Labels | `labels` | `labels-1.19.2-1.10.jar` | Art donor for Creative Labels, gameplay off (item hidden, recipes removed; sticky_notes.md 3.13). Added 2026-10-18 |
+| both | Creative Delight | `creative_delight` | `creative_delight-1.0.0.jar` | The pack's own bundle (development/creativeDelight): nests Farmer's Delight (`farmersdelight`), Ocean's Delight (`oceansdelight`), Oceanic Delight (`oceanic_delight`), End's Delight (`ends_delight`), the Rustic Delight 1.7.0 port (`rusticdelight`, reads `rustic_upstream/` on both sides) and Delightful 3.4.1 with 3.8.1 items (`delightful`) as Jar-in-Jar mods; nested ids take this row's side. Needs patcherMod. Added 2026-10-25, not installed yet: the six member rows go when it is (feature_writeup/creative_delight.md 19) |
 | both | End's Delight | `ends_delight` | `ends_delight-1.19.2-2.1.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
 | both | Hostile Delight | `hostiledelight` | `Hostile_Delight_0.2.2_1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
 | both | Miner's Delight (Backport) | `miners_delight` | `backportedMiners-1.4.5-ce-19.2-01.jar` | This pack's merged port of Miner's Delight 1.4.5 + 1.1.2 (development/backportedMiners), needs Farmer's Delight. Reads its art and data from the jar in `miners_upstream/` (not mods/). Replaces miners_delight-1.19.2-1.1.2.jar (live since 1.1.02); built 2026-10-24, installed by `:backportedMiners:installToMods` (feature_writeup/miners_delight.md) |

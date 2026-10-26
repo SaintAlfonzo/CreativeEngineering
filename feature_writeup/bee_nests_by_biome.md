@@ -7,8 +7,8 @@ Config: [bee_nests.json](../kubejs/generation_scripts/worldgen/bee_nests.json).
 
 | | before | after |
 |---|---|---|
-| overworld land, area-weighted (chunks per nest) | 1 in 785 | 1 in 170 |
-| land biomes with any nests | 17 of 126 | 47 of 126 |
+| overworld land, area-weighted (chunks per nest) | 1 in 518 | 1 in 142 |
+| land biomes with any nests | 15 of 122 | 45 of 122 |
 
 "before" = mods as loaded plus the pack's wild_crops.json changes; "after" = bee_nests.json applied.
 Rows marked **m** (38 biomes) are calibrated on the measured baseline (bee_nests_baseline.json, 41,684 chunks, 2026-10-10): real trees/chunk and nest rate, "after" scaled from it.
@@ -22,136 +22,134 @@ overworld surface (biome_config.json). Rules: chance/scale rules in fold order, 
 
 | biome | area % | m | trees/chunk | before | after | rules | nest sources (before) |
 |---|---|---|---|---|---|---|---|
-| minecraft:flower_forest | 0.13 |  | 6.94 | 1 in 8 | 1 in 4 | temperate_woods, flower_boost | minecraft:forest_flower_trees (1 in 8) |
-| terralith:lavender_valley | 0.07 |  | 14.11 | 1 in 11 | 1 in 5 | temperate_woods, flower_boost | terralith:flower/lavender/trees (1 in 11) |
-| terralith:lavender_forest | 0.00 |  | 14.10 | 1 in 11 | 1 in 5 | temperate_woods, flower_boost | terralith:flower/lavender/trees (1 in 11) |
-| terralith:sakura_valley | 0.00 |  | 9.54 | 1 in 12 | 1 in 5 | temperate_woods, flower_boost | terralith:cherry/cherry_trees (1 in 14), terralith:cherry/birch_sparse (1 in 100), terralith:cherry/birch (1 in 153) |
-| terralith:sakura_grove | 0.23 |  | 9.53 | 1 in 12 | 1 in 5 | temperate_woods, flower_boost | terralith:cherry/cherry_trees (1 in 14), terralith:cherry/birch_sparse (1 in 100), terralith:cherry/birch (1 in 153) |
-| terralith:blooming_plateau | 0.17 | m (389 ch, 3 nests) | 0.11 | 1 in 130 | 1 in 9 | grassland, flower_boost, bloom_bee_trees | minecraft:trees_meadow (1 in 100) |
-| minecraft:sunflower_plains | 0.27 |  | 0.15 | 1 in 400 | 1 in 10 | grassland, flower_boost, bloom_bee_trees | minecraft:plain_vegetation (1 in 400) |
-| terralith:blooming_valley | 0.30 | m (159 ch, 1 nests) | 5.04 | 1 in 159 | 1 in 10 | temperate_woods, flower_boost, bloom_woods | terralith:forest/flower/small/trees_small (1 in 82), terralith:forest/flower/cloud_trees (1 in 83), terralith:forest/flower/mid/trees_mid (1 in 126) |
-| terralith:skylands_spring | 0.07 |  | 3.73 | 1 in 100 | 1 in 11 | temperate_woods, flower_boost, bloom_woods | terralith:cherry/birch_sparse (1 in 100) |
-| terralith:mirage_isles | 0.03 |  | 28.17 | - | 1 in 12 | temperate_woods |  |
-| minecraft:meadow | 0.80 | m (236 ch, 0 nests) | 0.37 | - | 1 in 15 | grassland, flower_boost, meadow_bee_trees | minecraft:trees_meadow (1 in 100) |
-| minecraft:old_growth_birch_forest | 0.60 | m (600 ch, 35 nests) | 4.18 | 1 in 17 | 1 in 16 | temperate_woods | terralith:birch/birch_tall (1 in 6) |
-| terralith:haze_mountain | 0.00 | m (506 ch, 0 nests) | 50.76 | - | 1 in 20 | cold_woods |  |
-| minecraft:birch_forest | 0.37 | m (788 ch, 0 nests) | 14.26 | - | 1 in 23 | temperate_woods |  |
-| terralith:temperate_highlands | 0.57 |  | 12.27 | - | 1 in 27 | temperate_woods |  |
-| minecraft:dark_forest | 1.50 | m (740 ch, 0 nests) | 9.98 | - | 1 in 33 | temperate_woods |  |
-| terralith:yosemite_lowlands | 0.03 |  | 8.71 | - | 1 in 38 | temperate_woods |  |
-| terralith:fractured_savanna | 0.07 |  | 8.32 | - | 1 in 40 | warm_woods |  |
-| terralith:moonlight_valley | 0.47 |  | 8.11 | - | 1 in 41 | temperate_woods, flower_boost |  |
-| terralith:moonlight_grove | 0.07 |  | 8.10 | - | 1 in 41 | temperate_woods, flower_boost |  |
-| terralith:brushland | 3.30 | m (161 ch, 0 nests) | 7.84 | - | 1 in 42 | warm_woods |  |
-| minecraft:forest | 3.43 | m (598 ch, 6 nests) | 5.93 | 1 in 100 | 1 in 56 | temperate_woods | minecraft:birch_other (1 in 50) |
-| terralith:cloud_forest | 0.00 |  | 15.82 | - | 1 in 63 | cold_woods |  |
-| terralith:alpha_islands | 0.00 |  | 4.53 | - | 1 in 74 | temperate_woods |  |
-| terralith:hot_shrubland | 0.80 | m (119 ch, 1 nests) | 1.77 | 1 in 119 | 1 in 76 | warm_woods | minecraft:plain_vegetation (1 in 400) |
-| terralith:ashen_savanna | 0.00 |  | 3.80 | - | 1 in 88 | warm_woods |  |
-| terralith:shrubland | 0.47 | m (287 ch, 0 nests) | 2.74 | - | 1 in 122 | warm_woods | minecraft:plain_vegetation (1 in 400) |
-| terralith:lush_valley | 0.10 |  | 8.07 | - | 1 in 124 | cold_woods |  |
-| terralith:skylands_autumn | 0.03 | m (79 ch, 0 nests) | 2.28 | - | 1 in 146 | temperate_woods |  |
-| minecraft:windswept_savanna | 0.47 | m (73 ch, 0 nests) | 2.19 | - | 1 in 152 | warm_woods |  |
-| minecraft:savanna | 2.60 | m (765 ch, 0 nests) | 2.07 | - | 1 in 161 | warm_woods |  |
-| minecraft:old_growth_pine_taiga | 0.50 |  | 5.97 | - | 1 in 167 | cold_woods |  |
-| minecraft:plains | 3.10 | m (985 ch, 1 nests) | 0.24 | 1 in 985 | 1 in 183 | grassland | minecraft:plain_vegetation (1 in 400) |
-| minecraft:old_growth_spruce_taiga | 1.00 | m (83 ch, 0 nests) | 5.00 | - | 1 in 200 | cold_woods |  |
-| minecraft:savanna_plateau | 1.23 | m (280 ch, 0 nests) | 1.66 | - | 1 in 201 | warm_woods |  |
-| minecraft:taiga | 0.97 | m (56 ch, 0 nests) | 4.41 | - | 1 in 227 | cold_woods |  |
-| terralith:shield | 0.87 | m (345 ch, 0 nests) | 3.90 | - | 1 in 256 | cold_woods |  |
-| terralith:forested_highlands | 0.80 | m (210 ch, 0 nests) | 2.87 | - | 1 in 348 | cold_woods |  |
-| terralith:cave/frostfire_caves | 0.00 |  | 0.05 | 1 in 400 | 1 in 400 |  | minecraft:plain_vegetation (1 in 400) |
-| terralith:cave/mantle_caves | 0.00 |  | 0.05 | 1 in 400 | 1 in 400 |  | minecraft:plain_vegetation (1 in 400) |
-| terralith:cold_shrubland | 0.37 |  | 2.65 | 1 in 400 | 1 in 400 |  | minecraft:plain_vegetation (1 in 400) |
-| terralith:rocky_shrubland | 0.03 |  | 2.65 | 1 in 400 | 1 in 400 |  | minecraft:plain_vegetation (1 in 400) |
-| terralith:orchid_swamp | 0.17 | m (462 ch, 0 nests) | 0.67 | - | 1 in 495 | warm_woods, flower_boost |  |
-| minecraft:windswept_forest | 0.20 |  | 1.87 | - | 1 in 535 | cold_woods |  |
-| terralith:yellowstone | 3.60 | m (939 ch, 0 nests) | 1.72 | - | 1 in 580 | cold_woods |  |
-| terralith:arid_highlands | 0.57 |  | 0.21 | - | 1 in 1,587 | warm_woods |  |
-| terralith:savanna_slopes | 0.03 |  | 0.00 | - | 1 in 1,627,604 | warm_woods |  |
-| minecraft:badlands | 1.93 | m (706 ch, 0 nests) | 0.00 | - | - |  |  |
-| minecraft:bamboo_jungle | 0.33 | m (89 ch, 0 nests) | 3.70 | - | - |  |  |
-| minecraft:beach | 1.43 | m (578 ch, 0 nests) | 0.00 | - | - |  |  |
-| minecraft:deep_dark | 0.00 |  | 0.00 | - | - |  |  |
-| minecraft:desert | 2.27 | m (86 ch, 0 nests) | 0.00 | - | - |  |  |
-| minecraft:eroded_badlands | 0.53 |  | 0.00 | - | - |  |  |
-| minecraft:frozen_peaks | 0.70 | m (71 ch, 0 nests) | 0.00 | - | - |  |  |
-| minecraft:frozen_river | 0.30 |  | 0.00 | - | - |  |  |
-| minecraft:grove | 0.10 |  | 16.77 | - | - |  |  |
-| minecraft:ice_spikes | 0.10 |  | 0.10 | - | - |  |  |
-| minecraft:jagged_peaks | 0.47 |  | 0.00 | - | - |  |  |
-| minecraft:jungle | 0.90 |  | 49.22 | - | - |  |  |
-| minecraft:mangrove_swamp | 0.60 |  | 0.33 | - | - |  |  |
-| minecraft:mushroom_fields | 0.23 |  | 5.29 | - | - |  |  |
-| minecraft:river | 2.23 | m (346 ch, 0 nests) | 0.00 | - | - |  |  |
-| minecraft:snowy_beach | 0.17 | m (265 ch, 0 nests) | 0.03 | - | - |  |  |
-| minecraft:snowy_plains | 0.67 |  | 0.52 | - | - |  |  |
-| minecraft:snowy_slopes | 0.03 |  | 0.00 | - | - |  |  |
-| minecraft:snowy_taiga | 0.57 | m (209 ch, 0 nests) | 5.05 | - | - |  |  |
-| minecraft:sparse_jungle | 0.93 |  | 1.82 | - | - |  |  |
-| minecraft:stony_peaks | 0.47 |  | 0.00 | - | - |  |  |
-| minecraft:stony_shore | 0.00 |  | 0.00 | - | - |  |  |
-| minecraft:swamp | 0.53 | m (224 ch, 0 nests) | 5.71 | - | - |  |  |
-| minecraft:windswept_gravelly_hills | 0.00 |  | 0.03 | - | - |  |  |
-| minecraft:windswept_hills | 0.13 |  | 0.45 | - | - |  |  |
-| minecraft:wooded_badlands | 0.57 |  | 5.52 | - | - |  |  |
+| minecraft:flower_forest | 0.17 |  | 6.94 | 1 in 8 | 1 in 4 | temperate_woods, flower_boost | minecraft:forest_flower_trees (1 in 8) |
+| terralith:lavender_valley | 0.14 |  | 14.11 | 1 in 11 | 1 in 5 | temperate_woods, flower_boost | terralith:flower/lavender/trees (1 in 11) |
+| terralith:lavender_forest | 0.45 |  | 14.10 | 1 in 11 | 1 in 5 | temperate_woods, flower_boost | terralith:flower/lavender/trees (1 in 11) |
+| terralith:sakura_valley | 0.16 |  | 9.54 | 1 in 12 | 1 in 5 | temperate_woods, flower_boost | terralith:cherry/cherry_trees (1 in 14), terralith:cherry/birch_sparse (1 in 100), terralith:cherry/birch (1 in 153) |
+| terralith:sakura_grove | 0.48 |  | 9.53 | 1 in 12 | 1 in 5 | temperate_woods, flower_boost | terralith:cherry/cherry_trees (1 in 14), terralith:cherry/birch_sparse (1 in 100), terralith:cherry/birch (1 in 153) |
+| terralith:blooming_plateau | 0.27 | m (389 ch, 3 nests) | 0.11 | 1 in 130 | 1 in 9 | grassland, flower_boost, bloom_bee_trees | minecraft:trees_meadow (1 in 100) |
+| minecraft:sunflower_plains | 0.11 |  | 0.15 | 1 in 400 | 1 in 10 | grassland, flower_boost, bloom_bee_trees | minecraft:plain_vegetation (1 in 400) |
+| terralith:blooming_valley | 0.22 | m (159 ch, 1 nests) | 5.04 | 1 in 159 | 1 in 10 | temperate_woods, flower_boost, bloom_woods | terralith:forest/flower/small/trees_small (1 in 82), terralith:forest/flower/cloud_trees (1 in 83), terralith:forest/flower/mid/trees_mid (1 in 126) |
+| terralith:skylands_spring | 0.01 |  | 3.73 | 1 in 100 | 1 in 11 | temperate_woods, flower_boost, bloom_woods | terralith:cherry/birch_sparse (1 in 100) |
+| terralith:mirage_isles | 0.12 |  | 28.17 | - | 1 in 12 | temperate_woods |  |
+| minecraft:meadow | 0.79 | m (236 ch, 0 nests) | 0.37 | - | 1 in 15 | grassland, flower_boost, meadow_bee_trees | minecraft:trees_meadow (1 in 100) |
+| minecraft:old_growth_birch_forest | 0.45 | m (600 ch, 35 nests) | 4.18 | 1 in 17 | 1 in 16 | temperate_woods | terralith:birch/birch_tall (1 in 6) |
+| terralith:haze_mountain | 0.35 | m (506 ch, 0 nests) | 50.76 | - | 1 in 20 | cold_woods |  |
+| minecraft:birch_forest | 0.26 | m (788 ch, 0 nests) | 14.26 | - | 1 in 23 | temperate_woods |  |
+| terralith:temperate_highlands | 0.61 |  | 12.27 | - | 1 in 27 | temperate_woods |  |
+| minecraft:dark_forest | 1.49 | m (740 ch, 0 nests) | 9.98 | - | 1 in 33 | temperate_woods |  |
+| terralith:yosemite_lowlands | 0.12 |  | 8.71 | - | 1 in 38 | temperate_woods |  |
+| terralith:fractured_savanna | 0.28 |  | 8.32 | - | 1 in 40 | warm_woods |  |
+| terralith:moonlight_valley | 0.18 |  | 8.11 | - | 1 in 41 | temperate_woods, flower_boost |  |
+| terralith:moonlight_grove | 0.21 |  | 8.10 | - | 1 in 41 | temperate_woods, flower_boost |  |
+| terralith:brushland | 1.32 | m (161 ch, 0 nests) | 7.84 | - | 1 in 42 | warm_woods |  |
+| minecraft:forest | 2.29 | m (598 ch, 6 nests) | 5.93 | 1 in 100 | 1 in 56 | temperate_woods | minecraft:birch_other (1 in 50) |
+| terralith:cloud_forest | 0.41 |  | 15.82 | - | 1 in 63 | cold_woods |  |
+| terralith:alpha_islands | 0.13 |  | 4.53 | - | 1 in 74 | temperate_woods |  |
+| terralith:hot_shrubland | 0.56 | m (119 ch, 1 nests) | 1.77 | 1 in 119 | 1 in 76 | warm_woods | minecraft:plain_vegetation (1 in 400) |
+| terralith:ashen_savanna | 0.26 |  | 3.80 | - | 1 in 88 | warm_woods |  |
+| terralith:shrubland | 0.33 | m (287 ch, 0 nests) | 2.74 | - | 1 in 122 | warm_woods | minecraft:plain_vegetation (1 in 400) |
+| terralith:lush_valley | 0.09 |  | 8.07 | - | 1 in 124 | cold_woods |  |
+| terralith:skylands_autumn | 0.02 | m (79 ch, 0 nests) | 2.28 | - | 1 in 146 | temperate_woods |  |
+| minecraft:windswept_savanna | 0.62 | m (73 ch, 0 nests) | 2.19 | - | 1 in 152 | warm_woods |  |
+| minecraft:savanna | 1.02 | m (765 ch, 0 nests) | 2.07 | - | 1 in 161 | warm_woods |  |
+| minecraft:old_growth_pine_taiga | 0.77 |  | 5.97 | - | 1 in 167 | cold_woods |  |
+| minecraft:plains | 1.98 | m (985 ch, 1 nests) | 0.24 | 1 in 985 | 1 in 183 | grassland | minecraft:plain_vegetation (1 in 400) |
+| minecraft:old_growth_spruce_taiga | 0.73 | m (83 ch, 0 nests) | 5.00 | - | 1 in 200 | cold_woods |  |
+| minecraft:savanna_plateau | 0.71 | m (280 ch, 0 nests) | 1.66 | - | 1 in 201 | warm_woods |  |
+| minecraft:taiga | 0.91 | m (56 ch, 0 nests) | 4.41 | - | 1 in 227 | cold_woods |  |
+| terralith:shield | 0.68 | m (345 ch, 0 nests) | 3.90 | - | 1 in 256 | cold_woods |  |
+| terralith:forested_highlands | 0.64 | m (210 ch, 0 nests) | 2.87 | - | 1 in 348 | cold_woods |  |
+| terralith:cold_shrubland | 0.73 |  | 2.65 | 1 in 400 | 1 in 400 |  | minecraft:plain_vegetation (1 in 400) |
+| terralith:rocky_shrubland | 0.26 |  | 2.65 | 1 in 400 | 1 in 400 |  | minecraft:plain_vegetation (1 in 400) |
+| terralith:orchid_swamp | 0.69 | m (462 ch, 0 nests) | 0.67 | - | 1 in 495 | warm_woods, flower_boost |  |
+| minecraft:windswept_forest | 0.10 |  | 1.87 | - | 1 in 535 | cold_woods |  |
+| terralith:yellowstone | 4.28 | m (939 ch, 0 nests) | 1.72 | - | 1 in 580 | cold_woods |  |
+| terralith:arid_highlands | 0.77 |  | 0.21 | - | 1 in 1,587 | warm_woods |  |
+| terralith:savanna_slopes | 0.29 |  | 0.00 | - | 1 in 1,627,604 | warm_woods |  |
+| minecraft:badlands | 0.41 | m (706 ch, 0 nests) | 0.00 | - | - |  |  |
+| minecraft:bamboo_jungle | 0.20 | m (89 ch, 0 nests) | 3.70 | - | - |  |  |
+| minecraft:beach | 1.28 | m (578 ch, 0 nests) | 0.00 | - | - |  |  |
+| minecraft:desert | 0.32 | m (86 ch, 0 nests) | 0.00 | - | - |  |  |
+| minecraft:eroded_badlands | 0.86 |  | 0.00 | - | - |  |  |
+| minecraft:frozen_peaks | 0.73 | m (71 ch, 0 nests) | 0.00 | - | - |  |  |
+| minecraft:frozen_river | 0.32 |  | 8.00 | - | - |  |  |
+| minecraft:grove | 0.12 |  | 16.77 | - | - |  |  |
+| minecraft:ice_spikes | 0.30 |  | 0.10 | - | - |  |  |
+| minecraft:jagged_peaks | 0.44 |  | 0.00 | - | - |  |  |
+| minecraft:jungle | 0.45 |  | 49.22 | - | - |  |  |
+| minecraft:mangrove_swamp | 0.38 |  | 0.33 | - | - |  |  |
+| minecraft:mushroom_fields | 0.82 |  | 5.29 | - | - |  |  |
+| minecraft:river | 1.88 | m (346 ch, 0 nests) | 0.00 | - | - |  |  |
+| minecraft:snowy_beach | 0.27 | m (265 ch, 0 nests) | 0.03 | - | - |  |  |
+| minecraft:snowy_plains | 1.06 |  | 0.52 | - | - |  |  |
+| minecraft:snowy_slopes | 0.28 |  | 0.00 | - | - |  |  |
+| minecraft:snowy_taiga | 0.71 | m (209 ch, 0 nests) | 5.05 | - | - |  |  |
+| minecraft:sparse_jungle | 0.60 |  | 1.82 | - | - |  |  |
+| minecraft:stony_peaks | 0.40 |  | 0.00 | - | - |  |  |
+| minecraft:stony_shore | 0.30 |  | 0.00 | - | - |  |  |
+| minecraft:swamp | 0.84 | m (224 ch, 0 nests) | 5.71 | - | - |  |  |
+| minecraft:windswept_gravelly_hills | 0.18 |  | 0.03 | - | - |  |  |
+| minecraft:windswept_hills | 0.29 |  | 0.45 | - | - |  |  |
+| minecraft:wooded_badlands | 0.23 |  | 5.52 | - | - |  |  |
 | terralith:alpha_islands_winter | 0.00 |  | 4.53 | - | - |  |  |
-| terralith:alpine_grove | 0.07 | m (63 ch, 0 nests) | 1.21 | - | - |  |  |
-| terralith:alpine_highlands | 0.97 |  | 1.92 | - | - |  |  |
-| terralith:amethyst_canyon | 0.17 |  | 28.29 | - | - |  |  |
-| terralith:amethyst_rainforest | 0.33 |  | 28.28 | - | - |  |  |
-| terralith:ancient_sands | 0.03 |  | 0.00 | - | - |  |  |
-| terralith:basalt_cliffs | 0.00 |  | 0.00 | - | - |  |  |
-| terralith:birch_taiga | 0.27 | m (313 ch, 0 nests) | 2.52 | - | - |  |  |
-| terralith:bryce_canyon | 0.60 |  | 5.61 | - | - |  |  |
-| terralith:caldera | 0.00 |  | 0.00 | - | - |  |  |
-| terralith:cave/tuff_caves | 0.00 |  | 0.00 | - | - |  |  |
-| terralith:desert_canyon | 0.17 |  | 0.00 | - | - |  |  |
-| terralith:desert_oasis | 0.10 |  | 48.27 | - | - |  |  |
-| terralith:desert_spires | 0.03 |  | 48.27 | - | - |  |  |
-| terralith:emerald_peaks | 0.00 |  | 0.00 | - | - |  |  |
-| terralith:frozen_cliffs | 0.00 |  | 0.10 | - | - |  |  |
-| terralith:glacial_chasm | 0.20 |  | 0.00 | - | - |  |  |
-| terralith:granite_cliffs | 0.00 |  | 2.00 | - | - |  |  |
-| terralith:gravel_beach | 1.20 | m (472 ch, 0 nests) | 0.00 | - | - |  |  |
-| terralith:gravel_desert | 0.07 |  | 0.00 | - | - |  |  |
-| terralith:highlands | 1.00 | m (546 ch, 0 nests) | 0.32 | - | - |  |  |
-| terralith:ice_marsh | 0.13 | m (89 ch, 0 nests) | 1.84 | - | - |  |  |
+| terralith:alpine_grove | 0.09 | m (63 ch, 0 nests) | 1.21 | - | - |  |  |
+| terralith:alpine_highlands | 0.73 |  | 1.92 | - | - |  |  |
+| terralith:amethyst_canyon | 0.07 |  | 28.29 | - | - |  |  |
+| terralith:amethyst_rainforest | 0.41 |  | 28.28 | - | - |  |  |
+| terralith:ancient_sands | 0.15 |  | 0.00 | - | - |  |  |
+| terralith:basalt_cliffs | 0.30 |  | 0.00 | - | - |  |  |
+| terralith:birch_taiga | 0.20 | m (313 ch, 0 nests) | 2.52 | - | - |  |  |
+| terralith:bryce_canyon | 0.32 |  | 5.61 | - | - |  |  |
+| terralith:caldera | 0.30 |  | 0.00 | - | - |  |  |
+| terralith:desert_canyon | 0.57 |  | 0.00 | - | - |  |  |
+| terralith:desert_oasis | 0.16 |  | 48.27 | - | - |  |  |
+| terralith:desert_spires | 0.20 |  | 48.27 | - | - |  |  |
+| terralith:emerald_peaks | 0.08 |  | 0.00 | - | - |  |  |
+| terralith:frozen_cliffs | 0.30 |  | 0.10 | - | - |  |  |
+| terralith:glacial_chasm | 0.89 |  | 0.00 | - | - |  |  |
+| terralith:granite_cliffs | 0.30 |  | 2.00 | - | - |  |  |
+| terralith:gravel_beach | 0.66 | m (472 ch, 0 nests) | 0.00 | - | - |  |  |
+| terralith:gravel_desert | 0.31 |  | 0.00 | - | - |  |  |
+| terralith:highlands | 1.30 | m (546 ch, 0 nests) | 0.32 | - | - |  |  |
+| terralith:ice_marsh | 0.54 | m (89 ch, 0 nests) | 1.84 | - | - |  |  |
 | terralith:jungle_mountains | 0.03 |  | 0.26 | - | - |  |  |
-| terralith:lush_desert | 0.10 |  | 0.00 | - | - |  |  |
-| terralith:painted_mountains | 0.10 |  | 0.00 | - | - |  |  |
-| terralith:red_oasis | 0.17 |  | 48.27 | - | - |  |  |
-| terralith:rocky_jungle | 0.43 |  | 0.26 | - | - |  |  |
-| terralith:rocky_mountains | 0.77 | m (665 ch, 0 nests) | 0.00 | - | - |  |  |
+| terralith:lush_desert | 1.35 |  | 0.00 | - | - |  |  |
+| terralith:painted_mountains | 0.60 |  | 0.00 | - | - |  |  |
+| terralith:red_oasis | 1.01 |  | 48.27 | - | - |  |  |
+| terralith:rocky_jungle | 0.30 |  | 0.26 | - | - |  |  |
+| terralith:rocky_mountains | 1.00 | m (665 ch, 0 nests) | 0.00 | - | - |  |  |
 | terralith:sandstone_valley | 0.10 |  | 48.27 | - | - |  |  |
-| terralith:savanna_badlands | 0.40 |  | 0.00 | - | - | warm_woods |  |
-| terralith:scarlet_mountains | 0.17 | m (83 ch, 0 nests) | 0.00 | - | - |  |  |
-| terralith:shield_clearing | 0.00 |  | 0.42 | - | - |  |  |
-| terralith:siberian_grove | 0.00 |  | 20.26 | - | - |  |  |
-| terralith:siberian_taiga | 0.67 |  | 20.67 | - | - |  |  |
-| terralith:skylands_summer | 0.03 |  | 13.23 | - | - |  |  |
-| terralith:skylands_winter | 0.03 |  | 4.10 | - | - |  |  |
-| terralith:snowy_badlands | 0.13 |  | 0.00 | - | - |  |  |
-| terralith:snowy_maple_forest | 0.03 |  | 8.07 | - | - |  |  |
-| terralith:snowy_shield | 0.00 |  | 8.07 | - | - |  |  |
-| terralith:steppe | 0.43 |  | 0.00 | - | - |  |  |
-| terralith:stony_spires | 0.27 |  | 0.00 | - | - |  |  |
-| terralith:tropical_jungle | 0.43 |  | 10.59 | - | - |  |  |
-| terralith:valley_clearing | 0.00 |  | 0.00 | - | - |  |  |
-| terralith:volcanic_crater | 0.00 |  | 0.00 | - | - |  |  |
-| terralith:volcanic_peaks | 0.30 |  | 0.00 | - | - |  |  |
-| terralith:warm_river | 0.07 |  | 0.00 | - | - |  |  |
-| terralith:warped_mesa | 0.10 |  | 0.00 | - | - |  |  |
-| terralith:white_cliffs | 0.00 |  | 2.00 | - | - |  |  |
-| terralith:white_mesa | 0.03 |  | 0.00 | - | - |  |  |
-| terralith:windswept_spires | 0.10 |  | 0.03 | - | - |  |  |
-| terralith:wintry_forest | 0.23 |  | 24.15 | - | - |  |  |
-| terralith:wintry_lowlands | 0.10 |  | 24.15 | - | - |  |  |
-| terralith:yosemite_cliffs | 0.17 |  | 1.20 | - | - |  |  |
+| terralith:savanna_badlands | 0.29 |  | 0.00 | - | - | warm_woods |  |
+| terralith:scarlet_mountains | 0.25 | m (83 ch, 0 nests) | 0.00 | - | - |  |  |
+| terralith:shield_clearing | 0.15 |  | 0.42 | - | - |  |  |
+| terralith:siberian_grove | 0.06 |  | 20.26 | - | - |  |  |
+| terralith:siberian_taiga | 0.51 |  | 20.67 | - | - |  |  |
+| terralith:skylands_summer | 0.02 |  | 13.23 | - | - |  |  |
+| terralith:skylands_winter | 0.01 |  | 4.10 | - | - |  |  |
+| terralith:snowy_badlands | 0.52 |  | 0.00 | - | - |  |  |
+| terralith:snowy_maple_forest | 0.15 |  | 8.07 | - | - |  |  |
+| terralith:snowy_shield | 0.07 |  | 8.07 | - | - |  |  |
+| terralith:steppe | 0.49 |  | 0.00 | - | - |  |  |
+| terralith:stony_spires | 0.21 |  | 0.00 | - | - |  |  |
+| terralith:tropical_jungle | 0.10 |  | 10.59 | - | - |  |  |
+| terralith:valley_clearing | 0.30 |  | 0.00 | - | - |  |  |
+| terralith:volcanic_crater | 0.15 |  | 0.00 | - | - |  |  |
+| terralith:volcanic_peaks | 0.69 |  | 0.00 | - | - |  |  |
+| terralith:warm_river | 1.17 |  | 0.00 | - | - |  |  |
+| terralith:warped_mesa | 0.04 |  | 0.00 | - | - |  |  |
+| terralith:white_cliffs | 0.30 |  | 2.00 | - | - |  |  |
+| terralith:white_mesa | 0.06 |  | 0.00 | - | - |  |  |
+| terralith:windswept_spires | 0.15 |  | 0.03 | - | - |  |  |
+| terralith:wintry_forest | 0.29 |  | 24.15 | - | - |  |  |
+| terralith:wintry_lowlands | 0.04 |  | 24.15 | - | - |  |  |
+| terralith:yosemite_cliffs | 0.19 |  | 1.20 | - | - |  |  |
 
 Underground biomes with nests (trees under the surface, not in the table above):
 
 - minecraft:dripstone_caves: before 1 in 400, after 1 in 400
+- terralith:cave/frostfire_caves: before 1 in 400, after 1 in 400
+- terralith:cave/mantle_caves: before 1 in 400, after 1 in 400
 - terralith:cave/underground_jungle: before 1.64 per chunk, after 1.64 per chunk
 
 ## 2. Measured in game (/dumpbeenests)

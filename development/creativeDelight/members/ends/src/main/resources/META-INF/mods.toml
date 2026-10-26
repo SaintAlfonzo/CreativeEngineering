@@ -1,0 +1,32 @@
+# End's Delight (Creative Delight repack): upstream mods.toml with the display name suffix, our version and
+# cleaned dependencies (creative_delight.md 0.3, 14.1.6). Expanded by ce.forge-mod's processResources.
+modLoader="javafml"
+loaderVersion="[43,)"
+license="${mod_license}"
+logoFile="logo.png"
+logoBlur=false
+credits="GamingeckeSpace, mpustovoi, PExPE3, Roby1164, SABITRON, tankplanelaserkoala, TheLegendofSaram, unroman and many others!"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+[[dependencies.ends_delight]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.ends_delight]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.ends_delight]]
+    modId="farmersdelight"
+    mandatory=true
+    versionRange="[1.19-1.2.4,)"
+    ordering="AFTER"
+    side="BOTH"

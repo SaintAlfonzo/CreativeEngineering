@@ -1,4 +1,4 @@
-// Placeable food tags, drawn as tooltip lines by client_scripts/placeable_tooltip.js:
+// Placeable food tags, drawn as tooltip lines by assets/creative_delight/kubejs/_qol/placeable_tooltip.js:
 //   #creativeengineering:placeable                 can be put down as a block ("Placeable")
 //   #creativeengineering:placeable/sneak           ...only while sneaking (also in #placeable)
 //   #creativeengineering:placeable_on_plate        Display Delight Food Plate ("Placeable on plate")

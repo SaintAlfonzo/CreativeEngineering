@@ -28,8 +28,10 @@ Files to open first:
 - `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/cooking/`: `RemainderBuffer` (routing,
   fit check, leftover rule), `RemainderBufferHolder`, `RemainderBufferStorage` (saving), `RemainderOutputHandler`
   (automation), `RemainderSlot`, `client/RemainderSlotFrames`
-- `mixin/`: `CookingPotRemainderMixin`, `CookingPotMenuRemainderMixin`, `CookingPotScreenRemainderMixin`,
-  `KettleRemainderMixin`, `KettleMenuRemainderMixin`, `KettleScreenRemainderMixin`
+- Creative Delight (QoL-1 since 2026-10-25, creative_delight.md 22): `mixin/farmersdelight/` `CookingPotRemainderMixin`,
+  `CookingPotMenuRemainderMixin`, `CookingPotScreenRemainderMixin`; `mixin/farmersrespite/` `KettleRemainderMixin`,
+  `KettleMenuRemainderMixin`, `KettleScreenRemainderMixin`; switch `creative_delight-common.toml [qol] remainderBuffer`
+  (`qol/RemainderBufferQol`). patcherMod's `[cooking] remainderBuffer` is the oven's only; the other dials are shared
 - `oven/OvenBlockEntity`, `OvenMenu`, `client/OvenScreen` (native buffer)
 - `compat/WthitRemainderBuffer` (the WTHIT "Holding" / "Waiting" lines, 3.3)
 - `CEConfig.Cooking`; `config/creativeengineering-common.toml` `[cooking]`

@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 """Names for every Display Delight block -> kubejs/assets/displaydelight/lang/en_us.json.
 
-Display Delight 1.2.0 registers ~205 placed-food blocks (121 of them with a block item that JEI lists)
-but its lang file only names the two plates, so the rest show raw `block.displaydelight.*` keys in
-JEI and WTHIT. Each block's loot table drops the food it holds (plus the plate), so the name comes
-from that food's in-game name (tools/lang_index.py, which includes our renames):
+Display Delight 1.2.0 named only the two plates; the pack's 1.7.0 port names every block after its id
+("Beef Stew Block"). The pack names each food block after the food it holds, in game (tools/lang_index.py, which
+includes our renames); the plates keep the jar's names. The food comes from tools/display_delight_jar.py (1.2.0: the
+block's loot table drop; the port: the block name):
 
     beef_stew                     -> Placed Beef Stew
     plated_hamburger              -> Plated Hamburger
     small_plated_apple_pie_slice  -> Small Plated Apple Pie Slice
 
-When the food's mod isn't installed (corn_delight, expandeddelight, largemeals...), the name is built
-from the block id without its mod prefix, which also skips two typos in DD's loot tables
-(festive_delight:festive_chiken, pineapple_delight:pineapple_pie_side).
+When the food isn't installed (a 1.20-only food, or a 1.2.0 block for a mod the pack does not have), the name is
+built from the block id without its mod prefix.
 
     python3 tools/gen_display_delight_names.py           write the lang file
     python3 tools/gen_display_delight_names.py --check   exit 1 if the file is out of date
@@ -21,15 +20,10 @@ import argparse
 import json
 import re
 import sys
-import zipfile
-
+import display_delight_jar as ddj
 import lang_index
 
 OUT = lang_index.INSTANCE / 'kubejs/assets/displaydelight/lang/en_us.json'
-JAR_GLOB = 'displaydelight-*.jar'
-# Block-id prefixes DD uses for each optional food mod.
-PREFIXES = ('ad_', 'cd_', 'ctd_', 'df_', 'ed_', 'fd_', 'lm_', 'od_', 'pd_')
-PLATES = {'displaydelight:food_plate', 'displaydelight:small_food_plate'}
 # Hand-picked names, where the rule gives something odd.
 OVERRIDES = {
     'bowl': 'Placed Bowl',
@@ -42,28 +36,14 @@ def title(path):
     return ' '.join(w if (i and w in small) else w.capitalize() for i, w in enumerate(words))
 
 
-def strip_prefix(block):
-    for p in PREFIXES:
-        if block.startswith(p):
-            return block[len(p):]
-    return block
-
-
 def read_jar():
-    jars = sorted(lang_index.MODS.glob(JAR_GLOB))
-    if not jars:
-        sys.exit('no %s in mods/' % JAR_GLOB)
-    blocks, drops, own = [], {}, {}
-    with zipfile.ZipFile(jars[-1]) as z:
-        for name in z.namelist():
-            m = re.match(r'^assets/displaydelight/blockstates/([a-z0-9_]+)\.json$', name)
-            if m:
-                blocks.append(m.group(1))
-            m = re.match(r'^data/displaydelight/loot_tables/blocks/([a-z0-9_]+)\.json$', name)
-            if m:
-                drops[m.group(1)] = re.findall(r'"name"\s*:\s*"([^"]+)"', z.read(name).decode())
-        own = lang_index.parse_lang(z.read('assets/displaydelight/lang/en_us.json'))
-    return jars[-1].name, sorted(blocks), drops, own
+    """(jar name, every food block id the jar has a blockstate for, {block: food} links of registered ones)."""
+    path = ddj.jar_path()
+    with ddj.open_jar() as z:
+        blocks = [m.group(1) for m in (re.match(r'^assets/displaydelight/blockstates/([a-z0-9_-]+)\.json$', n)
+                                       for n in z.namelist()) if m and m.group(1) not in ddj.PLATES]
+        links = ddj.links(z)
+    return path.name, sorted(blocks), links
 
 
 def food_name(item, names, namespaces):
@@ -77,19 +57,17 @@ def food_name(item, names, namespaces):
 
 
 def build():
-    jar, blocks, drops, own = read_jar()
+    jar, blocks, links = read_jar()
     names, _ = lang_index.build(skip_kubejs_ns=('displaydelight',))
     namespaces = lang_index.mod_namespaces()
     out, fallback = {}, []
     for b in blocks:
         key = 'block.displaydelight.' + b
-        if key in own:
-            continue
         if b in OVERRIDES:
             out[key] = OVERRIDES[b]
             continue
-        food = [d for d in drops.get(b, []) if d not in PLATES]
-        stem = strip_prefix(b)
+        food = [links[b]] if b in links else []
+        stem = ddj.split_prefix(b)[1]
         if stem.startswith('small_plated_'):
             lead, stem = 'Small Plated ', stem[len('small_plated_'):]
         elif stem.startswith('plated_'):

@@ -10,7 +10,7 @@ picture, the current numbers, and the canned golem dye in full.
 |---|---|---|
 | Multi-serving cans: servings as NBT, a bar and "Servings: x / y", eat one serving at a time, return roll (empty 70 %, crushed 25 %, nothing 5 %), cans in NCH recipes one serving per craft | DEPLOYED (built 2026-09-28; shipped since 1.0.3), FO-14 to FO-22 pending | [food.md](food.md) 3.6 |
 | Servings per can: 247 entries in `can_servings.json` → `#creativeengineering:cans/servings/<n>` | DEPLOYED, grows with every can | [food.md](food.md) 3.6 |
-| 26 hand-written cans (raw veggie, fruit, meat) | DEPLOYED | [can_parity.md](can_parity.md), [cans.js](../kubejs/startup_scripts/items/cans.js) |
+| 26 hand-written cans (raw veggie, fruit, meat) | DEPLOYED | [can_parity.md](can_parity.md), [cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) |
 | 202 generated cans (`gen_can_types.py` → `can_types.json`; 20 of them re-valued Canned Goods cans) | DEPLOYED with 1.0.6 (can parity), untested in game | [can_parity.md](can_parity.md) |
 | Canned golem dyeable in 16 colours | DEPLOYED with 1.0.4, R4-07 pending | here, 2.3 |
 
@@ -142,7 +142,7 @@ directly eat a whole can; a dedicated-server client guesses nothing for a last-s
 ## 5. File map
 
 - patcherMod: [food/CanServings.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/food/CanServings.java), [food/CanServingsTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/food/CanServingsTooltip.java), `mixin/ItemStackCanServingsMixin`, `compat/KubeJSCanAction`, `compat/DyeableCannedGolem`, `mixin/CannedGolemColorMixin`, `mixin/CannedGolemRendererMixin`; `CEConfig.Canning`.
-- KubeJS: [items/cans.js](../kubejs/startup_scripts/items/cans.js), [cooking/canning.js](../kubejs/server_scripts/cooking/canning.js), [tags/cantags.js](../kubejs/server_scripts/tags/cantags.js), `generation_scripts/food/{can_servings.json, can_types.json}`, `assets/creativeengineering/textures/entity/canned_golem/`.
+- KubeJS: [items/cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js), [cooking/canning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js), [tags/cantags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js), `generation_scripts/food/{can_servings.json, can_types.json}`, `assets/creativeengineering/textures/entity/canned_golem/`.
 - Tools: [tools/gen_can_types.py](../tools/gen_can_types.py).
 
 ## 6. Offline checks

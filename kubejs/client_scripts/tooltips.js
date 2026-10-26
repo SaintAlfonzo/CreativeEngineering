@@ -27,6 +27,12 @@ function addTooltips(e) {
             e.add(id, tipLines);}}      
 }
 
+// Farmer villagers work this soil: Creative Delight's Farmer's Delight repack, config/farmersdelight-ce-common.toml
+// [villagers] farmlandBlocks (feature_writeup/farmers_delight.md 3). No line without the repack.
+function fdVillagerLine(colour) {
+    return Platform.isLoaded('creative_delight') ? [['Farmer villagers work it like Farmland', colour]] : [];
+}
+
 function addTooltipPattern(e, pattern) {
     var idx = 2;
     var excludeIds = [];
@@ -488,11 +494,16 @@ var i = global.item;
 		[i.bowl, ['Warning: Sometimes Consumed', col.warn]],
 		[i.sugar_cube, ['Feed to your horse, dissolves on contact w/ water', col.uncm]],
 		[i.fd_basket, ['Collects items from the block in front of opening, can be placed sideways', col.uncm]],
-		[i.rich_soil, ['Crops grow slightly faster and can\'t be trampled!', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]],
-		[i.rich_farmland, ['Crops grow slightly faster and can\'t be trampled!', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]],
-		[i.fertile_soil, ['Crops grow significantly faster and can\'t be trampled!', col.rare],['Doesn\'t need to be tilled, can be soaked w/ water to increase plant growth', col.rare]],
+		[i.rich_soil, ['Crops grow slightly faster; till it into Rich Farmland', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]],
+		[i.rich_farmland, ['Crops grow slightly faster and it can\'t be trampled!', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]].concat(fdVillagerLine(col.uncm)),
+		[i.fertile_soil, ['Crops grow significantly faster and can\'t be trampled!', col.rare],['Doesn\'t need to be tilled, can be soaked w/ water to increase plant growth', col.rare]].concat(fdVillagerLine(col.rare)),
 		[i.nulch, ['Grows nether crops faster', col.rare],['Can be filled w/ lava, but watch your feet!', col.rare]],
 		[i.cod_n_chips, ['The chips are fries. Don\'t tell the British.', col.uncm]],
+		// Oceanic Delight net (ocean_delight.md 5.1): blocks are the fishing_net tags, drops the biome tables
+		[i.fishing_net,
+			['Use on kelp, seagrass, sea grapes or pickerelweed to search them', col.uncm],
+			['Shrimp in oceans that are not cold, coral in warm oceans, Caviar in rivers', col.norm],
+			['Oceans can give Nautilus Shells, rarely a Heart of the Sea', col.norm]],
 		// Y follows neapolitan-common.toml "White Strawberry minimum height"
 		[i.white_strawberries, ['Strawberry Bushes at Y 192 or higher grow these instead of red ones', col.uncm]]
 	);

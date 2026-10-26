@@ -29,7 +29,7 @@ https://cdn.modrinth.com/data/qMxbM4BQ/versions/p0INUam7/miners_delight-1.20.1-1
 - Moves the ten cooking recipes under the stray `minersdelight` namespace to `miners_delight`.
 - Renames the 1.20 loot condition `minecraft:any_of` to 1.19.2's `minecraft:alternative`.
 - Drops the cup conversion row for `farmersdelight:onion_soup` (not in FD 1.19.2; the pack adds a Creamy Onion Soup
-  row in `kubejs/data/creativeengineering/cup_conversion/`).
+  row in `kubejs/data/creative_delight/cup_conversion/`, shipped in the Creative Delight jar).
 - Drops the five entries of `global_loot_modifiers.json` that have no file upstream.
 
 ## What differs from upstream behaviour

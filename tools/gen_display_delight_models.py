@@ -17,6 +17,10 @@ cactus soup, pufferfish broth): each such face takes the texture of its element'
 
 Item ids come from /dumpitemsbymod (kubejs/exported/items_by_mod/displaydelight.json).
 
+The pack's port of Display Delight 1.7.0 (development/backportedDisplay, jar backportedDisplay-*.jar) ships an item
+model for every item and fixes the '#missing' faces itself, so against it this writes nothing; files under OUT that
+the jar no longer needs are deleted, so they stop overriding the port's own models.
+
     python3 tools/gen_display_delight_models.py           write the models
     python3 tools/gen_display_delight_models.py --check   exit 1 if any file is missing or out of date
 """
@@ -30,16 +34,16 @@ import lang_index
 
 OUT = lang_index.INSTANCE / 'kubejs/assets/displaydelight/models'
 ITEMS = lang_index.INSTANCE / 'kubejs/exported/items_by_mod/displaydelight.json'
-JAR_GLOB = 'displaydelight-*.jar'
+JAR_GLOBS = ('backportedDisplay-*.jar', 'displaydelight-*.jar')
 ASSETS = 'assets/displaydelight/'
 # The gui transform most plated block models use (plated_hamburger, plated_cod_roll_1, ...).
 PLATED_GUI = {'rotation': [37, 44, 0], 'translation': [0, 4, 0], 'scale': [0.8, 0.8, 0.8]}
 
 
 def read_jar():
-    jars = sorted(lang_index.MODS.glob(JAR_GLOB))
+    jars = next((j for j in (sorted(lang_index.MODS.glob(g)) for g in JAR_GLOBS) if j), None)
     if not jars:
-        sys.exit('no %s in mods/' % JAR_GLOB)
+        sys.exit('no %s in mods/' % ' or '.join(JAR_GLOBS))
     files = {}
     with zipfile.ZipFile(jars[-1]) as z:
         for name in z.namelist():
@@ -125,11 +129,13 @@ def main():
     jar, out, problems = build()
     stale = [p for p, m in out.items() if not (OUT / (p + '.json')).exists()
              or (OUT / (p + '.json')).read_text() != render(m)]
+    extra = sorted(f for f in OUT.rglob('*.json') if f.relative_to(OUT).with_suffix('').as_posix() not in out)
     for p in problems:
         print('WARNING ' + p)
     if args.check:
-        if stale:
-            print('%d model(s) missing or out of date, run python3 tools/gen_display_delight_models.py' % len(stale))
+        if stale or extra:
+            print('%d model(s) missing or out of date, %d no longer needed, run python3 tools/gen_display_delight_models.py'
+                  % (len(stale), len(extra)))
             return 1
         print('up to date (%d models)' % len(out))
         return 0
@@ -137,9 +143,11 @@ def main():
         f = OUT / (p + '.json')
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(render(out[p]))
+    for f in extra:
+        f.unlink()
     items = sum(1 for p in out if p.startswith('item/'))
-    print('%s: %d item models, %d block models with #missing faces fixed; wrote %d file(s) under %s'
-          % (jar, items, len(out) - items, len(stale), OUT.relative_to(lang_index.INSTANCE)))
+    print('%s: %d item models, %d block models with #missing faces fixed; wrote %d file(s), deleted %d under %s'
+          % (jar, items, len(out) - items, len(stale), len(extra), OUT.relative_to(lang_index.INSTANCE)))
     return 0
 
 

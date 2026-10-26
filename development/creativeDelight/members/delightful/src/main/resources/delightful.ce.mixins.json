@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.creativedelight.delightful.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "DelightfulInitMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

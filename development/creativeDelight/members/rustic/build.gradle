@@ -1,0 +1,43 @@
+// backportedRustic: Rustic Delight 1.7.0 ported to Forge 1.19.2 (mod id rusticdelight), nested in Creative Delight.
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// Build from the instance root (`./gradlew :backportedRustic:build`); it ships through `:creativeDelight:installToMods`.
+plugins {
+    id 'ce.forge-mod'
+}
+
+repositories {
+    // Third-party mod jars copied from ../../../../mods (git-ignored).
+    flatDir { dir 'libs' }
+}
+
+dependencies {
+    // Farmer's Delight is the one hard dependency (feasts, pies, wild crops, cooking and cutting recipes).
+    // flatDir notation: 'local:<file name without -version>:<version>'
+    compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
+}
+
+// The jar must not carry upstream resources. Fail the build if a file under src/main/resources has the same path as a
+// file in the upstream jar (except the few root files we write ourselves).
+def upstreamJar = rootProject.file('rustic_upstream/rusticdelight-forge-1.20.1-1.7.0.jar')
+def ownFiles = ['META-INF/mods.toml', 'META-INF/MANIFEST.MF', 'pack.mcmeta'] as Set
+tasks.register('checkNoUpstreamResources') {
+    group = 'verification'
+    description = 'Fails if src/main/resources contains a path that also exists in the upstream Rustic Delight jar'
+    def resDir = file('src/main/resources')
+    inputs.dir(resDir)
+    doLast {
+        def ours = [] as Set
+        resDir.eachFileRecurse(groovy.io.FileType.FILES) { ours << resDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
+        def clashes = []
+        if (upstreamJar.exists()) {
+            new java.util.zip.ZipFile(upstreamJar).withCloseable { zip ->
+                zip.entries().each { e ->
+                    if (!e.directory && ours.contains(e.name) && !ownFiles.contains(e.name)) clashes << e.name
+                }
+            }
+        }
+        if (clashes) throw new GradleException("upstream files in src/main/resources:\n  " + clashes.join('\n  '))
+    }
+}
+tasks.named('check') { dependsOn 'checkNoUpstreamResources' }
+tasks.named('jar') { dependsOn 'checkNoUpstreamResources' }

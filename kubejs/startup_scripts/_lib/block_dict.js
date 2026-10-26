@@ -28,10 +28,15 @@ b.cfb_counter = 'cookingforblockheads:counter';   // 15 px worktops: cutting boa
 b.cfb_corner = 'cookingforblockheads:corner';
 // Counter toppers (patcherMod CounterToppers, TODO cooking/kitchen #20): plates, plated foods, coaster on a counter
 b.dd_food_plate = 'displaydelight:food_plate';
+// FD 1.3.4 backports in the Creative Delight repack (farmers_delight.md 3); unresolved until CD is installed
+b.fd_pumpkin_pie = 'farmersdelight:pumpkin_pie';        // placed vanilla pie; no item ([pumpkin_pie] placeAs)
+b.rope_fence = 'farmersdelight:rope_fence';
+b.rope_fence_gate = 'farmersdelight:rope_fence_gate';
+b.gleaming_salad_block = 'farmersdelight:gleaming_salad_block';
 b.dd_small_food_plate = 'displaydelight:small_food_plate';
 b.dd_plated_foods = 'displaydelight:*plated_*';    // every plated / small_plated food block (ctd_plated_*, plated_* ...)
 b.coaster = 'brewinandchewin:coaster';               // the Brewin' port
-// Milk and cow jars: glass bottles take milk out (server_scripts/cooking/milk_jar.js, TODO food/drinks #6)
+// Milk and cow jars: glass bottles take milk out (kubejs/data/creative_delight/kubejs/cookingforblockheads/milk_jar.js, TODO food/drinks #6)
 b.cow_jar = 'cookingforblockheads:cow_jar';
 b.milk_jar = 'cookingforblockheads:milk_jar';
 // Campfire rain (patcherMod campfire/CampfireRain.java)
@@ -71,6 +76,7 @@ b.botania_blaze_block = 'botania:blaze_block';       // Blaze Mesh fuel block, a
 b.snow = 'minecraft:snow';                             // snow layers
 b.snow_block = 'minecraft:snow_block';
 b.powder_snow = 'minecraft:powder_snow';
+b.powdered_sugar_block = 'creativeengineering:powdered_sugar_block'; // patcherMod food/PowderedSugarBlock.java
 b.thin_ice = 'immersive_weathering:thin_ice';
 b.iw_permafrost = 'immersive_weathering:permafrost';
 b.iw_cryosol = 'immersive_weathering:cryosol';
@@ -79,12 +85,25 @@ b.rich_soul_soil = 'nethersdelight:rich_soul_soil';
 b.iw_nulch = 'immersive_weathering:nulch_block';
 b.polished_packed_ice = 'architects_palette:polished_packed_ice';
 b.chiseled_packed_ice = 'architects_palette:chiseled_packed_ice';
+// Fishing net blocks with no item (block tags in server_scripts/tags/loottags.js; ocean_delight.md 5.1)
+b.kelp_plant = 'minecraft:kelp_plant';
+b.tall_seagrass = 'minecraft:tall_seagrass';
+b.ochre_kelp_plant = 'upgrade_aquatic:ochre_kelp_plant';
+b.polar_kelp_plant = 'upgrade_aquatic:polar_kelp_plant';
+b.thorny_kelp_plant = 'upgrade_aquatic:thorny_kelp_plant';
+b.tongue_kelp_plant = 'upgrade_aquatic:tongue_kelp_plant';
+b.corn_crop = 'corn_delight:corn_crop';            // knife harvest Corncob (CD corn_delight/loot.js)
+b.tall_blue_pickerelweed ='upgrade_aquatic:tall_blue_pickerelweed';
+b.tall_purple_pickerelweed = 'upgrade_aquatic:tall_purple_pickerelweed';
 
 // Tags
 b.any_bricks = '#minecraft:bricks';
 b.t_oven_heat_sources = '#creativeengineering:oven_heat_sources'; // OvenHeat.OVEN_HEAT_SOURCES
 b.t_fd_heat_sources = '#farmersdelight:heat_sources';
 b.t_fd_tray_heat_sources = '#farmersdelight:tray_heat_sources';   // fire, campfires, lava
+b.t_fd_mineable_knife = '#farmersdelight:mineable/knife';
+b.t_forge_fences = '#forge:fences';
+b.t_forge_fence_gates = '#forge:fence_gates';
 b.t_keg_heat_sources = '#brewinandchewin:heat_sources';     // Brewin port: keg + Vinery cold storage; holds FD heat_sources
 b.t_keg_freeze_sources = '#brewinandchewin:freeze_sources';
 b.t_ghost_pepper_soil = '#vintagedelight:ghost_pepper_soil'; // Vintage port: where ghost pepper seeds plant (vintage_delight.md 2.1)
@@ -98,6 +117,8 @@ b.t_vein_undo_denied = '#creativeengineering:vein_undo_denied'; // VeinUndo.DENI
 b.t_ores = '#forge:ores';
 b.t_storage_blocks = '#forge:storage_blocks';
 b.t_no_world_dye = '#creativeengineering:no_world_dye'; // SupplementariesDyeBlocksMixin: dye can't recolour these in world
+b.t_fishing_net_kelp = '#creativeengineering:fishing_net/kelp';           // OceanicDelightFishingNetMixin: net uses the kelp table
+b.t_fishing_net_sea_grass = '#creativeengineering:fishing_net/sea_grass'; // OceanicDelightFishingNetMixin: net uses the sea grass table
 b.t_blendable_blocks = '#c:blendable_blocks';       // Rubidium: per-vertex biome tint blending (vanilla grass gets it built in)
 
 // ############################## Validation ##############################

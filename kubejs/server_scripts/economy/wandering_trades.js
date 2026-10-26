@@ -41,11 +41,7 @@ MoreJSEvents.wandererTrades(e => {
 		i.minecraft_carrot, i.minecraft_potato, i.cocoa_beans, i.bamboo,
 		i.seed, i.mulberry,
 	], { emeralds: 1, maxUses: 12 })
-	// Veggies Delight (upstream's list, minus its bell pepper seeds): feature_writeup/veggies_delight.md 4.13
-	t.sell(e, t.COMMON, [
-		i.broccoli_seeds, i.cauliflower_seeds, i.turnip_seeds, i.zucchini_seeds,
-		i.garlic_clove, i.sweet_potato, i.dandelion_leaf,
-	], { emeralds: 1, maxUses: 12 })
+	// Veggies Delight's seeds: Creative Delight members #2 (kubejs/data/creative_delight/kubejs/veggiesdelight/trades.js)
 
 	// plants (no Nether roots, sprouts, vines or fungi)
 	t.sell(e, t.COMMON, [

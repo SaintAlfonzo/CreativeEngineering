@@ -1,5 +1,7 @@
 # Vintage Delight: backport and integration plan
 
+> **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Vintage Delight; its registry namespace and test prefix do not change.
+
 Plan written 2026-10-22, rewritten 2026-10-23 with the owner's decisions; **built 2026-10-23** (port jar, goose egg and
 pack integration in `mods/` and scripts; the dump-driven steps are open, §4.0). Vintage Delight (Ribs) has no
 1.19.2 build: Modrinth lists 1.20.1 to 1.20.6 only. Two jars are on disk: the original 0.1.6 for Forge 1.20.1 and the
@@ -39,7 +41,7 @@ This file has three parts:
 - **Source to port from:** `~/.local/share/atlauncher/downloads/vintagedelight-0.1.6.jar` (Forge 1.20.1, closest API,
   109 classes). Decompile with `python3 tools/decompile_mod.py <jar> <out dir>` (94 sources). The KOTS jar
   (`DecompiledMods/vintagedelight-kots-0.3.1.jar`, NeoForge 1.21.1) is the second reference for its fixes (§2.9).
-- **Licence:** 0.1.6 `mods.toml` says MIT; KOTS and the current Modrinth page say GPL-3.0. Both fit a GPLv3 port; keep
+- **Licence:** GPL (owner-supplied 2026-10-25). 0.1.6 `mods.toml` says MIT; KOTS and the current Modrinth page say GPL-3.0. Both fit a GPLv3 port; keep
   the MIT notice for 0.1.6 code and assets.
 - **Dependencies:** Forge and Farmer's Delight only (`farmersdelight [1.2.4,)`). FD 1.19.2-1.2.4 has every type it
   uses: `WildCropBlock`, the `wild_crop` feature, `add_features_by_filter`, `add_loot_table` / `add_item` loot
@@ -269,10 +271,10 @@ and are not ported (S8); `VTD-27` checks the registry.
 - **Chest loot:** the 7 chest tables (`vd_bastion_hoglin_stable`, `vd_ruined_portal`, `vd_village_{desert,plains,
   savanna,snowy,taiga}_house`) and the `mixed_seeds` placeholder are **added to the game and wired to nothing**: the
   jar's 7 `farmersdelight:add_loot_table` modifiers are not shipped and the pack's loot pipeline gets no rule for them.
-  Block loot tables ship in full. The `add_item` straw modifier on ripe oats stays (it is a crop drop, FD's own rule for
+  Block loot tables ship as 0.1.6 has them, which is not in full: six blocks have none (§2.10). The `add_item` straw modifier on ripe oats stays (it is a crop drop, FD's own rule for
   wheat).
 - **Compost:** the mod sets 14 chances at common setup, but the pack's compost engine rebuilds the table, so they are
-  rows in `compost_values.js` (`other`, as Brewin's), with the wild plants at 0.65 and the crates and oat bag at 1.0
+  rows in Creative Delight's `kubejs_startup/vintagedelight/compost.js` (was `compost_values.js`, moved 2026-10-25, QoL-4; `other`, as Brewin's), with the wild plants at 0.65 and the crates and oat bag at 1.0
   (§4.0, step 7a).
 - **Tags for other mods:** Serene Seasons (S16), Create (`blaze_burner_fuel`), C&A, forge nutrients. Diet is not in the
   pack.
@@ -292,7 +294,27 @@ recipe, both left out, S3), eye armor trim (the dead `mixed_seeds` table). The p
 Same blocks, crops, worldgen and recipes (197 recipe files after its datagen merge). Taken from KOTS: `*_mason_jar` ids
 renamed `*_jar` (the separate `mason_jar` item is gone; `empty_mason_jar` stays), Cucumber Dough, mason jar block classes
 merged into one `JamBlock`, a separate `FermentingJarItemHandler`, the planting-soil tooltip on ghost pepper seeds. Not
-taken: nothing; KOTS's lush grass switch (`ConfigurableAlterGroundDecorator`) is taken with the tree (S1).
+taken: see §2.10; KOTS's lush grass switch (`ConfigurableAlterGroundDecorator`) is taken with the tree (S1).
+
+### 2.10 KOTS 0.3.1 content past the port (evaluated 2026-10-25)
+
+`devmods/checkNewerVersionForContent/vintagedelight-kots-0.3.1.jar` is byte-identical to the KOTS jar read for §2.9.
+Compared against the installed port jar `backportedVintage-0.1.6-ce-19.2-03` by item models, blockstates, textures,
+lang keys, loot, worldgen, tags, recipes (by type and result) and class names (`tools/jar_diff.py` plus a scratch
+inventory script).
+
+| Kind | In KOTS, not in the port | Decision (proposed) |
+|---|---|---|
+| **Block loot (bug in the port)** | 0.1.6 ships no loot table for 6 blocks, so they drop nothing when broken; KOTS adds them. **Magic Peanut, Smooth Salt Block, Vine Tile**: drop themselves. **Cheese Wheel, Cheese Pizza, Meat Pizza**: drop the slices left (4 to 1 by `bites`) | **carry over** the three self-drops (data; `vintageport #18`). The wheel and pizzas are `PieBlock`s, and FD's own pies drop nothing when broken (FD 1.2.4 and 1.3.4), so their slice tables are the owner's call |
+| Purged content | Gearo berries (bush, worldgen, bag, jam jar and bottle, 31 textures), Dehydrated (effect, potions, lang), Pickled Pitcher Pod and the pitcher plant cutting | stays purged (S1, S3, S8) |
+| Mixed Seeds | `MixedSeedsItem` exists but is an empty class nothing registers | no change to §2.3a |
+| Chef hats | worn as armor with 16 `models/armor/*_chef_hat_layer_1` textures; 0.1.6 (the port) wears the item model on the head | skip (code change, same look in play) |
+| Wild plant cutting | Wild oats, peanuts, cucumbers, ghost peppers cut into 2 crops; 0.1.6 (the port) gives seeds and dye like FD's wild crops. Stripped magic vine cuts into an oat and tree bark | skip (FD's rule kept; the oat looks like an upstream mistake) |
+| Other mods' data | `c:` tags (NeoForge convention), Diet tags, Botany Pots crop recipes, `neoforge:` biome modifiers | skip: Diet and Botany Pots are not in the pack; the rest is format |
+| Lang | `tooltip.farmersdelight.nut_milk_bottle` | skip: the port has the same text under FD 1.2.4's key |
+
+Nothing else differs in content: same crops, wild patches, salt patch, machines and recipes once the `*_mason_jar` /
+`*_jar` renames of §2.9 are matched.
 
 ## 3. Part 2: overlap with what the pack already has
 
@@ -381,9 +403,9 @@ back to this table; removal of a side is a separate change at that point.
 | 5 Crop docs, WTHIT | OPEN | `/dumpcropgrowth` + `crop_growth_coverage.py` need the game |
 | 6 Seasons | BUILT | the jar's tags, as shipped |
 | 7 Food types | BUILT | 54 foods typed by hand in `food_types.json` (existing types only): produce raw veggie / fruit, pickles and kimchi cooked veggie (Brewin's precedent), roasted peanut cooked fruit, salted fish and surströmming cooked fish, the two eggs egg, cheese slice dairy, cookies / granola / honey roasted peanuts sweet, burgers / PB & J / burrito / pizza slices handheld, cucumber salad salad, pickle soup / ghostly chili / oatmeal soup (soup band and Comfort), cheese pasta / pad thai / overnight oats meal, nut milk and honey jar drink, doughs / noodles / curds / vinegar / every jam, sauce, relish and nut mash jar and bottle ingredient. `food_catalog.py` flags all 54 as not installed until a dump has them. No Dehydrated on any food (in the jar). Veggies: all 64 foods were already typed |
-| 7a Compost | BUILT | `compost_values.js`: the port's 14 chances (`other`), wild oats / peanuts / cucumbers / ghost peppers 0.65 (`crops`), 3 crates + oat bag 1.0 (`crates`); the Veggies wild crops and crates the same. Startup reload + `/reload` |
+| 7a Compost | BUILT | CD `kubejs_startup/vintagedelight/compost.js` (was `compost_values.js`, QoL-4): the port's 14 chances (`other`), wild oats / peanuts / cucumbers / ghost peppers 0.65 (`crops`), 3 crates + oat bag 1.0 (`crates`); the Veggies wild crops and crates the same. Startup reload + `/reload` |
 | 8 Cans | config BUILT, Vintage run OPEN | `gen_can_types.py`: 16 Vintage cans (cucumber, ghost pepper, pickled beetroot / onion / pepper, roasted peanuts, Surströmming, cheese slices, oatmeal cookies, cheese pasta, pad thai; cucumber salad and the 3 soups by type) and 4 shared sources (Vintage kimchi and pickle in Brewin's cans, salted cod and salmon in the cooked fish cans), skipped through `AWAIT_DUMP` until a dump has them. The vinegar additive ran (66 cans). Veggies: 24 cans generated. Rows in [can_parity.md](can_parity.md), CP-27 to CP-31 |
-| 9 Cooking rules | BUILT | `cooking.js`: burger rule for both burgers (shaped on the cheese slice so Delightful's wedge cheeseburgers keep their grids, beef or vegetarian patty; assemblies start on the slice, the deluxe on the patty), stuffed burrito on `#forge:tortilla` + assembly (ghost pepper or roasted bell pepper first), PB & J and cucumber salad `_manual_only`, heatless cheese pasta (pasta + 3 cheese + bowl), pad thai (2 cooked chicken cuts, roasted peanut) and pickle soup (bone broth, 2 pickles, baked potato), oat dough's furnace bread removed (3 raw oats -> bread stays); the Veggies compat grid recipes folded in (§3.4). `baking.js`: oatmeal cookie oven only (cookie dough + 2 raw oats -> 12). No rule applies: pizzas (one `#forge:dough` each already; oven.md has no pizza rule), granola bars, oatmeal (no cooked oat), ghostly chili (Nether, as blazing chili), jams, curds, nut milk |
+| 9 Cooking rules | BUILT | (Since 2026-10-25 the grid-meal moves, burrito wrap and heatless routes are Creative Delight QoL-5: `kubejs/data/creative_delight/kubejs/vintagedelight/cooking.js`; the burger rule stays in `cooking.js`.) `cooking.js`: burger rule for both burgers (shaped on the cheese slice so Delightful's wedge cheeseburgers keep their grids, beef or vegetarian patty; assemblies start on the slice, the deluxe on the patty), stuffed burrito on `#forge:tortilla` + assembly (ghost pepper or roasted bell pepper first), PB & J and cucumber salad `_manual_only`, heatless cheese pasta (pasta + 3 cheese + bowl), pad thai (2 cooked chicken cuts, roasted peanut) and pickle soup (bone broth, 2 pickles, baked potato), oat dough's furnace bread removed (3 raw oats -> bread stays); the Veggies compat grid recipes folded in (§3.4). `baking.js`: oatmeal cookie oven only (cookie dough + 2 raw oats -> 12). No rule applies: pizzas (one `#forge:dough` each already; oven.md has no pizza rule), granola bars, oatmeal (no cooked oat), ghostly chili (Nether, as blazing chili), jams, curds, nut milk |
 | 10, 11 Salt, cheese | BUILT (both lines ship) | `#forge:salt` holds salt dust from the jar; JEI info / WTHIT slices line OPEN |
 | 12 Pickling jar | BUILT; remainder buffer OPEN | NCH `R.vdPickling`. `alcohol.js`: Brewin' kimchi and pickled pickles moved from the keg (honey 250 mB -> honey bottle). Fermented garlic honey: the Veggies port ships Vintage's jar recipe (Veggies `-02`), its pot route is gone. The jar keeps no leftover bottles (a honey bottle input loses its glass bottle); a remainder-buffer slot is a TODO row |
 | 13 Potions | BUILT | no Dehydrated class, registry entry or brewing mix in the port; the 6 brews use vanilla effect ids only (checked); `VTD-23` records the mixers |
@@ -411,6 +433,27 @@ Port notes (what the jar does differently from 0.1.6, all in `development/backpo
 - Upstream id bugs fixed: Frost Fermenta's `minecraft:rotten_tomato` -> FD's; the pickled pepper potato-cannon type;
   `#forge:protein` named an undefined tag (now optional); the jam advancement's tag.
 - Mixed Seeds is not registered (§2.3a); its texture and table ship.
+
+### 4.0b Built 2026-10-25 (TODO ports/vintageport #5, #9 to #18)
+
+Port `0.1.6-ce-19.2-04` (built, not in `mods/`): no golden egg on the Magic Peanut tree (`VineTrunkPlacer`); JEI jar
+time in seconds under a minute and "1min 30s" for part minutes (`FermentingCategory`); a take-only leftover slot (9)
+on the Pickling Jar for ingredient leftovers (empty bottles, bowls, a potion's bottle), pulled from the bottom, kept in
+saves (older 9-slot saves are widened) and drops, port config `[pickling_jar] remainderBuffer` / `stallWhenFull` (both
+on); `port_resources.py` writes the honey_vd soft fluid for the honey jar, the KOTS self-drop loot of Magic Peanut,
+Smooth Salt Block and Vine Tile, and now also the two fixes that had been hand-made in the resources (`biome_tag` key,
+"Fertile Soul Soil" lang). Cheese Wheel and pizza drops (#18 decision) not built.
+
+Creative Delight scripts (the first member rows, [creative_delight.md](creative_delight.md) 10.3): server
+`kubejs/data/creative_delight/kubejs/vintagedelight/recipes.js` (slime block pickling removed; Berserker's Brew and
+leather rebuilt on `#forge:salt` with `R.vdPickling`; salted cod / salmon crafts removed; wild ghost pepper 2 seeds by
+Create milling and crushing, 3 by the IE Crusher), `vintagedelight/loot.js` (Vintage crop crates and bags through
+`L.pack`, the crops of the port's 7 chest tables joined to the vanilla tables at a small share), `veggiesdelight/loot.js`
+(Rustic bell pepper crates and seed bag), `create/slime.js` (`cooking/kitchen #12`); startup
+`development/creativeDelight/src/main/resources/kubejs_startup/vintagedelight/vintage_items.js` (salted cod / salmon
+into `global.removedItems`; ghost charcoal edible: Wither I 0:05, Fire Resistance 3:00, no hunger, always edible).
+These load only with the Creative Delight jar and its patcherMod installed (they return early without `global.CD`).
+`gen_can_types.py` and `food_types.json` no longer name the salted fish. Tests VTD-54, VTD-65 to VTD-74.
 
 ### 4.0a Systems not yet updated, both ports (audit 2026-10-23)
 
@@ -540,13 +583,14 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
   used (burgers, the listed salads). Open: which crafts.
 - **Vintage brews** (`alcohol/pack #3`): the six jar brews (§2.7a) all have vanilla effects; they get their own category and a
   redesign. Open: the category and the effects ([alcohol.md](alcohol.md) §11).
-- **Salted fish out** (`ports/vintageport #11`): Salted Cod and Salted Salmon are removed again (restored 2026-10-23);
-  Surstromming stays. Open: whether the note meant The Salt's own salted fish.
-- **Wild ghost pepper seeds** (`ports/vintageport #12`): 2 seeds from milling and crushing, 3 in the IE Crusher (confirm).
-- **Ghost charcoal** (`ports/vintageport #13`): edible, gives Wither and Fire Resistance. Open: durations.
-- **Golden egg off the tree** (`ports/vintageport #14`): the Magic Peanut tree no longer carries the 80 % golden egg
+- **Salted fish out** (BUILT 2026-10-25, §4.0b; `ports/vintageport #11`): Salted Cod and Salted Salmon are removed again
+  (restored 2026-10-23); Surstromming stays. Vintage's items only; The Salt's Salted cooked fish stays.
+- **Wild ghost pepper seeds** (BUILT 2026-10-25; `ports/vintageport #12`): 2 seeds from milling and crushing, 3 in the IE
+  Crusher (confirmed by the owner).
+- **Ghost charcoal** (BUILT 2026-10-25; `ports/vintageport #13`): edible, Wither I 0:05 and Fire Resistance 3:00 (owner).
+- **Golden egg off the tree** (BUILT 2026-10-25, port `-04`; `ports/vintageport #14`): the Magic Peanut tree no longer carries the 80 % golden egg
   (§2.4, S1, VTD-08); the goose egg (§2.5) stays. Needs a port change.
-- **Jar fixes** (`ports/vintageport #15`, `#16`, `#17`): JEI shows seconds under a minute; the jar gets a bottle output buffer
+- **Jar fixes** (BUILT 2026-10-25, §4.0b; `ports/vintageport #15`, `#16`, `#17`): JEI shows seconds under a minute; the jar gets a bottle output buffer
   (the keg's pattern, port-native); the slime block pickling recipe is removed.
 - **JEI pages** (`jei/jei-coverage #15`): Vintage's machines and jar recipes get a category or description per recipe type,
   as part of the dump-driven steps (`ports/vintageport #2`).
@@ -660,6 +704,29 @@ Overlap review and UI
   Vintage food; Pickle Soup, Ghostly Chili and Oatmeal go in a Supplementaries jar in their own colour (VD: Carrot
   Juice, Dandelion Juice, Turnip Water, Fermented Garlic Honey too, and a jar of carrot juice fills from a tank);
   Pickled Egg and Century Egg compost (0.6, 0.9), a Cucumber Crate composts at 1.0.
+- [ ] VTD-54 **Block drops (after `vintageport #18`):** in survival, break a placed Magic Peanut, Smooth Salt Block and
+  Vine Tile by hand: each drops itself. Cheese Wheel and both pizzas drop what the #18 decision says (not built yet).
+- [ ] VTD-65 **Salted fish out:** JEI has no Salted Cod or Salted Salmon and no recipe for them; Surstromming still
+  pickles; the canned fish and canned cooked salmon still craft from cooked cod / salmon.
+- [ ] VTD-66 **Wild ghost pepper seeds:** millstone and crushing wheels give 2 Ghost Pepper Seeds + 1 cyan dye, the IE
+  Crusher 3 seeds + 1 cyan dye.
+- [ ] VTD-67 **Ghost charcoal:** eat it at full hunger: Wither I 0:05 and Fire Resistance 3:00, no hunger restored; it
+  still burns in a furnace.
+- [ ] VTD-68 **No golden egg on the tree:** grow a Magic Peanut tree: nothing on top of the trunk; a goose can still lay
+  a golden egg.
+- [ ] VTD-69 **Jar time:** JEI Pickling Jar page: Berserker's Brew (400 ticks) shows 20s, a pickle (2400) 2min, leather
+  (4800) 4min.
+- [ ] VTD-70 **Jar leftover slot:** fermented garlic honey (garlic + honey bottle) leaves the glass bottle in the new slot
+  right of the outputs; a hopper under the jar pulls it; breaking the jar drops it; a jar from an older save keeps its
+  items; with the slot full of another item the jar waits.
+- [ ] VTD-71 **No slime from the jar:** Slime Block has no Pickling Jar recipe in JEI.
+- [ ] VTD-72 **Any salt:** Berserker's Brew and leather (rotten flesh, tree bark, vinegar) pickle with Create: The Salt's
+  salt as well as Vintage's salt dust.
+- [ ] VTD-73 **Honey jar fluid:** a Honey Jar empties into a Supplementaries jar as honey (honey colour, "Honey"), and
+  fills back into an empty mason jar; it no longer counts as apple sauce.
+- [ ] VTD-74 **Crop loot:** `/loottuning` (or the log) lists the Vintage crop packs (oat bale, oat bag, peanut, cucumber,
+  ghost pepper crates) and the Rustic bell pepper crates and seed bag; village house, ruined portal and bastion hoglin
+  stable chests can hold the Vintage crops.
 
 ## 9. History
 
@@ -691,3 +758,7 @@ Overlap review and UI
   compat recipes that went live with this port. The old §2.7 note that the compost table needed no action was
   wrong: the engine clears the mod's own values.
 - 2026-10-24: planned from the scratchpad (section 5, "Planned from the scratchpad"): jam and nut mash merges, pickled sea pickle, real-pickle recipes, pickle soup, enzyme and vinegar, Foul Taste, kimchi merge, century egg and garlic honey changes, salted fish and slime block pickling removed, ghost pepper and charcoal changes, golden egg off the tree, jar fixes (seconds, bottle buffer). Nothing built.
+- 2026-10-25: KOTS 0.3.1 checked for content past the port (§2.10). Found: Magic Peanut, Smooth Salt Block and Vine Tile
+  have no loot table in 0.1.6 or the port and drop nothing (`vintageport #18`, VTD-54); the rest is purged, format or
+  skipped. The §2.7 "block loot tables ship in full" note was wrong. No code changed.
+- 2026-10-25: vintageport #5, #9 to #18 built (§4.0b): port `-04`, first Creative Delight member scripts.

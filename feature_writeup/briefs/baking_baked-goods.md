@@ -67,7 +67,7 @@ Every crafting and pot recipe for a cookie, pie, cake or the strange eclair take
 every pie sits on a pie crust, and every cake starts from a cake base. The oven half is done (1.0.8).
 
 ### Now
-- Oven recipes: [baking.js](../../kubejs/server_scripts/cooking/baking.js) 41-117 already use `i.flour`
+- Oven recipes: [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 41-117 already use `i.flour`
   (`#forge:flour/wheat`), `i.t_flour_or_cornmeal`, `i.pie_crust` and `i.cake_base` (oven.md 2.6).
 - Pie crust from flour is built (1.0.8, [recipes_cooking.md](../recipes_cooking.md) 2.1):
   [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) 347 `R.shaped(2 crust, ['FMF',' F '], F flour-or-cornmeal,
@@ -302,7 +302,7 @@ Every obtainable pie can be made by Create sequenced assembly; the chorus pie's 
    pies matter; otherwise leave them.
 3. **Chorus pie** (after `food/drinks #4` decides the fluid):
    - startup: `StartupEvents.registry('fluid', e => e.create('creativeengineering:chorus_juice').thinTexture(0xa985a9)
-     .bucketColor(0xa985a9).displayName('Chorus Juice'))` (new file `startup_scripts/cooking/fluids.js`); add
+     .bucketColor(0xa985a9).displayName('Chorus Juice'))` (new file `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js`); add
      `f.chorus_juice = 'creativeengineering:chorus_juice'` to `fluid_dict.js`, and `f.t_chorus_juice =
      '#forge:fluid/chorus_juice'` if a tag is wanted (dict style of `f.t_honey`).
    - server: `R.createFilling(i.chorus_juice, [i.glass_bottle, Fluid.of(f.chorus_juice, 250)], e)`,
@@ -854,7 +854,7 @@ pie filling and the jam share one cherry route (jam: `dishes/jams #4`).
 
 ### Build
 - Add `['cherry_pie', i.cherry, 'canned_cherry_pie_filling']` to `PIES` in
-  [baking.js](../../kubejs/server_scripts/cooking/baking.js) once the item exists (pie crust, 2 cherries, 2 sugar in
+  [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) once the item exists (pie crust, 2 cherries, 2 sugar in
   the pie tin; the loop also makes the pot filling and the `_from_filling` bake); a 4-slice knife cut exists in CCK.
 - The item itself needs a registered block item (patcherMod or startup script): *unverified* which; decide with the row.
 - `i.cherry` is already in `item_dict` (the `cherry_cookie` flavour in `COOKIES`).
@@ -886,7 +886,7 @@ The chorus cookie is made from an uncanny cookie.
   Its recipe `ends_delight:food/chorus_cookie` is shapeless `chorus_fruit_grain` + `minecraft:wheat`
   (verified in the jar).
 - The uncanny cookie is `endersdelight:uncanny_cookies` (`i.uncanny_cookies`), baked in the oven 12 a batch from
-  cookie dough + 2 mite crust (`COOKIES` in [baking.js](../../kubejs/server_scripts/cooking/baking.js)).
+  cookie dough + 2 mite crust (`COOKIES` in [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)).
 
 ### Build
 After End's Delight is integrated (`/dumpall` for the keys): `R.remove({ id: 'ends_delight:food/chorus_cookie' }, e)`
@@ -918,7 +918,7 @@ cookie.
 ### Build
 1. Take `oatmeal_cookie` out of `COOKIES`; add `R.ceBaking([i.oat_dough, n(i.raw_oats, 2)], Item.of(i.oatmeal_cookie, 12),
    e, 'oatmeal_cookie', SHEET)` (inputs and count are a decision).
-2. New item `oatmeal_raisin_cookie` (startup script like `startup_scripts/cooking/baking_ingredients.js`, texture =
+2. New item `oatmeal_raisin_cookie` (startup script like `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js`, texture =
    `vintagedelight:item/oatmeal_cookie` recoloured, food values in `food_values.js` copying the oatmeal cookie);
    dict key, `food_types.json` entry (`baked`), can row if the other cookies have one.
 3. Which grape (red, white or either through a tag) is open.
@@ -986,7 +986,7 @@ Status: Planned / Work: KubeJS / TODO `baking/baked-goods #26` ([recipes_cooking
 Split the honey cake's flavour between honey and honeycomb, 50 / 50.
 
 ### Now
-`['honey_cake', i.honey_bottle]` in `CAKES` ([baking.js](../../kubejs/server_scripts/cooking/baking.js) line 46):
+`['honey_cake', i.honey_bottle]` in `CAKES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) line 46):
 every cake takes 2 of its flavour item (`Item.of(c[1], 2)`) in both the grid and the oven recipe. Honey cake is
 `createaddition:honey_cake` (`i.honey_cake`).
 

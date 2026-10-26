@@ -339,8 +339,8 @@
         Object.keys(seeds).forEach(n => check('#forge:seeds/' + n, tagHas(I, 'forge:seeds/' + n, seeds[n]) && tagHas(I, 'forge:seeds', seeds[n]),
             tagList(I, 'forge:seeds/' + n).join(', ')))
         note('peanut seeds', 'the peanut plants itself (no seed item); #forge:seeds/peanut = ' + (tagList(I, 'forge:seeds/peanut').join(', ') || 'empty'))
-        let rp = tagList(I, 'creativeengineering:roasted_bell_peppers')
-        check('#creativeengineering:roasted_bell_peppers', sameSet(rp, ['rusticdelight:roasted_bell_pepper_green', 'rusticdelight:roasted_bell_pepper_red',
+        let rp = tagList(I, 'creativeengineering:roasted_bell_pepper')
+        check('#creativeengineering:roasted_bell_pepper', sameSet(rp, ['rusticdelight:roasted_bell_pepper_green', 'rusticdelight:roasted_bell_pepper_red',
             'rusticdelight:roasted_bell_pepper_yellow']), rp.join(', '))
         check('burrito takes every roasted pepper', rp.length > 0 && rp.every(x => takes(server, C + 'shapeless/stuffed_burrito_manual_only', x)), '')
         // VTD-16: Brewin' pickling only in the jar

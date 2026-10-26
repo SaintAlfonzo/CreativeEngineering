@@ -65,6 +65,16 @@ f.t_apple_cider = '#forge:fluid/apple_cider';
 f.t_long_apple_cider = '#forge:fluid/long_apple_cider';
 f.t_strong_apple_cider = '#forge:fluid/strong_apple_cider';
 f.dragon_breath = 'create_central_kitchen:dragon_breath';
+// Farmer's Respite teas and drinks as Kettle tank fluids (farmers_respite.md K9)
+f.black_tea = 'create_central_kitchen:black_tea';
+f.green_tea = 'create_central_kitchen:green_tea';
+f.yellow_tea = 'create_central_kitchen:yellow_tea';
+f.dandelion_tea = 'create_central_kitchen:dandelion_tea';
+f.purulent_tea = 'create_central_kitchen:purulent_tea';
+f.rose_hip_tea = 'create_central_kitchen:rose_hip_tea';
+f.gamblers_tea = 'create_central_kitchen:gamblers_tea';
+f.chorus_fruit_milk_tea = 'create_central_kitchen:chorus_fruit_milk_tea';
+f.coffee = 'create_central_kitchen:coffee';   // Rustic Delight's Coffee (Respite's is purged, item_merges.md 2.8)
     f.cck_hot_cocoa = 'create_central_kitchen:hot_cocoa';
 
 f.melon_juice = 'create_central_kitchen:melon_juice';
@@ -73,7 +83,7 @@ f.t_melon_juice = '#forge:fluid/melon_juice';
 f.tomato_sauce = 'create_central_kitchen:tomato_sauce';
 f.t_tomato_sauce = '#forge:fluid/tomato_sauce';
 
-//Pack fluids (startup_scripts/cooking/fluids.js)
+//Pack fluids (Creative Delight kubejs_startup/creativeengineering/fluids.js)
 f.chorus_juice = 'creativeengineering:chorus_juice';
 f.t_chorus_juice = '#forge:fluid/chorus_juice';
 f.carrot_juice = 'creativeengineering:carrot_juice';
@@ -86,6 +96,17 @@ f.egg_solution = 'creativeengineering:egg_solution';
 f.t_egg_solution = '#forge:fluid/egg_solution';
 f.frosting = 'creativeengineering:frosting';
 f.t_frosting = '#forge:fluid/frosting';
+// Kettle tank drinks with no fluid of their own (farmers_respite.md K9)
+f.milk_coffee = 'creativeengineering:milk_coffee';
+f.honey_coffee = 'creativeengineering:honey_coffee';
+f.chocolate_coffee = 'creativeengineering:chocolate_coffee';
+f.dark_coffee = 'creativeengineering:dark_coffee';
+f.syrup_coffee = 'creativeengineering:syrup_coffee';
+f.pumpkin_coffee = 'creativeengineering:pumpkin_coffee';
+f.cherry_blossom_coffee = 'creativeengineering:cherry_blossom_coffee';
+f.lavender_tea = 'creativeengineering:lavender_tea';
+f.matcha_latte = 'creativeengineering:matcha_latte';
+f.berry_matcha_latte = 'creativeengineering:berry_matcha_latte';
 
 //Create: Confectionery
 f.black_chocolate = 'create_confectionery:black_chocolate';

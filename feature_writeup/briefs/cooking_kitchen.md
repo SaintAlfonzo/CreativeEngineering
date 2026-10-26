@@ -528,7 +528,7 @@ KubeJS / TODO `cooking/kitchen #10`
   `exported/food/recipes.json`, keeps Create milling and crushing from other mods whose main output is in a forge
   flour / sugar / salt / grain / crops tag or the tool's ALLOW list, minus EXCLUDE (ice cubes, nether wart) and scrap
   recycling, and writes `generation_scripts/food/mortar_catalog.json` (item_dict keys where they exist, and every
-  skipped recipe with its reason). `server_scripts/cooking/mortar.js` loops it through `R.mortar`. Today: wheat ->
+  skipped recipe with its reason). `kubejs/data/creative_delight/kubejs/creativeengineering/mortar.js` loops it through `R.mortar`. Today: wheat ->
   1 flour, sugar cane -> 2 sugar, raw rock salt -> salt, coffee berries -> beans, crushed cocoa -> cocoa powder, rice
   panicle and wild rice -> rice. IE crusher recipes export without ingredients, so they can't be catalogued.
 - **Changed 2026-10-21 (user):** food grinding now uses the pack's own `creativeengineering:mortar_and_pestle` (Old
@@ -608,7 +608,7 @@ Decorative meat grinder, pots, pans, baking sheets and silverware for kitchens.
   paper stack, potion bottles. No pans or cutlery.
 - Farmhouse Decorations: kitchen counters / cabinets / antique ovens (decor only).
 - The pack's bakeware (`creativeengineering:baking_sheet`, `muffin_tin`, `pie_tin`, `cake_pan`) are plain items
-  (`kubejs/startup_scripts/cooking/bakeware.js`).
+  (`development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js`).
 
 ### Build
 1. Source: no mod in the pack has a meat grinder, pans or silverware. Make them as KubeJS blocks

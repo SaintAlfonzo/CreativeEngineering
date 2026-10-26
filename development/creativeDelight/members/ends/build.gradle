@@ -1,0 +1,6 @@
+// repackedEnds: End's Delight 1.19.2-2.1 repacked for Creative Delight. Everything is in
+// build-logic/src/main/groovy/ce.forge-repack.gradle and gradle.properties; the overlay is src/.
+// Build: ./gradlew :repackedEnds:build --offline (ships only inside :creativeDelight:bundleJar).
+plugins {
+    id 'ce.forge-repack'
+}

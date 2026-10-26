@@ -1388,7 +1388,7 @@
 	// Every biome fit as the real biome tag creativeengineering:<fit>; StructureBiomeFits resolves the fit through it.
 	// Also biome_fits.json "biome_tags" (biome tags that are not fits, e.g. harsh for biome_frequency) as
 	// creativeengineering:<name>; they may name fit tags (#creativeengineering:land/desert).
-	// Unknown biome ids are reported by StructureBiomeFits at world load (this handler runs as a pre-pass, see wild_crops.js).
+	// Unknown biome ids are reported by StructureBiomeFits at world load (this handler runs as a pre-pass, see _biome_rules.js).
 	ServerEvents.tags('worldgen/biome', function (e) {
 		var fits = readFits()
 		Object.keys(fits).forEach(function (name) {

@@ -1,0 +1,39 @@
+# Creative Delight: manifest mod id only (no registry content). The members are nested jars, each with its own
+# mods.toml (META-INF/jarjar/metadata.json). creative_delight.md 0.3, 10.1, 14.2.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.creative_delight]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creative_delight]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+# patcherMod: supplies KubeJS (it requires it), the shared helpers (global.NCH, global.tags, global.compost) and the
+# startup script loader. Not a standalone Delight bundle (Q23). CreativeDelight logs an error at boot when the
+# installed patcherMod has no loader.
+[[dependencies.creative_delight]]
+modId="creativeengineering"
+mandatory=true
+versionRange="[1.1.03,)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.creative_delight]]
+modId="farmersdelight"
+mandatory=true
+versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"

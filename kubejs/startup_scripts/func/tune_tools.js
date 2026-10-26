@@ -128,6 +128,12 @@ var i = global.item;
 	tune(i.dragon_shovel,  { damage: 8, attackSpeed: 1.6, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 5, rarity: 'epic', fireproof: true })
 	tune(i.dragon_hoe,     { damage: 1,   attackSpeed: 5.5, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 5, rarity: 'epic', fireproof: true })
 
+	// ─────────────────────────────────── More Delight knives ─────────────────�
+	// Vanilla Wood / Stone tier values (More Delight 26.05.20, feature_writeup/more_delight.md 2.2); the installed
+	// 25.07.28 knives had mining speed 8 and harvest level 3-4. Damage on FD's 0.5 knife base; durability unchanged.
+	tune(i.wooden_knife, { damage: 1.5, attackSpeed: 2.0, miningSpeed: 2, enchantability: 15, miningLevel: 0 })
+	tune(i.stone_knife,  { damage: 2.5, attackSpeed: 2.0, miningSpeed: 4, enchantability: 5,  miningLevel: 1 })
+
 	// Ranged/thrown dragon gear (dragon_bow / dragon_crossbow / dragon_trident) and
 	// dragon_horse_armor aren't in /dumpgear. Bows/crossbows aren't tiered items, so
 	// only durability / rarity / fireproof / stackSize apply there; the trident also

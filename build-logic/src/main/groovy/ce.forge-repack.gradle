@@ -1,0 +1,138 @@
+// ce.forge-mod for a third-party Forge 1.19.2 mod that ships repacked as a Creative Delight member
+// (feature_writeup/creative_delight.md 14.3 B1 and B3). The upstream jar's classes and resources are copied
+// unchanged; this project adds only an overlay: its own mods.toml (src/main/resources/META-INF/mods.toml,
+// expanded like any mod's), the NOTICE files in its folder, and any overlay classes (mixins), reobfed as usual.
+//
+// Reads from <member>/gradle.properties, on top of ce.forge-mod's keys:
+//   upstream_jar       file name in development/creativeDelight/upstream/ (git-ignored; copy it from the mod's
+//                      release, check the sha1)
+//   upstream_sha1      the sha1 that file must have; any other file stops the build
+//   upstream_version   the upstream mod version, for the record (mod_version = upstream_version + -ce-19.2-NN,
+//                      creative_delight.md 14.1.4, so the repack always beats a stale upstream jar)
+//   replaced_classes   optional, comma-separated `path/to/Cls.class=<sha1 of the upstream bytes>`: upstream
+//                      classes left out (with their `$` inner classes) because the overlay holds a decompiled
+//                      replacement. The sha1 stops the build when an upstream bump changes the class.
+//   replaced_resources optional, same form for any other upstream file (`assets/<ns>/lang/en_us.json=<sha1>`):
+//                      left out because the overlay ships its own copy at that path (a backport editing an
+//                      upstream lang, tag or recipe file). No inner-class rule; the same sha1 guard.
+//   mixin_configs      optional, the overlay's mixin configs for the manifest (absent = no MixinConfigs)
+//
+// repackJar fails on any path that both the upstream jar and the overlay hold, unless it is in replaced_classes or
+// replaced_resources.
+// The repack is build/libs/<jar_name>-<mod_version>.jar; the overlay jar alone is the `-overlay` classifier.
+plugins {
+    id 'ce.forge-mod'
+}
+
+def prop = { String key, String fallback = null -> (project.findProperty(key) ?: fallback)?.toString() }
+def csv = { String key -> (prop(key, '') ?: '').split(',')*.trim().findAll { it } }
+def modId = prop('mod_id')
+def jarName = prop('jar_name', modId)
+def upstreamFile = rootProject.file("development/creativeDelight/upstream/${prop('upstream_jar')}")
+def pins = { String key ->
+    csv(key).collectEntries { entry ->
+        def (path, sha) = entry.split('=', 2)*.trim()
+        [(path): sha]
+    }
+}
+def replacedClasses = pins('replaced_classes')
+def replacedResources = pins('replaced_resources')
+replacedResources.keySet().each { path ->
+    if (path.endsWith('.class')) throw new GradleException("${project.name}: ${path} is a class: list it in replaced_classes")
+}
+def replaced = replacedClasses + replacedResources
+// Left out of the upstream copy: its mods.toml and manifest (ours replace them), each replaced class and its
+// inner classes, each replaced resource.
+def upstreamExcludes = ['META-INF/mods.toml', 'META-INF/MANIFEST.MF'] + replacedResources.keySet() +
+        replacedClasses.keySet().collectMany { [it, it.replaceAll(/\.class$/, '\\$*.class')] }
+
+ext.shipped_jar_task = 'repackJar'
+
+def sha1Of = { File f -> java.security.MessageDigest.getInstance('SHA-1').digest(f.bytes).encodeHex().toString() }
+def sha1OfBytes = { byte[] b -> java.security.MessageDigest.getInstance('SHA-1').digest(b).encodeHex().toString() }
+
+dependencies {
+    // Overlay code may name upstream classes (mixin targets); the upstream jar is SRG-named, like patcherMod's libs/.
+    compileOnly files(upstreamFile)
+}
+
+// Overlay mixins use SRG member names with remap = false (no refmap), as patcherMod's do.
+tasks.named('compileJava', JavaCompile).configure {
+    options.compilerArgs << '-AdisableTargetValidator=true'
+}
+
+tasks.named('jar', Jar).configure {
+    archiveClassifier = 'overlay'
+}
+
+def overlayJar = tasks.named('jar', Jar).flatMap { it.archiveFile }
+
+tasks.register('repackJar', Jar) {
+    group = 'ce'
+    description = "Upstream ${prop('upstream_jar')} plus this project's overlay, as ${jarName}-${version}.jar"
+    dependsOn 'reobfJar'
+    archiveBaseName = jarName
+    archiveClassifier = ''
+    destinationDirectory = layout.buildDirectory.dir('libs')
+    inputs.file(upstreamFile)
+    inputs.property('replaced_classes', replacedClasses)
+    inputs.property('replaced_resources', replacedResources)
+
+    from({ zipTree(upstreamFile) }) {
+        exclude upstreamExcludes
+    }
+    from({ zipTree(overlayJar.get().asFile) }) {
+        exclude 'META-INF/MANIFEST.MF'
+    }
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+
+    manifest {
+        def attrs = [
+                'Specification-Title'   : modId,
+                'Specification-Vendor'  : prop('mod_authors'),
+                'Specification-Version' : '1',
+                'Implementation-Title'  : project.name,
+                'Implementation-Version': version,
+                'Implementation-Vendor' : prop('mod_authors'),
+        ]
+        def mixins = csv('mixin_configs').findAll { it != 'none' }
+        if (mixins) attrs['MixinConfigs'] = mixins.join(',')
+        attributes(attrs)
+    }
+
+    doFirst {
+        if (!upstreamFile.isFile()) {
+            throw new GradleException("${project.name}: upstream jar missing: ${upstreamFile} " +
+                    "(copy ${prop('upstream_jar')} there, sha1 ${prop('upstream_sha1')})")
+        }
+        def actual = sha1Of(upstreamFile)
+        if (actual != prop('upstream_sha1')) {
+            throw new GradleException("${project.name}: ${upstreamFile.name} has sha1 ${actual}, " +
+                    "gradle.properties pins ${prop('upstream_sha1')}. Another upstream build: check it, then update the pin.")
+        }
+        def upstream = new java.util.zip.ZipFile(upstreamFile).withCloseable { z ->
+            z.entries().findAll { !it.directory }.collectEntries { [(it.name): z.getInputStream(it).bytes] }
+        }
+        replaced.each { path, sha ->
+            def key = path in replacedClasses ? 'replaced_classes' : 'replaced_resources'
+            if (!upstream.containsKey(path)) throw new GradleException("${project.name}: ${key} entry ${path} is not in the upstream jar")
+            def got = sha1OfBytes(upstream[path])
+            if (got != sha) throw new GradleException("${project.name}: upstream ${path} has sha1 ${got}, ${key} pins ${sha}: re-check the replacement")
+        }
+        def kept = upstream.keySet().findAll { name ->
+            !(name in ['META-INF/mods.toml', 'META-INF/MANIFEST.MF']) && !(name in replacedResources) && !replacedClasses.keySet().any { r ->
+                name == r || (name.startsWith(r.replaceAll(/\.class$/, '$')) && name.endsWith('.class'))
+            }
+        }
+        def overlay = new java.util.zip.ZipFile(overlayJar.get().asFile).withCloseable { z ->
+            z.entries().findAll { !it.directory }.collect { it.name }
+        }
+        def clashes = overlay.findAll { it != 'META-INF/MANIFEST.MF' && it in kept }
+        if (clashes) {
+            throw new GradleException("${project.name}: the overlay and the upstream jar both hold " + clashes.join(', ') +
+                    ' (list a decompiled class in replaced_classes, an edited resource in replaced_resources, or rename the overlay file)')
+        }
+    }
+}
+
+tasks.named('build').configure { dependsOn 'repackJar' }

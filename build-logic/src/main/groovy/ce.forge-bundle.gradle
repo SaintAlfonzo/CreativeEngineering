@@ -1,0 +1,100 @@
+// ce.forge-mod for a jar that nests other in-tree mods with Forge's Jar-in-Jar (Creative Delight,
+// feature_writeup/creative_delight.md 14.2 and 14.3 B4). Each member builds as its own project (a port with
+// ce.forge-mod, a repack with ce.forge-repack) and keeps its own mods.toml, AT, mixin config and refmap; this jar
+// adds them under META-INF/jarjar/ with a generated META-INF/jarjar/metadata.json (Forge 43's
+// JarInJarDependencyLocator loads each as a full mod).
+//
+// Reads from the project's gradle.properties, on top of ce.forge-mod's keys:
+//   bundle_members   comma-separated Gradle project paths (`:repackedOceans,...`). Each member's shipped jar is
+//                    nested, its metadata entry built from its mod_group_id, jar_name and mod_version, with the
+//                    range pinned to exactly that version. Set bundled_in=<this project> in each member.
+//
+// The bundle is build/libs/<jar_name>-<mod_version>.jar; this project's own (reobfed) jar alone is the `-own`
+// classifier.
+plugins {
+    id 'ce.forge-mod'
+}
+
+def prop = { String key, String fallback = null -> (project.findProperty(key) ?: fallback)?.toString() }
+def csv = { String key -> (prop(key, '') ?: '').split(',')*.trim().findAll { it } }
+def modId = prop('mod_id')
+def jarName = prop('jar_name', modId)
+def memberPaths = csv('bundle_members')
+
+ext.shipped_jar_task = 'bundleJar'
+
+memberPaths.each { evaluationDependsOn(it) }
+
+tasks.named('jar', Jar).configure {
+    archiveClassifier = 'own'
+}
+
+def ownJar = tasks.named('jar', Jar).flatMap { it.archiveFile }
+// One entry per member: its project, its shipped archive task and the metadata it contributes.
+def members = { ->
+    memberPaths.collect { path ->
+        def p = project(path)
+        def get = { String key -> p.findProperty(key)?.toString() }
+        if (get('bundled_in') != project.name) {
+            throw new GradleException("${path} is in bundle_members of ${project.name} but its bundled_in is '${get('bundled_in')}'")
+        }
+        def task = p.tasks.named(get('shipped_jar_task') ?: 'jar', AbstractArchiveTask).get()
+        [project: p, task: task, group: get('mod_group_id'), artifact: get('jar_name') ?: get('mod_id'),
+         version: get('mod_version'), modId: get('mod_id')]
+    }
+}
+
+// Not build/jarjar/: ForgeGradle's own (unused) jarJar task writes there.
+def metadataDir = layout.buildDirectory.dir('generated/bundle_metadata')
+def writeMetadata = tasks.register('jarJarMetadata') {
+    description = 'Writes META-INF/jarjar/metadata.json for the bundled members'
+    def out = metadataDir.map { it.file('META-INF/jarjar/metadata.json') }
+    inputs.property('members', memberPaths.collect { path ->
+        def p = project(path)
+        [path, p.findProperty('mod_group_id'), p.findProperty('jar_name'), p.findProperty('mod_version')].join('|')
+    })
+    outputs.file(out)
+    doLast {
+        def jars = members().collect { m ->
+            [identifier : [group: m.group, artifact: m.artifact],
+             version    : [range: "[${m.version}]", artifactVersion: m.version],
+             path       : "META-INF/jarjar/${m.task.archiveFileName.get()}",
+             isObfuscated: false]
+        }
+        def f = out.get().asFile
+        f.parentFile.mkdirs()
+        f.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([jars: jars])) + '\n'
+    }
+}
+
+tasks.register('bundleJar', Jar) {
+    group = 'ce'
+    description = "${jarName} with its members nested (${memberPaths.join(', ')})"
+    dependsOn 'reobfJar', writeMetadata
+    memberPaths.each { path ->
+        dependsOn({ project(path).tasks.named(project(path).findProperty('shipped_jar_task')?.toString() ?: 'jar') })
+    }
+    archiveBaseName = jarName
+    archiveClassifier = ''
+    destinationDirectory = layout.buildDirectory.dir('libs')
+
+    from({ zipTree(ownJar.get().asFile) }) {
+        exclude 'META-INF/MANIFEST.MF'
+    }
+    from(metadataDir)
+    into('META-INF/jarjar') {
+        from({ members().collect { it.task.archiveFile } })
+    }
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+
+    // Same manifest as the own jar (ce.forge-mod's attributes, incl. MixinConfigs).
+    manifest.from(tasks.named('jar', Jar).get().manifest)
+
+    doFirst {
+        members().each { m ->
+            if (!m.group || !m.version) throw new GradleException("${m.project.path}: mod_group_id and mod_version are required for the bundle")
+        }
+    }
+}
+
+tasks.named('build').configure { dependsOn 'bundleJar' }

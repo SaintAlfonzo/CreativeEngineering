@@ -36,12 +36,12 @@ Order: #6 → #5 → #4 a/b/e → #2 → #1 → #3 → #4 c/d/f/g.
 - One table + one registration loop: `kubejs/startup_scripts/cooking/sweets.js` holds
   `global.sweets = { gummy: [...], rock_candy: [...], ... }`, each entry `{ key, name, flavour (dict key), effects:
   [[effKey, ticks, amp]], texture }`, and registers the items in `StartupEvents.registry('item')`, the same shape as the
-  generated-can loop in [cans.js:83-102](../../kubejs/startup_scripts/items/cans.js#L83-L102). A new
+  generated-can loop in [cans.js:83-102](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js#L83-L102). A new
   `kubejs/server_scripts/cooking/sweets.js` reads the same table and writes the recipes through NCH. Per-fruit effects:
   take each fruit's Fruits Delight jello effect (the `sweet` table in food_catalog.md: lemon = haste + refreshing,
   orange = regeneration + recovering, mango = strength III + rage_aura, peach = heal_aura, pear = lozenge, ...).
 - Container return on eating: KubeJS items don't hand back a stick or bottle when eaten (vanilla `finishUsingItem`).
-  Use the food builder's `eaten` callback, already used in [cans.js:80](../../kubejs/startup_scripts/items/cans.js#L80):
+  Use the food builder's `eaten` callback, already used in [cans.js:80](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js#L80):
   `f.eaten(ev => ev.player.give('minecraft:stick'))` (verify `ev.player` vs `ev.entity` in the Rhino harness; cans.js
   uses `ev.entity`). Also set `.containerItem(...)` so the item leaves its container when used as a crafting
   ingredient.
@@ -271,7 +271,7 @@ b. **Not gross, parity values.** Startup, `ItemEvents.modification`:
    (and salmonberry) for Neapolitan's brain freeze. Where this lives: as `items` entries of
    `food_tuning.json` if `food/types-and-tuning #1` is built first; otherwise a `global.foodEdits` map next to
    `global.foodValueCopies` in [food_values.js](../../kubejs/startup_scripts/cooking/food_values.js).
-c. **Fluids for matcha and salmonberry.** In the shared startup fluid file `kubejs/startup_scripts/cooking/fluids.js`
+c. **Fluids for matcha and salmonberry.** In the shared startup fluid file `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js`
    (also used by `food/drinks #1` and `#4`; no KubeJS fluid exists in the pack yet):
    ```js
    StartupEvents.registry('fluid', e => {

@@ -1,5 +1,7 @@
 # Alcohol: Brewin' and Chewin' and Vinery backports
 
+> **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Brewin' and Chewin' (Part A) and Vinery (Part B); its registry namespace and test prefix do not change.
+
 Two backports live in this file:
 
 - **Part A (sections 0 to 10, tests `AL-`): Brewin' and Chewin'.** A full port of 4.5.0+1.21.1 as "Backported Brewin";

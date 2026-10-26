@@ -61,7 +61,7 @@ tortilla takes a water bucket or a water bottle". This section is a static audit
 kernels, cornmeal, tortillas and cornbread, so the fixes can be built without first finding them in play.
 
 ### Now
-- **Item:** [cornmeal.js](../../kubejs/startup_scripts/cooking/cornmeal.js) line 7
+- **Item:** [cornmeal.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cornmeal.js) line 7
   `e.create(global.item.cornmeal).displayName('Cornmeal')`; `i.cornmeal = 'creativeengineering:cornmeal'`
   ([item_dict.js](../../kubejs/startup_scripts/_lib/item_dict.js) 1885, priority 1000 so it loads first). No model
   file: KubeJS generates `creativeengineering:item/cornmeal`, which is where the sprite is
@@ -400,7 +400,7 @@ Forge fluid. Farmer's Delight's cooking pot can't take fluids, so these fluids o
 sequenced assembly), IE (Bottler, mixer) and buckets in the grid.
 
 ### Build
-1. New startup script `kubejs/startup_scripts/cooking/fluids.js`:
+1. New startup script `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js`:
    ```js
    StartupEvents.registry('fluid', e => {
        e.create(global.fluid.egg_solution).thinTexture(0xF3D97A).bucketColor(0xF3D97A).displayName('Egg Solution')
@@ -648,8 +648,8 @@ A cut sweet potato gives 3 sweet potato slices.
 ### Now
 - No sweet potato slice item exists (Veggies Delight jar and `item_dict.js`: only `sweet_potato`, `baked_sweet_potato`,
   dough, pie, cupcake, pancakes). The potato analogue is Rustic Delight `potato_slices` (`i.potato_slices`, a knife
-  cut of `minecraft:potato` gives 2, verified in the jar) and `baked_potato_slices`; tag `#forge:sliced_potatoes`
-  (`i.t_sliced_potatoes`, set in [cookingtags.js](../../kubejs/server_scripts/tags/cookingtags.js) line 38 and
+  cut of `minecraft:potato` gives 2, verified in the jar) and `baked_potato_slices`; tag `#forge:sliced_potato`
+  (`i.t_sliced_potato`, set in [cookingtags.js](../../kubejs/server_scripts/tags/cookingtags.js) line 38 and
   [item_merges.js](../../kubejs/server_scripts/other/item_merges.js) line 85) is what fries and fish and chips read.
 - VD is in-tree (`development/backportedVeggies`), so a new item can be registered there (Java) or as a KubeJS
   startup item.
@@ -657,7 +657,7 @@ A cut sweet potato gives 3 sweet potato slices.
 ### Build
 1. Item `sweet_potato_slices` (food, recoloured Rustic `potato_slices` texture; also a baked form if the potato has one).
 2. `R.fdCutting(i.sweet_potato, i.any_knife, Item.of(i.sweet_potato_slices, 3), e, 'sweet_potato_slices')`.
-3. `t.add(e, i.t_sliced_potatoes, i.sweet_potato_slices)` through `global.tags`, so fries (`dishes/meals #34`) take it.
+3. `t.add(e, i.t_sliced_potato, i.sweet_potato_slices)` through `global.tags`, so fries (`dishes/meals #34`) take it.
 4. Dict key, `food_types.json` entry (ingredient), changelog line.
 
 ### Decisions
@@ -679,15 +679,15 @@ Recipes that take a potato also take a sweet potato, and the same for the cooked
 - `i.potato` is `#forge:crops/potato` (item_dict 1934); VD tags the sweet potato under its own `#forge:crops/sweet_potato`
   and `#forge:vegetables/sweet_potato` (jar), so it is not in the potato tags. Baked potato is `i.baked_potato`
   (vanilla); `i.baked_sweet_potato` is VD's.
-- Potato users already read tags: `#forge:sliced_potatoes` (fries, fish and chips, More Delight potato salad),
+- Potato users already read tags: `#forge:sliced_potato` (fries, fish and chips, More Delight potato salad),
   `#forge:vegetables/potato` (VD fish and chips, Rustic potato salad, `potato_noodle`), vanilla `minecraft:potato`
   items in Create / Oceanic recipes.
 
 ### Build
 1. Audit with `/dumprecipes`: recipes whose inputs name `minecraft:potato`, `#forge:crops/potato`,
-   `#forge:vegetables/potato`, `minecraft:baked_potato`, `#forge:sliced_potatoes`.
+   `#forge:vegetables/potato`, `minecraft:baked_potato`, `#forge:sliced_potato`.
 2. Prefer tag edits (`global.tags`): add sweet potato to the potato crop and vegetable tags, baked sweet potato to a
-   baked-potato tag, sweet potato slices (`#20`) to `#forge:sliced_potatoes`. Item-only recipes get `R.replaceInput`.
+   baked-potato tag, sweet potato slices (`#20`) to `#forge:sliced_potato`. Item-only recipes get `R.replaceInput`.
 
 ### Decisions
 Which recipes (the row's decision). Adding the sweet potato to `#forge:crops/potato` also changes everything else that

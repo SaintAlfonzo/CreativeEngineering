@@ -27,5 +27,6 @@
   "effect.xaeroworldmap.no_world_map.description": "TODO: write a description for No World Map.",
   "effect.xaeroworldmap.no_world_map_harmful.description": "TODO: write a description for No World Map.",
   "effect.fungidelight.burrowing.description": "+50% Mining Speed on soil (level I), +100% (level II): blocks a shovel mines.",
-  "effect.fungidelight.weak_stomach.description": "From eating inky caps or durian. Drinking alcohol or any potion other than water while it lasts gives Nausea II, Poison II and Weakness II for 10 seconds."
+  "effect.fungidelight.weak_stomach.description": "From eating inky caps or durian. Drinking alcohol or any potion other than water while it lasts gives Nausea II, Poison II and Weakness II for 10 seconds.",
+  "curios.identifier.face": "Face"
 }

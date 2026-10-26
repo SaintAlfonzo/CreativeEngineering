@@ -85,8 +85,7 @@
       "mode": "cave",
       "where": ["!ocean", "ocean"],
       "features": ["creativeengineering:wild/cave_carrots/core", "creativeengineering:wild/cave_carrots/deep", "creativeengineering:wild/cave_carrots/high"],
-      "disable_modifiers": ["miners_delight:cave_carrots"],
-      "notes": "Miner's Delight wild cave carrots, every overworld biome, never above Y 48 (patch origin Y 44 at most; a patch spreads 3 up). Three bands, each 1 in N chunks, 8 floor spots tried: core Y -24 to 24 1 in 2, deep Y -64 to -25 1 in 5, high Y 25 to 44 1 in 8 (per Y layer the deep and high bands are about half the core density). On stone, deepslate or dirt, in noise caves and in carver caves (air and cave_air; the mushrooms are noise caves only). Replaces the mod's own modifier (1 in 3 chunks, Y -54 to 48, no cave check)."
+      "notes": "Miner's Delight wild cave carrots, every overworld biome, never above Y 48 (patch origin Y 44 at most; a patch spreads 3 up). Three bands, each 1 in N chunks, 8 floor spots tried: core Y -24 to 24 1 in 2, deep Y -64 to -25 1 in 5, high Y 25 to 44 1 in 8 (per Y layer the deep and high bands are about half the core density). On stone, deepslate or dirt, in noise caves and in carver caves (air and cave_air; the mushrooms are noise caves only). The Miner's port ships no modifier of its own (upstream: 1 in 3 chunks, Y -54 to 48, no cave check)."
     }
   }
 }

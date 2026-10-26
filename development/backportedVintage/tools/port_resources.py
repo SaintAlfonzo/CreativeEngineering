@@ -3,8 +3,9 @@
 
     python3 tools/port_resources.py            (run from anywhere; rewrites src/main/resources/{assets,data})
 
-Sources: the upstream 0.1.6 jar (MIT), read directly, plus three files from the KOTS 0.3.1 jar (GPL-3.0): the
-Cucumber Dough texture and model (its recipes are written below). Plan: feature_writeup/vintage_delight.md.
+Sources: the upstream 0.1.6 jar (MIT), read directly, plus files from the KOTS 0.3.1 jar (GPL-3.0): the Cucumber
+Dough texture and model (its recipes are written below) and the block loot of Magic Peanut, Smooth Salt Block and
+Vine Tile. Plan: feature_writeup/vintage_delight.md.
 
   * purged: every file and entry naming the gearo berry, the Dehydrated effect (lang, effect icon) or the pitcher
     plant (S1, S3, S8); the 1.20-only sniffer_diggable_block tag; the Galosphere / Spelunkery recipes; the Diet tags
@@ -21,7 +22,9 @@ Cucumber Dough texture and model (its recipes are written below). Plan: feature_
     pickled_ghost_pepper potato cannon type names vintagedelight:pickled_pepper
   * worldgen: wild cucumbers stand on #minecraft:dirt (was dirt, grass, coarse dirt, sand, red sand); the magic vine
     tree uses KOTS's switchable vintagedelight:configurable_alter_ground decorator and 1.19.2 leaf states
-  * Moonlight soft fluids: 1.19.2 texture ids (no 'block/'), KOTS jar ids, no gearo jam
+  * Moonlight soft fluids: 1.19.2 texture ids (no 'block/'), KOTS jar ids, no gearo jam; honey_vd holds the honey jar
+    (upstream lists the apple sauce bottle and jar)
+  * worldgen: the farmersdelight:biome_tag filter key is 'biome_tag' (upstream 'tag')
   * advancements: 1.20 placed_block location lists -> the 1.19.2 'block' field; purged items left out
   * loot tables lose 'random_sequence'; lang: purged keys out, jar item keys moved to the block keys, the fermenting
     jar is named Pickling Jar (S7), 1.19.2 creative tab key, KOTS keys (cucumber dough, ghost pepper soil tooltip)
@@ -203,10 +206,30 @@ def convert_configured_feature(name, d):
     return d
 
 
-def convert_soft_fluid(d):
+def convert_soft_fluid(name, d):
     for key in ('still_texture', 'flowing_texture'):
         if key in d:
             d[key] = d[key].replace('moonlight:block/soft_fluids/', 'moonlight:soft_fluids/')
+    if name == 'honey_vd':
+        # upstream copy-paste of apple_sauce (vintageport #9): the honey jar holds honey, drunk as a honey bottle, with
+        # Moonlight's honey look and name. The bottle stays Moonlight's own honey fluid.
+        d = {
+            'containers': [{'filled': [f'{NS}:honey_jar'], 'empty': f'{NS}:empty_mason_jar', 'capacity': 3}],
+            'flowing_texture': 'moonlight:soft_fluids/honey_liquid',
+            'food': {'divider': 1, 'item': 'minecraft:honey_bottle'},
+            'from_mod': NS,
+            'still_texture': 'moonlight:soft_fluids/honey_liquid',
+            'tint_method': 'no_tint',
+            'translation_key': 'fluid.supplementaries.honey',
+        }
+    return d
+
+
+def convert_placed_feature(d):
+    # farmersdelight:biome_tag reads 'biome_tag' in FD 1.2.4; upstream writes 'tag' (vintage_delight.md 2.1)
+    for mod in d.get('placement', []):
+        if mod.get('type') == 'farmersdelight:biome_tag' and 'tag' in mod:
+            mod['biome_tag'] = mod.pop('tag')
     return d
 
 
@@ -234,7 +257,7 @@ def convert_lang(d, english):
         out[f'itemGroup.{NS}_tab'] = out.pop('creativetab.vintage_tab')
     if english:
         out[f'item.{NS}.cucumber_dough'] = 'Cucumber Dough'
-        out[f'item.{NS}.ghost_pepper.planting_soil'] = 'Plant on Soul Soil, Rich Soul Soil or Nulch'
+        out[f'item.{NS}.ghost_pepper.planting_soil'] = 'Plant on Soul Soil, Rich Soul Soil or Fertile Soul Soil'
     return out
 
 
@@ -252,6 +275,10 @@ def kots_files():
             out = os.path.join(OUT, rel)
             os.makedirs(os.path.dirname(out), exist_ok=True)
             open(out, 'wb').write(jar.read(rel))
+        # KOTS block loot for three blocks 0.1.6 ships none for (vintageport #18): each drops itself
+        for block in ('magic_peanut', 'smooth_salt_block', 'vine_tile'):
+            d = json.loads(jar.read(f'data/{NS}/loot_table/blocks/{block}.json'))
+            write_json(f'data/{NS}/loot_tables/blocks/{block}.json', convert_loot('blocks/' + block, d))
     write_json(f'data/{NS}/recipes/cucumber_dough.json', {
         'type': 'minecraft:crafting_shapeless',
         'ingredients': [{'item': f'{NS}:cucumber'}, {'tag': 'forge:dough'}],
@@ -370,7 +397,9 @@ def main():
             elif '/configured_feature/' in path:
                 d = convert_configured_feature(name, d)
             elif '/soft_fluids/' in path:
-                d = convert_soft_fluid(d)
+                d = convert_soft_fluid(name, d)
+            elif '/placed_feature/' in path:
+                d = convert_placed_feature(d)
             elif '/potato_cannon_projectile_types/' in path:
                 # upstream names vintagedelight:pickled_ghost_pepper, which does not exist; the item is pickled_pepper
                 d['items'] = [f'{NS}:pickled_pepper' if i == f'{NS}:pickled_ghost_pepper' else i for i in d['items']]

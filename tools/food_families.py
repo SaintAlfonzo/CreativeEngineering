@@ -287,14 +287,16 @@ def classify(r):
         return 'salad'
 
     # Forms that cut across sweet / handheld / meal / baked / ingredient.
-    if has(n, 'jello', 'gelatine'):
+    if has(n, 'jello', 'gelatine', 'magma jelly'):
         return 'jello'
     if (re.search(r'\bjam\b', n) or has(n, 'jelly bottle')) and not has(n, 'sandwich'):
         return 'preserve/jam'
     if has(n, 'nut butter') and not has(n, 'sandwich'):
         return 'preserve/spread'
-    if has(n, 'kimchi', 'pickled', 'sauerkraut'):
+    if has(n, 'kimchi', 'pickled', 'sauerkraut') or n == 'pickle':
         return 'preserve/pickle'
+    if has(n, 'rice cake', 'takoyaki', 'cabbage wrapped'):
+        return 'roll'
     if has(n, 'pie crust'):
         return 'ingredient/dough'
     if has(n, 'pizza', 'quiche', 'lasagna'):
@@ -311,7 +313,7 @@ def classify(r):
         return 'cookie'
     if has(n, 'ice cream'):
         return 'frozen/ice_cream'
-    if has(n, 'popsicle', 'shaved ice'):
+    if has(n, 'popsicle', 'pearlsicle', 'popsiclime', 'shaved ice'):
         return 'frozen/popsicle'
     if has(n, 'custard', 'pudding', 'glowgurt'):
         return 'pudding'
@@ -333,7 +335,7 @@ def classify(r):
         return 'candy/piece'
     if has(n, 'scone'):
         return 'pastry/other'
-    if has(n, 'toast with', 'bruschetta', 'jelly bread'):
+    if has(n, 'toast with', 'bruschetta', 'jelly bread', 'caviar toast'):
         return 'sandwich/toast'
     if has(n, 'burger'):
         return 'sandwich/burger'
@@ -351,18 +353,19 @@ def classify(r):
         return 'roll'
     if has(n, 'stuffed') and t in ('handheld', 'meal') and not has(n, 'stuffing', 'bowl of', 'plate of'):
         return 'stuffed'
-    if has(n, 'fries', 'chip', 'popcorn', 'nachos', 'crab bars') and not has(n, 'fish and chips', "'n' chips"):
+    if has(n, 'fries', 'chip', 'popcorn', 'nachos', 'crab bars', 'nutritional bar', 'crunchy bar') and not has(n, 'fish and chips', "'n' chips"):
         return 'snack'
     if t == 'egg':
         return 'egg/cooked'
-    if has(n, 'omelet', 'eggs', 'shakshouka', 'with egg and', 'kuku'):
+    if (has(n, 'omelet', 'eggs', 'shakshouka', 'with egg and', 'kuku') and not has(n, 'mixture')
+            and not t.startswith(('raw/', 'cooked/'))):
         return 'egg/dish'
     if t in ('meal', 'handheld'):
         if has(n, 'rice', 'paella'):
             return 'meal/rice'
         if has(n, 'pasta', 'noodle'):
             return 'meal/pasta'
-        if has(n, 'fried', 'chips', 'tempura', 'nugget'):
+        if has(n, 'fried', 'chips', 'tempura', 'nugget', 'squid rings'):
             return 'meal/fried'
         return 'meal/plate'
 
@@ -624,6 +627,17 @@ def placed_on(*cols):
     return lambda m: bool(m.place & set(cols))
 
 
+placed_any = placed_on(*PLACE_ANY)
+# Cured, smoked, dried, glazed or fermented forms keep their own station (Keg, Smoker only, Spout, a craft, the
+# Fermenting Jar); the cooking trio is for plainly cooked ones.
+cured = lambda m: m.name_has('jerky', 'kipper', 'smoked', 'glazed', 'dried', 'century', 'surstr')
+own_station = lambda m: cured(m) and bool(m.stations())
+# Cuts that a mob drops (Nether's Delight knife drops, Hostile and Oceanic Delight drops): no board recipe.
+DROPPED = {'nethersdelight:hoglin_ear', 'nethersdelight:strider_slice', 'hostiledelight:guardianfillet',
+           'oceanic_delight:squid_tentacles', 'oceanic_delight:glow_squid_tentacles'}
+dropped = lambda m: m.id in DROPPED
+
+
 CP = '[can_parity.md](can_parity.md)'
 OV = '[oven.md](oven.md) 2.6'
 RCK = '[recipes_cooking.md](recipes_cooking.md)'
@@ -637,6 +651,9 @@ def T(*rows):
 
 
 AL = '[alcohol.md](alcohol.md) 11'
+OWN = 'owner 2026-10-25 (4.2 D1)'
+PLACE_PRODUCE = 'Placeable: at least on a coaster (every raw or cooked produce food, egg and cheese is in the coaster tag; one without its own coaster model is drawn flat)'
+MD = '[more_delight.md](more_delight.md) 2.3'
 BG9 = '[TODO](todo/TODO.md) baking/baked-goods #9, [brief](briefs/baking_baked-goods.md)'
 
 RULES = {
@@ -644,51 +661,63 @@ RULES = {
     'fruit': dict(
         can=[R('Per item, can parity 2.2 (raw: Fruit Meal 5/3 x 3 servings, + sugar, honey or vinegar; pumpkin, melon, '
                'cantaloupe, hamimelon and pineapple canned from slices) and 2.6 (dried / baked)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('none: gathered', gathered)]),
+        place=[R(PLACE_PRODUCE, OWN, placed_any)],
+        recipe=[R('none: gathered', OWN, gathered)]),
     'fruit/nut': dict(can=[R('Per item, can parity 2.2, but the additive is salt (or bone broth), not sugar, honey or vinegar', CP, CAN)]),
-    'fruit/slice': dict(recipe=[D('Cutting Board: whole fruit -> slices', board),
+    'fruit/slice': dict(recipe=[R('Cutting Board: whole fruit -> slices', OWN, board),
                              P('A banana bunch cuts into bananas', T('dishes/ingredients #18'))]),
-    'fruit/cooked': dict(recipe=[D('Smoker + Furnace + Campfire: whole fruit', trio)]),
+    'fruit/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: whole fruit', OWN, trio)]),
     'veggie': dict(
         can=[R('Per item, can parity 2.1 (raw: Baked Potato meal 5/6 x 2, + salt, broth or vinegar) and 2.6 '
                '(cooked: x2 x 4 servings, 6 or 5 + salt)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('none: harvested', gathered)]),
-    'veggie/raw_cut': dict(recipe=[D('Cutting Board: whole vegetable -> pieces', board),
+        place=[R(PLACE_PRODUCE, OWN, placed_any)],
+        recipe=[R('none: harvested', OWN, gathered)]),
+    'veggie/raw_cut': dict(recipe=[R('Cutting Board: whole vegetable -> pieces', OWN, board),
                                   P('Cut sweet potato gives 3 sweet potato slices; cabbage gives 3 leaves with a chance of a 4th',
                                     T('dishes/ingredients #20', 'dishes/ingredients #8'))]),
-    'veggie/cooked': dict(recipe=[D('Smoker + Furnace + Campfire: the raw vegetable', trio)]),
-    'veggie/cooked_cut': dict(recipe=[D('Smoker + Furnace + Campfire: the cut piece', trio)]),
+    'veggie/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw vegetable; boiled ones in the Cooking Pot', OWN,
+                                    lambda m: trio(m) or (m.name_has('boiled') and m.at('Cooking Pot')))]),
+    'veggie/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the cut piece, or Cutting Board: the cooked whole', OWN,
+                                        lambda m: trio(m) or board(m))]),
     'meat': dict(
         can=[R('Per item, can parity 2.3 (raw: Meat Meal 5/3 x 4) and 2.7 (cooked: x2 x 3, 5 or 4 + broth; patties, '
                'bacon and exotic meats not canned)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('none: dropped', gathered),
+        place=[R(PLACE_PRODUCE, OWN, placed_any)],
+        recipe=[R('none: dropped', OWN, gathered),
                 P('Patties become their own food type (recipes, which foods open)', T('dishes/meals #14')),
-                P('Unused meats (venison, goat) out of recipes and JEI', T('food/types-and-tuning #10'))]),
-    'meat/raw_cut': dict(recipe=[D('Cutting Board: raw cut -> pieces', board)]),
-    'meat/cooked': dict(recipe=[D('Smoker + Furnace + Campfire: the raw cut', trio)]),
-    'meat/cooked_cut': dict(recipe=[D('Smoker + Furnace + Campfire: the raw piece', trio)]),
+                R('Unused meats (venison, goat) are removed items; Abnormals Delight\'s duck line takes Untitled Duck Mod\'s '
+                  'raw duck', T('food/types-and-tuning #10'))]),
+    'meat/raw_cut': dict(recipe=[R('Cutting Board: raw cut -> pieces; a seasoned cut is crafted from its raw meat (mint '
+                                   'chops); a mob drop is dropped (hoglin ear, strider slice)', OWN,
+                                   lambda m: board(m) or dropped(m) or m.at('Crafting', ('mutton', 'pork', 'beef', 'chicken')))]),
+    'meat/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw cut; cured, smoked, dried or glazed cuts keep '
+                                  'their own station (Keg, Smoker, Spout, a craft)', OWN, lambda m: trio(m) or own_station(m))]),
+    'meat/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the raw piece', OWN, trio)]),
     'fish': dict(
         can=[R('Per item, can parity 2.4 (raw: Fish Meal 4/2 x 4; slices share the whole fish\'s count) and 2.8 '
                '(cooked: x2 x 3, from the cut)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('none: caught', gathered),
+        place=[R(PLACE_PRODUCE, OWN, placed_any)],
+        recipe=[R('none: caught', OWN, gathered),
                 P('Fish eggs accepted in the fish egg roll; salmon eggs renamed caviar (caviar in the sea pickle roll); '
                   'any tentacle cuts to calamari', T('dishes/ocean #2', 'dishes/ocean #5', 'dishes/ocean #4'))]),
-    'fish/raw_cut': dict(recipe=[R('Cutting Board: whole fish -> slices (salmon, cod, catfish 6)', RCK + ' 2.1', board)]),
-    'fish/cooked': dict(recipe=[D('Smoker + Furnace + Campfire: the raw fish', trio)]),
-    'fish/cooked_cut': dict(recipe=[D('Smoker + Furnace + Campfire: the raw slice', trio)]),
+    'fish/raw_cut': dict(recipe=[R('Cutting Board: whole fish -> slices (salmon, cod, catfish 6); a mob drop is dropped '
+                                   '(guardian fillet, squid tentacles)', RCK + ' 2.1; ' + OWN,
+                                   lambda m: board(m) or dropped(m))]),
+    'fish/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw fish; cured or fermented fish keeps its own '
+                                  'station (Keg, Fermenting Jar)', OWN, lambda m: trio(m) or own_station(m))]),
+    'fish/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the raw slice', OWN, trio)]),
     'egg': dict(
         can=[R('Never canned (precedent); per item, can parity 2.20', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('Campfire / Skillet + Smoker + Furnace: one egg', trio),
+        place=[R(PLACE_PRODUCE, OWN, placed_any)],
+        recipe=[R('Campfire / Skillet + Smoker + Furnace: one egg; scrambled eggs in the Cooking Pot; a cured egg '
+                  '(century egg) its own station', OWN,
+                  lambda m: trio(m) or (m.name_has('scrambled') and m.at('Cooking Pot')) or own_station(m)),
                 P('Cooking oil + 3 eggs -> 3 fried eggs; Cooking Pot 4 fried eggs -> 4 omelettes', T('dishes/meals #23')),
                 P('Any egg (`#forge:eggs`) in egg recipes via `R.replaceInput`; turtle and parrot eggs open',
                   T('food/types-and-tuning #6'))]),
     'egg/dish': dict(
-        place=[D('Display Delight placed', placed_on('placed'))],
+        place=[R('Display Delight placed (patcherMod adds a placed block for each dish Display Delight has none for)',
+                 OWN, placed_on('placed'))],
         recipe=[R('Pot meal rule: Cooking Pot, plus a heatless `_manual_only` shapeless craft from cooked forms '
                   '(one more main ingredient)', RCK + ' heatless meal rule',
                   lambda m: m.manual_craft() if m.at('Cooking Pot') else None),
@@ -696,8 +725,8 @@ RULES = {
                   '(exact recipe open)', T('dishes/meals #24'))]),
     'dairy': dict(
         can=[R('Cheese wedges, 4 per can in the Cooking Pot, x1.25 x 4 servings (can parity 2.20)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('none: cut from a cheese wheel', gathered),
+        place=[R(PLACE_PRODUCE, OWN, placed_any)],
+        recipe=[R('none: cut from a cheese wheel', OWN, gathered),
                 P('9 cheese wedges craft back to the cheese block, for each cheese; more cheese types',
                   T('dishes/ingredients #9'))],
         values=[P('Stack: cheese wheel 32', T('food/stack-sizes #1'))]),
@@ -711,7 +740,8 @@ RULES = {
                 P('Bread block cut to a crustless bread block (standard slab recipe)', T('baking/baked-goods #10'))]),
     'bread/slice': dict(recipe=[D('Cutting Board: the loaf -> slices; toast = slice in the trio',
                                   lambda m: m.at('Cutting Board') or trio(m)),
-                                P('Honeycomb spreads on toast', T('dishes/ingredients #22'))]),
+                                P('Honeycomb spreads on toast', T('dishes/ingredients #22'))],
+                        values=[R('Every toast eats fast (16 ticks, like dried kelp); CD moredelight/toast.js', MD, only_if(lambda m: m.name_has('toast'), lambda m: bool(m.food) and bool(m.food.get('fast'))))]),
     'ingredient': dict(
         can=[R('Per item, can parity 2.26 (Canned Dough: 8 dough, not edible; tomato sauce in the preserve section)',
                CP, CAN)],
@@ -891,7 +921,8 @@ RULES = {
     'sandwich/toast': dict(recipe=[
         D('Crafting: bread slice or toast + topping', lambda m: m.at('Crafting')),
         P('Bruschetta: 2 toast in place of bread', BG9,
-          only_if(lambda m: m.name_has('bruschetta'), lambda m: m.at('Crafting', ['toast'])))]),
+          only_if(lambda m: m.name_has('bruschetta'), lambda m: m.at('Crafting', ['toast'])))],
+        values=[R('Every toast eats fast (16 ticks, like dried kelp); CD moredelight/toast.js', MD, only_if(lambda m: m.name_has('toast'), lambda m: bool(m.food) and bool(m.food.get('fast'))))]),
     'skewer': dict(
         can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
         place=[D('Food Plate', placed_on('plate'))],

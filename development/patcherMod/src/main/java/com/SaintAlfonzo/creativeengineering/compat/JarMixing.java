@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
  * <p>What may share a jar: two items mix when they are the same item, or when one
  * {@code #creativeengineering:jar_family/<name>} tag holds both (cookies, candied berries ...). A new item has to
  * share one family with every item already inside. Items in no family still go in a jar on their own, as before.
- * What goes in a jar at all is still {@code #supplementaries:cookies}. Tags: server_scripts/tags/jartags.js,
+ * What goes in a jar at all is still {@code #supplementaries:cookies}. Tags: kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js,
  * feature_writeup/mixed_jars.md.
  *
  * <p>Everything here works on the jar as a plain {@link Container} so it runs on the tile, the client copy and the

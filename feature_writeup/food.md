@@ -20,12 +20,12 @@ per type, with per-item exceptions, and gives every can the value of what went i
 |---|---|---|
 | `/dumpfood` export | KubeJS command, `_lib/dump_food.js` | Works: ran 2026-09-28 19:24 (629 foods), FO-01 PASSED. Re-run 2026-10-02 22:13 after the 1.0.4 mods: 856 foods, 138 food blocks, 26 drinks, 27,499 recipes. Now part of `/dumpall`. Re-run 2026-10-20 23:12 on a scratch server: 1030 foods, 139 food blocks, 33 drinks, 28,031 recipes (server-side names are raw lang keys for KubeJS items; the export keeps the client names from the 10-18 dump) |
 | Food types (31) + canned map | [food_types.json](../kubejs/generation_scripts/food/food_types.json) | BUILT: 1016 foods typed, 14 excluded, 242 cans mapped to 252 sources (227 new foods typed 2026-10-02, 3.2; 5 on 2026-10-20) |
-| Type tags `#creativeengineering:food_type/...` + `#creativeengineering:canned_source` | [foodtypetags.js](../kubejs/server_scripts/tags/foodtypetags.js) | DEPLOYED with 1.0.2. FO-02 to FO-08 |
+| Type tags `#creativeengineering:food_type/...` + `#creativeengineering:canned_source` | [foodtypetags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js) | DEPLOYED with 1.0.2. FO-02 to FO-08 |
 | item_dict keys for the 216 foods it lacked + 32 tag keys | generated block at the end of [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | BUILT, `node --check` clean |
 | Classifier, checker and catalog | `tools/food_catalog.py` -> [food_catalog.md](food_catalog.md) | BUILT; `--check` passes |
-| Canned Goods recipes removed, new empty-can recipes | [canning.js](../kubejs/server_scripts/cooking/canning.js) | DEPLOYED with 1.0.2. FO-09 to FO-13 |
-| Multi-serving cans, chance can return, cans in recipes | patcherMod `food/CanServings` + `ItemStackCanServingsMixin`, CEConfig `[canning]`, [can_servings.json](../kubejs/generation_scripts/food/can_servings.json), [cantags.js](../kubejs/server_scripts/tags/cantags.js), NCH `cans` argument | DEPLOYED (1.0.2 notes "multi-serving cans"; 3.6). FO-14 to FO-22 |
-| Food canning: raw veggie, fruit, meat | [canning.js](../kubejs/server_scripts/cooking/canning.js), 36 cans in [cans.js](../kubejs/startup_scripts/items/cans.js) (beetroot can sprite), servings in can_servings.json | DEPLOYED with 1.0.2. Cooked/prepared cans: next row |
+| Canned Goods recipes removed, new empty-can recipes | [canning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js) | DEPLOYED with 1.0.2. FO-09 to FO-13 |
+| Multi-serving cans, chance can return, cans in recipes | patcherMod `food/CanServings` + `ItemStackCanServingsMixin`, CEConfig `[canning]`, [can_servings.json](../kubejs/generation_scripts/food/can_servings.json), [cantags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js), NCH `cans` argument | DEPLOYED (1.0.2 notes "multi-serving cans"; 3.6). FO-14 to FO-22 |
+| Food canning: raw veggie, fruit, meat | [canning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js), 36 cans in [cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) (beetroot can sprite), servings in can_servings.json | DEPLOYED with 1.0.2. Cooked/prepared cans: next row |
 | Food canning: cookies, cooked veggie/meat/fish, bread, salad, soup, golden | [tools/gen_can_types.py](../tools/gen_can_types.py) -> [can_types.json](../kubejs/generation_scripts/food/can_types.json); items/overrides in cans.js, recipes via `canSection()` in canning.js | BUILT 2026-10-04, 113 new cans + 13 Canned Goods cans re-valued; DEPLOYED with 1.0.6 (2026-10-14); single player 2026-10-11 logged `[cans] registered 113 generated cans`; recipes not checked in game. Pie, feast, meals, drinks, special not built |
 | Tuning system (values, effects, SoL complexity, canned parity) | design in 3.5 | Not built. Decisions D1 to D6 (4.3) first |
 | Fried egg furnace/smoker/campfire restored; cooking oil from pumpkin seeds too; own mixer ratio | [cooking.js](../kubejs/server_scripts/cooking/cooking.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js), NCH `smoking` xp/time | DEPLOYED with 1.0.2. FO-23 to FO-27 |
@@ -33,7 +33,7 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | Every raw egg stacks to 64 | now a rule of the stack size policy ([stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js), `tools/gen_stack_sizes.py`); `item_properties.js` is removed in 1.0.5 | DEPLOYED with 1.0.6; single player 2026-10-11 logged `[stack_sizes] set 1052 stack sizes`. FO-28 |
 | Glistering Melon Slice edible (Golden Melon Slice values, no effects) | [food_values.js](../kubejs/startup_scripts/cooking/food_values.js), `golden` type in food_types.json | built, scratch server PASSED 2026-10-22 (SQ-OF-12), not run in game (3.10). FO-29 |
 | Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, in the patcherMod 1.1.02 jar installed 2026-10-23 (3.11). FO-30, FO-31 |
-| Pack seasonings framework (NBT seasonings, combine rules, bonus on eating; test set cheese / onion / garlic on popcorn) | patcherMod `food/Seasonings`, `SeasoningRecipe`, `SeasoningTooltip`; [seasonings.js](../kubejs/startup_scripts/cooking/seasonings.js), [seasoning.js](../kubejs/server_scripts/cooking/seasoning.js), NCH `season` | BUILT 2026-10-23, patcherMod 1.1.02 jar in `mods/` (23:46, md5 57feef44); logic harness 11/11; scratch test queued (SQ-SN-00, 01) (3.12). FO-45 to FO-48 |
+| Pack seasonings framework (NBT seasonings, combine rules, bonus on eating; test set cheese / onion / garlic on popcorn) | patcherMod `food/Seasonings`, `SeasoningRecipe`, `SeasoningTooltip`; [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js), [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js), NCH `season` | BUILT 2026-10-23, patcherMod 1.1.02 jar in `mods/` (23:46, md5 57feef44); logic harness 11/11; scratch test queued (SQ-SN-00, 01) (3.12). FO-45 to FO-48 |
 | Spice of Life pack config (10 foods to activate, reset on death, queue 256; tier bonuses still WIP) | `defaultconfigs/solapplepie-server.toml` = `configs_edited/server_config/solapplepie-server.toml` | Shipped with 1.1.01 through the deploy's `defaultconfigs`; the instance copy added 2026-10-22. New-world values: scratch server PASSED 2026-10-22 (SQ-CF-01). FO-32 |
 | Bites from placed pies and cakes count for Spice of Life | patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`, [placed_food_slices.json](../kubejs/generation_scripts/food/placed_food_slices.json) | BUILT 2026-10-22, patcherMod 1.1.01 jar in `mods/` (11:06, md5 b5f60533) (4.2 finding 5); scratch server PASSED 2026-10-22 (SQ-SOL-01: load, 14 map entries, mixin); the bite: FO-43 in game |
 
@@ -237,7 +237,7 @@ Every call into a mod class goes through `guardThrowable`, so one odd item or re
 - **Assignments** live in [food_types.json](../kubejs/generation_scripts/food/food_types.json): type -> item_dict keys,
   plus `excluded` (key -> reason) and `canned` (can key -> source keys). It sits in `generation_scripts/` beside the
   worldgen configs because the tuning config will join it there.
-- **Tags:** [foodtypetags.js](../kubejs/server_scripts/tags/foodtypetags.js) reads the file on every tag load and adds
+- **Tags:** [foodtypetags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js) reads the file on every tag load and adds
   each type through `global.tags.addTag`, so the parents fill themselves. Tag ids come from the `i.t_food_*` dict
   keys. It warns when a key is in two types, when a key isn't an item id in item_dict (new keys before a restart),
   and logs `[food types] 615 foods in 31 types, 33 canned sources`.
@@ -258,7 +258,7 @@ Every call into a mod class goes through `guardThrowable`, so one odd item or re
 
 ### 3.3 Cans (built)
 
-[canning.js](../kubejs/server_scripts/cooking/canning.js) removes all 35 Canned Goods food-can recipes (the 34
+[canning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js) removes all 35 Canned Goods food-can recipes (the 34
 "2 x food + iron ingot" cans and the Hot Hot Hotpot), its two can recipes (ingot -> empty can, ingot -> crushed can)
 and the can -> iron ingot smelting and blasting (with 4 or more cans per ingot, that would duplicate iron). No can
 of food is craftable until food canning is rebuilt on the type tags. Kept: Soda, Reef-Cola, Oculemonade and Mini
@@ -373,7 +373,7 @@ A can holds several servings. Eating one takes a serving; the last serving leave
 or nothing. A KubeJS shaped or shapeless recipe can use a can the same way: one serving per craft.
 
 **How many servings.** [can_servings.json](../kubejs/generation_scripts/food/can_servings.json) maps item_dict
-keys to a count. [cantags.js](../kubejs/server_scripts/tags/cantags.js) turns it into
+keys to a count. [cantags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js) turns it into
 `#creativeengineering:cans/servings/<n>`, which chains up to `#creativeengineering:cans/servings` and
 `#creativeengineering:cans` (keys `i.t_can_servings`, `i.t_cans`). `/reload` applies a change. A can that isn't
 listed keeps the Canned Goods behaviour: one serving, always an empty can back. Today 247 cans are listed, from
@@ -529,7 +529,7 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 
 `food/seasoning #3`'s mechanism, separate from Salt's `Salted`. A seasoning is NBT on the food,
 `Seasonings:["creativeengineering:garlic", ...]`, kept sorted so the order they went on doesn't split stacks.
-- **Definitions:** [seasonings.js](../kubejs/startup_scripts/cooking/seasonings.js) (`global.seasoning`, startup, both
+- **Definitions:** [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js) (`global.seasoning`, startup, both
   sides) holds each seasoning once: id, display name, grid item, bonus (`nutrition` hunger points, `saturation` points
   capped at the food level, `heal` health points, timed `effects`) and `combines` (keys it may share a food with;
   either side listing the other is enough, unlisted pairs don't combine). It passes each one to patcherMod
@@ -539,7 +539,7 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
   matching `food` + one of each listed seasoning's item gives the same food (all NBT kept, so salted food stays salted)
   with those seasonings added, count 1. No match if the food already has one of them or any pair among old + new
   doesn't combine. Emitted by `NCH.season(food, key | [keys], e)`, id `shapeless/season/<keys>_on_<food>`; recipes in
-  [seasoning.js](../kubejs/server_scripts/cooking/seasoning.js).
+  [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js).
 - **Eating:** `Seasonings.onEaten` (`LivingEntityUseItemEvent.Finish`, server, players, edible items) applies each
   seasoning's bonus after the food's own.
 - **Tooltip:** `food/SeasoningTooltip`, one line per seasoning under the name: "Garlic: Speed (0:10)", "Onion: +2
@@ -560,6 +560,31 @@ bar and HUD overlay show the seasoned total (saturation modifier recomputed from
 Limits: a seasoned food used as a
 recipe input loses the seasoning; JEI shows seasoned and plain popcorn as one entry (no subtype interpreter). Not built
 from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to FO-48.
+
+### 3.13 Powdered sugar (BUILT 2026-10-25, not run)
+
+`dishes/ingredients #16`, with the sugar seasoning of `food/seasoning #5`. Three pieces, all `creativeengineering:`:
+- **Item** `powdered_sugar` (KubeJS, [baking_ingredients.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js)):
+  ground sugar, 1 sugar -> 1 by Create crushing, Millstone and the mortar (`NCH.foodGrinding`). In `#forge:sugar`
+  ([cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js)), so it goes wherever the pack-wide sugar swap
+  (cooking.js "Sugar") or a pack recipe takes `i.any_sugar`.
+- **Block** `powdered_sugar_block` (patcherMod `food/PowderedSugarBlock`, extends `PowderSnowBlock`, powder snow's
+  properties): sink in it, leather boots walk on it, no fall damage, no block item, drops nothing (as powder snow).
+  Unlike powder snow it does not freeze, burning mobs don't melt it, and it makes no snow particles. Inside it there is
+  no powder snow fog (vanilla checks the powder snow block itself).
+- **Bucket** `powdered_sugar_bucket` (`food/PowderedSugarRegistry`, a `SolidBucketItem`): places the block, an empty
+  bucket picks it back up; leaves its bucket in a crafting grid.
+- **Recipes** ([powdered_sugar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/powdered_sugar.js)): Vacuum Chamber, evacuating,
+  bucket + 3 sugar -> powdered sugar bucket, 600 ticks (mirrors Vintage Improvements' bucket + snow block -> powder snow
+  bucket; new `NCH.viVacuumizing`); grid: powdered sugar bucket -> 3 powdered sugar.
+- **Seasoning** `sugar` ([seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js)): sugar or powdered sugar
+  (not glycerol), +1 nutrition (placeholder). Test food: Create Factory's waffle. Popcorn is out: Corn Delight's
+  popcorn + sugar is caramel popcorn. Which foods take it is still open (`food/seasoning #5`).
+- **Textures** (`textureswapper/powdered_sugar/make_psugar.py`, sheet `preview_sheet.png`): item = sugar's palette on
+  Create Confectionery's cocoa powder; block = sugar and sugar cube palettes (sugar's two darkest greys dropped) on
+  powder snow; bucket = the same palette on the powder snow bucket's snow pixels.
+
+FO-50 to FO-53.
 
 ## 4. Limits and decisions
 
@@ -664,7 +689,7 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
 
 - [dump_food.js](../kubejs/server_scripts/_lib/dump_food.js): `/dumpfood`
 - [food_types.json](../kubejs/generation_scripts/food/food_types.json): types, exclusions, canned map
-- [foodtypetags.js](../kubejs/server_scripts/tags/foodtypetags.js): the tags
+- [foodtypetags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js): the tags
 - [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js): generated "Food mods" block before `// Validation`
 - `tools/food_catalog.py`: classifier, checker, catalog writer
 - [cooking.js](../kubejs/server_scripts/cooking/cooking.js) "Protein / Egg": fried egg restore, cooking oil pot and mixer
@@ -675,8 +700,10 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
 - patcherMod [compat/jei/SeasoningJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningJEI.java)
   and [SeasoningCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
 - Pack seasonings (3.12): patcherMod `food/Seasonings.java`, `SeasoningRecipe.java`, `SeasoningTooltip.java`;
-  [seasonings.js](../kubejs/startup_scripts/cooking/seasonings.js) (definitions), [seasoning.js](../kubejs/server_scripts/cooking/seasoning.js) (crafts),
+  [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js) (definitions), [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js) (crafts),
   [seasoning_lang.js](../kubejs/client_scripts/seasoning_lang.js) (names), NCH `season`
+- Powdered sugar (3.13): patcherMod `food/PowderedSugarBlock.java`, `PowderedSugarRegistry.java`;
+  [powdered_sugar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/powdered_sugar.js) (recipes), item in `baking_ingredients.js`, NCH `viVacuumizing`
 - [food_catalog.md](food_catalog.md): generated reference; `kubejs/exported/food/catalog.json` (not in git)
 - Spice of Life config: `defaultconfigs/solapplepie-server.toml` (pack copy), `saves/<world>/serverconfig/solapplepie-server.toml`, client `config/solapplepie-client.toml`
 - Placed food for Spice of Life: patcherMod `food/PlacedFoodSol.java`, `mixin/ServerPlayerGameModePlacedFoodMixin.java`; `kubejs/generation_scripts/food/placed_food_slices.json`; scratch probe `tools/food_drinks_probe/food_drinks_probe.js` (`/fdtest sol`)
@@ -687,7 +714,7 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
 
 - `python3 tools/food_catalog.py --check`: exit 0 = every food typed, every key resolves, no key in two types, no
   typed item gone. Passes 2026-09-28.
-- `node --check kubejs/startup_scripts/_lib/item_dict.js kubejs/server_scripts/tags/foodtypetags.js`: syntax.
+- `node --check kubejs/startup_scripts/_lib/item_dict.js kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js`: syntax.
 - After a mod update: `/dumpfood`, then the tool without `--check`; it prints every new food and its type.
 
 ## 7. In-game test suite
@@ -798,6 +825,16 @@ Cooking oil and fried eggs (3.7), after a restart:
   fills by the amount shown. Plain popcorn unchanged.
 - [ ] **FO-48 Stacking:** 2 Garlic + Onion popcorns made in different orders stack in one slot; seasoned and plain
   popcorn don't. `logs/latest.log` has no `Seasonings` error.
+- [ ] **FO-50 Powdered sugar item** (restart; new patcherMod jar in `mods/`): JEI shows Powdered Sugar (white pile) and
+  Powdered Sugar Bucket. JEI uses of Sugar: Crushing, Milling and a mortar craft give 1 Powdered Sugar. Powdered Sugar
+  shows in a `#forge:sugar` recipe (e.g. Frosting: Powdered Sugar + 2 Milk in the grid) and the craft works.
+- [ ] **FO-51 Bucket recipes:** a Vacuum Chamber (evacuating) with a Bucket and 3 Sugar gives a Powdered Sugar Bucket
+  (JEI lists it). Powdered Sugar Bucket alone in the grid gives 3 Powdered Sugar and the empty Bucket stays.
+- [ ] **FO-52 Block:** place the bucket on the ground: a powdered sugar block, empty bucket in hand. Walk in: you sink
+  slowly, no frost overlay or freezing damage after 20 s. With leather boots you stand on top. Fall 10 blocks into it: no
+  damage. Right-click it with an empty bucket: the block goes, Powdered Sugar Bucket in hand. Break it by hand: no drop.
+- [ ] **FO-53 Sugar seasoning:** Waffle + Sugar and Waffle + Powdered Sugar both give a waffle with the line "Sugar: +1
+  nutrition"; the two stack together; Seasoning JEI tab shows it. Popcorn + Sugar still gives Caramel Popcorn.
 
 ## 8. History
 
@@ -867,3 +904,16 @@ Cooking oil and fried eggs (3.7), after a restart:
   bonus on eating; test set cheese / onion / garlic on popcorn. patcherMod 1.1.02 jar installed (also carries the 3.11
   Seasoning page). FO-45 to FO-48; scratch SQ-SN-00, 01 queued.
 - 2026-10-24: planned from the scratchpad (4.6): merged pink salt, salt layers placed from inside, seasoning on AppleSkin and per-seasoning icons, honeycomb as sugar, one jam family and merged nut butter. Nothing built.
+- 2026-10-25: Powdered sugar (3.13, `dishes/ingredients #16`): item, powder-snow-like block and bucket, vacuum
+  chamber bucket recipe, `#forge:sugar`, sugar seasoning (sugar or powdered sugar) tested on the waffle. patcherMod
+  built, not installed. FO-50 to FO-53.
+- 2026-10-25: the `powdered_sugar` item was never registered (missing from `baking_ingredients.js`, so every recipe
+  and tag naming it would have failed); added. Textures checked against `make_psugar.py`'s picks (item_cocoa_powder,
+  block_soft, bucket_soft): all three installed files match.
+- **2026-10-25** Food types for the 233 foods of Hostile, End's, Miner's, Ocean's and Oceanic Delight (2026-10-24
+  dump): `food_catalog.py` keyed them, then 93 of its guesses were moved by hand (its default `raw/veggie` took candied
+  slime, takoyaki, the brownies and pies; guardian food is fish, as Ocean's Delight has it; cups are soups). Removed or
+  merged items moved to `excluded`: Incubation's fried egg, More Delight's diced potatoes, venison (6), chevon (2),
+  passion fruit glazed duck, Canned Food, Hot Hot Hotpot (types-and-tuning #10 built, [food_families.md](food_families.md) 4.4).
+  `gen_can_types.py` rerun: the 20 configured Vintage and Fungi cans built (`AWAIT_DUMP` emptied); the five new mods are
+  held out of the type loops (`UNDECIDED_MODS`) until their cans are decided.

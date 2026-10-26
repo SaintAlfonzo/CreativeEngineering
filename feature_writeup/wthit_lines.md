@@ -50,7 +50,7 @@ nothing under WTHIT; 2.6 to 2.8 port the ones that matter.
 | Plugin id | Class | Side | Needs | What it adds |
 |---|---|---|---|---|
 | `creativeengineering:run_speed` | `surface/WthitRunSpeed` | client | `blockrunner` | "Run Speed: 1.50× (Asphalt)" ([blockrunner.md](blockrunner.md) 3.8) |
-| `creativeengineering:crop_growth` | `crops/WthitCropGrowth` | client | nothing | "Growth: 67%", "(Harvestable)" ([crops.md](crops.md) 2.9) |
+| `creative_delight:crop_growth` | Creative Delight `compat/wthit/WthitCropGrowth` (QoL-6) | client | nothing | "Growth: 67%", "(Harvestable)" ([crops.md](crops.md) 2.9) |
 | `creativeengineering:block_model_icon` | `compat/WthitBlockModelIcon` | client | nothing | the icon fix, 2.2 |
 | `creativeengineering:coaster` | `compat/WthitCoaster` | client | `brewinandchewin` | coaster lines ([alcohol.md](alcohol.md) 12) |
 | `creativeengineering:holder_contents` | `compat/WthitHolderContents` | client | `supplementaries` | "Contents: ...", 2.3 |
@@ -298,7 +298,7 @@ Brief: [briefs/ui_wthit.md](briefs/ui_wthit.md). Nothing here is built.
 - [KegWthit.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/integration/wthit/KegWthit.java).
 - [devtools/WthitIconDump.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/WthitIconDump.java) → `kubejs/exported/wthit_icons.json` → [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
 - [tools/gen_display_delight_models.py](../tools/gen_display_delight_models.py); `check_display_delight_models` in [tools/build_deploy.py](../tools/build_deploy.py).
-- `surface/WthitRunSpeed`, `crops/WthitCropGrowth`: the two older lines.
+- `surface/WthitRunSpeed`, CD `compat/wthit/WthitCropGrowth`: the two older lines.
 
 ## 6. Offline and scratch checks
 

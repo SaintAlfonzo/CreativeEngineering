@@ -1,0 +1,8 @@
+{
+  "icon": "creativeengineering:slot/empty_face_slot",
+  "size": 1,
+  "order": 25,
+  "validator_predicates": [
+    "curios:tag"
+  ]
+}

@@ -979,6 +979,7 @@ village_towers share 0.33 matches its old "about a third where towers fit".
 | `meta/house_camp` | `remote` | a lone house (15%) | 1 friendly camp 16 to 48 out | 93 |
 | `meta/waysign_camps` | `remote` | a friendly camp (25%) | 0 to 2 more friendly camps 16 to 56 out; 1 way sign 10 to 40 out | 146 |
 | `meta/waysign_house_camp` | `remote` | a lone house (10%) | 1 friendly camp 16 to 48 out; 1 way sign 10 to 40 out | 113 |
+| `meta/deadwood_<wood>` (acacia, birch, cherry, jungle, oak, spruce; 3.25) | `deadwood` (own grid, 16/5) | none (weight 100 each) | 3 to 6 Geophilic stumps within 14, 3 apart; 2 to 4 fallen logs 2 to 16 out, 6 apart | 16 (oak, birch: 20, they share forests) |
 
 All are under `creativeengineering:`. "Est. 1 per" is `structure_group_estimates.md`: share x the anchors' own rate where
 the anchor and every required part can stand in the same biome. It is an upper bound (a meta whose parts don't fit
@@ -1633,6 +1634,32 @@ did not move (1 per 26). The jungle temple pair stays in `surface_dungeons` (its
   21 chunks; about 1 per 63 x 63 chunks of desert.
 - [ ] **ST-227 Priority:** a temple overlapping a desert mimic drops the mimic (`[placement-priority] dropped
   towns_and_towers:mimic_desert ... overlaps betterdeserttemples:desert_temple`), never the reverse.
+
+### 3.25 Deadwood patches and doubled stumps (added 2026-10-25, TODO `farming/trees #2`)
+
+Geophilic Reforged's scattered stumps (`tree_stumps/mc/*`) and fallen logs (`fallen_trees/mc/*`) for the six vanilla
+woods now try twice as often: overrides in `kubejs/data/geophilic_reforged/worldgen/placed_feature/` put a `count 2`
+in front of upstream's placement (stumps about 0.29 -> 0.58 tries per chunk, rarity 1/12; fallen logs 0.23 -> 0.47,
+1/12, acacia and cherry 1/15). The BoP, Traverse and Windswept woods are not overridden (those mods are not in the pack).
+
+New anchorless metas `creativeengineering:meta/deadwood_<wood>` (one per wood) in their own group `group/deadwood`
+(spacing 16, separation 5, all weight 100, so oak and birch split the forests they share). Each is 3 to 6 stumps and
+2 to 4 fallen logs of that wood (table in 3.16); its biomes are Geophilic's `#geophilic_reforged:wood_type/mc/<wood>`.
+The parts are `creativeengineering:meta/deadwood_stump_<wood>` / `deadwood_fallen_log_<wood>` placed features:
+upstream's ground filters (ocean-floor heightmap, dry land, oak-sapling survival) without count, rarity, square or
+biome. A spot that fails a filter places nothing; the meta itself never fails. Also in `type/environmental`.
+Estimate: 1 per 16 x 16 chunks of each wood's biomes. New chunks only. Sync, `--check`,
+`tools/test_structure_groups.sh` and `tools/test_worldgen_tools.sh` pass.
+
+Not changed: the sunk acacia log is Geophilic's bush (TODO `farming/trees #2` notes), still open.
+
+- [ ] **ST-228 Load:** `structure_tag_report.md` lists `deadwood` (16 / 5) with the six metas; no
+  `[meta-structures]` warning (`placed feature ... does not exist`) and no config error in latest.log.
+- [ ] **ST-229 Locate:** `/locate structure creativeengineering:meta/deadwood_acacia` from a savanna (and `_spruce`
+  from a taiga) finds one; at the spot: stumps and fallen acacia (spruce) logs within about 16 blocks, none in water.
+- [ ] **ST-230 Wood:** each patch uses its biome's wood; none in biomes outside Geophilic's wood list (a desert, plains).
+- [ ] **ST-231 Doubled:** census of standalone acacia stumps / fallen logs in a forceloaded savanna square, about twice
+  the 1.1.03 count (rough: about 0.5 stumps and 0.4 fallen logs per chunk before filters).
 
 ## 4. Limits and decisions
 
@@ -3131,3 +3158,4 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - 2026-10-23: desert temples split into `group/desert_temples`, 32 / 20 (3.24, `structures/rates-and-groups #10`);
   mimic frequency lowered to keep its rate. Tests ST-225 to ST-227. Not run.
 - 2026-10-24: planned from the scratchpad: desert structures in water, rare ice (`structures/earthfill #11`, `blocks/new #12`). No code changed.
+- 2026-10-25: deadwood metas and doubled Geophilic stumps / fallen logs (3.25, TODO `farming/trees #2`). Tests ST-228 to ST-231. Not run.

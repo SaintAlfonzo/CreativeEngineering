@@ -22,7 +22,8 @@ that no recipe describes. Each gap gets a suggested fix so the list can be worke
   - **stand-in**: register ordinary shaped/shapeless display recipes in a JEI plugin, the way Supplementaries
     and Create do for their own special recipes. Needs Java (patcherMod's JEI plugin); KubeJS 1902's
     `JEIEvents` can't add recipes to a category.
-  - **info**: a JEI information page on the item (`JEIEvents.information` in a client script). For
+  - **info**: a JEI information page on the item (`JEIEvents.information` in a client script; a member mod's pages are
+    Creative Delight QoL-6 files, `kubejs/assets/creative_delight/kubejs/<mod>/jei_info.js` with `// requires: jei`). For
     recipes that don't fit a grid picture.
   - **none**: not worth fixing (explained in the row).
 
