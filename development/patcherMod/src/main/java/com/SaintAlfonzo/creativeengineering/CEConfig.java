@@ -549,11 +549,10 @@ public final class CEConfig {
     }
 
     /**
-     * Dials for {@code crops.WthitCropGrowth} (client-side, display only): the "Growth" line WTHIT
+     * Dials for Creative Delight's {@code compat.wthit.WthitCropGrowth} (client-side, display only): the "Growth" line WTHIT
      * leaves off bushes, vines, hemp, tobacco and fruit-tree leaves.
      */
     public static final class CropGrowth {
-        public final ForgeConfigSpec.BooleanValue enabled;
         public final ForgeConfigSpec.BooleanValue fallback;
         public final ForgeConfigSpec.BooleanValue showHarvestable;
 
@@ -562,12 +561,10 @@ public final class CEConfig {
                     "WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla",
                     "plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in",
                     "WTHIT's own config, to every other growing plant. The blocks and their stages are in",
-                    "assets/creativeengineering/crop_growth.json (override it from kubejs/assets/creativeengineering/).",
-                    "Client-side only; reads the block state the client already has."
+                    "assets/creative_delight/crop_growth.json (override it from kubejs/assets/creative_delight/).",
+                    "Client-side only; reads the block state the client already has. The line is Creative Delight's:",
+                    "its on/off switch is creative_delight-common.toml [qol] wthitCropLine."
             ).push("crop_growth");
-
-            enabled = b.comment("Master on/off switch for the added lines.")
-                    .define("enabled", true);
 
             fallback = b.comment(
                     "true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in",
@@ -927,7 +924,9 @@ public final class CEConfig {
 
     /**
      * Remainder buffer on FD-style stations (cooking pot, Farmer's Respite kettle, oven): ingredient leftovers stay
-     * in the station. {@code cooking.RemainderBuffer}; feature_writeup/remainder_buffer.md.
+     * in the station. {@code cooking.RemainderBuffer}; feature_writeup/remainder_buffer.md. The pot and kettle hooks
+     * are Creative Delight's (QoL-1, switch {@code [qol] remainderBuffer}); {@code remainderBuffer} here is the oven's,
+     * the other dials are shared.
      */
     public static final class Cooking {
         public final ForgeConfigSpec.BooleanValue remainderBuffer;
@@ -943,7 +942,8 @@ public final class CEConfig {
                     "funnels on the output faces can empty."
             ).push("cooking");
 
-            remainderBuffer = b.comment("Off = leftovers are thrown out of the station as in the original mods.")
+            remainderBuffer = b.comment("Oven only. Off = its leftovers are thrown out of the front. The pot and kettle",
+                    "switch is creative_delight-common.toml [qol] remainderBuffer.")
                     .define("remainderBuffer", true);
 
             stallWhenFull = b.comment(
@@ -1969,7 +1969,6 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue templateTrim;
         public final ForgeConfigSpec.BooleanValue metaStructures;
         public final ForgeConfigSpec.BooleanValue structureReplacements;
-        public final ForgeConfigSpec.BooleanValue wildCrops;
         public final ForgeConfigSpec.BooleanValue mushroomSpawns;
         public final ForgeConfigSpec.BooleanValue wildFlowers;
         public final ForgeConfigSpec.BooleanValue mobSpawns;
@@ -2028,9 +2027,6 @@ public final class CEConfig {
                     "(the vanilla swamp hut in YUNG's witch hut slots; patcherMod MetaSlots). Off: they never generate and the",
                     "structures they replace keep every slot. Rejoin; new chunks only.")
                     .define("structureReplacements", true);
-            wildCrops = b.comment("wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).",
-                    "Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.")
-                    .define("wildCrops", true);
             mushroomSpawns = b.comment("mushroom_spawns.json: wild mushrooms, colonies and huge Fungi Delight mushrooms at the surface and in caves",
                     "(kubejs worldgen/mushroom_spawns.js). Off: mushrooms as their mods ship them. Rejoin to apply; only new chunks change.")
                     .define("mushroomSpawns", true);

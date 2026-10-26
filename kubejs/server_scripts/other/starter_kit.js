@@ -28,23 +28,22 @@ PlayerEvents.loggedIn(e => {
 	if (player.getTags().contains(STARTER_KITS.marker)) return
 
 	var $LevelResource = Java.loadClass('net.minecraft.world.level.storage.LevelResource')
-	var $Files = Java.loadClass('java.nio.file.Files')
 	var worldRoot = server.getWorldPath($LevelResource.ROOT).toAbsolutePath().normalize()
-	var trackingPath = worldRoot.resolve('data').resolve('starterkit').resolve('tracking.json')
+	var trackingFile = worldRoot.resolve('data').resolve('starterkit').resolve('tracking.json').toFile() // java.io/nio are class-filtered: no loadClass, JsonIO + instance methods only
 	var dedicated = server.isDedicatedServer()
 	var key = dedicated ? String(player.getStringUUID()) : String(worldRoot.getFileName())
 	var env = dedicated ? 'multiplayer' : 'singleplayer'
 
 	var tracking = { singleplayer: {}, multiplayer: {} }
-	if ($Files.exists(trackingPath)) {
+	if (trackingFile.exists()) {
 		try {
-			var parsed = JSON.parse(String($Files.readString(trackingPath)))
+			var parsed = JSON.parse(String(JsonIO.read(trackingFile)))
 			if (parsed && typeof parsed === 'object') {
 				tracking.singleplayer = parsed.singleplayer || {}
 				tracking.multiplayer = parsed.multiplayer || {}
 			}
 		} catch (err) {
-			console.warn('[starter-kit] could not read ' + trackingPath + ': ' + err)
+			console.warn('[starter-kit] could not read ' + trackingFile + ': ' + err)
 		}
 	}
 	if (tracking[env][key] === true) {
@@ -79,10 +78,10 @@ PlayerEvents.loggedIn(e => {
 
 		tracking[env][key] = true
 		try {
-			$Files.createDirectories(trackingPath.getParent())
-			$Files.writeString(trackingPath, JSON.stringify(tracking, null, 2))
+			trackingFile.getParentFile().mkdirs()
+			JsonIO.write(trackingFile, tracking)
 		} catch (err) {
-			console.warn('[starter-kit] could not write ' + trackingPath + ': ' + err)
+			console.warn('[starter-kit] could not write ' + trackingFile + ': ' + err)
 		}
 		console.log('[starter-kit] ' + kit.name + ' kit given to ' + player.getName().getString() + ' (' + keep.length + ' stacks given back)')
 	})

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "creativeengineering:block/placed_diced_potatoes_with_egg_and_tomato"
+    },
+    "facing=south": {
+      "model": "creativeengineering:block/placed_diced_potatoes_with_egg_and_tomato",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "creativeengineering:block/placed_diced_potatoes_with_egg_and_tomato",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "creativeengineering:block/placed_diced_potatoes_with_egg_and_tomato",
+      "y": 90
+    }
+  }
+}

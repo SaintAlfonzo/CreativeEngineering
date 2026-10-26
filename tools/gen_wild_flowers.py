@@ -12,7 +12,7 @@ Writes:
   per-Botania-color density, gaps, config problems.
 
 kubejs/generation_scripts/worldgen/wild_flowers.json is evaluated with the same rules as
-kubejs/server_scripts/worldgen/wild_flowers.js (biome traits come from wild_crops.json). The CEConfig wildFlowers
+kubejs/server_scripts/worldgen/wild_flowers.js (biome traits come from biome_traits.json). The CEConfig wildFlowers
 switch can't be read offline: "after" assumes it is on, "before" is the mods' defaults.
 
 Density is "flower patches per chunk": placement rate (count / rarity) times the block's share of the patch.
@@ -591,7 +591,7 @@ def check_config(cfg, world, all_traits, snap):
     def check_sel(where, sel):
         if ':' in sel:
             if sel not in all_traits:
-                problems.append(f'{where}: {sel} is not a biome in wild_crops.json "biomes"')
+                problems.append(f'{where}: {sel} is not a biome in biome_traits.json')
         else:
             for t in sel.split():
                 if t.lstrip('!') not in vocab:
@@ -600,7 +600,7 @@ def check_config(cfg, world, all_traits, snap):
     bot = cfg.get('botania') or {}
     for b, p in bot.get('palettes', {}).items():
         if b != '_default' and b not in all_traits:
-            problems.append(f'botania.palettes: {b} is not a biome in wild_crops.json "biomes"')
+            problems.append(f'botania.palettes: {b} is not a biome in biome_traits.json')
         for c in normalize_palette(p):
             if c not in DYES:
                 problems.append(f'botania.palettes {b}: "{c}" is not a dye color')
@@ -715,7 +715,7 @@ def write_md(cfg, all_traits, world, before, after, src_after, problems, gaps, s
     w('## 3. Gaps')
     w('')
     w(f'Grassy land biomes with fewer than {GAP} flower patches per chunk after the rules (biome traits from')
-    w('wild_crops.json; sandy, rocky and icy biomes are expected to be bare).')
+    w('biome_traits.json; sandy, rocky and icy biomes are expected to be bare).')
     w('')
     if gaps:
         for b, r in gaps:

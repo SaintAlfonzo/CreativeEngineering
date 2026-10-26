@@ -84,6 +84,8 @@ public class CreativeEngineering
 				com.SaintAlfonzo.creativeengineering.gear.ElytraDuplicationSerializers.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.potion.BetterBeaconsPotions.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.potion.MagicResistancePotions.register(modEventBus);
+				// creativeengineering:biome_tag loot condition (loot/BiomeTagCondition; the fishing net tables use it).
+				com.SaintAlfonzo.creativeengineering.loot.BiomeTagCondition.register(modEventBus);
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check
         // widening in mixin/LivingEntityShieldMixin, everything tunable in CEConfig.SHIELDS.
         com.SaintAlfonzo.creativeengineering.shield.ShieldItems.register(modEventBus);
@@ -93,13 +95,21 @@ public class CreativeEngineering
         // Oven: FD cooking-pot style baking block + the creativeengineering:baking recipe type
         // (oven/ package; feature_writeup/oven.md). Recipes and tags are KubeJS.
         com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.register(modEventBus);
+        // Powdered sugar block + bucket (food/PowderedSugarRegistry; TODO dishes/ingredients #16). Item and recipes are KubeJS.
+        com.SaintAlfonzo.creativeengineering.food.PowderedSugarRegistry.register(modEventBus);
+        // Display Delight placed blocks for foods it has none for (compat/DisplayDelightDishes; food_families.md egg/dish).
+        com.SaintAlfonzo.creativeengineering.compat.DisplayDelightDishes.register(modEventBus);
         // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
         com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinSerializers.register(modEventBus);
         if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinCurios.class);
         }
+        // Corn Delight 1.2.11 on 1.0.3: Cob Pipe right click to equip (compat/CornDelightCompat; corn_delight.md 2.3)
+        if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight")) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CornDelightCompat.class);
+        }
         // Remainder buffer: pot/kettle/oven keep ingredient leftovers in two slots instead of throwing them
-        // (cooking/ package + mixin/*RemainderMixin; feature_writeup/remainder_buffer.md). Saved as an attached cap.
+        // (cooking/ package; the pot and kettle mixins are Creative Delight QoL-1; remainder_buffer.md). Saved as an attached cap.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferStorage.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CfbCornerStorage.class);
         // Cutting board, plates, coaster on CfB counters: the per-state topper cache resets on tag reload.
@@ -156,7 +166,7 @@ public class CreativeEngineering
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServings.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServingsTooltip.class);
 
-        // Pack seasonings (food.Seasonings, defined by KubeJS startup_scripts/cooking/seasonings.js): the
+        // Pack seasonings (food.Seasonings, defined by KubeJS development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js): the
         // creativeengineering:seasoning craft, the bonus on eating and the per-seasoning tooltip lines.
         com.SaintAlfonzo.creativeengineering.food.SeasoningRecipe.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.Seasonings.class);
@@ -322,8 +332,17 @@ public class CreativeEngineering
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fan.DragonBreathingFanProcessingType::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.potion.PotionBucketDispenser::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.NockRecipeBookSync::register);
+			// Corn is villager food (corn_delight.md 2.6)
+			if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight")) {
+				event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.CornDelightCompat::addVillagerFood);
+			}
 			if (net.minecraftforge.fml.ModList.get().isLoaded("immersiveengineering")) {
 				event.enqueueWork(IECompat::registerHammerNoRotate);
+			}
+			// Farmer's Respite 2.0 registers potted_wild_tea_bush but never adds it to the flower pot
+			// (feature_writeup/farmers_respite.md 2.2)
+			if (net.minecraftforge.fml.ModList.get().isLoaded("farmersrespite")) {
+				event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.RespitePottedTeaBush::register);
 			}
 			// Can-serving crafting action for KubeJS recipes (NCH re-registers it on every server
 			// script load; this covers clients of a dedicated server).
@@ -471,6 +490,9 @@ public class CreativeEngineering
                 com.SaintAlfonzo.creativeengineering.compat.CraftingMenuPolymorphClient.register();
             }
             com.SaintAlfonzo.creativeengineering.shield.client.TierShieldClient.setup(event);
+            if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight") && net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
+                com.SaintAlfonzo.creativeengineering.compat.CobPipeRenderer.register();
+            }
             event.enqueueWork(() -> net.minecraft.client.gui.screens.MenuScreens.register(
                     com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.OVEN_MENU.get(),
                     com.SaintAlfonzo.creativeengineering.oven.client.OvenScreen::new));

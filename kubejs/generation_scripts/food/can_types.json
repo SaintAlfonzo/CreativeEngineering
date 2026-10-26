@@ -993,6 +993,205 @@
    ],
    "texture": "creativeengineering:item/canned_carrot"
   },
+  "canned_cucumber": {
+   "section": "raw_veggie",
+   "existing": false,
+   "name": "Canned Cucumber",
+   "servings": 2,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cucumber"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cucumber"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "cucumber"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cucumber"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_carrot"
+  },
+  "canned_ghost_pepper": {
+   "section": "raw_veggie",
+   "existing": false,
+   "name": "Canned Ghost Pepper",
+   "servings": 2,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "ghost_pepper"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "ghost_pepper"
+       ],
+       "n": 4
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "ghost_pepper"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "ghost_pepper"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_carrot"
+  },
+  "canned_truffle": {
+   "section": "raw_veggie",
+   "existing": false,
+   "name": "Canned Truffle",
+   "servings": 2,
+   "hunger": 5,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "truffle",
+    "truffle_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "truffle",
+        "truffle_slice"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "truffle",
+        "truffle_slice"
+       ],
+       "n": 1
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "truffle",
+        "truffle_slice"
+       ],
+       "n": 1
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_carrot"
+  },
   "canned_apple": {
    "section": "raw_fruit",
    "existing": false,
@@ -5080,6 +5279,53 @@
    ],
    "texture": "canned_goods:items/canned_cookies"
   },
+  "canned_oatmeal_cookie": {
+   "section": "cookies",
+   "existing": false,
+   "name": "Canned Oatmeal Cookies",
+   "servings": 5,
+   "hunger": 4,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "oatmeal_cookie"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "oatmeal_cookie"
+       ],
+       "n": 8
+      }
+     ]
+    },
+    {
+     "suffix": "_sugar",
+     "inputs": [
+      {
+       "any": [
+        "oatmeal_cookie"
+       ],
+       "n": 6
+      },
+      {
+       "any": [
+        "sugar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_cookies"
+  },
   "canned_baked_potato": {
    "section": "cooked_veggie",
    "existing": true,
@@ -5703,7 +5949,8 @@
    "glow": false,
    "effects": [],
    "sources": [
-    "kimchi"
+    "kimchi",
+    "vintagedelight_kimchi"
    ],
    "recipes": [
     {
@@ -5711,7 +5958,8 @@
      "inputs": [
       {
        "any": [
-        "kimchi"
+        "kimchi",
+        "vintagedelight_kimchi"
        ],
        "n": 6
       }
@@ -5722,7 +5970,8 @@
      "inputs": [
       {
        "any": [
-        "kimchi"
+        "kimchi",
+        "vintagedelight_kimchi"
        ],
        "n": 5
       },
@@ -5750,7 +5999,8 @@
    "glow": false,
    "effects": [],
    "sources": [
-    "pickled_pickles"
+    "pickled_pickles",
+    "pickle"
    ],
    "recipes": [
     {
@@ -5758,7 +6008,8 @@
      "inputs": [
       {
        "any": [
-        "pickled_pickles"
+        "pickled_pickles",
+        "pickle"
        ],
        "n": 6
       }
@@ -5769,7 +6020,8 @@
      "inputs": [
       {
        "any": [
-        "pickled_pickles"
+        "pickled_pickles",
+        "pickle"
        ],
        "n": 5
       },
@@ -6106,6 +6358,262 @@
       {
        "any": [
         "roasted_cauliflower_floret"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
+  "canned_pickled_beetroot": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Pickled Beetroot",
+   "servings": 4,
+   "hunger": 10,
+   "modifier": 0.4,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 0.6
+    }
+   ],
+   "sources": [
+    "pickled_beetroot"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pickled_beetroot"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "pickled_beetroot"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
+  "canned_pickled_onion": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Pickled Onions",
+   "servings": 4,
+   "hunger": 12,
+   "modifier": 0.2,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 0.6
+    }
+   ],
+   "sources": [
+    "pickled_onion"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pickled_onion"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "pickled_onion"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
+  "canned_pickled_pepper": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Pickled Peppers",
+   "servings": 4,
+   "hunger": 12,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 600,
+     "amp": 0,
+     "chance": 0.6
+    }
+   ],
+   "sources": [
+    "pickled_pepper"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pickled_pepper"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "pickled_pepper"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
+  "canned_roasted_peanut": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Roasted Peanuts",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.2,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "roasted_peanut"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "roasted_peanut"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "roasted_peanut"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
+  "canned_cooked_inky_cap": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Cooked Inky Cap",
+   "servings": 4,
+   "hunger": 12,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cooked_cleaned_cap"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cooked_cleaned_cap"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "cooked_cleaned_cap"
        ],
        "n": 5
       },
@@ -6842,6 +7350,54 @@
       {
        "any": [
         "cooked_lionfish"
+       ],
+       "n": 4
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_beef"
+  },
+  "canned_surstromming": {
+   "section": "cooked_meat",
+   "existing": false,
+   "name": "Canned Surströmming",
+   "servings": 3,
+   "hunger": 18,
+   "modifier": 0.85,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "surstromming"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "surstromming"
+       ],
+       "n": 5
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "surstromming"
        ],
        "n": 4
       },
@@ -7657,6 +8213,117 @@
       {
        "any": [
         "potato_noodles"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_cheese_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Cheese Pasta",
+   "servings": 4,
+   "hunger": 7,
+   "modifier": 0.723,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cheese_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cheese_pasta"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_pad_thai": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Pad Thai",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "pad_thai"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pad_thai"
+       ],
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_truffle_pasta": {
+   "section": "meal",
+   "existing": false,
+   "name": "Canned Truffle Pasta",
+   "servings": 4,
+   "hunger": 9,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "truffle_pasta"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "truffle_pasta"
        ],
        "n": 2
       }
@@ -8643,6 +9310,37 @@
       {
        "any": [
         "scarlet_cheese_wedge"
+       ],
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "pot": true,
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_cheese_slice": {
+   "section": "dairy",
+   "existing": false,
+   "name": "Canned Cheese Slices",
+   "servings": 4,
+   "hunger": 5,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cheese_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cheese_slice"
        ],
        "n": 4
       }
@@ -9668,6 +10366,60 @@
    ],
    "texture": "creativeengineering:item/canned_cabbage"
   },
+  "canned_cucumber_salad": {
+   "section": "salad",
+   "existing": false,
+   "name": "Canned Cucumber Salad",
+   "servings": 8,
+   "hunger": 10,
+   "modifier": 0.7,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:regeneration",
+     "ticks": 300,
+     "amp": 2,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cucumber_salad"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cucumber_salad"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "cucumber_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_cabbage"
+  },
   "canned_field_salad": {
    "section": "salad",
    "existing": false,
@@ -9768,6 +10520,60 @@
       {
        "any": [
         "fruit_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_cabbage"
+  },
+  "canned_inky_caps_salad": {
+   "section": "salad",
+   "existing": false,
+   "name": "Canned Inky Caps Salad",
+   "servings": 8,
+   "hunger": 10,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:luck",
+     "ticks": 450,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "inky_caps_salad"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "inky_caps_salad"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "inky_caps_salad"
        ],
        "n": 5
       },
@@ -10930,6 +11736,61 @@
    ],
    "texture": "canned_goods:items/canned_rabit_stew"
   },
+  "canned_creamy_morel_soup": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Creamy Morel Soup",
+   "servings": 8,
+   "hunger": 13,
+   "modifier": 0.673,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 450,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "creamy_morel_soup"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "creamy_morel_soup"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "creamy_morel_soup"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
   "canned_creamy_onion_soup": {
    "section": "soup",
    "existing": false,
@@ -11217,6 +12078,67 @@
    ],
    "texture": "canned_goods:items/canned_rabit_stew"
   },
+  "canned_ghostly_chili": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Ghostly Chili",
+   "servings": 8,
+   "hunger": 15,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:strength",
+     "ticks": 2700,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "ghostly_chili"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "ghostly_chili"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "ghostly_chili"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
   "canned_kangaroo_stew": {
    "section": "soup",
    "existing": false,
@@ -11360,6 +12282,116 @@
       {
        "any": [
         "noodle_soup"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
+  "canned_oatmeal": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Oatmeal",
+   "servings": 8,
+   "hunger": 10,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "oatmeal"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "oatmeal"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "oatmeal"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
+  "canned_pickle_soup": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Pickle Soup",
+   "servings": 8,
+   "hunger": 16,
+   "modifier": 0.863,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 4500,
+     "amp": 0,
+     "chance": 0.65
+    }
+   ],
+   "sources": [
+    "pickle_soup"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pickle_soup"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "pickle_soup"
        ],
        "n": 3
       },

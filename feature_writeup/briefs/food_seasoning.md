@@ -77,7 +77,7 @@ category list first (`seasoning #3`); no work before it.
    config/salt-common.toml: per item `min(2, max(1, round(hunger * 0.25)))` and saturation +0.05 / +0.1 by type (food.md
    3.5's suggestion: +1 / +0.05 raw, +2 / +0.1 meals). salt-common.toml is a common config in `config/`, read at
    load: a restart applies it. Keep `minecraft:rotten_flesh,1,0.05`.
-4. **Create salting pack-wide** (cooking.js or a new `server_scripts/cooking/seasoning.js`):
+4. **Create salting pack-wide** (cooking.js or a new `kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js`):
    ```js
    R.remove({ mod: 'create__the_salt', type: 'create:mixing', not: { id: 'create__the_salt:salt_create_recipe' } }, e)
    Ingredient.of(i.t_can_be_salted).itemIds.forEach(id => {
@@ -243,7 +243,7 @@ No pepper (only Rustic Delight bell peppers), dill or spice item in the dict. Sa
 
 ### Built 2026-10-23: the framework (step 1) and a popcorn test set
 Step 1 built as planned except: definitions live in KubeJS startup (`global.seasoning` in
-`startup_scripts/cooking/seasonings.js`, passed to `food/Seasonings.define`), not CEConfig; the recipe carries its food
+`development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js`, passed to `food/Seasonings.define`), not CEConfig; the recipe carries its food
 ingredient and seasoning items (no per-seasoning `seasonable` tag); bonus by a `LivingEntityUseItemEvent.Finish`
 handler; saturation is absolute points; `heal` and `combines` (which seasonings may share a food) added. Test set:
 cheese (+2 saturation), onion (+2 nutrition), garlic (Speed I 10 s) on popcorn; onion and garlic combine. Details and
@@ -267,7 +267,7 @@ recipes and tags use it.
   clusters, ores; tags `forge:salt`, `forge:salts`, `forge:dusts/salt`), Create: The Salt (recipes only, no item), Vintage
   Delight (`vintagedelight:salt_dust` = `i.salt_dust`, `salt_block`, `salt_bucket`, 17 lamps, bricks, a layer block
   `vintagedelight:salt`). `salt_dust.png` is the pink one (checked: pink crystal icon).
-- Pack code writes `i.salt_item` as an output: `server_scripts/cooking/salt.js` lines 21-27; `i.salt` is the tag
+- Pack code writes `i.salt_item` as an output: `kubejs/data/creative_delight/kubejs/creativeengineering/salt.js` lines 21-27; `i.salt` is the tag
   `#forge:salt`. Recipes that take the tag already accept either salt.
 - The merge framework: `startup_scripts/_lib/item_merges.js` (`[purged, survivor]`), recipes and loot swapped by
   `server_scripts/other/item_merges.js`, design in [item_merges.md](../item_merges.md).

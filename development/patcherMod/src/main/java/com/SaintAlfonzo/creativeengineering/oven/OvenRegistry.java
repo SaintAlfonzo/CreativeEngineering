@@ -22,7 +22,7 @@ import net.minecraftforge.registries.RegistryObject;
 /**
  * Everything the oven registers: {@code creativeengineering:oven} (block, item, block entity, menu) and the
  * {@code creativeengineering:baking} recipe type + serializer. Plan and behaviour: feature_writeup/oven.md.
- * Recipes are KubeJS ({@code global.NCH.ceBaking}, server_scripts/cooking/baking.js).
+ * Recipes are KubeJS ({@code global.NCH.ceBaking}, kubejs/data/creative_delight/kubejs/creativeengineering/baking.js).
  */
 public final class OvenRegistry {
 

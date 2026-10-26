@@ -55,3 +55,4 @@ Conventions every brief follows (from [CLAUDE.md](../../CLAUDE.md)): recipes thr
 | jei | [jei-coverage](jei_jei-coverage.md) |
 | largecontent | [mod-additions](largecontent_mod-additions.md) |
 | ports | [veggiesport](ports_veggiesport.md), [vintageport](ports_vintageport.md) |
+| creativedelight | [framework](creativedelight_framework.md), [members](creativedelight_members.md), [qol](creativedelight_qol.md), [swappers](creativedelight_swappers.md) |

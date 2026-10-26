@@ -6,9 +6,15 @@
 // Reads from <mod>/gradle.properties:
 //   mod_id, mod_name, mod_license, mod_version, mod_group_id, mod_authors, mod_description
 //   jar_name        optional, jar file prefix (default mod_id): <jar_name>-<mod_version>.jar
-//   mixin_configs   optional, comma-separated mixin configs for the jar manifest (default <mod_id>.mixins.json)
+//   mixin_configs   optional, comma-separated mixin configs for the jar manifest (default <mod_id>.mixins.json;
+//                   `none` = the jar has no mixins, no MixinConfigs attribute)
 //   replaces_jars   optional, comma-separated globs of other mods/ jars that installToMods moves out
 //                   (for a jar that replaces a third-party mod with the same mod id)
+//   bundled_in      optional, the Gradle project that ships this mod nested in its own jar (Creative Delight):
+//                   this project's installToMods then refuses and names that project's task instead
+//   shipped_jar_task  optional, the archive task whose jar is the one that ships (default `jar`). Set by
+//                   ce.forge-repack (`repackJar`) and ce.forge-bundle (`bundleJar`), not by hand; archiveJar
+//                   and installToMods use it
 plugins {
     id 'eclipse'
     id 'idea'
@@ -108,6 +114,8 @@ tasks.withType(ProcessResources).configureEach {
     }
 }
 
+def mixinConfigs = csv('mixin_configs', "${modId}.mixins.json").findAll { it != 'none' }
+
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
@@ -117,8 +125,7 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : prop('mod_authors'),
-                'MixinConfigs'            : csv('mixin_configs', "${modId}.mixins.json").join(',')
-        ])
+        ] + (mixinConfigs ? ['MixinConfigs': mixinConfigs.join(',')] : [:]))
     }
 
     finalizedBy 'reobfJar'
@@ -140,12 +147,16 @@ tasks.named('jar', Jar).configure {
     }
 }
 
+// The jar that ships: `jar` (reobfed in place), or the repack / bundle of ce.forge-repack / ce.forge-bundle.
+// Resolved at execution time, since those plugins register their task after this one is applied.
+def shippedJarTask = { tasks.named(prop('shipped_jar_task', 'jar'), AbstractArchiveTask).get() }
+
 // jar_archive/ (git-ignored) keeps one jar per mod_version so released versions survive `gradlew clean`.
 // A build only adds a version that isn't there yet, so dev rebuilds never replace a released jar;
 // tools/build_deploy.py stores the jar it actually ships.
 def archiveJar = tasks.register('archiveJar', Copy) {
-    dependsOn 'reobfJar'
-    from tasks.named('jar', Jar).flatMap { it.archiveFile }
+    dependsOn 'reobfJar', { shippedJarTask() }
+    from { shippedJarTask().archiveFile }
     into "${projectDir}/jar_archive"
     eachFile { if (new File("${projectDir}/jar_archive", it.name).exists()) it.exclude() }
 }
@@ -157,10 +168,17 @@ tasks.named('build').configure { finalizedBy archiveJar }
 tasks.register('installToMods') {
     group = 'ce'
     description = "Builds ${jarName} and swaps it into ../mods (old versions -> jar_archive/displaced/)"
-    dependsOn 'build'
+    dependsOn 'build', { shippedJarTask() }
+    doFirst {
+        def bundledIn = prop('bundled_in')
+        if (bundledIn) {
+            throw new GradleException("${project.name} ships nested in ${bundledIn}'s jar, not on its own: " +
+                    "run ./gradlew :${bundledIn}:installToMods")
+        }
+    }
     doLast {
         def modsDir = rootProject.file('mods')
-        def built = tasks.named('jar', Jar).get().archiveFile.get().asFile
+        def built = shippedJarTask().archiveFile.get().asFile
         def displaced = file('jar_archive/displaced')
         def matchers = (["${jarName}-*.jar"] + csv('replaces_jars')).collect {
             java.nio.file.FileSystems.default.getPathMatcher("glob:${it}")

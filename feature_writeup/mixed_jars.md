@@ -4,7 +4,7 @@
 
 | Part | Status | Where |
 |---|---|---|
-| Jar families (tags), every cookie and the families below jarable | BUILT 2026-10-21 | `kubejs/server_scripts/tags/jartags.js`, dict keys `i.t_jar_cookies`, `i.t_jar_family_*` (item_dict, next to `i.candy`) |
+| Jar families (tags), every cookie and the families below jarable | BUILT 2026-10-21 | `kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js`, dict keys `i.t_jar_cookies`, `i.t_jar_family_*` (item_dict, next to `i.candy`) |
 | Mixing in a placed jar (one item per slot, filled bottom to top) | BUILT 2026-10-21 | patcherMod `mixin/SupplementariesJarTileMixin`, `mixin/ItemDisplayTileAccessor`, rules in `compat/JarMixing` |
 | Layers drawn per item (placed jar, jar item) | BUILT 2026-10-21 | `mixin/SupplementariesJarRendererMixin`, `mixin/SupplementariesJarItemRendererMixin` (client) |
 | Jar item tooltip, one line per kind | BUILT 2026-10-21 | `mixin/SupplementariesJarItemTooltipMixin` |
@@ -106,7 +106,7 @@ Brief: [briefs/items_jars.md](briefs/items_jars.md). Nothing here is built.
 
 ## 5. File map
 
-- [kubejs/server_scripts/tags/jartags.js](../kubejs/server_scripts/tags/jartags.js): families
+- [kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js): families
 - [kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js): `i.t_jar_cookies`, `i.t_jar_family_*`
 - [compat/JarMixing.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/JarMixing.java): rules
 - [mixin/SupplementariesJarTileMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SupplementariesJarTileMixin.java), [ItemDisplayTileAccessor.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemDisplayTileAccessor.java)

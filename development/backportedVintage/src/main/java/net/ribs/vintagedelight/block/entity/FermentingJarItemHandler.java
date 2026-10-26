@@ -6,9 +6,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 /**
- * KOTS 0.3.1's sided view of the Pickling Jar's 9 slots: the top face feeds the 6 ingredient slots (spreading one item
+ * KOTS 0.3.1's sided view of the Pickling Jar's slots: the top face feeds the 6 ingredient slots (spreading one item
  * per empty slot first, then topping up the smallest matching stack), the sides feed the container slot, the bottom
- * extracts the two outputs. A null side (the screen) sees every slot.
+ * extracts the two outputs and (port) the leftover slot. A null side (the screen) sees every slot.
  */
 public class FermentingJarItemHandler {
     private final IItemHandler itemHandler;
@@ -60,7 +60,7 @@ public class FermentingJarItemHandler {
         if (side == Direction.UP) {
             return new int[]{0, 1, 2, 3, 4, 5};
         }
-        return side == Direction.DOWN ? new int[]{7, 8} : new int[]{6};
+        return side == Direction.DOWN ? new int[]{7, 8, 9} : new int[]{6};
     }
 
     private static int map(int slot, int[] exposed) {

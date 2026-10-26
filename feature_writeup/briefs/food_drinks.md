@@ -44,7 +44,7 @@ R.1.3, Cooking for Blockheads (CfB) 13.3.4, KubeJS 1902.6.2-build.73. Facts that
     e.custom(json).id(`${global.NCH.modId}:farmersrespitebrewing/${idSuffix}`)
   },
   ```
-- **Startup fluid file** `kubejs/startup_scripts/cooking/fluids.js` (no KubeJS-registered fluid exists in the pack;
+- **Startup fluid file** `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js` (no KubeJS-registered fluid exists in the pack;
   [fluid_dict.js](../../kubejs/startup_scripts/_lib/fluid_dict.js) only names other mods' fluids). KubeJS
   `FluidBuilder` (verified) has `thinTexture(color)`, `thickTexture`, `stillTexture`, `bucketColor`, `noBucket()`,
   `noBlock()`, `displayName`. Recommend `noBlock()` for every drink fluid (CCK's drink fluids are "virtual": no block,
@@ -53,7 +53,7 @@ R.1.3, Cooking for Blockheads (CfB) 13.3.4, KubeJS 1902.6.2-build.73. Facts that
 - **Drink items in KubeJS:** `.useAnimation('drink')`, `.containerItem(i.glass_bottle)` (bottle back when crafted with;
   also what the FD pot / kettle treat as "served in"), `.maxStackSize(16)` like FR / FD drinks, and
   `f.eaten(ev => ev.player.give(i.glass_bottle))` for the bottle back after drinking (the callback form is in
-  [cans.js:80](../../kubejs/startup_scripts/items/cans.js#L80); check `ev.player` in the harness).
+  [cans.js:80](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js#L80); check `ev.player` in the harness).
 - After new drinks: `/dumpfood` → `tools/food_catalog.py` (type `drink`), `gen_stack_sizes.py`, a `/` row in
   can_parity.md, and `food/placeable #3`'s tool picks them up.
 
@@ -236,7 +236,7 @@ chocolate cake, milk bottles (Neapolitan's goes), apple ciders; banana bunches c
   source in the world any more (crops.md V18); RD coffee grows wild in jungles.
 - Build: RD beans win. `R.replaceInput({ input: i.farmersrespite_coffee_beans }, i.farmersrespite_coffee_beans, i.coffee_beans, e)`
   (reaches FR's kettle coffee, coffee cake, blazing chili, CCK `mixing/coffee`; also change the pack's own
-  [baking.js:101](../../kubejs/server_scripts/cooking/baking.js#L101) coffee cake to `i.coffee_beans`). Hide FR beans,
+  [baking.js:101](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js#L101) coffee cake to `i.coffee_beans`). Hide FR beans,
   bean sack and coffee bush items (removed_items.js), and remove the recipes `farmersrespite:coffee_beans`,
   `coffee_beans_sack`, `cutting/coffee_berries`. Coffee berries and gambler's tea depend on D2. Drinks: keep both
   families (D2).
@@ -311,7 +311,7 @@ chorus pie. Maybe a progression fluid or a diluter later.
 - Uses: Ender's Delight pot `endersdelight:cooking/pearl_pasta` `[#endersdelight:enderman_loot, #forge:pasta,
   chorus_juice]`, shulker bowl; the pack's shapeless pearl pasta with 2 chorus juice
   ([cooking.js:418](../../kubejs/server_scripts/cooking/cooking.js#L418)). Chorus pie: Ender's Delight shaped (wheat,
-  chorus fruit, sugar, pie crust) and the oven recipe ([baking.js:64-65](../../kubejs/server_scripts/cooking/baking.js#L64-L65), 3 chorus fruit).
+  chorus fruit, sugar, pie crust) and the oven recipe ([baking.js:64-65](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js#L64-L65), 3 chorus fruit).
 - No chorus juice fluid: CCK's chorus fluids are for Ends Delight (not installed; `EDFluidEntries` not loaded).
 
 ### Build
@@ -407,7 +407,7 @@ Right click a Cooking for Blockheads Cow in a Jar with a glass bottle to get a m
 
 ### Build
 1. Keys `i.cow_jar = 'cookingforblockheads:cow_jar'`, `i.milk_jar = 'cookingforblockheads:milk_jar'`.
-2. New `kubejs/server_scripts/cooking/milk_jar.js`:
+2. New `kubejs/data/creative_delight/kubejs/cookingforblockheads/milk_jar.js`:
    ```js
    var $MilkFluid = Java.loadClass('net.minecraftforge.common.ForgeMod').MILK
    ;[global.item.cow_jar, global.item.milk_jar].forEach(id => BlockEvents.rightClicked(id, e => {

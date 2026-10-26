@@ -30,6 +30,16 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/turnip_water', f.turnip_water],
 		['forge:fluid/egg_solution', f.egg_solution],
 		['forge:fluid/frosting', f.frosting],
+		['forge:fluid/milk_coffee', f.milk_coffee],
+		['forge:fluid/honey_coffee', f.honey_coffee],
+		['forge:fluid/chocolate_coffee', f.chocolate_coffee],
+		['forge:fluid/dark_coffee', f.dark_coffee],
+		['forge:fluid/syrup_coffee', f.syrup_coffee],
+		['forge:fluid/pumpkin_coffee', f.pumpkin_coffee],
+		['forge:fluid/cherry_blossom_coffee', f.cherry_blossom_coffee],
+		['forge:fluid/lavender_tea', f.lavender_tea],
+		['forge:fluid/matcha_latte', f.matcha_latte],
+		['forge:fluid/berry_matcha_latte', f.berry_matcha_latte],
 		['forge:fluid/yeast_culture', f.yeast_culture],
 
 		// plant growth

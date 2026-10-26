@@ -398,6 +398,8 @@ ServerEvents.tags('block', e => {
 	t.addMatching(e, runner.spongy, [
 		'minecraft:mud', 'minecraft:muddy_mangrove_roots', 'minecraft:wet_sponge', 'minecraft:clay',
 		'create_compressed:dough_block', item.prepared_flesh_block,
+		item.gingerdough_block, item.cookie_dough_block, item.sweet_potato_dough_block, item.oat_dough_block,
+		item.cucumber_dough_block, item.sourdough_block,
 		'creativeengineering:*_culture_block',
 		'/^architects_palette:(rotten_flesh_block|entrails[a-z_]*)$/',
 	])

@@ -110,7 +110,7 @@ public class CopperCupItem extends Item implements DispensibleContainerItem {
             CriteriaTriggers.PLACED_BLOCK.trigger(serverPlayer, target, stack);
         }
         player.awardStat(Stats.ITEM_USED.get(this));
-        ItemStack after = player.getAbilities().instabuild ? stack : new ItemStack(MDItems.COPPER_CUP.get());
+        ItemStack after = player.getAbilities().instabuild ? stack : ItemUtils.createFilledResult(stack, player, new ItemStack(MDItems.COPPER_CUP.get()));
         return InteractionResultHolder.sidedSuccess(after, level.isClientSide());
     }
 

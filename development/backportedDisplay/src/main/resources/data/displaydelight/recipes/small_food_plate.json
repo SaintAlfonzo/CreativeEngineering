@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "SS"
+  ],
+  "result": {
+    "item": "displaydelight:small_food_plate",
+    "count": 2
+  }
+}

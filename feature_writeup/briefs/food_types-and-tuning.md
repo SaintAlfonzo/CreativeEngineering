@@ -114,7 +114,7 @@ No can in play with Canned Goods' broken values (modifiers 1 to 42, crossed ids,
   [can_types.json](../../kubejs/generation_scripts/food/can_types.json) (tropical fish, pufferfish, poisonous potato,
   spider eye, rotten flesh, chorus, cookies, baked potato, dried kelp, beef, pork, chicken, cooked mutton, cooked
   rabbit, fish, cooked salmon, rabbit stew, mushrooms, bread, honey bottles) and get their values in
-  [cans.js](../../kubejs/startup_scripts/items/cans.js) lines 105-120 (`ceCanFood`, lines 74-81).
+  [cans.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) lines 105-120 (`ceCanFood`, lines 74-81).
 - **Bug in that override:** `ceCanFood` only *adds* flags (`if (c.meat) f.meat()`), and the consumer form starts from
   Canned Goods' own properties, so Canned Goods' meat flag stays on `canned_cookies`, `canned_fish`,
   `canned_cooked_salmon`, `canned_honey_bottles` (dump: Canned Cookies `MF`, the others `M`; can_types says
@@ -290,7 +290,7 @@ Recipes that still take `minecraft:egg` as an item:
 
 Already fine: Brewin' `cooking/vegetable_omelet` and `fermenting/egg_grog_from_milk` use `#forge:eggs` in the 4.5.0
 port; `dread_nog_from_egg_grog` takes a turtle egg; Delightful's `minecraft:pumpkin_pie` override, FD's fried rice /
-baked cod stew, the pack's oven recipes ([baking.js](../../kubejs/server_scripts/cooking/baking.js)) and cooking.js
+baked cod stew, the pack's oven recipes ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)) and cooking.js
 lines 23, 30, 92, 140, 214, 224 use `i.eggs`. `tmted:wheat_dough_from_egg` and vanilla `minecraft:cake` are removed
 (cooking.js lines 90, 357). Jars scanned: the ~40 food and kitchen mods (list in the session's
 `scratchpad/egg_scan.py` run); IE has no egg recipe. Not scanned: the other ~360 mods.
@@ -407,7 +407,7 @@ The 7 cultures are (poor) food, and the Cooking Pot can grow them, less efficien
 - Items: [cultures.js](../../kubejs/startup_scripts/items/cultures.js) lines 15-23, plain items; line 6 says "no
   .food(), add nutrition once the cooking recipes are designed". Keys `i.culture_beef` ... `i.culture_salmon`
   (item_dict lines 92-98), blocks 100-106.
-- Recipes ([cultivated_meat.js](../../kubejs/server_scripts/cooking/cultivated_meat.js), DEPLOYED per
+- Recipes ([cultivated_meat.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js), DEPLOYED per
   recipes_cooking.md 2.5): syringe + `#creativeengineering:culture_base` + slime -> 1 culture (lines 20-26); heated
   mixing 1 culture + 250 mB diluted bonemeal + 250 mB plant oil -> 3 (lines 28-34); cutting board culture -> 4 raw
   beef / pork / mutton, 3 chicken / rabbit, 8 cod / salmon slices (lines 36-42); blocks 9 <-> 1. So the "cooking

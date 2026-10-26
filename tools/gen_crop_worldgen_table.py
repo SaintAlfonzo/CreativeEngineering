@@ -18,11 +18,12 @@ How it works:
   have no json, so JAVA_PLACED below restates them from the decompiled jars (feature_writeup/crops.md 2.7).
   Config-driven chances are read from config/*.toml.
 
-- The pack's own placement, kubejs/generation_scripts/worldgen/wild_crops.json and mushroom_spawns.json (applied
-  in game by kubejs/server_scripts/worldgen/wild_crops.js and mushroom_spawns.js), is evaluated with the same rules:
+- The pack's own placement, Creative Delight's kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json and the
+  pack's mushroom_spawns.json (applied in game by the wild_crops.js next to it and kubejs/server_scripts/worldgen/
+  mushroom_spawns.js), with the biome traits of biome_traits.json, is evaluated with the same rules:
   the mods' modifiers they switch off are dropped, remove_features run after every add (Forge's order), and each
   rule's features go to the biomes it matches (mushroom rules in cave mode also match ocean and cave biomes). The
-  CEConfig wildCrops / mushroomSpawns switches can't be read offline: the tables assume both are on, and the
+  Creative Delight wildCrops / CEConfig mushroomSpawns switches can't be read offline: the tables assume both are on, and the
   summary's "mod default" column shows the numbers with them off.
 - The Fungi Delight port (development/backportedFungi) ships only configured features, under the upstream ids. While
   no jar in mods/ has them, they are read from the upstream jar in the ATLauncher downloads folder.
@@ -32,6 +33,7 @@ rate by the share of the dimension the crop's biomes cover; it is an upper bound
 fails when the ground, water or space test fails.
 """
 import glob
+import io
 import json
 import re
 import zipfile
@@ -45,7 +47,8 @@ BIOME_DATA = INSTANCE / 'kubejs/exported/biome_data.json'
 BIOME_CONFIG = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_config.json'
 OUT_MD = INSTANCE / 'feature_writeup/crops_by_biome.md'
 OUT_JSON = INSTANCE / 'kubejs/exported/worldgen/crop_worldgen.json'
-WILD_CROPS = INSTANCE / 'kubejs/generation_scripts/worldgen/wild_crops.json'
+WILD_CROPS = INSTANCE / 'kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json'
+BIOME_TRAITS = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_traits.json'
 MUSHROOM_SPAWNS = INSTANCE / 'kubejs/generation_scripts/worldgen/mushroom_spawns.json'
 FUNGI_UPSTREAM = Path.home() / '.local/share/atlauncher/downloads/FungiDelight-1.20.1-1.3.jar'
 FUNGI_CONFIGURED = 'data/fungidelight/worldgen/configured_feature/'
@@ -169,6 +172,9 @@ JAVA_PLACED = {
         ground='#minecraft:dirt', notes='48 tries within 4; flower-type feature (bone meal on grass)'),
     'rusticdelight:wild_coffee_placed': dict(crop='Coffee (Rustic Delight)', mods=[rarity(toml_int('rusticdelight-common.toml', 'wild_coffee_chance', 15)), HM_MOTION],
         ground='#minecraft:dirt', notes='48 tries within 6; flower-type feature (bone meal on grass)'),
+    # Rustic Delight 1.7.0 (Creative Delight port; json in the rustic_upstream donor, rarity from the port's ChanceFilter)
+    'rusticdelight:bell_pepper_block_patch_placed': dict(crop='Giant Bell Peppers', mods=[rarity(64), HM_MOTION],
+        ground='grass block', notes='48 tries within 7; red, yellow, green giant pepper blocks (needs Creative Delight)'),
     # Nether's Delight 3.1 NDGeneration + PropelplantFeature
     'nethersdelight:patch_propelplant': dict(crop='Propelplant', mods=[{'type': 'minecraft:count', 'count': 8}, FULL_RANGE],
         ground='#minecraft:nylium (crimson/warped nylium)', notes='cross-shaped 7x7, y -1..+1 of a random height, 1 in 3 spots'),
@@ -272,9 +278,12 @@ def iter_sources():
             z = zipfile.ZipFile(jar)
         except (zipfile.BadZipFile, FileNotFoundError):
             continue
-        names = [n for n in z.namelist() if n.startswith('data/') and n.endswith('.json')]
-        fungi = fungi or any(n.startswith(FUNGI_CONFIGURED) for n in names)
-        yield jar.name, [(n, (lambda z=z, n=n: z.read(n))) for n in names]
+        # a bundle jar (Creative Delight) carries its members under META-INF/jarjar/; Forge loads them as mods
+        for label, zz in [(jar.name, z)] + [(f'{jar.name}!{n.rsplit("/", 1)[1]}', zipfile.ZipFile(io.BytesIO(z.read(n))))
+                                             for n in z.namelist() if n.startswith('META-INF/jarjar/') and n.endswith('.jar')]:
+            names = [n for n in zz.namelist() if n.startswith('data/') and n.endswith('.json')]
+            fungi = fungi or any(n.startswith(FUNGI_CONFIGURED) for n in names)
+            yield label, [(n, (lambda z=zz, n=n: z.read(n))) for n in names]
     # the Fungi Delight port ships the upstream configured features (only those) under the same ids
     if not fungi and FUNGI_UPSTREAM.exists():
         z = zipfile.ZipFile(FUNGI_UPSTREAM)
@@ -471,15 +480,17 @@ def fmt_rate(r):
     return f'1 in {n:.0f} chunks' if n >= 10 else f'1 in {n:.1f} chunks'
 
 
-# ── wild_crops.json (same rules as kubejs/server_scripts/worldgen/wild_crops.js) ──
+# ── wild_crops.json (same rules as Creative Delight's _worldgen/wild_crops.js) ──
 
 NEVER = {'ocean', 'cave'}      # surface features land on water or in another biome there
 
 
 def load_wild_crops():
-    """(config, biome traits). The config's crops also carry mushroom_spawns.json's rules, keys prefixed
-    'mushroom_spawns:' and marked '_mushroom': both systems share the biome table and the clause rules."""
+    """(config, biome traits). The config is Creative Delight's wild_crops.json with "biomes" from biome_traits.json;
+    its crops also carry mushroom_spawns.json's rules, keys prefixed 'mushroom_spawns:' and marked '_mushroom': both
+    systems share the biome table and the clause rules."""
     cfg = loads_lenient(WILD_CROPS.read_text())
+    cfg['biomes'] = loads_lenient(BIOME_TRAITS.read_text())['biomes']
     if MUSHROOM_SPAWNS.exists():
         for key, rule in loads_lenient(MUSHROOM_SPAWNS.read_text()).get('rules', {}).items():
             cfg['crops']['mushroom_spawns:' + key] = dict(rule, _mushroom=True)
@@ -668,10 +679,10 @@ def coverage_checks(world, wild, crop_set, area, oceans, rows):
         + sorted(b for b, d in RUNTIME_BIOMES.items() if d == 'minecraft:overworld')
     for b in overworld:
         if b not in traits:
-            problems.append(f'{b} is an overworld biome with no entry in wild_crops.json "biomes" (gets no crops)')
+            problems.append(f'{b} is an overworld biome with no entry in biome_traits.json (gets no crops)')
     for b in traits:
         if b not in bdata and b not in RUNTIME_BIOMES:
-            problems.append(f'wild_crops.json "biomes" lists {b}, which is not a registered biome')
+            problems.append(f'biome_traits.json lists {b}, which is not a registered biome')
     vocab = set().union(*traits.values())
     for key, crop in cfg['crops'].items():
         for clause in crop.get('where', []):
@@ -712,8 +723,8 @@ def write_md(rows, rows_default, wild, area, dim_of, dropped, checks):
     L.append('Generated by `python3 tools/gen_crop_worldgen_table.py`. Do not edit by hand; the explanations, ground rules and '
              'gaps are in [crops.md](crops.md) sections 2.7 and 2.8. Rerun after adding or updating mods, after `/dumpbiomes`, '
              'after retuning biomes (`biome_config.json`) or after editing `wild_crops.json` or `mushroom_spawns.json`.\n')
-    L.append('Every table assumes the pack\'s placement (`kubejs/generation_scripts/worldgen/wild_crops.json` and '
-             '`mushroom_spawns.json`, CEConfig `[worldgen.systems] wildCrops = true`, `mushroomSpawns = true`). Section 1 also '
+    L.append('Every table assumes the pack\'s placement (`kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json` and '
+             '`mushroom_spawns.json`, Creative Delight `[worldgen] wildCrops = true`, CEConfig `mushroomSpawns = true`). Section 1 also '
              'shows each crop with the switches off (the mods\' own spawns).\n')
     L.append('- **Rate**: patch attempts per chunk. "1 in 30 chunks" means a chunk tries once with probability 1/30.')
     L.append('- **Share**: the part of the dimension (post-tuning biome areas from `biome_config.json`) covered by the biomes '
@@ -796,7 +807,7 @@ def write_md(rows, rows_default, wild, area, dim_of, dropped, checks):
         L.append(f"- {len(bl)} biomes: " + ', '.join(bl) + '\n')
 
     L.append('## 5. Crops per biome\n')
-    L.append('Every overworld land biome, with its traits from `wild_crops.json`, plus other dimensions\' biomes that have a crop.\n')
+    L.append('Every overworld land biome, with its traits from `biome_traits.json`, plus other dimensions\' biomes that have a crop.\n')
     L.append('| Biome | Area | Traits | Crops (feature rate) |')
     L.append('|---|---|---|---|')
     per_biome = defaultdict(list)

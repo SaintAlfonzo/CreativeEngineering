@@ -55,10 +55,16 @@ ClientEvents.lang('en_us', e => {
 
   e.add('block.rusticdelight.bell_peppers', 'Bell Peppers')
   e.add('block.rusticdelight.cotton', 'Cotton')
+  // Rustic Delight 1.7.0's names for the boll and its crate (rustic_delight.md 5)
+  e.add('item.rusticdelight.cotton_boll', 'Cotton')
+  e.add('block.rusticdelight.cotton_boll_crate', 'Cotton Crate')
   e.add('block.rusticdelight.coffee', 'Coffee Plant')
   e.add('block.rusticdelight.potted_wild_bell_peppers', 'Potted Wild Bell Peppers')
   e.add('block.rusticdelight.potted_wild_coffee', 'Potted Wild Coffee')
   e.add('block.rusticdelight.potted_wild_cotton', 'Potted Wild Cotton')
+  // Brewin' and Chewin' pizza: the many-topping recipe in cooking/cooking.js
+  e.add('block.brewinandchewin.pizza', 'Supreme Pizza')
+  e.add('item.brewinandchewin.pizza_slice', 'Supreme Pizza Slice')
 
   e.renameItem('creativeengineering:transmitter', 'Transmitter')
   
@@ -66,6 +72,10 @@ ClientEvents.lang('en_us', e => {
   e.renameItem('canned_goods:canned_spider_eyes', 'Canned Night Berries')
   e.renameItem('neapolitan:chocolate_spider_eye', 'Chocolate Night Berries')
   e.renameItem('delightful:cactus_flesh', 'Cactus Flesh') // was Cactus Chunk; its can is Canned Cactus Flesh
+  // Delightful 3.8.1's names for three 3.4.1 items (feature_writeup/delightful.md 2.3)
+  e.renameItem(global.item.berry_matcha_latte, 'Iced Berry Matcha Latte')
+  e.renameItem(global.item.nut_butter_bottle, 'Nut Butter')
+  e.renameItem(global.item.rock_candy, 'Rose Rock Candy')
   // Farmer's Delight's cheesecake is the pack's only sweet berry pie (Canned Sweet Berry Pie Filling); the Display
   // Delight plates are renamed in kubejs/assets/displaydelight/lang
   e.renameItem(global.item.sweet_berry_cheesecake, 'Sweet Berry Pie')
@@ -256,6 +266,16 @@ ClientEvents.lang('en_us', e => {
   // tooltip names it too
   e.renameItem(global.item.nulch, 'Fertile Soul Soil')
   e.add('item.vintagedelight.ghost_pepper.planting_soil', 'Plant on Soul Soil, Rich Soul Soil or Fertile Soul Soil')
+  // Oceanic Delight's salmon eggs are Caviar, and its fish egg dishes are named after it (dishes/ocean #5, ocean_delight.md). Ancient
+  // Fish Eggs keep their name. The JEI pages follow the fishing net's biome tables (ocean_delight.md 5.1, 5.2).
+  e.renameItem(global.item.caviar, 'Caviar')
+  e.renameItem(global.item.fish_egg_roll, 'Caviar Roll')
+  e.renameItem(global.item.fish_egg_roll_slice, 'Caviar Roll Slice')
+  e.renameItem(global.item.fish_egg_noodle_soup, 'Caviar Noodle Soup')
+  e.add('jei.oceanic_delight.salmon_eggs_information',
+    'Salmon roe.\n\nDrops from Salmon killed with a Knife, and from a Fishing Net used on kelp or seagrass in rivers.')
+  e.add('jei.oceanic_delight.shrimp_information',
+    'Found in kelp and seagrass in oceans that are not cold.\n\nUse a Fishing Net on them to catch some.')
 })
 
 console.log('Rename Finished')

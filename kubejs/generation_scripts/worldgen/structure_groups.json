@@ -1126,6 +1126,40 @@
         }
       }
     },
+    "deadwood": {
+      "note": "Patches of dead wood on land: stumps and fallen logs by wood type (meta structures). Its own grid, so it takes no slots from buildings or ruins.",
+      "placement": {
+        "spacing": 16,
+        "separation": 5,
+        "salt": 1349061187
+      },
+      "structures": {
+        "creativeengineering:meta/deadwood_acacia": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "creativeengineering:meta/deadwood_birch": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "creativeengineering:meta/deadwood_cherry": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "creativeengineering:meta/deadwood_jungle": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "creativeengineering:meta/deadwood_oak": {
+          "weight": 100,
+          "frequency": 1.0
+        },
+        "creativeengineering:meta/deadwood_spruce": {
+          "weight": 100,
+          "frequency": 1.0
+        }
+      }
+    },
     "remote": {
       "note": "Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer's Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.",
       "placement": {

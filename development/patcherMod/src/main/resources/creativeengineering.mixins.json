@@ -58,6 +58,7 @@
     "VanillaShieldRepairMixin",
     "ShieldDisableCooldownMixin",
     "MobShieldDisableMixin",
+    "MobCobPipeSlotMixin",
     "MobEffectTickContextMixin",
     "ShieldDecorationRecipeMixin",
     "BonemealCharmMixin",
@@ -135,10 +136,6 @@
     "NoiseBasedChunkGeneratorDistantClipMixin",
     "NoiseChunkDistantClipMixin",
     "ConfiguredFeatureDistantClipMixin",
-    "CookingPotRemainderMixin",
-    "CookingPotMenuRemainderMixin",
-    "KettleRemainderMixin",
-    "KettleMenuRemainderMixin",
     "BlockStateCounterTopperMixin",
     "CfbOvenFuelMixin",
     "CfbOvenSmokingMixin",
@@ -151,7 +148,9 @@
     "TrinketCaseInventoryMixin",
     "TrinketCaseSlotMixin",
     "TrinketCaseMenuMixin",
-    "ItemBackedInventoryAccessor"
+    "ItemBackedInventoryAccessor",
+    "KubeJSScriptManagerInvoker",
+    "KubeJSStartupJarScriptsMixin"
   ],
   "client": [
     "McaCombEyeColourMixin",
@@ -209,8 +208,6 @@
     "SeasonHudCurrentSeasonMixin",
     "PrettyRainSeasonMixin",
     "DhCloudHeightMixin",
-    "CookingPotScreenRemainderMixin",
-    "KettleScreenRemainderMixin",
     "CreativePickBlockSyncMixin",
     "CookingPotMealTooltipMixin",
     "KettleMealTooltipMixin",

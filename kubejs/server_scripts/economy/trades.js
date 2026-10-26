@@ -111,15 +111,7 @@ MoreJSEvents.villagerTrades((e) => {
   e.addTrade(v.cleric, 5, [Item.of(i.emerald, 3)], Item.of(i.experience_bottle, 1)).maxUses(12).villagerExperience(30).priceMultiplier(0.05)
   e.addTrade(v.cleric, 5, [Item.of(i.emerald, 4)], Item.of(i.echo_shard, 1)).maxUses(16).villagerExperience(6).priceMultiplier(0.1)
 
-  // Farmer: Veggies Delight's produce trades, as upstream had them in code (feature_writeup/veggies_delight.md 4.13).
-  // Its bell pepper trade is dropped with the crop.
-  // Level 1 - Novice
-  e.addTrade(v.farmer, 1, [Item.of(i.broccoli, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
-  e.addTrade(v.farmer, 1, [Item.of(i.cauliflower, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
-  e.addTrade(v.farmer, 1, [Item.of(i.garlic, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
-  e.addTrade(v.farmer, 1, [Item.of(i.sweet_potato, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
-  e.addTrade(v.farmer, 1, [Item.of(i.turnip, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
-  e.addTrade(v.farmer, 1, [Item.of(i.zucchini, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
+  // Farmer: Veggies Delight's produce trades are Creative Delight members #2 (kubejs/data/creative_delight/kubejs/veggiesdelight/trades.js)
 })
 
 console.log('The trade event has finished!')

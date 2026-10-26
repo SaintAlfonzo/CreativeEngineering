@@ -30,6 +30,8 @@ public class FermentingJarScreen extends AbstractContainerScreen<FermentingJarMe
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
         this.blit(poseStack, x, y, 0, 0, this.imageWidth, this.imageHeight);
+        // Port: the leftover slot's frame, copied from the output slot's
+        this.blit(poseStack, x + 153, y + 44, 115, 44, 18, 18);
         if (this.menu.isCrafting()) {
             this.blit(poseStack, x + 84, y + 32, 176, 0, this.menu.getScaledProgress(), 30);
         }

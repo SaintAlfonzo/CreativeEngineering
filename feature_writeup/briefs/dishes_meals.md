@@ -34,7 +34,7 @@ or KubeJS does to them at runtime is only knowable in game (`/dumprecipes`, `/du
 proposed in other briefs):
 - Row 1 coverage: rows 2/4/8 plus vegetable soup, vegetable noodles, ratatouille, corn soup. All the pack's older cooked
   shapeless meals (fish stew, cabbage rolls, horror lasagna, pasta with mutton, the three Ender's Delight ones) got
-  `_manual_only` ids too. `soup_veggies_cooked` is listed by key (cookingtags.js runs before foodtypetags.js).
+  `_manual_only` ids too. `soup_veggie_cooked` is listed by key (cookingtags.js runs before foodtypetags.js).
 - Burgers: each assembly needs its own first step (CCK's bacon, chicken and egg sandwiches already start on
   `#forge:bread` with bacon, chicken, fried egg), so the egg burger is built on a beef patty and the others start with
   salad, cheese, onion, patty, tomato, bison patty, kangaroo. Loaded hamburger's cabbage is `#forge:crops/cabbage`
@@ -46,7 +46,7 @@ proposed in other briefs):
 
 **Built 2026-10-21 (rows 4, 7, 8, 9)**, as recommended here, with these differences (tests RC-66 to RC-70 in
 [recipes_cooking.md](../recipes_cooking.md); the RC-40/41/46/47/48 below are the brief's old numbers):
-- Row 7: fries and fish and chips take `#forge:sliced_potatoes` now, after Rustic Delight's slices were added to it
+- Row 7: fries and fish and chips take `#forge:sliced_potato` now, after Rustic Delight's slices were added to it
   (cookingtags.js), so diced potatoes fry too. Not checked: whether the cooking oil bottle comes back from the pot.
 - Row 9: no pure-gold tag; each forge gold tag holds only the vanilla item and the rose gold one, so golden.js names
   `i.nugget_gold`, `i.ingot_gold`, `i.block_gold`. Ingots too (MCA tags its rose gold ingot as gold). Costs set to
@@ -76,10 +76,10 @@ through `global.tags` in [cookingtags.js](../../kubejs/server_scripts/tags/cooki
 | `i.t_bread` | `'#forge:bread'` (vanilla bread, `corn_delight:cornbread`, `pneumaticcraft:sourdough_bread`; not slices: those are `#forge:bread_slices`) | row 2 burgers. Note `i.bread` is `#forge:bread/wheat` |
 | `i.t_tortilla` | `'#forge:tortilla'` (`corn_delight:tortilla`) | row 2 mutton wrap |
 | `i.t_cooking_oil` | `'#rusticdelight:cooking_oil'` (`rusticdelight:cooking_oil`) | row 7 |
-| `i.t_sliced_potatoes` | `'#forge:sliced_potatoes'` (today only `moredelight:diced_potatoes`) | row 7 |
-| `i.t_soup_veggie_cooked` | `'#creativeengineering:soup_veggies_cooked'` (new tag, below) | rows 2, 4 |
-| `i.t_exotic_fruit` | `'#creativeengineering:exotic_fruits'` (new tag, below) | row 2 exotic fruits |
-| `i.t_fruit_salad_slice` | `'#creativeengineering:fruit_salad_slices'` (new tag, below) | row 2 fruit salad |
+| `i.t_sliced_potato` | `'#forge:sliced_potato'` (today only `moredelight:diced_potatoes`) | row 7 |
+| `i.t_soup_veggie_cooked` | `'#creativeengineering:soup_veggie_cooked'` (new tag, below) | rows 2, 4 |
+| `i.t_exotic_fruit` | `'#creativeengineering:exotic_fruit'` (new tag, below) | row 2 exotic fruits |
+| `i.t_fruit_salad_slice` | `'#creativeengineering:fruit_salad_slice'` (new tag, below) | row 2 fruit salad |
 
 New tags (in `cookingtags.js`, all through `global.tags`):
 
@@ -95,7 +95,7 @@ t.add(e, i.t_fruit_salad_slice, [i.melon, i.cantaloupe_slice, i.hamimelon_slice,
 ```
 
 `addMatching` with `except` expands the food-type tags to their members at tag time (tag_helper.js lines 26-48), so the
-food-type tags must already be filled: [foodtypetags.js](../../kubejs/server_scripts/tags/foodtypetags.js) and
+food-type tags must already be filled: [foodtypetags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js) and
 `cookingtags.js` both run in `ServerEvents.tags('item')`; if order bites, list the members by key instead (the
 cooked/veggie list is in [food_catalog.md](../food_catalog.md) "cooked/veggie").
 
@@ -578,7 +578,7 @@ and made from diced potato + oil; every PneumaticCraft deep-frying recipe remove
 - Pot frying precedent: Rustic Delight `rusticdelight:cooking/fried_calamari` (`#rusticdelight:cooking_oil`,
   `rusticdelight:batter`, `#forge:raw_fishes/calamari`, tomato; bowl) and `fried_chicken`.
 - Potato slices: `rusticdelight:potato_slices` (knife: potato -> 2) and `moredelight:diced_potatoes` (knife: potato ->
-  1; the only member of `#forge:sliced_potatoes`). `dishes/ingredients #8` merges diced potatoes into Rustic Delight's
+  1; the only member of `#forge:sliced_potato`). `dishes/ingredients #8` merges diced potatoes into Rustic Delight's
   slices.
 
 ### Build
@@ -593,7 +593,7 @@ and made from diced potato + oil; every PneumaticCraft deep-frying recipe remove
    Dice gives it a heated mixing copy automatically (cooking.js line 388 note).
 3. Fries: rename `pneumaticcraft:chips` to "Fries" (`e.renameItem(i.chips, 'Fries')`); recipe
    `R.fdCooking([i.t_cooking_oil, i.potato_slices, i.potato_slices], Item.of(i.chips, 2), e, 'fries', 0.35, 200)`
-   (switch `i.potato_slices` to `i.t_sliced_potatoes` once `dishes/ingredients #8` puts Rustic's slices in the tag).
+   (switch `i.potato_slices` to `i.t_sliced_potato` once `dishes/ingredients #8` puts Rustic's slices in the tag).
 4. Fish and chips: rename `pneumaticcraft:cod_n_chips` "Fish and Chips"; pot recipe
    `R.fdCooking([i.t_cooking_oil, i.t_food_raw_fish, i.potato_slices, i.potato_slices], i.cod_n_chips, e,
    'fish_and_chips', 0.35, 200, i.paper)` (container paper = "plated with paper"); plus the cooked shapeless
@@ -608,7 +608,7 @@ and made from diced potato + oil; every PneumaticCraft deep-frying recipe remove
 ### Ids and data
 - Keys exist: `i.salmon_tempura`, `i.raw_salmon_tempura`, `i.chips`, `i.cod_n_chips`, `i.batter`, `i.cooking_oil`,
   `i.potato_slices`, `i.paper`, `i.t_food_raw_fish`, `i.raw_fish`, `i.cooked_fish`. New: `i.t_cooking_oil`,
-  `i.t_sliced_potatoes` (A0).
+  `i.t_sliced_potato` (A0).
 - `#rusticdelight:cooking_oil` = `rusticdelight:cooking_oil` (+ an optional Frycook's canola oil, not installed);
   `dishes/ingredients #10` plans fish oil as cooking oil: it would join this tag.
 
@@ -753,7 +753,7 @@ Merge the potato salad items into one, through `global.itemMerges` and the helpe
 
 ### Now
 Three exist (jars): Rustic Delight `rusticdelight:potato_salad` (`i.potato_salad`; shapeless eggs, milk, onion, potato,
-bowl), More Delight `moredelight:potato_salad` (`i.moredelight_potato_salad`; pot: eggs, `#forge:sliced_potatoes`,
+bowl), More Delight `moredelight:potato_salad` (`i.moredelight_potato_salad`; pot: eggs, `#forge:sliced_potato`,
 onion) and Oceanic Delight `oceanic_delight:potato_salad` (cabbage, sea pickle, potato, bowl; not in `item_dict` yet).
 The diced potato merge ([item_merges.js](../../kubejs/startup_scripts/_lib/item_merges.js)) already unified the
 potato slice ingredient. Listed in the pinned marked-merge notes only for Mashed Potatoes, not potato salad.
@@ -774,7 +774,7 @@ pot and the oven, applying to every feast, not just the hoglin one. Related `dis
 ### Now
 Feasts are shapeless grid crafts of a cooked set plus a bowl (`meals #5` Now: roast chicken, shepherd's pie,
 honey glazed ham; `plate_of_stuffed_hoglin_*` is Nether's Delight). The oven recipes are `R.ceBaking(inputs, output,
-e, id, tool)` in [baking.js](../../kubejs/server_scripts/cooking/baking.js); the pot is `R.fdCooking`. The feast list is
+e, id, tool)` in [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js); the pot is `R.fdCooking`. The feast list is
 `food_types.json` `meal/feast` plus the pizza and stuffed pepper blocks (`cans/canning #17` lists them).
 
 ### Build
@@ -1117,13 +1117,13 @@ Status: Planned / Work: KubeJS / TODO `dishes/meals #34` ([veggies_delight.md](.
 Fries are made from any potato slice (sweet potato slices too).
 
 ### Now
-Fries are `pneumaticcraft:chips` (renamed Fries): `R.fdCooking([oil, #forge:sliced_potatoes x2], chips x2)`
+Fries are `pneumaticcraft:chips` (renamed Fries): `R.fdCooking([oil, #forge:sliced_potato x2], chips x2)`
 (cooking.js line 369); fish and chips takes the same tag. The tag holds only Rustic `potato_slices` today
 (cookingtags.js line 38). So the recipes are already tag-based; the work is the sweet potato slice item and its tag
 entry (`dishes/ingredients #20`). Baked potato slices are a separate cooked item.
 
 ### Build
-After `ingredients #20`: `t.add(e, i.t_sliced_potatoes, i.sweet_potato_slices)`. Nothing else.
+After `ingredients #20`: `t.add(e, i.t_sliced_potato, i.sweet_potato_slices)`. Nothing else.
 
 ### Tests
 RC-134 Fries from sweet potato slices; fish and chips accepts them.

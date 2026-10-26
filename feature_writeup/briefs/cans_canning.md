@@ -2,10 +2,10 @@
 
 Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# cans`, Sub `canning`. Reference writeups:
 [cans.md](../cans.md) (hub), [can_parity.md](../can_parity.md) (worksheet, decisions 4, sprites 5.1),
-[food.md](../food.md) 3.5 (tuning) and 3.6 (servings). Code: [canning.js](../../kubejs/server_scripts/cooking/canning.js),
-[cans.js](../../kubejs/startup_scripts/items/cans.js), [gen_can_types.py](../../tools/gen_can_types.py) ->
+[food.md](../food.md) 3.5 (tuning) and 3.6 (servings). Code: [canning.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js),
+[cans.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js), [gen_can_types.py](../../tools/gen_can_types.py) ->
 [can_types.json](../../kubejs/generation_scripts/food/can_types.json), [can_servings.json](../../kubejs/generation_scripts/food/can_servings.json),
-[cantags.js](../../kubejs/server_scripts/tags/cantags.js), patcherMod `food/CanServings.java`, `compat/KubeJSCanAction.java`.
+[cantags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js), patcherMod `food/CanServings.java`, `compat/KubeJSCanAction.java`.
 
 ## Scope and order
 
@@ -578,7 +578,7 @@ Every feast (a placed block with servings) can be canned, as the nine existing f
 - Feast cans are rows in [gen_can_types.py](../../tools/gen_can_types.py) lines 356-370, section `feast`
   (`mult=1, servings=6, n=1`, `input=` the feast block item, value source = the serving); output goes to
   `kubejs/generation_scripts/food/can_types.json`; recipes come from `canSection('feast')`
-  ([canning.js](../../kubejs/server_scripts/cooking/canning.js) line 511).
+  ([canning.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js) line 511).
 - Covered: popcorn box, stuffed hoglin (one can for its three plates), honey glazed ham, nachos, pineapple fried
   rice, roast chicken, shepherd's pie, stuffed pumpkin, stuffed shulker.
 - No can row found (by absence in gen_can_types.py and `food_types.json` `canned_*`): Brewin' pizza, Vintage

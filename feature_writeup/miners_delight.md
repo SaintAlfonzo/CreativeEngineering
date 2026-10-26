@@ -1,5 +1,7 @@
 # Miner's Delight: merged backport plan
 
+> **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Miner's Delight; its registry namespace and test prefix do not change.
+
 Plan written 2026-10-24, revised the same day with the owner's answers. **The port is BUILT 2026-10-24**
 (`development/backportedMiners`, jar `backportedMiners-1.4.5-ce-19.2-01.jar`, offline checks pass, §7) **and waits to be
 installed** (the game was running; §4.1 P8). The cave carrot worldgen is built too (§4.3). Goal (owner): one Forge 1.19.2 jar that holds all content of the old Miner's Delight (1.1.2,
@@ -119,7 +121,7 @@ against the 1.21.1 jar. Because of the licence (D2) neither is a code or asset s
 ## 3. Overlaps with the pack
 
 Nothing is settled here. The ocean add-ons and Hostile Delight were added after the last `/dumpall`, so this list
-comes from [delight_addons_2026_10.md](delight_addons_2026_10.md) §2 and the hostile plan; `MND-01` refreshes the dumps.
+comes from [ocean_delight.md](ocean_delight.md) and the hostile plan; `MND-01` refreshes the dumps.
 
 ### 3.1 Items and drops
 
@@ -195,7 +197,8 @@ close.
   `vinery_upstream/` (`UPSTREAM_DONORS`). `tools/dump_server_mods.py` copies only `mods/`, as for Vinery; the server
   needs `miners_upstream/` copied by hand.
 - P9: the listener reads `data/<any namespace>/cup_conversion/*.json`, so the row is
-  `kubejs/data/creativeengineering/cup_conversion/creamy_onion_soup.json` (not the path first planned). Onion soup cup
+  `kubejs/data/creative_delight/cup_conversion/creamy_onion_soup.json`, shipped in the Creative Delight jar (moved from
+  `creativeengineering` 2026-10-25, creative_delight.md 27; not the path first planned). Onion soup cup
   food = half of FD 1.21's onion soup (12, 0.8, Nourishment 3 min): 6, 0.4, Nourishment 1:30.
 
 ### 4.2 Pack integration (after the build, before `MND-40` where it changes what is tested)
@@ -304,6 +307,7 @@ Copper pot and cups
   cups) and a Copper Cup as container, so the cup table reached the client.
 - [ ] MND-16 Empty copper cup: right-click water source = water cup, a cow or goat = milk cup, a fish or axolotl does
   nothing (the fish stays, the cup stays); water cup pours a source; powder snow cup places powder snow.
+- [ ] MND-17 Cups stack to 64 (empty, water, milk, powder snow; soup cups 16). With a stack of 5 powder snow cups: place one, the other 4 stay and an empty cup lands in the inventory. A stack of water cups emptied on the ground and filled at a cauldron keeps the rest of the stack. A stack of milk cups drinks one at a time and returns empty cups. The craft: 3 copper ingots (`X X` over ` X `) makes a Copper Cup.
 
 Food and feasts
 
@@ -344,3 +348,52 @@ Review (decides the drops)
   checks pass (§7), I2 done; jar swap (P8) waits for the game to close. Found while building: 1.20's `any_of` loot
   condition and 5 dangling global loot modifier entries (both handled in the translator), and the cup conversion data
   path (`cup_conversion/` at the namespace root).
+
+## 10. Original survey (2026-10-23, before the port plan)
+
+Moved here from the former combined add-ons survey; the survey that started the port. Row: `largecontent/mod-additions #7`.
+Miner's Delight 1.1.2 is `miners_delight-1.19.2-1.1.2.jar` (37 items; squid, glow squid, bat wing, silverfish eggs drops). The
+sections above supersede its conclusions (the merged backport replaces the "backport, not update" open question).
+
+The installed `miners_delight-1.19.2-1.1.2.jar` is the **OLD** version. The newer line is in
+`DecompiledMods/minersdelight-1.21.1-1.4.5.jar` (NeoForge 1.21.1, mod id `minersdelight`, needs Lodestone, Farmer's
+Delight). Not a drop-in: different mod id (`minersdelight` vs `miners_delight`), different loader, so a newer
+Miner's Delight on 1.19.2 would be a backport in the Veggies / Vintage style, not an update.
+
+**2026-10-24: the merged backport is this file** (behaviour reference: the Forge 1.20.1
+build of 1.4.5, mod id `miners_delight`; licence all rights reserved, so the Vinery donor-jar method; all 1.1.2 and 1.4.5 content except
+the hot cocoa cup, overlaps reviewed in game before any drop; onion soup cup = Brewin' Creamy Onion Soup; cave carrots now placed by the
+cave mushroom system).
+
+| | Old (1.1.2, 1.19.2) | New (1.4.5, 1.21.1) |
+|---|---|---|
+| Items | 37 | 69 |
+| Blocks (blockstates) | 7 | 10 |
+| Loot modifiers | 8 (bat wing, squid, glow squid, silverfish eggs, infested blocks) | 9+ (adds spider web, spider, arthropods, cooked squid / bat wing / spider leg) |
+| Worldgen | none | 3 files |
+| Tags | 1 (milk) | 44 |
+
+Content in the old version that the new one still has: copper pot and cup, cave carrot (+ wild + crate), bat wing,
+squid / glow squid / tentacles line, silverfish eggs, weird caviar, noodle / vegetable / beef / chicken / rabbit /
+mushroom / beetroot / pumpkin soup cups, milk / water / powder snow cups, sticky basket, gossypium, improvised
+barbecue stick, pasta with veggieballs.
+
+Only in the old version: `hot_cocoa_cup` (1).
+
+New in 1.4.5 (33 items): bat line (`bat_cookie`, `bat_rolls`, `bat_soup` + cup), spider and arthropod line
+(`spider_leg`, `baked_spider_leg`, `arthropod`, `cooked_arthropod`, `seasoned_arthropods`, `insect_stew` + cup,
+`insect_sandwich`, `insect_wrap`, `glazed_arachnid_limbs` + plate), vegan line (`vegan_patty`, `vegan_hamburger`,
+`vegan_wrap`, `vegan_steak_and_potatoes`, `fake_meatloaf` + plate), `cave_hamburger`, `copper_carrot`, `crunchy_bar`,
+`nutritional_bar`, `golden_nutritional_bar`, `moss`, `onion_soup_cup`, `bone_broth_cup`, `glow_ink_pasta`,
+`squid_sandwich`, `takoyaki`, `tentacles_on_a_stick`.
+
+Overlap of the new additions with the pack: onion soup (Veggies Delight port has onions and soups: check), vegan
+hamburger / wrap (Farmer's Delight `hamburger`, wraps), `takoyaki` (Oceanic Delight), `tentacles_on_a_stick` (Ocean's
+Delight `tentacle_on_a_stick`), `glow_ink_pasta` (Farmer's Delight `squid_ink_pasta`), spider/arthropod meat
+(Hostile Delight, Unusual Delight `spider_leg`, `spiderbarbecue`).
+
+### 10.1 Soup cup finding (2026-10-24)
+
+`largecontent/mod-additions #7`: gains an investigation of the soup cup. Finding so far: the cups come from the
+  data file `miners_delight/cup_conversion/default_conversions.json` (bowl -> cup pairs), not from recipes, which is why JEI
+  shows none.

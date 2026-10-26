@@ -12,7 +12,7 @@ Inputs:
 - kubejs/generation_scripts/worldgen/mob_spawns.json: the pack's tuning rules. They are applied here to the
   untuned spawners with the same semantics as patcherMod worldgen/SpawnTuning, so the tables show the file as it
   is now, before a restart. When that differs from what the dump recorded, a WARNING says so (rejoin + /dumpspawns).
-- kubejs/generation_scripts/worldgen/wild_crops.json: the biome trait table the rules' 'where' clauses use.
+- kubejs/generation_scripts/worldgen/biome_traits.json: the biome trait table the rules' 'where' clauses use.
 - kubejs/generation_scripts/worldgen/biome_config.json: post-tuning biome areas (share of each dimension).
 - tools/spawn_rules_vanilla.json: vanilla's spawn rule method per mob, read from SpawnPlacements' bytecode in the
   ForgeGradle mapped jar (--refresh-vanilla-rules). Mods' rules can only be named from the dump.
@@ -37,7 +37,7 @@ from pathlib import Path
 INSTANCE = Path(__file__).resolve().parent.parent
 SPAWNS = INSTANCE / 'kubejs/exported/spawns.json'
 RULES = INSTANCE / 'kubejs/generation_scripts/worldgen/mob_spawns.json'
-TRAITS = INSTANCE / 'kubejs/generation_scripts/worldgen/wild_crops.json'
+TRAITS = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_traits.json'
 BIOME_CONFIG = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_config.json'
 VANILLA_RULES = INSTANCE / 'tools/spawn_rules_vanilla.json'
 OUT_MD = INSTANCE / 'feature_writeup/spawns_by_biome.md'
@@ -669,7 +669,7 @@ def write_md(dump, tuned, untuned, rows, problems, warnings, stale, changes, are
 
     # 3. creatures by biome type
     w('## 3. Creatures by biome type\n')
-    w('Mean creature share over the overworld biomes with that trait (`wild_crops.json` table), weighted by area; '
+    w('Mean creature share over the overworld biomes with that trait (`biome_traits.json` table), weighted by area; '
       'biomes with no area count at a weight of 0.01. Columns are the biome types the tuning plans in mob_spawns.md '
       'name; a mob under 0.5% everywhere is left out.\n')
     cols = []
@@ -722,7 +722,7 @@ def write_md(dump, tuned, untuned, rows, problems, warnings, stale, changes, are
         for b in by_dim[dim]:
             v = dump['biomes'][b]
             a = areas.get(b, (None, None, None))[2]
-            tr = ' '.join(sorted(traits.get(b, []))) or 'no traits (not in wild_crops.json)'
+            tr = ' '.join(sorted(traits.get(b, []))) or 'no traits (not in biome_traits.json)'
             w(f"**`{short(b)}`** area {fmt_area(a) or '-'}%, herds {fmt_pct(v.get('creature_probability', 0))}%, "
               f"traits: {tr}" + (' (tuned)' if b in changed_biomes else ''))
             w('')

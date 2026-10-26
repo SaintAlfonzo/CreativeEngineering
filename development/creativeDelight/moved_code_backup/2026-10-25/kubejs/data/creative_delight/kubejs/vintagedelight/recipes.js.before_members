@@ -1,0 +1,43 @@
+// requires: vintagedelight
+// Vintage Delight recipe changes (feature_writeup/vintage_delight.md, TODO ports/vintageport). Creative Delight member
+// script: recipe ids are creative_delight:<type>/<suffix> (global.CD.recipes). The port's data stays as upstream ships
+// it, so each change removes the upstream id and adds the pack recipe here.
+ServerEvents.recipes(e => {
+	if (!global.CD || !global.CD.on('vintagedelight')) return
+
+	var i = global.item
+	var R = global.NCH
+
+	global.CD.recipes(() => {
+
+		//######################### Pickling Jar #########################
+		// No slime block from the jar (vintageport #17); slime comes from Create (create/slime.js).
+		R.remove({ id: 'vintagedelight:fermenting/slime_block_from_fermenting' }, e)
+
+		// The two jar recipes that took only salt dust, rebuilt on #forge:salt (vintageport #10). Same inputs, time and
+		// outputs as upstream.
+		R.remove({ id: 'vintagedelight:fermenting/berserks_brew' }, e)
+		R.vdPickling(Item.of(i.potion, '{Potion:"minecraft:water",CustomPotionEffects:[{Id:5,Amplifier:2,Duration:600},' +
+			'{Id:11,Amplifier:3,Duration:600},{Id:20,Amplifier:0,Duration:400}],CustomPotionColor:11141120,' +
+			'display:{Name:\'{"text":"Berserker\\\'s Brew","italic":false}\'}}'),
+			[i.blaze_powder, i.salt, i.crimson_fungus, i.fermented_spider_eye, i.ghast_tear], e, 'berserks_brew',
+			{ time: 400, container: i.glass_bottle })
+		R.remove({ id: 'vintagedelight:fermenting/leather_from_fermenting' }, e)
+		R.vdPickling(Item.of(i.leather, 2), [Item.of(i.rotten_flesh, 2), Item.of(i.tree_bark, 2), i.salt, i.vinegar], e,
+			'leather_from_fermenting', { time: 4800, secondary: i.glass_bottle })
+
+		//######################### Salted fish #########################
+		// Salted cod and salmon are out (vintageport #11, removed_items.js); Surstromming stays. The Salt's Salted
+		// cooked fish is a different thing and stays.
+		R.remove({ id: 'vintagedelight:salted_cod' }, e)
+		R.remove({ id: 'vintagedelight:salted_salmon' }, e)
+
+		//######################### Wild ghost pepper seeds #########################
+		// 2 seeds from the millstone and crushing wheels, 3 from the IE Crusher (were 1 each; vintageport #12).
+		R.remove({ id: 'vintagedelight:create/milling/wild_ghost_peppers' }, e)
+		R.remove({ id: 'vintagedelight:immersiveengineering/crusher/wild_ghost_pepper' }, e)
+		R.createCrushing([Item.of(i.ghost_pepper_seeds, 2), i.cyan_dye], i.wild_ghost_peppers, e, 'wild_ghost_pepper', true)
+		R.ieCrushing(Item.of(i.ghost_pepper_seeds, 3), i.wild_ghost_peppers, e, 'wild_ghost_pepper',
+			[{ chance: 1.0, output: i.cyan_dye }], 3200)
+	})
+})

@@ -652,6 +652,246 @@
           96
         ]
       }
+    },
+    "creativeengineering:meta/deadwood_acacia": {
+      "note": "A patch of dead acacia wood in savannas: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
+      "type": "creativeengineering:meta",
+      "biomes": "#geophilic_reforged:wood_type/mc/acacia",
+      "step": "surface_structures",
+      "terrain_adaptation": "none",
+      "spawn_overrides": {},
+      "parts": [
+        {
+          "features": "creativeengineering:meta/deadwood_stump_acacia",
+          "count": [
+            3,
+            6
+          ],
+          "distance": [
+            0,
+            14
+          ],
+          "spacing": 3,
+          "margin": 2,
+          "tries": 12,
+          "radius": 1
+        },
+        {
+          "features": "creativeengineering:meta/deadwood_fallen_log_acacia",
+          "count": [
+            2,
+            4
+          ],
+          "distance": [
+            2,
+            16
+          ],
+          "spacing": 6,
+          "margin": 2,
+          "tries": 12,
+          "radius": 4
+        }
+      ]
+    },
+    "creativeengineering:meta/deadwood_birch": {
+      "note": "A patch of dead birch wood in birch forests: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
+      "type": "creativeengineering:meta",
+      "biomes": "#geophilic_reforged:wood_type/mc/birch",
+      "step": "surface_structures",
+      "terrain_adaptation": "none",
+      "spawn_overrides": {},
+      "parts": [
+        {
+          "features": "creativeengineering:meta/deadwood_stump_birch",
+          "count": [
+            3,
+            6
+          ],
+          "distance": [
+            0,
+            14
+          ],
+          "spacing": 3,
+          "margin": 2,
+          "tries": 12,
+          "radius": 1
+        },
+        {
+          "features": "creativeengineering:meta/deadwood_fallen_log_birch",
+          "count": [
+            2,
+            4
+          ],
+          "distance": [
+            2,
+            16
+          ],
+          "spacing": 6,
+          "margin": 2,
+          "tries": 12,
+          "radius": 4
+        }
+      ]
+    },
+    "creativeengineering:meta/deadwood_cherry": {
+      "note": "A patch of dead cherry wood in sakura groves: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
+      "type": "creativeengineering:meta",
+      "biomes": "#geophilic_reforged:wood_type/mc/cherry",
+      "step": "surface_structures",
+      "terrain_adaptation": "none",
+      "spawn_overrides": {},
+      "parts": [
+        {
+          "features": "creativeengineering:meta/deadwood_stump_cherry",
+          "count": [
+            3,
+            6
+          ],
+          "distance": [
+            0,
+            14
+          ],
+          "spacing": 3,
+          "margin": 2,
+          "tries": 12,
+          "radius": 1
+        },
+        {
+          "features": "creativeengineering:meta/deadwood_fallen_log_cherry",
+          "count": [
+            2,
+            4
+          ],
+          "distance": [
+            2,
+            16
+          ],
+          "spacing": 6,
+          "margin": 2,
+          "tries": 12,
+          "radius": 4
+        }
+      ]
+    },
+    "creativeengineering:meta/deadwood_jungle": {
+      "note": "A patch of dead jungle wood in jungles: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
+      "type": "creativeengineering:meta",
+      "biomes": "#geophilic_reforged:wood_type/mc/jungle",
+      "step": "surface_structures",
+      "terrain_adaptation": "none",
+      "spawn_overrides": {},
+      "parts": [
+        {
+          "features": "creativeengineering:meta/deadwood_stump_jungle",
+          "count": [
+            3,
+            6
+          ],
+          "distance": [
+            0,
+            14
+          ],
+          "spacing": 3,
+          "margin": 2,
+          "tries": 12,
+          "radius": 1
+        },
+        {
+          "features": "creativeengineering:meta/deadwood_fallen_log_jungle",
+          "count": [
+            2,
+            4
+          ],
+          "distance": [
+            2,
+            16
+          ],
+          "spacing": 6,
+          "margin": 2,
+          "tries": 12,
+          "radius": 4
+        }
+      ]
+    },
+    "creativeengineering:meta/deadwood_oak": {
+      "note": "A patch of dead oak wood in oak forests, swamps and woodland: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
+      "type": "creativeengineering:meta",
+      "biomes": "#geophilic_reforged:wood_type/mc/oak",
+      "step": "surface_structures",
+      "terrain_adaptation": "none",
+      "spawn_overrides": {},
+      "parts": [
+        {
+          "features": "creativeengineering:meta/deadwood_stump_oak",
+          "count": [
+            3,
+            6
+          ],
+          "distance": [
+            0,
+            14
+          ],
+          "spacing": 3,
+          "margin": 2,
+          "tries": 12,
+          "radius": 1
+        },
+        {
+          "features": "creativeengineering:meta/deadwood_fallen_log_oak",
+          "count": [
+            2,
+            4
+          ],
+          "distance": [
+            2,
+            16
+          ],
+          "spacing": 6,
+          "margin": 2,
+          "tries": 12,
+          "radius": 4
+        }
+      ]
+    },
+    "creativeengineering:meta/deadwood_spruce": {
+      "note": "A patch of dead spruce wood in taigas and snowy spruce lands: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
+      "type": "creativeengineering:meta",
+      "biomes": "#geophilic_reforged:wood_type/mc/spruce",
+      "step": "surface_structures",
+      "terrain_adaptation": "none",
+      "spawn_overrides": {},
+      "parts": [
+        {
+          "features": "creativeengineering:meta/deadwood_stump_spruce",
+          "count": [
+            3,
+            6
+          ],
+          "distance": [
+            0,
+            14
+          ],
+          "spacing": 3,
+          "margin": 2,
+          "tries": 12,
+          "radius": 1
+        },
+        {
+          "features": "creativeengineering:meta/deadwood_fallen_log_spruce",
+          "count": [
+            2,
+            4
+          ],
+          "distance": [
+            2,
+            16
+          ],
+          "spacing": 6,
+          "margin": 2,
+          "tries": 12,
+          "radius": 4
+        }
+      ]
     }
   }
 }

@@ -1,6 +1,6 @@
 // Block loot — LEAF APPLES.  Oak, dark oak and Myrtrees rubberwood leaves no longer drop apples.
 //
-// Apples come from apple trees (Fruits Delight and Vinery, placed by worldgen/wild_crops.js in oak forests)
+// Apples come from apple trees (Fruits Delight and Vinery, placed by Creative Delight's wild crop rules in oak forests)
 // until the two apple trees are merged; feature_writeup/crops.md section 2.8. Myrtrees rubberwood leaves
 // copy the oak table (V17). The 2026-10-18 loot dump has no other leaf table with apples besides the two
 // apple trees (fruitsdelight / vinery blocks/apple_leaves).

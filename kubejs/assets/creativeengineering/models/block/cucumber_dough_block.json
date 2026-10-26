@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "creativeengineering:block/dough_block/cucumber_dough_block",
+    "particle": "creativeengineering:block/dough_block/cucumber_dough_block"
+  },
+  "render_type": "solid"
+}

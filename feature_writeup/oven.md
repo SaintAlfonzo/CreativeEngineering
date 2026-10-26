@@ -30,9 +30,9 @@ Files to open first:
 - `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/`: `OvenBlock`, `OvenBlockEntity`,
   `OvenHeat`, `OvenItemHandler`, `OvenMenu`, `OvenResultSlot`, `BakingRecipe`, `OvenRegistry`, `client/OvenScreen`,
   `jei/OvenJeiPlugin`, `jei/BakingRecipeCategory`
-- [kubejs/server_scripts/cooking/baking.js](../kubejs/server_scripts/cooking/baking.js): baking and crafting recipes
-- [kubejs/startup_scripts/cooking/bakeware.js](../kubejs/startup_scripts/cooking/bakeware.js): bakeware items
-- [kubejs/startup_scripts/cooking/baking_ingredients.js](../kubejs/startup_scripts/cooking/baking_ingredients.js): frosting, cookie dough
+- [kubejs/data/creative_delight/kubejs/creativeengineering/baking.js](../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js): baking and crafting recipes
+- [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js): bakeware items
+- [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js): frosting, cookie dough
 - `global.NCH.ceBaking` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js)
 - Tags: [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) (heat, hammer_no_rotate), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js) (bakeware)
 - `global.NCH.hammering` in neoCraftHelper.js; `IECompat.registerHammerNoRotate` in patcherMod `compat/`
@@ -207,9 +207,26 @@ pack adds none; 2026-10-22, user). Sugar is `#forge:sugar`, flour is
 | Frosting (`creativeengineering:frosting`), 2 | sugar, 2 milk; or 250 mB frosting fluid -> 1 (compactor; the fluid is heated mixer sugar + 250 mB milk -> 500 mB, [recipes_cooking.md](recipes_cooking.md) 2.2) | manual craft; compactor |
 | Cookie dough (`creativeengineering:cookie_dough`) | dough, 2 sugar | manual craft |
 
-Frosting and cookie dough are new plain items (not food) in `startup_scripts/cooking/baking_ingredients.js`, on
-placeholder textures until they get their own: Rustic Delight's cotton boll (frosting), Create Confectionery's
-gingerdough (cookie dough).
+Frosting and cookie dough are new plain items (not food) in `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js`, with
+their own textures (2026-10-25, baked-goods #16): frosting is the user's `textureswapper/frosting.png`; the dough
+textures were made with `textureswapper/palette_swap.py` (plain mapping; sources, outputs and `preview.png` in
+`textureswapper/baking/dough/`):
+
+| Texture | Made from | Installed at (`kubejs/assets/`) |
+|---|---|---|
+| Create dough | Farmer's Delight's `wheat_dough.png`, unchanged | `create/textures/item/dough.png` |
+| Ginger dough | FD wheat dough shape, Create Confectionery gingerdough palette | `create_confectionery/textures/items/gingerdough.png` |
+| Cookie dough | Create dough shape, Vintage Delight oat dough palette (`src/oat_dough.png`) | `creativeengineering/textures/item/cookie_dough.png` |
+| Dough block | `dough_block_light.png` (user template), final Create dough palette, `--drop-darkest 2 --drop-lightest 1` | `create_compressed/textures/block/dough_block.png` |
+| Ginger / cookie dough blocks | Same template, each final dough's palette | `creativeengineering/textures/block/dough_block/<id>.png` (blocks registered 2026-10-25, below) |
+| Sweet potato, oat, cucumber, sourdough blocks | Same template and flags, each mod's own dough texture as the palette (`src/`) | `creativeengineering/textures/block/dough_block/<id>.png` |
+| Nether wart sourdough, uncooked mhadjeb blocks | Same template and flags (only in `preview_all_blocks.png`, no file in `out/`) | not made: no block (#27) |
+
+**Dough blocks** (2026-10-25, baked-goods #27): Gingerdough, Cookie Dough, Sweet Potato Dough, Oat Dough, Cucumber
+Dough and Sourdough Blocks (`creativeengineering:<dough>_block`, `baking_ingredients.js`), Create Compressed's dough
+block stats (sand, slime block sounds, strength 0.5 / 10, shovel). 9 dough <-> 1 block in the grid (`cooking.js`), each
+in `#forge:storage_blocks/<dough>` and BlockRunner's spongy surface. Hand-authored cube_all models under
+`kubejs/assets/creativeengineering/`. Create's own dough keeps Create Compressed's block.
 
 **Cakes** (`CAKES`): baked base + frosting + 2 flavour (manual craft), or raw base + frosting + 2 flavour (oven, cake
 pan). Plain `minecraft:cake`: 3 frosting, or 2 frosting + one sweet berry, cranberry or cherry (`vinery:cherry`), both ways.
@@ -409,9 +426,9 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 | `.../CreativeEngineering.java` | `OvenRegistry.register`, `MenuScreens.register` |
 | `development/patcherMod/src/main/resources/assets/creativeengineering/{blockstates,models/block,models/item}/oven*.json`, `lang/en_us.json` | models, names |
 | `development/patcherMod/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
-| `kubejs/startup_scripts/cooking/bakeware.js` | bakeware items |
-| `kubejs/startup_scripts/cooking/baking_ingredients.js` | frosting, cookie dough (baking overhaul) |
-| `kubejs/server_scripts/cooking/baking.js` | baking + crafting recipes |
+| `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js` | bakeware items |
+| `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js` | frosting, cookie dough (baking overhaul) |
+| `kubejs/data/creative_delight/kubejs/creativeengineering/baking.js` | baking + crafting recipes |
 | `kubejs/server_scripts/cooking/cooking.js` "Muffins" | the dough fix |
 | `kubejs/server_scripts/tags/blocktags.js`, `cookingtags.js` | tags (2.4) |
 | `kubejs/startup_scripts/func/neoCraftHelper.js` | `ceBaking`, `hammering` |
@@ -512,6 +529,12 @@ Needs a patcherMod build in `mods/`.
   4 servings, 3 hunger each, Speed 30 s.
 - [ ] **OV-33 Chocolate cake spout** (recipe loaded: scratch server PASSED 2026-10-22; the Spout run: in game): a Spout with 500 mB chocolate over a Baked Cake Base on a depot gives a
   Chocolate Cake; JEI shows the filling recipe on the chocolate cake.
+- [ ] **OV-34 Dough textures:** Create Dough has the Farmer's Delight look; Ginger Dough is the same shape in its
+  ginger colours; Cookie Dough is Create's old dough shape in oat-dough tan; Frosting is no longer the cotton boll; the
+  Create Compressed Dough Block matches the new dough colour (inventory, placed, JEI). Cotton Boll unchanged.
+- [ ] **OV-35 Dough blocks:** JEI shows Gingerdough, Cookie Dough, Sweet Potato Dough, Oat Dough, Cucumber Dough and
+  Sourdough Blocks, each in its dough's colour (inventory, placed, held, breaking particles). 9 of a dough in the grid
+  gives its block; the block alone gives 9 back. A shovel breaks them fast, they drop themselves, they sound like slime.
 - [ ] **OV-14 Server:** the same on a dedicated server with a client (menu opens, slots sync, JEI page present).
 
 ## 8. History
@@ -572,3 +595,6 @@ Needs a patcherMod build in `mods/`.
 - 2026-10-22: muffin yields (OV-20, recipe level) and the CfB oven smoking probe (OV-24, `/kotest`) queued as SQ-OF-05,
   SQ-OF-06 ([testing/scratch_queue.md](testing/scratch_queue.md)); OV-23 tooltips stay in game.
 - 2026-10-22 (second bulk run): SQ-OF-05, SQ-OF-06 PASS on the scratch server. OV-24 done; OV-20's oven bake in game.
+- 2026-10-25: own textures for frosting, cookie dough, Create dough, ginger dough and the dough block (palette
+  swaps, table in 2.6; baked-goods #16). OV-34.
+- 2026-10-25: dough blocks for ginger, cookie, sweet potato, oat, cucumber and sourdough doughs (baked-goods #27). OV-35.

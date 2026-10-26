@@ -32,8 +32,8 @@ i.amethyst_lens = 'creativeengineering:amethyst_lens';
 i.wood_pellets = 'creativeengineering:wood_pellets';
 i.layered_obsidian = 'creativeengineering:layered_obsidian';
 // Oven — FD cooking-pot style baking block. Java: patcherMod oven/ package (block, GUI, JEI, the
-// creativeengineering:baking recipe type) | recipes: server_scripts/cooking/baking.js (NCH.ceBaking) |
-// bakeware items: startup_scripts/cooking/bakeware.js | feature_writeup/oven.md
+// creativeengineering:baking recipe type) | recipes: kubejs/data/creative_delight/kubejs/creativeengineering/baking.js (NCH.ceBaking) |
+// bakeware items: Creative Delight kubejs_startup/creativeengineering/bakeware.js | feature_writeup/oven.md
 i.oven = 'creativeengineering:oven';
 i.baking_sheet = 'creativeengineering:baking_sheet';
 i.cake_pan = 'creativeengineering:cake_pan';
@@ -196,6 +196,12 @@ i.onion_farmersdelight = 'farmersdelight:onion';
 i.fd_rope = 'farmersdelight:rope';
 i.any_wool = '#minecraft:wool';
 i.any_knife = '#forge:tools/knives';
+i.any_hoe = '#forge:tools/hoes';
+i.any_shears = '#forge:shears';
+i.t_forge_fences = '#forge:fences';
+i.t_forge_fence_gates = '#forge:fence_gates';
+i.t_forge_jams = '#forge:jams';
+i.t_fruitsdelight_jelly = '#fruitsdelight:jelly';     // Fruits Delight's 22 jam bottles
 i.planks_oak = 'minecraft:oak_planks';
 i.slab_oak = 'minecraft:oak_slab';
 i.vslab_oak = 'quark:oak_vertical_slab';
@@ -1533,7 +1539,7 @@ i.blue_bomb = 'supplementaries:bomb_blue';
 i.spiky_bomb = 'supplementaries:bomb_spiky';
 i.antique_ink = 'supplementaries:antique_ink';
 i.candy = 'supplementaries:candy';
-i.t_jar_cookies = '#supplementaries:cookies';    // what a Supplementaries jar takes at all (server_scripts/tags/jartags.js)
+i.t_jar_cookies = '#supplementaries:cookies';    // what a Supplementaries jar takes at all (kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js)
 // What may share one jar (patcherMod compat/JarMixing): two items mix when one jar_family tag holds both.
 i.t_jar_family_cookies = '#creativeengineering:jar_family/cookies';
 i.t_jar_family_candied_apples = '#creativeengineering:jar_family/candied_apples';
@@ -1900,9 +1906,27 @@ i.milk = '#forge:milk';
 i.milk_bucket = '#forge:milk';
 i.milk_bottle = '#forge:milk';
 i.flour = '#forge:flour/wheat';
-i.cornmeal = 'creativeengineering:cornmeal';          // startup_scripts/cooking/cornmeal.js
-i.frosting = 'creativeengineering:frosting';          // startup_scripts/cooking/baking_ingredients.js
-i.cookie_dough = 'creativeengineering:cookie_dough';  // startup_scripts/cooking/baking_ingredients.js
+i.cornmeal = 'creativeengineering:cornmeal';          // CD creativeengineering/cornmeal.js
+// Corn Delight 1.2.11 items on 1.0.3 (feature_writeup/corn_delight.md 2). Items: CD corn_delight/corn_items.js
+i.corncob = 'creativeengineering:corncob';
+i.corn_popsicle = 'creativeengineering:corn_popsicle';
+i.cob_pipe = 'creativeengineering:cob_pipe';          // head slot: patcherMod mixin/MobCobPipeSlotMixin, compat/CornDelightCompat
+i.cheese_toast = 'creativeengineering:cheese_toast';          // CD moredelight/cheese_toast.js
+i.t_curios_head = '#curios:head';
+i.t_curios_mouth = '#curios:mouth';                   // no such slot; the pack's face slot covers it (feature_writeup/curios_slots.md)
+i.t_curios_face = '#curios:face';                     // pack slot: kubejs/data/creativeengineering/curios/slots/face.json
+i.t_curios_hands = '#curios:hands';                   // pack slot: kubejs/data/creativeengineering/curios/slots/hands.json
+i.frosting = 'creativeengineering:frosting';          // CD creativeengineering/baking_ingredients.js
+i.cookie_dough = 'creativeengineering:cookie_dough';  // CD creativeengineering/baking_ingredients.js
+i.powdered_sugar = 'creativeengineering:powdered_sugar';  // CD creativeengineering/baking_ingredients.js
+i.powdered_sugar_bucket = 'creativeengineering:powdered_sugar_bucket';  // patcherMod food/PowderedSugarRegistry.java
+// Dough blocks (9 dough each; Create's is i.dough_block). Blocks: CD creativeengineering/baking_ingredients.js
+i.gingerdough_block = 'creativeengineering:gingerdough_block';
+i.cookie_dough_block = 'creativeengineering:cookie_dough_block';
+i.sweet_potato_dough_block = 'creativeengineering:sweet_potato_dough_block';
+i.oat_dough_block = 'creativeengineering:oat_dough_block';
+i.cucumber_dough_block = 'creativeengineering:cucumber_dough_block';
+i.sourdough_block = 'creativeengineering:sourdough_block';
 i.t_flour_corn = '#forge:flour/corn';
 i.t_flour_or_cornmeal = '#creativeengineering:flour_or_cornmeal'; // wheat flour or cornmeal: pancakes, pies, cakes
 i.t_crops_corn = '#forge:crops/corn';
@@ -1920,10 +1944,16 @@ i.t_fruits_cranberry = '#forge:fruits/cranberry';
 i.t_fruits_lemon = '#forge:fruits/lemon';
 i.t_fruits_fig = '#forge:fruits/fig';
 i.t_fruits_mangosteen = '#forge:fruits/mangosteen';
+i.t_fruits_hawberry = '#forge:fruits/hawberry';
+i.t_fruits_lychee = '#forge:fruits/lychee';
+i.t_fruits_mango = '#forge:fruits/mango';
+i.t_fruits_peach = '#forge:fruits/peach';
 i.t_fruits_bayberry = '#forge:fruits/bayberry';
 i.t_fruits_banana = '#forge:fruits/banana';
 i.t_crops_banana = '#forge:crops/banana';
 i.t_fruits_strawberry = '#forge:fruits/strawberry';
+i.t_fruits_pear = '#forge:fruits/pear';
+i.t_fruits_persimmon = '#forge:fruits/persimmon';
 i.t_fruits_salmonberries = '#forge:fruits/salmonberries';
 i.t_fruits_berries = '#forge:fruits/berries'; // Delightful's berry tag (berry matcha latte)
 i.t_ice_cubes = '#forge:ice_cubes';
@@ -1937,7 +1967,7 @@ i.onion = '#forge:crops/onion';
 i.tomato = '#forge:crops/tomato';
 i.rice = '#forge:crops/rice';
 i.mushrooms = '#forge:mushrooms';
-//Compost rule tags (startup_scripts/compost/compost_rules.js)
+//Compost rule tags (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js)
 i.t_seeds = '#forge:seeds';
 i.t_seeds_c = '#c:seeds';
 i.t_saplings = '#minecraft:saplings';
@@ -1950,6 +1980,8 @@ i.t_berries_c = '#c:berries';
 i.t_grain = '#forge:grain';
 i.t_nuts = '#forge:nuts';
 i.t_tea_leaves = '#forge:tea_leaves';
+i.t_respite_tea_leaves = '#farmersrespite:tea_leaves';   // Farmer's Respite's own tea leaf tag (Kettle recipes)
+i.t_lavender = '#forge:lavender';
 i.t_straw = '#minecraft:straw';
 i.t_botania_special_flowers = '#botania:special_flowers';
 i.t_botania_special_floating_flowers = '#botania:special_floating_flowers';
@@ -1978,20 +2010,92 @@ i.raw_fish = '#forge:raw_fishes';
 i.cooked_fish = '#forge:cooked_fishes';
 i.t_cooked_kangaroo = '#alexsdelight:cooked_kangaroo';
 i.t_cooked_duck = '#forge:cooked_duck';
+i.t_raw_duck = '#forge:raw_duck';
 // whole bread (vanilla, cornbread, sourdough; slices are #forge:bread_slices). i.bread is #forge:bread/wheat
 i.t_bread = '#forge:bread';
 i.t_tortilla = '#forge:tortilla';
 // frying (TODO dishes/meals #7): Rustic Delight's oil tag; sliced potatoes = Rustic's slices + More Delight's diced
 i.t_cooking_oil = '#rusticdelight:cooking_oil';
-i.t_sliced_potatoes = '#forge:sliced_potatoes';
+i.t_sliced_potato = '#forge:sliced_potato';
 // pack tags for meals (cookingtags.js, TODO dishes/meals #1, #2)
-i.t_soup_veggie_cooked = '#creativeengineering:soup_veggies_cooked';
-i.t_roasted_bell_pepper = '#creativeengineering:roasted_bell_peppers';   // Rustic's 3 colours (Veggies Delight's smoked pepper inputs)
-i.t_exotic_fruit = '#creativeengineering:exotic_fruits';
-i.t_fruit_salad_slice = '#creativeengineering:fruit_salad_slices';
+i.t_soup_veggie_cooked = '#creativeengineering:soup_veggie_cooked';
+i.t_roasted_bell_pepper = '#creativeengineering:roasted_bell_pepper';   // Rustic's 9 colours with Creative Delight (3 before) (Veggies Delight's smoked pepper inputs)
+// Rustic Delight 1.7.0 ids (Creative Delight member, feature_writeup/rustic_delight.md 5): only registered once the
+// Creative Delight jar replaces the 1.3.0 jar, so only Creative Delight's scripts use them.
+i.syrup                        = 'rusticdelight:syrup';
+i.t_syrup                      = '#rusticdelight:syrup';
+i.syrup_coffee                 = 'rusticdelight:syrup_coffee';
+i.pumpkin_coffee               = 'rusticdelight:pumpkin_coffee';
+i.cherry_blossom_coffee        = 'rusticdelight:cherry_blossom_coffee';
+i.pale_bell_pepper_seeds       = 'rusticdelight:pale_bell_pepper_seeds';
+i.dark_bell_pepper_seeds       = 'rusticdelight:dark_bell_pepper_seeds';
+i.pale_bell_pepper_seeds_bag   = 'rusticdelight:pale_bell_pepper_seeds_bag';
+i.dark_bell_pepper_seeds_bag   = 'rusticdelight:dark_bell_pepper_seeds_bag';
+i.roasted_coffee_beans_bag     = 'rusticdelight:roasted_coffee_beans_bag';
+i.calamari_crate               = 'rusticdelight:calamari_crate';
+i.syrup_cookie                 = 'rusticdelight:syrup_cookie';
+i.coffee_cookie                = 'rusticdelight:coffee_cookie';
+i.cherry_blossom_cookie        = 'rusticdelight:cherry_blossom_cookie';
+i.syrup_cheesecake             = 'rusticdelight:syrup_cheesecake';
+i.coffee_cheesecake            = 'rusticdelight:coffee_cheesecake';
+i.cherry_blossom_cheesecake    = 'rusticdelight:cherry_blossom_cheesecake';
+i.t_cherry_blossom             = '#rusticdelight:cherry_blossom_ingredients';   // Vinery cherry leaves, Quark pink blossom leaves
+i.bell_pepper_orange           = 'rusticdelight:bell_pepper_orange';
+i.roasted_bell_pepper_orange   = 'rusticdelight:roasted_bell_pepper_orange';
+i.bell_pepper_orange_crate     = 'rusticdelight:bell_pepper_orange_crate';
+i.bell_pepper_white            = 'rusticdelight:bell_pepper_white';
+i.roasted_bell_pepper_white    = 'rusticdelight:roasted_bell_pepper_white';
+i.bell_pepper_white_crate      = 'rusticdelight:bell_pepper_white_crate';
+i.bell_pepper_pink             = 'rusticdelight:bell_pepper_pink';
+i.roasted_bell_pepper_pink     = 'rusticdelight:roasted_bell_pepper_pink';
+i.bell_pepper_pink_crate       = 'rusticdelight:bell_pepper_pink_crate';
+i.bell_pepper_blue             = 'rusticdelight:bell_pepper_blue';
+i.roasted_bell_pepper_blue     = 'rusticdelight:roasted_bell_pepper_blue';
+i.bell_pepper_blue_crate       = 'rusticdelight:bell_pepper_blue_crate';
+i.bell_pepper_purple           = 'rusticdelight:bell_pepper_purple';
+i.roasted_bell_pepper_purple   = 'rusticdelight:roasted_bell_pepper_purple';
+i.bell_pepper_purple_crate     = 'rusticdelight:bell_pepper_purple_crate';
+i.bell_pepper_black            = 'rusticdelight:bell_pepper_black';
+i.roasted_bell_pepper_black    = 'rusticdelight:roasted_bell_pepper_black';
+i.bell_pepper_black_crate      = 'rusticdelight:bell_pepper_black_crate';
+// Delightful 3.8.1 items backported into the Delightful repack (Creative Delight member, feature_writeup/delightful.md
+// 3): only registered once the Creative Delight jar replaces the 3.4.1 jar, so only Creative Delight's scripts use them.
+i.cantaloupe_seeds             = 'delightful:cantaloupe_seeds';
+i.cantaloupe_bread             = 'delightful:cantaloupe_bread';
+i.wrapped_cantaloupe           = 'delightful:wrapped_cantaloupe';
+i.cantaloupe_popsicle          = 'delightful:cantaloupe_popsicle';
+i.stuffed_cantaloupe_block     = 'delightful:stuffed_cantaloupe_block';
+i.stuffed_cantaloupe           = 'delightful:stuffed_cantaloupe';
+i.cantaloupe_gummy             = 'delightful:cantaloupe_gummy';
+i.cactus_chili                 = 'delightful:cactus_chili';
+i.cactus_soup                  = 'delightful:cactus_soup';
+i.cactus_soup_cup              = 'delightful:cactus_soup_cup';
+i.baklava                      = 'delightful:baklava';
+i.baklava_slice                = 'delightful:baklava_slice';
+i.matcha_milkshake             = 'delightful:matcha_milkshake';
+i.salmonberry_milkshake        = 'delightful:salmonberry_milkshake';
+i.matcha_gummy                 = 'delightful:matcha_gummy';
+i.roasted_acorn                = 'delightful:roasted_acorn';
+i.nut_dough                    = 'delightful:nut_dough';
+i.aluminum_knife               = 'delightful:aluminum_knife';
+i.certus_quartz_knife          = 'delightful:certus_quartz_knife';
+i.fluix_knife                  = 'delightful:fluix_knife';
+i.fluix_block                  = 'ae2:fluix_block';
+i.t_matcha                     = '#forge:matcha';
+i.t_cooked_nuts                = '#forge:cooked_nuts';
+i.t_nut_butter                 = '#forge:nut_butter';
+i.t_crops_cactus               = '#forge:crops/cactus';
+i.t_hot_spices                 = '#delightful:hot_spices';
+i.t_fruits_cantaloupe          = '#forge:fruits/cantaloupe';
+i.t_nuts_acorn                 = '#forge:nuts/acorn';
+i.t_gems_certus_quartz         = '#forge:gems/certus_quartz';
+i.t_chilipepper                = '#forge:chilipepper';
+i.t_exotic_fruit = '#creativeengineering:exotic_fruit';
+i.t_fruit_salad_slice = '#creativeengineering:fruit_salad_slice';
 
 //Farmer's Delight
 i.cabbage_roll_veg = '#farmersdelight:cabbage_roll_ingredients';
+i.t_wolf_prey = '#farmersdelight:wolf_prey';            // Dog Food meat in 1.2.4 (replaced in creative_delight farmersdelight/recipes.js)
 
 //Ender's Delight
 i.shulker_flesh = '#endersdelight:shulker_loot';
@@ -11639,6 +11743,12 @@ i.wild_potatoes                 = 'farmersdelight:wild_potatoes';
 i.wild_rice                     = 'farmersdelight:wild_rice';
 i.wild_tomatoes                 = 'farmersdelight:wild_tomatoes';
 i.yellow_canvas_sign            = 'farmersdelight:yellow_canvas_sign';
+// FD 1.3.4 backports in the Creative Delight repack (farmers_delight.md 3); unresolved until CD is installed
+i.rope_fence                    = 'farmersdelight:rope_fence';
+i.rope_fence_gate               = 'farmersdelight:rope_fence_gate';
+i.gleaming_salad                = 'farmersdelight:gleaming_salad';
+i.gleaming_salad_block          = 'farmersdelight:gleaming_salad_block';
+i.fd_pumpkin_pie_slice          = 'farmersdelight:pumpkin_pie_slice';
 
 // ===== dustrial_decor  -  84 new  (106 items, 22 already mapped) =====
 i.anchor                                   = 'dustrial_decor:anchor';
@@ -12233,6 +12343,59 @@ i.creamy_corn_drink  = 'corn_delight:creamy_corn_drink';
 i.nachos_bowl        = 'corn_delight:nachos_bowl';
 i.tortilla_chip      = 'corn_delight:tortilla_chip';
 
+// ===== create_central_kitchen (2) =====
+i.incomplete_chorus_flower_pie = 'create_central_kitchen:incomplete_chorus_flower_pie';
+i.incomplete_chorus_fruit_pie  = 'create_central_kitchen:incomplete_chorus_fruit_pie';
+
+// ===== ends_delight (47) =====
+i.assorted_salad                = 'ends_delight:assorted_salad';
+i.bubble_tea                    = 'ends_delight:bubble_tea';
+i.chorus_cookie                 = 'ends_delight:chorus_cookie';
+i.chorus_flower_pie             = 'ends_delight:chorus_flower_pie';
+i.chorus_flower_tea             = 'ends_delight:chorus_flower_tea';
+i.chorus_fruit_grain            = 'ends_delight:chorus_fruit_grain';
+i.chorus_fruit_milk_tea         = 'ends_delight:chorus_fruit_milk_tea';
+i.chorus_fruit_pie_slice        = 'ends_delight:chorus_fruit_pie_slice';
+i.chorus_fruit_popsicle         = 'ends_delight:chorus_fruit_popsicle';
+i.chorus_fruit_wine             = 'ends_delight:chorus_fruit_wine';
+i.chorus_sauce                  = 'ends_delight:chorus_sauce';
+i.chorus_succulent              = 'ends_delight:chorus_succulent';
+i.dragon_breath_and_chorus_soup = 'ends_delight:dragon_breath_and_chorus_soup';
+i.dragon_breath_soda            = 'ends_delight:dragon_breath_soda';
+i.dragon_leg                    = 'ends_delight:dragon_leg';
+i.dragon_leg_with_sauce         = 'ends_delight:dragon_leg_with_sauce';
+i.dragon_meat_stew              = 'ends_delight:dragon_meat_stew';
+i.dried_endermite_meat          = 'ends_delight:dried_endermite_meat';
+i.end_barbecue_stick            = 'ends_delight:end_barbecue_stick';
+i.end_mixed_salad               = 'ends_delight:end_mixed_salad';
+i.ender_bamboo_rice             = 'ends_delight:ender_bamboo_rice';
+i.ender_congee                  = 'ends_delight:ender_congee';
+i.ender_noodle                  = 'ends_delight:ender_noodle';
+i.ender_sausage                 = 'ends_delight:ender_sausage';
+i.enderman_gristle              = 'ends_delight:enderman_gristle';
+i.enderman_gristle_stew         = 'ends_delight:enderman_gristle_stew';
+i.fried_dragon_egg              = 'ends_delight:fried_dragon_egg';
+i.grilled_shulker               = 'ends_delight:grilled_shulker';
+i.liquid_dragon_egg             = 'ends_delight:liquid_dragon_egg';
+i.raw_dragon_meat               = 'ends_delight:raw_dragon_meat';
+i.raw_dragon_meat_cuts          = 'ends_delight:raw_dragon_meat_cuts';
+i.raw_ender_mite_meat           = 'ends_delight:raw_ender_mite_meat';
+i.raw_ender_sausage             = 'ends_delight:raw_ender_sausage';
+i.roasted_dragon_meat           = 'ends_delight:roasted_dragon_meat';
+i.roasted_dragon_meat_cuts      = 'ends_delight:roasted_dragon_meat_cuts';
+i.roasted_dragon_steak          = 'ends_delight:roasted_dragon_steak';
+i.roasted_shulker_meat          = 'ends_delight:roasted_shulker_meat';
+i.roasted_shulker_meat_slice    = 'ends_delight:roasted_shulker_meat_slice';
+i.shulker_meat                  = 'ends_delight:shulker_meat';
+i.shulker_meat_slice            = 'ends_delight:shulker_meat_slice';
+i.shulker_omelette              = 'ends_delight:shulker_omelette';
+i.shulker_omelette_mixture      = 'ends_delight:shulker_omelette_mixture';
+i.shulker_soup                  = 'ends_delight:shulker_soup';
+i.smoked_dragon_leg             = 'ends_delight:smoked_dragon_leg';
+i.steamed_dragon_egg            = 'ends_delight:steamed_dragon_egg';
+i.stir_fried_shulker_meat       = 'ends_delight:stir_fried_shulker_meat';
+i.stuffed_rice_cake             = 'ends_delight:stuffed_rice_cake';
+
 // ===== farmersrespite (26) =====
 i.black_cod             = 'farmersrespite:black_cod';
 i.black_tea             = 'farmersrespite:black_tea';
@@ -12400,6 +12563,75 @@ i.golden_pumpkin_pie               = 'goldenfood:golden_pumpkin_pie';
 i.golden_rabbit_stew               = 'goldenfood:golden_rabbit_stew';
 i.golden_sweet_berries             = 'goldenfood:golden_sweet_berries';
 
+// ===== hostiledelight (67) =====
+i.ardentsauce            = 'hostiledelight:ardentsauce';
+i.aurorasoup             = 'hostiledelight:aurorasoup';
+i.blazecookie            = 'hostiledelight:blazecookie';
+i.blazingale             = 'hostiledelight:blazingale';
+i.blazingapple           = 'hostiledelight:blazingapple';
+i.bonegelatin            = 'hostiledelight:bonegelatin';
+i.candiedsalad           = 'hostiledelight:candiedsalad';
+i.candiedslime           = 'hostiledelight:candiedslime';
+i.carrotmite             = 'hostiledelight:carrotmite';
+i.caveskewer             = 'hostiledelight:caveskewer';
+i.cookedguardianfillet   = 'hostiledelight:cookedguardianfillet';
+i.cookedrottenham        = 'hostiledelight:cookedrottenham';
+i.cookendermite          = 'hostiledelight:cookendermite';
+i.dragontonic            = 'hostiledelight:dragontonic';
+i.enderpop               = 'hostiledelight:enderpop';
+i.endersubstance         = 'hostiledelight:endersubstance';
+i.friedturtleegg         = 'hostiledelight:friedturtleegg';
+i.frozen_flesh           = 'hostiledelight:frozen_flesh';
+i.ghastblood             = 'hostiledelight:ghastblood';
+i.ghastbloodicecream     = 'hostiledelight:ghastbloodicecream';
+i.ghastbrew              = 'hostiledelight:ghastbrew';
+i.ghastcookie            = 'hostiledelight:ghastcookie';
+i.ghastpudding           = 'hostiledelight:ghastpudding';
+i.ghastroll              = 'hostiledelight:ghastroll';
+i.ghasttentacle          = 'hostiledelight:ghasttentacle';
+i.glimmeringchowder      = 'hostiledelight:glimmeringchowder';
+i.glowapple              = 'hostiledelight:glowapple';
+i.glowbread              = 'hostiledelight:glowbread';
+i.glowgummy              = 'hostiledelight:glowgummy';
+i.glowingsauce           = 'hostiledelight:glowingsauce';
+i.glowpasta              = 'hostiledelight:glowpasta';
+i.glowwaxshuffle         = 'hostiledelight:glowwaxshuffle';
+i.greenpie               = 'hostiledelight:greenpie';
+i.grilledghast           = 'hostiledelight:grilledghast';
+i.guardianburger         = 'hostiledelight:guardianburger';
+i.guardiancookie         = 'hostiledelight:guardiancookie';
+i.guardianfillet         = 'hostiledelight:guardianfillet';
+i.guardianpatty          = 'hostiledelight:guardianpatty';
+i.guardianroll           = 'hostiledelight:guardianroll';
+i.guardianross           = 'hostiledelight:guardianross';
+i.guardiansandwich       = 'hostiledelight:guardiansandwich';
+i.guardiansashimi        = 'hostiledelight:guardiansashimi';
+i.guardiansoup           = 'hostiledelight:guardiansoup';
+i.guardiantartar         = 'hostiledelight:guardiantartar';
+i.magicalbutter          = 'hostiledelight:magicalbutter';
+i.magicbuttercookie      = 'hostiledelight:magicbuttercookie';
+i.magmabrownie           = 'hostiledelight:magmabrownie';
+i.magmacookie            = 'hostiledelight:magmacookie';
+i.magmajelly             = 'hostiledelight:magmajelly';
+i.marinecocktale         = 'hostiledelight:marinecocktale';
+i.mitecookie             = 'hostiledelight:mitecookie';
+i.miteymeal              = 'hostiledelight:miteymeal';
+i.pearlcookie            = 'hostiledelight:pearlcookie';
+i.popsiclime             = 'hostiledelight:popsiclime';
+i.preparedseapickle      = 'hostiledelight:preparedseapickle';
+i.rawendermite           = 'hostiledelight:rawendermite';
+i.refinedgelatin         = 'hostiledelight:refinedgelatin';
+i.rottenham              = 'hostiledelight:rottenham';
+i.rottenpie              = 'hostiledelight:rottenpie';
+i.seacucumbertea         = 'hostiledelight:seacucumbertea';
+i.silmesyrup             = 'hostiledelight:silmesyrup';
+i.slimebrownie           = 'hostiledelight:slimebrownie';
+i.slimestew              = 'hostiledelight:slimestew';
+i.hostiledelight_soda    = 'hostiledelight:soda';
+i.sunsetade              = 'hostiledelight:sunsetade';
+i.suspiciousbaconandaggs = 'hostiledelight:suspiciousbaconandaggs';
+i.turtleeggsandwich      = 'hostiledelight:turtleeggsandwich';
+
 // ===== moredelight (31) =====
 i.bread_slice                          = 'moredelight:bread_slice';
 i.carrot_soup                          = 'moredelight:carrot_soup';
@@ -12491,6 +12723,28 @@ i.strider_slice                 = 'nethersdelight:strider_slice';
 i.stuffed_hoglin                = 'nethersdelight:stuffed_hoglin';  // feast block (canned hoglin feast input)
 i.warped_moldy_meat             = 'nethersdelight:warped_moldy_meat';
 
+// ===== oceansdelight (20) =====
+i.baked_tentacle_on_a_stick      = 'oceansdelight:baked_tentacle_on_a_stick';
+i.bowl_of_guardian_soup          = 'oceansdelight:bowl_of_guardian_soup';
+i.braised_sea_pickle             = 'oceansdelight:braised_sea_pickle';
+i.cabbage_wrapped_elder_guardian = 'oceansdelight:cabbage_wrapped_elder_guardian';
+i.cooked_elder_guardian_slice    = 'oceansdelight:cooked_elder_guardian_slice';
+i.cooked_guardian_tail           = 'oceansdelight:cooked_guardian_tail';
+i.cooked_stuffed_cod             = 'oceansdelight:cooked_stuffed_cod';
+i.cut_tentacles                  = 'oceansdelight:cut_tentacles';
+i.elder_guardian_roll            = 'oceansdelight:elder_guardian_roll';
+i.elder_guardian_slab            = 'oceansdelight:elder_guardian_slab';
+i.elder_guardian_slice           = 'oceansdelight:elder_guardian_slice';
+i.fugu_roll                      = 'oceansdelight:fugu_roll';
+i.fugu_slice                     = 'oceansdelight:fugu_slice';
+i.guardian_tail                  = 'oceansdelight:guardian_tail';
+i.honey_fried_kelp               = 'oceansdelight:honey_fried_kelp';
+i.seagrass_salad                 = 'oceansdelight:seagrass_salad';
+i.squid_rings                    = 'oceansdelight:squid_rings';
+i.stuffed_cod                    = 'oceansdelight:stuffed_cod';
+i.tentacle_on_a_stick            = 'oceansdelight:tentacle_on_a_stick';
+i.oceansdelight_tentacles        = 'oceansdelight:tentacles';
+
 // ===== rusticdelight (33) =====
 i.baked_potato_slices        = 'rusticdelight:baked_potato_slices';
 i.batter                     = 'rusticdelight:batter';
@@ -12550,7 +12804,7 @@ i.mulberry_jam_bottle        = 'upgrade_aquatic:mulberry_jam_bottle';
 i.perch                      = 'upgrade_aquatic:perch';
 i.pike                       = 'upgrade_aquatic:pike';
 
-// ===== food type tags (server_scripts/tags/foodtypetags.js) =====
+// ===== food type tags (kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js) =====
 i.t_food_type                 = '#creativeengineering:food_type';
 i.t_food_raw                  = '#creativeengineering:food_type/raw';
 i.t_food_raw_veggie           = '#creativeengineering:food_type/raw/veggie';
@@ -12588,11 +12842,11 @@ i.t_food_canned               = '#creativeengineering:food_type/canned';
 i.t_canned_source             = '#creativeengineering:canned_source';
 // ===== end food mods (generated) =====
 
-// ===== can tags (server_scripts/tags/cantags.js, patcherMod food.CanServings) =====
+// ===== can tags (kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js, patcherMod food.CanServings) =====
 i.t_cans                        = '#creativeengineering:cans';
 i.t_can_servings                = '#creativeengineering:cans/servings'; // + '/<n>' = cans holding n servings
 
-// ===== canning (server_scripts/cooking/canning.js, startup_scripts/items/cans.js) =====
+// ===== canning (kubejs/data/creative_delight/kubejs/creativeengineering/canning.js, development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) =====
 // every can key is in the generated block below (tools/gen_can_types.py); Canned Goods' own cans are under canned_goods
 // additives
 i.salt                          = '#forge:salt';
@@ -12603,7 +12857,7 @@ i.any_cabbage                   = '#forge:crops/cabbage';           // cabbage, 
 i.any_potato                    = '#forge:vegetables/potato';       // potato, potato slices
 i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow
 // ===== BEGIN GENERATED CANS (tools/gen_can_types.py, do not edit) =====
-// 252 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
+// 272 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
 i.canned_beetroot                           = 'creativeengineering:canned_beetroot';
 i.canned_cabbage                            = 'creativeengineering:canned_cabbage';
 i.canned_carrot                             = 'creativeengineering:canned_carrot';
@@ -12619,6 +12873,9 @@ i.canned_cauliflower                        = 'creativeengineering:canned_caulif
 i.canned_sweet_potato                       = 'creativeengineering:canned_sweet_potato';
 i.canned_turnip                             = 'creativeengineering:canned_turnip';
 i.canned_zucchini                           = 'creativeengineering:canned_zucchini';
+i.canned_cucumber                           = 'creativeengineering:canned_cucumber';
+i.canned_ghost_pepper                       = 'creativeengineering:canned_ghost_pepper';
+i.canned_truffle                            = 'creativeengineering:canned_truffle';
 i.canned_apple                              = 'creativeengineering:canned_apple';
 i.canned_banana                             = 'creativeengineering:canned_banana';
 i.canned_cantaloupe                         = 'creativeengineering:canned_cantaloupe';
@@ -12679,6 +12936,7 @@ i.canned_mulberry_cookie                    = 'creativeengineering:canned_mulber
 i.canned_persimmon_cookie                   = 'creativeengineering:canned_persimmon_cookie';
 i.canned_sweet_berry_cookie                 = 'creativeengineering:canned_sweet_berry_cookie';
 i.canned_uncanny_cookie                     = 'creativeengineering:canned_uncanny_cookie';
+i.canned_oatmeal_cookie                     = 'creativeengineering:canned_oatmeal_cookie';
 i.canned_cooked_cactus_steak                = 'creativeengineering:canned_cooked_cactus_steak';
 i.canned_cooked_rice                        = 'creativeengineering:canned_cooked_rice';
 i.canned_roasted_bell_pepper                = 'creativeengineering:canned_roasted_bell_pepper';
@@ -12698,6 +12956,11 @@ i.canned_tortilla_chip                      = 'creativeengineering:canned_tortil
 i.canned_baked_sweet_potato                 = 'creativeengineering:canned_baked_sweet_potato';
 i.canned_roasted_zucchini                   = 'creativeengineering:canned_roasted_zucchini';
 i.canned_roasted_cauliflower                = 'creativeengineering:canned_roasted_cauliflower';
+i.canned_pickled_beetroot                   = 'creativeengineering:canned_pickled_beetroot';
+i.canned_pickled_onion                      = 'creativeengineering:canned_pickled_onion';
+i.canned_pickled_pepper                     = 'creativeengineering:canned_pickled_pepper';
+i.canned_roasted_peanut                     = 'creativeengineering:canned_roasted_peanut';
+i.canned_cooked_inky_cap                    = 'creativeengineering:canned_cooked_inky_cap';
 i.canned_glazed_porkchop                    = 'creativeengineering:canned_glazed_porkchop';
 i.canned_jerky                              = 'creativeengineering:canned_jerky';
 i.canned_maple_glazed_bacon                 = 'creativeengineering:canned_maple_glazed_bacon';
@@ -12706,6 +12969,7 @@ i.canned_cooked_catfish                     = 'creativeengineering:canned_cooked
 i.canned_cooked_perch                       = 'creativeengineering:canned_cooked_perch';
 i.canned_cooked_pike                        = 'creativeengineering:canned_cooked_pike';
 i.canned_cooked_lionfish                    = 'creativeengineering:canned_cooked_lionfish';
+i.canned_surstromming                       = 'creativeengineering:canned_surstromming';
 i.canned_sweet_roll                         = 'creativeengineering:canned_sweet_roll';
 i.canned_bell_pepper_pasta                  = 'creativeengineering:canned_bell_pepper_pasta';
 i.canned_cheesy_pasta                       = 'creativeengineering:canned_cheesy_pasta';
@@ -12725,6 +12989,9 @@ i.canned_creamed_corn                       = 'creativeengineering:canned_creame
 i.canned_dumplings                          = 'creativeengineering:canned_dumplings';
 i.canned_pasta_with_broccoli                = 'creativeengineering:canned_pasta_with_broccoli';
 i.canned_potato_noodles                     = 'creativeengineering:canned_potato_noodles';
+i.canned_cheese_pasta                       = 'creativeengineering:canned_cheese_pasta';
+i.canned_pad_thai                           = 'creativeengineering:canned_pad_thai';
+i.canned_truffle_pasta                      = 'creativeengineering:canned_truffle_pasta';
 i.canned_apple_pie_filling                  = 'creativeengineering:canned_apple_pie_filling';
 i.canned_chocolate_pie_filling              = 'creativeengineering:canned_chocolate_pie_filling';
 i.canned_chorus_pie_filling                 = 'creativeengineering:canned_chorus_pie_filling';
@@ -12750,6 +13017,7 @@ i.canned_stuffed_shulker                    = 'creativeengineering:canned_stuffe
 i.canned_powdered_milk                      = 'creativeengineering:canned_powdered_milk';
 i.canned_flaxen_cheese                      = 'creativeengineering:canned_flaxen_cheese';
 i.canned_scarlet_cheese                     = 'creativeengineering:canned_scarlet_cheese';
+i.canned_cheese_slice                       = 'creativeengineering:canned_cheese_slice';
 i.canned_tomato_sauce                       = 'creativeengineering:canned_tomato_sauce';
 i.canned_dough                              = 'creativeengineering:canned_dough';
 i.canned_pear_with_rock_sugar               = 'creativeengineering:canned_pear_with_rock_sugar';
@@ -12768,8 +13036,10 @@ i.canned_broccoli_salad                     = 'creativeengineering:canned_brocco
 i.canned_cesar_salad                        = 'creativeengineering:canned_cesar_salad';
 i.canned_chicken_salad                      = 'creativeengineering:canned_chicken_salad';
 i.canned_coleslaw                           = 'creativeengineering:canned_coleslaw';
+i.canned_cucumber_salad                     = 'creativeengineering:canned_cucumber_salad';
 i.canned_field_salad                        = 'creativeengineering:canned_field_salad';
 i.canned_fruit_salad                        = 'creativeengineering:canned_fruit_salad';
+i.canned_inky_caps_salad                    = 'creativeengineering:canned_inky_caps_salad';
 i.canned_lush_moss_salad                    = 'creativeengineering:canned_lush_moss_salad';
 i.canned_mango_salad                        = 'creativeengineering:canned_mango_salad';
 i.canned_mixed_salad                        = 'creativeengineering:canned_mixed_salad';
@@ -12791,14 +13061,18 @@ i.canned_cauliflower_soup                   = 'creativeengineering:canned_caulif
 i.canned_chicken_soup                       = 'creativeengineering:canned_chicken_soup';
 i.canned_chorus_stew                        = 'creativeengineering:canned_chorus_stew';
 i.canned_corn_soup                          = 'creativeengineering:canned_corn_soup';
+i.canned_creamy_morel_soup                  = 'creativeengineering:canned_creamy_morel_soup';
 i.canned_creamy_onion_soup                  = 'creativeengineering:canned_creamy_onion_soup';
 i.canned_endermite_stew                     = 'creativeengineering:canned_endermite_stew';
 i.canned_fig_chicken_stew                   = 'creativeengineering:canned_fig_chicken_stew';
 i.canned_fish_stew                          = 'creativeengineering:canned_fish_stew';
 i.canned_garlic_chicken_stew                = 'creativeengineering:canned_garlic_chicken_stew';
+i.canned_ghostly_chili                      = 'creativeengineering:canned_ghostly_chili';
 i.canned_kangaroo_stew                      = 'creativeengineering:canned_kangaroo_stew';
 i.canned_miso_with_bamboo_sprouts           = 'creativeengineering:canned_miso_with_bamboo_sprouts';
 i.canned_noodle_soup                        = 'creativeengineering:canned_noodle_soup';
+i.canned_oatmeal                            = 'creativeengineering:canned_oatmeal';
+i.canned_pickle_soup                        = 'creativeengineering:canned_pickle_soup';
 i.canned_pumpkin_soup                       = 'creativeengineering:canned_pumpkin_soup';
 i.canned_sinigang                           = 'creativeengineering:canned_sinigang';
 i.canned_sopa_de_macaco                     = 'creativeengineering:canned_sopa_de_macaco';
@@ -13408,12 +13682,17 @@ i.sealed_delivery_agreement = 'wares:sealed_delivery_agreement';
 
 // ############################## Placeable food (generated by tools/placeable_catalog.py) ##############################
 // Placeable foods that had no key elsewhere, plus the placeable tag keys
-// (server_scripts/tags/placeabletags.js, client_scripts/placeable_tooltip.js). Re-run the tool to add more.
+// (server_scripts/tags/placeabletags.js, assets/creative_delight/kubejs/_qol/placeable_tooltip.js). Re-run the tool to add more.
 
-i.enchanted_golden_cake = 'goldenfood:enchanted_golden_cake';
-i.golden_cake           = 'goldenfood:golden_cake';
-i.king_danis_wine       = 'vinery:king_danis_wine';
-i.mead                  = 'vinery:mead';
+i.chorus_fruit_pie         = 'ends_delight:chorus_fruit_pie';
+i.dragon_meat_stew_block   = 'ends_delight:dragon_meat_stew_block';
+i.grilled_shulker_block    = 'ends_delight:grilled_shulker_block';
+i.steamed_dragon_egg_block = 'ends_delight:steamed_dragon_egg_block';
+i.enchanted_golden_cake    = 'goldenfood:enchanted_golden_cake';
+i.golden_cake              = 'goldenfood:golden_cake';
+i.guardian_soup            = 'oceansdelight:guardian_soup';
+i.king_danis_wine          = 'vinery:king_danis_wine';
+i.mead                     = 'vinery:mead';
 
 i.t_placeable                = '#creativeengineering:placeable';
 i.t_placeable_sneak          = '#creativeengineering:placeable/sneak';
@@ -13767,6 +14046,13 @@ i.lasagna_slice                  = 'veggiesdelight:lasagna_slice';
 i.stuffed_bellpeppers_block      = 'veggiesdelight:stuffed_bellpeppers_block';
 i.stuffed_bellpepper             = 'veggiesdelight:stuffed_bellpepper';
 
+// ===== Food dict audit (2026-10-25): foods and kitchen ingredients with no key (tools/food_dict.py) =====
+i.dried_chorus_flower      = 'ends_delight:dried_chorus_flower';
+i.ender_pearl_grain        = 'ends_delight:ender_pearl_grain';
+i.non_hatchable_dragon_egg = 'ends_delight:non_hatchable_dragon_egg';
+i.raw_stuffed_hoglin       = 'nethersdelight:raw_stuffed_hoglin';
+i.splash_milk_bottle       = 'splash_milk:milk_bottle';
+
 // ############################## Validation ##############################
 
 StartupEvents.postInit(() => {
@@ -13795,6 +14081,13 @@ StartupEvents.postInit(() => {
 
 // ===== simplehats  -  1 new (removed: Vintage Delight's 16 chef hats replace it, vintage_delight.md S15) =====
 i.simplehats_chefshat            = 'simplehats:chefshat';
+i.simplehats_chalk_stick         = 'simplehats:chalk_stick';
+i.simplehats_angrymask           = 'simplehats:angrymask';
+i.simplehats_cucumbereyemask     = 'simplehats:cucumbereyemask';
+i.simplehats_ghostmask           = 'simplehats:ghostmask';
+i.simplehats_hockeymask          = 'simplehats:hockeymask';
+i.simplehats_horsemask           = 'simplehats:horsemask';
+i.simplehats_sleepeyemask        = 'simplehats:sleepeyemask';
 
 // ===== vintagedelight (134) - development/backportedVintage, feature_writeup/vintage_delight.md; 2026-10-23 =====
 // Prefixed where the bare key was taken: kimchi, salt
@@ -14044,6 +14337,57 @@ i.cave_soup_cup                     = 'miners_delight:cave_soup_cup';
 i.bat_soup_cup                      = 'miners_delight:bat_soup_cup';
 i.insect_stew_cup                   = 'miners_delight:insect_stew_cup';
 i.onion_soup_cup                    = 'miners_delight:onion_soup_cup';
+
+// ===== oceanic_delight (47) - ocean_delight.md; 2026-10-25 =====
+// Prefixed oceanic_ where the bare key was taken. salmon_eggs is keyed caviar (shown as Caviar, dishes/ocean #5).
+i.ancient_fish_eggs               = 'oceanic_delight:ancient_fish_eggs';
+i.bowl_of_paella                  = 'oceanic_delight:bowl_of_paella';
+i.caesar_salad                    = 'oceanic_delight:caesar_salad';
+i.caviar_toast                    = 'oceanic_delight:caviar_toast';
+i.egg_roll                        = 'oceanic_delight:egg_roll';
+i.elder_guardian_eye              = 'oceanic_delight:elder_guardian_eye';
+i.fish_egg_noodle_soup            = 'oceanic_delight:fish_egg_noodle_soup';
+i.fish_egg_roll                   = 'oceanic_delight:fish_egg_roll';
+i.fish_egg_roll_slice             = 'oceanic_delight:fish_egg_roll_slice';
+i.fishing_net                     = 'oceanic_delight:fishing_net';
+i.fried_shrimp                    = 'oceanic_delight:fried_shrimp';
+i.globular_rice                   = 'oceanic_delight:globular_rice';
+i.glow_squid_stew                 = 'oceanic_delight:glow_squid_stew';
+i.glow_squid_tentacles            = 'oceanic_delight:glow_squid_tentacles';
+i.grilled_squid_tentacles         = 'oceanic_delight:grilled_squid_tentacles';
+i.nautilus_juice                  = 'oceanic_delight:nautilus_juice';
+i.paella_plate                    = 'oceanic_delight:paella_plate';
+i.pasta_with_eyeball              = 'oceanic_delight:pasta_with_eyeball';
+i.plate_of_stuffed_pufferfish     = 'oceanic_delight:plate_of_stuffed_pufferfish';
+i.oceanic_potato_salad            = 'oceanic_delight:potato_salad';
+i.caviar                          = 'oceanic_delight:salmon_eggs';
+i.sea_grape                       = 'oceanic_delight:sea_grape';
+i.sea_grape_crate                 = 'oceanic_delight:sea_grape_crate';
+i.sea_grape_fruit                 = 'oceanic_delight:sea_grape_fruit';
+i.sea_grape_juice                 = 'oceanic_delight:sea_grape_juice';
+i.sea_grape_plant                 = 'oceanic_delight:sea_grape_plant';
+i.sea_pickle_crate                = 'oceanic_delight:sea_pickle_crate';
+i.sea_pickle_roll                 = 'oceanic_delight:sea_pickle_roll';
+i.sea_pickle_roll_slice           = 'oceanic_delight:sea_pickle_roll_slice';
+i.sea_pickle_slices               = 'oceanic_delight:sea_pickle_slices';
+i.sea_salad                       = 'oceanic_delight:sea_salad';
+i.seafood_skewer                  = 'oceanic_delight:seafood_skewer';
+i.shrimp                          = 'oceanic_delight:shrimp';
+i.shrimp_chips                    = 'oceanic_delight:shrimp_chips';
+i.shrimp_rice                     = 'oceanic_delight:shrimp_rice';
+i.shrimp_roll                     = 'oceanic_delight:shrimp_roll';
+i.shrimp_slices                   = 'oceanic_delight:shrimp_slices';
+i.shrimp_stew                     = 'oceanic_delight:shrimp_stew';
+i.sponge_cake                     = 'oceanic_delight:sponge_cake';
+i.sponge_cake_slice               = 'oceanic_delight:sponge_cake_slice';
+i.squid_and_pickles               = 'oceanic_delight:squid_and_pickles';
+i.squid_salad                     = 'oceanic_delight:squid_salad';
+i.squid_tentacles                 = 'oceanic_delight:squid_tentacles';
+i.steamed_beef                    = 'oceanic_delight:steamed_beef';
+i.stuffed_pufferfish              = 'oceanic_delight:stuffed_pufferfish';
+i.oceanic_takoyaki                = 'oceanic_delight:takoyaki';
+i.wild_sea_grape                  = 'oceanic_delight:wild_sea_grape';
+i.t_fishing_net_coral              = '#creativeengineering:fishing_net/coral';  // live corals and fans the net drops in warm oceans
 
 // ===== Removed items with no other key (2026-10-23, removed_items.js) =====
 i.passion_aloe_nectar           = 'abnormals_delight:passion_aloe_nectar';  // needs Atmospheric (ui/effects #6)

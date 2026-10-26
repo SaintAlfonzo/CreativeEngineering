@@ -1,0 +1,17 @@
+// requires: veggiesdelight
+// requires: rusticdelight
+// Veggies Delight chest loot additions (vintageport #5). Its crop crates and chest entries are in loot/07_rules.js;
+// its bell pepper is Rustic Delight's, whose crates and seed bag had no pack rule.
+//
+// Wrapped in an IIFE: all server scripts share one top-level scope.
+
+(function () {
+    if (!global.lootTuning) return
+    var L = global.lootTuning
+    var i = global.item
+
+    L.pack(i.bell_pepper_red_crate,    i.bell_pepper_red)
+    L.pack(i.bell_pepper_green_crate,  i.bell_pepper_green)
+    L.pack(i.bell_pepper_yellow_crate, i.bell_pepper_yellow)
+    L.pack(i.bell_pepper_seeds_bag,    i.bell_pepper_seeds)
+})()

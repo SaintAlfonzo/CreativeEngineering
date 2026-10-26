@@ -5,7 +5,7 @@
 // are read at world load, not on /reload). Only chunks generated afterwards change. Reference + tests:
 // feature_writeup/flowers.md; resolved numbers per biome: feature_writeup/flowers_by_biome.md
 // (python3 tools/gen_wild_flowers.py evaluates the same rules offline). Biome traits are the ones in
-// wild_crops.json "biomes"; a clause means the same thing in both files.
+// biome_traits.json; a clause means the same thing as in the wild crop rules.
 //
 // What it writes (ServerEvents.highPriorityData: KubeJS's top-priority virtual datapack, above the mod jars and
 // kubejs/data):
@@ -21,7 +21,7 @@
 // Anything that names a mod which isn't loaded is skipped: an unknown id stops the world loading.
 //
 // The tags handler can't check biome ids (KubeJS runs it as a pre-pass without a registry, see
-// wild_crops.js), so ServerEvents.loaded compares the live tags with the rules.
+// _biome_rules.js), so ServerEvents.loaded compares the live tags with the rules.
 //
 // CEConfig [worldgen.systems] wildFlowers = false: nothing here runs, every flower as its mod ships it.
 //
@@ -31,7 +31,7 @@
 
 	var CONFIG_PATH = 'kubejs/generation_scripts/worldgen/wild_flowers.json'
 	var SNAPSHOT_PATH = 'kubejs/generation_scripts/worldgen/flower_features.json'
-	var TRAITS_PATH = 'kubejs/generation_scripts/worldgen/wild_crops.json'
+	var TRAITS_PATH = 'kubejs/generation_scripts/worldgen/biome_traits.json'
 	var NS = 'creativeengineering:'
 	var PREFIX = 'wild_flowers/'
 	var NEVER = { ocean: true, cave: true }
@@ -118,7 +118,7 @@
 		return false
 	}
 
-	// where/add/except, as wild_crops.js. An entry with 'follows' takes the biome list the generator resolved for it
+	// where/add/except, as the wild crop rules. An entry with 'follows' takes the biome list the generator resolved for it
 	// (snapshot 'follows': every biome where that flower generates after the pack's rules), stored in load().
 	function resolve(traits, entry) {
 		if (entry.follows) return (entry._follows || []).slice()

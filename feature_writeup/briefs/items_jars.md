@@ -9,7 +9,7 @@ Related rows: `cooking/kitchen #18` (lava bottles, folded into row 3), `dishes/i
 
 - **Jar machinery** (all patcherMod, see mixed_jars.md 3 and 5): `mixin/SupplementariesJarTileMixin` (one slot per
   capacity point, one item per slot), `compat/JarMixing` (`canMix`, families = tags `#creativeengineering:jar_family/<name>`
-  from [jartags.js](../../kubejs/server_scripts/tags/jartags.js), keys `i.t_jar_family_*`), the two renderer mixins
+  from [jartags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js), keys `i.t_jar_family_*`), the two renderer mixins
   (`SupplementariesJarRendererMixin`, `SupplementariesJarItemRendererMixin`), `SupplementariesJarItemTooltipMixin`,
   `compat/WthitHolderContents`. What a jar takes at all is `#supplementaries:cookies` (`i.t_jar_cookies`).
 - **Capacity** is Supplementaries' `[functional.jar] capacity = 12` in `config/supplementaries-common.toml` ("leave at 12
@@ -180,7 +180,7 @@ Status **Planned** (investigation) / Work none / TODO `items/jars #6`
 Explain, then fix or document, why the hyperxp and toast items show as a jar family.
 
 ### Now
-- They are not a family. [jartags.js](../../kubejs/server_scripts/tags/jartags.js) line 6 and `item_dict` line 73 put
+- They are not a family. [jartags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js) line 6 and `item_dict` line 73 put
   `moredelight:toast` (its own mod's tag) and `i.hyper_experience_bottle` in `#supplementaries:cookies` only: jarable, no
   `jar_family/*` tag, so each fills a jar alone (mixed_jars.md 2).
 - The JEI Jar Storage tab builds a last row from every `#supplementaries:cookies` item that is in no family (`cookie_rows`,

@@ -5,7 +5,7 @@
 //              compost_values.js, "rule" = a category in compost_rules.js) and category
 //   excluded   items a value or rule (or the original table) would compost, blocked by an exclusion
 //
-// The framework is startup_scripts/func/compost.js; tools/gen_compost_values.py reads this dump.
+// The framework is compost.js in patcherMod's jar (development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/); tools/gen_compost_values.py reads this dump.
 
 ServerEvents.commandRegistry(event => {
 	var { commands: Commands } = event

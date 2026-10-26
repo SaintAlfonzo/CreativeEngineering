@@ -19,10 +19,14 @@
     "  apply     what makes a changed output take effect, shown only when something changed",
     "  warnExit  exit codes that mean 'finished with findings' rather than 'failed' (optional)",
     "  highlight extra regexes, on top of the top-level list, whose matching output lines go to chat",
+    "  outRoot   output folder for a generator that writes Creative Delight member rows (optional; read by the",
+    "            script through tools/gen_out.py, not by /cegen). Must be one of the CD trees the jar build copies,",
+    "            e.g. kubejs/data/creative_delight/kubejs/<modid>; its outputs must lie under it. Missing = pack folder.",
+    "            The CD jar has to be rebuilt after such a run (build_deploy refuses a stale jar)",
     "",
     "Not listed on purpose: dump_server_mods.py (it copies ~300 jars; in game it is /dumpservermods), echo_texture.py and",
     "potion_bucket_texture.py (one-off art tools that take arguments), gen_bedspreads/elytra_pattern_compat.py",
-    "(they write patcherMod resources, so their output needs a jar rebuild, not a game restart)."
+    "and gen_dd_dishes.py (they write patcherMod resources, so their output needs a jar rebuild, not a game restart)."
   ],
   "highlight": [
     "WARNING",
@@ -248,6 +252,16 @@
       "dumps": ["dumpfood", "dumpplaceable", "dumptags item"],
       "outputs": ["feature_writeup/food_families.md"],
       "apply": "nothing in game reads it (writeup only)"
+    },
+    {
+      "id": "food_dict",
+      "script": "tools/food_dict.py",
+      "groups": ["reports", "food"],
+      "dumps": ["dumpfood"],
+      "outputs": ["kubejs/generation_scripts/food/food_dict_index.json"],
+      "apply": "nothing in game reads the index; copy proposed lines into startup_scripts/_lib/food_dict.js (or run with --append), then restart",
+      "warnExit": [1],
+      "highlight": ["with no key", "problem\\(s\\)"]
     },
     {
       "id": "immersive_paintings",

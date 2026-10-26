@@ -8,7 +8,7 @@ directly; nothing regenerates this file.
 
 | Part | Status |
 |---|---|
-| Raw veggie / fruit / meat cans (hand-written, [cans.js](../kubejs/startup_scripts/items/cans.js)) | 2026-10-13: removed mint, acorn, grapes, mite crust, raw ham/chevon/hoglin/kangaroo/moose/bison/bunfungus; White Strawberries got their own can; Canned Cactus is now Canned Cactus Flesh (and the item Cactus Chunk is renamed Cactus Flesh). Not run in game (CP-01 to CP-05) |
+| Raw veggie / fruit / meat cans (hand-written, [cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js)) | 2026-10-13: removed mint, acorn, grapes, mite crust, raw ham/chevon/hoglin/kangaroo/moose/bison/bunfungus; White Strawberries got their own can; Canned Cactus is now Canned Cactus Flesh (and the item Cactus Chunk is renamed Cactus Flesh). Not run in game (CP-01 to CP-05) |
 | Generated cans (cookies, cooked, bread, salad, soup, golden; [can_types.json](../kubejs/generation_scripts/food/can_types.json)) | DEPLOYED with 1.0.6, untested in game (see [food.md](food.md)) |
 | Every remaining `x` row, `/` removals, alt inputs (2026-10-13) | BUILT, not run in game (CP-07 to CP-14): 17 raw fruit, shulker, 12 raw fish, 4 hazard, 2 special, 11 cookies, 10 cooked veggie, 3 cooked meat, 11 pastas, 9 pie fillings, 9 feasts, 2 drinks; 15 `/` cans removed; sliced alt inputs. 6 pie slices skipped (no source). Meal/pie/feast/drink/hazard values are placeholders ([3.1](#new-sections)) |
 | Can crafts, family sprites, values (2026-10-21) | BUILT; values, recipes and removals scratch server PASSED 2026-10-22 (SQ-OF-00 to SQ-OF-03); not run in game (CP-15 to CP-21): the 20 buildable `Want x` rows without a can ([TODO](todo/TODO.md) `cans/canning #14`); the hand-written raw veggie / fruit / meat cans moved into gen_can_types.py (same items, recipes, values and servings; they now carry their food's effects, `#4`; Cactus Flesh follows the rule); Canned Cake 1 cake or 4 slices + sugar / honey (`#15`); Canned Goods' 13 cans that no recipe makes get their family's values, Canned Food and the Hot Hot Hotpot are removed; can-consuming recipes (filling + crust -> pie) are manual only and take full cans only (CP-22 to CP-25); every can without a sprite borrows its family's ([5.1](#sprites)). The 6 pie slices stay without a can (no source) |
@@ -112,8 +112,9 @@ Baked Potato meals (5, 6), 2 servings. Additive: salt or bone broth.
 | x | Maize `corn_delight:corn` | Canned Corn | 6 / 4+1 | Corn Kernel: no (not canned) | x | / | x | x | none | 2 / 0.8 | 12 / 4.8 | 10 / 12 | 83% / 250% | 100% / 100% |
 | x | Broccoli `veggiesdelight:broccoli` | Canned Broccoli | 5 / 3+1 | - | x | / | x | x | none | 2 / 1.6 | 10 / 8 | 10 / 12 | 100% / 150% | 100% / 100% |
 | x | Cauliflower `veggiesdelight:cauliflower` | Canned Cauliflower | 2 / 1+1 | Cauliflower Floret: x | x | / | x | x | none | 4 / 3.2 | 8 / 6.4 | 10 / 12 | 125% / 188% | 100% / 100% |
-| x | Cucumber `vintagedelight:cucumber` (configured; waits on /dumpfood with Vintage loaded) | Canned Cucumber | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Ghost Pepper `vintagedelight:ghost_pepper` (configured; waits on /dumpfood with Vintage loaded) | Canned Ghost Pepper | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Cucumber `vintagedelight:cucumber` (configured; waits on /dumpfood with Vintage loaded) | Canned Cucumber | - | - | - | - | - | x | - | 2 / 0.8 | 12 / 4.8 | 10 / 12 | 83% / 250% | 100% / 100% |
+| x | Ghost Pepper `vintagedelight:ghost_pepper` (configured; waits on /dumpfood with Vintage loaded) | Canned Ghost Pepper | - | - | - | - | - | x | - | 3 / 1.2 | 12 / 4.8 | 10 / 12 | 83% / 250% | 100% / 100% |
+| x | Truffle `fungidelight:truffle` (fungi_delight.md step 8; waits on /dumpfood after the restart) | Canned Truffle | - | Truffle Slice: x | - | - | - | x | - | 6 / 7.2 | 6 / 7.2 | 10 / 12 | 167% / 167% | 100% / 100% |
 | x | Sweet Potato `veggiesdelight:sweet_potato` | Canned Sweet Potato | 5 / 3+1 | - | x | / | x | x | none | 2 / 1.6 | 10 / 8 | 10 / 12 | 100% / 150% | 100% / 100% |
 | x | Turnip `veggiesdelight:turnip` | Canned Turnip | 5 / 3+1 | - | x | / | x | x | none | 2 / 1.6 | 10 / 8 | 10 / 12 | 100% / 150% | 100% / 100% |
 | x | Zucchini `veggiesdelight:zucchini` | Canned Zucchini | 3 / 2+1 | Zucchini Slice: x | x | / | x | x | none | 3 / 2.4 | 9 / 7.2 | 10 / 12 | 111% / 167% | 100% / 100% |
@@ -247,7 +248,7 @@ Cookie x2 meals, 5 servings, fast. Additive: sugar.
 | x | Persimmon Cookie `fruitsdelight:persimmon_cookie` | Canned Persimmon Cookies | 8 / 6+1 | - | x | - | x | x | x | 1 / 0.6 | 8 / 4.8 | 10 / 6 | 125% / 125% | 100% / 100% |
 | x | Sweet Berry Cookie `farmersdelight:sweet_berry_cookie` | Canned Sweet Berry Cookies | 8 / 6+1 | - | x | - | x | x | none | 2 / 0.4 | 16 / 3.2 | 20 / 4 | 125% / 125% | 100% / 100% |
 | x | Uncanny Cookie `endersdelight:uncanny_cookies` | Canned Uncanny Cookies | 8 / 6+1 | - | x | - | x | x | x | 5 / 6 | 40 / 48 | 50 / 60 | 125% / 125% | 100% / 100% |
-| x | Oatmeal Cookie `vintagedelight:oatmeal_cookie` (configured; waits on /dumpfood with Vintage loaded) | Canned Oatmeal Cookies | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Oatmeal Cookie `vintagedelight:oatmeal_cookie` (configured; waits on /dumpfood with Vintage loaded) | Canned Oatmeal Cookies | - | - | - | - | - | x | - | 2 / 1.2 | 16 / 9.6 | 20 / 12 | 125% / 125% | 100% / 100% |
 
 ### 2.6 Cooked veggie and fruit <a id="cooked-veggie"></a>
 
@@ -276,13 +277,14 @@ Item x2 meals, 4 servings. Additive: salt.
 | x | Roasted Adzuki Beans `neapolitan:roasted_adzuki_beans` | Canned Roasted Adzuki Beans | 6 / 5+1 | - | x | - | x | x | x | 3 / 2.4 | 18 / 14.4 | 24 / 19.2 | 133% / 133% | 100% / 100% |
 | x | Tortilla Chip `corn_delight:tortilla_chip` | Canned Tortilla Chips | 6 / 5+1 | - | x | / | x | x | none | 1 / 0.2 | 6 / 1.2 | 8 / 1.6 | 133% / 133% | 100% / 100% |
 | x | Baked Sweet Potato `veggiesdelight:baked_sweet_potato` | Canned Baked Sweet Potato | 6 / 5+1 | - | x | / | x | x | none | 4 / 4 | 24 / 24 | 32 / 32 | 133% / 133% | 100% / 100% |
-| x | Kimchi `vintagedelight:kimchi` (fills Canned Kimchi; waits on /dumpfood with Vintage loaded) | Canned Kimchi | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Pickle `vintagedelight:pickle` (fills Canned Pickled Pickles; waits on /dumpfood with Vintage loaded) | Canned Pickled Pickles | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Pickled Beetroot `vintagedelight:pickled_beetroot` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Beetroot | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Pickled Onion `vintagedelight:pickled_onion` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Onions | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Pickled Pepper `vintagedelight:pickled_pepper` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Peppers | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Cooked Inky Cap `fungidelight:cooked_cleaned_cap` (fungi_delight.md step 8; waits on /dumpfood after the restart) | Canned Cooked Inky Cap | - | - | - | - | - | x | - | 6 / 7.2 | 36 / 43.2 | 48 / 57.6 | 133% / 133% | 100% / 100% |
+| x | Kimchi `vintagedelight:kimchi` (fills Canned Kimchi; waits on /dumpfood with Vintage loaded) | Canned Kimchi | - | - | - | - | - | x | - | 4 / 2.4 | 12 / 14.4 | 16 / 19.2 | 133% / 133% | 100% / 100% |
+| x | Pickle `vintagedelight:pickle` (fills Canned Pickled Pickles; waits on /dumpfood with Vintage loaded) | Canned Pickled Pickles | - | - | - | - | - | x | - | 6 / 3.6 | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 100% / 100% |
+| x | Pickled Beetroot `vintagedelight:pickled_beetroot` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Beetroot | - | - | - | - | - | x | - | 5 / 4 | 30 / 24 | 40 / 32 | 133% / 133% | 100% / 100% |
+| x | Pickled Onion `vintagedelight:pickled_onion` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Onions | - | - | - | - | - | x | - | 6 / 2.4 | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 100% / 100% |
+| x | Pickled Pepper `vintagedelight:pickled_pepper` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Peppers | - | - | - | - | - | x | - | 6 / 3.6 | 36 / 21.6 | 48 / 28.8 | 133% / 133% | 100% / 100% |
 | x | Roasted Cauliflower Floret `veggiesdelight:roasted_cauliflower_floret` | Canned Roasted Cauliflower | 6 / 5+1 | - | x | / | x | x | none | 2 / 1.2 | 12 / 7.2 | 16 / 9.6 | 133% / 133% | 100% / 100% |
-| x | Roasted Peanut `vintagedelight:roasted_peanut` (configured; waits on /dumpfood with Vintage loaded) | Canned Roasted Peanuts | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Roasted Peanut `vintagedelight:roasted_peanut` (configured; waits on /dumpfood with Vintage loaded) | Canned Roasted Peanuts | - | - | - | - | - | x | - | 4 / 1.6 | 24 / 9.6 | 32 / 12.8 | 133% / 133% | 100% / 100% |
 | x | Roasted Zucchini `veggiesdelight:roasted_zucchini` | Canned Roasted Zucchini | 6 / 5+1 | - | x | / | x | x | none | 4 / 3.2 | 24 / 19.2 | 32 / 25.6 | 133% / 133% | 100% / 100% |
 | / | Popcorn `corn_delight:popcorn` | Canned Popcorn | n/a | - | - | - | - | - | none | - | - | - | n/a | n/a |
 | / | Cooked Vegetarian Patty `veggiesdelight:cooked_vegetarian_patty` (patties are not canned cooked) | Canned Cooked Vegetarian Patty | - | - | - | - | - | - | - | - | - | - | n/a | n/a |
@@ -339,7 +341,7 @@ Same section as cooked meat (cooked_meat in can_types.json).
 | x | Cooked Salmon `minecraft:cooked_salmon` | Canned Cooked Salmon | 5 / 4+1 | Cooked Salmon Slice: x | x | x | x | x | none | 6 / 9.6 | 30 / 48 | 36 / 57.6 | 120% / 120% | 100% / 100% |
 | x | Salted Cod `vintagedelight:salted_cod` (fills Canned Cooked Cod; waits on /dumpfood with Vintage loaded) | Canned Cooked Cod | - | - | - | - | - | - | - | - | - | - | - | - |
 | x | Salted Salmon `vintagedelight:salted_salmon` (fills Canned Cooked Salmon; waits on /dumpfood with Vintage loaded) | Canned Cooked Salmon | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Surströmming `vintagedelight:surstromming` (configured; waits on /dumpfood with Vintage loaded) | Canned Surströmming | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Surströmming `vintagedelight:surstromming` (configured; waits on /dumpfood with Vintage loaded) | Canned Surströmming | - | - | - | - | - | x | - | 9 / 15.3 | 45 / 76.5 | 54 / 91.8 | 120% / 120% | 100% / 100% |
 | / | Cooked Crab Leg `quark:cooked_crab_leg` (not canned, removed 2026-10-13) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Cooked Lobster Tail `alexsmobs:cooked_lobster_tail` (not canned, removed 2026-10-13) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Kippers `brewinandchewin:kippers` | Canned Kippers | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
@@ -383,7 +385,7 @@ Salad x1.25 meals, 8 servings, fast, effects 0.75x. Vinegar additive: 5 salads +
 | x | Broccoli Salad `veggiesdelight:broccoli_salad` | Canned Broccoli Salad | 6 / 5+1 | - | x | / | x | x | x | 6 / 7.2 | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 107% / 100% |
 | x | Cesar Salad `veggiesdelight:cesar_salad` | Canned Cesar Salad | 6 / 5+1 | - | x | / | x | x | x | 10 / 14 | 60 / 84 | 104 / 140 | 173% / 167% | 104% / 100% |
 | x | Coleslaw `veggiesdelight:coleslaw` | Canned Coleslaw | 6 / 5+1 | - | x | / | x | x | x | 8 / 9.6 | 48 / 57.6 | 80 / 96 | 167% / 167% | 100% / 100% |
-| x | Cucumber Salad `vintagedelight:cucumber_salad` (configured; waits on /dumpfood with Vintage loaded) | Canned Cucumber Salad | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Cucumber Salad `vintagedelight:cucumber_salad` (configured; waits on /dumpfood with Vintage loaded) | Canned Cucumber Salad | - | - | - | - | - | x | - | 8 / 11.2 | 48 / 67.2 | 80 / 112 | 167% / 167% | 100% / 100% |
 | x | Turnip Salad `veggiesdelight:turnip_salad` | Canned Turnip Salad | 6 / 5+1 | - | x | / | x | x | x | 6 / 7.2 | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 107% / 100% |
 | / | Maggot Salad `alexsdelight:maggot_salad` (plan: all salads but maggot salad) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Potato Salad `moredelight:potato_salad` (plan: all salads but potato salad) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
@@ -426,9 +428,9 @@ Soup x1.25 meals, 8 servings, effects 0.75x. Additive: salt or bone broth (3 sou
 | x | Cacciatore `veggiesdelight:cacciatore` | Canned Cacciatore | 6 / 3+1 | - | x | / | x | x | x | 14 / 21 | 84 / 126 | 144 / 210 | 171% / 167% | 103% / 100% |
 | x | Cauliflower Soup `veggiesdelight:cauliflower_soup` | Canned Cauliflower Soup | 6 / 3+1 | - | x | / | x | x | x | 10 / 14 | 60 / 84 | 104 / 140 | 173% / 167% | 104% / 100% |
 | x | Garlic Chicken Stew `veggiesdelight:garlic_chicken_stew` | Canned Garlic Chicken Stew | 6 / 3+1 | - | x | / | x | x | x | 12 / 19.2 | 72 / 115.2 | 120 / 192 | 167% / 167% | 100% / 100% |
-| x | Ghostly Chili `vintagedelight:ghostly_chili` (configured; waits on /dumpfood with Vintage loaded) | Canned Ghostly Chili | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Oatmeal `vintagedelight:oatmeal` (configured; waits on /dumpfood with Vintage loaded) | Canned Oatmeal | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Pickle Soup `vintagedelight:pickle_soup` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickle Soup | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Ghostly Chili `vintagedelight:ghostly_chili` (configured; waits on /dumpfood with Vintage loaded) | Canned Ghostly Chili | - | - | - | - | - | x | - | 12 / 19.2 | 72 / 115.2 | 120 / 192 | 167% / 167% | 100% / 100% |
+| x | Oatmeal `vintagedelight:oatmeal` (configured; waits on /dumpfood with Vintage loaded) | Canned Oatmeal | - | - | - | - | - | x | - | 8 / 12 | 48 / 72 | 80 / 120 | 167% / 167% | 100% / 100% |
+| x | Pickle Soup `vintagedelight:pickle_soup` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickle Soup | - | - | - | - | - | x | - | 13 / 22.1 | 78 / 132.6 | 128 / 220.9 | 164% / 167% | 98% / 100% |
 | x | Turnip Beef Stew `veggiesdelight:turnip_beef_stew` | Canned Turnip Beef Stew | 6 / 3+1 | - | x | / | x | x | x | 14 / 21 | 84 / 126 | 144 / 210 | 171% / 167% | 103% / 100% |
 | / | Cavern Explorer Stew `quarkdelight:cavern_explorer_stew` (plan: all soups but cave explorer) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Chorus Stew `endersdelight:chorus_stew_wood` (wooden soup, removed) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
@@ -457,8 +459,8 @@ Pasta, duck noodles -> Pasta with Duck).
 | x | Creamed Corn `corn_delight:creamed_corn` | Canned Creamed Corn | 2 | - | x | / | x | x | x | 7 / 7 | 14 / 14 | 20 / 21 | 143% / 150% | 95% / 100% |
 | x | Creamy Pasta with Chicken Cuts `moredelight:creamy_pasta_with_chicken_cuts` | Canned Creamy Pasta with Chicken | 2 | - | x | / | x | x | x | 12 / 19.2 | 24 / 38.4 | 36 / 57.6 | 150% / 150% | 100% / 100% |
 | x | Creamy Pasta with Ham `moredelight:creamy_pasta_with_ham` | Canned Creamy Pasta with Ham | 2 | - | x | / | x | x | x | 12 / 19.2 | 24 / 38.4 | 36 / 57.6 | 150% / 150% | 100% / 100% |
-| x | Cheese Pasta `vintagedelight:cheese_pasta` (configured; waits on /dumpfood with Vintage loaded) | Canned Cheese Pasta | - | - | - | - | - | - | - | - | - | - | - | - |
-| x | Pad Thai `vintagedelight:pad_thai` (configured; waits on /dumpfood with Vintage loaded) | Canned Pad Thai | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Cheese Pasta `vintagedelight:cheese_pasta` (configured; waits on /dumpfood with Vintage loaded) | Canned Cheese Pasta | - | - | - | - | - | x | - | 9 / 13.5 | 18 / 27 | 28 / 40.5 | 156% / 150% | 104% / 100% |
+| x | Pad Thai `vintagedelight:pad_thai` (configured; waits on /dumpfood with Vintage loaded) | Canned Pad Thai | - | - | - | - | - | x | - | 12 / 18 | 24 / 36 | 36 / 54 | 150% / 150% | 100% / 100% |
 | x | Pasta With Broccoli `veggiesdelight:pasta_with_broccoli` | Canned Pasta with Broccoli | 2 | - | x | / | x | x | x | 12 / 19.2 | 24 / 38.4 | 36 / 57.6 | 150% / 150% | 100% / 100% |
 | x | Potato Noodles `veggiesdelight:potato_noodles` | Canned Potato Noodles | 2 | - | x | / | x | x | x | 12 / 19.2 | 24 / 38.4 | 36 / 57.6 | 150% / 150% | 100% / 100% |
 | / | Adzuki Curry `neapolitan:adzuki_curry` | Canned Adzuki Curry | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
@@ -827,7 +829,7 @@ Added 2026-10-20 from [3](#outside): cooked eggs and the Brewin cheese wedges. A
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | x* | Flaxen Cheese Wedge `brewinandchewin:flaxen_cheese_wedge` | Canned Flaxen Cheese | 4 (Cooking Pot) | - | x | / | x | x | none | 4 / 8 | 16 / 32 | 20 / 40 | 125% / 125% | 100% / 100% |
 | x* | Scarlet Cheese Wedge `brewinandchewin:scarlet_cheese_wedge` | Canned Scarlet Cheese | 4 (Cooking Pot) | - | x | / | x | x | none | 4 / 8 | 16 / 32 | 20 / 40 | 125% / 125% | 100% / 100% |
-| x | Cheese Slice `vintagedelight:cheese_slice` (configured; waits on /dumpfood with Vintage loaded) | Canned Cheese Slices | - | - | - | - | - | - | - | - | - | - | - | - |
+| x | Cheese Slice `vintagedelight:cheese_slice` (configured; waits on /dumpfood with Vintage loaded) | Canned Cheese Slices | - | - | - | - | - | x | - | 4 / 6.4 | 16 / 25.6 | 20 / 32 | 125% / 125% | 100% / 100% |
 | / | Boiled Emu Egg `alexsmobs:boiled_emu_egg` | Canned Boiled Emu Egg | - | - | - | - | - | - | none | - | - | - | n/a | n/a |
 | / | Fried Egg `farmersdelight:fried_egg` | Canned Fried Egg | - | - | - | - | - | - | none | - | - | - | n/a | n/a |
 | / | Fried Egg `incubation:fried_egg` | Canned Fried Egg | - | - | - | - | - | - | none | - | - | - | n/a | n/a |
@@ -1317,27 +1319,27 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 
 | Section | Cans | In -> out (basic) | In -> out (additive) | Out vs target |
 |---|---:|---|---|---|
-| raw_veggie | 17 | h 83 to 167%, s 83 to 750% | h 111 to 333%, s 167 to 1000% | h 100%, s 100% |
+| raw_veggie | 20 | h 83 to 167%, s 83 to 750% | h 111 to 333%, s 167 to 1000% | h 100%, s 100% |
 | raw_fruit | 34 | h 83 to 188%, s 94 to 1000% | h 125 to 250%, s 125 to 1499% | h 100 to 140%, s 100 to 167% |
 | raw_meat | 6 | h 100 to 133%, s 125 to 250% | h 133 to 167%, s 167 to 333% | h 40 to 100%, s 33 to 100% |
 | raw_fish | 12 | h 100 to 200%, s 83 to 500% | h 133 to 267%, s 111 to 667% | h 100%, s 100% |
 | hazard | 5 | h 100 to 200%, s 75 to 500% | n/a | h 40 to 100%, s 33 to 100% |
 | special | 2 | h 125%, s 125% | h 188%, s 188% | h 100%, s 100% |
-| cookies | 12 | h 125%, s 125% | h 167%, s 167% | h 100%, s 100% |
-| cooked_veggie | 21 | h 133%, s 133% | h 160%, s 160% | h 100%, s 100% |
-| cooked_meat | 15 | h 120%, s 120% | h 150%, s 150% | h 100%, s 100% |
-| soup | 34 | h 133 to 178%, s 167% | h 267 to 356%, s 333 to 334% | h 80 to 107%, s 100% |
+| cookies | 13 | h 125%, s 125% | h 167%, s 167% | h 100%, s 100% |
+| cooked_veggie | 26 | h 133%, s 133% | h 160%, s 160% | h 100%, s 100% |
+| cooked_meat | 16 | h 120%, s 120% | h 150%, s 150% | h 100%, s 100% |
+| soup | 38 | h 133 to 178%, s 167% | h 267 to 356%, s 333 to 334% | h 80 to 107%, s 100% |
 | bread | 12 | h 133%, s 133% | h 155%, s 246% | h 100%, s 100% |
-| meal | 18 | h 143 to 160%, s 150% | n/a | h 95 to 107%, s 100% |
+| meal | 21 | h 143 to 160%, s 150% | n/a | h 95 to 107%, s 100% |
 | pie | 14 | h 100%, s 100% | n/a | h 100%, s 100% |
 | feast | 9 | h 55 to 150%, s 55 to 150% | n/a | h 100%, s 100% |
 | drink | 2 | h 100%, s 100% | n/a | h 100%, s 100% |
-| dairy | 2 | h 125%, s 125% | n/a | h 100%, s 100% |
+| dairy | 3 | h 125%, s 125% | n/a | h 100%, s 100% |
 | preserve | 2 | h 100%, s 100% | n/a | h 100%, s 100% |
 | dessert | 1 | h 167%, s 167% | h 333%, s 333% | h 100%, s 100% |
 | cake | 1 | h 114%, s 101% | h 200%, s 176% | h 114%, s 101% |
 | golden | 55 | h 71 to 111%, s 111 to 124% | n/a | h 100 to 133%, s 100% |
-| salad | 12 | h 160 to 178%, s 167% | h 192 to 213%, s 200% | h 96 to 107%, s 100% |
+| salad | 14 | h 160 to 178%, s 167% | h 185 to 206%, s 196 to 199% | h 96 to 107%, s 100% |
 
 **raw_veggie**
 
@@ -1358,6 +1360,9 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_sweet_potato | 5 sweet_potato | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
 | canned_turnip | 5 turnip | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
 | canned_zucchini | 3 zucchini/zucchini_slice | 9 / 7.2 | 10 / 12 | 111% / 167% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
+| canned_cucumber | 6 cucumber | 12 / 4.8 | 10 / 12 | 83% / 250% | 8 / 3.2 | 125% / 375% | 10 / 12 | 100% / 100% |
+| canned_ghost_pepper | 4 ghost_pepper | 12 / 4.8 | 10 / 12 | 83% / 250% | 9 / 3.6 | 111% / 333% | 10 / 12 | 100% / 100% |
+| canned_truffle | 1 truffle/truffle_slice | 6 / 7.2 | 10 / 12 | 167% / 167% | 6 / 7.2 | 167% / 167% | 10 / 12 | 100% / 100% |
 | canned_beets | no recipe | n/a | 10 / 12 | n/a | - | - | 10 / 12 | 100% / 100% |
 | canned_potatos | no recipe | n/a | 10 / 12 | n/a | - | - | 10 / 12 | 100% / 100% |
 
@@ -1461,6 +1466,7 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_persimmon_cookie | 8 persimmon_cookie | 8 / 4.8 | 10 / 6 | 125% / 125% | 6 / 3.6 | 167% / 167% | 10 / 6 | 100% / 100% |
 | canned_sweet_berry_cookie | 8 sweet_berry_cookie | 16 / 3.2 | 20 / 4 | 125% / 125% | 12 / 2.4 | 167% / 167% | 20 / 4 | 100% / 100% |
 | canned_uncanny_cookie | 8 uncanny_cookies | 40 / 48 | 50 / 60 | 125% / 125% | 30 / 36 | 167% / 167% | 50 / 60 | 100% / 100% |
+| canned_oatmeal_cookie | 8 oatmeal_cookie | 16 / 9.6 | 20 / 12 | 125% / 125% | 12 / 7.2 | 167% / 167% | 20 / 12 | 100% / 100% |
 
 **cooked_veggie**
 
@@ -1478,8 +1484,8 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_boiled_corn | 6 boiled_corn | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 30 / 12 | 160% / 160% | 48 / 19.2 | 100% / 100% |
 | canned_dried_banana | 6 dried_banana | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 20 / 12 | 160% / 160% | 32 / 19.2 | 100% / 100% |
 | canned_dried_persimmon | 6 dried_persimmon | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 20 / 12 | 160% / 160% | 32 / 19.2 | 100% / 100% |
-| canned_kimchi | 6 kimchi | 12 / 14.4 | 16 / 19.2 | 133% / 133% | 10 / 12 | 160% / 160% | 16 / 19.2 | 100% / 100% |
-| canned_pickled_pickles | 6 pickled_pickles | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 20 / 12 | 160% / 160% | 32 / 19.2 | 100% / 100% |
+| canned_kimchi | 6 kimchi/vintagedelight_kimchi | 12 / 14.4 | 16 / 19.2 | 133% / 133% | 10 / 12 | 160% / 160% | 16 / 19.2 | 100% / 100% |
+| canned_pickled_pickles | 6 pickled_pickles/pickle | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 20 / 12 | 160% / 160% | 32 / 19.2 | 100% / 100% |
 | canned_roasted_adzuki_beans | 6 roasted_adzuki_beans | 18 / 14.4 | 24 / 19.2 | 133% / 133% | 15 / 12 | 160% / 160% | 24 / 19.2 | 100% / 100% |
 | canned_chips | 6 chips | 30 / 36 | 40 / 48 | 133% / 133% | 25 / 30 | 160% / 160% | 40 / 48 | 100% / 100% |
 | canned_grilled_corn | 6 grilled_corn | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 30 / 12 | 160% / 160% | 48 / 19.2 | 100% / 100% |
@@ -1487,6 +1493,11 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_baked_sweet_potato | 6 baked_sweet_potato | 24 / 24 | 32 / 32 | 133% / 133% | 20 / 20 | 160% / 160% | 32 / 32 | 100% / 100% |
 | canned_roasted_zucchini | 6 roasted_zucchini | 24 / 19.2 | 32 / 25.6 | 133% / 133% | 20 / 16 | 160% / 160% | 32 / 25.6 | 100% / 100% |
 | canned_roasted_cauliflower | 6 roasted_cauliflower_floret | 12 / 7.2 | 16 / 9.6 | 133% / 133% | 10 / 6 | 160% / 160% | 16 / 9.6 | 100% / 100% |
+| canned_pickled_beetroot | 6 pickled_beetroot | 30 / 24 | 40 / 32 | 133% / 133% | 25 / 20 | 160% / 160% | 40 / 32 | 100% / 100% |
+| canned_pickled_onion | 6 pickled_onion | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 30 / 12 | 160% / 160% | 48 / 19.2 | 100% / 100% |
+| canned_pickled_pepper | 6 pickled_pepper | 36 / 21.6 | 48 / 28.8 | 133% / 133% | 30 / 18 | 160% / 160% | 48 / 28.8 | 100% / 100% |
+| canned_roasted_peanut | 6 roasted_peanut | 24 / 9.6 | 32 / 12.8 | 133% / 133% | 20 / 8 | 160% / 160% | 32 / 12.8 | 100% / 100% |
+| canned_cooked_inky_cap | 6 cooked_cleaned_cap | 36 / 43.2 | 48 / 57.6 | 133% / 133% | 30 / 36 | 160% / 160% | 48 / 57.6 | 100% / 100% |
 
 **cooked_meat**
 
@@ -1507,6 +1518,7 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_cooked_perch | 5 cooked_perch/cooked_perch_slice | 25 / 35 | 30 / 42 | 120% / 120% | 20 / 28 | 150% / 150% | 30 / 42 | 100% / 100% |
 | canned_cooked_pike | 5 cooked_pike/cooked_pike_slice | 40 / 64 | 48 / 76.8 | 120% / 120% | 32 / 51.2 | 150% / 150% | 48 / 76.8 | 100% / 100% |
 | canned_cooked_lionfish | 5 cooked_lionfish | 30 / 42 | 36 / 50.4 | 120% / 120% | 24 / 33.6 | 150% / 150% | 36 / 50.4 | 100% / 100% |
+| canned_surstromming | 5 surstromming | 45 / 76.5 | 54 / 91.8 | 120% / 120% | 36 / 61.2 | 150% / 150% | 54 / 91.8 | 100% / 100% |
 
 **soup**
 
@@ -1532,14 +1544,18 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_chicken_soup | 6 chicken_soup | 84 / 126 | 144 / 210 | 171% / 167% | 42 / 63 | 343% / 333% | 140 / 210 | 103% / 100% |
 | canned_chorus_stew | 6 chorus_stew | 24 / 24 | 40 / 40 | 167% / 167% | 12 / 12 | 333% / 333% | 40 / 40 | 100% / 100% |
 | canned_corn_soup | 6 corn_soup | 60 / 108 | 104 / 179.9 | 173% / 167% | 30 / 54 | 347% / 333% | 100 / 180 | 104% / 100% |
+| canned_creamy_morel_soup | 6 creamy_morel_soup | 60 / 84 | 104 / 140 | 173% / 167% | 30 / 42 | 347% / 333% | 100 / 140 | 104% / 100% |
 | canned_creamy_onion_soup | 6 creamy_onion_soup | 72 / 115.2 | 120 / 192 | 167% / 167% | 36 / 57.6 | 333% / 333% | 120 / 192 | 100% / 100% |
 | canned_endermite_stew | 6 endermite_stew | 24 / 19.2 | 40 / 32 | 167% / 167% | 12 / 9.6 | 333% / 333% | 40 / 32 | 100% / 100% |
 | canned_fig_chicken_stew | 6 fig_chicken_stew | 72 / 115.2 | 120 / 192 | 167% / 167% | 36 / 57.6 | 333% / 333% | 120 / 192 | 100% / 100% |
 | canned_fish_stew | 6 fish_stew | 72 / 115.2 | 120 / 192 | 167% / 167% | 36 / 57.6 | 333% / 333% | 120 / 192 | 100% / 100% |
 | canned_garlic_chicken_stew | 6 garlic_chicken_stew | 72 / 115.2 | 120 / 192 | 167% / 167% | 36 / 57.6 | 333% / 333% | 120 / 192 | 100% / 100% |
+| canned_ghostly_chili | 6 ghostly_chili | 72 / 115.2 | 120 / 192 | 167% / 167% | 36 / 57.6 | 333% / 333% | 120 / 192 | 100% / 100% |
 | canned_kangaroo_stew | 6 kangaroo_stew | 60 / 96 | 104 / 160 | 173% / 167% | 30 / 48 | 347% / 333% | 100 / 160 | 104% / 100% |
 | canned_miso_with_bamboo_sprouts | 6 miso_with_bamboo_sprouts | 60 / 84 | 104 / 140 | 173% / 167% | 30 / 42 | 347% / 333% | 100 / 140 | 104% / 100% |
 | canned_noodle_soup | 6 noodle_soup | 84 / 126 | 144 / 210 | 171% / 167% | 42 / 63 | 343% / 333% | 140 / 210 | 103% / 100% |
+| canned_oatmeal | 6 oatmeal | 48 / 72 | 80 / 120 | 167% / 167% | 24 / 36 | 333% / 333% | 80 / 120 | 100% / 100% |
+| canned_pickle_soup | 6 pickle_soup | 78 / 132.6 | 128 / 220.9 | 164% / 167% | 39 / 66.3 | 328% / 333% | 130 / 221 | 98% / 100% |
 | canned_pumpkin_soup | 6 pumpkin_soup | 84 / 126 | 144 / 210 | 171% / 167% | 42 / 63 | 343% / 333% | 140 / 210 | 103% / 100% |
 | canned_sinigang | 6 sinigang | 90 / 162 | 152 / 270 | 169% / 167% | 45 / 81 | 338% / 333% | 150 / 270 | 101% / 100% |
 | canned_sopa_de_macaco | 6 sopa_de_macaco | 30 / 24 | 48 / 40 | 160% / 167% | 15 / 12 | 320% / 334% | 50 / 40 | 96% / 100% |
@@ -1586,6 +1602,9 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_dumplings | 2 dumplings | 16 / 25.6 | 24 / 38.4 | 150% / 150% | - | - | 24 / 38.4 | 100% / 100% |
 | canned_pasta_with_broccoli | 2 pasta_with_broccoli | 24 / 38.4 | 36 / 57.6 | 150% / 150% | - | - | 36 / 57.6 | 100% / 100% |
 | canned_potato_noodles | 2 potato_noodles | 24 / 38.4 | 36 / 57.6 | 150% / 150% | - | - | 36 / 57.6 | 100% / 100% |
+| canned_cheese_pasta | 2 cheese_pasta | 18 / 27 | 28 / 40.5 | 156% / 150% | - | - | 27 / 40.5 | 104% / 100% |
+| canned_pad_thai | 2 pad_thai | 24 / 36 | 36 / 54 | 150% / 150% | - | - | 36 / 54 | 100% / 100% |
+| canned_truffle_pasta | 2 truffle_pasta | 24 / 38.4 | 36 / 57.6 | 150% / 150% | - | - | 36 / 57.6 | 100% / 100% |
 
 **pie**
 
@@ -1633,6 +1652,7 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 |---|---|---|---|---|---|---|---|---|
 | canned_flaxen_cheese | 4 flaxen_cheese_wedge | 16 / 32 | 20 / 40 | 125% / 125% | - | - | 20 / 40 | 100% / 100% |
 | canned_scarlet_cheese | 4 scarlet_cheese_wedge | 16 / 32 | 20 / 40 | 125% / 125% | - | - | 20 / 40 | 100% / 100% |
+| canned_cheese_slice | 4 cheese_slice | 16 / 25.6 | 20 / 32 | 125% / 125% | - | - | 20 / 32 | 100% / 100% |
 
 **preserve**
 
@@ -1717,25 +1737,27 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 
 | Can | Basic recipe | Input | Output | In -> out | Additive input | In -> out (additive) | Target | Out vs target |
 |---|---|---|---|---|---|---|---|---|
-| canned_bowl_of_exotic_fruits | 6 bowl_of_exotic_fruits | 66 / 66 | 112 / 110 | 170% / 167% | 55 / 55 | 204% / 200% | 110 / 110 | 102% / 100% |
-| canned_broccoli_salad | 6 broccoli_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
-| canned_cesar_salad | 6 cesar_salad | 60 / 84 | 104 / 140 | 173% / 167% | 50 / 70 | 208% / 200% | 100 / 140 | 104% / 100% |
-| canned_chicken_salad | 6 chicken_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
-| canned_coleslaw | 6 coleslaw | 48 / 57.6 | 80 / 96 | 167% / 167% | 40 / 48 | 200% / 200% | 80 / 96 | 100% / 100% |
-| canned_field_salad | 6 field_salad | 60 / 66 | 104 / 110 | 173% / 167% | 50 / 55 | 208% / 200% | 100 / 110 | 104% / 100% |
-| canned_fruit_salad | 6 fruit_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
-| canned_lush_moss_salad | 6 lush_moss_salad | 48 / 48 | 80 / 80 | 167% / 167% | 40 / 40 | 200% / 200% | 80 / 80 | 100% / 100% |
-| canned_mango_salad | 6 mango_salad | 48 / 57.6 | 80 / 96 | 167% / 167% | 40 / 48 | 200% / 200% | 80 / 96 | 100% / 100% |
-| canned_mixed_salad | 6 mixed_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
-| canned_nether_salad | 6 nether_salad | 30 / 24 | 48 / 40 | 160% / 167% | 25 / 20 | 192% / 200% | 50 / 40 | 96% / 100% |
-| canned_turnip_salad | 6 turnip_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
+| canned_bowl_of_exotic_fruits | 6 bowl_of_exotic_fruits | 66 / 66 | 112 / 110 | 170% / 167% | 56 / 55.4 | 200% / 199% | 110 / 110 | 102% / 100% |
+| canned_broccoli_salad | 6 broccoli_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
+| canned_cesar_salad | 6 cesar_salad | 60 / 84 | 104 / 140 | 173% / 167% | 51 / 70.4 | 204% / 199% | 100 / 140 | 104% / 100% |
+| canned_chicken_salad | 6 chicken_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
+| canned_coleslaw | 6 coleslaw | 48 / 57.6 | 80 / 96 | 167% / 167% | 41 / 48.4 | 195% / 198% | 80 / 96 | 100% / 100% |
+| canned_cucumber_salad | 6 cucumber_salad | 48 / 67.2 | 80 / 112 | 167% / 167% | 41 / 56.4 | 195% / 199% | 80 / 112 | 100% / 100% |
+| canned_field_salad | 6 field_salad | 60 / 66 | 104 / 110 | 173% / 167% | 51 / 55.4 | 204% / 199% | 100 / 110 | 104% / 100% |
+| canned_fruit_salad | 6 fruit_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
+| canned_inky_caps_salad | 6 inky_caps_salad | 48 / 72 | 80 / 120 | 167% / 167% | 41 / 60.4 | 195% / 199% | 80 / 120 | 100% / 100% |
+| canned_lush_moss_salad | 6 lush_moss_salad | 48 / 48 | 80 / 80 | 167% / 167% | 41 / 40.4 | 195% / 198% | 80 / 80 | 100% / 100% |
+| canned_mango_salad | 6 mango_salad | 48 / 57.6 | 80 / 96 | 167% / 167% | 41 / 48.4 | 195% / 198% | 80 / 96 | 100% / 100% |
+| canned_mixed_salad | 6 mixed_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
+| canned_nether_salad | 6 nether_salad | 30 / 24 | 48 / 40 | 160% / 167% | 26 / 20.4 | 185% / 196% | 50 / 40 | 96% / 100% |
+| canned_turnip_salad | 6 turnip_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
 
 <!-- END CAN AUDIT -->
 
 ## 5. File map
 
-- [kubejs/startup_scripts/items/cans.js](../kubejs/startup_scripts/items/cans.js): hand-written cans, generated can registration, Canned Goods food overrides
-- [kubejs/server_scripts/cooking/canning.js](../kubejs/server_scripts/cooking/canning.js): recipes, section goals, plans for pie/feast/meal/drink/special
+- [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js): hand-written cans, generated can registration, Canned Goods food overrides
+- [kubejs/data/creative_delight/kubejs/creativeengineering/canning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js): recipes, section goals, plans for pie/feast/meal/drink/special
 - [tools/gen_can_types.py](../tools/gen_can_types.py) -> [can_types.json](../kubejs/generation_scripts/food/can_types.json): generated cans
 - [can_servings.json](../kubejs/generation_scripts/food/can_servings.json): servings per can
 - [food_types.json](../kubejs/generation_scripts/food/food_types.json): food families, `canned` map (can -> sources)
@@ -1852,6 +1874,11 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
 
 ## 8. History
 
+- 2026-10-25: Vintage Delight and Fungi Delight are in the 2026-10-24 dump, so `gen_can_types.py` built their 20
+  configured cans (`AWAIT_DUMP` emptied; the item_dict keys and `canned` type entries exist, the items after a restart).
+  Fungi rows added: Truffle (Truffle Slice as alt input) in 2.1, Cooked Inky Cap in 2.6 (fungi_delight.md step 8).
+  Hostile, End's, Miner's, Ocean's and Oceanic Delight foods are held out of the type loops (`UNDECIDED_MODS`) until
+  their cans are decided. `can_audit.py` rerun.
 - 2026-10-23: Veggies Delight and Vintage Delight rows (116) and cans. Veggies' 24 cans generated from the 10-22 dump
   (the catalog was rerun first; it was still from 10-20). Vintage has never been in a dump, so its 16 cans (cucumber,
   ghost pepper, 3 pickles, roasted peanuts, Surströmming, cheese slices, oatmeal cookies, cheese pasta, pad thai,

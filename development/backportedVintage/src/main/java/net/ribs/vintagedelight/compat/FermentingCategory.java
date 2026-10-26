@@ -79,7 +79,10 @@ public class FermentingCategory implements IRecipeCategory<FermentingRecipe> {
     public void draw(FermentingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack poseStack, double mouseX, double mouseY) {
         int processingTime = recipe.getProcessingTime();
         if (processingTime > 0) {
-            String text = String.format("%dmin", processingTime / 1200);
+            // Port: seconds under a minute (upstream printed "0min"), "1min 30s" for a part minute
+            int minutes = processingTime / 1200;
+            int seconds = processingTime % 1200 / 20;
+            String text = minutes == 0 ? seconds + "s" : seconds == 0 ? minutes + "min" : minutes + "min " + seconds + "s";
             Minecraft.getInstance().font.draw(poseStack, text, 110, 20, java.awt.Color.gray.getRGB());
         }
     }

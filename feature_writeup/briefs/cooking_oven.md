@@ -2,7 +2,7 @@
 
 Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# cooking`, Sub `oven`. Reference writeups: [oven.md](../oven.md)
 (block, `creativeengineering:baking`, 38 recipes, OV- tests), [remainder_buffer.md](../remainder_buffer.md),
-[tooltips.md](../tooltips.md). Code: [baking.js](../../kubejs/server_scripts/cooking/baking.js),
+[tooltips.md](../tooltips.md). Code: [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js),
 [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) (muffin pot recipes, lines 359-369),
 `global.NCH.ceBaking` / `fdCooking` in [neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js)
 (`fdCooking` line 926, `ceBaking` line 984), [tooltips.js](../../kubejs/client_scripts/tooltips.js), patcherMod `oven/`.
@@ -138,7 +138,7 @@ Every baked good has an oven recipe that uses flour (not wheat), and no wheat cr
   adzuki_bun, banana_bread, bread_slice, cornbread, honey_bread, minecraft_bread, mulberry_bread,
   nether_wart_sourdough, sourdough_bread, strawberry_scones, toast, tortilla) plus the baked members of `sweet`
   (muffins, cookies, tarts, pies, cakes, gingerbread, fruit beignet, waffles...). Tag
-  `#creativeengineering:food_type/baked` (`kubejs/server_scripts/tags/foodtypetags.js`).
+  `#creativeengineering:food_type/baked` (`kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js`).
 - The oven covers muffins, cookies, tarts, pies, cakes (38 recipes, oven.md 2.6); no breads yet.
 
 ### Build

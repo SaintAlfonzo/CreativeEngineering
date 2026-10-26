@@ -30,7 +30,7 @@ public class FermentingJarMenu extends AbstractContainerMenu {
    private static final int VANILLA_SLOT_COUNT = 36;
    private static final int VANILLA_FIRST_SLOT_INDEX = 0;
    private static final int TE_INVENTORY_FIRST_SLOT_INDEX = 36;
-   private static final int TE_INVENTORY_SLOT_COUNT = 9;
+   private static final int TE_INVENTORY_SLOT_COUNT = 10;
 
    public FermentingJarMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
       this(pContainerId, inv, inv.player.getLevel().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
@@ -70,6 +70,8 @@ public class FermentingJarMenu extends AbstractContainerMenu {
          });
          this.addSlot(new SlotItemHandler(iItemHandler, 7, inputBaseX + outputOffsetX, secondRowY));
          this.addSlot(new SlotItemHandler(iItemHandler, 8, inputBaseX + secondaryOutputX, secondRowY));
+         // Port: the leftover slot, right of the outputs (take-only through the handler's isItemValid)
+         this.addSlot(new SlotItemHandler(iItemHandler, 9, inputBaseX + secondaryOutputX + inputSpacing + 2, secondRowY));
       }
       this.addDataSlots(data);
    }
@@ -98,7 +100,7 @@ public class FermentingJarMenu extends AbstractContainerMenu {
             } else if (!this.moveItemStackTo(stack, 36, 42, false)) {
                return ItemStack.EMPTY;
             }
-         } else if (index >= 36 && index < 45 && !this.moveItemStackTo(stack, 0, 36, false)) {
+         } else if (index >= 36 && index < 46 && !this.moveItemStackTo(stack, 0, 36, false)) {
             return ItemStack.EMPTY;
          }
 

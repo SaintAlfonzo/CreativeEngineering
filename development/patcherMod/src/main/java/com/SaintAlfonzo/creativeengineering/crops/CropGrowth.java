@@ -11,7 +11,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * The rules behind the WTHIT "Growth" line for plants WTHIT doesn't cover ({@link WthitCropGrowth}).
+ * The rules behind the WTHIT "Growth" line for plants WTHIT doesn't cover (Creative Delight's
+ * {@code compat.wthit.WthitCropGrowth}; this class stays in patcherMod, StateLines shares its globs).
  * Pure logic, no Minecraft types, so it runs in the headless harness (tools/test_crop_growth.sh).
  *
  * <p>WTHIT's own provider only knows {@code CropBlock} subclasses and five vanilla blocks by identity

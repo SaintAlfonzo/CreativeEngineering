@@ -44,7 +44,6 @@ public final class WorldgenConfig {
 	public static boolean templateTrimEnabled() { return get(() -> wg().systems.templateTrim.get(), true); }
 	public static boolean metaStructuresEnabled() { return get(() -> wg().systems.metaStructures.get(), true); }
 	public static boolean structureReplacementsEnabled() { return get(() -> wg().systems.structureReplacements.get(), true); }
-	public static boolean wildCropsEnabled() { return get(() -> wg().systems.wildCrops.get(), true); }
 	public static boolean wildFlowersEnabled() { return get(() -> wg().systems.wildFlowers.get(), true); }
 	public static boolean mobSpawnsEnabled() { return get(() -> wg().systems.mobSpawns.get(), true); }
 	public static boolean beeNestsEnabled() { return get(() -> wg().systems.beeNests.get(), true); }

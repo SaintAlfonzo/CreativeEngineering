@@ -22,7 +22,7 @@ there after a no-rules run). For a biome with at least MIN_CHUNKS measured chunk
 rate and "after" splits the measured trees into nest-carrying ones (measured nests / the offline mean chance) and
 the rest; see calibrate(). Extra trees from `trees` rules are added at their written rate.
 
-Biome traits and the where/add/except selector come from wild_crops.json (tools/gen_crop_worldgen_table.py).
+Biome traits (biome_traits.json) and the where/add/except selector come from tools/gen_crop_worldgen_table.py.
 """
 import json
 import math

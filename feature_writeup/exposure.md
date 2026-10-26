@@ -250,10 +250,9 @@ palette with `/exposure palette export <id> json <file>`.
   was regenerated 2026-10-02 and already lists the port's tables (`exposure` 6, `exposure_expanded` 21, from
   `exposureBackport-...-02`), not 1.6.0's. It is stale for the mods added since (Subterrestrial, Underground Bunkers,
   the `eugene` port...). Regenerate it as loot.md describes (TODO `loot/lootjs-layer #3`).
-- **Leftovers:**
-  - `config/exposure-common-1.toml.bak` is a 1.6.0-era Forge backup.
-  - The Exposure-Create Compatibility resource pack is off, because it overrides 1.6.0 camera models and
-    would break 1.9.19's.
+- **Leftovers (cleared 2026-10-25, `exposureport #3`):** `config/exposure-common-1.toml.bak` (a 1.6.0-era Forge backup)
+  and `resourcepacks/Exposure-CreateCompatibility.zip` (off, it overrides 1.6.0 camera models and would break 1.9.19's;
+  it still shipped with every release) moved to `development/exposureBackport/jar_archive/displaced/exposure_leftovers/`.
 - **Version:** `1.9.19-ce-19.2-01` shipped with pack 1.0.3 (it was rebuilt in place twice before that: bug
   fixes, Expanded). `-02` is pack 1.0.4: the login-packet null fix, the refmap fix and Exposure Extras. Bump the
   port build once per pack release; rebuilds before a release keep the same number.
@@ -375,3 +374,4 @@ Before deploying 1.0.3:
 - 2026-10-19: `-04` had gone out in pack 1.0.7 (DEPLOYED 2026-10-18, [plan_1.0.7.md](plan_1.0.7.md) EX). Unchanged in
   1.0.8.
 - 2026-10-19: `-03` and `-04` fixes written up in 3.6; EX-25 added for `-04`.
+- 2026-10-25: leftovers cleared (the 1.6.0 config backup and the Exposure-Create Compatibility pack, section 4).

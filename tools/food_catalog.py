@@ -2,7 +2,7 @@
 """Food types: classify every food in the pack into one type, keep the assignments, and check them.
 
 The assignments live in kubejs/generation_scripts/food/food_types.json (type -> item_dict keys). The tag script
-next to it (foodtypetags.js) turns them into #creativeengineering:food_type/<type> item tags, and every
+next to it (Creative Delight creativeengineering/food_type_tags.js) turns them into #creativeengineering:food_type/<type> item tags, and every
 nested type also lands in its parents (raw/meat/sliced -> raw/meat -> raw -> food_type).
 
 Source data is the /dumpfood export (kubejs/exported/food/*.json): what the game itself reports after
@@ -355,7 +355,7 @@ def classify(f, cooked_from, cut_from, feast_servings):
 
 README = [
     'Food type assignments: every food in exactly one type, as item_dict keys (kubejs/startup_scripts/_lib/item_dict.js).',
-    'server_scripts/tags/foodtypetags.js turns each type into #creativeengineering:food_type/<type>; a nested type',
+    'creative_delight creativeengineering/food_type_tags.js turns each type into #creativeengineering:food_type/<type>; a nested type',
     '(raw/meat/sliced) is also in its parents (raw/meat, raw, and #creativeengineering:food_type).',
     'Move an item by moving its key. python3 tools/food_catalog.py adds foods that are in no type yet and checks',
     'the rest; it never moves an item you placed. Reference: feature_writeup/food.md.',
@@ -413,7 +413,7 @@ def render_block(existing_block_entries, new_entries, tag_entries, comments=None
         for k, v in rows:
             out.append(f"i.{k.ljust(w)} = '{v}';" + comments.get(k, ''))
         out.append('')
-    out.append('// ===== food type tags (server_scripts/tags/foodtypetags.js) =====')
+    out.append('// ===== food type tags (creative_delight creativeengineering/food_type_tags.js) =====')
     w = max(len(k) for k, _ in tag_entries)
     for k, v in tag_entries:
         out.append(f"i.{k.ljust(w)} = '{v}';")

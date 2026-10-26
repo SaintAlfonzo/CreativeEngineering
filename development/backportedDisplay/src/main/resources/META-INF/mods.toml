@@ -1,0 +1,35 @@
+# Display Delight 1.7.0 ported to Forge 1.19.2. Keeps the upstream mod id so every block id, tag and placed block
+# matches the upstream data.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/jkvin114/display-delight-neoforge/issues"
+
+[[mods]]
+modId="displaydelight"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+itemIcon="displaydelight:food_plate"
+description='''${mod_description}'''
+
+[[dependencies.displaydelight]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.displaydelight]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.displaydelight]]
+modId="farmersdelight"
+mandatory=false
+versionRange="[1.19.2-1.2.4,)"
+ordering="NONE"
+side="BOTH"

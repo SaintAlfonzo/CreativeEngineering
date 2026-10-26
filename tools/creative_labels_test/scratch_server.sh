@@ -21,7 +21,8 @@ setup)
   cd "$SRV" || exit 1
   ln -sfn "$SRVBASE/libraries" libraries
   cp "$SRVBASE/run.sh" .
-  ln -sfn "$INST/vinery_upstream" vinery_upstream
+  # ports that read a donor jar refuse to load without their *_upstream folder (Vinery, Miner's)
+  for u in "$INST"/*_upstream; do ln -sfn "$u" "$(basename "$u")"; done
   echo "-Xmx6G" > user_jvm_args.txt
   echo "eula=true" > eula.txt
   cat > server.properties <<EOF

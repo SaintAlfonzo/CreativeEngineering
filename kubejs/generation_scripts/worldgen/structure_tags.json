@@ -667,12 +667,18 @@
       ]
     },
     "type/environmental": {
-      "note": "Overworld natural features rather than buildings. Nether and End ones are type/nether_environmental and type/end_environmental. Also the driftwood flotilla (meta structure).",
+      "note": "Overworld natural features rather than buildings. Nether and End ones are type/nether_environmental and type/end_environmental. Also the driftwood flotilla and the deadwood patches (meta structures).",
       "values": [
         "terralith:underground/giant_bee_hive",
         "ae2:meteorite",
         "hopo:underwater_fossils",
-        "creativeengineering:meta/driftwood_flotilla"
+        "creativeengineering:meta/driftwood_flotilla",
+        "creativeengineering:meta/deadwood_acacia",
+        "creativeengineering:meta/deadwood_birch",
+        "creativeengineering:meta/deadwood_cherry",
+        "creativeengineering:meta/deadwood_jungle",
+        "creativeengineering:meta/deadwood_oak",
+        "creativeengineering:meta/deadwood_spruce"
       ]
     },
     "type/decoration": {
@@ -1034,6 +1040,17 @@
       "note": "Floating debris at sea: the driftwood flotilla (meta structure). Its own grid, so it takes no slots from ruins or ships.",
       "values": [
         "creativeengineering:meta/driftwood_flotilla"
+      ]
+    },
+    "group/deadwood": {
+      "note": "Patches of dead wood on land: stumps and fallen logs by wood type (meta structures). Its own grid, so it takes no slots from buildings or ruins.",
+      "values": [
+        "creativeengineering:meta/deadwood_acacia",
+        "creativeengineering:meta/deadwood_birch",
+        "creativeengineering:meta/deadwood_cherry",
+        "creativeengineering:meta/deadwood_jungle",
+        "creativeengineering:meta/deadwood_oak",
+        "creativeengineering:meta/deadwood_spruce"
       ]
     },
     "group/remote": {

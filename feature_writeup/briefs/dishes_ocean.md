@@ -2,7 +2,7 @@
 
 Written 2026-10-24 from [todo/TODO.md](../todo/TODO.md) `# dishes`, Sub `ocean` (rows 1 to 5, all scratchpad
 2026-10-24). Layout per [README.md](README.md). Feature writeup for this area:
-[delight_addons_2026_10.md](../delight_addons_2026_10.md) section 2 (Ocean's Delight, Oceanic Delight and the
+[ocean_delight.md](../ocean_delight.md) section 2 (Ocean's Delight, Oceanic Delight and the
 squid items of Miner's Delight and Rustic Delight). All recipes through `global.NCH` (`R`) in a new ocean section of
 [cooking.js](../../kubejs/server_scripts/cooking/cooking.js), tags through `global.tags`, merges through
 `global.itemMerges` ([item_merges.js](../../kubejs/startup_scripts/_lib/item_merges.js)).
@@ -17,12 +17,12 @@ squid items of Miner's Delight and Rustic Delight). All recipes through `global.
 |---|---|---|---|
 | 4 | Remove tentacles, all to calamari | Planned | first: it fixes the ingredient set the others use |
 | 3 | Squid items, calamari chain | Planned | needs new glow calamari items |
-| 5 | Salmon eggs become caviar | Planned | lang and recipes |
+| 5 | Salmon eggs become caviar | Testing | renames built 2026-10-25; sea pickle roll moved to row 6 (caviar use audit) |
 | 2 | Fish egg roll accepts eggs | Planned | one recipe |
-| 1 | Fishing net | Planned | investigate first |
+| 1 | Fishing net | Testing | built 2026-10-25, see [ocean_delight.md](../ocean_delight.md) 5.1 |
 
 ## ocean #1: Fishing net: cooldown, tooltips, loot by biome
-Status: Planned / Work: KubeJS / data / TODO `dishes/ocean #1` ([delight_addons_2026_10.md](../delight_addons_2026_10.md))
+Status: Testing (built 2026-10-25; what was built and the final rates are in [ocean_delight.md](../ocean_delight.md) 5.1; the plan below is kept as written) / Work: KubeJS / data / patcherMod / TODO `dishes/ocean #1`
 
 ### Goal
 Give the net a cooldown, tooltips and a loot table; drops by biome: shrimp in the ocean (boosted), salmon eggs in rivers
@@ -57,7 +57,7 @@ tooltip show.
 ---
 
 ## ocean #2: Fish egg roll accepts eggs
-Status: Planned / Work: KubeJS / TODO `dishes/ocean #2` ([delight_addons_2026_10.md](../delight_addons_2026_10.md))
+Status: Planned / Work: KubeJS / TODO `dishes/ocean #2` ([ocean_delight.md](../ocean_delight.md))
 
 ### Goal
 Allow fish eggs in the fish egg roll recipe.
@@ -82,7 +82,7 @@ DA-04 Roll crafts from ancient fish eggs.
 ---
 
 ## ocean #3: Squid and glow squid items, calamari chain
-Status: Planned / Work: KubeJS / data / TODO `dishes/ocean #3` ([delight_addons_2026_10.md](../delight_addons_2026_10.md))
+Status: Planned / Work: KubeJS / data / TODO `dishes/ocean #3` ([ocean_delight.md](../ocean_delight.md))
 
 ### Goal
 Keep the squid and glow squid items. They drop from squids and glow squids; the raw ink sac chance drops and a cut squid
@@ -117,7 +117,7 @@ DA-05 Squid drops its item; knife gives calamari and ink. DA-06 Glow squid chain
 ---
 
 ## ocean #4: Remove tentacles; all tentacles to calamari
-Status: Planned / Work: KubeJS / TODO `dishes/ocean #4` ([delight_addons_2026_10.md](../delight_addons_2026_10.md)); part of the ocean merge (`mod-additions #5`)
+Status: Planned / Work: KubeJS / TODO `dishes/ocean #4` ([ocean_delight.md](../ocean_delight.md)); part of the ocean merge (`mod-additions #5`)
 
 ### Goal
 Remove the tentacle items; any tentacle cuts to calamari.
@@ -148,7 +148,7 @@ DA-07 No tentacle item in JEI or loot; a knife on any squid-family item gives ca
 ---
 
 ## ocean #5: Salmon eggs become caviar
-Status: Planned / Work: KubeJS / lang / TODO `dishes/ocean #5` ([delight_addons_2026_10.md](../delight_addons_2026_10.md))
+Status: Testing (renames built 2026-10-25, [ocean_delight.md](../ocean_delight.md) 5.2; caviar in the sea pickle roll deferred by the user to `dishes/ocean #6`, a caviar use audit) / Work: KubeJS / lang / TODO `dishes/ocean #5`
 
 ### Goal
 More uses for salmon eggs: rename to caviar, add a caviar roll and a caviar noodle soup, and caviar in the sea pickle roll.
@@ -176,7 +176,7 @@ DA-08 Names read Caviar, Caviar Roll, Caviar Noodle Soup; sea pickle roll takes 
 
 None: no `ocean` row is at Testing or Complete.
 
-Test ids: DA-01 to DA-08 are proposed for [delight_addons_2026_10.md](../delight_addons_2026_10.md) (its test list is
+Test ids: DA-01 to DA-08 are proposed for [ocean_delight.md](../ocean_delight.md) (its test list is
 empty).
 
 ## Writeup corrections made

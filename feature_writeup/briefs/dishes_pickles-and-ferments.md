@@ -2,7 +2,7 @@
 
 Written 2026-10-24 from [todo/TODO.md](../todo/TODO.md) `# dishes`, Sub `pickles-and-ferments` (rows 1 to 10, all from the
 scratchpad). Layout per [README.md](README.md). Writeups: [vintage_delight.md](../vintage_delight.md) (§2.3 pickling jar,
-§2.7 recipes, §3.1 overlaps), [delight_addons_2026_10.md](../delight_addons_2026_10.md). Pickling recipes go through
+§2.7 recipes, §3.1 overlaps), [ocean_delight.md](../ocean_delight.md). Pickling recipes go through
 `R.vdPickling` (`neoCraftHelper.js` line 1139; opts `time`, `secondary`, `container`), ids from `global.item`, tags through
 `global.tags` in [cookingtags.js](../../kubejs/server_scripts/tags/cookingtags.js).
 

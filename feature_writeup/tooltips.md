@@ -18,7 +18,7 @@ keeps its own writeup.
 | FramedBlocks renamed "Framed Copycat …" | edited resource pack `Copycat Framed Block.zip` | DEPLOYED 2026-09-27; F3+T |
 | BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + patcherMod `CamoSpeedTooltip` | DEPLOYED (incl. the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording) |
 | Framework tooltips: armor effects, tool effects, potion buckets | dedicated client scripts | VERIFIED per their own memories |
-| Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | DEPLOYED with 1.0.6 (2026-10-14), PL-01 to PL-08 |
+| Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/assets/creative_delight/kubejs/_qol/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | DEPLOYED with 1.0.6 (2026-10-14), PL-01 to PL-08 |
 | Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-16 |
 | AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | patcherMod `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-17, TT-18. The other screens: next row |
 | AppleSkin food bars in the rest of the food screens: FD cooking pot, Farmer's Respite kettle, Central Kitchen cooking/brewing guides and the Oven (finished-meal slot); Brewin' keg tank (GUI, recipe book, JEI tank over the tankard); Vinery recipe book; TrashSlot; Pretty Pipes terminal; FTB Quests task/reward/description items; Wares agreement; Patchouli books; AE2 crafting tables, pattern encoding amount slots and guidebook | patcherMod `compat/MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + 17 client mixins (list in section 3); the Brewin' and Vinery ports | BUILT 2026-10-20 (patcherMod 1.1.01, Brewin' `-03`, Vinery `-04`), in `mods/`, not tested in game; TT-19 to TT-30 |
@@ -174,7 +174,7 @@ Examples:
     so they also get the JEI mod-name line / tooltip images / Legendary Tooltips frame like inventory tooltips.
 - **D&D Jetpack tooltip crash:** `JetpackItemTooltipMixin` stops a crash that used to break client
   tag loading, which delayed JEI (memory `axe-tag-ghost-entries`).
-- **WTHIT growth line** for hemp, tobacco, berry bushes, grapes and other plants WTHIT skips: patcherMod `crops/WthitCropGrowth`, written up in [crops.md](crops.md) 2.9 (tests CR-59 to CR-66).
+- **WTHIT growth line** for hemp, tobacco, berry bushes, grapes and other plants WTHIT skips: Creative Delight `compat/wthit/WthitCropGrowth` (QoL-6), written up in [crops.md](crops.md) 2.9 (tests CR-59 to CR-66).
 
 **Creative Labels** (2026-10-20, [sticky_notes.md](sticky_notes.md) 3.9 and 3.13)
 - The mod's three items carry their own lines (`appendHoverText`, one lang key per line, grey): the sticky note's
@@ -210,7 +210,7 @@ Examples:
 ## 5. File map
 
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): helpers, colour legend, all hand-written lines, removals
-- [placeable_tooltip.js](../kubejs/client_scripts/placeable_tooltip.js): placeable food lines + DD / Fruits Delight removals (tests in [placeable_food.md](placeable_food.md), PL-)
+- [placeable_tooltip.js](../kubejs/assets/creative_delight/kubejs/_qol/placeable_tooltip.js): placeable food lines + DD / Fruits Delight removals (tests in [placeable_food.md](placeable_food.md), PL-)
 - patcherMod `food/IntoxicatingDrinkTooltip`: Quark's saturation word -> "Intoxicating Drink" on every food with the Intoxication effect (drinks listed in `global.alcohol`, [alcohol.md](alcohol.md) 11)
 - [armor_effects_tooltip.js](../kubejs/client_scripts/armor_effects_tooltip.js), [tool_effects_tooltip.js](../kubejs/client_scripts/tool_effects_tooltip.js), [potion_buckets.js](../kubejs/client_scripts/potion_buckets.js)
 - patcherMod: [surface/CamoSpeedTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`

@@ -19,8 +19,8 @@
 // world loading, so chance/scale are not written then (trees still are: they are plain datapack features). A tree
 // feature of a mod that isn't loaded is skipped (an unknown feature id stops the world loading too).
 //
-// Selectors match tools/gen_bee_nests.py and wild_crops.js: 'where' clauses OR'ed, traits in a clause AND'ed,
-// '!trait' negated, traits from wild_crops.json's biome table, biomes marked ocean or cave never match a clause;
+// Selectors match tools/gen_bee_nests.py and the wild crop rules: 'where' clauses OR'ed, traits in a clause AND'ed,
+// '!trait' negated, traits from biome_traits.json, biomes marked ocean or cave never match a clause;
 // then 'add' (ids, '#tags' as nested tag references) and 'except' (ids).
 //
 // ServerEvents.loaded compares the live tags with the rules and logs BeeNests' summary.
@@ -32,7 +32,7 @@
 (function () {
 
 	var CONFIG_PATH = 'kubejs/generation_scripts/worldgen/bee_nests.json'
-	var TRAITS_PATH = 'kubejs/generation_scripts/worldgen/wild_crops.json'
+	var TRAITS_PATH = 'kubejs/generation_scripts/worldgen/biome_traits.json'
 	var TAG_PREFIX = 'creativeengineering:bee_nests/'
 	var MODIFIER_PATH = 'creativeengineering:forge/biome_modifier/bee_nests.json'
 	var NESTS_CLASS = 'com.SaintAlfonzo.creativeengineering.worldgen.BeeNests'

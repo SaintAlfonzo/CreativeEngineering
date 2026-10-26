@@ -1,5 +1,6 @@
-// Compiles the remainder buffer straight from patcherMod's sources (cooking/, the pot and kettle BE + menu mixins,
-// oven/ without JEI and client classes) next to the stand-in main class/config and the tests in src/, with
+// Compiles the remainder buffer straight from patcherMod's sources (cooking/, oven/ without JEI and client classes) and
+// Creative Delight's (the pot and kettle BE + menu mixins, QoL-1 since 2026-10-25, their switch class and CDConfig)
+// next to the stand-in main class/config and the tests in src/, with
 // Farmer's Delight and Farmer's Respite deobfuscated at runtime (jars in libs/, fetched by the test script).
 plugins { id 'ce.forge-mod' }
 
@@ -11,15 +12,20 @@ dependencies {
 }
 
 def patcherSrc = file('../../development/patcherMod/src/main/java')
+def cdSrc = file('../../development/creativeDelight/src/main/java')
 def syncPatcherSources = tasks.register('syncPatcherSources', Sync) {
     from(patcherSrc) {
         include 'com/SaintAlfonzo/creativeengineering/cooking/**'
         include 'com/SaintAlfonzo/creativeengineering/oven/**'
-        include 'com/SaintAlfonzo/creativeengineering/mixin/CookingPotRemainderMixin.java'
-        include 'com/SaintAlfonzo/creativeengineering/mixin/CookingPotMenuRemainderMixin.java'
-        include 'com/SaintAlfonzo/creativeengineering/mixin/KettleRemainderMixin.java'
-        include 'com/SaintAlfonzo/creativeengineering/mixin/KettleMenuRemainderMixin.java'
         exclude '**/jei/**', '**/client/**'
+    }
+    from(cdSrc) {
+        include 'com/SaintAlfonzo/creativedelight/CDConfig.java'
+        include 'com/SaintAlfonzo/creativedelight/qol/RemainderBufferQol.java'
+        include 'com/SaintAlfonzo/creativedelight/mixin/farmersdelight/CookingPotRemainderMixin.java'
+        include 'com/SaintAlfonzo/creativedelight/mixin/farmersdelight/CookingPotMenuRemainderMixin.java'
+        include 'com/SaintAlfonzo/creativedelight/mixin/farmersrespite/KettleRemainderMixin.java'
+        include 'com/SaintAlfonzo/creativedelight/mixin/farmersrespite/KettleMenuRemainderMixin.java'
     }
     into layout.buildDirectory.dir('patcher-src')
 }

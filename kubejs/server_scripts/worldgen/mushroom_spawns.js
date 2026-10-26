@@ -5,11 +5,11 @@
 // at world load, not on /reload). Only chunks generated afterwards change. Resolved lists:
 // feature_writeup/crops_by_biome.md (python3 tools/gen_crop_worldgen_table.py evaluates the same rules offline).
 //
-// Same machinery as wild_crops.js (_biome_rules.js, global.biomeRules) and the same biome words: the "biomes"
-// table of wild_crops.json. Per rule key: biome tag creativeengineering:mushroom_spawns/<key>, one forge:add_features
+// Same machinery as Creative Delight's wild crops (_biome_rules.js, global.biomeRules) and the same biome words:
+// biome_traits.json. Per rule key: biome tag creativeengineering:mushroom_spawns/<key>, one forge:add_features
 // modifier creativeengineering:mushroom_spawns/<key>, the mods' own modifiers in disable_modifiers replaced by
 // forge:none. Each rule has a mode:
-//   - surface: vegetal_decoration; biomes marked ocean or cave never match (as in wild_crops.json);
+//   - surface: vegetal_decoration; biomes marked ocean or cave never match (as in the wild crop rules);
 //   - cave: underground_decoration; every biome can match (the placed features search a cave floor below sea level,
 //     at least 13 blocks under the surface, so they stay out of the light).
 // Rarity lives in the placed features (kubejs/data/creativeengineering/worldgen/placed_feature/wild/mushrooms/).
@@ -29,7 +29,7 @@
 		return sys || (sys = global.biomeRules.system({
 			name: 'mushroom-spawns',
 			configPath: 'kubejs/generation_scripts/worldgen/mushroom_spawns.json',
-			biomesPath: 'kubejs/generation_scripts/worldgen/wild_crops.json',
+			biomesPath: 'kubejs/generation_scripts/worldgen/biome_traits.json',
 			rulesKey: 'rules',
 			ruleWord: 'mushroom',
 			tagPrefix: 'creativeengineering:mushroom_spawns/',
@@ -38,7 +38,7 @@
 			enabled: enabled,
 			never: function (rule) { return rule.mode === 'cave' ? {} : { ocean: true, cave: true } },
 			step: function (rule) { return rule.mode === 'cave' ? 'underground_decoration' : 'vegetal_decoration' },
-			reportUnclassified: false,   // wild_crops.js reports the biome table
+			reportUnclassified: false,   // CD's wild crop script reports the biome table
 		}))
 	}
 

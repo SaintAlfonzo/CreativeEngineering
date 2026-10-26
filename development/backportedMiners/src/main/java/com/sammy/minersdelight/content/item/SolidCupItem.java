@@ -33,7 +33,13 @@ public class SolidCupItem extends BlockItem implements DispensibleContainerItem 
         InteractionResult result = super.useOn(context);
         Player player = context.getPlayer();
         if (result.consumesAction() && player != null && !player.isCreative()) {
-            player.setItemInHand(context.getHand(), new ItemStack(MDItems.COPPER_CUP.get()));
+            // cups stack: the placed one is used up, the rest stay and the empty cup goes to the inventory
+            ItemStack empty = new ItemStack(MDItems.COPPER_CUP.get());
+            if (player.getItemInHand(context.getHand()).isEmpty()) {
+                player.setItemInHand(context.getHand(), empty);
+            } else if (!player.getInventory().add(empty)) {
+                player.drop(empty, false);
+            }
         }
         return result;
     }

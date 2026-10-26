@@ -1,0 +1,115 @@
+{
+  "parent": "displaydelight:block/parent_bowl",
+  "render_type": "cutout",
+  "textures": {
+    "particle": "creativeengineering:item/corn_popsicle",
+    "tray_top": "displaydelight:block/tray_top",
+    "tray_bottom": "displaydelight:block/tray_bottom",
+    "food": "creativeengineering:item/corn_popsicle"
+  },
+  "elements": [
+    {
+      "name": "tray",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        2,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            11,
+            15,
+            13
+          ],
+          "texture": "#tray_bottom"
+        },
+        "east": {
+          "uv": [
+            1,
+            11,
+            15,
+            13
+          ],
+          "texture": "#tray_bottom"
+        },
+        "south": {
+          "uv": [
+            1,
+            11,
+            15,
+            13
+          ],
+          "texture": "#tray_bottom"
+        },
+        "west": {
+          "uv": [
+            1,
+            11,
+            15,
+            13
+          ],
+          "texture": "#tray_bottom"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#tray_top"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#tray_top",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "food",
+      "from": [
+        2,
+        2.05,
+        2
+      ],
+      "to": [
+        14,
+        2.05,
+        14
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#food"
+        },
+        "down": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#food"
+        }
+      }
+    }
+  ]
+}

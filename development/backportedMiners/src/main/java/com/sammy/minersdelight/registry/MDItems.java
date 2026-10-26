@@ -42,11 +42,11 @@ public final class MDItems {
     public static final RegistryObject<Item> CAVE_CARROT_CRATE = block(MDBlocks.CAVE_CARROT_CRATE, props());
 
     // Cups
-    public static final RegistryObject<Item> COPPER_CUP = ITEMS.register("copper_cup", () -> new CopperCupItem(Fluids.EMPTY, props().stacksTo(16)));
-    public static final RegistryObject<Item> WATER_CUP = ITEMS.register("water_cup", () -> new CopperCupItem(Fluids.WATER, cupProps().stacksTo(1)));
-    public static final RegistryObject<Item> MILK_CUP = ITEMS.register("milk_cup", () -> new MilkCupItem(cupProps().stacksTo(1)));
+    public static final RegistryObject<Item> COPPER_CUP = ITEMS.register("copper_cup", () -> new CopperCupItem(Fluids.EMPTY, props().stacksTo(64)));
+    public static final RegistryObject<Item> WATER_CUP = ITEMS.register("water_cup", () -> new CopperCupItem(Fluids.WATER, cupProps().stacksTo(64)));
+    public static final RegistryObject<Item> MILK_CUP = ITEMS.register("milk_cup", () -> new MilkCupItem(cupProps().stacksTo(64)));
     public static final RegistryObject<Item> POWDER_SNOW_CUP = ITEMS.register("powder_snow_cup",
-            () -> new SolidCupItem(Blocks.POWDER_SNOW, SoundEvents.BUCKET_EMPTY_POWDER_SNOW, cupProps().stacksTo(1)));
+            () -> new SolidCupItem(Blocks.POWDER_SNOW, SoundEvents.BUCKET_EMPTY_POWDER_SNOW, cupProps().stacksTo(64)));
 
     // Food
     public static final RegistryObject<Item> CAVE_CARROT = ITEMS.register("cave_carrot",

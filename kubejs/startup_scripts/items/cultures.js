@@ -1,5 +1,5 @@
 // Meat cultures — raw lab-grown precursor for each cultivated-meat line (recipes that
-// grow/cook these into their vanilla-ish meat counterparts: server_scripts/cooking/cultivated_meat.js
+// grow/cook these into their vanilla-ish meat counterparts: kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js
 // — still WIP over there). Registered here since none of the 7 had an e.create() anywhere
 // despite already having textures/models under assets/creativeengineering/{textures,models}/item/.
 //
@@ -10,7 +10,7 @@
 // block model and item model are hand-authored on disk under
 // assets/creativeengineering/{blockstates,models/block,models/item}/<animal>_culture_block.json
 // (cube_all, texture at creativeengineering:block/culture_block/<animal>_culture_block.png).
-// Compact/uncompact recipes: server_scripts/cooking/cultivated_meat.js.
+// Compact/uncompact recipes: kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js.
 
 StartupEvents.registry('item', e => {
     e.create('creativeengineering:culture_beef').displayName('Beef Culture')

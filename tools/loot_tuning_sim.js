@@ -69,7 +69,7 @@ const sandbox = {
 }
 const run = rel => new Function(...Object.keys(sandbox), fs.readFileSync(ROOT + rel, 'utf8'))(...Object.values(sandbox))
 run('kubejs/startup_scripts/_lib/item_dict.js')
-run('kubejs/startup_scripts/func/tag_helper.js')
+run('development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js')
 run('kubejs/server_scripts/loot/05_tuning.js')
 run('kubejs/server_scripts/loot/07_rules.js')
 run('kubejs/server_scripts/tags/loottags.js')

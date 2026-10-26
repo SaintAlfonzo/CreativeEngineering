@@ -468,7 +468,7 @@
         let tem = present(CE + 'farmersdelightcooking/fish_tempura', 'salmon_tempura', 1)
         if (tem) ok(takes(tem, 't_cooking_oil'), 'fish tempura takes cooking oil')
         let fries = present(CE + 'farmersdelightcooking/fries', 'chips', 2)
-        if (fries) ok(takes(fries, 't_cooking_oil') && takes(fries, 't_sliced_potatoes'), 'fries: cooking oil + sliced potatoes')
+        if (fries) ok(takes(fries, 't_cooking_oil') && takes(fries, 't_sliced_potato'), 'fries: cooking oil + sliced potatoes')
         let fc = present(CE + 'farmersdelightcooking/fish_and_chips', 'cod_n_chips', 1)
         if (fc) {
             let cont = '?'
@@ -476,8 +476,8 @@
             ok(cont == i.paper, 'fish and chips plated on paper (' + cont + ')')
         }
         present(CE + 'shapeless/fish_and_chips_cooked_manual_only', 'cod_n_chips', 1)
-        let sliced = idsOfKey('t_sliced_potatoes')
-        ok(sliced.indexOf(i.potato_slices) >= 0, i.t_sliced_potatoes + ' holds ' + i.potato_slices)
+        let sliced = idsOfKey('t_sliced_potato')
+        ok(sliced.indexOf(i.potato_slices) >= 0, i.t_sliced_potato + ' holds ' + i.potato_slices)
         ok(idsOfKey('t_cooking_oil').length > 0, i.t_cooking_oil + ' holds ' + idsOfKey('t_cooking_oil').join(', '))
         let oily = makersOf([i.salmon_tempura, i.chips, i.cod_n_chips]).filter(r => fluidIds(r).some(x => /plantoil|plant_oil/.test(x)))
         ok(oily.length == 0, 'no plant-oil frying left (' + oily.map(r => String(r.getId())).join(', ') + ')')
