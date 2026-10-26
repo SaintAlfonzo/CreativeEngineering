@@ -6,11 +6,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
@@ -22,7 +25,8 @@ import javax.annotation.Nullable;
  * Goose golden egg: now and then a goose lays Vintage Delight's Golden Egg (its block item) instead of a
  * goose egg. mixin/GooseEntityEggLayerMixin rolls {@link IAConfig#GOLDEN_EGG_CHANCE} once per egg, before
  * the timer reaches Incubation's nest window, and on a win keeps the nest goal off (LayEggInNestGoalMixin)
- * and swaps the egg dropped at 0 for this one, dropped at the least walled-in spot nearby ({@link DropSpot}).
+ * and swaps the egg dropped at 0 for this one, laid as a block at the least walled-in spot nearby
+ * ({@link DropSpot}).
  *
  * Vintage Delight is not a compile-time dependency: the item is looked up by id, and with Vintage absent
  * (or the item missing) there is no roll at all.
@@ -50,19 +54,20 @@ public final class GoldenGooseEgg {
     }
 
     /**
-     * Drops the golden egg at the spot {@link DropSpot} picks. Goes through the bird's own spawnAtLocation
-     * (the goose marks the egg as thrown by itself, so it doesn't pick it straight back up), then moves it.
-     * Null when the item is gone, so the caller can fall back to the normal egg.
+     * Lays the golden egg. As a block (Vintage's Golden Egg, which falls like sand) on the open spot
+     * {@link DropSpot#pickBlock} picks; when there is none (a closed 1x1 pen) or the item has no block, as the
+     * item where {@link DropSpot#pick} says, through the bird's own spawnAtLocation (the goose marks the egg as
+     * thrown by itself, so it doesn't pick it straight back up), then moved. False when the item is gone, so
+     * the caller can fall back to the normal egg.
      */
-    @Nullable
-    public static ItemEntity drop(Mob bird) {
+    public static boolean lay(Mob bird) {
         Item item = item();
-        if (item == null) return null;
+        if (item == null) return false;
         Level level = bird.level;
         BlockPos base = bird.blockPosition();
         Vec3 from = new Vec3(bird.getX(), bird.getY() + 0.5, bird.getZ());
 
-        int[] o = DropSpot.pick(new DropSpot.Probe() {
+        DropSpot.Probe probe = new DropSpot.Probe() {
             @Override
             public boolean standable(int dx, int dy, int dz) {
                 BlockPos feet = base.offset(dx, dy, dz);
@@ -87,13 +92,29 @@ public final class GoldenGooseEgg {
                 BlockState state = level.getBlockState(pos);
                 return state.getCollisionShape(level, pos).isEmpty() && state.getFluidState().isEmpty();
             }
-        });
+        };
 
+        if (item instanceof BlockItem blockItem) {
+            int[] b = DropSpot.pickBlock(probe);
+            if (b != null) {
+                BlockPos spot = base.offset(b[0], b[1], b[2]);
+                // Free is not enough: never overwrite a torch, flower or rail.
+                if (level.getBlockState(spot).getMaterial().isReplaceable()) {
+                    BlockState egg = blockItem.getBlock().defaultBlockState();
+                    if (level.setBlock(spot, egg, Block.UPDATE_ALL)) {
+                        level.gameEvent(bird, GameEvent.BLOCK_PLACE, spot);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        int[] o = DropSpot.pick(probe);
         ItemEntity egg = bird.spawnAtLocation(item);
         if (egg != null && (o[0] != 0 || o[1] != 0 || o[2] != 0)) {
             BlockPos spot = base.offset(o[0], o[1], o[2]);
             egg.setPos(spot.getX() + 0.5, spot.getY() + 0.1, spot.getZ() + 0.5);
         }
-        return egg;
+        return true;
     }
 }

@@ -29,7 +29,7 @@ CRITICAL — LIVE CRASH BUGS
     switch map class too, or restructure burnDecision() to avoid a switch on the enum (e.g.
     if/else chain) so javac doesn't generate the synthetic class at all.
 
-[ ] crash-2026-09-11_17.47.20-server.txt is a 0-byte crash report — something crashed and the
+[x] crash-2026-09-11_17.47.20-server.txt is a 0-byte crash report — something crashed and the
     report never finished writing. Never investigated. Unclear if related to the above.
 
 ============================================================

@@ -1,0 +1,40 @@
+
+#One switch per Creative Delight member. Off: Creative Delight's scripts skip that member's recipe,
+#tag and loot rows (the member's own data is untouched). Server scripts re-read it on /reload.
+[members]
+	oceansdelight = true
+	oceanic_delight = true
+	ends_delight = true
+	rusticdelight = true
+	delightful = true
+	enders_additions = true
+
+#One switch per Creative Delight QoL feature (feature_writeup/creative_delight.md 8). Off: that feature
+#is skipped entirely. Startup and Java parts need a restart, server scripts re-read on /reload, client
+#scripts on F3+T.
+[qol]
+	#QoL-1: ingredient leftovers (bottles, bowls, buckets) stay in the Farmer's Delight cooking
+	#pot and the Farmer's Respite kettle (two take-only slots). Off: they are thrown out as in the original mods.
+	#The stall and recycle dials are creativeengineering-common.toml [cooking]; the oven is its own block there.
+	remainderBuffer = true
+	#QoL-2: the 'Placeable' / 'Placeable on plate' tooltip lines, in place of the mods' own.
+	placeableTooltips = true
+	#QoL-4: Creative Delight's composter chances for member foods. Off: those foods fall to the pack's
+	#compost rules.
+	compost = true
+	#QoL-5: grid meals on cooked food re-made as manual-only crafts, heatless routes for pot
+	#meals, tortilla wraps (Veggies, Vintage and Fungi Delight). Off: the mods' own recipes stay.
+	manualOnlyRoutes = true
+	#QoL-6: the WTHIT 'Growth' line for plants WTHIT doesn't cover (only with WTHIT).
+	#Dials: creativeengineering-common.toml [crop_growth].
+	wthitCropLine = true
+	#QoL-6: JEI information pages for member mechanics (only with JEI).
+	jeiInfoPages = true
+
+#One switch per Creative Delight worldgen system (feature_writeup/creative_delight.md 24). Rejoin the world
+#to apply; only chunks generated afterwards change.
+[worldgen]
+	#Which biomes each wild crop and fruit tree spawns in (_worldgen/wild_crops.json).
+	#Off: every crop as its mod ships it.
+	wildCrops = true
+

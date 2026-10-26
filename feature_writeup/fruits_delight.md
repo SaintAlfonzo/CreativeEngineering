@@ -124,3 +124,9 @@ bundle did not build at the time: the in-progress `:backportedRustic` member did
 | FR-05 | `#forge:jams` holds the 22 jams; `#forge:storage_blocks` and `/peach` hold the Peach Crate (item and block) | SQ-FR-04 |
 | FR-06 | Boot without Fruits Delight: CD loads, no mixin error, the three scripts skipped | SQ-FR-05 |
 
+## Bayberry Juice (2026-10-25, TODO `food/drinks #9`)
+
+Bayberry Soup is renamed Bayberry Juice (item, Forge fluid and can; `namechanges.js`) and typed `drink`
+(`food_types.json`, food dict `drink_juice_bayberry`); ids and recipes unchanged. Its jar fluid
+(`kubejs/data/creativeengineering/moonlight/soft_fluids/bayberry_soup.json`) is hand-written now, with the potion still
+texture, so the soup fluid generator keeps it. Test RC-D2, MJ-14 (SQ-CDB-11).

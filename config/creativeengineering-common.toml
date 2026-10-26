@@ -1250,9 +1250,6 @@
 		#Cancel a structure whose foundation would need too much earth over water or air ([worldgen.earth_fill]).
 		#New chunks only.
 		earthFill = true
-		#wild_crops.json: which biomes each wild crop and fruit tree spawns in (kubejs worldgen/wild_crops.js).
-		#Off: every crop as its mod ships it. Rejoin to apply; only new chunks change.
-		wildCrops = true
 		#Cancel a water structure whose water would replace too much dry ground or air ([worldgen.water_fill]).
 		#New chunks only.
 		waterFill = true
@@ -1676,7 +1673,8 @@
 #container slot; the rest goes to two leftover slots right of the output, which hoppers and
 #funnels on the output faces can empty.
 [cooking]
-	#Off = leftovers are thrown out of the station as in the original mods.
+	#Oven only. Off = its leftovers are thrown out of the front. The pot and kettle
+	#switch is creative_delight-common.toml [qol] remainderBuffer.
 	remainderBuffer = true
 	#On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).
 	#Off = it crafts anyway and throws what doesn't fit.
@@ -1838,11 +1836,10 @@
 #WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
 #plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
 #WTHIT's own config, to every other growing plant. The blocks and their stages are in
-#assets/creativeengineering/crop_growth.json (override it from kubejs/assets/creativeengineering/).
-#Client-side only; reads the block state the client already has.
+#assets/creative_delight/crop_growth.json (override it from kubejs/assets/creative_delight/).
+#Client-side only; reads the block state the client already has. The line is Creative Delight's:
+#its on/off switch is creative_delight-common.toml [qol] wthitCropLine.
 [crop_growth]
-	#Master on/off switch for the added lines.
-	enabled = true
 	#true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in
 	#crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from
 	#mods added later. false: only the plants in the file.

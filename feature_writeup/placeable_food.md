@@ -162,3 +162,7 @@ Restart the game (new item_dict keys, new client script). Hover items in JEI or 
 - **2026-10-20:** coaster tag = modelled items only (alcohol.md 12): `add_coaster()` reads the port's coaster files and
   the pack's generated Display Delight ones; `COASTER_DRINK_MODS` removed. Rerun on the last dump: 152 on a coaster
   (60 Vinery / Farmer's Respite drinks out, 56 DD foods in). Tests AL-91 to AL-93.
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Dough blocks for every dough (six exist, `baking/baked-goods #27`): `food/placeable #4`.

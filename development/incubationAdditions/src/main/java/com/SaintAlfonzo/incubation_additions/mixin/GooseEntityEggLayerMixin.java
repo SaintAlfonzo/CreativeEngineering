@@ -106,8 +106,8 @@ public abstract class GooseEntityEggLayerMixin extends TamableAnimal implements 
     private ItemEntity incubation_additions$layGoldenEgg(GooseEntity goose, ItemLike egg) {
         if (this.incubation_additions$goldenDue) {
             this.incubation_additions$goldenDue = false;
-            ItemEntity golden = GoldenGooseEgg.drop(this);
-            if (golden != null) return golden;
+            // The goose drops the return value, so null is fine once the golden egg is laid.
+            if (GoldenGooseEgg.lay(this)) return null;
         }
         return this.spawnAtLocation(egg);
     }

@@ -15,6 +15,8 @@ ServerEvents.recipes(e => {
 		//######################### New content #########################
 		R.shaped(Item.of(i.rope_fence, 3), ['r/r', 'r/r'], { r: i.any_rope, '/': i.stick }, e, 'rope_fence')
 		R.shaped(i.rope_fence_gate, ['/r/', '/r/'], { r: i.any_rope, '/': i.stick }, e, 'rope_fence_gate')
+		// 1.3.4 recipe for the undyed Hanging Canvas Sign (no dyed variants)
+		R.shaped(Item.of(i.hanging_canvas_sign, 6), ['c c', 'w#w', 'w#w'], { c: i.chain, w: i.any_log, '#': i.canvas }, e, 'hanging_canvas_sign')
 		R.shapeless(i.gleaming_salad_block, [i.glow_berries, i.glow_berries, i.honey_bottle, i.tomato, i.golden_carrot,
 			i.beetroot, i.farmersdelight_cabbage, i.farmersdelight_cabbage, i.bowl], e, 'gleaming_salad_block')
 		// Slices from the placed Farmer's Delight pumpkin pie ([pumpkin_pie] placeAs) go back into a pie
@@ -46,6 +48,30 @@ ServerEvents.recipes(e => {
 		R.fdCutting(i.furnace_minecart, i.any_hoe, [i.minecart, i.furnace], e, 'salvaging/furnace_minecart')
 		R.fdCutting(i.hopper_minecart, i.any_hoe, [i.minecart, i.hopper], e, 'salvaging/hopper_minecart')
 		R.fdCutting(i.tnt_minecart, i.any_hoe, [i.minecart, i.tnt], e, 'salvaging/tnt_minecart')
+		// Abnormals Delight 6.0.3's salvaging (abnormals_delight.md 3.1): Boatload furnace boats come apart with a hoe,
+		// as 6.0.3 lists them; chest boats with an axe like the vanilla ones above. Boatload's crimson and warped boats
+		// join their wood's furniture. River wood is removed (removed_woods.js); hanging signs and rafts are 1.20.
+		if (Platform.isLoaded('boatload')) {
+			woods.filter(w => i[w + '_furnace_boat']).forEach(w => {
+				var boat = i[w + '_boat'] || i['boatload_' + w + '_boat']
+				R.fdCutting(i[w + '_furnace_boat'], i.any_hoe, [boat, i.furnace], e, 'salvaging/' + w + '_furnace_boat')
+			})
+			;['crimson', 'warped'].forEach(w => {
+				R.fdCutting(i['boatload_' + w + '_boat'], R.AXE, Item.of(i['planks_' + w]).withChance(0.75), e, 'salvaging/' + w + '_boat')
+				R.fdCutting(i['boatload_' + w + '_chest_boat'], R.AXE, [i['boatload_' + w + '_boat'], i.chest], e, 'salvaging/' + w + '_chest_boat')
+			})
+		}
+		// Upgrade Aquatic's driftwood: one recipe replaces Abnormals Delight 4.1.2's door, sign and trapdoor (100%)
+		if (Platform.isLoaded('upgrade_aquatic')) {
+			['door', 'sign', 'trapdoor'].forEach(p => R.remove({ id: 'abnormals_delight:upgrade_aquatic/cutting/driftwood_' + p }, e))
+			var driftwood = ['door_', 'trapdoor_', 'sign_', 'fence_', 'fencegate_', 'pressureplate_', 'button_']
+				.map(p => i[p + 'driftwood']).concat([i.driftwood_boat])
+			if (Platform.isLoaded('abnormals_delight')) driftwood.push(i.driftwood_cabinet)
+			R.fdCutting(Ingredient.of(driftwood), R.AXE, Item.of(i.planks_driftwood).withChance(0.75), e, 'salvaging/driftwood_furniture')
+			R.fdCutting(i.driftwood_chest_boat, R.AXE, [i.driftwood_boat, i.chest], e, 'salvaging/driftwood_chest_boat')
+			if (Platform.isLoaded('boatload'))
+				R.fdCutting(i.driftwood_furnace_boat, i.any_hoe, [i.driftwood_boat, i.furnace], e, 'salvaging/driftwood_furnace_boat')
+		}
 
 		// The rows below moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
 
@@ -79,7 +105,7 @@ ServerEvents.recipes(e => {
 			R.ieBottling(i.tomato_sauce, f.t_tomato_sauce, i.bowl, e, undefined, 250)
 		}
 		//Expensive shapeless craft
-		R.shapeless(Item.of(i.tomato_sauce, 1), [i.bowl, Item.of(i.tomato, 4)], e)
+		R.shapeless(Item.of(i.tomato_sauce, 1), [i.bowl, i.tomato, i.tomato, i.tomato, i.tomato], e)
 
 		//Melon juice
 		//melon juice merge
@@ -93,7 +119,7 @@ ServerEvents.recipes(e => {
 				R.ieSqueezing(Fluid.of(f.melon_juice, 1250), i.melon_block, e, undefined, undefined, 6400)
 				R.ieBottling(i.melon_juice, f.t_melon_juice, i.glass_bottle, e, undefined, 250)
 			}
-			R.createMixing(Fluid.of(f.melon_juice, 250), [i.any_sugar, Item.of(i.melon, 3)], e, undefined, 'n/a')
+			R.createMixing(Fluid.of(f.melon_juice, 250), [i.any_sweetener_drink, Item.of(i.melon, 3)], e, undefined, 'n/a')
 		}
 
 		//Apple cider
@@ -106,7 +132,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'tmted:mixer/apple_cider' }, e)
 		R.remove({ id: 'tmted:bottling/apple_cider' }, e)
 		if (Platform.isLoaded('immersiveengineering') && Platform.isLoaded('create_central_kitchen')) {
-			R.ieMixer(Fluid.of(f.apple_cider, 250), [Item.of(i.apple, 2), i.any_sugar], f.t_water, e, 'apple_cider')
+			R.ieMixer(Fluid.of(f.apple_cider, 250), [Item.of(i.apple, 2), i.any_sweetener_drink], f.t_water, e, 'apple_cider')
 			R.ieBottling(i.farmersdelight_apple_cider, f.t_apple_cider, i.glass_bottle, e, undefined, 250)
 		}
 
@@ -115,7 +141,7 @@ ServerEvents.recipes(e => {
 		//Egg solution
 		// The pack's egg solution fluid: 250 mB stands in for one egg and its milk (create/recipes.js)
 		if (Platform.isLoaded('create')) {
-			R.createMixing(i.glow_berry_custard, [i.glow_berries, i.any_sugar, i.glass_bottle, Fluid.of(f.egg_solution, 250)], e,
+			R.createMixing(i.glow_berry_custard, [i.glow_berries, i.any_sweetener, i.glass_bottle, Fluid.of(f.egg_solution, 250)], e,
 				'glow_berry_custard_egg_solution', 'heated')
 		}
 
@@ -132,7 +158,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'farmersdelight:barbecue_stick' }, e)
 		R.shapeless(Item.of(i.bbq_stick, 1), [i.onion, i.tomato, i.cooked_meat, i.stick], e)
 		if (Platform.isLoaded('create')) {
-			const incBbqStick = R.incomplete('bbq_stick')
+			let incBbqStick = R.incomplete('bbq_stick')
 			R.createSequencedAssembly(Item.of(i.bbq_stick, 1), i.stick, [
 				e.recipes.create.deploying(incBbqStick, [incBbqStick, i.onion]),
 				e.recipes.create.deploying(incBbqStick, [incBbqStick, i.tomato]),
@@ -147,7 +173,7 @@ ServerEvents.recipes(e => {
 
 		if (Platform.isLoaded('create')) {
 			// Grilled salmon: FD's shapeless kept; sequenced assembly added
-			const incGrilledSalmon = R.incomplete('grilled_salmon')
+			let incGrilledSalmon = R.incomplete('grilled_salmon')
 			R.createSequencedAssembly(Item.of(i.grilled_salmon, 1), i.bowl, [
 				e.recipes.create.deploying(incGrilledSalmon, [incGrilledSalmon, i.onion]),
 				e.recipes.create.deploying(incGrilledSalmon, [incGrilledSalmon, i.cabbage]),
@@ -158,25 +184,25 @@ ServerEvents.recipes(e => {
 			// (Frying with cooking oil: pneumaticcraft/recipes.js)
 
 			// Bacon and eggs: FD's shapeless kept; sequenced assembly added
-			const incBaconAndEggs = R.incomplete('bacon_and_eggs')
+			let incBaconAndEggs = R.incomplete('bacon_and_eggs')
 			R.createSequencedAssembly(Item.of(i.bacon_and_eggs, 1), i.bowl, [
 				e.recipes.create.deploying(incBaconAndEggs, [incBaconAndEggs, i.cooked_bacon]),
 				e.recipes.create.deploying(incBaconAndEggs, [incBaconAndEggs, i.cooked_eggs])
 			], ['bacon_and_eggs'], e, 'bacon_eggs_sequenced_assembly', 2)
 
 			// Salmon roll: FD's shapeless kept; sequenced assembly added
-			const incSalmonRoll = R.incomplete('salmon_roll')
+			let incSalmonRoll = R.incomplete('salmon_roll')
 			R.createSequencedAssembly(Item.of(i.salmon_roll, 3), i.cooked_rice, [
 				e.recipes.create.deploying(incSalmonRoll, [incSalmonRoll, i.salmon_slice])
 			], ['salmon_roll'], e, 'salmon_roll_sequenced_assembly', 3)
 			// Cod roll: FD's shapeless kept; sequenced assembly added
-			const incCodRoll = R.incomplete('cod_roll')
+			let incCodRoll = R.incomplete('cod_roll')
 			R.createSequencedAssembly(Item.of(i.cod_roll, 3), i.cooked_rice, [
 				e.recipes.create.deploying(incCodRoll, [incCodRoll, i.cod_slice])
 			], ['cod_roll'], e, 'cod_roll_sequenced_assembly', 3)
 			//Kelp roll
 			// Sequenced assembly
-			const incKelpRoll = R.incomplete('kelp_roll')
+			let incKelpRoll = R.incomplete('kelp_roll')
 			R.createSequencedAssembly(Item.of(i.kelp_roll, 1), i.cooked_rice, [
 				e.recipes.create.deploying(incKelpRoll, [incKelpRoll, i.carrot]),
 				e.recipes.create.deploying(incKelpRoll, [incKelpRoll, i.dried_kelp]),
@@ -184,7 +210,7 @@ ServerEvents.recipes(e => {
 			], ['kelp_roll'], e, 'kelp_roll_sequenced_assembly', 1)
 			//Rice Medley
 			// Sequenced assembly
-			const incRiceMedley = R.incomplete('rice_medley')
+			let incRiceMedley = R.incomplete('rice_medley')
 			R.createSequencedAssembly(Item.of(i.rice_medley, 1), i.bowl, [
 				e.recipes.create.deploying(incRiceMedley, [incRiceMedley, i.cod_roll]),
 				e.recipes.create.deploying(incRiceMedley, [incRiceMedley, i.salmon_roll]),
@@ -203,7 +229,7 @@ ServerEvents.recipes(e => {
 
 			//Roasted mutton chops
 			// Sequenced assembly
-			const incRoastedMuttonChops = R.incomplete('roasted_mutton_chops')
+			let incRoastedMuttonChops = R.incomplete('roasted_mutton_chops')
 			R.createSequencedAssembly(Item.of(i.roasted_mutton_chops, 1), i.bowl, [
 				e.recipes.create.deploying(incRoastedMuttonChops, [incRoastedMuttonChops, i.tomato]),
 				e.recipes.create.deploying(incRoastedMuttonChops, [incRoastedMuttonChops, i.beetroot]),

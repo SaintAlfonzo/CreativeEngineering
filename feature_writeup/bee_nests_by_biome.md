@@ -22,11 +22,11 @@ overworld surface (biome_config.json). Rules: chance/scale rules in fold order, 
 
 | biome | area % | m | trees/chunk | before | after | rules | nest sources (before) |
 |---|---|---|---|---|---|---|---|
-| minecraft:flower_forest | 0.17 |  | 6.94 | 1 in 8 | 1 in 4 | temperate_woods, flower_boost | minecraft:forest_flower_trees (1 in 8) |
+| minecraft:flower_forest | 0.17 |  | 7.78 | 1 in 8 | 1 in 4 | temperate_woods, flower_boost | minecraft:forest_flower_trees (1 in 8) |
 | terralith:lavender_valley | 0.14 |  | 14.11 | 1 in 11 | 1 in 5 | temperate_woods, flower_boost | terralith:flower/lavender/trees (1 in 11) |
 | terralith:lavender_forest | 0.45 |  | 14.10 | 1 in 11 | 1 in 5 | temperate_woods, flower_boost | terralith:flower/lavender/trees (1 in 11) |
-| terralith:sakura_valley | 0.16 |  | 9.54 | 1 in 12 | 1 in 5 | temperate_woods, flower_boost | terralith:cherry/cherry_trees (1 in 14), terralith:cherry/birch_sparse (1 in 100), terralith:cherry/birch (1 in 153) |
-| terralith:sakura_grove | 0.48 |  | 9.53 | 1 in 12 | 1 in 5 | temperate_woods, flower_boost | terralith:cherry/cherry_trees (1 in 14), terralith:cherry/birch_sparse (1 in 100), terralith:cherry/birch (1 in 153) |
+| terralith:sakura_valley | 0.16 |  | 9.96 | 1 in 12 | 1 in 5 | temperate_woods, flower_boost | terralith:cherry/cherry_trees (1 in 14), terralith:cherry/birch_sparse (1 in 100), terralith:cherry/birch (1 in 153) |
+| terralith:sakura_grove | 0.48 |  | 9.95 | 1 in 12 | 1 in 5 | temperate_woods, flower_boost | terralith:cherry/cherry_trees (1 in 14), terralith:cherry/birch_sparse (1 in 100), terralith:cherry/birch (1 in 153) |
 | terralith:blooming_plateau | 0.27 | m (389 ch, 3 nests) | 0.11 | 1 in 130 | 1 in 9 | grassland, flower_boost, bloom_bee_trees | minecraft:trees_meadow (1 in 100) |
 | minecraft:sunflower_plains | 0.11 |  | 0.15 | 1 in 400 | 1 in 10 | grassland, flower_boost, bloom_bee_trees | minecraft:plain_vegetation (1 in 400) |
 | terralith:blooming_valley | 0.22 | m (159 ch, 1 nests) | 5.04 | 1 in 159 | 1 in 10 | temperate_woods, flower_boost, bloom_woods | terralith:forest/flower/small/trees_small (1 in 82), terralith:forest/flower/cloud_trees (1 in 83), terralith:forest/flower/mid/trees_mid (1 in 126) |
@@ -45,25 +45,25 @@ overworld surface (biome_config.json). Rules: chance/scale rules in fold order, 
 | terralith:brushland | 1.32 | m (161 ch, 0 nests) | 7.84 | - | 1 in 42 | warm_woods |  |
 | minecraft:forest | 2.29 | m (598 ch, 6 nests) | 5.93 | 1 in 100 | 1 in 56 | temperate_woods | minecraft:birch_other (1 in 50) |
 | terralith:cloud_forest | 0.41 |  | 15.82 | - | 1 in 63 | cold_woods |  |
-| terralith:alpha_islands | 0.13 |  | 4.53 | - | 1 in 74 | temperate_woods |  |
+| terralith:alpha_islands | 0.13 |  | 4.94 | - | 1 in 67 | temperate_woods |  |
 | terralith:hot_shrubland | 0.56 | m (119 ch, 1 nests) | 1.77 | 1 in 119 | 1 in 76 | warm_woods | minecraft:plain_vegetation (1 in 400) |
 | terralith:ashen_savanna | 0.26 |  | 3.80 | - | 1 in 88 | warm_woods |  |
 | terralith:shrubland | 0.33 | m (287 ch, 0 nests) | 2.74 | - | 1 in 122 | warm_woods | minecraft:plain_vegetation (1 in 400) |
 | terralith:lush_valley | 0.09 |  | 8.07 | - | 1 in 124 | cold_woods |  |
 | terralith:skylands_autumn | 0.02 | m (79 ch, 0 nests) | 2.28 | - | 1 in 146 | temperate_woods |  |
 | minecraft:windswept_savanna | 0.62 | m (73 ch, 0 nests) | 2.19 | - | 1 in 152 | warm_woods |  |
+| minecraft:old_growth_pine_taiga | 0.77 |  | 6.39 | - | 1 in 156 | cold_woods |  |
 | minecraft:savanna | 1.02 | m (765 ch, 0 nests) | 2.07 | - | 1 in 161 | warm_woods |  |
-| minecraft:old_growth_pine_taiga | 0.77 |  | 5.97 | - | 1 in 167 | cold_woods |  |
 | minecraft:plains | 1.98 | m (985 ch, 1 nests) | 0.24 | 1 in 985 | 1 in 183 | grassland | minecraft:plain_vegetation (1 in 400) |
 | minecraft:old_growth_spruce_taiga | 0.73 | m (83 ch, 0 nests) | 5.00 | - | 1 in 200 | cold_woods |  |
 | minecraft:savanna_plateau | 0.71 | m (280 ch, 0 nests) | 1.66 | - | 1 in 201 | warm_woods |  |
 | minecraft:taiga | 0.91 | m (56 ch, 0 nests) | 4.41 | - | 1 in 227 | cold_woods |  |
 | terralith:shield | 0.68 | m (345 ch, 0 nests) | 3.90 | - | 1 in 256 | cold_woods |  |
 | terralith:forested_highlands | 0.64 | m (210 ch, 0 nests) | 2.87 | - | 1 in 348 | cold_woods |  |
+| minecraft:windswept_forest | 0.10 |  | 2.70 | - | 1 in 370 | cold_woods |  |
 | terralith:cold_shrubland | 0.73 |  | 2.65 | 1 in 400 | 1 in 400 |  | minecraft:plain_vegetation (1 in 400) |
 | terralith:rocky_shrubland | 0.26 |  | 2.65 | 1 in 400 | 1 in 400 |  | minecraft:plain_vegetation (1 in 400) |
 | terralith:orchid_swamp | 0.69 | m (462 ch, 0 nests) | 0.67 | - | 1 in 495 | warm_woods, flower_boost |  |
-| minecraft:windswept_forest | 0.10 |  | 1.87 | - | 1 in 535 | cold_woods |  |
 | terralith:yellowstone | 4.28 | m (939 ch, 0 nests) | 1.72 | - | 1 in 580 | cold_woods |  |
 | terralith:arid_highlands | 0.77 |  | 0.21 | - | 1 in 1,587 | warm_woods |  |
 | terralith:savanna_slopes | 0.29 |  | 0.00 | - | 1 in 1,627,604 | warm_woods |  |
@@ -74,25 +74,25 @@ overworld surface (biome_config.json). Rules: chance/scale rules in fold order, 
 | minecraft:eroded_badlands | 0.86 |  | 0.00 | - | - |  |  |
 | minecraft:frozen_peaks | 0.73 | m (71 ch, 0 nests) | 0.00 | - | - |  |  |
 | minecraft:frozen_river | 0.32 |  | 8.00 | - | - |  |  |
-| minecraft:grove | 0.12 |  | 16.77 | - | - |  |  |
+| minecraft:grove | 0.12 |  | 17.19 | - | - |  |  |
 | minecraft:ice_spikes | 0.30 |  | 0.10 | - | - |  |  |
 | minecraft:jagged_peaks | 0.44 |  | 0.00 | - | - |  |  |
-| minecraft:jungle | 0.45 |  | 49.22 | - | - |  |  |
+| minecraft:jungle | 0.45 |  | 49.64 | - | - |  |  |
 | minecraft:mangrove_swamp | 0.38 |  | 0.33 | - | - |  |  |
 | minecraft:mushroom_fields | 0.82 |  | 5.29 | - | - |  |  |
 | minecraft:river | 1.88 | m (346 ch, 0 nests) | 0.00 | - | - |  |  |
 | minecraft:snowy_beach | 0.27 | m (265 ch, 0 nests) | 0.03 | - | - |  |  |
-| minecraft:snowy_plains | 1.06 |  | 0.52 | - | - |  |  |
+| minecraft:snowy_plains | 1.06 |  | 0.93 | - | - |  |  |
 | minecraft:snowy_slopes | 0.28 |  | 0.00 | - | - |  |  |
 | minecraft:snowy_taiga | 0.71 | m (209 ch, 0 nests) | 5.05 | - | - |  |  |
-| minecraft:sparse_jungle | 0.60 |  | 1.82 | - | - |  |  |
+| minecraft:sparse_jungle | 0.60 |  | 2.24 | - | - |  |  |
 | minecraft:stony_peaks | 0.40 |  | 0.00 | - | - |  |  |
 | minecraft:stony_shore | 0.30 |  | 0.00 | - | - |  |  |
 | minecraft:swamp | 0.84 | m (224 ch, 0 nests) | 5.71 | - | - |  |  |
 | minecraft:windswept_gravelly_hills | 0.18 |  | 0.03 | - | - |  |  |
-| minecraft:windswept_hills | 0.29 |  | 0.45 | - | - |  |  |
-| minecraft:wooded_badlands | 0.23 |  | 5.52 | - | - |  |  |
-| terralith:alpha_islands_winter | 0.00 |  | 4.53 | - | - |  |  |
+| minecraft:windswept_hills | 0.29 |  | 0.87 | - | - |  |  |
+| minecraft:wooded_badlands | 0.23 |  | 5.93 | - | - |  |  |
+| terralith:alpha_islands_winter | 0.00 |  | 4.94 | - | - |  |  |
 | terralith:alpine_grove | 0.09 | m (63 ch, 0 nests) | 1.21 | - | - |  |  |
 | terralith:alpine_highlands | 0.73 |  | 1.92 | - | - |  |  |
 | terralith:amethyst_canyon | 0.07 |  | 28.29 | - | - |  |  |
@@ -122,9 +122,9 @@ overworld surface (biome_config.json). Rules: chance/scale rules in fold order, 
 | terralith:sandstone_valley | 0.10 |  | 48.27 | - | - |  |  |
 | terralith:savanna_badlands | 0.29 |  | 0.00 | - | - | warm_woods |  |
 | terralith:scarlet_mountains | 0.25 | m (83 ch, 0 nests) | 0.00 | - | - |  |  |
-| terralith:shield_clearing | 0.15 |  | 0.42 | - | - |  |  |
+| terralith:shield_clearing | 0.15 |  | 0.83 | - | - |  |  |
 | terralith:siberian_grove | 0.06 |  | 20.26 | - | - |  |  |
-| terralith:siberian_taiga | 0.51 |  | 20.67 | - | - |  |  |
+| terralith:siberian_taiga | 0.51 |  | 21.08 | - | - |  |  |
 | terralith:skylands_summer | 0.02 |  | 13.23 | - | - |  |  |
 | terralith:skylands_winter | 0.01 |  | 4.10 | - | - |  |  |
 | terralith:snowy_badlands | 0.52 |  | 0.00 | - | - |  |  |

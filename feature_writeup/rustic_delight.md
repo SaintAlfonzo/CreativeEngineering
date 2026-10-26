@@ -230,3 +230,23 @@ crop options, and the wild-crop biome rules may be loosened for some crops when 
 `creativedelight/members #11`. Found while checking: Syrup, Pumpkin and Cherry Blossom Coffee (new in 1.7.0) are not in the
 `food_values.js` Caffeinated swap, so they still give upstream's Speed and Haste (RD-20 records it).
 
+### 5.9 Owner change list (scratchpad 2026-10-26)
+
+Changes the owner wants on top of the port. Each line is a TODO row in `creativedelight/members`; check the donor first, since
+several of these exist in 1.7.0 (pancakes, bell pepper pasta and soup, fried fish, stuffed peppers, coffee variants).
+
+| Row | Change |
+|---|---|
+| #14 | Peppers: dark seeds in ancient city and sculk chests, pale seeds in sky village and cloud storage loot (`loot/tables #13`); all slices, roasted slices, rolls, stuffed peppers; bell pepper medley, dark and pale medley, rice roll medley; giant pepper blocks and patches in hot dry grassy biomes; new bell pepper and slice values |
+| #15 | Pancake rework: new pancakes, new recipes, evaluate against Supplementaries pancakes |
+| #16 | Syrup changes; Maple Glazed Bacon and Maple Cookie stay, made with a Rustic syrup |
+| #17 | Coffee foods including the cake, gold and honey coffee, coffee beef, golden coffee bean; brown dye from roasted beans |
+| #18 | Fried foods including fried fish (evaluate), calamari pot (evaluate), calamari roll |
+| #19 | Cherry blossom foods with Vinery cherry leaves or Quark pink blossom leaves |
+| #20 | Bell pepper pasta and soup; bell peppers as a pizza topping, default brewing pizza renamed Supreme with many ingredients |
+| #21 | Effects: golden coffee bean, chocolate and veggie pancake, honey and chocolate Speed, vegetable Haste, potato salad Regeneration |
+| #22 | Remove Fruit Beignet; follow the cotton rename |
+
+Also: village farms grow Rustic crops by the wild-crop rules (`farming/crops #19`); rare Rustic pepper seeds from the wandering
+trader (`loot/trader #4`).
+

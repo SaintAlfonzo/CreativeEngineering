@@ -24,7 +24,7 @@ ItemEvents.modification(e => {
 		var id = i[key]
 		if (typeof id !== 'string') { console.warn('[toast] fast toast: no item for ' + key); return }
 		if (key === 'cheese_toast') return // registered fast above
-		e.modify(id, it => it.setFoodProperties(fb => fb.fast()))
+		e.modify(id, it => it.setFoodProperties(fb => fb.fastToEat()))
 		done++
 	})
 	console.log('[toast] ' + done + ' toasts set to fast eating')

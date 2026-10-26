@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "C C",
+    "BBB"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:stone_brick_slab"
+    },
+    "B": {
+      "item": "minecraft:acacia_slab"
+    },
+    "C": {
+      "item": "minecraft:acacia_trapdoor"
+    }
+  },
+  "result": {
+    "item": "storagedelight:acacia_cabinet_with_stone_bricks_countertop"
+  }
+}

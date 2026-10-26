@@ -79,11 +79,15 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	// Batch 3, walled compounds: soft only. Their courtyards are pad (the bastille has 9,423 pad columns) and
 	// should stay flat, so no trim; soft still shortens and rounds the skirt outside the walls.
 	var walledCompounds = ['takesapillage:bastille', 'takesapillage:pillager_camp']
+	// End builds (2026-10-25): Ender's Delight's End House (9x16 purpur and end stone floor, shipped by Creative
+	// Delight's enders member). Soft only: its floor is the building, not a pad, so no trim. Its own json says beard_thin.
+	var endBuilds = ['endersdelight:end_house']
 
 	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', portedMods)
 	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', padHouses)
 	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', outposts)
 	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', walledCompounds)
+	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', endBuilds)
 
 	global.tags.add(e, 'creativeengineering:template_trim', siegeWeapons)
 	global.tags.add(e, 'creativeengineering:template_trim', portedMods)

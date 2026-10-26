@@ -34,11 +34,23 @@
     function block(id) { return $FDReg.BLOCKS.getValue(rl(id)) }
 
     // id -> recipe, built once per command (never getType() on every recipe: memory rhino-fieldandmethods-gotcha)
-    let byId = null
+    let byId = null, aliased = {}
+    // recipe ids for enumeration: a moved recipe is listed once, under its creativeengineering: alias (the checks'
+    // prefixes), not also under its creative_delight: id
+    function recipeKeys(server) {
+        return Object.keys(recipes(server)).filter(id => !aliased[id])
+    }
     function recipes(server) {
         if (byId) return byId
         byId = {}
         server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
+        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creative_delight: ids, same paths): a
+        // creativeengineering: id the checks name also finds its creative_delight: twin
+        Object.keys(byId).forEach(id => {
+            if (id.indexOf('creative_delight:') != 0) return
+            let old = 'creativeengineering:' + id.substring('creative_delight:'.length)
+            if (byId[old] == null) { byId[old] = byId[id]; aliased[id] = true }
+        })
         return byId
     }
     function ingredientsOf(r) {
@@ -103,7 +115,7 @@
         let C = 'creativeengineering:'
         expectIds(server, [C + 'farmersdelightcooking/chorus_juice_manual_only', C + 'createmixing/chorus_juice',
             C + 'createfilling/chorus_juice', C + 'createemptying/chorus_juice'])
-        let bottling = Object.keys(recipes(server)).filter(id => id.indexOf(C + 'iebottling/') == 0 &&
+        let bottling = recipeKeys(server).filter(id => id.indexOf(C + 'iebottling/') == 0 &&
             resultOf(recipes(server)[id]).indexOf('endersdelight:chorus_juice') == 0)
         check('IE bottling chorus juice', bottling.length == 1, bottling.join(', ') || 'none')
         expectIds(server, ['egg_solution', 'dough_egg_solution', 'cornbread_batter_egg_solution', 'pancakes_egg_solution',
@@ -120,7 +132,7 @@
             takes(server, C + 'shapeless/berry_matcha_latte', 'neapolitan:ice_cubes'), 'ice and ice cubes')
         let rem = Item.of('delightful:matcha_latte').getCraftingRemainingItem()
         check('latte gives its bottle back in the grid', !rem.isEmpty() && itemId(rem) == 'minecraft:glass_bottle', String(rem))
-        let others = Object.keys(recipes(server)).filter(id => resultOf(recipes(server)[id]).indexOf('delightful:berry_matcha_latte') == 0)
+        let others = recipeKeys(server).filter(id => resultOf(recipes(server)[id]).indexOf('delightful:berry_matcha_latte') == 0)
         check('berry latte recipes', others.length == 2, others.join(', '))
         // bone broth soups and pastas (RC-75): hand-only ids (Create skips *_manual_only)
         expectIds(server, ['acacia_blossom_soup', 'carrot_soup', 'creamy_onion_soup', 'fig_chicken_stew', 'kangaroo_stew',
@@ -145,7 +157,7 @@
             'fruitsdelight:hamimelon_popsicle', 'fruitsdelight:hamimelon_shaved_ice', 'farmersdelight:cooking/bellini_cocktail'
         ].forEach(id => check('ice food ' + id, takes(server, id, 'minecraft:ice') && takes(server, id, 'neapolitan:ice_cubes'),
             has(server, id) ? 'ice ' + takes(server, id, 'minecraft:ice') + ', cubes ' + takes(server, id, 'neapolitan:ice_cubes') : 'recipe not loaded'))
-        let creams = Object.keys(recipes(server)).filter(id => id.indexOf('neapolitan:') == 0 && id.indexOf('ice_cream') > 0)
+        let creams = recipeKeys(server).filter(id => id.indexOf('neapolitan:') == 0 && id.indexOf('ice_cream') > 0)
         let creamsBad = creams.filter(id => takes(server, id, 'neapolitan:ice_cubes') && !takes(server, id, 'minecraft:ice'))
         check('Neapolitan ice creams take ice', creams.length > 0 && creamsBad.length == 0, creams.length + ' recipes, refuse ice: ' + creamsBad.join(', '))
         check('9 cubes -> ice keeps cubes only', has(server, 'neapolitan:ice') && !takes(server, 'neapolitan:ice', 'minecraft:ice'),
@@ -263,7 +275,7 @@
         let removed = global.removedItems || []
         PURGED.forEach(id => check('purged ' + id, removed.indexOf(id) >= 0, removed.indexOf(id) >= 0 ? 'in global.removedItems' : 'not listed'))
         let hits = []
-        Object.keys(recipes(server)).forEach(id => {
+        recipeKeys(server).forEach(id => {
             let r = recipes(server)[id]
             let out = resultOf(r)
             if (PURGED.some(p => out.indexOf(p + ' ') == 0)) hits.push(id + ' makes ' + out)
@@ -273,7 +285,7 @@
         expectGone(server, ['farmersrespite:brewing/coffee', 'farmersrespite:brewing/long_coffee', 'farmersrespite:brewing/strong_coffee',
             'create_central_kitchen:mixing/coffee', 'create_central_kitchen:milling/coffee_berries', 'farmersrespite:cutting/coffee_berries',
             'farmersrespite:coffee_beans', 'farmersrespite:coffee_beans_sack', 'minecraft:red_dye'])
-        let cake = Object.keys(recipes(server)).filter(id => resultOf(recipes(server)[id]).indexOf('farmersrespite:coffee_cake ') == 0 &&
+        let cake = recipeKeys(server).filter(id => resultOf(recipes(server)[id]).indexOf('farmersrespite:coffee_cake ') == 0 &&
             takes(server, id, 'rusticdelight:roasted_coffee_beans'))
         check('coffee cake takes roasted beans', cake.length > 0, cake.join(', ') || 'none')
         let eff = []
@@ -284,7 +296,7 @@
     }
 
     function run(src, which) {
-        pass = 0; fail = 0; byId = null; fakeN = 0; nextX = 40
+        pass = 0; fail = 0; byId = null; aliased = {}; fakeN = 0; nextX = 40
         let server = src.getServer(), level = src.getLevel()
         let parts = which == 'all' ? ['fluids', 'recipes', 'ice', 'milkjar', 'soupjar', 'sol', 'coffee'] : [which]
         parts.forEach(w => {

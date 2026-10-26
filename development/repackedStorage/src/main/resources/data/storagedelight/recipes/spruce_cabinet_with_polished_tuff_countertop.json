@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "C C",
+    "BBB"
+  ],
+  "key": {
+    "A": {
+      "item": "quark:polished_tuff_slab"
+    },
+    "B": {
+      "item": "minecraft:spruce_slab"
+    },
+    "C": {
+      "item": "minecraft:spruce_trapdoor"
+    }
+  },
+  "result": {
+    "item": "storagedelight:spruce_cabinet_with_polished_tuff_countertop"
+  }
+}

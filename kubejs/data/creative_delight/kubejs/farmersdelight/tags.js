@@ -38,4 +38,5 @@ ServerEvents.tags('block', e => {
 	t.add(e, b.t_forge_fences, b.rope_fence)
 	t.add(e, b.t_forge_fence_gates, b.rope_fence_gate)
 	t.add(e, b.t_fd_mineable_knife, b.fd_pumpkin_pie)
+	t.add(e, 'minecraft:mineable/axe', b.hanging_canvas_sign)
 })

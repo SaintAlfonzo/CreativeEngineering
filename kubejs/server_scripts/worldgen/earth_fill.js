@@ -20,6 +20,8 @@ ServerEvents.tags('worldgen/structure', function (e) {
 		// builds its own foundation: the woodland mansion pours cobblestone under its footprint down to the ground
 		// (its afterPlace), so its pad never hangs (structure_tuning.md 7.3.1)
 		'minecraft:mansion',
+		// buried by design: the cellar kitchen and the squid tank start 55 / 40 blocks under the surface
+		'farmers_structures:ratatouilles', 'farmers_structures:squids',
 	])
 	// Jigsaw structures whose offending pieces are dropped instead of the whole start (CEConfig [worldgen.earth_fill]
 	// prune): a house over deep water or a cliff goes, with its villagers, and the village stays (structure_tuning.md
@@ -30,7 +32,10 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	// Structures on a stone or brick base instead of a dirt pad: their base blocks (block tag
 	// creativeengineering:earth_fill/stone_base, blocktags.js) count as earth, for their size and their overhang.
 	// Without this the drum tower's 49x45 andesite plate counted as "small, 10 earth" (02_new_mods_tests.md 4.2).
+	// The End House (Ender's Delight, 2026-10-25) stands on a purpur and end stone floor (layer 0: 101 of its 144
+	// columns). Counted as earth, a start over the void hangs that whole floor in air and is cancelled (the mod's own
+	// structure type skipped chunks whose surface was below y 50, i.e. no island; the pack uses plain jigsaw).
 	global.tags.add(e, 'creativeengineering:earth_fill/stone_base', [
-		'eugene:ruined_drum_tower',
+		'eugene:ruined_drum_tower', 'endersdelight:end_house',
 	])
 })

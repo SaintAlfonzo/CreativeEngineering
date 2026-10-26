@@ -17,34 +17,7 @@
     }
    ],
    "notes": [
-    "Any tool but shears or a knife.",
-    "Fortune: up to +2 seeds per level."
-   ]
-  },
-  {
-   "requires": [
-    "farmersdelight"
-   ],
-   "inputs": [
-    {
-     "block": "farmersdelight:sandy_shrub"
-    }
-   ],
-   "action": {
-    "tag": "farmersdelight:straw_harvesters"
-   },
-   "outputs": [
-    {
-     "item": "minecraft:beetroot_seeds",
-     "chance": 0.125
-    },
-    {
-     "item": "farmersdelight:straw",
-     "chance": 0.3
-    }
-   ],
-   "notes": [
-    "Broken with a knife.",
+    "Any tool but shears.",
     "Fortune: up to +2 seeds per level."
    ]
   },
@@ -199,39 +172,7 @@
     }
    ],
    "notes": [
-    "Any tool but shears or a knife.",
-    "Fortune: up to +2 seeds per level."
-   ]
-  },
-  {
-   "requires": [
-    "farmersdelight",
-    "immersiveengineering"
-   ],
-   "inputs": [
-    {
-     "block": "minecraft:grass"
-    }
-   ],
-   "action": {
-    "tag": "farmersdelight:straw_harvesters"
-   },
-   "outputs": [
-    {
-     "item": "minecraft:wheat_seeds",
-     "chance": 0.125
-    },
-    {
-     "item": "farmersdelight:straw",
-     "chance": 0.2
-    },
-    {
-     "item": "immersiveengineering:seed",
-     "chance": 0.1
-    }
-   ],
-   "notes": [
-    "Broken with a knife.",
+    "Any tool but shears.",
     "Fortune: up to +2 seeds per level."
    ]
   },
@@ -344,38 +285,7 @@
     }
    ],
    "notes": [
-    "Any tool but shears or a knife."
-   ]
-  },
-  {
-   "requires": [
-    "farmersdelight",
-    "immersiveengineering"
-   ],
-   "inputs": [
-    {
-     "block": "minecraft:tall_grass"
-    }
-   ],
-   "action": {
-    "tag": "farmersdelight:straw_harvesters"
-   },
-   "outputs": [
-    {
-     "item": "minecraft:wheat_seeds",
-     "chance": 0.125
-    },
-    {
-     "item": "farmersdelight:straw",
-     "chance": 0.2
-    },
-    {
-     "item": "immersiveengineering:seed",
-     "chance": 0.1
-    }
-   ],
-   "notes": [
-    "Broken with a knife."
+    "Any tool but shears."
    ]
   },
   {

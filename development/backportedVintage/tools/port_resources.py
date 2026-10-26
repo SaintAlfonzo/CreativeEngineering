@@ -4,8 +4,8 @@
     python3 tools/port_resources.py            (run from anywhere; rewrites src/main/resources/{assets,data})
 
 Sources: the upstream 0.1.6 jar (MIT), read directly, plus files from the KOTS 0.3.1 jar (GPL-3.0): the Cucumber
-Dough texture and model (its recipes are written below) and the block loot of Magic Peanut, Smooth Salt Block and
-Vine Tile. Plan: feature_writeup/vintage_delight.md.
+Dough texture and model (its recipes are written below) and the block loot of Magic Peanut, Smooth Salt Block,
+Vine Tile, Cheese Wheel, Cheese Pizza and Meat Pizza. Plan: feature_writeup/vintage_delight.md.
 
   * purged: every file and entry naming the gearo berry, the Dehydrated effect (lang, effect icon) or the pitcher
     plant (S1, S3, S8); the 1.20-only sniffer_diggable_block tag; the Galosphere / Spelunkery recipes; the Diet tags
@@ -275,8 +275,9 @@ def kots_files():
             out = os.path.join(OUT, rel)
             os.makedirs(os.path.dirname(out), exist_ok=True)
             open(out, 'wb').write(jar.read(rel))
-        # KOTS block loot for three blocks 0.1.6 ships none for (vintageport #18): each drops itself
-        for block in ('magic_peanut', 'smooth_salt_block', 'vine_tile'):
+        # KOTS block loot for blocks 0.1.6 ships none for (vintageport #18): the first three drop themselves, the
+        # wheel and pizzas drop their remaining slices (4 at bites 0 down to 1 at bites 3)
+        for block in ('magic_peanut', 'smooth_salt_block', 'vine_tile', 'cheese_wheel', 'cheese_pizza', 'meat_pizza'):
             d = json.loads(jar.read(f'data/{NS}/loot_table/blocks/{block}.json'))
             write_json(f'data/{NS}/loot_tables/blocks/{block}.json', convert_loot('blocks/' + block, d))
     write_json(f'data/{NS}/recipes/cucumber_dough.json', {
@@ -400,6 +401,9 @@ def main():
                 d = convert_soft_fluid(name, d)
             elif '/placed_feature/' in path:
                 d = convert_placed_feature(d)
+            elif path == f'assets/{NS}/models/item/salt.json':
+                # the salt layer's item shows the one-layer block, as snow and ash layers do (upstream: salt dust's icon)
+                d = {'parent': f'{NS}:block/salt_height2'}
             elif '/potato_cannon_projectile_types/' in path:
                 # upstream names vintagedelight:pickled_ghost_pepper, which does not exist; the item is pickled_pepper
                 d['items'] = [f'{NS}:pickled_pepper' if i == f'{NS}:pickled_ghost_pepper' else i for i in d['items']]

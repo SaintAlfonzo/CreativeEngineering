@@ -68,7 +68,7 @@ console.log('sample_syringe func loading')
         notes: ['Main hand. A hit also deals normal damage.'],
     }))
     try {
-        const $WorldRows = Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.jei.world.WorldRows')
+        let $WorldRows = Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.jei.world.WorldRows')
         $WorldRows.clear('sample_syringe')
         $WorldRows.add('sample_syringe', JSON.stringify(rows))
     } catch (err) {

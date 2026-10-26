@@ -34,7 +34,8 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.cheese_pasta, [i.pasta, i.any_cheese, i.any_cheese, i.any_cheese, i.bowl], e, 'cheese_pasta_cooked_manual_only')
 		R.shapeless(i.pad_thai, [i.pasta, i.ghost_pepper, Item.of(i.chicken_cuts_cooked, 2), i.nut_mash_bottle, i.roasted_peanut, i.bowl], e,
 			'pad_thai_cooked_manual_only')
-		R.shapeless(i.pickle_soup, [i.bone_broth, Item.of(i.pickle, 2), i.carrot, i.baked_potato, i.beetroot, i.salad_ingredients], e,
+		// Heatless: the same pickled veggie slot (twice, as the 2 pickles) and any 2 vegetables as the pot recipe (vintagedelight/recipes.js)
+		R.shapeless(i.pickle_soup, [i.bone_broth, i.t_pickled_veg, i.t_pickled_veg, i.vegetables, i.vegetables, i.beetroot, i.salad_ingredients], e,
 			'pickle_soup_cooked_manual_only')
 	})
 })

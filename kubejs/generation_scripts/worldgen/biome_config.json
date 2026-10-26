@@ -3,9 +3,9 @@
     "workflow": "Set a biome's \"multiplier\" (or \"replace_with\"), then /reload or rejoin to see the solve (result_pct / note below update), and create a NEW world to use it. kubejs/server_scripts/worldgen/biome_overrides.js solves the layout at every world load. Multipliers other than 0/1 need a climate sample from /dumpclimate first (see README.md).",
     "multiplier": "1.0 = untouched. 0 = removed (its climate space goes to whichever biomes border it). 0.5 = half as common, 2.0 = twice as common, measured against share_pct. The solver hits these by raising/lowering one offset penalty per biome, so a boosted biome grows outward from its existing patches into its climate neighbours, never appears somewhere climatically unrelated.",
     "replace_with": "A biome id, or null. Relabels every entry of this biome to that one -- an exact swap of the same climate space. Overrides multiplier.",
+    "target_pct": "Optional: an absolute share goal (% of the biome's layer) instead of a multiplier; overrides it. Works for a biome the samples never hit: its entries win the samples they lose by the smallest margins. tools/biome_rarity_floor.py writes these. \"target_layer\" (optional) names the layer for a never-hit biome (default surface).",
     "read_only": "\"entries\" (how many climate boxes the biome owns), \"layer\" (surface or underground -- which sample layer its share is measured on), \"share_pct\" (original % of that layer), \"result_pct\" (% after the last solve), \"note\" (solver warnings, e.g. target clamped).",
-    "caveat": "Every world stores its biome layout in level.dat at creation time. Changes only affect worlds created AFTER the override exists; existing saves keep the layout they were made with.",
-    "target_pct": "Optional: an absolute share goal (% of the biome's layer) instead of a multiplier; overrides it. Works for a biome the samples never hit: its entries win the samples they lose by the smallest margins. tools/biome_rarity_floor.py writes these. \"target_layer\" (optional) names the layer for a never-hit biome (default surface)."
+    "caveat": "Every world stores its biome layout in level.dat at creation time. Changes only affect worlds created AFTER the override exists; existing saves keep the layout they were made with."
   },
   "dimensions": {
     "minecraft:overworld": {
@@ -367,12 +367,12 @@
         "minecraft:stony_shore": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.3,
+          "target_layer": "surface",
           "entries": 8,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.3,
-          "target_pct": 0.3,
-          "target_layer": "surface"
+          "result_pct": 0.3
         },
         "minecraft:sunflower_plains": {
           "multiplier": 1.36,
@@ -522,12 +522,12 @@
         "terralith:basalt_cliffs": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.3,
+          "target_layer": "surface",
           "entries": 1,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.3,
-          "target_pct": 0.3,
-          "target_layer": "surface"
+          "result_pct": 0.3
         },
         "terralith:birch_taiga": {
           "multiplier": 1,
@@ -573,12 +573,12 @@
         "terralith:caldera": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.3,
+          "target_layer": "surface",
           "entries": 6,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.305,
-          "target_pct": 0.3,
-          "target_layer": "surface"
+          "result_pct": 0.305
         },
         "terralith:cave/andesite_caves": {
           "multiplier": 1,
@@ -736,12 +736,12 @@
         "terralith:frozen_cliffs": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.3,
+          "target_layer": "surface",
           "entries": 4,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.3,
-          "target_pct": 0.3,
-          "target_layer": "surface"
+          "result_pct": 0.3
         },
         "terralith:glacial_chasm": {
           "multiplier": 0.736,
@@ -754,12 +754,12 @@
         "terralith:granite_cliffs": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.3,
+          "target_layer": "surface",
           "entries": 8,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.3,
-          "target_pct": 0.3,
-          "target_layer": "surface"
+          "result_pct": 0.3
         },
         "terralith:gravel_beach": {
           "multiplier": 1,
@@ -980,12 +980,12 @@
         "terralith:shield_clearing": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.15,
+          "target_layer": "surface",
           "entries": 1,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.15,
-          "target_pct": 0.15,
-          "target_layer": "surface"
+          "result_pct": 0.15
         },
         "terralith:shrubland": {
           "multiplier": 1,
@@ -1102,22 +1102,22 @@
         "terralith:valley_clearing": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.3,
+          "target_layer": "surface",
           "entries": 2,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.3,
-          "target_pct": 0.3,
-          "target_layer": "surface"
+          "result_pct": 0.3
         },
         "terralith:volcanic_crater": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.15,
+          "target_layer": "surface",
           "entries": 1,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.15,
-          "target_pct": 0.15,
-          "target_layer": "surface"
+          "result_pct": 0.15
         },
         "terralith:volcanic_peaks": {
           "multiplier": 1.5,
@@ -1146,12 +1146,12 @@
         "terralith:white_cliffs": {
           "multiplier": 1,
           "replace_with": null,
+          "target_pct": 0.3,
+          "target_layer": "surface",
           "entries": 4,
           "layer": "surface",
           "share_pct": 0,
-          "result_pct": 0.3,
-          "target_pct": 0.3,
-          "target_layer": "surface"
+          "result_pct": 0.3
         },
         "terralith:white_mesa": {
           "multiplier": 1.5,

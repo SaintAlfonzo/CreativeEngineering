@@ -14,7 +14,7 @@ ServerEvents.recipes(e => {
 		//######################### Egg solution #########################
 		// The pack's egg solution fluid: 250 mB stands in for one egg and its milk (create/recipes.js)
 		if (Platform.isLoaded('create')) {
-			R.createMixing(i.vanilla_pudding, [i.dried_vanilla_pods, i.any_sugar, i.bowl, Fluid.of(f.egg_solution, 250)], e,
+			R.createMixing(i.vanilla_pudding, [i.dried_vanilla_pods, i.any_sweetener, i.bowl, Fluid.of(f.egg_solution, 250)], e,
 				'vanilla_pudding_egg_solution', 'heated')
 		}
 

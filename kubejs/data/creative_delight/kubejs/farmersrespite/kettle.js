@@ -31,10 +31,10 @@ ServerEvents.recipes(e => {
 		kettle('farmersrespite:brewing/rose_hip_tea', [i.rose_hips, i.rose_hips], i.rose_hip_tea, 'rose_hip_tea', f.water)
 		kettle('farmersrespite:brewing/dandelion_tea', [i.dandelion, i.t_respite_tea_leaves], i.dandelion_tea, 'dandelion_tea', f.water)
 		kettle('farmersrespite:brewing/purulent_tea', [i.nether_wart, i.fermented_spider_eye], i.purulent_tea, 'purulent_tea', f.water)
-		kettle('farmersrespite:brewing/apple_cider', [i.apple, i.sugar], i.farmersdelight_apple_cider, 'apple_cider', f.water)
-		kettle('farmersrespite:brewing/melon_juice', [i.melon, i.sugar], i.melon_juice, 'melon_juice', f.water)
+		kettle('farmersrespite:brewing/apple_cider', [i.apple, i.any_sweetener_drink], i.farmersdelight_apple_cider, 'apple_cider', f.water)
+		kettle('farmersrespite:brewing/melon_juice', [i.melon, i.any_sweetener_drink], i.melon_juice, 'melon_juice', f.water)
 		// 2.0 used a milk bottle as the container; the milk is now the base and the cocoa is bottled in glass
-		kettle('farmersrespite:brewing/hot_cocoa', [i.cocoa_beans, i.sugar], i.hot_cocoa, 'hot_cocoa', f.milk)
+		kettle('farmersrespite:brewing/hot_cocoa', [i.cocoa_beans, i.any_sweetener_drink], i.hot_cocoa, 'hot_cocoa', f.milk)
 
 		// Tiers: [tier item, base fluid] per drink. Long: + milk. Strong: + honey bottle (its bottle goes to the
 		// leftover slots).

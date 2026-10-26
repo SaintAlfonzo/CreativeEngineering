@@ -38,7 +38,7 @@ R.replaceInput(
   i.any_plate_gold, e
 )
 //IE Workbench recipe
-R.ieBlueprint(Item.of(i.gold_hand, 1), [Item.of(i.any_plate_gold, 3), i.andesite_alloy], 'components', e)
+R.ieBlueprint(Item.of(i.gold_hand, 1), [{ id: i.any_plate_gold, count: 3 }, i.andesite_alloy], 'components', e, '3_plate_gold_to_1_brass_hand_by_components')
 
 // ############################## Vibration Table ##############################
 

@@ -1660,6 +1660,9 @@ Not changed: the sunk acacia log is Geophilic's bush (TODO `farming/trees #2` no
 - [ ] **ST-230 Wood:** each patch uses its biome's wood; none in biomes outside Geophilic's wood list (a desert, plains).
 - [ ] **ST-231 Doubled:** census of standalone acacia stumps / fallen logs in a forceloaded savanna square, about twice
   the 1.1.03 count (rough: about 0.5 stumps and 0.4 fallen logs per chunk before filters).
+- [ ] **ST-232 Quark spire teleport in the End [scratch]:** `/tp` an armor stand (or player) in the End to an
+  unexplored spot (300016 100 300016): done in milliseconds, no "ticks behind", no region file at the target. Then
+  an ender pearl onto Myalite next to a spire viaduct still warps along it (the chunks there are loaded).
 
 ## 4. Limits and decisions
 

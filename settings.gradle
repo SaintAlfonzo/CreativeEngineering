@@ -29,7 +29,7 @@ plugins {
 rootProject.name = 'CreativeEngineering'
 
 // The mod folders live under development/; project names (and :task paths) stay the bare mod names.
-['patcherMod', 'exposureBackport', 'incubationAdditions', 'moreMooblooms', 'backportedBrewin', 'backportedVinery', 'babyMobs', 'creativeLabels', 'backportedVeggies', 'backportedVintage', 'backportedFungi', 'clientCapture', 'backportedMiners', 'backportedDisplay'].each { name ->
+['patcherMod', 'exposureBackport', 'incubationAdditions', 'moreMooblooms', 'backportedBrewin', 'backportedVinery', 'babyMobs', 'creativeLabels', 'backportedVeggies', 'backportedVintage', 'backportedFungi', 'clientCapture', 'backportedMiners', 'backportedDisplay', 'repackedStorage'].each { name ->
     include name
     project(":${name}").projectDir = file("development/${name}")
 }
@@ -38,7 +38,7 @@ rootProject.name = 'CreativeEngineering'
 // under development/creativeDelight/members/. Project name = the member's jar_name.
 include 'creativeDelight'
 project(':creativeDelight').projectDir = file('development/creativeDelight')
-['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'repackedOceanic': 'oceanic', 'repackedEnds': 'ends', 'backportedRustic': 'rustic', 'repackedDelightful': 'delightful'].each { name, dir ->
+['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'repackedOceanic': 'oceanic', 'repackedEnds': 'ends', 'backportedRustic': 'rustic', 'repackedDelightful': 'delightful', 'endersAdditions': 'enders'].each { name, dir ->
     include name
     project(":${name}").projectDir = file("development/creativeDelight/members/${dir}")
 }

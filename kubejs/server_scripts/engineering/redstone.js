@@ -126,7 +126,7 @@ R.createSequencedAssembly(Item.of(i.transmitter, 1), i.any_plate_copper, [
 	e.recipes.create.deploying(incTransmitter, [incTransmitter, i.amethyst_shard]),
 	e.recipes.create.deploying(incTransmitter, [incTransmitter, i.lightning_rod])
 ], ['transmitter'], e, 'transmitter_sequenced_assembly', 1)
-R.ieBlueprint(Item.of(i.transmitter, 2), [Item.of(i.any_plate_copper, 2), Item.of(i.redstone, 2), Item.of(i.lightning_rod, 1), Item.of(i.amethyst_shard, 1)], 'redstonecomponents', e)
+R.ieBlueprint(Item.of(i.transmitter, 2), [{ id: i.any_plate_copper, count: 2 }, Item.of(i.redstone, 2), Item.of(i.lightning_rod, 1), Item.of(i.amethyst_shard, 1)], 'redstonecomponents', e, '2_plate_copper_to_2_transmitter_by_redstonecomponents')
 
 // Redstone link andesite tier, add transmitter
 R.remove({id: 'create:crafting/logistics/redstone_link'}, e)

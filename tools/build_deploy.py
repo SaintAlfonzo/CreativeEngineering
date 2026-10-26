@@ -149,6 +149,15 @@ IN_TREE_EXTRA_SRC = {
                         'kubejs/assets/creative_delight/kubejs', 'kubejs/data/creative_delight/worldgen',
                         'kubejs/data/creative_delight/cup_conversion'],
 }
+# Third-party jars that patcherMod fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
+# fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.
+PINNED_MODS = [
+    ('Create-DnDesire-', 'Create-DnDesire-1.19.2-1.2c.Beta Mid-Dev.jar'),
+    ('supplementaries-', 'supplementaries-1.19.2-2.4.20.jar'),
+    ('breezy-', 'breezy-1.19.2-1.0.8.jar'),
+    ('create-1.19.2-', 'create-1.19.2-0.5.1.i.jar'),
+    ('easyelytratakeoff-', 'easyelytratakeoff-1.19.2-4.2.jar'),
+]
 
 # payload folder -> (targets, folder it goes to on the target; '' = the target's root). Everything the server
 # gets, the client gets too: clients also host single-player worlds, so they need the server-only mods and
@@ -171,6 +180,9 @@ CATEGORIES = {
     # the unmodified Rustic Delight 1.7.0 jar the Creative Delight port reads its art and data from (rustic_delight.md
     # 5), as for Miner's Delight. Never in mods/.
     'rustic_upstream': (('server', 'client'), 'rustic_upstream'),
+    # the unmodified Farmer's Structures 1.0.6 jar the patcherMod worldgen donor reads (farmers_structures.md 5).
+    # Never in mods/: it is a NeoForge jar.
+    'farmers_upstream': (('server', 'client'), 'farmers_upstream'),
     'server': (('server',), ''),
 }
 TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
@@ -477,6 +489,8 @@ UPSTREAM_DONORS = {
     'vinery_upstream': ('backportedVinery', 'Vinery', ('backportedVinery', 'net', 'satisfy', 'vinery', 'forge', 'upstream')),
     'miners_upstream': ('backportedMiners', "Miner's Delight", ('backportedMiners', 'com', 'sammy', 'minersdelight', 'upstream')),
     # nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
+    'farmers_upstream': ('creativeengineering', "Farmer's Structures donor (patcherMod)",
+                         ('patcherMod', 'com', 'SaintAlfonzo', 'creativeengineering', 'worldgen', 'donor')),
     'rustic_upstream': ('creative_delight', 'Rustic Delight (Creative Delight)',
                         ('creativeDelight/members/rustic', 'com', 'SaintAlfonzo', 'creativedelight', 'rustic', 'upstream')),
 }
@@ -577,6 +591,16 @@ def check_in_tree_mods(pre):
                       if '/build/' not in d + '/'), default=0)
         if newest > os.path.getmtime(jar):
             pre.warn(f'development/{project}/src has changes newer than mods/{deployed[0]} (rebuild + install the jar?)')
+
+
+def check_pinned_mods(pre):
+    """Version-pinned fixes (deploy.md "Mod updates"): warn when a targeted jar is no longer the pinned file."""
+    jars = os.listdir(MODS)
+    for prefix, pinned in PINNED_MODS:
+        found = [j for j in jars if j.startswith(prefix) and j.endswith('.jar')]
+        if found != [pinned]:
+            pre.warn(f'version-pinned fixes target {pinned}, mods/ has {found or "none"}: rerun the '
+                     'deploy.md "Mod updates" checklist for it, then update PINNED_MODS')
 
 
 def check_climate_reader(pre, files):
@@ -1423,21 +1447,23 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream')) else None,
         ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
          'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ("`miners_upstream/` goes next to `mods/`, never inside it: the Miner's Delight backport reads that jar and "
          'stops the game with a message if it is missing.') if has('miners_upstream') else None,
         ("`rustic_upstream/` goes next to `mods/`, never inside it: Creative Delight's Rustic Delight port reads that jar "
          'and stops the game with a message if it is missing.') if has('rustic_upstream') else None,
+        ("`farmers_upstream/` goes next to `mods/`, never inside it: patcherMod reads Farmer's Structures 1.0.6 from it for the "
+         'new farm structures and house pieces. Without it the old 1.0.0 structures run alone.') if has('farmers_upstream') else None,
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
          "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
         world_step('the server world (`world/`, or the `level-name` folder)'),
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),
@@ -1522,6 +1548,7 @@ def main():
     print('checking structure data (regenerating in a scratch folder)...')
     check_structures(pre)
     check_in_tree_mods(pre)
+    check_pinned_mods(pre)
     check_climate_reader(pre, files)
     check_manifest(pre, files)
     check_display_delight_models(pre)

@@ -183,7 +183,9 @@ public class SeasoningJEI implements IModPlugin {
 
     /** A {@link SeasoningRecipe} page: every food it takes, seasoned in step; null if it matches nothing or is too long. */
     private static Display pack(SeasoningRecipe recipe, ItemStack machine) {
-        List<ItemStack> foods = Arrays.asList(recipe.getFood().getItems());
+        // a pair craft's food ingredient is the first seasoning's tag; keep the foods both take
+        List<ItemStack> foods = Arrays.stream(recipe.getFood().getItems())
+                .filter(food -> Seasonings.accepts(food, recipe.seasonings())).toList();
         if (foods.isEmpty() || recipe.getParts().size() + 1 > SeasoningCategory.MAX_INPUTS) {
             return null;
         }

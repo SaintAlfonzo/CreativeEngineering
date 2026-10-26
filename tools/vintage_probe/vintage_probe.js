@@ -35,6 +35,9 @@
 
     const Y = -60
     const VT = 'vintagedelight:', VG = 'veggiesdelight:', C = 'creativeengineering:'
+    // the pack's food recipes are under C or, since the move into Creative Delight (2026-10-25), CDN
+    const CDN = 'creative_delight:'
+    function ours(id, path) { return id.indexOf(C + path) == 0 || id.indexOf(CDN + path) == 0 }
     let pass = 0, fail = 0, part = ''
     function check(name, ok, detail) {
         if (ok) pass++; else fail++
@@ -51,11 +54,20 @@
     function set(level, pos, id) { level.setBlockAndUpdate(pos, block(id).defaultBlockState()) }
 
     // ---- recipes: id -> recipe, built once per command (never getType() on every recipe)
-    let byId = null
+    let byId = null, aliasId = {}
     function recipes(server) {
         if (byId) return byId
-        byId = {}
+        byId = {}; aliasId = {}
         server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
+        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creative_delight: ids, same paths): a
+        // creativeengineering: id the checks name also finds its creative_delight: twin
+        let aliased = 0
+        Object.keys(byId).forEach(id => {
+            if (id.indexOf('creative_delight:') != 0) return
+            let old = 'creativeengineering:' + id.substring('creative_delight:'.length)
+            if (byId[old] == null) { aliasId[old] = byId[id]; aliased++ }
+        })
+        note('recipe ids aliased from creative_delight:', aliased)
         return byId
     }
     function ingredientsOf(r) {
@@ -66,21 +78,22 @@
     function resultOf(r) {
         try { let s = r.getResultItem(); return s == null || s.isEmpty() ? '' : itemId(s) + ' x' + s.getCount() } catch (e) { return '?' }
     }
-    function has(server, id) { return recipes(server)[id] != null }
+    function rget(server, id) { let r = recipes(server)[id]; return r != null ? r : aliasId[id] }
+    function has(server, id) { return rget(server, id) != null }
     function expectIds(server, ids) {
-        ids.forEach(id => check('recipe ' + id, has(server, id), has(server, id) ? resultOf(recipes(server)[id]) : 'not loaded'))
+        ids.forEach(id => check('recipe ' + id, has(server, id), has(server, id) ? resultOf(rget(server, id)) : 'not loaded'))
     }
     function expectGone(server, ids) {
         ids.forEach(id => check('removed ' + id, !has(server, id), has(server, id) ? 'still loaded' : 'gone'))
     }
     function takes(server, id, itemIdStr) {
-        let r = recipes(server)[id]
+        let r = rget(server, id)
         if (!r) return false
         return ingredientsOf(r).some(g => g.test(Item.of(itemIdStr)))
     }
     // ids (any namespace) whose id passes `idTest` and whose result is outId
     function idsWhere(server, idTest, outId) {
-        return Object.keys(recipes(server)).filter(id => idTest(id) && resultOf(recipes(server)[id]).indexOf(outId + ' ') == 0)
+        return Object.keys(recipes(server)).filter(id => idTest(id) && resultOf(rget(server, id)).indexOf(outId + ' ') == 0)
     }
     function idsMaking(server, prefix, outId) { return idsWhere(server, id => id.indexOf(prefix) == 0, outId) }
     function firstOfTag(tagId) {
@@ -158,8 +171,8 @@
     }
     function expectCan(server, key, suffix, mustTake) {
         let id = canRecipeId(server, key, suffix), out = global.item[key]
-        let ok = id != null && resultOf(recipes(server)[id]).indexOf(out + ' ') == 0
-        let detail = id == null ? 'not loaded' : id + ' -> ' + resultOf(recipes(server)[id])
+        let ok = id != null && resultOf(rget(server, id)).indexOf(out + ' ') == 0
+        let detail = id == null ? 'not loaded' : id + ' -> ' + resultOf(rget(server, id))
         if (ok && mustTake) mustTake.forEach(t => { if (!takes(server, id, t)) { ok = false; detail += ', refuses ' + t } })
         check('can ' + key + (suffix || ' (plain)'), ok, detail)
         return id
@@ -188,17 +201,17 @@
             .forEach(k => { tally(expectCan(server, k, '')); tally(expectCan(server, k, '_broth')) })
         // CP-29 sweet potato pie filling: 4 slices, the pot (2 baked + 2 sugar + can), filling + crust by hand and oven
         tally(expectCan(server, 'canned_sweet_potato_pie_filling', '', [VG + 'sweet_potato_pie_slice']))
-        let slices = 0, fr = recipes(server)[canRecipeId(server, 'canned_sweet_potato_pie_filling', '') || '-']
+        let slices = 0, fr = rget(server, canRecipeId(server, 'canned_sweet_potato_pie_filling', '') || '-')
         if (fr) ingredientsOf(fr).forEach(g => { if (g.test(Item.of(VG + 'sweet_potato_pie_slice'))) slices++ })
         check('filling takes 4 slices', slices == 4, slices + ' slots')
         let pot = C + 'farmersdelightcooking/canned_sweet_potato_pie_filling_pot'
         check('filling in the Cooking Pot', has(server, pot) && takes(server, pot, VG + 'baked_sweet_potato') && takes(server, pot, 'minecraft:sugar'),
-            has(server, pot) ? resultOf(recipes(server)[pot]) + ', baked ' + takes(server, pot, VG + 'baked_sweet_potato') + ', sugar ' +
+            has(server, pot) ? resultOf(rget(server, pot)) + ', baked ' + takes(server, pot, VG + 'baked_sweet_potato') + ', sugar ' +
                 takes(server, pot, 'minecraft:sugar') : 'not loaded')
         if (has(server, pot)) {
-            let ins = ingredientsOf(recipes(server)[pot]).map(g => { let s = g.getStacks(); return s.size() ? itemId(s.toList().get(0)) : '-' })
+            let ins = ingredientsOf(rget(server, pot)).map(g => { let s = g.getStacks(); return s.size() ? itemId(s.toList().get(0)) : '-' })
             note('pot filling inputs', ins.join(', '))
-            try { note('pot filling container', String(recipes(server)[pot].getOutputContainer())) } catch (e) { }
+            try { note('pot filling container', String(rget(server, pot).getOutputContainer())) } catch (e) { }
         }
         expectIds(server, [C + 'shapeless/canned_sweet_potato_pie_filling_pie_manual_only', C + 'baking/sweet_potato_pie_from_filling',
             C + 'baking/sweet_potato_pie'])
@@ -239,27 +252,27 @@
             VG + 'compat/vintagedelight/deluxe_burger'])
         ;['cheese_burger', 'deluxe_burger'].forEach(n => {
             let id = C + 'shaped/' + n + '_manual_only'
-            check(n + ' shaped', has(server, id), has(server, id) ? resultOf(recipes(server)[id]) : 'not loaded')
+            check(n + ' shaped', has(server, id), has(server, id) ? resultOf(rget(server, id)) : 'not loaded')
             check(n + ' takes the cheese slice', takes(server, id, VT + 'cheese_slice'), '')
             check(n + ' takes beef or vegetarian patty', takes(server, id, 'farmersdelight:beef_patty') && takes(server, id, VG + 'cooked_vegetarian_patty'),
                 'beef ' + takes(server, id, 'farmersdelight:beef_patty') + ', veg ' + takes(server, id, VG + 'cooked_vegetarian_patty'))
             let asm = assemblies(server, VT + n)
             let asmId = C + 'createsequencedassembly/' + n + '_sequenced_assembly'
             if (!asm.length && has(server, asmId)) asm = [asmId]
-            check(n + ' one assembly', asm.length == 1 && asm[0] == asmId, asm.join(', ') || 'none (' + asmId + ' loaded: ' + has(server, asmId) + ')')
+            check(n + ' one assembly', asm.length == 1 && (asm[0] == asmId || asm[0] == CDN + asmId.substring(C.length)), asm.join(', ') || 'none (' + asmId + ' loaded: ' + has(server, asmId) + ')')
             let mach = machineRoutes(server, VT + n)
             check(n + ' not in mixer / mechanical crafter', mach.length == 0, mach.join(', ') || 'none')
-            let all = Object.keys(recipes(server)).filter(k => resultOf(recipes(server)[k]).indexOf(VT + n + ' ') == 0)
+            let all = Object.keys(recipes(server)).filter(k => resultOf(rget(server, k)).indexOf(VT + n + ' ') == 0)
             note(n + ' recipes', all.join(', '))
         })
         // VTD-49 stuffed burrito
         expectGone(server, [VT + 'stuffed_burrito', VG + 'compat/vintagedelight/stuffed_burrito'])
         let bur = C + 'shapeless/stuffed_burrito_manual_only', tort = firstOfTag('forge:tortilla')
-        check('burrito grid', has(server, bur), has(server, bur) ? resultOf(recipes(server)[bur]) : 'not loaded')
+        check('burrito grid', has(server, bur), has(server, bur) ? resultOf(rget(server, bur)) : 'not loaded')
         check('burrito takes a tortilla', tort != null && takes(server, bur, tort), 'first #forge:tortilla ' + tort)
         check('burrito takes ghost pepper or roasted pepper', takes(server, bur, VT + 'ghost_pepper') && takes(server, bur, 'rusticdelight:roasted_bell_pepper_red'),
             'ghost ' + takes(server, bur, VT + 'ghost_pepper') + ', roasted red ' + takes(server, bur, 'rusticdelight:roasted_bell_pepper_red'))
-        let burAll = Object.keys(recipes(server)).filter(k => resultOf(recipes(server)[k]).indexOf(VT + 'stuffed_burrito ') == 0)
+        let burAll = Object.keys(recipes(server)).filter(k => resultOf(rget(server, k)).indexOf(VT + 'stuffed_burrito ') == 0)
         let burBread = burAll.filter(k => takes(server, k, 'minecraft:bread'))
         check('no burrito recipe on bread', burBread.length == 0, burBread.join(', ') || 'none of ' + burAll.length)
         let burAsm = assemblies(server, VT + 'stuffed_burrito')
@@ -281,11 +294,11 @@
         let heat = Object.keys(recipes(server)).filter(id => /smelting|smoking|campfire|blasting/.test(id) && takes(server, id, VT + 'oat_dough'))
         check('oat dough has no furnace route', heat.length == 0, heat.join(', ') || 'none')
         check('3 raw oats -> bread kept', has(server, VT + 'oat_bread') && takes(server, VT + 'oat_bread', VT + 'raw_oats') &&
-            resultOf(recipes(server)[VT + 'oat_bread']).indexOf('minecraft:bread ') == 0,
-            has(server, VT + 'oat_bread') ? resultOf(recipes(server)[VT + 'oat_bread']) : 'not loaded')
+            resultOf(rget(server, VT + 'oat_bread')).indexOf('minecraft:bread ') == 0,
+            has(server, VT + 'oat_bread') ? resultOf(rget(server, VT + 'oat_bread')) : 'not loaded')
         expectGone(server, [VT + 'oatmeal_cookie'])
-        let cookie = Object.keys(recipes(server)).filter(id => resultOf(recipes(server)[id]).indexOf(VT + 'oatmeal_cookie ') == 0)
-        check('oatmeal cookie only in the oven', cookie.length >= 1 && cookie.every(id => id.indexOf(C + 'baking/') == 0) &&
+        let cookie = Object.keys(recipes(server)).filter(id => resultOf(rget(server, id)).indexOf(VT + 'oatmeal_cookie ') == 0)
+        check('oatmeal cookie only in the oven', cookie.length >= 1 && cookie.every(id => ours(id, 'baking/')) &&
             takes(server, C + 'baking/oatmeal_cookie', VT + 'raw_oats'), cookie.join(', ') || 'none')
         // VTD-52 / VD Veggies compat folded
         expectGone(server, [VG + 'cesar_salad', VG + 'compat/vintagedelight/cesar_salad', VG + 'stuffed_zucchini_boat',
@@ -301,7 +314,7 @@
             VG + 'compat/corndelight/vegetable_wrap'])
         let doughs = tagList($VReg.ITEMS, 'forge:dough')
         ;['chicken_fajitas_wrap', 'vegetables_wrap'].forEach(n => {
-            let all = Object.keys(recipes(server)).filter(k => resultOf(recipes(server)[k]).indexOf(VG + n + ' ') == 0)
+            let all = Object.keys(recipes(server)).filter(k => resultOf(rget(server, k)).indexOf(VG + n + ' ') == 0)
             let onDough = all.filter(k => doughs.some(d => takes(server, k, d)))
             check(n + ' has no dough recipe', all.length > 0 && onDough.length == 0, onDough.join(', ') || all.length + ' recipes, none on dough')
             let grid = C + 'shapeless/' + n + '_manual_only'
@@ -340,8 +353,9 @@
             tagList(I, 'forge:seeds/' + n).join(', ')))
         note('peanut seeds', 'the peanut plants itself (no seed item); #forge:seeds/peanut = ' + (tagList(I, 'forge:seeds/peanut').join(', ') || 'empty'))
         let rp = tagList(I, 'creativeengineering:roasted_bell_pepper')
-        check('#creativeengineering:roasted_bell_pepper', sameSet(rp, ['rusticdelight:roasted_bell_pepper_green', 'rusticdelight:roasted_bell_pepper_red',
-            'rusticdelight:roasted_bell_pepper_yellow']), rp.join(', '))
+        // all nine colours since the Rustic Delight 1.7.0 port (creative_delight rusticdelight/tags.js)
+        check('#creativeengineering:roasted_bell_pepper', sameSet(rp, ['green', 'red', 'yellow', 'orange', 'white', 'pink', 'blue', 'purple', 'black']
+            .map(c => 'rusticdelight:roasted_bell_pepper_' + c)), rp.join(', '))
         check('burrito takes every roasted pepper', rp.length > 0 && rp.every(x => takes(server, C + 'shapeless/stuffed_burrito_manual_only', x)), '')
         // VTD-16: Brewin' pickling only in the jar
         expectGone(server, ['brewinandchewin:fermenting/kimchi', 'brewinandchewin:fermenting/pickled_pickles_from_honey'])
@@ -349,11 +363,16 @@
             let keg = idsWhere(server, id => id.indexOf('brewinandchewin:fermenting/') == 0 || id.indexOf(C + 'fermenting/') == 0, out)
             check('no keg recipe for ' + out, keg.length == 0, keg.join(', ') || 'none')
         })
-        expectIds(server, [C + 'pickling/brewin_kimchi', C + 'pickling/brewin_pickled_pickles'])
+        expectIds(server, [C + 'pickling/brewin_kimchi', C + 'pickling/pickled_sea_pickle'])
+        // VTD-55: Brewin's pickled pickles merged into Pickled Sea Pickle (2026-10-25); its honey jar recipe is gone
+        expectGone(server, [C + 'pickling/brewin_pickled_pickles'])
         check('jar kimchi -> Brewin kimchi x2', has(server, C + 'pickling/brewin_kimchi') &&
-            resultOf(recipes(server)[C + 'pickling/brewin_kimchi']) == 'brewinandchewin:kimchi x2', has(server, C + 'pickling/brewin_kimchi') ?
-            resultOf(recipes(server)[C + 'pickling/brewin_kimchi']) : '-')
-        check('jar pickled pickles take a honey bottle', takes(server, C + 'pickling/brewin_pickled_pickles', 'minecraft:honey_bottle'), '')
+            resultOf(rget(server, C + 'pickling/brewin_kimchi')) == 'brewinandchewin:kimchi x2', has(server, C + 'pickling/brewin_kimchi') ?
+            resultOf(rget(server, C + 'pickling/brewin_kimchi')) : '-')
+        check('jar pickled sea pickle: 5 sea pickles + salt -> 5', has(server, C + 'pickling/pickled_sea_pickle') &&
+            takes(server, C + 'pickling/pickled_sea_pickle', 'minecraft:sea_pickle') &&
+            resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) == 'creativeengineering:pickled_sea_pickle x5',
+            has(server, C + 'pickling/pickled_sea_pickle') ? resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) : '-')
         // VTD-11: every jar recipe that takes salt dust also takes The Salt's salt
         let jarIds = Object.keys(recipes(server)).filter(id => id.indexOf(VT + 'fermenting/') == 0 || id.indexOf(C + 'pickling/') == 0 ||
             id.indexOf(VG + 'compat/vintagedelight/fermenting/') == 0)
@@ -508,10 +527,10 @@
             check('tag forge:fluid/' + n, tagHas($VReg.FLUIDS, 'forge:fluid/' + n, C + n), tagList($VReg.FLUIDS, 'forge:fluid/' + n).join(', '))
             expectGone(server, [VG + 'cooking/' + n])
             let pot = C + 'farmersdelightcooking/' + n + '_manual_only'
-            check('pot ' + n, has(server, pot) && takes(server, pot, POT_IN[n]), has(server, pot) ? resultOf(recipes(server)[pot]) +
+            check('pot ' + n, has(server, pot) && takes(server, pot, POT_IN[n]), has(server, pot) ? resultOf(rget(server, pot)) +
                 ', takes ' + POT_IN[n] + ' ' + takes(server, pot, POT_IN[n]) : 'not loaded')
             // Create mixer (heated): 250 mB out
-            let mix = recipes(server)[C + 'createmixing/' + n]
+            let mix = rget(server, C + 'createmixing/' + n)
             if (!mix) check('createmixing ' + n, false, 'not loaded')
             else {
                 let d = '?'
@@ -521,7 +540,7 @@
                 check('createmixing ' + n, d == C + n + ' 250', d + ', heat ' + heat)
             }
             ;['createfilling', 'createemptying'].forEach(kind => {
-                let r = recipes(server)[C + kind + '/' + n]
+                let r = rget(server, C + kind + '/' + n)
                 if (!r) { check(kind + ' ' + n, false, 'not loaded'); return }
                 let d = '?'
                 try {
@@ -532,8 +551,8 @@
             })
             // IE Bottling Machine: one per fluid, 250 mB
             let bott = Object.keys(recipes(server)).filter(id => {
-                if (id.indexOf(C + 'iebottling/') != 0) return false
-                let r = recipes(server)[id], out = ''
+                if (!ours(id, 'iebottling/')) return false
+                let r = rget(server, id), out = ''
                 try { out = itemId(r.output.get().get(0)) } catch (e) { out = resultOf(r) }
                 return out.indexOf(VG + n) == 0
             })
@@ -575,10 +594,10 @@
     function pickling(server, level) {
         let jb = block(VT + 'fermenting_jar')
         check('Pickling Jar block', jb != null && String($VReg.BLOCKS.getKey(jb)) == VT + 'fermenting_jar', jb == null ? 'null' : String($VReg.BLOCKS.getKey(jb)))
-        // side mapping: top 6 ingredient slots, sides the container slot, bottom the 2 outputs
+        // side mapping: top 6 ingredient slots, sides the container slot, bottom the 2 outputs and the remainder slot (-04)
         let pos = jarAt(level, 200), be = level.getBlockEntity(pos)
         let up = side(be, $VDir.UP), north = side(be, $VDir.NORTH), down = side(be, $VDir.DOWN)
-        check('item handler sides', up != null && north != null && down != null && up.getSlots() == 6 && north.getSlots() == 1 && down.getSlots() == 2,
+        check('item handler sides', up != null && north != null && down != null && up.getSlots() == 6 && north.getSlots() == 1 && down.getSlots() == 3,
             'up ' + (up ? up.getSlots() : 'none') + ', side ' + (north ? north.getSlots() : 'none') + ', down ' + (down ? down.getSlots() : 'none'))
         if (up == null || north == null || down == null) return
         let rej = north.insertItem(0, Item.of(VT + 'cucumber'), false)
@@ -588,7 +607,7 @@
         let cont = north.insertItem(0, Item.of('minecraft:glass_bottle'), false)
         check('side takes a glass bottle', cont.isEmpty() && itemId(be.getInventory().getStackInSlot(6)) == 'minecraft:glass_bottle', slots(be.getInventory()))
         // 5 cucumbers + salt -> 5 pickles, with each salt
-        let pr = recipes(server)[VT + 'fermenting/pickle_from_fermenting']
+        let pr = rget(server, VT + 'fermenting/pickle_from_fermenting')
         let pt = pr ? pr.getProcessingTime() : 2400
         note('pickle recipe', pr ? resultOf(pr) + ', ' + pt + ' ticks' : 'not loaded')
         ;[[VT + 'salt_dust', 202], ['salt:salt', 204]].forEach(s => {
@@ -602,7 +621,7 @@
         })
         // fermented garlic honey (honey bottle input): 1 jar item out; the bottle is not returned (vintageport #4)
         let gid = VG + 'compat/vintagedelight/fermenting/fermented_garlic'
-        let gr = recipes(server)[gid], gt = gr ? gr.getProcessingTime() : 600
+        let gr = rget(server, gid), gt = gr ? gr.getProcessingTime() : 600
         check('garlic honey recipe', gr != null, gr ? resultOf(gr) + ', ' + gt + ' ticks' : 'not loaded')
         let p3 = jarAt(level, 206), b3 = level.getBlockEntity(p3)
         topIn(b3, VG + 'garlic_clove', 4); topIn(b3, 'minecraft:honey_bottle', 1)
@@ -613,7 +632,7 @@
         note('honey bottle remainder (known gap vintageport #4, record only)', 'jar after the craft: ' + inv3 +
             (out3['minecraft:glass_bottle'] ? '; a glass bottle came out' : '; no glass bottle returned'))
         // century egg: any egg + coal + salt; 216000 block-entity ticks (counts jar ticks, not the clock: /time add won't help)
-        let cid = VT + 'fermenting/century_egg_from_fermenting', cr = recipes(server)[cid]
+        let cid = VT + 'fermenting/century_egg_from_fermenting', cr = rget(server, cid)
         let ct = cr ? cr.getProcessingTime() : -1
         check('century egg recipe 3 hours', ct == 216000, ct + ' ticks (processingTime counted by the jar tick)')
         let eggs = tagList($VReg.ITEMS, 'forge:eggs')
@@ -850,7 +869,8 @@
         check('no port food gives Dehydrated', bad.length == 0, bad.join(', ') || 'none')
         // the 6 jar brews: vanilla effect ids
         ;['berserks_brew', 'brashing_tonic', 'dragons_belch', 'goblins_piss', 'oily_oaf', 'frost_fermenta'].forEach(n => {
-            let r = recipes(server)[VT + 'fermenting/' + n]
+            // berserks_brew is replaced by creative_delight:pickling/berserks_brew (#forge:salt, SQ-VTD4-02)
+            let r = rget(server, VT + 'fermenting/' + n) || rget(server, 'creative_delight:pickling/' + n)
             if (!r) { check('brew ' + n, false, 'not loaded'); return }
             let nbt = String(r.getResultItem().nbt), ids = [], m, re = /Id:(-?\d+)/g
             while ((m = re.exec(nbt)) != null) {

@@ -36,7 +36,8 @@
     function itemId(st) { return String($GReg.ITEMS.getKey(st.getItem())) }
     function block(id) { return $GReg.BLOCKS.getValue(rl(id)) }
     function blockId(state) { return String($GReg.BLOCKS.getKey(state.getBlock())) }
-    const FG = 'fungidelight:', C = 'creativeengineering:'
+    // Grid and pot meals moved into Creative Delight's tree (creative_delight: ids) on 2026-10-25; the oven pie is still C
+    const FG = 'fungidelight:', C = 'creativeengineering:', CDN = 'creative_delight:'
 
     let byId = null
     function recipes(server) {
@@ -93,15 +94,15 @@
         'steak_with_mushrooms', 'stuffed_morels', 'truffle_pasta']
     function recipeIds(server) {
         expectGone(server, [FG + 'inky_cap_salad', FG + 'inky_cap_scrambled_eggs', FG + 'truffle_ice_cream'])
-        expectIds(server, GRID.map(n => C + 'shapeless/' + n + '_manual_only'))
-        expectIds(server, POT.map(n => C + 'shapeless/' + n + '_cooked_manual_only'))
+        expectIds(server, GRID.map(n => CDN + 'shapeless/' + n + '_manual_only'))
+        expectIds(server, POT.map(n => CDN + 'shapeless/' + n + '_cooked_manual_only'))
         expectIds(server, POT.map(n => FG + 'cooking/' + n))
         GRID.concat(POT).forEach(n => {
             let bad = idsMaking(server, C + 'createmixing/', FG + n).concat(idsMaking(server, C + 'createcrafting/', FG + n))
             check('no unheated mixer/crafter route ' + n, bad.length == 0, bad.join(', ') || 'none')
         })
-        check('salad takes cleaned cap', takes(server, C + 'shapeless/inky_caps_salad_manual_only', FG + 'cleaned_cap'), 'cleaned cap')
-        check('scrambled eggs take cooked cap', takes(server, C + 'shapeless/inky_cap_scrambled_eggs_manual_only', FG + 'cooked_cleaned_cap'), 'cooked cap')
+        check('salad takes cleaned cap', takes(server, CDN + 'shapeless/inky_caps_salad_manual_only', FG + 'cleaned_cap'), 'cleaned cap')
+        check('scrambled eggs take cooked cap', takes(server, CDN + 'shapeless/inky_cap_scrambled_eggs_manual_only', FG + 'cooked_cleaned_cap'), 'cooked cap')
         // effect stews: Luck / Comfort / Haste, 160 ticks
         const STEW = { inky_cap_mushroom: 'minecraft:luck', morel_mushroom: 'farmersdelight:comfort', truffle: 'minecraft:haste' }
         Object.keys(STEW).forEach(n => {
@@ -163,7 +164,8 @@
         check('truffle in #minecraft:piglin_food', tagHas(I, 'minecraft:piglin_food', FG + 'truffle'), '')
         check('truffle dirt in #minecraft:dirt', tagHas(B, 'minecraft:dirt', FG + 'truffle_dirt'), '')
         check('truffle dirt shovel mineable', tagHas(B, 'minecraft:mineable/shovel', FG + 'truffle_dirt'), '')
-        ;['inky_cap_mushroom', 'morel_mushroom', 'inky_cap_mushroom_colony', 'morel_mushroom_colony'].forEach(n => {
+        // colonies: FD's own colonies are in neither Serene Seasons tag, so the port leaves the Fungi ones out too (2026-10-25 run)
+        ;['inky_cap_mushroom', 'morel_mushroom'].forEach(n => {
             check('year-round block ' + n, tagHas(B, 'sereneseasons:year_round_crops', FG + n), '')
             check('unbreakable infertile ' + n, tagHas(B, 'sereneseasons:unbreakable_infertile_crops', FG + n), '')
         })

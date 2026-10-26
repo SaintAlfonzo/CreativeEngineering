@@ -933,6 +933,31 @@
         ]
       }
     },
+    "endersdelight:end_house": {
+      "source": "creative_delight-1.0.0.jar!endersAdditions-1.1.4-ce-19.2-01.jar",
+      "structures": [
+        {
+          "structure": "endersdelight:end_house",
+          "weight": 1,
+          "biomes": [
+            "minecraft:end_highlands",
+            "minecraft:end_midlands"
+          ]
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 25,
+        "separation": 15,
+        "salt": 1708580401,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
     "eugene:camp": {
       "source": "kubejs/data",
       "structures": [
@@ -1102,7 +1127,7 @@
       }
     },
     "farmers_structures:aquacultures_beach_with_all": {
-      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
       "structures": [
         {
           "structure": "farmers_structures:aquacultures_beach",
@@ -1127,19 +1152,19 @@
         }
       }
     },
-    "farmers_structures:aquacultures_carp_with_all": {
-      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+    "farmers_structures:aquacultures_cod_with_all": {
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
       "structures": [
         {
-          "structure": "farmers_structures:aquacultures_carp",
+          "structure": "farmers_structures:aquacultures_cod",
           "weight": 1,
-          "biomes": "#farmers_structures:is_aquaculture_carp_spawn"
+          "biomes": "#farmers_structures:is_aquaculture_cod_spawn"
         }
       ],
       "original": {
         "type": "minecraft:random_spread",
-        "spacing": 48,
-        "separation": 31,
+        "spacing": 78,
+        "separation": 38,
         "salt": 126199459,
         "frequency": 1.0,
         "locate_offset": [
@@ -1154,7 +1179,7 @@
       }
     },
     "farmers_structures:aquacultures_common_with_all": {
-      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
       "structures": [
         {
           "structure": "farmers_structures:aquacultures_common",
@@ -1179,8 +1204,34 @@
         }
       }
     },
+    "farmers_structures:cacaos_with_all": {
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
+      "structures": [
+        {
+          "structure": "farmers_structures:cacaos",
+          "weight": 1,
+          "biomes": "#farmers_structures:is_cacao_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 65,
+        "separation": 31,
+        "salt": 796123667,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
     "farmers_structures:cooks_moss_with_all": {
-      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
       "structures": [
         {
           "structure": "farmers_structures:cooks_moss",
@@ -1206,7 +1257,7 @@
       }
     },
     "farmers_structures:cooks_nether_1_with_all": {
-      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
       "structures": [
         {
           "structure": "farmers_structures:cooks_nether_1",
@@ -1232,7 +1283,7 @@
       }
     },
     "farmers_structures:cooks_nether_2_with_all": {
-      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
       "structures": [
         {
           "structure": "farmers_structures:cooks_nether_2",
@@ -1243,7 +1294,7 @@
       "original": {
         "type": "minecraft:random_spread",
         "spacing": 37,
-        "separation": 22,
+        "separation": 28,
         "salt": 433617316,
         "frequency": 1.0,
         "locate_offset": [
@@ -1258,7 +1309,7 @@
       }
     },
     "farmers_structures:cooks_with_all": {
-      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
       "structures": [
         {
           "structure": "farmers_structures:cooks",
@@ -1283,8 +1334,112 @@
         }
       }
     },
+    "farmers_structures:fishs_stew_with_all": {
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
+      "structures": [
+        {
+          "structure": "farmers_structures:fishs_stew",
+          "weight": 1,
+          "biomes": "#farmers_structures:is_fish_stew_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 36,
+        "separation": 18,
+        "salt": 886477885,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:ratatouilles_with_all": {
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
+      "structures": [
+        {
+          "structure": "farmers_structures:ratatouilles",
+          "weight": 1,
+          "biomes": "#farmers_structures:is_ratatouille_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 44,
+        "separation": 29,
+        "salt": 429454167,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:shepherd_farms_with_all": {
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
+      "structures": [
+        {
+          "structure": "farmers_structures:shepherd_farms",
+          "weight": 1,
+          "biomes": "#farmers_structures:is_cook_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 141,
+        "separation": 121,
+        "salt": 1007701540,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
+    "farmers_structures:squids_with_all": {
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
+      "structures": [
+        {
+          "structure": "farmers_structures:squids",
+          "weight": 1,
+          "biomes": "#farmers_structures:is_squid_spawn"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 38,
+        "separation": 22,
+        "salt": 429454167,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ],
+        "exclusion_zone": {
+          "other_set": "minecraft:villages",
+          "chunk_count": 8
+        }
+      }
+    },
     "farmers_structures:sushus_with_all": {
-      "source": "FarmersStructures-1.0.0-1.19.2.jar",
+      "source": "FarmersStructures-1.0.6-1.21.1_neoforge.jar (donor)",
       "structures": [
         {
           "structure": "farmers_structures:sushis",
@@ -1294,8 +1449,8 @@
       ],
       "original": {
         "type": "minecraft:random_spread",
-        "spacing": 35,
-        "separation": 20,
+        "spacing": 54,
+        "separation": 24,
         "salt": 1314228740,
         "frequency": 1.0,
         "locate_offset": [

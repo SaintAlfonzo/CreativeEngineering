@@ -21,6 +21,7 @@ update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026
 | In-tree mods (`IN_TREE_MODS`): patcherMod, exposureBackport, incubationAdditions, moreMooblooms, backportedVinery and backportedBrewin (2026-10-18); preflight checks `mods/` equals the build, the shipped jar is archived | BUILT; two jars with one mod id in `mods/` stop the build since 1.0.9 (4) | `IN_TREE_MODS` |
 | Vinery donor jars (`vinery_upstream` category, both sides; [alcohol.md](alcohol.md) B4.8, D14): the two unmodified Vinery jars ship in the payload for now (a published pack downloads them from Modrinth / CurseForge instead, not built). Preflight: while the port is in `mods/`, each jar must exist with the sha1 `UpstreamJars.java` pins. README step: copy `vinery_upstream/` next to `mods/` | BUILT 2026-10-18, not run (the port isn't in `mods/` yet) | `vinery_upstream_jars`, `collect` |
 | `world_serverconfig/` payload folder: the full serverconfig set every build, with README steps to copy it into existing worlds (server and single-player saves) | BUILT 2026-10-21; scratch server PASSED 2026-10-22 (SQ-OM-17 scratch build, SQ-OM-18 world boot); a real release build and a single-player save in game (DP-08) | `main` (after `select_payload`), `render_readme` |
+| Mod-update checklist: [Mod updates](#mod-updates-version-pinned-fixes) lists the version-pinned fixes; preflight warns when a pinned jar in `mods/` changed (`PINNED_MODS`, `check_pinned_mods`) | BUILT 2026-10-26; the check passes on the current `mods/` and warns on a changed file (offline) | `PINNED_MODS` |
 | Climate samples gzipped and moved out of `exported/` | BUILT (patcherMod 1.0.3, copied to `mods/`); tuner output byte-identical | [BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java), [dump_climate.js](../kubejs/server_scripts/_lib/dump_climate.js) |
 
 **Day to day:**
@@ -173,6 +174,23 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
   still match the sha1 in that version's history json (edited or deleted = error).
 - `CONFIG_CLASSES`: `creativeengineering/changelog_seen.txt` (the read marker) is `player`; it is git-ignored too.
 
+### Mod updates (version-pinned fixes)
+
+Some patcherMod fixes target one exact third-party jar. Before an updated jar of one of these mods goes into `mods/`,
+recheck its fix here, rerun the listed tests, then update `PINNED_MODS` in build_deploy.py (prefix -> pinned file).
+Preflight warns while `mods/` holds anything other than the pinned file for a prefix (`check_pinned_mods`), so an
+update is flagged at staging. "Loud" = the game stops at launch with a mixin error; "silent" = it starts and the fix
+just stops working (at most a log warning) or breaks later in play. The pack's mixin config sets no
+`defaultRequire`, so an injector without its own `require` is silent when its target is gone.
+
+| Mod (pinned jar) | Fix and class | On an update | Recheck | Tests |
+|---|---|---|---|---|
+| Create: Dreams & Desires (`Create-DnDesire-1.19.2-1.2c.Beta Mid-Dev.jar`) | Drill and saw server crash ([fixes_compat.md](fixes_compat.md) 2.3): `ExcavationDrillItemMixin` (2 redirects, `require = 2`), `DeforesterSawItemMixin` (2 redirects, `require = 1`) | Loud if the call sites move. Silent if D&D adds a new client-only call elsewhere: the dedicated server crashes in play instead | Boot the dedicated server; if upstream fixed the crash, drop both mixins | FX-05, FX-06 (dedicated server) |
+| Supplementaries (`supplementaries-1.19.2-2.4.20.jar`) + Breezy (`breezy-1.19.2-1.0.8.jar`) | Wind vane with Breezy ([fixes_compat.md](fixes_compat.md) 2.11): `SupplementariesBreezyCompatMixin` (`@Overwrite` of `BreezyCompatImpl.getWindDirection`, named by string) | Silent. A Breezy update that changes `BreezyNetworking.CLIENT_CACHE` or `NewWindSavedData.getWindAtHeight` crashes the client when the first wind vane ticks. A Supplementaries update that renames the class or method leaves its own (possibly broken) code running | Check both names still exist in the new jars (`javap -p`); if Supplementaries now supports Breezy 1.0.8+, drop the mixin | FX-14 (client) |
+| Create (`create-1.19.2-0.5.1.i.jar`) | Text fields in the Configs screen ([fixes_compat.md](fixes_compat.md) 2.8): `SubMenuConfigScreenMixin` (`@Inject` into `lambda$init$12`, `CAPTURE_FAILEXCEPTION`) | Silent if the lambda is renumbered (no `require`): text values show "Impl missing" again. A changed local list throws when the screen opens | `javap -c -p` on `SubMenuConfigScreen`: the lambda that builds `ConfigScreenList$LabeledEntry` must still be `lambda$init$12` with the same captured locals | FX-11 (client) |
+| Easy Elytra Takeoff (`easyelytratakeoff-1.19.2-4.2.jar`) | Rocket takeoff with the dragon chestplate ([gear_tuning.md](gear_tuning.md) F11): `EasyElytraTakeoffGroundCheckMixin` (`@ModifyVariable` on local slot 8 of `ElytraEvent.onFirework`), `EasyElytraTakeoffHelperMixin` (`@Inject` at the head of `ForgeElytraEventHelper.isWearingAnElytra`) | Silent, both (no `require`). Worse for the slot mixin: if slot 8 is another boolean now, it rewrites the wrong variable | `javap -c -p` on `ElytraEvent`: slot 8 must still be `inAir`, loaded once, right after the scan loop; `isWearingAnElytra` must still exist | GR-23, GR-29 |
+
+
 ## 3. What the pack changes
 
 - **Climate samples.** `/dumpclimate` writes `kubejs/generation_scripts/worldgen/climate/<ns>__<dim>.json.gz`.
@@ -238,6 +256,8 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
 - [x] **DP-06 snapshot:** PASSED (1.0.3 and 1.0.4 recorded; the 1.0.5 build said `update from 1.0.4`). Was: `--snapshot` after DP-04/05 -> DEPLOYED.json at 1.0.3, `- Deployed:` line in the log, next `--dry-run` says `update from 1.0.3`.
 - [ ] **DP-08 world serverconfig:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-17: a scratch build with `tools/changelog_test/scratch_deploy_build.py` holds 8 files, each equal to its source, also in an update build, both README steps name them; SQ-OM-18: mod defaults 2000 / 160 / 2000 without them, 0 / -1 / 0 read from the world's `serverconfig/` with them).* next build (`--dry-run` is not enough, it writes no folder) -> `deploy/latest/world_serverconfig/` holds every `defaultconfigs` file incl. `configs_edited/server_config` (4 at 1.0.9: brickhopper, seasonhud, sereneseasons, unlitcampfire), in an update too; README server and client steps each have the Existing worlds line naming the changed files. Copy into an existing world's `serverconfig/` -> the world boots with the pack values (e.g. sereneseasons settings in `latest.log`/in game).
 - [ ] **DP-09 apply script:** on the real server, `sh apply.sh server <server folder>` -> verify `OK ... matches 1.0.9`, removals deleted, folders copied, `LaunchServer.sh` keeps its `MEMORY`/`JAVAPATH`, world `serverconfig/` refreshed, ends `OK ... is at 1.1.01`; server boots. On the Windows client, `apply.ps1 client <instance> -World saves\<world>` -> the same, ends `OK`; game starts.
+- [ ] **DP-10 pinned-mod warning:** first real staging after 2026-10-26 -> no `version-pinned fixes` warning while
+  `mods/` holds the pinned jars. *Offline 2026-10-26: quiet on the current `mods/`; a changed pinned name warns.*
 - [ ] **DP-07 /dumpclimate:** in a world, `/dumpclimate` -> writes `generation_scripts/worldgen/climate/*.json.gz` (about 0.2 MB total), `/reload` solves with them.
 
 ## 8. History
@@ -295,3 +315,6 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
   recorded; DEPLOYED.json and the DEPLOY_LOG "Deployed" line say 2026-10-23). It froze `changelog/1.1.02.md` (the text that
   shipped) and flagged `unreleased.md` as edited since staging; the shipped bullets were removed from it by hand, the
   post-1.1.02 bullets stay (next version is 1.1.03). Next update builds from 1.1.02.
+- 2026-10-26: "Mod updates" checklist for the version-pinned patcherMod fixes (D&D, Supplementaries + Breezy, Create,
+  Easy Elytra Takeoff) and preflight `check_pinned_mods` (`PINNED_MODS`): warns when the jar in `mods/` for a pinned
+  prefix is not the pinned file ([TODO](todo/TODO.md) `pack/server #7`, closes [fixes_compat.md](fixes_compat.md) F3).

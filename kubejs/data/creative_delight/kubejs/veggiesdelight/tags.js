@@ -9,3 +9,10 @@ ServerEvents.tags('item', e => {
 	// meals (TODO dishes/meals #1, #2): cooked veggies for heatless soups and stews (minecraft/tags.js has the rule)
 	t.add(e, i.t_soup_veggie_cooked, [i.baked_sweet_potato, i.roasted_zucchini])
 })
+
+// Zucchini picks its fruit and drops back to stage 4; Quark's replant to stage 0 skips it (vintageport #8, crops.md 2.2)
+ServerEvents.tags('block', e => {
+	if (!global.CD || !global.CD.on('veggiesdelight')) return
+	var b = global.blocks
+	global.tags.add(e, b.t_own_pick_crops, b.zucchini_crop)
+})

@@ -28,7 +28,7 @@ To add a merge: add the pair to `global.itemMerges`, then remove any duplicate r
 | # | Purged | Survivor | Per-merge work |
 |---|---|---|---|
 | 2.1 | `alexsmobs:banana` | `neapolitan:banana` | Leaf drops stay off (`config/alexsmobs.toml` `bananasDropFromLeaves = false`, unchanged). Neapolitan's banana joins `#forge:crops/banana`, so `#alexsmobs:bananas` (Alex's Mobs' banana-eating mobs) holds only it. Trader elephant chest: banana -> Neapolitan's (loot swap). Eating Neapolitan's banana gives an Alex's Mobs banana peel, as Alex's did (sopa de macaco keeps its source). Compost row removed |
-| 2.2 | `neapolitan:milk_bottle` | `farmersdelight:milk_bottle` | Abnormals Delight turns off Farmer's Delight's bucket and bottle recipes while Neapolitan is loaded, so Neapolitan's stay: bucket + 3 glass bottles -> 3 bottles (output swapped) and bucket + 3 `#forge:bottles/milk` -> milk bucket (FD's bottle joins that tag). Removed: Create spout / drain compat for Neapolitan's bottle and Delightful's `matcha_latte_neapolitan` (FD copies exist). Milk cauldron: taking milk out with a bottle gives Neapolitan's bottle in code; the inventory swap turns it into FD's |
+| 2.2 | `neapolitan:milk_bottle` | `farmersdelight:milk_bottle` | Abnormals Delight turns off Farmer's Delight's bucket and bottle recipes while Neapolitan is loaded, so Neapolitan's ran (3 per bucket); since 2026-10-25 Creative Delight replaces them with 4 per bucket ([abnormals_delight.md](abnormals_delight.md) 3.4): bucket + 4 glass bottles -> 4 FD bottles and bucket + 4 `#forge:bottles/milk` -> milk bucket (FD's bottle joins that tag). Removed: Create spout / drain compat for Neapolitan's bottle and Delightful's `matcha_latte_neapolitan` (FD copies exist). Milk cauldron: taking milk out with a bottle gives Neapolitan's bottle in code; the inventory swap turns it into FD's |
 | 2.3 | `neapolitan:chocolate_cake` | `createaddition:chocolate_cake` | Keeps CC&A's texture. Abnormals Delight's 7 slices -> cake makes CC&A's cake. Since the baking overhaul (2026-10-22, [oven.md](oven.md) 2.6) every other recipe is gone (CC&A's own spout, Neapolitan's crafting); baking.js makes CC&A's by hand, in the oven and by a Spout (baked cake base + 500 mB chocolate; ids `chocolate_cake_manual_only`, `chocolate_cake`, `createfilling/chocolate_cake_spout`, [oven.md](oven.md) OV-33). A bite from the placed cake counts for Spice of Life as the Abnormals Delight slice ([food.md](food.md) 4.2 finding 5). Knife on the cutting board: CC&A's cake -> 7 Abnormals Delight chocolate slices (NCH `fdCutting`, id `chocolate_cake`). Knife on the placed cake: CC&A's block joins `abnormals_delight:drops_chocolate_cake_slice`. Compost row moved to CC&A's cake |
 | 2.4 | `moredelight:diced_potatoes` | `rusticdelight:potato_slices` | Rustic Delight's potato -> 2 slices stays; More Delight's potato -> 1 diced removed. Rustic slices join `#forge:sliced_potato`, which More Delight's dishes (diced potatoes with beef / chicken / egg and tomato / porkchop, mashed potatoes, potato salad) read |
 | 2.5 | `decorative_blocks:rocky_dirt` | `twigs:rocky_dirt` | Decorative Blocks' 4 dirt -> 1 and 1 -> 4 dirt recipes removed. Dave's `davebuildingmod:rocky_dirt` (and slab) is a separate block, renamed Pebble Dirt / Pebble Dirt Slab. Recipes swapped: Pebble Dirt is Twigs' pattern (dirt and pebbles crossed in a 2x2) -> 4, Rocky Dirt is Dave's shapeless 2 dirt + 2 cobblestone -> 4; coarse dirt in place of dirt gives 8 in both. Originals (`davebuildingmod:rec_rocky_dirt`, `twigs:rocky_dirt`) removed |
@@ -143,7 +143,7 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 | MG-03 | Eat a Neapolitan banana | Banana peel in the inventory |
 | MG-04 | Feed / tame a capuchin monkey with a Neapolitan banana | Accepted |
 | MG-05 | Break jungle leaves (20+) | No bananas |
-| MG-06 | JEI uses of milk bucket; craft bucket + 3 glass bottles | 3 Farmer's Delight milk bottles; 3 FD bottles + bucket -> milk bucket |
+| MG-06 | JEI uses of milk bucket; craft bucket + 4 glass bottles | 4 Farmer's Delight milk bottles; 4 FD bottles + bucket -> milk bucket (3 until 2026-10-25, abnormals_delight.md 3.4) |
 | MG-07 | Milk cauldron (bucket in), take with a glass bottle | FD milk bottle |
 | MG-08 | Spout milk into a glass bottle; matcha latte in the kettle with an FD bottle | FD bottle; latte brews, one recipe only in JEI |
 | MG-09 | JEI chocolate cake | CC&A cake with: baked base + frosting + 2 chocolate bars by hand, 7 slices, oven, spout (baked base + 500 mB chocolate, the pack's recipe only) |
@@ -191,3 +191,6 @@ Probes `tools/item_merges_probe/merge_probe.js` (`/mgtest`, `/mgpf`) and `merge_
   (Rustic's coffee gives Caffeinated, no Speed or Haste). MG-23 (JEI), MG-24 (drinking), MG-25, MG-26 (JEI), MG-27,
   MG-28 stay in game.
 
+## Owner ideas (scratchpad 2026-10-26)
+
+- Cantaloupe and hami melon into one item, Cantaloupe name kept; read Delightful first: `farming/crops #18`.

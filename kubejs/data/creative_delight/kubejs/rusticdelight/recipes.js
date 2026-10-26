@@ -52,6 +52,18 @@ ServerEvents.recipes(e => {
 			R.createMixing(i.potato_salad, [i.potato, i.onion, i.bowl, Fluid.of(f.egg_solution, 250)], e, 'potato_salad_egg_solution', 'n/a')
 		}
 
+		//######################### Glowing calamari #########################
+		// The calamari line for glow squids (TODO dishes/ocean #3; items in kubejs_startup/rusticdelight/glowing_calamari.js,
+		// glow squids cut to it in miners_delight/recipes.js). It is a raw calamari with a glow: it cuts, cooks and rolls like
+		// Rustic's, and cooks into Rustic's own Cooked Calamari and Cooked Calamari Slice (no cooked glowing items). Slices
+		// and bone meal from the cut, the cooking trio, 2 rolls from 2 raw slices and cooked rice. Fried calamari and calamari
+		// soup take it through #forge:raw_fishes/calamari (tags.js).
+		R.fdCutting(i.glowing_calamari, i.any_knife, [Item.of(i.glowing_calamari_slice, 2), i.bone_meal], e, 'glowing_calamari_slice')
+		F.fishCook(i.glowing_calamari, i.cooked_calamari, 'cooked_glowing_calamari')
+		F.fishCook(i.glowing_calamari_slice, i.cooked_calamari_slice, 'cooked_glowing_calamari_slice')
+		R.shapeless(Item.of(i.glowing_calamari_roll, 2), [i.glowing_calamari_slice, i.glowing_calamari_slice, i.cooked_rice], e,
+			'glowing_calamari_roll')
+
 		//######################### Heatless meals #########################
 		// Heatless meal rule: farmersdelight/recipes.js "Meals". Pastas take no broth: the pot's bowl.
 		// Bell pepper pasta: any 3 roasted peppers, as Rustic Delight 1.7.0's pot recipe takes any 3 peppers (was one of each colour)

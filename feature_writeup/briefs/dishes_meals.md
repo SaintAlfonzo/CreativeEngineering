@@ -893,7 +893,7 @@ RC-124 Each swap works and gives the same omelet.
 ---
 
 ## meals #25: Retexture cauliflower soup
-Status: Planned / Work: resource pack / TODO `dishes/meals #25` ([veggies_delight.md](../veggies_delight.md))
+Status: Planned / Work: resource pack / TODO `textures/food #2` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 New texture for Veggies Delight's cauliflower soup.

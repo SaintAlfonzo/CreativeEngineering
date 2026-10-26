@@ -89,7 +89,7 @@ OVERRIDES = {
     'buzzier_bees:glazed_porkchop': 'cooked/meat',
     'buzzier_bees:honey_apple': 'sweet',
     'brewinandchewin:kimchi': 'cooked/veggie',
-    'brewinandchewin:pickled_pickles': 'cooked/veggie',
+    'creativeengineering:pickled_sea_pickle': 'cooked/veggie',
     'brewinandchewin:kippers': 'cooked/fish',
     'brewinandchewin:jerky': 'cooked/meat',
     'pneumaticcraft:chips': 'cooked/veggie',

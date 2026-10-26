@@ -225,6 +225,11 @@ From `vazkii.quark.content.tweaks.module.SimpleHarvestModule` (Quark 3.4-418).
   bush handling only applies with a hoe (§2.3).
 - **Villagers:** farmer villagers use the same replant instead of breaking crops.
 - **Opt-out tag:** `#quark:simple_harvest_blacklisted` (empty in the pack).
+- **Own-pick crops (pack, 2026-10-25):** a `CropBlock` with its own ripe right-click (pick the fruit, back a few
+  stages) would be found by the search and replanted to stage 0 before its own pick runs. Blocks in
+  `#creativeengineering:crops/own_pick` get the bush treatment instead (patcherMod `QuarkOwnPickMixin`): empty hand or
+  1x1 hoe, the block's own pick; hoe area, Quark clicks each. Members: cucumber, ghost pepper (Vintage port), zucchini
+  (Veggies port). Villagers still replant them to stage 0. Test VTD-76.
 
 ### 2.3 Hoe area mechanics (Quark Hoe Harvesting)
 
@@ -1368,3 +1373,11 @@ the real client (rendering, tooltips, JEI, natural random ticks with a player ne
   and SQ-CD-00 to SQ-CD-02 PASS on the scratch server. CR-74 done; the rest keep their game halves. `[wild-crops]` also
   warns that 5 Terralith cave biomes are not in `wild_crops.json` (no crops there; not an error).
 - 2026-10-24: planned from the scratchpad: bone meal in planters, other plants in random growth (`farming/crops #14`, `#15`). No code changed.
+- 2026-10-25: own-pick crops (§2.2): `#creativeengineering:crops/own_pick` + patcherMod `QuarkOwnPickMixin` keep Quark
+  off the cucumber, ghost pepper and zucchini picks (vintageport #8). Test VTD-76.
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Water buckets and water bottles applied to farmland, rich farmland and fertile soil make it wet: `farming/crops #17`.
+- Merge cantaloupe and hami melon, keeping the Cantaloupe name (examine Delightful): `farming/crops #18`, [item_merges.md](item_merges.md).
+- Village farms grow Rustic crops by the wild-crop rules: `farming/crops #19`.

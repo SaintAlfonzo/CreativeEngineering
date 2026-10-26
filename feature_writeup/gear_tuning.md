@@ -260,7 +260,8 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
   `/dumpgear`; `tune_tools.js` comment near the end lists what applies). Horse armor protection isn't reachable from
   `tuneArmor` (it's a `HorseArmorItem`).
 - **F11. The ground-check mixin is pinned to one jar.** `@ModifyVariable(index = 8)` targets a local slot in Easy
-  Elytra Takeoff 4.2's bytecode; any update of that mod needs a recheck (also in `mod_todo.txt` 16). The Alex's Mobs
+  Elytra Takeoff 4.2's bytecode; any update of that mod needs a recheck: [deploy.md](deploy.md) "Mod updates" says how (`javap`
+  check, GR-23, GR-29), and staging warns when the jar in `mods/` is no longer 4.2 (also in `mod_todo.txt` 16). The Alex's Mobs
   items named in `todo.txt` aren't in `#elytra_chestplates`; the helper mixin already accepts any item with
   `canElytraFly`, so only the ground rule would differ for them ([TODO](todo/TODO.md) `gear/tuning #7`; the version pin is `pack/server #7`).
 - **F12.** FIXED 2026-10-19 (example uses `mb` / `blows`). **Stale doc in NCH.** The `NCH.cfg` example in
@@ -393,3 +394,7 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - 2026-10-18: this writeup; findings F1 to F13; tests GR-01 to GR-30. No code changed.
 - 2026-10-19: F1 (`CRAFTING.FELSIC_SHIELD` in CEConfig, patcherMod 1.0.9), F3 (tag helper) and F7 (`useDurationTicks` read per use) fixed ([plan_1.0.9.md](plan_1.0.9.md)). Not run in game; GR-28 now expects a toml change to apply after a config reload.
 - 2026-10-19: F12 fixed (NCH.cfg example uses the Java field names).
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- The dragon hoe does not consume tree fertilizer either: `gear/tuning #15`.

@@ -64,7 +64,7 @@ global.CD.food = function (e) {
 		cake: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_cake_pan },
 		muffin: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_muffin_tin, container: i.paper },
 	}
-	var SWEET = [i.any_sugar, i.honey_bottle]   // one sweet slot: sugar or a honey bottle
+	var SWEET = i.any_sweetener   // one sweet slot: any sweetener (sugar, powdered sugar, glycerol, honey bottle, honeycomb)
 	// Recipes the pack and CD add themselves are never swept by a family's removal
 	var OURS = [{ mod: 'creativeengineering' }, { mod: 'creative_delight' }]
 
@@ -154,12 +154,12 @@ global.CD.food = function (e) {
 		muffinBake(fruit, output) {
 			var s = suffix(output, '')
 			R.remove({ type: 'farmersdelight:cooking', output: output, not: OURS }, e)
-			R.ceBaking([n(fruit, 2), i.flour, i.t_milk_bottle, i.eggs, i.any_sugar], Item.of(output, V.muffinsOven), e, s, ware.muffin)
-			R.fdCooking([fruit, fruit, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sugar], Item.of(output, V.muffinsPot), e, s,
+			R.ceBaking([n(fruit, 2), i.flour, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsOven), e, s, ware.muffin)
+			R.fdCooking([fruit, fruit, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsPot), e, s,
 				V.bake.exp, V.bake.time)
 		},
 		tartBake(fruit, output) {
-			R.ceBaking([fruit, i.pie_crust, i.eggs, i.any_sugar, i.t_milk_bottle], Item.of(output, V.tarts), e,
+			R.ceBaking([fruit, i.pie_crust, i.eggs, i.any_sweetener, i.t_milk_bottle], Item.of(output, V.tarts), e,
 				suffix(output, ''), ware.sheet)
 		},
 

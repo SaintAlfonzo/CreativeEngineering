@@ -1,0 +1,20 @@
+{
+  "color": "#7f6e24",
+  "containers": [
+    {
+      "filled": [
+        "miners_delight:vegetable_soup_cup"
+      ],
+      "empty": "miners_delight:copper_cup",
+      "capacity": 2
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 2,
+    "item": "miners_delight:vegetable_soup_cup"
+  },
+  "from_mod": "miners_delight",
+  "still_texture": "moonlight:soft_fluids/soup_liquid",
+  "translation_key": "item.miners_delight.vegetable_soup_cup"
+}

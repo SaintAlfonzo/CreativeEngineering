@@ -30,6 +30,7 @@
 		[i.ghost_pepper,                       0.4],
 		[i.ghost_pepper_seeds,                 0.3],
 		[i.pickle,                             0.4],
+		[i.pickled_sea_pickle,                 0.5],   // Brewin's Pickled Pickles' 0.5 (merged into it)
 		[i.pickled_pepper,                     0.4],
 		[i.pickled_beetroot,                   0.6],
 		[i.pickled_onion,                      0.6],

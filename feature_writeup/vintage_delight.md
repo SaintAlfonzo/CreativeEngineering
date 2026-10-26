@@ -146,7 +146,8 @@ This file has three parts:
   relish, honey, vinegar; the gearo jam is purged) are placeable, 1 to 4 per block, waterlogged. A jar holds 3 bottles'
   worth: jar + 3 glass bottles <-> 3 bottles by hand. Filled jars are pot meals with the jar as container.
 - **Golden Egg** (block). Breaking it drops 8 to 32 gold nuggets, 1 to 15 gold ingots, 0 to 7 golden apples and 2 to 16
-  golden carrots; table unchanged. Sources: the magic vine tree top (80 %, test set, S1) and the goose (§2.5).
+  golden carrots; table unchanged. Falls like sand when unsupported (port change 2026-10-25, `GoldenEggBlock` extends
+  `FallingBlock`). Sources: the magic vine tree top (80 %, test set, S1) and the goose (§2.5).
 - **Organic Mash** (bone meal x3 per use): secondary output of the vinegar pickling recipes, input to the organic compost
   recipes (§2.3a); ported as shipped.
 - **Lush Grass** (block). Bone meal places flower forest, meadow and grass features; a hoe turns it straight into FD Rich
@@ -210,7 +211,7 @@ timer is `eggLayTime`, reset to 6000 + rand(6000)). Incubation's `LayEggInNestGo
 when it is about to lay.
 
 - When a goose is due to lay (its egg timer runs out), a **very small chance** (config value, default **1 in 1000**)
-  swaps the lay for a Golden Egg item dropped on the ground. The timer resets as after a normal lay.
+  swaps the lay for a Golden Egg placed as a block on the ground (since 2026-10-25; was an item). The timer resets as after a normal lay.
 - **The roll happens before the goose starts the walk-to-nest check**, so a goose that wins never goes to a nest; and
   **the golden egg is never laid in a nest** (it is always a ground drop, nests never see it).
 - A goose that loses the roll behaves exactly as today (walks to a nest if one is in range, otherwise drops the egg).
@@ -219,7 +220,9 @@ when it is about to lay.
 - **Away from walls.** On a winning roll the goose looks for a drop spot before laying: candidate ground spots within
   3 blocks of it, scored by solid blocks around the spot at foot and head height (the 8 neighbours). It lays at the first
   spot with none, else the spot with the fewest; if no candidate is better than where it stands, it lays where it stands
-  (so "avoid walls when possible"). The egg is dropped as an item at the chosen spot; the goose is not made to walk
+  (so "avoid walls when possible"). Since 2026-10-25 the egg is placed as a block at the best spot other than the
+  goose's own (never on the goose, never over a torch, flower or rail); only with no such spot (a closed 1x1 pen) is it
+  dropped as an item, at the spot above; the goose is not made to walk
   (no new goal, which also keeps it from touching the nest goal).
 - Sound and particles as the goose's normal lay.
 
@@ -305,7 +308,7 @@ inventory script).
 
 | Kind | In KOTS, not in the port | Decision (proposed) |
 |---|---|---|
-| **Block loot (bug in the port)** | 0.1.6 ships no loot table for 6 blocks, so they drop nothing when broken; KOTS adds them. **Magic Peanut, Smooth Salt Block, Vine Tile**: drop themselves. **Cheese Wheel, Cheese Pizza, Meat Pizza**: drop the slices left (4 to 1 by `bites`) | **carry over** the three self-drops (data; `vintageport #18`). The wheel and pizzas are `PieBlock`s, and FD's own pies drop nothing when broken (FD 1.2.4 and 1.3.4), so their slice tables are the owner's call |
+| **Block loot (bug in the port)** | 0.1.6 ships no loot table for 6 blocks, so they drop nothing when broken; KOTS adds them. **Magic Peanut, Smooth Salt Block, Vine Tile**: drop themselves. **Cheese Wheel, Cheese Pizza, Meat Pizza**: drop the slices left (4 to 1 by `bites`) | **carry over** the three self-drops (data; `vintageport #18`). The wheel and pizzas are `PieBlock`s, and FD's own pies drop nothing when broken (FD 1.2.4 and 1.3.4); **owner 2026-10-25: KOTS's slice tables too** (port `-05`) |
 | Purged content | Gearo berries (bush, worldgen, bag, jam jar and bottle, 31 textures), Dehydrated (effect, potions, lang), Pickled Pitcher Pod and the pitcher plant cutting | stays purged (S1, S3, S8) |
 | Mixed Seeds | `MixedSeedsItem` exists but is an empty class nothing registers | no change to §2.3a |
 | Chef hats | worn as armor with 16 `models/armor/*_chef_hat_layer_1` textures; 0.1.6 (the port) wears the item model on the head | skip (code change, same look in play) |
@@ -442,7 +445,8 @@ on the Pickling Jar for ingredient leftovers (empty bottles, bowls, a potion's b
 saves (older 9-slot saves are widened) and drops, port config `[pickling_jar] remainderBuffer` / `stallWhenFull` (both
 on); `port_resources.py` writes the honey_vd soft fluid for the honey jar, the KOTS self-drop loot of Magic Peanut,
 Smooth Salt Block and Vine Tile, and now also the two fixes that had been hand-made in the resources (`biome_tag` key,
-"Fertile Soul Soil" lang). Cheese Wheel and pizza drops (#18 decision) not built.
+"Fertile Soul Soil" lang). Port `-05` (2026-10-25): the same script copies KOTS's Cheese Wheel, Cheese Pizza and
+Meat Pizza tables (the slices left: 4 at `bites` 0 down to 1 at 3); no other port block lacks a table.
 
 Creative Delight scripts (the first member rows, [creative_delight.md](creative_delight.md) 10.3): server
 `kubejs/data/creative_delight/kubejs/vintagedelight/recipes.js` (slime block pickling removed; Berserker's Brew and
@@ -454,6 +458,22 @@ Create milling and crushing, 3 by the IE Crusher), `vintagedelight/loot.js` (Vin
 into `global.removedItems`; ghost charcoal edible: Wither I 0:05, Fire Resistance 3:00, no hunger, always edible).
 These load only with the Creative Delight jar and its patcherMod installed (they return early without `global.CD`).
 `gen_can_types.py` and `food_types.json` no longer name the salted fish. Tests VTD-54, VTD-65 to VTD-74.
+
+Port `-06` (2026-10-25, vintageport #7; carries `-05`): ghost pepper seeds and the wild ghost pepper stay only on their
+soils. Forge's `BushBlock.canSurvive` asked the soil's `canSustainPlant`, and farmland sustains every crop (grass and
+dirt every plains plant), so `mayPlaceOn` alone never kept them off farmland; both blocks now check `mayPlaceOn` in
+`canSurvive` (crop: `#vintagedelight:ghost_pepper_soil` plus the light check; wild: nylium or that tag). Peppers
+already on farmland pop off at the next block update. Test VTD-75.
+
+Right-click harvest (vintageport #8, investigated 2026-10-25): Quark's harvesting search takes every modded
+`CropBlock`, and its `RightClickBlock` handler runs before the block's `use`, so a ripe cucumber, ghost pepper or
+zucchini was broken for its loot and replanted at stage 0: cucumber / pepper 1 fruit + 0 to 3 seeds (one seed kept
+back as the replant), zucchini 0 to 3 zucchini; the own pick (1 to 2 cucumbers, 1 pepper, 1 to 2 zucchini; back to 5,
+5 and 4) never ran. Kept the own pick (it regrows in 2 or 3 stages, a berry-bush crop): patcherMod
+`QuarkOwnPickMixin` on `SimpleHarvestModule.getAction` gives blocks in `#creativeengineering:crops/own_pick` Quark's
+berry bush treatment (empty hand or 1x1 hoe: Quark steps aside and the block's pick runs; hoe area: Quark clicks each).
+Tag filled in the CD trees (`vintagedelight/tags.js`, `veggiesdelight/tags.js`). Quark's villager harvest still
+replants them at stage 0 (villagers only farm farmland, so not ghost peppers). Test VTD-76.
 
 ### 4.0a Systems not yet updated, both ports (audit 2026-10-23)
 
@@ -595,6 +615,20 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
 - **JEI pages** (`jei/jei-coverage #15`): Vintage's machines and jar recipes get a category or description per recipe type,
   as part of the dump-driven steps (`ports/vintageport #2`).
 
+### Built 2026-10-25: pickled sea pickle, pickle soup (TODO `dishes/pickles-and-ferments #1`, `#3`)
+
+- **Pickled Sea Pickle** (`creativeengineering:pickled_sea_pickle`, CD `kubejs_startup/vintagedelight/vintage_items.js`):
+  4 hunger, modifier 0.3, eaten fast. Pickling Jar: 5 sea pickles + salt -> 5, 2400 ticks (CD `vintagedelight/recipes.js`).
+  Art: `textureswapper/palette_swap.py` on Vintage's pickle (GPL) with the vanilla sea pickle's palette,
+  `kubejs/assets/creativeengineering/textures/item/pickled_sea_pickle.png`. Brewin's Pickled Pickles merge into it
+  (`global.itemMerges`, pushed from the same startup file); the pack's honey jar recipe for them is gone (`alcohol.js`);
+  compost 0.5 and the cooked soup veggie tag moved to it. `canned_pickled_pickles` keeps its id as Canned Pickles
+  (pickle + pickled sea pickle; `gen_can_types.py`, applied at the next `/cegen` after `/dumpfood`).
+- **Pickle soup:** Vintage's pot recipe replaced: `#creativeengineering:pickled_veg` (pickle, pickled sea pickle, pickled
+  beetroot, onion and pepper, both kimchis; CD `vintagedelight/tags.js`), 2 `#forge:vegetables` (was carrot + potato),
+  beetroot, `#forge:salad_ingredients`; 200 ticks, 1.0 xp as before.
+- Tests: VTD-55, VTD-57 below; SQ-CDB-08, -09.
+
 ## 6. File map (planned)
 
 | File | Role |
@@ -705,7 +739,8 @@ Overlap review and UI
   Juice, Dandelion Juice, Turnip Water, Fermented Garlic Honey too, and a jar of carrot juice fills from a tank);
   Pickled Egg and Century Egg compost (0.6, 0.9), a Cucumber Crate composts at 1.0.
 - [ ] VTD-54 **Block drops (after `vintageport #18`):** in survival, break a placed Magic Peanut, Smooth Salt Block and
-  Vine Tile by hand: each drops itself. Cheese Wheel and both pizzas drop what the #18 decision says (not built yet).
+  Vine Tile by hand: each drops itself. Place a Cheese Wheel, a Cheese Pizza and a Meat Pizza; break one whole (4
+  slices), take one slice from another and break it (3 slices); a Creeper or TNT blast drops nothing (port `-05`).
 - [ ] VTD-65 **Salted fish out:** JEI has no Salted Cod or Salted Salmon and no recipe for them; Surstromming still
   pickles; the canned fish and canned cooked salmon still craft from cooked cod / salmon.
 - [ ] VTD-66 **Wild ghost pepper seeds:** millstone and crushing wheels give 2 Ghost Pepper Seeds + 1 cyan dye, the IE
@@ -724,9 +759,24 @@ Overlap review and UI
   salt as well as Vintage's salt dust.
 - [ ] VTD-73 **Honey jar fluid:** a Honey Jar empties into a Supplementaries jar as honey (honey colour, "Honey"), and
   fills back into an empty mason jar; it no longer counts as apple sauce.
+- [ ] VTD-75 **Ghost pepper soil:** ghost pepper seeds plant on Soul Soil, Rich Soul Soil and Nulch only; farmland, Rich
+  Farmland, Fertile Soil, dirt, grass and nylium refuse them. A wild ghost pepper places on nylium and those three, not on
+  grass or dirt. A ghost pepper already on farmland (old save) breaks when a neighbour updates.
+- [ ] VTD-77 **Salt layer icon** (port `-07`): the Salt layer item in JEI, the inventory and the hand is a thin pink-white
+  slab like the snow layer's item, not the salt dust pile. Placing it still places one layer.
+- [ ] VTD-76 **Own pick, not Quark:** ripe cucumber, ghost pepper and zucchini with an empty hand: 1 to 2 cucumbers (1
+  pepper, 1 to 2 zucchini), no seeds, back to stage 5 (zucchini 4). Same with a wooden hoe. With an iron hoe over a 3x3 of
+  ripe and unripe ones: every ripe one picks once, unripe ones stay, no double drops. Wheat in the same area still
+  replants to stage 0.
 - [ ] VTD-74 **Crop loot:** `/loottuning` (or the log) lists the Vintage crop packs (oat bale, oat bag, peanut, cucumber,
   ghost pepper crates) and the Rustic bell pepper crates and seed bag; village house, ruined portal and bastion hoglin
   stable chests can hold the Vintage crops.
+
+Pickles (2026-10-25)
+
+- [ ] VTD-55 Pickling Jar: 5 sea pickles + salt -> 5 Pickled Sea Pickles; Pickled Pickles are not in JEI, creative or
+  loot, and an old stack turns into Pickled Sea Pickles.
+- [ ] VTD-57 Cooking pot: each pickled veggie in the pickle slot makes pickle soup, with any 2 vegetables.
 
 ## 9. History
 
@@ -762,3 +812,9 @@ Overlap review and UI
   have no loot table in 0.1.6 or the port and drop nothing (`vintageport #18`, VTD-54); the rest is purged, format or
   skipped. The §2.7 "block loot tables ship in full" note was wrong. No code changed.
 - 2026-10-25: vintageport #5, #9 to #18 built (§4.0b): port `-04`, first Creative Delight member scripts.
+- 2026-10-25: Cheese Wheel and pizza loot taken from KOTS (owner: "fix the block tables"): port `-05`, VTD-54, SQ-VTD5-01.
+  Veggies' cakes, pies and tray have no table either, as upstream and as FD's pies: not a bug.
+- 2026-10-25: vintageport #4 found already built as #16 (leftover slot, VTD-70); #7 ghost pepper soil in `canSurvive`
+  (port `-06`, VTD-75); #8 Quark vs own pick investigated, own pick kept via `crops/own_pick` (§4.0b, VTD-76).
+- 2026-10-26: the salt layer item shows its one-layer block model instead of salt dust's icon (`food/seasoning #7`, part):
+  port `-07` (`tools/port_resources.py` writes the item model), VTD-77.

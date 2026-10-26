@@ -40,6 +40,1064 @@
    ]
   },
   {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_weathered_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_oxidized_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:cut_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_cut_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:copper_shingles"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_shingles"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_exposed_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_shingles"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_weathered_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_shingles"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_oxidized_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_exposed_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_weathered_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_oxidized_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_exposed_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_weathered_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_oxidized_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:copper_tiles"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_tiles"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_exposed_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_tiles"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_weathered_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_tiles"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_oxidized_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:copper_tile_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_exposed_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_weathered_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_oxidized_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_exposed_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_weathered_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "create:waxed_oxidized_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:plate_iron"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
    "requires": [
     "immersive_weathering"
    ],
@@ -54,6 +1112,2175 @@
    "outputs": [
     {
      "block": "immersive_weathering:waxed_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:cut_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:iron_door"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_door"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_door"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_door"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:iron_bars"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_bars"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_bars"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_bars"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_door"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_door"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_door"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_door"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_bars"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_bars"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_bars"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_bars"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_hopper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_hopper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_hopper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_hopper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_lantern"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_lantern"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_lantern"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_lantern"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:chipped_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_chipped_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:chipped_exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_chipped_exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:chipped_weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_chipped_weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:chipped_oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_chipped_oxidized_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:damaged_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_damaged_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:damaged_exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_damaged_exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:damaged_weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_damaged_weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:damaged_oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_damaged_oxidized_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_chain"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_chain"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_chain"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_chain"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_rail"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_rail"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_rail"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_rail"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_ladder"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_ladder"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_ladder"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_ladder"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_button"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_button"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_button"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_button"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_lamp"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_lamp"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_lamp"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_lamp"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:copper_grate"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_grate"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_grate"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_grate"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:chiseled_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_chiseled_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_chiseled_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Stops weathering."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_chiseled_copper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:honeycomb"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_chiseled_copper"
     }
    ],
    "notes": [
@@ -80,12 +3307,9 @@
    ]
   },
   {
-   "requires": [
-    "immersive_weathering"
-   ],
    "inputs": [
     {
-     "block": "immersive_weathering:waxed_cut_iron"
+     "block": "minecraft:waxed_weathered_copper"
     }
    ],
    "action": {
@@ -93,7 +3317,7 @@
    },
    "outputs": [
     {
-     "block": "immersive_weathering:cut_iron"
+     "block": "minecraft:weathered_copper"
     }
    ],
    "notes": [
@@ -121,55 +3345,235 @@
   {
    "inputs": [
     {
-     "block": "minecraft:exposed_copper"
+     "block": "minecraft:waxed_oxidized_copper"
     }
    ],
    "action": {
     "tag": "forge:tools/axes"
    },
    "outputs": [
-    {
-     "block": "minecraft:copper_block"
-    }
-   ],
-   "notes": [
-    "Right-click: scrapes off one oxidation stage."
-   ]
-  },
-  {
-   "inputs": [
-    {
-     "block": "minecraft:weathered_copper"
-    }
-   ],
-   "action": {
-    "tag": "forge:tools/axes"
-   },
-   "outputs": [
-    {
-     "block": "minecraft:exposed_copper"
-    }
-   ],
-   "notes": [
-    "Right-click: scrapes off one oxidation stage."
-   ]
-  },
-  {
-   "inputs": [
     {
      "block": "minecraft:oxidized_copper"
     }
    ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper"
+    }
+   ],
    "action": {
     "tag": "forge:tools/axes"
    },
    "outputs": [
     {
-     "block": "minecraft:weathered_copper"
+     "block": "minecraft:oxidized_cut_copper"
     }
    ],
    "notes": [
-    "Right-click: scrapes off one oxidation stage."
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_cut_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:waxed_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
    ]
   },
   {
@@ -178,7 +3582,28 @@
    ],
    "inputs": [
     {
-     "block": "immersive_weathering:weathered_cut_iron"
+     "block": "immersive_weathering:waxed_cut_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron"
     }
    ],
    "action": {
@@ -190,8 +3615,7 @@
     }
    ],
    "notes": [
-    "Right-click: scrapes off one rust stage.",
-    "Exposed iron needs steel wool."
+    "Right-click: scrapes the wax off."
    ]
   },
   {
@@ -200,7 +3624,7 @@
    ],
    "inputs": [
     {
-     "block": "immersive_weathering:rusted_cut_iron"
+     "block": "immersive_weathering:waxed_weathered_cut_iron"
     }
    ],
    "action": {
@@ -212,8 +3636,5221 @@
     }
    ],
    "notes": [
-    "Right-click: scrapes off one rust stage.",
-    "Exposed iron needs steel wool."
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_hopper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_hopper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_hopper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_hopper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_chipped_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chipped_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_chipped_exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chipped_exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_chipped_weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chipped_weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_chipped_oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chipped_oxidized_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_damaged_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:damaged_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_damaged_exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:damaged_exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_damaged_weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:damaged_weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_damaged_oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:damaged_oxidized_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_chain"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_chain"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_chain"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_chain"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_rail"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_rail"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_rail"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_rail"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_ladder"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_ladder"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_ladder"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_ladder"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_button"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_button"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_button"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_button"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_lamp"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_lamp"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_lamp"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_lamp"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_grate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_grate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_grate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_grate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_chiseled_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_chiseled_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_chiseled_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_chiseled_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:waxed_copper_nub"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:copper_nub"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:waxed_exposed_copper_nub"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:exposed_copper_nub"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:waxed_weathered_copper_nub"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:weathered_copper_nub"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:waxed_oxidized_copper_nub"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:oxidized_copper_nub"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "block": "vintagedelight:magic_vine"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "vintagedelight:stripped_magic_vine"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "block": "vintagedelight:magic_vine_block"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "vintagedelight:stripped_magic_vine_block"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_copper_shingles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_exposed_copper_shingles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_weathered_copper_shingles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_oxidized_copper_shingles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:oxidized_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_exposed_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_weathered_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_oxidized_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:oxidized_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_exposed_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_weathered_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_oxidized_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:oxidized_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_copper_tiles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_exposed_copper_tiles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_weathered_copper_tiles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_oxidized_copper_tiles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:oxidized_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_exposed_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_weathered_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_oxidized_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:oxidized_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_exposed_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_weathered_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:waxed_oxidized_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:oxidized_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_red_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:red_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_orange_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:orange_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_yellow_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:yellow_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_green_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:green_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_blue_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:blue_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_indigo_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:indigo_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_violet_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:violet_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_white_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:white_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_black_corundum"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:black_corundum"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_cut_copper_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:cut_copper_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_exposed_cut_copper_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:exposed_cut_copper_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_weathered_cut_copper_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:weathered_cut_copper_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:waxed_oxidized_cut_copper_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:oxidized_cut_copper_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_copper_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_exposed_copper_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_weathered_copper_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:waxed_oxidized_copper_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes the wax off."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:copper_block"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_cut_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_door"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_bars"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_trapdoor"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_pressure_plate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_pressure_plate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_hopper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_hopper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_hopper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_hopper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_soul_lantern"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_soul_lantern"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:chipped_exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chipped_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:chipped_weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chipped_exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:chipped_oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chipped_weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:damaged_exposed_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:damaged_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:damaged_weathered_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:damaged_exposed_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:damaged_oxidized_copper_anvil"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:damaged_weathered_copper_anvil"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_chain"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_chain"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_chain"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_chain"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_rail"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_rail"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_rail"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_rail"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_ladder"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_ladder"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_ladder"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_ladder"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_button"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_button"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_button"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_button"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_lamp"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_lamp"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_lamp"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_lamp"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_copper_grate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_copper_grate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_copper_grate"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_copper_grate"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:exposed_chiseled_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:weathered_chiseled_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:exposed_chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "everythingcopper"
+   ],
+   "inputs": [
+    {
+     "block": "everythingcopper:oxidized_chiseled_copper"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everythingcopper:weathered_chiseled_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:exposed_copper_nub"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:copper_nub"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:weathered_copper_nub"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:exposed_copper_nub"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:oxidized_copper_nub"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:weathered_copper_nub"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "block": "vintagedelight:magic_vine"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "vintagedelight:stripped_magic_vine"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "block": "vintagedelight:magic_vine_block"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "vintagedelight:stripped_magic_vine_block"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_shingles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_shingles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_shingles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_shingles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_shingle_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_shingle_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_shingle_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_shingle_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_tiles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_tiles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_tiles"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_tiles"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_tile_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_tile_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:exposed_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:weathered_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:exposed_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "create"
+   ],
+   "inputs": [
+    {
+     "block": "create:oxidized_copper_tile_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create:weathered_copper_tile_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "sootychimneys"
+   ],
+   "inputs": [
+    {
+     "block": "sootychimneys:dirty_brick_chimney"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "sootychimneys:brick_chimney"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "sootychimneys"
+   ],
+   "inputs": [
+    {
+     "block": "sootychimneys:dirty_cobblestone_chimney"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "sootychimneys:cobblestone_chimney"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "sootychimneys"
+   ],
+   "inputs": [
+    {
+     "block": "sootychimneys:dirty_stone_brick_chimney"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "sootychimneys:stone_brick_chimney"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "sootychimneys"
+   ],
+   "inputs": [
+    {
+     "block": "sootychimneys:dirty_mud_brick_chimney"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "sootychimneys:mud_brick_chimney"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "sootychimneys"
+   ],
+   "inputs": [
+    {
+     "block": "sootychimneys:dirty_iron_chimney"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "sootychimneys:iron_chimney"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "sootychimneys"
+   ],
+   "inputs": [
+    {
+     "block": "sootychimneys:dirty_copper_chimney"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "sootychimneys:copper_chimney"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "sootychimneys"
+   ],
+   "inputs": [
+    {
+     "block": "sootychimneys:dirty_terracotta_chimney"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "sootychimneys:terracotta_chimney"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:exposed_cut_copper_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:cut_copper_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:weathered_cut_copper_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:exposed_cut_copper_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:oxidized_cut_copper_vertical_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:weathered_cut_copper_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:weathered_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
    ]
   },
   {
@@ -243,7 +8880,7 @@
    ],
    "inputs": [
     {
-     "block": "minecraft:weathered_copper"
+     "block": "minecraft:oxidized_cut_copper"
     }
    ],
    "action": {
@@ -251,7 +8888,7 @@
    },
    "outputs": [
     {
-     "block": "minecraft:exposed_copper"
+     "block": "minecraft:weathered_cut_copper"
     }
    ],
    "notes": [
@@ -264,7 +8901,7 @@
    ],
    "inputs": [
     {
-     "block": "minecraft:oxidized_copper"
+     "block": "minecraft:weathered_cut_copper"
     }
    ],
    "action": {
@@ -272,7 +8909,154 @@
    },
    "outputs": [
     {
-     "block": "minecraft:weathered_copper"
+     "block": "minecraft:exposed_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one oxidation stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_slab"
     }
    ],
    "notes": [
@@ -306,7 +9090,7 @@
    ],
    "inputs": [
     {
-     "block": "immersive_weathering:weathered_cut_iron"
+     "block": "immersive_weathering:exposed_cut_iron_stairs"
     }
    ],
    "action": {
@@ -314,7 +9098,7 @@
    },
    "outputs": [
     {
-     "block": "immersive_weathering:exposed_cut_iron"
+     "block": "immersive_weathering:cut_iron_stairs"
     }
    ],
    "notes": [
@@ -327,7 +9111,7 @@
    ],
    "inputs": [
     {
-     "block": "immersive_weathering:rusted_cut_iron"
+     "block": "immersive_weathering:exposed_cut_iron_slab"
     }
    ],
    "action": {
@@ -335,7 +9119,175 @@
    },
    "outputs": [
     {
-     "block": "immersive_weathering:weathered_cut_iron"
+     "block": "immersive_weathering:cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_door"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_bars"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: scrapes off one rust stage."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_vertical_slab"
     }
    ],
    "notes": [
@@ -369,7 +9321,7 @@
    ],
    "inputs": [
     {
-     "block": "immersive_weathering:waxed_cut_iron"
+     "block": "minecraft:waxed_weathered_copper"
     }
    ],
    "action": {
@@ -377,7 +9329,7 @@
    },
    "outputs": [
     {
-     "block": "immersive_weathering:cut_iron"
+     "block": "minecraft:weathered_copper"
     }
    ],
    "notes": [
@@ -399,6 +9351,1203 @@
    "outputs": [
     {
      "block": "minecraft:exposed_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_oxidized_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:oxidized_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_cut_copper"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_cut_copper_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_oxidized_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:oxidized_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_weathered_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:weathered_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_exposed_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:exposed_cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:waxed_cut_copper_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:cut_copper_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_stairs"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_door"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_door"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_door"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_door"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_door"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_trapdoor"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_trapdoor"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_iron_bars"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_iron_bars"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_iron_bars"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_iron_bars"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_iron_bars"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_cut_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_cut_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_exposed_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:exposed_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_weathered_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:weathered_plate_iron_vertical_slab"
+    }
+   ],
+   "notes": [
+    "Right-click: takes the wax off."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:waxed_rusted_plate_iron_vertical_slab"
+    }
+   ],
+   "action": {
+    "item": "immersive_weathering:steel_wool"
+   },
+   "outputs": [
+    {
+     "block": "immersive_weathering:rusted_plate_iron_vertical_slab"
     }
    ],
    "notes": [

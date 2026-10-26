@@ -204,7 +204,7 @@ additives and the 4.2 sliced-input rule as for the built cans.
 ---
 
 ## canning #13: Can textures (priority)
-Status Planned / Work resource pack / `cans/canning #13`
+Status Planned / Work resource pack / `textures/food #1`
 
 ### Goal
 Every registered can has its own 16x16 sprite; none borrows its group's or Canned Goods' beetroot can.

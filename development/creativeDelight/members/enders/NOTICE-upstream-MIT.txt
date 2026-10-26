@@ -1,0 +1,36 @@
+Ender's Delight 1.1.4 (Forge 1.20.1, by Axedgaming; credits: Axedgaming, Furti Two), the source of the art and data in
+endersAdditions (Creative Delight).
+Source: the Ender's Delight 1.1.4 release jar (endersdelight-1.1.4.jar, sha1 d1541d70c7dbae71c2a7e1693f512f2166908802).
+The jar ships no LICENSE file; its META-INF/mods.toml declares license="MIT" and authors="Axedgaming". The licence text
+below is the standard MIT License text.
+
+Taken from that jar, unchanged unless noted: the blockstates, block and item models, block and item textures, block loot
+tables (1.20-only "random_sequence" removed) and the English names of amberveil_mushroom, ethereal_saffron_bush,
+chorus_flame_block, voidpepper_block and their items, crushed_voidpepper, amberveil_stew, amberveiled_curry,
+chicken_curry, steak_fries and veil_of_flames_risotto. The voidpepper_block blockstate is changed so the plain and the
+fruiting vine models no longer overlap. Also from that jar: the End House (structures/end_house.nbt and its
+structure, template pool and structure set files; the structure type changed to minecraft:jigsaw) and the chorus_crate
+and endstone_stove block loot tables (the crate's gained the block type and an explosion condition). Nothing in this jar comes from the installed Ender's Delight 1.2.2 (All Rights
+Reserved). The Java code is our own, written from the 1.1.4 behaviour, and is GNU GPL3 like the rest of the pack's code.
+
+MIT License
+
+Copyright (c) Axedgaming
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

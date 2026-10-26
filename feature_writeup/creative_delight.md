@@ -42,8 +42,9 @@ engine" now means these scripts.
 
 | Mod | Jar in `mods/` | Mod id | Licence (from `mods.toml`) | Writeup | Integration so far |
 |---|---|---|---|---|---|
-| End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | none (boot check only) |
+| End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | CD member `repackedEnds` -02 (overlay: dragon loot, tooth tier mixin, 13 textures) and rows in CD `ends_delight/`, BUILT 2026-10-25 (ends_delight.md 5) |
 | Ender's Delight | `endersdelight-1.19-1.2.2.jar` | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags |
+| Ender's Delight Additions | in `creative_delight` (member `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables |
 | Ocean's Delight | `oceansdelight-1.0.2-1.19.2.jar` | `oceansdelight` | MIT (Scouter456) | [ocean_delight.md](ocean_delight.md) | names (caviar) only |
 | Oceanic Delight | `oceanic_delight-1.0.1-forge-1.19.2.jar` | `oceanic_delight` | MIT (DariusZeBaguette, MCreator build) | [ocean_delight.md](ocean_delight.md) | dict block, fishing net mixin and loot tables |
 
@@ -1383,7 +1384,7 @@ Read from this file, `todo/TODO.md`, `mod_sides.md` and `mods/` on 2026-10-25. T
 | Chefs Delight 1.0.3 | Separate jar | No CD folder, no integration found |
 | Engineers Delight 1.3 | Separate jar | No CD folder, no integration found |
 | KubeJSDelight 1.1.2 | Separate jar | No CD folder, no integration found |
-| Storage Delight 25.12.09 | Separate jar | 26.10.05 evaluated 2026-10-25, nothing built (storage_delight.md); no CD folder |
+| Storage Delight 25.12.09 | Own rebuild, `repackedStorage-...-01.jar` (not a member) | 50 blocks added 2026-10-25 (storage_delight.md), not installed; no CD folder |
 
 Rows for the smaller mods come from folder names, `mod_sides.md` and each mod's writeup header where one exists.
 

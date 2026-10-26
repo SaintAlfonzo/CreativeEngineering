@@ -27,7 +27,7 @@ ServerEvents.recipes(e => {
 		//######################### Egg solution #########################
 		// The pack's egg solution fluid: 250 mB stands in for one egg and its milk (create/recipes.js)
 		if (Platform.isLoaded('create')) {
-			R.createMixing(i.blueberry_custard, [Item.of(i.t_fruits_blueberry, 2), i.any_sugar, i.glass_bottle, Fluid.of(f.egg_solution, 250)], e,
+			R.createMixing(i.blueberry_custard, [i.t_fruits_blueberry, i.t_fruits_blueberry, i.any_sweetener, i.glass_bottle, Fluid.of(f.egg_solution, 250)], e,
 				'blueberry_custard_egg_solution', 'heated')
 		}
 
@@ -38,21 +38,21 @@ ServerEvents.recipes(e => {
 		//Muffins
 		// Fruits Delight's pot recipes ask for #forge:dough/wheat; use the general #forge:dough tag instead
 		// (TODO cooking/oven #3, "muffins not cookable?"). Otherwise identical: 2 berries, dough, milk bottle, egg, sugar ->
-		// 2 muffins, 0.1 xp, 200 ticks. #forge:sugar as the sugar swap (minecraft/recipes.js) gives every other recipe. The
+		// 2 muffins, 0.1 xp, 200 ticks. Any sweetener, as the sugar swap (minecraft/recipes.js) gives every other recipe. The
 		// oven copies are in creativeengineering/baking.js.
 		R.remove({ id: 'farmersdelight:cooking/blueberry_muffin' }, e)
 		R.remove({ id: 'farmersdelight:cooking/cranberry_muffin' }, e)
-		R.fdCooking([i.t_fruits_blueberry, i.t_fruits_blueberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sugar],
+		R.fdCooking([i.t_fruits_blueberry, i.t_fruits_blueberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sweetener],
 			Item.of(i.blueberry_muffin, 2), e, 'blueberry_muffin', 0.1, 200)
-		R.fdCooking([i.t_fruits_cranberry, i.t_fruits_cranberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sugar],
+		R.fdCooking([i.t_fruits_cranberry, i.t_fruits_cranberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sweetener],
 			Item.of(i.cranberry_muffin, 2), e, 'cranberry_muffin', 0.1, 200)
 
 		//Orange jam (TODO baking/sweets #6)
 		// Fruits Delight's 2-orange pot and heated mixing recipes stay; one orange's 4 slices also work
-		R.fdCooking([i.orange_slice, i.orange_slice, i.orange_slice, i.orange_slice, i.any_sugar, i.lemon_slice],
+		R.fdCooking([i.orange_slice, i.orange_slice, i.orange_slice, i.orange_slice, i.any_sweetener, i.lemon_slice],
 			i.orange_jelly, e, 'orange_jam_from_slices', 0.1, 200, i.glass_bottle)
 		if (Platform.isLoaded('create')) {
-			R.createMixing(Fluid.of(f.orange_jam, 125), [Item.of(i.orange_slice, 4), i.lemon_slice, i.any_sugar, Fluid.of(f.water, 100)],
+			R.createMixing(Fluid.of(f.orange_jam, 125), [Item.of(i.orange_slice, 4), i.lemon_slice, i.any_sweetener, Fluid.of(f.water, 100)],
 				e, 'orange_jam_from_slices', 'heated')
 		}
 	})

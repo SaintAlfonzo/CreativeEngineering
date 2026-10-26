@@ -249,6 +249,12 @@ handler; saturation is absolute points; `heal` and `combines` (which seasonings 
 cheese (+2 saturation), onion (+2 nutrition), garlic (Speed I 10 s) on popcorn; onion and garlic combine. Details and
 tests: [food.md](../food.md) 3.12, FO-45 to FO-48. Steps 2 to 4 not started.
 
+### Built 2026-10-26: foods by family, popcorn only
+Each seasoning's foods are `#<ns>:seasonable/<path>`: its `families` (food_families.py paths, subfamilies included),
+then `add`, then `remove` ([food.md](../food.md) 3.12). The craft refuses a food outside the tag; crafts are generated
+per seasoning and per combining pair. Cheese, onion, garlic: popcorn only (`add`); sugar: no foods (waffle test dropped).
+Tests FO-53, FO-56.
+
 ### Tests
 - **SE-06 Pepper:** cooked beef + ground pepper -> peppered cooked beef with the bonus line; eating it gives the extra
   saturation.
@@ -318,6 +324,10 @@ Place salt layers while standing in them (no push out); retexture the salt layer
 - Which layer block is the palette source: options snow, sand layers (IW), Create's; recommend snow (same model).
 - Collision: empty always (walk through salt) vs only while standing in it; recommend only while an entity overlaps.
 
+### Built 2026-10-26 (item icon only)
+The salt layer item (`vintagedelight:salt`) shows its one-layer block model, as snow's and ash's items do (was salt dust's
+flat icon); port `-07`, `tools/port_resources.py`. Collision and retexture still open. Test VTD-77.
+
 ### Tests
 - VTD-54 Stand in a salt layer, right-click salt dust at your feet: the layer thickens, you are not pushed up.
 
@@ -345,8 +355,13 @@ A seasoned food's seasoning shows in the AppleSkin tooltip.
 - Show the seasoning's name line too? AppleSkin has no line API; the pack's own tooltip line already exists
   (`food/SeasoningTooltip`). Recommend values only.
 
+### Built 2026-10-26
+Salt's own `AppleSkinHandler` already shows `Salted` (it was not missing: the brief's "Now" was wrong). The real fault
+was order: the pack handler and Salt's ran in no fixed order on the same event. The pack handler is now `LOWEST`, so it
+adds on top of Salt's values ([food.md](../food.md) 3.12). Values only, no name line (D: recommended).
+
 ### Tests
-- FO-51 Salted cooked beef: AppleSkin tooltip bar shows the salted hunger and saturation; unsalted is unchanged.
+- FO-54 (food.md 7; replaces the FO-51 proposed here, the number went to powdered sugar).
 
 ---
 
@@ -369,8 +384,13 @@ Each new seasoning (`seasoning #3`) gets its own seasoned icon.
 ### Decisions
 - One combined icon per combination vs layers per seasoning; recommend layers (garlic + onion = both overlays).
 
+### Built 2026-10-26
+patcherMod `food/SeasonedItemModel` + `mixin/SeasonedItemModelMixin` (layers, as recommended); overlays in Salt's shape,
+the seasoning's colours (`textureswapper/seasoning/make_seasoning.py`); Salt's own overlay switched off and drawn by the pack
+([food.md](../food.md) 3.12). Several overlays on one food overlap (one shape).
+
 ### Tests
-- FO-52 Seasoned popcorn (cheese, onion, garlic) shows the matching overlay(s) in inventory, hand and JEI.
+- FO-55 (food.md 7; replaces the FO-52 proposed here).
 
 ---
 

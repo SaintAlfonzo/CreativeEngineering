@@ -1,7 +1,8 @@
 # Performance: always-on server recording and the per-mod report
 
-Test prefix **PF-** · Last updated **2026-10-03** · Overall status **BUILT** (the Linux path works end to end on a
-scratch copy of the server, the server report included; ships with the next deploy build; the Windows scripts are untested)
+Test prefix **PF-** · Last updated **2026-10-26** · Overall status **BUILT** (the Linux path works end to end on a
+scratch copy of the server, the server report included; ships with the next deploy build; the Windows scripts are untested).
+The pack's own JFR events (3.6, 2026-10-26) are built, headless-tested, scratch test queued (SQ-PF).
 
 ## 0. At a glance
 
@@ -21,11 +22,13 @@ Recorder (JFR), built into Java, no mod. When it lags, `perf/dump.sh` on the ser
 | Server report (crash/lag bundle) | `server/perf/report.sh` | BUILT 2026-09-30; live, crashed and watchdog paths tested on a scratch server; Linux only |
 | Report intake | `tools/perf/ingest_report.py` | BUILT 2026-09-30; tested on the three scratch archives |
 | Dump on exit | `dumponexit=true,filename=perf/exit` in the `JVMARGS` line | BUILT 2026-09-30; watchdog crash wrote a 254 MB recording |
+| Pack events (exact tick, dimension, chunk-wait, KubeJS-script, entity-type times) | patcherMod `perf/` + 9 mixins, `ce-server.jfc` (3.6) | BUILT 2026-10-26 (patcherMod 1.1.03); JFR logic and report tested headless; scratch test queued (SQ-PF) |
+| `/ceperf status`, `/ceperf dump [tag]` | patcherMod `perf/PerfCommand` (3.6) | BUILT 2026-10-26; scratch test queued |
 
 **After a crash or lag (preferred):** on the server, `perf/report.sh` (section 3.5). Copy the zip here and run
 `python3 tools/perf/ingest_report.py <zip>`, then open `perf/incoming/<name>/index.html`.
 
-**Recording only:** on the server, `perf/dump.sh 10m`. Copy the file to `perf/recordings/` here. Then run
+**Recording only:** on the server, `perf/dump.sh 10m` (or in game, as an op: `/ceperf dump`, the whole kept window). Copy the file to `perf/recordings/` here. Then run
 `python3 tools/perf/perf_report.py perf/recordings/<file>.jfr` and open `perf/reports/<file>.html`. Add
 `--baseline perf/reports/<older>.summary.json` to see what changed between two recordings.
 
@@ -49,23 +52,27 @@ Sections, in page order:
 1. **Tiles**: tick time (median, p95, max of Minecraft's 100-tick average), estimated server-thread busy share,
    sample count, GC pauses, allocation rate.
 2. **Timelines**: tick time, per-second busy share (estimate), CPU (JVM vs whole machine), heap after GC.
-3. **Server thread: who does the work**: share of server-thread samples per mod, with a 95% range bar, each
+3. **Measured by the pack's hooks** (recordings from patcherMod 1.1.03 on; section 3.6): exact single-tick times
+   (median, p95, p99, longest per second) and busy share, each dimension's share of the tick, chunk waits with
+   the mod and call site that asked, KubeJS handlers by script and line, entity and block entity time by registered
+   type with the positions of slow single ticks.
+4. **Server thread: who does the work**: share of server-thread samples per mod, with a 95% range bar, each
    mod's top methods and who called it.
-4. **Tick phases**: entity tick, block entity tick, mob spawning, random ticks, scheduled ticks, block events,
+5. **Tick phases**: entity tick, block entity tick, mob spawning, random ticks, scheduled ticks, block events,
    raids, player packets, chunk system, Forge tick events, tasks between ticks, and so on, with the mods
    inside each.
-5. **Event handlers**: the Forge handler each sample ran under, e.g. `LevelTickHandler#onWorldTick`
+6. **Event handlers**: the Forge handler each sample ran under, e.g. `LevelTickHandler#onWorldTick`
    (snowundertrees) or `KubeJSWorldEventHandler#levelPostTick` (all KubeJS `LevelEvents.tick` scripts together).
-6. **Entities / Block entities**: the class whose tick was running.
-7. **Busy seconds**: mod shares in the seconds where the server thread was at least 50% busy, against the
+7. **Entities / Block entities**: the class whose tick was running.
+8. **Busy seconds**: mod shares in the seconds where the server thread was at least 50% busy, against the
    whole window. This is the lag-spike view.
-8. **Server thread waiting**: parks over 50 ms and lock contention over 20 ms.
-9. **All threads**: every thread pool's share and its mods: worldgen (`Worker-Main`), Distant Horizons,
+9. **Server thread waiting**: parks over 50 ms and lock contention over 20 ms.
+10. **All threads**: every thread pool's share and its mods: worldgen (`Worker-Main`), Distant Horizons,
    netty, and so on.
-10. **Allocation and GC**: MB/s of garbage per mod, collections, stop-the-world VM operations.
-11. **Chunk generation**: Minecraft's per-stage timing.
-12. **Hottest methods**: self time on the server thread.
-13. **Method and limits**, plus any mixin frames that could not be traced to a mod.
+11. **Allocation and GC**: MB/s of garbage per mod, collections, stop-the-world VM operations.
+12. **Chunk generation**: Minecraft's per-stage timing.
+13. **Hottest methods**: self time on the server thread.
+14. **Method and limits**, plus any mixin frames that could not be traced to a mod.
 
 Example (scratch server, 60 s idle, no players, 137 samples, so each share is +/- 5-8 points): KubeJS 21%
 (`levelPostTick`), snowundertrees 12% (`SereneSeasonsHandler#tryMeltSnowUnderTrees`), sereneseasons 9%
@@ -188,18 +195,69 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
     logger with numbers normalised.
   - The Server thread from each live thread dump, and system.txt.
 
+### 3.6 The pack's own events (patcherMod, 2026-10-26)
+
+Closes the blind spots of sampling (section 4) with measured times. patcherMod defines ten JFR events
+(`perf/PerfJfrEvents`), fired by mixins; `ce-server.jfc` enables them all. They show in the report's
+"Measured by the pack's hooks" section, and in JDK Mission Control under Creative Engineering / Performance.
+
+| Event | Hook (SRG) | What it records |
+|---|---|---|
+| `ServerTick` | `MinecraftServer#tickServer` (m_5705_), `ServerTickPerfMixin` | every tick's duration, tick number, players |
+| `LevelTick` | `ServerLevel#tick` (m_8793_), `ServerLevelTickPerfMixin` | each dimension's part of the tick, loaded chunks, players |
+| `ChunkWait`, `ChunkWaitStats` | `ServerChunkCache#getChunk` (m_7587_) and `getChunkFuture` (m_8431_) around `managedBlock` (m_18701_), `ServerChunkCacheWaitPerfMixin` | waits over 1 ms with the stack that asked; per second: cache misses, time waited, longest |
+| `KubeJSHandler`, `KubeJSHandlerStats` | `EventHandler#listen`/`listenJava` and `EventHandlerContainer.<init>` (KubeJS), wrapping each handler in `KubeJSHandlerTiming` | calls over 5 ms (jfc threshold) with event, script and line; per second and handler: calls, time, longest |
+| `SlowEntityTick`, `EntityTypeTicks` | `Level#guardEntityTick` (m_46653_), `LevelEntityTickPerfMixin`; totals on the type (`EntityTypePerfStatsMixin`) | ticks over 2 ms with type, dimension, position; per second and registered type: ticks, time, longest |
+| `SlowBlockEntityTick`, `BlockEntityTypeTicks` | `LevelChunk$BoundTickingBlockEntity#tick` (m_142224_), `BlockEntityTickPerfMixin`; `BlockEntityTypePerfStatsMixin` | the same for block entities |
+
+- **Switching.** `PerfEvents` reads from JFR once a second (at the end of a tick) which events a running recording
+  enables; a hook whose events are off only reads a static boolean. A client or a server without a recording pays
+  nothing else. Set `enabled` to `false` in `ce-server.jfc` to drop one; a recording started later with `jcmd` is
+  picked up within a second. Events a `.jfc` does not name are on by their defaults (an older server `.jfc` records them).
+- **Thresholds.** `ServerTick`, `LevelTick` and `KubeJSHandler` use JFR's own duration, so their jfc threshold
+  applies. The slow-tick and chunk-wait events carry their time in a field and use fixed thresholds in `PerfEvents`
+  (2 ms entity, 2 ms block entity, 1 ms chunk wait); their JFR duration is 0.
+- **Totals.** The per-second totals are plain fields owned by the server thread and written as events at the end
+  of the first tick after each second. KubeJS totals count server-thread calls only (client and startup scripts
+  would race the flush); the slow-call event covers every thread. Totals are kept per event + script + line, so
+  `/reload` reuses them.
+- **Cost.** Two `System.nanoTime()` calls and a field update per entity and block entity tick (tens of
+  nanoseconds), one event per tick and dimension, one per type and handler per second: an estimated 300 events/s and
+  roughly 25 MB per 30-minute window on a busy server, inside `maxsize=512m`. A/B timing is SQ-PF-04.
+- **Chunk waits** include the main-thread tasks the server runs while it waits (chunk promotions, queued packets),
+  as `managedBlock` does; the report blames each recorded wait on the first mod frame past `getChunk`.
+- **Hooks are optional** (`require = 0`): a mod that changes one of these methods leaves that event empty
+  instead of crashing the server. `/ceperf status` lists hooks that never ran.
+- **`/ceperf status`** (op level 3): the running recording, which pack events it records, hooks that have not run
+  yet, and how many KubeJS handlers are wrapped. **`/ceperf dump [tag]`** saves the whole kept window (up to 30
+  minutes) to `perf/recordings/server-<time>[-tag].jfr` on a background thread, like `dump.sh`, for admins without
+  shell access. It cannot cut a shorter window (Java 17's API has no `maxage` for a dump); use
+  `perf_report.py --last` instead.
+- **Tests.** Headless (2026-10-26, scratchpad harness on the built classes and a real JFR recording): flags follow
+  the recording, the KubeJS wrapper times and names handlers (3 slow calls, 3 and 100 calls in totals), nested and
+  unbalanced chunk waits, `PerfParse` passes the events and the ChunkWait stack, and the report renders every
+  table on a synthetic 20 s recording and still renders a 1.0.x recording with a note. Mixin application, the SRG
+  targets in a live JVM and the overhead need the scratch server (SQ-PF).
+
 ## 4. Limits and decisions
 
-**Blind spots:**
+**Blind spots of sampling, and what patches them (3.6, patcherMod 1.1.03 on):**
 
 - **Waiting.** Waiting on the server thread isn't sampled. It waits for chunks in 0.1 ms parks, which also stay
-  under the park threshold.
-- **KubeJS.** KubeJS is visible per event, not per script: Rhino interprets scripts, so no script name
-  appears on the stack.
+  under the park threshold. Patched for chunk waits (`ChunkWait`); other waits (a mod's `join()` on a future)
+  still only show as parks over 50 ms.
+- **KubeJS.** Sampling sees KubeJS per event, not per script: Rhino interprets scripts, so no script name
+  appears on the stack. Patched: `KubeJSHandlerStats` times each handler by script and line. Time inside one
+  handler is still not split further.
 - **No dimension, entity or position.** The runtime class is also not visible when a mob inherits `tick()`.
+  Patched: `LevelTick` per dimension, totals per registered entity and block entity type, positions for single
+  ticks over 2 ms. Many cheap ticks of one type at one place (a hopper wall) show as a type total, not a place.
 - **Busy-seconds undercount.** JFR samples a few threads per period, so the busy-share estimate reads low
-  while many threads are busy.
+  while many threads are busy. Patched: the measured busy share is tick time over wall time.
 - **Smoothed tick time.** The tick-time series is Minecraft's 100-tick average, which smears short spikes.
+  Patched: `ServerTick` records every tick.
+- **Still open:** per-mod shares stay samples (with their error bars); the client is not covered (no recording
+  there); Windows scripts are untested.
 
 **Rejected or deferred options:**
 
@@ -209,9 +267,9 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
   position", and it is not in this pack's mods.
 - **Vanilla `/jfr start`.** Its settings take a stop-the-world heap census (`jdk.ObjectCount`) and log every
   file read and write.
-- **patcherMod JFR events (deferred, the user's option 3).** Per-tick and per-dimension timing, chunk-wait
-  events with stacks, KubeJS handler timing, and a `/ceperf dump` command. These would close the waiting and
-  per-dimension gaps, and they cost nothing while not recording.
+- **patcherMod JFR events (the user's option 3).** Deferred on 2026-09-28, built 2026-10-26 (3.6): per-tick
+  and per-dimension timing, chunk-wait events with stacks, KubeJS handler timing by script, entity and block
+  entity totals by type, `/ceperf status` and `/ceperf dump`.
 
 ## 5. File map
 
@@ -221,6 +279,11 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
 - [../server/perf/report.sh](../server/perf/report.sh), [../tools/perf/ingest_report.py](../tools/perf/ingest_report.py)
 - [../tools/perf/perf_report.py](../tools/perf/perf_report.py), [../tools/perf/PerfParse.java](../tools/perf/PerfParse.java), [../tools/perf/modindex.py](../tools/perf/modindex.py), [../tools/perf/report_html.py](../tools/perf/report_html.py)
 - [../tools/build_deploy.py](../tools/build_deploy.py) (`server` category)
+- patcherMod: [perf/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/perf/) (`PerfJfrEvents`,
+  `PerfEvents`, `PerfStatsHolder`, `KubeJSHandlerTiming`, `PerfCommand`) and the mixins `ServerTickPerfMixin`,
+  `ServerLevelTickPerfMixin`, `ServerChunkCacheWaitPerfMixin`, `LevelEntityTickPerfMixin`, `BlockEntityTickPerfMixin`,
+  `EntityTypePerfStatsMixin`, `BlockEntityTypePerfStatsMixin`, `KubeJSEventHandlerListenMixin`,
+  `KubeJSEventHandlerContainerMixin`
 - Untracked output: `perf/recordings/`, `perf/parsed/`, `perf/reports/`, `perf/incoming/`, `perf/.cache/`
 
 ## 6. Offline checks (done 2026-09-28, scratch server from `deploy/latest`, 338 jars)
@@ -299,7 +362,32 @@ Notes:
   with no "unattributed jars" warning. (Scratch: done; 1.0.2 "mods differ", as expected for dev jars.)
 - [ ] **PF-13 Windows:** no `report.ps1` yet; build it if a Windows server ever needs it.
 
+Pack events (3.6), scratch-queue rows SQ-PF-01 to -06:
+
+- [x] **PF-14 hooks load:** PASSED 2026-10-26 after a fix (the 9 mixins sat in the client list and never applied on a
+  dedicated server; moved to `mixins`): all hooks run, 320 KubeJS handlers wrapped, no mixin warning. boot with the recording -> no mixin warning for the 9 perf mixins; `/ceperf status`
+  shows recording `ce`, all 10 events recorded, every hook run but chunk wait, and some KubeJS handlers wrapped.
+- [x] **PF-15 dump and report:** PASSED 2026-10-26 (scratch nb2). `/ceperf dump smoke` -> `perf/recordings/server-...-smoke.jfr`; its report has the
+  measured section: ticks, one row per dimension, KubeJS handlers named `server_scripts:...:line`, entity and
+  block entity types.
+- [ ] **PF-16 chunk waits:** partial 2026-10-26: one sync load (`spreadplayers`, no player to `/tp`) listed with
+  caller `Level#getChunk` and phase; the player-teleport caller is still unchecked. in a fresh normal world, `/tp` into unexplored land a few times, then dump -> Chunk
+  waits lists them with the caller (the teleport / player move).
+- [ ] **PF-17 overhead:** Chunky pregen of 2601 chunks with the pack events on and with them off (copy of the jfc)
+  -> the same time within noise (1:34 in the 2026-09-28 A/B).
+- [x] **PF-18 reload:** PASSED 2026-10-26 (320 before and after). `/reload` twice, `/ceperf status` -> the wrapped-handler count does not grow; no KubeJS errors.
+- [ ] **PF-19 client:** a client (no recording) boots and plays as before; `/ceperf status` in single player says
+  no recording.
+
 ## 9. History
+
+- 2026-10-26: Pack events built (3.6, TODO `server #9`): ten `creativeengineering.*` JFR events from 9 patcherMod
+  mixins, `/ceperf status|dump`, the events in `ce-server.jfc`, `PerfParse` and `perf_report.py` read them (new
+  "Measured by the pack's hooks" section). Headless JFR and report tests pass; patcherMod 1.1.03 rebuilt;
+  live checks queued as SQ-PF-01 to -06.
+- 2026-10-26 (scratch run nb2): the 9 perf mixins were in the `client` list of `creativeengineering.mixins.json`, so a
+  dedicated server never applied them (`/ceperf status`: no hook run, 0 handlers wrapped); moved to the common list,
+  patcherMod 1.1.03 rebuilt and installed 15:54. PF-14, PF-15, PF-18 PASSED, PF-16 partial; PF-17, PF-19 open.
 
 - 2026-10-03: Known issues (section 7) fixed: 5 throttles in patcherMod `[perf]` plus the horse armor pass, and a
   wrong effect id found while doing it. Scratch-server boot and mixin export checked. patcherMod 1.0.4 jar built, not

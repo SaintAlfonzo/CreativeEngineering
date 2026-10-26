@@ -50,7 +50,7 @@ global.foodFamily = function (e) {
 	var out = (output, count) => (typeof output === 'string' ? Item.of(output, count) : output)
 	var tool = key => ({ exp: ff.bake.exp, time: ff.bake.time, tool: i[key] })
 	var item = key => i[key] ?? key   // a global.item key, or a full item id
-	var SWEET = () => [i.any_sugar, i.honey_bottle]   // one pie sugar slot
+	var SWEET = () => i.any_sweetener   // one pie sugar slot (any sweetener, honey bottle included)
 
 	var F = {}
 
@@ -101,12 +101,12 @@ global.foodFamily = function (e) {
 	F.muffinBake = (berry, muffinKey, countOverride, idOverride) => {
 		var opts = tool('t_bakeware_muffin_tin')
 		opts.container = i.paper
-		R.ceBaking([n(berry, 2), i.flour, i.t_milk_bottle, i.eggs, i.any_sugar], Item.of(item(muffinKey), countOverride ?? ff.muffinCount), e,
+		R.ceBaking([n(berry, 2), i.flour, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(item(muffinKey), countOverride ?? ff.muffinCount), e,
 			idOverride ?? muffinKey, opts)
 	}
 	// Tart: fruit + crust + egg + sugar + milk, baking sheet.
 	F.tartBake = (fruit, tartKey, countOverride, idOverride) => {
-		R.ceBaking([fruit, i.pie_crust, i.eggs, i.any_sugar, i.t_milk_bottle], Item.of(item(tartKey), countOverride ?? ff.tartCount), e,
+		R.ceBaking([fruit, i.pie_crust, i.eggs, i.any_sweetener, i.t_milk_bottle], Item.of(item(tartKey), countOverride ?? ff.tartCount), e,
 			idOverride ?? tartKey, tool('t_bakeware_baking_sheet'))
 	}
 

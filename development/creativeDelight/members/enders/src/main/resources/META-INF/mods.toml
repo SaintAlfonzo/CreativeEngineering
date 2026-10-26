@@ -1,0 +1,42 @@
+# Ender's Delight 1.1.4's new End plants, items and dishes rebuilt for Forge 1.19.2 (Creative Delight member). Its blocks
+# and items register under the endersdelight namespace, so this mod needs Ender's Delight itself and loads after it.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="enders_additions"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+credits="Ender's Delight by Axedgaming (1.1.4 art and data, MIT)"
+description='''${mod_description}'''
+
+[[dependencies.enders_additions]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.enders_additions]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.enders_additions]]
+modId="farmersdelight"
+mandatory=true
+versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.enders_additions]]
+modId="endersdelight"
+mandatory=true
+versionRange="[1.19-1.2.2,)"
+ordering="AFTER"
+side="BOTH"

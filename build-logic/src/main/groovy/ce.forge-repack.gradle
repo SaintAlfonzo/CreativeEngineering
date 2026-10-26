@@ -121,7 +121,7 @@ tasks.register('repackJar', Jar) {
         }
         def kept = upstream.keySet().findAll { name ->
             !(name in ['META-INF/mods.toml', 'META-INF/MANIFEST.MF']) && !(name in replacedResources) && !replacedClasses.keySet().any { r ->
-                name == r || (name.startsWith(r.replaceAll(/\.class$/, '$')) && name.endsWith('.class'))
+                name == r || (name.startsWith(r.replaceAll(/\.class$/, '\\$')) && name.endsWith('.class'))
             }
         }
         def overlay = new java.util.zip.ZipFile(overlayJar.get().asFile).withCloseable { z ->

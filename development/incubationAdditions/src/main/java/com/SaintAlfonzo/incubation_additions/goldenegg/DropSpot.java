@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.incubation_additions.goldenegg;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -71,5 +72,25 @@ public final class DropSpot {
             }
         }
         return best.clone();
+    }
+
+    /**
+     * Where to place the egg as a block: like {@link #pick} but the goose's own spot is never an option (the
+     * block would land on the goose). Null when no candidate is standable and reachable (a closed 1x1 pen).
+     */
+    @Nullable
+    public static int[] pickBlock(Probe probe) {
+        int[] best = null;
+        int bestScore = Integer.MAX_VALUE;
+        for (int[] c : CANDIDATES) {
+            if (!probe.standable(c[0], c[1], c[2]) || !probe.reachable(c[0], c[1], c[2])) continue;
+            int s = score(probe, c[0], c[1], c[2]);
+            if (s == 0) return c.clone();
+            if (s < bestScore) {
+                best = c;
+                bestScore = s;
+            }
+        }
+        return best == null ? null : best.clone();
     }
 }

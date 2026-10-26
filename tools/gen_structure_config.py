@@ -39,6 +39,7 @@ kubejs/server_scripts/worldgen/structure_overrides.js reads this baseline + stru
 every world load.
 """
 import glob
+import io
 import json
 import re
 import zipfile
@@ -291,17 +292,35 @@ def loads_lenient(raw):
     return json.loads(''.join(out))
 
 
+DONOR_SKIP_STRUCTURES = {'aether', 'afterdark_farms', 'deeper_farms', 'flesh_farms', 'honey_cake_farms', 'undergardens',
+                         'undergardens_sea'}
+DONOR_EMPTIED_SETS = {'farmers_structures:aquacultures_carp_with_all'}
+
+
+def mod_zips():
+    """(label, ZipFile) for every jar in mods/ and every jar nested in one (META-INF/jarjar/: Creative Delight's
+    members, which Forge loads as mods of their own; the End House ships in the enders member)."""
+    for jar in sorted(MODS_DIR.glob('*.jar')):
+        try:
+            z = zipfile.ZipFile(jar)
+        except zipfile.BadZipFile:
+            continue
+        yield jar.name, z
+        for n in z.namelist():
+            if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
+                try:
+                    yield f'{jar.name}!{n.rsplit("/", 1)[-1]}', zipfile.ZipFile(io.BytesIO(z.read(n)))
+                except zipfile.BadZipFile:
+                    continue
+
+
 def scan_mod_jars():
     """-> (structure_sets: {id: raw json}, structure_biomes: {id: raw 'biomes' value}, source: {id: jar name})"""
     structure_sets = {}
     structure_biomes = {}
     source = {}
     markers = {cs['marker']: sid for sid, cs in CODE_REGISTERED_SETS.items()}
-    for jar in sorted(MODS_DIR.glob('*.jar')):
-        try:
-            z = zipfile.ZipFile(jar)
-        except zipfile.BadZipFile:
-            continue
+    for jar_name, z in mod_zips():
         names = z.namelist()
         for name in names:
             if name in markers and markers[name] not in structure_sets:
@@ -309,7 +328,7 @@ def scan_mod_jars():
                 cs = CODE_REGISTERED_SETS[sid]
                 structure_sets[sid] = {'placement': {k: v for k, v in cs.items() if k not in ('marker', 'biomes', 'structures')},
                                        'structures': cs['structures']}
-                source[sid] = jar.name + ' (registered in code)'
+                source[sid] = jar_name + ' (registered in code)'
                 for entry in cs['structures']:
                     structure_biomes[entry['structure']] = cs['biomes']
                 continue
@@ -318,7 +337,7 @@ def scan_mod_jars():
                 sid = f'{m.group(1)}:{m.group(2)}'
                 try:
                     structure_sets[sid] = loads_lenient(z.read(name))
-                    source[sid] = jar.name
+                    source[sid] = jar_name
                 except (json.JSONDecodeError, UnicodeDecodeError):
                     pass
                 continue
@@ -330,6 +349,25 @@ def scan_mod_jars():
                     structure_biomes[sid] = data.get('biomes')
                 except (json.JSONDecodeError, UnicodeDecodeError):
                     pass
+    # Donor jars (farmers_upstream/, patcherMod worldgen/donor): data the game serves in memory above the installed
+    # mod's own. Their sets and structures replace the installed jar's, except the foreign-dimension ones the
+    # translator leaves out; sets the donor empties are dropped (the carp pond is gone from 1.0.6).
+    for jar in sorted((MODS_DIR.parent / 'farmers_upstream').glob('*.jar')):
+        z = zipfile.ZipFile(jar)
+        for name in z.namelist():
+            m = re.match(r'^data/farmers_structures/worldgen/(structure_set|structure)/(.+)\.json$', name)
+            if not m:
+                continue
+            data = loads_lenient(z.read(name))
+            sid = f'farmers_structures:{m.group(2)}'
+            if m.group(1) == 'structure':
+                if m.group(2) not in DONOR_SKIP_STRUCTURES:
+                    structure_biomes[sid] = data.get('biomes')
+            elif not any(x['structure'].split(':')[1] in DONOR_SKIP_STRUCTURES for x in data.get('structures', [])):
+                structure_sets[sid] = data
+                source[sid] = jar.name + ' (donor)'
+        for sid in DONOR_EMPTIED_SETS:
+            structure_sets.pop(sid, None)
     # Structures shipped as plain datapack data in kubejs/data (e.g. MCreator house mods whose
     # jars can't load on Forge 43.3.9). Only ids no jar provides, so a kubejs/data override of a
     # mod's set can never become that set's baseline.

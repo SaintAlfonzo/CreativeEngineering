@@ -11,6 +11,12 @@ server PASSED" (legend in [../README.md](../README.md)).
 Refreshed 2026-10-25 against the unreleased changelog: new entries SQ-MDP-05 to -13, SQ-RM, SQ-SK, CQ-NEW-04 to -06;
 SQ-FN and the Round 0 / jar-state notes corrected. Every change a player can notice in `unreleased.md` now has a row.
 
+Run results live in the Run log at the bottom, not in the entry rows. Latest: the 2026-10-26 afternoon run (group B nb2: dumps, generators, SQ-SNF, SQ-PF, SQ-INV-01 to -06; perf mixin fix). Before it, the 2026-10-26 run (group A qb1 and one group B
+boot nb1, patcherMod 1.1.03 and the 2026-10-25 23:59 jars) passed the Creative Delight boot, Abnormals, Storage, End's server half and
+Farmer's Structures placement entries; its "Not run" row lists what is still open (group B worldgen counts and all client rows).
+Jars in `mods/` now: patcherMod 1.1.03 (2026-10-26 14:32), CD, Vintage -06, Incubation Additions 1.1.0, repackedStorage; copy them
+into the scratch `mods/` before any run.
+
 Entry fields: ID, feature, target state, world group, commands, expected log, pass / fail, if it fails.
 
 ## World groups
@@ -47,7 +53,8 @@ Setup notes (from the 2026-10-22 second run; Rhino names in memory `rhino-fielda
 - Uncaught Java errors (no JS `catch`): reading `VillagerTrades` (roll real villagers instead), a `const` inside a
   nested block that runs twice (use `let`). `ConfigTracker` is blocked by KubeJS's class filter (read the mod's own
   config statics).
-- Zombies are undead: no Regeneration or Poison on them (use a pillager). Adding a placed feature to another biome
+- Zombies are undead: no Regeneration or Poison on them (use a pillager).
+- `/vtdtest` plants its crops at y = -60: group A only (in a normal world that is underground and every light check fails). Adding a placed feature to another biome
   in the same step (scratch biome modifier) crashes spawn generation with a feature order cycle.
 
 ## Queue
@@ -56,10 +63,9 @@ Setup notes (from the 2026-10-22 second run; Rhino names in memory `rhino-fielda
 
 Feature: [../fungi_delight.md](../fungi_delight.md) §4.0 / §8 (FGD-), [../potions.md](../potions.md) PO-27, TODO
 `ports/fungiport #1`. Target: `backportedFungi-1.3-ce-19.2-01` and patcherMod `creativeengineering-1.1.01` md5 378f7897
-(mooshroom family, `brown_chance`, CEConfig `mushroomSpawns`). **Refreshed 2026-10-25:** `backportedFungi-...-01` is in
-`mods/` and booted in the user's client (2026-10-25 03:19, no registry error); `mods/` holds patcherMod 1.1.02 md5 2d2d74ab but
-the build in `development/patcherMod/build/libs/` is md5 f4a9b127 (15:41, starter kit and the CD loader work): reinstall it before
-any run, then `creativeengineering-1.1.01` is superseded by 1.1.02 in every row. KubeJS tree as of 2026-10-25 (mushroom_spawns, `_biome_rules.js`, wild_crops `step`, mob_spawns rules, cooking.js Fungi block,
+(mooshroom family, `brown_chance`, CEConfig `mushroomSpawns`). **Refreshed 2026-10-26:** `backportedFungi-...-01` is in
+`mods/` and booted in the 2026-10-26 scratch run (`/fgdtest all` 135/136, the failure is the known truffle pie, TODO `fungiport #3`);
+`mods/` holds patcherMod 1.1.03 (built and installed 2026-10-26 14:32), which supersedes `creativeengineering-1.1.01` and 1.1.02 in every row. KubeJS tree as of 2026-10-25 (mushroom_spawns, `_biome_rules.js`, wild_crops `step`, mob_spawns rules, cooking.js Fungi block,
 baking.js truffle pie, compost rows, jei_info.js).
 
 Before the run (game closed, `pgrep -c java` is 0): `./gradlew :patcherMod:installToMods --offline` (the Fungi jar is
@@ -139,7 +145,7 @@ Client-only halves are in round 2 (CQ-VP).
 | SQ-VP-10 | A | `/vtdtest mobs` | VTD-31 / VD-33: `Chicken.FOOD_ITEMS`, `Pig.FOOD_ITEMS`, `Parrot.TAME_FOOD`, `Villager.WANTED_ITEMS` contain both ports' items and the pack's own; `animal.isFood(stack)` true for a chicken with oats / VD seeds, pig with the produce, parrot with VD seeds; Quark troughs read the same; no conflict between the two ports. Static-field reads may be blocked by Rhino, then use `isFood` on spawned entities | `rhino-fieldandmethods-gotcha`; port `ModMobsEvents` |
 | SQ-VP-11 | A | `/vtdtest loot`, `/loot spawn` on each Vintage table | VTD-30: none of the 8 Vintage chest tables is in any vanilla or pack chest table (scan `exported/loot` after a server `/dumpall`); `/loot` can still roll them; VD-31: the Veggies injections appear only as `L.add` entries at 0.015 to 0.04; the 6 VD crates are `L.pack`; VD-32 farmer level 1 and wandering trader common pool carry the VD items (trade changes need a restart; roll real villagers) | `loot/07_rules.js`, `trades.js`, `wandering_trades.js` |
 | SQ-VP-12 | A | `/vtdtest stacks`, `/vtdtest effects` | VTD-27: no Dehydrated effect, potion, brewing mix or salt-dust awkward potion step; the 6 brews' effects are vanilla ids; VD-18 stacks only after CQ-DUMP (defer) | Port Java; `no dehydrated string` check on the jar |
-| SQ-VP-13 | A | `/vtdtest egg` after setting `goldenEggChance` to 1 in `config/incubation_additions-common.toml` and a restart | NE-15, NE-16 logic: a goose (Incubation Additions) with a goose nest in a fenced pen drops a Golden Egg item on the ground at lay time (400-tick window), never walks to the nest, the nest stays empty; with chance 0 geese lay into nests as before; a goose against a wall with open ground within 3 blocks drops on open ground, in a closed 1x1 pen where it stands; never a golden egg in a goose nest. A Golden Egg block drops its reward table (VTD-09). Default config key `goldenEggChance` = 1000 (1 in 1000) | `incubationAdditions/.../goldenegg/DropSpot` (logic test 9 / 9 passes headless), `IAConfig`; the config toml appears after the first boot of 1.1.0 |
+| SQ-VP-13 | A | `/vtdtest egg` after setting `goldenEggChance` to 1 in `config/incubation_additions-common.toml` and a restart | NE-15, NE-16 logic: a goose (Incubation Additions) with a goose nest in a fenced pen places a Golden Egg block next to itself at lay time (since 2026-10-25; NE-17: never on the goose, never over a torch / flower / rail, falls when undermined) (400-tick window), never walks to the nest, the nest stays empty; with chance 0 geese lay into nests as before; a goose against a wall with open ground within 3 blocks drops on open ground, in a closed 1x1 pen the item where it stands; never a golden egg in a goose nest. A Golden Egg block drops its reward table (VTD-09). Default config key `goldenEggChance` = 1000 (1 in 1000) | `incubationAdditions/.../goldenegg/DropSpot` (logic test 9 / 9 passes headless), `IAConfig`; the config toml appears after the first boot of 1.1.0 |
 | SQ-VP-14 | B (new normal world) | `/zfw wild` extended with the 9 rules, then `/ceplace`, `forceload add` sampling | VTD-06 / VD-04 / VD-05: wild oats in cold and temperate grassland; peanuts warm and dry; cucumbers wet / cold-temperate grassy; broccoli, cauliflower, garlic temperate; sweet potato, zucchini warm dry; turnips only where sea beets grow; each places on grass, podzol, Rich Soil, Fertile Soil and Immersive Weathering soils; salt patches on beaches and stony shores; mature dandelion in the 61 biomes of `follows` and nowhere else, more often than wild crops (VD-06). `tools/test_wild_crops.sh` and `test_wild_flowers.sh` already pass offline | `wild_crops.json`, `crops_by_biome.md`, `gen_soil_compat.py`; Vinery grape bush `tries` changed 36 -> 33 (also check the four grape feature JSONs load: no `Failed to load configured feature` line) |
 | SQ-VP-15 | B-nether (new world, worldgen registry change) | `forceload add` over a crimson and a warped forest; count blocks | VTD-07: wild ghost peppers generate in crimson and warped forests on nylium and nowhere else in the Nether (`nether_worldgen_rules.json` `literal` modifier); `no feature order cycle` crash is the known risk of adding a placed feature | `gen_nether_worldgen.py`; memory `nether-worldgen-decisions` |
 | SQ-VP-16 | B | `/locate` or `/ceplace` a village, plain / desert / savanna / snowy / taiga | VD-30: Veggies depot houses appear in the 5 vanilla village styles at weight 4 x `mod/veggiesdelight` multiplier 0.5, in `pool_config.json` after the first world load; their chests are Lootr chests | `pool_tags.json`, port injection (normal priority, PoolTuner LOWEST) |
@@ -268,6 +274,17 @@ Feature: [../food.md](../food.md) 3.12, FO-45 to FO-48; TODO `food/seasoning #3`
 | SQ-SN-00 | A | boot | `latest.log` has `[seasoning] defined creativeengineering:cheese`, `...:onion`, `...:garlic` and no `[seasoning] bad definition`; `server.log` has `seasoning done`, no `[NCH] season` warning; no `Parsing error loading recipe creativeengineering:shapeless/season/` | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js` load order (needs `global.item`, `global.effect`) or `NCH.season` JSON |
 | SQ-SN-01 | A | recipe probe (RecipeManager id dump) | Present, type `creativeengineering:seasoning`: `creativeengineering:shapeless/season/{cheese,onion,garlic,garlic_onion}_on_corn_delight_popcorn` | serializer registration (`SeasoningRecipe.register`) |
 
+#### SQ-SNF: seasonings by food family (added 2026-10-26)
+
+Feature: [../food.md](../food.md) 3.12, FO-53 to FO-56; TODO `food/seasoning #3`, `#8`, `#9`. Needs patcherMod 1.1.03 and
+Creative Delight rebuilt 2026-10-26 in `mods/` (not installed yet). Supersedes SQ-SN-01's recipe ids.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-SNF-01 | A | boot + tag probe (`/kubejs dump_tags` or the pack's tag dump) | `creativeengineering:seasonable/cheese`, `/onion`, `/garlic`, `/void_pepper` each hold exactly `corn_delight:popcorn`; no `seasonable/sugar` tag; `creativeengineering:food_family/snack` holds popcorn and tortilla chip, `food_family/fruit` holds `food_family/fruit/whole`'s members; no `[food families] could not read` or `[seasoning] ... has no members` line | `seasoning_tags.js`, `generation_scripts/food/food_families.json` present |
+| SQ-SNF-02 | A | recipe probe (RecipeManager id dump) | Present, type `creativeengineering:seasoning`: `creative_delight:shapeless/season/{cheese,onion,garlic,void_pepper,garlic_onion}`; absent: any `..._on_corn_delight_popcorn`, any `sugar` season recipe | `seasoning.js` generation, `NCH.season` with a tag food |
+| SQ-SNF-03 | A | craft probe (`SeasoningRecipe.matches` on a test grid, server script) | popcorn + flaxen cheese wedge matches; tortilla chip + cheese wedge and waffle + onion don't; garlic popcorn + onion matches | `Seasonings.accepts`, tag bound on the server |
+
 #### SQ-PS: powdered sugar (added 2026-10-25)
 
 Feature: [../food.md](../food.md) 3.13, FO-50 to FO-53; TODO `dishes/ingredients #16`, `food/seasoning #5`. patcherMod
@@ -383,6 +400,23 @@ three `_lib` files are in `kubejs/startup_scripts/`). Any boot of the pack cover
 |---|---|---|---|---|
 | SQ-FD-01 | A | Boot; grep `logs/latest.log` for `food dict:` and `food_grammar.js` / `food_dict.js` errors; `/kubejs eval global.food.veggie_slice_cooked_potato` (or any startup-side print) | No `food dict:` error line; value `rusticdelight:baked_potato_slices` | A thrown check (the line names each bad key) or a script error: a KubeJS API the offline Rhino run did not have |
 
+#### SQ-VTD5: Vintage port -05 (added 2026-10-25)
+
+| ID | World | Steps | Pass | Fail means |
+|---|---|---|---|---|
+| SQ-VTD5-01 | A | `/setblock` a Cheese Wheel, Cheese Pizza and Meat Pizza at `bites=0` and one at `bites=2`; break each as a fake player with an empty hand; then one at `bites=0` by `/summon tnt` | 4 slices (wheel: `vintagedelight:cheese_slice`, pizzas: their own slice), 2 slices at `bites=2`, nothing from the blast (VTD-54) | Nothing at all: the `-05` jar is not in `mods/`, or `port_resources.py` was not rerun before the build |
+
+#### SQ-VTD6: Vintage port -06 ghost pepper soil, Quark own-pick crops (added 2026-10-25)
+
+Feature: [../vintage_delight.md](../vintage_delight.md) 4.0b, [../crops.md](../crops.md) 2.2. Scratch `mods/`: Vintage port
+`-06`, patcherMod 1.1.03 from `build/libs` and the Creative Delight jar of the same tree (the own-pick tag is filled by CD
+scripts), Veggies `-03`.
+
+| ID | World | Steps | Pass | Fail means |
+|---|---|---|---|---|
+| SQ-VTD6-01 | A | `/setblock` farmland, Soul Soil, Rich Soul Soil, Nulch, grass and nylium in a lit row; `/setblock` `vintagedelight:ghost_pepper_crop[age=0]` on each, then a block update next to each; same with `vintagedelight:wild_ghost_peppers` | Crop survives only on the three soul soils; wild survives on those and nylium; the others pop off (VTD-75) | Survives on farmland: the `-06` jar is not loaded, or `canSurvive` is not the override |
+| SQ-VTD6-02 | A | Grep `logs/latest.log` for `QuarkOwnPickMixin`; `/kubejs`-dump or `/dumptags` block tag `creativeengineering:crops/own_pick`; as a fake player with an empty hand, right-click ripe `cucumber_crop[age=7]`, `ghost_pepper_crop[age=7]`, `veggiesdelight:zucchini_crop[age=7]` | No mixin apply error; tag holds the three crops; each drops only its fruit (no seeds) and reads age 5, 5, 4 (VTD-76) | Age 0 plus seeds: the tag is empty (CD scripts not loaded) or the mixin did not apply |
+
 #### SQ-VTD4: Vintage port -04, Veggies -03 and the first Creative Delight member scripts (added 2026-10-25)
 
 Feature: [../vintage_delight.md](../vintage_delight.md) 4.0b, [../creative_delight.md](../creative_delight.md) 19.6, [../kitchen.md](../kitchen.md) KT-18.
@@ -422,6 +456,9 @@ Feature: [../farmers_delight.md](../farmers_delight.md) 4. Scratch `mods/`: `cre
 | SQ-FDB-10 | A | Tags: `farmersdelight:cabbage_roll_ingredients` contains `minecraft:beef` and `farmersdelight:tomato`, no `minecraft:egg`; `forge:fences` has `farmersdelight:rope_fence`; block tag `farmersdelight:mineable/knife` has `farmersdelight:pumpkin_pie` | As listed | Egg still in: another script adds it after `farmersdelight/tags.js` |
 | SQ-FDB-11 | A | Kill 300 zombies as a fake player with Looting III (or `/loot spawn ~ ~ ~ kill @e[type=zombie,limit=1]` repeatedly with a player killer); break a pumpkin with an iron knife, then with a Silk Touch knife | About 5% of zombie kills drop an Onion (2% + 3x1%); no onion from a non-player kill; knife: 4 Pumpkin Slices, no pumpkin; Silk Touch knife: the pumpkin | Runs without CD too (loot.js needs only FD and LootJS) |
 | SQ-FDB-12 | A, client | Client: Gleaming Salad sparkles; rope fence and gate models and item icons; FD pumpkin pie model; Rich Soil Farmland and Fertile Soil tooltips; rice placed on dry land | Sparkle particles near the salad (no missing-texture squares); models match the preview page; tooltips have the "Farmer villagers work it like Farmland" line; rice message "This seed must be planted in shallow water." | Purple-black: a texture not copied into the overlay |
+| SQ-FDB-13 | A | `/setblock ~ ~ ~ farmersdelight:hanging_canvas_sign[rotation=5,attached=true,waterlogged=true]` under a stone ceiling; `/setblock` all 16 rotations in a row (`rotation=0..15`, both `attached` values); hold the item and place it under stone, then under a chain, sneaking and not | States accepted with exactly `rotation`, `attached`, `waterlogged`; placed sign faces the player, 16 rotations step evenly (22.5 degrees), V chains when attached, straight chains when not; waterlogged one shows water; no missing-texture squares | Purple-black: `textures/block/hanging_canvas_sign.png`; wrong direction or skewed rotations: element angle signs in `blockstates/hanging_canvas_sign.json` models |
+| SQ-FDB-14 | A | Place an attached sign (sneak) under a stone block and break the stone; repeat with an unattached sign; mine a sign with an axe and with a hand | Attached sign pops off and drops 1 item; unattached stays; axe mines it faster; it drops itself | Nothing drops: loot table path; no pop: `canSurvive` |
+| SQ-FDB-15 | A | JEI / recipe dump: `creative_delight:crafting_shaped/hanging_canvas_sign`; craft `c c / w#w / w#w` with 2 Chains, 4 oak logs (and another wood), 2 Canvas | 6 Hanging Canvas Signs; recipe visible in JEI with the icon and name "Hanging Canvas Sign"; Farmer's Structures house template places its signs without popping | No recipe: `farmersdelight/recipes.js` load error in `logs/kubejs/server.log` |
 
 #### SQ-FR: Fruits Delight 0.5.11 fixes in Creative Delight (added 2026-10-25)
 
@@ -658,6 +695,39 @@ server. Full restart (mixins, startup fluids, NCH).
 | SQ-RSP-13 | A | eat a Slice of Coffee Cake and a Rose Hip Pie Slice, `/effect` list | coffee: Caffeinated 0:30 only; pie: Regeneration 0:20 only | `food_values.js` modification block |
 | SQ-RSP-14 | A | a world saved with a 2.0 Kettle at `water_level=3`: load it | Kettle still at 3 water, brews normally | blockstate property range |
 
+#### SQ-INV: TODO investigations a scratch server can answer (added 2026-10-25)
+
+Each entry answers or closes an open TODO row; the result goes into that row (close it, or rewrite it with the finding).
+Ordered quickest first: steps 01 to 07 are log reads and single commands on the boot you already need; 08 to 14 are one
+dump pass plus offline tools; 15 to 18 are generator and test runs after it. Run the whole group on one server, in order:
+the dump pass (SQ-INV-08) must finish before 09 to 18. Group A except SQ-INV-06 (needs the End: B). No client needed.
+The `/dumpworldjei` command is a server command (`WorldJeiDump`).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-INV-01 | A | grep `latest.log` after boot for `[time]`, `seasons now follow the sun`, `[advancements]`, `vinery:mead`, `king_danis_wine`, `calendar`, `Missing registry` | TODO `pack/release #3`: `[time]` push line, "seasons now follow the sun" once per dimension, `[advancements] N left out`, missing-registry lines only for the removed ids. Close the row | an unexpected id missing from the registry: note it in the row |
+| SQ-INV-02 | A | grep `latest.log` for `item_dict` / `TL-01` tag check lines | TODO `tooling/dictionaries #1`: if every tag key is reported missing, the check runs before tags load (confirmed; move the tag half to `ServerEvents.tags`); if only real gaps, close the row | none |
+| SQ-INV-03 | A | grep `latest.log` for the `[CE potions] added N` line and MoreJS `removeByPotion` lines | TODO `potions/potions #5`: N unchanged from PO-27 / PO-28's recorded count; close the row | record the new N in the row |
+| SQ-INV-04 | A | grep `latest.log` for `metal base event` | TODO `recipes/metal #4`: print the line's wording and count; decide if it is noise or a real gap | none |
+| SQ-INV-05 | A | read the block-state count (log line, or a probe of `Block.BLOCK_STATE_REGISTRY.size()`) | TODO `pack/server #6`: record the count against the 2^20 = 1,048,576 ceiling (761,052 on 10-19); headroom under about 290,000 | over the ceiling: the state-id fix breaks, stop adding block mods |
+| SQ-INV-06 | B (End forceloaded) | `execute in minecraft:the_end run locate biome nullscape:crystal_peaks`, then `nullscape:void_barrens`; allow the 120 s timeout | TODO `worldgen/biomes #8` and `#4`: a biome is found (the tuning keeps it) or not found (tuning flips whole biomes out; record the seed and result) | locate times out: repeat with a larger `forceload` square |
+| SQ-INV-07 | A | probe recipes of type `farmersdelight:cooking` for muffins (`/kubejs` recipe dump) and check the dough ingredient resolves `#forge:dough` and that Create's dough is in `#forge:dough/wheat` | TODO `cooking/oven #3` (OV-13): a muffin recipe exists and its ingredients match; closes or names the cause | name the failing ingredient in the row |
+| SQ-INV-08 | A | `/dumpall`, `/dumptags`, `/dumpfood`, `/dumpstacks`, `/dumpplaceable`, `/dumppotions`, `/dumpworldjei` (the `/dumpall` set runs `/dumpfood`; `/dumpnames` is single-player only) | all write to `kubejs/exported/` without error; `/dumpservermods` needs every jar in `mod_sides.md` | a missing `mod_sides.md` row: add it, rerun |
+| SQ-INV-09 | A | after 08: `python3 tools/food_catalog.py`, `gen_stack_sizes.py`, `gen_can_types.py` (empty `AWAIT_DUMP` for `fungidelight` and `vintagedelight`), `effect_audit.py`, `placeable_catalog.py`, `gen_compost_values.py --merge`; follow memory `dumpall-refresh-workflow` for order and hand steps | TODO `pack/release #5`, `food/stack-sizes #2`, `food/placeable #2`, `ports/vintageport #2`, `ports/fungiport #2`, `alcohol/brewinport #4`: generators run clean; Canned Kimchi no longer copies Satisfaction; `canned_mhadjeb` gone and glow calamari cans made (`dishes/meals #32`, `dishes/ocean #3`) | a food in the wrong type band: fix in `food_catalog` precedents |
+| SQ-INV-10 | A | after 08: check the `kubejs/exported/` tag dump for `#brewinandchewin:heat_sources` and `freeze_sources` | TODO `alcohol/brewinport #2` (AL-41): both tags hold the expected sources | missing source: edit `blocktags.js` |
+| SQ-INV-11 | A | after 08, offline scans of the recipe dump: shapeless recipes that output a pie crust; recipes using vanilla `minecraft:egg`; chicken-cut and fermented-veg usage; users of `createdeco:polished_iron_bars`; amethyst crushing recipes per machine (Create, IE) | TODO `baking/baked-goods #24`, `food/types-and-tuning #6` (IE recipes are not in the dump: list them separately), `recipes/metal #5`, `recipes/engineering #2`: a list of hits per row, written into each row | the dump lacks IE recipes: use `NCH` source grep instead |
+| SQ-INV-12 | A | after 08, offline scans of the tag and item dumps: gold tags containing rose gold; flowers and `#minecraft:flowers` vs bee-breeding tags; potted-plant coverage; items with no BlockRunner tier; bottled items without a jar fluid; crops without harvest / replant rows | TODO `recipes/metal #3`, `mobs/bees #1`, `blocks/framed-and-decor #6`, `gameplay/blockrunner #2`, `items/jars #3`, `farming/crops #3`: a list per row | none |
+| SQ-INV-13 | A | after 08: count Comfort-type foods in the food dump (57 on 2026-10-25) and list them by food type | TODO `food/types-and-tuning #15`: the list the owner needs to decide the rule | none |
+| SQ-INV-14 | A | after 08: list gear upgrade recipes (assembly, smithing, crafting) and mark which go through `SequencedAssemblyRecipeMixin` | TODO `gear/tuning #4`: the upgrade paths that bypass the mixin | none |
+| SQ-INV-15 | A | `python3 tools/gen_jei_world.py` / `/cegen run jei_world` after `/dumpworldjei` | TODO `jei/jei-coverage #5`, `#16`: `generated.json` rebuilt from `tool_pairs.json`; Stripping rows one per log | a generator error: fix the tool |
+| SQ-INV-16 | A | `/cegen run loot dumps` after 08 | TODO `loot/lootjs-layer #3`: census, `loot_index.json`, `loot_config.json` now include Subterrestrial, Underground Bunkers and eugene (21 tables) | a table missing: check the namespace filter |
+| SQ-INV-17 | A | after 16, verify LT-03, LT-04, LT-05, LT-18, LT-19 in the loot index; grep the loot dump for `stockpile`, `recovery`, `cycle` enchanted books; probe a librarian's offers | TODO `loot/tables #7` and `#10`: no coin or PneumaticCraft item in any table; list the tables that still hold the three books | a table with coins: add a ban |
+| SQ-INV-18 | A | `/test runall` (or the SUN-counter GameTest) and `python3 tools/time_table.py` | TODO `gameplay/time #3`: both pass; close the row | a failure: the clock mapping needs a fix |
+
+Results: not run yet. Skipped here and left in the TODO: scene and measurement checks (TNT minecart chain, fortified-meta
+locate timing, Faraday armor, Vinery stem shearing, End teleport stall, trough load), config-change runs (`avoidCoasts`),
+and pregen / debug-build work (`Level.random` caller, watchdog kills).
+
 ### Round 2: with a client window
 
 One JVM at a time (memory `one-game-instance-at-a-time`): this round is run with the scratch server stopped. Either a
@@ -676,6 +746,10 @@ cropped PNG per test ID in `test_captures/`; once it exists these rows get a `Ca
 |---|---|---|---|---|
 | CQ-DUMP-01 | creative superflat | `/dumpall`, then `/dumpfood`, `/dumpcompost`, `/dumpcropgrowth`, `/dumpplaceable`, `/dumpnames` (those not in `/dumpall`) | Files in `kubejs/exported/` newer than the boot; they list `vintagedelight:` items | `python3 tools/food_catalog.py --check` (no unclassified Vintage food, VTD-20, VTD-53); empty `AWAIT_DUMP` in `gen_can_types.py` and rerun, then restart; `gen_stack_sizes.py`, `placeable_catalog.py`, `crop_growth_coverage.py` (0 UNKNOWN), `name_audit.py`, `jei_coverage.py`, BlockRunner tier script, `gen_pack_manifest.py` |
 | CQ-DUMP-02 | same, after the rerun | restart; `/ofprobe` and `/vtdtest recipes` again | CP-31 recipe level: the 16 Vintage cans + 4 shared sources load; `[cans] registered` rises accordingly (and the Vintage rows of `can_parity.md` get their numbers, `can_audit.py`) | server-visible, so it can ride the next round-1 run |
+| CQ-DUMP-03 | same boot as CQ-DUMP-01 | the dumps `/dumpall` does not run: `/dumpstacks`, `/dumppotions`, `/dumptags`, `/cedumpnames`, `/cedumpicons` (or `[debug.wthit] dumpIconsAtTitle`), `/dumpwinetextures` | Files newer than the boot in `kubejs/exported/` (and the name / icon / wine texture outputs) | `tools/stack_sizes.py` (`food/stack-sizes #2`), `effect_audit.py` and the `/dumppotions` step (`pack/release #5`, `alcohol/brewinport #4`), `name_audit.py` (`ui/names #4`), `wthit_icon_audit.py` (`ui/wthit #2`), the wine texture check (`textures/tools #1`); rerun `/dumptags` for the heat / cold tag audit (`alcohol/brewinport #2`) |
+| CQ-DUMP-04 | creative superflat, after CQ-DUMP-01 | `/cegen run loot dumps`, then `/cegen` for the can generators and `soup_soft_fluids`; `python3 tools/food_catalog.py --check`, `gen_can_types.py` (empty `AWAIT_DUMP`: Fungi and Vintage), `can_audit.py` | Loot census and `loot_index.json` list Subterrestrial, Underground Bunkers and eugene (21 tables) (`loot/lootjs-layer #3`); `canned_mhadjeb` gone, glow calamari cans, Canned Pickles with the pickled sea pickle source, Canned Kimchi no longer copies Satisfaction (`dishes/ocean #3`, `dishes/pickles-and-ferments #1`, `dishes/meals #32`, `pack/release #5`); the hunger / saturation findings for the cans, 24 soup fluids still cover every `food_type/soup` item (`cans/canning #3, #14`, `dishes/ingredients #13`) | restart after the can regeneration (CQ-DUMP-02 covers the load check) |
+| CQ-DUMP-05 | scratch server, group B normal world with the End | `/dumpall` biomes and `/locate biome nullscape:crystal_peaks` and `nullscape:void_barrens`; rerun the End climate dump | Whether crystal peaks and void barrens exist live (`worldgen/biomes #8`, `#4`) | none |
+| CQ-DUMP-06 | any, after CQ-DUMP-01 | read the new `/dumpfood` and recipe dump: Comfort foods per type (57 on 2026-10-25), vanilla egg uses in recipes (rescan, the dump cannot read IE recipes), shapeless pie -> crust recipes, Hostile Mobs effect name, placeable cheese wheels and the Review regex | Numbers and ids for `food/types-and-tuning #15, #6`, `baking/baked-goods #24`, `ui/effects #10`, `food/placeable #2` | none |
 
 #### CQ-VP: Vintage and Veggies, visual and machine runs
 
@@ -731,6 +805,126 @@ Anything that fails here is written to the feature's writeup first, then fixed; 
 TODO row's status word changes.
 
 ## Run log
+
+### 2026-10-26 afternoon run (group B normal world nb2, seed -8188900049893920259, JFR on)
+
+Jars: `mods/` as of 2026-10-26 15:32 (patcherMod 1.1.03, CD 15:31, Vintage -07), COPIED into the scratch `mods/`; second
+boot with patcherMod rebuilt 15:54 (fix 1). Probes: the usual set plus new `tools/seasoning_probe/seasoning_probe.js`
+(`/sntest`, SQ-SNF-03) and `/zq states all` (block-state count). Boot clean apart from the known `truffle_pie` NCH error.
+
+Fixes made in the run:
+
+1. **Perf mixins never applied on a dedicated server:** all 9 (`ServerTickPerfMixin` ... `KubeJSEventHandlerContainerMixin`)
+   were in the `client` list of `creativeengineering.mixins.json`; `/ceperf status` said no hook had run and 0 handlers
+   were wrapped. Moved to `mixins`; patcherMod rebuilt and installed 15:54. Dev / server tooling, no changelog bullet.
+2. `food_dict.js`: dropped `fruit_jam_bottle`, `fruit_jam_glow`, `drink_juice_prickly_pear` (Delightful items removed in the
+   3.8.1 repack; `tools/food_dict.py` flagged them, no script used them). No changelog bullet.
+
+Dumps and generators: `/dumpall` 23/24 in 318 s (`/dumpservermods` needs `mod_sides.md`, so `tools/dump_server_mods.py` ran
+offline: 368 jars). Copied back: recipes, tags, loot_tables, world_jei, structures, biome_data, spawns, villager_trades,
+fluids, potions, worldgen/structuregen and the 4 climate dumps (old set in the session scratchpad). All 29 manifest
+generators ran from the instance: 27 exit 0, `structure_live_check` warns (only the known empty
+`aquacultures_carp_with_all` set; shipwrecks / ruined portals in no set as structure_tuning.md says), `food_dict` warned
+before fix 2. Client-only dumps (names, stacks, gear, food, crops, compost, paintings, items by mod) were not copied.
+
+| Entries | Result |
+|---|---|
+| SQ-SNF-01, -02, -03 | PASS: the 4 seasonable tags hold only popcorn, no `seasonable/sugar` tag; snack and fruit families as expected; the 5 season recipes present, none for sugar or `_on_corn_delight_popcorn`; `/sntest` 5/5 |
+| SQ-PF-01, -02, -05 | PASS after fix 1 (320 handlers wrapped, all hooks run; report has ticks, dimensions, `server_scripts:<file>:<line>`, entity / block entity types; 2 reloads keep 320) |
+| SQ-PF-03 | Partial: no player, so `spreadplayers` stood in for `/tp`: one 22 s sync load listed with caller `Level#getChunk` and phase |
+| SQ-SV-01 | Server half PASS: End armor stand tp to 300016 100 300016 in 6 ms, no "ticks behind", no `r.585.585.mca`. Myalite viaduct needs a player |
+| SQ-INV-01 to -06 | Done, results in the TODO rows (`release #3`, `dictionaries #1`, `potions #5`, `metal #4`, `server #6`, `biomes #8`): 770,959 block states; both Nullscape biomes located |
+| SQ-INV-08, -15, -16 | Dump pass and generators as above (`jei_world` 3551 rows, loot census 12342 tables) |
+| `/fdtest all`, `/cdjtest`, `/fgdtest all`, `/kttest` | 98/98, 23/23, 135/136 (truffle pie), 27/31 (KT-15d, KT-17 x3, as 10-26) |
+| `/vtdtest all` | 358/376: the 18 fails are crop-survival rows; the probe plants at y = -60, underground in a normal world (no light). Not a regression: run it on group A |
+| Not run | SQ-PF-04 (pregen A/B), SQ-PF-06 and all client rows, SQ-INV-07 and -09 to -14, -17, -18, group B worldgen counts |
+
+### 2026-10-26 run (group A superflat qb1, then group B normal world nb1)
+
+Jars: `mods/` as of 2026-10-25 23:59 (patcherMod 1.1.03, CD 23:49, Vintage -06, Incubation Additions 1.1.0, repackedStorage
+-01), COPIED into the scratch `mods/`. KubeJS tree of 2026-10-26 00:06 plus the fixes below. 3 boots of qb1, 1 of nb1.
+New probe: `tools/cdb_en_probe/cdb_en_probe.js` (`/cbetest blocks|soils|growth|dragon|anvil|squid|jars|all`; needs
+`forceload add 400 400`). Probe fixes: `fdtest` resolves `creativeengineering:` ids to their `creative_delight:` twin (listed
+once), `vtdtest` checks Pickled Sea Pickle instead of Brewin's pickled pickles, `/zq recipes` counts past its 80-line print cap.
+Setup slips worth knowing: `/cdjtest` takes no argument and needs `forceload add 400 400` (0 gristle otherwise); `place
+structure` needs the spot forceloaded first ("That position is not loaded").
+
+Fixes made in the run:
+
+1. **Boot stopped (datapack load):** `creative_delight:wild/chorus_succulent` used feature type
+   `ends_delight:chorus_succulent_feature` (from upstream's stale json); the registered id is `ends_delight:chorus_succulent`.
+   Fixed in the configured feature and `tools/gen_crop_worldgen_table.py`. Unreleased work, no changelog bullet.
+2. `sample_syringe.js#71` `redeclaration of var $WorldRows` (Rhino nested `const`, also in the user's client log): the Sample
+   Syringe JEI world rows were never added. `const` -> `let`; after a restart the class loads with no warning. Bullet added.
+3. 29 soups had no jar fluid (Miner's cups and bowls, Hostile, Oceanic, End's, Fungi): `gen_soup_soft_fluids.py` only read
+   top-level `mods/*.jar`, so the nested CD members and the `*_upstream` donors gave no texture. It now opens jarjar jars and
+   donor jars; rerun wrote 29 new fluids (bell pepper soup colour now from Rustic 1.7.0). `/fdtest soupjar` PASS after a
+   restart (Moonlight reads soft fluids at world load). Bullet added.
+4. `Item.of(i.<tag key>, n)` as a recipe input collapses to the tag's first item (Cake Base wanted 2 Parrot Eggs and plain
+   Sugar). 16 grid recipes, 3 Create mixes and 3 IE blueprints fixed: repeated keys for `R.shapeless` / `R.createMixing`,
+   `{ id, count }` for `ieBlueprint`; the 4 auto ids that changed are pinned to the old ones. Memory `kubejs-api-notes`. Bullets added.
+5. Vintage's fermented spider eye jar recipe took plain sugar only (`replaceInput` does not reach `vintagedelight:fermenting`):
+   replaced by `creative_delight:pickling/fermented_spider_eye_from_fermenting` on the plain sweetener tag. Covered by the
+   existing sweetener bullet.
+
+| Entries | Result |
+|---|---|
+| SQ-CDB-01, SQ-EN-01 (server half), SQ-FFH-01/02 (no `foodFamily` / `cd_food.js` error), SQ-STD-01, SQ-FSD-01 | PASS after fix 1. Only NCH error: the known `truffle_pie` (`fungiport #3`). `[itemMerges] 12 merges`; Storage Delight 140 recipes; Farmer's donor 177 files, only Aether / Aquaculture blocks to air, no `Could not translate` |
+| `/fgdtest all`, `/vtdtest all`, `/kttest`, `/cdjtest`, `/fdtest all` | fgd 135/136 (truffle pie), vtd 373+ all PASS after the probe update, kt 30/34 (same 4 as 10-25: KT-15d, KT-17 x3), cdj 23/23, fd 97/97 after fixes 3 and the probe alias |
+| SQ-CDB-02 | PASS after fix 5 (all four sweetener tags as the row says) |
+| SQ-CDB-03, -09, -13; SQ-ABD-01 to -05; SQ-MRD-03 (recipe half) | PASS by `/zq` |
+| SQ-CDB-10, -11 | PASS after fix 4 (cacciatore now cycles cooked chicken cuts); `canned_mhadjeb` waits for SQ-CDB-12 |
+| SQ-CDB-04, -06, -07 | PASS (`/cbetest squid`, `jars`): one squid / glow squid item per kill, no ink / calamari / tentacles (a knife adds Delightful's animal fat: upstream `fatty_animals` holds squid); lava bottle in and out; milkshakes go in; Splash Milk's bottle shows `moonlight:milk` |
+| SQ-EN-02, -03, -04, -06 | PASS (`/cbetest`): crate and stove drop themselves; the 4 plants survive only on end stone / tilled end stone; chorusflame 9-10 vs 16-24 and void pepper 18 vs 28 growth ticks of 100 (tilled faster); dragon bare 23 meat / 8 legs / 5 teeth in 4 kills, knife and machete 34 / 8 / 9; Dragon Tooth Knife repairs with a tooth |
+| SQ-FSD-03, -04 (placement), -06 | PASS: all 7 kinds place; carp not locatable, squids at 552 blocks. Chest / frame / pot contents and the cook variety are client checks |
+| SQ-FSD-05, -08 | Upstream finding: Farmer's Structures 1.0.6 templates name `minecraft:cook_end_1_pool` / `cook_additions_N_pool` (no namespace) on the back-connectors and on 4 expansion connectors (`cook_additions_2_6/7/10`, `cook_end_1_15`); log `Empty or non-existent pool`, those 4 never expand. Same on 1.21. Not changed: owner decision (rewrite in the donor converter or leave) |
+| SQ-EN-07 | Partial: `end_house` found 156 blocks from 1500 0 in a new End; the earth-fill check needs `log = ALL` in the srv toml and a restart (not done) |
+| Not run | Group B worldgen counts (SQ-FGD-12 to -15, SQ-WCD, SQ-DW, SQ-VP-14/15, SQ-MD-01, SQ-RD-09 to -11 / -26 to -28, SQ-OPEN-*, SQ-EN-07 rest, SQ-EN-10), fake-player rows of Round 1 not covered by a probe, all client rows (CDB-05/08/12, EN-05/08, CQ-*) |
+
+Other findings (not fixed): Corn Delight 1.0.3's `village_house` / `shipwreck_loot` loot modifiers use `mmlib:add_loot_table`,
+not in the pack, so they never load (old: also in 2026-10-24 client logs). `i.spider_eye` is defined 3 times in `item_dict.js`.
+
+### 2026-10-25 late run (group A, current 1.1.03 tree, partial)
+
+Jars: everything in `mods/` as of 22:13 (copied into the scratch `mods/`, not symlinked: a parallel session rebuilt
+and installed patcherMod and CD mid-boot once, `NoClassDefFoundError` in RegisterEvent), patcherMod and CD from
+`build/libs` with the fixes below. KubeJS tree of 22:24. One superflat world (qa1), 5 boots. New scratch tools:
+`tools/scratch_query/zq_probe.js` (`/zq recipes|rdetail|itemtag|blocktag|tagsof|nbt`), `zq_batch.sh` (a file of
+console commands, prints the `[zq]` lines), `game_jvms.sh` (java pids that are not Gradle: `pgrep -x java` also
+matches the Gradle daemon). `/dumpall` 22/24 ok (climatecaves, servermods fail on superflat). Server stopped at the end.
+
+Fixes made in the run (all in unreleased 1.1.03 work, so no changelog bullet):
+
+1. Boot stopped in KubeJS startup: CD `moredelight/toast.js` called `FoodBuilder.fast()`; KubeJS 1902 has
+   `fastToEat()`. Fixed (CD rebuild).
+2. Boot stopped again: KubeJS counts upper-case asset file names as startup errors. Renamed
+   `corn_delight_art_NOTICE.txt` / `more_delight_art_NOTICE.txt` to `_notice.txt` (docs updated). Keep asset names lower case.
+3. `[NCH] withNamespace failed ... redeclaration of var incBbqStick`: the whole CD Farmer's Delight block after the
+   barbecue stick was skipped (grilled salmon, rolls, rice medley, mutton chops assemblies...). Nested `const inc*` ->
+   `let` in `farmersdelight/recipes.js`, `create/golden.js`, `quarkdelight/recipes.js` (memory `rhino-fieldandmethods-gotcha`).
+   After `/reload` the FD sequenced assemblies load.
+4. CD Berserker's Brew came out as a plain water bottle: NCH `vdPickling` wrote results through `_itemJson` (no NBT),
+   and `_nbtItemJson` read NBT with `getTag()`, which KubeJS hides from scripts (`.nbt` works). `vdPickling` output and
+   secondary now use `_nbtItemJson`, which reads `.nbt`. Verified: Strength, Resistance, Wither. No `ieBlueprint` call
+   passes an NBT stack, so that helper's recipes are unchanged. patcherMod rebuild + restart.
+
+Probe updates (expectations that went stale with the CD move, not pack bugs): `fungi_probe.js` grid / pot meal ids are
+`creative_delight:`, colony Serene Seasons checks dropped (FD's colonies are in neither tag; fungi_delight.md corrected);
+`vintage_probe.js` resolves a `creativeengineering:` id to its `creative_delight:` twin, jar bottom side is 3 slots (the
+-04 remainder slot), roasted pepper tag holds all 9 colours, Berserker's Brew under `creative_delight:pickling/`.
+
+| Entries | Result |
+|---|---|
+| SQ-FGD-00, SQ-VP-00, -01, SQ-MDP-01, SQ-AD-00 (as nested CD members), SQ-FN-01, SQ-LE-00, SQ-TI-00, SQ-KT-00, SQ-VTD4-01, SQ-FDB-01, SQ-FR-01, SQ-RD-01, SQ-RD-25, SQ-CDQ-00, SQ-CDM-00, SQ-CDF-00, SQ-CDF-03, SQ-CN-00, SQ-DDP-01, SQ-RSP-01, SQ-FD-01 (log half) | PASS after fixes 1 to 3: `Done (`, no mixin / registry / `Error occurred while handling event` / NCH failure from our code except the known `truffle_pie` (`fungiport #3`). Only noise: redeco's two `Not a JSON object` tag files (also in the client log). Counts that moved since the rows were written: `[cans] registered 272`, `Cup conversions: 16`, Rustic upstream 452 files (8 dropped), `[jar-startup] creative_delight: 57 of 57`, `[CE potions] 58 item-agnostic mixes`, `[jeiRemove] 349`. FDB toml, `[moss]` keys, displaydelight `[Features]`, simplehats chef hat weight 0 all as the rows say |
+| SQ-SN-00, SQ-PS-00 | PASS on `[seasoning] defined` cheese / onion / garlic / sugar; the `seasoning done` / `powdered_sugar done` lines no longer exist (the scripts moved into CD and log nothing): rows stale |
+| SQ-FGD-01 to -06, -08, -10 (`/fgdtest all`) | PASS 135 / 136; the 1 FAIL is the known truffle pie (`fungiport #3`) |
+| SQ-VP-02 to -12 (`/vtdtest all`) | PASS 370 / 375 after fix 4. Remaining FAILs are open TODO rows: ghost pepper survives on farmland (`vintageport #7`), right-click harvest resets cucumber / ghost pepper / zucchini to age 0 (`vintageport #8`) |
+| SQ-KT-01, -02 (`/kttest`) | 30 PASS, 4 FAIL: KT-15d plate over air not refused; KT-17 food plate / plated hamburger do not pop when the stone or counter under them is broken (`above` still the plate, no drops). New since the last run: check the `updateShape` mixin and `popsUnsupported` (row's failure notes) |
+| SQ-CDJ-01, -06 (`/cdjtest`) | PASS 23 / 23 |
+| SQ-SN-01, SQ-PS-01, -02, SQ-DB-01, SQ-VTD4-02, SQ-LE-02, SQ-RM-01, SQ-RM-04 | PASS, ids now `creative_delight:` (seasoning, powdered sugar routes, 12 dough block recipes, pickling brew / leather with `#forge:salt`, ghost pepper crushing 2 / milling 2 / IE 3 seeds, no Vintage slime or salted fish, no bedroll / fruit beignet / Design Decor golden apple, the 4 FD dishes and `crab_bars_manual_only`, driftwood log stripping on the board and the Create saw, no Abnormals driftwood cutting). The five removed foods: no recipe, loot table or trade. Not shown by `/zq`: fluid amounts, heat, secondary outputs (orange jam mixer, slime mixer heat, bark output) |
+| Not run | Everything else in Round 1 (fake-player rows, loot rolls, villagers, the B worldgen groups, client rows). Odd finding for a later look: `forge:sugar` also holds `pneumaticcraft:glycerol` |
+
+The scratch `kubejs/exported/` of this run (server-safe dumps) was not copied into the instance.
 
 ### 2026-10-25 Creative Delight run (group A, CD focus)
 
@@ -921,3 +1115,105 @@ Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, 
 |---|---|---|---|---|
 | SQ-FFH-01 | B | Boot, then `/dumpall` and diff the recipe dump against the previous one for cutting, smelting, smoking, campfire and `creativeengineering:baking` ids | Same ids and results as before the change; no `foodFamily` error in `logs/latest.log` | CD `food_family_recipes.js` |
 | SQ-FFH-02 | B | Rebuild the CD jar first (`cd_food.js` was edited at 21:29, after the 21:24 build; `:creativeDelight:build`, `installToMods`), boot, then `/dumpall` | No `cd_food.js` parse or `global.CD.food` error in `logs/latest.log`; recipe dump unchanged from SQ-FFH-01 (nothing calls the new helper yet). After the members move to it: same ids and results as before for cutting, cooking trio, `creativeengineering:baking`, grid meals and sequenced assemblies, and no duplicate recipe of a swept output | CD jar; creative_delight.md 30 |
+
+## Storage Delight additions (storage_delight.md section 5)
+
+Needs `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` installed (`:repackedStorage:installToMods`).
+
+| ID | Group | Action | Expect | Depends on |
+|---|---|---|---|---|
+| SQ-STD-01 | B | Boot a server with the jar and the pack's Quark; `/dumpall` | No `storagedelight` error in `logs/latest.log`; 140 `storagedelight:` blocks, 50 of them new; the 50 recipes load (`storagedelight:` recipe ids for the 36 stone countertops and 14 bamboo blocks) | repackedStorage jar |
+| SQ-STD-02 | B | `/give` and place a `storagedelight:bamboo_drawer`, a `storagedelight:oak_cabinet_with_polished_tuff_countertop` and a `storagedelight:warped_cabinet_with_stone_bricks_countertop`; open and close each, break with an axe | Opens as 27 slots, no block entity error, item kept and dropped | repackedStorage jar |
+
+## Abnormals Delight plans (abnormals_delight.md section 3)
+
+Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, `installToMods`).
+
+| ID | Group | Action | Expect | Depends on |
+|---|---|---|---|---|
+| SQ-ABD-01 | B | Boot, then `/dumpall` and look up `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice` | Both gone; `creative_delight:smelting/cooked_perch_slice` and `.../cooked_pike_slice` present, experience 0.35, cookingtime 200, same input and output; the smoking and campfire recipes unchanged; no error in `logs/latest.log` | CD jar |
+| SQ-ABD-02 | B | Same boot: look up the salvaging ids in the dump | `abnormals_delight:upgrade_aquatic/cutting/driftwood_door`, `_sign`, `_trapdoor` gone; `creative_delight:farmersdelightcutting/salvaging/driftwood_furniture` (10 items incl. `abnormals_delight:driftwood_cabinet`, 0.75 driftwood planks, axe), `.../driftwood_chest_boat`, `.../driftwood_furnace_boat`, `.../<wood>_furnace_boat` for the 9 vanilla woods (crimson and warped give `boatload:` boats), `.../crimson_boat`, `.../warped_boat`, `.../crimson_chest_boat`, `.../warped_chest_boat` present; no `fdCutting` warning in `logs/latest.log` | CD jar |
+| SQ-ABD-03 | B | Same boot | `abnormals_delight:neapolitan/adzuki_curry` gone; `creative_delight:shapeless/adzuki_curry_cooked_manual_only` takes roasted adzuki beans, dried banana, `#forge:crops/carrot`, pumpkin slice, bowl; `abnormals_delight:neapolitan/cooking/adzuki_curry` unchanged | CD jar |
+| SQ-ABD-04 | B | Same boot; `/dumptags` or the tag dump | `#creativeengineering:pickerelweed` = blue + purple; `abnormals_delight:pickerelweed_juice` and `pike_with_beetroot` gone; `creative_delight:farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot` take that tag twice, 1.0 xp, 200 ticks | CD jar |
+| SQ-ABD-05 | B | Same boot | `neapolitan:milk/milk_bottles_from_bucket` and `milk_bucket_from_bottles` gone; `creative_delight:shapeless/milk_bottles_from_bucket` (`#forge:buckets/milk` + 4 glass bottles -> 4 `farmersdelight:milk_bottle`) and `.../milk_bucket_from_bottles` (bucket + 4 `#forge:bottles/milk` -> milk bucket) present | CD jar |
+
+## Farmer's Structures donor (farmers_structures.md section 5)
+
+Needs patcherMod rebuilt and installed (`:patcherMod:installToMods`), the Creative Delight jar (hanging canvas sign), and `farmers_upstream/FarmersStructures-1.0.6-1.21.1_neoforge.jar` in the game folder.
+
+| ID | Group | Action | Expect | Depends on |
+|---|---|---|---|---|
+| SQ-FSD-01 | B | Boot a server; read `logs/latest.log` | One `[farmers-donor] N files from Farmer's Structures 1.0.6 {...}` line; no `Could not translate`; the counts list `blocks mapped minecraft:pink_petals`, no `blocks to air` for a block you expect to exist (rope fence, gleaming salad, hanging canvas sign, basket) | donor jar |
+| SQ-FSD-02 | B | Rename the donor jar, boot | One warning that it is missing; the game loads with the 1.0.0 structures only | donor jar |
+| SQ-FSD-03 | B | `/place structure farmers_structures:aquacultures_cod` a few times (different spots) | Pond places; fish are cod in some, with pike and perch in others; no empty pond | Upgrade Aquatic |
+| SQ-FSD-04 | B | `/place structure` each of `cacaos` (jungle), `fishs_stew`, `ratatouilles`, `squids`, `shepherd_farms` | All place; chests, item frames and cooking pots hold items; the cacao basement piece attaches; ratatouilles and squids sit below ground; the stew hut fish include salmon and pike / perch | |
+| SQ-FSD-05 | B | `/place structure farmers_structures:cooks` 10 times | More varied houses than before; rope fences and gates present; azalea flower piles where pink petals were; Vinery cherry leaves; no air holes in walls | |
+| SQ-FSD-06 | B | `/locate structure farmers_structures:aquacultures_carp` | Not found (no carp set); `farmers_structures:squids` etc. are locatable in their biomes | |
+| SQ-FSD-07 | B | Dump with `/dumpall`; look at `structure_set` for `farmers_structures:*` | Group `remote` holds cod, cacaos, fishs_stew, ratatouilles, shepherd_farms, squids; no `aquacultures_carp` | |
+| SQ-FSD-08 | B | Look at the cook house piece with a hanging canvas sign (`cook_end_1_21`, via `/ceplace` or many cooks) | The sign is present, hanging from a ceiling | CD jar |
+
+
+## Creative Delight food batch, 2026-10-25 (TODO rows in each ID's writeup column)
+
+Needs the Creative Delight jar built 2026-10-25 22:48 (installed in `mods/`). Startup changes (new items, removed items,
+the merge): restart. Then `/dumpfood`, `/cegen run` the can generator, restart again for the can changes.
+
+| ID | Group | Action | Expect | Depends on |
+|---|---|---|---|---|
+| SQ-CDB-01 | A | Boot; `logs/latest.log` | No startup or server script error for `glow_calamari.js`, `veggies_items.js`, `vintage_items.js`, `minecraft/recipes.js`, `miners_delight/*.js`, `oceansdelight/recipes.js`; `[itemMerges]` count one higher | |
+| SQ-CDB-02 | A | `/dumpall`; look up the four `#creativeengineering:sweeteners` tags and sugar recipes | Cooking (pumpkin pie, a Fruits Delight jam) takes all five; drinks (`farmersdelight:cooking/hot_cocoa`, a Fruits Delight tea mix, a Create DD milkshake mix) sugar, powdered sugar, honey bottle; Brewin' keg recipes all but glycerol; Botania mana powder, a Pretty Pipes module, the fermented spider eye jar recipe sugar or powdered sugar; powdered sugar and the sugar cube plain sugar (RC-25) | |
+| SQ-CDB-03 | A | Same dump: `creative_delight:farmersdelightcutting/squid_to_calamari`, `glow_squid_to_calamari`, `baked_squid_to_calamari`; `miners_delight` squid cuts | The three present (calamari 1 + 50 %, ink 1 + 50 % 2); no Miner's squid-to-tentacles cut | |
+| SQ-CDB-04 | A | Summon a squid and a glow squid, kill each with a sword, then with a knife (DA-05, DA-06) | One squid item / glow squid item each kill; no ink sac, calamari or tentacles | |
+| SQ-CDB-05 | A | JEI: Glowing Calamari line | 3 items with the palette-swapped sprites (Pickled Sea Pickle too); cut, roll recipes; furnace, smoker and campfire give Cooked Calamari; fried calamari lists glowing calamari | |
+| SQ-CDB-06 | A | Fill a jar with a lava bottle, then empty it | Lava goes in and comes back out into a glass bottle | |
+| SQ-CDB-07 | A | Fill a jar with a Neapolitan milkshake and with Splash Milk's milk bottle | Each goes in; the milk bottle shows milk | |
+| SQ-CDB-08 | A | JEI: Pickled Sea Pickle, Pickled Pickles (VTD-55) | Sea pickle art in pickle shape; Pickling Jar 5 sea pickles + salt -> 5; Pickled Pickles hidden; an old Pickled Pickles stack turns into Pickled Sea Pickles | |
+| SQ-CDB-09 | A | Cooking pot: pickle soup with pickled onion, cauliflower, broccoli, beetroot, cabbage leaf (VTD-57); braised sea pickle from 2 slices + 2 brown mushrooms (VTD-58) | Both cook | |
+| SQ-CDB-10 | A | JEI: mhadjeb, potato noodle (RC-132, RC-133) | No mhadjeb or uncooked mhadjeb; Gnocchi and Creamy Gnocchi names; knife on sweet potato dough gives 2 gnocchi; Creamy Gnocchi takes milk, 2 gnocchi, onion / garlic / pickled onion | |
+| SQ-CDB-11 | A | JEI: Bayberry Juice; heatless cacciatore (RC-D2, RC-136) | The bottle, the fluid and the can read Bayberry Juice; 12 bottles fill a jar (MJ-14); the cacciatore grid recipe cycles cooked chicken cuts | |
+| SQ-CDB-12 | A | After `/dumpfood` and `/cegen`: can generator output | No `canned_mhadjeb`; `canned_pickled_pickles` named Canned Pickles from pickle or pickled sea pickle | SQ-CDB-01 |
+| SQ-CDB-13 | A | JEI search Bowl of Water; `/give @s botania:water_bowl`, hover it | Not in JEI; the item has no tags | |
+| SQ-CDB-14 | client | JEI uses of the empty Sample Syringe (fixed 2026-10-26 run, `sample_syringe.js` `const` -> `let`) | The world page lists each mob and its filled syringe; no `redeclaration of var $WorldRows` in `logs/latest.log` | |
+| SQ-CDB-15 | client | Craft Cake Base with 2 chicken eggs, 3 flour and 2 honey bottles; Pie Crust from cornmeal; Cacciatore with cooked chicken cuts | All three craft (fixed 2026-10-26 run, `Item.of(tag, n)`) | |
+
+## End's and Ender's Delight, 2026-10-25 ([ends_delight.md](../ends_delight.md) 5.6)
+
+Needs the CD jar built 2026-10-25 (`repackedEnds -02`, `endersAdditions -01`) and the patcherMod it needs, installed; full
+restart (new items, member, worldgen). New End chunks for EN-02, EN-06, EN-10. Then `/dumpall` and `/cegen run worldgen`.
+
+| ID | Group | Action | Expect | Depends on |
+|---|---|---|---|---|
+| SQ-EN-01 | A | Boot; `logs/latest.log` | `enders_additions` and `ends_delight.ce.mixins.json` load; no missing model / texture for `endersdelight:` plants; no script error in `ends_delight/*.js`, `endersdelight/*.js`; wild-crops log lists the 5 End rules (EN-16) | |
+| SQ-EN-02 | A | Break a Chorus Crate and an Endstone Stove (EN-01) | Each drops itself | |
+| SQ-EN-03 | A | Place the 4 plants on end stone, tilled end stone, dirt, farmland (EN-03); random tick speed 100 on both soils (EN-04, EN-05) | Only the two soils; faster on tilled; void pepper spreads then fruits, 3 / 1 drops | |
+| SQ-EN-04 | A | Kill the Ender Dragon bare-handed, with a knife, with a machete (`/summon`) (EN-07) | 5-7 meat, 2 legs, 1-2 teeth; +2 meat +1 tooth with knife or machete | |
+| SQ-EN-05 | A | JEI and tooltips: the 10 drop items; Dragon Tooth Knife; the 5 dishes; Crushed Void Pepper; crate unpack; End's grid meals (EN-08, EN-09, EN-11 to EN-14) | As ends_delight.md 5.6 | SQ-EN-01 |
+| SQ-EN-06 | A | Anvil: damaged Dragon Tooth Knife + Dragon Tooth (EN-09) | Repairs | |
+| SQ-EN-07 | A | New End world: `/locate structure endersdelight:end_house`, fly the highlands; earth fill log ALL (EN-06, EN-02, EN-10) | Houses only in highlands / midlands, on ground, no chests; plants and succulent wild on end stone | SQ-EN-01 |
+| SQ-EN-08 | A | Look at the 25 retextured items; eat Stuffed Shulker with an empty hand (EN-15) | New art; message names the Shulker Bowl | |
+| SQ-LR-01 | A | Set `debug.level_random.probe = true`, play a session with Distant Horizons generating and mobs near (Regrowth); `grep LevelRandomProbe logs/latest.log` | No crash; each `[LevelRandomProbe]` entry names the off-thread caller (or none appears, then DH FEATURES mode was not the cause). Reset to false after | |
+
+## Server fixes, 2026-10-26 (TODO `server #3`, `server #6`)
+
+Needs patcherMod 1.1.03 built 2026-10-26 (in `mods/`). SQ-SV-02 needs a client connected to the scratch server.
+
+| ID | Group | Action | Expect | Depends on |
+|---|---|---|---|---|
+| SQ-SV-01 | A | End: `/execute in minecraft:the_end run tp` an armor stand to 300016 100 300016 (ST-232); then a pearl onto Myalite at a spire viaduct | The tp takes milliseconds, no "ticks behind", no region file at the target; the viaduct warp still works | |
+| SQ-SV-02 | client | Blow up a spot with Quark / Every Compat blocks and vanilla blocks (FX-47, FX-13) | Every change shows; no "Error executing task on Client"; `[debug.block_state_sync]` on: no unresolved id | |
+
+## Pack perf events, 2026-10-26 (TODO `server #9`, perf.md 3.6)
+
+Needs patcherMod 1.1.03 rebuilt 2026-10-26 (the perf mixins) and the server booted with the recording: add
+`-XX:FlightRecorderOptions=stackdepth=256,repository=perf/jfr-repo -XX:StartFlightRecording=name=ce,settings=perf/ce-server.jfc,disk=true,maxage=30m,maxsize=512m`
+to the scratch server's java line and copy `server/perf/ce-server.jfc` to `OUT/srv/perf/`. Grep `latest.log` for
+`Perf` / `KubeJSEventHandler` mixin warnings first.
+
+| ID | Group | Action | Expect | Depends on |
+|---|---|---|---|---|
+| SQ-PF-01 | A | Boot; `/ceperf status` (PF-14) | Recording `ce` running; all 10 events recorded; hooks: all run except possibly chunk wait; KubeJS handlers wrapped > 0; no mixin warning for the 9 perf mixins | |
+| SQ-PF-02 | A | After 2 min, `/ceperf dump smoke`; copy the file here, `python3 tools/perf/perf_report.py <file>` (PF-15) | Chat says saved; the report's "Measured by the pack's hooks" has ticks, a row per dimension, handlers as `server_scripts:<file>:<line>`, entity and block entity types | SQ-PF-01 |
+| SQ-PF-03 | B | New world: `/tp` 5 times to unexplored land 2000+ blocks apart, then `/ceperf dump tp` and report (PF-16) | Chunk waits lists waits over 1 ms with a caller and phase; totals non-zero | SQ-PF-01 |
+| SQ-PF-04 | B | Chunky pregen 2601 chunks with the jfc as is, then with every `creativeengineering.*` set to `enabled=false` (PF-17) | Same time within noise (1:34 in the 2026-09-28 A/B) | SQ-PF-01 |
+| SQ-PF-05 | A | `/reload` twice, `/ceperf status` (PF-18) | Wrapped-handler count unchanged; no KubeJS errors | SQ-PF-01 |
+| SQ-PF-06 | client | Single player without a recording: play a minute, `/ceperf status` (PF-19) | No errors; "no JFR recording is running"; events listed as not recorded | |

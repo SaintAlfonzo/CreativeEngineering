@@ -270,6 +270,146 @@ def tsv(path):
             yield line.rstrip('\n').split('\t')
 
 
+CHUNK_WAIT_HOOKS = ('net.minecraft.server.level.ServerChunkCache#m_7587_', 'net.minecraft.server.level.ServerChunkCache#m_8431_',
+                    'net.minecraft.server.level.ServerChunkCache#getChunk', 'net.minecraft.server.level.ServerChunkCache#getChunkFuture')
+
+
+def analyze_ce(ev, stacks, at, lo, secs):
+    """The pack's own creativeengineering.* events (patcherMod, perf.md 3.6): exact tick times, per dimension,
+    chunk waits, KubeJS handlers by script, entity and block entity types. None when the recording has none."""
+    by = collections.defaultdict(list)
+    for e in ev:
+        if e['type'].startswith('creativeengineering.'):
+            by[e['type'][len('creativeengineering.'):]].append(e)
+    if not by:
+        return None
+    nsec = int(secs) + 1
+
+    def pctl(vals, q):
+        v = sorted(vals)
+        return v[min(len(v) - 1, int(q * len(v)))] if v else None
+
+    def ns(id_):
+        return id_.split(':', 1)[0] if ':' in id_ else '?'
+
+    out = {'events': {k: len(v) for k, v in sorted(by.items())}}
+
+    # Whole ticks: the end time is t + dur, so a tick belongs to the second it finished in.
+    ticks = by.get('ServerTick', [])
+    if ticks:
+        d = [e['dur'] for e in ticks]
+        busy = collections.Counter()
+        worst = collections.defaultdict(float)
+        for e in ticks:
+            sec = int((e['t'] - lo) / 1000)
+            busy[sec] += e['dur']
+            worst[sec] = max(worst[sec], e['dur'])
+        out['ticks'] = {'count': len(d), 'median': pctl(d, .5), 'p95': pctl(d, .95), 'p99': pctl(d, .99), 'max': max(d),
+                        'over50': sum(1 for x in d if x > 50), 'busy_pct': 100.0 * sum(d) / (secs * 1000) if secs else 0,
+                        'worst_series': [[sec, worst.get(sec, 0.0)] for sec in range(nsec)],
+                        'busy_series': [[sec, min(100.0, busy.get(sec, 0.0) / 10.0)] for sec in range(nsec)]}
+    total_tick_ms = sum(e['dur'] for e in ticks) or None
+
+    levels = by.get('LevelTick', [])
+    if levels:
+        dims = collections.defaultdict(list)
+        chunks = collections.defaultdict(list)
+        players = collections.defaultdict(int)
+        per_sec = collections.defaultdict(collections.Counter)
+        for e in levels:
+            k = e.get('dimension') or '?'
+            dims[k].append(e['dur'])
+            chunks[k].append(e.get('loadedChunks') or 0)
+            players[k] = max(players[k], e.get('players') or 0)
+            per_sec[k][int((e['t'] - lo) / 1000)] += e['dur']
+        rows = []
+        for k, d in sorted(dims.items(), key=lambda kv: -sum(kv[1])):
+            rows.append({'dim': k, 'ticks': len(d), 'total_ms': sum(d), 'mean_ms': sum(d) / len(d), 'p95_ms': pctl(d, .95),
+                         'max_ms': max(d), 'pct': 100.0 * sum(d) / total_tick_ms if total_tick_ms else None,
+                         'chunks': sum(chunks[k]) / len(chunks[k]), 'players': players[k]})
+        out['dims'] = rows
+        out['dim_series'] = [(r['dim'], [[sec, per_sec[r['dim']].get(sec, 0.0) / 10.0] for sec in range(nsec)])
+                             for r in rows[:4]]
+
+    cws = by.get('ChunkWaitStats', [])
+    waits = by.get('ChunkWait', [])
+    if cws or waits:
+        waited = sum(e.get('waited') or 0 for e in cws)
+        cw = {'requests': sum(e.get('requests') or 0 for e in cws), 'waited_ms': waited,
+              'longest_ms': max((e.get('longest') or 0 for e in cws), default=0),
+              'pct': 100.0 * waited / total_tick_ms if total_tick_ms else None,
+              'series': [[int((e['t'] - lo) / 1000), e.get('waited') or 0] for e in cws], 'slow': len(waits)}
+        who = collections.defaultdict(lambda: [0, 0.0, 0.0, collections.Counter()])
+        for e in waits:
+            frames, _ = stacks.get(e.get('stack', -1), ([], False))
+            cut = max((i for i, f in enumerate(frames) if f in CHUNK_WAIT_HOOKS or at.pretty(f) in CHUNK_WAIT_HOOKS), default=-1)
+            frames = frames[cut + 1:]
+            mod = at.blame(frames)[0]
+            site = next((at.pretty(f) for f in frames if at.owner(f)[1] in ('mod', 'mixin')),
+                        at.pretty(frames[0]) if frames else '?')
+            w = who[(mod, site, at.phase(frames))]
+            w[0] += 1
+            w[1] += e.get('waitTime') or 0
+            w[2] = max(w[2], e.get('waitTime') or 0)
+            w[3][e.get('dimension') or '?'] += 1
+        cw['who'] = [{'mod': k[0], 'site': k[1], 'phase': k[2], 'count': v[0], 'total_ms': v[1], 'max_ms': v[2],
+                      'dims': ', '.join('%s %d' % (dm, c) for dm, c in v[3].most_common(3))}
+                     for k, v in sorted(who.items(), key=lambda kv: -kv[1][1])[:20]]
+        out['chunk_waits'] = cw
+
+    hs = by.get('KubeJSHandlerStats', [])
+    slow_h = by.get('KubeJSHandler', [])
+    if hs or slow_h:
+        agg = collections.defaultdict(lambda: [0, 0.0, 0.0, 0])
+        for e in hs:
+            a = agg[(e.get('event') or '?', e.get('source') or '?', e.get('line') or 0)]
+            a[0] += e.get('calls') or 0
+            a[1] += e.get('time') or 0
+            a[2] = max(a[2], e.get('longest') or 0)
+        for e in slow_h:
+            agg[(e.get('event') or '?', e.get('source') or '?', e.get('line') or 0)][3] += 1
+        out['kubejs'] = [{'event': k[0], 'source': k[1], 'line': k[2], 'calls': v[0], 'total_ms': v[1],
+                          'ms_s': v[1] / secs if secs else 0, 'mean_us': 1000.0 * v[1] / v[0] if v[0] else 0,
+                          'max_ms': v[2], 'slow': v[3], 'pct': 100.0 * v[1] / total_tick_ms if total_tick_ms else None}
+                         for k, v in sorted(agg.items(), key=lambda kv: -kv[1][1])[:30]]
+        out['kubejs_total_ms'] = sum(v[1] for v in agg.values())
+
+    for kind, stat, slow, key in (('entities', 'EntityTypeTicks', 'SlowEntityTick', 'entityType'),
+                                  ('block_entities', 'BlockEntityTypeTicks', 'SlowBlockEntityTick', 'blockEntityType')):
+        st, sl = by.get(stat, []), by.get(slow, [])
+        if not st and not sl:
+            continue
+        agg = collections.defaultdict(lambda: [0, 0.0, 0.0])
+        for e in st:
+            a = agg[e.get(key) or '?']
+            a[0] += e.get('ticks') or 0
+            a[1] += e.get('time') or 0
+            a[2] = max(a[2], e.get('longest') or 0)
+        mods = collections.Counter()
+        for k, v in agg.items():
+            mods[ns(k)] += v[1]
+        places = collections.defaultdict(lambda: [0, 0.0, None, None])
+        for e in sl:
+            pl = places[(e.get(key) or '?', e.get('dimension') or '?', '%s %s %s' % (e.get('x'), e.get('y'), e.get('z')))]
+            t = (e['t'] - lo) / 1000.0
+            pl[0] += 1
+            pl[1] = max(pl[1], e.get('tickTime') or 0)
+            pl[2] = t if pl[2] is None else min(pl[2], t)
+            pl[3] = t if pl[3] is None else max(pl[3], t)
+        out[kind] = {
+            'total_ms': sum(v[1] for v in agg.values()),
+            'types': [{'type': k, 'mod': ns(k), 'ticks': v[0], 'total_ms': v[1], 'ms_s': v[1] / secs if secs else 0,
+                       'per_tick': v[0] / (len(ticks) or secs * 20 or 1), 'mean_us': 1000.0 * v[1] / v[0] if v[0] else 0,
+                       'max_ms': v[2], 'pct': 100.0 * v[1] / total_tick_ms if total_tick_ms else None}
+                      for k, v in sorted(agg.items(), key=lambda kv: -kv[1][1])[:30]],
+            'mods': [{'mod': m, 'total_ms': v, 'pct': 100.0 * v / total_tick_ms if total_tick_ms else None}
+                     for m, v in mods.most_common(15)],
+            'slow': [{'type': k[0], 'dim': k[1], 'pos': k[2], 'count': v[0], 'max_ms': v[1], 'first': v[2], 'last': v[3]}
+                     for k, v in sorted(places.items(), key=lambda kv: (-kv[1][0], -kv[1][1]))[:25]],
+            'slow_count': len(sl)}
+    return out
+
+
 def analyze(parsed, idx, srg, args):
     at = Attributor(idx, srg)
     stacks = {}
@@ -520,6 +660,7 @@ def analyze(parsed, idx, srg, args):
         'blocked': [{'type': k[0], 'mod': k[1], 'site': k[2], 'count': v[0], 'total_ms': v[1]}
                     for k, v in sorted(blocked.items(), key=lambda kv: -kv[1][1])[:15]],
         'unresolved_mixins': at.unresolved_mixins.most_common(10),
+        'ce': analyze_ce(ev, stacks, at, lo, secs),
     }
 
 

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "C C",
+    "BBB"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:stone_brick_slab"
+    },
+    "B": {
+      "item": "minecraft:crimson_slab"
+    },
+    "C": {
+      "item": "minecraft:crimson_trapdoor"
+    }
+  },
+  "result": {
+    "item": "storagedelight:crimson_cabinet_with_stone_bricks_countertop"
+  }
+}

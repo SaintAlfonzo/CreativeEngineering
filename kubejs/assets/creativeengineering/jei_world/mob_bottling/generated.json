@@ -1,0 +1,473 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:blobfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:blobfish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:catfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:small_catfish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:comb_jelly"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:comb_jelly_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:cosmic_cod"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:cosmic_cod_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:devils_hole_pupfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:devils_hole_pupfish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:flying_fish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:flying_fish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:frilled_shark"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:frilled_shark_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:lobster"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:lobster_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:mimic_octopus"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:mimic_octopus_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:mudskipper"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:mudskipper_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:platypus"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:platypus_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:stradpole"
+    }
+   ],
+   "action": {
+    "item": "minecraft:lava_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:stradpole_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "entity": "alexsmobs:terrapin"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "alexsmobs:terrapin_bucket"
+    }
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:axolotl"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:axolotl_bucket"
+    }
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:cod"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:cod_bucket"
+    }
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:pufferfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:pufferfish_bucket"
+    }
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:salmon"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:salmon_bucket"
+    }
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:tadpole"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:tadpole_bucket"
+    }
+   ]
+  },
+  {
+   "inputs": [
+    {
+     "entity": "minecraft:tropical_fish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "minecraft:tropical_fish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "entity": "quark:crab"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "quark:crab_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "upgrade_aquatic:box_jellyfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:jellyfish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "upgrade_aquatic:cassiopea_jellyfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:jellyfish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "upgrade_aquatic:immortal_jellyfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:jellyfish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "upgrade_aquatic:lionfish"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:lionfish_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "upgrade_aquatic:nautilus"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:nautilus_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "upgrade_aquatic:perch"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:perch_bucket"
+    }
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "entity": "upgrade_aquatic:pike"
+    }
+   ],
+   "action": {
+    "item": "minecraft:water_bucket"
+   },
+   "outputs": [
+    {
+     "item": "upgrade_aquatic:pike_bucket"
+    }
+   ]
+  }
+ ]
+}

@@ -71,6 +71,7 @@ public class CreativeEngineering
     public CreativeEngineering() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.worldgen.donor.FarmersDonor::onAddPackFinders);
 
         // Must be registered here, during construction - Forge loads every mod's COMMON/CLIENT
         // config immediately after every mod's constructor has run, so anything later (even

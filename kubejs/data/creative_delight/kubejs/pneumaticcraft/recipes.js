@@ -23,7 +23,7 @@ ServerEvents.recipes(e => {
 		//######################### Sourdough #########################
 		//Swap flour to dough
 		R.remove({ id: 'pneumaticcraft:sourdough' }, e)
-		R.shapeless(Item.of(i.sourdough, 1), [i.yeast_culture_bucket, Item.of(i.dough, 8)], e)
+		R.shapeless(Item.of(i.sourdough, 1), [i.yeast_culture_bucket, i.dough, i.dough, i.dough, i.dough, i.dough, i.dough, i.dough, i.dough], e)
 		// Make smoking
 		R.remove({ id: 'pneumaticcraft:sourdough_bread' }, e)
 		R.smoking(i.sourdough_bread, i.sourdough, e)
@@ -33,7 +33,7 @@ ServerEvents.recipes(e => {
 		}
 		// Mixing
 		if (Platform.isLoaded('create')) {
-			R.createMixing(Item.of(i.sourdough, 8), [Fluid.of(f.yeast_culture, 500), Item.of(i.dough, 8)], e, undefined, 'heated')
+			R.createMixing(Item.of(i.sourdough, 8), [Fluid.of(f.yeast_culture, 500), i.dough, i.dough, i.dough, i.dough, i.dough, i.dough, i.dough, i.dough], e, undefined, 'heated')
 		}
 		// Bottling
 		if (Platform.isLoaded('immersiveengineering')) {

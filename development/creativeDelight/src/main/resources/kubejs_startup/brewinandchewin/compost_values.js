@@ -15,7 +15,6 @@
 
 	C.values('other', [
 		[i.kimchi,          0.5],
-		[i.pickled_pickles, 0.5],
 		[i.quiche,          0.85],
 		[i.quiche_slice,    0.85],
 	])

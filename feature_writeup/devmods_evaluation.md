@@ -98,7 +98,7 @@ Only the Farmer's Delight rows are built (2026-10-25, not installed); the others
 | Change | Class | Decision |
 |---|---|---|
 | Magic Peanut, Smooth Salt Block, Vine Tile have no loot table in the port and drop nothing | data, **bug** | **carry over** the three self-drops, BUILT 2026-10-25 (port `-04`, VTD-54) |
-| Cheese Wheel, Cheese Pizza, Meat Pizza have no loot table | data | open: owner decides slices (KOTS) or nothing (FD pies) |
+| Cheese Wheel, Cheese Pizza, Meat Pizza have no loot table | data | **carry over** KOTS's slice tables (owner), BUILT 2026-10-25 (port `-05`, VTD-54) |
 | Gearo berry line, Dehydrated, Pickled Pitcher Pod | content | stays purged (S1, S3, S8) |
 | `MixedSeedsItem` | code | empty class, never registered; section 2.3a stands |
 | Chef hats as armor layers | code | skip |

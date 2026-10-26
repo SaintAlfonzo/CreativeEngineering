@@ -40,10 +40,11 @@ VANILLA = Path.home() / '.local/share/atlauncher/libraries/net/minecraft/client/
 SOFT_FLUID_RE = re.compile(r'^data/[^/]+/moonlight/soft_fluids/.+\.json$')
 CAPACITY = {'minecraft:glass_bottle': 1}   # everything else is a bowl: 2 per item, as Supplementaries' soups
 # Forge fluids of the same soup: the jar takes them from a bucket or a pipe as this soft fluid
-EQUIVALENT = {'fruitsdelight:bayberry_soup': ['fruitsdelight:bayberry_soup']}
+EQUIVALENT = {}
 # hand-written soft fluids for bottled drinks in the same folder: never written or deleted by this tool
 HAND_WRITTEN = {'nut_milk.json', 'carrot_juice.json', 'dandelion_juice.json', 'turnip_water.json',
-                'fermented_garlic_honey.json'}
+                'fermented_garlic_honey.json',
+                'bayberry_soup.json'}   # Bayberry Juice (a drink since food/drinks #9; keeps its id and Forge fluid)
 # item id -> '#rrggbb', where the patch picks garnish, shadow or a gold bowl (checked against the textures)
 COLOR_OVERRIDE = {
     'alexsdelight:acacia_blossom_soup': '#d6cba0',
@@ -60,8 +61,16 @@ COLOR_OVERRIDE = {
 
 
 def jar_index():
-    """Every mods/*.jar plus the vanilla client jar, highest priority first, as open ZipFiles."""
-    jars = [zipfile.ZipFile(p) for p in sorted(glob.glob(str(INSTANCE / 'mods/*.jar')))]
+    """Every mods/*.jar (and the jars nested in it under META-INF/jarjar, e.g. Creative Delight's members),
+    the *_upstream donor jars, then the vanilla client jar, highest priority first, as open ZipFiles."""
+    jars = []
+    for p in sorted(glob.glob(str(INSTANCE / 'mods/*.jar'))):
+        z = zipfile.ZipFile(p)
+        jars.append(z)
+        for n in z.namelist():
+            if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
+                jars.append(zipfile.ZipFile(io.BytesIO(z.read(n))))
+    jars += [zipfile.ZipFile(p) for p in sorted(glob.glob(str(INSTANCE / '*_upstream/*.jar')))]
     if VANILLA.exists():
         jars.append(zipfile.ZipFile(VANILLA))
     return jars

@@ -1,6 +1,6 @@
 # Storage Delight 26.10.05 against the installed 25.12.09
 
-**Nothing built.** Installed: `storagedelight-25.12.09-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated
+**BUILT 2026-10-25 (decisions in section 5), jar not yet installed.** Installed until then: `storagedelight-25.12.09-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated
 2026-10-25 against `devmods/checkNewerVersionForContent/storagedelight-26.10.05-26.3-neoforge.jar` (NeoForge, vanilla
 26.3), method in [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan
 row: `largecontent/mod-additions #26` in [todo/TODO.md](todo/TODO.md). No config file. The pack's scripts do not touch
@@ -79,6 +79,42 @@ poplar are in 26.10.05 only.
    the 9 tuff ones, bamboo, cherry?
 2. Cherry: skip, or retexture to Vinery's dark cherry?
 
-## 4. Tests (once built)
+## 4. Tests
 
-None yet. Prefix `STD-`.
+Prefix `STD-`. Needs `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` in `mods/` (and `server_mods/`); install with
+`./gradlew :repackedStorage:installToMods` once no game is running (it moves `storagedelight-25.12.09-1.19-forge.jar`
+to `development/repackedStorage/jar_archive/displaced/`).
+
+| ID | Check |
+|---|---|
+| STD-01 | Boot: no registry, model or recipe error mentioning `storagedelight` in `logs/latest.log`; creative tab holds 140 blocks (90 + 50) |
+| STD-02 | Craft one countertop of each new stone (Polished Blackstone, Polished Diorite, Stone Bricks, Polished Tuff) on two woods, one nether wood included: slab row + trapdoor + wood slabs; the Tuff one takes a Quark Polished Tuff Slab |
+| STD-03 | Craft all 14 bamboo blocks from Quark Bamboo Planks Slabs and Bamboo Trapdoors (countertops with the matching stone slab; glass doors with a glass pane) |
+| STD-04 | Place a new countertop cabinet, a bamboo drawer and a bamboo cabinet with glass doors: each opens as 27 slots, keeps its items, drops them (and itself) when broken with an axe, model changes open / closed, in all four facings |
+| STD-05 | Tuff countertops show Quark's polished tuff on top; blackstone, diorite and stone bricks show the vanilla texture; no missing-texture purple on any of the 50 |
+| STD-06 | A world saved before the jar: the original 90 blocks and their contents are intact after loading with it |
+| STD-07 | Wood, bamboo and Oak blocks burn 300 ticks in a furnace; Crimson / Warped ones do not |
+
+
+## 5. Owner decisions and build plan (2026-10-25)
+
+Owner's notes: add the Polished Blackstone, Polished Diorite, Stone Bricks and Polished Tuff countertops on the 9
+current woods, and every bamboo variant. Nothing else (no cherry, pale oak, poplar, plain cabinet).
+
+**Result: 50 blocks.** 36 countertop cabinets (4 stones x 9 woods) and 14 bamboo blocks (the 8 types: drawer, drawer
+with door, drawer with books, small drawers, single door cabinet, cabinet with glass doors, bookshelf with door, glass
+cabinet; plus 6 countertops: deepslate, andesite, blackstone, diorite, stone bricks, tuff). Answers section 3: yes to the
+27 vanilla-stone countertops, yes to the 9 tuff ones, yes to bamboo, no to cherry.
+
+**Route:** section 2.1 route 1, an in-tree rebuild with the same mod id `storagedelight`. Project
+`development/repackedStorage` (plugin `ce.forge-repack`, upstream 25.12.09 unchanged). The overlay replaces
+`BlockRegistry`, `ItemRegistry` and `EntityTypesRegistry` (written fresh in Mojmap, same ids for all 90 existing blocks,
+registered from the wood / type tables) and `en_us.json` and the axe tag; it adds the models, blockstates, textures
+(from the 26.10.05 jar, MIT, notice kept), recipes and loot tables of the 50 blocks. Not a Creative Delight member.
+
+**Ingredients on 1.19.2:** stone slabs `polished_blackstone_slab`, `polished_diorite_slab`, `stone_brick_slab` (vanilla),
+`quark:polished_tuff_slab`; bamboo `quark:bamboo_planks_slab` and `quark:bamboo_trapdoor`; glass panes `#forge:glass_panes`
+as in the installed recipes. The tuff top face uses `quark:block/polished_tuff` (vanilla has no polished tuff on 1.19.2).
+Properties and fuel (300 ticks, overworld woods) as the existing blocks; bamboo burns like them.
+
+**Tests:** `STD-`, section 4. 2026-10-26 scratch run: SQ-STD-01 PASSED (no `storagedelight` error, 140 `storagedelight:` blocks, 140 recipes); SQ-STD-02 (place and use) not run.

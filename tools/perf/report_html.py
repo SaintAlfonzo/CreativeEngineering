@@ -6,13 +6,13 @@ import time
 
 CSS = """
 :root{color-scheme:light;--page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;
---grid:#e1e0d9;--axis:#c3c2b7;--border:rgba(11,11,11,.10);--s1:#2a78d6;--s2:#eb6834;--wash:rgba(42,120,214,.10);
+--grid:#e1e0d9;--axis:#c3c2b7;--border:rgba(11,11,11,.10);--s1:#2a78d6;--s2:#eb6834;--s3:#16907f;--s4:#8a5cd1;--wash:rgba(42,120,214,.10);
 --track:#f0efec;--good:#006300;--bad:#d03b3b}
 @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--page:#0d0d0d;
 --surface:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);
---s1:#3987e5;--s2:#d95926;--wash:rgba(57,135,229,.12);--track:#262624;--good:#0ca30c;--bad:#e66767}}
+--s1:#3987e5;--s2:#d95926;--s3:#22ab98;--s4:#a07ce6;--wash:rgba(57,135,229,.12);--track:#262624;--good:#0ca30c;--bad:#e66767}}
 :root[data-theme="dark"]{color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#fff;--ink2:#c3c2b7;
---grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);--s1:#3987e5;--s2:#d95926;--wash:rgba(57,135,229,.12);
+--grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);--s1:#3987e5;--s2:#d95926;--s3:#22ab98;--s4:#a07ce6;--wash:rgba(57,135,229,.12);
 --track:#262624;--good:#0ca30c;--bad:#e66767}
 *{box-sizing:border-box}
 body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -208,6 +208,94 @@ def delta(cur, base):
     return '<span class="%s">%+.1f</span>' % ('up' if d > 0 else 'down', d)
 
 
+
+def render_ce(c, out):
+    """The pack's own measured events (patcherMod creativeengineering.*, perf.md 3.6)."""
+    out.append('<h2>Measured by the pack\'s hooks</h2><p class="note">Exact times from patcherMod\'s own JFR events, '
+               'not samples: every tick, every dimension, every chunk wait, every KubeJS handler call, every entity and '
+               'block entity tick. Shares below are of the total server tick time.</p>')
+    t = c.get('ticks')
+    if t:
+        out.append('<div class="tiles">')
+        out.append(tile('Tick time, median', '%s ms' % fnum(t['median'], 1), '%d ticks measured' % t['count']))
+        out.append(tile('Tick time, p95 / p99', '%s / %s ms' % (fnum(t['p95'], 1), fnum(t['p99'], 1)), 'single ticks'))
+        out.append(tile('Longest tick', '%s ms' % fnum(t['max'], 0), '%d ticks over 50 ms' % t['over50']))
+        out.append(tile('Server thread busy', '%s%%' % fnum(t['busy_pct'], 0), 'tick time / wall time, exact'))
+        out.append('</div>')
+        out.append('<h3>Longest tick in each second</h3><p class="note">Short spikes stay visible here; the 50 ms line '
+                   'is the budget of one tick.</p>')
+        out.append('<div class="card">%s</div>' % line_chart([('longest tick', t['worst_series'], '--s1')], 'ms', ref=50,
+                                                              ymin_top=10))
+        out.append('<h3>Server thread busy share, per second (exact)</h3>')
+        out.append('<div class="card">%s</div>' % line_chart([('busy', t['busy_series'], '--s1')], '%', ymin_top=100,
+                                                              fmt=lambda v: fnum(v, 0)))
+    dims = c.get('dims')
+    if dims:
+        out.append('<h3>Dimensions</h3><p class="note">Each dimension\'s part of the tick (ServerLevel.tick): its '
+                   'entities, block entities, chunks and weather. The rest of a tick is players\' packets, '
+                   'Forge tick events and the server\'s own work.</p>')
+        out.append('<div class="card">%s</div>' % line_chart(
+            [(name, pts, var) for (name, pts), var in zip(c['dim_series'], ('--s1', '--s2', '--s3', '--s4'))],
+            '% of the second', ymin_top=10, fmt=lambda v: fnum(v, 1)))
+        out.append(table(['dimension', '% of tick time', 'mean ms', 'p95 ms', 'max ms', 'loaded chunks (mean)', 'players (max)'],
+                         [['<code>%s</code>' % esc(r['dim']), fnum(r['pct'], 1), fnum(r['mean_ms'], 2), fnum(r['p95_ms'], 2),
+                           fnum(r['max_ms'], 1), fnum(r['chunks'], 0), fnum(r['players'], 0)] for r in dims],
+                         numeric=(1, 2, 3, 4, 5, 6)))
+    cw = c.get('chunk_waits')
+    if cw:
+        out.append('<h3>Chunk waits</h3><p class="note">Time the server thread stood in getChunk until a chunk was '
+                   'ready. Sampling misses this (the thread parks in 0.1 ms slices); it includes main-thread tasks run '
+                   'meanwhile. %s requests missed the cache, %s ms waited in all (%s%% of tick time), longest %s ms; %d '
+                   'waits over 1 ms were recorded with the stack that asked.</p>' % (
+                       fnum(cw['requests'], 0), fnum(cw['waited_ms'], 0), fnum(cw['pct'], 1), fnum(cw['longest_ms'], 1),
+                       cw['slow']))
+        if cw['series']:
+            out.append('<div class="card">%s</div>' % line_chart([('waited', cw['series'], '--s2')], 'ms per second',
+                                                                  ymin_top=5, fmt=lambda v: fnum(v, 1)))
+        if cw['who']:
+            out.append(table(['who asked (mod)', 'where', 'tick phase', 'waits', 'total ms', 'longest ms', 'dimensions'],
+                             [[esc(r['mod']), '<code>%s</code>' % esc(r['site']), esc(r['phase']), fnum(r['count'], 0),
+                               fnum(r['total_ms'], 0), fnum(r['max_ms'], 1), esc(r['dims'])] for r in cw['who']],
+                             numeric=(3, 4, 5)))
+    kj = c.get('kubejs')
+    if kj:
+        out.append('<h3>KubeJS handlers by script</h3><p class="note">Every call of every handler, timed on the server '
+                   'thread and named by the script and line that registered it. %s ms in all. "Slow" counts single calls '
+                   'over the KubeJSHandler threshold (5 ms by default).</p>' % fnum(c.get('kubejs_total_ms'), 0))
+        out.append('<div class="card">%s</div>' % hbars(
+            kj, lambda r: '%s:%d' % (r['source'], r['line']), lambda r: r['ms_s'], lambda v: '%s ms/s' % fnum(v, 2),
+            tip=lambda r: '%s at %s:%d: %d calls, %.1f ms' % (r['event'], r['source'], r['line'], r['calls'], r['total_ms']),
+            limit=15))
+        out.append('<details><summary>Table</summary>%s</details>' % table(
+            ['script:line', 'event', 'calls', 'ms per second', '% of tick time', 'mean µs', 'longest ms', 'slow'],
+            [['<code>%s:%d</code>' % (esc(r['source']), r['line']), esc(r['event']), fnum(r['calls'], 0), fnum(r['ms_s'], 2),
+              fnum(r['pct'], 2), fnum(r['mean_us'], 0), fnum(r['max_ms'], 1), fnum(r['slow'], 0)] for r in kj],
+            numeric=(2, 3, 4, 5, 6, 7)))
+    for kind, title, what in (('entities', 'Entity types', 'entity'), ('block_entities', 'Block entity types', 'block entity')):
+        k = c.get(kind)
+        if not k:
+            continue
+        out.append('<h3>%s</h3><p class="note">Tick time per registered %s type (the real type, not the class that '
+                   'declares tick()), %s ms in all. "Per tick" is how many ticked in an average server tick. Slow single '
+                   'ticks (over 2 ms) are listed with their position: %d in this window.</p>' % (
+                       title, what, fnum(k['total_ms'], 0), k['slow_count']))
+        if k['types']:
+            out.append('<div class="card">%s</div>' % hbars(
+                k['types'], lambda r: r['type'], lambda r: r['ms_s'], lambda v: '%s ms/s' % fnum(v, 2),
+                tip=lambda r: '%s: %.0f per tick, %.0f us each' % (r['type'], r['per_tick'], r['mean_us']), limit=15))
+            out.append('<details><summary>Table, and by mod</summary>%s%s</details>' % (
+                table(['type', 'ms per second', '% of tick time', 'per tick', 'mean µs', 'longest ms'],
+                      [['<code>%s</code>' % esc(r['type']), fnum(r['ms_s'], 2), fnum(r['pct'], 2), fnum(r['per_tick'], 1),
+                        fnum(r['mean_us'], 1), fnum(r['max_ms'], 1)] for r in k['types']], numeric=(1, 2, 3, 4, 5)),
+                table(['mod (id namespace)', 'total ms', '% of tick time'],
+                      [[esc(r['mod']), fnum(r['total_ms'], 0), fnum(r['pct'], 2)] for r in k['mods']], numeric=(1, 2))))
+        if k['slow']:
+            out.append('<details><summary>Slow single ticks by place</summary>%s</details>' % table(
+                ['type', 'dimension', 'position', 'slow ticks', 'longest ms', 'first at', 'last at'],
+                [['<code>%s</code>' % esc(r['type']), '<code>%s</code>' % esc(r['dim']), esc(r['pos']), fnum(r['count'], 0),
+                  fnum(r['max_ms'], 1), mmss(r['first']), mmss(r['last'])] for r in k['slow']], numeric=(3, 4)))
+
+
 def render(d, baseline=None):
     w, s, info = d['window'], d['server'], d['info']
     n = s['samples']
@@ -266,6 +354,12 @@ def render(d, baseline=None):
                    'recording suggests something is holding on to memory.</p>')
         out.append('<div class="card">%s</div>' % line_chart([('heap after GC', d['heap_series'], '--s1')], 'MB',
                                                               fmt=lambda v: fnum(v, 0)))
+
+    if d.get('ce'):
+        render_ce(d['ce'], out)
+    else:
+        out.append('<p class="note">No creativeengineering.* events in this recording (patcherMod 1.1.03 or later records '
+                   'exact tick, dimension, chunk-wait, KubeJS-script and entity-type times).</p>')
 
     # ── server thread by mod ──
     base_mods = (baseline or {}).get('server_mods', {})
@@ -355,7 +449,7 @@ def render(d, baseline=None):
     if d['blocked']:
         out.append('<h2>Server thread waiting</h2><p class="note">Blocking events recorded on the server thread '
                    '(parks over 50 ms, lock contention over 20 ms). Waiting in 0.1 ms slices, as the server does when '
-                   'it waits for a chunk, is not captured.</p>')
+                   'it waits for a chunk, is not captured here; see Chunk waits in the measured section.</p>')
         out.append(table(['kind', 'mod', 'where', 'count', 'total ms'],
                          [[esc(r['type']), esc(r['mod']), '<code>%s</code>' % esc(r['site']), fnum(r['count'], 0),
                            fnum(r['total_ms'], 0)] for r in d['blocked']], numeric=(3, 4)))
@@ -428,10 +522,13 @@ on a chunk) is not sampled.</li>
 mod when it is in that mod's jar (<code>%s</code>). Mixin code merged into vanilla or another mod
 (<code>handler$...</code>, <code>redirect$...</code>) is traced to the mod that injected it; a name shared by two mods'
 mixins lists both. Library mods pass the blame to their caller.</li>
-<li><b>KubeJS</b> runs interpreted, so time is visible per event (the handler table) but not per script file.</li>
-<li><b>Not visible:</b> which dimension a sample belongs to, which individual entity/block (positions), and the client.
-Observable or spark answer "which one, where" on the live server.</li>
-<li><b>Tick time</b> is Minecraft's 100-tick average, so it trails and smooths spikes.</li>
+<li><b>KubeJS</b> runs interpreted, so samples see it per event (the handler table), not per script file. The
+measured section, when present, times each handler by script and line.</li>
+<li><b>Not visible to sampling:</b> which dimension a sample belongs to, which individual entity/block (positions), and
+the client. The measured section, when present, gives per-dimension time, entity and block entity time by registered
+type, and positions of single slow ticks; Observable or spark still answer "which one" below that threshold.</li>
+<li><b>Tick time</b> in the first chart is Minecraft's 100-tick average, so it trails and smooths spikes; the measured
+section has every single tick.</li>
 </ul>%s</div>''' % (fnum(w['period_ms'], 0), esc(d['mods_dir']),
                       ('<details><summary>Mixin frames that could not be traced to a mod</summary><ul>%s</ul></details>' % unres)
                       if unres else ''))

@@ -67,6 +67,13 @@ refused. Candy cane then honey candy: mixes. Toast then toast: fine; toast then 
 - **Tooltip** (jar item): one line per kind with its total ("Cookie x3", "Lemon Cookie x2").
 - **WTHIT**: one kind keeps "Cookie (5 / 12)"; several read "3 Cookie, 2 Lemon Cookie (5 / 12)".
 
+- **Broken soft fluid containers** (2026-10-25, TODO `cooking/kitchen #18`): an audit of all 136 jar fluids (mod jars,
+  nested ones and the pack's) for container ids that are not items. Fixed by same-path overrides in `kubejs/data/`
+  (above mod data): Moonlight's `lava.json` (the lava bottle's empty `minecraft:bottle` -> `minecraft:glass_bottle`),
+  Supplementaries' 7 Neapolitan milkshake and smoothie fluids (`minecraft:<id>` -> `neapolitan:<id>`), and Moonlight's
+  `milk.json` (+ Splash Milk's milk bottle). Bayberry Juice's fluid is hand-written now (it left the soup type).
+  Bottled foods no jar takes: TODO `items/jars #3`. Tests SQ-CDB-06, -07.
+
 ## 4. Limits and decisions
 
 - **One slot per item, not one slot per run.** Runs (a stack per consecutive kind) would need fewer slots, but Forge's

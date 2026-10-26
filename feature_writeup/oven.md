@@ -208,7 +208,7 @@ pack adds none; 2026-10-22, user). Sugar is `#forge:sugar`, flour is
 | Cookie dough (`creativeengineering:cookie_dough`) | dough, 2 sugar | manual craft |
 
 Frosting and cookie dough are new plain items (not food) in `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js`, with
-their own textures (2026-10-25, baked-goods #16): frosting is the user's `textureswapper/frosting.png`; the dough
+their own textures (2026-10-25, textures/food #3): frosting is the user's `textureswapper/frosting.png`; the dough
 textures were made with `textureswapper/palette_swap.py` (plain mapping; sources, outputs and `preview.png` in
 `textureswapper/baking/dough/`):
 
@@ -220,7 +220,7 @@ textures were made with `textureswapper/palette_swap.py` (plain mapping; sources
 | Dough block | `dough_block_light.png` (user template), final Create dough palette, `--drop-darkest 2 --drop-lightest 1` | `create_compressed/textures/block/dough_block.png` |
 | Ginger / cookie dough blocks | Same template, each final dough's palette | `creativeengineering/textures/block/dough_block/<id>.png` (blocks registered 2026-10-25, below) |
 | Sweet potato, oat, cucumber, sourdough blocks | Same template and flags, each mod's own dough texture as the palette (`src/`) | `creativeengineering/textures/block/dough_block/<id>.png` |
-| Nether wart sourdough, uncooked mhadjeb blocks | Same template and flags (only in `preview_all_blocks.png`, no file in `out/`) | not made: no block (#27) |
+| Nether wart sourdough, uncooked mhadjeb blocks | Same template and flags (only in `preview_all_blocks.png`, no file in `out/`) | not made: these get no block (decided 2026-10-25, #27) |
 
 **Dough blocks** (2026-10-25, baked-goods #27): Gingerdough, Cookie Dough, Sweet Potato Dough, Oat Dough, Cucumber
 Dough and Sourdough Blocks (`creativeengineering:<dough>_block`, `baking_ingredients.js`), Create Compressed's dough
@@ -596,5 +596,9 @@ Needs a patcherMod build in `mods/`.
   SQ-OF-06 ([testing/scratch_queue.md](testing/scratch_queue.md)); OV-23 tooltips stay in game.
 - 2026-10-22 (second bulk run): SQ-OF-05, SQ-OF-06 PASS on the scratch server. OV-24 done; OV-20's oven bake in game.
 - 2026-10-25: own textures for frosting, cookie dough, Create dough, ginger dough and the dough block (palette
-  swaps, table in 2.6; baked-goods #16). OV-34.
+  swaps, table in 2.6; textures/food #3). OV-34.
 - 2026-10-25: dough blocks for ginger, cookie, sweet potato, oat, cucumber and sourdough doughs (baked-goods #27). OV-35.
+
+## Owner ideas (scratchpad 2026-10-26)
+
+- Farmer's Delight's dough texture on every dough: recolour ginger dough to it, recolour Create's dough with oat dough for cookie dough: `textures/food #4` (own dough textures exist since 2026-10-25, see above).

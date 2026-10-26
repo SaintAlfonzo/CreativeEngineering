@@ -473,8 +473,8 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - [x] **BR-01 Tags load clean:** after world load, search `logs/latest.log` for `BlockRunner tier overlaps checked`. → `… ids, 0 overlap(s)`. PASSED 2026-09-26 at 1927 ids and 2026-09-27 after the whole-pack scan (log `6062 ids, 0 overlap(s)`). The log's id count runs lower than the real tier size: the 11:54 `/dumptags` export has 6126 tiered ids, which matches the sim exactly. Treat the dump as the count and the log line as the overlap check.
 - [x] **BR-02 Basic tiers are empty:** stand on a dirt path. `T blockrunner:quick_blocks` → fails; `T blockrunner:surface/natural_path` → passes.
 - [x] **BR-03 Fast tiers:** `M` on asphalt → **+0.05**; on concrete → **+0.04**; on a Quark grate → **+0.03**; on stone → **+0.005**.
-- [ ] **BR-04 Slow tiers:** `M` on sand → **−0.015**; on wool → **−0.012**; on a honey block → **−0.055** (jumping on honey is still damped).
-- [ ] **BR-05 1.00 tiers:** `M` on glass and on grass → "no modifier". `T blockrunner:surface/glass` on glass passes.
+- [x] **BR-04 Slow tiers:** `M` on sand → **−0.015**; on wool → **−0.012**; on a honey block → **−0.055** (jumping on honey is still damped).
+- [x] **BR-05 1.00 tiers:** `M` on glass and on grass → "no modifier". `T blockrunner:surface/glass` on glass passes.
 - ~~**BR-06 Tooltips**~~ moved to [TT-03](tooltips.md).
 - [x] **BR-07 FOV stays put:** sprint from stone onto asphalt → no FOV zoom beyond normal sprinting.
 - [ ] **BR-08 Mobs too:** walk a horse onto asphalt, then `/attribute @e[type=minecraft:horse,limit=1,sort=nearest] minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002` → half the horse's base speed (a positive number).

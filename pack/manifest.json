@@ -785,29 +785,6 @@
       }
     },
     {
-      "file": "Delightful-1.19.2-3.4.1.jar",
-      "name": "Delightful",
-      "version": "3.4.1-1.19.2",
-      "sha1": "531b4031e28fc5c72ae2584f9123f9439d633342",
-      "modId": "delightful",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 637529,
-          "fileId": 4792851,
-          "slug": "delightful",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/delightful/files/4792851"
-        },
-        "modrinth": {
-          "projectId": "JtSnhtNJ",
-          "versionId": "3kuWUhts",
-          "slug": "delightful",
-          "url": "https://modrinth.com/mod/delightful/version/3kuWUhts",
-          "download": "https://cdn.modrinth.com/data/JtSnhtNJ/versions/3kuWUhts/Delightful-1.19.2-3.4.1.jar"
-        }
-      }
-    },
-    {
       "file": "DetailArmorBar-2.6.4+1.19.2-forge.jar",
       "name": "Detail Armor Bar [Forge]",
       "version": "2.6.4+1.19.2-forge",
@@ -1052,29 +1029,6 @@
           "slug": "atmospheric-paintings",
           "url": "https://modrinth.com/mod/atmospheric-paintings/version/WoUSyaxE",
           "download": "https://cdn.modrinth.com/data/OWfnVQX4/versions/WoUSyaxE/FORGE_PaintingPack_1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "FarmersDelight-1.19.2-1.2.4.jar",
-      "name": "Farmer's Delight",
-      "version": "1.19.2-1.2.4",
-      "sha1": "7474aaf58f3001455db9426d4bf36bc3e80455f1",
-      "modId": "farmersdelight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 398521,
-          "fileId": 5051241,
-          "slug": "farmers-delight",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/farmers-delight/files/5051241"
-        },
-        "modrinth": {
-          "projectId": "R2OftAxM",
-          "versionId": "rFTKVUtq",
-          "slug": "farmers-delight",
-          "url": "https://modrinth.com/mod/farmers-delight/version/rFTKVUtq",
-          "download": "https://cdn.modrinth.com/data/R2OftAxM/versions/rFTKVUtq/FarmersDelight-1.19.2-1.2.4.jar"
         }
       }
     },
@@ -3125,6 +3079,15 @@
       "source": "local"
     },
     {
+      "file": "backportedDisplay-1.7.0-ce-19.2-01.jar",
+      "name": "backportedDisplay-1.7.0-ce-19.2-01",
+      "version": "",
+      "sha1": "03b4804344032315843e177314b5217229300cd3",
+      "modId": "displaydelight",
+      "side": "both",
+      "source": "local"
+    },
+    {
       "file": "backportedFungi-1.3-ce-19.2-01.jar",
       "name": "backportedFungi-1.3-ce-19.2-01",
       "version": "",
@@ -3134,10 +3097,19 @@
       "source": "local"
     },
     {
-      "file": "backportedVeggies-1.9.2-ce-19.2-02.jar",
-      "name": "backportedVeggies-1.9.2-ce-19.2-02.jar",
-      "version": "Unknown",
-      "sha1": "77710d61f1443d59e1e400b64746f238de4088a1",
+      "file": "backportedMiners-1.4.5-ce-19.2-01.jar",
+      "name": "backportedMiners-1.4.5-ce-19.2-01",
+      "version": "",
+      "sha1": "26660c1f6d5d98650f7c1477d82939921c43c33b",
+      "modId": "miners_delight",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "backportedVeggies-1.9.2-ce-19.2-03.jar",
+      "name": "backportedVeggies-1.9.2-ce-19.2-03",
+      "version": "",
+      "sha1": "9c2165bda46039a51f706b85accf3a57546a502b",
       "modId": "veggiesdelight",
       "side": "both",
       "source": "local"
@@ -3152,10 +3124,10 @@
       "source": "local"
     },
     {
-      "file": "backportedVintage-0.1.6-ce-19.2-03.jar",
-      "name": "backportedVintage-0.1.6-ce-19.2-03",
+      "file": "backportedVintage-0.1.6-ce-19.2-07.jar",
+      "name": "backportedVintage-0.1.6-ce-19.2-07",
       "version": "",
-      "sha1": "54a731e3b6dc8bfc26b38056deb4a4ae6376dba1",
+      "sha1": "5f4815106505132fc63bc4205281d7463a27db18",
       "modId": "vintagedelight",
       "side": "both",
       "source": "local"
@@ -4629,10 +4601,19 @@
       "source": "local"
     },
     {
-      "file": "creativeengineering-1.1.02.jar",
-      "name": "creativeengineering-1.1.02",
+      "file": "creative_delight-1.0.0.jar",
+      "name": "creative_delight-1.0.0",
       "version": "",
-      "sha1": "6168a835f2206b8636114f42623eba2996e5ee6c",
+      "sha1": "d5bb3dc4028178f3b487a95e5a6bd8830a1c4f27",
+      "modId": "creative_delight",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativeengineering-1.1.03.jar",
+      "name": "creativeengineering-1.1.03",
+      "version": "",
+      "sha1": "9d1630ef55a0eae1184fb21a9ae73fb5bf57bea9",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -4735,29 +4716,6 @@
           "slug": "create-design-n-decor",
           "url": "https://modrinth.com/mod/create-design-n-decor/version/fMnWzc4m",
           "download": "https://cdn.modrinth.com/data/x49wilh8/versions/fMnWzc4m/design_decor-0.4-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "displaydelight-1.2.0.jar",
-      "name": "Display Delight",
-      "version": "1.2.0",
-      "sha1": "356d3a9d941a264e530709b9f5449e13d9d57c50",
-      "modId": "displaydelight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 1144296,
-          "fileId": 5972197,
-          "slug": "display-delight",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/display-delight/files/5972197"
-        },
-        "modrinth": {
-          "projectId": "yXepZhp8",
-          "versionId": "75JYP7rh",
-          "slug": "display-delight",
-          "url": "https://modrinth.com/mod/display-delight/version/75JYP7rh",
-          "download": "https://cdn.modrinth.com/data/yXepZhp8/versions/75JYP7rh/displaydelight-1.2.0.jar"
         }
       }
     },
@@ -5084,29 +5042,6 @@
           "fileId": 4770255,
           "slug": "nethered-end-portal",
           "url": "https://www.curseforge.com/minecraft/mc-mods/nethered-end-portal/files/4770255"
-        }
-      }
-    },
-    {
-      "file": "ends_delight-1.19.2-2.1.jar",
-      "name": "End's Delight",
-      "version": "1.19.2-2.1",
-      "sha1": "e0d223416d514417389a7a1b77c4d19549791645",
-      "modId": "ends_delight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 662675,
-          "fileId": 5556990,
-          "slug": "ends-delight",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/ends-delight/files/5556990"
-        },
-        "modrinth": {
-          "projectId": "yHN0njMr",
-          "versionId": "Q4q0rf2I",
-          "slug": "ends-delight",
-          "url": "https://modrinth.com/mod/ends-delight/version/Q4q0rf2I",
-          "download": "https://cdn.modrinth.com/data/yHN0njMr/versions/Q4q0rf2I/ends_delight-1.19.2-2.1.jar"
         }
       }
     },
@@ -5809,7 +5744,7 @@
       "file": "incubationAdditions-1.1.0.jar",
       "name": "incubationAdditions-1.1.0.jar",
       "version": "Unknown",
-      "sha1": "c494af2698dc6c66851ee24957a9ddc11b3aa86b",
+      "sha1": "ce057f6fa12c194f54358903c266b5eb7b71c0dd",
       "modId": "incubation_additions",
       "side": "both",
       "source": "local"
@@ -6456,22 +6391,6 @@
       }
     },
     {
-      "file": "miners_delight-1.19.2-1.1.2.jar",
-      "name": "Miner's Delight +",
-      "version": "miners_delight-1.19.2-1.1.2.jar",
-      "sha1": "23701e0772676ff74c0290387c90fd9365987673",
-      "modId": "miners_delight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 689630,
-          "fileId": 4738272,
-          "slug": "miners-delight-plus",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/miners-delight-plus/files/4738272"
-        }
-      }
-    },
-    {
       "file": "modnametooltip-1.20.1-1.20.0.jar",
       "name": "Mod Name Tooltip",
       "version": "modnametooltip-1.20.1-1.20.0.jar",
@@ -6908,52 +6827,6 @@
       }
     },
     {
-      "file": "oceanic_delight-1.0.1-forge-1.19.2.jar",
-      "name": "Oceanic Delight",
-      "version": "1.0.1",
-      "sha1": "91fd8842a5bf9b55c2d9fb39f721129bc6cae1b5",
-      "modId": "oceanic_delight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 1128831,
-          "fileId": 5861443,
-          "slug": "oceanic-delight",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/oceanic-delight/files/5861443"
-        },
-        "modrinth": {
-          "projectId": "O1qboAbB",
-          "versionId": "9JkMCuAa",
-          "slug": "oceanic-delight",
-          "url": "https://modrinth.com/mod/oceanic-delight/version/9JkMCuAa",
-          "download": "https://cdn.modrinth.com/data/O1qboAbB/versions/9JkMCuAa/oceanic_delight-1.0.1-forge-1.19.2.jar"
-        }
-      }
-    },
-    {
-      "file": "oceansdelight-1.0.2-1.19.2.jar",
-      "name": "Ocean's Delight",
-      "version": "1.0.2-1.19.2",
-      "sha1": "b998d3283c7e4a4b7c71ac00416254df4c90b48b",
-      "modId": "oceansdelight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 841262,
-          "fileId": 4652058,
-          "slug": "oceans-delight",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/oceans-delight/files/4652058"
-        },
-        "modrinth": {
-          "projectId": "DGiq4ZSW",
-          "versionId": "rClYLHGR",
-          "slug": "oceans-delight",
-          "url": "https://modrinth.com/mod/oceans-delight/version/rClYLHGR",
-          "download": "https://cdn.modrinth.com/data/DGiq4ZSW/versions/rClYLHGR/oceansdelight-1.0.2-1.19.2.jar"
-        }
-      }
-    },
-    {
       "file": "old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar",
       "name": "Old fisherman swamp house",
       "version": "old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar",
@@ -7268,6 +7141,15 @@
       }
     },
     {
+      "file": "repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar",
+      "name": "repackedStorage-25.12.09-1.19-forge-ce-19.2-01",
+      "version": "",
+      "sha1": "27d6be23945e70c82ee0d71e77d2d6a050b819bf",
+      "modId": "storagedelight",
+      "side": "both",
+      "source": "local"
+    },
+    {
       "file": "resourcefullib-forge-1.19.2-1.1.24.jar",
       "name": "Resourceful Lib",
       "version": "1.1.24",
@@ -7402,29 +7284,6 @@
           "slug": "rubidium",
           "url": "https://modrinth.com/mod/rubidium/version/bmmEZ4mh",
           "download": "https://cdn.modrinth.com/data/4ZqxOvjD/versions/bmmEZ4mh/rubidium-mc1.19.2-0.6.2c.jar"
-        }
-      }
-    },
-    {
-      "file": "rusticdelight-forge-1.19.2-1.3.0.jar",
-      "name": "Rustic Delight",
-      "version": "1.3.0",
-      "sha1": "d49fdd2ac2942457610501a288b182826e0edd13",
-      "modId": "rusticdelight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 1106612,
-          "fileId": 5906221,
-          "slug": "rustic-delight",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/rustic-delight/files/5906221"
-        },
-        "modrinth": {
-          "projectId": "foa4fGIH",
-          "versionId": "w58d5SIH",
-          "slug": "rustic-delight",
-          "url": "https://modrinth.com/mod/rustic-delight/version/w58d5SIH",
-          "download": "https://cdn.modrinth.com/data/foa4fGIH/versions/w58d5SIH/rusticdelight-forge-1.19.2-1.3.0.jar"
         }
       }
     },
@@ -7873,29 +7732,6 @@
           "fileId": 7253365,
           "slug": "sticky-it",
           "url": "https://www.curseforge.com/minecraft/mc-mods/sticky-it/files/7253365"
-        }
-      }
-    },
-    {
-      "file": "storagedelight-25.12.09-1.19-forge.jar",
-      "name": "Storage Delight (Forge & Neoforge)",
-      "version": "25.12.09-1.19-forge",
-      "sha1": "115b04c03f6b3d99785de95b3b0a01dc6a4725d2",
-      "modId": "storagedelight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 979761,
-          "fileId": 7313456,
-          "slug": "storage-delight-forge",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/storage-delight-forge/files/7313456"
-        },
-        "modrinth": {
-          "projectId": "LTTvOp5L",
-          "versionId": "Rgf2MFH6",
-          "slug": "storage-delight",
-          "url": "https://modrinth.com/mod/storage-delight/version/Rgf2MFH6",
-          "download": "https://cdn.modrinth.com/data/LTTvOp5L/versions/Rgf2MFH6/storagedelight-25.12.09-1.19-forge.jar"
         }
       }
     },
@@ -9746,23 +9582,6 @@
           "fileId": 4126222,
           "slug": "engineers-guis",
           "url": "https://www.curseforge.com/minecraft/texture-packs/engineers-guis/files/4126222"
-        }
-      }
-    },
-    {
-      "file": "Exposure-CreateCompatibility.zip",
-      "name": "Exposure-Create Compatibility",
-      "version": "Exposure-Create Compatibility V1.1",
-      "sha1": "d396fb9049f7664a1ed18fbcd8a8588e4d2c00a4",
-      "enabled": false,
-      "loadOrder": null,
-      "flaggedIncompatible": false,
-      "source": {
-        "curseforge": {
-          "projectId": 1024724,
-          "fileId": 5371732,
-          "slug": "exposure-create-compatibility",
-          "url": "https://www.curseforge.com/minecraft/texture-packs/exposure-create-compatibility/files/5371732"
         }
       }
     },

@@ -52,6 +52,102 @@
   {
    "requires": [
     "creativeengineering",
+    "hostiledelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:aurorasoup\",Count:12,CachedColor:-4091649}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "hostiledelight:aurorasoup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:baked_cod_stew_cup\",Count:12,CachedColor:-11695045}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:baked_cod_stew_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bat_soup\",Count:12,CachedColor:-12504785}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:bat_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bat_soup_cup\",Count:12,CachedColor:-11978441}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:bat_soup_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
     "fruitsdelight"
    ],
    "inputs": [
@@ -76,12 +172,60 @@
   {
    "requires": [
     "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:beef_stew_cup\",Count:12,CachedColor:-9224146}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:beef_stew_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:beetroot_soup_cup\",Count:12,CachedColor:-9103854}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:beetroot_soup_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
     "rusticdelight"
    ],
    "inputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bell_pepper_soup\",Count:12,CachedColor:-6149599}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bell_pepper_soup\",Count:12,CachedColor:-8577010}}}",
      "label": "Holding 12"
     },
     {
@@ -148,6 +292,102 @@
   {
    "requires": [
     "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bone_broth_cup\",Count:12,CachedColor:-5469376}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:bone_broth_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:broccoli_soup\",Count:12,CachedColor:-5389691}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:broccoli_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cacciatore\",Count:12,CachedColor:-4571904}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:cacciatore"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:carrot_juice\",Count:12,CachedColor:-1013212}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:carrot_juice"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
     "moredelight"
    ],
    "inputs": [
@@ -172,6 +412,78 @@
   {
    "requires": [
     "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cauliflower_soup\",Count:12,CachedColor:-2507624}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:cauliflower_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cave_soup\",Count:12,CachedColor:-11781334}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:cave_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cave_soup_cup\",Count:12,CachedColor:-5407135}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:cave_soup_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
     "quarkdelight"
    ],
    "inputs": [
@@ -187,6 +499,30 @@
    "outputs": [
     {
      "item": "quarkdelight:cavern_explorer_stew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:chicken_soup_cup\",Count:12,CachedColor:-6787762}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:chicken_soup_cup"
     }
    ],
    "notes": [
@@ -243,6 +579,30 @@
   },
   {
    "requires": [
+    "creativeengineering",
+    "fungidelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:creamy_morel_soup\",Count:12,CachedColor:-11517912}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "fungidelight:creamy_morel_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
     "brewinandchewin",
     "creativeengineering"
    ],
@@ -259,6 +619,54 @@
    "outputs": [
     {
      "item": "brewinandchewin:creamy_onion_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:dandelion_juice\",Count:12,CachedColor:-1061062}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:dandelion_juice"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "ends_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:dragon_breath_and_chorus_soup\",Count:12,CachedColor:-10668708}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ends_delight:dragon_breath_and_chorus_soup"
     }
    ],
    "notes": [
@@ -340,6 +748,30 @@
   {
    "requires": [
     "creativeengineering",
+    "ends_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:enderman_gristle_stew\",Count:12,CachedColor:-12306820}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ends_delight:enderman_gristle_stew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
     "endersdelight"
    ],
    "inputs": [
@@ -364,6 +796,30 @@
   {
    "requires": [
     "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:fermented_garlic_honey\",Count:12,CachedColor:-1858756}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:fermented_garlic_honey"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
     "fruitsdelight"
    ],
    "inputs": [
@@ -379,6 +835,150 @@
    "outputs": [
     {
      "item": "fruitsdelight:fig_chicken_stew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "oceanic_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:fish_egg_noodle_soup\",Count:12,CachedColor:-11041506}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "oceanic_delight:fish_egg_noodle_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:fish_stew_cup\",Count:12,CachedColor:-4180961}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:fish_stew_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:garlic_chicken_stew\",Count:12,CachedColor:-4620471}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:garlic_chicken_stew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:ghostly_chili\",Count:12,CachedColor:-11659764}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:ghostly_chili"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "hostiledelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:glimmeringchowder\",Count:12,CachedColor:-10013600}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "hostiledelight:glimmeringchowder"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "oceanic_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:glow_squid_stew\",Count:12,CachedColor:-14849980}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "oceanic_delight:glow_squid_stew"
     }
    ],
    "notes": [
@@ -459,6 +1059,78 @@
   },
   {
    "requires": [
+    "creativeengineering",
+    "hostiledelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:guardiansoup\",Count:12,CachedColor:-11706279}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "hostiledelight:guardiansoup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:insect_stew\",Count:12,CachedColor:-12631748}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:insect_stew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:insect_stew_cup\",Count:12,CachedColor:-12566213}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:insect_stew_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
     "alexsdelight",
     "creativeengineering"
    ],
@@ -508,6 +1180,30 @@
   {
    "requires": [
     "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:mushroom_stew_cup\",Count:12,CachedColor:-2446972}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:mushroom_stew_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
     "farmersdelight"
    ],
    "inputs": [
@@ -523,6 +1219,222 @@
    "outputs": [
     {
      "item": "farmersdelight:noodle_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:noodle_soup_cup\",Count:12,CachedColor:-3828941}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:noodle_soup_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:nut_milk\",Count:12,CachedColor:-661566}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:nut_milk_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:oatmeal\",Count:12,CachedColor:-5072260}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:oatmeal"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:onion_soup_cup\",Count:12,CachedColor:-7118289}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:onion_soup_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:pickle_soup\",Count:12,CachedColor:-1851532}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:pickle_soup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:pumpkin_soup_cup\",Count:12,CachedColor:-2921971}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:pumpkin_soup_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:rabbit_stew_cup\",Count:12,CachedColor:-6662912}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:rabbit_stew_cup"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "oceanic_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:shrimp_stew\",Count:12,CachedColor:-5149377}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "oceanic_delight:shrimp_stew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "ends_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:shulker_soup\",Count:12,CachedColor:-6205952}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "ends_delight:shulker_soup"
     }
    ],
    "notes": [
@@ -556,6 +1468,30 @@
   {
    "requires": [
     "creativeengineering",
+    "hostiledelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:slimestew\",Count:12,CachedColor:-10913977}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "hostiledelight:slimestew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
     "nethersdelight"
    ],
    "inputs": [
@@ -571,6 +1507,78 @@
    "outputs": [
     {
      "item": "nethersdelight:strider_moss_stew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:turnip_beef_stew\",Count:12,CachedColor:-11655399}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:bowl"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:turnip_beef_stew"
+    }
+   ],
+   "notes": [
+    "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "veggiesdelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:turnip_water\",Count:12,CachedColor:-1845786}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "veggiesdelight:turnip_water"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "creativeengineering",
+    "miners_delight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:vegetable_soup_cup\",Count:12,CachedColor:-8425948}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "miners_delight:copper_cup"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "miners_delight:vegetable_soup_cup"
     }
    ],
    "notes": [
@@ -679,7 +1687,31 @@
   },
   {
    "requires": [
-    "farmersdelight"
+    "alexsmobs"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"moonlight:lava\",Count:12,CachedColor:-1}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "alexsmobs:lava_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "splash_milk"
    ],
    "inputs": [
     {
@@ -867,6 +1899,29 @@
   },
   {
    "requires": [
+    "neapolitan"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:adzuki_milkshake\",Count:12,CachedColor:-1736049}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "neapolitan:adzuki_milkshake"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
     "farmersdelight"
    ],
    "inputs": [
@@ -886,6 +1941,29 @@
    ],
    "notes": [
     "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "neapolitan"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:banana_milkshake\",Count:12,CachedColor:-404848}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "neapolitan:banana_milkshake"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
    ]
   },
   {
@@ -978,6 +2056,29 @@
    ],
    "notes": [
     "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "neapolitan"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:chocolate_milkshake\",Count:12,CachedColor:-9025743}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "neapolitan:chocolate_milkshake"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
    ]
   },
   {
@@ -1112,6 +2213,29 @@
    "outputs": [
     {
      "item": "alexsmobs:komodo_spit_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "neapolitan"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:mint_milkshake\",Count:12,CachedColor:-6099024}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "neapolitan:mint_milkshake"
     }
    ],
    "notes": [
@@ -1258,6 +2382,52 @@
   },
   {
    "requires": [
+    "neapolitan"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:strawberry_banana_smoothie\",Count:12,CachedColor:-2267473}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "neapolitan:strawberry_banana_smoothie"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "neapolitan"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:strawberry_milkshake\",Count:12,CachedColor:-1274454}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "neapolitan:strawberry_milkshake"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
     "farmersdelight"
    ],
    "inputs": [
@@ -1277,6 +2447,29 @@
    ],
    "notes": [
     "Takes 2 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "neapolitan"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"supplementaries:vanilla_milkshake\",Count:12,CachedColor:-602166}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "neapolitan:vanilla_milkshake"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
    ]
   },
   {
@@ -1323,6 +2516,351 @@
    ],
    "notes": [
     "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:apple_sauce\",Count:12,CachedColor:-1519986}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:apple_sauce_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:apple_sauce\",Count:12,CachedColor:-1519986}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "vintagedelight:empty_mason_jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:apple_sauce_jar"
+    }
+   ],
+   "notes": [
+    "Takes 3 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:glow_berry_jam\",Count:12,CachedColor:-1056628}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:glow_berry_jam_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:glow_berry_jam\",Count:12,CachedColor:-1056628}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "vintagedelight:empty_mason_jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:glow_berry_jam_jar"
+    }
+   ],
+   "notes": [
+    "Takes 3 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:honey_vd\",Count:12,CachedColor:-1}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "vintagedelight:empty_mason_jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:honey_jar"
+    }
+   ],
+   "notes": [
+    "Takes 3 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:nut_mash\",Count:12,CachedColor:-6785457}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:nut_mash_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:nut_mash\",Count:12,CachedColor:-6785457}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "vintagedelight:empty_mason_jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:nut_mash_jar"
+    }
+   ],
+   "notes": [
+    "Takes 3 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:pepper_jam\",Count:12,CachedColor:-6281971}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:pepper_jam_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:pepper_jam\",Count:12,CachedColor:-6281971}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "vintagedelight:empty_mason_jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:pepper_jam_jar"
+    }
+   ],
+   "notes": [
+    "Takes 3 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:relish\",Count:12,CachedColor:-7946172}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:relish_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:relish\",Count:12,CachedColor:-7946172}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "vintagedelight:empty_mason_jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:relish_jar"
+    }
+   ],
+   "notes": [
+    "Takes 3 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:sweet_berry_jam\",Count:12,CachedColor:-8254715}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:sweet_berry_jam_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:sweet_berry_jam\",Count:12,CachedColor:-8254715}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "vintagedelight:empty_mason_jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:sweet_berry_jam_jar"
+    }
+   ],
+   "notes": [
+    "Takes 3 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:vinegar\",Count:12,CachedColor:-11010048}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "minecraft:glass_bottle"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:vinegar_bottle"
+    }
+   ],
+   "notes": [
+    "Takes 1 of 12."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "item": "supplementaries:jar",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"vintagedelight:vinegar\",Count:12,CachedColor:-11010048}}}",
+     "label": "Holding 12"
+    },
+    {
+     "item": "vintagedelight:empty_mason_jar"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "vintagedelight:vinegar_jar"
+    }
+   ],
+   "notes": [
+    "Takes 3 of 12."
    ]
   }
  ]

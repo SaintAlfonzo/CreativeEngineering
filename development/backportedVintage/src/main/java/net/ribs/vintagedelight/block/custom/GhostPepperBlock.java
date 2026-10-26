@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,6 +50,13 @@ public class GhostPepperBlock extends CropBlock {
    // Port: the hard-coded nylium check is the block tag #vintagedelight:ghost_pepper_soil (the pack fills it)
    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
       return state.is(ModTags.GHOST_PEPPER_SOIL);
+   }
+
+   // Port: Forge's BushBlock.canSurvive asks the soil's canSustainPlant, and farmland sustains every crop, so the seeds
+   // planted on farmland past mayPlaceOn. The soil tag is now the only soil rule (vintageport #7); the light check stays.
+   public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+      BlockPos below = pos.below();
+      return this.mayPlaceOn(level.getBlockState(below), level, below) && super.canSurvive(state, level, pos);
    }
 
    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {

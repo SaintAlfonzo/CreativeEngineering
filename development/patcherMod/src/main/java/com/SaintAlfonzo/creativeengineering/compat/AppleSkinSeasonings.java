@@ -5,6 +5,7 @@ import java.util.List;
 import com.SaintAlfonzo.creativeengineering.food.Seasonings;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import squeek.appleskin.api.event.FoodValuesEvent;
 import squeek.appleskin.api.food.FoodValues;
@@ -14,12 +15,17 @@ import squeek.appleskin.api.food.FoodValues;
  * they match what eating gives. Registered only when AppleSkin is loaded; the class is never touched otherwise.
  * Nutrition adds to the hunger points; saturation is absolute points, so the modifier is recomputed from the new
  * total ({@code hunger * modifier * 2} is AppleSkin's saturation increment).
+ *
+ * <p>Runs last ({@link EventPriority#LOWEST}): Salt's own handler adds its {@code Salted} bonus to hunger and to the
+ * saturation modifier, as its eating mixin does, and the pack bonus goes on after the food's own (salted) values on
+ * eating too ({@link Seasonings#onEaten}). Run before Salt's, the modifier recomputed here would be scaled again by
+ * Salt's addition and the bar would show the wrong saturation for salted seasoned food.
  */
 public final class AppleSkinSeasonings {
 
     private AppleSkinSeasonings() {}
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onFoodValues(FoodValuesEvent event) {
         List<ResourceLocation> ids = Seasonings.of(event.itemStack);
         if (ids.isEmpty()) {

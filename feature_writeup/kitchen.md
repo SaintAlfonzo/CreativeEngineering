@@ -281,7 +281,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   (`#6`), corner storage (`#15`), bamboo bowl and mortar grinding (`#10`); scythe and stepstool split to `#16`,
   `#17`. Row `#5`'s cause found in Sticky It!'s tooltip handler (fixed by Creative Labels). Corner tests renamed from
   the brief's KC-01 to KC-04 to KT-09 to KT-12.
-- 2026-10-24: planned from the scratchpad: fridge texture padding, plates and coasters on the counter (`cooking/kitchen #19`, `#20`). No code changed.
+- 2026-10-24: planned from the scratchpad: fridge texture padding, plates and coasters on the counter (`textures/art #1`, `cooking/kitchen #20`). No code changed.
 - 2026-10-24: built `#20` (patcherMod 1.1.02, in `mods/` only): the cutting board route generalised to counter toppers
   (2.3), `plateOffset*` config, coaster renderer mixin; `cutting_board_supports` renamed `counter_supports`. KT-15, KT-16
   added; `/kttest` extended, scratch run queued (SQ-KT).

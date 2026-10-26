@@ -100,7 +100,7 @@ Effects `minecraft:weakness`, `minecraft:slowness`, `minecraft:haste`. Items `i.
 ---
 
 ## echo #2: Human-made echo textures
-Status Planned / Work resource pack / `gear/echo #2`
+Status Planned / Work resource pack / `textures/art #3`
 
 ### Goal
 Hand-drawn sprites for the four echo tools, keeping the CDD-style animated glow.

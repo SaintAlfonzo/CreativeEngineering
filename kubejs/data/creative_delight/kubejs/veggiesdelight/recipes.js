@@ -16,9 +16,9 @@ ServerEvents.recipes(e => {
 		// Delight's own inputs, re-id'd manual only. Create mixer, heated: the same inputs + 250 mB water -> 250 mB; spout, drain
 		// and IE Bottling Machine at 250 mB. The juice and tea rule (TODO food/drinks #8) may change the ratios.
 		;[
-			['carrot_juice', [i.minecraft_carrot, i.minecraft_carrot, i.any_sugar]],
+			['carrot_juice', [i.minecraft_carrot, i.minecraft_carrot, i.any_sweetener_drink]],
 			['dandelion_juice', [i.dandelion_leaf, i.dandelion_leaf, i.sugar_cane]],
-			['turnip_water', [i.turnip, i.turnip, i.any_sugar]],
+			['turnip_water', [i.turnip, i.turnip, i.any_sweetener_drink]],
 		].forEach(j => {
 			var item = i[j[0]], fluid = f[j[0]]
 			R.remove({ id: 'veggiesdelight:cooking/' + j[0] }, e)
@@ -36,5 +36,19 @@ ServerEvents.recipes(e => {
 		var SHEET = { exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet }
 		R.remove({ id: 'veggiesdelight:cauliflower_bread' }, e)
 		R.ceBaking([i.any_dough, n(i.cauliflower, 2)], Item.of(i.cauliflower_bread, 1), e, 'cauliflower_bread', SHEET)
+
+		//######################### Mhadjeb removed #########################
+		// Both items are in removed_items.js (TODO dishes/meals #32); their recipes, the Vintage cheese variant included.
+		R.remove({ output: i.uncooked_mhadjeb }, e)
+		R.remove({ output: i.mhadjeb }, e)
+
+		//######################### Gnocchi #########################
+		// Potato noodle is Gnocchi and potato noodles are Creamy Gnocchi (namechanges.js; TODO dishes/meals #33). Gnocchi:
+		// the potato pot recipe as before, or 2 from sweet potato dough on the board (there is no potato dough yet).
+		// Creamy Gnocchi: milk, 2 gnocchi and onion, garlic or pickled onion; Vintage's cheese variant stays.
+		R.fdCutting(i.sweet_potato_dough, i.any_knife, Item.of(i.potato_noodle, 2), e, 'gnocchi_from_sweet_potato_dough')
+		R.remove({ id: 'veggiesdelight:cooking/potato_noodles' }, e)
+		R.fdCooking([i.milk, i.potato_noodle, i.potato_noodle, [i.onion, i.t_crops_garlic, i.pickled_onion]], i.potato_noodles, e,
+			'creamy_gnocchi', 1.0, 200, i.bowl)
 	})
 })

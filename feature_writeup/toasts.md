@@ -8,7 +8,7 @@ mixin, driven by two CEConfig switches. Every other toast is left alone. Test pr
 
 | Part | Status |
 |---|---|
-| `[toasts] tutorial / advancement` + `ToastFilterMixin` | BUILT 2026-10-19 into the patcherMod 1.0.9 jar in `build/libs/` (no version bump); not copied to `mods/` yet (the game was running), not deployed |
+| `[toasts] tutorial / advancement` + `ToastFilterMixin` | DEPLOYED with patcherMod 1.1.01 (2026-10-22); TO-01 to TO-07 not run |
 | Rubidium Extra `tutorial_toast` / `advancement_toast` = `false` | already set in this instance before this feature; player file, never shipped (3.2) |
 | Every other toast | on, unchanged (2) |
 | In-game tests | TO-01 to TO-07 pending |

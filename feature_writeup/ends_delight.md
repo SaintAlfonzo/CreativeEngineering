@@ -1,9 +1,9 @@
 # End's Delight and Ender's Delight
 
-**Nothing integrated.** End's Delight (`ends_delight-1.19.2-2.1.jar`, native 1.19.2, so no port) was dropped into `mods/` on
-2026-10-23 beside the existing Ender's Delight (`endersdelight-1.19-1.2.2`). It has a `mod_sides.md` row but no tags, recipe
-rules, food tuning or names/JEI pass. Decision rows: `largecontent/mod-additions #4` and `#15` in [todo/TODO.md](todo/TODO.md);
-plan: [briefs/largecontent_mod-additions.md](briefs/largecontent_mod-additions.md). Test prefix: none yet (boot check `SQ-AD-00`).
+**Built 2026-10-25, not installed, not tested in game** (section 5). End's Delight 2.1 is a Creative Delight member
+(`repackedEnds`, now `-ce-19.2-02`); Ender's Delight 1.2.2 stays its own ARR jar, and its 1.1.4 content is rebuilt in the
+new CD member `enders_additions` (`development/creativeDelight/members/enders/`). Decision rows: `largecontent/mod-additions
+#4`, `#15`, `#28`, `#29` and `creativedelight/members #7` in [todo/TODO.md](todo/TODO.md). Test prefix `EN-` (section 5.6).
 
 Split out of the former combined add-ons survey (survey written 2026-10-23, planned rows added 2026-10-24).
 "Pack" means everything installed in `mods/` plus the Veggies and Vintage ports. Item lists were read from the jars' `assets/*/models/item`, recipes and loot modifiers from `data/`.
@@ -219,7 +219,103 @@ author FoggyHillside. TODO: `largecontent/mod-additions #29`.
 
 | Item | Status |
 |---|---|
-| Newer-jar review (sections 3.1, 3.2, 3.3) | Written 2026-10-25; decisions recorded, none built; TODO `largecontent/mod-additions #28` (Ender's), `#29` (End's) |
+| Newer-jar review (sections 3.1, 3.2, 3.3) | Written 2026-10-25 |
 | Overlap survey (section 1) | Written 2026-10-23 |
-| Integration | Not started; `largecontent/mod-additions #4`, `#15` |
-| Test list | None yet; boot check `SQ-AD-00` in [testing/scratch_queue.md](testing/scratch_queue.md) |
+| End's 2.6.1 changes, Ender's 1.1.4 content, End House, integration rows (section 5) | BUILT 2026-10-25 in the CD jar (`creative_delight-1.0.0.jar` with `repackedEnds-1.19.2-2.1-ce-19.2-02`, `endersAdditions-1.1.4-ce-19.2-01`); not installed; EN-01 to EN-16 queued |
+| Food tuning, cans, names audit for the new items | Open: needs `/dumpall` after install (section 5.5) |
+| Tower spacing / End grouping pass; strict y 50 House check | Open decisions (section 5.5) |
+
+## 5. Built 2026-10-25
+
+Owner decisions of 2026-10-25 (this session) on top of 3.1: both mods' changes; Ender's 1.1.4 content in a new CD member
+with `endersdelight:` ids; Amberveils and Ethereal Saffron stay place-and-pick (no growth stage); End House and the
+Mysticrift End tower in `type/end_constructed`; mortar route for Crushed Void Pepper; only Void Pepper is a spice
+(saffron not); all 25 retextures; machete dragon kills give the knife extras; heatless grid routes for End's pot meals too.
+
+### 5.1 End's Delight (member `repackedEnds`, overlay)
+
+| Change | Where |
+|---|---|
+| Dragon drops with no tool (2.1's dragon_meat 5 to 7, dragon_leg 2, dragon_tooth 1 or 2); knife extras +2 meat, +1 tooth (2.6.1's files); machete: `nd_add_dragon_meat` / `_tooth` rewritten to the same extras, `nd_add_dragon_leg` taken off the list; the other four `nd_` (mob parts) unchanged. `dragon_loot_tools` tag now unused | `members/ends/src/main/resources/data/ends_delight/loot_modifiers/`, `data/forge/loot_modifiers/global_loot_modifiers.json` (pinned in `replaced_resources`) |
+| Dragon Tooth tier repairs with a Dragon Tooth (was Bone Block); other tier values stay 2.1's (`gear #12`) | overlay mixin `com.SaintAlfonzo.creativedelight.ends.mixin.DragonToothTierMixin` (target `MaterialRegistry$4.m_6282_`), `ends_delight.ce.mixins.json` |
+| 13 retextures from 2.6.1 | overlay `assets/ends_delight/textures/`, pinned; NOTICE updated |
+| Dragon Tooth Knife smithed (egg shell knife + tooth), shapeless craft removed; crimson fungus inputs of Assorted Salad, Roasted Dragon Steak, Dragon Leg with Sauce -> `#creativeengineering:cookable_fungi` (crimson, warped, inky cap, morel, truffle; Ender Noodle already took 4 options, unchanged); End's crate unpack removed (shared route); heatless grid routes for the 9 pot meals | `kubejs/data/creative_delight/kubejs/ends_delight/recipes.js` |
+| Tags: crate in `forge:storage_blocks/chorus_fruit` (block: axe), pie slice in `#creativeengineering:chorus_pie_slice`, shulker meat and slice in `#endersdelight:shulker_loot`, the fungus tag | `ends_delight/tags.js` |
+| Chorus Succulent kept: 2.1 places it from Java (`ends_delight:chorus_succulent`, 1 in 8 chunks, 20 tries) in End Highlands; now the wild-crops rule `chorus_succulent` with the same feature type and biome, 2.1's modifier `forge:none` | `_worldgen/wild_crops.json`, `worldgen/*/wild/chorus_succulent.json` |
+| Drop tooltips and JEI pages (7 items) | `kubejs/assets/creative_delight/kubejs/ends_delight/` |
+
+### 5.2 Ender's Delight (non-member, pack rows in CD's `endersdelight` folder)
+
+| Change | Where |
+|---|---|
+| One unpack route for both crates (`#forge:storage_blocks/chorus_fruit` -> 9 chorus fruit), Ender's unpack removed | `endersdelight/recipes.js` |
+| Mining tags (crate axe, stove pickaxe), Shulker Filet in `#forge:shulker_meat` (End's pot meals take it), pie slice tag, soils, spice tag | `endersdelight/tags.js` |
+| Self-drop loot tables for Chorus Crate and Endstone Stove (1.1.4's files) | `enders_additions` jar `data/endersdelight/loot_tables/blocks/` |
+| 12 retextures from 1.1.4 (MIT notice beside them) | `kubejs/assets/endersdelight/textures/item/` (the KubeJS pack sits above mod jars; a member jar cannot override the ARR jar's paths) |
+| Knife drop tooltips and JEI pages (sight, crust, mollusk); "You need a Shulker Bowl to eat this" | `kubejs/assets/creative_delight/kubejs/endersdelight/client.js` |
+
+### 5.3 Ender's 1.1.4 content (member `enders_additions`)
+
+Mod id `enders_additions`, registers under `endersdelight:` (Forge may log an "alternative prefix" warning); hard
+dependency on `endersdelight` and `farmersdelight`. Build guard `checkNoArrResources` fails on any path the ARR jar has.
+Blocks `amberveil_mushroom`, `ethereal_saffron_bush`, `chorus_flame_block` (age 0 to 2), `voidpepper_block` (multiface,
+no block entity: 1.1.4's was dead code); items `amberveil`, `ethereal_saffron`, `chorusflame`, `voidpepper`,
+`crushed_voidpepper` and five Shulker Bowl dishes (1.1.4 food values: stew and curry also give Speed 2:00). Names:
+the pepper item reads "Void Pepper", the spice "Crushed Void Pepper" (1.1.4: "Void Pepper Sprout" / "Void Pepper").
+
+- Soil: all four survive only on `#creative_delight:end_plant_soil_slow` (end stone) or `_fast` (Endercrop's tilled end
+  stone); the void pepper on any attached face. Growth chances in `config/enders_additions-common.toml [growth]`:
+  `chorusflameGrowthSlow` 0.1, `chorusflameGrowthFast` 0.2 (1.1.4: 1/5), `voidpepperTickSlow` 0.5, `voidpepperTickFast` 1.0.
+- Void pepper blockstate fixed so the plain and fruiting vines no longer overlap; spread waits for loaded chunks.
+- Recipes (`endersdelight/additions.js`): 1.1.4's five pot recipes; heatless grid routes; knife 1 -> 2 crushed;
+  `foodGrinding` (milling 2 + 30%, mortar 2; no crushing wheel). Spice tag `#creativeengineering:spices` = the two peppers.
+- Wild: `end_amberveil` (1 in 10), `end_chorusflame` (15), `end_saffron` (25), `end_voidpepper` (15), 1.1.4's patches
+  but each block on end stone; biomes: the four vanilla End land biomes plus Nullscape's crystal peaks, shadowlands,
+  void barrens. `tools/gen_crop_worldgen_table.py` now accepts registered non-Overworld biomes in `add` and knows the
+  five End crops.
+- Not ported: the `end_flames` particle (1.1.4 uses it on its own stove only).
+
+### 5.4 End House
+
+Files in the member (`data/endersdelight/structures|worldgen/`), type `minecraft:jigsaw`. Tags `mod/endersdelight`,
+`type/end_constructed`, `land/end` (end highlands and midlands, which `land/end` already was). No End group grid exists
+yet, so the House keeps its own set (25/15). Soft beard; in `earth_fill/stone_base`, which cancels void starts (its
+bottom layers read as all air), so the mod's y 50 check is covered except a solid low island. `tools/gen_structure_config.py`
+now scans jars nested in `META-INF/jarjar/`. The Mysticrift End tower is in `type/end_constructed` too, but keeps its
+`group/pillager_settlements` slots (a structure is in one group only).
+
+### 5.5 Open
+
+- Tower: keep on the pillager grid (now), standalone set, or a new `group/end_constructed` (the pending End pass).
+- Strict y 50 House check (patcherMod `min_surface` tag proposal, ~40 lines) or earth fill only.
+- After install: `/dumpall`, then the food tuning (`food_types.json`), can decision, names and JEI audits for the 10
+  new items and End's integration rows; `/cegen run worldgen` (or `gen_structure_config.py` + `gen_structure_groups.py`).
+- `food/drinks #7` (pot teas cost more), machete review, End gear values (`gear #12`) unchanged.
+
+### 5.6 Tests
+
+| ID | Check |
+|---|---|
+| EN-01 | A broken Chorus Crate and Endstone Stove drop themselves; axe / pickaxe mine them faster |
+| EN-02 | The 4 plants generate wild in End land biomes on end stone only; none twice (no 1.1.4 modifiers) |
+| EN-03 | Each plant places and survives only on end stone and tilled end stone; breaks on farmland, dirt, grass, and when its soil goes |
+| EN-04 | Chorusflame and Void Pepper grow slower on end stone than tilled (config values to 0 stop growth) |
+| EN-05 | Void Pepper spreads to end-stone-adjacent spots within 7 blocks, then fruits; drops 3 fruiting, 1 not (+Fortune); right face, no z-fighting |
+| EN-06 | End House in end highlands / midlands, no chests, floor on end stone, never over the void (earth fill log CANCELLED); tower rate unchanged |
+| EN-07 | Dragon bare-handed: 5-7 meat, 2 legs, 1-2 teeth; knife and machete: +2 meat, +1 tooth |
+| EN-08 | Tooltips and JEI pages on the 7 End's and 3 Ender's drops |
+| EN-09 | Dragon Tooth Knife smithed from the egg shell knife and a tooth; no shapeless craft; repairs with a Dragon Tooth in the anvil |
+| EN-10 | Chorus Succulent generates in new End Highlands chunks at the old density, not twice |
+| EN-11 | The 5 dishes: pot and grid recipes, Shulker Bowl back, effects, steak fries no effect line |
+| EN-12 | Crushed Void Pepper by knife (2), Millstone (2 + 30%), mortar (2) |
+| EN-13 | Both crates unpack to 9 chorus fruit through one recipe; End's shulker-meat pot recipes take a Shulker Filet; fungus recipes take warped / inky cap / morel / truffle |
+| EN-14 | End's 9 heatless grid routes craft; Create does not auto-craft them |
+| EN-15 | 25 retextures show (Stuffed Shulker bowl item purple); Stuffed Shulker message names the Shulker Bowl |
+| EN-16 | Boot: `enders_additions` and `repackedEnds` mixin load, no missing model / texture for `endersdelight:` plants |
+
+Scratch server 2026-10-26 ([scratch_queue.md](testing/scratch_queue.md) run log): EN-01, EN-03, EN-04, EN-07, EN-09 (anvil) and
+EN-16 (server half) PASSED (`tools/cdb_en_probe/cdb_en_probe.js`). The boot first failed on the Chorus Succulent configured
+feature (type `ends_delight:chorus_succulent_feature`; registered id `ends_delight:chorus_succulent`), fixed. EN-06 partial (house
+located, ground check not run); EN-02, EN-05, EN-08, EN-10 to EN-15 open.
+
+Changelog: bullets added 2026-10-25 (Farming, Food, World Generation, Loot, Gear, Interface families).
