@@ -12,7 +12,7 @@ For every placed/configured feature in the mod jars with a block predicate that 
 (offset [0,-1,0]) against a block list containing minecraft:grass_block, this writes an override to
 kubejs/data/<ns>/worldgen/<kind>/<path>.json in which that predicate becomes
     any_of(<the original list>, matching_block_tag #creativeengineering:worldgen/grass_like_soils)
-(the tag is filled in kubejs/server_scripts/tags/blocktags.js). Nothing else in the file changes.
+(the tag is filled in kubejs/server_scripts/tags/blocktags.js). The only other change is STATE_SWAPS (merged blocks).
 Features registered in Java (no JSON in the jar) are rebuilt from the decompiled source in JAVA_BASES.
 
 Snow-layer, lake and snow-removal features also test grass, but they shape terrain rather than place
@@ -42,6 +42,10 @@ MANIFEST = INSTANCE / 'kubejs/generation_scripts/worldgen/soil_compat_manifest.j
 TAG = 'creativeengineering:worldgen/grass_like_soils'
 GRASS = 'minecraft:grass_block'
 BELOW = [0, -1, 0]
+# Block states the overrides it writes swap as well: blocks purged by an item merge (feature_writeup/item_merges.md).
+# Vintage Delight's salt patch lays a salt block under its layers; since the salt merge it is The Salt's raw rock salt
+# block, which does not dissolve (patcherMod block.SaltBlockTicks), so shoreline patches stay.
+STATE_SWAPS = {'vintagedelight:salt_block': 'salt:raw_rock_salt_block'}
 KINDS = ('placed_feature', 'configured_feature')
 
 # Terrain shaping, not plants: snow layers/fixes, lakes, snow removal.
@@ -127,6 +131,8 @@ def patch(o):
         for k, v in o.items():
             out[k], c = patch(v)
             n += c
+        if out.get('Name') in STATE_SWAPS:
+            out['Name'] = STATE_SWAPS[out['Name']]
         return out, n
     if isinstance(o, list):
         n, out = 0, []

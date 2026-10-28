@@ -85,7 +85,7 @@ def short(sid):
 
 
 def load_json_lenient(path):
-    return json.loads(re.sub(r'^\s*//.*$', '', path.read_text(), flags=re.M))
+    return g.loads_lenient(path.read_text())
 
 
 # ── structures ───────────────────────────────────────────────────────────────

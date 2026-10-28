@@ -132,6 +132,9 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
 - **Mobs:** cow, pig, chicken, sheep, rabbit, cod, salmon, and a More Mooblooms moobloom (gives a cow sample).
 - **Recipe:** iron rod + 4 glass panes + iron plate. Filled syringes start the cultivated meat cultures
   ([cultivated_meat.js](../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js); backlog row 20).
+- **Reserved for Creative Cultivation (2026-10-27):** the syringe exists only to start meat cultures, so its three
+  scripts carry the Creative Cultivation header with the rest of the cultivated-meat code
+  ([creative_delight.md](creative_delight.md) 29.5). They stay in the pack folder for now.
 
 ## 3. What the pack changes
 
@@ -278,3 +281,7 @@ patcherMod's copies to see whether the jar is current.
 - 2026-10-18: this writeup; findings F1 to F8; tests EN-01 to EN-18. No code changed.
 - 2026-10-22: F10 fixed (syringe hit sampling, `getActual()`), found in the second scratch bulk run.
 - 2026-10-24: planned from the scratchpad: milkshake and sulfuric acid lava generation (`engineering/dreams-and-desires #7`, `#8`). No code changed.
+- 2026-10-27: syringe scripts marked as reserved for Creative Cultivation (creative_delight.md 29.5); the wire coil keys
+  `coil_<metal>` and `wire_coil_block_<metal>` are gone from the item dict (one key per id: `wire_coil_<metal>`,
+  `coil_block_<metal>`); the coil transition items keep their `kubejs:incomplete_coil_<metal>` ids and now take their
+  sprite from `i.wire_coil_<metal>` (`transition_items.js`). No recipe change.

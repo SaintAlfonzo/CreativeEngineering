@@ -17,7 +17,9 @@ f.ie_potion = 'immersiveengineering:potion';
 
 // Finish xp merge
 f.xp_still = 'sophisticatedcore:xp_still';
+f.flowing_xp_still = 'sophisticatedcore:xp_flowing';
 f.memory_essence = 'pneumaticcraft:memory_essence';
+f.flowing_memory_essence = 'pneumaticcraft:memory_essence_flowing';
 
 //Vanilla
 f.water = 'minecraft:water';
@@ -118,6 +120,7 @@ f.white_chocolate = 'create_confectionery:white_chocolate';
 
 //Create: Enchantment Industry
 f.experience = 'create_enchantment_industry:experience';
+f.flowing_experience = 'create_enchantment_industry:flowing_experience';
     f.xp = 'create_enchantment_industry:experience';
 f.hyper_experience = 'create_enchantment_industry:hyper_experience';
 f .hyper_xp = 'create_enchantment_industry:hyper_experience';

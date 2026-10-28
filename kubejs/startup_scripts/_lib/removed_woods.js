@@ -3,7 +3,7 @@
 // Removed woods: a wood set merged into oak
 // ============================================================
 // Each set lists purged id -> oak twin, for every block, item and other mod's variant of that wood. Runs after
-// item_merges.js and joins its list, so the merge does the rest (recipe inputs, loot, inventories; hidden in JEI,
+// item_merges.js and joins its pack group, so the merge does the rest (recipe inputs, loot, inventories; hidden in JEI,
 // tags stripped). server_scripts/wood/removed_woods.js removes every recipe that makes a purged item first, so the
 // merge can't turn them into duplicate oak recipes. Design and tests: feature_writeup/recipes_wood.md 2.6.
 
@@ -109,11 +109,6 @@ global.removedWoods = {
 	],
 };
 
-Object.keys(global.removedWoods).forEach(wood => {
-	global.removedWoods[wood].forEach(m => {
-		global.itemMerges.push(m);
-		global.removedItems.push(m[0]);
-	});
-});
+Object.keys(global.removedWoods).forEach(wood => global.addItemMerges('pack', global.removedWoods[wood]));
 
 console.log(`[removedWoods] ${Object.keys(global.removedWoods).length} woods merged into oak`)

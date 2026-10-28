@@ -31,6 +31,11 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'endersdelight:chorus_fruit_from_crate' }, e)
 		R.shapeless(Item.of(i.chorus_fruit, 9), [i.t_storage_chorus_fruit], e, 'chorus_fruit_from_crate')
 
+		//######################### Shulker bowls #########################
+		// One shulker shell -> 12 bowls (Ender's Delight's gave 8; TODO recipes/cooking #4)
+		R.remove({ id: 'endersdelight:shulker_bowl' }, e)
+		R.shapeless(Item.of(i.shulker_bowl, 12), [i.shulker_shell], e, 'shulker_bowl')
+
 		//######################### Meals #########################
 		// Heatless meal rule: farmersdelight/recipes.js "Meals". Expensive grid routes for pot meals (TODO dishes/meals #4):
 		// chorus and endermite stews come in Ender's Delight's shulker bowl.
@@ -52,11 +57,11 @@ ServerEvents.recipes(e => {
 		}
 		// Crawling sandwich: shaped
 		R.remove({ id: 'endersdelight:crawling_sandwich' }, e)
-		R.shaped(i.crawling_sandwich, ['SMC', ' B '], { S: i.shulker_loot, M: i.mite_crust, C: i.chorus_fruit, B: i.minecraft_bread },
+		R.shaped(i.crawling_sandwich, ['SMC', ' B '], { S: i.shulker_loot, M: i.mite_crust, C: i.chorus_fruit, B: i.t_bread },
 			e, 'crawling_sandwich_manual_only')
 		if (Platform.isLoaded('create')) {
 			var incCrawlingSandwich = R.incomplete('crawling_sandwich')
-			R.createSequencedAssembly(i.crawling_sandwich, i.minecraft_bread, [
+			R.createSequencedAssembly(i.crawling_sandwich, i.t_bread, [
 				e.recipes.create.deploying(incCrawlingSandwich, [incCrawlingSandwich, i.shulker_loot]),
 				e.recipes.create.deploying(incCrawlingSandwich, [incCrawlingSandwich, i.mite_crust]),
 				e.recipes.create.deploying(incCrawlingSandwich, [incCrawlingSandwich, i.chorus_fruit])
@@ -71,7 +76,7 @@ ServerEvents.recipes(e => {
 		// Stuffed shulker shapeless
 		R.shapeless(Item.of(i.stuffed_shulker, 1), [i.tomato_sauce, i.tomato_sauce, i.cooked_rice, i.cooked_rice, i.brown_mushroom, i.chorus_fruit, i.shulker_mollusk, i.shulker_shell], e, 'stuffed_shulker_cooked_manual_only')
 		//Ender paella shapeless
-		R.shapeless(Item.of(i.ender_paella, 1), [i.cooked_rice, i.cooked_rice, i.shulker_flesh, i.chorus_flower, i.chorus_flower, i.ender_sight, i.shulker_bowl], e, 'ender_paella_cooked_manual_only')
+		R.shapeless(Item.of(i.ender_paella, 1), [i.cooked_rice, i.cooked_rice, i.shulker_loot, i.chorus_flower, i.chorus_flower, i.ender_sight, i.shulker_bowl], e, 'ender_paella_cooked_manual_only')
 		//Pearl pasta shapeless
 		R.shapeless(Item.of(i.pearl_pasta, 1), [i.enderman, i.pasta, i.pasta, i.chorus_juice, i.chorus_juice, i.shulker_bowl], e, 'pearl_pasta_cooked_manual_only')
 	})

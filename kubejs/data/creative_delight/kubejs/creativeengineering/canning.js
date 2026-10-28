@@ -36,6 +36,8 @@ global.CD.recipes(() => {
 		Object.keys(canTypes).forEach(key => {
 			var can = canTypes[key]
 			if (can.section !== section) return
+			// a can purged by an item merge gets no recipes (canned_hamimelon: item_merges.md 2.10)
+			if (global.removedItems.indexOf(i[key]) >= 0) return
 			can.recipes.forEach(rec => {
 				try {
 					var input = can.pot ? [] : [i.empty_can]

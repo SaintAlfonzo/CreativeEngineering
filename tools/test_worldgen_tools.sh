@@ -10,6 +10,7 @@
 #   8. LocateTest: locate counters (misses before a hit, stages, batch capture) and Distant Horizons' fake seabed roll
 #   9. tools/check_worldgen_json.py: kubejs/data worldgen JSON has the keys 1.19.2's codecs require (ported 1.20 data)
 #  10. PoolTunerTest: canonical pool order, processor lists of pieces added in code rebound to the world's registry
+#  11. BiomeLayoutCacheTest: the biome tuner's disk cache (hit, wrong key, corrupt file, edited input)
 # Java parts run against development/patcherMod/build/classes (run ./gradlew build first). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -43,4 +44,6 @@ echo "== 9. worldgen JSON shape (1.19.2 codecs)"
 python3 tools/check_worldgen_json.py || status=1
 echo "== 10. pool order + processor rebind"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.PoolTunerTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+echo "== 11. biome tuner disk cache"
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.BiomeLayoutCacheTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 exit $status

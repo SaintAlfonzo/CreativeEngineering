@@ -2,7 +2,7 @@
 """Offline index of every en_us lang key the client can see, and where it comes from.
 
 Sources, lowest priority first (a later source wins for the same key, like the game's pack stack):
-  1. vanilla 1.19.2 client jar (~/.minecraft/versions/1.19.2/1.19.2.jar) and the Forge client jar
+  1. the vanilla client jar and the instance's Forge universal jar (pack_paths.vanilla_jar / forge_jar)
   2. the upstream jars the ports read at runtime (<name>_upstream/*.jar), then every mod jar in mods/
      (assets/<ns>/lang/en_us.json) with the jars nested in it (META-INF/jarjar/, Creative Delight's members)
   3. KubeJS: kubejs/assets/<ns>/lang/en_us.json, kubejs/assets/*.zip, and the ClientEvents.lang calls
@@ -18,13 +18,18 @@ Used by tools/missing_names.py and tools/gen_display_delight_names.py.
 import io
 import json
 import re
+import sys
 import zipfile
 from pathlib import Path
 
-INSTANCE = Path(__file__).resolve().parent.parent
-MODS = INSTANCE / 'mods'
-VANILLA_JAR = Path.home() / '.minecraft/versions/1.19.2/1.19.2.jar'
-FORGE_JAR = Path.home() / '.local/share/atlauncher/libraries/net/minecraftforge/forge/1.19.2-43.3.9/forge-1.19.2-43.3.9-client.jar'
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths  # noqa: E402
+
+INSTANCE = pack_paths.INSTANCE
+MODS = pack_paths.MODS
+# Forge's own lang (assets/forge/lang) is in the universal jar; the -client jar holds patched classes only.
+VANILLA_JAR = pack_paths.vanilla_jar() or Path('/nonexistent/vanilla.jar')
+FORGE_JAR = pack_paths.forge_jar('universal') or Path('/nonexistent/forge.jar')
 LANG_RE = re.compile(r'^assets/([^/]+)/lang/en_us\.json$')
 
 
@@ -88,7 +93,8 @@ SCRIPT_ADD = re.compile(r"""\.add\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]*)['"]"""
 SCRIPT_RENAME = re.compile(r"""\.rename(?:Item|Block)\(\s*['"]([a-z0-9_.\-]+):([a-z0-9_./\-]+)['"]\s*,\s*['"]([^'"]*)['"]""")
 # renameItem(global.item.<key>, 'Name'): the id comes from item_dict.js
 SCRIPT_RENAME_KEY = re.compile(r"""\.rename(?:Item|Block)\(\s*global\.item\.(\w+)\s*,\s*['"]([^'"]*)['"]""")
-ITEM_DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
+ITEM_DICT = pack_paths.ITEM_DICT
+ITEM_ID = re.compile(r'[a-z0-9_.\-]+:[a-z0-9_./\-]+')
 
 
 def script_langs():
@@ -105,8 +111,7 @@ def script_langs():
         renames = SCRIPT_RENAME.findall(text)
         for key, val in SCRIPT_RENAME_KEY.findall(text):
             if item_ids is None:
-                item_ids = dict(re.findall(r"^\s*i\.(\w+)\s*=\s*'([a-z0-9_.\-]+:[a-z0-9_./\-]+)'",
-                                           ITEM_DICT.read_text(errors='replace'), re.M))
+                item_ids = {k: v for k, v in pack_paths.parse_item_dict(ITEM_DICT)[1].items() if ITEM_ID.fullmatch(v)}
             if key in item_ids:
                 renames.append(tuple(item_ids[key].split(':', 1)) + (val,))
         for ns, path, val in renames:

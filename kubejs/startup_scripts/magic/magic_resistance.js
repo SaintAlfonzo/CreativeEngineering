@@ -2,7 +2,7 @@
 // one this pack defines itself, rather than reusing vanilla/Alex's Mobs/Better Beacons).
 //
 // Registering the effect itself needs no Java: unlike better_beacons:long_reach/phantom_bane
-// (see cooking/potions.js's header comment + patcherMod's BetterBeaconsPotions), there's no
+// (see cooking/potions.js's header comment + patcherMod's CEPotions), there's no
 // cross-mod registry-timing problem here — this effect doesn't depend on any OTHER mod's
 // MobEffect registry having already fired, it just needs to exist at all, which KubeJS's own
 // 'mob_effect' registry event handles directly.
@@ -17,8 +17,8 @@
 //   amplifier level (same scaling as vanilla Resistance), full immunity at amplifier 4+.
 //
 // The potions (base, long, strong) are registered in Java by patcherMod's
-// potion/MagicResistancePotions.java (a real DeferredRegister<Potion>, the same dance
-// BetterBeaconsPotions.java uses: KubeJS's StartupEvents.registry('potion', ...) callback runs
+// potion/CEPotions.java (a real DeferredRegister<Potion>, the same dance
+// the Better Beacons rows in it use: KubeJS's StartupEvents.registry('potion', ...) callback runs
 // too early to see ANY MobEffect, including this one). Their brewing mixes are in
 // cooking/potions.js (CE_POTION_MIXES, amethyst shard placeholder reagent). The effect can
 // also be applied directly (/effect give, global.armorEffects, etc.).

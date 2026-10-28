@@ -44,7 +44,7 @@ public final class LocateStats {
 	public enum Stage { PLACEMENT, BIOME, POINT, FREQUENCY, META, META_TARGET }
 
 	/** Why a structure didn't start in a census slot (recorded at generation time). */
-	public enum Reason { BUILT, NO_START, SURFACE_CHECK, EARTH_FILL, PRIORITY, FREQUENCY, VETO, META_ONLY, CONVERTED }
+	public enum Reason { BUILT, NO_START, SURFACE_CHECK, EARTH_FILL, PRIORITY, FREQUENCY, VETO, META_ONLY, CONVERTED, DIMENSION }
 
 	public static final class Search {
 		public final String label;

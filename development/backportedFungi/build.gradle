@@ -6,11 +6,6 @@ plugins {
     id 'ce.forge-mod-refmap'
 }
 
-repositories {
-    // Third-party mod jars copied from ../../mods (git-ignored).
-    flatDir { dir 'libs' }
-}
-
 dependencies {
     // Farmer's Delight is the one hard dependency (MushroomColonyBlock/Item, ConsumableItem, effects, tags).
     // flatDir notation: 'local:<file name without -version>:<version>'
@@ -20,25 +15,4 @@ dependencies {
 // Access transformer (SRG names): Pig.FOOD_ITEMS and PotionBrewing.addMix.
 minecraft {
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-
-// The Hoglin mixin uses Mojang names and gets a real refmap, like backportedVintage.
-mixin {
-    add sourceSets.main, 'fungidelight.refmap.json'
-    mixin_configs.split(',').each { config it.trim() }
-}
-
-tasks.named('compileJava', JavaCompile).configure {
-    outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
-}
-
-// Backstop: the mixin config must find its refmap in the jar.
-tasks.named('jar', Jar).configure {
-    doLast {
-        def jarFile = archiveFile.get().asFile
-        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
-        if (!entries.contains('fungidelight.refmap.json')) {
-            throw new GradleException("fungidelight.refmap.json is not in ${jarFile.name}")
-        }
-    }
 }

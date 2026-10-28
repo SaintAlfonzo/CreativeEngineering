@@ -15,9 +15,7 @@
 //     creativeengineering:forge/biome_modifier/bee_nests/<id>.json, step vegetal_decoration.
 // Written in ServerEvents.highPriorityData (KubeJS's top-priority virtual datapack, above the mod jars).
 //
-// An older patcherMod jar without BeeNests would make the modifier type unknown, and an unknown type stops the
-// world loading, so chance/scale are not written then (trees still are: they are plain datapack features). A tree
-// feature of a mod that isn't loaded is skipped (an unknown feature id stops the world loading too).
+// A tree feature of a mod that isn't loaded is skipped (an unknown feature id stops the world loading).
 //
 // Selectors match tools/gen_bee_nests.py and the wild crop rules: 'where' clauses OR'ed, traits in a clause AND'ed,
 // '!trait' negated, traits from biome_traits.json, biomes marked ocean or cave never match a clause;
@@ -44,20 +42,10 @@
 	var $TagKey = Java.loadClass('net.minecraft.tags.TagKey')
 	var $ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')
 
-	function enabled() {
-		try {
-			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig').beeNestsEnabled() == true
-		} catch (err) {
-			return true   // jar without the switch: BeeNests is missing too, see nestsClass()
-		}
-	}
+	var $BeeNests = Java.loadClass(NESTS_CLASS)
 
-	function nestsClass() {
-		try {
-			return Java.loadClass(NESTS_CLASS)
-		} catch (err) {
-			return null
-		}
+	function enabled() {
+		return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig').beeNestsEnabled() == true
 	}
 
 	function readJson(path) {
@@ -254,14 +242,9 @@
 		if (!cfg) return
 		var rules = usableRules(cfg, false)
 		var tuned = rules.filter(function (u) { return u.rule.chance != null || u.rule.scale != null })
-		var hasJava = !!nestsClass()
-		if (tuned.length && !hasJava) {
-			console.error(LOG + 'patcherMod has no ' + NESTS_CLASS + ' (old jar): chance/scale of ' + tuned.length
-				+ ' rules NOT applied (trees still are). Install patcherMod from development/patcherMod.')
-		}
-		var out = hasJava ? tuned.map(function (u) {
+		var out = tuned.map(function (u) {
 			return { id: u.rule.id, biomes: '#' + TAG_PREFIX + u.rule.id, chance: u.rule.chance, scale: u.rule.scale }
-		}) : []
+		})
 		if (out.length) event.add(MODIFIER_PATH, toJson({ type: 'creativeengineering:bee_nests', rules: out }))
 		var trees = 0
 		rules.forEach(function (u) {
@@ -322,8 +305,7 @@
 			})
 		})
 		problems.forEach(function (p) { console.error(LOG + p) })
-		var nests = nestsClass()
 		console.info(LOG + pairs + ' rule/biome pairs checked' + (problems.length ? ', ' + problems.length + ' problems' : '')
-			+ '; ' + (nests ? String(nests.summary()) : 'patcherMod without BeeNests'))
+			+ '; ' + String($BeeNests.summary()))
 	})
 })()

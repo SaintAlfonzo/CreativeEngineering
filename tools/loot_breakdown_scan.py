@@ -23,9 +23,7 @@ import audit_loot_containers as A  # noqa: E402
 
 ROOT = Path(A.ROOT)
 CACHE = ROOT / 'tools/.cache/template_scan.json'
-VANILLA_JAR = glob.glob(os.path.expanduser(
-    '~/.local/share/atlauncher/libraries/net/minecraft/client/1.19.2*/*-extra.jar'))
-VANILLA_JAR = VANILLA_JAR[0] if VANILLA_JAR else A.VANILLA_JAR
+VANILLA_JAR = A.VANILLA_JAR   # tools/pack_paths.py vanilla_jar()
 
 
 def snbt(v):

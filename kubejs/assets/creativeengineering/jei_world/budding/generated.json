@@ -37,8 +37,7 @@
    ],
    "outputs": [
     {
-     "item": "minecraft:barrier",
-     "label": "Drops nothing"
+     "block": "minecraft:air"
     }
    ],
    "notes": [

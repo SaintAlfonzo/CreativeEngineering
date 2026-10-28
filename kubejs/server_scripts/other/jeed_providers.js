@@ -92,7 +92,7 @@ ServerEvents.recipes(e => {
 	add('via_romana:travellers_fatigue', i.any_sign)                         // fast travel between linked signs
 
 	//######################### Food and drink with code-applied effects #########################
-	add('minecraft:speed', [i.bar_of_caramel, i.black_chocolate_candy, i.ruby_chocolate_candy, i.pancake,
+	add('minecraft:speed', [i.bar_of_caramel, i.black_chocolate_candy, i.ruby_chocolate_candy, i.pancakes,
 		i.coin_chocolate_gold])
 	add('minecraft:haste', [i.builders_tea, i.candy_cane, i.coin_chocolate_iron])
 	add('minecraft:regeneration', [i.hot_chocolate_bottle, i.soothing_hot_chocolate])
@@ -206,9 +206,11 @@ ServerEvents.recipes(e => {
 		written++
 	})
 
-	// Items holding a `Potion` NBT tag like minecraft:potion; JEED fills each with every potion of the effect
+	// Items holding a `Potion` NBT tag like minecraft:potion; JEED fills each with every potion of the effect.
+	// Potion bundles draw nothing without a `Uses` count (their base model has no texture), so they carry a full 3.
+	var fullBundle = id => ({ item: id, nbt: '{Uses:3}' })
 	R.jeedPotionProvider([i.ce_potion_bucket, i.ce_splash_potion_bucket, i.ce_lingering_potion_bucket,
-		i.potion_bundle, i.splash_potion_bundle, i.lingering_potion_bundle,
+		fullBundle(i.potion_bundle), fullBundle(i.splash_potion_bundle), fullBundle(i.lingering_potion_bundle),
 		i.immersiveengineering_potion, i.gun_ammo], e, 'potion_carriers')
 
 	console.log('jeed_providers.js: ' + written + ' effect provider recipes')

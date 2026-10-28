@@ -84,11 +84,11 @@ FAMILIES = OrderedDict([
     ('bread', ('Bread', 'Baked plain or lightly flavoured dough with no filling.')),
     ('bread/loaf', ('Loaf', 'A whole loaf or round bread.')),
     ('bread/slice', ('Bread slice', 'A slice of a loaf, toasted or not.')),
-    ('bread/flat', ('Flatbread and bun', 'Tortillas, flatbreads and filled buns baked as one piece.')),
+    ('bread/flat', ('Flatbread', 'Tortillas and flatbreads baked as one piece (sweet buns are desserts).')),
     ('ingredient', ('Kitchen ingredient', 'Edible but made to go into other food, not to be eaten as a dish.')),
-    ('ingredient/dough', ('Dough and batter', 'Unbaked dough, batter, crust, raw pasta and noodles.')),
+    ('ingredient/dough', ('Dough and batter', 'Unbaked dough, batter and crust, edible or not.')),
     ('ingredient/sauce', ('Sauce and fat', 'Sauces, oils and fats.')),
-    ('ingredient/other', ('Other ingredient', 'Leaves, beans, pods, mash and mince for other recipes.')),
+    ('ingredient/other', ('Other ingredient', 'Leaves, beans, pods, mash, mince, raw pasta and noodles for other recipes.')),
     ('preserve', ('Preserve', 'Fruit or vegetables kept in sugar, salt or brine.')),
     ('preserve/jam', ('Jam', 'Fruit boiled with sugar, in a jar or bottle.')),
     ('preserve/spread', ('Spread', 'A non-fruit spread in a jar (nut butter).')),
@@ -101,12 +101,16 @@ FAMILIES = OrderedDict([
     ('cake', ('Cake', 'Sweet sponge with frosting; whole cakes are blocks cut into slices.')),
     ('cake/whole', ('Whole cake', 'The placed block, eaten or cut in slices.')),
     ('cake/slice', ('Cake slice', 'One slice of a whole cake.')),
-    ('cake/small', ('Small cake', 'A one-serving cake: muffins, cupcakes, brownies.')),
+    ('cake/muffin', ('Muffin and cupcake', 'A one-serving cake baked in a muffin tin: muffins, cupcakes (brownies are desserts).')),
     ('cookie', ('Cookie', 'A small flat baked biscuit.')),
-    ('pastry', ('Pastry', 'Sweet breakfast bakes that are not cake, pie or cookie.')),
-    ('pastry/waffle', ('Waffle', 'A waffle, plain or topped.')),
-    ('pastry/roll', ('Sweet roll', 'A rolled sweet dough (sweet roll, chocolate roll).')),
-    ('pastry/other', ('Other pastry', 'Pancakes, scones, eclairs, beignets.')),
+    ('dessert', ('Dessert', 'Sweet bakes and set desserts that are not cake, pie, cookie, candy, jello or frozen; also the '
+                            'catchall for any sweet or baked food with no other family.')),
+    ('dessert/brownie', ('Brownie', 'A brownie, or the tray of brownies it is cut from.')),
+    ('dessert/pudding', ('Pudding', 'Soft set desserts in a bowl (custard, pudding, yogurt desserts) and steamed puddings cut in slices.')),
+    ('dessert/pastry', ('Pastry', 'Pancakes, scones, eclairs, beignets and sweet buns.')),
+    ('dessert/waffle', ('Waffle', 'A waffle, plain or topped.')),
+    ('dessert/roll', ('Sweet roll', 'A rolled sweet dough (sweet roll, chocolate roll).')),
+    ('dessert/other', ('Other dessert', 'A sweet or baked food that fits no other family.')),
     ('candy', ('Candy', 'Sugar or chocolate confections.')),
     ('candy/bar', ('Chocolate bar', 'A bar of chocolate or caramel.')),
     ('candy/piece', ('Candy piece', 'A bite of candy, fudge, gummy, coin or leather.')),
@@ -114,8 +118,8 @@ FAMILIES = OrderedDict([
     ('candy/marshmallow', ('Marshmallow', 'Marshmallows, on a stick or in a s\'more.')),
     ('frozen', ('Frozen dessert', 'Served frozen.')),
     ('frozen/ice_cream', ('Ice cream', 'Churned ice cream in a bowl.')),
-    ('frozen/popsicle', ('Popsicle and ice', 'Frozen juice on a stick, or shaved ice.')),
-    ('pudding', ('Pudding', 'Soft set desserts in a bowl: custard, pudding, yogurt desserts.')),
+    ('frozen/popsicle', ('Popsicle', 'Frozen juice, fruit or flavour on a stick (every popsicle, melon and cantaloupe to corn and ender).')),
+    ('frozen/shaved_ice', ('Shaved ice', 'Shaved ice with a fruit flavour.')),
     ('sandwich', ('Sandwich', 'Fillings held in bread or a wrap, eaten by hand.')),
     ('sandwich/square', ('Square sandwich', 'Square bread slices around a filling (the sprite shows slices).')),
     ('sandwich/roll', ('Long roll sandwich', 'A long roll (whole bread) around a filling.')),
@@ -125,9 +129,15 @@ FAMILIES = OrderedDict([
     ('skewer', ('Skewer', 'Pieces on a stick, eaten by hand; the stick is kept.')),
     ('roll', ('Roll and dumpling', 'A filling rolled or folded in a wrapper: sushi rolls, cabbage rolls, dumplings.')),
     ('stuffed', ('Stuffed vegetable', 'A vegetable hollowed and filled (stuffed potato, peppers).')),
-    ('bake', ('Savory bake', 'A savory dish baked in a tray and cut: pizza, quiche, lasagna.')),
-    ('bake/whole', ('Whole bake', 'The placed block, cut in slices.')),
-    ('bake/slice', ('Bake slice', 'One slice of a whole bake.')),
+    ('pizza', ('Pizza', 'Dough topped with sauce, cheese and toppings, baked whole and cut.')),
+    ('pizza/whole', ('Whole pizza', 'The placed block, cut in slices.')),
+    ('pizza/slice', ('Pizza slice', 'One slice of a whole pizza.')),
+    ('quiche', ('Quiche', 'A savory egg and cheese custard baked in a pie crust.')),
+    ('quiche/whole', ('Whole quiche', 'The placed block, cut in slices.')),
+    ('quiche/slice', ('Quiche slice', 'One slice of a whole quiche.')),
+    ('lasagna', ('Lasagna', 'Layered pasta, sauce and cheese baked in a pan.')),
+    ('lasagna/whole', ('Lasagna pan', 'The placed pan, served in portions.')),
+    ('lasagna/serving', ('Lasagna serving', 'One portion of lasagna, from the pan or made on its own.')),
     ('snack', ('Snack', 'Fried or popped finger food: fries, chips, popcorn, nachos, crab sticks.')),
     ('salad', ('Salad', 'Raw or cold parts mixed in a bowl.')),
     ('soup', ('Soup', 'Liquid food in a bowl.')),
@@ -166,6 +176,10 @@ SQUARE_SANDWICH = {
     'delightful:nut_butter_and_jelly_sandwich', 'alexsdelight:bunfungus_sandwich', 'brewinandchewin:ham_and_cheese_sandwich',
     'delightful:chunkwich', 'veggiesdelight:zucchini_sandwich',
 }
+# Renamed foods whose dump name still says the old one (renames take effect at the next /dumpall)
+FAMILY_OVERRIDE = {'oceanic_delight:sponge_cake': 'pie/whole', 'oceanic_delight:sponge_cake_slice': 'pie/slice'}
+# Sweet or baked one-offs that fit no other family: the dessert catchall, ahead of the special-type no-family rule
+DESSERT_OTHER = {'botania:mana_cookie', 'create_confectionery:gingerbread'}
 UNSORTED = 'unsorted'
 NOFAM = 'nofamily'   # foods that fit no family: listed on their own, no rules
 SKIP = None
@@ -237,16 +251,23 @@ def classify(r):
     n, p, t, mod = r['n'], r['p'], r['t'], r['mod']
     if r.get('excluded') or 'incomplete' in p or p in ('lunchbox', 'lunchbag', 'golden_lunchbox'):
         return SKIP
+    if r['id'] in FAMILY_OVERRIDE:
+        return FAMILY_OVERRIDE[r['id']]
     if r['whole']:
         if has(n, 'black powder'):
             return SKIP
-        if has(n, 'pizza', 'quiche', 'lasagna'):
-            return 'bake/whole'
+        for w in ('pizza', 'quiche', 'lasagna'):
+            if has(n, w):
+                return w + '/whole'
         if has(n, 'popcorn', 'nachos'):
             return 'snack'
         if has(n, 'golden cake'):
             return 'golden/enchanted' if has(n, 'enchanted') else 'golden'
-        if has(n, 'cake', 'brownie', 'pudding') and not has(n, 'turnip'):
+        if has(n, 'brownie'):
+            return 'dessert/brownie'
+        if has(n, 'pudding'):
+            return 'dessert/pudding'
+        if has(n, 'cake') and not has(n, 'turnip'):
             return 'cake/whole'
         if has(n, 'pie') and not has(n, 'shepherd'):
             return 'pie/whole'
@@ -259,6 +280,8 @@ def classify(r):
         return 'golden'
     if t == 'hazard':
         return 'hazard'
+    if r['id'] in DESSERT_OTHER:
+        return 'dessert/other'
     if t == 'special' or r['id'] in NO_FAMILY or has(n, 'fermented garlic honey'):
         return NOFAM
     if has(n, 'bellini'):
@@ -302,35 +325,44 @@ def classify(r):
         return 'preserve/pickle'
     if has(n, 'rice cake', 'takoyaki', 'cabbage wrapped'):
         return 'roll'
-    if has(n, 'pie crust'):
+    # Oven bases: made to be baked into a cake or cookie, not eaten as one
+    if has(n, 'pie crust') or p in ('cake_base', 'cake_base_baked', 'cake_paste', 'cookie_dough'):
         return 'ingredient/dough'
-    if has(n, 'pizza', 'quiche', 'lasagna'):
-        return 'bake/slice'
+    if has(n, 'pizza'):
+        return 'pizza/slice'
+    if has(n, 'quiche'):
+        return 'quiche/slice'
+    if has(n, 'lasagna'):
+        return 'lasagna/serving'
     if re.search(r'\bpie\b', n):
         return 'pie/slice' if has(n, 'slice') else 'pie/small'
-    if has(n, 'tart'):
+    if has(n, 'tart') and not has(n, 'tartar'):   # Spiked Tartare is a fish dish
         return 'pie/small'
-    if has(n, 'cake', 'gateau', 'pudding slice') and not has(n, 'turnip cake', 'pancake', 'cupcake'):
+    if has(n, 'brownie'):
+        return 'dessert/brownie'
+    if has(n, 'custard', 'pudding', 'glowgurt'):
+        return 'dessert/pudding'
+    if has(n, 'cake', 'gateau') and not has(n, 'turnip cake', 'pancake', 'cupcake'):
         return 'cake/slice' if has(n, 'slice') else 'cake/whole'
-    if has(n, 'cupcake', 'muffin', 'brownie'):
-        return 'cake/small'
-    if has(n, 'cookie', 'gingerbread'):
+    if has(n, 'cupcake', 'muffin'):
+        return 'cake/muffin'
+    if has(n, 'cookie', 'gingerbread man'):
         return 'cookie'
     if has(n, 'ice cream'):
         return 'frozen/ice_cream'
-    if has(n, 'popsicle', 'pearlsicle', 'popsiclime', 'shaved ice'):
+    if has(n, 'shaved ice'):
+        return 'frozen/shaved_ice'
+    if has(n, 'popsicle', 'pearlsicle', 'popsiclime'):
         return 'frozen/popsicle'
-    if has(n, 'custard', 'pudding', 'glowgurt'):
-        return 'pudding'
     if has(n, 'marshmallow', "s'more"):
         return 'candy/marshmallow'
     if t == 'sweet':
         if has(n, 'waffle'):
-            return 'pastry/waffle'
+            return 'dessert/waffle'
         if has(n, ' roll') and not has(n, 'hawberry'):
-            return 'pastry/roll'
+            return 'dessert/roll'
         if has(n, 'pancake', 'eclair', 'beignet', 'scone'):
-            return 'pastry/other'
+            return 'dessert/pastry'
         if has(n, 'toast with'):
             return 'sandwich/toast'
         if has(n, 'bar of', 'chocolate bar', 'mint chocolate', 'chocolate fingers'):
@@ -338,8 +370,8 @@ def classify(r):
         if has(n, 'apple', 'berries', 'strawberries', 'walnut', 'pear with'):
             return 'candy/coated'
         return 'candy/piece'
-    if has(n, 'scone'):
-        return 'pastry/other'
+    if has(n, 'scone', 'pancake', 'eclair', 'beignet', 'adzuki bun'):
+        return 'dessert/pastry'
     if has(n, 'toast with', 'bruschetta', 'jelly bread', 'caviar toast'):
         return 'sandwich/toast'
     if has(n, 'burger'):
@@ -416,13 +448,17 @@ def classify(r):
     if t == 'dairy':
         return 'dairy'
     if t == 'baked':
+        if has(n, 'honey bread', 'mulberry bread') or p == 'glowbread':   # filled, not bread (baked-goods #33)
+            return 'dessert/other'
         if has(n, 'slice', 'toast'):
             return 'bread/slice'
         if has(n, 'tortilla', 'mhadjeb', 'bun'):
             return 'bread/flat'
         return 'bread/loaf'
     if t == 'ingredient':
-        if has(n, 'dough', 'batter', 'pasta', 'noodle', 'tortilla', 'uncooked'):
+        if has(n, 'pasta', 'noodle'):
+            return 'ingredient/other'
+        if has(n, 'dough', 'batter', 'tortilla', 'uncooked'):
             return 'ingredient/dough'
         if has(n, 'sauce', 'oil', 'fat'):
             return 'ingredient/sauce'
@@ -496,6 +532,22 @@ def build_rows(cat, foods, blocks):
         rows[b['id']] = dict(id=b['id'], name=name, n=name.lower(), p=b['id'].split(':', 1)[1],
                              mod=b['id'].split(':', 1)[0], t='', whole=True, food=None)
     return rows
+
+
+def add_dough_rows(rows, key_val):
+    """Every f.dough_* in food_dict.js is a dough, edible or not (Create dough, cookie dough, sourdough ...)."""
+    src = (INSTANCE / 'kubejs/startup_scripts/_lib/food_dict.js').read_text()
+    names = {}
+    for group in load_json(INSTANCE / 'kubejs/exported/display_names.json', 'entries').values():
+        for e in group:
+            names[e['id']] = e['name']
+    for k in re.findall(r'f\.dough_\w+\s*=\s*i\.(\w+)', src):
+        iid = key_val[k]
+        if iid in rows:
+            continue
+        name = clean(names.get(iid) or iid)
+        rows[iid] = dict(id=iid, name=name, n=name.lower(), p=iid.split(':', 1)[1], mod=iid.split(':', 1)[0],
+                         t='ingredient', whole=False, food=None)
 
 
 def placement(rows, dump_place, tags, key_val, place_keys, fluids):
@@ -803,8 +855,10 @@ RULES = {
         place=[R('Own block', PF, placed_on('block', 'sneak'))],
         recipe=[R('Oven (pie tin): pie crust + 2 fruit + 2 sugar (honey allowed)', OV,
                   lambda m: m.at('Oven', ['pie_crust'])),
-                R('Oven or Crafting: pie crust + a full can of its filling (all but durian and pineapple)', OV,
-                  lambda m: m.at(('Oven', 'Crafting'), ['pie_crust'], ['canned_'])),
+                R('Oven or Crafting: pie crust + a full can of its filling (all but durian, pineapple, sponge and End\'s chorus '
+                  'fruit pie: Ender\'s chorus pie owns the chorus filling can)', OV,
+                  only_if(lambda m: m.id not in ('ends_delight:chorus_fruit_pie', 'oceanic_delight:sponge_cake'),
+                          lambda m: m.at(('Oven', 'Crafting'), ['pie_crust'], ['canned_']))),
                 R('No other recipe (every other mod\'s pie recipe removed)', OV,
                   lambda m: m.only('Oven', 'Crafting', 'Sequenced assembly')),
                 P('Sequenced assembly for every pie', TD + ' baked-goods #4', lambda m: m.at('Sequenced assembly')),
@@ -822,6 +876,9 @@ RULES = {
     'pie/small': dict(
         recipe=[R('Tarts: Oven (baking sheet): fruit + pie crust + egg + sugar + milk -> 2', OV,
                   only_if(lambda m: m.name_has('tart'), lambda m: m.at('Oven', ['pie_crust']))),
+                R('Hand pies: Oven only (baking sheet): pie crust + the filling -> 1 (CD handPieBake)', OV,
+                  only_if(lambda m: not m.name_has('tart') and m.id not in ('fruitsdelight:durian_pie', 'fruitsdelight:pineapple_pie'),
+                          lambda m: m.at('Oven', ['pie_crust']) and m.only('Oven'))),
                 P('Every tart becomes a pie (renamed, retextured)', TD + ' baked-goods #6',
                   only_if(lambda m: m.name_has('tart'), lambda m: False))]),
     'cake': dict(
@@ -834,12 +891,13 @@ RULES = {
                   only_if(is_cake, lambda m: m.at('Crafting', ['frosting'], ['cake_base']))),
                 R('Cakes: Oven (cake pan): raw cake base + frosting + 2 flavour', OV,
                   only_if(is_cake, lambda m: m.at('Oven', ['frosting']))),
-                R('Cakes: no other recipe (every other mod\'s cake recipe removed; `_from_slices` reassembly kept)', OV,
-                  only_if(is_cake, lambda m: m.only('Oven', 'Crafting'))),
-                D('Fig pudding and brownie tray: Oven', only_if(lambda m: not is_cake(m), lambda m: m.at('Oven'))),
-                P('Sponge cake renamed Sponge Pie; honey cake split 50 / 50 between honey and honeycomb; mangosteen cake '
-                  'renamed (not a cake); a dragon egg cake', T('baking/baked-goods #25', 'baking/baked-goods #26',
-                                                              'baking/baked-goods #5')),
+                R('Cakes: no other recipe (every other mod\'s cake recipe removed; `_from_slices` reassembly kept; plain and '
+                  'chocolate cake also spout onto a baked base)', OV,
+                  only_if(is_cake, lambda m: m.only('Oven', 'Crafting', 'Spout'))),
+                P('Every cake becomes a sequenced assembly (baked base, frosting, flavour), not only a grid or oven recipe; the existing '
+                  'spouts (plain, chocolate) need more steps', T('baking/baked-goods #28')),
+                R('Honey cake: 1 honey bottle + 1 honeycomb as its 2 flavour', T('baking/baked-goods #26')),
+                P('Mangosteen cake renamed (not a cake); a dragon egg cake', T('baking/baked-goods #5')),
                 P('Cake paste goes into the Cooking Pot', T('baking/baked-goods #6'))]),
     'cake/slice': dict(
         place=[P('All slices placeable (method not stated; proposal: Small Food Plate)', TD + ' baked-goods #5',
@@ -847,10 +905,9 @@ RULES = {
         recipe=[D('Cutting Board: whole cake -> slices', board),
                 P('Unobtainable slices (7 Central Kitchen, its pumpkin pie slice, 6 Delightful) audited and removed',
                   T('baking/baked-goods #5'))]),
-    'cake/small': dict(
-        recipe=[R('Muffins: Oven (muffin tin): 2 berry + wheat flour + milk + egg + sugar -> 4', OV,
-                  only_if(lambda m: m.name_has('muffin'), lambda m: m.at('Oven'))),
-                D('Others: Oven', only_if(lambda m: not m.name_has('muffin'), lambda m: m.at('Oven'))),
+    'cake/muffin': dict(
+        recipe=[R('Oven (muffin tin, on paper): 2 fruit + wheat flour + milk + egg + sugar -> 4; Cooking Pot: 2 fruit + '
+                  'dough + milk + egg + sugar -> 2 (CD muffinBake)', OV, lambda m: m.at('Oven')),
                 P('Brownie and cupcake baking types: the muffin stays unfrosted, the cupcake is frosted',
                   T('baking/baked-goods #18')),
                 P('Muffin variants: fruit + milk + egg + sugar + flour or cornmeal, served on paper, sequenced assembly',
@@ -865,14 +922,15 @@ RULES = {
                   T('baking/baked-goods #23')),
                 P('Chorus cookie made from the uncanny cookie; a maple cookie next to the cherry cookie',
                   T('baking/baked-goods #22', 'baking/baked-goods #15'))]),
-    'pastry': dict(
+    'dessert': dict(
         can=[R('Per item, can parity 2.24 (sweets)', CP, CAN)],
         place=[D('Food Plate', placed_on('plate'))],
-        recipe=[D('Spout: topping onto the plain pastry; the plain one in the Oven',
-                  lambda m: m.at('Spout') or m.at('Oven')),
+        recipe=[D('Oven for the plain bake; toppings by Spout', lambda m: m.at('Spout') or m.at('Oven')),
                 P('Pancakes become their own food type (sweet potato pancakes placeable); coverings recoloured to the jam',
                   T('dishes/meals #12', 'dishes/meals #37')),
-                P('More waffle recipes and uses', T('baking/baked-goods #6'))]),
+                P('More waffle recipes and uses', T('baking/baked-goods #6')),
+                D('A dessert can get its own cookware or recipe treatment (a mould, a griddle, a press), not the cookie, cake or '
+                  'pie shape; Gingerbread is the first (Create Confectionery\'s gingerdough: furnace, smoker); the Gingerbread Man stays a cookie')]),
     'candy': dict(
         can=[R('Per item, can parity 2.24 (sweets)', CP, CAN)],
         place=[D('Supplementaries jar', placed_on('jar'))],
@@ -888,10 +946,15 @@ RULES = {
                 P('Ice cream: unified recipes, a fluid per flavour with mixing recipes, bowl spouting, an ice cream block per '
                   'flavour (BlockRunner: sticky, sinks in); Truffle Ice Cream joins as a flavour', T('baking/sweets #4')),
                 P('More custard, shaved ice and popsicle variants', T('baking/sweets #3'))]),
-    'pudding': dict(
+    'dessert/brownie': dict(
+        place=[D('Tray: own block (cut into brownies)', only_if(lambda m: m.row['whole'], placed_on('block', 'sneak')))],
+        recipe=[D('Oven: the tray (cake pan); Cutting Board: tray -> brownies',
+                  lambda m: m.at('Cutting Board') if not m.row['whole'] else m.at('Oven'))]),
+    'dessert/pudding': dict(
         can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
         place=[D('Display Delight placed', placed_on('placed'))],
-        recipe=[D('Cooking Pot (Mixer mirrors it)', lambda m: m.at('Cooking Pot'))]),
+        recipe=[D('Bowl puddings: Cooking Pot (Mixer mirrors it); fig pudding: Oven, cut on the board',
+                  lambda m: m.at('Cooking Pot') if not m.name_has('fig') else (m.at('Cutting Board') or m.at('Oven')))]),
     # ---- hand food
     'sandwich': dict(
         can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
@@ -945,22 +1008,41 @@ RULES = {
                   lambda m: m.at('Crafting') and m.at('Sequenced assembly')),
                 P('Stuffed pepper plate: red, yellow and green peppers + rice, meat and onion; sequenced assembly on a bowl '
                   'plus a less efficient manual craft (or drop the dish)', T('dishes/meals #16'))]),
-    'bake': dict(
+    'pizza': dict(
         can=[R('Per item, can parity 2.25', CP, CAN)],
         place=[D('see subfamilies')],
         recipe=[D('see subfamilies')]),
-    'bake/whole': dict(
+    'pizza/whole': dict(
         place=[R('Own block', PF, placed_on('block', 'sneak'))],
-        recipe=[D('One shaped recipe + one sequenced assembly (as Brewin\' pizza and quiche, ' + RCK + ' 2.1)',
+        recipe=[D('One shaped recipe + one sequenced assembly (as Brewin\' pizza, ' + RCK + ' 2.1)',
                   lambda m: m.at('Crafting') and m.at('Sequenced assembly')),
-                P('Pizza: 8 slices per pizza, dearer dough and cheese; Brewin\' pizzas merge into Deluxe Pizza, plus a '
-                  'Tropical Pizza (pineapple, bacon)', T('dishes/meals #5', 'dishes/meals #26', 'dishes/meals #27',
-                                                         'baking/baked-goods #20')),
-                P('Quiche: a pie variant for vegetables; lasagna needs a baking dish item', T('baking/baked-goods #19',
-                                                                                              'baking/baked-goods #21'))]),
-    'bake/slice': dict(
+                P('8 slices per pizza, dearer dough and cheese; Brewin\' pizzas merge into Deluxe Pizza, plus a Tropical Pizza '
+                  '(pineapple, bacon)', T('dishes/meals #5', 'dishes/meals #26', 'dishes/meals #27', 'baking/baked-goods #20'))]),
+    'pizza/slice': dict(
         place=[D('Small Food Plate', placed_on('small_plate'))],
-        recipe=[D('Cutting Board: whole bake -> slices', board)]),
+        recipe=[D('Cutting Board: whole pizza -> slices', board)]),
+    'quiche': dict(
+        can=[R('Per item, can parity 2.25', CP, CAN)],
+        place=[D('see subfamilies')],
+        recipe=[D('see subfamilies')]),
+    'quiche/whole': dict(
+        place=[R('Own block', PF, placed_on('block', 'sneak'))],
+        recipe=[D('Shaped recipe on a pie crust + one sequenced assembly on a pie crust (as Brewin\' quiche, ' + RCK + ' 2.1)',
+                  lambda m: m.at('Crafting', ['pie_crust']) and m.at('Sequenced assembly')),
+                P('Quiche: a pie variant for vegetables', T('baking/baked-goods #19'))]),
+    'quiche/slice': dict(
+        place=[D('Small Food Plate', placed_on('small_plate'))],
+        recipe=[D('Cutting Board: whole quiche -> slices', board)]),
+    'lasagna': dict(
+        can=[R('Per item, can parity 2.25', CP, CAN)],
+        place=[D('see subfamilies')],
+        recipe=[D('see subfamilies')]),
+    'lasagna/whole': dict(
+        place=[R('Own block', PF, placed_on('block', 'sneak'))],
+        recipe=[D('Cooking Pot (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
+                P('Lasagna needs a baking dish item', T('baking/baked-goods #21'))]),
+    'lasagna/serving': dict(
+        recipe=[D('Taken from the pan, or Cooking Pot + heatless grid route', lambda m: m.at('Cooking Pot') or m.at('Crafting'))]),
     'snack': dict(
         can=[R('Per item, can parity 2.25', CP, CAN)],
         place=[D('none required')],
@@ -1364,7 +1446,16 @@ def main():
 
     cat, foods, blocks, recipes, dump_place, tags, key_val, types, place_keys = load()
     rows = build_rows(cat, foods, blocks)
-    for k in types['excluded']:
+    add_dough_rows(rows, key_val)
+    removed = (INSTANCE / 'kubejs/startup_scripts/_lib/removed_items.js').read_text()
+    removed = removed[removed.index('global.removedItems'):]
+    removed = re.findall(r'i\.(\w+)', removed[:removed.index(']')])
+    # merged items (the old id of each [old, new] pair): the pack's list and Creative Delight's <mod>/item_merges.js
+    cd = INSTANCE / 'development/creativeDelight/src/main/resources/kubejs_startup'
+    for f in [INSTANCE / 'kubejs/startup_scripts/_lib/item_merges.js', *sorted(cd.glob('*/item_merges.js'))]:
+        if f.exists():
+            removed += re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', f.read_text())
+    for k in [*types['excluded'], *removed]:
         if key_val.get(k) in rows:
             rows[key_val[k]]['excluded'] = True
     fam_of, skipped = OrderedDict(), []
@@ -1372,7 +1463,7 @@ def main():
         f = classify(r)
         if f is SKIP:
             why = ('sequenced assembly intermediate' if 'incomplete' in r['p'] else
-                   'removed from the pack' if r.get('excluded') else
+                   'removed or merged' if r.get('excluded') else
                    'food container' if 'lunch' in r['p'] else 'not food (black powder)')
             skipped.append((i, why))
             continue

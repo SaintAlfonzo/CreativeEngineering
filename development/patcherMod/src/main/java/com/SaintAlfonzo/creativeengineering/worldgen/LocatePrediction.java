@@ -32,7 +32,8 @@ import java.util.function.Predicate;
  *  - Per-member frequency (StructureFrequencies, already in the prediction before this class); a member's biome
  *    factor (a group's biome_frequency) once the generation point is known, in plain().
  *  - Stage B (foldBiomes): the biome at the generation point, with the biome rules and fits, the same test
- *    Structure#generate makes; vanilla's prediction only finds the point.
+ *    Structure#generate makes; vanilla's prediction only finds the point. Where biome entries tie, every tied biome
+ *    must fail (TiedBiomes), since the lookup depends on the thread's history.
  *  - Meta structures and replacements keep their own prediction (MetaSlots), which already tested biomes.
  *
  * Each "no" is counted per stage for the current search (LocateStats).
@@ -89,14 +90,17 @@ public final class LocatePrediction {
 
 	/**
 	 * A member of a group with biome_frequency rolls frequency x the factor of the biome at its generation point
-	 * (StructureFrequencies), the same roll generation makes: a miss is a certain "no". Not for the dummy point a
+	 * (StructureFrequencies), the same roll generation makes: a miss for every biome the point could be (TiedBiomes)
+	 * is a certain "no". Not for the dummy point a
 	 * failed prediction returns (no pieces; the chunk load decides).
 	 */
 	static Optional<Structure.GenerationStub> biomeFactor(Structure structure, Structure.GenerationContext ctx, Optional<Structure.GenerationStub> stub) {
 		if (stub.isEmpty() || !StructureFrequencies.hasBiomeFactors(structure)) return stub;
 		try {
-			if (StructureFrequencies.factorRejects(structure, ctx.seed(), ctx.chunkPos(),
-					StructureFrequencies.biomeAt(ctx.chunkGenerator(), ctx.randomState(), stub.get().position()))) {
+			BlockPos p = stub.get().position();
+			if (!TiedBiomes.any(ctx.chunkGenerator().getBiomeSource(), ctx.randomState().sampler(), QuartPos.fromBlock(p.getX()),
+					QuartPos.fromBlock(p.getY()), QuartPos.fromBlock(p.getZ()),
+					b -> !StructureFrequencies.factorRejects(structure, ctx.seed(), ctx.chunkPos(), b))) {
 				LocateStats.predictedNo(LocateStats.Stage.FREQUENCY);
 				return Optional.empty();
 			}
@@ -123,8 +127,8 @@ public final class LocatePrediction {
 				return stub;
 			}
 			BlockPos p = stub.get().position();
-			if (biomes.test(ctx.chunkGenerator().getBiomeSource().getNoiseBiome(QuartPos.fromBlock(p.getX()), QuartPos.fromBlock(p.getY()),
-					QuartPos.fromBlock(p.getZ()), ctx.randomState().sampler()))) return stub;
+			if (TiedBiomes.any(ctx.chunkGenerator().getBiomeSource(), ctx.randomState().sampler(), QuartPos.fromBlock(p.getX()),
+					QuartPos.fromBlock(p.getY()), QuartPos.fromBlock(p.getZ()), biomes)) return stub;
 			if (count) LocateStats.predictedNo(LocateStats.Stage.BIOME);
 			return Optional.empty();
 		} catch (RuntimeException e) {

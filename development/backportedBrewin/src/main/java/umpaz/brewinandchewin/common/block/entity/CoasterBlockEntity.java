@@ -25,8 +25,6 @@ import vectorwing.farmersdelight.common.block.entity.SyncedBlockEntity;
 
 public class CoasterBlockEntity extends SyncedBlockEntity {
    public final NonNullList<ItemStack> inventory = NonNullList.withSize(4, ItemStack.EMPTY);
-   /** Port: loaded from a 2.0 item coaster; its block state still says size 0. */
-   private boolean legacySizeFix = false;
 
    public CoasterBlockEntity(BlockPos pos, BlockState state) {
       super(BnCBlockEntityTypes.COASTER, pos, state);
@@ -108,31 +106,6 @@ public class CoasterBlockEntity extends SyncedBlockEntity {
       super.load(nbt);
       this.inventory.clear();
       ContainerHelper.loadAllItems(nbt, this.inventory);
-      // Port: a 2.0 item coaster kept its one item in an ItemStackHandler ("Inventory"); it becomes slot 0. The block
-      // remap sets the coaster's size to 1 (forge/registry/BnCRemaps).
-      if (nbt.contains("Inventory", 10) && !nbt.contains("Items", 9)) {
-         CompoundTag old = nbt.getCompound("Inventory");
-         net.minecraftforge.items.ItemStackHandler handler = new net.minecraftforge.items.ItemStackHandler(1);
-         handler.deserializeNBT(old);
-         this.inventory.set(0, handler.getStackInSlot(0).copy());
-         this.legacySizeFix = !this.inventory.get(0).isEmpty();
-      }
-   }
-
-   @Override
-   public void onLoad() {
-      super.onLoad();
-      if (this.legacySizeFix && this.level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
-         this.legacySizeFix = false;
-         BlockPos pos = this.getBlockPos();
-         // Not during chunk loading itself: on the server's next task run.
-         serverLevel.getServer().execute(() -> {
-            BlockState state = serverLevel.getBlockState(pos);
-            if (serverLevel.getBlockEntity(pos) == this && state.getBlock() instanceof CoasterBlock && state.getValue(CoasterBlock.SIZE) == 0) {
-               serverLevel.setBlockAndUpdate(pos, state.setValue(CoasterBlock.SIZE, 1));
-            }
-         });
-      }
    }
 
    @Override

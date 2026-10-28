@@ -9,9 +9,6 @@ plugins {
 }
 
 repositories {
-    flatDir {
-        dir 'libs'
-    }
     mavenCentral()
 }
 
@@ -23,6 +20,10 @@ configurations {
 dependencies {
     // Third-party mod jars copied from ../mods (git-ignored). They are SRG-named, see the note below.
     compileOnly fileTree(dir: 'libs', include: '*.jar')
+    // In-tree ports, compiled against the project (never a copied jar): the coaster renderer offset
+    // (CoasterRendererOffsetMixin) and the dish blocks (compat/DisplayDelightDishBlocks).
+    compileOnly project(':backportedBrewin')
+    compileOnly project(':backportedDisplay')
 
     // Markdown parser for the changelog screen (changelog/ChangelogMarkdown). BSD-2-Clause, see NOTICE-commonmark.txt.
     shade 'org.commonmark:commonmark:0.21.0'
@@ -48,14 +49,6 @@ tasks.named('jar', Jar).configure {
     from(relocateCommonmark.map { zipTree(it.archiveFile) }) {
         exclude 'META-INF/**'
     }
-}
-
-// This project ships no Mixin refmap (the org.spongepowered.mixin Gradle plugin is not
-// applied) and only ever runs reobfuscated. Mixins that target Minecraft classes therefore
-// use SRG member names with remap = false; disable the AP target validator so it does not
-// reject those names against the dev-time (Mojmap) classes.
-tasks.named('compileJava', JavaCompile).configure {
-    options.compilerArgs << '-AdisableTargetValidator=true'
 }
 
 publishing {

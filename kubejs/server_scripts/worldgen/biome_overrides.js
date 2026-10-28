@@ -9,8 +9,9 @@
 // The solver is patcherMod's BiomeLayoutTuner (Java: it brute-forces ~1700 climate entries against
 // every sample, too slow for Rhino). It runs here, in ServerEvents.highPriorityData, which KubeJS
 // fires while the world's datapacks load (world creation included), and the edited dimension
-// layouts go into KubeJS's top-priority virtual datapack. Results are cached, so /reload with
-// nothing edited doesn't re-solve. Solver stats (share_pct / result_pct / note) are written back
+// layouts go into KubeJS's top-priority virtual datapack. Results are cached in memory and on disk
+// (generation_scripts/worldgen/biome_layout_cache.json.gz, ships with the pack), so /reload and a new
+// launch with nothing edited don't re-solve. Solver stats (share_pct / result_pct / note) are written back
 // into biome_config.json when they change.
 //
 // Wrapped in an IIFE: all server scripts share one top-level scope.
@@ -28,7 +29,7 @@
 	ServerEvents.highPriorityData(function (event) {
 		var result = Tuner.run()
 		if (result.isFromCache()) {
-			console.info(TAG + 'inputs unchanged, reusing the last solve')
+			console.info(TAG + 'inputs unchanged, reusing the last solve (' + result.getCacheSource() + ')')
 		} else {
 			each(result.getMessages(), function (m) { console.info(TAG + m) })
 		}

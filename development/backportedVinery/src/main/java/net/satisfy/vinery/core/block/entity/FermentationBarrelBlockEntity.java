@@ -137,43 +137,6 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
         this.fermentationTime = nbt.getInt("FermentationTime");
         this.fluidLevel = nbt.getInt("FluidLevel");
         this.juiceType = nbt.getString("JuiceType");
-        if (!nbt.contains("FluidLevel") && !nbt.contains("JuiceType")) {
-            convertLegacyLayout();
-        }
-    }
-
-    /** Port (W3): 1.3.10 barrels kept slot 0 bottles, 1-4 ingredients (juice was an ingredient), 5 output. */
-    private final List<ItemStack> legacyOverflow = new ArrayList<>();
-
-    private void convertLegacyLayout() {
-        NonNullList<ItemStack> old = this.inventory;
-        this.inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
-        this.inventory.set(WINE_BOTTLE_SLOT, old.get(0));
-        this.inventory.set(OUTPUT_SLOT_GENERAL, old.get(5));
-        int nextIngredient = 1;
-        for (int i = 1; i <= 4; i++) {
-            ItemStack stack = old.get(i);
-            if (stack.isEmpty()) {
-                continue;
-            }
-            String type = JuiceUtil.getJuiceType(stack);
-            if (!type.isEmpty() && (this.juiceType.isEmpty() || this.juiceType.equals(type))) {
-                int per = Math.max(1, PlatformHelper.getMaxFluidIncrease());
-                while (!stack.isEmpty() && this.fluidLevel + per <= PlatformHelper.getMaxFluidLevel()) {
-                    this.juiceType = type;
-                    this.fluidLevel += per;
-                    stack.shrink(1);
-                    legacyOverflow.add(new ItemStack(ObjectRegistry.WINE_BOTTLE.get()));
-                }
-            }
-            if (!stack.isEmpty()) {
-                if (nextIngredient <= 3) {
-                    this.inventory.set(nextIngredient++, stack);
-                } else {
-                    legacyOverflow.add(stack);
-                }
-            }
-        }
     }
 
     @Override
@@ -207,14 +170,6 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
 
     public static void tick(Level level, BlockPos pos, FermentationBarrelBlockEntity blockEntity) {
         if (level.isClientSide) return;
-
-        if (!blockEntity.legacyOverflow.isEmpty()) {
-            for (ItemStack stack : blockEntity.legacyOverflow) {
-                Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, stack);
-            }
-            blockEntity.legacyOverflow.clear();
-            blockEntity.setChanged();
-        }
 
         if (blockEntity.fluidLevel == 0 && !blockEntity.juiceType.isEmpty()) {
             blockEntity.setJuiceType("");

@@ -97,7 +97,7 @@ the item is in either hand. Tooltip headers: "On hit, inflicts to target:" (with
 | | CDD original | Pack |
 |---|---|---|
 | Effect 1 | Resistance II | Night Vision, at least 300 ticks (CDD's 60 would strobe: Night Vision flashes under about 200) |
-| Effect 2 | Strength II | `better_beacons:phantom_bane`, CDD's duration and amplifier (so level II, F7); stays Strength if Better Beacons is missing |
+| Effect 2 | Strength II | `better_beacons:phantom_bane`, CDD's duration, level I (F7, fixed 2026-10-28; Night Vision too); stays Strength if Better Beacons is missing |
 | Tooltip | "Resistance II / Strength II (infinite)" | "Night Vision / Phantom Bane (infinite)" |
 
 The check that all four pieces are worn is CDD's; the mixin only swaps the two `addEffect` arguments.
@@ -110,7 +110,7 @@ The check that all four pieces are worn is CDD's; the mixin only swaps the two `
 - **What counts:** vanilla's magic flag: poison and Instant Damage, evoker fangs, thorns, the warden's sonic boom,
   dragon's breath clouds, and modded sources that set the flag. Not the pack's own `magic` damage tag (F6).
 - **Where it comes from:** felsic and dragon set bonuses (level I), the potions (base 3:00, long 8:00, strong
-  1:30 at II, from `MagicResistancePotions`), `/effect`. Felsic gear assembly fills with it (see
+  1:30 at II, from `CEPotions`), `/effect`. Felsic gear assembly fills with it (see
   [gear_tuning.md](gear_tuning.md)).
 - **Effect description:** still `TODO` in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) line 11
   (one of the JEED rows in [TODO](todo/TODO.md) `ui/effects #1`).
@@ -195,6 +195,9 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
   whether Better Beacons scales Phantom Bane with level; if it does, either drop the amplifier to 0 or say "II".
   Checked 2026-10-21 (Better Beacons 1.0.2 jar): its only consumer, `PhantomSpawnerMixin`, tests `hasEffect`, so the
   level does nothing; amplifier 0 is cosmetic ([briefs/potions_effects.md](briefs/potions_effects.md)).
+  FIXED 2026-10-28 (owner: Phantom Bane is levelless, like Night Vision): the mixin gives both echo effects amplifier 0,
+  and patcherMod `CEPotions` registers no strong Phantom Bane potion (the glowstone mix is gone from `potions.js`).
+  Scratch SQ-CM-07, SQ-CM-08.
 - **F8. One effect packet per effect per tick, unmeasured.** Re-adding an effect with a longer duration fires
   `onEffectUpdated`, which syncs the effect to the client. A dragon set plus a held dragon tool is 8 updates a
   player a tick. [perf.md](perf.md) only measured the horse walk. A cheaper version re-adds only when under, say, 20
@@ -270,7 +273,7 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
 - [ ] **AE-09 Echo tooltip:** hover an echo piece → "Night Vision (infinite)" and "Phantom Bane (infinite)", nothing
   about Resistance or Strength, and no second "With full set on" block.
 - [ ] **AE-10 Phantom Bane level (F7):** with the echo set, `/data get entity @s ActiveEffects` → note Phantom Bane's
-  Amplifier (expected 1).
+  Amplifier (expected 0 since 2026-10-28, F7).
 - [ ] **AE-11 Horse armor:** put dragon horse armor on a tamed horse, wait 5 s, damage it → it regenerates; its
   ActiveEffects shows Regeneration (Amplifier 0). Take the armor off → gone within 7 s.
 - [ ] **AE-12 Horse interval:** set `[perf] mountEffectIntervalTicks = 20` → newly equipped armor works within 1 s.
@@ -309,3 +312,5 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
 - 2026-10-22: F4 fixed, dragon bow and crossbow on-hit and held swapped; AE-19 and AE-20 rewritten.
 - 2026-10-22 (second bulk run): F10 found and fixed (no on-hit tool effect had ever applied); SQ-GM-02 then PASS on
   the scratch server. Held effects of AE-19 / AE-20 stay in game.
+- 2026-10-27: horse pass moved to one `ServerEvents.tick`, skipping dimensions without a player ([perf.md](perf.md)
+  10.4). Scratch SQ-HT-01 / -02 queued; AE-11 / AE-12 unchanged.

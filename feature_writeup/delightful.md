@@ -29,7 +29,9 @@ Owner decisions of 2026-10-25 are marked **Decided**. Status per row: Built / Wa
 
 **Decided:** all of these come in. **Built 2026-10-25** in the repack's overlay (3), recipes in Creative Delight's
 `delightful/recipes.js` (3.2), except the Mulberry Pie (dropped, below). Cantaloupe and Hami melon (Mini Melon) will be
-merged eventually, so the cantaloupe line should not grow more than the rows below.
+merged eventually, so the cantaloupe line should not grow more than the rows below. **Merged 2026-10-28**
+([item_merges.md](item_merges.md) 2.10): this Cantaloupe is the Mini Cantaloupe (seeds: Mini Cantaloupe Seeds), the
+slice stays, the popsicle is Fruits Delight's, the wild patch grows in the hamimelon biomes.
 
 | Item | Needs | Note |
 |---|---|---|

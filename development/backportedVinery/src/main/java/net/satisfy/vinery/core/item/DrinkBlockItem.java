@@ -117,7 +117,7 @@ public class DrinkBlockItem extends BlockItem {
         addFoodEffectLines(tooltip);
         getBottleSize().addSizeLines(tooltip);
 
-        if (level != null && ages() && (WineYears.hasWineYear(stack) || WineYears.hasLegacyYear(stack))) {
+        if (level != null && ages() && WineYears.hasWineYear(stack)) {
             VintageClock.Snapshot clock = VintageClock.of(level);
             tooltip.add(Component.empty());
             int ageYears = Math.max(0, WineYears.getWineAgeYears(stack, level));
@@ -154,7 +154,6 @@ public class DrinkBlockItem extends BlockItem {
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemStack, Level level, @NotNull LivingEntity livingEntity) {
         WineEffects.WineEffect wineEffect = WineEffects.get(this);
         if (!level.isClientSide && wineEffect != null) {
-            WineYears.convertLegacy(itemStack, level);
             if (!WineYears.hasWineYear(itemStack)) {
                 WineYears.setWineYear(itemStack, level);
             }
@@ -222,7 +221,6 @@ public class DrinkBlockItem extends BlockItem {
         super.inventoryTick(stack, level, entity, slot, selected);
 
         if (!level.isClientSide) {
-            WineYears.convertLegacy(stack, level);
             if (!WineYears.hasWineYear(stack)) {
                 WineYears.setWineYear(stack, level);
             } else {

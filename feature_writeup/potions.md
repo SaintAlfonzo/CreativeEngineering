@@ -77,9 +77,9 @@ KubeJS's potion registry runs before any mod's mob effects exist, so potions for
 
 | Potion | Effect | Reagent | Class |
 |---|---|---|---|
-| Long Reach | `better_beacons:long_reach` | wrappist shard (Geode+) | `BetterBeaconsPotions` |
-| Phantom Bane | `better_beacons:phantom_bane` | celestite shard (Geode+) | `BetterBeaconsPotions` (must be Better Beacons' real effect object: its phantom-spawn check compares by identity) |
-| Magic Resistance | `creativeengineering:magic_resistance` | amethyst shard (**placeholder**) | `MagicResistancePotions` ([armor_effects.md](armor_effects.md) 2.5) |
+| Long Reach | `better_beacons:long_reach` | wrappist shard (Geode+) | `CEPotions` |
+| Phantom Bane | `better_beacons:phantom_bane` | celestite shard (Geode+) | `CEPotions` (must be Better Beacons' real effect object: its phantom-spawn check compares by identity) |
+| Magic Resistance | `creativeengineering:magic_resistance` | amethyst shard (**placeholder**) | `CEPotions` ([armor_effects.md](armor_effects.md) 2.5) |
 
 ### 2.3 Other mods' potions made to work everywhere
 
@@ -214,7 +214,7 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
 - [client_scripts/fluid_jei.js](../kubejs/client_scripts/fluid_jei.js): fluids in JEI's list.
 - [server_scripts/tags/fluidtags.js](../kubejs/server_scripts/tags/fluidtags.js): `#forge:fluid/potion`, `#forge:fluid/dragon_breath`.
 - patcherMod [fluidbrewing/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/fluidbrewing/): `DragonBreathBrewing`, `Lingerification`, `PotionMixDedup`; run from common setup (`CreativeEngineering.java` lines 287-288).
-- patcherMod [potion/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/): `BetterBeaconsPotions`, `MagicResistancePotions` (registered line 85-86).
+- patcherMod [potion/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/): `CEPotions` (one `DeferredRegister<Potion>` over a row table: effect, optional required mod, base / long / strong trio; Better Beacons rows skipped without the mod; registered in `CreativeEngineering.java`).
 - Mixins: [PotionRecipeGeneratorsMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionRecipeGeneratorsMixin.java), [PotionHelperMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionHelperMixin.java), [PotionMixingRecipesMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionMixingRecipesMixin.java), [MechanicalMixerBlockEntityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MechanicalMixerBlockEntityMixin.java), [FluidTagInputMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/FluidTagInputMixin.java), [PotionFluidHandlerMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/PotionFluidHandlerMixin.java), [SpoutCategoryMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SpoutCategoryMixin.java), [ItemDrainCategoryMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemDrainCategoryMixin.java), [JEIHelperMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/JEIHelperMixin.java), and the IE category tooltip mixins (Mixer, BottlingMachine, Refinery, Squeezer, Fermenter `...RecipeCategoryMixin`).
 - JEI: [compat/DragonBreathingJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java) (registers both pages), [AutomatedPotionMixingCategory](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/AutomatedPotionMixingCategory.java), [LingerificationCategory](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/LingerificationCategory.java), [PotionFluidTooltip](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/PotionFluidTooltip.java); lang keys in patcherMod `assets/creativeengineering/lang/en_us.json`.
 - Not here: the dragon-breathing fan type (backlog row 6), potion buckets and machine-tipped arrows ([potion_buckets.md](potion_buckets.md)), effects on gear ([armor_effects.md](armor_effects.md)).
@@ -290,3 +290,25 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
 ## Owner ideas (scratchpad 2026-10-26)
 
 - Every vanilla effect (luck, haste, ...) brewable through the pack's own systems, overriding other mods' routes: `potions/potions #10`. Luck in JEI is N-05.
+
+## 9. Owner effect change list (scratchpad 2026-10-27)
+
+TODO rows: `potions/effects` (last rows). Nothing here is built.
+
+- Knockback resistance: bear hair or crab claw can be brewed for it and drops Resilience.
+- Agility / climbing: swap every Agility to Climbing, durations unchanged.
+- Restful: drop it, and drop the flare mob and every reference to it.
+- Caffeinated: make Phantom Bane a sub-effect. First determine which phantom prevention is better, then add a
+  'Phantom Bane' line to the 'When applied:' tooltip. Extend the effect description system so compound effects list
+  their parts accurately.
+- Teleport: move every chorus effect to Teleport.
+- Power Outage: remove.
+- Stimulation: a compound of Refreshing and Sweetening; behaviour unchanged.
+- Recovering: compound; identify every other compound effect.
+- Golden apple (wine): find a better 'best effect'; compound as is, updated if it changes; rename it if unchanged.
+- Double jump: compound.
+- Copper poisoning (new): from wearing or carrying fully oxidized copper gear for too long. Damage dealing is replaced by
+  plain Poison. Every 5 minutes (+- 2 minutes random, configurable) while a fully oxidized piece is worn or in the
+  hotbar or offhand, roll for the effect; more fully oxidized pieces raise the chance; the poison is short and its
+  duration grows with the piece count. Analyse the performance cost of scanning for oxidized gear first.
+- Oiled: remove it from fish oil; decide where the effect comes from (a chemical thrower without igniter?).

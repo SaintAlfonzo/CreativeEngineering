@@ -9,6 +9,5 @@
 
 [Compatibility]
 	#Overlay texture will be drawn over salted foods. Disable if there's an issue with rendering items.
-	#Creative Engineering: off, patcherMod draws the salt overlay together with the pack seasonings' (food/SeasonedItemModel).
 	SaltingOverlayEnabled = false
 

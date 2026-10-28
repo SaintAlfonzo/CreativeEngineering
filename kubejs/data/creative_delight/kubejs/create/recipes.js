@@ -11,6 +11,11 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Bread rolls ####################
+		// Sweet roll and the Create Factory rolls took only vanilla bread; any bread works (creativeengineering/bread_tags.js)
+		R.replaceInput([{ id: 'create:filling/sweet_roll' }, { id: /^create_factory:(caramel|chocolate|dark_chocolate|honey|ruby_chocolate|white_chocolate)_roll$/ }],
+			i.minecraft_bread, i.t_bread, e)
+
 		//######################### Egg solution #########################
 		// The pack's egg solution fluid (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js, TODO dishes/ingredients #2). Mixer: 1 egg + 250 mB
 		// milk -> 500 mB. Each 250 mB stands in for one egg and its milk, so an egg goes twice as far in the mixer and spout.

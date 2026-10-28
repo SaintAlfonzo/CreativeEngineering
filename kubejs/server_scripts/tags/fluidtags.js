@@ -84,13 +84,8 @@ ServerEvents.tags('fluid', e => {
 	t.remove(e, 'forge:fluid/potion', f.ie_potion)
 
 		// ── XP fluid merge: Create's Liquid Experience is the ONLY #forge:experience ──
-	;['create_enchantment_industry:experience',
-	  'create_enchantment_industry:flowing_experience']
-		.forEach(fl => e.add('forge:experience', fl))
-
-	;['pneumaticcraft:memory_essence', 'pneumaticcraft:memory_essence_flowing',
-	  'sophisticatedcore:xp_still', 'sophisticatedcore:xp_flowing']
-		.forEach(fl => e.remove('forge:experience', fl))
+	t.add(e, 'forge:experience', [f.experience, f.flowing_experience])
+	t.remove(e, 'forge:experience', [f.memory_essence, f.flowing_memory_essence, f.xp_still, f.flowing_xp_still])
 
 
 	// ── forge:fluid only (no meaningful subtag) ────────────────────────────

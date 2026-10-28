@@ -41,14 +41,17 @@ flagged "missing"; "settings" and "patterns" are never touched once they exist.
 
 Run: python3 tools/gen_loot_config.py      then /reload in game.
 """
-import glob
 import json
+import sys
 import math
 import re
 import zipfile
 from collections import OrderedDict, defaultdict
 from datetime import date
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths  # noqa: E402
 
 INSTANCE = Path(__file__).resolve().parent.parent
 MODS_DIR = INSTANCE / 'mods'
@@ -62,11 +65,8 @@ OUT_DIR = INSTANCE / 'kubejs/server_scripts/loot'
 CONFIG_PATH = OUT_DIR / 'loot_config.json'
 INDEX_PATH = OUT_DIR / 'loot_index.json'
 
-# Same lookup as gen_structure_config.py: the Forge "-extra" jar is the one with loose data/ jsons.
-_vanilla_jar_candidates = glob.glob(
-    str(Path.home() / '.local/share/atlauncher/libraries/net/minecraft/client/1.19.2*/*-extra.jar')
-)
-VANILLA_JAR = Path(_vanilla_jar_candidates[0]) if _vanilla_jar_candidates else None
+# The vanilla jar with the loose data/ jsons (tools/pack_paths.py). Its file name lands in loot_config.json ("over").
+VANILLA_JAR = pack_paths.vanilla_jar()
 
 CHEST_TYPE = 'minecraft:chest'
 CHEST_PATH = re.compile(r'(^|/)chests?/')

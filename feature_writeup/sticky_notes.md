@@ -406,7 +406,7 @@ block atlas.
 
 The jars stay installed and unmodified; our code refers to their files by resource location; anything derived is
 built in memory at resource load and never written to disk or shipped. The mechanism is the Vinery port's
-(`UpstreamPacks` registers an in-memory pack on `AddPackFindersEvent`; `BottleLooks` recolours; [alcohol.md](alcohol.md)
+(an in-memory pack added on `AddPackFindersEvent`, now the shared `BuiltInPacks.addMemory`, [pack_tooling.md](pack_tooling.md) 2.8; `BottleLooks` recolours; [alcohol.md](alcohol.md)
 B4.8). Our own code, so it can be copied over.
 
 | Piece | Source | How |

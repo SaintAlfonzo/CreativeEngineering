@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.SaintAlfonzo.creativeengineering.CreativeEngineering;
+import com.SaintAlfonzo.creativeengineering.compat.jei.JeiArrow;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -27,9 +28,7 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.item.ItemStack;
 
 /**
  * One world-interaction tab ({@link WorldTab}): inputs | action over the arrow -> outputs, with note lines under.
@@ -39,8 +38,7 @@ import net.minecraft.world.item.ItemStack;
  *            [action]
  * [in][in][in] ---->  [out][out][out]
  *                     [out][out][out]
- * note line 1
- * note line 2
+ * notes, joined into one paragraph and wrapped
  * </pre>
  * An output under 100% shows its chance under the slot (single output row) and in its tooltip. Effect and "Nothing"
  * slots are drawn here and get their tooltip from {@link #getTooltipStrings}; so do notes cut off after 3 lines.
@@ -48,8 +46,6 @@ import net.minecraft.world.item.ItemStack;
 @ParametersAreNonnullByDefault
 public class WorldInteractionCategory implements IRecipeCategory<WorldRow> {
 
-    /** The same arrow as Feast Plating. */
-    private static final ResourceLocation GUI = new ResourceLocation("jei", "textures/gui/gui_vanilla.png");
     private static final int WIDTH = 160;
     private static final int ROW_Y = 19;
     private static final int ACTION_X = 62;
@@ -65,14 +61,16 @@ public class WorldInteractionCategory implements IRecipeCategory<WorldRow> {
     private final IDrawable icon;
     private final IDrawableStatic slot;
     private final IDrawableStatic arrow;
+    private final WorldSlotRenderer slotRenderer;
 
-    public WorldInteractionCategory(IGuiHelper helper, WorldTab tab, ItemStack iconStack) {
+    public WorldInteractionCategory(IGuiHelper helper, WorldTab tab, IDrawable icon, WorldSlotRenderer slotRenderer) {
         this.tab = tab;
         this.type = type(tab);
+        this.slotRenderer = slotRenderer;
         background = helper.createBlankDrawable(WIDTH, NOTES_Y + NOTE_LINES * 10);
-        icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, iconStack);
+        this.icon = icon;
         slot = helper.getSlotDrawable();
-        arrow = helper.createDrawable(GUI, 82, 128, 24, 17);
+        arrow = JeiArrow.create(helper);
     }
 
     public static RecipeType<WorldRow> type(WorldTab tab) {
@@ -125,11 +123,12 @@ public class WorldInteractionCategory implements IRecipeCategory<WorldRow> {
     }
 
     /** Null for a drawn-only slot. */
-    private static IRecipeSlotBuilder slot(IRecipeLayoutBuilder builder, RecipeIngredientRole role, int x, int y, WorldRow.Ing ing) {
+    private IRecipeSlotBuilder slot(IRecipeLayoutBuilder builder, RecipeIngredientRole role, int x, int y, WorldRow.Ing ing) {
         if (ing.drawnOnly()) return null;
         IRecipeSlotBuilder slot = builder.addSlot(role, x, y);
         if (!ing.items().isEmpty()) {
             slot.addItemStacks(ing.items());
+            if (WorldSlotRenderer.wanted(ing.items())) slot.setCustomRenderer(VanillaTypes.ITEM_STACK, slotRenderer);
         } else {
             slot.addIngredients(ForgeTypes.FLUID_STACK, ing.fluids());
             slot.setFluidRenderer(1000, false, 16, 16);
@@ -177,14 +176,30 @@ public class WorldInteractionCategory implements IRecipeCategory<WorldRow> {
             }
         }
         int line = 0;
-        for (String note : row.notes()) {
-            List<FormattedCharSequence> wrapped = font.split(FormattedText.of(note), WIDTH);
-            for (FormattedCharSequence part : wrapped) {
-                if (line == NOTE_LINES) return;
-                font.draw(poseStack, part, 0, NOTES_Y + line * 10, TEXT);
-                line++;
-            }
+        for (FormattedCharSequence part : font.split(FormattedText.of(notes(row)), WIDTH)) {
+            if (line == NOTE_LINES) return;
+            font.draw(poseStack, part, 0, NOTES_Y + line * 10, TEXT);
+            line++;
         }
+    }
+
+    /**
+     * The notes as one paragraph, so a short note shares a line with the one before it; a note that doesn't end in
+     * punctuation gets a full stop first.
+     */
+    private static String notes(WorldRow row) {
+        StringBuilder out = new StringBuilder();
+        for (String note : row.notes()) {
+            String text = note.strip();
+            if (text.isEmpty()) continue;
+            if (!out.isEmpty()) {
+                char last = out.charAt(out.length() - 1);
+                if (".!?:;,".indexOf(last) < 0) out.append('.');
+                out.append(' ');
+            }
+            out.append(text);
+        }
+        return out.toString();
     }
 
     @Override
@@ -200,10 +215,7 @@ public class WorldInteractionCategory implements IRecipeCategory<WorldRow> {
     }
 
     private static boolean notesCut(WorldRow row) {
-        Font font = Minecraft.getInstance().font;
-        int lines = 0;
-        for (String note : row.notes()) lines += font.split(FormattedText.of(note), WIDTH).size();
-        return lines > NOTE_LINES;
+        return Minecraft.getInstance().font.split(FormattedText.of(notes(row)), WIDTH).size() > NOTE_LINES;
     }
 
     private interface SlotVisitor {

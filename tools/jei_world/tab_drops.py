@@ -76,7 +76,7 @@ def _item_dict():
 
 
 def removed_and_merges():
-    """(removed item ids, {old id: new id}) from removed_items.js, item_merges.js and removed_woods.js."""
+    """(removed item ids, {old id: new id}) from removed_items.js, removed_woods.js and every item_merges.js."""
     vals = _item_dict()
     removed, merges = set(), {}
     src = (LIB / 'removed_items.js').read_text(encoding='utf-8')
@@ -84,8 +84,9 @@ def removed_and_merges():
     for key in re.findall(r'i\.(\w+)', body):
         if key in vals:
             removed.add(vals[key])
-    for name in ('item_merges.js', 'removed_woods.js'):
-        p = LIB / name
+    # the pack's merges, then Creative Delight's food lists (<mod>/item_merges.js, item_merges.md 1.1)
+    cd = ROOT / 'development/creativeDelight/src/main/resources/kubejs_startup'
+    for p in [LIB / 'item_merges.js', LIB / 'removed_woods.js', *sorted(cd.glob('*/item_merges.js'))]:
         if not p.exists():
             continue
         for a, b in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.(\w+)\s*\]', p.read_text(encoding='utf-8')):
@@ -179,13 +180,20 @@ def jar_nbt(fluid_id, count, color):
     return '{BlockEntityTag:{FluidHolder:{Fluid:"%s",Count:%d,CachedColor:%d}}}' % (fluid_id, count, color)
 
 
+POTION_BOTTLES = ('minecraft:potion', 'minecraft:splash_potion', 'minecraft:lingering_potion')
+
+
 def filled_ing(ids, fluid_id):
     """The filled container slot; water and potions are minecraft:potion told apart by NBT."""
     if ids == ['minecraft:potion'] and fluid_id.endswith(':water'):
         return item('minecraft:potion', nbt='{Potion:"minecraft:water"}')
-    if any(i in ('minecraft:potion', 'minecraft:splash_potion', 'minecraft:lingering_potion') for i in ids):
-        return items(ids, nbt='{Potion:"minecraft:swiftness"}', label='Any potion')
     return items(ids) if len(ids) > 1 else item(ids[0])
+
+
+def is_potion_row(ids, fluid_id):
+    """Potion bottles into a jar: the row is written once and marked per_potion; patcherMod's PotionRows makes one row
+    per potion (bottles with the potion, jars with its NBT and colour)."""
+    return not fluid_id.endswith(':water') and any(i in POTION_BOTTLES for i in ids)
 
 
 def jar_rows(ctx, pack):
@@ -231,14 +239,16 @@ def jar_rows(ctx, pack):
                 if empty == 'minecraft:air':
                     notes.append('Cannot be poured back out.')
                 storage.append(row(inputs, outs, notes=notes, requires=r))
+                if is_potion_row(fresh, fid):
+                    storage[-1]['per_potion'] = True
                 if empty == 'minecraft:air':
                     continue
                 first = fresh[0]
                 out = filled_ing([first], fid)
-                if 'label' in out:
-                    out['label'] = 'The potion that went in'
                 emptying.append(row([item(JAR, nbt=jar_nbt(fid, cap, jar_color(data)), label=f'Holding {cap}'), item(empty)], [out],
                                     notes=[f'Takes {size} of {cap}.'], requires=r))
+                if is_potion_row([first], fid):
+                    emptying[-1]['per_potion'] = True
     if cfg.get('jar_cookies', 'true') == 'true':
         storage.extend(cookie_rows(pack, cap))
     if cfg.get('jar_capture', 'true') == 'true':
@@ -478,11 +488,11 @@ class Glm:
         if self.tool:
             what = self.tool[1]
             if self.optional_knife:
-                n.append(f'Broken with {what}; without, drops itself.')
+                n.append(f'Cut with {what}; drops itself otherwise.')
             elif self.entities:
                 n.append(f'Killed with {what}' + (' by a player.' if self.player_kill else '.'))
             else:
-                n.append(f'Broken with {what}.')
+                n.append(f'Cut with {what}.')
         elif self.player_kill and kill:
             n.append('Killed by a player.')
         if self.on_fire is True:
@@ -661,10 +671,10 @@ def grass_rows(ctx, pack, glms):
                     notes.insert(0, 'Any tool but shears' + (' or a knife.' if any(g.tool for g in extra) else '.'))
                 elif scen == 'knife':
                     action = tag('farmersdelight:straw_harvesters')
-                    notes.insert(0, 'Broken with a knife.')
+                    notes.insert(0, 'Cut with a knife.')
                 else:
                     action = tag('forge:shears')
-                    notes.insert(0, 'Broken with shears.')
+                    notes.insert(0, 'Cut with shears.')
                 req = {ns} | {mod_of(o['item']) for o in outs if 'item' in o}
                 req.discard('minecraft')
                 rows.append(row([block(bid)], outs[:6], action=action, notes=notes[:3], requires=req))

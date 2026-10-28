@@ -64,6 +64,6 @@ ServerEvents.recipes(e => {
 		R.fdCutting(i.corncob, i.any_knife, Item.of(i.corn_seeds, 6), e, 'corncob_kernels')
 		// Corn Popsicle: upstream's shape, the family's ice cubes (frozen/popsicle, food_families.md)
 		R.shaped(i.corn_popsicle, ['  m', 'im ', 'si '], { m: i.t_crops_corn, i: i.t_ice_cubes, s: i.any_stick }, e, 'corn_popsicle')
-		R.shapeless(i.cob_pipe, [i.wooden_rod, i.corncob], e, 'cob_pipe')
+		R.shapeless(i.cob_pipe, [i.any_stick, i.corncob], e, 'cob_pipe')
 	})
 })

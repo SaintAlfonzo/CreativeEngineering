@@ -42,14 +42,8 @@
 		}))
 	}
 
-	// CEConfig is read directly (WorldgenConfig has no getter for this switch yet); any failure (config not loaded,
-	// older jar without the field) counts as on, like WorldgenConfig's fallbacks.
 	function enabled() {
-		try {
-			return Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig').WORLDGEN.systems.mushroomSpawns.get() == true
-		} catch (err) {
-			return true
-		}
+		return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig').mushroomSpawnsEnabled() == true
 	}
 
 	ServerEvents.tags('worldgen/biome', function (event) { S().tags(event) })

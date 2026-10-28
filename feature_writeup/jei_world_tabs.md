@@ -12,6 +12,7 @@ is the build.
 | 19 tabs (section 2) | BUILT 2026-10-22, rows generated or hand-written; not seen in game |
 | `/dumpworldjei` (patcherMod `devtools/WorldJeiDump`, in `/dumpall`) | BUILT, never run. Until it runs, stripping / waxing / dyeing / soaping come from a hand-made fixture (`kubejs/exported/world_jei/tool_pairs.json`, `"_fixture": true`) and mob bucketing has only its manual rows |
 | Moobloom Conversion category (More Mooblooms 1.1.0, rebuilt in place) | BUILT 2026-10-22, not in `mods/` |
+| Tab tweaks ([plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md)): blocks and mobs drawn in slots, notes as one paragraph, one Jar Storage / Jar Fluids row per potion, jar + faucet icon, regenerated tool tabs, "Cut" wording, Lava Interactions, concrete 30 s | BUILT 2026-10-26 (patcherMod built, not in `mods/`: the game was running; data regenerated), not seen in game. Tests JW-19 to JW-27 |
 | Grape Planting category (Backported Vinery 1.5.5-ce-19.2-04, rebuilt in place) | BUILT 2026-10-22, seen in game; slow/fast text rebuilt 2026-10-22, not in `mods/`. TODO `alcohol/vineryport #23` |
 
 **Before a release:** run `/dumpworldjei` then `/cegen run jei_world` (or `python3 tools/gen_jei_world.py`), so
@@ -23,9 +24,23 @@ the fixture rows are replaced. The generator exits 1 and prints a WARNING while 
   `WorldInteractionCategory`, draws every tab: up to 3 inputs, an optional action slot over the arrow (tool, held item,
   trigger stand-in such as a lightning rod), Feast Plating's arrow, up to 6 outputs (chance under the slot and in the
   tooltip), 3 note lines. A tab with no rows doesn't show.
-- **Notes:** 160 px wide, 3 lines, then cut; hovering the note area of a cut row shows the full text. Write them in the
+- **Notes:** joined into one paragraph (a note with no end punctuation gets a full stop), 160 px wide, 3 lines, then
+  cut; hovering the note area of a cut row shows the full text. Since 2026-10-26 no generated or manual row runs past 3
+  lines (estimated with the font's glyph widths); the Java-provider rows (Burning, Campfire) are not measured. Write them in the
   changelog style (section 3.6 of [changelog.md](changelog.md)): terse facts, the tool is already in the action slot
   so don't repeat it ("Right-click: washes the dye out.", not "Right-click with soap to ..."), aim for 2 lines.
+- **Drawn slots (`WorldSlotRenderer`, 2026-10-26):** an entity slot (its spawn egg, or a named name tag) draws the mob
+  itself, feet on the slot floor, turning; the stack stays the egg, so lookups and the tooltip are unchanged. A mob that
+  can't be created on the client or throws while drawing falls back to the egg for the session (log `[jei_world] can't
+  draw`); MCA mobs always do. An itemless block (frosted ice, candle cakes, crops, Create's dyed sails, tall seagrass) is
+  a Barrier named after the block and draws the block's model (crops at their highest age); a block with no model stays
+  the Barrier. Fire is flint and steel, a bubble column a water bucket. Both are marked by NBT keys
+  `CreativeEngineeringJeiEntity` / `CreativeEngineeringJeiBlock` set in `WorldRow`.
+- **Per-potion rows (`PotionRows`, 2026-10-26):** the generator writes the potion soft fluid's jar rows once with
+  `"per_potion": true`; at JEI start each becomes one row per potion (water, awkward, thick, mundane and effectless
+  potions left out): bottles with the potion (normal, splash, lingering, cycling together with the jar of that bottle
+  kind), the jar with Moonlight's `NBT:{Potion, Bottle}` and the potion's colour, Create's potion fluid with its tag.
+  Row format addition: `{"stacks": [{"item", "nbt"}, ...]}` (each stack its own NBT); `"nbt"` also applies to a fluid.
 - **Drawn-only slots:** air outputs are an empty slot, tooltip "Nothing" (was a named barrier); `{"effect": id}` draws
   the mob effect's icon (Campfire Rules' Comfort). Both are drawn by the category, so JEI can't look them up.
 - **Jars:** filled jar icons carry `CachedColor` in `FluidHolder` (the soft fluid's `color`, -1 for none or
@@ -48,15 +63,15 @@ the fixture rows are replaced. The generator exits 1 and prints a WARNING while 
 |---|---|---|
 | Weathering and Growth | Immersive Weathering `block_growths` + its tag-paired built-in rules (`tab_weathering.py`) | 82 |
 | Lightning Conversion | IW lightning growths, copper de-oxidising | 9 |
-| Lava Generation | IW `fluid_generators`, Create and Dreams and Desires fluid interactions, vanilla | 25 |
-| Concrete Hardening | IE liquid concrete (manual) | 2 |
+| Lava Interactions (was Lava Generation) | IW `fluid_generators`, Create and Dreams and Desires fluid interactions, vanilla | 25 |
+| Concrete Hardening | IE liquid concrete (manual); sets after 30 s (patcherMod `IEConcreteSetTimeMixin`, was 32) | 2 |
 | Salt Dissolving and Melting | Salt mod (manual, tags) | 7 |
-| Stripping | `/dumpworldjei` axe strip pairs, IW bark (`tab_tools.py`) | fixture 3 |
-| Waxing and Scraping | honeycomb, axe wax-off and scrape, IW rust, everythingcopper, steel wool | fixture 21 |
-| Block Dyeing | Supplementaries dye-on-block colour sets, Create sails, seats, valve handles | fixture 54 |
-| Soap Washing | Supplementaries soap on blocks, sheep, collars, signs | fixture 13 |
-| Jar Storage | soft fluids (jars + the pack's own), cookie families, mob capture (`tab_drops.py`) | 78 |
-| Jar Fluids | pouring from jars, Supplementaries faucet sources | 67 |
+| Stripping | `/dumpworldjei` axe strip pairs, IW bark (`tab_tools.py`); one row per log pair | 85 (2026-10-26) |
+| Waxing and Scraping | honeycomb, axe wax-off and scrape, IW rust, everythingcopper, steel wool | 503 (2026-10-26) |
+| Block Dyeing | Supplementaries dye-on-block colour sets, Create sails, seats, valve handles | 2177 (2026-10-26) |
+| Soap Washing | Supplementaries soap on blocks, sheep, collars, signs; one row per target, sources cycle | 347 (2026-10-26) |
+| Jar Storage | soft fluids (jars + the pack's own), cookie families, mob capture (`tab_drops.py`); potions one row each (`PotionRows`); icon: jar with a small faucet | 143 + potions |
+| Jar Fluids | pouring from jars, Supplementaries faucet sources; potions one row each | 132 + potions |
 | Knife and Machete Drops | active global loot modifiers needing a knife or machete | 40 |
 | Grass Drops | grass and ground-plant loot tables, IE hemp seeds, straw | 24 |
 | Sample Syringe | KubeJS, one row per filled syringe | 7 |
@@ -80,38 +95,31 @@ pipe-spill collisions; Farmer's Delight bark (cutting board only); candle-skull 
   ultra-warm dimensions, elsewhere the block becomes air (its config comment says water); two IW growths use
   `sky_access`, not a valid tick source; Backported Vinery: shearing a ripe stem drops seed and grapes but only steps
   the stem back one stage, so repeated shearing may duplicate seeds (1.3.10 emptied it). TODO rows open.
-- Unverified details (check in game): concrete sets after about 31 s; DnD milkshake-lava pairing order and chances;
+- Unverified details (check in game): concrete now sets after 30 s (32 s before the mixin, by the javap reading); DnD milkshake-lava pairing order and chances;
   powder snow per faucet pull; bed and framed-sign soap behaviour; whether Create seats and valve handles use the dye;
   MCA zombie-kill conversion path.
 - The axe dump simulates on the world-bottom block under spawn with a fake player; doors skip the Forge event because
   everythingcopper's listener writes the other half even when simulating.
 
-### Planned from the scratchpad (2026-10-24)
+### Tab tweaks (built 2026-10-26, [plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md))
 
-Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). Nothing here is built.
+Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). TODO rows `jei/jei-coverage #7`, `#10`, `#11`,
+`#16` to `#28`, `mobs/mooblooms #6`, `ui/effects #9`.
 
-- [TODO](todo/TODO.md) `jei/jei-coverage #16`, [TODO](todo/TODO.md) `jei/jei-coverage #17`, [TODO](todo/TODO.md) `jei/jei-coverage #18` (Stripping, Soap Washing, Block Dyeing): the tool dump has been run (no
-  `_fixture` key, 0 errors) but `generated.json` was not regenerated after it, so these tabs still show the fixture
-  rows (3, 4 and 5 rows). Run `/cegen run jei_world` first, then decide: Stripping one row per log pair or one cycling
-  row; Soap Washing keeps cycling dyed glass and copper (the generator groups by target) and already covers copper oxidation
-  (its `unoxidise` rule, so the open "should soap remove oxidation" is answered by the data); Block Dyeing cycles every dye
-  input after a load-time check of the up to about 2,500 rows, and the Create sail inputs are added.
-- [TODO](todo/TODO.md) `jei/jei-coverage #19` (bug): itemless blocks (frosted ice, rare ice, bubble column, candle cakes, rice, tall sea grass, tomato vine
-  and stick, attached hamimelon stem) become a renamed Barrier in `WorldRow.blockStack`. Plan: stand-in items (ice, cake),
-  the Budding tab's barrier output becomes the "Nothing" slot, other rows dropped. Open: stand-in or drop per block.
-- [TODO](todo/TODO.md) `jei/jei-coverage #20` (bug): Burning notes are separate strings per row (`BurnRows`), so a wrapped first note plus the second hits the
-  3-line cut; join them.
-- [TODO](todo/TODO.md) `jei/jei-coverage #21`: the tab is renamed "Lava Interactions" (lang only); open whether basalt gets a water row.
-- [TODO](todo/TODO.md) `jei/jei-coverage #22`: draw mobs instead of spawn eggs (a custom slot renderer reusing More Mooblooms' entity drawing). Open: whether to do it.
-- [TODO](todo/TODO.md) `jei/jei-coverage #23` (bug): Jar Storage potion row is one generic "Any potion" row with an uncraftable potion fluid; replace by a Java
-  provider with one row per potion (like the Potion Buckets pages).
-- [TODO](todo/TODO.md) `jei/jei-coverage #25`: the jar tabs' empty jar icon becomes a "jar with spout". Open: what that is (no such item exists; recommend
-  a drawn jar plus faucet icon).
-- [TODO](todo/TODO.md) `jei/jei-coverage #26`: Knife and Machete Drops (and Grass Drops) say "Cut", not "Broken"; shorter cheese note. Generator text in
-  `tab_drops.py`.
-- [TODO](todo/TODO.md) `jei/jei-coverage #27`: concrete sets after 30 s, not 31: IE's timer is hardcoded, so a mixin on `ConcreteFluid` plus the note text.
-- [TODO](todo/TODO.md) `jei/jei-coverage #28`: drop the one Survivality row from Mob Transformations. The TODO says Survivality is on a removal list, but
-  [feature_porting.md](feature_porting.md) 6 only says port its tweaks one at a time and the jar is still in `mods/`: confirm first.
+- Tool tabs regenerated from the real `/dumpworldjei` dump (`#16`, `#17`, `#18`): Stripping one row per log pair; Soap
+  Washing keeps one row per target with the sources cycling (soap already takes off copper oxidation, the `unoxidise`
+  pairs); Block Dyeing 2177 rows (load cost not measured yet, JW-21; fallback: one row per colour set with the dye
+  cycling). Create's dyed sails were Barriers because they have no item: they now draw as blocks (`#18`, `#19`).
+- Itemless blocks draw their model (`#19`); the Budding "Drops nothing" output is the "Nothing" slot. Deviation from the
+  plan: the ice / cake stand-ins and dropping the crop rows were replaced by drawing the real block, which also fixes the
+  sails.
+- Notes joined into one paragraph (`#20`, `#11`): nothing is cut any more. The 3-line rows were left as they are.
+- Lava Generation is titled Lava Interactions (`#21`); no basalt + water row (no such rule).
+- Mobs drawn instead of spawn eggs in every world tab (`#22`, owner 2026-10-26: every tab, egg fallback).
+- Potions in jars one row per potion (`#23`, folds in `#10`).
+- "Cut with a knife / shears" (`#26`); concrete 30 s (`#27`); the Survivality row stays (`#28`, owner 2026-10-26).
+- Jar Storage icon: jar with a small faucet (`#25`, Create's two-item icon; the jar alone without Create). Jar Fluids
+  keeps the faucet.
 
 ## 4. Tests
 
@@ -157,3 +165,29 @@ Install patcherMod 1.1.01, moreMooblooms-1.1.0 and backportedVinery-1.5.5-ce-19.
   Drops (a pig), Grass Drops, Lightning, Lava Generation, Block Dyeing (Create sail): no note runs past its third line.
   If one does, hovering the notes shows the whole text.
 - [ ] **JW-17 Dedicated server:** join CreEngServer: the tabs show the same rows as single player.
+
+Tab tweaks (2026-10-26; install the patcherMod jar built 2026-10-26 first):
+
+- [ ] **JW-19 Stripping:** uses of Oak Log -> Stripping: Oak Log -> Stripped Oak Log + Oak Bark on its own page; paging
+  shows one log type per page, nothing cycles.
+- [ ] **JW-20 Soap:** uses of Soap -> a "washes the dye out" glass row cycling the colours; an oxidised copper row
+  ("takes off wax and all oxidation").
+- [ ] **JW-21 Block Dyeing:** note the world-join time against before (latest.log `[jei_world] N rows`); uses of Red Dye ->
+  a Create sail page whose input cycles the dyed sails drawn as sails (not Barriers). If JEI start is more than about
+  2 s slower, switch `_dyeing` to one row per colour set.
+- [ ] **JW-22 Blocks drawn:** page Weathering and Growth (frosted ice row), Lava Interactions (bubble column: water
+  bucket), Knife and Machete Drops (a candle cake draws as the cake with its candle), Grass Drops (tall seagrass): no
+  Barrier icon anywhere; hovering names the block. Budding Blocks: the "drops nothing" row has an empty slot, tooltip
+  "Nothing".
+- [ ] **JW-23 Mobs drawn:** Mob Transformations, Mob Bottling and Jar Storage mob capture draw the mobs turning in their
+  slots; hover still names the mob and R/U on the slot opens the egg's pages. An MCA villager slot shows the egg; no
+  `[jei_world] can't draw` errors for vanilla mobs.
+- [ ] **JW-24 Potions in jars:** uses of a Healing potion -> a Jar Storage row with Healing bottles (normal / splash /
+  lingering cycling with the jar), the jar drawn red, Create potion fluid tooltip names Healing; Jar Fluids has a
+  Healing row; no "Any potion" or Swiftness row left.
+- [ ] **JW-25 Jar icon:** Jar Storage shows the jar with a small faucet in the category list and tab header.
+- [ ] **JW-26 Text:** Knife and Machete Drops on a cheese wheel reads "Cut with a knife; drops itself otherwise."; Grass
+  Drops "Cut with shears."; the lava tab is titled Lava Interactions; the Burning notes fit (no cut text); joined notes
+  read as sentences (a full stop between notes).
+- [ ] **JW-27 Concrete:** place IE liquid concrete on flat ground and time it: it sets after about 30 s (was about
+  32 s); the tab says 30 s.

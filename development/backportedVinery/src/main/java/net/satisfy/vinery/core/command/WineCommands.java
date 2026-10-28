@@ -219,7 +219,6 @@ public final class WineCommands {
             return 0;
         }
         Level level = player.getLevel();
-        WineYears.convertLegacy(stack, level);
         CompoundTag component = WineYears.data(stack);
         VintageClock.Snapshot clock = VintageClock.of(level);
         source.sendSuccess(stack.getHoverName().copy().withStyle(ChatFormatting.GOLD), false);
@@ -264,7 +263,7 @@ public final class WineCommands {
         source.sendSuccess(line("command.vinery.wine.time", "Day %s, month %s (%s days per month, %s months per effect level)",
                 day, WineYears.getYear(level, daysPerYear), daysPerYear, clock.yearsPerEffectLevel()), false);
         source.sendSuccess(Component.translatable("command.vinery_backport.wine.time.clock", clock.ticks(), DrinkBlockItem.realTime(clock.realTicks(clock.ticks())),
-                VineryConfig.CLOCK_MODE.get().name(), VineryConfig.DAY_UNIT.get().name()), false);
+                VineryConfig.clockMode().name(), VineryConfig.dayUnit().name()), false);
         source.sendSuccess(Component.translatable("command.vinery_backport.wine.time.units", DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerDay())),
                 DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerYear())), DrinkBlockItem.realTime(clock.realTicks(clock.ticksPerYear() * clock.yearsPerEffectLevel()))), false);
         String measured = clock.measuredDayTicks() > 0 ? DrinkBlockItem.realTime((long) clock.measuredDayTicks()) : "-";

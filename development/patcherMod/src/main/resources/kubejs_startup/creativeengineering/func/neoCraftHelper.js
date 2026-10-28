@@ -12,9 +12,6 @@ var $NCH_CEConfigClass // lazily loaded/cached by NCH.cfg() below - undefined = 
 
 global.NCH = {
 
-  // Bumped when a helper is added or changes shape; a caller in another mod's scripts checks it (10.6).
-  //   1 = ns() / withNamespace() (2026-10-25)
-  apiVersion: 1,
   // The pack's own namespace: recipe TYPES the pack registers (seasoning, dragon_breathing, ...) always use it.
   modId: 'creativeengineering',
   // Namespace of the recipe IDS the helpers write; withNamespace() changes it for one block of calls.
@@ -407,13 +404,19 @@ global.NCH = {
     }
   },
 
+  _warnedFluidTags: {},
+
   _checkFluid(id, context) {
     if (!id) {
 		global.NCH._warn(context, 'resolved to an undefined/empty fluid id')
 		return false
     }
     if (global.NCH._isTag(id)) {
-		console.warn('[NCH] ' + context + ': fluid tag "' + id + '" is not validated (tag support not yet implemented)')
+		// once per tag: the potion bottling loop alone passes #forge:fluid/potion hundreds of times
+		if (!global.NCH._warnedFluidTags[id]) {
+			global.NCH._warnedFluidTags[id] = true
+			console.warn('[NCH] ' + context + ': fluid tag "' + id + '" is not validated (tag support not yet implemented)')
+		}
 		return true
 	}
     if (!global.NCH._fluidExists(id)) {
@@ -428,6 +431,12 @@ global.NCH = {
 		if (global.NCH.strict) throw new Error(text)
 		console.warn(text)
 	},
+
+  // A KubeJS FluidStackJS or a { fluid | amount } object.
+  _isFluidLike(v) {
+    return v != null && typeof v === 'object' &&
+      (v.fluid !== undefined || v.amount !== undefined || typeof v.getAmount === 'function')
+  },
 
   // Validates a single item-like or fluid-like value, or recurses through arrays of them.
   _validateAny(v, context) {
@@ -452,9 +461,7 @@ global.NCH = {
       return
     }
 
-    var looksLikeFluid = typeof v === 'object' &&
-	(v	.fluid !== undefined || v.amount !== undefined || typeof v.getAmount === 'function')
-    if (looksLikeFluid) {
+    if (global.NCH._isFluidLike(v)) {
 		global.NCH._checkFluid(global.NCH._resolveFluidAmount(v).id, context)
 	} else {
 		global.NCH._checkItem(global.NCH._resolveIdCount(v).id, context)
@@ -593,6 +600,7 @@ global.NCH = {
   // opts.allowTag: default true
   // opts.defaultAmount: fallback amount when v doesn't carry its own (default 1000)
   // opts.context: string used in validation warnings
+  // opts.nbtString: write the fluid's NBT as an SNBT string
   _fluidJson(v, opts) {
     opts = opts || {}
     var context = opts.context || 'unnamed NCH call'
@@ -608,7 +616,8 @@ global.NCH = {
     if (v && typeof v === 'object') {
       try {
         var nbt = v.getTag ? v.getTag() : v.nbt
-        if (nbt) json.nbt = nbt
+        // opts.nbtString: SNBT string for e.custom JSON (a FluidStackJS hands back a CompoundTag)
+        if (nbt) json.nbt = opts.nbtString ? String(nbt) : nbt
       } catch (err) {}
     }
 
@@ -655,6 +664,36 @@ global.NCH = {
       if (key === 'input') {
         if (r.hasInput(filter.input) && r.replaceInput(oldValue, newValue)) changed++
       } else if (r.hasOutput(filter.output) && r.replaceOutput(oldValue, newValue)) changed++
+    }
+    return changed
+  },
+
+  // Item merges (perf.md 11.2 #4): swaps every [old, new] item pair in the inputs and outputs of every recipe, data
+  // and script-added alike, in list order, as replaceInput / replaceOutput with includeAdded would per pair. One
+  // filtered pass over the data recipes and one over the added ones (prefiltered by a single match of every old id)
+  // instead of two data scans and two added walks per pair. Returns the number of recipes changed.
+  replaceItems(pairs, e) {
+    if (!e) throw new Error('replaceItems called without event object!')
+    if (!pairs || pairs.length === 0) return 0
+    pairs.forEach((p, idx) => {
+      global.NCH._validateAny(p[0], 'replaceItems[' + idx + '] old')
+      global.NCH._validateAny(p[1], 'replaceItems[' + idx + '] new')
+    })
+    var anyOld = Ingredient.of(pairs.map(p => p[0]))
+    var changed = 0
+    var swap = r => {
+      var hit = false
+      pairs.forEach(p => {
+        if (r.replaceInput(p[0], p[1])) hit = true
+        if (r.replaceOutput(p[0], p[1])) hit = true
+      })
+      if (hit) changed++
+    }
+    e.forEachRecipe([{ input: anyOld }, { output: anyOld }], swap)
+    var it = e.addedRecipes.iterator()
+    while (it.hasNext()) {
+      var r = it.next()
+      if (r.hasInput(anyOld) || r.hasOutput(anyOld)) swap(r)
     }
     return changed
   },
@@ -1406,7 +1445,7 @@ global.NCH = {
 		var inc = global.NCH.incomplete(key)
 		global.NCH.createSequencedAssembly(Item.of(out, 1), base, [
 			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, mb, '{Bottle:"REGULAR",Potion:"creativeengineering:long_reach"}')]),
-			e.recipes.create.deploying(inc, [inc, global.item.felsic_ingot]),
+			e.recipes.create.deploying(inc, [inc, global.item.ingot_felsic]),
 			e.custom({ type: 'vintageimprovements:hammering', hammerBlows: hammerBlows ?? 3, ingredients: [{ item: inc }], results: [{ item: inc }] }),
 			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, mb, '{Bottle:"REGULAR",Potion:"' + potion + '"}')])
 		], [key], e, key + '_sequenced_assembly', loops)
@@ -1600,7 +1639,7 @@ global.NCH = {
 
 	Rolling	Rolling Mill	neoCraftHelper.js:1160 createRolling — helper exists but no recipe currently puts it inside a sequence
 
-	Polishing	Grinder	neoCraftHelper.js:1271 viPolishing — ✅ already used as a step (crystal.js:22)
+	Polishing	Grinder	neoCraftHelper.js:1271 viPolishing — already used as a step (crystal.js:22)
 	Laser Cutting	Laser	neoCraftHelper.js:1239 viLaserCutting — helper exists, not used as a step yet
 	Vibrating	Vibrating Table	neoCraftHelper.js:1218 viVibrating — helper exists, not used as a step yet
 	Turning	Lathe	no NCH helper
@@ -1736,6 +1775,22 @@ global.NCH = {
 		var ctx = 'createEmptying ' + idSuffix
 
 		global.NCH._validateAny(outArr, ctx + ' output')
+
+		// An input carrying NBT (Item.of(id, '{...}'), a { item, nbt } shorthand) is written as a
+		// forge:partial_nbt ingredient: KubeJS's own NBT ingredients have matched nothing in this pack
+		// (item_dict.js, Sample Syringe note).
+		var inJson = (input && typeof input === 'object' && !Array.isArray(input) && !global.NCH._ingredientLike(input))
+			? global.NCH._nbtItemJson(input, { role: 'input', context: ctx + ' input' }) : null
+		if (inJson && inJson.type === 'forge:partial_nbt') {
+			e.custom({
+				type: 'create:emptying',
+				ingredients: [inJson],
+				results: outArr.map((o, idx) => global.NCH._isFluidLike(o)
+					? global.NCH._fluidJson(o, { allowTag: false, nbtString: true, context: ctx + ' output[' + idx + ']' })
+					: global.NCH._nbtItemJson(o, { role: 'result', countMode: 'flat', allowTag: false, context: ctx + ' output[' + idx + ']' }))
+			}).id(`${global.NCH.ns()}:createemptying/${idSuffix}`)
+			return
+		}
 		global.NCH._validateAny(input, ctx + ' input')
 
 		e.recipes.create
@@ -2118,6 +2173,11 @@ global.NCH = {
 		e.custom(json).id(`${global.NCH.ns()}:iemixer/${idSuffix}`)
 	},
 
+	// IE Bottling Machine. NBT-aware like ieBlueprint: a result may be Item.of(id, '{nbt}'), an input
+	// Item.of(id, '{nbt}') / { item, nbt } (forge:partial_nbt). fluid: an id, Fluid.of(...), or
+	// { tag | fluid, amount, nbt } (the fluid NBT is subset-matched, patcherMod FluidTagInputMixin).
+	//   R.ieBottling(Item.of(i.tipped_arrow, '{Potion:"minecraft:swiftness"}'),
+	//     { tag: f.t_potion, amount: 20, nbt: '{Bottle:"LINGERING",Potion:"minecraft:swiftness"}' }, i.arrow, e, 'tipped_arrow/swiftness')
 	ieBottling(results, fluid, inputs, e, idOverride, amount) {
 		if (!e) throw new Error('ieBottling called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(results, inputs, "iebottling")
@@ -2125,12 +2185,12 @@ global.NCH = {
 
 		const json = {
 		  type: 'immersiveengineering:bottling_machine',
-		  fluid: global.NCH._fluidJson(fluid, { defaultAmount: amount, context: ctx + ' fluid' }),
+		  fluid: global.NCH._fluidJson(fluid, { defaultAmount: amount, nbtString: true, context: ctx + ' fluid' }),
 		  inputs: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
-		      return global.NCH._itemJson(i, { countMode: 'flat', context: ctx + ' input[' + idx + ']' })
+		      return global.NCH._nbtItemJson(i, { countMode: 'flat', role: 'input', context: ctx + ' input[' + idx + ']' })
 		  }),
 		  results: (Array.isArray(results) ? results : [results]).map((r, idx) => {
-		      return global.NCH._itemJson(r, { countMode: 'flat', allowTag: false, context: ctx + ' result[' + idx + ']' })
+		      return global.NCH._nbtItemJson(r, { countMode: 'flat', allowTag: false, role: 'result', context: ctx + ' result[' + idx + ']' })
 		  })
 		}
 
@@ -2288,6 +2348,45 @@ global.NCH = {
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:pcthermoplant/${idSuffix}`)
+	},
+
+	// Ender Storage's shaped type (enderstorage:create_recipe): a vanilla shaped grid whose result keeps
+	// the frequency of an Ender Storage item in the grid. Keys as in shaped(); an array = any of them.
+	//   R.enderStorage(i.es_ender_pouch, ['BLB', 'LPL', 'BWB'], { P: i.t_ender_pearls, ... }, e, 'ender_pouch')
+	enderStorage(output, pattern, keys, e, idOverride) {
+		if (!e) throw new Error('enderStorage called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, Object.values(keys)[0], 'enderstorage')
+		var ctx = 'enderStorage ' + idSuffix
+		var key = {}
+		Object.keys(keys).forEach((k) => {
+			key[k] = global.NCH._itemJson(keys[k], { countMode: 'none', context: ctx + ' key[' + k + ']' })
+		})
+		e.custom({
+			type: 'enderstorage:create_recipe',
+			pattern: pattern,
+			key: key,
+			result: global.NCH._itemJson(output, { countMode: 'flat', allowTag: false, context: ctx + ' output' })
+		}).id(`${global.NCH.ns()}:enderstorage/${idSuffix}`)
+	},
+
+	// Scraping a block with an axe (the axe_scrape tool action) for items. results: one item or an array,
+	// each may carry a chance (Item.of(x).withChance(0.5)).
+	// opts.soot: Sooty Chimneys' soot_scraping (block = a dirty chimney; scraping cleans it). The only
+	// axe scraping recipe type in the pack, so it is required for now.
+	//   R.axeScraping(Item.of(i.soot).withChance(0.75), 'sootychimneys:dirty_brick_chimney', e, 'dirty_brick_chimney', { soot: true })
+	axeScraping(results, block, e, idOverride, opts) {
+		if (!e) throw new Error('axeScraping called without event object!')
+		opts = opts || {}
+		if (!opts.soot) throw new Error('axeScraping: only { soot: true } (Sooty Chimneys) is supported')
+		var resArr = Array.isArray(results) ? results : [results]
+		var idSuffix = idOverride ?? global.NCH.toId(resArr[0], block, 'axescraping')
+		var ctx = 'axeScraping ' + idSuffix
+		e.custom({
+			type: 'sootychimneys:soot_scraping',
+			chimney: global.NCH._itemJson(block, { countMode: 'none', allowTag: false, context: ctx + ' block' }),
+			results: resArr.map((r, idx) => global.NCH._itemJson(r, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })),
+			tool: { type: 'sootychimneys:tool_action', action: 'axe_scrape' }
+		}).id(`${global.NCH.ns()}:soot_scraping/${idSuffix}`)
 	},
 
 	// ========================================================================

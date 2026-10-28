@@ -87,7 +87,7 @@ Tooltip numbers (bare fist = 1 damage / 4.0 speed). All epic and fireproof.
 |---|---|---|---|---|---|---|
 | Echo sword (CDD) | 9 | 1.65 | | 2124 | 18 | 4 |
 | Echo pickaxe / axe / shovel / hoe | 6 / 12 / 7 / 1 | 1.2 / 1.0 / 1.2 / 4.5 | 10 | 2124 | 18 | 4 |
-| Felsic sword | 10 | 1.7 | | **2502** (F9) | 21 | 4 |
+| Felsic sword | 10 | 1.7 | | 2501 (F9, fixed 2026-10-28) | 21 | 4 |
 | Felsic pickaxe / axe / shovel / hoe | 7 / 14 / 7.5 / 1 | 1.2 / 1.1 / 1.4 / 5.0 | 11 | 2501 | 21 | 4 |
 | Dragon sword | 11 | 1.75 | | 3350 | 25 | 5 |
 | Dragon pickaxe / axe / shovel / hoe | 8 / 16 / 8 / 1 | 1.2 / 1.2 / 1.6 / 5.5 | 12 | 3350 | 25 | 5 |
@@ -139,7 +139,8 @@ KubeJS build and silently did nothing.
 
 - **What:** every `intervalTicks` (200), any damaged item in `#creativeengineering:dragon_gear` in a player's four
   armor slots or two hands gets `amountPerInterval` (50) durability back. A horse wearing dragon horse armor too (the
-  same once-per-interval walk over the level's entities as the horse armor effect).
+  same once-per-interval walk over the level's entities as the horse armor effect; since 2026-10-27 only in
+  dimensions with a player in them, [perf.md](perf.md) 10.4).
 - **Not repaired:** items in the inventory, backpacks or curios slots.
 - **Tag:** DragonLoot's 14 gear items (both chestplates, bow, crossbow, trident, horse armor), the dragon anvil, the
   dragon shield and the air brake. The anvil and the air brake have no durability, so they're no-ops (F6).
@@ -255,7 +256,8 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
 - **F8. Server velocity echo while braking, unverified.** The handler sets `hurtMarked` on the server each braking
   tick, which sends the player their own motion each tick. If server and client drift, that could stutter. Watch for
   it in GR-24.
-- **F9. Felsic sword durability 2502**, every other felsic tool 2501. Typo or deliberate.
+- **F9. Felsic sword durability 2502**, every other felsic tool 2501. Typo or deliberate. FIXED 2026-10-28: 2501
+  (`tune_tools.js`, owner). Scratch SQ-CM-07.
 - **F10. Dragon bow, crossbow, trident and horse armor are untuned. Your call.** They keep DragonLoot's numbers (not in
   `/dumpgear`; `tune_tools.js` comment near the end lists what applies). Horse armor protection isn't reachable from
   `tuneArmor` (it's a `HorseArmorItem`).

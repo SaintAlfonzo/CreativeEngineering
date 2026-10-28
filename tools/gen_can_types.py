@@ -44,6 +44,7 @@ DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
 OUT = GEN / 'can_types.json'
 SERVINGS = GEN / 'can_servings.json'
 TYPES = GEN / 'food_types.json'
+COMFORT_NOURISHMENT = GEN / 'comfort_nourishment.json'
 SPRITES = INSTANCE / 'kubejs/assets/creativeengineering/textures/item'
 
 BEGIN = '// ===== BEGIN GENERATED CANS (tools/gen_can_types.py, do not edit) ====='
@@ -135,7 +136,7 @@ EXPLICIT = [
     # raw veggie: Baked Potato meals. Whole and sliced share a tag (cabbage leaf, potato slices) or the slots (kernels)
     ('raw_veggie', 'canned_beetroot', 'Canned Beetroot', ['minecraft_beetroot'], False, dict(input=['beetroot'])),
     ('raw_veggie', 'canned_cabbage', 'Canned Cabbage', ['farmersdelight_cabbage', 'cabbage_leaf'], False,
-     dict(input=['any_cabbage'])),
+     dict(input=['cabbage'])),
     ('raw_veggie', 'canned_carrot', 'Canned Carrot', ['minecraft_carrot'], False, dict(input=['carrot'])),
     ('raw_veggie', 'canned_onion', 'Canned Onion', ['onion_farmersdelight'], False, dict(input=['onion'])),
     ('raw_veggie', 'canned_potato', 'Canned Potato', ['minecraft_potato', 'potato_slices'], False,
@@ -213,7 +214,7 @@ EXPLICIT = [
     ('raw_fish', 'canned_raw_calamari', 'Canned Raw Calamari', ['calamari', 'calamari_slice'], False),
     ('raw_fish', 'canned_raw_catfish', 'Canned Raw Catfish', ['catfish', 'raw_catfish_slice'], False),
     ('raw_fish', 'canned_raw_cod', 'Canned Raw Cod', ['cod', 'cod_slice'], False),
-    ('raw_fish', 'canned_raw_crab', 'Canned Raw Crab Leg', ['raw_crab'], False),
+    ('raw_fish', 'canned_raw_crab', 'Canned Raw Crab Leg', ['crab'], False),
     ('raw_fish', 'canned_raw_lionfish', 'Canned Raw Lionfish', ['lionfish'], False),
     ('raw_fish', 'canned_raw_perch', 'Canned Raw Perch', ['perch', 'perch_slice'], False),
     ('raw_fish', 'canned_raw_pike', 'Canned Raw Pike', ['pike', 'pike_slice'], False),
@@ -496,6 +497,32 @@ def sized_recipes(spec, sources, srcs):
     return recipes
 
 
+def apply_comfort_nourishment(foods, keymap):
+    """Give every source food the Comfort / Nourishment the game sets at startup (tools/gen_comfort_nourishment.py,
+    read the same way by Creative Delight's comfort_nourishment.js), so cans follow without a fresh /dumpfood."""
+    if not COMFORT_NOURISHMENT.exists():
+        return
+    data = load_json(COMFORT_NOURISHMENT)
+    comfort, nourishment = 'farmersdelight:comfort', 'farmersdelight:nourishment'
+    id_of = lambda entry: entry if ':' in entry else keymap.get(entry)  # noqa: E731
+    rules = {id_of(k): v for k, v in data['set'].items()}
+    keep = {id_of(k) for k in data['keep']}
+    strip = {id_of(k) for k in data['strip']}
+    for fid, f in foods.items():
+        if fid in keep:
+            continue
+        fx = f.get('effects') or []
+        if fid in rules or fid in strip:
+            fx = [e for e in fx if e['effect'] not in (comfort, nourishment)]
+            rule = rules.get(fid)
+            if rule and rule['effect'] != 'none':
+                fx.append(OrderedDict([('effect', 'farmersdelight:' + rule['effect']), ('amplifier', 0),
+                                       ('seconds', rule['seconds']), ('chance', 1)]))
+        else:
+            fx = [e for e in fx if e['effect'] != nourishment]
+        f['effects'] = fx
+
+
 def build(foods, names, keymap_all, keymap_base, types):
     ids_of = lambda key: keymap_all[key]  # noqa: E731
     cans = OrderedDict()
@@ -679,6 +706,7 @@ def main():
     keymap_base = parse_dict(base_text)
     types_json = load_json(TYPES)
     types = types_json['types']
+    apply_comfort_nourishment(foods, keymap_base)
 
     cans, problems = build(foods, names, keymap_base, keymap_base, types)
     if WAITING:

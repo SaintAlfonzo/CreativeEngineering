@@ -27,38 +27,16 @@ R.bulk('replaceInput', [
 // ============================================================
 
 //Rebuilt enderstorage crafts for variable input
-e.remove({ id: 'enderstorage:ender_pouch' })
-e.custom({
-  type: 'enderstorage:create_recipe',
-  result: { item: i.es_ender_pouch },
-  pattern: ["BLB", "LPL", "BWB"],
-  key: {
-    P: { tag: global.tags._clean(i.t_ender_pearls) },
-    L: { tag: global.tags._clean(i.t_leather) },
-    B: { item: i.blaze_powder },
-    W: [{ item: i.white_wool }, { item: i.hemp_fabric }]}})
-e.remove({ id: 'enderstorage:ender_chest' })
-e.custom({
-  type: 'enderstorage:create_recipe',
-  result: { item: i.es_ender_chest },
-  pattern: ["BWB", "OCO", "BPB"],
-  key: {
-    P: { tag: global.tags._clean(i.t_ender_pearls) },
-    O: { tag: global.tags._clean(i.t_obsidian) },
-    C: { tag: global.tags._clean(i.t_chest_wooden) },
-    B: { item: i.blaze_rod },
-    W: [{ item: i.white_wool }, { item: i.hemp_fabric }]}})
-e.remove({ id: 'enderstorage:ender_tank' })
-e.custom({
-  type: 'enderstorage:create_recipe',
-  result: { item: i.es_ender_tank },
-  pattern: ["BWB", "OCO", "BPB"],
-  key: {
-    P: { tag: global.tags._clean(i.t_ender_pearls) },
-    O: { tag: global.tags._clean(i.t_obsidian) },
-    C: { item: i.cauldron },
-    B: { item: i.blaze_rod },
-    W: [{ item: i.white_wool }, { item: i.hemp_fabric }]}})
+const ES_WOOL = [i.white_wool, i.hemp_fabric]
+R.remove({ id: 'enderstorage:ender_pouch' }, e)
+R.enderStorage(i.es_ender_pouch, ['BLB', 'LPL', 'BWB'],
+	{ P: i.t_ender_pearls, L: i.t_leather, B: i.blaze_powder, W: ES_WOOL }, e, 'ender_pouch')
+R.remove({ id: 'enderstorage:ender_chest' }, e)
+R.enderStorage(i.es_ender_chest, ['BWB', 'OCO', 'BPB'],
+	{ P: i.t_ender_pearls, O: i.t_obsidian, C: i.wooden_chest, B: i.blaze_rod, W: ES_WOOL }, e, 'ender_chest')
+R.remove({ id: 'enderstorage:ender_tank' }, e)
+R.enderStorage(i.es_ender_tank, ['BWB', 'OCO', 'BPB'],
+	{ P: i.t_ender_pearls, O: i.t_obsidian, C: i.cauldron, B: i.blaze_rod, W: ES_WOOL }, e, 'ender_tank')
 
 	console.log('Magic storage done')
 })

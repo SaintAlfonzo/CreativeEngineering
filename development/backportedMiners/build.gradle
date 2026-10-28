@@ -5,11 +5,6 @@ plugins {
     id 'ce.forge-mod-refmap'
 }
 
-repositories {
-    // Third-party mod jars copied from ../../mods (git-ignored).
-    flatDir { dir 'libs' }
-}
-
 dependencies {
     // Farmer's Delight is the one hard dependency (cooking recipes, feasts, wild crops, heat sources).
     // flatDir notation: 'local:<file name without -version>:<version>'
@@ -21,53 +16,4 @@ dependencies {
 // Access transformer (SRG names): PotionBrewing.addMix for the haste potions.
 minecraft {
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-
-// The FoodProperties accessor uses Mojang names and gets a real refmap, like backportedVintage.
-mixin {
-    add sourceSets.main, 'miners_delight.refmap.json'
-    mixin_configs.split(',').each { config it.trim() }
-}
-
-tasks.named('compileJava', JavaCompile).configure {
-    outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
-}
-
-// D2 (miners_delight.md): the jar must not carry upstream resources. Fail the build if a file under
-// src/main/resources has the same path as a file in the upstream jar (except the few we write ourselves).
-def upstreamJar = rootProject.file('miners_upstream/miners_delight-1.20.1-1.4.5-backport.jar')
-// Root files of the jar that the donor also has; ours are our own (the packs only serve assets/ and data/).
-def ownFiles = ['META-INF/mods.toml', 'META-INF/MANIFEST.MF', 'META-INF/accesstransformer.cfg', 'pack.mcmeta',
-                'miners_delight.mixins.json', 'miners_delight.refmap.json'] as Set
-tasks.register('checkNoUpstreamResources') {
-    group = 'verification'
-    description = 'Fails if src/main/resources contains a path that also exists in the upstream Miner\'s Delight jar'
-    def resDir = file('src/main/resources')
-    inputs.dir(resDir)
-    doLast {
-        def ours = [] as Set
-        resDir.eachFileRecurse(groovy.io.FileType.FILES) { ours << resDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
-        def clashes = []
-        if (upstreamJar.exists()) {
-            new java.util.zip.ZipFile(upstreamJar).withCloseable { zip ->
-                zip.entries().each { e ->
-                    if (!e.directory && ours.contains(e.name) && !ownFiles.contains(e.name)) clashes << e.name
-                }
-            }
-        }
-        if (clashes) throw new GradleException("upstream files in src/main/resources:\n  " + clashes.join('\n  '))
-    }
-}
-tasks.named('check') { dependsOn 'checkNoUpstreamResources' }
-tasks.named('jar') { dependsOn 'checkNoUpstreamResources' }
-
-// Backstop: the mixin config must find its refmap in the jar.
-tasks.named('jar', Jar).configure {
-    doLast {
-        def jarFile = archiveFile.get().asFile
-        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
-        if (!entries.contains('miners_delight.refmap.json')) {
-            throw new GradleException("miners_delight.refmap.json is not in ${jarFile.name}")
-        }
-    }
 }

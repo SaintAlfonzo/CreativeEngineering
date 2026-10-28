@@ -47,11 +47,17 @@ public final class WorldgenConfig {
 	public static boolean wildFlowersEnabled() { return get(() -> wg().systems.wildFlowers.get(), true); }
 	public static boolean mobSpawnsEnabled() { return get(() -> wg().systems.mobSpawns.get(), true); }
 	public static boolean beeNestsEnabled() { return get(() -> wg().systems.beeNests.get(), true); }
+	public static boolean mushroomSpawnsEnabled() { return get(() -> wg().systems.mushroomSpawns.get(), true); }
 	public static boolean permafrostMergeEnabled() { return get(() -> wg().systems.permafrostMerge.get(), true); }
 	public static boolean templateBlockSwapsEnabled() { return get(() -> wg().systems.templateBlockSwaps.get(), true); }
 	public static boolean oceanGeodesEnabled() { return get(() -> wg().systems.oceanGeodes.get(), true); }
 	public static boolean placementPriorityEnabled() { return get(() -> wg().systems.placementPriority.get(), true); }
 	public static boolean mulberrySaplingEnabled() { return get(() -> wg().systems.mulberrySapling.get(), true); }
+	public static boolean firstTickWaterEnabled() { return get(() -> wg().systems.firstTickWater.get(), true); }
+	public static boolean holdGeneratedFallingBlocksEnabled() { return get(() -> wg().systems.holdGeneratedFallingBlocks.get(), true); }
+	public static boolean dimensionFilterEnabled() { return get(() -> wg().systems.dimensionFilter.get(), true); }
+	public static boolean sharedTerrainCacheEnabled() { return get(() -> wg().systems.sharedTerrainCache.get(), true); }
+	public static long firstTickWaterWindowTicks() { return get(() -> wg().firstTickWater.windowTicks.get(), 600); }
 	public static boolean placementPriorityLog() { return get(() -> wg().placementPriority.log.get(), false); }
 
 	// ── locate ───────────────────────────────────────────────────────────────
@@ -128,7 +134,7 @@ public final class WorldgenConfig {
 	public static int earthBaseLayers() { return get(() -> wg().earthFill.baseLayers.get(), 3); }
 	public static List<? extends String> earthBlocks() { return get(() -> wg().earthFill.blocks.get(), List.of("creativeengineering:earth_fill/earth")); }
 	public static List<? extends String> earthOverrides() { return get(() -> wg().earthFill.overrides.get(), List.<String>of()); }
-	public static int earthSampleGrid() { return get(() -> wg().earthFill.sampleGrid.get(), 2); }
+	public static int earthSampleGrid() { return get(() -> wg().earthFill.sampleGrid.get(), 4); }
 	public static CEConfig.EarthFillLog earthLog() { return get(() -> wg().earthFill.log.get(), CEConfig.EarthFillLog.CANCELLED); }
 
 	// ── water fill ───────────────────────────────────────────────────────────

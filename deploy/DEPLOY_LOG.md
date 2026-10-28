@@ -4,6 +4,769 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.1.03 -->
+## 1.1.03 - 2026-10-26 18:11
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: ebb0648 + 13 uncommitted file(s)
+- Since: 1.1.02
+- Deployed: server, client 2026-10-26 19:04
+- Contents: 368 server+client mods, 45 client-only mods, 29 resource pack files, 16 shader pack files
+- Payload: update from 1.1.02, config functional: 267 files, 22.0 MB (mods 8, kubejs 234, config 12, miners_upstream 1, rustic_upstream 1, farmers_upstream 1, server 2, world_serverconfig 8)
+- Notes: 1.1.03: Delight ports (Creative Delight bundle, Vintage, Fungi, Miner's, Display), patcherMod 1.1.03, perf tooling, Exposure -04
+- Built with warnings:
+  - kubejs/exported/items_by_mod/displaydelight.json is older than mods/backportedDisplay-1.7.0-ce-19.2-01.jar: run `/dumpitemsbymod displaydelight`, then tools/gen_display_delight_models.py
+  - 13 uncommitted change(s) in shipped folders (commit ebb0648 + working tree)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 8: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 14: bullet is 306 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 39: bullet is 404 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 59: bullet is 425 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 84: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 105: bullet is 358 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 118: bullet is 497 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 132: bullet is 593 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 142: bullet is 453 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 147: bullet is 491 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 155: bullet is 386 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 173: bullet is 427 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 207: bullet is 325 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 221: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 240: bullet is 458 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 246: bullet is 331 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 249: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 254: bullet is 412 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 266: bullet is 316 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 272: bullet is 320 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 367: bullet is 362 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 394: bullet is 447 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 408: bullet is 726 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 425: bullet is 483 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 22: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 158: bullet is 614 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 218: bullet is 317 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/unreleased.md: line 286: bullet is 542 characters (over 300: split it or use a sub-bullet)
+
+### Changes
+
+Mods added (1):
+
+- creative_delight `creative_delight-1.0.0.jar` (both)
+
+Mods updated (7):
+
+- creativeengineering: `creativeengineering-1.1.02.jar` -> `creativeengineering-1.1.03.jar`
+- displaydelight: `displaydelight-1.2.0.jar` -> `backportedDisplay-1.7.0-ce-19.2-01.jar`
+- incubation_additions: `incubationAdditions-1.1.0.jar` -> `incubationAdditions-1.1.0.jar`
+- miners_delight: `miners_delight-1.19.2-1.1.2.jar` -> `backportedMiners-1.4.5-ce-19.2-01.jar`
+- storagedelight: `storagedelight-25.12.09-1.19-forge.jar` -> `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar`
+- veggiesdelight: `backportedVeggies-1.9.2-ce-19.2-02.jar` -> `backportedVeggies-1.9.2-ce-19.2-03.jar`
+- vintagedelight: `backportedVintage-0.1.6-ce-19.2-03.jar` -> `backportedVintage-0.1.6-ce-19.2-07.jar`
+
+Mods removed (6):
+
+- Delightful 3.4.1-1.19.2 `Delightful-1.19.2-3.4.1.jar` (was both)
+- End's Delight 1.19.2-2.1 `ends_delight-1.19.2-2.1.jar` (was both)
+- Farmer's Delight 1.19.2-1.2.4 `FarmersDelight-1.19.2-1.2.4.jar` (was both)
+- Ocean's Delight 1.0.2-1.19.2 `oceansdelight-1.0.2-1.19.2.jar` (was both)
+- Oceanic Delight 1.0.1 `oceanic_delight-1.0.1-forge-1.19.2.jar` (was both)
+- Rustic Delight 1.3.0 `rusticdelight-forge-1.19.2-1.3.0.jar` (was both)
+
+<details><summary>kubejs/: 154 added, 80 changed, 193 removed</summary>
+
+*added (154)*
+
+- `assets/frosting.png`
+- `assets/create/textures/item/dough.png`
+- `assets/create_compressed/textures/block/dough_block.png`
+- `assets/create_confectionery/textures/items/gingerdough.png`
+- `assets/creativeengineering/blockstates/cookie_dough_block.json`
+- `assets/creativeengineering/blockstates/cucumber_dough_block.json`
+- `assets/creativeengineering/blockstates/gingerdough_block.json`
+- `assets/creativeengineering/blockstates/oat_dough_block.json`
+- `assets/creativeengineering/blockstates/sourdough_block.json`
+- `assets/creativeengineering/blockstates/sweet_potato_dough_block.json`
+- `assets/creativeengineering/changelog/1.1.03.md`
+- `assets/creativeengineering/jei_world/mob_bottling/generated.json`
+- `assets/creativeengineering/models/block/cookie_dough_block.json`
+- `assets/creativeengineering/models/block/cucumber_dough_block.json`
+- `assets/creativeengineering/models/block/gingerdough_block.json`
+- `assets/creativeengineering/models/block/oat_dough_block.json`
+- `assets/creativeengineering/models/block/sourdough_block.json`
+- `assets/creativeengineering/models/block/sweet_potato_dough_block.json`
+- `assets/creativeengineering/models/item/cob_pipe.json`
+- `assets/creativeengineering/models/item/cob_pipe_3d.json`
+- `assets/creativeengineering/models/item/cookie_dough_block.json`
+- `assets/creativeengineering/models/item/cucumber_dough_block.json`
+- `assets/creativeengineering/models/item/gingerdough_block.json`
+- `assets/creativeengineering/models/item/oat_dough_block.json`
+- `assets/creativeengineering/models/item/sourdough_block.json`
+- `assets/creativeengineering/models/item/sweet_potato_dough_block.json`
+- `assets/creativeengineering/models/item/seasoned/cheese.json`
+- `assets/creativeengineering/models/item/seasoned/garlic.json`
+- `assets/creativeengineering/models/item/seasoned/onion.json`
+- `assets/creativeengineering/models/item/seasoned/sugar.json`
+- `assets/creativeengineering/models/item/seasoned/void_pepper.json`
+- `assets/creativeengineering/textures/block/fridge_top_fill.png`
+- `assets/creativeengineering/textures/block/dough_block/cookie_dough_block.png`
+- `assets/creativeengineering/textures/block/dough_block/cucumber_dough_block.png`
+- `assets/creativeengineering/textures/block/dough_block/gingerdough_block.png`
+- `assets/creativeengineering/textures/block/dough_block/oat_dough_block.png`
+- `assets/creativeengineering/textures/block/dough_block/sourdough_block.png`
+- `assets/creativeengineering/textures/block/dough_block/sweet_potato_dough_block.png`
+- `assets/creativeengineering/textures/item/` (15 files)
+- `assets/creativeengineering/textures/item/seasoned/cheese.png`
+- `assets/creativeengineering/textures/item/seasoned/garlic.png`
+- `assets/creativeengineering/textures/item/seasoned/onion.png`
+- `assets/creativeengineering/textures/item/seasoned/sugar.png`
+- `assets/creativeengineering/textures/item/seasoned/void_pepper.png`
+- `assets/creativeengineering/textures/slot/empty_face_slot.png`
+- `assets/endersdelight/textures/item/` (13 files)
+- `assets/farmersrespite/lang/en_us.json`
+- `client_scripts/seasoning_lang.js`
+- `data/creativeengineering/curios/entities/player_hands_face.json`
+- `data/creativeengineering/curios/slots/face.json`
+- `data/creativeengineering/curios/slots/hands.json`
+- `data/creativeengineering/loot_tables/gameplay/fishing_net/coral.json`
+- `data/creativeengineering/loot_tables/gameplay/fishing_net/junk.json`
+- `data/creativeengineering/loot_tables/gameplay/fishing_net/ocean_treasure.json`
+- `data/creativeengineering/moonlight/soft_fluids/` (29 files)
+- `data/creativeengineering/worldgen/configured_feature/wild/cave_carrots.json`
+- `data/creativeengineering/worldgen/placed_feature/meta/` (12 files)
+- `data/creativeengineering/worldgen/placed_feature/wild/cave_carrots/core.json`
+- `data/creativeengineering/worldgen/placed_feature/wild/cave_carrots/deep.json`
+- `data/creativeengineering/worldgen/placed_feature/wild/cave_carrots/high.json`
+- `data/geophilic_reforged/worldgen/placed_feature/fallen_trees/mc/acacia.json`
+- `data/geophilic_reforged/worldgen/placed_feature/fallen_trees/mc/birch.json`
+- `data/geophilic_reforged/worldgen/placed_feature/fallen_trees/mc/cherry.json`
+- `data/geophilic_reforged/worldgen/placed_feature/fallen_trees/mc/jungle.json`
+- `data/geophilic_reforged/worldgen/placed_feature/fallen_trees/mc/oak.json`
+- `data/geophilic_reforged/worldgen/placed_feature/fallen_trees/mc/spruce.json`
+- `data/geophilic_reforged/worldgen/placed_feature/tree_stumps/mc/acacia.json`
+- `data/geophilic_reforged/worldgen/placed_feature/tree_stumps/mc/birch.json`
+- `data/geophilic_reforged/worldgen/placed_feature/tree_stumps/mc/cherry.json`
+- `data/geophilic_reforged/worldgen/placed_feature/tree_stumps/mc/jungle.json`
+- `data/geophilic_reforged/worldgen/placed_feature/tree_stumps/mc/oak.json`
+- `data/geophilic_reforged/worldgen/placed_feature/tree_stumps/mc/spruce.json`
+- `data/moonlight/moonlight/soft_fluids/lava.json`
+- `data/moonlight/moonlight/soft_fluids/milk.json`
+- `data/oceanic_delight/loot_tables/gameplay/fishing_net_on_kelp.json`
+- `data/oceanic_delight/loot_tables/gameplay/fishing_net_on_sea_grass.json`
+- `data/supplementaries/moonlight/soft_fluids/adzuki_milkshake.json`
+- `data/supplementaries/moonlight/soft_fluids/banana_milkshake.json`
+- `data/supplementaries/moonlight/soft_fluids/chocolate_milkshake.json`
+- `data/supplementaries/moonlight/soft_fluids/mint_milkshake.json`
+- `data/supplementaries/moonlight/soft_fluids/strawberry_banana_smoothie.json`
+- `data/supplementaries/moonlight/soft_fluids/strawberry_milkshake.json`
+- `data/supplementaries/moonlight/soft_fluids/vanilla_milkshake.json`
+- `generation_scripts/food/food_families.json`
+- `generation_scripts/worldgen/biome_traits.json`
+- `server_scripts/tags/curiostags.js`
+- `startup_scripts/_lib/food_dict.js`
+- `startup_scripts/_lib/food_grammar.js`
+- `startup_scripts/changes/pnc_tooltips.js`
+
+*changed (80)*
+
+- `assets/cookingforblockheads/models/block/fridge_large_upper.json`
+- `assets/creativeengineering/jei_world/dyeing/generated.json`
+- `assets/creativeengineering/jei_world/grass_drops/generated.json`
+- `assets/creativeengineering/jei_world/jar_interaction/generated.json`
+- `assets/creativeengineering/jei_world/jar_storage/generated.json`
+- `assets/creativeengineering/jei_world/knife_drops/generated.json`
+- `assets/creativeengineering/jei_world/soaping/generated.json`
+- `assets/creativeengineering/jei_world/stripping/generated.json`
+- `assets/creativeengineering/jei_world/waxing/generated.json`
+- `assets/creativeengineering/lang/en_us.json`
+- `assets/displaydelight/lang/en_us.json`
+- `assets/pneumaticcraft/lang/en_us.json`
+- `client_scripts/namechanges.js`
+- `client_scripts/tooltips.js`
+- `data/creativeengineering/moonlight/soft_fluids/bayberry_soup.json`
+- `data/creativeengineering/moonlight/soft_fluids/bell_pepper_soup.json`
+- `generation_scripts/food/can_servings.json`
+- `generation_scripts/food/can_types.json`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/food/mortar_catalog.json`
+- `generation_scripts/food/placeable.json`
+- `generation_scripts/names/name_fixes.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/meta_structures.json`
+- `generation_scripts/worldgen/mushroom_spawns.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/structure_config.json`
+- `generation_scripts/worldgen/structure_groups.json`
+- `generation_scripts/worldgen/structure_tags.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.caves.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_end.json.gz`
+- `generation_scripts/worldgen/climate/minecraft__the_nether.json.gz`
+- `server_scripts/_lib/dump_compost.js`
+- `server_scripts/_lib/dump_crop_growth.js`
+- `server_scripts/_lib/recipe_scan.js`
+- `server_scripts/cooking/alcohol.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/economy/trades.js`
+- `server_scripts/economy/wandering_trades.js`
+- `server_scripts/engineering/potion_bottling.js`
+- `server_scripts/engineering/potion_buckets.js`
+- `server_scripts/engineering/process.js`
+- `server_scripts/engineering/redstone.js`
+- `server_scripts/engineering/transport.js`
+- `server_scripts/equipment/tipped_arrows.js`
+- `server_scripts/loot/07_rules.js`
+- `server_scripts/loot/08_leaf_apples.js`
+- `server_scripts/loot/loot_config.json`
+- `server_scripts/loot/loot_index.json`
+- `server_scripts/other/item_merges.js`
+- `server_scripts/other/jeed_providers.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/other/starter_kit.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/tags/cookingtags.js`
+- `server_scripts/tags/fluidtags.js`
+- `server_scripts/tags/loottags.js`
+- `server_scripts/tags/placeabletags.js`
+- `server_scripts/tags/storageblocktags.js`
+- `server_scripts/wood/bark.js`
+- `server_scripts/wood/wood_types.js`
+- `server_scripts/worldgen/_biome_rules.js`
+- `server_scripts/worldgen/bee_nests.js`
+- `server_scripts/worldgen/earth_fill.js`
+- `server_scripts/worldgen/mob_spawns.js`
+- `server_scripts/worldgen/mushroom_spawns.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `server_scripts/worldgen/terrain_adaptation.js`
+- `server_scripts/worldgen/wild_flowers.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/fluid_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/_lib/removed_items.js`
+- `startup_scripts/cooking/food_values.js`
+- `startup_scripts/cooking/potions.js`
+- `startup_scripts/func/potion_area.js`
+- `startup_scripts/func/sample_syringe.js`
+- `startup_scripts/func/tune_tools.js`
+- `startup_scripts/items/cultures.js`
+
+*removed (193)*
+
+- `assets/cookingforblockheads/models/block/fridge_large_door_lower.json`
+- `assets/cookingforblockheads/models/block/fridge_large_door_lower_flipped.json`
+- `assets/cookingforblockheads/models/block/fridge_large_door_upper.json`
+- `assets/cookingforblockheads/models/block/fridge_large_door_upper_flipped.json`
+- `assets/cookingforblockheads/models/block/fridge_large_lower.json`
+- `assets/creativeengineering/brewinandchewin/coaster/` (56 files)
+- `assets/displaydelight/models/block/df_cactus_soup.json`
+- `assets/displaydelight/models/block/lm_pufferfish_broth.json`
+- `assets/displaydelight/models/block/pumpkin_soup.json`
+- `assets/displaydelight/models/item/` (89 files)
+- `client_scripts/jei_info.js`
+- `client_scripts/placeable_tooltip.js`
+- `data/creativeengineering/worldgen/configured_feature/wild/beetroots.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/cabbages.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/hamimelon.json`
+- `data/creativeengineering/worldgen/configured_feature/wild/rubber_tree.json`
+- `data/creativeengineering/worldgen/placed_feature/wild/` (11 files)
+- `generation_scripts/worldgen/wild_crops.json`
+- `server_scripts/cooking/baking.js`
+- `server_scripts/cooking/canning.js`
+- `server_scripts/cooking/chocolate.js`
+- `server_scripts/cooking/cultivated_meat.js`
+- `server_scripts/cooking/golden.js`
+- `server_scripts/cooking/milk_jar.js`
+- `server_scripts/cooking/mortar.js`
+- `server_scripts/cooking/salt.js`
+- `server_scripts/tags/cantags.js`
+- `server_scripts/tags/foodtypetags.js`
+- `server_scripts/tags/jartags.js`
+- `server_scripts/worldgen/wild_crops.js`
+- `startup_scripts/compost/compost_rules.js`
+- `startup_scripts/compost/compost_values.js`
+- `startup_scripts/cooking/bakeware.js`
+- `startup_scripts/cooking/baking_ingredients.js`
+- `startup_scripts/cooking/cornmeal.js`
+- `startup_scripts/cooking/fluids.js`
+- `startup_scripts/func/compost.js`
+- `startup_scripts/func/neoCraftHelper.js`
+- `startup_scripts/func/tag_helper.js`
+- `startup_scripts/items/cans.js`
+
+</details>
+
+config/: 3 added, 9 changed, 0 removed:
+
+*added (3)*
+
+- `creative_delight-common.toml`
+- `enders_additions-common.toml`
+- `farmersdelight-ce-common.toml`
+
+*changed (9)*
+
+- `create_central_kitchen-common.toml`
+- `creativeengineering-common.toml`
+- `delightful-common.toml`
+- `displaydelight-common.toml`
+- `rare-ice.properties`
+- `upgrade_aquatic-common.toml`
+- `vintagedelight-common.toml`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+resourcepacks/: 0 added, 0 changed, 1 removed:
+
+*removed (1)*
+
+- `Exposure-CreateCompatibility.zip`
+
+miners_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `miners_delight-1.20.1-1.4.5-backport.jar`
+
+rustic_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `rusticdelight-forge-1.20.1-1.7.0.jar`
+
+farmers_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `FarmersStructures-1.0.6-1.21.1_neoforge.jar`
+
+server/: 0 added, 2 changed, 0 removed:
+
+*changed (2)*
+
+- `perf/README.md`
+- `perf/ce-server.jfc`
+
+### Removals (from 1.1.02)
+
+<details><summary>Delete on the server (205, also in removals_server.txt)</summary>
+
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_door_lower.json`
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_door_lower_flipped.json`
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_door_upper.json`
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_door_upper_flipped.json`
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_lower.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__acacia_blossom_soup.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__bison_burger.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__bunfungus_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__gongylidia_bruschetta.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__kangaroo_pasta.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__kangaroo_stew.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__lobster_pasta.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__maggot_salad.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__classic_corn_dog.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__corn_soup.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__cornbread_stuffing.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__creamed_corn.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__creamy_corn_drink.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__grilled_corn.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__nachos_bowl.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__taco.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__berry_matcha_latte.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__cheeseburger.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__cooked_marshmallow_stick.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__deluxe_cheeseburger.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__ender_nectar.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__field_salad.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__matcha_ice_cream.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__matcha_latte.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__nut_butter_and_jelly_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__pumpkin_pie_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__salmonberry_ice_cream.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__salmonberry_pie_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__sinigang.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__smore.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__apple_pie_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__bacon_and_eggs.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__bacon_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__barbecue_stick.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__cabbage_rolls.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__cake_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__chicken_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__chocolate_pie_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__dumplings.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__egg_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__grilled_salmon.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__hamburger.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__honey_glazed_ham.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__mushroom_rice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__mutton_wrap.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__pasta_with_meatballs.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__pasta_with_mutton_chop.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__ratatouille.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__roast_chicken.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__roasted_mutton_chops.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__shepherds_pie.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__squid_ink_pasta.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__steak_and_potatoes.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__stuffed_potato.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__sweet_berry_cheesecake_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__vegetable_noodles.json`
+- `kubejs/assets/displaydelight/models/block/df_cactus_soup.json`
+- `kubejs/assets/displaydelight/models/block/lm_pufferfish_broth.json`
+- `kubejs/assets/displaydelight/models/block/pumpkin_soup.json`
+- `kubejs/assets/displaydelight/models/item/ad_acacia_blossom_soup.json`
+- `kubejs/assets/displaydelight/models/item/ad_kangaroo_pasta.json`
+- `kubejs/assets/displaydelight/models/item/ad_kangaroo_stew.json`
+- `kubejs/assets/displaydelight/models/item/ad_lobster_pasta.json`
+- `kubejs/assets/displaydelight/models/item/ad_maggot_salad.json`
+- `kubejs/assets/displaydelight/models/item/beetroot_soup.json`
+- `kubejs/assets/displaydelight/models/item/cd_corn_soup.json`
+- `kubejs/assets/displaydelight/models/item/cd_cornbread_stuffing.json`
+- `kubejs/assets/displaydelight/models/item/cd_creamed_corn.json`
+- `kubejs/assets/displaydelight/models/item/cd_creamy_corn_drink.json`
+- `kubejs/assets/displaydelight/models/item/cd_nachos_bowl.json`
+- `kubejs/assets/displaydelight/models/item/ctd_creamed_corn.json`
+- `kubejs/assets/displaydelight/models/item/ctd_fried_eggplant_pasta.json`
+- `kubejs/assets/displaydelight/models/item/ctd_hearty_salad.json`
+- `kubejs/assets/displaydelight/models/item/ctd_spicy_curry.json`
+- `kubejs/assets/displaydelight/models/item/df_berry_matcha_latte.json`
+- `kubejs/assets/displaydelight/models/item/df_cactus_chili.json`
+- `kubejs/assets/displaydelight/models/item/df_cactus_soup.json`
+- `kubejs/assets/displaydelight/models/item/df_ender_nectar.json`
+- `kubejs/assets/displaydelight/models/item/df_field_salad.json`
+- `kubejs/assets/displaydelight/models/item/df_matcha_ice_cream.json`
+- `kubejs/assets/displaydelight/models/item/df_matcha_latte.json`
+- `kubejs/assets/displaydelight/models/item/df_matcha_milkshake.json`
+- `kubejs/assets/displaydelight/models/item/df_salmonberry_ice_cream.json`
+- `kubejs/assets/displaydelight/models/item/df_salmonberry_milkshake.json`
+- `kubejs/assets/displaydelight/models/item/df_sinigang.json`
+- `kubejs/assets/displaydelight/models/item/df_stuffed_cantaloupe.json`
+- `kubejs/assets/displaydelight/models/item/ed_apple_juice.json`
+- `kubejs/assets/displaydelight/models/item/ed_asparagus_and_bacon_cheesy.json`
+- `kubejs/assets/displaydelight/models/item/ed_asparagus_soup.json`
+- `kubejs/assets/displaydelight/models/item/ed_asparagus_soup_creamy.json`
+- `kubejs/assets/displaydelight/models/item/ed_cinnamon_apples.json`
+- `kubejs/assets/displaydelight/models/item/ed_cinnamon_rice.json`
+- `kubejs/assets/displaydelight/models/item/ed_glow_berry_juice.json`
+- `kubejs/assets/displaydelight/models/item/ed_mac_and_cheese.json`
+- `kubejs/assets/displaydelight/models/item/ed_peanut_honey_soup.json`
+- `kubejs/assets/displaydelight/models/item/ed_peanut_salad.json`
+- `kubejs/assets/displaydelight/models/item/ed_peperonata.json`
+- `kubejs/assets/displaydelight/models/item/ed_sweet_berry_juice.json`
+- `kubejs/assets/displaydelight/models/item/ed_sweet_potato_salad.json`
+- `kubejs/assets/displaydelight/models/item/fd_christmas_tea.json`
+- `kubejs/assets/displaydelight/models/item/fd_festive_chicken.json`
+- `kubejs/assets/displaydelight/models/item/fd_salmon_verrines.json`
+- `kubejs/assets/displaydelight/models/item/lm_chicken_curry.json`
+- `kubejs/assets/displaydelight/models/item/lm_cod_deluxe.json`
+- `kubejs/assets/displaydelight/models/item/lm_hearty_lunch.json`
+- `kubejs/assets/displaydelight/models/item/lm_mushroom_pot_pie.json`
+- `kubejs/assets/displaydelight/models/item/lm_omurice.json`
+- `kubejs/assets/displaydelight/models/item/lm_pasta_with_mushroom_sauce.json`
+- `kubejs/assets/displaydelight/models/item/lm_potato_soup.json`
+- `kubejs/assets/displaydelight/models/item/lm_pufferfish_broth.json`
+- `kubejs/assets/displaydelight/models/item/lm_red_soup.json`
+- `kubejs/assets/displaydelight/models/item/lm_rice_pudding.json`
+- `kubejs/assets/displaydelight/models/item/lm_roasted_mutton_rack.json`
+- `kubejs/assets/displaydelight/models/item/lm_sweet_berry_custard.json`
+- `kubejs/assets/displaydelight/models/item/lm_tomato_egg_soup.json`
+- `kubejs/assets/displaydelight/models/item/mushroom_stew.json`
+- `kubejs/assets/displaydelight/models/item/od_bowl_of_guardian_soup.json`
+- `kubejs/assets/displaydelight/models/item/od_braised_sea_pickle.json`
+- `kubejs/assets/displaydelight/models/item/od_seagrass_salad.json`
+- `kubejs/assets/displaydelight/models/item/od_squid_rings.json`
+- `kubejs/assets/displaydelight/models/item/pd_pineapple_fried_rice.json`
+- `kubejs/assets/displaydelight/models/item/pd_pineapple_ice_cream.json`
+- `kubejs/assets/displaydelight/models/item/pd_pineapple_juice.json`
+- `kubejs/assets/displaydelight/models/item/pd_pineapple_milk_shake.json`
+- `kubejs/assets/displaydelight/models/item/plated_bacon_sandwich.json`
+- `kubejs/assets/displaydelight/models/item/plated_barbecue_stick.json`
+- `kubejs/assets/displaydelight/models/item/plated_cabbage_rolls.json`
+- `kubejs/assets/displaydelight/models/item/plated_chicken_sandwich.json`
+- `kubejs/assets/displaydelight/models/item/plated_cod_roll.json`
+- `kubejs/assets/displaydelight/models/item/plated_dumplings.json`
+- `kubejs/assets/displaydelight/models/item/plated_egg_sandwich.json`
+- `kubejs/assets/displaydelight/models/item/plated_hamburger.json`
+- `kubejs/assets/displaydelight/models/item/plated_kelp_roll.json`
+- `kubejs/assets/displaydelight/models/item/plated_kelp_roll_slice.json`
+- `kubejs/assets/displaydelight/models/item/plated_melon_popsicle.json`
+- `kubejs/assets/displaydelight/models/item/plated_mutton_wrap.json`
+- `kubejs/assets/displaydelight/models/item/plated_salmon_roll.json`
+- `kubejs/assets/displaydelight/models/item/plated_stuffed_potato.json`
+- `kubejs/assets/displaydelight/models/item/rabbit_stew.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_apple_pie_slice.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_cabbage_rolls.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_cake_slice.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_chocolate_pie_slice.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_cod_roll.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_kelp_roll_slice.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_salmon_roll.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_stuffed_potato.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_sweet_berry_cheesecake_slice.json`
+- `kubejs/client_scripts/jei_info.js`
+- `kubejs/client_scripts/placeable_tooltip.js`
+- `kubejs/data/creativeengineering/worldgen/configured_feature/wild/beetroots.json`
+- `kubejs/data/creativeengineering/worldgen/configured_feature/wild/cabbages.json`
+- `kubejs/data/creativeengineering/worldgen/configured_feature/wild/hamimelon.json`
+- `kubejs/data/creativeengineering/worldgen/configured_feature/wild/rubber_tree.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/beetroots.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/cabbages.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/cocoa_jungle_tree.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/hamimelon.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/melon.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/pumpkin.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/rooted_dirt_blob.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/rubber_tree.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/sugar_cane.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/sweet_berries.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/truffle_dirt_ore.json`
+- `kubejs/generation_scripts/worldgen/wild_crops.json`
+- `kubejs/server_scripts/cooking/baking.js`
+- `kubejs/server_scripts/cooking/canning.js`
+- `kubejs/server_scripts/cooking/chocolate.js`
+- `kubejs/server_scripts/cooking/cultivated_meat.js`
+- `kubejs/server_scripts/cooking/golden.js`
+- `kubejs/server_scripts/cooking/milk_jar.js`
+- `kubejs/server_scripts/cooking/mortar.js`
+- `kubejs/server_scripts/cooking/salt.js`
+- `kubejs/server_scripts/tags/cantags.js`
+- `kubejs/server_scripts/tags/foodtypetags.js`
+- `kubejs/server_scripts/tags/jartags.js`
+- `kubejs/server_scripts/worldgen/wild_crops.js`
+- `kubejs/startup_scripts/compost/compost_rules.js`
+- `kubejs/startup_scripts/compost/compost_values.js`
+- `kubejs/startup_scripts/cooking/bakeware.js`
+- `kubejs/startup_scripts/cooking/baking_ingredients.js`
+- `kubejs/startup_scripts/cooking/cornmeal.js`
+- `kubejs/startup_scripts/cooking/fluids.js`
+- `kubejs/startup_scripts/func/compost.js`
+- `kubejs/startup_scripts/func/neoCraftHelper.js`
+- `kubejs/startup_scripts/func/tag_helper.js`
+- `kubejs/startup_scripts/items/cans.js`
+- `mods/Delightful-1.19.2-3.4.1.jar`
+- `mods/FarmersDelight-1.19.2-1.2.4.jar`
+- `mods/backportedVeggies-1.9.2-ce-19.2-02.jar`
+- `mods/backportedVintage-0.1.6-ce-19.2-03.jar`
+- `mods/creativeengineering-1.1.02.jar`
+- `mods/displaydelight-1.2.0.jar`
+- `mods/ends_delight-1.19.2-2.1.jar`
+- `mods/miners_delight-1.19.2-1.1.2.jar`
+- `mods/oceanic_delight-1.0.1-forge-1.19.2.jar`
+- `mods/oceansdelight-1.0.2-1.19.2.jar`
+- `mods/rusticdelight-forge-1.19.2-1.3.0.jar`
+- `mods/storagedelight-25.12.09-1.19-forge.jar`
+
+</details>
+
+<details><summary>Delete on the client (206, also in removals_client.txt)</summary>
+
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_door_lower.json`
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_door_lower_flipped.json`
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_door_upper.json`
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_door_upper_flipped.json`
+- `kubejs/assets/cookingforblockheads/models/block/fridge_large_lower.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__acacia_blossom_soup.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__bison_burger.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__bunfungus_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__gongylidia_bruschetta.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__kangaroo_pasta.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__kangaroo_stew.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__lobster_pasta.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/alexsdelight__maggot_salad.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__classic_corn_dog.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__corn_soup.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__cornbread_stuffing.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__creamed_corn.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__creamy_corn_drink.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__grilled_corn.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__nachos_bowl.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/corn_delight__taco.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__berry_matcha_latte.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__cheeseburger.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__cooked_marshmallow_stick.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__deluxe_cheeseburger.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__ender_nectar.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__field_salad.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__matcha_ice_cream.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__matcha_latte.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__nut_butter_and_jelly_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__pumpkin_pie_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__salmonberry_ice_cream.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__salmonberry_pie_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__sinigang.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/delightful__smore.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__apple_pie_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__bacon_and_eggs.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__bacon_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__barbecue_stick.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__cabbage_rolls.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__cake_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__chicken_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__chocolate_pie_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__dumplings.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__egg_sandwich.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__grilled_salmon.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__hamburger.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__honey_glazed_ham.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__mushroom_rice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__mutton_wrap.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__pasta_with_meatballs.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__pasta_with_mutton_chop.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__ratatouille.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__roast_chicken.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__roasted_mutton_chops.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__shepherds_pie.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__squid_ink_pasta.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__steak_and_potatoes.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__stuffed_potato.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__sweet_berry_cheesecake_slice.json`
+- `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__vegetable_noodles.json`
+- `kubejs/assets/displaydelight/models/block/df_cactus_soup.json`
+- `kubejs/assets/displaydelight/models/block/lm_pufferfish_broth.json`
+- `kubejs/assets/displaydelight/models/block/pumpkin_soup.json`
+- `kubejs/assets/displaydelight/models/item/ad_acacia_blossom_soup.json`
+- `kubejs/assets/displaydelight/models/item/ad_kangaroo_pasta.json`
+- `kubejs/assets/displaydelight/models/item/ad_kangaroo_stew.json`
+- `kubejs/assets/displaydelight/models/item/ad_lobster_pasta.json`
+- `kubejs/assets/displaydelight/models/item/ad_maggot_salad.json`
+- `kubejs/assets/displaydelight/models/item/beetroot_soup.json`
+- `kubejs/assets/displaydelight/models/item/cd_corn_soup.json`
+- `kubejs/assets/displaydelight/models/item/cd_cornbread_stuffing.json`
+- `kubejs/assets/displaydelight/models/item/cd_creamed_corn.json`
+- `kubejs/assets/displaydelight/models/item/cd_creamy_corn_drink.json`
+- `kubejs/assets/displaydelight/models/item/cd_nachos_bowl.json`
+- `kubejs/assets/displaydelight/models/item/ctd_creamed_corn.json`
+- `kubejs/assets/displaydelight/models/item/ctd_fried_eggplant_pasta.json`
+- `kubejs/assets/displaydelight/models/item/ctd_hearty_salad.json`
+- `kubejs/assets/displaydelight/models/item/ctd_spicy_curry.json`
+- `kubejs/assets/displaydelight/models/item/df_berry_matcha_latte.json`
+- `kubejs/assets/displaydelight/models/item/df_cactus_chili.json`
+- `kubejs/assets/displaydelight/models/item/df_cactus_soup.json`
+- `kubejs/assets/displaydelight/models/item/df_ender_nectar.json`
+- `kubejs/assets/displaydelight/models/item/df_field_salad.json`
+- `kubejs/assets/displaydelight/models/item/df_matcha_ice_cream.json`
+- `kubejs/assets/displaydelight/models/item/df_matcha_latte.json`
+- `kubejs/assets/displaydelight/models/item/df_matcha_milkshake.json`
+- `kubejs/assets/displaydelight/models/item/df_salmonberry_ice_cream.json`
+- `kubejs/assets/displaydelight/models/item/df_salmonberry_milkshake.json`
+- `kubejs/assets/displaydelight/models/item/df_sinigang.json`
+- `kubejs/assets/displaydelight/models/item/df_stuffed_cantaloupe.json`
+- `kubejs/assets/displaydelight/models/item/ed_apple_juice.json`
+- `kubejs/assets/displaydelight/models/item/ed_asparagus_and_bacon_cheesy.json`
+- `kubejs/assets/displaydelight/models/item/ed_asparagus_soup.json`
+- `kubejs/assets/displaydelight/models/item/ed_asparagus_soup_creamy.json`
+- `kubejs/assets/displaydelight/models/item/ed_cinnamon_apples.json`
+- `kubejs/assets/displaydelight/models/item/ed_cinnamon_rice.json`
+- `kubejs/assets/displaydelight/models/item/ed_glow_berry_juice.json`
+- `kubejs/assets/displaydelight/models/item/ed_mac_and_cheese.json`
+- `kubejs/assets/displaydelight/models/item/ed_peanut_honey_soup.json`
+- `kubejs/assets/displaydelight/models/item/ed_peanut_salad.json`
+- `kubejs/assets/displaydelight/models/item/ed_peperonata.json`
+- `kubejs/assets/displaydelight/models/item/ed_sweet_berry_juice.json`
+- `kubejs/assets/displaydelight/models/item/ed_sweet_potato_salad.json`
+- `kubejs/assets/displaydelight/models/item/fd_christmas_tea.json`
+- `kubejs/assets/displaydelight/models/item/fd_festive_chicken.json`
+- `kubejs/assets/displaydelight/models/item/fd_salmon_verrines.json`
+- `kubejs/assets/displaydelight/models/item/lm_chicken_curry.json`
+- `kubejs/assets/displaydelight/models/item/lm_cod_deluxe.json`
+- `kubejs/assets/displaydelight/models/item/lm_hearty_lunch.json`
+- `kubejs/assets/displaydelight/models/item/lm_mushroom_pot_pie.json`
+- `kubejs/assets/displaydelight/models/item/lm_omurice.json`
+- `kubejs/assets/displaydelight/models/item/lm_pasta_with_mushroom_sauce.json`
+- `kubejs/assets/displaydelight/models/item/lm_potato_soup.json`
+- `kubejs/assets/displaydelight/models/item/lm_pufferfish_broth.json`
+- `kubejs/assets/displaydelight/models/item/lm_red_soup.json`
+- `kubejs/assets/displaydelight/models/item/lm_rice_pudding.json`
+- `kubejs/assets/displaydelight/models/item/lm_roasted_mutton_rack.json`
+- `kubejs/assets/displaydelight/models/item/lm_sweet_berry_custard.json`
+- `kubejs/assets/displaydelight/models/item/lm_tomato_egg_soup.json`
+- `kubejs/assets/displaydelight/models/item/mushroom_stew.json`
+- `kubejs/assets/displaydelight/models/item/od_bowl_of_guardian_soup.json`
+- `kubejs/assets/displaydelight/models/item/od_braised_sea_pickle.json`
+- `kubejs/assets/displaydelight/models/item/od_seagrass_salad.json`
+- `kubejs/assets/displaydelight/models/item/od_squid_rings.json`
+- `kubejs/assets/displaydelight/models/item/pd_pineapple_fried_rice.json`
+- `kubejs/assets/displaydelight/models/item/pd_pineapple_ice_cream.json`
+- `kubejs/assets/displaydelight/models/item/pd_pineapple_juice.json`
+- `kubejs/assets/displaydelight/models/item/pd_pineapple_milk_shake.json`
+- `kubejs/assets/displaydelight/models/item/plated_bacon_sandwich.json`
+- `kubejs/assets/displaydelight/models/item/plated_barbecue_stick.json`
+- `kubejs/assets/displaydelight/models/item/plated_cabbage_rolls.json`
+- `kubejs/assets/displaydelight/models/item/plated_chicken_sandwich.json`
+- `kubejs/assets/displaydelight/models/item/plated_cod_roll.json`
+- `kubejs/assets/displaydelight/models/item/plated_dumplings.json`
+- `kubejs/assets/displaydelight/models/item/plated_egg_sandwich.json`
+- `kubejs/assets/displaydelight/models/item/plated_hamburger.json`
+- `kubejs/assets/displaydelight/models/item/plated_kelp_roll.json`
+- `kubejs/assets/displaydelight/models/item/plated_kelp_roll_slice.json`
+- `kubejs/assets/displaydelight/models/item/plated_melon_popsicle.json`
+- `kubejs/assets/displaydelight/models/item/plated_mutton_wrap.json`
+- `kubejs/assets/displaydelight/models/item/plated_salmon_roll.json`
+- `kubejs/assets/displaydelight/models/item/plated_stuffed_potato.json`
+- `kubejs/assets/displaydelight/models/item/rabbit_stew.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_apple_pie_slice.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_cabbage_rolls.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_cake_slice.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_chocolate_pie_slice.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_cod_roll.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_kelp_roll_slice.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_salmon_roll.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_stuffed_potato.json`
+- `kubejs/assets/displaydelight/models/item/small_plated_sweet_berry_cheesecake_slice.json`
+- `kubejs/client_scripts/jei_info.js`
+- `kubejs/client_scripts/placeable_tooltip.js`
+- `kubejs/data/creativeengineering/worldgen/configured_feature/wild/beetroots.json`
+- `kubejs/data/creativeengineering/worldgen/configured_feature/wild/cabbages.json`
+- `kubejs/data/creativeengineering/worldgen/configured_feature/wild/hamimelon.json`
+- `kubejs/data/creativeengineering/worldgen/configured_feature/wild/rubber_tree.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/beetroots.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/cabbages.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/cocoa_jungle_tree.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/hamimelon.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/melon.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/pumpkin.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/rooted_dirt_blob.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/rubber_tree.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/sugar_cane.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/sweet_berries.json`
+- `kubejs/data/creativeengineering/worldgen/placed_feature/wild/truffle_dirt_ore.json`
+- `kubejs/generation_scripts/worldgen/wild_crops.json`
+- `kubejs/server_scripts/cooking/baking.js`
+- `kubejs/server_scripts/cooking/canning.js`
+- `kubejs/server_scripts/cooking/chocolate.js`
+- `kubejs/server_scripts/cooking/cultivated_meat.js`
+- `kubejs/server_scripts/cooking/golden.js`
+- `kubejs/server_scripts/cooking/milk_jar.js`
+- `kubejs/server_scripts/cooking/mortar.js`
+- `kubejs/server_scripts/cooking/salt.js`
+- `kubejs/server_scripts/tags/cantags.js`
+- `kubejs/server_scripts/tags/foodtypetags.js`
+- `kubejs/server_scripts/tags/jartags.js`
+- `kubejs/server_scripts/worldgen/wild_crops.js`
+- `kubejs/startup_scripts/compost/compost_rules.js`
+- `kubejs/startup_scripts/compost/compost_values.js`
+- `kubejs/startup_scripts/cooking/bakeware.js`
+- `kubejs/startup_scripts/cooking/baking_ingredients.js`
+- `kubejs/startup_scripts/cooking/cornmeal.js`
+- `kubejs/startup_scripts/cooking/fluids.js`
+- `kubejs/startup_scripts/func/compost.js`
+- `kubejs/startup_scripts/func/neoCraftHelper.js`
+- `kubejs/startup_scripts/func/tag_helper.js`
+- `kubejs/startup_scripts/items/cans.js`
+- `mods/Delightful-1.19.2-3.4.1.jar`
+- `mods/FarmersDelight-1.19.2-1.2.4.jar`
+- `mods/backportedVeggies-1.9.2-ce-19.2-02.jar`
+- `mods/backportedVintage-0.1.6-ce-19.2-03.jar`
+- `mods/creativeengineering-1.1.02.jar`
+- `mods/displaydelight-1.2.0.jar`
+- `mods/ends_delight-1.19.2-2.1.jar`
+- `mods/miners_delight-1.19.2-1.1.2.jar`
+- `mods/oceanic_delight-1.0.1-forge-1.19.2.jar`
+- `mods/oceansdelight-1.0.2-1.19.2.jar`
+- `mods/rusticdelight-forge-1.19.2-1.3.0.jar`
+- `mods/storagedelight-25.12.09-1.19-forge.jar`
+- `resourcepacks/Exposure-CreateCompatibility.zip`
+
+</details>
+
 <!-- deploy:1.1.02 -->
 ## 1.1.02 - 2026-10-23 17:38
 

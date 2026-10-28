@@ -88,7 +88,7 @@ import java.util.function.Predicate;
  * creativeengineering:meta/coast_ok (fleets, flotillas, wrecks, sunken ruins) and feature parts are not checked.
  *
  * The json lives in kubejs/generation_scripts/worldgen/meta_structures.json; structure_overrides.js adds it to
- * the datapack only when this class exists (an older jar would otherwise fail the world load on the unknown type).
+ * the datapack.
  */
 public final class MetaStructure extends Structure {
 

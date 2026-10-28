@@ -10,7 +10,7 @@ var i = global.item;
 //Speaker craft change
 R.replaceInput(
   { id: 'computercraft:speaker' },
-  i.note_block,
+  i.noteblock,
   i.speaker, e
 )
  

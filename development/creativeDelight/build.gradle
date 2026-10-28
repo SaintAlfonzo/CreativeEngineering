@@ -17,11 +17,6 @@ plugins {
     id 'ce.forge-bundle'
 }
 
-repositories {
-    // Third-party mod jars copied from ../../mods (git-ignored), for the Java compartments only.
-    flatDir { dir 'libs' }
-}
-
 dependencies {
     // Fruits Delight compartment (compat/FruitsDelightHooks). SRG-named jar; only its own type is used.
     compileOnly 'local:fruitsdelight:0.5.11'
@@ -35,11 +30,6 @@ dependencies {
     // recipes, and the base fluid slot on Respite's JEI page.
     compileOnly 'local:create:1.19.2-0.5.1.i'
     compileOnly 'local:jei:1.19.2-forge-11.8.1.1034'
-}
-
-// No refmap (no MixinGradle): the compartment mixins target other mods' own names with remap = false, like patcherMod.
-tasks.named('compileJava', JavaCompile).configure {
-    options.compilerArgs << '-AdisableTargetValidator=true'
 }
 
 def scriptTrees = ['data/creative_delight/kubejs', 'assets/creative_delight/kubejs']

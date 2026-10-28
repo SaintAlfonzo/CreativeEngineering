@@ -154,8 +154,9 @@ Examples:
   `renderComponentTooltip(pose, lines, x, y)` / `renderTooltip(pose, lines, image, x, y)` send `ItemStack.EMPTY`. Each fix
   draws the same lines with Forge's overload that takes the stack:
   - finished-meal slot ("Served on"): FD `CookingPotScreen`, Farmer's Respite `KettleScreen`, Central Kitchen
-    `CookingGuideScreen` / `BrewingGuideScreen` (mixins `CookingPotMealTooltipMixin`, `KettleMealTooltipMixin`,
-    `CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`, helper `compat/MealSlotTooltip`); the Oven
+    `CookingGuideScreen` / `BrewingGuideScreen` (mixins Creative Delight `farmersdelight.CookingPotMealTooltipMixin` and `farmersrespite.KettleMealTooltipMixin`
+    (moved from patcherMod 2026-10-27), patcherMod `CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`,
+    helper patcherMod `compat/MealSlotTooltip`); the Oven
     (`OvenScreen`, direct edit).
   - Brewin' port: the keg tank tooltip (keg GUI and its recipe book) carries the item the drink pours into
     (`BnCFluidItemDisplays`). In JEI the fermenting result tank sits over the tankard icon and JEI shows the first

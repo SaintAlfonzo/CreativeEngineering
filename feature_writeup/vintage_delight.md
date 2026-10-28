@@ -339,7 +339,7 @@ Every row ships. The marker is the text to put in this file, in the JEI / names 
 | Honey Jar | pack honey fluid, honey bottle, honey blocks | `*overlaps w/ honey bottle and blocks*` |
 | Vinegar (bottle, jar) | none; `dishes/ingredients #6` planned a KubeJS vinegar | not an overlap: it becomes the pack vinegar (S9) |
 | Pickle, pickled beetroot / egg / onion / pepper | Brewin' Pickled Pickles (sea pickles, canned) | different foods; "Pickle" vs "Pickled Pickles" is a names check |
-| Oat dough, cucumber dough | Create dough | `*overlaps w/ Create dough*`. **Oat dough is a `#forge:dough`** (owner, 2026-10-23), so it works in every dough recipe; cucumber dough stays a named ingredient |
+| Oat dough, cucumber dough | Create dough | `*overlaps w/ Create dough*`. **Oat dough is a `#forge:dough`** (owner, 2026-10-23), so it works in every dough recipe; cucumber dough stays a named ingredient. 2026-10-28 (TODO `baking/baked-goods #29`, #31): no furnace, smoker or campfire bread; oat dough bakes to bread in the oven with any dough (1 / 3 / 6 on a baking sheet). Overnight oats also craft: 3 raw oats, a fruit slice, a berry, milk, bowl |
 | Cheese pizza, meat pizza | Brewin' Pizza (placeable, sliced) | `*overlaps w/ Brewin' Pizza*` (different fillings) |
 | Cheese pasta, cucumber noodles | FD pasta dishes, `#forge:pasta` | `*overlaps w/ FD pasta*` (check the noodles in the tag cannot stand in for cooked pasta) |
 | Salted Cod, Salted Salmon | The Salt's salting (`Salted` tag on any food, Create mixing pack-wide planned) | `*overlaps w/ The Salt's salting*` |
@@ -409,7 +409,7 @@ back to this table; removal of a side is a separate change at that point.
 | 7a Compost | BUILT | CD `kubejs_startup/vintagedelight/compost.js` (was `compost_values.js`, QoL-4): the port's 14 chances (`other`), wild oats / peanuts / cucumbers / ghost peppers 0.65 (`crops`), 3 crates + oat bag 1.0 (`crates`); the Veggies wild crops and crates the same. Startup reload + `/reload` |
 | 8 Cans | config BUILT, Vintage run OPEN | `gen_can_types.py`: 16 Vintage cans (cucumber, ghost pepper, pickled beetroot / onion / pepper, roasted peanuts, Surströmming, cheese slices, oatmeal cookies, cheese pasta, pad thai; cucumber salad and the 3 soups by type) and 4 shared sources (Vintage kimchi and pickle in Brewin's cans, salted cod and salmon in the cooked fish cans), skipped through `AWAIT_DUMP` until a dump has them. The vinegar additive ran (66 cans). Veggies: 24 cans generated. Rows in [can_parity.md](can_parity.md), CP-27 to CP-31 |
 | 9 Cooking rules | BUILT | (Since 2026-10-25 the grid-meal moves, burrito wrap and heatless routes are Creative Delight QoL-5: `kubejs/data/creative_delight/kubejs/vintagedelight/cooking.js`; the burger rule stays in `cooking.js`.) `cooking.js`: burger rule for both burgers (shaped on the cheese slice so Delightful's wedge cheeseburgers keep their grids, beef or vegetarian patty; assemblies start on the slice, the deluxe on the patty), stuffed burrito on `#forge:tortilla` + assembly (ghost pepper or roasted bell pepper first), PB & J and cucumber salad `_manual_only`, heatless cheese pasta (pasta + 3 cheese + bowl), pad thai (2 cooked chicken cuts, roasted peanut) and pickle soup (bone broth, 2 pickles, baked potato), oat dough's furnace bread removed (3 raw oats -> bread stays); the Veggies compat grid recipes folded in (§3.4). `baking.js`: oatmeal cookie oven only (cookie dough + 2 raw oats -> 12). No rule applies: pizzas (one `#forge:dough` each already; oven.md has no pizza rule), granola bars, oatmeal (no cooked oat), ghostly chili (Nether, as blazing chili), jams, curds, nut milk |
-| 10, 11 Salt, cheese | BUILT (both lines ship) | `#forge:salt` holds salt dust from the jar; JEI info / WTHIT slices line OPEN |
+| 10, 11 Salt, cheese | BUILT (both lines ship; salt merged 2026-10-26: Vintage's dust and The Salt's block stay, salt bucket removed, [item_merges.md](item_merges.md) 2.9) | `#forge:salt` holds salt dust from the jar; JEI info / WTHIT slices line OPEN |
 | 12 Pickling jar | BUILT; remainder buffer OPEN | NCH `R.vdPickling`. `alcohol.js`: Brewin' kimchi and pickled pickles moved from the keg (honey 250 mB -> honey bottle). Fermented garlic honey: the Veggies port ships Vintage's jar recipe (Veggies `-02`), its pot route is gone. The jar keeps no leftover bottles (a honey bottle input loses its glass bottle); a remainder-buffer slot is a TODO row |
 | 13 Potions | BUILT | no Dehydrated class, registry entry or brewing mix in the port; the 6 brews use vanilla effect ids only (checked); `VTD-23` records the mixers |
 | 14 Placeables, stacks | OPEN | `/dumpplaceable`, `gen_stack_sizes.py` |
@@ -582,7 +582,7 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
 - **Jams** ([TODO](todo/TODO.md) `dishes/jams #1`): every jam becomes Fruits Delight's jam item with Vintage's jam block, in
   mason jars; mason jars take glass panes; a new empty-jar texture; jams recolour per fruit. Replaces S2's "keep both" for
   the Vintage jams (§3.1). Open: which jar item stays (recommend the mason jar).
-- **Nut mash** (`dishes/jams #5`): merged with Delightful's nut butter. Open: which survives (recommend Vintage's nut mash).
+- **Nut mash** (`merges/dishes #7`): merged with Delightful's nut butter. Open: which survives (recommend Vintage's nut mash).
 - **Pickled sea pickle** (`dishes/pickles-and-ferments #1`): Brewin's Pickled Pickles is removed; a recoloured pickle is the
   new Pickled Sea Pickle, crafted without honey. Open: the craft (recommend 5 sea pickles + salt).
 - **Real pickles only** (`pickles-and-ferments #2`): pickle recipes (squid and pickles, sea pickle roll, others) take
@@ -678,7 +678,8 @@ Crops and worldgen
 Machines
 
 - [ ] VTD-10 Pickling jar: 5 cucumbers + salt -> pickle; hopper in from the top, out from the bottom.
-- [ ] VTD-11 The jar accepts The Salt's salt and Vintage's salt dust in every salt recipe.
+- [ ] VTD-11 The jar takes salt dust in every salt recipe (since the salt merge, item_merges.md 2.9, The Salt's salt
+  is salt dust in any inventory; no recipe names `salt:salt`).
 - [ ] VTD-12 Evaporator next to water grows salt layers; salt dust places and thickens a layer; salt bucket -> 3 dust.
 - [ ] VTD-13 Cheese mold: 4 curds -> wheel after a random tick -> slices; JEI explains it.
 - [ ] VTD-14 Mason jars stack 1 to 4 on a block; jar + 3 bottles <-> 3 bottles.

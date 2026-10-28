@@ -298,6 +298,8 @@ def main():
             legacy.append(rel)
             os.makedirs(os.path.dirname(os.path.join(OUT, rel)), exist_ok=True)
             shutil.copyfile(os.path.join(root, f), os.path.join(OUT, rel))
+    # the Food Plate and Small Food Plate items' own icons: no block model reaches them
+    textures |= {n for n in names if n.startswith(A + 'textures/item/') and n.endswith('.png')}
     for t in sorted(textures):
         if t in legacy:
             continue

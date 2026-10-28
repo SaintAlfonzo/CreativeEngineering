@@ -42,6 +42,15 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.t_pickled_veg, i.vegetables, i.vegetables, i.beetroot, i.salad_ingredients], i.pickle_soup, e,
 			'pickle_soup', 1.0, 200)
 
+		//######################### One salt #########################
+		// The Salt's salt and Vintage's salt block are merged (vintage_items.js; swaps in the pack's item_merges.js). The
+		// swap leaves two 9 <-> 1 pairs: Vintage's packing (any #forge:salt) and The Salt's unpacking stay. The salt bucket
+		// is gone with both its recipes.
+		R.remove({ id: 'salt:salt_packing' }, e)
+		R.remove({ id: 'vintagedelight:salt_block_deconstruct' }, e)
+		R.remove({ id: 'vintagedelight:salt_from_smelting' }, e)
+		R.remove({ id: 'vintagedelight:salt_bucket_to_salt' }, e)
+
 		//######################### Salted fish #########################
 		// Salted cod and salmon are out (vintageport #11, removed_items.js); Surstromming stays. The Salt's Salted
 		// cooked fish is a different thing and stays.
@@ -59,9 +68,14 @@ ServerEvents.recipes(e => {
 		// Rows below: Creative Delight members #3, moved from the pack's server_scripts/cooking/cooking.js 2026-10-25, unchanged.
 
 		//######################### Bread #########################
-		// Vintage Delight's oat dough is a #forge:dough: no furnace bread either (its 3 raw oats -> bread craft stays, as wheat)
+		// Oat dough is a #forge:dough: no furnace, smoker or campfire bread (its 3 raw oats -> bread craft stays, as wheat). It bakes
+		// into bread in the oven like every dough (farmersdelight/recipes.js "Bread from dough").
 		R.remove({ id: 'vintagedelight:bread_from_smelting' }, e)
 		R.remove({ id: 'vintagedelight:bread_from_smoking' }, e)
+
+		//######################### Overnight oats #########################
+		// A craft beside the Pickling Jar recipe (TODO dishes/meals #22): 3 raw oats, a fruit slice, a berry, milk, bowl
+		R.shapeless(i.overnight_oats, [i.raw_oats, i.raw_oats, i.raw_oats, i.t_fruit_salad_slice, i.t_berries, i.milk, i.bowl], e, 'overnight_oats')
 
 		//######################### Burgers #########################
 		// The pack's burger rule (creativeengineering/recipes.js): shaped, any #forge:bread, cheese never milk; the assembly is the only

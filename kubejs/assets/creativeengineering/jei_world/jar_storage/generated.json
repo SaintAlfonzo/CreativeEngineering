@@ -2120,9 +2120,7 @@
       "minecraft:potion",
       "minecraft:splash_potion",
       "minecraft:lingering_potion"
-     ],
-     "nbt": "{Potion:\"minecraft:swiftness\"}",
-     "label": "Any potion"
+     ]
     },
     {
      "item": "supplementaries:jar"
@@ -2146,7 +2144,8 @@
    "notes": [
     "Each adds 1 of 12; 12 fill a jar.",
     "One potion kind per jar."
-   ]
+   ],
+   "per_potion": true
   },
   {
    "inputs": [

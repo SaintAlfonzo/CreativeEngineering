@@ -6,8 +6,6 @@ plugins {
 }
 
 repositories {
-    // Third-party mod jars copied from ../../mods (git-ignored).
-    flatDir { dir 'libs' }
     mavenCentral()
 }
 
@@ -23,31 +21,7 @@ dependencies {
     // target name only (their art is read from the installed jars at runtime).
 }
 
-// Mixins use Mojang names and get a real refmap, like backportedVinery.
-mixin {
-    add sourceSets.main, 'creative_labels.refmap.json'
-    mixin_configs.split(',').each { config it.trim() }
-}
-
-// The mixin AP writes the refmap into the compile task's temporary dir, which Gradle doesn't track: declare it as an
-// output so a missing one re-runs the compile (exposureBackport shipped a jar without its refmap once).
+// Port in progress: report every compile error, not javac's default first 100.
 tasks.named('compileJava', JavaCompile).configure {
-    outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
     options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
-}
-
-// Backstop: every mixin config that lists mixins must find its refmap in the jar.
-tasks.named('jar', Jar).configure {
-    doLast {
-        def jarFile = archiveFile.get().asFile
-        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
-        def slurper = new groovy.json.JsonSlurper()
-        mixin_configs.split(',').collect { it.trim() }.each { config ->
-            def json = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> slurper.parse(zip.getInputStream(zip.getEntry(config))) }
-            def count = ['mixins', 'client', 'server'].sum { (json[it] ?: []).size() }
-            if (count > 0 && json.refmap && !entries.contains(json.refmap)) {
-                throw new GradleException("${config} has ${count} mixin(s) but its refmap ${json.refmap} is not in ${jarFile.name}")
-            }
-        }
-    }
 }

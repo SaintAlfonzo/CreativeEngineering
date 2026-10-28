@@ -6,7 +6,6 @@ ServerEvents.recipes(e => {
 	var i = global.item
 	var f = global.fluid
 	var R = global.NCH
-	var F = global.foodFamily(e)
 
 	global.CD.recipes(() => {
 
@@ -35,17 +34,8 @@ ServerEvents.recipes(e => {
 		// Heatless meal rule: farmersdelight/recipes.js "Meals". Bone broth route (TODO dishes/ingredients #4).
 		R.shapeless(i.fig_chicken_stew, [i.bone_broth, i.cooked_chicken, i.t_fruits_fig, i.t_fruits_fig, i.t_fruits_fig], e, 'fig_chicken_stew_cooked_manual_only')
 
-		//Muffins
-		// Fruits Delight's pot recipes ask for #forge:dough/wheat; use the general #forge:dough tag instead
-		// (TODO cooking/oven #3, "muffins not cookable?"). Otherwise identical: 2 berries, dough, milk bottle, egg, sugar ->
-		// 2 muffins, 0.1 xp, 200 ticks. Any sweetener, as the sugar swap (minecraft/recipes.js) gives every other recipe. The
-		// oven copies are in creativeengineering/baking.js.
-		R.remove({ id: 'farmersdelight:cooking/blueberry_muffin' }, e)
-		R.remove({ id: 'farmersdelight:cooking/cranberry_muffin' }, e)
-		R.fdCooking([i.t_fruits_blueberry, i.t_fruits_blueberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sweetener],
-			Item.of(i.blueberry_muffin, 2), e, 'blueberry_muffin', 0.1, 200)
-		R.fdCooking([i.t_fruits_cranberry, i.t_fruits_cranberry, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sweetener],
-			Item.of(i.cranberry_muffin, 2), e, 'cranberry_muffin', 0.1, 200)
+		//Muffins: both routes (oven, and the Cooking Pot on any dough in place of Fruits Delight's wheat dough) are the
+		// muffin family call in creativeengineering/baking.js (TODO cooking/oven #3, "muffins not cookable?").
 
 		//Orange jam (TODO baking/sweets #6)
 		// Fruits Delight's 2-orange pot and heated mixing recipes stay; one orange's 4 slices also work

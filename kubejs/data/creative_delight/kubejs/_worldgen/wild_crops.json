@@ -178,10 +178,11 @@
       "notes": "1 in 100 chunks."
     },
     "cantaloupe": {
-      "label": "Cantaloupe",
-      "where": ["warm dry grassy"],
-      "features": ["delightful:patch_cantaloupe"],
-      "disable_modifiers": ["delightful:cantaloupe"]
+      "label": "Mini Cantaloupe",
+      "where": ["warm desert", "warm badlands"],
+      "features": ["creative_delight:wild/mini_cantaloupe"],
+      "disable_modifiers": ["delightful:cantaloupe"],
+      "notes": "Cantaloupe merge (item_merges.md 2.10): Delightful's cantaloupe is the Mini Cantaloupe and grows where the Cantaloupe (hamimelon) does, on the same soils (pack feature, copy of wild/hamimelon). Was warm dry grassy, Delightful's patch."
     },
     "corn": {
       "label": "Corn",
@@ -282,7 +283,7 @@
       "notes": "Fruits Delight's feature needs sand below; outside beaches it only takes where the coast has sand."
     },
     "hamimelon": {
-      "label": "Hamimelon",
+      "label": "Cantaloupe",
       "where": ["warm desert", "warm badlands"],
       "features": ["creative_delight:wild/hamimelon"],
       "disable_modifiers": ["fruitsdelight:hamimelon"],

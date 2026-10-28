@@ -77,10 +77,9 @@ Everything is written under `kubejs/exported/`. Bring it home with
 | `dumptrades` | `villager_trades.json` | trade review. Holds the tick for 2-5 s and queues vanilla cartographer map searches in the background, so run it when few players are on |
 
 **Do not run these on the live server:**
-- `dumpall`: it includes `dumpclimate` and `dumpservermods` (below).
+- `dumpall`: it includes `dumpclimate` (below). It no longer copies jars.
 - `dumpclimate`: overwrites the shipped climate samples in `generation_scripts/`, which biome tuning reads.
 - `dumpnames`: single player only (says so on a dedicated server).
-- `dumpservermods`: copies about 340 jars into `server_mods/`.
 
 ## 6. Afterwards (dev machine)
 

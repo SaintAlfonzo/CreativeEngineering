@@ -1,9 +1,9 @@
 // requires: jei
 // requires: ends_delight
 // End's Delight JEI information pages: mob drops that come from loot modifiers, not recipes (ends_delight.md 3.1).
-// Creative Delight QoL-6, switch [qol] jeiInfoPages. Ender's Delight's knife drops: endersdelight/jei_info.js.
+// Creative Delight QoL-6, switch [qol] jeiInfoPages. Ender's Delight's knife drops: endersdelight/client.js.
 JEIEvents.information(e => {
-	if (!global.CD || !global.CD.on('ends_delight') || !global.CD.qol('jeiInfoPages')) return
+	if (!global.CD.on('ends_delight') || !global.CD.qol('jeiInfoPages')) return
 	var i = global.item
 
 	e.addItem(i.raw_dragon_meat, [Text.of('Dropped by the Ender Dragon (5 to 7). Killed with a knife or a machete: 2 more.')])

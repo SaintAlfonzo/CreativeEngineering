@@ -2,6 +2,8 @@ package com.SaintAlfonzo.creativeengineering.worldgen;
 
 import com.SaintAlfonzo.creativeengineering.CEConfig.EarthFillLog;
 import com.SaintAlfonzo.creativeengineering.CreativeEngineering;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.mojang.datafixers.util.Either;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -314,7 +316,7 @@ public final class EarthFill {
 	private static final Map<StructureTemplate, long[]> LOCAL_WATER = new ConcurrentHashMap<>();
 
 	@SubscribeEvent
-	public static void onServerStopped(ServerStoppedEvent event) { LOCAL.clear(); LOCAL_WATER.clear(); }
+	public static void onServerStopped(ServerStoppedEvent event) { LOCAL.clear(); LOCAL_WATER.clear(); SHARED.clear(); }
 
 	@SubscribeEvent
 	public static void onTagsUpdated(TagsUpdatedEvent event) { LOCAL.clear(); }
@@ -414,23 +416,58 @@ public final class EarthFill {
 
 	// ── predicted terrain ────────────────────────────────────────────────────
 
-	/** One predicted column and, once asked, its topmost non-air block and whether that is water. */
-	private static final class Column {
-		final NoiseColumn blocks;
-		int top = Integer.MIN_VALUE;
-		boolean topWater;
+	/**
+	 * One predicted column, packed 2 bits per y over the level's build height (air, water or anything else; outside
+	 * it reads as air, as NoiseColumn does), with its topmost non-air block and whether that is water. About 100
+	 * bytes instead of a 384-entry NoiseColumn, so the shared cache can hold many.
+	 */
+	static final class Column {
+		private static final int AIR = 0, WATER = 1, OTHER = 2;
+		final int minY, height, top;
+		final boolean topWater;
+		private final long[] kinds;
 
-		Column(NoiseColumn blocks) { this.blocks = blocks; }
-
-		private void findTop(LevelHeightAccessor level) {
-			if (top != Integer.MIN_VALUE) return;
-			top = topOf(blocks, level);
-			topWater = top >= level.getMinBuildHeight() && isWater(blocks.getBlock(top));
+		Column(NoiseColumn blocks, LevelHeightAccessor level) {
+			minY = level.getMinBuildHeight();
+			height = level.getHeight();
+			kinds = new long[(height * 2 + 63) / 64];
+			int topY = minY - 1;
+			boolean water = false;
+			for (int i = height - 1; i >= 0; i--) {
+				BlockState state = blocks.getBlock(minY + i);
+				int k = state.isAir() ? AIR : isWater(state) ? WATER : OTHER;
+				if (k == AIR) continue;
+				kinds[i >> 5] |= (long) k << ((i & 31) << 1);
+				if (topY < minY) { topY = minY + i; water = k == WATER; }
+			}
+			top = topY;
+			topWater = water;
 		}
 
-		boolean underWater(LevelHeightAccessor level) { findTop(level); return topWater; }
+		Kind at(int y) {
+			int i = y - minY;
+			if (i < 0 || i >= height) return Kind.AIR;
+			int k = (int) (kinds[i >> 5] >>> ((i & 31) << 1)) & 3;
+			if (k == AIR) return Kind.AIR;
+			if (k == WATER) return Kind.WATER;
+			return topWater ? Kind.SEABED : Kind.SOLID;
+		}
+	}
 
-		int top(LevelHeightAccessor level) { findTop(level); return top; }
+	/**
+	 * Predicted columns shared by every start, placement-priority prediction and meta retry of a dimension: the same
+	 * chunk's columns are otherwise read again by each (perf.md 10.7). Keyed by everything a column depends on, so a
+	 * cached column is exactly what a fresh read returns. Bounded per key; cleared when the server stops.
+	 */
+	private record ColumnSource(ChunkGenerator generator, RandomState randomState, int grid, int minY, int height) {}
+
+	private static final int SHARED_COLUMNS = 65_536;
+	private static final Map<ColumnSource, Cache<Long, Column>> SHARED = new ConcurrentHashMap<>();
+
+	private static Cache<Long, Column> shared(ChunkGenerator generator, RandomState randomState, LevelHeightAccessor level, int grid) {
+		if (!WorldgenConfig.sharedTerrainCacheEnabled()) return null;
+		return SHARED.computeIfAbsent(new ColumnSource(generator, randomState, grid, level.getMinBuildHeight(), level.getHeight()),
+				k -> CacheBuilder.newBuilder().maximumSize(SHARED_COLUMNS).build());
 	}
 
 	/** The y of a column's topmost non-air block, or one below the bottom for an all-air column. */
@@ -447,27 +484,32 @@ public final class EarthFill {
 		return top >= level.getMinBuildHeight() && isWater(column.getBlock(top));
 	}
 
-	/** The generator's noise terrain, read once per grid x grid cell and cached for this start. */
+	/**
+	 * The generator's noise terrain, read once per grid x grid cell. Columns are kept for this start and, with
+	 * [worldgen.systems] sharedTerrainCache, in the dimension's shared cache.
+	 */
 	static Terrain predicted(ChunkGenerator generator, RandomState randomState, LevelHeightAccessor level, int grid) {
 		Long2ObjectOpenHashMap<Column> columns = new Long2ObjectOpenHashMap<>();
+		Cache<Long, Column> shared = shared(generator, randomState, level, grid);
 		return new Terrain() {
 			private Column column(int x, int z) {
 				int cx = Math.floorDiv(x, grid) * grid + grid / 2, cz = Math.floorDiv(z, grid) * grid + grid / 2;
 				long key = ChunkPos.asLong(cx, cz);
 				Column column = columns.get(key);
-				if (column == null) columns.put(key, column = new Column(generator.getBaseColumn(cx, cz, level, randomState)));
+				if (column != null) return column;
+				if (shared != null) column = shared.getIfPresent(key);
+				if (column == null) {
+					// two threads may read the same column at once: both get the same answer, either is kept
+					column = new Column(generator.getBaseColumn(cx, cz, level, randomState), level);
+					if (shared != null) shared.put(key, column);
+				}
+				columns.put(key, column);
 				return column;
 			}
 
-			public Kind at(int x, int y, int z) {
-				Column column = column(x, z);
-				BlockState state = column.blocks.getBlock(y);
-				if (state.isAir()) return Kind.AIR;
-				if (isWater(state)) return Kind.WATER;
-				return column.underWater(level) ? Kind.SEABED : Kind.SOLID;
-			}
+			public Kind at(int x, int y, int z) { return column(x, z).at(y); }
 
-			public int top(int x, int z) { return column(x, z).top(level); }
+			public int top(int x, int z) { return column(x, z).top; }
 		};
 	}
 

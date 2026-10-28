@@ -35,6 +35,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gen_crop_worldgen_table as C  # noqa: E402
 import loot_breakdown_scan as S  # noqa: E402
 import nether_blocks_scan as N  # noqa: E402
+from pack_paths import loads_lenient  # noqa: E402  (comments anywhere: Terralith's magma_veins `"count": 0 //8`)
 
 ROOT = C.INSTANCE
 OUT_MD = ROOT / 'feature_writeup/nether_worldgen_scan.md'
@@ -93,14 +94,6 @@ PREDICATE_KEYS = {'target', 'predicate', 'blocks', 'can_replace', 'cannot_replac
                   'can_grow_through', 'valid_base_block', 'can_place_on', 'can_survive_on', 'target_condition',
                   'cannot_replace_blocks', 'replaceable_blocks', 'block_predicate'}
 
-
-def loads_lenient(raw):
-    """Json with // comments anywhere on a line (Terralith's magma_veins: `"count": 0 //8`)."""
-    text = raw.decode('utf-8-sig', 'ignore') if isinstance(raw, bytes) else raw
-    return json.loads(re.sub(r'//[^\n"]*$', '', text, flags=re.M))
-
-
-C.loads_lenient = loads_lenient
 
 
 # ── surface rules ────────────────────────────────────────────────────────────

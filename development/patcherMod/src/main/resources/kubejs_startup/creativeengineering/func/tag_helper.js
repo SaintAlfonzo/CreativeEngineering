@@ -129,14 +129,23 @@ global.tags = {
 	},
 
 	// ── bonus: block mining tool + level in one call (ServerEvents.tags('block'))
-	// TAGS.mineable(e, 'pickaxe', 'iron', ['mod:block'])   level: null|stone|iron|diamond|gold|netherite
-	mineable(event, tool, level, blocks) {
-		const needs = { stone: 'minecraft:needs_stone_tool', iron: 'minecraft:needs_iron_tool',
-			diamond: 'minecraft:needs_diamond_tool', gold: 'forge:needs_gold_tool',
-			netherite: 'forge:needs_netherite_tool' }
+	// TAGS.mineable(e, 'pickaxe', 'iron', ['mod:block'])   level: null|stone|copper|iron|diamond|gold|netherite
+	// tool null = set only the level. opts.exclusive: also take the blocks out of every other tool's
+	// mineable tag (when tool is given) and every other level's needs_ tag (when level is given).
+	//   TAGS.mineable(e, null, 'copper', ['mod:block'], { exclusive: true })
+	mineable(event, tool, level, blocks, opts) {
+		opts = opts || {}
+		const tools = ['pickaxe', 'shovel', 'axe', 'hoe']
+		const needs = { stone: 'minecraft:needs_stone_tool', copper: 'creativeengineering:needs_copper_tool',
+			iron: 'minecraft:needs_iron_tool', diamond: 'minecraft:needs_diamond_tool',
+			gold: 'forge:needs_gold_tool', netherite: 'forge:needs_netherite_tool' }
+		if (level && !needs[level]) throw new Error('global.tags.mineable: unknown level "' + level + '"')
 		this._arr(blocks).forEach(id => {
-			event.add('minecraft:mineable/' + tool, id)
+			if (tool) event.add('minecraft:mineable/' + tool, id)
 			if (needs[level]) event.add(needs[level], id)
+			if (!opts.exclusive) return
+			if (tool) tools.forEach(other => { if (other !== tool) event.remove('minecraft:mineable/' + other, id) })
+			if (needs[level]) Object.keys(needs).forEach(other => { if (other !== level) event.remove(needs[other], id) })
 		})
 	},
 

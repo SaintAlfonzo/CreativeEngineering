@@ -6,15 +6,14 @@ import com.SaintAlfonzo.more_mooblooms.entity.CowFeeding;
 import com.SaintAlfonzo.more_mooblooms.entity.MMEntities;
 import com.SaintAlfonzo.more_mooblooms.item.MoobloomSpawnEggItem;
 import com.SaintAlfonzo.more_mooblooms.network.SyncVariantsPacket;
+import com.SaintAlfonzo.more_mooblooms.shared.BuiltInPacks;
+import com.SaintAlfonzo.more_mooblooms.shared.HiddenItems;
 import com.SaintAlfonzo.more_mooblooms.spawn.MoobloomSpawns;
 import com.SaintAlfonzo.more_mooblooms.variant.MoobloomBreeding;
 import com.SaintAlfonzo.more_mooblooms.variant.MoobloomVariants;
 import com.mojang.logging.LogUtils;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddPackFindersEvent;
@@ -27,10 +26,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.resource.PathPackResources;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -70,6 +67,8 @@ public class MoreMooblooms {
 
         MMEntities.register(modBus);
         MoobloomSpawnEggItem.register(modBus);
+        // The buttercup and Buzzier Bees' moobloom egg stay out of the creative tabs (mixin applied only with Buzzier Bees).
+        if (isLoaded(BuzzierBeesSet.MOD_ID)) HiddenItems.set(BuzzierBeesSet::isHidden);
         modBus.addListener((FMLCommonSetupEvent e) -> SyncVariantsPacket.register());
         modBus.addListener(MoreMooblooms::addPacks);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientSetup.register(modBus));
@@ -116,16 +115,6 @@ public class MoreMooblooms {
     }
 
     private static void addPack(AddPackFindersEvent event, Path dir, String packId, String title, Pack.Position position) {
-        event.addRepositorySource((consumer, constructor) -> {
-            try (PathPackResources probe = new PathPackResources(packId, dir)) {
-                PackMetadataSection meta = probe.getMetadataSection(PackMetadataSection.SERIALIZER);
-                if (meta == null) throw new IOException("no pack.mcmeta in " + dir);
-                // required: always on, can't be switched off; hidden: not listed in the pack screens.
-                consumer.accept(constructor.create(packId, Component.literal(title), true,
-                        () -> new PathPackResources(packId, dir), meta, position, PackSource.BUILT_IN, true));
-            } catch (IOException e) {
-                throw new IllegalStateException("More Mooblooms pack " + packId + " is broken", e);
-            }
-        });
+        BuiltInPacks.addFolder(event, dir, packId, title, position, "More Mooblooms");
     }
 }

@@ -4,11 +4,9 @@ import com.SaintAlfonzo.incubation_additions.client.DuckModEggModels;
 import com.SaintAlfonzo.incubation_additions.crate.WaterfowlEggCrates;
 import com.SaintAlfonzo.incubation_additions.nest.EmuNests;
 import com.SaintAlfonzo.incubation_additions.nest.WaterfowlNests;
+import com.SaintAlfonzo.incubation_additions.shared.BuiltInPacks;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,9 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.MissingMappingsEvent;
 import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.resource.PathPackResources;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -107,20 +103,8 @@ public class IncubationAdditions {
     private static void addPacks(AddPackFindersEvent event, List<ContentSet> active) {
         Path root = ModList.get().getModFileById(ID).getFile().findResource("packs");
         for (ContentSet set : active) {
-            String packId = ID + ":" + set.modId();
-            Path dir = root.resolve(set.modId());
-            event.addRepositorySource((consumer, constructor) -> {
-                try (PathPackResources probe = new PathPackResources(packId, dir)) {
-                    PackMetadataSection meta = probe.getMetadataSection(PackMetadataSection.SERIALIZER);
-                    if (meta == null) throw new IOException("no pack.mcmeta in " + dir);
-                    // required: always on, can't be switched off; hidden: not listed in the pack screens.
-                    consumer.accept(constructor.create(packId, Component.literal(set.title()), true,
-                            () -> new PathPackResources(packId, dir), meta, Pack.Position.BOTTOM,
-                            PackSource.BUILT_IN, true));
-                } catch (IOException e) {
-                    throw new IllegalStateException("Incubation Additions pack " + packId + " is broken", e);
-                }
-            });
+            BuiltInPacks.addFolder(event, root.resolve(set.modId()), ID + ":" + set.modId(), set.title(), Pack.Position.BOTTOM,
+                    "Incubation Additions");
         }
     }
 

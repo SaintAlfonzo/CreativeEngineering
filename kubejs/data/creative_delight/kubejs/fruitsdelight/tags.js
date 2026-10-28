@@ -28,10 +28,10 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_exotic_fruit, [
 		i.pear, i.hawberry, i.lychee, i.mango, i.persimmon, i.peach, i.orange, i.mangosteen,
 		i.bayberry, i.kiwi, i.fig, i.blueberry, i.lemon, i.cranberry, i.pineapple, i.durian_flesh,
-		i.hamimelon_slice,
 	])
+	// the hamimelon slice is merged into the cantaloupe slice (fruitsdelight/item_merges.js, delightful/tags.js)
 	t.add(e, i.t_fruit_salad_slice, [
-		i.hamimelon_slice, i.pineapple_slice, i.lemon_slice, i.orange_slice,
+		i.pineapple_slice, i.lemon_slice, i.orange_slice,
 	])
 })
 

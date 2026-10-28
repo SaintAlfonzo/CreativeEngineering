@@ -1,15 +1,16 @@
 {
- "_note": "Hand-written: Salt 1.2.4.1 Dissolving, Melting, ISaltBlock.onSaltRandomTick, Salt$Blocks dissolved states (javap), values from config/salt-common.toml. Melting.meltBlock places water only when the dimension is ultra-warm (bytecode tests ultraWarm(), the config text says water), so outside the Nether a melted block becomes air. Salt clusters and evaporation have Salt's own JEI pages.",
+ "_note": "Hand-written: Salt 1.2.4.1 Dissolving, Melting, ISaltBlock.onSaltRandomTick, Salt$Blocks dissolved states (javap), values from config/salt-common.toml. Melting.meltBlock places water only when the dimension is ultra-warm (bytecode tests ultraWarm(), the config text says water), so outside the Nether a melted block becomes air. Salt clusters and evaporation have Salt's own JEI pages. Pack changes (patcherMod block.SaltBlockTicks, item_merges.md 2.9): Vintage's salt blocks melt like The Salt's, the Salt Layer also dissolves, raw rock salt block never dissolves. Salt dust does not melt ice when used or dispensed (The Salt binds that to its own salt item), so those two rows are gone. Evaporator: Vintage SaltBlock, growth speed 50 (chance 0.5 per random tick); it grows when water is beside and the block above is air, or when a salt layer below 8 sits on it.",
  "rows": [
   {
    "requires": [
-    "salt"
+    "salt",
+    "vintagedelight"
    ],
    "inputs": [
     {
      "blocks": [
       "salt:salt_block",
-      "salt:raw_rock_salt_block"
+      "vintagedelight:salt"
      ]
     },
     {
@@ -65,13 +66,14 @@
   },
   {
    "requires": [
-    "salt"
+    "salt",
+    "vintagedelight"
    ],
    "inputs": [
     {
      "blocks": [
       "salt:salt_block",
-      "salt:raw_rock_salt_block"
+      "vintagedelight:salt"
      ]
     }
    ],
@@ -117,7 +119,8 @@
   },
   {
    "requires": [
-    "salt"
+    "salt",
+    "vintagedelight"
    ],
    "inputs": [
     {
@@ -126,7 +129,20 @@
       "salt:raw_rock_salt_block",
       "salt:rock_salt_ore",
       "salt:deepslate_rock_salt_ore",
-      "salt:salt_lamp"
+      "salt:salt_lamp",
+      "vintagedelight:salt",
+      "vintagedelight:evaporator",
+      "vintagedelight:smooth_salt_block",
+      "vintagedelight:salt_bricks",
+      "vintagedelight:salt_brick_stairs",
+      "vintagedelight:salt_brick_slab",
+      "vintagedelight:salt_brick_wall",
+      "vintagedelight:mixed_salt_bricks",
+      "vintagedelight:mixed_salt_brick_stairs",
+      "vintagedelight:mixed_salt_brick_slab",
+      "vintagedelight:mixed_salt_brick_wall",
+      "vintagedelight:salt_pillar",
+      "vintagedelight:salt_lamp_default"
      ],
      "label": "Any salt block"
     },
@@ -143,59 +159,34 @@
    ],
    "notes": [
     "Random tick 40%: melts touching ice or snow",
+    "Any salt block, salt lamp or Salt Layer",
     "Water is only left in the Nether"
    ]
   },
   {
    "requires": [
-    "salt"
+    "vintagedelight"
    ],
    "inputs": [
     {
-     "block_tag": "salt:meltables"
-    }
-   ],
-   "action": {
-    "tag": "forge:salts",
-    "label": "Use on the block"
-   },
-   "outputs": [
-    {
-     "block": "minecraft:air",
-     "label": "Melts away"
-    }
-   ],
-   "notes": [
-    "Use salt on ice or snow; uses one",
-    "Water is only left in the Nether"
-   ]
-  },
-  {
-   "requires": [
-    "salt"
-   ],
-   "inputs": [
-    {
-     "item": "minecraft:dispenser",
-     "label": "Facing the block"
+     "block": "vintagedelight:evaporator"
     },
     {
-     "block_tag": "salt:meltables"
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Touching a side"
     }
    ],
-   "action": {
-    "tag": "forge:salts",
-    "label": "In the dispenser"
-   },
    "outputs": [
     {
-     "block": "minecraft:air",
-     "label": "Melts away"
+     "block": "vintagedelight:salt",
+     "label": "On top, up to 8 layers"
     }
    ],
    "notes": [
-    "A dispenser melts the block in front; uses one",
-    "Water is only left in the Nether"
+    "Random tick 50%: adds a layer",
+    "First layer needs water beside and air above",
+    "Later layers grow without water"
    ]
   }
  ]

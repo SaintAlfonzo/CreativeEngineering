@@ -11,10 +11,3 @@ dependencies {
     // registry ids only.
     compileOnly fileTree(dir: 'libs', include: '*.jar')
 }
-
-// Same approach as patcherMod: no Mixin refmap, the jar only ever runs reobfuscated, so mixins that
-// touch Minecraft members use SRG names with remap = false. Disable the AP target validator so it
-// doesn't reject those names against the dev-time (Mojmap) classes.
-tasks.named('compileJava', JavaCompile).configure {
-    options.compilerArgs << '-AdisableTargetValidator=true'
-}

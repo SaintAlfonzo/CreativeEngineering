@@ -16,10 +16,7 @@ console.info('[creative_delight] core starting')
 var $CDConfig = Java.loadClass('com.SaintAlfonzo.creativedelight.CDConfig')
 
 global.CD = {
-	apiVersion: 1,
 	modId: 'creative_delight',
-	// Lowest global.NCH.apiVersion CD's scripts need (1: withNamespace).
-	needsNchApi: 1,
 
 	members() {
 		// Array.from on a Java List throws in this Rhino (JavaIteratorWrapper); copy it by hand.
@@ -46,8 +43,4 @@ global.CD = {
 	},
 }
 
-if (!global.NCH || !(global.NCH.apiVersion >= global.CD.needsNchApi)) {
-	console.error('[creative_delight] global.NCH apiVersion ' + (global.NCH ? global.NCH.apiVersion : 'missing') +
-		', need ' + global.CD.needsNchApi + ': install the patcherMod built with this Creative Delight jar')
-}
 console.info('[creative_delight] core finished, members: ' + global.CD.members().join(', '))

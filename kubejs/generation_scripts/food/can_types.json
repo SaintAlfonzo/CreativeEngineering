@@ -93,7 +93,7 @@
      "inputs": [
       {
        "any": [
-        "any_cabbage"
+        "cabbage"
        ],
        "n": 5
       }
@@ -104,7 +104,7 @@
      "inputs": [
       {
        "any": [
-        "any_cabbage"
+        "cabbage"
        ],
        "n": 3
       },
@@ -122,7 +122,7 @@
      "inputs": [
       {
        "any": [
-        "any_cabbage"
+        "cabbage"
        ],
        "n": 3
       },
@@ -4014,7 +4014,7 @@
    "glow": false,
    "effects": [],
    "sources": [
-    "raw_crab"
+    "crab"
    ],
    "recipes": [
     {
@@ -4022,7 +4022,7 @@
      "inputs": [
       {
        "any": [
-        "raw_crab"
+        "crab"
        ],
        "n": 8
       }
@@ -4033,7 +4033,7 @@
      "inputs": [
       {
        "any": [
-        "raw_crab"
+        "crab"
        ],
        "n": 6
       },
@@ -4051,7 +4051,7 @@
      "inputs": [
       {
        "any": [
-        "raw_crab"
+        "crab"
        ],
        "n": 6
       },

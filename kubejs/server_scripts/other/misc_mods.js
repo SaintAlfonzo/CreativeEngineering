@@ -57,6 +57,12 @@ R.bulk('remove', [i.bedroll, i.white_bedroll, i.orange_bedroll, i.magenta_bedrol
 // Enchanted golden apple mechanical craft (blocks/framed-and-decor #9)
 R.remove({ id: 'design_decor:mechanical_crafting/enchanted_golden_apple' }, e)
 
+// Cardboard merge: Old and Weathered Cardboard Box are only made by washing, Dustrial box -> Old -> Weathered
+R.remove({ output: i.cardboard_box }, e)
+R.remove({ output: i.weathered_cardboard_box }, e)
+R.createSplashing(i.cardboard_box, i.dustrial_decor_cardboard_box, e)
+R.createSplashing(i.weathered_cardboard_box, i.cardboard_box, e)
+
 // ============================================================
 // Incubation
 // ============================================================

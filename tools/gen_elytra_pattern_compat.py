@@ -29,16 +29,20 @@ Run from the instance root:
 import glob
 import os
 import re
+import sys
 import zipfile
 from io import BytesIO
 
 import numpy as np
 from PIL import Image
 
-INSTANCE_ROOT = "/home/liam/.local/share/atlauncher/instances/CreativeEngineering2"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import pack_paths  # noqa: E402
+
+INSTANCE_ROOT = str(pack_paths.INSTANCE)
 MODS_DIR = os.path.join(INSTANCE_ROOT, "mods")
 ELYTRA_JAR = os.path.join(MODS_DIR, "customizableelytra-1.19.0-1.7.4.jar")
-VANILLA_JAR = "/home/liam/.minecraft/versions/1.19.2/1.19.2.jar"
+VANILLA_JAR = pack_paths.vanilla_jar()
 OUT_ROOT = os.path.join(
     INSTANCE_ROOT,
     "development/patcherMod/src/main/resources/assets/creativeengineering/textures/entity",
@@ -112,7 +116,8 @@ def iter_mod_jars():
         if os.path.samefile(path, ELYTRA_JAR):
             continue
         yield path
-    yield VANILLA_JAR
+    if VANILLA_JAR:
+        yield str(VANILLA_JAR)
 
 
 def main():

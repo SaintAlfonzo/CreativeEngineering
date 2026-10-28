@@ -27,12 +27,6 @@ function addTooltips(e) {
             e.add(id, tipLines);}}      
 }
 
-// Farmer villagers work this soil: Creative Delight's Farmer's Delight repack, config/farmersdelight-ce-common.toml
-// [villagers] farmlandBlocks (feature_writeup/farmers_delight.md 3). No line without the repack.
-function fdVillagerLine(colour) {
-    return Platform.isLoaded('creative_delight') ? [['Farmer villagers work it like Farmland', colour]] : [];
-}
-
 function addTooltipPattern(e, pattern) {
     var idx = 2;
     var excludeIds = [];
@@ -308,44 +302,44 @@ var i = global.item;
 			['Electrical Conductivity: 11 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0909 Ω·mm²/m', col.dark_gray]],
 
-		[i.coil_copper,
+		[i.wire_coil_copper,
 			['Electrical Conductivity: 59.6 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0168 Ω·mm²/m', col.dark_gray]],
-		[i.coil_iron,
+		[i.wire_coil_iron,
 			['Electrical Conductivity: 10.3 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0971 Ω·mm²/m', col.dark_gray]],
-		[i.coil_gold,
+		[i.wire_coil_gold,
 			['Electrical Conductivity: 45.2 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0221 Ω·mm²/m', col.dark_gray]],
-		[i.coil_zinc,
+		[i.wire_coil_zinc,
 			['Electrical Conductivity: 16.9 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0592 Ω·mm²/m', col.dark_gray]],
-		[i.coil_aluminum,
+		[i.wire_coil_aluminum,
 			['Electrical Conductivity: 37.7 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0265 Ω·mm²/m', col.dark_gray]],
-		[i.coil_lead,
+		[i.wire_coil_lead,
 			['Electrical Conductivity: 4.5 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.2222 Ω·mm²/m', col.dark_gray]],
-		[i.coil_nickel,
+		[i.wire_coil_nickel,
 			['Electrical Conductivity: 14.3 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0699 Ω·mm²/m', col.dark_gray]],
-		[i.coil_silver,
+		[i.wire_coil_silver,
 			['Electrical Conductivity: 63.0 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0159 Ω·mm²/m', col.dark_gray]],
-		[i.coil_steel,
+		[i.wire_coil_steel,
 			['Electrical Conductivity: 7.0 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.1429 Ω·mm²/m', col.dark_gray]],
-		[i.coil_brass,
+		[i.wire_coil_brass,
 			['Electrical Conductivity: 15.9 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0629 Ω·mm²/m', col.dark_gray]],
-		[i.coil_constantan,
+		[i.wire_coil_constantan,
 			['Electrical Conductivity: 2.04 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.4902 Ω·mm²/m', col.dark_gray]],
-		[i.coil_electrum,
+		[i.wire_coil_electrum,
 			['Electrical Conductivity: 11 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0909 Ω·mm²/m', col.dark_gray]],
 
-		[i.coil_hv,
+		[i.wirecoil_hv,
 			['Electrical Conductivity: 22.35 MS/m', col.dark_gray],
 			['Electrical Resistivity: 0.0447 Ω·mm²/m', col.dark_gray]],
 		[i.coil_block_hv,
@@ -467,7 +461,7 @@ var i = global.item;
 		[i.cr_nozzle, ['Craftable with tough fabric', col.eng]],
 		[i.cr_pulley, ['Craftable with tough fabric', col.eng]],
 		[i.cr_sail, ['Craftable with tough fabric', col.eng]],
-		[i.brass_speaker, ['Make announcements in chat, display message on screen, or speak through narrator', col.rare]],
+		[i.speaker, ['Make announcements in chat, display message on screen, or speak through narrator', col.rare]],
 		[i.woven_mesh, ['Craftable with tough fabric', col.eng]],
 		[i.mechanical_crafter, ['Crafted with gold', col.eng]],
 		[i.cinder_flour, ['A powerful reagent, changes form when mixed with potions', col.eng]],
@@ -490,34 +484,16 @@ var i = global.item;
 // ############################## Food / Farmers Delight ##############################
     
     addTooltips(e,
-		[i.lead_knife, ['Extra nutrients in your food...', col.warn]],
 		[i.bowl, ['Warning: Sometimes Consumed', col.warn]],
-		[i.sugar_cube, ['Feed to your horse, dissolves on contact w/ water', col.uncm]],
 		[i.fd_basket, ['Collects items from the block in front of opening, can be placed sideways', col.uncm]],
 		[i.rich_soil, ['Crops grow slightly faster; till it into Rich Farmland', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]],
-		[i.rich_farmland, ['Crops grow slightly faster and it can\'t be trampled!', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]].concat(fdVillagerLine(col.uncm)),
-		[i.fertile_soil, ['Crops grow significantly faster and can\'t be trampled!', col.rare],['Doesn\'t need to be tilled, can be soaked w/ water to increase plant growth', col.rare]].concat(fdVillagerLine(col.rare)),
-		[i.nulch, ['Grows nether crops faster', col.rare],['Can be filled w/ lava, but watch your feet!', col.rare]],
-		[i.cod_n_chips, ['The chips are fries. Don\'t tell the British.', col.uncm]],
-		// Oceanic Delight net (ocean_delight.md 5.1): blocks are the fishing_net tags, drops the biome tables
-		[i.fishing_net,
-			['Use on kelp, seagrass, sea grapes or pickerelweed to search them', col.uncm],
-			['Shrimp in oceans that are not cold, coral in warm oceans, Caviar in rivers', col.norm],
-			['Oceans can give Nautilus Shells, rarely a Heart of the Sea', col.norm]],
-		// Y follows neapolitan-common.toml "White Strawberry minimum height"
-		[i.white_strawberries, ['Strawberry Bushes at Y 192 or higher grow these instead of red ones', col.uncm]]
+		[i.rich_farmland, ['Crops grow slightly faster and it can\'t be trampled!', col.uncm],['Can cultivate mushroom colonies from mushrooms', col.uncm]],
+		[i.fertile_soil, ['Crops grow significantly faster and can\'t be trampled!', col.rare],['Doesn\'t need to be tilled, can be soaked w/ water to increase plant growth', col.rare]],
+		[i.nulch, ['Grows nether crops faster', col.rare],['Can be filled w/ lava, but watch your feet!', col.rare]]
 	);
+	// Food tooltips (Farmer's Delight villager soil line, foods, kitchen blocks) moved to Creative Delight 2026-10-27:
+	// kubejs/assets/creative_delight/kubejs/<mod>/client.js
 
-	// Cooking for Blockheads kitchen (TODO cooking/kitchen #8): the oven burns any furnace fuel plus cooking oil
-	// (ovenRequiresCookingOil = false + patcherMod CfbOvenFuelMixin), and fuel containers come back to the output.
-	// It cooks food from furnace and smoker recipes (patcherMod CfbOvenSmokingMixin, TODO cooking/oven #4).
-	addTooltips(e,
-		[i.cfb_oven,
-			['Cooks food like a furnace and a smoker', col.norm],
-			['Burns any furnace fuel, and Cooking Oil', col.uncm],
-			['Empty fuel containers (bottles, buckets) go to the output slots', col.norm]],
-		[i.cfb_sink, ['Gives infinite water', col.uncm]]
-	);
 	// Fantasy Furniture's seven ovens run smoking recipes with normal fuel (their OvenBlockEntity); expect 7 matches.
 	addTooltipPattern(e, 'fantasyfurniture:*/oven', ['Works like a smoker', col.norm]);
 
@@ -583,8 +559,6 @@ var i = global.item;
   	addTooltips(e,
 		[i.wayward_lantern, ['Allows following pets in unloaded chunks to wander home', col.good]],
 		[i.feather_on_a_stick, ['Play with your pets, herd them effectively', col.norm]],
-		[i.rotten_apple, ['Turns a horse into a zombie horse', col.epic]],
-		[i.sinister_carrot, ['Turns a zombie horse into a skeleton horse', col.epic]],
 		[i.deed_of_ownership, ['Allows transferring ownership of a pet to another player', col.rare]],
 		[i.pet_drum, ['Set behavior of all pets in hearing range, can be activated w/ redstone', col.uncm]],
 		[i.collar_tag, ['Usable as a nametag, can be enchanted', col.uncm]]
@@ -691,7 +665,7 @@ var i = global.item;
 	addTooltipPattern(e, 'create:*_ladder', ['Right click to extend ladder, can hang below a supported ladder', col.norm]);
 	addTooltipPattern(e, 'quark:*_ladder', ['Right click to extend ladder, can hang below a supported ladder', col.norm]);
 	addTooltips(e,
-		[i.ladder, ['Right click to extend ladder, can hang below a supported ladder', col.norm]],
+		[i.ladder_oak, ['Right click to extend ladder, can hang below a supported ladder', col.norm]],
 		[i.rainbow_rune, ['Recolor enchantment shine!', col.epic]],
 		[i.bottled_cloud, ['Place a temporary block midair!', col.rare]],
 		[i.slime_in_a_bucket, ['Detects slime chunks!', col.rare]],
@@ -720,7 +694,6 @@ var i = global.item;
 		[i.tinted_glass, ['Can dim beacon beams', col.norm]],
 		[i.item_frame, ['Can be dyed, allows custom colors', col.norm]],
 		[i.glow_item_frame, ['Can be dyed, allows custom colors', col.norm]],
-		[i.poisonous_potato, ['Can be fed to a baby animal for a chance to stunt their growth', col.norm]],
 		[i.spore_blossom, ['Can be duplicated w/ bone meal', col.norm]],
 		[i.dragon_scale, ['Drops from ender dragon when killed, can be crafted w/ elytra to duplicate', col.epic]]
 	);
@@ -782,8 +755,6 @@ var i = global.item;
 			['Shoots shrapnel projectiles', col.norm]],
 		[i.rope_arrow, ['Deploys a rope coil where it lands', col.uncm]],
 		[i.antique_ink, ['Age your signs, maps, globes, and written books', col.rare]],
-		[i.candy, ['Don\'t eat too many, they\'ll rot your teeth!', col.uncm]],
-		[i.pancake, ['Can be covered in honey or chocolate', col.uncm]],
 		[i.creeper_head, 
 			['Can be stacked, candles can be placed on top', col.uncm],
 			['Can be used w/ fence to create skull pike, which scares hostile mobs away', col.norm]],

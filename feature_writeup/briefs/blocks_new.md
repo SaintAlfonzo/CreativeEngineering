@@ -19,7 +19,7 @@ A flower bale block beside the straw, rice and hay bales: a decorative (or compo
 
 ### Now
 - Existing bales: `i.straw_bale` (`farmersdelight:straw_bale`), `i.rice_bale`, `i.hay_bale` (`minecraft:hay_block`), `i.oat_bale`
-  (`vintagedelight:oat_bale`) in item_dict. There is no grass bale yet; `recipes/materials #2` makes the flax bale a grass bale
+  (`vintagedelight:oat_bale`) in item_dict. There is no grass bale yet; `merges/materials #2` makes the flax bale a grass bale
   (misc_mods.js line 25-27 swaps `i.flax_block` for rice and straw bales). Pack-own blocks are registered in
   [decor_blocks.js](../../kubejs/startup_scripts/items/decor_blocks.js) (`StartupEvents.registry('block')`, hand-written
   blockstate and models under `kubejs/assets/creativeengineering/`, texture `creativeengineering:block/<name>`).

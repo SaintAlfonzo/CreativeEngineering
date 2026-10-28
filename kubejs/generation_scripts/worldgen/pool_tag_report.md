@@ -2,7 +2,7 @@
 
 Rewritten by patcherMod `worldgen/PoolTuner` at every world load from `pool_config.json` + `pool_tags.json`. Don't edit.
 
-- 1416 pools, 7187 pieces
+- 1424 pools, 7246 pieces
 - 39 pool(s) retuned
 - 1 pool(s) restored to first-seen weights (a mod re-added its pieces on this world load, or a previous edit was reverted)
 

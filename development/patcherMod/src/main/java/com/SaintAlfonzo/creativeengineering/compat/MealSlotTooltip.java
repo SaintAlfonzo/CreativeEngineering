@@ -15,6 +15,10 @@ import java.util.List;
  * {@code RenderTooltipEvent.GatherComponents} with {@code ItemStack.EMPTY}, so AppleSkin adds no food bars to
  * the one slot that always holds food. The mixins redirect that call here: same lines and position, drawn
  * with Forge's overload that carries the hovered slot's stack.
+ *
+ * Callers: patcherMod's {@code CckCookingGuideMealTooltipMixin} / {@code CckBrewingGuideMealTooltipMixin}, and Creative
+ * Delight's {@code farmersdelight.CookingPotMealTooltipMixin} / {@code farmersrespite.KettleMealTooltipMixin}
+ * (moved there 2026-10-27, CD hard-depends on patcherMod).
  */
 public final class MealSlotTooltip {
 

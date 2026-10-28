@@ -31,6 +31,18 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
   token, so redact it in the same command and never print it raw. Use
   `ps -eo pid,etime,args | grep "[j]ava" | sed -E 's/(--accessToken|--uuid|--username)[= ][^ ]+/\1 ***/g'`
   (or `pgrep -x java` for pids only, then `readlink /proc/PID/cwd`). Never run bare `pgrep -af` / `ps -f` / `ps aux`.
+- **Agent-to-agent messages** (subagents, forks, SendMessage to other sessions):
+  - First contact: open by stating you are an agent (name/role, which session or task spawned you), then your
+    overall goal for the whole task, then the specific request. Later messages in the same exchange skip the
+    identification and restate the goal only if it changed.
+  - No pleasantries (no "thank you", "please", greetings, sign-offs). Plain statements: goal, context, request, expected return format.
+  - Delegate using what an agent can know: split by independence, file/subsystem ownership, and what each side
+    already has in context or tools. Give pointers (paths, doc names, what is already ruled out), not retyped content.
+    Do not hand off a lookup you can finish in a few tool calls.
+  - Delegation is provisional. If the other agent reports information that contradicts or supersedes the plan
+    (the work is already done, a premise is false, a better owner exists, scope differs), adopt it: say so in
+    one line, re-split the work, and do not repeat the original request. Say the same when you hold such
+    information and the other agent's brief is wrong.
 - **Keep context lean.** Write Bash commands to return only what the task needs (`head`/`tail`/`grep`,
   tail of build logs); grep or offset/limit big docs instead of reading them whole. When context nears
   ~150k, or a task ends / the next step is a different subsystem / debugging has become a long loop,

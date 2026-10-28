@@ -91,10 +91,15 @@ public class CanPagesJEI implements IModPlugin {
         if (stack.isEmpty()) {
             stack = new ItemStack(Items.CRAFTING_TABLE);
         }
+        return doubleIcon(gui, stack, new ItemStack(Items.CRAFTING_TABLE));
+    }
+
+    /** A big item with a small one on top (Create's DoubleItemIcon), or the big one alone without Create. */
+    public static IDrawable doubleIcon(IGuiHelper gui, ItemStack big, ItemStack small) {
         if (ModList.get().isLoaded("create")) {
-            return CreateIcon.of(stack, new ItemStack(Items.CRAFTING_TABLE));
+            return CreateIcon.of(big, small);
         }
-        return gui.createDrawableIngredient(VanillaTypes.ITEM_STACK, stack);
+        return gui.createDrawableIngredient(VanillaTypes.ITEM_STACK, big);
     }
 
     @Override

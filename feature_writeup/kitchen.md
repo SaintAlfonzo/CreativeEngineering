@@ -16,7 +16,7 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 | CfB sink: infinite water | BUILT 2026-10-21 (config), scratch server PASSED | `#8` |
 | FD cutting board on a CfB counter or corner, drawn on the worktop, config offset | BUILT 2026-10-21 (patcherMod), placement and cutting PASSED on a scratch server; the drawing not seen | `#8` |
 | Display Delight plates and plated foods, Brewin' coaster on a CfB counter or corner, drawn on the worktop, own offset | BUILT 2026-10-24 (patcherMod 1.1.02 + KubeJS tags), scratch test queued (SQ-KT) | `#20` |
-| CfB 2-tall fridge filled to a full block with a white box on top (the 2026-10-21 stretch reverted) | BUILT 2026-10-25 (resource override), not seen in a client | `#6`, `#19` |
+| CfB 2-tall fridge filled to a full block with a white box on top (the 2026-10-21 stretch reverted) | BUILT 2026-10-25 (resource override); top box rendered missing in a client, texture fixed 2026-10-26, not seen since | `#6`, `#19` |
 | Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (patcherMod 1.1.02, not in `mods/`), scratch test queued (SQ-KT) | `#20` |
 | CfB kitchen corner storage (27 slots, chest GUI, hoppers, cooking table) | BUILT 2026-10-21 (patcherMod), scratch server PASSED | `#15` |
 | Bamboo bowl | BUILT 2026-10-21 (KubeJS), scratch server PASSED | `#10` |
@@ -85,12 +85,12 @@ water".
 - `BlockStateCounterTopperMixin` on `BlockStateBase`: RETURN on `canSurvive` (m_60710_) turns a `false` into `true`
   for a topper on a support. `BlockItem.canPlace` and the board's and coaster's `updateShape` all ask through the
   state, so one hook covers every topper (it replaced the FD-only `CuttingBoardSupportMixin`).
-- Breaking the block below: Display Delight's blocks check survival only when placed, so they stayed in the air when
-  the counter (or any block) under them was broken. The same mixin's RETURN on `updateShape` (m_60728_) answers air for
-  a change from below when the state can no longer survive, for every topper and every `displaydelight` block (bowls and
-  drinks too; `CounterToppers.popsUnsupported`, cached per state with the topper flag). Vanilla's `updateOrDestroy`
-  then breaks it with its loot. The board and the coaster already did this in their own `updateShape` (the coaster
-  drops its drinks in `onRemove`).
+- Breaking the block below: the coaster and the board break with their loot in their own `updateShape` (the coaster
+  drops its drinks in `onRemove`). Display Delight blocks stay and grow a wooden leg (`support` state, the 1.7.0 port,
+  [display_delight.md](display_delight.md); changelog 1.1.03 "they stand on a wooden leg"). The same mixin's RETURN on
+  `updateShape` (m_60728_) answers air for a change from below when a topper or `displaydelight` block can no longer
+  survive (`CounterToppers.popsUnsupported`). It was written for Display Delight 1.2.0; the 1.7.0 blocks' `canSurvive`
+  is always true, so it never fires for them now (scratch run 2026-10-27, KT-17 rewritten to the leg).
 - Drawn on the worktop: `CounterToppers.offset` gives the shift for a topper above a support. The same mixin's HEAD
   on `getOffset` (m_60824_) returns it for a topper, so the chunk mesher (vanilla and Rubidium both call it) moves the
   model; plated foods draw the food inside the block model, so plate and food move together. Whether a state is a
@@ -112,8 +112,11 @@ water".
   writes it to `kubejs/assets/cookingforblockheads/models/block/` unchanged plus one element `CE_TopFill`: x 1-15,
   y 13-16, z 1-15 (the body and the closed door's front), all six faces (the bottom shows over the door's gap when it
   swings open). CfB loads the model by id in code (`client/ModModels`), not through `blockstates/fridge.json`.
-- Texture `creativeengineering:block/fridge_top_fill` (written by the script): flat white 246, the body's own white;
-  `tintindex` 0, so a dyed fridge's box takes the dye like the body.
+- Texture: CfB's own `fridge_side`, its white inside (uv 1-15 on top and bottom, a 14 x 3 strip on the sides), with
+  `tintindex` 0, so a dyed fridge's box takes the dye like the body. CfB bakes this model through Balm's
+  `loadDynamicModel`, which stitches no textures of its own: the first version's own texture
+  (`creativeengineering:block/fridge_top_fill`) was never put on the block atlas and rendered missing (seen 2026-10-26,
+  fixed the same day). A texture for this model must be one CfB's blockstate models already use.
 - Was (2026-10-21 to 2026-10-25): six overrides stretched the body walls out to x 0-16 / z 16 and the doors to full
   width and height, with position UVs on the stretched faces. The textures looked wrong (`#19`), so it was reverted
   (user): the script deletes those overrides, and the lower half and doors are CfB's own again. `--check` reports
@@ -168,7 +171,7 @@ water".
 - patcherMod mixins (all `remap = false`, SRG names): CfB oven fuel, `BlockStateBase#canSurvive` / `#getOffset`
   (counter toppers), FD board and Brewin' coaster renderers (client), CfB corner block entity and use. CfB 13.3.4's and
   the Brewin' port's jars are in `development/patcherMod/libs/` to compile against.
-- Resource overrides: CfB's `fridge_large_upper` (top fill box) and its texture.
+- Resource overrides: CfB's `fridge_large_upper` (top fill box, CfB's own texture).
 - Recipes: bamboo bowl; mortar crafts (own and catalogue); slime block from a dough block + green dye in a heated mixer
   (`cooking/kitchen #12`, Creative Delight script `kubejs/data/creative_delight/kubejs/create/slime.js`, id
   `creative_delight:createmixing/slime_block_from_dough_block`; it replaces the Pickling Jar's slime block).
@@ -211,7 +214,7 @@ Brief: [briefs/cooking_kitchen.md](briefs/cooking_kitchen.md). Nothing here is b
   `b.dd_small_food_plate`, `b.dd_plated_foods`, `b.coaster`, `b.t_counter_supports`, `b.t_counter_toppers`.
 - Generated: [mortar_catalog.json](../kubejs/generation_scripts/food/mortar_catalog.json) by
   [gen_mortar_catalog.py](../tools/gen_mortar_catalog.py); fridge model in
-  `kubejs/assets/cookingforblockheads/models/block/` and `textures/block/fridge_top_fill.png` by [gen_cfb_fridge_models.py](../tools/gen_cfb_fridge_models.py).
+  `kubejs/assets/cookingforblockheads/models/block/` by [gen_cfb_fridge_models.py](../tools/gen_cfb_fridge_models.py).
 - Probes: [tools/kitchen_probe/](../tools/kitchen_probe/).
 
 ## 6. Offline checks
@@ -233,8 +236,9 @@ Scratch dedicated server (`tools/creative_labels_test/scratch_server.sh`, the pr
 
 Queued (SQ-KT, not run): `/kttest` now also places a plate, a small plate and a coaster on a counter and a plate on a
 corner (KT-15a/b, KT-16a), sets a plated hamburger on a counter (KT-15c), moves it with `plateOffsetY` (KT-16b) and
-checks a plate over air is still refused (KT-15d); and breaks the block under a plate and a plated hamburger on
-stone and a plate and a coaster on a counter, each must pop (KT-17).
+checks a plate over air stays with its wooden leg (KT-15d); and breaks the block under a plate and a plated hamburger
+on stone and a plate and a coaster on a counter: the coaster pops, the Display Delight blocks keep a leg (KT-17;
+rewritten 2026-10-27 for the 1.7.0 port, which the old pop expectation predated).
 
 Not covered offline: anything drawn (board offset, fridge), the corner's GUI on a client, JEI.
 
@@ -248,7 +252,8 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   output slots; when the last oil burns, its bottle is in the fuel slot.
 - [ ] **KT-05 Board drawn on the worktop:** the board and an item on it sit on the counter top with no gap, on
   counters facing all four ways; set `cuttingBoardOffsetZ = -2`, restart, F3+A → it moves toward the door on each.
-- [ ] **KT-06 Fridge look:** a 2-tall fridge: CfB's own body and doors (not stretched), a white box on top level
+- [ ] **KT-06 Fridge look:** a 2-tall fridge: CfB's own body and doors (not stretched), a white box on top (textured, not
+  purple-black) level
   with a full block next to it, a candle on top sits on it; the door opens and closes cleanly on both hinge sides and
   passes under the box; a dyed fridge's body and box both take the colour.
 - [ ] **KT-07 Bamboo bowl:** 3 bamboo in a V → 1 bowl.
@@ -268,9 +273,9 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - [ ] **KT-16 Plates drawn on the worktop:** the plate, its food, the coaster and its drinks sit on the counter top with
   no gap, on counters facing all four ways; set `plateOffsetY = -3`, restart, F3+A → plates and coaster sink 2 px
   more, the cutting board does not move.
-- [ ] **KT-17 Plates pop when the block below goes:** a Food Plate, a plated food and a Display Delight bowl on stone,
-  and a plate and a Coaster with drinks on a counter: break the block under each → it breaks and drops (the plated
-  food its food, the coaster its drinks); nothing is left floating.
+- [ ] **KT-17 Block below goes:** a Food Plate, a plated food and a Display Delight bowl on stone, and a plate and a
+  Coaster with drinks on a counter: break the block under each → the Display Delight blocks stay on a wooden leg; the
+  coaster breaks and drops its drinks; nothing floats without a leg.
 - [ ] **KT-18 Slime block in the mixer:** a dough block + green dye in a heated basin → slime block; JEI lists it under
   Mixing (needs the Creative Delight jar).
 
@@ -290,3 +295,5 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   rewritten.
 - 2026-10-25: slime block mixing (`cooking/kitchen #12`, KT-18; the brief's KT-08 number was taken), written as a
   Creative Delight script.
+- 2026-10-27: KT-15d and KT-17 rewritten for Display Delight 1.7.0 (plates over air or on a broken block get a wooden
+  leg, only the coaster pops); `/kttest` updated. The 2026-10-27 scratch run's 4 kt fails were these expectations.

@@ -1,5 +1,9 @@
 # Vinery JEI pages
 
+**Code removed 2026-10-27** ([pack_hygiene.md](pack_hygiene.md) finding 6): patcherMod's `compat/vinery/` plugin, its
+lang keys and the 1.3.10 jar in `patcherMod/libs/` are gone. The Vinery port's own JEI pages are the only ones. This
+file is kept as history; VJ-01 to VJ-10 can no longer run.
+
 ## 0. At a glance
 
 **Numbers below are the retired plugin's (6 grapes, 3 stomps, 2 bottles).** The port's Grape Stomping page follows the pot's current values (12 grapes, `grapevinePotStomps` stomps [4], 4 bottles); its Grape Planting page is documented in [jei_world_tabs.md](jei_world_tabs.md) (JW-16).

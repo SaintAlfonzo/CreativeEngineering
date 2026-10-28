@@ -12,11 +12,12 @@ ServerEvents.tags('item', e => {
 	])
 	t.add(e, 'creativeengineering:carbon_filament', [i.paper, i.bamboo])
 
-	t.add(e, 'creativeengineering:culture_base', [i.mycelium, i.red_mushroom_colony, i.brown_mushroom_colony, i.red_mushroom_block, i.brown_mushroom_block])
+	// The culture base tag moved to Creative Delight 2026-10-27 (creativeengineering/cultivated_meat_tags.js; reserved for
+	// Creative Cultivation, creative_delight.md 29.5)
 
 	// Precision sawblade blueprint templates — the "shape reference" ingredient for the
 	// vertical_planks / railing sawblades. No upstream tag exists for either shape, so the
-	// blueprint recipes (kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_*.json)
+	// blueprint recipes (server_scripts/engineering/blueprints.js, precision sawblades)
 	// point at these. Keep in sync with the sawmill outputs generated in generation_scripts/sawmill.js.
 	t.add(e, 'creativeengineering:vertical_planks', [
 		'quark:vertical_oak_planks', 'quark:vertical_spruce_planks', 'quark:vertical_birch_planks',

@@ -19,11 +19,15 @@ Run from the instance root:  python3 tools/potion_bucket_texture.py
 Needs Pillow and the vanilla 1.19.2 client-extra jar (for water_bucket.png).
 """
 import io
+import sys
 import zipfile
 from pathlib import Path
 from PIL import Image
 
-CLIENT_EXTRA = Path.home() / ".gradle/caches/forge_gradle/minecraft_repo/versions/1.19.2/client-extra.jar"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths  # noqa: E402
+
+CLIENT_EXTRA = pack_paths.vanilla_jar()   # any vanilla jar with the assets (tools/pack_paths.py)
 OUT = Path("kubejs/assets/creativeengineering/textures/item")
 
 IDS = ["potion_bucket", "splash_potion_bucket", "lingering_potion_bucket"]

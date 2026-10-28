@@ -298,6 +298,35 @@ public class EarthFillTest {
 		check(!EarthFill.topIsWater(new NoiseColumn(-64, land), height), "a land column is not, even with an aquifer below");
 		check(!EarthFill.topIsWater(new NoiseColumn(-64, empty), height), "an empty column is not");
 
+		// 7. the packed column (shared terrain cache) reads exactly as the NoiseColumn it was built from
+		BlockState[] palette = {Blocks.AIR.defaultBlockState(), Blocks.CAVE_AIR.defaultBlockState(), Blocks.WATER.defaultBlockState(),
+				Blocks.STONE.defaultBlockState(), Blocks.KELP.defaultBlockState(), Blocks.LAVA.defaultBlockState(),
+				Blocks.OAK_SLAB.defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED, true)};
+		java.util.Random rnd = new java.util.Random(42);
+		int bad = 0;
+		for (int n = 0; n < 2000; n++) {
+			// some columns are narrower than the level (noise settings above its bottom), all have runs like real terrain
+			int minY = n % 5 == 0 ? -32 : -64, len = n % 5 == 0 ? 300 : 384;
+			BlockState[] states = new BlockState[len];
+			int surface = rnd.nextInt(len + 1);
+			for (int i = 0; i < len; i++) {
+				BlockState s = palette[rnd.nextInt(palette.length)];
+				states[i] = i >= surface ? (rnd.nextInt(4) == 0 ? s : palette[0]) : s;
+			}
+			if (n % 7 == 0) java.util.Arrays.fill(states, palette[0]);
+			NoiseColumn noise = new NoiseColumn(minY, states);
+			EarthFill.Column packed = new EarthFill.Column(noise, height);
+			boolean topWater = EarthFill.topIsWater(noise, height);
+			if (packed.top != EarthFill.topOf(noise, height) || packed.topWater != topWater) bad++;
+			for (int y = -70; y < 330; y++) {
+				BlockState s = noise.getBlock(y);
+				EarthFill.Kind want = s.isAir() ? EarthFill.Kind.AIR : EarthFill.isWater(s) ? EarthFill.Kind.WATER
+						: topWater ? EarthFill.Kind.SEABED : EarthFill.Kind.SOLID;
+				if (packed.at(y) != want) bad++;
+			}
+		}
+		check(bad == 0, "packed columns read as their NoiseColumn: top, top water and every y (2000 random columns, " + bad + " mismatches)");
+
 		System.out.println(fails == 0 ? "ALL " + checks + " CHECKS PASSED" : fails + " FAILED of " + checks);
 		System.exit(fails == 0 ? 0 : 1);
 	}

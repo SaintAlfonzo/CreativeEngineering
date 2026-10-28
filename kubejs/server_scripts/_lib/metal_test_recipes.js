@@ -84,7 +84,7 @@ ServerEvents.recipes(e => {
 
 	// ########## Netherite — custom recipe ##########
 	var netheriteEntries = [
-		{ letter: 'A', item: i.scrap_netherite },
+		{ letter: 'A', item: i.raw_netherite },
 		{ letter: 'B', item: i.fragment_netherite },
 		{ letter: 'C', item: i.nugget_netherite },
 		{ letter: 'D', item: i.plate_netherite },

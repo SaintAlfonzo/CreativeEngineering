@@ -129,9 +129,9 @@ R.ieBlueprint({ item: i.message_arrow, count: 2 }, [i.paper, i.arrow_shaft, i.an
 // Ink Arrow
 // ============================================================
 //Fletching
-R.fletching(i.ink, i.arrow_shaft, i.any_fletching, { item: i.ink_arrow, count: 3 }, e);
+R.fletching(i.ink_sac, i.arrow_shaft, i.any_fletching, { item: i.ink_arrow, count: 3 }, e);
 //IE Blueprint
-R.ieBlueprint({ item: i.ink_arrow, count: 3 }, [i.ink, i.arrow_shaft, i.any_fletching], 'archery', e, 'ink_arrow');
+R.ieBlueprint({ item: i.ink_arrow, count: 3 }, [i.ink_sac, i.arrow_shaft, i.any_fletching], 'archery', e, 'ink_arrow');
 
 // ============================================================
 // Luminous Arrow

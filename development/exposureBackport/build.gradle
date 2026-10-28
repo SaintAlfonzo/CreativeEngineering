@@ -9,11 +9,6 @@ plugins {
     id 'ce.forge-mod-refmap'
 }
 
-repositories {
-    // Third-party mod jars copied from ../../mods (git-ignored), for optional integrations only.
-    flatDir { dir 'libs' }
-}
-
 dependencies {
     // Optional integrations (JEI, KubeJS, Create). fg.deobf remaps the SRG-named mod jars to Mojang names, so
     // integration code can call Minecraft methods inherited through their classes. Compile-only: none of them
@@ -114,43 +109,6 @@ addons.keySet().each { addon ->
 // Access transformer (SRG names, generated from tools/accesstransformer.official.cfg by tools/gen_at.py).
 minecraft {
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-
-// Unlike patcherMod, this mod gets real Mixin refmaps: mixins use Mojang names and work both in the dev
-// runs (runClient / runServer / runGameTestServer) and reobfuscated in the instance.
-mixin {
-    add sourceSets.main, 'exposure.refmap.json'
-    add sourceSets.expanded, 'exposure_expanded.refmap.json'
-    add sourceSets.polaroid, 'exposure_polaroid.refmap.json'
-    add sourceSets.catalog, 'exposure_catalog.refmap.json'
-    // dev runs read mixin configs from here; the jar manifest gets them from mixin_configs too
-    mixin_configs.split(',').each { config it.trim() }
-}
-
-// The mixin AP writes each refmap into its compile task's temporary dir, which Gradle doesn't track: if the file
-// goes missing while the compile is UP-TO-DATE, addMixinsToJar silently skips it and the jar ships without it (1.0.3
-// shipped without exposure_polaroid.refmap.json, so every real client crashed on startup). Declaring the refmap as
-// an output makes a missing one re-run the compile.
-(['main'] + addons.keySet()).each { name ->
-    tasks.named(sourceSets[name].compileJavaTaskName, JavaCompile).configure {
-        outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
-    }
-}
-
-// Backstop: every mixin config that lists mixins must find its refmap in the jar.
-tasks.named('jar', Jar).configure {
-    doLast {
-        def jarFile = archiveFile.get().asFile
-        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
-        def slurper = new groovy.json.JsonSlurper()
-        mixin_configs.split(',').collect { it.trim() }.each { config ->
-            def json = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> slurper.parse(zip.getInputStream(zip.getEntry(config))) }
-            def count = ['mixins', 'client', 'server'].sum { (json[it] ?: []).size() }
-            if (count > 0 && json.refmap && !entries.contains(json.refmap)) {
-                throw new GradleException("${config} has ${count} mixin(s) but its refmap ${json.refmap} is not in ${jarFile.name}")
-            }
-        }
-    }
 }
 
 // Port in progress: report every compile error, not javac's default first 100.

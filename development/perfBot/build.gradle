@@ -1,0 +1,11 @@
+// Shared Forge setup (runs, mods.toml expansion, jar manifest, jar archive) comes from
+// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to perfBot.
+// Dev-only: tools/perf/suite/perf_suite.py copies the jar from build/libs into its scratch server's mods/,
+// never into the instance's mods/ (feature_writeup/perf_suite.md). Don't run installToMods for this mod.
+plugins {
+    id 'ce.forge-mod'
+}
+
+tasks.named('installToMods').configure {
+    doFirst { throw new GradleException('perfBot is dev-only: tools/perf/suite/perf_suite.py picks it up from build/libs') }
+}

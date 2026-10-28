@@ -33,8 +33,8 @@ console.log('item physics tags starting')
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  physicsFromTag(event, behaviour, sourceTags[, opts])   — behaviour to every item in
-//  another tag. Default adds a NESTED #tag ref (transitive, order-safe). opts.except /
-//  opts.expand force expansion to concrete ids. See git history for the long doc.
+//  another tag, as a NESTED #tag ref (transitive, order-safe). opts.except expands the tags
+//  to their current ids minus the exceptions. Alias over global.tags.addMatching.
 // ─────────────────────────────────────────────────────────────────────────────
 const PHYSICS_TAG = {
 	float:      'creativeengineering:physics/floats',
@@ -48,38 +48,13 @@ const PHYSICS_TAG = {
 }
 
 function physicsFromTag(event, behaviour, sourceTags, opts) {
-	opts = opts || {}
+	const t = global.tags
 	const target = PHYSICS_TAG[String(behaviour).toLowerCase()]
 	if (!target) {
 		console.warn('[item_physics] physicsFromTag: unknown behaviour "' + behaviour + '"')
-		return 0
+		return
 	}
-
-	const strip  = s => String(s).replace(/^#/, '')
-	const srcs   = (Array.isArray(sourceTags) ? sourceTags : [sourceTags]).map(strip)
-	const except = (opts.except == null ? [] : (Array.isArray(opts.except) ? opts.except : [opts.except])).map(strip)
-	const expand = opts.expand === true || except.length > 0
-
-	let n = 0
-	srcs.forEach(src => {
-		if (!expand) {
-			event.add(target, '#' + src)          // nested reference — transitive + order-safe
-			n++
-			return
-		}
-		event.get(src).getObjectIds().forEach(rl => {
-			const id = rl.toString()
-			if (except.indexOf(id) !== -1) return
-			event.add(target, id)
-			n++
-		})
-	})
-
-	console.log('[item_physics] ' + target + ' += ' +
-		(expand ? n + ' items' : srcs.map(s => '#' + s).join(', ')) +
-		' from ' + srcs.join(', ') +
-		(except.length ? ' (except ' + except.join(', ') + ')' : ''))
-	return n
+	t.addMatching(event, target, t._arr(sourceTags).map(s => '#' + t._clean(s)), { except: (opts || {}).except })
 }
 
 // ── small builders for the tedious vanilla families ─────────────────────────
@@ -380,7 +355,7 @@ ServerEvents.tags('item', e => {
 		i.dragon_helmet, i.dragon_chestplate, i.dragon_leggings, i.dragon_boots,
 		i.upgraded_dragon_chestplate, i.dragon_horse_armor, i.dragon_anvil,
 		i.dragonloot_dragon_scale,
-		i.netherite_bars, i.ore_netherite, i.debris, i.raw_netherite, i.fragment_netherite,
+		i.netherite_bars, i.ore_netherite, i.raw_netherite, i.fragment_netherite,
 		i.nugget_netherite, i.ingot_netherite, i.block_netherite,
 		i.plate_netherite, i.plate_block_netherite, i.component_netherite,
 	])

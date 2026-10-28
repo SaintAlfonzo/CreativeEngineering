@@ -8,7 +8,7 @@
 //
 // key: {
 //   id         seasoning id (NBT value, lang key seasoning.<ns>.<path>)
-//   name       display name (client_scripts/seasoning_lang.js)
+//   name       display name (assets/creative_delight/kubejs/creativeengineering/seasoning_lang.js)
 //   item       item_dict key value of what you put in the grid (item or tag)
 //   nutrition  hunger points added                     (optional)
 //   saturation saturation points added, capped at food (optional)

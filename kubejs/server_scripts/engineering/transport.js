@@ -137,7 +137,7 @@ R.shaped(Item.of(i.ll_fluid_hopper, 1), ['GPG','GTG', 'PH '], {G: i.glass, P: i.
  
 //Replace vehicle charger recipe
 R.remove({id:'littlelogistics:vessel_charger'}, e)
-R.shaped(Item.of(i.ll_vessel_charger, 1), [' E ','VIV', 'RIR'], {E: i.mv_coil, V: i.vacuum_tube, I: i.any_rod_iron, R: i.redstone_block}, e)
+R.shaped(Item.of(i.ll_vessel_charger, 1), [' E ','VIV', 'RIR'], {E: i.coil_block_electrum, V: i.vacuum_tube, I: i.any_rod_iron, R: i.redstone_block}, e)
  
 console.log('The transport event has finished!')
 })

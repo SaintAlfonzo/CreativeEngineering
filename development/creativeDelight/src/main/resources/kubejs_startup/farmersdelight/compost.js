@@ -7,7 +7,7 @@
 ;(function () {
 	var i = global.item
 	var C = global.compost
-	var ON = { when: () => !!global.CD && global.CD.qol('compost') && global.CD.on('farmersdelight') }
+	var ON = { when: () => global.CD.qol('compost') && global.CD.on('farmersdelight') }
 
 	C.values('seeds', [
 		[i.cabbage_seeds,             0.3],

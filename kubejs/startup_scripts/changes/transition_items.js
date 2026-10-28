@@ -43,6 +43,7 @@ StartupEvents.registry('item', e => {
 		['enchanted_golden_apple'],
 		['ham_and_cheese_sandwich'],                                 // alcohol.js (alcohol.md 8.6)
 		['quiche'],
+		['zucchini_quiche'],                                         // CD veggiesdelight/recipes.js (food_families.md quiche/whole)
 		// meals (cooking.js "Meals", TODO dishes/meals #2, #3)
 		['mutton_wrap'],
 		['chicken_fajitas_wrap'],                                    // Veggies Delight (veggies_delight.md 4.7)
@@ -155,22 +156,25 @@ StartupEvents.registry('item', e => {
 
 	// ---- wire coils + coil blocks + pack components ----------------------------------------
 	// Keep COIL_METALS in sync with server_scripts/metal/metal_base_materials.js.
-	//   coil_<m>       : wire-coil-in-progress  — auto grey-tint of the wirecoil_<m> item sprite
-	//                    (creativeengineering:* for the 9 pack coils, immersiveengineering:* for
-	//                    copper / steel / electrum).
+	//   coil_<m>       : wire-coil-in-progress  — grey-tint of the wire coil's item sprite, taken
+	//                    from i.wire_coil_<m> (the dict has one key per id since 2026-10-27, so
+	//                    there is no i.coil_<m> to auto-derive from; the incomplete id stays
+	//                    kubejs:incomplete_coil_<m>). creativeengineering:* for the 9 pack coils,
+	//                    immersiveengineering:* for copper / steel / electrum.
 	//   coil_block_<m> : coil-block-in-progress — the block's own side texture; the coil-block
 	//                    item model is a 3D block, so there is no flat item sprite to derive from.
 	//                    copper -> IE coil_lv, electrum -> IE coil_mv (placeholder until a
 	//                    creativeengineering:coil_electrum block exists); the other 10 (incl.
 	//                    steel) -> the pack's own coil block.
 	const COIL_METALS = ['copper', 'iron', 'gold', 'zinc', 'aluminum', 'lead', 'nickel', 'silver', 'brass', 'constantan', 'steel', 'electrum']
+	const coilSprite = m => String(global.item['wire_coil_' + m]).replace(':', ':item/')
 	const coilBlockSide = m =>
 		m === 'copper'   ? 'immersiveengineering:block/metal_decoration/coil_lv_side' :
 		m === 'electrum' ? 'immersiveengineering:block/metal_decoration/coil_mv_side' :
 		                   'creativeengineering:block/coil_block/coil_' + m + '_side'
 
 	COIL_METALS.forEach(m => {
-		SEQUENCED_ASSEMBLIES.push(['coil_' + m])
+		SEQUENCED_ASSEMBLIES.push(['coil_' + m, coilSprite(m)])
 		SEQUENCED_ASSEMBLIES.push(['coil_block_' + m, coilBlockSide(m)])
 	})
 

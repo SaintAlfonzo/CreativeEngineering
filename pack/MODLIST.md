@@ -7,7 +7,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 - Java 17
 - JVM args: `-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M`
 
-## Mods (413: 368 both, 45 client)
+## Mods (412: 368 both, 44 client)
 
 | Side | Mod | Mod id | Version | File | Source |
 |---|---|---|---|---|---|
@@ -88,7 +88,6 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Comforts | `comforts` | 6.0.7+1.19.2 | `comforts-forge-6.0.7+1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/comforts/files/4977779) [MR](https://modrinth.com/mod/comforts/version/4xI610Ck) |
 | both | Compressed Creativity | `compressedcreativity` | 1.19.2-0.1.8 | `compressedcreativity-1.19.2-0.1.8.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/compressedcreativity/files/4792470) [MR](https://modrinth.com/mod/compressedcreativity/version/f03UZ0sz) |
 | both | Compressed Engineering | `compressedengineering` | compressedengineering-1.3.5.jar | `compressedengineering-1.3.5.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/compressed-engineering/files/6771602) |
-| client | ConnectedTexturesMod | `ctm` | CTM - 1.19.2-1.1.6+8 | `CTM-1.19.2-1.1.6+8.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ctm/files/4393695) |
 | both | Connectible Chains [FORGE] | `connectiblechains` | Connectible Chains-forge-1.19.2-2.1.4 | `Connectible Chains-forge-1.19.2-2.1.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/connectible-chains-forge/files/5202515) |
 | both | Construction Wand | `constructionwand` | 1.19.2-2.10 | `constructionwand-1.19.2-2.10.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/construction-wand/files/4455719) [MR](https://modrinth.com/mod/construction-wand/version/aHdfYfXB) |
 | both | Control Engineering | `controlengineering` | 0.2.0 | `ControlEngineering-0.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/control-engineering/files/4056124) [MR](https://modrinth.com/mod/control-engineering/version/wkIKWJ11) |
@@ -521,6 +520,7 @@ file/Fancy Crops v1.2.zip
 
 | Mod | File | Source |
 |---|---|---|
+| ConnectedTexturesMod | `CTM-1.19.2-1.1.6+8.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ctm/files/4393695) |
 | Copper Drops | `CopperDrops-1.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/copper-drops/files/4889063) |
 | Create: Copper Splashing | `Create_Copper_Splashing_v2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-copper-splashing/files/6536354) |
 | Create Waystone Recipes | `Create_Waystone_Recipes_1.19_v2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-waystone-recipes/files/6536359) |

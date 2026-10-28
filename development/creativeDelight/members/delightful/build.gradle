@@ -6,11 +6,6 @@ plugins {
     id 'ce.forge-repack'
 }
 
-repositories {
-    // Third-party mod jars copied from ../../../../mods (git-ignored).
-    flatDir { dir 'libs' }
-}
-
 dependencies {
     // The overlay's pies, feast and foods are Farmer's Delight types; the repacked FD member ships beside it.
     compileOnly files(rootProject.file('development/creativeDelight/upstream/FarmersDelight-1.19.2-1.2.4.jar'))

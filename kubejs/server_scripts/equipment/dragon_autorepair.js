@@ -69,19 +69,23 @@
 
 	// dragon_horse_armor is worn in the horse's own inventory slot, not a player
 	// slot/hand, so the PlayerEvents.tick pass above can never see it - same
-	// AbstractHorse walk as armor_effects.js's mount() support.
-	LevelEvents.tick(event => {
+	// AbstractHorse walk as armor_effects.js's mount() support. One ServerEvents.tick
+	// that skips dimensions with no player, not a LevelEvents.tick per dimension
+	// (perf.md 10.2 #6).
+	ServerEvents.tick(event => {
 		if (!CFG.DRAGON_GEAR.autorepairEnabled.get()) return
-		var level = event.getLevel()
-		if (level.isClientSide()) return
+		var server = event.getServer()
 
 		var intervalTicks = CFG.DRAGON_GEAR.autorepairIntervalTicks.get()
-		if (level.getServer().getTickCount() % intervalTicks !== 0) return
+		if (server.getTickCount() % intervalTicks !== 0) return
 
 		var amount = CFG.DRAGON_GEAR.autorepairAmountPerInterval.get()
-		level.getAllEntities().forEach(entity => {
-			if (!(entity instanceof $DragonAbstractHorse)) return
-			repairIfDragonGear(entity.getSlot(DRAGON_HORSE_ARMOR_SLOT).get(), amount)
+		server.getAllLevels().forEach(level => {
+			if (level.getPlayers().isEmpty()) return
+			level.getAllEntities().forEach(entity => {
+				if (!(entity instanceof $DragonAbstractHorse)) return
+				repairIfDragonGear(entity.getSlot(DRAGON_HORSE_ARMOR_SLOT).get(), amount)
+			})
 		})
 	})
 })()

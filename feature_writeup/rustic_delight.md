@@ -131,10 +131,10 @@ cut, a syrup for the maple foods.
 | Piece | Where | Notes |
 |---|---|---|
 | Project | `development/creativeDelight/members/rustic` (Gradle `:backportedRustic`, `bundled_in=creativeDelight`) | Mod id `rusticdelight`, display name "Rustic Delight (Creative Delight)", version `1.7.0-ce-19.2-01`. Own package `com.SaintAlfonzo.creativedelight.rustic` (nothing in the pack names upstream classes). GPLv3, our code only |
-| Donor | `rustic_upstream/rusticdelight-forge-1.20.1-1.7.0.jar`, sha1 `bca9adf6...`, Modrinth `foa4fGIH/z29Gd3ec` | Read at runtime as two hidden built-in packs (`UpstreamJars`, `UpstreamPacks`, `MemoryPackResources`, the Miner's method). Missing or wrong file stops the game with the URL. `build_deploy.py` ships the folder (`UPSTREAM_DONORS`) |
+| Donor | `rustic_upstream/rusticdelight-forge-1.20.1-1.7.0.jar`, sha1 `bca9adf6...`, Modrinth `foa4fGIH/z29Gd3ec` | Read at runtime as two hidden built-in packs (`UpstreamJars` pins, on the shared `DonorJars` / `BuiltInPacks.addUpstream` / `MemoryPackResources`, [pack_tooling.md](pack_tooling.md) 2.8; the Miner's method). Missing or wrong file stops the game with the URL. `build_deploy.py` ships the folder (`UPSTREAM_DONORS`) |
 | Registry | `registry/RDBlocks`, `RDItems`, `RDFoods`, `RDPotions`, `RDLoot`, `RDTab` | Every 1.7.0 id (162) but `fruit_beignet`; every 1.3.0 id kept, so old worlds need no conversion. `tools/check_donor.py` compares the ids with the donor's lang, blockstates and data (0 problems) |
 | Blocks written from behaviour | `content/` | `PancakeStackBlock` (6 per placed plate, take one, sneak-use puts one back up to 12; keeps upstream's `servings` numbering so 1.3.0 plates load as they were), `PepperMedleyBlock` and `RiceRollRoyaleBlock` (FD `FeastBlock` with their own `servings` range), crops (bell peppers 8 stages, coffee 6, cotton 4), wild crops on `#minecraft:dirt`, coffees that clear one effect (`EffectClearingDrinkItem`) |
-| Translator | `upstream/RusticTranslator` | Drops advancements, the biome modifiers (the pack places every patch, 5.4), upstream's edits of five FD recipes, the 8 chest seed and bean swaps, Fruit Beignet; renames 1.20 loot `any_of` and rewrites `all_of`; makes other-namespace tag entries optional; drops a recipe whose item or type this game lacks; cherry blossom tag to `vinery:cherry_leaves` + `quark:pink_blossom_leaves`; wild and giant patches to the three base colours |
+| Translator | `upstream/RusticTranslator` | Drops advancements, the biome modifiers (the pack places every patch, 5.4), upstream's edits of five FD recipes, the 8 chest seed and bean swaps, Fruit Beignet; renames 1.20 loot `any_of` and rewrites `all_of`; makes other-namespace tag entries optional; drops a recipe whose item or type this game lacks; cherry blossom tag to `vinery:cherry_leaves` + `quark:pink_blossom_leaves`; wild and giant patches to the three base colours; in models, FD 1.20's `template_crop_cross` to 1.19.2's `crop_cross` (same model; coffee and the three pepper crops rendered missing without it, fixed 2026-10-26). FD 1.20's `platter` texture (the three medleys) ships in repackedFarmers at FD's own path |
 | Data types | `logic/` | `squids_drop_calamari_modifier`, `config_boolean` (always on: no families config), `configurable_rarity_filter` (fixed N: cotton 96 as the pack's 1.3.0 config, peppers 15, coffee 15, giant 64 [1.7.0: 16]). The village farm processor is Creative Delight's, not Rustic's (5.4) |
 | Not ported | | Config and item families, Thirst compat, advancements, the brewing steps (the pack's `potions.js` mixes brew the three Haste potions), upstream's Pale and Dark trader offers (pack trade, 5.4) |
 
@@ -152,6 +152,10 @@ Pack rows (`kubejs/data/creative_delight/kubejs/rusticdelight/recipes.js` unless
   (so it does not clash with the Syrup Cookie). Maple Glazed Bacon: cooked bacon + syrup.
 - `cooking.js`: the heatless Bell Pepper Pasta takes any 3 roasted peppers [one of each colour]; Brewin's pizza is the
   Supreme Pizza: bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat on a dough [cheese, 2 toppings, sauce].
+- Stuffed peppers (2026-10-28, scratchpad): a second pot recipe per colour, roasted pepper + rice + one stuffed pepper
+  filling -> the stuffed pepper of that colour (9 recipes; upstream's raw pepper recipe stays). The roasted pepper is an
+  ingredient, not the container: the pot matches ingredients only, so 9 recipes differing by container would all match
+  the first colour. Time and experience as upstream; Slice & Dice copies each. RD-33.
 - Tags: bell peppers in `#brewinandchewin:foods/pizza_topping` (`cookingtags.js`); the six new roasted colours in the
   roasted pepper and cooked veggie tags (`rusticdelight/tags.js`).
 
@@ -191,10 +195,11 @@ saturation [0.8], Chocolate and Vegetable pancake servings 4 / 0.6 [3 / 0.6], ho
 
 Offline 2026-10-25: `:backportedRustic:build`; `tools/check_donor.py` 0 problems (162 ids both ways, every data
 reference resolves, no 1.20-only loot type left, no recipe item missing from the last `/dumpall`); `gen_crop_worldgen_table.py`
-resolves the new row; `build_deploy.py` reads the donor pin. Live: SQ-RD-01 to SQ-RD-31 in
+resolves the new row; `build_deploy.py` reads the donor pin. 2026-10-26: all 30 donor models naming `template_crop_cross`
+match the translator's rename; `platter.png` is in the built repackedFarmers. Live: SQ-RD-01 to SQ-RD-32 in
 [testing/scratch_queue.md](testing/scratch_queue.md) (RD-n = SQ-RD-n), queued. RD-01 to RD-12 cover the boot, old
 worlds and the pack rows; RD-13 to RD-31 (added 2026-10-25, owner: every scratch test the port needs) cover each new
-content group, the worldgen and village rows, the client side and the cutover.
+content group, the worldgen and village rows, the client side and the cutover. RD-32 (2026-10-26): crop and medley textures. RD-33 (2026-10-28): the roasted-pepper stuffed pepper recipes.
 
 ### 5.7 Cutover (when the Creative Delight jar is installed)
 

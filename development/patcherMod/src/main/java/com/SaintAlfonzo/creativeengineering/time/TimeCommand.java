@@ -98,7 +98,7 @@ public final class TimeCommand {
         source.sendSuccess(header("Pushed"), false);
         source.sendSuccess(line(String.format(Locale.ROOT,
                 " Better Days (getters): speeds above, RATIO. sereneseasons-server.toml: day_duration %d, sub_season_duration %d, progress_season_while_offline %s."
-                        + " seasonhud-server.toml: the same lengths. vinery-common.toml: clock %s, daysPerMonth %d, monthsPerEffectLevel %d, cellar %.1f.",
+                        + " seasonhud-server.toml: the same lengths. Vinery port (reads [time.wine]): clock %s, daysPerMonth %d, monthsPerEffectLevel %d, cellar %.1f.",
                 TimeSettings.seasonDayDuration(), sub, !CEConfig.TIME.pauseWhenEmpty.get(),
                 CEConfig.TIME.wineClock.get() == CEConfig.Time.WineClock.SUN ? "WORLD_TIME" : "PLAYTIME", sub, months, cellar), ChatFormatting.GRAY), false);
         return 1;

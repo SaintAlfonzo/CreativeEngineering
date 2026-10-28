@@ -11,13 +11,16 @@ vanilla mineshafts...) show up as "empty" here, but Lootr converts those in game
 
 Run after adding/updating a structure mod:  python3 tools/audit_loot_containers.py
 """
-import collections, fnmatch, glob, gzip, io, json, os, re, struct, sys, zipfile
+import collections, fnmatch, io, json, os, re, struct, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import pack_paths  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'kubejs/generation_scripts/worldgen/loot_container_audit.md')
 SWAPS = os.path.join(ROOT, 'kubejs/generation_scripts/worldgen/loot_container_swaps.json')
 LOOTR = os.path.join(ROOT, 'config/lootr-common.toml')
-VANILLA_JAR = os.path.expanduser('~/.gradle/caches/forge_gradle/minecraft_repo/versions/1.19.2/client-extra.jar')
+VANILLA_JAR = pack_paths.vanilla_jar()
 SKIP_TEMPLATES = ('create:gametest/',)
 CONTAINER_HINT = re.compile(r'chest|barrel|shulker|crate|cabinet|basket|dropper|dispenser|hopper|monobank|safe|sack')
 
@@ -83,50 +86,15 @@ def matches(block, patterns):
     return next((p for p in patterns if fnmatch.fnmatchcase(block, p)), None)
 
 
-def scan_template(raw, jar, template, rows):
-    try:
-        d = read_nbt(gzip.decompress(raw))
-    except (OSError, ValueError, struct.error, EOFError):
-        try:
-            d = read_nbt(raw)
-        except (ValueError, struct.error, EOFError):
-            print(f'  skipped unreadable {jar}:{template}', file=sys.stderr)
-            return
-    palette = d.get('palette') or (d.get('palettes') or [[]])[0]
-    for b in d.get('blocks', []):
-        nb = b.get('nbt')
-        if not nb or b['state'] >= len(palette):
-            continue
-        block = palette[b['state']]['Name']
-        if not (nb.get('LootTable') or 'Items' in nb):
-            continue
-        rows.append(dict(jar=jar, template=template, block=block, loot=nb.get('LootTable'),
-                         items=len(nb.get('Items') or [])))
-
-
 def scan():
+    """One row per container that holds items or a loot table, from the cached template scan
+    (loot_breakdown_scan.scan(): vanilla, mods/*.jar and kubejs/data, one entry per template id as the game loads it)."""
+    import loot_breakdown_scan as S  # imports this module, so not at the top
     rows = []
-    jars = sorted(glob.glob(os.path.join(ROOT, 'mods/*.jar')))
-    if os.path.exists(VANILLA_JAR):
-        jars.append(VANILLA_JAR)
-    for j in jars:
-        try:
-            z = zipfile.ZipFile(j)
-        except zipfile.BadZipFile:
-            continue
-        for n in z.namelist():
-            if not (n.startswith('data/') and '/structures/' in n and n.endswith('.nbt')):
-                continue
-            ns = n.split('/')[1]
-            template = f"{ns}:{n.split('/structures/', 1)[1][:-4]}"
-            if template.startswith(SKIP_TEMPLATES):
-                continue
-            scan_template(z.read(n), 'vanilla' if j == VANILLA_JAR else os.path.basename(j), template, rows)
-    # structures ported out of jars into the KubeJS datapack (tools/port_structure_jars.py)
-    for path in sorted(glob.glob(os.path.join(ROOT, 'kubejs/data/*/structures/**/*.nbt'), recursive=True)):
-        rel = os.path.relpath(path, os.path.join(ROOT, 'kubejs/data')).split(os.sep)
-        with open(path, 'rb') as fh:
-            scan_template(fh.read(), 'kubejs/data', f"{rel[0]}:{'/'.join(rel[2:])[:-4]}", rows)
+    for template, t in sorted(S.scan().items()):
+        for c in t['containers']:
+            rows.append(dict(jar=t['origin'], template=template, block=c['block'], loot=c['loot'],
+                             items=len(c['items'])))
     return rows
 
 

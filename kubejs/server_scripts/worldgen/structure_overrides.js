@@ -38,20 +38,19 @@
 // structure whose pieces would overlap a higher-ranked structure's never starts. A meta structure's "companions" are
 // structures started in chunks of their own around it (villages around a fortified town). priority.peaceful: a radius
 // (chunks) around big settlements, villages and remote camps/houses where no hostile structure may start. Staged to
-// patcherMod (worldgen/PlacementPriority); an older jar ignores all of it with a warning.
+// patcherMod (worldgen/PlacementPriority).
 //
 // REPLACEMENTS: a group member with "replaces": "<member id>" and "share": 0..1 never wins a slot by its own weight; it
 // takes that share of the slots the named member wins and keeps (the vanilla swamp hut in YUNG's witch hut slots), so the
-// two together spawn exactly as often as the named member alone did. Staged to patcherMod (worldgen/MetaSlots). Without
-// MetaSlots.stageReplacements (older jar), or with [worldgen.systems] structureReplacements off, replacements are left
-// out of their group set and the named member keeps every slot.
+// two together spawn exactly as often as the named member alone did. Staged to patcherMod (worldgen/MetaSlots). With
+// [worldgen.systems] structureReplacements off, replacements are left out of their group set and the named member keeps
+// every slot.
 //
 // BIOME FREQUENCY (a group's "biome_frequency", 2026-10-14): {"#biome tag" | "biome id": factor 0..1, ..., "default": factor}.
 // Every member's frequency is multiplied by the factor of the biome at its generation point (the first rule the biome
 // matches, else default); patcherMod rolls it in generation and in /locate's prediction alike. The vehicles use it to be
 // twice as common in #creativeengineering:harsh biomes. Biome tags of our own (harsh) are biome_fits.json "biome_tags",
-// added as real tags creativeengineering:<name> below. An older jar without StructureFrequencies.stageBiomeFactors
-// ignores it with a warning (every member then spawns at its plain frequency).
+// added as real tags creativeengineering:<name> below.
 //
 // frequency < 1 is not a vanilla feature: the table is handed to patcherMod
 // (worldgen/StructureFrequencies), which rolls it when a structure is about to be placed.
@@ -107,17 +106,17 @@
 
 	// KubeJS's class filter blocks java.io, so the markdown report goes through patcherMod.
 	var WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles')
+	// patcherMod's worldgen side: switches, and the stages the plan is handed to
+	var WorldgenConfig = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig')
+	var StructureFrequencies = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies')
+	var StructureBiomeRules = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules')
+	var StructureBiomeFits = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeFits')
+	var MetaSlots = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots')
+	var PlacementPriority = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority')
 
-	// CEConfig [worldgen] switches; the defaults when the jar predates WorldgenConfig.
+	// CEConfig [worldgen] switches
 	function worldgenSettings() {
-		var s = { groups: true, density: 1 }
-		try {
-			var C = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig')
-			s.groups = C.structureGroupsEnabled() == true
-			s.density = Number(C.structureDensity())
-		} catch (err) {
-			console.warn(TAG + 'no patcherMod WorldgenConfig (older jar?): structure groups on, density 1')
-		}
+		var s = { groups: WorldgenConfig.structureGroupsEnabled() == true, density: Number(WorldgenConfig.structureDensity()) }
 		if (!(s.density > 0) || !isFinite(s.density)) s.density = 1
 		return s
 	}
@@ -468,65 +467,18 @@
 		return { fits: fits, structures: biomeFits.structures }
 	}
 
-	// patcherMod's biome fits; null when the jar is older than this script (fits then simply don't apply)
-	function biomeFitStage() {
-		try {
-			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeFits')
-		} catch (err) {
-			return null
-		}
-	}
-
 	// ── meta structures ──────────────────────────────────────────────────────
 
-	// {ok} when patcherMod can build meta structures, else {ok: false, why}
+	// {ok} when the meta structure switch is on, else {ok: false, why}
 	function metaSupport() {
-		try {
-			Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure')
-		} catch (err) {
-			return { ok: false, why: 'patcherMod has no worldgen.MetaStructure (older jar in mods/)' }
-		}
-		try {
-			Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots')
-		} catch (err) {
-			// a jar from before slot conversion would let an anchored meta take group slots of its own
-			return { ok: false, why: 'patcherMod has no worldgen.MetaSlots (older jar in mods/)' }
-		}
-		try {
-			var C = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig')
-			if (C.metaStructuresEnabled() != true) return { ok: false, why: 'switched off ([worldgen.systems] metaStructures)' }
-		} catch (err) {
-			// an older WorldgenConfig has no switch: on
-		}
+		if (WorldgenConfig.metaStructuresEnabled() != true) return { ok: false, why: 'switched off ([worldgen.systems] metaStructures)' }
 		return { ok: true }
 	}
 
-	// {ok, stage: MetaSlots} when patcherMod can stage replacements and the switch is on, else {ok: false, why}
+	// {ok} when the replacement switch is on, else {ok: false, why}
 	function replacementSupport() {
-		var slots
-		try {
-			slots = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots')
-		} catch (err) {
-			return { ok: false, why: 'patcherMod has no worldgen.MetaSlots (older jar in mods/)' }
-		}
-		if (!slots.stageReplacements) return { ok: false, why: 'patcherMod has no MetaSlots.stageReplacements (older jar in mods/)' }
-		try {
-			var C = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig')
-			if (C.structureReplacementsEnabled() != true) return { ok: false, why: 'switched off ([worldgen.systems] structureReplacements)', stage: slots }
-		} catch (err) {
-			// a WorldgenConfig without the switch can't come with stageReplacements; on
-		}
-		return { ok: true, stage: slots }
-	}
-
-	// patcherMod's PlacementPriority stager, or null (older jar)
-	function prioritySupport() {
-		try {
-			var C = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority')
-			return C.stage ? C : null
-		} catch (err) {
-			return null
-		}
+		if (WorldgenConfig.structureReplacementsEnabled() != true) return { ok: false, why: 'switched off ([worldgen.systems] structureReplacements)' }
+		return { ok: true }
 	}
 
 	// structure_groups.json "priority" -> {ranks: {id: n}, companions: {meta: {...}}, groups, overrides}
@@ -859,8 +811,6 @@
 		})
 
 		var priority = planPriority(doc, groupNames, tagMembers, owner, metaPlans, errors, warnings)
-		var priorityStage = prioritySupport()
-		if (!priorityStage && Object.keys(priority.ranks).length) warnings.push('patcherMod has no worldgen.PlacementPriority (older jar): placement priority and companions not applied')
 
 		var knownSets = {}
 		Object.keys(sets).forEach(function (id) { knownSets[id] = true })
@@ -999,9 +949,7 @@
 			frequencies: frequencies,
 			biomeFrequencies: biomeFrequencies,
 			replacements: replacements,
-			replacementStage: replSupport.stage || null,
 			priority: priority,
-			priorityStage: priorityStage,
 			biomeRules: biomeRules,
 			biomeFits: biomeFits,
 			report: buildReport(groupPlans, setPlans, biomeRules, biomeFits, tagDefs, tagMembers, allIds, warnings, freqCount, metaPlans, owner, priority),
@@ -1273,35 +1221,6 @@
 		}
 	}
 
-	// patcherMod's frequency roller; null when the jar is older than this script
-	function frequencyStage() {
-		try {
-			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies')
-		} catch (err) {
-			return null
-		}
-	}
-
-	// The group biome factors; false when the jar predates them (2026-10-14)
-	function stageBiomeFactors(stage, json) {
-		try {
-			if (!stage.stageBiomeFactors) return false
-			stage.stageBiomeFactors(json)
-			return true
-		} catch (err) {
-			return false
-		}
-	}
-
-	// patcherMod's biome rules; null when the jar is older than this script (rules then simply don't apply)
-	function biomeRuleStage() {
-		try {
-			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules')
-		} catch (err) {
-			return null
-		}
-	}
-
 	ServerEvents.highPriorityData(function (event) {
 		var result
 		try {
@@ -1309,48 +1228,32 @@
 		} catch (err) {
 			result = { errors: ['structure tuning failed: ' + err], title: 'Structure tuning failed' }
 		}
-		var stage = frequencyStage()
-		if (!result.errors && !stage) {
-			result = { errors: ['patcherMod has no worldgen.StructureFrequencies: mods/ holds an older creativeengineering jar. '
-				+ 'Groups without their per-structure frequencies would spawn every member at full rate, so nothing is applied. '
-				+ 'Copy the new jar from development/patcherMod/build/libs into mods/.'], title: 'patcherMod jar too old' }
-		}
 		if (result.errors) {
 			result.errors.forEach(function (e) { console.error(TAG + e) })
 			console.error(TAG + 'nothing applied, every structure uses its mod/vanilla default')
-			if (stage) stage.stage('{}')
-			if (stage) stageBiomeFactors(stage, '{}')
-			var prio = prioritySupport()
-			if (prio) prio.stage('{}')
-			var repl = replacementSupport()
-			if (repl.stage) repl.stage.stageReplacements('{}')
-			var ruleStage = biomeRuleStage()
-			if (ruleStage) ruleStage.stage('{}')
-			var fitStageClass = biomeFitStage()
-			if (fitStageClass) fitStageClass.stage('{}')
+			StructureFrequencies.stage('{}')
+			StructureFrequencies.stageBiomeFactors('{}')
+			PlacementPriority.stage('{}')
+			MetaSlots.stageReplacements('{}')
+			StructureBiomeRules.stage('{}')
+			StructureBiomeFits.stage('{}')
 			writeReport(buildErrorReport(result.title || 'Errors', result.errors))
 			return
 		}
 		Object.keys(result.files).forEach(function (path) { event.add(path, result.files[path]) })
 		Object.keys(result.metaFiles).forEach(function (path) { event.add(path, result.metaFiles[path]) })
-		stage.stage(toJson(result.frequencies))
-		if (!stageBiomeFactors(stage, toJson(result.biomeFrequencies)) && Object.keys(result.biomeFrequencies).length)
-			result.warnings.push('patcherMod has no StructureFrequencies.stageBiomeFactors (older jar): biome_frequency not applied ('
-				+ Object.keys(result.biomeFrequencies).join(', ') + ' spawn at their plain frequencies)')
-		if (result.replacementStage) result.replacementStage.stageReplacements(toJson(result.replacements))
-		if (result.priorityStage) result.priorityStage.stage(toJson({ ranks: result.priority.ranks, shaped: result.priority.shaped, companions: result.priority.companions,
+		StructureFrequencies.stage(toJson(result.frequencies))
+		StructureFrequencies.stageBiomeFactors(toJson(result.biomeFrequencies))
+		MetaSlots.stageReplacements(toJson(result.replacements))
+		PlacementPriority.stage(toJson({ ranks: result.priority.ranks, shaped: result.priority.shaped, companions: result.priority.companions,
 			peace: { radius: result.priority.radius, hostile: result.priority.hostile } }))
 		var rules = {}
 		Object.keys(result.biomeRules).forEach(function (name) {
 			rules[name] = { biomes: result.biomeRules[name].biomes, allow: result.biomeRules[name].allow }
 			if (result.biomeRules[name].surface.length) rules[name].surface_check = result.biomeRules[name].surface
 		})
-		var ruleStage = biomeRuleStage()
-		if (ruleStage) ruleStage.stage(toJson(rules))
-		else if (Object.keys(rules).length) result.warnings.push('patcherMod has no worldgen.StructureBiomeRules (older jar): biome_rules not applied')
-		var fitStageClass = biomeFitStage()
-		if (fitStageClass) fitStageClass.stage(toJson(fitStage(result.biomeFits)))
-		else if (Object.keys(result.biomeFits.structures).length) result.warnings.push('patcherMod has no worldgen.StructureBiomeFits (older jar): biome fits not applied')
+		StructureBiomeRules.stage(toJson(rules))
+		StructureBiomeFits.stage(toJson(fitStage(result.biomeFits)))
 		result.warnings.forEach(function (w) { console.warn(TAG + w) })
 		console.info(TAG + result.summary)
 		writeReport(result.report)

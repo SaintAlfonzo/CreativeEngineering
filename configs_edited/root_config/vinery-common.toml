@@ -1,0 +1,157 @@
+
+[blocks]
+	#Ticks a Cask takes for one wine
+	#Range: 1 ~ 10000
+	totalFermentationTime = 6000
+	#Juice units a Cask holds
+	#Range: 100 ~ 10000
+	maxFluidLevel = 100
+	#Juice units one juice bottle adds
+	#Range: 1 ~ 10000
+	maxFluidIncrease = 25
+	#Range: 1 ~ 10000
+	applePressMashingTime = 600
+	#Range: 1 ~ 10000
+	applePressFermentationTime = 800
+	#Range: 0.0 ~ 1.0
+	cherryGrowthChance = 0.4
+	#Range: 0.0 ~ 1.0
+	appleGrowthChance = 0.4
+	#Port (D10): chance that picking cherries also drops a rotten cherry, as in 1.3.10. 0 = never (1.5.5)
+	#Range: 0.0 ~ 1.0
+	rottenCherryChance = 0.15
+	#Range: 0.0 ~ 1.0
+	grapeGrowthChance = 0.5
+	#Multiplies the growth chance of grape bushes, stems and lattices
+	#Range: 0.0 ~ 10.0
+	grapeGrowthMultiplier = 1.0
+	#Stomps a full Grapevine Pot needs
+	#Range: 1 ~ 100
+	grapevinePotStomps = 4
+	#Extra stomp progress in percent for an entity with 15 or more armor
+	#Range: 0 ~ 100
+	grapevinePotHeavyArmorBonus = 10
+	grapevinePotSplashParticles = true
+	#Red and white grapevine stems grow grapevine leaves around them
+	grapevineLeavesEnabled = true
+
+[wine]
+	#Wines age at all
+	agingEnabled = true
+	#Wines only age while they sit in a storage block (rack, shelf, placed bottle...)
+	ageOnlyInStorage = false
+	#Longest effect a wine can reach, in ticks
+	#Range: 1 ~ 100000
+	maxDuration = 15000
+	#Highest effect level from aging (the pack's [time] master replaces this while it is on)
+	#Range: 0 ~ 10
+	maxLevel = 5
+	#Effect ticks a wine gains per month of age
+	#Range: 0 ~ 10000
+	durationPerMonth = 200
+	#Aging speed in a storage block with no sky light (the pack's [time] master replaces this while it is on)
+	#Range: 1.0 ~ 5.0
+	cellarAgingMultiplier = 2.0
+	#Days per wine month: one Serene Seasons sub-season (the pack's 8 world days) (the pack's [time] master replaces this while it is on)
+	#Range: 1 ~ 100
+	daysPerMonth = 8
+	#Wine months per effect level (3 = one season) (the pack's [time] master replaces this while it is on)
+	#Range: 1 ~ 100
+	monthsPerEffectLevel = 1
+	#wine|effect|amplifier|durationTicks per wine (1.5.5 defaults plus the two 1.3.10 wines the port keeps)
+	effects = ["vinery:apple_cider|minecraft:strength|0|1800", "vinery:apple_wine|minecraft:resistance|0|1800", "vinery:glowing_wine|minecraft:glowing|0|1800", "vinery:solaris_wine|minecraft:health_boost|0|1800", "vinery:kelp_cider|vinery:water_walker|0|1800", "vinery:eiswein|vinery:frosty_armor|0|1800", "vinery:aegis_wine|vinery:armor_effect|0|1800", "vinery:villagers_fright|minecraft:bad_omen|0|1800", "vinery:clark_wine|vinery:double_jump|0|1800", "vinery:jellie_wine|vinery:jellie|0|1800", "vinery:noir_wine|minecraft:jump_boost|0|1800", "vinery:red_wine|minecraft:slow_falling|0|1800", "vinery:strad_wine|minecraft:night_vision|0|1800", "vinery:cherry_wine|minecraft:invisibility|0|1800", "vinery:cristel_wine|minecraft:water_breathing|0|1800", "vinery:lilitu_wine|vinery:party_effect|0|1800", "vinery:jo_special_mixture|vinery:climbing_effect|0|1800", "vinery:bolvar_wine|vinery:lava_walker|0|1800", "vinery:magnetic_wine|vinery:magnet|0|1800", "vinery:stal_wine|minecraft:health_boost|0|1800", "vinery:chenet_wine|vinery:climbing_effect|0|1800", "vinery:bottle_mojang_noir|vinery:experience_effect|0|1800", "vinery:chorus_wine|vinery:teleport|0|10", "vinery:creepers_crush|vinery:creeper_effect|0|100", "vinery:mellohi_wine|minecraft:instant_health|0|1", "vinery:praetorian_wine|minecraft:glowing|0|1800"]
+	#Aging speed in a cold storage block: Brewin' and Chewin's freeze sources outweigh its heat sources
+	#nearby (the keg's chilly or colder). Multiplies with the cellar bonus (the pack's [time] master replaces this while it is on)
+	#Range: 1.0 ~ 5.0
+	coldAgingMultiplier = 2.0
+	#Aging speed in a warm storage block: Brewin' and Chewin's heat sources outweigh its freeze sources
+	#nearby (the keg's warm or hotter). Multiplies with the cellar bonus (the pack's [time] master replaces this while it is on)
+	#Range: 0.1 ~ 1.0
+	warmAgingMultiplier = 0.75
+
+[aging]
+	#What moves the vintage clock wines age on: PLAYTIME (a player is online), SERVER_TICKS (always, 1.5.5), WORLD_TIME (overworld day time like the seasons; sleeping ages wine) (the pack's [time] master replaces this while it is on)
+	#Allowed Values: PLAYTIME, SERVER_TICKS, WORLD_TIME
+	clockMode = "WORLD_TIME"
+	#Real hours of clock time per wine month (dayUnit AGING)
+	#Range: 0.01 ~ 10000.0
+	playtimeHoursPerMonth = 8.0
+	#AGING: a day is playtimeHoursPerMonth / daysPerMonth. WORLD: a day is one world day as players see it (worldDayMinutes). DAYTIME: sunrise to sunrise; always used when clockMode is WORLD_TIME (the pack's [time] master replaces this while it is on)
+	#Allowed Values: AGING, WORLD, DAYTIME
+	dayUnit = "DAYTIME"
+	#dayUnit WORLD: real minutes per world day. 0 = measure it from the overworld day time (follows Better Days) (the pack's [time] master replaces this while it is on)
+	#Range: 0.0 ~ 100000.0
+	worldDayMinutes = 60.0
+
+[banner]
+	#The Vinery banner gives its effect to players within the radius
+	giveEffect = true
+	showTooltip = true
+	#Effect id the banner gives; an unknown id falls back to minecraft:regeneration
+	effect = "minecraft:health_boost"
+	#Effect amplifier: 0 = level I, 1 = level II (Health Boost II = 4 extra hearts)
+	#Range: 0 ~ 255
+	amplifier = 1
+	#Blocks around the banner
+	#Range: 1 ~ 64
+	radius = 8
+	#Effect length given at each refresh, in seconds
+	#Range: 1 ~ 3600
+	durationSeconds = 60
+	#A player whose banner effect has this many seconds or more left is skipped; below it the duration is topped up in place
+	#Range: 1 ~ 3600
+	refreshBelowSeconds = 10
+
+[trader]
+	#Chance that a Wandering Trader spawn is a Wandering Winemaker instead (1.5.5's swap).
+	#Adds to ownSpawner; the pack uses ownSpawner and 0 here
+	#Range: 0.0 ~ 1.0
+	spawnChance = 0.0
+	#The Winemaker comes with two leashed mules
+	spawnWithMules = true
+	#Ticks a Winemaker stays before it leaves
+	#Range: 0 ~ 72000
+	spawnDelay = 48000
+	#Port: the Winemaker spawns on its own timer, independent of the Wandering Trader (a copy of
+	#vanilla's trader spawner: overworld, doMobSpawning and doTraderSpawning on, 25/50/75% then 1 in 10 per roll)
+	ownSpawner = true
+	#ownSpawner: ticks between rolls (vanilla's trader: 24000)
+	#Range: 1200 ~ 100000000
+	ownSpawnerInterval = 96000
+
+[villager]
+	#Winemaker villager trades per level: item|BUY or SELL|price|count|maxUses|experience
+	level1 = ["vinery:red_grape|BUY|15|1|4|5", "vinery:white_grape|BUY|15|1|4|5", "vinery:red_grape_seeds|SELL|2|1|1|5", "vinery:white_grape_seeds|SELL|2|1|1|5"]
+	level2 = ["vinery:wine_bottle|SELL|1|1|4|7", "vinery:cherry|BUY|12|1|4|6", "vinery:apple_mash|SELL|1|1|4|6"]
+	level3 = ["vinery:white_grape_bag|SELL|7|1|2|10", "vinery:red_grape_bag|SELL|7|1|2|10", "vinery:cherry_bag|SELL|7|1|2|10", "vinery:apple_bag|SELL|7|1|2|10"]
+	level4 = ["vinery:window|SELL|12|1|2|10", "vinery:cherry_beam|SELL|6|4|2|10", "vinery:grapevine_pot|SELL|6|1|2|10", "vinery:taiga_grape_seeds_red|SELL|2|1|2|5", "vinery:taiga_grape_seeds_white|SELL|2|1|2|5"]
+	level5 = ["vinery:wine_box|SELL|10|1|2|10", "vinery:lilitu_wine|SELL|4|1|2|10", "vinery:vinemaker_apron|SELL|18|1|1|15", "vinery:straw_hat|SELL|12|1|1|12"]
+
+[winemaker_set]
+	#Full winemaker set: bone meal isn't used up
+	enabled = true
+	#Chance the bone meal is kept
+	#Range: 0.0 ~ 1.0
+	keepChance = 1.0
+	#NONE (no damage), ALL_PIECES (1.3.10 / 1.5.5), ONE_PIECE (one random piece)
+	#Allowed Values: NONE, ALL_PIECES, ONE_PIECE
+	damageMode = "ALL_PIECES"
+	#Chance a use deals damage
+	#Range: 0.0 ~ 1.0
+	damageChance = 0.3
+	#Damage per piece per damaging use (1.5.5 hardcodes 2, the pack used 1)
+	#Range: 0 ~ 100
+	damageAmount = 1
+
+[infoOverlay]
+	#Not used by the port: the block info lines are in WTHIT
+	#Allowed Values: OFF, ON, STRAW_HAT
+	mode = "OFF"
+
+[village_houses]
+	#Add the 1.5.5 winery houses (plains, taiga, savanna, desert) to the vanilla village house pools of the same biome. Takes a restart; the pack's pool_config.json can reweight them afterwards
+	enabled = true
+	#Pool weight of each house; 0 = the average weight of the pieces already in that pool (about 4 to 5)
+	#Range: 0 ~ 1000
+	weight = 0
+

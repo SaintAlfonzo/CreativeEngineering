@@ -12,6 +12,7 @@ investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Mult
 | Goals (this file) | written 2026-10-18 |
 | Implementation investigation | done 2026-10-18 (9), design and build plan proposed (10, 11) |
 | Build | steps 1-3 BUILT 2026-10-18 and DEPLOYED with 1.0.7 (patcherMod 1.0.7, KubeJS, first small tree, report tool; 12); not run in game, JO-01 to JO-12 pending; step 4 (fill the tree) not started |
+| Equipment family | BUILT 2026-10-26 (KubeJS only; 12.5): replaces the first small tree's Equipment > Tools; JO-13 to JO-16 pending |
 | Bug: order never reached patcherMod | FIXED 2026-10-20: `client_scripts/jei_order.js` threw "redeclaration of var $PackIngredientOrder" on every client load (top-level `const` inside `try`, a known quirk of this Rhino, reproduced in the pack's Rhino jar), so `define()` never ran and JEI kept its own order. Now `Java.loadClass(...).define(...)` with no binding; a scratch client logs `[jei order] definition: 4 types, 10 nodes` |
 
 ## 1. Why
@@ -375,6 +376,18 @@ Additional test from the investigation:
   is placed on the client (proves `mob_effect` tags sync; if not, effect leaves move to id lists).
 - **JO-12** The fluids fluid_jei.js adds are sorted with the other fluids, not appended at the end.
 
+Equipment family (12.5):
+
+- **JO-13** The item list opens with Equipment: wood, leather, stone, copper, ... in the 12.5 family order; inside a
+  family the tools come first (sword, pickaxe, axe, shovel, hoe, knife, machete), then armor (helmet to boots, then
+  goggle helmet, diving helmet, backtank, diving boots), then the family's shield, shears, horse armor, fishing rod
+  and backpack.
+- **JO-14** After the families: misc vanilla (bow, crossbow, trident, ...), misc modded, knives (the leftover
+  Delightful knives by name, none of the six placed in a family), arrows (Nock Enough Arrows included), guns (Old
+  Guns first, then IE, then PneumaticCraft), then tech, magic and hats (every Simple Hats item) last.
+- **JO-15** `jei_order_catalog.md` section 2 lists no conflicts and no unknown list ids for `equipment/...`.
+- **JO-16** None of the mechanisms or repair parts of Old Guns sit under `equipment/misc/guns` (`except`).
+
 Open points for the build:
 
 - Whether the definition should also accept item ids with NBT (one enchanted book level placed
@@ -444,6 +457,39 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
 5. JO-11: speed/haste/... placed under `beneficial` proves mob_effect tags reach the client (they are listed
    too, so check `placedBy: tag` in the JSON, not just the position).
 
+### 12.5 Equipment family (2026-10-26)
+
+From the 2026-10-26 scratchpad layout. KubeJS only (no patcherMod change): `/kubejs reload startup_scripts`,
+`/kubejs reload client_scripts`, `/reload`, or a restart.
+
+- `item` tree: `equipment` is the first (and so far only) item category. Children, in order: `wood`, `leather`,
+  `stone`, `copper`, `chainmail`, `iron`, `gold`, `diamond`, `netherite`, `echo`, `felsic`, `dragon`, then (order to
+  tune) `turtle`, `shulker`, `immersive_armors` (bone, slime, robe, prismarine, warrior, heavy, steampunk, divine,
+  wither; the wooden set is in `wood`), `steel` (IE tools and armor, Delightful steel knife), `faraday`,
+  `compressed_iron` (PneumaticCraft compressed iron and pneumatic armor), `quartz` (AE2 certus and nether quartz),
+  `fluix`, `botania` (glass pick, manasteel, manaweave, elementium, terrasteel, alfsteel knife), `wardrobe`,
+  `cardboard`, `vinery`, `floral` (Floral Enchantment crowns), `alexsmobs`, then `misc`.
+- Each family is one `list` leaf: tools, then armor, then the family's copies of misc gear (shields, shears, horse
+  armor, fishing rods and upgrades, backpacks, Dragon Loot's bow/crossbow/trident).
+- `misc` children: `vanilla`, `modded`, `knives`, `arrows`, `guns`, then the catch-alls from the scratchpad's
+  "equipment not yet in the families" list, folded in at the end: `tech` (Create, CTM, Create DD, IE tools and
+  upgrades, PneumaticCraft, AE2, Construction Wands, physics gun, portal guns), `magic` (Botania wands, bows, rods,
+  cloaks and charms, MCA staff, Witch Mobility hats, suit and brooms), `hats` (cosmetic heads, conductor caps,
+  Botania cosmetics, all of Simple Hats via `@simplehats`).
+- Pattern members: `knives` takes `delightful:*_knife` except the six placed in a family; `arrows` takes
+  `@nock_enough_arrows`; `guns` takes Old Guns guns, shot, cartridges, cannonballs, shells, rockets and cannon barrels
+  by wildcard, except `*_mechanism` / `*_repair_parts`, sorted `mod, name` with node `modOrder` Old Guns, IE,
+  PneumaticCraft. `hats` takes `@simplehats`.
+- Helper: nodes take `except` (passed to `global.tags.addMatching`), so a `from` pattern can leave out ids another node
+  lists instead of making a conflict.
+- Removed items are left out (`cb_microblock` saws, Everything Copper's shield; CE's copper shield is listed).
+  172 new `global.item` keys for gear that had none (end of `item_dict.js`, "JEI equipment tree").
+- Checked off-game: definition run in Node with the real dicts and helper (no warnings, 36 item nodes, 34 tags);
+  every listed id exists in `exported/items_by_mod`, no id in two nodes, and the patterns expanded against the dumps
+  give 1136 placed items with no conflicts.
+- Not placed yet (on purpose): Sophisticated Backpacks upgrades, Old Guns parts and materials, Create toolboxes,
+  IE `toolbox` and `turret_gun`, `physics_gun_mod` mode variants.
+
 ## 13. History
 
 - 2026-10-18: goals, investigation, design, build plan; steps 1 to 3 built (12).
@@ -453,3 +499,56 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
   top-level `const` in `try`, in the user's client.log since 1.0.7), so nothing in this file had ever applied in game.
   Fixed in `jei_order.js`; proven on a scratch client (latest.log `[jei order] definition: 4 types, 10 nodes`). JO-01 to
   JO-12 still need a world.
+- 2026-10-26: Equipment family built (12.5), replacing Equipment > Tools > copper / iron. JO-13 to JO-16 added.
+
+### 12.6 Equipment not yet in the family (generated 2026-10-26, moved from the scratchpad 2026-10-27)
+
+Generated from `items_by_mod`, excluding everything in `exported/gear` `tools.csv` and `armor.csv`; a name-pattern scan,
+so check for misses. TODO `jei/jei-ordering #6`.
+
+Family order wanted (owner, equipment at the front of the list for evaluation): by material family, then misc. Materials:
+wood (including immersive armor), leather, stone, copper, chainmail, iron, gold, diamond, netherite, echo, felsic,
+dragon (all equipment, even copies of misc); later, in logical order: turtle shell, shulker shell, immersive armor
+tiers, steel (both), faraday, PC armor, AE2 quartz and fluix, Botania (progression order), wardrobe, cardboard, vinery,
+floral enchantment, Alex's Mobs items. Types: sword, pick, axe, shovel, hoe, knife, machete, helm, chest, legs, boots,
+goggle helm, diving helm, backtank, diving boots. Misc: vanilla (bow, crossbow, trident, compass, clock, bundle,
+spyglass...), modded (quiver, slingshot, trowel, abacus...), remaining knives, all arrows, all guns (old guns first,
+then IE), and everything listed below.
+
+- vanilla: bow, crossbow, trident, shield, shears, fishing_rod, flint_and_steel, elytra, saddle, totem_of_undying, arrow,
+  spectral_arrow, tipped_arrow, leather / iron / golden / diamond horse armor, netherite_horse_armor (the mod)
+- quark: hammer, backpack (in the armor dump), forgotten_hat (in the armor dump), torch_arrow, iron_rod
+- supplementaries: slingshot, quiver, bomb, rope_arrow, spring_launcher, wrench
+- vanilla plus: everythingcopper copper_shield, copper_shears, copper_horse_armor; creativeengineering copper / gold /
+  diamond / netherite / echo / felsic / dragon shield and arrow_fletching; dragonloot dragon_bow, dragon_crossbow,
+  dragon_trident, dragon_horse_armor, dragon_shield (ce); iron_fishing_rods iron / gold / diamond / netherite rods and
+  iron / gold / diamond upgrades; nock_enough_arrows quiver + 26 arrows (blossom, cupid, dousing, drill, echoing,
+  ethereal, explosive, growing, ink, luminous, message, paint, party, prismarine, pufferfish, redstone_torch,
+  reinforced, repulsive, seeker, slime, soul_torch, split, teleportation, torch, whistling); customizableelytra
+  customizable_elytra, elytra_wing; domesticationinnovation deflection_shield; alexsmobs shield_of_the_deep,
+  ancient_dart, shark_tooth_arrow, squid_grapple, vine_lasso, straddle_helmet, straddle_saddle; sophisticatedbackpacks
+  backpack + copper / iron / gold / diamond / netherite backpack (armor-slot style); wardrobe backpack, large_backpack,
+  travel_backpack, book_hat
+- tech: create wrench, goggles, potato_cannon, wand_of_symmetry (mechanical_drill / saw are blocks, probably skip);
+  create_things_and_misc sticky_launcher, brass_sticky_launcher, spout_gun (+ chocolate, honey, lava, slime, water);
+  create_dd modular_drill, jetpack_placeable (block); ae2 certus / nether_quartz wrench and cutting_knife, charged_staff,
+  matter_cannon; immersiveengineering hammer, drill (+ drillheads iron / steel, toolupgrade_drill_*), excavator, shield
+  (+ toolupgrade_shield_*), glider, turret_gun; pneumaticcraft pneumatic_wrench, jackhammer, air_cannon, vortex_cannon,
+  drill_bit_* (iron / compressed_iron / diamond / netherite), elytra_upgrade, jet_boots_upgrade_1-5; createaddition
+  electrum_amulet; constructionwand stone / iron / diamond / infinity wand; cb_microblock saws (in the tools dump);
+  physics_gun_mod physics_gun, supercharged_gravity_gun, displacer_cannon, tool_gun (+ about 14 mode variants, probably
+  hide all but the base); ricksportalgun portal_gun, golden_portal_gun, prime_portal_gun
+- oldguns (guns and ammo, would be its own family): matchlock, wheellock, flintlock, caplock x musket / long_musket /
+  musketoon / pistol / blunderbuss / blunderbuss_pistol / doublebarrel / pepperbox / nock_gun; bombard,
+  medium_naval_cannon, cannon barrels (small / medium / large), cannonballs, ram_rod; musket balls and paper cartridges
+  in small / medium / large x stone / lead / iron
+- magic: botania livingwood_bow, crystal_bow, slingshot, dreamwood_wand, twig_wand, mana_gun, light_launcher, mana_bomb,
+  manasteel_shears, elementium_shears, balance_cloak, holy_cloak, unholy_cloak, invisibility_cloak, diva_charm,
+  goddess_charm, divining_rod and the rods (cobble, dirt, skydirt, exchange, fire, gravity, missile, smelt,
+  terraform, tornado, water), cosmetic_ancient_mask, eerie_mask, engineer_goggles, lusitanic_shield,
+  tiny_potato_mask; mca staff_of_life; witchmobility silver_arrow_broom_item (brooms, check others); cloudstorage
+  balloon_arrow
+- hats and cosmetics: simplehats, the whole mod (about 20+ hats: angrymask, azumanga_hat, bigcrown, cat_hat, crown,
+  cucumbereyemask, fishing_hat, flowercrown, ghostmask, goggles, hockeymask, horsemask, lilbow, orange_hat,
+  right_hand_hat, sleepeyemask, strawberry_hat, udder_hat, worm_hat, plus more the scan missed); fruitsdelight
+  durian_helmet; botania cosmetic_* (above)

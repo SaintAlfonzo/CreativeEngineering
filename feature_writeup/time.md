@@ -211,9 +211,9 @@ effects) stay in their own mods' files.
 | Serene Seasons | `starting_sub_season` | copied | 1 | set |
 | Serene Seasons | `progress_season_while_offline` | `!pauseWhenEmpty` | false | set |
 | SeasonHUD | `day_length`, `sub_season_length` | same as Serene Seasons | 24000, 8 | `SeasonHudServer` values `.set()` |
-| Vinery | `clockMode` | from `wine.clock`: SUN -> WORLD_TIME, PLAYTIME -> PLAYTIME | WORLD_TIME | `VineryConfig.CLOCK_MODE.set()` |
-| Vinery | `dayUnit`, `worldDayMinutes` | WORLD, `dayMinutes + nightMinutes` (exact, never measured) | DAYTIME (3.7) | set |
-| Vinery | `daysPerMonth` (was `daysPerYear`), `monthsPerEffectLevel`, `maxLevel`, `cellarAgingMultiplier` | `daysPerSubSeason`, then copied (3.7) | 8, 1 or 3 (preset, 3.9), 5, 2.0 | set |
+| Vinery | `clockMode` | from `wine.clock`: SUN -> WORLD_TIME, PLAYTIME -> PLAYTIME | WORLD_TIME | the port reads `time.WineTime` (since 2026-10-27; was `VineryConfig.CLOCK_MODE.set()`) |
+| Vinery | `dayUnit`, `worldDayMinutes` | WORLD, `dayMinutes + nightMinutes` (exact, never measured) | DAYTIME (3.7) | read by the port |
+| Vinery | `daysPerMonth` (was `daysPerYear`), `monthsPerEffectLevel`, `maxLevel`, `cellarAgingMultiplier` | `daysPerSubSeason`, then copied (3.7) | 8, 1 or 3 (preset, 3.9), 5, 2.0 | read by the port (also `cold` / `warmAgingMultiplier`) |
 
 **Better Days:** its config is WhiteNoise, not Forge, so values can't be set from outside the normal way. A `@Pseudo`
 mixin on the static getters of `betterdays.config.ConfigHandler$Common` (`daySpeed`, `nightSpeed`, `dayStart`,
@@ -227,11 +227,17 @@ every client at login, so the HUD sees the same numbers. The fields are public s
 `club.iananderson.seasonhud.config.SeasonHudServer`), reached by reflection, so patcherMod gets no compile dependency.
 Old worlds get the master values on their next start, and new worlds get them on their first.
 
-**Vinery port:** the same `.set()` on `net.satisfy.vinery.forge.VineryConfig` values on `ServerAboutToStartEvent`,
-again by reflection, like `VineryJEI` already does. The port's `VintageClockPacket` carries them to clients.
+**Vinery port (since 2026-10-27, [pack_hygiene.md](pack_hygiene.md) finding 39):** nothing is pushed. patcherMod has
+a small public class `time/WineTime` (`active()`, `sunClock()`, `worldDayMinutes()`, `daysPerMonth()`,
+`monthsPerLevel()`, `maxLevel()`, `cellar` / `cold` / `warmMultiplier()`), and the port's `forge/PackTime` calls it when
+patcherMod is loaded (soft dependency, `compileOnly project(':patcherMod')`). The port's `VineryConfig` getters
+(`clockMode()`, `dayUnit()`, `daysPerYear()` and on) return the master's values while `[time] enabled`, else the port's
+own keys. So `vinery-common.toml` is never written by patcherMod, and its matching `[wine]` / `[aging]` keys are only
+used with the master off or without patcherMod (their comments say so). The port's `VintageClockPacket` still carries
+the values to clients. Until 2026-10-27 patcherMod set the `VineryConfig` values by reflection (`TimePush.pushVinery`).
 
 **Live edits:** a change through Create's Configs screen fires CEConfig's reload, which pushes again. Better Days
-speeds and every Vinery value apply at once. Serene Seasons / SeasonHUD lengths apply at once on the server, but a
+speeds and every Vinery value apply at once (the port reads them live). Serene Seasons / SeasonHUD lengths apply at once on the server, but a
 connected client keeps the values it got at login until it rejoins (Forge doesn't re-sync server configs). Decision T7.
 
 Each push logs any value it changed, old -> new, the same way `global.NCH.cfg` does.
@@ -396,7 +402,7 @@ No conversions between versions: the ports are in development, so nothing below 
 |---|---|---|
 | Port's own lang (`vinery_backport`) | `tooltip.vinery_backport.age`, `command.vinery_backport.wine.time.units`, `jei.vinery_backport.wine_aging.year` / `.level`, `wthit.vinery_backport.wine` | edit the text |
 | Upstream lang (in the 1.5.5 jar, can't be edited) | `hud.vinery.wine.age` ("Aged %s Years"), `command.vinery.wine.info.age`, `command.vinery.wine.time`, `vinery.configuration.daysPerYear` / `yearsPerEffectLevel` / `durationPerYear`, `advancement.vinery.vintage_perfection.desc` ("aged ... for 15 years") | same keys in the port's own `assets/vinery/lang/en_us.json`, our own wording, which layers above the donor jar (B4.8, check with VB-43) |
-| Config | `[wine] daysPerYear`, `yearsPerEffectLevel`, `durationPerYear` | renamed as above; the master pushes them |
+| Config | `[wine] daysPerYear`, `yearsPerEffectLevel`, `durationPerYear` | renamed as above; the master supplies `daysPerMonth` and `monthsPerEffectLevel` (the port reads `time.WineTime`) |
 | `/wine clock add <n> years` | command argument | `months` (keep `days`) |
 | `vintage_perfection` advancement | its age condition | read it from the 1.5.5 jar. If it checks years, the translator rewrites it to months |
 
@@ -420,7 +426,8 @@ No conversions between versions: the ports are in development, so nothing below 
   - Unregister both, and drop them from the port's lists.
   - The upstream-pack layer leaves out the 1.3.10 data that names it: recipe, loot table, tags.
   - No replacement item; nothing converts.
-  - `legacyYearLengthDays` is then only used for reading 1.3.10 wine `Year` NBT.
+  - `legacyYearLengthDays` was then only used for reading 1.3.10 wine `Year` NBT; that conversion and the key were
+    removed 2026-10-27 (pack_hygiene.md finding 10), so a 1.3.10 wine's `Year` is ignored and it ages as a fresh wine.
 - **The Serene Seasons calendar takes over its tooltip** (patcherMod, `ItemTooltipEvent` on `sereneseasons:calendar`):
   - Line 1: season and day: "Mid Spring, day 3 of 8".
   - Line 2: year and time: "Year 2, 7:30 pm".
@@ -440,7 +447,7 @@ is in `mods/` and `server_mods/`. `creativeengineering-common.toml` gets `[time]
 |---|---|---|
 | `[time]` | `CEConfig.Time` | As 3.1, plus `hudTimeOfDay` (T6 as a switch). `startingSubSeason` 0 = random, as Serene Seasons |
 | Better Days | `BetterDaysConfigMixin` (`@Pseudo`, the four getters), log line at server start | none |
-| Push | `time/TimePush`: `ServerAboutToStartEvent` + every save of the toml (`ModConfigEvent.Reloading`), `/cetime push` | Serene Seasons and SeasonHUD are compiled against (both jars are in `libs/`); only the Vinery port goes by reflection. Each change is logged old -> new |
+| Push | `time/TimePush`: `ServerAboutToStartEvent` + every save of the toml (`ModConfigEvent.Reloading`), `/cetime push` | Serene Seasons and SeasonHUD are compiled against (both jars are in `libs/`); the Vinery port is not pushed to since 2026-10-27 (it reads `time/WineTime`). Each change is logged old -> new |
 | SUN seasons | `time/SeasonClock`, `SereneSeasonsClockMixin` (server), `SereneSeasonsClientClockMixin` (client mixin since 2026-10-19: as one common mixin its `Minecraft` reference crashed dedicated servers), `SereneSeasonsTimeSkipMixin` | Serene Seasons' +1 per tick **and** its time-skip handler stand down, and patcherMod counts every forward dayTime step itself (the design changed the skip threshold to 0, which needs the same cancel anyway). It syncs every second and at once after a jump. **Client:** between syncs Serene Seasons' client counter also ran +1 per tick, so by day it ran ahead about 3.7 times and snapped back each second, with a full chunk re-render whenever that crossed a sub-season. In SUN mode it follows the client's own dayTime |
 | Sunrise offset | `SeasonClock.migrate` | the counter is lined up with `dayStart` once per level, so the day changes at 6:00 am |
 | Migration | `SeasonClock.Marker` (`data/creativeengineering_season_clock.dat` per level) | keeps sub-season and day number, read with Serene Seasons' lengths from **before** this start's push. Switching back to TICKS clears the marker, so a later switch migrates again |
@@ -472,8 +479,8 @@ How it behaves (`time/TimePresets`, run when the toml loads, on every save and a
   shows the preset.
 
 **Deploy gotcha (open):** `tools/build_deploy.py` ships the same `config/` to the server and to the clients. A server
-set to SERVER is put back to SINGLEPLAYER by the next payload, and the push then writes 1 month per level into the
-server's Vinery config. It needs a server-only copy of `creativeengineering-common.toml` in the payload, or a
+set to SERVER is put back to SINGLEPLAYER by the next payload, and the server's Vinery port then reads 1 month per
+level from it. It needs a server-only copy of `creativeengineering-common.toml` in the payload, or a
 per-side default. Not built.
 
 ### 3.10 Minimap time line and bed clock (2026-10-23, TODO time #4 / #5)
@@ -539,11 +546,11 @@ apart: night not fast-forwarding, client time standing still in bed, or the cloc
 | [../config/seasonhud-client.toml](../config/seasonhud-client.toml) | HUD position and day display |
 | `../saves/<world>/serverconfig/sereneseasons-server.toml`, `seasonhud-server.toml` | per-world, written by the push |
 | [../configs_edited/server_config/sereneseasons-server.toml](../configs_edited/server_config/sereneseasons-server.toml), [seasonhud-server.toml](../configs_edited/server_config/seasonhud-server.toml) | backups; become reference copies of what the push writes |
-| [../config/vinery-common.toml](../config/vinery-common.toml) | Vinery port `[aging]`, `[wine]` |
+| [../config/vinery-common.toml](../config/vinery-common.toml) | Vinery port `[aging]`, `[wine]` (the keys the master supplies are unused while it is on) |
 | [../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/VintageClock.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/VintageClock.java) | vintage clock |
 | [../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java) | wine age, storage rate, cellar boost |
 | [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) | `Time` section |
-| [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/) | `TimeSettings` (derived values, clock text), `TimePush`, `SeasonClock` (SUN counter, migration), `TimePause`, `TimeCommand` (`/cetime`), `CalendarDate`, `TimeClient` (calendar) |
+| [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/) | `TimeSettings` (derived values, clock text), `TimePush`, `SeasonClock` (SUN counter, migration), `TimePause`, `TimeCommand` (`/cetime`), `CalendarDate`, `TimeClient` (calendar), `WineTime` (public, read by the Vinery port's `forge/PackTime`) |
 | `../development/patcherMod/.../mixin/BetterDaysConfigMixin.java`, `BetterDaysTimePauseMixin.java`, `ServerLevelTimePauseMixin.java`, `SereneSeasonsClockMixin.java`, `SereneSeasonsClientClockMixin.java`, `SereneSeasonsTimeSkipMixin.java`, `SeasonHudCurrentSeasonMixin.java`, `XaeroTimeInfoMixin.java` | the mixins (3.8, 3.10) |
 | [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SeasonHudHelperMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SeasonHudHelperMixin.java) | season-type HUD day; reads the same lengths |
 
@@ -599,7 +606,7 @@ TI-27 cover what the build added (3.8).
 - [ ] **TI-24 Day split (3.7):** time one sunrise to sunset and sunset to sunrise -> about 45 and 15 real minutes
 - [ ] **TI-25 Client day doesn't run ahead (3.8):** SUN seasons, watch SeasonHUD across a sub-season change by day -> the day number steps once at sunrise, and the world re-tints once (no repeated chunk reload)
 - [ ] **TI-26 Game time keeps running when paused (3.8):** dedicated server, nobody online for a minute -> `/time query gametime` moved on, `/time query daytime` didn't; a hopper clock left loaded still ran
-- [ ] **TI-28 Presets (3.9):** fresh config -> `preset = "SINGLEPLAYER"`, `monthsPerLevel = 1`; pick SERVER in Create's Configs screen -> `monthsPerLevel` becomes 3 and `vinery-common.toml` `monthsPerEffectLevel` 3; set `daysPerSubSeason` to 10 -> the preset reads CUSTOM; set it back to 8 -> SERVER again
+- [ ] **TI-28 Presets (3.9):** fresh config -> `preset = "SINGLEPLAYER"`, `monthsPerLevel = 1`; pick SERVER in Create's Configs screen -> `monthsPerLevel` becomes 3 and `/wine time` shows 3 months per level (`vinery-common.toml` is not written since 2026-10-27); set `daysPerSubSeason` to 10 -> the preset reads CUSTOM; set it back to 8 -> SERVER again
 - [ ] **TI-29 Preset picked offline (3.9):** game closed, change only `preset` to SERVER in the file, start -> the log writes `monthsPerLevel 1 -> 3`, no CUSTOM
 - [ ] **TI-27 Push log (3.8):** first start of `Workspace` -> latest.log lists `[time] sereneseasons day_duration 192000 -> 24000` and `sub_season_duration 10 -> 8`, then `[time] minecraft:overworld: seasons now follow the sun; sub-season N day M kept`; the second start lists no changes
 - [ ] **TI-30 Minimap lines agree (3.10):** overworld, Xaero's time line on (default profile) -> `/time set 11800`: the SeasonHUD line ends "7:30 pm" and Xaero's reads "Day N, 19:30"; `/time set 22250`, wait for sunrise -> SeasonHUD's "Day x/24" and Xaero's "Day N" step together at 6:00 am; in the Nether Xaero's line is unchanged
@@ -645,3 +652,6 @@ TI-27 cover what the build added (3.8).
   options).
 - 2026-10-19: DEPLOYED with pack 1.0.8 (10:20, server + clients). The server preset is still open (TODO `pack/release #2`); TI-01 to TI-29 pending.
 - 2026-10-23: 3.10 built: Xaero minimap time line on the pack clock (`XaeroTimeInfoMixin`, `TimeSettings.clock24` / `dayNumber`). Bed clock freeze (TODO time #4) investigated offline, no cause found; TI-30, TI-31 added.
+- 2026-10-27: the Vinery port owns its config (pack_hygiene.md finding 39). `TimePush.pushVinery` (reflection into
+  `VineryConfig`) is gone; the port reads the master through patcherMod's public `time/WineTime` (3.2). Same values
+  and behaviour. The 1.3.10 wine `Year` conversion and `legacyYearLengthDays` were removed (finding 10).

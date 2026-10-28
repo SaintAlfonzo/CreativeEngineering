@@ -3,7 +3,6 @@
  "families": {
   "fruit": [],
   "fruit/whole": [
-   "alexsmobs:banana",
    "fruitsdelight:fig",
    "fruitsdelight:kiwi",
    "fruitsdelight:lemon",
@@ -18,7 +17,6 @@
   ],
   "fruit/berry": [
    "delightful:salmonberries",
-   "farmersrespite:coffee_berries",
    "fruitsdelight:bayberry",
    "fruitsdelight:blueberry",
    "fruitsdelight:cranberry",
@@ -317,14 +315,11 @@
   ],
   "bread": [],
   "bread/loaf": [
-   "buzzier_bees:honey_bread",
    "corn_delight:cornbread",
    "farmersrespite:nether_wart_sourdough",
-   "hostiledelight:glowbread",
    "minecraft:bread",
    "neapolitan:banana_bread",
    "pneumaticcraft:sourdough_bread",
-   "upgrade_aquatic:mulberry_bread",
    "veggiesdelight:cauliflower_bread",
    "veggiesdelight:garlic_bread"
   ],
@@ -333,21 +328,16 @@
    "moredelight:toast"
   ],
   "bread/flat": [
-   "corn_delight:tortilla",
-   "neapolitan:adzuki_bun"
+   "corn_delight:tortilla"
   ],
   "ingredient": [],
   "ingredient/dough": [
    "corn_delight:cornbread_batter",
    "corn_delight:tortilla_raw",
    "farmersdelight:pie_crust",
-   "farmersdelight:raw_pasta",
-   "farmersdelight:wheat_dough",
    "rusticdelight:batter",
-   "veggiesdelight:potato_noodle",
    "veggiesdelight:sweet_potato_dough",
    "vintagedelight:cucumber_dough",
-   "vintagedelight:cucumber_noodles",
    "vintagedelight:oat_dough"
   ],
   "ingredient/sauce": [
@@ -366,6 +356,7 @@
    "delightful:green_tea_leaf",
    "ends_delight:liquid_dragon_egg",
    "ends_delight:shulker_omelette_mixture",
+   "farmersdelight:raw_pasta",
    "hostiledelight:bonegelatin",
    "hostiledelight:ghastblood",
    "hostiledelight:magicalbutter",
@@ -374,8 +365,10 @@
    "neapolitan:dried_vanilla_pods",
    "rusticdelight:golden_coffee_beans",
    "rusticdelight:roasted_coffee_beans",
+   "veggiesdelight:potato_noodle",
    "vinery:apple_mash",
    "vintagedelight:cheese_curds",
+   "vintagedelight:cucumber_noodles",
    "vintagedelight:nut_mash_bottle",
    "vintagedelight:nut_mash_jar",
    "vintagedelight:relish_bottle",
@@ -385,8 +378,6 @@
   ],
   "preserve": [],
   "preserve/jam": [
-   "delightful:glow_jelly_bottle",
-   "delightful:jelly_bottle",
    "fruitsdelight:apple_jelly",
    "fruitsdelight:bayberry_jelly",
    "fruitsdelight:blueberry_jelly",
@@ -460,7 +451,6 @@
   "pie/slice": [
    "create_central_kitchen:cherry_pie_slice",
    "create_central_kitchen:mulberry_pie_slice",
-   "create_central_kitchen:pumpkin_pie_slice",
    "create_central_kitchen:truffle_pie_slice",
    "delightful:blueberry_pie_slice",
    "delightful:crimson_berry_pie_slice",
@@ -476,6 +466,7 @@
    "farmersdelight:chocolate_pie_slice",
    "farmersdelight:sweet_berry_cheesecake_slice",
    "farmersrespite:rose_hip_pie_slice",
+   "oceanic_delight:sponge_cake_slice",
    "veggiesdelight:sweet_potato_pie_slice"
   ],
   "pie/small": [
@@ -485,7 +476,6 @@
    "fruitsdelight:lemon_tart",
    "fruitsdelight:pineapple_pie",
    "hostiledelight:greenpie",
-   "hostiledelight:guardiantartar",
    "hostiledelight:rottenpie"
   ],
   "cake": [],
@@ -508,23 +498,17 @@
    "create_central_kitchen:yucca_cake_slice",
    "farmersdelight:cake_slice",
    "farmersrespite:coffee_cake_slice",
-   "fruitsdelight:fig_pudding_slice",
-   "oceanic_delight:sponge_cake_slice",
    "veggiesdelight:carrot_cake_slice"
   ],
-  "cake/small": [
+  "cake/muffin": [
    "fruitsdelight:blueberry_muffin",
    "fruitsdelight:cranberry_muffin",
-   "hostiledelight:magmabrownie",
-   "hostiledelight:slimebrownie",
-   "veggiesdelight:beetroot_brownie",
    "veggiesdelight:sweet_potato_cupcake"
   ],
   "cookie": [
    "abnormals_delight:cherry_cookie",
    "abnormals_delight:maple_cookie",
    "abnormals_delight:mulberry_cookie",
-   "create_confectionery:gingerbread",
    "create_confectionery:gingerbread_man",
    "endersdelight:uncanny_cookies",
    "ends_delight:chorus_cookie",
@@ -546,8 +530,27 @@
    "miners_delight:bat_cookie",
    "vintagedelight:oatmeal_cookie"
   ],
-  "pastry": [],
-  "pastry/waffle": [
+  "dessert": [],
+  "dessert/brownie": [
+   "hostiledelight:magmabrownie",
+   "hostiledelight:slimebrownie",
+   "veggiesdelight:beetroot_brownie"
+  ],
+  "dessert/pudding": [
+   "berry_good:glowgurt",
+   "farmersdelight:glow_berry_custard",
+   "fruitsdelight:blueberry_custard",
+   "fruitsdelight:fig_pudding_slice",
+   "hostiledelight:ghastpudding",
+   "neapolitan:vanilla_pudding"
+  ],
+  "dessert/pastry": [
+   "endersdelight:strange_eclair",
+   "neapolitan:adzuki_bun",
+   "neapolitan:strawberry_scones",
+   "veggiesdelight:sweet_potato_pancakes"
+  ],
+  "dessert/waffle": [
    "create_factory:caramel_waffle",
    "create_factory:chocolate_waffle",
    "create_factory:dark_chocolate_waffle",
@@ -556,7 +559,7 @@
    "create_factory:waffle",
    "create_factory:white_chocolate_waffle"
   ],
-  "pastry/roll": [
+  "dessert/roll": [
    "create:sweet_roll",
    "create_factory:caramel_roll",
    "create_factory:chocolate_roll",
@@ -565,10 +568,12 @@
    "create_factory:ruby_chocolate_roll",
    "create_factory:white_chocolate_roll"
   ],
-  "pastry/other": [
-   "endersdelight:strange_eclair",
-   "neapolitan:strawberry_scones",
-   "veggiesdelight:sweet_potato_pancakes"
+  "dessert/other": [
+   "botania:mana_cookie",
+   "buzzier_bees:honey_bread",
+   "create_confectionery:gingerbread",
+   "hostiledelight:glowbread",
+   "upgrade_aquatic:mulberry_bread"
   ],
   "candy": [],
   "candy/bar": [
@@ -610,12 +615,6 @@
    "hostiledelight:candiedslime",
    "hostiledelight:glowgummy",
    "hostiledelight:glowwaxshuffle",
-   "lightmanscurrency:coin_chocolate_copper",
-   "lightmanscurrency:coin_chocolate_diamond",
-   "lightmanscurrency:coin_chocolate_emerald",
-   "lightmanscurrency:coin_chocolate_gold",
-   "lightmanscurrency:coin_chocolate_iron",
-   "lightmanscurrency:coin_chocolate_netherite",
    "neapolitan:mint_candies",
    "neapolitan:strawberry_bean_bonbons",
    "neapolitan:vanilla_fudge",
@@ -626,7 +625,6 @@
    "vintagedelight:honey_roasted_peanut"
   ],
   "candy/coated": [
-   "buzzier_bees:honey_apple",
    "create:chocolate_glazed_berries",
    "create:honeyed_apple",
    "create_confectionery:black_chocolate_glazed_berries",
@@ -639,7 +637,6 @@
    "create_factory:honey_glazed_berries",
    "create_factory:ruby_chocolate_apple",
    "create_factory:white_chocolate_apple",
-   "delightful:honey_glazed_walnut",
    "fruitsdelight:pear_with_rock_sugar",
    "neapolitan:chocolate_spider_eye",
    "neapolitan:chocolate_strawberries"
@@ -671,21 +668,17 @@
    "neapolitan:vanilla_ice_cream"
   ],
   "frozen/popsicle": [
+   "creativeengineering:corn_popsicle",
+   "delightful:cantaloupe_popsicle",
    "ends_delight:chorus_fruit_popsicle",
    "farmersdelight:melon_popsicle",
-   "fruitsdelight:hamimelon_popsicle",
-   "fruitsdelight:hamimelon_shaved_ice",
    "fruitsdelight:kiwi_popsicle",
    "hostiledelight:enderpop",
    "hostiledelight:popsiclime",
    "moredelight:chocolate_popsicle"
   ],
-  "pudding": [
-   "berry_good:glowgurt",
-   "farmersdelight:glow_berry_custard",
-   "fruitsdelight:blueberry_custard",
-   "hostiledelight:ghastpudding",
-   "neapolitan:vanilla_pudding"
+  "frozen/shaved_ice": [
+   "fruitsdelight:hamimelon_shaved_ice"
   ],
   "sandwich": [],
   "sandwich/square": [
@@ -798,17 +791,25 @@
    "veggiesdelight:stuffed_zucchinis",
    "vintagedelight:stuffed_burrito"
   ],
-  "bake": [],
-  "bake/whole": [],
-  "bake/slice": [
-   "brewinandchewin:horror_lasagna",
+  "pizza": [],
+  "pizza/whole": [],
+  "pizza/slice": [
    "brewinandchewin:pizza_slice",
-   "brewinandchewin:quiche_slice",
-   "veggiesdelight:lasagna_slice",
    "veggiesdelight:vegan_pizza_slice",
-   "veggiesdelight:zucchini_quiche_slice",
    "vintagedelight:cheese_pizza_slice",
    "vintagedelight:meat_pizza_slice"
+  ],
+  "quiche": [],
+  "quiche/whole": [],
+  "quiche/slice": [
+   "brewinandchewin:quiche_slice",
+   "veggiesdelight:zucchini_quiche_slice"
+  ],
+  "lasagna": [],
+  "lasagna/whole": [],
+  "lasagna/serving": [
+   "brewinandchewin:horror_lasagna",
+   "veggiesdelight:lasagna_slice"
   ],
   "snack": [
    "corn_delight:caramel_popcorn",
@@ -890,9 +891,7 @@
    "alexsdelight:kangaroo_stew",
    "delightful:sinigang",
    "endersdelight:chorus_stew",
-   "endersdelight:chorus_stew_wood",
    "endersdelight:endermite_stew",
-   "endersdelight:endermite_stew_wood",
    "ends_delight:enderman_gristle_stew",
    "farmersdelight:baked_cod_stew",
    "farmersdelight:beef_stew",
@@ -924,7 +923,6 @@
   "meal/rice": [
    "alexsmobs:shrimp_fried_rice",
    "endersdelight:ender_paella",
-   "endersdelight:ender_paella_wood",
    "ends_delight:ender_bamboo_rice",
    "farmersdelight:cooked_rice",
    "farmersdelight:fried_rice",
@@ -944,7 +942,6 @@
    "alexsdelight:lobster_pasta",
    "brewinandchewin:cheesy_pasta",
    "endersdelight:pearl_pasta",
-   "endersdelight:pearl_pasta_wood",
    "ends_delight:ender_noodle",
    "farmersdelight:pasta_with_meatballs",
    "farmersdelight:pasta_with_mutton_chop",
@@ -1007,6 +1004,7 @@
    "hostiledelight:carrotmite",
    "hostiledelight:guardianross",
    "hostiledelight:guardiansashimi",
+   "hostiledelight:guardiantartar",
    "hostiledelight:miteymeal",
    "miners_delight:improvised_barbecue_stick",
    "miners_delight:seasoned_arthropods",
@@ -1057,7 +1055,6 @@
   "drink/juice": [
    "canned_goods:oculemonade",
    "delightful:ender_nectar",
-   "delightful:prickly_pear_juice",
    "endersdelight:chorus_juice",
    "fruitsdelight:hamimelon_juice",
    "fruitsdelight:kiwi_juice",
@@ -1103,9 +1100,6 @@
    "hostiledelight:seacucumbertea"
   ],
   "drink/coffee": [
-   "farmersrespite:coffee",
-   "farmersrespite:long_coffee",
-   "farmersrespite:strong_coffee",
    "quarkdelight:cloud_latte",
    "rusticdelight:chocolate_coffee",
    "rusticdelight:coffee",
@@ -1546,7 +1540,6 @@
    "alexsmobs:maggot",
    "domesticationinnovation:rotten_apple",
    "domesticationinnovation:sinister_carrot",
-   "everythingcopper:copper_nugget",
    "hostiledelight:frozen_flesh",
    "immersive_weathering:pond_water",
    "minecraft:poisonous_potato",

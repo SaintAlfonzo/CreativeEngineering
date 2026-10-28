@@ -256,7 +256,7 @@ rule (`forge:none`); it is skipped without the mod.
 | File | Role |
 |---|---|
 | `development/backportedMiners/` | The port (new) |
-| `development/backportedMiners/.../upstream/` | Donor view: sha1 pin, in-memory pack, translator (nothing upstream in the jar) |
+| `development/backportedMiners/.../upstream/` | Donor view: sha1 pin (`UpstreamJars`), translator (nothing upstream in the jar); the jar reading and the in-memory packs are the shared `DonorJars` / `BuiltInPacks` / `MemoryPackResources` ([pack_tooling.md](pack_tooling.md) 2.8), registered in `MinersDelightMod` |
 | `miners_upstream/` | The donor jar (server and client), like `vinery_upstream/` |
 | `settings.gradle` | Include |
 | `kubejs/startup_scripts/_lib/item_dict.js` | Keys |

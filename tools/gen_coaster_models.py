@@ -12,7 +12,7 @@ Plate. DD's models are full-size blocks (a plate is 14 px across), so each entry
 widest side down to TARGET_PX, about the size of the port's own bowls.
 
 placeable_catalog.py reads these files too: their items join #creativeengineering:placeable_on_coaster, and
-server_scripts/tags/placeabletags.js puts that tag into #brewinandchewin:placeable_on_coaster. So run this first.
+data/creative_delight/kubejs/creativeengineering/placeable_tags.js puts that tag into #brewinandchewin:placeable_on_coaster. So run this first.
 
 DD links come from /dumpplaceable (fallback: /dumpfood + the DD jar), the same way placeable_catalog.py reads them.
 

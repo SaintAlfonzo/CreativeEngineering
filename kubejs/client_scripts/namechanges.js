@@ -1,10 +1,11 @@
-const CE = global.CE
-
 console.log('Rename Started')
 
 ClientEvents.lang('en_us', e => {
 	e.renameItem('create:brass_hand', 'Gold Hand')
 	e.renameItem('oldguns:mortar_and_pestle', 'Powder Pestle')
+	e.add('block.salt.salt_lamp', 'Large Salt Lamp')  // The Salt's lamp next to Vintage Delight's (salt merge)
+	// JEI info: Salt Blocks no longer grow salt since the salt merge (patcherMod block.SaltBlockTicks)
+	e.add('vintagedelight.jei.info.evaporator', 'Place next to water to grow Salt Layers on top. Salt Blocks do not grow salt.')
 	e.add('item.creativeengineering.precision_sawblade', 'Precision Sawblade')
   e.add('item.creativeengineering.creosote_soaked_sawdust', 'Creosote Soaked Sawdust')
   e.add('item.creativeengineering.zinc_grit', 'Zinc Grit')
@@ -53,41 +54,14 @@ ClientEvents.lang('en_us', e => {
 	e.add('block.creativeengineering.constantan_dust_pile', 'Constantan Grit Pile')
 	e.add('block.creativeengineering.brass_dust_pile', 'Brass Grit Pile')
 
-  e.add('block.rusticdelight.bell_peppers', 'Bell Peppers')
-  e.add('block.rusticdelight.cotton', 'Cotton')
-  // Rustic Delight 1.7.0's names for the boll and its crate (rustic_delight.md 5)
-  e.add('item.rusticdelight.cotton_boll', 'Cotton')
-  e.add('block.rusticdelight.cotton_boll_crate', 'Cotton Crate')
-  e.add('block.rusticdelight.coffee', 'Coffee Plant')
-  e.add('block.rusticdelight.potted_wild_bell_peppers', 'Potted Wild Bell Peppers')
-  e.add('block.rusticdelight.potted_wild_coffee', 'Potted Wild Coffee')
-  e.add('block.rusticdelight.potted_wild_cotton', 'Potted Wild Cotton')
+  // Food and Delight-member names (Rustic Delight, Canned Goods, Neapolitan, Delightful, Farmer's Delight, PneumaticCraft
+  // fried food) moved to Creative Delight 2026-10-27: kubejs/assets/creative_delight/kubejs/<mod>/client.js
   // Brewin' and Chewin' pizza: the many-topping recipe in cooking/cooking.js
   e.add('block.brewinandchewin.pizza', 'Supreme Pizza')
   e.add('item.brewinandchewin.pizza_slice', 'Supreme Pizza Slice')
 
   e.renameItem('creativeengineering:transmitter', 'Transmitter')
   
-  e.renameItem('canned_goods:canned_rotten_flesh', 'Canned Tough Jerky')
-  e.renameItem('canned_goods:canned_spider_eyes', 'Canned Night Berries')
-  e.renameItem('neapolitan:chocolate_spider_eye', 'Chocolate Night Berries')
-  e.renameItem('delightful:cactus_flesh', 'Cactus Flesh') // was Cactus Chunk; its can is Canned Cactus Flesh
-  // Delightful 3.8.1's names for three 3.4.1 items (feature_writeup/delightful.md 2.3)
-  e.renameItem(global.item.berry_matcha_latte, 'Iced Berry Matcha Latte')
-  e.renameItem(global.item.nut_butter_bottle, 'Nut Butter')
-  e.renameItem(global.item.rock_candy, 'Rose Rock Candy')
-  // Farmer's Delight's cheesecake is the pack's only sweet berry pie (Canned Sweet Berry Pie Filling); the Display
-  // Delight plates are renamed in kubejs/assets/displaydelight/lang
-  e.renameItem(global.item.sweet_berry_cheesecake, 'Sweet Berry Pie')
-  e.renameItem(global.item.sweet_berry_cheesecake_slice, 'Slice of Sweet Berry Pie')
-  e.renameItem(global.item.incomplete_sweet_berry_cheesecake, 'Incomplete Sweet Berry Pie')
-  // PneumaticCraft fried food, now fried in the pot with any fish (TODO dishes/meals #7)
-  e.renameItem(global.item.salmon_tempura, 'Fish Tempura')
-  e.renameItem(global.item.raw_salmon_tempura, 'Raw Fish Tempura')
-  e.renameItem(global.item.chips, 'Fries')
-  e.renameItem(global.item.cod_n_chips, 'Fish and Chips')
-  // FD's fried rice is made with eggs; Display Delight's placed copy is renamed in kubejs/assets/displaydelight/lang
-  e.renameItem(global.item.fried_rice, 'Egg Fried Rice')
 
 	e.renameItem('create_compressed:copper_sheet_block', 'Copper Plate Block')
   e.renameItem('create_compressed:iron_sheet_block', 'Iron Plate Block')
@@ -125,6 +99,7 @@ ClientEvents.lang('en_us', e => {
   e.renameItem('creategbd:guardian_beam_capacitor', 'Guardian Charge Cell')
   e.renameItem('creategbd:elder_guardian_beam_capacitor', 'Elder Guardian Charge Cell')
   
+  e.renameItem('design_decor:cardboard_box', 'Old Cardboard Box')  // cardboard merge: Design and Decor's box
   e.renameItem('dustrial_decor:large_chain', 'Huge Chain')
   e.renameItem('dustrial_decor:large_gold_chain', 'Huge Gold Chain')
   
@@ -287,6 +262,30 @@ ClientEvents.lang('en_us', e => {
   e.renameItem(global.item.canned_potato_noodles, 'Canned Creamy Gnocchi')
   // Brewin's Pickled Pickles merged into the Pickled Sea Pickle (dishes/pickles-and-ferments #1): the can holds pickles
   e.renameItem(global.item.canned_pickled_pickles, 'Canned Pickles')
+  // Cantaloupe merge (item_merges.md 2.10): Fruits Delight's hamimelon line is the Cantaloupe, Delightful's cantaloupe
+  // (sand crop) the Mini Cantaloupe. Ids unchanged.
+  e.renameItem(global.item.hamimelon, 'Cantaloupe')
+  e.renameItem(global.item.hamimelon_seeds, 'Cantaloupe Seeds')
+  e.renameItem(global.item.hamimelon_jello, 'Cantaloupe Jello')
+  e.renameItem(global.item.hamimelon_jelly, 'Cantaloupe Jam')
+  e.renameItem(global.item.hamimelon_juice, 'Cantaloupe Juice')
+  e.renameItem(global.item.hamimelon_shaved_ice, 'Cantaloupe Shaved Ice')
+  e.renameItem(global.item.hamimelon_jello_block, 'Cantaloupe Jello Block')
+  e.renameItem(global.item.hamimelon_jelly_block, 'Cantaloupe Jam Block')
+  e.add('block.fruitsdelight.hamimelon_stem', 'Cantaloupe Stem')
+  e.add('block.fruitsdelight.attached_hamimelon_stem', 'Attached Cantaloupe Stem')
+  e.add('block.fruitsdelight.hamimelon_cauldron', 'Cantaloupe Cauldron')
+  e.add('block.fruitsdelight.hamimelon_jello_cauldron', 'Cantaloupe Jello Cauldron')
+  e.add('block.fruitsdelight.hamimelon_jelly_cauldron', 'Cantaloupe Jam Cauldron')
+  e.add('fluid.fruitsdelight.hamimelon_jam', 'Cantaloupe Jam')
+  e.add('fluid.fruitsdelight.hamimelon_jello', 'Melted Cantaloupe Jello')
+  e.add('fluid.fruitsdelight.hamimelon_juice', 'Cantaloupe Juice')
+  e.renameItem(global.item.cantaloupe, 'Mini Cantaloupe')
+  e.renameItem(global.item.cantaloupe_seeds, 'Mini Cantaloupe Seeds')
+  e.add('block.delightful.sliced_cantaloupe', 'Sliced Mini Cantaloupe')
+  e.add('block.delightful.cantaloupe_plant', 'Mini Cantaloupe Plant')
+  e.add('delightful.cantaloupe.desc', 'Found in deserts and badlands.')
+  e.add('jei.delightful.info.cantaloupe_seeds', 'Mini Cantaloupe Seeds will sprout when planted in sand next to water.')
 })
 
 console.log('Rename Finished')

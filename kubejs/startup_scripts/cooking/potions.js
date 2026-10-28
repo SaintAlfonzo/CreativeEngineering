@@ -52,7 +52,7 @@ const CUSTOM_POTIONS = {
 
 // long_reach / phantom_bane use a modded effect (better_beacons:*) — KubeJS's own
 // StartupEvents.registry('potion', ...) runs too early to ever see it (see CE potions
-// header comment below and patcherMod's BetterBeaconsPotions), so patcherMod registers
+// header comment below and patcherMod's CEPotions), so patcherMod registers
 // creativeengineering:long_reach / phantom_bane (+ long_/strong_ variants) as REAL
 // DeferredRegister<Potion> entries instead. Brewing mixes for them are added below
 // alongside AM_POTION_MIXES. [reagent, fromPotion, toPotion]
@@ -63,9 +63,9 @@ const CE_POTION_MIXES = [
 
 	['geode:celestite_shard',    'minecraft:thick',                  'creativeengineering:phantom_bane'],
 	['minecraft:redstone',       'creativeengineering:phantom_bane', 'creativeengineering:long_phantom_bane'],
-	['minecraft:glowstone_dust', 'creativeengineering:phantom_bane', 'creativeengineering:strong_phantom_bane'],
+	// no glowstone step: Phantom Bane is levelless (patcherMod CEPotions, like Night Vision)
 
-	// pack-original effect (patcherMod's MagicResistancePotions.java, same timing dance as
+	// pack-original effect (patcherMod's CEPotions.java, same timing dance as
 	// above since KubeJS's own 'potion' registry runs too early to see even its own
 	// 'mob_effect' registrations - see magic_resistance.js). amethyst_shard is a placeholder
 	// reagent - retune later.
@@ -140,7 +140,7 @@ const AM_POTION_MIXES = [
 // used (Registry.MOB_EFFECT / ForgeRegistries.MOB_EFFECTS — same result, same timing).
 // For a modded effect (e.g. better_beacons:long_reach / phantom_bane), register the
 // potion in patcherMod instead, as a real DeferredRegister<Potion> — see
-// BetterBeaconsPotions.java + CE_POTION_MIXES below.
+// CEPotions.java + CE_POTION_MIXES below.
 StartupEvents.registry('potion', event => {
 	const EFFECTS = Java.loadClass('net.minecraft.core.Registry').MOB_EFFECT
 	const ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')

@@ -11,6 +11,13 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Bread ####################
+		// #forge:bread takes every bread, slice and toast (creativeengineering/bread_tags.js). Garlic bread and the slicing
+		// recipe turn a bread into more bread, so they stay on the plain loaves (4 garlic bread from a garlic bread, or 4
+		// slices from a slice, would copy items).
+		R.replaceInput({ id: 'veggiesdelight:garlic_bread' }, i.t_bread, i.t_bread_loaf, e)
+		R.replaceInput({ id: 'veggiesdelight:compat/moredelight/cutting/bread_slice' }, i.t_bread, i.t_bread_loaf, e)
+
 		//######################### Juices #########################
 		// Fluids like chorus juice (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js; feature_writeup/veggies_delight.md 4.9). Pot: Veggies
 		// Delight's own inputs, re-id'd manual only. Create mixer, heated: the same inputs + 250 mB water -> 250 mB; spout, drain
@@ -50,5 +57,12 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'veggiesdelight:cooking/potato_noodles' }, e)
 		R.fdCooking([i.milk, i.potato_noodle, i.potato_noodle, [i.onion, i.t_crops_garlic, i.pickled_onion]], i.potato_noodles, e,
 			'creamy_gnocchi', 1.0, 200, i.bowl)
+
+		//######################### Zucchini quiche #########################
+		// Quiche family rule (food_families.md `quiche/whole`): the shaped recipes on a pie crust stay, plus one assembly on
+		// the crust like Brewin's quiche. 3 roasted zucchini, the cooked meat, 250 mB milk.
+		global.CD.food(e).assemble(i.pie_crust, [i.roasted_zucchini, i.roasted_zucchini, i.roasted_zucchini,
+			[i.cooked_mutton, i.cooked_chicken, i.cooked_beef, i.cooked_pork, i.cooked_bacon], { fill: Fluid.of(f.milk, 250) }],
+			i.zucchini_quiche)
 	})
 })

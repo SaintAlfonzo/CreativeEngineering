@@ -123,14 +123,14 @@ ServerEvents.recipes(e => {
     //Electrical Component blueprint
     R.shaped(Item.of(i.blueprint, '{blueprint:"electricalcomponents"}'),['abc', 'ddd', 'ppp'],{
         a: i.ingot_electrum,
-        b: i.wire_coil_block_steel,
+        b: i.coil_block_steel,
         c: i.component_electronic,
         d: i.dye_blue,
         p: i.paper
     },e,'blueprint_electricalcomponents')
     R.shaped(Item.of(i.blueprint, '{blueprint:"electricalcomponents"}'),['abc', ' s '],{
         a: i.ingot_electrum,
-        b: i.wire_coil_block_steel,
+        b: i.coil_block_steel,
         c: i.component_electronic,
         s: i.empty_schematic
     },e,'blueprint_electricalcomponents_schematic')
@@ -197,6 +197,26 @@ ServerEvents.recipes(e => {
         c: i.rod_steel,
         s: i.empty_schematic
     },e,'blueprint_precision_sawblades_schematic')
+
+    // Engineer's Workbench: sawblade + one block of the shape + 2 steel plates -> a precision sawblade
+    // with that Profile (the sawmill recipes it unlocks are in generation_scripts/sawmill.js)
+    ;[
+        ['button', i.any_wooden_buttons],
+        ['door', i.any_wooden_doors],
+        ['fence', i.any_wooden_fences],
+        ['fence_gate', i.any_fence_gates],
+        ['ladder', i.any_ladders],
+        ['pressure_plate', i.any_wooden_pressure_plates],
+        ['railing', i.any_railings],
+        ['sign', i.any_sign],
+        ['stairs', i.any_wooden_stairs],
+        ['trapdoor', i.any_wooden_trapdoors],
+        ['vertical_planks', i.any_vertical_planks],
+        ['vertical_slab', i.any_wooden_vertical_slabs],
+    ].forEach(([profile, shape]) => {
+        R.ieBlueprint(Item.of(i.precision_sawblade, '{Profile:"' + profile + '"}'),
+            [i.sawblade, shape, { id: i.any_plate_steel, count: 2 }], 'precision_sawblades', e, 'precision_sawblade_' + profile)
+    })
 
 
     //Blueprint duplication

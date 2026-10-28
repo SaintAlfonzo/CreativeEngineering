@@ -133,17 +133,18 @@ FAMILY_KEY = {
     'bread/loaf': ('grain', ''), 'bread/slice': ('grain', 'slice'), 'bread/flat': ('grain', ''),
     'ingredient/dough': ('dough', ''), 'ingredient/sauce': ('sauce', ''), 'ingredient/other': ('ingredient', None),
     'preserve/jam': ('fruit', 'jam'), 'preserve/spread': ('sauce', ''), 'preserve/pickle': ('veggie', ''),
-    'jello': ('dessert', ''), 'pudding': ('dessert', ''), 'frozen/popsicle': ('dessert', ''),
+    'jello': ('dessert', ''), 'dessert/pudding': ('dessert', ''), 'dessert/other': ('dessert', ''), 'frozen/popsicle': ('dessert', ''), 'frozen/shaved_ice': ('dessert', ''),
     'frozen/ice_cream': ('ice_cream', ''),
     'pie/whole': ('pie', ''), 'pie/slice': ('pie', 'slice'), 'pie/small': ('pie', ''),
-    'cake/whole': ('cake', ''), 'cake/slice': ('cake', 'slice'), 'cake/small': ('cake', ''),
+    'cake/whole': ('cake', ''), 'cake/slice': ('cake', 'slice'), 'cake/muffin': ('cake', ''), 'dessert/brownie': ('cake', ''),
     'cookie': ('cookie', ''),
-    'pastry/waffle': ('pastry', ''), 'pastry/roll': ('pastry', ''), 'pastry/other': ('pastry', ''),
+    'dessert/waffle': ('pastry', ''), 'dessert/roll': ('pastry', ''), 'dessert/pastry': ('pastry', ''),
     'candy/bar': ('candy', ''), 'candy/piece': ('candy', ''), 'candy/coated': ('candy', ''), 'candy/marshmallow': ('candy', ''),
     'sandwich/square': ('sandwich', 'square'), 'sandwich/roll': ('sandwich', 'roll'), 'sandwich/burger': ('sandwich', 'burger'),
     'sandwich/wrap': ('sandwich', 'wrap'), 'sandwich/toast': ('sandwich', 'toast'),
-    'skewer': ('dish', ''), 'roll': ('dish', ''), 'stuffed': ('dish', ''), 'bake/whole': ('dish', ''),
-    'bake/slice': ('dish', 'slice'), 'snack': ('snack', ''), 'salad': ('salad', ''),
+    'skewer': ('dish', ''), 'roll': ('dish', ''), 'stuffed': ('dish', ''), 'pizza/whole': ('dish', ''),
+    'pizza/slice': ('dish', 'slice'), 'quiche/whole': ('dish', ''), 'quiche/slice': ('dish', 'slice'),
+    'lasagna/whole': ('dish', ''), 'lasagna/serving': ('dish', ''), 'snack': ('snack', ''), 'salad': ('salad', ''),
     'soup/soup': ('soup', ''), 'soup/stew': ('soup', ''),
     'meal/rice': ('dish', ''), 'meal/pasta': ('dish', ''), 'meal/fried': ('dish', ''), 'meal/plate': ('dish', ''),
     'feast/whole': ('feast', ''), 'feast/serving': ('feast', 'serving'),
@@ -240,8 +241,10 @@ def excluded_ids(key_val):
     body = removed[removed.index('global.removedItems'):]
     body = body[:body.index(']')]
     out |= {key_val.get(k) for k in re.findall(r'i\.(\w+)', body)}
-    merges = (LIB / 'item_merges.js').read_text()
-    out |= {key_val.get(k) for k in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', merges)}
+    # merge pairs: the pack's list, and Creative Delight's food lists (<mod>/item_merges.js, item_merges.md 1.1)
+    cd = INSTANCE / 'development/creativeDelight/src/main/resources/kubejs_startup'
+    for p in [LIB / 'item_merges.js', *sorted(cd.glob('*/item_merges.js'))]:
+        out |= {key_val.get(k) for k in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', p.read_text())}
     return out - {None}
 
 

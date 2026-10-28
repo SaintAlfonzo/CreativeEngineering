@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 
 import com.SaintAlfonzo.creativeengineering.CreativeEngineering;
+import com.SaintAlfonzo.creativeengineering.compat.jei.CanPagesJEI;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -16,6 +17,8 @@ import com.mojang.logging.LogUtils;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -60,8 +63,10 @@ public class WorldInteractionJEI implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
+        WorldSlotRenderer slotRenderer = new WorldSlotRenderer(
+                registration.getJeiHelpers().getIngredientManager().getIngredientRenderer(VanillaTypes.ITEM_STACK));
         for (WorldTab tab : WorldTab.values()) {
-            registration.addRecipeCategories(new WorldInteractionCategory(helper, tab, icon(tab)));
+            registration.addRecipeCategories(new WorldInteractionCategory(helper, tab, icon(helper, tab), slotRenderer));
         }
     }
 
@@ -72,6 +77,7 @@ public class WorldInteractionJEI implements IModPlugin {
         for (WorldTab tab : WorldTab.values()) {
             List<JsonObject> json = new ArrayList<>(raw.getOrDefault(tab, List.of()));
             json.addAll(WorldRows.rows(tab));
+            json = PotionRows.expand(json);
             List<WorldRow> rows = new ArrayList<>();
             for (int n = 0; n < json.size(); n++) {
                 WorldRow row = WorldRow.parse(json.get(n), tab.id + " row " + n);
@@ -117,12 +123,21 @@ public class WorldInteractionJEI implements IModPlugin {
         return out;
     }
 
-    private static ItemStack icon(WorldTab tab) {
+    /** The tab's first icon item that exists; Jar Storage is the jar with a small faucet on top. */
+    private static IDrawable icon(IGuiHelper helper, WorldTab tab) {
+        ItemStack stack = new ItemStack(Items.BARRIER);
         for (String id : tab.icons) {
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(id));
-            if (item != null && item != Items.AIR) return new ItemStack(item);
+            if (item != null && item != Items.AIR) {
+                stack = new ItemStack(item);
+                break;
+            }
         }
-        return new ItemStack(Items.BARRIER);
+        if (tab == WorldTab.JAR_STORAGE) {
+            List<ItemStack> faucet = stacks("supplementaries:faucet");
+            if (!faucet.isEmpty()) return CanPagesJEI.doubleIcon(helper, stack, faucet.get(0));
+        }
+        return helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, stack);
     }
 
     /** An item id or {@code #item_tag} as stacks. */

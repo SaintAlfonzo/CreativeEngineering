@@ -25,7 +25,7 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.amberveil, i.ethereal_saffron, i.chorus_flower], i.veil_of_flames_risotto, e, 'veil_of_flames_risotto', 1.0, 200, i.shulker_bowl)
 		R.fdCooking([i.amberveil, i.ethereal_saffron, i.crushed_voidpepper, i.chicken, i.chicken_cuts, i.rice], i.chicken_curry, e,
 			'chicken_curry', 1.0, 200, i.shulker_bowl)
-		R.fdCooking([i.crushed_voidpepper, i.beef, i.milk_bottle, i.potato], i.steak_fries, e, 'steak_fries', 1.0, 200, i.shulker_bowl)
+		R.fdCooking([i.crushed_voidpepper, i.beef, i.milk, i.potato], i.steak_fries, e, 'steak_fries', 1.0, 200, i.shulker_bowl)
 
 		// Heatless meal rule (farmersdelight/recipes.js "Meals"); like Ender's other stews (recipes.js) they come in the
 		// Shulker Bowl rather than with bone broth. One more main ingredient than the pot; meat cooked, rice cooked,

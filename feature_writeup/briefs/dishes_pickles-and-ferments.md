@@ -200,7 +200,7 @@ today" cannot be measured; the note may mean the canned additive foods.
 ---
 
 ## pickles-and-ferments #8: Merge kimchis
-Status **Planned** / Work: KubeJS / data / id `dishes/pickles-and-ferments #8`
+Status **Planned** / Work: KubeJS / data / id `merges/dishes #9`
 
 ### Goal
 Use Vintage Delight's kimchi, remove the Brewin' brewing of it, and allow any pickleable veggie as the base

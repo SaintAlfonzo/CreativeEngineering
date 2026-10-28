@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Season types on top of Serene Seasons: arid, frozen, dry, tropical, temperate and cold biomes by tag,
@@ -117,6 +118,13 @@ public final class SeasonTypes {
     private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {-1, 1}, {-1, -1}, {1, -1}};
     private static final int CACHE_SIZE = 32768;
     private static final Map<Level, Map<Long, Holder<Biome>>> CACHES = new WeakHashMap<>();
+    /**
+     * tagged() per biome holder (registry references only; holders compare by identity). Chunk meshing reads it
+     * for every tinted block on several threads, ten tag lookups each. Replaced, not cleared, on tag reload so a
+     * lookup racing the reload lands in the old map.
+     */
+    private static volatile Map<Holder<Biome>, Object> TYPE_CACHE = new ConcurrentHashMap<>();
+    private static final Object UNTAGGED = new Object();
 
     private SeasonTypes() {}
 
@@ -132,6 +140,19 @@ public final class SeasonTypes {
     @Nullable
     public static Type tagged(Holder<Biome> biome) {
         if (!enabled()) return null;
+        if (biome.kind() != Holder.Kind.REFERENCE) return lookupType(biome);
+        Map<Holder<Biome>, Object> cache = TYPE_CACHE;
+        Object hit = cache.get(biome);
+        if (hit == null) {
+            Type type = lookupType(biome);
+            hit = type != null ? type : UNTAGGED;
+            cache.put(biome, hit);
+        }
+        return hit == UNTAGGED ? null : (Type) hit;
+    }
+
+    @Nullable
+    private static Type lookupType(Holder<Biome> biome) {
         if (biome.is(ARID)) return Type.ARID;
         if (biome.is(FROZEN)) return Type.FROZEN;
         if (biome.is(PERMANENT_WINTER)) return Type.PERMANENT_WINTER;
@@ -441,6 +462,7 @@ public final class SeasonTypes {
 
     @SubscribeEvent
     public static void onTagsUpdated(TagsUpdatedEvent event) {
+        TYPE_CACHE = new ConcurrentHashMap<>();
         synchronized (CACHES) {
             CACHES.clear();
         }

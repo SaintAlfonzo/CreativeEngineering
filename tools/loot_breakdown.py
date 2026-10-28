@@ -35,6 +35,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gen_loot_config as G  # noqa: E402
 import loot_breakdown_scan as S  # noqa: E402
+from pack_paths import loads_lenient  # noqa: E402  (Philip's Ruins ships annotated worldgen json)
 from loot_census import chest_scope  # noqa: E402
 
 ROOT = G.INSTANCE
@@ -98,41 +99,6 @@ CONTAINER_LIKE = {'minecraft:chest', 'minecraft:trapped_chest', 'minecraft:barre
                   'minecraft:chiseled_bookshelf', 'aether:altar'}
 
 # ------------------------------------------------------------------------------------------ helpers
-
-
-def loads_lenient(raw):
-    """json.loads that also accepts // and /* */ comments (Philip's Ruins ships annotated worldgen JSON)."""
-    if isinstance(raw, bytes):
-        raw = raw.decode('utf-8-sig', 'replace')
-    try:
-        return json.loads(raw)
-    except ValueError:
-        pass
-    out, i, n, in_str = [], 0, len(raw), False
-    while i < n:
-        c = raw[i]
-        if in_str:
-            out.append(c)
-            if c == '\\':
-                out.append(raw[i + 1:i + 2])
-                i += 1
-            elif c == '"':
-                in_str = False
-        elif c == '"':
-            in_str = True
-            out.append(c)
-        elif raw.startswith('//', i):
-            while i < n and raw[i] != '\n':
-                i += 1
-            continue
-        elif raw.startswith('/*', i):
-            j = raw.find('*/', i + 2)
-            i = n if j < 0 else j + 2
-            continue
-        else:
-            out.append(c)
-        i += 1
-    return json.loads(re.sub(r',(\s*[}\]])', r'\1', ''.join(out)))
 
 
 def md_escape(s):

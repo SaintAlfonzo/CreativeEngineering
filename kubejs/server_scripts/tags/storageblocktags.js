@@ -8,15 +8,10 @@ var storage = {
 	steel: [i.block_steel], // immersiveengineering:storage_steel
 }
 
-// soft storage blocks: hand-breakable, hoe is the fast tool (like prepared_flesh_block)
+// soft storage blocks: hand-breakable, hoe is the fast tool (like prepared_flesh_block). The 7 meat culture blocks
+// moved to Creative Delight 2026-10-27 (creativeengineering/cultivated_meat_tags.js; reserved for Creative Cultivation,
+// creative_delight.md 29.5).
 var softStorage = {
-	beef_culture: [i.culture_block_beef],
-	pork_culture: [i.culture_block_pork],
-	mutton_culture: [i.culture_block_mutton],
-	poultry_culture: [i.culture_block_poultry],
-	rabbit_culture: [i.culture_block_rabbit],
-	cod_culture: [i.culture_block_cod],
-	salmon_culture: [i.culture_block_salmon],
 }
 
 // dough blocks: shovel, like Create Compressed's dough block

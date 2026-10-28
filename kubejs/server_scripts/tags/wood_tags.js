@@ -2,45 +2,23 @@ ServerEvents.tags('item', e => {
 console.log('wood tag started')
 
 var i = global.item;
-
-i.barrel = 'minecraft:barrel';
+var t = global.tags
 
 // ============================================================
 // Mulch
 // ============================================================
 
-e.add('forge:mulch/brown', i.sawdust)
-e.add('forge:mulch/brown', i.straw)
-
-e.add('forge:mulch/bone', i.bone)
-e.add('forge:mulch/bone', i.bonemeal)
-
-e.add('forge:mulch/waste', i.rotten_flesh)
-e.add('forge:mulch/waste', i.spider_eye)
-e.add('forge:mulch/waste', i.poisonous_potato)
-
-e.add('forge:mulch/green', i.moss)
-e.add('forge:mulch/green', i.moss_clump)
-e.add('forge:mulch/green', i.moss_paste)
-e.add('forge:mulch/green', i.grass)
-e.add('forge:mulch/green', i.tall_grass)
-e.add('forge:mulch/green', i.fern)
-e.add('forge:mulch/green', i.large_fern)
-
-e.add('forge:mulch/fungus', i.red_mushroom)
-e.add('forge:mulch/fungus', i.brown_mushroom)
-e.add('forge:mulch/fungus', i.red_mushroom_colony)
-e.add('forge:mulch/fungus', i.brown_mushroom_colony)
-
-e.add('forge:mulch/fertilizer', i.ash)
-e.add('forge:mulch/fertilizer', i.dust_saltpeter)
-e.add('forge:mulch/fertilizer', i.fertilizer)
+t.add(e, 'forge:mulch/brown', [i.sawdust, i.straw])
+t.add(e, 'forge:mulch/bone', [i.bone, i.bonemeal])
+t.add(e, 'forge:mulch/waste', [i.rotten_flesh, i.spider_eye, i.poisonous_potato])
+t.add(e, 'forge:mulch/green', [i.moss, i.moss_clump, i.moss_paste, i.grass, i.tall_grass, i.fern, i.large_fern])
+t.add(e, 'forge:mulch/fungus', [i.red_mushroom, i.brown_mushroom, i.red_mushroom_colony, i.brown_mushroom_colony])
+t.add(e, 'forge:mulch/fertilizer', [i.ash, i.dust_saltpeter, i.fertilizer])
 
 // ============================================================
 // Wooden barrel
 // ============================================================
-e.add('vinery:barrel', i.barrel)
-e.add('vinery:wooden_barrels', i.barrel)
+t.add(e, ['vinery:barrel', 'vinery:wooden_barrels'], i.barrel)
 
 console.log('wood tag finished')
 })

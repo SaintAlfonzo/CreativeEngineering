@@ -10,7 +10,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `server` | Only does anything on the server; harmless on clients | Yes |
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 
-**Current count:** 364 both, 0 server, 45 client (409 rows).
+**Current count:** 370 both, 0 server, 43 client (413 rows).
 
 ## Keeping this up to date
 
@@ -111,14 +111,13 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.1.02.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
+| both | Creative Engineering | `creativeengineering` | `creativeengineering-1.1.03.jar` | This pack's own mod (development/patcherMod); client-only parts are guarded |
 | both | Creative Labels | `creative_labels` | `creativeLabels-1.0.0.jar` | This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
 | both | Customizable Elytra | `customizableelytra` | `customizableelytra-1.19.0-1.7.4.jar` |  |
 | both | Dave's Building Extended | `davebuildingmod` | `dbExtended-1.19.2-6.0.1.jar` |  |
 | both | Decorative Blocks | `decorative_blocks` | `Decorative Blocks-forge-1.19.2-3.0.0.jar` |  |
-| both | Delightful | `delightful` | `Delightful-1.19.2-3.4.1.jar` |  |
 | both | Display Delight (Backport) | `displaydelight` | `backportedDisplay-1.7.0-ce-19.2-01.jar` | This pack's port of Display Delight 1.7.0 (development/backportedDisplay); replaces displaydelight-1.2.0.jar. Added 2026-10-25 |
 | both | Distant Horizons | `distanthorizons` | `DistantHorizons-3.0.2-b-1.19.2-fabric-forge.jar` | Optional on server: sends distant terrain to players |
 | both | Do A Barrel Roll | `do_a_barrel_roll` | `do-a-barrel-roll-2.6.2+1.19.2-forge.jar` | Optional on server: enforces its settings |
@@ -147,7 +146,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Extended Cogwheels | `extendedgears` | `extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar` |  |
 | both | Fairy Lights | `fairylights` | `fairylights-6.0.1-1.19.2.jar` |  |
 | both | Fantasy's Furniture | `fantasyfurniture` | `fantasyfurniture-1.19.2-6.7.0.jar` |  |
-| both | Farmer's Delight | `farmersdelight` | `FarmersDelight-1.19.2-1.2.4.jar` | Required by: Alex's Delight, Brewin' and Chewin', Chefs Delight, Delightful, FarmersStructures, Nether's Delight (+1 more) |
 | both | FarmersStructures | `farmers_structures` | `FarmersStructures-1.0.0-1.19.2.jar` |  |
 | both | Fast Workbench | `fastbench` | `FastWorkbench-1.19.2-7.1.4.jar` |  |
 | both | FastFurnace | `fastfurnace` | `FastFurnace-1.19.2-7.0.0.jar` |  |
@@ -203,6 +201,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Metal Fences | `metalfences` | `MetalFences-FORGE-1.19.2-1.0.1.jar` |  |
 | both | Minecraft Comes Alive | `mca` | `minecraft-comes-alive-7.5.20+1.19.2-universal.jar` |  |
 | both | MmmMmmMmmmmm | `dummmmmmy` | `dummmmmmy-1.19.2-1.7.1.jar` |  |
+| both | ModernFix | `modernfix` | `modernfix-forge-5.18.1+mc1.19.2.jar` | Performance (model, registry, datapack load); needs Forge 43+, not required by any mod; added 2026-10-27, booted server + client 2026-10-27 (perf.md 12); `mixin.perf.cache_strongholds=false` in config |
 | both | Momentum Protection | `momentumprotection` | `momentumprotection-1.19.2-0.0.1.jar` |  |
 | both | Monobank | `monobank` | `monobank-1.19.2-1.1.3.jar` |  |
 | both | Moog's End Structures | `mes` | `mes-1.3.1-1.19.2-forge.jar` |  |
@@ -254,7 +253,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Resourceful Lib | `resourcefullib` | `resourcefullib-forge-1.19.2-1.1.24.jar` | Required by: Handcrafted |
 | both | Responsive Shields | `responsiveshields` | `responsiveshields-2.3-mc1.18-19-20.x.jar` |  |
 | both | Rhino | `rhino` | `rhino-forge-1902.2.3-build.284.jar` | Required by: KubeJS |
-| both | Rustic Delight | `rusticdelight` | `rusticdelight-forge-1.19.2-1.3.0.jar` |  |
 | both | Scholar | `scholar` | `scholar-1.19.2-1.0.0-forge.jar` |  |
 | both | Sculk Transporting | `sculktransporting` | `sculktransporting-1.19.2-1.1.jar` |  |
 | both | SeasonHud | `seasonhud` | `seasonhud-forge-1.19.2-2.0.4.jar` | Registers a SERVER config the server syncs to players - must be on the server |
@@ -272,7 +270,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Sophisticated Core | `sophisticatedcore` | `sophisticatedcore-1.19.2-0.6.4.730.jar` | Required by: Sophisticated Backpacks |
 | both | Spice of Life: Apple Pie Edition | `solapplepie` | `solapplepie-1.19.2-2.2.0.jar` |  |
 | both | Stardew Fishing | `stardew_fishing` | `stardew_fishing-1.19.2-1.3-all.jar` |  |
-| both | Storage Delight | `storagedelight` | `storagedelight-25.12.09-1.19-forge.jar` |  |
+| both | Storage Delight | `storagedelight` | `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` | This pack's rebuild of Storage Delight 25.12.09 (development/repackedStorage), MIT; installed 2026-10-25 (feature_writeup/storage_delight.md) |
 | both | Storage Drawers | `storagedrawers` | `StorageDrawers-1.19.2-11.4.1.jar` |  |
 | both | SuperMartijn642's Config Library | `supermartijn642configlib` | `supermartijn642configlib-1.1.8-forge-mc1.19.jar` | Required by: Durability Tooltip, Trash Cans |
 | both | SuperMartijn642's Core Lib | `supermartijn642corelib` | `supermartijn642corelib-1.1.21-forge-mc1.19.2.jar` | Required by: Portable Mobs, Trash Cans |
@@ -288,8 +286,8 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Trash Cans | `trashcans` | `trashcans-1.0.18-forge-mc1.19.jar` |  |
 | both | TrashSlot | `trashslot` | `trashslot-forge-1.19.2-12.1.0.jar` |  |
 | both | Twigs | `twigs` | `twigs-forge-1.19.2-3.0.1.jar` |  |
-| both | Veggies Delight (Backport) | `veggiesdelight` | `backportedVeggies-1.9.2-ce-19.2-02.jar` | This pack's port of Veggies Delight 1.9.2 (development/backportedVeggies); no 1.19.2 build of the mod exists. Added 2026-10-22; -02 2026-10-23 ships the Vintage Delight compat recipes (feature_writeup/veggies_delight.md) |
-| both | Vintage Delight (Backport) | `vintagedelight` | `backportedVintage-0.1.6-ce-19.2-02.jar` | This pack's port of Vintage Delight 0.1.6 (development/backportedVintage) with KOTS 0.3.1's jar ids; no 1.19.2 build of the mod exists. Added 2026-10-23 (feature_writeup/vintage_delight.md) |
+| both | Veggies Delight (Backport) | `veggiesdelight` | `backportedVeggies-1.9.2-ce-19.2-03.jar` | This pack's port of Veggies Delight 1.9.2 (development/backportedVeggies); no 1.19.2 build of the mod exists. Added 2026-10-22; -02 2026-10-23 ships the Vintage Delight compat recipes (feature_writeup/veggies_delight.md) |
+| both | Vintage Delight (Backport) | `vintagedelight` | `backportedVintage-0.1.6-ce-19.2-07.jar` | This pack's port of Vintage Delight 0.1.6 (development/backportedVintage) with KOTS 0.3.1's jar ids; no 1.19.2 build of the mod exists. Added 2026-10-23 (feature_writeup/vintage_delight.md) |
 | both | Via Romana | `via_romana` | `Via_Romana-1.19.2-1.1.3.jar` |  |
 | both | Villagers Sell Animals (by NoCube) | `villagersellanimals` | `nocube's_villagers_sell_animals_1.2.1_forge_1.19.2.jar` |  |
 | both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-04.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
@@ -325,7 +323,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | client | BetterF3 | `betterf3` | `BetterF3-4.0.1-Forge-1.19.2.jar` | F3 screen |
 | client | Cherished Worlds | `cherishedworlds` | `cherishedworlds-forge-6.0.5+1.19.4.jar` | World-list favourites |
 | client | Clear Void | `clearvoid` | `clearvoid-forge-1.3.0.jar` | Removes void fog/skybox band |
-| client | ConnectedTexturesMod | `ctm` | `CTM-1.19.2-1.1.6+8.jar` | Connected textures (resource-pack rendering) |
 | client | Controlling | `controlling` | `Controlling-forge-1.19.2-10.0+7.jar` | Keybind menu search |
 | client | Create Questing | `create_questing` | `Create_Questing-FORGE-1.19.2-1.0.0.jar` | Create-styled FTB Quests GUI |
 | client | Detail Armor Bar | `detailab` | `DetailArmorBar-2.6.4+1.19.2-forge.jar` | Armor bar HUD (creativeengineering compat code is client-guarded) |
@@ -412,7 +409,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Breedable Killer Rabbit | `breedablekillerrabbit` | `breedablekillerrabbit-1.19.2-3.5.jar` | Killer rabbits from breeding + taming; event logic only, no blocks/items/network (Serilum). Requires Collective |
 | both | Cool Rain | `coolrain` | `coolrain-1.19.2-Forge-1.0.2.jar` | Per-block rain sounds (client), but registers a strict `coolrain:main` channel (version "1" both ways) and ships its block tags as data, so like w2w2 the server must have it |
 | both | MEED (Moderately Enough Effect Descriptions) | `meed` | `MEED-1.19.2-7.1.1.jar` | Data only: `jeed:effect_provider` recipes for other mods' effects. Recipes come from the server, so it must be there (and JEED with it) |
-| client | Pretty Rain | `particlerain` | `Pretty Rain-1.19.2-Forge-1.1.1.jar` | Rain/snow/fog particles; no channel. patcherMod's PrettyRainSeasonMixin is in the mixin config's client list |
+| both | Pretty Rain | `particlerain` | `Pretty Rain-1.19.2-Forge-1.1.1.jar` | Rain/snow/fog particles; no channel, but registers particle types (synced registry), so a server without it strips them and the client crashes on `particlerain:rain` when it rains (2026-10-27). Requires Cloth Config. patcherMod's PrettyRainSeasonMixin is in the mixin config's client list |
 | both | Cycle Paintings | `cyclepaintings` | `cyclepaintings-1.19.2-3.5.jar` | Right-click a placed painting with a painting to cycle same-size variants (sneak = backwards); server event logic only (Serilum). Cycles everything in `#minecraft:placeable`, which all the painting packs fill. Requires Collective. Added 2026-10-14 |
 | both | DarkPaintings | `darkpaintings` | `DarkPaintings-Forge-1.19.2-13.1.5.jar` | Painting variants (Forge registry, synced). Requires Bookshelf. Added 2026-10-13 |
 | both | Dimensional Paintings | `dimpaintings` | `Dimensional-Paintings-1.19.2-1.4.1.jar` | Painting items + recipes. Added 2026-10-13 |
@@ -434,11 +431,8 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Campsite Structures | `campsite_structures` | `campsite_structures-1.19.2-FORGE-1.0.3.jar` | MCreator: camper entity + camp features (features overridden to forge:none by the structure work, jar kept for CamperEntity). Added 2026-10-14 |
 | both | restApi | `restapi` | `restApi - 0.7 - 1.19.2 - Forge.jar` | Library by restonic4 (registry/sound/tool-tier helpers). Added 2026-10-14 |
 | both | Unlit Campfire | `unlitcampfire` | `unlitcampfire-forge-1.19-1.7.1.0.jar` | Campfires placed unlit / burn out; block mixins + config, Jade/TOP compat. Added 2026-10-14 |
-| both | Create Salt | `create__the_salt` | `Create salt integration. Added 2026-10-18 |
+| both | Create : The Salt | `create__the_salt` | `create_salt 1.19.2-1.1.0.jar` | Create salt integration. Added 2026-10-18 |
 | both | Labels | `labels` | `labels-1.19.2-1.10.jar` | Art donor for Creative Labels, gameplay off (item hidden, recipes removed; sticky_notes.md 3.13). Added 2026-10-18 |
-| both | Creative Delight | `creative_delight` | `creative_delight-1.0.0.jar` | The pack's own bundle (development/creativeDelight): nests Farmer's Delight (`farmersdelight`), Ocean's Delight (`oceansdelight`), Oceanic Delight (`oceanic_delight`), End's Delight (`ends_delight`), Ender's Delight Additions (`enders_additions`, Ender's 1.1.4 content under `endersdelight:` ids, added 2026-10-25), the Rustic Delight 1.7.0 port (`rusticdelight`, reads `rustic_upstream/` on both sides) and Delightful 3.4.1 with 3.8.1 items (`delightful`) as Jar-in-Jar mods; nested ids take this row's side. Needs patcherMod. Added 2026-10-25, not installed yet: the six member rows go when it is (feature_writeup/creative_delight.md 19) |
-| both | End's Delight | `ends_delight` | `ends_delight-1.19.2-2.1.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
+| both | Creative Delight | `creative_delight` | `creative_delight-1.0.0.jar` | The pack's own bundle (development/creativeDelight): nests Farmer's Delight (`farmersdelight`), Ocean's Delight (`oceansdelight`), Oceanic Delight (`oceanic_delight`), End's Delight (`ends_delight`), Ender's Delight Additions (`enders_additions`, Ender's 1.1.4 content under `endersdelight:` ids, added 2026-10-25), the Rustic Delight 1.7.0 port (`rusticdelight`, reads `rustic_upstream/` on both sides) and Delightful 3.4.1 with 3.8.1 items (`delightful`) as Jar-in-Jar mods; nested ids take this row's side. Needs patcherMod. Added 2026-10-25; the member mods have no rows of their own (rows removed 2026-10-27) |
 | both | Hostile Delight | `hostiledelight` | `Hostile_Delight_0.2.2_1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
 | both | Miner's Delight (Backport) | `miners_delight` | `backportedMiners-1.4.5-ce-19.2-01.jar` | This pack's merged port of Miner's Delight 1.4.5 + 1.1.2 (development/backportedMiners), needs Farmer's Delight. Reads its art and data from the jar in `miners_upstream/` (not mods/). Replaces miners_delight-1.19.2-1.1.2.jar (live since 1.1.02); built 2026-10-24, installed by `:backportedMiners:installToMods` (feature_writeup/miners_delight.md) |
-| both | Oceanic Delight | `oceanic_delight` | `oceanic_delight-1.0.1-forge-1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
-| both | Ocean's Delight | `oceansdelight` | `oceansdelight-1.0.2-1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |

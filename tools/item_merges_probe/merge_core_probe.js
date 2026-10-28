@@ -59,9 +59,11 @@
         let p = $MCFakeFactory.get(level, new $MCGameProfile($MCUUID.randomUUID(), 'mgcore'))
         p.getInventory().clearContent()
 
-        // startup list (MG-01 server half): five merges, each purged id flagged and stripped of every item tag
+        // startup list (MG-01 server half): the core merges are in the list (107 pairs since the river woods and the
+        // Creative Delight food pairs joined), each purged id flagged and stripped of every item tag
         let merges = global.itemMerges || []
-        check('merge list', merges.length == 5, merges.map(m => m[0] + ' -> ' + m[1]).join(', '))
+        let missing = PURGED.filter(id => !merges.some(m => m[0] == id))
+        check('merge list', missing.length == 0, merges.length + ' merges; core ids missing: ' + missing)
         PURGED.forEach(id => {
             let item = $MCForgeReg.ITEMS.getValue(new $MCRL(id))
             let tags = item.builtInRegistryHolder().tags().count()
@@ -110,15 +112,16 @@
 
         // 2.2 milk bottle (MG-06)
         check('FD bottle in #forge:bottles/milk', hasTag(Item.of('farmersdelight:milk_bottle'), itemTag('forge:bottles/milk')), '')
-        craftCheck(level, p, 'milk bucket + 3 glass bottles',
-            ['minecraft:milk_bucket', 'minecraft:glass_bottle', 'minecraft:glass_bottle', 'minecraft:glass_bottle'],
-            'farmersdelight:milk_bottle', 3)
-        craftCheck(level, p, 'bucket + 3 FD milk bottles',
-            ['minecraft:bucket', 'farmersdelight:milk_bottle', 'farmersdelight:milk_bottle', 'farmersdelight:milk_bottle'],
+        // Creative Delight's recipes use 4 bottles (3 glass bottles + a milk bucket is Splash Milk's recipe)
+        craftCheck(level, p, 'milk bucket + 4 glass bottles',
+            ['minecraft:milk_bucket', 'minecraft:glass_bottle', 'minecraft:glass_bottle', 'minecraft:glass_bottle', 'minecraft:glass_bottle'],
+            'farmersdelight:milk_bottle', 4)
+        craftCheck(level, p, 'bucket + 4 FD milk bottles',
+            ['minecraft:bucket', 'farmersdelight:milk_bottle', 'farmersdelight:milk_bottle', 'farmersdelight:milk_bottle', 'farmersdelight:milk_bottle'],
             'minecraft:milk_bucket', 1)
 
         // 2.3 chocolate cake (MG-10 server half): knife recipe and the placed-cake slice tag
-        let cut = recipe(rm, 'creativeengineering:farmersdelightcutting/chocolate_cake')
+        let cut = recipe(rm, 'creative_delight:farmersdelightcutting/chocolate_cake')
         let cutOut = 'missing'
         if (cut) {
             cutOut = desc(cut.getResultItem())

@@ -14,12 +14,15 @@
 
 | Key | Default | Vanilla | Meaning |
 |---|---|---|---|
-| `enabled` | true | | off = vanilla trader (24000 ticks, 5 + 1 offers) and no Winemaker spawner |
+| `enabled` | true | | off = vanilla trader (24000 ticks, 5 + 1 offers) |
 | `traderIntervalTicks` | 96000 | 24000 | server ticks between Wandering Trader spawn rolls (96000 = 80 minutes) |
 | `commonTrades` | 25 | 5 | offers drawn from the common pool, each a different entry |
 | `rareTrades` | 5 | 1 | offers drawn from the rare pool, each a different item |
-| `winemakerEnabled` | true | | the Winemaker's own spawner |
-| `winemakerIntervalTicks` | 96000 | | server ticks between Winemaker spawn rolls |
+
+The Winemaker's spawner moved into the Vinery port on 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) finding 39):
+`config/vinery-common.toml` `[trader]` `ownSpawner` (true; was CEConfig `winemakerEnabled`), `ownSpawnerInterval`
+(96000; was `winemakerIntervalTicks`), `spawnChance` (0, 1.5.5's swap), `spawnWithMules` (true), `spawnDelay` (48000,
+the stay). It no longer depends on `[wandering_trader] enabled`.
 
 What the pools hold is not a config value: it is [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.js)
 (edit, then `/reload`).
@@ -27,7 +30,7 @@ What the pools hold is not a config value: it is [wandering_trades.js](../kubejs
 **How to measure:** `/summon minecraft:wandering_trader ~ ~ ~ {NoAI:1b}` then
 `/data get entity @e[type=minecraft:wandering_trader,limit=1,sort=nearest] Offers.Recipes` (reading the data rolls the
 offers). Trader wait: `WanderingTraderSpawnDelay` in level.dat. Winemaker wait: `SpawnDelay` in
-`<world>/data/creativeengineering_winemaker_spawner.dat`. Pool sizes: the `[wandering trades] common N, rare N,
+`<world>/data/vinery_winemaker_spawner.dat`. Pool sizes: the `[wandering trades] common N, rare N,
 winemaker N` line in `logs/kubejs/server.log`. Catalog: `/dumptrades`, then `python3 tools/wandering_trader_report.py`.
 
 ## 1. Overview
@@ -129,12 +132,13 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 
 - **Trader wait:** `WanderingTraderSpawnerMixin` swaps the `sipush 24000` in `tick` (`m_7995_`) and in the
   constructor (a new world's first wait) for `traderIntervalTicks`. Bytecode-checked: those are the only two.
-- **Winemaker spawner:** [WinemakerSpawner](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/WinemakerSpawner.java)
-  copies vanilla's spawner on `LevelTickEvent` (overworld, `doMobSpawning`, `doTraderSpawning`): 1200-tick step,
+- **Winemaker spawner** (in the Vinery port since 2026-10-27, `forge/WinemakerSpawner`; before that patcherMod
+  `trader/WinemakerSpawner`): copies vanilla's spawner on `LevelTickEvent` (overworld, `doMobSpawning`, `doTraderSpawning`): 1200-tick step,
   25/50/75%, 1 in 10, spot near a random player or meeting point, two leashed `vinery:mule`s like Vinery's own code,
-  48000-tick stay. Its wait and chance are saved per world in `data/creativeengineering_winemaker_spawner.dat`. At
-  server start it logs a warning if Vinery's `wine_trader_chance` is above 0 (then Vinery would still turn that
-  share of trader spawns into Winemakers on top).
+  48000-tick stay (`spawnWithMules`, `spawnDelay`). Its wait and chance are saved per world in
+  `data/vinery_winemaker_spawner.dat` (was `creativeengineering_winemaker_spawner.dat`; not carried over, so an
+  existing world waits one full interval first). `[trader] spawnChance` above 0 still adds 1.5.5's swap on top; the
+  patcherMod start-up warning for that is gone.
 - **Offer counts:** `WanderingTraderTradesMixin` swaps the `iconst_5` in `updateTrades` (`m_7604_`) for
   `commonTrades`, and at TAIL adds `rareTrades - 1` rare offers after vanilla's one, in random order, skipping any
   item already on the trader.
@@ -183,7 +187,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 |---|---|
 | [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) | `[wandering_trader]` |
 | [trader/WanderingTraderTweaks.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/WanderingTraderTweaks.java) | trader wait, common count, extra rare offers |
-| [trader/WinemakerSpawner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/WinemakerSpawner.java) | Winemaker spawner + saved data + Vinery config warning |
+| [backportedVinery forge/WinemakerSpawner.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/forge/WinemakerSpawner.java) | Winemaker spawner + saved data (moved from patcherMod 2026-10-27) |
 | [trader/TradeListings.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/TradeListings.java) | listing builders, find-by-result |
 | [trader/TagItemListing.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/TagItemListing.java) | random tag member listing |
 | [trader/WinemakerTrades.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/WinemakerTrades.java) | Winemaker pool extras (reflection, no Vinery compile dependency) |
@@ -226,7 +230,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   96000, not 24000.
 - [ ] **WT-09 Winemaker offers:** use a Wandering Winemaker spawn egg a few times → 9 offers each (quill + 8);
   across them Fruits Delight saplings and white jungle grape seeds turn up.
-- [ ] **WT-10 Winemaker wait saved:** play 2 minutes, `/save-all` → `<world>/data/creativeengineering_winemaker_spawner.dat`
+- [ ] **WT-10 Winemaker wait saved:** play 2 minutes, `/save-all` → `<world>/data/vinery_winemaker_spawner.dat` (before 2026-10-27: `creativeengineering_winemaker_spawner.dat`)
   exists with `SpawnDelay` below 96000.
 - [ ] **WT-11 no Vinery swap:** `latest.log` has no `[trades] ... wine_trader_chance` warning at server start.
 - [ ] **WT-12 removed stock:** across several summoned traders → no CC: Tweaked, Advanced Peripherals or Lightman's
@@ -256,6 +260,9 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   now dumps the Winemaker pool; the report shows weights and counts both traders. Jar md5 37ce1023, checked on a
   scratch dedicated server. WT-06 retired, WT-09 to WT-16 added.
 - 2026-10-22: Fruits Delight's apple sapling removed from the Winemaker (Vinery's apple tree is the pack's); WT-17.
+- 2026-10-27: the Winemaker spawner moved from patcherMod into the Vinery port (pack_hygiene.md finding 39). Same
+  rolls, interval, mules and stay; keys now `vinery-common.toml` `[trader] ownSpawner` / `ownSpawnerInterval`; CEConfig
+  `winemakerEnabled` / `winemakerIntervalTicks` and the regex check of the Vinery toml removed. New saved-data name.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

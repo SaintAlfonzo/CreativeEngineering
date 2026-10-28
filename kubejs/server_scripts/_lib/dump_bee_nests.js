@@ -10,28 +10,17 @@
 ServerEvents.commandRegistry(event => {
 	const { commands: Commands } = event
 
-	function nests(ctx) {
-		try {
-			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.BeeNests')
-		} catch (err) {
-			ctx.source.sendFailure(Text.red('/dumpbeenests needs patcherMod with worldgen/BeeNests (install the jar): ' + err))
-			return null
-		}
-	}
+	const $BeeNests = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.BeeNests')
 
 	event.register(
 		Commands.literal('dumpbeenests')
 			.requires(src => src.hasPermission(2))
 			.executes(ctx => {
-				var $BeeNests = nests(ctx)
-				if (!$BeeNests) return 0
 				var line = String($BeeNests.write())
 				ctx.source.sendSuccess(Text.green(`Dumped bee nests: ${line}`), false)
 				return 1
 			})
 			.then(Commands.literal('reset').executes(ctx => {
-				var $BeeNests = nests(ctx)
-				if (!$BeeNests) return 0
 				$BeeNests.reset()
 				ctx.source.sendSuccess(Text.green('Bee nest counters reset: generate new chunks, then /dumpbeenests'), false)
 				return 1

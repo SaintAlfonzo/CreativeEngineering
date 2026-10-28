@@ -13,7 +13,7 @@ LootJS.modifiers(event => {
 
 	;[
 		['minecraft:squid', i.squid, [i.ink_sac, i.calamari]],
-		['minecraft:glow_squid', i.glow_squid, [i.glow_ink_sac, i.calamari, i.glowing_calamari]],
+		['minecraft:glow_squid', i.glow_squid, [i.glow_ink, i.calamari, i.glowing_calamari]],
 	].forEach(s => {
 		event.addEntityLootModifier(s[0])
 			.removeLoot(s[2].concat(TENTACLES, [s[1]]))

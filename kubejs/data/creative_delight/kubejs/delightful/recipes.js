@@ -8,7 +8,6 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var R = global.NCH
-	var F = global.foodFamily(e)
 	var n = (id, count) => ({ id: id, count: count })
 	// as cooking/baking.js
 	var PIE = { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin }
@@ -17,7 +16,9 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		//######################### Cantaloupe #########################
-		R.shapeless(i.cantaloupe_seeds, [i.cantaloupe_slice], e, 'cantaloupe_seeds')
+		// Cantaloupe merge (item_merges.md 2.10): this Cantaloupe is the Mini Cantaloupe, its seeds the Mini Cantaloupe
+		// Seeds; the slice gives Fruits Delight's seeds. This popsicle is the one popsicle (fruitsdelight/item_merges.js)
+		R.shaped(i.cantaloupe, ['cc', 'cc'], { c: i.cantaloupe_slice }, e, 'mini_cantaloupe')
 		R.shapeless(i.cantaloupe_bread, [i.any_dough, i.t_fruits_cantaloupe, i.any_sweetener], e, 'cantaloupe_bread')
 		R.shapeless(i.wrapped_cantaloupe, [i.t_fruits_cantaloupe, i.cooked_bacon], e, 'wrapped_cantaloupe')
 		R.shaped(i.cantaloupe_popsicle, [' cc', 'icc', 'si '], { c: i.t_fruits_cantaloupe, i: i.t_ice_cubes, s: i.any_stick }, e, 'cantaloupe_popsicle')

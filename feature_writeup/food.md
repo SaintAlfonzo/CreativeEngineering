@@ -533,7 +533,7 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
   sides) holds each seasoning once: id, display name, grid item, bonus (`nutrition` hunger points, `saturation` points
   capped at the food level, `heal` health points, timed `effects`) and `combines` (keys it may share a food with;
   either side listing the other is enough, unlisted pairs don't combine). It passes each one to patcherMod
-  `food/Seasonings.define` as JSON. The client lang hook [seasoning_lang.js](../kubejs/client_scripts/seasoning_lang.js)
+  `food/Seasonings.define` as JSON. The client lang hook [seasoning_lang.js](../kubejs/assets/creative_delight/kubejs/creativeengineering/seasoning_lang.js)
   adds the names (`seasoning.<ns>.<path>`).
 - **Craft:** recipe type `creativeengineering:seasoning` (`food/SeasoningRecipe`, special shapeless): one food
   matching `food` + one of each listed seasoning's item gives the same food (all NBT kept, so salted food stays salted)
@@ -755,7 +755,7 @@ do not take them.
   and [SeasoningCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
 - Pack seasonings (3.12): patcherMod `food/Seasonings.java`, `SeasoningRecipe.java`, `SeasoningTooltip.java`;
   [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js) (definitions), [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js) (crafts),
-  [seasoning_lang.js](../kubejs/client_scripts/seasoning_lang.js) (names), NCH `season`; [seasoning_tags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning_tags.js)
+  [seasoning_lang.js](../kubejs/assets/creative_delight/kubejs/creativeengineering/seasoning_lang.js) (names), NCH `season`; [seasoning_tags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning_tags.js)
   (family and seasonable tags); `food/SeasonedItemModel.java` + `mixin/SeasonedItemModelMixin.java` and
   [make_seasoning.py](../textureswapper/seasoning/make_seasoning.py) (icons)
 - Powdered sugar (3.13): patcherMod `food/PowderedSugarBlock.java`, `PowderedSugarRegistry.java`;

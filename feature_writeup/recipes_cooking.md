@@ -222,7 +222,13 @@ reverted.
 - **Cultivated meat:** sample syringe (iron rod, 4 glass panes, iron plate); a filled syringe + `#creativeengineering:culture_base`
   + slime ball → a culture (beef, pork, poultry, mutton, rabbit, cod, salmon); heated mixing culture + 250 mB diluted
   bone meal + 250 mB plant oil → 3; knife on the cutting board → 4 raw beef / pork / mutton, 3 chicken / rabbit, 8 cod or
-  salmon slices. Culture blocks 9 ↔ 1.
+  salmon slices. Culture blocks 9 ↔ 1. Since 2026-10-27 the cooking pot grows them too: culture + bone meal + Rustic
+  Delight cooking oil → 3 (0.35 xp, 200 ticks; `creative_delight:farmersdelightcooking/<animal>_culture_cooking`, only
+  with Rustic Delight on).
+- **Creative Cultivation reservation (2026-10-27):** all cultivated-meat code (sample syringe, cultures, culture blocks,
+  recipes, tags, lang, textures) is marked for a future own mod, Creative Cultivation, the way brewing and alcohol are
+  marked for Creative Brewing ([creative_delight.md](creative_delight.md) 29.5). Items and blocks:
+  CD `kubejs_startup/creativeengineering/cultures.js`; tags: `creativeengineering/cultivated_meat_tags.js`.
 
 ## 3. What the pack changes
 
@@ -312,11 +318,11 @@ until a row is built.
 - [TODO](todo/TODO.md) `dishes/meals #23`: cooking oil + 3 eggs gives 3 fried eggs; the pot turns 4 fried eggs into 4 omelettes.
 - [TODO](todo/TODO.md) `dishes/meals #24`: extra vegetable omelette recipe with tomato, beetroot, any bell pepper or ghost pepper
   swapped in. Open: which slot.
-- [TODO](todo/TODO.md) `dishes/meals #26`: Brewin' pizza renamed Deluxe Pizza (tomato, peppers, mushrooms, cheese, cooked meat or
+- [TODO](todo/TODO.md) `merges/dishes #8`: Brewin' pizza renamed Deluxe Pizza (tomato, peppers, mushrooms, cheese, cooked meat or
   fish). Open: whether Vintage's meat pizza merges into it.
 - [TODO](todo/TODO.md) `dishes/meals #27`: Tropical Pizza (pineapple and bacon) with a funny tooltip. Open: tooltip text.
-- [TODO](todo/TODO.md) `dishes/meals #28`: merge Brewin's pasta with cheese and Vintage's cheese pasta. Open: survivor.
-- [TODO](todo/TODO.md) `dishes/meals #30`: merge the two Caesar salads (Veggies Delight "Cesar", Oceanic Delight "Caesar").
+- [TODO](todo/TODO.md) `merges/dishes #5`: merge Brewin's pasta with cheese and Vintage's cheese pasta. Open: survivor.
+- [TODO](todo/TODO.md) `merges/dishes #6`: merge the two Caesar salads (Veggies Delight "Cesar", Oceanic Delight "Caesar").
 - [TODO](todo/TODO.md) `dishes/meals #31`: nut butter sandwich takes more jams and only square bread.
 - [TODO](todo/TODO.md) `dishes/meals #32`: remove the mhadjeb (ends the "kept until dough unification" rule in
   [veggies_delight.md](veggies_delight.md) 5.2).
@@ -451,6 +457,9 @@ None.
   250 mB -> 1 Frosting item; spout 750 mB on a Baked Cake Base -> Cake. JEI lists the Frosting fluid next to the item.
 - [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball → beef culture; heated mixer with diluted
   bone meal and plant oil → 3; knife → 4 raw beef.
+- [ ] **RC-82 Culture in the cooking pot:** JEI beef culture → U: a cooking pot recipe beef culture + bone meal +
+  cooking oil → 3 beef cultures (`creative_delight:farmersdelightcooking/beef_culture_cooking`); same for the other 6
+  cultures. Cook one on a lit stove → 3 cultures.
 - [ ] **RC-79 Orange jam from slices:** JEI orange jam → R: the 2-orange pot recipe and a pot recipe with 4 orange
   slices + sugar + lemon slice (bottle); a heated basin with 4 slices + lemon slice + sugar + 100 mB water gives 125 mB
   orange jam. Both 2-orange recipes still there.
@@ -516,3 +525,8 @@ None.
 - 2026-10-23: F6 fixed (`recipes/cooking #3`); orange jam from slices (`baking/sweets #6`), fruit beignet removed
   (`dishes/meals #19`), fried rice renamed Egg Fried Rice (`dishes/meals #17`). Tests RC-79 to RC-81. Not run in game.
 - 2026-10-24: planned scratchpad rows added to section 4 (drinks, jams, meals, baking, shulker bowl); no code changed.
+- 2026-10-27: cultures and culture blocks registered by Creative Delight (`kubejs_startup/creativeengineering/cultures.js`,
+  ids unchanged), their tags in `creativeengineering/cultivated_meat_tags.js`; cooking pot culture growth added (7 rows);
+  all cultivated-meat code reserved for Creative Cultivation (creative_delight.md 29.5). Test RC-82. Not run in game.
+
+- 2026-10-28: planned from the scratchpad: raise coleslaw nutrition (TODO `dishes/meals #42`), rename cucumber pasta to Veggie Pasta with more vegetables and a less minty colour (`dishes/meals #43`). Tropical Pizza stays `dishes/meals #27`. No code changed.

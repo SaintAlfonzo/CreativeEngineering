@@ -25,6 +25,9 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import pack_paths  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RECIPES = os.path.join(ROOT, 'kubejs', 'exported', 'food', 'recipes.json')
 TAGS = os.path.join(ROOT, 'kubejs', 'exported', 'tags', 'item_tags_by_item.json')
@@ -54,10 +57,8 @@ def load_tags():
 
 
 def load_dict_keys():
-    keys = {}
-    for m in re.finditer(r"^i\.([A-Za-z0-9_]+)\s*=\s*'([^']+)'", open(DICT).read(), re.M):
-        keys.setdefault(m.group(2), m.group(1))
-    return keys
+    """item id -> first item_dict key (tools/pack_paths.py)."""
+    return pack_paths.item_dict_first_keys(pack_paths.item_dict_text(DICT))
 
 
 def ratio(outputs, main):

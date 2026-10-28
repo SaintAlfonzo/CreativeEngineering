@@ -15,6 +15,24 @@
 //   shipped_jar_task  optional, the archive task whose jar is the one that ships (default `jar`). Set by
 //                   ce.forge-repack (`repackJar`) and ce.forge-bundle (`bundleJar`), not by hand; archiveJar
 //                   and installToMods use it
+//   shared_sources  optional, comma-separated modules of development/shared/ compiled into this jar
+//                   (feature_writeup/pack_tooling.md, "Shared Java sources")
+//   shared_base     this mod's base package, required with shared_sources: the template packages ce.shared and
+//                   ce.mixin become <shared_base>.shared and <shared_base>.mixin. Each jar carries its own copy under its
+//                   own package, so no mod needs another at runtime
+//   disable_target_validator  optional, `true` adds -AdisableTargetValidator=true to compileJava: for mixins that use
+//                   SRG member names with remap = false (no refmap), so the AP doesn't reject them against the dev-time
+//                   (Mojmap) classes. ce.forge-repack always sets the flag
+//   resource_guard_jars  optional, comma-separated jars (paths from the instance root; `*` allowed in the file name,
+//                   first match) whose files src/main/resources must not repeat: adds checkNoUpstreamResources (or
+//                   checkNoArrResources with resource_guard_arr=true) to check and jar. A missing jar is skipped.
+//                   (Not `upstream_jar`: that is the donor/repack jar of ce.forge-repack and the port tools.)
+//   resource_guard_own_files  the resource paths the mod may share with those jars (root files it writes itself)
+//   resource_guard_name  the upstream mod's name, for the task description
+//   resource_guard_arr   optional, `true` for an All Rights Reserved upstream (the installed jar): ARR task name and message
+//
+// Every mod gets the `libs/` flatDir repository (third-party mod jars copied from the pack's mods/, git-ignored);
+// flatDir notation: 'local:<file name without -version>:<version>'.
 plugins {
     id 'eclipse'
     id 'idea'
@@ -31,6 +49,10 @@ group = prop('mod_group_id')
 
 base {
     archivesName = jarName
+}
+
+repositories {
+    flatDir { dir 'libs' }
 }
 
 // Mojang ships Java 17 to end users in 1.18+.
@@ -74,6 +96,29 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+// shared_sources: copy the listed development/shared/<module>/ trees into build/generated/sources/shared with the
+// template package moved to shared_base, and compile them as part of main.
+def sharedModules = csv('shared_sources')
+if (sharedModules) {
+    def sharedBase = prop('shared_base')
+    if (!sharedBase) throw new GradleException("${project.name}: shared_sources needs shared_base (this mod's base package)")
+    def sharedSources = tasks.register('sharedSources', Sync) {
+        description = "Copies development/shared/{${sharedModules.join(',')}} into ${sharedBase}"
+        inputs.property('sharedBase', sharedBase)
+        sharedModules.each { m ->
+            def dir = rootProject.file("development/shared/${m}")
+            if (!dir.isDirectory()) throw new GradleException("${project.name}: no shared module ${dir}")
+            from(dir) { include '**/*.java' }
+        }
+        into layout.buildDirectory.dir('generated/sources/shared')
+        includeEmptyDirs = false
+        duplicatesStrategy = DuplicatesStrategy.FAIL
+        eachFile { it.path = it.path.replaceFirst(/^ce\//, sharedBase.replace('.', '/') + '/') }
+        filter { String line -> line.replaceAll(/\bce\.(shared|mixin)\b/, sharedBase + '.$1') }
+    }
+    sourceSets.main.java.srcDir(sharedSources)
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
 
@@ -96,6 +141,53 @@ configurations.configureEach {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+if (prop('disable_target_validator') == 'true') {
+    tasks.named('compileJava', JavaCompile).configure {
+        options.compilerArgs << '-AdisableTargetValidator=true'
+    }
+}
+
+// resource_guard_jars: the jar must not carry upstream resources (licence and port guard: miners_delight.md D2, alcohol.md
+// B4.8, rustic, Ender's ARR). Fail the build if a file under src/main/resources has the same path as a file in one
+// of the jars, except resource_guard_own_files.
+def upstreamJars = csv('resource_guard_jars').collect { String path ->
+    def f = rootProject.file(path)
+    f.name.contains('*') ? f.parentFile.listFiles()?.find { it.name ==~ f.name.replace('.', '\\.').replace('*', '.*') } : f
+}
+if (upstreamJars) {
+    def ownFiles = csv('resource_guard_own_files') as Set
+    def arr = prop('resource_guard_arr') == 'true'
+    def checkName = arr ? 'checkNoArrResources' : 'checkNoUpstreamResources'
+    def what = arr ? "the installed ${prop('resource_guard_name')} (ARR) jar" :
+            (upstreamJars.size() > 1 ? "an upstream ${prop('resource_guard_name')} jar" : "the upstream ${prop('resource_guard_name')} jar")
+    tasks.register(checkName) {
+        group = 'verification'
+        description = "Fails if src/main/resources contains a path that also exists in ${what}"
+        def resDir = file('src/main/resources')
+        inputs.dir(resDir)
+        doLast {
+            def ours = [] as Set
+            resDir.eachFileRecurse(groovy.io.FileType.FILES) { ours << resDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
+            def clashes = []
+            upstreamJars.findAll { it?.exists() }.each { jar ->
+                new java.util.zip.ZipFile(jar).withCloseable { zip ->
+                    zip.entries().each { e ->
+                        if (!e.directory && ours.contains(e.name) && !ownFiles.contains(e.name)) {
+                            clashes << (upstreamJars.size() > 1 ? "${e.name} (${jar.name})" : e.name)
+                        }
+                    }
+                }
+            }
+            if (clashes) {
+                def head = arr ? "paths also in ${upstreamJars.find { it?.exists() }.name} (ARR):" : 'upstream files in src/main/resources:'
+                throw new GradleException(head + '\n  ' + clashes.join('\n  '))
+            }
+        }
+    }
+    tasks.named('check') { dependsOn checkName }
+    tasks.named('jar') { dependsOn checkName }
 }
 
 tasks.withType(ProcessResources).configureEach {

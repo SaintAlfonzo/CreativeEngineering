@@ -8,10 +8,11 @@
 # jar: a KubeJS virtual resourcepack overlay works fine.
 #
 # This script:
-#   1. Scans every enabled mod jar's assets/*/lang/en_us.json for "effect.<mod>.<path>"
-#      (display name) and "effect.<mod>.<path>.description" keys.
-#   2. Scans kubejs/assets/**/lang/en_us.json the same way (existing overlays / this
-#      script's own prior output).
+#   1. Reads every en_us table the client sees through tools/lang_index.py (vanilla and Forge jars, the upstream
+#      jars the ports read, every mod jar with its jar-in-jar members, kubejs/assets, client script renames,
+#      enabled resource packs) for "effect.<mod>.<path>" (display name) and "effect.<mod>.<path>.description".
+#   2. Leaves out this script's own output (kubejs/assets/creativeengineering/lang), so its placeholders never
+#      count as "found".
 #   3. Adds any pack-original MobEffects that skip a lang name entirely (e.g.
 #      creativeengineering:magic_resistance uses a hardcoded Text.of(...) display name) —
 #      see EXTRA_EFFECTS below. Grep for new ones with:
@@ -33,11 +34,12 @@
 
 import zipfile, json, os, re, sys, glob
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODS_DIR = os.path.join(ROOT, "mods")
-# The Vinery backport reads its lang (effect names and descriptions included) from this donor jar at runtime
-# (feature_writeup/alcohol.md B4.8). Only 1.5.5: the 1.3.10 jar there also holds names of effects the port dropped.
-DONOR_JARS = [os.path.join(ROOT, "vinery_upstream", "letsdo-vinery-fabric-1.5.5.jar")]
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import lang_index  # noqa: E402
+
+ROOT = str(lang_index.INSTANCE)
+# The Vinery backport reads its lang from vinery_upstream/ at runtime (feature_writeup/alcohol.md B4.8); lang_index
+# reads both jars there. Names of effects the port dropped (1.3.10 only) get nothing: main() keeps registered ones.
 KUBEJS_ASSETS = os.path.join(ROOT, "kubejs", "assets")
 OUT_FILE = os.path.join(KUBEJS_ASSETS, "creativeengineering", "lang", "en_us.json")
 MOB_EFFECTS = os.path.join(ROOT, "kubejs", "exported", "mob_effects.json")
@@ -70,12 +72,10 @@ PORTED = {
 SOURCE_DESC_RE = re.compile(r"^effect\.([a-z0-9_]+)\.([a-z0-9_]+)\.(?:description|desc)$")
 
 
-def process_lang_json(data, names, descs):
-    try:
-        obj = json.loads(data.decode("utf-8"))
-    except Exception:
-        return
-    for k, v in obj.items():
+def scan():
+    names, descs = {}, {}
+    table, _ = lang_index.build(skip_kubejs_ns=("creativeengineering",))  # not our own output (OUT_FILE)
+    for k, v in table.items():
         m = NAME_RE.match(k)
         if m:
             names[(m.group(1), m.group(2))] = v
@@ -83,32 +83,6 @@ def process_lang_json(data, names, descs):
         m = DESC_RE.match(k)
         if m:
             descs[(m.group(1), m.group(2))] = v
-
-
-def scan():
-    names, descs = {}, {}
-
-    jars = [os.path.join(MODS_DIR, fn) for fn in sorted(os.listdir(MODS_DIR)) if fn.endswith(".jar")]
-    jars += [j for j in DONOR_JARS if os.path.isfile(j)]
-    for path in jars:
-        try:
-            with zipfile.ZipFile(path) as z:
-                for name in z.namelist():
-                    if re.match(r"assets/[^/]+/lang/en_us\.json$", name):
-                        with z.open(name) as f:
-                            process_lang_json(f.read(), names, descs)
-        except zipfile.BadZipFile:
-            continue
-
-    for dirpath, _, files in os.walk(KUBEJS_ASSETS):
-        for fn in files:
-            if fn != "en_us.json" or not dirpath.endswith(os.path.join("lang")):
-                continue
-            path = os.path.join(dirpath, fn)
-            if os.path.abspath(path) == os.path.abspath(OUT_FILE):
-                continue  # don't let our own generated placeholders count as "found"
-            with open(path, "rb") as f:
-                process_lang_json(f.read(), names, descs)
 
     for eid, display in EXTRA_EFFECTS.items():
         mod, path = eid.split(":", 1)

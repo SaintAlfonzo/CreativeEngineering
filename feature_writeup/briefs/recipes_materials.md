@@ -65,7 +65,7 @@ Related rows: `ports/cavesandchasmsport #4` (C&C block merges, same helper), `lo
 ---
 
 ## materials #1: Merge cardboard
-Status Planned / Work KubeJS / TODO `recipes/materials #1` (scratchpad 2026-10-19)
+Status Planned / Work KubeJS / TODO `merges/materials #1` (scratchpad 2026-10-19)
 
 ### Goal
 One cardboard item in the pack; the other mod's cardboard recipes and uses point at it.
@@ -88,7 +88,7 @@ One cardboard item in the pack; the other mod's cardboard recipes and uses point
   347, Dustrial cardboard blocks).
 
 ### Build
-1. removed_items.js: add `i.cardboard_sheet` (comment `// merged into dustrial_decor:cardboard (recipes/materials #1)`).
+1. removed_items.js: add `i.cardboard_sheet` (comment `// merged into dustrial_decor:cardboard (merges/materials #1)`).
 2. merges.js: `R.remove({ id: 'design_decor:crafting/cardboard_sheet' }, e)` (the same 2:1 paper rate as Dustrial's;
    keeping it would just duplicate), then `R.merge(i.cardboard_sheet, i.cardboard, e)`. The merge turns
    `design_decor:crafting/cardboard_box` into 4 Dustrial cardboard -> 1 Design n' Decor box.
@@ -177,7 +177,7 @@ Kept `twigs:rocky_dirt`; removed `davebuildingmod:rocky_dirt`; kept `davebuildin
 ---
 
 ## materials #2: Merge rope
-Status Planned / Work KubeJS / data (+ config) / TODO `recipes/materials #2` (scratchpad 2026-10-19)
+Status Planned / Work KubeJS / data (+ config) / TODO `merges/materials #2` (scratchpad 2026-10-19)
 
 ### Goal
 One rope. Flax goes. Rope arrows use the surviving rope, and tomato vines keep climbing it (Farmer's Delight's

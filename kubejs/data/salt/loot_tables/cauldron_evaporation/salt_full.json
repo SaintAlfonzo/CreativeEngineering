@@ -2,7 +2,7 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
-      "entries": [{ "type": "minecraft:item", "name": "salt:salt" }],
+      "entries": [{ "type": "minecraft:item", "name": "vintagedelight:salt_dust" }],
       "rolls": 1.0
     },
     {
@@ -11,7 +11,7 @@
         {
           "type": "minecraft:item",
           "conditions": [{ "chance": 0.5, "condition": "minecraft:random_chance" }],
-          "name": "salt:salt"
+          "name": "vintagedelight:salt_dust"
         }
       ],
       "rolls": 1.0
