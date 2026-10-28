@@ -49,6 +49,7 @@ Rows of other subfamilies that depend on this: `cans/canning #1`, `#3` (can valu
 ---
 
 ## types-and-tuning #4: Spice of Life config
+Update 2026-10-27: the dead speed benefit is now `attribute,generic.movement_speed,0.01` (ADDITION on a base of 0.1, so +10%) in both config copies.
 Status Bug (the pack config is in place: `defaultconfigs/solapplepie-server.toml` 2026-10-22, same file as `configs_edited/server_config/`, new-world values checked on the scratch server by SQ-CF-01; the speed benefit stays open for the tier rework) / Work config / `food/types-and-tuning #4`
 
 ### Goal
