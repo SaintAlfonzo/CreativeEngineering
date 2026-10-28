@@ -14,12 +14,13 @@ global.NCH.remove({ id: 'immersiveengineering:potion_bottling_list' }, e)
 // shows correctly in JEI. The fluid nbt is subset-matched by patcherMod's FluidTagInputMixin,
 // so extra keys on the fluid stack (CustomPotionColor, ...) don't break the match.
 var i = global.item
+var f = global.fluid
 var R = global.NCH
 var POTIONS = Java.loadClass('net.minecraft.core.Registry').POTION
 var BOTTLES = [
-	['REGULAR',   'minecraft:potion'],
-	['SPLASH',    'minecraft:splash_potion'],
-	['LINGERING', 'minecraft:lingering_potion']
+	['REGULAR',   i.potion],
+	['SPLASH',    i.splash_potion],
+	['LINGERING', i.lingering_potion]
 ]
 
 // ── Fill / bottle / drain the CE potion buckets ──────────────────────────────
@@ -54,7 +55,7 @@ function bucketRecipes(pid, idBase) {
 		var bottleIngredient = { type: 'forge:partial_nbt', item: bottleItem, nbt: bucketNbt }
 		R.shapeless(
 			Item.of(bucketItem, bucketNbt),
-			['minecraft:bucket', bottleIngredient, bottleIngredient, bottleIngredient, bottleIngredient],
+			[i.bucket, bottleIngredient, bottleIngredient, bottleIngredient, bottleIngredient],
 			e,
 			'potion_bucket_fill/' + idSuffix
 		)
@@ -69,32 +70,13 @@ function bucketRecipes(pid, idBase) {
 		)
 
 		// Create filling: empty bucket + create:potion fluid -> filled potion bucket
-		e.custom({
-			type: 'create:filling',
-			ingredients: [
-				{ item: 'minecraft:bucket' },
-				{ amount: 1000, fluid: 'create:potion', nbt: fluidNbt }
-			],
-			results: [{ item: bucketItem, nbt: bucketNbt }]
-		}).id('creativeengineering:create_filling/potion_bucket/' + idSuffix)
+		R.createFilling(Item.of(bucketItem, bucketNbt), [i.bucket, Fluid.of(f.create_potion, 1000, fluidNbt)], e, 'potion_bucket/' + idSuffix)
 
 		// IE bottling machine: same fill, on the bottling machine instead of the Spout
-		e.custom({
-			type: 'immersiveengineering:bottling_machine',
-			fluid: { tag: 'forge:fluid/potion', amount: 1000, nbt: fluidNbt },
-			inputs: [{ item: 'minecraft:bucket' }],
-			results: [{ item: bucketItem, nbt: bucketNbt }]
-		}).id('creativeengineering:bottling/potion_bucket/' + idSuffix)
+		R.ieBottling(Item.of(bucketItem, bucketNbt), { tag: f.t_potion, amount: 1000, nbt: fluidNbt }, i.bucket, e, 'potion_bucket/' + idSuffix)
 
 		// Create emptying ("draining"): filled potion bucket -> empty bucket + create:potion fluid
-		e.custom({
-			type: 'create:emptying',
-			ingredients: [{ item: bucketItem, nbt: bucketNbt }],
-			results: [
-				{ item: 'minecraft:bucket' },
-				{ amount: 1000, fluid: 'create:potion', nbt: fluidNbt }
-			]
-		}).id('creativeengineering:create_emptying/potion_bucket/' + idSuffix)
+		R.createEmptying([i.bucket, Fluid.of(f.create_potion, 1000, fluidNbt)], Item.of(bucketItem, bucketNbt), e, 'potion_bucket/' + idSuffix)
 
 		n += 5
 	})
@@ -111,12 +93,9 @@ while (it.hasNext()) {
 
 	BOTTLES.forEach(function (bt) {
 		var bottle = bt[0], outItem = bt[1]
-		e.custom({
-			type: 'immersiveengineering:bottling_machine',
-			fluid: { tag: 'forge:fluid/potion', amount: 250, nbt: '{Bottle:"' + bottle + '",Potion:"' + pid + '"}' },
-			inputs: [{ item: 'minecraft:glass_bottle' }],
-			results: [{ item: outItem, nbt: '{Potion:"' + pid + '"}' }]
-		}).id('creativeengineering:bottling/create_potion/' + idBase + '_' + bottle.toLowerCase())
+		R.ieBottling(Item.of(outItem, '{Potion:"' + pid + '"}'),
+			{ tag: f.t_potion, amount: 250, nbt: '{Bottle:"' + bottle + '",Potion:"' + pid + '"}' },
+			i.glass_bottle, e, 'create_potion/' + idBase + '_' + bottle.toLowerCase())
 		n++
 	})
 

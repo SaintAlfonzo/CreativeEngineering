@@ -48,11 +48,7 @@
 	var $ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')
 
 	function enabled() {
-		try {
-			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig').wildFlowersEnabled() == true
-		} catch (err) {
-			return true   // older jar: no switch
-		}
+		return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig').wildFlowersEnabled() == true
 	}
 
 	function readJson(path) {

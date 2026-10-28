@@ -9,9 +9,10 @@ with no item at all on their JEI page (JEED's own sources plus the pack's provid
 
 Source data:
   kubejs/exported/mob_effects.json, potions.json    /dumppotions
-  mods/*.jar, vinery_upstream/*-1.5.5.jar           every en_us lang table the client loads (the Vinery port reads
-  kubejs/assets/**/lang/en_us.json                  its lang from the donor jar), then enabled resource-pack zips
-  resourcepacks/*.zip (options.txt order)           on top, as the client stacks them
+  lang_index.build()                                every en_us lang table the client loads: vanilla and Forge
+                                                    jars, *_upstream/*.jar (the ports read their lang there),
+                                                    mods/*.jar with their jar-in-jar members, kubejs/assets, client
+                                                    script renames, then enabled resource-pack zips on top
   feature_writeup/effects.md                        for EFFECT_OVERRIDES below: effects the ports add or drop
   kubejs/exported/food/foods.json                   /dumpfood: FoodProperties effects, which JEED lists by itself
   mods/jeed-*.jar data/jeed/recipes                 JEED's own effect_provider recipes
@@ -19,7 +20,7 @@ Source data:
   kubejs/startup_scripts/func/{armor,tool}_effects.js   plus the gear registries and the Vinery [wine] effects
   config/vinery-common.toml, config/jeed-client.toml    config it reads; hidden_effects need no source
 
-Vanilla's own lang lives in the client jar, so vanilla potions are skipped in the name check.
+Vanilla potions are skipped in the name check (the game names them itself).
 
     python3 tools/effect_audit.py           summary + problems
     python3 tools/effect_audit.py --json    the full per-effect / per-potion table as JSON
@@ -30,9 +31,11 @@ import sys
 import zipfile
 from pathlib import Path
 
-INSTANCE = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import lang_index  # noqa: E402
+
+INSTANCE = lang_index.INSTANCE
 EXPORTED = INSTANCE / 'kubejs/exported'
-DONOR_JARS = [INSTANCE / 'vinery_upstream/letsdo-vinery-fabric-1.5.5.jar']
 PLACEHOLDER = 'TODO: write a description'
 
 # The last /dumppotions ran before the Vinery port went into mods/ (2026-10-19): it dropped these three
@@ -52,37 +55,10 @@ EFFECT_ID = re.compile(r"'([a-z0-9_]+:[a-z0-9_]+)'")
 
 
 def load_lang():
-    lang = {}
-
-    def add(raw, src):
-        try:
-            obj = json.loads(raw.decode('utf-8-sig'))
-        except ValueError:
-            return
-        for k, v in obj.items():
-            lang[k] = (v, src)
-
-    def add_zip(path, src):
-        try:
-            with zipfile.ZipFile(path) as z:
-                for n in z.namelist():
-                    if re.match(r'assets/[^/]+/lang/en_us\.json$', n):
-                        add(z.read(n), src)
-        except (zipfile.BadZipFile, FileNotFoundError):
-            pass
-
-    for jar in sorted((INSTANCE / 'mods').glob('*.jar')):
-        add_zip(jar, jar.name)
-    for jar in DONOR_JARS:
-        add_zip(jar, jar.name)
-    for f in sorted((INSTANCE / 'kubejs/assets').glob('*/lang/en_us.json')):
-        add(f.read_bytes(), str(f.relative_to(INSTANCE)))
-    options = (INSTANCE / 'options.txt').read_text(errors='replace')
-    packs = json.loads(re.search(r'^resourcePacks:(.*)$', options, re.M).group(1))
-    for p in packs:
-        if p.startswith('file/'):
-            add_zip(INSTANCE / 'resourcepacks' / p[5:], p)
-    return lang
+    """key -> (value, source label): every en_us key the client sees (tools/lang_index.py, which also reads the
+    vanilla and Forge jars, the jar-in-jar members and the upstream jars the ports read)."""
+    names, source = lang_index.build()
+    return {k: (v, source[k]) for k, v in names.items()}
 
 
 def jei_sources(potions):

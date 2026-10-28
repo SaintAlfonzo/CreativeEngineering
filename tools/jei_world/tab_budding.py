@@ -121,7 +121,7 @@ def _harvest_row(ctx, cache, block_ids, requires, extra_notes=()):
     table = _loot(ctx, block_ids[0], cache)
     found = drops(table)
     if not found:
-        return row([blocks(block_ids)], [item('minecraft:barrier', label='Drops nothing')],
+        return row([blocks(block_ids)], [block('minecraft:air')],
                    notes=['Drops nothing, even with Silk Touch.', *extra_notes], requires=requires)
     outs = [_drop_ing(d) for d in found][:6]
     notes = list(extra_notes)

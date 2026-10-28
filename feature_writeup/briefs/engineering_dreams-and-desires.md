@@ -596,3 +596,27 @@ None: every row of this subfamily is Planned.
 
 None. The linked writeups (nether_worldgen.md F7, blockrunner.md 3.5, mob_block_tweaks.md) match the code and the
 1.0.9 deploy.
+
+## Extra woods: overlap survey (scratchpad 2026-10-27)
+
+For `engineering/dreams-and-desires #4`. D&D adds four woods with no tree, sapling or worldgen (logs are creative only).
+
+- Blocks every D&D wood has (13): log, wood, stripped log, stripped wood, planks, slab, stairs, fence, fence gate, door,
+  trapdoor, button, pressure plate.
+- rose: no overlap by name (not rose quartz, rose gold or rose bush). Needs a visual check against Quark blossom and cherry wood.
+- smoked: overlaps Immersive Weathering's charred wood (log, planks, slab, stairs, fence, gate); IE treated wood
+  (planks only) is the brief's option B.
+- rubber: overlaps myrtrees rubberwood, the pack's real rubber tree (log, planks, leaves, sapling, latex). Related:
+  create_dd raw_rubber / rubber / rubber_block / padded rubber are not wood and stay (rubber chain is #2).
+- spirit: no overlap by name. Needs a visual check against Quark ancient and the nether woods.
+- Generated for each of the 4 woods (removing a wood removes these too): Every Compat af 7 (bench, chair, drawer,
+  planter_box, shelf, shutter, table), ap 5 (boards, slab, stairs, wall, railing), bd 3 (blinds, picture_frame,
+  trellis), c 2 (window, window_pane), db 4 (beam, palisade, seat, support), dd 2 (short and tall door), fd 1 (cabinet),
+  hc 16 (bench, board, chair, corner_trim, couch, counter, cupboard, desk, dining_bench, drawer, fancy_bed, nightstand,
+  pillar_trim, shelf, side_table, table), lc 4 (auction_stand, bookshelf_trader, shelf, shelf_2x2), q 8 (hollow_log,
+  bookshelf, chest, ladder, post, trapped_chest, stripped_post, vertical_planks), sd 7 (drawers, trim), tw 1 (table).
+- Overlap inside Every Compat itself, for every wood in the pack: bench af / hc, chair af / hc, drawer af / hc / sd,
+  shelf af / hc / lc, table af / hc / tw, cabinet fd vs cupboard hc, trellis bd vs lattice.
+- Other: supplementaries sign_post and hanging_sign, suppsquared item_shelf, IW bark (compost 0.8), railways tracks
+  (3 widths + incomplete, 6 each).
+- Recommendation (owner list): keep smoked; remove rose, spirit and rubber (rubber duplicates myrtrees).

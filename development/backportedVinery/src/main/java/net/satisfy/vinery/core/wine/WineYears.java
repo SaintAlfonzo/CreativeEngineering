@@ -10,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.satisfy.vinery.forge.VineryConfig;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -24,11 +23,9 @@ import java.util.Locale;
  * A wine stack carries {@code WineYear {brewedAt, storedSince, storedTicks, bonusTicks, storageRate, storageKind}}, all in clock
  * ticks (upstream's WINE_YEAR component in days). Unlike upstream, the day / year lengths and level settings are read
  * from config when needed rather than copied into each stack, so changing the scale re-scales every wine at once.
- * 1.3.10 wines ({@code Year} = world-day year) convert once, keeping their age in years (W8).
  */
 public class WineYears {
     public static final String TAG = "WineYear";
-    private static final String LEGACY_YEAR = "Year";
     private static final String LABEL = "label.vinery_backport.storage.";
     /**
      * storageKind bits: no sky light (cellar, otherwise sunny) and a cold or warm spot (Brewin' and Chewin's keg
@@ -62,27 +59,6 @@ public class WineYears {
         return data(wine) != null;
     }
 
-    public static boolean hasLegacyYear(ItemStack wine) {
-        CompoundTag tag = wine.getTag();
-        return tag != null && !tag.contains(TAG, 10) && tag.contains(LEGACY_YEAR, 3);
-    }
-
-    /** W8: a 1.3.10 wine gets a brew time that keeps its age in years. Server side; the client shows the same estimate. */
-    public static void convertLegacy(ItemStack wine, Level level) {
-        if (!hasLegacyYear(wine) || level == null) {
-            return;
-        }
-        CompoundTag tag = wine.getOrCreateTag();
-        int legacyYearLength = Math.max(1, VineryConfig.LEGACY_YEAR_LENGTH_DAYS.get());
-        long legacyNow = level.getDayTime() / 24000L / legacyYearLength;
-        long ageYears = Math.max(0, legacyNow - tag.getInt(LEGACY_YEAR));
-        VintageClock.Snapshot clock = VintageClock.of(level);
-        long ageTicks = (long) (ageYears * clock.ticksPerYear());
-        tag.remove(LEGACY_YEAR);
-        CompoundTag data = fresh(clock.ticks() - ageTicks);
-        tag.put(TAG, data);
-    }
-
     private static CompoundTag fresh(long brewedAt) {
         CompoundTag data = new CompoundTag();
         data.putLong("brewedAt", brewedAt);
@@ -98,11 +74,6 @@ public class WineYears {
     public static long getWineAgeTicks(ItemStack wine, Level level) {
         if (level == null || !isAgingEnabled()) {
             return 0;
-        }
-        if (hasLegacyYear(wine)) {
-            ItemStack copy = wine.copy();
-            convertLegacy(copy, level);
-            return getWineAgeTicks(copy, level);
         }
         CompoundTag data = data(wine);
         if (data == null) {
@@ -191,10 +162,10 @@ public class WineYears {
             Class<?> heat = Class.forName("umpaz.brewinandchewin.common.utility.BnCHeatSources");
             return MethodHandles.publicLookup().findStatic(heat, "climate", MethodType.methodType(int.class, Level.class, BlockPos.class));
         } catch (ClassNotFoundException e) {
-            return null;
-        } catch (ReflectiveOperationException e) {
-            LoggerFactory.getLogger("vinery").warn("Brewin' and Chewin' has no BnCHeatSources.climate; wine storage is never cold or warm ({})", e.toString());
-            return null;
+            return null; // Brewin' not installed
+        } catch (NoSuchMethodException | IllegalAccessException e) {
+            // both ports ship together: a mismatch is a broken build, not a supported setup
+            throw new IllegalStateException("the Brewin' and Chewin' port has no public BnCHeatSources.climate(Level, BlockPos)", e);
         }
     }
 
@@ -204,7 +175,7 @@ public class WineYears {
     }
 
     public static int getEffectLevel(ItemStack wine, Level level) {
-        if (!hasWineYear(wine) && !hasLegacyYear(wine)) {
+        if (!hasWineYear(wine)) {
             return 0;
         }
         VintageClock.Snapshot clock = VintageClock.of(level);
@@ -213,7 +184,7 @@ public class WineYears {
     }
 
     public static int getEffectDuration(ItemStack wine, Level level, int baseDuration) {
-        if (!hasWineYear(wine) && !hasLegacyYear(wine)) {
+        if (!hasWineYear(wine)) {
             return baseDuration;
         }
         VintageClock.Snapshot clock = VintageClock.of(level);
@@ -226,12 +197,10 @@ public class WineYears {
     public static void setWineYear(ItemStack wine, Level level) {
         VintageClock.Snapshot clock = VintageClock.of(level);
         long day = (long) (clock.ticks() / clock.ticksPerDay());
-        wine.getOrCreateTag().remove(LEGACY_YEAR);
         wine.getOrCreateTag().put(TAG, fresh((long) (day * clock.ticksPerDay())));
     }
 
     public static void startStorage(ItemStack wine, Level level, BlockPos pos) {
-        convertLegacy(wine, level);
         if (!hasWineYear(wine)) {
             setWineYear(wine, level);
         }
@@ -245,7 +214,6 @@ public class WineYears {
     }
 
     public static void stopStorage(ItemStack wine, Level level) {
-        convertLegacy(wine, level);
         CompoundTag data = data(wine);
         if (data != null && data.getLong("storedSince") >= 0) {
             long stored = Math.max(0, VintageClock.of(level).ticks() - data.getLong("storedSince"));
@@ -258,7 +226,6 @@ public class WineYears {
     }
 
     public static void setWineAgeDays(ItemStack wine, Level level, int days) {
-        convertLegacy(wine, level);
         if (!hasWineYear(wine)) {
             setWineYear(wine, level);
         }
@@ -271,7 +238,7 @@ public class WineYears {
     /** Clock ticks until the next effect level (at the current storage rate), -1 when fully aged. */
     public static long getTicksUntilNextLevel(ItemStack wine, Level level) {
         VintageClock.Snapshot clock = VintageClock.of(level);
-        if (!hasWineYear(wine) && !hasLegacyYear(wine) || getEffectLevel(wine, level) >= clock.maxLevel()) {
+        if (!hasWineYear(wine) || getEffectLevel(wine, level) >= clock.maxLevel()) {
             return -1;
         }
         double ticksPerLevel = clock.ticksPerYear() * clock.yearsPerEffectLevel();

@@ -6,8 +6,6 @@ var i = global.item
 var f = global.fluid
 var R = global.NCH
 
-i.mundane_potion = { type: 'forge:nbt', item: 'minecraft:potion', nbt: { Potion: 'minecraft:mundane' } };
-
 // ############################## Vanilla ##############################
 
 //redstone torch

@@ -27,6 +27,12 @@ ServerEvents.recipes(e => {
 		// Make smoking
 		R.remove({ id: 'pneumaticcraft:sourdough_bread' }, e)
 		R.smoking(i.sourdough_bread, i.sourdough, e)
+		// Oven: sourdough has its own bread, so it bakes into that and not plain bread (farmersdelight/recipes.js "Bread from
+		// dough"; TODO baking/baked-goods #31), 1 / 3 / 6 on a baking sheet
+		;[1, 3, 6].forEach(k => {
+			R.ceBaking([k > 1 ? { id: i.sourdough, count: k } : i.sourdough], Item.of(i.sourdough_bread, k), e, 'sourdough_bread_' + k,
+				{ exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet })
+		})
 		// slice to 2 bread
 		if (Platform.isLoaded('farmersdelight')) {
 			R.fdCutting(i.sourdough_bread, i.any_knife, Item.of(i.bread, 2), e)

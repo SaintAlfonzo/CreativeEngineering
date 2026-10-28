@@ -337,6 +337,11 @@ Breaking a wild plant keeps VD's drops: the planting item plus a 20 % roll of th
   Supplementaries soft fluid with its own colour ([mixed_jars.md](mixed_jars.md), `dishes/ingredients #13`).
 - Stack sizes by `gen_stack_sizes.py` rules (bowl meals 32, drinks 32, placed cakes and feasts 8); placeables through
   `/dumpplaceable` + `placeable_catalog.py`; feasts in the Feast Plating JEI tab.
+- Own values (Creative Delight `veggiesdelight/veggies_foods.js`, 2026-10-28, owner): Coleslaw 11 hunger (was 8),
+  modifier 0.6 kept; Fermented Garlic Honey Regeneration II 5 s and Health Boost II 30 s (were I / I, 5 s; TODO
+  `dishes/pickles-and-ferments #10`). SQ-CM-05. Coleslaw at 11 hunger may change its Comfort / Nourishment length on
+  the next `/dumpall` + `gen_comfort_nourishment.py` run (R5 uses output hunger).
+- Gnocchi (`potato_noodle`) is a `#forge:pasta` (2026-10-28, TODO `dishes/meals #38`): every pasta recipe takes it.
 
 ### 4.7 Cooking rules folded in
 
@@ -463,7 +468,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
   reads `#forge:sliced_potato`; the work is the slice item).
 - [TODO](todo/TODO.md) `dishes/meals #35`: steak and broccoli accepts rice, mashed potatoes, any baked potato plus a bowl, and other
   baked veggies plus a bowl.
-- [TODO](todo/TODO.md) `ports/veggiesport #2` (folded): merge fish and cod and chips (marked merge M1 above).
+- [TODO](todo/TODO.md) `merges/dishes #1 to #3` (folded): merge fish and cod and chips (marked merge M1 above).
 
 ### 5.5 Built 2026-10-25: mhadjeb removed, gnocchi (TODO `dishes/meals #32`, `#33`)
 

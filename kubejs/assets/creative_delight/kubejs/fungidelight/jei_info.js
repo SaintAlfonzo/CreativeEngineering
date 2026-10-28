@@ -4,7 +4,7 @@
 // (jei_coverage.md 4.11). Creative Delight QoL-6 (creative_delight.md 8; moved from client_scripts/jei_info.js
 // 2026-10-25), switch [qol] jeiInfoPages. Pages for another member go in that member's folder, headed the same way.
 JEIEvents.information(e => {
-	if (!global.CD || !global.CD.qol('jeiInfoPages')) return
+	if (!global.CD.qol('jeiInfoPages')) return
 	var i = global.item
 
 	// Fungi Delight port (fungi_delight.md 5.1.1, step 18)

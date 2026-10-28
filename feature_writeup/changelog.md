@@ -406,6 +406,8 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
   `PoseStack ... invalid dist` lines than a boot with the previous 1.1.01 dev jar (19 vs 17), both in the KubeJS load
   phase like the rest, not traced (that jar also lacks other uncommitted changes); worth a look on the real server.
 - [ ] **CL-12 fresh install:** delete `config/creativeengineering/changelog_seen.txt` → the bubble shows once.
+- [ ] **CL-13 tooltip not covered:** with the bubble showing, hover or Tab-focus the book button → the bubble hides
+  and the "What's New" tooltip is fully visible; it returns when the button loses hover and focus.
 
 ## 8. History
 

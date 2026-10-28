@@ -14,6 +14,10 @@ import java.util.List;
  * <p>
  * Wine ages in months (time.md 3.7, alcohol.md B7.8): a month is one Serene Seasons sub-season of world days, and the
  * clock follows the sun. The Java names still say "year"; only the keys and the text changed.
+ * <p>
+ * The aging code reads the clock, lengths, levels and boosts through the getters at the bottom ({@link #clockMode()}
+ * and on): while the pack's {@code [time]} master is on ({@link PackTime}) they come from there, and the matching keys
+ * here are not used. Every other key is this mod's own.
  */
 public final class VineryConfig {
     public static final ForgeConfigSpec SPEC;
@@ -52,7 +56,6 @@ public final class VineryConfig {
     public static final ForgeConfigSpec.DoubleValue PLAYTIME_HOURS_PER_YEAR;
     public static final ForgeConfigSpec.EnumValue<DayUnit> DAY_UNIT;
     public static final ForgeConfigSpec.DoubleValue WORLD_DAY_MINUTES;
-    public static final ForgeConfigSpec.IntValue LEGACY_YEAR_LENGTH_DAYS;
 
     // [banner]
     public static final ForgeConfigSpec.BooleanValue BANNER_GIVE_EFFECT;
@@ -71,6 +74,8 @@ public final class VineryConfig {
     public static final ForgeConfigSpec.DoubleValue TRADER_SPAWN_CHANCE;
     public static final ForgeConfigSpec.BooleanValue TRADER_SPAWN_WITH_MULES;
     public static final ForgeConfigSpec.IntValue TRADER_SPAWN_DELAY;
+    public static final ForgeConfigSpec.BooleanValue TRADER_OWN_SPAWNER;
+    public static final ForgeConfigSpec.IntValue TRADER_OWN_SPAWNER_INTERVAL;
 
     // [villager]
     public static final List<ForgeConfigSpec.ConfigValue<List<? extends String>>> VILLAGER_TRADES = new ArrayList<>();
@@ -132,30 +137,28 @@ public final class VineryConfig {
         AGING_ENABLED = b.comment("Wines age at all").define("agingEnabled", true);
         AGE_ONLY_IN_STORAGE = b.comment("Wines only age while they sit in a storage block (rack, shelf, placed bottle...)").define("ageOnlyInStorage", false);
         MAX_DURATION = b.comment("Longest effect a wine can reach, in ticks").defineInRange("maxDuration", 15000, 1, 100000);
-        MAX_LEVEL = b.comment("Highest effect level from aging").defineInRange("maxLevel", 5, 0, 10);
+        MAX_LEVEL = b.comment("Highest effect level from aging (the pack's [time] master replaces this while it is on)").defineInRange("maxLevel", 5, 0, 10);
         DURATION_PER_YEAR = b.comment("Effect ticks a wine gains per month of age").defineInRange("durationPerMonth", 200, 0, 10000);
-        CELLAR_AGING_MULTIPLIER = b.comment("Aging speed in a storage block with no sky light").defineInRange("cellarAgingMultiplier", 2.0, 1, 5);
+        CELLAR_AGING_MULTIPLIER = b.comment("Aging speed in a storage block with no sky light (the pack's [time] master replaces this while it is on)").defineInRange("cellarAgingMultiplier", 2.0, 1, 5);
         COLD_AGING_MULTIPLIER = b.comment("Aging speed in a cold storage block: Brewin' and Chewin's freeze sources outweigh its heat sources",
-                "nearby (the keg's chilly or colder). Multiplies with the cellar bonus").defineInRange("coldAgingMultiplier", 2.0, 1, 5);
+                "nearby (the keg's chilly or colder). Multiplies with the cellar bonus (the pack's [time] master replaces this while it is on)").defineInRange("coldAgingMultiplier", 2.0, 1, 5);
         WARM_AGING_MULTIPLIER = b.comment("Aging speed in a warm storage block: Brewin' and Chewin's heat sources outweigh its freeze sources",
-                "nearby (the keg's warm or hotter). Multiplies with the cellar bonus").defineInRange("warmAgingMultiplier", 0.75, 0.1, 1);
-        DAYS_PER_YEAR = b.comment("Days per wine month: one Serene Seasons sub-season (the pack's 8 world days)").defineInRange("daysPerMonth", 8, 1, 100);
-        YEARS_PER_EFFECT_LEVEL = b.comment("Wine months per effect level (3 = one season)").defineInRange("monthsPerEffectLevel", 3, 1, 100);
+                "nearby (the keg's warm or hotter). Multiplies with the cellar bonus (the pack's [time] master replaces this while it is on)").defineInRange("warmAgingMultiplier", 0.75, 0.1, 1);
+        DAYS_PER_YEAR = b.comment("Days per wine month: one Serene Seasons sub-season (the pack's 8 world days) (the pack's [time] master replaces this while it is on)").defineInRange("daysPerMonth", 8, 1, 100);
+        YEARS_PER_EFFECT_LEVEL = b.comment("Wine months per effect level (3 = one season) (the pack's [time] master replaces this while it is on)").defineInRange("monthsPerEffectLevel", 3, 1, 100);
         EFFECTS = b.comment("wine|effect|amplifier|durationTicks per wine (1.5.5 defaults plus the two 1.3.10 wines the port keeps)")
                 .defineList("effects", defaultEffects(), o -> o instanceof String);
         b.pop();
 
         b.push("aging");
-        CLOCK_MODE = b.comment("What moves the vintage clock wines age on: PLAYTIME (a player is online), SERVER_TICKS (always, 1.5.5), WORLD_TIME (overworld day time like the seasons; sleeping ages wine)")
+        CLOCK_MODE = b.comment("What moves the vintage clock wines age on: PLAYTIME (a player is online), SERVER_TICKS (always, 1.5.5), WORLD_TIME (overworld day time like the seasons; sleeping ages wine) (the pack's [time] master replaces this while it is on)")
                 .defineEnum("clockMode", ClockMode.WORLD_TIME);
         PLAYTIME_HOURS_PER_YEAR = b.comment("Real hours of clock time per wine month (dayUnit AGING)")
                 .defineInRange("playtimeHoursPerMonth", 8.0, 0.01, 10000);
-        DAY_UNIT = b.comment("AGING: a day is playtimeHoursPerMonth / daysPerMonth. WORLD: a day is one world day as players see it (worldDayMinutes). DAYTIME: sunrise to sunrise; always used when clockMode is WORLD_TIME")
+        DAY_UNIT = b.comment("AGING: a day is playtimeHoursPerMonth / daysPerMonth. WORLD: a day is one world day as players see it (worldDayMinutes). DAYTIME: sunrise to sunrise; always used when clockMode is WORLD_TIME (the pack's [time] master replaces this while it is on)")
                 .defineEnum("dayUnit", DayUnit.DAYTIME);
-        WORLD_DAY_MINUTES = b.comment("dayUnit WORLD: real minutes per world day. 0 = measure it from the overworld day time (follows Better Days)")
+        WORLD_DAY_MINUTES = b.comment("dayUnit WORLD: real minutes per world day. 0 = measure it from the overworld day time (follows Better Days) (the pack's [time] master replaces this while it is on)")
                 .defineInRange("worldDayMinutes", 0.0, 0, 100000);
-        LEGACY_YEAR_LENGTH_DAYS = b.comment("1.3.10 wines (Year NBT): the year_length_in_days the old jar used, to convert their age once (pack: 16)")
-                .defineInRange("legacyYearLengthDays", 16, 1, 1000);
         b.pop();
 
         b.push("banner");
@@ -171,10 +174,16 @@ public final class VineryConfig {
         b.pop();
 
         b.push("trader");
-        TRADER_SPAWN_CHANCE = b.comment("Chance that a Wandering Trader spawn is a Wandering Winemaker. The pack spawns the winemaker itself (patcherMod WinemakerSpawner): 0")
+        TRADER_SPAWN_CHANCE = b.comment("Chance that a Wandering Trader spawn is a Wandering Winemaker instead (1.5.5's swap).",
+                        "Adds to ownSpawner; the pack uses ownSpawner and 0 here")
                 .defineInRange("spawnChance", 0.0, 0, 1);
-        TRADER_SPAWN_WITH_MULES = b.define("spawnWithMules", true);
-        TRADER_SPAWN_DELAY = b.defineInRange("spawnDelay", 48000, 0, 72000);
+        TRADER_SPAWN_WITH_MULES = b.comment("The Winemaker comes with two leashed mules").define("spawnWithMules", true);
+        TRADER_SPAWN_DELAY = b.comment("Ticks a Winemaker stays before it leaves").defineInRange("spawnDelay", 48000, 0, 72000);
+        TRADER_OWN_SPAWNER = b.comment("Port: the Winemaker spawns on its own timer, independent of the Wandering Trader (a copy of",
+                        "vanilla's trader spawner: overworld, doMobSpawning and doTraderSpawning on, 25/50/75% then 1 in 10 per roll)")
+                .define("ownSpawner", true);
+        TRADER_OWN_SPAWNER_INTERVAL = b.comment("ownSpawner: ticks between rolls (vanilla's trader: 24000)")
+                .defineInRange("ownSpawnerInterval", 96000, 1200, 100_000_000);
         b.pop();
 
         b.push("villager");
@@ -213,6 +222,46 @@ public final class VineryConfig {
         b.pop();
 
         SPEC = b.build();
+    }
+
+    // ---------------------------------------------------------------- values the [time] master can supply
+
+    public static ClockMode clockMode() {
+        return PackTime.active() ? (PackTime.sunClock() ? ClockMode.WORLD_TIME : ClockMode.PLAYTIME) : CLOCK_MODE.get();
+    }
+
+    public static DayUnit dayUnit() {
+        return PackTime.active() ? (PackTime.sunClock() ? DayUnit.DAYTIME : DayUnit.WORLD) : DAY_UNIT.get();
+    }
+
+    public static double worldDayMinutes() {
+        return PackTime.active() ? PackTime.worldDayMinutes() : WORLD_DAY_MINUTES.get();
+    }
+
+    /** Days per wine month. */
+    public static int daysPerYear() {
+        return PackTime.active() ? PackTime.daysPerMonth() : DAYS_PER_YEAR.get();
+    }
+
+    /** Wine months per effect level. */
+    public static int yearsPerEffectLevel() {
+        return PackTime.active() ? PackTime.monthsPerLevel() : YEARS_PER_EFFECT_LEVEL.get();
+    }
+
+    public static int maxLevel() {
+        return PackTime.active() ? PackTime.maxLevel() : MAX_LEVEL.get();
+    }
+
+    public static double cellarAgingMultiplier() {
+        return PackTime.active() ? PackTime.cellarMultiplier() : CELLAR_AGING_MULTIPLIER.get();
+    }
+
+    public static double coldAgingMultiplier() {
+        return PackTime.active() ? PackTime.coldMultiplier() : COLD_AGING_MULTIPLIER.get();
+    }
+
+    public static double warmAgingMultiplier() {
+        return PackTime.active() ? PackTime.warmMultiplier() : WARM_AGING_MULTIPLIER.get();
     }
 
     private static List<String> defaultEffects() {

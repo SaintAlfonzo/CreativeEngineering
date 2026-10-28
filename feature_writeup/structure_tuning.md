@@ -572,8 +572,9 @@ first (the roll is deterministic), so nothing is computed for it.
    brick plates, since 1.0.7, DEPLOYED 2026-10-18; 3.23).
 2. where each stands in the world: piece position + rotation and mirror (the same transform the placement uses).
 3. what the generator's own terrain holds there: `ChunkGenerator#getBaseColumn` for the column (read once per
-   `sampleGrid` x `sampleGrid` cell, 2 by default, and cached per start), then the block at that Y: water, air, or
-   solid.
+   `sampleGrid` x `sampleGrid` cell, 4 by default (2 until 2026-10-27), and cached per start and, with
+   `[worldgen.systems] sharedTerrainCache`, across starts, predictions and retries: perf.md 10.8), then the block at
+   that Y: water, air, or solid.
 4. **the beard** (since 2026-10-13, 7.3.1): the structure's terrain adaptation fills air and water under its pieces
    with ground before the template is placed (vanilla's `beard_thin` / `beard_box`, the pack's soft beard, `bury`).
    So earth over water or air counts only where the ground under it lies more than the beard's reach below the
@@ -622,7 +623,7 @@ the ground column by column, so they never hang.
 | `baseLayers` | 3 | template layers from the bottom that count as foundation |
 | `blocks` | `["creativeengineering:earth_fill/earth"]` | block tags that count as earth |
 | `overrides` | `[]` | per-structure limits: `"<id or #structure tag>=<water>,<air>[,<mound>]"`, first match wins, replaces the size's limits (mound left out = the size's), e.g. `"philipsruins:ancient_ruins=0,16"` or `"#creativeengineering:type/village=-1,-1,-1"` |
-| `sampleGrid` | 2 | terrain read once per N x N cells (1 = every column) |
+| `sampleGrid` | 4 | terrain read once per N x N cells (1 = every column); 2 until 2026-10-27 (perf.md 10.8) |
 | `log` | `CANCELLED` | `CANCELLED` logs each cancelled start, `ALL` every start that has earth in its base (and counts it fully), `OFF` |
 
 `[worldgen.earth_fill.sizes]`: `bounds = [150, 600, 2000]` (earth base blocks where medium, large and huge start), and
@@ -786,7 +787,7 @@ should be near 0, and a few dozen blocks into dry ground or air is already a vis
 cancel), plus:
 - The seabed test reads the column's top non-air block, so a lake or river bed counts as seabed too, and a column whose
   surface the noise puts in an aquifer lake is "under water" even if a surface rule later makes it dry.
-- At `sampleGrid` 2 a shoreline is resolved to 2 blocks; a ruin touching a beach may count a few blocks either way.
+- At `sampleGrid` 4 a shoreline is resolved to 4 blocks; a ruin touching a beach may count a few blocks either way.
 - Water a processor adds or removes at placement is not seen; only the template's own blocks count.
 
 ### 3.15 Terrain adaptation by tag, the soft beard and template trim (added 2026-10-09)
@@ -3162,3 +3163,6 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
   mimic frequency lowered to keep its rate. Tests ST-225 to ST-227. Not run.
 - 2026-10-24: planned from the scratchpad: desert structures in water, rare ice (`structures/earthfill #11`, `blocks/new #12`). No code changed.
 - 2026-10-25: deadwood metas and doubled Geophilic stumps / fallen logs (3.25, TODO `farming/trees #2`). Tests ST-228 to ST-231. Not run.
+- 2026-10-27: worldgen performance work, details and measurements in [perf.md](perf.md) 10.6 to 10.9 and 11.2 (TODO `server #13, #14, #18`). Built: `DimensionFilter` (structure checks skipped in dimensions they do not belong to), the `kubejs/data` Tectonic cliffs override, the shared terrain cache for EarthFill and PlacementPriority, `sampleGrid` 2 -> 4, `FirstTickWater` (no item drops from generated water in a settling window after a chunk first ticks), and the stronghold ring position cache in the world's data. Options 1-4 together: pregen 5:26 -> 3:50, census 886 -> 424 s. Tests SQ-WGP-01 to -08, SQ-FTW-01 to -06, SQ-RING-01 to -03, CQ-WGP-01/-02, CQ-FTW-01. Option 5 (reuse predicted starts) will not be built. Open: Terralith underground census false negatives (`structures/testing #4`).
+
+- 2026-10-28: planned from the scratchpad: more water-replace checks for lakes, tent camps and ruins floating in water, seen on a client scratch server (TODO `structures/earthfill #12`). No code changed.

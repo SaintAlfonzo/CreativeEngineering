@@ -3,6 +3,7 @@ ServerEvents.tags('item', e => {
 console.log('misctagremoval starting')
 
 var i = global.item;
+var t = global.tags
 
 // Chestplates that glide but aren't a vanilla ElytraItem — patcherMod's Easy Elytra
 // Takeoff mixins read this (EasyElytraTakeoffHelperMixin = rocket-takeoff is allowed at
@@ -42,68 +43,24 @@ global.tags.add(e, 'creativeengineering:hoe_harvest/4x4', [i.diamond_hoe, i.neth
 global.tags.add(e, 'creativeengineering:hoe_harvest/5x5', [i.echo_hoe, i.felsic_hoe, i.dragon_hoe])
 
 // Add fletching tag to feathers and fletchings
-e.add('forge:fletching', i.feather)
-e.add('forge:fletching', i.arrow_fletching)
-e.add('forge:fletching', i.roadrunner_feather)
+t.add(e, 'forge:fletching', [i.feather, i.arrow_fletching, i.roadrunner_feather])
 
-// Shaft tags
+// Shaft tags: every shaft is in forge:arrow_shaft plus its kinds' forge:arrow_shaft/<kind>
+const shaft = (id, kinds) => t.add(e, ['forge:arrow_shaft'].concat(kinds.map(k => 'forge:arrow_shaft/' + k)), id)
 //Light
-e.add('forge:arrow_shaft', i.rod_aluminum)
-e.add('forge:arrow_shaft/metal', i.rod_aluminum)
-e.add('forge:arrow_shaft/light', i.rod_aluminum)
-
+shaft(i.rod_aluminum, ['metal', 'light'])
 //Heavy
-e.add('forge:arrow_shaft', i.rod_lead)
-e.add('forge:arrow_shaft/metal', i.rod_lead)
-e.add('forge:arrow_shaft/heavy', i.rod_lead)
-
-e.add('forge:arrow_shaft', i.rod_uranium)
-e.add('forge:arrow_shaft/metal', i.rod_uranium)
-e.add('forge:arrow_shaft/heavy', i.rod_uranium)
-
+shaft(i.rod_lead, ['metal', 'heavy'])
+shaft(i.rod_uranium, ['metal', 'heavy'])
 //Quick
-e.add('forge:arrow_shaft', i.rod_silver)
-e.add('forge:arrow_shaft/metal', i.rod_silver)
-e.add('forge:arrow_shaft/quick', i.rod_silver)
-
-e.add('forge:arrow_shaft', i.rod_electrum)
-e.add('forge:arrow_shaft/metal', i.rod_electrum)
-e.add('forge:arrow_shaft/quick', i.rod_electrum)
-
-e.add('forge:arrow_shaft', i.rod_gold)
-e.add('forge:arrow_shaft/metal', i.rod_gold)
-e.add('forge:arrow_shaft/quick', i.rod_gold)
-
-e.add('forge:arrow_shaft', i.rod_rose_gold)
-e.add('forge:arrow_shaft/metal', i.rod_rose_gold)
-e.add('forge:arrow_shaft/quick', i.rod_rose_gold)
-
+;[i.rod_silver, i.rod_electrum, i.rod_gold, i.rod_rose_gold].forEach(id => shaft(id, ['metal', 'quick']))
 //Metal
-e.add('forge:arrow_shaft', i.rod_copper)
-e.add('forge:arrow_shaft/metal', i.rod_copper)
-e.add('forge:arrow_shaft', i.rod_iron)
-e.add('forge:arrow_shaft/metal', i.rod_iron)
-e.add('forge:arrow_shaft', i.rod_zinc)
-e.add('forge:arrow_shaft/metal', i.rod_zinc)
-e.add('forge:arrow_shaft', i.rod_nickel)
-e.add('forge:arrow_shaft/metal', i.rod_nickel)
-e.add('forge:arrow_shaft', i.rod_brass)
-e.add('forge:arrow_shaft/metal', i.rod_brass)
-e.add('forge:arrow_shaft', i.rod_constantan)
-e.add('forge:arrow_shaft/metal', i.rod_constantan)
-e.add('forge:arrow_shaft', i.rod_steel)
-e.add('forge:arrow_shaft/metal', i.rod_steel)
-
+;[i.rod_copper, i.rod_iron, i.rod_zinc, i.rod_nickel, i.rod_brass, i.rod_constantan, i.rod_steel].forEach(id => shaft(id, ['metal']))
 //Blazing
-e.add('forge:arrow_shaft', i.blaze_rod)
-e.add('forge:arrow_shaft/blazing', i.blaze_rod)
-
+shaft(i.blaze_rod, ['blazing'])
 //Wooden (last)
-e.add('forge:arrow_shaft', i.stick)
-e.add('forge:arrow_shaft/wooden', i.stick)
-
-e.add('forge:arrow_shaft', i.stick_treated)
-e.add('forge:arrow_shaft/wooden', i.stick_treated)
+shaft(i.stick, ['wooden'])
+shaft(i.stick_treated, ['wooden'])
 
 })
 

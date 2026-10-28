@@ -4,7 +4,6 @@
 // It records what existed when it ran; `/cdtest startup` checks the record.
 global.cdtestStartup = {
 	nch: typeof global.NCH,
-	nchApi: global.NCH ? global.NCH.apiVersion : null,
 	nsAtLoad: global.NCH && global.NCH.ns ? global.NCH.ns() : null,
 	tags: typeof global.tags,
 	compost: typeof global.compost,

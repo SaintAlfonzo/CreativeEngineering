@@ -7,7 +7,6 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var R = global.NCH
-	var F = global.foodFamily(e)
 
 	global.CD.recipes(() => {
 

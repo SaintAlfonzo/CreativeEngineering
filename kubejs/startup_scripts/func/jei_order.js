@@ -27,6 +27,8 @@
 //                                                             //   creative  creative tab order
 //     list:     [global.item.copper_sword, ...],              // exact ids: members (tagged too) and their order
 //     from:     ['@mod', '#forge:tag', 'minecraft:*_boat'],   // more members, tag side only (global.tags.addMatching)
+//     except:   [global.item.x, 'mod:*_part'],              // taken back out of `from` (ids, wildcards, '#tags'), e.g.
+//                                                             //   ids another node lists, so they don't conflict
 //     modOrder: [...],                                        // per-node override of the shared modOrder
 //   }
 // A node holds its own members before its children's. Multiblocks have no registry: their nodes place by `list`
@@ -90,7 +92,7 @@ global.jeiOrder = {
 		this.walk(type, (node, path) => {
 			const entries = (node.from || []).concat(node.list || [])
 			if (entries.length === 0) return
-			global.tags.addMatching(event, this.tagId(path), entries)
+			global.tags.addMatching(event, this.tagId(path), entries, node.except ? { except: node.except } : undefined)
 			tags++
 		})
 		console.log('[jeiOrder] ' + type + ': ' + tags + ' jei tags')
@@ -118,6 +120,8 @@ global.jeiOrder = {
 				out.list.forEach(e => { if (/^[#@\/]|[*?]/.test(e)) console.warn('global.jeiOrder: ' + type + ' node "' + path + '" list entry "' + e + '" is not an exact id (put patterns in `from`)') })
 			}
 			if (node.from) out.from = this._strings(node.from)
+			if (node.except) out.except = this._strings(node.except)
+			if (node.except && !node.from) console.warn('global.jeiOrder: ' + type + ' node "' + path + '" has `except` but no `from`')
 			if (node.from && !this.TAG_REGISTRY[type]) console.warn('global.jeiOrder: ' + type + ' node "' + path + '" has `from`, but ' + type + ' has no tags (use `list`)')
 			if (node.children) out.children = this._nodes(type, node.children, prefix.concat([id]))
 			return out

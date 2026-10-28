@@ -112,7 +112,7 @@ public final class VineryWthit implements IWailaCommonPlugin {
                     continue;
                 }
                 CompoundTag tag = stack(item);
-                if (item.getItem() instanceof DrinkBlockItem && (WineYears.hasWineYear(item) || WineYears.hasLegacyYear(item))) {
+                if (item.getItem() instanceof DrinkBlockItem && WineYears.hasWineYear(item)) {
                     tag.putInt("Years", Math.max(0, WineYears.getWineAgeYears(item, level)));
                     tag.putInt("Level", WineYears.getEffectLevel(item, level));
                     if (WineYears.isStored(item)) {

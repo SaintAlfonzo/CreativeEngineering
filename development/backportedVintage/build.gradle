@@ -6,11 +6,6 @@ plugins {
     id 'ce.forge-mod-refmap'
 }
 
-repositories {
-    // Third-party mod jars copied from ../../mods (git-ignored).
-    flatDir { dir 'libs' }
-}
-
 dependencies {
     // Farmer's Delight is the one hard dependency. fg.deobf remaps the SRG-named jars to Mojang names, so our classes
     // can extend its blocks (PieBlock, WildCropBlock, SafetyNetBlock) and items.
@@ -24,25 +19,4 @@ dependencies {
 // the 1.19.2 mappings by the Veggies port).
 minecraft {
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-
-// The two Lush Grass mixins use Mojang names and get a real refmap, like backportedBrewin.
-mixin {
-    add sourceSets.main, 'vintagedelight.refmap.json'
-    mixin_configs.split(',').each { config it.trim() }
-}
-
-tasks.named('compileJava', JavaCompile).configure {
-    outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
-}
-
-// Backstop: the mixin config must find its refmap in the jar.
-tasks.named('jar', Jar).configure {
-    doLast {
-        def jarFile = archiveFile.get().asFile
-        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
-        if (!entries.contains('vintagedelight.refmap.json')) {
-            throw new GradleException("vintagedelight.refmap.json is not in ${jarFile.name}")
-        }
-    }
 }

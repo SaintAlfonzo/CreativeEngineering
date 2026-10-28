@@ -171,19 +171,27 @@
         let o = level.getBlockState(h.above()).getOffset(level, h.above())
         check('KT-16b plateOffsetY moves the plate', Math.abs(o.y() * 16 + 3) < 1e-6, 'px y ' + (o.y() * 16))
         K.plateOffsetY.set(-1.0)
-        // not a support: a plate over air is refused as before
+        // not a support: Display Delight 1.7.0 keeps a plate over air and gives it a wooden leg (display_delight.md 3)
         let air = pos(11, Y + 2, 2)
         set(level, air, 'displaydelight:food_plate')
-        check('KT-15d plate over air is refused', !level.getBlockState(air).canSurvive(level, air), '')
+        let st = level.getBlockState(air).updateShape($KTDir.DOWN, level.getBlockState(air.below()), level, air, air.below())
+        check('KT-15d plate over air stays with a leg', st.canSurvive(level, air) && supportOf(st) == 'true', 'support ' + supportOf(st))
     }
 
-    // plates, plated foods and the coaster break with drops when the block below goes (on a counter or a full block)
+    // Display Delight's `support` state (the wooden leg); '-' for a block without it
+    function supportOf(state) {
+        let p = state.getBlock().getStateDefinition().getProperty('support')
+        return p == null ? '-' : String(state.getValue(p))
+    }
+
+    // when the block below goes: the coaster breaks with drops; Display Delight blocks (1.7.0) stay and grow their
+    // wooden leg (on a counter or a full block)
     function pops(level) {
         let cases = [
-            ['displaydelight:food_plate', 'minecraft:stone'],
-            ['displaydelight:plated_hamburger', 'minecraft:stone'],
-            ['displaydelight:food_plate', 'cookingforblockheads:counter'],
-            ['brewinandchewin:coaster', 'cookingforblockheads:counter'],
+            ['displaydelight:food_plate', 'minecraft:stone', 'leg'],
+            ['displaydelight:plated_hamburger', 'minecraft:stone', 'leg'],
+            ['displaydelight:food_plate', 'cookingforblockheads:counter', 'leg'],
+            ['brewinandchewin:coaster', 'cookingforblockheads:counter', 'pop'],
         ]
         cases.forEach((c, n) => {
             let h = pos(12, Y, n)
@@ -192,8 +200,14 @@
             drops(level, h)
             level.destroyBlock(h, false)
             let above = blockId(level, h.above())
-            check('KT-17 ' + c[0] + ' pops when its ' + c[1] + ' is broken', above == 'minecraft:air',
-                'above: ' + above + ', drops: ' + drops(level, h.above()))
+            if (c[2] == 'pop') {
+                check('KT-17 ' + c[0] + ' pops when its ' + c[1] + ' is broken', above == 'minecraft:air',
+                    'above: ' + above + ', drops: ' + drops(level, h.above()))
+            } else {
+                let leg = supportOf(level.getBlockState(h.above()))
+                check('KT-17 ' + c[0] + ' keeps a leg when its ' + c[1] + ' is broken', above == c[0] && leg == 'true',
+                    'above: ' + above + ', support ' + leg + ', drops: ' + drops(level, h.above()))
+            }
         })
     }
 

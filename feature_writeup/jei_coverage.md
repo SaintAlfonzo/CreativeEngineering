@@ -310,7 +310,7 @@ fluids can be generated from their JSON.
 | Architect's Palette | wither skeleton -> withered bone | GLM |
 | Twigs | leaves drop twigs; gravel -> pebbles; bamboo leaves **[I]** | GLM + LootTableLoadEvent |
 | The Dirty Stuff | tobacco seeds in plains village chests **[I]** | GLM |
-| **Pack** (LootJS, `loot/08_leaf_apples.js`, `09_crop_drops.js`, `05..40`) | oak/dark oak/rubberwood leaves no longer drop apples; bell pepper colour roll 1:1:1; chest loot retuning | LootJS = GLM: JER shows the **old** tables |
+| **Pack** (LootJS, `loot/08_leaf_apples.js`, `05..40`; CD `rusticdelight/crop_drops.js`) | oak/dark oak/rubberwood leaves no longer drop apples; bell pepper colour roll 1:1:1; chest loot retuning | LootJS = GLM: JER shows the **old** tables |
 | Create Deep Dark | warden -> echo ingot | hardcoded procedure |
 | Dragon Loot | dragon death -> scales per player | hardcoded |
 | Create Netherless | soul drop on death **[I]** | hardcoded |
@@ -482,8 +482,15 @@ Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). World-tab rows
 - [TODO](todo/TODO.md) `jei/jei-coverage #15`: Vintage Delight machines. The port ships only the Fermenting (Pickling Jar) category; the Cheese Mold, salt growth
   and the jam type have none. List what shows today from a `/dumprecipes` of the loaded jar, then add a page per type the
   player cannot guess ([vintage_delight.md](vintage_delight.md) 2.3).
-- [TODO](todo/TODO.md) `jei/jei-coverage #24`: the Tipped Arrows, Potion Buckets (`RowPagesCategory`) and Seasoning (`SeasoningCategory`) pages draw JEI's
-  crafting-table arrow; switch them to the Feast Plating / world-tab arrow (sprite 82,128, 24 x 17).
+- [TODO](todo/TODO.md) `jei/jei-coverage #24`: BUILT 2026-10-26: the Tipped Arrows, Potion Buckets (`RowPagesCategory`) and Seasoning
+  (`SeasoningCategory`) pages draw the Feast Plating / world-tab arrow (sprite 82,128, 24 x 17) from one helper,
+  `compat/jei/JeiArrow`, which Feast Plating and the world tabs use too; outputs moved right by 2 px. JC-30.
+- [TODO](todo/TODO.md) `jei/jei-coverage #7`: BUILT 2026-10-26: fluid amounts in every JEI tank (any mod's category, and the pack's)
+  are drawn on a curve, `config/creativeengineering-common.toml` `[jei] fluidAmountScale` = `LOG` (default), `SQRT` or
+  `LINEAR` (JEI's own). patcherMod `mixin/JeiFluidTankScaleMixin` on JEI 11.8.1's `FluidTankRenderer` fill height,
+  curve in `compat/jei/FluidTankScale`. In a 1000 mB tank (16 px): LOG 10 mB 6 px, 250 mB 13 px, 500 mB 14 px; SQRT 2,
+  8, 11; LINEAR 0 (1 px floor), 4, 8. The tank size is each category's choice, so an amount at or over it still fills
+  the tank. Takes effect at once. JC-31.
 
 ## 6. Offline checks
 
@@ -548,6 +555,12 @@ The covered/uncovered split comes from bytecode, not a running JEI. A few looks 
   `config/creativeengineering-common.toml` `[jei]`, rejoin: the four tabs are gone and the recipes are back on their
   old tabs (tipped arrows on Crafting again).
 - [ ] **JC-27 load time:** world join not noticeably slower than before.
+- [ ] **JC-30 arrows (2026-10-26):** Tipped Arrows, Potion Buckets and Seasoning pages show the same arrow as Feast
+  Plating; input, arrow and output slots line up, no overlap.
+- [ ] **JC-31 fluid scale (2026-10-26):** a page with small fluid amounts (Create spout filling a bottle, 250 mB, or a
+  Jar Storage row) shows the tank clearly part-filled, and 250 / 1000 mB look different; set `[jei]
+  fluidAmountScale = "SQRT"`, reopen: a milder curve; `"LINEAR"`: JEI's own thin sliver. No mixin warning for
+  `JeiFluidTankScaleMixin` in latest.log.
 
 ## 8. History
 

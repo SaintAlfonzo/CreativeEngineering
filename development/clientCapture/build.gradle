@@ -11,11 +11,6 @@ dependencies {
     compileOnly fileTree(dir: 'libs', include: '*.jar')
 }
 
-// Same approach as patcherMod: no Mixin refmap, mixins use SRG names with remap = false.
-tasks.named('compileJava', JavaCompile).configure {
-    options.compilerArgs << '-AdisableTargetValidator=true'
-}
-
 tasks.named('installToMods').configure {
     doFirst { throw new GradleException('clientCapture is dev-only: tools/client_capture/run_captures.py picks it up from build/libs') }
 }

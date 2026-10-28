@@ -12,7 +12,7 @@ _version = 4
 	#
 	# Defines the distance allowed to be synchronized around the player. 
 	# Should be the same or larger than maxGenerationRequestDistance in most cases.
-	maxSyncOnLoadRequestDistance = 4096
+	maxSyncOnLoadRequestDistance = 256
 	#
 	# If true, clients will receive updated LODs when joining or loading new LODs.
 	synchronizeOnLoad = true
@@ -24,7 +24,7 @@ _version = 4
 	serverKey = ""
 	#
 	# Defines the distance allowed to generate around the player.
-	maxGenerationRequestDistance = 4096
+	maxGenerationRequestDistance = 256
 	#
 	# When enabled, Distant Horizons will attempt to download missing LODs from the server.
 	# 
@@ -117,7 +117,7 @@ _version = 4
 	[common.multiThreading]
 		#
 		# How many threads should be used by Distant Horizons?
-		numberOfThreads = 3
+		numberOfThreads = 1
 		#
 		# A value between 1.0 and 0.0 that represents the percentage 
 		# of time each thread can run before going idle. 

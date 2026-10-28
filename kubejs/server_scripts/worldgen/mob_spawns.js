@@ -19,8 +19,7 @@
 // #minecraft:animals_spawnable_on.
 // Written in ServerEvents.highPriorityData (KubeJS's top-priority virtual datapack, above the mod jars).
 //
-// An older patcherMod jar without SpawnTuning would make the modifier type unknown, and an unknown type stops the
-// world loading, so nothing is written then. A modifier id of a mod that isn't loaded is skipped.
+// A modifier id of a mod that isn't loaded is skipped.
 //
 // Selectors match tools/gen_spawn_table.py: 'where' clauses OR'ed, traits in a clause AND'ed, '!trait' negated,
 // traits from biome_traits.json; then 'add' (ids, '#tags' as nested tag references) and 'except' (ids).
@@ -50,20 +49,10 @@
 	var $TagKey = Java.loadClass('net.minecraft.tags.TagKey')
 	var $ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')
 
-	function enabled() {
-		try {
-			return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig').mobSpawnsEnabled() == true
-		} catch (err) {
-			return true   // jar without the switch: SpawnTuning is missing too, see tuningClass()
-		}
-	}
+	var $SpawnTuning = Java.loadClass(TUNING_CLASS)
 
-	function tuningClass() {
-		try {
-			return Java.loadClass(TUNING_CLASS)
-		} catch (err) {
-			return null
-		}
+	function enabled() {
+		return Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig').mobSpawnsEnabled() == true
 	}
 
 	function readJson(path) {
@@ -283,7 +272,7 @@
 
 	ServerEvents.tags('worldgen/biome', function (event) {
 		var cfg = readConfig()
-		if (!cfg || !tuningClass()) return
+		if (!cfg) return
 		var rules = usableRules(cfg, true)
 		rules.forEach(function (u) {
 			var entries = u.sel.ids.concat(u.sel.tags)
@@ -295,10 +284,10 @@
 	})
 
 	// Ground blocks for spawn rules. Plain block tags, but patcherMod's walk-value mixins (same jar as SpawnTuning)
-	// must read them too, or night spawns on the new blocks fail; so an old jar gets none.
+	// must read them too, or night spawns on the new blocks fail.
 	ServerEvents.tags('block', function (event) {
 		var cfg = readConfig()
-		if (!cfg || !tuningClass()) return
+		if (!cfg) return
 		Object.keys(cfg.spawn_ground).forEach(function (tag) {
 			if (tag.charAt(0) === '_') return
 			var entries = (cfg.spawn_ground[tag] || []).map(String).filter(function (e) {
@@ -311,12 +300,6 @@
 	ServerEvents.highPriorityData(function (event) {
 		var cfg = readConfig()
 		if (!cfg) return
-		if (!tuningClass()) {
-			if (cfg.rules.length || cfg.conditions.length) console.error(LOG + 'patcherMod has no ' + TUNING_CLASS
-				+ ' (old jar): ' + cfg.rules.length + ' rules and ' + cfg.conditions.length
-				+ ' conditions NOT applied. Install patcherMod 1.0.5 from development/patcherMod.')
-			return
-		}
 		var rules = usableRules(cfg, false)
 		var disabled = {}
 		var out = rules.map(function (u) {
@@ -377,8 +360,6 @@
 	ServerEvents.loaded(function (event) {
 		var cfg = readConfig()
 		if (!cfg) return
-		var tuning = tuningClass()
-		if (!tuning) return
 		var reg
 		var known
 		try {
@@ -420,6 +401,6 @@
 		})
 		problems.forEach(function (p) { console.error(LOG + p) })
 		console.info(LOG + pairs + ' rule/biome pairs checked' + (problems.length ? ', ' + problems.length + ' problems' : '')
-			+ '; ' + String(tuning.summary()))
+			+ '; ' + String($SpawnTuning.summary()))
 	})
 })()

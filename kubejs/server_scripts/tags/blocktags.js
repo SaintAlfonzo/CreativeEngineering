@@ -18,9 +18,7 @@ ServerEvents.tags('block', e => {
 
 	t.add(e, 'minecraft:fire', b.dark_fire)
 
-	// Vintage Delight port (vintage_delight.md 2.1, S6): ghost pepper seeds plant only on these. Nylium is left out on
-	// purpose: the wild ghost pepper still generates there (its own block accepts nylium too).
-	t.add(e, b.t_ghost_pepper_soil, [b.soul_soil, b.rich_soul_soil, b.iw_nulch])
+	// The Vintage Delight ghost pepper soil tag moved to Creative Delight 2026-10-27 (vintagedelight/tags.js).
 
 	// Oven (patcherMod oven/, feature_writeup/oven.md 2.4, 3.1). What heats it from below: FD's open-fire
 	// sources (fire, campfires, lava; nested, so it stays live) + magma, lava cauldron, blaze burners and
@@ -78,7 +76,7 @@ ServerEvents.tags('block', e => {
 
 	// Ore Excavation undo (patcherMod excavation/VeinUndo.java, CEConfig [vein_undo]). An undo whose vein mine broke
 	// any of these is refused; blocks with a block entity are refused in code (a restored chest rerolls its loot).
-	t.add(e, b.t_vein_undo_denied, [b.t_ores, b.t_storage_blocks, item.ancient_debris, item.spawner])
+	t.add(e, b.t_vein_undo_denied, [b.t_ores, b.t_storage_blocks, item.ore_netherite, item.spawner])
 	t.addMatching(e, b.t_vein_undo_denied, '*:budding_*')
 
 	// Emu, duck and goose nests: Incubation Additions tags them into incubation:bird_nests itself
@@ -360,7 +358,7 @@ ServerEvents.tags('block', e => {
 		'/^create_dd:([a-z_]+_)?(velvet_block|padded_[a-z_]+|rubber_block)$/', item.belt_block,
 		'/^dustrial_decor:(mini_)?padded_(?!door$)[a-z_]+$/', '/^dustrial_decor:(smooth_cardboard[a-z_]*|folded_cardboard|cardboard_box|cardboard_trapdoor)$/',
 		'davebuildingmod:*_quilted_wool', item.bison_fur_block, 'botania:*_petal_block', 'twigs:bamboo_thatch*',
-		item.paraffin_wax_block,
+		item.paraffin_wax_block, item.weathered_cardboard_box,
 		// sacks, bags and bales
 		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag', 'vinery:*_bag', 'farmersrespite:*_sack', item.corn_kernel_bag,
 		'/^farmersdelight:(rice_bag|rice_bale|straw_bale|tatami)$/',
@@ -400,7 +398,7 @@ ServerEvents.tags('block', e => {
 		'create_compressed:dough_block', item.prepared_flesh_block,
 		item.gingerdough_block, item.cookie_dough_block, item.sweet_potato_dough_block, item.oat_dough_block,
 		item.cucumber_dough_block, item.sourdough_block,
-		'creativeengineering:*_culture_block',
+		'creativeengineering:*_culture_block',  // meat culture blocks (reserved for Creative Cultivation, creative_delight.md 29.5)
 		'/^architects_palette:(rotten_flesh_block|entrails[a-z_]*)$/',
 	])
 

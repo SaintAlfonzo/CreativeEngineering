@@ -17,6 +17,9 @@ Re-run /dumptags and /kubejs export in game after adding mods.
 """
 import glob, io, json, os, re, sys, zipfile, collections
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import pack_paths  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'tools', 'blockrunner_untagged_blocks.json')
 BS = re.compile(r'^assets/([a-z0-9_.-]+)/blockstates/([a-z0-9_/.-]+)\.json$')
@@ -43,8 +46,8 @@ for jar in glob.glob(os.path.join(ROOT, 'mods/*.jar')):
 for f in glob.glob(os.path.join(ROOT, 'kubejs/assets/*/blockstates/*.json')):
     modded.add(f.split('/assets/')[1].split('/')[0] + ':' + os.path.basename(f)[:-5])
 vanilla = set()
-for jar in glob.glob(os.path.join(ROOT, '../../libraries/net/minecraft/client/1.19.2/client-1.19.2.jar')):
-    blockstate_ids(zipfile.ZipFile(jar), vanilla)
+if pack_paths.vanilla_jar():
+    blockstate_ids(zipfile.ZipFile(pack_paths.vanilla_jar()), vanilla)
 if not vanilla: print('vanilla client jar not found: untagged vanilla blocks are missing')
 
 untagged = sorted((vanilla | {b for b in modded if b in items}) - tagged)

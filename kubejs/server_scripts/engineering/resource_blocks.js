@@ -246,9 +246,9 @@ R.createCompacting(Item.of(i.deepslate, 32), [Item.of(i.cobblestone, 32), Fluid.
 R.createCompacting(Item.of(i.deepslate, 48), [Item.of(i.cobblestone, 32), Fluid.of(f.lava, 1000)], e, 'deepslate_bulk_superheated', "superheated")
 //Deepslate crushing
 //Deepslate -> cobble crush step, dscobble crush to gravel
-R.ieCrushing(Item.of(i.deepslate_cobblestone, 1), Item.of(i.deepslate, 1), e)
+R.ieCrushing(Item.of(i.deepslate_cobble, 1), Item.of(i.deepslate, 1), e)
 R.remove({ id: 'create:crushing/scrap_cobblestone_small' }, e)
-R.createCrushing(i.gravel, i.deepslate_cobblestone, e)
+R.createCrushing(i.gravel, i.deepslate_cobble, e)
 
 console.log('The resource block event has finished!')
 })

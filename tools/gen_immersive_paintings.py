@@ -37,9 +37,6 @@ import lang_index
 DUMP = lang_index.INSTANCE / 'kubejs/exported/paintings.json'
 OUT = lang_index.INSTANCE / 'kubejs/data/creativeengineering/paintings'
 KUBEJS_ASSETS = lang_index.INSTANCE / 'kubejs/assets'
-# Fallback when ~/.minecraft has no 1.19.2 jar: the launcher's split client jar holds the assets.
-VANILLA_EXTRA = (lang_index.Path.home() / '.local/share/atlauncher/libraries/net/minecraft/client'
-                 / '1.19.2-20220805.130853/client-1.19.2-20220805.130853-extra.jar')
 TEXTURE_RE = re.compile(r'^assets/([^/]+)/textures/painting/(.+)\.png$')
 TARGET_RES = 32
 # 1.19.2 has no painting title/author lang; these are the credits vanilla added in 1.21.
@@ -65,9 +62,9 @@ def zip_textures(path, label, textures, owners):
 def collect_textures():
     """{ns:id: (source label, png bytes)} after pack priority, and {ns: first jar that has it}."""
     textures, owners = {}, {}
-    vanilla = lang_index.VANILLA_JAR if lang_index.VANILLA_JAR.exists() else VANILLA_EXTRA
-    if not vanilla.exists():
-        sys.exit('no vanilla 1.19.2 client jar (%s or %s)' % (lang_index.VANILLA_JAR, VANILLA_EXTRA))
+    vanilla = lang_index.pack_paths.vanilla_jar()
+    if not vanilla:
+        sys.exit('no vanilla client jar in the launcher libraries (tools/pack_paths.py vanilla_jar)')
     zip_textures(vanilla, 'vanilla', textures, {})
     for jar in sorted(lang_index.MODS.glob('*.jar')):
         zip_textures(jar, jar.name, textures, owners)

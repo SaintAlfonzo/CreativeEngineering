@@ -8,7 +8,8 @@
 // Results are "[vtdtest] PASS|FAIL <part> <name>: <detail>" lines in logs/latest.log, NOTE lines for record-only
 // facts, then "[vtdtest] done <part>: N pass, M fail". Same style as tools/food_drinks_probe (/fdtest).
 //
-// Probe blocks live at x 200..300, z 20..40, Y -60 (superflat, -61 is grass). Not covered here: trades (real
+// Probe blocks live at x 200..300, z 20..40, Y -60 (superflat, -61 is grass; crop survival checks sit at the build
+// limit, so `crops` also passes in a normal world). Not covered here: trades (real
 // villagers after a restart), the same compost table after /reload (run /vtdtest compost again after /reload),
 // Quark troughs, hoe area harvest, VD-18 stack policy (after CQ-DUMP; `stacks` only records), exported/loot scan.
 (() => {
@@ -338,7 +339,8 @@
         check('#forge:dough holds oat dough', tagHas(I, 'forge:dough', VT + 'oat_dough'), '')
         check('#forge:dough has no cucumber dough', !tagHas(I, 'forge:dough', VT + 'cucumber_dough'), tagList(I, 'forge:dough').join(', '))
         check('#forge:salt holds salt dust', tagHas(I, 'forge:salt', VT + 'salt_dust'), '')
-        check('#forge:salt holds The Salt salt', tagHas(I, 'forge:salt', 'salt:salt'), tagList(I, 'forge:salt').join(', '))
+        // salt merge (item_merges.md 2.9): The Salt's salt is folded into salt dust
+        check('#forge:salt has no The Salt salt', !tagHas(I, 'forge:salt', 'salt:salt'), tagList(I, 'forge:salt').join(', '))
         let soil = tagList(B, 'vintagedelight:ghost_pepper_soil')
         check('#vintagedelight:ghost_pepper_soil', sameSet(soil, ['minecraft:soul_soil', 'nethersdelight:rich_soul_soil', 'immersive_weathering:nulch_block']),
             soil.join(', '))
@@ -373,13 +375,13 @@
             takes(server, C + 'pickling/pickled_sea_pickle', 'minecraft:sea_pickle') &&
             resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) == 'creativeengineering:pickled_sea_pickle x5',
             has(server, C + 'pickling/pickled_sea_pickle') ? resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) : '-')
-        // VTD-11: every jar recipe that takes salt dust also takes The Salt's salt
+        // VTD-11 since the salt merge (item_merges.md 2.9): jar recipes take salt dust and none takes The Salt's salt
         let jarIds = Object.keys(recipes(server)).filter(id => id.indexOf(VT + 'fermenting/') == 0 || id.indexOf(C + 'pickling/') == 0 ||
             id.indexOf(VG + 'compat/vintagedelight/fermenting/') == 0)
         let salty = jarIds.filter(id => takes(server, id, VT + 'salt_dust'))
-        let oneSalt = salty.filter(id => !takes(server, id, 'salt:salt'))
-        check('VTD-11 jar salt recipes take both salts', salty.length > 0 && oneSalt.length == 0,
-            salty.length + ' of ' + jarIds.length + ' jar recipes take salt; dust only: ' + (oneSalt.join(', ') || 'none'))
+        let oldSalt = jarIds.filter(id => takes(server, id, 'salt:salt'))
+        check('VTD-11 jar salt recipes take salt dust only', salty.length > 0 && oldSalt.length == 0,
+            salty.length + ' of ' + jarIds.length + ' jar recipes take salt dust; take salt:salt: ' + (oldSalt.join(', ') || 'none'))
     }
 
     // ================================================================ compost (SQ-VP-05, VD-34)
@@ -606,11 +608,11 @@
         check('bottom refuses inserts', bot.getCount() == 1, 'left ' + bot.getCount())
         let cont = north.insertItem(0, Item.of('minecraft:glass_bottle'), false)
         check('side takes a glass bottle', cont.isEmpty() && itemId(be.getInventory().getStackInSlot(6)) == 'minecraft:glass_bottle', slots(be.getInventory()))
-        // 5 cucumbers + salt -> 5 pickles, with each salt
+        // 5 cucumbers + salt dust -> 5 pickles (The Salt's salt is merged into the dust, item_merges.md 2.9)
         let pr = rget(server, VT + 'fermenting/pickle_from_fermenting')
         let pt = pr ? pr.getProcessingTime() : 2400
         note('pickle recipe', pr ? resultOf(pr) + ', ' + pt + ' ticks' : 'not loaded')
-        ;[[VT + 'salt_dust', 202], ['salt:salt', 204]].forEach(s => {
+        ;[[VT + 'salt_dust', 202]].forEach(s => {
             let p2 = jarAt(level, s[1]), b2 = level.getBlockEntity(p2)
             let left = topIn(b2, VT + 'cucumber', 5)
             let left2 = topIn(b2, s[0], 1)
@@ -662,14 +664,16 @@
     }
 
     // ================================================================ crops (SQ-VP-09: VTD-01 to VTD-04, VD-01, VD-25)
+    // Survival needs light 8 or open sky (CropBlock): checked just under the build limit, so it also holds in a
+    // normal world, where Y is underground
     let cropX = 220
     function survives(level, cropId, soilId) {
-        let pos = at(cropX, Y, 26)
+        let pos = at(cropX, level.getMaxBuildHeight() - 2, 26)
         cropX += 1
         set(level, pos.below(), soilId)
         set(level, pos, 'minecraft:air')
         let ok = block(cropId).defaultBlockState().canSurvive(level, pos)
-        set(level, pos.below(), 'minecraft:grass_block')
+        set(level, pos.below(), 'minecraft:air')
         return ok
     }
     function ageOf(state) { let m = String(state).match(/age=(\d+)/); return m ? parseInt(m[1]) : -1 }

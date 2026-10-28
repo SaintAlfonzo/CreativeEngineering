@@ -24,10 +24,13 @@ import sys
 from collections import OrderedDict, defaultdict
 from pathlib import Path
 
-INSTANCE = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths  # noqa: E402
+
+INSTANCE = pack_paths.INSTANCE
 EXPORT = INSTANCE / 'kubejs/exported'
 FOOD_TYPES = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
-ITEM_DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
+ITEM_DICT = pack_paths.ITEM_DICT
 OUT = INSTANCE / 'kubejs/generation_scripts/stacks/stack_sizes.json'
 
 # Namespaces whose items_by_mod file is left over from a removed mod.
@@ -110,13 +113,7 @@ BANNER_RE = re.compile(r'^minecraft:\w+_banner$')
 
 def load_dict_keys():
     """item id -> first item_dict key."""
-    rev = {}
-    pat = re.compile(r"^\s*i\.(\w+)\s*=\s*'([^'#]*)'")
-    for line in ITEM_DICT.read_text().splitlines():
-        m = pat.match(line)
-        if m and m.group(1) not in ('na', 'none'):
-            rev.setdefault(m.group(2), m.group(1))
-    return rev
+    return pack_paths.item_dict_first_keys(pack_paths.item_dict_text(ITEM_DICT), tags=False, skip_keys=('na', 'none'))
 
 
 def load_universe():

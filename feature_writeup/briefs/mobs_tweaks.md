@@ -253,7 +253,7 @@ Depends on the decision:
 ---
 
 ## tweaks #8: Merge monkeys
-Status Planned / Work data / KubeJS / TODO `mobs/tweaks #8`
+Status Planned / Work data / KubeJS / TODO `merges/mobs #1`
 
 ### Goal
 One jungle monkey across Alex's Mobs and Neapolitan instead of two overlapping ones.

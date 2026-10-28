@@ -23,6 +23,9 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
  * otherwise keeps resetting it to 60. If {@code better_beacons} is not installed the
  * phantom-bane lookup is null and that slot is left as the original Strength effect.
  *
+ * <p>Both are level I (amplifier 0): neither effect does anything with a level (Better Beacons only tests
+ * {@code hasEffect}), and the procedure's amplifier 1 showed them as "II" (armor_effects.md F7).
+ *
  * <p>{@code EchoArmorEffectProcedure} is an unobfuscated mod class and this project ships
  * no Mixin refmap, so {@code remap = false} throughout and {@code addEffect} is matched by
  * its SRG name {@code m_7292_}; the Mojmap references in the handler body are mapped back
@@ -53,7 +56,7 @@ public class EchoArmorEffectProcedureMixin {
             return new MobEffectInstance(
                     MobEffects.NIGHT_VISION,
                     Math.max(original.getDuration(), NIGHT_VISION_TICKS),
-                    original.getAmplifier(), original.isAmbient(), original.isVisible());
+                    0, original.isAmbient(), original.isVisible());
         }
 
         if (from == MobEffects.DAMAGE_BOOST) {                      // Strength -> Phantom Bane
@@ -61,7 +64,7 @@ public class EchoArmorEffectProcedureMixin {
             if (phantomBane != null) {
                 return new MobEffectInstance(
                         phantomBane, original.getDuration(),
-                        original.getAmplifier(), original.isAmbient(), original.isVisible());
+                        0, original.isAmbient(), original.isVisible());
             }
         }
 

@@ -6,9 +6,13 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var R = global.NCH
-	var F = global.foodFamily(e)
 
 	global.CD.recipes(() => {
+
+		//######################### Bread ####################
+		// Their sandwiches and burger took only vanilla bread; any bread works (creativeengineering/bread_tags.js)
+		R.replaceInput([{ id: 'hostiledelight:gburgerrecp' }, { id: 'hostiledelight:gsandrecp' }, { id: 'hostiledelight:teggsandrecp' }],
+			i.minecraft_bread, i.t_bread, e)
 
 		//######################### Upstream bugs #########################
 		// B2: ppicklerecp outputs `preapredseapickle` (typo), so Prepared Sea Pickle had no working recipe

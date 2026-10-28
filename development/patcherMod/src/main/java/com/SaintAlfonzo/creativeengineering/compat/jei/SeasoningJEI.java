@@ -59,6 +59,7 @@ public class SeasoningJEI implements IModPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final ResourceLocation ID = new ResourceLocation(CreativeEngineering.MODID, "seasoning");
     private static final ResourceLocation SALT = new ResourceLocation("salt", "salt");
+    private static final ResourceLocation SALT_DUST = new ResourceLocation("vintagedelight", "salt_dust");
     private static final ResourceLocation MIXER = new ResourceLocation("create", "mechanical_mixer");
     private static final ResourceLocation CREATE_MIXING = new ResourceLocation("create", "mixing");
     private static final String SEASON_PREFIX = "shapeless/season/";
@@ -74,7 +75,9 @@ public class SeasoningJEI implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        ItemStack icon = stack(SALT);
+        // The Salt's salt is merged into Vintage Delight's salt dust (food/seasoning #6)
+        ItemStack icon = stack(SALT_DUST);
+        if (icon.isEmpty()) icon = stack(SALT);
         registration.addRecipeCategories(new SeasoningCategory(registration.getJeiHelpers().getGuiHelper(),
                 icon.isEmpty() ? new ItemStack(Items.BREAD) : icon));
     }

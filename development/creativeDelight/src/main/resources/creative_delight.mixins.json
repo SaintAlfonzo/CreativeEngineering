@@ -6,6 +6,7 @@
   "plugin": "com.SaintAlfonzo.creativedelight.compat.CDMixinPlugin",
   "mixins": [
     "fruitsdelight.FruitsDelightFoodDataAnchorMixin",
+    "fruitsdelight.FruitsDelightLeafCheckMixin",
     "fruitsdelight.MangosteenCakeEffectMixin",
     "farmersdelight.CookingPotRemainderMixin",
     "farmersdelight.CookingPotMenuRemainderMixin",
@@ -22,7 +23,9 @@
     "farmersrespite.KettleScreenRemainderMixin",
     "farmersrespite.KettleScreenTankMixin",
     "farmersrespite.KettleItemTooltipMixin",
-    "farmersrespite.KettleJeiBaseMixin"
+    "farmersrespite.KettleJeiBaseMixin",
+    "farmersdelight.CookingPotMealTooltipMixin",
+    "farmersrespite.KettleMealTooltipMixin"
   ],
   "server": [],
   "injectors": {

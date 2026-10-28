@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The vintage clock wines age on (feature_writeup/alcohol.md B4.5). One counter per world, saved in the overworld
- * ({@code data/vinery_aging.dat}). Only {@link VineryConfig#CLOCK_MODE} moves it. The pack runs it on the sun
+ * ({@code data/vinery_aging.dat}). Only {@link VineryConfig#clockMode()} moves it. The pack runs it on the sun
  * ({@code WORLD_TIME}, time.md 3.7): it moves with the overworld day time like the seasons, so sleeping ages wine, and
  * one day is 24000 clock units, sunrise to sunrise. {@code PLAYTIME} (B4.5) is still there.
  * <p>
@@ -62,28 +62,28 @@ public final class VintageClock {
     }
 
     private static Snapshot fromConfig(long ticks, double measuredDayTicks, double rate) {
-        return new Snapshot(ticks, ticksPerDay(measuredDayTicks), Math.max(1, VineryConfig.DAYS_PER_YEAR.get()),
-                Math.max(1, VineryConfig.YEARS_PER_EFFECT_LEVEL.get()), Math.max(0, VineryConfig.MAX_LEVEL.get()),
+        return new Snapshot(ticks, ticksPerDay(measuredDayTicks), Math.max(1, VineryConfig.daysPerYear()),
+                Math.max(1, VineryConfig.yearsPerEffectLevel()), Math.max(0, VineryConfig.maxLevel()),
                 Math.max(0, VineryConfig.DURATION_PER_YEAR.get()), Math.max(0, VineryConfig.MAX_DURATION.get()),
-                (int) Math.round(VineryConfig.CELLAR_AGING_MULTIPLIER.get() * 100), (int) Math.round(VineryConfig.COLD_AGING_MULTIPLIER.get() * 100),
-                (int) Math.round(VineryConfig.WARM_AGING_MULTIPLIER.get() * 100), VineryConfig.AGE_ONLY_IN_STORAGE.get(),
+                (int) Math.round(VineryConfig.cellarAgingMultiplier() * 100), (int) Math.round(VineryConfig.coldAgingMultiplier() * 100),
+                (int) Math.round(VineryConfig.warmAgingMultiplier() * 100), VineryConfig.AGE_ONLY_IN_STORAGE.get(),
                 VineryConfig.AGING_ENABLED.get(), rate, measuredDayTicks);
     }
 
     /** Clock ticks per aging day under the current settings. */
     private static double ticksPerDay(double measuredDayTicks) {
-        if (VineryConfig.CLOCK_MODE.get() == VineryConfig.ClockMode.WORLD_TIME || VineryConfig.DAY_UNIT.get() == VineryConfig.DayUnit.DAYTIME) {
+        if (VineryConfig.clockMode() == VineryConfig.ClockMode.WORLD_TIME || VineryConfig.dayUnit() == VineryConfig.DayUnit.DAYTIME) {
             return 24000; // the WORLD_TIME clock counts day time units (time.md 3.7)
         }
-        if (VineryConfig.DAY_UNIT.get() == VineryConfig.DayUnit.WORLD) {
-            double minutes = VineryConfig.WORLD_DAY_MINUTES.get();
+        if (VineryConfig.dayUnit() == VineryConfig.DayUnit.WORLD) {
+            double minutes = VineryConfig.worldDayMinutes();
             if (minutes > 0) {
                 return minutes * 1200;
             }
             return measuredDayTicks > 0 ? measuredDayTicks : 24000;
         }
         double ticksPerYear = VineryConfig.PLAYTIME_HOURS_PER_YEAR.get() * 72000;
-        return Math.max(1, ticksPerYear / Math.max(1, VineryConfig.DAYS_PER_YEAR.get()));
+        return Math.max(1, ticksPerYear / Math.max(1, VineryConfig.daysPerYear()));
     }
 
     // ---------------------------------------------------------------- server
@@ -98,7 +98,7 @@ public final class VintageClock {
         long dayTime = server.overworld().getDayTime();
         long step = data.lastDayTime < 0 ? 0 : dayTime - data.lastDayTime;
         boolean playersOnline = server.getPlayerCount() > 0;
-        switch (VineryConfig.CLOCK_MODE.get()) {
+        switch (VineryConfig.clockMode()) {
             case PLAYTIME -> {
                 if (playersOnline) data.ticks++;
             }
@@ -138,13 +138,13 @@ public final class VintageClock {
      * play has been measured).
      */
     private static double rate(Data data) {
-        if (VineryConfig.CLOCK_MODE.get() != VineryConfig.ClockMode.WORLD_TIME) {
+        if (VineryConfig.clockMode() != VineryConfig.ClockMode.WORLD_TIME) {
             return 1.0;
         }
         if (data != null && data.measuredDayTicks() > 0) {
             return (double) data.measuredSteps / data.measuredTicks;
         }
-        double minutes = VineryConfig.WORLD_DAY_MINUTES.get();
+        double minutes = VineryConfig.worldDayMinutes();
         return minutes > 0 ? 24000 / (minutes * 1200) : 1.0;
     }
 

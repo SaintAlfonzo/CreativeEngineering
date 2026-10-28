@@ -746,7 +746,7 @@ The shrimp converts the whole held stack at once; fine as a bulk route.
 ---
 
 ## meals #11: Merge potato salad
-Status: Planned / Work: KubeJS / TODO `dishes/meals #11` (scratchpad 2026-10-22, repeated 2026-10-24; no earlier section here)
+Status: Planned / Work: KubeJS / TODO `merges/dishes #4` (scratchpad 2026-10-22, repeated 2026-10-24; no earlier section here)
 
 ### Goal
 Merge the potato salad items into one, through `global.itemMerges` and the helpers.
@@ -913,7 +913,7 @@ RC-125 The soup shows the new texture in inventory and in the placed bowl.
 ---
 
 ## meals #26: Merge Brewin' pizza
-Status: Planned / Work: KubeJS / TODO `dishes/meals #26` ([recipes_cooking.md](../recipes_cooking.md)); related `baking/baked-goods #20`
+Status: Planned / Work: KubeJS / TODO `merges/dishes #8` ([recipes_cooking.md](../recipes_cooking.md)); related `baking/baked-goods #20`
 
 ### Goal
 One pizza, renamed Deluxe Pizza: tomato, peppers, mushrooms, cheese and cooked meat or fish, best nutrients.
@@ -966,7 +966,7 @@ RC-127 Tropical Pizza crafts, places, slices; tooltip shows.
 ---
 
 ## meals #28: Merge cheesy pastas
-Status: Planned / Work: KubeJS / TODO `dishes/meals #28` ([recipes_cooking.md](../recipes_cooking.md))
+Status: Planned / Work: KubeJS / TODO `merges/dishes #5` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Merge the cheesy pasta dishes of the mods into one.
@@ -1016,7 +1016,7 @@ RC-129 Each listed dish accepts the pickled version and still the raw one.
 ---
 
 ## meals #30: Merge Caesar salads
-Status: Planned / Work: KubeJS / lang / TODO `dishes/meals #30` ([recipes_cooking.md](../recipes_cooking.md))
+Status: Planned / Work: KubeJS / lang / TODO `merges/dishes #6` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Merge the two Caesar salads (spelled differently in two mods) into one.
@@ -1050,7 +1050,7 @@ Vintage's `pb_j` (`i.pb_j`): cooking.js line 583, shapeless `i.t_bread` + nut ma
 
 ### Decisions
 Which items count as square bread; recommend slices only (a sandwich takes two square slices). Two sandwich items for
-one dish (Vintage's and Delightful's): recommend merging them with `dishes/jams #5` nut butter / nut mash.
+one dish (Vintage's and Delightful's): recommend merging them with `merges/dishes #7` nut butter / nut mash.
 
 ### Build
 Change the bread slot, widen the jam tag via `global.tags` once the jam merge decides the item set.
@@ -1139,7 +1139,7 @@ Steak and broccoli accepts rice, mashed potatoes, any baked potato plus a bowl, 
 ### Now
 `veggiesdelight:steak_and_broccoli`: VD recipe shapeless cooked beef, broccoli, cooked rice, bowl; the pack's
 heatless version cooking.js line 487 (cooked beef, broccoli, cooked rice, no bowl). Mashed potatoes are two items
-(`i.mashed_potatoes` More Delight, `i.veggiesdelight_mashed_potatoes` VD; pinned merge, `ports/veggiesport #2`).
+(`i.mashed_potatoes` More Delight, `i.veggiesdelight_mashed_potatoes` VD; pinned merge, `merges/dishes #1 to #3`).
 `i.t_soup_veggie_cooked` (cookingtags.js line 96) already lists baked potato, baked sweet potato, roasted zucchini.
 
 ### Build

@@ -27,8 +27,6 @@ public class CreativeDelight {
 
 	public static final String MOD_ID = "creative_delight";
 	public static final Logger LOGGER = LogUtils.getLogger();
-	/** patcherMod's startup loader (creative_delight.md 10.5); without it CD's startup scripts never run. */
-	private static final String LOADER_CLASS = "com.SaintAlfonzo.creativeengineering.compat.kubejs.JarStartupScripts";
 
 	public CreativeDelight() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, "creative_delight-common.toml");
@@ -39,12 +37,6 @@ public class CreativeDelight {
 		List<String> missing = members.stream().filter(id -> !ModList.get().isLoaded(id)).toList();
 		LOGGER.info("[creative_delight] members: {}{}", members, missing.isEmpty() ? "" : " (NOT loaded: " + missing + ")");
 		members.forEach(CreativeDelight::warnIfNotNested);
-		try {
-			Class.forName(LOADER_CLASS, false, CreativeDelight.class.getClassLoader());
-		} catch (ClassNotFoundException | LinkageError e) {
-			LOGGER.error("[creative_delight] this patcherMod (creativeengineering) has no startup script loader ({}): "
-					+ "Creative Delight's startup scripts will not run. Install the patcherMod built with this jar.", LOADER_CLASS);
-		}
 	}
 
 	/**

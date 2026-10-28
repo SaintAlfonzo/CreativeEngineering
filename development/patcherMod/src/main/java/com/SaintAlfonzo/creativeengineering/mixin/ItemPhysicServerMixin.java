@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
+import com.SaintAlfonzo.creativeengineering.itemphysic.AllurementItemCurses;
 import com.SaintAlfonzo.creativeengineering.itemphysic.ItemBurnTransform;
 import com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit;
 import net.minecraft.tags.TagKey;
@@ -11,7 +12,9 @@ import net.minecraft.world.level.material.Fluid;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import team.creative.creativecore.common.util.type.list.SortingList;
 import team.creative.itemphysic.ItemPhysic;
 import team.creative.itemphysic.ItemPhysicConfig;
@@ -42,6 +45,15 @@ public class ItemPhysicServerMixin {
 
     private static final String CAN_PASS =
             "Lteam/creative/creativecore/common/util/type/list/SortingList;canPass(Lnet/minecraft/world/item/ItemStack;)Z";
+
+    /**
+     * Allurement's Curse of Ascension / Fleeting hook sits in the vanilla gravity branch that
+     * ItemPhysic bypasses; run them after ItemPhysic's own gravity instead.
+     */
+    @Inject(method = "updatePre", at = @At("TAIL"), remap = false)
+    private static void creativeengineering$allurementCurses(ItemEntity item, RandomSource rand, CallbackInfo ci) {
+        AllurementItemCurses.tick(item);
+    }
 
     @Redirect(method = "fireImmune", at = @At(value = "INVOKE", target = CAN_PASS, remap = false), remap = false)
     private static boolean creativeengineering$fireImmune(SortingList list, ItemStack stack, ItemEntity item) {

@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creative_labels;
 
+import com.SaintAlfonzo.creative_labels.compat.DonorItems;
+import com.SaintAlfonzo.creative_labels.shared.HiddenItems;
 import com.SaintAlfonzo.creative_labels.block.FacePaperInteractions;
 import com.SaintAlfonzo.creative_labels.client.ClientSetup;
 import com.SaintAlfonzo.creative_labels.item.AnvilLabels;
@@ -39,6 +41,8 @@ public class CreativeLabels {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLConfig.CLIENT_SPEC);
 
         CLRegistry.register(modBus);
+        // Sticky It's note and eraser and Labels' label stay out of the creative tabs (sticky_notes.md 3.13).
+        HiddenItems.set(DonorItems::isHidden);
         modBus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(CLNetwork::register));
         MinecraftForge.EVENT_BUS.register(FacePaperInteractions.class);
         MinecraftForge.EVENT_BUS.register(AnvilLabels.class);

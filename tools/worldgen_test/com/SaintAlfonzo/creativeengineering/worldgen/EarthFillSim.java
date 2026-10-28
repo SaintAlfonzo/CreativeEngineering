@@ -75,6 +75,9 @@ public class EarthFillSim {
 
 	static final int[][] LIMITS = {{0, 0}, {8, 32}, {24, 64}, {48, 128}, {48, 160}, {96, 256}, {200, 400}};
 
+	/** [worldgen.earth_fill] sampleGrid to simulate: GRID=n tools/earth_fill_sim.sh (default 4, the config default). */
+	static final int GRID = Integer.getInteger("grid", 4);
+
 	public static void main(String[] args) throws Exception {
 		long seed = args.length > 0 ? Long.parseLong(args[0]) : 4242L;
 		int sites = args.length > 1 ? Integer.parseInt(args[1]) : 150;
@@ -125,7 +128,7 @@ public class EarthFillSim {
 				if (!start.isValid()) { noStart++; continue; }
 				List<long[]> pieces = new ArrayList<>();
 				for (StructurePiece p : start.getPieces()) pieces.add(EarthFill.pieceEarth(p, templates, earth, 3));
-				EarthFill.Terrain terrain = EarthFill.predicted(generator, randomState, height, 2);
+				EarthFill.Terrain terrain = EarthFill.predicted(generator, randomState, height, GRID);
 				// pruning, as for structures in earth_fill/prune (the villages)
 				List<StructurePiece> all = start.getPieces();
 				List<net.minecraft.world.level.levelgen.structure.BoundingBox> boxes = new ArrayList<>();

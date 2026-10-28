@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
  * Bytecode-confirmed (1.19.2, Forge 43.3.9): the only {@code sipush 24000} in {@code tick}
  * ({@code m_7995_}) is the reset after a roll, and the only one in the constructor is the first wait
  * of a brand new world. Vinery's spawn mixin can swap the spawned entity inside {@code spawn}; the
- * pack sets its chance to 0 and spawns the Winemaker from {@code trader.WinemakerSpawner} instead.
+ * pack sets its chance to 0 and spawns the Winemaker from the Vinery port's own {@code WinemakerSpawner} instead.
  *
  * <p>Vanilla-class target, matched by SRG name with {@code remap = false}.
  */

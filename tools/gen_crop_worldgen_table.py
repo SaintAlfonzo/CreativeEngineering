@@ -32,15 +32,19 @@ Rates are patch attempts per chunk (1/N = one chunk in N on average). "Per 1000 
 rate by the share of the dimension the crop's biomes cover; it is an upper bound, since an attempt still
 fails when the ground, water or space test fails.
 """
-import glob
 import io
 import json
 import re
 import zipfile
+import sys
 from collections import defaultdict
 from pathlib import Path
 
-INSTANCE = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths  # noqa: E402
+from pack_paths import loads_lenient  # noqa: E402
+
+INSTANCE = pack_paths.INSTANCE
 MODS = INSTANCE / 'mods'
 CONFIG = INSTANCE / 'config'
 BIOME_DATA = INSTANCE / 'kubejs/exported/biome_data.json'
@@ -53,10 +57,7 @@ MUSHROOM_SPAWNS = INSTANCE / 'kubejs/generation_scripts/worldgen/mushroom_spawns
 FUNGI_UPSTREAM = Path.home() / '.local/share/atlauncher/downloads/FungiDelight-1.20.1-1.3.jar'
 FUNGI_CONFIGURED = 'data/fungidelight/worldgen/configured_feature/'
 
-LIBS = Path.home() / '.local/share/atlauncher/libraries'
-_vj = sorted(glob.glob(str(LIBS / 'net/minecraft/client/1.19.2*/*-extra.jar')))
-_fj = sorted(glob.glob(str(LIBS / 'net/minecraftforge/forge/1.19.2-*/forge-1.19.2-*-universal.jar')))
-BASE_JARS = [Path(p) for p in _vj[:1] + _fj[:1]]
+BASE_JARS = [j for j in (pack_paths.vanilla_jar(), pack_paths.forge_jar('universal')) if j]
 
 
 # ── config values the Java features read ────────────────────────────────────
@@ -247,7 +248,7 @@ CROP_BLOCKS = {
     # the pack's own json versions of Java features (kubejs/data/creativeengineering/worldgen/*/wild/)
     'farmersdelight:wild_cabbages': 'Cabbage', 'farmersdelight:wild_beetroots': 'Beetroot (Sea Beet)',
     'farmersdelight:brown_mushroom_colony': 'Brown Mushroom Colony', 'farmersdelight:red_mushroom_colony': 'Red Mushroom Colony',
-    'fruitsdelight:hamimelon': 'Hamimelon',
+    'fruitsdelight:hamimelon': 'Cantaloupe', 'delightful:cantaloupe': 'Mini Cantaloupe',  # item_merges.md 2.10
     # Veggies Delight backport (development/backportedVeggies)
     'veggiesdelight:wild_broccoli': 'Broccoli', 'veggiesdelight:wild_cauliflowers': 'Cauliflower',
     'veggiesdelight:wild_garlic': 'Garlic', 'veggiesdelight:wild_sweet_potatoes': 'Sweet Potato',
@@ -264,12 +265,6 @@ CROP_BLOCKS = {
 COCOA = 'Cocoa'
 
 # ── loading ──────────────────────────────────────────────────────────────────
-
-def loads_lenient(raw):
-    text = raw.decode('utf-8-sig', 'ignore') if isinstance(raw, bytes) else raw
-    text = re.sub(r'^\s*//.*$', '', text, flags=re.M)
-    return json.loads(text)
-
 
 def iter_sources():
     """(label, {path: bytes-reader}) in load order: vanilla, forge, mods, kubejs/data."""

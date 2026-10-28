@@ -24,7 +24,7 @@
 			rubberwood = true
 
 		[types.leaves_type.upgrade_aquatic]
-			river = true
+			river = false
 
 		[types.leaves_type.fruitsdelight]
 			pear = true
@@ -63,14 +63,14 @@
 			rubberwood = true
 
 		[types.wood_type.create_dd]
-			rose = true
+			rose = false
 			smoked = true
-			rubber = true
-			spirit = true
+			rubber = false
+			spirit = false
 
 		[types.wood_type.upgrade_aquatic]
 			driftwood = true
-			river = true
+			river = false
 
 [entries]
 
@@ -163,10 +163,10 @@
 			table = true
 
 		[entries.wood_type.lightmanscurrency]
-			bookshelf_trader = true
-			auction_stand = true
-			shelf_2x2 = true
-			shelf = true
+			bookshelf_trader = false
+			auction_stand = false
+			shelf_2x2 = false
+			shelf = false
 
 		[entries.wood_type.dramaticdoors]
 			short_door = true

@@ -1,6 +1,6 @@
 // Placeable food tooltip lines: Creative Delight QoL-2 (creative_delight.md 8; moved from client_scripts/ 2026-10-25),
 // switch [qol] placeableTooltips (off: no lines and the mods' own lines stay). From the tags in the pack's
-// server_scripts/tags/placeabletags.js:
+// kubejs/data/creative_delight/kubejs/creativeengineering/placeable_tags.js:
 //   "Placeable"                     #creativeengineering:placeable
 //   "Placeable (while sneaking)"    ...and #creativeengineering:placeable/sneak
 //   "Placeable on plate"            #creativeengineering:placeable_on_plate        (Display Delight Food Plate)
@@ -20,12 +20,12 @@
 ItemEvents.tooltip(e => {
 	var i = global.item
 	var $TranslatableContents = Java.loadClass('net.minecraft.network.chat.contents.TranslatableContents')
-	var tagOf = (key, fallback) => i[key] ? String(i[key]).replace(/^#/, '') : fallback
-	var T_PLACEABLE = tagOf('t_placeable', 'creativeengineering:placeable')
-	var T_SNEAK = tagOf('t_placeable_sneak', 'creativeengineering:placeable/sneak')
-	var T_PLATE = tagOf('t_placeable_on_plate', 'creativeengineering:placeable_on_plate')
-	var T_SMALL = tagOf('t_placeable_on_small_plate', 'creativeengineering:placeable_on_small_plate')
-	var T_COASTER = tagOf('t_placeable_on_coaster', 'creativeengineering:placeable_on_coaster')
+	var tagOf = key => String(i[key]).replace(/^#/, '')
+	var T_PLACEABLE = tagOf('t_placeable')
+	var T_SNEAK = tagOf('t_placeable_sneak')
+	var T_PLATE = tagOf('t_placeable_on_plate')
+	var T_SMALL = tagOf('t_placeable_on_small_plate')
+	var T_COASTER = tagOf('t_placeable_on_coaster')
 	var STRIP = {
 		'item.displaydelight.tooltip.displayable': true,
 		'item.displaydelight.tooltip.can_placed_on': true,
@@ -35,7 +35,7 @@ ItemEvents.tooltip(e => {
 	}
 
 	e.addAdvancedToAll((item, advanced, text) => {
-		if (!global.CD || !global.CD.qol('placeableTooltips')) return
+		if (!global.CD.qol('placeableTooltips')) return
 		// index 0 is the name: the Food Plate item's own name uses one of the stripped keys
 		for (var n = text.size() - 1; n >= 1; n--) {
 			var contents = text.get(n).getContents()

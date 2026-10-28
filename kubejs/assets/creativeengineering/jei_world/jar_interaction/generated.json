@@ -1785,16 +1785,13 @@
    ],
    "outputs": [
     {
-     "items": [
-      "minecraft:potion"
-     ],
-     "nbt": "{Potion:\"minecraft:swiftness\"}",
-     "label": "The potion that went in"
+     "item": "minecraft:potion"
     }
    ],
    "notes": [
     "Takes 1 of 12."
-   ]
+   ],
+   "per_potion": true
   },
   {
    "inputs": [

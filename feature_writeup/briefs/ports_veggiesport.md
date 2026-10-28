@@ -7,7 +7,7 @@ writeup: [veggies_delight.md](../veggies_delight.md) (5.1 marked merges). The po
 ([item_merges.js](../../kubejs/startup_scripts/_lib/item_merges.js), design in [item_merges.md](../item_merges.md)).
 
 ## veggiesport #2: Marked merges: Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers
-Status: Pinned / Work: KubeJS / TODO `ports/veggiesport #2` ([veggies_delight.md](../veggies_delight.md) 3.3, 5.1; no earlier section here)
+Status: Pinned / Work: KubeJS / TODO `merges/dishes #1 to #3` ([veggies_delight.md](../veggies_delight.md) 3.3, 5.1; no earlier section here)
 
 Base work is in the writeup (both sides stay until the port has been played, then merge). Folded scope (scratchpad
 2026-10-24): merge fish and cod and chips, i.e. the first marked merge (M1) is now asked for:

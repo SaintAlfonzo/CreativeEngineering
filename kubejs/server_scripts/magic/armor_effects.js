@@ -78,21 +78,26 @@ PlayerEvents.tick(event => {
 // CEConfig perf.mountEffectIntervalTicks (default 100) and each application lasts
 // interval + REFRESH_TICKS, so the effect never lapses between passes. Newly equipped
 // armor starts working within one interval.
-LevelEvents.tick(event => {
-	var level = event.getLevel()
-	if (level.isClientSide()) return
-
+//
+// One ServerEvents.tick, not LevelEvents.tick: the per-level handler ran once per
+// dimension every tick (16 calls, perf.md 10.2 #6). The interval check comes first, and
+// dimensions with no player in them are skipped.
+ServerEvents.tick(event => {
 	var AE = global.armorEffects
 	if (!AE || !Object.keys(AE.MOUNTS).length) return
 
+	var server = event.getServer()
 	var interval = $ArmorFxCEConfig ? $ArmorFxCEConfig.PERF.mountEffectIntervalTicks.get() : MOUNT_INTERVAL_DEFAULT
-	if (level.getServer().getTickCount() % interval !== 0) return
+	if (server.getTickCount() % interval !== 0) return
 
-	level.getAllEntities().forEach(entity => {
-		if (!(entity instanceof $AbstractHorse)) return
-		var armorStack = entity.getSlot(HORSE_ARMOR_SLOT).get()
-		if (!armorStack || armorStack.isEmpty()) return
-		var effects = AE.MOUNTS[String(armorStack.getItem().getId())]
-		if (effects && effects.length) applyEffects(entity, effects, interval + REFRESH_TICKS)
+	server.getAllLevels().forEach(level => {
+		if (level.getPlayers().isEmpty()) return
+		level.getAllEntities().forEach(entity => {
+			if (!(entity instanceof $AbstractHorse)) return
+			var armorStack = entity.getSlot(HORSE_ARMOR_SLOT).get()
+			if (!armorStack || armorStack.isEmpty()) return
+			var effects = AE.MOUNTS[String(armorStack.getItem().getId())]
+			if (effects && effects.length) applyEffects(entity, effects, interval + REFRESH_TICKS)
+		})
 	})
 })

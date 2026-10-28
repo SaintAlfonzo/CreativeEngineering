@@ -13,7 +13,8 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 | Tag helper `global.tags` (add/remove, wildcard `addMatching`, families, mineable, storage blocks, overlaps, mirror) | in use |
 | `CEConfig` (patcherMod): one Forge common config, 23 sections, live-editable in Create's config screen; `NCH.cfg` reads recipe values from it | in use ([gear_tuning.md](gear_tuning.md) for `NCH.cfg`) |
 | 24 `/dump*` commands writing `kubejs/exported/`, and `/dumpall` | in use |
-| `/cegen`: runs `tools/generators.json` (28 Python generators) in game, optionally at startup | in use; startup run off |
+| `/cegen`: runs `tools/generators.json` (45 Python generators and reports) in game, optionally at startup | in use; startup run off |
+| `tools/pack_paths.py`: shared instance paths, item_dict parser, lenient JSON loader, vanilla / Forge jar locator for the Python tools | in use since 2026-10-27 |
 | Headless tests: 9 `tools/test_*.sh` suites (Java on patcherMod classes, the pack's Rhino fork, node sims, Python), plus GameTest projects | in use; machine-specific paths (F7) |
 | Root Gradle build: one build for the 5 in-tree mods, `ce.forge-mod` convention plugin, `installToMods` | in use |
 | Item-loss repro harness (`tools/item_repro/`) | ran 2026-09-30; found the Sophisticated Backpacks wipe ([plan_1.0.3.md](plan_1.0.3.md) 4.7) |
@@ -54,7 +55,15 @@ config, the Java dump and dev commands, and its jar is built by the root Gradle 
 - **Conventions:** keys are short, unique, mod-prefixed when two mods clash (`i.ce_copper_shield` vs Everything Copper's
   `i.copper_shield`; `i.q_dragon_scale` vs DragonLoot's). `t_` = a tag key (`i.t_bakeware`). Generated sections are
   marked (`===== create - 502 new =====`, placeable food from `tools/placeable_catalog.py`).
-- **State:** 12,511 item keys; 55 keys are assigned twice to the same id (harmless); an "Unsorted (Possible
+- **One key per id (2026-10-27, pack_hygiene finding 20):** no id or tag is assigned under two different keys; the only
+  `i.x = i.y` lines left are the `i.none` / `i.na` placeholders of the metal chains. 77 item ids and 9 tags had 2 to 4
+  keys; one was kept per id (most code uses; dynamic uses such as `i['wire_coil_' + m]` count; ties go to the chain
+  convention) and every use rewritten, 96 keys dropped. Notable: `wire_coil_<metal>` (not `coil_<metal>`),
+  `coil_block_<metal>` (not `wire_coil_block_<metal>`), `ds_ore_<metal>` (not `deepslate_ore_<metal>`),
+  `explorers_compass`, `natures_compass`, `bonemeal`, `slime`, `eggs`, `milk`, `planks`, `cabbage`, `ore_netherite`,
+  `raw_netherite`. The scan and the full mapping were one-off (session scratchpad); re-check with a parse of the
+  `i.key = 'value'` lines grouped by value before adding a key for an id that may already have one.
+- **State:** 12,511 item keys (2026-10-18 count); an "Unsorted (Possible
   duplicates)" section near the top; 911 candidate entries and 689 unmapped ids still in
   [startup_scripts/todo/](../kubejs/startup_scripts/todo/) ([TODO](todo/TODO.md) `tooling/dictionaries #3`).
 - **Removed items:** hidden in JEI and given a red "REMOVED ITEM: DO NOT USE" line
@@ -129,16 +138,15 @@ folders through patcherMod because KubeJS can't).
 | `/dumpgear`, `/dumpstacks`, `/dumpfood`, `/dumpplaceable`, `/dumpcropgrowth`, `/dumpcompost`, `/dumppaintings` | per-feature tables ([gear_tuning.md](gear_tuning.md), [stack_sizes.md](stack_sizes.md), [food.md](food.md), ...) |
 | `/dumploot`, `/dumptrades`, `/loottuning` | loot and trades ([loot.md](loot.md), [wandering_trader.md](wandering_trader.md)) |
 | `/dumpbeenests [reset]` | measured nests per biome ([bee_nests.md](bee_nests.md)); **not** in `/dumpall` (a session that generated nothing would overwrite a measurement) |
-| `/dumpservermods` (Java) | copies `both`/`server` jars (per `mod_sides.md`) into `server_mods/` |
-| `/dumpall` | runs every dump above except `/dumpbeenests` through the real dispatcher, in order (quick registry dumps first, `/dumpclimate`, `/dumpclimatecaves` and `/dumpservermods` last; `/dumpclimate` takes about 4.5 minutes at its 20,000-column default); a failing dump is reported and skipped |
+| `/dumpall` | runs every dump above except `/dumpbeenests` through the real dispatcher, in order (quick registry dumps first, `/dumpclimate` and `/dumpclimatecaves` last; `/dumpclimate` takes about 4.5 minutes at its 20,000-column default); a failing dump is reported and skipped |
 
 [java_guard.js](../kubejs/server_scripts/_lib/java_guard.js) `guardThrowable(fn)` catches `java.lang.Error`s that
 Rhino's `try/catch` can't (a `NoClassDefFoundError` used to kill `/dumprecipes` silently).
 
 ### 2.6 Generators and `/cegen`
 
-[tools/generators.json](../tools/generators.json) lists 28 Python generators in run order, each with `groups`
-(`core`, `worldgen`, `loot`, `client`, `pack`, `reports`, `names`, `food`, `blockrunner`, `jei`, `slow`), the `dumps` it
+[tools/generators.json](../tools/generators.json) lists 45 Python generators and reports in run order, each with `groups`
+(`core`, `worldgen`, `loot`, `client`, `pack`, `reports`, `names`, `food`, `blockrunner`, `jei`, `stacks`, `slow`), the `dumps` it
 reads, its `outputs` and an `apply` hint. patcherMod's `devtools/GeneratorRunner` runs them as child processes from the
 instance root, hashes the outputs before and after, and reports changes.
 
@@ -153,8 +161,26 @@ Output goes to chat (status lines and highlighted lines), `latest.log` (`[cegen:
 load complete (up to `startupWaitSeconds`), so the first world load reads fresh files; results go to the first player
 to join. Python and timeout are configurable (`python`, `timeoutSeconds`).
 
-About 42 of the 70 Python tools aren't in the manifest; 5 are excluded on purpose (listed in its `_readme`), the rest are run by hand
-(F5). Newest manifest entries: `soup_soft_fluids` (`tools/gen_soup_soft_fluids.py`, jar soft fluids, [veggies_delight.md](veggies_delight.md)) and `jei_world` (`tools/gen_jei_world.py` + `tools/jei_world/`, group `jei`, [jei_world_tabs.md](jei_world_tabs.md)).
+Every other `tools/*.py` generator or report is named in the manifest's `_readme` with the reason it runs by hand
+(needs arguments or a choice, writes mod resources that need a jar rebuild, a `--check`-first hand workflow, a check
+that only prints, a library, or a release step). `dump_server_mods.py` is the only way to fill `server_mods/` and stays
+out (it copies ~300 jars). Entries added 2026-10-27 (pack_hygiene 44): `nether_swaps`, `meat_block_swaps`,
+`nether_blocks_scan`, `nether_worldgen_scan`, `wood_mismatch_scan`, `loot_breakdown`, `jei_coverage`,
+`stack_size_rules` (`gen_stack_sizes.py`), `stack_sizes`, `food_catalog`, `can_audit`, `flower_pot_audit`,
+`wandering_trader_report`, `texture_audit`, `jei_order_report`. Earlier: `soup_soft_fluids`
+([veggies_delight.md](veggies_delight.md)) and `jei_world` ([jei_world_tabs.md](jei_world_tabs.md)).
+
+**Shared Python module** [tools/pack_paths.py](../tools/pack_paths.py) (standard library only, cheap to import):
+`INSTANCE`, `MODS`, `ITEM_DICT`; `parse_item_dict()` (source, key -> value with the last assignment winning, id ->
+keys without `#tag` values; any indent, either quote; `food_catalog.parse_dict()` wraps it),
+`item_dict_first_keys()`, `item_dict_assignments()`; `loads_lenient()` (BOM, `//` and `/* */` comments outside
+strings, trailing commas); `MC_VERSION` / `FORGE_VERSION` from `instance.json`, `vanilla_jar()` (the launcher
+libraries' resources-only `-extra` jar first, then the full client jar, `~/.minecraft`, the ForgeGradle cache),
+`forge_jar(kind)` (the instance's Forge `universal` / `client` jar) and `forge_mapped_jar()` (ForgeGradle's Mojmap jar,
+for `javap`). En_us tables come from `lang_index.build()` (vanilla, Forge universal, upstream jars, mods with their
+jar-in-jar members, kubejs, client script renames, resource packs); `effect_audit.py` and
+`gen_effect_descriptions.py` use it. Structure template containers come from `loot_breakdown_scan.scan()` (cached),
+which `audit_loot_containers.py` uses too.
 
 ### 2.7 Headless tests
 
@@ -182,14 +208,46 @@ About 42 of the 70 Python tools aren't in the manifest; 5 are excluded on purpos
   `backportedBrewin`, `backportedVinery`, `babyMobs`, `creativeLabels`, `backportedVeggies` from `development/`; project names stay the bare mod names (`:patcherMod`).
 - `build-logic/` holds the `ce.forge-mod` convention plugin (ForgeGradle setup, official 1.19.2 mappings, Java 17,
   mods.toml expansion from `<mod>/gradle.properties`, jar manifest with mixin configs, dev runs, `installToMods`) and
-  `ce.forge-mod-refmap` for mods with real Mixin refmaps (exposureBackport).
+  `ce.forge-mod-refmap` for mods with real Mixin refmaps (below).
 - Shared versions in the root `gradle.properties` (Forge 43.3.9, `org.gradle.java.home`); per-mod ids and versions in
   each mod's `gradle.properties` (`replaces_jars` moves a replaced third-party jar out of `mods/`).
 - `./gradlew :patcherMod:installToMods` builds and swaps the jar into `mods/`, moving the old one to
   `development/<mod>/jar_archive/displaced/`. `development/<mod>/libs/` (compile-only copies of mod jars) is
   gitignored. The root [README.md](../README.md) has the commands.
 - patcherMod has no refmap and only runs reobfuscated: its mixins on vanilla classes use SRG names with
-  `remap = false`, and reflection uses SRG strings (`m_20115_`, `f_43494_`).
+  `remap = false`, and reflection uses SRG strings (`m_20115_`, `f_43494_`). Mods like it set
+  `disable_target_validator=true` (`-AdisableTargetValidator=true` on compileJava; patcherMod, babyMobs,
+  clientCapture, incubationAdditions, moreMooblooms, creativeDelight; `ce.forge-repack` always adds it).
+- Every `ce.forge-mod` project gets the `libs/` flatDir repository (`local:<file name without -version>:<version>`);
+  a build.gradle adds only other repositories (mavenCentral).
+- **Refmaps** (`ce.forge-mod-refmap`, 2026-10-27, pack_hygiene finding 41): a mod with Mojang-named mixins sets
+  `refmap_name=<mod>.refmap.json` (backportedMiners, backportedFungi, backportedVinery, backportedVintage,
+  backportedBrewin, creativeLabels, exposureBackport); exposureBackport adds
+  `refmap_source_sets=expanded:...,polaroid:...,catalog:...` for the addon source sets its build.gradle creates. The
+  plugin does the MixinGradle `add` and `config` (from `mixin_configs`), declares each refmap as a `mixinRefmap`
+  output of its compile task (a missing refmap re-runs the compile), and after `jar` fails if `refmap_name` is not in
+  the jar or a mixin config that lists mixins names a refmap the jar lacks.
+- **Upstream-resource guard** (`ce.forge-mod`, 2026-10-27, finding 42): `resource_guard_jars` (root-relative jar
+  paths, `*` in the file name = first match), `resource_guard_own_files`, `resource_guard_name` and optional
+  `resource_guard_arr=true` add `checkNoUpstreamResources` (or `checkNoArrResources`) to `check` and `jar`: the build
+  fails if `src/main/resources` has a path that is also in one of the jars, except the own files. Used by
+  backportedMiners, backportedVinery (two jars; a clash names its jar), Rustic and Ender's (ARR: the installed
+  `mods/endersdelight-*.jar`). Not `upstream_jar`, which is the donor or repack jar of `ce.forge-repack` and the port
+  tools.
+- **Shared Java sources** (`development/shared/<module>/`, 2026-10-27, pack_hygiene findings 36 and 38). Code that
+  several in-tree jars need is written once and compiled into each jar under that jar's own package, so no mod needs
+  another at runtime. A mod lists `shared_sources=<module>,...` and `shared_base=<its base package>` in its
+  `gradle.properties`; `ce.forge-mod`'s `sharedSources` task copies the modules into
+  `build/generated/sources/shared/`, moving the template packages `ce.shared` / `ce.mixin` to
+  `<shared_base>.shared` / `<shared_base>.mixin` (text replace on package, imports and references), and adds that to
+  the main source set. Edit only the templates; the copies are regenerated on every build. Modules:
+
+  | Module | Classes | Used by |
+  |---|---|---|
+  | `packs` | `BuiltInPacks` (`addFolder`: a `packs/<...>/` folder of the jar; `addMemory`: an in-memory pack of one pack type; `addUpstream`: a port's `<prefix>_assets` / `<prefix>_data` pair at the bottom), `MemoryPackResources` (path -> bytes `PackResources`, description from the caller) | backportedMiners, backportedVinery, Rustic (CD member), creativeLabels (`DonorArt`), patcherMod (`worldgen/donor/FarmersDonor`), moreMooblooms, incubationAdditions |
+  | `upstream` | `DonorJars` (`Jar` record, `verifyOrFail`, `read` by entry prefix, `readEntry`, `sha1`). Each port keeps its own `upstream/UpstreamJars.java` with the `new Jar("file", "sha1", ...)` pins, which `tools/build_deploy.py` reads | backportedMiners, backportedVinery, Rustic |
+  | `mixinplugin` | `GatedMixinPlugin`: a mixin applies only when its mod is loaded, named by a compartment package (`mixin.<modid>.`, optional exact version) or by a simple-name table (any of several mods); subclasses add `postApply` edits | creativeDelight (`CDMixinPlugin`, compartments + the Fruits Delight bytecode edits), moreMooblooms, incubationAdditions, creativeLabels (tables) |
+  | `itemhidden` | `mixin.ItemHiddenMixin` (`Item.allowedIn`, SRG name, no refmap) + `shared.HiddenItems` (the mod sets its test at construction) | moreMooblooms (Buzzier Bees buttercup and egg, only with Buzzier Bees), creativeLabels (`DonorItems`) |
 
 ### 2.9 Item-loss repro harness
 
@@ -241,9 +299,8 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   - `sequence_assembly_processes.js`: a nether star → nether star sequenced assembly using every legal assembly step.
 
   They show in JEI and are craftable (each is a loss, so no exploit). Keep as showcases, or gate them.
-- **F5. Many Python tools aren't in `generators.json`.** 33 of 55: some on purpose (the `_readme` names 5), but reports
-  like `food_catalog.py`, `stack_sizes.py`, `jei_coverage.py`, `wandering_trader_report.py`, `loot_breakdown.py` and
-  `gen_crop_worldgen_table.py` could be `/cegen` entries with their dumps.
+- **F5.** FIXED 2026-10-27 (pack_hygiene 44). **Many Python tools aren't in `generators.json`:** every generator or
+  report is now an entry or named in the `_readme` with its reason (2.6).
 - **F6.** FIXED 2026-10-19 (all three). **Stale references:** `test_crop_growth.sh` names `feature_writeup/crop_growth.md` (it's [crops.md](crops.md)
   2.9); `neoCraftHelper.js` line 1 says `kubejs/server_scripts/helpers/recipes.js`; the `NCH.cfg` example uses toml
   keys instead of field names ([gear_tuning.md](gear_tuning.md) F12).
@@ -278,8 +335,8 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - Dictionaries: [startup_scripts/_lib/](../kubejs/startup_scripts/_lib/) (`item_dict.js`, `block_dict.js`, `fluid_dict.js`, `effect_dict.js`, `multiblock_dict.js`, `removed_items.js`); worklists in [startup_scripts/todo/](../kubejs/startup_scripts/todo/).
 - Helpers: [startup_scripts/func/](../kubejs/startup_scripts/func/) (`neoCraftHelper.js`, `tag_helper.js`, plus the feature helpers: `tune_tools.js`, `armor_effects.js`, `compost.js`, `trade_helper.js`, `jei_order.js`, `item_physics.js`, ...); [changes/transition_items.js](../kubejs/startup_scripts/changes/transition_items.js).
 - Server `_lib/`: the `dump_*.js` commands, `dump_all.js`, `export_io.js`, `java_guard.js`, `recipe_scan.js`, `loot_dump.js`, `structure_dump.js`, `villager_trades_dump.js`, and the test recipes (F4).
-- patcherMod: [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java), [devtools/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/) (`GeneratorCommand`, `GeneratorRunner`, `ServerModsDump`, `BlockStateSyncDebug`).
-- Tools: [tools/generators.json](../tools/generators.json), `tools/*.py` (generators, reports, scans), `tools/test_*.sh` + `tools/*_test/`, [java_test_cp.sh](../tools/java_test_cp.sh), [lang_index.py](../tools/lang_index.py) (shared paths and jar/lang lookups for the Python tools), [tools/item_repro/](../tools/item_repro/README.md), [tools/perf/](../tools/perf/) ([perf.md](perf.md)), [build_deploy.py](../tools/build_deploy.py) ([deploy.md](deploy.md)), [gen_pack_manifest.py](../tools/gen_pack_manifest.py), [dump_server_mods.py](../tools/dump_server_mods.py), [decompile_mod.py](../tools/decompile_mod.py).
+- patcherMod: [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java), [devtools/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/) (`GeneratorCommand`, `GeneratorRunner`, `BlockStateSyncDebug`).
+- Tools: [tools/generators.json](../tools/generators.json), `tools/*.py` (generators, reports, scans), `tools/test_*.sh` + `tools/*_test/`, [java_test_cp.sh](../tools/java_test_cp.sh), [pack_paths.py](../tools/pack_paths.py) (shared paths, item_dict parser, lenient JSON, jar locator), [lang_index.py](../tools/lang_index.py) (every en_us table), [tools/item_repro/](../tools/item_repro/README.md), [tools/perf/](../tools/perf/) ([perf.md](perf.md)), [build_deploy.py](../tools/build_deploy.py) ([deploy.md](deploy.md)), [gen_pack_manifest.py](../tools/gen_pack_manifest.py), [dump_server_mods.py](../tools/dump_server_mods.py), [decompile_mod.py](../tools/decompile_mod.py).
 - Build: [settings.gradle](../settings.gradle), [gradle.properties](../gradle.properties), [build-logic/](../build-logic/), [README.md](../README.md).
 
 ## 6. Offline checks
@@ -307,7 +364,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - [ ] **TL-07 `/dumpall`:** run it → chat ends with `[dumpall] all 22 dumps done`; `kubejs/exported/` timestamps
   updated; `server_mods/` refreshed.
 - [ ] **TL-08 A dump failing:** (if one fails) `/dumpall` reports it and carries on with the rest.
-- [ ] **TL-09 `/cegen` list:** `/cegen` → the 22 generators, the groups and the last run.
+- [ ] **TL-09 `/cegen` list:** `/cegen` → the 45 generators, the groups (`stacks` among them) and the last run.
 - [ ] **TL-10 `/cegen run core`:** runs the core group in the background, one chat line per script, changed outputs
   named; `logs/cegen/structure_config.log` exists.
 - [ ] **TL-11 `/cegen run loot dumps`:** runs `/dumploot` and `/dumptags item` first, then the loot generators.
@@ -315,8 +372,9 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   `/cegen status` says so.
 - [ ] **TL-13 Startup run:** `[debug.generators] runAtStartup = true`, restart → the log shows the core generators
   running during load; the first player to join gets the results. Turn it off.
-- [ ] **TL-14 `/dumpservermods`:** copies only `both` / `server` jars into `server_mods/`; with a jar missing from
-  `mod_sides.md` it writes nothing and names the jar.
+- [ ] **TL-14 `tools/dump_server_mods.py`:** copies only `both` / `server` jars into `server_mods/`; with a jar missing
+  from `mod_sides.md` it writes nothing and names the jar. (`/dumpservermods` was removed 2026-10-27; `/dumpall` no
+  longer copies jars.)
 - [ ] **TL-15 Gradle:** `./gradlew :patcherMod:build` succeeds (libs populated); `./gradlew :patcherMod:installToMods`
   moves the old jar to `jar_archive/displaced/`.
 - [ ] **TL-16 `_manual_only`:** JEI on cooking oil → the cooking-pot recipe (2 oil from 6 ingredients) and a separate
@@ -335,3 +393,20 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - 2026-10-19: F6 fixed (test_crop_growth.sh, neoCraftHelper.js line 1, NCH.cfg example).
 - 2026-10-22: `R.replaceInput` / `R.replaceOutput` take `includeAdded` (2.2), found in the second scratch bulk run
   (SQ-CO-01: Canned Coffee Berries still took Respite's berries).
+- 2026-10-27 (pack_hygiene 36-38, 40): shared Java sources (2.8) replace the per-jar copies of `MemoryPackResources`,
+  `UpstreamPacks`, the `UpstreamJars` reading code, the three `NEEDS_MOD` mixin plugins, the two `ItemHiddenMixin`s
+  and the built-in `packs/` registration; patcherMod's two potion registrars became one table (`potion/CEPotions`,
+  same ids); `/dumpservermods` (`devtools/ServerModsDump`) removed, `tools/dump_server_mods.py` is the only route
+  (TL-14 now tests it). No id or behaviour change.
+- 2026-10-27 (pack_hygiene 44-49): `tools/pack_paths.py` (2.6) replaces the per-tool item_dict regexes
+  (`gen_mortar_catalog`, `gen_stack_sizes`, `lang_index`; `food_catalog.parse_dict` wraps it), the four lenient JSON
+  loaders (and `nether_worldgen_scan`'s monkeypatch) and the 13 hard-coded vanilla / Forge jar paths (Forge no longer
+  pinned to 43.3.9: read from `instance.json`; `lang_index` now reads Forge's own lang from the universal jar, the
+  client jar has none). `effect_audit` and `gen_effect_descriptions` read lang through `lang_index.build()`;
+  `audit_loot_containers` reads `loot_breakdown_scan.scan()`. 15 manifest entries added, the rest named in the
+  `_readme` (F5 fixed).
+- 2026-10-27: item dict down to one key per id (finding 20, 2.1 above): 96 extra keys dropped and their uses rewritten
+  across the pack, Creative Delight, patcherMod's `neoCraftHelper.js` (`felsic_ingot` -> `ingot_felsic`), the food JSON
+  (`food_types.json`, `can_types.json`, `placeable.json`, `stack_sizes.json`) and `tools/gen_can_types.py` (`cabbage`,
+  `crab`). No generator change needed: none of the dropped keys was in a generated section, and the generators pick an
+  id's existing key (`best_key`).

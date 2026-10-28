@@ -99,7 +99,7 @@
 	C.values('plant_matter', [
 		[i.brown_mushroom_block, 0.85],
 		[i.dried_kelp_block,     0.5],
-		[i.hay_block,            0.85],
+		[i.hay_bale,             0.85],
 		[i.moss,                 0.65],
 		[i.mushroom_stem,        0.65],
 		[i.nether_wart_block,    0.85],

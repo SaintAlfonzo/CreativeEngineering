@@ -10,7 +10,7 @@ Test prefix **VN-** · Last updated **2026-10-01** · Overall status **reference
 | Wine aging and wine effects | §2.10, §2.11 | reference |
 | Grape and grape seed flavour lines removed | [tooltips.js](../kubejs/client_scripts/tooltips.js) Vinery section, see [tooltips.md](tooltips.md) | DEPLOYED (client script), TT-14 pending |
 | Tooltip lines for the main Vinery blocks | same section, `TODO` placeholders | placeholders only, text not written yet |
-| JEI pages (fermentation, press, stomping, aging) | patcherMod, see [vinery_jei.md](vinery_jei.md) | BUILT, not in `mods/`; **barrel time on the page is wrong** (§4) |
+| JEI pages (fermentation, press, stomping, aging) | patcherMod, see [vinery_jei.md](vinery_jei.md) | REMOVED 2026-10-27 (the port ships its own) |
 | Other pack changes (oil, compost, crates, recipes, tags) | §3 | DEPLOYED |
 
 - **Open first:** this file's §2 for any "how does X work" question. Then [vinery_jei.md](vinery_jei.md) for the JEI pages.
@@ -229,7 +229,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 - **Tooltips** ([tooltips.js](../kubejs/client_scripts/tooltips.js), Vinery section; recorded in [tooltips.md](tooltips.md)):
   - Removed Vinery's per-variant grape and grape seed lines (`item.vinery.grape.tooltip.*`, `item.vinery.grapeseed.tooltip.*`). `removeTooltipKey` now accepts a key ending in `*` as a prefix, because Vinery builds the key from the item id.
   - Added `TODO` placeholder lines for the pot, press, barrel, stem, lattice, apple/cherry leaves and saplings, kitchen sink, stackable log and the wine storage blocks. **The placeholders show in game until written.** Vinery's own grey lines on those blocks are kept.
-- **JEI:** patcherMod adds four Vinery pages ([vinery_jei.md](vinery_jei.md)). BUILT, not in `mods/`.
+- **JEI:** patcherMod's four 1.3.10 pages were removed 2026-10-27 ([vinery_jei.md](vinery_jei.md)); the port ships its own.
 - **Plant oil:** every grape seed squeezes into 50 mB of plant oil in the IE Squeezer at 6400 energy ([oil.js](../kubejs/server_scripts/engineering/oil.js)).
 - **Composting:**
   - grapes and seeds 0.4
@@ -270,7 +270,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 
 - Mod jar: `mods/letsdo-vinery-forge-1.3.10.jar`; config `config/vinery/config.json5`
 - Pack tooltips: [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Vinery section, `removeTooltipKey`)
-- JEI pages: `development/patcherMod/.../compat/vinery/` ([vinery_jei.md](vinery_jei.md))
+- JEI pages: none in patcherMod since 2026-10-27 ([vinery_jei.md](vinery_jei.md))
 - Item keys: Vinery block of `global.item` in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) (`i.grapevine_pot`, `i.wine_press`, `i.fermentation_barrel`, `i.grape_seeds_*`, ...)
 - Pack scripts touching Vinery: [oil.js](../kubejs/server_scripts/engineering/oil.js), [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js), [cantags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js), [07_rules.js](../kubejs/server_scripts/loot/07_rules.js), [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js), [fabric.js](../kubejs/server_scripts/engineering/fabric.js), [wood_tags.js](../kubejs/server_scripts/tags/wood_tags.js), [blocktags.js](../kubejs/server_scripts/tags/blocktags.js)
 - Decompile helper: [tools/decompile_mod.py](../tools/decompile_mod.py)

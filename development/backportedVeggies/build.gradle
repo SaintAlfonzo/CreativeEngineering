@@ -6,11 +6,6 @@ plugins {
     id 'ce.forge-mod'
 }
 
-repositories {
-    // Third-party mod jars copied from ../../mods (git-ignored).
-    flatDir { dir 'libs' }
-}
-
 dependencies {
     // Farmer's Delight is the one hard dependency. fg.deobf remaps the SRG-named jar to Mojang names, so our classes
     // can extend its blocks (PieBlock, FeastBlock) and items.

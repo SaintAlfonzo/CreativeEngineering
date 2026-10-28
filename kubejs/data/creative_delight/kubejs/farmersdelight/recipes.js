@@ -8,9 +8,22 @@ ServerEvents.recipes(e => {
 	var i = global.item
 	var f = global.fluid
 	var R = global.NCH
-	var F = global.foodFamily(e)
 
 	global.CD.recipes(() => {
+
+		//######################### Bread ####################
+		// The roast chicken stuffing took only vanilla bread; any bread works (creativeengineering/bread_tags.js)
+		R.replaceInput({ id: 'farmersdelight:roast_chicken_block' }, i.minecraft_bread, i.t_bread, e)
+
+		//######################### Bread from dough #########################
+		// A dough bakes into plain bread on a baking sheet, 1 / 3 / 6 at a time (TODO baking/baked-goods #31), only when it has
+		// no bread of its own. #forge:dough holds exactly those (Create, sweet potato, oat; sourdough and cucumber dough are not
+		// in it): a dough with its own bread must stay out of that tag and bake into that bread instead (sourdough: pneumaticcraft/recipes.js).
+		// The 3 flour grid craft stays; no furnace, smoker or campfire route.
+		var SHEET_BREAD = { exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet }
+		;[1, 3, 6].forEach(k => {
+			R.ceBaking([k > 1 ? { id: i.any_dough, count: k } : i.any_dough], Item.of(i.minecraft_bread, k), e, 'bread_from_dough_' + k, SHEET_BREAD)
+		})
 
 		//######################### New content #########################
 		R.shaped(Item.of(i.rope_fence, 3), ['r/r', 'r/r'], { r: i.any_rope, '/': i.stick }, e, 'rope_fence')
@@ -29,6 +42,10 @@ ServerEvents.recipes(e => {
 		// food type is the same idea (beef, pork, chicken, mutton, rabbit and the modded meats)
 		R.replaceInput({ id: 'farmersdelight:cooking/dog_food' }, i.t_wolf_prey, i.t_food_raw_meat, e)
 		// Cabbage Rolls: the filling tag is widened in farmersdelight/tags.js
+		// Any raw pasta in every pasta recipe (TODO dishes/meals #38): recipes naming FD's raw pasta, by item or by
+		// #forge:pasta/raw_pasta, take all of #forge:pasta (cucumber noodles, gnocchi: veggiesdelight/tags.js)
+		R.replaceInput({ input: i.raw_pasta }, i.raw_pasta, i.pasta, e, true)
+		R.replaceInput({ input: i.t_pasta_raw_pasta }, i.t_pasta_raw_pasta, i.pasta, e, true)
 
 		//######################### Salvaging (cutting board, axe) #########################
 		// One recipe per wood: every wooden furniture piece gives its plank at 75% (1.2.4: door, sign and trapdoor

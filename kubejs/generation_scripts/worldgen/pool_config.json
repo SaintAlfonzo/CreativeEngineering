@@ -1630,6 +1630,12 @@
         "desert_watchtower:desert_watch_tower": { "original": 1, "current": 1, "enabled": true }
       }
     },
+    "endersdelight:end_house": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "endersdelight:end_house": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
     "eugene:camp": {
       "fallback": "minecraft:empty",
       "elements": {
@@ -1740,10 +1746,31 @@
         "farmers_structures:aquaculture/aquaculture_carp_spawn": { "original": 1, "current": 1, "enabled": true }
       }
     },
+    "farmers_structures:aquaculture_cod_spawn_pool": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "farmers_structures:aquaculture/aquaculture_cod_spawn": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:aquaculture/aquaculture_cod_spawn_perch": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:aquaculture/aquaculture_cod_spawn_pike": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:aquaculture/aquaculture_cod_spawn_pike_perch": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
     "farmers_structures:aquaculture_common_spawn_pool": {
       "fallback": "minecraft:empty",
       "elements": {
         "farmers_structures:aquaculture/aquaculture_turtle_spawn": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
+    "farmers_structures:cacao_basement_pool": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "farmers_structures:cacao_spawn_2": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
+    "farmers_structures:cacao_spawn_pool": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "farmers_structures:cacao_spawn_1": { "original": 1, "current": 1, "enabled": true }
       }
     },
     "farmers_structures:cook_additions_1_pool": {
@@ -1753,16 +1780,24 @@
         "farmers_structures:cook_houses/cook_additions_1_2": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_1_3": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_1_4": { "original": 1, "current": 1, "enabled": true },
-        "farmers_structures:cook_houses/cook_additions_1_5": { "original": 1, "current": 1, "enabled": true }
+        "farmers_structures:cook_houses/cook_additions_1_5": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_1_6": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_1_7": { "original": 1, "current": 1, "enabled": true }
       }
     },
     "farmers_structures:cook_additions_2_pool": {
       "fallback": "minecraft:empty",
       "elements": {
         "farmers_structures:cook_houses/cook_additions_2_1": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_2_10": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_2_2": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_2_3": { "original": 1, "current": 1, "enabled": true },
-        "farmers_structures:cook_houses/cook_additions_2_4": { "original": 1, "current": 1, "enabled": true }
+        "farmers_structures:cook_houses/cook_additions_2_4": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_2_5": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_2_6": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_2_7": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_2_8": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_2_9": { "original": 1, "current": 1, "enabled": true }
       }
     },
     "farmers_structures:cook_additions_3_pool": {
@@ -1772,17 +1807,30 @@
         "farmers_structures:cook_houses/cook_additions_3_2": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_3_3": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_3_4": { "original": 1, "current": 1, "enabled": true },
-        "farmers_structures:cook_houses/cook_additions_3_5": { "original": 1, "current": 1, "enabled": true }
+        "farmers_structures:cook_houses/cook_additions_3_5": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_3_6": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_3_7": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_3_8": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_3_9": { "original": 1, "current": 1, "enabled": true }
       }
     },
     "farmers_structures:cook_additions_4_pool": {
       "fallback": "minecraft:empty",
       "elements": {
         "farmers_structures:cook_houses/cook_additions_4_1": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_10": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_11": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_12": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_13": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_14": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_4_2": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_4_3": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_additions_4_4": { "original": 1, "current": 1, "enabled": true },
-        "farmers_structures:cook_houses/cook_additions_4_5": { "original": 1, "current": 1, "enabled": true }
+        "farmers_structures:cook_houses/cook_additions_4_5": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_6": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_7": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_8": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_additions_4_9": { "original": 1, "current": 1, "enabled": true }
       }
     },
     "farmers_structures:cook_end_1_pool": {
@@ -1790,8 +1838,29 @@
       "elements": {
         "farmers_structures:cook_houses/cook_end_1_1": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_end_1_10": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_11": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_12": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_13": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_14": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_15": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_16": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_17": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_18": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_19": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_end_1_2": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_20": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_21": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_22": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_23": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_24": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_25": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_26": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_27": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_28": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_29": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_end_1_3": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_30": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_end_1_31": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_end_1_4": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_end_1_5": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_end_1_6": { "original": 1, "current": 1, "enabled": true },
@@ -1826,7 +1895,37 @@
         "farmers_structures:cook_houses/cook_spawn_1": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_spawn_2": { "original": 1, "current": 1, "enabled": true },
         "farmers_structures:cook_houses/cook_spawn_3": { "original": 1, "current": 1, "enabled": true },
-        "farmers_structures:cook_houses/cook_spawn_4": { "original": 1, "current": 1, "enabled": true }
+        "farmers_structures:cook_houses/cook_spawn_4": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_spawn_5": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_spawn_6": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:cook_houses/cook_spawn_7": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
+    "farmers_structures:fish_stew_spawn_pool": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "farmers_structures:fish_stew_spawn": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:fish_stew_spawn_perch": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:fish_stew_spawn_pike": { "original": 1, "current": 1, "enabled": true },
+        "farmers_structures:fish_stew_spawn_pike_perch": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
+    "farmers_structures:ratatouille_spawn_pool": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "farmers_structures:ratatouille_spawn": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
+    "farmers_structures:shepherd_farm_spawn_pool": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "farmers_structures:shepherd_farm": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
+    "farmers_structures:squid_spawn_pool": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "farmers_structures:squid_spawn": { "original": 1, "current": 1, "enabled": true }
       }
     },
     "farmers_structures:sushi_spawn_pool": {

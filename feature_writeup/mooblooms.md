@@ -981,6 +981,9 @@ Blueprint's `SpawnEggItemMixin` (it only sorts `minecraft:` eggs in the creative
   1.1.0 changes server behaviour, and it boots there (scratch server PASSED 2026-10-22, SQ-GM-09: `Done (`, no error naming
   `more_mooblooms` or `compat.jei`).
   MB-100 to MB-104 are client only (JEI).
+- **Sunflower turned (2026-10-26, `mobs/mooblooms #6`):** the upper sunflower half is one-sided and showed its back on the
+  JEI pages; `MoobloomFlowerLayer` turns a sunflower slot 180 degrees (world and JEI alike). Rebuilt in place as 1.1.0
+  (third jar of that name, so bump the version before a deploy); not in `mods/`. MB-105.
 
 ### Planned from the scratchpad (2026-10-24)
 
@@ -994,7 +997,7 @@ Brief: [briefs/mobs_mooblooms.md](briefs/mobs_mooblooms.md). Nothing here is bui
 
 | What | Where |
 |---|---|
-| More Mooblooms | `development/moreMooblooms/` (README); Java in `src/main/java/com/SaintAlfonzo/more_mooblooms/`: `entity/` (Moobloom, CowFeeding, MMEntities), `variant/` (MoobloomVariant, MoobloomVariants, MoobloomBreeding), `spawn/MoobloomSpawns`, `item/MoobloomSpawnEggItem`, `client/` (renderer, model, flower layer), `compat/` (BuzzierBeesSet, `jei/`), `mixin/` (NaturalSpawnerMixin, ItemHiddenMixin, TagLoaderStripMixin, MobSunBurnMixin), `network/SyncVariantsPacket`, `MMConfig` |
+| More Mooblooms | `development/moreMooblooms/` (README); Java in `src/main/java/com/SaintAlfonzo/more_mooblooms/`: `entity/` (Moobloom, CowFeeding, MMEntities), `variant/` (MoobloomVariant, MoobloomVariants, MoobloomBreeding), `spawn/MoobloomSpawns`, `item/MoobloomSpawnEggItem`, `client/` (renderer, model, flower layer), `compat/` (BuzzierBeesSet, `jei/`), `mixin/` (NaturalSpawnerMixin, TagLoaderStripMixin, MobSunBurnMixin; ItemHiddenMixin plus `shared/` (BuiltInPacks, GatedMixinPlugin, HiddenItems) are generated from `development/shared/`, [pack_tooling.md](pack_tooling.md) 2.8), `network/SyncVariantsPacket`, `MMConfig` |
 | Mod data | `src/main/resources/data/more_mooblooms/` (`moobloom_variants/`, `moobloom_breeding/`, `loot_tables/`, `tags/blocks/spawnable_on_in_dark.json`); `src/main/resources/packs/` (`more_mooblooms/witherbloom_spawns/`, `buzzier_bees/<switch>/`, one folder per compat mod) |
 | Coats | `src/main/resources/assets/more_mooblooms/textures/entity/moobloom/<variant>.png`; working copies and the flower crops in `textureswapper/moobloom/` (a local folder, not in the git repo) |
 | Generators | `tools/gen_moobloom_variants.py` (variant table -> variant and breeding files), `development/moreMooblooms/tools/egg_colors.py` (egg colours from the coats) |
@@ -1052,6 +1055,9 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
 - [ ] **MB-101 JEI breeding outputs:** rosebloom egg -> pages for rosebloom + rosebloom -> rosebloom 100%, rosebloom + lilybloom -> peonybloom 35% / random 65%, the random-calf page (no witherbloom); each parent shows its food cycling; moobloom + moobloom -> sunbloom 10% / moobloom 90%
 - [ ] **MB-102 Info text:** each egg's info page reads in a few short lines, numbers match the config
 - [ ] **MB-103 No BB moobloom in JEI:** JEI search "moobloom" and BB's egg via recipe lookup -> no Just Enough Breeding page for Buzzier Bees' moobloom
+- [ ] **MB-105 Sunflower faces forward (2026-10-26):** JEI -> Moobloom Conversion and Shearing pages for the sunbloom: the
+  sunflower heads show their face (yellow petals, brown disc), not the green back. In the world, a sunbloom seen from
+  the front shows the faces too.
 - [ ] **MB-104 JEI conversion:** JEI uses of Dandelion (or a cow spawn egg's recipes) -> "Moobloom Conversion": a cow + dandelion -> moobloom 90 % / sunbloom 10 % shares in the hover, chance per food item, the rendered moobloom; a calf note on the cow slot (same as JW-15)
 - [ ] **MB-72 Egg swap:** survival; a Rosebloom egg in hotbar slot 1, a Lilybloom egg in the main inventory; use the last Rosebloom egg -> slot 1 stays empty (Quark ignores the egg). With the egg taken out of Quark's "Ignored Items" -> slot 1 refills with the Lilybloom egg
 - [ ] **MB-73 Egg on a moobloom:** right-click a lilybloom with a rosebloom egg -> a rosebloom calf; a plain egg -> a lilybloom calf

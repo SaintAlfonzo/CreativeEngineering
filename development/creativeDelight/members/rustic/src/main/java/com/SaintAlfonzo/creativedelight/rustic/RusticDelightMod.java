@@ -8,7 +8,9 @@ import com.SaintAlfonzo.creativedelight.rustic.registry.RDItems;
 import com.SaintAlfonzo.creativedelight.rustic.registry.RDLoot;
 import com.SaintAlfonzo.creativedelight.rustic.registry.RDPotions;
 import com.SaintAlfonzo.creativedelight.rustic.upstream.UpstreamJars;
-import com.SaintAlfonzo.creativedelight.rustic.upstream.UpstreamPacks;
+import com.SaintAlfonzo.creativedelight.rustic.shared.BuiltInPacks;
+import com.SaintAlfonzo.creativedelight.rustic.upstream.RusticTranslator;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,7 +41,10 @@ public class RusticDelightMod {
         RDLoot.MODIFIERS.register(bus);
         RDLoot.PLACEMENTS.register(bus);
         CraftingHelper.register(EnabledCondition.Serializer.INSTANCE);
-        bus.addListener(UpstreamPacks::onAddPackFinders);
+        // Upstream art and data as built-in packs, always on and at the bottom: resource packs, KubeJS and datapacks
+        // still override them (rustic_delight.md 5).
+        bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "rustic_upstream",
+                "Rustic Delight: art and data read from the upstream jar", RusticTranslator::assets, RusticTranslator::data));
         bus.addListener(RDEvents::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(RDEvents::onRightClickBlock);
         MinecraftForge.EVENT_BUS.addListener(RDEvents::onVillagerTrades);

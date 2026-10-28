@@ -10,18 +10,11 @@ var i = global.item;
 // ============================================================
 
 //Remove lightmans chocolate currency
-e.remove({output: i.coinpile_chocolate_copper})
-e.remove({input: i.coinpile_chocolate_copper})
-e.remove({output: i.coinpile_chocolate_iron})
-e.remove({input: i.coinpile_chocolate_iron})
-e.remove({output: i.coinpile_chocolate_gold})
-e.remove({input: i.coinpile_chocolate_gold})
-e.remove({output: i.coinpile_chocolate_emerald})
-e.remove({input: i.coinpile_chocolate_emerald})
-e.remove({output: i.coinpile_chocolate_diamond})
-e.remove({input: i.coinpile_chocolate_diamond})
-e.remove({output: i.coinpile_chocolate_netherite})
-e.remove({input: i.coinpile_chocolate_netherite})
+;[i.coinpile_chocolate_copper, i.coinpile_chocolate_iron, i.coinpile_chocolate_gold,
+  i.coinpile_chocolate_emerald, i.coinpile_chocolate_diamond, i.coinpile_chocolate_netherite].forEach(coin => {
+	R.remove({ output: coin }, e)
+	R.remove({ input: coin }, e)
+})
 
 console.log('Coin done')
 })

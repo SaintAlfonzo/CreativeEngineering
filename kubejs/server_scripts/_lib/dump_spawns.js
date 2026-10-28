@@ -8,18 +8,12 @@
 
 ServerEvents.commandRegistry(event => {
 	const { commands: Commands } = event
+	const $SpawnDump = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.SpawnDump')
 
 	event.register(
 		Commands.literal('dumpspawns')
 			.requires(src => src.hasPermission(2))
 			.executes(ctx => {
-				var $SpawnDump
-				try {
-					$SpawnDump = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.SpawnDump')
-				} catch (err) {
-					ctx.source.sendFailure(Text.red('/dumpspawns needs patcherMod 1.0.5 with worldgen/SpawnDump (install the jar): ' + err))
-					return 0
-				}
 				var line = String($SpawnDump.write(ctx.source.getServer()))
 				ctx.source.sendSuccess(Text.green(`Dumped spawns: ${line}`), false)
 				return 1

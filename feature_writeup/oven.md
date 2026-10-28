@@ -406,9 +406,20 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
   for `[cooking] recycleShowTicks` (10 ticks) before the result is plated with it ([remainder_buffer.md](remainder_buffer.md)
   3.1, TODO `cooking/kitchen #13`; GameTest RB-T15, RB-14 in game). WTHIT shows the leftover slots ("Holding: ...",
   [wthit_lines.md](wthit_lines.md) 2.9).
-- **Baking audit wanted (scratchpad 2026-10-21):** every baked good gets an oven recipe with flour, not wheat, and no
-  leftover crafting route. Known: banana bread (remove the wheat recipe, add a baking recipe) and honey cake (add a
-  baking recipe) ([TODO](todo/TODO.md) `cooking/oven #6`).
+- **Baking audit (2026-10-27, from the 2026-10-24 recipe dump; BUILT, not run in game):** 156 baked foods. Families
+  restructured the same day ([food_families.md](food_families.md) 4.6: pizza, quiche, lasagna and dessert families,
+  `cake/muffin`). New oven members, each sweeping its mod's recipes: Bat, Chorus, Maple and Hostile's seven cookies,
+  Gingerbread and Gingerbread Man (COOKIES), Chorus Fruit Pie and Sponge Pie (renamed from Sponge Cake; PIES, no can),
+  Rotten, Green and Chorus Flower pie (HAND_PIES, `handPieBake`), Sweet Potato Cupcake (`muffinBake`); Honey Cake takes
+  honey bottle + honeycomb. Wheat swap for the rest:
+  [baked_goods.js](../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js) turns the wheat of bread
+  (and Quark's bent bread), Glow Bread, Adzuki Bun, Banana Bread, Strawberry Scones, Strange Eclair, Sweet Potato Dough
+  and Rustic batter (pot, Slice & Dice copy, and the egg solution mix) into flour. Left on wheat, not baked: Brewin'
+  vodka, sweet gelatine bucket, fried shrimp, turnip cake, nutritional bar.
+  Still without an oven recipe (hand craft or furnace; no family rule asks for one yet): Banana, Glow, Garlic, Honey and
+  Mulberry Bread, Nether Wart Sourdough, Cornbread and tortilla (furnace trio), Adzuki Bun, Strawberry Scones, Strange
+  Eclair, the brownies, Fig Pudding, Create Factory waffles and rolls, pizzas, lasagna. Quiches follow their own rule
+  (shaped + sequenced assembly). Foods without a family: none baked (Biscuit of Totality is in `dessert/other`).
 
 ## 5. File map
 

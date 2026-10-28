@@ -4,8 +4,6 @@ console.log('end engineering starting')
 const R = global.NCH
 var i = global.item;
 
-i.ender_shard = 'endersdelight:ender_shard';
-
 // ============================================================
 // Ender pearls
 // ============================================================

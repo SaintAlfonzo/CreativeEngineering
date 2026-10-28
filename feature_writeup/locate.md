@@ -14,7 +14,7 @@ classes and Async Locator 1.3.0; decisions in 4)
 | 3.3 StructureCheck thread safety | BUILT 2026-10-12 | `mixin/StructureCheckThreadSafeMixin` |
 | 3.4 Miss logging (misses before a hit, per search and per structure) | BUILT 2026-10-12 | `worldgen/LocateStats` + `mixin/ChunkGeneratorMetaLocateMixin` |
 | 3.5 `/celocate batch` | BUILT 2026-10-12; `stop` label fixed in 1.0.7 (DEPLOYED 2026-10-18) | `worldgen/LocateCommand`, `compat/AsyncLocatorBridge` |
-| 3.6 `/celocate census` (with generation-time miss reasons) | BUILT 2026-10-12; "known" bug (LO-03, LO-14) FIXED in 1.0.7 (DEPLOYED 2026-10-18) | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
+| 3.6 `/celocate census` (with generation-time miss reasons) | BUILT 2026-10-12; "known" bug (LO-03, LO-14) FIXED in 1.0.7 (DEPLOYED 2026-10-18); biome-tie false negatives FIXED 2026-10-27 (not deployed, SQ-TIE-01) | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
 | 3.7 Distant Horizons generation clipped below y 48 with a fake seabed (deep oceans around y 8, other oceans just under 48); pregen on the final server world | BUILT 2026-10-12 (option A), DEPLOYED with 1.0.6 (2026-10-14; LO-12 passed on that jar); LO-11 [game] open; pregen is a deploy step | `worldgen/DistantClip`, `mixin/NoiseBasedChunkGeneratorDistantClipMixin`, `NoiseChunkDistantClipMixin`, `ConfiguredFeatureDistantClipMixin` |
 
 **Main findings:**
@@ -249,6 +249,19 @@ what the census is for.
   Now each region's slots are grouped by chunk: every set that tries the chunk is predicted, then the chunk loads
   once, then every slot is scored. Chunks generated before the census still count "known", as designed. Retest:
   LO-03, LO-14.
+- **Biome ties (fixed 2026-10-27, not deployed; TODO `structures/testing #4`).** The 10-27 census (perf.md 10.9) had
+  5 / 10 false negatives, all `terralith:underground/old_refinery` and `mining_outpost` at stage biome. Vanilla's
+  `Climate.RTree#search` starts from the calling thread's previous result and keeps it when another entry is equally
+  near. Terralith's `cave/deep_caves` and vanilla's `deep_dark` overlap at offset 0 (depth 1.05 to 1.2, erosion below
+  -0.375), so at those points the biome depends on what the thread looked up before: the census or `/locate` thread
+  could get `deep_dark` where the worldgen thread got `deep_caves`. Both structures list `deep_caves`; the other four
+  members of the set don't, so they had no false negatives. `worldgen/TiedBiomes` keeps the one-sample test and,
+  only when it fails on a `MultiNoiseBiomeSource`, walks the parameter list for every entry at the nearest distance;
+  stage B and the biome-factor roll say no only if all of them fail. Generation is unchanged. Not covered (on
+  purpose): `MetaStructure`'s own biome tests (they run at generation too) and `MetaSlots.biomeNear` (already a
+  sampled heuristic). Harness 2026-10-27 on the real `Climate` classes and Terralith's list: the tie reproduced
+  (`deep_dark` after a `deep_dark` lookup, `deep_caves` after a `deep_caves` one), 9 checks PASS, 7 ties in 20000
+  random points. Live retest: SQ-TIE-01.
 
 ### 3.7 Deferring the bottom 64 to 96 blocks (investigation)
 

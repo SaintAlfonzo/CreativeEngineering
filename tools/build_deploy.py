@@ -226,6 +226,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/climate/*.json.gz', 'runtime'),      # BiomeLayoutTuner (/dumpclimate samples)
     ('generation_scripts/worldgen/biome_baselines/*.json', 'runtime'),  # BiomeLayoutTuner
     ('generation_scripts/worldgen/biome_config.json', 'runtime'),       # BiomeLayoutTuner
+    ('generation_scripts/worldgen/biome_layout_cache.json.gz', 'runtime'),  # BiomeLayoutTuner solve cache
     ('generation_scripts/worldgen/loot_container_swaps.json', 'runtime'),  # LootContainerSwaps
     ('generation_scripts/worldgen/pool_config.json', 'runtime'),        # PoolTuner
     ('generation_scripts/worldgen/pool_tags.json', 'runtime'),          # PoolTuner
@@ -252,9 +253,12 @@ KUBEJS_CLASSES = [
     ('generation_scripts/food/food_types.json', 'runtime'),             # CD creativeengineering/food_type_tags.js
     ('generation_scripts/food/can_servings.json', 'runtime'),           # creative_delight creativeengineering/can_tags.js
     ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
-    ('generation_scripts/food/placeable.json', 'runtime'),             # tags/placeabletags.js (placeable food tooltips)
+    ('generation_scripts/food/placeable.json', 'runtime'),             # CD creativeengineering/placeable_tags.js (placeable food tooltips)
     ('generation_scripts/food/mortar_catalog.json', 'runtime'),        # cooking/mortar.js (tools/gen_mortar_catalog.py)
     ('generation_scripts/food/placed_food_slices.json', 'runtime'),    # PlacedFoodSol (Spice of Life bites of placed cakes)
+    ('generation_scripts/food/food_families.json', 'runtime'),         # CD seasoning_tags.js (food family item tags)
+    ('generation_scripts/food/comfort_nourishment.json', 'runtime'),   # CD creativeengineering/comfort_nourishment.js (tools/gen_comfort_nourishment.py)
+    ('generation_scripts/food/food_dict_index.json', 'dev'),           # tools/food_dict.py lookup only
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
     ('generation_scripts/names/name_fixes.json', 'client'),             # client_scripts/name_fixes.js (tools/name_audit.py)
     ('generation_scripts/names/name_rules.json', 'dev'),                # tools/name_audit.py input
@@ -271,7 +275,7 @@ KUBEJS_CLASSES = [
 CONFIG_CLASSES = [
     ('trashslot-common.toml', 'player', '1.0.3'),   # TrashSlot deletion behaviour; pushed once with 1.0.3
     ('creativeengineering/changelog_seen.txt', 'player'),  # changelog read marker (also git-ignored)
-    ('DistantHorizons.toml', 'player', '1.0.4'),    # LOD distance/quality + DH threads; pushed once with 1.0.4
+    ('DistantHorizons.toml', 'player', '1.1.04'),    # LOD distance/quality + DH threads and server request distances; pushed once with 1.0.4 and again with 1.1.04
     ('jei/blacklist.cfg', 'functional'),            # hidden ingredients (pack-defined)
     ('jei/recipe-category-sort-order.ini', 'functional'),   # pack's recipe tab order
     ('jei/ingredient-list-mod-sort-order.ini', 'functional'),  # pack's ingredient list order by mod
@@ -426,7 +430,10 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
             if test_suite_entries(path):
                 pre.error(f'mods/{jar} was built with -Pcd_test_suite (holds the scratch test suite): '
                           'rebuild it with ./gradlew :creativeDelight:build --offline before a release')
-        dupes = {m: jars for m, jars in by_id.items() if len(jars) > 1}
+        # Third-party jars nesting the same library (xaerolib, spectrelib, ...) are resolved by FML's Jar-in-Jar
+        # version selection; only a clash with a top-level jar or a Creative Delight member needs action.
+        dupes = {m: jars for m, jars in by_id.items()
+                 if len(jars) > 1 and any('!' not in j or j.startswith('creative_delight') for j in jars)}
         if dupes:
             pre.error('mods/ holds more than one jar for a mod id (FML loads only one; remove the others):\n'
                       + '\n'.join(f'    {m}: {", ".join(jars)}' for m, jars in sorted(dupes.items())))
@@ -1247,18 +1254,21 @@ def target_copies():
     return {t: [(cat, dest) for cat, (targets, dest) in CATEGORIES.items() if t in targets] for t in ('server', 'client')}
 
 
-def write_scripts(out, bases, cur):
+def write_scripts(out, bases, cur, payload):
     """verify.sh / verify.ps1 + verify/<target>.sha1 and .version (the jars each target's base version put in
-    its mods/; bases: {target: history snapshot}, empty for an install payload) and verify/<target>.installed.*
-    (the same for this version), and apply.sh / apply.ps1."""
+    its mods/, minus jars this payload copies over anyway; bases: {target: history snapshot}, empty for an
+    install payload) and verify/<target>.installed.* (the same for this version), and apply.sh / apply.ps1."""
     os.makedirs(os.path.join(out, 'verify'), exist_ok=True)
     for target in ('server', 'client'):
+        shipped = {rel for cat, paths in payload.items() if cat in CATEGORIES
+                   and CATEGORIES[cat][1] == 'mods' and target in CATEGORIES[cat][0] for rel in paths}
         for stem, snap in ((target, bases.get(target)), (f'{target}.installed', cur)):
             if not snap:
                 continue
+            skip = shipped if snap is not cur else set()     # a missing/disabled jar the update restores isn't drift
             lines = sorted(f'{h}  mods/{rel}' for cat, paths in snap['files'].items()
                            for rel, h in paths.items()
-                           if CATEGORIES[cat][1] == 'mods' and target in CATEGORIES[cat][0])
+                           if CATEGORIES[cat][1] == 'mods' and target in CATEGORIES[cat][0] and rel not in skip)
             with open(os.path.join(out, 'verify', f'{stem}.sha1'), 'w', encoding='utf8', newline='\n') as f:
                 f.write('\n'.join(lines) + '\n')
             with open(os.path.join(out, 'verify', f'{stem}.version'), 'w', encoding='utf8', newline='\n') as f:
@@ -1632,7 +1642,7 @@ def main():
         if dpay['removals'][target]:
             with open(os.path.join(OUT, f'removals_{target}.txt'), 'w', encoding='utf8') as f:
                 f.write('\n'.join(dpay['removals'][target]) + '\n')
-    write_scripts(OUT, bases, cur)
+    write_scripts(OUT, bases, cur, payload)
     with open(os.path.join(OUT, 'README.md'), 'w', encoding='utf8') as f:
         f.write(render_readme(cur, prev, d, dpay, base, payload))
     if os.path.isfile(RUNBOOK):

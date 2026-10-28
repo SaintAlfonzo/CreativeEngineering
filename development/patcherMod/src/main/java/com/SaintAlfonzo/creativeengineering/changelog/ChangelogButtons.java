@@ -39,7 +39,8 @@ import java.util.List;
  * by their translation key, so moved vanilla buttons still work.
  *
  * <p>Bubble: while the newest version is above the read marker, "New in X!" bobs one pixel every half second
- * (Quark's motion) beside the button, drawn after the screen. It points at the button from whichever side has room.
+ * (Quark's motion) beside the button, drawn after the screen and hidden while the button is hovered or focused so
+ * its tooltip is never covered. It points at the button from whichever side has room.
  */
 @Mod.EventBusSubscriber(modid = CreativeEngineering.MODID, value = Dist.CLIENT)
 public final class ChangelogButtons {
@@ -96,6 +97,8 @@ public final class ChangelogButtons {
     @SubscribeEvent
     public static void onScreenRender(ScreenEvent.Render.Post event) {
         if (button == null || bubble == null || owner != event.getScreen()) return;
+        // The button's tooltip is drawn inside the widget pass and the bubble after it, over the same pixels.
+        if (button.isHoveredOrFocused()) return;
         Screen screen = event.getScreen();
         Font font = Minecraft.getInstance().font;
         int w = font.width(bubble);

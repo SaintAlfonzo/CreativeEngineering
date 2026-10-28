@@ -83,8 +83,7 @@ public class CreativeEngineering
 				CreativeEngineeringEntities.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.fan.DragonBreathingRecipeType.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.gear.ElytraDuplicationSerializers.register(modEventBus);
-				com.SaintAlfonzo.creativeengineering.potion.BetterBeaconsPotions.register(modEventBus);
-				com.SaintAlfonzo.creativeengineering.potion.MagicResistancePotions.register(modEventBus);
+				com.SaintAlfonzo.creativeengineering.potion.CEPotions.register(modEventBus);
 				// creativeengineering:biome_tag loot condition (loot/BiomeTagCondition; the fishing net tables use it).
 				com.SaintAlfonzo.creativeengineering.loot.BiomeTagCondition.register(modEventBus);
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check
@@ -115,6 +114,8 @@ public class CreativeEngineering
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CfbCornerStorage.class);
         // Cutting board, plates, coaster on CfB counters: the per-state topper cache resets on tag reload.
         com.SaintAlfonzo.creativeengineering.compat.CounterToppers.init();
+        // Armor Trims' item lists cached once the registry locks; the trimmable list resets on tag reload (perf.md 10.2 #1).
+        com.SaintAlfonzo.creativeengineering.compat.ArmorTrimsItemCache.init();
         // Sacks work like bundles in inventory screens (compat.SackBundle, mixin.SupplementariesSackItemMixin):
         // the scroll-to-rotate packet. The scroll listener is compat.SackBundleScroll (client).
         com.SaintAlfonzo.creativeengineering.compat.SackBundle.register();
@@ -190,8 +191,8 @@ public class CreativeEngineering
 
         // BlockRunner tier speeds come from CEConfig [surface.speed] (mixin/BlockRunnerSpeedConfigMixin):
         // re-apply them when the toml is saved, and log an error if the mixin never ran.
-        // [time] master (feature_writeup/time.md): pushes into Serene Seasons / SeasonHUD / Vinery at server start and
-        // on every toml save, the sun-driven season counter, and /cetime. Calendar tooltip: time/TimeClient (client).
+        // [time] master (feature_writeup/time.md): pushes into Serene Seasons / SeasonHUD at server start and
+        // on every toml save (the Vinery port reads time/WineTime itself), the sun-driven season counter, and /cetime. Calendar tooltip: time/TimeClient (client).
         modEventBus.addListener(com.SaintAlfonzo.creativeengineering.time.TimePush::onConfigReload);
         modEventBus.addListener(com.SaintAlfonzo.creativeengineering.time.TimePresets::onConfigLoading);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.time.TimePush.class);
@@ -252,6 +253,10 @@ public class CreativeEngineering
         // CEConfig [worldgen.earth_fill] and [worldgen.water_fill].
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.EarthFill.class);
 
+        // Structures no biome of a dimension can hold are not tried there (ChunkGeneratorStructureFrequencyMixin);
+        // registered to clear its cache. On/off: [worldgen.systems] dimensionFilter.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.DimensionFilter.class);
+
         // Terrain adaptation by structure tag (none / bury / beard_thin / beard_box / the soft beard) and template trim
         // (air and bare pad around the built columns not placed): mixin/StructureTerrainAdaptationMixin,
         // BeardifierSoftMixin and StructureTemplateGroundMatchMixin. Registered for the tag table and the template
@@ -266,10 +271,6 @@ public class CreativeEngineering
         // /celocate batch | census | stats: structure-search measurements on Async Locator's thread pool;
         // the search prediction folds, miss logging and non-blocking loads are mixins. CEConfig [worldgen.locate].
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.LocateCommand.class);
-
-        // Vinery's Wandering Winemaker on its own spawn timer, independent of the Wandering Trader;
-        // knobs in CEConfig [wandering_trader]. Pool content is KubeJS (economy/wandering_trades.js).
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.trader.WinemakerSpawner.class);
 
         // Python generators (tools/generators.json): /cegen registers itself on the FORGE bus; these two
         // run them at startup when CEConfig [debug.generators] runAtStartup is on, finishing before any
@@ -333,6 +334,8 @@ public class CreativeEngineering
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fan.DragonBreathingFanProcessingType::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.potion.PotionBucketDispenser::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.NockRecipeBookSync::register);
+			// Vintage's salt blocks melt ice and dissolve like The Salt's (item_merges.md 2.9)
+			event.enqueueWork(com.SaintAlfonzo.creativeengineering.block.SaltBlockTicks::init);
 			// Corn is villager food (corn_delight.md 2.6)
 			if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight")) {
 				event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.CornDelightCompat::addVillagerFood);

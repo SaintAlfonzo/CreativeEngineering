@@ -48,7 +48,17 @@ public final class RusticTranslator {
             "data/rusticdelight/worldgen/configured_feature/wild_bell_peppers.json", RusticTranslator::basePatch,
             "data/rusticdelight/worldgen/configured_feature/bell_pepper_block_patch.json", RusticTranslator::basePatch);
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    /**
+     * Farmer's Delight 1.20 model ids the upstream models name, to their 1.19.2 names (same model). FD 1.20's platter
+     * texture (Bell Pepper Medley) has no 1.19.2 counterpart; repackedFarmers ships it at FD's own path instead.
+     */
+    private static final Map<String, String> RENAMED_MODEL_REFS = Map.of(
+            "\"farmersdelight:block/template_crop_cross\"", "\"farmersdelight:block/crop_cross\"");
+
+    private static final String OLD_TOOLTIP_PREFIX = "tooltip.farmersdelight.";
+    private static final String NEW_TOOLTIP_PREFIX = "farmersdelight.tooltip.";
+
+    private static final Gson GSON =new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static Map<String, byte[]> assets;
     private static Map<String, byte[]> data;
 
@@ -64,6 +74,8 @@ public final class RusticTranslator {
                 }
                 if (path.contains("/lang/")) {
                     bytes = withoutRemovedLangKeys(bytes);
+                } else if (path.contains("/models/")) {
+                    bytes = withRenamedModelRefs(bytes);
                 }
                 assets.put(path, bytes);
             });
@@ -289,7 +301,20 @@ public final class RusticTranslator {
     private static byte[] withoutRemovedLangKeys(byte[] bytes) {
         JsonObject lang = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
         lang.keySet().removeIf(key -> REMOVED.stream().anyMatch(id -> key.endsWith("." + RusticDelightMod.MODID + "." + id)));
-        return GSON.toJson(lang).getBytes(StandardCharsets.UTF_8);
+        // FD 1.20 names item tooltips tooltip.farmersdelight.<item>; FD 1.19.2 reads farmersdelight.tooltip.<item>.
+        JsonObject renamed = new JsonObject();
+        lang.entrySet().forEach(e -> renamed.add(e.getKey().startsWith(OLD_TOOLTIP_PREFIX)
+                ? NEW_TOOLTIP_PREFIX + e.getKey().substring(OLD_TOOLTIP_PREFIX.length()) : e.getKey(), e.getValue()));
+        return GSON.toJson(renamed).getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static byte[] withRenamedModelRefs(byte[] bytes) {
+        String text = new String(bytes, StandardCharsets.UTF_8);
+        String renamed = text;
+        for (Entry<String, String> e : RENAMED_MODEL_REFS.entrySet()) {
+            renamed = renamed.replace(e.getKey(), e.getValue());
+        }
+        return renamed.equals(text) ? bytes : renamed.getBytes(StandardCharsets.UTF_8);
     }
 
     private static boolean isRemoved(String id) {

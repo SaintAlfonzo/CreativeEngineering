@@ -7,7 +7,6 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var R = global.NCH
-	var F = global.foodFamily(e)
 
 	global.CD.recipes(() => {
 
@@ -23,6 +22,6 @@ ServerEvents.recipes(e => {
 		//Fish
 		//Increase slicing yield
 		R.remove({ id: 'alexsdelight:cutting/raw_catfish_slice' }, e)
-		R.fdCutting(i.catfish, i.any_knife, Item.of(i.catfish_slice, 6), e)
+		R.fdCutting(i.catfish, i.any_knife, Item.of(i.raw_catfish_slice, 6), e)
 	})
 })

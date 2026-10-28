@@ -25,7 +25,6 @@ light, ground blocks, mob caps and the rule checks (section 6) decide whether a 
 Exit code 1 when mob_spawns.json has rule errors, 2 when an input is missing.
 """
 import argparse
-import glob
 import json
 import math
 import re
@@ -34,6 +33,9 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths  # noqa: E402
+
 INSTANCE = Path(__file__).resolve().parent.parent
 SPAWNS = INSTANCE / 'kubejs/exported/spawns.json'
 RULES = INSTANCE / 'kubejs/generation_scripts/worldgen/mob_spawns.json'
@@ -41,8 +43,6 @@ TRAITS = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_traits.json'
 BIOME_CONFIG = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_config.json'
 VANILLA_RULES = INSTANCE / 'tools/spawn_rules_vanilla.json'
 OUT_MD = INSTANCE / 'feature_writeup/spawns_by_biome.md'
-MAPPED_JAR_GLOB = str(Path.home() / '.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge'
-                      / '1.19.2-*_mapped_official_1.19.2/forge-1.19.2-*_mapped_official_1.19.2.jar')
 
 TAG_PREFIX = 'creativeengineering:mob_spawns/'
 ACTIONS = ('set', 'scale', 'remove')
@@ -183,10 +183,10 @@ def load_areas():
 def refresh_vanilla_rules():
     """Parse SpawnPlacements.<clinit> in the mapped Forge jar: EntityType.X, Type.Y, Heightmap.Z, then an
     invokedynamic whose bootstrap names the rule method, then register(...)."""
-    jars = sorted(glob.glob(MAPPED_JAR_GLOB))
-    if not jars:
-        sys.exit('no ForgeGradle mapped jar under ~/.gradle (build patcherMod once): ' + MAPPED_JAR_GLOB)
-    text = subprocess.run(['javap', '-cp', jars[-1], '-p', '-c', '-v', 'net.minecraft.world.entity.SpawnPlacements'],
+    jar = pack_paths.forge_mapped_jar()
+    if not jar:
+        sys.exit('no ForgeGradle mapped Forge jar under ~/.gradle/caches/forge_gradle (build patcherMod once)')
+    text = subprocess.run(['javap', '-cp', str(jar), '-p', '-c', '-v', 'net.minecraft.world.entity.SpawnPlacements'],
                           capture_output=True, text=True, check=True).stdout
     clinit = text[text.index('  static {};'):]
     bsm_text = text[text.index('BootstrapMethods:'):]
@@ -209,7 +209,7 @@ def refresh_vanilla_rules():
             rules['minecraft:' + cur[0]] = {'placement': cur[1], 'heightmap': cur[2],
                                             'rule': cls.rsplit('.', 1)[1] + '.' + meth, 'class': cls}
             cur = []
-    VANILLA_RULES.write_text(json.dumps({'_source': Path(jars[-1]).name + ' SpawnPlacements.<clinit>',
+    VANILLA_RULES.write_text(json.dumps({'_source': jar.name + ' SpawnPlacements.<clinit>',
                                          'mobs': dict(sorted(rules.items()))}, indent=2) + '\n')
     print(f'{len(rules)} vanilla spawn rules -> {VANILLA_RULES.relative_to(INSTANCE)}')
 

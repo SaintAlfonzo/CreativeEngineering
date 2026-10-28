@@ -294,7 +294,7 @@ because `none` counts every earth block of its sunk dirt bowl; the terrain brief
 ---
 
 ## structures/earthfill #7: Worldgen hot spots
-Status Planned · Work patcherMod · TODO `structures/earthfill #7`
+Status **Built 2026-10-27** (A and B, perf.md 10.8; scratch test queued SQ-WGP-03, -04) · Work patcherMod · TODO `structures/earthfill #7`
 
 ### Goal
 Remove the two pack-side worldgen costs Phase 10 found: twigs' obelisk check (3.1% of worldgen CPU) and the repeated

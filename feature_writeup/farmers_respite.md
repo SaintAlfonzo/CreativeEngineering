@@ -116,7 +116,7 @@ All of section 2 is built. Where each piece lives:
 | Tank, brewing, boxes, pipes (K1-K6, K13) | Creative Delight `mixin/farmersrespite/KettleTankMixin` (block entity), `KettleBlockMixin` (`water_level` 0-4, right-click, placing a kept tank), `KettleMenuTankMixin`, `KettleDispenseMixin`; rules in `compat/farmersrespite/KettleTank` |
 | Recipe format (K8) | `KettleRecipeSerializerMixin` + `compat/farmersrespite/KettleBases`; NCH `frBrewing` option `base` (`needWater` gone, warns) |
 | Which bottles pour (K3, K4, K7) | `compat/farmersrespite/KettleDrinks`: read from Create filling / emptying recipes (glass bottle <-> 250 mB, one item, untagged fluid); water bottle hard-wired. A drink with no such pair can't go in the tank |
-| Recipes (K8, K9) | `kubejs/data/creative_delight/kubejs/farmersrespite/kettle.js` (48 Kettle recipes); gambler's tea stays in `other/item_merges.js` |
+| Recipes (K8, K9) | `kubejs/data/creative_delight/kubejs/farmersrespite/kettle.js` (48 Kettle recipes); gambler's tea is in `farmersrespite/item_merges.js` (the coffee merge, item_merges.md 1.1) |
 | Fluids (K9) | 10 new pack fluids in `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js` (`f.milk_coffee` ... `f.berry_matcha_latte`), tags in `fluidtags.js`; Central Kitchen's tea, cider, cocoa, melon and coffee fluids reused |
 | Spout / drain (K10, K12) | NCH `createBottle` (filling + emptying), called in `kettle.js` and `miners_delight/recipes.js` (water cup) |
 | GUI, tooltip, WTHIT, JEI (K11) | `KettleScreenTankMixin` + `compat/farmersrespite/client/KettleTankRender`; `KettleItemTooltipMixin`; `compat/wthit/WthitKettleTank`; `KettleJeiBaseMixin` (base fluid slot in the bar) |

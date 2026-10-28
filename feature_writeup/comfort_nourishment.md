@@ -1,7 +1,7 @@
 # Comfort vs Nourishment audit
 
 Audit of which foods give Farmer's Delight's *Comfort* and which give *Nourishment*, and whether a food's hunger or
-saturation value decides between them. Written so the owner can set pack rules (section 5). Nothing is built.
+saturation value decides between them. Written so the owner can set pack rules (section 5). R5 is built (section 10).
 
 ## 0. At a glance
 
@@ -9,7 +9,8 @@ saturation value decides between them. Written so the owner can set pack rules (
 |---|---|
 | Audit (upstream 1.19.2 values, before the delight backports) | DONE 2026-10-26 |
 | Pack rule for Comfort / Nourishment | OPEN: decisions CN-D1 to CN-D5 (section 5) |
-| Applying the rule | not started; depends on the decisions |
+| Ingredient rule R5 (inputs' hunger and count decide the effect; bowls, mason jars, shulker bowls, copper cups) | RULES SET by owner 2026-10-27 (section 9): Comfort input hunger 5+ / 3+ inputs, Nourishment input hunger 8+ / 4+ inputs and output hunger 10+, an effect-less bowl at 10 or more output hunger gets Comfort, two lengths by output hunger (120 s / 240 s); non-bowl forms settled (appendix C); decisions CN-D6, CN-D9 still open |
+| Applying the rule | BUILT 2026-10-27 (section 10): generator + Creative Delight startup script, CD jar in `mods/`; CN-D6 and CN-D9 taken as recommended; owner rules 4 and 5 (golden, 60 s light Comfort) added; tests CNS-01 to CNS-08, SQ-CNS; cans wait for `/dumpfood` |
 
 **Answer:** there is **no hunger or saturation cutoff**. In Farmer's Delight 1.2.4 the two effects use the same value
 tiers (Chicken Soup and Roast Chicken are both 14 / 0.75 for 300 s). The values pick the **duration**; the **dish form**
@@ -79,9 +80,9 @@ Sprouts 10 / 0.7, Mushroom Stew and Beetroot Soup 6 / 0.6. Light foods with one:
 
 | Hunger / mod | Seconds | Comfort | Nourishment |
 |---|---:|---|---|
-| 6 / 0.4 | 30 | Cooked Rice | |
-| 8 / 0.7 | 60 | Bone Broth | |
-| 10 / 0.6 | 60 | | Bacon and Eggs, Ratatouille |
+| 6 / 0.4 | 30 | Cooked Rice |  |
+| 8 / 0.7 | 60 | Bone Broth |  |
+| 10 / 0.6 | 60 |  | Bacon and Eggs, Ratatouille |
 | 12 / 0.8 | 180 | Beef Stew, Fish Stew, Vegetable Soup | Mushroom Rice, Pasta with Meatballs, Pasta with Mutton Chop, Steak and Potatoes |
 | 14 / 0.75 | 300 | Baked Cod Stew, Chicken Soup, Noodle Soup, Pumpkin Soup, Egg Fried Rice | Honey Glazed Ham, Roast Chicken, Shepherd's Pie, Stuffed Pumpkin, Roasted Mutton Chops, Squid Ink Pasta, Vegetable Noodles; Grilled Salmon (180 s) |
 
@@ -98,7 +99,7 @@ Adding "rice" to the Comfort words fixes FD's two but breaks Mushroom Rice and M
 
 | Mod | Form rule right | Notes on the misses |
 |---|---:|---|
-| Abnormals, Ender's, Farmer's Respite, More, Nether's, Rustic | all | |
+| Abnormals, Ender's, Farmer's Respite, More, Nether's, Rustic | all |  |
 | Delightful | 8 / 9 | Azalea Tea gives Nourishment (Lavender Tea gives Comfort) |
 | Corn | 4 / 5 | Creamed Corn (bowl, Comfort) |
 | End's | 9 / 12 | Ender Noodle Comfort; Enderman Gristle Stew and Dragon Meat Stew Nourishment |
@@ -131,6 +132,7 @@ Decision 2.5 A (2026-10-25) already keeps Comfort on FD's soups, so the pack fol
 | **R1 Form rule** (recommended) | Comfort: soup, stew, broth, chowder, congee, porridge, oats, chili, curry, plain/fried rice in a bowl, warm drinks and teas. Nourishment: plated meals, pasta, roasts, sandwiches, burgers, bars, salads | 25 upstream foods (A.1, column "Form rule says"), plus the ports to taste | FD's own design, matches decision 2.5 A, explainable in one line on a tooltip or JEI | needs per-food overrides; meat stews may feel like meals |
 | R2 Value cutoff | e.g. hunger 9 or less Comfort, 10 and more Nourishment | about 40 foods | one number, automatic for new foods | every FD soup (12 to 14 hunger) becomes Nourishment, reversing decision 2.5 A; light plates become Comfort |
 | R3 Status quo | keep upstream, fix only outliers (Miner's vanilla-soup cups, Azalea vs Lavender Tea, cake slices) | under 10 | least work | no rule to point new foods at |
+| R5 Ingredient rule (section 9) | Comfort: inputs worth 5+ hunger in 3+ slots, or no effect and output hunger 10+; Nourishment: 8+ hunger in 4+ slots and output hunger 10+; lengths 120 s (output under 10) / 240 s (10 up); bowls only | 84 of 191 bowl foods | automatic for every new bowl, no names or overrides | breaks the soup / plate split; thin soups lose Comfort |
 | R4 Form + value hybrid | R1 for which effect, FD's tier for duration (section 4.1) | R1 plus durations for about 70 foods | consistent lengths pack-wide | biggest change; durations are also a balance knob for food.md D1-D6 |
 
 Decisions:
@@ -162,13 +164,188 @@ code goes in CD), then `gen_can_types.py` so cans copy the new effects, and a ch
 
 ## 7. Tests
 
-None until a rule is applied. Then: CN-01 eat one food from each changed group (soup, rice, meat stew, vanilla soup) and
-check the effect and duration in the inventory screen and JEI.
+IDs are `CNS-` (`CN-` is taken by Corn Delight and the can tests). Restart with the 2026-10-27 CD jar first. Hover the
+food (effect line and length in the tooltip), eat it, check the inventory screen.
+
+| ID | Check | Pass |
+|---|---|---|
+| CNS-01 | `logs/latest.log` after boot | `[comfort_nourishment] 269 ruled foods set, N bottles stripped, M other foods lost Nourishment`, no `could not read` or `no item_dict key` line |
+| CNS-02 | Noodle Soup, Plate of Roast Chicken | Nourishment 4:00, no Comfort |
+| CNS-03 | Beef Stew, Baked Cod Stew | Comfort 4:00 |
+| CNS-04 | Bone Broth, Cooked Rice | neither effect |
+| CNS-05 | Dog Food, Rabbit Stew Cup, Slice of Yucca Cake | Comfort 1:00 |
+| CNS-06 | Golden Carrot; Enchanted Golden Apple | Nourishment 2:00; Nourishment 4:00 next to its vanilla effects |
+| CNS-07 | Chunkwich, Pickle; Azalea Tea, Relish Bottle | no Nourishment (other effects kept); no Comfort or Nourishment |
+| CNS-08 | after `/dumpfood` + `python3 tools/gen_can_types.py` + restart: Canned Noodle Soup, Canned Bone Broth | Nourishment; neither |
+
+Scratch server: SQ-CNS in [testing/scratch_queue.md](testing/scratch_queue.md).
 
 ## 8. History
 
+- 2026-10-27 (build): R5 built (section 10) with CN-D6 / CN-D9 as recommended; owner rules 4 (golden foods
+  Nourishment 120 s / 240 s) and 5 (Comfort 60 s at output hunger 7 or less) added to 9.0 during the build.
+- 2026-10-27 (latest): the rules were extended to mason jars, shulker bowls and copper cup meals; bottles lose all
+  effects; every other food loses Nourishment (appendix C rewritten, C.1 to C.5; CN-D8 settled).
+- 2026-10-27 (later): owner added output-hunger rules to R5 (section 9.0): Nourishment needs output hunger 10+, an
+  effect-less bowl at 10 or more output hunger gets Comfort, and both effects use two lengths split at 10 output hunger
+  (short 120 s, long 240 s, set by the owner; the averages of today's bowls are 140 s / 220 s). Appendix B.1 recomputed: 107 of 191 bowls unchanged.
+- 2026-10-27: ingredient rule R5 investigated (section 9, appendices B and C): best fit Comfort 5+ hunger / 3+
+  inputs, Nourishment 8+ / 4+, 109 of 191 bowls unchanged. Non-bowl foods with an effect listed in appendix C.
 - 2026-10-26: audit done on the 2026-10-24 dump. No value cutoff; FD picks the effect by dish form and the duration by
   value tier. Options R1 to R4 and decisions CN-D1 to CN-D5 written for the owner.
+
+## 9. Ingredient rule (R5, investigated 2026-10-27)
+
+Owner idea: decide the effect from the **recipe inputs**, not the dish form. Bowl meals only for now.
+
+- **Inputs** = the ingredient slots of the recipe that makes the bowl (the bowl itself does not count).
+- **Input value** = the total hunger of those inputs. A slot that takes several items (a tag or a list) counts its
+  **lowest** hunger food; members that are not food are skipped, and a slot with no food member counts 0.
+- Rule: input value at least **Vn** and inputs at least **Cn** -> Nourishment; else input value at least **Vc** and
+  inputs at least **Cc** -> Comfort; else neither. Nourishment needs more on both: Vn > Vc and Cn > Cc.
+
+### 9.0 Owner rules (2026-10-27), on top of the input rule
+
+1. **Nourishment needs output hunger 10 or more.** The food's own hunger (what it restores), not the input value. A
+   bowl that passes the Nourishment input test (8+ hunger, 4+ inputs) but restores under 10 falls through to the
+   Comfort test.
+2. **Fallback Comfort.** A bowl that gets no effect from the input rule and restores **10 or more** hunger gets
+   Comfort.
+3. **Two lengths, both effects.** Output hunger under 10 -> **short 120 s**, 10 and above -> **long 240 s**. The owner
+   set these after seeing the averages of today's bowl durations in each band: 141.7 s (18 bowls) and 220.9 s (102
+   bowls, median 180 s); the upstream audit set (A.1) gives 144.5 s / 219.3 s. This replaces FD's four-step tier
+   (section 4.1) for rule-driven bowls.
+4. **Golden foods** (added 2026-10-27, later): every food of the golden food type gives Nourishment 120 s, every
+   enchanted golden food Nourishment 240 s. This overrides every other rule (bowls, bottles, no-recipe bowls) and
+   replaces Comfort: a golden soup gives Nourishment only.
+5. **Light Comfort** (added 2026-10-27, later): a food left with Comfort that restores **7 or less** gets 60 s. This
+   covers ruled bowls, jars and cups and the foods outside the ruled forms that keep their Comfort (C.5).
+
+Order of tests, first match wins:
+
+| Test | Result |
+|---|---|
+| 4+ inputs, input hunger 8+, output hunger 10+ | Nourishment |
+| 3+ inputs, input hunger 5+ | Comfort |
+| output hunger 10+ | Comfort |
+| otherwise | no effect |
+
+Then two overrides (rules 4 and 5 below): a golden food gives Nourishment only (120 s, enchanted 240 s) whatever the
+table says, and any Comfort on a food that restores 7 or less lasts 60 s instead of 120 s.
+
+The 9.1 fit below chose only the two input thresholds; the three owner rules were added afterwards and are not fitted.
+
+### 9.1 Fitted numbers
+
+Every Vc, Cc, Vn, Cn combination was scored on the 191 bowl foods that have a recipe (37 Comfort, 83 Nourishment,
+71 neither). Score = the mean of the three per-class hit rates, so neither class can win by swallowing the others
+(chance 0.33; plain accuracy picks "everything Nourishment", 84 / 120 of the effect foods).
+
+| Rule | Comfort | Nourishment | Score | Comfort kept | Nourishment kept | Neither kept | Same overall |
+|---|---|---|---:|---:|---:|---:|---:|
+| **Recommended** | hunger 5+, 3+ inputs | hunger 8+, 4+ inputs | 0.567 | 20 / 37 | 46 / 83 | 43 / 71 | 109 / 191 (57 %) |
+| Base value 1 (non-food inputs count 1) | hunger 4+, 3+ inputs | hunger 10+, 4+ inputs | 0.579 | 29 / 37 | 37 / 83 | 36 / 71 | 102 / 191 |
+| Saturation instead of hunger | saturation 2+, 3+ inputs | saturation 6+, 4+ inputs | 0.583 | 27 / 37 | 39 / 83 | 39 / 71 | 105 / 191 |
+| Hunger + saturation | 9+, any count | 12+, 4+ inputs | 0.591 | 18 / 37 | 46 / 83 | 52 / 71 | 116 / 191 |
+
+The variants gain at most 0.024, and hunger is the number players see, so the recommendation stays with hunger and
+lowest food value. Upstream 1.19.2 mods only (146 foods, ports left out) give the same picture: 80 / 146 unchanged.
+
+Count spread (all 191): 1 input is 22 neither and 1 Comfort; 3 inputs 14 C / 16 N; 4 inputs 11 C / 34 N; 5 to 6
+inputs 9 C / 25 N; 7 to 8 inputs (all feasts) 5 N. Hunger spread: under 6 is 14 C / 16 N / 51 neither; 9 and up is
+9 C / 42 N.
+
+### 9.2 What the rules change (input rule plus owner rules 9.0)
+
+| Now \ Rule | Comfort | Nourishment | neither |
+|---|---:|---:|---:|
+| Comfort (37) | 25 | 6 | 6 |
+| Nourishment (83) | 36 | 44 | 3 |
+| neither (71) | 31 | 2 | 38 |
+
+107 of 191 bowls keep their effect (56 %; the input rule alone kept 109). The full per-food answer, with the length
+each bowl would get, is appendix B.1.
+
+- **Rich soups move to Nourishment (6):** Noodle Soup, Pumpkin Soup, Sinigang, Pickle Soup, Ghostly Chili, Dragon's
+  Breath and Chorus Soup. Ender Noodle and Coleslaw now stay Comfort (output hunger 8 and under).
+- **Thin soups lose Comfort (6):** Cooked Rice, Bone Broth, Oatmeal, Shulker Soup, Strider Moss Stew, Bell Pepper Soup.
+  All restore under 10 and have too little input hunger.
+- **Nourishment loses its effect (3):** Pike with Beetroot, Insect Stew, Bat Soup (all restore under 10).
+- **Nourishment drops to Comfort (36):** every plate whose input hunger is under 8 or with 3 inputs (pastas, rice
+  plates, Fried Chicken, Ratatouille, Shakshouka), plus plates that restore under 10 (Plate of Grilled Shulker, Fake
+  Meatloaf, Cheese Pasta, Enderman Gristle Stew), and Grilled Strider, Cave Soup and Fish and Chips (10 hunger, fallback).
+- **Bowls with no effect today gain one (33):** 31 Comfort (ice creams, salads, Dog Food, Glowgurt, Takoyaki, diced
+  potatoes, Mashed Potatoes, Blazing Chili, Tea Curry) and 2 Nourishment (Neapolitan Ice Cream, vanilla Rabbit Stew).
+  Fruit Salad, Cucumber Salad and Adzuki Curry are Comfort, not Nourishment as under the input rule alone. Rule 4 then
+  turns the golden soups (Golden Beetroot Soup, Golden Mushroom Stew, Golden Rabbit Stew) into Nourishment 120 s.
+- **Rules 4 and 5 (2026-10-27, later)** change the lengths: every golden food is Nourishment 120 s (enchanted 240 s),
+  and Comfort on a food restoring 7 or less lasts 60 s (28 foods, e.g. Dog Food, ice creams, jam jars, most soup cups).
+  The counts above are from before these two rules; the generator's own tally is in section 10.
+- **Rule 2 (fallback Comfort) decides 19 bowls**: 11 that restore 12 to 15 (Stuffed Morels, Squid Ink Pasta, Fried
+  Mushrooms, Perch with Mushrooms, Mushroom Rice, Acacia Blossom Soup, Cooked Rice with Chicken Cuts, Seasoned
+  Arthropods, Bowl of Guardian Soup, Bowl of Pineapple Fried Rice, Baked Cod Stew) and 8 that restore exactly 10
+  (Grilled Strider, Cave Soup, Fish and Chips, Blazing Chili, Tea Curry, Mashed Potatoes, Diced Potatoes with Beef and
+  with Chicken Cuts). They would be bare without it.
+
+Why it cannot fit better: the current split follows dish form (section 4), and inputs cut across form. Noodle Soup (4
+inputs, 9) is Comfort while Vegetable Noodles (5 inputs, 7) is Nourishment; Beef Stew (3, 6) Comfort next to Pasta with
+Mutton Chop (3, 7) Nourishment. Any input rule moves about 40 % of today's bowls. It is a new design, not a model of
+the old one.
+
+### 9.3 Method and data
+
+- Data: `foods.json` and `food/recipes.json` of the 2026-10-24 `/dumpfood`, `tags/item_tags.json` of 2026-10-26. The
+  dump predates the Miner's 1.4.5 and Rustic 1.7.0 ports (2026-10-25); rerun after the next `/dumpall`.
+- Recipe per food: the cooking pot recipe, else shapeless, else shaped crafting (first id). A feast serving uses its
+  feast block's recipe whole (Roast Chicken plate = 8 inputs); dividing value by servings scored worse.
+- A non-food input that is itself crafted (raw pasta, dough, batter, sauces) takes the value of its cheapest recipe per
+  item, two levels deep. This changed almost nothing against counting it 0.
+- Bowl meal = hands back `minecraft:bowl`. 22 bowl foods had no recipe found (feasts whose serving link is missing in
+  the dump, Ender's own pot recipes); they are listed in B.2 and need a hand check. Cans (52) are left out.
+- Script (Python over the three dumps, about 120 lines): session scratchpad, not kept.
+
+### 9.4 Decisions for R5
+
+- **CN-D6** (settled 2026-10-27: owner asked to execute the plan, so the recommended numbers) R5 with Comfort hunger
+  5+ and 3+ inputs, Nourishment hunger 8+ and 4+ inputs.
+- **CN-D7** (settled by the owner 2026-10-27) Duration: two lengths for both effects, short 120 s below 10 output
+  hunger and long 240 s from 10 up (section 9.0), instead of FD's four tiers.
+- **CN-D8** (settled by the owner 2026-10-27) Non-bowl foods: the rules apply to mason jars, shulker bowls and copper
+  cup meals (appendix C.1 to C.3); bottles lose every effect (C.4); every other food loses Nourishment and keeps
+  Comfort (C.5). Cans copy their source food through `gen_can_types.py`, so cans follow the result.
+- **CN-D10** (settled by the owner 2026-10-27) Fallback Comfort counts 10 as well: "10 or more".
+- **CN-D9** (settled 2026-10-27 as recommended) Base value for non-food inputs: 0, the rule as stated (1 would score
+  slightly better and keep Bone Broth, Mushroom Rice and the fried rices in).
+
+Applying R5: a generator in `tools/` writes the per-food effect list from the dumps into `generation_scripts/`, read
+by a startup food script in Creative Delight's `creativeengineering/` tree (FoodProperties are startup-time; restart
+needed). New bowls then get their effect from the next `/dumpall` + `/cegen`.
+
+## 10. Built (2026-10-27)
+
+- **Generator** [gen_comfort_nourishment.py](../tools/gen_comfort_nourishment.py) (`/cegen run comfort_nourishment`,
+  group `food`): the rules of 9.0 (1 to 5) and appendix C, written to
+  `kubejs/generation_scripts/food/comfort_nourishment.json` (`set`: food -> effect and seconds, `keep`: no recipe
+  found, `strip`: bottles). `--list` prints every ruled food with inputs, input hunger and recipe. The rules never read
+  a food's current Comfort / Nourishment except to find the kept Comfort of rule 5, so the output does not shift after
+  the game has applied it.
+- **Applier** Creative Delight `kubejs_startup/creativeengineering/comfort_nourishment.js` (priority -100, after the
+  other CD food rebuilds): sets `set`, strips `strip`, and removes Nourishment from every other food in the registry
+  (new foods too) except cans and `keep`. Restart to apply; shipped through build_deploy's runtime list.
+- **Cans**: [gen_can_types.py](../tools/gen_can_types.py) applies the same file to the source food before copying
+  effects (70 cans change). It is blocked until the next `/dumpfood` by an unrelated problem (Pickled Sea Pickle is not
+  in the food catalog yet); until then cans keep their old effects.
+- **Copper cups** take their bowl from Miner's own `cup_conversion` data in the donor jar; the Onion Soup Cup's bowl
+  is Brewin's Creamy Onion Soup (FD 1.19.2 has no Onion Soup).
+- **Check against appendix B / C**: 215 of 216 listed foods match. Glow Ink Pasta differs: the doc lists input hunger
+  8 (Nourishment), but the stated rule (lowest food per slot: raw fish 1, pasta 2, glow berries 2, ink sac 0) gives 5,
+  so it is Comfort 240 s. Not in the tables (no effect today): Honey Jar restores 10, so the fallback gives it Comfort
+  240 s (C's "no jar restores 10" counted only jars with an effect); Nut Mash Jar Comfort 120 s; the shulker-bowl
+  Twisted Cereal neither. Appendix B and C were updated to rules 4 and 5 on 2026-10-27 (Rule, Inputs, Input hunger and Seconds rule columns regenerated from the generator).
+- **Output (2026-10-24 dump)**: 269 set (118 unchanged), 19 kept for the B.2 hand check (the three enchanted golden
+  soups left B.2 through rule 4), 105 bottles, 22 other foods lose Nourishment, 28 Comfort foods at 60 s, 52 golden
+  foods. Rerun after the next `/dumpall` (the dump predates the Miner's 1.4.5 and Rustic 1.7.0 ports).
+- **Open**: the B.2 hand check (19 bowls keep today's effect), and cans after `/dumpfood`.
 
 ## Appendix: every food in the audit
 
@@ -381,3 +558,358 @@ These are the foods R1 would change.
 | Nourishment | 1 | 0 | 0 | 120 | tankard | same | Pale Jane | brewinandchewin |
 | Nourishment | 1 | 0 | 0 | 60 | tankard | same | Rice Wine | brewinandchewin |
 
+### B. R5 on every bowl meal (recommended numbers)
+
+"Rule" shows the effect under R5 plus the owner rules of 9.0 (bold where it differs from today). Input hunger is the
+total hunger of the inputs, output hunger is what the bowl restores. "Seconds rule" is 60 for Comfort at 7 output hunger or less, otherwise 120 below 10 output hunger and
+240 from 10 up; "-" means no effect.
+
+#### B.1 Bowl foods with a recipe (191)
+
+| Now | Rule | Inputs | Input hunger | Output hunger | Seconds now | Seconds rule | Food | Mod | Recipe |
+|---|---|---:|---:|---:|---:|---:|---|---|---|
+| Nourishment | Nourishment | 8 | 56 | 12 | 300 | 240 | Plate Of Glazed Arachnid Limbs | miners_delight | crafting_shapeless (feast, 4 servings) |
+| Nourishment | Nourishment | 8 | 36 | 14 | 300 | 240 | Plate of Honey Glazed Ham | farmersdelight | crafting_shapeless (feast, 4 servings) |
+| Nourishment | Nourishment | 8 | 29 | 14 | 300 | 240 | Plate of Roast Chicken | farmersdelight | crafting_shapeless (feast, 4 servings) |
+| Nourishment | Nourishment | 8 | 27 | 14 | 300 | 240 | Plate of Shepherd's Pie | farmersdelight | crafting_shapeless (feast, 4 servings) |
+| Nourishment | **Comfort** | 7 | 17 | 8 | 300 | 120 | Plate of Grilled Shulker | ends_delight | crafting_shaped (feast, 4 servings) |
+| Nourishment | Nourishment | 6 | 20 | 12 | 300 | 240 | Bowl of Steamed Dragon Egg | ends_delight | cooking (feast, 4 servings) |
+| Nourishment | Nourishment | 6 | 15 | 14 | 180 | 240 | Lasagna Slice | veggiesdelight | cooking (feast, 4 servings) |
+| Nourishment | Nourishment | 6 | 14 | 18 | 300 | 240 | Roasted Dragon Steak | ends_delight | crafting_shapeless |
+| Nourishment | Nourishment | 6 | 13 | 10 | 30 | 240 | Field Salad | delightful | crafting_shapeless |
+| Nourishment | Nourishment | 6 | 13 | 12 | 180 | 240 | Pineapple Marinated Pork | fruitsdelight | cooking |
+| Nourishment | Nourishment | 6 | 11 | 10 | 300 | 240 | Bowl of Dragon Meat Stew | ends_delight | cooking (feast, 4 servings) |
+| Nourishment | Nourishment | 6 | 11 | 12 | 180 | 240 | Orange Marinated Pork | fruitsdelight | cooking |
+| Nourishment | Nourishment | 6 | 11 | 12 | 180 | 240 | Roasted Vegetables | veggiesdelight | cooking |
+| Nourishment | Nourishment | 6 | 10 | 12 | 180 | 240 | Lychee Chicken | fruitsdelight | cooking |
+| Nourishment | Nourishment | 6 | 9 | 12 | 180 | 240 | Orange Chicken | fruitsdelight | cooking |
+| Nourishment | Nourishment | 6 | 8 | 10 | 300 | 240 | Bowl Of Stuffed Squid | miners_delight | cooking (feast, 5 servings) |
+| Nourishment | Nourishment | 5 | 17 | 12 | 180 | 240 | Vegetable Omelet | brewinandchewin | cooking |
+| Nourishment | Nourishment | 5 | 15 | 16 | 300 | 240 | Horror Lasagna | brewinandchewin | cooking |
+| Nourishment | Nourishment | 5 | 14 | 10 | 30 | 240 | Dandelion Greens And Eggs | veggiesdelight | crafting_shapeless |
+| Nourishment | Nourishment | 5 | 13 | 12 | 300 | 240 | Duck Noodles | abnormals_delight | crafting_shapeless |
+| Nourishment | Nourishment | 5 | 12 | 12 | 300 | 240 | Nachos | corn_delight | cooking (feast, 4 servings) |
+| Nourishment | Nourishment | 5 | 11 | 14 | 300 | 240 | Bowl of Stuffed Pumpkin | farmersdelight | cooking (feast, 4 servings) |
+| Nourishment | Nourishment | 5 | 11 | 12 | 300 | 240 | Pad Thai | vintagedelight | cooking |
+| Nourishment | Nourishment | 5 | 10 | 12 | 420 | 240 | Scarlet Pierogi | brewinandchewin | cooking |
+| Nourishment | Nourishment | 5 | 8 | 14 | 300 | 240 | Pork Marsala With Mushrooms | fungidelight | cooking |
+| Nourishment | Nourishment | 5 | 8 | 14 | 300 | 240 | Rabbit with Morels | fungidelight | cooking |
+| Nourishment | Nourishment | 5 | 8 | 14 | 300 | 240 | Rice And Vegetables | veggiesdelight | cooking |
+| Nourishment | Nourishment | 4 | 17 | 12 | 180 | 240 | Steak and Potatoes | farmersdelight | crafting_shaped |
+| Nourishment | Nourishment | 4 | 16 | 10 | 60 | 240 | Bacon and Eggs | farmersdelight | crafting_shapeless |
+| Nourishment | Nourishment | 4 | 16 | 12 | 180 | 240 | Vegan Steak And Potatoes | miners_delight | crafting_shapeless |
+| Nourishment | Nourishment | 4 | 12 | 12 | 300 | 240 | Cornbread Stuffing | corn_delight | cooking |
+| Nourishment | Nourishment | 4 | 12 | 12 | 180 | 240 | Creamy Pasta with Ham | moredelight | cooking |
+| Nourishment | Nourishment | 4 | 12 | 14 | 300 | 240 | Garlic Rice With Cauliflower | veggiesdelight | crafting_shapeless |
+| Nourishment | Nourishment | 4 | 11 | 12 | 180 | 240 | Creamy Onion Soup | brewinandchewin | cooking |
+| Nourishment | Nourishment | 4 | 11 | 14 | 300 | 240 | Roasted Mutton Chops | farmersdelight | crafting_shapeless |
+| Nourishment | **Comfort** | 4 | 11 | 8 | 60 | 120 | Plate Of Fake Meatloaf | miners_delight | cooking (feast, 4 servings) |
+| Nourishment | Nourishment | 4 | 11 | 12 | 180 | 240 | Cauliflower Kuku | veggiesdelight | cooking |
+| Nourishment | Nourishment | 4 | 10 | 10 | 180 | 240 | Black Cod | farmersrespite | crafting_shapeless |
+| Nourishment | Nourishment | 4 | 9 | 12 | 180 | 240 | Truffle Pasta | fungidelight | cooking |
+| Nourishment | Nourishment | 4 | 9 | 10 | 300 | 240 | Garlic Baked Cod | veggiesdelight | crafting_shapeless |
+| Nourishment | Nourishment | 4 | 8 | 14 | 300 | 240 | Pasta with Cheese | brewinandchewin | cooking |
+| Nourishment | Nourishment | 4 | 8 | 14 | 180 | 240 | Grilled Salmon | farmersdelight | crafting_shapeless |
+| Nourishment | Nourishment | 4 | 8 | 12 | 180 | 240 | Steak With Mushrooms | fungidelight | cooking |
+| Nourishment | **Comfort** | 4 | 5 | 14 | 300 | 240 | Glow Ink Pasta | miners_delight | cooking |
+| Nourishment | Nourishment | 4 | 8 | 12 | 180 | 240 | Creamy Pasta with Chicken Cuts | moredelight | cooking |
+| Nourishment | Nourishment | 4 | 8 | 14 | 300 | 240 | Stuffed Zucchinis | veggiesdelight | cooking |
+| Nourishment | **Comfort** | 5 | 7 | 14 | 300 | 240 | Vegetable Noodles | farmersdelight | cooking |
+| Nourishment | **Comfort** | 4 | 7 | 12 | 180 | 240 | Fried Chicken | rusticdelight | cooking |
+| Nourishment | **Comfort** | 4 | 6 | 7 | 180 | 60 | Enderman Gristle Stew | ends_delight | cooking |
+| Nourishment | **Comfort** | 4 | 6 | 14 | 300 | 240 | Mutton Chops with Truffle | fungidelight | cooking |
+| Nourishment | **Comfort** | 4 | 6 | 14 | 300 | 240 | Coffee-Braised Beef | rusticdelight | cooking |
+| Nourishment | **Comfort** | 4 | 6 | 12 | 180 | 240 | Fried Calamari | rusticdelight | cooking |
+| Nourishment | **Comfort** | 4 | 6 | 12 | 180 | 240 | Shakshouka | veggiesdelight | cooking |
+| Nourishment | **Comfort** | 4 | 5 | 10 | 180 | 240 | Stir Fried Shulker Meat | ends_delight | cooking |
+| Nourishment | **Comfort** | 4 | 5 | 10 | 60 | 240 | Ratatouille | farmersdelight | cooking |
+| Nourishment | **Comfort** | 4 | 5 | 12 | 180 | 240 | Bell Pepper Pasta | rusticdelight | cooking |
+| Nourishment | **Comfort** | 3 | 14 | 10 | 180 | 240 | Inky Cap Scrambled Eggs | fungidelight | crafting_shapeless |
+| Nourishment | **Comfort** | 3 | 12 | 12 | 180 | 240 | Steak And Broccoli | veggiesdelight | crafting_shapeless |
+| Nourishment | **Comfort** | 3 | 10 | 10 | 300 | 240 | Kangaroo Pasta | alexsdelight | cooking |
+| Nourishment | **Comfort** | 3 | 10 | 9 | 180 | 120 | Cheese Pasta | vintagedelight | cooking |
+| Nourishment | **Comfort** | 3 | 9 | 12 | 180 | 240 | Pasta With Veggieballs | miners_delight | cooking |
+| Nourishment | **Comfort** | 3 | 8 | 10 | 300 | 240 | Kangaroo Stew | alexsdelight | cooking |
+| Nourishment | **Comfort** | 3 | 8 | 10 | 300 | 240 | Lobster Pasta | alexsdelight | cooking |
+| Nourishment | **Comfort** | 3 | 8 | 12 | 180 | 240 | Pasta with Meatballs | farmersdelight | cooking |
+| Nourishment | **Comfort** | 3 | 8 | 12 | 180 | 240 | Pasta With Broccoli | veggiesdelight | cooking |
+| Nourishment | **Comfort** | 3 | 7 | 12 | 180 | 240 | Pasta with Mutton Chop | farmersdelight | cooking |
+| Nourishment | **Comfort** | 3 | 7 | 12 | 180 | 240 | Fig Chicken Stew | fruitsdelight | cooking |
+| Nourishment | **Comfort** | 3 | 6 | 14 | 180 | 240 | Cooked Rice with Porkchop | moredelight | cooking |
+| Nourishment | **Comfort** | 3 | 5 | 14 | 180 | 240 | Cooked Rice with Beef | moredelight | cooking |
+| Nourishment | **Comfort** | 5 | 4 | 12 | 180 | 240 | Stuffed Morels | fungidelight | cooking |
+| Nourishment | **Comfort** | 5 | 2 | 10 | 120 | 240 | Grilled Strider | nethersdelight | cooking |
+| Nourishment | **Comfort** | 4 | 4 | 14 | 300 | 240 | Squid Ink Pasta | farmersdelight | cooking |
+| Nourishment | **Comfort** | 4 | 4 | 12 | 180 | 240 | Fried Mushrooms | rusticdelight | cooking |
+| Nourishment | **Comfort** | 4 | 3 | 10 | 180 | 240 | Cave Soup | miners_delight | cooking |
+| Nourishment | **Comfort** | 4 | 2 | 14 | 300 | 240 | Perch with Mushrooms | abnormals_delight | cooking |
+| Nourishment | **-** | 4 | 2 | 9 | 60 | - | Pike with Beetroot | abnormals_delight | cooking |
+| Nourishment | **Comfort** | 4 | 1 | 12 | 180 | 240 | Mushroom Rice | farmersdelight | cooking |
+| Nourishment | **Comfort** | 3 | 4 | 12 | 300 | 240 | Acacia Blossom Soup | alexsdelight | cooking |
+| Nourishment | **Comfort** | 3 | 4 | 14 | 180 | 240 | Cooked Rice with Chicken Cuts | moredelight | cooking |
+| Nourishment | **Comfort** | 3 | 2 | 10 | 30 | 240 | Fish And Chips | veggiesdelight | cooking |
+| Nourishment | **-** | 2 | 10 | 8 | 60 | - | Insect Stew | miners_delight | cooking |
+| Nourishment | **Comfort** | 2 | 10 | 14 | 300 | 240 | Seasoned Arthropods | miners_delight | crafting_shapeless |
+| Nourishment | **-** | 2 | 2 | 7 | 180 | - | Bat Soup | miners_delight | cooking |
+| Comfort | **Nourishment** | 6 | 8 | 15 | 300 | 240 | Sinigang | delightful | cooking |
+| Comfort | **Nourishment** | 5 | 14 | 16 | 180 | 240 | Dragon's Breath and Chorus Soup | ends_delight | cooking |
+| Comfort | **Nourishment** | 5 | 12 | 13 | 300 | 240 | Pickle Soup | vintagedelight | cooking |
+| Comfort | Comfort | 5 | 11 | 8 | 180 | 120 | Ender Noodle | ends_delight | cooking |
+| Comfort | **Nourishment** | 5 | 10 | 12 | 300 | 240 | Ghostly Chili | vintagedelight | cooking |
+| Comfort | **Nourishment** | 4 | 9 | 14 | 300 | 240 | Noodle Soup | farmersdelight | cooking |
+| Comfort | **Nourishment** | 4 | 9 | 14 | 300 | 240 | Pumpkin Soup | farmersdelight | cooking |
+| Comfort | Comfort | 4 | 8 | 8 | 180 | 120 | Coleslaw | veggiesdelight | crafting_shapeless |
+| Comfort | Comfort | 6 | 6 | 8 | 60 | 120 | Pear with Rock Sugar | fruitsdelight | cooking |
+| Comfort | Comfort | 4 | 7 | 10 | 180 | 240 | Corn Soup | corn_delight | cooking |
+| Comfort | Comfort | 4 | 6 | 14 | 300 | 240 | Chicken Soup | farmersdelight | cooking |
+| Comfort | Comfort | 4 | 6 | 12 | 180 | 240 | Vegetable Soup | farmersdelight | cooking |
+| Comfort | Comfort | 4 | 6 | 9 | 60 | 120 | Mangosteen Cake | fruitsdelight | crafting_shapeless |
+| Comfort | Comfort | 4 | 5 | 14 | 300 | 240 | Egg Fried Rice | farmersdelight | cooking |
+| Comfort | Comfort | 4 | 5 | 10 | 30 | 240 | Creamy Morel Soup | fungidelight | cooking |
+| Comfort | Comfort | 3 | 12 | 12 | 180 | 240 | Potato Noodles | veggiesdelight | cooking |
+| Comfort | Comfort | 3 | 12 | 12 | 180 | 240 | Sweet Potato Pancakes | veggiesdelight | cooking |
+| Comfort | Comfort | 3 | 9 | 12 | 180 | 240 | Carrot Soup | moredelight | cooking |
+| Comfort | Comfort | 3 | 8 | 10 | 30 | 240 | Broccoli Soup | veggiesdelight | cooking |
+| Comfort | Comfort | 3 | 8 | 12 | 180 | 240 | Garlic Chicken Stew | veggiesdelight | cooking |
+| Comfort | Comfort | 3 | 7 | 12 | 180 | 240 | Fish Stew | farmersdelight | cooking |
+| Comfort | Comfort | 3 | 7 | 10 | 30 | 240 | Mashed Potatoes | veggiesdelight | cooking |
+| Comfort | Comfort | 3 | 7 | 14 | 300 | 240 | Turnip Beef Stew | veggiesdelight | cooking |
+| Comfort | Comfort | 3 | 6 | 12 | 180 | 240 | Beef Stew | farmersdelight | cooking |
+| Comfort | Comfort | 3 | 6 | 10 | 30 | 240 | Cauliflower Soup | veggiesdelight | cooking |
+| Comfort | Comfort | 3 | 5 | 7 | 180 | 60 | Creamed Corn | corn_delight | cooking |
+| Comfort | Comfort | 3 | 5 | 10 | 180 | 240 | Ender Congee | ends_delight | cooking |
+| Comfort | Comfort | 3 | 5 | 14 | 300 | 240 | Cacciatore | veggiesdelight | cooking |
+| Comfort | Comfort | 6 | 4 | 15 | 180 | 240 | Bowl of Guardian Soup | oceansdelight | cooking (feast, 4 servings) |
+| Comfort | Comfort | 6 | 1 | 14 | 300 | 240 | Bowl of Pineapple Fried Rice | fruitsdelight | cooking (feast, 4 servings) |
+| Comfort | **-** | 5 | 2 | 8 | 120 | - | Strider Moss Stew | nethersdelight | cooking |
+| Comfort | **-** | 4 | 4 | 6 | 180 | - | Bell Pepper Soup | rusticdelight | cooking |
+| Comfort | Comfort | 4 | 3 | 14 | 300 | 240 | Baked Cod Stew | farmersdelight | cooking |
+| Comfort | **-** | 3 | 3 | 8 | 180 | - | Shulker Soup | ends_delight | cooking |
+| Comfort | **-** | 2 | 2 | 8 | 60 | - | Bone Broth | farmersdelight | cooking |
+| Comfort | **-** | 2 | 2 | 8 | 300 | - | Oatmeal | vintagedelight | cooking |
+| Comfort | **-** | 1 | 0 | 6 | 30 | - | Cooked Rice | farmersdelight | cooking |
+| - | **Nourishment** | 9 | 10 | 4 | - | 120 | Golden Rabbit Stew | goldenfood | crafting_shaped |
+| - | **Comfort** | 6 | 11 | 6 | - | 60 | Fruit Salad | farmersdelight | crafting_shapeless |
+| - | **Nourishment** | 6 | 11 | 12 | - | 240 | Neapolitan Ice Cream | neapolitan | crafting_shapeless |
+| - | **Comfort** | 4 | 14 | 8 | - | 120 | Cucumber Salad | vintagedelight | crafting_shapeless |
+| - | **Nourishment** | 4 | 11 | 10 | - | 240 | Rabbit Stew | minecraft | cooking |
+| - | **Comfort** | 4 | 8 | 6 | - | 60 | Adzuki Curry | neapolitan | cooking |
+| - | **Nourishment** | 9 | 6 | 4 | - | 120 | Golden Beetroot Soup | goldenfood | crafting_shaped |
+| - | **Nourishment** | 9 | 6 | 4 | - | 120 | Golden Mushroom Stew | goldenfood | crafting_shaped |
+| - | **Comfort** | 5 | 7 | 10 | - | 240 | End Mixed Salad | ends_delight | crafting_shapeless |
+| - | **Comfort** | 5 | 6 | 6 | - | 60 | Maggot Salad | alexsdelight | crafting_shapeless |
+| - | **Comfort** | 4 | 7 | 10 | - | 240 | Glowgurt | berry_good | crafting_shapeless |
+| - | **Comfort** | 4 | 7 | 12 | - | 240 | Takoyaki | miners_delight | cooking |
+| - | **Comfort** | 4 | 7 | 6 | - | 60 | Chicken Salad | moredelight | crafting_shapeless |
+| - | **Comfort** | 4 | 7 | 10 | - | 240 | Diced Potatoes with Egg and Tomato | moredelight | cooking |
+| - | **Comfort** | 4 | 7 | 6 | - | 60 | Chocolate Ice Cream | neapolitan | crafting_shapeless |
+| - | **Comfort** | 4 | 7 | 10 | - | 240 | Cesar Salad | veggiesdelight | crafting_shapeless |
+| - | **Comfort** | 4 | 6 | 6 | - | 60 | Adzuki Ice Cream | neapolitan | crafting_shapeless |
+| - | **Comfort** | 4 | 6 | 6 | - | 60 | Strawberry Ice Cream | neapolitan | crafting_shapeless |
+| - | **Comfort** | 4 | 6 | 8 | - | 120 | Potato Salad | rusticdelight | crafting_shapeless |
+| - | **Comfort** | 4 | 5 | 6 | - | 60 | Matcha Ice Cream | delightful | crafting_shapeless |
+| - | **Comfort** | 4 | 5 | 6 | - | 60 | Salmonberry Ice Cream | delightful | crafting_shapeless |
+| - | **Comfort** | 4 | 5 | 4 | - | 60 | Dog Food | farmersdelight | cooking |
+| - | **Comfort** | 4 | 5 | 7 | - | 60 | Truffle Ice Cream | fungidelight | crafting_shapeless |
+| - | **Comfort** | 4 | 5 | 6 | - | 60 | Banana Ice Cream | neapolitan | crafting_shapeless |
+| - | **Comfort** | 4 | 5 | 6 | - | 60 | Mint Ice Cream | neapolitan | crafting_shapeless |
+| - | **Comfort** | 3 | 7 | 9 | - | 120 | Warped Moldy Meat | nethersdelight | crafting_shapeless |
+| - | **Comfort** | 3 | 5 | 10 | - | 240 | Diced Potatoes with Porkchop | moredelight | cooking |
+| - | **Comfort** | 3 | 5 | 6 | - | 60 | Broccoli Salad | veggiesdelight | crafting_shapeless |
+| - | **Comfort** | 6 | 4 | 10 | - | 240 | Blazing Chili | farmersrespite | cooking |
+| - | **Comfort** | 6 | 4 | 10 | - | 240 | Tea Curry | farmersrespite | cooking |
+| - | - | 5 | 2 | 8 | - | - | Adzuki Stew | neapolitan | cooking |
+| - | - | 4 | 4 | 6 | - | - | Vanilla Ice Cream | neapolitan | crafting_shapeless |
+| - | - | 4 | 3 | 2 | - | - | Batter | rusticdelight | cooking |
+| - | **Comfort** | 3 | 4 | 10 | - | 240 | Diced Potatoes with Beef | moredelight | cooking |
+| - | - | 3 | 3 | 6 | - | - | Mixed Salad | farmersdelight | crafting_shapeless |
+| - | - | 3 | 3 | 6 | - | - | Scrambled Eggs | incubation | cooking |
+| - | - | 3 | 3 | 6 | - | - | Beetroot Soup | minecraft | cooking |
+| - | - | 3 | 3 | 5 | - | - | Weird Caviar | miners_delight | crafting_shapeless |
+| - | **Comfort** | 3 | 3 | 10 | - | 240 | Diced Potatoes with Chicken Cuts | moredelight | cooking |
+| - | **Comfort** | 3 | 3 | 10 | - | 240 | Mashed Potatoes | moredelight | cooking |
+| - | - | 3 | 2 | 6 | - | - | Potato Salad | moredelight | cooking |
+| - | - | 3 | 1 | 6 | - | - | Vanilla Pudding | neapolitan | crafting_shapeless |
+| - | - | 3 | 0 | 5 | - | - | Sopa De Macaco | alexsmobs | crafting_shapeless |
+| - | - | 2 | 5 | 8 | - | - | Inky Caps Salad | fungidelight | crafting_shapeless |
+| - | - | 2 | 3 | 3 | - | - | Chorus Sauce | ends_delight | cooking |
+| - | - | 2 | 3 | 6 | - | - | Turnip Salad | veggiesdelight | crafting_shapeless |
+| - | - | 2 | 2 | 4 | - | - | Tomato Sauce | farmersdelight | cooking |
+| - | - | 2 | 0 | 5 | - | - | Nether Salad | farmersdelight | crafting_shapeless |
+| - | - | 2 | 0 | 6 | - | - | Mushroom Stew | minecraft | cooking |
+| - | - | 1 | 8 | 1 | - | - | Apple Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Bayberry Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Blueberry Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Chorus Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Cranberry Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Durian Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Fig Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Glowberry Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Hamimelon Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Hawberry Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Kiwi Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Lemon Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Lychee Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Mango Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Mangosteen Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Melon Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Orange Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Peach Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Pear Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Persimmon Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Pineapple Jello | fruitsdelight | crafting_shapeless |
+| - | - | 1 | 8 | 1 | - | - | Sweetberry Jello | fruitsdelight | crafting_shapeless |
+
+#### B.2 Bowl foods with no recipe found (19, hand check)
+
+The three Enchanted Golden soups left this list: rule 4 gives them Nourishment 240 s without a recipe. The rest keep
+today's effect until checked.
+
+| Now | Food | Mod |
+|---|---|---|
+| Nourishment | Dune Platter | abnormals_delight |
+| Nourishment | Passion Fruit Glazed Duck | abnormals_delight |
+| Nourishment | Seared Venison | abnormals_delight |
+| - | Slabdish | abnormals_delight |
+| Nourishment | Venison with Bamboo Shoots | abnormals_delight |
+| Nourishment | Fiery Fondue | brewinandchewin |
+| Comfort | Coconut Curry | delightful |
+| Comfort | Chorus Stew | endersdelight |
+| Nourishment | Ender Paella | endersdelight |
+| Comfort | Endermite Stew | endersdelight |
+| Nourishment | Pearl Pasta | endersdelight |
+| Nourishment | Bowl of Stuffed Shulker | endersdelight |
+| - | Twisted Cereal | endersdelight |
+| Nourishment | Plate of Dragon Leg with Sauce | ends_delight |
+| - | Mango Salad | fruitsdelight |
+| Nourishment | Plate of Stuffed Hoglin Ham | nethersdelight |
+| Nourishment | Plate of Stuffed Hoglin Roast | nethersdelight |
+| Nourishment | Plate of Stuffed Hoglin Snout | nethersdelight |
+| Comfort | Overnight Oats | vintagedelight |
+
+### C. Foods outside the bowl scope (rules applied 2026-10-27)
+
+Owner decision 2026-10-27: the R5 rules (9.0) also apply to **mason jars**, **shulker bowls** and **copper cup
+meals**. **Bottles** are being removed from the pack, so every Comfort / Nourishment effect on a bottle is dropped.
+**Every other food loses Nourishment** (it keeps Comfort). Cans copy their source food (CN-D8), so the 26 Nourishment
+cans follow their source: cans of the foods in C.5 lose it, cans of bowls follow B.1.
+
+How the rules read for these forms:
+
+- **Inputs / input hunger** come from the cooking pot recipe of the food (jars, shulker bowls: the container is not an
+  input; sugar and other non-food inputs count 0 hunger but still count as a slot). A **copper cup has no recipe**: it
+  is a serving of its bowl, so it takes the **bowl's** inputs and input hunger from B.1 (Onion Soup Cup = Creamy Onion
+  Soup; Beetroot Soup, Mushroom Stew and Rabbit Stew cups = the vanilla bowls) and its **own** output hunger.
+- Output hunger decides Nourishment (10+) and the length (under 10 -> 120 s, 10 and up -> 240 s). No jar, shulker bowl
+  or cup restores 10, so **none of them can be Nourishment, and all of them get 120 s** when they get an effect. The
+  fallback Comfort (10+ output hunger) never applies to them either.
+- Vinegar Jar has 3 inputs worth 3 hunger and restores 3, so it gets no effect.
+
+#### C.1 Mason jars (6)
+
+| Now | Rule | Output hunger | Inputs | Input hunger | Seconds now | Seconds rule | Hands back | Food | Mod |
+|---|---|---:|---:|---:|---:|---:|---|---|---|
+| Comfort | Comfort | 8 | 6 | 20 | 300 | 120 | empty_mason_jar | Apple Sauce Jar | vintagedelight |
+| Comfort | Comfort | 7 | 6 | 10 | 300 | 60 | empty_mason_jar | Glow Berries Jam Jar | vintagedelight |
+| Comfort | Comfort | 7 | 6 | 10 | 300 | 60 | empty_mason_jar | Sweet Berries Jam Jar | vintagedelight |
+| Nourishment | **Comfort** | 9 | 6 | 30 | 180 | 120 | empty_mason_jar | Pepper Jam Jar | vintagedelight |
+| Nourishment | **-** | 3 | 3 | 3 | 180 | - | empty_mason_jar | Vinegar Jar | vintagedelight |
+| both | **Comfort** | 7 | 6 | 30 | - | 60 | empty_mason_jar | Relish Jar | vintagedelight |
+
+Jam jars keep their other effects (Glowing, Strength); only Comfort / Nourishment change. The Relish Jar gave both
+effects and now gives Comfort only. Comfort at 7 hunger or less lasts 60 s (rule 5). Two jars had no effect and are not
+in the table: Honey Jar (3 inputs worth 18, restores 10) gets Comfort 240 s through the fallback, Nut Mash Jar (6 inputs
+worth 20, restores 8) Comfort 120 s.
+
+#### C.2 Shulker bowls (4)
+
+| Now | Rule | Output hunger | Inputs | Input hunger | Seconds now | Seconds rule | Hands back | Food | Mod |
+|---|---|---:|---:|---:|---:|---:|---|---|---|
+| Comfort | **-** | 4 | 2 | 4 | 300 | - | shulker_bowl | Chorus Stew | endersdelight |
+| Comfort | **-** | 4 | 2 | 1 | 300 | - | shulker_bowl | Endermite Stew | endersdelight |
+| Nourishment | **-** | 4 | 4 | 1 | 300 | - | shulker_bowl | Ender Paella | endersdelight |
+| Nourishment | **-** | 4 | 3 | 2 | 300 | - | shulker_bowl | Pearl Pasta | endersdelight |
+
+All four have too few inputs (2 to 4) and too little input hunger (1 to 4), and restore 4, so none gets an effect.
+The bowl versions of Chorus Stew and Endermite Stew (listed without a recipe in B.2) share these recipes and follow the
+same result: no effect. Hand-check them with B.2.
+
+#### C.3 Copper cup meals (15)
+
+| Now | Rule | Output hunger | Inputs | Input hunger | Seconds now | Seconds rule | Hands back | Food | Mod |
+|---|---|---:|---:|---:|---:|---:|---|---|---|
+| Comfort | **-** | 7 | 4 | 3 | 150 | - | copper_cup | Baked Cod Stew Cup | miners_delight |
+| Comfort | Comfort | 6 | 3 | 6 | 90 | 60 | copper_cup | Beef Stew Cup | miners_delight |
+| Comfort | **-** | 4 | 2 | 2 | 30 | - | copper_cup | Bone Broth Cup | miners_delight |
+| Comfort | Comfort | 7 | 4 | 6 | 150 | 60 | copper_cup | Chicken Soup Cup | miners_delight |
+| Comfort | Comfort | 6 | 3 | 7 | 90 | 60 | copper_cup | Fish Stew Cup | miners_delight |
+| Comfort | Comfort | 7 | 4 | 9 | 150 | 60 | copper_cup | Noodle Soup Cup | miners_delight |
+| Comfort | Comfort | 7 | 4 | 9 | 150 | 60 | copper_cup | Pumpkin Soup Cup | miners_delight |
+| Comfort | Comfort | 6 | 4 | 6 | 90 | 60 | copper_cup | Vegetable Soup Cup | miners_delight |
+| Nourishment | **-** | 3 | 2 | 2 | 90 | - | copper_cup | Bat Soup Cup | miners_delight |
+| Nourishment | **-** | 3 | 3 | 3 | 90 | - | copper_cup | Beetroot Soup Cup | miners_delight |
+| Nourishment | **-** | 5 | 4 | 3 | 90 | - | copper_cup | Cave Soup Cup | miners_delight |
+| Nourishment | **-** | 4 | 2 | 10 | 30 | - | copper_cup | Insect Stew Cup | miners_delight |
+| Nourishment | **-** | 3 | 2 | 0 | 90 | - | copper_cup | Mushroom Stew Cup | miners_delight |
+| Nourishment | **Comfort** | 6 | 4 | 11 | 90 | 60 | copper_cup | Onion Soup Cup | miners_delight |
+| Nourishment | **Comfort** | 5 | 4 | 11 | 150 | 60 | copper_cup | Rabbit Stew Cup | miners_delight |
+
+The empty **Copper Cup** itself is crafted from 3 copper ingots (shaped crafting, recipe `miners_delight:copper_cup`).
+It is the cup meals' container, so like the jar and the shulker bowl it is not counted as an input.
+
+Cups are all under 10 output hunger, so Nourishment is impossible and a cup is Comfort (60 s at 7 hunger or less, else 120 s) or bare. Eight cups end
+with Comfort (six keep it, Onion Soup and Rabbit Stew switch from Nourishment); seven end bare (Baked Cod Stew and Bone
+Broth lose Comfort, five Nourishment cups lose Nourishment).
+
+#### C.4 Bottles (10): every effect removed
+
+| Now | Output hunger | Food | Mod |
+|---|---:|---|---|
+| Comfort | 2 | Creamy Corn Drink | corn_delight |
+| Comfort | 0 | Lavender Tea | delightful |
+| Comfort | 0 | Dandelion Tea | farmersrespite |
+| Comfort | 0 | Dandelion Tea | farmersrespite |
+| Comfort | 3 | Apple Sauce Bottle | vintagedelight |
+| Comfort | 2 | Glow Berries Jam Bottle | vintagedelight |
+| Comfort | 2 | Sweet Berries Jam Bottle | vintagedelight |
+| Nourishment | 0 | Azalea Tea | delightful |
+| Nourishment | 1 | Vinegar Bottle | vintagedelight |
+| both | 2 | Relish Bottle | vintagedelight |
+
+All ten lose Comfort / Nourishment (7 Comfort, 2 Nourishment, Relish Bottle both). Bottles themselves are to be removed
+from the pack.
+
+#### C.5 Every other food: Nourishment removed (25)
+
+| Now | Rule | Output hunger | Hands back | Food | Mod |
+|---|---|---:|---|---|---|
+| Comfort | Comfort | 1 | - | Slice of Yucca Cake | create_central_kitchen |
+| Comfort | Comfort | 15 | - | Cabbage Wrapped Elder Guardian | oceansdelight |
+| Nourishment | - | 1 | - | Slice of Pumpkin Cake | create_central_kitchen |
+| Nourishment | - | 11 | - | Chunkwich | delightful |
+| Nourishment | - | 13 | - | Deluxe Cheeseburger | delightful |
+| Nourishment | - | 10 | - | Nut Butter and Jam Sandwich | delightful |
+| Nourishment | - | 9 | - | S'more | delightful |
+| Nourishment | - | 15 | - | Ender Bamboo Rice | ends_delight |
+| Nourishment | Nourishment | 10 | - | Golden Nutritional Bar | miners_delight |
+| Nourishment | - | 1 | - | Moss | miners_delight |
+| Nourishment | - | 10 | - | Nutritional Bar | miners_delight |
+| Nourishment | - | 8 | - | Stuffed Bell Pepper | veggiesdelight |
+| Nourishment | - | 14 | - | Turnip Cake | veggiesdelight |
+| Nourishment | - | 11 | - | Century Egg | vintagedelight |
+| Nourishment | - | 4 | - | Cheese Pizza Slice | vintagedelight |
+| Nourishment | - | 5 | - | Meat Pizza Slice | vintagedelight |
+| Nourishment | - | 6 | - | Pickle | vintagedelight |
+| Nourishment | - | 5 | - | Pickled Beetroot | vintagedelight |
+| Nourishment | - | 6 | - | Pickled Egg | vintagedelight |
+| Nourishment | - | 6 | - | Pickled Onion | vintagedelight |
+| Nourishment | - | 6 | - | Pickled Pepper | vintagedelight |
+| Nourishment | - | 14 | - | Stuffed Burrito | vintagedelight |
+| Nourishment | - | 15 | - | The Burger | vintagedelight |
+| Nourishment | - | 1 | tankard | Pale Jane | brewinandchewin |
+| Nourishment | - | 1 | tankard | Rice Wine | brewinandchewin |
+
+23 Nourishment effects dropped (cakes, sandwiches, burgers, bars, pickles, pizza, Century Egg, Moss, the two tankard
+drinks). The two Comfort foods (Slice of Yucca Cake, Cabbage Wrapped Elder Guardian) keep Comfort. Slice of Yucca Cake restores 1, so its Comfort lasts 60 s (rule 5); the Elder Guardian wrap keeps its own length.
+
+- 2026-10-28: planned from the scratchpad: other effects on high-value meals, Nourishment being on bowls only (TODO `food/types-and-tuning #18`). No code changed.

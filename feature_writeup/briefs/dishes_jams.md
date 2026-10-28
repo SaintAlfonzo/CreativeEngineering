@@ -125,7 +125,7 @@ recipe), bread fillings, cans. The pack adds items in `kubejs/startup_scripts/it
 ---
 
 ## jams #5: Merge nut butter and nut mash
-Status **Planned** / Work: KubeJS / id `dishes/jams #5`
+Status **Planned** / Work: KubeJS / id `merges/dishes #7`
 
 ### Goal
 Merge nut butter and nut mash into one item across the mods.

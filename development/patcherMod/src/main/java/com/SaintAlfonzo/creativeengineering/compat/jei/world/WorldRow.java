@@ -51,11 +51,12 @@ import net.minecraftforge.registries.ForgeRegistries;
  * }]}
  * ING: one of {"item": id} {"items": [id, ...]} {"tag": item_tag} {"block": id} {"blocks": [id, ...]}
  *      {"block_tag": block_tag} {"fluid": id, "amount": mB} {"entity": id} {"entities": [id, ...]}
- *      {"effect": mob_effect_id}
- *      plus optional "count", "nbt" (SNBT, items only), "chance" (0..1), "label" (extra tooltip line)
+ *      {"effect": mob_effect_id} {"stacks": [{"item": id, "nbt": SNBT}, ...]} (each stack its own NBT)
+ *      plus optional "count", "nbt" (SNBT, items or the fluid), "chance" (0..1), "label" (extra tooltip line)
  * </pre>
- * Blocks with no item (fire, water, lava) fall back to the fluid's bucket or a labelled stand-in; air is an empty
- * "Nothing" slot; an effect is its icon; entities show as their spawn egg, or a name tag named after the mob.
+ * Blocks with no item (fire, water, lava) fall back to the fluid's bucket or a labelled stand-in, drawn as the block's
+ * model where it has one; air is an empty "Nothing" slot; an effect is its icon; entities are their spawn egg (or a
+ * name tag named after the mob), drawn as the mob ({@link WorldSlotRenderer}).
  * Nothing and effect slots are drawn by the category, not JEI, so they can't be looked up.
  */
 public record WorldRow(List<Ing> inputs, Ing action, List<Ing> outputs, List<String> notes, boolean linked) {
@@ -120,6 +121,20 @@ public record WorldRow(List<Ing> inputs, Ing action, List<Ing> outputs, List<Str
         if (json.has("items")) {
             for (JsonElement id : json.getAsJsonArray("items")) addItem(items, id.getAsString(), count);
         }
+        if (json.has("stacks")) {
+            for (JsonElement element : json.getAsJsonArray("stacks")) {
+                JsonObject stack = element.getAsJsonObject();
+                int before = items.size();
+                addItem(items, stack.get("item").getAsString(), count);
+                if (items.size() > before && stack.has("nbt")) {
+                    try {
+                        items.get(before).setTag(TagParser.parseTag(stack.get("nbt").getAsString()));
+                    } catch (CommandSyntaxException e) {
+                        LOGGER.warn("[jei_world] {}: bad nbt {}", where, stack.get("nbt"));
+                    }
+                }
+            }
+        }
         if (json.has("tag")) {
             TagKey<Item> tag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(strip(json.get("tag").getAsString())));
             for (Holder<Item> holder : Registry.ITEM.getTagOrEmpty(tag)) items.add(new ItemStack(holder.value(), count));
@@ -145,10 +160,11 @@ public record WorldRow(List<Ing> inputs, Ing action, List<Ing> outputs, List<Str
             for (JsonElement id : json.getAsJsonArray("entities")) addEntity(items, id.getAsString());
         }
         MobEffect effect = json.has("effect") ? ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(json.get("effect").getAsString())) : null;
-        if (json.has("nbt") && !items.isEmpty()) {
+        if (json.has("nbt") && !(items.isEmpty() && fluids.isEmpty())) {
             try {
                 var tag = TagParser.parseTag(json.get("nbt").getAsString());
                 for (ItemStack stack : items) stack.getOrCreateTag().merge(tag);
+                if (items.isEmpty()) for (FluidStack stack : fluids) stack.getOrCreateTag().merge(tag);
             } catch (CommandSyntaxException e) {
                 LOGGER.warn("[jei_world] {}: bad nbt {}", where, json.get("nbt"));
             }
@@ -189,7 +205,11 @@ public record WorldRow(List<Ing> inputs, Ing action, List<Ing> outputs, List<Str
         }
     }
 
-    /** A block as its item; a liquid block as its fluid; fire and other itemless blocks as a labelled stand-in. */
+    /**
+     * A block as its item; a liquid block as its fluid; fire as flint and steel; a bubble column as a water bucket.
+     * Any other itemless block (frosted ice, candle cakes, crops, Create's dyed sails) is a Barrier named after the
+     * block and marked with {@link WorldSlotRenderer#BLOCK_TAG}, so the slot draws the block's model instead.
+     */
     private static void blockStack(List<ItemStack> items, List<FluidStack> fluids, Block block, int count) {
         Item item = block.asItem();
         if (item != Items.AIR) {
@@ -200,9 +220,15 @@ public record WorldRow(List<Ing> inputs, Ing action, List<Ing> outputs, List<Str
             fluids.add(new FluidStack(liquid.getFluid(), 1000));
             return;
         }
-        ItemStack standIn = new ItemStack(block instanceof net.minecraft.world.level.block.BaseFireBlock ? Items.FLINT_AND_STEEL : Items.BARRIER);
-        standIn.setHoverName(block.getName().withStyle(s -> s.withItalic(false)));
-        items.add(standIn);
+        Item standIn = block instanceof net.minecraft.world.level.block.BaseFireBlock ? Items.FLINT_AND_STEEL
+                : block instanceof net.minecraft.world.level.block.BubbleColumnBlock ? Items.WATER_BUCKET
+                : Items.BARRIER;
+        ItemStack stack = new ItemStack(standIn);
+        stack.setHoverName(block.getName().withStyle(s -> s.withItalic(false)));
+        if (standIn == Items.BARRIER) {
+            stack.getOrCreateTag().putString(WorldSlotRenderer.BLOCK_TAG, ForgeRegistries.BLOCKS.getKey(block).toString());
+        }
+        items.add(stack);
     }
 
     private static void addEntity(List<ItemStack> items, String id) {
@@ -211,13 +237,21 @@ public record WorldRow(List<Ing> inputs, Ing action, List<Ing> outputs, List<Str
         items.add(entityStack(type));
     }
 
-    /** The mob's spawn egg, or a name tag named after it. */
+    /**
+     * The mob's spawn egg, or a name tag named after it, marked with {@link WorldSlotRenderer#ENTITY_TAG} so a world
+     * tab slot draws the mob itself (the stack stays what JEI looks up and names in the tooltip).
+     */
     public static ItemStack entityStack(EntityType<?> type) {
         SpawnEggItem egg = SpawnEggItem.byId(type);
         if (egg == null) egg = ForgeSpawnEggItem.fromEntityType(type);
-        if (egg != null) return new ItemStack(egg);
-        ItemStack tag = new ItemStack(Items.NAME_TAG);
-        tag.setHoverName(type.getDescription().copy().withStyle(s -> s.withItalic(false)));
-        return tag;
+        ItemStack stack;
+        if (egg != null) {
+            stack = new ItemStack(egg);
+        } else {
+            stack = new ItemStack(Items.NAME_TAG);
+            stack.setHoverName(type.getDescription().copy().withStyle(s -> s.withItalic(false)));
+        }
+        stack.getOrCreateTag().putString(WorldSlotRenderer.ENTITY_TAG, ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
+        return stack;
     }
 }

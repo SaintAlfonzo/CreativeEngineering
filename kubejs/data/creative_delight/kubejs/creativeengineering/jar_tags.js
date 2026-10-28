@@ -18,6 +18,9 @@ ServerEvents.tags('item', e => {
 			i.cookie, i.honey_cookie, i.sweet_berry_cookie, i.green_tea_cookie, i.mulberry_cookie, i.cherry_cookie,
 			i.maple_cookie, i.bayberry_cookie, i.cranberry_cookie, i.lemon_cookie, i.persimmon_cookie, i.golden_cookie,
 			i.enchanted_golden_cookie, i.uncanny_cookies, i.mana_cookie, i.gingerbread_man,
+			// the rest of the cookie family (food_families.md `cookie`, baking audit 2026-10-27)
+			i.oatmeal_cookie, i.bat_cookie, i.chorus_cookie, i.blazecookie, i.ghastcookie, i.guardiancookie,
+			i.magicbuttercookie, i.magmacookie, i.mitecookie, i.pearlcookie,
 		],
 		// honeyed, caramel and chocolate apples
 		candied_apples: [

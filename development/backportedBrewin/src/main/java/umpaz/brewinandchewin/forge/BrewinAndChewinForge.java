@@ -25,7 +25,6 @@ import umpaz.brewinandchewin.common.registry.BnCMenuTypes;
 import umpaz.brewinandchewin.common.registry.BnCParticleTypes;
 import umpaz.brewinandchewin.common.registry.BnCRecipeSerializers;
 import umpaz.brewinandchewin.common.registry.BnCRecipeTypes;
-import umpaz.brewinandchewin.forge.event.BnCRemaps;
 import umpaz.brewinandchewin.forge.loot.BnCSlicingModifier;
 import umpaz.brewinandchewin.forge.network.BnCNetwork;
 import umpaz.brewinandchewin.forge.platform.BnCPlatformHelperForge;
@@ -43,7 +42,6 @@ public class BrewinAndChewinForge {
       modBus.addListener(BnCAttachments::registerCapabilities);
       modBus.addListener(BnCConfiguration::onConfigChanged);
       modBus.addListener(BrewinAndChewinForge::commonSetup);
-      BnCRemaps.register();
       DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> umpaz.brewinandchewin.forge.client.BrewinAndChewinForgeClient.init(modBus));
    }
 

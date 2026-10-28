@@ -576,8 +576,11 @@ it?
 Brief: [briefs/ui_effects.md](briefs/ui_effects.md). Nothing here is built.
 
 - [TODO](todo/TODO.md) `ui/effects #9` (bug): the three Potion Bundles items do not render on the JEI effect provider pages although they are in
-  the `potion_carriers` provider list ([jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js)). Cause unverified
-  (the bundle's NBT or a JEI filter); reproduce, then give JEED fully formed stacks.
+  the `potion_carriers` provider list ([jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js)). FIXED 2026-10-26
+  (server script, `/reload`): Potion Bundles 1.6's base item model has no texture and draws only through its `uses`
+  1 to 3 overrides (`PotionBundleUtils` `Uses` key); JEED copies each provider stack and adds only `Potion`, so the
+  stacks had no `Uses` and drew nothing. The three bundles are now given as `{Uses:3}` stacks (a `forge:partial_nbt`
+  provider; JEED keeps the NBT, `EffectInfo` copies and calls `PotionUtils.setPotion`). EF-21.
 - [TODO](todo/TODO.md) `ui/effects #10`: the "Hostile Mobs" effect's provider page collapses to one grouped entry and gets descriptions. Open: which
   effect this is (no effect of that name in the dump or the Hostile Delight lang), and whether JEED's provider recipe accepts a
   tag as one entry (else a stand-in item).
@@ -656,6 +659,8 @@ ingredient type.
   REMOVED line (`removedItems` doesn't unregister it); JEI search "nectar" / "Passion" → no Abnormals Delight
   entries; latest.log `[jeiRemove]` lists no recipe for it. Same for Cherry Cream Soda, Dune Platter, Yucca Gateau
   Slice.
+- [ ] **EF-21 Potion bundles on provider pages (2026-10-26):** `/reload`, JEI -> Regeneration effect page: the three
+  potion bundles show, drawn full (3 bottles) in the potion's colour, hover names the Regeneration bundle.
 - [ ] **EF-20 Slow Falling sources:** JEI → Slow Falling effect page → Red Wine and the potions, no Cherry Cream Soda.
 - [ ] **EF-13 Pack effect potions as fluid:** JEI fluid list → "Potion of Long Reach", "Potion of Magic Resistance" and
   "Potion of Intimidation" `create:potion` stacks exist.

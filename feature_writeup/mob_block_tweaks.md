@@ -351,3 +351,5 @@ because forceloaded chunks get no random ticks.
 ## Owner ideas (scratchpad 2026-10-26)
 
 - Villagers can't use the tall doors of Dramatic Doors; check the short doors too: `mobs/tweaks #15`.
+
+- 2026-10-28: planned from the scratchpad: profile and trim Alex's Mobs behavior and tick cost (TODO `mobs/tweaks #17`). No code changed.

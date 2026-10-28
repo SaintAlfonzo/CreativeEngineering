@@ -1,8 +1,8 @@
 package com.SaintAlfonzo.creativeengineering.worldgen.donor;
 
+import com.SaintAlfonzo.creativeengineering.shared.BuiltInPacks;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
@@ -45,16 +45,8 @@ public final class FarmersDonor {
     }
 
     public static void onAddPackFinders(AddPackFindersEvent event) {
-        if (event.getPackType() != PackType.SERVER_DATA) {
-            return;
-        }
-        event.addRepositorySource((consumer, constructor) -> {
-            Pack pack = Pack.create(PACK_ID, true, () -> new DonorPackResources(PACK_ID, PackType.SERVER_DATA, FarmersDonor::files),
-                    constructor, Pack.Position.TOP, PackSource.BUILT_IN);
-            if (pack != null) {
-                consumer.accept(pack);
-            }
-        });
+        BuiltInPacks.addMemory(event, PackType.SERVER_DATA, PACK_ID, "Farmer's Structures 1.0.6 data, translated in memory from the donor jar",
+                Pack.Position.TOP, FarmersDonor::files);
     }
 
     /** Built once per game start, on the first read (the registries are complete by then). */

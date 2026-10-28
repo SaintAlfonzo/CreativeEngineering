@@ -163,7 +163,8 @@ yellowstone 2.8 → 3.175 %): the 3,000-column set was one sample per 0.033 %. M
 96.639 %, Nether 86.4 %, End 80.1 % (End and Nether samples of 2026-10-18; the End's Nullscape biomes
 are now measured on the surface layer, 3,000 points, where the 2026-10-14 file measured them underground, hence the
 new End shares). The Overworld solve takes about 10 s per world load (about 2 s
-before), once per session (cached on the input hashes).
+before), only when an input changed: the result is cached on the input hashes in memory and in
+`biome_layout_cache.json.gz` (2026-10-27, perf.md 11.2 #3).
 
 ### 2.2 The fields
 
@@ -207,7 +208,10 @@ before), once per session (cached on the input hashes).
     closest entries.
   - Output: one full dimension JSON per edited dimension (a biome source has no additive form), plus stats written back
     to `biome_config.json` only when they change. Results are cached on the input files' hashes, so a `/reload` with no
-    edit costs a hash.
+    edit costs a hash. The last clean solve is also kept in `generation_scripts/worldgen/biome_layout_cache.json.gz`
+    (ships with the pack; key adds a hash of the solver's class files), so a new launch reads it back instead of
+    solving. Delete the file to force a solve; a changed config, baseline, sample, solver setting or patcherMod solver
+    re-solves on its own and rewrites it. Log line on a hit: `inputs unchanged, reusing the last solve (disk)`.
 - **Applying it:** `biome_overrides.js` calls the tuner in `ServerEvents.highPriorityData` (fires during world load,
   world creation included) and adds the files to KubeJS's top-priority virtual datapack, above Terralith and Nullscape.
   Nothing is written to `kubejs/data`.

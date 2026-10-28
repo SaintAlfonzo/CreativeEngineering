@@ -24,7 +24,7 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		//######################### 1. Farmer's Respite's own #########################
-		// The three coffees are purged (item_merges.md 2.8); gambler's tea is the pack's (other/item_merges.js).
+		// The three coffees are purged (item_merges.md 2.8); gambler's tea is farmersrespite/item_merges.js's.
 		kettle('farmersrespite:brewing/black_tea', [i.black_tea_leaves, i.black_tea_leaves], i.black_tea, 'black_tea', f.water)
 		kettle('farmersrespite:brewing/green_tea', [i.green_tea_leaves, i.green_tea_leaves], i.green_tea, 'green_tea', f.water)
 		kettle('farmersrespite:brewing/yellow_tea', [i.yellow_tea_leaves, i.yellow_tea_leaves], i.yellow_tea, 'yellow_tea', f.water)

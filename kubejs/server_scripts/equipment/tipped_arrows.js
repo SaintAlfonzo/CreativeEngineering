@@ -1,6 +1,7 @@
 ServerEvents.recipes(e => {
 console.log('tipped arrow tipping starting')
 
+var i = global.item
 var f = global.fluid
 var R = global.NCH
 
@@ -33,17 +34,12 @@ while (it.hasNext()) {
 	var resultNbt = '{Potion:"' + pid + '"}'
 
 	// IE Bottling Machine — one arrow per operation
-	e.custom({
-		type: 'immersiveengineering:bottling_machine',
-		fluid: { tag: 'forge:fluid/potion', amount: 20, nbt: lingeringNbt },
-		inputs: [{ item: 'minecraft:arrow', count: 1 }],
-		results: [{ item: 'minecraft:tipped_arrow', count: 1, nbt: resultNbt }]
-	}).id('creativeengineering:bottling/tipped_arrow/' + idBase)
+	R.ieBottling(Item.of(i.tipped_arrow, resultNbt), { tag: f.t_potion, amount: 20, nbt: lingeringNbt }, i.arrow, e, 'tipped_arrow/' + idBase)
 
 	// Create Spout / filling — one arrow per operation
 	R.createFilling(
-		Item.of('minecraft:tipped_arrow', resultNbt),
-		[Item.of('minecraft:arrow'), Fluid.of(f.create_potion, 25, lingeringNbt)],
+		Item.of(i.tipped_arrow, resultNbt),
+		[i.arrow, Fluid.of(f.create_potion, 25, lingeringNbt)],
 		e,
 		'tipped_arrow/' + idBase
 	)

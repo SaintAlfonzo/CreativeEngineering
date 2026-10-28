@@ -10,7 +10,9 @@ import com.sammy.minersdelight.registry.MDLoot;
 import com.sammy.minersdelight.registry.MDMenuTypes;
 import com.sammy.minersdelight.registry.MDPotions;
 import com.sammy.minersdelight.upstream.UpstreamJars;
-import com.sammy.minersdelight.upstream.UpstreamPacks;
+import com.sammy.minersdelight.shared.BuiltInPacks;
+import com.sammy.minersdelight.upstream.MinersTranslator;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -42,7 +44,10 @@ public class MinersDelightMod {
         MDLoot.MODIFIERS.register(bus);
         MDLoot.CONDITIONS.register(bus);
         MDLoot.FUNCTIONS.register(bus);
-        bus.addListener(UpstreamPacks::onAddPackFinders);
+        // Upstream art and data as built-in packs, always on and at the bottom: resource packs, KubeJS and datapacks
+        // still override them (miners_delight.md D12).
+        bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "miners_upstream",
+                "Miner's Delight: art and data read from the upstream jar", MinersTranslator::assets, MinersTranslator::data));
         bus.addListener(MDSetup::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(CupConversions::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(CupConversions::onDatapackSync);

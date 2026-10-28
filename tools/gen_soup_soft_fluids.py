@@ -31,12 +31,13 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from food_catalog import INSTANCE, parse_dict  # noqa: E402
+import pack_paths  # noqa: E402
 
 REMOVED_JS = INSTANCE / 'kubejs/startup_scripts/_lib/removed_items.js'
 TYPES = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
 FOODS = INSTANCE / 'kubejs/exported/food/foods.json'
 OUT = INSTANCE / 'kubejs/data/creativeengineering/moonlight/soft_fluids'
-VANILLA = Path.home() / '.local/share/atlauncher/libraries/net/minecraft/client/1.19.2/client-1.19.2.jar'
+VANILLA = pack_paths.vanilla_jar()
 SOFT_FLUID_RE = re.compile(r'^data/[^/]+/moonlight/soft_fluids/.+\.json$')
 CAPACITY = {'minecraft:glass_bottle': 1}   # everything else is a bowl: 2 per item, as Supplementaries' soups
 # Forge fluids of the same soup: the jar takes them from a bucket or a pipe as this soft fluid
@@ -71,7 +72,7 @@ def jar_index():
             if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
                 jars.append(zipfile.ZipFile(io.BytesIO(z.read(n))))
     jars += [zipfile.ZipFile(p) for p in sorted(glob.glob(str(INSTANCE / '*_upstream/*.jar')))]
-    if VANILLA.exists():
+    if VANILLA:
         jars.append(zipfile.ZipFile(VANILLA))
     return jars
 

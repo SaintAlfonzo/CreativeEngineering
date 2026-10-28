@@ -115,7 +115,7 @@ var i = global.item;
 	tune(i.echo_hoe,     { damage: 1,   attackSpeed: 4.5, miningSpeed: 10, durability: 2124, enchantability: 18, miningLevel: 4, rarity: 'epic', fireproof: true })
 
 	// ─────────────────────────────────── Felsic ────────────────────────────────
-	tune(i.felsic_sword,   { damage: 10,   attackSpeed: 1.7,                durability: 2502, enchantability: 21, miningLevel: 4, rarity: 'epic', fireproof: true })
+	tune(i.felsic_sword,   { damage: 10,   attackSpeed: 1.7,                durability: 2501, enchantability: 21, miningLevel: 4, rarity: 'epic', fireproof: true })
 	tune(i.felsic_pickaxe, { damage: 7,   attackSpeed: 1.2, miningSpeed: 11, durability: 2501, enchantability: 21, miningLevel: 4, rarity: 'epic', fireproof: true })
 	tune(i.felsic_axe,     { damage: 14,  attackSpeed: 1.1, miningSpeed: 11, durability: 2501, enchantability: 21, miningLevel: 4, rarity: 'epic', fireproof: true })
 	tune(i.felsic_shovel,  { damage: 7.5, attackSpeed: 1.4, miningSpeed: 11, durability: 2501, enchantability: 21, miningLevel: 4, rarity: 'epic', fireproof: true })

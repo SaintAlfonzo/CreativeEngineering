@@ -138,6 +138,7 @@ are NCH's generated ones, so they ignore counts (F1).
   Check with RW-03.
 - **F2. Soot scraping is raw code:** `ash.js` uses `e.remove` and `e.custom({type: 'sootychimneys:soot_scraping', ...})`
   directly; an NCH helper would fit the rule. The file is named for ash but holds soot and torches.
+  FIXED 2026-10-27: `R.axeScraping(..., { soot: true })` and `R.remove`, chimneys in the item dict (pack_hygiene.md 14, PH-05).
 - **F3. Define-once:** `ash.js` defines `i.any_animal_fat` locally (not in `item_dict.js`); `item_dict.js` itself defines
   `i.mulch_brown` four times and `i.any_bark` twice (same values).
 - **F4. Twisted wood:** its cutting-board recipe is added without removing an original ("the original also had a bug

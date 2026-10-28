@@ -145,7 +145,7 @@ Brief: [briefs/items_item-physics.md](briefs/items_item-physics.md). Nothing her
 
 ## 5. File map
 
-- patcherMod: [itemphysic/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/) (`ItemPhysicSplit`, `ItemBurnTransform`, `BurnBlastDamage`), [mixin/ItemPhysicServerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java), `data/creativeengineering/tags/items/physics/*.json` (seed).
+- patcherMod: [itemphysic/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/) (`ItemPhysicSplit`, `ItemBurnTransform`, `BurnBlastDamage`, `AllurementItemCurses`), [mixin/ItemPhysicServerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java), `data/creativeengineering/tags/items/physics/*.json` (seed).
 - KubeJS: [func/item_physics.js](../kubejs/startup_scripts/func/item_physics.js) (`global.itemPhysics`), [tags/item_physics_tags.js](../kubejs/server_scripts/tags/item_physics_tags.js).
 - Config: `config/itemphysic.json`.
 - Related: shrapnel ([tnt_shrapnel.md](tnt_shrapnel.md)).
@@ -157,6 +157,8 @@ None. `/dumptags` lists the four physics tags' final members.
 ## 7. In-game test suite
 
 Drop items with Q into the hazard.
+
+- IP-15: drop an item with Curse of Ascension (anvil or `/give` with the enchantment) and one with Curse of Fleeting. Ascension rises; Fleeting pushes nearby mobs and players away. Queued as SQ-IP-15.
 
 - [ ] **IP-01 Default:** drop a Create cogwheel in water → sinks; in fire → burns; in lava → burns.
 - [ ] **IP-02 Floats:** oak planks, a boat and bone meal in water → float. Gunpowder → sinks.
@@ -184,3 +186,4 @@ Drop items with Q into the hazard.
 - 2026-10-19: F1 fixed in patcherMod 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). IP-13 still to run.
 - 2026-10-19: F2 fixed (item_physics.js and item_physics_tags.js headers).
 - 2026-10-24: planned from the scratchpad: golden egg physics (`items/item-physics #5`). No code changed.
+- 2026-10-27: Allurement's Ascension/Fleeting hook sits in the gravity branch that ItemPhysic's `isNoGravity -> true` redirect skips; `ItemPhysicServerMixin` now calls them at the tail of `updatePre` (`AllurementItemCurses`, reflection, optional). Built and installed in patcherMod 1.1.03; IP-15 not run.

@@ -53,7 +53,7 @@ ServerEvents.tags('item', e => {
 			if (sources.indexOf(i[key]) < 0) sources.push(i[key])
 		})
 	})
-	t.add(e, i.t_canned_source || '#creativeengineering:canned_source', sources)
+	t.add(e, i.t_canned_source, sources)
 
 	if (missing.length) {
 		console.warn(`[food types] ${missing.length} key(s) are not item ids in item_dict (new keys need a restart): `

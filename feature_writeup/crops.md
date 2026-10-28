@@ -903,6 +903,9 @@ list in `village_farms.json` or a sibling file and a biome-to-crop lookup from `
 
 ## 3. What the pack changes
 
+Soil yield (extra produce on better soil, built 2026-10-28, off per crop by default) and every crop's ripe drop counts:
+[crop_yields.md](crop_yields.md).
+
 - **Fertile Soil** is a rename of Immersive Weathering's Mulch Block ([namechanges.js](../kubejs/client_scripts/namechanges.js)).
   The pack adds its own recipes from Rich Soil plus mulches ([sawdust.js](../kubejs/server_scripts/wood/sawdust.js))
   and soil tooltips ([tooltips.js](../kubejs/client_scripts/tooltips.js), Rich Soil and Fertile Soil lines).
@@ -915,7 +918,7 @@ list in `village_farms.json` or a sibling file and a biome-to-crop lookup from `
 - **Wild crop placement (built 2026-10-03, DEPLOYED with 1.0.4, rules revised for 1.0.6; not looked at in game):** §2.8. Also oak/dark oak leaves drop no apples,
   Alex's Mobs leaf bananas are off (`config/alexsmobs.toml`) and Farmer's Respite's Basalt Deltas coffee is off.
 - **Bell pepper colours (built 2026-10-21, not deployed):** the ripe Rustic Delight roll was red 6 : green 1 : yellow 1
-  plus 15% bonus green and yellow (red 58% of peppers). [09_crop_drops.js](../kubejs/server_scripts/loot/09_crop_drops.js)
+  plus 15% bonus green and yellow (red 58% of peppers). [rusticdelight/crop_drops.js](../kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js) (Creative Delight; the pack's `loot/09_crop_drops.js` until 2026-10-27)
   (pre-roll, like the leaf apples) sets the roll to 1 : 1 : 1 and appends a 15% bonus red pool, so each colour averages
   0.483 per ripe harvest. Pools are matched by their items, existing positions kept. Wild bell peppers stay red-only
   (forage hint). TODO `farming/crops #9`, CR-69, CR-70.
@@ -1116,7 +1119,7 @@ Brief: [briefs/farming_crops.md](briefs/farming_crops.md). Nothing here is built
   `kubejs/data/creative_delight/worldgen/configured_feature/wild/` and `placed_feature/wild/` (CD features),
   `CDConfig` `[worldgen] wildCrops`, `CDResources` (jar copy of the rules),
   [kubejs/server_scripts/loot/08_leaf_apples.js](../kubejs/server_scripts/loot/08_leaf_apples.js) (leaf apples),
-  [kubejs/server_scripts/loot/09_crop_drops.js](../kubejs/server_scripts/loot/09_crop_drops.js) (crop harvest table fixes: bell pepper colours),
+  [kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js](../kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js) (crop harvest table fixes: bell pepper colours),
   [config/alexsmobs.toml](../config/alexsmobs.toml) `bananasDropFromLeaves` (copy in `configs_edited/root_config/`),
   [tools/test_wild_crops.sh](../tools/test_wild_crops.sh) + `tools/wild_crops_test/RhinoWildCrops.java` (offline checks)
 
@@ -1379,5 +1382,7 @@ the real client (rendering, tooltips, JEI, natural random ticks with a player ne
 ## Owner ideas (scratchpad 2026-10-26)
 
 - Water buckets and water bottles applied to farmland, rich farmland and fertile soil make it wet: `farming/crops #17`.
-- Merge cantaloupe and hami melon, keeping the Cantaloupe name (examine Delightful): `farming/crops #18`, [item_merges.md](item_merges.md).
+- Merge cantaloupe and hami melon, keeping the Cantaloupe name (examine Delightful): `merges/fruit #1`, [item_merges.md](item_merges.md).
 - Village farms grow Rustic crops by the wild-crop rules: `farming/crops #19`.
+
+- 2026-10-28: planned from the scratchpad: a mini melon crop like the Mini Cantaloupe (TODO `farming/crops #25`); a third, most common cantaloupe wild patch in normal and mini (`farming/wild-crops #5`). The seed rename to Mini Cantaloupe (Seeds) is already built (`merges/fruit #1`). No code changed.

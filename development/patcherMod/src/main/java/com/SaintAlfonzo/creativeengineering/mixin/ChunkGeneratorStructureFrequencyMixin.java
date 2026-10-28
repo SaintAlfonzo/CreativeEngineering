@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
+import com.SaintAlfonzo.creativeengineering.worldgen.DimensionFilter;
 import com.SaintAlfonzo.creativeengineering.worldgen.LocateStats;
 import com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots;
 import com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies;
@@ -33,7 +34,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  *  - at HEAD: a vetoed slot returns false immediately (no generation work). A converted meta structure
  *    or replacement picked directly returns false too (it only comes from its anchors' slots). An anchor
  *    whose slot converts first runs this method for the meta or replacement (all the other mixins on it
- *    apply to that structure), and goes on as itself only when that isn't built.
+ *    apply to that structure), and goes on as itself only when that isn't built. Last, a structure no biome of
+ *    this dimension can hold returns false (worldgen/DimensionFilter).
  */
 @Mixin(value = ChunkGenerator.class, remap = false)
 public abstract class ChunkGeneratorStructureFrequencyMixin {
@@ -62,7 +64,9 @@ public abstract class ChunkGeneratorStructureFrequencyMixin {
 		if (d.skip()) {
 			LocateStats.reject(entry.structure().value(), chunkPos, LocateStats.Reason.META_ONLY);
 			cir.setReturnValue(false);
-		} else if (d.convert()) {
+			return;
+		}
+		if (d.convert()) {
 			boolean built;
 			MetaSlots.beginConversion(d.targetEntry(), entry, chunkPos);
 			try {
@@ -73,7 +77,13 @@ public abstract class ChunkGeneratorStructureFrequencyMixin {
 			if (built) {
 				LocateStats.reject(entry.structure().value(), chunkPos, LocateStats.Reason.CONVERTED);
 				cir.setReturnValue(true);
+				return;
 			}
+		}
+		// no biome of this dimension passes the structure's biome test: it would fail after all the generation work
+		if (DimensionFilter.impossible((ChunkGenerator) (Object) this, entry.structure().value())) {
+			LocateStats.reject(entry.structure().value(), chunkPos, LocateStats.Reason.DIMENSION);
+			cir.setReturnValue(false);
 		}
 	}
 

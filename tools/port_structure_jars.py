@@ -33,7 +33,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KJS_DATA = os.path.join(ROOT, 'kubejs/data')
 KJS_ASSETS = os.path.join(ROOT, 'kubejs/assets')
 DISABLED = os.path.join(ROOT, 'disabledmods/archive')
-VANILLA_JAR = os.path.expanduser('~/.gradle/caches/forge_gradle/minecraft_repo/versions/1.19.2/client-extra.jar')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import pack_paths  # noqa: E402
+
+VANILLA_JAR = str(pack_paths.vanilla_jar())   # resources only are read (tools/pack_paths.py)
 ITEM_FORMAT_CHANGE = 3837  # 1.20.5: item components, lowercase count, new banner/attribute format
 
 # 1.20+ blocks -> a 1.19.2 (or in-pack modded) block. None = air. keep_props: True copies the blockstate

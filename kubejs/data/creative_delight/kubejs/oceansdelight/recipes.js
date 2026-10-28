@@ -9,6 +9,11 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Bread ####################
+		// Caesar salad takes any bread (creativeengineering/bread_tags.js); caviar toast is made on toast, not bread
+		R.replaceInput({ id: 'oceanic_delight:caesar_salad' }, i.minecraft_bread, i.t_bread, e)
+		R.replaceInput({ id: 'oceanic_delight:caviar_toast' }, i.minecraft_bread, i.toast, e)
+
 		//######################### Braised sea pickle #########################
 		// Also from 2 Sea Pickle Slices (Oceanic's knife cut gives 2 a pickle) in place of the sea pickle
 		// (dishes/pickles-and-ferments #4). Mushrooms, bowl, time and xp as Ocean's own recipe, which stays.

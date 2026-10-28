@@ -10,6 +10,8 @@ ServerEvents.tags('item', e => {
 	// Vintage Delight port (vintage_delight.md 3.1): oat dough is a #forge:dough (owner, 2026-10-23); cucumber dough
 	// stays a named ingredient. Cucumber noodles stay in #forge:pasta until the VTD-40 overlap review.
 	t.add(e, i.any_dough, i.oat_dough)
+	// One salt (food/seasoning #6): salt dust takes The Salt's salt's tags. #forge:salts is the Salting craft's input.
+	t.add(e, ['forge:salts', 'forge:dusts', 'supplementaries:hourglass_dusts'], i.salt_dust)
 	// Pickled veggies: pickle soup's pickle slot (dishes/pickles-and-ferments #3). Brewin's kimchi is added only beside Brewin'.
 	t.add(e, i.t_pickled_veg, [i.pickle, i.pickled_sea_pickle, i.pickled_beetroot, i.pickled_onion, i.pickled_pepper, i.vintagedelight_kimchi])
 	if (Platform.isLoaded('brewinandchewin')) t.add(e, i.t_pickled_veg, i.kimchi)
@@ -37,4 +39,9 @@ ServerEvents.tags('block', e => {
 	if (!global.CD || !global.CD.on('vintagedelight')) return
 	var b = global.blocks
 	global.tags.add(e, b.t_own_pick_crops, [b.cucumber_crop, b.ghost_pepper_crop])
+
+	// Ghost pepper seeds plant only on these (vintage_delight.md 2.1, S6; moved from the pack's
+	// server_scripts/tags/blocktags.js 2026-10-27). Nylium is left out on purpose: the wild ghost pepper still generates
+	// there (its own block accepts nylium too).
+	global.tags.add(e, b.t_ghost_pepper_soil, [b.soul_soil, b.rich_soul_soil, b.iw_nulch])
 })

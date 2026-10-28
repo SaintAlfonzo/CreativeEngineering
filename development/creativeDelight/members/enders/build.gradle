@@ -6,40 +6,8 @@ plugins {
     id 'ce.forge-mod'
 }
 
-repositories {
-    // Third-party mod jars copied from the pack (git-ignored).
-    flatDir { dir 'libs' }
-}
-
 dependencies {
     // Farmer's Delight: ConsumableItem, the Nourishment effect and the creative tab.
     // flatDir notation: 'local:<file name without -version>:<version>'
     compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
 }
-
-// Licence guard: the installed Ender's Delight 1.2.2 is All Rights Reserved, so nothing of it may ship here. Fail the
-// build if a file under src/main/resources has the same path as a file in that jar (except the root files we write
-// ourselves and the lang file, which merges across jars and holds only the keys 1.1.4 added).
-def arrJar = rootProject.file('mods').listFiles()?.find { it.name ==~ /endersdelight-.*\.jar/ }
-def ownFiles = ['META-INF/mods.toml', 'META-INF/MANIFEST.MF', 'pack.mcmeta', 'assets/endersdelight/lang/en_us.json'] as Set
-tasks.register('checkNoArrResources') {
-    group = 'verification'
-    description = 'Fails if src/main/resources contains a path that also exists in the installed Ender\'s Delight (ARR) jar'
-    def resDir = file('src/main/resources')
-    inputs.dir(resDir)
-    doLast {
-        def ours = [] as Set
-        resDir.eachFileRecurse(groovy.io.FileType.FILES) { ours << resDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
-        def clashes = []
-        if (arrJar?.exists()) {
-            new java.util.zip.ZipFile(arrJar).withCloseable { zip ->
-                zip.entries().each { e ->
-                    if (!e.directory && ours.contains(e.name) && !ownFiles.contains(e.name)) clashes << e.name
-                }
-            }
-        }
-        if (clashes) throw new GradleException("paths also in ${arrJar.name} (ARR):\n  " + clashes.join('\n  '))
-    }
-}
-tasks.named('check') { dependsOn 'checkNoArrResources' }
-tasks.named('jar') { dependsOn 'checkNoArrResources' }

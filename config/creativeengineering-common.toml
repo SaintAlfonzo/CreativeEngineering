@@ -1220,6 +1220,13 @@
 		#demand whatever this says. Off by default.
 		runAtLoad = false
 
+	#Finds the off-thread caller of Level.random (feature_writeup/fixes_compat.md F4).
+	[debug.level_random]
+		#Debug mode. When true, a Level's shared random logs the stack trace of every access from a thread other
+		#than the one that created the Level ([LevelRandomProbe] lines in latest.log, at most 20 distinct
+		#callers per session). Read when the world loads: restart to apply. Off by default.
+		probe = false
+
 #World generation: switches per system, a debug rate multiplier, and the constants of the pack's
 #worldgen code. The per-structure, per-piece and per-biome tables are the JSON files in
 #kubejs/generation_scripts/worldgen/ (see feature_writeup/structure_tuning.md). Structure and
@@ -1302,6 +1309,24 @@
 		#mushroom_spawns.json: wild mushrooms, colonies and huge Fungi Delight mushrooms at the surface and in caves
 		#(kubejs worldgen/mushroom_spawns.js). Off: mushrooms as their mods ship them. Rejoin to apply; only new chunks change.
 		mushroomSpawns = true
+		#Generated water that first flows when its chunk starts ticking (aquifer edges, cave springs) breaks the
+		#plants, carpets and torches in its way without dropping items ([worldgen.first_tick_water]; patcherMod FirstTickWater).
+		#Off: vanilla, they drop as items. Applies at once.
+		firstTickWater = true
+		#Sand, gravel and other falling blocks left floating by generation stay put when their chunk first
+		#ticks, until a later block update next to them (patcherMod GeneratedFallingBlocks). Covers the chunk's
+		#post-processing, generated water settling in the [worldgen.first_tick_water] window and ticks scheduled during
+		#generation. Off: vanilla, they fall on the first tick (in the outer ring of loaded chunks the falling entity never
+		#lands and stays saved). Applies at once.
+		holdGeneratedFallingBlocks = true
+		#A structure that cannot start in any biome of a dimension is not tried there (patcherMod DimensionFilter):
+		#no generation point, terrain reads or jigsaw assembly for Nether and End structures in the Overworld.
+		#Same structures either way, only faster. Off: every structure set is tried in every dimension, as vanilla 1.19.2.
+		dimensionFilter = true
+		#Earth and water fill share one bounded cache of predicted terrain columns across starts, placement
+		#priority predictions, meta retries and the real start of a chunk (patcherMod EarthFill). Same results either way,
+		#only faster. Off: each start reads its own columns.
+		sharedTerrainCache = true
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
@@ -1442,7 +1467,7 @@
 		#The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little
 		#coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too.
 		#Range: 1 ~ 8
-		sampleGrid = 2
+		sampleGrid = 4
 		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
 		#structure that has any earth in its base. For tuning the limits.
 		#Allowed Values: OFF, CANCELLED, ALL
@@ -1650,6 +1675,14 @@
 		#Skip placed features (ores, geodes, cave decoration) that start below clipBelowY.
 		skipFeatures = true
 
+	#Generated water flows for the first time when its chunk starts ticking. For windowTicks after that, that
+	#water and every block it spreads to drop no items when the flow breaks something.
+	[worldgen.first_tick_water]
+		#Length of the window in ticks (20 = 1 s), counted from the chunk's first tick and refreshed
+		#each time the water spreads to a block. 0: no window (vanilla drops). Applies at once.
+		#Range: 0 ~ 72000
+		windowTicks = 600
+
 #Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
 #one takes a serving; the servings left show as a durability bar and a tooltip line. The
 #last serving leaves an empty can, a crushed can or nothing, rolled with the chances below.
@@ -1737,14 +1770,14 @@
 	#remembers its own trash slot position and on/off state. false: all backpacks share one.
 	splitBackpacksByTier = true
 
-#Wandering Trader and Wandering Winemaker spawning, and the trader's offer counts.
-#Each spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
+#Wandering Trader spawning and offer counts (the Wandering Winemaker: vinery-common.toml [trader]).
+#The spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
 #overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not
 #change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then
 #a free spot near a random player; on average about 14 rolls per spawn.
-#To stop both use /gamerule doTraderSpawning false.
+#/gamerule doTraderSpawning false stops it and the Winemaker.
 [wandering_trader]
-	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers) and no Winemaker spawner.
+	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers).
 	enabled = true
 	#Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes.
 	#A change takes effect after the wait already counting down.
@@ -1757,14 +1790,6 @@
 	#Offers drawn from the rare pool, all different items. Vanilla: 1.
 	#Range: 1 ~ 50
 	rareTrades = 5
-	#Spawn Vinery's Wandering Winemaker from its own spawner, independent of the Wandering Trader.
-	#Vinery's own swap (vinery-common.toml [trader] spawnChance, 1.3.10: config/vinery/config.json5
-	#wine_trader_chance) must be 0, or it still
-	#turns that share of Wandering Trader spawns into Winemakers.
-	winemakerEnabled = true
-	#Ticks between Wandering Winemaker spawn rolls.
-	#Range: 1200 ~ 100000000
-	winemakerIntervalTicks = 96000
 
 #Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.
 [perf]
@@ -1832,6 +1857,12 @@
 	#(crafts that take a can). Off: they stay on the Crafting page.
 	#Takes effect the next time JEI starts (rejoin or /reload).
 	canCategories = true
+	#How full a fluid looks in JEI tanks (every mod's recipe pages and the pack's own) for its amount.
+	#LOG: small amounts stay visible and 250, 1000 and 8000 mB look different. SQRT: a milder curve.
+	#LINEAR: JEI's own (fill = amount / tank size, so small amounts are a sliver).
+	#Takes effect at once.
+	#Allowed Values: LOG, SQRT, LINEAR
+	fluidAmountScale = "LOG"
 
 #WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
 #plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
@@ -1881,8 +1912,9 @@
 	snowLineY = 320
 
 #Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the
-#time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml,
-#and vinery-common.toml [wine]/[aging] are overwritten from here at server start and on every edit.
+#time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml
+#are overwritten from here at server start and on every edit. The Vinery port reads [time.wine] and the
+#lengths from here and ignores the matching vinery-common.toml [wine]/[aging] keys while enabled.
 #/cetime shows every derived value.
 [time]
 	#SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:

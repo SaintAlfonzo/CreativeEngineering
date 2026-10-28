@@ -35,7 +35,7 @@ ServerEvents.recipes(e => {
 		R.replaceInput({ not: { id: 'neapolitan:ice' } }, i.ice_cubes, i.t_ice_cubes, e)
 		// FD's melon popsicle recipe is Abnormals Delight's while Neapolitan is loaded (farmersdelight:melon_popsicle doesn't load)
 		var iceFoods = ['abnormals_delight:neapolitan/melon_popsicle', 'moredelight:chocolate_popsicle', 'fruitsdelight:kiwi_popsicle',
-			'fruitsdelight:hamimelon_popsicle', 'fruitsdelight:hamimelon_shaved_ice', 'farmersdelight:cooking/bellini_cocktail',
+			'fruitsdelight:hamimelon_shaved_ice', 'farmersdelight:cooking/bellini_cocktail',
 			'fruitsdelight:mixing/flowing_bellini_cocktail']
 		R.replaceInput(iceFoods.map(id => ({ id: id })), i.ice, i.t_ice_cubes, e)
 	})

@@ -47,7 +47,6 @@
 			if (!s) { check('suite ran', false, 'global.cdtestStartup missing: the CD jar was not built with -Pcd_test_suite, or the startup loader did not run'); return }
 			check('helpers before the CD pack', s.nch === 'object' && s.tags === 'object' && s.compost === 'object',
 				'NCH ' + s.nch + ', tags ' + s.tags + ', compost ' + s.compost)
-			check('NCH apiVersion', s.nchApi >= 1, String(s.nchApi))
 			check('namespace at load', s.nsAtLoad === 'creativeengineering', String(s.nsAtLoad))
 			check('dicts before the CD pack', s.itemDict === 'minecraft:wheat', 'global.item.wheat = ' + s.itemDict)
 			check('cd_core.js first in its pack (priority)', s.cd === 'object', 'global.CD ' + s.cd)

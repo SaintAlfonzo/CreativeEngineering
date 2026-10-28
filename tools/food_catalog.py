@@ -22,6 +22,9 @@ import sys
 from collections import OrderedDict, defaultdict
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths  # noqa: E402
+
 INSTANCE = Path(__file__).resolve().parent.parent
 EXPORT = INSTANCE / 'kubejs/exported/food'
 DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
@@ -246,16 +249,10 @@ def recipe_links(recipes):
 
 
 def parse_dict():
-    """item_dict.js -> (key -> value, last assignment wins) and (item id -> [keys])."""
-    src = DICT.read_text()
-    key_val = {}
-    for m in re.finditer(r"^\s*i\.(\w+)\s*=\s*'([^']*)'", src, re.M):
-        key_val[m.group(1)] = m.group(2)
-    by_id = defaultdict(list)
-    for k, v in key_val.items():
-        if not v.startswith('#'):
-            by_id[v].append(k)
-    return src, key_val, by_id
+    """item_dict.js -> (source, key -> value with the last assignment winning, item id -> [keys]): the shared
+    parser in tools/pack_paths.py."""
+    src, key_val, by_id = pack_paths.parse_item_dict(DICT)
+    return src, key_val, defaultdict(list, by_id)
 
 
 def best_key(item_id, keys):

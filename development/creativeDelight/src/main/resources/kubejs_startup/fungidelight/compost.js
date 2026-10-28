@@ -7,7 +7,7 @@
 ;(function () {
 	var i = global.item
 	var C = global.compost
-	var ON = { when: () => !!global.CD && global.CD.qol('compost') && global.CD.on('fungidelight') }
+	var ON = { when: () => global.CD.qol('compost') && global.CD.on('fungidelight') }
 
 	C.values('mushrooms', [   // upstream values, fungi_delight.md step 13
 		[i.inky_cap_mushroom, 0.65],

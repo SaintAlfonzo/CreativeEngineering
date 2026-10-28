@@ -5,8 +5,6 @@ ServerEvents.recipes(e => {
     var f = global.fluid
     var R = global.NCH
 
-    i.matcha = 'delightful:matcha';
-
     // ############################## Amethyst ##############################
 
     R.createCrushing(Item.of(i.amethyst_dust, 1).withChance(0.75), i.amethyst_shard, e)

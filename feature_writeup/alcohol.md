@@ -81,7 +81,7 @@ Every row is a change the port has to make (IDs are used in section 3).
 | R4 | Rename `item_coaster` -> `coaster` | New `CoasterBlock`: holds up to 4 items (`size` 0 to 4), 16 rotations, an `invisible` state. The old coaster held 1 |
 | R5 | Rename `scarlet_pierogies` -> `scarlet_pierogi` | 4.5.0 handles the rename with a DFU schema; the port uses a Forge missing-mappings remap |
 | R6 | Register 18 fluids (+ flowing) | 16 drinks + `flaxen_cheese` + `scarlet_cheese`. Tank only: no bucket, no world block (4.5.0 `BnCFluidFabric` returns air for both). Honey and milk: see 4.1 |
-| R7 | Remove `satisfaction` effect | Remap the old id (3.3) |
+| R7 | Remove `satisfaction` effect | Dropped; no remap (3.3, removed 2026-10-27) |
 | R8 | Add `intoxication` effect | 2.4 |
 | R9 | Add `raging` effect | 2.4 |
 | R10 | Add damage type `cardiac_arrest` | 4.5.0 makes it bypass armor, cooldown, effects, enchantments, resistance, shield and wolf armor |
@@ -372,7 +372,7 @@ Build order. Each step should boot before starting the next:
 1. **Registry**:
    - R1 to R12 and the new items.
    - Creative tab: on 1.19.2 this is an item group, not a registry entry.
-   - Remaps (3.3).
+   - Remaps (3.3): REMOVED 2026-10-27.
    - Assets copied from `DecompiledMods/.../assets`.
 2. **Fluids**: 18 Forge `FluidType`s, tank only (no bucket, no block), with client extensions for the still and flow
    textures and tint. Honey and milk per 4.1.
@@ -404,7 +404,7 @@ Build order. Each step should boot before starting the next:
    - Block loot tables copy the keg tank.
    - Knife slicing as Forge global loot modifiers (2.3).
 10. **JEI** (O3), compostables (O2), tags (O1).
-11. **Old-world conversion** (3.3).
+11. ~~**Old-world conversion** (3.3).~~ REMOVED 2026-10-27 (pack_hygiene.md finding 9).
 
 **API mapping, 1.21 -> 1.19.2 Forge:**
 
@@ -433,14 +433,13 @@ Build order. Each step should boot before starting the next:
 
 ### 3.3 Old worlds
 
-| What | Conversion |
-|---|---|
-| Item / block `item_coaster` | remap to `coaster`; its single stored item goes to slot 0 with `size` 1 |
-| Item `scarlet_pierogies` | remap to `scarlet_pierogi` |
-| Effect `satisfaction` | remap to `farmersdelight:nourishment` (the closest effect, so running instances don't vanish with an error) |
-| Placed kegs (2.0 NBT: 9-slot `Inventory`, drink in slot 5) | on load: the drink stack of N becomes 250 x N mB of that drink's fluid (up to the capacity; any extra drops as items). Slots 0 to 3 stay. The old fluid item (slot 4) and slots 6 to 8 go to the container / output slots, or drop if those are full |
-| Keg items carrying 2.0 `BlockEntityTag` | the same conversion when the item is placed, and in the item tooltip |
-| Ripening cheese wheels | unchanged (same block, same `age` property, 10% per random tick in both versions) |
+**REMOVED 2026-10-27** (CLAUDE.md "no old-version or cross-mod conversions"; [pack_hygiene.md](pack_hygiene.md)
+finding 9). The port no longer converts Brewin' and Chewin' 2.0 content: `BnCRemaps` (the `item_coaster`,
+`scarlet_pierogies` and `satisfaction` remaps), `BlockEntityLegacyIdMixin` (the `item_coaster` block entity id), the
+2.0 keg inventory conversion (250 mB per drink, `BnCInventoryVersion`, the pending-drop list) and the 2.0 coaster
+inventory / `legacySizeFix` are gone. A world last saved with the 2.0 jar loses those blocks, items and contents
+(Forge's missing-mappings screen). The port has been in the pack since 1.0.7, so only worlds not opened since then
+are affected. Ripening cheese wheels never needed a conversion (same block and `age` property).
 
 ### 3.4 Pack-side changes
 
@@ -467,12 +466,11 @@ follows upstream: `common/` and `client/` as 4.5.0, `forge/` in place of `neofor
 
 **Done:** every registry (blocks, items, 18 tank-only fluids + Forge fluid types, effects, block entities, menu,
 particles, recipe types and serializers, loot functions, slicing loot modifier); the config; the keg (tank, pouring,
-temperature, 2.0 keg conversion), keg screen, keg recipe book (items), keg item tooltip; Tipsy numbed hearts and cardiac
+temperature), keg screen, keg recipe book (items), keg item tooltip; Tipsy numbed hearts and cardiac
 arrest, Raging stacks, Intoxication (saturation block, undead immunity, HUD bar, AppleSkin preview), Sweet Heart, the
 milk-bottle low-priority rule; camera spin and mouse sway; chat, `/msg`, sign and name-tag scrambling (client side,
 4.3); coaster renderer; particles; JEI (Fermenting page with pouring, Cheese aging page, clickable tank, transfer
-button); old-world remaps (`item_coaster`, `scarlet_pierogies`, `satisfaction`, 2.0 coaster and keg contents); all
-assets and data through `tools/port_resources.py`.
+button); all assets and data through `tools/port_resources.py`.
 
 **Not ported yet (each works in a reduced form):**
 
@@ -507,8 +505,6 @@ assets and data through `tools/port_resources.py`.
   conditions, which 1.19.2's `placed_block` can't. Upstream's two loot conditions served only this, so they aren't ported.
 - Coaster models are extra baked models drawn quad by quad with the texture-modifier tint (no wrapped model or colour
   handler). Fluid item displays copy NBT keys (`copy_nbt`) where upstream remaps data components.
-- The 2.0 coaster block entity id is rewritten on load (`BlockEntityLegacyIdMixin`): block entity ids aren't in Forge's
-  registry snapshot, so a remap can't reach them.
 - Create Central Kitchen's required keg mixin (2.6) was checked against the bytecode: both its injectors find their
   targets in the port's `updateTemperature` (first `Level#getBlockState`, second `BlockState#is(TagKey)` with a second
   `BlockState` local), so it applies with no change in behaviour.
@@ -701,11 +697,11 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [ ] **AL-32 Jams:** craft each in the cooking pot, eat -> bottle back, honey sound
 - [ ] **AL-33 Coaster:** place up to 4 tankards on one coaster, rotate, take back
 - [ ] **AL-34 Knife slicing:** break a pizza with a knife -> slices
-- [ ] **AL-35 Old world: coaster and pierogi:** a 2.0 world with an item coaster and scarlet pierogies -> coaster block holds its item, pierogi item present
-- [ ] **AL-36 Old world: keg:** a 2.0 keg holding 3 beers -> 750 mB beer in the tank
+- [ ] ~~**AL-35 Old world: coaster and pierogi:**~~ retired 2026-10-27 (old-world conversion removed, pack_hygiene.md finding 9). a 2.0 world with an item coaster and scarlet pierogies -> coaster block holds its item, pierogi item present
+- [ ] ~~**AL-36 Old world: keg:**~~ retired 2026-10-27 (old-world conversion removed, pack_hygiene.md finding 9). a 2.0 keg holding 3 beers -> 750 mB beer in the tank
 - [ ] **AL-37 CCK mixin:** boot log shows only the CCK warning, no crash
 - [ ] **AL-38 JEI:** Fermenting page shows ferment + pour; Cheese aging page; transfer button fills the keg
-- [ ] **AL-39 Satisfaction remap:** a 2.0 save with Satisfaction running -> loads with Nourishment, no error
+- [ ] ~~**AL-39 Satisfaction remap:**~~ retired 2026-10-27 (old-world conversion removed, pack_hygiene.md finding 9). a 2.0 save with Satisfaction running -> loads with Nourishment, no error
 - [ ] **AL-40 Dedicated server:** boots with the port, client joins, no RecipeBookType or registry desync kick
 - [ ] **AL-41 Heat / cold tags:** after the 2.7 additions, `/dumptags` lists them; a lit furnace or bonfire next to a keg reads Warm, an unlit furnace doesn't count, a polished packed ice block reads Chilly, a snow layer doesn't count
 - [ ] **AL-42 Boot log:** client and server boot with the port; no mixin apply errors (including CCK's keg mixin), no recipe parse errors for `brewinandchewin:`
@@ -714,7 +710,7 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [ ] **AL-45 Numbed hearts HUD:** at Tipsy III, take 6 damage -> 3 hearts show the numbed sprite, flicker in the last 4 s, then cardiac arrest lands; same with absorption hearts
 - [ ] **AL-46 Signs sober up:** scrambled signs read normally again the moment Tipsy drops below the threshold
 - [ ] **AL-47 /msg to two players:** a Tipsy sender's both echoes and both receivers' copies scramble the same way
-- [ ] **AL-48 Old coaster block entity:** a 2.0 world's item coaster keeps its item after loading (no "Skipping BlockEntity" in the log)
+- [ ] ~~**AL-48 Old coaster block entity:**~~ retired 2026-10-27 (old-world conversion removed, pack_hygiene.md finding 9). a 2.0 world's item coaster keeps its item after loading (no "Skipping BlockEntity" in the log)
 - [ ] **AL-49 JEI effects on the fluid output (8.2):** Fermenting page for beer, hover the result tank -> Tipsy and Intoxication lines with the same durations as the beer tankard's tooltip; the flaxen cheese page shows none
 - [ ] **AL-50 Tank tooltip effects (8.2):** keg holding beer, hover the tank in the GUI and the keg item in the inventory -> the same effect lines
 - [ ] **AL-51 Cask / crate tooltips (8.3):** Heating Cask and Ice Crate show the keg source line; the cask also shows the stove line and the steam line
@@ -1350,7 +1346,8 @@ WTHIT shows `cold x2.0`, `cellar x2.0`, `cold cellar x4.0`.
   `warmMultiplier` 0.75 (0.1 to 1.0), pushed into `vinery-common.toml` (`cellarAgingMultiplier`, new
   `coldAgingMultiplier`, `warmAgingMultiplier`). The running game re-saved both tomls and dropped the new keys; Forge
   writes them back at their defaults on the next start, so the SINGLEPLAYER preset still matches. The vintage clock
-  packet carries the cold and warm values (Vinery network version 1 -> 2).
+  packet carries the cold and warm values (Vinery network version 1 -> 2). Since 2026-10-27 nothing is pushed: the
+  port reads these from patcherMod's `time.WineTime` while `[time]` is on ([time.md](time.md) 3.7).
 - **Text:** every block item in either tag: "Heats/Cools the surrounding environment", then "Useful for keg brewing
   and wine casking" on its own line (split 2026-10-20, 10.18); keg: "Sensitive to hot and cold blocks in the environment"; wine racks (9x, 4x, single-bottle) and the wine
   box: "Wine aging is sped up by dark and cold environments, slowed by warm ones" (the last three words added with
@@ -1621,7 +1618,7 @@ Display Delight models to the coaster; add WTHIT info.
   - The tag ships in the port, written by `tools/port_resources.py` from its 96 coaster files (the other mods' ids
     optional, so 1.21-only Farmer's Delight foods don't break it).
   - The pack adds `#creativeengineering:placeable_on_coaster` into it
-    ([placeabletags.js](../kubejs/server_scripts/tags/placeabletags.js), key `i.t_bnc_placeable_on_coaster`).
+    ([placeable_tags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/placeable_tags.js), key `i.t_bnc_placeable_on_coaster`).
 - **Display Delight models (pack + port):** [tools/gen_coaster_models.py](../tools/gen_coaster_models.py) writes 56 coaster
   files to `kubejs/assets/creativeengineering/brewinandchewin/coaster/`, one per food DD links that the port has no
   model for (the other 29 keep the port's). Each points at the DD block's default model: the food on its own first,
@@ -1928,7 +1925,7 @@ Mapping the old keys:
 |---|---|---|
 | `year_length_in_days` | `daysPerYear` | pack sets 16 |
 | `years_per_effect_level` | `yearsPerEffectLevel` | pack sets 2 |
-| `wine_trader_chance` | `trader.spawnChance` | pack sets 0, because the pack's own `WinemakerSpawner` handles it |
+| `wine_trader_chance` | `trader.spawnChance` | pack sets 0; the port's own spawner (`[trader] ownSpawner`, 96000 ticks, moved from patcherMod 2026-10-27) spawns the Winemaker |
 | `enable_wine_maker_set_bonus` | none | the set bonus is always on |
 | `probability_to_keep_bone_meal` | none | always 100% |
 | `probability_for_damage` | none | always 100% |
@@ -1981,18 +1978,26 @@ Each row is something the port has to handle. The ID is used in B4 and B5.
 
 ### B3.3 Old worlds and old items
 
+**2026-10-27: the conversions W2, W3, W8, W9 and W10 are REMOVED from the port** (CLAUDE.md "no old-version or
+cross-mod conversions"; [pack_hygiene.md](pack_hygiene.md) finding 10): `BlockEntityLegacyIdMixin` (`doapi:storage`),
+`FermentationBarrelBlockEntity.convertLegacyLayout`, `WineYears.convertLegacy` / `hasLegacyYear` with the
+`legacyYearLengthDays` key, and the `improved_*` effect / `chair` entity entries in `VineryCommonEvents`. A world last
+saved with 1.3.10 (before 1.0.7) loses 1.3.10 storage contents, old barrel layouts and old wines' ages. The rows below
+are the original plan, kept for the record. W1 (ids kept, D1 / D2) and W4 (the press keeps its block entity id) need
+no code.
+
 | # | Issue | Port approach |
 |---|---|---|
-| W1 | ~60 ids renamed or gone (B2.1); Forge drops unknown blocks/items with a missing-mappings warning | **Mostly gone after D1 / D2 (B4.1):** every 1.3.10 id stays registered. `MissingMappingsEvent` is left only for the effects (W9) |
-| W2 | `doapi:storage` block entities in placed racks, shelves, wine bottles, the wine box, storage pots (1.3.10) | rewrite the `id` on load (hook `BlockEntity.loadStatic`) to `vinery:storage`, `vinery:storage_pot` or the cabinet type per block. Block-entity types are not covered by missing mappings. The slot layouts differ per storage type (old `four_bottle` / `nine_bottle` / `wine_box` vs new layouts): map slot by slot, drop the overflow |
-| W3 | Aging Barrel contents (old layout 0 bottle, 1-4 ingredients, 5 output) | on load: old slot 0 -> 4 (bottles); old juice items in 1-4 -> poured into the fluid level when the type matches (25 each, up to 100), the rest drop; other ingredients keep 1-3, a fourth drops |
+| W1 | ~60 ids renamed or gone (B2.1); Forge drops unknown blocks/items with a missing-mappings warning | **Mostly gone after D1 / D2 (B4.1):** every 1.3.10 id stays registered. The port has no `MissingMappingsEvent` handler (W9 removed 2026-10-27) |
+| W2 | **REMOVED 2026-10-27.** `doapi:storage` block entities in placed racks, shelves, wine bottles, the wine box, storage pots (1.3.10) | rewrite the `id` on load (hook `BlockEntity.loadStatic`) to `vinery:storage`, `vinery:storage_pot` or the cabinet type per block. Block-entity types are not covered by missing mappings. The slot layouts differ per storage type (old `four_bottle` / `nine_bottle` / `wine_box` vs new layouts): map slot by slot, drop the overflow |
+| W3 | **REMOVED 2026-10-27.** Aging Barrel contents (old layout 0 bottle, 1-4 ingredients, 5 output) | on load: old slot 0 -> 4 (bottles); old juice items in 1-4 -> poured into the fluid level when the type matches (25 each, up to 100), the rest drop; other ingredients keep 1-3, a fourth drops |
 | W4 | Apple Press contents (old 0 in, 1 out) | old 0 -> 0, old 1 (mash) -> 1. The block is 2 tall now: if the space above is blocked, keep a 1-tall legacy state or drop the press as an item |
 | W5 | Grapevine pots mid-stomp (no block entity, stage 3-6) | block entity created on first touch; stage > 3 gives progress `(stage-3) x points/3` (1.5.5 already does this) |
 | W6 | Apple / cherry leaves: `can_have_apples` / `can_have_cherries` -> `can_grow_*`; new `age` | blockstate fixer: unknown properties fall back to the default (no fruit). Better: a `ChunkDataEvent.Load` palette pass that maps `can_have_*` -> `can_grow_*`, and `has_*=true` -> `age=3` |
 | W7 | `grapevine_lattice` with jungle grapes on it (age/grape in state, no block entity) | remap to the lattice from D1, facing north, keep `age` and `grape`, block entity created on load |
-| W8 | Wines with `Year` NBT on the day-time clock | convert once, when the stack is first seen, to the vintage clock (B4.5): `ageTicks = (oldYearNow - Year) x 16 x ticksPerDay`, then `brewedAt = clock - ageTicks`. Do not use the upstream `year x daysPerYear` fallback, which would make some wines "brewed in the future" after lots of sleeping |
-| W9 | Active instances of removed effects (`trippy`, `improved_*`) | remap each improved effect to its vanilla effect (`improved_speed` -> `speed` and so on), and `improved_absorbtion` -> `absorption` (D3) |
-| W10 | `vinery:chair` seat entities | drop on load, as the player just stands up; or remap to `foundation:chair` |
+| W8 | **REMOVED 2026-10-27.** Wines with `Year` NBT on the day-time clock | convert once, when the stack is first seen, to the vintage clock (B4.5): `ageTicks = (oldYearNow - Year) x 16 x ticksPerDay`, then `brewedAt = clock - ageTicks`. Do not use the upstream `year x daysPerYear` fallback, which would make some wines "brewed in the future" after lots of sleeping |
+| W9 | **REMOVED 2026-10-27.** Active instances of removed effects (`trippy`, `improved_*`) | remap each improved effect to its vanilla effect (`improved_speed` -> `speed` and so on), and `improved_absorbtion` -> `absorption` (D3) |
+| W10 | **REMOVED 2026-10-27.** `vinery:chair` seat entities | drop on load, as the player just stands up; or remap to `foundation:chair` |
 | W11 | Every Compat, Dramatic Doors, Lightman's Currency, Supplementaries and Supplementaries Squared generate 65 items from Vinery's `cherry` wood type (`everycomp:*/vinery/cherry_*`, `dramaticdoors:*_vinery_cherry_door`, `lightmanscurrency:auction_stand_cherry`, `supplementaries:vinery/*_cherry`) | renaming the wood to `dark_cherry` renames all 65, and their placed blocks are lost. **Main reason for D1** |
 
 ### B3.4 Pack integration
@@ -2001,9 +2006,9 @@ Each row is something the port has to handle. The ID is used in B4 and B5.
 |---|---|---|
 | I1 | License | code MIT, resources All Rights Reserved (B3.6). Settle D13 before building anything that ships upstream files |
 | I2 | patcherMod `FermentationBarrelStackOutputMixin` | targets the 1.3.10 class and slots; 1.5.5 stacks by itself. **Remove** |
-| I3 | patcherMod `compat/vinery` JEI plugin (VineryJEI, 4 pages, [vinery_jei.md](vinery_jei.md)) | the port ships JEI for the barrel and both press stages. Keep only Grape Stomping (12 stomps now) and Wine Aging (rewrite for storage aging and the cellar multiplier); retire Fermentation and Wine Press; update `config/jei/recipe-category-sort-order.ini` (+ `configs_edited/`) |
+| I3 | patcherMod `compat/vinery` JEI plugin (VineryJEI, 4 pages, [vinery_jei.md](vinery_jei.md); deleted 2026-10-27, pack_hygiene.md finding 6) | the port ships JEI for the barrel and both press stages. Keep only Grape Stomping (12 stomps now) and Wine Aging (rewrite for storage aging and the cellar multiplier); retire Fermentation and Wine Press; update `config/jei/recipe-category-sort-order.ini` (+ `configs_edited/`) |
 | I4 | patcherMod `WinemakerTrades` | reflects on `satisfyu.vinery.entity.WanderingWinemakerEntity`'s static trade map. The class moves to `net.satisfy.vinery.core.entity` and its trades become config-driven: rewrite against the port's API (a direct dependency is fine now, since we own the jar) |
-| I5 | patcherMod `WinemakerSpawner` | reads `config/vinery/config.json5 wine_trader_chance`: switch to the port's `trader.spawnChance` (pack: 0) |
+| I5 | patcherMod `WinemakerSpawner` (moved into the port 2026-10-27: `forge/WinemakerSpawner`, `[trader] ownSpawner`) | reads `config/vinery/config.json5 wine_trader_chance`: switch to the port's `trader.spawnChance` (pack: 0) |
 | I6 | patcherMod `StuckInBlock` | rule keyed by class name `satisfyu.vinery.block.grape.TaigaGrapeBush`: becomes `net.satisfy.vinery.core.block.GrapeBushBlock$TaigaGrapeBush` |
 | I7 | patcherMod `BonemealCharmMixin` | modelled on Vinery's bone-meal mixin. 1.5.5's version changes the return to PASS, so the charm (which checks for CONSUME) and the winemaker set no longer double-refund. The order still matters if both mixins hit the same call: check (VB-27) |
 | I8 | patcherMod `crop_growth.json` (WTHIT growth line) | `vinery:grapevine_lattice` -> the 10 lattice ids (`vinery:*_lattice`); lattice age now lives in the block entity too, but the state `age` still drives it |
@@ -2164,7 +2169,8 @@ SOFTWARE.
 **Effect on B3.3:**
 - W1 shrinks to the effects (W9) and the `vinery:chair` seat entity (W10).
 - No item or block remaps are needed.
-- W2 (storage block entity ids) and W3 / W4 (barrel and press contents) still apply.
+- W2 (storage block entity ids) and W3 / W4 (barrel and press contents) still apply. (W2 and W3 were removed again
+  on 2026-10-27, see B3.3.)
 - W7 no longer applies, since `grapevine_lattice` stays.
 
 **Possible look-alike pairs to prune later:** old `chair` / `table` / `big_table` / `shelf` vs the new `cherry_*`
@@ -2206,7 +2212,7 @@ Build order. Each step should boot before starting the next:
    - The creative tab.
    - Remaps (W1, W9, W10).
 3. **Barrel** (B2.2): fluid level, juice types, the recipe format, the GUI with a juice gauge, hopper sides. Old
-   contents conversion (W3).
+   contents conversion (W3): REMOVED 2026-10-27.
 4. **Apple Press** (B2.3): 2-tall block, both recipe types, GUI, old contents (W4).
 5. **Grapes** (B2.4):
    - Pot block entity (W5).
@@ -2218,15 +2224,15 @@ Build order. Each step should boot before starting the next:
    - Stackable-log campfire.
    - Slabs and their mixins (P17).
 6. **Wine** (B2.5, **B4.5**): the vintage clock, `WineYear` NBT in clock ticks, storage aging hooked straight into the
-   ported storage block entity (no mixin needed), tooltip, effect list setting, `Year` conversion (W8).
+   ported storage block entity (no mixin needed), tooltip, effect list setting. (`Year` conversion, W8: REMOVED 2026-10-27.)
 7. **Effects** (B2.5, P6). Experience orb mixin, fall-damage / jump mixins, the double-jump client handler.
-8. **Entities and trades:** mule, Wandering Winemaker (spawn via the pack's spawner, I4, I5), villager profession +
+8. **Entities and trades:** mule, Wandering Winemaker (the port's own spawner since 2026-10-27, I4, I5), villager profession +
    config trades (P16).
 9. **Worldgen** (P15, F7). **Commands** (B2.6). **Data** (F1 to F6, done in memory by the B4.8 translation). **Config** (P14).
 10. **Client:** renderers (lattice, pot, storage pot, log, bottles, racks, banner), screens, colours, armor models.
     WTHIT lines (D6, B4.6) in place of the info overlay.
 11. **JEI** (I3).
-12. **Old-world conversion pass** (W2, W3, W6) and a scratch-server boot on a copy of a 1.3.10 world.
+12. ~~**Old-world conversion pass** (W2, W3, W6) and a scratch-server boot on a copy of a 1.3.10 world.~~ REMOVED 2026-10-27 (B3.3).
 
 ### B4.3 API mapping, 1.21.1 Fabric -> 1.19.2 Forge
 
@@ -2269,7 +2275,7 @@ Rows shared with Part A 3.1 (data components, codecs, packets, `c:` tags) apply 
 | I2 | `FermentationBarrelStackOutputMixin` deleted, entry removed from `creativeengineering.mixins.json` |
 | I3 | patcherMod's `VineryJEI` stands down entirely when `net.satisfy.vinery.forge.VineryForge` is present: the port ships all five pages (barrel, both press stages, and its own Grape Stomping and Wine Aging). JEI sort order (`config/jei/` + `configs_edited/root_config/jei/`): the four `creativeengineering:vinery_*` lines became `vinery:wine_fermentation`, `apple_press_mashing`, `apple_press_fermenting`, `grape_stomping`, `wine_aging` (in configs_edited after the Brewin' lines) |
 | I4 | `WinemakerTrades` tries `net.satisfy.vinery.core.entity.WanderingWinemakerEntity` first, then 1.3.10's class; the port keeps the static `TRADES` map. `/dumptrades` (`villager_trades_dump.js`) does the same |
-| I5 | `WinemakerSpawner` reads `config/vinery-common.toml` `[trader] spawnChance` when that file exists, else 1.3.10's json5; CEConfig comment names both |
+| I5 | `WinemakerSpawner` reads `config/vinery-common.toml` `[trader] spawnChance` when that file exists, else 1.3.10's json5; CEConfig comment names both. 2026-10-27: the spawner moved into the port (`[trader] ownSpawner`, `ownSpawnerInterval`); CEConfig `winemakerEnabled` / `winemakerIntervalTicks` and the toml check are gone |
 | I6 | `StuckInBlock` has a rule for the port's `GrapeBushBlock$TaigaGrapeBush` next to the 1.3.10 one |
 | I7 | unchanged; still VB-27 |
 | I8 | `crop_growth.json`: the 10 `vinery:*_lattice` ids (listed one by one) |
@@ -2521,14 +2527,14 @@ booted yet.
     (1.5.5's sign and boat textures). Chest boat built on vanilla `ChestBoat`. Boats placed in 1.3.10 worlds
     (`doapi:boat` entities) are lost with doapi.
   - Press block entity id is 1.3.10's `wine_press`: old presses load straight into the new one (W4).
-  - Barrel: a 1.3.10 barrel (no `FluidLevel` key) converts on load per W3.
+  - Barrel: a 1.3.10 barrel (no `FluidLevel` key) converted on load per W3 (removed 2026-10-27).
   - Winemaker job site: the Aging Barrel (1.5.5); 1.3.10's was the wine press.
   - Port-only text lives in `assets/vinery_backport/lang/` (keys are global; the path never matches upstream's).
 - **Open decisions built with the recommendation:** D3 (trippy kept as a client post shader, `improved_*` remapped
-  to vanilla), D4 (1.5.5 effect list, plus praetorian Glowing and king danis Instant Health), D5 (1.5.5 numbers;
+  to vanilla, remap removed 2026-10-27), D4 (1.5.5 effect list, plus praetorian Glowing and king danis Instant Health), D5 (1.5.5 numbers;
   aging per B4.5), D7 (Foundation bundled), D8 (no village houses), D9 (no hanging sign), D10 (rotten cherry kept,
   setting `rottenCherryChance` 0.15), D12 (bamboo racks / lattice from `quark:bamboo_planks`).
-- **Done since (2026-10-18):** W2, W3, W4, W6, W8 to W10; praetorian / king danis barrel recipes
+- **Done since (2026-10-18):** W2, W3, W4, W6, W8 to W10 (W2, W3, W8 to W10 removed again 2026-10-27); praetorian / king danis barrel recipes
   (`data/vinery/recipes/port/`); WTHIT lines (B4.6); pack-side changes (B4.4 outcome table); deploy category.
 - **Fixes found by review, no boot yet:**
   - `mods.toml` declared only `vinery`. Foundation is a second `@Mod`, and FML rejects an `@Mod` class with no entry,
@@ -2650,7 +2656,7 @@ The decision goes further than the recommendation below: blocks that have a 1.5.
 
 - **Recommended:**
   - Keep `trippy` registered. The pack's echo "discombobulate" uses it (I16), and it's only a client shader.
-  - Remap the 10 `improved_*` effects to vanilla on load (W9).
+  - Remap the 10 `improved_*` effects to vanilla on load (W9). Removed 2026-10-27 (B3.3).
 - **Alternative:** drop `trippy` and replace it in `tool_effects.js` with Nausea.
 
 ### B5 D4. Wine effects (DECIDED 2026-10-19: 1.5.5 list)
@@ -2772,7 +2778,7 @@ went up because `-01` shipped in 1.0.7, and a rebuild under the same name wouldn
 | B7.5 JEED providers | Built. Port: `WineEffects.all()` (wine -> effect) and `winesByEffect()` (effect id -> wine ids, strings only, for Rhino). Pack: `R.jeedProvider(effect, providers, e, idOverride)` in NCH, called once per effect at the end of `kubejs/server_scripts/cooking/alcohol.js` (`creativeengineering:jeed/vinery_<effect>`). NCH is a startup script, so it needs a game restart, not just `/reload` |
 | B7.6 Mead out | Built. Block, item, storage lists, render layer and effect default are gone. The upstream-pack layer has a `REMOVED` set: tag entries naming `vinery:mead` are dropped, and so are advancement criteria whose item list it empties. **Found:** `wine_somelier` (the advancement that gives the banner) and `the_noble_drop` list mead. The old "leave out the whole file" rule would have dropped both, banner reward included. Now mead is taken out of their lists: 25 -> 24 criteria (checked headless against the 1.5.5 file). Villager trades never had it |
 | B7.7 Banner | Built. `[banner] effect / amplifier / radius / durationSeconds / refreshBelowSeconds` (Health Boost II, 8, 60, 10). Below the threshold the running effect is extended in place with `MobEffectInstance.update` plus a `ClientboundUpdateMobEffectPacket`, never re-added, so the extra hearts aren't clamped. The tooltip line comes from the settings (`tooltip.foundation.banner.effect`) |
-| B7.8 Time | patcherMod side BUILT too (patcherMod 1.0.8, [time.md](time.md) 3.8): the `[time]` master pushes `daysPerMonth`, the clock, the cellar value and the rest into `vinery-common.toml`; Serene Seasons calendar tooltip; "7:30 pm" clock. Port side built: `[wine] daysPerMonth` 8, `monthsPerEffectLevel` 3, `durationPerMonth` 200, `cellarAgingMultiplier` 2.5; `[aging] clockMode` WORLD_TIME, a new `dayUnit` DAYTIME (24000 clock units a day, forced on WORLD_TIME), `playtimeHoursPerMonth`. Real-time text divides by the measured day-time pace (`Snapshot.realTicks`). "Month" in the tooltip, `/wine` (literal `months`), JEI, WTHIT and the upstream keys. The Vinery calendar is removed (block, item, classes, keeper data; `i.calendar` / `i.mead` out of `item_dict.js` and the generated food / stack JSONs) |
+| B7.8 Time | patcherMod side BUILT too (patcherMod 1.0.8, [time.md](time.md) 3.8): the `[time]` master pushes `daysPerMonth`, the clock, the cellar value and the rest into `vinery-common.toml` (since 2026-10-27 the port reads them from `time.WineTime` instead, time.md 3.7); Serene Seasons calendar tooltip; "7:30 pm" clock. Port side built: `[wine] daysPerMonth` 8, `monthsPerEffectLevel` 3, `durationPerMonth` 200, `cellarAgingMultiplier` 2.5; `[aging] clockMode` WORLD_TIME, a new `dayUnit` DAYTIME (24000 clock units a day, forced on WORLD_TIME), `playtimeHoursPerMonth`. Real-time text divides by the measured day-time pace (`Snapshot.realTicks`). "Month" in the tooltip, `/wine` (literal `months`), JEI, WTHIT and the upstream keys. The Vinery calendar is removed (block, item, classes, keeper data; `i.calendar` / `i.mead` out of `item_dict.js` and the generated food / stack JSONs) |
 | B7.9 Cask | Built. **Deviation:** the plan put our wording in the port's `assets/vinery/lang/en_us.json`. The jar can't carry upstream's path (`checkNoUpstreamResources`), and the order between the mod's own pack and the upstream pack isn't guaranteed. So the lines live in `src/main/resources/vinery_port/upstream_lang/en_us.json`, and the upstream-pack layer applies them on top of the merged upstream lang (checked headless). Resource packs still override. `dark_cherry_barrel` and 1.3.10's `barrel` keep their names (VQ2) |
 | B7.10 Apple wine | Built (10.12 later made its size come from its per-block limit, 3 = small). `BottleSize.SMALL`. The upstream-pack layer moves `vinery:apple_wine` from `large_bottle` to `small_bottle`, in place of an own tag file (same reason as B7.9). Its block still holds 3 |
 | B7.11 Praetorian | SETTLED by 10.8 (small racks, shrunk); medium since 10.12, so the 4x rack, the wine box and the single-bottle rack, drawn with its own model (no slim, 10.14) |
@@ -3031,8 +3037,8 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - [ ] **VB-27 Winemaker set and charm:** full set + bone meal -> bone meal kept, 30% of uses damage all 4 pieces by 1; set + bonemeal charm -> exactly one refund
 - [ ] **VB-28 JEI:** all five Vinery pages (cask, press mashing, press fermenting, grape stomping, wine aging) come from the port, in that order after Brewin's; none of patcherMod's `creativeengineering:vinery_*` pages
 - [ ] **VB-29 Old world: ids kept:** a 1.3.10 world with cherry blocks, crates, wine_press, juice bottles, vinemaker armor, stove, sink, flower box -> all present under the same ids; nothing in the missing-mappings log except effects
-- [ ] **VB-30 Old world: storage:** 1.3.10 wine racks, shelves and placed wine bottles keep their bottles
-- [ ] **VB-31 Old world: barrel and wines:** 1.3.10 barrel with juice and bottles converts per W3; an old 2-year wine shows its age, not "brewed in the future"
+- [ ] ~~**VB-30 Old world: storage:**~~ retired 2026-10-27 (old-world conversion removed, pack_hygiene.md finding 10). 1.3.10 wine racks, shelves and placed wine bottles keep their bottles
+- [ ] ~~**VB-31 Old world: barrel and wines:**~~ retired 2026-10-27 (old-world conversion removed, pack_hygiene.md finding 10). 1.3.10 barrel with juice and bottles converts per W3; an old 2-year wine shows its age, not "brewed in the future"
 - [ ] **VB-32 Old world: cross-mod cherry:** Every Compat / Dramatic Doors cherry blocks still there (D1)
 - [ ] ~~**VB-33 Clock only on playtime:**~~ superseded 2026-10-18 (clock is WORLD_TIME, B7.8): dedicated server, note `/wine time`, log everyone off for 10 min, log back in -> clock moved by about 0
 - [ ] ~~**VB-34 Today's pace measured:**~~ superseded 2026-10-18 (B7.8): play through one full world day with `dayUnit = WORLD`, `worldDayMinutes = 0` -> the measured day length is about 106 min, close to the 28.2 h-per-year default

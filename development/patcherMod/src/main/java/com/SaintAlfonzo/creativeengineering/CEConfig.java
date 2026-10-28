@@ -583,8 +583,8 @@ public final class CEConfig {
     }
 
     /**
-     * Crop harvest table values read by {@code kubejs/server_scripts/loot/09_crop_drops.js} (server side);
-     * feature_writeup/crops.md 3. A change needs /reload.
+     * Crop harvest table values read by Creative Delight's {@code rusticdelight/crop_drops.js} and
+     * {@code creativeengineering/soil_yield.js} (server side); feature_writeup/crops.md 3. A change needs /reload.
      */
     public static final class CropDrops {
         public final ForgeConfigSpec.BooleanValue bellPeppers;
@@ -594,6 +594,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.DoubleValue redBonusChance;
         public final ForgeConfigSpec.DoubleValue greenBonusChance;
         public final ForgeConfigSpec.DoubleValue yellowBonusChance;
+        public final SoilYield SOIL_YIELD;
 
         private CropDrops(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -626,7 +627,65 @@ public final class CEConfig {
             yellowBonusChance = b.comment("Chance [0-1] of one extra yellow pepper.")
                     .defineInRange("yellowBonusChance", 0.15, 0.0, 1.0);
 
-            b.pop(2); // bell_peppers, crop_drops
+            b.pop(); // bell_peppers
+            SOIL_YIELD = new SoilYield(b);
+            b.pop(); // crop_drops
+        }
+    }
+
+    /**
+     * Extra produce from crops grown on better soil (CD {@code creativeengineering/soil_yield.js}, applied on /reload).
+     * Each soil adds a binomial pool to a ripe crop's harvest; each crop is switched on on its own (all off by default).
+     * feature_writeup/crop_yields.md.
+     */
+    public static final class SoilYield {
+        /** Crop keys of soil_yield.js's CROPS table, in the same order. */
+        public static final String[] CROPS = {
+                "wheat", "carrots", "potatoes", "beetroots", "cabbages", "onions", "tomatoes", "rice",
+                "bell_peppers", "coffee", "cotton", "ender_crop", "tobacco", "flax", "hemp", "corn", "cave_carrots",
+                "broccoli", "cauliflower", "garlic", "sweet_potato", "turnip", "zucchini", "cucumber", "oats",
+                "peanuts", "adzuki"
+        };
+
+        public final ForgeConfigSpec.IntValue farmlandTries;
+        public final ForgeConfigSpec.DoubleValue farmlandChance;
+        public final ForgeConfigSpec.IntValue richFarmlandTries;
+        public final ForgeConfigSpec.DoubleValue richFarmlandChance;
+        public final ForgeConfigSpec.IntValue fertileSoilTries;
+        public final ForgeConfigSpec.DoubleValue fertileSoilChance;
+        public final ForgeConfigSpec.IntValue richSoilTries;
+        public final ForgeConfigSpec.DoubleValue richSoilChance;
+        public final Map<String, ForgeConfigSpec.BooleanValue> crop = new java.util.LinkedHashMap<>();
+
+        private SoilYield(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Extra produce on better soil. A ripe crop whose block below is the soil gets 'tries' extra",
+                    "chances at one more of its produce (seeds are not included), each at 'chance'. Average extra per",
+                    "harvest = tries x chance. The crop's own drops are unchanged. 0 tries = nothing for that soil.",
+                    "Each crop is switched on in [crop_drops.soil_yield.crops]; all are off by default.",
+                    "feature_writeup/crop_yields.md lists every crop's drops."
+            ).push("soil_yield");
+
+            farmlandTries = b.comment("Vanilla farmland: extra tries.").defineInRange("farmlandTries", 0, 0, 8);
+            farmlandChance = b.comment("Vanilla farmland: chance [0-1] per try.").defineInRange("farmlandChance", 0.0, 0.0, 1.0);
+            richFarmlandTries = b.comment("Rich Soil Farmland: extra tries.").defineInRange("richFarmlandTries", 2, 0, 8);
+            richFarmlandChance = b.comment("Rich Soil Farmland: chance [0-1] per try.").defineInRange("richFarmlandChance", 0.35, 0.0, 1.0);
+            fertileSoilTries = b.comment("Fertile Soil (Immersive Weathering mulch): extra tries.").defineInRange("fertileSoilTries", 2, 0, 8);
+            fertileSoilChance = b.comment("Fertile Soil: chance [0-1] per try.").defineInRange("fertileSoilChance", 0.25, 0.0, 1.0);
+            richSoilTries = b.comment("Untilled Rich Soil (only rice and adzuki grow on it): extra tries.").defineInRange("richSoilTries", 2, 0, 8);
+            richSoilChance = b.comment("Untilled Rich Soil: chance [0-1] per try.").defineInRange("richSoilChance", 0.35, 0.0, 1.0);
+
+            b.comment("true: the crop gets the soil pools above. false: its drops are the same on every soil.").push("crops");
+            for (String key : CROPS) {
+                crop.put(key, b.define(key, false));
+            }
+            b.pop(2); // crops, soil_yield
+        }
+
+        /** The crop's switch, or null for a key the config does not have. */
+        public Boolean cropOn(String key) {
+            ForgeConfigSpec.BooleanValue v = crop.get(key);
+            return v == null ? null : v.get();
         }
     }
 
@@ -1252,8 +1311,8 @@ public final class CEConfig {
     /**
      * The one place day length, seasons and wine aging are set ({@code time/} package, feature_writeup/time.md).
      * patcherMod pushes the derived values into Better Days (getter mixin), Serene Seasons and SeasonHUD (their
-     * per-world server configs) and the Vinery port (its common config), so their own files stop being edited by
-     * hand. Every length is in world days of {@code dayMinutes + nightMinutes} real minutes.
+     * per-world server configs); the Vinery port reads its wine values through {@code time.WineTime}. Their own
+     * files stop being edited by hand. Every length is in world days of {@code dayMinutes + nightMinutes} real minutes.
      */
     public static final class Time {
         public enum Clock { SUN, TICKS }
@@ -1282,8 +1341,9 @@ public final class CEConfig {
         private Time(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the",
-                    "time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml,",
-                    "and vinery-common.toml [wine]/[aging] are overwritten from here at server start and on every edit.",
+                    "time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml",
+                    "are overwritten from here at server start and on every edit. The Vinery port reads [time.wine] and the",
+                    "lengths from here and ignores the matching vinery-common.toml [wine]/[aging] keys while enabled.",
                     "/cetime shows every derived value."
             ).push("time");
 
@@ -1534,6 +1594,10 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue potionBucketCategory;
         public final ForgeConfigSpec.BooleanValue tippedArrowCategory;
         public final ForgeConfigSpec.BooleanValue canCategories;
+        public final ForgeConfigSpec.EnumValue<FluidScale> fluidAmountScale;
+
+        /** How JEI tanks turn a fluid amount into a fill height ({@code mixin.JeiFluidTankScaleMixin}). */
+        public enum FluidScale { LOG, SQRT, LINEAR }
 
         private Jei(ForgeConfigSpec.Builder b) {
             b.comment("JEI recipe screen tweaks (client side).").push("jei");
@@ -1586,6 +1650,13 @@ public final class CEConfig {
                     "(crafts that take a can). Off: they stay on the Crafting page.",
                     "Takes effect the next time JEI starts (rejoin or /reload)."
             ).define("canCategories", true);
+
+            fluidAmountScale = b.comment(
+                    "How full a fluid looks in JEI tanks (every mod's recipe pages and the pack's own) for its amount.",
+                    "LOG: small amounts stay visible and 250, 1000 and 8000 mB look different. SQRT: a milder curve.",
+                    "LINEAR: JEI's own (fill = amount / tank size, so small amounts are a sliver).",
+                    "Takes effect at once."
+            ).defineEnum("fluidAmountScale", FluidScale.LOG);
 
             b.pop(); // jei
         }
@@ -1926,6 +1997,7 @@ public final class CEConfig {
         public final PlacementPriorityCfg placementPriority;
         public final LocateCfg locate;
         public final DistantCfg distant;
+        public final FirstTickWaterCfg firstTickWater;
 
         private Worldgen(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -1948,6 +2020,7 @@ public final class CEConfig {
             placementPriority = new PlacementPriorityCfg(b);
             locate = new LocateCfg(b);
             distant = new DistantCfg(b);
+            firstTickWater = new FirstTickWaterCfg(b);
             b.pop(); // worldgen
         }
     }
@@ -1978,6 +2051,10 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue templateBlockSwaps;
         public final ForgeConfigSpec.BooleanValue permafrostMerge;
         public final ForgeConfigSpec.BooleanValue mulberrySapling;
+        public final ForgeConfigSpec.BooleanValue firstTickWater;
+        public final ForgeConfigSpec.BooleanValue holdGeneratedFallingBlocks;
+        public final ForgeConfigSpec.BooleanValue dimensionFilter;
+        public final ForgeConfigSpec.BooleanValue sharedTerrainCache;
 
         private WorldgenSystems(ForgeConfigSpec.Builder b) {
             b.comment("Switch a system off to see the mods' own behaviour. Off never deletes a config file.").push("systems");
@@ -2059,6 +2136,24 @@ public final class CEConfig {
                     "trunk tree that worldgen places by rivers (patcherMod MulberrySapling). Off: UA's built-in tree with river logs,",
                     "which drop oak logs. Applies at once.")
                     .define("mulberrySapling", true);
+            firstTickWater = b.comment("Generated water that first flows when its chunk starts ticking (aquifer edges, cave springs) breaks the",
+                    "plants, carpets and torches in its way without dropping items ([worldgen.first_tick_water]; patcherMod FirstTickWater).",
+                    "Off: vanilla, they drop as items. Applies at once.")
+                    .define("firstTickWater", true);
+            holdGeneratedFallingBlocks = b.comment("Sand, gravel and other falling blocks left floating by generation stay put when their chunk first",
+                    "ticks, until a later block update next to them (patcherMod GeneratedFallingBlocks). Covers the chunk's",
+                    "post-processing, generated water settling in the [worldgen.first_tick_water] window and ticks scheduled during",
+                    "generation. Off: vanilla, they fall on the first tick (in the outer ring of loaded chunks the falling entity never",
+                    "lands and stays saved). Applies at once.")
+                    .define("holdGeneratedFallingBlocks", true);
+            dimensionFilter = b.comment("A structure that cannot start in any biome of a dimension is not tried there (patcherMod DimensionFilter):",
+                    "no generation point, terrain reads or jigsaw assembly for Nether and End structures in the Overworld.",
+                    "Same structures either way, only faster. Off: every structure set is tried in every dimension, as vanilla 1.19.2.")
+                    .define("dimensionFilter", true);
+            sharedTerrainCache = b.comment("Earth and water fill share one bounded cache of predicted terrain columns across starts, placement",
+                    "priority predictions, meta retries and the real start of a chunk (patcherMod EarthFill). Same results either way,",
+                    "only faster. Off: each start reads its own columns.")
+                    .define("sharedTerrainCache", true);
             b.pop(); // systems
         }
     }
@@ -2292,7 +2387,7 @@ public final class CEConfig {
             sampleGrid = b.comment(
                     "The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little",
                     "coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too."
-            ).defineInRange("sampleGrid", 2, 1, 8);
+            ).defineInRange("sampleGrid", 4, 1, 8);
             log = b.comment(
                     "CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked",
                     "structure that has any earth in its base. For tuning the limits."
@@ -2526,6 +2621,22 @@ public final class CEConfig {
      * Distant Horizons' own world generation (its throwaway LOD chunks, never real chunks): the bottom of the world
      * is not generated; oceans get a fake seabed instead. See feature_writeup/locate.md 3.7.
      */
+    /** Settling window of {@code worldgen.FirstTickWater} ([worldgen.systems] firstTickWater switches it). */
+    public static final class FirstTickWaterCfg {
+        public final ForgeConfigSpec.IntValue windowTicks;
+
+        private FirstTickWaterCfg(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Generated water flows for the first time when its chunk starts ticking. For windowTicks after that, that",
+                    "water and every block it spreads to drop no items when the flow breaks something."
+            ).push("first_tick_water");
+            windowTicks = b.comment("Length of the window in ticks (20 = 1 s), counted from the chunk's first tick and refreshed",
+                    "each time the water spreads to a block. 0: no window (vanilla drops). Applies at once.")
+                    .defineInRange("windowTicks", 600, 0, 72000);
+            b.pop(); // first_tick_water
+        }
+    }
+
     public static final class DistantCfg {
         public final ForgeConfigSpec.BooleanValue clip;
         public final ForgeConfigSpec.IntValue clipBelowY;
@@ -2732,8 +2843,8 @@ public final class CEConfig {
 
     /**
      * Dials for {@code trader.WanderingTraderTweaks} (Wandering Trader wait and offer counts, through
-     * {@code mixin.WanderingTraderSpawnerMixin} / {@code mixin.WanderingTraderTradesMixin}) and
-     * {@code trader.WinemakerSpawner} (the Wandering Winemaker's own spawner). What the pools hold is
+     * {@code mixin.WanderingTraderSpawnerMixin} / {@code mixin.WanderingTraderTradesMixin}). The Wandering
+     * Winemaker's spawner is the Vinery port's own (vinery-common.toml [trader]). What the pools hold is
      * set in KubeJS ({@code kubejs/server_scripts/economy/wandering_trades.js}).
      */
     public static final class WanderingTrader {
@@ -2741,20 +2852,18 @@ public final class CEConfig {
         public final ForgeConfigSpec.IntValue traderIntervalTicks;
         public final ForgeConfigSpec.IntValue commonTrades;
         public final ForgeConfigSpec.IntValue rareTrades;
-        public final ForgeConfigSpec.BooleanValue winemakerEnabled;
-        public final ForgeConfigSpec.IntValue winemakerIntervalTicks;
 
         private WanderingTrader(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Wandering Trader and Wandering Winemaker spawning, and the trader's offer counts.",
-                    "Each spawner rolls once per interval, counted in server ticks (20 = 1 second) while the",
+                    "Wandering Trader spawning and offer counts (the Wandering Winemaker: vinery-common.toml [trader]).",
+                    "The spawner rolls once per interval, counted in server ticks (20 = 1 second) while the",
                     "overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not",
                     "change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then",
                     "a free spot near a random player; on average about 14 rolls per spawn.",
-                    "To stop both use /gamerule doTraderSpawning false."
+                    "/gamerule doTraderSpawning false stops it and the Winemaker."
             ).push("wandering_trader");
 
-            enabled = b.comment("Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers) and no Winemaker spawner.")
+            enabled = b.comment("Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers).")
                     .define("enabled", true);
 
             traderIntervalTicks = b.comment(
@@ -2769,16 +2878,6 @@ public final class CEConfig {
 
             rareTrades = b.comment("Offers drawn from the rare pool, all different items. Vanilla: 1.")
                     .defineInRange("rareTrades", 5, 1, 50);
-
-            winemakerEnabled = b.comment(
-                    "Spawn Vinery's Wandering Winemaker from its own spawner, independent of the Wandering Trader.",
-                    "Vinery's own swap (vinery-common.toml [trader] spawnChance, 1.3.10: config/vinery/config.json5",
-                    "wine_trader_chance) must be 0, or it still",
-                    "turns that share of Wandering Trader spawns into Winemakers."
-            ).define("winemakerEnabled", true);
-
-            winemakerIntervalTicks = b.comment("Ticks between Wandering Winemaker spawn rolls.")
-                    .defineInRange("winemakerIntervalTicks", 96000, 1200, 100_000_000);
 
             b.pop(); // wandering_trader
         }

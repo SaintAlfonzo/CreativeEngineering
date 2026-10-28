@@ -17,7 +17,7 @@ ItemEvents.tooltip(e => {
 
 if (Platform.isLoaded('jei')) {
 	JEIEvents.information(e => {
-		if (!global.CD || !global.CD.qol('jeiInfoPages')) return
+		if (!global.CD.qol('jeiInfoPages')) return
 		var i = global.item
 		e.addItem(i.enderman_sight, [Text.of('Dropped by an Enderman killed with a knife.')])
 		e.addItem(i.mite_crust, [Text.of('Dropped by an Endermite killed with a knife.')])

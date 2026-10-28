@@ -14,8 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * creativeengineering:magic_resistance — the MobEffect itself is registered entirely in
  * KubeJS ({@code startup_scripts/magic/magic_resistance.js}, {@code StartupEvents.registry
  * ('mob_effect', ...)}); that part needs no Java at all since it's a pack-original effect
- * with no cross-mod registry-timing problem (unlike {@link BetterBeaconsPotions}, which
- * DOES need Java because it depends on ANOTHER mod's effect).
+ * with no cross-mod registry-timing problem. Its potions do need Java ({@link CEPotions}).
  *
  * <p>What KubeJS can't do is the actual damage reduction: this build's KubeJS wraps
  * {@code LivingHurtEvent} as a read-only {@code EntityEvents.hurt} (confirmed by

@@ -24,13 +24,13 @@ i.blueprint = 'immersiveengineering:blueprint';
 // ############################## Unsorted (Possible duplicates) ##############################
 
 i.wirecoil_hv = 'immersiveengineering:wirecoil_steel';
-	i.coil_hv = 'immersiveengineering:wirecoil_steel';
 i.coil_block_hv = 'immersiveengineering:coil_hv';
 i.culture_base = '#creativeengineering:culture_base';
 i.amethyst_dust = 'creativeengineering:amethyst_dust';
 i.amethyst_lens = 'creativeengineering:amethyst_lens';
 i.wood_pellets = 'creativeengineering:wood_pellets';
 i.layered_obsidian = 'creativeengineering:layered_obsidian';
+i.weathered_cardboard_box = 'creativeengineering:weathered_cardboard_box';
 // Oven — FD cooking-pot style baking block. Java: patcherMod oven/ package (block, GUI, JEI, the
 // creativeengineering:baking recipe type) | recipes: kubejs/data/creative_delight/kubejs/creativeengineering/baking.js (NCH.ceBaking) |
 // bakeware items: Creative Delight kubejs_startup/creativeengineering/bakeware.js | feature_writeup/oven.md
@@ -45,8 +45,6 @@ i.t_bakeware_cake_pan = '#creativeengineering:bakeware/cake_pan';
 i.t_bakeware_pie_tin = '#creativeengineering:bakeware/pie_tin';
 i.t_bakeware_muffin_tin = '#creativeengineering:bakeware/muffin_tin';
 i.catfish = 'alexsmobs:raw_catfish';
-i.catfish_slice = 'alexsdelight:raw_catfish_slice';
-i.felsic_scrap = 'creativeengineering:felsic_scrap';
 i.component_diamond = 'creativeengineering:component_diamond';
 // Air Brake — hold-to-use elytra brake. Item: startup_scripts/items/air_brake.js |
 // deceleration physics: patcherMod gear/AirBrakeHandler.java | knobs: CEConfig.AirBrake
@@ -74,6 +72,8 @@ i.ce_lingering_potion_bucket = 'creativeengineering:lingering_potion_bucket';
 i.leather_camera_bag = 'exposure_extras:leather_camera_bag';
 i.iron_camera_bag = 'exposure_extras:iron_camera_bag';
 i.netherite_camera_bag = 'exposure_extras:netherite_camera_bag';
+// Cultivated meat (sample syringe, cultures, culture blocks): reserved for a future Creative Cultivation mod
+// (creative_delight.md 29.5).
 // Sample Syringe — one empty (reusable) item + one filled item per sampled animal, split
 // like book/written_book/enchanted_book instead of one item + NBT (NBT-matched ingredients
 // via .weakNBT()/PartialNBTIngredient kept silently matching zero items here - not worth
@@ -87,8 +87,8 @@ i.sheep_sample_syringe = 'creativeengineering:sheep_sample_syringe';
 i.rabbit_sample_syringe = 'creativeengineering:rabbit_sample_syringe';
 i.cod_sample_syringe = 'creativeengineering:cod_sample_syringe';
 i.salmon_sample_syringe = 'creativeengineering:salmon_sample_syringe';
-// Meat cultures — raw lab-grown precursors for cultivated meat (WIP, cooking.js).
-// Items: startup_scripts/items/cultures.js
+// Meat cultures — raw lab-grown precursors for cultivated meat. Items and blocks: Creative Delight
+// kubejs_startup/creativeengineering/cultures.js; recipes: kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js
 i.culture_beef = 'creativeengineering:culture_beef';
 i.culture_pork = 'creativeengineering:culture_pork';
 i.culture_mutton = 'creativeengineering:culture_mutton';
@@ -96,7 +96,7 @@ i.culture_poultry = 'creativeengineering:culture_poultry';
 i.culture_rabbit = 'creativeengineering:culture_rabbit';
 i.culture_cod = 'creativeengineering:culture_cod';
 i.culture_salmon = 'creativeengineering:culture_salmon';
-// Culture storage blocks (9 cultures each). Blocks: startup_scripts/items/cultures.js
+// Culture storage blocks (9 cultures each). Blocks: Creative Delight kubejs_startup/creativeengineering/cultures.js
 i.culture_block_beef = 'creativeengineering:beef_culture_block';
 i.culture_block_pork = 'creativeengineering:pork_culture_block';
 i.culture_block_mutton = 'creativeengineering:mutton_culture_block';
@@ -105,6 +105,14 @@ i.culture_block_rabbit = 'creativeengineering:rabbit_culture_block';
 i.culture_block_cod = 'creativeengineering:cod_culture_block';
 i.culture_block_salmon = 'creativeengineering:salmon_culture_block';
 i.soot = 'immersive_weathering:soot'
+// Sooty Chimneys: dirty chimneys, scraped with an axe for soot (server_scripts/wood/ash.js)
+i.dirty_brick_chimney = 'sootychimneys:dirty_brick_chimney';
+i.dirty_cobblestone_chimney = 'sootychimneys:dirty_cobblestone_chimney';
+i.dirty_mud_brick_chimney = 'sootychimneys:dirty_mud_brick_chimney';
+i.dirty_stone_brick_chimney = 'sootychimneys:dirty_stone_brick_chimney';
+i.dirty_copper_chimney = 'sootychimneys:dirty_copper_chimney';
+i.dirty_iron_chimney = 'sootychimneys:dirty_iron_chimney';
+i.dirty_terracotta_chimney = 'sootychimneys:dirty_terracotta_chimney';
 i.any_corundum = '#quark:corundum';
 i.barrel = 'minecraft:barrel';
 i.canvas = 'farmersdelight:canvas';
@@ -125,7 +133,7 @@ i.es_ender_tank = 'enderstorage:ender_tank';
 i.t_ender_pearls = '#forge:ender_pearls';
 i.t_leather = '#forge:leather';
 i.t_obsidian = '#forge:obsidian';
-i.t_chest_wooden = '#forge:chests/wooden';
+i.t_animal_fat = '#forge:animal_fat';
 i.t_chalks = '#chalk:chalks';
 i.t_loot_chalk = '#creativeengineering:loot/chalk';
 i.t_loot_golden_food = '#creativeengineering:loot/golden_food';
@@ -581,7 +589,6 @@ i.ll_fluid_barge = 'littlelogistics:fluid_barge';
 i.ll_fluid_hopper = 'littlelogistics:fluid_hopper';
 i.ll_vessel_charger = 'littlelogistics:vessel_charger';
 i.ll_rapid_hopper = 'littlelogistics:rapid_hopper';
-i.leather = 'minecraft:leather';
 i.mulch_brown = '#forge:mulch/brown';
 i.mulch_bone = '#forge:mulch/bone';
 i.mulch_waste = '#forge:mulch/waste';
@@ -594,19 +601,19 @@ i.any_scale = '#immersive_weathering:scales';
 i.magma_cream = 'minecraft:magma_cream';
 i.nether_wart = 'minecraft:nether_wart';
 i.any_log = '#minecraft:logs';
-i.any_planks = '#minecraft:planks';
-i.any_wooden_stairs = '#minecraft:wooden_stairs';
 i.any_wooden_fences = '#minecraft:wooden_fences';
-i.any_wooden_slabs = '#minecraft:wooden_slabs';
+i.any_wooden_buttons = '#minecraft:wooden_buttons';
+i.any_wooden_doors = '#minecraft:wooden_doors';
+i.any_fence_gates = '#minecraft:fence_gates';
+i.any_ladders = '#quark:ladders';
+i.any_wooden_pressure_plates = '#minecraft:wooden_pressure_plates';
+i.any_wooden_trapdoors = '#minecraft:wooden_trapdoors';
+i.any_wooden_vertical_slabs = '#quark:wooden_vertical_slabs';
+i.any_railings = '#creativeengineering:railings';
+i.any_vertical_planks = '#creativeengineering:vertical_planks';
 i.scrap_wood_small = '#create:scrap_wood_small';
 i.scrap_wood_medium = '#create:scrap_wood_medium';
 i.scrap_wood_large = '#create:scrap_wood_large';
-i.mulch_brown = '#forge:mulch/brown';
-i.mulch_bone = '#forge:mulch/bone';
-i.mulch_waste = '#forge:mulch/waste';
-i.mulch_green = '#forge:mulch/green';
-i.mulch_fungus = '#forge:mulch/fungus';
-i.mulch_fertilizer = '#forge:mulch/fertilizer';
 i.straw = 'farmersdelight:straw';
 i.bone = 'minecraft:bone';
 i.spider_eye = 'minecraft:spider_eye';
@@ -623,30 +630,8 @@ i.brown_mushroom = 'minecraft:brown_mushroom';
 i.red_mushroom_colony = 'farmersdelight:red_mushroom_colony';
 i.brown_mushroom_colony = 'farmersdelight:brown_mushroom_colony';
 i.fertilizer = 'immersiveengineering:fertilizer';
-i.any_bark = '#immersive_weathering:bark';
-i.mulch_brown = '#forge:mulch/brown';
-i.mulch_bone = '#forge:mulch/bone';
-i.mulch_waste = '#forge:mulch/waste';
-i.mulch_green = '#forge:mulch/green';
-i.mulch_fungus = '#forge:mulch/fungus';
-i.mulch_fertilizer = '#forge:mulch/fertilizer';
-i.straw = 'farmersdelight:straw';
-i.bone = 'minecraft:bone';
-i.spider_eye = 'minecraft:spider_eye';
-i.rotten_flesh = 'minecraft:rotten_flesh';
-i.moss = 'minecraft:moss_block';
-i.moss_clump = 'immersive_weathering:moss_clump';
-i.moss_paste = 'quark:moss_paste';
-i.grass = 'minecraft:grass';
-i.tall_grass = 'minecraft:tall_grass';
-i.red_mushroom = 'minecraft:red_mushroom';
-i.brown_mushroom = 'minecraft:brown_mushroom';
-i.red_mushroom_colony = 'farmersdelight:red_mushroom_colony';
-i.brown_mushroom_colony = 'farmersdelight:brown_mushroom_colony';
-i.fertilizer = 'immersiveengineering:fertilizer';
 i.explorers_compass = 'explorerscompass:explorerscompass';
 i.natures_compass = 'naturescompass:naturescompass';
-i.compost = 'farmersdelight:organic_compost';
 i.rich_soil = 'farmersdelight:rich_soil';
 i.rich_farmland = 'farmersdelight:rich_soil_farmland';
 i.fertile_soil = 'immersive_weathering:mulch_block';
@@ -668,7 +653,6 @@ i.rod_brass = 'createaddition:brass_rod';
 i.any_sandpaper = '#create:sandpaper';
 i.item_drain = 'create:item_drain';
 i.disenchanter = 'create_enchantment_industry:disenchanter';
-i.copper_casing = 'create:copper_casing';
 i.xp_block = 'create:experience_block';
 i.propeller = 'create:propeller';
 i.experience_rotor = 'create_enchantment_industry:experience_rotor';
@@ -691,14 +675,6 @@ i.dust_petcoke = 'immersivepetroleum:petcoke_dust';
 i.mechanical_drill = 'create:mechanical_drill';
 i.any_rope = '#forge:rope';
 i.cr_fluid_valve = 'create:fluid_valve';
-i.any_sandpaper = '#create:sandpaper';
-i.item_drain = 'create:item_drain';
-i.disenchanter = 'create_enchantment_industry:disenchanter';
-i.copper_casing = 'create:copper_casing';
-i.xp_block = 'create:experience_block';
-i.propeller = 'create:propeller';
-i.experience_rotor = 'create_enchantment_industry:experience_rotor';
-i.printer = 'create_enchantment_industry:printer';
 i.lv_accumulator = 'immersiveengineering:capacitor_lv';
 i.mv_accumulator = 'immersiveengineering:capacitor_mv';
 i.hv_accumulator = 'immersiveengineering:capacitor_hv';
@@ -729,28 +705,6 @@ i.framed_bars = 'framedblocks:framed_bars';
 i.framed_cube = 'framedblocks:framed_cube';
 i.glass_bottle = 'minecraft:glass_bottle';
 i.block_andesite_alloy = 'create:andesite_alloy_block';
-i.mulch_brown = '#forge:mulch/brown';
-i.mulch_bone = '#forge:mulch/bone';
-i.mulch_waste = '#forge:mulch/waste';
-i.mulch_green = '#forge:mulch/green';
-i.mulch_fungus = '#forge:mulch/fungus';
-i.mulch_fertilizer = '#forge:mulch/fertilizer';
-i.straw = 'farmersdelight:straw';
-i.bone = 'minecraft:bone';
-i.spider_eye = 'minecraft:spider_eye';
-i.rotten_flesh = 'minecraft:rotten_flesh';
-i.moss = 'minecraft:moss_block';
-i.moss_clump = 'immersive_weathering:moss_clump';
-i.moss_paste = 'quark:moss_paste';
-i.grass = 'minecraft:grass';
-i.tall_grass = 'minecraft:tall_grass';
-i.fern = 'minecraft:fern';
-i.large_fern = 'minecraft:large_fern';
-i.red_mushroom = 'minecraft:red_mushroom';
-i.brown_mushroom = 'minecraft:brown_mushroom';
-i.red_mushroom_colony = 'farmersdelight:red_mushroom_colony';
-i.brown_mushroom_colony = 'farmersdelight:brown_mushroom_colony';
-i.fertilizer = 'immersiveengineering:fertilizer';
 
 // ############################## Tools ##############################
 
@@ -762,7 +716,6 @@ i.flint_and_steel = 'minecraft:flint_and_steel';
 
 //Materials
 i.arrow_fletching = 'creativeengineering:arrow_fletching';
-i.roadrunner_feather = 'alexsmobs:roadrunner_feather';
 i.emu_feather = 'alexsmobs:emu_feather';
 
 //Tags
@@ -827,7 +780,6 @@ i.any_small_spring = '#forge:small_springs';
 //Copper
 //Component Chain
 i.ore_copper = 'minecraft:copper_ore';
-i.deepslate_ore_copper = 'minecraft:deepslate_copper_ore';
 i.ds_ore_copper = 'minecraft:deepslate_copper_ore';
 i.raw_copper = 'minecraft:raw_copper';
 i.raw_block_copper = 'minecraft:raw_copper_block';
@@ -843,8 +795,6 @@ i.plate_block_copper = 'create_compressed:copper_sheet_block';
 i.rod_copper = 'immersiveposts:stick_copper';
 i.wire_copper = 'immersiveengineering:wire_copper';
 i.wire_coil_copper = 'immersiveengineering:wirecoil_copper';
-i.coil_copper = 'immersiveengineering:wirecoil_copper';
-i.wire_coil_block_copper = 'immersiveengineering:coil_lv';
 	i.coil_block_copper = 'immersiveengineering:coil_lv';
 i.spring_copper = 'vintageimprovements:copper_spring';
 i.small_spring_copper = 'vintageimprovements:small_copper_spring';
@@ -855,7 +805,6 @@ i.any_ore_copper = "#forge:ores/copper";
 //Iron
 //Component Chain
 i.ore_iron = 'minecraft:iron_ore';
-i.deepslate_ore_iron = 'minecraft:deepslate_iron_ore';
 i.ds_ore_iron = 'minecraft:deepslate_iron_ore';
 i.raw_iron = 'minecraft:raw_iron';
 i.raw_block_iron = 'minecraft:raw_iron_block';
@@ -871,8 +820,6 @@ i.plate_block_iron = 'create_compressed:iron_sheet_block';
 i.rod_iron = 'immersiveengineering:stick_iron';
 i.wire_iron = 'creativeengineering:iron_wire';
 i.wire_coil_iron = 'creativeengineering:wirecoil_iron';
-i.coil_iron = 'creativeengineering:wirecoil_iron';
-i.wire_coil_block_iron = 'creativeengineering:coil_iron';
 	i.coil_block_iron = 'creativeengineering:coil_iron';
 i.spring_iron = 'vintageimprovements:iron_spring';
 i.small_spring_iron = 'vintageimprovements:small_iron_spring';
@@ -883,7 +830,6 @@ i.any_ore_iron = "#forge:ores/iron";
 //Gold
 //Component Chain
 i.ore_gold = 'minecraft:gold_ore';
-i.deepslate_ore_gold = 'minecraft:deepslate_gold_ore';
 i.ds_ore_gold = 'minecraft:deepslate_gold_ore';
 i.raw_gold = 'minecraft:raw_gold';
 i.raw_block_gold = 'minecraft:raw_gold_block';
@@ -899,8 +845,6 @@ i.plate_block_gold = 'create_compressed:gold_sheet_block';
 i.rod_gold = 'immersiveposts:stick_gold';
 i.wire_gold = 'creativeengineering:gold_wire';
 i.wire_coil_gold = 'creativeengineering:wirecoil_gold';
-i.coil_gold = 'creativeengineering:wirecoil_gold';
-i.wire_coil_block_gold = 'creativeengineering:coil_gold';
 	i.coil_block_gold = 'creativeengineering:coil_gold';
 i.spring_gold = 'vintageimprovements:golden_spring';
 i.small_spring_gold = 'vintageimprovements:small_golden_spring';
@@ -911,7 +855,6 @@ i.any_ore_gold = "#forge:ores/gold";
 //Zinc
 //Component Chain
 i.ore_zinc = 'create:zinc_ore';
-i.deepslate_ore_zinc = 'create:deepslate_zinc_ore';
 i.ds_ore_zinc = 'create:deepslate_zinc_ore';
 i.raw_zinc = 'create:raw_zinc';
 i.raw_block_zinc = 'create:raw_zinc_block';
@@ -927,8 +870,6 @@ i.plate_block_zinc = 'creativeengineering:zinc_plate_block';
 i.rod_zinc = 'vintageimprovements:zinc_rod';
 i.wire_zinc = 'creativeengineering:zinc_wire';
 i.wire_coil_zinc = 'creativeengineering:wirecoil_zinc';
-i.coil_zinc = 'creativeengineering:wirecoil_zinc';
-i.wire_coil_block_zinc = 'creativeengineering:coil_zinc';
 	i.coil_block_zinc = 'creativeengineering:coil_zinc';
 i.spring_zinc = 'vintageimprovements:zinc_spring';
 i.small_spring_zinc = 'vintageimprovements:small_zinc_spring';
@@ -939,7 +880,6 @@ i.any_ore_zinc = "#forge:ores/zinc";
 //Aluminum
 //Component Chain
 i.ore_aluminum = 'immersiveengineering:ore_aluminum';
-i.deepslate_ore_aluminum = 'immersiveengineering:deepslate_ore_aluminum';
 i.ds_ore_aluminum = 'immersiveengineering:deepslate_ore_aluminum';
 i.raw_aluminum = 'immersiveengineering:raw_aluminum';
 i.raw_block_aluminum = 'immersiveengineering:raw_block_aluminum';
@@ -955,8 +895,6 @@ i.plate_block_aluminum = 'creativeengineering:aluminum_plate_block';
 i.rod_aluminum = 'immersiveengineering:stick_aluminum';
 i.wire_aluminum = 'immersiveengineering:wire_aluminum';
 i.wire_coil_aluminum = 'creativeengineering:wirecoil_aluminum';
-i.coil_aluminum = 'creativeengineering:wirecoil_aluminum';
-i.wire_coil_block_aluminum = 'creativeengineering:coil_aluminum';
 	i.coil_block_aluminum = 'creativeengineering:coil_aluminum';
 i.spring_aluminum = 'vintageimprovements:aluminum_spring';
 i.small_spring_aluminum = 'vintageimprovements:small_aluminum_spring';
@@ -970,7 +908,6 @@ i.spring_lead = i.none;
 i.small_spring_lead = i.none;
 //Component Chain
 i.ore_lead = 'immersiveengineering:ore_lead';
-i.deepslate_ore_lead = 'immersiveengineering:deepslate_ore_lead';
 i.ds_ore_lead = 'immersiveengineering:deepslate_ore_lead';
 i.raw_lead = 'immersiveengineering:raw_lead';
 i.raw_block_lead = 'immersiveengineering:raw_block_lead';
@@ -986,8 +923,6 @@ i.plate_block_lead = 'creativeengineering:lead_plate_block';
 i.rod_lead = 'immersiveposts:stick_lead';
 i.wire_lead = 'immersiveengineering:wire_lead';
 i.wire_coil_lead = 'creativeengineering:wirecoil_lead';
-i.coil_lead = 'creativeengineering:wirecoil_lead';
-i.wire_coil_block_lead = 'creativeengineering:coil_lead';
 	i.coil_block_lead = 'creativeengineering:coil_lead';
 i.component_lead = 'creativeengineering:component_lead';
 //Any Tags
@@ -996,7 +931,6 @@ i.any_ore_lead = "#forge:ores/lead";
 //Nickel
 //Component Chain
 i.ore_nickel = 'immersiveengineering:ore_nickel';
-i.deepslate_ore_nickel = 'immersiveengineering:deepslate_ore_nickel';
 i.ds_ore_nickel = 'immersiveengineering:deepslate_ore_nickel';
 i.raw_nickel = 'immersiveengineering:raw_nickel';
 i.raw_block_nickel = 'immersiveengineering:raw_block_nickel';
@@ -1012,8 +946,6 @@ i.plate_block_nickel = 'creativeengineering:nickel_plate_block';
 i.rod_nickel = 'immersiveposts:stick_nickel';
 i.wire_nickel = 'creativeengineering:nickel_wire';
 i.wire_coil_nickel = 'creativeengineering:wirecoil_nickel';
-i.coil_nickel = 'creativeengineering:wirecoil_nickel';
-i.wire_coil_block_nickel = 'creativeengineering:coil_nickel';
 	i.coil_block_nickel = 'creativeengineering:coil_nickel';
 i.spring_nickel = 'vintageimprovements:nickel_spring';
 i.small_spring_nickel = 'vintageimprovements:small_nickel_spring';
@@ -1024,7 +956,6 @@ i.any_ore_nickel = "#forge:ores/nickel";
 //Silver
 //Component Chain
 i.ore_silver = 'immersiveengineering:ore_silver';
-i.deepslate_ore_silver = 'immersiveengineering:deepslate_ore_silver';
 i.ds_ore_silver = 'immersiveengineering:deepslate_ore_silver';
 i.raw_silver = 'immersiveengineering:raw_silver';
 i.raw_block_silver = 'immersiveengineering:raw_block_silver';
@@ -1040,8 +971,6 @@ i.plate_block_silver = 'creativeengineering:silver_plate_block';
 i.rod_silver = 'immersiveposts:stick_silver';
 i.wire_silver = 'creativeengineering:silver_wire';
 i.wire_coil_silver = 'creativeengineering:wirecoil_silver';
-i.coil_silver = 'creativeengineering:wirecoil_silver';
-i.wire_coil_block_silver = 'creativeengineering:coil_silver';
 	i.coil_block_silver = 'creativeengineering:coil_silver';
 i.spring_silver = 'vintageimprovements:silver_spring';
 i.small_spring_silver = 'vintageimprovements:small_silver_spring';
@@ -1053,14 +982,11 @@ i.any_ore_silver = "#forge:ores/silver";
 //None
 i.wire_uranium = i.none;
 i.wire_coil_uranium = i.none;
-i.coil_uranium = i.none;
-i.wire_coil_block_uranium = i.none;
 	i.coil_block_uranium = i.none;
 i.spring_uranium = i.none;
 i.small_spring_uranium = i.none;
 //Component Chain
 i.ore_uranium = 'immersiveengineering:ore_uranium';
-i.deepslate_ore_uranium = 'immersiveengineering:deepslate_ore_uranium';
 i.ds_ore_uranium = 'immersiveengineering:deepslate_ore_uranium';
 i.raw_uranium = 'immersiveengineering:raw_uranium';
 i.raw_block_uranium = 'immersiveengineering:raw_block_uranium';
@@ -1080,9 +1006,7 @@ i.any_ore_uranium = "#forge:ores/uranium";
 
 //Netherite
 //None
-i.deepslate_ore_netherite = i.none;
 i.ds_ore_netherite = i.none;
-i.raw_netherite = i.none;
 i.raw_block_netherite = i.none;
 i.crushed_netherite = i.none;
 i.crushed_block_netherite = i.none;
@@ -1090,21 +1014,15 @@ i.dust_netherite = i.none;
 i.dust_block_netherite = i.none;
 i.wire_netherite = i.none;
 i.wire_coil_netherite = i.none;
-i.coil_netherite = i.none;
-i.wire_coil_block_netherite = i.none;
 	i.coil_block_netherite = i.none;
 i.spring_netherite = i.none;
 i.small_spring_netherite = i.none;
 i.rod_netherite = i.none;
 //Component Chain
 i.ore_netherite = 'minecraft:ancient_debris';
-i.debris = 'minecraft:ancient_debris';
-	i.ancient_debris = 'minecraft:ancient_debris';
 i.raw_netherite = 'minecraft:netherite_scrap';
-	i.scrap_netherite = 'minecraft:netherite_scrap';
 i.fragment_netherite = 'create_netherless:netherite_fragment';
 i.nugget_netherite = 'create_crush_everything:netherite_shard';
-	i.shard_netherite = 'create_crush_everything:netherite_shard';
 i.ingot_netherite = 'minecraft:netherite_ingot';
 i.block_netherite = 'minecraft:netherite_block';
 i.plate_netherite = 'vintageimprovements:netherite_sheet';
@@ -1116,7 +1034,6 @@ i.component_netherite = 'creativeengineering:component_netherite';
 //Cast Iron
 //None
 i.ore_cast_iron = i.none;
-i.deepslate_ore_cast_iron = i.none;
 i.ds_ore_cast_iron = i.none;
 i.raw_cast_iron = i.none;
 i.raw_block_cast_iron = i.none;
@@ -1124,8 +1041,6 @@ i.crushed_cast_iron = i.none;
 i.crushed_block_cast_iron = i.none;
 i.wire_cast_iron = i.none;
 i.wire_coil_cast_iron = i.none;
-i.coil_cast_iron = i.none;
-i.wire_coil_block_cast_iron = i.none;
 	i.coil_block_cast_iron = i.none;
 i.spring_cast_iron = i.none;
 i.small_spring_cast_iron = i.none;
@@ -1143,7 +1058,6 @@ i.rod_cast_iron = 'vintageimprovements:cast_iron_rod';
 //Rose Gold
 //None
 i.ore_rose_gold = i.none;
-i.deepslate_ore_rose_gold = i.none;
 i.ds_ore_rose_gold = i.none;
 i.raw_rose_gold = i.none;
 i.raw_block_rose_gold = i.none;
@@ -1176,7 +1090,6 @@ i.any_rod_gold = "#forge:rods/gold";
 //Brass
 //None
 i.ore_brass = i.none;
-i.deepslate_ore_brass = i.none;
 i.ds_ore_brass = i.none;
 i.raw_brass = i.none;
 i.raw_block_brass = i.none;
@@ -1190,11 +1103,8 @@ i.ingot_brass = 'create:brass_ingot';
 i.block_brass = 'create:brass_block';
 i.plate_brass = 'create:brass_sheet';
 i.plate_block_brass = 'create_compressed:brass_sheet_block';
-i.rod_brass = 'createaddition:brass_rod';
 i.wire_brass = 'creativeengineering:brass_wire';
 i.wire_coil_brass = 'creativeengineering:wirecoil_brass';
-i.coil_brass = 'creativeengineering:wirecoil_brass';
-i.wire_coil_block_brass = 'creativeengineering:coil_brass';
 	i.coil_block_brass = 'creativeengineering:coil_brass';
 i.spring_brass = 'vintageimprovements:brass_spring';
 i.small_spring_brass = 'vintageimprovements:small_brass_spring';
@@ -1203,7 +1113,6 @@ i.component_brass = 'creativeengineering:component_brass';
 //Steel
 //None
 i.ore_steel = i.none;
-i.deepslate_ore_steel = i.none;
 i.ds_ore_steel = i.none;
 i.raw_steel = i.none;
 i.raw_block_steel = i.none;
@@ -1220,8 +1129,6 @@ i.plate_block_steel = 'creativeengineering:steel_plate_block';
 i.rod_steel = 'immersiveengineering:stick_steel';
 i.wire_steel = 'immersiveengineering:wire_steel';
 i.wire_coil_steel = 'immersiveengineering:wirecoil_structure_steel';
-	i.coil_steel = 'immersiveengineering:wirecoil_structure_steel';
-i.wire_coil_block_steel = 'creativeengineering:coil_steel';
 	i.coil_block_steel = 'creativeengineering:coil_steel';
 i.spring_steel = 'vintageimprovements:steel_spring';
 i.small_spring_steel = 'vintageimprovements:small_steel_spring';
@@ -1230,7 +1137,6 @@ i.component_steel = 'immersiveengineering:component_steel';
 //Constantan
 //None
 i.ore_constantan = i.none;
-i.deepslate_ore_constantan = i.none;
 i.ds_ore_constantan = i.none;
 i.raw_constantan = i.none;
 i.raw_block_constantan = i.none;
@@ -1247,8 +1153,6 @@ i.plate_block_constantan = 'creativeengineering:constantan_plate_block';
 i.rod_constantan = 'immersiveposts:stick_constantan';
 i.wire_constantan = 'creativeengineering:constantan_wire';
 i.wire_coil_constantan = 'creativeengineering:wirecoil_constantan';
-i.coil_constantan = 'creativeengineering:wirecoil_constantan';
-i.wire_coil_block_constantan = 'creativeengineering:coil_constantan';
 	i.coil_block_constantan = 'creativeengineering:coil_constantan';
 i.spring_constantan = 'vintageimprovements:constantan_spring';
 i.small_spring_constantan = 'vintageimprovements:small_constantan_spring';
@@ -1257,7 +1161,6 @@ i.component_constantan = 'creativeengineering:component_constantan';
 //Electrum
 //None
 i.ore_electrum = i.none;
-i.deepslate_ore_electrum = i.none;
 i.ds_ore_electrum = i.none;
 i.raw_electrum = i.none;
 i.raw_block_electrum = i.none;
@@ -1277,8 +1180,6 @@ i.plate_block_electrum = 'creativeengineering:electrum_plate_block';
 i.rod_electrum = 'immersiveposts:stick_electrum';
 i.wire_electrum = 'immersiveengineering:wire_electrum';
 i.wire_coil_electrum = 'immersiveengineering:wirecoil_electrum';
-i.coil_electrum = 'immersiveengineering:wirecoil_electrum';
-i.wire_coil_block_electrum = 'immersiveengineering:coil_mv';
 	i.coil_block_electrum = 'immersiveengineering:coil_mv';
 i.spring_electrum = 'vintageimprovements:electrum_spring';
 i.small_spring_electrum = 'vintageimprovements:small_electrum_spring';
@@ -1316,9 +1217,7 @@ i.tall_iron_door = 'dramaticdoors:tall_iron_door';
 
 //Stone / Building
 i.cobblestone = 'minecraft:cobblestone';
-i.cobble = 'minecraft:cobblestone';
 i.deepslate_cobble = 'minecraft:cobbled_deepslate';
-i.deepslate_cobblestone = 'minecraft:cobbled_deepslate';
 i.gilded_blackstone = 'minecraft:gilded_blackstone';
 i.white_concrete = 'minecraft:white_concrete';
 i.smooth_stone_slab = 'minecraft:smooth_stone_slab';
@@ -1337,8 +1236,6 @@ i.netherrack = 'minecraft:netherrack';
 i.nether_brick = 'minecraft:nether_brick';
 i.nether_bricks = 'minecraft:nether_bricks';
 i.cinder_flour = 'create:cinder_flour';
-i.scoria = 'create:scoria';
-i.limestone = 'create:limestone';
 i.blaze_powder = 'minecraft:blaze_powder';
 i.gravel = 'minecraft:gravel';
 i.clay_ball = 'minecraft:clay_ball';
@@ -1352,18 +1249,13 @@ i.soul_sand = 'minecraft:soul_sand';
 i.soul_soil = 'minecraft:soul_soil';
 i.soul_sandstone = 'quark:soul_sandstone';
 i.bonemeal = 'minecraft:bone_meal';
-i.bone_meal = 'minecraft:bone_meal';
 i.ash = 'supplementaries:ash';
 i.magma_block = 'minecraft:magma_block';
 i.crushed_magma = 'create_things_and_misc:crushed_magma';
 i.torch = 'minecraft:torch';
-i.ink = 'minecraft:ink_sac';
 i.ink_sac = 'minecraft:ink_sac';
 i.glow_ink = 'minecraft:glow_ink_sac';
-i.glow_ink_sac = 'minecraft:glow_ink_sac';
 i.slime = 'minecraft:slime_ball';
-i.slimeball = 'minecraft:slime_ball';
-i.slime_ball = 'minecraft:slime_ball';
 i.ender_pearl = 'minecraft:ender_pearl';
 i.ender_eye = 'minecraft:ender_eye';
 i.goat_horn = 'minecraft:goat_horn';
@@ -1384,22 +1276,17 @@ i.vine = 'minecraft:vine';
 i.tinted_glass = 'minecraft:tinted_glass';
 i.campfire = 'minecraft:campfire';
 i.soul_campfire = 'minecraft:soul_campfire';
-i.soul_torch = 'minecraft:soul_torch';
 i.item_frame = 'minecraft:item_frame';
 i.glow_item_frame = 'minecraft:glow_item_frame';
-i.ladder = 'minecraft:ladder';
 i.blackstone = 'minecraft:blackstone';
 i.iron_door = 'minecraft:iron_door';
 i.iron_trapdoor = 'minecraft:iron_trapdoor';
 i.tnt = 'minecraft:tnt';
-i.firework = 'minecraft:firework_rocket';
-i.glass_bottle = 'minecraft:glass_bottle';
 
 //Materials
 i.string = 'minecraft:string';
 i.feather = 'minecraft:feather';
 i.white_wool = 'minecraft:white_wool';
-i.glass = 'minecraft:glass';
 i.glowstone = 'minecraft:glowstone_dust';
 i.gunpowder = 'minecraft:gunpowder';
 i.flint = 'minecraft:flint';
@@ -1449,9 +1336,7 @@ i.redstone_lamp = 'minecraft:redstone_lamp';
 i.hopper = 'minecraft:hopper';
 i.iron_pressure_plate = 'minecraft:heavy_weighted_pressure_plate';
 i.daylight_sensor = 'minecraft:daylight_detector';
-i.daylight_detector = 'minecraft:daylight_detector';
 i.noteblock = 'minecraft:note_block';
-i.note_block = 'minecraft:note_block';
 i.jukebox = 'minecraft:jukebox';
 i.clock = 'minecraft:clock';
 i.dispenser = 'minecraft:dispenser';
@@ -1553,7 +1438,6 @@ i.t_jar_family_dried_fruit = '#creativeengineering:jar_family/dried_fruit';
 i.enderman_head = 'supplementaries:enderman_head';
 i.sugar_cube = 'supplementaries:sugar_cube';
 i.speaker = 'supplementaries:speaker_block';
-i.brass_speaker = 'supplementaries:speaker_block';
 //SuppSquared
 i.heavy_key = 'suppsquared:heavy_key';
 
@@ -1569,7 +1453,6 @@ i.andesite_casing = 'create:andesite_casing';
 i.cog = 'create:cogwheel';
 i.large_cog = 'create:large_cogwheel';
 i.gold_hand = 'create:brass_hand';
-i.brass_hand = 'create:brass_hand';
 i.electron_tube = 'create:electron_tube';
 i.redstone_link = 'create:redstone_link';
 i.precision_mechanism = 'create:precision_mechanism';
@@ -1579,11 +1462,7 @@ i.transmitter = 'creativeengineering:transmitter';
 i.sturdy_plate = 'create:sturdy_sheet'
 i.sturdy_plate_block = 'create_compressed:sturdy_sheet_block'
 i.powdered_obsidian = 'create:powdered_obsidian';
-i.powder_obsidian = 'create:powdered_obsidian';
 i.powdered_obsidian_block = 'create_compressed:powdered_obsidian_pile';
-i.powder_obsidian_block = 'create_compressed:powdered_obsidian_pile';
-i.empty_schematic = 'create:empty_schematic';
-i.any_sandpaper = '#create:sandpaper';
 
 // ########## Utilities ##########
 i.cr_filter = 'create:filter';
@@ -1592,12 +1471,9 @@ i.cr_nozzle = 'create:nozzle';
 i.cr_pulley = 'create:rope_pulley';
 i.cr_sail = 'create:white_sail';
 i.cr_pipe = 'create:fluid_pipe';
-i.cr_fluid_valve = 'create:fluid_valve';
 i.cr_tank = 'create:fluid_tank';
 i.mechanical_piston = 'create:mechanical_piston';
 i.mechanical_crafter = 'create:mechanical_crafter';
-i.mechanical_drill = 'create:mechanical_drill';
-i.any_rope = '#forge:rope';
 
 // ########## Dreams & Desires ##########
 i.white_asphalt_block = 'create_dd:white_asphalt_block';
@@ -1627,7 +1503,6 @@ i.voltmeter = 'immersiveengineering:voltmeter';
 i.survey_tools = 'immersiveengineering:survey_tools';
 i.sample_drill = 'immersiveengineering:sample_drill';
 i.drillhead_iron = 'immersiveengineering:drillhead_iron';
-i.drillhead_steel = 'immersiveengineering:drillhead_steel';
 
 // ########## Molds ##########
 i.mold_plate = 'immersiveengineering:mold_plate';
@@ -1641,9 +1516,6 @@ i.mold_unpacking = 'immersiveengineering:mold_unpacking';
 
 // ########## Materials ##########
 i.sawdust = 'immersiveengineering:dust_wood';
-i.saw_dust = 'immersiveengineering:dust_wood';
-i.mv_coil = 'immersiveengineering:coil_mv';
-i.vacuum_tube = 'immersiveengineering:electron_tube';
 i.dust_coke = 'immersiveengineering:dust_coke';
 i.dust_saltpeter = 'immersiveengineering:dust_saltpeter';
 i.dust_sulfur = 'immersiveengineering:dust_sulfur';
@@ -1661,17 +1533,11 @@ i.fiberboard = 'immersiveengineering:fiberboard';
 i.duroplast = 'immersiveengineering:duroplast';
 i.plate_duroplast = 'immersiveengineering:plate_duroplast';
 i.ersatz_leather = 'immersiveengineering:ersatz_leather';
-i.leather = 'minecraft:leather';
 i.empty_casing = 'immersiveengineering:empty_casing';
 i.empty_shell = 'immersiveengineering:empty_shell';
 i.stick_treated = 'immersiveengineering:stick_treated';
-i.any_stick = '#forge:rods/wooden'
-i.wooden_rod = '#forge:rods/wooden'
+i.any_stick = '#forge:rods/wooden';
 i.spool = 'creativeengineering:spool';
-i.lv_accumulator = 'immersiveengineering:capacitor_lv';
-i.mv_accumulator = 'immersiveengineering:capacitor_mv';
-i.hv_accumulator = 'immersiveengineering:capacitor_hv';
-i.modular_accumulator = 'createaddition:modular_accumulator';
 
 // ########## Electronics ##########
 i.component_electronic = 'immersiveengineering:component_electronic';
@@ -1684,7 +1550,6 @@ i.wirecoil_redstone = 'immersiveengineering:wirecoil_redstone';
 i.wirecoil_copper_ins = 'immersiveengineering:wirecoil_copper_ins';
 i.wirecoil_electrum_ins = 'immersiveengineering:wirecoil_electrum_ins';
 i.wirecoil_structure_rope = 'immersiveengineering:wirecoil_structure_rope';
-i.wirecoil_structure_steel = 'immersiveengineering:wirecoil_structure_steel';
 
 // ############################## Project Red ##############################
 i.red_electrum_ingot = 'projectred_core:red_ingot';
@@ -1702,7 +1567,6 @@ i.ghost_rail = 'botania:ghost_rail';
 i.terrasteel_ingot = 'botania:terrasteel_ingot';
 i.vine_ball = 'botania:vine_ball';
 i.ingot_manasteel   = 'botania:manasteel_ingot';
-i.ingot_terrasteel  = 'botania:terrasteel_ingot';
 i.ingot_elementium  = 'botania:elementium_ingot';
 i.block_manasteel   = 'botania:manasteel_block';
 i.block_terrasteel  = 'botania:terrasteel_block';
@@ -1715,10 +1579,6 @@ i.block_felsic = 'felsic_gear:felsic_block';
 
 //XP
 i.xp_nugget = 'create:experience_nugget';
-i.xp_nug = 'create:experience_nugget';
-i.xp_block = 'create:experience_block';
-i.propeller = 'create:propeller';
-i.experience_rotor = 'create_enchantment_industry:experience_rotor';
 
 // ############################## Gates ##############################
 i.fast_repeater = 'gates:fast_repeater';
@@ -1737,8 +1597,6 @@ i.baby_girl = 'mca:baby_girl';
 i.rope_nail = 'comforts:rope_and_nail';
 
 //Compass mods
-i.explore_compass = 'explorerscompass:explorerscompass';
-i.nature_compass = 'naturescompass:naturescompass';
 
 //Domestic Innovation
 i.wayward_lantern = 'domesticationinnovation:wayward_lantern';
@@ -1751,7 +1609,6 @@ i.collar_tag = 'domesticationinnovation:collar_tag';
 
 //Waystones
 i.warpstone = 'waystones:warp_stone';
-i.warp_stone = 'waystones:warp_stone';
 
 //Etched
 i.radio = 'etched:radio';
@@ -1789,6 +1646,7 @@ i.any_plate_iron = '#forge:plates/iron';
 i.any_wire_iron = '#forge:wires/iron';
 i.any_rod_iron = '#forge:rods/iron';
 i.any_plate_gold = '#forge:plates/gold';
+i.any_plate_steel = '#forge:plates/steel';
 
 //Springs (generic tags, not tied to a specific metal)
 i.sheetmetal_slabs = '#forge:sheetmetal_slabs';
@@ -1808,7 +1666,6 @@ i.anystone = '#forge:stone';
 
 //Minecraft
 i.hay_bale = 'minecraft:hay_block';
-i.hay_block = 'minecraft:hay_block';
 i.wheat = 'minecraft:wheat';
 i.sweet_berries = 'minecraft:sweet_berries';
 i.melon = 'minecraft:melon_slice';
@@ -1817,11 +1674,8 @@ i.chorus_fruit = 'minecraft:chorus_fruit';
 i.chorus_flower = 'minecraft:chorus_flower';
 i.beetroot_soup = 'minecraft:beetroot_soup';
 i.baked_potato = 'minecraft:baked_potato';
-i.brown_mushroom = 'minecraft:brown_mushroom';
 i.dried_kelp = 'minecraft:dried_kelp';
 i.kelp = 'minecraft:kelp';
-i.dirt = 'minecraft:dirt';
-i.mud = 'minecraft:mud';
 
 //Flour
 i.in_flour = 'create:wheat_flour';
@@ -1838,7 +1692,6 @@ i.salmon_tempura = 'pneumaticcraft:salmon_tempura';
 
 //Quark
 i.crab = 'quark:crab_leg';
-i.raw_crab = 'quark:crab_leg';
 i.cooked_crab = 'quark:cooked_crab_leg';
 
 //Quark Delight
@@ -1855,9 +1708,7 @@ i.cabbage_rolls = 'farmersdelight:cabbage_rolls';
 i.cooked_mutton_chops = 'farmersdelight:cooked_mutton_chops';
 i.cooked_bacon = 'farmersdelight:cooked_bacon';
 i.bacon = 'farmersdelight:bacon';
-i.raw_salmon_slice = 'farmersdelight:salmon_slice';
 i.salmon_slice = 'farmersdelight:salmon_slice';
-i.raw_cod_slice = 'farmersdelight:cod_slice';
 i.cod_slice = 'farmersdelight:cod_slice';
 i.grilled_salmon = 'farmersdelight:grilled_salmon';
 i.fish_stew = 'farmersdelight:fish_stew';
@@ -1867,16 +1718,11 @@ i.cod_roll = 'farmersdelight:cod_roll';
 i.kelp_roll = 'farmersdelight:kelp_roll';
 i.kelp_roll_slice = 'farmersdelight:kelp_roll_slice';
 i.rice_medley = 'farmersdelight:rice_roll_medley_block';
-i.pasta_with_mutton_chop = 'farmersdelight:pasta_with_mutton_chop';
 i.pasta_with_mutton = 'farmersdelight:pasta_with_mutton_chop';
-i.barbecue_stick = 'farmersdelight:barbecue_stick';
 i.bbq_stick = 'farmersdelight:barbecue_stick';
 i.roasted_mutton_chops = 'farmersdelight:roasted_mutton_chops';
-i.roast_mutton_chops = 'farmersdelight:roasted_mutton_chops';
-i.roast_mutton = 'farmersdelight:roasted_mutton_chops';
 i.melon_juice = 'farmersdelight:melon_juice';
 i.fd_basket = 'farmersdelight:basket';
-i.rich_soil = 'farmersdelight:rich_soil';
 
 //Brewin' & Chewin'
 i.scarlet_cheese_wedge = 'brewinandchewin:scarlet_cheese_wedge';
@@ -1894,7 +1740,6 @@ i.chorus_juice = 'endersdelight:chorus_juice';
 
 //Supplementaries
 i.pancakes = 'supplementaries:pancake';
-i.pancake = 'supplementaries:pancake';
 
 //Rustic Delight
 i.golden_coffee_beans = 'rusticdelight:golden_coffee_beans';
@@ -1903,8 +1748,6 @@ i.golden_coffee_beans = 'rusticdelight:golden_coffee_beans';
 
 //Forge
 i.milk = '#forge:milk';
-i.milk_bucket = '#forge:milk';
-i.milk_bottle = '#forge:milk';
 i.flour = '#forge:flour/wheat';
 i.cornmeal = 'creativeengineering:cornmeal';          // CD creativeengineering/cornmeal.js
 // Corn Delight 1.2.11 items on 1.0.3 (feature_writeup/corn_delight.md 2). Items: CD corn_delight/corn_items.js
@@ -1938,11 +1781,13 @@ i.sourdough_block = 'creativeengineering:sourdough_block';
 i.t_flour_corn = '#forge:flour/corn';
 i.t_flour_or_cornmeal = '#creativeengineering:flour_or_cornmeal'; // wheat flour or cornmeal: pancakes, pies, cakes
 i.t_crops_corn = '#forge:crops/corn';
+i.t_grain_wheat = '#forge:grain/wheat';
 i.t_seeds_corn = '#forge:seeds/corn';                 // corn kernels
 i.dough = '#forge:dough/wheat';
 i.any_dough = '#forge:dough';
 i.bread = '#forge:bread/wheat';
-i.pasta = '#forge:pasta';
+i.pasta = '#forge:pasta'; // every raw pasta: FD raw pasta, cucumber noodles, gnocchi (potato noodle)
+i.t_pasta_raw_pasta = '#forge:pasta/raw_pasta'; // FD raw pasta only; recipes naming it are widened to i.pasta
 i.any_sugar = '#forge:sugar';
 i.any_sweetener = '#creativeengineering:sweeteners'; // #forge:sugar (sugar, powdered sugar, glycerol) + honey bottle + honeycomb: cooking sugar slots
 i.any_sweetener_drink = '#creativeengineering:sweeteners/drink';       // sugar, powdered sugar, honey bottle: drink sugar slots
@@ -1970,7 +1815,7 @@ i.t_fruits_salmonberries = '#forge:fruits/salmonberries';
 i.t_fruits_berries = '#forge:fruits/berries'; // Delightful's berry tag (berry matcha latte)
 i.t_ice_cubes = '#forge:ice_cubes';
 i.t_bars_chocolate = '#forge:bars/chocolate';
-i.t_milk_bottle = '#forge:milk/milk_bottle'; // bottles only (i.milk_bottle is all of #forge:milk)
+i.t_milk_bottle = '#forge:milk/milk_bottle'; // bottles only (i.milk is all of #forge:milk)
 i.t_bottles_milk = '#forge:bottles/milk'; // Neapolitan's bottle tag; holds Farmer's Delight's bottle (item_merges.js)
 i.carrot = '#forge:crops/carrot';
 i.potato = '#forge:crops/potato';
@@ -2011,13 +1856,7 @@ i.raw_pork = '#forge:raw_pork';
 i.raw_chicken = '#forge:raw_chicken';
 i.cooked_chicken = '#forge:cooked_chicken';
 i.cooked_eggs = '#forge:cooked_eggs';
-i.cooked_egg = '#forge:cooked_eggs';
-i.fried_eggs = '#forge:cooked_eggs';
-	i.fried_egg = '#forge:cooked_eggs';
 i.eggs = '#forge:eggs';
-i.egg = '#forge:eggs';
-i.raw_eggs = '#forge:eggs';
-i.raw_egg = '#forge:eggs';
 i.cooked_cod = '#forge:cooked_fishes/cod';
 i.cooked_salmon = '#forge:cooked_fishes/salmon';
 i.raw_fish = '#forge:raw_fishes';
@@ -2025,8 +1864,11 @@ i.cooked_fish = '#forge:cooked_fishes';
 i.t_cooked_kangaroo = '#alexsdelight:cooked_kangaroo';
 i.t_cooked_duck = '#forge:cooked_duck';
 i.t_raw_duck = '#forge:raw_duck';
-// whole bread (vanilla, cornbread, sourdough; slices are #forge:bread_slices). i.bread is #forge:bread/wheat
+// any bread: loaves, flavored breads, bread slices and plain toast (creativeengineering/bread_tags.js in Creative Delight).
+// i.bread is #forge:bread/wheat; slices alone are #forge:bread_slices
 i.t_bread = '#forge:bread';
+// plain loaves only (vanilla, corn, cauliflower, sourdough): for recipes that turn a bread into more bread
+i.t_bread_loaf = '#creativeengineering:bread_loaves';
 i.t_tortilla = '#forge:tortilla';
 // frying (TODO dishes/meals #7): Rustic Delight's oil tag; sliced potatoes = Rustic's slices + More Delight's diced
 i.t_cooking_oil = '#rusticdelight:cooking_oil';
@@ -2072,6 +1914,13 @@ i.bell_pepper_purple_crate     = 'rusticdelight:bell_pepper_purple_crate';
 i.bell_pepper_black            = 'rusticdelight:bell_pepper_black';
 i.roasted_bell_pepper_black    = 'rusticdelight:roasted_bell_pepper_black';
 i.bell_pepper_black_crate      = 'rusticdelight:bell_pepper_black_crate';
+i.stuffed_bell_pepper_orange   = 'rusticdelight:stuffed_bell_pepper_orange';
+i.stuffed_bell_pepper_white    = 'rusticdelight:stuffed_bell_pepper_white';
+i.stuffed_bell_pepper_pink     = 'rusticdelight:stuffed_bell_pepper_pink';
+i.stuffed_bell_pepper_blue     = 'rusticdelight:stuffed_bell_pepper_blue';
+i.stuffed_bell_pepper_purple   = 'rusticdelight:stuffed_bell_pepper_purple';
+i.stuffed_bell_pepper_black    = 'rusticdelight:stuffed_bell_pepper_black';
+i.t_stuffed_bell_pepper_ingredients = '#rusticdelight:stuffed_bell_pepper_ingredients';   // any raw meat, fish, egg, mushroom, vegetable (rustic_delight.md 2.2)
 // Delightful 3.8.1 items backported into the Delightful repack (Creative Delight member, feature_writeup/delightful.md
 // 3): only registered once the Creative Delight jar replaces the 3.4.1 jar, so only Creative Delight's scripts use them.
 i.cantaloupe_seeds             = 'delightful:cantaloupe_seeds';
@@ -2112,7 +1961,6 @@ i.cabbage_roll_veg = '#farmersdelight:cabbage_roll_ingredients';
 i.t_wolf_prey = '#farmersdelight:wolf_prey';            // Dog Food meat in 1.2.4 (replaced in creative_delight farmersdelight/recipes.js)
 
 //Ender's Delight
-i.shulker_flesh = '#endersdelight:shulker_loot';
 i.shulker_loot = '#endersdelight:shulker_loot';
 i.ender_sight = '#endersdelight:enderman_sight';
 i.ender_shard = 'endersdelight:ender_shard';
@@ -2133,7 +1981,6 @@ i.dye_lime = 'minecraft:lime_dye';
 i.dye_pink = 'minecraft:pink_dye';
 i.dye_gray = 'minecraft:gray_dye';
 i.dye_light_gray = 'minecraft:light_gray_dye';
-i.dye_cyan = 'minecraft:cyan_dye';
 i.dye_purple = 'minecraft:purple_dye';
 i.dye_blue = 'minecraft:blue_dye';
 i.dye_brown = 'minecraft:brown_dye';
@@ -5833,12 +5680,10 @@ i.drum_wild                               = 'botania:drum_wild';
 i.dry_grass                               = 'botania:dry_grass';
 i.dry_seeds                               = 'botania:dry_seeds';
 i.elementium_axe                          = 'botania:elementium_axe';
-i.elementium_block                        = 'botania:elementium_block';
 i.elementium_boots                        = 'botania:elementium_boots';
 i.elementium_chestplate                   = 'botania:elementium_chestplate';
 i.elementium_helmet                       = 'botania:elementium_helmet';
 i.elementium_hoe                          = 'botania:elementium_hoe';
-i.elementium_ingot                        = 'botania:elementium_ingot';
 i.elementium_leggings                     = 'botania:elementium_leggings';
 i.elementium_nugget                       = 'botania:elementium_nugget';
 i.elementium_pickaxe                      = 'botania:elementium_pickaxe';
@@ -6108,12 +5953,10 @@ i.mana_tablet                             = 'botania:mana_tablet';
 i.mana_void                               = 'botania:mana_void';
 i.manastar                                = 'botania:manastar';
 i.manasteel_axe                           = 'botania:manasteel_axe';
-i.manasteel_block                         = 'botania:manasteel_block';
 i.manasteel_boots                         = 'botania:manasteel_boots';
 i.manasteel_chestplate                    = 'botania:manasteel_chestplate';
 i.manasteel_helmet                        = 'botania:manasteel_helmet';
 i.manasteel_hoe                           = 'botania:manasteel_hoe';
-i.manasteel_ingot                         = 'botania:manasteel_ingot';
 i.manasteel_leggings                      = 'botania:manasteel_leggings';
 i.manasteel_nugget                        = 'botania:manasteel_nugget';
 i.manasteel_pick                          = 'botania:manasteel_pick';
@@ -6409,7 +6252,6 @@ i.terra_pick                              = 'botania:terra_pick';
 i.terra_plate                             = 'botania:terra_plate';
 i.terra_sword                             = 'botania:terra_sword';
 i.terraform_rod                           = 'botania:terraform_rod';
-i.terrasteel_block                        = 'botania:terrasteel_block';
 i.terrasteel_boots                        = 'botania:terrasteel_boots';
 i.terrasteel_chestplate                   = 'botania:terrasteel_chestplate';
 i.terrasteel_helmet                       = 'botania:terrasteel_helmet';
@@ -6481,12 +6323,10 @@ i.upgraded_dragon_chestplate = 'dragonloot:upgraded_dragon_chestplate';
 
 // ===== felsic_gear  -  11 new  (11 items, 0 already mapped) =====
 i.felsic_axe        = 'felsic_gear:felsic_axe';
-i.felsic_block      = 'felsic_gear:felsic_block';
 i.felsic_boots      = 'felsic_gear:felsic_boots';
 i.felsic_chestplate = 'felsic_gear:felsic_chestplate';
 i.felsic_helmet     = 'felsic_gear:felsic_helmet';
 i.felsic_hoe        = 'felsic_gear:felsic_hoe';
-i.felsic_ingot      = 'felsic_gear:felsic_ingot';
 i.felsic_leggings   = 'felsic_gear:felsic_leggings';
 i.felsic_pickaxe    = 'felsic_gear:felsic_pickaxe';
 i.felsic_shovel     = 'felsic_gear:felsic_shovel';
@@ -10898,7 +10738,6 @@ i.snowy_stone_slab                                = 'immersive_weathering:snowy_
 i.snowy_stone_stairs                              = 'immersive_weathering:snowy_stone_stairs';
 i.snowy_stone_vertical_slab                       = 'immersive_weathering:snowy_stone_vertical_slab';
 i.snowy_stone_wall                                = 'immersive_weathering:snowy_stone_wall';
-i.immersive_weathering_soot                       = 'immersive_weathering:soot';
 i.spruce_leaf_pile                                = 'immersive_weathering:spruce_leaf_pile';
 i.stone_brick                                     = 'immersive_weathering:stone_brick';
 i.stone_wall                                      = 'immersive_weathering:stone_wall';
@@ -11647,7 +11486,6 @@ i.acacia_cabinet                = 'farmersdelight:acacia_cabinet';
 i.farmersdelight_apple_cider    = 'farmersdelight:apple_cider';
 i.apple_pie                     = 'farmersdelight:apple_pie';
 i.apple_pie_slice               = 'farmersdelight:apple_pie_slice';
-i.farmersdelight_bacon          = 'farmersdelight:bacon';
 i.bacon_sandwich                = 'farmersdelight:bacon_sandwich';
 i.farmersdelight_beetroot_crate = 'farmersdelight:beetroot_crate';
 i.birch_cabinet                 = 'farmersdelight:birch_cabinet';
@@ -12897,8 +12735,9 @@ i.t_can_servings                = '#creativeengineering:cans/servings'; // + '/<
 i.salt                          = '#forge:salt';
 i.salt_item                     = 'salt:salt';
 i.raw_rock_salt                 = 'salt:raw_rock_salt'; // the salt crystals: cluster / ore drop, ground into salt
+i.salt_salt_block               = 'salt:salt_block';    // the one Salt Block (Vintage Delight's merges into it)
+i.salt_lamp                     = 'salt:salt_lamp';     // named Large Salt Lamp
 // ingredient groups (whole + sliced, or colours/varieties canned into one can)
-i.any_cabbage                   = '#forge:crops/cabbage';           // cabbage, cabbage leaf
 i.any_potato                    = '#forge:vegetables/potato';       // potato, potato slices
 i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow
 // ===== BEGIN GENERATED CANS (tools/gen_can_types.py, do not edit) =====
@@ -13727,7 +13566,7 @@ i.sealed_delivery_agreement = 'wares:sealed_delivery_agreement';
 
 // ############################## Placeable food (generated by tools/placeable_catalog.py) ##############################
 // Placeable foods that had no key elsewhere, plus the placeable tag keys
-// (server_scripts/tags/placeabletags.js, assets/creative_delight/kubejs/_qol/placeable_tooltip.js). Re-run the tool to add more.
+// (data/creative_delight/kubejs/creativeengineering/placeable_tags.js, assets/creative_delight/kubejs/_qol/placeable_tooltip.js). Re-run the tool to add more.
 
 i.chorus_fruit_pie         = 'ends_delight:chorus_fruit_pie';
 i.dragon_meat_stew_block   = 'ends_delight:dragon_meat_stew_block';
@@ -14262,7 +14101,6 @@ i.vine_net                       = 'vintagedelight:vine_net';
 i.vine_tile                      = 'vintagedelight:vine_tile';
 i.vine_tile_slab                 = 'vintagedelight:vine_tile_slab';
 i.vine_tile_stairs               = 'vintagedelight:vine_tile_stairs';
-i.vinegar_bottle                 = 'vintagedelight:vinegar_bottle';
 i.vinegar_jar                    = 'vintagedelight:vinegar_jar';
 i.white_chefs_hat                = 'vintagedelight:white_chefs_hat';
 i.wild_cucumbers                 = 'vintagedelight:wild_cucumbers';
@@ -14484,3 +14322,177 @@ i.brown_bedroll                = 'upgrade_aquatic:brown_bedroll';
 i.green_bedroll                = 'upgrade_aquatic:green_bedroll';
 i.red_bedroll                  = 'upgrade_aquatic:red_bedroll';
 i.black_bedroll                = 'upgrade_aquatic:black_bedroll';
+
+// ===== JEI equipment tree (2026-10-26): gear with no key (startup_scripts/jei/order.js, jei_ordering.md) =====
+i.abnormals_delight_silver_knife   = 'abnormals_delight:silver_knife';
+i.necromium_knife                  = 'abnormals_delight:necromium_knife';
+i.certus_quartz_sword              = 'ae2:certus_quartz_sword';
+i.certus_quartz_pickaxe            = 'ae2:certus_quartz_pickaxe';
+i.certus_quartz_axe                = 'ae2:certus_quartz_axe';
+i.certus_quartz_shovel             = 'ae2:certus_quartz_shovel';
+i.certus_quartz_hoe                = 'ae2:certus_quartz_hoe';
+i.certus_quartz_cutting_knife      = 'ae2:certus_quartz_cutting_knife';
+i.nether_quartz_sword              = 'ae2:nether_quartz_sword';
+i.nether_quartz_pickaxe            = 'ae2:nether_quartz_pickaxe';
+i.nether_quartz_axe                = 'ae2:nether_quartz_axe';
+i.nether_quartz_shovel             = 'ae2:nether_quartz_shovel';
+i.nether_quartz_hoe                = 'ae2:nether_quartz_hoe';
+i.nether_quartz_cutting_knife      = 'ae2:nether_quartz_cutting_knife';
+i.fluix_sword                      = 'ae2:fluix_sword';
+i.fluix_pickaxe                    = 'ae2:fluix_pickaxe';
+i.fluix_axe                        = 'ae2:fluix_axe';
+i.fluix_shovel                     = 'ae2:fluix_shovel';
+i.fluix_hoe                        = 'ae2:fluix_hoe';
+i.certus_quartz_wrench             = 'ae2:certus_quartz_wrench';
+i.nether_quartz_wrench             = 'ae2:nether_quartz_wrench';
+i.network_tool                     = 'ae2:network_tool';
+i.meteorite_compass                = 'ae2:meteorite_compass';
+i.charged_staff                    = 'ae2:charged_staff';
+i.matter_cannon                    = 'ae2:matter_cannon';
+i.mysterious_beanie_helmet         = 'canned_goods:mysterious_beanie_helmet';
+i.stone_wand                       = 'constructionwand:stone_wand';
+i.iron_wand                        = 'constructionwand:iron_wand';
+i.diamond_wand                     = 'constructionwand:diamond_wand';
+i.infinity_wand                    = 'constructionwand:infinity_wand';
+i.deforester_saw                   = 'create_dd:deforester_saw';
+i.excavation_drill                 = 'create_dd:excavation_drill';
+i.gilded_rose_sword                = 'create_dd:gilded_rose_sword';
+i.gilded_rose_pickaxe              = 'create_dd:gilded_rose_pickaxe';
+i.gilded_rose_axe                  = 'create_dd:gilded_rose_axe';
+i.gilded_rose_shovel               = 'create_dd:gilded_rose_shovel';
+i.gilded_rose_hoe                  = 'create_dd:gilded_rose_hoe';
+i.modular_drill                    = 'create_dd:modular_drill';
+i.drill_crusher_head               = 'create_dd:drill_crusher_head';
+i.drill_enchantable_head           = 'create_dd:drill_enchantable_head';
+i.drill_smelting_head              = 'create_dd:drill_smelting_head';
+i.drill_vein_head                  = 'create_dd:drill_vein_head';
+i.visor_helmet                     = 'create_dd:visor_helmet';
+i.jetpack                          = 'create_dd:jetpack';
+i.clockwork_crossbow               = 'create_dd:clockwork_crossbow';
+i.white_crown                      = 'floralench:white_crown';
+i.yellow_crown                     = 'floralench:yellow_crown';
+i.red_crown                        = 'floralench:red_crown';
+i.pink_crown                       = 'floralench:pink_crown';
+i.blue_crown                       = 'floralench:blue_crown';
+i.black_crown                      = 'floralench:black_crown';
+i.tulips_crown                     = 'floralench:tulips_crown';
+i.iron_fishing_rod                 = 'iron_fishing_rods:iron_fishing_rod';
+i.iron_fishing_rod_upgrade         = 'iron_fishing_rods:iron_fishing_rod_upgrade';
+i.gold_fishing_rod                 = 'iron_fishing_rods:gold_fishing_rod';
+i.gold_fishing_rod_upgrade         = 'iron_fishing_rods:gold_fishing_rod_upgrade';
+i.diamond_fishing_rod              = 'iron_fishing_rods:diamond_fishing_rod';
+i.diamond_fishing_rod_upgrade      = 'iron_fishing_rods:diamond_fishing_rod_upgrade';
+i.netherite_fishing_rod            = 'iron_fishing_rods:netherite_fishing_rod';
+i.iron_machete                     = 'nethersdelight:iron_machete';
+i.golden_machete                   = 'nethersdelight:golden_machete';
+i.diamond_machete                  = 'nethersdelight:diamond_machete';
+i.netherite_machete                = 'nethersdelight:netherite_machete';
+i.musketeer_hat                    = 'oldguns:musketeer_hat';
+i.horsemans_pot_helm               = 'oldguns:horsemans_pot_helm';
+i.powder_horn                      = 'oldguns:powder_horn';
+i.ram_rod                          = 'oldguns:ram_rod';
+i.gunners_quadrant                 = 'oldguns:gunners_quadrant';
+i.bombard                          = 'oldguns:bombard';
+i.medium_naval_cannon              = 'oldguns:medium_naval_cannon';
+i.physics_gun                      = 'physics_gun_mod:physics_gun';
+i.supercharged_gravity_gun         = 'physics_gun_mod:supercharged_gravity_gun';
+i.displacer_cannon                 = 'physics_gun_mod:displacer_cannon';
+i.tool_gun                         = 'physics_gun_mod:tool_gun';
+i.white_conductor_cap              = 'railways:white_conductor_cap';
+i.light_gray_conductor_cap         = 'railways:light_gray_conductor_cap';
+i.gray_conductor_cap               = 'railways:gray_conductor_cap';
+i.black_conductor_cap              = 'railways:black_conductor_cap';
+i.brown_conductor_cap              = 'railways:brown_conductor_cap';
+i.red_conductor_cap                = 'railways:red_conductor_cap';
+i.orange_conductor_cap             = 'railways:orange_conductor_cap';
+i.yellow_conductor_cap             = 'railways:yellow_conductor_cap';
+i.lime_conductor_cap               = 'railways:lime_conductor_cap';
+i.green_conductor_cap              = 'railways:green_conductor_cap';
+i.cyan_conductor_cap               = 'railways:cyan_conductor_cap';
+i.light_blue_conductor_cap         = 'railways:light_blue_conductor_cap';
+i.blue_conductor_cap               = 'railways:blue_conductor_cap';
+i.purple_conductor_cap             = 'railways:purple_conductor_cap';
+i.magenta_conductor_cap            = 'railways:magenta_conductor_cap';
+i.pink_conductor_cap               = 'railways:pink_conductor_cap';
+i.portal_gun                       = 'ricksportalgun:portal_gun';
+i.golden_portal_gun                = 'ricksportalgun:golden_portal_gun';
+i.prime_portal_gun                 = 'ricksportalgun:prime_portal_gun';
+i.copper_backpack                  = 'sophisticatedbackpacks:copper_backpack';
+i.iron_backpack                    = 'sophisticatedbackpacks:iron_backpack';
+i.gold_backpack                    = 'sophisticatedbackpacks:gold_backpack';
+i.diamond_backpack                 = 'sophisticatedbackpacks:diamond_backpack';
+i.netherite_backpack               = 'sophisticatedbackpacks:netherite_backpack';
+i.sophisticatedbackpacks_backpack  = 'sophisticatedbackpacks:backpack';
+i.desert_helmet                    = 'wardrobe:desert_helmet';
+i.desert_chestplate                = 'wardrobe:desert_chestplate';
+i.desert_leggings                  = 'wardrobe:desert_leggings';
+i.desert_boots                     = 'wardrobe:desert_boots';
+i.snowy_helmet                     = 'wardrobe:snowy_helmet';
+i.snowy_chestplate                 = 'wardrobe:snowy_chestplate';
+i.snowy_leggings                   = 'wardrobe:snowy_leggings';
+i.snowy_boots                      = 'wardrobe:snowy_boots';
+i.taiga_helmet                     = 'wardrobe:taiga_helmet';
+i.taiga_chestplate                 = 'wardrobe:taiga_chestplate';
+i.taiga_leggings                   = 'wardrobe:taiga_leggings';
+i.taiga_boots                      = 'wardrobe:taiga_boots';
+i.jungle_chestplate                = 'wardrobe:jungle_chestplate';
+i.jungle_leggings                  = 'wardrobe:jungle_leggings';
+i.jungle_boots                     = 'wardrobe:jungle_boots';
+i.savanna_chestplate               = 'wardrobe:savanna_chestplate';
+i.savanna_leggings                 = 'wardrobe:savanna_leggings';
+i.savanna_boots                    = 'wardrobe:savanna_boots';
+i.snowy_hood_covered_helmet        = 'wardrobe:snowy_hood_covered_helmet';
+i.hat_helmet                       = 'wardrobe:hat_helmet';
+i.leather_top_hat_helmet           = 'wardrobe:leather_top_hat_helmet';
+i.newsboy_cap_helmet               = 'wardrobe:newsboy_cap_helmet';
+i.farmers_hat_helmet               = 'wardrobe:farmers_hat_helmet';
+i.fletchers_hat_helmet             = 'wardrobe:fletchers_hat_helmet';
+i.fox_hat_helmet                   = 'wardrobe:fox_hat_helmet';
+i.snow_fox_hat_helmet              = 'wardrobe:snow_fox_hat_helmet';
+i.cake_hat_helmet                  = 'wardrobe:cake_hat_helmet';
+i.book_hat                         = 'wardrobe:book_hat';
+i.book_hat_2                       = 'wardrobe:book_hat_2';
+i.book_hat_3                       = 'wardrobe:book_hat_3';
+i.wool_vest_chestplate             = 'wardrobe:wool_vest_chestplate';
+i.broken_barrel_chestplate         = 'wardrobe:broken_barrel_chestplate';
+i.chiton                           = 'wardrobe:chiton';
+i.leather_apron                    = 'wardrobe:leather_apron';
+i.brewing_apron                    = 'wardrobe:brewing_apron';
+i.fishing_apron                    = 'wardrobe:fishing_apron';
+i.breathing_reed                   = 'wardrobe:breathing_reed';
+i.lantern_on_a_stick               = 'wardrobe:lantern_on_a_stick';
+i.soul_lantern_on_a_stick          = 'wardrobe:soul_lantern_on_a_stick';
+i.wardrobe_backpack                = 'wardrobe:backpack';
+i.large_backpack                   = 'wardrobe:large_backpack';
+i.travel_backpack                  = 'wardrobe:travel_backpack';
+i.white_scarf                      = 'wardrobe:white_scarf';
+i.light_gray_scarf                 = 'wardrobe:light_gray_scarf';
+i.gray_scarf                       = 'wardrobe:gray_scarf';
+i.black_scarf                      = 'wardrobe:black_scarf';
+i.brown_scarf                      = 'wardrobe:brown_scarf';
+i.red_scarf                        = 'wardrobe:red_scarf';
+i.orange_scarf                     = 'wardrobe:orange_scarf';
+i.yellow_scarf                     = 'wardrobe:yellow_scarf';
+i.lime_scarf                       = 'wardrobe:lime_scarf';
+i.green_scarf                      = 'wardrobe:green_scarf';
+i.cyan_scarf                       = 'wardrobe:cyan_scarf';
+i.light_blue_scarf                 = 'wardrobe:light_blue_scarf';
+i.blue_scarf                       = 'wardrobe:blue_scarf';
+i.purple_scarf                     = 'wardrobe:purple_scarf';
+i.magenta_scarf                    = 'wardrobe:magenta_scarf';
+i.pink_scarf                       = 'wardrobe:pink_scarf';
+i.apprentice_witch_hat             = 'witchmobility:apprentice_witch_hat';
+i.gold_witch_hat                   = 'witchmobility:gold_witch_hat';
+i.diamond_witch_hat                = 'witchmobility:diamond_witch_hat';
+i.amethyst_witch_hat               = 'witchmobility:amethyst_witch_hat';
+i.witch_suit                       = 'witchmobility:witch_suit';
+i.basic_broom_item                 = 'witchmobility:basic_broom_item';
+i.woodshade_broom_item             = 'witchmobility:woodshade_broom_item';
+i.leafshade_broom_item             = 'witchmobility:leafshade_broom_item';
+i.goldenwood_broom_item            = 'witchmobility:goldenwood_broom_item';
+i.swiftstick_broom_item            = 'witchmobility:swiftstick_broom_item';
+i.snowair_broom_item               = 'witchmobility:snowair_broom_item';
+i.blue_bottle_broom_item           = 'witchmobility:blue_bottle_broom_item';
+i.firebolt_broom_item              = 'witchmobility:firebolt_broom_item';
+i.wings_broom_item                 = 'witchmobility:wings_broom_item';
+i.silver_arrow_broom_item          = 'witchmobility:silver_arrow_broom_item';

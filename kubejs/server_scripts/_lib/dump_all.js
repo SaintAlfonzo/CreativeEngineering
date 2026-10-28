@@ -3,8 +3,9 @@
 // dump that throws is reported and skipped rather than stopping the rest.
 //
 // Order: quick registry dumps first, world/worldgen dumps after, then the two slow ones
-// (dumpclimate samples every multi_noise dimension, about 4.5 min; dumpclimatecaves the Overworld's caves;
-// dumpservermods copies ~300 jars).
+// (dumpclimate samples every multi_noise dimension, about 4.5 min; dumpclimatecaves the Overworld's caves).
+// The server jar copy is not a dump command: run tools/dump_server_mods.py (by hand, or through /cegen when
+// tools/generators.json lists it).
 //
 // /dumploot runs without "all" because its trade half writes the same villager_trades.json as
 // /dumptrades. Adding a new /dump* command? Add it to DUMP_ALL_COMMANDS below.
@@ -25,6 +26,7 @@
 		'dumpcropgrowth',
 		'dumpfood',
 		'dumpplaceable',
+		'dumppots',
 		'dumppaintings',
 		'dumpcompost',
 		'dumpstructures',
@@ -33,7 +35,6 @@
 		'dumptrades',
 		'dumpclimate',
 		'dumpclimatecaves',
-		'dumpservermods',   // patcherMod (Java): KubeJS can't copy files
 		'dumpworldjei',     // patcherMod (Java): world-interaction JEI facts (tools/gen_jei_world.py)
 	]
 

@@ -15,9 +15,8 @@ Where wild bee nests generate, how often, and a tuning file that gives nests to 
 | CEConfig `[worldgen.systems] beeNests` | BUILT, same jar |
 | Starter rules (section 9) | IN `bee_nests.json`, calibrated on the baseline; DEPLOYED as they are with pack 1.0.6 (2026-10-14); your review still open |
 
-- **Jar:** needs patcherMod 1.0.5 or later (in `mods/`; shipped with pack 1.0.6, as 1.0.5 was never deployed). With an older jar, `bee_nests.js`
-  writes the `trees` features only (a `chance`/`scale` modifier of an unknown type would stop the world loading),
-  and `/dumpbeenests` says the jar is missing.
+- **Jar:** patcherMod's `worldgen/BeeNests` (since 1.0.5, first shipped in pack 1.0.6). The scripts load it directly; the
+  older-jar fallback was removed 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) finding 4).
 - **Knobs:** `kubejs/generation_scripts/worldgen/bee_nests.json` (section 3); CEConfig `[worldgen.systems] beeNests`
   (off = nests as the mods ship them). Rejoin to apply; only chunks generated afterwards change.
 - **Preview without the game:** edit the rules, `python3 tools/gen_bee_nests.py` (or `/cegen run bee_nests`).
@@ -176,7 +175,7 @@ Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Nothing here is built.
    generator computes them) and add modifier;
 3. the same on a fixture with every rule shape, and each of 7 bad rules is reported and skipped;
 4. CEConfig switch off: nothing written;
-5. old jar (no `BeeNests`): no chance/scale modifier, trees still written, error logged;
+5. (retired 2026-10-27: the old-jar fallback is gone)
 6. a mod missing (Vinery): its tree rule writes nothing, the rest unchanged.
 
 ## 7. In-game tests

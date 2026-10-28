@@ -35,11 +35,10 @@ public class RowPagesCategory implements IRecipeCategory<RowPagesCategory.Page> 
     public static final int MAX_INPUTS = 3;
     public static final int MAX_OUTPUTS = 2;
 
-    private static final ResourceLocation CRAFTING_GUI = new ResourceLocation("minecraft", "textures/gui/container/crafting_table.png");
     private static final int ROW_H = 20;
     private static final int INPUT_X = 24;
     private static final int ARROW_X = INPUT_X + MAX_INPUTS * 18 + 4;
-    private static final int OUTPUT_X = ARROW_X + 26;
+    private static final int OUTPUT_X = ARROW_X + JeiArrow.WIDTH + 4;
 
     /** One slot: items or fluids (one of the two lists is empty). */
     public record Slot(List<ItemStack> items, List<FluidStack> fluids) {
@@ -75,7 +74,7 @@ public class RowPagesCategory implements IRecipeCategory<RowPagesCategory.Page> 
         this.icon = icon;
         background = helper.createBlankDrawable(OUTPUT_X + MAX_OUTPUTS * 18, maxRows * ROW_H);
         slot = helper.getSlotDrawable();
-        arrow = helper.createDrawable(CRAFTING_GUI, 90, 35, 22, 15);
+        arrow = JeiArrow.create(helper);
     }
 
     @Override
@@ -138,7 +137,7 @@ public class RowPagesCategory implements IRecipeCategory<RowPagesCategory.Page> 
             for (int n = 0; n < row.inputs().size(); n++) {
                 slot.draw(poseStack, INPUT_X + n * 18, y);
             }
-            arrow.draw(poseStack, ARROW_X, y + 1);
+            arrow.draw(poseStack, ARROW_X, y);
             for (int n = 0; n < row.outputs().size(); n++) {
                 slot.draw(poseStack, OUTPUT_X + n * 18, y);
             }

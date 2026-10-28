@@ -1,8 +1,62 @@
-// ce.forge-mod plus MixinGradle (refmaps), for mods whose mixins use Mojang names and must also work in
-// the dev runs. Configure it in the mod's build.gradle with a `mixin { add sourceSets.X, '<name>.refmap.json' }`
-// block. (A plugin that build-logic only depends on can't be applied by id from a mod's build.gradle,
-// hence this wrapper.)
+// ce.forge-mod plus MixinGradle (refmaps), for mods whose mixins use Mojang names and must also work in the dev runs.
+// (A plugin that build-logic only depends on can't be applied by id from a mod's build.gradle, hence this wrapper.)
+//
+// Reads from <mod>/gradle.properties:
+//   refmap_name         the main source set's refmap, e.g. vinery.refmap.json (required)
+//   refmap_source_sets  optional, comma-separated <sourceSet>:<refmap> pairs for source sets the mod's build.gradle
+//                       creates (exposureBackport's addons); each is wired up when its source set is created
+//   mixin_configs       as in ce.forge-mod: the configs the dev runs load (MixinGradle `config`) and the jar check reads
+//
+// Per refmapped source set: MixinGradle `mixin { add <set>, <refmap> }`, and the refmap declared as an output of its
+// compile task. After the jar task: refmap_name must be in the jar, and every mixin config that lists mixins and
+// names a refmap must find it there. (A refmap_source_sets refmap is only written when its set has mixins with
+// remapped targets, so it is checked through its mixin config only: exposure's expanded and catalog write none.)
 plugins {
     id 'ce.forge-mod'
     id 'org.spongepowered.mixin'
+}
+
+def prop = { String key, String fallback = null -> (project.findProperty(key) ?: fallback)?.toString() }
+def csv = { String key, String fallback = '' -> prop(key, fallback).split(',')*.trim().findAll { it } }
+
+def mainRefmap = prop('refmap_name')
+if (!mainRefmap) throw new GradleException("${project.name}: ce.forge-mod-refmap needs refmap_name in gradle.properties")
+def refmaps = [main: mainRefmap] + csv('refmap_source_sets').collectEntries {
+    def (set, refmap) = it.split(':')*.trim()
+    if (!set || !refmap) throw new GradleException("${project.name}: refmap_source_sets entry '${it}' is not <sourceSet>:<refmap>")
+    [(set): refmap]
+}
+def mixinConfigs = csv('mixin_configs', "${prop('mod_id')}.mixins.json").findAll { it != 'none' }
+
+mixin {
+    // dev runs read mixin configs from here; the jar manifest gets them from mixin_configs in ce.forge-mod
+    mixinConfigs.each { config it }
+}
+
+sourceSets.matching { refmaps.containsKey(it.name) }.configureEach { ss ->
+    mixin.add ss, refmaps[ss.name]
+    // The mixin AP writes the refmap into the compile task's temporary dir, which Gradle doesn't track: if the file goes
+    // missing while the compile is UP-TO-DATE, addMixinsToJar silently skips it and the jar ships without it (1.0.3
+    // shipped without exposure_polaroid.refmap.json, so every real client crashed on startup). Declaring the refmap as
+    // an output makes a missing one re-run the compile.
+    tasks.named(ss.compileJavaTaskName, JavaCompile).configure {
+        outputs.file(new File(temporaryDir, "${it.name}-refmap.json")).withPropertyName('mixinRefmap')
+    }
+}
+
+// Backstop: the main refmap must be in the jar, and every mixin config that lists mixins must find its refmap there.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def jarFile = archiveFile.get().asFile
+        def entries = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> zip.entries().collect { it.name } as Set }
+        if (!entries.contains(mainRefmap)) throw new GradleException("${mainRefmap} is not in ${jarFile.name}")
+        def slurper = new groovy.json.JsonSlurper()
+        mixinConfigs.each { config ->
+            def json = new java.util.zip.ZipFile(jarFile).withCloseable { zip -> slurper.parse(zip.getInputStream(zip.getEntry(config))) }
+            def count = ['mixins', 'client', 'server'].sum { (json[it] ?: []).size() }
+            if (count > 0 && json.refmap && !entries.contains(json.refmap)) {
+                throw new GradleException("${config} has ${count} mixin(s) but its refmap ${json.refmap} is not in ${jarFile.name}")
+            }
+        }
+    }
 }

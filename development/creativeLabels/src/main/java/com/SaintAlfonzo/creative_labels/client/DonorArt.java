@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
+import com.SaintAlfonzo.creative_labels.shared.BuiltInPacks;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.fml.ModList;
@@ -35,7 +35,7 @@ import java.util.Map;
  * {@code sticky_inverted}, {@code sticky_smile}. The donor jar is a resource pack like any mod, so the resource
  * manager finds them by location.
  *
- * <p><b>Generated</b> into an in-memory resource pack ({@link MemoryPackResources}, added on
+ * <p><b>Generated</b> into an in-memory resource pack ({@link BuiltInPacks#addMemory}, added on
  * {@link AddPackFindersEvent} at the bottom so real packs override it), built lazily from the donor PNG bytes:
  * <ul>
  * <li>{@code creative_labels:generated/note_grey}: {@code sticky.png} greyscale, brightened so its dominant colour
@@ -109,13 +109,8 @@ public final class DonorArt {
     }
 
     public static void onAddPackFinders(AddPackFindersEvent event) {
-        if (event.getPackType() != PackType.CLIENT_RESOURCES) return;
-        event.addRepositorySource((consumer, constructor) -> {
-            Pack pack = Pack.create(PACK_ID, true,
-                    () -> new MemoryPackResources(PACK_ID, PackType.CLIENT_RESOURCES, DonorArt::files),
-                    constructor, Pack.Position.BOTTOM, PackSource.BUILT_IN);
-            if (pack != null) consumer.accept(pack);
-        });
+        BuiltInPacks.addMemory(event, PackType.CLIENT_RESOURCES, PACK_ID, "Creative Labels: art derived in memory from the donor jars",
+                Pack.Position.BOTTOM, DonorArt::files);
     }
 
     // ----------------------------------------------------------------------------------------------- generation

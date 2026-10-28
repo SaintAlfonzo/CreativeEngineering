@@ -35,10 +35,9 @@ public class SeasoningCategory implements IRecipeCategory<SeasoningCategory.Disp
     /** Most input slots a page draws; longer crafts stay on the Crafting page. */
     public static final int MAX_INPUTS = 3;
 
-    private static final ResourceLocation CRAFTING_GUI = new ResourceLocation("minecraft", "textures/gui/container/crafting_table.png");
     private static final int INPUT_X = 26;
     private static final int ARROW_X = INPUT_X + MAX_INPUTS * 18 + 4;
-    private static final int OUTPUT_X = ARROW_X + 28;
+    private static final int OUTPUT_X = ARROW_X + JeiArrow.WIDTH + 6;
     private static final int Y = 9;
 
     /**
@@ -58,7 +57,7 @@ public class SeasoningCategory implements IRecipeCategory<SeasoningCategory.Disp
         background = helper.createBlankDrawable(OUTPUT_X + 18, 36);
         icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, iconStack);
         slot = helper.getSlotDrawable();
-        arrow = helper.createDrawable(CRAFTING_GUI, 90, 35, 22, 15);
+        arrow = JeiArrow.create(helper);
     }
 
     @Override
@@ -114,7 +113,7 @@ public class SeasoningCategory implements IRecipeCategory<SeasoningCategory.Disp
         for (int n = 0; n < display.inputs().size(); n++) {
             slot.draw(poseStack, INPUT_X + n * 18, Y);
         }
-        arrow.draw(poseStack, ARROW_X, Y + 1);
+        arrow.draw(poseStack, ARROW_X, Y);
         slot.draw(poseStack, OUTPUT_X, Y);
     }
 }

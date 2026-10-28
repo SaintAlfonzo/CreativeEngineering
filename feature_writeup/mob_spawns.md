@@ -17,8 +17,8 @@ file that changes spawn weights per biome, adds mobs to biomes and removes them.
 | Cow table in [mooblooms.md](mooblooms.md) (first consumer) | PLANNED |
 | Passive animal analysis (farm animals, duck/goose, Alex's Mobs surface animals) | DONE 2026-10-09, section 10; baseline for the cohesion rules |
 
-- **Jar:** needs patcherMod 1.0.5 or later (in `mods/`; 1.0.5 was never deployed, so it first shipped in pack 1.0.6). With an older jar `/dumpspawns` says so,
-  and `mob_spawns.js` writes nothing (an unknown modifier type would stop the world loading).
+- **Jar:** patcherMod's `worldgen/SpawnTuning` (since 1.0.5, first shipped in pack 1.0.6). The scripts load it directly;
+  the older-jar fallback was removed 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) finding 4).
 - **Measure:** `/dumpspawns` (or `/dumpall`), then `python3 tools/gen_spawn_table.py` (or `/cegen run spawns_by_biome`).
 - **Knobs:** `kubejs/generation_scripts/worldgen/mob_spawns.json` (rules, section 3); CEConfig
   `[worldgen.systems] mobSpawns` (off = every mob as its mod ships it). Rejoin to apply.
@@ -221,7 +221,7 @@ and then fail at night. `AnimalWalkTargetMixin` / `MushroomCowWalkTargetMixin` m
 effect: wandering animals favour every spawnable dirt the way they favour grass. With the system off the tags are
 vanilla (grass_block, mycelium), so the mixins change nothing.
 
-The block tags are only written when the jar has `SpawnTuning` (an old jar has no walk-value mixins either).
+The block tags rely on patcherMod's walk-value mixins (same jar as `SpawnTuning`).
 
 **Interplay:** More Mooblooms turns cows into mooblooms at spawn time, after the pick ([mooblooms.md](mooblooms.md)
 4.9), so a cow weight change changes moobloom numbers in the same proportion. `moobloom_cows.json` (cows added to
@@ -286,7 +286,7 @@ Trader, patrols, phantoms and villages don't use biome lists (section 4).
    selection, the modifier holds every rule in order with the right fields and JS-style numbers, `forge:none` for
    `disable_modifiers`.
 3. **Rhino edge cases:** bad rules (id, action, missing weight, duplicate id, trait typo, tag in `except`, bad
-   category) are reported and left out; switch off, an old jar without `SpawnTuning`, and a missing mod write nothing
+   category) are reported and left out; switch off and a missing mod write nothing
    for what they cover.
 4. **Generator:** on a fixture dump it writes every section, warns that the dump predates the rules, stops warning
    once the dump shows them, and `--mob` prints a table with "(was N)".
@@ -391,7 +391,7 @@ First block (down to the ducks) DONE 2026-10-09, see section 3 and 3.1 (not yet 
 Added from the scratchpad 2026-10-21:
 - Fireflies can be jarred when near a bush at night (TODO `mobs/spawns #6`).
 - Alex's Mobs seagulls can't take lunchboxes (TODO `mobs/tweaks #7`).
-- Merge the monkeys across mods, Alex's Mobs and Neapolitan (TODO `mobs/tweaks #8`).
+- Merge the monkeys across mods, Alex's Mobs and Neapolitan (TODO `merges/mobs #1`).
 - Autumnity port: turkeys replace chicken spawns in the autumn biomes (TODO `ports/autumnityport #4`).
 - Environmental features: deer and reindeer (venison), koi, muddy pigs (TODO `largecontent/mod-additions #3`).
 

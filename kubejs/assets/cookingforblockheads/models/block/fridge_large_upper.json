@@ -5,8 +5,7 @@
 		"fridge_side": "cookingforblockheads:block/fridge_side",
 		"fridge_top": "cookingforblockheads:block/fridge_top",
 		"fridge_back": "cookingforblockheads:block/fridge_back",
-		"fridgeLarge_inside": "cookingforblockheads:block/fridge_inside",
-		"ce_top_fill": "creativeengineering:block/fridge_top_fill"
+		"fridgeLarge_inside": "cookingforblockheads:block/fridge_inside"
 	},
 	"elements": [
 		{
@@ -474,28 +473,64 @@
 			],
 			"faces": {
 				"north": {
-					"texture": "#ce_top_fill",
+					"uv": [
+						1,
+						1,
+						15,
+						4
+					],
+					"texture": "#fridge_side",
 					"tintindex": 0
 				},
 				"east": {
-					"texture": "#ce_top_fill",
+					"uv": [
+						1,
+						1,
+						15,
+						4
+					],
+					"texture": "#fridge_side",
 					"tintindex": 0
 				},
 				"south": {
-					"texture": "#ce_top_fill",
+					"uv": [
+						1,
+						1,
+						15,
+						4
+					],
+					"texture": "#fridge_side",
 					"tintindex": 0
 				},
 				"west": {
-					"texture": "#ce_top_fill",
+					"uv": [
+						1,
+						1,
+						15,
+						4
+					],
+					"texture": "#fridge_side",
 					"tintindex": 0
 				},
 				"up": {
-					"texture": "#ce_top_fill",
+					"uv": [
+						1,
+						1,
+						15,
+						15
+					],
+					"texture": "#fridge_side",
 					"tintindex": 0,
 					"cullface": "up"
 				},
 				"down": {
-					"texture": "#ce_top_fill",
+					"uv": [
+						1,
+						1,
+						15,
+						15
+					],
+					"texture": "#fridge_side",
 					"tintindex": 0
 				}
 			}

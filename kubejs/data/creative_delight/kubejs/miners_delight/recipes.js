@@ -6,7 +6,6 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var R = global.NCH
-	var F = global.foodFamily(e)
 
 	global.CD.recipes(() => {
 
@@ -24,7 +23,7 @@ ServerEvents.recipes(e => {
 		if (global.CD.on('rusticdelight')) {
 			;[
 				[i.squid, i.calamari, i.ink_sac, 'squid'],
-				[i.glow_squid, i.glowing_calamari, i.glow_ink_sac, 'glow_squid'],
+				[i.glow_squid, i.glowing_calamari, i.glow_ink, 'glow_squid'],
 				[i.baked_squid, i.cooked_calamari, null, 'baked_squid'],
 			].forEach(c => {
 				R.remove({ type: 'farmersdelight:cutting', input: c[0] }, e)

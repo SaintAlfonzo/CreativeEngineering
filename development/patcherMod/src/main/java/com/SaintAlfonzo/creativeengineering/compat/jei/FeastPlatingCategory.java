@@ -65,7 +65,6 @@ public class FeastPlatingCategory implements IRecipeCategory<FeastPlatingCategor
             new RecipeType<>(new ResourceLocation(CreativeEngineering.MODID, "feast_plating"), Display.class);
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation GUI = new ResourceLocation("jei", "textures/gui/gui_vanilla.png");
     private static final int TEXT_COLOR = 0xFF404040;
     private static final int WIDTH = 176, HEIGHT = 56;
     private static final int FEAST_X = 1, TOOL_X = 23, ROW_Y = 1;
@@ -109,7 +108,7 @@ public class FeastPlatingCategory implements IRecipeCategory<FeastPlatingCategor
         ItemStack chicken = stack(new ResourceLocation("farmersdelight", "roast_chicken_block"), 1);
         icon = gui.createDrawableItemStack(chicken.isEmpty() ? new ItemStack(Items.BOWL) : chicken);
         slot = gui.getSlotDrawable();
-        arrow = gui.createDrawable(GUI, 82, 128, 24, 17);
+        arrow = JeiArrow.create(gui);
     }
 
     // ---- collection ----

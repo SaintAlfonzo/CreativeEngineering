@@ -2,7 +2,7 @@
 // End's Delight drop tooltips (ends_delight.md 3.1): the mob parts that only come from loot modifiers. Same facts as
 // the JEI pages in jei_info.js; grey like the pack's other drop lines (tooltips.md).
 ItemEvents.tooltip(e => {
-	if (!global.CD || !global.CD.on('ends_delight')) return
+	if (!global.CD.on('ends_delight')) return
 	var i = global.item
 
 	e.add(i.raw_dragon_meat, Text.gray('Ender Dragon drop; more when killed with a knife or machete'))

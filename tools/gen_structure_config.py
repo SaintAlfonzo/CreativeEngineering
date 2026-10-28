@@ -38,13 +38,17 @@ Run: python3 tools/gen_structure_config.py, then python3 tools/gen_structure_gro
 kubejs/server_scripts/worldgen/structure_overrides.js reads this baseline + structure_groups.json at
 every world load.
 """
-import glob
 import io
 import json
 import re
+import sys
 import zipfile
 from pathlib import Path
 from collections import OrderedDict
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths  # noqa: E402
+from pack_paths import loads_lenient  # noqa: E402  (Beautify ships commented worldgen json; importers use it from here too)
 
 INSTANCE = Path(__file__).resolve().parent.parent
 MODS_DIR = INSTANCE / 'mods'
@@ -52,14 +56,9 @@ KUBEJS_DATA_DIR = INSTANCE / 'kubejs/data'
 OUT_PATH = INSTANCE / 'kubejs/generation_scripts/worldgen/structure_config.json'
 META_PATH = INSTANCE / 'kubejs/generation_scripts/worldgen/meta_structures.json'
 
-# The vanilla 1.19.2 jar that actually contains loose data/ jsons (Forge's dev-time split puts
-# resources in the "-extra" jar; the plain client/server jars here are launcher stubs). Found by
-# globbing the AT Launcher shared library cache; adjust if this instance's libraries live
-# elsewhere. Only used for the has_structure/* biome tags -- see load_vanilla_biome_tags().
-_vanilla_jar_candidates = glob.glob(
-    str(Path.home() / '.local/share/atlauncher/libraries/net/minecraft/client/1.19.2*/*-extra.jar')
-)
-VANILLA_JAR = Path(_vanilla_jar_candidates[0]) if _vanilla_jar_candidates else None
+# The vanilla jar with the loose data/ jsons (tools/pack_paths.py: the libraries' resources-only "-extra" jar
+# first). Only used for the has_structure/* biome tags -- see load_vanilla_biome_tags().
+VANILLA_JAR = pack_paths.vanilla_jar()
 
 # ---------------------------------------------------------------------------
 # Vanilla 1.19.2 structure_set defaults, javap-verified against StructureSets.bootstrap
@@ -259,37 +258,6 @@ def load_vanilla_biome_tags():
         biomes = [v for v in data.get('values', []) if isinstance(v, str) and not v.startswith('#')]
         out[tag_name] = sorted(biomes)
     return out
-
-
-def loads_lenient(raw):
-    """json.loads that also accepts // and /* */ comments, like Minecraft's lenient GSON reader.
-    Some mods (e.g. Beautify) ship commented worldgen jsons that plain json.loads rejects."""
-    text = raw.decode('utf-8') if isinstance(raw, bytes) else raw
-    out, i, n, in_str = [], 0, len(text), False
-    while i < n:
-        c = text[i]
-        if in_str:
-            out.append(c)
-            if c == '\\' and i + 1 < n:
-                out.append(text[i + 1])
-                i += 1
-            elif c == '"':
-                in_str = False
-        elif c == '"':
-            in_str = True
-            out.append(c)
-        elif text.startswith('//', i):
-            while i < n and text[i] != '\n':
-                i += 1
-            continue
-        elif text.startswith('/*', i):
-            end = text.find('*/', i + 2)
-            i = n if end < 0 else end + 2
-            continue
-        else:
-            out.append(c)
-        i += 1
-    return json.loads(''.join(out))
 
 
 DONOR_SKIP_STRUCTURES = {'aether', 'afterdark_farms', 'deeper_farms', 'flesh_farms', 'honey_cake_farms', 'undergardens',

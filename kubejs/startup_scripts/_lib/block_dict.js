@@ -100,6 +100,31 @@ b.tall_purple_pickerelweed = 'upgrade_aquatic:tall_purple_pickerelweed';
 b.cucumber_crop = 'vintagedelight:cucumber_crop';
 b.ghost_pepper_crop = 'vintagedelight:ghost_pepper_crop';
 b.zucchini_crop = 'veggiesdelight:zucchini_crop';
+// Crop blocks with a soil yield row (CD creativeengineering/soil_yield.js, feature_writeup/crop_yields.md)
+b.wheat_crop = 'minecraft:wheat';
+b.carrots = 'minecraft:carrots';
+b.potatoes = 'minecraft:potatoes';
+b.beetroots = 'minecraft:beetroots';
+b.cabbages = 'farmersdelight:cabbages';
+b.onions = 'farmersdelight:onions';
+b.tomatoes = 'farmersdelight:tomatoes';
+b.rice_panicles = 'farmersdelight:rice_panicles';
+b.bell_peppers = 'rusticdelight:bell_peppers';
+b.coffee_crop = 'rusticdelight:coffee';
+b.cotton_crop = 'rusticdelight:cotton';
+b.ender_crop = 'endercrop:ender_crop';
+b.tobacco_crop = 'the_dirty_stuff:tobacco_seeds';     // the tobacco plant (its seed item has the same id)
+b.flax_crop = 'supplementaries:flax';
+b.hemp = 'immersiveengineering:hemp';
+b.cave_carrots = 'miners_delight:cave_carrots';
+b.broccoli_crop = 'veggiesdelight:broccoli_crop';
+b.cauliflower_crop = 'veggiesdelight:cauliflower_crop';
+b.garlic_crop = 'veggiesdelight:garlic_crop';
+b.sweet_potato_crop = 'veggiesdelight:sweet_potato_crop';
+b.turnip_crop = 'veggiesdelight:turnip_crop';
+b.oat_crop = 'vintagedelight:oat_crop';
+b.peanut_crop = 'vintagedelight:peanut_crop';
+b.adzuki_sprouts = 'neapolitan:adzuki_sprouts';
 
 // Tags
 b.any_bricks = '#minecraft:bricks';

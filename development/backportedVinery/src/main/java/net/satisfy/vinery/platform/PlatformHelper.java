@@ -60,7 +60,7 @@ public final class PlatformHelper {
     }
 
     public static double getCellarAgingMultiplier() {
-        return VineryConfig.CELLAR_AGING_MULTIPLIER.get();
+        return VineryConfig.cellarAgingMultiplier();
     }
 
     public static int getGrapevinePotStomps() {
@@ -80,7 +80,7 @@ public final class PlatformHelper {
     }
 
     public static int getWineMaxLevel() {
-        return VineryConfig.MAX_LEVEL.get();
+        return VineryConfig.maxLevel();
     }
 
     public static List<? extends String> getWineEffects() {
@@ -104,11 +104,11 @@ public final class PlatformHelper {
     }
 
     public static int getWineDaysPerYear() {
-        return VineryConfig.DAYS_PER_YEAR.get();
+        return VineryConfig.daysPerYear();
     }
 
     public static int getWineYearsPerEffectLevel() {
-        return VineryConfig.YEARS_PER_EFFECT_LEVEL.get();
+        return VineryConfig.yearsPerEffectLevel();
     }
 
     public static int getWineMaxDuration() {

@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -52,7 +53,10 @@ import java.util.Set;
  *
  * Stats (layer / share_pct / result_pct / note, per dimension samples + model_agreement_pct) are
  * written back into biome_config.json, only when they changed. Results are cached on the input
- * files' contents, so a /reload with nothing edited costs a hash, not a solve.
+ * files' contents, so a /reload with nothing edited costs a hash, not a solve. The cache is also kept on
+ * disk (biome_layout_cache.json.gz, ships with the pack), so the first datapack load of a new JVM reads it
+ * back instead of re-solving (10-11 s). Its key adds a hash of this solver's own class files, so a changed
+ * solver never reads a layout an older one wrote.
  */
 public final class BiomeLayoutTuner {
 
@@ -63,6 +67,8 @@ public final class BiomeLayoutTuner {
 	// copy is still read when there is no .gz, so an older dump keeps working.
 	static final String SAMPLE_DIR = WORLDGEN_DIR + "climate/";
 	static final String LEGACY_SAMPLE_DIR = "kubejs/exported/worldgen/climate/";
+	static final String DISK_CACHE = WORLDGEN_DIR + "biome_layout_cache.json.gz";
+	private static final int DISK_CACHE_FORMAT = 1;
 
 	private static final String[] AXES = {"temperature", "humidity", "continentalness", "erosion", "depth", "weirdness"};
 	private static final double Q = 10000;                 // Climate.quantizeCoord scale
@@ -88,12 +94,15 @@ public final class BiomeLayoutTuner {
 		private final List<String> messages = new ArrayList<>();
 		private final List<String> errors = new ArrayList<>();
 		private boolean fromCache = false;
+		private String cacheSource = "";
 
 		/** resource path ("minecraft:dimension/overworld.json") -> JSON text. */
 		public Map<String, String> getFiles() { return files; }
 		public List<String> getMessages() { return messages; }
 		public List<String> getErrors() { return errors; }
 		public boolean isFromCache() { return fromCache; }
+		/** "memory" or "disk" when fromCache, else "". */
+		public String getCacheSource() { return cacheSource; }
 	}
 
 	public static synchronized Result run() {
@@ -126,7 +135,14 @@ public final class BiomeLayoutTuner {
 			String key = fingerprint(cfgText, dims.keySet(), baselineText, sampleText);
 			if (key.equals(cacheKey) && cached != null) {
 				cached.fromCache = true;
+				cached.cacheSource = "memory";
 				return cached;
+			}
+			Result fromDisk = readDiskCache(key);
+			if (fromDisk != null) {
+				cacheKey = key;
+				cached = fromDisk;
+				return fromDisk;
 			}
 
 			Set<String> knownBiomes = new LinkedHashSet<>();
@@ -160,6 +176,7 @@ public final class BiomeLayoutTuner {
 
 			cacheKey = fingerprint(newCfgText, dims.keySet(), baselineText, sampleText);
 			cached = r;
+			writeDiskCache(cacheKey, r);
 		} catch (Exception e) {
 			// Never hand back a half-built layout: no files means the mod/vanilla layout is used.
 			r.files.clear();
@@ -653,8 +670,77 @@ public final class BiomeLayoutTuner {
 		return e.isJsonNull() ? "null" : e.getAsJsonPrimitive().toString();
 	}
 
+	// ── disk cache ────────────────────────────────────────────────────────────
+
+	/** The cached Result when the file holds this key, else null (missing, other key or unreadable: solve). */
+	private static Result readDiskCache(String key) {
+		if (solverHash() == null) return null;
+		try {
+			String text = WorldgenFiles.readGzipText(DISK_CACHE);
+			if (text == null) return null;
+			JsonObject doc = JsonParser.parseString(text).getAsJsonObject();
+			if (doc.get("format").getAsInt() != DISK_CACHE_FORMAT || !key.equals(doc.get("key").getAsString())) return null;
+			Result r = new Result();
+			for (Map.Entry<String, JsonElement> f : doc.getAsJsonObject("files").entrySet()) r.files.put(f.getKey(), f.getValue().getAsString());
+			r.messages.addAll(strings(doc.getAsJsonArray("messages")));
+			r.fromCache = true;
+			r.cacheSource = "disk";
+			return r;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/** Only clean solves go to disk: a run with errors re-solves (and reports them) on the next JVM. */
+	private static void writeDiskCache(String key, Result r) {
+		if (!r.errors.isEmpty() || solverHash() == null) return;
+		try {
+			JsonObject doc = new JsonObject();
+			doc.addProperty("format", DISK_CACHE_FORMAT);
+			doc.addProperty("key", key);
+			JsonObject files = new JsonObject();
+			r.files.forEach(files::addProperty);
+			doc.add("files", files);
+			JsonArray messages = new JsonArray();
+			r.messages.forEach(messages::add);
+			doc.add("messages", messages);
+			WorldgenFiles.writeGzipText(DISK_CACHE, COMPACT.toJson(doc));
+		} catch (Exception e) {
+			r.messages.add("could not write " + DISK_CACHE + ": " + e);
+		}
+	}
+
+	private static final String[] SOLVER_CLASSES = {"BiomeLayoutTuner", "BiomeLayoutTuner$Quant", "BiomeLayoutTuner$DimResult"};
+	private static byte[] solverHash = null;
+	private static boolean solverHashDone = false;
+
+	/**
+	 * SHA-256 of the solver's compiled classes, so the disk cache follows code changes too. Null when a
+	 * class file can't be read: then there is no disk cache, only the in-memory one.
+	 */
+	private static byte[] solverHash() {
+		if (!solverHashDone) {
+			solverHashDone = true;
+			try {
+				MessageDigest md = MessageDigest.getInstance("SHA-256");
+				for (String c : SOLVER_CLASSES) {
+					try (InputStream in = BiomeLayoutTuner.class.getResourceAsStream(c + ".class")) {
+						if (in == null) return null;
+						md.update(in.readAllBytes());
+					}
+				}
+				solverHash = md.digest();
+			} catch (Exception e) {
+				solverHash = null;
+			}
+		}
+		return solverHash;
+	}
+
 	private static String fingerprint(String cfgText, Set<String> dimIds, Map<String, String> baselines, Map<String, String> samples) throws Exception {
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		byte[] solver = solverHash();
+		if (solver != null) md.update(solver);
 		md.update(("solver " + maxCandidates + " " + rounds + "\0").getBytes(StandardCharsets.UTF_8));
 		md.update(cfgText.getBytes(StandardCharsets.UTF_8));
 		for (String d : dimIds) {

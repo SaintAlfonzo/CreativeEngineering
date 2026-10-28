@@ -39,7 +39,7 @@
 			tagPrefix: 'creative_delight:wild_crops/',
 			modifierPrefix: 'creative_delight:forge/biome_modifier/wild_crops/',
 			offMessage: 'off in creative_delight-common.toml [worldgen] wildCrops: every crop spawns where its mod puts it',
-			enabled: function () { return global.CD.worldgen ? global.CD.worldgen('wildCrops') : true },   // older jar: no switch
+			enabled: function () { return global.CD.worldgen('wildCrops') },
 			never: function () { return { ocean: true, cave: true } },
 			step: function (crop) { return crop.step || 'vegetal_decoration' },
 			reportUnclassified: true,

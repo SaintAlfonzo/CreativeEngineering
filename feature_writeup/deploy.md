@@ -101,6 +101,9 @@ not a tracked category: no history entry, removals or verify (which worlds get i
 verify prints `MISSING`, `CHANGED` and `EXTRA` lines and exits 1 on any of them. It exits 0 with `OK`
 when the machine matches. It checks `mods/` only: configs and the tuner-written kubejs files change on the
 machines by design.
+Jars the payload itself copies into `mods/` are left out of `verify/<target>.sha1`: a missing or
+disabled jar the update restores is not drift (2026-10-27, Pretty Rain client -> both while clients had it
+turned off). The `.installed` lists keep every jar.
 
 ### kubejs classes
 
@@ -318,3 +321,10 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
 - 2026-10-26: "Mod updates" checklist for the version-pinned patcherMod fixes (D&D, Supplementaries + Breezy, Create,
   Easy Elytra Takeoff) and preflight `check_pinned_mods` (`PINNED_MODS`): warns when the jar in `mods/` for a pinned
   prefix is not the pinned file ([TODO](todo/TODO.md) `pack/server #7`, closes [fixes_compat.md](fixes_compat.md) F3).
+- 2026-10-26: 1.1.03 staged (undistributed; server and players are on 1.1.02). Update from 1.1.02: 267 files / 22.0 MB
+  (8 mods, 234 kubejs, 12 config), removals 205 server / 206 client. Preflight fixes: `KUBEJS_CLASSES` rules for
+  `food_families.json` (runtime, read by CD `seasoning_tags.js`) and `food_dict_index.json` (dev); the duplicate-mod-id
+  check no longer flags third-party Jar-in-Jar libraries nested in two different jars (xaerolib, spectrelib, mixinextras,
+  create_dragon_lib), only a clash with a top-level jar or a Creative Delight member. `pack/manifest.json` regenerated.
+  Remaining warnings: Display Delight export older than the jar, uncommitted tree, changelog bullets over 300 characters.
+  Not booted: SQ-VP-00 and the scratch queue have not run on these jars. Next: copy, then `--snapshot 1.1.03`.

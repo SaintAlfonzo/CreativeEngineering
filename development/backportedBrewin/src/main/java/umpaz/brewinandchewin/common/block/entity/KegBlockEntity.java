@@ -12,8 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +19,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -41,7 +38,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +50,6 @@ import umpaz.brewinandchewin.common.container.AbstractedFluidTank;
 import umpaz.brewinandchewin.common.container.AbstractedItemHandler;
 import umpaz.brewinandchewin.common.crafting.KegFermentingRecipe;
 import umpaz.brewinandchewin.common.crafting.KegPouringRecipe;
-import umpaz.brewinandchewin.common.item.BoozeItem;
 import umpaz.brewinandchewin.common.registry.BnCBlockEntityTypes;
 import umpaz.brewinandchewin.common.registry.BnCItems;
 import umpaz.brewinandchewin.common.registry.BnCRecipeTypes;
@@ -82,11 +77,7 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
     */
    public static final int REMAINDER_SLOT = 8;
    public static final int INVENTORY_SIZE = 9;
-   /** Port: marks a port save, whose 9 slots aren't a 2.0 keg's 9 (see isLegacyInventory). */
-   private static final String INVENTORY_VERSION = "BnCInventoryVersion";
    public static final int RANGE = 2;
-   /** Port: a 2.0 keg's drink serving, in mB per drink, for the old-world conversion (alcohol.md 3.3). */
-   public static final int LEGACY_SERVING = 250;
    private final AbstractedItemHandler inventory;
    private final SidedKegWrapper inputHandler;
    private final SidedKegWrapper outputHandler;
@@ -107,8 +98,6 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
    private ResourceLocation lastRecipeID;
    private boolean checkNewRecipe;
    private boolean checkFluidSlot = true;
-   /** Port: items a converted 2.0 keg couldn't keep; dropped on the next tick (saved until then). */
-   private final List<ItemStack> pendingDrops = new ArrayList<>();
 
    public KegBlockEntity(BlockPos pos, BlockState state) {
       super(BnCBlockEntityTypes.KEG, pos, state);
@@ -128,13 +117,8 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
    @Override
    public void load(CompoundTag compound) {
       super.load(compound);
-      CompoundTag inventoryTag = compound.getCompound("Inventory");
-      if (isLegacyInventory(compound)) {
-         this.loadLegacyInventory(inventoryTag);
-      } else {
-         this.inventory.readFromNbt(inventoryTag);
-         this.fluidTank.readFromNbt(compound.getCompound("FluidTank"));
-      }
+      this.inventory.readFromNbt(compound.getCompound("Inventory"));
+      this.fluidTank.readFromNbt(compound.getCompound("FluidTank"));
       this.fermentTime = compound.getInt("FermentTime");
       this.fermentTimeTotal = compound.getInt("FermentTimeTotal");
       if (compound.contains("CustomName", 8)) {
@@ -154,75 +138,8 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
          this.kegTemperature = compound.getInt("Temperature");
       }
 
-      this.pendingDrops.clear();
-      ListTag drops = compound.getList("BnCPendingDrops", Tag.TAG_COMPOUND);
-      for (int i = 0; i < drops.size(); i++) {
-         ItemStack stack = ItemStack.of(drops.getCompound(i));
-         if (!stack.isEmpty()) {
-            this.pendingDrops.add(stack);
-         }
-      }
-
       this.checkNewRecipe = true;
       this.checkFluidSlot = true;
-   }
-
-   /** A 2.0 keg saved 9 slots; port saves before the leftover slot had 8, and since then 9 plus the version key. */
-   private static boolean isLegacyInventory(CompoundTag compound) {
-      return compound.getCompound("Inventory").getInt("Size") == 9 && !compound.contains(INVENTORY_VERSION);
-   }
-
-   /**
-    * Port: a 2.0 keg (9 slots: 0-3 ingredients, 4 base-fluid item, 5 finished drink, 6 container in, 7 output,
-    * 8 container out). The drink stack becomes 250 mB per drink in the tank; the rest goes to the container and output
-    * slots, and anything left over drops.
-    */
-   private void loadLegacyInventory(CompoundTag inventoryTag) {
-      ItemStackHandler old = new ItemStackHandler(9);
-      old.deserializeNBT(inventoryTag);
-      for (int i = 0; i < INVENTORY_SIZE; i++) {
-         this.inventory.setStackInSlot(i, i < 4 ? old.getStackInSlot(i).copy() : ItemStack.EMPTY);
-      }
-      this.fluidTank.setAbstractedFluid(AbstractedFluidStack.EMPTY);
-
-      List<ItemStack> leftovers = new ArrayList<>();
-      AbstractedFluidStack legacyFluid = legacyDrinkToFluid(old.getStackInSlot(5), this.fluidTank.getFluidCapacity(), leftovers);
-      if (!legacyFluid.isEmpty()) {
-         this.fluidTank.setAbstractedFluid(legacyFluid);
-      }
-      leftovers.add(old.getStackInSlot(7).copy());
-      leftovers.add(old.getStackInSlot(6).copy());
-      leftovers.add(old.getStackInSlot(4).copy());
-      leftovers.add(old.getStackInSlot(8).copy());
-      for (ItemStack stack : leftovers) {
-         if (stack.isEmpty()) {
-            continue;
-         }
-         ItemStack rest = this.inventory.insertItem(OUTPUT_SLOT, stack, false);
-         if (!rest.isEmpty()) {
-            rest = this.inventory.insertItem(CONTAINER_SLOT, rest, false);
-         }
-         if (!rest.isEmpty()) {
-            this.pendingDrops.add(rest);
-         }
-      }
-      BrewinAndChewin.LOG.info("Converted a Brewin' and Chewin' 2.0 keg at {}: tank {}", this.worldPosition, this.fluidTank.getAbstractedFluid());
-   }
-
-   /** The fluid a 2.0 keg's drink slot turns into; drinks that don't fit (or aren't drinks) go to `leftovers`. */
-   private static AbstractedFluidStack legacyDrinkToFluid(ItemStack drinks, long capacity, List<ItemStack> leftovers) {
-      if (drinks.isEmpty()) {
-         return AbstractedFluidStack.EMPTY;
-      }
-      if (!(drinks.getItem() instanceof BoozeItem booze)) {
-         leftovers.add(drinks.copy());
-         return AbstractedFluidStack.EMPTY;
-      }
-      int fit = (int)Math.min(drinks.getCount(), capacity / LEGACY_SERVING);
-      if (fit < drinks.getCount()) {
-         leftovers.add(BnCItemUtils.copyWithCount(drinks, drinks.getCount() - fit));
-      }
-      return fit <= 0 ? AbstractedFluidStack.EMPTY : new AbstractedFluidStack(booze.getFluid(), (long)fit * LEGACY_SERVING);
    }
 
    public static AbstractedFluidStack getMealFromItem(ItemStack kegStack) {
@@ -232,13 +149,6 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
          CompoundTag tag = BlockItem.getBlockEntityData(kegStack);
          if (tag == null || tag.isEmpty()) {
             return AbstractedFluidStack.EMPTY;
-         }
-         // Port: a 2.0 keg item shows what its drinks will become once placed.
-         CompoundTag inventoryTag = tag.getCompound("Inventory");
-         if (isLegacyInventory(tag)) {
-            ItemStackHandler old = new ItemStackHandler(9);
-            old.deserializeNBT(inventoryTag);
-            return legacyDrinkToFluid(old.getStackInSlot(5), BnCConfiguration.COMMON_CONFIG.get().keg().localizedCapacity(), new ArrayList<>());
          }
          return tag.contains("FluidTank", 10)
             ? BrewinAndChewin.getHelper().deserializeTankFluidStack(tag.getCompound("FluidTank"))
@@ -262,7 +172,6 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
    public void saveAdditional(CompoundTag compound) {
       super.saveAdditional(compound);
       compound.put("Inventory", this.inventory.writeToNbt());
-      compound.putInt(INVENTORY_VERSION, 2);
       compound.put("FluidTank", this.fluidTank.writeToNbt());
       compound.putInt("FermentTime", this.fermentTime);
       compound.putInt("FermentTimeTotal", this.fermentTimeTotal);
@@ -273,19 +182,11 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
       CompoundTag compoundRecipes = new CompoundTag();
       this.usedRecipeTracker.forEach((recipeId, craftedAmount) -> compoundRecipes.putInt(recipeId.toString(), craftedAmount));
       compound.put("RecipesUsed", compoundRecipes);
-      if (!this.pendingDrops.isEmpty()) {
-         ListTag drops = new ListTag();
-         for (ItemStack stack : this.pendingDrops) {
-            drops.add(stack.save(new CompoundTag()));
-         }
-         compound.put("BnCPendingDrops", drops);
-      }
    }
 
    private CompoundTag writeUpdateTag(CompoundTag compound) {
       super.saveAdditional(compound);
       compound.put("Inventory", this.inventory.writeToNbt());
-      compound.putInt(INVENTORY_VERSION, 2);
       compound.put("FluidTank", this.fluidTank.writeToNbt());
       compound.putInt("FermentTime", this.fermentTime);
       compound.putInt("FermentTimeTotal", this.fermentTimeTotal);
@@ -338,13 +239,6 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
 
    public static void fermentingTick(Level level, BlockPos pos, BlockState state, KegBlockEntity keg) {
       boolean didInventoryChange = false;
-      if (!keg.pendingDrops.isEmpty()) {
-         for (ItemStack stack : keg.pendingDrops) {
-            Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, stack);
-         }
-         keg.pendingDrops.clear();
-         keg.setChanged();
-      }
 
       if (level.getGameTime() % 80L == 0L) {
          keg.updateTemperature();
@@ -1126,7 +1020,6 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
          drops.add(this.inventory.getStackInSlot(i));
       }
 
-      drops.addAll(this.pendingDrops);
       return drops;
    }
 

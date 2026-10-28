@@ -328,22 +328,6 @@
       }
     },
     {
-      "file": "CTM-1.19.2-1.1.6+8.jar",
-      "name": "ConnectedTexturesMod",
-      "version": "CTM - 1.19.2-1.1.6+8",
-      "sha1": "50e8eb2e6266dcdebb4e60dbc26f526ed06e636c",
-      "modId": "ctm",
-      "side": "client",
-      "source": {
-        "curseforge": {
-          "projectId": 267602,
-          "fileId": 4393695,
-          "slug": "ctm",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/ctm/files/4393695"
-        }
-      }
-    },
-    {
       "file": "CannedGoods-1.19.2-3.jar",
       "name": "Canned Goods :|",
       "version": "1.0.3",
@@ -4604,7 +4588,7 @@
       "file": "creative_delight-1.0.0.jar",
       "name": "creative_delight-1.0.0",
       "version": "",
-      "sha1": "d5bb3dc4028178f3b487a95e5a6bd8830a1c4f27",
+      "sha1": "0016ae3bc8c8f4e55587cc15d8a52e318d3cd665",
       "modId": "creative_delight",
       "side": "both",
       "source": "local"
@@ -4613,7 +4597,7 @@
       "file": "creativeengineering-1.1.03.jar",
       "name": "creativeengineering-1.1.03",
       "version": "",
-      "sha1": "9d1630ef55a0eae1184fb21a9ae73fb5bf57bea9",
+      "sha1": "4f1a0f13c579b9d42bd66efbc3beeb944a0f1a65",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
@@ -6495,7 +6479,7 @@
       "file": "moreMooblooms-1.1.0.jar",
       "name": "moreMooblooms-1.1.0.jar",
       "version": "Unknown",
-      "sha1": "3d321b34a44d494b0f427a0914f330bdf92bee33",
+      "sha1": "67833471ce1b226b29b1c8130cd6a9a18384e3fc",
       "modId": "more_mooblooms",
       "side": "both",
       "source": "local"
@@ -8465,6 +8449,21 @@
     }
   ],
   "disabledMods": [
+    {
+      "file": "CTM-1.19.2-1.1.6+8.jar",
+      "name": "ConnectedTexturesMod",
+      "version": "CTM - 1.19.2-1.1.6+8",
+      "sha1": "50e8eb2e6266dcdebb4e60dbc26f526ed06e636c",
+      "modId": "ctm",
+      "source": {
+        "curseforge": {
+          "projectId": 267602,
+          "fileId": 4393695,
+          "slug": "ctm",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/ctm/files/4393695"
+        }
+      }
+    },
     {
       "file": "CopperDrops-1.1.jar",
       "name": "Copper Drops",

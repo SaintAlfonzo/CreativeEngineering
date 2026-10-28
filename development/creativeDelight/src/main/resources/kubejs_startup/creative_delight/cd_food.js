@@ -14,13 +14,15 @@
 // Families and their calls:
 //   cutting board   fruitSlice, veggieSlice, meatCut, fishSlice (input, output, count): knife, FAMILY count unless given
 //                   pieSlice (whole, slice, count): board cut plus slices -> whole by hand (`<whole>_from_slices`)
+//                   cultureCut (culture, meat, count): a meat culture is its own family; raw meat or fish, no bone meal
 //   cooking trio    fruitCook, veggieCook, meatCook, fishCook, eggCook (input, output): furnace, smoker and campfire
-//   oven            cakeBake (flavour, cake)          baked base + frosting + 2 flavour by hand; raw base in the oven
+//   oven            cakeBake (flavour, cake, second)  baked base + frosting + 2 flavour (or flavour + second) by hand; raw base in the oven
 //                   pieBake (flavour, pie, can)       crust + 2 flavour + 2 sweet; with a filling can key also the pot
 //                                                     filling and crust + full can
 //                   cookieBake (flavour, cookie, second)  cookie dough + 2 flavour (or flavour + second) -> 12
 //                   muffinBake (fruit, muffin)        oven 4 on paper; Cooking Pot 2 on dough
 //                   tartBake (fruit, tart)            crust + fruit + egg + sugar + milk -> 2, baking sheet
+//                   handPieBake (fillings, pie)       crust + fillings -> 1, baking sheet, oven only
 //   heatless grid   mealCraft (inputs, meal)          a pot meal's grid route from cooked forms (`_cooked_manual_only`)
 //                   soupCraft (inputs, soup)          the same with the bone broth added (it brings the bowl)
 //                   saladCraft (inputs, salad)        raw parts with the bowl added (`_manual_only`)
@@ -35,8 +37,8 @@
 
 global.CD.FOOD = {
 	// Cutting board: pieces per whole when the call gives no count
-	slice: { fruit: 4, veggie: 2, meat: 2, fish: 6, pie: 4 },
-	// Fish slices also give a bone meal
+	slice: { fruit: 4, veggie: 2, meat: 2, fish: 6, pie: 4, culture: 4 },
+	// Fish slices also give a bone meal (a fish culture does not)
 	fishBone: true,
 	// Cooking trio per family: xp, furnace / smoker / campfire ticks (vanilla's cooked food)
 	cook: {
@@ -102,6 +104,7 @@ global.CD.food = function (e) {
 		veggieSlice(input, output, count) { F._board('veggie', input, output, count) },
 		meatCut(input, output, count) { F._board('meat', input, output, count) },
 		fishSlice(input, output, count) { F._board('fish', input, output, count, V.fishBone ? [i.bonemeal] : []) },
+		cultureCut(input, output, count) { F._board('culture', input, output, count) },
 		pieSlice(whole, slice, count) {
 			var c = count == null ? V.slice.pie : count
 			F._board('pie', whole, slice, c)
@@ -130,11 +133,13 @@ global.CD.food = function (e) {
 		//######################### Oven #########################
 		// Every other recipe of the output goes; slices -> whole stays
 		_sweep(output) { R.remove({ output: output, not: [{ id: /_from_slices$/ }].concat(OURS) }, e) },
-		cakeBake(flavour, output) {
+		cakeBake(flavour, output, second) {
 			F._sweep(output)
 			var s = suffix(output, '')
-			R.shapeless(output, [i.cake_base_baked, i.frosting, Item.of(flavour, 2)], e, s + '_manual_only')
-			R.ceBaking([i.cake_base, i.frosting, n(flavour, 2)], Item.of(output, 1), e, s, ware.cake)
+			R.shapeless(output, [i.cake_base_baked, i.frosting].concat(second ? [flavour, second] : [Item.of(flavour, 2)]), e,
+				s + '_manual_only')
+			R.ceBaking([i.cake_base, i.frosting].concat(second ? [flavour, second] : [n(flavour, 2)]), Item.of(output, 1), e, s,
+				ware.cake)
 		},
 		// can: the filling can's global.item key (its can json's "pie"), or nothing for a pie with no can
 		pieBake(flavour, output, can) {
@@ -157,6 +162,11 @@ global.CD.food = function (e) {
 			R.ceBaking([n(fruit, 2), i.flour, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsOven), e, s, ware.muffin)
 			R.fdCooking([fruit, fruit, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsPot), e, s,
 				V.bake.exp, V.bake.time)
+		},
+		// A one-serving pie: every other recipe of it goes, as for whole pies. fillings: slots (F.slot for a count)
+		handPieBake(fillings, output) {
+			F._sweep(output)
+			R.ceBaking([i.pie_crust].concat(fillings), Item.of(output, 1), e, suffix(output, ''), ware.sheet)
 		},
 		tartBake(fruit, output) {
 			R.ceBaking([fruit, i.pie_crust, i.eggs, i.any_sweetener, i.t_milk_bottle], Item.of(output, V.tarts), e,
